@@ -1,0 +1,63 @@
+﻿namespace Fanex.NAP.CTS.Library.Services.Implement
+{
+    using Fanex.NAP.CTS.Library.Core.BaseClasses;
+    using Fanex.NAP.CTS.Library.Criteria.DailyDataCapture;
+    using Fanex.NAP.CTS.Library.Services.Interface;
+    using Fanex.NAP.CTS.Library.ViewModels.DailyDataMonitor;
+    using RemotingRef;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    public class DailyCaptureDataService : IDailyDataCaptureService
+    {
+        public IEnumerable<CapturedMatch> GetMatches(DailyDataGetCriteria criteria)
+        {
+            return DataService.GetData<Models.DailyDataCapture.CapturedMatch>(criteria)
+                .Select(m => new CapturedMatch
+                {
+                    MatchId = m.MatchId,
+                    MatchCode = m.MatchCode,
+                    League = CachedRef.GetLeagueName(m.LeagueId),
+                    Home = CachedRef.GetTeamName(m.HomeId),
+                    Away = CachedRef.GetTeamName(m.AwayId),
+                    AgentTO = new ViewModels.History<double?>
+                    {
+                        New = m.NewTotalAgentTO,
+                        Old = m.OldTotalAgentTO
+                    },
+                    CancelledTickets = new ViewModels.History<int?>
+                    {
+                        New = m.NewTotalCancelledTickets,
+                        Old = m.OldTotalCancelledTickets
+                    },
+                    CompanyTO = new ViewModels.History<double?>
+                    {
+                        New = m.NewTotalCompanyTO,
+                        Old = m.OldTotalCompanyTO
+                    },
+                    EventDate = m.EventDate.ToString("MMM dd, yyyy HH:mm:ss"),
+                    MasterTO = new ViewModels.History<double?>
+                    {
+                        New = m.NewTotalMasterTO,
+                        Old = m.OldTotalMasterTO
+                    },
+                    ScannedDate = m.CapturedDate.ToString("MMM dd, yyyy HH:mm:ss"),
+                    SettledTickets = new ViewModels.History<int?>
+                    {
+                        New = m.NewTotalSettledTickets,
+                        Old = m.OldTotalSettledTickets
+                    },
+                    SuperTO = new ViewModels.History<double?>
+                    {
+                        New = m.NewTotalSuperTO,
+                        Old = m.OldTotalSuperTO
+                    },
+                    Tickets = new ViewModels.History<int?>
+                    {
+                        New = m.NewTotalTickets,
+                        Old = m.OldTotalTickets
+                    }
+                });
+        }
+    }
+}

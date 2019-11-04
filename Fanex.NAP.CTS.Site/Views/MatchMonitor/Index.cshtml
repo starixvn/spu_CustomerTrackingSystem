@@ -1,0 +1,138 @@
+﻿@using Fanex.NAP.CTS.Library.ViewModels.MatchMonitor
+@model Fanex.NAP.CTS.Library.Models.MatchMonitor.BalanceUpDate
+
+@{
+    ViewBag.Title = "MATCH MONITOR";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles{
+    <style>
+
+        .table .container-note .note-content {
+            word-wrap: normal !important;
+            word-break: break-word;
+            white-space: pre-line;
+            padding: 8px;
+            min-width: 140px;
+            min-height: 60px;
+            display: grid;
+            align-items: center;
+        }
+
+        .input-note-content {
+            resize: vertical;
+        }
+
+        .icon-note-save:before {
+            content: "\e927";
+        }
+
+        .note-ellipsis {
+            cursor: pointer;
+            color: mediumblue;
+        }
+
+        .note-collapse {
+            cursor: pointer;
+            color: mediumblue;
+        }
+
+        .col-note {
+            overflow: auto;
+        }
+    </style>
+}
+
+<h1 class="title">Match Monitor</h1>
+<div class="form-filter">
+    <div class="group calendar">
+        <label class="text">Event Date</label>
+        <input type="text" id="event_date" class="control">
+        <span class="icon-calendar-text"></span>
+    </div>
+    <div class="group width-160">
+        <label class="text">Sport</label>
+        <select class="control" id="sport">
+            <option value="1">Soccer</option>
+        </select>
+    </div>
+    <div class="group width-400">
+        <label class="text">League</label>
+        <select class="control" id="league"></select>
+    </div>
+    <div class="group width-160">
+        <label class="text">Verified</label>
+        <select class="control" id="is_verified">
+            <option>All</option>
+            <option value="true">Yes</option>
+            <option value="false" selected>No</option>
+        </select>
+    </div>
+    <div class="group width-160">
+        <label class="text">Match Status</label>
+        <select class="control" id="match_status">
+            <option>All</option>
+            <option value="running" selected>Running</option>
+            <option value="completed">Completed</option>
+        </select>
+    </div>
+    <div class="group">
+        <label class="checkbox">
+            <input type="checkbox" checked id="is_main_market" />
+            <span>Main Markets Only</span>
+        </label>
+    </div>
+    <button class="button -primary" id="generate">Generate</button>
+    <button class="button -export" id="export"><span class="icon-export-excel"></span>Export</button>
+</div>
+
+<div id="match_grid">
+    <div class="top-header">
+        <div class="refresh">
+            <select class="refresh-option first" id="refresh_interval">
+                <option value="--">Not refresh</option>
+                <option value="60">60s</option>
+                <option value="90">90s</option>
+                <option value="120">120s</option>
+                <option value="180">180s</option>
+            </select>
+            <div class="refresh-action">
+                <button class="icon" id="refresh_btn"><span class="icon-autorenew"></span></button>
+                <span class="number" id="refresh_countdown">-</span>
+            </div>
+        </div>
+    </div>
+
+    <table class="table table-striped width-100per" style="width: 100%">
+        <thead>
+            <tr>
+                <th class="col-no">#</th>
+                <th class="col-verified">Verified</th>
+                <th>Last Verified <br /> By</th>
+                <th>Event</th>
+                <th>Score</th>
+                <th class="col-status">Status</th>
+                <th class="col-bsng">BSNG</th>
+                <th class="col-flagged-acc">Flagged Accounts</th>
+                <th class="col-delay-goal">Delay <br /> Goal</th>
+                <th class="col-delay-goal">Arbitrage</th>
+                <th>Note</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<div hidden>
+    @Html.Partial("MatchNote")
+</div>
+
+@section scripts{
+    <script>
+        var balanceUpDay = new Date(@Model.BalanceUpDay.Year, @(Model.BalanceUpDay.Month - 1), @Model.BalanceUpDay.Day);
+        var username = "@ViewBag.Username";
+        var isOnPRO = @ViewBag.Environment == 3 ? false : true;
+    </script>
+    @Scripts.Render("~/scripts/match-monitor")
+}

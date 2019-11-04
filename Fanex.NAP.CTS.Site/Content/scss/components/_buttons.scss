@@ -1,0 +1,108 @@
+.button {
+    display: inline-block;
+    font-family: 'Lato', Tahoma, sans-serif !important;
+    height: 28px;
+    font-size: 14px !important;
+    font-weight: bold;
+    line-height: 20px;
+    padding-left: 12px;
+    padding-right: 12px;
+    border-radius: 2px;
+    border: none;
+    outline: none;
+    text-transform: capitalize;
+    text-align: center;
+    text-shadow: none;
+
+    &.-primary {
+        background-color: $btn-primary-bg;
+        color: $btn-primary-color;
+
+        &:hover:not(:disabled) {
+            background-color: $btn-primary-bg-hover;
+        }
+    }
+
+    &.-add {
+        background-color: #396EF8;
+        color: $btn-primary-color;
+
+        &:hover:not(:disabled) {
+            background-color: #0047FF;
+        }
+    }
+
+    &.-export {
+        border: 1px solid $btn-primary-bg;
+        background-color: #fff;
+        color: #3a6e17;
+
+        .icon-export-excel {
+            margin-right: 10px;
+        }
+
+        &:hover:not(:disabled) {
+            border-color: $btn-primary-bg-hover;
+            background-color: $btn-primary-bg-hover;
+            color: #fff;
+        }
+
+        &:hover .icon-export-excel {
+            color: #fff;
+        }
+    }
+
+    &.-cancel {
+        background-color: $btn-cancel-bg;
+        color: $btn-cancel-color;
+
+        &:hover:not(:disabled) {
+            background-color: $btn-cancel-bg-hover;
+        }
+    }
+
+    &.btn-cancel-outline {
+        border: 1px solid #545454;
+        background-color: #fff;
+        color: #545454;
+
+        &:hover:not(:disabled) {
+            background-color: #545454;
+            color: #fff;
+        }
+    }
+}
+
+.btn-search, .btn-submit {
+    background-color: #396EF8;
+    color: $btn-primary-color;
+
+    &:hover:not(:disabled) {
+        background-color: #5081ff;
+    }
+}
+
+a.button, a.button:hover {
+    text-decoration: none;
+}
+
+.button:not(:disabled) {
+    cursor: pointer;
+}
+
+.button[disabled] {
+    background-color: $btn-disabled-bg;
+    color: $btn-disabled-color;
+    cursor: not-allowed;
+}
+
+.button.-export[disabled] {
+    border-color: $btn-disabled-bg;
+    background-color: #fff;
+    color: $btn-disabled-bg;
+
+    .icon-export-excel,
+    &:hover .icon-export-excel {
+        color: $btn-disabled-bg;
+    }
+}

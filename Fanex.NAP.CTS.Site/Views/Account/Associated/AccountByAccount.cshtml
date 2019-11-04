@@ -1,0 +1,76 @@
+﻿@using Fanex.NAP.CTS.Library.Models;
+@{
+    ViewBag.Title = "AccountAssociatedAccount";
+}
+
+@Html.Partial("./Associated/GraphVisualization")
+@Html.Partial("./Associated/ShortestPathVisual")
+
+<div id="account-by-account">
+    <div id="account-by-account-filter">
+        <div class="filter">
+            <div class="form-control">
+                <label class="checkbox">
+                    <input type="checkbox" id="account-by-account-chk-device-away-1" checked />
+                    <span>1 Device Away from </span><span class="username-span"></span>
+                </label>
+                <label class="checkbox">
+                    <input type="checkbox" id="account-by-account-chk-device-away-2" />
+                    <span>2 or more Device Away from </span><span class="account-by-account-username"></span>
+                </label>
+            </div>
+            <div class="form-control">
+                <div class="control-label">Status</div>
+                <select class="control" id="account-by-account-cbb-status" multiple="multiple">
+                    @foreach (KeyValuePair<AccountStatus, string> status in ViewBag.AccountStatusList)
+                    {
+                        <option value="@status.Key">@status.Value</option>
+                    }
+                </select>
+            </div>
+            <div class="form-control">
+                <div class="control-label">Evidence Status</div>
+                <select class="control" id="account-by-account-cbb-evidence-status">
+                    <option value="@EvidenceStatus.All" selected>All</option>
+                    <option value="@EvidenceStatus.Affected">Flagged/Affected</option>
+                    <option value="@EvidenceStatus.Clean">Clean</option>
+                </select>
+            </div>            
+            <div class="form-control" style="vertical-align: bottom;">
+                <button class="button btn-search" id="account-by-account-btn-search">Search</button>
+            </div>
+        </div>
+    </div>
+    <div id="account-by-account-loading" class="report-cont">
+        <img src="@Url.Content("~/Content/images/ajax-loader.gif")" alt="Loading ..." />
+    </div>
+    <div class="table-report" id="account-by-account-content">
+        <div class="search-box">
+            <span class="icon-magnify"></span>
+            <input type="text" class="text" id="account-by-account-txt-search" placeholder="Search..." />
+        </div>
+
+        <div class="graph-heading">
+            <div class="free-size"></div>
+            <div class="graph-info">
+                <button class="button btn-graph" id="account-by-account-btn-on-graph">View On Graph</button>
+                <span class="icon-path graph" id="account-by-account-btn-shortest-path" title="Graph View"></span>
+            </div>
+        </div>
+
+        <table id="account-by-account-table" class="table table-striped" style="width: 100%">
+            <thead>
+                <tr>
+                    <th>Account</th>
+                    <th>Status</th>
+                    <th>First Login</th>
+                    <th>Lastest Login</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>

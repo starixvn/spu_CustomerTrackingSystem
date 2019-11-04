@@ -1,0 +1,353 @@
+// Adds a browser prefix to the property
+// @param {*} $property Property
+// @param {*} $value Value
+
+@mixin css3-prefix($property, $value) {
+  -webkit-#{$property}: #{$value};
+   -khtml-#{$property}: #{$value};
+     -moz-#{$property}: #{$value};
+      -ms-#{$property}: #{$value};
+       -o-#{$property}: #{$value};
+          #{$property}: #{$value};
+}
+
+// Box Shadow
+
+@mixin box-shadow($x: 2px, $y: 2px, $blur: 5px, $color: rgba(0,0,0,.4), $inset: "") {
+  @if ($inset != "") {
+    @include css3-prefix('box-shadow', $inset $x $y $blur $color);
+  } @else {
+    @include css3-prefix('box-shadow', $x $y $blur $color);
+  }
+}
+
+@mixin box-shadow-multiple($string) {
+    @include css3-prefix('box-shadow', $string);
+}
+
+// Box Sizing
+// @param {*} $type [border-box] - Type
+// @require {mixin} css3-prefix
+
+@mixin box-sizing($type: border-box) {
+  @include css3-prefix('box-sizing', $type);
+}
+
+// Border Radius
+// @param {Size} $radius [5px] - Radius
+// @require {mixin} css3-prefix
+
+@mixin border-radius($radius: 5px) {
+    @include css3-prefix('border-radius', $radius);
+}
+
+// Transition
+// @param {List} $properties - Properties
+// @require {mixin} css3-prefix
+
+@mixin transition($properties...) {
+  @if length($properties) >= 1 {
+    @include css3-prefix('transition', $properties);
+  }
+
+  @else {
+    @include css3-prefix('transition',  "all 0.2s ease-in-out 0s");
+  }
+}
+
+// Transform
+// @param {List} $params - Params
+// @require {mixin} css3-prefix
+
+@mixin transform($params) {
+  @include css3-prefix('transform', $params);
+}
+
+@mixin shadow($top, $left, $blur, $color, $inset: false) {
+ @if $inset {
+    -webkit-box-shadow:inset $top $left $blur $color;
+    -moz-box-shadow:inset $top $left $blur $color;
+    box-shadow:inset $top $left $blur $color;
+  } @else {
+    -webkit-box-shadow: $top $left $blur $color;
+    -moz-box-shadow: $top $left $blur $color;
+    box-shadow: $top $left $blur $color;
+  }
+}
+
+//Keyframes
+@mixin keyframes($animationName) {
+    @-webkit-keyframes #{$animationName} {
+        @content;
+    }
+    @-moz-keyframes #{$animationName} {
+        @content;
+    }
+    @-o-keyframes #{$animationName} {
+        @content;
+    }
+    @keyframes #{$animationName} {
+        @content;
+    }
+}
+
+@mixin icon($height, $width, $x, $y) {
+    background: url(../Images/sprite_01.png);
+    background-position: $x $y;
+    display: inline-block;
+    height: $height;
+    width: $width;
+}
+
+@mixin font($color, $font-size, $font-family) {
+    color: $color;
+    font-size: $font-size;
+    font-family: $font-family;
+}
+
+@mixin align-items($display: flex, $justify-content: space-between, $align-items: center) {
+  display: $display;
+  justify-content: $justify-content;
+  align-items: $align-items;
+}
+
+@mixin input-placeholder($color) {
+  // Chrome/Opera/Safari
+  &::-webkit-input-placeholder {
+    color: $color;
+  }
+
+  // Firefox 19+
+  &::-moz-placeholder {
+      color: $color;
+      opacity: 1;
+  }
+
+  // IE 10+
+  &:-ms-input-placeholder {
+      color: $color;
+  }
+
+  // Firefox 18-
+  &:-moz-placeholder {
+      color: $color;
+      opacity: 1;
+  }
+}
+
+@mixin input-placeholder-focus($color) {
+  &:focus:-moz-placeholder {
+      color: $color;
+  }
+
+  &:focus:-ms-input-placeholder {
+      color: $color;
+  }
+
+  &:focus::-webkit-input-placeholder {
+      color: $color;
+  }
+}
+
+@function circle-angle($size) {
+  @return round($size * 0.70710678118) + ($size / 2);
+}
+
+@function circle-normal($size) {
+  @return round($size * 0.70710678118) + $size;
+}
+
+@mixin loader(
+  $size: $loader-size,
+  $color: $loader-color,
+  $duration: $loader-animation-duration,
+  $align: null
+) {
+  $dot-color: rgba($color, 0.05), rgba($color, 0.1), rgba($color, 0.2), rgba($color, 0.3), rgba($color, 0.4), rgba($color, 0.6), rgba($color, 0.8), rgba($color, 1);
+  width: $size;
+  height: $size;
+  border-radius: 50%;
+  position: fixed;
+  left: 50%;
+  margin-top: -$size / 2;
+  margin-left: -$size / 2;
+  animation: #{'loader'}-$size $duration linear infinite;
+  @if ($align == center) {
+    top: 50%;
+  }
+  @if ($align == middle) {
+    top: 240px;
+  }
+  @keyframes #{'loader'}-#{$size} {
+    0% {
+      box-shadow: // Top
+						      0 (- circle-normal($size)) 0 0 nth($dot-color, 1),
+						      // Top Right
+						      circle-angle($size) (- circle-angle($size)) 0 0 nth($dot-color, 2),
+						      // Right
+						      circle-normal($size) 0 0 0 nth($dot-color, 3),
+						      // Bottom right
+						      circle-angle($size) circle-angle($size) 0 0 nth($dot-color, 4),
+						      // Bottom
+						      0 circle-normal($size) 0 0 nth($dot-color, 5),
+						      // Bottom Left
+						      (- circle-angle($size)) circle-angle($size) 0 0 nth($dot-color, 6),
+						      // Left
+						      (- circle-normal($size)) 0 0 0 nth($dot-color, 7),
+						      // Top left
+						      (- circle-angle($size)) (- circle-angle($size)) 0 0 nth($dot-color, 8);
+    }
+
+    12.5% {
+      box-shadow: // Top
+						      0 (- circle-normal($size)) 0 0 nth($dot-color, 8),
+						      // Top Right
+						      circle-angle($size) (- circle-angle($size)) 0 0 nth($dot-color, 1),
+						      // Right
+						      circle-normal($size) 0 0 0 nth($dot-color, 2),
+						      // Bottom right
+						      circle-angle($size) circle-angle($size) 0 0 nth($dot-color, 3),
+						      // Bottom
+						      0 circle-normal($size) 0 0 nth($dot-color, 4),
+						      // Bottom Left
+						      (- circle-angle($size)) circle-angle($size) 0 0 nth($dot-color, 5),
+						      // Left
+						      (- circle-normal($size)) 0 0 0 nth($dot-color, 6),
+						      // Top left
+						      (- circle-angle($size)) (- circle-angle($size)) 0 0 nth($dot-color, 7);
+    }
+
+    25% {
+      box-shadow: // Top
+      						0 (- circle-normal($size)) 0 0 nth($dot-color, 7),
+						      // Top Right
+						      circle-angle($size) (- circle-angle($size)) 0 0 nth($dot-color, 8),
+						      // Right
+						      circle-normal($size) 0 0 0 nth($dot-color, 1),
+						      // Bottom right
+						      circle-angle($size) circle-angle($size) 0 0 nth($dot-color, 2),
+						      // Bottom
+						      0 circle-normal($size) 0 0 nth($dot-color, 3),
+						      // Bottom Left
+						      (- circle-angle($size)) circle-angle($size) 0 0 nth($dot-color, 4),
+						      // Left
+						      (- circle-normal($size)) 0 0 0 nth($dot-color, 5),
+						      // Top left
+						      (- circle-angle($size)) (- circle-angle($size)) 0 0 nth($dot-color, 6);
+    }
+
+    37.5% {
+      box-shadow: // Top
+						      0 (- circle-normal($size)) 0 0 nth($dot-color, 6),
+						      // Top Right
+						      circle-angle($size) (- circle-angle($size)) 0 0 nth($dot-color, 7),
+						      // Right
+						      circle-normal($size) 0 0 0 nth($dot-color, 8),
+						      // Bottom right
+						      circle-angle($size) circle-angle($size) 0 0 nth($dot-color, 1),
+						      // Bottom
+						      0 circle-normal($size) 0 0 nth($dot-color, 2),
+						      // Bottom Left
+						      (- circle-angle($size)) circle-angle($size) 0 0 nth($dot-color, 3),
+						      // Left
+						      (- circle-normal($size)) 0 0 0 nth($dot-color, 4),
+						      // Top left
+						      (- circle-angle($size)) (- circle-angle($size)) 0 0 nth($dot-color, 5);
+    }
+
+    50% {
+      box-shadow: // Top
+						      0 (- circle-normal($size)) 0 0 nth($dot-color, 5),
+						      // Top Right
+						      circle-angle($size) (- circle-angle($size)) 0 0 nth($dot-color, 6),
+						      // Right
+						      circle-normal($size) 0 0 0 nth($dot-color, 7),
+						      // Bottom right
+						      circle-angle($size) circle-angle($size) 0 0 nth($dot-color, 8),
+						      // Bottom
+						      0 circle-normal($size) 0 0 nth($dot-color, 1),
+						      // Bottom Left
+						      (- circle-angle($size)) circle-angle($size) 0 0 nth($dot-color, 2),
+						      // Left
+						      (- circle-normal($size)) 0 0 0 nth($dot-color, 3),
+						      // Top left
+						      (- circle-angle($size)) (- circle-angle($size)) 0 0 nth($dot-color, 4);
+    }
+
+    62.5% {
+      box-shadow: // Top
+						      0 (- circle-normal($size)) 0 0 nth($dot-color, 4),
+						      // Top Right
+						      circle-angle($size) (- circle-angle($size)) 0 0 nth($dot-color, 5),
+						      // Right
+						      circle-normal($size) 0 0 0 nth($dot-color, 6),
+						      // Bottom right
+						      circle-angle($size) circle-angle($size) 0 0 nth($dot-color, 7),
+						      // Bottom
+						      0 circle-normal($size) 0 0 nth($dot-color, 8),
+						      // Bottom Left
+						      (- circle-angle($size)) circle-angle($size) 0 0 nth($dot-color, 1),
+						      // Left
+						      (- circle-normal($size)) 0 0 0 nth($dot-color, 2),
+						      // Top left
+						      (- circle-angle($size)) (- circle-angle($size)) 0 0 nth($dot-color, 3);
+    }
+
+    75% {
+      box-shadow: // Top
+						      0 (- circle-normal($size)) 0 0 nth($dot-color, 3),
+						      // Top Right
+						      circle-angle($size) (- circle-angle($size)) 0 0 nth($dot-color, 4),
+						      // Right
+						      circle-normal($size) 0 0 0 nth($dot-color, 5),
+						      // Bottom right
+						      circle-angle($size) circle-angle($size) 0 0 nth($dot-color, 6),
+						      // Bottom
+						      0 circle-normal($size) 0 0 nth($dot-color, 7),
+						      // Bottom Lefts
+						      (- circle-angle($size)) circle-angle($size) 0 0 nth($dot-color, 8),
+						      // Left
+						      (- circle-normal($size)) 0 0 0 nth($dot-color, 1),
+						      // Top left
+						      (- circle-angle($size)) (- circle-angle($size)) 0 0 nth($dot-color, 2);
+    }
+
+    87.5% {
+      box-shadow: // Top
+						      0 (- circle-normal($size)) 0 0 nth($dot-color, 2),
+						      // Top Right
+						      circle-angle($size) (- circle-angle($size)) 0 0 nth($dot-color, 3),
+						      // Right
+						      circle-normal($size) 0 0 0 nth($dot-color, 4),
+						      // Bottom right
+						      circle-angle($size) circle-angle($size) 0 0 nth($dot-color, 5),
+						      // Bottom
+						      0 circle-normal($size) 0 0 nth($dot-color, 6),
+						      // Bottom Left
+						      (- circle-angle($size)) circle-angle($size) 0 0 nth($dot-color, 7),
+						      // Left
+						      (- circle-normal($size)) 0 0 0 nth($dot-color, 8),
+						      // Top left
+						      (- circle-angle($size)) (- circle-angle($size)) 0 0 nth($dot-color, 1);
+    }
+
+    100% {
+      box-shadow: // Top
+						      0 (- circle-normal($size)) 0 0 nth($dot-color, 1),
+						      // Top Right
+						      circle-angle($size) (- circle-angle($size)) 0 0 nth($dot-color, 2),
+						      // Right
+						      circle-normal($size) 0 0 0 nth($dot-color, 3),
+						      // Bottom right
+						      circle-angle($size) circle-angle($size) 0 0 nth($dot-color, 4),
+						      // Bottom
+						      0 circle-normal($size) 0 0 nth($dot-color, 5),
+						      // Bottom Left
+						      (- circle-angle($size)) circle-angle($size) 0 0 nth($dot-color, 6),
+						      // Left
+						      (- circle-normal($size)) 0 0 0 nth($dot-color, 7),
+						      // Top left
+						      (- circle-angle($size)) (- circle-angle($size)) 0 0 nth($dot-color, 8);
+    }
+  }
+}

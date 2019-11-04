@@ -1,0 +1,42 @@
+﻿namespace Fanex.NAP.CTS.Library.Models
+{
+    public enum AccountStatus
+    {
+        Open,
+        Suspended,
+        Closed,
+        CN88_Active,
+        CN88_ViewOnly,
+        CN88_Suspended,
+        CN88_Inactive,
+        NotYetDeposit
+    }
+
+    public enum EvidenceStatus
+    {
+        All,
+        Affected,        
+        Clean
+    }
+
+    public enum AccountEvidenceStatus
+    {
+        Clean,
+        CentralPoint,
+        Flagged
+    }
+
+    public enum TransactionHistoryLength
+    {
+        Hours24 = 1,
+        Days7 = 7,
+        Days30 = 30,
+        Days180 = 180
+    }
+
+    public enum ProblemAccountStatus
+    {
+        Yes,
+        No
+    }
+}

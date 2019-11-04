@@ -1,0 +1,38 @@
+﻿namespace Fanex.NAP.CTS.Site.Controllers
+{
+    using Fanex.NAP.Core.Web.Attribute;
+    using Fanex.NAP.CTS.Library.Core.Consts;
+    using System.Web.Mvc;
+
+    [NapSuperAuth]
+    public class HomeController : BaseController
+    {
+        public ActionResult Index()
+        {
+            return View(CurrentSession.MenuItemList);
+        }
+
+        public override string BaseControllerName { get => Consts.MenuItemHome; }
+
+        public ActionResult Menu(string activeMenu)
+        {
+            ViewBag.ActiveMenu = activeMenu ?? this.BaseControllerName;
+
+            return PartialView("~/Views/Shared/_Menu.cshtml", CurrentSession.MenuItemList);
+        }
+
+        public ActionResult About()
+        {
+            ViewBag.Message = "Your application description page.";
+
+            return View();
+        }
+
+        public ActionResult Contact()
+        {
+            ViewBag.Message = "Your contact page.";
+
+            return View();
+        }
+    }
+}

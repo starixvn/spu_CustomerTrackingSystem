@@ -1,0 +1,38 @@
+﻿@model Fanex.NAP.CTS.Library.ViewModels.Transaction.IPInformation
+
+<div id="form-ip-information">
+    @if (Model != null)
+    {
+        <div class="ip-info-text">
+            <label>Service Provider: </label>
+            <span>@Model.ISPName</span>
+        </div>
+        <div class="ip-info-text">
+            <label>Country: </label>
+            <span>@Model.CountryName</span>
+        </div>
+        <div class="ip-info-text">
+            <label>Region: </label>
+            <span>@Model.Region</span>
+        </div>
+        <div class="ip-info-text">
+            <label>City: </label>
+            <span>@Model.City</span>
+        </div>
+    }
+    else
+    {
+        <div class="ip-info-text">
+            <label>Service Provider: </label>
+        </div>
+        <div class="ip-info-text">
+            <label>Country: </label>
+        </div>
+        <div class="ip-info-text">
+            <label>Region: </label>
+        </div>
+        <div class="ip-info-text">
+            <label>City: </label>
+        </div>
+    }
+</div>

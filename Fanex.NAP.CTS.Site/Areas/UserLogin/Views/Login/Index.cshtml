@@ -1,0 +1,96 @@
+﻿@model string
+
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,400i,700" rel="stylesheet">
+    <link rel="stylesheet" href="~/Content/scss/fonts/Fraud-Sensor/style.css">
+    <link rel="stylesheet" href="~/Content/scss/base/reset.css">
+    <link rel="stylesheet" href="~/Content/scss/pages/login/login.css">
+    <title>Fraud Sensor</title>
+</head>
+<body>
+    <section class="block">
+        <div class="logo">
+            <svg width="300" height="52">
+                <image xlink:href="~/Content/scss/images/login.svg" src="~/Content/scss/images/login.png" width="300" height="52" alt="Fraud Sensor" />
+            </svg>
+        </div>
+        @using (Html.BeginForm())
+        {
+        <input type="hidden" id="loginToken" name="loginToken" value="@ViewBag.LoginToken" />
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="Username" id="username" name="username">
+            <span class="icon icon-account-outline"></span>
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" placeholder="Password" id="password" name="password">
+            <span class="icon icon-onepassword"></span>
+        </div>
+        <button class="button -primary">Login</button>
+        }
+
+        <div class="msg-error">
+            @if (Model != null)
+            {
+            @Model;
+            }
+        </div>
+    </section>
+    <script src="~/Scripts/jquery-3.0.0.min.js"></script>
+    <script src="~/Scripts/CryptoJS.js"></script>
+    <script>
+        var username = $("#username");
+        var password = $("#password");
+        var token = $("#loginToken");
+
+        var msg = $(".msg-error");
+        var fst_load = true;
+        var has_error_message = @(Model != null ? "true": "false");
+
+        if (has_error_message) {
+            setTimeout(() => msg.text(""), 3000);
+        }
+
+        function check_before_submit() {
+            if (username.val().length == 0) {
+                username.addClass("invalid");
+            }
+
+            if (password.val().length == 0) {
+                password.addClass("invalid");
+            }
+
+            var notEmpty = username.val().length != 0 && password.val().length != 0;
+
+            if (notEmpty) {
+                encryptedPw = CryptoJS.CfsEnCode(password.val());
+                hashPw = CryptoJS.SHA256(encryptedPw + token.val());
+
+                password.val(hashPw);
+
+                return true;
+            }
+
+            return false;
+        }
+
+        function reset_input() {
+            $("input").removeClass("invalid");
+            if (!fst_load) msg.html("");
+            fst_load = false;
+        }
+
+        $("input").focus(reset_input);
+        document.forms[0].onsubmit = check_before_submit;
+
+        var a = "@(ViewBag.Message)";
+
+        console.log(a);
+    </script>
+</body>
+</html>

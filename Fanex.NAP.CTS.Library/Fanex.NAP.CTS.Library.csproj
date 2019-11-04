@@ -1,0 +1,583 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2D6F84F8-E9B5-49EC-B487-05B44E994DCC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Fanex.NAP.CTS.Library</RootNamespace>
+    <AssemblyName>Fanex.NAP.CTS.Library</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>
+    </CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>
+    </CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.3.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <HintPath>..\packages\BouncyCastle.1.8.3.1\lib\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
+    <Reference Include="Couchbase, Version=1.0.0.0, Culture=neutral, PublicKeyToken=81137140da4e57ef, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.Caching.1.0.404.95\lib\net40\Couchbase.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Dapper, Version=1.60.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.1.60.6\lib\net451\Dapper.dll</HintPath>
+    </Reference>
+    <Reference Include="EasyNetQ, Version=3.4.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\EasyNetQ.3.4.4\lib\net451\EasyNetQ.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Enyim.Caching, Version=2.12.0.0, Culture=neutral, PublicKeyToken=81137140da4e57ef, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.Caching.1.0.404.95\lib\net40\Enyim.Caching.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Fanex.BetList.BetTrade, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.BetList.Core.2.69.0-beta1\lib\net40\Fanex.BetList.BetTrade.dll</HintPath>
+    </Reference>
+    <Reference Include="Fanex.BetList.Core, Version=2.69.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.BetList.Core.2.69.0-beta1\lib\net40\Fanex.BetList.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Fanex.Caching, Version=1.0.404.95, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.Caching.1.0.404.95\lib\net40\Fanex.Caching.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Fanex.Common, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.Common.1.1.0.1\lib\net40\Fanex.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Fanex.Data, Version=4.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.Data.4.0.1\lib\net461\Fanex.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Fanex.Data.MySql, Version=4.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.Data.MySql.4.0.1\lib\net461\Fanex.Data.MySql.dll</HintPath>
+    </Reference>
+    <Reference Include="Fanex.Data.Repository, Version=4.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.Data.Repository.4.0.1\lib\net461\Fanex.Data.Repository.dll</HintPath>
+    </Reference>
+    <Reference Include="Fanex.Data.SqlServer, Version=4.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.Data.SqlServer.4.0.1\lib\net461\Fanex.Data.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Fanex.Logging, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.Logging.1.0.4\lib\net40\Fanex.Logging.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Fanex.MailDelivery.Client">
+      <HintPath>..\packages\Fanex.MailStation.1.1.0.1\lib\net40\Fanex.MailDelivery.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Fanex.MailDelivery.Core">
+      <HintPath>..\packages\Fanex.MailStation.1.1.0.1\lib\net40\Fanex.MailDelivery.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Fanex.NAP.Core, Version=1.2.1.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.NAP.Core.Client.1.2.1.1\lib\net40\Fanex.NAP.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Fanex.NAP.Framework, Version=1.0.0.3, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.NAP.Framework.1.0.0.3\lib\net40\Fanex.NAP.Framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Fanex.RemotingRef, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.RemotingRef.1.3.0\lib\net461\Fanex.RemotingRef.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Google.Protobuf, Version=3.6.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Protobuf.3.6.1\lib\net45\Google.Protobuf.dll</HintPath>
+    </Reference>
+    <Reference Include="MessagePack, Version=1.7.3.4, Culture=neutral, PublicKeyToken=b4a0369545f0a1be, processorArchitecture=MSIL">
+      <HintPath>..\packages\MessagePack.1.7.3.4\lib\net45\MessagePack.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.1.0.0\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Diagnostics.Tracing.EventSource, Version=1.1.28.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Diagnostics.Tracing.EventSource.Redist.1.1.28\lib\net46\Microsoft.Diagnostics.Tracing.EventSource.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Caching, Version=5.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\EnterpriseLibrary.Caching.5.0.414.0\lib\net40\Microsoft.Practices.EnterpriseLibrary.Caching.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=5.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\EnterpriseLibrary.Common.5.0.414.0\lib\net40\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Logging, Version=5.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\EnterpriseLibrary.Logging.5.0.414.0\lib\net40\Microsoft.Practices.EnterpriseLibrary.Logging.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\EnterpriseLibrary.Unity.5.0.414.0\lib\net40\Microsoft.Practices.ServiceLocation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity, Version=2.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\EnterpriseLibrary.Unity.5.0.414.0\lib\net40\Microsoft.Practices.Unity.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Interception, Version=2.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\EnterpriseLibrary.Unity.5.0.414.0\lib\net40\Microsoft.Practices.Unity.Interception.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MySql.Data, Version=8.0.16.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.8.0.16\lib\net452\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.3.0\lib\net40\NPOI.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NPOI.OOXML, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.3.0\lib\net40\NPOI.OOXML.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.3.0\lib\net40\NPOI.OpenXml4Net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.3.0\lib\net40\NPOI.OpenXmlFormats.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ONEbook.UM, Version=2.0.2.9, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ONEbook.UM.2.0.2.9\lib\net40\ONEbook.UM.dll</HintPath>
+    </Reference>
+    <Reference Include="RabbitMQ.Client, Version=5.0.0.0, Culture=neutral, PublicKeyToken=89e7d7c5feba84ce, processorArchitecture=MSIL">
+      <HintPath>..\packages\RabbitMQ.Client.5.1.0\lib\net451\RabbitMQ.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.105.2.3\lib\net46\RestSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Configuration.Install" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Design" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Messaging" />
+    <Reference Include="System.Net.Http, Version=4.1.1.3, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Net.Http.4.3.4\lib\net46\System.Net.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net461\System.Security.Cryptography.Algorithms.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.3.0\lib\portable-net45+win8+wp8+wpa81\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="TplCore, Version=1.0.4854.17253, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TplCore.1.0.4854.17254\lib\net40\TplCore.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="UMControllerLibrary, Version=1.0.1872.836, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UMControllerLibrary.1.0.1872.836\lib\net40\UMControllerLibrary.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Core\BaseClasses\CachedRef.cs" />
+    <Compile Include="Core\BaseClasses\CommandBase.cs" />
+    <Compile Include="Core\BaseClasses\DataService.cs" />
+    <Compile Include="Core\BaseClasses\FraudCaseAttribute.cs" />
+    <Compile Include="Core\Consts\Consts.cs" />
+    <Compile Include="Core\Consts\ConstsResources.cs" />
+    <Compile Include="Core\ExportExcel\ExcelUtilities.cs" />
+    <Compile Include="Core\ExportExcel\FSExcelConfig.cs" />
+    <Compile Include="Core\ExportExcel\ExcelStream.cs" />
+    <Compile Include="Core\Extensions\IEnumerableExtension.cs" />
+    <Compile Include="Core\Helpers\Api\ApiHelper.cs" />
+    <Compile Include="Core\Helpers\AppSettings.cs" />
+    <Compile Include="Core\Helpers\BetListHelper.cs" />
+    <Compile Include="Core\Helpers\ObjectHelper.cs" />
+    <Compile Include="Core\Helpers\Sequence.cs" />
+    <Compile Include="Core\Helpers\Xml\XmlHelper.cs" />
+    <Compile Include="Core\Helpers\Xml\XNameAttribute.cs" />
+    <Compile Include="Core\Resources\ResourcesManager.cs" />
+    <Compile Include="Core\Resources\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Core\Utilities\ConfigSettings.cs" />
+    <Compile Include="Core\Utilities\Extentions.cs" />
+    <Compile Include="Criteria\Account\Associated\GetAssociatedAccountByAccountCriteria.cs" />
+    <Compile Include="Criteria\Account\Associated\GetCustomerFraudInfoCriteria.cs" />
+    <Compile Include="Criteria\Account\Evidence\InsertExceptionEvidenceCriteria.cs" />
+    <Compile Include="Criteria\Account\Evidence\GetAccountEvidenceCriteria.cs" />
+    <Compile Include="Criteria\Account\Evidence\GetExceptionAccountEvidenceCriteria.cs" />
+    <Compile Include="Criteria\Account\GeneralInformation\GetAssociationByAccountCriteria.cs" />
+    <Compile Include="Criteria\Account\GeneralInformation\GetCustomerGeneralInformationCriteria.cs" />
+    <Compile Include="Criteria\Account\GeneralInformation\GetEvidenceByTargetIdCriteria.cs" />
+    <Compile Include="Criteria\Account\SearchAccountCriteria.cs" />
+    <Compile Include="Criteria\Api\FlaggedAccountDeleteCriteria.cs" />
+    <Compile Include="Criteria\Api\FlaggedAccountInsertCriteria.cs" />
+    <Compile Include="Criteria\CheckBetReport\CheckBetReportGetCriteria.cs" />
+    <Compile Include="Criteria\CheckBetReport\CheckBetReportUpdateNoteCriteria.cs" />
+    <Compile Include="Criteria\CustomerMonitor\CustomerDetails\GetCustomerTicketsCriteria.cs" />
+    <Compile Include="Criteria\CustomerMonitor\CustomerGetCriteria.cs" />
+    <Compile Include="Criteria\CustomerMonitor\UpdateNoteCriteria.cs" />
+    <Compile Include="Criteria\DailyDataCapture\DailyDataGetCriteria.cs" />
+    <Compile Include="Criteria\FraudCase\DelayedGoal\DelayGoalAssociationAccountInsertCriteria.cs" />
+    <Compile Include="Criteria\FraudCase\DelayedGoal\DelayGoalManualAccountGetCriteria.cs" />
+    <Compile Include="Criteria\FraudCase\DelayedGoal\DelayedGoalAccountInsertCriteria.cs" />
+    <Compile Include="Criteria\FraudCase\DelayedGoal\DelayedGoalAccountDeleteCriteria.cs" />
+    <Compile Include="Criteria\FraudCase\DelayedGoal\DelayedGoalAccountGetCriteria.cs" />
+    <Compile Include="Criteria\FraudCase\FraudCaseGetByIdCriteria.cs" />
+    <Compile Include="Criteria\FraudCase\FraudCaseGetCriteria.cs" />
+    <Compile Include="Criteria\FraudCase\GetIsActiveCriteria.cs" />
+    <Compile Include="Criteria\FraudCase\ScannedOfficeIP\OfficeIPDeleteCriteria.cs" />
+    <Compile Include="Criteria\FraudCase\ScannedOfficeIP\OfficeIPInternalAccountDeleteCriteria.cs" />
+    <Compile Include="Criteria\FraudCase\ScannedOfficeIP\OfficeIPInternalAccountGetCriteria.cs" />
+    <Compile Include="Criteria\FraudCase\ScannedOfficeIP\OfficeIPInternalAccountInsertCriteria.cs" />
+    <Compile Include="Criteria\FraudCase\ScannedOfficeIP\OfficeIPGetCriteria.cs" />
+    <Compile Include="Criteria\FraudCase\ScannedOfficeIP\OfficeIPInsertCriteria.cs" />
+    <Compile Include="Criteria\FraudCase\UpdateFraudCaseStatusCriteria.cs" />
+    <Compile Include="Criteria\FraudSensorTask\BetsNearGoalPreconditionCriteria.cs" />
+    <Compile Include="Criteria\FraudSensorTask\BetsNearGoalRuleCriteria.cs" />
+    <Compile Include="Criteria\FraudSensorTask\ArbitragePreconditionCriteria.cs" />
+    <Compile Include="Criteria\FraudSensorTask\ArbitrageCleanUpCriteria.cs" />
+    <Compile Include="Criteria\FraudSensorTask\ArbitrageRuleCriteria.cs" />
+    <Compile Include="Criteria\FraudSensorTask\CheckBetRuleCriteria.cs" />
+    <Compile Include="Criteria\FraudSensorTask\DailyDataCaptureRuleCriteria.cs" />
+    <Compile Include="Criteria\FraudSensorTask\DelayGoalPreconditionCriteria.cs" />
+    <Compile Include="Criteria\FraudSensorTask\DelayGoalRuleCriteria.cs" />
+    <Compile Include="Criteria\FraudSensorTask\FlaggedAccountPreconditionCriteria.cs" />
+    <Compile Include="Criteria\FraudSensorTask\FlaggedAccountRuleCriteria.cs" />
+    <Compile Include="Criteria\FraudSensorTask\BigStakeNearGoalRuleCriteria.cs" />
+    <Compile Include="Criteria\FraudSensorTask\BigStakeNearGoalPreconditionCriteria.cs" />
+    <Compile Include="Criteria\FraudSensorTask\OfficeIPPreconditionCriteria.cs" />
+    <Compile Include="Criteria\FraudSensorTask\OfficeIPRuleCriteria.cs" />
+    <Compile Include="Criteria\MatchMonitor\BalanceUpDateGetCriteria.cs" />
+    <Compile Include="Criteria\MatchMonitor\FraudCaseDetails\ArbitrageDetailsCriteria.cs" />
+    <Compile Include="Criteria\MatchMonitor\FraudCaseDetails\GetArbitrageTicketCriteria.cs" />
+    <Compile Include="Criteria\MatchMonitor\FraudCaseDetails\GetCurrencyCriteria.cs" />
+    <Compile Include="Criteria\MatchMonitor\FraudCaseDetails\GetArbitrageCustomerCriteria.cs" />
+    <Compile Include="Criteria\MatchMonitor\FraudCaseDetails\GetCustomerCriteria.cs" />
+    <Compile Include="Criteria\MatchMonitor\FraudCaseDetails\FlaggedAccountCriteria.cs" />
+    <Compile Include="Criteria\MatchMonitor\FraudCaseDetails\GetFlaggedAccountCustomerCriteria.cs" />
+    <Compile Include="Criteria\MatchMonitor\FraudCaseDetails\GetFlaggedAccountTicketCriteria.cs" />
+    <Compile Include="Criteria\MatchMonitor\FraudCaseDetails\GetMatchInfoCriteria.cs" />
+    <Compile Include="Criteria\MatchMonitor\FraudCaseDetails\GetScoreHDP.cs" />
+    <Compile Include="Criteria\MatchMonitor\FraudCaseDetails\GetTicketCriteria.cs" />
+    <Compile Include="Criteria\MatchMonitor\FraudCaseDetails\Last7DaysTicketGetCriteria.cs" />
+    <Compile Include="Criteria\MatchMonitor\FraudCaseDetails\GetTicketByIPCriteria.cs" />
+    <Compile Include="Criteria\MatchMonitor\LeagueGetCriteria.cs" />
+    <Compile Include="Criteria\MatchMonitor\MatchGetAllCriteria.cs" />
+    <Compile Include="Criteria\MatchMonitor\MatchNoteUpdateCriteria.cs" />
+    <Compile Include="Criteria\MatchMonitor\VerifyMatchCriteria.cs" />
+    <Compile Include="Criteria\Notification\RecipientAddCriteria.cs" />
+    <Compile Include="Criteria\Notification\RecipientGetCriteria.cs" />
+    <Compile Include="Criteria\Notification\RecipientRemoveCriteria.cs" />
+    <Compile Include="Criteria\Notification\UserMessageGetCriteria.cs" />
+    <Compile Include="Criteria\ScannedOfficeIP\TicketFromOfficeIpGetCriteria.cs" />
+    <Compile Include="Criteria\Notification\UserMessageUnreadCounterGetCriteria.cs" />
+    <Compile Include="Criteria\SubscriberAssignment\SubscriberGetCriteria.cs" />
+    <Compile Include="Criteria\SubscriberAssignment\SubscribersUpdateCriteria.cs" />
+    <Compile Include="Criteria\SuspiciousCustomerDetails\SuspiciousCustomerDetailsGeneralCriteria.cs" />
+    <Compile Include="Criteria\SuspiciousCustomerDetails\SuspiciousCustomerDetailsStatisticsGetCriteria.cs" />
+    <Compile Include="Criteria\SuspiciousCustomer\SuspiciousCustomerAssigneeGetCriteria.cs" />
+    <Compile Include="Criteria\SuspiciousCustomer\SuspiciousCustomerGetCriteria.cs" />
+    <Compile Include="Criteria\SuspiciousCustomerDetails\SuspiciousCustomerDetailsViolatedTicketGetCriteria.cs" />
+    <Compile Include="Criteria\SuspiciousCustomer\SuspiciousCustomerLogNoteGetCriteria.cs" />
+    <Compile Include="Criteria\SuspiciousInfo\SuspiciousInfoUpdateCriteria.cs" />
+    <Compile Include="Criteria\SuspiciousInfo\SuspiciousInfoGetCriteria.cs" />
+    <Compile Include="Criteria\SuspiciousCustomer\SuspiciousCustomerAssigneeUpdateCriteria.cs" />
+    <Compile Include="Criteria\SuspiciousCustomer\SuspiciousCustomerNoteDeleteCriteria.cs" />
+    <Compile Include="Criteria\SuspiciousCustomer\SuspiciousCustomerNoteInsertCriteria.cs" />
+    <Compile Include="Criteria\SuspiciousCustomer\SuspiciousCustomerNoteGetCriteria.cs" />
+    <Compile Include="Criteria\SuspiciousCustomer\SuspiciousCustomerUpdateCriteria.cs" />
+    <Compile Include="Criteria\SuspiciousCustomer\SuspiciousCustomerReportGetCriteria.cs" />
+    <Compile Include="Criteria\SuspiciousInfo\SuspicousCustomerCurrencyGetCriteria.cs" />
+    <Compile Include="Criteria\Transaction\History\TransactionHistoryGetByCustIdCriteria.cs" />
+    <Compile Include="DTO\CustomerEvidence.cs" />
+    <Compile Include="DTO\CustomerEvidenceList.cs" />
+    <Compile Include="DTO\CustomerSubcriber.cs" />
+    <Compile Include="DTO\CustomerTotalAssociation.cs" />
+    <Compile Include="DTO\CustomerList.cs" />
+    <Compile Include="DTO\CustomerAssociation.cs" />
+    <Compile Include="DTO\Message.cs" />
+    <Compile Include="DTO\Match.cs" />
+    <Compile Include="DTO\FraudCase.cs" />
+    <Compile Include="Core\Resources\Error.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Error.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Core\Resources\ErrorLookup.cs" />
+    <Compile Include="ExcelConfig\CheckBetReport\CheckBetReportExcelConfig.cs" />
+    <Compile Include="ExcelConfig\CustomerMonitor\CustomerMonitorConfig.cs" />
+    <Compile Include="ExcelConfig\CustomerMonitor\CustomerMonitorTicketDetailConfig.cs" />
+    <Compile Include="ExcelConfig\DailyDataCapture\DailyDataCaptureExcelConfig.cs" />
+    <Compile Include="ExcelConfig\FraudCase\DelayedGoal\DelayedGoalExcelConfig.cs" />
+    <Compile Include="ExcelConfig\FraudCase\ScannedOfficeIP\OfficeIPExcelConfig.cs" />
+    <Compile Include="ExcelConfig\FraudCase\ScannedOfficeIP\OfficeIPInternalAccountExcelConfig.cs" />
+    <Compile Include="ExcelConfig\MatchMonitor\ArbitrageConfig.cs" />
+    <Compile Include="ExcelConfig\MatchMonitor\CustomerDetailConfig.cs" />
+    <Compile Include="ExcelConfig\MatchMonitor\FlaggedAccountTicketConfig.cs" />
+    <Compile Include="ExcelConfig\MatchMonitor\MatchMonitorExcelConfig.cs" />
+    <Compile Include="ExcelConfig\MatchMonitor\TicketByIpConfig.cs" />
+    <Compile Include="ExcelConfig\MatchMonitor\TicketDetailConfig.cs" />
+    <Compile Include="ExcelConfig\ScannedOfficeIP\OfficeTicketConfig.cs" />
+    <Compile Include="ExcelConfig\SuspiciousCustomer\SuspiciousCustomerConfig.cs" />
+    <Compile Include="ExcelConfig\Utilities.cs" />
+    <Compile Include="FSMQ\MessageQueue\FSMessageQueue.cs" />
+    <Compile Include="FSMQ\MessageQueue\MessageQueueSender.cs" />
+    <Compile Include="FSMQ\MessageQueue\IMessageQueueSender.cs" />
+    <Compile Include="FSMQ\SendingCase\AddingCase.cs" />
+    <Compile Include="FSMQ\SendingCase\DeactivatingCase.cs" />
+    <Compile Include="FSMQ\SendingCase\ActivatingCase.cs" />
+    <Compile Include="FSMQ\SendingCase\RemovingCase.cs" />
+    <Compile Include="FSMQ\SendingCase\UpdatingCase.cs" />
+    <Compile Include="FSMQ\SendingMessage\ISendingMessage.cs" />
+    <Compile Include="FSMQ\SendingMessage\SendingMessage.cs" />
+    <Compile Include="FSMQ\SendingMessage\SendingMessageFactory.cs" />
+    <Compile Include="FSMQ\SendingType\SendingType.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Account\Evidence\AccountEvidence.cs" />
+    <Compile Include="Models\Account\Evidence\AccountExceptionEvidence.cs" />
+    <Compile Include="Models\Account\AccountGeneralInformation.cs" />
+    <Compile Include="Models\Account\CustomerByGraphDB.cs" />
+    <Compile Include="Models\CheckBetReport\CheckBetHistory.cs" />
+    <Compile Include="Models\CustomerMonitor\Customer.cs" />
+    <Compile Include="Models\DailyDataCapture\CapturedMatch.cs" />
+    <Compile Include="Models\DBResult.cs" />
+    <Compile Include="Models\Device\Device.cs" />
+    <Compile Include="Models\Enum.cs" />
+    <Compile Include="Models\FraudCaseId.cs" />
+    <Compile Include="Models\FraudCaseTask\ArbitrageCustomer.cs" />
+    <Compile Include="Models\FraudCaseTask\ArbitrageGroup.cs" />
+    <Compile Include="Models\FraudCaseTask\ArbitrageTicket.cs" />
+    <Compile Include="Models\FraudCase\DelayedGoal\Customer.cs" />
+    <Compile Include="Models\FraudCase\FlaggedAccount\FlaggedCustomer.cs" />
+    <Compile Include="Models\FraudCase\FraudCase.cs" />
+    <Compile Include="Models\FraudCase\NotificationRecipient.cs" />
+    <Compile Include="Models\FraudCase\ScannedOfficeIP\OfficeIPInternalAccount.cs" />
+    <Compile Include="Models\FraudCase\ScannedOfficeIP\OfficeIp.cs" />
+    <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\IP\IpModel.cs" />
+    <Compile Include="Models\MatchMonitor\BalanceUpDate.cs" />
+    <Compile Include="Models\MatchMonitor\FraudCase.cs" />
+    <Compile Include="Models\MatchMonitor\FraudCaseDetails\BetTypes.cs" />
+    <Compile Include="Models\MatchMonitor\FraudCaseDetails\Currency.cs" />
+    <Compile Include="Models\MatchMonitor\FraudCaseDetails\CustEvidence.cs" />
+    <Compile Include="Models\MatchMonitor\FraudCaseDetails\CustInfo.cs" />
+    <Compile Include="Models\MatchMonitor\FraudCaseDetails\Evidence.cs" />
+    <Compile Include="Models\MatchMonitor\FraudCaseDetails\ScoreHDP.cs" />
+    <Compile Include="Models\MatchMonitor\FraudCaseDetails\MatchInfo.cs" />
+    <Compile Include="Models\MatchMonitor\FraudCaseDetails\Site.cs" />
+    <Compile Include="Models\MatchMonitor\FraudCaseDetails\TicketInfo.cs" />
+    <Compile Include="Models\MatchMonitor\League.cs" />
+    <Compile Include="Models\MatchMonitor\Match.cs" />
+    <Compile Include="ViewModels\Account\Evidence\ChainNode.cs" />
+    <Compile Include="Models\Subscriber\Subscriber.cs" />
+    <Compile Include="Models\Transaction\Transaction.cs" />
+    <Compile Include="Services\Implement\EvidenceService.cs" />
+    <Compile Include="Services\Implement\TransactionService.cs" />
+    <Compile Include="Services\Interface\IEvidenceService.cs" />
+    <Compile Include="Services\Interface\ITransactionService.cs" />
+    <Compile Include="ViewModels\Account\Associated\AssociatedAccountByCustomer.cs" />
+    <Compile Include="ViewModels\Account\CustomerFraudSuspicious.cs" />
+    <Compile Include="ViewModels\Account\Associated\AssociatedAccountsCollected.cs" />
+    <Compile Include="ViewModels\Account\Associated\AssociatedAccountByAccount.cs" />
+    <Compile Include="ViewModels\Account\Associated\AssociatedAccountByAccountFilter.cs" />
+    <Compile Include="ViewModels\Account\Associated\AssociatedDeviceByAccount.cs" />
+    <Compile Include="ViewModels\Account\Associated\AssociatedDeviceByAccountFilter.cs" />
+    <Compile Include="ViewModels\Account\CustomerFraud.cs" />
+    <Compile Include="ViewModels\Account\CustomerSuspicious.cs" />
+    <Compile Include="ViewModels\Account\Evidence\ChainsToEvidence.cs" />
+    <Compile Include="ViewModels\Account\Evidence\ChainsToEvidenceFilter.cs" />
+    <Compile Include="ViewModels\Account\Evidence\RetractedAndExceptionCollected.cs" />
+    <Compile Include="ViewModels\Account\Evidence\RetractedAndExceptionEvidenceFilter.cs" />
+    <Compile Include="ViewModels\Account\Evidence\RetractedAndExceptionEvidence.cs" />
+    <Compile Include="ViewModels\Account\Evidence\RetractedAndExceptionNode.cs" />
+    <Compile Include="ViewModels\Account\Evidence\Exception\ExceptionEvidenceAdd.cs" />
+    <Compile Include="ViewModels\Account\GeneralInformation\AssociatedByAccount.cs" />
+    <Compile Include="ViewModels\Account\GeneralInformation\CustomerInformation.cs" />
+    <Compile Include="ViewModels\Account\GeneralInformation\EvidenceByTarget.cs" />
+    <Compile Include="ViewModels\Account\GeneralInformation\GeneralAccountCollected.cs" />
+    <Compile Include="ViewModels\Account\GeneralInformation\GeneralInformationFilter.cs" />
+    <Compile Include="ViewModels\Account\Search\SearchAccountFilter.cs" />
+    <Compile Include="ViewModels\Account\Search\SubscriberAccount.cs" />
+    <Compile Include="ViewModels\Account\AccountDetail.cs" />
+    <Compile Include="Models\Subscriber\SubscriberAssignment.cs" />
+    <Compile Include="Models\SuspiciousCustomerDetails\FraudCaseViolated.cs" />
+    <Compile Include="Models\SuspiciousCustomerDetails\Statistics.cs" />
+    <Compile Include="Models\SuspiciousCustomer\DataTableAjaxPostModel.cs" />
+    <Compile Include="Models\SuspiciousCustomer\SuspiciousCustomerModel.cs" />
+    <Compile Include="Models\SuspiciousInfo\SuspciousCustomerInfo.cs" />
+    <Compile Include="Models\SuspiciousInfo\SuspiciousCustomerFraudCaseModel.cs" />
+    <Compile Include="Models\SuspiciousCustomerDetails\BettypeStatistics.cs" />
+    <Compile Include="Models\SuspiciousCustomerDetails\ChoiceStatistics.cs" />
+    <Compile Include="Models\SuspiciousCustomerDetails\SportStatistics.cs" />
+    <Compile Include="Models\SuspiciousCustomerDetails\Summary.cs" />
+    <Compile Include="Models\SuspiciousCustomerDetails\WinLossStatistics.cs" />
+    <Compile Include="Models\SuspiciousCustomer\SuspiciousCustomerReportModel.cs" />
+    <Compile Include="Models\SuspiciousCustomer\SuspiciousCustomerNoteModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Implement\CheckBetReportService.cs" />
+    <Compile Include="Services\Implement\CustomerMonitorService.cs" />
+    <Compile Include="Services\Implement\DailyCaptureDataService.cs" />
+    <Compile Include="Services\Implement\DelayGoalAccountService.cs" />
+    <Compile Include="Services\Implement\FraudCaseDetailsService.cs" />
+    <Compile Include="Services\Implement\AccountService.cs" />
+    <Compile Include="Services\Implement\SubscriberAssignmentService.cs" />
+    <Compile Include="Services\Interface\ICustomerMonitorService.cs" />
+    <Compile Include="Services\Implement\NotificationRecipientService.cs" />
+    <Compile Include="Services\Implement\NotificationService.cs" />
+    <Compile Include="Services\Implement\MatchMonitorService.cs" />
+    <Compile Include="Services\Implement\OfficeIPService.cs" />
+    <Compile Include="Services\Implement\ScannedOfficeIpReport.cs" />
+    <Compile Include="Services\Implement\SuspiciousCustomerReportDetailsService.cs" />
+    <Compile Include="Services\Implement\SuspiciousCustomerReportService.cs" />
+    <Compile Include="Services\Implement\FlaggedAccountService.cs" />
+    <Compile Include="Services\Implement\FraudCaseService.cs" />
+    <Compile Include="Services\Implement\FraudSensorTaskService.cs" />
+    <Compile Include="Services\Interface\ICheckBetReportService.cs" />
+    <Compile Include="Services\Interface\IDailyDataCaptureService.cs" />
+    <Compile Include="Services\Interface\IFraudCaseDetailsService.cs" />
+    <Compile Include="Services\Interface\IDelayGoalAccountService.cs" />
+    <Compile Include="Services\Interface\INotificationRecipientService.cs" />
+    <Compile Include="Services\Interface\INotificationService.cs" />
+    <Compile Include="Services\Interface\IOfficeIPService.cs" />
+    <Compile Include="Services\Interface\IScannedOfficeIpReportService.cs" />
+    <Compile Include="Services\Interface\IAccountService.cs" />
+    <Compile Include="Services\Interface\ISubscriberAssignmentService.cs" />
+    <Compile Include="Services\Interface\ISuspiciousCustomerReportDetailsService.cs" />
+    <Compile Include="Services\Interface\ISuspiciousCustomerReportService.cs" />
+    <Compile Include="Services\Interface\IFlaggedAccountService.cs" />
+    <Compile Include="Services\Interface\IFraudSensorTaskService.cs" />
+    <Compile Include="Services\Interface\IFraudCaseService.cs" />
+    <Compile Include="Services\Interface\IMatchMonitorService.cs" />
+    <Compile Include="ViewModels\CheckBetReport\CheckBetTicket.cs" />
+    <Compile Include="ViewModels\CustomerMonitor\CustomerDetails\CustomerDetailsInfo.cs" />
+    <Compile Include="ViewModels\CustomerMonitor\CustomerDetails\TicketDetails.cs" />
+    <Compile Include="ViewModels\DailyDataMonitor\CapturedMatch.cs" />
+    <Compile Include="ViewModels\Evidence\Evidence.cs" />
+    <Compile Include="ViewModels\Evidence\InformationEvidenceByAccountRetractEvidence.cs" />
+    <Compile Include="ViewModels\Evidence\InformationEvidenceByAccountUpdateOfComment.cs" />
+    <Compile Include="ViewModels\Evidence\InformationEvidenceByAccount.cs" />
+    <Compile Include="ViewModels\Evidence\InformationEvidenceByAccountFilter.cs" />
+    <Compile Include="ViewModels\Evidence\InformationEvidenceByAccountHistory.cs" />
+    <Compile Include="ViewModels\Evidence\GeneralInformationPlaceEvidenceByAccount.cs" />
+    <Compile Include="ViewModels\FraudCase\DelayedGoal\Customer.cs" />
+    <Compile Include="ViewModels\History.cs" />
+    <Compile Include="ViewModels\MatchMonitor\Event.cs" />
+    <Compile Include="ViewModels\MatchMonitor\FraudCase.cs" />
+    <Compile Include="ViewModels\MatchMonitor\FraudCaseDetails\ArbitrageGroupTicketList.cs" />
+    <Compile Include="ViewModels\MatchMonitor\FraudCaseDetails\ArbitrageStake.cs" />
+    <Compile Include="ViewModels\MatchMonitor\FraudCaseDetails\ArbitrageTicket.cs" />
+    <Compile Include="ViewModels\MatchMonitor\FraudCaseDetails\ArbitrageTicketList.cs" />
+    <Compile Include="ViewModels\MatchMonitor\FraudCaseDetails\AssociatedCustomer.cs" />
+    <Compile Include="ViewModels\MatchMonitor\FraudCaseDetails\BettypeOrder.cs" />
+    <Compile Include="ViewModels\MatchMonitor\FraudCaseDetails\CustomerDetails.cs" />
+    <Compile Include="ViewModels\MatchMonitor\FraudCaseDetails\FlaggedAccountTicket.cs" />
+    <Compile Include="ViewModels\MatchMonitor\FraudCaseDetails\MatchFraudCaseInfo.cs" />
+    <Compile Include="ViewModels\MatchMonitor\FraudCaseDetails\OddsDetails.cs" />
+    <Compile Include="ViewModels\MatchMonitor\FraudCaseDetails\Result.cs" />
+    <Compile Include="ViewModels\MatchMonitor\FraudCaseDetails\TicketDetails.cs" />
+    <Compile Include="ViewModels\MatchMonitor\Match.cs" />
+    <Compile Include="ViewModels\MatchMonitor\MatchList.cs" />
+    <Compile Include="ViewModels\SuspiciousCustomerDetails\CustomerDetailsViewModel.cs" />
+    <Compile Include="ViewModels\SuspiciousCustomerDetails\TicketDetails.cs" />
+    <Compile Include="ViewModels\SuspiciousCustomer\SuspiciousCustomerNoteView.cs" />
+    <Compile Include="ViewModels\Transaction\IPInformation.cs" />
+    <Compile Include="ViewModels\Transaction\TransactionHistory.cs" />
+    <Compile Include="ViewModels\Transaction\TransactionHistoryFilter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Core\Configurations\" />
+    <Folder Include="DataAccess\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Fanex.NAP.FS.Library-1.ruleset" />
+    <None Include="Fanex.NAP.FS.Library.ruleset" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\Google.Protobuf.dll" />
+    <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\SonarAnalyzer.CSharp.dll" />
+    <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\SonarAnalyzer.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Core\Resources\Error.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Error.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\Resources\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Fanex.NAP.FS.Model\Fanex.NAP.CTS.Model.csproj">
+      <Project>{5CE0BA40-0A37-4C89-A33B-D61C7944BE08}</Project>
+      <Name>Fanex.NAP.CTS.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Criteria\Transaction\IPInformationGetByRangeLocationCriteria.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

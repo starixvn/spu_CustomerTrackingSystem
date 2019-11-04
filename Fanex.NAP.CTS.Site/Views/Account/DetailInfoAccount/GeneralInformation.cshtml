@@ -1,0 +1,103 @@
+﻿@{
+    ViewBag.Title = "GeneralInformation";
+}
+
+@Html.Partial("../Evidence/FormInformationEvidence")
+@Html.Partial("../Evidence/FormRetractEvidence")
+@Html.Partial("../Evidence/FormPlaceEvidence")
+
+<h2 class="title">
+    <span class="breadcrumb">
+        <span>Search Account/</span>
+        <span class="page">Account Detail</span>
+    </span>
+</h2>
+
+<div class="content-card">
+    <div class="status">
+        <p class="info">
+            <i id="general-info-username-icon"></i>
+            <span id="general-info-username"></span>
+        </p>
+
+        <p class="bold">
+            Account Status:
+            <span id="general-info-account-status"></span>
+        </p>
+        <button class="button btn-add" type="button" id="btn-add-evidence">Place Evidence</button>
+    </div>
+
+    <div class="account-info">
+        <div class="info-item">
+            <div class="info-title">Login Information</div>
+            <div class="info-block">
+                <div class="info-label">
+                    <label>First Login:</label>
+                    <label>Last Login:</label>
+                    <label>Login Frequency:</label>
+                </div>
+                <div class="info-text">
+                    <div id="general-info-first-login"> </div>
+                    <div id="general-info-last-login"> </div>
+                    <div id="general-info-account-age"> </div>
+                </div>
+            </div>
+        </div>
+        <div class="info-item">
+            <div class="info-title">Association</div>
+            <div class="info-block">
+                <div class="info-label">
+                    <label>Associated Accounts:</label>
+                    <label>Associated Devices:</label>
+                    <label>Shared Devices:</label>
+                    <label>No-Shared Devices:</label>
+                    <label>Account Exceptions:</label>
+                </div>
+                <div class="info-text">
+                    <div id="general-info-associated-accounts"> </div>
+                    <div id="general-info-associated-devices"> </div>
+                    <div id="general-info-shared-devices"> </div>
+                    <div id="general-info-noshared-device"> </div>
+                    <div id="general-info-account-exceptions"> </div>
+                </div>
+            </div>
+        </div>
+        <div class="info-item">
+            <div class="info-title">Fraud Infomation</div>
+            <div class="info-block">
+                <div class="info-label">
+                    <label>Evidence:</label>
+                    <label>Problem Account:</label>
+                    <label>Abnormal Level:</label>
+                    <label style="height: 60px;">Dangerous Level:</label>
+                    <label>Auto Suspend:</label>
+                    <label style="border-bottom: 0;">Commited Fraud Cases:</label>
+                </div>
+                <div class="info-text">
+                    <div>
+                        <span class="link" id="general-info-evidences"> </span>
+                    </div>
+
+                    <div id="general-info-problem-account-status"> </div>
+                    <div><span class="badge-level" id="general-info-abnormal"> </span></div>                   
+                    <div>
+                        <table class="dangerous-level">
+                            <tr>
+                                <th>ORG</th>
+                                <th>ABI</th>
+                                <th>OS</th>
+                            </tr>
+                            <tr>
+                                <td id="general-info-dangerous-level-original"></td>
+                                <td id="general-info-dangerous-level-non-live"></td>
+                                <td id="general-info-dangerous-level-other-sports"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div id="general-info-autosuspend"> </div>
+                    <div id="general-info-commited-fraudcase" style="border-bottom: 0;"> </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

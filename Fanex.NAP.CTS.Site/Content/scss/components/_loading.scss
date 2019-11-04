@@ -1,0 +1,12 @@
+
+.loader {
+  @include loader($size: 16px, $align: middle);
+  z-index: 10000;
+}
+
+.loader-in-table {
+  @include loader($size: 8px, $align: middle);
+  position: absolute;
+  top: 55px;
+  z-index: 10000;
+}

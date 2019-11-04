@@ -1,0 +1,107 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles{
+    @Styles.Render("~/suspicious-customer-styles")
+
+    <style>
+        .popover{
+            display:normal;
+            width: 600px;
+        }
+    </style>
+}
+
+<h1 class="title">Suspicious Customer</h1>
+<div class="form-filter">
+    <div class="group width-220">
+        <label class="text">Event Date</label>
+        <select class="control" id="date_type">
+            <option value="0">Today</option>
+            <option value="1">Yesterday</option>
+            <option value="2">This Week</option>
+            <option value="3">Last Week</option>
+            <option value="4">This Month</option>
+            <option value="5">Last Month</option>
+            <option value="6">Since Last Month</option>
+            <option value="7">Specific Date</option>
+        </select>
+    </div>
+
+    <div class="group calendar">
+        <label class="text">From</label>
+        <input type="text" id="event_date" class="control">
+        <span class="icon-calendar-text"></span>
+    </div>
+
+    <div class="group calendar">
+        <label class="text">To</label>
+        <input type="text" id="event_date2" class="control" />
+        <span class="icon-calendar-text"></span>
+    </div>
+
+    <div class="group  width-220">
+        <label class="text">Member</label>
+        <input type="text" id="member" class="control" />
+    </div>
+
+    <div class="group width-160">
+        <label class="text">Fraud Case</label>
+        <select class="control" id="fraud_case"></select>
+    </div>
+
+    <div class="group width-160">
+        <label class="text">Verified</label>
+        <select class="control" id="is_verified">
+            <option>All</option>
+            <option value="true">Verified</option>
+            <option value="false">Not Verified</option>
+        </select>
+    </div>
+
+    <div class="group width-160">
+        <label class="text">Classification</label>
+        <select class="control" id="classification">
+            <option value="0">All</option>
+            <option value="1">Delinquency</option>
+            <option value="2">Dirty</option>
+            <option value="3">Hedge</option>
+        </select>
+    </div>
+
+    <div class="group width-160">
+        <label class="text">Assignees</label>
+        <select class="control" id="assignee"></select>
+    </div>
+
+    <button class="button -primary">Generate</button>
+    <button class="button -export"><span class="icon-export-excel"></span>Export</button>
+</div>
+
+<div id='customer_grid' hidden>
+    <table class="table table-striped width-100per" style="width: 100%">
+        <thead>
+            <tr>
+                <th class="col-no">#</th>
+                <th class="col-classification">Classification</th>
+                <th class="col-logs-notes">Notes</th>
+                <th class="col-verified">Verified</th>
+                <th>Member</th>
+                <th>Total Violations</th>
+                <th>Violated Cases</th>
+                <th>#Tickets</th>
+                <th>Assignee</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<div id="note_popup" class="popover">
+    @Html.Partial("Note")
+</div>
+
+@section scripts{
+    @Scripts.Render("~/scripts/suspicious-customer")
+}

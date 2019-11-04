@@ -1,0 +1,52 @@
+input[type="checkbox"] {
+  display: none;
+  transition: $transition-common;
+}
+
+input[type="checkbox"] + span {
+  position: relative;
+  padding-left: 22px;
+  cursor: pointer;
+
+  &:before {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 16px;
+    width: 16px;
+    border-radius: 2px;
+    border: 1px solid #545454;
+    background-color: #fff;
+    content: '';
+  }
+}
+
+input[type="checkbox"] + .null {
+  padding-left: 16px;
+}
+
+// Box checked
+input[type="checkbox"]:checked + span:after {
+  position: absolute;
+  top: 5px;
+  left: 4px;
+  height: 5px;
+  width: 9px;
+  border: 2px solid #fff;
+  border-top: none;
+  border-right: none;
+  transform: rotate(-45deg);
+  content: "";
+}
+
+input[type="checkbox"]:checked + span:before {
+    background-color: #458A00;
+    border-color: #458A00;
+}
+
+// Disabled state label.
+input[type="checkbox"]:disabled + span {
+  opacity: 0.5;
+}
+
+

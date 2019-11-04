@@ -1,0 +1,62 @@
+﻿namespace Fanex.NAP.CTS.Site.Controllers
+{
+    using Fanex.NAP.Core.Service.Impl;
+    using Fanex.NAP.Core.Web.Attribute;
+    using Fanex.NAP.CTS.Library.Core.Consts;
+    using Fanex.NAP.CTS.Library.Services;
+    using Fanex.NAP.CTS.Service.Utilities;
+    using System.Configuration;
+    using System.Web.Mvc;
+
+    [NapAuth(FunctionKey = FSFunctionKeys.SubscriberAssignment, Policy = Core.Business.Constant.Policy.Read)]
+    public class SubscriberAssignmentController : BaseController
+    {
+        private readonly ISubscriberAssignmentService _subscriberAssignmentService;      
+
+        public SubscriberAssignmentController()
+        {
+            _subscriberAssignmentService = new SubscriberAssignmentService();
+        }
+
+        public override string BaseControllerName { get => Consts.MenuItemSettings; }
+
+        public ActionResult Index()
+        {
+            ViewBag.Username = this.User.Identity.Name;
+            ViewBag.Environment = int.Parse(ConfigurationManager.AppSettings["Environment"]);
+            ViewBag.IsPermission = PermissionService.IsMasterSubscriberAssignment();
+
+            return View();
+        }
+
+        public ActionResult GetUserId(string userName)
+        {
+            var userService = new UserService();
+
+            var user = userService.Get(userName);
+
+            if(user != null && userService.HasAnyPermission(user.Id, SiteId, Environment))
+            {
+                return Json(user.Id, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(string.Empty, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetSubscribers(long userId)
+        {
+            var data = _subscriberAssignmentService.GetSubscribers(userId);
+
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult AssignSubscribers(int userId, string subscriberIds, bool isMasterSub)
+        {
+            var data = _subscriberAssignmentService.UpdateSubscribers(isMasterSub, userId, subscriberIds, CurrentSession.UserId);
+
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+    }
+}

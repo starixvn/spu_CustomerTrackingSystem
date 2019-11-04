@@ -1,0 +1,152 @@
+﻿@using Fanex.NAP.CTS.Library.Models
+@using Fanex.NAP.CTS.Library.DTO
+@model Fanex.NAP.CTS.Websites.ViewModels.FraudCase.FraudCaseViewModel
+
+@{
+    var ajax = new AjaxOptions
+    {
+        OnBegin = "common.showLoading",
+        OnComplete = "common.closeLoading"
+    };
+}
+
+@section styles{
+    @Styles.Render("~/fraud-case-styles")
+
+    <style>
+        #search-btn {
+            display: none;
+        }
+    </style>
+}
+
+<h1 class="title">Fraud case rules</h1>
+
+@using (Ajax.BeginForm(ajax))
+{
+    <div class="form-filter">
+        <div class="group">
+            <label class="text">Fraud case</label>
+            <select class="control" name="fraudCaseId" id="fraud-case-selector">
+                @if (Model.FraudCaseList.Any())
+                {
+                    foreach (var item in Model.FraudCaseList)
+                    {
+                        <option value="@((int) item.FraudCaseId)" @(Model != null && Model.FraudCaseInfo.FraudCaseId == (int)item.FraudCaseId ? "selected" : "")>
+                            @(item.FraudCaseName)
+                        </option>
+                    }
+                }
+                else
+                {
+                    <option selected="selected">There's no data</option>
+                }
+            </select>
+        </div>
+        @if (Model.FraudCaseList.Any())
+        {
+            <button class="button -primary" id="search-btn">Search</button>
+        }
+    </div>
+}
+
+@if (Model.FraudCaseInfo != null)
+{
+    <div class="info">
+        <div class="row">
+            <div class="info-name">Active</div>
+            <div class="info-value">
+                <div class="switch">
+                    <input @(ViewBag.IsHost ? "" : "disabled") class="switch-input button-activate {$modifiers}" id="fraud-case-activator" data-active="1" data-id="@(Model.FraudCaseInfo.FraudCaseId)" type="checkbox" @(Model.FraudCaseInfo.IsActive ? "checked='checked'" : "")>
+                    <label class="switch-paddle" for="fraud-case-activator"></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="info-name">Schedule</div>
+            <div class="info-value">@Model.FraudCaseInfo.ScheduleTime</div>
+        </div>
+
+        <div class="row">
+            <div class="info-name">Match to scan</div>
+            <div class="info-value">
+                @foreach (var rule in Model.FraudCaseInfo.MatchRules)
+                {
+                    <p class="detail">@Html.Raw(rule)</p>
+                }
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="info-name">Ticket in rules</div>
+            <div class="info-value">
+                @foreach (var rule in Model.FraudCaseInfo.TicketRules)
+                {
+                    <p class="detail">@Html.Raw(rule)</p>
+                }
+                @*Ticket from customers which are in the list <a href="#" class="view-list">View List</a>*@
+            </div>
+        </div>
+
+        @if (Model.FraudCaseInfo.Actions != null && Model.FraudCaseInfo.Actions.Any())
+        {
+            <div class="row">
+                <div class="info-name">Actions</div>
+                <div class="info-value">
+                    @foreach (var action in Model.FraudCaseInfo.Actions)
+                    {
+                        <p class="detail">@Html.Raw(action)</p>
+                    }
+                    @*Ticket from customers which are in the list <a href="#" class="view-list">View List</a>*@
+                </div>
+            </div>
+        }
+    </div>
+
+    switch ((FraudCaseId)Model.FraudCaseInfo.FraudCaseId)
+    {
+        case FraudCaseId.DelayedGoal:
+            @Html.Partial("DelayedGoal/Dialog")
+            break;
+        case FraudCaseId.ScannedOfficeIP:
+            @Html.Partial("ScannedOfficeIP/Dialog")
+            @Html.Partial("ScannedOfficeIP/InternalAccountDialog")
+            break;     
+        case FraudCaseId.DailyDataCapture:
+        case FraudCaseId.CheckBet:
+            @Html.Partial("DailyDataCapture/Dialog")
+            break;
+        default:
+            break;
+    }
+}
+
+@section scripts{
+    <script>
+        var fraudCaseId = @(Model.FraudCaseInfo.FraudCaseId);
+        var isHost = @(ViewBag.IsHost.ToString().ToLower());
+    </script>
+
+    @Scripts.Render("~/fraud-case-scripts")
+
+    @if (Model.FraudCaseInfo != null)
+    {
+        switch ((FraudCaseId)Model.FraudCaseInfo.FraudCaseId)
+        {
+            case FraudCaseId.DelayedGoal:
+                @Scripts.Render("~/fraud-case-scripts/delayed-goal")
+                break;
+            case FraudCaseId.ScannedOfficeIP:
+                @Scripts.Render("~/fraud-case-scripts/scanned-office-ip")
+                @Scripts.Render("~/fraud-case-scripts/scanned-office-account")
+                break;
+            case FraudCaseId.DailyDataCapture:
+            case FraudCaseId.CheckBet:
+                @Scripts.Render("~/fraud-case-scripts/daily-data-capture")
+                break;
+            default:
+                break;
+        }
+    }
+}

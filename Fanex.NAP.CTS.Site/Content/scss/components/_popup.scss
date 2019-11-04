@@ -1,0 +1,169 @@
+.ui-widget-overlay {
+    background: rgba(0,0,0,.4);
+}
+
+.ui-widget.ui-widget-content {
+    border: none;
+}
+
+.ui-dialog {
+    position: fixed;
+    /*top: 120px !important;*/
+    padding: 0;
+    font-family: $font-family;
+    box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.1);
+
+    .ui-dialog-content {
+       padding: 12px;
+    }
+
+    .ui-dialog-buttonpane {
+        border-top: none;
+        margin-top: 0;
+        padding-bottom: 20px;
+    }
+
+    .ui-dialog-buttonpane button {
+        padding: 0 24px;
+        margin: 0 13px;
+
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+
+    .ui-button.-primary:hover,
+    .ui-button.-primary:focus,
+    .ui-button.-primary:active {
+        border: none;
+    }
+
+    .ui-dialog-titlebar {
+        padding: 10px;
+        border: none;
+        border-radius: 0;
+        background-color: #1e2e4f;
+        color: #fff;
+        font-weight: normal;
+        font-size: 15px;
+    }
+
+    .ui-dialog-titlebar-close {
+        background: none;
+        border: none;
+    }
+}
+
+.ui-button:hover .ui-icon {
+    background: none;
+    &:before {
+        color: #fff;
+    }
+}
+
+.ui-button .ui-icon {
+    width: auto;
+    height: auto;
+    margin-left: -11px;
+    margin-top: -10px;
+    background: none;
+    font-family: 'Fraud-Sensor';
+    text-indent: 0;
+
+    &:before {
+        display: inline-block;
+        content: "\e920";
+        color: #909bad;
+        font-size: 20px;
+    }
+}
+
+// Confirmation
+.dialog-confirmation {
+    .ui-dialog-content  {
+        padding: 32px 12px;
+        font-size: 16px;
+    }
+}
+
+// modal-graph-render
+.modal-graph-render {
+    top: 60px !important;
+    width: 99% !important;
+
+    .ppt-body {
+        margin: 5px;
+        padding: 0 !important;
+    }
+
+    .ppt-container-graph {
+        background: #2e3138;
+        border-radius: 0;
+        height: 100%;
+    }
+
+    .ppt-div-graph {
+        border-bottom: 5px solid #fff;
+    }
+
+    .ppt-node__back-text--choose,
+    .ppt-node__back-text--choose--value-selected,
+    .ppt-node__back-text--value,
+    .ppt-node__back-text--root,
+    .ppt-node__back-text--root--value-selected {
+        fill: #fff;
+        fill-opacity: 1;
+        transform: translateY(10px);
+    }
+
+    .ppt-node__text--choose, .ppt-node__text--choose--value-selected, .ppt-node__text--value, .ppt-node__text--root--value-selected, .ppt-node__text--root {
+        fill: #003546;
+        font-family: 'Lato', Tahoma, sans-serif;
+        transform: translateY(10px);
+    }
+
+    .ppt-donut-segments {
+        > g:last-child {
+            .ppt-segment {
+                fill: #35BAA3;
+            }
+        }
+    }
+
+    .ppt-link.ppt-USED, .ppt-link.ppt-BELONG_TO {
+        stroke-width: 3px;
+    }
+
+    .ppt-BELONG_TO {
+        stroke: #35BAA3;
+    }
+
+    /*.Customer {
+        &.ppt-node__back-text--root, &.ppt-node__text--root--value-selected, &.ppt-node__back-text--root--value-selected {
+            transform: translateY(10px);
+        }
+
+        &.ppt-node__text--root {
+            transform: translateY(10px);
+        }
+    }
+
+    .Device, .Group {
+        &.ppt-node__back-text--choose {
+            transform: translateY(10px);
+        }
+
+        &.ppt-node__text--choose {
+            transform: translateY(10px);
+        }
+    }*/
+
+    .ppt-g-node-foreground {
+        transform: translateX(-40px);
+    }
+
+    .ppt-count-box.value, .ppt-count-box.root {
+        fill-opacity: 1;
+        rx: 6;
+    }
+}
