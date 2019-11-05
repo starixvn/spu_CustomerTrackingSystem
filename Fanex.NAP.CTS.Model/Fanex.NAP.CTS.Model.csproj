@@ -140,6 +140,15 @@
     <Compile Include="CustomerMonitor\Customer.cs" />
     <Compile Include="DailyDataCapture\CapturedMatch.cs" />
     <Compile Include="Device\Device.cs" />
+    <Compile Include="DTO\CustomerAssociation.cs" />
+    <Compile Include="DTO\CustomerEvidence.cs" />
+    <Compile Include="DTO\CustomerEvidenceList.cs" />
+    <Compile Include="DTO\CustomerList.cs" />
+    <Compile Include="DTO\CustomerSubcriber.cs" />
+    <Compile Include="DTO\CustomerTotalAssociation.cs" />
+    <Compile Include="DTO\FraudCase.cs" />
+    <Compile Include="DTO\Match.cs" />
+    <Compile Include="DTO\Message.cs" />
     <Compile Include="Enum.cs" />
     <Compile Include="Environment.cs" />
     <Compile Include="FraudCaseHealth.cs" />

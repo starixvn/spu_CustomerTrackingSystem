@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4940BBBB-2943-476D-A778-FFE0ED748F12}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Fanex.NAP.CTS.ViewModel</RootNamespace>
+    <AssemblyName>Fanex.NAP.CTS.ViewModel</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Fanex.BetList.BetTrade, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.BetList.Core.2.95.0\lib\net40\Fanex.BetList.BetTrade.dll</HintPath>
+    </Reference>
+    <Reference Include="Fanex.BetList.Core, Version=2.95.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.BetList.Core.2.95.0\lib\net40\Fanex.BetList.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.1.3\lib\net40\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI, Version=2.1.3.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.1.3\lib\net40\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML, Version=2.1.3.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.1.3\lib\net40\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net, Version=2.1.3.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.1.3\lib\net40\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats, Version=2.1.3.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.1.3\lib\net40\NPOI.OpenXmlFormats.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="TplCore, Version=1.0.4694.29951, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TplCore.1.0.4694.29951\lib\net40\TplCore.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Account\AccountDetail.cs" />
+    <Compile Include="Account\Associated\AssociatedAccountByAccount.cs" />
+    <Compile Include="Account\Associated\AssociatedAccountByAccountFilter.cs" />
+    <Compile Include="Account\Associated\AssociatedAccountByCustomer.cs" />
+    <Compile Include="Account\Associated\AssociatedAccountsCollected.cs" />
+    <Compile Include="Account\Associated\AssociatedDeviceByAccount.cs" />
+    <Compile Include="Account\Associated\AssociatedDeviceByAccountFilter.cs" />
+    <Compile Include="Account\CustomerFraud.cs" />
+    <Compile Include="Account\CustomerFraudSuspicious.cs" />
+    <Compile Include="Account\CustomerSuspicious.cs" />
+    <Compile Include="Account\Evidence\ChainNode.cs" />
+    <Compile Include="Account\Evidence\ChainsToEvidence.cs" />
+    <Compile Include="Account\Evidence\ChainsToEvidenceFilter.cs" />
+    <Compile Include="Account\Evidence\Exception\ExceptionEvidenceAdd.cs" />
+    <Compile Include="Account\Evidence\RetractedAndExceptionCollected.cs" />
+    <Compile Include="Account\Evidence\RetractedAndExceptionEvidence.cs" />
+    <Compile Include="Account\Evidence\RetractedAndExceptionEvidenceFilter.cs" />
+    <Compile Include="Account\Evidence\RetractedAndExceptionNode.cs" />
+    <Compile Include="Account\GeneralInformation\AssociatedByAccount.cs" />
+    <Compile Include="Account\GeneralInformation\CustomerInformation.cs" />
+    <Compile Include="Account\GeneralInformation\EvidenceByTarget.cs" />
+    <Compile Include="Account\GeneralInformation\GeneralAccountCollected.cs" />
+    <Compile Include="Account\GeneralInformation\GeneralInformationFilter.cs" />
+    <Compile Include="Account\Search\SearchAccountFilter.cs" />
+    <Compile Include="Account\Search\SubscriberAccount.cs" />
+    <Compile Include="CheckBetReport\CheckBetTicket.cs" />
+    <Compile Include="CustomerMonitor\CustomerDetails\CustomerDetailsInfo.cs" />
+    <Compile Include="CustomerMonitor\CustomerDetails\TicketDetails.cs" />
+    <Compile Include="DailyDataMonitor\CapturedMatch.cs" />
+    <Compile Include="Evidence\Evidence.cs" />
+    <Compile Include="Evidence\GeneralInformationPlaceEvidenceByAccount.cs" />
+    <Compile Include="Evidence\InformationEvidenceByAccount.cs" />
+    <Compile Include="Evidence\InformationEvidenceByAccountFilter.cs" />
+    <Compile Include="Evidence\InformationEvidenceByAccountHistory.cs" />
+    <Compile Include="Evidence\InformationEvidenceByAccountRetractEvidence.cs" />
+    <Compile Include="Evidence\InformationEvidenceByAccountUpdateOfComment.cs" />
+    <Compile Include="FraudCase\DelayedGoal\Customer.cs" />
+    <Compile Include="FraudCase\FraudCaseViewModel.cs" />
+    <Compile Include="History.cs" />
+    <Compile Include="MatchMonitor\Event.cs" />
+    <Compile Include="MatchMonitor\FraudCase.cs" />
+    <Compile Include="MatchMonitor\FraudCaseDetails\ArbitrageGroupTicketList.cs" />
+    <Compile Include="MatchMonitor\FraudCaseDetails\ArbitrageStake.cs" />
+    <Compile Include="MatchMonitor\FraudCaseDetails\ArbitrageTicket.cs" />
+    <Compile Include="MatchMonitor\FraudCaseDetails\ArbitrageTicketList.cs" />
+    <Compile Include="MatchMonitor\FraudCaseDetails\AssociatedCustomer.cs" />
+    <Compile Include="MatchMonitor\FraudCaseDetails\BettypeOrder.cs" />
+    <Compile Include="MatchMonitor\FraudCaseDetails\CustomerDetails.cs" />
+    <Compile Include="MatchMonitor\FraudCaseDetails\FlaggedAccountTicket.cs" />
+    <Compile Include="MatchMonitor\FraudCaseDetails\MatchFraudCaseInfo.cs" />
+    <Compile Include="MatchMonitor\FraudCaseDetails\OddsDetails.cs" />
+    <Compile Include="MatchMonitor\FraudCaseDetails\Result.cs" />
+    <Compile Include="MatchMonitor\FraudCaseDetails\TicketDetails.cs" />
+    <Compile Include="MatchMonitor\Match.cs" />
+    <Compile Include="MatchMonitor\MatchList.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SuspiciousCustomerDetails\CustomerDetailsViewModel.cs" />
+    <Compile Include="SuspiciousCustomerDetails\TicketDetails.cs" />
+    <Compile Include="SuspiciousCustomer\SuspiciousCustomerNoteView.cs" />
+    <Compile Include="Transaction\IPInformation.cs" />
+    <Compile Include="Transaction\TransactionHistory.cs" />
+    <Compile Include="Transaction\TransactionHistoryFilter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Fanex.NAP.CTS.Model\Fanex.NAP.CTS.Model.csproj">
+      <Project>{5ce0ba40-0a37-4c89-a33b-d61c7944be08}</Project>
+      <Name>Fanex.NAP.CTS.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fanex.NAP.CTS.Resource\Fanex.NAP.CTS.Resource.csproj">
+      <Project>{ae6c4b2a-8cd3-433a-8f42-d8272390cf61}</Project>
+      <Name>Fanex.NAP.CTS.Resource</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
