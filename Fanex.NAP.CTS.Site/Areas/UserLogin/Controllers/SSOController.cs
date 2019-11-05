@@ -10,7 +10,7 @@
     using Fanex.NAP.Core.Web.Auth;
     using Fanex.NAP.Core.Web.Session;
     using Fanex.NAP.CTS.Service.Utilities;
-    using Fanex.NAP.CTS.Site.Controllers;
+    using Fanex.NAP.CTS.Controller;
     using System;
     using System.CodeDom.Compiler;
     using System.Linq;

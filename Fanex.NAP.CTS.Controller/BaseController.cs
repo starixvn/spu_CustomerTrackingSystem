@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Site.Controllers
+﻿namespace Fanex.NAP.CTS.Controller
 {
     using Fanex.Logging;
     using Fanex.NAP.Core.Configuration;

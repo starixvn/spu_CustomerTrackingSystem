@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Site.Controllers
+﻿namespace Fanex.NAP.CTS.Controller
 {
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Service.Interface;
@@ -6,11 +6,10 @@
     using Fanex.NAP.CTS.Library.Core.Consts;
     using Fanex.NAP.CTS.Library.Services;
     using Fanex.NAP.CTS.Library.ViewModels.Account.Search;
-    using Fanex.NAP.CTS.Service.Utilities;
     using System.Configuration;
     using System.Web.Mvc;
 
-    [NapAuth(FunctionKey = FSFunctionKeys.SearchAccount, Policy = Core.Business.Constant.Policy.Read)]
+    [NapAuth(FunctionKey = FSFunctionKeys.SearchAccount, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class SearchAccountController : BaseController
     {
         private readonly IAccountService _accountService;

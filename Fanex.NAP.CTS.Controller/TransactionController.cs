@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Site.Controllers
+﻿namespace Fanex.NAP.CTS.Controller
 {
     using Fanex.NAP.CTS.Library.Services;
     using Fanex.NAP.CTS.Library.ViewModels.Transaction;
@@ -20,14 +20,14 @@
         }
 
         [HttpPost]
-        [NapAuth(FunctionKey = FSFunctionKeys.TransactionHistory, Policy = Core.Business.Constant.Policy.Read)]
+        [NapAuth(FunctionKey = FSFunctionKeys.TransactionHistory, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetTransactionHistory(int accountId)
         {
             return PartialView("TransactionHistory");
         }
 
         [HttpPost]
-        [NapAuth(FunctionKey = FSFunctionKeys.TransactionHistory, Policy = Core.Business.Constant.Policy.Read)]
+        [NapAuth(FunctionKey = FSFunctionKeys.TransactionHistory, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetTransactionHistoryFilter(TransactionHistoryFilter filter)
         {            
             var data = _transactionService.GetTransactionHistory(filter);

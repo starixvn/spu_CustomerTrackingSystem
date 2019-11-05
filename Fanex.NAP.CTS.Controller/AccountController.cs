@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Site.Controllers
+﻿namespace Fanex.NAP.CTS.Controller
 {
     using System.Net;
     using System.Web.Mvc;
@@ -11,13 +11,13 @@
     using Fanex.NAP.CTS.Library.ViewModels.Evidence;
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.CTS.Library.ViewModels.Account.GeneralInformation;
-    using Fanex.NAP.CTS.Service.Utilities;
+    using Fanex.NAP.CTS.Core.Service.Utilities;
     using Fanex.NAP.CTS.Library.ViewModels.Account.Evidence;
     using Fanex.NAP.CTS.Library.ViewModels.Account.Evidence.Exception;
     using Fanex.NAP.CTS.Library.Models;
     using Fanex.NAP.CTS.Library.Core.Resources;
 
-    [NapAuth(FunctionKey = FSFunctionKeys.SearchAccount, Policy = Core.Business.Constant.Policy.Read)]
+    [NapAuth(FunctionKey = FSFunctionKeys.SearchAccount, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class AccountController : BaseController
     {
         private readonly IAccountService _accountService;
@@ -35,14 +35,14 @@
         {
             return View();
         }
-     
+
         public ActionResult DetailAccount(int id, int custId)
         {
             var permissionIPLocation = new UserService().GetPermission(CurrentSession.UserId, SiteId, FSFunctionKeys.IPLocation);
 
             ViewBag.IsPermissionIPLocation = permissionIPLocation > 0;
             ViewBag.AccountId = id;
-            ViewBag.CustId = custId;         
+            ViewBag.CustId = custId;
             return View("DetailAccount");
         }
 
@@ -227,6 +227,6 @@
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        #endregion                
+        #endregion
     }
 }

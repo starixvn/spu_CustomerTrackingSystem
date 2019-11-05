@@ -61,7 +61,6 @@
     </Reference>
     <Reference Include="EasyNetQ, Version=3.4.5.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\EasyNetQ.3.4.5\lib\net451\EasyNetQ.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Enyim.Caching, Version=2.12.0.0, Culture=neutral, PublicKeyToken=81137140da4e57ef, processorArchitecture=MSIL">
       <HintPath>..\packages\Fanex.Caching.1.0.404.95\lib\net40\Enyim.Caching.dll</HintPath>
@@ -95,7 +94,6 @@
     </Reference>
     <Reference Include="Fanex.Logging, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Fanex.Logging.1.0.4\lib\net40\Fanex.Logging.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Fanex.NAP.Core, Version=1.2.1.4, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Fanex.NAP.Core.Client.1.2.1.4\lib\net40\Fanex.NAP.Core.dll</HintPath>
@@ -338,26 +336,6 @@
     <Compile Include="Areas\UserLogin\Controllers\LoginController.cs" />
     <Compile Include="Areas\UserLogin\Controllers\SSOController.cs" />
     <Compile Include="Areas\UserLogin\UserLoginAreaRegistration.cs" />
-    <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\Api\ApiFPSController.cs" />
-    <Compile Include="Controllers\BaseController.cs" />
-    <Compile Include="Controllers\CheckBetReportController.cs" />
-    <Compile Include="Controllers\ConfigurationsController.cs" />
-    <Compile Include="Controllers\CustomerMonitorController.cs" />
-    <Compile Include="Controllers\DailyDataCaptureController.cs" />
-    <Compile Include="Controllers\ErrorsController.cs" />
-    <Compile Include="Controllers\NotificationController.cs" />
-    <Compile Include="Controllers\FraudCaseController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\ScannedOfficeIpReportController.cs" />
-    <Compile Include="Controllers\SearchAccountController.cs" />
-    <Compile Include="Controllers\SearchDeviceController.cs" />
-    <Compile Include="Controllers\SubscriberAssignmentController.cs" />
-    <Compile Include="Controllers\SuspiciousCustomerController.cs" />
-    <Compile Include="Controllers\MatchMonitorController.cs" />
-    <Compile Include="Controllers\ReportsController.cs" />
-    <Compile Include="Controllers\SuspiciousCustomerDetailsController.cs" />
-    <Compile Include="Controllers\TransactionController.cs" />
     <Compile Include="FSFunctionKeys.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1237,6 +1215,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Fanex.NAP.CTS.Controller\Fanex.NAP.CTS.Controller.csproj">
+      <Project>{96bc0111-63b6-4c24-94df-c00ec2656ec7}</Project>
+      <Name>Fanex.NAP.CTS.Controller</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Fanex.NAP.CTS.Library\Fanex.NAP.CTS.Library.csproj">
       <Project>{2d6f84f8-e9b5-49ec-b487-05b44e994dcc}</Project>
       <Name>Fanex.NAP.CTS.Library</Name>

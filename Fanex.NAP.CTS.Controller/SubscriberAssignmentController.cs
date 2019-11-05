@@ -1,14 +1,14 @@
-﻿namespace Fanex.NAP.CTS.Site.Controllers
+﻿namespace Fanex.NAP.CTS.Controller
 {
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Library.Core.Consts;
     using Fanex.NAP.CTS.Library.Services;
-    using Fanex.NAP.CTS.Service.Utilities;
+    using Fanex.NAP.CTS.Core.Service.Utilities;
     using System.Configuration;
     using System.Web.Mvc;
 
-    [NapAuth(FunctionKey = FSFunctionKeys.SubscriberAssignment, Policy = Core.Business.Constant.Policy.Read)]
+    [NapAuth(FunctionKey = FSFunctionKeys.SubscriberAssignment, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class SubscriberAssignmentController : BaseController
     {
         private readonly ISubscriberAssignmentService _subscriberAssignmentService;      

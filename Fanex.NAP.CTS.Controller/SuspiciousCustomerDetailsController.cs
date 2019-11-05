@@ -1,16 +1,14 @@
-﻿namespace Fanex.NAP.CTS.Site.Controllers
+﻿namespace Fanex.NAP.CTS.Controller
 {
-    using Core.Service.Impl;
+    using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Library.Core.Consts;
-    using Fanex.NAP.CTS.Library.Models.SuspiciousCustomerDetails;
     using Fanex.NAP.CTS.Library.Services;
     using Library.ViewModels.SuspiciousCustomerDetails;
     using System;
-    using System.Threading.Tasks;
     using System.Web.Mvc;
 
-    [NapAuth(FunctionKey = FSFunctionKeys.SuspiciousCustomerDetails, Policy = Core.Business.Constant.Policy.Read)]
+    [NapAuth(FunctionKey = FSFunctionKeys.SuspiciousCustomerDetails, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class SuspiciousCustomerDetailsController : ReportsController
     {
         private readonly ISuspiciousCustomerReportDetailsService _detailsService = new SuspiciousCustomerReportDetailsService();
@@ -32,7 +30,7 @@
             return View(generalViewModel);
         }
 
-        [NapAuth(FunctionKey = FSFunctionKeys.SuspiciousCustomerDetails, Policy = Core.Business.Constant.Policy.Host)]
+        [NapAuth(FunctionKey = FSFunctionKeys.SuspiciousCustomerDetails, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult UpdateAssignee(int custId, int? assigneeId)
         {
             var result = _detailsService.UpdateAssignee(custId, assigneeId, CurrentSession.UserId);
@@ -40,7 +38,7 @@
             return Json(result);
         }
 
-        [NapAuth(FunctionKey = FSFunctionKeys.SuspiciousCustomerDetails, Policy = Core.Business.Constant.Policy.Host)]
+        [NapAuth(FunctionKey = FSFunctionKeys.SuspiciousCustomerDetails, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult UpdateCustomerFraudCaseVerify(int custId, int fraudCaseId)
         {
             var result = _detailsService.VerifySuspiciousCustomerFraudCase(custId, CurrentSession.UserId, fraudCaseId);
@@ -48,7 +46,7 @@
             return Json(result);
         }
 
-        [NapAuth(FunctionKey = FSFunctionKeys.SuspiciousCustomerDetails, Policy = Core.Business.Constant.Policy.Host)]
+        [NapAuth(FunctionKey = FSFunctionKeys.SuspiciousCustomerDetails, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult RemoveLogNote(int custId, int customerLogId)
         {
             var result = _detailsService.DeleteCustomerLogNotes(CurrentSession.UserId, customerLogId);
@@ -56,7 +54,7 @@
             return Json(result);
         }
 
-        [NapAuth(FunctionKey = FSFunctionKeys.SuspiciousCustomerDetails, Policy = Core.Business.Constant.Policy.Host)]
+        [NapAuth(FunctionKey = FSFunctionKeys.SuspiciousCustomerDetails, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult InsertLogNote(int custId, string logDesc)
         {
             var result = _detailsService.InsertCustomerLogNotes(custId, CurrentSession.UserId, logDesc);
@@ -64,7 +62,7 @@
             return Json(result);
         }
 
-        [NapAuth(FunctionKey = FSFunctionKeys.SuspiciousCustomerDetails, Policy = Core.Business.Constant.Policy.Host)]
+        [NapAuth(FunctionKey = FSFunctionKeys.SuspiciousCustomerDetails, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult UpdateCustomerInfo(int custId, bool? isDelinquent, bool? isDirty, bool? isHedge)
         {
             var result = _detailsService.UpdateSuspiciousCustomerInfo(custId, CurrentSession.UserId, isDelinquent, isDirty, isHedge);

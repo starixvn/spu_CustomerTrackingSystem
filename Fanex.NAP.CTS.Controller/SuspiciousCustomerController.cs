@@ -1,8 +1,8 @@
-﻿namespace Fanex.NAP.CTS.Site.Controllers
+﻿namespace Fanex.NAP.CTS.Controller
 {
-    using Core.Business;
-    using Core.Service.Impl;
-    using Core.Web.Attribute;
+    using Fanex.NAP.Core.Business;
+    using Fanex.NAP.Core.Service.Impl;
+    using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Library.Core.Consts;
     using Fanex.NAP.CTS.Library.Models.SuspiciousCustomer;
     using Library.Criteria.SuspiciousCustomer;
@@ -117,7 +117,7 @@
         {
             var siteId = int.Parse(ConfigurationManager.AppSettings["SiteId"]);
             var users = new UserService().GetUserPolicies(FSFunctionKeys.SuspiciousCustomer, siteId);
-            var result = new List<Core.Models.User>();
+            var result = new List<Fanex.NAP.Core.Models.User>();
 
             foreach (var user in users)
             {

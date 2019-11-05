@@ -1,6 +1,6 @@
-﻿namespace Fanex.NAP.CTS.Site.Controllers
+﻿namespace Fanex.NAP.CTS.Controller
 {
-    using Core.Service.Impl;
+    using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Library.Core.Consts;
     using Fanex.NAP.CTS.Library.Criteria.MatchMonitor;
@@ -13,7 +13,7 @@
     using System.Linq;
     using System.Web.Mvc;
 
-    [NapAuth(FunctionKey = FSFunctionKeys.MatchMonitoring, Policy = Core.Business.Constant.Policy.Read)]
+    [NapAuth(FunctionKey = FSFunctionKeys.MatchMonitoring, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class MatchMonitorController : ReportsController
     {
         private readonly IFraudCaseDetailsService _fraudCaseDetailService;
@@ -57,7 +57,7 @@
         }
 
         [HttpPost]
-        [NapAuth(FunctionKey = FSFunctionKeys.MatchMonitoring, Policy = Core.Business.Constant.Policy.Host)]
+        [NapAuth(FunctionKey = FSFunctionKeys.MatchMonitoring, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult VerifyMatch(VerifyMatchCriteria criteria)
         {
             criteria.UserId = CurrentSession.UserId;

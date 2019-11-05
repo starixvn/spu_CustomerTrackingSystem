@@ -5,7 +5,7 @@
     using Fanex.NAP.Core.Models.ValueObject;
     using Fanex.NAP.CTS.Library.Services;
     using Fanex.NAP.CTS.Service.Utilities;
-    using Fanex.NAP.CTS.Site.Controllers;
+    using Fanex.NAP.CTS.Controller;
     using Logging;
     using NAP.Core.Configuration;
     using NAP.Core.Service.Impl;

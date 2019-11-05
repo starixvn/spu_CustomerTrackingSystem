@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Site.Controllers
+﻿namespace Fanex.NAP.CTS.Controller
 {
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Web.Attribute;
@@ -15,7 +15,7 @@
     using System.Threading.Tasks;
     using System.Web.Mvc;
 
-    [NapAuth(FunctionKey = FSFunctionKeys.CustomerMonitor, Policy = Core.Business.Constant.Policy.Read)]
+    [NapAuth(FunctionKey = FSFunctionKeys.CustomerMonitor, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class CustomerMonitorController : ReportsController
     {
         readonly ICustomerMonitorService _customerMonitorService = new CustomerMonitorService();
@@ -33,13 +33,13 @@
         public ActionResult Index()
         {
             return View(_customerMonitorService.GetBalanceUpDate());
-        }        
+        }
 
         [HttpPost]
         public ActionResult GetCustomers(CustomerGetCriteria criteria)
         {
             criteria.IsShowSpecialCurrencies = isSpecialCurrency;
-            criteria.Environment = int.Parse(ConfigurationManager.AppSettings["Environment"]);            
+            criteria.Environment = int.Parse(ConfigurationManager.AppSettings["Environment"]);
 
             return Json(_customerMonitorService.GetCustomers(criteria));
         }
@@ -48,7 +48,7 @@
         public ActionResult UpdateNote(UpdateNoteCriteria criteria)
         {
             criteria.UserId = CurrentSession.UserId;
-    
+
             return Json(_customerMonitorService.UpdateNote(criteria));
         }
 

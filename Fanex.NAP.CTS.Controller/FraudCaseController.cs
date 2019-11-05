@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Site.Controllers
+﻿namespace Fanex.NAP.CTS.Controller
 {
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Library.Core.Helpers;
@@ -8,22 +8,22 @@
     using Fanex.NAP.CTS.Library.Models;
     using Fanex.NAP.CTS.Library.Services.Implement;
     using Fanex.NAP.CTS.Library.Services.Interface;
+    using Fanex.NAP.CTS.Library.ViewModels.FraudCase;
     using Queue;
     using Library.Core.Helpers.Xml;
     using Library.Criteria.FraudCase.DelayedGoal;
     using Library.DTO;
     using Library.Services;
+    using Library.Core.Utilities;
     using System;
     using System.Collections.Generic;
     using System.Configuration;
     using System.Linq;
-    using System.Web.Mvc;
-    using ViewModels.FraudCase;
+    using System.Web.Mvc;   
     using Model;
     using EasyNetQ;
-    using Library.Core.Utilities;
 
-    [NapAuth(FunctionKey = FSFunctionKeys.FraudCase, Policy = Core.Business.Constant.Policy.Read)]
+    [NapAuth(FunctionKey = FSFunctionKeys.FraudCase, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class FraudCaseController : ConfigurationsController
     {
         private readonly string FPS_WEBAPI_GET_ASSOCIATION_ACCOUNT = ConfigurationManager.AppSettings["FPS_WEBAPI_GET_ASSOCIATION_ACCOUNT"];
@@ -50,7 +50,7 @@
                 .CreateBus()
                 .DeclareExchange(ConfigSettings.RabbitMQ_Exchange());
 
-            ViewBag.IsHost = UserService.IsHavingPermission(CurrentSession.UserId, int.Parse(AppSettings.Get("SiteId")), FSFunctionKeys.FraudCase, Core.Business.Constant.Policy.Host);
+            ViewBag.IsHost = UserService.IsHavingPermission(CurrentSession.UserId, int.Parse(AppSettings.Get("SiteId")), FSFunctionKeys.FraudCase, NAP.Core.Business.Constant.Policy.Host);
         }
 
         public ActionResult Index()
@@ -117,14 +117,14 @@
         }
 
         [HttpPost]
-        [NapAuth(FunctionKey = FSFunctionKeys.FraudCase, Policy = Core.Business.Constant.Policy.Host)]
+        [NapAuth(FunctionKey = FSFunctionKeys.FraudCase, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult DeleteDelayedGoalCustomer(int custId)
         {
             return Json(_fraudCaseService.DeleteDelayedGoalCustomer(custId, CurrentSession.UserId));
         }
 
         [HttpPost]
-        [NapAuth(FunctionKey = FSFunctionKeys.FraudCase, Policy = Core.Business.Constant.Policy.Host)]
+        [NapAuth(FunctionKey = FSFunctionKeys.FraudCase, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult AddDelayedGoalCustomer(string username)
         {
             var dbresult = _fraudCaseService.AddDelayedGoalCustomer(username, CurrentSession.UserId);
@@ -166,13 +166,13 @@
             return JData(_ipService.GetIps());
         }
 
-        [NapAuth(FunctionKey = FSFunctionKeys.FraudCase, Policy = Core.Business.Constant.Policy.Host)]
+        [NapAuth(FunctionKey = FSFunctionKeys.FraudCase, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult DeleteIpRange(string fromIp, string toIp)
         {
             return Json(_ipService.DeleteIpRange(fromIp, toIp, CurrentSession.UserId));
         }
 
-        [NapAuth(FunctionKey = FSFunctionKeys.FraudCase, Policy = Core.Business.Constant.Policy.Host)]
+        [NapAuth(FunctionKey = FSFunctionKeys.FraudCase, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult AddIpRange(string fromIp, string toIp)
         {
             return Json(_ipService.AddIpRange(fromIp, toIp, CurrentSession.UserId));
@@ -199,14 +199,14 @@
         }
 
         [HttpPost]
-        [NapAuth(FunctionKey = FSFunctionKeys.FraudCase, Policy = Core.Business.Constant.Policy.Host)]
+        [NapAuth(FunctionKey = FSFunctionKeys.FraudCase, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult AddInternalAccount(string userName)
         {
             return Json(_ipService.AddInternalAccount(userName, CurrentSession.UserId));
         }
 
         [HttpPost]
-        [NapAuth(FunctionKey = FSFunctionKeys.FraudCase, Policy = Core.Business.Constant.Policy.Host)]
+        [NapAuth(FunctionKey = FSFunctionKeys.FraudCase, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult DeleteInternalAccount(int custId)
         {
             return Json(_ipService.DeleteInternalAccount(custId, CurrentSession.UserId));
@@ -233,13 +233,13 @@
         }
 
         [HttpPost]
-        [NapAuth(FunctionKey = FSFunctionKeys.FraudCase, Policy = Core.Business.Constant.Policy.Host)]
+        [NapAuth(FunctionKey = FSFunctionKeys.FraudCase, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult AddRecipients(string recipients, FraudCaseId fraudCase)
         {
             return Json(_recipientService.AddRecipient(recipients, CurrentSession.UserId, fraudCase));
         }
 
-        [NapAuth(FunctionKey = FSFunctionKeys.FraudCase, Policy = Core.Business.Constant.Policy.Host)]
+        [NapAuth(FunctionKey = FSFunctionKeys.FraudCase, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult RemoveRecipient(int id, FraudCaseId fraudCase)
         {
             return Json(_recipientService.RemoveRecipient(id, CurrentSession.UserId, fraudCase));

@@ -1,10 +1,10 @@
-﻿namespace Fanex.NAP.CTS.Site.Controllers
+﻿namespace Fanex.NAP.CTS.Controller
 {
     using Fanex.NAP.Core.Web.Attribute;
     using System;
 
     [NapSuperAuth]
-    public abstract class ReportsController : BaseController
+    public class ReportsController : BaseController
     {
         public string GetExcelReportName(string report)
         {

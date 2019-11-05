@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Site.Controllers
+﻿namespace Fanex.NAP.CTS.Controller
 {
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Library.Core.Consts;
@@ -9,7 +9,7 @@
     using System;
     using System.Web.Mvc;
 
-    [NapAuth(FunctionKey = FSFunctionKeys.DailyDataCapture, Policy = Core.Business.Constant.Policy.Read)]
+    [NapAuth(FunctionKey = FSFunctionKeys.DailyDataCapture, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class DailyDataCaptureController : ReportsController
     {
         private readonly IDailyDataCaptureService _service = new DailyCaptureDataService();

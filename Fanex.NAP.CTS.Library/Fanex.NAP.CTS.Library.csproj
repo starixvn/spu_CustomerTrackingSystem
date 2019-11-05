@@ -45,10 +45,6 @@
     <Reference Include="Dapper, Version=1.60.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Dapper.1.60.6\lib\net451\Dapper.dll</HintPath>
     </Reference>
-    <Reference Include="EasyNetQ, Version=3.4.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\EasyNetQ.3.4.4\lib\net451\EasyNetQ.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -84,7 +80,6 @@
     </Reference>
     <Reference Include="Fanex.Logging, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Fanex.Logging.1.0.4\lib\net40\Fanex.Logging.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Fanex.MailDelivery.Client">
       <HintPath>..\packages\Fanex.MailStation.1.1.0.1\lib\net40\Fanex.MailDelivery.Client.dll</HintPath>
@@ -92,9 +87,8 @@
     <Reference Include="Fanex.MailDelivery.Core">
       <HintPath>..\packages\Fanex.MailStation.1.1.0.1\lib\net40\Fanex.MailDelivery.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Fanex.NAP.Core, Version=1.2.1.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Fanex.NAP.Core.Client.1.2.1.1\lib\net40\Fanex.NAP.Core.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Fanex.NAP.Core, Version=1.2.1.4, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.NAP.Core.Client.1.2.1.4\lib\net40\Fanex.NAP.Core.dll</HintPath>
     </Reference>
     <Reference Include="Fanex.NAP.Framework, Version=1.0.0.3, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Fanex.NAP.Framework.1.0.0.3\lib\net40\Fanex.NAP.Framework.dll</HintPath>
@@ -511,6 +505,7 @@
     <Compile Include="ViewModels\Evidence\InformationEvidenceByAccountHistory.cs" />
     <Compile Include="ViewModels\Evidence\GeneralInformationPlaceEvidenceByAccount.cs" />
     <Compile Include="ViewModels\FraudCase\DelayedGoal\Customer.cs" />
+    <Compile Include="ViewModels\FraudCase\FraudCaseViewModel.cs" />
     <Compile Include="ViewModels\History.cs" />
     <Compile Include="ViewModels\MatchMonitor\Event.cs" />
     <Compile Include="ViewModels\MatchMonitor\FraudCase.cs" />
@@ -564,7 +559,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Fanex.NAP.FS.Model\Fanex.NAP.CTS.Model.csproj">
+    <ProjectReference Include="..\Fanex.NAP.CTS.Model\Fanex.NAP.CTS.Model.csproj">
       <Project>{5CE0BA40-0A37-4C89-A33B-D61C7944BE08}</Project>
       <Name>Fanex.NAP.CTS.Model</Name>
     </ProjectReference>

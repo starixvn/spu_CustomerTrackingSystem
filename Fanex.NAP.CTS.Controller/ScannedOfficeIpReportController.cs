@@ -1,6 +1,6 @@
-﻿namespace Fanex.NAP.CTS.Site.Controllers
+﻿namespace Fanex.NAP.CTS.Controller
 {
-    using Core.Service.Impl;
+    using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Library.Core.Consts;
     using Fanex.NAP.CTS.Library.Criteria.ScannedOfficeIP;
@@ -10,7 +10,7 @@
     using System;
     using System.Web.Mvc;
 
-    [NapAuth(FunctionKey = FSFunctionKeys.ScannedOfficeIP, Policy = Core.Business.Constant.Policy.Read)]
+    [NapAuth(FunctionKey = FSFunctionKeys.ScannedOfficeIP, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class ScannedOfficeIpReportController : ReportsController
     {
         private readonly IScannedOfficeIpReportService _service = new ScannedOfficeIpReport();

@@ -1,6 +1,6 @@
-﻿namespace Fanex.NAP.CTS.Site.Controllers
+﻿namespace Fanex.NAP.CTS.Controller
 {
-    using Core.Service.Impl;
+    using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Library.Core.Consts;
     using Fanex.NAP.CTS.Library.Criteria.CheckBetReport;
@@ -9,7 +9,7 @@
     using Fanex.NAP.CTS.Library.Services.Interface;
     using System.Web.Mvc;
 
-    [NapAuth(FunctionKey = FSFunctionKeys.CheckBetReport, Policy = Core.Business.Constant.Policy.Read)]
+    [NapAuth(FunctionKey = FSFunctionKeys.CheckBetReport, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class CheckBetReportController : ReportsController
     {
         private readonly ICheckBetReportService _service = new CheckBetReportService();
@@ -37,7 +37,7 @@
         public ActionResult UpdateNote(CheckBetReportUpdateNoteCriteria criteria)
         {
             criteria.UserId = CurrentSession.UserId;
-         
+
             return Json(_service.UpdateNote(criteria));
         }
 
