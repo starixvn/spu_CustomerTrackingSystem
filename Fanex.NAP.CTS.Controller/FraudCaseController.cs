@@ -56,9 +56,9 @@
         public ActionResult Index()
         {
             var fraudCaseViewModel = new FraudCaseViewModel();
-            fraudCaseViewModel.FraudCaseInfo = Library.Models.FraudCase.FraudCase.GetFraudCase(FraudCaseId.BSNG);
+            fraudCaseViewModel.FraudCaseInfo = Library.Models.FraudCase.FraudCase.GetFraudCase(Library.Models.FraudCaseId.BSNG);
             fraudCaseViewModel.FraudCaseList = _fraudCaseService.Get(null, null, envConfig);
-            fraudCaseViewModel.FraudCaseInfo.IsActive = _fraudCaseService.CheckActiveFraudCase(FraudCaseId.BSNG, envConfig);
+            fraudCaseViewModel.FraudCaseInfo.IsActive = _fraudCaseService.CheckActiveFraudCase(Library.Models.FraudCaseId.BSNG, envConfig);
 
             return View(fraudCaseViewModel);
         }
@@ -66,7 +66,7 @@
         [HttpPost]
         public ActionResult Index(int fraudCaseId)
         {
-            var caseid = (FraudCaseId)fraudCaseId;
+            var caseid = (Library.Models.FraudCaseId)fraudCaseId;
             var fraudCaseViewModel = new FraudCaseViewModel();
             fraudCaseViewModel.FraudCaseInfo = Library.Models.FraudCase.FraudCase.GetFraudCase(caseid);
             fraudCaseViewModel.FraudCaseList = _fraudCaseService.Get(null, null, int.Parse(ConfigurationManager.AppSettings["Environment"]));
@@ -78,8 +78,8 @@
         [HttpPost]
         public ActionResult ChangeCaseStatus(int fraudCaseId, bool isActive)
         {
-            _fraudCaseService.ChangeFraudCaseStatus((FraudCaseId)fraudCaseId, CurrentSession.UserId);
-            var fraudCaseName = Enum.GetName(typeof(FraudCaseId), fraudCaseId);
+            _fraudCaseService.ChangeFraudCaseStatus((Library.Models.FraudCaseId)fraudCaseId, CurrentSession.UserId);
+            var fraudCaseName = Enum.GetName(typeof(Library.Models.FraudCaseId), fraudCaseId);
             if (!string.IsNullOrWhiteSpace(fraudCaseName))
             {
                 _rabbitMQ
@@ -227,20 +227,20 @@
 
         #region notification recipient
 
-        public ActionResult GetRecipients(FraudCaseId fraudCase)
+        public ActionResult GetRecipients(Library.Models.FraudCaseId fraudCase)
         {
             return JData(_recipientService.GetRecipients(fraudCase));
         }
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.FraudCase, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult AddRecipients(string recipients, FraudCaseId fraudCase)
+        public ActionResult AddRecipients(string recipients, Library.Models.FraudCaseId fraudCase)
         {
             return Json(_recipientService.AddRecipient(recipients, CurrentSession.UserId, fraudCase));
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.FraudCase, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult RemoveRecipient(int id, FraudCaseId fraudCase)
+        public ActionResult RemoveRecipient(int id, Library.Models.FraudCaseId fraudCase)
         {
             return Json(_recipientService.RemoveRecipient(id, CurrentSession.UserId, fraudCase));
         }

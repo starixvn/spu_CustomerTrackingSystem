@@ -1,0 +1,26 @@
+﻿namespace Fanex.NAP.CTS.Core.BaseClasses
+{
+    using Fanex.Data.Repository;
+    using System;
+    using System.Collections;
+
+    public class CommandBase : NonQueryCommand
+    {
+        public virtual int ErrCode { get; set; }
+
+        public virtual Hashtable GetOutParam()
+        {
+            return new Hashtable();
+        }
+        
+        public override string GetSettingKey()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool IsValid()
+        {
+            return true;
+        }
+    }
+}

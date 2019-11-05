@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fanex.NAP.CTS.Controller", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fanex.NAP.CTS.Core", "Fanex.NAP.CTS.Core\Fanex.NAP.CTS.Core.csproj", "{5F3ABBF7-EA70-4C02-BD47-B427F1A9CC39}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fanex.NAP.CTS.Criteria", "Fanex.NAP.CTS.Criteria\Fanex.NAP.CTS.Criteria.csproj", "{1F75F58B-BFA1-4081-8D01-06DEE8CE6821}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fanex.NAP.CTS.Resource", "Fanex.NAP.CTS.Resource\Fanex.NAP.CTS.Resource.csproj", "{AE6C4B2A-8CD3-433A-8F42-D8272390CF61}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +49,14 @@ Global
 		{5F3ABBF7-EA70-4C02-BD47-B427F1A9CC39}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F3ABBF7-EA70-4C02-BD47-B427F1A9CC39}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F3ABBF7-EA70-4C02-BD47-B427F1A9CC39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F75F58B-BFA1-4081-8D01-06DEE8CE6821}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F75F58B-BFA1-4081-8D01-06DEE8CE6821}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F75F58B-BFA1-4081-8D01-06DEE8CE6821}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F75F58B-BFA1-4081-8D01-06DEE8CE6821}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE6C4B2A-8CD3-433A-8F42-D8272390CF61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE6C4B2A-8CD3-433A-8F42-D8272390CF61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE6C4B2A-8CD3-433A-8F42-D8272390CF61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE6C4B2A-8CD3-433A-8F42-D8272390CF61}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

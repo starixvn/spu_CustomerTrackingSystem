@@ -1,0 +1,44 @@
+﻿namespace Fanex.NAP.CTS.Model.Transaction
+{
+    using System;    
+
+    public class Transaction
+    {
+        public long TransID { get; set; }
+
+        public DateTime TransDate { get; set; }        
+
+        public long AccountID { get; set; }
+
+        public long SubscriberID { get; set; }
+
+        public string ActionResult { get; set; }
+
+        public long DeviceID { get; set; }
+
+        public string DeviceCode { get; set; }
+
+        public string DeviceType { get; set; }
+
+        public string DeviceStatus { get; set; }
+
+        public string Browser { get; set; }
+
+        public string Domain { get; set; }
+
+        public string IP { get; set; }      
+
+        public string TransDateToString
+        {
+            get
+            {
+                if (TransDate == DateTime.MinValue)
+                {
+                    return string.Empty;
+                }
+
+                return TransDate.ToString("MMM dd, yyyy hh: mm:ss tt");
+            }
+        }
+    }
+}

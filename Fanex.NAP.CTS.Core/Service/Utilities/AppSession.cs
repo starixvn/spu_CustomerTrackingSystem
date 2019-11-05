@@ -1,8 +1,8 @@
 ﻿namespace Fanex.NAP.CTS.Core.Service.Utilities
 {
-    using Fanex.NAP.Core.Models;
-    using Fanex.NAP.CTS.Library.Core.Consts;
-    using Fanex.NAP.CTS.Library.Models.Subscriber;
+    using Fanex.NAP.Core.Model;
+    using Fanex.NAP.CTS.Core.Consts;
+    using Fanex.NAP.CTS.Core.Models;
     using Logging;
     using System;
     using System.Collections.Generic;

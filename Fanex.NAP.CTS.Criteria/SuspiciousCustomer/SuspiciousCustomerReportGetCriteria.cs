@@ -1,0 +1,86 @@
+﻿namespace Fanex.NAP.CTS.Library.Criteria.SuspiciousCustomer
+{
+    using Data;
+    using Data.Repository;
+    using Fanex.NAP.CTS.Core.Helpers;
+    using System;
+
+    public class SuspiciousCustomerReportGetCriteria : CriteriaBase
+    {
+        public int PageSize { get; set; }
+
+        public int PageIndex { get; set; }
+
+        public int TotalItems { get; set; }
+
+        public bool IsExportExcel { get; set; }
+
+        public DateTime FromDate { get; set; }
+
+        public DateTime ToDate { get; set; }
+
+        public string Username { get; set; }
+
+        public bool? IsVerified { get; set; }
+
+        public int? FraudCaseId { get; set; }
+
+        [SpParam(Ignored = true)]
+        public int Classification { get; set; }
+
+        public bool? IsDelinquent
+        {
+            get
+            {
+                if (Classification == 1)
+                {
+                    return true;
+                }
+
+                return null;
+            }
+        }
+
+        public bool? IsDirty
+        {
+            get
+            {
+                if (Classification == 2)
+                {
+                    return true;
+                }
+
+                return null;
+            }
+        }
+
+        public bool? IsHedge
+        {
+            get
+            {
+                if (Classification == 3)
+                {
+                    return true;
+                }
+
+                return null;
+            }
+        }
+
+        public int? AssigneeId { get; set; }
+
+        public int Environment => int.Parse(AppSettings.Get("Environment"));
+
+        public bool IsShowSpecialCurrencies { get; set; }
+
+        public override string GetSettingKey()
+        {
+            return "FS_Rpt_SuspiciousCustomer_Get";
+        }
+
+        public override bool IsValid()
+        {
+            return true;
+        }
+    }
+}

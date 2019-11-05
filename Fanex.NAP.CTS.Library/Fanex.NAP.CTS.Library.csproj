@@ -52,11 +52,11 @@
       <HintPath>..\packages\Fanex.Caching.1.0.404.95\lib\net40\Enyim.Caching.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Fanex.BetList.BetTrade, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Fanex.BetList.Core.2.69.0-beta1\lib\net40\Fanex.BetList.BetTrade.dll</HintPath>
+    <Reference Include="Fanex.BetList.BetTrade, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.BetList.Core.2.95.0\lib\net40\Fanex.BetList.BetTrade.dll</HintPath>
     </Reference>
-    <Reference Include="Fanex.BetList.Core, Version=2.69.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Fanex.BetList.Core.2.69.0-beta1\lib\net40\Fanex.BetList.Core.dll</HintPath>
+    <Reference Include="Fanex.BetList.Core, Version=2.95.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.BetList.Core.2.95.0\lib\net40\Fanex.BetList.Core.dll</HintPath>
     </Reference>
     <Reference Include="Fanex.Caching, Version=1.0.404.95, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Fanex.Caching.1.0.404.95\lib\net40\Fanex.Caching.dll</HintPath>
@@ -398,7 +398,6 @@
     <Compile Include="Models\FraudCase\NotificationRecipient.cs" />
     <Compile Include="Models\FraudCase\ScannedOfficeIP\OfficeIPInternalAccount.cs" />
     <Compile Include="Models\FraudCase\ScannedOfficeIP\OfficeIp.cs" />
-    <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\IP\IpModel.cs" />
     <Compile Include="Models\MatchMonitor\BalanceUpDate.cs" />
     <Compile Include="Models\MatchMonitor\FraudCase.cs" />

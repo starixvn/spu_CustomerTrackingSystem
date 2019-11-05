@@ -1,0 +1,13 @@
+﻿namespace Fanex.NAP.CTS.Model.FraudCase
+{
+    using Fanex.NAP.Core.Service.Impl;
+
+    public class NotificationRecipient
+    {
+        private static UserService _user = new UserService();
+
+        public int RecipientId { get; set; }
+
+        public string Recipient => _user.GetById(RecipientId)?.Username;
+    }
+}
