@@ -1,0 +1,23 @@
+﻿namespace Fanex.NAP.CTS.Service
+{
+    using Fanex.NAP.CTS.Criteria.SuspiciousCustomer;
+    using Model.SuspiciousCustomer;
+    using System.Collections.Generic;
+    using ViewModel.SuspiciousCustomer;
+
+    public interface ISuspiciousCustomerReportService
+    {
+        IEnumerable<SuspiciousCustomerReportModel> GetSuspiciousCustomerReport(SuspiciousCustomerReportGetCriteria criteria);
+
+        IEnumerable<SuspiciousCustomerNoteModel> GetNotesData(int custId);
+
+        IEnumerable<SuspiciousCustomerNoteView> GetNoteViews(int custId);
+
+        byte[] ExportExcel(SuspiciousCustomerReportGetCriteria criteria, string fraudCaseName, string assignee, string template, IEnumerable<SuspiciousCustomerReportModel> data);
+
+        IEnumerable<SuspiciousCustomerReportModel> GetData(SuspiciousCustomerReportGetCriteria criteria);
+
+        string ExportCSV(IEnumerable<SuspiciousCustomerReportModel> data, SuspiciousCustomerReportGetCriteria criteria, string fraudCaseName, string assignee, string classification, string verified);
+
+    }
+}

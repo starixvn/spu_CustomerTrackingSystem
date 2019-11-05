@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.ViewModels.Account.Associated
+﻿namespace Fanex.NAP.CTS.ViewModel.Account.Associated
 {
     using Fanex.NAP.CTS.Model;
 

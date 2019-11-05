@@ -2,7 +2,7 @@
 {
     using System;
 
-    internal class MatchInfo
+    public class MatchInfo
     {
         public DateTime EventDate { get; set; }
 

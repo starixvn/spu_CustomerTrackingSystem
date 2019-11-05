@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Library.Criteria.SuspiciousCustomer
+﻿namespace Fanex.NAP.CTS.Criteria.SuspiciousCustomer
 {
     using Data;
     using Data.Repository;

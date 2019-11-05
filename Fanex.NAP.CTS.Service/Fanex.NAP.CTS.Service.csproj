@@ -30,17 +30,179 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Couchbase, Version=1.0.0.0, Culture=neutral, PublicKeyToken=81137140da4e57ef, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.Caching.1.0.404.95\lib\net40\Couchbase.dll</HintPath>
+    </Reference>
+    <Reference Include="Dapper, Version=1.60.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.1.60.6\lib\net451\Dapper.dll</HintPath>
+    </Reference>
+    <Reference Include="Enyim.Caching, Version=2.12.0.0, Culture=neutral, PublicKeyToken=81137140da4e57ef, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.Caching.1.0.404.95\lib\net40\Enyim.Caching.dll</HintPath>
+    </Reference>
+    <Reference Include="Fanex.BetList.BetTrade, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.BetList.Core.2.93.0\lib\net40\Fanex.BetList.BetTrade.dll</HintPath>
+    </Reference>
+    <Reference Include="Fanex.BetList.Core, Version=2.93.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.BetList.Core.2.93.0\lib\net40\Fanex.BetList.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Fanex.Caching, Version=1.0.404.95, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.Caching.1.0.404.95\lib\net40\Fanex.Caching.dll</HintPath>
+    </Reference>
+    <Reference Include="Fanex.Common, Version=1.0.404.97, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.Common.1.0.404.97\lib\net40\Fanex.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Fanex.Data, Version=4.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.Data.4.0.1\lib\net461\Fanex.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Fanex.Data.Repository, Version=4.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.Data.Repository.4.0.1\lib\net461\Fanex.Data.Repository.dll</HintPath>
+    </Reference>
+    <Reference Include="Fanex.Logging, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.Logging.2.0.1\lib\net461\Fanex.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Fanex.NAP.Core, Version=2.1.0.6, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.NAP.Core.2.1.0.6\lib\net40\Fanex.NAP.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="IBCFile, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.File.1.0.0\lib\net40\IBCFile.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Caching, Version=5.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\EnterpriseLibrary.Caching.5.0.414.0\lib\net40\Microsoft.Practices.EnterpriseLibrary.Caching.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=5.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\EnterpriseLibrary.Common.5.0.414.0\lib\net40\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\EnterpriseLibrary.Unity.5.0.414.0\lib\net40\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity, Version=2.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\EnterpriseLibrary.Unity.5.0.414.0\lib\net40\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Interception, Version=2.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\EnterpriseLibrary.Unity.5.0.414.0\lib\net40\Microsoft.Practices.Unity.Interception.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.3.0\lib\net40\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.3.0\lib\net40\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.3.0\lib\net40\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.3.0\lib\net40\NPOI.OpenXmlFormats.dll</HintPath>
+    </Reference>
+    <Reference Include="RemotingRef, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RemotingRef.2.0.0.17\lib\net40\RemotingRef.dll</HintPath>
+    </Reference>
+    <Reference Include="SPSRemoting, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SPSRemoting.1.0.0\lib\net40\SPSRemoting.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="TplCore, Version=1.0.4694.29951, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TplCore.1.0.4694.29951\lib\net40\TplCore.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExcelConfig\CheckBetReport\CheckBetReportExcelConfig.cs" />
+    <Compile Include="ExcelConfig\CustomerMonitor\CustomerMonitorConfig.cs" />
+    <Compile Include="ExcelConfig\CustomerMonitor\CustomerMonitorTicketDetailConfig.cs" />
+    <Compile Include="ExcelConfig\DailyDataCapture\DailyDataCaptureExcelConfig.cs" />
+    <Compile Include="ExcelConfig\FraudCase\DelayedGoal\DelayedGoalExcelConfig.cs" />
+    <Compile Include="ExcelConfig\FraudCase\ScannedOfficeIP\OfficeIPExcelConfig.cs" />
+    <Compile Include="ExcelConfig\FraudCase\ScannedOfficeIP\OfficeIPInternalAccountExcelConfig.cs" />
+    <Compile Include="ExcelConfig\MatchMonitor\ArbitrageConfig.cs" />
+    <Compile Include="ExcelConfig\MatchMonitor\CustomerDetailConfig.cs" />
+    <Compile Include="ExcelConfig\MatchMonitor\FlaggedAccountTicketConfig.cs" />
+    <Compile Include="ExcelConfig\MatchMonitor\MatchMonitorExcelConfig.cs" />
+    <Compile Include="ExcelConfig\MatchMonitor\TicketByIpConfig.cs" />
+    <Compile Include="ExcelConfig\MatchMonitor\TicketDetailConfig.cs" />
+    <Compile Include="ExcelConfig\ScannedOfficeIP\OfficeTicketConfig.cs" />
+    <Compile Include="ExcelConfig\SuspiciousCustomer\SuspiciousCustomerConfig.cs" />
+    <Compile Include="ExcelConfig\Utilities.cs" />
+    <Compile Include="Implement\AccountService.cs" />
+    <Compile Include="Implement\CheckBetReportService.cs" />
+    <Compile Include="Implement\CustomerMonitorService.cs" />
+    <Compile Include="Implement\DailyCaptureDataService.cs" />
+    <Compile Include="Implement\DelayGoalAccountService.cs" />
+    <Compile Include="Implement\EvidenceService.cs" />
+    <Compile Include="Implement\FlaggedAccountService.cs" />
+    <Compile Include="Implement\FraudCaseDetailsService.cs" />
+    <Compile Include="Implement\FraudCaseService.cs" />
+    <Compile Include="Implement\FraudSensorTaskService.cs" />
+    <Compile Include="Implement\MatchMonitorService.cs" />
+    <Compile Include="Implement\NotificationRecipientService.cs" />
+    <Compile Include="Implement\NotificationService.cs" />
+    <Compile Include="Implement\OfficeIPService.cs" />
+    <Compile Include="Implement\ScannedOfficeIpReport.cs" />
+    <Compile Include="Implement\SubscriberAssignmentService.cs" />
+    <Compile Include="Implement\SuspiciousCustomerReportDetailsService.cs" />
+    <Compile Include="Implement\SuspiciousCustomerReportService.cs" />
+    <Compile Include="Implement\TransactionService.cs" />
+    <Compile Include="Interface\IAccountService.cs" />
+    <Compile Include="Interface\ICheckBetReportService.cs" />
+    <Compile Include="Interface\ICustomerMonitorService.cs" />
+    <Compile Include="Interface\IDailyDataCaptureService.cs" />
+    <Compile Include="Interface\IDelayGoalAccountService.cs" />
+    <Compile Include="Interface\IEvidenceService.cs" />
+    <Compile Include="Interface\IFlaggedAccountService.cs" />
+    <Compile Include="Interface\IFraudCaseDetailsService.cs" />
+    <Compile Include="Interface\IFraudCaseService.cs" />
+    <Compile Include="Interface\IFraudSensorTaskService.cs" />
+    <Compile Include="Interface\IMatchMonitorService.cs" />
+    <Compile Include="Interface\INotificationRecipientService.cs" />
+    <Compile Include="Interface\INotificationService.cs" />
+    <Compile Include="Interface\IOfficeIPService.cs" />
+    <Compile Include="Interface\IScannedOfficeIpReportService.cs" />
+    <Compile Include="Interface\ISubscriberAssignmentService.cs" />
+    <Compile Include="Interface\ISuspiciousCustomerReportDetailsService.cs" />
+    <Compile Include="Interface\ISuspiciousCustomerReportService.cs" />
+    <Compile Include="Interface\ITransactionService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Fanex.NAP.CTS.Core\Fanex.NAP.CTS.Core.csproj">
+      <Project>{5f3abbf7-ea70-4c02-bd47-b427f1a9cc39}</Project>
+      <Name>Fanex.NAP.CTS.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fanex.NAP.CTS.Criteria\Fanex.NAP.CTS.Criteria.csproj">
+      <Project>{1f75f58b-bfa1-4081-8d01-06dee8ce6821}</Project>
+      <Name>Fanex.NAP.CTS.Criteria</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fanex.NAP.CTS.Model\Fanex.NAP.CTS.Model.csproj">
+      <Project>{5ce0ba40-0a37-4c89-a33b-d61c7944be08}</Project>
+      <Name>Fanex.NAP.CTS.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fanex.NAP.CTS.Resource\Fanex.NAP.CTS.Resource.csproj">
+      <Project>{ae6c4b2a-8cd3-433a-8f42-d8272390cf61}</Project>
+      <Name>Fanex.NAP.CTS.Resource</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fanex.NAP.CTS.ViewModel\Fanex.NAP.CTS.ViewModel.csproj">
+      <Project>{4940bbbb-2943-476d-a778-ffe0ed748f12}</Project>
+      <Name>Fanex.NAP.CTS.ViewModel</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
