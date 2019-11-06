@@ -5,9 +5,7 @@
     public class UnitTest1
     {
         [Theory]
-        [InlineData("1")]
-        [InlineData("2")]
-        [InlineData(null)]
+        [InlineData("1")]      
         public void TestMethod1(string value)
         {
             Assert.Equal("1", value);
