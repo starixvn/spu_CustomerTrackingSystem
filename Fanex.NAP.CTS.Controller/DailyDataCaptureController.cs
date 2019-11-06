@@ -1,11 +1,11 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
     using Fanex.NAP.Core.Web.Attribute;
-    using Fanex.NAP.CTS.Library.Core.Consts;
-    using Fanex.NAP.CTS.Library.Criteria.DailyDataCapture;
-    using Fanex.NAP.CTS.Library.ExcelConfig.DailyDataCapture;
-    using Fanex.NAP.CTS.Library.Services.Implement;
-    using Fanex.NAP.CTS.Library.Services.Interface;
+    using Fanex.NAP.CTS.Resource.Consts;
+    using Fanex.NAP.CTS.Criteria.DailyDataCapture;
+    using Fanex.NAP.CTS.Service.ExcelConfig.DailyDataCapture;
+    using Fanex.NAP.CTS.Service.Implement;
+    using Fanex.NAP.CTS.Service.Interface;
     using System;
     using System.Web.Mvc;
 

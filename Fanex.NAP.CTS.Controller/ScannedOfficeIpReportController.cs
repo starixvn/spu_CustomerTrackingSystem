@@ -2,11 +2,11 @@
 {
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Web.Attribute;
-    using Fanex.NAP.CTS.Library.Core.Consts;
-    using Fanex.NAP.CTS.Library.Criteria.ScannedOfficeIP;
-    using Fanex.NAP.CTS.Library.ExcelConfig.ScannedOfficeIP;
-    using Fanex.NAP.CTS.Library.Services.Implement;
-    using Fanex.NAP.CTS.Library.Services.Interface;
+    using Fanex.NAP.CTS.Resource.Consts;
+    using Fanex.NAP.CTS.Criteria.ScannedOfficeIP;
+    using Fanex.NAP.CTS.Service.ExcelConfig.ScannedOfficeIP;
+    using Fanex.NAP.CTS.Service.Implement;
+    using Fanex.NAP.CTS.Service.Interface;
     using System;
     using System.Web.Mvc;
 

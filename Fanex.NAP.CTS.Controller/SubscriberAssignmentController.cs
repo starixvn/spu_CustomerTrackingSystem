@@ -2,8 +2,8 @@
 {
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Web.Attribute;
-    using Fanex.NAP.CTS.Library.Core.Consts;
-    using Fanex.NAP.CTS.Library.Services;
+    using Fanex.NAP.CTS.Resource.Consts;
+    using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.Core.Service.Utilities;
     using System.Configuration;
     using System.Web.Mvc;

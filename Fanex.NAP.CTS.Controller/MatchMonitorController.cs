@@ -2,12 +2,11 @@
 {
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Web.Attribute;
-    using Fanex.NAP.CTS.Library.Core.Consts;
-    using Fanex.NAP.CTS.Library.Criteria.MatchMonitor;
-    using Library.Core.Helpers;
-    using Library.Criteria.MatchMonitor.FraudCaseDetails;
-    using Library.Service.MatchMonitor;
-    using Library.Service;
+    using Fanex.NAP.CTS.Resource.Consts;
+    using Fanex.NAP.CTS.Criteria.MatchMonitor;
+    using Core.Helpers;
+    using Criteria.MatchMonitor.FraudCaseDetails;    
+    using Service;
     using System;    
     using System.Configuration;
     using System.Linq;
@@ -141,8 +140,8 @@
 
             ViewBag.BUDate = _matchMonitorService.GetBalanceUpDate().BalanceUpDay;
 
-            if (fraudCaseId == (int)Library.Models.FraudCaseId.Arbitrage
-                || fraudCaseId == (int)Library.Models.FraudCaseId.FlaggedAccount)
+            if (fraudCaseId == (int)Model.FraudCaseId.Arbitrage
+                || fraudCaseId == (int)Model.FraudCaseId.FlaggedAccount)
             {
                 ViewBag.SiteList = _fraudCaseDetailService.GetSites();
                 ViewBag.CurrencyList = _fraudCaseDetailService.GetAllCurrency(IsShowSpecialCurrencies);

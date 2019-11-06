@@ -185,7 +185,6 @@
     <Compile Include="SuspiciousCustomerDetails\Statistics.cs" />
     <Compile Include="SuspiciousCustomerDetails\Summary.cs" />
     <Compile Include="SuspiciousCustomerDetails\WinLossStatistics.cs" />
-    <Compile Include="SuspiciousCustomer\DataTableAjaxPostModel.cs" />
     <Compile Include="SuspiciousCustomer\SuspiciousCustomerModel.cs" />
     <Compile Include="SuspiciousCustomer\SuspiciousCustomerNoteModel.cs" />
     <Compile Include="SuspiciousCustomer\SuspiciousCustomerReportModel.cs" />

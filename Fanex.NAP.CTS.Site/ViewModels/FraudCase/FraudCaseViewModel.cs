@@ -4,8 +4,8 @@
 
     public class FraudCaseViewModel
     {
-        public Library.Models.FraudCase.FraudCase FraudCaseInfo { get; set; }
+        public Fanex.NAP.CTS.Model.FraudCase.FraudCase FraudCaseInfo { get; set; }
 
-        public IEnumerable<Library.DTO.FraudCase> FraudCaseList { get; set; }
+        public IEnumerable<Fanex.NAP.CTS.Model.DTO.FraudCase> FraudCaseList { get; set; }
     }
 }

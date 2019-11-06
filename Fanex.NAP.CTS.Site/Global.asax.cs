@@ -6,8 +6,8 @@
     using Fanex.Data.MySql;
     using Fanex.Data.SqlServer;
     using Fanex.Logging;
-    using Fanex.NAP.CTS.Library.Core.Helpers.Xml;
-    using Fanex.NAP.CTS.Library.Core.Utilities;
+    using Fanex.NAP.CTS.Core.Helpers.Xml;
+    using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.RemotingRef;
     using System;
     using System.Configuration;

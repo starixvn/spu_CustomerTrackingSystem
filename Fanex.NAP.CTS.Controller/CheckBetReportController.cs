@@ -2,11 +2,11 @@
 {
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Web.Attribute;
-    using Fanex.NAP.CTS.Library.Core.Consts;
-    using Fanex.NAP.CTS.Library.Criteria.CheckBetReport;
-    using Fanex.NAP.CTS.Library.ExcelConfig.CheckBetReport;
-    using Fanex.NAP.CTS.Library.Services.Implement;
-    using Fanex.NAP.CTS.Library.Services.Interface;
+    using Fanex.NAP.CTS.Resource.Consts;
+    using Fanex.NAP.CTS.Criteria.CheckBetReport;
+    using Fanex.NAP.CTS.Service.ExcelConfig.CheckBetReport;
+    using Fanex.NAP.CTS.Service.Implement;
+    using Fanex.NAP.CTS.Service.Interface;
     using System.Web.Mvc;
 
     [NapAuth(FunctionKey = FSFunctionKeys.CheckBetReport, Policy = NAP.Core.Business.Constant.Policy.Read)]

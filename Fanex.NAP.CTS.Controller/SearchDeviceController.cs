@@ -1,6 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
-    using Fanex.NAP.CTS.Library.Core.Consts;
+    using Fanex.NAP.CTS.Resource.Consts;
     using System.Configuration;
     using System.Web.Mvc;
 

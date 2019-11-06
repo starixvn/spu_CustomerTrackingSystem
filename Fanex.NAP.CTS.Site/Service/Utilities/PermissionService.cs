@@ -1,7 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Service.Utilities
 {
     using Fanex.NAP.Core.Models.ValueObject;
-    using Fanex.NAP.CTS.Library.Core.Consts;
+    using Fanex.NAP.CTS.Resource.Consts;
     using NAP.Core.Business;
     using System.Collections.Generic;
     using System.Linq;

@@ -3,9 +3,9 @@
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Web.Attribute;
-    using Fanex.NAP.CTS.Library.Core.Consts;
-    using Fanex.NAP.CTS.Library.Services;
-    using Fanex.NAP.CTS.Library.ViewModels.Account.Search;
+    using Fanex.NAP.CTS.Resource.Consts;
+    using Fanex.NAP.CTS.Service;
+    using Fanex.NAP.CTS.ViewModel.Account.Search;
     using System.Configuration;
     using System.Web.Mvc;
 

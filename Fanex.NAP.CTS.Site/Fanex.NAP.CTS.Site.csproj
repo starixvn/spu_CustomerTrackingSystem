@@ -1219,9 +1219,9 @@
       <Project>{96bc0111-63b6-4c24-94df-c00ec2656ec7}</Project>
       <Name>Fanex.NAP.CTS.Controller</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Fanex.NAP.CTS.Library\Fanex.NAP.CTS.Library.csproj">
-      <Project>{2d6f84f8-e9b5-49ec-b487-05b44e994dcc}</Project>
-      <Name>Fanex.NAP.CTS.Library</Name>
+    <ProjectReference Include="..\Fanex.NAP.CTS.Core\Fanex.NAP.CTS.Core.csproj">
+      <Project>{5f3abbf7-ea70-4c02-bd47-b427f1a9cc39}</Project>
+      <Name>Fanex.NAP.CTS.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\Fanex.NAP.CTS.Model\Fanex.NAP.CTS.Model.csproj">
       <Project>{5ce0ba40-0a37-4c89-a33b-d61c7944be08}</Project>
@@ -1230,6 +1230,14 @@
     <ProjectReference Include="..\Fanex.NAP.CTS.Queue\Fanex.NAP.CTS.Queue.csproj">
       <Project>{feffed8a-7e97-4b9a-baed-06ef734fc456}</Project>
       <Name>Fanex.NAP.CTS.Queue</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fanex.NAP.CTS.Resource\Fanex.NAP.CTS.Resource.csproj">
+      <Project>{ae6c4b2a-8cd3-433a-8f42-d8272390cf61}</Project>
+      <Name>Fanex.NAP.CTS.Resource</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fanex.NAP.CTS.Service\Fanex.NAP.CTS.Service.csproj">
+      <Project>{3ed1d03f-97f1-4826-8cdd-258485a07546}</Project>
+      <Name>Fanex.NAP.CTS.Service</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

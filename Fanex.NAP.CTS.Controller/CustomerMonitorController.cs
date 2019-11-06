@@ -2,13 +2,13 @@
 {
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Web.Attribute;
-    using Fanex.NAP.CTS.Library.Core.Consts;
-    using Fanex.NAP.CTS.Library.Criteria.CustomerMonitor;
-    using Fanex.NAP.CTS.Library.Criteria.CustomerMonitor.CustomerDetails;
-    using Fanex.NAP.CTS.Library.ExcelConfig.CustomerMonitor;
-    using Fanex.NAP.CTS.Library.Services.Implement;
-    using Fanex.NAP.CTS.Library.Services.Interface;
-    using Fanex.NAP.CTS.Library.ViewModels.CustomerMonitor.CustomerDetails;
+    using Fanex.NAP.CTS.Resource.Consts;
+    using Fanex.NAP.CTS.Criteria.CustomerMonitor;
+    using Fanex.NAP.CTS.Criteria.CustomerMonitor.CustomerDetails;
+    using Fanex.NAP.CTS.Service.ExcelConfig.CustomerMonitor;
+    using Fanex.NAP.CTS.Service.Implement;
+    using Fanex.NAP.CTS.Service.Interface;
+    using Fanex.NAP.CTS.ViewModel.CustomerMonitor.CustomerDetails;
     using System;
     using System.Configuration;
     using System.Linq;

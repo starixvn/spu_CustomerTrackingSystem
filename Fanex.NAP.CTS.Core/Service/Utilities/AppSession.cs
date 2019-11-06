@@ -1,7 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Core.Service.Utilities
 {
     using Fanex.NAP.Core.Model;
-    using Fanex.NAP.CTS.Core.Consts;
+    using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Core.Models;
     using Logging;
     using System;

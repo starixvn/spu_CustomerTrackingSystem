@@ -3,10 +3,10 @@
     using Fanex.NAP.Core.Business;
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Web.Attribute;
-    using Fanex.NAP.CTS.Library.Core.Consts;
-    using Fanex.NAP.CTS.Library.Models.SuspiciousCustomer;
-    using Library.Criteria.SuspiciousCustomer;
-    using Library.Services;
+    using Fanex.NAP.CTS.Resource.Consts;
+    using Fanex.NAP.CTS.Model.SuspiciousCustomer;
+    using Criteria.SuspiciousCustomer;
+    using Service;
     using System;
     using System.Collections.Generic;
     using System.Configuration;
@@ -37,13 +37,12 @@
         }
 
         [HttpPost]
-        public ActionResult Generate(DataTableAjaxPostModel criteria)
+        public ActionResult Generate(DataTableAjaxPostCriteria criteria)
         {
             int filteredResultsCount = 0;
             int totalResultsCount = 0;
 
-            criteria.IsShowSpecialCurrencies = IsShowSpecialCurrencies;
-            
+            criteria.IsShowSpecialCurrencies = IsShowSpecialCurrencies;            
 
             var result = FilterData(criteria, out filteredResultsCount, out totalResultsCount);
 
@@ -56,7 +55,7 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        public IList<SuspiciousCustomerReportModel> FilterData(DataTableAjaxPostModel model, out int filteredResultsCount, out int totalResultsCount)
+        public IList<SuspiciousCustomerReportModel> FilterData(DataTableAjaxPostCriteria model, out int filteredResultsCount, out int totalResultsCount)
         {
             var take = model.length;
             var skip = model.start;

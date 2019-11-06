@@ -1,7 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
-    using Fanex.NAP.CTS.Library.Services;
-    using Fanex.NAP.CTS.Library.ViewModels.Transaction;
+    using Fanex.NAP.CTS.Service;
+    using Fanex.NAP.CTS.ViewModel.Transaction;
     using System.Web.Mvc;
     using Fanex.NAP.Core.Web.Attribute;    
 

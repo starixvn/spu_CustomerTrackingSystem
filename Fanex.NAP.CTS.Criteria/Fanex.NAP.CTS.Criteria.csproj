@@ -132,6 +132,7 @@
     <Compile Include="SuspiciousCustomerDetails\SuspiciousCustomerDetailsGeneralCriteria.cs" />
     <Compile Include="SuspiciousCustomerDetails\SuspiciousCustomerDetailsStatisticsGetCriteria.cs" />
     <Compile Include="SuspiciousCustomerDetails\SuspiciousCustomerDetailsViolatedTicketGetCriteria.cs" />
+    <Compile Include="SuspiciousCustomer\DataTableAjaxPostCriteria.cs" />
     <Compile Include="SuspiciousCustomer\SuspiciousCustomerAssigneeGetCriteria.cs" />
     <Compile Include="SuspiciousCustomer\SuspiciousCustomerAssigneeUpdateCriteria.cs" />
     <Compile Include="SuspiciousCustomer\SuspiciousCustomerGetCriteria.cs" />

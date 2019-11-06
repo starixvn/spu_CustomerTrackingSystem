@@ -19,6 +19,9 @@
         public const string GraphDBGetShortestPath = "GraphDB_GetShortestPath";
 
         public const string FormatDateToString_MMMddyyyy = "MMM dd, yyyy";
-        public const string FormatDateToString_MMMddyyyyhhmmsstt = "MMM dd, yyyy hh: mm:ss tt";               
+        public const string FormatDateToString_MMMddyyyyhhmmsstt = "MMM dd, yyyy hh: mm:ss tt";
+
+        public const string CurrentSubscriberAssignmentsKey = "CurrentSubscriberAssignmentsKey";
+        public const string SubscriberNameCN88 = "CN88";
     }
 }

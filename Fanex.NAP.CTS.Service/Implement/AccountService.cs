@@ -16,7 +16,7 @@
     using Fanex.NAP.CTS.ViewModel.Account.Search;
     using Fanex.NAP.CTS.Core.Helpers;    
     using Fanex.NAP.CTS.Core.Helpers.Api;
-    using Fanex.NAP.CTS.Core.Consts;
+    using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Criteria.Account.Associated;
     using Fanex.Data;
     using Fanex.NAP.CTS.ViewModel.Account.GeneralInformation;

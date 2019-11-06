@@ -3,7 +3,7 @@
     using Fanex.NAP.Core.Models;
     using Fanex.NAP.Core.Models.ParameterObject;
     using Fanex.NAP.Core.Models.ValueObject;
-    using Fanex.NAP.CTS.Library.Services;
+    using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.Service.Utilities;
     using Fanex.NAP.CTS.Controller;
     using Logging;

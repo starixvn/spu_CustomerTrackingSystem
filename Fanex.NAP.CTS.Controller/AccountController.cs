@@ -2,20 +2,19 @@
 {
     using System.Net;
     using System.Web.Mvc;
-    using System.Linq;
     using System.Collections.Generic;
-    using Fanex.NAP.CTS.Library.Services;
-    using Fanex.NAP.CTS.Library.ViewModels.Account.Associated;
+    using Fanex.NAP.CTS.Service;
+    using Fanex.NAP.CTS.ViewModel.Account.Associated;
     using Fanex.NAP.Core.Web.Attribute;
-    using Fanex.NAP.CTS.Library.Core.Consts;
-    using Fanex.NAP.CTS.Library.ViewModels.Evidence;
+    using Fanex.NAP.CTS.Resource.Consts;
+    using Fanex.NAP.CTS.ViewModel.Evidence;
     using Fanex.NAP.Core.Service.Impl;
-    using Fanex.NAP.CTS.Library.ViewModels.Account.GeneralInformation;
+    using Fanex.NAP.CTS.ViewModel.Account.GeneralInformation;
     using Fanex.NAP.CTS.Core.Service.Utilities;
-    using Fanex.NAP.CTS.Library.ViewModels.Account.Evidence;
-    using Fanex.NAP.CTS.Library.ViewModels.Account.Evidence.Exception;
-    using Fanex.NAP.CTS.Library.Models;
-    using Fanex.NAP.CTS.Library.Core.Resources;
+    using Fanex.NAP.CTS.ViewModel.Account.Evidence;
+    using Fanex.NAP.CTS.ViewModel.Account.Evidence.Exception;
+    using Fanex.NAP.CTS.Model;
+    using Fanex.NAP.CTS.Resource;
 
     [NapAuth(FunctionKey = FSFunctionKeys.SearchAccount, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class AccountController : BaseController

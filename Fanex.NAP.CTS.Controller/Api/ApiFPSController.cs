@@ -1,8 +1,8 @@
 ﻿namespace Fanex.NAP.CTS.Controller.Api
 {
-    using CTS.Library.Criteria.Api;
-    using CTS.Library.Models;
-    using CTS.Library.Services;
+    using CTS.Criteria.Api;
+    using CTS.Service;
+    using Fanex.NAP.CTS.Core;
     using System.Web.Http;
 
     public class ApiFPSController : ApiController

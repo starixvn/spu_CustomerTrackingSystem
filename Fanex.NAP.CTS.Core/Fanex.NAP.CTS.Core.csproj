@@ -153,6 +153,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Drawing.Design" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Messaging" />
     <Reference Include="System.Net.Http, Version=4.1.1.3, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Net.Http.4.3.4\lib\net46\System.Net.Http.dll</HintPath>
     </Reference>
@@ -207,12 +208,23 @@
     <Compile Include="BaseClasses\CommandBase.cs" />
     <Compile Include="BaseClasses\DataService.cs" />
     <Compile Include="BaseClasses\FraudCaseAttribute.cs" />
-    <Compile Include="Consts\Consts.cs" />
     <Compile Include="DBResult.cs" />
     <Compile Include="ExportExcel\ExcelStream.cs" />
     <Compile Include="ExportExcel\ExcelUtilities.cs" />
     <Compile Include="ExportExcel\FSExcelConfig.cs" />
     <Compile Include="Extensions\IEnumerableExtension.cs" />
+    <Compile Include="FSMQ\MessageQueue\FSMessageQueue.cs" />
+    <Compile Include="FSMQ\MessageQueue\IMessageQueueSender.cs" />
+    <Compile Include="FSMQ\MessageQueue\MessageQueueSender.cs" />
+    <Compile Include="FSMQ\SendingCase\ActivatingCase.cs" />
+    <Compile Include="FSMQ\SendingCase\AddingCase.cs" />
+    <Compile Include="FSMQ\SendingCase\DeactivatingCase.cs" />
+    <Compile Include="FSMQ\SendingCase\RemovingCase.cs" />
+    <Compile Include="FSMQ\SendingCase\UpdatingCase.cs" />
+    <Compile Include="FSMQ\SendingMessage\ISendingMessage.cs" />
+    <Compile Include="FSMQ\SendingMessage\SendingMessage.cs" />
+    <Compile Include="FSMQ\SendingMessage\SendingMessageFactory.cs" />
+    <Compile Include="FSMQ\SendingType\SendingType.cs" />
     <Compile Include="Helpers\Api\ApiHelper.cs" />
     <Compile Include="Helpers\AppSettings.cs" />
     <Compile Include="Helpers\BetListHelper.cs" />
