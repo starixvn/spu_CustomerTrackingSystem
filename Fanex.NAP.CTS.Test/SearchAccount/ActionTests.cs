@@ -5,9 +5,9 @@
     using System.Security.Principal;
     using System.Web.Routing;
     using System.Web;
-    using System.Web.Mvc;
-    using Xunit;
+    using System.Web.Mvc;    
     using System.Configuration;
+    using Xunit;
 
     public class ActionTests
     {
@@ -31,7 +31,7 @@
             // Act
             var result = controller.Index() as ViewResult;
 
-            // Result
+            // Assert
             Assert.Equal(viewName, result.ViewName);
         }
         
