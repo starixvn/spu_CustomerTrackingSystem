@@ -17,14 +17,11 @@
         public void Index_Test(string viewName)
         {
             // Arrange
-            var identity = new GenericIdentity("sa");            
-            var principal = new GenericPrincipal(identity, null);
-
-            var request = new Mock<HttpRequestBase>();
-            request.SetupGet(x => x.IsAuthenticated).Returns(true);
+            var genericIdentity = new GenericIdentity("sa");
+            var genericPrincipal = new GenericPrincipal(genericIdentity, null);
 
             var context = new Mock<HttpContextBase>();
-            context.SetupGet(x => x.User).Returns(principal);
+            context.SetupGet(x => x.User).Returns(genericPrincipal);
 
             var controller = new SearchAccountController();
             controller.ControllerContext = new ControllerContext(context.Object, new RouteData(), controller);
@@ -37,6 +34,6 @@
             // Result
             Assert.Equal(viewName, result.ViewName);
         }
-       
+        
     }
 }

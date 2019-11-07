@@ -6,8 +6,7 @@
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.ViewModel.Account.Search;
-    using System.Configuration;
-    using System.Security.Principal;
+    using System.Configuration;   
     using System.Web.Mvc;
 
     [NapAuth(FunctionKey = FSFunctionKeys.SearchAccount, Policy = NAP.Core.Business.Constant.Policy.Read)]
