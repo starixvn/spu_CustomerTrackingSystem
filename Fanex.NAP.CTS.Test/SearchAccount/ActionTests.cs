@@ -12,8 +12,7 @@
     public class ActionTests
     {
         [Theory]
-        [InlineData("")]
-        [InlineData("fail")]
+        [InlineData("")]       
         public void Index_Test(string viewName)
         {
             // Arrange

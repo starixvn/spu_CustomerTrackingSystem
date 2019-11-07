@@ -133,7 +133,7 @@
       <Version>4.0.1</Version>
     </PackageReference>
     <PackageReference Include="Fanex.Logging">
-      <Version>2.0.1</Version>
+      <Version>1.0.4</Version>
     </PackageReference>
     <PackageReference Include="Fanex.NAP.Core">
       <Version>2.1.0.6</Version>
