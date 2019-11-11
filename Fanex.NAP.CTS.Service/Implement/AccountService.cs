@@ -16,12 +16,11 @@
     using Fanex.NAP.CTS.ViewModel.Account.Search;
     using Fanex.NAP.CTS.Core.Helpers;    
     using Fanex.NAP.CTS.Core.Helpers.Api;
-    using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Criteria.Account.Associated;
     using Fanex.Data;
     using Fanex.NAP.CTS.ViewModel.Account.GeneralInformation;
     using Fanex.NAP.CTS.Criteria.Account.GeneralInformation;
-    using Fanex.NAP.CTS.Core.Extensions;
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Resource;
 
     public class AccountService : IAccountService
@@ -114,7 +113,7 @@
             return GetSubscribers(rawSubscribers);
         }
 
-        private static bool CheckIsMasterSubscriber(IEnumerable<SubscriberAssignment> subscribers)
+        public static bool CheckIsMasterSubscriber(IEnumerable<SubscriberAssignment> subscribers)
         {
             if (subscribers != null && subscribers.Any())
             {

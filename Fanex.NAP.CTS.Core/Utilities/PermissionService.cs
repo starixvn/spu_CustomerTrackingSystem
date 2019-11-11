@@ -1,6 +1,6 @@
-﻿namespace Fanex.NAP.CTS.Core.Service.Utilities
+﻿namespace Fanex.NAP.CTS.Core.Utilities
 {
-    using Fanex.NAP.Core.Model.ValueObject;
+    using Fanex.NAP.Core.Models.ValueObject;
     using Fanex.NAP.CTS.Resource.Consts;
     using NAP.Core.Business;
     using System.Collections.Generic;
@@ -52,10 +52,10 @@
         {
             var subscribers = AppSession.CurrentSubscriberAssignments;
 
-            if (subscribers != null && subscribers.Any())
-            {
-                return subscribers[0].IsMaster == 1;
-            }
+            //if (subscribers != null && subscribers.Any())
+            //{
+            //    return (subscribers[0] as SubscriberAssignment).IsMaster == 1;
+            //}
 
             return false;
         }
@@ -66,15 +66,15 @@
 
             foreach (var sub in subscribers)
             {
-                if (sub.IsMaster == 1)
-                {
-                    return true;
-                }
+                //if (sub.IsMaster == 1)
+                //{
+                //    return true;
+                //}
 
-                if (sub.isAssigned == 1 && sub.SubscriberName.ToUpper().Contains(Consts.SubscriberNameCN88))
-                {
-                    return true;
-                }
+                //if (sub.isAssigned == 1 && sub.SubscriberName.ToUpper().Contains(Consts.SubscriberNameCN88))
+                //{
+                //    return true;
+                //}
             }
 
             return false;

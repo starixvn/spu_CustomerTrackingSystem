@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Core.Service.Utilities
+﻿namespace Fanex.NAP.CTS.Core.Utilities
 {
     using System;
     using System.CodeDom.Compiler;

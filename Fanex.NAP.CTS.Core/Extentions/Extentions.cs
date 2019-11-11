@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Core.Utilities
+﻿namespace Fanex.NAP.CTS.Core.Extentions
 {
     using System;
     using System.Collections.Generic;

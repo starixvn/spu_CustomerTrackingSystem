@@ -1,10 +1,10 @@
-﻿namespace Fanex.NAP.CTS.Core.Extensions
+﻿namespace Fanex.NAP.CTS.Core.Extentions
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
-    public static class IEnumerableExtension
+    public static class IEnumerableExtention
     {
         public static string Join<T, TR>(this IEnumerable<T> data, Func<T,TR> selector, string seperator = ",")
         {

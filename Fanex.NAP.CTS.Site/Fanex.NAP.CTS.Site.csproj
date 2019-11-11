@@ -332,10 +332,6 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Areas\UserLogin\Controllers\CommonController.cs" />
-    <Compile Include="Areas\UserLogin\Controllers\LoginController.cs" />
-    <Compile Include="Areas\UserLogin\Controllers\SSOController.cs" />
-    <Compile Include="Areas\UserLogin\UserLoginAreaRegistration.cs" />
     <Compile Include="FSFunctionKeys.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -411,9 +407,6 @@
     <Content Include="Scripts\Search\Account\search-account.js" />
     <Content Include="Scripts\SubscriberAssignment\subscriber.js" />
     <Content Include="Scripts\Account\general-information.js" />
-    <Compile Include="Service\Utilities\AppSession.cs" />
-    <Compile Include="Service\Utilities\PermissionService.cs" />
-    <Compile Include="Service\Utilities\SessionManager.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\FraudCase\FraudCaseViewModel.cs" />
   </ItemGroup>
@@ -427,12 +420,6 @@
       <DependentUpon>NAPFSNames.tt</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Areas\UserLogin\scripts\lib\jquery-1.9.0.min.js" />
-    <Content Include="Areas\UserLogin\scripts\ReCheckIn.js" />
-    <Content Include="Areas\UserLogin\Views\Common\Style\AccessDenied.css" />
-    <Content Include="Areas\UserLogin\Views\Common\Style\Error.css" />
-    <Content Include="Areas\UserLogin\Views\Common\Style\Images\accessDenied.gif" />
-    <Content Include="Areas\UserLogin\Views\Common\Style\Images\UnderMaintenance.gif" />
     <Content Include="Content\CoreBetList.css" />
     <Content Include="Content\gulpfile.js" />
     <Content Include="Content\images\details_close.png" />
@@ -766,14 +753,6 @@
       <LastGenOutput>NAPFSNames.xml</LastGenOutput>
     </Content>
     <Content Include="Scripts\auto-grid.js" />
-    <Content Include="Areas\UserLogin\Views\Common\AccessDenied.cshtml" />
-    <Content Include="Areas\UserLogin\Views\Common\Error.cshtml" />
-    <Content Include="Areas\UserLogin\Views\Common\Offline.cshtml" />
-    <Content Include="Areas\UserLogin\Views\Login\Index.cshtml" />
-    <Content Include="Areas\UserLogin\Views\Shared\_Layout.cshtml" />
-    <Content Include="Areas\UserLogin\Views\SSO\SSOIndex.cshtml" />
-    <Content Include="Areas\UserLogin\Views\UserSite\Site.cshtml" />
-    <Content Include="Areas\UserLogin\Views\Web.config" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\CheckBetReport\check-bet-report.js" />
@@ -1239,6 +1218,10 @@
       <Project>{3ed1d03f-97f1-4826-8cdd-258485a07546}</Project>
       <Name>Fanex.NAP.CTS.Service</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Fanex.NAP.CTS.User\Fanex.NAP.CTS.User.csproj">
+      <Project>{072a03dc-0c4f-4bc9-a1c9-d4d62c7afccb}</Project>
+      <Name>Fanex.NAP.CTS.User</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\Google.Protobuf.dll" />
@@ -1246,7 +1229,7 @@
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\SonarAnalyzer.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\UserLogin\Models\" />
+    <Folder Include="Areas\" />
     <Folder Include="Views\UM\" />
   </ItemGroup>
   <ItemGroup>

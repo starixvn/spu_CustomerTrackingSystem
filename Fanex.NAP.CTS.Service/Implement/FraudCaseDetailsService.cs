@@ -7,12 +7,11 @@
     using Fanex.NAP.CTS.Core.ExportExcel;
     using Fanex.NAP.CTS.Core.Helpers;
     using Fanex.NAP.CTS.Core.Helpers.Api;
-    using Fanex.NAP.CTS.Core.Utilities;
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Criteria.MatchMonitor;
     using Fanex.NAP.CTS.Criteria.MatchMonitor.FraudCaseDetails;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Service.ExcelConfig.MatchMonitor;
-    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.MatchMonitor;    
     using Fanex.NAP.CTS.ViewModel.MatchMonitor.FraudCaseDetails;
     using Fanex.NAP.CTS.Model.MatchMonitor.FraudCaseDetails;

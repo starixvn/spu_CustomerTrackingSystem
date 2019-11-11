@@ -78,8 +78,8 @@
     <Reference Include="Fanex.MailDelivery.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Fanex.MailStation.1.1.0.1\lib\net40\Fanex.MailDelivery.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Fanex.NAP.Core, Version=2.1.0.6, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Fanex.NAP.Core.2.1.0.6\lib\net40\Fanex.NAP.Core.dll</HintPath>
+    <Reference Include="Fanex.NAP.Core, Version=1.2.1.4, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.NAP.Core.Client.1.2.1.4\lib\net40\Fanex.NAP.Core.dll</HintPath>
     </Reference>
     <Reference Include="Fanex.RemotingRef, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Fanex.RemotingRef.1.3.0\lib\net461\Fanex.RemotingRef.dll</HintPath>
@@ -215,7 +215,7 @@
     <Compile Include="ExportExcel\ExcelStream.cs" />
     <Compile Include="ExportExcel\ExcelUtilities.cs" />
     <Compile Include="ExportExcel\FSExcelConfig.cs" />
-    <Compile Include="Extensions\IEnumerableExtension.cs" />
+    <Compile Include="Extentions\IEnumerableExtention.cs" />
     <Compile Include="FSMQ\MessageQueue\FSMessageQueue.cs" />
     <Compile Include="FSMQ\MessageQueue\IMessageQueueSender.cs" />
     <Compile Include="FSMQ\MessageQueue\MessageQueueSender.cs" />
@@ -235,13 +235,12 @@
     <Compile Include="Helpers\Sequence.cs" />
     <Compile Include="Helpers\Xml\XmlHelper.cs" />
     <Compile Include="Helpers\Xml\XNameAttribute.cs" />
-    <Compile Include="Models\SubscriberAssignment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Service\Utilities\AppSession.cs" />
-    <Compile Include="Service\Utilities\PermissionService.cs" />
-    <Compile Include="Service\Utilities\SessionManager.cs" />
+    <Compile Include="Utilities\AppSession.cs" />
+    <Compile Include="Utilities\PermissionService.cs" />
+    <Compile Include="Utilities\SessionManager.cs" />
     <Compile Include="Utilities\ConfigSettings.cs" />
-    <Compile Include="Utilities\Extentions.cs" />
+    <Compile Include="Extentions\Extentions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

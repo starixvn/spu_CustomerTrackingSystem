@@ -1,25 +1,21 @@
-﻿namespace Fanex.NAP.CTS.Service.Utilities
+﻿namespace Fanex.NAP.CTS.Core.Utilities
 {
     using Fanex.NAP.Core.Models;
     using Fanex.NAP.CTS.Resource.Consts;
-    using Fanex.NAP.CTS.Model.Subscriber;
     using Logging;
     using System;
     using System.Collections.Generic;
 
-    /// <summary>
-    /// AppSession class.
-    /// </summary>
     public static class AppSession
     {
-        private const string CurrentActionNameKey = "Fanex.NAP.FraudDetection.Contants.AppSession.CurrentActionName";
-        private const string CurrentLogInUserKey = "Fanex.NAP.FraudDetection.Contants.AppSession.CurrentLogInUser";
-        private const string CurrentUserMenuKey = "Fanex.NAP.FraudDetection.Contants.AppSession.CurrentUserMenu";
-        private const string CurrentUserRoleAccessKey = "Fanex.NAP.FraudDetection.Contants.AppSession.CurrentUserRoleAccess";
+        private const string CurrentActionNameKey = "Fanex.NAP.CTS.Contants.AppSession.CurrentActionName";
+        private const string CurrentLogInUserKey = "Fanex.NAP.CTS.Contants.AppSession.CurrentLogInUser";
+        private const string CurrentUserMenuKey = "Fanex.NAP.CTS.Contants.AppSession.CurrentUserMenu";
+        private const string CurrentUserRoleAccessKey = "Fanex.NAP.CTS.Contants.AppSession.CurrentUserRoleAccess";
 
-        private const string IsAccountingLoginKey = "Fanex.NAP.FraudDetection.Contants.AppSession.IsAccountingLogin";
+        private const string IsAccountingLoginKey = "Fanex.NAP.CTS.Contants.AppSession.IsAccountingLogin";
         private const string ViewIpVnKey = "ViewIPVN";
-        private const string CurrentWorkingOnMenuKey = "Fanex.NAP.FraudDetection.Contants.AppSession.CurrentWorkingOnMenu";
+        private const string CurrentWorkingOnMenuKey = "Fanex.NAP.CTS.Contants.AppSession.CurrentWorkingOnMenu";
 
         /// <summary>
         ///     Gets or sets current login user.
@@ -64,19 +60,11 @@
             }
         }
 
-        public static IList<SubscriberAssignment> CurrentSubscriberAssignments
+        public static IList<object> CurrentSubscriberAssignments
         {
             get
             {
-                try
-                {
-                    return SessionManager.Get<IList<SubscriberAssignment>>(Consts.CurrentSubscriberAssignmentsKey);
-                }
-                catch (Exception exception)
-                {
-                    LogService.Error(exception.Message, exception);
-                    throw;
-                }
+                return SessionManager.Get<IList<object>>(Consts.CurrentSubscriberAssignmentsKey);
             }
             set
             {

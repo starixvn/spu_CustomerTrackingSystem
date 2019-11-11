@@ -10,7 +10,7 @@
     using Fanex.NAP.CTS.ViewModel.Evidence;
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.CTS.ViewModel.Account.GeneralInformation;
-    using Fanex.NAP.CTS.Core.Service.Utilities;
+    using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.ViewModel.Account.Evidence;
     using Fanex.NAP.CTS.ViewModel.Account.Evidence.Exception;
     using Fanex.NAP.CTS.Model;
