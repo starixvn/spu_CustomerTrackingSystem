@@ -116,45 +116,7 @@
     margin: 12px;
     background: #fff;
     border: 1px solid #C7C7C7;
-    border-radius: 3px;
-    /*.info-text {
-            display: grid;
-            grid-template-columns: 150px 1fr;
-
-            label {
-                padding: 5px;
-                //width: 150px;
-                font-weight: bold;
-                color: #404040;
-                background: #B3D2EF;
-                border-bottom: 1px solid #fff;
-            }
-
-            span {
-                border-bottom: 1px solid #DDDDDD;
-            }
-
-            .line-item {
-                margin-left: 50px;
-                margin-right: 10px;
-            }
-
-            .line-item2 {
-                margin-right: 10px;
-            }
-
-            .width-50 {
-                width: 50px;
-            }
-
-            .width-90 {
-                width: 90px;
-            }
-
-            .width-140 {
-                width: 140px;
-            }
-        }*/ }
+    border-radius: 3px; }
     .content-card .account-info .info-title {
       padding: 8px 12px;
       background: #1D2E4F;
@@ -214,6 +176,9 @@
   .ui-state-default .ui-icon:before {
     font-family: 'Fraud-Sensor', sans-serif !important;
     content: "\e925"; }
+
+.ui-multiselect {
+  border: 1px solid #d6d6d6 !important; }
 
 .report-item {
   background: #fff;

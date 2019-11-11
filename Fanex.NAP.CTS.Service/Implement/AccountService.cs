@@ -22,6 +22,7 @@
     using Fanex.NAP.CTS.Criteria.Account.GeneralInformation;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Resource;
+    using Fanex.NAP.CTS.Resource.Consts;
 
     public class AccountService : IAccountService
     {
@@ -103,7 +104,7 @@
                 ip_userId = userId
             };
 
-            var rawSubscribers = DataService.GetData<SubscriberAssignment>(criteria).OrderBy(c => c.SubscriberName);
+            var rawSubscribers = DataService.GetData<SubscriberAssignment>(criteria).OrderBy(c => c.SubscriberName).ToList();
 
             if (CheckIsMasterSubscriber(rawSubscribers))
             {
@@ -113,11 +114,32 @@
             return GetSubscribers(rawSubscribers);
         }
 
-        public static bool CheckIsMasterSubscriber(IEnumerable<SubscriberAssignment> subscribers)
+        public bool CheckIsMasterSubscriber(IEnumerable<SubscriberAssignment> subscribers)
         {
             if (subscribers != null && subscribers.Any())
             {
                 return subscribers.ToList()[0].IsMaster == 1;
+            }
+
+            return false;
+        }
+
+        public bool CheckIsPermissionCN88(IEnumerable<SubscriberAssignment> subscribers)
+        {
+            if (subscribers != null && subscribers.Any())
+            {
+                foreach (var sub in subscribers)
+                {
+                    if (sub.IsMaster == 1)
+                    {
+                        return true;
+                    }
+
+                    if (sub.isAssigned == 1 && sub.SubscriberName.ToUpper().Contains(Consts.SubscriberNameCN88))
+                    {
+                        return true;
+                    }
+                }
             }
 
             return false;

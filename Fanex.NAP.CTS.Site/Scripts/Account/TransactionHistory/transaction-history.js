@@ -80,7 +80,7 @@
         transactionContent.hide();
         loading.show();
 
-        var url = common.modifyRelativeUrl('/Transaction/GetTransactionHistoryFilter');
+        var url = common.modifyRelativeUrl('/Account/GetTransactionHistoryFilter');
         var lengthReport = $(reportLength).val();
 
         $.ajax(url, {

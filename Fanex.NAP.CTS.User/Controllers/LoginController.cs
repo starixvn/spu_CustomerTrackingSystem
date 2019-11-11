@@ -159,8 +159,11 @@
 
                                     var currentFunction = _userService.GetPermissions(user.Id, NapSettings.Settings.SiteId, null, NapSettings.Settings.Environment);
                                     AppSession.CurrentUser = user;
-                                    AppSession.RoleAccess = PermissionService.GetRoleAccess(currentFunction);                                    
-                                    //AppSession.CurrentSubscriberAssignments = new AccountService().GetSubscribers(user.Id).ToList();
+                                    AppSession.RoleAccess = PermissionService.GetRoleAccess(currentFunction);
+                                    var accountService = new AccountService();
+                                    var subscribersAssignments = accountService.GetSubscribers(user.Id);
+                                    AppSession.IsMasterSubscriberAssignment = accountService.CheckIsMasterSubscriber(subscribersAssignments);
+                                    AppSession.IsPermissionCN88 = accountService.CheckIsPermissionCN88(subscribersAssignments);                                    
 
                                     if (AppSession.CurrentUserMenu != null &&
                                         AppSession.CurrentUserMenu.Where(m => m.Parent == null).ToList().Count > 0)

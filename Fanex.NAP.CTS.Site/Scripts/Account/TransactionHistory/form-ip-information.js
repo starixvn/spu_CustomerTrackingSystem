@@ -2,7 +2,7 @@
     var form = $('#form-ip-information');  
 
     this.OpenModal = function (ip, targetElement) {        
-        var url = common.modifyRelativeUrl('/Transaction/GetIPInformation');
+        var url = common.modifyRelativeUrl('/Account/GetIPInformation');
 
         common.showLoading();
 

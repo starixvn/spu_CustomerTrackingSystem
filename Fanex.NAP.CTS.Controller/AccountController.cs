@@ -15,17 +15,20 @@
     using Fanex.NAP.CTS.ViewModel.Account.Evidence.Exception;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Resource;
+    using Fanex.NAP.CTS.ViewModel.Account.TransactionHistory;
 
     [NapAuth(FunctionKey = FSFunctionKeys.SearchAccount, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class AccountController : BaseController
     {
         private readonly IAccountService _accountService;
         private readonly IEvidenceService _evidenceService;
+        private readonly ITransactionService _transactionService;
 
         public AccountController()
         {
             _accountService = new AccountService();
             _evidenceService = new EvidenceService();
+            _transactionService = new TransactionService();
         }
 
         public override string BaseControllerName { get => Consts.MenuItemSearch; }
@@ -226,6 +229,32 @@
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
+        #endregion
+
+        #region Transaction History
+        [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.TransactionHistory, Policy = NAP.Core.Business.Constant.Policy.Read)]
+        public ActionResult GetTransactionHistory(int accountId)
+        {
+            return PartialView("TransactionHistory/TransactionHistory");
+        }
+
+        [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.TransactionHistory, Policy = NAP.Core.Business.Constant.Policy.Read)]
+        public ActionResult GetTransactionHistoryFilter(TransactionHistoryFilter filter)
+        {
+            var data = _transactionService.GetTransactionHistory(filter);
+
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult GetIPInformation(string ip)
+        {
+            var data = _transactionService.GetIPInformation(ip);
+
+            return PartialView("TransactionHistory/IPInformation", data);
+        }
         #endregion
     }
 }

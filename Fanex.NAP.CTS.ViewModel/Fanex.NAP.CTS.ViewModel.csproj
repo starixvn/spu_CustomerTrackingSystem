@@ -99,9 +99,9 @@
     <Compile Include="SuspiciousCustomerDetails\CustomerDetailsViewModel.cs" />
     <Compile Include="SuspiciousCustomerDetails\TicketDetails.cs" />
     <Compile Include="SuspiciousCustomer\SuspiciousCustomerNoteView.cs" />
-    <Compile Include="Transaction\IPInformation.cs" />
-    <Compile Include="Transaction\TransactionHistory.cs" />
-    <Compile Include="Transaction\TransactionHistoryFilter.cs" />
+    <Compile Include="Account\TransactionHistory\IPInformation.cs" />
+    <Compile Include="Account\TransactionHistory\TransactionHistory.cs" />
+    <Compile Include="Account\TransactionHistory\TransactionHistoryFilter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fanex.NAP.CTS.Model\Fanex.NAP.CTS.Model.csproj">

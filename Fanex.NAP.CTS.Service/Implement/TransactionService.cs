@@ -2,15 +2,15 @@
 {
     using System.Collections.Generic;
     using Fanex.NAP.CTS.Model.Transaction;
-    using Fanex.NAP.CTS.ViewModel.Transaction;
     using Fanex.NAP.CTS.Criteria.Transaction.History;
     using Fanex.NAP.CTS.Core.BaseClasses;
     using Fanex.NAP.CTS.Criteria.Transaction;
+    using Fanex.NAP.CTS.ViewModel.Account.TransactionHistory;
     using System.Linq;
     using Fanex.NAP.CTS.Model.IP;
     using System.Net;
     using System;
-    using System.Numerics;
+    using System.Numerics;    
 
     public class TransactionService : ITransactionService
     {

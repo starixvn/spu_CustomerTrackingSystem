@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.ViewModel.Transaction
+﻿namespace Fanex.NAP.CTS.ViewModel.Account.TransactionHistory
 {
     public class IPInformation
     {

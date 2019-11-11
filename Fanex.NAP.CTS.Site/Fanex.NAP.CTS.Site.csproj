@@ -1068,8 +1068,8 @@
     <Content Include="Scripts\SuspiciousCustomer\suspicious-customer.js" />
     <Content Include="Scripts\toast\jquery.toast.js" />
     <Content Include="Scripts\toogle.js" />
-    <Content Include="Scripts\Transaction\History\form-ip-information.js" />
-    <Content Include="Scripts\Transaction\History\transaction-history.js" />
+    <Content Include="Scripts\Account\TransactionHistory\form-ip-information.js" />
+    <Content Include="Scripts\Account\TransactionHistory\transaction-history.js" />
     <Content Include="Scripts\umd\popper-utils.js" />
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
@@ -1090,6 +1090,8 @@
     <Content Include="Views\Evidence\FormPlaceEvidence.cshtml" />
     <Content Include="Views\Account\Associated\GraphVisualization.cshtml" />
     <Content Include="Views\Account\Associated\ShortestPathVisual.cshtml" />
+    <Content Include="Views\Account\TransactionHistory\IPInformation.cshtml" />
+    <Content Include="Views\Account\TransactionHistory\TransactionHistory.cshtml" />
     <None Include="Views\Errors\403.cshtml" />
     <None Include="Views\Errors\404.cshtml" />
     <None Include="Views\Errors\500.cshtml" />
@@ -1180,8 +1182,6 @@
     <Content Include="Views\SearchAccount\Index.cshtml" />
     <Content Include="Views\SearchDevice\Index.cshtml" />
     <Content Include="Views\Account\DetailAccount.cshtml" />
-    <Content Include="Views\Transaction\TransactionHistory.cshtml" />
-    <Content Include="Views\Transaction\IPInformation.cshtml" />
     <Content Include="Views\Evidence\FormInformationEvidence.cshtml" />
     <Content Include="Views\Evidence\FormRetractEvidence.cshtml" />
   </ItemGroup>
@@ -1229,7 +1229,6 @@
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\SonarAnalyzer.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\" />
     <Folder Include="Views\UM\" />
   </ItemGroup>
   <ItemGroup>

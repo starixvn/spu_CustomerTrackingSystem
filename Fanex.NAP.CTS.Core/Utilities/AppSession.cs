@@ -72,6 +72,30 @@
             }
         }
 
+        public static bool IsMasterSubscriberAssignment
+        {
+            get
+            {
+                return SessionManager.Get<bool>(Consts.CurrentSubscriberAssignmentsKey);
+            }
+            set
+            {
+                SessionManager.Set(Consts.CurrentSubscriberAssignmentsKey, value);
+            }
+        }
+
+        public static bool IsPermissionCN88
+        {
+            get
+            {
+                return SessionManager.Get<bool>(Consts.IsPermissionCN88Key);
+            }
+            set
+            {
+                SessionManager.Set(Consts.IsPermissionCN88Key, value);
+            }
+        }
+
         /// <summary>
         ///     Gets or sets current working menu url.
         /// </summary>

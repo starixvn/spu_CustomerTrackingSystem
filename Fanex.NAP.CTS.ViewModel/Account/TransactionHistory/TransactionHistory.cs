@@ -1,7 +1,6 @@
-﻿namespace Fanex.NAP.CTS.ViewModel.Transaction
+﻿namespace Fanex.NAP.CTS.ViewModel.Account.TransactionHistory
 {
     using Fanex.NAP.CTS.Model.Transaction;
-    using System.Collections.Generic;
 
     public class TransactionHistory
     {

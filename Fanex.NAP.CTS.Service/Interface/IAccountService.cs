@@ -11,6 +11,10 @@
     {
         IEnumerable<SubscriberAssignment> GetSubscribers(long userId);
 
+        bool CheckIsMasterSubscriber(IEnumerable<SubscriberAssignment> subscribers);
+
+        bool CheckIsPermissionCN88(IEnumerable<SubscriberAssignment> subscribers);
+
         IEnumerable<SubscriberAccount> SearchAccounts(SearchAccountFilter filter);
 
         AccountDetail GetAccountDetailGeneralInformation(GeneralInformationFilter filter);

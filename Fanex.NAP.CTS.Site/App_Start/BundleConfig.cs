@@ -166,7 +166,7 @@
 
         private static void RegisterTransactionHistoryBundles(BundleCollection bundles)
         {
-            bundles.Add(new ScriptBundle("~/transaction/history-scripts").Include("~/Scripts/Transaction/History/*.js"));
+            bundles.Add(new ScriptBundle("~/account/transaction-hisory/history-scripts").Include("~/Scripts/Account/TransactionHistory/*.js"));
         }
 
     }

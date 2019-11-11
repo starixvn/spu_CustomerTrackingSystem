@@ -10,7 +10,7 @@
         { name: "retract_evidence", url: common.modifyRelativeUrl('/Account/GetRetractAndException') },
         { name: "associated_account", url: common.modifyRelativeUrl('/Account/GetAssociatedAccountByAccount') },
         { name: "associated_device", url: common.modifyRelativeUrl('/Account/GetAssociatedDeviceByAccount') },
-        { name: "transaction_history", url: common.modifyRelativeUrl('/Transaction/GetTransactionHistory') }
+        { name: "transaction_history", url: common.modifyRelativeUrl('/Account/GetTransactionHistory') }
     ];   
 
     function ToogleDetail() {  

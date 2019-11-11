@@ -155,7 +155,6 @@
     <Compile Include="SubscriberAssignmentController.cs" />
     <Compile Include="SuspiciousCustomerController.cs" />
     <Compile Include="SuspiciousCustomerDetailsController.cs" />
-    <Compile Include="TransactionController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
