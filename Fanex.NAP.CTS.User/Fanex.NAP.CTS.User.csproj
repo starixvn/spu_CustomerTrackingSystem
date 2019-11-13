@@ -135,22 +135,8 @@
     <Compile Include="UserLoginAreaRegistration.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="scripts\lib\jquery-1.9.0.min.js" />
-    <Content Include="scripts\ReCheckIn.js" />
-    <Content Include="Views\Common\Style\AccessDenied.css" />
-    <Content Include="Views\Common\Style\Error.css" />
-    <Content Include="Views\Common\Style\Images\accessDenied.gif" />
-    <Content Include="Views\Common\Style\Images\UnderMaintenance.gif" />
     <None Include="app.config" />
     <None Include="packages.config" />
-    <Content Include="Views\Common\AccessDenied.cshtml" />
-    <Content Include="Views\Common\Error.cshtml" />
-    <Content Include="Views\Common\Offline.cshtml" />
-    <Content Include="Views\Login\Index.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\SSO\SSOIndex.cshtml" />
-    <Content Include="Views\UserSite\Site.cshtml" />
-    <Content Include="Views\Web.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fanex.NAP.CTS.Controller\Fanex.NAP.CTS.Controller.csproj">

@@ -342,6 +342,12 @@
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="Areas\UserLogin\scripts\lib\jquery-1.9.0.min.js" />
+    <Content Include="Areas\UserLogin\scripts\ReCheckIn.js" />
+    <Content Include="Areas\UserLogin\Views\Common\Style\AccessDenied.css" />
+    <Content Include="Areas\UserLogin\Views\Common\Style\Error.css" />
+    <Content Include="Areas\UserLogin\Views\Common\Style\Images\accessDenied.gif" />
+    <Content Include="Areas\UserLogin\Views\Common\Style\Images\UnderMaintenance.gif" />
     <Content Include="Content\images\account_not_flagged_with_evidence.png" />
     <Content Include="Content\images\affected_account_by_link_to_evidence.png" />
     <Content Include="Content\images\affected_device_by_link_to_evidence.png" />
@@ -888,6 +894,14 @@
     <Content Include="App_Data\Excel Template\CustomerMonitor\CustomerDetails\template.xlsx" />
     <Content Include="App_Data\Excel Template\FraudCase\ScannedOfficeIP\InternalAccountTemplate.xlsx" />
     <Content Include="App_Data\Excel Template\MatchMonitor\FraudCaseDetail\flagged account.xlsx" />
+    <Content Include="Areas\UserLogin\Views\Common\AccessDenied.cshtml" />
+    <Content Include="Areas\UserLogin\Views\Common\Error.cshtml" />
+    <Content Include="Areas\UserLogin\Views\Common\Offline.cshtml" />
+    <Content Include="Areas\UserLogin\Views\Login\Index.cshtml" />
+    <Content Include="Areas\UserLogin\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\UserLogin\Views\SSO\SSOIndex.cshtml" />
+    <Content Include="Areas\UserLogin\Views\UserSite\Site.cshtml" />
+    <Content Include="Areas\UserLogin\Views\Web.config" />
     <None Include="bundleconfig.json" />
     <Content Include="fonts\Fraud-Sensor.eot" />
     <Content Include="fonts\Fraud-Sensor.ttf" />

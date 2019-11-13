@@ -41,6 +41,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.3.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <HintPath>..\packages\BouncyCastle.1.8.3.1\lib\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
     <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <HintPath>..\packages\Castle.Core.4.4.0\lib\net45\Castle.Core.dll</HintPath>
     </Reference>
@@ -62,8 +65,20 @@
     <Reference Include="Fanex.Data, Version=4.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Fanex.Data.4.0.1\lib\net461\Fanex.Data.dll</HintPath>
     </Reference>
+    <Reference Include="Fanex.Data.MySql, Version=4.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.Data.MySql.4.0.1\lib\net461\Fanex.Data.MySql.dll</HintPath>
+    </Reference>
+    <Reference Include="Fanex.Data.Repository, Version=4.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.Data.Repository.4.0.1\lib\net461\Fanex.Data.Repository.dll</HintPath>
+    </Reference>
+    <Reference Include="Fanex.Data.SqlServer, Version=4.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.Data.SqlServer.4.0.1\lib\net461\Fanex.Data.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Fanex.NAP.Core, Version=1.2.1.4, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Fanex.NAP.Core.Client.1.2.1.4\lib\net40\Fanex.NAP.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Protobuf, Version=3.6.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Protobuf.3.6.1\lib\net45\Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Caching, Version=5.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -96,13 +111,22 @@
     <Reference Include="Moq, Version=4.13.0.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <HintPath>..\packages\Moq.4.13.1\lib\net45\Moq.dll</HintPath>
     </Reference>
+    <Reference Include="MySql.Data, Version=8.0.16.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.8.0.16\lib\net452\MySql.Data.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Design" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
@@ -111,6 +135,9 @@
       <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.1\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System.Transactions" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.Helpers.dll</HintPath>
@@ -146,14 +173,50 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DbSettingProviderCollection.cs" />
+    <Compile Include="DbSettingProviderFixture.cs" />
+    <Compile Include="SampleData\ExpectedData.cs" />
+    <Compile Include="SearchAccount\Mocks\SearchAccountControllerMock.cs" />
     <Compile Include="SearchAccount\ActionTests.cs" />
-    <Compile Include="SearchAccount\RouteTests.cs" />
-    <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\NAPFrameworkSpNames.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\NAPFSNames.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\UAT\NAPFrameworkSpNames.xml" />
+    <Content Include="App_Data\UAT\NAPFSNames.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>NAPFSNames.xml</LastGenOutput>
+    </Content>
+    <Content Include="App_Data\UAT\NAPFSNames.xml">
+      <DependentUpon>NAPFSNames.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DesignTime>True</DesignTime>
+    </Content>
     <None Include="app.config" />
+    <Content Include="App_Data\Excel Template\Check Bet Report\template.xlsx" />
+    <Content Include="App_Data\Excel Template\CustomerMonitor\CustomerDetails\template.xlsx" />
+    <Content Include="App_Data\Excel Template\CustomerMonitor\template.xlsx" />
+    <Content Include="App_Data\Excel Template\DailyDataCapture\template.xlsx" />
+    <Content Include="App_Data\Excel Template\FraudCase\DelayedGoal\template.xlsx" />
+    <Content Include="App_Data\Excel Template\FraudCase\ScannedOfficeIP\InternalAccountTemplate.xlsx" />
+    <Content Include="App_Data\Excel Template\FraudCase\ScannedOfficeIP\template.xlsx" />
+    <Content Include="App_Data\Excel Template\MatchMonitor\FraudCaseDetail\arbitrage.xlsx" />
+    <Content Include="App_Data\Excel Template\MatchMonitor\FraudCaseDetail\flagged account.xlsx" />
+    <Content Include="App_Data\Excel Template\MatchMonitor\FraudCaseDetail\template.xlsx" />
+    <Content Include="App_Data\Excel Template\MatchMonitor\FraudCaseDetail\ticket by ip.xlsx" />
+    <Content Include="App_Data\Excel Template\MatchMonitor\template.xlsx" />
+    <Content Include="App_Data\Excel Template\Scanned Office IP\template.xlsx" />
+    <Content Include="App_Data\Excel Template\SuspiciousCustomer\template.xlsx" />
     <None Include="packages.config" />
+    <Content Include="Web.ConnectionString.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\xunit.analyzers.0.10.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
@@ -163,6 +226,18 @@
     <ProjectReference Include="..\Fanex.NAP.CTS.Controller\Fanex.NAP.CTS.Controller.csproj">
       <Project>{96bc0111-63b6-4c24-94df-c00ec2656ec7}</Project>
       <Name>Fanex.NAP.CTS.Controller</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fanex.NAP.CTS.Core\Fanex.NAP.CTS.Core.csproj">
+      <Project>{5f3abbf7-ea70-4c02-bd47-b427f1a9cc39}</Project>
+      <Name>Fanex.NAP.CTS.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fanex.NAP.CTS.Model\Fanex.NAP.CTS.Model.csproj">
+      <Project>{5ce0ba40-0a37-4c89-a33b-d61c7944be08}</Project>
+      <Name>Fanex.NAP.CTS.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fanex.NAP.CTS.ViewModel\Fanex.NAP.CTS.ViewModel.csproj">
+      <Project>{4940bbbb-2943-476d-a778-ffe0ed748f12}</Project>
+      <Name>Fanex.NAP.CTS.ViewModel</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
