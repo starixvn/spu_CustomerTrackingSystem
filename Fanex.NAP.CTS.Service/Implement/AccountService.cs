@@ -145,7 +145,7 @@
             return false;
         }
 
-        private static IEnumerable<SubscriberAssignment> GetSubscribers(IEnumerable<SubscriberAssignment> rawSubscribers)
+        private static IEnumerable<SubscriberAssignment> GetSubscribers(List<SubscriberAssignment> rawSubscribers)
         {
             var subscribers = new List<SubscriberAssignment>();
 

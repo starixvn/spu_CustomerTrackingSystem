@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Test.Mocks.Controllers
+﻿namespace Fanex.NAP.CTS.Controller.Test.Mocks
 {
     using Fanex.NAP.CTS.Controller;
     using Fanex.NAP.CTS.ViewModel.Account.Search;

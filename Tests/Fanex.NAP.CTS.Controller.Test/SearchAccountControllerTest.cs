@@ -1,19 +1,19 @@
-﻿namespace Fanex.NAP.CTS.Test.Site.SearchAccount
+﻿namespace Fanex.NAP.CTS.Controller.Test
 {
     using System.Web.Mvc;
     using System.Collections.Generic;
     using Xunit;
-    using Fanex.NAP.CTS.ViewModel.Account.Search;
-    using Fanex.NAP.CTS.Test.Mocks.Controllers;    
+    using Fanex.NAP.CTS.ViewModel.Account.Search;   
     using Fanex.NAP.CTS.Model.Subscriber;
+    using Fanex.NAP.CTS.Controller.Test.Mocks;
 
     [Collection(nameof(DbSettingProviderCollection))]
-    public class ActionTests
+    public class SearchAccountControllerTest
     {
         private readonly SearchAccountControllerMock _runner;
         private const string ExpectedActionIndex = "Index";
 
-        public ActionTests()
+        public SearchAccountControllerTest()
         {
             _runner = new SearchAccountControllerMock();
             _runner.SetPrincipal("sa");
@@ -23,7 +23,7 @@
         [Theory]
         [InlineData("")]       
         public void Index_Test(string viewName)
-        {           
+        {
             // Act
             var result = _runner.Index() as ViewResult;
 
