@@ -414,7 +414,6 @@
     <Content Include="Scripts\SubscriberAssignment\subscriber.js" />
     <Content Include="Scripts\Account\general-information.js" />
     <Compile Include="Startup.cs" />
-    <Compile Include="ViewModels\FraudCase\FraudCaseViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\NAPFrameworkSpNames.xml" />

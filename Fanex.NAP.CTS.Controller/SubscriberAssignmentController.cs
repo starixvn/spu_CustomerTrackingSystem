@@ -7,6 +7,7 @@
     using Fanex.NAP.CTS.Core.Utilities;
     using System.Configuration;
     using System.Web.Mvc;
+    using Fanex.NAP.CTS.Model.Subscriber;
 
     [NapAuth(FunctionKey = FSFunctionKeys.SubscriberAssignment, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class SubscriberAssignmentController : BaseController
@@ -51,9 +52,11 @@
         }
 
         [HttpPost]
-        public ActionResult AssignSubscribers(int userId, string subscriberIds, bool isMasterSub)
+        public ActionResult AssignSubscribers(SubscriberAssignmentUpdate subscriberAssignmentUpdate)
         {
-            var data = _subscriberAssignmentService.UpdateSubscribers(isMasterSub, userId, subscriberIds, CurrentSession.UserId);
+            subscriberAssignmentUpdate.UserId = CurrentSession.UserId;
+
+            var data = _subscriberAssignmentService.UpdateSubscribers(subscriberAssignmentUpdate);
 
             return Json(data, JsonRequestBehavior.AllowGet);
         }

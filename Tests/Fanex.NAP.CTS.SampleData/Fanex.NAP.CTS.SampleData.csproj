@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExpectedData.cs" />
+    <Compile Include="ExpectedUpdate.cs" />
     <Compile Include="ExpectedFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

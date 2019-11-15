@@ -183,6 +183,7 @@
     <Compile Include="ReportModel.cs" />
     <Compile Include="Subscriber\Subscriber.cs" />
     <Compile Include="Subscriber\SubscriberAssignment.cs" />
+    <Compile Include="Subscriber\SubscriberAssignmentUpdate.cs" />
     <Compile Include="SuspiciousCustomerDetails\BettypeStatistics.cs" />
     <Compile Include="SuspiciousCustomerDetails\ChoiceStatistics.cs" />
     <Compile Include="SuspiciousCustomerDetails\FraudCaseViolated.cs" />

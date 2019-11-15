@@ -179,6 +179,7 @@
     <Compile Include="Mock\ControllerContextMock.cs" />
     <Compile Include="SearchAccountControllerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SubscriberAssignmentControllerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

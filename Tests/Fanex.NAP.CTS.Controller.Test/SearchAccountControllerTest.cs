@@ -22,12 +22,17 @@
         public SearchAccountControllerTest()
         {
             _runner = new SearchAccountController();
+            ConfigurationManager.AppSettings[Environment] = EnvironmentLocal;
         }
 
         [Theory]
         [InlineData("")]       
         public void Index_Test(string viewName)
         {
+            // Arrange
+            var controllerContextMock = new ControllerContextMock(IdentityName, _runner);
+            _runner.ControllerContext = controllerContextMock.Instance;
+
             // Act
             var actualResult = _runner.Index() as ViewResult;
 
@@ -49,8 +54,7 @@
         [Fact]
         public void SearchSubscriberAccount_Test()
         {
-            // Arrange
-            ConfigurationManager.AppSettings[Environment] = EnvironmentLocal;
+            // Arrange            
             var controllerContextMock = new ControllerContextMock(IdentityName, _runner);
             _runner.ControllerContext = controllerContextMock.Instance;
 
@@ -64,6 +68,10 @@
         [Fact]
         public void GetSubscribers_Test()
         {
+            // Arrange            
+            var controllerContextMock = new ControllerContextMock(IdentityName, _runner);
+            _runner.ControllerContext = controllerContextMock.Instance;
+
             // Act
             var actualResult = _runner.GetSubscribers() as JsonResult;
 

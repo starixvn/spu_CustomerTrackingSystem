@@ -8,7 +8,6 @@
     {
         IEnumerable<SubscriberAssignment> GetSubscribers(long userId);
 
-        DBResult UpdateSubscribers(bool isMasterSub, int userId, string subscriberIds, int createdBy);
-
+        DBResult UpdateSubscribers(SubscriberAssignmentUpdate subscriberAssignmentUpdate);
     }
 }

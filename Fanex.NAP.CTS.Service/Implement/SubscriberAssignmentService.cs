@@ -18,17 +18,18 @@
             };
 
             return DataService.GetData<SubscriberAssignment>(criteria)
-                                .OrderBy(c => c.SubscriberName);
+                                .OrderBy(c => c.SubscriberName)
+                                .ToList();
         }
 
-        public DBResult UpdateSubscribers(bool isMasterSub, int userId, string subscriberIds, int createdBy)
+        public DBResult UpdateSubscribers(SubscriberAssignmentUpdate subscriberAssignmentUpdate)
         {
             var criteria = new SubscribersUpdateCriteria
             {
-                ip_isMasterSub = isMasterSub,
-                ip_subscriberIds = subscriberIds,
-                ip_userId = userId,
-                ip_createdBy = createdBy
+                ip_isMasterSub = subscriberAssignmentUpdate.IsMasterSub,
+                ip_subscriberIds = subscriberAssignmentUpdate.SubscriberIds,
+                ip_userId = subscriberAssignmentUpdate.UserId,
+                ip_createdBy = subscriberAssignmentUpdate.CreatedBy
             };
 
             try
