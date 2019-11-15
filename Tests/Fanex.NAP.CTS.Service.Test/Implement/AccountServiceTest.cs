@@ -1,10 +1,10 @@
 ﻿namespace Fanex.NAP.CTS.Service.Test.Implement
 {
     using Fanex.NAP.CTS.Model.Subscriber;
-    using Fanex.NAP.CTS.Resource.Consts;
-    using Fanex.NAP.CTS.Service.Test.Mocks;
-    using Fanex.NAP.CTS.Service.Test.SampleData;
+    using Fanex.NAP.CTS.Resource.Consts;    
+    using Fanex.NAP.CTS.SampleData;
     using Fanex.NAP.CTS.ViewModel.Account.Search;
+    using Fanex.NAP.CTS.Service.Test.DbSetting;
     using System.Collections.Generic;
     using System.Linq;
     using Xunit;
@@ -12,22 +12,19 @@
     [Collection(nameof(DbSettingProviderCollection))]
     public class AccountServiceTest
     {
-        private readonly AccountServiceMock _runner;
+        private readonly AccountService _runner;
 
         public AccountServiceTest()
         {
-            _runner = new AccountServiceMock();
+            _runner = new AccountService();
         }
 
         #region Search account test
         [Fact]
         public void SearchAccounts_Test()
         {
-            // Arrange
-            _runner.GenerateSearchAccountFilter();
-
             // Act
-            var result = _runner.SearchAccounts();
+            var result = _runner.SearchAccounts(ExpectedFilter.ExpectedSearchAccountFilter);
 
             // Assert
             Assert.IsType<List<SubscriberAccount>>(result);
@@ -78,18 +75,31 @@
 
         #region General information
         [Fact]
-        public void GetAccountDetailGeneralInformation()
+        public void GetAccountDetailGeneralInformation_Test()
         {
             // Arrange
             var expected = ExpectedData.ExpectedAccountDetail;
-            _runner.GenerateGeneralInformationFilter();
 
             // Act
-            var actualResult = _runner.GetAccountDetailGeneralInformation();
+            var actualResult = _runner.GetAccountDetailGeneralInformation(ExpectedFilter.ExpectedGeneralInformationFilter);
 
             // Assert
             Assert.IsType(expected.GetType(), actualResult);
         }
+        #endregion
+
+        #region Associated account by account
+        [Fact]
+        public void GetAssociatedAccountByAccounts_Test()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+
+        }
+
         #endregion
 
     }

@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fanex.NAP.CTS.Controller.Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fanex.NAP.CTS.Service.Test", "Tests\Fanex.NAP.CTS.Service.Test\Fanex.NAP.CTS.Service.Test.csproj", "{FBD40FE3-B8C9-4119-8C41-FD35CCF91939}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fanex.NAP.CTS.SampleData", "Tests\Fanex.NAP.CTS.SampleData\Fanex.NAP.CTS.SampleData.csproj", "{C4E2F55F-C718-4AAB-94F3-7C19219E7B0F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,10 @@ Global
 		{FBD40FE3-B8C9-4119-8C41-FD35CCF91939}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FBD40FE3-B8C9-4119-8C41-FD35CCF91939}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FBD40FE3-B8C9-4119-8C41-FD35CCF91939}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4E2F55F-C718-4AAB-94F3-7C19219E7B0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4E2F55F-C718-4AAB-94F3-7C19219E7B0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4E2F55F-C718-4AAB-94F3-7C19219E7B0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4E2F55F-C718-4AAB-94F3-7C19219E7B0F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -90,6 +96,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{F6FAA929-E8BE-4D27-B71A-DFD96BA864CB} = {4251AACF-6788-4B6E-880B-1C97AE75647D}
 		{FBD40FE3-B8C9-4119-8C41-FD35CCF91939} = {4251AACF-6788-4B6E-880B-1C97AE75647D}
+		{C4E2F55F-C718-4AAB-94F3-7C19219E7B0F} = {4251AACF-6788-4B6E-880B-1C97AE75647D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {59C41D87-741A-4C93-8603-036EF4802379}

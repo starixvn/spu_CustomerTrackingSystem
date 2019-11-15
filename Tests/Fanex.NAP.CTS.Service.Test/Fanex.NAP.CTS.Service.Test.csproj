@@ -113,12 +113,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DbSettingProviderCollection.cs" />
-    <Compile Include="DbSettingProviderFixture.cs" />
+    <Compile Include="DbSetting\DbSettingProviderCollection.cs" />
+    <Compile Include="DbSetting\DbSettingProviderFixture.cs" />
     <Compile Include="Implement\AccountServiceTest.cs" />
-    <Compile Include="Mocks\AccountServiceMock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SampleData\ExpectedData.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -167,6 +165,10 @@
     <ProjectReference Include="..\..\Fanex.NAP.CTS.ViewModel\Fanex.NAP.CTS.ViewModel.csproj">
       <Project>{4940bbbb-2943-476d-a778-ffe0ed748f12}</Project>
       <Name>Fanex.NAP.CTS.ViewModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fanex.NAP.CTS.SampleData\Fanex.NAP.CTS.SampleData.csproj">
+      <Project>{c4e2f55f-c718-4aab-94f3-7c19219e7b0f}</Project>
+      <Name>Fanex.NAP.CTS.SampleData</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

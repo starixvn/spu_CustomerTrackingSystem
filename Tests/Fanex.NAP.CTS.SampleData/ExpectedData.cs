@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Service.Test.SampleData
+﻿namespace Fanex.NAP.CTS.SampleData
 {
     using Fanex.NAP.CTS.Model.Subscriber;
     using Fanex.NAP.CTS.ViewModel.Account;
@@ -10,7 +10,7 @@
 
         private static AccountDetail expectedAccountDetail;
 
-        public static List<SubscriberAssignment> ExpectedSubscriberAssignments 
+        public static List<SubscriberAssignment> ExpectedSubscriberAssignments
         {
             get
             {
@@ -27,7 +27,7 @@
                 expectedAccountDetail = expectedAccountDetail ?? GenerateSampleAccountDetail();
 
                 return expectedAccountDetail;
-            }            
+            }
         }
 
         public static List<SubscriberAssignment> GenerateSampleSubscriberAssignments()

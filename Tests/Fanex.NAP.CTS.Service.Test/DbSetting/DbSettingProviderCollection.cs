@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Controller.Test
+﻿namespace Fanex.NAP.CTS.Service.Test.DbSetting
 {
     using Xunit;
 

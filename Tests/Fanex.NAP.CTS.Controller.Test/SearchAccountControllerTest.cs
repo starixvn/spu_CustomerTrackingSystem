@@ -4,20 +4,24 @@
     using System.Collections.Generic;
     using Xunit;
     using Fanex.NAP.CTS.ViewModel.Account.Search;   
-    using Fanex.NAP.CTS.Model.Subscriber;
-    using Fanex.NAP.CTS.Controller.Test.Mocks;
+    using Fanex.NAP.CTS.Model.Subscriber;    
+    using Fanex.NAP.CTS.Controller.Test.DbSetting;
+    using Fanex.NAP.CTS.SampleData;
+    using Fanex.NAP.CTS.Test.Mocks;
+    using System.Configuration;
 
     [Collection(nameof(DbSettingProviderCollection))]
     public class SearchAccountControllerTest
     {
-        private readonly SearchAccountControllerMock _runner;
+        private readonly SearchAccountController _runner;
         private const string ExpectedActionIndex = "Index";
+        private const string IdentityName = "sa";
+        private const string Environment = "Environment";
+        private const string EnvironmentLocal = "1";
 
         public SearchAccountControllerTest()
         {
-            _runner = new SearchAccountControllerMock();
-            _runner.SetPrincipal("sa");
-            _runner.SetAppSetting("Environment", "1");
+            _runner = new SearchAccountController();
         }
 
         [Theory]
@@ -25,10 +29,10 @@
         public void Index_Test(string viewName)
         {
             // Act
-            var result = _runner.Index() as ViewResult;
+            var actualResult = _runner.Index() as ViewResult;
 
             // Assert
-            Assert.Equal(viewName, result.ViewName);
+            Assert.Equal(viewName, actualResult.ViewName);
         }
 
         [Theory]
@@ -36,31 +40,35 @@
         public void SearchAccount_Test(string keySearch)
         {
             // Act
-            var result = _runner.SearchAccount(keySearch) as ViewResult;
+            var actualResult = _runner.SearchAccount(keySearch) as ViewResult;
 
             // Assert
-            Assert.Equal(ExpectedActionIndex, result.ViewName);
+            Assert.Equal(ExpectedActionIndex, actualResult.ViewName);
         }
 
         [Fact]
         public void SearchSubscriberAccount_Test()
         {
-            // Act 
-            _runner.GenerateSearchAccountFilter();
-            var result = _runner.SearchSubscriberAccount() as JsonResult;
+            // Arrange
+            ConfigurationManager.AppSettings[Environment] = EnvironmentLocal;
+            var controllerContextMock = new ControllerContextMock(IdentityName, _runner);
+            _runner.ControllerContext = controllerContextMock.Instance;
+
+            // Act
+            var actualResult = _runner.SearchSubscriberAccount(ExpectedFilter.ExpectedSearchAccountFilter) as JsonResult;
 
             // Assert
-            Assert.IsType<List<SubscriberAccount>>(result.Data);
+            Assert.IsType<List<SubscriberAccount>>(actualResult.Data);
         }
 
         [Fact]
         public void GetSubscribers_Test()
         {
             // Act
-            var result = _runner.GetSubscribers() as JsonResult;
+            var actualResult = _runner.GetSubscribers() as JsonResult;
 
             // Assert
-            Assert.IsType<List<SubscriberAssignment>>(result.Data);
+            Assert.IsType<List<SubscriberAssignment>>(actualResult.Data);
         }
 
     }
