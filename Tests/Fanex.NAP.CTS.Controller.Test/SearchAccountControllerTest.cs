@@ -7,7 +7,7 @@
     using Fanex.NAP.CTS.Model.Subscriber;    
     using Fanex.NAP.CTS.Controller.Test.DbSetting;
     using Fanex.NAP.CTS.SampleData;
-    using Fanex.NAP.CTS.Test.Mocks;
+    using Fanex.NAP.CTS.Test.Mock;
     using System.Configuration;
 
     [Collection(nameof(DbSettingProviderCollection))]

@@ -176,7 +176,7 @@
     <Compile Include="AccountControllerTest.cs" />
     <Compile Include="DbSetting\DbSettingProviderCollection.cs" />
     <Compile Include="DbSetting\DbSettingProviderFixture.cs" />
-    <Compile Include="Mocks\ControllerContextMock.cs" />
+    <Compile Include="Mock\ControllerContextMock.cs" />
     <Compile Include="SearchAccountControllerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -8,6 +8,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using Xunit;
+    using Fanex.NAP.CTS.ViewModel.Account.Associated;
 
     [Collection(nameof(DbSettingProviderCollection))]
     public class AccountServiceTest
@@ -93,11 +94,13 @@
         public void GetAssociatedAccountByAccounts_Test()
         {
             // Arrange
+            string msgError = string.Empty;
 
             // Act
+            var actualResult = _runner.GetAssociatedAccountByAccounts(ExpectedFilter.ExpectedAssociatedAccountByAccountFilter, out msgError);
 
             // Assert
-
+            Assert.IsType<List<AssociatedAccountByAccount>>(actualResult);
         }
 
         #endregion

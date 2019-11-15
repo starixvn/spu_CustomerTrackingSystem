@@ -116,6 +116,7 @@
     <Compile Include="DbSetting\DbSettingProviderCollection.cs" />
     <Compile Include="DbSetting\DbSettingProviderFixture.cs" />
     <Compile Include="Implement\AccountServiceTest.cs" />
+    <Compile Include="Implement\TransactionServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

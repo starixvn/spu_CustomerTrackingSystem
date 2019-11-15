@@ -486,7 +486,7 @@
                                     .Where(customer => customer.CompareStatus(filter.Status)),
                                     cusA => cusA.CustID,
                                     cusB => cusB.custid,
-                                    (cusA, cusB) => GetAssociatedAccount(cusA, cusB));
+                                    (cusA, cusB) => GetAssociatedAccount(cusA, cusB)).ToList();
             }
             catch (Exception ex)
             {

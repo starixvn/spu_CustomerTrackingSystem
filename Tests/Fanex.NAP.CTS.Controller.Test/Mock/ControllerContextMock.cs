@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Test.Mocks
+﻿namespace Fanex.NAP.CTS.Test.Mock
 {
     using Moq;
     using System.Security.Principal;
