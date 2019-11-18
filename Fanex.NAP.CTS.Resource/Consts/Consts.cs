@@ -25,5 +25,7 @@
         public const string IsMasterSubscriberAssignmentKey = "IsMasterSubscriberAssignmentKey";
         public const string IsPermissionCN88Key = "IsPermissionCN88Key";
         public const string SubscriberNameCN88 = "CN88";
+        public const string SettingEnvironmentKey = "Environment";
+        public const string SettingEnvironmentLocalValue = "1";
     }
 }

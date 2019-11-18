@@ -9,6 +9,7 @@
     using Fanex.NAP.CTS.SampleData;
     using Fanex.NAP.CTS.Test.Fake;
     using System.Configuration;
+    using Fanex.NAP.CTS.Resource.Consts;
 
     [Collection(nameof(DbSettingProviderCollection))]
     public class SearchAccountControllerTest
@@ -16,13 +17,11 @@
         private readonly SearchAccountController _runner;
         private const string ExpectedActionIndex = "Index";
         private const string IdentityName = "sa";
-        private const string Environment = "Environment";
-        private const string EnvironmentLocal = "1";
 
         public SearchAccountControllerTest()
         {
             _runner = new SearchAccountController();
-            ConfigurationManager.AppSettings[Environment] = EnvironmentLocal;
+            ConfigurationManager.AppSettings[Consts.SettingEnvironmentKey] = Consts.SettingEnvironmentLocalValue;
         }
 
         [Theory]

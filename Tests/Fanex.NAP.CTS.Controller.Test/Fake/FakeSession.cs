@@ -4,20 +4,16 @@
 
     public static class FakeSession
     {
-        private static CurrentSession currentSession;
-
         public static CurrentSession CurrentSession
         {
             get
             {
-                currentSession = currentSession ?? new CurrentSession
+                return new CurrentSession
                 {
                     UserId = 8,
                     Username = "sa"
                 };
-
-                return currentSession;
-            }        
+            }
         }
     }
 }

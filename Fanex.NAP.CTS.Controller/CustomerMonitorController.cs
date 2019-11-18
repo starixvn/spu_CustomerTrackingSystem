@@ -14,6 +14,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using System.Web.Mvc;
+    using Fanex.NAP.Core.Web.Session;
 
     [NapAuth(FunctionKey = FSFunctionKeys.CustomerMonitor, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class CustomerMonitorController : ReportsController
@@ -27,6 +28,14 @@
             var permission = new UserService().GetPermission(CurrentSession.UserId, SiteId, FSFunctionKeys.SpecialCurrencies);
             isSpecialCurrency = permission > 0;
         }
+
+        public CustomerMonitorController(ICurrentSession currentSession)
+        {
+            var permission = new UserService().GetPermission(currentSession.UserId, SiteId, FSFunctionKeys.SpecialCurrencies);
+            isSpecialCurrency = permission > 0;
+        }
+
+        public string TemplatePath { get; set; } = "~/App_data/Excel Template/CustomerMonitor/template.xlsx";
 
         public override string BaseControllerName { get => Consts.MenuItemSuspiciousBets; }
 
@@ -75,7 +84,7 @@
             criteria.IsShowSpecialCurrencies = isSpecialCurrency;
             criteria.Environment = int.Parse(ConfigurationManager.AppSettings["Environment"]);
 
-            var template = Server.MapPath("~/App_data/Excel Template/CustomerMonitor/template.xlsx");
+            var template = Server.MapPath(TemplatePath);
 
             var fileName = GetExcelReportName("CustomerMonitor");
 

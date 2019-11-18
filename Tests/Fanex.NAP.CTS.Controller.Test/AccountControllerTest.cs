@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Test
+﻿namespace Fanex.NAP.CTS.Controller.Test
 {
     using Fanex.NAP.CTS.Controller;
     using Fanex.NAP.CTS.Controller.Test.DbSetting;

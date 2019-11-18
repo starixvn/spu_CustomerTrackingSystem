@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Test.Fake
 {
     using Moq;
+    using System;
     using System.Security.Principal;
     using System.Web;
     using System.Web.Mvc;
@@ -18,17 +19,19 @@
             _controller = controller;
         }
 
+        public string TemplatePath { get; set; }
+
         public ControllerContext Instance
         {
             get
             {
                 if (_controllerContext == null)
-                {
+                {                    
                     var context = new Mock<HttpContextBase>();
                     context.SetupGet(ctx => ctx.User).Returns(GenerateGenericPrincipal());
+                    context.SetupGet(ctx => ctx.Server).Returns(GenerateMapPathServer());
 
-                    _controllerContext = new ControllerContext(context.Object, new RouteData(), _controller);
-                    
+                    _controllerContext = new ControllerContext(context.Object, new RouteData(), _controller);                    
                 }
 
                 return _controllerContext;
@@ -41,6 +44,14 @@
             var genericPrincipal = new GenericPrincipal(genericIdentity, null);
 
             return genericPrincipal;
+        }
+
+        public HttpServerUtilityBase GenerateMapPathServer()
+        {
+            var server = new Mock<HttpServerUtilityBase>();
+            server.Setup(x => x.MapPath(TemplatePath)).Returns(TemplatePath);
+            
+            return server.Object;
         }
     }
 }

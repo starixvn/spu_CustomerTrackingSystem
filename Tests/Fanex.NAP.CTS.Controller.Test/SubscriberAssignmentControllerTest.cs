@@ -1,9 +1,10 @@
-﻿namespace Fanex.NAP.CTS.Test
+﻿namespace Fanex.NAP.CTS.Controller.Test
 {
     using Fanex.NAP.CTS.Controller;
     using Fanex.NAP.CTS.Controller.Test.DbSetting;
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Model.Subscriber;
+    using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.SampleData;
     using Fanex.NAP.CTS.Test.Fake;
     using System.Collections.Generic;
@@ -16,19 +17,17 @@
     {
         private readonly SubscriberAssignmentController _runner;
         private const string IdentityName = "sa";
-        private const string Environment = "Environment";
-        private const string EnvironmentLocal = "1";
-
+        
         public SubscriberAssignmentControllerTest()
         {
+            ConfigurationManager.AppSettings[Consts.SettingEnvironmentKey] = Consts.SettingEnvironmentLocalValue;
             _runner = new SubscriberAssignmentController();
         }
 
         [Fact]
         public void Index_Test()
         {
-            // Arrange
-            ConfigurationManager.AppSettings[Environment] = EnvironmentLocal;
+            // Arrange            
             var controllerContextMock = new FakeControllerContext(IdentityName, _runner);
             _runner.ControllerContext = controllerContextMock.Instance;
 
