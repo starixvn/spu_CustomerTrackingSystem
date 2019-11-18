@@ -18,7 +18,7 @@
 
         [Theory]
         [InlineData(8)]
-        public void GetSubscribers_Test(long userId)
+        public void Can_GetSubscribers(long userId)
         {
             // Act
             var actualResult = _runner.GetSubscribers(userId);
@@ -28,7 +28,7 @@
         }
 
         [Fact]
-        public void UpdateSubscribers_UpdateSuccess()
+        public void UpdateSuccess_UpdateSubscribers()
         {
             // Act
             var actualResult = _runner.UpdateSubscribers(ExpectedUpdate.ExpectedSubscriberAssignmentUpdate);

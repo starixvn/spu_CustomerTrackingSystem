@@ -7,7 +7,7 @@
     using Fanex.NAP.CTS.Model.Subscriber;    
     using Fanex.NAP.CTS.Controller.Test.DbSetting;
     using Fanex.NAP.CTS.SampleData;
-    using Fanex.NAP.CTS.Test.Mock;
+    using Fanex.NAP.CTS.Test.Fake;
     using System.Configuration;
 
     [Collection(nameof(DbSettingProviderCollection))]
@@ -30,7 +30,7 @@
         public void Index_Test(string viewName)
         {
             // Arrange
-            var controllerContextMock = new ControllerContextMock(IdentityName, _runner);
+            var controllerContextMock = new FakeControllerContext(IdentityName, _runner);
             _runner.ControllerContext = controllerContextMock.Instance;
 
             // Act
@@ -42,7 +42,7 @@
 
         [Theory]
         [InlineData("")]
-        public void SearchAccount_Test(string keySearch)
+        public void Can_SearchAccount(string keySearch)
         {
             // Act
             var actualResult = _runner.SearchAccount(keySearch) as ViewResult;
@@ -52,10 +52,10 @@
         }
 
         [Fact]
-        public void SearchSubscriberAccount_Test()
+        public void Can_SearchSubscriberAccount()
         {
             // Arrange            
-            var controllerContextMock = new ControllerContextMock(IdentityName, _runner);
+            var controllerContextMock = new FakeControllerContext(IdentityName, _runner);
             _runner.ControllerContext = controllerContextMock.Instance;
 
             // Act
@@ -66,11 +66,11 @@
         }
 
         [Fact]
-        public void GetSubscribers_Test()
+        public void Can_GetSubscribers()
         {
             // Arrange            
-            var controllerContextMock = new ControllerContextMock(IdentityName, _runner);
-            _runner.ControllerContext = controllerContextMock.Instance;
+            var fakecontrollerContext = new FakeControllerContext(IdentityName, _runner);
+            _runner.ControllerContext = fakecontrollerContext.Instance;
 
             // Act
             var actualResult = _runner.GetSubscribers() as JsonResult;

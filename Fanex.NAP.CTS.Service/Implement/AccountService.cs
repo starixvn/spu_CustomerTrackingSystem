@@ -387,8 +387,8 @@
         private static IEnumerable<CustomerByGraphDB> GetCustomersFromAPI(AssociatedAccountByAccountFilter filter)
         {
             var customers = new List<CustomerByGraphDB>();
-            var apiURLOneLevel = AppSettings.Get(Resource.Consts.Consts.GraphDBGetAssociationOneLevel);
-            var apiURLMoreLevel = AppSettings.Get(Resource.Consts.Consts.GraphDBGetAssociationOneLevel);
+            var apiURLOneLevel = AppSettings.Get(Consts.GraphDBGetAssociationOneLevel);
+            var apiURLMoreLevel = AppSettings.Get(Consts.GraphDBGetAssociationOneLevel);
 
             if (filter.DeviceAwayOne)
             {
@@ -419,26 +419,21 @@
             if (customersFromAPI.Any())
             {
                 var customerIds = customersFromAPI.Select(c => c.CustId).Distinct().Join();
-                
-                return GetAssociatedAccountByCustomers(filter, customerIds);
+
+                var criteria = new GetAssociatedAccountByAccountCriteria
+                {
+                    custIds = customerIds,
+                    rootAccountId = filter.AccountId,
+                    userId = filter.userId,
+                    isMaster = filter.isMasterSubscriberAssignment
+                };
+
+                return DataService.GetData<AssociatedAccountByCustomer>(criteria);
             }
 
             return new List<AssociatedAccountByCustomer>();            
         }
-
-        private static IEnumerable<AssociatedAccountByCustomer> GetAssociatedAccountByCustomers(AssociatedAccountByAccountFilter filter, string customerIds)
-        {
-            var criteria = new GetAssociatedAccountByAccountCriteria
-            {
-                custIds = customerIds,
-                rootAccountId = filter.AccountId,
-                userId = filter.userId,
-                isMaster = filter.isMasterSubscriberAssignment
-            };
-
-            return DataService.GetData<AssociatedAccountByCustomer>(criteria);
-        }
-
+        
         private CustomerFraudSuspicious GetCustomerFraud(IEnumerable<AssociatedAccountByCustomer> associatedCustomers)
         {
             if (associatedCustomers.Any())

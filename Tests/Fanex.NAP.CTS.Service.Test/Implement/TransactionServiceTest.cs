@@ -18,7 +18,7 @@
         }
 
         [Fact]
-        public void GetTransactionHistory_Test()
+        public void Can_GetTransactionHistory()
         {
             // Act
             var actualResult = _runner.GetTransactionHistory(ExpectedFilter.ExpectedTransactionHistoryFilter);
@@ -29,7 +29,7 @@
 
         [Theory]
         [InlineData("20.0.255.255")]
-        public void GetIPInformation_Test(string ipAddress)
+        public void Can_GetIPInformation(string ipAddress)
         {
             // Act
             var actualResult = _runner.GetIPInformation(ipAddress);

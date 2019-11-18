@@ -22,7 +22,7 @@
 
         #region Search account test
         [Fact]
-        public void SearchAccounts_Test()
+        public void Can_SearchAccounts()
         {
             // Act
             var result = _runner.SearchAccounts(ExpectedFilter.ExpectedSearchAccountFilter);
@@ -37,7 +37,7 @@
         [Theory]
         [InlineData(0)]
         [InlineData(8)]
-        public void GetSubscribers_Test(long userId)
+        public void Can_GetSubscribers(long userId)
         {
             // Act
             var result = _runner.GetSubscribers(userId);
@@ -47,7 +47,7 @@
         }
 
         [Fact]
-        public void CheckIsMasterSubscriber_Test()
+        public void Can_CheckIsMasterSubscriber()
         {
             // Arrange
             var expected = ExpectedData.ExpectedSubscriberAssignments.FirstOrDefault(c => c.IsMaster == 1) != null;
@@ -60,7 +60,7 @@
         }
 
         [Fact]
-        public void CheckIsPermissionCN88_Test()
+        public void Can_CheckIsPermissionCN88()
         {
             // Arrange
             var expected = ExpectedData.ExpectedSubscriberAssignments.FirstOrDefault(c => c.IsMaster == 1
@@ -76,7 +76,7 @@
 
         #region General information
         [Fact]
-        public void GetAccountDetailGeneralInformation_Test()
+        public void Can_GetAccountDetailGeneralInformation()
         {
             // Arrange
             var expected = ExpectedData.ExpectedAccountDetail;
@@ -87,11 +87,11 @@
             // Assert
             Assert.IsType(expected.GetType(), actualResult);
         }
-        #endregion
+        #endregion        
 
         #region Associated account by account
         [Fact]
-        public void GetAssociatedAccountByAccounts_Test()
+        public void Can_GetAssociatedAccountByAccounts()
         {
             // Arrange
             string msgError = string.Empty;

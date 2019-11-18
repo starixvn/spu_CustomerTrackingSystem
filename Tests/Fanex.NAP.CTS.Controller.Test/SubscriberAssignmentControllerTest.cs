@@ -5,7 +5,7 @@
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Model.Subscriber;
     using Fanex.NAP.CTS.SampleData;
-    using Fanex.NAP.CTS.Test.Mock;
+    using Fanex.NAP.CTS.Test.Fake;
     using System.Collections.Generic;
     using System.Configuration;
     using System.Web.Mvc;
@@ -29,7 +29,7 @@
         {
             // Arrange
             ConfigurationManager.AppSettings[Environment] = EnvironmentLocal;
-            var controllerContextMock = new ControllerContextMock(IdentityName, _runner);
+            var controllerContextMock = new FakeControllerContext(IdentityName, _runner);
             _runner.ControllerContext = controllerContextMock.Instance;
 
             // Act
@@ -41,7 +41,7 @@
 
         [Theory]
         [InlineData("BCHAI")]
-        public void GetUserId_HasPermission(string userName)
+        public void HasPermission_GetUserId(string userName)
         {
             // Act
             var actualResult = _runner.GetUserId(userName) as JsonResult;
@@ -52,7 +52,7 @@
 
         [Theory]
         [InlineData(8)]
-        public void GetSubscribers_Test(long userId)
+        public void Can_GetSubscribers_Test(long userId)
         {
             // Act
             var actualResult = _runner.GetSubscribers(userId) as JsonResult;
@@ -62,7 +62,7 @@
         }
 
         [Fact]
-        public void AssignSubscribers_UpdateSuccess()
+        public void UpdateSuccess_AssignSubscribers()
         {
             // Act
             var actualResult = _runner.AssignSubscribers(ExpectedUpdate.ExpectedSubscriberAssignmentUpdate) as JsonResult;

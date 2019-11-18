@@ -45,6 +45,7 @@
             ViewBag.IsPermissionIPLocation = permissionIPLocation > 0;
             ViewBag.AccountId = id;
             ViewBag.CustId = custId;
+
             return View("DetailAccount");
         }
 
