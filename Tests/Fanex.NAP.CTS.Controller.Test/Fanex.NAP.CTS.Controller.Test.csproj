@@ -10,8 +10,8 @@
     <ProjectGuid>{F6FAA929-E8BE-4D27-B71A-DFD96BA864CB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Fanex.NAP.CTS.Test</RootNamespace>
-    <AssemblyName>Fanex.NAP.CTS.Test</AssemblyName>
+    <RootNamespace>Fanex.NAP.CTS.Controller.Test</RootNamespace>
+    <AssemblyName>Fanex.NAP.CTS.Controller.Test</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -239,6 +239,8 @@
     <Compile Include="SearchAccountControllerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SubscriberAssignmentControllerTest.cs" />
+    <Compile Include="SuspiciousCustomerControllerTest.cs" />
+    <Compile Include="SuspiciousCustomerDetailsControllerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -286,7 +288,9 @@
   <ItemGroup>
     <Analyzer Include="..\..\packages\xunit.analyzers.0.10.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Fanex.NAP.CTS.Controller\Fanex.NAP.CTS.Controller.csproj">
       <Project>{96bc0111-63b6-4c24-94df-c00ec2656ec7}</Project>

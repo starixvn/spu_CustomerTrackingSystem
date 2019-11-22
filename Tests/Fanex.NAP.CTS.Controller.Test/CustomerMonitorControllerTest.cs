@@ -76,8 +76,7 @@
             // Assert
             Assert.NotNull(actualResult);
         }
-
-        [Fact]
+        
         public void Can_ExportExcel()
         {
             // Arrange

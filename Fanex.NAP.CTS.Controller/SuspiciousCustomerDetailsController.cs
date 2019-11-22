@@ -7,6 +7,7 @@
     using ViewModel.SuspiciousCustomerDetails;
     using System;
     using System.Web.Mvc;
+    using Fanex.NAP.Core.Web.Session;
 
     [NapAuth(FunctionKey = FSFunctionKeys.SuspiciousCustomerDetails, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class SuspiciousCustomerDetailsController : ReportsController
@@ -18,6 +19,12 @@
         public SuspiciousCustomerDetailsController()
         {
             var permission = new UserService().GetPermission(CurrentSession.UserId, SiteId, FSFunctionKeys.SpecialCurrencies);
+            IsShowSpecialCurrencies = permission > 0;
+        }
+
+        public SuspiciousCustomerDetailsController(ICurrentSession currentSession)
+        {
+            var permission = new UserService().GetPermission(currentSession.UserId, SiteId, FSFunctionKeys.SpecialCurrencies);
             IsShowSpecialCurrencies = permission > 0;
         }
 

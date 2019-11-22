@@ -27,5 +27,7 @@
         public const string SubscriberNameCN88 = "CN88";
         public const string SettingEnvironmentKey = "Environment";
         public const string SettingEnvironmentLocalValue = "1";
+        public const string SettingSiteIdKey = "SiteId";
+        public const string SettingSiteIdValue = "102";
     }
 }

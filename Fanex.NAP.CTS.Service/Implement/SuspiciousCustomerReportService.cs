@@ -25,20 +25,6 @@
             return DataService.GetData<SuspiciousCustomerNoteModel>(criteria);
         }
 
-        public IEnumerable<SuspiciousCustomerNoteView> GetNoteViews(int custId)
-        {
-            var user_service = new UserService();
-
-            return GetNotesData(custId)
-                .Select(d => new SuspiciousCustomerNoteView
-                {
-                    Date = d.LogDate.ToString("MMM dd, yyyy hh:mm:ss tt"),
-                    Description = d.Description,
-                    Type = d.Type,
-                    Author = user_service.GetById(d.CreatorId).Username
-                });
-        }
-
         public byte[] ExportExcel(SuspiciousCustomerReportGetCriteria criteria, string fraudCaseName, string assignee, string template, IEnumerable<SuspiciousCustomerReportModel> data)
         {
             var wb = ExcelUtilities.GetWorkbook(template)

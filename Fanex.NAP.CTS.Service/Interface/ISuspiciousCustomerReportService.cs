@@ -9,9 +9,7 @@
     {
         IEnumerable<SuspiciousCustomerReportModel> GetSuspiciousCustomerReport(SuspiciousCustomerReportGetCriteria criteria);
 
-        IEnumerable<SuspiciousCustomerNoteModel> GetNotesData(int custId);
-
-        IEnumerable<SuspiciousCustomerNoteView> GetNoteViews(int custId);
+        IEnumerable<SuspiciousCustomerNoteModel> GetNotesData(int custId);        
 
         byte[] ExportExcel(SuspiciousCustomerReportGetCriteria criteria, string fraudCaseName, string assignee, string template, IEnumerable<SuspiciousCustomerReportModel> data);
 

@@ -14,6 +14,8 @@
     using System.Text;
     using System.Threading.Tasks;
     using System.Web.Mvc;
+    using Fanex.NAP.CTS.ViewModel.SuspiciousCustomer;
+    using Fanex.NAP.Core.Web.Session;
 
     [NapAuth(FunctionKey = FSFunctionKeys.SuspiciousCustomer, Policy = Constant.Policy.Read)]
     public class SuspiciousCustomerController : ReportsController
@@ -26,6 +28,13 @@
         {
             _suspiciousCustomerReportService = new SuspiciousCustomerReportService();
             var permission = new UserService().GetPermission(CurrentSession.UserId, SiteId, FSFunctionKeys.SpecialCurrencies);
+            IsShowSpecialCurrencies = permission > 0;
+        }
+
+        public SuspiciousCustomerController(ICurrentSession currentSession)
+        {
+            _suspiciousCustomerReportService = new SuspiciousCustomerReportService();
+            var permission = new UserService().GetPermission(currentSession.UserId, SiteId, FSFunctionKeys.SpecialCurrencies);
             IsShowSpecialCurrencies = permission > 0;
         }
 
@@ -114,7 +123,7 @@
 
         public async Task<ActionResult> GetUsers()
         {
-            var siteId = int.Parse(ConfigurationManager.AppSettings["SiteId"]);
+            var siteId = int.Parse(ConfigurationManager.AppSettings["SiteId"]);           
             var users = new UserService().GetUserPolicies(FSFunctionKeys.SuspiciousCustomer, siteId);
             var result = new List<Fanex.NAP.Core.Models.User>();
 
@@ -155,7 +164,17 @@
 
         public ActionResult GetSuspiciousCustomerNote(int custId)
         {
-            return Json(_suspiciousCustomerReportService.GetNoteViews(custId), JsonRequestBehavior.AllowGet);
+            var userService = new UserService();
+            var data = _suspiciousCustomerReportService.GetNotesData(custId);
+            var viewData = data.Select(d => new SuspiciousCustomerNoteView
+            {
+                Date = d.LogDate.ToString("MMM dd, yyyy hh:mm:ss tt"),
+                Description = d.Description,
+                Type = d.Type,
+                Author = userService.Get(d.CreatorId).Username
+            });
+
+            return Json(viewData, JsonRequestBehavior.AllowGet);
         }
     }
 }
