@@ -229,6 +229,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountControllerTest.cs" />
+    <Compile Include="CheckBetReportControllerTest.cs" />
     <Compile Include="CustomerMonitorControllerTest.cs" />
     <Compile Include="DbSetting\DbSettingProviderCollection.cs" />
     <Compile Include="DbSetting\DbSettingProviderFixture.cs" />

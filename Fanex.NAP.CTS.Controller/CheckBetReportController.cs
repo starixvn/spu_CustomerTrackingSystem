@@ -8,6 +8,7 @@
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
     using System.Web.Mvc;
+    using Fanex.NAP.Core.Web.Session;
 
     [NapAuth(FunctionKey = FSFunctionKeys.CheckBetReport, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class CheckBetReportController : ReportsController
@@ -16,6 +17,12 @@
         private bool IsShowSpecialCurrencies;
 
         public CheckBetReportController()
+        {
+            var permission = new UserService().GetPermission(CurrentSession.UserId, SiteId, FSFunctionKeys.SpecialCurrencies);
+            IsShowSpecialCurrencies = permission > 0;
+        }
+
+        public CheckBetReportController(ICurrentSession currentSession)
         {
             var permission = new UserService().GetPermission(CurrentSession.UserId, SiteId, FSFunctionKeys.SpecialCurrencies);
             IsShowSpecialCurrencies = permission > 0;
@@ -31,6 +38,7 @@
         public ActionResult GenerateReport(CheckBetReportGetCriteria criteria)
         {
             criteria.IsShowSpecialCurrencies = IsShowSpecialCurrencies;
+
             return Json(_service.Generate(criteria));
         }
 
