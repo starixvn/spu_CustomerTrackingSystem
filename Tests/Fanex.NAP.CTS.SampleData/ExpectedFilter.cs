@@ -77,50 +77,41 @@
         }
 
         private static SearchAccountFilter GenerateSampleSearchAccountFilter()
-        {
-            return new SearchAccountFilter
+            => new SearchAccountFilter
             {
                 Key = "12b",
                 Subscribers = "-1",
                 UserId = 8
             };
-        }
 
         private static GeneralInformationFilter GenerateSampleGeneralInformationFilter()
-        {
-            return new GeneralInformationFilter
+            => new GeneralInformationFilter
             {
                 AccountId = 9,
                 CustId = 37778546,
                 IsMasterSubscriberAssignment = true,
                 UserId = 8
             };
-        }
 
         private static ChainsToEvidenceFilter GenerateSampleChainsToEvidenceFilter()
-        {
-            return new ChainsToEvidenceFilter
+            => new ChainsToEvidenceFilter
             {
                 AccountId = 9,
                 CustId = 37778546,
                 IsMasterSubscriberAssignment = true,
                 UserId = 8
             };
-        }
 
         private static RetractedAndExceptionEvidenceFilter GenerateSampleRetractedAndExceptionEvidenceFilter()
-        {
-            return new RetractedAndExceptionEvidenceFilter
+            => new RetractedAndExceptionEvidenceFilter
             {
                 AccountId = 9,
                 IsMasterSubscriberAssignment = true,
                 UserId = 8
             };
-        }
 
         private static AssociatedAccountByAccountFilter GenerateSampleAssociatedAccountByAccountFilter()
-        {
-            return new AssociatedAccountByAccountFilter
+            => new AssociatedAccountByAccountFilter
             {
                 CustId = 37778546,
                 AccountId = 9,
@@ -131,15 +122,12 @@
                 Status = "Open,Suspended,Closed,CN88_Active,CN88_ViewOnly,CN88_Suspended,CN88_Inactive,NotYetDeposit",
                 userId = 8
             };
-        }
 
         private static TransactionHistoryFilter GenerateSampleTransactionHistoryFilter()
-        {
-            return new TransactionHistoryFilter
+            => new TransactionHistoryFilter
             {
                 AccountId = 9,
                 ReportLength = TransactionHistoryLength.Days7
             };
-        }
     }
 }

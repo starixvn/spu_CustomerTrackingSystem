@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Service.Test.Implement
 {
     using Fanex.NAP.CTS.Service.Implement;
+    using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.Service.Test.DbSetting;
     using System;
     using Xunit;
@@ -8,7 +9,7 @@
     [Collection(nameof(DbSettingProviderCollection))]
     public class ScannedOfficeIpReportServiceTest
     {
-        private readonly ScannedOfficeIpReportService _runner;
+        private readonly IScannedOfficeIpReportService _runner;
 
         public ScannedOfficeIpReportServiceTest()
         {

@@ -10,7 +10,7 @@
     [Collection(nameof(DbSettingProviderCollection))]
     public class TransactionServiceTest
     {
-        private readonly TransactionService _runner;
+        private readonly ITransactionService _runner;
 
         public TransactionServiceTest()
         {

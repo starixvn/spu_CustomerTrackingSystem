@@ -213,7 +213,11 @@
     <Compile Include="Implement\CheckBetReportServiceTest.cs" />
     <Compile Include="Implement\CustomerMonitorServiceTest.cs" />
     <Compile Include="Implement\DailyCaptureDataServiceTest.cs" />
+    <Compile Include="Implement\DelayGoalAccountServiceTest.cs" />
     <Compile Include="Implement\EvidenceServiceTest.cs" />
+    <Compile Include="Implement\FraudCaseServiceTest.cs" />
+    <Compile Include="Implement\NotificationRecipientServiceTest.cs" />
+    <Compile Include="Implement\OfficeIPServiceTest.cs" />
     <Compile Include="Implement\ScannedOfficeIpReportServiceTest.cs" />
     <Compile Include="Implement\SubscriberAssignmentServiceTest.cs" />
     <Compile Include="Implement\SuspiciousCustomerReportDetailsServiceTest.cs" />

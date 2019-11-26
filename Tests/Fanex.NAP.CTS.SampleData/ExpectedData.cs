@@ -43,8 +43,7 @@
         }
 
         private static List<SubscriberAssignment> GenerateSampleSubscriberAssignments()
-        {
-            return new List<SubscriberAssignment>
+            => new List<SubscriberAssignment>
             {
                 new SubscriberAssignment
                 {
@@ -61,18 +60,12 @@
                     IsMaster = 1
                 }
             };
-        }
 
         private static AccountDetail GenerateSampleAccountDetail()
-        {
-            return new AccountDetail
-            {
-            };
-        }
+            => new AccountDetail { };
 
         private static CustomerDetailsInfo GenerateSampleCustomerDetailsInfo()
-        {
-            return new CustomerDetailsInfo
+            => new CustomerDetailsInfo
             {
                 CustId = 37778546,
                 FromDate = new DateTime(2019, 11, 15),
@@ -82,6 +75,5 @@
                 TicketCount = 1,
                 ViolationCount = 1
             };
-        }
     }
 }

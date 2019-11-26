@@ -31,6 +31,7 @@
 
         public void Dispose()
         {
+            DbSettingProviderManager.ClearSession();
         }
     }
 }

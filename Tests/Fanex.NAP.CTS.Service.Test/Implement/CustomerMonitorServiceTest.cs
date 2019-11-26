@@ -5,15 +5,15 @@
     using Fanex.NAP.CTS.Model.MatchMonitor;
     using Fanex.NAP.CTS.SampleData;
     using Fanex.NAP.CTS.Service.Implement;
+    using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.Service.Test.DbSetting;
-    using Fanex.NAP.CTS.ViewModel.CustomerMonitor.CustomerDetails;
     using System.Collections.Generic;
     using Xunit;
 
     [Collection(nameof(DbSettingProviderCollection))]
     public class CustomerMonitorServiceTest
     {
-        private readonly CustomerMonitorService _runner;
+        private readonly ICustomerMonitorService _runner;
 
         public CustomerMonitorServiceTest()
         {

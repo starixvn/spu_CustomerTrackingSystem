@@ -9,7 +9,7 @@
     [Collection(nameof(DbSettingProviderCollection))]
     public class SuspiciousCustomerReportDetailsServiceTest
     {
-        private readonly SuspiciousCustomerReportDetailsService _runner;
+        private readonly ISuspiciousCustomerReportDetailsService _runner;
 
         public SuspiciousCustomerReportDetailsServiceTest()
         {

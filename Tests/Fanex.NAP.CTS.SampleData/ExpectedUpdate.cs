@@ -29,22 +29,16 @@
         }
 
         private static SubscriberAssignmentUpdate GenerateSampleSubscriberAssignmentUpdate()
-        {
-            return new SubscriberAssignmentUpdate
-            {
-            };
-        }
+            => new SubscriberAssignmentUpdate { };
 
         private static ExceptionEvidenceAdd GenerateSampleExceptionEvidenceAdd()
-        {
-            return new ExceptionEvidenceAdd
+            => new ExceptionEvidenceAdd
             {
                 AccountId = 9,
                 ExceptionAccountId = 1,
                 SubscriberId = 6,
                 Comment = "comment",
                 UserId = 8,
-            };
-        }
+            };      
     }
 }

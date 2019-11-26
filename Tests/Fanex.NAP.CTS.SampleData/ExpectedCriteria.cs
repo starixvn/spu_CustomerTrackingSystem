@@ -5,6 +5,7 @@
     using Fanex.NAP.CTS.Criteria.CustomerMonitor;
     using Fanex.NAP.CTS.Criteria.CustomerMonitor.CustomerDetails;
     using Fanex.NAP.CTS.Criteria.DailyDataCapture;
+    using Fanex.NAP.CTS.Criteria.FraudCase.DelayedGoal;
     using Fanex.NAP.CTS.Criteria.SuspiciousCustomer;
 
     public static class ExpectedCriteria
@@ -17,6 +18,7 @@
         private static SuspiciousCustomerReportGetCriteria expectedSuspiciousCustomerReportGetCriteria;
         private static DataTableAjaxPostCriteria expectedDataTableAjaxPostCriteria;
         private static DailyDataGetCriteria expectedDailyDataGetCriteria;
+        private static DelayGoalAssociationAccountInsertCriteria expectedDelayGoalAssociationAccountInsertCriteria;
 
         public static CustomerGetCriteria ExpectedCustomerGetCriteria
         {
@@ -98,30 +100,35 @@
             }
         }
 
-        private static CustomerGetCriteria GenerateSampleCustomerGetCriteria()
+        public static DelayGoalAssociationAccountInsertCriteria ExpectedDelayGoalAssociationAccountInsertCriteria
         {
-            return new CustomerGetCriteria
+            get
+            {
+                expectedDelayGoalAssociationAccountInsertCriteria = expectedDelayGoalAssociationAccountInsertCriteria ?? GenerateSampleDelayGoalAssociationAccountInsertCriteria();
+
+                return expectedDelayGoalAssociationAccountInsertCriteria;
+            }
+        }    
+
+        private static CustomerGetCriteria GenerateSampleCustomerGetCriteria()
+            => new CustomerGetCriteria
             {
                 FromDate = new DateTime(2019, 11, 15),
                 ToDate = new DateTime(2019, 11, 18),
                 Environment = 1,
-                IsShowSpecialCurrencies = false,
-            };
-        }
+                IsShowSpecialCurrencies = false
+            };        
 
         private static UpdateNoteCriteria GenerateSampleUpdateNoteCriteria()
-        {
-            return new UpdateNoteCriteria
+            => new UpdateNoteCriteria
             {
                 CustId = 37778546,
                 UserId = 8,
                 Notes = "notes"
             };
-        }
-
+        
         private static GetCustomerTicketsCriteria GenerateSampleGetCustomerTicketsCriteria()
-        {
-            return new GetCustomerTicketsCriteria
+            => new GetCustomerTicketsCriteria
             {
                 CustId = 37778546,
                 FromDate = new DateTime(2019, 11, 15),
@@ -129,31 +136,25 @@
                 Environment = 1,
                 IsShowSpecialCurrencies = false
             };
-        }
 
         private static CheckBetReportGetCriteria GenerateSampleCheckBetReportGetCriteria()
-        {
-            return new CheckBetReportGetCriteria
+            => new CheckBetReportGetCriteria
             {
                 FromDate = new DateTime(2019, 01, 01),
                 ToDate = new DateTime(2019, 11, 18),
                 IsShowSpecialCurrencies = false
             };
-        }
 
         private static CheckBetReportUpdateNoteCriteria GenerateSampleCheckBetReportUpdateNoteCriteria()
-        {
-            return new CheckBetReportUpdateNoteCriteria
+            => new CheckBetReportUpdateNoteCriteria
             {
                 Note = "note",
                 TransId = 106484632547,
                 UserId = 8
             };
-        }
 
         private static SuspiciousCustomerReportGetCriteria GenerateSampleSuspiciousCustomerReportGetCriteria()
-        {
-            return new SuspiciousCustomerReportGetCriteria
+            => new SuspiciousCustomerReportGetCriteria
             {
                 AssigneeId = null,
                 Classification = 0,
@@ -167,12 +168,10 @@
                 PageSize = 50,
                 TotalItems = 0,
                 Username = null
-            };
-        }
+            };       
 
         private static DataTableAjaxPostCriteria GenerateSampleDataTableAjaxPostCriteria()
-        {
-            return new DataTableAjaxPostCriteria
+            => new DataTableAjaxPostCriteria
             {
                 AssigneeId = null,
                 Classification = 0,
@@ -189,15 +188,18 @@
                 length = 50,
                 start = 1
             };
-        }
 
         private static DailyDataGetCriteria GenerateSampleDailyDataGetCriteria()
-        {
-            return new DailyDataGetCriteria
+            => new DailyDataGetCriteria
             {
                 FromDate = new DateTime(2019, 1, 1),
                 ToDate = new DateTime(2019, 11, 26)
-            };
-        }
+            };        
+
+        private static DelayGoalAssociationAccountInsertCriteria GenerateSampleDelayGoalAssociationAccountInsertCriteria()
+            => new DelayGoalAssociationAccountInsertCriteria
+            {
+                CustomerAssociationXML = string.Empty
+            };                
     }
 }

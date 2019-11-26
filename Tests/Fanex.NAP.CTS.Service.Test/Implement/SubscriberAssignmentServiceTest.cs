@@ -9,7 +9,7 @@
     [Collection(nameof(DbSettingProviderCollection))]
     public class SubscriberAssignmentServiceTest
     {
-        private readonly SubscriberAssignmentService _runner;
+        private readonly ISubscriberAssignmentService _runner;
 
         public SubscriberAssignmentServiceTest()
         {

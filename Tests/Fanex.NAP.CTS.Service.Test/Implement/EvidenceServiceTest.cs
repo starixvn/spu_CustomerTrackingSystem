@@ -8,7 +8,7 @@
     [Collection(nameof(DbSettingProviderCollection))]
     public class EvidenceServiceTest
     {
-        private readonly EvidenceService _runner;
+        private readonly IEvidenceService _runner;
 
         public EvidenceServiceTest()
         {

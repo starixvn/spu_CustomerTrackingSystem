@@ -13,7 +13,7 @@
     [Collection(nameof(DbSettingProviderCollection))]
     public class AccountServiceTest
     {
-        private readonly AccountService _runner;
+        private readonly IAccountService _runner;
 
         public AccountServiceTest()
         {

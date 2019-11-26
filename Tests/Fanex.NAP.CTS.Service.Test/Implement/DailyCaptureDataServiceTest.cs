@@ -2,13 +2,14 @@
 {
     using Fanex.NAP.CTS.SampleData;
     using Fanex.NAP.CTS.Service.Implement;
+    using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.Service.Test.DbSetting;
     using Xunit;
 
     [Collection(nameof(DbSettingProviderCollection))]
     public class DailyCaptureDataServiceTest
     {
-        private readonly DailyCaptureDataService _runner;
+        private readonly IDailyDataCaptureService _runner;
         public DailyCaptureDataServiceTest()
         {
             _runner = new DailyCaptureDataService();

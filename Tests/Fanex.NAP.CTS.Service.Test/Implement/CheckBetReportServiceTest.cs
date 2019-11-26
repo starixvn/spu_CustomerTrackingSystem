@@ -2,13 +2,14 @@
 {
     using Fanex.NAP.CTS.SampleData;
     using Fanex.NAP.CTS.Service.Implement;
+    using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.Service.Test.DbSetting;
     using Xunit;
 
     [Collection(nameof(DbSettingProviderCollection))]
     public class CheckBetReportServiceTest
     {
-        private readonly CheckBetReportService _runner;
+        private readonly ICheckBetReportService _runner;
 
         public CheckBetReportServiceTest()
         {
