@@ -25,7 +25,7 @@
         }
 
         [Fact]
-        public void Index_Test()
+        public void CanView_Index()
         {
             // Arrange            
             var controllerContextMock = new FakeControllerContext(IdentityName, _runner);
@@ -40,7 +40,7 @@
 
         [Theory]
         [InlineData("BCHAI")]
-        public void HasPermission_GetUserId(string userName)
+        public void Can_GetUserId(string userName)
         {
             // Act
             var actualResult = _runner.GetUserId(userName) as JsonResult;
@@ -51,7 +51,7 @@
 
         [Theory]
         [InlineData(8)]
-        public void Can_GetSubscribers_Test(long userId)
+        public void Can_GetSubscribers(long userId)
         {
             // Act
             var actualResult = _runner.GetSubscribers(userId) as JsonResult;
@@ -61,7 +61,7 @@
         }
 
         [Fact]
-        public void UpdateSuccess_AssignSubscribers()
+        public void Can_AssignSubscribers()
         {
             // Act
             var actualResult = _runner.AssignSubscribers(ExpectedUpdate.ExpectedSubscriberAssignmentUpdate) as JsonResult;

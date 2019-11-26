@@ -4,6 +4,7 @@
     using Fanex.NAP.CTS.Criteria.CheckBetReport;
     using Fanex.NAP.CTS.Criteria.CustomerMonitor;
     using Fanex.NAP.CTS.Criteria.CustomerMonitor.CustomerDetails;
+    using Fanex.NAP.CTS.Criteria.DailyDataCapture;
     using Fanex.NAP.CTS.Criteria.SuspiciousCustomer;
 
     public static class ExpectedCriteria
@@ -15,6 +16,7 @@
         private static CheckBetReportUpdateNoteCriteria expectedCheckBetReportUpdateNoteCriteria;
         private static SuspiciousCustomerReportGetCriteria expectedSuspiciousCustomerReportGetCriteria;
         private static DataTableAjaxPostCriteria expectedDataTableAjaxPostCriteria;
+        private static DailyDataGetCriteria expectedDailyDataGetCriteria;
 
         public static CustomerGetCriteria ExpectedCustomerGetCriteria
         {
@@ -63,7 +65,7 @@
                 expectedCheckBetReportUpdateNoteCriteria = expectedCheckBetReportUpdateNoteCriteria ?? GenerateSampleCheckBetReportUpdateNoteCriteria();
 
                 return expectedCheckBetReportUpdateNoteCriteria;
-            }        
+            }
         }
 
         public static SuspiciousCustomerReportGetCriteria ExpectedSuspiciousCustomerReportGetCriteria
@@ -83,6 +85,16 @@
                 expectedDataTableAjaxPostCriteria = expectedDataTableAjaxPostCriteria ?? GenerateSampleDataTableAjaxPostCriteria();
 
                 return expectedDataTableAjaxPostCriteria;
+            }
+        }
+
+        public static DailyDataGetCriteria ExpectedDailyDataGetCriteria
+        {
+            get
+            {
+                expectedDailyDataGetCriteria = expectedDailyDataGetCriteria ?? GenerateSampleDailyDataGetCriteria();
+
+                return expectedDailyDataGetCriteria;
             }
         }
 
@@ -176,6 +188,15 @@
                 Username = null,
                 length = 50,
                 start = 1
+            };
+        }
+
+        private static DailyDataGetCriteria GenerateSampleDailyDataGetCriteria()
+        {
+            return new DailyDataGetCriteria
+            {
+                FromDate = new DateTime(2019, 1, 1),
+                ToDate = new DateTime(2019, 11, 26)
             };
         }
     }

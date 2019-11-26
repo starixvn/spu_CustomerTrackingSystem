@@ -7,19 +7,26 @@
     using Fanex.NAP.CTS.Service.ExcelConfig.ScannedOfficeIP;
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
+    using Fanex.NAP.Core.Web.Session;
     using System;
-    using System.Web.Mvc;
+    using System.Web.Mvc;    
 
     [NapAuth(FunctionKey = FSFunctionKeys.ScannedOfficeIP, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class ScannedOfficeIpReportController : ReportsController
     {
-        private readonly IScannedOfficeIpReportService _service = new ScannedOfficeIpReport();
+        private readonly IScannedOfficeIpReportService _service = new ScannedOfficeIpReportService();
 
         private bool IsShowSpecialCurrencies;
 
         public ScannedOfficeIpReportController()
         {
             var permission = new UserService().GetPermission(CurrentSession.UserId, SiteId, FSFunctionKeys.SpecialCurrencies);
+            IsShowSpecialCurrencies = permission > 0;
+        }
+
+        public ScannedOfficeIpReportController(ICurrentSession currentSession)
+        {
+            var permission = new UserService().GetPermission(currentSession.UserId, SiteId, FSFunctionKeys.SpecialCurrencies);
             IsShowSpecialCurrencies = permission > 0;
         }
 

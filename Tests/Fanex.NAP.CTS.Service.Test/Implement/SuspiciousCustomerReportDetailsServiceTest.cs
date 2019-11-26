@@ -50,8 +50,11 @@
         [Fact]
         public void Can_GetSuspiciousCustomerFraudCase()
         {
+            // Arrange
+            var custId = 24734887;
+
             // Act
-            var actualResult = _runner.GetSuspiciousCustomerFraudCase(24734887);
+            var actualResult = _runner.GetSuspiciousCustomerFraudCase(custId);
 
             // Assert
             Assert.NotNull(actualResult);
@@ -60,8 +63,11 @@
         [Fact]
         public void Can_VerifySuspiciousCustomerFraudCase()
         {
+            // Arrange
+            var custId = 24734887;
+
             // Act
-            var actualResult = _runner.VerifySuspiciousCustomerFraudCase(24734887, 8, 6);
+            var actualResult = _runner.VerifySuspiciousCustomerFraudCase(custId, 8, 6);
 
             // Assert
             Assert.True(actualResult.ErrorCode == 0);
@@ -70,8 +76,12 @@
         [Fact]
         public void Can_InsertCustomerLogNotes()
         {
+            // Arrange
+            var custId = 24734887;
+            var logDesc = "test";
+
             // Act
-            var actualResult = _runner.InsertCustomerLogNotes(24734887, 8, "test");
+            var actualResult = _runner.InsertCustomerLogNotes(custId, 8, logDesc);
 
             // Assert
             Assert.True(actualResult.ErrorCode == 0);
@@ -80,8 +90,11 @@
         [Fact]
         public void Can_GetCustomerLogNotes()
         {
+            // Arrange
+            var custId = 24734887;
+
             // Act
-            var actualResult = _runner.GetCustomerLogNotes(24734887);
+            var actualResult = _runner.GetCustomerLogNotes(custId);
 
             // Assert
             Assert.NotNull(actualResult);
@@ -102,8 +115,11 @@
         [InlineData(true, true, true)]
         public void Can_UpdateSuspiciousCustomerInfo(bool isDelinquent, bool isDirty, bool isHedge)
         {
+            // Arrange
+            var custId = 24734887;
+
             // Act
-            var actualResult = _runner.UpdateSuspiciousCustomerInfo(24734887, 8, isDelinquent, isDirty, isHedge);
+            var actualResult = _runner.UpdateSuspiciousCustomerInfo(custId, 8, isDelinquent, isDirty, isHedge);
 
             // Assert
             Assert.True(actualResult.ErrorCode == 0);
@@ -112,8 +128,11 @@
         [Fact]
         public void Can_GetCustomerCurrency()
         {
+            // Arrange
+            var custId = 24734887;
+
             // Act
-            var actualResult = _runner.GetCustomerCurrency(24734887);
+            var actualResult = _runner.GetCustomerCurrency(custId);
 
             // Assert
             Assert.True(!string.IsNullOrEmpty(actualResult));

@@ -24,7 +24,7 @@
         }
 
         [Fact]
-        public void Index_Test()
+        public void CanView_Index()
         {
             // Act
             var actualResult = _runner.Index() as ViewResult;

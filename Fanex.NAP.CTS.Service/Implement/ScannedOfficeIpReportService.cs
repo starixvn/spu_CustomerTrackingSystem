@@ -11,7 +11,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    public class ScannedOfficeIpReport : IScannedOfficeIpReportService
+    public class ScannedOfficeIpReportService : IScannedOfficeIpReportService
     {
         public IEnumerable<TicketDetails> GetTickets(DateTime fromDate, DateTime toDate, bool isShowSpecialCurrencies)
         {

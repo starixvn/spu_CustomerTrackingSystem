@@ -74,7 +74,7 @@
     <Compile Include="Implement\NotificationRecipientService.cs" />
     <Compile Include="Implement\NotificationService.cs" />
     <Compile Include="Implement\OfficeIPService.cs" />
-    <Compile Include="Implement\ScannedOfficeIpReport.cs" />
+    <Compile Include="Implement\ScannedOfficeIpReportService.cs" />
     <Compile Include="Implement\SubscriberAssignmentService.cs" />
     <Compile Include="Implement\SuspiciousCustomerReportDetailsService.cs" />
     <Compile Include="Implement\SuspiciousCustomerReportService.cs" />

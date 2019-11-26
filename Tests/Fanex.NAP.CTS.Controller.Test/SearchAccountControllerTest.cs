@@ -26,7 +26,7 @@
 
         [Theory]
         [InlineData("")]       
-        public void Index_Test(string viewName)
+        public void CanView_Index(string viewName)
         {
             // Arrange
             var controllerContextMock = new FakeControllerContext(IdentityName, _runner);

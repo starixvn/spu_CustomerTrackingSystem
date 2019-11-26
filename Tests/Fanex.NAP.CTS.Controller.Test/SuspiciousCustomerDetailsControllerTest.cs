@@ -22,7 +22,7 @@
         }
 
         [Fact]
-        public void Index_Test()
+        public void CanView_Index()
         {
             // Arrange
             var custId = 24734887;
