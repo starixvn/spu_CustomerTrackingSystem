@@ -23,7 +23,7 @@
     <link href="~/Content/scss/pages/dashboard/dashboard.min.css" rel="stylesheet" />
 }
 <div class="dashboard">
-    @foreach (var menu in Model.Where(m => m.Parent == null && m.IsActive && m.Name != "Home").OrderBy(m => m.DisplayOrder))
+    @*@foreach (var menu in Model.Where(m => m.Parent == null && m.IsActive && m.Name != "Home").OrderBy(m => m.DisplayOrder))
     {
         var subMenus = Model.Where(m => m.Parent != null && m.IsActive && m.Parent.Id == menu.Id).OrderBy(m => m.DisplayOrder);
 
@@ -44,5 +44,11 @@
             }
         }
     </div>
-    }
+    }*@
+    <div class="logo">CTS</div>
+    <div class="search-box">
+        <input class="input-field" placeholder="Type in Username or Login ID to search" type="text" />
+        <i class="icon-magnify"></i>
+    </div>
+    <div class="error-alert">At least three letters are required!</div>
 </div>

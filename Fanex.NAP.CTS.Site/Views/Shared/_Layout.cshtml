@@ -18,11 +18,11 @@
         <div class="toggle-btn toggle-close">
             <span class="lines"></span>
         </div>
-        <a href="@Url.Action("Index", "Home")" class="logo">
+        @*<a href="@Url.Action("Index", "Home")" class="logo">
             <svg width="128" height="32">
                 <image xlink:href="~/Content/scss/images/logo.svg" src="~/Content/scss/images/logo.png" width="128" height="32" alt="Fraud Sensor" />
             </svg>
-        </a>
+        </a>*@
         <div class="header-right">
             @{
                 var property = ViewContext.Controller.GetType().GetProperty("BaseControllerName");

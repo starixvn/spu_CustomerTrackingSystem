@@ -24,11 +24,12 @@ body {
 }
 
 .header {
-    @include align-items(grid);
-    grid-template-columns: 128px 1fr;
-    grid-template-rows: 60px;
+    //@include align-items(grid);
+    //grid-template-columns: 1fr 1fr;
+    //grid-template-rows: 60px;
     background-color: $primary-color;
     font-size: 16px;
+    padding: 0 20px;
 
     .logo {
         @include align-items($justify-content: center);
@@ -216,19 +217,25 @@ body {
 
     .username {
         @extend %has-sub-menu;
-        padding-left: 30px;
-        line-height: 60px;
+        //padding-left: 30px;
+        line-height: 2;
+        width: 40px;
+        height: 40px;
         color: #fff;
         cursor: pointer;
+        border-radius: 30px;
+        background: #fff;
+        text-align: center;
+        color: #1d2e4f;
+        border: 3px solid rgba(29,46,79,.7);
 
-        &:after {
+        /*&:after {
             display: inline-block;
             margin-left: 6px;
             font-family: 'Fraud-Sensor';
             content: "\e90c";
             font-size: 14px;
-        }
-
+        }*/
         .sub-menu {
             left: auto;
             right: -18px;

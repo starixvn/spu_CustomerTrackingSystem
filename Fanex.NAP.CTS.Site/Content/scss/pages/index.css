@@ -1004,13 +1004,9 @@ body {
   overflow-y: visible !important; }
 
 .header {
-  display: grid;
-  justify-content: space-between;
-  align-items: center;
-  grid-template-columns: 128px 1fr;
-  grid-template-rows: 60px;
   background-color: #1d2e4f;
-  font-size: 16px; }
+  font-size: 16px;
+  padding: 0 20px; }
   .header .logo {
     display: flex;
     justify-content: center;
@@ -1148,16 +1144,23 @@ body {
       .header-info .search-component .search-option .link {
         line-height: 12px; }
   .header-info .username {
-    padding-left: 30px;
-    line-height: 60px;
+    line-height: 2;
+    width: 40px;
+    height: 40px;
     color: #fff;
-    cursor: pointer; }
-    .header-info .username:after {
-      display: inline-block;
-      margin-left: 6px;
-      font-family: 'Fraud-Sensor';
-      content: "\e90c";
-      font-size: 14px; }
+    cursor: pointer;
+    border-radius: 30px;
+    background: #fff;
+    text-align: center;
+    color: #1d2e4f;
+    border: 3px solid rgba(29, 46, 79, 0.7);
+    /*&:after {
+            display: inline-block;
+            margin-left: 6px;
+            font-family: 'Fraud-Sensor';
+            content: "\e90c";
+            font-size: 14px;
+        }*/ }
     .header-info .username .sub-menu {
       left: auto;
       right: -18px;
