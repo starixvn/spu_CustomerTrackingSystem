@@ -1197,6 +1197,7 @@
     <Content Include="Views\Account\DetailAccount.cshtml" />
     <Content Include="Views\Evidence\FormInformationEvidence.cshtml" />
     <Content Include="Views\Evidence\FormRetractEvidence.cshtml" />
+    <Content Include="Views\Home\Search.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
