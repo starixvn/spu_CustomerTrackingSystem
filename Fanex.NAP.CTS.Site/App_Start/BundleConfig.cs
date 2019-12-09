@@ -33,6 +33,8 @@
                       "~/Content/scss/pages/index.css"));
 
             RegisterFSCoreBundles(bundles);
+            RegisterSearchBoxBundles(bundles);
+
             RegisterMatchMonitorBundles(bundles);
             RegisterFraudCaseBundles(bundles);
             RegisterSuspiciousCustomerBundles(bundles);
@@ -47,7 +49,7 @@
             RegisterAssociatedAccountBundles(bundles);
             RegisterEvidenceBundles(bundles);
             RegisterTransactionHistoryBundles(bundles);
-            RegisterGraphVisualizeBundles(bundles);
+            RegisterGraphVisualizeBundles(bundles);           
         }
 
         private static void RegisterFSCoreBundles(BundleCollection bundles)
@@ -66,6 +68,11 @@
                 "~/Scripts/toogle.js"));
 
             bundles.Add(new ScriptBundle("~/finalize").Include("~/scripts/finalize.js"));
+        }
+
+        private static void RegisterSearchBoxBundles(BundleCollection bundles)
+        {
+            bundles.Add(new ScriptBundle("~/scripts/searchbox").Include("~/scripts/Home/SearchPage.js"));
         }
 
         private static void RegisterMatchMonitorBundles(BundleCollection bundles)
