@@ -35,8 +35,11 @@
             return View();
         }
 
-        public ActionResult Search()
+        [HttpPost]
+        public ActionResult Search(FormCollection form)
         {
+            string inputValue = form["input"];
+
             return View();
         }
     }

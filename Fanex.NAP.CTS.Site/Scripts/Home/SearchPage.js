@@ -2,6 +2,7 @@
     var common = new UICommon();
     var input = $('#txtInput');
     var errorMessage = $('#errMessage');
+    var frmSearch = $('form');
 
     function Initial() {
         errorMessage.hide();
@@ -11,13 +12,14 @@
     input.keypress(function (event) {
         if (event.which === 13)
         {
-            if (input.val().length <= 3) {
+            if (input.val().length <= 2) {
                 errorMessage.show();
+
+                return false;
             }
             else {
-                errorMessage.hide();
-
-            }
+                frmSearch.submit();
+            }            
         }
     });
 

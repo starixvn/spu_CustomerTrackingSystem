@@ -45,16 +45,18 @@
             }
         </div>
         }*@
-    <form action="~/Home/Search" method="post" id="frmSearch">
+    @using (Html.BeginForm("Search", "Home", FormMethod.Post))
+    {
         <div class="logo">CTS</div>
         <div class="search-box">
 
-            <input id="txtInput" class="input-field" placeholder="Type in Username or Login ID to search" type="text" />
+            <input id="txtInput" name="input" class="input-field" placeholder="Type in Username or Login ID to search" type="text" />
             <i class="icon-magnify"></i>
 
         </div>
         <div id="errMessage" class="error-alert">At least three letters are required!</div>
-    </form>
+    }
+
 </div>
 
 @section scripts{
