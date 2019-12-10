@@ -22,29 +22,7 @@
 @section styles{
     <link href="~/Content/scss/pages/dashboard/dashboard.min.css" rel="stylesheet" />
 }
-<div class="dashboard">
-    @*@foreach (var menu in Model.Where(m => m.Parent == null && m.IsActive && m.Name != "Home").OrderBy(m => m.DisplayOrder))
-        {
-            var subMenus = Model.Where(m => m.Parent != null && m.IsActive && m.Parent.Id == menu.Id).OrderBy(m => m.DisplayOrder);
-
-        <div class="col">
-            <h1 class="col-tile">@Html.Raw(iconLookup(menu.Name)) @menu.Name</h1>
-            @if (subMenus.Any())
-            {
-                foreach (var subMenu in subMenus)
-                {
-
-            <div class="block">
-                <a href="@Url.Content(subMenu.ValidUrl)">
-                    <h2 class="block-title">@subMenu.Name</h2>
-                    <p class="block-content">@subMenu.Description</p>
-                </a>
-            </div>
-
-                }
-            }
-        </div>
-        }*@
+<div class="dashboard">    
     @using (Html.BeginForm("Search", "Home", FormMethod.Post))
     {
         <div class="logo">
