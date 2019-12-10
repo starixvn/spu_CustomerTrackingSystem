@@ -16,8 +16,7 @@
     });
 
     function Initial() {
-        errorMessage.hide();
-        input.focus();
+        errorMessage.hide();        
     }
 
     input.keypress(function (event) {
@@ -33,8 +32,17 @@
             }            
         }
     });
-
-    Initial();
+    
+    $(document).ready(function () {
+        Initial();
+        input
+            .putCursorAtEnd() // should be chainable
+            .on("focus", function () { // could be on any event
+                searchInput.putCursorAtEnd()
+            });
+    });
 }
 
 $(SearchPage);
+
+
