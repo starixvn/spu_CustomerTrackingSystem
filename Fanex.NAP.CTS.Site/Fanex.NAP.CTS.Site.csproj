@@ -363,6 +363,12 @@
     <Content Include="Content\scss\images\logo-CTS.svg" />
     <Content Include="Content\scss\images\logo-header.png" />
     <Content Include="Content\scss\images\logo-header.svg" />
+    <Content Include="Content\scss\pages\account\account-fps.css">
+      <DependentUpon>account-fps.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\scss\pages\account\account-fps.min.css">
+      <DependentUpon>account-fps.css</DependentUpon>
+    </Content>
     <Content Include="Content\scss\pages\evidence\evidence.css">
       <DependentUpon>evidence.scss</DependentUpon>
     </Content>
@@ -933,6 +939,7 @@
     <Content Include="Content\scss\vendors\popoto\font\popoto\popoto.eot" />
     <Content Include="Content\scss\vendors\popoto\font\popoto\popoto.ttf" />
     <Content Include="Content\scss\vendors\popoto\font\popoto\popoto.woff" />
+    <Content Include="Content\scss\pages\account\account-fps.scss" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />

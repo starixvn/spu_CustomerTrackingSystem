@@ -122,13 +122,17 @@
 }
 
 .search-result {
-    .search-box {
+    /*.search-box {
+        margin-left: 36px;
+    }*/
+
+    .error-alert {
         margin-left: 36px;
     }
 
     .result-content {
-        margin-top: 16px;
-        border-top: 1px solid #E1E1E1;
+        margin-top: 122px;
+        //border-top: 1px solid #E1E1E1;
         padding: 10px 36px;
     }
 
@@ -159,5 +163,15 @@
                 margin-right: 15px;
             }
         }
+    }
+
+    > form {
+        position: fixed;
+        top: 60px;
+        right: 0;
+        left: 0;
+        padding: 16px 36px;
+        background: #fff;
+        border-bottom: 1px solid #E1E1E1;
     }
 }

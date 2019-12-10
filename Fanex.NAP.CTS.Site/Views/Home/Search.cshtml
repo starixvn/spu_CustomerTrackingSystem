@@ -9,44 +9,46 @@
 
 @Styles.Render("~/Content/styles/dashboard")
 
-<div class="search-result">
-    @using (Html.BeginForm("Search", "Home", FormMethod.Post))
-    {
-        <div class="search-box">
-            <input id="txtInput" name="txtInput" class="input-field" placeholder="Type in Username or Login ID to search" type="text" value="@Model.InputValue" />
-            <i class="icon-magnify"></i>
-        </div>
-    }
+    <div class="search-result">
+        @using (Html.BeginForm("Search", "Home", FormMethod.Post))
+        {
+            <div class="search-box">
+                <input id="txtInput" name="txtInput" class="input-field" placeholder="Type in Username or Login ID to search" type="text" value="@Model.InputValue" />
+                <i class="icon-magnify"></i>
+            </div>
 
-    <div class="result-content">
-        <div class="result-number">Top <span>50</span> results with keyword "<span>@Model.InputValue</span>"</div>
-        <ul class="result-list">
-            @if (Model.SearchResults != null && Model.SearchResults.Any())
-            {
-                foreach (var data in Model.SearchResults)
+            <div id="errMessage" class="error-alert">At least three letters are required!</div>
+        }
+
+        <div class="result-content">
+            <div class="result-number">Top <span>50</span> results with keyword "<span>@Model.InputValue</span>"</div>
+            <ul class="result-list">
+                @if (Model.SearchResults != null && Model.SearchResults.Any())
                 {
-                    username2 = data.Username2 != "NULL" ? "(" + data.Username2 + ")" : string.Empty;
+                    foreach (var data in Model.SearchResults)
+                    {
+                        username2 = data.Username2 != "NULL" ? "(" + data.Username2 + ")" : string.Empty;
 
+                        <li class="result-item">
+                            <a class="result-name" href="Account/Index?custid=@data.CTSCustId">@data.Username <span>@username2</span></a>
+                            <p>
+                                <span>Currency: @data.Currency.Name</span>
+                                <span>Level: @data.Role.Name</span>
+                                <span>Subscriber: @data.Subscriber.Name</span>
+                                <span>Last Login: @data.LastLogin.ToString("MMM dd, yyyy")</span>
+                            </p>
+                        </li>
+                    }
+                }
+                else
+                {
                     <li class="result-item">
-                        <a class="result-name" href="Account/Index?custid=@data.CTSCustId">@data.Username <span>@username2</span></a>
-                        <p>
-                            <span>Currency: @data.Currency.Name</span>
-                            <span>Level: @data.Role.Name</span>
-                            <span>Subscriber: @data.Subscriber.Name</span>
-                            <span>Last Login: @data.LastLogin.ToString("MMM dd, yyyy")</span>
-                        </p>
+                        There is no data.
                     </li>
                 }
-            }
-            else
-            {
-                <li class="result-item">
-                   There is no data.
-                </li>
-            }
-        </ul>
+            </ul>
+        </div>
     </div>
-</div>
 
 @section scripts{
     @Scripts.Render("~/scripts/searchbox")
