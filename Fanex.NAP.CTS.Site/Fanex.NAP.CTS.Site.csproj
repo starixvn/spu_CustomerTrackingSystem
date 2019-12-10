@@ -1110,6 +1110,7 @@
     <Content Include="Views\Account\Associated\ShortestPathVisual.cshtml" />
     <Content Include="Views\Account\TransactionHistory\IPInformation.cshtml" />
     <Content Include="Views\Account\TransactionHistory\TransactionHistory.cshtml" />
+    <Content Include="Views\Account\Index.cshtml" />
     <None Include="Views\Errors\403.cshtml" />
     <None Include="Views\Errors\404.cshtml" />
     <None Include="Views\Errors\500.cshtml" />
