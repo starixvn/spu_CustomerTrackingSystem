@@ -994,11 +994,14 @@ table.dataTable tbody tr.selected td {
   100% {
     box-shadow: 0 -14px 0 0 rgba(255, 255, 255, 0.05), 10px -10px 0 0 rgba(255, 255, 255, 0.1), 14px 0 0 0 rgba(255, 255, 255, 0.2), 10px 10px 0 0 rgba(255, 255, 255, 0.3), 0 14px 0 0 rgba(255, 255, 255, 0.4), -10px 10px 0 0 rgba(255, 255, 255, 0.6), -14px 0 0 0 rgba(255, 255, 255, 0.8), -10px -10px 0 0 white; } }
 
+html {
+  font-size: 10px; }
+
 body {
   padding: 0;
   margin: 0;
   background-color: #fff;
-  font-size: 14px;
+  font-size: 1.4rem;
   font-family: "Lato", Arial, Tahoma, sans-serif;
   color: #666;
   overflow-y: visible !important; }
@@ -1007,8 +1010,8 @@ body {
   display: grid;
   justify-content: space-between;
   align-items: center;
-  grid-template-columns: 128px 1fr;
-  grid-template-rows: 60px;
+  grid-template-columns: 12.8rem 1fr;
+  grid-template-rows: 6rem;
   background-color: #1d2e4f;
   font-size: 16px; }
   .header .logo {
@@ -1262,8 +1265,12 @@ body {
     font-size: 10px;
     color: #8a8a8a; }
 
-.content {
-  padding: 16px 36px; }
+.page-title {
+  padding: 1rem 1.6rem;
+  text-transform: uppercase;
+  color: #DF5615;
+  background: #DDE2E6;
+  font-size: 1.6rem; }
 
 .title {
   margin-bottom: 15px;
