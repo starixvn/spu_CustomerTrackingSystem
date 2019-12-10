@@ -90,6 +90,8 @@
   /*.search-box {
         margin-left: 36px;
     }*/ }
+  .search-result .has-shadow {
+    box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28); }
   .search-result .error-alert {
     margin-left: 36px; }
   .search-result .result-content {
@@ -119,4 +121,5 @@
     left: 0;
     padding: 16px 36px;
     background: #fff;
-    border-bottom: 1px solid #E1E1E1; }
+    border-bottom: 1px solid #E1E1E1;
+    transition: all .2s ease; }

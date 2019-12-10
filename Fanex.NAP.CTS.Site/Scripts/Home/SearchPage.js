@@ -3,6 +3,17 @@
     var input = $('#txtInput');
     var errorMessage = $('#errMessage');
     var frmSearch = $('form');
+    var searchFixed = $(".search-result > form");
+
+    $(window).scroll(function () {
+        var scroll = $(window).scrollTop();
+
+        if (scroll >= 200) {
+            searchFixed.addClass("has-shadow");
+        } else {
+            searchFixed.removeClass("has-shadow");
+        }
+    });
 
     function Initial() {
         errorMessage.hide();
