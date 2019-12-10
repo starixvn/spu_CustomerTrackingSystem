@@ -47,12 +47,14 @@
         }*@
     @using (Html.BeginForm("Search", "Home", FormMethod.Post))
     {
-        <div class="logo">CTS</div>
+        <div class="logo">
+            <svg width="140" height="48">
+                <image xlink:href="~/Content/scss/images/logo-CTS.svg" src="~/Content/scss/images/logo-CTS.png" width="140" height="48" alt="Customer Tracking System" />
+            </svg>
+        </div>
         <div class="search-box">
-
             <input id="txtInput" name="input" class="input-field" placeholder="Type in Username or Login ID to search" type="text" />
             <i class="icon-magnify"></i>
-
         </div>
         <div id="errMessage" class="error-alert">At least three letters are required!</div>
     }

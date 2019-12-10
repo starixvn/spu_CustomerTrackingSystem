@@ -24,12 +24,11 @@ body {
 }
 
 .header {
-    //@include align-items(grid);
-    //grid-template-columns: 1fr 1fr;
-    //grid-template-rows: 60px;
+    @include align-items(grid);
+    grid-template-columns: 128px 1fr;
+    grid-template-rows: 60px;
     background-color: $primary-color;
     font-size: 16px;
-    padding: 0 20px;
 
     .logo {
         @include align-items($justify-content: center);
@@ -228,7 +227,6 @@ body {
         text-align: center;
         color: #1d2e4f;
         border: 3px solid rgba(29,46,79,.7);
-
         /*&:after {
             display: inline-block;
             margin-left: 6px;
@@ -261,6 +259,7 @@ body {
 
     .notification-icon {
         position: relative;
+
         &.has-arrow-down:after {
             position: absolute;
             right: 5px;
@@ -304,22 +303,19 @@ body {
         background-color: #fff;
         box-shadow: 0 0 6px rgba(0,0,0,.2);
 
-        &::-webkit-scrollbar-track
-        {
-	            background-color: #ededed;
+        &::-webkit-scrollbar-track {
+            background-color: #ededed;
         }
 
-         &::-webkit-scrollbar {
-	         width: 10px;
+        &::-webkit-scrollbar {
+            width: 10px;
         }
 
-         &::-webkit-scrollbar-thumb
-        {
-	        border-radius: 5px;
-	        background-color: #bababa;
+        &::-webkit-scrollbar-thumb {
+            border-radius: 5px;
+            background-color: #bababa;
         }
-        
-    }    
+    }
 }
 
 .notification {
@@ -346,7 +342,7 @@ body {
 
     .notification-header {
         @include align-items;
-        position: relative;        
+        position: relative;
         padding-bottom: 2px;
     }
 
@@ -358,7 +354,6 @@ body {
     .notification-content {
         line-height: 18px;
         color: #545454;
-        
     }
 
     .notification-date {
@@ -371,7 +366,7 @@ body {
 // Content
 
 .content {
-    padding: 16px 10px;
+    padding: 16px 36px;
 }
 
 .title {
@@ -380,6 +375,51 @@ body {
     font-size: 16px;
     font-weight: normal;
     text-transform: uppercase;
+}
+
+.search-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 500px;
+    padding: 9px 15px 11px;
+    border-radius: 40px;
+    background: #fff;
+    box-shadow: 0 0 3px rgba(0,0,0,.3);
+
+    .icon-magnify {
+        font-size: 20px;
+        color: #346BFC;
+    }
+
+    .input-field {
+        width: 100%;
+        border: 0;
+        font-size: 18px;
+
+        &:focus {
+            box-shadow: none;
+        }
+
+
+        &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+            color: #9f9f9f;
+            opacity: 1; /* Firefox */
+        }
+
+        &:-ms-input-placeholder { /* Internet Explorer 10-11 */
+            color: #9f9f9f;
+        }
+
+        &::-ms-input-placeholder { /* Microsoft Edge */
+            color: #9f9f9f;
+        }
+    }
+
+    .error-alert {
+        padding-top: 10px;
+        color: #FE0000;
+    }
 }
 
 .form-filter {
@@ -427,7 +467,6 @@ body {
     .icon-note.active {
         color: #2197ff;
     }
-
     // Icons
     [class^="icon"] {
         font-size: 20px;
@@ -586,7 +625,7 @@ body {
         height: 100%;
         background: #2f323a;
         padding-top: 60px;
-        margin: 0;        
+        margin: 0;
         transition: left .25s ease;
 
         .menu-item {

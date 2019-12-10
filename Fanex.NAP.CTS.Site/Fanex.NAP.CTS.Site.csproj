@@ -359,6 +359,10 @@
     <Content Include="Content\images\expand_all.png" />
     <Content Include="Content\images\flagged_device_by_evidence.png" />
     <Content Include="Content\images\graph_view.png" />
+    <Content Include="Content\scss\images\logo-CTS.png" />
+    <Content Include="Content\scss\images\logo-CTS.svg" />
+    <Content Include="Content\scss\images\logo-header.png" />
+    <Content Include="Content\scss\images\logo-header.svg" />
     <Content Include="Content\scss\pages\evidence\evidence.css">
       <DependentUpon>evidence.scss</DependentUpon>
     </Content>

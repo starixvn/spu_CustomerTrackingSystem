@@ -4,5 +4,59 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Search</h2>
+@section styles{
+    <link href="~/Content/scss/pages/dashboard/dashboard.min.css" rel="stylesheet" />
+}
+
+<div class="search-result">
+    <div class="search-box">
+        <input id="txtInput" class="input-field" placeholder="Type in Username or Login ID to search" type="text" value="super" />
+        <i class="icon-magnify"></i>
+    </div>
+
+    <div class="result-content">
+        <div class="result-number">Top <span>50</span> results with keyword "<span>Super</span>"</div>
+        <ul class="result-list">
+            <li class="result-item">
+                <a class="result-name" href="#">Super <span>(Super)</span></a>
+                <p>
+                    <span>Currency: USS</span>
+                    <span>Level: Member</span>
+                    <span>Subscriber: Maxbet</span>
+                    <span>Last Login: Nov 28,2019</span>
+                </p>
+            </li>
+
+            <li class="result-item">
+                <a class="result-name" href="#">SuperSA <span>(SuperTEST)</span></a>
+                <p>
+                    <span>Currency: USS</span>
+                    <span>Level: Member</span>
+                    <span>Subscriber: Maxbet</span>
+                    <span>Last Login: Nov 28,2019</span>
+                </p>
+            </li>
+
+            <li class="result-item">
+                <a class="result-name" href="#">SuperSA1 <span>(TestSuperSA)</span></a>
+                <p>
+                    <span>Currency: USS</span>
+                    <span>Level: Member</span>
+                    <span>Subscriber: Maxbet</span>
+                    <span>Last Login: Nov 28,2019</span>
+                </p>
+            </li>
+
+            <li class="result-item">
+                <a class="result-name" href="#">12BETACCTestSuper <span>(SuperSA2)</span></a>
+                <p>
+                    <span>Currency: USS</span>
+                    <span>Level: Member</span>
+                    <span>Subscriber: Maxbet</span>
+                    <span>Last Login: Nov 28,2019</span>
+                </p>
+            </li>
+        </ul>
+    </div>
+</div>
 

@@ -1,45 +1,17 @@
-﻿.dashboard {
+﻿.content {
+    padding: 16px 0;
+}
+
+.search-form {
     display: flex;
     padding-top: 100px;
     flex-direction: column;
     align-items: center;
+}
 
-    .logo {
-        font-size: 70px;
-        color: #1d2e4f;
-        font-weight: 700;
-    }
-
+.dashboard {
     .search-box {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 500px;
-        padding: 5px 15px;
         margin-top: 40px;
-        border-radius: 40px;
-        background: #fff;
-        box-shadow: 0 0 3px rgba(0,0,0,.3);
-
-        .icon-magnify {
-            font-size: 20px;
-            color: #346BFC;
-        }
-    }
-
-    .input-field {
-        width: 100%;
-        border: 0;
-        font-size: 15px;
-
-        &:focus {
-            box-shadow: none;
-        }
-    }
-
-    .error-alert {
-        padding-top: 10px;
-        color: #FE0000;
     }
 
     .col {
@@ -138,6 +110,47 @@
     @media screen and (max-width: 1366px) {
         .col {
             width: 280px;
+        }
+    }
+}
+
+.search-result {
+    .search-box {
+        margin-left: 36px;
+    }
+
+    .result-content {
+        margin-top: 16px;
+        border-top: 1px solid #E1E1E1;
+        padding: 10px 36px;
+    }
+
+    .result-list {
+        padding: 0;
+        padding-top: 15px;
+        margin: 0;
+    }
+
+    .result-item {
+        padding-bottom: 24px;
+
+        .result-name {
+            color: #346BFC;
+            font-size: 22px;
+
+            > span {
+                color: #C16112;
+            }
+        }
+
+        p {
+            font-size: 16px;
+            color: #545454;
+            margin-top: 10px;
+
+            > span {
+                margin-right: 15px;
+            }
         }
     }
 }
