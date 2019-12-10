@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Model.Subscriber
+﻿namespace Fanex.NAP.CTS.Model.DTO
 {
     public class Subscriber
     {

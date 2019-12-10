@@ -14,7 +14,7 @@
     using Fanex.NAP.CTS.Core.BaseClasses;
     using Fanex.NAP.CTS.Criteria.Account;
     using Fanex.NAP.CTS.ViewModel.Account.Search;
-    using Fanex.NAP.CTS.Core.Helpers;    
+    using Fanex.NAP.CTS.Core.Helpers;
     using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Criteria.Account.Associated;
     using Fanex.Data;
@@ -23,6 +23,8 @@
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Resource;
     using Fanex.NAP.CTS.Resource.Consts;
+    using Fanex.NAP.CTS.Model.Home;
+    using Fanex.NAP.CTS.Criteria.Home;
 
     public class AccountService : IAccountService
     {
@@ -561,6 +563,17 @@
 
             return lstAssociated;
         }
+
+        public List<SearchResultViewModel> SearchAccounts(string username)
+        {
+            var criteria = new SearchResultCriteria
+            {
+                Username = username
+            };
+
+            return DataService.GetData<SearchResultViewModel>(criteria).ToList();
+        }
+
         #endregion
     }
 }

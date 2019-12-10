@@ -151,6 +151,7 @@
     <Compile Include="DTO\FraudCase.cs" />
     <Compile Include="DTO\Match.cs" />
     <Compile Include="DTO\Message.cs" />
+    <Compile Include="DTO\RoleUser.cs" />
     <Compile Include="Enum.cs" />
     <Compile Include="Environment.cs" />
     <Compile Include="FraudCaseHealth.cs" />
@@ -165,6 +166,7 @@
     <Compile Include="FraudCase\NotificationRecipient.cs" />
     <Compile Include="FraudCase\ScannedOfficeIP\OfficeIp.cs" />
     <Compile Include="FraudCase\ScannedOfficeIP\OfficeIPInternalAccount.cs" />
+    <Compile Include="Home\SearchResultViewModel.cs" />
     <Compile Include="IP\IpModel.cs" />
     <Compile Include="MatchMonitor\BalanceUpDate.cs" />
     <Compile Include="MatchMonitor\FraudCase.cs" />
@@ -181,7 +183,7 @@
     <Compile Include="MatchMonitor\Match.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReportModel.cs" />
-    <Compile Include="Subscriber\Subscriber.cs" />
+    <Compile Include="DTO\Subscriber.cs" />
     <Compile Include="Subscriber\SubscriberAssignment.cs" />
     <Compile Include="Subscriber\SubscriberAssignmentUpdate.cs" />
     <Compile Include="SuspiciousCustomerDetails\BettypeStatistics.cs" />

@@ -280,36 +280,36 @@
   <Function name="SearchAccount">
     <Setting Key="FPS_DC_SearchAccount" 
              SpName="FPS_DC_SearchAccount" 
-             DbName="MySQL.FPS_DataCenter"/>    
+             DbName="MySQL.CTS_DataCenter"/>    
   </Function> 
   <Function name="AccountDetail">
     <Setting Key="FPS_DC_GetCustomerGeneralInfo"
             SpName="FPS_DC_GetCustomerGeneralInfo"
-            DbName="MySQL.FPS_DataCenter"/>
+            DbName="MySQL.CTS_DataCenter"/>
 
     <Setting Key="FPS_DC_GetEvidenceByTargetId"
             SpName="FPS_DC_GetEvidenceByTargetId"
-            DbName="MySQL.FPS_DataCenter"/>
+            DbName="MySQL.CTS_DataCenter"/>
 
     <Setting Key="FPS_DC_Rpt_GetAssociationByAccount"
             SpName="FPS_DC_Rpt_GetAssociationByAccount"
-            DbName="MySQL.FPS_DataCenter"/>
+            DbName="MySQL.CTS_DataCenter"/>
 
     <Setting Key="FPS_DC_Rpt_ChainToEvidence" 
              SpName="FPS_DC_Rpt_ChainToEvidence" 
-             DbName="MySQL.FPS_DataCenter"/>
+             DbName="MySQL.CTS_DataCenter"/>
 
     <Setting Key="FPS_DC_InsertException"
              SpName="FPS_DC_InsertException"
-             DbName="MySQL.FPS_DataCenter"/>
+             DbName="MySQL.CTS_DataCenter"/>
 
     <Setting Key="FPS_DC_Rpt_GetExceptionByAccountId"
              SpName="FPS_DC_Rpt_GetExceptionByAccountId"
-             DbName="MySQL.FPS_DataCenter"/>
+             DbName="MySQL.CTS_DataCenter"/>
 
     <Setting Key="FPS_DC_Rpt_GetAssociatedAccountByAccount"
             SpName="FPS_DC_Rpt_GetAssociatedAccountByAccount"
-            DbName="MySQL.FPS_DataCenter"/>
+            DbName="MySQL.CTS_DataCenter"/>
     
     <Setting Key="FS_CustomerFraudInfo_Get"
             SpName="FS_CustomerFraudInfo_Get"
@@ -317,10 +317,14 @@
     
     <Setting Key="FPS_DC_GetTransactionHistoryByCustId"
              SpName="FPS_DC_GetTransactionHistoryByCustId"
-             DbName="MySQL.FPS_DataCenter"/>
+             DbName="MySQL.CTS_DataCenter"/>
     
     <Setting Key="FPS_DC_GetLocationInfobyIP"
              SpName="FPS_DC_GetLocationInfobyIP"
-             DbName="MySQL.FPS_DataCenter"/>
+             DbName="MySQL.CTS_DataCenter"/>
+
+    <Setting Key="CTS_DC_GetUserInfomationByUsername"
+            SpName="CTS_DC_GetUserInfomationByUsername"
+            DbName="MySQL.CTS_DataCenter"/>
   </Function>
 </Functions>

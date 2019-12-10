@@ -1,12 +1,22 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
     using Fanex.NAP.Core.Web.Attribute;
+    using Fanex.NAP.CTS.Model.Home;
     using Fanex.NAP.CTS.Resource.Consts;
+    using Fanex.NAP.CTS.Service;
+    using System.Collections.Generic;
     using System.Web.Mvc;
 
     [NapSuperAuth]
     public class HomeController : BaseController
     {
+        private IAccountService accountService;
+
+        public HomeController()
+        {
+            accountService = new AccountService();
+        }
+
         public ActionResult Index()
         {
             return View(CurrentSession.MenuItemList);
@@ -40,7 +50,14 @@
         {
             string inputValue = form["input"];
 
-            return View();
-        }
+            if(string.IsNullOrEmpty(inputValue) || inputValue.Length <= 2)
+            {
+                return View(string.Empty);
+            }
+
+            var result = accountService.SearchAccounts(inputValue);
+
+            return View(result);
+        }   
     }
 }

@@ -90,6 +90,7 @@
     <Compile Include="FraudSensorTask\FlaggedAccountRuleCriteria.cs" />
     <Compile Include="FraudSensorTask\OfficeIPPreconditionCriteria.cs" />
     <Compile Include="FraudSensorTask\OfficeIPRuleCriteria.cs" />
+    <Compile Include="Home\SearchResultCriteria.cs" />
     <Compile Include="MatchMonitor\BalanceUpDateGetCriteria.cs" />
     <Compile Include="MatchMonitor\FraudCaseDetails\ArbitrageDetailsCriteria.cs" />
     <Compile Include="MatchMonitor\FraudCaseDetails\FlaggedAccountCriteria.cs" />

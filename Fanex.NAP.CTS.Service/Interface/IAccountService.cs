@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
+    using Fanex.NAP.CTS.Model.Home;
     using Fanex.NAP.CTS.Model.Subscriber;
     using Fanex.NAP.CTS.ViewModel.Account;
     using Fanex.NAP.CTS.ViewModel.Account.Associated;
@@ -23,6 +24,8 @@
 
         string GetShortestPath(int startCustId, int endCustId);
 
-        IEnumerable<AssociatedDeviceByAccount> GetAssociatedDevicesByAccount(AssociatedDeviceByAccountFilter filter);        
+        IEnumerable<AssociatedDeviceByAccount> GetAssociatedDevicesByAccount(AssociatedDeviceByAccountFilter filter);
+
+        List<SearchResultViewModel> SearchAccounts(string username);
     }
 }
