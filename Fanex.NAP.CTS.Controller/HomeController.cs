@@ -43,21 +43,21 @@
             ViewBag.Message = "Your contact page.";
 
             return View();
-        }
-
+        }        
+        
         [HttpPost]
         public ActionResult Search(FormCollection form)
         {
-            string inputValue = form["input"];
+            string inputValue = form["txtInput"];
 
-            if(string.IsNullOrEmpty(inputValue) || inputValue.Length <= 2)
+            if (string.IsNullOrEmpty(inputValue) || inputValue.Length <= 2)
             {
-                return View(string.Empty);
+                return View(new SearchResultViewModel { SearchResults = null, InputValue = inputValue });
             }
 
             var result = accountService.SearchAccounts(inputValue);
 
-            return View(result);
-        }   
+            return View(new SearchResultViewModel { SearchResults = result, InputValue = inputValue });
+        }
     }
 }

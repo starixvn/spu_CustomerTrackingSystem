@@ -142,6 +142,7 @@
     <Compile Include="CustomerMonitor\Customer.cs" />
     <Compile Include="DailyDataCapture\CapturedMatch.cs" />
     <Compile Include="Device\Device.cs" />
+    <Compile Include="DTO\Currency.cs" />
     <Compile Include="DTO\CustomerAssociation.cs" />
     <Compile Include="DTO\CustomerEvidence.cs" />
     <Compile Include="DTO\CustomerEvidenceList.cs" />
@@ -151,7 +152,7 @@
     <Compile Include="DTO\FraudCase.cs" />
     <Compile Include="DTO\Match.cs" />
     <Compile Include="DTO\Message.cs" />
-    <Compile Include="DTO\RoleUser.cs" />
+    <Compile Include="DTO\Role.cs" />
     <Compile Include="Enum.cs" />
     <Compile Include="Environment.cs" />
     <Compile Include="FraudCaseHealth.cs" />
@@ -166,6 +167,7 @@
     <Compile Include="FraudCase\NotificationRecipient.cs" />
     <Compile Include="FraudCase\ScannedOfficeIP\OfficeIp.cs" />
     <Compile Include="FraudCase\ScannedOfficeIP\OfficeIPInternalAccount.cs" />
+    <Compile Include="Home\SearchResultModel.cs" />
     <Compile Include="Home\SearchResultViewModel.cs" />
     <Compile Include="IP\IpModel.cs" />
     <Compile Include="MatchMonitor\BalanceUpDate.cs" />

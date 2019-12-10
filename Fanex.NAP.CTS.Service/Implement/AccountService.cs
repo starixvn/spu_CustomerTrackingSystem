@@ -25,6 +25,7 @@
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Model.Home;
     using Fanex.NAP.CTS.Criteria.Home;
+    using Fanex.NAP.CTS.Model.DTO;
 
     public class AccountService : IAccountService
     {
@@ -37,7 +38,7 @@
                 ip_Username = filter.Key,
                 ip_UserId = filter.UserId
             };
-          
+
             var accountsCollected = DataService.GetData<SubscriberAccount>(criteria);
 
             return SortAccounts(accountsCollected, filter);
@@ -55,14 +56,14 @@
             {
                 // exactly
                 accounts.AddRange(subGroup
-                    .Where(c => c.SubscriberName == subGroup.Key 
+                    .Where(c => c.SubscriberName == subGroup.Key
                         && c.UserNameToSort.ToLower().Equals(keySearch))
                     .Select(c => GetAccount(c))
                 );
 
                 // beginning
                 accounts.AddRange(subGroup
-                    .Where(c => c.SubscriberName == subGroup.Key 
+                    .Where(c => c.SubscriberName == subGroup.Key
                         && !c.UserNameToSort.ToLower().Equals(keySearch)
                         && c.UserNameToSort.ToLower().StartsWith(keySearch)
                     )
@@ -275,13 +276,13 @@
             generalInfo.FrequencyLogin = customerInformation.LoginCount;
             generalInfo.FirstLoginName = customerInformation.FirstLoginName;
             generalInfo.Username = customerInformation.Username;
-            generalInfo.Username2 = customerInformation.Username2;            
+            generalInfo.Username2 = customerInformation.Username2;
 
             if (customerInformation.AccountEvidenceStatus == 0)
             {
                 generalInfo.AccountEvidenceStatus = AccountEvidenceStatus.CentralPoint;
             }
-            else if(customerInformation.AccountEvidenceStatus == 1)
+            else if (customerInformation.AccountEvidenceStatus == 1)
             {
                 generalInfo.AccountEvidenceStatus = AccountEvidenceStatus.Clean;
             }
@@ -311,7 +312,7 @@
         {
             var evidenceTypeCodes = evidenceByTargets.Select(e => e.EvidenceTypeCode).OrderBy(e => e);
 
-            generalInfo.EvidenceTypeCodes = evidenceTypeCodes.Join(";");            
+            generalInfo.EvidenceTypeCodes = evidenceTypeCodes.Join(";");
 
             return generalInfo;
         }
@@ -433,9 +434,9 @@
                 return DataService.GetData<AssociatedAccountByCustomer>(criteria);
             }
 
-            return new List<AssociatedAccountByCustomer>();            
+            return new List<AssociatedAccountByCustomer>();
         }
-        
+
         private CustomerFraudSuspicious GetCustomerFraud(IEnumerable<AssociatedAccountByCustomer> associatedCustomers)
         {
             if (associatedCustomers.Any())
@@ -475,7 +476,7 @@
 
                 return accountsCollected.AccountsByCustomers.AsEnumerable()
                                 .Where(customer => customer.CompareEvidenceStatus(filter.EvidenceStatus))
-                                .Join(accountsCollected.CustomersFromAPI.Distinct(c=>c.CustId).AsEnumerable(),
+                                .Join(accountsCollected.CustomersFromAPI.Distinct(c => c.CustId).AsEnumerable(),
                                     cusA => cusA.CustID,
                                     cusB => cusB.CustId,
                                     (cusA, cusB) => GetAssociatedAccountByGraph(cusA, cusB))
@@ -564,14 +565,28 @@
             return lstAssociated;
         }
 
-        public List<SearchResultViewModel> SearchAccounts(string username)
+        public List<SearchResultModel> SearchAccounts(string username)
         {
             var criteria = new SearchResultCriteria
             {
                 Username = username
             };
 
-            return DataService.GetData<SearchResultViewModel>(criteria).ToList();
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                var result = db.Query<SearchResultModel, Currency, Role, Subscriber, SearchResultModel>((model, currency, role, subscriber) =>
+                {
+                    model.Currency = currency;
+                    model.Role = role;
+                    model.Subscriber = subscriber;
+
+                    return model;
+                },
+                "CurrencyId, RoleId, SubscriberId",
+                criteria).ToList();
+
+                return result;
+            }
         }
 
         #endregion

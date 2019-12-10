@@ -32,6 +32,9 @@
                       "~/Content/scss/base/reset.css",
                       "~/Content/scss/pages/index.css"));
 
+            bundles.Add(new StyleBundle("~/Content/styles/dashboard").Include(                      
+                      "~/Content/scss/pages/dashboard/dashboard.min.css"));
+
             RegisterFSCoreBundles(bundles);
             RegisterSearchBoxBundles(bundles);
 

@@ -2,8 +2,8 @@
 {
     public class Subscriber
     {
-        public int SubscriberID { get; set; }
+        public int Id { get; set; }
 
-        public string SubscriberName { get; set; }
+        public string Name { get; set; }
     }
 }

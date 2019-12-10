@@ -1054,12 +1054,12 @@
             return evidences;
         }
       
-        public IEnumerable<Currency> GetAllCurrency(bool isShowSpecialCurrencies)
+        public IEnumerable<Model.MatchMonitor.FraudCaseDetails.Currency> GetAllCurrency(bool isShowSpecialCurrencies)
         {
             var criteria = new GetCurrencyCriteria();
             criteria.IsShowSpecialCurrencies = isShowSpecialCurrencies;
 
-            return DataService.GetData<Currency>(criteria);
+            return DataService.GetData<Model.MatchMonitor.FraudCaseDetails.Currency>(criteria);
         }
 
         public IEnumerable<ScoreHDP> GetScoreHDP(int matchId, bool isShowSpecialCurrencies)

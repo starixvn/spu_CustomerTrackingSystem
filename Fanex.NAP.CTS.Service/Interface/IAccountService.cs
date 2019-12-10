@@ -26,6 +26,6 @@
 
         IEnumerable<AssociatedDeviceByAccount> GetAssociatedDevicesByAccount(AssociatedDeviceByAccountFilter filter);
 
-        List<SearchResultViewModel> SearchAccounts(string username);
+        List<SearchResultModel> SearchAccounts(string username);
     }
 }

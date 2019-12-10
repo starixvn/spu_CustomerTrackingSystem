@@ -36,7 +36,7 @@
 
         IEnumerable<Evidence> GetListEvidences();
 
-        IEnumerable<Currency> GetAllCurrency(bool isShowSpecialCurrencies);
+        IEnumerable<Model.MatchMonitor.FraudCaseDetails.Currency> GetAllCurrency(bool isShowSpecialCurrencies);
 
         IEnumerable<ScoreHDP> GetScoreHDP(int matchId, bool isShowSpecialCurrencies);
 

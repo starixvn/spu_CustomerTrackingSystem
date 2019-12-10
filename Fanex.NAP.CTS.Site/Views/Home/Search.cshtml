@@ -2,62 +2,52 @@
 @{
     ViewBag.Title = "Search";
     Layout = "~/Views/Shared/_Layout.cshtml";
-}
-@model List<Fanex.NAP.CTS.Model.Home.SearchResultViewModel>
+    var username2 = string.Empty;
 
-@section styles{
-    <link href="~/Content/scss/pages/dashboard/dashboard.min.css" rel="stylesheet" />
 }
+@model Fanex.NAP.CTS.Model.Home.SearchResultViewModel
+
+@Styles.Render("~/Content/styles/dashboard")
 
 <div class="search-result">
-    <div class="search-box">
-        <input id="txtInput" class="input-field" placeholder="Type in Username or Login ID to search" type="text" value="super" />
-        <i class="icon-magnify"></i>
-    </div>
+    @using (Html.BeginForm("Search", "Home", FormMethod.Post))
+    {
+        <div class="search-box">
+            <input id="txtInput" name="txtInput" class="input-field" placeholder="Type in Username or Login ID to search" type="text" value="@Model.InputValue" />
+            <i class="icon-magnify"></i>
+        </div>
+    }
 
     <div class="result-content">
-        <div class="result-number">Top <span>50</span> results with keyword "<span>Super</span>"</div>
+        <div class="result-number">Top <span>50</span> results with keyword "<span>@Model.InputValue</span>"</div>
         <ul class="result-list">
-            <li class="result-item">
-                <a class="result-name" href="#">Super <span>(Super)</span></a>
-                <p>
-                    <span>Currency: USS</span>
-                    <span>Level: Member</span>
-                    <span>Subscriber: Maxbet</span>
-                    <span>Last Login: Nov 28,2019</span>
-                </p>
-            </li>
+            @if (Model.SearchResults != null && Model.SearchResults.Any())
+            {
+                foreach (var data in Model.SearchResults)
+                {
+                    username2 = data.Username2 != "NULL" ? "(" + data.Username2 + ")" : string.Empty;
 
-            <li class="result-item">
-                <a class="result-name" href="#">SuperSA <span>(SuperTEST)</span></a>
-                <p>
-                    <span>Currency: USS</span>
-                    <span>Level: Member</span>
-                    <span>Subscriber: Maxbet</span>
-                    <span>Last Login: Nov 28,2019</span>
-                </p>
-            </li>
-
-            <li class="result-item">
-                <a class="result-name" href="#">SuperSA1 <span>(TestSuperSA)</span></a>
-                <p>
-                    <span>Currency: USS</span>
-                    <span>Level: Member</span>
-                    <span>Subscriber: Maxbet</span>
-                    <span>Last Login: Nov 28,2019</span>
-                </p>
-            </li>
-
-            <li class="result-item">
-                <a class="result-name" href="#">12BETACCTestSuper <span>(SuperSA2)</span></a>
-                <p>
-                    <span>Currency: USS</span>
-                    <span>Level: Member</span>
-                    <span>Subscriber: Maxbet</span>
-                    <span>Last Login: Nov 28,2019</span>
-                </p>
-            </li>
+                    <li class="result-item">
+                        <a class="result-name" href="Account/Index?custid=@data.CTSCustId">@data.Username <span>@username2</span></a>
+                        <p>
+                            <span>Currency: @data.Currency.Name</span>
+                            <span>Level: @data.Role.Name</span>
+                            <span>Subscriber: @data.Subscriber.Name</span>
+                            <span>Last Login: @data.LastLogin.ToString("MMM dd, yyyy")</span>
+                        </p>
+                    </li>
+                }
+            }
+            else
+            {
+                <li class="result-item">
+                   There is no data.
+                </li>
+            }
         </ul>
     </div>
 </div>
 
+@section scripts{
+    @Scripts.Render("~/scripts/searchbox")
+}

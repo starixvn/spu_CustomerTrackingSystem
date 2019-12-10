@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Fanex.NAP.CTS.Model.DTO
 {
-    public class RoleUser
+    public class Role
     {
         public int Id { get; set; }
 
