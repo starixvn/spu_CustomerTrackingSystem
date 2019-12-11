@@ -5,6 +5,7 @@
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Web.Mvc;
 
     [NapSuperAuth]
@@ -43,8 +44,8 @@
             ViewBag.Message = "Your contact page.";
 
             return View();
-        }        
-        
+        }
+
         [HttpPost]
         public ActionResult Search(FormCollection form)
         {
@@ -56,6 +57,12 @@
             }
 
             var result = accountService.SearchAccounts(inputValue);
+
+            if (result.Count == 1 && result.Any(x => x.Username == inputValue || x.Username2 == inputValue))
+            {
+                return RedirectToAction("Index", "Account", new { CTSCustId = result.FirstOrDefault().CTSCustId });
+                    
+            }
 
             return View(new SearchResultViewModel { SearchResults = result, InputValue = inputValue });
         }
