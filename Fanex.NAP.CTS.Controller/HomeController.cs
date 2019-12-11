@@ -60,7 +60,7 @@
 
             if (result.Count == 1 && result.Any(x => x.Username == inputValue || x.Username2 == inputValue))
             {
-                return RedirectToAction("Index", "Account", new { CTSCustId = result.FirstOrDefault().CTSCustId });
+                return RedirectToAction("Index", "Account", new { custId = result.FirstOrDefault().CTSCustId });
                     
             }
 

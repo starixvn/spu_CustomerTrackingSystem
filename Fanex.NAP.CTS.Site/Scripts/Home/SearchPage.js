@@ -16,8 +16,7 @@
         }
     });
 
-    function Initial() {
-        errorMessage.hide();   
+    function Initial() {        
 
         input.focus(function () {
             searchBox.addClass("has-shadow");

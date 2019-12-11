@@ -33,7 +33,7 @@
 
         public override string BaseControllerName { get => Consts.MenuItemSearch; }
 
-        public ActionResult Index(int ctsCustId)
+        public ActionResult Index(int custId)
         {
             return View();
         }
