@@ -1,10 +1,10 @@
 @font-face {
-  font-family: 'Fraud-Sensor';
-  src:  url('fonts/Fraud-Sensor.eot?gj97qo');
-  src:  url('fonts/Fraud-Sensor.eot?gj97qo#iefix') format('embedded-opentype'),
-    url('fonts/Fraud-Sensor.ttf?gj97qo') format('truetype'),
-    url('fonts/Fraud-Sensor.woff?gj97qo') format('woff'),
-    url('fonts/Fraud-Sensor.svg?gj97qo#Fraud-Sensor') format('svg');
+  font-family: 'CTS';
+  src:  url('fonts/CTS.eot?s845fm');
+  src:  url('fonts/CTS.eot?s845fm#iefix') format('embedded-opentype'),
+    url('fonts/CTS.ttf?s845fm') format('truetype'),
+    url('fonts/CTS.woff?s845fm') format('woff'),
+    url('fonts/CTS.svg?s845fm#CTS') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -12,7 +12,7 @@
 
 [class^="icon-"], [class*=" icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: 'Fraud-Sensor' !important;
+  font-family: 'CTS' !important;
   speak: none;
   font-style: normal;
   font-weight: normal;
@@ -25,6 +25,84 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-Robot-User:before {
+  content: "\e941";
+}
+.icon-Affected:before {
+  content: "\e942";
+  color: #c1272d;
+}
+.icon-Bet-Restrict-Account .path1:before {
+  content: "\e943";
+  color: rgb(0, 0, 0);
+}
+.icon-Bet-Restrict-Account .path2:before {
+  content: "\e944";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-Bet-Restricted-Currency:before {
+  content: "\e945";
+}
+.icon-Bet-Restricted-Site:before {
+  content: "\e946";
+  color: #f00;
+}
+.icon-Bet-Restricted-SiteandCurrency .path1:before {
+  content: "\e947";
+  color: rgb(255, 0, 0);
+}
+.icon-Bet-Restricted-SiteandCurrency .path2:before {
+  content: "\e948";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-Delinquency:before {
+  content: "\e949";
+  color: #e7363c;
+}
+.icon-Dirty-Account:before {
+  content: "\e94a";
+  color: #e67148;
+}
+.icon-Flagged:before {
+  content: "\e94b";
+  color: #f00;
+}
+.icon-Flagged-With-Evidence:before {
+  content: "\e94c";
+}
+.icon-Hedge-Account:before {
+  content: "\e94d";
+  color: #475162;
+}
+.icon-P-with-Bet-Limit .path1:before {
+  content: "\e94e";
+  color: rgb(255, 0, 0);
+}
+.icon-P-with-Bet-Limit .path2:before {
+  content: "\e94f";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-P-without-Bet-Limit .path1:before {
+  content: "\e950";
+  color: rgb(255, 0, 0);
+}
+.icon-P-without-Bet-Limit .path2:before {
+  content: "\e951";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-Smart-Punter-Account .path1:before {
+  content: "\e952";
+  color: rgb(152, 72, 7);
+}
+.icon-Smart-Punter-Account .path2:before {
+  content: "\e953";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
 .icon-double-arrow:before {
   content: "\e940";
   color: #fff;

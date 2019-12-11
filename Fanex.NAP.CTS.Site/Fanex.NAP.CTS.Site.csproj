@@ -359,6 +359,7 @@
     <Content Include="Content\images\expand_all.png" />
     <Content Include="Content\images\flagged_device_by_evidence.png" />
     <Content Include="Content\images\graph_view.png" />
+    <Content Include="Content\scss\fonts\Fraud-Sensor\fonts\CTS.svg" />
     <Content Include="Content\scss\images\logo-CTS.png" />
     <Content Include="Content\scss\images\logo-CTS.svg" />
     <Content Include="Content\scss\images\logo-header.png" />
@@ -940,6 +941,9 @@
     <Content Include="Content\scss\vendors\popoto\font\popoto\popoto.ttf" />
     <Content Include="Content\scss\vendors\popoto\font\popoto\popoto.woff" />
     <Content Include="Content\scss\pages\account\account-fps.scss" />
+    <Content Include="Content\scss\fonts\Fraud-Sensor\fonts\CTS.eot" />
+    <Content Include="Content\scss\fonts\Fraud-Sensor\fonts\CTS.ttf" />
+    <Content Include="Content\scss\fonts\Fraud-Sensor\fonts\CTS.woff" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />
