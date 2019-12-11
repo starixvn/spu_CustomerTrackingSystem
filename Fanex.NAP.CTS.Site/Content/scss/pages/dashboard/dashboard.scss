@@ -128,20 +128,17 @@
     .has-shadow {
         box-shadow: 0 1px 6px 0 rgba(32,33,36,0.28);
     }
-
-    .error-alert {
-        margin-left: 36px;
-    }
-
+    
     .result-content {
         margin-top: 122px;
         //border-top: 1px solid #E1E1E1;
         padding: 10px 36px;
+        padding-left: 14.8rem;
     }
 
     .result-list {
         padding: 0;
-        padding-top: 15px;
+        padding-top: 20px;
         margin: 0;
     }
 
@@ -155,6 +152,10 @@
             > span {
                 color: #C16112;
             }
+
+            &:hover {
+                text-decoration: underline;
+            }
         }
 
         p {
@@ -163,7 +164,7 @@
             margin-top: 10px;
 
             > span {
-                margin-right: 15px;
+                margin-right: 35px;
             }
         }
     }
@@ -173,7 +174,8 @@
         top: 60px;
         right: 0;
         left: 0;
-        padding: 16px 36px;
+        padding: 16px 0;
+        padding-left: 14.8rem;
         background: #fff;
         border-bottom: 1px solid #E1E1E1;
         transition: all .2s ease;
