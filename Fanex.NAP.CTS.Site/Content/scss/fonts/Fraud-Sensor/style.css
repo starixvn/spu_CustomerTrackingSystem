@@ -1,10 +1,10 @@
 @font-face {
-  font-family: 'CTS';
-  src:  url('fonts/CTS.eot?s845fm');
-  src:  url('fonts/CTS.eot?s845fm#iefix') format('embedded-opentype'),
-    url('fonts/CTS.ttf?s845fm') format('truetype'),
-    url('fonts/CTS.woff?s845fm') format('woff'),
-    url('fonts/CTS.svg?s845fm#CTS') format('svg');
+  font-family: 'Fraud-Sensor';
+  src:  url('fonts/Fraud-Sensor.eot?xytwul');
+  src:  url('fonts/Fraud-Sensor.eot?xytwul#iefix') format('embedded-opentype'),
+    url('fonts/Fraud-Sensor.ttf?xytwul') format('truetype'),
+    url('fonts/Fraud-Sensor.woff?xytwul') format('woff'),
+    url('fonts/Fraud-Sensor.svg?xytwul#Fraud-Sensor') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -12,7 +12,7 @@
 
 [class^="icon-"], [class*=" icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: 'CTS' !important;
+  font-family: 'Fraud-Sensor' !important;
   speak: none;
   font-style: normal;
   font-weight: normal;

@@ -3,12 +3,122 @@
     ViewBag.Title = "AccountDetail";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@section styles{    
+@section styles{
     <link href="~/Content/scss/pages/account/account.css" rel="stylesheet" />
 }
 
 <h2 class="page-title">Home</h2>
 
 <div class="content-card">
-     
+    <div class="status-info">
+        <p>
+            <strong>Member:</strong>
+            <span class="username">Johnwick</span>
+            
+            <span class="icon icon-Robot-User"></span>
+            <span class="icon icon-Bet-Restricted-Currency"></span>
+            <span class="icon icon-Bet-Restricted-Site"></span>
+            <span class="icon icon-Affected"></span>
+        </p>
+        <p>
+            <strong>Account Status: </strong>
+            <span class="badge-label status-active">Active</span>
+        </p>
+    </div>
+
+    <div class="account-info">
+        <!-- Dates -->
+        <div class="info-item">
+            <div class="info-title">Dates</div>
+            <div class="info-block">
+                <div class="info-label">
+                    <label>Created</label>
+                    <label>Last Login</label>
+                    <label>Last Ticket</label>
+                </div>
+                <div class="info-text">
+                    <div>Jun 13, 2019, 23:59</div>
+                    <div>Jun 13, 2019, 23:59</div>
+                    <div>Jun 13, 2019, 23:59</div>
+                </div>
+            </div>
+        </div>
+
+        <!--Dangerous-->
+        <div class="info-item">
+            <div class="info-title">Dangerous</div>
+            <div class="info-block">
+                <div class="info-label">
+                    <label>Orignal</label>
+                    <label>ABI</label>
+                    <label>Other Sports</label>
+                </div>
+                <div class="info-text">
+                    <div>Jun 13, 2019, 23:59</div>
+                    <div>Jun 13, 2019, 23:59</div>
+                    <div>Jun 13, 2019, 23:59</div>
+                </div>
+            </div>
+        </div>
+
+        <!--Abnormal-->
+        <div class="info-item">
+            <div class="info-title">Abnormal</div>
+            <div class="info-block">
+                <div class="info-label">
+                    <label>Abnormal</label>
+                </div>
+                <div class="info-text">
+                    <div>Jun 13, 2019, 23:59</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Auto Suspend-->
+        <div class="info-item">
+            <div class="info-title">Auto Suspend</div>
+            <div class="info-block">
+                <div class="info-label">
+                    <label>Soccer</label>
+                    <label>Other Sports</label>
+                    <label>E-Sports</label>
+                </div>
+                <div class="info-text">
+                    <div>Yes</div>
+                    <div>Yes</div>
+                    <div>Yes</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Association & Evidence-->
+        <div class="info-item">
+            <div class="info-title">Association & Evidence</div>
+            <div class="info-block">
+                <div class="info-label">
+                    <label>Accounts / Devices</label>
+                    <label>Evidence</label>
+                </div>
+                <div class="info-text">
+                    <div>15/25</div>
+                    <div>6.7, 6.8</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Committed Fraud Case -->
+        <div class="info-item">
+            <div class="info-title">Association & Evidence</div>
+            <div class="info-block">
+                <div class="info-label">
+                    <label>Classification</label>
+                    <label>Fraud case</label>
+                </div>
+                <div class="info-text">
+                    <div><span class="icon-dirty"></span><span class="icon-delinquency"></span><span class="icon-Hedge-Account"></span></div>
+                    <div>BNG, Check Bet, Bets Near Goal, Flagged Account Delay Goal</div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
