@@ -46,10 +46,10 @@
                     var customerGeneralStatusViewModel = new CustomerGeneralStatusViewModel(customerStatus);
 
                     return View(customerGeneralStatusViewModel);
-                }                
+                }                 
             }
 
-            return View();
+            return RedirectToAction("Index", "Home") ;
         }
 
         //public ActionResult DetailAccount(int id, int custId)

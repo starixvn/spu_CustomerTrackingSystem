@@ -238,6 +238,7 @@
     <Compile Include="Fake\FakeControllerContext.cs" />
     <Compile Include="Fake\FakeHttpContext.cs" />
     <Compile Include="FraudCaseControllerTest.cs" />
+    <Compile Include="HomeControllerTest.cs" />
     <Compile Include="ScannedOfficeIpReportControllerTest.cs" />
     <Compile Include="SearchAccountControllerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

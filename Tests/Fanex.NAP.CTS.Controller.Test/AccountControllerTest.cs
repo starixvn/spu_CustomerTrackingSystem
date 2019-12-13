@@ -27,21 +27,39 @@
             _runner = new AccountController();
         }
 
-        //#region General information
-        //[Fact]
-        //public void Can_GetGeneralInformation()
-        //{
-        //    // Arrange
-        //    FakeHttpContext.SetCurrentContext();
-        //    FakeHttpContext.SetFakeSession();
-        //    _runner.CurrentSession = FakeSession.CurrentSession;
+        #region General information
 
-        //    // Act
-        //    var actualResult = _runner.GetGeneralInformation(ExpectedFilter.ExpectedGeneralInformationFilter) as JsonResult;
+        [Fact]
+        public void GetGeneralInformation_Redirect()
+        {
+            // Arrange
+            FakeHttpContext.SetCurrentContext();
+            FakeHttpContext.SetFakeSession();
+            _runner.CurrentSession = FakeSession.CurrentSession;
 
-        //    // Assert
-        //    Assert.IsType<AccountDetail>(actualResult.Data);
-        //}
+            // Act
+            var actualResult = _runner.Index(-1) as RedirectToRouteResult;
+
+            // Assert
+            Assert.Equal("Index", actualResult.RouteValues["action"]);
+        }
+
+        [Fact]
+        public void GetGeneralInformation_ReturnViewModel()
+        {
+            // Arrange
+            FakeHttpContext.SetCurrentContext();
+            FakeHttpContext.SetFakeSession();
+            _runner.CurrentSession = FakeSession.CurrentSession;
+
+            // Act
+            var custId = 1;
+            var actualResult = _runner.Index(custId) as ViewResult;
+            var viewModel = actualResult.ViewData.Model as CustomerGeneralStatusViewModel;
+
+            // Assert
+            Assert.Equal(custId, viewModel.CustId);
+        }
 
         //[Fact]
         //public void Can_GetAllEvidences()
@@ -165,6 +183,6 @@
         //    Assert.IsType<IPInformation>(actualResult.Model);
         //}
 
-        //#endregion
+        #endregion
     }
 }

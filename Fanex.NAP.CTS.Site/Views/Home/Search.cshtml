@@ -30,7 +30,7 @@
 
                 @foreach (var data in Model.SearchResults)
                 {
-                    username2 = data.Username2 != "NULL" ? "(" + data.Username2 + ")" : string.Empty;
+                    username2 = !string.IsNullOrWhiteSpace(data.Username2) ? "(" + data.Username2 + ")" : string.Empty;
 
                     <li class="result-item">
                         <a class="result-name" href="~/Account/Index?custid=@data.CustId">@data.Username <span>@username2</span></a>
