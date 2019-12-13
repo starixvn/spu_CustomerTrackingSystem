@@ -341,7 +341,7 @@
         .content-card .account-info .info-item {
           grid-column: span 2; } }
     .content-card .account-info .info-title {
-      padding: 8px 12px;
+      padding: 8px 6px;
       background: #1D2E4F;
       color: #fff;
       font-size: 14px;
