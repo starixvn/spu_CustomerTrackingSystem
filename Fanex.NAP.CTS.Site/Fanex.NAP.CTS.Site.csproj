@@ -1253,6 +1253,10 @@
       <Project>{072a03dc-0c4f-4bc9-a1c9-d4d62c7afccb}</Project>
       <Name>Fanex.NAP.CTS.User</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Fanex.NAP.CTS.ViewModel\Fanex.NAP.CTS.ViewModel.csproj">
+      <Project>{4940bbbb-2943-476d-a778-ffe0ed748f12}</Project>
+      <Name>Fanex.NAP.CTS.ViewModel</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\Google.Protobuf.dll" />

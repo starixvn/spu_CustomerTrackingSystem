@@ -325,8 +325,7 @@
 
     <Setting Key="CTS_DC_GetUserInfomationByUsername"
             SpName="CTS_DC_GetUserInfomationByUsername"
-            DbName="MySQL.CTS_DataCenter">
-      
+            DbName="MySQL.CTS_DataCenter">      
       <Mapping DataField="CurrencyId" ObjectProperty="Id" Class="Currency"/>
       <Mapping DataField="Currency" ObjectProperty="Name" Class="Currency"/>
       
@@ -334,9 +333,12 @@
       <Mapping DataField="RoleName" ObjectProperty="Name" Class="Role"/>
       
       <Mapping DataField="SubscriberId" ObjectProperty="Id" Class="Subscriber"/>
-      <Mapping DataField="SubscriberName" ObjectProperty="Name" Class="Subscriber"/>
-            
+      <Mapping DataField="SubscriberName" ObjectProperty="Name" Class="Subscriber"/>            
     </Setting>
+
+    <Setting Key="CTS_CustomerGeneralStatus_Get"
+         SpName="CTS_CustomerGeneralStatus_Get"
+         DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
       
   </Function>
 </Functions>

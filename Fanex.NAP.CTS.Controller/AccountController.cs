@@ -4,6 +4,7 @@
     using System.Web.Mvc;
     using System.Collections.Generic;
     using Fanex.NAP.CTS.Service;
+    using Fanex.NAP.CTS.ViewModel.Account;
     using Fanex.NAP.CTS.ViewModel.Account.Associated;
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Resource.Consts;
@@ -16,246 +17,259 @@
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Resource;
     using Fanex.NAP.CTS.ViewModel.Account.TransactionHistory;
+    using Fanex.NAP.CTS.Model.Account;
 
     [NapAuth(FunctionKey = FSFunctionKeys.SearchAccount, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class AccountController : BaseController
     {
         private readonly IAccountService _accountService;
-        private readonly IEvidenceService _evidenceService;
-        private readonly ITransactionService _transactionService;
+        //private readonly IEvidenceService _evidenceService;
+        //private readonly ITransactionService _transactionService;
 
         public AccountController()
         {
             _accountService = new AccountService();
-            _evidenceService = new EvidenceService();
-            _transactionService = new TransactionService();
+            //_evidenceService = new EvidenceService();
+            //_transactionService = new TransactionService();
         }
 
         public override string BaseControllerName { get => Consts.MenuItemSearch; }
 
         public ActionResult Index(int custId)
         {
+            if (custId > 0)
+            {
+                var customerStatus = _accountService.GetCustomerGeneralStatus(custId);
+
+                if(customerStatus != null)
+                {
+                    var customerGeneralStatusViewModel = new CustomerGeneralStatusViewModel(customerStatus);
+
+                    return View(customerGeneralStatusViewModel);
+                }                
+            }
+
             return View();
         }
 
-        public ActionResult DetailAccount(int id, int custId)
-        {
-            var permissionIPLocation = new UserService().GetPermission(CurrentSession.UserId, SiteId, FSFunctionKeys.IPLocation);
+        //public ActionResult DetailAccount(int id, int custId)
+        //{
+        //    var permissionIPLocation = new UserService().GetPermission(CurrentSession.UserId, SiteId, FSFunctionKeys.IPLocation);
 
-            ViewBag.IsPermissionIPLocation = permissionIPLocation > 0;
-            ViewBag.AccountId = id;
-            ViewBag.CustId = custId;
+        //    ViewBag.IsPermissionIPLocation = permissionIPLocation > 0;
+        //    ViewBag.AccountId = id;
+        //    ViewBag.CustId = custId;
 
-            return View("DetailAccount");
-        }
+        //    return View("DetailAccount");
+        //}
 
-        #region General Information
-        [HttpPost]
-        public ActionResult GetGeneralInformation(GeneralInformationFilter filter)
-        {
-            filter.IsMasterSubscriberAssignment = PermissionService.IsMasterSubscriberAssignment();
-            filter.UserId = CurrentSession.UserId;
+        //#region General Information
+        //[HttpPost]
+        //public ActionResult GetGeneralInformation(GeneralInformationFilter filter)
+        //{
+        //    filter.IsMasterSubscriberAssignment = PermissionService.IsMasterSubscriberAssignment();
+        //    filter.UserId = CurrentSession.UserId;
 
-            var data = _accountService.GetAccountDetailGeneralInformation(filter);
+        //    var data = _accountService.GetAccountDetailGeneralInformation(filter);
 
-            return Json(data, JsonRequestBehavior.AllowGet);
-        }
+        //    return Json(data, JsonRequestBehavior.AllowGet);
+        //}
 
-        public ActionResult GetAllEvidences()
-        {
-            var data = _evidenceService.GetAllEvidences();
+        //public ActionResult GetAllEvidences()
+        //{
+        //    var data = _evidenceService.GetAllEvidences();
 
-            return Json(data, JsonRequestBehavior.AllowGet);
-        }
+        //    return Json(data, JsonRequestBehavior.AllowGet);
+        //}
 
-        [HttpPost]
-        public ActionResult PlaceEvidenceByAccount(GeneralInformationPlaceEvidenceByAccount evidenceByAccount)
-        {
-            var data = _evidenceService.PlaceEvidenceByAccount(evidenceByAccount);
+        //[HttpPost]
+        //public ActionResult PlaceEvidenceByAccount(GeneralInformationPlaceEvidenceByAccount evidenceByAccount)
+        //{
+        //    var data = _evidenceService.PlaceEvidenceByAccount(evidenceByAccount);
 
-            return Json(data, JsonRequestBehavior.AllowGet);
-        }
+        //    return Json(data, JsonRequestBehavior.AllowGet);
+        //}
 
-        [HttpPost]
-        public ActionResult GetInformationEvidenceByAccount(InformationEvidenceByAccountFilter filter)
-        {
-            var data = _evidenceService.GetInformationEvidenceByAccount(filter);
+        //[HttpPost]
+        //public ActionResult GetInformationEvidenceByAccount(InformationEvidenceByAccountFilter filter)
+        //{
+        //    var data = _evidenceService.GetInformationEvidenceByAccount(filter);
 
-            return Json(data, JsonRequestBehavior.AllowGet);
-        }
+        //    return Json(data, JsonRequestBehavior.AllowGet);
+        //}
 
-        [HttpPost]
-        public ActionResult UpdateEvidenceByAccountOfComment(InformationEvidenceByAccountUpdateOfComment evidenceOfComment)
-        {
-            var data = _evidenceService.UpdateEvidenceByAccountOfComment(evidenceOfComment);
+        //[HttpPost]
+        //public ActionResult UpdateEvidenceByAccountOfComment(InformationEvidenceByAccountUpdateOfComment evidenceOfComment)
+        //{
+        //    var data = _evidenceService.UpdateEvidenceByAccountOfComment(evidenceOfComment);
 
-            return Json(data, JsonRequestBehavior.AllowGet);
-        }
+        //    return Json(data, JsonRequestBehavior.AllowGet);
+        //}
 
-        [HttpPost]
-        public ActionResult RetractEvidenceByAccount(InformationEvidenceByAccountRetractEvidence evidenceRetract)
-        {
-            var data = _evidenceService.RetractEvidenceByAccount(evidenceRetract);
+        //[HttpPost]
+        //public ActionResult RetractEvidenceByAccount(InformationEvidenceByAccountRetractEvidence evidenceRetract)
+        //{
+        //    var data = _evidenceService.RetractEvidenceByAccount(evidenceRetract);
 
-            return Json(data, JsonRequestBehavior.AllowGet);
-        }
+        //    return Json(data, JsonRequestBehavior.AllowGet);
+        //}
 
-        #endregion
+        //#endregion
 
-        #region Chain To Evidence
-        [HttpPost]
-        public ActionResult GetChainsToEvidence(ChainsToEvidenceFilter filter)
-        {
-            filter.UserId = CurrentSession.UserId;
+        //#region Chain To Evidence
+        //[HttpPost]
+        //public ActionResult GetChainsToEvidence(ChainsToEvidenceFilter filter)
+        //{
+        //    filter.UserId = CurrentSession.UserId;
 
-            filter.IsMasterSubscriberAssignment = PermissionService.IsMasterSubscriberAssignment();
+        //    filter.IsMasterSubscriberAssignment = PermissionService.IsMasterSubscriberAssignment();
 
-            var data = _evidenceService.GetChainsToEvidence(filter);
+        //    var data = _evidenceService.GetChainsToEvidence(filter);
 
-            return PartialView("DetailInfoAccount/ChainsToEvidence", data);
-        }
+        //    return PartialView("DetailInfoAccount/ChainsToEvidence", data);
+        //}
 
-        [HttpPost]
-        public ActionResult AddExceptionEvidence(ExceptionEvidenceAdd exceptionEvidenceAdd)
-        {
-            exceptionEvidenceAdd.UserId = CurrentSession.UserId;
+        //[HttpPost]
+        //public ActionResult AddExceptionEvidence(ExceptionEvidenceAdd exceptionEvidenceAdd)
+        //{
+        //    exceptionEvidenceAdd.UserId = CurrentSession.UserId;
 
-            var data = _evidenceService.AddExceptionEvidence(exceptionEvidenceAdd);
+        //    var data = _evidenceService.AddExceptionEvidence(exceptionEvidenceAdd);
 
-            return Json(data, JsonRequestBehavior.AllowGet);
-        }
+        //    return Json(data, JsonRequestBehavior.AllowGet);
+        //}
 
-        #endregion
+        //#endregion
 
-        #region Retract And Exception
-        [HttpPost]
-        public ActionResult GetRetractAndException(RetractedAndExceptionEvidenceFilter filter)
-        {
-            filter.UserId = CurrentSession.UserId;
+        //#region Retract And Exception
+        //[HttpPost]
+        //public ActionResult GetRetractAndException(RetractedAndExceptionEvidenceFilter filter)
+        //{
+        //    filter.UserId = CurrentSession.UserId;
 
-            filter.IsMasterSubscriberAssignment = PermissionService.IsMasterSubscriberAssignment();
+        //    filter.IsMasterSubscriberAssignment = PermissionService.IsMasterSubscriberAssignment();
 
-            var data = _evidenceService.GetRetractedAndExceptionEvidence(filter);
+        //    var data = _evidenceService.GetRetractedAndExceptionEvidence(filter);
 
-            return PartialView("DetailInfoAccount/RetractAndException", data);
-        }
+        //    return PartialView("DetailInfoAccount/RetractAndException", data);
+        //}
 
-        #endregion
+        //#endregion
 
-        #region Associated Account By Account
-        [HttpPost]
-        public ActionResult GetAssociatedAccountByAccount()
-        {
-            ViewBag.AccountStatusList = GetAccountStatusList();
+        //#region Associated Account By Account
+        //[HttpPost]
+        //public ActionResult GetAssociatedAccountByAccount()
+        //{
+        //    ViewBag.AccountStatusList = GetAccountStatusList();
 
-            return PartialView("Associated/AccountByAccount");
-        }
+        //    return PartialView("Associated/AccountByAccount");
+        //}
 
-        [HttpPost]
-        public ActionResult GetAssociatedAccountByAccountFilter(AssociatedAccountByAccountFilter filter)
-        {
-            var msgError = string.Empty;
+        //[HttpPost]
+        //public ActionResult GetAssociatedAccountByAccountFilter(AssociatedAccountByAccountFilter filter)
+        //{
+        //    var msgError = string.Empty;
 
-            filter.userId = CurrentSession.UserId;
+        //    filter.userId = CurrentSession.UserId;
 
-            filter.isMasterSubscriberAssignment = PermissionService.IsMasterSubscriberAssignment();
+        //    filter.isMasterSubscriberAssignment = PermissionService.IsMasterSubscriberAssignment();
 
-            var data = _accountService.GetAssociatedAccountByAccounts(filter, out msgError);
+        //    var data = _accountService.GetAssociatedAccountByAccounts(filter, out msgError);
 
-            if (!string.IsNullOrEmpty(msgError))
-            {
-                return ResponseError(msgError);
-            }
+        //    if (!string.IsNullOrEmpty(msgError))
+        //    {
+        //        return ResponseError(msgError);
+        //    }
 
-            return Json(data, JsonRequestBehavior.AllowGet);
-        }
+        //    return Json(data, JsonRequestBehavior.AllowGet);
+        //}
 
-        [HttpPost]
-        public ActionResult GetShortestPath(int startCustId, int endCustId)
-        {
-            var data = _accountService.GetShortestPath(startCustId, endCustId);
-            return Json(data, JsonRequestBehavior.AllowGet);
-        }
+        //[HttpPost]
+        //public ActionResult GetShortestPath(int startCustId, int endCustId)
+        //{
+        //    var data = _accountService.GetShortestPath(startCustId, endCustId);
+        //    return Json(data, JsonRequestBehavior.AllowGet);
+        //}
 
-        private ActionResult ResponseError(string msgError)
-        {
-            Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            var errors = new List<string>();
-            errors.Add(msgError);
+        //private ActionResult ResponseError(string msgError)
+        //{
+        //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+        //    var errors = new List<string>();
+        //    errors.Add(msgError);
 
-            return Json(errors, JsonRequestBehavior.AllowGet);
-        }
+        //    return Json(errors, JsonRequestBehavior.AllowGet);
+        //}
 
-        private static Dictionary<AccountStatus, string> GetAccountStatusList()
-        {
-            var listStatus = new Dictionary<AccountStatus, string>();
-            listStatus.Add(AccountStatus.Open, ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_OPEN));
-            listStatus.Add(AccountStatus.Suspended, ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_SUSPENDED));
-            listStatus.Add(AccountStatus.Closed, ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_CLOSED));
+        //private static Dictionary<AccountStatus, string> GetAccountStatusList()
+        //{
+        //    var listStatus = new Dictionary<AccountStatus, string>();
+        //    listStatus.Add(AccountStatus.Open, ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_OPEN));
+        //    listStatus.Add(AccountStatus.Suspended, ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_SUSPENDED));
+        //    listStatus.Add(AccountStatus.Closed, ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_CLOSED));
 
-            if (PermissionService.IsPermissionCN88())
-            {
-                listStatus.Add(AccountStatus.CN88_Active, ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_CN88_NAME_ACTIVE));
-                listStatus.Add(AccountStatus.CN88_ViewOnly, ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_CN88_NAME_VIEW_ONLY));
-                listStatus.Add(AccountStatus.CN88_Suspended, ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_CN88_NAME_SUSPENDED));
-                listStatus.Add(AccountStatus.CN88_Inactive, ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_CN88_NAME_INACTIVE));
-            }
+        //    if (PermissionService.IsPermissionCN88())
+        //    {
+        //        listStatus.Add(AccountStatus.CN88_Active, ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_CN88_NAME_ACTIVE));
+        //        listStatus.Add(AccountStatus.CN88_ViewOnly, ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_CN88_NAME_VIEW_ONLY));
+        //        listStatus.Add(AccountStatus.CN88_Suspended, ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_CN88_NAME_SUSPENDED));
+        //        listStatus.Add(AccountStatus.CN88_Inactive, ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_CN88_NAME_INACTIVE));
+        //    }
 
-            listStatus.Add(AccountStatus.NotYetDeposit, ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_NOTYETDEPOSIT));
+        //    listStatus.Add(AccountStatus.NotYetDeposit, ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_NOTYETDEPOSIT));
 
-            return listStatus;
-        }
+        //    return listStatus;
+        //}
 
-        #endregion
+        //#endregion
 
-        #region Associated Device By Account
-        [HttpPost]
-        public ActionResult GetAssociatedDeviceByAccount()
-        {
-            return PartialView("Associated/DeviceByAccount");
-        }
+        //#region Associated Device By Account
+        //[HttpPost]
+        //public ActionResult GetAssociatedDeviceByAccount()
+        //{
+        //    return PartialView("Associated/DeviceByAccount");
+        //}
 
-        [HttpPost]
-        public ActionResult GetAssociatedDeviceByAccountFilter(AssociatedDeviceByAccountFilter filter)
-        {
-            var data = _accountService.GetAssociatedDevicesByAccount(filter);
+        //[HttpPost]
+        //public ActionResult GetAssociatedDeviceByAccountFilter(AssociatedDeviceByAccountFilter filter)
+        //{
+        //    var data = _accountService.GetAssociatedDevicesByAccount(filter);
 
-            return Json(data, JsonRequestBehavior.AllowGet);
-        }
+        //    return Json(data, JsonRequestBehavior.AllowGet);
+        //}
 
-        public ActionResult GetEvidencesByAccount(int accountId)
-        {
-            var data = _evidenceService.GetEvidencesByAccount(accountId);
+        //public ActionResult GetEvidencesByAccount(int accountId)
+        //{
+        //    var data = _evidenceService.GetEvidencesByAccount(accountId);
 
-            return Json(data, JsonRequestBehavior.AllowGet);
-        }
+        //    return Json(data, JsonRequestBehavior.AllowGet);
+        //}
 
-        #endregion
+        //#endregion
 
-        #region Transaction History
-        [HttpPost]
-        [NapAuth(FunctionKey = FSFunctionKeys.TransactionHistory, Policy = NAP.Core.Business.Constant.Policy.Read)]
-        public ActionResult GetTransactionHistory(int accountId)
-        {
-            return PartialView("TransactionHistory/TransactionHistory");
-        }
+        //#region Transaction History
+        //[HttpPost]
+        //[NapAuth(FunctionKey = FSFunctionKeys.TransactionHistory, Policy = NAP.Core.Business.Constant.Policy.Read)]
+        //public ActionResult GetTransactionHistory(int accountId)
+        //{
+        //    return PartialView("TransactionHistory/TransactionHistory");
+        //}
 
-        [HttpPost]
-        [NapAuth(FunctionKey = FSFunctionKeys.TransactionHistory, Policy = NAP.Core.Business.Constant.Policy.Read)]
-        public ActionResult GetTransactionHistoryFilter(TransactionHistoryFilter filter)
-        {
-            var data = _transactionService.GetTransactionHistory(filter);
+        //[HttpPost]
+        //[NapAuth(FunctionKey = FSFunctionKeys.TransactionHistory, Policy = NAP.Core.Business.Constant.Policy.Read)]
+        //public ActionResult GetTransactionHistoryFilter(TransactionHistoryFilter filter)
+        //{
+        //    var data = _transactionService.GetTransactionHistory(filter);
 
-            return Json(data, JsonRequestBehavior.AllowGet);
-        }
+        //    return Json(data, JsonRequestBehavior.AllowGet);
+        //}
 
-        [HttpPost]
-        public ActionResult GetIPInformation(string ip)
-        {
-            var data = _transactionService.GetIPInformation(ip);
+        //[HttpPost]
+        //public ActionResult GetIPInformation(string ip)
+        //{
+        //    var data = _transactionService.GetIPInformation(ip);
 
-            return PartialView("TransactionHistory/IPInformation", data);
-        }
-        #endregion
+        //    return PartialView("TransactionHistory/IPInformation", data);
+        //}
+        //#endregion
     }
 }

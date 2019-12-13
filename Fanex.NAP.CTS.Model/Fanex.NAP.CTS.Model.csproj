@@ -135,6 +135,7 @@
   <ItemGroup>
     <Compile Include="Account\AccountGeneralInformation.cs" />
     <Compile Include="Account\CustomerByGraphDB.cs" />
+    <Compile Include="Account\CustomerGeneralStatusModel.cs" />
     <Compile Include="Account\Evidence\AccountEvidence.cs" />
     <Compile Include="Account\Evidence\AccountExceptionEvidence.cs" />
     <Compile Include="Action.cs" />
@@ -168,7 +169,6 @@
     <Compile Include="FraudCase\ScannedOfficeIP\OfficeIp.cs" />
     <Compile Include="FraudCase\ScannedOfficeIP\OfficeIPInternalAccount.cs" />
     <Compile Include="Home\SearchResultModel.cs" />
-    <Compile Include="Home\SearchResultViewModel.cs" />
     <Compile Include="IP\IpModel.cs" />
     <Compile Include="MatchMonitor\BalanceUpDate.cs" />
     <Compile Include="MatchMonitor\FraudCase.cs" />

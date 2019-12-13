@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Account\Associated\GetAssociatedAccountByAccountCriteria.cs" />
     <Compile Include="Account\Associated\GetCustomerFraudInfoCriteria.cs" />
+    <Compile Include="Account\CustomerGeneralStatusCriteria.cs" />
     <Compile Include="Account\Evidence\GetAccountEvidenceCriteria.cs" />
     <Compile Include="Account\Evidence\GetExceptionAccountEvidenceCriteria.cs" />
     <Compile Include="Account\Evidence\InsertExceptionEvidenceCriteria.cs" />

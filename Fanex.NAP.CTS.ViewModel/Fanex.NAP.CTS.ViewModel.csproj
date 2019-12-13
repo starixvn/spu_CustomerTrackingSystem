@@ -49,6 +49,7 @@
     <Compile Include="Account\Associated\AssociatedDeviceByAccountFilter.cs" />
     <Compile Include="Account\CustomerFraud.cs" />
     <Compile Include="Account\CustomerFraudSuspicious.cs" />
+    <Compile Include="Account\CustomerGeneralStatusViewModel.cs" />
     <Compile Include="Account\CustomerSuspicious.cs" />
     <Compile Include="Account\Evidence\ChainNode.cs" />
     <Compile Include="Account\Evidence\ChainsToEvidence.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="FraudCase\DelayedGoal\Customer.cs" />
     <Compile Include="FraudCase\FraudCaseViewModel.cs" />
     <Compile Include="History.cs" />
+    <Compile Include="Home\SearchResultViewModel.cs" />
     <Compile Include="MatchMonitor\Event.cs" />
     <Compile Include="MatchMonitor\FraudCase.cs" />
     <Compile Include="MatchMonitor\FraudCaseDetails\ArbitrageGroupTicketList.cs" />

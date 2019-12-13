@@ -27,144 +27,144 @@
             _runner = new AccountController();
         }
 
-        #region General information
-        [Fact]
-        public void Can_GetGeneralInformation()
-        {
-            // Arrange
-            FakeHttpContext.SetCurrentContext();
-            FakeHttpContext.SetFakeSession();
-            _runner.CurrentSession = FakeSession.CurrentSession;
+        //#region General information
+        //[Fact]
+        //public void Can_GetGeneralInformation()
+        //{
+        //    // Arrange
+        //    FakeHttpContext.SetCurrentContext();
+        //    FakeHttpContext.SetFakeSession();
+        //    _runner.CurrentSession = FakeSession.CurrentSession;
 
-            // Act
-            var actualResult = _runner.GetGeneralInformation(ExpectedFilter.ExpectedGeneralInformationFilter) as JsonResult;
+        //    // Act
+        //    var actualResult = _runner.GetGeneralInformation(ExpectedFilter.ExpectedGeneralInformationFilter) as JsonResult;
 
-            // Assert
-            Assert.IsType<AccountDetail>(actualResult.Data);
-        }
+        //    // Assert
+        //    Assert.IsType<AccountDetail>(actualResult.Data);
+        //}
 
-        [Fact]
-        public void Can_GetAllEvidences()
-        {
-            // Act
-            var actualResult = _runner.GetAllEvidences() as JsonResult;
+        //[Fact]
+        //public void Can_GetAllEvidences()
+        //{
+        //    // Act
+        //    var actualResult = _runner.GetAllEvidences() as JsonResult;
 
-            // Assert
-            Assert.IsType<List<Evidence>>(actualResult.Data);
-        }
+        //    // Assert
+        //    Assert.IsType<List<Evidence>>(actualResult.Data);
+        //}
 
-        #endregion
+        //#endregion
 
-        #region Chain to evidence
-        [Theory]
-        [InlineData("DetailInfoAccount/ChainsToEvidence")]
-        public void Can_GetChainsToEvidence(string partialViewName)
-        {
-            // Arrange
-            FakeHttpContext.SetCurrentContext();
-            FakeHttpContext.SetFakeSession();
-            _runner.CurrentSession = FakeSession.CurrentSession;
+        //#region Chain to evidence
+        //[Theory]
+        //[InlineData("DetailInfoAccount/ChainsToEvidence")]
+        //public void Can_GetChainsToEvidence(string partialViewName)
+        //{
+        //    // Arrange
+        //    FakeHttpContext.SetCurrentContext();
+        //    FakeHttpContext.SetFakeSession();
+        //    _runner.CurrentSession = FakeSession.CurrentSession;
 
-            // Act
-            var actualResult = _runner.GetChainsToEvidence(ExpectedFilter.ExpectedChainsToEvidenceFilter) as PartialViewResult;
+        //    // Act
+        //    var actualResult = _runner.GetChainsToEvidence(ExpectedFilter.ExpectedChainsToEvidenceFilter) as PartialViewResult;
 
-            // Assert
-            Assert.Equal(partialViewName, actualResult.ViewName);
-            Assert.IsType<ChainsToEvidence>(actualResult.Model);
-        }
+        //    // Assert
+        //    Assert.Equal(partialViewName, actualResult.ViewName);
+        //    Assert.IsType<ChainsToEvidence>(actualResult.Model);
+        //}
 
-        [Fact]
-        public void Can_AddExceptionEvidence()
-        {
-            // Arrange
-            _runner.CurrentSession = FakeSession.CurrentSession;
+        //[Fact]
+        //public void Can_AddExceptionEvidence()
+        //{
+        //    // Arrange
+        //    _runner.CurrentSession = FakeSession.CurrentSession;
 
-            // Act
-            var actualResult = _runner.AddExceptionEvidence(ExpectedUpdate.ExpectedExceptionEvidenceAdd) as JsonResult;
-            var actualDBResult = actualResult.Data as DBResult;
+        //    // Act
+        //    var actualResult = _runner.AddExceptionEvidence(ExpectedUpdate.ExpectedExceptionEvidenceAdd) as JsonResult;
+        //    var actualDBResult = actualResult.Data as DBResult;
 
-            // Assert
-            Assert.True(actualDBResult.ErrorCode == 0);
-        }
-        #endregion
+        //    // Assert
+        //    Assert.True(actualDBResult.ErrorCode == 0);
+        //}
+        //#endregion
 
-        #region Retract and exception
-        [Theory]
-        [InlineData("DetailInfoAccount/RetractAndException")]
-        public void Can_GetRetractAndException(string partialViewName)
-        {
-            // Arrange
-            FakeHttpContext.SetCurrentContext();
-            FakeHttpContext.SetFakeSession();
-            _runner.CurrentSession = FakeSession.CurrentSession;
+        //#region Retract and exception
+        //[Theory]
+        //[InlineData("DetailInfoAccount/RetractAndException")]
+        //public void Can_GetRetractAndException(string partialViewName)
+        //{
+        //    // Arrange
+        //    FakeHttpContext.SetCurrentContext();
+        //    FakeHttpContext.SetFakeSession();
+        //    _runner.CurrentSession = FakeSession.CurrentSession;
 
-            // Act
-            var actualResult = _runner.GetRetractAndException(ExpectedFilter.ExpectedRetractedAndExceptionEvidenceFilter) as PartialViewResult;
+        //    // Act
+        //    var actualResult = _runner.GetRetractAndException(ExpectedFilter.ExpectedRetractedAndExceptionEvidenceFilter) as PartialViewResult;
 
-            // Assert
-            Assert.Equal(partialViewName, actualResult.ViewName);
-            Assert.IsType<RetractedAndExceptionEvidence>(actualResult.Model);
-        }
-        #endregion
+        //    // Assert
+        //    Assert.Equal(partialViewName, actualResult.ViewName);
+        //    Assert.IsType<RetractedAndExceptionEvidence>(actualResult.Model);
+        //}
+        //#endregion
 
-        #region Associated account by account
+        //#region Associated account by account
 
-        [Theory]
-        [InlineData("Associated/AccountByAccount")]
-        public void Can_GetAssociatedAccountByAccount(string partialViewName)
-        {
-            // Act
-            var actualResult = _runner.GetAssociatedAccountByAccount() as PartialViewResult;
+        //[Theory]
+        //[InlineData("Associated/AccountByAccount")]
+        //public void Can_GetAssociatedAccountByAccount(string partialViewName)
+        //{
+        //    // Act
+        //    var actualResult = _runner.GetAssociatedAccountByAccount() as PartialViewResult;
 
-            // Assert
-            Assert.Equal(partialViewName, actualResult.ViewName);
-        }
+        //    // Assert
+        //    Assert.Equal(partialViewName, actualResult.ViewName);
+        //}
 
-        [Fact]
-        public void Can_GetAssociatedAccountByAccountFilter()
-        {
-            // Act
-            var actualResult = _runner.GetAssociatedAccountByAccountFilter(ExpectedFilter.ExpectedAssociatedAccountByAccountFilter) as JsonResult;
+        //[Fact]
+        //public void Can_GetAssociatedAccountByAccountFilter()
+        //{
+        //    // Act
+        //    var actualResult = _runner.GetAssociatedAccountByAccountFilter(ExpectedFilter.ExpectedAssociatedAccountByAccountFilter) as JsonResult;
 
-            // Assert
-            Assert.IsType<List<AssociatedAccountByAccount>>(actualResult.Data);
-        }
+        //    // Assert
+        //    Assert.IsType<List<AssociatedAccountByAccount>>(actualResult.Data);
+        //}
 
-        #endregion
+        //#endregion
 
-        #region Transaction history
-        [Theory]
-        [InlineData(12345)]
-        public void Can_GetTransactionHistory(int accountId)
-        {
-            // Act
-            var actualResult = _runner.GetTransactionHistory(accountId) as PartialViewResult;
+        //#region Transaction history
+        //[Theory]
+        //[InlineData(12345)]
+        //public void Can_GetTransactionHistory(int accountId)
+        //{
+        //    // Act
+        //    var actualResult = _runner.GetTransactionHistory(accountId) as PartialViewResult;
 
-            // Assert
-            Assert.Equal(ExpectedTransactionHistoryViewName, actualResult.ViewName);
-        }
+        //    // Assert
+        //    Assert.Equal(ExpectedTransactionHistoryViewName, actualResult.ViewName);
+        //}
 
-        [Fact]
-        public void Can_GetTransactionHistoryFilter()
-        {
-            // Act
-            var actualResult = _runner.GetTransactionHistoryFilter(ExpectedFilter.ExpectedTransactionHistoryFilter) as JsonResult;
+        //[Fact]
+        //public void Can_GetTransactionHistoryFilter()
+        //{
+        //    // Act
+        //    var actualResult = _runner.GetTransactionHistoryFilter(ExpectedFilter.ExpectedTransactionHistoryFilter) as JsonResult;
 
-            // Assert
-            Assert.IsType<List<Transaction>>(actualResult.Data);
-        }
+        //    // Assert
+        //    Assert.IsType<List<Transaction>>(actualResult.Data);
+        //}
 
-        [Theory]
-        [InlineData("20.0.255.255")]
-        public void Can_GetIPInformation(string ipAddress)
-        {
-            // Act
-            var actualResult = _runner.GetIPInformation(ipAddress) as PartialViewResult;
+        //[Theory]
+        //[InlineData("20.0.255.255")]
+        //public void Can_GetIPInformation(string ipAddress)
+        //{
+        //    // Act
+        //    var actualResult = _runner.GetIPInformation(ipAddress) as PartialViewResult;
 
-            // Assert
-            Assert.IsType<IPInformation>(actualResult.Model);
-        }
+        //    // Assert
+        //    Assert.IsType<IPInformation>(actualResult.Model);
+        //}
 
-        #endregion
+        //#endregion
     }
 }

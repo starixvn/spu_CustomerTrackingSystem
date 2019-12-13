@@ -1,12 +1,9 @@
-﻿using System;
+﻿using Fanex.NAP.CTS.Model.Home;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Fanex.NAP.CTS.Model.Home
+namespace Fanex.NAP.CTS.ViewModel.Home
 {
-   public class SearchResultViewModel
+    public class SearchResultViewModel
     {
         public List<SearchResultModel> SearchResults { get; set; }
 

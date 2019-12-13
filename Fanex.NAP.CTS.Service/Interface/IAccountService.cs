@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
+    using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.Home;
     using Fanex.NAP.CTS.Model.Subscriber;
     using Fanex.NAP.CTS.ViewModel.Account;
@@ -27,5 +28,7 @@
         IEnumerable<AssociatedDeviceByAccount> GetAssociatedDevicesByAccount(AssociatedDeviceByAccountFilter filter);
 
         List<SearchResultModel> SearchAccounts(string username);
+
+        CustomerGeneralStatusModel GetCustomerGeneralStatus(int custId);
     }
 }

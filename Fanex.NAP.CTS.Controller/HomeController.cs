@@ -4,6 +4,7 @@
     using Fanex.NAP.CTS.Model.Home;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
+    using Fanex.NAP.CTS.ViewModel.Home;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;

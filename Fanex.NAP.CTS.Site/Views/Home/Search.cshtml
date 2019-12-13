@@ -5,7 +5,7 @@
     var username2 = string.Empty;
 
 }
-@model Fanex.NAP.CTS.Model.Home.SearchResultViewModel
+@model Fanex.NAP.CTS.ViewModel.Home.SearchResultViewModel
 
 @Styles.Render("~/Content/styles/dashboard")
 
@@ -33,7 +33,7 @@
                     username2 = data.Username2 != "NULL" ? "(" + data.Username2 + ")" : string.Empty;
 
                     <li class="result-item">
-                        <a class="result-name" href="~/Account/Index?custid=@data.CTSCustId">@data.Username <span>@username2</span></a>
+                        <a class="result-name" href="~/Account/Index?custid=@data.CustId">@data.Username <span>@username2</span></a>
                         <p>
                             <span>Currency: @data.Currency.Name</span>
                             <span>Level: @data.Role.Name</span>

@@ -565,6 +565,8 @@
             return lstAssociated;
         }
 
+
+        //CTS new Implement
         public List<SearchResultModel> SearchAccounts(string username)
         {
             var criteria = new SearchResultCriteria
@@ -584,6 +586,21 @@
                 },
                 "CurrencyId, RoleId, SubscriberId",
                 criteria).ToList();
+
+                return result;
+            }
+        }
+
+        public CustomerGeneralStatusModel GetCustomerGeneralStatus(int custId)
+        {
+            var criteria = new CustomerGeneralStatusCriteria
+            {
+                CustId = custId
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                var result = db.QueryEntity<CustomerGeneralStatusModel>(criteria);                
 
                 return result;
             }

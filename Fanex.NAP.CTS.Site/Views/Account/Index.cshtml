@@ -1,19 +1,18 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "AccountDetail";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section styles{
     <link href="~/Content/scss/pages/account/account.css" rel="stylesheet" />
 }
-
+@model Fanex.NAP.CTS.ViewModel.Account.CustomerGeneralStatusViewModel
 <h2 class="page-title">Home</h2>
 
 <div class="content-card">
     <div class="status-info">
         <p>
             <strong>Member:</strong>
-            <span class="username">Johnwick</span>
+            <span class="username">@Model.UserName</span>
 
             <span class="icon icon-Robot-User"></span>
             <span class="icon icon-Bet-Restricted-Currency"></span>
@@ -22,7 +21,7 @@
         </p>
         <p>
             <strong>Account Status: </strong>
-            <span class="badge-label status-active">Active</span>
+            <span class="badge-label status-active">@Model.AcountStatus</span>
         </p>
     </div>
 

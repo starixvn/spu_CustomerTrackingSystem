@@ -7,6 +7,8 @@ namespace Fanex.NAP.CTS.Model.Home
     {
         public int CTSCustId { get; set; }
 
+        public int CustId { get; set; }
+
         public string Username { get; set; }
 
         public string Username2 { get; set; }
