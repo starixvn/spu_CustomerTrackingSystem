@@ -1,6 +1,6 @@
-﻿$abnormalBackgroundColor: ( level-1: #ffc0cb, level-2: #ffff00, level-3: #ffa500, level-4: #008000, level-5: #ff0000, level-6: #800080, level-7: #a52a2a, level-8: #808080, level-9: #00ff00, level-10: #00ffff);
+﻿$abnormalBackgroundColor: ( level-0: #fff, level-1: #ffc0cb, level-2: #ffff00, level-3: #ffa500, level-4: #008000, level-5: #ff0000, level-6: #800080, level-7: #a52a2a, level-8: #808080, level-9: #00ff00, level-10: #00ffff);
 $dangerousBackgroundColor: ( level-11: #ff0000, level-12: #ffff00, level-13: #8db4e2, level-14: #9cf1fc, level-15: #ccc0da, level-16: #cc6600, level-17: #ffa500, level-18: #d8e4bc, level-19: #c4bd97, level-20: #ff66cc, level-21: #ff66cc);
-$dangerousColor: ( level-1: #000, level-2: #ff0000, level-3: #ffcc00, level-4: #0000ff, level-5: #ff8080, level-6: #bb00c1, level-7: #660000, level-8: #ff6600, level-9: #708090, level-10: #339952);
+$dangerousColor: ( level-0: #000, level-1: #000, level-2: #ff0000, level-3: #ffcc00, level-4: #0000ff, level-5: #ff8080, level-6: #bb00c1, level-7: #660000, level-8: #ff6600, level-9: #708090, level-10: #339952);
 
 @mixin badge-label($color) {
     width: 6rem;
@@ -32,6 +32,10 @@ $dangerousColor: ( level-1: #000, level-2: #ff0000, level-3: #ffcc00, level-4: #
         color: $color;
         font-weight: 600;
     }
+}
+
+.abnormal-level-0 {
+    border: 1px solid #000;
 }
 
 .content {
