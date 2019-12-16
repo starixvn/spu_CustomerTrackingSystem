@@ -157,13 +157,11 @@
         //#endregion
 
         //#region Associated Account By Account
-        //[HttpPost]
-        //public ActionResult GetAssociatedAccountByAccount()
-        //{
-        //    ViewBag.AccountStatusList = GetAccountStatusList();
-
-        //    return PartialView("Associated/AccountByAccount");
-        //}
+        [HttpPost]
+        public ActionResult GetAssociatedAccountByAccount()
+        {
+            return PartialView("Associated/AccountByAccount");
+        }
 
         //[HttpPost]
         //public ActionResult GetAssociatedAccountByAccountFilter(AssociatedAccountByAccountFilter filter)

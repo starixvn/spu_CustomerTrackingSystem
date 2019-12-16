@@ -157,8 +157,11 @@
 
         private static void RegisterAssociatedAccountBundles(BundleCollection bundles)
         {
-            bundles.Add(new ScriptBundle("~/account/associated-scripts").Include("~/Scripts/Account/Associated/*.js"));
-            bundles.Add(new ScriptBundle("~/account-scripts").Include("~/scripts/Account/*.js"));
+            //bundles.Add(new ScriptBundle("~/account/associated-scripts").Include("~/Scripts/Account/Associated/*.js"));
+            //bundles.Add(new ScriptBundle("~/account-scripts").Include("~/scripts/Account/*.js"));
+
+            bundles.Add(new ScriptBundle("~/account-scripts").Include("~/scripts/Account/Index.js"));
+
         }
 
         private static void RegisterGraphVisualizeBundles(BundleCollection bundles)

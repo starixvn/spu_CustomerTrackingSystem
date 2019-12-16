@@ -123,7 +123,7 @@
                     <div>
                         <a href="#" class="link">BNG</a>,
                         <a href="#" class="link">Check Bet</a>,
-                        <a href="#" class="link">Bets Near Goal</a>, 
+                        <a href="#" class="link">Bets Near Goal</a>,
                         @*<a href="#" class="link">Flagged Account Delay Goal</a>*@
                     </div>
                 </div>
@@ -139,7 +139,7 @@
             Account Detail
         </p>
     </div>
-    <div id="associated_report" class="ui-accordion ui-widget ui-helper-reset ui-accordion-icons">        
+    <div id="associated_report" class="ui-accordion ui-widget ui-helper-reset ui-accordion-icons">
         <div class="report-item">
             <h3 class="head ui-accordion-header ui-helper-reset ui-state-default ui-corner-all" ref="associated_account">
                 <span class="ui-icon ui-icon-triangle-1-e"></span>
@@ -148,8 +148,12 @@
                 </a>
             </h3>
             <div id="associated_account" class="report-cont" hidden>
-                <img src="@Url.Content("~/Content/images/ajax-loader.gif")" alt="Loading ..." />
             </div>
-        </div>       
+        </div>
     </div>
 </div>
+@section scripts{   
+    <script src="~/Scripts/MultipleSelect/jquery.multiselect.filter.js"></script>
+    <script src="~/Scripts/MultipleSelect/jquery.multiselect.js"></script>
+    @Scripts.Render("~/account-scripts")
+}
