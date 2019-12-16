@@ -4,6 +4,7 @@
 }
 @section styles{
     <link href="~/Content/scss/pages/account/account.css" rel="stylesheet" />
+
 }
 @model Fanex.NAP.CTS.ViewModel.Account.CustomerGeneralStatusViewModel
 <h2 class="page-title">Home</h2>
@@ -128,5 +129,27 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
+<div class="content-card">
+    <div class="status">
+        <p class="info" style="margin-bottom: 0">
+            <span class="expand-all" title="Expand All"></span>
+            <span class="collapse-all" title="Collapse All"></span>
+            Account Detail
+        </p>
+    </div>
+    <div id="associated_report" class="ui-accordion ui-widget ui-helper-reset ui-accordion-icons">        
+        <div class="report-item">
+            <h3 class="head ui-accordion-header ui-helper-reset ui-state-default ui-corner-all" ref="associated_account">
+                <span class="ui-icon ui-icon-triangle-1-e"></span>
+                <a href="#">
+                    Associated Accounts
+                </a>
+            </h3>
+            <div id="associated_account" class="report-cont" hidden>
+                <img src="@Url.Content("~/Content/images/ajax-loader.gif")" alt="Loading ..." />
+            </div>
+        </div>       
     </div>
 </div>
