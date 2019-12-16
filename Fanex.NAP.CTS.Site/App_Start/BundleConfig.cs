@@ -49,7 +49,7 @@
             RegisterCustomerMonitorBundles(bundles);
             RegisterSubscriberAssignment(bundles);
             RegisterSearchBundles(bundles);
-            RegisterAssociatedAccountBundles(bundles);
+            RegisterAccountDetailBundles(bundles);
             RegisterEvidenceBundles(bundles);
             RegisterTransactionHistoryBundles(bundles);
             RegisterGraphVisualizeBundles(bundles);           
@@ -155,13 +155,9 @@
             bundles.Add(new ScriptBundle("~/search-account-scripts").Include("~/Scripts/Search/Account/*.js"));
         }
 
-        private static void RegisterAssociatedAccountBundles(BundleCollection bundles)
+        private static void RegisterAccountDetailBundles(BundleCollection bundles)
         {
-            //bundles.Add(new ScriptBundle("~/account/associated-scripts").Include("~/Scripts/Account/Associated/*.js"));
-            //bundles.Add(new ScriptBundle("~/account-scripts").Include("~/scripts/Account/*.js"));
-
-            bundles.Add(new ScriptBundle("~/account-scripts").Include("~/scripts/Account/Index.js"));
-
+            bundles.Add(new ScriptBundle("~/account-detail-scripts").Include("~/scripts/Account/Index.js"));
         }
 
         private static void RegisterGraphVisualizeBundles(BundleCollection bundles)
