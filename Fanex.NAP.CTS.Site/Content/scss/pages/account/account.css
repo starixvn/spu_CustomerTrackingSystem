@@ -476,8 +476,10 @@
     margin-bottom: 5px; }
   .report-item.expanded .report-header {
     background: #396EF8; }
-    .report-item.expanded .report-header a {
+    .report-item.expanded .report-header a, .report-item.expanded .report-header .icon-chevron-right {
       color: #fff; }
+    .report-item.expanded .report-header .icon-chevron-right {
+      transform: rotate(90deg); }
 
 .report-cont {
   padding: 12px; }

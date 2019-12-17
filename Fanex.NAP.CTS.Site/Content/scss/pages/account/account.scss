@@ -299,9 +299,13 @@ $dangerousColor: ( level-0: #000, level-1: #000, level-2: #ff0000, level-3: #ffc
     &.expanded .report-header {
         background: #396EF8;
 
-        a {
+        a, .icon-chevron-right {
             color: #fff;
-        }        
+        }
+
+        .icon-chevron-right {
+            transform: rotate(90deg);
+        }
     }
 }
 
