@@ -14,27 +14,28 @@
     function CollapseExpand() {
         $("#account-detail-container .report-item h3").on('click', function ()
         {
-            CollapseAll();
+            RefreshCollapseExpand();
 
             var $this = $(this).next();
 
             if ($this.hasClass('hide')) {
                 $this.removeClass('hide');
-            }
-            else {
-                $this.addClass('hide');
-            }
+                $this.parent().addClass("expanded");
+            }            
         });
     }
 
-    function CollapseAll()
+    function RefreshCollapseExpand()
     {
         $("#account-detail-container .report-item .report-cont").addClass('hide');
+        $("#account-detail-container .report-item").removeClass('expanded');
     }
+
 
     function Initial() {
         CollapseExpand();
         LoadAssociationByAccount();
+        
     }
 
     $(document).ready(function () {
