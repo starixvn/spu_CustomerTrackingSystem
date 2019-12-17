@@ -9,15 +9,21 @@
 <div id="account-by-account">
     <div id="account-by-account-filter">
         <div class="filter">
-            <div class="form-control">
-                <label class="checkbox">
-                    <input type="checkbox" id="account-by-account-chk-device-away-1" checked />
+            <div class="form-control radio-button">
+                @*<label class="checkbox">
+                    <input type="radio" id="account-by-account-chk-device-away-1" checked />
                     <span>1 Device Away from </span><span class="account-by-account-username"></span>
                 </label>
                 <label class="checkbox">
-                    <input type="checkbox" id="account-by-account-chk-device-away-2" />
+                    <input type="radio" id="account-by-account-chk-device-away-2" />
                     <span>2 or more Device Away from </span><span class="account-by-account-username"></span>
-                </label>
+                </label>*@                
+                    
+                <input type="radio" id="radio03-01" name="demo03" checked />
+                <label for="radio03-01">Direct Association with Member01</label>
+
+                <input type="radio" id="radio03-02" name="demo03" />
+                <label for="radio03-02">Indirect Association with Member01</label>                
             </div>
             <div class="form-control">
                 <div class="control-label">Status</div>
@@ -45,7 +51,7 @@
         <img src="@Url.Content("~/Content/images/ajax-loader.gif")" alt="Loading ..." />
     </div>
     <div class="table-report" id="account-by-account-content">
-        <div class="search-box">
+        <div class="search-table">
             <span class="icon-magnify"></span>
             <input type="text" class="text" id="account-by-account-txt-search" placeholder="Search..." />
         </div>

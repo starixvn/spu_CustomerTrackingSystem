@@ -322,6 +322,66 @@
   font-family: 'Fraud-Sensor', sans-serif !important;
   content: "\e933"; }
 
+.filter {
+  padding: 0 16px 16px; }
+  .filter .control-label {
+    margin-bottom: 7px;
+    color: #474747; }
+  .filter .button {
+    margin-bottom: 0; }
+  .filter .button-search {
+    margin-top: 10px; }
+  .filter .form-control {
+    margin-right: 16px;
+    display: inline-block;
+    vertical-align: top; }
+  .filter .button-group {
+    margin-top: 9px; }
+  .filter .input-field {
+    width: 220px;
+    border-color: #e5e5e5; }
+
+.radio-button input[type="radio"] {
+  display: none; }
+
+.radio-button label {
+  position: relative;
+  display: block;
+  padding: 6px 3px 6px 25px;
+  cursor: pointer; }
+  .radio-button label:before, .radio-button label:after {
+    position: absolute;
+    content: '';
+    top: 50%;
+    border-radius: 100%;
+    -webkit-transition: all .2s;
+    transition: all .2s; }
+  .radio-button label:before {
+    left: 0;
+    width: 16px;
+    height: 16px;
+    margin-top: -8px;
+    background: #f3f3f3;
+    border: 1px solid #ccc; }
+  .radio-button label:after {
+    opacity: 0;
+    left: 4px;
+    width: 8px;
+    height: 8px;
+    margin-top: -4px;
+    background: #458A00;
+    -webkit-transform: scale(2);
+    transform: scale(2); }
+
+.radio-button input[type="radio"]:checked + label::before {
+  background: #fff;
+  border: 1px solid #458A00; }
+
+.radio-button input[type="radio"]:checked + label::after {
+  opacity: 1;
+  -webkit-transform: scale(1);
+  transform: scale(1); }
+
 .content-card {
   margin: 12px 16px;
   border: 1px solid #DFDFDF;
@@ -393,16 +453,30 @@
       color: #475A7C;
       font-weight: bold; }
 
+.report-content {
+  padding: 10px; }
+  .report-content .report-header {
+    padding: 9px 10px;
+    border-radius: 2px; }
+    .report-content .report-header .icon-chevron-right {
+      display: inline-block;
+      font-size: 18px;
+      vertical-align: middle; }
+    .report-content .report-header a {
+      display: inline-block;
+      vertical-align: middle;
+      font-size: 14px;
+      color: #475A7C; }
+
 .report-item {
   background: #fff;
-  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2); }
-  .report-item.expanded .ui-accordion-header {
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 2px; }
+  .report-item:not(:last-child) {
+    margin-bottom: 5px; }
+  .report-item.expanded .report-header {
     background: #396EF8; }
-    .report-item.expanded .ui-accordion-header a {
-      color: #fff; }
-    .report-item.expanded .ui-accordion-header .ui-icon {
-      margin-top: 0;
-      transform: rotate(90deg);
+    .report-item.expanded .report-header a {
       color: #fff; }
 
 .report-cont {
@@ -419,7 +493,7 @@
 .table-report {
   position: relative;
   margin-top: 12px; }
-  .table-report .search-box {
+  .table-report .search-table {
     position: absolute;
     right: 0;
     top: -40px;
@@ -427,10 +501,10 @@
     border: 1px solid #E5E5E5;
     border-radius: 3px;
     padding: 0 5px; }
-    .table-report .search-box input[type="text"] {
+    .table-report .search-table input[type="text"] {
       border: 1px solid transparent;
       font-family: inherit; }
-      .table-report .search-box input[type="text"]:focus {
+      .table-report .search-table input[type="text"]:focus {
         box-shadow: none; }
   .table-report [class^="icon"] {
     font-size: 15px;

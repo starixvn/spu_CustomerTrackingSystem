@@ -139,24 +139,20 @@
             Account Detail
         </p>
     </div>
-    <div id="account-detail-container" class="ui-accordion ui-widget ui-helper-reset ui-accordion-icons">
+    <div id="account-detail-container" class="report-content">
         <div class="report-item">
-            <h3 class="head ui-accordion-header ui-helper-reset ui-state-default ui-corner-all" ref="associated_account">
-                <span class="ui-icon ui-icon-triangle-1-e"></span>
-                <a href="#">
-                    Associated Accounts
-                </a>
+            <h3 class="report-header" ref="associated_account">    
+                <i class="icon-chevron-right"></i>
+                <a href="#">Associated Accounts</a>
             </h3>
             <div id="associated_account" class="report-cont hide">
                 <img src="@Url.Content("~/Content/images/ajax-loader.gif")" alt="Loading ..." />
             </div>
         </div>
         <div class="report-item">
-            <h3 class="head ui-accordion-header ui-helper-reset ui-state-default ui-corner-all" ref="chains_evidence">
-                <span class="ui-icon ui-icon-triangle-1-e"></span>
-                <a href="#">
-                    Chains To Evidence
-                </a>
+            <h3 class="report-header" ref="chains_evidence">
+                <i class="icon-chevron-right"></i>
+                <a href="#">Chains To Evidence</a>
             </h3>
             <div id="chains_evidence" class="report-cont hide">
                 <img src="@Url.Content("~/Content/images/ajax-loader.gif")" alt="Loading ..." />
