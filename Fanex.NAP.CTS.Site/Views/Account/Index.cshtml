@@ -4,7 +4,9 @@
 }
 @section styles{
     <link href="~/Content/scss/pages/account/account.css" rel="stylesheet" />
-
+    <link href="~/Content/scss/pages/evidence/evidence.css" rel="stylesheet" />
+    <link href="~/Content/scss/vendors/popoto/popoto.min.css" rel="stylesheet" />
+    <link href="~/Content/scss/vendors/popoto/vis/vis-network.min.css" rel="stylesheet" />
 }
 @model Fanex.NAP.CTS.ViewModel.Account.CustomerGeneralStatusViewModel
 <h2 class="page-title">Home</h2>
@@ -141,7 +143,7 @@
     </div>
     <div id="account-detail-container" class="report-content">
         <div class="report-item">
-            <h3 class="report-header" ref="associated_account">    
+            <h3 class="report-header" ref="associated_account">
                 <i class="icon-chevron-right"></i>
                 <a href="#">Associated Accounts</a>
             </h3>
@@ -161,8 +163,13 @@
     </div>
 
 </div>
-@section scripts{   
+@section scripts{
     <script src="~/Scripts/MultipleSelect/jquery.multiselect.filter.js"></script>
     <script src="~/Scripts/MultipleSelect/jquery.multiselect.js"></script>
-    @Scripts.Render("~/account-detail-scripts")
+    @*<script src="~/Scripts/Account/Associated/full-graph.js"></script>*@
+    <script src="~/Scripts/Account/Associated/short-graph.js"></script>
+    <script src="~/Scripts/Account/Associated/sample-data-graph.js"></script>
+    @Scripts.Render("~/account-detail-scripts"
+    , "~/graph-visualize-lib")
+
 }

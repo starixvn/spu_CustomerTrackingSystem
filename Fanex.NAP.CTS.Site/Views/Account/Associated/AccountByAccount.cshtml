@@ -3,8 +3,8 @@
     ViewBag.Title = "AccountAssociatedAccount";
 }
 
-@*@Html.Partial("./Associated/GraphVisualization")
-@Html.Partial("./Associated/ShortestPathVisual")*@
+@*@Html.Partial("./Associated/GraphVisualization")*@
+@Html.Partial("./Associated/ShortestPathVisual")
 
 <div id="account-by-account">
     <div id="account-by-account-filter">
@@ -80,3 +80,57 @@
         </table>
     </div>
 </div>
+
+<script type="text/javascript">   
+    function OpenGraphShortestPath() {
+        $('#shortest-path-render').dialog({
+            modal: true,
+            width: '1500px',
+            title: 'Shortest Path',
+            dialogClass: "modal-graph-render",
+            resizable: true,
+            draggable: true,
+            open: function () {
+                var shortestGraph = new short_graph();
+                shortestGraph.Register();
+                shortestGraph.OpenGraph();
+                //$.ajax({
+                //    type: "POST",
+                //    data: { startCustId: startCustId, endCustId: endCustId },
+                //    url: "GetShortestPath",
+                //    beforeSend: function () {
+                //        common.showLoading();
+                //    },
+                //    success: function () {
+                //        common.closeLoading();
+                //        var openGraph = new short_graph();
+                //    }
+                //});
+            },
+            close: function () { $(this).dialog('close'); }
+        })
+    }
+
+    function OpenGraphFullPath() {
+        $('#form-graph-render').dialog({
+            modal: true,
+            width: '1500px',
+            title: 'Graph visualization',
+            dialogClass: "modal-graph-render",
+            resizable: true,
+            draggable: true,
+            open: function () {
+                //var openGraph = new full_graph();
+            },
+            close: function () { $(this).dialog('close'); }
+        })
+    }
+
+    $('#account-by-account-btn-shortest-path').click(function () {
+        OpenGraphShortestPath();        
+    });
+
+    $('#account-by-account-btn-on-graph').click(function () {
+        //OpenGraphFullPath();
+    });
+</script>
