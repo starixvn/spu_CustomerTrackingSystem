@@ -83,15 +83,16 @@
 <script type="text/javascript">
     var formGraph = new graph();
     formGraph.Options();
-    formGraph.Provider();
-    formGraph.Start();
+    formGraph.Provider();    
+    //formGraph.Start();
 
     $('#account-by-account-btn-shortest-path').click(function () {
+        formGraph.Start();
         formGraph.GenerateShortestNodes();
         formGraph.OpenModal();
     });
 
-    $('#account-by-account-btn-on-graph').click(function () {
+    $('#account-by-account-btn-on-graph').click(function () {        
         formGraph.GenerateFullNodes();
         formGraph.OpenModal();
     });   
