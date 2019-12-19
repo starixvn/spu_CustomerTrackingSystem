@@ -36,5 +36,7 @@
         CustomerAssociationByCTSCustIdModel GetCustomerTotalAssociationByCTSCustId(int ctsCustId);
 
         List<CustomerEvidenceByCTSCustIdModel> GetCustomerEvidenceByCTSCustId(int ctsCustId);
+
+        List<CustomerStaticStatusModel> GetCustomerStaticStatus(int listId, bool status);
     }
 }

@@ -139,6 +139,7 @@
     <Compile Include="Account\CustomerEvidenceByCTSCustIdModel.cs" />
     <Compile Include="Account\CustomerGeneralStatusModel.cs" />
     <Compile Include="Account\CustomerInfoByCTSCustIdModel.cs" />
+    <Compile Include="Account\CustomerStaticStatusModel.cs" />
     <Compile Include="Account\Evidence\AccountEvidence.cs" />
     <Compile Include="Account\Evidence\AccountExceptionEvidence.cs" />
     <Compile Include="Action.cs" />

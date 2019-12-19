@@ -651,6 +651,24 @@
             }
         }
 
+        public List<CustomerStaticStatusModel> GetCustomerStaticStatus(int listId, bool status)
+        {
+            var criteria = new CustomerStaticAccountStatusCriteria
+            {
+                ListId = listId,
+                Status = status
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                var result = db.Query<CustomerStaticStatusModel>(criteria);
+
+                return result.ToList();
+            }
+        }
+
+
+
 
         #endregion
     }

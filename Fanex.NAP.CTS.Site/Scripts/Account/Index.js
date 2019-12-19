@@ -12,8 +12,7 @@
     }
 
     function CollapseExpandItem() {
-        $("#account-detail-container .report-item h3").on('click', function ()
-        {
+        $("#account-detail-container .report-item h3").on('click', function () {
             CollapseAll();
 
             var $this = $(this).next();
@@ -21,7 +20,7 @@
             if ($this.hasClass('hide')) {
                 $this.removeClass('hide');
                 $this.parent().addClass("expanded");
-            }            
+            }
         });
     }
 
@@ -46,18 +45,15 @@
         $("#account-detail-container .report-item").addClass('expanded');
     }
 
-    function CollapseAll()
-    {
+    function CollapseAll() {
         $("#account-detail-container .report-item .report-cont").addClass('hide');
         $("#account-detail-container .report-item").removeClass('expanded');
     }
-
 
     function Initial() {
         CollapseExpandAll();
         CollapseExpandItem();
         LoadAssociationByAccount();
-        
     }
 
     $(document).ready(function () {
