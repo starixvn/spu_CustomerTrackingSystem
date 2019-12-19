@@ -206,4 +206,168 @@
             ]
         }
     }
+
+    this.genereateSampleFullPath = function () {
+        return {
+            "nodes": [
+                {
+                    "properties": {
+                        "Username": "Agent007"
+                    },
+                    "labels": ["Customer"],
+                    "id": 0
+                },
+                {
+                    "properties": {
+                        "Username": "Super001"
+                    },
+                    "labels": ["Customer"],
+                    "id": 1
+                },
+                {
+                    "properties": {
+                        "Username": "Member17"
+                    },
+                    "labels": ["Customer"],
+                    "id": 2
+                },
+                {
+                    "properties": {
+                        "Username": "M4A1000"
+                    },
+                    "labels": ["Customer"],
+                    "id": 3
+                },
+                {
+                    "properties": {
+                        "Username": "SujuMninha"
+                    },
+                    "labels": ["Customer"],
+                    "id": 4
+                },
+                {
+                    "properties": {
+                        "Username": "FCMU"
+                    },
+                    "labels": ["Customer"],
+                    "id": 5
+                },
+                {
+                    "properties": {
+                        "Username": "FCManCity"
+                    },
+                    "labels": ["Customer"],
+                    "id": 6
+                },
+                {
+                    "properties": {
+                        "Username": "FCTottenham"
+                    },
+                    "labels": ["Customer"],
+                    "id": 7
+                }                
+            ],
+            "edges": [
+                {
+                    "id": 0,
+                    "type": "Associated",
+                    "startNode": 0,
+                    "endNode": 1,
+                    "properties": {
+                        "roles": ["Neo"]
+                    }
+                },
+                {
+                    "id": 2,
+                    "type": "Associated",
+                    "startNode": 0,
+                    "endNode": 2,
+                    "properties": {
+                        "roles": ["Neo"]
+                    }
+                },
+                {
+                    "id": 3,
+                    "type": "Associated",
+                    "startNode": 0,
+                    "endNode": 3,
+                    "properties": {
+                        "roles": ["Neo"]
+                    }
+                },
+                {
+                    "id": 4,
+                    "type": "Associated",
+                    "startNode": 0,
+                    "endNode": 4,
+                    "properties": {
+                        "roles": ["Neo"]
+                    }
+                },
+                {
+                    "id": 5,
+                    "type": "Associated",
+                    "startNode": 2,
+                    "endNode": 3,
+                    "properties": {
+                        "roles": ["Neo"]
+                    }
+                },
+                {
+                    "id": 6,
+                    "type": "Associated",
+                    "startNode": 2,
+                    "endNode": 4,
+                    "properties": {
+                        "roles": ["Neo"]
+                    }
+                },
+                {
+                    "id": 7,
+                    "type": "Associated",
+                    "startNode": 3,
+                    "endNode": 4,
+                    "properties": {
+                        "roles": ["Neo"]
+                    }
+                },
+                {
+                    "id": 8,
+                    "type": "Associated",
+                    "startNode": 4,
+                    "endNode": 5,
+                    "properties": {
+                        "roles": ["Neo"]
+                    }
+                },
+                {
+                    "id": 9,
+                    "type": "Associated",
+                    "startNode": 4,
+                    "endNode": 5,
+                    "properties": {
+                        "roles": ["Neo"]
+                    }
+                },
+                {
+                    "id": 10,
+                    "type": "Associated",
+                    "startNode": 5,
+                    "endNode": 6,
+                    "properties": {
+                        "roles": ["Neo"]
+                    }
+                },
+                {
+                    "id": 11,
+                    "type": "Associated",
+                    "startNode": 5,
+                    "endNode": 7,
+                    "properties": {
+                        "roles": ["Neo"]
+                    }
+                }                
+            ]
+        }
+    }
 }

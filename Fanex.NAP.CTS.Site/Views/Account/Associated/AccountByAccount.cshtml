@@ -3,8 +3,7 @@
     ViewBag.Title = "AccountAssociatedAccount";
 }
 
-@*@Html.Partial("./Associated/GraphVisualization")*@
-@Html.Partial("./Associated/ShortestPathVisual")
+@Html.Partial("./Associated/GraphVisualization")
 
 <div id="account-by-account">
     <div id="account-by-account-filter">
@@ -17,7 +16,7 @@
                 <label class="checkbox">
                     <input type="radio" id="account-by-account-chk-device-away-2" />
                     <span>2 or more Device Away from </span><span class="account-by-account-username"></span>
-                </label>*@                
+                </label>*@
                     
                 <input type="radio" id="radio03-01" name="demo03" checked />
                 <label for="radio03-01">Direct Association with Member01</label>
@@ -81,56 +80,19 @@
     </div>
 </div>
 
-<script type="text/javascript">   
-    function OpenGraphShortestPath() {
-        $('#shortest-path-render').dialog({
-            modal: true,
-            width: '1500px',
-            title: 'Shortest Path',
-            dialogClass: "modal-graph-render",
-            resizable: true,
-            draggable: true,
-            open: function () {
-                var shortestGraph = new short_graph();
-                shortestGraph.Register();
-                shortestGraph.OpenGraph();
-                //$.ajax({
-                //    type: "POST",
-                //    data: { startCustId: startCustId, endCustId: endCustId },
-                //    url: "GetShortestPath",
-                //    beforeSend: function () {
-                //        common.showLoading();
-                //    },
-                //    success: function () {
-                //        common.closeLoading();
-                //        var openGraph = new short_graph();
-                //    }
-                //});
-            },
-            close: function () { $(this).dialog('close'); }
-        })
-    }
-
-    function OpenGraphFullPath() {
-        $('#form-graph-render').dialog({
-            modal: true,
-            width: '1500px',
-            title: 'Graph visualization',
-            dialogClass: "modal-graph-render",
-            resizable: true,
-            draggable: true,
-            open: function () {
-                //var openGraph = new full_graph();
-            },
-            close: function () { $(this).dialog('close'); }
-        })
-    }
+<script type="text/javascript">
+    var formGraph = new graph();
+    formGraph.Options();
+    formGraph.Provider();
+    formGraph.Start();
 
     $('#account-by-account-btn-shortest-path').click(function () {
-        OpenGraphShortestPath();        
+        formGraph.GenerateShortestNodes();
+        formGraph.OpenModal();
     });
 
-    $('#account-by-account-btn-on-graph').click(function () {
-        //OpenGraphFullPath();
+    $('#account-by-account-btn-on-graph').click(function () { 
+        formGraph.GenerateFullNodes();
+        formGraph.OpenModal();
     });
 </script>
