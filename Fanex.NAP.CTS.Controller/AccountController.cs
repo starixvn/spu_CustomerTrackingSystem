@@ -35,15 +35,21 @@
 
         public override string BaseControllerName { get => Consts.MenuItemSearch; }
 
-        public ActionResult Index(int custId)
+        public ActionResult Index(int ctsCustId)
         {
-            if (custId > 0)
+            if (ctsCustId > 0)
             {
-                var customerStatus = _accountService.GetCustomerGeneralStatus(custId);
+                var customerInfoFromCTS = _accountService.GetCustomerInfoByCTSCustId(ctsCustId);                
 
-                if(customerStatus != null)
+                if(customerInfoFromCTS != null)
                 {
-                    var customerGeneralStatusViewModel = new CustomerGeneralStatusViewModel(customerStatus);
+                    var customerStatus = _accountService.GetCustomerGeneralStatus(customerInfoFromCTS.CustId);
+
+                    var customerGeneralStatusViewModel = new CustomerGeneralStatusViewModel();
+
+                    customerGeneralStatusViewModel
+                        .BindingDataFromMainDB(customerStatus)
+                        .BindingDataFromCTS(customerInfoFromCTS);
 
                     return View(customerGeneralStatusViewModel);
                 }                 

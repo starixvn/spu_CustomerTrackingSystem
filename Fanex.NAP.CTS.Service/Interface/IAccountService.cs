@@ -30,5 +30,7 @@
         List<SearchResultModel> SearchAccounts(string username);
 
         CustomerGeneralStatusModel GetCustomerGeneralStatus(int custId);
+
+        CustomerInfoByCTSCustIdModel GetCustomerInfoByCTSCustId(int ctsCustId);
     }
 }

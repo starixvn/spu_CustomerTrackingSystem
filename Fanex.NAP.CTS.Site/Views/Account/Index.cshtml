@@ -15,8 +15,7 @@
     <div class="status-info">
         <p>
             <strong>Member:</strong>
-            <span class="username">@Model.UserName <span class="nickname" style="color: #c16112">(Nickname)</span></span>
-            
+            <span class="username">@Model.UserName <span class="nickname" style="color: #c16112">(@Model.UserName2)</span></span>
 
             <span class="icon icon-Robot-User"></span>
             <span class="icon icon-Bet-Restricted-Currency"></span>
@@ -41,7 +40,7 @@
                 </div>
                 <div class="info-text">
                     <div>Jun 13, 2019, 23:59</div>
-                    <div>Jun 13, 2019, 23:59</div>
+                    <div>@Model.LastLoginDate</div>
                     <div>Jun 13, 2019, 23:59</div>
                 </div>
             </div>
@@ -57,9 +56,9 @@
                     <label>Other Sports</label>
                 </div>
                 <div class="info-text">
-                    <div><span class="dangerous-level-0">None</span></div>
-                    <div><span class="dangerous-level-19">19</span></div>
-                    <div><span class="dangerous-level-18">18</span></div>
+                    <div><span class="dangerous-level-@Model.DangerousOriginal">@(Model.DangerousOriginal == 0 ? "None": Model.DangerousOriginal.ToString())</span></div>
+                    <div><span class="dangerous-level-@Model.DangerouseABI">@(Model.DangerouseABI == 0 ? "None" : Model.DangerouseABI.ToString())</span></div>
+                    <div><span class="dangerous-level-@Model.DangerouseOtherSports">@(Model.DangerouseOtherSports == 0 ? "None" : Model.DangerouseOtherSports.ToString())</span></div>
                 </div>
             </div>
         </div>
@@ -72,7 +71,7 @@
                     <label>Abnormal</label>
                 </div>
                 <div class="info-text">
-                    <div><span class="abnormal-level-0">None</span></div>
+                    <div><span class="abnormal-level-@Model.Abnormal">@(Model.Abnormal == 0 ? "None" : Model.DangerousOriginal.ToString())</span></div>
                 </div>
             </div>
         </div>
@@ -87,9 +86,9 @@
                     <label>E-Sports</label>
                 </div>
                 <div class="info-text">
-                    <div><a href="#" class="link">Yes</a></div>
-                    <div><a href="#" class="link">Yes</a></div>
-                    <div>No</div>
+                    <div>@(Model.AutoSuspendSoccer ? "<a href='#' class='link'>Yes</a>" : "No")</div>
+                    <div>@(Model.AutoSuspendOtherSport ? "<a href='#' class='link'>Yes</a>" : "No")</div>
+                    <div>@(Model.AutoSuspendESport ? "<a href='#' class='link'>Yes</a>" : "No")</div>
                 </div>
             </div>
         </div>

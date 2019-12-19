@@ -9,24 +9,7 @@ using System.Threading.Tasks;
 namespace Fanex.NAP.CTS.ViewModel.Account
 {
     public class CustomerGeneralStatusViewModel
-    {
-        public CustomerGeneralStatusViewModel(CustomerGeneralStatusModel model)
-        {
-            if (model != null)
-            {
-                this.AcountStatus = Enum.GetName(typeof(AccountStatus), GetAccountStatus(model));
-                this.DangerousOriginal = model.danger;
-                this.DangerouseABI = model.danger2;
-                this.DangerouseOtherSports = model.danger3;
-                this.CustId = model.custid;
-                this.UserName = model.username;
-                this.Abnormal = model.Abnormal;
-                this.AutoSuspendSoccer = model.autosuspend;
-                this.AutoSuspendOtherSport = model.autosuspend2;
-
-            }
-        }
-
+    {      
         public int CustId { get; set; }
 
         public string UserName { get; set; }
@@ -83,9 +66,41 @@ namespace Fanex.NAP.CTS.ViewModel.Account
 
         public bool AutoSuspendESport { get; set; }
 
+        public CustomerGeneralStatusViewModel BindingDataFromMainDB(CustomerGeneralStatusModel model)
+        {
+            if (model != null)
+            {
+                this.AcountStatus = Enum.GetName(typeof(AccountStatus), GetAccountStatus(model));
+                this.DangerousOriginal = model.Danger;
+                this.DangerouseABI = model.Danger2;
+                this.DangerouseOtherSports = model.Danger3;
+                this.CustId = model.CustId;
+                this.UserName = model.Username;
+                this.Abnormal = model.Abnormal;
+                this.AutoSuspendSoccer = model.Autosuspend;
+                this.AutoSuspendOtherSport = model.Autosuspend2;
+
+            }
+
+            return this;
+        }
+
+        public CustomerGeneralStatusViewModel BindingDataFromCTS(CustomerInfoByCTSCustIdModel model)
+        {
+            this.LastLoginDate = model.LastLoginTime;
+            this.UserName2 = model.Username2;
+
+            return this;
+        }
+
+        public CustomerGeneralStatusViewModel BindingDataFromFS()
+        {
+            return this;
+        }
+
         private AccountStatus GetAccountStatus(CustomerGeneralStatusModel model)
         {
-            if (model.cn88status == -1)
+            if (model.CN88Status == -1)
             {
                 return GetAccountStatusForMBC(model);
             }
@@ -95,12 +110,12 @@ namespace Fanex.NAP.CTS.ViewModel.Account
 
         private AccountStatus GetAccountStatusForMBC(CustomerGeneralStatusModel model)
         {
-            if (model.closed)
+            if (model.Closed)
             {
                 return AccountStatus.Closed;
             }
 
-            if (model.reject)
+            if (model.Reject)
             {
                 return AccountStatus.Suspended;
             }
@@ -110,7 +125,7 @@ namespace Fanex.NAP.CTS.ViewModel.Account
 
         private AccountStatus GetAccountStatusForCN88(CustomerGeneralStatusModel model)
         {
-            switch (model.cn88status)
+            switch (model.CN88Status)
             {
                 case 1:
                     return AccountStatus.CN88_Inactive;

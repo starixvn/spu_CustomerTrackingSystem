@@ -323,6 +323,10 @@
              SpName="FPS_DC_GetLocationInfobyIP"
              DbName="MySQL.CTS_DataCenter"/>
 
+    
+    
+    
+    
     <Setting Key="CTS_DC_GetUserInfomationByUsername"
             SpName="CTS_DC_GetUserInfomationByUsername"
             DbName="MySQL.CTS_DataCenter">      
@@ -338,7 +342,12 @@
 
     <Setting Key="CTS_CustomerGeneralStatus_Get"
          SpName="CTS_CustomerGeneralStatus_Get"
-         DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
+         DbName="DBTP.bodb02.bodbAdminNet" />
+
+    <Setting Key="CTS_DC_GetCustomerInfoByCTSCustId"
+            SpName="CTS_DC_GetCustomerInfoByCTSCustId"
+            DbName="MySQL.CTS_DataCenter">     
+    </Setting>
       
   </Function>
 </Functions>

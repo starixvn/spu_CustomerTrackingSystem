@@ -606,6 +606,23 @@
             }
         }
 
+        public CustomerInfoByCTSCustIdModel GetCustomerInfoByCTSCustId(int ctsCustId)
+        {
+            var criteria = new CustomerInfoByCTSCustIdCriteria
+            {
+                CTSCustId = ctsCustId
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                var result = db.QueryEntity<CustomerInfoByCTSCustIdModel>(criteria);
+
+                return result;
+            }
+        }
+
+
+
         #endregion
     }
 }

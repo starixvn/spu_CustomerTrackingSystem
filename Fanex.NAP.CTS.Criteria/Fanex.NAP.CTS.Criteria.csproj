@@ -52,6 +52,7 @@
     <Compile Include="Account\GeneralInformation\GetAssociationByAccountCriteria.cs" />
     <Compile Include="Account\GeneralInformation\GetCustomerGeneralInformationCriteria.cs" />
     <Compile Include="Account\GeneralInformation\GetEvidenceByTargetIdCriteria.cs" />
+    <Compile Include="Account\CustomerInfoByCTSCustIdCriteria.cs" />
     <Compile Include="Account\SearchAccountCriteria.cs" />
     <Compile Include="Api\FlaggedAccountDeleteCriteria.cs" />
     <Compile Include="Api\FlaggedAccountInsertCriteria.cs" />

@@ -33,7 +33,7 @@
                     username2 = !string.IsNullOrWhiteSpace(data.Username2) ? "(" + data.Username2 + ")" : string.Empty;
 
                     <li class="result-item">
-                        <a class="result-name" href="~/Account/Index?custid=@data.CustId">@data.Username <span>@username2</span></a>
+                        <a class="result-name" href="~/Account/Index?ctsCustId=@data.CTSCustId">@data.Username <span>@username2</span></a>
                         <p>
                             <span>Currency: @data.Currency.Name</span>
                             <span>Level: @data.Role.Name</span>
