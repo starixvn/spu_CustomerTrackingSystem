@@ -423,7 +423,7 @@
       font-weight: bold; }
     .content-card .account-info .info-block {
       display: grid;
-      grid-template-columns: 130px 1fr;
+      grid-template-columns: 150px 1fr;
       height: calc(100% - 30px); }
     .content-card .account-info .info-label {
       background: #B3D2EF; }
@@ -451,7 +451,8 @@
     .content-card .status .info {
       margin-bottom: 8px;
       color: #475A7C;
-      font-weight: bold; }
+      font-weight: bold;
+      cursor: pointer; }
 
 .report-content {
   padding: 10px; }

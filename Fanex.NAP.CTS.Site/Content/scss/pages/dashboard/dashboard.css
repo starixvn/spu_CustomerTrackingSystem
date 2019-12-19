@@ -114,7 +114,8 @@
       color: #545454;
       margin-top: 10px; }
       .search-result .result-item p > span {
-        margin-right: 35px; }
+        margin-right: 35px;
+        display: inline-block; }
   .search-result > form {
     position: fixed;
     top: 60px;

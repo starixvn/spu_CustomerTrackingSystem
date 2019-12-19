@@ -218,7 +218,7 @@ $dangerousColor: ( level-0: #000, level-1: #000, level-2: #ff0000, level-3: #ffc
 
         .info-block {
             display: grid;
-            grid-template-columns: 130px 1fr;
+            grid-template-columns: 150px 1fr;
             height: calc(100% - 30px);
         }
 
@@ -261,6 +261,7 @@ $dangerousColor: ( level-0: #000, level-1: #000, level-2: #ff0000, level-3: #ffc
             margin-bottom: 8px;
             color: #475A7C;
             font-weight: bold;
+            cursor: pointer;
         }
     }
 }

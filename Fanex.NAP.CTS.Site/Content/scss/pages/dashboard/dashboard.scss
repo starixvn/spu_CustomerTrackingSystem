@@ -128,7 +128,7 @@
     .has-shadow {
         box-shadow: 0 1px 6px 0 rgba(32,33,36,0.28);
     }
-    
+
     .result-content {
         margin-top: 122px;
         //border-top: 1px solid #E1E1E1;
@@ -165,6 +165,7 @@
 
             > span {
                 margin-right: 35px;
+                display: inline-block;
             }
         }
     }
