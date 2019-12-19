@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Fanex.NAP.CTS.ViewModel.Account
 {
     public class CustomerGeneralStatusViewModel
-    {      
+    {
         public int CustId { get; set; }
 
         public string UserName { get; set; }
@@ -66,7 +66,15 @@ namespace Fanex.NAP.CTS.ViewModel.Account
 
         public bool AutoSuspendESport { get; set; }
 
-        public CustomerGeneralStatusViewModel BindingDataFromMainDB(CustomerGeneralStatusModel model)
+        public int TotalAssociationByAccount { get; set; }
+
+        public int TotalAssociationByDevice { get; set; }
+
+        public int TotalAssociationByIp { get; set; }
+
+        public string Evidences { get; set; }
+
+        public CustomerGeneralStatusViewModel BindingGeneralDataFromMainDB(CustomerGeneralStatusModel model)
         {
             if (model != null)
             {
@@ -85,15 +93,40 @@ namespace Fanex.NAP.CTS.ViewModel.Account
             return this;
         }
 
-        public CustomerGeneralStatusViewModel BindingDataFromCTS(CustomerInfoByCTSCustIdModel model)
+        public CustomerGeneralStatusViewModel BindingGeneralDataFromCTS(CustomerInfoByCTSCustIdModel customerInfoByCTSCustIdModel)
         {
-            this.LastLoginDate = model.LastLoginTime;
-            this.UserName2 = model.Username2;
+            if (customerInfoByCTSCustIdModel != null)
+            {
+                this.LastLoginDate = customerInfoByCTSCustIdModel.LastLoginTime;
+                this.UserName2 = customerInfoByCTSCustIdModel.Username2;
+            }
 
             return this;
         }
 
-        public CustomerGeneralStatusViewModel BindingDataFromFS()
+        public CustomerGeneralStatusViewModel BindingTotalAssociationFromCTS(CustomerAssociationByCTSCustIdModel customerAssociationByCTSCustIdModel)
+        {
+            if(customerAssociationByCTSCustIdModel != null)
+            {
+                this.TotalAssociationByAccount = customerAssociationByCTSCustIdModel.TotalAccounts;
+                this.TotalAssociationByDevice = customerAssociationByCTSCustIdModel.TotalDevices;
+                this.TotalAssociationByIp = customerAssociationByCTSCustIdModel.TotalIps;
+            }            
+
+            return this;
+        }
+
+        public CustomerGeneralStatusViewModel BindingEvidenceListFromCTS(List<CustomerEvidenceByCTSCustIdModel> customerEvidenceByCTSCustIdModelList)
+        {
+            if(customerEvidenceByCTSCustIdModelList != null && customerEvidenceByCTSCustIdModelList.Any())
+            {
+                this.Evidences = string.Join(", ", customerEvidenceByCTSCustIdModelList.Select(x => x.EvidenceCode).ToArray());
+            }
+
+            return this;
+        }
+
+        public CustomerGeneralStatusViewModel BindingGeneralDataFromFS()
         {
             return this;
         }

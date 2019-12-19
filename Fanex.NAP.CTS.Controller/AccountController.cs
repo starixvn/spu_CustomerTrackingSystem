@@ -18,6 +18,7 @@
     using Fanex.NAP.CTS.Resource;
     using Fanex.NAP.CTS.ViewModel.Account.TransactionHistory;
     using Fanex.NAP.CTS.Model.Account;
+    using System.Threading.Tasks;
 
     [NapAuth(FunctionKey = FSFunctionKeys.SearchAccount, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class AccountController : BaseController
@@ -39,23 +40,34 @@
         {
             if (ctsCustId > 0)
             {
-                var customerInfoFromCTS = _accountService.GetCustomerInfoByCTSCustId(ctsCustId);                
+                var tasks = new List<Task>();
 
-                if(customerInfoFromCTS != null)
+                var customerInfoFromCTS = _accountService.GetCustomerInfoByCTSCustId(ctsCustId);
+
+                if (customerInfoFromCTS != null)
                 {
-                    var customerStatus = _accountService.GetCustomerGeneralStatus(customerInfoFromCTS.CustId);
-
                     var customerGeneralStatusViewModel = new CustomerGeneralStatusViewModel();
+                    var customerStatus = new CustomerGeneralStatusModel();
+                    var customerTotalAssociation = new CustomerAssociationByCTSCustIdModel();
+                    var customerEvidences = new List<CustomerEvidenceByCTSCustIdModel>();
+
+                    tasks.Add(Task.Run(() => { customerStatus = _accountService.GetCustomerGeneralStatus(customerInfoFromCTS.CustId); }));
+                    tasks.Add(Task.Run(() => { customerTotalAssociation = _accountService.GetCustomerTotalAssociationByCTSCustId(ctsCustId); }));
+                    tasks.Add(Task.Run(() => { customerEvidences = _accountService.GetCustomerEvidenceByCTSCustId(ctsCustId); }));
+                    
+                    Task.WhenAll(tasks.ToArray()).Wait();                    
 
                     customerGeneralStatusViewModel
-                        .BindingDataFromMainDB(customerStatus)
-                        .BindingDataFromCTS(customerInfoFromCTS);
+                        .BindingGeneralDataFromMainDB(customerStatus)
+                        .BindingGeneralDataFromCTS(customerInfoFromCTS)
+                        .BindingTotalAssociationFromCTS(customerTotalAssociation)
+                        .BindingEvidenceListFromCTS(customerEvidences);
 
                     return View(customerGeneralStatusViewModel);
-                }                 
+                }
             }
 
-            return RedirectToAction("Index", "Home") ;
+            return RedirectToAction("Index", "Home");
         }
 
         //public ActionResult DetailAccount(int id, int custId)

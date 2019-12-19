@@ -98,19 +98,19 @@
             <div class="info-title">Association & Evidence</div>
             <div class="info-block">
                 <div class="info-label">
-                    <label>Accounts / Devices</label>
+                    <label>Accounts / Devices / IP</label>
                     <label>Evidence</label>
                 </div>
                 <div class="info-text">
-                    <div><a href="#" class="link">15/25</a></div>
-                    <div><a href="#" class="link">6.7, 6.8</a></div>
+                    <div><a href="#" class="link">@Model.TotalAssociationByAccount/@Model.TotalAssociationByDevice/@Model.TotalAssociationByIp</a></div>
+                    <div><a href="#" class="link">@Model.Evidences</a></div>
                 </div>
             </div>
         </div>
 
         <!-- Committed Fraud Case -->
         <div class="info-item">
-            <div class="info-title">Association & Evidence</div>
+            <div class="info-title">Committed Fraud Case</div>
             <div class="info-block">
                 <div class="info-label">
                     <label>Classification</label>
@@ -134,10 +134,10 @@
     </div>
 </div>
 <div class="content-card">
-    <div class="status">
+    <div class="status" id="account-detail-header">
         <p class="info" style="margin-bottom: 0">
             <span class="expand-all" title="Expand All"></span>
-            <span class="collapse-all" title="Collapse All"></span>
+            @*<span class="collapse-all" title="Collapse All"></span>*@
             Account Detail
         </p>
     </div>

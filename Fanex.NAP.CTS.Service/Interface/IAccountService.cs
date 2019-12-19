@@ -32,5 +32,9 @@
         CustomerGeneralStatusModel GetCustomerGeneralStatus(int custId);
 
         CustomerInfoByCTSCustIdModel GetCustomerInfoByCTSCustId(int ctsCustId);
+
+        CustomerAssociationByCTSCustIdModel GetCustomerTotalAssociationByCTSCustId(int ctsCustId);
+
+        List<CustomerEvidenceByCTSCustIdModel> GetCustomerEvidenceByCTSCustId(int ctsCustId);
     }
 }

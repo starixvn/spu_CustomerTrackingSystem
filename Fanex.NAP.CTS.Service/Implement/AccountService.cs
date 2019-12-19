@@ -621,6 +621,35 @@
             }
         }
 
+        public CustomerAssociationByCTSCustIdModel GetCustomerTotalAssociationByCTSCustId(int ctsCustId)
+        {
+            var criteria = new CustomerAssociationByCTSCustIdCriteria
+            {
+                CTSCustId = ctsCustId
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                var result = db.QueryEntity<CustomerAssociationByCTSCustIdModel>(criteria);
+
+                return result;
+            }
+        }
+
+        public List<CustomerEvidenceByCTSCustIdModel> GetCustomerEvidenceByCTSCustId(int ctsCustId)
+        {
+            var criteria = new CustomerEvidenceByCTSCustIdCriteria
+            {
+                CTSCustId = ctsCustId
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                var result = db.Query<CustomerEvidenceByCTSCustIdModel>(criteria);
+
+                return result.ToList();
+            }
+        }
 
 
         #endregion

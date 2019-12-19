@@ -61,7 +61,7 @@
 
             if (result.Count == 1 && result.Any(x => x.Username.Equals(inputValue, System.StringComparison.CurrentCultureIgnoreCase) || x.Username2.Equals(inputValue, System.StringComparison.CurrentCultureIgnoreCase)))
             {
-                return RedirectToAction("Index", "Account", new { custId = result.FirstOrDefault().CustId });
+                return RedirectToAction("Index", "Account", new { ctsCustId = result.FirstOrDefault().CTSCustId });
                     
             }
 

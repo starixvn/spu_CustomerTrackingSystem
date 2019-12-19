@@ -348,6 +348,15 @@
             SpName="CTS_DC_GetCustomerInfoByCTSCustId"
             DbName="MySQL.CTS_DataCenter">     
     </Setting>
-      
+
+    <Setting Key="CTS_DC_GetAssociationByCTSCustID"
+            SpName="CTS_DC_GetAssociationByCTSCustID"
+            DbName="MySQL.CTS_DataCenter">
+    </Setting>
+
+    <Setting Key="CTS_DC_GetEvidenceByCTSCustID"
+            SpName="CTS_DC_GetEvidenceByCTSCustID"
+            DbName="MySQL.CTS_DataCenter">
+    </Setting>
   </Function>
 </Functions>
