@@ -72,6 +72,8 @@ namespace Fanex.NAP.CTS.ViewModel.Account
 
         public string Evidences { get; set; }
 
+        public List<FraudCaseModel> FraudCases { get; set; }
+
         public CustomerGeneralStatusViewModel BindingGeneralDataFromMainDB(CustomerGeneralStatusModel model)
         {
             if (model != null)
@@ -124,8 +126,13 @@ namespace Fanex.NAP.CTS.ViewModel.Account
             return this;
         }
 
-        public CustomerGeneralStatusViewModel BindingGeneralDataFromFS()
+        public CustomerGeneralStatusViewModel BindingGeneralDataFromFS(CustomerProfileFraudInfoModel customerProfileFraudInfoModel)
         {
+            this.Delinquency = customerProfileFraudInfoModel.SuspiciouseCustomer.IsDelinquent;
+            this.DirtyAccount = customerProfileFraudInfoModel.SuspiciouseCustomer.IsDirty;
+            this.HedgeAccount = customerProfileFraudInfoModel.SuspiciouseCustomer.IsHedge;
+            this.FraudCases = customerProfileFraudInfoModel.FraudCaseList;
+
             return this;
         }
 

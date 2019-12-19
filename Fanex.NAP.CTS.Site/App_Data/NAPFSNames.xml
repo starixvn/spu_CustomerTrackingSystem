@@ -358,5 +358,14 @@
             SpName="CTS_DC_GetEvidenceByCTSCustID"
             DbName="MySQL.CTS_DataCenter">
     </Setting>
+
+    <Setting Key="CTS_DC_GetStaticList"
+            SpName="CTS_DC_GetStaticList"
+            DbName="MySQL.CTS_DataCenter">
+    </Setting>
+
+    <Setting Key="CTS_CustomerProfile_FraudInfo_Get"
+            SpName="CTS_CustomerProfile_FraudInfo_Get"
+            DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
   </Function>
 </Functions>

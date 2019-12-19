@@ -139,9 +139,13 @@
     <Compile Include="Account\CustomerEvidenceByCTSCustIdModel.cs" />
     <Compile Include="Account\CustomerGeneralStatusModel.cs" />
     <Compile Include="Account\CustomerInfoByCTSCustIdModel.cs" />
+    <Compile Include="Account\CustomerInfoDetailModel.cs" />
+    <Compile Include="Account\CustomerProfileFraudInfoModel.cs" />
     <Compile Include="Account\CustomerStaticStatusModel.cs" />
     <Compile Include="Account\Evidence\AccountEvidence.cs" />
     <Compile Include="Account\Evidence\AccountExceptionEvidence.cs" />
+    <Compile Include="Account\FraudCaseModel.cs" />
+    <Compile Include="Account\SuspiciousCustomerModel.cs" />
     <Compile Include="Action.cs" />
     <Compile Include="CheckBetReport\CheckBetHistory.cs" />
     <Compile Include="CustomerMonitor\Customer.cs" />
@@ -158,6 +162,7 @@
     <Compile Include="DTO\Match.cs" />
     <Compile Include="DTO\Message.cs" />
     <Compile Include="DTO\Role.cs" />
+    <Compile Include="DTO\SuspiciousCustomer.cs" />
     <Compile Include="Enum.cs" />
     <Compile Include="Environment.cs" />
     <Compile Include="FraudCaseHealth.cs" />

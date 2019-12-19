@@ -45,6 +45,7 @@
     <Compile Include="Account\Associated\AssociatedAccountByAccountFilter.cs" />
     <Compile Include="Account\Associated\AssociatedAccountByCustomer.cs" />
     <Compile Include="Account\Associated\AssociatedAccountsCollected.cs" />
+    <Compile Include="Account\Associated\AssociatedByAccountViewModel.cs" />
     <Compile Include="Account\Associated\AssociatedDeviceByAccount.cs" />
     <Compile Include="Account\Associated\AssociatedDeviceByAccountFilter.cs" />
     <Compile Include="Account\CustomerFraud.cs" />

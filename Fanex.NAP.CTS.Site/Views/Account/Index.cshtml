@@ -123,9 +123,13 @@
                         </span><span class="icon-Hedge-Account"></span>
                     </div>
                     <div>
-                        <a href="#" class="link">BNG</a>,
-                        <a href="#" class="link">Check Bet</a>,
-                        <a href="#" class="link">Bets Near Goal</a>,
+                        @foreach (var fraudCase in Model.FraudCases)
+                        {
+                            <a href="#" class="link">@(fraudCase.FraudCaseName + ", ")</a>
+                        }
+
+                        @*<a href="#" class="link">Check Bet</a>,
+                        <a href="#" class="link">Bets Near Goal</a>,*@
                         @*<a href="#" class="link">Flagged Account Delay Goal</a>*@
                     </div>
                 </div>
@@ -163,11 +167,10 @@
     </div>
 
 </div>
-@section scripts{
-    <script src="~/Scripts/MultipleSelect/jquery.multiselect.filter.js"></script>
-    <script src="~/Scripts/MultipleSelect/jquery.multiselect.js"></script>
+@section scripts{   
     <script src="~/Scripts/Account/Associated/graph.js"></script>
     <script src="~/Scripts/Account/Associated/sample-data-graph.js"></script>
     @Scripts.Render("~/account-detail-scripts"
-    , "~/graph-visualize-lib")
+    , "~/graph-visualize-lib"
+    ,"~/associated-by-account-detail-scripts")
 }

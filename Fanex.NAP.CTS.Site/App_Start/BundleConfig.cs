@@ -8,11 +8,11 @@
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery-{version}.js",
-                        "~/Scripts/jquery-ui-1.12.1.min.js"));
+                        "~/Scripts/JQuery/jquery-{version}.js",
+                        "~/Scripts/JQuery/jquery-ui-1.12.1.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
-                        "~/Scripts/jquery.validate*"));
+                        "~/Scripts/JQuery/jquery.validate*"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at http://modernizr.com to pick only the tests you need.
@@ -20,7 +20,7 @@
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                      "~/Scripts/bootstrap.js",
+                      "~/Scripts/Bootstrap/bootstrap.js",
                       "~/Scripts/respond.js"));
 
             bundles.Add(new StyleBundle("~/Content/styles").Include(
@@ -50,6 +50,7 @@
             RegisterSubscriberAssignment(bundles);
             RegisterSearchBundles(bundles);
             RegisterAccountDetailBundles(bundles);
+            RegisterAssociatedByAccountBundles(bundles);
             RegisterEvidenceBundles(bundles);
             RegisterTransactionHistoryBundles(bundles);
             RegisterGraphVisualizeBundles(bundles);           
@@ -58,7 +59,7 @@
         private static void RegisterFSCoreBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/core").Include(
-                "~/Scripts/moment.min.js",
+                "~/Scripts/Moment/moment.min.js",
                 "~/Scripts/select2.min.js",
                 "~/Scripts/common.js",
                 "~/Scripts/Fanex.Grid/Fanex.Grid.js",
@@ -68,7 +69,9 @@
                 "~/Scripts/numeral/numeral.min.js",
                 "~/scripts/multiple-select.js",
                 "~/Scripts/search.js",
-                "~/Scripts/toogle.js"));
+                "~/Scripts/toogle.js",
+                "~/Scripts/MultipleSelect/jquery.multiselect.filter.js",
+                "~/Scripts/MultipleSelect/jquery.multiselect.js"));
 
             bundles.Add(new ScriptBundle("~/finalize").Include("~/scripts/finalize.js"));
         }
@@ -157,8 +160,14 @@
 
         private static void RegisterAccountDetailBundles(BundleCollection bundles)
         {
-            bundles.Add(new ScriptBundle("~/account-detail-scripts").Include("~/scripts/Account/Index.js"));
+            bundles.Add(new ScriptBundle("~/account-detail-scripts").Include("~/scripts/Account/index.js"));
         }
+
+        private static void RegisterAssociatedByAccountBundles(BundleCollection bundles)
+        {
+            bundles.Add(new ScriptBundle("~/associated-by-account-detail-scripts").Include("~/scripts/Account/Associated/account-by-account.js"));
+        }
+
 
         private static void RegisterGraphVisualizeBundles(BundleCollection bundles)
         {

@@ -1,8 +1,9 @@
 ﻿@using Fanex.NAP.CTS.Model;
+
 @{
     ViewBag.Title = "AccountAssociatedAccount";
 }
-
+@model Fanex.NAP.CTS.ViewModel.Account.Associated.AssociatedByAccountViewModel
 @Html.Partial("./Associated/GraphVisualization")
 
 <div id="account-by-account">
@@ -10,42 +11,43 @@
         <div class="filter">
             <div class="form-control radio-button">
                 @*<label class="checkbox">
-                    <input type="radio" id="account-by-account-chk-device-away-1" checked />
-                    <span>1 Device Away from </span><span class="account-by-account-username"></span>
-                </label>
-                <label class="checkbox">
-                    <input type="radio" id="account-by-account-chk-device-away-2" />
-                    <span>2 or more Device Away from </span><span class="account-by-account-username"></span>
-                </label>*@
-                    
+                        <input type="radio" id="account-by-account-chk-device-away-1" checked />
+                        <span>1 Device Away from </span><span class="account-by-account-username"></span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="radio" id="account-by-account-chk-device-away-2" />
+                        <span>2 or more Device Away from </span><span class="account-by-account-username"></span>
+                    </label>*@
+
                 <input type="radio" id="radio03-01" name="demo03" checked />
                 <label for="radio03-01">Direct Association with Member01</label>
 
                 <input type="radio" id="radio03-02" name="demo03" />
-                <label for="radio03-02">Indirect Association with Member01</label>                
+                <label for="radio03-02">Indirect Association with Member01</label>
             </div>
             <div class="form-control">
                 <div class="control-label">Status</div>
                 <select class="control" id="account-by-account-cbb-status" multiple="multiple">
-                    @*@foreach (KeyValuePair<AccountStatus, string> status in ViewBag.AccountStatusList)
+                    @foreach (var status in Model.AccountStatusList)
                     {
-                        <option value="@status.Key">@status.Value</option>
-                    }*@
+                        <option value="@status.ItemId">@status.ItemNameDisplay</option>
+                    }
                 </select>
             </div>
             <div class="form-control">
-                <div class="control-label">Evidence Status</div>
-                <select class="control" id="account-by-account-cbb-evidence-status">
-                    @*<option value="@EvidenceStatus.All" selected>All</option>
-                    <option value="@EvidenceStatus.Affected">Flagged/Affected</option>
-                    <option value="@EvidenceStatus.Clean">Clean</option>*@
+                <div class="control-label">Association Type</div>
+                <select class="control" id="account-by-account-cbb-association-type">
+                    @foreach (var status in Model.AssociationTypeList)
+                    {
+                        <option value="@status.ItemId">@status.ItemNameDisplay</option>
+                    }
                 </select>
-            </div>            
+            </div>
             <div class="form-control" style="vertical-align: bottom;">
                 <button class="button btn-search" id="account-by-account-btn-search">Search</button>
             </div>
         </div>
-    </div>    
+    </div>
     <div class="table-report" id="account-by-account-content">
         <div class="search-table">
             <span class="icon-magnify"></span>
@@ -80,7 +82,7 @@
 <script type="text/javascript">
     var formGraph = new graph();
     formGraph.Options();
-    formGraph.Provider();    
+    formGraph.Provider();
     formGraph.Start();
 
     $('#account-by-account-btn-shortest-path').click(function () {
@@ -88,8 +90,10 @@
         formGraph.OpenModal();
     });
 
-    $('#account-by-account-btn-on-graph').click(function () {        
+    $('#account-by-account-btn-on-graph').click(function () {
         formGraph.GenerateFullNodes(1);
         formGraph.OpenModal();
-    });   
+    });
+
+    $(account_by_account);
 </script>

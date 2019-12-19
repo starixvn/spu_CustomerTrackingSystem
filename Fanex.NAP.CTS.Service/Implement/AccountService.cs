@@ -600,7 +600,7 @@
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                var result = db.QueryEntity<CustomerGeneralStatusModel>(criteria);                
+                var result = db.QueryEntity<CustomerGeneralStatusModel>(criteria);
 
                 return result;
             }
@@ -664,6 +664,25 @@
                 var result = db.Query<CustomerStaticStatusModel>(criteria);
 
                 return result.ToList();
+            }
+        }
+
+        public CustomerProfileFraudInfoModel GetCustomerProfileFraudInfo(int custId)
+        {
+            var criteria = new CustomerProfileFraudInfoCriteria
+            {
+                CustId = custId
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                var result = db.QueryMultiple(criteria);
+
+                return new CustomerProfileFraudInfoModel
+                {
+                    SuspiciouseCustomer = result.ReadFirst<SuspiciousCustomerModel>(),
+                    FraudCaseList = result.Read<FraudCaseModel>().ToList()
+                };
             }
         }
 

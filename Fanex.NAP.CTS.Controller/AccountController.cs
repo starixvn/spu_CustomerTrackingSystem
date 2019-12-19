@@ -19,6 +19,7 @@
     using Fanex.NAP.CTS.ViewModel.Account.TransactionHistory;
     using Fanex.NAP.CTS.Model.Account;
     using System.Threading.Tasks;
+    using System.Linq;
 
     [NapAuth(FunctionKey = FSFunctionKeys.SearchAccount, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class AccountController : BaseController
@@ -49,19 +50,23 @@
                     var customerGeneralStatusViewModel = new CustomerGeneralStatusViewModel();
                     var customerStatus = new CustomerGeneralStatusModel();
                     var customerTotalAssociation = new CustomerAssociationByCTSCustIdModel();
+                    var customerProfileFraudInfo = new CustomerProfileFraudInfoModel();
+
                     var customerEvidences = new List<CustomerEvidenceByCTSCustIdModel>();
 
                     tasks.Add(Task.Run(() => { customerStatus = _accountService.GetCustomerGeneralStatus(customerInfoFromCTS.CustId); }));
                     tasks.Add(Task.Run(() => { customerTotalAssociation = _accountService.GetCustomerTotalAssociationByCTSCustId(ctsCustId); }));
                     tasks.Add(Task.Run(() => { customerEvidences = _accountService.GetCustomerEvidenceByCTSCustId(ctsCustId); }));
-                    
-                    Task.WhenAll(tasks.ToArray()).Wait();                    
+                    tasks.Add(Task.Run(() => { customerProfileFraudInfo = _accountService.GetCustomerProfileFraudInfo(customerInfoFromCTS.CustId); }));
+
+                    Task.WhenAll(tasks.ToArray()).Wait();
 
                     customerGeneralStatusViewModel
                         .BindingGeneralDataFromMainDB(customerStatus)
                         .BindingGeneralDataFromCTS(customerInfoFromCTS)
                         .BindingTotalAssociationFromCTS(customerTotalAssociation)
-                        .BindingEvidenceListFromCTS(customerEvidences);
+                        .BindingEvidenceListFromCTS(customerEvidences)
+                        .BindingGeneralDataFromFS(customerProfileFraudInfo);
 
                     return View(customerGeneralStatusViewModel);
                 }
@@ -178,7 +183,20 @@
         [HttpPost]
         public ActionResult GetAssociatedAccountByAccount()
         {
-            return PartialView("Associated/AccountByAccount");
+            var getCustomerStaticStatus = _accountService.GetCustomerStaticStatus(1, true);
+
+            var getCustomerStaticAssType = _accountService.GetCustomerStaticStatus(4, true);
+
+            var associatedByAccountViewModel = new AssociatedByAccountViewModel
+            {
+                AccountStatusList = getCustomerStaticStatus,
+                AssociationTypeList = getCustomerStaticAssType,
+                CustomerInfoDetailList = new List<CustomerInfoDetailModel>(),
+                Status = getCustomerStaticStatus.FirstOrDefault().ItemId,
+                AssociationType = getCustomerStaticAssType.FirstOrDefault().ItemId
+            };
+
+            return PartialView("Associated/AccountByAccount", associatedByAccountViewModel);
         }
 
         //[HttpPost]

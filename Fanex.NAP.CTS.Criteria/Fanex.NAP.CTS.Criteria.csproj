@@ -49,6 +49,7 @@
     <Compile Include="Account\CustomerEvidenceByCTSCustIdCriteria.cs" />
     <Compile Include="Account\CustomerAssociationByCTSCustIdCriteria.cs" />
     <Compile Include="Account\CustomerGeneralStatusCriteria.cs" />
+    <Compile Include="Account\CustomerProfileFraudInfoCriteria.cs" />
     <Compile Include="Account\Evidence\GetAccountEvidenceCriteria.cs" />
     <Compile Include="Account\Evidence\GetExceptionAccountEvidenceCriteria.cs" />
     <Compile Include="Account\Evidence\InsertExceptionEvidenceCriteria.cs" />

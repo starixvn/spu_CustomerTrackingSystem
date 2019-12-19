@@ -38,5 +38,7 @@
         List<CustomerEvidenceByCTSCustIdModel> GetCustomerEvidenceByCTSCustId(int ctsCustId);
 
         List<CustomerStaticStatusModel> GetCustomerStaticStatus(int listId, bool status);
+
+        CustomerProfileFraudInfoModel GetCustomerProfileFraudInfo(int custId);
     }
 }
