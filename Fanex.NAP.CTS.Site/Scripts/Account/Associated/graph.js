@@ -35,7 +35,21 @@
         popoto.start("Customer");
     }
 
-    this.GenerateShortestNodes = function () {
+    this.GenerateShortestNodes = function (custIdFrom, custIdTo) {
+        //var url = '';
+        //var paramsFilter = {};
+        //paramsFilter.CustIdFrom = custIdFrom;
+        //paramsFilter.CustIdTo = custIdTo;
+        //$.ajax(url, {
+        //    type: 'POST',
+        //    data: paramsFilter,
+        //    success: function (response) {
+        //    },
+        //    error: function (errMsg) {
+        //        console.log(errMsg);
+        //        common.showError(errMsg);
+        //    }
+        //});
         var sampleData = generateSampleData();
         var nodes = convertNodes(sampleData.nodes);
         var edges = convertEdges(sampleData.edges);
@@ -50,7 +64,20 @@
         var network = new vis.Network(container, data, options);
     }
 
-    this.GenerateFullNodes = function () {
+    this.GenerateFullNodes = function (custId) {
+        //var url = '';
+        //var paramsFilter = {};
+        //paramsFilter.CustId = custId;
+        //$.ajax(url, {
+        //    type: 'POST',
+        //    data: paramsFilter,
+        //    success: function (response) {
+        //    },
+        //    error: function (errMsg) {
+        //        console.log(errMsg);
+        //        common.showError(errMsg);
+        //    }
+        //});
         var sampleData = generateSampleDataFullPath();
         var nodes = convertNodes(sampleData.nodes);
         var edges = convertEdges(sampleData.edges);
