@@ -265,12 +265,40 @@
                     },
                     "labels": ["Customer"],
                     "id": 7
-                }                
+                },
+                {
+                    "properties": {
+                        "Username": "FCTEverton"
+                    },
+                    "labels": ["Customer"],
+                    "id": 8
+                },
+                {
+                    "properties": {
+                        "Username": "FCArsenal"
+                    },
+                    "labels": ["Customer"],
+                    "id": 9
+                },
+                {
+                    "properties": {
+                        "Username": "FCChelsea"
+                    },
+                    "labels": ["Customer"],
+                    "id": 10
+                },
+                {
+                    "properties": {
+                        "Username": "FCFullham"
+                    },
+                    "labels": ["Customer"],
+                    "id": 11
+                }
             ],
             "edges": [
                 {
                     "id": 0,
-                    "type": "Associated",
+                    "type": "IP",
                     "startNode": 0,
                     "endNode": 1,
                     "properties": {
@@ -278,8 +306,8 @@
                     }
                 },
                 {
-                    "id": 2,
-                    "type": "Associated",
+                    "id": 1,
+                    "type": "Device",
                     "startNode": 0,
                     "endNode": 2,
                     "properties": {
@@ -287,82 +315,82 @@
                     }
                 },
                 {
-                    "id": 3,
-                    "type": "Associated",
+                    "id": 2,
+                    "type": "Device/IP",
                     "startNode": 0,
                     "endNode": 3,
+                    "properties": {
+                        "roles": ["Neo"]
+                    }
+                },
+                {
+                    "id": 3,
+                    "type": "IP",
+                    "startNode": 0,
+                    "endNode": 4,
                     "properties": {
                         "roles": ["Neo"]
                     }
                 },
                 {
                     "id": 4,
-                    "type": "Associated",
+                    "type": "Device",
                     "startNode": 0,
-                    "endNode": 4,
+                    "endNode": 5,
                     "properties": {
                         "roles": ["Neo"]
                     }
                 },
                 {
                     "id": 5,
-                    "type": "Associated",
-                    "startNode": 2,
-                    "endNode": 3,
-                    "properties": {
-                        "roles": ["Neo"]
-                    }
-                },
-                {
-                    "id": 6,
-                    "type": "Associated",
-                    "startNode": 2,
-                    "endNode": 4,
-                    "properties": {
-                        "roles": ["Neo"]
-                    }
-                },
-                {
-                    "id": 7,
-                    "type": "Associated",
-                    "startNode": 3,
-                    "endNode": 4,
-                    "properties": {
-                        "roles": ["Neo"]
-                    }
-                },
-                {
-                    "id": 8,
-                    "type": "Associated",
-                    "startNode": 4,
-                    "endNode": 5,
-                    "properties": {
-                        "roles": ["Neo"]
-                    }
-                },
-                {
-                    "id": 9,
-                    "type": "Associated",
-                    "startNode": 4,
-                    "endNode": 5,
-                    "properties": {
-                        "roles": ["Neo"]
-                    }
-                },
-                {
-                    "id": 10,
-                    "type": "Associated",
-                    "startNode": 5,
+                    "type": "IP",
+                    "startNode": 0,
                     "endNode": 6,
                     "properties": {
                         "roles": ["Neo"]
                     }
                 },
                 {
-                    "id": 11,
-                    "type": "Associated",
-                    "startNode": 5,
+                    "id": 6,
+                    "type": "IP",
+                    "startNode": 0,
                     "endNode": 7,
+                    "properties": {
+                        "roles": ["Neo"]
+                    }
+                },
+                {
+                    "id": 7,
+                    "type": "Device/IP",
+                    "startNode": 0,
+                    "endNode": 8,
+                    "properties": {
+                        "roles": ["Neo"]
+                    }
+                },
+                {
+                    "id": 8,
+                    "type": "IP",
+                    "startNode": 0,
+                    "endNode": 9,
+                    "properties": {
+                        "roles": ["Neo"]
+                    }
+                },
+                {
+                    "id": 9,
+                    "type": "Device/IP",
+                    "startNode": 0,
+                    "endNode": 10,
+                    "properties": {
+                        "roles": ["Neo"]
+                    }
+                },
+                {
+                    "id": 10,
+                    "type": "Device",
+                    "startNode": 0,
+                    "endNode": 11,
                     "properties": {
                         "roles": ["Neo"]
                     }
