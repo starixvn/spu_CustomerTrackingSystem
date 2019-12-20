@@ -6,78 +6,81 @@
 @model Fanex.NAP.CTS.ViewModel.Account.Associated.AssociatedByAccountViewModel
 @Html.Partial("./Associated/GraphVisualization")
 
-<div id="account-by-account">
-    <div id="account-by-account-filter">
-        <div class="filter">
-            <div class="form-control radio-button">
-                @*<label class="checkbox">
-                        <input type="radio" id="account-by-account-chk-device-away-1" checked />
-                        <span>1 Device Away from </span><span class="account-by-account-username"></span>
-                    </label>
-                    <label class="checkbox">
-                        <input type="radio" id="account-by-account-chk-device-away-2" />
-                        <span>2 or more Device Away from </span><span class="account-by-account-username"></span>
-                    </label>*@
+    <div id="account-by-account">
+        <div id="account-by-account-filter">
+            <div class="filter">
+                <div class="form-control radio-button">
+                    @*<label class="checkbox">
+                    <input type="radio" id="account-by-account-chk-device-away-1" checked />
+                    <span>1 Device Away from </span><span class="account-by-account-username"></span>
+                </label>
+                <label class="checkbox">
+                    <input type="radio" id="account-by-account-chk-device-away-2" />
+                    <span>2 or more Device Away from </span><span class="account-by-account-username"></span>
+                </label>*@
 
-                <input type="radio" id="radio03-01" name="demo03" checked />
-                <label for="radio03-01">Direct Association with Member01</label>
+                    <input type="radio" id="radio03-01" name="demo03" checked />
+                    <label for="radio03-01">Direct Association with Member01</label>
 
-                <input type="radio" id="radio03-02" name="demo03" />
-                <label for="radio03-02">Indirect Association with Member01</label>
+                    <input type="radio" id="radio03-02" name="demo03" />
+                    <label for="radio03-02">Indirect Association with Member01</label>
+                </div>
+                <div class="form-control">
+                    <div class="control-label">Status</div>
+                    <select class="control" id="account-by-account-cbb-status" multiple="multiple">
+                        @foreach (var status in Model.AccountStatusList)
+                        {
+                            <option value="@status.ItemId">@status.ItemNameDisplay</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-control">
+                    <div class="control-label">Association Type</div>
+                    <select class="control" id="account-by-account-cbb-association-type">
+                        @foreach (var status in Model.AssociationTypeList)
+                        {
+                            <option value="@status.ItemId">@status.ItemNameDisplay</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-control" style="vertical-align: bottom;">
+                    <button class="button btn-search" id="account-by-account-btn-search">Search</button>
+                </div>
             </div>
-            <div class="form-control">
-                <div class="control-label">Status</div>
-                <select class="control" id="account-by-account-cbb-status" multiple="multiple">
-                    @foreach (var status in Model.AccountStatusList)
-                    {
-                        <option value="@status.ItemId">@status.ItemNameDisplay</option>
-                    }
-                </select>
+            <div class="graph-heading">
+                <div class="free-size"></div>
+                <div class="graph-info">
+                    <button class="button btn-graph" id="account-by-account-btn-on-graph">View On Graph</button>
+                    <span class="icon-path graph" id="account-by-account-btn-shortest-path" title="Graph View"></span>
+                </div>
             </div>
-            <div class="form-control">
-                <div class="control-label">Association Type</div>
-                <select class="control" id="account-by-account-cbb-association-type">
-                    @foreach (var status in Model.AssociationTypeList)
-                    {
-                        <option value="@status.ItemId">@status.ItemNameDisplay</option>
-                    }
-                </select>
+        </div>
+        
+        <div class="table-report" id="account-by-account-content">
+            <div class="search-table">
+                <span class="icon-magnify"></span>
+                <input type="text" class="text" id="account-by-account-txt-search" placeholder="Search..." />
             </div>
-            <div class="form-control" style="vertical-align: bottom;">
-                <button class="button btn-search" id="account-by-account-btn-search">Search</button>
-            </div>
+
+            <table id="account-by-account-table" class="table table-striped" style="width: 100%">
+                <thead>
+                    <tr>
+                        <th>Tag</th>
+                        <th>Username</th>
+                        <th>Login ID</th>
+                        <th>Status</th>
+                        <th>Subscriber</th>
+                        <th>Association Type</th>
+                        <th>Shared Devices</th>
+                        <th>Shared IPs</th>
+                        <th>Association Date</th>
+                        <th>Path</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
     </div>
-    <div class="table-report" id="account-by-account-content">
-        <div class="search-table">
-            <span class="icon-magnify"></span>
-            <input type="text" class="text" id="account-by-account-txt-search" placeholder="Search..." />
-        </div>
-
-        <div class="graph-heading">
-            <div class="free-size"></div>
-            <div class="graph-info">
-                <button class="button btn-graph" id="account-by-account-btn-on-graph">View On Graph</button>
-                <span class="icon-path graph" id="account-by-account-btn-shortest-path" title="Graph View"></span>
-            </div>
-        </div>
-
-        <table id="account-by-account-table" class="table table-striped" style="width: 100%">
-            <thead>
-                <tr>
-                    <th>Account</th>
-                    <th>Status</th>
-                    <th>First Login</th>
-                    <th>Lastest Login</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
-</div>
 
 <script type="text/javascript">
     var formGraph = new graph();
@@ -93,6 +96,4 @@
         formGraph.GenerateFullNodes(1);
         formGraph.OpenModal();
     });
-
-    $(account_by_account);
 </script>

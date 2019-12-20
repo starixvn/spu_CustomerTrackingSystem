@@ -3,7 +3,11 @@
         $.ajax(common.modifyRelativeUrl('/Account/GetAssociatedAccountByAccount'), {
             type: 'POST',
             success: function (response) {
-                $("#associated_account").html(response)
+                $("#associated_account").html(response);              
+            },
+            complete: function () {
+                var associationByAccount = new account_by_account();
+                associationByAccount.Initial();
             },
             error: function (errMsg) {
 

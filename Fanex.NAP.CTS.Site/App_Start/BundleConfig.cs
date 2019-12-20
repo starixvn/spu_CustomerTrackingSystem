@@ -32,7 +32,7 @@
                       "~/Content/scss/base/reset.css",
                       "~/Content/scss/pages/index.css"));
 
-            bundles.Add(new StyleBundle("~/Content/styles/dashboard").Include(                      
+            bundles.Add(new StyleBundle("~/Content/styles/dashboard").Include(
                       "~/Content/scss/pages/dashboard/dashboard.min.css"));
 
             RegisterFSCoreBundles(bundles);
@@ -53,7 +53,7 @@
             RegisterAssociatedByAccountBundles(bundles);
             RegisterEvidenceBundles(bundles);
             RegisterTransactionHistoryBundles(bundles);
-            RegisterGraphVisualizeBundles(bundles);           
+            RegisterGraphVisualizeBundles(bundles);
         }
 
         private static void RegisterFSCoreBundles(BundleCollection bundles)
@@ -69,9 +69,7 @@
                 "~/Scripts/numeral/numeral.min.js",
                 "~/scripts/multiple-select.js",
                 "~/Scripts/search.js",
-                "~/Scripts/toogle.js",
-                "~/Scripts/MultipleSelect/jquery.multiselect.filter.js",
-                "~/Scripts/MultipleSelect/jquery.multiselect.js"));
+                "~/Scripts/toogle.js"));
 
             bundles.Add(new ScriptBundle("~/finalize").Include("~/scripts/finalize.js"));
         }
@@ -100,7 +98,7 @@
 
             bundles.Add(new ScriptBundle("~/fraud-case-scripts/scanned-office-ip").Include("~/scripts/fraudcase/scanned-office-ip.js"));
 
-            bundles.Add(new ScriptBundle("~/fraud-case-scripts/scanned-office-account").Include("~/scripts/fraudcase/scanned-office-account.js")); 
+            bundles.Add(new ScriptBundle("~/fraud-case-scripts/scanned-office-account").Include("~/scripts/fraudcase/scanned-office-account.js"));
 
             bundles.Add(new ScriptBundle("~/fraud-case-scripts/daily-data-capture").Include("~/scripts/fraudcase/daily-data-capture.js"));
         }
@@ -122,7 +120,7 @@
         {
             bundles.Add(new ScriptBundle("~/ScannedOfficeIp-scripts/main").Include("~/scripts/ScannedOfficeIp/scanned-office-ip.js"));
         }
-        
+
         private static void RegisterDailyDataCaptureBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/daily-data-capture-scripts").Include("~/scripts/dailydatacapture/daily-data-capture.js"));
@@ -179,7 +177,7 @@
 
         private static void RegisterEvidenceBundles(BundleCollection bundles)
         {
-            bundles.Add(new ScriptBundle("~/evidence-scripts").Include("~/Scripts/Evidence/*.js"));           
+            bundles.Add(new ScriptBundle("~/evidence-scripts").Include("~/Scripts/Evidence/*.js"));
         }
 
         private static void RegisterTransactionHistoryBundles(BundleCollection bundles)

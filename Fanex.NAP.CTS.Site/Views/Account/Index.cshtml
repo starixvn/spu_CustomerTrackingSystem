@@ -56,7 +56,7 @@
                     <label>Other Sports</label>
                 </div>
                 <div class="info-text">
-                    <div><span class="dangerous-level-@Model.DangerousOriginal">@(Model.DangerousOriginal == 0 ? "None": Model.DangerousOriginal.ToString())</span></div>
+                    <div><span class="dangerous-level-@Model.DangerousOriginal">@(Model.DangerousOriginal == 0 ? "None" : Model.DangerousOriginal.ToString())</span></div>
                     <div><span class="dangerous-level-@Model.DangerouseABI">@(Model.DangerouseABI == 0 ? "None" : Model.DangerouseABI.ToString())</span></div>
                     <div><span class="dangerous-level-@Model.DangerouseOtherSports">@(Model.DangerouseOtherSports == 0 ? "None" : Model.DangerouseOtherSports.ToString())</span></div>
                 </div>
@@ -118,19 +118,28 @@
                 </div>
                 <div class="info-text">
                     <div class="icon-classification">
-                        <span class="icon-dirty"></span>
-                        <span class="icon-delinquency">
-                        </span><span class="icon-Hedge-Account"></span>
+                        @if (Model.Delinquency)
+                        {
+                            <span class="icon-delinquency" />
+                        }
+                        @if (Model.HedgeAccount)
+                        {
+                            <span class="icon-Hedge-Account" />
+                        }
+                        @if (Model.DirtyAccount)
+                        {
+                            <span class="icon-dirty" />
+                        }
                     </div>
                     <div>
-                        @foreach (var fraudCase in Model.FraudCases)
+                        @if (Model.FraudCases != null && Model.FraudCases.Any())
                         {
-                            <a href="#" class="link">@(fraudCase.FraudCaseName + ", ")</a>
+                            foreach (var fraudCase in Model.FraudCases)
+                            {
+                                <a href="#" class="link">@(fraudCase.FraudCaseName + ", ")</a>
+                            }
                         }
 
-                        @*<a href="#" class="link">Check Bet</a>,
-                        <a href="#" class="link">Bets Near Goal</a>,*@
-                        @*<a href="#" class="link">Flagged Account Delay Goal</a>*@
                     </div>
                 </div>
             </div>
@@ -167,10 +176,11 @@
     </div>
 
 </div>
-@section scripts{   
+@section scripts{
     <script src="~/Scripts/Account/Associated/graph.js"></script>
     <script src="~/Scripts/Account/Associated/sample-data-graph.js"></script>
-    @Scripts.Render("~/account-detail-scripts"
-    , "~/graph-visualize-lib"
-    ,"~/associated-by-account-detail-scripts")
+    @Scripts.Render(
+    "~/graph-visualize-lib"
+    , "~/associated-by-account-detail-scripts"
+    ,"~/account-detail-scripts")
 }

@@ -676,18 +676,19 @@
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                var result = db.QueryMultiple(criteria);
-
-                return new CustomerProfileFraudInfoModel
+                using (var result = db.QueryMultiple(criteria))
                 {
-                    SuspiciouseCustomer = result.ReadFirst<SuspiciousCustomerModel>(),
-                    FraudCaseList = result.Read<FraudCaseModel>().ToList()
-                };
+                    var suspiciouseCustomer = result.ReadFirstOrDefault<SuspiciousCustomerModel>();
+                    var fraudCaseList = result.Read<FraudCaseModel>().ToList();
+
+                    return new CustomerProfileFraudInfoModel
+                    {
+                        SuspiciouseCustomer = suspiciouseCustomer,
+                        FraudCaseList = fraudCaseList
+                    };
+                }
             }
         }
-
-
-
 
         #endregion
     }

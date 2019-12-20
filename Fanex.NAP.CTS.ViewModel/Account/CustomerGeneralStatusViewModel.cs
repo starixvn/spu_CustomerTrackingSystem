@@ -128,10 +128,18 @@ namespace Fanex.NAP.CTS.ViewModel.Account
 
         public CustomerGeneralStatusViewModel BindingGeneralDataFromFS(CustomerProfileFraudInfoModel customerProfileFraudInfoModel)
         {
-            this.Delinquency = customerProfileFraudInfoModel.SuspiciouseCustomer.IsDelinquent;
-            this.DirtyAccount = customerProfileFraudInfoModel.SuspiciouseCustomer.IsDirty;
-            this.HedgeAccount = customerProfileFraudInfoModel.SuspiciouseCustomer.IsHedge;
-            this.FraudCases = customerProfileFraudInfoModel.FraudCaseList;
+            if(customerProfileFraudInfoModel.SuspiciouseCustomer != null)
+            {
+                this.Delinquency = customerProfileFraudInfoModel.SuspiciouseCustomer.IsDelinquent;
+                this.DirtyAccount = customerProfileFraudInfoModel.SuspiciouseCustomer.IsDirty;
+                this.HedgeAccount = customerProfileFraudInfoModel.SuspiciouseCustomer.IsHedge;
+                
+            }
+
+            if (customerProfileFraudInfoModel.FraudCaseList != null && customerProfileFraudInfoModel.FraudCaseList.Any())
+            {
+                this.FraudCases = customerProfileFraudInfoModel.FraudCaseList;
+            }                
 
             return this;
         }
