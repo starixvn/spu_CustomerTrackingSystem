@@ -1,4 +1,4 @@
-﻿function graph() {   
+﻿function graph() {
     this.OpenModal = function () {
         $('#form-graph-render').dialog({
             modal: true,
@@ -16,9 +16,6 @@
         popoto.rest.AUTHORIZATION = "Basic cG9wb3RvOmIuVlJZQVF2blZjV2tyLlRaYnpmTks5aHp6SHlTdXk=";
         popoto.query.RESULTS_PAGE_SIZE = 100;
         popoto.logger.LEVEL = popoto.logger.LogLevels.ERROR;
-    }
-
-    this.Provider = function () {
         popoto.provider.node.Provider = {
             Customer: {
                 returnAttributes: ["Username"],
@@ -51,17 +48,7 @@
         //    }
         //});
         var sampleData = generateSampleData();
-        var nodes = convertNodes(sampleData.nodes);
-        var edges = convertEdges(sampleData.edges);
-        var container = document.getElementById('popoto-graph');
-        var data = {
-            nodes: nodes,
-            edges: edges
-        };
-        var options = getOptions();
-
-        // initialize the network
-        var network = new vis.Network(container, data, options);
+        generateGraph(sampleData);
     }
 
     this.GenerateFullNodes = function (custId) {
@@ -79,8 +66,12 @@
         //    }
         //});
         var sampleData = generateSampleDataFullPath();
-        var nodes = convertNodes(sampleData.nodes);
-        var edges = convertEdges(sampleData.edges);
+        generateGraph(sampleData);
+    }
+
+    function generateGraph(rawData) {
+        var nodes = convertNodes(rawData.nodes);
+        var edges = convertEdges(rawData.edges);
         var container = document.getElementById('popoto-graph');
         var data = {
             nodes: nodes,
