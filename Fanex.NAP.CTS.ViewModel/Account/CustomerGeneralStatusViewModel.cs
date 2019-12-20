@@ -99,6 +99,7 @@ namespace Fanex.NAP.CTS.ViewModel.Account
             {
                 this.LastLoginDate = customerInfoByCTSCustIdModel.LastLoginTime;
                 this.UserName2 = customerInfoByCTSCustIdModel.Username2;
+                this.CreatedDate = customerInfoByCTSCustIdModel.CreatedDate;
             }
 
             return this;

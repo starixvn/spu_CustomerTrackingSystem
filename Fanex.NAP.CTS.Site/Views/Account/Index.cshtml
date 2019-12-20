@@ -15,7 +15,7 @@
     <div class="status-info">
         <p>
             <strong>Member:</strong>
-            <span class="username">@Model.UserName <span class="nickname" style="color: #c16112">(@Model.UserName2)</span></span>
+            <span class="username">@Model.UserName <span class="nickname" style="color: #c16112">@(Model.UserName2 != null ? "(" + Model.UserName2 + ")" : string.Empty)</span></span>
 
             <span class="icon icon-Robot-User"></span>
             <span class="icon icon-Bet-Restricted-Currency"></span>
@@ -39,8 +39,8 @@
                     <label>Last Ticket</label>
                 </div>
                 <div class="info-text">
-                    <div>Jun 13, 2019, 23:59</div>
-                    <div>@Model.LastLoginDate</div>
+                    <div>@Model.CreatedDate.ToString("MMM dd, yyyy hh:mm")</div>
+                    <div>@Model.LastLoginDate.ToString("MMM dd, yyyy hh:mm")</div>
                     <div>Jun 13, 2019, 23:59</div>
                 </div>
             </div>
@@ -182,5 +182,5 @@
     @Scripts.Render(
     "~/graph-visualize-lib"
     , "~/associated-by-account-detail-scripts"
-    ,"~/account-detail-scripts")
+    , "~/account-detail-scripts")
 }

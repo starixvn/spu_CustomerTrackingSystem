@@ -15,5 +15,7 @@ namespace Fanex.NAP.CTS.Model.Account
         public string Username2 { get; set; }
 
         public int CustId { get; set; }
+
+        public DateTime CreatedDate { get; set; }
     }
 }
