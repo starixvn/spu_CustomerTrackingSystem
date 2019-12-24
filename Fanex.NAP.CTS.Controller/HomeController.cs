@@ -59,10 +59,10 @@
 
             var result = accountService.SearchAccounts(inputValue);
 
-            if (result.Count == 1 && result.Any(x => x.Username.Equals(inputValue, System.StringComparison.CurrentCultureIgnoreCase) || x.Username2.Equals(inputValue, System.StringComparison.CurrentCultureIgnoreCase)))
+            if (result.Count == 1 && result.Any(x => (x.Username != null && x.Username.Equals(inputValue, System.StringComparison.CurrentCultureIgnoreCase)) || (x.Username2 != null && x.Username2.Equals(inputValue, System.StringComparison.CurrentCultureIgnoreCase))))
             {
                 return RedirectToAction("Index", "Account", new { ctsCustId = result.FirstOrDefault().CTSCustId });
-                    
+
             }
 
             return View(new SearchResultViewModel { SearchResults = result, InputValue = inputValue });

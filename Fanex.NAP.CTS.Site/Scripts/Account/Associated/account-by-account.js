@@ -8,7 +8,6 @@
 
     function InitialGrid() {
         associatedByAccountTable.DataTable({
-            //dom: 't<"pagination"<"page-size"><"bottom"lp<"clear">>"i>',
             language: {
                 lengthMenu: "Page size _MENU_",
                 paginate: {
@@ -49,12 +48,7 @@
                 { data: obj => obj.SharedIps },
                 { data: obj => moment(obj.AssociationDate).format("MMM DD, YYYY") },
                 { data: obj => RenderGraphImage() }
-            ],
-            headerCallback: function (thread) {
-                //$("th", thread).eq(4).text('Total Logins on shared device with ' + USERNAME),
-                //    $("th", thread).eq(5).text('Associated with ' + USERNAME + ' on'),
-                //    $("th", thread).eq(6).text('Path to ' + USERNAME)
-            }
+            ]
         });        
     }
 
@@ -66,23 +60,11 @@
 
 
     function RenderUsername(obj) {
-        //var url = common.modifyRelativeUrl('/Account/DetailAccount?id=' + obj.AccountID
-        //    + '&custId=' + obj.CustID);
-        //var className = 'icon-clean';
+        var url = common.modifyRelativeUrl('/Account/DetailAccount');              
+       
+        var html = '<a class="info-bng" href="' + url + '" target="_blank">' + obj.Username + '</a>';
 
-        //if (obj.EvidenceLevel == "0") {
-        //    className = 'icon-fraud-flag';
-        //} else if (obj.EvidenceLevel == "2") {
-        //    className = 'icon-fraud';
-        //}
-
-        //var html = '<span class="' + className + '"></span>';
-        //html += '<a class="info-bng" href="' + url + '" target="_blank">' + obj.Username + "(" + obj.Username2 + ")" + '</a>';
-
-        //return html;
-
-        return obj.Username;
-
+        return html;
     }
 
     function RenderGraphImage() {
@@ -103,8 +85,6 @@
             success: function (response) {
                 associatedByAccountTable.DataTable().clear().rows.add(response).draw();
                 associatedByAccountTable.DataTable().columns.adjust();
-
-                // AnimateContent();
             },
             error: function (errMsg) {
                 console.log(errMsg);
