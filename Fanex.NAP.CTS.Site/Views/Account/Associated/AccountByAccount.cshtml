@@ -25,7 +25,7 @@
                     <input type="radio" id="radio03-02" name="demo03" />
                     <label for="radio03-02">Indirect Association with @Model.Username</label>
                 </div>
-                <div class="form-control">
+                <div class="form-control dropdown">
                     <div class="control-label">Status</div>
                     <select class="control" id="account-by-account-cbb-status" multiple="multiple">
                         @foreach (var status in Model.AccountStatusList)
@@ -34,7 +34,7 @@
                         }
                     </select>
                 </div>
-                <div class="form-control">
+                <div class="form-control dropdown">
                     <div class="control-label">Association Type</div>
                     <select class="control" id="account-by-account-cbb-association-type">
                         @foreach (var status in Model.AssociationTypeList)
@@ -46,7 +46,14 @@
                 <div class="form-control" style="vertical-align: bottom;">
                     <button class="button btn-search" id="account-by-account-btn-search">Search</button>
                 </div>
-            </div>
+            </div>            
+        </div>
+        
+        <div class="table-report" id="account-by-account-content">
+            @*<div class="search-table">
+            <span class="icon-magnify"></span>
+            <input type="text" class="text" id="account-by-account-txt-search" placeholder="Search..." />
+        </div>*@
             <div class="graph-heading">
                 <div class="free-size"></div>
                 <div class="graph-info">
@@ -54,14 +61,6 @@
                     <span class="icon-path graph" id="account-by-account-btn-shortest-path" title="Graph View"></span>
                 </div>
             </div>
-        </div>
-        
-        <div class="table-report" id="account-by-account-content">
-            @*<div class="search-table">
-                <span class="icon-magnify"></span>
-                <input type="text" class="text" id="account-by-account-txt-search" placeholder="Search..." />
-            </div>*@
-
             <table id="account-by-account-table" class="table table-striped" style="width: 100%">
                 <thead>
                     <tr>

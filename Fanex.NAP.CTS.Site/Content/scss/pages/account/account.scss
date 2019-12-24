@@ -15,7 +15,7 @@ $dangerousColor: ( level-0: #000, level-1: #000, level-2: #ff0000, level-3: #ffc
 
 @each $name, $color in $abnormalBackgroundColor {
     .abnormal-#{$name} {
-        @include badge-label(#000);        
+        @include badge-label(#000);
         background: $color;
     }
 }
@@ -92,9 +92,17 @@ $dangerousColor: ( level-0: #000, level-1: #000, level-2: #ff0000, level-3: #ffc
     }
 
     .form-control {
-        margin-right: 16px;
+        margin-right: 20px;
         display: inline-block;
-        vertical-align: top;
+        vertical-align: bottom;
+
+        &.dropdown {
+            width: 150px;
+        }
+
+        select.control {
+            width: 100%
+        }
     }
 
     .button-group {
@@ -115,7 +123,7 @@ $dangerousColor: ( level-0: #000, level-1: #000, level-2: #ff0000, level-3: #ffc
     label {
         position: relative;
         display: block;
-        padding: 6px 3px 6px 25px;
+        padding: 13px 3px 0 25px;
         cursor: pointer;
 
         &:before, &:after {
@@ -131,7 +139,7 @@ $dangerousColor: ( level-0: #000, level-1: #000, level-2: #ff0000, level-3: #ffc
             left: 0;
             width: 16px;
             height: 16px;
-            margin-top: -8px;
+            margin-top: -4px;
             background: #f3f3f3;
             border: 1px solid #ccc;
         }
@@ -141,7 +149,7 @@ $dangerousColor: ( level-0: #000, level-1: #000, level-2: #ff0000, level-3: #ffc
             left: 4px;
             width: 8px;
             height: 8px;
-            margin-top: -4px;
+            margin-top: 0;
             background: #458A00;
             -webkit-transform: scale(2);
             transform: scale(2);
@@ -385,6 +393,18 @@ $dangerousColor: ( level-0: #000, level-1: #000, level-2: #ff0000, level-3: #ffc
                 border: 1px solid #2f79ed;
             }
         }
+    }
+
+    .dataTables_length {
+        position: absolute;
+        top: -35px;
+        left: 10px;
+    }
+
+    .dataTables_filter {
+        position: absolute;
+        right: 0;
+        top: -77px;
     }
 }
 

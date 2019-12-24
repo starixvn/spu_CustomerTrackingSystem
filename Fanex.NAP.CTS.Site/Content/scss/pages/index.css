@@ -539,6 +539,23 @@ select[disabled] {
   background: #1e2e4f;
   color: #fff; }
 
+.ms-parent {
+  width: 100% !important; }
+
+.ms-choice {
+  height: 30px;
+  line-height: 30px;
+  border-color: #E5E5E5;
+  border-radius: 2px; }
+
+.ms-drop {
+  border-radius: 2px;
+  border-color: #E5E5E5; }
+  .ms-drop ul {
+    max-height: 240px !important; }
+  .ms-drop ul > li {
+    padding: 6px 0; }
+
 .top-header {
   -webkit-border-radius: 2px 2px 0 0;
   -khtml-border-radius: 2px 2px 0 0;

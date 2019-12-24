@@ -332,9 +332,13 @@
   .filter .button-search {
     margin-top: 10px; }
   .filter .form-control {
-    margin-right: 16px;
+    margin-right: 20px;
     display: inline-block;
-    vertical-align: top; }
+    vertical-align: bottom; }
+    .filter .form-control.dropdown {
+      width: 150px; }
+    .filter .form-control select.control {
+      width: 100%; }
   .filter .button-group {
     margin-top: 9px; }
   .filter .input-field {
@@ -347,7 +351,7 @@
 .radio-button label {
   position: relative;
   display: block;
-  padding: 6px 3px 6px 25px;
+  padding: 13px 3px 0 25px;
   cursor: pointer; }
   .radio-button label:before, .radio-button label:after {
     position: absolute;
@@ -360,7 +364,7 @@
     left: 0;
     width: 16px;
     height: 16px;
-    margin-top: -8px;
+    margin-top: -4px;
     background: #f3f3f3;
     border: 1px solid #ccc; }
   .radio-button label:after {
@@ -368,7 +372,7 @@
     left: 4px;
     width: 8px;
     height: 8px;
-    margin-top: -4px;
+    margin-top: 0;
     background: #458A00;
     -webkit-transform: scale(2);
     transform: scale(2); }
@@ -533,6 +537,14 @@
         background-color: #e3e9f6;
         color: #2f79ed;
         border: 1px solid #2f79ed; }
+  .table-report .dataTables_length {
+    position: absolute;
+    top: -35px;
+    left: 10px; }
+  .table-report .dataTables_filter {
+    position: absolute;
+    right: 0;
+    top: -77px; }
 
 .modal-content .chains-block {
   display: flex;

@@ -82,3 +82,28 @@ select[disabled] {
         color: #fff;
     }
 }
+
+// -------------- Multi select ----------- //
+.ms-parent {
+    width: 100% !important;
+}
+
+.ms-choice {
+    height: 30px;
+    line-height: 30px;
+    border-color: #E5E5E5;
+    border-radius: 2px;
+}
+
+.ms-drop {
+    border-radius: 2px;
+    border-color: #E5E5E5;
+
+    ul {
+        max-height: 240px !important;
+    }
+
+    ul > li {
+        padding: 6px 0;
+    }
+}
