@@ -690,6 +690,26 @@
             }
         }
 
+        public List<CustomerAssociationByAccountDetailModel> GetCustomerAssociationByAccountDetail(int ctsCustId, string statusIds, int associationType)
+        {
+            return new List<CustomerAssociationByAccountDetailModel>();
+        }
+
+        public CustomerLastTicketDateModel GetCustomerLastTicketDate(int custId)
+        {
+            var criteria = new CustomerLastTicketDateCriteria
+            {
+                CustId = custId
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                var result = db.QueryEntity<CustomerLastTicketDateModel>(criteria);
+
+                return result;
+            }
+        }
+
         #endregion
     }
 }

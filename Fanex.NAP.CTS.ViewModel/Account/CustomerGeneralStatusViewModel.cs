@@ -10,6 +10,8 @@ namespace Fanex.NAP.CTS.ViewModel.Account
     {
         public int CustId { get; set; }
 
+        public int CTSCustId { get; set; }
+
         public string UserName { get; set; }
 
         public string UserName2 { get; set; }
@@ -74,20 +76,30 @@ namespace Fanex.NAP.CTS.ViewModel.Account
 
         public List<FraudCaseModel> FraudCases { get; set; }
 
-        public CustomerGeneralStatusViewModel BindingGeneralDataFromMainDB(CustomerGeneralStatusModel model)
+        public CustomerGeneralStatusViewModel BindingGeneralDataFromMainDB(CustomerGeneralStatusModel customerGeneralStatusModel, CustomerLastTicketDateModel customerLastTicketDateModel)
         {
-            if (model != null)
+            if (customerGeneralStatusModel != null)
             {
-                this.AcountStatus = Enum.GetName(typeof(AccountStatus), GetAccountStatus(model));
-                this.DangerousOriginal = model.Danger;
-                this.DangerouseABI = model.Danger2;
-                this.DangerouseOtherSports = model.Danger3;
-                this.CustId = model.CustId;
-                this.UserName = model.Username;
-                this.Abnormal = model.Abnormal;
-                this.AutoSuspendSoccer = model.Autosuspend;
-                this.AutoSuspendOtherSport = model.Autosuspend2;
+                this.AcountStatus = Enum.GetName(typeof(AccountStatus), GetAccountStatus(customerGeneralStatusModel));
+                this.DangerousOriginal = customerGeneralStatusModel.Danger;
+                this.DangerouseABI = customerGeneralStatusModel.Danger2;
+                this.DangerouseOtherSports = customerGeneralStatusModel.Danger3;
+                this.CustId = customerGeneralStatusModel.CustId;
+                this.UserName = customerGeneralStatusModel.Username;
+                this.Abnormal = customerGeneralStatusModel.Abnormal;
+                this.AutoSuspendSoccer = customerGeneralStatusModel.Autosuspend;
+                this.AutoSuspendOtherSport = customerGeneralStatusModel.Autosuspend2;
+                this.ProblemAccountWithBetLimit = customerGeneralStatusModel.ProblemAccountWithBetLimit;
+                this.ProblemAccountWithoutBetLimit = customerGeneralStatusModel.ProblemAccountWithoutBetLimit;
+                this.BetRestrictedAccount = customerGeneralStatusModel.BetRestrictedAccount;
+                this.BetRestrictedCurrency = customerGeneralStatusModel.BetRestrictedCurrency;
+                this.BetRestrictedSite = customerGeneralStatusModel.BetRestrictedSite;
+                this.SmartPunterAccount = customerGeneralStatusModel.SmartPunter;
+            }
 
+            if(customerLastTicketDateModel != null)
+            {
+                this.LastTicketDate = customerLastTicketDateModel.TransDate;
             }
 
             return this;

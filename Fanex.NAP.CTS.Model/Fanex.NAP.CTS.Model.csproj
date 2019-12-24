@@ -139,7 +139,8 @@
     <Compile Include="Account\CustomerEvidenceByCTSCustIdModel.cs" />
     <Compile Include="Account\CustomerGeneralStatusModel.cs" />
     <Compile Include="Account\CustomerInfoByCTSCustIdModel.cs" />
-    <Compile Include="Account\CustomerInfoDetailModel.cs" />
+    <Compile Include="Account\CustomerAssociationByAccountDetailModel.cs" />
+    <Compile Include="Account\CustomerLastTicketDateModel.cs" />
     <Compile Include="Account\CustomerProfileFraudInfoModel.cs" />
     <Compile Include="Account\CustomerStaticStatusModel.cs" />
     <Compile Include="Account\Evidence\AccountEvidence.cs" />

@@ -20,17 +20,17 @@
                 </label>*@
 
                     <input type="radio" id="radio03-01" name="demo03" checked />
-                    <label for="radio03-01">Direct Association with Member01</label>
+                    <label for="radio03-01">Direct Association with @Model.Username</label>
 
                     <input type="radio" id="radio03-02" name="demo03" />
-                    <label for="radio03-02">Indirect Association with Member01</label>
+                    <label for="radio03-02">Indirect Association with @Model.Username</label>
                 </div>
                 <div class="form-control">
                     <div class="control-label">Status</div>
                     <select class="control" id="account-by-account-cbb-status" multiple="multiple">
                         @foreach (var status in Model.AccountStatusList)
                         {
-                            <option value="@status.ItemId">@status.ItemNameDisplay</option>
+                            <option value="@status.ItemId" selected>@status.ItemNameDisplay</option>
                         }
                     </select>
                 </div>
@@ -57,10 +57,10 @@
         </div>
         
         <div class="table-report" id="account-by-account-content">
-            <div class="search-table">
+            @*<div class="search-table">
                 <span class="icon-magnify"></span>
                 <input type="text" class="text" id="account-by-account-txt-search" placeholder="Search..." />
-            </div>
+            </div>*@
 
             <table id="account-by-account-table" class="table table-striped" style="width: 100%">
                 <thead>

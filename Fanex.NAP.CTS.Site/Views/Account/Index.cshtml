@@ -16,11 +16,46 @@
         <p>
             <strong>Member:</strong>
             <span class="username">@Model.UserName <span class="nickname" style="color: #c16112">@(Model.UserName2 != null ? "(" + Model.UserName2 + ")" : string.Empty)</span></span>
+            @if (Model.RobotUser)
+            {
+                <span class="icon icon-Robot-User"></span>
+            }
 
-            <span class="icon icon-Robot-User"></span>
-            <span class="icon icon-Bet-Restricted-Currency"></span>
-            <span class="icon icon-Bet-Restricted-Site"></span>
-            <span class="icon icon-Affected"></span>
+            @if (Model.ProblemAccountWithBetLimit)
+            {
+                <span class="icon icon-P-with-Bet-Limit"></span>
+            }
+
+            @if (Model.ProblemAccountWithBetLimit)
+            {
+                <span class="icon icon-P-without-Bet-Limit"></span>
+            }
+
+            @if (Model.BetRestrictedAccount)
+            {
+                <span class="icon icon-Bet-Restrict-Account"></span>
+            }
+
+            @if (Model.BetRestrictedCurrency)
+            {
+                <span class="icon icon-Bet-Restrict-Currency"></span>
+            }
+
+            @if (Model.BetRestrictedSite)
+            {
+                <span class="icon icon-Bet-Restrict-Site"></span>
+            }
+
+            @if (Model.BetRestrictedSite && Model.BetRestrictedCurrency)
+            {
+                <span class="icon icon-Bet-Restricted-SiteandCurrency"></span>
+            }
+
+            @if (Model.SmartPunterAccount)
+            {
+                <span class="icon icon-Smart-Punter-Account"></span>
+            }
+
         </p>
         <p>
             <strong>Account Status: </strong>
@@ -39,9 +74,9 @@
                     <label>Last Ticket</label>
                 </div>
                 <div class="info-text">
-                    <div>@Model.CreatedDate.ToString("MMM dd, yyyy hh:mm")</div>
-                    <div>@Model.LastLoginDate.ToString("MMM dd, yyyy hh:mm")</div>
-                    <div>Jun 13, 2019, 23:59</div>
+                    <div>@Model.CreatedDate.ToString("MMM dd, yyyy HH:mm")</div>
+                    <div>@Model.LastLoginDate.ToString("MMM dd, yyyy HH:mm")</div>
+                    <div>@Model.LastTicketDate.ToString("MMM dd, yyyy HH:mm")</div>
                 </div>
             </div>
         </div>
@@ -174,7 +209,11 @@
             </div>
         </div>
     </div>
-
+</div>
+<div class="hide">
+    <input id="hdCTSCustId" type="hidden" value="@Model.CTSCustId" />
+    <input id="hdCustId" type="hidden" value="@Model.CustId" />
+    <input id="hdUsername" type="hidden" value="@Model.UserName" />
 </div>
 @section scripts{
     <script src="~/Scripts/Account/Associated/graph.js"></script>

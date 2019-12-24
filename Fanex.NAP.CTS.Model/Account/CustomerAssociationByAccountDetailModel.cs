@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Fanex.NAP.CTS.Model.Account
 {
-   public class CustomerInfoDetailModel
+   public class CustomerAssociationByAccountDetailModel
     {
         public int CTSCustId { get; set; }
 
@@ -17,6 +17,8 @@ namespace Fanex.NAP.CTS.Model.Account
         public string LoginName { get; set; }
 
         public string Status { get; set; }
+
+        public string Subscriber { get; set; }
 
         public string AssociationType { get; set; }
 

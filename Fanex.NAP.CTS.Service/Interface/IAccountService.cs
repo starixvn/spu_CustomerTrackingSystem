@@ -40,5 +40,9 @@
         List<CustomerStaticStatusModel> GetCustomerStaticStatus(int listId, bool status);
 
         CustomerProfileFraudInfoModel GetCustomerProfileFraudInfo(int custId);
+
+        List<CustomerAssociationByAccountDetailModel> GetCustomerAssociationByAccountDetail(int ctsCustId, string statusIds, int associationType);
+
+        CustomerLastTicketDateModel GetCustomerLastTicketDate(int custId);
     }
 }

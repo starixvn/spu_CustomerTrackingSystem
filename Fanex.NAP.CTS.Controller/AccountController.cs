@@ -47,10 +47,15 @@
 
                 if (customerInfoFromCTS != null)
                 {
-                    var customerGeneralStatusViewModel = new CustomerGeneralStatusViewModel();
+                    var customerGeneralStatusViewModel = new CustomerGeneralStatusViewModel()
+                    {
+                        CTSCustId = ctsCustId
+                    };
+
                     var customerStatus = new CustomerGeneralStatusModel();
                     var customerTotalAssociation = new CustomerAssociationByCTSCustIdModel();
                     var customerProfileFraudInfo = new CustomerProfileFraudInfoModel();
+                    var customerLastTicketDate = new CustomerLastTicketDateModel();
 
                     var customerEvidences = new List<CustomerEvidenceByCTSCustIdModel>();
 
@@ -58,11 +63,12 @@
                     tasks.Add(Task.Run(() => { customerTotalAssociation = _accountService.GetCustomerTotalAssociationByCTSCustId(ctsCustId); }));
                     tasks.Add(Task.Run(() => { customerEvidences = _accountService.GetCustomerEvidenceByCTSCustId(ctsCustId); }));
                     tasks.Add(Task.Run(() => { customerProfileFraudInfo = _accountService.GetCustomerProfileFraudInfo(customerInfoFromCTS.CustId); }));
+                    tasks.Add(Task.Run(() => { customerLastTicketDate = _accountService.GetCustomerLastTicketDate(customerInfoFromCTS.CustId); }));
 
                     Task.WhenAll(tasks.ToArray()).Wait();
 
                     customerGeneralStatusViewModel
-                        .BindingGeneralDataFromMainDB(customerStatus)
+                        .BindingGeneralDataFromMainDB(customerStatus, customerLastTicketDate)
                         .BindingGeneralDataFromCTS(customerInfoFromCTS)
                         .BindingTotalAssociationFromCTS(customerTotalAssociation)
                         .BindingEvidenceListFromCTS(customerEvidences)
@@ -181,23 +187,29 @@
 
         //#region Associated Account By Account
         [HttpPost]
-        public ActionResult GetAssociatedAccountByAccount()
+        public ActionResult AssociatedByAccount(string username)
         {
             var getCustomerStaticStatus = _accountService.GetCustomerStaticStatus(1, true);
-
             var getCustomerStaticAssType = _accountService.GetCustomerStaticStatus(4, true);
 
             var associatedByAccountViewModel = new AssociatedByAccountViewModel
             {
                 AccountStatusList = getCustomerStaticStatus,
-                AssociationTypeList = getCustomerStaticAssType,
-                CustomerInfoDetailList = new List<CustomerInfoDetailModel>(),
-                Status = getCustomerStaticStatus.FirstOrDefault().ItemId,
-                AssociationType = getCustomerStaticAssType.FirstOrDefault().ItemId
-            };
+                AssociationTypeList = getCustomerStaticAssType,     
+                Username = username
+             };
 
             return PartialView("Associated/AccountByAccount", associatedByAccountViewModel);
         }
+
+        [HttpPost]
+        public ActionResult GetAssociationByAccount(int ctsCustId, string statusIds, int associationType, bool isDirect)
+        {
+            var data = _accountService.GetCustomerAssociationByAccountDetail(ctsCustId, statusIds, associationType);
+
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
 
         //[HttpPost]
         //public ActionResult GetAssociatedAccountByAccountFilter(AssociatedAccountByAccountFilter filter)

@@ -9,10 +9,6 @@ namespace Fanex.NAP.CTS.ViewModel.Account.Associated
 
         public List<CustomerStaticStatusModel> AssociationTypeList { get; set; }
 
-        public List<CustomerInfoDetailModel> CustomerInfoDetailList { get; set; }
-
-        public int Status { get; set; }
-
-        public int AssociationType { get; set; }
+        public string Username { get; set; }
     }
 }
