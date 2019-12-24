@@ -44,5 +44,7 @@
         List<CustomerAssociationByAccountDetailModel> GetCustomerAssociationByAccountDetail(int ctsCustId, string statusIds, int associationType);
 
         CustomerLastTicketDateModel GetCustomerLastTicketDate(int custId);
+
+        CustomerEsportAutoSuspendStatusModel GetCustomerEsportAutoSuspendedStatus(int custId);
     }
 }

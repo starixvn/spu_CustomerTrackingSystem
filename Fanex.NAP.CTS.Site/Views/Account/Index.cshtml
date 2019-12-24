@@ -121,9 +121,9 @@
                     <label>E-Sports</label>
                 </div>
                 <div class="info-text">
-                    <div>@(Model.AutoSuspendSoccer ? "<a href='#' class='link'>Yes</a>" : "No")</div>
-                    <div>@(Model.AutoSuspendOtherSport ? "<a href='#' class='link'>Yes</a>" : "No")</div>
-                    <div>@(Model.AutoSuspendESport ? "<a href='#' class='link'>Yes</a>" : "No")</div>
+                    <div>@(Model.AutoSuspendSoccer ? Html.Raw("<a href='#' class='link'>Yes</a>") : Html.Raw("No"))</div>
+                    <div>@(Model.AutoSuspendOtherSport ? Html.Raw("<a href='#' class='link'>Yes</a>") : Html.Raw("No"))</div>
+                    <div>@(Model.AutoSuspendESport ? Html.Raw("<a href='#' class='link'>Yes</a>") : Html.Raw("No"))</div>
                 </div>
             </div>
         </div>

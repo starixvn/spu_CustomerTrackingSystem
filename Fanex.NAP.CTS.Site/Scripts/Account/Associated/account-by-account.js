@@ -47,7 +47,7 @@
                 { data: obj => obj.AssociationType },
                 { data: obj => obj.SharedDevices },
                 { data: obj => obj.SharedIps },
-                { data: obj => obj.AssociationDate },
+                { data: obj => moment(obj.AssociationDate).format("MMM DD, YYYY") },
                 { data: obj => RenderGraphImage() }
             ],
             headerCallback: function (thread) {
@@ -81,9 +81,7 @@
 
         //return html;
 
-        var html = "";
-
-        return html;
+        return obj.Username;
 
     }
 

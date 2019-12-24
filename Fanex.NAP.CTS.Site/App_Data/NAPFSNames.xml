@@ -348,6 +348,10 @@
         SpName="CTS_CustomerLastTicketDate_Get"
         DbName="DBTP.bodb02.bodbAdminNet" />
 
+    <Setting Key="CTS_CustomerEsportAutoSuspendStatus_Get"
+        SpName="CTS_CustomerEsportAutoSuspendStatus_Get"
+        DbName="DBTP.bodb02.bodbAdminNet" />
+    
     <Setting Key="CTS_DC_GetCustomerInfoByCTSCustId"
             SpName="CTS_DC_GetCustomerInfoByCTSCustId"
             DbName="MySQL.CTS_DataCenter">     

@@ -136,6 +136,7 @@
     <Compile Include="Account\AccountGeneralInformation.cs" />
     <Compile Include="Account\CustomerAssociationByCTSCustIdModel.cs" />
     <Compile Include="Account\CustomerByGraphDB.cs" />
+    <Compile Include="Account\CustomerEsportAutoSuspendStatusModel.cs" />
     <Compile Include="Account\CustomerEvidenceByCTSCustIdModel.cs" />
     <Compile Include="Account\CustomerGeneralStatusModel.cs" />
     <Compile Include="Account\CustomerInfoByCTSCustIdModel.cs" />

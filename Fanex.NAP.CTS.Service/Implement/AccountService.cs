@@ -710,6 +710,27 @@
             }
         }
 
+        public CustomerEsportAutoSuspendStatusModel GetCustomerEsportAutoSuspendedStatus(int custId)
+        {
+            //var criteria = new CustomerEsportAutoSuspendStatusCriteria
+            //{
+            //    CustId = custId
+            //};
+
+            //using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            //{
+            //    var result = db.QueryEntity<CustomerEsportAutoSuspendStatusModel>(criteria);
+
+            //    return result;
+            //}                                                                                                                                                          
+
+            return new CustomerEsportAutoSuspendStatusModel                  
+            {
+                AutoSuspendLive = true,
+                AutoSuspendNonLive = true
+            };
+        }
+
         #endregion
     }
 }

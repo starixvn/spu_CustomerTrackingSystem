@@ -20,6 +20,7 @@
     using Fanex.NAP.CTS.Model.Account;
     using System.Threading.Tasks;
     using System.Linq;
+    using System;
 
     [NapAuth(FunctionKey = FSFunctionKeys.SearchAccount, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class AccountController : BaseController
@@ -56,6 +57,7 @@
                     var customerTotalAssociation = new CustomerAssociationByCTSCustIdModel();
                     var customerProfileFraudInfo = new CustomerProfileFraudInfoModel();
                     var customerLastTicketDate = new CustomerLastTicketDateModel();
+                    var customerEsportAutoSuspendedStatus = new CustomerEsportAutoSuspendStatusModel();
 
                     var customerEvidences = new List<CustomerEvidenceByCTSCustIdModel>();
 
@@ -64,11 +66,12 @@
                     tasks.Add(Task.Run(() => { customerEvidences = _accountService.GetCustomerEvidenceByCTSCustId(ctsCustId); }));
                     tasks.Add(Task.Run(() => { customerProfileFraudInfo = _accountService.GetCustomerProfileFraudInfo(customerInfoFromCTS.CustId); }));
                     tasks.Add(Task.Run(() => { customerLastTicketDate = _accountService.GetCustomerLastTicketDate(customerInfoFromCTS.CustId); }));
+                    tasks.Add(Task.Run(() => { customerEsportAutoSuspendedStatus = _accountService.GetCustomerEsportAutoSuspendedStatus(customerInfoFromCTS.CustId); }));
 
                     Task.WhenAll(tasks.ToArray()).Wait();
 
                     customerGeneralStatusViewModel
-                        .BindingGeneralDataFromMainDB(customerStatus, customerLastTicketDate)
+                        .BindingGeneralDataFromMainDB(customerStatus, customerLastTicketDate, customerEsportAutoSuspendedStatus)
                         .BindingGeneralDataFromCTS(customerInfoFromCTS)
                         .BindingTotalAssociationFromCTS(customerTotalAssociation)
                         .BindingEvidenceListFromCTS(customerEvidences)
@@ -195,9 +198,9 @@
             var associatedByAccountViewModel = new AssociatedByAccountViewModel
             {
                 AccountStatusList = getCustomerStaticStatus,
-                AssociationTypeList = getCustomerStaticAssType,     
+                AssociationTypeList = getCustomerStaticAssType,
                 Username = username
-             };
+            };
 
             return PartialView("Associated/AccountByAccount", associatedByAccountViewModel);
         }
@@ -206,6 +209,45 @@
         public ActionResult GetAssociationByAccount(int ctsCustId, string statusIds, int associationType, bool isDirect)
         {
             var data = _accountService.GetCustomerAssociationByAccountDetail(ctsCustId, statusIds, associationType);
+
+            if (!data.Any())
+            {
+                data.Add(new CustomerAssociationByAccountDetailModel
+                {
+                    Username = "testing",
+                    LoginName = "test",
+                    Status = "Active",
+                    Subscriber = "12bet",
+                    AssociationType = "Ip",
+                    SharedDevices = 12,
+                    SharedIps = 100,
+                    AssociationDate = DateTime.Now
+                });
+
+                data.Add(new CustomerAssociationByAccountDetailModel
+                {
+                    Username = "testing1",
+                    LoginName = "test1",
+                    Status = "Active",
+                    Subscriber = "CN88",
+                    AssociationType = "All",
+                    SharedDevices = 24,
+                    SharedIps = 200,
+                    AssociationDate = DateTime.Now
+                });
+
+                data.Add(new CustomerAssociationByAccountDetailModel
+                {
+                    Username = "testing3",
+                    LoginName = "test3",
+                    Status = "Active",
+                    Subscriber = "Maxbet",
+                    AssociationType = "Devie",
+                    SharedDevices = 32,
+                    SharedIps = 100,
+                    AssociationDate = DateTime.Now
+                });
+            }
 
             return Json(data, JsonRequestBehavior.AllowGet);
         }
