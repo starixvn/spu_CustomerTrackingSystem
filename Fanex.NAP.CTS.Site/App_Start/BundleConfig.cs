@@ -67,7 +67,8 @@
                 "~/Scripts/DataTables/jquery.datatables.js",
                 "~/Scripts/toast/jquery.toast.js",
                 "~/Scripts/numeral/numeral.min.js",
-                "~/scripts/multiple-select.js",
+                //"~/scripts/multiple-select.js",
+                "~/scripts/MultipleSelect/jquery.multiselect.js",
                 "~/Scripts/search.js",
                 "~/Scripts/toogle.js"));
 

@@ -211,7 +211,7 @@
     //$('#account-by-account-btn-on-graph').click(OpenGraphRender);
 
     this.Initial = function (ctsCustId, statusIds, associationType, isDirect) {
-        $("#account-by-account-cbb-status").multipleSelect();
+        $("#account-by-account-cbb-status").multiselect();
 
         InitialGrid();
         RenderGrid(ctsCustId, statusIds, associationType, isDirect);
