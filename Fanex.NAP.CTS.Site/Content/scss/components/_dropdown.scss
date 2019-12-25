@@ -38,6 +38,10 @@ select[disabled] {
 
 // Dropdown list
 
+.ui-multiselect-menu {
+    display: none;
+}
+ 
 .ui-selectmenu-button.ui-button {
     border: none;
     background-color: transparent;
@@ -83,27 +87,33 @@ select[disabled] {
     }
 }
 
-// -------------- Multi select ----------- //
-.ms-parent {
+//--------------------------- //
+.ui-multiselect {
     width: 100% !important;
-}
-
-.ms-choice {
-    height: 30px;
-    line-height: 30px;
-    border-color: #E5E5E5;
+    height: 28px;
+    background-color: #fff;
+    border: 1px solid #d6d6d6;
     border-radius: 2px;
+    text-align: left;
+    
 }
 
-.ms-drop {
-    border-radius: 2px;
-    border-color: #E5E5E5;
-
-    ul {
-        max-height: 240px !important;
-    }
-
-    ul > li {
-        padding: 6px 0;
-    }
+/*.report-cont .ui-multiselect {
+    border: 1px solid #d6d6d6;
+    padding: 0 4px;
 }
+
+.ui-multiselect-header .ui-helper-reset li {
+    display: inline-block;
+}
+
+.ui-multiselect-checkboxes {
+    height: 170px !important;
+}
+
+.ui-multiselect-menu {
+    .ui-widget-header {
+        border-radius: 0;
+        padding: 5px;
+    }
+}*/
