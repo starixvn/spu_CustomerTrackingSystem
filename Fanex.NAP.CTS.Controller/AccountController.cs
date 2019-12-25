@@ -1,26 +1,16 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
-    using System.Net;
-    using System.Web.Mvc;
-    using System.Collections.Generic;
+    using Fanex.NAP.Core.Web.Attribute;
+    using Fanex.NAP.CTS.Model.Account;
+    using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.ViewModel.Account;
     using Fanex.NAP.CTS.ViewModel.Account.Associated;
-    using Fanex.NAP.Core.Web.Attribute;
-    using Fanex.NAP.CTS.Resource.Consts;
-    using Fanex.NAP.CTS.ViewModel.Evidence;
-    using Fanex.NAP.Core.Service.Impl;
-    using Fanex.NAP.CTS.ViewModel.Account.GeneralInformation;
-    using Fanex.NAP.CTS.Core.Utilities;
-    using Fanex.NAP.CTS.ViewModel.Account.Evidence;
-    using Fanex.NAP.CTS.ViewModel.Account.Evidence.Exception;
-    using Fanex.NAP.CTS.Model;
-    using Fanex.NAP.CTS.Resource;
-    using Fanex.NAP.CTS.ViewModel.Account.TransactionHistory;
-    using Fanex.NAP.CTS.Model.Account;
-    using System.Threading.Tasks;
-    using System.Linq;
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using System.Web.Mvc;
 
     [NapAuth(FunctionKey = FSFunctionKeys.SearchAccount, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class AccountController : BaseController

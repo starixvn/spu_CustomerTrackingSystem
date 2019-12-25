@@ -26,7 +26,7 @@
 
         input.keypress(function (event) {
             if (event.which === 13) {
-                if (input.val().length <= 2) {
+                if (input.val().length <= 1) {
                     errorMessage.show();
 
                     return false;
