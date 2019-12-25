@@ -147,6 +147,7 @@
     <Compile Include="Account\Evidence\AccountEvidence.cs" />
     <Compile Include="Account\Evidence\AccountExceptionEvidence.cs" />
     <Compile Include="Account\FraudCaseModel.cs" />
+    <Compile Include="Account\GraphCustomerModel.cs" />
     <Compile Include="Account\SuspiciousCustomerModel.cs" />
     <Compile Include="Action.cs" />
     <Compile Include="CheckBetReport\CheckBetHistory.cs" />

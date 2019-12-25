@@ -12,7 +12,7 @@
     [NapSuperAuth]
     public class HomeController : BaseController
     {
-        private IAccountService accountService;
+        private readonly IAccountService accountService;
 
         public HomeController()
         {

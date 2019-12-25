@@ -192,9 +192,7 @@
         [HttpPost]
         public ActionResult AssociatedByAccount(string username)
         {
-            var getCustomerStaticStatus = _accountService.GetCustomerStaticStatus(1, true);
-            getCustomerStaticStatus.Insert(0, new CustomerStaticStatusModel { ItemId = 0, ItemNameDisplay = "All" });
-
+            var getCustomerStaticStatus = _accountService.GetCustomerStaticStatus(1, true);           
             var getCustomerStaticAssType = _accountService.GetCustomerStaticStatus(4, true);
 
             getCustomerStaticAssType.Insert(0, new CustomerStaticStatusModel { ItemId = 0, ItemNameDisplay = "All" });
