@@ -1,8 +1,6 @@
 ﻿using Fanex.NAP.CTS.Portal.API.Model;
-using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Web.Http;
-using System.Web.Http.Description;
 using System.Web.Mvc;
 
 namespace Fanex.NAP.CTS.Portal.API.Controllers
@@ -15,9 +13,11 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
         /// <param name="custId"></param>
         /// <returns>GraphCustomerModel</returns>
     
-        public ActionResult<GraphCustomerModel> GetAssociationByAccount(int custId)
+        public IHttpActionResult GetAssociationByAccount(int custId)
         {
-            return new GraphCustomerModel { CustId = 0, Username = "test", Username2 = "abc", RoleId = 1 };
+            var result = new GraphCustomerModel { CustId = 0, Username = "test", Username2 = "abc", RoleId = 1 };
+
+            return Json(new { result = result });
         }
 
         /// <summary>
@@ -33,6 +33,11 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
             result.Add(new GraphCustomerModel { CustId = 2, Username = "testzzz", Username2 = "abczzz", RoleId = 1 });
 
             return result;
+        }
+
+        public string aaa()
+        {
+            return "";
         }
     }
 }

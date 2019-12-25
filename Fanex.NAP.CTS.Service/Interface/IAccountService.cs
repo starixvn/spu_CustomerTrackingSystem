@@ -46,5 +46,7 @@
         CustomerLastTicketDateModel GetCustomerLastTicketDate(int custId);
 
         CustomerEsportAutoSuspendStatusModel GetCustomerEsportAutoSuspendedStatus(int custId);
+
+        CustomerRobotUserStatusModel GetCustomerRobotUserStatus(int custId);
     }
 }

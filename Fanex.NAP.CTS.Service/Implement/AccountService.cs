@@ -731,6 +731,21 @@
             };
         }
 
+        public CustomerRobotUserStatusModel GetCustomerRobotUserStatus(int custId)
+        {
+            var criteria = new CustomerRobotUserStatusCriteria
+            {
+                CustId = custId
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                var result = db.QueryEntity<CustomerRobotUserStatusModel>(criteria);
+
+                return result;
+            }
+        }
+
         #endregion
     }
 }

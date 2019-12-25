@@ -76,7 +76,10 @@ namespace Fanex.NAP.CTS.ViewModel.Account
 
         public List<FraudCaseModel> FraudCases { get; set; }
 
-        public CustomerGeneralStatusViewModel BindingGeneralDataFromMainDB(CustomerGeneralStatusModel customerGeneralStatusModel, CustomerLastTicketDateModel customerLastTicketDateModel, CustomerEsportAutoSuspendStatusModel customerEsportAutoSuspendStatusModel)
+        public CustomerGeneralStatusViewModel BindingGeneralDataFromMainDB(CustomerGeneralStatusModel customerGeneralStatusModel, 
+            CustomerLastTicketDateModel customerLastTicketDateModel, 
+            CustomerEsportAutoSuspendStatusModel customerEsportAutoSuspendStatusModel, 
+            CustomerRobotUserStatusModel customerRobotUserStatusModel)
         {
             if (customerGeneralStatusModel != null)
             {
@@ -105,6 +108,11 @@ namespace Fanex.NAP.CTS.ViewModel.Account
             if (customerEsportAutoSuspendStatusModel != null)
             {
                 this.AutoSuspendESport = customerEsportAutoSuspendStatusModel.AutoSuspendLive || customerEsportAutoSuspendStatusModel.AutoSuspendNonLive;
+            }
+
+            if (customerRobotUserStatusModel != null)
+            {
+                this.RobotUser = customerRobotUserStatusModel.IsRobotUser;
             }
 
             return this;

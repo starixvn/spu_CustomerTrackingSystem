@@ -58,6 +58,7 @@
                     var customerProfileFraudInfo = new CustomerProfileFraudInfoModel();
                     var customerLastTicketDate = new CustomerLastTicketDateModel();
                     var customerEsportAutoSuspendedStatus = new CustomerEsportAutoSuspendStatusModel();
+                    var customerRobotUserStatusModel = new CustomerRobotUserStatusModel();
 
                     var customerEvidences = new List<CustomerEvidenceByCTSCustIdModel>();
 
@@ -67,11 +68,15 @@
                     tasks.Add(Task.Run(() => { customerProfileFraudInfo = _accountService.GetCustomerProfileFraudInfo(customerInfoFromCTS.CustId); }));
                     tasks.Add(Task.Run(() => { customerLastTicketDate = _accountService.GetCustomerLastTicketDate(customerInfoFromCTS.CustId); }));
                     tasks.Add(Task.Run(() => { customerEsportAutoSuspendedStatus = _accountService.GetCustomerEsportAutoSuspendedStatus(customerInfoFromCTS.CustId); }));
+                    tasks.Add(Task.Run(() => { customerRobotUserStatusModel = _accountService.GetCustomerRobotUserStatus(customerInfoFromCTS.CustId); }));
 
                     Task.WhenAll(tasks.ToArray()).Wait();
 
                     customerGeneralStatusViewModel
-                        .BindingGeneralDataFromMainDB(customerStatus, customerLastTicketDate, customerEsportAutoSuspendedStatus)
+                        .BindingGeneralDataFromMainDB(customerStatus,
+                                                        customerLastTicketDate,
+                                                        customerEsportAutoSuspendedStatus,
+                                                        customerRobotUserStatusModel)
                         .BindingGeneralDataFromCTS(customerInfoFromCTS)
                         .BindingTotalAssociationFromCTS(customerTotalAssociation)
                         .BindingEvidenceListFromCTS(customerEvidences)
@@ -192,7 +197,7 @@
         [HttpPost]
         public ActionResult AssociatedByAccount(string username)
         {
-            var getCustomerStaticStatus = _accountService.GetCustomerStaticStatus(1, true);           
+            var getCustomerStaticStatus = _accountService.GetCustomerStaticStatus(1, true);
             var getCustomerStaticAssType = _accountService.GetCustomerStaticStatus(4, true);
 
             getCustomerStaticAssType.Insert(0, new CustomerStaticStatusModel { ItemId = 0, ItemNameDisplay = "All" });

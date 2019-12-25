@@ -375,5 +375,9 @@
     <Setting Key="CTS_CustomerProfile_FraudInfo_Get"
             SpName="CTS_CustomerProfile_FraudInfo_Get"
             DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
+
+    <Setting Key="CTS_RobotUserStatus_Get"
+            SpName="CTS_RobotUserStatus_Get"
+            DbName="DBONUSER.ON_USER.bodbSPUNet" />
   </Function>
 </Functions>

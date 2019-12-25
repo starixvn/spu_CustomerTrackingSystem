@@ -34,10 +34,7 @@ namespace Fanex.NAP.CTS.Portal.API.Areas.HelpPage
         public static void Register(HttpConfiguration config)
         {
             //// Uncomment the following to use the documentation from XML documentation file.
-            ///
-            config.SetDocumentationProvider(
-        new XmlDocumentationProvider(
-            HttpContext.Current.Server.MapPath("~/App_Data/Fanex.NAP.CTS.Portal.API.xml")));
+           
             //config.SetDocumentationProvider(new XmlDocumentationProvider(HttpContext.Current.Server.MapPath("~/App_Data/XmlDocument.xml")));
 
             //// Uncomment the following to use "sample string" as the sample for all actions that have string as the body parameter or return type.
