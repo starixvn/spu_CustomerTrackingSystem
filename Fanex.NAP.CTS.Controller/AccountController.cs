@@ -59,6 +59,7 @@
                     var customerLastTicketDate = new CustomerLastTicketDateModel();
                     var customerEsportAutoSuspendedStatus = new CustomerEsportAutoSuspendStatusModel();
                     var customerRobotUserStatusModel = new CustomerRobotUserStatusModel();
+                    var customerFlagInfoModel = new CustomerFlagInfoModel();
 
                     var customerEvidences = new List<CustomerEvidenceByCTSCustIdModel>();
 
@@ -69,6 +70,7 @@
                     tasks.Add(Task.Run(() => { customerLastTicketDate = _accountService.GetCustomerLastTicketDate(customerInfoFromCTS.CustId); }));
                     tasks.Add(Task.Run(() => { customerEsportAutoSuspendedStatus = _accountService.GetCustomerEsportAutoSuspendedStatus(customerInfoFromCTS.CustId); }));
                     tasks.Add(Task.Run(() => { customerRobotUserStatusModel = _accountService.GetCustomerRobotUserStatus(customerInfoFromCTS.CustId); }));
+                    tasks.Add(Task.Run(() => { customerFlagInfoModel = _accountService.GetCustomerFlagInfo(ctsCustId, customerInfoFromCTS.SubscriberId); }));
 
                     Task.WhenAll(tasks.ToArray()).Wait();
 
@@ -77,7 +79,7 @@
                                                         customerLastTicketDate,
                                                         customerEsportAutoSuspendedStatus,
                                                         customerRobotUserStatusModel)
-                        .BindingGeneralDataFromCTS(customerInfoFromCTS)
+                        .BindingGeneralDataFromCTS(customerInfoFromCTS, customerFlagInfoModel)
                         .BindingTotalAssociationFromCTS(customerTotalAssociation)
                         .BindingEvidenceListFromCTS(customerEvidences)
                         .BindingGeneralDataFromFS(customerProfileFraudInfo);

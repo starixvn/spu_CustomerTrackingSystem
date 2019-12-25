@@ -62,6 +62,7 @@ namespace Fanex.NAP.CTS.Portal.API.Areas.HelpPage
                         return parameterNode.Value.Trim();
                     }
                 }
+
             }
 
             return null;

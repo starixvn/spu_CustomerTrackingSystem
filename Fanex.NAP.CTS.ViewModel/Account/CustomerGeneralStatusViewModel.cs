@@ -118,13 +118,20 @@ namespace Fanex.NAP.CTS.ViewModel.Account
             return this;
         }
 
-        public CustomerGeneralStatusViewModel BindingGeneralDataFromCTS(CustomerInfoByCTSCustIdModel customerInfoByCTSCustIdModel)
+        public CustomerGeneralStatusViewModel BindingGeneralDataFromCTS(CustomerInfoByCTSCustIdModel customerInfoByCTSCustIdModel, CustomerFlagInfoModel customerFlagInfoModel)
         {
             if (customerInfoByCTSCustIdModel != null)
             {
                 this.LastLoginDate = customerInfoByCTSCustIdModel.LastLoginTime;
                 this.UserName2 = customerInfoByCTSCustIdModel.Username2;
                 this.CreatedDate = customerInfoByCTSCustIdModel.CreatedDate;
+            }
+
+            if(customerFlagInfoModel != null)
+            {
+                this.Affected = customerFlagInfoModel.Flagged == 0;
+                this.Flagged = customerFlagInfoModel.Flagged == 2;
+                this.FlaggedWithEvi100 = customerFlagInfoModel.Flagged == 1;
             }
 
             return this;

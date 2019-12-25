@@ -746,6 +746,22 @@
             }
         }
 
+        public CustomerFlagInfoModel GetCustomerFlagInfo(int ctsCustId, int subscriberId)
+        {
+            var criteria = new CustomerFlagInfoByCTSCustIdCriteria
+            {
+                CTSCustId = ctsCustId,
+                SubscriberId = subscriberId
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                var result = db.QueryEntity<CustomerFlagInfoModel>(criteria);
+
+                return result;
+            }
+        }
+
         #endregion
     }
 }

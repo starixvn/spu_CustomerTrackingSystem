@@ -481,19 +481,20 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetAssociationByAccount(System.Int32)">
-            <summary>
-            Get Association By Account
-            </summary>
-            <param name="custId"></param>
-            <returns>GraphCustomerModel</returns>
-        </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetAssociationOneLevel(System.Int32)">
             <summary>
-            Get Association One Level
+            Get Association with one Level
             </summary>
             <param name="custId"></param>
-            <returns>List of GraphCustomerModel</returns>      
+            <returns></returns>
+            
+        </member>
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetAssociationNLevel(System.Int32)">
+            <summary>
+            Get Association with N Level
+            </summary>
+            <param name="custId"></param>
+            <returns></returns>
         </member>
     </members>
 </doc>

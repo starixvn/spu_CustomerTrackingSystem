@@ -58,6 +58,18 @@
             {
                 <span class="icon icon-Smart-Punter-Account"></span>
             }
+            @if (Model.Affected)
+            {
+                <span class="icon icon-Affected"></span>
+            }
+            @if (Model.Flagged)
+            {
+                <span class="icon icon-Flagged"></span>
+            }
+            @if (Model.FlaggedWithEvi100)
+            {
+                <span class="icon icon-Flagged-With-Evidence"></span>
+            }
 
         </p>
         <p>

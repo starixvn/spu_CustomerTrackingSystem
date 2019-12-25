@@ -48,5 +48,7 @@
         CustomerEsportAutoSuspendStatusModel GetCustomerEsportAutoSuspendedStatus(int custId);
 
         CustomerRobotUserStatusModel GetCustomerRobotUserStatus(int custId);
+
+        CustomerFlagInfoModel GetCustomerFlagInfo(int ctsCustId, int subscriberId);
     }
 }
