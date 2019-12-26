@@ -1,9 +1,15 @@
-﻿using Fanex.NAP.CTS.Portal.API.Model;
+﻿using Fanex.NAP.CTS.Model.Account;
+using Fanex.NAP.SPU.Graph.Core;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http;
 
 namespace Fanex.NAP.CTS.Portal.API.Controllers
 {
+    /// <summary>
+    /// Graph Controller
+    /// </summary>
     public class GraphController : ApiController
     {
         /// <summary>
@@ -14,14 +20,9 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
         /// 
         [System.Web.Http.AcceptVerbs("GetAssociationOneLevel")]
         [HttpPost]
-        public IEnumerable<GraphCustomerModel> GetAssociationOneLevel(int custId)
+        public IEnumerable<GraphCustomerModel> GetAssociationOneLevel([FromBody] int custId)
         {
-            var result = new List<GraphCustomerModel>();
-
-            result.Add(new GraphCustomerModel { CustId = 1, Username = "test", Username2 = "abc", RoleId = 1 });
-            result.Add(new GraphCustomerModel { CustId = 2, Username = "testzzz", Username2 = "abczzz", RoleId = 1 });
-
-            return result;
+            return DbSessionFactory.Execute<GraphCustomerModel>("GetAssociationOneLevelByCustId", new { CustId = custId }).Data;
         }
 
         /// <summary>
@@ -31,14 +32,31 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
         /// <returns></returns>
         [System.Web.Http.AcceptVerbs("GetAssociationNLevel")]
         [HttpPost]
-        public IEnumerable<GraphCustomerModel> GetAssociationNLevel(int custId)
+        public IEnumerable<GraphCustomerModel> GetAssociationNLevel([FromBody] int custId)
         {
-            var result = new List<GraphCustomerModel>();
+            return DbSessionFactory.Execute<GraphCustomerModel>("GetAssociationNLevelByCustId", new { CustId = custId }).Data;
+        }
 
-            result.Add(new GraphCustomerModel { CustId = 1, Username = "test", Username2 = "abc", RoleId = 1 });
-            result.Add(new GraphCustomerModel { CustId = 2, Username = "testzzz", Username2 = "abczzz", RoleId = 1 });
+        /// <summary>
+        /// Get association by level
+        /// </summary>
+        /// <param name="custId"></param>
+        /// <param name="isOneLevel"></param>
+        /// <returns>HttpResponseMessage</returns>
+        public HttpResponseMessage Get(int custId, bool isOneLevel)
+        {
+            var query = isOneLevel ? "GetAssociationOneLevelByCustId" : "GetAssociationNLevelByCustId";
 
-            return result;
+            var result = DbSessionFactory.Execute<GraphCustomerModel>(query, new { CustId = custId }).Data;
+
+            if(result == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
+
+            HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.OK, result);
+
+            return response;
         }
     }
 }

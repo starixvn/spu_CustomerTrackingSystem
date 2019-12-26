@@ -1,0 +1,2 @@
+﻿MATCH path = shortestpath((:Customer{CustId: $StartCustId })-[:USED*]-(:Customer{CustId: $EndCustId }))
+RETURN path

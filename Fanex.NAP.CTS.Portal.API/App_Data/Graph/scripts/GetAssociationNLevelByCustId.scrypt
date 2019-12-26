@@ -1,0 +1,3 @@
+﻿match (c:Customer)-[:BELONG_TO]->(g:Group)<-[:BELONG_TO]-(c1:Customer)
+where c.CustId = $CustId
+return c1.CustId as CustId, c1.Username as Username, c1.Username2 as Username2
