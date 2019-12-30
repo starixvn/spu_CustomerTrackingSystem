@@ -1,4 +1,3 @@
-﻿MATCH (c:Customer)-[:USED*2]-(c1:Customer)
-//MATCH (c:Customer)-[:USED]->(:Device)<-[:USED]-(c1:Customer)
-WHERE c.CustId = $CustId
-RETURN c1.CustId AS CustId, c1.Username AS Username, c1.Username2 AS Username2
+﻿MATCH (c:CTSCustomer)-[:USED_DEVICE*2]-(c1:CTSCustomer)
+WHERE c.CustID = $CustId
+RETURN c1.CustID AS CustId, c1.UserName AS Username, c1.UserName2 AS Username2
