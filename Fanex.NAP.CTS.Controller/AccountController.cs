@@ -190,9 +190,9 @@
         public ActionResult AssociatedByAccount(string username)
         {
             var getCustomerStaticStatus = _accountService.GetCustomerStaticStatus(1, true);
-            var getCustomerStaticAssType = _accountService.GetCustomerStaticStatus(4, true);
+            var getCustomerStaticAssType = _accountService.GetCustomerStaticStatus(2, true);
 
-            getCustomerStaticAssType.Insert(0, new CustomerStaticStatusModel { ItemId = 0, ItemNameDisplay = "All" });
+            getCustomerStaticAssType.Insert(0, new CustomerStaticStatusModel { ItemId = 0, ItemName = "All" });
 
             var associatedByAccountViewModel = new AssociatedByAccountViewModel
             {
@@ -223,11 +223,21 @@
 
                     if (accountStatus != null && accountStatus.Any())
                     {
-                        result = result.Select(x => { x.Status = accountStatus.FirstOrDefault(z => z.custId == x.CustId).status; return x; }).ToList();
+                        result = result
+                                       .Select(x =>
+                                       {
+                                           if(x.CustId != 0)
+                                           {
+                                               var accStatus = accountStatus.FirstOrDefault(z => z.custId == x.CustId);
+
+                                               x.Status = accStatus != null ? accStatus.status : string.Empty;
+                                           }                                           
+
+                                           return x;
+
+                                       }).ToList();
                     }
                 }
-
-
             }
             else
             {

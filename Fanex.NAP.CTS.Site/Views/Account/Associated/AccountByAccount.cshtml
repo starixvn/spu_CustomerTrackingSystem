@@ -30,7 +30,7 @@
                     <select class="control" id="account-by-account-cbb-status" multiple="multiple">
                         @foreach (var status in Model.AccountStatusList)
                         {
-                            <option value="@status.ItemId" selected>@status.ItemNameDisplay</option>
+                            <option value="@status.ItemId" selected>@status.ItemName</option>
                         }
                     </select>
                 </div>
@@ -39,7 +39,7 @@
                     <select class="control" id="account-by-account-cbb-association-type">
                         @foreach (var status in Model.AssociationTypeList)
                         {
-                            <option value="@status.ItemId">@status.ItemNameDisplay</option>
+                            <option value="@status.ItemId">@status.ItemName</option>
                         }
                     </select>
                 </div>

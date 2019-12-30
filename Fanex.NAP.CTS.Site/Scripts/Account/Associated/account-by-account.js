@@ -1,13 +1,10 @@
 ﻿function account_by_account() {
-    //var loading = $('#account-by-account-loading');
-    //var btnSearch = $('#account-by-account-btn-search');
-    //var accountSearch = $('#account-by-account-txt-search');
-    //var usernameSpan = $('.account-by-account-username');
-    var associatedByAccountTable = $('#account-by-account-table');
-    //var associatedContent = $('#account-by-account-content'); 
+    var btnSearch = $('#account-by-account-btn-search');
+    var associatedByAccountTable = $('#account-by-account-table'); 
+   
 
     function InitialGrid() {
-        associatedByAccountTable.DataTable({
+        associatedByAccountTable.DataTable({           
             language: {
                 lengthMenu: "Page size _MENU_",
                 paginate: {
@@ -15,7 +12,7 @@
                 },
                 info: "Displaying _START_ to _END_ of _TOTAL_ item(s)",
                 infoEmpty: "",
-                zeroRecords: "There's no data"
+                zeroRecords: "There's no data"                
             },
             ordering: false,
             lengthMenu: [10, 20, 50, 100, 200],
@@ -25,7 +22,7 @@
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
                 { targets: [-2, -1], className: "text-center" },
-                { targets: [1, 2, 3, 4, 5, 6], className: "text-center" },
+                { targets: [1, 2, 3, 4, 5, 6, 7], className: "text-center" },
                 { targets: [0], width: "5%" },
                 { targets: [1], width: "20%" },
                 { targets: [2], width: "10%" },
@@ -80,6 +77,9 @@
 
         $.ajax(url, {
             type: 'POST',
+            beforeSend: function () {
+                associatedByAccountTable.find('tbody').addClass('loading');
+            },
             data: {
                 ctsCustId: ctsCustId,
                 statusIds: statusIds,
@@ -89,6 +89,8 @@
             success: function (response) {
                 associatedByAccountTable.DataTable().clear().rows.add(response).draw();
                 associatedByAccountTable.DataTable().columns.adjust();
+
+                associatedByAccountTable.find('tbody').removeClass('loading');
             },
             error: function (errMsg) {
                 console.log(errMsg);
@@ -199,6 +201,15 @@
 
         InitialGrid();
         RenderGrid(ctsCustId, statusIds, associationType, isDirect);
+
+        btnSearch.on('click', function () {
+            var isDirect = $("#radio03-01").is(':checked');
+            var accountStatus = $('#account-by-account-cbb-status').val().join(',');
+            var associationType = $("#account-by-account-cbb-association-type").val();
+            var ctsCustId = $("#hdCTSCustId").val();
+
+            RenderGrid(ctsCustId, accountStatus, associationType, isDirect);
+        });
     }
 }
 
