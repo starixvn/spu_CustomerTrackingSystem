@@ -83,7 +83,7 @@ namespace Fanex.NAP.CTS.ViewModel.Account
         {
             if (customerGeneralStatusModel != null)
             {
-                this.AcountStatus = Enum.GetName(typeof(AccountStatus), GetAccountStatus(customerGeneralStatusModel));
+                this.AcountStatus = GetAccountStatusName(GetAccountStatus(customerGeneralStatusModel));
                 this.DangerousOriginal = customerGeneralStatusModel.Danger;
                 this.DangerouseABI = customerGeneralStatusModel.Danger2;
                 this.DangerouseOtherSports = customerGeneralStatusModel.Danger3;
@@ -177,7 +177,7 @@ namespace Fanex.NAP.CTS.ViewModel.Account
             return this;
         }
 
-        private AccountStatus GetAccountStatus(CustomerGeneralStatusModel model)
+        public AccountStatus GetAccountStatus(CustomerGeneralStatusModel model)
         {
             if (model.CN88Status == -1)
             {
@@ -185,6 +185,11 @@ namespace Fanex.NAP.CTS.ViewModel.Account
             }
 
             return GetAccountStatusForCN88(model);
+        }
+
+        public string GetAccountStatusName(AccountStatus accountStatus)
+        {
+            return Enum.GetName(typeof(AccountStatus), accountStatus);
         }
 
         private AccountStatus GetAccountStatusForMBC(CustomerGeneralStatusModel model)

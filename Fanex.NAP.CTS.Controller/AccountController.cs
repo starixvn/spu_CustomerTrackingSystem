@@ -213,14 +213,21 @@
             {
                 result = _accountService.GetDirectCustomerAssociatedByAccount(ctsCustId, associationType);
 
-                if(result != null && result.Any())
+                if (result != null && result.Any())
                 {
                     var getStatusByCustIds = _accountService.GetCustomerGeneralStatus(string.Join(",", result.Select(x => x.CustId)));
 
+                    var accountStatusViewModel = new CustomerGeneralStatusViewModel();
 
+                    var accountStatus = getStatusByCustIds.Select(x => new { custId = x.CustId, status = accountStatusViewModel.GetAccountStatusName(accountStatusViewModel.GetAccountStatus(x)) }).ToList();
+
+                    if (accountStatus != null && accountStatus.Any())
+                    {
+                        result = result.Select(x => { x.Status = accountStatus.FirstOrDefault(z => z.custId == x.CustId).status; return x; }).ToList();
+                    }
                 }
 
-                
+
             }
             else
             {
@@ -262,7 +269,7 @@
                         AssociationDate = DateTime.Now
                     });
                 }
-            }            
+            }
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
