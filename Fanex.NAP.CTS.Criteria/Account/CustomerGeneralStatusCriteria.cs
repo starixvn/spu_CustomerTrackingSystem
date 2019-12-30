@@ -9,7 +9,7 @@ namespace Fanex.NAP.CTS.Criteria.Account
 {
     public class CustomerGeneralStatusCriteria : CriteriaBase
     {
-        public int CustId { get; set; }
+        public string CustIds { get; set; }
 
         public override string GetSettingKey()
         {

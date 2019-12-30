@@ -53,7 +53,7 @@
 
                     var customerEvidences = new List<CustomerEvidenceByCTSCustIdModel>();
 
-                    tasks.Add(Task.Run(() => { customerStatus = _accountService.GetCustomerGeneralStatus(customerInfoFromCTS.CustId); }));
+                    tasks.Add(Task.Run(() => { customerStatus = _accountService.GetCustomerGeneralStatus(customerInfoFromCTS.CustId.ToString()).FirstOrDefault(); }));
                     tasks.Add(Task.Run(() => { customerTotalAssociation = _accountService.GetCustomerTotalAssociationByCTSCustId(ctsCustId); }));
                     tasks.Add(Task.Run(() => { customerEvidences = _accountService.GetCustomerEvidenceByCTSCustId(ctsCustId); }));
                     tasks.Add(Task.Run(() => { customerProfileFraudInfo = _accountService.GetCustomerProfileFraudInfo(customerInfoFromCTS.CustId); }));
@@ -69,7 +69,7 @@
                                                         customerLastTicketDate,
                                                         customerEsportAutoSuspendedStatus,
                                                         customerRobotUserStatusModel)
-                        .BindingGeneralDataFromCTS(customerInfoFromCTS, customerFlagInfoModel)
+                        .BindingGeneralDataFromCTS(customerInfoFromCTS, customerFlagInfoModel, customerTotalAssociation)
                         .BindingTotalAssociationFromCTS(customerTotalAssociation)
                         .BindingEvidenceListFromCTS(customerEvidences)
                         .BindingGeneralDataFromFS(customerProfileFraudInfo);
@@ -207,48 +207,64 @@
         [HttpPost]
         public ActionResult GetAssociationByAccount(int ctsCustId, string statusIds, int associationType, bool isDirect)
         {
-            var data = _accountService.GetCustomerAssociationByAccountDetail(ctsCustId, statusIds, associationType);
+            var result = new List<CustomerAssociationByAccountDetailModel>();
 
-            if (!data.Any())
+            if (isDirect)
             {
-                data.Add(new CustomerAssociationByAccountDetailModel
-                {
-                    Username = "testing",
-                    LoginName = "test",
-                    Status = "Active",
-                    Subscriber = "12bet",
-                    AssociationType = "Ip",
-                    SharedDevices = 12,
-                    SharedIps = 100,
-                    AssociationDate = DateTime.Now
-                });
+                result = _accountService.GetDirectCustomerAssociatedByAccount(ctsCustId, associationType);
 
-                data.Add(new CustomerAssociationByAccountDetailModel
+                if(result != null && result.Any())
                 {
-                    Username = "testing1",
-                    LoginName = "test1",
-                    Status = "Active",
-                    Subscriber = "CN88",
-                    AssociationType = "All",
-                    SharedDevices = 24,
-                    SharedIps = 200,
-                    AssociationDate = DateTime.Now
-                });
+                    var getStatusByCustIds = _accountService.GetCustomerGeneralStatus(string.Join(",", result.Select(x => x.CustId)));
 
-                data.Add(new CustomerAssociationByAccountDetailModel
-                {
-                    Username = "testing3",
-                    LoginName = "test3",
-                    Status = "Active",
-                    Subscriber = "Maxbet",
-                    AssociationType = "Devie",
-                    SharedDevices = 32,
-                    SharedIps = 100,
-                    AssociationDate = DateTime.Now
-                });
+
+                }
+
+                
             }
+            else
+            {
+                if (!result.Any())
+                {
+                    result.Add(new CustomerAssociationByAccountDetailModel
+                    {
+                        Username = "testing",
+                        LoginId = "test",
+                        Status = "Active",
+                        Subscriber = "12bet",
+                        AssociationType = "Ip",
+                        SharedDevices = 12,
+                        SharedIps = 100,
+                        AssociationDate = DateTime.Now
+                    });
 
-            return Json(data, JsonRequestBehavior.AllowGet);
+                    result.Add(new CustomerAssociationByAccountDetailModel
+                    {
+                        Username = "testing1",
+                        LoginId = "test1",
+                        Status = "Active",
+                        Subscriber = "CN88",
+                        AssociationType = "All",
+                        SharedDevices = 24,
+                        SharedIps = 200,
+                        AssociationDate = DateTime.Now
+                    });
+
+                    result.Add(new CustomerAssociationByAccountDetailModel
+                    {
+                        Username = "testing3",
+                        LoginId = "test3",
+                        Status = "Active",
+                        Subscriber = "Maxbet",
+                        AssociationType = "Devie",
+                        SharedDevices = 32,
+                        SharedIps = 100,
+                        AssociationDate = DateTime.Now
+                    });
+                }
+            }            
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
 

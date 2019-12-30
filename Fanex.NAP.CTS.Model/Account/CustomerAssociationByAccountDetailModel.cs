@@ -8,13 +8,15 @@ namespace Fanex.NAP.CTS.Model.Account
 {
    public class CustomerAssociationByAccountDetailModel
     {
+        public int Tag { get; set; }
+
         public int CTSCustId { get; set; }
 
         public int CustId { get; set; }
 
         public string Username { get; set; }
 
-        public string LoginName { get; set; }
+        public string LoginId { get; set; }
 
         public string Status { get; set; }
 

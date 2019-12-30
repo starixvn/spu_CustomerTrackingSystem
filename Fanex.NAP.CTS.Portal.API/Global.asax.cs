@@ -2,6 +2,7 @@
 {
     using Fanex.NAP.SPU.Graph.Core;
     using Fanex.NAP.SPU.Graph.Core.Neo4j;
+    using Newtonsoft.Json.Serialization;
     using System.Web.Http;
     using System.Web.Mvc;
     using System.Web.Optimization;

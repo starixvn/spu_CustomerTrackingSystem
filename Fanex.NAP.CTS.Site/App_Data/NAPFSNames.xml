@@ -384,5 +384,10 @@
             SpName="CTS_DC_GetCustomerFlagInfo"
             DbName="MySQL.CTS_DataCenter">
     </Setting>
+    
+    <Setting Key="CTS_DC_GetDirectAssociatedAccount"
+            SpName="CTS_DC_GetDirectAssociatedAccount"
+            DbName="MySQL.CTS_DataCenter">
+    </Setting>
   </Function>
 </Functions>

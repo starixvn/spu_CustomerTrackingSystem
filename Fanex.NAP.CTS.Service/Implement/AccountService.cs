@@ -26,6 +26,7 @@
     using Fanex.NAP.CTS.Model.Home;
     using Fanex.NAP.CTS.Criteria.Home;
     using Fanex.NAP.CTS.Model.DTO;
+    using Fanex.NAP.CTS.Model.Association;
 
     public class AccountService : IAccountService
     {
@@ -591,18 +592,18 @@
             }
         }
 
-        public CustomerGeneralStatusModel GetCustomerGeneralStatus(int custId)
+        public List<CustomerGeneralStatusModel> GetCustomerGeneralStatus(string custIds)
         {
             var criteria = new CustomerGeneralStatusCriteria
             {
-                CustId = custId
+                CustIds = custIds
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                var result = db.QueryEntity<CustomerGeneralStatusModel>(criteria);
+                var result = db.Query<CustomerGeneralStatusModel>(criteria);
 
-                return result;
+                return result.ToList();
             }
         }
 
@@ -690,9 +691,20 @@
             }
         }
 
-        public List<CustomerAssociationByAccountDetailModel> GetCustomerAssociationByAccountDetail(int ctsCustId, string statusIds, int associationType)
+        public List<CustomerAssociationByAccountDetailModel> GetDirectCustomerAssociatedByAccount(int ctsCustId, int associationType)
         {
-            return new List<CustomerAssociationByAccountDetailModel>();
+            var criteria = new GetDirectAssociationByAccountCriteria
+            {
+                CTSCustId = ctsCustId,
+                AssociationType = associationType
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                var result = db.Query<CustomerAssociationByAccountDetailModel>(criteria);
+
+                return result.ToList();
+            }
         }
 
         public CustomerLastTicketDateModel GetCustomerLastTicketDate(int custId)
@@ -724,7 +736,7 @@
             //    return result;
             //}                                                                                                                                                          
 
-            return new CustomerEsportAutoSuspendStatusModel                  
+            return new CustomerEsportAutoSuspendStatusModel
             {
                 AutoSuspendLive = true,
                 AutoSuspendNonLive = true
@@ -760,7 +772,7 @@
 
                 return result;
             }
-        }
+        }        
 
         #endregion
     }

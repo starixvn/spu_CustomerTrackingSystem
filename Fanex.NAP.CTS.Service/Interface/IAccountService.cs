@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
     using Fanex.NAP.CTS.Model.Account;
+    using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.Home;
     using Fanex.NAP.CTS.Model.Subscriber;
     using Fanex.NAP.CTS.ViewModel.Account;
@@ -29,7 +30,7 @@
 
         List<SearchResultModel> SearchAccounts(string username);
 
-        CustomerGeneralStatusModel GetCustomerGeneralStatus(int custId);
+        List<CustomerGeneralStatusModel> GetCustomerGeneralStatus(string custIds);
 
         CustomerInfoByCTSCustIdModel GetCustomerInfoByCTSCustId(int ctsCustId);
 
@@ -41,7 +42,7 @@
 
         CustomerProfileFraudInfoModel GetCustomerProfileFraudInfo(int custId);
 
-        List<CustomerAssociationByAccountDetailModel> GetCustomerAssociationByAccountDetail(int ctsCustId, string statusIds, int associationType);
+        List<CustomerAssociationByAccountDetailModel> GetDirectCustomerAssociatedByAccount(int ctsCustId, int associationType);
 
         CustomerLastTicketDateModel GetCustomerLastTicketDate(int custId);
 

@@ -118,7 +118,7 @@ namespace Fanex.NAP.CTS.ViewModel.Account
             return this;
         }
 
-        public CustomerGeneralStatusViewModel BindingGeneralDataFromCTS(CustomerInfoByCTSCustIdModel customerInfoByCTSCustIdModel, CustomerFlagInfoModel customerFlagInfoModel)
+        public CustomerGeneralStatusViewModel BindingGeneralDataFromCTS(CustomerInfoByCTSCustIdModel customerInfoByCTSCustIdModel, CustomerFlagInfoModel customerFlagInfoModel, CustomerAssociationByCTSCustIdModel customerAssociationByCTSCustIdModel)
         {
             if (customerInfoByCTSCustIdModel != null)
             {
@@ -129,7 +129,7 @@ namespace Fanex.NAP.CTS.ViewModel.Account
 
             if(customerFlagInfoModel != null)
             {
-                this.Affected = customerFlagInfoModel.Flagged == 0;
+                this.Affected = customerFlagInfoModel.Flagged == 0 && customerAssociationByCTSCustIdModel.TotalAccounts > 0;
                 this.Flagged = customerFlagInfoModel.Flagged == 2;
                 this.FlaggedWithEvi100 = customerFlagInfoModel.Flagged == 1;
             }

@@ -17,7 +17,7 @@
                 infoEmpty: "",
                 zeroRecords: "There's no data"
             },
-            ordering: false,            
+            ordering: false,
             lengthMenu: [10, 20, 50, 100, 200],
             pageLength: 20,
             scrollX: false,
@@ -40,7 +40,7 @@
             columns: [
                 { data: obj => RenderTag(obj) },
                 { data: obj => RenderUsername(obj) },
-                { data: obj => obj.LoginName },
+                { data: obj => obj.LoginId },
                 { data: obj => obj.Status },
                 { data: obj => obj.Subscriber },
                 { data: obj => obj.AssociationType },
@@ -49,7 +49,7 @@
                 { data: obj => moment(obj.AssociationDate).format("MMM DD, YYYY") },
                 { data: obj => RenderGraphImage() }
             ]
-        });        
+        });
     }
 
     function RenderTag(obj) {
@@ -60,8 +60,12 @@
 
 
     function RenderUsername(obj) {
-        var url = common.modifyRelativeUrl('/Account/DetailAccount');              
-       
+        if (obj.Username == null) {
+            return obj.Username;
+        }
+
+        var url = common.modifyRelativeUrl('/Account/DetailAccount?CustId=' + obj.CustId);
+
         var html = '<a class="info-bng" href="' + url + '" target="_blank">' + obj.Username + '</a>';
 
         return html;

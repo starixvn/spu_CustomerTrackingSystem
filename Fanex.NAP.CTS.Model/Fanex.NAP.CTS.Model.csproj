@@ -152,6 +152,7 @@
     <Compile Include="Account\GraphCustomerModel.cs" />
     <Compile Include="Account\SuspiciousCustomerModel.cs" />
     <Compile Include="Action.cs" />
+    <Compile Include="Association\AssociatedByAccountModel.cs" />
     <Compile Include="CheckBetReport\CheckBetHistory.cs" />
     <Compile Include="CustomerMonitor\Customer.cs" />
     <Compile Include="DailyDataCapture\CapturedMatch.cs" />

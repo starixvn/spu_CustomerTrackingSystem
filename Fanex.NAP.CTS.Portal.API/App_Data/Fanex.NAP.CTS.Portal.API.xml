@@ -481,6 +481,11 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
+        <member name="T:Fanex.NAP.CTS.Portal.API.Controllers.GraphController">
+            <summary>
+            Graph Controller
+            </summary>
+        </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetAssociationOneLevel(System.Int32)">
             <summary>
             Get Association with one Level
@@ -495,6 +500,14 @@
             </summary>
             <param name="custId"></param>
             <returns></returns>
+        </member>
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.Get(System.Int32,System.Boolean)">
+            <summary>
+            Get association by level
+            </summary>
+            <param name="custId"></param>
+            <param name="isOneLevel"></param>
+            <returns>HttpResponseMessage</returns>
         </member>
     </members>
 </doc>
