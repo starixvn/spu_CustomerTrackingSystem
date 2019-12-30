@@ -122,13 +122,13 @@
                         return ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_SUSPENDED);
                     case AccountStatus.Closed:
                         return ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_CLOSED);
-                    case AccountStatus.CN88_Active:
+                    case AccountStatus.Active:
                         return ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_CN88_ACTIVE);
-                    case AccountStatus.CN88_ViewOnly:
+                    case AccountStatus.ViewOnly:
                         return ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_CN88_VIEW_ONLY);
-                    case AccountStatus.CN88_Suspended:
-                        return ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_CN88_SUSPENDED);
-                    case AccountStatus.CN88_Inactive:
+                    //case AccountStatus.Suspended:
+                    //    return ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_CN88_SUSPENDED);
+                    case AccountStatus.Inactive:
                         return ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_CN88_INACTIVE);                   
                     default:
                         return ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_NOTYETDEPOSIT);

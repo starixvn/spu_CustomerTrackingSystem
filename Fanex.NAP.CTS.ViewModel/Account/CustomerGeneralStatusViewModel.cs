@@ -187,6 +187,11 @@ namespace Fanex.NAP.CTS.ViewModel.Account
             return GetAccountStatusForCN88(model);
         }
 
+        public int GetAccountStatusId(string name)
+        {
+            return (int)Enum.Parse(typeof(AccountStatus), name);
+        }
+
         public string GetAccountStatusName(AccountStatus accountStatus)
         {
             return Enum.GetName(typeof(AccountStatus), accountStatus);
@@ -212,13 +217,13 @@ namespace Fanex.NAP.CTS.ViewModel.Account
             switch (model.CN88Status)
             {
                 case 1:
-                    return AccountStatus.CN88_Inactive;
+                    return AccountStatus.Inactive;
                 case 2:
-                    return AccountStatus.CN88_Suspended;
+                    return AccountStatus.Suspended;
                 case 3:
-                    return AccountStatus.CN88_ViewOnly;
+                    return AccountStatus.ViewOnly;
                 default:
-                    return AccountStatus.CN88_Active;
+                    return AccountStatus.Active;
             }
         }
     }

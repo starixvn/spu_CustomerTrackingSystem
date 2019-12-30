@@ -2,20 +2,22 @@
 {
     public enum AccountStatus
     {
-        Open,
-        Suspended,
-        Closed,
-        CN88_Active,
-        CN88_ViewOnly,
-        CN88_Suspended,
-        CN88_Inactive,
-        NotYetDeposit
+        Open = 1,
+        Suspended = 2,
+        Closed = 3,
+        Active = 4,
+        ViewOnly = 5,
+        Inactive = 6,
+        Locked = 7,
+        Archived = 8,
+        Disable = 9,
+        NotYetDeposit = 10
     }
 
     public enum EvidenceStatus
     {
         All,
-        Affected,        
+        Affected,
         Clean
     }
 

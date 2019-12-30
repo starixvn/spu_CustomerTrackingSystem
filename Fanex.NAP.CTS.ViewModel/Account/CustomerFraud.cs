@@ -89,13 +89,13 @@
             switch (this.cn88status)
             {
                 case 1:
-                    return AccountStatus.CN88_Inactive;
+                    return AccountStatus.Inactive;
                 case 2:
-                    return AccountStatus.CN88_Suspended;
+                    return AccountStatus.Suspended;
                 case 3:
-                    return AccountStatus.CN88_ViewOnly;
+                    return AccountStatus.ViewOnly;
                 default:
-                    return AccountStatus.CN88_Active;
+                    return AccountStatus.Active;
             }
         }
     }

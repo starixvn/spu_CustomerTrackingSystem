@@ -22,7 +22,7 @@
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
                 { targets: [-2, -1], className: "text-center" },
-                { targets: [1, 2, 3, 4, 5, 6, 7], className: "text-center" },
+                { targets: [0, 1, 2, 3, 4, 5, 6, 7], className: "text-center" },
                 { targets: [0], width: "5%" },
                 { targets: [1], width: "20%" },
                 { targets: [2], width: "10%" },
@@ -50,7 +50,18 @@
     }
 
     function RenderTag(obj) {
+
         var html = "";
+
+        if (obj.Tag == 1) {
+            html = "<span class='icon icon-Flagged-With-Evidence'></span>";
+        }
+        else if (obj.Tag == 2) {
+            html = "<span class='icon icon-Flagged'></span>";
+        }
+        else {
+            html = "<span class='icon icon-Affected'></span>";
+        }        
 
         return html;
     }
@@ -69,7 +80,7 @@
     }
 
     function RenderGraphImage() {
-        return '<span class="icon-path graph" title="Graph View" onclick="OpenShortestPath(22971808,4677919)"></span>';
+        return '<span class="icon-path graph" title="Graph View"></span>';
     }
 
     function RenderGrid(ctsCustId, statusIds, associationType, isDirect) {
@@ -88,8 +99,9 @@
             },
             success: function (response) {
                 associatedByAccountTable.DataTable().clear().rows.add(response).draw();
-                associatedByAccountTable.DataTable().columns.adjust();
-
+                associatedByAccountTable.DataTable().columns.adjust();               
+            },
+            complete: function () {
                 associatedByAccountTable.find('tbody').removeClass('loading');
             },
             error: function (errMsg) {
