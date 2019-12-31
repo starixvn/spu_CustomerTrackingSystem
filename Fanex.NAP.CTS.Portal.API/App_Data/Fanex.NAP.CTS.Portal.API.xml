@@ -486,7 +486,7 @@
             Graph Controller
             </summary>
         </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetAssociationOneLevel(System.Int32)">
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetDirectAssociation(System.Int32)">
             <summary>
             Get Association with one Level
             </summary>
@@ -494,7 +494,7 @@
             <returns></returns>
             
         </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetAssociationNLevel(System.Int32)">
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetInDirectAssociation(System.Int32)">
             <summary>
             Get Association with N Level
             </summary>
