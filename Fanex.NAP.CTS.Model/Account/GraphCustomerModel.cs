@@ -14,6 +14,12 @@ namespace Fanex.NAP.CTS.Model.Account
 
         public string Username2 { get; set; }
 
-        public int? RoleId { get; set; }
+        public string AssociationType { get; set; }
+
+        public DateTime AssociationDate { get; set; }
+
+        public int SharedDevices { get; set; }
+
+        public int SharedIPs { get; set; }
     }
 }
