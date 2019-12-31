@@ -35,7 +35,17 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
         [HttpPost]
         public IEnumerable<GraphCustomerModel> GetAssociationNLevel([FromBody] int custId)
         {
-            return DbSessionFactory.Execute<GraphCustomerModel>("GetAssociationNLevelByCustId", new { CustId = custId }).Data;
+            // return DbSessionFactory.Execute<GraphCustomerModel>("GetAssociationNLevelByCustId", new { CustId = custId }).Data;
+            var result = new List<GraphCustomerModel>()
+            {
+                new GraphCustomerModel()
+                {
+                    CustId = 1,
+                    Username = "harvey02424",
+                    Username2 = "harvey.nguyen"
+                }
+            };
+            return new List<GraphCustomerModel>();
         }
 
         /// <summary>
