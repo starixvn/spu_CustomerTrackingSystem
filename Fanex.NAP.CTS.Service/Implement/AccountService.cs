@@ -691,12 +691,11 @@
             }
         }
 
-        public List<CustomerAssociationByAccountDetailModel> GetDirectCustomerAssociatedByAccount(int ctsCustId, int associationType)
+        public List<CustomerAssociationByAccountDetailModel> GetDirectCustomerAssociatedByAccount(string custIds)
         {
             var criteria = new GetDirectAssociationByAccountCriteria
             {
-                CTSCustId = ctsCustId,
-                AssociationType = associationType
+                CustIds = custIds
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -734,12 +733,14 @@
             //    var result = db.QueryEntity<CustomerEsportAutoSuspendStatusModel>(criteria);
 
             //    return result;
-            //}                                                                                                                                                          
+            //}           
 
             return new CustomerEsportAutoSuspendStatusModel
             {
+                CustId = custId,
                 AutoSuspendLive = true,
                 AutoSuspendNonLive = true
+
             };
         }
 
@@ -772,7 +773,23 @@
 
                 return result;
             }
-        }        
+        }
+
+        public List<GraphCustomerModel> GetCustomerAssociationByGraph(string apiURL, int custId)
+        {
+            var data = ApiHelper.Post<List<GraphCustomerModel>>(apiURL, custId);
+
+            Task.WhenAll(data);
+
+            var customersAPI = data.Result;
+
+            return customersAPI ?? new List<GraphCustomerModel>();
+        }
+
+        public List<CustomerAssociationByAccountDetailModel> GetInDirectCustomerAssociatedByAccount(string custIds)
+        {
+            throw new NotImplementedException();
+        }
 
         #endregion
     }

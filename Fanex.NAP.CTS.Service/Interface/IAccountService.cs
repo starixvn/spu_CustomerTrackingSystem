@@ -28,6 +28,10 @@
 
         IEnumerable<AssociatedDeviceByAccount> GetAssociatedDevicesByAccount(AssociatedDeviceByAccountFilter filter);
 
+
+        // New Implement
+
+
         List<SearchResultModel> SearchAccounts(string username);
 
         List<CustomerGeneralStatusModel> GetCustomerGeneralStatus(string custIds);
@@ -42,7 +46,9 @@
 
         CustomerProfileFraudInfoModel GetCustomerProfileFraudInfo(int custId);
 
-        List<CustomerAssociationByAccountDetailModel> GetDirectCustomerAssociatedByAccount(int ctsCustId, int associationType);
+        List<CustomerAssociationByAccountDetailModel> GetDirectCustomerAssociatedByAccount(string custIds);
+
+        List<CustomerAssociationByAccountDetailModel> GetInDirectCustomerAssociatedByAccount(string custIds);
 
         CustomerLastTicketDateModel GetCustomerLastTicketDate(int custId);
 
@@ -51,5 +57,7 @@
         CustomerRobotUserStatusModel GetCustomerRobotUserStatus(int custId);
 
         CustomerFlagInfoModel GetCustomerFlagInfo(int ctsCustId, int subscriberId);
+
+        List<GraphCustomerModel> GetCustomerAssociationByGraph(string apiURL, int custId);
     }
 }

@@ -1,11 +1,14 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
     using Fanex.NAP.Core.Web.Attribute;
+    using Fanex.NAP.CTS.Core.Helpers.Api;
+    using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.ViewModel.Account;
     using Fanex.NAP.CTS.ViewModel.Account.Associated;
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -190,7 +193,9 @@
         public ActionResult AssociatedByAccount(string username)
         {
             var getCustomerStaticStatus = _accountService.GetCustomerStaticStatus(1, true);
-            var getCustomerStaticAssType = _accountService.GetCustomerStaticStatus(2, true);                        
+            var getCustomerStaticAssType = _accountService.GetCustomerStaticStatus(2, true);
+
+            getCustomerStaticAssType.Insert(0, new CustomerStaticStatusModel { ItemId = 0, ItemName = "All" });
 
             var associatedByAccountViewModel = new AssociatedByAccountViewModel
             {
@@ -203,46 +208,63 @@
         }
 
         [HttpPost]
-        public ActionResult GetAssociationByAccount(int ctsCustId, string statusIds, int associationType, bool isDirect)
+        public ActionResult GetAssociationByAccount(int CustId, int ctsCustId, string statusIds, int associationType, bool isDirect)
         {
+            var customerAssociation = new List<GraphCustomerModel>();
+
             var result = new List<CustomerAssociationByAccountDetailModel>();
 
             if (isDirect)
             {
-                result = _accountService.GetDirectCustomerAssociatedByAccount(ctsCustId, associationType);
+                customerAssociation = _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetDirectAssociation, CustId);
 
-                if (result != null && result.Any())
+                if (customerAssociation != null && customerAssociation.Any())
                 {
-                    var getStatusByCustIds = _accountService.GetCustomerGeneralStatus(string.Join(",", result.Select(x => x.CustId)));
+                    var param = new
+                    {                        
+                        custId = customerAssociation.Select(x => x.CustId).ToList()                        
+                    };
 
-                    var accountStatusViewModel = new CustomerGeneralStatusViewModel();
+                    var jsonParam = JsonConvert.SerializeObject(param);
 
-                    var accountStatus = getStatusByCustIds.Select(x => new { 
-                        custId = x.CustId, 
-                        status = accountStatusViewModel.GetAccountStatusName(accountStatusViewModel.GetAccountStatus(x)),
-                        statusId = accountStatusViewModel.GetAccountStatusId(accountStatusViewModel.GetAccountStatusName(accountStatusViewModel.GetAccountStatus(x)))
-                    }).ToList();
+                    result = _accountService.GetDirectCustomerAssociatedByAccount(jsonParam);
 
-                    if (accountStatus != null && accountStatus.Any())
+                    if (result != null && result.Any())
                     {
-                        result = result
-                                       .Select(x =>
-                                       {
-                                           if(x.CustId != 0)
+                        var getStatusByCustIds = _accountService.GetCustomerGeneralStatus(string.Join(",", result.Select(x => x.CustId)));
+
+                        var accountStatusViewModel = new CustomerGeneralStatusViewModel();
+
+                        var accountStatus = getStatusByCustIds.Select(x => new
+                        {
+                            custId = x.CustId,
+                            status = accountStatusViewModel.GetAccountStatusName(accountStatusViewModel.GetAccountStatus(x)),
+                            statusId = accountStatusViewModel.GetAccountStatusId(accountStatusViewModel.GetAccountStatusName(accountStatusViewModel.GetAccountStatus(x)))
+                        }).ToList();
+
+                        if (accountStatus != null && accountStatus.Any())
+                        {
+                            result = result
+                                           .Select(x =>
                                            {
-                                               var accStatus = accountStatus.FirstOrDefault(z => z.custId == x.CustId);
+                                               if (x.CustId != 0)
+                                               {
+                                                   var accStatus = accountStatus.FirstOrDefault(z => z.custId == x.CustId);
 
-                                               x.Status = accStatus != null ? accStatus.status : string.Empty;
-                                           }                                           
+                                                   x.Status = accStatus != null ? accStatus.status : string.Empty;
+                                               }
 
-                                           return x;
+                                               return x;
 
-                                       }).ToList();
+                                           }).ToList();
+                        }
                     }
                 }
             }
             else
             {
+                customerAssociation = _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetInDirectAssociation, CustId);
+
                 if (!result.Any())
                 {
                     result.Add(new CustomerAssociationByAccountDetailModel
