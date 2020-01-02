@@ -91,8 +91,7 @@ namespace Fanex.NAP.CTS.ViewModel.Account
                 this.DangerousOriginal = customerGeneralStatusModel.Danger;
                 this.DangerouseABI = customerGeneralStatusModel.Danger2;
                 this.DangerouseOtherSports = customerGeneralStatusModel.Danger3;
-                this.CustId = customerGeneralStatusModel.CustId;
-                this.UserName = customerGeneralStatusModel.Username;
+                this.CustId = customerGeneralStatusModel.CustId;               
                 this.Abnormal = customerGeneralStatusModel.Abnormal;
                 this.AutoSuspendSoccer = customerGeneralStatusModel.Autosuspend;
                 this.AutoSuspendOtherSport = customerGeneralStatusModel.Autosuspend2;
@@ -128,6 +127,7 @@ namespace Fanex.NAP.CTS.ViewModel.Account
             {
                 this.LastLoginDate = customerInfoByCTSCustIdModel.LastLoginTime;
                 this.UserName2 = customerInfoByCTSCustIdModel.Username2;
+                this.UserName = customerInfoByCTSCustIdModel.Username;
                 this.CreatedDate = customerInfoByCTSCustIdModel.CreatedDate;
                 this.Role = new Model.DTO.Role { Id = customerInfoByCTSCustIdModel.RoleId };
                 this.CustSubId = customerInfoByCTSCustIdModel.CustSubId;
