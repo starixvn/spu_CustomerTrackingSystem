@@ -195,7 +195,7 @@
             var getCustomerStaticStatus = _accountService.GetCustomerStaticStatus(1, true);
             var getCustomerStaticAssType = _accountService.GetCustomerStaticStatus(2, true);
 
-            getCustomerStaticAssType.Insert(0, new CustomerStaticStatusModel { ItemId = 0, ItemName = "All" });
+            getCustomerStaticAssType.Insert(0, new CustomerStaticStatusModel { ItemId = 0, ItemNameDisplay = "All" });
 
             var associatedByAccountViewModel = new AssociatedByAccountViewModel
             {

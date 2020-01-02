@@ -17,7 +17,7 @@
 <div class="content-card">
     <div class="status-info">
         <p>
-            <strong>Member:</strong>
+            <strong>@Model.Role.Name @(Model.CustSubId !=0 ? "(Sub Account)" : string.Empty) :</strong>
             <span class="username">@Model.UserName <span class="nickname" style="color: #c16112">@(Model.UserName2 != null ? "(" + Model.UserName2 + ")" : string.Empty)</span></span>
             @if (Model.RobotUser)
             {

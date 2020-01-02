@@ -8,9 +8,13 @@ namespace Fanex.NAP.CTS.ViewModel.Account
 {
     public class CustomerGeneralStatusViewModel
     {
+        public Model.DTO.Role Role { get; set; }
+
         public int CustId { get; set; }
 
         public int CTSCustId { get; set; }
+
+        public int CustSubId { get; set; }
 
         public string UserName { get; set; }
 
@@ -76,9 +80,9 @@ namespace Fanex.NAP.CTS.ViewModel.Account
 
         public List<FraudCaseModel> FraudCases { get; set; }
 
-        public CustomerGeneralStatusViewModel BindingGeneralDataFromMainDB(CustomerGeneralStatusModel customerGeneralStatusModel, 
-            CustomerLastTicketDateModel customerLastTicketDateModel, 
-            CustomerEsportAutoSuspendStatusModel customerEsportAutoSuspendStatusModel, 
+        public CustomerGeneralStatusViewModel BindingGeneralDataFromMainDB(CustomerGeneralStatusModel customerGeneralStatusModel,
+            CustomerLastTicketDateModel customerLastTicketDateModel,
+            CustomerEsportAutoSuspendStatusModel customerEsportAutoSuspendStatusModel,
             CustomerRobotUserStatusModel customerRobotUserStatusModel)
         {
             if (customerGeneralStatusModel != null)
@@ -100,7 +104,7 @@ namespace Fanex.NAP.CTS.ViewModel.Account
                 this.SmartPunterAccount = customerGeneralStatusModel.SmartPunter;
             }
 
-            if(customerLastTicketDateModel != null)
+            if (customerLastTicketDateModel != null)
             {
                 this.LastTicketDate = customerLastTicketDateModel.TransDate;
             }
@@ -125,9 +129,11 @@ namespace Fanex.NAP.CTS.ViewModel.Account
                 this.LastLoginDate = customerInfoByCTSCustIdModel.LastLoginTime;
                 this.UserName2 = customerInfoByCTSCustIdModel.Username2;
                 this.CreatedDate = customerInfoByCTSCustIdModel.CreatedDate;
+                this.Role = new Model.DTO.Role { Id = customerInfoByCTSCustIdModel.RoleId };
+                this.CustSubId = customerInfoByCTSCustIdModel.CustSubId;
             }
 
-            if(customerFlagInfoModel != null)
+            if (customerFlagInfoModel != null)
             {
                 this.Affected = customerFlagInfoModel.Flagged == 0 && customerAssociationByCTSCustIdModel.TotalAccounts > 0;
                 this.Flagged = customerFlagInfoModel.Flagged == 2;
@@ -139,19 +145,19 @@ namespace Fanex.NAP.CTS.ViewModel.Account
 
         public CustomerGeneralStatusViewModel BindingTotalAssociationFromCTS(CustomerAssociationByCTSCustIdModel customerAssociationByCTSCustIdModel)
         {
-            if(customerAssociationByCTSCustIdModel != null)
+            if (customerAssociationByCTSCustIdModel != null)
             {
                 this.TotalAssociationByAccount = customerAssociationByCTSCustIdModel.TotalAccounts;
                 this.TotalAssociationByDevice = customerAssociationByCTSCustIdModel.TotalDevices;
                 this.TotalAssociationByIp = customerAssociationByCTSCustIdModel.TotalIps;
-            }            
+            }
 
             return this;
         }
 
         public CustomerGeneralStatusViewModel BindingEvidenceListFromCTS(List<CustomerEvidenceByCTSCustIdModel> customerEvidenceByCTSCustIdModelList)
         {
-            if(customerEvidenceByCTSCustIdModelList != null && customerEvidenceByCTSCustIdModelList.Any())
+            if (customerEvidenceByCTSCustIdModelList != null && customerEvidenceByCTSCustIdModelList.Any())
             {
                 this.Evidences = string.Join(", ", customerEvidenceByCTSCustIdModelList.Select(x => x.EvidenceCode).ToArray());
             }
@@ -161,18 +167,18 @@ namespace Fanex.NAP.CTS.ViewModel.Account
 
         public CustomerGeneralStatusViewModel BindingGeneralDataFromFS(CustomerProfileFraudInfoModel customerProfileFraudInfoModel)
         {
-            if(customerProfileFraudInfoModel.SuspiciouseCustomer != null)
+            if (customerProfileFraudInfoModel.SuspiciouseCustomer != null)
             {
                 this.Delinquency = customerProfileFraudInfoModel.SuspiciouseCustomer.IsDelinquent;
                 this.DirtyAccount = customerProfileFraudInfoModel.SuspiciouseCustomer.IsDirty;
                 this.HedgeAccount = customerProfileFraudInfoModel.SuspiciouseCustomer.IsHedge;
-                
+
             }
 
             if (customerProfileFraudInfoModel.FraudCaseList != null && customerProfileFraudInfoModel.FraudCaseList.Any())
             {
                 this.FraudCases = customerProfileFraudInfoModel.FraudCaseList;
-            }                
+            }
 
             return this;
         }

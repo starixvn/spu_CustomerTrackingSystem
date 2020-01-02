@@ -8,8 +8,36 @@ namespace Fanex.NAP.CTS.Model.DTO
 {
     public class Role
     {
-        public int Id { get; set; }
+        private int _id;
 
-        public string Name { get; set; }
+        public int Id
+        {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                _id = value;
+            }
+        }
+
+        public string Name
+        {
+            get
+            {
+                switch (_id)
+                {
+                    case 1:
+                        return "Member";
+                    case 2:
+                        return "Agent";
+                    case 3:
+                        return "Master";
+                }
+
+                return "Supper";
+            }
+        }
     }
 }
