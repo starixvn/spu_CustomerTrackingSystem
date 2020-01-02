@@ -220,17 +220,36 @@
 
                 if (customerAssociation != null && customerAssociation.Any())
                 {
-                    var param = new
-                    {                        
-                        custId = customerAssociation.Select(x => x.CustId).ToList()                        
-                    };
-
-                    var jsonParam = JsonConvert.SerializeObject(param);
-
-                    result = _accountService.GetDirectCustomerAssociatedByAccount(jsonParam);
+                    result = customerAssociation.Select(x => new CustomerAssociationByAccountDetailModel
+                    {
+                        CustId = x.CustId.HasValue ? x.CustId.Value : 0,
+                        Username = x.Username,
+                        LoginId = x.Username2
+                    }).ToList();
 
                     if (result != null && result.Any())
                     {
+                        var param = new
+                        {
+                            CustIds = result.Where(x => x.CustId != 0).Select(a => a.CustId)
+                        };
+
+                        var getTags = _accountService.GetDirectCustomerAssociatedByAccount(JsonConvert.SerializeObject(param));
+
+                        result = result.Select(x=> {
+
+                            if(x.CustId != 0)
+                            {
+                                var getTag = getTags.FirstOrDefault(a => a.CustId == x.CustId);
+
+                                x.Tag = getTag.Tag;
+                                x.Subscriber = getTag.Subscriber;
+                                x.CTSCustId = getTag.CTSCustId;
+                            }                            
+
+                            return x; 
+                        }).ToList();
+
                         var getStatusByCustIds = _accountService.GetCustomerGeneralStatus(string.Join(",", result.Select(x => x.CustId)));
 
                         var accountStatusViewModel = new CustomerGeneralStatusViewModel();
