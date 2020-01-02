@@ -83,7 +83,7 @@
         return '<span class="icon-path graph" title="Graph View"></span>';
     }
 
-    function RenderGrid(custId, ctsCustId, statusIds, associationType, isDirect) {
+    function RenderGrid(custId, statusIds, associationType, isDirect) {
         var url = common.modifyRelativeUrl('/Account/GetAssociationByAccount');
 
         $.ajax(url, {
@@ -92,8 +92,7 @@
                 associatedByAccountTable.find('tbody').addClass('loading');
             },
             data: {
-                custId: custId,
-                ctsCustId: ctsCustId,
+                custId: custId,               
                 statusIds: statusIds,
                 associationType: associationType,
                 isDirect: isDirect
@@ -209,20 +208,19 @@
 
     //$('#account-by-account-btn-on-graph').click(OpenGraphRender);
 
-    this.Initial = function (custId, ctsCustId, statusIds, associationType, isDirect) {
+    this.Initial = function (custId, statusIds, associationType, isDirect) {
         $("#account-by-account-cbb-status").multiselect();
 
         InitialGrid();
-        RenderGrid(custId, ctsCustId, statusIds, associationType, isDirect);
+        RenderGrid(custId, statusIds, associationType, isDirect);
 
         btnSearch.on('click', function () {
             var isDirect = $("#radio03-01").is(':checked');
             var accountStatus = $('#account-by-account-cbb-status').val().join(',');
             var associationType = $("#account-by-account-cbb-association-type").val();
-            var ctsCustId = $("#hdCTSCustId").val();
             var custId = $("#hdCustId").val();
 
-            RenderGrid(custId, ctsCustId, accountStatus, associationType, isDirect);
+            RenderGrid(custId, accountStatus, associationType, isDirect);
         });
     }
 }

@@ -31,19 +31,19 @@
 
         public override string BaseControllerName { get => Consts.MenuItemSearch; }
 
-        public ActionResult Index(int ctsCustId)
+        public ActionResult Index(int Id)
         {
-            if (ctsCustId > 0)
+            if (Id > 0)
             {
                 var tasks = new List<Task>();
 
-                var customerInfoFromCTS = _accountService.GetCustomerInfoByCTSCustId(ctsCustId);
+                var customerInfoFromCTS = _accountService.GetCustomerInfoByCTSCustId(Id);
 
                 if (customerInfoFromCTS != null)
                 {
                     var customerGeneralStatusViewModel = new CustomerGeneralStatusViewModel()
                     {
-                        CTSCustId = ctsCustId
+                        CTSCustId = Id
                     };
 
                     var customerStatus = new CustomerGeneralStatusModel();
@@ -57,13 +57,13 @@
                     var customerEvidences = new List<CustomerEvidenceByCTSCustIdModel>();
 
                     tasks.Add(Task.Run(() => { customerStatus = _accountService.GetCustomerGeneralStatus(customerInfoFromCTS.CustId.ToString()).FirstOrDefault(); }));
-                    tasks.Add(Task.Run(() => { customerTotalAssociation = _accountService.GetCustomerTotalAssociationByCTSCustId(ctsCustId); }));
-                    tasks.Add(Task.Run(() => { customerEvidences = _accountService.GetCustomerEvidenceByCTSCustId(ctsCustId); }));
+                    tasks.Add(Task.Run(() => { customerTotalAssociation = _accountService.GetCustomerTotalAssociationByCTSCustId(Id); }));
+                    tasks.Add(Task.Run(() => { customerEvidences = _accountService.GetCustomerEvidenceByCTSCustId(Id); }));
                     tasks.Add(Task.Run(() => { customerProfileFraudInfo = _accountService.GetCustomerProfileFraudInfo(customerInfoFromCTS.CustId); }));
                     tasks.Add(Task.Run(() => { customerLastTicketDate = _accountService.GetCustomerLastTicketDate(customerInfoFromCTS.CustId); }));
                     tasks.Add(Task.Run(() => { customerEsportAutoSuspendedStatus = _accountService.GetCustomerEsportAutoSuspendedStatus(customerInfoFromCTS.CustId); }));
                     tasks.Add(Task.Run(() => { customerRobotUserStatusModel = _accountService.GetCustomerRobotUserStatus(customerInfoFromCTS.CustId); }));
-                    tasks.Add(Task.Run(() => { customerFlagInfoModel = _accountService.GetCustomerFlagInfo(ctsCustId, customerInfoFromCTS.SubscriberId); }));
+                    tasks.Add(Task.Run(() => { customerFlagInfoModel = _accountService.GetCustomerFlagInfo(Id, customerInfoFromCTS.SubscriberId); }));
 
                     Task.WhenAll(tasks.ToArray()).Wait();
 
@@ -208,7 +208,7 @@
         }
 
         [HttpPost]
-        public ActionResult GetAssociationByAccount(int CustId, int ctsCustId, string statusIds, int associationType, bool isDirect)
+        public ActionResult GetAssociationByAccount(int CustId, string statusIds, int associationType, bool isDirect)
         {
             var customerAssociation = new List<GraphCustomerModel>();
 
@@ -224,15 +224,16 @@
                     {
                         CustId = x.CustId.HasValue ? x.CustId.Value : 0,
                         Username = x.Username,
-                        LoginId = x.Username2
+                        LoginId = x.Username2,
+                        AssociationDate = x.AssociationDate,
+                        SharedDevices = x.SharedDevices,
+                        SharedIps = x.SharedIPs,
+                        AssociationType = x.AssociationType
                     }).ToList();
 
                     if (result != null && result.Any())
                     {
-                        var param = new
-                        {
-                            CustIds = result.Where(x => x.CustId != 0).Select(a => a.CustId)
-                        };
+                        var param = result.Select(a => new { a.CustId, a.LoginId });                       
 
                         var getTags = _accountService.GetDirectCustomerAssociatedByAccount(JsonConvert.SerializeObject(param));
 
@@ -242,9 +243,13 @@
                             {
                                 var getTag = getTags.FirstOrDefault(a => a.CustId == x.CustId);
 
-                                x.Tag = getTag.Tag;
-                                x.Subscriber = getTag.Subscriber;
-                                x.CTSCustId = getTag.CTSCustId;
+                                if(getTag != null)
+                                {
+                                    x.Tag = getTag.Tag;
+                                    x.Subscriber = getTag.Subscriber;
+                                    x.CTSCustId = getTag.CTSCustId;
+                                }
+                                
                             }                            
 
                             return x; 

@@ -50,7 +50,7 @@
         [HttpPost]
         public ActionResult Search(FormCollection form)
         {
-            string inputValue = form["txtInput"];
+            string inputValue = form["txtInput"].Trim();
 
             if (string.IsNullOrEmpty(inputValue) || inputValue.Length <= 1)
             {
@@ -61,7 +61,7 @@
 
             if (result.Count == 1 && result.Any(x => (x.Username != null && x.Username.Equals(inputValue, System.StringComparison.CurrentCultureIgnoreCase)) || (x.Username2 != null && x.Username2.Equals(inputValue, System.StringComparison.CurrentCultureIgnoreCase))))
             {
-                return RedirectToAction("Index", "Account", new { ctsCustId = result.FirstOrDefault().CTSCustId });
+                return RedirectToAction("Index", "Account", new { Id = result.FirstOrDefault().CTSCustId });
 
             }
 
