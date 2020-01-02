@@ -223,8 +223,8 @@
                     result = customerAssociation.Select(x => new CustomerAssociationByAccountDetailModel
                     {
                         CustId = x.CustId.HasValue ? x.CustId.Value : 0,
-                        Username = x.Username,
-                        LoginId = x.Username2,
+                        Username = !string.IsNullOrWhiteSpace(x.Username) ? x.Username : x.Username2,
+                        LoginId = !string.IsNullOrWhiteSpace(x.Username2) ? x.Username2 : x.Username,
                         AssociationDate = x.AssociationDate,
                         SharedDevices = x.SharedDevices,
                         SharedIps = x.SharedIPs,
@@ -233,26 +233,22 @@
 
                     if (result != null && result.Any())
                     {
-                        var param = result.Select(a => new { a.CustId, a.LoginId });                       
+                        var param = result.Select(a => new { a.CustId, a.LoginId });
 
                         var getTags = _accountService.GetDirectCustomerAssociatedByAccount(JsonConvert.SerializeObject(param));
 
-                        result = result.Select(x=> {
+                        result = result.Select(x =>
+                        {
+                            var getTag = getTags.FirstOrDefault(a => a.CustId == x.CustId || a.LoginId == x.LoginId);
 
-                            if(x.CustId != 0)
+                            if (getTag != null)
                             {
-                                var getTag = getTags.FirstOrDefault(a => a.CustId == x.CustId);
+                                x.Tag = getTag.Tag;
+                                x.Subscriber = getTag.Subscriber;
+                                x.CTSCustId = getTag.CTSCustId;
+                            }
 
-                                if(getTag != null)
-                                {
-                                    x.Tag = getTag.Tag;
-                                    x.Subscriber = getTag.Subscriber;
-                                    x.CTSCustId = getTag.CTSCustId;
-                                }
-                                
-                            }                            
-
-                            return x; 
+                            return x;
                         }).ToList();
 
                         var getStatusByCustIds = _accountService.GetCustomerGeneralStatus(string.Join(",", result.Select(x => x.CustId)));
@@ -280,7 +276,7 @@
 
                                                return x;
 
-                                           }).ToList();
+                                           }).OrderByDescending(a => a.Status).ToList();
                         }
                     }
                 }
