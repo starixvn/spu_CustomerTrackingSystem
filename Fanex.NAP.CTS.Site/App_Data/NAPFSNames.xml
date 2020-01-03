@@ -342,15 +342,15 @@
 
     <Setting Key="CTS_CustomerGeneralStatus_Get"
          SpName="CTS_CustomerGeneralStatus_Get"
-         DbName="DBTP.bodb02.bodbAdminNet" />
+         DbName="DBCTS.bodb02.bodbSPUNet" />
 
     <Setting Key="CTS_CustomerLastTicketDate_Get"
         SpName="CTS_CustomerLastTicketDate_Get"
-        DbName="DBTP.bodb02.bodbAdminNet" />
+        DbName="DBCTS.bodb02.bodbSPUNet" />
 
     <Setting Key="CTS_CustomerEsportAutoSuspendStatus_Get"
         SpName="CTS_CustomerEsportAutoSuspendStatus_Get"
-        DbName="DBTP.bodb02.bodbAdminNet" />
+        DbName="DBCTS.bodb02.bodbSPUNet" />
     
     <Setting Key="CTS_DC_GetCustomerInfoByCTSCustId"
             SpName="CTS_DC_GetCustomerInfoByCTSCustId"

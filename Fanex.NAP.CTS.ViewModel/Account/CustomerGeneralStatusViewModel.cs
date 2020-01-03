@@ -188,9 +188,16 @@ namespace Fanex.NAP.CTS.ViewModel.Account
         {
             if (model.CN88Status == -1)
             {
+                if(model.IsLicensee == 1) // 12bet
+                {
+                    return GetAccountStatusForLicensee(model);
+                }
+
+                // maxbet
                 return GetAccountStatusForMBC(model);
             }
 
+            //cn88
             return GetAccountStatusForCN88(model);
         }
 
@@ -204,6 +211,26 @@ namespace Fanex.NAP.CTS.ViewModel.Account
             return Enum.GetName(typeof(AccountStatus), accountStatus);
         }
 
+        private AccountStatus GetAccountStatusForLicensee(CustomerGeneralStatusModel model)
+        {
+            if (model.Closed)
+            {
+                return AccountStatus.Closed;
+            }
+
+            if (model.Reject)
+            {
+                return AccountStatus.Locked;
+            }
+
+            if(!model.Enabled)
+            {
+                return AccountStatus.Disable;
+            }
+
+            return AccountStatus.Active;
+        }
+
         private AccountStatus GetAccountStatusForMBC(CustomerGeneralStatusModel model)
         {
             if (model.Closed)
@@ -214,6 +241,11 @@ namespace Fanex.NAP.CTS.ViewModel.Account
             if (model.Reject)
             {
                 return AccountStatus.Suspended;
+            }
+
+            if (!model.Enabled)
+            {
+                return AccountStatus.Disable;
             }
 
             return AccountStatus.Open;

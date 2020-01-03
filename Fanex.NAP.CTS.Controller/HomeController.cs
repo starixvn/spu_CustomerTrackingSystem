@@ -52,7 +52,7 @@
         {
             string inputValue = form["txtInput"].Trim();
 
-            if (string.IsNullOrEmpty(inputValue) || inputValue.Length <= 1)
+            if (string.IsNullOrEmpty(inputValue) || inputValue.Length <= 1 || inputValue.Length > 50)
             {
                 return View(new SearchResultViewModel { SearchResults = null, InputValue = inputValue });
             }

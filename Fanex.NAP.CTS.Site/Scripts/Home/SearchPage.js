@@ -27,14 +27,7 @@
 
         input.keypress(function (event) {
             if (event.which === 13) {
-                if (input.val().length <= 1) {
-                    errorMessage.show();
-
-                    return false;
-                }
-                else {
-                    frmSearch.submit();
-                }
+                SearchActive();
             }
         });
 
@@ -45,9 +38,20 @@
             });
 
         iconSearch.on('click', function () {
-            frmSearch.submit();
+            SearchActive();
         });
-    }      
+    }    
+
+    function SearchActive() {
+        if (input.val().length <= 1) {
+            errorMessage.show();
+
+            return false;
+        }
+        else {
+            frmSearch.submit();
+        }
+    }
 
     $(document).ready(function () {
         Initial();        
