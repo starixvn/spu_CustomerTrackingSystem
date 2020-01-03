@@ -29,11 +29,9 @@
             <ul class="result-list">
 
                 @foreach (var data in Model.SearchResults)
-                {
-                    username2 = !string.IsNullOrWhiteSpace(data.Username2) ? "(" + data.Username2 + ")" : string.Empty;
-
+                {                   
                     <li class="result-item">
-                        <a class="result-name" href="~/Account/Index/@data.CTSCustId">@data.Username <span>@username2</span></a>
+                        <a class="result-name" href="~/Account/Index/@data.CTSCustId">@(string.IsNullOrWhiteSpace(data.Username) ? data.Username2 : data.Username) <span>(@(string.IsNullOrWhiteSpace(data.Username2) ? data.Username : data.Username2))</span></a>
                         <p>
                             <span style="width: 130px;">Currency: @(data.Currency == null ? "None" : data.Currency.Name)</span>
                             <span style="width: 130px;">Level: @(data.Role == null ? "None" : data.Role.Name)</span>

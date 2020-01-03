@@ -20,6 +20,8 @@ namespace Fanex.NAP.CTS.Model.Account
 
         public int SubscriberId { get; set; }
 
+        public string SubscriberName { get; set; }
+
         public int RoleId { get; set; }
 
         public int CustSubId { get; set; }

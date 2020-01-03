@@ -78,6 +78,8 @@ namespace Fanex.NAP.CTS.ViewModel.Account
 
         public string Evidences { get; set; }
 
+        public string Subscriber { get; set; }
+
         public List<FraudCaseModel> FraudCases { get; set; }
 
         public CustomerGeneralStatusViewModel BindingGeneralDataFromMainDB(CustomerGeneralStatusModel customerGeneralStatusModel,
@@ -132,6 +134,9 @@ namespace Fanex.NAP.CTS.ViewModel.Account
                 this.Role = new Model.DTO.Role { Id = customerInfoByCTSCustIdModel.RoleId };
                 this.CustSubId = customerInfoByCTSCustIdModel.CustSubId;
                 this.CustId = customerInfoByCTSCustIdModel.CustId;
+                this.Subscriber = customerInfoByCTSCustIdModel.SubscriberName;
+
+
             }
 
             if (customerFlagInfoModel != null)
