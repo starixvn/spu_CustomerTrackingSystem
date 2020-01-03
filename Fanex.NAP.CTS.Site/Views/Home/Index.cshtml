@@ -1,6 +1,7 @@
 ﻿@model IList<Fanex.NAP.Core.Models.MenuItem>
 @{
     ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
 
     Func<string, string> iconLookup = menuName =>
     {

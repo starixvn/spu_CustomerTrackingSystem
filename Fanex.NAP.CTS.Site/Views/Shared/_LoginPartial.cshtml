@@ -1,37 +1,34 @@
 ﻿@using Microsoft.AspNet.Identity
 
-@{ 
-    var itemKeySelect = ViewBag.ItemKeySelect ?? "search-account";
-    var itemKeyNonSelect = ViewBag.ItemKeyNonSelect ?? "search-device";
-    var optionSelect = ViewBag.OptionSelect ?? "Search account";
-    var optionNonSelect = ViewBag.OptionNonSelect ?? "Search device";
-}
 <div class="header-info">
     <div class="search-component">
         @*<span class="icon-magnify" id="button-search"></span>
-        <input type="text" class="search-text" id="txt-search" placeholder="" value=@ViewBag.KeySearch />*@
+            <input type="text" class="search-text" id="txt-search" placeholder="" value=@ViewBag.KeySearch />*@
         @*<div class="search-option" id="search-option" item-key=@itemKeySelect>
 
-            <span>@optionSelect</span>
-            <ul class="sub-menu">
-                <li class="sub-menu-item">
-                    <a href="#" class="link" id="link-item" item-key=@itemKeyNonSelect>@optionNonSelect</a>
-                </li>
-            </ul>
-        </div>*@
-        <label class="search-header">
-            <input id="txtSearch" name="txtSearch" class="search-field" type="search" placeholder="Search" checked="checked" />
-        </label>
+                <span>@optionSelect</span>
+                <ul class="sub-menu">
+                    <li class="sub-menu-item">
+                        <a href="#" class="link" id="link-item" item-key=@itemKeyNonSelect>@optionNonSelect</a>
+                    </li>
+                </ul>
+            </div>*@
+        @using (Html.BeginForm("Search", "Home", FormMethod.Post))
+        {
+            <label class="search-header">
+                <input id="txtInput" name="txtInput" class="search-field" type="search" placeholder="Search" checked="checked" />
+            </label>
+        }
     </div>
     <div class="username">
         @User.Identity.GetUserName()
         @*<ul class="sub-menu -small">
-            <li class="sub-menu-item">
-                <a href="#" class="link">Change Password</a>
-            </li>
-            <li class="sub-menu-item">
-                <a href="~/UserLogin/Login/Logout" class="link">Log Out</a>
-            </li>
-        </ul>*@
+                <li class="sub-menu-item">
+                    <a href="#" class="link">Change Password</a>
+                </li>
+                <li class="sub-menu-item">
+                    <a href="~/UserLogin/Login/Logout" class="link">Log Out</a>
+                </li>
+            </ul>*@
     </div>
 </div>

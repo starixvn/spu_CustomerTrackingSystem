@@ -1236,6 +1236,8 @@
     <Content Include="Views\Evidence\FormInformationEvidence.cshtml" />
     <Content Include="Views\Evidence\FormRetractEvidence.cshtml" />
     <Content Include="Views\Home\Search.cshtml" />
+    <Content Include="Views\Shared\_HomeLayout.cshtml" />
+    <Content Include="Views\Shared\_HomeLoginPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
