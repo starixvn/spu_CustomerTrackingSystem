@@ -1,6 +1,17 @@
 ﻿function graph() {
-    this.OpenModal = function () {
-        $('#form-graph-render').dialog({
+    var $this = this;
+    var width = 1850;
+    var height = 800;
+    var collapse_level = 1;
+    var root;
+
+    var urls = {
+        GetShortestAssociationGraph: common.modifyRelativeUrl('/Account/GetShortestAssociationGraph'),
+        GetDirectAssociationGraph: common.modifyRelativeUrl('/Account/GetDirectAssociationGraph')
+    };
+
+    $this.OpenModal = function () {
+        $('#form-graph').dialog({
             modal: true,
             width: '1500px',
             title: 'Graph visualization',
@@ -11,150 +22,243 @@
         })
     }
 
-    this.Options = function () {
-        popoto.rest.CYPHER_URL = "https://db-kh9ct9ai1mqn6hz2itry.graphenedb.com:24780/db/data/transaction/commit";
-        popoto.rest.AUTHORIZATION = "Basic cG9wb3RvOmIuVlJZQVF2blZjV2tyLlRaYnpmTks5aHp6SHlTdXk=";
-        popoto.query.RESULTS_PAGE_SIZE = 100;
-        popoto.logger.LEVEL = popoto.logger.LogLevels.ERROR;
-        popoto.provider.node.Provider = {
-            Customer: {
-                returnAttributes: ["Username"],
-                constraintAttribute: "Username"
+    $this.GenerateShortestPath = function (custIdFrom, userNameFrom, custIdTo) {
+        collapse_level = 0;
+        //var sampleData = new sample_data_graph();
+        //var data = sampleData.GenereateSampleShortest();
+        var paramsFilter = {};
+        paramsFilter.custIdFrom = custIdFrom;
+        paramsFilter.userNameFrom = "Master001";
+        paramsFilter.custIdTo = custIdTo;
+
+        $.ajax(urls.GetShortestAssociationGraph, {
+            type: 'POST',
+            data: paramsFilter,
+            success: function (response) {
+                generateGraph(data);
             },
-            Device: {
-                returnAttributes: ["DeviceId"],
-                constraintAttribute: "DeviceId"
+            error: function (errMsg) {
+                console.log(errMsg);
+                common.showError(errMsg);
             }
-        };
-    }
-
-    this.Start = function () {
-        popoto.start("Customer");
-    }
-
-    this.GenerateShortestNodes = function (custIdFrom, custIdTo) {
-        //var url = '';
-        //var paramsFilter = {};
-        //paramsFilter.CustIdFrom = custIdFrom;
-        //paramsFilter.CustIdTo = custIdTo;
-        //$.ajax(url, {
-        //    type: 'POST',
-        //    data: paramsFilter,
-        //    success: function (response) {
-        //    },
-        //    error: function (errMsg) {
-        //        console.log(errMsg);
-        //        common.showError(errMsg);
-        //    }
-        //});
-        var sampleData = generateSampleData();
-        generateGraph(sampleData);
-    }
-
-    this.GenerateFullNodes = function (custId) {
-        //var url = '';
-        //var paramsFilter = {};
-        //paramsFilter.CustId = custId;
-        //$.ajax(url, {
-        //    type: 'POST',
-        //    data: paramsFilter,
-        //    success: function (response) {
-        //    },
-        //    error: function (errMsg) {
-        //        console.log(errMsg);
-        //        common.showError(errMsg);
-        //    }
-        //});
-        var sampleData = generateSampleDataFullPath();
-        generateGraph(sampleData);
-    }
-
-    function generateGraph(rawData) {
-        var nodes = convertNodes(rawData.nodes);
-        var edges = convertEdges(rawData.edges);
-        var container = document.getElementById('popoto-graph');
-        var data = {
-            nodes: nodes,
-            edges: edges
-        };
-        var options = getOptions();
-
-        // initialize the network
-        var network = new vis.Network(container, data, options);
-    }
-
-    function convertNodes(nodes) {
-        var convertedNodes = [];
-
-        nodes.forEach(function (node) {
-            var nodeLabel = node.labels[0];
-            convertedNodes.push({
-                id: node.id,
-                label: (nodeLabel === "Customer" ? node.properties["Username"] : node.properties["DeviceId"]),
-                group: nodeLabel
-            })
         });
-
-        return convertedNodes;
     }
 
-    function convertEdges(edges) {
-        var convertedEdges = [];
+    $this.GenerateFullPath = function (custId, userName) {
+        //var sampleData = new sample_data_graph();
+        //var data = sampleData.GenereateSampleFullPath();
+        var paramsFilter = {};
+        paramsFilter.custId = custId;
+        paramsFilter.userName = userName;
 
-        edges.forEach(function (edge) {
-            convertedEdges.push({
-                from: edge.startNode,
-                to: edge.endNode,
-                label: edge.type
-            })
-        });
-
-        return convertedEdges;
-    }
-
-    function getOptions() {
-        return {
-            nodes: {
-                shape: 'circle',
-                borderWidth: 2,
-                size: 20,
-                font: {
-                    size: 10,
-                    color: '#000000'
-                }
+        $.ajax(urls.GetDirectAssociationGraph, {
+            type: 'POST',
+            data: paramsFilter,
+            success: function (response) {
+                generateGraph(response);
             },
-            edges: {
-                length: 200,
-                font: {
-                    align: 'top',
-                    color: '#ffffff',
-                    strokeWidth: 0,
-                    size: 10
-                },
-                arrows: 'to'
-            },
-            groups: {
-                Customer: {
-                    color: { background: '#FFFF00', border: '#5CA8DB' }
-                },
-                Device: {
-                    color: { background: '#FF756E', border: '#E06760' }
-                }
+            error: function (errMsg) {
+                console.log(errMsg);
+                common.showError(errMsg);
             }
+        });
+    }
+
+    function generateGraph(data) {
+        root = data;
+        var force = d3.layout.force()
+            .size([width, height])
+            .on("tick", tick);
+
+        var svg = d3.select("#container-graph").append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        var link = svg.selectAll(".link");
+        var node = svg.selectAll(".node");        
+
+        parseLevel(root, 0);
+        update();        
+
+        // Initialize the display to show a few nodes.
+        if (collapse_level == 1) {
+            root.children.forEach(toggleAll);            
+        }  
+        update(root);
+
+        function parseLevel(node, level) {
+            node.level = level;
+            if (typeof node.children !== 'undefined' && node.children != null) {
+                node.children.forEach(function (children) {
+                    parseLevel(children, level + 1);
+                });
+            }
+        }
+
+        function toggleAll(d) {
+            if (d.children) {
+                d.children.forEach(toggleAll);
+                if (d.level < collapse_level) {
+                    return;
+                }
+                toggle(d);
+            }
+        }
+
+        function toggle(d) {
+            if (d.children) {
+                d._children = d.children;
+                d.children = null;
+            } else {
+                d.children = d._children;
+                d._children = null;
+            }
+        }
+
+        function update() {
+            var nodes = flatten(root),
+                links = d3.layout.tree().links(nodes);
+
+            // Restart the force layout.
+            force.nodes(nodes)
+                .links(links)
+                .charge(-1000)
+                .linkDistance(180)
+                .friction(0.8)
+                .start();
+
+            // Update links.
+            link = link.data(links, function (d) { return d.target.id; });
+
+            link.exit().remove();
+
+            var linkEnter = link
+                .enter()
+                .insert("g")
+                .attr('class', 'link');
+
+            addLink(linkEnter);
+
+            // Update nodes.
+            node = node.data(nodes, function (d) { return d.id; });
+            node.exit().remove();
+
+            var nodeEnter = node.enter().append("g")
+                .attr("class", "node")
+                .on("click", click)
+                .call(force.drag);
+
+            nodeEnter.append("circle")
+                .attr("r", function (d) {
+                    return 26;
+                });
+
+            nodeEnter.append("text")
+                .attr("dy", ".35em")
+                .text(function (d) { return d.Username; });
+
+            node.select("circle")
+                .style("fill", color);
+        }
+
+        function color(d) {
+            return d._children ? "#3182bd" // collapsed package
+                : d.children ? "#c6dbef" // expanded package
+                    : "#fd8d3c"; // leaf node
+        }
+
+        function tick() {
+            svg.selectAll('.link')
+                .attr("x1", function (d) { return d.source.x; })
+                .attr("y1", function (d) { return d.source.y; })
+                .attr("x2", function (d) { return d.target.x; })
+                .attr("y2", function (d) { return d.target.y; });
+
+            node.attr("transform", function (d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+            svg.selectAll('text.aEnd')
+                .attr('x', function (d) { return xpos(d.source, d.target); })
+                .attr('y', function (d) { return ypos(d.source, d.target); });
+        }        
+
+        // Toggle children on click.
+        function click(d) {
+            if (d3.event.defaultPrevented){ return; } // ignore drag
+            if (d.children) {
+                d._children = d.children;
+                d.children = null;
+            } else {
+                var paramsFilter = {};
+                paramsFilter.custId = d.CustId;
+                paramsFilter.userName = d.Username;
+                $.ajax(urls.GetDirectAssociationGraph, {
+                    type: 'POST',
+                    data: paramsFilter,
+                    success: function (response) {
+                        d.children = response;
+                        d._children = null;
+                        update();
+                    },
+                    error: function (errMsg) {
+                        d.children = d._children;
+                        d._children = null;
+                        console.log(errMsg);
+                        common.showError(errMsg);
+                    }
+                });
+            }            
+        }
+
+        // Returns a list of all nodes under the root.
+        function flatten(root) {
+            var nodes = [];
+            var index = 0;
+
+            function recurse(node) {
+                if (node.children) {
+                    //node.children.forEach(recurse);
+                    var childs = node.children;
+                    for (var i = 0; i < childs.length; i++) {
+                        recurse(childs[i]);
+                    }
+                }
+                if (!node.id) {
+                    node.id = ++index;
+                }
+                nodes.push(node);
+            }
+
+            recurse(root);
+
+            return nodes;
+        }        
+
+        function xpos(source, target) {
+            var angle = Math.atan2(target.y - source.y, target.x - source.x);
+            return 120 * Math.cos(angle) + source.x;
         };
-    }
 
-    function generateSampleData() {
-        var sampleData = new sample_data_graph();
-        var data = sampleData.genereateSampleShortest();
+        function ypos(source, target) {
+            var angle = Math.atan2(target.y - source.y, target.x - source.x);
+            return 120 * Math.sin(angle) + source.y;
+        };
 
-        return data;
-    }
+        function addLink(linkEnter) {
+            linkEnter.append('svg:line')
+                .attr("class", 'link')
+                .attr("x1", function (d) { return d.source.x; })
+                .attr("y1", function (d) { return d.source.y; })
+                .attr("x2", function (d) { return d.target.x; })
+                .attr("y2", function (d) { return d.target.y; });
 
-    function generateSampleDataFullPath() {
-        var sampleData = new sample_data_graph();
-        var data = sampleData.genereateSampleFullPath();
-
-        return data;
+            linkEnter.append('svg:text')
+                .attr('class', 'aEnd')
+                .attr('x', function (d) { return d.source.x; })
+                .attr('y', function (d) { return d.source.y; })
+                .attr('text-anchor', 'middle')
+                .text(function (d) {
+                    return d.target.AssociationType;
+                });
+        };
     }
 }

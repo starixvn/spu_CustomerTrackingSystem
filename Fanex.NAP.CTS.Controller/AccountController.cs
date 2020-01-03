@@ -220,26 +220,6 @@
 
                 if (customerAssociation != null && customerAssociation.Any())
                 {
-                    var statusIdList = statusIds.Split(',').Select(Int32.Parse).ToList();
-                    var getStatusByCustIds = _accountService.GetCustomerGeneralStatus(string.Join(",", customerAssociation.Select(x => x.CustId)));
-                    
-                    getStatusByCustIds = getStatusByCustIds.Select(x => {
-
-
-                        return x;
-                    }).ToList();
-
-                    var accountStatusViewModel = new CustomerGeneralStatusViewModel();
-                    var accountStatus = getStatusByCustIds.Select(x => new
-                    {
-                        custId = x.CustId,
-                        status = accountStatusViewModel.GetAccountStatusName(accountStatusViewModel.GetAccountStatus(x)),
-                        statusId = accountStatusViewModel.GetAccountStatusId(accountStatusViewModel.GetAccountStatusName(accountStatusViewModel.GetAccountStatus(x)))
-                    }).Where(a=> statusIdList.Contains(a.statusId));
-
-                    customerAssociation = customerAssociation.Where(x => accountStatus.Any(a => a.custId == x.CustId)).ToList();
-
-
                     result = customerAssociation.Select(x => new CustomerAssociationByAccountDetailModel
                     {
                         CustId = x.CustId.HasValue ? x.CustId.Value : 0,
@@ -269,8 +249,18 @@
                             }
 
                             return x;
-                        }).ToList();                        
-                        
+                        }).ToList();
+
+                        var getStatusByCustIds = _accountService.GetCustomerGeneralStatus(string.Join(",", result.Select(x => x.CustId)));
+
+                        var accountStatusViewModel = new CustomerGeneralStatusViewModel();
+
+                        var accountStatus = getStatusByCustIds.Select(x => new
+                        {
+                            custId = x.CustId,
+                            status = accountStatusViewModel.GetAccountStatusName(accountStatusViewModel.GetAccountStatus(x)),
+                            statusId = accountStatusViewModel.GetAccountStatusId(accountStatusViewModel.GetAccountStatusName(accountStatusViewModel.GetAccountStatus(x)))
+                        }).ToList();
 
                         if (accountStatus != null && accountStatus.Any())
                         {
@@ -336,6 +326,40 @@
             }
 
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult GetDirectAssociationGraph(int custId, string userName)
+        {
+            var graphCustomer = new GraphCustomerItemViewModel();
+            var graphCustomerList = new List<GraphCustomerItemViewModel>();
+            var customerAssociationList = _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetDirectAssociation, custId);
+            if (customerAssociationList != null && customerAssociationList.Any())
+            {
+                graphCustomerList = customerAssociationList.Select(c => new GraphCustomerItemViewModel
+                {
+                    CustId = c.CustId,
+                    Username = c.Username,
+                    Username2 = c.Username2,
+                    AssociationType = "Device",//c.AssociationType,
+                    children = new List<GraphCustomerItemViewModel>().ToArray()
+                }).Take(100).ToList();
+
+                graphCustomer.CustId = custId;
+                graphCustomer.Username = userName;
+                graphCustomer.AssociationType = "";
+                graphCustomer.children = graphCustomerList.ToArray();
+            }
+            
+            return Json(graphCustomer, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult GetShortestAssociationGraph(int custIdFrom, string userNameFrom, int custIdTo)
+        {
+            var graphCustomer = new GraphCustomerItemViewModel();
+
+            return Json(graphCustomer, JsonRequestBehavior.AllowGet);
         }
 
         //[HttpPost]
