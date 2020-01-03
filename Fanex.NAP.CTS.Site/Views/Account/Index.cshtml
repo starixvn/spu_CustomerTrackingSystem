@@ -21,54 +21,54 @@
             <span class="username">@Model.UserName <span class="nickname" style="color: #c16112">@(Model.UserName2 != null ? "(" + Model.UserName2 + ")" : string.Empty)</span></span>
             @if (Model.RobotUser)
             {
-                <span class="icon icon-Robot-User"></span>
+                <span class="icon icon-Robot-User" title="Robot User"></span>
             }
 
             @if (Model.ProblemAccountWithBetLimit)
             {
-                <span class="icon icon-P-with-Bet-Limit"></span>
+                <span class="icon icon-P-with-Bet-Limit" title="Problem Account With Bet Limit reduced"></span>
             }
 
             @if (Model.ProblemAccountWithoutBetLimit)
             {
-                <span class="icon icon-P-without-Bet-Limit"></span>
+                <span class="icon icon-P-without-Bet-Limit" title="Problem Account Without Bet Limit reduced"></span>
             }
 
             @if (Model.BetRestrictedAccount)
             {
-                <span class="icon icon-Bet-Restrict-Account"></span>
+                <span class="icon icon-Bet-Restrict-Account" title="Bet Restricted Account"></span>
             }
 
             @if (Model.BetRestrictedCurrency)
             {
-                <span class="icon icon-Bet-Restricted-Currency"></span>
+                <span class="icon icon-Bet-Restricted-Currency" title="Bet Restricted Currency"></span>
             }
 
             @if (Model.BetRestrictedSite)
             {
-                <span class="icon icon-Bet-Restrict-Site"></span>
+                <span class="icon icon-Bet-Restrict-Site" title="Bet Restricted Site"></span>
             }
 
             @if (Model.BetRestrictedSite && Model.BetRestrictedCurrency)
             {
-                <span class="icon icon-Bet-Restricted-SiteandCurrency"></span>
+                <span class="icon icon-Bet-Restricted-SiteandCurrency" title="Bet Restricted Site and Currency"></span>
             }
 
             @if (Model.SmartPunterAccount)
             {
-                <span class="icon icon-Smart-Punter-Account"></span>
+                <span class="icon icon-Smart-Punter-Account" title="Smart Punter Account"></span>
             }
             @if (Model.Affected)
             {
-                <span class="icon icon-Affected"></span>
+                <span class="icon icon-Affected" title="Affected"></span>
             }
             @if (Model.Flagged)
             {
-                <span class="icon icon-Flagged"></span>
+                <span class="icon icon-Flagged" title="Flagged"></span>
             }
             @if (Model.FlaggedWithEvi100)
             {
-                <span class="icon icon-Flagged-With-Evidence"></span>
+                <span class="icon icon-Flagged-With-Evidence" title="Flagged with Evidence 100"></span>
             }
 
         </p>
@@ -173,15 +173,15 @@
                     <div class="classification">
                         @if (Model.Delinquency)
                         {
-                            <span class="icon-delinquency" />
+                            <span class="icon-delinquency" title="Delinquency" />
                         }
                         @if (Model.HedgeAccount)
                         {
-                            <span class="icon-Hedge-Account" />
+                            <span class="icon-Hedge-Account" title="Hedge Account" />
                         }
                         @if (Model.DirtyAccount)
                         {
-                            <span class="icon-dirty" />
+                            <span class="icon-dirty" title="Dirty Account" />
                         }
                         @if (!Model.Delinquency && !Model.HedgeAccount && !Model.DirtyAccount)
                         {
