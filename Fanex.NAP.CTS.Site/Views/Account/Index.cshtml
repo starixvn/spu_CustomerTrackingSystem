@@ -41,7 +41,7 @@
 
             @if (Model.BetRestrictedCurrency)
             {
-                <span class="icon icon-Bet-Restrict-Currency"></span>
+                <span class="icon icon-Bet-Restricted-Currency"></span>
             }
 
             @if (Model.BetRestrictedSite)
@@ -74,7 +74,10 @@
         </p>
         <p>
             <strong>Account Status: </strong>
-            <span class="badge-label status-active">@Model.AcountStatus</span>
+            <span class="badge-label status-active" style="margin-right: 20px">@Model.AcountStatus</span>
+
+            <strong>Subscribers: </strong>
+            <span class="username">Maxbet</span>
         </p>
     </div>
 

@@ -3,7 +3,7 @@ $dangerousBackgroundColor: ( level-11: #ff0000, level-12: #ffff00, level-13: #8d
 $dangerousColor: ( level-0: #000, level-1: #000, level-2: #ff0000, level-3: #ffcc00, level-4: #0000ff, level-5: #ff8080, level-6: #bb00c1, level-7: #660000, level-8: #ff6600, level-9: #708090, level-10: #339952);
 
 @mixin badge-label($color) {
-    width: 6rem;
+    width: 6.2rem;
     padding: 3px 0;
     display: inline-block;
     font-size: 12px;
