@@ -89,9 +89,9 @@
                     <label>Last Ticket</label>
                 </div>
                 <div class="info-text">
-                    <div>@(Model.CreatedDate != null ? "None" : Model.CreatedDate.ToString("MMM dd, yyyy HH:mm"))</div>
-                    <div>@(Model.LastLoginDate != null ? "None" : Model.LastLoginDate.ToString("MMM dd, yyyy HH:mm"))</div>
-                    <div>@(Model.LastTicketDate != null ? "None" : Model.LastTicketDate.ToString("MMM dd, yyyy HH:mm"))</div>
+                    <div>@(Model.CreatedDate.Year == 0001 ? "None" : Model.CreatedDate.ToString("MMM dd, yyyy HH:mm"))</div>
+                    <div>@(Model.LastLoginDate.Year == 0001 ? "None" : Model.LastLoginDate.ToString("MMM dd, yyyy HH:mm"))</div>
+                    <div>@(Model.LastTicketDate.Year == 0001 ? "None" : Model.LastTicketDate.ToString("MMM dd, yyyy HH:mm"))</div>
                 </div>
             </div>
         </div>
