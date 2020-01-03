@@ -444,7 +444,12 @@ body {
 
     .icon-magnify {
         font-size: 20px;
-        color: #346BFC;
+        color: #9AA2B5;
+        cursor: pointer;
+
+        &:hover {
+            color: #346bfc;
+        }
     }
 
     .input-field {
@@ -469,7 +474,7 @@ body {
         &::-ms-input-placeholder { /* Microsoft Edge */
             color: #9f9f9f;
         }
-    }    
+    }
 }
 
 .error-alert {

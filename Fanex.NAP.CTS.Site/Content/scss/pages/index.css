@@ -1376,7 +1376,10 @@ body {
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.3); }
   .search-box .icon-magnify {
     font-size: 20px;
-    color: #346BFC; }
+    color: #9AA2B5;
+    cursor: pointer; }
+    .search-box .icon-magnify:hover {
+      color: #346bfc; }
   .search-box .input-field {
     width: 100%;
     border: 0;
