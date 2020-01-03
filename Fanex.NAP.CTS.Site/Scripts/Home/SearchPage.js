@@ -1,6 +1,7 @@
 ﻿function SearchPage() {
     var common = new UICommon();
     var input = $('#txtInput');
+    var iconSearch = $('.icon-magnify');
     var errorMessage = $('#errMessage');
     var frmSearch = $('form');
     var searchFixed = $(".search-result > form");
@@ -42,6 +43,10 @@
             .on("focus", function () { // could be on any event
                 input.putCursorAtEnd()
             });
+
+        iconSearch.on('click', function () {
+            frmSearch.submit();
+        });
     }      
 
     $(document).ready(function () {
