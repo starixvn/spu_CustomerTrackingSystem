@@ -10,6 +10,8 @@
 
         public string Username2 { get; set; }
 
+        public string DisplayName { get; set; }
+
         public string AssociationType { get; set; }
 
         public int id { get; set; }

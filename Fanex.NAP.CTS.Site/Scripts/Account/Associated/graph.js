@@ -122,13 +122,7 @@
             var nodes = flatten(root);
                 
             updateLevelX(nodes);            
-        }
-
-        function updateAfterExpand(dataExpand) {
-            var nodes = flattenLevelX(root, dataExpand);
-
-            updateLevelX(nodes);
-        }
+        }      
 
         function updateLevelX(nodes) {
             links = d3.layout.tree().links(nodes);
@@ -168,7 +162,7 @@
 
             nodeEnter.append("text")
                 .attr("dy", ".35em")
-                .text(function (d) { return d.Username; });
+                .text(function (d) { return d.DisplayName; });
 
             node.select("circle")
                 .style("fill", color);
@@ -216,8 +210,8 @@
                     data: paramsFilter,
                     success: function (response) {
                         d.children = response.children;
-                        d._children = null;                        
-                        updateAfterExpand(d.children);
+                        d._children = null;         
+                        update();                        
                     },
                     error: function (errMsg) {
                         d.children = d._children;
@@ -227,28 +221,6 @@
                     }
                 });
             }
-        }                
-
-        // Returns a list of all nodes under the root after click expand.
-        function flattenLevelX(root, dataExpand) {
-            var nodes = [];
-            var index = 0;
-
-            function recurse(node) {
-                if (node.children) {
-                    node.children.forEach(recurse);
-                }                
-                if (!node.id) {
-                    node.id = ++index;
-                } else if (node.id == index) {
-                    node.id = ++index;
-                }              
-                nodes.push(node);
-            }
-
-            recurse(root);
-
-            return nodes;
         }
       
         // Returns a list of all nodes under the root.
@@ -261,7 +233,8 @@
                     node.children.forEach(recurse);                    
                 }
                 if (!node.id) {
-                    node.id = ++index;
+                    //node.id = ++index;
+                    node.id = node.CustId;
                 }                
                 nodes.push(node);
             }

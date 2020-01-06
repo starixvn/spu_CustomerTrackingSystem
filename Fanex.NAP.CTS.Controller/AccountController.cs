@@ -353,12 +353,13 @@
                     CustId = c.CustId.HasValue ? c.CustId.Value : 0,
                     Username = c.Username,
                     Username2 = c.Username2,
+                    DisplayName = c.Username,
                     AssociationType = c.AssociationType,
                     children = null
                 }).Take(10).ToList();
 
-                graphCustomer.CustId = custId;
-                graphCustomer.Username = userName;
+                graphCustomer.CustId = custId;                
+                graphCustomer.DisplayName = userName;
                 graphCustomer.AssociationType = "Device";
                 graphCustomer.children = graphCustomerList.ToArray();
             }
@@ -381,12 +382,14 @@
                         CustId = c.CustId.HasValue ? c.CustId.Value : 0,
                         Username = c.Username,
                         Username2 = c.Username2,
+                        DisplayName = c.Username,
                         AssociationType = c.AssociationType,
+                        level = 2,
                         children = null
                     }).Take(10).ToList();
 
                 graphCustomer.CustId = custId;
-                graphCustomer.Username = userName;
+                graphCustomer.DisplayName = userName;
                 graphCustomer.AssociationType = "Device";
                 graphCustomer.children = graphCustomerList.ToArray();
             }
