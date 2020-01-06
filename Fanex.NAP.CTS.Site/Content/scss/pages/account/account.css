@@ -395,8 +395,6 @@
     font-size: 15px;
     color: #545454;
     border-bottom: 1px solid #DDE2E5; }
-    .content-card .status-info > p:first-child {
-      margin-bottom: 8px; }
     .content-card .status-info .username {
       color: #475A7C;
       font-weight: bold;

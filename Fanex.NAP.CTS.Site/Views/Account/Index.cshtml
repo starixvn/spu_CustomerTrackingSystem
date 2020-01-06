@@ -17,7 +17,7 @@
 <div class="content-card">
     <div class="status-info">
         <p>
-            <strong>@Model.Role.Name @(Model.CustSubId !=0 ? "(Sub Account)" : string.Empty) :</strong>
+            <strong>@Model.Role.Name @(Model.CustSubId != 0 ? "(Sub Account)" : string.Empty) :</strong>
             <span class="username">@Model.UserName <span class="nickname" style="color: #c16112">@(Model.UserName2 != null ? "(" + Model.UserName2 + ")" : string.Empty)</span></span>
             @if (Model.RobotUser)
             {
@@ -71,14 +71,13 @@
                 <span class="icon icon-Flagged-With-Evidence" title="Flagged with Evidence 100"></span>
             }
 
-        </p>
-        <p>
-            <strong>Account Status: </strong>
+            <strong style="margin-left: 20px">Account Status: </strong>
             <span class="badge-label status-active" style="margin-right: 20px">@Model.AcountStatus</span>
 
             <strong>Subscribers: </strong>
             <span class="username">@Model.Subscriber</span>
         </p>
+       
     </div>
 
     <div class="account-info">
