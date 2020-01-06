@@ -220,6 +220,26 @@
 
                 if (customerAssociation != null && customerAssociation.Any())
                 {
+                    var statusIdList = statusIds.Split(',').Select(Int32.Parse).ToList();
+                    var getStatusByCustIds = _accountService.GetCustomerGeneralStatus(string.Join(",", customerAssociation.Select(x => x.CustId)));
+                    
+                    getStatusByCustIds = getStatusByCustIds.Select(x => {
+
+
+                        return x;
+                    }).ToList();
+
+                    var accountStatusViewModel = new CustomerGeneralStatusViewModel();
+                    var accountStatus = getStatusByCustIds.Select(x => new
+                    {
+                        custId = x.CustId,
+                        status = accountStatusViewModel.GetAccountStatusName(accountStatusViewModel.GetAccountStatus(x)),
+                        statusId = accountStatusViewModel.GetAccountStatusId(accountStatusViewModel.GetAccountStatusName(accountStatusViewModel.GetAccountStatus(x)))
+                    }).Where(a=> statusIdList.Contains(a.statusId));
+
+                    customerAssociation = customerAssociation.Where(x => accountStatus.Any(a => a.custId == x.CustId)).ToList();
+
+
                     result = customerAssociation.Select(x => new CustomerAssociationByAccountDetailModel
                     {
                         CustId = x.CustId.HasValue ? x.CustId.Value : 0,
@@ -249,18 +269,8 @@
                             }
 
                             return x;
-                        }).ToList();
-
-                        var getStatusByCustIds = _accountService.GetCustomerGeneralStatus(string.Join(",", result.Select(x => x.CustId)));
-
-                        var accountStatusViewModel = new CustomerGeneralStatusViewModel();
-
-                        var accountStatus = getStatusByCustIds.Select(x => new
-                        {
-                            custId = x.CustId,
-                            status = accountStatusViewModel.GetAccountStatusName(accountStatusViewModel.GetAccountStatus(x)),
-                            statusId = accountStatusViewModel.GetAccountStatusId(accountStatusViewModel.GetAccountStatusName(accountStatusViewModel.GetAccountStatus(x)))
-                        }).ToList();
+                        }).ToList();                        
+                        
 
                         if (accountStatus != null && accountStatus.Any())
                         {
