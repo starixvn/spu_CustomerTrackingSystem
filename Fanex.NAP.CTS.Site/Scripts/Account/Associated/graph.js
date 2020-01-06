@@ -7,6 +7,7 @@
 
     var urls = {
         GetShortestAssociationGraph: common.modifyRelativeUrl('/Account/GetShortestAssociationGraph'),
+        GetAssociationGraphLevelX: common.modifyRelativeUrl('/Account/GetAssociationGraphLevelX'),
         GetDirectAssociationGraph: common.modifyRelativeUrl('/Account/GetDirectAssociationGraph')
     };
 
@@ -47,6 +48,8 @@
     $this.GenerateFullPath = function (custId, userName) {
         //var sampleData = new sample_data_graph();
         //var data = sampleData.GenereateSampleFullPath();
+        //generateGraph(data);
+
         var paramsFilter = {};
         paramsFilter.custId = custId;
         paramsFilter.userName = userName;
@@ -116,15 +119,25 @@
         }
 
         function update() {
-            var nodes = flatten(root),
-                links = d3.layout.tree().links(nodes);
+            var nodes = flatten(root);
+                
+            updateLevelX(nodes);            
+        }
 
+        function updateAfterExpand(dataExpand) {
+            var nodes = flattenLevelX(root, dataExpand);
+
+            updateLevelX(nodes);
+        }
+
+        function updateLevelX(nodes) {
+            links = d3.layout.tree().links(nodes);
             // Restart the force layout.
             force.nodes(nodes)
                 .links(links)
                 .charge(-1000)
                 .linkDistance(180)
-                .friction(0.8)
+                .friction(0.5)
                 .start();
 
             // Update links.
@@ -163,8 +176,9 @@
 
         function color(d) {
             return d._children ? "#3182bd" // collapsed package
-                : d.children ? "#c6dbef" // expanded package
-                    : "#fd8d3c"; // leaf node
+                    : d.children ? "#c6dbef" // expanded package
+                    : "#3182bd"; // leaf node
+                    //: "#fd8d3c"; // leaf node
         }
 
         function tick() {
@@ -187,17 +201,23 @@
             if (d.children) {
                 d._children = d.children;
                 d.children = null;
+                update();
             } else {
+                //d.children = d._children;
+                //d._children = null;
+                //update();
+
                 var paramsFilter = {};
                 paramsFilter.custId = d.CustId;
                 paramsFilter.userName = d.Username;
-                $.ajax(urls.GetDirectAssociationGraph, {
+
+                $.ajax(urls.GetAssociationGraphLevelX, {
                     type: 'POST',
                     data: paramsFilter,
                     success: function (response) {
-                        d.children = response;
-                        d._children = null;
-                        update();
+                        d.children = response.children;
+                        d._children = null;                        
+                        updateAfterExpand(d.children);
                     },
                     error: function (errMsg) {
                         d.children = d._children;
@@ -206,9 +226,31 @@
                         common.showError(errMsg);
                     }
                 });
-            }            
-        }
+            }
+        }                
 
+        // Returns a list of all nodes under the root after click expand.
+        function flattenLevelX(root, dataExpand) {
+            var nodes = [];
+            var index = 0;
+
+            function recurse(node) {
+                if (node.children) {
+                    node.children.forEach(recurse);
+                }                
+                if (!node.id) {
+                    node.id = ++index;
+                } else if (node.id == index) {
+                    node.id = ++index;
+                }              
+                nodes.push(node);
+            }
+
+            recurse(root);
+
+            return nodes;
+        }
+      
         // Returns a list of all nodes under the root.
         function flatten(root) {
             var nodes = [];
@@ -216,31 +258,26 @@
 
             function recurse(node) {
                 if (node.children) {
-                    //node.children.forEach(recurse);
-                    var childs = node.children;
-                    for (var i = 0; i < childs.length; i++) {
-                        recurse(childs[i]);
-                    }
+                    node.children.forEach(recurse);                    
                 }
                 if (!node.id) {
                     node.id = ++index;
-                }
+                }                
                 nodes.push(node);
             }
-
             recurse(root);
 
             return nodes;
-        }        
+        }          
 
         function xpos(source, target) {
             var angle = Math.atan2(target.y - source.y, target.x - source.x);
-            return 120 * Math.cos(angle) + source.x;
+            return 100 * Math.cos(angle) + source.x;
         };
 
         function ypos(source, target) {
             var angle = Math.atan2(target.y - source.y, target.x - source.x);
-            return 120 * Math.sin(angle) + source.y;
+            return 100 * Math.sin(angle) + source.y;
         };
 
         function addLink(linkEnter) {

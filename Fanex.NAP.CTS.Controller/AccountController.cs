@@ -346,21 +346,51 @@
             var customerAssociationList = _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetDirectAssociation, custId);
             if (customerAssociationList != null && customerAssociationList.Any())
             {
-                graphCustomerList = customerAssociationList.Select(c => new GraphCustomerItemViewModel
+                graphCustomerList = customerAssociationList
+                    .Where(c => c.Username != null)
+                    .Select(c => new GraphCustomerItemViewModel
                 {
-                    CustId = c.CustId,
+                    CustId = c.CustId.HasValue ? c.CustId.Value : 0,
                     Username = c.Username,
                     Username2 = c.Username2,
-                    AssociationType = "Device",//c.AssociationType,
-                    children = new List<GraphCustomerItemViewModel>().ToArray()
-                }).Take(100).ToList();
+                    AssociationType = c.AssociationType,
+                    children = null
+                }).Take(10).ToList();
 
                 graphCustomer.CustId = custId;
                 graphCustomer.Username = userName;
-                graphCustomer.AssociationType = "";
+                graphCustomer.AssociationType = "Device";
                 graphCustomer.children = graphCustomerList.ToArray();
             }
             
+            return Json(graphCustomer, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult GetAssociationGraphLevelX(int custId, string userName)
+        {
+            var graphCustomer = new GraphCustomerItemViewModel();
+            var graphCustomerList = new List<GraphCustomerItemViewModel>();
+            var customerAssociationList = _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetDirectAssociation, custId);
+            if (customerAssociationList != null && customerAssociationList.Any())
+            {
+                graphCustomerList = customerAssociationList
+                    .Where(c => c.Username != null)
+                    .Select(c => new GraphCustomerItemViewModel
+                    {
+                        CustId = c.CustId.HasValue ? c.CustId.Value : 0,
+                        Username = c.Username,
+                        Username2 = c.Username2,
+                        AssociationType = c.AssociationType,
+                        children = null
+                    }).Take(10).ToList();
+
+                graphCustomer.CustId = custId;
+                graphCustomer.Username = userName;
+                graphCustomer.AssociationType = "Device";
+                graphCustomer.children = graphCustomerList.ToArray();
+            }
+
             return Json(graphCustomer, JsonRequestBehavior.AllowGet);
         }
 
