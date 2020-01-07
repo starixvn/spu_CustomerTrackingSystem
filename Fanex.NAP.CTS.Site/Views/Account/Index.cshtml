@@ -119,7 +119,7 @@
                     <label>Abnormal</label>
                 </div>
                 <div class="info-text">
-                    <div>@(Model.Abnormal == 0 ? Html.Raw("None") : Html.Raw(string.Format("<span class='abnormal-level-{0}'>{1}</span>", Model.DangerousOriginal.ToString(), Model.Abnormal)))</div>
+                    <div>@(Model.Abnormal == 0 ? Html.Raw("None") : Html.Raw(string.Format("<span class='abnormal-level-{0}'>{1}</span>", Model.Abnormal.ToString(), Model.Abnormal)))</div>
                 </div>
             </div>
         </div>
