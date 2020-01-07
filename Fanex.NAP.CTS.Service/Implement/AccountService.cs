@@ -775,15 +775,15 @@
             }
         }
 
-        public List<GraphCustomerModel> GetCustomerAssociationByGraph(string apiURL, int custId)
+        public List<GraphAssociationModel> GetCustomerAssociationByGraph(string apiURL, int custId)
         {
-            var data = ApiHelper.Post<List<GraphCustomerModel>>(apiURL, custId);
+            var data = ApiHelper.Post<List<GraphAssociationModel>>(apiURL, custId);
 
             Task.WhenAll(data);
 
             var customersAPI = data.Result;
 
-            return customersAPI ?? new List<GraphCustomerModel>();
+            return customersAPI ?? new List<GraphAssociationModel>();
         }
 
         public List<CustomerAssociationByAccountDetailModel> GetInDirectCustomerAssociatedByAccount(string custIds)
@@ -791,7 +791,7 @@
             throw new NotImplementedException();
         }
 
-        public List<GraphCustomerModel> FilterCustomerAssociationByStatus(string statusIds, List<GraphCustomerModel> customerAssociation, List<CustomerGeneralStatusModel> statusByCustIds)
+        public List<GraphAssociationModel> FilterCustomerAssociationByStatus(string statusIds, List<GraphAssociationModel> customerAssociation, List<CustomerGeneralStatusModel> statusByCustIds)
         {
             customerAssociation = customerAssociation.Select(x => { if (x.CustId == null) x.CustId = 0; return x; }).ToList();
 

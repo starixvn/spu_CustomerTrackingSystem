@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Fanex.NAP.CTS.Model.Account
 {
-    public class GraphCustomerModel
+    public class GraphAssociationModel
     {
         public int? CustId { get; set; }
 

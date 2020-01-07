@@ -1,2 +1,2 @@
-﻿MATCH path = shortestpath((:Customer{CustId: $StartCustId })-[:USED*]-(:Customer{CustId: $EndCustId }))
+﻿MATCH path = shortestpath((c:CTSCustomer {CustID: $StartCustId})-[r:USED_DEVICE|:USED_IP*]-(c1:CTSCustomer  {CustID:$EndCustId}))
 RETURN path

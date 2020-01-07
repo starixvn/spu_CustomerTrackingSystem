@@ -1,9 +1,11 @@
 ﻿using Fanex.NAP.CTS.Model.Account;
+using Fanex.NAP.CTS.Model.GraphDB;
 using Fanex.NAP.SPU.Graph.Core;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Results;
 
 namespace Fanex.NAP.CTS.Portal.API.Controllers
 {
@@ -20,9 +22,9 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
         /// 
         [System.Web.Http.AcceptVerbs("GetDirectAssociation")]
         [HttpPost]
-        public IEnumerable<GraphCustomerModel> GetDirectAssociation([FromBody] int custId)
+        public IEnumerable<GraphAssociationModel> GetDirectAssociation([FromBody] int custId)
         {
-            var result = DbSessionFactory.Execute<GraphCustomerModel>("GetAssociationOneLevelByCustId", new { CustId = custId }).Data;
+            var result = DbSessionFactory.Execute<GraphAssociationModel>("GetAssociationOneLevelByCustId", new { CustId = custId }).Data;
             return result;
         }
 
@@ -33,19 +35,19 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
         /// <returns></returns>
         [System.Web.Http.AcceptVerbs("GetInDirectAssociation")]
         [HttpPost]
-        public IEnumerable<GraphCustomerModel> GetInDirectAssociation([FromBody] int custId)
+        public IEnumerable<GraphAssociationModel> GetInDirectAssociation([FromBody] int custId)
         {
             // return DbSessionFactory.Execute<GraphCustomerModel>("GetAssociationNLevelByCustId", new { CustId = custId }).Data;
-            var result = new List<GraphCustomerModel>()
+            var result = new List<GraphAssociationModel>()
             {
-                new GraphCustomerModel()
+                new GraphAssociationModel()
                 {
                     CustId = 1,
                     Username = "harvey02424",
                     Username2 = "harvey.nguyen"
                 }
             };
-            return new List<GraphCustomerModel>();
+            return new List<GraphAssociationModel>();
         }
 
         /// <summary>
@@ -58,7 +60,7 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
         {
             var query = isOneLevel ? "GetAssociationOneLevelByCustId" : "GetAssociationNLevelByCustId";
 
-            var result = DbSessionFactory.Execute<GraphCustomerModel>(query, new { CustId = custId }).Data;
+            var result = DbSessionFactory.Execute<GraphAssociationModel>(query, new { CustId = custId }).Data;
 
             if(result == null)
             {
@@ -68,6 +70,16 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
             HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.OK, result);
 
             return response;
+        }
+
+        [System.Web.Http.AcceptVerbs("GetShortestPath")]
+        [HttpGet]
+        public JsonResult<ShortestPathOfAccount> GetShortestPath(int custIdFrom, int custIdTo)
+        {
+            custIdFrom = 23081993;
+            custIdTo = 23081995;
+            var result = DbSessionFactory.ExecuteSingle<ShortestPathOfAccount>("GetShortestPath", new { StartCustId = custIdFrom, EndCustId = custIdTo }).Data;
+            return Json(result);
         }
     }
 }

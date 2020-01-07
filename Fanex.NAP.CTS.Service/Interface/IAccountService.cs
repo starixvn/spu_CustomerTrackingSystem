@@ -1,7 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
     using Fanex.NAP.CTS.Model.Account;
-    using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.Home;
     using Fanex.NAP.CTS.Model.Subscriber;
     using Fanex.NAP.CTS.ViewModel.Account;
@@ -58,8 +57,8 @@
 
         CustomerFlagInfoModel GetCustomerFlagInfo(int ctsCustId, int subscriberId);
 
-        List<GraphCustomerModel> GetCustomerAssociationByGraph(string apiURL, int custId);
+        List<GraphAssociationModel> GetCustomerAssociationByGraph(string apiURL, int custId);
 
-        List<GraphCustomerModel> FilterCustomerAssociationByStatus(string statusIds, List<GraphCustomerModel>  customerAssociation, List<CustomerGeneralStatusModel> statusByCustIds);
+        List<GraphAssociationModel> FilterCustomerAssociationByStatus(string statusIds, List<GraphAssociationModel>  customerAssociation, List<CustomerGeneralStatusModel> statusByCustIds);
     }
 }
