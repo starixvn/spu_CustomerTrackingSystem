@@ -21,9 +21,7 @@
 
         AccountDetail GetAccountDetailGeneralInformation(GeneralInformationFilter filter);
 
-        IEnumerable<AssociatedAccountByAccount> GetAssociatedAccountByAccounts(AssociatedAccountByAccountFilter filter, out string msgError);
-
-        string GetShortestPath(int startCustId, int endCustId);
+        IEnumerable<AssociatedAccountByAccount> GetAssociatedAccountByAccounts(AssociatedAccountByAccountFilter filter, out string msgError);        
 
         IEnumerable<AssociatedDeviceByAccount> GetAssociatedDevicesByAccount(AssociatedDeviceByAccountFilter filter);
 
@@ -58,6 +56,8 @@
         CustomerFlagInfoModel GetCustomerFlagInfo(int ctsCustId, int subscriberId);
 
         List<GraphAssociationModel> GetCustomerAssociationByGraph(string apiURL, int custId);
+
+        List<GraphCustomerModel> GetShortestPathAssociationByGraph(string apiURL, int custIdFrom, int custIdTo);
 
         List<GraphAssociationModel> FilterCustomerAssociationByStatus(string statusIds, List<GraphAssociationModel>  customerAssociation, List<CustomerGeneralStatusModel> statusByCustIds);
     }

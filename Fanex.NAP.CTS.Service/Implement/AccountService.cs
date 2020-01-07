@@ -363,18 +363,6 @@
         #endregion
 
         #region Associated account by account
-        public string GetShortestPath(int startCustId, int endCustId)
-        {
-            // var data = ApiHelper.Post<string>(AppSettings.Get(Consts.GraphDBGetShortestPath), new { StartCustId = startCustId, EndCustId = endCustId });
-
-            //Task.WhenAll(data);
-
-            //var customersAPI = data.Result;
-            var customersAPI = string.Empty;
-
-            return customersAPI;
-        }
-
         public IEnumerable<AssociatedAccountByAccount> GetAssociatedAccountByAccounts(AssociatedAccountByAccountFilter filter, out string msgError)
         {
             var accountCollected = new AssociatedAccountsCollected();
@@ -510,7 +498,7 @@
                 TotalLoginWithRootAccount = customerA.TotalLoginWithRootAccount,
                 EvidenceLevel = customerA.EvidenceLevel
             };
-        }
+        }       
 
         private static AssociatedAccountByAccount GetAssociatedAccount(AssociatedAccountByAccount customerA, CustomerFraud customerB)
         {
@@ -789,6 +777,17 @@
         public List<CustomerAssociationByAccountDetailModel> GetInDirectCustomerAssociatedByAccount(string custIds)
         {
             throw new NotImplementedException();
+        }
+
+        public List<GraphCustomerModel> GetShortestPathAssociationByGraph(string apiURL, int custIdFrom, int custIdTo)
+        {
+            var data = ApiHelper.Post<List<GraphCustomerModel>>(apiURL, custIdFrom, custIdTo);
+
+            Task.WhenAll(data);
+
+            var customersAPI = data.Result;
+
+            return customersAPI ?? new List<GraphCustomerModel>();
         }
 
         public List<GraphAssociationModel> FilterCustomerAssociationByStatus(string statusIds, List<GraphAssociationModel> customerAssociation, List<CustomerGeneralStatusModel> statusByCustIds)

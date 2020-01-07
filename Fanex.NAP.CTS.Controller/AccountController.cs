@@ -296,6 +296,8 @@
         public ActionResult GetShortestAssociationGraph(int custIdFrom, string userNameFrom, int custIdTo)
         {
             var graphCustomer = new GraphCustomerItemViewModel();
+            var graphCustomerList = new List<GraphCustomerItemViewModel>();
+            var customerAssociationList = _accountService.GetShortestPathAssociationByGraph(ConfigSettings.GetShortestAssociation, custIdFrom, custIdTo);            
 
             return Json(graphCustomer, JsonRequestBehavior.AllowGet);
         }

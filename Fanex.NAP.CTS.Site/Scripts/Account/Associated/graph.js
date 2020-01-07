@@ -24,18 +24,21 @@
 
     $this.GenerateShortestPath = function (custIdFrom, userNameFrom, custIdTo) {
         collapse_level = 0;
+
         //var sampleData = new sample_data_graph();
         //var data = sampleData.GenereateSampleShortest();
+        //generateGraph(data);
+
         var paramsFilter = {};
         paramsFilter.custIdFrom = custIdFrom;
-        paramsFilter.userNameFrom = "Master001";
+        paramsFilter.userNameFrom = userNameFrom;
         paramsFilter.custIdTo = custIdTo;
 
         $.ajax(urls.GetShortestAssociationGraph, {
             type: 'POST',
             data: paramsFilter,
             success: function (response) {
-                generateGraph(data);
+                generateGraph(response);
             },
             error: function (errMsg) {
                 console.log(errMsg);
