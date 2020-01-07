@@ -82,15 +82,16 @@
     </div>
 
 <script type="text/javascript">
+    var userName = '@Model.Username';
     var formGraph = new graph();    
 
     $('#account-by-account-btn-shortest-path').click(function () {
-        formGraph.GenerateShortestPath(1, "Master001", 2);
+        formGraph.GenerateShortestPath(1, userName, 2);
         formGraph.OpenModal();
     });
 
     $('#account-by-account-btn-on-graph').click(function () {
-        formGraph.GenerateFullPath(39856622, "Master001");
+        formGraph.GenerateFullPath(39856622, userName);
         formGraph.OpenModal();
     });
 </script>

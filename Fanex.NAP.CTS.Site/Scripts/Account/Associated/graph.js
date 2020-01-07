@@ -7,7 +7,6 @@
 
     var urls = {
         GetShortestAssociationGraph: common.modifyRelativeUrl('/Account/GetShortestAssociationGraph'),
-        GetAssociationGraphLevelX: common.modifyRelativeUrl('/Account/GetAssociationGraphLevelX'),
         GetDirectAssociationGraph: common.modifyRelativeUrl('/Account/GetDirectAssociationGraph')
     };
 
@@ -46,10 +45,6 @@
     }
 
     $this.GenerateFullPath = function (custId, userName) {
-        //var sampleData = new sample_data_graph();
-        //var data = sampleData.GenereateSampleFullPath();
-        //generateGraph(data);
-
         var paramsFilter = {};
         paramsFilter.custId = custId;
         paramsFilter.userName = userName;
@@ -122,21 +117,20 @@
             var nodes = flatten(root);
                 
             updateLevelX(nodes);            
-        }      
+        }       
 
         function updateLevelX(nodes) {
             links = d3.layout.tree().links(nodes);
             // Restart the force layout.
             force.nodes(nodes)
                 .links(links)
-                .charge(-1000)
+                .charge(-800)
                 .linkDistance(180)
                 .friction(0.5)
                 .start();
 
             // Update links.
             link = link.data(links, function (d) { return d.target.id; });
-
             link.exit().remove();
 
             var linkEnter = link
@@ -167,7 +161,7 @@
             node.select("circle")
                 .style("fill", color);
         }
-
+        
         function color(d) {
             return d._children ? "#3182bd" // collapsed package
                     : d.children ? "#c6dbef" // expanded package
@@ -185,8 +179,8 @@
             node.attr("transform", function (d) { return "translate(" + d.x + "," + d.y + ")"; });
 
             svg.selectAll('text.aEnd')
-                .attr('x', function (d) { return xpos(d.source, d.target); })
-                .attr('y', function (d) { return ypos(d.source, d.target); });
+                .attr('x', function (d) { return xposition(d.source, d.target); })
+                .attr('y', function (d) { return yposition(d.source, d.target); });
         }        
 
         // Toggle children on click.
@@ -197,21 +191,17 @@
                 d.children = null;
                 update();
             } else {
-                //d.children = d._children;
-                //d._children = null;
-                //update();
-
                 var paramsFilter = {};
                 paramsFilter.custId = d.CustId;
                 paramsFilter.userName = d.Username;
 
-                $.ajax(urls.GetAssociationGraphLevelX, {
+                $.ajax(urls.GetDirectAssociationGraph, {
                     type: 'POST',
                     data: paramsFilter,
                     success: function (response) {
                         d.children = response.children;
                         d._children = null;         
-                        update();                        
+                        update();
                     },
                     error: function (errMsg) {
                         d.children = d._children;
@@ -226,15 +216,13 @@
         // Returns a list of all nodes under the root.
         function flatten(root) {
             var nodes = [];
-            var index = 0;
 
             function recurse(node) {
                 if (node.children) {
                     node.children.forEach(recurse);                    
                 }
                 if (!node.id) {
-                    //node.id = ++index;
-                    node.id = node.CustId;
+                    node.id = node.ItemCode;
                 }                
                 nodes.push(node);
             }
@@ -243,12 +231,12 @@
             return nodes;
         }          
 
-        function xpos(source, target) {
+        function xposition(source, target) {
             var angle = Math.atan2(target.y - source.y, target.x - source.x);
             return 100 * Math.cos(angle) + source.x;
         };
 
-        function ypos(source, target) {
+        function yposition(source, target) {
             var angle = Math.atan2(target.y - source.y, target.x - source.x);
             return 100 * Math.sin(angle) + source.y;
         };
