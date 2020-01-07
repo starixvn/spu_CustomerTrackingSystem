@@ -134,6 +134,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Account\AccountGeneralInformation.cs" />
+    <Compile Include="Account\AccountStatusModel.cs" />
     <Compile Include="Account\CustomerAssociationByCTSCustIdModel.cs" />
     <Compile Include="Account\CustomerByGraphDB.cs" />
     <Compile Include="Account\CustomerEsportAutoSuspendStatusModel.cs" />

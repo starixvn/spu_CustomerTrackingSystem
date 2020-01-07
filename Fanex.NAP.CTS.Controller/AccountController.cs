@@ -3,6 +3,7 @@
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Core.Utilities;
+    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
@@ -210,128 +211,53 @@
         [HttpPost]
         public ActionResult GetAssociationByAccount(int CustId, string statusIds, int associationType, bool isDirect)
         {
-            var customerAssociation = new List<GraphCustomerModel>();
-
             var result = new List<CustomerAssociationByAccountDetailModel>();
 
-            if (isDirect)
+            var customerAssociation = isDirect ?
+                _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetDirectAssociation, CustId) :
+                _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetInDirectAssociation, CustId);
+
+            if (customerAssociation != null && customerAssociation.Any())
             {
-                customerAssociation = _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetDirectAssociation, CustId);
+                var getStatusByCustIds = _accountService.GetCustomerGeneralStatus(string.Join(",", customerAssociation.Select(x => x.CustId)));
 
-                if (customerAssociation != null && customerAssociation.Any())
+                customerAssociation = _accountService.FilterCustomerAssociationByStatus(statusIds, customerAssociation, getStatusByCustIds);
+
+                result = customerAssociation.Select(x => new CustomerAssociationByAccountDetailModel
                 {
-                    var statusIdList = statusIds.Split(',').Select(Int32.Parse).ToList();
-                    var getStatusByCustIds = _accountService.GetCustomerGeneralStatus(string.Join(",", customerAssociation.Select(x => x.CustId)));
-                    
-                    getStatusByCustIds = getStatusByCustIds.Select(x => {
+                    CustId = x.CustId.HasValue ? x.CustId.Value : 0,
+                    Username = !string.IsNullOrWhiteSpace(x.Username) ? x.Username : x.Username2,
+                    LoginId = !string.IsNullOrWhiteSpace(x.Username2) ? x.Username2 : x.Username,
+                    AssociationDate = x.AssociationDate,
+                    SharedDevices = x.SharedDevices,
+                    SharedIps = x.SharedIPs,
+                    AssociationType = x.AssociationType,
+                    Status = x.StatusName,
+                    StatusId = x.StatusId
+                }).ToList();
 
+                if (result != null && result.Any())
+                {
+                    var param = result.Select(a => new { a.CustId, a.LoginId });
+
+                    var getTags = _accountService.GetDirectCustomerAssociatedByAccount(JsonConvert.SerializeObject(param));
+
+                    result = result.Select(x =>
+                    {
+                        var getTag = getTags.FirstOrDefault(a => a.CustId == x.CustId || a.LoginId == x.LoginId);
+
+                        if (getTag != null)
+                        {
+                            x.Tag = getTag.Tag;
+                            x.Subscriber = getTag.Subscriber;
+                            x.CTSCustId = getTag.CTSCustId;
+                        }
 
                         return x;
-                    }).ToList();
+                    })
+                        .OrderBy(a => a.StatusId)
+                        .ToList();
 
-                    var accountStatusViewModel = new CustomerGeneralStatusViewModel();
-                    var accountStatus = getStatusByCustIds.Select(x => new
-                    {
-                        custId = x.CustId,
-                        status = accountStatusViewModel.GetAccountStatusName(accountStatusViewModel.GetAccountStatus(x)),
-                        statusId = accountStatusViewModel.GetAccountStatusId(accountStatusViewModel.GetAccountStatusName(accountStatusViewModel.GetAccountStatus(x)))
-                    }).Where(a=> statusIdList.Contains(a.statusId));
-
-                    customerAssociation = customerAssociation.Where(x => accountStatus.Any(a => a.custId == x.CustId)).ToList();
-
-
-                    result = customerAssociation.Select(x => new CustomerAssociationByAccountDetailModel
-                    {
-                        CustId = x.CustId.HasValue ? x.CustId.Value : 0,
-                        Username = !string.IsNullOrWhiteSpace(x.Username) ? x.Username : x.Username2,
-                        LoginId = !string.IsNullOrWhiteSpace(x.Username2) ? x.Username2 : x.Username,
-                        AssociationDate = x.AssociationDate,
-                        SharedDevices = x.SharedDevices,
-                        SharedIps = x.SharedIPs,
-                        AssociationType = x.AssociationType
-                    }).ToList();
-
-                    if (result != null && result.Any())
-                    {
-                        var param = result.Select(a => new { a.CustId, a.LoginId });
-
-                        var getTags = _accountService.GetDirectCustomerAssociatedByAccount(JsonConvert.SerializeObject(param));
-
-                        result = result.Select(x =>
-                        {
-                            var getTag = getTags.FirstOrDefault(a => a.CustId == x.CustId || a.LoginId == x.LoginId);
-
-                            if (getTag != null)
-                            {
-                                x.Tag = getTag.Tag;
-                                x.Subscriber = getTag.Subscriber;
-                                x.CTSCustId = getTag.CTSCustId;
-                            }
-
-                            return x;
-                        }).ToList();                        
-                        
-
-                        if (accountStatus != null && accountStatus.Any())
-                        {
-                            result = result
-                                           .Select(x =>
-                                           {
-                                               if (x.CustId != 0)
-                                               {
-                                                   var accStatus = accountStatus.FirstOrDefault(z => z.custId == x.CustId);
-
-                                                   x.Status = accStatus != null ? accStatus.status : string.Empty;
-                                               }
-
-                                               return x;
-
-                                           }).OrderByDescending(a => a.Status).ToList();
-                        }
-                    }
-                }
-            }
-            else
-            {
-                customerAssociation = _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetInDirectAssociation, CustId);
-
-                if (!result.Any())
-                {
-                    result.Add(new CustomerAssociationByAccountDetailModel
-                    {
-                        Username = "testing",
-                        LoginId = "test",
-                        Status = "Active",
-                        Subscriber = "12bet",
-                        AssociationType = "Ip",
-                        SharedDevices = 12,
-                        SharedIps = 100,
-                        AssociationDate = DateTime.Now
-                    });
-
-                    result.Add(new CustomerAssociationByAccountDetailModel
-                    {
-                        Username = "testing1",
-                        LoginId = "test1",
-                        Status = "Active",
-                        Subscriber = "CN88",
-                        AssociationType = "All",
-                        SharedDevices = 24,
-                        SharedIps = 200,
-                        AssociationDate = DateTime.Now
-                    });
-
-                    result.Add(new CustomerAssociationByAccountDetailModel
-                    {
-                        Username = "testing3",
-                        LoginId = "test3",
-                        Status = "Active",
-                        Subscriber = "Maxbet",
-                        AssociationType = "Devie",
-                        SharedDevices = 32,
-                        SharedIps = 100,
-                        AssociationDate = DateTime.Now
-                    });
                 }
             }
 

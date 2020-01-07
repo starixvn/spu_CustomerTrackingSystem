@@ -59,5 +59,7 @@
         CustomerFlagInfoModel GetCustomerFlagInfo(int ctsCustId, int subscriberId);
 
         List<GraphCustomerModel> GetCustomerAssociationByGraph(string apiURL, int custId);
+
+        List<GraphCustomerModel> FilterCustomerAssociationByStatus(string statusIds, List<GraphCustomerModel>  customerAssociation, List<CustomerGeneralStatusModel> statusByCustIds);
     }
 }

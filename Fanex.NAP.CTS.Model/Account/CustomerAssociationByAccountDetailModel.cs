@@ -20,6 +20,8 @@ namespace Fanex.NAP.CTS.Model.Account
 
         public string Status { get; set; }
 
+        public int StatusId { get; set; }
+
         public string Subscriber { get; set; }
 
         public string AssociationType { get; set; }

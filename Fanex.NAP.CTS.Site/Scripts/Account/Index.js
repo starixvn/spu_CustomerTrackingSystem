@@ -27,13 +27,17 @@
 
     function CollapseExpandItem() {
         $("#account-detail-container .report-item h3").on('click', function () {
-            CollapseAll();
-
+            
             var $this = $(this).next();
 
             if ($this.hasClass('hide')) {
+                CollapseAll();
                 $this.removeClass('hide');
                 $this.parent().addClass("expanded");
+            }
+            else {
+                $this.parent().removeClass('expanded');
+                $this.addClass("hide");
             }
         });
     }

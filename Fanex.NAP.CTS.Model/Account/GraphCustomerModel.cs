@@ -21,5 +21,9 @@ namespace Fanex.NAP.CTS.Model.Account
         public int SharedDevices { get; set; }
 
         public int SharedIPs { get; set; }
+
+        public string StatusName { get; set; }
+
+        public int StatusId { get; set; }
     }
 }

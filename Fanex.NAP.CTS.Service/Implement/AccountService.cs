@@ -791,6 +791,62 @@
             throw new NotImplementedException();
         }
 
+        public List<GraphCustomerModel> FilterCustomerAssociationByStatus(string statusIds, List<GraphCustomerModel> customerAssociation, List<CustomerGeneralStatusModel> statusByCustIds)
+        {
+            customerAssociation = customerAssociation.Select(x => { if (x.CustId == null) x.CustId = 0; return x; }).ToList();
+
+            var statusIdList = statusIds.Split(',').Select(Int32.Parse).ToList();
+            var accountStatusViewModel = new CustomerGeneralStatusViewModel();
+            var notYetDepositStatusName = accountStatusViewModel.GetAccountStatusName(Model.AccountStatus.NotYetDeposit);
+            var notYetDepositStatusId = accountStatusViewModel.GetAccountStatusId(notYetDepositStatusName);
+
+            var accountStatus = statusByCustIds.Select(x => new AccountStatusModel
+            {
+                CustId = x.CustId,
+                Username = x.Username,
+                StatusName = accountStatusViewModel.GetAccountStatusName(accountStatusViewModel.GetAccountStatus(x)),
+                StatusId = accountStatusViewModel.GetAccountStatusId(accountStatusViewModel.GetAccountStatusName(accountStatusViewModel.GetAccountStatus(x)))
+            }).Where(a => statusIdList.Contains(a.StatusId));
+
+            if (statusIdList.Any(x => notYetDepositStatusId == x))
+            {
+                var accountStatusNotDeposit = new List<AccountStatusModel>();
+                customerAssociation.Where(a => a.CustId == 0).ToList().ForEach(x =>
+                {
+                    accountStatusNotDeposit.Add(new AccountStatusModel
+                    {
+                        CustId = 0,
+                        Username = x.Username,
+                        StatusName = notYetDepositStatusName,
+                        StatusId = notYetDepositStatusId
+                    });
+
+                });
+
+                accountStatus = accountStatus.Concat(accountStatusNotDeposit);
+            }
+
+            return customerAssociation
+                .Where(x => accountStatus.Any(a => a.CustId == x.CustId))
+                .Select(a =>
+                {
+                    var accStatus = accountStatus.FirstOrDefault(z => z.CustId == a.CustId);
+
+                    if(accStatus != null)
+                    {
+                        a.StatusName = accStatus.StatusName;
+                        a.StatusId = accStatus.StatusId;
+                    }
+                    else
+                    {
+                        a.StatusName = string.Empty;
+                        a.StatusId = 0;
+                    }
+
+                    return a;
+                }).ToList();
+        }
+
         #endregion
     }
 }
