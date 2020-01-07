@@ -57,7 +57,7 @@
 
         List<GraphAssociationModel> GetCustomerAssociationByGraph(string apiURL, int custId);
 
-        List<GraphCustomerModel> GetShortestPathAssociationByGraph(string apiURL, int custIdFrom, int custIdTo);
+        List<GraphAssociationModel> GetShortestPathAssociationByGraph(string apiURL, int custIdFrom, int custIdTo);
 
         List<GraphAssociationModel> FilterCustomerAssociationByStatus(string statusIds, List<GraphAssociationModel>  customerAssociation, List<CustomerGeneralStatusModel> statusByCustIds);
     }

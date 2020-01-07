@@ -779,15 +779,16 @@
             throw new NotImplementedException();
         }
 
-        public List<GraphCustomerModel> GetShortestPathAssociationByGraph(string apiURL, int custIdFrom, int custIdTo)
+        public List<GraphAssociationModel> GetShortestPathAssociationByGraph(string apiURL, int custIdFrom, int custIdTo)
         {
-            var data = ApiHelper.Post<List<GraphCustomerModel>>(apiURL, custIdFrom, custIdTo);
+            var customersAPI = new List<GraphAssociationModel>();            
+            var data = ApiHelper.Get<object>(string.Format(apiURL, custIdFrom, custIdTo));
 
             Task.WhenAll(data);
 
-            var customersAPI = data.Result;
+            var dataAPI = data.Result;
 
-            return customersAPI ?? new List<GraphCustomerModel>();
+            return customersAPI ?? new List<GraphAssociationModel>();
         }
 
         public List<GraphAssociationModel> FilterCustomerAssociationByStatus(string statusIds, List<GraphAssociationModel> customerAssociation, List<CustomerGeneralStatusModel> statusByCustIds)
