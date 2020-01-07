@@ -69,11 +69,11 @@
                     Task.WhenAll(tasks.ToArray()).Wait();
 
                     customerGeneralStatusViewModel
+                        .BindingGeneralDataFromCTS(customerInfoFromCTS, customerFlagInfoModel, customerTotalAssociation)
                         .BindingGeneralDataFromMainDB(customerStatus,
                                                         customerLastTicketDate,
                                                         customerEsportAutoSuspendedStatus,
-                                                        customerRobotUserStatusModel)
-                        .BindingGeneralDataFromCTS(customerInfoFromCTS, customerFlagInfoModel, customerTotalAssociation)
+                                                        customerRobotUserStatusModel)                        
                         .BindingTotalAssociationFromCTS(customerTotalAssociation)
                         .BindingEvidenceListFromCTS(customerEvidences)
                         .BindingGeneralDataFromFS(customerProfileFraudInfo);

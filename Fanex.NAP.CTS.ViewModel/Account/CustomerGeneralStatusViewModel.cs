@@ -104,6 +104,10 @@ namespace Fanex.NAP.CTS.ViewModel.Account
                 this.BetRestrictedSite = customerGeneralStatusModel.BetRestrictedSite;
                 this.SmartPunterAccount = customerGeneralStatusModel.SmartPunter;
             }
+            else
+            {
+                this.AcountStatus = GetAccountStatusName(AccountStatus.NA);
+            }
 
             if (customerLastTicketDateModel != null)
             {
@@ -193,17 +197,25 @@ namespace Fanex.NAP.CTS.ViewModel.Account
         {
             if (model.CN88Status == -1)
             {
-                if(model.IsLicensee == 1) // 12bet
+                if (model.IsLicensee == 1) // 12bet
                 {
-                    return GetAccountStatusForLicensee(model);
+                    if (this.Role != null && this.Role.Id == 1) // for member
+                    {
+                        return AccountStatus.NA;
+                    }
+                    else
+                    {
+                        return GetAccountStatusForMBC(model);
+                    }
                 }
 
-                // maxbet
+                // mbc
                 return GetAccountStatusForMBC(model);
             }
 
             //cn88
             return GetAccountStatusForCN88(model);
+
         }
 
         public int GetAccountStatusId(string name)
@@ -214,50 +226,33 @@ namespace Fanex.NAP.CTS.ViewModel.Account
         public string GetAccountStatusName(AccountStatus accountStatus)
         {
             return Enum.GetName(typeof(AccountStatus), accountStatus);
-        }
-
-        private AccountStatus GetAccountStatusForLicensee(CustomerGeneralStatusModel model)
-        {
-            if (model.Closed)
-            {
-                return AccountStatus.Closed;
-            }
-
-            if (model.Reject)
-            {
-                return AccountStatus.Locked;
-            }
-
-            if(!model.Enabled)
-            {
-                return AccountStatus.Disable;
-            }
-
-            return AccountStatus.Active;
-        }
+        }                
 
         private AccountStatus GetAccountStatusForMBC(CustomerGeneralStatusModel model)
-        {
-            if (model.Closed)
+        {            
+            if(model.Enabled)
             {
-                return AccountStatus.Closed;
+                if(!model.Closed && !model.Reject)
+                {
+                    return AccountStatus.Open;
+                }
+
+                if(!model.Closed && model.Reject)
+                {
+                    return AccountStatus.Suspended;
+                }
+
+                if(model.Closed)
+                {
+                    return AccountStatus.Closed;
+                }
             }
 
-            if (model.Reject)
-            {
-                return AccountStatus.Suspended;
-            }
-
-            if (!model.Enabled)
-            {
-                return AccountStatus.Disable;
-            }
-
-            return AccountStatus.Open;
+            return AccountStatus.Disable;
         }
 
         private AccountStatus GetAccountStatusForCN88(CustomerGeneralStatusModel model)
-        {
+        {                       
             switch (model.CN88Status)
             {
                 case 1:
