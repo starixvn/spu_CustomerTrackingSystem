@@ -711,25 +711,17 @@
 
         public CustomerEsportAutoSuspendStatusModel GetCustomerEsportAutoSuspendedStatus(int custId)
         {
-            //var criteria = new CustomerEsportAutoSuspendStatusCriteria
-            //{
-            //    CustId = custId
-            //};
-
-            //using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            //{
-            //    var result = db.QueryEntity<CustomerEsportAutoSuspendStatusModel>(criteria);
-
-            //    return result;
-            //}           
-
-            return new CustomerEsportAutoSuspendStatusModel
+            var criteria = new CustomerEsportAutoSuspendStatusCriteria
             {
-                CustId = custId,
-                AutoSuspendLive = true,
-                AutoSuspendNonLive = true
-
+                CustId = custId
             };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                var result = db.QueryEntity<CustomerEsportAutoSuspendStatusModel>(criteria);
+
+                return result;
+            }
         }
 
         public CustomerRobotUserStatusModel GetCustomerRobotUserStatus(int custId)
