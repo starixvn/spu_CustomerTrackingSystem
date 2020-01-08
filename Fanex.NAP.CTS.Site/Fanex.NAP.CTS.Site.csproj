@@ -386,6 +386,12 @@
     <Content Include="Content\scss\pages\account\account-fps.min.css">
       <DependentUpon>account-fps.css</DependentUpon>
     </Content>
+    <Content Include="Content\scss\pages\account\account.css">
+	<DependentUpon>account.scss</DependentUpon>
+	</Content>
+    <Content Include="Content\scss\pages\account\account.min.css" >
+	<DependentUpon>account.css</DependentUpon>
+	</Content>
     <Content Include="Content\scss\pages\evidence\evidence.css">
       <DependentUpon>evidence.scss</DependentUpon>
     </Content>
