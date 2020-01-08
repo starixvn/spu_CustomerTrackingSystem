@@ -102,6 +102,7 @@ namespace Fanex.NAP.CTS.ViewModel.Account
                 this.BetRestrictedAccount = customerGeneralStatusModel.BetRestrictedAccount;
                 this.BetRestrictedCurrency = customerGeneralStatusModel.BetRestrictedCurrency;
                 this.BetRestrictedSite = customerGeneralStatusModel.BetRestrictedSite;
+                this.BetRestrictedSiteAndCurrency = customerGeneralStatusModel.BetRestrictedSiteAndCurrency;
                 this.SmartPunterAccount = customerGeneralStatusModel.SmartPunter;
             }
             else

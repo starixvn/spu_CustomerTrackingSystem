@@ -44,6 +44,8 @@
 
         public bool BetRestrictedSite { get; set; }
 
+        public bool BetRestrictedSiteAndCurrency { get; set; }
+
         public bool SmartPunter { get; set; }
 
         public int IsLicensee { get; set; }
