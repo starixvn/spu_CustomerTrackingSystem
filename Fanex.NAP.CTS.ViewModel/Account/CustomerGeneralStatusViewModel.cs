@@ -117,7 +117,7 @@ namespace Fanex.NAP.CTS.ViewModel.Account
 
             if (customerEsportAutoSuspendStatusModel != null)
             {
-                this.AutoSuspendESport = customerEsportAutoSuspendStatusModel.AutoSuspendLive || customerEsportAutoSuspendStatusModel.AutoSuspendNonLive;
+                this.AutoSuspendESport = customerEsportAutoSuspendStatusModel.EsportAutoSuspendStatus;
             }
 
             if (customerRobotUserStatusModel != null)

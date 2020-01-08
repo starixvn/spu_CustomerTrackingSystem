@@ -10,8 +10,6 @@ namespace Fanex.NAP.CTS.Model.Account
     {
         public int CustId { get; set; }
 
-        public bool AutoSuspendLive { get; set; }
-
-        public bool AutoSuspendNonLive { get; set; }
+        public bool EsportAutoSuspendStatus{ get; set; }
     }
 }
