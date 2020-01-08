@@ -31,7 +31,6 @@ $dangerousColor: ( level-0: #000, level-1: #000, level-2: #ff0000, level-3: #ffc
     .dangerous-#{$name} {
         @include badge-label(#000);
         color: $color;
-        border: 1px solid #a8a8a8;
     }
 }
 

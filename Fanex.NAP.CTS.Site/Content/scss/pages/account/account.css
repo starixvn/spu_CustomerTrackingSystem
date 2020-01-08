@@ -249,8 +249,7 @@
   border-radius: 3px;
   text-align: center;
   color: #000;
-  color: #000;
-  border: 1px solid #a8a8a8; }
+  color: #000; }
 
 .dangerous-level-1 {
   width: 6.2rem;
@@ -261,8 +260,7 @@
   border-radius: 3px;
   text-align: center;
   color: #000;
-  color: #000;
-  border: 1px solid #a8a8a8; }
+  color: #000; }
 
 .dangerous-level-2 {
   width: 6.2rem;
@@ -273,8 +271,7 @@
   border-radius: 3px;
   text-align: center;
   color: #000;
-  color: #ff0000;
-  border: 1px solid #a8a8a8; }
+  color: #ff0000; }
 
 .dangerous-level-3 {
   width: 6.2rem;
@@ -285,8 +282,7 @@
   border-radius: 3px;
   text-align: center;
   color: #000;
-  color: #ffcc00;
-  border: 1px solid #a8a8a8; }
+  color: #ffcc00; }
 
 .dangerous-level-4 {
   width: 6.2rem;
@@ -297,8 +293,7 @@
   border-radius: 3px;
   text-align: center;
   color: #000;
-  color: #0000ff;
-  border: 1px solid #a8a8a8; }
+  color: #0000ff; }
 
 .dangerous-level-5 {
   width: 6.2rem;
@@ -309,8 +304,7 @@
   border-radius: 3px;
   text-align: center;
   color: #000;
-  color: #ff8080;
-  border: 1px solid #a8a8a8; }
+  color: #ff8080; }
 
 .dangerous-level-6 {
   width: 6.2rem;
@@ -321,8 +315,7 @@
   border-radius: 3px;
   text-align: center;
   color: #000;
-  color: #bb00c1;
-  border: 1px solid #a8a8a8; }
+  color: #bb00c1; }
 
 .dangerous-level-7 {
   width: 6.2rem;
@@ -333,8 +326,7 @@
   border-radius: 3px;
   text-align: center;
   color: #000;
-  color: #660000;
-  border: 1px solid #a8a8a8; }
+  color: #660000; }
 
 .dangerous-level-8 {
   width: 6.2rem;
@@ -345,8 +337,7 @@
   border-radius: 3px;
   text-align: center;
   color: #000;
-  color: #ff6600;
-  border: 1px solid #a8a8a8; }
+  color: #ff6600; }
 
 .dangerous-level-9 {
   width: 6.2rem;
@@ -357,8 +348,7 @@
   border-radius: 3px;
   text-align: center;
   color: #000;
-  color: #708090;
-  border: 1px solid #a8a8a8; }
+  color: #708090; }
 
 .dangerous-level-10 {
   width: 6.2rem;
@@ -369,8 +359,7 @@
   border-radius: 3px;
   text-align: center;
   color: #000;
-  color: #339952;
-  border: 1px solid #a8a8a8; }
+  color: #339952; }
 
 .abnormal-level-0 {
   border: 1px solid #000; }
