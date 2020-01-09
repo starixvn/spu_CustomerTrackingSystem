@@ -11,6 +11,8 @@
     };
 
     $this.OpenModal = function () {
+        $("#container-graph").html('');
+
         $('#form-graph').dialog({
             modal: true,
             width: '1500px',
@@ -21,18 +23,11 @@
             close: function () { $(this).dialog('close'); }
         })
     }
-
-    $this.GenerateShortestPath = function (custIdFrom, userNameFrom, custIdTo) {
-        collapse_level = 0;
-        $("#container-graph").html('');
-
-        //var sampleData = new sample_data_graph();
-        //var data = sampleData.GenereateSampleShortest();
-        //generateGraph(data);
-
+      
+    $this.GenerateShortestPath = function (custIdFrom, custIdTo) {
+        collapse_level = 0;        
         var paramsFilter = {};
         paramsFilter.custIdFrom = custIdFrom;
-        paramsFilter.userNameFrom = userNameFrom;
         paramsFilter.custIdTo = custIdTo;
 
         $.ajax(urls.GetShortestAssociationGraph, {
@@ -48,8 +43,7 @@
         });
     }
 
-    $this.GenerateFullPath = function (custId, userName) {
-        $("#container-graph").html('');
+    $this.GenerateFullPath = function (custId, userName) {     
         var paramsFilter = {};
         paramsFilter.custId = custId;
         paramsFilter.userName = userName;

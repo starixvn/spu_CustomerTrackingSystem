@@ -295,7 +295,7 @@
         }
 
         [HttpPost]
-        public ActionResult GetShortestAssociationGraph(int custIdFrom, string userNameFrom, int custIdTo)
+        public ActionResult GetShortestAssociationGraph(int custIdFrom, int custIdTo)
         {
             var graphCustomer = new GraphCustomerItemViewModel();
             //var shortestPathOfAccount = _accountService.GetShortestPathAssociationByGraph(ConfigSettings.GetShortestAssociation, custIdFrom, custIdTo);
