@@ -1,7 +1,7 @@
 ﻿function account_by_account() {
     var btnSearch = $('#account-by-account-btn-search');
-    var associatedByAccountTable = $('#account-by-account-table'); 
-   
+    var btnViewOnGraph = $('#account-by-account-btn-on-graph');
+    var associatedByAccountTable = $('#account-by-account-table');    
 
     function InitialGrid() {
         associatedByAccountTable.DataTable({           
@@ -44,7 +44,11 @@
                 { data: obj => obj.SharedDevices },
                 { data: obj => obj.SharedIps },
                 { data: obj => moment(obj.AssociationDate).format("MMM DD, YYYY") },
-                { data: obj => RenderGraphImage() }
+                {
+                    data: obj => RenderGraphImage(), createdCell: (cell, _, row) => {
+                        $('.icon-path', cell).click(() => HandleGraphShortestPath(row));
+                    }
+                }
             ]
         });
     }
@@ -65,7 +69,6 @@
 
         return html;
     }
-
 
     function RenderUsername(obj) {
         if (obj.Username == null) {
@@ -109,6 +112,12 @@
                 common.showError(errMsg);
             }
         });
+    }
+
+    function HandleGraphShortestPath(row) {
+        var formGraph = new graph();
+        formGraph.GenerateShortestPath(row.CTSCustId, row.CustId);
+        formGraph.OpenModal();
     }
 
     //function BindDataToGrid(data) {
@@ -208,7 +217,7 @@
 
     //$('#account-by-account-btn-on-graph').click(OpenGraphRender);
 
-    this.Initial = function (custId, statusIds, associationType, isDirect) {
+    this.Initial = function (custId, username, statusIds, associationType, isDirect) {
         $("#account-by-account-cbb-status").multiselect();
 
         InitialGrid();
@@ -221,6 +230,12 @@
             var custId = $("#hdCustId").val();
 
             RenderGrid(custId, accountStatus, associationType, isDirect);
+        });
+
+        btnViewOnGraph.on('click', function () {
+            var formGraph = new graph();
+            formGraph.GenerateFullPath(custId, username);
+            formGraph.OpenModal();
         });
     }
 }

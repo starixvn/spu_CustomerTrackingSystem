@@ -43,10 +43,10 @@
         });
     }
 
-    $this.GenerateFullPath = function (custId, userName) {     
+    $this.GenerateFullPath = function (custId, username) {     
         var paramsFilter = {};
         paramsFilter.custId = custId;
-        paramsFilter.userName = userName;
+        paramsFilter.username = username;
 
         $.ajax(urls.GetDirectAssociationGraph, {
             type: 'POST',
@@ -79,7 +79,7 @@
 
         // Initialize the display to show a few nodes.
         if (collapse_level == 1) {
-            root.children.forEach(toggleAll);            
+            if (root.children) { root.children.forEach(toggleAll); }
         }  
         update(root);
 

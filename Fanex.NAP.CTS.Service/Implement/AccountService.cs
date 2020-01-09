@@ -775,7 +775,7 @@
         public ShortestPathOfAccount GetShortestPathAssociationByGraph(string apiURL, int custIdFrom, int custIdTo)
         {
             var data = ApiHelper.Get<ShortestPathOfAccount>(string.Format(apiURL, custIdFrom, custIdTo));
-            Task.WhenAll(data);            
+            Task.WhenAll(data);
 
             return data.Result ?? new ShortestPathOfAccount();
         }        

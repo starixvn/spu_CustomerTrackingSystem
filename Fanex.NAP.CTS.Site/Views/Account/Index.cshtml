@@ -235,9 +235,7 @@
     <input id="hdCustId" type="hidden" value="@Model.CustId" />
     <input id="hdUsername" type="hidden" value="@Model.UserName" />
 </div>
-@section scripts{
-    <script src="~/Scripts/Account/Associated/graph.js"></script>
-    <script src="~/Scripts/Account/Associated/sample-data-graph.js"></script>
+@section scripts{   
     @Scripts.Render(
     "~/graph-visualize-lib"
     , "~/associated-by-account-detail-scripts"

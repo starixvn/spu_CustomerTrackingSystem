@@ -218,7 +218,7 @@
             var customerAssociation = isDirect ?
                 _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetDirectAssociation, CustId) :
                 _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetInDirectAssociation, CustId);
-
+            
             if (customerAssociation != null && customerAssociation.Any())
             {
                 var getStatusByCustIds = _accountService.GetCustomerGeneralStatus(string.Join(",", customerAssociation.Select(x => x.CustId)));
@@ -261,13 +261,13 @@
                         .ToList();
 
                 }
-            }
+            }            
 
             return Json(result, JsonRequestBehavior.AllowGet);
-        }
+        }      
 
         [HttpPost]
-        public ActionResult GetDirectAssociationGraph(int custId, string userName)
+        public ActionResult GetDirectAssociationGraph(int custId, string username)
         {
             var graphCustomer = new GraphCustomerItemViewModel();
             var graphCustomerList = new List<GraphCustomerItemViewModel>();
@@ -276,7 +276,6 @@
             {
                 var now = DateTime.Now.Ticks.ToString();
                 graphCustomerList = customerAssociationList
-                    .Where(c => c.Username != null)
                     .Select(c => new GraphCustomerItemViewModel
                     {
                         CustId = (c.CustId.HasValue ? c.CustId.Value : 0),
@@ -284,13 +283,13 @@
                         Username = c.Username,
                         DisplayName = c.Username,
                         AssociationType = c.AssociationType
-                    }).Take(7).ToList();
-
-                graphCustomer.CustId = custId;
-                graphCustomer.DisplayName = userName;
+                    }).ToList();
+                
                 graphCustomer.children = graphCustomerList.ToArray();
             }
-            
+            graphCustomer.CustId = custId;
+            graphCustomer.DisplayName = username;
+
             return Json(graphCustomer, JsonRequestBehavior.AllowGet);
         }
 
@@ -298,8 +297,8 @@
         public ActionResult GetShortestAssociationGraph(int custIdFrom, int custIdTo)
         {
             var graphCustomer = new GraphCustomerItemViewModel();
-            //var shortestPathOfAccount = _accountService.GetShortestPathAssociationByGraph(ConfigSettings.GetShortestAssociation, custIdFrom, custIdTo);
-            graphCustomer = _graphService.GetGraphCustomerItemByShortestPathOfAccount(null);
+            var shortestPathOfAccount = _accountService.GetShortestPathAssociationByGraph(ConfigSettings.GetShortestAssociation, custIdFrom, custIdTo);
+            graphCustomer = _graphService.GetGraphCustomerItemByShortestPathOfAccount(shortestPathOfAccount);
 
             return Json(graphCustomer, JsonRequestBehavior.AllowGet);
         }

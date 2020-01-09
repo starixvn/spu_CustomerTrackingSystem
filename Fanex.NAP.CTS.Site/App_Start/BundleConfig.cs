@@ -164,7 +164,8 @@
 
         private static void RegisterAssociatedByAccountBundles(BundleCollection bundles)
         {
-            bundles.Add(new ScriptBundle("~/associated-by-account-detail-scripts").Include("~/scripts/Account/Associated/account-by-account.js"));
+            bundles.Add(new ScriptBundle("~/associated-by-account-detail-scripts").Include("~/scripts/Account/Associated/account-by-account.js",
+                "~/scripts/Account/Associated/graph.js"));
         }
 
 

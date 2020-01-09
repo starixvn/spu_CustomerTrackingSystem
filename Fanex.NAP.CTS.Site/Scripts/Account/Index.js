@@ -17,7 +17,7 @@
                 var associationType = $("#account-by-account-cbb-association-type").val();
 
                 var associationByAccount = new account_by_account();
-                associationByAccount.Initial(custId, accountStatus, associationType, isDirect);
+                associationByAccount.Initial(custId, username, accountStatus, associationType, isDirect);
             },
             error: function (errMsg) {
                 common.showError(errMsg);

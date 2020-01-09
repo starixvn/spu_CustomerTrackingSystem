@@ -14,7 +14,6 @@
 
         public GraphCustomerItemViewModel GetGraphCustomerItemByShortestPathOfAccount(ShortestPathOfAccount shortestPathOfAccount)
         {
-            shortestPathOfAccount = GenerateSampleShortestPathOfAccount();
             var graphCustomer = new GraphCustomerItemViewModel();            
             var path = shortestPathOfAccount.Path;
             if (path != null)

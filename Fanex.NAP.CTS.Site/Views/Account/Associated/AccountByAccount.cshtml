@@ -57,8 +57,7 @@
             <div class="graph-heading">
                 <div class="free-size"></div>
                 <div class="graph-info">
-                    <button class="button btn-graph" id="account-by-account-btn-on-graph">View On Graph</button>
-                    <span class="icon-path graph" id="account-by-account-btn-shortest-path" title="Graph View"></span>
+                    <button class="button btn-graph" id="account-by-account-btn-on-graph">View On Graph</button>                    
                 </div>
             </div>
             <table id="account-by-account-table" class="table table-striped" style="width: 100%">
@@ -80,18 +79,3 @@
             </table>
         </div>
     </div>
-
-<script type="text/javascript">
-    var userName = '@Model.Username';
-    var formGraph = new graph();    
-
-    $('#account-by-account-btn-shortest-path').click(function () {
-        formGraph.GenerateShortestPath(39856622, 2);
-        formGraph.OpenModal();
-    });
-
-    $('#account-by-account-btn-on-graph').click(function () {
-        formGraph.GenerateFullPath(39856622, userName);
-        formGraph.OpenModal();
-    });
-</script>
