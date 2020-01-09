@@ -1,12 +1,15 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
     using Fanex.NAP.Core.Web.Attribute;
+    using Fanex.NAP.CTS.Core.Helpers;
     using Fanex.NAP.CTS.Model.Home;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.ViewModel.Home;
     using System.Collections.Generic;
+    using System.Data.Linq.SqlClient;
     using System.Linq;
+    using System.Threading.Tasks;
     using System.Web.Mvc;
 
     [NapSuperAuth]
@@ -65,7 +68,29 @@
 
             }
 
-            return View(new SearchResultViewModel { SearchResults = result, InputValue = inputValue });
+            var tasks = new List<Task>();
+
+            var exactUserName = new List<SearchResultModel>();
+            tasks.Add(Task.Run(() => { exactUserName = result.Where(x => !string.IsNullOrWhiteSpace(x.Username) && x.Username.StartsWith(inputValue, System.StringComparison.CurrentCultureIgnoreCase)).ToList(); }));
+
+            var exactUserName2 = new List<SearchResultModel>();
+            tasks.Add(Task.Run(() => { exactUserName2 = result.Where(x => !string.IsNullOrWhiteSpace(x.Username2) && x.Username2.StartsWith(inputValue, System.StringComparison.CurrentCultureIgnoreCase)).ToList(); }));
+
+            var likeUserName = new List<SearchResultModel>();
+            tasks.Add(Task.Run(() => { likeUserName = result.Where(x => !string.IsNullOrWhiteSpace(x.Username) && x.Username.StartsWith(inputValue, System.StringComparison.CurrentCultureIgnoreCase)).ToList(); }));
+
+            var likeUserName2 = new List<SearchResultModel>();
+            tasks.Add(Task.Run(() => { likeUserName2 = result.Where(x => !string.IsNullOrWhiteSpace(x.Username2) && x.Username2.StartsWith(inputValue, System.StringComparison.CurrentCultureIgnoreCase)).ToList(); }));
+
+            Task.WhenAll(tasks.ToArray()).Wait();
+
+            var newResult = exactUserName
+                .Union(exactUserName2)
+                .Union(likeUserName)
+                .Union(likeUserName2)
+                .Union(result).ToList();
+
+            return View(new SearchResultViewModel { SearchResults = newResult, InputValue = inputValue });
         }
     }
 }
