@@ -24,6 +24,7 @@
 
     $this.GenerateShortestPath = function (custIdFrom, userNameFrom, custIdTo) {
         collapse_level = 0;
+        $("#container-graph").html('');
 
         //var sampleData = new sample_data_graph();
         //var data = sampleData.GenereateSampleShortest();
@@ -48,6 +49,7 @@
     }
 
     $this.GenerateFullPath = function (custId, userName) {
+        $("#container-graph").html('');
         var paramsFilter = {};
         paramsFilter.custId = custId;
         paramsFilter.userName = userName;
@@ -63,7 +65,7 @@
                 common.showError(errMsg);
             }
         });
-    }
+    }   
 
     function generateGraph(data) {
         root = data;
@@ -150,8 +152,8 @@
             var nodeEnter = node.enter().append("g")
                 .attr("class", "node")
                 .on("click", click)
-                .call(force.drag);
-
+                .call(force.drag);          
+            
             nodeEnter.append("circle")
                 .attr("r", function (d) {
                     return 26;
@@ -188,32 +190,34 @@
 
         // Toggle children on click.
         function click(d) {
-            if (d3.event.defaultPrevented){ return; } // ignore drag
-            if (d.children) {
-                d._children = d.children;
-                d.children = null;
-                update();
-            } else {
-                var paramsFilter = {};
-                paramsFilter.custId = d.CustId;
-                paramsFilter.userName = d.Username;
+            if (d3.event.defaultPrevented) { return; } // ignore drag
+            if (collapse_level == 1) {
+                if (d.children) {
+                    d._children = d.children;
+                    d.children = null;
+                    update();
+                } else {
+                    var paramsFilter = {};
+                    paramsFilter.custId = d.CustId;
+                    paramsFilter.userName = d.Username;
 
-                $.ajax(urls.GetDirectAssociationGraph, {
-                    type: 'POST',
-                    data: paramsFilter,
-                    success: function (response) {
-                        d.children = response.children;
-                        d._children = null;         
-                        update();
-                    },
-                    error: function (errMsg) {
-                        d.children = d._children;
-                        d._children = null;
-                        console.log(errMsg);
-                        common.showError(errMsg);
-                    }
-                });
-            }
+                    $.ajax(urls.GetDirectAssociationGraph, {
+                        type: 'POST',
+                        data: paramsFilter,
+                        success: function (response) {
+                            d.children = response.children;
+                            d._children = null;
+                            update();
+                        },
+                        error: function (errMsg) {
+                            d.children = d._children;
+                            d._children = null;
+                            console.log(errMsg);
+                            common.showError(errMsg);
+                        }
+                    });
+                }
+            }            
         }
       
         // Returns a list of all nodes under the root.

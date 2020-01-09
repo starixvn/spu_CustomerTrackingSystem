@@ -27,6 +27,7 @@
     using Fanex.NAP.CTS.Criteria.Home;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.Association;
+    using Fanex.NAP.CTS.Model.GraphDB;
 
     public class AccountService : IAccountService
     {
@@ -771,17 +772,13 @@
             throw new NotImplementedException();
         }
 
-        public List<GraphAssociationModel> GetShortestPathAssociationByGraph(string apiURL, int custIdFrom, int custIdTo)
+        public ShortestPathOfAccount GetShortestPathAssociationByGraph(string apiURL, int custIdFrom, int custIdTo)
         {
-            var customersAPI = new List<GraphAssociationModel>();            
-            var data = ApiHelper.Get<object>(string.Format(apiURL, custIdFrom, custIdTo));
+            var data = ApiHelper.Get<ShortestPathOfAccount>(string.Format(apiURL, custIdFrom, custIdTo));
+            Task.WhenAll(data);            
 
-            Task.WhenAll(data);
-
-            var dataAPI = data.Result;
-
-            return customersAPI ?? new List<GraphAssociationModel>();
-        }
+            return data.Result ?? new ShortestPathOfAccount();
+        }        
 
         public List<GraphAssociationModel> FilterCustomerAssociationByStatus(string statusIds, List<GraphAssociationModel> customerAssociation, List<CustomerGeneralStatusModel> statusByCustIds)
         {

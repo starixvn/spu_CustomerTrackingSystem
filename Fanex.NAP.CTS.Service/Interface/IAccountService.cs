@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
     using Fanex.NAP.CTS.Model.Account;
+    using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.Home;
     using Fanex.NAP.CTS.Model.Subscriber;
     using Fanex.NAP.CTS.ViewModel.Account;
@@ -57,7 +58,7 @@
 
         List<GraphAssociationModel> GetCustomerAssociationByGraph(string apiURL, int custId);
 
-        List<GraphAssociationModel> GetShortestPathAssociationByGraph(string apiURL, int custIdFrom, int custIdTo);
+        ShortestPathOfAccount GetShortestPathAssociationByGraph(string apiURL, int custIdFrom, int custIdTo);        
 
         List<GraphAssociationModel> FilterCustomerAssociationByStatus(string statusIds, List<GraphAssociationModel>  customerAssociation, List<CustomerGeneralStatusModel> statusByCustIds);
     }

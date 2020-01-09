@@ -20,12 +20,14 @@
     public class AccountController : BaseController
     {
         private readonly IAccountService _accountService;
+        private readonly IGraphService _graphService;
         //private readonly IEvidenceService _evidenceService;
         //private readonly ITransactionService _transactionService;
 
         public AccountController()
         {
             _accountService = new AccountService();
+            _graphService = new GraphService();
             //_evidenceService = new EvidenceService();
             //_transactionService = new TransactionService();
         }
@@ -296,8 +298,8 @@
         public ActionResult GetShortestAssociationGraph(int custIdFrom, string userNameFrom, int custIdTo)
         {
             var graphCustomer = new GraphCustomerItemViewModel();
-            var graphCustomerList = new List<GraphCustomerItemViewModel>();
-            var customerAssociationList = _accountService.GetShortestPathAssociationByGraph(ConfigSettings.GetShortestAssociation, custIdFrom, custIdTo);            
+            //var shortestPathOfAccount = _accountService.GetShortestPathAssociationByGraph(ConfigSettings.GetShortestAssociation, custIdFrom, custIdTo);
+            graphCustomer = _graphService.GetGraphCustomerItemByShortestPathOfAccount(null);
 
             return Json(graphCustomer, JsonRequestBehavior.AllowGet);
         }

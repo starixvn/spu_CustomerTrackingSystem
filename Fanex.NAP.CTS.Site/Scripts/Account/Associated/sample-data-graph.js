@@ -3,41 +3,71 @@
 
     $this.GenereateSampleShortest = function () {
         var data = {
+            "CustId": "001",
+            "ItemCode": "001",
             "Username": "Agent001",
-            "Type": "Device",
+            "DisplayName": "Agent001",
+            "AssociationType": "Device",
             "children": [{
+                "CustId": "002",
+                "ItemCode": "002",
                 "Username": "Master001",
-                "Type": "Device",
+                "DisplayName": "Master001",
+                "AssociationType": "Device",
                 "children": [
                     {
+                        "CustId": "003",
+                        "ItemCode": "003",
                         "Username": "Member001",
-                        "Type": "Device",
+                        "DisplayName": "Member001",
+                        "AssociationType": "Device",
                         "children": [
                             {
-                                "Username": "Member100",
-                                "Type": "Device",
+                                "CustId": "004",
+                                "ItemCode": "004",
+                                "Username": "Member002",
+                                "DisplayName": "Member002",
+                                "AssociationType": "Device",
                                 "children": [
                                     {
-                                        "Username": "Member001",
-                                        "Type": "Device",
+                                        "CustId": "005",
+                                        "ItemCode": "005",
+                                        "Username": "Member003",
+                                        "DisplayName": "Member003",
+                                        "AssociationType": "Device",
                                         "children": [{
-                                            "Username": "Member001",
-                                            "Type": "Device",
+                                            "CustId": "006",
+                                            "ItemCode": "006",
+                                            "Username": "Member004",
+                                            "DisplayName": "Member004",
+                                            "AssociationType": "Device",
                                             "children": [
                                                 {
-                                                    "Username": "Member001",
-                                                    "Type": "Device",
+                                                    "CustId": "007",
+                                                    "ItemCode": "007",
+                                                    "Username": "Member005",
+                                                    "DisplayName": "Member005",
+                                                    "AssociationType": "Device",
                                                     "children": [
                                                         {
-                                                            "Username": "Member100",
-                                                            "Type": "Device",
+                                                            "CustId": "008",
+                                                            "ItemCode": "008",
+                                                            "Username": "Member006",
+                                                            "DisplayName": "Member006",
+                                                            "AssociationType": "Device",
                                                             "children": [
                                                                 {
-                                                                    "Username": "Member001",
-                                                                    "Type": "Device",
+                                                                    "CustId": "009",
+                                                                    "ItemCode": "009",
+                                                                    "Username": "Member007",
+                                                                    "DisplayName": "Member007",
+                                                                    "AssociationType": "Device",
                                                                     "children": [{
-                                                                        "Username": "Member001",
-                                                                        "Type": "Device"
+                                                                        "CustId": "010",
+                                                                        "ItemCode": "010",
+                                                                        "Username": "Member008",
+                                                                        "DisplayName": "Member008",
+                                                                        "AssociationType": "Device"
                                                                     }]
                                                                 }]
                                                         }]
@@ -54,16 +84,25 @@
 
     $this.GenereateSampleFullPath = function () {
         var data = {
+            "CustId": "001",
+            "ItemCode": "001",
             "Username": "Agent001",
-            "Type": "Device",
+            "DisplayName": "Agent001",
+            "AssociationType": "Device",
             "children": [{
+                "CustId": "002",
+                "ItemCode": "002",
                 "Username": "Master001",
-                "Type": "Device",
+                "DisplayName": "Master001",
+                "AssociationType": "Device",
                 "children": [
                     {
+                        "CustId": "003",
+                        "ItemCode": "003",
                         "Username": "Member001",
+                        "DisplayName": "Member001",
                         "children": [
-                            { "Username": "Member100", "Type": "Device" },
+                            { "CustId": "004", "ItemCode": "004", "Username": "Member100", "DisplayName": "Member100", "AssociationType": "Device" },
                             //{ "Username": "Member101", "Type": "IP" },
                             //{ "Username": "Member102", "Type": "Device" },
                             //{ "Username": "Member103", "Type": "Device" }

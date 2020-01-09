@@ -70,6 +70,7 @@
     <Compile Include="Implement\FraudCaseDetailsService.cs" />
     <Compile Include="Implement\FraudCaseService.cs" />
     <Compile Include="Implement\FraudSensorTaskService.cs" />
+    <Compile Include="Implement\GraphService.cs" />
     <Compile Include="Implement\MatchMonitorService.cs" />
     <Compile Include="Implement\NotificationRecipientService.cs" />
     <Compile Include="Implement\NotificationService.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="Interface\IFraudCaseDetailsService.cs" />
     <Compile Include="Interface\IFraudCaseService.cs" />
     <Compile Include="Interface\IFraudSensorTaskService.cs" />
+    <Compile Include="Interface\IGraphService.cs" />
     <Compile Include="Interface\IMatchMonitorService.cs" />
     <Compile Include="Interface\INotificationRecipientService.cs" />
     <Compile Include="Interface\INotificationService.cs" />

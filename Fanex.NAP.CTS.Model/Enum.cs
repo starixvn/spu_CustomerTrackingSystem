@@ -42,4 +42,10 @@
         Yes,
         No
     }
+
+    public enum RelationshipNodeType
+    {
+        Start,
+        End
+    }
 }
