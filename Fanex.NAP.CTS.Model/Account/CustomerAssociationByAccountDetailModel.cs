@@ -24,7 +24,9 @@ namespace Fanex.NAP.CTS.Model.Account
 
         public string Subscriber { get; set; }
 
-        public string AssociationType { get; set; }
+        public int AssociationType { get; set; }
+
+        public string AssociationTypeName { get; set; }
 
         public int SharedDevices { get; set; }
 

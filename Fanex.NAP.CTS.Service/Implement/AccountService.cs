@@ -1,33 +1,32 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
-    using System;
-    using System.Text;
-    using System.Linq;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using Fanex.NAP.CTS.Model.Account;
-    using Fanex.NAP.CTS.ViewModel.Account;
-    using Fanex.NAP.CTS.ViewModel.Account.Associated;
-    using Fanex.NAP.CTS.Model.Subscriber;
-    using Fanex.NAP.CTS.Model;
-    using Fanex.NAP.CTS.Criteria.SubscriberAssignment;
+    using Fanex.Data;
     using Fanex.NAP.CTS.Core.BaseClasses;
-    using Fanex.NAP.CTS.Criteria.Account;
-    using Fanex.NAP.CTS.ViewModel.Account.Search;
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Helpers;
     using Fanex.NAP.CTS.Core.Helpers.Api;
+    using Fanex.NAP.CTS.Criteria.Account;
     using Fanex.NAP.CTS.Criteria.Account.Associated;
-    using Fanex.Data;
-    using Fanex.NAP.CTS.ViewModel.Account.GeneralInformation;
     using Fanex.NAP.CTS.Criteria.Account.GeneralInformation;
-    using Fanex.NAP.CTS.Core.Extentions;
+    using Fanex.NAP.CTS.Criteria.Home;
+    using Fanex.NAP.CTS.Criteria.SubscriberAssignment;
+    using Fanex.NAP.CTS.Model;
+    using Fanex.NAP.CTS.Model.Account;
+    using Fanex.NAP.CTS.Model.DTO;
+    using Fanex.NAP.CTS.Model.GraphDB;
+    using Fanex.NAP.CTS.Model.Home;
+    using Fanex.NAP.CTS.Model.Subscriber;
     using Fanex.NAP.CTS.Resource;
     using Fanex.NAP.CTS.Resource.Consts;
-    using Fanex.NAP.CTS.Model.Home;
-    using Fanex.NAP.CTS.Criteria.Home;
-    using Fanex.NAP.CTS.Model.DTO;
-    using Fanex.NAP.CTS.Model.Association;
-    using Fanex.NAP.CTS.Model.GraphDB;
+    using Fanex.NAP.CTS.ViewModel.Account;
+    using Fanex.NAP.CTS.ViewModel.Account.Associated;
+    using Fanex.NAP.CTS.ViewModel.Account.GeneralInformation;
+    using Fanex.NAP.CTS.ViewModel.Account.Search;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
 
     public class AccountService : IAccountService
     {
@@ -499,7 +498,7 @@
                 TotalLoginWithRootAccount = customerA.TotalLoginWithRootAccount,
                 EvidenceLevel = customerA.EvidenceLevel
             };
-        }       
+        }
 
         private static AssociatedAccountByAccount GetAssociatedAccount(AssociatedAccountByAccount customerA, CustomerFraud customerB)
         {
@@ -778,7 +777,7 @@
             Task.WhenAll(data);
 
             return data.Result ?? new ShortestPathOfAccount();
-        }        
+        }
 
         public List<GraphAssociationModel> FilterCustomerAssociationByStatus(string statusIds, List<GraphAssociationModel> customerAssociation, List<CustomerGeneralStatusModel> statusByCustIds)
         {
@@ -821,7 +820,7 @@
                 {
                     var accStatus = accountStatus.FirstOrDefault(z => z.CustId == a.CustId);
 
-                    if(accStatus != null)
+                    if (accStatus != null)
                     {
                         a.StatusName = accStatus.StatusName;
                         a.StatusId = accStatus.StatusId;
@@ -834,6 +833,36 @@
 
                     return a;
                 }).ToList();
+        }
+
+        public List<GraphAssociationModel> FilterCustomerAssociationByAssociationType(int associationType, List<GraphAssociationModel> customerAssociation)
+        {
+            if (customerAssociation != null && customerAssociation.Any())
+            {
+                if (associationType == 0)
+                {
+                    var groupData = customerAssociation.GroupBy(x => x.CustId)
+                        .Where(g => g.Count() > 1)
+                        .Select(g => new GraphAssociationModel
+                        {
+                            CustId = g.Key,
+                            AssociationType = 0,
+                            Username = g.FirstOrDefault().Username,
+                            Username2 = g.FirstOrDefault().Username2,
+                            AssociationDate = g.FirstOrDefault().AssociationDate,
+                            SharedDevices = g.FirstOrDefault().SharedDevices,
+                            SharedIPs = g.FirstOrDefault().SharedIPs,
+                            StatusName = g.FirstOrDefault().StatusName,
+                            StatusId = g.FirstOrDefault().StatusId
+                        }).ToList();
+
+                    return groupData;
+                }
+
+                return customerAssociation.Where(x => x.AssociationType == associationType).ToList();
+            }
+
+            return customerAssociation;
         }
 
         #endregion

@@ -232,7 +232,7 @@
                 ItemCode = node.Properties.CustId.ToString(),
                 Username = node.Properties.Username,
                 DisplayName = node.Properties.Username,
-                AssociationType = associationType
+                AssociationTypeName = associationType
             };
         
     }

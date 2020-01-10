@@ -16,6 +16,19 @@ namespace Fanex.NAP.CTS.Model.Account
 
         public int AssociationType { get; set; }
 
+        public string AssociationTypeName
+        {
+            get
+            {
+                if (this.AssociationType == 0)
+                {
+                    return "Divice, IP";
+                }
+
+                return Enum.GetName(typeof(AssociationType), AssociationType);
+            }
+        }
+
         public DateTime AssociationDate { get; set; }
 
         public int SharedDevices { get; set; }

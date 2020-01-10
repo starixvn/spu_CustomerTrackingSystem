@@ -75,7 +75,7 @@
                         .BindingGeneralDataFromMainDB(customerStatus,
                                                         customerLastTicketDate,
                                                         customerEsportAutoSuspendedStatus,
-                                                        customerRobotUserStatusModel)                        
+                                                        customerRobotUserStatusModel)
                         .BindingTotalAssociationFromCTS(customerTotalAssociation)
                         .BindingEvidenceListFromCTS(customerEvidences)
                         .BindingGeneralDataFromFS(customerProfileFraudInfo);
@@ -225,15 +225,18 @@
 
                 customerAssociation = _accountService.FilterCustomerAssociationByStatus(statusIds, customerAssociation, getStatusByCustIds);
 
+                customerAssociation = _accountService.FilterCustomerAssociationByAssociationType(associationType, customerAssociation);
+
                 result = customerAssociation.Select(x => new CustomerAssociationByAccountDetailModel
                 {
                     CustId = x.CustId.HasValue ? x.CustId.Value : 0,
                     Username = !string.IsNullOrWhiteSpace(x.Username) ? x.Username : x.Username2,
                     LoginId = !string.IsNullOrWhiteSpace(x.Username2) ? x.Username2 : x.Username,
                     AssociationDate = x.AssociationDate,
-                    SharedDevices = x.SharedDevices,
-                    SharedIps = x.SharedIPs,
+                    SharedDevices = isDirect ? x.SharedDevices : -1,
+                    SharedIps = isDirect ? x.SharedIPs : -1,
                     AssociationType = x.AssociationType.ToString(),
+                    AssociationTypeName = x.AssociationTypeName,
                     Status = x.StatusName,
                     StatusId = x.StatusId
                 }).ToList();
@@ -282,8 +285,8 @@
                         ItemCode = (c.CustId.HasValue ? c.CustId.Value : 0) + "_" + now,
                         Username = c.Username,
                         DisplayName = c.Username,
-                        AssociationType = c.AssociationType.ToString()
-                    }).ToList();
+                        AssociationType = c.AssociationType,
+                        AssociationTypeName = c.AssociationTypeName
                 
                 graphCustomer.children = graphCustomerList.ToArray();
             }

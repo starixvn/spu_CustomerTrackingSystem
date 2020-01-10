@@ -15,6 +15,13 @@
         NA = 11
     }
 
+    public enum AssociationType
+    {
+        Device = 1,
+        IP = 2,
+        All = 0
+    }
+
     public enum EvidenceStatus
     {
         All,

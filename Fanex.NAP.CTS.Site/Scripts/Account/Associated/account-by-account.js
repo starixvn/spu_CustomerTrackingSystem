@@ -40,9 +40,9 @@
                 { data: obj => obj.LoginId },
                 { data: obj => obj.Status },
                 { data: obj => obj.Subscriber },
-                { data: obj => obj.AssociationType },
-                { data: obj => obj.SharedDevices },
-                { data: obj => obj.SharedIps },
+                { data: obj => obj.AssociationTypeName },
+                { data: obj => obj.SharedDevices == -1 ? "-" : obj.SharedDevices },
+                { data: obj => obj.SharedIps == -1 ? "-" : obj.SharedIps},
                 { data: obj => moment(obj.AssociationDate).format("MMM DD, YYYY") },
                 {
                     data: obj => RenderGraphImage(), createdCell: (cell, _, row) => {
