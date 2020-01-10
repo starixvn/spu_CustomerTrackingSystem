@@ -501,13 +501,13 @@
             <param name="custId"></param>
             <returns></returns>
         </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.Get(System.Int32,System.Boolean)">
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetShortestPath(System.Int32,System.Int32)">
             <summary>
-            Get association by level
+            Get shortest path between 2 customers
             </summary>
-            <param name="custId"></param>
-            <param name="isOneLevel"></param>
-            <returns>HttpResponseMessage</returns>
+            <param name="custIdFrom"></param>
+            <param name="custIdTo"></param>
+            <returns>Json string</returns>
         </member>
     </members>
 </doc>

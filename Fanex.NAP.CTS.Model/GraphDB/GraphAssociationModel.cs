@@ -14,7 +14,7 @@ namespace Fanex.NAP.CTS.Model.Account
 
         public string Username2 { get; set; }
 
-        public string AssociationType { get; set; }
+        public int AssociationType { get; set; }
 
         public DateTime AssociationDate { get; set; }
 

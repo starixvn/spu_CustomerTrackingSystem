@@ -233,7 +233,7 @@
                     AssociationDate = x.AssociationDate,
                     SharedDevices = x.SharedDevices,
                     SharedIps = x.SharedIPs,
-                    AssociationType = x.AssociationType,
+                    AssociationType = x.AssociationType.ToString(),
                     Status = x.StatusName,
                     StatusId = x.StatusId
                 }).ToList();
@@ -282,7 +282,7 @@
                         ItemCode = (c.CustId.HasValue ? c.CustId.Value : 0) + "_" + now,
                         Username = c.Username,
                         DisplayName = c.Username,
-                        AssociationType = c.AssociationType
+                        AssociationType = c.AssociationType.ToString()
                     }).ToList();
                 
                 graphCustomer.children = graphCustomerList.ToArray();
