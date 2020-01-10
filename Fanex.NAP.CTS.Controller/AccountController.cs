@@ -235,7 +235,7 @@
                     AssociationDate = x.AssociationDate,
                     SharedDevices = isDirect ? x.SharedDevices : -1,
                     SharedIps = isDirect ? x.SharedIPs : -1,
-                    AssociationType = x.AssociationType.ToString(),
+                    AssociationType = x.AssociationType,
                     AssociationTypeName = x.AssociationTypeName,
                     Status = x.StatusName,
                     StatusId = x.StatusId
@@ -287,7 +287,7 @@
                         DisplayName = c.Username,
                         AssociationType = c.AssociationType,
                         AssociationTypeName = c.AssociationTypeName
-                
+                    }).ToList();
                 graphCustomer.children = graphCustomerList.ToArray();
             }
             graphCustomer.CustId = custId;
