@@ -1,9 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
     using Fanex.NAP.Core.Web.Attribute;
-    using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Core.Utilities;
-    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
@@ -215,15 +213,15 @@
         {
             var result = new List<CustomerAssociationByAccountDetailModel>();
 
-            if (string.IsNullOrWhiteSpace(statusIds))
+            if (string.IsNullOrWhiteSpace(statusIds) || CustId == 0)
             {
                 return Json(result, JsonRequestBehavior.AllowGet);
-            }           
+            }
 
             var customerAssociation = isDirect ?
                 _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetDirectAssociation, CustId) :
                 _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetInDirectAssociation, CustId);
-            
+
             if (customerAssociation != null && customerAssociation.Any())
             {
                 var getStatusByCustIds = _accountService.GetCustomerGeneralStatus(string.Join(",", customerAssociation.Select(x => x.CustId)));
@@ -269,16 +267,16 @@
                         .ToList();
 
                 }
-            }            
+            }
 
             return Json(result, JsonRequestBehavior.AllowGet);
-        }      
+        }
 
         [HttpPost]
         public ActionResult GetDirectAssociationGraph(int custId, string username)
         {
             var graphCustomer = new GraphCustomerItemViewModel();
-            
+
             var customerAssociationList = _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetDirectAssociation, custId);
             if (customerAssociationList != null && customerAssociationList.Any())
             {

@@ -39,7 +39,7 @@
          SpName="FS_Rpt_BNGCustomerDetails_Get"
          DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
   </Function>
-  
+
   <Function Name="MatchMonitor">
     <Setting Key="FS_Rpt_MatchMonitor_Get"
              SpName="FS_Rpt_MatchMonitor_Get"
@@ -144,7 +144,7 @@
     <Setting Key="FS_Tbl_OfficeIP_GetAll"
      SpName="FS_Tbl_OfficeIP_GetAll"
      DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
-    
+
     <Setting Key="FS_OfficeIPInternalAccount_Insert"
      SpName="FS_OfficeIPInternalAccount_Insert"
      DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
@@ -156,7 +156,7 @@
     <Setting Key="FS_OfficeIPInternalAccount_GetAll"
     SpName="FS_OfficeIPInternalAccount_GetAll"
     DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
-    
+
   </Function>
 
   <Function Name="FS_API">
@@ -256,7 +256,7 @@
     <Setting Key="FS_Rpt_CheckBetNote_Update"
              SpName="FS_Rpt_CheckBetNote_Update"
              DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
-  </Function>  
+  </Function>
 
   <Function Name="CustomerMonitor">
     <Setting Key="FS_Rpt_CustomerMonitor_Get"
@@ -278,50 +278,54 @@
              DbName="MySQL.FPS_Admin"/>
   </Function>
   <Function name="SearchAccount">
-    <Setting Key="FPS_DC_SearchAccount" 
-             SpName="FPS_DC_SearchAccount" 
-             DbName="MySQL.FPS_DataCenter"/>    
-  </Function> 
+    <Setting Key="FPS_DC_SearchAccount"
+             SpName="FPS_DC_SearchAccount"
+             DbName="MySQL.CTS_DataCenter"/>
+  </Function>
   <Function name="AccountDetail">
     <Setting Key="FPS_DC_GetCustomerGeneralInfo"
             SpName="FPS_DC_GetCustomerGeneralInfo"
-            DbName="MySQL.FPS_DataCenter"/>
+            DbName="MySQL.CTS_DataCenter"/>
 
     <Setting Key="FPS_DC_GetEvidenceByTargetId"
             SpName="FPS_DC_GetEvidenceByTargetId"
-            DbName="MySQL.FPS_DataCenter"/>
+            DbName="MySQL.CTS_DataCenter"/>
 
     <Setting Key="FPS_DC_Rpt_GetAssociationByAccount"
             SpName="FPS_DC_Rpt_GetAssociationByAccount"
-            DbName="MySQL.FPS_DataCenter"/>
+            DbName="MySQL.CTS_DataCenter"/>
 
-    <Setting Key="FPS_DC_Rpt_ChainToEvidence" 
-             SpName="FPS_DC_Rpt_ChainToEvidence" 
-             DbName="MySQL.FPS_DataCenter"/>
+    <Setting Key="FPS_DC_Rpt_ChainToEvidence"
+             SpName="FPS_DC_Rpt_ChainToEvidence"
+             DbName="MySQL.CTS_DataCenter"/>
 
     <Setting Key="FPS_DC_InsertException"
              SpName="FPS_DC_InsertException"
-             DbName="MySQL.FPS_DataCenter"/>
+             DbName="MySQL.CTS_DataCenter"/>
 
     <Setting Key="FPS_DC_Rpt_GetExceptionByAccountId"
              SpName="FPS_DC_Rpt_GetExceptionByAccountId"
-             DbName="MySQL.FPS_DataCenter"/>
+             DbName="MySQL.CTS_DataCenter"/>
 
     <Setting Key="FPS_DC_Rpt_GetAssociatedAccountByAccount"
             SpName="FPS_DC_Rpt_GetAssociatedAccountByAccount"
-            DbName="MySQL.FPS_DataCenter"/>
-    
+            DbName="MySQL.CTS_DataCenter"/>
+
     <Setting Key="FS_CustomerFraudInfo_Get"
             SpName="FS_CustomerFraudInfo_Get"
             DbName="DBFS.bodb_FraudSensor.bodbSPUNet"/>
-    
+
     <Setting Key="FPS_DC_GetTransactionHistoryByCustId"
              SpName="FPS_DC_GetTransactionHistoryByCustId"
-             DbName="MySQL.FPS_DataCenter"/>
-    
+             DbName="MySQL.CTS_DataCenter"/>
+
     <Setting Key="FPS_DC_GetLocationInfobyIP"
              SpName="FPS_DC_GetLocationInfobyIP"
-             DbName="MySQL.FPS_DataCenter"/>
+             DbName="MySQL.CTS_DataCenter"/>
+
+
+
+
 
     <Setting Key="CTS_DC_GetUserInfomationByUsername"
             SpName="CTS_DC_GetUserInfomationByUsername"
@@ -338,6 +342,52 @@
 
     <Setting Key="CTS_CustomerGeneralStatus_Get"
          SpName="CTS_CustomerGeneralStatus_Get"
-         DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
+         DbName="DBCTS.bodb02.bodbSPUNet" />
+
+    <Setting Key="CTS_CustomerLastTicketDate_Get"
+        SpName="CTS_CustomerLastTicketDate_Get"
+        DbName="DBCTS.bodb02.bodbSPUNet" />
+
+    <Setting Key="CTS_CustomerEsportAutoSuspendStatus_Get"
+        SpName="CTS_CustomerEsportAutoSuspendStatus_Get"
+        DbName="DBCTS.bodb02.bodbSPUNet" />
+
+    <Setting Key="CTS_DC_GetCustomerInfoByCTSCustId"
+            SpName="CTS_DC_GetCustomerInfoByCTSCustId"
+            DbName="MySQL.CTS_DataCenter">
+    </Setting>
+
+    <Setting Key="CTS_DC_GetAssociationByCTSCustID"
+            SpName="CTS_DC_GetAssociationByCTSCustID"
+            DbName="MySQL.CTS_DataCenter">
+    </Setting>
+
+    <Setting Key="CTS_DC_GetEvidenceByCTSCustID"
+            SpName="CTS_DC_GetEvidenceByCTSCustID"
+            DbName="MySQL.CTS_DataCenter">
+    </Setting>
+
+    <Setting Key="CTS_DC_GetStaticList"
+            SpName="CTS_DC_GetStaticList"
+            DbName="MySQL.CTS_DataCenter">
+    </Setting>
+
+    <Setting Key="CTS_CustomerProfile_FraudInfo_Get"
+            SpName="CTS_CustomerProfile_FraudInfo_Get"
+            DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
+
+    <Setting Key="CTS_RobotUserStatus_Get"
+            SpName="CTS_RobotUserStatus_Get"
+            DbName="DBONUSER.ON_USER.bodbSPUNet" />
+
+    <Setting Key="CTS_DC_GetCustomerFlagInfo"
+            SpName="CTS_DC_GetCustomerFlagInfo"
+            DbName="MySQL.CTS_DataCenter">
+    </Setting>
+
+    <Setting Key="CTS_DC_GetDirectAssociatedAccount"
+            SpName="CTS_DC_GetDirectAssociatedAccount"
+            DbName="MySQL.CTS_DataCenter">
+    </Setting>
   </Function>
 </Functions>
