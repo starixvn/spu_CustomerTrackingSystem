@@ -215,6 +215,11 @@
         {
             var result = new List<CustomerAssociationByAccountDetailModel>();
 
+            if (string.IsNullOrWhiteSpace(statusIds))
+            {
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }           
+
             var customerAssociation = isDirect ?
                 _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetDirectAssociation, CustId) :
                 _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetInDirectAssociation, CustId);
