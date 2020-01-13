@@ -256,7 +256,7 @@
                 .attr('y', function (d) { return d.source.y; })
                 .attr('text-anchor', 'middle')
                 .text(function (d) {
-                    return d.target.AssociationType;
+                    return d.target.AssociationTypeName;
                 });
         };
     }
