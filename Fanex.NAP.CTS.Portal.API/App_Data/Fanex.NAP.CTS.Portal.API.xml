@@ -490,7 +490,7 @@
             <summary>
             Get Association with one Level
             </summary>
-            <param name="custId"></param>
+            <param name="ctsCustId"></param>
             <returns></returns>
             
         </member>
@@ -498,15 +498,15 @@
             <summary>
             Get Association with N Level
             </summary>
-            <param name="custId"></param>
+            <param name="ctsCustId"></param>
             <returns></returns>
         </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetShortestPath(System.Int32,System.Int32)">
             <summary>
             Get shortest path between 2 customers
             </summary>
-            <param name="custIdFrom"></param>
-            <param name="custIdTo"></param>
+            <param name="ctsCustIdFrom"></param>
+            <param name="ctsCustIdTo"></param>
             <returns>Json string</returns>
         </member>
     </members>
