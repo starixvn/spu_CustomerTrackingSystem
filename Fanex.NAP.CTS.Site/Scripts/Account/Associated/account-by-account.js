@@ -236,7 +236,7 @@
 
         btnViewOnGraph.on('click', function () {
             var formGraph = new graph();
-            formGraph.GenerateFullPath(custId, username);
+            formGraph.GenerateFullPath(ctsCustid, username);
             formGraph.OpenModal();
         });
     }

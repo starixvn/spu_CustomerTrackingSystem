@@ -45,7 +45,7 @@
 
     $this.GenerateFullPath = function (custId, username) {     
         var paramsFilter = {};
-        paramsFilter.custId = custId;
+        paramsFilter.ctsCustid = custId;
         paramsFilter.username = username;
 
         $.ajax(urls.GetDirectAssociationGraph, {
@@ -192,7 +192,7 @@
                     update();
                 } else {
                     var paramsFilter = {};
-                    paramsFilter.custId = d.CustId;
+                    paramsFilter.ctsCustid = d.CustId;
                     paramsFilter.userName = d.Username;
 
                     $.ajax(urls.GetDirectAssociationGraph, {

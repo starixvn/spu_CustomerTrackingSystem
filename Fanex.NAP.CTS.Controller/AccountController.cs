@@ -273,11 +273,11 @@
         }
 
         [HttpPost]
-        public ActionResult GetDirectAssociationGraph(int custId, string username)
+        public ActionResult GetDirectAssociationGraph(int ctsCustid, string username)
         {
             var graphCustomer = new GraphCustomerItemViewModel();
 
-            var customerAssociationList = _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetDirectAssociation, custId);
+            var customerAssociationList = _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetDirectAssociation, ctsCustid);
             if (customerAssociationList != null && customerAssociationList.Any())
             {
                 var now = DateTime.Now.Ticks.ToString();
@@ -293,7 +293,7 @@
                     }).ToList();
                 graphCustomer.children = graphCustomerList.ToArray();
             }
-            graphCustomer.CustId = custId;
+            graphCustomer.CustId = ctsCustid;
             graphCustomer.DisplayName = username;
 
             return Json(graphCustomer, JsonRequestBehavior.AllowGet);
