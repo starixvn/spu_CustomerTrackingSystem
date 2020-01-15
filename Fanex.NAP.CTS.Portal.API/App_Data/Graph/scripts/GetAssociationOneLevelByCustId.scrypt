@@ -7,5 +7,5 @@ UNION ALL
 MATCH (c:CTSCustomer)-[:USED_IP]->(i:IP)<-[:USED_IP]-(c2:CTSCustomer)
 WHERE c.CTSCustID = $CTSCustID
 WITH c,c2,i
-MATCH (c)-[:USED_DEVICE]->(d:Device)<-[:USED_DEVICE]-(c2)
+OPTIONAL MATCH (c)-[:USED_DEVICE]->(d:Device)<-[:USED_DEVICE]-(c2)
 RETURN c2.CustID AS CustId, c2.UserName AS Username, c2.UserName2 AS Username2, 2 as AssociationType, COUNT(d) AS SharedDevices, COUNT(i) AS SharedIPs
