@@ -3,7 +3,7 @@
     var btnViewOnGraph = $('#account-by-account-btn-on-graph');
     var associatedByAccountTable = $('#account-by-account-table');    
 
-    function InitialGrid() {
+    function InitialGrid(ctsCustid) {
         associatedByAccountTable.DataTable({           
             language: {
                 lengthMenu: "Page size _MENU_",
@@ -46,7 +46,7 @@
                 { data: obj => moment(obj.AssociationDate).format("MMM DD, YYYY") },
                 {
                     data: obj => RenderGraphImage(), createdCell: (cell, _, row) => {
-                        $('.icon-path', cell).click(() => HandleGraphShortestPath(row));
+                        $('.icon-path', cell).click(() => HandleGraphShortestPath(row, ctsCustid));
                     }
                 }
             ]
@@ -115,9 +115,9 @@
         });
     }
 
-    function HandleGraphShortestPath(row) {
+    function HandleGraphShortestPath(row, ctsCustid) {
         var formGraph = new graph();
-        formGraph.GenerateShortestPath(row.CTSCustId, row.CustId);
+        formGraph.GenerateShortestPath(ctsCustid, row.CTSCustId);
         formGraph.OpenModal();
     }
 
@@ -218,10 +218,10 @@
 
     //$('#account-by-account-btn-on-graph').click(OpenGraphRender);
 
-    this.Initial = function (custId,ctsCustid, username, statusIds, associationType, isDirect) {
+    this.Initial = function (custId, ctsCustid, username, statusIds, associationType, isDirect) {
         $("#account-by-account-cbb-status").multiselect();
 
-        InitialGrid();
+        InitialGrid(ctsCustid);
         RenderGrid(custId, ctsCustid, statusIds, associationType, isDirect);
 
         btnSearch.on('click', function () {
