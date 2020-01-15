@@ -779,14 +779,27 @@
             return data.Result ?? new ShortestPathOfAccount();
         }
 
-        public List<GraphAssociationModel> FilterCustomerAssociationByStatus(string statusIds, List<GraphAssociationModel> customerAssociation, List<CustomerGeneralStatusModel> statusByCustIds)
+        public List<GraphAssociationModel> FilterCustomerAssociationByStatus(string statusIds,
+            List<GraphAssociationModel> customerAssociation,
+            List<CustomerGeneralStatusModel> statusByCustIds)
         {
-            customerAssociation = customerAssociation.Select(x => { if (x.CustId == null) x.CustId = 0; return x; }).ToList();
-
-            var statusIdList = statusIds.Split(',').Select(Int32.Parse).ToList();
             var accountStatusViewModel = new CustomerGeneralStatusViewModel();
             var notYetDepositStatusName = accountStatusViewModel.GetAccountStatusName(Model.AccountStatus.NotYetDeposit);
             var notYetDepositStatusId = accountStatusViewModel.GetAccountStatusId(notYetDepositStatusName);
+
+            customerAssociation = customerAssociation.Select(x =>
+            {
+                if (x.CustId == null)
+                {
+                    x.CustId = 0;
+                    x.StatusId = notYetDepositStatusId;
+                    x.StatusName = notYetDepositStatusName;
+                }
+
+                return x;
+            }).ToList();
+
+            var statusIdList = statusIds.Split(',').Select(Int32.Parse).ToList();
 
             var accountStatus = statusByCustIds.Select(x => new AccountStatusModel
             {
@@ -794,45 +807,31 @@
                 Username = x.Username,
                 StatusName = accountStatusViewModel.GetAccountStatusName(accountStatusViewModel.GetAccountStatus(x)),
                 StatusId = accountStatusViewModel.GetAccountStatusId(accountStatusViewModel.GetAccountStatusName(accountStatusViewModel.GetAccountStatus(x)))
-            }).Where(a => statusIdList.Contains(a.StatusId));
+            }).Where(a => statusIdList.Contains(a.StatusId)).ToList();
 
-            if (statusIdList.Any(x => notYetDepositStatusId == x))
+            if (!statusIdList.Any(x => notYetDepositStatusId == x))
             {
-                var accountStatusNotDeposit = new List<AccountStatusModel>();
-                customerAssociation.Where(a => a.CustId == 0).ToList().ForEach(x =>
-                {
-                    accountStatusNotDeposit.Add(new AccountStatusModel
-                    {
-                        CustId = 0,
-                        Username = x.Username,
-                        StatusName = notYetDepositStatusName,
-                        StatusId = notYetDepositStatusId
-                    });
-
-                });
-
-                accountStatus = accountStatus.Concat(accountStatusNotDeposit);
+                customerAssociation = customerAssociation.Where(x => x.StatusId != notYetDepositStatusId).ToList();
             }
 
-            return customerAssociation
-                .Where(x => accountStatus.Any(a => a.CustId == x.CustId))
-                .Select(a =>
+            var result = customerAssociation.Select(x =>
+            {
+                if(x.StatusId == 0)
                 {
-                    var accStatus = accountStatus.FirstOrDefault(z => z.CustId == a.CustId);
+                    var status = accountStatus.FirstOrDefault(a => a.CustId == x.CustId);
 
-                    if (accStatus != null)
+                    if (status != null)
                     {
-                        a.StatusName = accStatus.StatusName;
-                        a.StatusId = accStatus.StatusId;
+                        x.StatusId = status.StatusId;
+                        x.StatusName = status.StatusName;
                     }
-                    else
-                    {
-                        a.StatusName = string.Empty;
-                        a.StatusId = 0;
-                    }
+                }               
 
-                    return a;
-                }).ToList();
+                return x;
+            }).ToList();
+
+            return result;
+
         }
 
         public List<GraphAssociationModel> FilterCustomerAssociationByAssociationType(int associationType, List<GraphAssociationModel> customerAssociation)
