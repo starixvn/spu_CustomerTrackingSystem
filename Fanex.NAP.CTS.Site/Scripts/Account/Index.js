@@ -1,6 +1,7 @@
 ﻿function AccountDetail() {
     var username = $("#hdUsername").val();  
     var custId = $("#hdCustId").val();
+    var ctsCustId = $("#hdCTSCustId").val();
 
     function LoadAssociationByAccount() {
         $.ajax(common.modifyRelativeUrl('/Account/AssociatedByAccount'), {
@@ -17,7 +18,7 @@
                 var associationType = $("#account-by-account-cbb-association-type").val();
 
                 var associationByAccount = new account_by_account();
-                associationByAccount.Initial(custId, username, accountStatus, associationType, isDirect);
+                associationByAccount.Initial(custId, ctsCustId, username, accountStatus, associationType, isDirect);
             },
             error: function (errMsg) {
                 common.showError(errMsg);

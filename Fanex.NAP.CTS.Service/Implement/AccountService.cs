@@ -755,9 +755,9 @@
             }
         }
 
-        public List<GraphAssociationModel> GetCustomerAssociationByGraph(string apiURL, int custId)
+        public List<GraphAssociationModel> GetCustomerAssociationByGraph(string apiURL, int ctsCustId)
         {
-            var data = ApiHelper.Post<List<GraphAssociationModel>>(apiURL, custId);
+            var data = ApiHelper.Post<List<GraphAssociationModel>>(apiURL, ctsCustId);
 
             Task.WhenAll(data);
 
@@ -842,11 +842,10 @@
                 if (associationType == 0)
                 {
                     var groupData = customerAssociation.GroupBy(x => x.CustId)
-                        .Where(g => g.Count() > 1)
                         .Select(g => new GraphAssociationModel
                         {
                             CustId = g.Key,
-                            AssociationType = 0,
+                            AssociationType = (g.Count() > 1 ? 0 : g.FirstOrDefault().AssociationType),
                             Username = g.FirstOrDefault().Username,
                             Username2 = g.FirstOrDefault().Username2,
                             AssociationDate = g.FirstOrDefault().AssociationDate,
@@ -855,6 +854,8 @@
                             StatusName = g.FirstOrDefault().StatusName,
                             StatusId = g.FirstOrDefault().StatusId
                         }).ToList();
+
+
 
                     return groupData;
                 }

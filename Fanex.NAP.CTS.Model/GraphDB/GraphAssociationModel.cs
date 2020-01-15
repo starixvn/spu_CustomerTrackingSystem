@@ -22,7 +22,7 @@ namespace Fanex.NAP.CTS.Model.Account
             {
                 if (this.AssociationType == 0)
                 {
-                    return "Divice, IP";
+                    return "Device, IP";
                 }
 
                 return Enum.GetName(typeof(AssociationType), AssociationType);

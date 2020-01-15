@@ -56,7 +56,7 @@
 
         CustomerFlagInfoModel GetCustomerFlagInfo(int ctsCustId, int subscriberId);
 
-        List<GraphAssociationModel> GetCustomerAssociationByGraph(string apiURL, int custId);
+        List<GraphAssociationModel> GetCustomerAssociationByGraph(string apiURL, int ctsCustId);
 
         ShortestPathOfAccount GetShortestPathAssociationByGraph(string apiURL, int custIdFrom, int custIdTo);        
 

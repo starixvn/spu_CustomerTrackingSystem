@@ -209,18 +209,18 @@
         }
 
         [HttpPost]
-        public ActionResult GetAssociationByAccount(int CustId, string statusIds, int associationType, bool isDirect)
+        public ActionResult GetAssociationByAccount(int CustId, int ctsCustId, string statusIds, int associationType, bool isDirect)
         {
             var result = new List<CustomerAssociationByAccountDetailModel>();
 
-            if (string.IsNullOrWhiteSpace(statusIds) || CustId == 0)
+            if (string.IsNullOrWhiteSpace(statusIds) || CustId == 0 || ctsCustId == 0)
             {
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
 
             var customerAssociation = isDirect ?
-                _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetDirectAssociation, CustId) :
-                _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetInDirectAssociation, CustId);
+                _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetDirectAssociation, ctsCustId) :
+                _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetInDirectAssociation, ctsCustId);
 
             if (customerAssociation != null && customerAssociation.Any())
             {
