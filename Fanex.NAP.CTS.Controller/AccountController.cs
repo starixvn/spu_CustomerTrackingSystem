@@ -239,7 +239,7 @@
                     SharedDevices = isDirect ? x.SharedDevices : -1,
                     SharedIps = isDirect ? x.SharedIPs : -1,
                     AssociationType = x.AssociationType,
-                    AssociationTypeName = x.AssociationTypeName,
+                    AssociationTypeName = x.AssociationType == 0 ? string.Format("{0}, {1}", x.GetAssociationTypeName(Model.AssociationType.Device), x.GetAssociationTypeName(Model.AssociationType.IP)) : x.AssociationTypeName,
                     Status = x.StatusName,
                     StatusId = x.StatusId
                 }).ToList();

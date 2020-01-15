@@ -20,11 +20,6 @@ namespace Fanex.NAP.CTS.Model.Account
         {
             get
             {
-                if (this.AssociationType == 0)
-                {
-                    return "Device, IP";
-                }
-
                 return Enum.GetName(typeof(AssociationType), AssociationType);
             }
         }
@@ -38,5 +33,10 @@ namespace Fanex.NAP.CTS.Model.Account
         public string StatusName { get; set; }
 
         public int StatusId { get; set; }
+
+        public string GetAssociationTypeName(AssociationType associationType)
+        {
+            return Enum.GetName(typeof(AssociationType), associationType);
+        }
     }
 }
