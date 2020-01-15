@@ -52,8 +52,6 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
         [HttpGet]
         public JsonResult<ShortestPathOfAccount> GetShortestPath(int ctsCustIdFrom, int ctsCustIdTo)
         {
-            ctsCustIdFrom = 732436;
-            ctsCustIdTo = 32675916;
             var result = DbSessionFactory.ExecuteSingle<ShortestPathOfAccount>("GetShortestPath", new { StartCustId = ctsCustIdFrom, EndCustId = ctsCustIdTo }).Data;
             return Json(result);
         }
