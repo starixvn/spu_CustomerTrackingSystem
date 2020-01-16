@@ -8,6 +8,8 @@ namespace Fanex.NAP.CTS.Model.Account
 {
     public class GraphAssociationModel
     {
+        public int CTSCustID { get; set; }
+
         public int? CustId { get; set; }
 
         public string Username { get; set; }
