@@ -87,7 +87,7 @@
     }
 
     function RenderGrid(custId,ctsCustId, statusIds, associationType, isDirect) {
-        var url = common.modifyRelativeUrl('/Account/GetAssociationByAccount');
+        var url = common.modifyRelativeUrl('/Account/GetAssociatedByAccount');
 
         $.ajax(url, {
             type: 'POST',

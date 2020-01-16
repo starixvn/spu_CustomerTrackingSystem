@@ -72,7 +72,7 @@
             FakeHttpContext.SetFakeSession();
             _runner.CurrentSession = FakeSession.CurrentSession;
 
-            var actualResult = _runner.GetAssociationByAccount(custId, ctsCustId, statusId, 0, false) as JsonResult;
+            var actualResult = _runner.GetAssociatedByAccount(custId, ctsCustId, statusId, 0, false) as JsonResult;
 
             // Assert
             var result = actualResult.Data as List<CustomerAssociationByAccountDetailModel>;
@@ -97,7 +97,7 @@
             var statusId = "1,2,3,4,5,6,7,8,9,10";
             var isDirect = true;
 
-            var actualResult = _runner.GetAssociationByAccount(custId, ctsCustId, statusId, associationType, isDirect) as JsonResult;
+            var actualResult = _runner.GetAssociatedByAccount(custId, ctsCustId, statusId, associationType, isDirect) as JsonResult;
 
             // Assert
             var result = actualResult.Data as List<CustomerAssociationByAccountDetailModel>;

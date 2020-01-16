@@ -209,7 +209,7 @@
         }
 
         [HttpPost]
-        public ActionResult GetAssociationByAccount(int CustId, int ctsCustId, string statusIds, int associationType, bool isDirect)
+        public ActionResult GetAssociatedByAccount(int CustId, int ctsCustId, string statusIds, int associationType, bool isDirect)
         {
             var result = new List<CustomerAssociationByAccountDetailModel>();
 
