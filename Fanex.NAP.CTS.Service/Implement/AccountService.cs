@@ -840,10 +840,10 @@
             {
                 if (associationType == 0)
                 {
-                    var groupData = customerAssociation.GroupBy(x => new { x.CustId, x.Username, x.Username2 })
+                    var groupData = customerAssociation.GroupBy(x => x.CTSCustID)
                         .Select(g => new GraphAssociationModel
                         {
-                            CustId = g.Key.CustId,
+                            CustId = g.FirstOrDefault().CustId,
                             AssociationType = (g.Count() > 1 ? 0 : g.FirstOrDefault().AssociationType),
                             Username = g.FirstOrDefault().Username,
                             Username2 = g.FirstOrDefault().Username2,
