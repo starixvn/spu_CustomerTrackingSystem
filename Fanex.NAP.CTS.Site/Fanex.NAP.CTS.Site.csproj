@@ -358,6 +358,7 @@
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="App_Data\NAPFSNames.LOCAL.xml" />
     <Content Include="Areas\UserLogin\scripts\lib\jquery-1.9.0.min.js" />
     <Content Include="Areas\UserLogin\scripts\ReCheckIn.js" />
     <Content Include="Areas\UserLogin\Views\Common\Style\AccessDenied.css" />
@@ -387,11 +388,11 @@
       <DependentUpon>account-fps.css</DependentUpon>
     </Content>
     <Content Include="Content\scss\pages\account\account.css">
-	<DependentUpon>account.scss</DependentUpon>
-	</Content>
-    <Content Include="Content\scss\pages\account\account.min.css" >
-	<DependentUpon>account.css</DependentUpon>
-	</Content>
+      <DependentUpon>account.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\scss\pages\account\account.min.css">
+      <DependentUpon>account.css</DependentUpon>
+    </Content>
     <Content Include="Content\scss\pages\evidence\evidence.css">
       <DependentUpon>evidence.scss</DependentUpon>
     </Content>
