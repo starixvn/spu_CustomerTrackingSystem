@@ -63,5 +63,9 @@
         List<GraphAssociationModel> FilterCustomerAssociationByStatus(string statusIds, List<GraphAssociationModel>  customerAssociation, List<CustomerGeneralStatusModel> statusByCustIds);
 
         List<GraphAssociationModel> FilterCustomerAssociationByAssociationType(int associationType, List<GraphAssociationModel> customerAssociation);
+
+        IEnumerable<EvidenceModel> GetEvidenceList();
+
+        IEnumerable<FlaggedEvidenceModel> GetFlaggedEvidences(int custId, string evidenceCodes);
     }
 }

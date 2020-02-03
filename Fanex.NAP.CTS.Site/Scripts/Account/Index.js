@@ -26,6 +26,22 @@
         });
     }
 
+    function LoadChainToEvidence() {
+        $.ajax(common.modifyRelativeUrl('/Account/ChainToEvidence'), {
+            type: 'POST',
+            success: function (response) {
+                $("#chains_evidence").html(response);
+            },
+            complete: function () {
+                var chainToEvidence = new chain_to_evidence();
+                chainToEvidence.Initial(custId);
+            },
+            error: function (errMsg) {
+                common.showError(errMsg);
+            }
+        });
+    }
+
     function CollapseExpandItem() {
         $("#account-detail-container .report-item h3").on('click', function () {
             
@@ -73,6 +89,7 @@
         CollapseExpandAll();
         CollapseExpandItem();
         LoadAssociationByAccount();
+        LoadChainToEvidence();
     }
 
     $(document).ready(function () {

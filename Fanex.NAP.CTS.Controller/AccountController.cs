@@ -6,7 +6,7 @@
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.ViewModel.Account;
-    using Fanex.NAP.CTS.ViewModel.Account.Associated;
+    using Fanex.NAP.CTS.ViewModel.Account.Associated;    
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
@@ -307,6 +307,29 @@
 
             return Json(graphCustomer, JsonRequestBehavior.AllowGet);
         }
+
+        #region Chain To Evidence
+        public ActionResult ChainToEvidence()
+        {
+            ViewBag.EvidenceList = _accountService.GetEvidenceList();            
+
+            return PartialView();
+        }    
+
+        [HttpPost]
+        public ActionResult GetFlaggedEvidence(int custId, string evidenceCodes)
+        {
+            var viewModel = new ChainToEvidenceViewModel();
+            var flaggedEvidences = _accountService.GetFlaggedEvidences(custId, evidenceCodes);
+            if (flaggedEvidences != null && flaggedEvidences.Any())
+            {
+                viewModel.AddFlaggedEvidenceList(flaggedEvidences);
+            }
+
+            return Json(viewModel, JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion
 
         //[HttpPost]
         //public ActionResult GetAssociatedAccountByAccountFilter(AssociatedAccountByAccountFilter filter)

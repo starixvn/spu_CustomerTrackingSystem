@@ -19,6 +19,9 @@
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 
+            bundles.Add(new ScriptBundle("~/bundles/multiselectfilter").Include(
+                "~/Scripts/MultipleSelect/jquery.multiselect.filter.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/Bootstrap/bootstrap.js",
                       "~/Scripts/respond.js"));
@@ -54,6 +57,7 @@
             RegisterEvidenceBundles(bundles);
             RegisterTransactionHistoryBundles(bundles);
             RegisterGraphVisualizeBundles(bundles);
+            RegisterChainToEvidenceBundles(bundles);
         }
 
         private static void RegisterFSCoreBundles(BundleCollection bundles)
@@ -168,11 +172,15 @@
                 "~/scripts/Account/Associated/graph.js"));
         }
 
-
         private static void RegisterGraphVisualizeBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/graph-visualize-lib").Include(
                 "~/Scripts/popoto/d3.v3.min.js"));
+        }
+
+        private static void RegisterChainToEvidenceBundles(BundleCollection bundles)
+        {
+            bundles.Add(new ScriptBundle("~/chain-to-evidence-scripts").Include("~/scripts/Account/ChainToEvidence/chain-to-evidence.js"));
         }
 
         private static void RegisterEvidenceBundles(BundleCollection bundles)

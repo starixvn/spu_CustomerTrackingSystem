@@ -433,6 +433,7 @@
     <Content Include="Scripts\Account\Associated\device-by-account.js" />
     <Content Include="Scripts\Account\Associated\graph.js" />
     <Content Include="Scripts\Account\Associated\sample-data-graph.js" />
+    <Content Include="Scripts\Account\ChainToEvidence\chain-to-evidence.js" />
     <Content Include="Scripts\Account\index.js" />
     <Content Include="Scripts\Evidence\form-information-evidence.js" />
     <Content Include="Scripts\Evidence\form-place-evidence.js" />
@@ -1138,13 +1139,12 @@
     <Content Include="Views\Evidence\FormException.cshtml" />
     <Content Include="Views\Account\DetailInfoAccount\RetractAndException.cshtml" />
     <Content Include="Views\Account\Associated\AccountByAccount.cshtml" />
-    <Content Include="Views\Account\Associated\DeviceByAccount.cshtml" />
     <Content Include="Views\Evidence\FormPlaceEvidence.cshtml" />
     <Content Include="Views\Account\Associated\GraphVisualization.cshtml" />
-    <Content Include="Views\Account\Associated\ShortestPathVisual.cshtml" />
     <Content Include="Views\Account\TransactionHistory\IPInformation.cshtml" />
     <Content Include="Views\Account\TransactionHistory\TransactionHistory.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
+    <Content Include="Views\Account\ChainToEvidence.cshtml" />
     <None Include="Views\Errors\403.cshtml" />
     <None Include="Views\Errors\404.cshtml" />
     <None Include="Views\Errors\500.cshtml" />

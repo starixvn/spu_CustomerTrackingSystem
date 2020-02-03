@@ -1,0 +1,61 @@
+﻿@using Fanex.NAP.CTS.Model;
+
+@{
+    ViewBag.Title = "ChainToEvidence";
+}
+
+<div id="chain-to-evidence">
+    <div class="filter">
+        <div class="form-control dropdown">
+            <div class="control-label">Evidence List</div>
+            <select class="control" id="chain-to-evidence-cbb-evidence" multiple="multiple"> 
+                @foreach (var evidence in ViewBag.EvidenceList)
+                {
+                <option value="@evidence.EvidenceCode" selected>@(evidence.EvidenceCode + " " + evidence.EvidenceName)</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="table-report" id="chain-to-evidence-content">
+        <table id="chain-to-evidence-flagged-table" class="table table-striped" style="width: 100%">
+            <thead>
+                <tr>
+                    <th>Evidence</th>
+                    <th>Flagged Date/Time</th>
+                    <th>Comment</th>
+                    <th>Creator</th>
+                    <th>Remove</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <table id="chain-to-evidence-affected-table" class="table table-striped" style="width: 100%" hidden>
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Login ID</th>
+                    <th>Association Type</th>
+                    <th>Affected Date/Time</th>
+                    <th>Last Login</th>
+                    <th>Remove</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <table id="chain-to-evidence-exception-table" class="table table-striped" style="width: 100%" hidden>
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Login ID</th>
+                    <th>Exceptions Date/Time</th>
+                    <th>Comment</th>
+                    <th>Creator</th>
+                    <th>Remove</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>

@@ -321,11 +321,7 @@
     
     <Setting Key="FPS_DC_GetLocationInfobyIP"
              SpName="FPS_DC_GetLocationInfobyIP"
-             DbName="MySQL.CTS_DataCenter"/>
-
-    
-    
-    
+             DbName="MySQL.CTS_DataCenter"/>           
     
     <Setting Key="CTS_DC_GetUserInfomationByUsername"
             SpName="CTS_DC_GetUserInfomationByUsername"
@@ -388,6 +384,16 @@
     <Setting Key="CTS_DC_GetDirectAssociatedAccount"
             SpName="CTS_DC_GetDirectAssociatedAccount"
             DbName="MySQL.CTS_DataCenter">
+    </Setting>
+    
+    <Setting Key="CTS_DC_GetAllEvidences"
+                 SpName="CTS_DC_GetAllEvidences"
+                 DbName="MySQL.CTS_DataCenter">
+    </Setting>
+    
+    <Setting Key="CTS_DC_GetEvidenceByCustID"
+             SpName="CTS_DC_GetEvidenceByCustID"
+             DbName="MySQL.CTS_DataCenter">
     </Setting>
   </Function>
 </Functions>

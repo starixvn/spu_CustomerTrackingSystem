@@ -389,5 +389,15 @@
             SpName="CTS_DC_GetDirectAssociatedAccount"
             DbName="MySQL.CTS_DataCenter">
     </Setting>
+
+    <Setting Key="CTS_DC_GetAllEvidences"
+             SpName="CTS_DC_GetAllEvidences"
+             DbName="MySQL.CTS_DataCenter">
+    </Setting>
+    
+    <Setting Key="CTS_DC_GetEvidenceByCustID"
+             SpName="CTS_DC_GetEvidenceByCustID"
+             DbName="MySQL.CTS_DataCenter">
+    </Setting>
   </Function>
 </Functions>

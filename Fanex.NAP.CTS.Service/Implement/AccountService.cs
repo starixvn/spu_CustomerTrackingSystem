@@ -6,7 +6,7 @@
     using Fanex.NAP.CTS.Core.Helpers;
     using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Criteria.Account;
-    using Fanex.NAP.CTS.Criteria.Account.Associated;
+    using Fanex.NAP.CTS.Criteria.Account.Associated;    
     using Fanex.NAP.CTS.Criteria.Account.GeneralInformation;
     using Fanex.NAP.CTS.Criteria.Home;
     using Fanex.NAP.CTS.Criteria.SubscriberAssignment;
@@ -865,6 +865,33 @@
             return customerAssociation;
         }
 
+        #endregion
+
+        #region Chain To Evidence
+        public IEnumerable<EvidenceModel> GetEvidenceList()
+        {
+            var criteria = new GetAllEvidenceCriteria();
+            
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<EvidenceModel>(criteria);
+            }
+        }
+
+        public IEnumerable<FlaggedEvidenceModel> GetFlaggedEvidences(int custId, string evidenceCodes)
+        {
+            var criteria = new GetEvidenceByCustIDCriteria
+            {
+                CustId = 27,
+                EvidenceCodes = "1.12",
+                IsFlagged = true
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<FlaggedEvidenceModel>(criteria);                
+            }
+        }
         #endregion
     }
 }

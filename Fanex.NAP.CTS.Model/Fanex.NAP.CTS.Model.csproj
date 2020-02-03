@@ -147,8 +147,10 @@
     <Compile Include="Account\CustomerProfileFraudInfoModel.cs" />
     <Compile Include="Account\CustomerRobotUserStatusModel.cs" />
     <Compile Include="Account\CustomerStaticStatusModel.cs" />
+    <Compile Include="Account\EvidenceModel.cs" />
     <Compile Include="Account\Evidence\AccountEvidence.cs" />
     <Compile Include="Account\Evidence\AccountExceptionEvidence.cs" />
+    <Compile Include="Account\FlaggedEvidenceModel.cs" />
     <Compile Include="Account\FraudCaseModel.cs" />
     <Compile Include="GraphDB\GraphCustomer.cs" />
     <Compile Include="GraphDB\GraphAssociationModel.cs" />

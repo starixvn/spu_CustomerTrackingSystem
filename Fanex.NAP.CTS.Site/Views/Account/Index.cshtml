@@ -236,8 +236,11 @@
     <input id="hdUsername" type="hidden" value="@Model.UserName" />
 </div>
 @section scripts{   
+
     @Scripts.Render(
+    "~/bundles/multiselectfilter",
     "~/graph-visualize-lib"
     , "~/associated-by-account-detail-scripts"
-    , "~/account-detail-scripts")
+    , "~/account-detail-scripts"
+    , "~/chain-to-evidence-scripts")
 }
