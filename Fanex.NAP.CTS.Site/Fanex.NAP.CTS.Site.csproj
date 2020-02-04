@@ -1148,7 +1148,6 @@
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Account\ChainToEvidence\ChainToEvidence.cshtml" />
     <Content Include="Views\Account\ChainToEvidence\PlaceEvidence.cshtml" />
-    <Content Include="Views\Account\ChainToEvidence\Exceptions.cshtml" />
     <Content Include="Views\Account\ChainToEvidence\AddException.cshtml" />
     <None Include="Views\Errors\403.cshtml" />
     <None Include="Views\Errors\404.cshtml" />
