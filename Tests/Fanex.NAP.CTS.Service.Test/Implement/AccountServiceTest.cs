@@ -121,7 +121,7 @@
 
         [Theory]
         [InlineData(11113, 1, 1, "Place by Tuan", 8)]        
-        [InlineData(120, 9, 60, "Place by Tuan", 8)]
+        [InlineData(10, 9, 60, "Place by Tuan", 8)]        
         public void Can_PlaceEvidence(int ctsCustId, int subscriberId, int evidenceId, string comment, int userId)
         {
             // Act

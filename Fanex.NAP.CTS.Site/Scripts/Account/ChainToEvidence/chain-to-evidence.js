@@ -47,7 +47,7 @@
     }
 
     function RemoveFlaggedEvidence(evidenceId, custId) {
-
+        
     }
 
     function GetChainToEvidence(custId) {

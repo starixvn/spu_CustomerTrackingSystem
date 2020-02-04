@@ -1,10 +1,24 @@
 ﻿function place_evidence() {
     var divPlaceEvidence = $('#divPlaceEvidence');
+    var lblPlaceEvidenceAccount = $('#lblPlaceEvidenceAccount');
+    var lblPlaceEvidenceSubscriber = $('#lblPlaceEvidenceSubscriber');
     var ddlPlaceEvidenceListEvidence = $('#ddlPlaceEvidenceListEvidence');
     var btnPlaceEvidenceCancel = $('#btnPlaceEvidenceCancel');
     var btnPlaceEvidenceSubmit = $('#btnPlaceEvidenceSubmit');
+    var divPlaceEvidenceDescription = $('#divPlaceEvidenceDescription');
     var txtPlaceEvidenceComment = $('#txtPlaceEvidenceComment');
-  
+
+    function Reset() {
+        btnPlaceEvidenceCancel.prop('onclick', null).off('click');
+        btnPlaceEvidenceSubmit.prop('onclick', null).off('click');
+        ddlPlaceEvidenceListEvidence.prop('change', null).off('change');
+
+        lblPlaceEvidenceAccount.text('');
+        lblPlaceEvidenceSubscriber.text('');
+        divPlaceEvidenceDescription.text('');        
+        txtPlaceEvidenceComment.val('');
+    }
+
     function Summit(custId, subscriberId) {
         var url = common.modifyRelativeUrl('/Account/PlaceEvidence');
         var params = {};
@@ -28,6 +42,8 @@
     }
 
     this.Initial = function (custId, subscriberId) {
+        Reset();
+
         ddlPlaceEvidenceListEvidence.multiselect({
             multiple: false,
             selectedList: 1,
@@ -41,6 +57,13 @@
             placeholder: ''
             });
 
+        ddlPlaceEvidenceListEvidence.bind('change', function (e) {
+            var desc = $('#ddlPlaceEvidenceListEvidence :selected').attr('desc');
+            if (desc === undefined)
+                desc = '';
+            divPlaceEvidenceDescription.html(desc);
+        })
+
         divPlaceEvidence.dialog({
             modal: true,
             width: '650px',
@@ -48,14 +71,14 @@
             resizable: true,
             draggable: true,
             close: function () { $(this).dialog('close'); }
-        })
+        })       
 
-        btnPlaceEvidenceCancel.on('click', function () {
+        btnPlaceEvidenceCancel.on('click', function () {            
             divPlaceEvidence.dialog('close');
         })
 
-        btnPlaceEvidenceSubmit.on('click', function () {
-            Summit(custId, subscriberId);
+        btnPlaceEvidenceSubmit.on('click', function (e) {
+            Summit(custId, subscriberId);            
         })
     }
 }

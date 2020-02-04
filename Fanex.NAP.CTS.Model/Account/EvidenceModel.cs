@@ -7,5 +7,7 @@
         public string EvidenceCode { get; set; }
 
         public string EvidenceName { get; set; }
+
+        public string EvidenceDesc { get; set; }
     }
 }

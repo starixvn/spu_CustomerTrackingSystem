@@ -17,7 +17,7 @@
                     <select id="ddlPlaceEvidenceListEvidence">
                         @foreach (var evidence in ViewBag.EvidenceList)
                         {
-                            <option value="@evidence.EvidenceID" selected>@(evidence.EvidenceCode + " " + evidence.EvidenceName)</option>
+                            <option value="@evidence.EvidenceID" desc="@evidence.EvidenceDesc">@(evidence.EvidenceCode + " " + evidence.EvidenceName)</option>
                         }
                     </select>
                 </div>
