@@ -372,6 +372,11 @@ $dangerousColor: ( level-0: #000, level-1: #000, level-2: #ff0000, level-3: #ffc
         padding: 4px 10px;
         background-color: #e3e9f6;
 
+
+        .bold {
+            color: #444;
+        }
+
         .free-size {
             display: flex;
             justify-content: space-between;
@@ -432,6 +437,10 @@ $dangerousColor: ( level-0: #000, level-1: #000, level-2: #ff0000, level-3: #ffc
         tr {
             opacity: .3;
         }
+    }
+
+    .icon-delete {
+        color: red;
     }
 }
 

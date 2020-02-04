@@ -106,3 +106,13 @@ a.button, a.button:hover {
         color: $btn-disabled-bg;
     }
 }
+
+.button-primary-outline {
+    background-color: #e3e9f6;
+    color: #2053D9;
+    border: 1px solid #2053D9;
+
+    &:hover {
+        background: rgba(32,83,217,.2);
+    }
+}

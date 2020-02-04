@@ -17,56 +17,65 @@
         </div>
     </div>
     <div class="table-report">
-        <div class="graph-heading">
-            <div class="free-size">Flagged Evidence</div>
-            <div class="graph-info">
-                <button class="button btn-graph" id="btnChainToEvidenceFlagged">Flagged Evidence</button>
+        <div>
+            <div class="graph-heading">
+                <div class="bold">Flagged Evidence</div>
+                <div class="graph-info">
+                    <button class="button button-primary-outline" id="btnChainToEvidenceFlagged">Flagged Evidence</button>
+                </div>
             </div>
+            <table id="tblChainToEvidenceFlagged" class="table table-striped" style="width: 100%">
+                <thead>
+                    <tr>
+                        <th>Evidence</th>
+                        <th>Flagged Date/Time</th>
+                        <th>Comment</th>
+                        <th>Creator</th>
+                        <th>Remove</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
-        <table id="tblChainToEvidenceFlagged" class="table table-striped" style="width: 100%">
-            <thead>
-                <tr>
-                    <th>Evidence</th>
-                    <th>Flagged Date/Time</th>
-                    <th>Comment</th>
-                    <th>Creator</th>
-                    <th>Remove</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-        <div class="graph-heading">
-            <div class="free-size">Affected Evidence</div>
+        
+        <div class="mt-12">
+            <div class="graph-heading">
+                <div class="bold">Affected Evidence</div>
+            </div>
+            <table id="tblChainToEvidenceAffected" class="table table-striped" style="width: 100%">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Login ID</th>
+                        <th>Association Type</th>
+                        <th>Affected Date/Time</th>
+                        <th>Last Login</th>
+                        <th>Remove</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
-        <table id="tblChainToEvidenceAffected" class="table table-striped" style="width: 100%">
-            <thead>
-                <tr>
-                    <th>Username</th>
-                    <th>Login ID</th>
-                    <th>Association Type</th>
-                    <th>Affected Date/Time</th>
-                    <th>Last Login</th>
-                    <th>Remove</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-        <div class="graph-heading">
-            <div class="free-size">Exceptions</div>
-        </div>
-        <table id="tblChainToEvidenceException" class="table table-striped" style="width: 100%">
-            <thead>
-                <tr>
-                    <th>Username</th>
-                    <th>Login ID</th>
-                    <th>Exceptions Date/Time</th>
-                    <th>Comment</th>
-                    <th>Creator</th>
-                    <th>Remove</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+        
+        <div class="mt-12">
+            <div class="graph-heading">
+                <div class="bold">Exceptions</div>
+                <button class="button button-primary-outline">Add Exceptions</button>
+            </div>
+            <table id="tblChainToEvidenceException" class="table table-striped" style="width: 100%">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Login ID</th>
+                        <th>Exceptions Date/Time</th>
+                        <th>Comment</th>
+                        <th>Creator</th>
+                        <th>Remove</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>        
     </div>
 </div>
 

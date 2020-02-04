@@ -610,6 +610,8 @@
     border: 1px solid #c1c1c1;
     padding: 4px 10px;
     background-color: #e3e9f6; }
+    .table-report .graph-heading .bold {
+      color: #444; }
     .table-report .graph-heading .free-size {
       display: flex;
       justify-content: space-between;
@@ -654,6 +656,8 @@
       animation: spin 1s infinite linear; }
     .table-report .loading tr {
       opacity: .3; }
+  .table-report .icon-delete {
+    color: red; }
 
 table.dataTable.no-footer {
   border-bottom: 0; }
