@@ -9,6 +9,8 @@
     using System.Linq;
     using Xunit;
     using Fanex.NAP.CTS.ViewModel.Account.Associated;
+    using Fanex.NAP.CTS.Core;
+    using Fanex.NAP.CTS.Model.Account;
 
     [Collection(nameof(DbSettingProviderCollection))]
     public class AccountServiceTest
@@ -101,6 +103,32 @@
 
             // Assert
             Assert.IsType<List<AssociatedAccountByAccount>>(actualResult);
+        }
+
+        #endregion
+
+        #region Chain To Evidence
+        [Theory]
+        [InlineData(11113, "1.1")]
+        public void Can_GetFlaggedEvidences(int custId, string evidenceCodes)
+        {
+            // Act
+            var actualResult = _runner.GetFlaggedEvidences(custId, evidenceCodes);
+          
+            // Assert
+            Assert.IsType<List<FlaggedEvidenceModel>>(actualResult);
+        }
+
+        [Theory]
+        [InlineData(11113, 1, 1, "Place by Tuan", 8)]        
+        [InlineData(120, 9, 60, "Place by Tuan", 8)]
+        public void Can_PlaceEvidence(int ctsCustId, int subscriberId, int evidenceId, string comment, int userId)
+        {
+            // Act
+            var actualResult = _runner.PlaceEvidence(ctsCustId, subscriberId, evidenceId, comment, userId) as DBResult;
+
+            // Assert
+            Assert.True(actualResult.ErrorCode == 0);
         }
 
         #endregion

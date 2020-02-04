@@ -2,6 +2,8 @@
 {
     public class EvidenceModel
     {
+        public int EvidenceID { get; set; }
+
         public string EvidenceCode { get; set; }
 
         public string EvidenceName { get; set; }

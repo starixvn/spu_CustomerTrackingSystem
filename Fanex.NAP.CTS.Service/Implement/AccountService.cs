@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
     using Fanex.Data;
+    using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.BaseClasses;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Helpers;
@@ -882,14 +883,29 @@
         {
             var criteria = new GetFlaggedEvidenceCriteria
             {
-                CustId = 27,
-                EvidenceCodes = "1.12",                
+                CustId = custId,
+                EvidenceCodes = evidenceCodes,                
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 return db.Query<FlaggedEvidenceModel>(criteria);                
             }
+        }
+
+        public DBResult PlaceEvidence(int ctsCustId, int subscriberId, int evidenceId, string comment, int userId)
+        {
+            var criteria = new PlaceEvidenceCriteria
+            {
+                CTSCustId = ctsCustId,
+                SubscriberId = subscriberId,
+                EvidenceId = evidenceId,
+                Remark = comment,
+                UserId = userId,
+                IsCreatedByMaster = true
+            };
+
+            return DataService.UpdateData(criteria, "Place evidence");
         }
 
         public List<AccountExceptionsModel> GetAccountExceptions()

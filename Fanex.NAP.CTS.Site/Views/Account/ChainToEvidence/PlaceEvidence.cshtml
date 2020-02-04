@@ -1,4 +1,6 @@
-﻿<div id="divPlaceEvidence" style="display:none;">
+﻿@using Fanex.NAP.CTS.Model;
+
+<div id="divPlaceEvidence" style="display:none;">
     <div class="modal-dialog">
         <div class="box">
             <div class="box-heading">Account Information</div>
@@ -12,7 +14,12 @@
             <div class="box-heading">Add Evidence</div>
             <div class="box-content">
                 <div style="margin-bottom: 10px; width: 300px;">
-                    <select id="ddlPlaceEvidenceListEvidence"></select>
+                    <select id="ddlPlaceEvidenceListEvidence">
+                        @foreach (var evidence in ViewBag.EvidenceList)
+                        {
+                            <option value="@evidence.EvidenceID" selected>@(evidence.EvidenceCode + " " + evidence.EvidenceName)</option>
+                        }
+                    </select>
                 </div>
                 <div class="box">
                     <div class="box-heading">Description</div>
@@ -29,7 +36,7 @@
         </div>
         <div class="modal-footer margin-top-10">
             <button class="button btn-cancel-outline" id="btnPlaceEvidenceCancel">Cancel</button>
-            <button class="button -add" id="btnPlaceEvidenceAdd">Add Evidence</button>
+            <button class="button -add" id="btnPlaceEvidenceSubmit">Add Evidence</button>
         </div>
     </div>
 </div>

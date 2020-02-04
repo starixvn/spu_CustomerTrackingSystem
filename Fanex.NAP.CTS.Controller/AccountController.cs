@@ -354,6 +354,14 @@
             return Json(viewModel, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        public ActionResult PlaceEvidence(int custId, int subscriberId, int evidenceId, string comment)
+        {
+            var result = _accountService.PlaceEvidence(custId, subscriberId, evidenceId, comment, CurrentSession.UserId);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
         #endregion
 
         //[HttpPost]

@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
+    using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.Home;
@@ -68,6 +69,8 @@
 
         IEnumerable<FlaggedEvidenceModel> GetFlaggedEvidences(int custId, string evidenceCodes);
 
-        List<AccountExceptionsModel> GetAccountExceptions();
+	DBResult PlaceEvidence(int ctsCustId, int subscriberId, int evidenceId, string comment, int userId);
+
+        List<AccountExceptionsModel> GetAccountExceptions();               
     }
 }
