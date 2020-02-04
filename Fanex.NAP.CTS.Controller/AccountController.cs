@@ -329,17 +329,17 @@
 
             return Json(viewModel, JsonRequestBehavior.AllowGet);
         }
-        
+
         [HttpPost]
         public ActionResult GetExceptions()
         {
-            var viewModel = new List<AccountExceptionsViewModel>();
+            var result = new List<AccountExceptionsViewModel>();
 
             var exceptions = _accountService.GetAccountExceptions();
 
             if (exceptions != null && exceptions.Any())
             {
-                viewModel = exceptions.Select(x => new AccountExceptionsViewModel
+                result = exceptions.Select(x => new AccountExceptionsViewModel
                 {
                     UserName = x.UserName,
                     LoginId = x.LoginId,
@@ -350,8 +350,26 @@
                     ExceptionDate = x.ExceptionDate
                 }).ToList();
             }
+            else
+            {
+                result.Add(new AccountExceptionsViewModel
+                {
+                    UserName = "testing",
+                    LoginId = "testing 2",
+                    Comment = "abc",
+                    ExceptionDate = DateTime.Now,
+                    Creator = "aaaa",
+                    CustId = 0,
+                    CTSCustId = 0
+                });
+            }
 
-            return Json(viewModel, JsonRequestBehavior.AllowGet);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult AddException()
+        {
+            return View();
         }
 
         [HttpPost]

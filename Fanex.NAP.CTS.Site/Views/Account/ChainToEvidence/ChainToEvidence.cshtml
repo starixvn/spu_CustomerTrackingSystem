@@ -8,10 +8,10 @@
     <div class="filter">
         <div class="form-control dropdown">
             <div class="control-label">Evidence List</div>
-            <select class="control" id="cbbChainToEvidenceListEvidence" multiple="multiple"> 
+            <select class="control" id="cbbChainToEvidenceListEvidence" multiple="multiple">
                 @foreach (var evidence in ViewBag.EvidenceList)
                 {
-                <option value="@evidence.EvidenceCode" selected>@(evidence.EvidenceCode + " " + evidence.EvidenceName)</option>
+                    <option value="@evidence.EvidenceCode" selected>@(evidence.EvidenceCode + " " + evidence.EvidenceName)</option>
                 }
             </select>
         </div>
@@ -37,7 +37,7 @@
                 <tbody></tbody>
             </table>
         </div>
-        
+
         <div class="mt-12">
             <div class="graph-heading">
                 <div class="bold">Affected Evidence</div>
@@ -56,11 +56,11 @@
                 <tbody></tbody>
             </table>
         </div>
-        
+
         <div class="mt-12">
             <div class="graph-heading">
                 <div class="bold">Exceptions</div>
-                <button class="button button-primary-outline">Add Exceptions</button>
+                <button id="btnaddexceptions" class="button button-primary-outline">Add Exceptions</button>
             </div>
             <table id="tblChainToEvidenceException" class="table table-striped" style="width: 100%">
                 <thead>
@@ -75,8 +75,9 @@
                 </thead>
                 <tbody></tbody>
             </table>
-        </div>        
+        </div>
     </div>
 </div>
 
 @Html.Partial("ChainToEvidence/PlaceEvidence")
+@Html.Partial("ChainToEvidence/AddException")

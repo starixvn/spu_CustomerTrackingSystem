@@ -1,6 +1,7 @@
 ﻿function chain_to_evidence() {
     var tblChainToEvidenceFlagged = $('#tblChainToEvidenceFlagged');
     var btnChainToEvidenceFlagged = $('#btnChainToEvidenceFlagged');
+    
     var cbbChainToEvidenceListEvidence = $('#cbbChainToEvidenceListEvidence');
 
     function InitialFlaggedGrid(custId) {
@@ -98,6 +99,8 @@
         btnChainToEvidenceFlagged.on('click', function () {
             var formPlaceEvidence = new place_evidence();
             formPlaceEvidence.Initial();
-        })
+        });
+
+       
     }
 }

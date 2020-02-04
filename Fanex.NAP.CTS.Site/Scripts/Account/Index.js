@@ -35,6 +35,9 @@
             complete: function () {
                 var chainToEvidence = new chain_to_evidence();
                 chainToEvidence.Initial(custId);
+
+                var exceptions = new account_exceptions();
+                exceptions.Initial();
             },
             error: function (errMsg) {
                 common.showError(errMsg);
