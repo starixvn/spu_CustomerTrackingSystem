@@ -395,8 +395,12 @@
              DbName="MySQL.CTS_DataCenter">
     </Setting>
     
-    <Setting Key="CTS_DC_GetEvidenceByCustID"
-             SpName="CTS_DC_GetEvidenceByCustID"
+    <Setting Key="CTS_DC_GetFlaggedEvidence"
+             SpName="CTS_DC_GetFlaggedEvidence"
+             DbName="MySQL.CTS_DataCenter">
+    </Setting>
+    <Setting Key="CTS_DC_GetAffectedEvidence"
+             SpName="CTS_DC_GetAffectedEvidence"
              DbName="MySQL.CTS_DataCenter">
     </Setting>
   </Function>

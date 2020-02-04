@@ -8,7 +8,7 @@
     <div class="filter">
         <div class="form-control dropdown">
             <div class="control-label">Evidence List</div>
-            <select class="control" id="chain-to-evidence-cbb-evidence" multiple="multiple"> 
+            <select class="control" id="cbbChainToEvidenceListEvidence" multiple="multiple"> 
                 @foreach (var evidence in ViewBag.EvidenceList)
                 {
                 <option value="@evidence.EvidenceCode" selected>@(evidence.EvidenceCode + " " + evidence.EvidenceName)</option>
@@ -16,8 +16,14 @@
             </select>
         </div>
     </div>
-    <div class="table-report" id="chain-to-evidence-content">
-        <table id="chain-to-evidence-flagged-table" class="table table-striped" style="width: 100%">
+    <div class="table-report">
+        <div class="graph-heading">
+            <div class="free-size">Flagged Evidence</div>
+            <div class="graph-info">
+                <button class="button btn-graph" id="btnChainToEvidenceFlagged">Flagged Evidence</button>
+            </div>
+        </div>
+        <table id="tblChainToEvidenceFlagged" class="table table-striped" style="width: 100%">
             <thead>
                 <tr>
                     <th>Evidence</th>
@@ -30,7 +36,7 @@
             <tbody></tbody>
         </table>
 
-        <table id="chain-to-evidence-affected-table" class="table table-striped" style="width: 100%" hidden>
+        <table id="tblChainToEvidenceAffected" class="table table-striped" style="width: 100%" hidden>
             <thead>
                 <tr>
                     <th>Username</th>
@@ -44,7 +50,7 @@
             <tbody></tbody>
         </table>
 
-        <table id="chain-to-evidence-exception-table" class="table table-striped" style="width: 100%" hidden>
+        <table id="tblChainToEvidenceException" class="table table-striped" style="width: 100%" hidden>
             <thead>
                 <tr>
                     <th>Username</th>
@@ -59,3 +65,5 @@
         </table>
     </div>
 </div>
+
+@Html.Partial("ChainToEvidence/PlaceEvidence")

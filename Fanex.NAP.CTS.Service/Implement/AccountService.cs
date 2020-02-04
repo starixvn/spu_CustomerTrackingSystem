@@ -880,11 +880,10 @@
 
         public IEnumerable<FlaggedEvidenceModel> GetFlaggedEvidences(int custId, string evidenceCodes)
         {
-            var criteria = new GetEvidenceByCustIDCriteria
+            var criteria = new GetFlaggedEvidenceCriteria
             {
                 CustId = 27,
-                EvidenceCodes = "1.12",
-                IsFlagged = true
+                EvidenceCodes = "1.12",                
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))

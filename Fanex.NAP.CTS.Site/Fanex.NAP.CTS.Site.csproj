@@ -434,6 +434,7 @@
     <Content Include="Scripts\Account\Associated\graph.js" />
     <Content Include="Scripts\Account\Associated\sample-data-graph.js" />
     <Content Include="Scripts\Account\ChainToEvidence\chain-to-evidence.js" />
+    <Content Include="Scripts\Account\ChainToEvidence\place-evidence.js" />
     <Content Include="Scripts\Account\index.js" />
     <Content Include="Scripts\Evidence\form-information-evidence.js" />
     <Content Include="Scripts\Evidence\form-place-evidence.js" />
@@ -1144,7 +1145,8 @@
     <Content Include="Views\Account\TransactionHistory\IPInformation.cshtml" />
     <Content Include="Views\Account\TransactionHistory\TransactionHistory.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
-    <Content Include="Views\Account\ChainToEvidence.cshtml" />
+    <Content Include="Views\Account\ChainToEvidence\ChainToEvidence.cshtml" />
+    <Content Include="Views\Account\ChainToEvidence\PlaceEvidence.cshtml" />
     <None Include="Views\Errors\403.cshtml" />
     <None Include="Views\Errors\404.cshtml" />
     <None Include="Views\Errors\500.cshtml" />

@@ -1,8 +1,10 @@
 ﻿function chain_to_evidence() {
-    var flaggedEvidenceTable = $('#chain-to-evidence-flagged-table');
+    var tblChainToEvidenceFlagged = $('#tblChainToEvidenceFlagged');
+    var btnChainToEvidenceFlagged = $('#btnChainToEvidenceFlagged');
+    var cbbChainToEvidenceListEvidence = $('#cbbChainToEvidenceListEvidence');
 
     function InitialFlaggedGrid(custId) {
-        flaggedEvidenceTable.DataTable({
+        tblChainToEvidenceFlagged.DataTable({
             language: {
                 lengthMenu: "Page size _MENU_",
                 paginate: {
@@ -13,7 +15,7 @@
                 zeroRecords: "There's no data"
             },
             ordering: false,
-            paging: false,
+            paging: false,            
             searching: false,
             scrollX: false,
             scrollCollapse: false,
@@ -48,12 +50,12 @@
     }
 
     function GetChainToEvidence(custId) {
-        var url = common.modifyRelativeUrl('/Account/GetFlaggedEvidence');
+        var url = common.modifyRelativeUrl('/Account/GetChainToEvidence');
 
         $.ajax(url, {
             type: 'POST',
             beforeSend: function () {
-                flaggedEvidenceTable.find('tbody').addClass('loading');
+                tblChainToEvidenceFlagged.find('tbody').addClass('loading');
             },
             data: {
                 custId: custId
@@ -62,7 +64,7 @@
                 RenderFlaggedGrid(response);    
             },
             complete: function () {
-                flaggedEvidenceTable.find('tbody').removeClass('loading');
+                tblChainToEvidenceFlagged.find('tbody').removeClass('loading');
             },
             error: function (errMsg) {
                 console.log(errMsg);
@@ -72,15 +74,15 @@
     }
 
     function RenderFlaggedGrid(data) {
-        flaggedEvidenceTable.DataTable().clear();
+        tblChainToEvidenceFlagged.DataTable().clear();
         if (data.FlaggedEvidenceList.length > 0) {
-            flaggedEvidenceTable.DataTable().rows.add(data.FlaggedEvidenceList).draw();
+            tblChainToEvidenceFlagged.DataTable().rows.add(data.FlaggedEvidenceList).draw();
         }        
-        flaggedEvidenceTable.DataTable().columns.adjust();
+        tblChainToEvidenceFlagged.DataTable().columns.adjust();
     }
 
     this.Initial = function (custId) {
-        $('#chain-to-evidence-cbb-evidence').multiselect({
+        cbbChainToEvidenceListEvidence.multiselect({
             menuWidth: 330,
             menuHeight: 330,
             selectedText: "# of # selected",
@@ -92,5 +94,10 @@
 
         InitialFlaggedGrid(custId);
         GetChainToEvidence(custId);
+
+        btnChainToEvidenceFlagged.on('click', function () {
+            var formPlaceEvidence = new place_evidence();
+            formPlaceEvidence.Initial();
+        })
     }
 }

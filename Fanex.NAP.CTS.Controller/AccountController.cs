@@ -313,11 +313,11 @@
         {
             ViewBag.EvidenceList = _accountService.GetEvidenceList();            
 
-            return PartialView();
+            return PartialView("ChainToEvidence/ChainToEvidence");
         }    
 
         [HttpPost]
-        public ActionResult GetFlaggedEvidence(int custId, string evidenceCodes)
+        public ActionResult GetChainToEvidence(int custId, string evidenceCodes)
         {
             var viewModel = new ChainToEvidenceViewModel();
             var flaggedEvidences = _accountService.GetFlaggedEvidences(custId, evidenceCodes);
