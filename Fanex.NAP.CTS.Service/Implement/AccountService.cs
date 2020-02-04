@@ -891,6 +891,12 @@
                 return db.Query<FlaggedEvidenceModel>(criteria);                
             }
         }
+
+        public List<AccountExceptionsModel> GetAccountExceptions()
+        {
+            return new List<AccountExceptionsModel>();
+        }
+
         #endregion
     }
 }

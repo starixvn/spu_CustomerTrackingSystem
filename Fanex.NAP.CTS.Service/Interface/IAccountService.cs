@@ -67,5 +67,7 @@
         IEnumerable<EvidenceModel> GetEvidenceList();
 
         IEnumerable<FlaggedEvidenceModel> GetFlaggedEvidences(int custId, string evidenceCodes);
+
+        List<AccountExceptionsModel> GetAccountExceptions();
     }
 }

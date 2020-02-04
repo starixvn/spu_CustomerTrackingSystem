@@ -133,6 +133,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Account\AccountExceptionsModel.cs" />
     <Compile Include="Account\AccountGeneralInformation.cs" />
     <Compile Include="Account\AccountStatusModel.cs" />
     <Compile Include="Account\CustomerAssociationByCTSCustIdModel.cs" />

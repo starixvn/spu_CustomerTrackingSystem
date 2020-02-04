@@ -6,7 +6,8 @@
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.ViewModel.Account;
-    using Fanex.NAP.CTS.ViewModel.Account.Associated;    
+    using Fanex.NAP.CTS.ViewModel.Account.Associated;
+    using Fanex.NAP.CTS.ViewModel.Account.ChainToEvidence;
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
@@ -311,10 +312,10 @@
         #region Chain To Evidence
         public ActionResult ChainToEvidence()
         {
-            ViewBag.EvidenceList = _accountService.GetEvidenceList();            
+            ViewBag.EvidenceList = _accountService.GetEvidenceList();
 
             return PartialView("ChainToEvidence/ChainToEvidence");
-        }    
+        }
 
         [HttpPost]
         public ActionResult GetChainToEvidence(int custId, string evidenceCodes)
@@ -324,6 +325,30 @@
             if (flaggedEvidences != null && flaggedEvidences.Any())
             {
                 viewModel.AddFlaggedEvidenceList(flaggedEvidences);
+            }
+
+            return Json(viewModel, JsonRequestBehavior.AllowGet);
+        }
+        
+        [HttpPost]
+        public ActionResult GetExceptions()
+        {
+            var viewModel = new List<AccountExceptionsViewModel>();
+
+            var exceptions = _accountService.GetAccountExceptions();
+
+            if (exceptions != null && exceptions.Any())
+            {
+                viewModel = exceptions.Select(x => new AccountExceptionsViewModel
+                {
+                    UserName = x.UserName,
+                    LoginId = x.LoginId,
+                    Comment = x.Comment,
+                    Creator = x.Creator,
+                    CTSCustId = x.CTSCustId,
+                    CustId = x.CustId,
+                    ExceptionDate = x.ExceptionDate
+                }).ToList();
             }
 
             return Json(viewModel, JsonRequestBehavior.AllowGet);

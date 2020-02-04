@@ -433,6 +433,7 @@
     <Content Include="Scripts\Account\Associated\device-by-account.js" />
     <Content Include="Scripts\Account\Associated\graph.js" />
     <Content Include="Scripts\Account\Associated\sample-data-graph.js" />
+    <Content Include="Scripts\Account\ChainToEvidence\account-exceptions.js" />
     <Content Include="Scripts\Account\ChainToEvidence\chain-to-evidence.js" />
     <Content Include="Scripts\Account\ChainToEvidence\place-evidence.js" />
     <Content Include="Scripts\Account\index.js" />
@@ -1147,6 +1148,7 @@
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Account\ChainToEvidence\ChainToEvidence.cshtml" />
     <Content Include="Views\Account\ChainToEvidence\PlaceEvidence.cshtml" />
+    <Content Include="Views\Account\ChainToEvidence\Exceptions.cshtml" />
     <None Include="Views\Errors\403.cshtml" />
     <None Include="Views\Errors\404.cshtml" />
     <None Include="Views\Errors\500.cshtml" />
