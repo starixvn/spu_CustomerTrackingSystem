@@ -8,22 +8,22 @@
     var divPlaceEvidenceDescription = $('#divPlaceEvidenceDescription');
     var txtPlaceEvidenceComment = $('#txtPlaceEvidenceComment');
 
-    function Reset() {
+    function Reset(username, subscriber) {
         btnPlaceEvidenceCancel.prop('onclick', null).off('click');
         btnPlaceEvidenceSubmit.prop('onclick', null).off('click');
         ddlPlaceEvidenceListEvidence.prop('change', null).off('change');
 
-        lblPlaceEvidenceAccount.text('');
-        lblPlaceEvidenceSubscriber.text('');
-        divPlaceEvidenceDescription.text('');        
+        lblPlaceEvidenceAccount.text(username);
+        lblPlaceEvidenceSubscriber.text(subscriber);
+        divPlaceEvidenceDescription.text('');
         txtPlaceEvidenceComment.val('');
     }
 
-    function Summit(custId, subscriberId) {
+    function Summit(ctsCustId, subscriberId) {
         var url = common.modifyRelativeUrl('/Account/PlaceEvidence');
         var params = {};
-        params.custId = 1;
-        params.subscriberId = 1,
+        params.ctsCustId = ctsCustId;
+        params.subscriberId = subscriberId,
         params.evidenceId = ddlPlaceEvidenceListEvidence.find('option:selected').val();
         params.comment = txtPlaceEvidenceComment.val();
 
@@ -41,8 +41,8 @@
         })
     }
 
-    this.Initial = function (custId, subscriberId) {
-        Reset();
+    this.Initial = function (ctsCustId, username, subscriberId, subscriber) {
+        Reset(username, subscriber);
 
         ddlPlaceEvidenceListEvidence.multiselect({
             multiple: false,
@@ -78,7 +78,7 @@
         })
 
         btnPlaceEvidenceSubmit.on('click', function (e) {
-            Summit(custId, subscriberId);            
+            Summit(ctsCustId, subscriberId);            
         })
     }
 }

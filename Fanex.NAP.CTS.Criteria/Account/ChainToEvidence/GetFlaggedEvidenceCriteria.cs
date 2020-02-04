@@ -5,8 +5,8 @@
 
     public class GetFlaggedEvidenceCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_CustID")]
-        public int CustId { get; set; }
+        [SpParam(SqlParamName = "ip_CTSCustID")]
+        public int CTSCustId { get; set; }
 
         [SpParam(SqlParamName = "ip_EvidenceCodes")]
         public string EvidenceCodes { get; set; }       

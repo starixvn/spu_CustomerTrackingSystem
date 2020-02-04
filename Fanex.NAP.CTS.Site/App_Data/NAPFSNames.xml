@@ -404,6 +404,11 @@
             SpName="CTS_DC_AddEvidence"
             DbName="MySQL.CTS_DataCenter">
     </Setting>
+
+    <Setting Key="CTS_DC_RemoveFlaggedEvidence"
+          SpName="CTS_DC_RemoveFlaggedEvidence"
+          DbName="MySQL.CTS_DataCenter">
+    </Setting>
     
     <Setting Key="CTS_DC_GetAffectedEvidence"
              SpName="CTS_DC_GetAffectedEvidence"

@@ -5,9 +5,9 @@
     using System.Collections.Generic;
 
     [Serializable]
-    public class ChainToEvidenceViewModel
+    public class FlaggedEvidenceViewModel
     {
-        public ChainToEvidenceViewModel()
+        public FlaggedEvidenceViewModel()
         {
             FlaggedEvidenceList = new List<FlaggedEvidenceItem>();
         }

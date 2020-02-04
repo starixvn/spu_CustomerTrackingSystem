@@ -879,12 +879,12 @@
             }
         }
 
-        public IEnumerable<FlaggedEvidenceModel> GetFlaggedEvidences(int custId, string evidenceCodes)
+        public IEnumerable<FlaggedEvidenceModel> GetFlaggedEvidences(int ctsCustId, string evidenceCodes)
         {
             var criteria = new GetFlaggedEvidenceCriteria
             {
-                CustId = custId,
-                EvidenceCodes = evidenceCodes,                
+                CTSCustId = ctsCustId,
+                EvidenceCodes = evidenceCodes               
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -906,6 +906,18 @@
             };
 
             return DataService.UpdateData(criteria, "Place evidence");
+        }
+
+        public DBResult RemoveFlaggedEvidence(int ctsCustId, int evidenceId, int userId)
+        {
+            var criteria = new RemoveFlaggedEvidenceCriteria
+            {
+                CTSCustId = ctsCustId,               
+                EvidenceId = evidenceId,               
+                UserId = userId                
+            };
+
+            return DataService.UpdateData(criteria, "Remove flagged evidence");
         }
 
         public List<AccountExceptionsModel> GetAccountExceptions()

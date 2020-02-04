@@ -49,7 +49,7 @@
     <Compile Include="Account\Associated\AssociatedDeviceByAccount.cs" />
     <Compile Include="Account\Associated\AssociatedDeviceByAccountFilter.cs" />
     <Compile Include="Account\Associated\GraphCustomerItemViewModel.cs" />
-    <Compile Include="Account\ChainToEvidence\ChainToEvidenceViewModel.cs" />
+    <Compile Include="Account\ChainToEvidence\FlaggedEvidenceViewModel.cs" />
     <Compile Include="Account\ChainToEvidence\AccountExceptionsViewModel.cs" />
     <Compile Include="Account\ChainToEvidence\FlaggedEvidenceItem.cs" />
     <Compile Include="Account\CustomerFraud.cs" />

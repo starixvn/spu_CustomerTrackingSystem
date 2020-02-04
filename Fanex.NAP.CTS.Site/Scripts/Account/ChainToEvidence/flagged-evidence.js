@@ -1,20 +1,14 @@
-﻿function chain_to_evidence() {
+﻿function flagged_evidence() {
     var tblChainToEvidenceFlagged = $('#tblChainToEvidenceFlagged');
-    var btnChainToEvidenceFlagged = $('#btnChainToEvidenceFlagged');
-    
+    var btnChainToEvidenceFlagged = $('#btnChainToEvidenceFlagged');    
     var cbbChainToEvidenceListEvidence = $('#cbbChainToEvidenceListEvidence');
 
-    function InitialFlaggedGrid(custId) {
+    function InitialFlaggedGrid(ctsCustId) {
         tblChainToEvidenceFlagged.DataTable({
-            language: {
-                lengthMenu: "Page size _MENU_",
-                paginate: {
-                    previous: "Back"
-                },
-                info: "Displaying _START_ to _END_ of _TOTAL_ item(s)",
-                infoEmpty: "",
+            language: {                
                 zeroRecords: "There's no data"
             },
+            info: false,
             ordering: false,
             paging: false,            
             searching: false,
@@ -35,7 +29,7 @@
                 { data: obj => obj.Creator },
                 {
                     data: obj => RenderRemoveFlaggedEvidence(), createdCell: (cell, _, row) => {
-                        $('.icon-delete', cell).click(() => RemoveFlaggedEvidence(row.EvidenceID, custId));
+                        $('.icon-delete', cell).click(() => RemoveFlaggedEvidence(row.EvidenceID, ctsCustId));
                     }
                 }
             ]
@@ -46,12 +40,33 @@
         return '<span class="icon-delete"></span>';
     }
 
-    function RemoveFlaggedEvidence(evidenceId, custId) {
-        
+    function RemoveFlaggedEvidence(evidenceId, ctsCustId) {
+        var url = common.modifyRelativeUrl('/Account/RemoveFlaggedEvidence'); 
+
+        $.ajax(url, {
+            type: 'POST', 
+            beforeSend: function () {
+                common.showLoading();
+            },
+            data: {
+                ctsCustId: ctsCustId,
+                evidenceId: evidenceId
+            },
+            success: function (response) {
+                common.showSuccess();
+            },  
+            complete: function () {
+                common.closeLoading();
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+                common.showError(errMsg);
+            }
+        })
     }
 
-    function GetChainToEvidence(custId) {
-        var url = common.modifyRelativeUrl('/Account/GetChainToEvidence');
+    function GetFlaggedEvidences(ctsCustId) {
+        var url = common.modifyRelativeUrl('/Account/GetFlaggedEvidences');
 
         $.ajax(url, {
             type: 'POST',
@@ -59,7 +74,7 @@
                 tblChainToEvidenceFlagged.find('tbody').addClass('loading');
             },
             data: {
-                custId: custId
+                ctsCustId: ctsCustId
             },
             success: function (response) {
                 RenderFlaggedGrid(response);    
@@ -82,7 +97,7 @@
         tblChainToEvidenceFlagged.DataTable().columns.adjust();
     }
 
-    this.Initial = function (custId) {
+    this.Initial = function (ctsCustId, username, subscriberId, subscriber) {
         cbbChainToEvidenceListEvidence.multiselect({
             menuWidth: 330,
             menuHeight: 330,
@@ -93,14 +108,12 @@
             placeholder: ''
         });
 
-        InitialFlaggedGrid(custId);
-        GetChainToEvidence(custId);
+        InitialFlaggedGrid(ctsCustId);
+        GetFlaggedEvidences(ctsCustId);
 
         btnChainToEvidenceFlagged.on('click', function () {
             var formPlaceEvidence = new place_evidence();
-            formPlaceEvidence.Initial();
-        });
-
-       
+            formPlaceEvidence.Initial(ctsCustId, username, subscriberId, subscriber);
+        });       
     }
 }

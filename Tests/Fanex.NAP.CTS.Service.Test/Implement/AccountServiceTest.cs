@@ -110,22 +110,32 @@
         #region Chain To Evidence
         [Theory]
         [InlineData(11113, "1.1")]
-        public void Can_GetFlaggedEvidences(int custId, string evidenceCodes)
+        public void Can_GetFlaggedEvidences(int ctsCustId, string evidenceCodes)
         {
             // Act
-            var actualResult = _runner.GetFlaggedEvidences(custId, evidenceCodes);
+            var actualResult = _runner.GetFlaggedEvidences(ctsCustId, evidenceCodes);
           
             // Assert
             Assert.IsType<List<FlaggedEvidenceModel>>(actualResult);
         }
 
         [Theory]
-        [InlineData(11113, 1, 1, "Place by Tuan", 8)]        
-        [InlineData(10, 9, 60, "Place by Tuan", 8)]        
+        [InlineData(120, 130, 60, "Place by Tuan", 8)]                   
         public void Can_PlaceEvidence(int ctsCustId, int subscriberId, int evidenceId, string comment, int userId)
         {
             // Act
             var actualResult = _runner.PlaceEvidence(ctsCustId, subscriberId, evidenceId, comment, userId) as DBResult;
+
+            // Assert
+            Assert.True(actualResult.ErrorCode == 0);
+        }
+
+        [Theory]
+        [InlineData(11113, 1, 8)]
+        public void Can_RemoveFlaggedEvidence(int ctsCustId, int evidenceId, int userId)
+        {
+            // Act
+            var actualResult = _runner.RemoveFlaggedEvidence(ctsCustId, evidenceId, userId) as DBResult;
 
             // Assert
             Assert.True(actualResult.ErrorCode == 0);

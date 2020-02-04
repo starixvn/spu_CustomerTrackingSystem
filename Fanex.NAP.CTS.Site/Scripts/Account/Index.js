@@ -2,6 +2,8 @@
     var username = $("#hdUsername").val();  
     var custId = $("#hdCustId").val();
     var ctsCustId = $("#hdCTSCustId").val();
+    var custSubId = $("#hdCustSubId").val();
+    var subscriber = $("#hdSubscriber").val();
 
     function LoadAssociationByAccount() {
         $.ajax(common.modifyRelativeUrl('/Account/AssociatedByAccount'), {
@@ -33,8 +35,8 @@
                 $("#chains_evidence").html(response);
             },
             complete: function () {
-                var chainToEvidence = new chain_to_evidence();
-                chainToEvidence.Initial(custId);
+                var flaggedEvidence = new flagged_evidence();
+                flaggedEvidence.Initial(ctsCustId, username, custSubId, subscriber);
 
                 var exceptions = new account_exceptions();
                 exceptions.Initial();

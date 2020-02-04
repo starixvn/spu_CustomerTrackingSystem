@@ -181,7 +181,7 @@
         private static void RegisterChainToEvidenceBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/chain-to-evidence-scripts")
-                .Include("~/scripts/Account/ChainToEvidence/chain-to-evidence.js",
+                .Include("~/scripts/Account/ChainToEvidence/flagged-evidence.js",
                 "~/scripts/Account/ChainToEvidence/place-evidence.js",
                 "~/scripts/Account/ChainToEvidence/account-exceptions.js"
                 ));

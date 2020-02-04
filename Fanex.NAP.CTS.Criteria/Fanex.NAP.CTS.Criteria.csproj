@@ -49,6 +49,7 @@
     <Compile Include="Account\Associated\GetDirectAssociationByAccountCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\GetAllEvidenceCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\PlaceEvidenceCriteria.cs" />
+    <Compile Include="Account\ChainToEvidence\RemoveFlaggedEvidenceCriteria.cs" />
     <Compile Include="Account\CustomerEsportAutoSuspendStatusCriteria.cs" />
     <Compile Include="Account\CustomerEvidenceByCTSCustIdCriteria.cs" />
     <Compile Include="Account\CustomerAssociationByCTSCustIdCriteria.cs" />

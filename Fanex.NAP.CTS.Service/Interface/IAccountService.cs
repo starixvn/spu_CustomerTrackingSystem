@@ -67,9 +67,11 @@
 
         IEnumerable<EvidenceModel> GetEvidenceList();
 
-        IEnumerable<FlaggedEvidenceModel> GetFlaggedEvidences(int custId, string evidenceCodes);
+        IEnumerable<FlaggedEvidenceModel> GetFlaggedEvidences(int ctsCustId, string evidenceCodes);
 
 	    DBResult PlaceEvidence(int ctsCustId, int subscriberId, int evidenceId, string comment, int userId);
+
+        DBResult RemoveFlaggedEvidence(int ctsCustId, int evidenceId, int userId);
 
         List<AccountExceptionsModel> GetAccountExceptions();               
     }

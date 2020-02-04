@@ -318,10 +318,10 @@
         }
 
         [HttpPost]
-        public ActionResult GetChainToEvidence(int custId, string evidenceCodes)
+        public ActionResult GetFlaggedEvidences(int ctsCustId, string evidenceCodes)
         {
-            var viewModel = new ChainToEvidenceViewModel();
-            var flaggedEvidences = _accountService.GetFlaggedEvidences(custId, evidenceCodes);
+            var viewModel = new FlaggedEvidenceViewModel();
+            var flaggedEvidences = _accountService.GetFlaggedEvidences(ctsCustId, evidenceCodes);
             if (flaggedEvidences != null && flaggedEvidences.Any())
             {
                 viewModel.AddFlaggedEvidenceList(flaggedEvidences);
@@ -373,9 +373,17 @@
         }
 
         [HttpPost]
-        public ActionResult PlaceEvidence(int custId, int subscriberId, int evidenceId, string comment)
+        public ActionResult PlaceEvidence(int ctsCustId, int subscriberId, int evidenceId, string comment)
         {
-            var result = _accountService.PlaceEvidence(custId, subscriberId, evidenceId, comment, CurrentSession.UserId);
+            var result = _accountService.PlaceEvidence(ctsCustId, subscriberId, evidenceId, comment, CurrentSession.UserId);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult RemoveFlaggedEvidence(int ctsCustId, int evidenceId)
+        {
+            var result = _accountService.RemoveFlaggedEvidence(ctsCustId, evidenceId, CurrentSession.UserId);
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
