@@ -341,10 +341,11 @@
             {
                 result = exceptions.Select(x => new AccountExceptionsViewModel
                 {
+                    ExceptionCTSCustId = x.ExceptionCTSCustId,
                     UserName = x.UserName,
                     LoginId = x.LoginId,
                     Comment = x.Comment,
-                    Creator = x.Creator,
+                    Creator = x.CreatedBy,
                     CTSCustId = x.CTSCustId,
                     CustId = x.CustId,
                     ExceptionDate = x.ExceptionDate
@@ -357,6 +358,8 @@
         [HttpPost]
         public ActionResult AddException(UpdateAccountExceptionModel model)
         {
+            model.UserId = CurrentSession.UserId;
+
             var result = _accountService.AddAccountException(model);
 
             return Json(new

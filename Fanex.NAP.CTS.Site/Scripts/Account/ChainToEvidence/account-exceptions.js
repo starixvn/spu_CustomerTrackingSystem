@@ -5,7 +5,8 @@
     var btnAddException = $('#btnaddexceptions');
     var btnSaveException = $('#btnsaveexceptions');
     var btnCancelException = $('#btncancelexceptions');
-
+    var username = $('#txtusername');
+    var comment = $('#txtcomment');
     function RenderGrid() {
         tblChainToEvidenceException.DataTable({
             language: {
@@ -24,12 +25,12 @@
             scrollCollapse: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0], width: "10%", className: "text-left" },
-                { targets: [1], width: "10%", className: "text-center" },
-                { targets: [2], width: "20%", className: "text-left" },
+                { targets: [0], width: "15%", className: "text-center" },
+                { targets: [1], width: "15%", className: "text-center" },
+                { targets: [2], width: "15%", className: "text-center" },
                 { targets: [3], width: "30%", className: "text-left" },
-                { targets: [4], width: "20%", className: "text-center" },
-                { targets: [4], width: "10%", className: "text-center" }
+                { targets: [4], width: "15%", className: "text-center" },
+                { targets: [5], width: "10%", className: "text-center" }
             ],
             columns: [
                 { data: obj => obj.UserName },
@@ -39,21 +40,23 @@
                 { data: obj => obj.Creator },
                 {
                     data: obj => '<span class="icon-delete"></span>', createdCell: (cell, _, row) => {
-                        $('.icon-delete', cell).click(() => RemoveException());
+                        $('.icon-delete', cell).click(() => RemoveException(row.ExceptionCTSCustId));
                     }
                 }
             ]
         })
     }
 
-    function RemoveException() {
-
+    function RemoveException(exceptionCTSCustId) {
+        alert(exceptionCTSCustId);
     }
 
     function AddException(ctsCustId) {
         var url = common.modifyRelativeUrl('/Account/AddException');
         var params = {};
-        params.UserId = ctsCustId;        
+        params.FromCTSCustId = ctsCustId;
+        params.ToUserName = username.val();
+        params.Comment = comment.val();
 
         $.ajax(url, {
             type: 'POST',
@@ -61,11 +64,14 @@
             success: function (response) {
                 if (response.errorCode == 0) {
                     common.showSuccess('Add the exception successful!');
-                    divPlaceEvidence.dialog('close');
+                    divException.dialog('close');
+                }
+                else if (response.errorCode == 1) {
+                    common.showError('User "' + username.val() + '" dose not exist. Please check again.');
                 }
                 else {
                     common.showError('Add the exception fail!');
-                }                
+                }
             },
             complete: function () {
                 GetException(ctsCustId);
@@ -73,11 +79,18 @@
         })
     }
 
+    function ResetForm() {
+        username.val('');
+        comment.val('');
+    }
+
     this.Initial = function(ctsCustId) {
         RenderGrid();
         GetException(ctsCustId);
+        
+        btnAddException.on('click', function () {   
+            ResetForm();
 
-        btnAddException.on('click', function () {           
             divException.dialog({
                 modal: true,
                 width: '650px',
@@ -109,8 +122,11 @@
                 ctsCustId: ctsCustId
             },
             success: function (response) {
-                tblChainToEvidenceException.DataTable().rows.add(response).draw();
-                tblChainToEvidenceException.DataTable().columns.adjust(); 
+                tblChainToEvidenceException.DataTable().clear();
+                if (response.length > 0) {
+                    tblChainToEvidenceException.DataTable().rows.add(response).draw();
+                }
+                tblChainToEvidenceException.DataTable().columns.adjust();
             },
             complete: function () {
                 tblChainToEvidenceException.find('tbody').removeClass('loading');
