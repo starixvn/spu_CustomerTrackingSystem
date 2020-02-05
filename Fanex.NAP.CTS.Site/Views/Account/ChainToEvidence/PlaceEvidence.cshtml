@@ -5,15 +5,15 @@
         <div class="box">
             <div class="box-heading">Account Information</div>
             <div class="box-content">
-                <div><label>Account: </label><span id="lblPlaceEvidenceAccount"></span></div>
-                <div><label>Subscriber: </label><span id="lblPlaceEvidenceSubscriber"></span></div>
+                <div><label class="bold">Account: </label><span id="lblPlaceEvidenceAccount"></span></div>
+                <div><label class="bold">Subscriber: </label><span id="lblPlaceEvidenceSubscriber"></span></div>
             </div>
         </div>
 
         <div class="box">
             <div class="box-heading">Add Evidence</div>
             <div class="box-content">
-                <div style="margin-bottom: 10px; width: 300px;">
+                <div style="margin-bottom: 10px; width: 290px;">
                     <select id="ddlPlaceEvidenceListEvidence">
                         @foreach (var evidence in ViewBag.EvidenceList)
                         {
@@ -21,17 +21,19 @@
                         }
                     </select>
                 </div>
-                <div class="box">
-                    <div class="box-heading">Description</div>
-                    <div class="box-content" id="divPlaceEvidenceDescription">
+                <div class="flex">
+                    <div class="flex-auto-width">
+                        <div class="label">Description</div>
+                        <div style="margin-right: 10px;" id="divPlaceEvidenceDescription">
+                        </div>
                     </div>
-                </div>
-                <div class="box">
-                    <div class="box-heading">Comment</div>
-                    <div class="box-content">
-                        <textarea rows="4" class="comment-field" id="txtPlaceEvidenceComment"></textarea>
+                    <div class="flex-auto-width">
+                        <div class="label">Comment</div>
+                        <div>
+                            <textarea rows="4" class="comment-field" id="txtPlaceEvidenceComment"></textarea>
+                        </div>
                     </div>
-                </div>
+                </div>                
             </div>
         </div>
         <div class="modal-footer margin-top-10">
