@@ -79,6 +79,6 @@
 
         int AddAccountException(UpdateAccountExceptionModel model);
 
-        void RemoveAccountException(UpdateAccountExceptionModel model);
+        int RemoveAccountException(UpdateAccountExceptionModel model);
     }
 }

@@ -369,6 +369,19 @@
         }
 
         [HttpPost]
+        public ActionResult RemoveException(UpdateAccountExceptionModel model)
+        {
+            model.UserId = CurrentSession.UserId;
+
+            var result = _accountService.RemoveAccountException(model);
+
+            return Json(new
+            {
+                errorCode = result
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
         public ActionResult PlaceEvidence(int ctsCustId, int subscriberId, int evidenceId, string comment)
         {
             var result = _accountService.PlaceEvidence(ctsCustId, subscriberId, evidenceId, comment, CurrentSession.UserId);

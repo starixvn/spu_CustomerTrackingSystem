@@ -1,5 +1,4 @@
-﻿function account_exceptions()
-{
+﻿function account_exceptions() {
     var divException = $('#divAddException');
     var tblChainToEvidenceException = $('#tblChainToEvidenceException');
     var btnAddException = $('#btnaddexceptions');
@@ -7,6 +6,7 @@
     var btnCancelException = $('#btncancelexceptions');
     var username = $('#txtusername');
     var comment = $('#txtcomment');
+    var _ctsCustId = 0;
     function RenderGrid() {
         tblChainToEvidenceException.DataTable({
             language: {
@@ -40,7 +40,13 @@
                 { data: obj => obj.Creator },
                 {
                     data: obj => '<span class="icon-delete"></span>', createdCell: (cell, _, row) => {
-                        $('.icon-delete', cell).click(() => RemoveException(row.ExceptionCTSCustId));
+                        $('.icon-delete', cell).click(() =>
+                        {
+                            common.showConfirmation(`Do you want to remove ${row.UserName}?`, function () {
+                                RemoveException(row.ExceptionCTSCustId);
+                            });
+                            
+                        });
                     }
                 }
             ]
@@ -48,13 +54,32 @@
     }
 
     function RemoveException(exceptionCTSCustId) {
-        alert(exceptionCTSCustId);
+        var url = common.modifyRelativeUrl('/Account/RemoveException');
+        var params = {};
+        params.FromCTSCustId = _ctsCustId;
+        params.ToCTSCustId = exceptionCTSCustId;
+
+        $.ajax(url, {
+            type: 'POST',
+            data: params,
+            success: function (response) {
+                if (response.errorCode == 0) {
+                    common.showSuccess('Remove the exception successful!');
+                }
+                else {
+                    common.showError('Remove the exception fail!');
+                }
+            },
+            complete: function () {
+                GetException();
+            }
+        });
     }
 
-    function AddException(ctsCustId) {
+    function AddException() {
         var url = common.modifyRelativeUrl('/Account/AddException');
         var params = {};
-        params.FromCTSCustId = ctsCustId;
+        params.FromCTSCustId = _ctsCustId;
         params.ToUserName = username.val();
         params.Comment = comment.val();
 
@@ -67,16 +92,16 @@
                     divException.dialog('close');
                 }
                 else if (response.errorCode == 1) {
-                    common.showError('User "' + username.val() + '" dose not exist. Please check again.');
+                    common.showError('User "' + username.val() + '" dose not exist.');
                 }
                 else {
                     common.showError('Add the exception fail!');
                 }
             },
             complete: function () {
-                GetException(ctsCustId);
-            }           
-        })
+                GetException();
+            }
+        });
     }
 
     function ResetForm() {
@@ -84,11 +109,12 @@
         comment.val('');
     }
 
-    this.Initial = function(ctsCustId) {
+    this.Initial = function (ctsCustId) {
+        _ctsCustId = ctsCustId;
         RenderGrid();
-        GetException(ctsCustId);
-        
-        btnAddException.on('click', function () {   
+        GetException();
+
+        btnAddException.on('click', function () {
             ResetForm();
 
             divException.dialog({
@@ -102,7 +128,7 @@
         });
 
         btnSaveException.on('click', function () {
-            AddException(ctsCustId);
+            AddException();
         });
 
         btnCancelException.on('click', function () {
@@ -110,7 +136,7 @@
         });
     }
 
-    function GetException(ctsCustId) {
+    function GetException() {
         var url = common.modifyRelativeUrl('/Account/GetExceptions');
 
         $.ajax(url, {
@@ -118,8 +144,8 @@
             beforeSend: function () {
                 tblChainToEvidenceException.find('tbody').addClass('loading');
             },
-            data: { 
-                ctsCustId: ctsCustId
+            data: {
+                ctsCustId: _ctsCustId
             },
             success: function (response) {
                 tblChainToEvidenceException.DataTable().clear();
@@ -136,5 +162,5 @@
                 common.showError(errMsg);
             }
         })
-    } 
+    }
 }

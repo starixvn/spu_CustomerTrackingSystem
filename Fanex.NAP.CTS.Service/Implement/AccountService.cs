@@ -953,7 +953,7 @@
             }
         }
 
-        public void RemoveAccountException(UpdateAccountExceptionModel model)
+        public int RemoveAccountException(UpdateAccountExceptionModel model)
         {
             var criteria = new RemoveAccountExceptionCriteria
             {
@@ -965,6 +965,8 @@
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 db.ExecuteNonQuery(criteria);
+
+                return 0;
             }
         }
         
