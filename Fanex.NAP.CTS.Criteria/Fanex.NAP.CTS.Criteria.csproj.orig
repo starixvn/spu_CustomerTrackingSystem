@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1F75F58B-BFA1-4081-8D01-06DEE8CE6821}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Fanex.NAP.CTS.Criteria</RootNamespace>
+    <AssemblyName>Fanex.NAP.CTS.Criteria</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Account\Associated\GetAssociatedAccountByAccountCriteria.cs" />
+    <Compile Include="Account\Associated\GetCustomerFraudInfoCriteria.cs" />
+    <Compile Include="Account\Associated\CustomerStaticAccountStatusCriteria.cs" />
+    <Compile Include="Account\Associated\GetDirectAssociationByAccountCriteria.cs" />
+<<<<<<< HEAD
+    <Compile Include="Account\ChainToEvidence\AddAccountExceptionCriteria.cs" />
+    <Compile Include="Account\ChainToEvidence\GetAccountExceptionsCriteria.cs" />
+=======
+    <Compile Include="Account\ChainToEvidence\GetAffectedEvidenceCriteria.cs" />
+>>>>>>> 127150 - affected and retract evidence
+    <Compile Include="Account\ChainToEvidence\GetAllEvidenceCriteria.cs" />
+    <Compile Include="Account\ChainToEvidence\PlaceEvidenceCriteria.cs" />
+    <Compile Include="Account\ChainToEvidence\RemoveFlaggedEvidenceCriteria.cs" />
+    <Compile Include="Account\ChainToEvidence\RemoveAccountExceptionCriteria.cs" />
+    <Compile Include="Account\CustomerEsportAutoSuspendStatusCriteria.cs" />
+    <Compile Include="Account\CustomerEvidenceByCTSCustIdCriteria.cs" />
+    <Compile Include="Account\CustomerAssociationByCTSCustIdCriteria.cs" />
+    <Compile Include="Account\CustomerFlagInfoByCTSCustIdCriteria.cs" />
+    <Compile Include="Account\CustomerGeneralStatusCriteria.cs" />
+    <Compile Include="Account\CustomerLastTicketDateCriteria.cs" />
+    <Compile Include="Account\CustomerProfileFraudInfoCriteria.cs" />
+    <Compile Include="Account\CustomerRobotUserStatusCriteria.cs" />
+    <Compile Include="Account\Evidence\GetAccountEvidenceCriteria.cs" />
+    <Compile Include="Account\Evidence\GetExceptionAccountEvidenceCriteria.cs" />
+    <Compile Include="Account\Evidence\InsertExceptionEvidenceCriteria.cs" />
+    <Compile Include="Account\GeneralInformation\GetAssociationByAccountCriteria.cs" />
+    <Compile Include="Account\GeneralInformation\GetCustomerGeneralInformationCriteria.cs" />
+    <Compile Include="Account\GeneralInformation\GetEvidenceByTargetIdCriteria.cs" />
+    <Compile Include="Account\CustomerInfoByCTSCustIdCriteria.cs" />
+    <Compile Include="Account\ChainToEvidence\GetFlaggedEvidenceCriteria.cs" />
+    <Compile Include="Account\SearchAccountCriteria.cs" />
+    <Compile Include="Api\FlaggedAccountDeleteCriteria.cs" />
+    <Compile Include="Api\FlaggedAccountInsertCriteria.cs" />
+    <Compile Include="CheckBetReport\CheckBetReportGetCriteria.cs" />
+    <Compile Include="CheckBetReport\CheckBetReportUpdateNoteCriteria.cs" />
+    <Compile Include="CustomerMonitor\CustomerDetails\GetCustomerTicketsCriteria.cs" />
+    <Compile Include="CustomerMonitor\CustomerGetCriteria.cs" />
+    <Compile Include="CustomerMonitor\UpdateNoteCriteria.cs" />
+    <Compile Include="DailyDataCapture\DailyDataGetCriteria.cs" />
+    <Compile Include="FraudCase\DelayedGoal\DelayedGoalAccountDeleteCriteria.cs" />
+    <Compile Include="FraudCase\DelayedGoal\DelayedGoalAccountGetCriteria.cs" />
+    <Compile Include="FraudCase\DelayedGoal\DelayedGoalAccountInsertCriteria.cs" />
+    <Compile Include="FraudCase\DelayedGoal\DelayGoalAssociationAccountInsertCriteria.cs" />
+    <Compile Include="FraudCase\DelayedGoal\DelayGoalManualAccountGetCriteria.cs" />
+    <Compile Include="FraudCase\FraudCaseGetByIdCriteria.cs" />
+    <Compile Include="FraudCase\FraudCaseGetCriteria.cs" />
+    <Compile Include="FraudCase\GetIsActiveCriteria.cs" />
+    <Compile Include="FraudCase\ScannedOfficeIP\OfficeIPDeleteCriteria.cs" />
+    <Compile Include="FraudCase\ScannedOfficeIP\OfficeIPGetCriteria.cs" />
+    <Compile Include="FraudCase\ScannedOfficeIP\OfficeIPInsertCriteria.cs" />
+    <Compile Include="FraudCase\ScannedOfficeIP\OfficeIPInternalAccountDeleteCriteria.cs" />
+    <Compile Include="FraudCase\ScannedOfficeIP\OfficeIPInternalAccountGetCriteria.cs" />
+    <Compile Include="FraudCase\ScannedOfficeIP\OfficeIPInternalAccountInsertCriteria.cs" />
+    <Compile Include="FraudCase\UpdateFraudCaseStatusCriteria.cs" />
+    <Compile Include="FraudSensorTask\ArbitrageCleanUpCriteria.cs" />
+    <Compile Include="FraudSensorTask\ArbitragePreconditionCriteria.cs" />
+    <Compile Include="FraudSensorTask\ArbitrageRuleCriteria.cs" />
+    <Compile Include="FraudSensorTask\BetsNearGoalPreconditionCriteria.cs" />
+    <Compile Include="FraudSensorTask\BetsNearGoalRuleCriteria.cs" />
+    <Compile Include="FraudSensorTask\BigStakeNearGoalPreconditionCriteria.cs" />
+    <Compile Include="FraudSensorTask\BigStakeNearGoalRuleCriteria.cs" />
+    <Compile Include="FraudSensorTask\CheckBetRuleCriteria.cs" />
+    <Compile Include="FraudSensorTask\DailyDataCaptureRuleCriteria.cs" />
+    <Compile Include="FraudSensorTask\DelayGoalPreconditionCriteria.cs" />
+    <Compile Include="FraudSensorTask\DelayGoalRuleCriteria.cs" />
+    <Compile Include="FraudSensorTask\FlaggedAccountPreconditionCriteria.cs" />
+    <Compile Include="FraudSensorTask\FlaggedAccountRuleCriteria.cs" />
+    <Compile Include="FraudSensorTask\OfficeIPPreconditionCriteria.cs" />
+    <Compile Include="FraudSensorTask\OfficeIPRuleCriteria.cs" />
+    <Compile Include="Home\SearchResultCriteria.cs" />
+    <Compile Include="MatchMonitor\BalanceUpDateGetCriteria.cs" />
+    <Compile Include="MatchMonitor\FraudCaseDetails\ArbitrageDetailsCriteria.cs" />
+    <Compile Include="MatchMonitor\FraudCaseDetails\FlaggedAccountCriteria.cs" />
+    <Compile Include="MatchMonitor\FraudCaseDetails\GetArbitrageCustomerCriteria.cs" />
+    <Compile Include="MatchMonitor\FraudCaseDetails\GetArbitrageTicketCriteria.cs" />
+    <Compile Include="MatchMonitor\FraudCaseDetails\GetCurrencyCriteria.cs" />
+    <Compile Include="MatchMonitor\FraudCaseDetails\GetCustomerCriteria.cs" />
+    <Compile Include="MatchMonitor\FraudCaseDetails\GetFlaggedAccountCustomerCriteria.cs" />
+    <Compile Include="MatchMonitor\FraudCaseDetails\GetFlaggedAccountTicketCriteria.cs" />
+    <Compile Include="MatchMonitor\FraudCaseDetails\GetMatchInfoCriteria.cs" />
+    <Compile Include="MatchMonitor\FraudCaseDetails\GetScoreHDP.cs" />
+    <Compile Include="MatchMonitor\FraudCaseDetails\GetTicketByIPCriteria.cs" />
+    <Compile Include="MatchMonitor\FraudCaseDetails\GetTicketCriteria.cs" />
+    <Compile Include="MatchMonitor\FraudCaseDetails\Last7DaysTicketGetCriteria.cs" />
+    <Compile Include="MatchMonitor\LeagueGetCriteria.cs" />
+    <Compile Include="MatchMonitor\MatchGetAllCriteria.cs" />
+    <Compile Include="MatchMonitor\MatchNoteUpdateCriteria.cs" />
+    <Compile Include="MatchMonitor\VerifyMatchCriteria.cs" />
+    <Compile Include="Notification\RecipientAddCriteria.cs" />
+    <Compile Include="Notification\RecipientGetCriteria.cs" />
+    <Compile Include="Notification\RecipientRemoveCriteria.cs" />
+    <Compile Include="Notification\UserMessageGetCriteria.cs" />
+    <Compile Include="Notification\UserMessageUnreadCounterGetCriteria.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScannedOfficeIP\TicketFromOfficeIpGetCriteria.cs" />
+    <Compile Include="SubscriberAssignment\SubscriberGetCriteria.cs" />
+    <Compile Include="SubscriberAssignment\SubscribersUpdateCriteria.cs" />
+    <Compile Include="SuspiciousCustomerDetails\SuspiciousCustomerDetailsGeneralCriteria.cs" />
+    <Compile Include="SuspiciousCustomerDetails\SuspiciousCustomerDetailsStatisticsGetCriteria.cs" />
+    <Compile Include="SuspiciousCustomerDetails\SuspiciousCustomerDetailsViolatedTicketGetCriteria.cs" />
+    <Compile Include="SuspiciousCustomer\DataTableAjaxPostCriteria.cs" />
+    <Compile Include="SuspiciousCustomer\SuspiciousCustomerAssigneeGetCriteria.cs" />
+    <Compile Include="SuspiciousCustomer\SuspiciousCustomerAssigneeUpdateCriteria.cs" />
+    <Compile Include="SuspiciousCustomer\SuspiciousCustomerGetCriteria.cs" />
+    <Compile Include="SuspiciousCustomer\SuspiciousCustomerLogNoteGetCriteria.cs" />
+    <Compile Include="SuspiciousCustomer\SuspiciousCustomerNoteDeleteCriteria.cs" />
+    <Compile Include="SuspiciousCustomer\SuspiciousCustomerNoteGetCriteria.cs" />
+    <Compile Include="SuspiciousCustomer\SuspiciousCustomerNoteInsertCriteria.cs" />
+    <Compile Include="SuspiciousCustomer\SuspiciousCustomerReportGetCriteria.cs" />
+    <Compile Include="SuspiciousCustomer\SuspiciousCustomerUpdateCriteria.cs" />
+    <Compile Include="SuspiciousInfo\SuspiciousInfoGetCriteria.cs" />
+    <Compile Include="SuspiciousInfo\SuspiciousInfoUpdateCriteria.cs" />
+    <Compile Include="SuspiciousInfo\SuspicousCustomerCurrencyGetCriteria.cs" />
+    <Compile Include="Transaction\History\TransactionHistoryGetByCustIdCriteria.cs" />
+    <Compile Include="Transaction\IPInformationGetByRangeLocationCriteria.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Fanex.NAP.CTS.Core\Fanex.NAP.CTS.Core.csproj">
+      <Project>{5f3abbf7-ea70-4c02-bd47-b427f1a9cc39}</Project>
+      <Name>Fanex.NAP.CTS.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Fanex.Data.Repository">
+      <Version>4.2.2</Version>
+    </PackageReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

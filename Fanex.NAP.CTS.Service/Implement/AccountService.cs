@@ -933,7 +933,7 @@
                 return db.Query<AccountExceptionsModel>(criteria).ToList();
             }
         }
-
+        
         public int AddAccountException(UpdateAccountExceptionModel model)
         {
             var criteria = new AddAccountExceptionCriteria
@@ -967,6 +967,27 @@
                 db.ExecuteNonQuery(criteria);
             }
         }
+        
+        public AffectedRetractEvidenceModel GetAffectedRetractEvidences(int ctsCustId, string evidenceCodes)
+        {
+            var criteria = new GetAffectedEvidenceCriteria
+            {
+                CTSCustId = ctsCustId,
+                EvidenceCodes = evidenceCodes
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                using (var result = db.QueryMultiple(criteria))
+                {
+                    return new AffectedRetractEvidenceModel
+                    {
+                        AffectedEvidenceList = result.Read<AffectedEvidenceModel>().ToList(),
+                        RetractEvidenceList = result.Read<AffectedEvidenceModel>().ToList()
+                    };
+                }
+            }
+        }             
 
         #endregion
     }

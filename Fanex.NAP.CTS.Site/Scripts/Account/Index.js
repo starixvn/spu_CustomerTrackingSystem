@@ -38,6 +38,9 @@
                 var flaggedEvidence = new flagged_evidence();
                 flaggedEvidence.Initial(ctsCustId, username, custSubId, subscriber);
 
+                var affectedRetractEvidence = new affected_retract_evidence();
+                affectedRetractEvidence.Initial(ctsCustId);
+
                 var exceptions = new account_exceptions();
                 exceptions.Initial(ctsCustId);
             },

@@ -109,7 +109,7 @@
 
         #region Chain To Evidence
         [Theory]
-        [InlineData(11113, "1.1")]
+        [InlineData(11113, "6.8")]
         public void Can_GetFlaggedEvidences(int ctsCustId, string evidenceCodes)
         {
             // Act
@@ -120,7 +120,8 @@
         }
 
         [Theory]
-        [InlineData(120, 130, 60, "Place by Tuan", 8)]                   
+        [InlineData(501755, 6, 60, "Place by Tuan", 8)]
+        [InlineData(10263017, 6, 60, "Place by Tuan", 8)]        
         public void Can_PlaceEvidence(int ctsCustId, int subscriberId, int evidenceId, string comment, int userId)
         {
             // Act
@@ -139,6 +140,17 @@
 
             // Assert
             Assert.True(actualResult.ErrorCode == 0);
+        }
+
+        [Theory]
+        [InlineData(11113, "6.8")]
+        public void Can_GetAffectedRetractEvidences(int ctsCustId, string evidenceCodes)
+        {
+            // Act
+            var actualResult = _runner.GetAffectedRetractEvidences(ctsCustId, evidenceCodes);
+
+            // Assert
+            Assert.IsType<AffectedRetractEvidenceModel>(actualResult);
         }
 
         #endregion

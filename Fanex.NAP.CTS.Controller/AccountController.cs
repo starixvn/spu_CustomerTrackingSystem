@@ -384,6 +384,44 @@
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        public ActionResult GetAffectedRetractEvidences(int ctsCustId, string evidenceCodes)
+        {
+            var result = new List<AffectedRetractEvidenceViewModel>();
+            var evidences = _accountService.GetAffectedRetractEvidences(ctsCustId, evidenceCodes);
+
+            if (evidences.AffectedEvidenceList != null && evidences.AffectedEvidenceList.Any())
+            {
+                result.AddRange(evidences.AffectedEvidenceList.Select(x => new AffectedRetractEvidenceViewModel
+                {
+                    EvidenceID = x.EvidenceID,
+                    EvidenceDisplay = x.EvidenceCode + " " + x.EvidenceName,
+                    LoginID = x.LoginID,
+                    UserName = x.UserName,
+                    AssociationType = x.AssociationType,
+                    AffectedTime = x.CreatedDate,
+                    LastLoginTime = x.LastLoginTime,
+                    IsRetract = false
+                }));
+            }
+            if (evidences.RetractEvidenceList != null && evidences.RetractEvidenceList.Any())
+            {
+                result.AddRange(evidences.RetractEvidenceList.Select(x => new AffectedRetractEvidenceViewModel
+                {
+                    EvidenceID = x.EvidenceID,
+                    EvidenceDisplay = x.EvidenceCode + " " + x.EvidenceName,
+                    LoginID = x.LoginID,
+                    UserName = x.UserName,
+                    AssociationType = x.AssociationType,
+                    AffectedTime = x.CreatedDate,
+                    LastLoginTime = x.LastLoginTime,
+                    IsRetract = true
+                }));
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
         #endregion        
     }
 }
