@@ -414,5 +414,20 @@
              SpName="CTS_DC_GetAffectedEvidence"
              DbName="MySQL.CTS_DataCenter">
     </Setting>
+
+    <Setting Key="CTS_DC_AddException"
+            SpName="CTS_DC_AddException"
+            DbName="MySQL.CTS_DataCenter">
+    </Setting>
+
+    <Setting Key="CTS_DC_RemoveException"
+            SpName="CTS_DC_RemoveException"
+            DbName="MySQL.CTS_DataCenter">
+    </Setting>
+
+    <Setting Key="CTS_DC_GetExceptionByCTSCustID"
+           SpName="CTS_DC_GetExceptionByCTSCustID"
+           DbName="MySQL.CTS_DataCenter">
+    </Setting>
   </Function>
 </Functions>

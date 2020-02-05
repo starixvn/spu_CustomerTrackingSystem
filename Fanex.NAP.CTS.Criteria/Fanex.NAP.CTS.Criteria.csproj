@@ -47,9 +47,12 @@
     <Compile Include="Account\Associated\GetCustomerFraudInfoCriteria.cs" />
     <Compile Include="Account\Associated\CustomerStaticAccountStatusCriteria.cs" />
     <Compile Include="Account\Associated\GetDirectAssociationByAccountCriteria.cs" />
+    <Compile Include="Account\ChainToEvidence\AddAccountExceptionCriteria.cs" />
+    <Compile Include="Account\ChainToEvidence\GetAccountExceptionsCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\GetAllEvidenceCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\PlaceEvidenceCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\RemoveFlaggedEvidenceCriteria.cs" />
+    <Compile Include="Account\ChainToEvidence\RemoveAccountExceptionCriteria.cs" />
     <Compile Include="Account\CustomerEsportAutoSuspendStatusCriteria.cs" />
     <Compile Include="Account\CustomerEvidenceByCTSCustIdCriteria.cs" />
     <Compile Include="Account\CustomerAssociationByCTSCustIdCriteria.cs" />

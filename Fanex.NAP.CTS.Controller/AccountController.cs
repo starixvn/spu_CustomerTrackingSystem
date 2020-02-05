@@ -331,11 +331,11 @@
         }
 
         [HttpPost]
-        public ActionResult GetExceptions()
+        public ActionResult GetExceptions(int ctsCustId)
         {
             var result = new List<AccountExceptionsViewModel>();
 
-            var exceptions = _accountService.GetAccountExceptions();
+            var exceptions = _accountService.GetAccountExceptions(ctsCustId);
 
             if (exceptions != null && exceptions.Any())
             {
@@ -350,26 +350,19 @@
                     ExceptionDate = x.ExceptionDate
                 }).ToList();
             }
-            else
-            {
-                result.Add(new AccountExceptionsViewModel
-                {
-                    UserName = "testing",
-                    LoginId = "testing 2",
-                    Comment = "abc",
-                    ExceptionDate = DateTime.Now,
-                    Creator = "aaaa",
-                    CustId = 0,
-                    CTSCustId = 0
-                });
-            }
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult AddException()
+        [HttpPost]
+        public ActionResult AddException(UpdateAccountExceptionModel model)
         {
-            return View();
+            var result = _accountService.AddAccountException(model);
+
+            return Json(new
+            {
+                errorCode = result
+            }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -388,113 +381,6 @@
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        #endregion
-
-        //[HttpPost]
-        //public ActionResult GetAssociatedAccountByAccountFilter(AssociatedAccountByAccountFilter filter)
-        //{
-        //    var msgError = string.Empty;
-
-        //    filter.userId = CurrentSession.UserId;
-
-        //    filter.isMasterSubscriberAssignment = PermissionService.IsMasterSubscriberAssignment();
-
-        //    var data = _accountService.GetAssociatedAccountByAccounts(filter, out msgError);
-
-        //    if (!string.IsNullOrEmpty(msgError))
-        //    {
-        //        return ResponseError(msgError);
-        //    }
-
-        //    return Json(data, JsonRequestBehavior.AllowGet);
-        //}
-
-        //[HttpPost]
-        //public ActionResult GetShortestPath(int startCustId, int endCustId)
-        //{
-        //    var data = _accountService.GetShortestPath(startCustId, endCustId);
-        //    return Json(data, JsonRequestBehavior.AllowGet);
-        //}
-
-        //private ActionResult ResponseError(string msgError)
-        //{
-        //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
-        //    var errors = new List<string>();
-        //    errors.Add(msgError);
-
-        //    return Json(errors, JsonRequestBehavior.AllowGet);
-        //}
-
-        //private static Dictionary<AccountStatus, string> GetAccountStatusList()
-        //{
-        //    var listStatus = new Dictionary<AccountStatus, string>();
-        //    listStatus.Add(AccountStatus.Open, ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_OPEN));
-        //    listStatus.Add(AccountStatus.Suspended, ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_SUSPENDED));
-        //    listStatus.Add(AccountStatus.Closed, ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_CLOSED));
-
-        //    if (PermissionService.IsPermissionCN88())
-        //    {
-        //        listStatus.Add(AccountStatus.CN88_Active, ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_CN88_NAME_ACTIVE));
-        //        listStatus.Add(AccountStatus.CN88_ViewOnly, ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_CN88_NAME_VIEW_ONLY));
-        //        listStatus.Add(AccountStatus.CN88_Suspended, ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_CN88_NAME_SUSPENDED));
-        //        listStatus.Add(AccountStatus.CN88_Inactive, ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_CN88_NAME_INACTIVE));
-        //    }
-
-        //    listStatus.Add(AccountStatus.NotYetDeposit, ResourcesManager.GetValue(ConstsResources.ACCOUNT_STATUS_NOTYETDEPOSIT));
-
-        //    return listStatus;
-        //}
-
-        //#endregion
-
-        //#region Associated Device By Account
-        //[HttpPost]
-        //public ActionResult GetAssociatedDeviceByAccount()
-        //{
-        //    return PartialView("Associated/DeviceByAccount");
-        //}
-
-        //[HttpPost]
-        //public ActionResult GetAssociatedDeviceByAccountFilter(AssociatedDeviceByAccountFilter filter)
-        //{
-        //    var data = _accountService.GetAssociatedDevicesByAccount(filter);
-
-        //    return Json(data, JsonRequestBehavior.AllowGet);
-        //}
-
-        //public ActionResult GetEvidencesByAccount(int accountId)
-        //{
-        //    var data = _evidenceService.GetEvidencesByAccount(accountId);
-
-        //    return Json(data, JsonRequestBehavior.AllowGet);
-        //}
-
-        //#endregion
-
-        //#region Transaction History
-        //[HttpPost]
-        //[NapAuth(FunctionKey = FSFunctionKeys.TransactionHistory, Policy = NAP.Core.Business.Constant.Policy.Read)]
-        //public ActionResult GetTransactionHistory(int accountId)
-        //{
-        //    return PartialView("TransactionHistory/TransactionHistory");
-        //}
-
-        //[HttpPost]
-        //[NapAuth(FunctionKey = FSFunctionKeys.TransactionHistory, Policy = NAP.Core.Business.Constant.Policy.Read)]
-        //public ActionResult GetTransactionHistoryFilter(TransactionHistoryFilter filter)
-        //{
-        //    var data = _transactionService.GetTransactionHistory(filter);
-
-        //    return Json(data, JsonRequestBehavior.AllowGet);
-        //}
-
-        //[HttpPost]
-        //public ActionResult GetIPInformation(string ip)
-        //{
-        //    var data = _transactionService.GetIPInformation(ip);
-
-        //    return PartialView("TransactionHistory/IPInformation", data);
-        //}
-        //#endregion
+        #endregion        
     }
 }

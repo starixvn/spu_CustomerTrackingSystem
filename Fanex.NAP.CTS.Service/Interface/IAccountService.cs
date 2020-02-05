@@ -73,6 +73,10 @@
 
         DBResult RemoveFlaggedEvidence(int ctsCustId, int evidenceId, int userId);
 
-        List<AccountExceptionsModel> GetAccountExceptions();               
+        List<AccountExceptionsModel> GetAccountExceptions(int ctsCustId);
+
+        int AddAccountException(UpdateAccountExceptionModel model);
+
+        void RemoveAccountException(UpdateAccountExceptionModel model);
     }
 }

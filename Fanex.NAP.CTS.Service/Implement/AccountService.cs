@@ -7,7 +7,8 @@
     using Fanex.NAP.CTS.Core.Helpers;
     using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Criteria.Account;
-    using Fanex.NAP.CTS.Criteria.Account.Associated;    
+    using Fanex.NAP.CTS.Criteria.Account.Associated;
+    using Fanex.NAP.CTS.Criteria.Account.ChainToEvidence;
     using Fanex.NAP.CTS.Criteria.Account.GeneralInformation;
     using Fanex.NAP.CTS.Criteria.Home;
     using Fanex.NAP.CTS.Criteria.SubscriberAssignment;
@@ -817,7 +818,7 @@
 
             var result = customerAssociation.Select(x =>
             {
-                if(x.StatusId == 0)
+                if (x.StatusId == 0)
                 {
                     var status = accountStatus.FirstOrDefault(a => a.CustId == x.CustId);
 
@@ -826,7 +827,7 @@
                         x.StatusId = status.StatusId;
                         x.StatusName = status.StatusName;
                     }
-                }               
+                }
 
                 return x;
             }).ToList();
@@ -872,7 +873,7 @@
         public IEnumerable<EvidenceModel> GetEvidenceList()
         {
             var criteria = new GetAllEvidenceCriteria();
-            
+
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 return db.Query<EvidenceModel>(criteria);
@@ -889,7 +890,7 @@
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<FlaggedEvidenceModel>(criteria);                
+                return db.Query<FlaggedEvidenceModel>(criteria);
             }
         }
 
@@ -920,9 +921,51 @@
             return DataService.UpdateData(criteria, "Remove flagged evidence");
         }
 
-        public List<AccountExceptionsModel> GetAccountExceptions()
+        public List<AccountExceptionsModel> GetAccountExceptions(int ctsCustId)
         {
-            return new List<AccountExceptionsModel>();
+            var criteria = new GetAccountExceptionsCriteria
+            {
+                CTSCustId = ctsCustId
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<AccountExceptionsModel>(criteria).ToList();
+            }
+        }
+
+        public int AddAccountException(UpdateAccountExceptionModel model)
+        {
+            var criteria = new AddAccountExceptionCriteria
+            {
+                UserId = model.UserId,
+                FromCTSCustId = model.FromCTSCustId,
+                ToUserName = model.ToUserName,
+                Comment = model.Comment,
+                ErrorCode = 0
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                db.ExecuteNonQuery(criteria);
+
+                return criteria.ErrorCode;
+            }
+        }
+
+        public void RemoveAccountException(UpdateAccountExceptionModel model)
+        {
+            var criteria = new RemoveAccountExceptionCriteria
+            {
+                UserId = model.UserId,
+                FromCTSCustId = model.FromCTSCustId,
+                ToCTSCustId = model.ToCTSCustId
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                db.ExecuteNonQuery(criteria);
+            }
         }
 
         #endregion
