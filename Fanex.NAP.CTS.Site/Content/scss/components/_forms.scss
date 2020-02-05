@@ -69,3 +69,17 @@
         width: 100%;
     }
 }
+
+.form-control {
+    margin-bottom: 12px;
+
+    .label {
+        margin-bottom: 8px;
+        color: #545454;
+    }
+
+    .full-width {
+        width: 100%;
+        font-family: inherit;
+    }
+}

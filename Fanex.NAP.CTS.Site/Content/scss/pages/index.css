@@ -488,6 +488,15 @@ input[type="checkbox"]:disabled + span {
   .form-info .control {
     width: 100%; }
 
+.form-control {
+  margin-bottom: 12px; }
+  .form-control .label {
+    margin-bottom: 8px;
+    color: #545454; }
+  .form-control .full-width {
+    width: 100%;
+    font-family: inherit; }
+
 select {
   -webkit-border-radius: 2px;
   -khtml-border-radius: 2px;
