@@ -3,6 +3,8 @@
     var divException = $('#divAddException');
     var tblChainToEvidenceException = $('#tblChainToEvidenceException');
     var btnAddException = $('#btnaddexceptions');
+    var btnSaveException = $('#btnsaveexceptions');
+    var btnCancelException = $('#btncancelexceptions');
 
     function RenderGrid() {
         tblChainToEvidenceException.DataTable({
@@ -48,9 +50,32 @@
 
     }
 
-    this.Initial = function() {
+    function AddException(ctsCustId) {
+        var url = common.modifyRelativeUrl('/Account/AddException');
+        var params = {};
+        params.UserId = ctsCustId;        
+
+        $.ajax(url, {
+            type: 'POST',
+            data: params,
+            success: function (response) {
+                if (response.errorCode == 0) {
+                    common.showSuccess('Add the exception successful!');
+                    divPlaceEvidence.dialog('close');
+                }
+                else {
+                    common.showError('Add the exception fail!');
+                }                
+            },
+            complete: function () {
+                GetException(ctsCustId);
+            }           
+        })
+    }
+
+    this.Initial = function(ctsCustId) {
         RenderGrid();
-        GetException();
+        GetException(ctsCustId);
 
         btnAddException.on('click', function () {           
             divException.dialog({
@@ -62,9 +87,17 @@
                 close: function () { $(this).dialog('close'); }
             })
         });
+
+        btnSaveException.on('click', function () {
+            AddException(ctsCustId);
+        });
+
+        btnCancelException.on('click', function () {
+            divException.dialog('close');
+        });
     }
 
-    function GetException() {
+    function GetException(ctsCustId) {
         var url = common.modifyRelativeUrl('/Account/GetExceptions');
 
         $.ajax(url, {
@@ -72,7 +105,8 @@
             beforeSend: function () {
                 tblChainToEvidenceException.find('tbody').addClass('loading');
             },
-            data: {                
+            data: { 
+                ctsCustId: ctsCustId
             },
             success: function (response) {
                 tblChainToEvidenceException.DataTable().rows.add(response).draw();

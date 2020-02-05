@@ -39,7 +39,7 @@
                 flaggedEvidence.Initial(ctsCustId, username, custSubId, subscriber);
 
                 var exceptions = new account_exceptions();
-                exceptions.Initial();
+                exceptions.Initial(ctsCustId);
             },
             error: function (errMsg) {
                 common.showError(errMsg);
