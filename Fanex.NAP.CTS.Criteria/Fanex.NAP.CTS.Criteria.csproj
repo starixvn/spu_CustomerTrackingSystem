@@ -54,6 +54,7 @@
     <Compile Include="Account\ChainToEvidence\PlaceEvidenceCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\RemoveFlaggedEvidenceCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\RemoveAccountExceptionCriteria.cs" />
+    <Compile Include="Account\ChainToEvidence\RestoreAffectedEvidenceCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\RetractAffectedEvidenceCriteria.cs" />
     <Compile Include="Account\CustomerEsportAutoSuspendStatusCriteria.cs" />
     <Compile Include="Account\CustomerEvidenceByCTSCustIdCriteria.cs" />

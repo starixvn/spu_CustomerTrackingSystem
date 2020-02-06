@@ -164,6 +164,17 @@
             Assert.True(actualResult == 0);
         }
 
+        [Theory]
+        [InlineData(501755, 60, 8)]
+        public void Can_RestoreAffectedEvidence(int ctsCustId, int evidenceId, int userId)
+        {
+            // Act
+            var actualResult = _runner.RestoreAffectedEvidence(ctsCustId, evidenceId, userId);
+
+            // Assert
+            Assert.True(actualResult == 0);
+        }
+
         #endregion
 
     }

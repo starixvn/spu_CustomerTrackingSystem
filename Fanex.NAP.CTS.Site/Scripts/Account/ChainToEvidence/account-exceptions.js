@@ -10,14 +10,9 @@
     function RenderGrid() {
         tblChainToEvidenceException.DataTable({
             language: {
-                lengthMenu: "Page size _MENU_",
-                paginate: {
-                    previous: "Back"
-                },
-                info: "Displaying _START_ to _END_ of _TOTAL_ item(s)",
-                infoEmpty: "",
                 zeroRecords: "There's no data"
             },
+            info: false,
             ordering: false,
             paging: false,
             searching: false,

@@ -325,27 +325,26 @@
 
     <Setting Key="CTS_DC_GetFlaggedEvidence"
              SpName="CTS_DC_GetFlaggedEvidence"
-             DbName="MySQL.CTS_DataCenter">
-    </Setting>
+             DbName="MySQL.CTS_DataCenter" />    
 
     <Setting Key="CTS_DC_AddEvidence"
             SpName="CTS_DC_AddEvidence"
-            DbName="MySQL.CTS_DataCenter">
-    </Setting>
+            DbName="MySQL.CTS_DataCenter" />    
 
     <Setting Key="CTS_DC_RemoveFlaggedEvidence"
          SpName="CTS_DC_RemoveFlaggedEvidence"
-         DbName="MySQL.CTS_DataCenter">
-    </Setting>
+         DbName="MySQL.CTS_DataCenter" />    
 
     <Setting Key="CTS_DC_GetAffectedEvidence"
              SpName="CTS_DC_GetAffectedEvidence"
-             DbName="MySQL.CTS_DataCenter">
-    </Setting>
+             DbName="MySQL.CTS_DataCenter" />   
 
     <Setting Key="CTS_DC_RetractAffectedEvidence"
             SpName="CTS_DC_RetractAffectedEvidence"
-            DbName="MySQL.CTS_DataCenter">
-    </Setting>
+            DbName="MySQL.CTS_DataCenter" />
+
+    <Setting Key="CTS_DC_RestoreAffectedEvidence"
+           SpName="CTS_DC_RestoreAffectedEvidence"
+           DbName="MySQL.CTS_DataCenter" />
   </Function>
 </Functions>

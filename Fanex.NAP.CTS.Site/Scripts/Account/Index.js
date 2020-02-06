@@ -3,7 +3,7 @@
     var custId = $("#hdCustId").val();
     var ctsCustId = $("#hdCTSCustId").val();
     var custSubId = $("#hdCustSubId").val();
-    var subscriber = $("#hdSubscriber").val();
+    var subscriber = $("#hdSubscriber").val();    
 
     function LoadAssociationByAccount() {
         $.ajax(common.modifyRelativeUrl('/Account/AssociatedByAccount'), {
@@ -36,10 +36,34 @@
             },
             complete: function () {
                 var flaggedEvidence = new flagged_evidence();
-                flaggedEvidence.Initial(ctsCustId, username, custSubId, subscriber);
-
                 var affectedRetractEvidence = new affected_retract_evidence();
-                affectedRetractEvidence.Initial(ctsCustId);
+
+                var cbbChainToEvidenceListEvidence = $('#cbbChainToEvidenceListEvidence');
+                cbbChainToEvidenceListEvidence.multiselect({
+                    menuWidth: 330,
+                    menuHeight: 330,
+                    selectedText: "# of # selected",
+                    noneSelectedText: "Select options",
+                    click: function (event, ui) {
+                        flaggedEvidence.Refresh(ui.value, ui.checked);
+                        affectedRetractEvidence.Refresh(ui.value, ui.checked);
+                    },
+                    checkAll: function () {
+                        flaggedEvidence.RefreshAll(true);
+                        affectedRetractEvidence.RefreshAll(true);
+                    },
+                    uncheckAll: function () {
+                        flaggedEvidence.RefreshAll(false);
+                        affectedRetractEvidence.RefreshAll(false);
+                    }
+                }).multiselectfilter({
+                    width: 250,
+                    placeholder: ''
+                    });
+
+                var evidenceCodes = cbbChainToEvidenceListEvidence.multiselect().val().join();                
+                flaggedEvidence.Initial(ctsCustId, username, custSubId, subscriber, evidenceCodes);                
+                affectedRetractEvidence.Initial(ctsCustId, username, evidenceCodes);
 
                 var exceptions = new account_exceptions();
                 exceptions.Initial(ctsCustId);
@@ -48,7 +72,7 @@
                 common.showError(errMsg);
             }
         });
-    }
+    }    
 
     function CollapseExpandItem() {
         $("#account-detail-container .report-item h3").on('click', function () {

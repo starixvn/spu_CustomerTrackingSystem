@@ -1000,7 +1000,21 @@
                 UserId = userId
             };
 
-            var result = DataService.UpdateData(criteria, "Retract Affected evidence");
+            var result = DataService.UpdateData(criteria, "Retract affected evidence");
+
+            return result.ErrorCode;
+        }
+
+        public int RestoreAffectedEvidence(int ctsCustId, int evidenceId, int userId)
+        {
+            var criteria = new RestoreAffectedEvidenceCriteria
+            {
+                CTSCustId = ctsCustId,
+                EvidenceId = evidenceId,
+                UserId = userId
+            };
+
+            var result = DataService.UpdateData(criteria, "Restore affected evidence");
 
             return result.ErrorCode;
         }

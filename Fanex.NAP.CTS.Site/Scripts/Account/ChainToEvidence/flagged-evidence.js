@@ -1,9 +1,8 @@
 ﻿function flagged_evidence() {
     var tblChainToEvidenceFlagged = $('#tblChainToEvidenceFlagged');
-    var btnChainToEvidenceFlagged = $('#btnChainToEvidenceFlagged');    
-    var cbbChainToEvidenceListEvidence = $('#cbbChainToEvidenceListEvidence');
+    var btnChainToEvidenceFlagged = $('#btnChainToEvidenceFlagged');        
 
-    function InitialFlaggedGrid(ctsCustId) {
+    function InitialFlaggedGrid(ctsCustId, username) {
         tblChainToEvidenceFlagged.DataTable({
             language: {                
                 zeroRecords: "There's no data"
@@ -28,17 +27,20 @@
                 { data: obj => obj.Comment },
                 { data: obj => obj.Creator },
                 {
-                    data: obj => RenderRemoveFlaggedEvidence(), createdCell: (cell, _, row) => {
-                        $('.icon-delete', cell).click(() => RemoveFlaggedEvidence(row.EvidenceID, ctsCustId));
+                    data: obj => '<span class="icon-delete"></span>', createdCell: (cell, _, row) => {
+                        $('.icon-delete', cell).click(() =>
+                            common.showConfirmation(`Do you want remove affected evidence ${row.EvidenceDisplay} to ${username}?`, function () {
+                                RemoveFlaggedEvidence(row.EvidenceID, ctsCustId)
+                            })                            
+                        );
                     }
                 }
-            ]
+            ],
+            createdRow: function (row, obj) {
+                $(row).attr('evidence-code', obj.EvidenceCode);
+            },
         })
-    }
-
-    function RenderRemoveFlaggedEvidence() {
-        return '<span class="icon-delete"></span>';
-    }
+    }   
 
     function RemoveFlaggedEvidence(evidenceId, ctsCustId) {
         var url = common.modifyRelativeUrl('/Account/RemoveFlaggedEvidence'); 
@@ -65,7 +67,7 @@
         })
     }
 
-    function GetFlaggedEvidences(ctsCustId) {
+    function GetFlaggedEvidences(ctsCustId, evidenceCodes) {
         var url = common.modifyRelativeUrl('/Account/GetFlaggedEvidences');
 
         $.ajax(url, {
@@ -74,7 +76,8 @@
                 tblChainToEvidenceFlagged.find('tbody').addClass('loading');
             },
             data: {
-                ctsCustId: ctsCustId
+                ctsCustId: ctsCustId,
+                evidenceCodes: evidenceCodes
             },
             success: function (response) {
                 RenderFlaggedGrid(response);    
@@ -97,23 +100,35 @@
         tblChainToEvidenceFlagged.DataTable().columns.adjust();
     }
 
-    this.Initial = function (ctsCustId, username, subscriberId, subscriber) {
-        cbbChainToEvidenceListEvidence.multiselect({
-            menuWidth: 330,
-            menuHeight: 330,
-            selectedText: "# of # selected",
-            noneSelectedText: "Select options"
-        }).multiselectfilter({
-            width: 250,
-            placeholder: ''
-        });
-
-        InitialFlaggedGrid(ctsCustId);
-        GetFlaggedEvidences(ctsCustId);
+    this.Initial = function (ctsCustId, username, subscriberId, subscriber, evidenceCodes) {       
+        InitialFlaggedGrid(ctsCustId, username);
+        GetFlaggedEvidences(ctsCustId, evidenceCodes);
 
         btnChainToEvidenceFlagged.on('click', function () {
             var formPlaceEvidence = new place_evidence();
             formPlaceEvidence.Initial(ctsCustId, username, subscriberId, subscriber);
         });       
+    }
+
+    this.Refresh = function (evidenceCode, checked) {
+        tblChainToEvidenceFlagged.find('tr').each(function () {
+            if ($(this).attr('evidence-code') == evidenceCode) {
+                if (checked) {
+                    $(this).removeClass('hide');
+                } else {
+                    $(this).addClass('hide');
+                }
+            }
+        }) 
+    }
+
+    this.RefreshAll = function (checked) {
+        tblChainToEvidenceFlagged.find('tr').each(function () {
+            if (checked) {
+                $(this).removeClass('hide');
+            } else {
+                $(this).addClass('hide');
+            }
+        })
     }
 }

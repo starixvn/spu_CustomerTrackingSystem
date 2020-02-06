@@ -5,7 +5,9 @@
     [Serializable]
     public class AffectedRetractEvidenceViewModel
     {
-        public int EvidenceID { get; set; }      
+        public int EvidenceID { get; set; }
+
+        public string EvidenceCode { get; set; }
 
         public string EvidenceDisplay { get; set; }
 

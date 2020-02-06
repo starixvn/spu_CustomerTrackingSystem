@@ -1,7 +1,7 @@
 ﻿function affected_retract_evidence() {
-    var tblChainToEvidenceAffectedRetract = $('#tblChainToEvidenceAffected');
+    var tblChainToEvidenceAffectedRetract = $('#tblChainToEvidenceAffected');    
 
-    function InitialAffectedRetractGrid(ctsCustId) {
+    function InitialAffectedRetractGrid() {
         tblChainToEvidenceAffectedRetract.DataTable({
             language: {
                 zeroRecords: "There's no data"
@@ -30,6 +30,9 @@
                 { data: obj => moment(obj.AffectedTime).format("MMM DD, YYYY HH:mm:ss") },
                 { data: obj => moment(obj.LastLoginTime).format("MMM DD, YYYY HH:mm:ss") }
             ],
+            createdRow: function (row, obj) {
+                $(row).attr('evidence-code', obj.EvidenceCode);
+            },
             drawCallback: function (settings) {
                 var api = this.api();
                 var rows = api.rows({ page: 'current' }).nodes();
@@ -37,21 +40,20 @@
                 var last = null;
 
                 api.column(0, { page: 'current' }).data().each(function (group, i) {
-                    if (last !== group) {                        
+                    if (last !== group) {
                         var html = '';
-                        if (!data[i].IsRetract) {
-                            html = '<tr style="background-color: #70809e">';
-                            html += '<td colspan="5" style="color: #fff !important">' + group + '</td>';
-                            html += '<td class="text-center"><span class="icon-delete" style="cursor: pointer;"></span></td>';
+                        if (data[i].IsRetract) {
+                            html = '<tr evidence-code="' + data[i].EvidenceCode + '" style="background-color: #70809e">';
+                            html += '<td colspan="5" style="color: #fff !important; text-decoration: line-through;">' + group + '</td>';
+                            html += '<td class="text-center"><span class="icon-delete retract" evidence-id = "' + data[i].EvidenceID + '" style="cursor: pointer"></span></td>';
                             html += '</tr>';
-                                
                         } else {
-                            html = '<tr style="background-color: #70809e">';
+                            html = '<tr evidencecode="' + data[i].EvidenceCode + '" style="background-color: #70809e">';
                             html += '<td colspan="5" style="color: #fff !important">' + group + '</td>';
-                            html += '<td class="text-center"><span class="icon-delete icon-retract" style="cursor: pointer;"></span></td>';
-                            html += '</tr>';
+                            html += '<td class="text-center"><span class="icon-delete" evidence-id = "' + data[i].EvidenceID + '" style="cursor: pointer;"></span></td>';
+                            html += '</tr>';  
                         }
-                        $(rows).eq(i).before(html);                       
+                        $(rows).eq(i).before(html);
                         last = group;
                     }
                 });
@@ -59,7 +61,7 @@
         })
     }     
 
-    function GetAffectedRetractEvidences(ctsCustId) {
+    function GetAffectedRetractEvidences(ctsCustId, username, evidenceCodes) {
         var url = common.modifyRelativeUrl('/Account/GetAffectedRetractEvidences');
 
         $.ajax(url, {
@@ -69,10 +71,10 @@
             },
             data: {
                 ctsCustId: ctsCustId,
-                evidenceCodes: '6.8'
+                evidenceCodes: evidenceCodes
             },
             success: function (response) {
-                RenderAffectedRetractEvidences(response);
+                RenderAffectedRetractEvidences(response, ctsCustId, username);
             },
             complete: function () {
                 tblChainToEvidenceAffectedRetract.find('tbody').removeClass('loading');
@@ -84,7 +86,7 @@
         })
     }
 
-    function RenderAffectedRetractEvidences(data) {
+    function RenderAffectedRetractEvidences(data, ctsCustId, username) {
         tblChainToEvidenceAffectedRetract.DataTable().clear();
         if (data.length > 0) {
             tblChainToEvidenceAffectedRetract.DataTable().rows.add(data).draw();
@@ -92,38 +94,95 @@
         tblChainToEvidenceAffectedRetract.DataTable().columns.adjust();
 
         tblChainToEvidenceAffectedRetract.find('span.icon-delete').click(function () {
-            RetractAffectedEvidence();
-        })
-    }
-
-    function RetractAffectedEvidence() {
-        var url = common.modifyRelativeUrl('/Account/RetractAffectedEvidence');
-
-        $.ajax(url, {
-            type: 'POST',
-            beforeSend: function () {
-                common.showLoading();
-            },
-            data: {
-                ctsCustId: 501755,
-                evidenceId: 60
-            },
-            success: function (response) {
-                common.showSuccess();
-            },
-            complete: function () {
-                common.closeLoading();
-            },
-            error: function (errMsg) {
-                console.log(errMsg);
-                common.closeLoading();
-                common.showError(errMsg);
+            var evidenceId = $(this).attr('evidence-id');
+            if ($(this).hasClass('retract')) {
+                RestoreAffectedEvidence(ctsCustId, username, evidenceId);
+            } else {
+                RetractAffectedEvidence(ctsCustId, username, evidenceId);
             }
         })
     }
 
-    this.Initial = function (ctsCustId) {
+    function RestoreAffectedEvidence(ctsCustId, username, evidenceId) {
+        common.showConfirmation(`Do you want restore affected evidence to ${username}?`, function () {
+            var url = common.modifyRelativeUrl('/Account/RestoreAffectedEvidence');
+
+            $.ajax(url, {
+                type: 'POST',
+                beforeSend: function () {
+                    common.showLoading();
+                },
+                data: {
+                    ctsCustId: ctsCustId,
+                    evidenceId: evidenceId
+                },
+                success: function (response) {
+                    common.showSuccess();
+                },
+                complete: function () {
+                    common.closeLoading();
+                },
+                error: function (errMsg) {
+                    console.log(errMsg);
+                    common.closeLoading();
+                    common.showError(errMsg);
+                }
+            })
+        })
+    }
+
+    function RetractAffectedEvidence(ctsCustId, username, evidenceId) {
+        common.showConfirmation(`Do you want retract affected evidence to ${username}?`, function () {
+            var url = common.modifyRelativeUrl('/Account/RetractAffectedEvidence');
+
+            $.ajax(url, {
+                type: 'POST',
+                beforeSend: function () {
+                    common.showLoading();
+                },
+                data: {
+                    ctsCustId: ctsCustId,
+                    evidenceId: evidenceId
+                },
+                success: function (response) {
+                    common.showSuccess();
+                },
+                complete: function () {
+                    common.closeLoading();
+                },
+                error: function (errMsg) {
+                    console.log(errMsg);
+                    common.closeLoading();
+                    common.showError(errMsg);
+                }
+            })
+        })        
+    }
+
+    this.Initial = function (ctsCustId, username, evidenceCodes) {
         InitialAffectedRetractGrid(ctsCustId);
-        GetAffectedRetractEvidences(ctsCustId);
+        GetAffectedRetractEvidences(ctsCustId, username, evidenceCodes);
+    }
+
+    this.Refresh = function (evidenceCode, checked) {
+        tblChainToEvidenceAffectedRetract.find('tr').each(function () {
+            if ($(this).attr('evidence-code') == evidenceCode) {
+                if (checked) {
+                    $(this).removeClass('hide');
+                } else {
+                    $(this).addClass('hide');
+                }                
+            }
+        })                
+    }
+
+    this.RefreshAll = function (checked) {
+        tblChainToEvidenceAffectedRetract.find('tr').each(function () {
+            if (checked) {
+                $(this).removeClass('hide');
+            } else {
+                $(this).addClass('hide');
+            }
+        })
     }
 }

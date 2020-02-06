@@ -408,6 +408,7 @@
                 result.AddRange(evidences.AffectedEvidenceList.Select(x => new AffectedRetractEvidenceViewModel
                 {
                     EvidenceID = x.EvidenceID,
+                    EvidenceCode = x.EvidenceCode,
                     EvidenceDisplay = x.EvidenceCode + " " + x.EvidenceName,
                     LoginID = x.LoginID,
                     UserName = x.UserName,
@@ -422,6 +423,7 @@
                 result.AddRange(evidences.RetractEvidenceList.Select(x => new AffectedRetractEvidenceViewModel
                 {
                     EvidenceID = x.EvidenceID,
+                    EvidenceCode = x.EvidenceCode,
                     EvidenceDisplay = x.EvidenceCode + " " + x.EvidenceName,
                     LoginID = x.LoginID,
                     UserName = x.UserName,
@@ -440,6 +442,14 @@
         {
             var result = _accountService.RetractAffectedEvidence(ctsCustId, evidenceId, CurrentSession.UserId);
             
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult RestoreAffectedEvidence(int ctsCustId, int evidenceId)
+        {
+            var result = _accountService.RestoreAffectedEvidence(ctsCustId, evidenceId, CurrentSession.UserId);
+
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
