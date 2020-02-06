@@ -691,3 +691,13 @@ table.dataTable.no-footer {
         border-radius: 2px;
     }
 }
+
+.retract, .affected {
+    .icon-delete {
+        color: white;
+    } 
+    
+    &:hover td {
+        background: #70809e;
+    }
+}

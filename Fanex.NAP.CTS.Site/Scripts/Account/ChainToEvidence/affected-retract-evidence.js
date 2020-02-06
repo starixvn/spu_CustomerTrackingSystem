@@ -43,12 +43,12 @@
                     if (last !== group) {
                         var html = '';
                         if (data[i].IsRetract) {
-                            html = '<tr evidence-code="' + data[i].EvidenceCode + '" style="background-color: #70809e">';
+                            html = '<tr class="retract" evidence-code="' + data[i].EvidenceCode + '" style="background-color: #70809e">';
                             html += '<td colspan="5" style="color: #fff !important; text-decoration: line-through;">' + group + '</td>';
-                            html += '<td class="text-center"><span class="icon-delete retract" evidence-id = "' + data[i].EvidenceID + '" style="cursor: pointer"></span></td>';
+                            html += '<td class="text-center"><span class="icon-delete-retract" evidence-id = "' + data[i].EvidenceID + '" style="cursor: pointer"></span></td>';
                             html += '</tr>';
                         } else {
-                            html = '<tr evidencecode="' + data[i].EvidenceCode + '" style="background-color: #70809e">';
+                            html = '<tr class="affected" evidencecode="' + data[i].EvidenceCode + '" style="background-color: #70809e">';
                             html += '<td colspan="5" style="color: #fff !important">' + group + '</td>';
                             html += '<td class="text-center"><span class="icon-delete" evidence-id = "' + data[i].EvidenceID + '" style="cursor: pointer;"></span></td>';
                             html += '</tr>';  
