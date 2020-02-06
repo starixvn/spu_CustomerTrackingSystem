@@ -120,8 +120,10 @@
         }
 
         [Theory]
-        [InlineData(501755, 6, 60, "Place by Tuan", 8)]
-        [InlineData(10263017, 6, 60, "Place by Tuan", 8)]        
+        [InlineData(10515, 2, 60, "Place by Tuan", 8)]
+        [InlineData(18491, 2, 61, "Place by Tuan", 8)]
+        [InlineData(213419, 2, 59, "Place by Tuan", 8)]
+        [InlineData(127512, 2, 58, "Place by Tuan", 8)]
         public void Can_PlaceEvidence(int ctsCustId, int subscriberId, int evidenceId, string comment, int userId)
         {
             // Act

@@ -32,6 +32,9 @@
             ],
             createdRow: function (row, obj) {
                 $(row).attr('evidence-code', obj.EvidenceCode);
+                if (obj.IsRetract) {
+                    $(row).attr('cust-retract', true);
+                }
             },
             drawCallback: function (settings) {
                 var api = this.api();
@@ -87,10 +90,13 @@
     }
 
     function RenderAffectedRetractEvidences(data, ctsCustId, username) {
-        tblChainToEvidenceAffectedRetract.DataTable().clear();
-        if (data.length > 0) {
-            tblChainToEvidenceAffectedRetract.DataTable().rows.add(data).draw();
-        }
+        tblChainToEvidenceAffectedRetract.DataTable().clear().rows.add(data).draw();
+        tblChainToEvidenceAffectedRetract.find('tr').each(function () {
+            if ($(this).attr('cust-retract') == "true") {
+                $(this).addClass('hide');
+            }
+        })
+
         tblChainToEvidenceAffectedRetract.DataTable().columns.adjust();
 
         tblChainToEvidenceAffectedRetract.find('span.icon-delete').click(function () {
@@ -177,8 +183,8 @@
     }
 
     this.RefreshAll = function (checked) {
-        tblChainToEvidenceAffectedRetract.find('tr').each(function () {
-            if (checked) {
+        tblChainToEvidenceAffectedRetract.find('tr').each(function () {            
+            if (checked && $(this).attr('cust-retract') != "true") {
                 $(this).removeClass('hide');
             } else {
                 $(this).addClass('hide');
