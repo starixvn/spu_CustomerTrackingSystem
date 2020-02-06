@@ -435,6 +435,14 @@
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        public ActionResult RetractAffectedEvidence(int ctsCustId, int evidenceId)
+        {
+            var result = _accountService.RetractAffectedEvidence(ctsCustId, evidenceId, CurrentSession.UserId);
+            
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
         #endregion        
     }
 }

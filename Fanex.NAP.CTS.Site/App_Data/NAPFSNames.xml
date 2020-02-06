@@ -429,5 +429,10 @@
            SpName="CTS_DC_GetExceptionByCTSCustID"
            DbName="MySQL.CTS_DataCenter">
     </Setting>
+
+    <Setting Key="CTS_DC_RetractAffectedEvidence"
+            SpName="CTS_DC_RetractAffectedEvidence"
+            DbName="MySQL.CTS_DataCenter">
+    </Setting>
   </Function>
 </Functions>

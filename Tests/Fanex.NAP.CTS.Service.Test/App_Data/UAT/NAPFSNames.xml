@@ -114,8 +114,8 @@
 
     <Setting Key="CTS_DC_GetFlaggedEvidence" SpName="CTS_DC_GetFlaggedEvidence_xtest" DbName="MySQL.CTS_DataCenter" />
     <Setting Key="CTS_DC_GetAffectedEvidence" SpName="CTS_DC_GetAffectedEvidence_xtest" DbName="MySQL.CTS_DataCenter" />
-    <Setting Key="CTS_DC_RemoveFlaggedEvidence" SpName="CTS_DC_RemoveFlaggedEvidence_xtest" DbName="MySQL.CTS_DataCenter">
-    </Setting>
+    <Setting Key="CTS_DC_RemoveFlaggedEvidence" SpName="CTS_DC_RemoveFlaggedEvidence_xtest" DbName="MySQL.CTS_DataCenter" />    
     <Setting Key="CTS_DC_AddEvidence" SpName="CTS_DC_AddEvidence_xtest" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_RetractAffectedEvidence" SpName="CTS_DC_RetractAffectedEvidence_xtest" DbName="MySQL.CTS_DataCenter" />
   </Function>
 </Functions>

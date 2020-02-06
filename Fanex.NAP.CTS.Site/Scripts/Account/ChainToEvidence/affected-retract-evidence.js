@@ -40,14 +40,14 @@
                     if (last !== group) {                        
                         var html = '';
                         if (!data[i].IsRetract) {
-                            html = '<tr style="background-color: #e3e9f6">';
-                            html += '<td colspan="5">' + group + '</td>';
+                            html = '<tr style="background-color: #70809e">';
+                            html += '<td colspan="5" style="color: #fff !important">' + group + '</td>';
                             html += '<td class="text-center"><span class="icon-delete" style="cursor: pointer;"></span></td>';
                             html += '</tr>';
                                 
                         } else {
-                            html = '<tr style="background-color: #e3e9f6">';
-                            html += '<td colspan="5">' + group + '</td>';
+                            html = '<tr style="background-color: #70809e">';
+                            html += '<td colspan="5" style="color: #fff !important">' + group + '</td>';
                             html += '<td class="text-center"><span class="icon-delete icon-retract" style="cursor: pointer;"></span></td>';
                             html += '</tr>';
                         }
@@ -68,7 +68,7 @@
                 tblChainToEvidenceAffectedRetract.find('tbody').addClass('loading');
             },
             data: {
-                ctsCustId: 501755,
+                ctsCustId: ctsCustId,
                 evidenceCodes: '6.8'
             },
             success: function (response) {
@@ -92,7 +92,33 @@
         tblChainToEvidenceAffectedRetract.DataTable().columns.adjust();
 
         tblChainToEvidenceAffectedRetract.find('span.icon-delete').click(function () {
-            console.log("deleted");
+            RetractAffectedEvidence();
+        })
+    }
+
+    function RetractAffectedEvidence() {
+        var url = common.modifyRelativeUrl('/Account/RetractAffectedEvidence');
+
+        $.ajax(url, {
+            type: 'POST',
+            beforeSend: function () {
+                common.showLoading();
+            },
+            data: {
+                ctsCustId: 501755,
+                evidenceId: 60
+            },
+            success: function (response) {
+                common.showSuccess();
+            },
+            complete: function () {
+                common.closeLoading();
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+                common.closeLoading();
+                common.showError(errMsg);
+            }
         })
     }
 

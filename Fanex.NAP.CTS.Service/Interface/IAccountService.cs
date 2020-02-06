@@ -80,5 +80,7 @@
         int AddAccountException(UpdateAccountExceptionModel model);
 
         int RemoveAccountException(UpdateAccountExceptionModel model);
+
+        int RetractAffectedEvidence(int ctsCustId, int evidenceId, int userId);
     }
 }

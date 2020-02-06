@@ -991,6 +991,20 @@
             }
         }             
 
+        public int RetractAffectedEvidence(int ctsCustId, int evidenceId, int userId)
+        {
+            var criteria = new RetractAffectedEvidenceCriteria
+            {
+                CTSCustId = ctsCustId,
+                EvidenceId = evidenceId,
+                UserId = userId
+            };
+
+            var result = DataService.UpdateData(criteria, "Retract Affected evidence");
+
+            return result.ErrorCode;
+        }
+
         #endregion
     }
 }

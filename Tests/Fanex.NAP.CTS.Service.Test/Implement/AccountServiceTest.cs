@@ -132,7 +132,7 @@
         }
 
         [Theory]
-        [InlineData(11113, 1, 8)]
+        [InlineData(501755, 1, 8)]
         public void Can_RemoveFlaggedEvidence(int ctsCustId, int evidenceId, int userId)
         {
             // Act
@@ -151,6 +151,17 @@
 
             // Assert
             Assert.IsType<AffectedRetractEvidenceModel>(actualResult);
+        }
+
+        [Theory]
+        [InlineData(501755, 60, 8)]
+        public void Can_RetractAffectedEvidence(int ctsCustId, int evidenceId, int userId)
+        {
+            // Act
+            var actualResult = _runner.RetractAffectedEvidence(ctsCustId, evidenceId, userId);
+
+            // Assert
+            Assert.True(actualResult == 0);
         }
 
         #endregion

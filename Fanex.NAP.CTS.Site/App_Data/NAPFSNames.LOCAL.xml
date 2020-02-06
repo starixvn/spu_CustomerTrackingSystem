@@ -410,5 +410,10 @@
              SpName="CTS_DC_GetAffectedEvidence"
              DbName="MySQL.CTS_DataCenter">
     </Setting>
+
+    <Setting Key="CTS_DC_RetractAffectedEvidence"
+             SpName="CTS_DC_RetractAffectedEvidence"
+             DbName="MySQL.CTS_DataCenter">
+    </Setting>
   </Function>
 </Functions>
