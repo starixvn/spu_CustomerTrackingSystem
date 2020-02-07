@@ -2,7 +2,7 @@
     var username = $("#hdUsername").val();  
     var custId = $("#hdCustId").val();
     var ctsCustId = $("#hdCTSCustId").val();
-    var custSubId = $("#hdCustSubId").val();
+    var subscriberId = $("#hdSubcriberId").val();
     var subscriber = $("#hdSubscriber").val();    
 
     function LoadAssociationByAccount() {
@@ -62,7 +62,7 @@
                     });
 
                 var evidenceCodes = cbbChainToEvidenceListEvidence.multiselect().val().join();                
-                flaggedEvidence.Initial(ctsCustId, username, custSubId, subscriber, evidenceCodes);                
+                flaggedEvidence.Initial(ctsCustId, username, subscriberId, subscriber, evidenceCodes);                
                 affectedRetractEvidence.Initial(ctsCustId, username, evidenceCodes);
 
                 var exceptions = new account_exceptions();

@@ -80,6 +80,8 @@ namespace Fanex.NAP.CTS.ViewModel.Account
 
         public string Subscriber { get; set; }
 
+        public int SubscriberId { get; set; }
+
         public List<FraudCaseModel> FraudCases { get; set; }
 
         public CustomerGeneralStatusViewModel BindingGeneralDataFromMainDB(CustomerGeneralStatusModel customerGeneralStatusModel,
@@ -140,8 +142,7 @@ namespace Fanex.NAP.CTS.ViewModel.Account
                 this.CustSubId = customerInfoByCTSCustIdModel.CustSubId;
                 this.CustId = customerInfoByCTSCustIdModel.CustId;
                 this.Subscriber = customerInfoByCTSCustIdModel.SubscriberName;
-
-
+                this.SubscriberId = customerInfoByCTSCustIdModel.SubscriberId;
             }
 
             if (customerFlagInfoModel != null)
