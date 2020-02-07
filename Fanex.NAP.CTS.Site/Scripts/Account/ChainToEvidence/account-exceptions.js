@@ -37,15 +37,33 @@
                     data: obj => '<span class="icon-delete"></span>', createdCell: (cell, _, row) => {
                         $('.icon-delete', cell).click(() =>
                         {
-                            common.showConfirmation(`Do you want to remove ${row.UserName}?`, function () {
-                                RemoveException(row.ExceptionCTSCustId);
-                            });
-                            
+                            ConfirmRemoveException(row.ExceptionCTSCustId, row.UserName);
                         });
                     }
                 }
             ]
         })
+    }
+
+    function ConfirmRemoveException(exceptionCTSCustId, username) {
+        var url = common.modifyRelativeUrl('/Account/GetAffectedEvidenceListBetweenCusts');
+        var params = {};
+        params.FromCTSCustId = _ctsCustId;
+        params.ToCTSCustId = exceptionCTSCustId;
+        
+        $.ajax(url, {
+            type: 'POST',
+            data: params,
+            success: function (response) {
+                var html = `The following evidence will be affected between 2 accounts ${username}? <br/>`;
+                for (var i = 0; i < response.length; i++) {
+                    html += response[i].EvidenceDisplay + '<br/>';
+                }
+                common.showConfirmation(html, function () {
+                    RemoveException(exceptionCTSCustId);
+                });
+            }
+        });
     }
 
     function RemoveException(exceptionCTSCustId) {
@@ -144,9 +162,7 @@
             },
             success: function (response) {
                 tblChainToEvidenceException.DataTable().clear();
-                if (response.length > 0) {
-                    tblChainToEvidenceException.DataTable().rows.add(response).draw();
-                }
+                tblChainToEvidenceException.DataTable().rows.add(response).draw();
                 tblChainToEvidenceException.DataTable().columns.adjust();
             },
             complete: function () {

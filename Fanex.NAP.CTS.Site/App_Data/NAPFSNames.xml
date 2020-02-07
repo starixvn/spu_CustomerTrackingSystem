@@ -423,5 +423,9 @@
     <Setting Key="CTS_DC_RestoreAffectedEvidence"
              SpName="CTS_DC_RestoreAffectedEvidence"
              DbName="MySQL.CTS_DataCenter" />
+
+    <Setting Key="CTS_DC_GetAffectedEvidenListBetweenCusts"
+           SpName="CTS_DC_GetAffectedEvidenListBetweenCusts"
+           DbName="MySQL.CTS_DataCenter" />
   </Function>
 </Functions>

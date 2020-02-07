@@ -350,6 +350,10 @@
     <Setting Key="CTS_DC_GetAllEvidences"
            SpName="CTS_DC_GetAllEvidences"
            DbName="MySQL.CTS_DataCenter" />
+
+    <Setting Key="CTS_DC_GetAffectedEvidenListBetweenCusts"
+          SpName="CTS_DC_GetAffectedEvidenListBetweenCusts"
+          DbName="MySQL.CTS_DataCenter" />
     
   </Function>
 </Functions>

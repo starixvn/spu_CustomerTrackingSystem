@@ -175,6 +175,17 @@
             Assert.True(actualResult == 0);
         }
 
+        [Theory]
+        [InlineData(501755, 18491)]
+        public void Can_GetAffectedEvidenceListBetweenCusts(int fromCTSCustId, int toCTSCustId)
+        {
+            // Act
+            var actualResult = _runner.GetAffectedEvidenceListBetweenCusts(fromCTSCustId, toCTSCustId);
+
+            // Assert
+            Assert.IsType<List<AffectedEvidenceListBetweenCustsModel>>(actualResult);
+        }
+
         #endregion
 
     }

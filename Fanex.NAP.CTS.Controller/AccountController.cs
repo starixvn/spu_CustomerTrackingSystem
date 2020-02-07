@@ -460,6 +460,22 @@
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        public ActionResult GetAffectedEvidenceListBetweenCusts(int fromCTSCustId, int toCTSCustId)
+        {
+            var result = new List<AffectedEvidenceListBetweenCustsViewModel>();
+            var evidences = _accountService.GetAffectedEvidenceListBetweenCusts(fromCTSCustId, toCTSCustId);
+            if (evidences != null && evidences.Any())
+            {
+                result = evidences.OrderBy(x=>x.EvidenceCode).Select(x => new AffectedEvidenceListBetweenCustsViewModel
+                {
+                     EvidenceDisplay = x.EvidenceCode + " " + x.EvidenceName
+                }).ToList();
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
         #endregion        
     }
 }

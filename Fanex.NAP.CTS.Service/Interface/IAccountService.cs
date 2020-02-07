@@ -84,5 +84,7 @@
         int RetractAffectedEvidence(int ctsCustId, int evidenceId, int userId);
 
         int RestoreAffectedEvidence(int ctsCustId, int evidenceId, int userId);
+
+        IEnumerable<AffectedEvidenceListBetweenCustsModel> GetAffectedEvidenceListBetweenCusts(int fromCTSCustID, int toCTSCustID);        
     }
 }

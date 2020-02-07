@@ -88,11 +88,8 @@
                 ctsCustId: ctsCustId,
                 evidenceCodes: evidenceCodes
             },
-            success: function (response) {
-                tblChainToEvidenceFlagged.DataTable().clear();
-                if (response.length > 0) {
-                    tblChainToEvidenceFlagged.DataTable().rows.add(response).draw();
-                }                    
+            success: function (response) {                
+                tblChainToEvidenceFlagged.DataTable().clear().rows.add(response).draw();                  
                 tblChainToEvidenceFlagged.DataTable().columns.adjust();
             },
             complete: function () {
@@ -105,11 +102,7 @@
         })
     }
 
-    function ResetPlaceEvidence(username, subscriber) {
-        //btnPlaceEvidenceCancel.prop('onclick', null).off('click');
-        //btnPlaceEvidenceSubmit.prop('onclick', null).off('click');
-        //ddlPlaceEvidenceListEvidence.prop('change', null).off('change');
-
+    function ResetPlaceEvidence(username, subscriber) {      
         lblPlaceEvidenceAccount.text(username);
         lblPlaceEvidenceSubscriber.text(subscriber);
         divPlaceEvidenceDescription.text('');
@@ -147,10 +140,7 @@
         InitialFlaggedGrid(ctsCustId, username);
         GetFlaggedEvidences(ctsCustId, evidenceCodes);
 
-        btnChainToEvidenceFlagged.on('click', function () {
-            //var formPlaceEvidence = new place_evidence();
-            //formPlaceEvidence.Initial(ctsCustId, username, subscriberId, subscriber);
-
+        btnChainToEvidenceFlagged.on('click', function () {           
             ddlPlaceEvidenceListEvidence.multiselect({
                 multiple: false,
                 selectedList: 1,

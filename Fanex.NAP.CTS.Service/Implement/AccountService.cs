@@ -1019,6 +1019,20 @@
             return result.ErrorCode;
         }
 
+        public IEnumerable<AffectedEvidenceListBetweenCustsModel> GetAffectedEvidenceListBetweenCusts(int fromCTSCustID, int toCTSCustID)
+        {
+            var criteria = new GetAffectedEvidenceBetweenCustsCriteria
+            {
+                 FromCTSCustID = fromCTSCustID,
+                 ToCTSCustID = toCTSCustID
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<AffectedEvidenceListBetweenCustsModel>(criteria);
+            }
+        }
+
         #endregion
     }
 }

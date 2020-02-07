@@ -89,11 +89,8 @@
         })
     }
 
-    function RenderAffectedRetractEvidences(data, ctsCustId, username) {
-        tblChainToEvidenceAffectedRetract.DataTable().clear();
-        if (data.length > 0) {
-            tblChainToEvidenceAffectedRetract.DataTable().rows.add(data).draw();
-        }            
+    function RenderAffectedRetractEvidences(data, ctsCustId, username) {        
+        tblChainToEvidenceAffectedRetract.DataTable().clear().rows.add(data).draw();
         tblChainToEvidenceAffectedRetract.find('tr').each(function () {
             if ($(this).attr('cust-retract') == "true") {
                 $(this).addClass('hide');
