@@ -1,6 +1,15 @@
 ﻿function flagged_evidence() {
     var tblChainToEvidenceFlagged = $('#tblChainToEvidenceFlagged');
     var btnChainToEvidenceFlagged = $('#btnChainToEvidenceFlagged');        
+    var divPlaceEvidence = $('#divPlaceEvidence');
+    var lblPlaceEvidenceAccount = $('#lblPlaceEvidenceAccount');
+    var lblPlaceEvidenceSubscriber = $('#lblPlaceEvidenceSubscriber');
+    var ddlPlaceEvidenceListEvidence = $('#ddlPlaceEvidenceListEvidence');
+    var btnPlaceEvidenceCancel = $('#btnPlaceEvidenceCancel');
+    var btnPlaceEvidenceSubmit = $('#btnPlaceEvidenceSubmit');
+    var divPlaceEvidenceDescription = $('#divPlaceEvidenceDescription');
+    var txtPlaceEvidenceComment = $('#txtPlaceEvidenceComment');
+    var cacheEvidenceCodes = '';
 
     function InitialFlaggedGrid(ctsCustId, username) {
         tblChainToEvidenceFlagged.DataTable({
@@ -80,7 +89,11 @@
                 evidenceCodes: evidenceCodes
             },
             success: function (response) {
-                RenderFlaggedGrid(response);    
+                tblChainToEvidenceFlagged.DataTable().clear();
+                if (response.length > 0) {
+                    tblChainToEvidenceFlagged.DataTable().rows.add(response).draw();
+                }                    
+                tblChainToEvidenceFlagged.DataTable().columns.adjust();
             },
             complete: function () {
                 tblChainToEvidenceFlagged.find('tbody').removeClass('loading');
@@ -92,22 +105,91 @@
         })
     }
 
-    function RenderFlaggedGrid(data) {
-        tblChainToEvidenceFlagged.DataTable().clear();
-        if (data.FlaggedEvidenceList.length > 0) {
-            tblChainToEvidenceFlagged.DataTable().rows.add(data.FlaggedEvidenceList).draw();
-        }        
-        tblChainToEvidenceFlagged.DataTable().columns.adjust();
+    function ResetPlaceEvidence(username, subscriber) {
+        //btnPlaceEvidenceCancel.prop('onclick', null).off('click');
+        //btnPlaceEvidenceSubmit.prop('onclick', null).off('click');
+        //ddlPlaceEvidenceListEvidence.prop('change', null).off('change');
+
+        lblPlaceEvidenceAccount.text(username);
+        lblPlaceEvidenceSubscriber.text(subscriber);
+        divPlaceEvidenceDescription.text('');
+        txtPlaceEvidenceComment.val('');
     }
 
-    this.Initial = function (ctsCustId, username, subscriberId, subscriber, evidenceCodes) {       
+    function AddPlaceEvidence(ctsCustId, subscriberId) {
+        var url = common.modifyRelativeUrl('/Account/PlaceEvidence');
+        var params = {};
+        params.ctsCustId = ctsCustId;
+        params.subscriberId = subscriberId,
+        params.evidenceId = ddlPlaceEvidenceListEvidence.find('option:selected').val();
+        params.comment = txtPlaceEvidenceComment.val();
+
+        $.ajax(url, {
+            type: 'POST',
+            data: params,
+            success: function (response) {
+                common.showSuccess('Add the evidence successful!');
+                divPlaceEvidence.dialog('close');
+            },
+            complete: function () {
+                GetFlaggedEvidences(ctsCustId, cacheEvidenceCodes);
+            },
+            error: function (errorMessage) {
+                console.log(errorMessage);
+                common.showError('Add the evidence fail!');
+            }
+        })
+    }
+
+    this.Initial = function (ctsCustId, username, subscriberId, subscriber, evidenceCodes) {     
+        cacheEvidenceCodes = evidenceCodes;
+
         InitialFlaggedGrid(ctsCustId, username);
         GetFlaggedEvidences(ctsCustId, evidenceCodes);
 
         btnChainToEvidenceFlagged.on('click', function () {
-            var formPlaceEvidence = new place_evidence();
-            formPlaceEvidence.Initial(ctsCustId, username, subscriberId, subscriber);
-        });       
+            //var formPlaceEvidence = new place_evidence();
+            //formPlaceEvidence.Initial(ctsCustId, username, subscriberId, subscriber);
+
+            ddlPlaceEvidenceListEvidence.multiselect({
+                multiple: false,
+                selectedList: 1,
+                menuWidth: 300,
+                menuHeight: 300,
+                create: function () {
+                    $('.ui-multiselect-all').parent().parent().remove();
+                }
+            }).multiselectfilter({
+                width: 220,
+                placeholder: ''
+            });
+
+            ddlPlaceEvidenceListEvidence.bind('change', function (e) {
+                var desc = $('#ddlPlaceEvidenceListEvidence :selected').attr('desc');
+                if (desc === undefined)
+                    desc = '';
+                divPlaceEvidenceDescription.html(desc);
+            })
+
+            ResetPlaceEvidence(username, subscriber);
+
+            divPlaceEvidence.dialog({
+                modal: true,
+                width: '650px',
+                title: 'ADD EVIDENCE',
+                resizable: true,
+                draggable: true,
+                close: function () { $(this).dialog('close'); }
+            })    
+        })   
+
+        btnPlaceEvidenceCancel.on('click', function () {
+            divPlaceEvidence.dialog('close');
+        })
+
+        btnPlaceEvidenceSubmit.on('click', function (e) {
+            AddPlaceEvidence(ctsCustId, subscriberId);
+        })
     }
 
     this.Refresh = function (evidenceCode, checked) {

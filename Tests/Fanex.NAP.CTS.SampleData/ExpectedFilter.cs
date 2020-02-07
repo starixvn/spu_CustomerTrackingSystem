@@ -13,7 +13,6 @@
         private static GeneralInformationFilter expectedGeneralInformationFilter;
         private static ChainsToEvidenceFilter expectedChainsToEvidenceFilter;
         private static RetractedAndExceptionEvidenceFilter expectedRetractedAndExceptionEvidenceFilter;
-        private static AssociatedAccountByAccountFilter expectedAssociatedAccountByAccountFilter;
         private static TransactionHistoryFilter expectedTransactionHistoryFilter;
 
         public static SearchAccountFilter ExpectedSearchAccountFilter
@@ -54,17 +53,7 @@
 
                 return expectedRetractedAndExceptionEvidenceFilter;
             }
-        }
-
-        public static AssociatedAccountByAccountFilter ExpectedAssociatedAccountByAccountFilter
-        {
-            get
-            {
-                expectedAssociatedAccountByAccountFilter = expectedAssociatedAccountByAccountFilter ?? GenerateSampleAssociatedAccountByAccountFilter();
-
-                return expectedAssociatedAccountByAccountFilter;
-            }
-        }
+        }    
 
         public static TransactionHistoryFilter ExpectedTransactionHistoryFilter
         {
@@ -108,20 +97,7 @@
                 AccountId = 9,
                 IsMasterSubscriberAssignment = true,
                 UserId = 8
-            };
-
-        private static AssociatedAccountByAccountFilter GenerateSampleAssociatedAccountByAccountFilter()
-            => new AssociatedAccountByAccountFilter
-            {
-                CustId = 37778546,
-                AccountId = 9,
-                DeviceAwayMore = false,
-                DeviceAwayOne = true,
-                EvidenceStatus = EvidenceStatus.All,
-                isMasterSubscriberAssignment = true,
-                Status = "Open,Suspended,Closed,CN88_Active,CN88_ViewOnly,CN88_Suspended,CN88_Inactive,NotYetDeposit",
-                userId = 8
-            };
+            };   
 
         private static TransactionHistoryFilter GenerateSampleTransactionHistoryFilter()
             => new TransactionHistoryFilter

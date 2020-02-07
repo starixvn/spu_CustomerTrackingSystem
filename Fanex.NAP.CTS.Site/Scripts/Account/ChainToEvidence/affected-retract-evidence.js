@@ -48,12 +48,12 @@
                         if (data[i].IsRetract) {
                             html = '<tr class="retract" evidence-code="' + data[i].EvidenceCode + '" style="background-color: #70809e">';
                             html += '<td colspan="5" style="color: #fff !important; text-decoration: line-through;">' + group + '</td>';
-                            html += '<td class="text-center"><span class="icon-delete-retract" evidence-id = "' + data[i].EvidenceID + '" style="cursor: pointer"></span></td>';
+                            html += '<td class="text-center"><span class="icon-delete-restore delete" evidence-id = "' + data[i].EvidenceID + '"></span></td>';
                             html += '</tr>';
                         } else {
                             html = '<tr class="affected" evidencecode="' + data[i].EvidenceCode + '" style="background-color: #70809e">';
                             html += '<td colspan="5" style="color: #fff !important">' + group + '</td>';
-                            html += '<td class="text-center"><span class="icon-delete" evidence-id = "' + data[i].EvidenceID + '" style="cursor: pointer;"></span></td>';
+                            html += '<td class="text-center"><span class="icon-delete delete" evidence-id = "' + data[i].EvidenceID + '"></span></td>';
                             html += '</tr>';  
                         }
                         $(rows).eq(i).before(html);
@@ -90,7 +90,10 @@
     }
 
     function RenderAffectedRetractEvidences(data, ctsCustId, username) {
-        tblChainToEvidenceAffectedRetract.DataTable().clear().rows.add(data).draw();
+        tblChainToEvidenceAffectedRetract.DataTable().clear();
+        if (data.length > 0) {
+            tblChainToEvidenceAffectedRetract.DataTable().rows.add(data).draw();
+        }            
         tblChainToEvidenceAffectedRetract.find('tr').each(function () {
             if ($(this).attr('cust-retract') == "true") {
                 $(this).addClass('hide');
@@ -99,9 +102,9 @@
 
         tblChainToEvidenceAffectedRetract.DataTable().columns.adjust();
 
-        tblChainToEvidenceAffectedRetract.find('span.icon-delete').click(function () {
+        tblChainToEvidenceAffectedRetract.find('span.delete').click(function () {
             var evidenceId = $(this).attr('evidence-id');
-            if ($(this).hasClass('retract')) {
+            if ($(this).hasClass('icon-delete-restore')) {
                 RestoreAffectedEvidence(ctsCustId, username, evidenceId);
             } else {
                 RetractAffectedEvidence(ctsCustId, username, evidenceId);

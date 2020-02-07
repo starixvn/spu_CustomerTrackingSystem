@@ -320,14 +320,21 @@
         [HttpPost]
         public ActionResult GetFlaggedEvidences(int ctsCustId, string evidenceCodes)
         {
-            var viewModel = new FlaggedEvidenceViewModel();
+            var result = new List<FlaggedEvidenceViewModel>();
             var flaggedEvidences = _accountService.GetFlaggedEvidences(ctsCustId, evidenceCodes);
             if (flaggedEvidences != null && flaggedEvidences.Any())
             {
-                viewModel.AddFlaggedEvidenceList(flaggedEvidences);
+                result = flaggedEvidences.OrderBy(x=>x.EvidenceID).Select(x => new FlaggedEvidenceViewModel
+                {
+                    EvidenceID = x.EvidenceID,                    
+                    EvidenceDisplay = x.EvidenceCode + " " + x.EvidenceName,
+                    Comment = x.Remark,
+                    Creator = x.Creator,
+                    FlaggedDate = x.CreatedDate
+                }).ToList();
             }
 
-            return Json(viewModel, JsonRequestBehavior.AllowGet);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -405,7 +412,7 @@
 
             if (evidences.AffectedEvidenceList != null && evidences.AffectedEvidenceList.Any())
             {
-                result.AddRange(evidences.AffectedEvidenceList.Select(x => new AffectedRetractEvidenceViewModel
+                result.AddRange(evidences.AffectedEvidenceList.OrderBy(x=>x.EvidenceID).Select(x => new AffectedRetractEvidenceViewModel
                 {
                     EvidenceID = x.EvidenceID,
                     EvidenceCode = x.EvidenceCode,
@@ -420,7 +427,7 @@
             }
             if (evidences.RetractEvidenceList != null && evidences.RetractEvidenceList.Any())
             {
-                result.AddRange(evidences.RetractEvidenceList.Select(x => new AffectedRetractEvidenceViewModel
+                result.AddRange(evidences.RetractEvidenceList.OrderBy(x => x.EvidenceID).Select(x => new AffectedRetractEvidenceViewModel
                 {
                     EvidenceID = x.EvidenceID,
                     EvidenceCode = x.EvidenceCode,

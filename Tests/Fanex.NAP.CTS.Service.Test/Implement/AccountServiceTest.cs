@@ -92,22 +92,20 @@
         #endregion        
 
         #region Associated account by account
-        [Fact]
-        public void Can_GetAssociatedAccountByAccounts()
-        {
-            // Arrange
-            string msgError = string.Empty;
-
-            // Act
-            var actualResult = _runner.GetAssociatedAccountByAccounts(ExpectedFilter.ExpectedAssociatedAccountByAccountFilter, out msgError);
-
-            // Assert
-            Assert.IsType<List<AssociatedAccountByAccount>>(actualResult);
-        }
-
+      
         #endregion
 
         #region Chain To Evidence
+        [Fact]
+        public void Can_GetEvidenceList()
+        {
+            // Act
+            var actualResult = _runner.GetEvidenceList();
+
+            // Assert
+            Assert.IsType<List<EvidenceModel>>(actualResult);
+        }
+
         [Theory]
         [InlineData(11113, "6.8")]
         public void Can_GetFlaggedEvidences(int ctsCustId, string evidenceCodes)

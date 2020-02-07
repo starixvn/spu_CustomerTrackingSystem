@@ -18,6 +18,6 @@
 
         public string Remark { get; set; }
 
-        public string UserName { get; set; }
+        public string Creator { get; set; }
     }
 }
