@@ -2,11 +2,12 @@
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
+    using System;
 
     public class GetAffectedEvidenceCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_CTSCustID")]
-        public int CTSCustId { get; set; }
+        public Int64 CTSCustId { get; set; }
 
         [SpParam(SqlParamName = "ip_EvidenceCodes")]
         public string EvidenceCodes { get; set; }

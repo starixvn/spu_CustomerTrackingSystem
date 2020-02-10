@@ -12,7 +12,7 @@ namespace Fanex.NAP.CTS.ViewModel.Account
 
         public int CustId { get; set; }
 
-        public int CTSCustId { get; set; }
+        public Int64 CTSCustId { get; set; }
 
         public int CustSubId { get; set; }
 

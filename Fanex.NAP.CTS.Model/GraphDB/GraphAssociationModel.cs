@@ -8,7 +8,7 @@ namespace Fanex.NAP.CTS.Model.Account
 {
     public class GraphAssociationModel
     {
-        public int CTSCustID { get; set; }
+        public Int64 CTSCustID { get; set; }
 
         public int? CustId { get; set; }
 

@@ -33,7 +33,7 @@
 
         public override string BaseControllerName { get => Consts.MenuItemSearch; }
 
-        public ActionResult Index(int Id)
+        public ActionResult Index(Int64 Id)
         {
             if (Id > 0)
             {
@@ -210,7 +210,7 @@
         }
 
         [HttpPost]
-        public ActionResult GetAssociatedByAccount(int CustId, int ctsCustId, string statusIds, int associationType, bool isDirect)
+        public ActionResult GetAssociatedByAccount(int CustId, Int64 ctsCustId, string statusIds, int associationType, bool isDirect)
         {
             var result = new List<CustomerAssociationByAccountDetailModel>();
 
@@ -274,7 +274,7 @@
         }
 
         [HttpPost]
-        public ActionResult GetDirectAssociationGraph(int ctsCustid, string username)
+        public ActionResult GetDirectAssociationGraph(Int64 ctsCustid, string username)
         {
             var graphCustomer = new GraphCustomerItemViewModel();
 
@@ -318,7 +318,7 @@
         }
 
         [HttpPost]
-        public ActionResult GetFlaggedEvidences(int ctsCustId, string evidenceCodes)
+        public ActionResult GetFlaggedEvidences(Int64 ctsCustId, string evidenceCodes)
         {
             var result = new List<FlaggedEvidenceViewModel>();
             var flaggedEvidences = _accountService.GetFlaggedEvidences(ctsCustId, evidenceCodes);
@@ -338,7 +338,7 @@
         }
 
         [HttpPost]
-        public ActionResult GetExceptions(int ctsCustId)
+        public ActionResult GetExceptions(Int64 ctsCustId)
         {
             var result = new List<AccountExceptionsViewModel>();
 
@@ -389,7 +389,7 @@
         }
 
         [HttpPost]
-        public ActionResult PlaceEvidence(int ctsCustId, int subscriberId, int evidenceId, string comment)
+        public ActionResult PlaceEvidence(Int64 ctsCustId, int subscriberId, int evidenceId, string comment)
         {
             var result = _accountService.PlaceEvidence(ctsCustId, subscriberId, evidenceId, comment, CurrentSession.UserId);
 
@@ -397,7 +397,7 @@
         }
 
         [HttpPost]
-        public ActionResult RemoveFlaggedEvidence(int ctsCustId, int evidenceId)
+        public ActionResult RemoveFlaggedEvidence(Int64 ctsCustId, int evidenceId)
         {
             var result = _accountService.RemoveFlaggedEvidence(ctsCustId, evidenceId, CurrentSession.UserId);
 
@@ -405,7 +405,7 @@
         }
 
         [HttpPost]
-        public ActionResult GetAffectedRetractEvidences(int ctsCustId, string evidenceCodes)
+        public ActionResult GetAffectedRetractEvidences(Int64 ctsCustId, string evidenceCodes)
         {
             var result = new List<AffectedRetractEvidenceViewModel>();
             var evidences = _accountService.GetAffectedRetractEvidences(ctsCustId, evidenceCodes);
@@ -445,7 +445,7 @@
         }
 
         [HttpPost]
-        public ActionResult RetractAffectedEvidence(int ctsCustId, int evidenceId)
+        public ActionResult RetractAffectedEvidence(Int64 ctsCustId, int evidenceId)
         {
             var result = _accountService.RetractAffectedEvidence(ctsCustId, evidenceId, CurrentSession.UserId);
             
@@ -453,7 +453,7 @@
         }
 
         [HttpPost]
-        public ActionResult RestoreAffectedEvidence(int ctsCustId, int evidenceId)
+        public ActionResult RestoreAffectedEvidence(Int64 ctsCustId, int evidenceId)
         {
             var result = _accountService.RestoreAffectedEvidence(ctsCustId, evidenceId, CurrentSession.UserId);
 
@@ -461,7 +461,7 @@
         }
 
         [HttpPost]
-        public ActionResult GetAffectedEvidenceListBetweenCusts(int fromCTSCustId, int toCTSCustId)
+        public ActionResult GetAffectedEvidenceListBetweenCusts(Int64 fromCTSCustId, Int64 toCTSCustId)
         {
             var result = new List<AffectedEvidenceListBetweenCustsViewModel>();
             var evidences = _accountService.GetAffectedEvidenceListBetweenCusts(fromCTSCustId, toCTSCustId);

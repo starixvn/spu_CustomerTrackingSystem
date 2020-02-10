@@ -1,10 +1,12 @@
-﻿namespace Fanex.NAP.CTS.ViewModel.Account.Associated
+﻿using System;
+
+namespace Fanex.NAP.CTS.ViewModel.Account.Associated
 {
     public class GraphCustomerItemViewModel
     {
         public GraphCustomerItemViewModel() { }
 
-        public int CustId { get; set; }
+        public Int64 CustId { get; set; }
 
         public string Username { get; set; }
 

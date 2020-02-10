@@ -597,7 +597,7 @@
             }
         }
 
-        public CustomerInfoByCTSCustIdModel GetCustomerInfoByCTSCustId(int ctsCustId)
+        public CustomerInfoByCTSCustIdModel GetCustomerInfoByCTSCustId(Int64 ctsCustId)
         {
             var criteria = new CustomerInfoByCTSCustIdCriteria
             {
@@ -612,7 +612,7 @@
             }
         }
 
-        public CustomerAssociationByCTSCustIdModel GetCustomerTotalAssociationByCTSCustId(int ctsCustId)
+        public CustomerAssociationByCTSCustIdModel GetCustomerTotalAssociationByCTSCustId(Int64 ctsCustId)
         {
             var criteria = new CustomerAssociationByCTSCustIdCriteria
             {
@@ -627,7 +627,7 @@
             }
         }
 
-        public List<CustomerEvidenceByCTSCustIdModel> GetCustomerEvidenceByCTSCustId(int ctsCustId)
+        public List<CustomerEvidenceByCTSCustIdModel> GetCustomerEvidenceByCTSCustId(Int64 ctsCustId)
         {
             var criteria = new CustomerEvidenceByCTSCustIdCriteria
             {
@@ -741,7 +741,7 @@
             }
         }
 
-        public CustomerFlagInfoModel GetCustomerFlagInfo(int ctsCustId, int subscriberId)
+        public CustomerFlagInfoModel GetCustomerFlagInfo(Int64 ctsCustId, int subscriberId)
         {
             var criteria = new CustomerFlagInfoByCTSCustIdCriteria
             {
@@ -757,7 +757,7 @@
             }
         }
 
-        public List<GraphAssociationModel> GetCustomerAssociationByGraph(string apiURL, int ctsCustId)
+        public List<GraphAssociationModel> GetCustomerAssociationByGraph(string apiURL, Int64 ctsCustId)
         {
             var data = ApiHelper.Post<List<GraphAssociationModel>>(apiURL, ctsCustId);
 
@@ -880,7 +880,7 @@
             }
         }
 
-        public IEnumerable<FlaggedEvidenceModel> GetFlaggedEvidences(int ctsCustId, string evidenceCodes)
+        public IEnumerable<FlaggedEvidenceModel> GetFlaggedEvidences(Int64 ctsCustId, string evidenceCodes)
         {
             var criteria = new GetFlaggedEvidenceCriteria
             {
@@ -894,7 +894,7 @@
             }
         }
 
-        public DBResult PlaceEvidence(int ctsCustId, int subscriberId, int evidenceId, string comment, int userId)
+        public DBResult PlaceEvidence(Int64 ctsCustId, int subscriberId, int evidenceId, string comment, int userId)
         {
             var criteria = new PlaceEvidenceCriteria
             {
@@ -909,7 +909,7 @@
             return DataService.UpdateData(criteria, "Place evidence");
         }
 
-        public DBResult RemoveFlaggedEvidence(int ctsCustId, int evidenceId, int userId)
+        public DBResult RemoveFlaggedEvidence(Int64 ctsCustId, int evidenceId, int userId)
         {
             var criteria = new RemoveFlaggedEvidenceCriteria
             {
@@ -921,7 +921,7 @@
             return DataService.UpdateData(criteria, "Remove flagged evidence");
         }
 
-        public List<AccountExceptionsModel> GetAccountExceptions(int ctsCustId)
+        public List<AccountExceptionsModel> GetAccountExceptions(Int64 ctsCustId)
         {
             var criteria = new GetAccountExceptionsCriteria
             {
@@ -970,7 +970,7 @@
             }
         }
         
-        public AffectedRetractEvidenceModel GetAffectedRetractEvidences(int ctsCustId, string evidenceCodes)
+        public AffectedRetractEvidenceModel GetAffectedRetractEvidences(Int64 ctsCustId, string evidenceCodes)
         {
             var criteria = new GetAffectedEvidenceCriteria
             {
@@ -991,7 +991,7 @@
             }
         }             
 
-        public int RetractAffectedEvidence(int ctsCustId, int evidenceId, int userId)
+        public int RetractAffectedEvidence(Int64 ctsCustId, int evidenceId, int userId)
         {
             var criteria = new RetractAffectedEvidenceCriteria
             {
@@ -1005,7 +1005,7 @@
             return result.ErrorCode;
         }
 
-        public int RestoreAffectedEvidence(int ctsCustId, int evidenceId, int userId)
+        public int RestoreAffectedEvidence(Int64 ctsCustId, int evidenceId, int userId)
         {
             var criteria = new RestoreAffectedEvidenceCriteria
             {
@@ -1019,7 +1019,7 @@
             return result.ErrorCode;
         }
 
-        public IEnumerable<AffectedEvidenceListBetweenCustsModel> GetAffectedEvidenceListBetweenCusts(int fromCTSCustID, int toCTSCustID)
+        public IEnumerable<AffectedEvidenceListBetweenCustsModel> GetAffectedEvidenceListBetweenCusts(Int64 fromCTSCustID, Int64 toCTSCustID)
         {
             var criteria = new GetAffectedEvidenceBetweenCustsCriteria
             {

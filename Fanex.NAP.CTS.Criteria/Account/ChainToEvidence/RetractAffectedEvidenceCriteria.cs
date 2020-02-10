@@ -2,6 +2,7 @@
 {
     using Fanex.Data;
     using Fanex.NAP.CTS.Core.BaseClasses;
+    using System;
 
     public class RetractAffectedEvidenceCriteria : CommandBase
     {
@@ -9,7 +10,7 @@
         public override int ErrCode { get; set; }
 
         [SpParam(SqlParamName = "ip_CTSCustID")]
-        public int CTSCustId { get; set; }
+        public Int64 CTSCustId { get; set; }
 
         [SpParam(SqlParamName = "ip_EvidenceID")]
         public int EvidenceId { get; set; }

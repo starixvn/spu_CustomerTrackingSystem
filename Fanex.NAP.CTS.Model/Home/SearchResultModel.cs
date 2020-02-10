@@ -5,7 +5,7 @@ namespace Fanex.NAP.CTS.Model.Home
 {
     public class SearchResultModel
     {
-        public int CTSCustId { get; set; }
+        public Int64 CTSCustId { get; set; }
 
         public int CustId { get; set; }
 

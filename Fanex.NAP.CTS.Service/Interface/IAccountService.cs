@@ -9,6 +9,7 @@
     using Fanex.NAP.CTS.ViewModel.Account.Associated;
     using Fanex.NAP.CTS.ViewModel.Account.GeneralInformation;
     using Fanex.NAP.CTS.ViewModel.Account.Search;
+    using System;
     using System.Collections.Generic;
 
     public interface IAccountService
@@ -35,11 +36,11 @@
 
         List<CustomerGeneralStatusModel> GetCustomerGeneralStatus(string custIds);
 
-        CustomerInfoByCTSCustIdModel GetCustomerInfoByCTSCustId(int ctsCustId);
+        CustomerInfoByCTSCustIdModel GetCustomerInfoByCTSCustId(Int64 ctsCustId);
 
-        CustomerAssociationByCTSCustIdModel GetCustomerTotalAssociationByCTSCustId(int ctsCustId);
+        CustomerAssociationByCTSCustIdModel GetCustomerTotalAssociationByCTSCustId(Int64 ctsCustId);
 
-        List<CustomerEvidenceByCTSCustIdModel> GetCustomerEvidenceByCTSCustId(int ctsCustId);
+        List<CustomerEvidenceByCTSCustIdModel> GetCustomerEvidenceByCTSCustId(Int64 ctsCustId);
 
         List<CustomerStaticStatusModel> GetCustomerStaticStatus(int listId, bool status);
 
@@ -55,9 +56,9 @@
 
         CustomerRobotUserStatusModel GetCustomerRobotUserStatus(int custId);
 
-        CustomerFlagInfoModel GetCustomerFlagInfo(int ctsCustId, int subscriberId);
+        CustomerFlagInfoModel GetCustomerFlagInfo(Int64 ctsCustId, int subscriberId);
 
-        List<GraphAssociationModel> GetCustomerAssociationByGraph(string apiURL, int ctsCustId);
+        List<GraphAssociationModel> GetCustomerAssociationByGraph(string apiURL, Int64 ctsCustId);
 
         ShortestPathOfAccount GetShortestPathAssociationByGraph(string apiURL, int custIdFrom, int custIdTo);        
 
@@ -67,24 +68,24 @@
 
         IEnumerable<EvidenceModel> GetEvidenceList();
 
-        IEnumerable<FlaggedEvidenceModel> GetFlaggedEvidences(int ctsCustId, string evidenceCodes);
+        IEnumerable<FlaggedEvidenceModel> GetFlaggedEvidences(Int64 ctsCustId, string evidenceCodes);
 
-        AffectedRetractEvidenceModel GetAffectedRetractEvidences(int ctsCustId, string evidenceCodes);
+        AffectedRetractEvidenceModel GetAffectedRetractEvidences(Int64 ctsCustId, string evidenceCodes);
 
-        DBResult PlaceEvidence(int ctsCustId, int subscriberId, int evidenceId, string comment, int userId);
+        DBResult PlaceEvidence(Int64 ctsCustId, int subscriberId, int evidenceId, string comment, int userId);
 
-        DBResult RemoveFlaggedEvidence(int ctsCustId, int evidenceId, int userId);
+        DBResult RemoveFlaggedEvidence(Int64 ctsCustId, int evidenceId, int userId);
 
-        List<AccountExceptionsModel> GetAccountExceptions(int ctsCustId);
+        List<AccountExceptionsModel> GetAccountExceptions(Int64 ctsCustId);
 
         int AddAccountException(UpdateAccountExceptionModel model);
 
         int RemoveAccountException(UpdateAccountExceptionModel model);
 
-        int RetractAffectedEvidence(int ctsCustId, int evidenceId, int userId);
+        int RetractAffectedEvidence(Int64 ctsCustId, int evidenceId, int userId);
 
-        int RestoreAffectedEvidence(int ctsCustId, int evidenceId, int userId);
+        int RestoreAffectedEvidence(Int64 ctsCustId, int evidenceId, int userId);
 
-        IEnumerable<AffectedEvidenceListBetweenCustsModel> GetAffectedEvidenceListBetweenCusts(int fromCTSCustID, int toCTSCustID);        
+        IEnumerable<AffectedEvidenceListBetweenCustsModel> GetAffectedEvidenceListBetweenCusts(Int64 fromCTSCustID, Int64 toCTSCustID);        
     }
 }

@@ -2,14 +2,15 @@
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
+    using System;
 
     public class GetAffectedEvidenceBetweenCustsCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_FromCTSCustID")]
-        public int FromCTSCustID { get; set; }
+        public Int64 FromCTSCustID { get; set; }
 
         [SpParam(SqlParamName = "ip_ToCTSCustID")]
-        public int ToCTSCustID { get; set; }
+        public Int64 ToCTSCustID { get; set; }
 
         public override string GetSettingKey()
             => "CTS_DC_GetAffectedEvidenListBetweenCusts";       
