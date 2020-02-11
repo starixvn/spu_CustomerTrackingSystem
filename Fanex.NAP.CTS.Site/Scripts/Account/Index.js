@@ -35,35 +35,8 @@
                 $("#chains_evidence").html(response);
             },
             complete: function () {
-                var flaggedEvidence = new flagged_evidence();
-                var affectedRetractEvidence = new affected_retract_evidence();
-
-                var cbbChainToEvidenceListEvidence = $('#cbbChainToEvidenceListEvidence');
-                cbbChainToEvidenceListEvidence.multiselect({
-                    menuWidth: 330,
-                    menuHeight: 330,
-                    selectedText: "# of # selected",
-                    noneSelectedText: "Select options",
-                    click: function (event, ui) {
-                        flaggedEvidence.Refresh(ui.value, ui.checked);
-                        affectedRetractEvidence.Refresh(ui.value, ui.checked);
-                    },
-                    checkAll: function () {
-                        flaggedEvidence.RefreshAll(true);
-                        affectedRetractEvidence.RefreshAll(true);
-                    },
-                    uncheckAll: function () {
-                        flaggedEvidence.RefreshAll(false);
-                        affectedRetractEvidence.RefreshAll(false);
-                    }
-                }).multiselectfilter({
-                    width: 250,
-                    placeholder: ''
-                    });
-
-                var evidenceCodes = cbbChainToEvidenceListEvidence.multiselect().val().join();                
-                flaggedEvidence.Initial(ctsCustId, username, subscriberId, subscriber, evidenceCodes);                
-                affectedRetractEvidence.Initial(ctsCustId, username, evidenceCodes);
+                var accountEvidence = new account_evidence();
+                accountEvidence.Initial(ctsCustId, username, subscriberId, subscriber);
 
                 var exceptions = new account_exceptions();
                 exceptions.Initial(ctsCustId);

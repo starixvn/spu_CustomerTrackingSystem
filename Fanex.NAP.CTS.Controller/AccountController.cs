@@ -14,6 +14,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using System.Web.Mvc;
+    using Fanex.NAP.CTS.Core.Extentions;
 
     [NapAuth(FunctionKey = FSFunctionKeys.SearchAccount, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class AccountController : BaseController
@@ -318,6 +319,88 @@
         }
 
         [HttpPost]
+        public ActionResult GetAccountEvidence(Int64 ctsCustId)
+        {
+            var result = new AccountEvidenceViewModel();
+            var evidenceCodeList = _accountService.GetEvidenceList().Select(x => x.EvidenceCode);
+            var evidenceCodes = string.Join(",", evidenceCodeList);
+
+            var tasks = new List<Task>();
+            var evidenceList = new List<EvidenceViewModel>();
+            var flaggedEvidences = new List<FlaggedEvidenceModel>();
+            tasks.Add(Task.Run(() => flaggedEvidences = _accountService.GetFlaggedEvidences(ctsCustId, evidenceCodes).ToList()));
+
+            var affectedRetractEvidences = new AffectedRetractEvidenceModel();
+            tasks.Add(Task.Run(() => affectedRetractEvidences = _accountService.GetAffectedRetractEvidences(ctsCustId, evidenceCodes)));
+
+            Task.WhenAll(tasks.ToArray()).Wait();
+
+            if (flaggedEvidences != null && flaggedEvidences.Any())
+            {
+                result.FlaggedEvidenceList = flaggedEvidences.OrderBy(x => x.EvidenceID).Select(x => new FlaggedEvidenceViewModel
+                {
+                    EvidenceID = x.EvidenceID,
+                    EvidenceCode = x.EvidenceCode,
+                    EvidenceName = x.EvidenceName,
+                    EvidenceDisplay = x.EvidenceCode + " " + x.EvidenceName,
+                    Comment = x.Remark,
+                    Creator = x.Creator,
+                    FlaggedDate = x.CreatedDate
+                }).ToList();
+
+                evidenceList.AddRange(result.FlaggedEvidenceList.Select(x => new EvidenceViewModel
+                {
+                    EvidenceCode = x.EvidenceCode,
+                    EvidenceDisplay = x.EvidenceCode + " " + x.EvidenceName
+                }));                
+            }
+
+            if (affectedRetractEvidences.AffectedEvidenceList != null && affectedRetractEvidences.AffectedEvidenceList.Any())
+            {
+                result.AffectedRetractEvidenceList.AddRange(affectedRetractEvidences.AffectedEvidenceList.OrderBy(x => x.EvidenceID).Select(x => new AffectedRetractEvidenceViewModel
+                {
+                    EvidenceID = x.EvidenceID,
+                    EvidenceCode = x.EvidenceCode,
+                    EvidenceName = x.EvidenceName,
+                    EvidenceDisplay = x.EvidenceCode + " " + x.EvidenceName,
+                    LoginID = x.LoginID,
+                    UserName = x.UserName,
+                    AssociationType = x.AssociationType,
+                    AffectedTime = x.CreatedDate,
+                    LastLoginTime = x.LastLoginTime,
+                    IsRetract = false
+                }));                
+            }
+
+            if (affectedRetractEvidences.RetractEvidenceList != null && affectedRetractEvidences.RetractEvidenceList.Any())
+            {
+                result.AffectedRetractEvidenceList.AddRange(affectedRetractEvidences.RetractEvidenceList.OrderBy(x => x.EvidenceID).Select(x => new AffectedRetractEvidenceViewModel
+                {
+                    EvidenceID = x.EvidenceID,
+                    EvidenceCode = x.EvidenceCode,
+                    EvidenceName = x.EvidenceName,
+                    EvidenceDisplay = x.EvidenceCode + " " + x.EvidenceName,
+                    LoginID = x.LoginID,
+                    UserName = x.UserName,
+                    AssociationType = x.AssociationType,
+                    AffectedTime = x.CreatedDate,
+                    LastLoginTime = x.LastLoginTime,
+                    IsRetract = true
+                }));
+            }
+
+            evidenceList.AddRange(result.AffectedRetractEvidenceList.Select(x => new EvidenceViewModel
+            {
+                EvidenceCode = x.EvidenceCode,
+                EvidenceDisplay = x.EvidenceCode + " " + x.EvidenceName
+            }));            
+
+            result.EvidenceList.AddRange(evidenceList.Distinct(x=>x.EvidenceCode));
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
         public ActionResult GetFlaggedEvidences(Int64 ctsCustId, string evidenceCodes)
         {
             var result = new List<FlaggedEvidenceViewModel>();
@@ -326,7 +409,7 @@
             {
                 result = flaggedEvidences.OrderBy(x=>x.EvidenceID).Select(x => new FlaggedEvidenceViewModel
                 {
-                    EvidenceID = x.EvidenceID,                    
+                    EvidenceID = x.EvidenceID,
                     EvidenceDisplay = x.EvidenceCode + " " + x.EvidenceName,
                     Comment = x.Remark,
                     Creator = x.Creator,

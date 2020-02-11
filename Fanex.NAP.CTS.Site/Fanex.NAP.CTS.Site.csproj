@@ -432,9 +432,8 @@
     <Content Include="images\graphrender\group.svg" />
     <Content Include="Scripts\Account\Associated\account-by-account.js" />
     <Content Include="Scripts\Account\Associated\graph.js" />
+    <Content Include="Scripts\Account\ChainToEvidence\account-evidence.js" />
     <Content Include="Scripts\Account\ChainToEvidence\account-exceptions.js" />
-    <Content Include="Scripts\Account\ChainToEvidence\affected-retract-evidence.js" />
-    <Content Include="Scripts\Account\ChainToEvidence\flagged-evidence.js" />
     <Content Include="Scripts\Account\index.js" />
     <Content Include="Scripts\Evidence\form-information-evidence.js" />
     <Content Include="Scripts\Evidence\form-place-evidence.js" />

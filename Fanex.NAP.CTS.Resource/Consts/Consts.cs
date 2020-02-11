@@ -28,6 +28,6 @@
         public const string SettingEnvironmentKey = "Environment";
         public const string SettingEnvironmentLocalValue = "1";
         public const string SettingSiteIdKey = "SiteId";
-        public const string SettingSiteIdValue = "102";
+        public const string SettingSiteIdValue = "108";
     }
 }

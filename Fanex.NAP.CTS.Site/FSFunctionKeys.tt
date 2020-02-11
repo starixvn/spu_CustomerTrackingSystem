@@ -33,7 +33,7 @@ public static class FSFunctionKeys
 <#
     SqlConnection conn = new SqlConnection(connectionString);
 
-    string command = string.Format("SELECT DISTINCT FunctionKey FROM [NAP_Functions] WHERE SiteId = 102");
+    string command = string.Format("SELECT DISTINCT FunctionKey FROM [NAP_Functions] WHERE SiteId = 108");
 
     SqlCommand comm = new SqlCommand(command, conn);
 

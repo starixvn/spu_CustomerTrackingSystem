@@ -151,8 +151,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReportsController.cs" />
     <Compile Include="ScannedOfficeIpReportController.cs" />
-    <Compile Include="SearchAccountController.cs" />
-    <Compile Include="SearchDeviceController.cs" />
     <Compile Include="SubscriberAssignmentController.cs" />
     <Compile Include="SuspiciousCustomerController.cs" />
     <Compile Include="SuspiciousCustomerDetailsController.cs" />
