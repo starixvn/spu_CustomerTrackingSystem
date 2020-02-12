@@ -82,7 +82,7 @@
 
         int RemoveAccountException(UpdateAccountExceptionModel model);
 
-        int RetractAffectedEvidence(Int64 ctsCustId, int evidenceId, int userId);
+        int RetractAffectedEvidence(Int64 ctsCustId, int evidenceId, string comment, int userId);
 
         int RestoreAffectedEvidence(Int64 ctsCustId, int evidenceId, int userId);
 

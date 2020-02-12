@@ -991,12 +991,13 @@
             }
         }             
 
-        public int RetractAffectedEvidence(Int64 ctsCustId, int evidenceId, int userId)
+        public int RetractAffectedEvidence(Int64 ctsCustId, int evidenceId, string comment, int userId)
         {
             var criteria = new RetractAffectedEvidenceCriteria
             {
                 CTSCustId = ctsCustId,
                 EvidenceId = evidenceId,
+                Comment = comment,
                 UserId = userId
             };
 

@@ -350,6 +350,7 @@
 
                 evidenceList.AddRange(result.FlaggedEvidenceList.Select(x => new EvidenceViewModel
                 {
+                    EvidenceID = x.EvidenceID,
                     EvidenceCode = x.EvidenceCode,
                     EvidenceDisplay = x.EvidenceCode + " " + x.EvidenceName
                 }));                
@@ -385,41 +386,24 @@
                     AssociationType = x.AssociationType,
                     AffectedTime = x.CreatedDate,
                     LastLoginTime = x.LastLoginTime,
+                    Creator = x.Creator,
+                    Comment = x.Remark,
                     IsRetract = true
                 }));
             }
 
             evidenceList.AddRange(result.AffectedRetractEvidenceList.Select(x => new EvidenceViewModel
             {
+                EvidenceID = x.EvidenceID,
                 EvidenceCode = x.EvidenceCode,
                 EvidenceDisplay = x.EvidenceCode + " " + x.EvidenceName
             }));            
 
-            result.EvidenceList.AddRange(evidenceList.Distinct(x=>x.EvidenceCode));
+            result.EvidenceList.AddRange(evidenceList.Distinct(x=>x.EvidenceCode).OrderBy(x=>x.EvidenceID));
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
-
-        [HttpPost]
-        public ActionResult GetFlaggedEvidences(Int64 ctsCustId, string evidenceCodes)
-        {
-            var result = new List<FlaggedEvidenceViewModel>();
-            var flaggedEvidences = _accountService.GetFlaggedEvidences(ctsCustId, evidenceCodes);
-            if (flaggedEvidences != null && flaggedEvidences.Any())
-            {
-                result = flaggedEvidences.OrderBy(x=>x.EvidenceID).Select(x => new FlaggedEvidenceViewModel
-                {
-                    EvidenceID = x.EvidenceID,
-                    EvidenceDisplay = x.EvidenceCode + " " + x.EvidenceName,
-                    Comment = x.Remark,
-                    Creator = x.Creator,
-                    FlaggedDate = x.CreatedDate
-                }).ToList();
-            }
-
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
-
+     
         [HttpPost]
         public ActionResult GetExceptions(Int64 ctsCustId)
         {
@@ -485,52 +469,12 @@
             var result = _accountService.RemoveFlaggedEvidence(ctsCustId, evidenceId, CurrentSession.UserId);
 
             return Json(result, JsonRequestBehavior.AllowGet);
-        }
+        }       
 
         [HttpPost]
-        public ActionResult GetAffectedRetractEvidences(Int64 ctsCustId, string evidenceCodes)
+        public ActionResult RetractAffectedEvidence(Int64 ctsCustId, int evidenceId, string comment)
         {
-            var result = new List<AffectedRetractEvidenceViewModel>();
-            var evidences = _accountService.GetAffectedRetractEvidences(ctsCustId, evidenceCodes);
-
-            if (evidences.AffectedEvidenceList != null && evidences.AffectedEvidenceList.Any())
-            {
-                result.AddRange(evidences.AffectedEvidenceList.OrderBy(x=>x.EvidenceID).Select(x => new AffectedRetractEvidenceViewModel
-                {
-                    EvidenceID = x.EvidenceID,
-                    EvidenceCode = x.EvidenceCode,
-                    EvidenceDisplay = x.EvidenceCode + " " + x.EvidenceName,
-                    LoginID = x.LoginID,
-                    UserName = x.UserName,
-                    AssociationType = x.AssociationType,
-                    AffectedTime = x.CreatedDate,
-                    LastLoginTime = x.LastLoginTime,
-                    IsRetract = false
-                }));
-            }
-            if (evidences.RetractEvidenceList != null && evidences.RetractEvidenceList.Any())
-            {
-                result.AddRange(evidences.RetractEvidenceList.OrderBy(x => x.EvidenceID).Select(x => new AffectedRetractEvidenceViewModel
-                {
-                    EvidenceID = x.EvidenceID,
-                    EvidenceCode = x.EvidenceCode,
-                    EvidenceDisplay = x.EvidenceCode + " " + x.EvidenceName,
-                    LoginID = x.LoginID,
-                    UserName = x.UserName,
-                    AssociationType = x.AssociationType,
-                    AffectedTime = x.CreatedDate,
-                    LastLoginTime = x.LastLoginTime,
-                    IsRetract = true
-                }));
-            }
-
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        public ActionResult RetractAffectedEvidence(Int64 ctsCustId, int evidenceId)
-        {
-            var result = _accountService.RetractAffectedEvidence(ctsCustId, evidenceId, CurrentSession.UserId);
+            var result = _accountService.RetractAffectedEvidence(ctsCustId, evidenceId, comment, CurrentSession.UserId);
             
             return Json(result, JsonRequestBehavior.AllowGet);
         }

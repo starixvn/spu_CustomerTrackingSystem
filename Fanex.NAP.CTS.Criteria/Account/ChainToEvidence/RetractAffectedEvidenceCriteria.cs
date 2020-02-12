@@ -15,6 +15,9 @@
         [SpParam(SqlParamName = "ip_EvidenceID")]
         public int EvidenceId { get; set; }
 
+        [SpParam(SqlParamName = "ip_Remark")]
+        public string Comment { get; set; }
+
         [SpParam(SqlParamName = "ip_UserID")]
         public int UserId { get; set; }
 

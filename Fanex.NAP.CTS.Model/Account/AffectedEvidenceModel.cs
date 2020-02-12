@@ -18,7 +18,11 @@
 
         public string AssociationType { get; set; }
 
+        public string Remark { get; set; }
+
         public DateTime CreatedDate { get; set; }
+
+        public string Creator { get; set; }
 
         public DateTime LastLoginTime { get; set; }
 

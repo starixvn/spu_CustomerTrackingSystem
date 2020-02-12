@@ -95,8 +95,13 @@
                     if (last !== group) {
                         var html = '';
                         if (data[i].IsRetract) {
-                            html = '<tr class="retract" evidence-code="' + data[i].EvidenceCode + '" style="background-color: #70809e">';
-                            html += '<td colspan="5" style="color: #fff !important; text-decoration: line-through;">' + group + '</td>';
+                            html = '<tr class="retract" evidence-code="' + data[i].EvidenceCode + '"style="background-color: #70809e">';
+                            html += '<td colspan="5" style="color: #fff !important; text-decoration: line-through; position: relative;">';
+                            html += '<span class="evidence-retract">' + group + '</span>';
+                            html += '<div class="tooltip">';
+                            html += '<div>Create Date: ' + moment(data[i].AffectedTime).format("MMM DD, YYYY HH:mm:ss") + '</div>';
+                            html += '<div>Create By: ' + data[i].Creator + '</div>';
+                            html += '<div>Comment:  ' + data[i].Comment + '</div></td>';
                             html += '<td class="text-center"><span class="icon-delete-restore delete" evidence-id = "' + data[i].EvidenceID + '"></span></td>';
                             html += '</tr>';
                         } else {
@@ -224,18 +229,25 @@
     }
 
     function RetractAffectedEvidence(ctsCustId, username, evidenceId) {
-        common.showConfirmation(`Do you want retract affected evidence to ${username}?`, function () {
+
+        var html = '<div class="filter"><div class="dropdown">';        
+        html += '<div class="control-label">Comment</div>';
+        html += '<div><textarea rows="4" style="width:400px" id="txtRemoveEvidenceComment" maxlength="500"></textarea></div>';
+        html += '</div></div>';        
+
+        common.showConfirmation(html, function () {
             var url = common.modifyRelativeUrl('/Account/RetractAffectedEvidence');
+            var params = {};
+            params.ctsCustId = ctsCustId;
+            params.evidenceId = evidenceId;
+            params.comment = $('#txtRemoveEvidenceComment').val();
 
             $.ajax(url, {
                 type: 'POST',
                 beforeSend: function () {
                     common.showLoading();
                 },
-                data: {
-                    ctsCustId: ctsCustId,
-                    evidenceId: evidenceId
-                },
+                data: params,
                 success: function (response) {
                     common.showSuccess();
                 },
@@ -253,13 +265,21 @@
     }
 
     function GenerateEvidenceList(data) {
-        $('#cbbChainToEvidenceListEvidence').empty().multiselect("refresh");
+        $('option', '#cbbChainToEvidenceListEvidence').filter(function () {          
+            return $(this).val() != '';
+        }).remove()
+
+        $('#cbbChainToEvidenceListEvidence').multiselect("refresh");
 
         for (var i = 0; i < data.length; i++) {
             $('#cbbChainToEvidenceListEvidence').append(`<option selected value='${data[i].EvidenceCode}'>${data[i].EvidenceDisplay}</option>`);
-        }
+        }      
 
         $('#cbbChainToEvidenceListEvidence').multiselect("refresh").multiselect({
+            menuWidth: 330,
+            menuHeight: 330,
+            selectedText: "# of # selected",
+            noneSelectedText: "Select options",
             click: function (event, ui) {
                 RefreshFlaggedEvidence(ui.value, ui.checked);
                 RefreshAffectedRetractEvidence(ui.value, ui.checked);
@@ -272,8 +292,11 @@
                 RefreshAllFlaggedEvidence(false);
                 RefreshAllAffectedRetractEvidence(false);
             }
+        }).multiselectfilter({
+            width: 250,
+            placeholder: ''
         });
-    }     
+    }
 
     function RefreshFlaggedEvidence (evidenceCode, checked) {
         tblChainToEvidenceFlagged.find('tr').each(function () {
@@ -309,7 +332,7 @@
    
     function RefreshAffectedRetractEvidence(evidenceCode, checked) {
         tblChainToEvidenceAffectedRetract.find('tr').each(function () {
-            if ($(this).attr('evidence-code') == evidenceCode) {
+            if ($(this).attr('evidence-code') == evidenceCode && $(this).hasClass('retract')) {
                 if (checked) {
                     $(this).removeClass('hide');
                 } else {
@@ -325,10 +348,7 @@
                 multiple: false,
                 selectedList: 1,
                 menuWidth: 340,
-                menuHeight: 300,
-                create: function () {
-                    $('.ui-multiselect-all').parent().parent().remove();
-                }
+                menuHeight: 300,              
             }).multiselectfilter({
                 width: 250,
                 placeholder: ''

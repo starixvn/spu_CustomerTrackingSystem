@@ -23,6 +23,10 @@
 
         public DateTime LastLoginTime { get; set; }
 
+        public string Creator { get; set; }
+
+        public string Comment { get; set; }
+
         public bool IsRetract { get; set; }
 
     }
