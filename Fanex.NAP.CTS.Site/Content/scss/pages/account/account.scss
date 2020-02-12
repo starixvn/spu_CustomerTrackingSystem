@@ -701,3 +701,8 @@ table.dataTable.no-footer {
         background: #70809e;
     }
 }
+
+.ui-multiselect-checkboxes {
+    height: 250px !important;
+    overflow: auto !important;
+}

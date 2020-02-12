@@ -842,3 +842,7 @@ table.dataTable.no-footer {
 
 .retract:hover td, .affected:hover td {
   background: #70809e; }
+
+.ui-multiselect-checkboxes {
+  height: 250px !important;
+  overflow: auto !important; }
