@@ -105,7 +105,7 @@
                             html += '<td class="text-center"><span class="icon-delete-restore delete" evidence-id = "' + data[i].EvidenceID + '"></span></td>';
                             html += '</tr>';
                         } else {
-                            html = '<tr class="affected" evidencecode="' + data[i].EvidenceCode + '" style="background-color: #70809e">';
+                            html = '<tr class="affected" evidence-code="' + data[i].EvidenceCode + '" style="background-color: #70809e">';
                             html += '<td colspan="5" style="color: #fff !important">' + group + '</td>';
                             html += '<td class="text-center"><span class="icon-delete delete" evidence-id = "' + data[i].EvidenceID + '"></span></td>';
                             html += '</tr>';
@@ -331,14 +331,16 @@
     }
    
     function RefreshAffectedRetractEvidence(evidenceCode, checked) {
-        tblChainToEvidenceAffectedRetract.find('tr').each(function () {
-            if ($(this).attr('evidence-code') == evidenceCode && $(this).hasClass('retract')) {
-                if (checked) {
-                    $(this).removeClass('hide');
-                } else {
-                    $(this).addClass('hide');
+        tblChainToEvidenceAffectedRetract.find('tr').each(function () {            
+            if (!$(this).attr('cust-retract') == true) {
+                if ($(this).attr('evidence-code') == evidenceCode) {
+                    if (checked) {
+                        $(this).removeClass('hide');
+                    } else {
+                        $(this).addClass('hide');
+                    }
                 }
-            }
+            }            
         })
     }     
 
