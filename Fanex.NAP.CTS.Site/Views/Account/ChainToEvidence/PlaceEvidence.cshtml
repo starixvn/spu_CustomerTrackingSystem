@@ -13,11 +13,11 @@
         <div class="box">
             <div class="box-heading">Add Evidence</div>
             <div class="box-content">
-                <div style="margin-bottom: 10px; width: 290px;">
+                <div style="margin-bottom: 10px; width: 340px;">
                     <select id="ddlPlaceEvidenceListEvidence">
                         @foreach (var evidence in ViewBag.EvidenceList)
                         {
-                            <option value="@evidence.EvidenceID" desc="@evidence.EvidenceDesc">@(evidence.EvidenceCode + " " + evidence.EvidenceName)</option>
+                            <option value="@evidence.EvidenceID" code ="@evidence.EvidenceCode" desc="@evidence.EvidenceDesc">@(evidence.EvidenceCode + " " + evidence.EvidenceName)</option>
                         }
                     </select>
                 </div>

@@ -27,7 +27,7 @@
                 { targets: [0], width: "30%", className: "text-left" },
                 { targets: [1], width: "20%", className: "text-center" },
                 { targets: [2], width: "20%", className: "text-left" },
-                { targets: [3], width: "20%", className: "text-left" },
+                { targets: [3], width: "20%", className: "text-center" },
                 { targets: [4], width: "20%", className: "text-center" }
             ],
             columns: [
@@ -38,7 +38,7 @@
                 {
                     data: obj => '<span class="icon-delete"></span>', createdCell: (cell, _, row) => {
                         $('.icon-delete', cell).click(() =>
-                            common.showConfirmation(`Do you want remove affected evidence ${row.EvidenceDisplay} to ${username}?`, function () {
+                            common.showConfirmation(`Do you want remove flagged evidence ${row.EvidenceDisplay} to ${username}?`, function () {
                                 RemoveFlaggedEvidence(row.EvidenceID, ctsCustId, username)
                             })
                         );
@@ -62,15 +62,14 @@
             searching: false,
             scrollX: false,
             scrollCollapse: false,
-            columnDefs: [
-                { targets: "_all", defaultContent: "-" },
+            columnDefs: [                
                 { targets: [0], width: "15%", className: "text-left", visible: false },
-                { targets: [1], width: "15%", className: "text-left" },
-                { targets: [2], width: "15%", className: "text-center" },
-                { targets: [3], width: "20%", className: "text-center" },
-                { targets: [4], width: "20%", className: "text-center" },
-                { targets: [5], width: "10%", className: "text-center" },
-                { targets: [6], width: "10%", className: "text-center" }
+                { targets: [1], width: "15%", className: "text-left", defaultContent: "-" },
+                { targets: [2], width: "15%", className: "text-center", defaultContent: "-" },
+                { targets: [3], width: "20%", className: "text-center", defaultContent: "-" },
+                { targets: [4], width: "20%", className: "text-center", defaultContent: "-" },
+                { targets: [5], width: "10%", className: "text-center", defaultContent: "-" },
+                { targets: [6], width: "10%", className: "text-center", defaultContent: "" }
             ],
             columns: [
                 { data: obj => obj.EvidenceDisplay },
@@ -318,13 +317,80 @@
                 }
             }
         })
-    } 
+    }     
+
+    function InitialPlaceEvidenceForm(ctsCustId, username, subscriberId, subscriber) {        
+        btnChainToEvidenceFlagged.on('click', function () {
+            ddlPlaceEvidenceListEvidence.multiselect({
+                multiple: false,
+                selectedList: 1,
+                menuWidth: 340,
+                menuHeight: 300,
+                create: function () {
+                    $('.ui-multiselect-all').parent().parent().remove();
+                }
+            }).multiselectfilter({
+                width: 250,
+                placeholder: ''
+                });
+
+            var flaggedEvidenceCodes = GetEvidenceInFlaggedEvidenceGrid();
+
+            $('option', ddlPlaceEvidenceListEvidence).filter(function () {
+                return $.inArray($(this).attr('code'), flaggedEvidenceCodes) !== -1
+            }).remove();
+                        
+            $('option:first-child', ddlPlaceEvidenceListEvidence).prop("selected", true);
+            ddlPlaceEvidenceListEvidence.multiselect('refresh');
+
+            ddlPlaceEvidenceListEvidence.bind('change', function (e) {
+                var desc = $('#ddlPlaceEvidenceListEvidence :selected').attr('desc');
+                if (desc === undefined)
+                    desc = '';
+                divPlaceEvidenceDescription.html(desc);
+            })
+
+            ResetPlaceEvidence(username, subscriber);
+
+            divPlaceEvidence.dialog({
+                modal: true,
+                width: '900px',
+                title: 'ADD EVIDENCE',
+                resizable: true,
+                draggable: true,
+                close: function () { $(this).dialog('close'); }
+            })
+        })
+
+        btnPlaceEvidenceCancel.on('click', function () {
+            divPlaceEvidence.dialog('close');
+        })
+
+        btnPlaceEvidenceSubmit.on('click', function (e) {
+            AddPlaceEvidence(ctsCustId, username, subscriberId);
+        })
+    }
 
     function ResetPlaceEvidence(username, subscriber) {
         lblPlaceEvidenceAccount.text(username);
         lblPlaceEvidenceSubscriber.text(subscriber);
-        divPlaceEvidenceDescription.text('');
+        var desc = $('option:first-child', ddlPlaceEvidenceListEvidence).attr('desc');
+        if (desc === undefined)
+            desc = '';
+        divPlaceEvidenceDescription.text(desc);
         txtPlaceEvidenceComment.val('');
+    }
+
+    function GetEvidenceInFlaggedEvidenceGrid() {
+        var evidenceCodes = [];
+
+        tblChainToEvidenceFlagged.find('tr').each(function () {
+            if ($(this).attr('evidence-code') != undefined) {
+                evidenceCodes.push($(this).attr('evidence-code'));
+            }
+        })
+
+        return evidenceCodes;
     }
 
     function AddPlaceEvidence(ctsCustId, username, subscriberId) {
@@ -353,61 +419,23 @@
     }
 
     this.Initial = function (ctsCustId, username, subscriberId, subscriber) {
+
         $('#cbbChainToEvidenceListEvidence').multiselect({
             menuWidth: 330,
             menuHeight: 330,
             selectedText: "# of # selected",
-            noneSelectedText: "Select options"            
+            noneSelectedText: "Select options"
         }).multiselectfilter({
             width: 250,
             placeholder: ''
             });
-
-        btnChainToEvidenceFlagged.on('click', function () {
-            ddlPlaceEvidenceListEvidence.multiselect({
-                multiple: false,
-                selectedList: 1,
-                menuWidth: 300,
-                menuHeight: 300,
-                create: function () {
-                    $('.ui-multiselect-all').parent().parent().remove();
-                }
-            }).multiselectfilter({
-                width: 220,
-                placeholder: ''
-            });
-
-            ddlPlaceEvidenceListEvidence.bind('change', function (e) {
-                var desc = $('#ddlPlaceEvidenceListEvidence :selected').attr('desc');
-                if (desc === undefined)
-                    desc = '';
-                divPlaceEvidenceDescription.html(desc);
-            })
-
-            ResetPlaceEvidence(username, subscriber);
-
-            divPlaceEvidence.dialog({
-                modal: true,
-                width: '650px',
-                title: 'ADD EVIDENCE',
-                resizable: true,
-                draggable: true,
-                close: function () { $(this).dialog('close'); }
-            })
-        })
-
-        btnPlaceEvidenceCancel.on('click', function () {
-            divPlaceEvidence.dialog('close');
-        })
-
-        btnPlaceEvidenceSubmit.on('click', function (e) {
-            AddPlaceEvidence(ctsCustId, username, subscriberId);
-        })
 
         InitialFlaggedGrid(ctsCustId, username, subscriberId, subscriber);        
 
         InitialAffectedRetractGrid();
 
         GetAccountEvidence(ctsCustId, username);
+
+        InitialPlaceEvidenceForm(ctsCustId, username, subscriberId, subscriber);
     }
 }
