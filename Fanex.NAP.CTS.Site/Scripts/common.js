@@ -5,6 +5,13 @@
 
     var loading = $("#loading").hide();
 
+    var formconfirmation = $("#formconfirmation").dialog({
+        autoOpen: false,
+        modal: true,
+        draggable: true,
+        resizable: false,
+    });
+
     var confirmation = $("#confirmation").dialog({
         autoOpen: false,
         modal: true,
@@ -95,6 +102,44 @@
             return str.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;");
         }
         return str;
+    }
+
+    this.showFormConfirmation = function (html, title, yesCallback, noCallback) {
+        formconfirmation.empty().html(html).dialog("open");
+
+        var yesBtn =
+            {
+                'class': 'button -add',
+                text: "Confirm",
+                click: function () {
+                    formconfirmation.dialog("close");
+
+                    if (yesCallback != null) {
+                        yesCallback(this)
+                    }
+                }
+            };
+
+        var noBtn =
+            {
+                'class': 'button btn-cancel-outline',
+                text: "Cancel",
+                click: function () {
+                    formconfirmation.dialog("close");
+
+                    if (noCallback != null) {
+                        noCallback()
+                    }
+                }
+            }
+
+        formconfirmation.dialog("option", {
+            dialogClass: "dialog-confirmation",
+            title: title,
+            buttons: [yesBtn, noBtn],
+            width: 460,
+            close: noCallback
+        });
     }
 
     this.showConfirmation = function (html, yesCallback, noCallback) {

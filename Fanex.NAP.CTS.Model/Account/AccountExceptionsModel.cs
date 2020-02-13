@@ -4,7 +4,7 @@ namespace Fanex.NAP.CTS.Model.Account
 {
     public class AccountExceptionsModel
     {
-        public int ExceptionCTSCustId { get; set; }
+        public Int64 ExceptionCTSCustId { get; set; }
 
         public int CustId { get; set; }
 

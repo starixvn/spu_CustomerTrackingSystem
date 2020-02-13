@@ -120,5 +120,7 @@
     <Setting Key="CTS_DC_RestoreAffectedEvidence" SpName="CTS_DC_RestoreAffectedEvidence_xtest" DbName="MySQL.CTS_DataCenter" />
     <Setting Key="CTS_DC_GetAllEvidences" SpName="CTS_DC_GetAllEvidences_xtest" DbName="MySQL.CTS_DataCenter" />
     <Setting Key="CTS_DC_GetAffectedEvidenListBetweenCusts" SpName="CTS_DC_GetAffectedEvidenListBetweenCusts_xtest" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_AddException" SpName="CTS_DC_AddException_xtest" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_RemoveException" SpName="CTS_DC_RemoveException_xtest" DbName="MySQL.CTS_DataCenter" />
   </Function>
 </Functions>

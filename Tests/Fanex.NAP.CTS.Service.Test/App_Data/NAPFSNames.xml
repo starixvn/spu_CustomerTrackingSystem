@@ -354,6 +354,14 @@
     <Setting Key="CTS_DC_GetAffectedEvidenListBetweenCusts"
           SpName="CTS_DC_GetAffectedEvidenListBetweenCusts"
           DbName="MySQL.CTS_DataCenter" />
+
+    <Setting Key="CTS_DC_AddException"
+          SpName="CTS_DC_AddException"
+          DbName="MySQL.CTS_DataCenter" />
+
+    <Setting Key="CTS_DC_RemoveException"
+         SpName="CTS_DC_RemoveException"
+         DbName="MySQL.CTS_DataCenter" />
     
   </Function>
 </Functions>

@@ -72,9 +72,9 @@
 
         AffectedRetractEvidenceModel GetAffectedRetractEvidences(Int64 ctsCustId, string evidenceCodes);
 
-        DBResult PlaceEvidence(Int64 ctsCustId, int subscriberId, int evidenceId, string comment, int userId);
+        DBResult PlaceEvidence(UpdatePlaceEvidenceModel model);
 
-        DBResult RemoveFlaggedEvidence(Int64 ctsCustId, int evidenceId, int userId);
+        DBResult RemoveFlaggedEvidence(RemoveEvidenceModel model);
 
         List<AccountExceptionsModel> GetAccountExceptions(Int64 ctsCustId);
 
@@ -82,9 +82,9 @@
 
         int RemoveAccountException(UpdateAccountExceptionModel model);
 
-        int RetractAffectedEvidence(Int64 ctsCustId, int evidenceId, string comment, int userId);
+        int RetractAffectedEvidence(RemoveEvidenceModel model);
 
-        int RestoreAffectedEvidence(Int64 ctsCustId, int evidenceId, int userId);
+        int RestoreAffectedEvidence(RemoveEvidenceModel model);
 
         IEnumerable<AffectedEvidenceListBetweenCustsModel> GetAffectedEvidenceListBetweenCusts(Int64 fromCTSCustID, Int64 toCTSCustID);        
     }

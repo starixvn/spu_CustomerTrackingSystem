@@ -7,6 +7,8 @@
     var username = $('#txtusername');
     var comment = $('#txtcomment');
     var _ctsCustId = 0;
+    var _rootUsername = '';
+
     function RenderGrid() {
         tblChainToEvidenceException.DataTable({
             language: {
@@ -20,15 +22,15 @@
             scrollCollapse: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0], width: "15%", className: "text-center" },
-                { targets: [1], width: "15%", className: "text-center" },
+                { targets: [0], width: "15%", className: "text-left" },
+                { targets: [1], width: "15%", className: "text-left" },
                 { targets: [2], width: "15%", className: "text-center" },
                 { targets: [3], width: "30%", className: "text-left" },
                 { targets: [4], width: "15%", className: "text-center" },
                 { targets: [5], width: "10%", className: "text-center" }
             ],
             columns: [
-                { data: obj => obj.UserName },
+                { data: obj => RenderUsername(obj) },
                 { data: obj => obj.LoginId },
                 { data: obj => moment(obj.ExceptionDate).format("MMM DD, YYYY HH:mm:ss") },
                 { data: obj => obj.Comment },
@@ -45,6 +47,18 @@
         })
     }
 
+    function RenderUsername(obj) {
+        if (obj.UserName == null) {
+            return '';
+        }
+
+        var url = common.modifyRelativeUrl('/Account/Index/' + obj.ExceptionCTSCustId);
+
+        var html = '<a class="info-bng" href="' + url + '">' + obj.UserName + '</a>';
+
+        return html;
+    }
+
     function ConfirmRemoveException(exceptionCTSCustId, username) {
         var url = common.modifyRelativeUrl('/Account/GetAffectedEvidenceListBetweenCusts');
         var params = {};
@@ -56,10 +70,15 @@
             data: params,
             success: function (response) {
                 var html = `The following evidence will be affected between 2 accounts ${username}? <br/>`;
+                html += '<div><ul>';
                 for (var i = 0; i < response.length; i++) {
-                    html += response[i].EvidenceDisplay + '<br/>';
+                    html += '<li> - ' + response[i].EvidenceDisplay + '</li>';
                 }
-                common.showConfirmation(html, function () {
+                html += '</ul></div>';
+
+                var title = `Remove ${username} From Member ${_rootUsername} Exceptions List`;
+
+                common.showFormConfirmation(html, title, function () {
                     RemoveException(exceptionCTSCustId);
                 });
             }
@@ -105,7 +124,10 @@
                     divException.dialog('close');
                 }
                 else if (response.errorCode == 1) {
-                    common.showError('User "' + username.val() + '" dose not exist.');
+                    common.showError('Username/Login ID "' + username.val() + '" is invalid.');
+                }
+                else if (response.errorCode == 1062) {
+                    common.showError('Username/Login ID is already existed in "' + username.val() + '" Exceptions List.');
                 }
                 else {
                     common.showError('Add the exception fail!');
@@ -120,33 +142,6 @@
     function ResetForm() {
         username.val('');
         comment.val('');
-    }
-
-    this.Initial = function (ctsCustId) {
-        _ctsCustId = ctsCustId;
-        RenderGrid();
-        GetException();
-
-        btnAddException.on('click', function () {
-            ResetForm();
-
-            divException.dialog({
-                modal: true,
-                width: '650px',
-                title: 'ADD EXCEPTIONS',
-                resizable: true,
-                draggable: true,
-                close: function () { $(this).dialog('close'); }
-            })
-        });
-
-        btnSaveException.on('click', function () {
-            AddException();
-        });
-
-        btnCancelException.on('click', function () {
-            divException.dialog('close');
-        });
     }
 
     function GetException() {
@@ -174,4 +169,38 @@
             }
         })
     }
+
+    this.Initial = function (ctsCustId, username) {
+        _ctsCustId = ctsCustId;
+        _rootUsername = username;
+
+        RenderGrid();
+        GetException();
+
+        btnAddException.on('click', function () {
+            ResetForm();
+
+            divException.dialog({
+                modal: true,
+                width: '650px',
+                title: 'ADD EXCEPTIONS',
+                resizable: true,
+                draggable: true,
+                close: function () { $(this).dialog('close'); }
+            })
+        });
+
+        btnSaveException.on('click', function () {
+            if (username.val() == '') {
+                common.showError('Username/Login ID is require.');
+                username.focus();
+            } else {
+                AddException();
+            }            
+        });
+
+        btnCancelException.on('click', function () {
+            divException.dialog('close');
+        });
+    }    
 }

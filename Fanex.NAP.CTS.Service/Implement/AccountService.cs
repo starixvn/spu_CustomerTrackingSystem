@@ -894,28 +894,28 @@
             }
         }
 
-        public DBResult PlaceEvidence(Int64 ctsCustId, int subscriberId, int evidenceId, string comment, int userId)
+        public DBResult PlaceEvidence(UpdatePlaceEvidenceModel model)
         {
             var criteria = new PlaceEvidenceCriteria
             {
-                CTSCustId = ctsCustId,
-                SubscriberId = subscriberId,
-                EvidenceId = evidenceId,
-                Remark = comment,
-                UserId = userId,
+                CTSCustId = model.CTSCustId,
+                SubscriberId = model.SubscriberId,
+                EvidenceId = model.EvidenceId,
+                Remark = model.Comment,
+                UserId = model.UserId,
                 IsCreatedByMaster = true
             };
 
             return DataService.UpdateData(criteria, "Place evidence");
         }
 
-        public DBResult RemoveFlaggedEvidence(Int64 ctsCustId, int evidenceId, int userId)
+        public DBResult RemoveFlaggedEvidence(RemoveEvidenceModel model)
         {
             var criteria = new RemoveFlaggedEvidenceCriteria
             {
-                CTSCustId = ctsCustId,               
-                EvidenceId = evidenceId,               
-                UserId = userId                
+                CTSCustId = model.CTSCustId,               
+                EvidenceId = model.EvidenceId,               
+                UserId = model.UserId                
             };
 
             return DataService.UpdateData(criteria, "Remove flagged evidence");
@@ -947,7 +947,15 @@
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                db.ExecuteNonQuery(criteria);
+                try
+                {
+                    db.ExecuteNonQuery(criteria);
+                }
+                catch (Exception ex)
+                {
+                    if (ex.Message != string.Empty && ex.Message.ToLower().Contains("duplicate"))
+                        return 1062;
+                }
 
                 return criteria.ErrorCode;
             }
@@ -991,14 +999,14 @@
             }
         }             
 
-        public int RetractAffectedEvidence(Int64 ctsCustId, int evidenceId, string comment, int userId)
+        public int RetractAffectedEvidence(RemoveEvidenceModel model)
         {
             var criteria = new RetractAffectedEvidenceCriteria
             {
-                CTSCustId = ctsCustId,
-                EvidenceId = evidenceId,
-                Comment = comment,
-                UserId = userId
+                CTSCustId = model.CTSCustId,
+                EvidenceId = model.EvidenceId,
+                Comment = model.Comment,
+                UserId = model.UserId
             };
 
             var result = DataService.UpdateData(criteria, "Retract affected evidence");
@@ -1006,13 +1014,13 @@
             return result.ErrorCode;
         }
 
-        public int RestoreAffectedEvidence(Int64 ctsCustId, int evidenceId, int userId)
+        public int RestoreAffectedEvidence(RemoveEvidenceModel model)
         {
             var criteria = new RestoreAffectedEvidenceCriteria
             {
-                CTSCustId = ctsCustId,
-                EvidenceId = evidenceId,
-                UserId = userId
+                CTSCustId = model.CTSCustId,
+                EvidenceId = model.EvidenceId,
+                UserId = model.UserId
             };
 
             var result = DataService.UpdateData(criteria, "Restore affected evidence");

@@ -4,7 +4,7 @@ namespace Fanex.NAP.CTS.ViewModel.Account.ChainToEvidence
 {
     public class AccountExceptionsViewModel
     {
-        public int ExceptionCTSCustId { get; set; }
+        public Int64 ExceptionCTSCustId { get; set; }
 
         public int CustId { get; set; }
 

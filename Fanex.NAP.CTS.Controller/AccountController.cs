@@ -20,16 +20,12 @@
     public class AccountController : BaseController
     {
         private readonly IAccountService _accountService;
-        private readonly IGraphService _graphService;
-        //private readonly IEvidenceService _evidenceService;
-        //private readonly ITransactionService _transactionService;
+        private readonly IGraphService _graphService;        
 
         public AccountController()
         {
             _accountService = new AccountService();
-            _graphService = new GraphService();
-            //_evidenceService = new EvidenceService();
-            //_transactionService = new TransactionService();
+            _graphService = new GraphService();           
         }
 
         public override string BaseControllerName { get => Consts.MenuItemSearch; }
@@ -87,111 +83,7 @@
             return RedirectToAction("Index", "Home");
         }
 
-        //public ActionResult DetailAccount(int id, int custId)
-        //{
-        //    var permissionIPLocation = new UserService().GetPermission(CurrentSession.UserId, SiteId, FSFunctionKeys.IPLocation);
-
-        //    ViewBag.IsPermissionIPLocation = permissionIPLocation > 0;
-        //    ViewBag.AccountId = id;
-        //    ViewBag.CustId = custId;
-
-        //    return View("DetailAccount");
-        //}
-
-        //#region General Information
-        //[HttpPost]
-        //public ActionResult GetGeneralInformation(GeneralInformationFilter filter)
-        //{
-        //    filter.IsMasterSubscriberAssignment = PermissionService.IsMasterSubscriberAssignment();
-        //    filter.UserId = CurrentSession.UserId;
-
-        //    var data = _accountService.GetAccountDetailGeneralInformation(filter);
-
-        //    return Json(data, JsonRequestBehavior.AllowGet);
-        //}
-
-        //public ActionResult GetAllEvidences()
-        //{
-        //    var data = _evidenceService.GetAllEvidences();
-
-        //    return Json(data, JsonRequestBehavior.AllowGet);
-        //}
-
-        //[HttpPost]
-        //public ActionResult PlaceEvidenceByAccount(GeneralInformationPlaceEvidenceByAccount evidenceByAccount)
-        //{
-        //    var data = _evidenceService.PlaceEvidenceByAccount(evidenceByAccount);
-
-        //    return Json(data, JsonRequestBehavior.AllowGet);
-        //}
-
-        //[HttpPost]
-        //public ActionResult GetInformationEvidenceByAccount(InformationEvidenceByAccountFilter filter)
-        //{
-        //    var data = _evidenceService.GetInformationEvidenceByAccount(filter);
-
-        //    return Json(data, JsonRequestBehavior.AllowGet);
-        //}
-
-        //[HttpPost]
-        //public ActionResult UpdateEvidenceByAccountOfComment(InformationEvidenceByAccountUpdateOfComment evidenceOfComment)
-        //{
-        //    var data = _evidenceService.UpdateEvidenceByAccountOfComment(evidenceOfComment);
-
-        //    return Json(data, JsonRequestBehavior.AllowGet);
-        //}
-
-        //[HttpPost]
-        //public ActionResult RetractEvidenceByAccount(InformationEvidenceByAccountRetractEvidence evidenceRetract)
-        //{
-        //    var data = _evidenceService.RetractEvidenceByAccount(evidenceRetract);
-
-        //    return Json(data, JsonRequestBehavior.AllowGet);
-        //}
-
-        //#endregion
-
-        //#region Chain To Evidence
-        //[HttpPost]
-        //public ActionResult GetChainsToEvidence(ChainsToEvidenceFilter filter)
-        //{
-        //    filter.UserId = CurrentSession.UserId;
-
-        //    filter.IsMasterSubscriberAssignment = PermissionService.IsMasterSubscriberAssignment();
-
-        //    var data = _evidenceService.GetChainsToEvidence(filter);
-
-        //    return PartialView("DetailInfoAccount/ChainsToEvidence", data);
-        //}
-
-        //[HttpPost]
-        //public ActionResult AddExceptionEvidence(ExceptionEvidenceAdd exceptionEvidenceAdd)
-        //{
-        //    exceptionEvidenceAdd.UserId = CurrentSession.UserId;
-
-        //    var data = _evidenceService.AddExceptionEvidence(exceptionEvidenceAdd);
-
-        //    return Json(data, JsonRequestBehavior.AllowGet);
-        //}
-
-        //#endregion
-
-        //#region Retract And Exception
-        //[HttpPost]
-        //public ActionResult GetRetractAndException(RetractedAndExceptionEvidenceFilter filter)
-        //{
-        //    filter.UserId = CurrentSession.UserId;
-
-        //    filter.IsMasterSubscriberAssignment = PermissionService.IsMasterSubscriberAssignment();
-
-        //    var data = _evidenceService.GetRetractedAndExceptionEvidence(filter);
-
-        //    return PartialView("DetailInfoAccount/RetractAndException", data);
-        //}
-
-        //#endregion
-
-        //#region Associated Account By Account
+        #region Associated By Account
         [HttpPost]
         public ActionResult AssociatedByAccount(string username)
         {
@@ -310,6 +202,8 @@
             return Json(graphCustomer, JsonRequestBehavior.AllowGet);
         }
 
+        #endregion
+
         #region Chain To Evidence
         public ActionResult ChainToEvidence()
         {
@@ -365,6 +259,7 @@
                     EvidenceName = x.EvidenceName,
                     EvidenceDisplay = x.EvidenceCode + " " + x.EvidenceName,
                     LoginID = x.LoginID,
+                    CTSCustID = x.CTSCustID,
                     UserName = x.UserName,
                     AssociationType = x.AssociationType,
                     AffectedTime = x.CreatedDate,
@@ -382,6 +277,7 @@
                     EvidenceName = x.EvidenceName,
                     EvidenceDisplay = x.EvidenceCode + " " + x.EvidenceName,
                     LoginID = x.LoginID,
+                    CTSCustID = x.CTSCustID,
                     UserName = x.UserName,
                     AssociationType = x.AssociationType,
                     AffectedTime = x.CreatedDate,
@@ -456,33 +352,40 @@
         }
 
         [HttpPost]
-        public ActionResult PlaceEvidence(Int64 ctsCustId, int subscriberId, int evidenceId, string comment)
+        public ActionResult PlaceEvidence(UpdatePlaceEvidenceModel model)
         {
-            var result = _accountService.PlaceEvidence(ctsCustId, subscriberId, evidenceId, comment, CurrentSession.UserId);
+            model.UserId = CurrentSession.UserId;
+            var result = _accountService.PlaceEvidence(model);
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        public ActionResult RemoveFlaggedEvidence(Int64 ctsCustId, int evidenceId)
+        public ActionResult RemoveFlaggedEvidence(RemoveEvidenceModel model)
         {
-            var result = _accountService.RemoveFlaggedEvidence(ctsCustId, evidenceId, CurrentSession.UserId);
+            model.UserId = CurrentSession.UserId;
+
+            var result = _accountService.RemoveFlaggedEvidence(model);
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }       
 
         [HttpPost]
-        public ActionResult RetractAffectedEvidence(Int64 ctsCustId, int evidenceId, string comment)
+        public ActionResult RetractAffectedEvidence(RemoveEvidenceModel model)
         {
-            var result = _accountService.RetractAffectedEvidence(ctsCustId, evidenceId, comment, CurrentSession.UserId);
+            model.UserId = CurrentSession.UserId;
+
+            var result = _accountService.RetractAffectedEvidence(model);
             
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        public ActionResult RestoreAffectedEvidence(Int64 ctsCustId, int evidenceId)
+        public ActionResult RestoreAffectedEvidence(RemoveEvidenceModel model)
         {
-            var result = _accountService.RestoreAffectedEvidence(ctsCustId, evidenceId, CurrentSession.UserId);
+            model.UserId = CurrentSession.UserId;
+
+            var result = _accountService.RestoreAffectedEvidence(model);
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }

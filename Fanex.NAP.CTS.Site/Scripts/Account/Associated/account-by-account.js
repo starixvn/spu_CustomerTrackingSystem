@@ -36,7 +36,7 @@
             ],
             columns: [
                 { data: obj => RenderTag(obj) },
-                { data: obj => RenderUsername(obj) },
+                { data: obj => RenderUsername(obj, ctsCustid) },
                 { data: obj => obj.LoginId },
                 { data: obj => obj.Status },
                 { data: obj => obj.Subscriber },
@@ -72,12 +72,12 @@
 
     function RenderUsername(obj) {
         if (obj.Username == null) {
-            return obj.Username;
+            return '';
         }
 
-        var url = common.modifyRelativeUrl('/Account/DetailAccount?CustId=' + obj.CustId);
+        var url = common.modifyRelativeUrl('/Account/Index/' + obj.CTSCustId);
 
-        var html = '<a class="info-bng" href="' + url + '" target="_blank">' + obj.Username + '</a>';
+        var html = '<a class="info-bng" href="' + url + '">' + obj.Username + '</a>';
 
         return html;
     }

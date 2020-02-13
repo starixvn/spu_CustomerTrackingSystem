@@ -38,7 +38,7 @@
                 {
                     data: obj => '<span class="icon-delete"></span>', createdCell: (cell, _, row) => {
                         $('.icon-delete', cell).click(() =>
-                            common.showConfirmation(`Do you want remove flagged evidence ${row.EvidenceDisplay} to ${username}?`, function () {
+                            common.showFormConfirmation(`Do you want remove flagged evidence ${row.EvidenceDisplay} to ${username}?`, 'Confirmation', function () {
                                 RemoveFlaggedEvidence(row.EvidenceID, ctsCustId, username)
                             })
                         );
@@ -73,7 +73,7 @@
             ],
             columns: [
                 { data: obj => obj.EvidenceDisplay },
-                { data: obj => obj.UserName },
+                { data: obj => RenderUsername(obj) },
                 { data: obj => obj.LoginID },
                 { data: obj => obj.AssociationType },
                 { data: obj => moment(obj.AffectedTime).format("MMM DD, YYYY HH:mm:ss") },
@@ -102,12 +102,15 @@
                             html += '<div>Create Date: ' + moment(data[i].AffectedTime).format("MMM DD, YYYY HH:mm:ss") + '</div>';
                             html += '<div>Create By: ' + data[i].Creator + '</div>';
                             html += '<div>Comment:  ' + data[i].Comment + '</div></td>';
-                            html += '<td class="text-center"><span class="icon-delete-restore delete" evidence-id = "' + data[i].EvidenceID + '"></span></td>';
+                            html += '<td class="text-center"><span class="icon-delete-restore delete" evidence-id = "' + data[i].EvidenceID + '" evidence-display = "' + data[i].EvidenceDisplay + '"></span></td>';
                             html += '</tr>';
                         } else {
                             html = '<tr class="affected" evidence-code="' + data[i].EvidenceCode + '" style="background-color: #70809e">';
-                            html += '<td colspan="5" style="color: #fff !important">' + group + '</td>';
-                            html += '<td class="text-center"><span class="icon-delete delete" evidence-id = "' + data[i].EvidenceID + '"></span></td>';
+                            html += '<td colspan="5" style="color: #fff !important">';
+                            html += '<span class="icon icon-chevron-up" style="cursor: pointer;"></span>';
+                            html += '<span style="cursor: pointer;">' + group + '</span>';
+                            html += '</td>';
+                            html += '<td class="text-center"><span class="icon-delete delete" evidence-id = "' + data[i].EvidenceID + '" evidence-display = "' + data[i].EvidenceDisplay + '"></span></td>';
                             html += '</tr>';
                         }
                         $(rows).eq(i).before(html);
@@ -116,6 +119,18 @@
                 });
             }
         })
+    }   
+
+    function RenderUsername(obj) {
+        if (obj.UserName == null) {
+            return '';
+        }
+
+        var url = common.modifyRelativeUrl('/Account/Index/' + obj.CTSCustID);
+
+        var html = '<a class="info-bng" href="' + url + '">' + obj.UserName + '</a>';
+
+        return html;
     }
 
     function GetAccountEvidence(ctsCustId, username) {
@@ -162,8 +177,8 @@
                 common.showLoading();
             },
             data: {
-                ctsCustId: ctsCustId,
-                evidenceId: evidenceId
+                CTSCustId: ctsCustId,
+                EvidenceId: evidenceId
             },
             success: function (response) {
                 common.showSuccess();
@@ -191,16 +206,44 @@
 
         tblChainToEvidenceAffectedRetract.find('span.delete').click(function () {
             var evidenceId = $(this).attr('evidence-id');
+            var evidenceDisplay = $(this).attr('evidence-display');
+
             if ($(this).hasClass('icon-delete-restore')) {
-                RestoreAffectedEvidence(ctsCustId, username, evidenceId);
+                RestoreAffectedEvidence(ctsCustId, username, evidenceId, evidenceDisplay);
             } else {
-                RetractAffectedEvidence(ctsCustId, username, evidenceId);
+                RetractAffectedEvidence(ctsCustId, username, evidenceId, evidenceDisplay);
+            }
+        })
+
+        tblChainToEvidenceAffectedRetract.find('tr.affected').each(function () {
+            AffectedRetractToogleGroup(this);
+        })
+
+        $('tbody', tblChainToEvidenceAffectedRetract).on('click', 'tr.affected', function () {
+            AffectedRetractToogleGroup(this);
+        })
+    }
+
+    function AffectedRetractToogleGroup(target) {
+        var evidenceCode = $(target).attr('evidence-code');
+
+        $('tr[evidence-code="' + evidenceCode + '"]', tblChainToEvidenceAffectedRetract).each(function () {
+            if (!$(this).hasClass('affected')) {
+                if ($(this).hasClass('hide')) {
+                    $(this).removeClass('hide');                    
+                    $('span.icon', $(target)).removeClass('icon-chevron-down').addClass('icon-chevron-up');
+                } else {
+                    $(this).addClass('hide');
+                    $('span.icon', $(target)).removeClass('icon-chevron-up').addClass('icon-chevron-down');
+                }
             }
         })
     }
 
-    function RestoreAffectedEvidence(ctsCustId, username, evidenceId) {
-        common.showConfirmation(`Do you want restore affected evidence to ${username}?`, function () {
+    function RestoreAffectedEvidence(ctsCustId, username, evidenceId, evidenceDisplay) {     
+        var title = `Recover Affected Evidence ${evidenceDisplay} from all associations to ${username}?`;
+
+        common.showFormConfirmation('', title, function () {
             var url = common.modifyRelativeUrl('/Account/RestoreAffectedEvidence');
 
             $.ajax(url, {
@@ -209,8 +252,8 @@
                     common.showLoading();
                 },
                 data: {
-                    ctsCustId: ctsCustId,
-                    evidenceId: evidenceId
+                    CTSCustId: ctsCustId,
+                    EvidenceId: evidenceId
                 },
                 success: function (response) {
                     common.showSuccess();
@@ -228,19 +271,21 @@
         })
     }
 
-    function RetractAffectedEvidence(ctsCustId, username, evidenceId) {
+    function RetractAffectedEvidence(ctsCustId, username, evidenceId, evidenceDisplay) {
 
         var html = '<div class="filter"><div class="dropdown">';        
         html += '<div class="control-label">Comment</div>';
         html += '<div><textarea rows="4" style="width:400px" id="txtRemoveEvidenceComment" maxlength="500"></textarea></div>';
-        html += '</div></div>';        
+        html += '</div></div>';
 
-        common.showConfirmation(html, function () {
+        var title = `Remove Affected Evidence ${evidenceDisplay} from all associations to ${username}`;
+
+        common.showFormConfirmation(html, title, function () {
             var url = common.modifyRelativeUrl('/Account/RetractAffectedEvidence');
             var params = {};
-            params.ctsCustId = ctsCustId;
-            params.evidenceId = evidenceId;
-            params.comment = $('#txtRemoveEvidenceComment').val();
+            params.CTSCustId = ctsCustId;
+            params.EvidenceId = evidenceId;
+            params.Comment = $('#txtRemoveEvidenceComment').val();
 
             $.ajax(url, {
                 type: 'POST',
@@ -418,10 +463,10 @@
     function AddPlaceEvidence(ctsCustId, username, subscriberId) {
         var url = common.modifyRelativeUrl('/Account/PlaceEvidence');
         var params = {};
-        params.ctsCustId = ctsCustId;
-        params.subscriberId = subscriberId;
-        params.evidenceId = ddlPlaceEvidenceListEvidence.find('option:selected').val();
-        params.comment = txtPlaceEvidenceComment.val();
+        params.CTSCustId = ctsCustId;
+        params.SubscriberId = subscriberId;
+        params.EvidenceId = ddlPlaceEvidenceListEvidence.find('option:selected').val();
+        params.Comment = txtPlaceEvidenceComment.val();
 
         $.ajax(url, {
             type: 'POST',

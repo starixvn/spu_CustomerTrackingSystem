@@ -117,26 +117,21 @@
             Assert.IsType<List<FlaggedEvidenceModel>>(actualResult);
         }
 
-        [Theory]
-        [InlineData(10515, 2, 60, "Place by Tuan", 8)]
-        [InlineData(18491, 2, 61, "Place by Tuan", 8)]
-        [InlineData(213419, 2, 59, "Place by Tuan", 8)]
-        [InlineData(127512, 2, 58, "Place by Tuan", 8)]
-        public void Can_PlaceEvidence(int ctsCustId, int subscriberId, int evidenceId, string comment, int userId)
+        [Fact]
+        public void Can_PlaceEvidence()
         {
             // Act
-            var actualResult = _runner.PlaceEvidence(ctsCustId, subscriberId, evidenceId, comment, userId) as DBResult;
+            var actualResult = _runner.PlaceEvidence(ExpectedUpdate.ExpectedUpdatePlaceEvidenceModel) as DBResult;
 
             // Assert
             Assert.True(actualResult.ErrorCode == 0);
         }
 
-        [Theory]
-        [InlineData(501755, 1, 8)]
-        public void Can_RemoveFlaggedEvidence(int ctsCustId, int evidenceId, int userId)
+        [Fact]
+        public void Can_RemoveFlaggedEvidence()
         {
             // Act
-            var actualResult = _runner.RemoveFlaggedEvidence(ctsCustId, evidenceId, userId) as DBResult;
+            var actualResult = _runner.RemoveFlaggedEvidence(ExpectedUpdate.ExpectedRemoveFlaggedEvidenceModel) as DBResult;
 
             // Assert
             Assert.True(actualResult.ErrorCode == 0);
@@ -153,23 +148,21 @@
             Assert.IsType<AffectedRetractEvidenceModel>(actualResult);
         }
 
-        [Theory]
-        [InlineData(501755, 60, 8)]
-        public void Can_RetractAffectedEvidence(int ctsCustId, int evidenceId, int userId)
+        [Fact]
+        public void Can_RetractAffectedEvidence()
         {
             // Act
-            var actualResult = _runner.RetractAffectedEvidence(ctsCustId, evidenceId, userId);
+            var actualResult = _runner.RetractAffectedEvidence(ExpectedUpdate.ExpectedRetractAffectedEvidenceModel);
 
             // Assert
             Assert.True(actualResult == 0);
         }
 
-        [Theory]
-        [InlineData(501755, 60, 8)]
-        public void Can_RestoreAffectedEvidence(int ctsCustId, int evidenceId, int userId)
+        [Fact]
+        public void Can_RestoreAffectedEvidence()
         {
             // Act
-            var actualResult = _runner.RestoreAffectedEvidence(ctsCustId, evidenceId, userId);
+            var actualResult = _runner.RestoreAffectedEvidence(ExpectedUpdate.ExpectedRestoreAffectedEvidenceModel);
 
             // Assert
             Assert.True(actualResult == 0);
@@ -184,6 +177,16 @@
 
             // Assert
             Assert.IsType<List<AffectedEvidenceListBetweenCustsModel>>(actualResult);
+        }
+      
+        [Fact]
+        public void Can_AddAccountException()
+        {
+            // Act
+            var actualResult = _runner.AddAccountException(ExpectedUpdate.ExpectedUpdateAccountExceptionModel);
+
+            // Assert
+            Assert.True(actualResult == 0);
         }
 
         #endregion

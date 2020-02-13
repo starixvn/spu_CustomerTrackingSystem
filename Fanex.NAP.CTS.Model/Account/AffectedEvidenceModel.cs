@@ -14,6 +14,8 @@
 
         public string LoginID { get; set; }
 
+        public Int64 CTSCustID { get; set; }
+
         public string UserName { get; set; }
 
         public string AssociationType { get; set; }
