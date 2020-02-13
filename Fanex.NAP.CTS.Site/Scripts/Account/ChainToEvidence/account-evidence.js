@@ -38,7 +38,7 @@
                 {
                     data: obj => '<span class="icon-delete"></span>', createdCell: (cell, _, row) => {
                         $('.icon-delete', cell).click(() =>
-                            common.showFormConfirmation(`Do you want remove flagged evidence ${row.EvidenceDisplay} to ${username}?`, 'Confirmation', function () {
+                            common.showFormConfirmation(`Do you want remove flagged evidence ${row.EvidenceDisplay} from ${username}?`, 'Confirmation', function () {
                                 RemoveFlaggedEvidence(row.EvidenceID, ctsCustId, username)
                             })
                         );
@@ -106,9 +106,9 @@
                             html += '</tr>';
                         } else {
                             html = '<tr class="affected" evidence-code="' + data[i].EvidenceCode + '" style="background-color: #70809e">';
-                            html += '<td colspan="5" style="color: #fff !important">';
-                            html += '<span class="icon icon-chevron-up" style="cursor: pointer;"></span>';
-                            html += '<span style="cursor: pointer;">' + group + '</span>';
+                            html += '<td class="affected-group" colspan="5" style="color: #fff !important; cursor: pointer; ">';
+                            html += '<span class="icon icon-chevron-up""></span>';
+                            html += '<span>' + group + '</span>';
                             html += '</td>';
                             html += '<td class="text-center"><span class="icon-delete delete" evidence-id = "' + data[i].EvidenceID + '" evidence-display = "' + data[i].EvidenceDisplay + '"></span></td>';
                             html += '</tr>';
@@ -217,8 +217,8 @@
             AffectedRetractToogleGroup(this);
         })
 
-        $('tbody', tblChainToEvidenceAffectedRetract).on('click', 'tr.affected', function () {
-            AffectedRetractToogleGroup(this);
+        $('tbody', tblChainToEvidenceAffectedRetract).on('click', 'td.affected-group', function () {
+            AffectedRetractToogleGroup($(this).closest('tr'));
         })
     }
 

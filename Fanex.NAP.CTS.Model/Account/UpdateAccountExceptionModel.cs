@@ -4,6 +4,8 @@
     {
         public int UserId { get; set; }
 
+        public int SubscriberId { get; set; }
+
         public long FromCTSCustId { get; set; }
 
         public long ToCTSCustId { get; set; }

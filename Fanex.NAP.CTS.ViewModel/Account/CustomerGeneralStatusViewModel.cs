@@ -135,8 +135,8 @@ namespace Fanex.NAP.CTS.ViewModel.Account
             if (customerInfoByCTSCustIdModel != null)
             {
                 this.LastLoginDate = customerInfoByCTSCustIdModel.LastLoginTime;
-                this.UserName2 = customerInfoByCTSCustIdModel.Username2;
-                this.UserName = customerInfoByCTSCustIdModel.Username;
+                this.UserName2 = string.IsNullOrEmpty(customerInfoByCTSCustIdModel.Username2) ? customerInfoByCTSCustIdModel.Username : customerInfoByCTSCustIdModel.Username2;
+                this.UserName = string.IsNullOrEmpty(customerInfoByCTSCustIdModel.Username) ? customerInfoByCTSCustIdModel.Username2 : customerInfoByCTSCustIdModel.Username;
                 this.CreatedDate = customerInfoByCTSCustIdModel.CreatedDate;
                 this.Role = new Model.DTO.Role { Id = customerInfoByCTSCustIdModel.RoleId };
                 this.CustSubId = customerInfoByCTSCustIdModel.CustSubId;

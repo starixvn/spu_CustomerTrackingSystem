@@ -1,17 +1,15 @@
-﻿using Fanex.Data;
-using Fanex.Data.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Fanex.NAP.CTS.Criteria.Account.ChainToEvidence
+﻿namespace Fanex.NAP.CTS.Criteria.Account.ChainToEvidence
 {
+    using Fanex.Data;
+    using Fanex.Data.Repository;
+
     public class RemoveAccountExceptionCriteria : NonQueryCommand
     {
         [SpParam(SqlParamName = "ip_UserID")]
         public int UserId { get; set; }
+
+        [SpParam(SqlParamName = "ip_FromSubscriberID")]
+        public int SubscriberId { get; set; }
 
         [SpParam(SqlParamName = "ip_FromCTSCustID")]
         public long FromCTSCustId { get; set; }

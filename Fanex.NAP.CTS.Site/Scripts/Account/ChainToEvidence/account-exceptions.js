@@ -8,6 +8,7 @@
     var comment = $('#txtcomment');
     var _ctsCustId = 0;
     var _rootUsername = '';
+    var _subscriberId = 0;
 
     function RenderGrid() {
         tblChainToEvidenceException.DataTable({
@@ -61,14 +62,14 @@
         var url = common.modifyRelativeUrl('/Account/GetAffectedEvidenceListBetweenCusts');
         var params = {};
         params.FromCTSCustId = _ctsCustId;
-        params.ToCTSCustId = exceptionCTSCustId;
+        params.ToCTSCustId = exceptionCTSCustId;        
         
         $.ajax(url, {
             type: 'POST',
             data: params,
             success: function (response) {
                 var html = `The following evidence will be affected between 2 accounts <br/>`;
-                html += '<div><ul>';
+                html += '<div style="overflow-y:auto; line-height: normal; max-height: 350px;"><ul>';
                 for (var i = 0; i < response.length; i++) {
                     html += '<li> - ' + response[i].EvidenceDisplay + '</li>';
                 }
@@ -88,6 +89,7 @@
         var params = {};
         params.FromCTSCustId = _ctsCustId;
         params.ToCTSCustId = exceptionCTSCustId;
+        params.SubscriberId = _subscriberId;
 
         $.ajax(url, {
             type: 'POST',
@@ -125,7 +127,7 @@
                     common.showError('Username/Login ID "' + params.ToUserName + '" is invalid.');
                 }
                 else if (response.errorCode == 1062) {
-                    common.showError('Username/Login ID is already existed in "' + params.ToUserName + '" Exceptions List.');
+                    common.showError('Username/Login ID already exists in "' + params.ToUserName + '" exceptions list.');
                 }
                 else {
                     common.showError('Add the exception fail!');
@@ -168,9 +170,10 @@
         })
     }
 
-    this.Initial = function (ctsCustId, rootUsername) {
+    this.Initial = function (ctsCustId, rootUsername, subscriberId) {
         _ctsCustId = ctsCustId;
         _rootUsername = rootUsername;
+        _subscriberId = subscriberId;
 
         RenderGrid();
         GetException();
@@ -180,8 +183,8 @@
 
             divException.dialog({
                 modal: true,
-                width: '700px',
-                title: 'ADD EXCEPTIONS',
+                width: '800px',               
+                title: 'ADD EXCEPTIONS',                
                 resizable: true,
                 draggable: true,
                 close: function () { $(this).dialog('close'); }

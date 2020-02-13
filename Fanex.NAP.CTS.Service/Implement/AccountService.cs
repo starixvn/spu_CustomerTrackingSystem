@@ -966,6 +966,7 @@
             var criteria = new RemoveAccountExceptionCriteria
             {
                 UserId = model.UserId,
+                SubscriberId = model.SubscriberId,
                 FromCTSCustId = model.FromCTSCustId,
                 ToCTSCustId = model.ToCTSCustId
             };
