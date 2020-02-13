@@ -13,7 +13,7 @@
 
         public string EvidenceDisplay { get; set; }
 
-        public DateTime FlaggedDate { get; set; }
+        public string FlaggedDate { get; set; }
 
         public string Comment { get; set; }
 

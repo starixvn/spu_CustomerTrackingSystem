@@ -71,15 +71,13 @@
     }
 
     function RenderUsername(obj) {
-        if (obj.Username == null) {
-            return '';
+        if (obj.Username != null) {
+            var url = common.modifyRelativeUrl('/Account/Index/' + obj.CTSCustId);
+
+            return '<a class="info-bng" href="' + url + '">' + obj.Username + '</a>';
         }
 
-        var url = common.modifyRelativeUrl('/Account/Index/' + obj.CTSCustId);
-
-        var html = '<a class="info-bng" href="' + url + '">' + obj.Username + '</a>';
-
-        return html;
+        return null;        
     }
 
     function RenderGraphImage() {

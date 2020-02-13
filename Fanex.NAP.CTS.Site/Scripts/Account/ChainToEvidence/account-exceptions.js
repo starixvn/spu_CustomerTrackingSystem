@@ -32,7 +32,7 @@
             columns: [
                 { data: obj => RenderUsername(obj) },
                 { data: obj => obj.LoginId },
-                { data: obj => moment(obj.ExceptionDate).format("MMM DD, YYYY HH:mm:ss") },
+                { data: obj => obj.ExceptionDate },
                 { data: obj => obj.Comment },
                 { data: obj => obj.Creator },
                 {
@@ -48,15 +48,13 @@
     }
 
     function RenderUsername(obj) {
-        if (obj.UserName == null) {
-            return '';
+        if (obj.UserName != null) {
+            var url = common.modifyRelativeUrl('/Account/Index/' + obj.ExceptionCTSCustId);
+
+            return '<a class="info-bng" href="' + url + '">' + obj.UserName + '</a>';
         }
 
-        var url = common.modifyRelativeUrl('/Account/Index/' + obj.ExceptionCTSCustId);
-
-        var html = '<a class="info-bng" href="' + url + '">' + obj.UserName + '</a>';
-
-        return html;
+        return null;        
     }
 
     function ConfirmRemoveException(exceptionCTSCustId, username) {
@@ -69,14 +67,14 @@
             type: 'POST',
             data: params,
             success: function (response) {
-                var html = `The following evidence will be affected between 2 accounts ${username}? <br/>`;
+                var html = `The following evidence will be affected between 2 accounts <br/>`;
                 html += '<div><ul>';
                 for (var i = 0; i < response.length; i++) {
                     html += '<li> - ' + response[i].EvidenceDisplay + '</li>';
                 }
                 html += '</ul></div>';
 
-                var title = `Remove ${username} From Member ${_rootUsername} Exceptions List`;
+                var title = `Remove ${username} From ${_rootUsername} Exceptions List`;
 
                 common.showFormConfirmation(html, title, function () {
                     RemoveException(exceptionCTSCustId);
@@ -124,10 +122,10 @@
                     divException.dialog('close');
                 }
                 else if (response.errorCode == 1) {
-                    common.showError('Username/Login ID "' + username.val() + '" is invalid.');
+                    common.showError('Username/Login ID "' + params.ToUserName + '" is invalid.');
                 }
                 else if (response.errorCode == 1062) {
-                    common.showError('Username/Login ID is already existed in "' + username.val() + '" Exceptions List.');
+                    common.showError('Username/Login ID is already existed in "' + params.ToUserName + '" Exceptions List.');
                 }
                 else {
                     common.showError('Add the exception fail!');
@@ -170,9 +168,9 @@
         })
     }
 
-    this.Initial = function (ctsCustId, username) {
+    this.Initial = function (ctsCustId, rootUsername) {
         _ctsCustId = ctsCustId;
-        _rootUsername = username;
+        _rootUsername = rootUsername;
 
         RenderGrid();
         GetException();
@@ -182,7 +180,7 @@
 
             divException.dialog({
                 modal: true,
-                width: '650px',
+                width: '700px',
                 title: 'ADD EXCEPTIONS',
                 resizable: true,
                 draggable: true,

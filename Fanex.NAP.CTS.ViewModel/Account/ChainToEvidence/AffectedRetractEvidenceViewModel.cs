@@ -21,9 +21,9 @@
 
         public string AssociationType { get; set; }
 
-        public DateTime AffectedTime { get; set; }
+        public string AffectedTime { get; set; }
 
-        public DateTime LastLoginTime { get; set; }
+        public string LastLoginTime { get; set; }
 
         public string Creator { get; set; }
 

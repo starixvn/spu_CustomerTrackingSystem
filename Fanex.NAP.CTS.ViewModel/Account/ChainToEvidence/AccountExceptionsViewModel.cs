@@ -14,7 +14,7 @@ namespace Fanex.NAP.CTS.ViewModel.Account.ChainToEvidence
 
         public string LoginId { get; set; }
 
-        public DateTime ExceptionDate { get; set; }
+        public string ExceptionDate { get; set; }
 
         public string Comment { get; set; }
 

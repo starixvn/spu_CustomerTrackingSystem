@@ -32,7 +32,7 @@
             ],
             columns: [
                 { data: obj => obj.EvidenceDisplay },
-                { data: obj => moment(obj.FlaggedDate).format("MMM DD, YYYY HH:mm:ss") },
+                { data: obj => obj.FlaggedDate },
                 { data: obj => obj.Comment },
                 { data: obj => obj.Creator },
                 {
@@ -76,8 +76,8 @@
                 { data: obj => RenderUsername(obj) },
                 { data: obj => obj.LoginID },
                 { data: obj => obj.AssociationType },
-                { data: obj => moment(obj.AffectedTime).format("MMM DD, YYYY HH:mm:ss") },
-                { data: obj => moment(obj.LastLoginTime).format("MMM DD, YYYY HH:mm:ss") }
+                { data: obj => obj.AffectedTime },
+                { data: obj => obj.LastLoginTime }
             ],
             createdRow: function (row, obj) {
                 $(row).attr('evidence-code', obj.EvidenceCode);
@@ -99,7 +99,7 @@
                             html += '<td colspan="5" style="color: #fff !important; text-decoration: line-through; position: relative;">';
                             html += '<span class="evidence-retract">' + group + '</span>';
                             html += '<div class="tooltip">';
-                            html += '<div>Create Date: ' + moment(data[i].AffectedTime).format("MMM DD, YYYY HH:mm:ss") + '</div>';
+                            html += '<div>Create Date: ' + data[i].AffectedTime + '</div>';
                             html += '<div>Create By: ' + data[i].Creator + '</div>';
                             html += '<div>Comment:  ' + data[i].Comment + '</div></td>';
                             html += '<td class="text-center"><span class="icon-delete-restore delete" evidence-id = "' + data[i].EvidenceID + '" evidence-display = "' + data[i].EvidenceDisplay + '"></span></td>';
@@ -122,15 +122,13 @@
     }   
 
     function RenderUsername(obj) {
-        if (obj.UserName == null) {
-            return '';
+        if (obj.UserName != null) {
+            var url = common.modifyRelativeUrl('/Account/Index/' + obj.CTSCustID);
+
+            return '<a class="info-bng" href="' + url + '">' + obj.UserName + '</a>';
         }
 
-        var url = common.modifyRelativeUrl('/Account/Index/' + obj.CTSCustID);
-
-        var html = '<a class="info-bng" href="' + url + '">' + obj.UserName + '</a>';
-
-        return html;
+        return null;        
     }
 
     function GetAccountEvidence(ctsCustId, username) {

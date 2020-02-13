@@ -239,7 +239,7 @@
                     EvidenceDisplay = x.EvidenceCode + " " + x.EvidenceName,
                     Comment = x.Remark,
                     Creator = x.Creator,
-                    FlaggedDate = x.CreatedDate
+                    FlaggedDate = x.CreatedDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss)
                 }).ToList();
 
                 evidenceList.AddRange(result.FlaggedEvidenceList.Select(x => new EvidenceViewModel
@@ -258,12 +258,12 @@
                     EvidenceCode = x.EvidenceCode,
                     EvidenceName = x.EvidenceName,
                     EvidenceDisplay = x.EvidenceCode + " " + x.EvidenceName,
-                    LoginID = x.LoginID,
+                    LoginID = string.IsNullOrEmpty(x.LoginID) ? x.UserName : x.LoginID,
                     CTSCustID = x.CTSCustID,
-                    UserName = x.UserName,
+                    UserName = string.IsNullOrEmpty(x.UserName) ? x.LoginID : x.UserName,
                     AssociationType = x.AssociationType,
-                    AffectedTime = x.CreatedDate,
-                    LastLoginTime = x.LastLoginTime,
+                    AffectedTime = x.CreatedDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+                    LastLoginTime = x.LastLoginTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                     IsRetract = false
                 }));                
             }
@@ -276,12 +276,12 @@
                     EvidenceCode = x.EvidenceCode,
                     EvidenceName = x.EvidenceName,
                     EvidenceDisplay = x.EvidenceCode + " " + x.EvidenceName,
-                    LoginID = x.LoginID,
+                    LoginID = string.IsNullOrEmpty(x.LoginID) ? x.UserName : x.LoginID,
                     CTSCustID = x.CTSCustID,
-                    UserName = x.UserName,
+                    UserName = string.IsNullOrEmpty(x.UserName) ? x.LoginID : x.UserName,
                     AssociationType = x.AssociationType,
-                    AffectedTime = x.CreatedDate,
-                    LastLoginTime = x.LastLoginTime,
+                    AffectedTime = x.CreatedDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+                    LastLoginTime = x.LastLoginTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                     Creator = x.Creator,
                     Comment = x.Remark,
                     IsRetract = true
@@ -312,13 +312,13 @@
                 result = exceptions.Select(x => new AccountExceptionsViewModel
                 {
                     ExceptionCTSCustId = x.ExceptionCTSCustId,
-                    UserName = x.UserName,
-                    LoginId = x.LoginId,
+                    UserName = string.IsNullOrEmpty(x.UserName) ? x.LoginId : x.UserName,
+                    LoginId = string.IsNullOrEmpty(x.LoginId) ? x.UserName : x.LoginId,
                     Comment = x.Comment,
                     Creator = x.CreatedBy,
                     CTSCustId = x.CTSCustId,
                     CustId = x.CustId,
-                    ExceptionDate = x.ExceptionDate
+                    ExceptionDate = x.ExceptionDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss)
                 }).ToList();
             }
 
