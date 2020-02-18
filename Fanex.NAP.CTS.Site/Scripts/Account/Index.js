@@ -3,7 +3,10 @@
     var custId = $("#hdCustId").val();
     var ctsCustId = $("#hdCTSCustId").val();
     var subscriberId = $("#hdSubcriberId").val();
-    var subscriber = $("#hdSubscriber").val();    
+    var subscriber = $("#hdSubscriber").val();  
+
+    var lnkAssociation = $("#lnkAssociation");
+    var lnkEvidence = $("#lnkEvidence");
 
     function LoadAssociationByAccount() {
         $.ajax(common.modifyRelativeUrl('/Account/AssociatedByAccount'), {
@@ -95,6 +98,14 @@
         CollapseExpandItem();
         LoadAssociationByAccount();
         LoadChainToEvidence();
+
+        lnkAssociation.on('click', function () {
+            $("#header_associated_account").trigger("click");
+        });
+
+        lnkEvidence.on('click', function () {
+            $("#header_chains_evidence").trigger("click");
+        });
     }
 
     $(document).ready(function () {

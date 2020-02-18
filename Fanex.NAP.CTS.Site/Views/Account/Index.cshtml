@@ -134,9 +134,9 @@
                     <label>E-Sports</label>
                 </div>
                 <div class="info-text">
-                    <div>@(Model.AutoSuspendSoccer ? Html.Raw("<a href='#' class='link'>Yes</a>") : Html.Raw("No"))</div>
-                    <div>@(Model.AutoSuspendOtherSport ? Html.Raw("<a href='#' class='link'>Yes</a>") : Html.Raw("No"))</div>
-                    <div>@(Model.AutoSuspendESport ? Html.Raw("<a href='#' class='link'>Yes</a>") : Html.Raw("No"))</div>
+                    <div>@(Model.AutoSuspendSoccer ? Html.Raw("Yes") : Html.Raw("No"))</div>
+                    <div>@(Model.AutoSuspendOtherSport ? Html.Raw("Yes") : Html.Raw("No"))</div>
+                    <div>@(Model.AutoSuspendESport ? Html.Raw("Yes") : Html.Raw("No"))</div>
                 </div>
             </div>
         </div>
@@ -150,8 +150,8 @@
                     <label>Evidence</label>
                 </div>
                 <div class="info-text">
-                    <div><a href="#" class="link">@Model.TotalAssociationByAccount/@Model.TotalAssociationByDevice/@Model.TotalAssociationByIp</a></div>
-                    <div>@(Model.Evidences != null ? Html.Raw(string.Format("<a href='#' class='link'>{0}</a>", Model.Evidences)) : Html.Raw("None"))</div>
+                    <div><a id="lnkAssociation" href="javascript:void(0)" class="link">@Model.TotalAssociationByAccount/@Model.TotalAssociationByDevice/@Model.TotalAssociationByIp</a></div>
+                    <div>@(Model.Evidences != null ? Html.Raw(string.Format("<a id='lnkEvidence' href='javascript:void(0)' class='link'>{0}</a>", Model.Evidences)) : Html.Raw("None"))</div>
                 </div>
             </div>
         </div>
@@ -211,7 +211,7 @@
     </div>
     <div id="account-detail-container" class="report-content">
         <div class="report-item">
-            <h3 class="report-header" ref="associated_account">
+            <h3 id="header_associated_account" class="report-header" ref="associated_account">
                 <i class="icon-chevron-right"></i>
                 <a href="javascript:void(0)">Associated Accounts</a>
             </h3>
@@ -220,7 +220,7 @@
             </div>
         </div>
         <div class="report-item">
-            <h3 class="report-header" ref="chains_evidence">
+            <h3 id="header_chains_evidence" class="report-header" ref="chains_evidence">
                 <i class="icon-chevron-right"></i>
                 <a href="javascript:void(0)">Chains to Evidence and Exceptions</a>
             </h3>
