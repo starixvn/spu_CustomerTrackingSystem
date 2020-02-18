@@ -2,11 +2,11 @@
 
 <div class="header-info">    
     <div class="username">
-        @User.Identity.GetUserName()
-        <ul class="sub-menu -small">
-            <li class="sub-menu-item">
-                <a href="#" class="link">Change Password</a>
-            </li>
+        <span>
+            @User.Identity.GetUserName()
+            <i class="icon-chevron-down"></i>
+        </span>
+        <ul class="sub-menu -small">            
             <li class="sub-menu-item">
                 <a href="~/UserLogin/Login/Logout" class="link">Log Out</a>
             </li>

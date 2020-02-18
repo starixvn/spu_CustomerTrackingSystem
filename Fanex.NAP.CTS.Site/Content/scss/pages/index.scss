@@ -55,8 +55,8 @@ body {
         display: table;
         z-index: 111;
         opacity: 1;
-        height: auto;
-        transform: scaleY(1);
+        //height: auto;
+        //transform: scaleY(1);
     }
 
     .icon {
@@ -70,13 +70,13 @@ body {
         top: 100%;
         //bottom: 0;
         left: 0;
-        height: 0;
+        //height: 0;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         min-width: 190px;
-        transform: scaleY(0.8);
-        transition: transform .2s .1s ease-out, opacity .2s .1s ease-out;
+        //transform: scaleY(0.8);
+        //transition: transform .2s .1s ease-out, opacity .2s .1s ease-out;
         transform-origin: 0 0;
         border: 1px solid #d0d0d0;
         box-shadow: 0 0 4px rgba(0,0,0, .3);
@@ -223,40 +223,33 @@ body {
     }*/
     .username {
         @extend %has-sub-menu;
-        //padding-left: 30px;
         line-height: 2;
-        width: 40px;
-        height: 40px;
         color: #fff;
         cursor: pointer;
-        border-radius: 30px;
-        background: #fff;
-        text-align: center;
-        color: #1d2e4f;
+        color: #fff;
         border: 3px solid rgba(29,46,79,.7);
-        /*&:after {
+
+        > span, .icon-chevron-down {
             display: inline-block;
-            margin-left: 6px;
-            font-family: 'Fraud-Sensor';
-            content: "\e90c";
-            font-size: 14px;
-        }*/
+            vertical-align: middle;
+        }
+
+        .icon-chevron-down {
+            margin-left: 5px;
+        }
+
         .sub-menu {
             left: auto;
-            right: -18px;
+            right: 0px;
             line-height: 1;
             position: absolute;
             background: #fff;
-        }
+            border-radius: 3px;
 
-        .sub-menu:before {
-            position: absolute;
-            right: 17px;
-            top: -14px;
-            content: '';
-            border: 7px solid;
-            border-color: transparent transparent #fff transparent;
-            z-index: 1002;
+            .sub-menu-item > .link:hover {
+                background: #ddd;
+                color: #333;
+            }
         }
     }
 
