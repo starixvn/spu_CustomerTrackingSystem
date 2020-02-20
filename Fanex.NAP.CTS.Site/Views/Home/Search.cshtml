@@ -29,14 +29,14 @@
             <ul class="result-list">
 
                 @foreach (var data in Model.SearchResults)
-                {                   
+                {
                     <li class="result-item">
                         <a class="result-name" href="~/Account/Index/@data.CTSCustId">@(string.IsNullOrWhiteSpace(data.Username) ? data.Username2 : data.Username) <span>(@(string.IsNullOrWhiteSpace(data.Username2) ? data.Username : data.Username2))</span></a>
                         <p>
                             <span style="width: 130px;">Currency: @(data.Currency == null ? "None" : data.Currency.Name)</span>
                             <span style="width: 130px;">Level: @(data.Role == null ? "None" : data.Role.Name)</span>
                             <span style="width: 200px;">Subscriber: @(data.Subscriber == null ? "None" : data.Subscriber.Name)</span>
-                            <span style="width: 170px;">Last Login: @data.LastLogin.ToString("MMM dd, yyyy")</span>
+                            <span style="width: 170px;">Last Login: @(data.LastLogin.Year == 0001 ? "None" : data.LastLogin.ToString("MMM dd, yyyy"))</span>
                         </p>
                     </li>
                 }

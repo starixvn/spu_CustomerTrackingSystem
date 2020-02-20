@@ -77,7 +77,7 @@
                 { data: obj => obj.LoginID },
                 { data: obj => obj.AssociationType },
                 { data: obj => obj.AffectedTime },
-                { data: obj => obj.LastLoginTime }
+                { data: obj => moment.isDate(obj.LastLoginTime) ? obj.LastLoginTime : "None" }
             ],
             createdRow: function (row, obj) {
                 $(row).attr('evidence-code', obj.EvidenceCode);
@@ -99,8 +99,8 @@
                             html += '<td colspan="5" style="color: #fff !important; text-decoration: line-through; position: relative;">';
                             html += '<span class="evidence-retract">' + group + '</span>';
                             html += '<div class="tooltip">';
-                            html += '<div>Create Date: ' + data[i].AffectedTime + '</div>';
-                            html += '<div>Create By: ' + data[i].Creator + '</div>';
+                            html += '<div>Removed Date: ' + data[i].AffectedTime + '</div>';
+                            html += '<div>Removed By: ' + data[i].Creator + '</div>';
                             html += '<div>Comment:  ' + data[i].Comment + '</div></td>';
                             html += '<td class="text-center"><span class="icon-delete-restore delete" evidence-id = "' + data[i].EvidenceID + '" evidence-display = "' + data[i].EvidenceDisplay + '"></span></td>';
                             html += '</tr>';
