@@ -41,16 +41,16 @@
             RegisterFSCoreBundles(bundles);
             RegisterSearchBoxBundles(bundles);
 
-            RegisterMatchMonitorBundles(bundles);
-            RegisterFraudCaseBundles(bundles);
-            RegisterSuspiciousCustomerBundles(bundles);
-            RegisterSuspiciousCustomerDetailsBundles(bundles);
-            RegisterScannedOfficeIpBundles(bundles);
-            RegisterNotificationBundles(bundles);
-            RegisterDailyDataCaptureBundles(bundles);
-            RegisterCheckBetReportBundles(bundles);
-            RegisterCustomerMonitorBundles(bundles);
-            RegisterSubscriberAssignment(bundles);
+            //RegisterMatchMonitorBundles(bundles);
+            //RegisterFraudCaseBundles(bundles);
+            //RegisterSuspiciousCustomerBundles(bundles);
+            //RegisterSuspiciousCustomerDetailsBundles(bundles);
+            //RegisterScannedOfficeIpBundles(bundles);
+            //RegisterNotificationBundles(bundles);
+            //RegisterDailyDataCaptureBundles(bundles);
+            //RegisterCheckBetReportBundles(bundles);
+            //RegisterCustomerMonitorBundles(bundles);
+            //RegisterSubscriberAssignment(bundles);
             RegisterSearchBundles(bundles);
             RegisterAccountDetailBundles(bundles);
             RegisterAssociatedByAccountBundles(bundles);
