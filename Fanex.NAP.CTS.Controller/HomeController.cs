@@ -9,6 +9,7 @@
     using System.Collections.Generic;
     using System.Data.Linq.SqlClient;
     using System.Linq;
+    using System.Text;
     using System.Threading.Tasks;
     using System.Web.Mvc;
 
@@ -60,9 +61,13 @@
                 return View(new SearchResultViewModel { SearchResults = null, InputValue = inputValue });
             }
 
-            var result = accountService.SearchAccounts(inputValue);
+            var inputUsername = ValidateUserName(inputValue);
 
-            if (result.Count == 1 && result.Any(x => (x.Username != null && x.Username.Equals(inputValue, System.StringComparison.CurrentCultureIgnoreCase)) || (x.Username2 != null && x.Username2.Equals(inputValue, System.StringComparison.CurrentCultureIgnoreCase))))
+            var result = accountService.SearchAccounts(inputUsername);
+
+            if (result.Count == 1 && result.Any(x => (
+                        x.Username != null && x.Username.Equals(inputValue, System.StringComparison.CurrentCultureIgnoreCase)) 
+                        || (x.Username2 != null && x.Username2.Equals(inputValue, System.StringComparison.CurrentCultureIgnoreCase))))
             {
                 return RedirectToAction("Index", "Account", new { Id = result.FirstOrDefault().CTSCustId });
 
@@ -91,6 +96,25 @@
                 .Union(result).ToList();
 
             return View(new SearchResultViewModel { SearchResults = newResult, InputValue = inputValue });
+        }
+
+        private string ValidateUserName(string inputUserName)
+        {
+            var words = inputUserName.Split(new char[] { '$', '@' });
+            var result = new StringBuilder();
+
+            if(words.Length > 0)
+            {
+                foreach(var word in words)
+                {
+                    if(!string.IsNullOrWhiteSpace(word))
+                    {
+                        result.Append($"+{word}* ");
+                    }
+                }
+            }
+
+            return  "\'" + result.ToString() + "\'";
         }
     }
 }
