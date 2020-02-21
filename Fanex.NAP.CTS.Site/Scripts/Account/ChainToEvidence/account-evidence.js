@@ -217,16 +217,16 @@
             AffectedRetractToogleGroup(this);
         })
 
-        $('tbody', tblChainToEvidenceAffectedRetract).on('click', 'td.affected-group', function () {
+        tblChainToEvidenceAffectedRetract.find('tr td.affected-group').on('click', function () {
             AffectedRetractToogleGroup($(this).closest('tr'));
-        })
+        });        
     }
 
     function AffectedRetractToogleGroup(target) {
         var evidenceCode = $(target).attr('evidence-code');
 
         $('tr[evidence-code="' + evidenceCode + '"]', tblChainToEvidenceAffectedRetract).each(function () {
-            if (!$(this).hasClass('affected')) {
+            if (!$(this).hasClass('affected')) {               
                 if ($(this).hasClass('hide')) {
                     $(this).removeClass('hide');                    
                     $('span.icon', $(target)).removeClass('icon-chevron-down').addClass('icon-chevron-up');
