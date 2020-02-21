@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNet.Identity
 
 <div class="header-info">
-    <div class="search-component">       
+    <div class="search-component">
         @using (Html.BeginForm("Search", "Home", FormMethod.Post))
         {
             <label class="search-header">
@@ -10,14 +10,14 @@
         }
     </div>
     <div class="username">
-        @User.Identity.GetUserName()
+        <span>
+            @User.Identity.GetUserName()
+            <i class="icon-chevron-down"></i>
+        </span>
         <ul class="sub-menu -small">
-                @*<li class="sub-menu-item">
-                    <a href="#" class="link">Change Password</a>
-                </li>*@
-                <li class="sub-menu-item">
-                    <a href="~/UserLogin/Login/Logout" class="link">Log Out</a>
-                </li>
-            </ul>
+            <li class="sub-menu-item">
+                <a href="~/UserLogin/Login/Logout" class="link">Log Out</a>
+            </li>
+        </ul>
     </div>
 </div>
