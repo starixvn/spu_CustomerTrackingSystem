@@ -69,7 +69,7 @@
             data: params,
             success: function (response) {
                 var html = `The following evidence will be affected between 2 accounts <br/>`;
-                html += '<div style="overflow-y:auto; line-height: normal; max-height: 350px;"><ul>';
+                html += '<div class="list-evidence"><ul>';
                 for (var i = 0; i < response.length; i++) {
                     html += '<li> - ' + response[i].EvidenceDisplay + '</li>';
                 }

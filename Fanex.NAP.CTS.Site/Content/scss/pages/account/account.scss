@@ -1,10 +1,14 @@
 ﻿$abnormalBackgroundColor: ( level-0: #fff, level-1: #ffc0cb, level-2: #ffff00, level-3: #ffa500, level-4: #008000, level-5: #ff0000, level-6: #800080, level-7: #a52a2a, level-8: #808080, level-9: #00ff00, level-10: #00ffff);
-$dangerousBackgroundColor: ( level-11: #ff0000, level-12: #ffff00, level-13: #8db4e2, level-14: #9cf1fc, level-15: #ccc0da, level-16: #cc6600, level-17: #ffa500, level-18: #d8e4bc, level-19: #c4bd97, level-20: #ff66cc, level-21: #3366ff);
+
 $dangerousColor: ( level-0: #000, level-1: #000, level-2: #ff0000, level-3: #ffcc00, level-4: #0000ff, level-5: #ff8080, level-6: #bb00c1, level-7: #660000, level-8: #ff6600, level-9: #708090, level-10: #339952);
+$dangerousBackgroundColor_11_20: ( level-11: #ff0000, level-12: #ffff00, level-13: #8db4e2, level-14: #9cf1fc, level-15: #ccc0da, level-16: #cc6600, level-17: #ffa500, level-18: #d8e4bc, level-19: #c4bd97, level-20: #ff66cc, level-21: #3366ff);
+$dangerousBackgroundColor_21_30: ( level-21: #3366ff, level-22: #ff0000, level-23: #8db4e2, level-24: #70ad29, level-25: #ccc0da, level-26: #cc6600, level-27: #ffa500, level-28: #808080, level-29: #babd97, level-30: #ff66cc);
+$dangerousBackgroundColor_31_40: ( level-31: #00ff00, level-32: #ffff00, level-33: #8db4e2, level-34: #9cf1fc, level-35: #ccc0da, level-36: #ff7f66, level-37: #ffa500, level-38: #d8e4bc, level-39: #babd97, level-40: #ff66cc);
+$dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-43: #ffff00, level-44: #9cf1fc, level-45: #ccc0da, level-46: #00ff00, level-47: #ffa500, level-48: #d8e4bc, level-49: #babd97, level-50: #000);
 
 @mixin badge-label($color) {
     width: 6.2rem;
-    padding: 3px 0;
+    padding: 2px 0;
     display: inline-block;
     font-size: 12px;
     font-weight: 600;
@@ -20,18 +24,39 @@ $dangerousColor: ( level-0: #000, level-1: #000, level-2: #ff0000, level-3: #ffc
     }
 }
 
-@each $name, $color in $dangerousBackgroundColor {
+@each $name, $color in $dangerousColor {
+    .dangerous-#{$name} {
+        @include badge-label(#000);
+        color: $color;
+        border: 1px solid #a8a8a8;
+    }
+}
+
+@each $name, $color in $dangerousBackgroundColor_11_20 {
     .dangerous-#{$name} {
         @include badge-label(#000);
         background: $color;
     }
 }
 
-@each $name, $color in $dangerousColor {
+@each $name, $color in $dangerousBackgroundColor_21_30 {
     .dangerous-#{$name} {
-        @include badge-label(#000);
-        color: $color;
-        border: 1px solid #a8a8a8;
+        @include badge-label(#fff);
+        background: $color;
+    }
+}
+
+@each $name, $color in $dangerousBackgroundColor_31_40 {
+    .dangerous-#{$name} {
+        @include badge-label(#0070c0);
+        background: $color;
+    }
+}
+
+@each $name, $color in $dangerousBackgroundColor_41_50 {
+    .dangerous-#{$name} {
+        @include badge-label(#fe0000);
+        background: $color;
     }
 }
 
@@ -411,7 +436,6 @@ $dangerousColor: ( level-0: #000, level-1: #000, level-2: #ff0000, level-3: #ffc
 
     .loading {
         position: relative;
-
         /*&:before {
             content: '';
             position: absolute;
@@ -419,7 +443,6 @@ $dangerousColor: ( level-0: #000, level-1: #000, level-2: #ff0000, level-3: #ffc
             width: 100%;
             height: calc(100% - 60px);
         }*/
-
         &:after {
             content: '';
             position: absolute;
@@ -442,6 +465,32 @@ $dangerousColor: ( level-0: #000, level-1: #000, level-2: #ff0000, level-3: #ffc
     .icon-delete {
         color: red;
         cursor: pointer;
+    }
+
+    .retract, .affected {
+        cursor: pointer;
+
+        .has-tooltip {
+            position: relative;
+        }
+
+        td {
+            background: #70809e;
+            color: #fff;
+        }
+
+        .icon-delete, .icon-delete-restore {
+            color: white;
+            cursor: pointer;
+        }
+
+        &:hover td {
+            background: #70809e;
+        }
+    }
+
+    .remove-action {
+        width: 170px !important;
     }
 }
 
@@ -693,16 +742,7 @@ table.dataTable.no-footer {
     }
 }
 
-.retract, .affected {
-    .icon-delete, .icon-delete-restore {
-        color: white;
-        cursor: pointer;
-    }
 
-    &:hover td {
-        background: #70809e;
-    }
-}
 
 .ui-multiselect-checkboxes {
     height: 250px !important;
@@ -734,12 +774,19 @@ table.dataTable.no-footer {
     }
 }
 
+.list-evidence {
+    overflow-y: auto;
+    line-height: normal;
+    max-height: 250px;
+}
+
 .tooltip:hover {
     display: block;
 }
 
 .evidence-retract {
     cursor: pointer;
+    text-decoration: line-through;
 }
 
 .evidence-retract:hover + .tooltip {

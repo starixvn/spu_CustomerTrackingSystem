@@ -9,7 +9,7 @@
     var btnPlaceEvidenceSubmit = $('#btnPlaceEvidenceSubmit');
     var divPlaceEvidenceDescription = $('#divPlaceEvidenceDescription');
     var txtPlaceEvidenceComment = $('#txtPlaceEvidenceComment');    
-    var tblChainToEvidenceAffectedRetract = $('#tblChainToEvidenceAffected');  
+    var tblChainToEvidenceAffectedRetract = $('#tblChainToEvidenceAffected');   
 
     function InitialFlaggedGrid(ctsCustId, username) {
         tblChainToEvidenceFlagged.DataTable({
@@ -28,7 +28,7 @@
                 { targets: [1], width: "20%", className: "text-center" },
                 { targets: [2], width: "20%", className: "text-left" },
                 { targets: [3], width: "20%", className: "text-center" },
-                { targets: [4], width: "20%", className: "text-center" }
+                { targets: [4], width: "20%", className: "text-center remove-action" }
             ],
             columns: [
                 { data: obj => obj.EvidenceDisplay },
@@ -95,22 +95,22 @@
                     if (last !== group) {
                         var html = '';
                         if (data[i].IsRetract) {
-                            html = '<tr class="retract" evidence-code="' + data[i].EvidenceCode + '>';
-                            html += '<td colspan="5">';
+                            html = '<tr class="retract" evidence-code="' + data[i].EvidenceCode + '">';
+                            html += '<td colspan="5" class="has-tooltip">';
                             html += '<span class="evidence-retract">' + group + '</span>';
                             html += '<div class="tooltip">';
                             html += '<div>Removed Date: <strong>' + data[i].AffectedTime + '</strong></div>';
                             html += '<div>Removed By: <strong>' + data[i].Creator + '</strong></div>';
                             html += '<div>Comment:  <strong>' + data[i].Comment + '</strong></div></td>';
-                            html += '<td class="text-center"><span class="icon-delete-restore delete" title="Remove Evidence" evidence-id = "' + data[i].EvidenceID + '" evidence-display = "' + data[i].EvidenceDisplay + '"></span></td>';
+                            html += '<td class="text-center"><span class="icon-delete-restore delete" evidence-id = "' + data[i].EvidenceID + '" evidence-display = "' + data[i].EvidenceDisplay + '"></span></td>';
                             html += '</tr>';
                         } else {
-                            html = '<tr class="affected" evidence-code="' + data[i].EvidenceCode + '>';
+                            html = '<tr class="affected" evidence-code="' + data[i].EvidenceCode + '">';
                             html += '<td class="affected-group" colspan="5">';
                             html += '<span class="icon icon-chevron-up""></span>';
                             html += '<span>' + group + '</span>';
                             html += '</td>';
-                            html += '<td class="text-center"><span class="icon-delete delete" title="Remove Evidence" evidence-id = "' + data[i].EvidenceID + '" evidence-display = "' + data[i].EvidenceDisplay + '"></span></td>';
+                            html += '<td class="text-center"><span class="icon-delete delete" evidence-id = "' + data[i].EvidenceID + '" evidence-display = "' + data[i].EvidenceDisplay + '"></span></td>';
                             html += '</tr>';
                         }
                         $(rows).eq(i).before(html);
@@ -273,7 +273,7 @@
 
         var html = '<div class="filter"><div class="dropdown">';        
         html += '<div class="control-label">Comment</div>';
-        html += '<div><textarea rows="4" style="width:400px" id="txtRemoveEvidenceComment" maxlength="500"></textarea></div>';
+        html += '<div><textarea rows="4" style="width:100%" id="txtRemoveEvidenceComment" maxlength="500"></textarea></div>';
         html += '</div></div>';
 
         var title = `Remove Affected Evidence ${evidenceDisplay} from all associations to ${username}`;

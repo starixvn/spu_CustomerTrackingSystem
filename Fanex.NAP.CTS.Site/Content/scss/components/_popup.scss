@@ -25,17 +25,18 @@
 
     .ui-dialog-buttonpane button {
         padding: 0 24px;
-        margin: 0 13px;
+        margin: 0 8px;
 
         &:last-child {
             margin-right: 0;
         }
     }
 
-    .ui-button.-primary:hover,
-    .ui-button.-primary:focus,
-    .ui-button.-primary:active {
-        border: none;
+    .ui-button:hover,
+    .ui-button:focus,
+    .ui-button:active {
+        border: 0;
+        font-weight: bold;
     }
 
     .ui-dialog-titlebar {
@@ -80,9 +81,17 @@
 
 // Confirmation
 .dialog-confirmation {
-    .ui-dialog-content  {
-        padding: 32px 12px;
+    .ui-dialog-content {
+        padding: 12px;
         font-size: 16px;
+
+        .control-label {
+            font-size: 13px;
+        }
+
+        .filter {
+            padding: 0;
+        }
     }
 }
 

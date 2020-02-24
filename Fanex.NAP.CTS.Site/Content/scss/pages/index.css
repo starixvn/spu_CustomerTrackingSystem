@@ -880,13 +880,14 @@ table.dataTable tbody tr.selected td {
     padding-bottom: 20px; }
   .ui-dialog .ui-dialog-buttonpane button {
     padding: 0 24px;
-    margin: 0 13px; }
+    margin: 0 8px; }
     .ui-dialog .ui-dialog-buttonpane button:last-child {
       margin-right: 0; }
-  .ui-dialog .ui-button.-primary:hover,
-  .ui-dialog .ui-button.-primary:focus,
-  .ui-dialog .ui-button.-primary:active {
-    border: none; }
+  .ui-dialog .ui-button:hover,
+  .ui-dialog .ui-button:focus,
+  .ui-dialog .ui-button:active {
+    border: 0;
+    font-weight: bold; }
   .ui-dialog .ui-dialog-titlebar {
     padding: 10px;
     border: none;
@@ -919,8 +920,12 @@ table.dataTable tbody tr.selected td {
     font-size: 20px; }
 
 .dialog-confirmation .ui-dialog-content {
-  padding: 32px 12px;
+  padding: 12px;
   font-size: 16px; }
+  .dialog-confirmation .ui-dialog-content .control-label {
+    font-size: 13px; }
+  .dialog-confirmation .ui-dialog-content .filter {
+    padding: 0; }
 
 .modal-graph-render {
   top: 60px !important;
@@ -1264,7 +1269,7 @@ body {
       padding: 10px 0 10px 32px;
       background: #fff;
       transition: all .5s;
-      color: transparent;
+      color: #333;
       cursor: pointer;
       box-sizing: border-box;
       font-family: inherit;

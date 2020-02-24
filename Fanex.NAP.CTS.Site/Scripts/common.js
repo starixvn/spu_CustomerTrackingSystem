@@ -136,7 +136,7 @@
         formconfirmation.dialog("option", {
             dialogClass: "dialog-confirmation",
             title: title,
-            buttons: [yesBtn, noBtn],
+            buttons: [noBtn, yesBtn],
             width: 460,
             close: noCallback
         });
