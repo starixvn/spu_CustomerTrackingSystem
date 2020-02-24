@@ -67,13 +67,16 @@
                     Task.WhenAll(tasks.ToArray()).Wait();
 
                     customerGeneralStatusViewModel
-                        .BindingGeneralDataFromCTS(customerInfoFromCTS, customerFlagInfoModel, customerTotalAssociation)
+                        .BindingEvidenceListFromCTS(customerEvidences)
+                        .BindingGeneralDataFromCTS(customerInfoFromCTS, 
+                                                    customerFlagInfoModel, 
+                                                    customerTotalAssociation, 
+                                                    customerEvidences)                        
                         .BindingGeneralDataFromMainDB(customerStatus,
                                                         customerLastTicketDate,
                                                         customerEsportAutoSuspendedStatus,
                                                         customerRobotUserStatusModel)
-                        .BindingTotalAssociationFromCTS(customerTotalAssociation)
-                        .BindingEvidenceListFromCTS(customerEvidences)
+                        .BindingTotalAssociationFromCTS(customerTotalAssociation)                        
                         .BindingGeneralDataFromFS(customerProfileFraudInfo);
 
                     return View(customerGeneralStatusViewModel);
