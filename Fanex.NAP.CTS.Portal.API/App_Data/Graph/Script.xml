@@ -2,6 +2,7 @@
 <Functions>
   <Function Name="MiddleSerivce">
     <GraphSetting Key="GetAssociationOneLevelByCustId" SpName="GetAssociationOneLevelByCustId" DbName="GraphDB" />
+    <GraphSetting Key="GetAssociationOneLevelByCustIds" SpName="GetAssociationOneLevelByCustIds" DbName="GraphDB" />
     <GraphSetting Key="GetAssociationNLevelByCustId" SpName="GetAssociationNLevelByCustId" DbName="GraphDB" />
     <GraphSetting Key="GetShortestPath" SpName="GetShortestPath" DbName="GraphDB" />
   </Function>

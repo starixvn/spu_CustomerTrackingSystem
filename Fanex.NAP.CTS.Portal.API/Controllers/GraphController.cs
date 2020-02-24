@@ -29,6 +29,14 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
             return result;
         }
 
+        [System.Web.Http.AcceptVerbs("GetDirectAssociationMultiCust")]
+        [HttpPost]
+        public IEnumerable<GraphAssociationModel> GetDirectAssociationMultiCust([FromBody] List<int> ctsCustIds)
+        {
+            var result = DbSessionFactory.Execute<GraphAssociationModel>("GetAssociationOneLevelByCustIds", new { CTSCustIDs = ctsCustIds }).Data;
+            return result;
+        }
+
         /// <summary>
         /// Get Association with N Level
         /// </summary>

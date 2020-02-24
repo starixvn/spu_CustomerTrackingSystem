@@ -34,6 +34,8 @@ namespace Fanex.NAP.CTS.Model.Account
 
         public int StatusId { get; set; }
 
+        public int SubscriberID { get; set; }
+
         public string GetAssociationTypeName(AssociationType associationType)
         {
             return Enum.GetName(typeof(AssociationType), associationType);
