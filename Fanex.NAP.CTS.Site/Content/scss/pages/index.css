@@ -1215,11 +1215,13 @@ body {
         }
     }*/ }
   .header-info .username {
-    line-height: 2;
     color: #fff;
     cursor: pointer;
     color: #fff;
-    border: 3px solid rgba(29, 46, 79, 0.7); }
+    height: 60px;
+    line-height: 60px; }
+    .header-info .username:hover .sub-menu {
+      display: block; }
     .header-info .username > span, .header-info .username .icon-chevron-down {
       display: inline-block;
       vertical-align: middle; }
@@ -1228,35 +1230,39 @@ body {
     .header-info .username .sub-menu {
       left: auto;
       right: 0px;
+      padding: 5px 0;
       line-height: 1;
       position: absolute;
+      top: 45px;
       background: #fff;
-      border-radius: 3px; }
-      .header-info .username .sub-menu .sub-menu-item > .link:hover {
-        background: #ddd;
-        color: #333; }
+      border-radius: 3px;
+      display: none; }
+      .header-info .username .sub-menu .sub-menu-item > .link {
+        padding: 5px 20px; }
+        .header-info .username .sub-menu .sub-menu-item > .link:hover {
+          background: #ddd;
+          color: #333; }
   .header-info .search-header {
     position: relative;
-    margin-right: 10px; }
+    margin-right: 15px; }
     .header-info .search-header:before {
       content: "\e919";
       font-family: 'Fraud-Sensor' !important;
       position: absolute;
-      top: -2px;
-      left: 0;
-      width: 40px;
-      font-size: 22px;
-      color: #fff;
+      top: 0;
+      left: 7px;
+      width: 35px;
+      font-size: 18px;
+      color: #868686;
       text-align: left;
       z-index: 2;
       pointer-events: none; }
     .header-info .search-header .search-field {
       position: relative;
-      width: 40px;
+      width: 200px;
       border: 0;
-      border-bottom: 2px solid transparent;
       padding: 10px 0 10px 32px;
-      background: transparent;
+      background: #fff;
       transition: all .5s;
       color: transparent;
       cursor: pointer;
@@ -1265,13 +1271,6 @@ body {
       font-size: 100%;
       outline: none;
       -webkit-appearance: textfield; }
-      .header-info .search-header .search-field:focus {
-        width: 200px;
-        color: white;
-        cursor: auto;
-        border-bottom-color: #ddd;
-        outline: none;
-        box-shadow: none; }
 
 .notification-container {
   position: relative; }

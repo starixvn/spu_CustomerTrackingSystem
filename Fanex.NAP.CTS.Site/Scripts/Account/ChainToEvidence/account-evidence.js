@@ -9,7 +9,7 @@
     var btnPlaceEvidenceSubmit = $('#btnPlaceEvidenceSubmit');
     var divPlaceEvidenceDescription = $('#divPlaceEvidenceDescription');
     var txtPlaceEvidenceComment = $('#txtPlaceEvidenceComment');    
-    var tblChainToEvidenceAffectedRetract = $('#tblChainToEvidenceAffected');   
+    var tblChainToEvidenceAffectedRetract = $('#tblChainToEvidenceAffected');  
 
     function InitialFlaggedGrid(ctsCustId, username) {
         tblChainToEvidenceFlagged.DataTable({
@@ -99,9 +99,9 @@
                             html += '<td colspan="5" style="color: #fff !important; text-decoration: line-through; position: relative;">';
                             html += '<span class="evidence-retract">' + group + '</span>';
                             html += '<div class="tooltip">';
-                            html += '<div>Removed Date: ' + data[i].AffectedTime + '</div>';
-                            html += '<div>Removed By: ' + data[i].Creator + '</div>';
-                            html += '<div>Comment:  ' + data[i].Comment + '</div></td>';
+                            html += '<div>Removed Date: <strong>' + data[i].AffectedTime + '</strong></div>';
+                            html += '<div>Removed By: <strong>' + data[i].Creator + '</strong></div>';
+                            html += '<div>Comment:  <strong>' + data[i].Comment + '</strong></div></td>';
                             html += '<td class="text-center"><span class="icon-delete-restore delete" evidence-id = "' + data[i].EvidenceID + '" evidence-display = "' + data[i].EvidenceDisplay + '"></span></td>';
                             html += '</tr>';
                         } else {

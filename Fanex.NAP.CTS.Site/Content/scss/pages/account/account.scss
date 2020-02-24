@@ -441,6 +441,7 @@ $dangerousColor: ( level-0: #000, level-1: #000, level-2: #ff0000, level-3: #ffc
 
     .icon-delete {
         color: red;
+        cursor: pointer;
     }
 }
 
@@ -695,6 +696,7 @@ table.dataTable.no-footer {
 .retract, .affected {
     .icon-delete {
         color: white;
+        cursor: pointer;
     } 
     
     &:hover td {
@@ -708,19 +710,28 @@ table.dataTable.no-footer {
 }
 
 .tooltip {
-    padding: 20px;
-    border: 1px solid #ccc;
+    padding: 10px;
     background: #fff;
-    color: #000;
-    box-shadow: 0 0 3px rgba(0, 0, 0, .3);
-    -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, .3);
-    border-radius: 3px;
-    -webkit-border-radius: 3px;
+    color: #444;
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,.3), 0 2px 6px 2px rgba(60,64,67,.15);
+    border-radius: 2px;
     position: absolute;
-    top: 0px;
-    left: 100px;
+    top: 32px;
+    left: -1px;
     display: none;
     z-index: 100;
+
+    &:before {
+        position: absolute;
+        top: -5px;
+        display: block;
+        content: '';
+        width: 0px;
+        height: 0px;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-bottom: 5px solid #fff;
+    }
 }
 
 .tooltip:hover {

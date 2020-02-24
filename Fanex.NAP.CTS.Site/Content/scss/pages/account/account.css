@@ -657,7 +657,8 @@
     .table-report .loading tr {
       opacity: .3; }
   .table-report .icon-delete {
-    color: red; }
+    color: red;
+    cursor: pointer; }
 
 table.dataTable.no-footer {
   border-bottom: 0; }
@@ -838,7 +839,8 @@ table.dataTable.no-footer {
     border-radius: 2px; }
 
 .retract .icon-delete, .affected .icon-delete {
-  color: white; }
+  color: white;
+  cursor: pointer; }
 
 .retract:hover td, .affected:hover td {
   background: #70809e; }
@@ -848,19 +850,26 @@ table.dataTable.no-footer {
   overflow: auto !important; }
 
 .tooltip {
-  padding: 20px;
-  border: 1px solid #ccc;
+  padding: 10px;
   background: #fff;
-  color: #000;
-  box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
-  -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
-  border-radius: 3px;
-  -webkit-border-radius: 3px;
+  color: #444;
+  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 2px 6px 2px rgba(60, 64, 67, 0.15);
+  border-radius: 2px;
   position: absolute;
-  top: 0px;
-  left: 100px;
+  top: 32px;
+  left: -1px;
   display: none;
   z-index: 100; }
+  .tooltip:before {
+    position: absolute;
+    top: -5px;
+    display: block;
+    content: '';
+    width: 0px;
+    height: 0px;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid #fff; }
 
 .tooltip:hover {
   display: block; }
