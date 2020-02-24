@@ -2,7 +2,7 @@
     ViewBag.Title = "AccountDetail";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@section styles{  
+@section styles{
     <link href="~/Content/scss/MultipleSelect/jquery.multiselect.filter.css" rel="stylesheet" />
     <link href="~/Content/scss/MultipleSelect/jquery.multiselect.css" rel="stylesheet" />
     <link href="~/Content/scss/pages/account/account.css" rel="stylesheet" />
@@ -14,7 +14,7 @@
     <div class="status-info">
         <p>
             <strong>@Model.Role.Name @(Model.CustSubId != 0 ? "(Sub Account)" : string.Empty) :</strong>
-            <span class="username">@(Model.UserName != null ? Model.UserName  : Model.UserName2) <span class="nickname" style="color: #c16112">(@(Model.UserName2 != null ? Model.UserName2 : Model.UserName))</span></span>
+            <span class="username">@(Model.UserName != null ? Model.UserName : Model.UserName2) <span class="nickname" style="color: #c16112">(@(Model.UserName2 != null ? Model.UserName2 : Model.UserName))</span></span>
             @if (Model.RobotUser)
             {
                 <span class="icon icon-Robot-User" title="Robot User"></span>
@@ -73,7 +73,7 @@
             <strong>Subscribers: </strong>
             <span class="username">@Model.Subscriber</span>
         </p>
-       
+
     </div>
 
     <div class="account-info">
@@ -187,10 +187,14 @@
                     <div>
                         @if (Model.FraudCases != null && Model.FraudCases.Any())
                         {
+                            var fraudCases = new List<string>();
                             foreach (var fraudCase in Model.FraudCases)
                             {
-                                <a href="#" class="link">@(fraudCase.FraudCaseName + ", ")</a>
+                                fraudCases.Add(fraudCase.FraudCaseName);
+
                             }
+
+                            <span>@string.Join(", ", fraudCases)</span>
                         }
                         else
                         {
@@ -226,7 +230,7 @@
             </h3>
             <div id="chains_evidence" class="report-cont hide">
                 <img src="@Url.Content("~/Content/images/ajax-loader.gif")" alt="Loading ..." />
-            </div>            
+            </div>
         </div>
     </div>
 </div>
@@ -237,7 +241,7 @@
     <input id="hdSubcriberId" type="hidden" value="@Model.SubscriberId" />
     <input id="hdSubscriber" type="hidden" value="@Model.Subscriber" />
 </div>
-@section scripts{   
+@section scripts{
 
     @Scripts.Render(
     "~/bundles/multiselectfilter",

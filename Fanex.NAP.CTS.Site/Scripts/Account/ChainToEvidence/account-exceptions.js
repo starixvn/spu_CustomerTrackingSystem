@@ -37,7 +37,7 @@
                 { data: obj => obj.Comment },
                 { data: obj => obj.Creator },
                 {
-                    data: obj => '<span class="icon-delete"></span>', createdCell: (cell, _, row) => {
+                    data: obj => '<span class="icon-delete" title="Remove Exception"></span>', createdCell: (cell, _, row) => {
                         $('.icon-delete', cell).click(() =>
                         {
                             ConfirmRemoveException(row.ExceptionCTSCustId, row.UserName);
