@@ -36,7 +36,7 @@
                 { data: obj => obj.Comment },
                 { data: obj => obj.Creator },
                 {
-                    data: obj => '<span class="icon-delete"></span>', createdCell: (cell, _, row) => {
+                    data: obj => '<span class="icon-delete" title="Remove Evidence"></span>', createdCell: (cell, _, row) => {
                         $('.icon-delete', cell).click(() =>
                             common.showFormConfirmation(`Do you want remove flagged evidence ${row.EvidenceDisplay} from ${username}?`, 'Confirmation', function () {
                                 RemoveFlaggedEvidence(row.EvidenceID, ctsCustId, username)
@@ -102,7 +102,7 @@
                             html += '<div>Removed Date: <strong>' + data[i].AffectedTime + '</strong></div>';
                             html += '<div>Removed By: <strong>' + data[i].Creator + '</strong></div>';
                             html += '<div>Comment:  <strong>' + data[i].Comment + '</strong></div></td>';
-                            html += '<td class="text-center"><span class="icon-delete-restore delete" evidence-id = "' + data[i].EvidenceID + '" evidence-display = "' + data[i].EvidenceDisplay + '"></span></td>';
+                            html += '<td class="text-center"><span class="icon-delete-restore delete" title="Remove Evidence" evidence-id = "' + data[i].EvidenceID + '" evidence-display = "' + data[i].EvidenceDisplay + '"></span></td>';
                             html += '</tr>';
                         } else {
                             html = '<tr class="affected" evidence-code="' + data[i].EvidenceCode + '" style="background-color: #70809e">';
@@ -110,7 +110,7 @@
                             html += '<span class="icon icon-chevron-up""></span>';
                             html += '<span>' + group + '</span>';
                             html += '</td>';
-                            html += '<td class="text-center"><span class="icon-delete delete" evidence-id = "' + data[i].EvidenceID + '" evidence-display = "' + data[i].EvidenceDisplay + '"></span></td>';
+                            html += '<td class="text-center"><span class="icon-delete delete" title="Remove Evidence" evidence-id = "' + data[i].EvidenceID + '" evidence-display = "' + data[i].EvidenceDisplay + '"></span></td>';
                             html += '</tr>';
                         }
                         $(rows).eq(i).before(html);
