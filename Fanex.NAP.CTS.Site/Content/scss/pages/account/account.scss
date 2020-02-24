@@ -694,11 +694,11 @@ table.dataTable.no-footer {
 }
 
 .retract, .affected {
-    .icon-delete {
+    .icon-delete, .icon-delete-restore {
         color: white;
         cursor: pointer;
-    } 
-    
+    }
+
     &:hover td {
         background: #70809e;
     }
