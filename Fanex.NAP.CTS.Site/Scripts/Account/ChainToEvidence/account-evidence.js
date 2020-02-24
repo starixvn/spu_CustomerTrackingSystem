@@ -102,7 +102,7 @@
                             html += '<div>Removed Date: <strong>' + data[i].AffectedTime + '</strong></div>';
                             html += '<div>Removed By: <strong>' + data[i].Creator + '</strong></div>';
                             html += '<div>Comment:  <strong>' + data[i].Comment + '</strong></div></td>';
-                            html += '<td class="text-center"><span class="icon-delete-restore delete" title="Remove Evidence" evidence-id = "' + data[i].EvidenceID + '" evidence-display = "' + data[i].EvidenceDisplay + '"></span></td>';
+                            html += '<td class="text-center"><span class="icon-delete-restore delete" title="Restore Evidence" evidence-id = "' + data[i].EvidenceID + '" evidence-display = "' + data[i].EvidenceDisplay + '"></span></td>';
                             html += '</tr>';
                         } else {
                             html = '<tr class="affected" evidence-code="' + data[i].EvidenceCode + '">';
