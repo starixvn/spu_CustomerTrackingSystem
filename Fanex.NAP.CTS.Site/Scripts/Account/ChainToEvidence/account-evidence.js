@@ -95,8 +95,8 @@
                     if (last !== group) {
                         var html = '';
                         if (data[i].IsRetract) {
-                            html = '<tr class="retract" evidence-code="' + data[i].EvidenceCode + '"style="background-color: #70809e">';
-                            html += '<td colspan="5" style="color: #fff !important; text-decoration: line-through; position: relative;">';
+                            html = '<tr class="retract" evidence-code="' + data[i].EvidenceCode + '>';
+                            html += '<td colspan="5">';
                             html += '<span class="evidence-retract">' + group + '</span>';
                             html += '<div class="tooltip">';
                             html += '<div>Removed Date: <strong>' + data[i].AffectedTime + '</strong></div>';
@@ -105,8 +105,8 @@
                             html += '<td class="text-center"><span class="icon-delete-restore delete" title="Remove Evidence" evidence-id = "' + data[i].EvidenceID + '" evidence-display = "' + data[i].EvidenceDisplay + '"></span></td>';
                             html += '</tr>';
                         } else {
-                            html = '<tr class="affected" evidence-code="' + data[i].EvidenceCode + '" style="background-color: #70809e">';
-                            html += '<td class="affected-group" colspan="5" style="color: #fff !important; cursor: pointer; ">';
+                            html = '<tr class="affected" evidence-code="' + data[i].EvidenceCode + '>';
+                            html += '<td class="affected-group" colspan="5">';
                             html += '<span class="icon icon-chevron-up""></span>';
                             html += '<span>' + group + '</span>';
                             html += '</td>';
