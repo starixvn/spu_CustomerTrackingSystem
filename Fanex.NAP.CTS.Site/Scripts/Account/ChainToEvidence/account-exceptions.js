@@ -68,14 +68,16 @@
             type: 'POST',
             data: params,
             success: function (response) {
-                var html = `The following evidence will be affected between 2 accounts <br/>`;
+                var html = 'Account: <b>' + username + '</b><br/>';
+                html += 'From: <b>' + _rootUsername + $.parseHTML("&#x27;")[0]['wholeText'] + 's Exception List </b><br/>';
+                html += `The following evidence will be affected between 2 account: <br/>`;
                 html += '<div class="list-evidence"><ul>';
                 for (var i = 0; i < response.length; i++) {
                     html += '<li> - ' + response[i].EvidenceDisplay + '</li>';
                 }
                 html += '</ul></div>';
 
-                var title = `Remove ${username} From ${_rootUsername} Exceptions List`;
+                var title = `Remove Exceptions List`;                                
 
                 common.showFormConfirmation(html, title, function () {
                     RemoveException(exceptionCTSCustId);
