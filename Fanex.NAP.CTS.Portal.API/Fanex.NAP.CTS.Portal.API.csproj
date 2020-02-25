@@ -346,17 +346,18 @@
     <Content Include="App_Data\Graph\scripts\GetAssociationOneLevelByCustId.scrypt" />
     <Content Include="App_Data\Graph\scripts\GetShortestPath.scrypt" />
     <Content Include="Fanex.NAP.CTS.Portal.API.dll.LOCAL.config">
-	<DependentUpon>Web.config</DependentUpon>
+      <DependentUpon>Web.config</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Fanex.NAP.CTS.Portal.API.dll.PRO.config">
-	<DependentUpon>Web.config</DependentUpon>
+      <DependentUpon>Web.config</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Fanex.NAP.CTS.Portal.API.dll.UAT.config">
-	<DependentUpon>Web.config</DependentUpon>
+      <DependentUpon>Web.config</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="App_Data\Graph\scripts\GetAssociationOneLevelByCustIds.scrypt" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
