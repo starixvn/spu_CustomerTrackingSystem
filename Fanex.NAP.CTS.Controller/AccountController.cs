@@ -15,6 +15,7 @@
     using System.Threading.Tasks;
     using System.Web.Mvc;
     using Fanex.NAP.CTS.Core.Extentions;
+    using Fanex.NAP.CTS.Model.GraphDB;
 
     [NapAuth(FunctionKey = FSFunctionKeys.SearchAccount, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class AccountController : BaseController
@@ -30,7 +31,7 @@
 
         public override string BaseControllerName { get => Consts.MenuItemSearch; }
 
-        public ActionResult Index(Int64 Id)
+        public ActionResult Index(long Id)
         {
             if (Id > 0)
             {
@@ -145,13 +146,32 @@
 
                 if (result != null && result.Any())
                 {
-                    var custIdsFlaggedTag = result.Select(a => new { a.SubscriberId, a.CTSCustId });
+                    var tasks = new List<Task>();
 
-                    var getFlaggedTags = _accountService.GetDirectAssociatedAccountTagFlagged(JsonConvert.SerializeObject(custIdsFlaggedTag));
 
-                    var custIdsAffectedTag = result.Select(a => new { a.CTSCustId }).ToList();
+                    var getFlaggedTags = new List<TagModel>();
+                    var getAffectedTags = new List<TagModel>();
+                    var getCustIdsAffectedTag = new List<GraphDirectAssociationModel>();
 
-                    var getCustIdsAffectedTag = _accountService.GetDirectAssocationByGraph("", JsonConvert.SerializeObject(custIdsAffectedTag));
+                    tasks.Add(Task.Run(() =>
+                    {
+                        var custIdsFlaggedTag = result.Select(a => new { a.SubscriberId, a.CTSCustId });
+                        getFlaggedTags = _accountService.GetDirectAssociatedAccountTagFlagged(JsonConvert.SerializeObject(custIdsFlaggedTag));
+                    }));
+
+                    tasks.Add(Task.Run(() =>
+                    {
+                        var custIdsAffectedTag = result.Select(a => new { a.CTSCustId }).ToList();
+                        getCustIdsAffectedTag = _accountService.GetDirectAssocationByGraph("", JsonConvert.SerializeObject(custIdsAffectedTag));
+
+                        var param = getCustIdsAffectedTag.Select(x => new { x.SubscriberId, x.FromCTSCustId, x.ToCTSCustId });
+
+                        getAffectedTags = _accountService.GetDirectAssociatedAccountTagAffected(JsonConvert.SerializeObject(param));
+                    }));
+
+                    Task.WhenAll(tasks.ToArray()).Wait();
+
+
 
                     //var param = result.Select(a => new { a.CustId, a.LoginId });
 
@@ -296,7 +316,7 @@
                     AffectedTime = x.CreatedDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                     LastLoginTime = x.LastLoginTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                     Creator = x.Creator,
-                    Comment = x.Remark,
+                    Comment = string.IsNullOrWhiteSpace(x.Remark) ? string.Empty : x.Remark,
                     IsRetract = true
                 }));
             }

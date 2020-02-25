@@ -469,16 +469,23 @@
         $.ajax(url, {
             type: 'POST',
             data: params,
+            beforeSend: function () {
+                btnPlaceEvidenceSubmit.prop('disabled', true);
+                common.showLoading();
+            },
             success: function (response) {
                 common.showSuccess('Add the evidence successful!');
                 divPlaceEvidence.dialog('close');
             },
             complete: function () {
                 GetAccountEvidence(ctsCustId, username);
+                common.closeLoading();
+                btnPlaceEvidenceSubmit.prop('disabled', false);
             },
             error: function (errorMessage) {
                 console.log(errorMessage);
                 common.showError('Add the evidence fail!');
+                common.closeLoading();
             }
         })
     }

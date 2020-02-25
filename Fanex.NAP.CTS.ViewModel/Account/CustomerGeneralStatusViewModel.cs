@@ -156,10 +156,8 @@ namespace Fanex.NAP.CTS.ViewModel.Account
                     this.Flagged = customerFlagInfoModel.Flagged == 2;
                     this.FlaggedWithEvi100 = customerFlagInfoModel.Flagged == 1;
                 }
-                else
-                {
-                    this.Affected = customerAssociationByCTSCustIdModel.TotalAccounts > 0 && customerEvidences.Count > 0;
-                }                            
+
+                this.Affected = customerAssociationByCTSCustIdModel.TotalAccounts > 0 && customerEvidences.Count > 0;
             }
 
             return this;
