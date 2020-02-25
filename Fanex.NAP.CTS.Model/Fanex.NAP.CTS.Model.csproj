@@ -157,6 +157,7 @@
     <Compile Include="Account\FlaggedEvidenceModel.cs" />
     <Compile Include="Account\FraudCaseModel.cs" />
     <Compile Include="Account\RemoveEvidenceModel.cs" />
+    <Compile Include="Account\TagModel.cs" />
     <Compile Include="Account\UpdateAccountExceptionModel.cs" />
     <Compile Include="Account\UpdatePlaceEvidenceModel.cs" />
     <Compile Include="GraphDB\GraphCustomer.cs" />
@@ -195,6 +196,7 @@
     <Compile Include="FraudCase\ScannedOfficeIP\OfficeIp.cs" />
     <Compile Include="FraudCase\ScannedOfficeIP\OfficeIPInternalAccount.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="GraphDB\GraphDirectAssociationModel.cs" />
     <Compile Include="GraphDB\Node.cs" />
     <Compile Include="GraphDB\Relationship.cs" />
     <Compile Include="GraphDB\ShortestPath.cs" />

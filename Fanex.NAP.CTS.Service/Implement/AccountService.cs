@@ -681,16 +681,46 @@
             }
         }
 
-        public List<CustomerAssociationByAccountDetailModel> GetDirectCustomerAssociatedByAccount(string custIds)
+        //public List<CustomerAssociationByAccountDetailModel> GetDirectCustomerAssociatedByAccount(string custIds)
+        //{
+        //    var criteria = new GetDirectAssociationByAccountCriteria
+        //    {
+        //        CustIds = custIds
+        //    };
+
+        //    using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+        //    {
+        //        var result = db.Query<CustomerAssociationByAccountDetailModel>(criteria);
+
+        //        return result.ToList();
+        //    }
+        //}
+
+        public List<TagModel> GetDirectAssociatedAccountTagAffected(string custIdsAssInfo)
         {
-            var criteria = new GetDirectAssociationByAccountCriteria
+            var criteria = new GetDirectAssociatedAccountTagAffectedCriteria
             {
-                CustIds = custIds
+                CustAssInfo = custIdsAssInfo
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                var result = db.Query<CustomerAssociationByAccountDetailModel>(criteria);
+                var result = db.Query<TagModel>(criteria);
+
+                return result.ToList();
+            }
+        }
+
+        public List<TagModel> GetDirectAssociatedAccountTagFlagged(string custIdsAssInfo)
+        {
+            var criteria = new GetDirectAssociatedAccountTagFlaggedCriteria
+            {
+                CustAssInfo = custIdsAssInfo
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                var result = db.Query<TagModel>(criteria);
 
                 return result.ToList();
             }
@@ -757,7 +787,7 @@
             }
         }
 
-        public List<GraphAssociationModel> GetCustomerAssociationByGraph(string apiURL, Int64 ctsCustId)
+        public List<GraphAssociationModel> GetCustomerAssociationByGraph(string apiURL, long ctsCustId)
         {
             var data = ApiHelper.Post<List<GraphAssociationModel>>(apiURL, ctsCustId);
 
@@ -768,9 +798,15 @@
             return customersAPI ?? new List<GraphAssociationModel>();
         }
 
-        public List<CustomerAssociationByAccountDetailModel> GetInDirectCustomerAssociatedByAccount(string custIds)
+        public List<GraphDirectAssociationModel> GetDirectAssocationByGraph(string apiURL, string ctsCustIds)
         {
-            throw new NotImplementedException();
+            var data = ApiHelper.Post<List<GraphDirectAssociationModel>>(apiURL, ctsCustIds);
+
+            Task.WhenAll(data);
+
+            var customersAPI = data.Result;
+
+            return customersAPI ?? new List<GraphDirectAssociationModel>();
         }
 
         public ShortestPathOfAccount GetShortestPathAssociationByGraph(string apiURL, int custIdFrom, int custIdTo)
@@ -885,7 +921,7 @@
             var criteria = new GetFlaggedEvidenceCriteria
             {
                 CTSCustId = ctsCustId,
-                EvidenceCodes = evidenceCodes               
+                EvidenceCodes = evidenceCodes
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -913,9 +949,9 @@
         {
             var criteria = new RemoveFlaggedEvidenceCriteria
             {
-                CTSCustId = model.CTSCustId,               
-                EvidenceId = model.EvidenceId,               
-                UserId = model.UserId                
+                CTSCustId = model.CTSCustId,
+                EvidenceId = model.EvidenceId,
+                UserId = model.UserId
             };
 
             return DataService.UpdateData(criteria, "Remove flagged evidence");
@@ -933,7 +969,7 @@
                 return db.Query<AccountExceptionsModel>(criteria).ToList();
             }
         }
-        
+
         public int AddAccountException(UpdateAccountExceptionModel model)
         {
             var criteria = new AddAccountExceptionCriteria
@@ -978,7 +1014,7 @@
                 return 0;
             }
         }
-        
+
         public AffectedRetractEvidenceModel GetAffectedRetractEvidences(Int64 ctsCustId, string evidenceCodes)
         {
             var criteria = new GetAffectedEvidenceCriteria
@@ -998,7 +1034,7 @@
                     };
                 }
             }
-        }             
+        }
 
         public int RetractAffectedEvidence(RemoveEvidenceModel model)
         {
@@ -1033,8 +1069,8 @@
         {
             var criteria = new GetAffectedEvidenceBetweenCustsCriteria
             {
-                 FromCTSCustID = fromCTSCustID,
-                 ToCTSCustID = toCTSCustID
+                FromCTSCustID = fromCTSCustID,
+                ToCTSCustID = toCTSCustID
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))

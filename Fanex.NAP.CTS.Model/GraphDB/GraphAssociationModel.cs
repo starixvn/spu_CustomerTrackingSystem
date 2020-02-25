@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Fanex.NAP.CTS.Model.Account
 {
     public class GraphAssociationModel
     {
-        public Int64 CTSCustID { get; set; }
+        public long CTSCustID { get; set; }
 
         public int? CustId { get; set; }
+
+        public int SubscriberId { get; set; }
 
         public string Username { get; set; }
 

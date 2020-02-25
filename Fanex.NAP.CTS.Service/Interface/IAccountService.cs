@@ -46,9 +46,9 @@
 
         CustomerProfileFraudInfoModel GetCustomerProfileFraudInfo(int custId);
 
-        List<CustomerAssociationByAccountDetailModel> GetDirectCustomerAssociatedByAccount(string custIds);
+        List<TagModel> GetDirectAssociatedAccountTagAffected(string custIdsAssInfo);
 
-        List<CustomerAssociationByAccountDetailModel> GetInDirectCustomerAssociatedByAccount(string custIds);
+        List<TagModel> GetDirectAssociatedAccountTagFlagged(string custIdsAssInfo);
 
         CustomerLastTicketDateModel GetCustomerLastTicketDate(int custId);
 
@@ -56,9 +56,11 @@
 
         CustomerRobotUserStatusModel GetCustomerRobotUserStatus(int custId);
 
-        CustomerFlagInfoModel GetCustomerFlagInfo(Int64 ctsCustId, int subscriberId);
+        CustomerFlagInfoModel GetCustomerFlagInfo(long ctsCustId, int subscriberId);
 
-        List<GraphAssociationModel> GetCustomerAssociationByGraph(string apiURL, Int64 ctsCustId);
+        List<GraphAssociationModel> GetCustomerAssociationByGraph(string apiURL, long ctsCustId);
+
+        List<GraphDirectAssociationModel> GetDirectAssocationByGraph(string apiURL, string ctsCustIds);
 
         ShortestPathOfAccount GetShortestPathAssociationByGraph(string apiURL, int custIdFrom, int custIdTo);        
 
@@ -68,15 +70,15 @@
 
         IEnumerable<EvidenceModel> GetEvidenceList();
 
-        IEnumerable<FlaggedEvidenceModel> GetFlaggedEvidences(Int64 ctsCustId, string evidenceCodes);
+        IEnumerable<FlaggedEvidenceModel> GetFlaggedEvidences(long ctsCustId, string evidenceCodes);
 
-        AffectedRetractEvidenceModel GetAffectedRetractEvidences(Int64 ctsCustId, string evidenceCodes);
+        AffectedRetractEvidenceModel GetAffectedRetractEvidences(long ctsCustId, string evidenceCodes);
 
         DBResult PlaceEvidence(UpdatePlaceEvidenceModel model);
 
         DBResult RemoveFlaggedEvidence(RemoveEvidenceModel model);
 
-        List<AccountExceptionsModel> GetAccountExceptions(Int64 ctsCustId);
+        List<AccountExceptionsModel> GetAccountExceptions(long ctsCustId);
 
         int AddAccountException(UpdateAccountExceptionModel model);
 

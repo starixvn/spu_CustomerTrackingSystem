@@ -20,12 +20,12 @@
     public class AccountController : BaseController
     {
         private readonly IAccountService _accountService;
-        private readonly IGraphService _graphService;        
+        private readonly IGraphService _graphService;
 
         public AccountController()
         {
             _accountService = new AccountService();
-            _graphService = new GraphService();           
+            _graphService = new GraphService();
         }
 
         public override string BaseControllerName { get => Consts.MenuItemSearch; }
@@ -68,15 +68,15 @@
 
                     customerGeneralStatusViewModel
                         .BindingEvidenceListFromCTS(customerEvidences)
-                        .BindingGeneralDataFromCTS(customerInfoFromCTS, 
-                                                    customerFlagInfoModel, 
-                                                    customerTotalAssociation, 
-                                                    customerEvidences)                        
+                        .BindingGeneralDataFromCTS(customerInfoFromCTS,
+                                                    customerFlagInfoModel,
+                                                    customerTotalAssociation,
+                                                    customerEvidences)
                         .BindingGeneralDataFromMainDB(customerStatus,
                                                         customerLastTicketDate,
                                                         customerEsportAutoSuspendedStatus,
                                                         customerRobotUserStatusModel)
-                        .BindingTotalAssociationFromCTS(customerTotalAssociation)                        
+                        .BindingTotalAssociationFromCTS(customerTotalAssociation)
                         .BindingGeneralDataFromFS(customerProfileFraudInfo);
 
                     return View(customerGeneralStatusViewModel);
@@ -106,7 +106,7 @@
         }
 
         [HttpPost]
-        public ActionResult GetAssociatedByAccount(int CustId, Int64 ctsCustId, string statusIds, int associationType, bool isDirect)
+        public ActionResult GetAssociatedByAccount(int CustId, long ctsCustId, string statusIds, int associationType, bool isDirect)
         {
             var result = new List<CustomerAssociationByAccountDetailModel>();
 
@@ -138,30 +138,40 @@
                     AssociationType = x.AssociationType,
                     AssociationTypeName = x.AssociationType == 0 ? string.Format("{0}, {1}", x.GetAssociationTypeName(Model.AssociationType.Device), x.GetAssociationTypeName(Model.AssociationType.IP)) : x.AssociationTypeName,
                     Status = x.StatusName,
-                    StatusId = x.StatusId
+                    StatusId = x.StatusId,
+                    SubscriberId = x.SubscriberId,
+                    CTSCustId = x.CTSCustID
                 }).ToList();
 
                 if (result != null && result.Any())
                 {
-                    var param = result.Select(a => new { a.CustId, a.LoginId });
+                    var custIdsFlaggedTag = result.Select(a => new { a.SubscriberId, a.CTSCustId });
 
-                    var getTags = _accountService.GetDirectCustomerAssociatedByAccount(JsonConvert.SerializeObject(param));
+                    var getFlaggedTags = _accountService.GetDirectAssociatedAccountTagFlagged(JsonConvert.SerializeObject(custIdsFlaggedTag));
 
-                    result = result.Select(x =>
-                    {
-                        var getTag = getTags.FirstOrDefault(a => a.CustId == x.CustId || a.LoginId == x.LoginId);
+                    var custIdsAffectedTag = result.Select(a => new { a.CTSCustId }).ToList();
 
-                        if (getTag != null)
-                        {
-                            x.Tag = getTag.Tag;
-                            x.Subscriber = getTag.Subscriber;
-                            x.CTSCustId = getTag.CTSCustId;
-                        }
+                    var getCustIdsAffectedTag = _accountService.GetDirectAssocationByGraph("", JsonConvert.SerializeObject(custIdsAffectedTag));
 
-                        return x;
-                    })
-                        .OrderBy(a => a.StatusId)
-                        .ToList();
+                    //var param = result.Select(a => new { a.CustId, a.LoginId });
+
+                    //var getTags = _accountService.GetDirectCustomerAssociatedByAccount(JsonConvert.SerializeObject(param));
+
+                    //result = result.Select(x =>
+                    //{
+                    //    var getTag = getTags.FirstOrDefault(a => a.CustId == x.CustId || a.LoginId == x.LoginId);
+
+                    //    if (getTag != null)
+                    //    {
+                    //        x.Tag = getTag.Tag;
+                    //        x.Subscriber = getTag.Subscriber;
+                    //        x.CTSCustId = getTag.CTSCustId;
+                    //    }
+
+                    //    return x;
+                    //})
+                    //    .OrderBy(a => a.StatusId)
+                    //    .ToList();
 
                 }
             }
@@ -250,7 +260,7 @@
                     EvidenceID = x.EvidenceID,
                     EvidenceCode = x.EvidenceCode,
                     EvidenceDisplay = x.EvidenceCode + " " + x.EvidenceName
-                }));                
+                }));
             }
 
             if (affectedRetractEvidences.AffectedEvidenceList != null && affectedRetractEvidences.AffectedEvidenceList.Any())
@@ -268,7 +278,7 @@
                     AffectedTime = x.CreatedDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                     LastLoginTime = x.LastLoginTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                     IsRetract = false
-                }));                
+                }));
             }
 
             if (affectedRetractEvidences.RetractEvidenceList != null && affectedRetractEvidences.RetractEvidenceList.Any())
@@ -296,13 +306,13 @@
                 EvidenceID = x.EvidenceID,
                 EvidenceCode = x.EvidenceCode,
                 EvidenceDisplay = x.EvidenceCode + " " + x.EvidenceName
-            }));            
+            }));
 
-            result.EvidenceList.AddRange(evidenceList.Distinct(x=>x.EvidenceCode).OrderBy(x=>x.EvidenceID));
+            result.EvidenceList.AddRange(evidenceList.Distinct(x => x.EvidenceCode).OrderBy(x => x.EvidenceID));
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
-     
+
         [HttpPost]
         public ActionResult GetExceptions(Int64 ctsCustId)
         {
@@ -371,7 +381,7 @@
             var result = _accountService.RemoveFlaggedEvidence(model);
 
             return Json(result, JsonRequestBehavior.AllowGet);
-        }       
+        }
 
         [HttpPost]
         public ActionResult RetractAffectedEvidence(RemoveEvidenceModel model)
@@ -379,7 +389,7 @@
             model.UserId = CurrentSession.UserId;
 
             var result = _accountService.RetractAffectedEvidence(model);
-            
+
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -400,9 +410,9 @@
             var evidences = _accountService.GetAffectedEvidenceListBetweenCusts(fromCTSCustId, toCTSCustId);
             if (evidences != null && evidences.Any())
             {
-                result = evidences.OrderBy(x=>x.EvidenceCode).Select(x => new AffectedEvidenceListBetweenCustsViewModel
+                result = evidences.OrderBy(x => x.EvidenceCode).Select(x => new AffectedEvidenceListBetweenCustsViewModel
                 {
-                     EvidenceDisplay = x.EvidenceCode + " " + x.EvidenceName
+                    EvidenceDisplay = x.EvidenceCode + " " + x.EvidenceName
                 }).ToList();
             }
 
