@@ -203,16 +203,16 @@
                     .Select(c => new GraphCustomerItemViewModel
                     {
                         CustId = (c.CustId.HasValue ? c.CustId.Value : 0),
-                        ItemCode = (c.CustId.HasValue ? c.CustId.Value : 0) + "_" + now,
+                        ItemCode = (c.CustId.HasValue ? c.CustId.Value.ToString() : c.Username2) + "_" + now,
                         Username = c.Username,
-                        DisplayName = c.Username,
+                        DisplayName = !string.IsNullOrWhiteSpace(c.Username) ? c.Username : c.Username2,
                         AssociationType = c.AssociationType,
                         AssociationTypeName = c.AssociationTypeName
                     }).ToList();
                 graphCustomer.children = graphCustomerList.ToArray();
             }
             graphCustomer.CustId = ctsCustid;
-            graphCustomer.DisplayName = username;
+            graphCustomer.DisplayName = username;            
 
             return Json(graphCustomer, JsonRequestBehavior.AllowGet);
         }
