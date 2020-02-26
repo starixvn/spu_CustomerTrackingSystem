@@ -345,18 +345,6 @@
     <Content Include="App_Data\Graph\scripts\GetAssociationNLevelByCustId.scrypt" />
     <Content Include="App_Data\Graph\scripts\GetAssociationOneLevelByCustId.scrypt" />
     <Content Include="App_Data\Graph\scripts\GetShortestPath.scrypt" />
-    <Content Include="Fanex.NAP.CTS.Portal.API.dll.LOCAL.config">
-      <DependentUpon>Web.config</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Fanex.NAP.CTS.Portal.API.dll.PRO.config">
-      <DependentUpon>Web.config</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Fanex.NAP.CTS.Portal.API.dll.UAT.config">
-      <DependentUpon>Web.config</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="App_Data\Graph\scripts\GetAssociationOneLevelByCustIds.scrypt" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
@@ -378,6 +366,27 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Web.LOCAL.config" />
+    <Content Include="Web.LOCAL.Debug.config">
+      <DependentUpon>Web.LOCAL.config</DependentUpon>
+    </Content>
+    <Content Include="Web.LOCAL.Release.config">
+      <DependentUpon>Web.LOCAL.config</DependentUpon>
+    </Content>
+    <None Include="Web.PRO.config" />
+    <None Include="Web.PRO.Debug.config">
+      <DependentUpon>Web.PRO.config</DependentUpon>
+    </None>
+    <None Include="Web.PRO.Release.config">
+      <DependentUpon>Web.PRO.config</DependentUpon>
+    </None>
+    <None Include="Web.UAT.config" />
+    <None Include="Web.UAT.Debug.config">
+      <DependentUpon>Web.UAT.config</DependentUpon>
+    </None>
+    <None Include="Web.UAT.Release.config">
+      <DependentUpon>Web.UAT.config</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fanex.NAP.CTS.Model\Fanex.NAP.CTS.Model.csproj">

@@ -60,7 +60,7 @@
 
         List<GraphAssociationModel> GetCustomerAssociationByGraph(string apiURL, long ctsCustId);
 
-        List<GraphDirectAssociationModel> GetDirectAssocationByGraph(string apiURL, string ctsCustIds);
+        List<GraphDirectAssociationModel> GetDirectAssocationByGraph(string apiURL, List<long> ctsCustIds);
 
         ShortestPathOfAccount GetShortestPathAssociationByGraph(string apiURL, int custIdFrom, int custIdTo);        
 

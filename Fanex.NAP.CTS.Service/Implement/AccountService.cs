@@ -798,7 +798,7 @@
             return customersAPI ?? new List<GraphAssociationModel>();
         }
 
-        public List<GraphDirectAssociationModel> GetDirectAssocationByGraph(string apiURL, string ctsCustIds)
+        public List<GraphDirectAssociationModel> GetDirectAssocationByGraph(string apiURL, List<long> ctsCustIds)
         {
             var data = ApiHelper.Post<List<GraphDirectAssociationModel>>(apiURL, ctsCustIds);
 
@@ -864,7 +864,7 @@
                         x.StatusName = status.StatusName;
                     }
                 }
-
+                
                 return x;
             }).ToList();
 
@@ -889,7 +889,9 @@
                             SharedDevices = g.FirstOrDefault().SharedDevices,
                             SharedIPs = g.FirstOrDefault().SharedIPs,
                             StatusName = g.FirstOrDefault().StatusName,
-                            StatusId = g.FirstOrDefault().StatusId
+                            StatusId = g.FirstOrDefault().StatusId,
+                            SubscriberId = g.FirstOrDefault().SubscriberId,
+                            CTSCustID = g.FirstOrDefault().CTSCustID
                         }).ToList();
 
 

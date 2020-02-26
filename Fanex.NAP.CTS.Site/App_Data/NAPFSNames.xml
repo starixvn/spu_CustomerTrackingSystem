@@ -378,11 +378,8 @@
 
     <Setting Key="CTS_DC_GetCustomerFlagInfo"
             SpName="CTS_DC_GetCustomerFlagInfo"
-            DbName="MySQL.CTS_DataCenter" />    
-    
-    <Setting Key="CTS_DC_GetDirectAssociatedAccount"
-            SpName="CTS_DC_GetDirectAssociatedAccount"
-            DbName="MySQL.CTS_DataCenter" />    
+            DbName="MySQL.CTS_DataCenter" />  
+      
 
     <Setting Key="CTS_DC_GetAllEvidences"
              SpName="CTS_DC_GetAllEvidences"
@@ -426,6 +423,14 @@
 
     <Setting Key="CTS_DC_GetAffectedEvidenListBetweenCusts"
            SpName="CTS_DC_GetAffectedEvidenListBetweenCusts"
+           DbName="MySQL.CTS_DataCenter" />
+
+    <Setting Key="CTS_DC_GetDirectAssociatedAccount_TagAffected"
+           SpName="CTS_DC_GetDirectAssociatedAccount_TagAffected"
+           DbName="MySQL.CTS_DataCenter" />
+
+    <Setting Key="CTS_DC_GetDirectAssociatedAccount_TagFlagged"
+           SpName="CTS_DC_GetDirectAssociatedAccount_TagFlagged"
            DbName="MySQL.CTS_DataCenter" />
   </Function>
 </Functions>

@@ -161,12 +161,10 @@
 
                     tasks.Add(Task.Run(() =>
                     {
-                        var custIdsAffectedTag = result.Select(a => new { a.CTSCustId }).ToList();
-                        getCustIdsAffectedTag = _accountService.GetDirectAssocationByGraph(ConfigSettings.GetDirectAssociationMultiCust, JsonConvert.SerializeObject(custIdsAffectedTag));
+                        var custIdsAffectedTag = result.Select(a => a.CTSCustId ).ToList();
+                        getCustIdsAffectedTag = _accountService.GetDirectAssocationByGraph(ConfigSettings.GetDirectAssociationMultiCust, custIdsAffectedTag);                                               
 
-                        var param = getCustIdsAffectedTag.Select(x => new { x.SubscriberId, x.FromCTSCustId, x.ToCTSCustId });
-
-                        getAffectedTags = _accountService.GetDirectAssociatedAccountTagAffected(JsonConvert.SerializeObject(param));
+                        getAffectedTags = _accountService.GetDirectAssociatedAccountTagAffected(JsonConvert.SerializeObject(getCustIdsAffectedTag));
                     }));
 
                     Task.WhenAll(tasks.ToArray()).Wait();
