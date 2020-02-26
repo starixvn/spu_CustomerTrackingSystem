@@ -7,8 +7,8 @@
     using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Web.Context;
     using Fanex.NAP.Core.Web.Session;
-    using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Core.ExportExcel;
+    using Fanex.NAP.CTS.Resource.Consts;
     using NPOI.SS.UserModel;
     using System;
     using System.Collections.Generic;
@@ -29,7 +29,7 @@
             {
                 CurrentSession = new CurrentSession();
                 ViewBag.Session = CurrentSession;
-            }
+            }            
 
             LogManager.SetDefaultLogCategory("CTS")
                   .Use(new List<ILogEngine>
