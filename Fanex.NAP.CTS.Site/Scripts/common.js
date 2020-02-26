@@ -244,11 +244,7 @@
         next_element.click(() => $input.focus());
 
         $input.addClass("control").datepicker(options);
-    }
-
-    this.formatDate = function (input, momentFormat) {
-        return moment(input).zone(-4).format(momentFormat);
-    }
+    }       
 
     this.makeWrapString = function (str = "", maxLength = 0) {
         if (str == null) return str;

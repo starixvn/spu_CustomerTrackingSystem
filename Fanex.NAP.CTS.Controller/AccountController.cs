@@ -112,7 +112,7 @@
         [HttpPost]
         public ActionResult GetAssociatedByAccount(int CustId, long ctsCustId, string statusIds, int associationType, bool isDirect)
         {
-            var result = new List<CustomerAssociationByAccountDetailModel>();
+            var result = new List<CustomerAssociationByAccountDetailViewModel>();
 
             if (string.IsNullOrWhiteSpace(statusIds) || CustId == 0 || ctsCustId == 0)
             {
@@ -133,12 +133,12 @@
 
                 customerAssociation = _accountService.FilterCustomerAssociationByAssociationType(associationType, customerAssociation);
 
-                result = customerAssociation.Select(x => new CustomerAssociationByAccountDetailModel
+                result = customerAssociation.Select(x => new CustomerAssociationByAccountDetailViewModel
                 {
                     CustId = x.CustId.HasValue ? x.CustId.Value : 0,
                     Username = !string.IsNullOrWhiteSpace(x.Username) ? x.Username : x.Username2,
                     LoginId = !string.IsNullOrWhiteSpace(x.Username2) ? x.Username2 : x.Username,
-                    AssociationDate = x.AssociationDate,
+                    AssociationDate = x.AssociationDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                     SharedDevices = isDirect ? x.SharedDevices : -1,
                     SharedIps = isDirect ? x.SharedIPs : -1,
                     AssociationType = x.AssociationType,

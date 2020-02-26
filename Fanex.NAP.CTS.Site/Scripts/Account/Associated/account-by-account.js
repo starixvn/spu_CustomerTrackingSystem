@@ -44,7 +44,7 @@
                 { data: obj => obj.SharedDevices == -1 ? "-" : obj.SharedDevices },
                 { data: obj => obj.SharedIps == -1 ? "-" : obj.SharedIps },
                 {
-                    data: obj => common.formatDate(obj.AssociationDate, "MMM DD, YYYY HH:mm:ss")
+                    data: obj => obj.AssociationDate
                 },
                 {
                     data: obj => RenderGraphImage(), createdCell: (cell, _, row) => {

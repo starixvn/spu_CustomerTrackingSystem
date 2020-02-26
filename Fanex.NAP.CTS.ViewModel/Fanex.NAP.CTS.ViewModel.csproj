@@ -48,6 +48,7 @@
     <Compile Include="Account\Associated\AssociatedByAccountViewModel.cs" />
     <Compile Include="Account\Associated\AssociatedDeviceByAccount.cs" />
     <Compile Include="Account\Associated\AssociatedDeviceByAccountFilter.cs" />
+    <Compile Include="Account\Associated\CustomerAssociationByAccountDetailViewModel.cs" />
     <Compile Include="Account\Associated\GraphCustomerItemViewModel.cs" />
     <Compile Include="Account\ChainToEvidence\AccountEvidenceViewModel.cs" />
     <Compile Include="Account\ChainToEvidence\AffectedEvidenceListBetweenCustsViewModel.cs" />
