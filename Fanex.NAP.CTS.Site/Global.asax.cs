@@ -31,17 +31,6 @@
                 .UseDefaultConnectionStringProvider()
                 .Run();
 
-            LogManager.SetDefaultLogCategory("CTS")
-                   .Use(new List<ILogEngine>
-                   {
-                         new SentryLogging(new SentryEngineOptions
-                         {
-                             Dsn = new Dsn("http://49a89a5c0163465895db709864620c65@10.99.99.51:801/103")
-                         })
-                   });
-
-            LogService.Info("Application is starting");
-
             RefDataTypeContainer
                 .ConnectTo(new Uri(ConfigurationManager.AppSettings["Fanex.RemotingRef.Service.Url"]))
                 .FromApplication("SPU - Fraud Sensor");

@@ -14,6 +14,9 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Web.Mvc;
+    using Fanex.Logging.Sentry;
+    using Sentry;
+    using System.Configuration;
 
     public class BaseController : Controller
     {
@@ -27,6 +30,15 @@
                 CurrentSession = new CurrentSession();
                 ViewBag.Session = CurrentSession;
             }
+
+            LogManager.SetDefaultLogCategory("CTS")
+                  .Use(new List<ILogEngine>
+                  {
+                         new SentryLogging(new SentryEngineOptions
+                         {
+                             Dsn = new Dsn(ConfigurationManager.AppSettings["Sentry-Log-Config"])
+                         })
+                  });
         }
 
         public virtual string BaseControllerName { get => Consts.BaseController; }
