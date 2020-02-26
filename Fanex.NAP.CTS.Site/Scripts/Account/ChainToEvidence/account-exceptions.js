@@ -185,7 +185,7 @@
 
             divException.dialog({
                 modal: true,
-                width: '800px',               
+                width: '600px',               
                 title: 'ADD EXCEPTIONS',                
                 resizable: true,
                 draggable: true,

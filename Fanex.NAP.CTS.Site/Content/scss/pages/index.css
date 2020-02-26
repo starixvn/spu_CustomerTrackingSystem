@@ -888,6 +888,8 @@ table.dataTable tbody tr.selected td {
   .ui-dialog .ui-button:active {
     border: 0;
     font-weight: bold; }
+  .ui-dialog .btn-cancel-outline:focus, .ui-dialog .btn-cancel-outline:hover, .ui-dialog .btn-cancel-outline:active {
+    border: 1px solid #545454; }
   .ui-dialog .ui-dialog-titlebar {
     padding: 10px;
     border: none;

@@ -238,10 +238,16 @@
         })
     }
 
-    function RestoreAffectedEvidence(ctsCustId, username, evidenceId, evidenceDisplay) {     
-        var title = `Recover Affected Evidence ${evidenceDisplay} from all associations to ${username}?`;
+    function RestoreAffectedEvidence(ctsCustId, username, evidenceId, evidenceDisplay) {   
+        var html = '<div>';
+        html += '<p>Evidence: <strong>' + evidenceDisplay + '</strong></p>';
+        html += '<p>From: <strong>All associations</strong></p>';
+        html += '<p>To: <strong>' + username + '</strong></p>';
+        html += '</div>';
 
-        common.showFormConfirmation('', title, function () {
+        var title = `Recover Affected Evidence`;
+
+        common.showFormConfirmation(html, title, function () {
             var url = common.modifyRelativeUrl('/Account/RestoreAffectedEvidence');
 
             $.ajax(url, {
@@ -271,12 +277,15 @@
 
     function RetractAffectedEvidence(ctsCustId, username, evidenceId, evidenceDisplay) {
 
-        var html = '<div class="filter"><div class="dropdown">';        
-        html += '<div class="control-label">Comment</div>';
+        var html = '<div class="filter"><div class="dropdown">';         
+        html += '<p>Evidence: <strong>' + evidenceDisplay + '</strong></p>';
+        html += '<p>From: <strong>All associations</strong></p>';
+        html += '<p>To: <strong>' + username + '</strong></p>';        
+        html += '<div class="control-label" style="margin-top: 16px;">Comment</div>';
         html += '<div><textarea rows="4" style="width:100%" id="txtRemoveEvidenceComment" maxlength="500"></textarea></div>';
         html += '</div></div>';
 
-        var title = `Remove Affected Evidence ${evidenceDisplay} from all associations to ${username}`;
+        var title = `Remove Affected Evidence`;
 
         common.showFormConfirmation(html, title, function () {
             var url = common.modifyRelativeUrl('/Account/RetractAffectedEvidence');

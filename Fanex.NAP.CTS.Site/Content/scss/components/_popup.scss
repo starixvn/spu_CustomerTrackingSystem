@@ -14,7 +14,7 @@
     box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.1);
 
     .ui-dialog-content {
-       padding: 12px;
+        padding: 12px;
     }
 
     .ui-dialog-buttonpane {
@@ -37,6 +37,10 @@
     .ui-button:active {
         border: 0;
         font-weight: bold;
+    }
+
+    .btn-cancel-outline:focus, .btn-cancel-outline:hover, .btn-cancel-outline:active {
+        border: 1px solid #545454;
     }
 
     .ui-dialog-titlebar {
