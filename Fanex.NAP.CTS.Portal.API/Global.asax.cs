@@ -1,8 +1,12 @@
 ﻿namespace Fanex.NAP.CTS.Portal.API
 {
+    using Fanex.Logging;
+    using Fanex.Logging.Sentry;
     using Fanex.NAP.SPU.Graph.Core;
     using Fanex.NAP.SPU.Graph.Core.Neo4j;
     using Newtonsoft.Json.Serialization;
+    using Sentry;
+    using System.Collections.Generic;
     using System.Web.Http;
     using System.Web.Mvc;
     using System.Web.Optimization;
@@ -25,6 +29,15 @@
                 .RegisterCommandBuilder(new Neo4jCommandBuilder("~/App_Data/Graph/scripts"))
                 .RegisterCommandExecutor(new Neo4jExecutor())
                 .Run();
+
+            LogManager.SetDefaultLogCategory("CTS/PortalAPI")
+                   .Use(new List<ILogEngine>
+                   {
+                         new SentryLogging(new SentryEngineOptions
+                         {
+                             Dsn = new Dsn("http://49a89a5c0163465895db709864620c65@10.99.99.51:801/103")
+                         })
+                   });
 
             var json = GlobalConfiguration.Configuration.Formatters.JsonFormatter;
             json.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();

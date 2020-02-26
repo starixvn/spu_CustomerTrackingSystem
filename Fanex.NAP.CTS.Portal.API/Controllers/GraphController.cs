@@ -1,4 +1,5 @@
-﻿using Fanex.NAP.CTS.Model.Account;
+﻿using Fanex.Logging;
+using Fanex.NAP.CTS.Model.Account;
 using Fanex.NAP.CTS.Model.GraphDB;
 using Fanex.NAP.SPU.Graph.Core;
 using System;
@@ -26,18 +27,32 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
         [HttpGet]
         public IEnumerable<GraphAssociationModel> GetDirectAssociation([FromBody] int ctsCustId)
         {
-            var result = DbSessionFactory.Execute<GraphAssociationModel>("GetAssociationOneLevelByCustId", new { CTSCustID = ctsCustId }).Data;
-
-            return result;
+            try
+            {
+                var result = DbSessionFactory.Execute<GraphAssociationModel>("GetAssociationOneLevelByCustId", new { CTSCustID = ctsCustId }).Data;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("GetDirectAssociation failed: " + ex.Message + ex.StackTrace);
+                throw;
+            }
         }
 
         [System.Web.Http.AcceptVerbs("GetDirectAssociationMultiCust")]
         [HttpPost]
         public IEnumerable<GraphDirectAssociationModel> GetDirectAssociationMultiCust([FromBody] List<long> ctsCustIds)
         {
-            var result = DbSessionFactory.Execute<GraphDirectAssociationModel>("GetAssociationOneLevelByCustIds", new { CTSCustIDs = ctsCustIds }).Data;
-
-            return result;
+            try
+            {
+                var result = DbSessionFactory.Execute<GraphDirectAssociationModel>("GetAssociationOneLevelByCustIds", new { CTSCustIDs = ctsCustIds }).Data;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("GetDirectAssociationMultiCust failed: " + ex.Message + ex.StackTrace);
+                throw;
+            }
         }
 
         /// <summary>
@@ -50,8 +65,17 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
         [HttpGet]
         public IEnumerable<GraphAssociationModel> GetInDirectAssociation([FromBody] int ctsCustId)
         {
-            var result = DbSessionFactory.Execute<GraphAssociationModel>("GetAssociationNLevelByCustId", new { CTSCustID = ctsCustId }).Data;
-            return result;
+            try
+            {
+                var result = DbSessionFactory.Execute<GraphAssociationModel>("GetAssociationNLevelByCustId", new { CTSCustID = ctsCustId }).Data;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("GetInDirectAssociation failed: " + ex.Message + ex.StackTrace);
+                throw;
+            }
+            
         }
 
         /// <summary>
@@ -63,7 +87,7 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
         [System.Web.Http.AcceptVerbs("GetShortestPath")]
         [HttpGet]
         public JsonResult<ShortestPathOfAccount> GetShortestPath(int ctsCustIdFrom, int ctsCustIdTo)
-        {         
+        {
             var result = DbSessionFactory.ExecuteSingle<ShortestPathOfAccount>("GetShortestPath", new { StartCustId = ctsCustIdFrom, EndCustId = ctsCustIdTo }).Data;
             return Json(result);
         }
@@ -72,8 +96,17 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
         [HttpGet]
         public IEnumerable<GraphAssociationModel> TestGetDirectAssociation(int ctsCustId)
         {
-            var result = DbSessionFactory.Execute<GraphAssociationModel>("GetAssociationOneLevelByCustId", new { CTSCustID = ctsCustId }).Data;
-            return result;
+            try
+            {
+                var result = DbSessionFactory.Execute<GraphAssociationModel>("GetAssociationOneLevelByCustId", new { CTSCustID = ctsCustId }).Data;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("TestGetDirectAssociation failed: " + ex.Message + ex.StackTrace);
+                throw;
+            }
+
         }
 
         [System.Web.Http.AcceptVerbs("TestGetInDirectAssociation")]
