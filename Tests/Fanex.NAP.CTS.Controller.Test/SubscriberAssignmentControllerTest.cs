@@ -49,16 +49,16 @@
             Assert.True(actualResult.Data.ToString() != string.Empty);
         }
 
-        [Theory]
-        [InlineData(8)]
-        public void Can_GetSubscribers(long userId)
-        {
-            // Act
-            var actualResult = _runner.GetSubscribers(userId) as JsonResult;
+        //[Theory]
+        //[InlineData(8)]
+        //public void Can_GetSubscribers(long userId)
+        //{
+        //    // Act
+        //    var actualResult = _runner.GetSubscribers(userId) as JsonResult;
 
-            // Assert
-            Assert.IsType<List<SubscriberAssignment>>(actualResult.Data);
-        }
+        //    // Assert
+        //    Assert.IsType<List<SubscriberAssignment>>(actualResult.Data);
+        //}
 
         [Fact]
         public void Can_AssignSubscribers()

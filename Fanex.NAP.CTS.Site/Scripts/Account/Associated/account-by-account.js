@@ -43,7 +43,7 @@
                 { data: obj => obj.AssociationTypeName },
                 { data: obj => obj.SharedDevices == -1 ? "-" : obj.SharedDevices },
                 { data: obj => obj.SharedIps == -1 ? "-" : obj.SharedIps },
-                { data: obj => moment(obj.AssociationDate).format("MMM DD, YYYY") },
+                { data: obj => moment(obj.AssociationDate).format("MMM DD, YYYY HH:mm:ss") },
                 {
                     data: obj => RenderGraphImage(), createdCell: (cell, _, row) => {
                         $('.icon-path', cell).click(() => HandleGraphShortestPath(row, ctsCustid));

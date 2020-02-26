@@ -12,15 +12,15 @@
         private static AccountDetail expectedAccountDetail;
         private static CustomerDetailsInfo expectedCustomerDetailsInfo;
 
-        public static List<SubscriberAssignment> ExpectedSubscriberAssignments
-        {
-            get
-            {
-                expectedSubscriberAssignments = expectedSubscriberAssignments ?? GenerateSampleSubscriberAssignments();
+        //public static List<SubscriberAssignment> ExpectedSubscriberAssignments
+        //{
+        //    get
+        //    {
+        //        expectedSubscriberAssignments = expectedSubscriberAssignments ?? GenerateSampleSubscriberAssignments();
 
-                return expectedSubscriberAssignments;
-            }
-        }
+        //        return expectedSubscriberAssignments;
+        //    }
+        //}
 
         public static AccountDetail ExpectedAccountDetail
         {
@@ -40,26 +40,7 @@
 
                 return expectedCustomerDetailsInfo;
             }
-        }
-
-        private static List<SubscriberAssignment> GenerateSampleSubscriberAssignments()
-            => new List<SubscriberAssignment>
-            {
-                new SubscriberAssignment
-                {
-                    SubscriberID = 1,
-                    SubscriberName = "11Bet",
-                    isAssigned = 0,
-                    IsMaster = 1
-                },
-                new SubscriberAssignment
-                {
-                    SubscriberID = 2,
-                    SubscriberName = "12Bet",
-                    isAssigned = 1,
-                    IsMaster = 1
-                }
-            };
+        }        
 
         private static AccountDetail GenerateSampleAccountDetail()
             => new AccountDetail { };

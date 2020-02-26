@@ -13,25 +13,7 @@
     using System.Collections.Generic;
 
     public interface IAccountService
-    {
-        IEnumerable<SubscriberAssignment> GetSubscribers(long userId);
-
-        bool CheckIsMasterSubscriber(IEnumerable<SubscriberAssignment> subscribers);
-
-        bool CheckIsPermissionCN88(IEnumerable<SubscriberAssignment> subscribers);
-
-        IEnumerable<SubscriberAccount> SearchAccounts(SearchAccountFilter filter);
-
-        AccountDetail GetAccountDetailGeneralInformation(GeneralInformationFilter filter);
-
-        IEnumerable<AssociatedAccountByAccount> GetAssociatedAccountByAccounts(AssociatedAccountByAccountFilter filter, out string msgError);        
-
-        IEnumerable<AssociatedDeviceByAccount> GetAssociatedDevicesByAccount(AssociatedDeviceByAccountFilter filter);
-
-
-        // New Implement
-
-
+    {        
         List<SearchResultModel> SearchAccounts(string username);
 
         List<CustomerGeneralStatusModel> GetCustomerGeneralStatus(string custIds);

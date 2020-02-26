@@ -10,11 +10,11 @@
 
     public class SubscriberAssignmentService : ISubscriberAssignmentService
     {
-        public IEnumerable<SubscriberAssignment> GetSubscribers(long userId)
+        public IEnumerable<SubscriberAssignment> GetSubscribers(int userId)
         {
-            var criteria = new SubscriberGetCriteria
+            var criteria = new GetAllSubscriberCriteria
             {
-                ip_userId = userId
+                UserId = userId
             };
 
             return DataService.GetData<SubscriberAssignment>(criteria)

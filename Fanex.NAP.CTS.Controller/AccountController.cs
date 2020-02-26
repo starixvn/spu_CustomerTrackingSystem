@@ -17,16 +17,19 @@
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Model.GraphDB;
 
-    [NapAuth(FunctionKey = FSFunctionKeys.SearchAccount, Policy = NAP.Core.Business.Constant.Policy.Read)]
+    [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class AccountController : BaseController
     {
         private readonly IAccountService _accountService;
         private readonly IGraphService _graphService;
 
+        private readonly ISubscriberAssignmentService _subscriberAssignmentService;
+
         public AccountController()
         {
             _accountService = new AccountService();
             _graphService = new GraphService();
+            _subscriberAssignmentService = new SubscriberAssignmentService();
         }
 
         public override string BaseControllerName { get => Consts.MenuItemSearch; }
@@ -124,6 +127,8 @@
             {
                 var getStatusByCustIds = _accountService.GetCustomerGeneralStatus(string.Join(",", customerAssociation.Select(x => x.CustId)));
 
+                var getAllSubscribers = _subscriberAssignmentService.GetSubscribers(0);
+
                 customerAssociation = _accountService.FilterCustomerAssociationByStatus(statusIds, customerAssociation, getStatusByCustIds);
 
                 customerAssociation = _accountService.FilterCustomerAssociationByAssociationType(associationType, customerAssociation);
@@ -141,6 +146,7 @@
                     Status = x.StatusName,
                     StatusId = x.StatusId,
                     SubscriberId = x.SubscriberId,
+                    Subscriber = getAllSubscribers.FirstOrDefault(a => a.SubscriberId == x.SubscriberId).SubscriberName,
                     CTSCustId = x.CTSCustID
                 }).ToList();
 
@@ -161,23 +167,23 @@
 
                     tasks.Add(Task.Run(() =>
                     {
-                        var custIdsAffectedTag = result.Select(a => a.CTSCustId ).ToList();
-                        getCustIdsAffectedTag = _accountService.GetDirectAssocationByGraph(ConfigSettings.GetDirectAssociationMultiCust, custIdsAffectedTag);                                               
+                        var custIdsAffectedTag = result.Select(a => a.CTSCustId).ToList();
+                        getCustIdsAffectedTag = _accountService.GetDirectAssocationByGraph(ConfigSettings.GetDirectAssociationMultiCust, custIdsAffectedTag);
 
                         getAffectedTags = _accountService.GetDirectAssociatedAccountTagAffected(JsonConvert.SerializeObject(getCustIdsAffectedTag));
                     }));
 
                     Task.WhenAll(tasks.ToArray()).Wait();
 
-                    result = result.Select(x => 
+                    result = result.Select(x =>
                     {
-                        x.AffectedTag =  getAffectedTags.FirstOrDefault(z => z.FromCTSCustId == x.CTSCustId).AffectedTag;
+                        x.AffectedTag = getAffectedTags.FirstOrDefault(z => z.FromCTSCustId == x.CTSCustId).AffectedTag;
                         x.FlaggedTag = getFlaggedTags.FirstOrDefault(z => z.CTSCustId == x.CTSCustId).FlaggedTag;
 
-                        return x;                    
+                        return x;
                     })
                     .OrderBy(a => a.StatusId)
-                    .ToList();                    
+                    .ToList();
                 }
             }
 

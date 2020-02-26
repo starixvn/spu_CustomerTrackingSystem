@@ -2,11 +2,11 @@
 {
     public class SubscriberAssignment
     {
-        public int SubscriberID { get; set; }
+        public int SubscriberId { get; set; }
 
         public string SubscriberName { get; set; }
 
-        public int isAssigned { get; set; }
+        public int IsAssigned { get; set; }
 
         public int IsMaster { get; set; }
     }

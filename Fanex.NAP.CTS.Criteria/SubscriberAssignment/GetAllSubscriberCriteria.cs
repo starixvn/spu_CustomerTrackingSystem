@@ -1,10 +1,12 @@
 ﻿namespace Fanex.NAP.CTS.Criteria.SubscriberAssignment
 {
+    using Fanex.Data;
     using Fanex.Data.Repository;
 
-    public class SubscriberGetCriteria : CriteriaBase
+    public class GetAllSubscriberCriteria : CriteriaBase
     {
-        public long ip_userId { get; set; }
+        [SpParam(SqlParamName = "ip_userId")]
+        public int UserId { get; set; }
 
         public override string GetSettingKey() => "CTS_AD_GetAllSubscribers";
 

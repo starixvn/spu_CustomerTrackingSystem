@@ -44,7 +44,7 @@
             return Json(string.Empty, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetSubscribers(long userId)
+        public ActionResult GetSubscribers(int userId)
         {
             var data = _subscriberAssignmentService.GetSubscribers(userId);
 

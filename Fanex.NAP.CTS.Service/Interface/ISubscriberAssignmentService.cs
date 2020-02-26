@@ -6,7 +6,7 @@
 
     public interface ISubscriberAssignmentService
     {
-        IEnumerable<SubscriberAssignment> GetSubscribers(long userId);
+        IEnumerable<SubscriberAssignment> GetSubscribers(int userId);
 
         DBResult UpdateSubscribers(SubscriberAssignmentUpdate subscriberAssignmentUpdate);
     }

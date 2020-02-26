@@ -140,7 +140,7 @@
     <Compile Include="Notification\UserMessageUnreadCounterGetCriteria.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScannedOfficeIP\TicketFromOfficeIpGetCriteria.cs" />
-    <Compile Include="SubscriberAssignment\SubscriberGetCriteria.cs" />
+    <Compile Include="SubscriberAssignment\GetAllSubscriberCriteria.cs" />
     <Compile Include="SubscriberAssignment\SubscribersUpdateCriteria.cs" />
     <Compile Include="SuspiciousCustomerDetails\SuspiciousCustomerDetailsGeneralCriteria.cs" />
     <Compile Include="SuspiciousCustomerDetails\SuspiciousCustomerDetailsStatisticsGetCriteria.cs" />

@@ -16,16 +16,16 @@
             _runner = new SubscriberAssignmentService();
         }
 
-        [Theory]
-        [InlineData(8)]
-        public void Can_GetSubscribers(long userId)
-        {
-            // Act
-            var actualResult = _runner.GetSubscribers(userId);
+        //[Theory]
+        //[InlineData(8)]
+        //public void Can_GetSubscribers(long userId)
+        //{
+        //    // Act
+        //    var actualResult = _runner.GetSubscribers(userId);
 
-            // Assert
-            Assert.IsType<List<SubscriberAssignment>>(actualResult);
-        }
+        //    // Assert
+        //    Assert.IsType<List<SubscriberAssignment>>(actualResult);
+        //}
 
         [Fact]
         public void UpdateSuccess_UpdateSubscribers()

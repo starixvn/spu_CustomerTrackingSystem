@@ -31,141 +31,7 @@
     using System.Threading.Tasks;
 
     public class AccountService : IAccountService
-    {
-        #region Search account
-        public IEnumerable<SubscriberAccount> SearchAccounts(SearchAccountFilter filter)
-        {
-            var criteria = new SearchAccountCriteria
-            {
-                ip_SubscriberIDs = filter.Subscribers,
-                ip_Username = filter.Key,
-                ip_UserId = filter.UserId
-            };
-
-            var accountsCollected = DataService.GetData<SubscriberAccount>(criteria);
-
-            return SortAccounts(accountsCollected, filter);
-        }
-
-        private IEnumerable<SubscriberAccount> SortAccounts(IEnumerable<SubscriberAccount> accountsCollected, SearchAccountFilter filter)
-        {
-            var accounts = new List<SubscriberAccount>();
-            var keySearch = filter.Key.Trim().ToLower();
-
-            var subscribers = accountsCollected.AsEnumerable()
-                .GroupBy(g => g.SubscriberName);
-
-            foreach (var subGroup in subscribers)
-            {
-                // exactly
-                accounts.AddRange(subGroup
-                    .Where(c => c.SubscriberName == subGroup.Key
-                        && c.UserNameToSort.ToLower().Equals(keySearch))
-                    .Select(c => GetAccount(c))
-                );
-
-                // beginning
-                accounts.AddRange(subGroup
-                    .Where(c => c.SubscriberName == subGroup.Key
-                        && !c.UserNameToSort.ToLower().Equals(keySearch)
-                        && c.UserNameToSort.ToLower().StartsWith(keySearch)
-                    )
-                    .Select(c => GetAccount(c))
-                    .OrderBy(a => a.UserNameToSort)
-                );
-
-                // alphabet
-                accounts.AddRange(subGroup
-                   .Where(c => c.SubscriberName == subGroup.Key
-                       && !c.UserNameToSort.ToLower().Equals(keySearch)
-                       && !c.UserNameToSort.ToLower().StartsWith(keySearch)
-                   )
-                   .Select(c => GetAccount(c))
-                   .OrderBy(a => a.UserNameToSort)
-               );
-            }
-
-            return accounts;
-        }
-
-        private SubscriberAccount GetAccount(SubscriberAccount account)
-        {
-            return new SubscriberAccount
-            {
-                SubscriberID = account.SubscriberID,
-                SubscriberName = account.SubscriberName,
-                AccountID = account.AccountID,
-                CustID = account.CustID,
-                UserName = account.GetUserName(),
-                UserName2 = account.UserName2,
-            };
-        }
-        #endregion
-
-        #region Subscribers to user
-        public IEnumerable<SubscriberAssignment> GetSubscribers(long userId)
-        {
-            var criteria = new SubscriberGetCriteria
-            {
-                ip_userId = userId
-            };
-
-            var rawSubscribers = DataService.GetData<SubscriberAssignment>(criteria).OrderBy(c => c.SubscriberName).ToList();
-
-            if (CheckIsMasterSubscriber(rawSubscribers))
-            {
-                return rawSubscribers;
-            }
-
-            return GetSubscribers(rawSubscribers);
-        }
-
-        public bool CheckIsMasterSubscriber(IEnumerable<SubscriberAssignment> subscribers)
-        {
-            if (subscribers != null && subscribers.Any())
-            {
-                return subscribers.ToList()[0].IsMaster == 1;
-            }
-
-            return false;
-        }
-
-        public bool CheckIsPermissionCN88(IEnumerable<SubscriberAssignment> subscribers)
-        {
-            if (subscribers != null && subscribers.Any())
-            {
-                foreach (var sub in subscribers)
-                {
-                    if (sub.IsMaster == 1)
-                    {
-                        return true;
-                    }
-
-                    if (sub.isAssigned == 1 && sub.SubscriberName.ToUpper().Contains(Consts.SubscriberNameCN88))
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        private static IEnumerable<SubscriberAssignment> GetSubscribers(List<SubscriberAssignment> rawSubscribers)
-        {
-            var subscribers = new List<SubscriberAssignment>();
-
-            foreach (SubscriberAssignment subscriber in rawSubscribers)
-            {
-                if (subscriber.isAssigned == 1)
-                {
-                    subscribers.Add(subscriber);
-                }
-            }
-
-            return subscribers;
-        }
-        #endregion
+    {      
 
         #region General information
         public AccountDetail GetAccountDetailGeneralInformation(GeneralInformationFilter filter)
@@ -891,7 +757,7 @@
                             StatusName = g.FirstOrDefault().StatusName,
                             StatusId = g.FirstOrDefault().StatusId,
                             SubscriberId = g.FirstOrDefault().SubscriberId,
-                            CTSCustID = g.FirstOrDefault().CTSCustID
+                            CTSCustID = g.FirstOrDefault().CTSCustID                            
                         }).ToList();
 
 

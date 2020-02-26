@@ -23,72 +23,72 @@
         }
 
         #region Search account test
-        [Fact]
-        public void Can_SearchAccounts()
-        {
-            // Act
-            var result = _runner.SearchAccounts(ExpectedFilter.ExpectedSearchAccountFilter);
+        //[Fact]
+        //public void Can_SearchAccounts()
+        //{
+        //    // Act
+        //    var result = _runner.SearchAccounts(ExpectedFilter.ExpectedSearchAccountFilter);
 
-            // Assert
-            Assert.IsType<List<SubscriberAccount>>(result);
-        }
+        //    // Assert
+        //    Assert.IsType<List<SubscriberAccount>>(result);
+        //}
 
         #endregion
 
         #region Subscribers to user
-        [Theory]
-        [InlineData(0)]
-        [InlineData(8)]
-        public void Can_GetSubscribers(long userId)
-        {
-            // Act
-            var result = _runner.GetSubscribers(userId);
+        //[Theory]
+        //[InlineData(0)]
+        //[InlineData(8)]
+        //public void Can_GetSubscribers(long userId)
+        //{
+        //    // Act
+        //    var result = _runner.GetSubscribers(userId);
 
-            // Assert
-            Assert.IsType<List<SubscriberAssignment>>(result);
-        }
+        //    // Assert
+        //    Assert.IsType<List<SubscriberAssignment>>(result);
+        //}
 
-        [Fact]
-        public void Can_CheckIsMasterSubscriber()
-        {
-            // Arrange
-            var expected = ExpectedData.ExpectedSubscriberAssignments.FirstOrDefault(c => c.IsMaster == 1) != null;
+        //[Fact]
+        //public void Can_CheckIsMasterSubscriber()
+        //{
+        //    // Arrange
+        //    var expected = ExpectedData.ExpectedSubscriberAssignments.FirstOrDefault(c => c.IsMaster == 1) != null;
 
-            // Act
-            var actualResult = _runner.CheckIsMasterSubscriber(ExpectedData.ExpectedSubscriberAssignments);
+        //    // Act
+        //    var actualResult = _runner.CheckIsMasterSubscriber(ExpectedData.ExpectedSubscriberAssignments);
 
-            // Assert
-            Assert.Equal(expected, actualResult);
-        }
+        //    // Assert
+        //    Assert.Equal(expected, actualResult);
+        //}
 
-        [Fact]
-        public void Can_CheckIsPermissionCN88()
-        {
-            // Arrange
-            var expected = ExpectedData.ExpectedSubscriberAssignments.FirstOrDefault(c => c.IsMaster == 1
-                                        || (c.isAssigned == 1 && c.SubscriberName.ToUpper().Contains(Consts.SubscriberNameCN88))) != null;
+        //[Fact]
+        //public void Can_CheckIsPermissionCN88()
+        //{
+        //    // Arrange
+        //    var expected = ExpectedData.ExpectedSubscriberAssignments.FirstOrDefault(c => c.IsMaster == 1
+        //                                || (c.isAssigned == 1 && c.SubscriberName.ToUpper().Contains(Consts.SubscriberNameCN88))) != null;
 
-            // Act
-            var actualResult = _runner.CheckIsPermissionCN88(ExpectedData.ExpectedSubscriberAssignments);
+        //    // Act
+        //    var actualResult = _runner.CheckIsPermissionCN88(ExpectedData.ExpectedSubscriberAssignments);
 
-            // Assert
-            Assert.Equal(expected, actualResult);
-        }
+        //    // Assert
+        //    Assert.Equal(expected, actualResult);
+        //}
         #endregion
 
         #region General information
-        [Fact]
-        public void Can_GetAccountDetailGeneralInformation()
-        {
-            // Arrange
-            var expected = ExpectedData.ExpectedAccountDetail;
+        //[Fact]
+        //public void Can_GetAccountDetailGeneralInformation()
+        //{
+        //    // Arrange
+        //    var expected = ExpectedData.ExpectedAccountDetail;
 
-            // Act
-            var actualResult = _runner.GetAccountDetailGeneralInformation(ExpectedFilter.ExpectedGeneralInformationFilter);
+        //    // Act
+        //    var actualResult = _runner.GetAccountDetailGeneralInformation(ExpectedFilter.ExpectedGeneralInformationFilter);
 
-            // Assert
-            Assert.IsType(expected.GetType(), actualResult);
-        }
+        //    // Assert
+        //    Assert.IsType(expected.GetType(), actualResult);
+        //}
         #endregion        
 
         #region Associated account by account
