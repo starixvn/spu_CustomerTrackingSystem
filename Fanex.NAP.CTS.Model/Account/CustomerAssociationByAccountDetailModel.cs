@@ -8,7 +8,9 @@ namespace Fanex.NAP.CTS.Model.Account
 {
    public class CustomerAssociationByAccountDetailModel
     {
-        public int Tag { get; set; }
+        public int AffectedTag { get; set; }
+
+        public int FlaggedTag { get; set; }
 
         public long CTSCustId { get; set; }
 

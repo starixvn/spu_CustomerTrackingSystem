@@ -1,10 +1,10 @@
 ﻿function account_by_account() {
     var btnSearch = $('#account-by-account-btn-search');
     var btnViewOnGraph = $('#account-by-account-btn-on-graph');
-    var associatedByAccountTable = $('#account-by-account-table');    
+    var associatedByAccountTable = $('#account-by-account-table');
 
     function InitialGrid(ctsCustid) {
-        associatedByAccountTable.DataTable({           
+        associatedByAccountTable.DataTable({
             language: {
                 lengthMenu: "Page size _MENU_",
                 paginate: {
@@ -12,7 +12,7 @@
                 },
                 info: "Displaying _START_ to _END_ of _TOTAL_ item(s)",
                 infoEmpty: "",
-                zeroRecords: "There's no data"                
+                zeroRecords: "There's no data"
             },
             ordering: false,
             lengthMenu: [10, 20, 50, 100, 200],
@@ -42,7 +42,7 @@
                 { data: obj => obj.Subscriber },
                 { data: obj => obj.AssociationTypeName },
                 { data: obj => obj.SharedDevices == -1 ? "-" : obj.SharedDevices },
-                { data: obj => obj.SharedIps == -1 ? "-" : obj.SharedIps},
+                { data: obj => obj.SharedIps == -1 ? "-" : obj.SharedIps },
                 { data: obj => moment(obj.AssociationDate).format("MMM DD, YYYY") },
                 {
                     data: obj => RenderGraphImage(), createdCell: (cell, _, row) => {
@@ -57,17 +57,23 @@
 
         var html = "";
 
-        if (obj.Tag == 1) {
-            html = "<span class='icon icon-Flagged-With-Evidence'></span>";
+        if (obj.AffectedTag == 1) {
+            html += "<span class='icon icon-Affected'  title='Affected'></span>";
         }
-        else if (obj.Tag == 2) {
-            html = "<span class='icon icon-Flagged'></span>";
-        }
-        else {
-            html = "<span class='icon icon-Affected'></span>";
-        }        
 
-        return html;
+        if (obj.FlaggedTag != 0)
+        {
+            if (obj.FlaggedTag == 2)
+            {
+                html += "<span class='icon icon-Flagged' title='Flagged'></span>";
+            }
+            else
+            {
+                html += "<span class='icon icon-Flagged-With-Evidence' title='Flagged with Evidence 100'></span>";
+            }
+        }
+
+        return html == "" ? "-" : html;
     }
 
     function RenderUsername(obj) {
@@ -77,14 +83,14 @@
             return '<a class="info-bng" href="' + url + '">' + obj.Username + '</a>';
         }
 
-        return null;        
+        return null;
     }
 
     function RenderGraphImage() {
         return '<span class="icon-path graph" title="Graph View"></span>';
     }
 
-    function RenderGrid(custId,ctsCustId, statusIds, associationType, isDirect) {
+    function RenderGrid(custId, ctsCustId, statusIds, associationType, isDirect) {
         var url = common.modifyRelativeUrl('/Account/GetAssociatedByAccount');
 
         $.ajax(url, {
@@ -93,7 +99,7 @@
                 associatedByAccountTable.find('tbody').addClass('loading');
             },
             data: {
-                custId: custId,    
+                custId: custId,
                 ctsCustId: ctsCustId,
                 statusIds: statusIds,
                 associationType: associationType,
@@ -101,7 +107,7 @@
             },
             success: function (response) {
                 associatedByAccountTable.DataTable().clear().rows.add(response).draw();
-                associatedByAccountTable.DataTable().columns.adjust();               
+                associatedByAccountTable.DataTable().columns.adjust();
             },
             complete: function () {
                 associatedByAccountTable.find('tbody').removeClass('loading');
@@ -117,7 +123,7 @@
         var formGraph = new graph();
         formGraph.GenerateShortestPath(ctsCustid, row.CTSCustId);
         formGraph.OpenModal();
-    }    
+    }
 
     this.Initial = function (custId, ctsCustid, username, statusIds, associationType, isDirect) {
         $("#account-by-account-cbb-status").multiselect();

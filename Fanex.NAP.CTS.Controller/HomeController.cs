@@ -1,13 +1,11 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
     using Fanex.NAP.Core.Web.Attribute;
-    using Fanex.NAP.CTS.Core.Helpers;
     using Fanex.NAP.CTS.Model.Home;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.ViewModel.Home;
     using System.Collections.Generic;
-    using System.Data.Linq.SqlClient;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;

@@ -169,28 +169,15 @@
 
                     Task.WhenAll(tasks.ToArray()).Wait();
 
+                    result = result.Select(x => 
+                    {
+                        x.AffectedTag =  getAffectedTags.FirstOrDefault(z => z.FromCTSCustId == x.CTSCustId).AffectedTag;
+                        x.FlaggedTag = getFlaggedTags.FirstOrDefault(z => z.CTSCustId == x.CTSCustId).FlaggedTag;
 
-
-                    //var param = result.Select(a => new { a.CustId, a.LoginId });
-
-                    //var getTags = _accountService.GetDirectCustomerAssociatedByAccount(JsonConvert.SerializeObject(param));
-
-                    //result = result.Select(x =>
-                    //{
-                    //    var getTag = getTags.FirstOrDefault(a => a.CustId == x.CustId || a.LoginId == x.LoginId);
-
-                    //    if (getTag != null)
-                    //    {
-                    //        x.Tag = getTag.Tag;
-                    //        x.Subscriber = getTag.Subscriber;
-                    //        x.CTSCustId = getTag.CTSCustId;
-                    //    }
-
-                    //    return x;
-                    //})
-                    //    .OrderBy(a => a.StatusId)
-                    //    .ToList();
-
+                        return x;                    
+                    })
+                    .OrderBy(a => a.StatusId)
+                    .ToList();                    
                 }
             }
 
