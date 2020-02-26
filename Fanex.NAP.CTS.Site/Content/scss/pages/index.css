@@ -921,7 +921,8 @@ table.dataTable tbody tr.selected td {
 
 .dialog-confirmation .ui-dialog-content {
   padding: 12px;
-  font-size: 16px; }
+  font-size: 16px;
+  line-height: 1.3; }
   .dialog-confirmation .ui-dialog-content .control-label {
     font-size: 13px; }
   .dialog-confirmation .ui-dialog-content .filter {

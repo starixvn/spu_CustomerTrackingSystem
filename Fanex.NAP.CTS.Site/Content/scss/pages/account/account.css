@@ -1222,3 +1222,6 @@ table.dataTable.no-footer {
 
 .evidence-retract:hover + .tooltip {
   display: block; }
+
+.popup-content {
+  line-height: 1.3; }

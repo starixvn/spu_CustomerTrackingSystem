@@ -38,7 +38,7 @@
                 {
                     data: obj => '<span class="icon-delete" title="Remove Evidence"></span>', createdCell: (cell, _, row) => {
                         $('.icon-delete', cell).click(() =>
-                            common.showFormConfirmation(`Do you want remove flagged evidence ${row.EvidenceDisplay} from ${username}?`, 'Confirmation', function () {
+                            common.showFormConfirmation(`<div class="popup-content">Do you want remove flagged evidence <br/> <strong style="color: red;">${row.EvidenceDisplay}</strong> from <strong style="color: red;">${username}</strong>?</div>`, 'Confirmation', function () {
                                 RemoveFlaggedEvidence(row.EvidenceID, ctsCustId, username)
                             })
                         );
