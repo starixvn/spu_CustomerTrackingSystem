@@ -9,14 +9,12 @@
     using Fanex.Logging.Extensions;
     using Fanex.Logging.Extensions.Database;
     using Fanex.Logging.Sentry;
-    using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.RemotingRef;
     using Sentry;
     using System;
     using System.Collections.Generic;
     using System.Configuration;
     using System.Web;
-    using System.Web.Http;
     using System.Web.Mvc;
     using System.Web.Optimization;
     using System.Web.Routing;
