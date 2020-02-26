@@ -123,9 +123,9 @@
             // Restart the force layout.
             force.nodes(nodes)
                 .links(links)
-                .charge(-800)
+                .charge(-600)
                 .linkDistance(180)
-                .friction(0.5)
+                .friction(0.9)
                 .start();
 
             // Update links.
