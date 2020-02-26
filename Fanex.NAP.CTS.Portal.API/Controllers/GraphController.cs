@@ -103,7 +103,7 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
             }
             catch (Exception ex)
             {
-                LogService.Error("TestGetDirectAssociation failed: " + ex.Message + ex.StackTrace);
+                LogService.Error("TestGetDirectAssociation failed: " + ex.Message + ex.StackTrace + ex.InnerException);
                 throw;
             }
 
