@@ -16,6 +16,7 @@
     using System.Web.Mvc;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Model.GraphDB;
+    using Fanex.Logging;
 
     [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class AccountController : BaseController
@@ -36,6 +37,8 @@
 
         public ActionResult Index(long Id)
         {
+            LogService.Info("Terry is testing");
+
             if (Id > 0)
             {
                 var tasks = new List<Task>();
