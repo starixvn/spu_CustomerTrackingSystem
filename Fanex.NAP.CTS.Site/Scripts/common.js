@@ -217,16 +217,6 @@
         var host = window.location.origin;
 
         return host + config.contextPath + url;
-        
-
-        //if (host.includes("starific")) {
-        //    return "/V2" + url;
-        //}
-        //else if (host.includes("oneops")) {
-        //    return "/NAPFS" + url;
-        //}             
-
-        //return url;
     }
 
     this.makeNonSearchSelect = select => $(select).select2({ minimumResultsForSearch: -1 })
@@ -254,6 +244,10 @@
         next_element.click(() => $input.focus());
 
         $input.addClass("control").datepicker(options);
+    }
+
+    this.formatDate = function (input, momentFormat) {
+        return moment(input).zone(-4).format(momentFormat);
     }
 
     this.makeWrapString = function (str = "", maxLength = 0) {

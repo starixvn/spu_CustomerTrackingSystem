@@ -43,7 +43,9 @@
                 { data: obj => obj.AssociationTypeName },
                 { data: obj => obj.SharedDevices == -1 ? "-" : obj.SharedDevices },
                 { data: obj => obj.SharedIps == -1 ? "-" : obj.SharedIps },
-                { data: obj => moment(obj.AssociationDate).zone(-4).format("MMM DD, YYYY HH:mm:ss") },
+                {
+                    data: obj => common.formatDate(obj.AssociationDate, "MMM DD, YYYY HH:mm:ss")
+                },
                 {
                     data: obj => RenderGraphImage(), createdCell: (cell, _, row) => {
                         $('.icon-path', cell).click(() => HandleGraphShortestPath(row, ctsCustid));
@@ -61,14 +63,11 @@
             html += "<span class='icon icon-Affected'  title='Affected'></span>";
         }
 
-        if (obj.FlaggedTag != 0)
-        {
-            if (obj.FlaggedTag == 2)
-            {
+        if (obj.FlaggedTag != 0) {
+            if (obj.FlaggedTag == 2) {
                 html += "<span class='icon icon-Flagged' title='Flagged'></span>";
             }
-            else
-            {
+            else {
                 html += "<span class='icon icon-Flagged-With-Evidence' title='Flagged with Evidence 100'></span>";
             }
         }
