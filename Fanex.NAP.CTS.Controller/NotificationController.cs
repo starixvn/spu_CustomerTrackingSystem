@@ -26,18 +26,10 @@
         [HttpGet]
         public JsonResult ReCheckNotification()
         {
-            try
-            {
-                var userId = CurrentSession.UserId;
-                var unreadMessageCounter = _notificationService.GetUnreadMessageCounter(userId);
+            var userId = CurrentSession.UserId;
+            var unreadMessageCounter = _notificationService.GetUnreadMessageCounter(userId);
 
-                return Json(new { UnreadMessageCounter = unreadMessageCounter }, JsonRequestBehavior.AllowGet);
-            }
-            catch (System.Exception e)
-            {
-                LogService.Error(e.Message, e);
-                throw;
-            }
+            return Json(new { UnreadMessageCounter = unreadMessageCounter }, JsonRequestBehavior.AllowGet);
         }
     }
 }

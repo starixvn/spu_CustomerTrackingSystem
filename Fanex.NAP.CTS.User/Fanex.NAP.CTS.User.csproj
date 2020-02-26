@@ -51,6 +51,12 @@
     <Reference Include="Fanex.Logging, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Fanex.Logging.1.0.0.0\lib\net40\Fanex.Logging.dll</HintPath>
     </Reference>
+    <Reference Include="Fanex.Logging.Extensions, Version=1.0.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.Logging.Extensions.1.0.6\lib\net461\Fanex.Logging.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Fanex.Logging.Extensions.Database, Version=1.0.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.Logging.Extensions.Database.1.0.8\lib\net461\Fanex.Logging.Extensions.Database.dll</HintPath>
+    </Reference>
     <Reference Include="Fanex.NAP.Core, Version=1.2.1.4, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Fanex.NAP.Core.Client.1.2.1.4\lib\net40\Fanex.NAP.Core.dll</HintPath>
     </Reference>

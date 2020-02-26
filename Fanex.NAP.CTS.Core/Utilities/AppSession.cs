@@ -43,15 +43,7 @@
         {
             get
             {
-                try
-                {
-                    return SessionManager.Get<Dictionary<string, int>>(CurrentUserRoleAccessKey);
-                }
-                catch (Exception exception)
-                {
-                    LogService.Error(exception.Message, exception);
-                    throw;
-                }
+                return SessionManager.Get<Dictionary<string, int>>(CurrentUserRoleAccessKey);
             }
 
             set

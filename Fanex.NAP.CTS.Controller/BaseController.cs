@@ -17,6 +17,8 @@
     using Fanex.Logging.Sentry;
     using Sentry;
     using System.Configuration;
+    using Fanex.Logging.Extensions;
+    using Fanex.Logging.Extensions.Database;
 
     public class BaseController : Controller
     {
@@ -107,7 +109,11 @@
 
         protected override void OnException(ExceptionContext filterContext)
         {
-            LogService.Error(filterContext.Exception.Message, filterContext.Exception);
+            var logMessage = new LogMessage(filterContext.Exception.Message)
+                .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(filterContext.Exception))
+                .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(filterContext.Exception)).ToString();
+
+            LogService.Error(logMessage);
 
             base.OnException(filterContext);
         }

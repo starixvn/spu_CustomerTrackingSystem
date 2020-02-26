@@ -24,6 +24,8 @@
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Security;
+    using Fanex.Logging.Extensions;
+    using Fanex.Logging.Extensions.Database;
 
     /// <summary>
     /// Login controller.
@@ -213,7 +215,12 @@
                     }
                     catch (Exception exception)
                     {
-                        LogService.Error(exception.Message, exception);
+                        var logMessage = new LogMessage(exception.Message)
+                                        .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(exception))
+                                        .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(exception)).ToString();
+
+                        LogService.Error(logMessage);
+
                         throw;
                     }
                 }
@@ -302,9 +309,14 @@
                     IsKickedOut = "0"
                 });
             }
-            catch (Exception exception)
+            catch (Exception ex)
             {
-                LogService.Error(exception.Message, exception);
+                var logMessage = new LogMessage(ex.Message)
+                                      .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                                      .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error(logMessage);
+
                 throw;
             }
         }

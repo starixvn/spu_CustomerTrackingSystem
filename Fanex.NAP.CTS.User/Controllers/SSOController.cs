@@ -17,6 +17,8 @@
     using System.Web.Mvc;
     using System.Web.Security;
     using Fanex.NAP.CTS.Core.Utilities;
+    using Fanex.Logging.Extensions;
+    using Fanex.Logging.Extensions.Database;
 
     /// <summary>
     /// SSO Controller.
@@ -107,9 +109,14 @@
 
                 return Redirect(FormsAuthentication.LoginUrl);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                LogService.Error(e.Message, e);
+                var logMessage = new LogMessage(ex.Message)
+                                       .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                                       .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error(logMessage);
+
                 throw;
             }
         }
@@ -166,9 +173,14 @@
 
                 return Redirect(FormsAuthentication.LoginUrl);
             }
-            catch (Exception exception)
+            catch (Exception ex)
             {
-                LogService.Error(exception.Message, exception);
+                var logMessage = new LogMessage(ex.Message)
+                                      .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                                      .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error(logMessage);
+
                 return Redirect(FormsAuthentication.LoginUrl);
             }
         }
