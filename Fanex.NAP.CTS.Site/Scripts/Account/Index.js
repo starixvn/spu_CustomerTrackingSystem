@@ -172,24 +172,24 @@
                         $("#dangerousOriginal").html("None");
                     }
                     else {
-                        $("#dangerousOriginal").html(response.Danger);
-                        $("#dangerousOriginal").addClass("dangerous-level-" + response.Danger);
+                        $("#dangerousOriginal").html(response.customerStatus.Danger);
+                        $("#dangerousOriginal").addClass("dangerous-level-" + response.customerStatus.Danger);
                     }
 
                     if (response.customerStatus.Danger2 == 0) {
                         $("#dangerouseABI").html("None");
                     }
                     else {
-                        $("#dangerouseABI").html(response.Danger2);
-                        $("#dangerouseABI").addClass("dangerous-level-" + response.Danger2);
+                        $("#dangerouseABI").html(response.customerStatus.Danger2);
+                        $("#dangerouseABI").addClass("dangerous-level-" + response.customerStatus.Danger2);
                     }
 
                     if (response.customerStatus.Danger3 == 0) {
                         $("#dangerouseOtherSports").html("None");
                     }
                     else {
-                        $("#dangerouseOtherSports").html(response.Danger3);
-                        $("#dangerouseOtherSports").addClass("dangerous-level-" + response.Danger3);
+                        $("#dangerouseOtherSports").html(response.customerStatus.Danger3);
+                        $("#dangerouseOtherSports").addClass("dangerous-level-" + response.customerStatus.Danger3);
                     }
 
                     if (response.customerStatus.Abnormal == 0) {
@@ -197,7 +197,7 @@
                     }
                     else {
                         $("#abnormal").html(response.customerStatus.Abnormal);
-                        $("#abnormal").addClass("abnormal-level-" + response.customerStatus.Danger3);
+                        $("#abnormal").addClass("abnormal-level-" + response.customerStatus.Abnormal);
                     }
 
                     $('#autoSuspendSoccer').html(response.customerStatus.Autosuspend ? 'Yes' : 'No');
