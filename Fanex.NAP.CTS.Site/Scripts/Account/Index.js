@@ -264,7 +264,7 @@
                 custId: custId
             },
             success: function (response) {
-                if (response.suspiciouseCustomer != null) {                  
+                if (response.suspiciouseCustomer.IsDelinquent || response.suspiciouseCustomer.IsHedge || response.suspiciouseCustomer.IsDirty) {                  
 
                     if (response.suspiciouseCustomer.IsDelinquent) {
                         $('span.icon-delinquency').removeClass('hide');
@@ -284,7 +284,7 @@
                     $('div.classification').html("<span>None</span>");
                 }
 
-                if (response.fraudCases != null) {
+                if (response.fraudCases != '') {
                     $('#fraudcase').html("<span>" + response.fraudCases + "</span>");
                 }
                 else {
