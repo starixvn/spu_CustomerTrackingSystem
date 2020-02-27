@@ -131,10 +131,7 @@ namespace Fanex.NAP.CTS.ViewModel.Account
         }
 
         public CustomerGeneralStatusViewModel BindingGeneralDataFromCTS(
-            CustomerInfoByCTSCustIdModel customerInfoByCTSCustIdModel, 
-            CustomerFlagInfoModel customerFlagInfoModel, 
-            CustomerAssociationByCTSCustIdModel customerAssociationByCTSCustIdModel,
-            List<CustomerEvidenceByCTSCustIdModel> customerEvidences)
+            CustomerInfoByCTSCustIdModel customerInfoByCTSCustIdModel            )
         {
             if (customerInfoByCTSCustIdModel != null)
             {
@@ -148,42 +145,31 @@ namespace Fanex.NAP.CTS.ViewModel.Account
                 this.Subscriber = customerInfoByCTSCustIdModel.SubscriberName;
                 this.SubscriberId = customerInfoByCTSCustIdModel.SubscriberId;
             }
-
-            if (customerFlagInfoModel != null)
-            {
-                if(customerFlagInfoModel.Flagged != 0)
-                {
-                    this.Flagged = customerFlagInfoModel.Flagged == 2;
-                    this.FlaggedWithEvi100 = customerFlagInfoModel.Flagged == 1;
-                }
-
-                this.Affected = customerAssociationByCTSCustIdModel.TotalAccounts > 0 && customerEvidences.Count > 0;
-            }
-
+           
             return this;
         }
 
-        public CustomerGeneralStatusViewModel BindingTotalAssociationFromCTS(CustomerAssociationByCTSCustIdModel customerAssociationByCTSCustIdModel)
-        {
-            if (customerAssociationByCTSCustIdModel != null)
-            {
-                this.TotalAssociationByAccount = customerAssociationByCTSCustIdModel.TotalAccounts;
-                this.TotalAssociationByDevice = customerAssociationByCTSCustIdModel.TotalDevices;
-                this.TotalAssociationByIp = customerAssociationByCTSCustIdModel.TotalIps;
-            }
+        //public CustomerGeneralStatusViewModel BindingTotalAssociationFromCTS(CustomerAssociationByCTSCustIdModel customerAssociationByCTSCustIdModel)
+        //{
+        //    if (customerAssociationByCTSCustIdModel != null)
+        //    {
+        //        this.TotalAssociationByAccount = customerAssociationByCTSCustIdModel.TotalAccounts;
+        //        this.TotalAssociationByDevice = customerAssociationByCTSCustIdModel.TotalDevices;
+        //        this.TotalAssociationByIp = customerAssociationByCTSCustIdModel.TotalIps;
+        //    }
 
-            return this;
-        }
+        //    return this;
+        //}
 
-        public CustomerGeneralStatusViewModel BindingEvidenceListFromCTS(List<CustomerEvidenceByCTSCustIdModel> customerEvidenceByCTSCustIdModelList)
-        {
-            if (customerEvidenceByCTSCustIdModelList != null && customerEvidenceByCTSCustIdModelList.Any())
-            {
-                this.Evidences = string.Join(", ", customerEvidenceByCTSCustIdModelList.Select(x => x.EvidenceCode).ToArray());
-            }
+        //public CustomerGeneralStatusViewModel BindingEvidenceListFromCTS(List<CustomerEvidenceByCTSCustIdModel> customerEvidenceByCTSCustIdModelList)
+        //{
+        //    if (customerEvidenceByCTSCustIdModelList != null && customerEvidenceByCTSCustIdModelList.Any())
+        //    {
+        //        this.Evidences = string.Join(", ", customerEvidenceByCTSCustIdModelList.Select(x => x.EvidenceCode).ToArray());
+        //    }
 
-            return this;
-        }
+        //    return this;
+        //}
 
         public CustomerGeneralStatusViewModel BindingGeneralDataFromFS(CustomerProfileFraudInfoModel customerProfileFraudInfoModel)
         {

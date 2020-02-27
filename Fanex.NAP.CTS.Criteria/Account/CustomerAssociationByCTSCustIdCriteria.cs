@@ -11,8 +11,8 @@ namespace Fanex.NAP.CTS.Criteria.Account
     public class CustomerAssociationByCTSCustIdCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_CTSCustID")]
-        public Int64 CTSCustId { get; set; }
-
+        public long CTSCustId { get; set; }
+       
         public override string GetSettingKey()
         {
             return "CTS_DC_GetAssociationByCTSCustID";

@@ -37,8 +37,6 @@
 
         public ActionResult Index(long Id)
         {
-            LogService.Info("Terry is testing");
-
             if (Id > 0)
             {
                 var tasks = new List<Task>();
@@ -53,37 +51,26 @@
                     };
 
                     var customerStatus = new CustomerGeneralStatusModel();
-                    var customerTotalAssociation = new CustomerAssociationByCTSCustIdModel();
+                 
                     var customerProfileFraudInfo = new CustomerProfileFraudInfoModel();
                     var customerLastTicketDate = new CustomerLastTicketDateModel();
                     var customerEsportAutoSuspendedStatus = new CustomerEsportAutoSuspendStatusModel();
-                    var customerRobotUserStatusModel = new CustomerRobotUserStatusModel();
-                    var customerFlagInfoModel = new CustomerFlagInfoModel();
-
-                    var customerEvidences = new List<CustomerEvidenceByCTSCustIdModel>();
-
-                    tasks.Add(Task.Run(() => { customerStatus = _accountService.GetCustomerGeneralStatus(customerInfoFromCTS.CustId.ToString()).FirstOrDefault(); }));
-                    tasks.Add(Task.Run(() => { customerTotalAssociation = _accountService.GetCustomerTotalAssociationByCTSCustId(Id); }));
-                    tasks.Add(Task.Run(() => { customerEvidences = _accountService.GetCustomerEvidenceByCTSCustId(Id); }));
+                    var customerRobotUserStatusModel = new CustomerRobotUserStatusModel();                 
+                                    
+                    tasks.Add(Task.Run(() => { customerStatus = _accountService.GetCustomerGeneralStatus(customerInfoFromCTS.CustId.ToString()).FirstOrDefault(); }));                 
                     tasks.Add(Task.Run(() => { customerProfileFraudInfo = _accountService.GetCustomerProfileFraudInfo(customerInfoFromCTS.CustId); }));
                     tasks.Add(Task.Run(() => { customerLastTicketDate = _accountService.GetCustomerLastTicketDate(customerInfoFromCTS.CustId); }));
                     tasks.Add(Task.Run(() => { customerEsportAutoSuspendedStatus = _accountService.GetCustomerEsportAutoSuspendedStatus(customerInfoFromCTS.CustId); }));
-                    tasks.Add(Task.Run(() => { customerRobotUserStatusModel = _accountService.GetCustomerRobotUserStatus(customerInfoFromCTS.CustId); }));
-                    tasks.Add(Task.Run(() => { customerFlagInfoModel = _accountService.GetCustomerFlagInfo(Id, customerInfoFromCTS.SubscriberId); }));
+                    tasks.Add(Task.Run(() => { customerRobotUserStatusModel = _accountService.GetCustomerRobotUserStatus(customerInfoFromCTS.CustId); }));                   
 
                     Task.WhenAll(tasks.ToArray()).Wait();
 
                     customerGeneralStatusViewModel
-                        .BindingEvidenceListFromCTS(customerEvidences)
-                        .BindingGeneralDataFromCTS(customerInfoFromCTS,
-                                                    customerFlagInfoModel,
-                                                    customerTotalAssociation,
-                                                    customerEvidences)
+                        .BindingGeneralDataFromCTS(customerInfoFromCTS)
                         .BindingGeneralDataFromMainDB(customerStatus,
                                                         customerLastTicketDate,
                                                         customerEsportAutoSuspendedStatus,
                                                         customerRobotUserStatusModel)
-                        .BindingTotalAssociationFromCTS(customerTotalAssociation)
                         .BindingGeneralDataFromFS(customerProfileFraudInfo);
 
                     return View(customerGeneralStatusViewModel);
@@ -91,6 +78,39 @@
             }
 
             return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        public ActionResult GetCustomerTotalAssociationByCTSCustId(long ctsCustId)
+        {
+            var result = _accountService.GetCustomerTotalAssociationByCTSCustId(ctsCustId);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult GetCustomerEvidenceByCTSCustId(long ctsCustId)
+        {
+            var evidences = _accountService.GetCustomerEvidenceByCTSCustId(ctsCustId);
+            var result = "None";
+            var numOfItem = 0;
+
+            if (evidences != null && evidences.Any())
+            {
+                numOfItem = evidences.Count;
+
+                result = string.Join(", ", evidences.Select(x => x.EvidenceCode).ToArray());
+            }
+
+            return Json(new { evidences = result, numberOfItems = numOfItem }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult GetCustomerFlagInfo(long ctsCustId, int subscriberId)
+        {
+            var result = _accountService.GetCustomerFlagInfo(ctsCustId, subscriberId);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         #region Associated By Account

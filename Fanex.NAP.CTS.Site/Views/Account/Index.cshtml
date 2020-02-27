@@ -54,19 +54,11 @@
             {
                 <span class="icon icon-Smart-Punter-Account" title="Smart Punter Account"></span>
             }
-            @if (Model.Affected)
-            {
-                <span class="icon icon-Affected" title="Affected"></span>
-            }
-            @if (Model.Flagged)
-            {
-                <span class="icon icon-Flagged" title="Flagged"></span>
-            }
-            @if (Model.FlaggedWithEvi100)
-            {
-                <span class="icon icon-Flagged-With-Evidence" title="Flagged with Evidence 100"></span>
-            }
 
+            <span id="affected" class="icon icon-Affected hide" title="Affected"></span>
+            <span id="flagged" class="icon icon-Flagged hide" title="Flagged"></span>
+            <span id="flagged100" class="icon icon-Flagged-With-Evidence hide" title="Flagged with Evidence 100"></span>
+      
             <strong style="margin-left: 20px">Account Status: </strong>
             <span class="badge-label status-active" style="margin-right: 20px">@(Model.AcountStatus == "NA" ? "N/A" : Model.AcountStatus)</span>
 
@@ -150,8 +142,20 @@
                     <label>Evidence</label>
                 </div>
                 <div class="info-text">
-                    <div><a id="lnkAssociation" href="javascript:void(0)" class="link">@Model.TotalAssociationByAccount/@Model.TotalAssociationByDevice/@Model.TotalAssociationByIp</a></div>
-                    <div>@(Model.Evidences != null ? Html.Raw(string.Format("<a id='lnkEvidence' href='javascript:void(0)' class='link'>{0}</a>", Model.Evidences)) : Html.Raw("None"))</div>
+                    <div>
+                        <a id="lnkAssociation" href="javascript:void(0)" class="link">
+                            <span id="totalAssAccount">Loading...</span>/
+                            <span id="totalAssDevice">Loading...</span>/
+                            <span id="totalAssIP">Loading...</span>
+                            @*@Model.TotalAssociationByAccount/@Model.TotalAssociationByDevice/@Model.TotalAssociationByIp*@
+                        </a>
+                    </div>
+                    <div>
+                        <a id='lnkEvidence' href='javascript:void(0)' class='link'>
+                            <span id="evidences">Loading...</span>
+                        </a>
+                        @*@(Model.Evidences != null ? Html.Raw(string.Format("<a id='lnkEvidence' href='javascript:void(0)' class='link'>{0}</a>", Model.Evidences)) : Html.Raw("None"))*@
+                    </div>
                 </div>
             </div>
         </div>

@@ -18,11 +18,11 @@
 
         List<CustomerGeneralStatusModel> GetCustomerGeneralStatus(string custIds);
 
-        CustomerInfoByCTSCustIdModel GetCustomerInfoByCTSCustId(Int64 ctsCustId);
+        CustomerInfoByCTSCustIdModel GetCustomerInfoByCTSCustId(long ctsCustId);
 
-        CustomerAssociationByCTSCustIdModel GetCustomerTotalAssociationByCTSCustId(Int64 ctsCustId);
+        CustomerAssociationByCTSCustIdModel GetCustomerTotalAssociationByCTSCustId(long ctsCustId);
 
-        List<CustomerEvidenceByCTSCustIdModel> GetCustomerEvidenceByCTSCustId(Int64 ctsCustId);
+        List<CustomerEvidenceByCTSCustIdModel> GetCustomerEvidenceByCTSCustId(long ctsCustId);
 
         List<CustomerStaticStatusModel> GetCustomerStaticStatus(int listId, bool status);
 

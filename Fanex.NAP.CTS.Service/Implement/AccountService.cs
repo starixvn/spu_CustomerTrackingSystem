@@ -31,7 +31,7 @@
     using System.Threading.Tasks;
 
     public class AccountService : IAccountService
-    {      
+    {
 
         #region General information
         public AccountDetail GetAccountDetailGeneralInformation(GeneralInformationFilter filter)
@@ -478,11 +478,11 @@
             }
         }
 
-        public CustomerAssociationByCTSCustIdModel GetCustomerTotalAssociationByCTSCustId(Int64 ctsCustId)
+        public CustomerAssociationByCTSCustIdModel GetCustomerTotalAssociationByCTSCustId(long ctsCustId)
         {
             var criteria = new CustomerAssociationByCTSCustIdCriteria
             {
-                CTSCustId = ctsCustId
+                CTSCustId = ctsCustId                
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -493,7 +493,7 @@
             }
         }
 
-        public List<CustomerEvidenceByCTSCustIdModel> GetCustomerEvidenceByCTSCustId(Int64 ctsCustId)
+        public List<CustomerEvidenceByCTSCustIdModel> GetCustomerEvidenceByCTSCustId(long ctsCustId)
         {
             var criteria = new CustomerEvidenceByCTSCustIdCriteria
             {
@@ -730,7 +730,7 @@
                         x.StatusName = status.StatusName;
                     }
                 }
-                
+
                 return x;
             }).ToList();
 
@@ -757,7 +757,7 @@
                             StatusName = g.FirstOrDefault().StatusName,
                             StatusId = g.FirstOrDefault().StatusId,
                             SubscriberId = g.FirstOrDefault().SubscriberId,
-                            CTSCustID = g.FirstOrDefault().CTSCustID                            
+                            CTSCustID = g.FirstOrDefault().CTSCustID
                         }).ToList();
 
 
