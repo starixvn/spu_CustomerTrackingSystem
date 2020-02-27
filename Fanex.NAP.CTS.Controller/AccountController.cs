@@ -203,19 +203,17 @@
             {
                 var now = DateTime.Now.Ticks.ToString();
                 var graphCustomerList = customerAssociationList
-                    .Select(c => new GraphCustomerItemViewModel
+                    .Select(x => new GraphCustomerItemViewModel
                     {
-                        CustId = (c.CustId.HasValue ? c.CustId.Value : 0),
-                        ItemCode = (c.CustId.HasValue ? c.CustId.Value.ToString() : c.Username2) + "_" + now,
-                        Username = c.Username,
-                        DisplayName = !string.IsNullOrWhiteSpace(c.Username) ? c.Username : c.Username2,
-                        AssociationType = c.AssociationType,
-                        AssociationTypeName = c.AssociationTypeName
+                        CTSCustId = x.CTSCustID,                        
+                        ItemCode = (x.CTSCustID == 0 ? x.CTSCustID.ToString() : x.Username2) + "_" + now,                      
+                        DisplayName = !string.IsNullOrWhiteSpace(x.Username) ? x.Username : x.Username2                      
                     }).ToList();
+
                 graphCustomer.children = graphCustomerList.ToArray();
             }
-            graphCustomer.CustId = ctsCustid;
-            graphCustomer.DisplayName = username;            
+            graphCustomer.CTSCustId = ctsCustid;
+            graphCustomer.DisplayName = username;
 
             return Json(graphCustomer, JsonRequestBehavior.AllowGet);
         }

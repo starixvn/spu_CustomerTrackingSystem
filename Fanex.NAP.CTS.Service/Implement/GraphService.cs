@@ -23,121 +23,7 @@
             }
 
             return graphCustomer;
-        }
-
-        public ShortestPathOfAccount GenerateSampleShortestPathOfAccount()
-        {
-            string[] lblCustomer = { "CTSCustomer" };
-            string[] lblDevice = { "Device" };
-            var shortestPath = new ShortestPathOfAccount();
-            shortestPath.Path = new ShortestPath();
-            shortestPath.Path.Start = new Node
-            {
-                Id = "9977105",
-                Labels = lblCustomer,
-                Properties = new GraphCustomer
-                {
-                    CustId = 23081993,
-                    Username = null,
-                    Username2 = null,
-                    RoleId = 0
-                }
-            };
-            shortestPath.Path.End = new Node
-            {
-                Id = "9977108",
-                Labels = lblCustomer,
-                Properties = new GraphCustomer
-                {
-                    CustId = 23081995,
-                    Username = null,
-                    Username2 = null,
-                    RoleId = 0
-                }
-            };
-
-            var nodes = new List<Node>();            
-            nodes.Add(new Node
-            {
-                Id = "9977105",
-                Labels = lblCustomer,
-                Properties = new GraphCustomer
-                {
-                    CustId = 23081993,
-                    Username = "Member001"
-                }
-            });
-            nodes.Add(new Node
-            {
-                Id = "9977106",
-                Labels = lblDevice,
-                Properties = new GraphCustomer
-                {
-                    CustId = 100,
-                    Username = "Device"                   
-                }
-            });
-            nodes.Add(new Node
-            {
-                Id = "9977126",
-                Labels = lblCustomer,
-                Properties = new GraphCustomer
-                {
-                    CustId = 23081994,
-                    Username = "Member002"                    
-                }
-            });
-            nodes.Add(new Node
-            {
-                Id = "9977107",
-                Labels = lblDevice,
-                Properties = new GraphCustomer
-                {
-                    CustId = 101,
-                    Username = "Device"                  
-                }
-            });
-            nodes.Add(new Node
-            {
-                Id = "9977108",
-                Labels = lblCustomer,
-                Properties = new GraphCustomer
-                {
-                    CustId = 23081995,
-                    Username = "Member003"                 
-                }
-            });
-
-            shortestPath.Path.Nodes = nodes.ToArray();
-            var relationShips = new List<Relationship>();
-            relationShips.Add(new Relationship
-            {
-                StartNodeId = 9977105,
-                EndNodeId = 9977106,
-                Type = "USED_DEVICE"
-            });
-            relationShips.Add(new Relationship
-            {
-                StartNodeId = 9977126,
-                EndNodeId = 9977106,
-                Type = "USED_DEVICE"
-            });
-            relationShips.Add(new Relationship
-            {
-                StartNodeId = 9977126,
-                EndNodeId = 9977107,
-                Type = "USED_IP"
-            });
-            relationShips.Add(new Relationship
-            {
-                StartNodeId = 9977108,
-                EndNodeId = 9977107,
-                Type = "USED_IP"
-            });
-            shortestPath.Path.Relationships = relationShips.ToArray();
-
-            return shortestPath;
-        }
+        }     
 
         public GraphCustomerItemViewModel GenerateCustomerItem(
             List<Relationship> relationshipList, 
@@ -228,10 +114,10 @@
         public GraphCustomerItemViewModel GenerateCustomerItem(Node node, string associationType)
             => new GraphCustomerItemViewModel
             {
-                CustId = node.Properties.CustId,
+                CTSCustId = node.Properties.CustId,
                 ItemCode = node.Properties.CustId.ToString(),
                 Username = node.Properties.Username,
-                DisplayName = node.Properties.Username,
+                DisplayName = !string.IsNullOrWhiteSpace(node.Properties.Username) ? node.Properties.Username : node.Properties.Username2,
                 AssociationTypeName = associationType
             };
         

@@ -43,9 +43,9 @@
         });
     }
 
-    $this.GenerateFullPath = function (custId, username) {     
+    $this.GenerateFullPath = function (ctsCustId, username) {     
         var paramsFilter = {};
-        paramsFilter.ctsCustid = custId;
+        paramsFilter.ctsCustid = ctsCustId;
         paramsFilter.username = username;
 
         $.ajax(urls.GetDirectAssociationGraph, {
@@ -192,7 +192,7 @@
                     update();
                 } else {
                     var paramsFilter = {};
-                    paramsFilter.ctsCustid = d.CustId;
+                    paramsFilter.ctsCustid = d.CTSCustId;
                     paramsFilter.userName = d.Username;
 
                     $.ajax(urls.GetDirectAssociationGraph, {
@@ -249,15 +249,6 @@
                 .attr("y1", function (d) { return d.source.y; })
                 .attr("x2", function (d) { return d.target.x; })
                 .attr("y2", function (d) { return d.target.y; });
-
-            //linkEnter.append('svg:text')
-            //    .attr('class', 'aEnd')
-            //    .attr('x', function (d) { return d.source.x; })
-            //    .attr('y', function (d) { return d.source.y; })
-            //    .attr('text-anchor', 'middle')
-            //    .text(function (d) {
-            //        return d.target.AssociationTypeName;
-            //    });
         };
     }
 }
