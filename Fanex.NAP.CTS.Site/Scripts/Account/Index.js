@@ -17,10 +17,10 @@
             data: {
                 username: username
             },
-            success: function (response) {
+            success: function(response) {
                 $("#associated_account").html(response);
             },
-            complete: function () {
+            complete: function() {
                 var isDirect = $("#radio03-01").is(':checked');
                 var accountStatus = $('#account-by-account-cbb-status').val().join(',');
                 var associationType = $("#account-by-account-cbb-association-type").val();
@@ -28,7 +28,7 @@
                 var associationByAccount = new account_by_account();
                 associationByAccount.Initial(custId, ctsCustId, username, accountStatus, associationType, isDirect);
             },
-            error: function (errMsg) {
+            error: function(errMsg) {
                 common.showError(errMsg);
             }
         });
@@ -37,17 +37,17 @@
     function LoadChainToEvidence() {
         $.ajax(common.modifyRelativeUrl('/Account/ChainToEvidence'), {
             type: 'POST',
-            success: function (response) {
+            success: function(response) {
                 $("#chains_evidence").html(response);
             },
-            complete: function () {
+            complete: function() {
                 var accountEvidence = new account_evidence();
                 accountEvidence.Initial(ctsCustId, username, subscriberId, subscriber);
 
                 var exceptions = new account_exceptions();
                 exceptions.Initial(ctsCustId, username, subscriberId);
             },
-            error: function (errMsg) {
+            error: function(errMsg) {
                 common.showError(errMsg);
             }
         });
@@ -57,9 +57,9 @@
         $.ajax(common.modifyRelativeUrl('/Account/GetCustomerTotalAssociationByCTSCustId'), {
             type: 'POST',
             data: {
-                ctsCustId: ctsCustId                
+                ctsCustId: ctsCustId
             },
-            success: function (response) {
+            success: function(response) {
 
                 totalAssAccount = response.TotalAccounts;
 
@@ -67,10 +67,10 @@
                 $('#totalAssDevice').html(response.TotalDevices);
                 $('#totalAssIP').html(response.TotalIps);
             },
-            complete: function () {
+            complete: function() {
                 GetCustomerEvidences();
             },
-            error: function (errMsg) {
+            error: function(errMsg) {
                 common.showError(errMsg);
             }
         });
@@ -82,7 +82,7 @@
             data: {
                 ctsCustId: ctsCustId
             },
-            success: function (response) {
+            success: function(response) {
                 $('#evidences').html(response.evidences);
                 totalEvidence = response.numberOfItems;
 
@@ -90,12 +90,12 @@
                     $('#lnkEvidence').contents().unwrap();
                 }
             },
-            complete: function () {
+            complete: function() {
                 if (totalAssAccount > 0 && totalEvidence > 0) {
                     $('span.icon-Affected').removeClass('hide');
-                }                
+                }
             },
-            error: function (errMsg) {
+            error: function(errMsg) {
                 common.showError(errMsg);
             }
         });
@@ -108,22 +108,20 @@
                 ctsCustId: ctsCustId,
                 subscriberId: subscriberId
             },
-            success: function (response)
-            {
-                if (response.Flagged != 0)
-                {
+            success: function(response) {
+                if (response.Flagged != 0) {
                     if (response.Flagged == 2) {
-                        $('span.icon-Flagged').removeClass('hide');                       
+                        $('span.icon-Flagged').removeClass('hide');
                     }
                     else {
                         $('span.icon-Flagged-With-Evidence').removeClass('hide');
                     }
-                }                
+                }
             },
-            complete: function () {
-                $('span.loading').remove(); 
+            complete: function() {
+                $('span.loading').remove();
             },
-            error: function (errMsg) {
+            error: function(errMsg) {
                 common.showError(errMsg);
             }
         });
@@ -133,9 +131,9 @@
         $.ajax(common.modifyRelativeUrl('/Account/GetCustomerGeneralStatus'), {
             type: 'POST',
             data: {
-                custId: custId               
+                custId: custId
             },
-            success: function (response) {
+            success: function(response) {
                 if (response != null) {
 
                     $('#accountStatus').html(response.accountStatus);
@@ -167,7 +165,7 @@
                     if (response.customerStatus.SmartPunter) {
                         $('span.icon-Smart-Punter-Account').removeClass('hide');
                     }
-                    
+
                     if (response.customerStatus.Danger == 0) {
                         $("#dangerousOriginal").html("None");
                     }
@@ -205,10 +203,10 @@
 
                 }
             },
-            complete: function () {
-                                 
+            complete: function() {
+
             },
-            error: function (errMsg) {
+            error: function(errMsg) {
                 common.showError(errMsg);
             }
         });
@@ -220,17 +218,17 @@
             data: {
                 custId: custId
             },
-            success: function (response) {
+            success: function(response) {
                 if (response != null) {
                     if (response.IsRobotUser) {
                         $('span.icon-Robot-User').removeClass('hide');
                     }
                 }
             },
-            complete: function () {
-                
+            complete: function() {
+
             },
-            error: function (errMsg) {
+            error: function(errMsg) {
                 common.showError(errMsg);
             }
         });
@@ -242,15 +240,15 @@
             data: {
                 custId: custId
             },
-            success: function (response) {
+            success: function(response) {
                 if (response != null) {
                     $('#autoSuspendESport').html(response.EsportAutoSuspendStatus ? 'Yes' : 'No');
                 }
             },
-            complete: function () {
+            complete: function() {
 
             },
-            error: function (errMsg) {
+            error: function(errMsg) {
                 common.showError(errMsg);
             }
         });
@@ -263,8 +261,8 @@
             data: {
                 custId: custId
             },
-            success: function (response) {
-                if (response.suspiciouseCustomer.IsDelinquent || response.suspiciouseCustomer.IsHedge || response.suspiciouseCustomer.IsDirty) {                  
+            success: function(response) {
+                if (response.suspiciouseCustomer != null && (response.suspiciouseCustomer.IsDelinquent || response.suspiciouseCustomer.IsHedge || response.suspiciouseCustomer.IsDirty)) {
 
                     if (response.suspiciouseCustomer.IsDelinquent) {
                         $('span.icon-delinquency').removeClass('hide');
@@ -291,17 +289,17 @@
                     $('#fraudcase').html("<span>None</span>");
                 }
             },
-            complete: function () {
+            complete: function() {
 
             },
-            error: function (errMsg) {
+            error: function(errMsg) {
                 common.showError(errMsg);
             }
         });
     }
 
     function CollapseExpandItem() {
-        $("#account-detail-container .report-item h3").on('click', function () {
+        $("#account-detail-container .report-item h3").on('click', function() {
 
             var $this = $(this).next();
 
@@ -318,7 +316,7 @@
     }
 
     function CollapseExpandAll() {
-        $("#account-detail-header").on('click', function () {
+        $("#account-detail-header").on('click', function() {
             var $this = $(this).find("span");
 
             if ($this.hasClass("expand-all")) {
@@ -345,7 +343,7 @@
 
     function Initial() {
         CollapseExpandAll();
-        CollapseExpandItem();    
+        CollapseExpandItem();
         GetCustomerRobotUserStatus();
         GetCustomerGeneralStatus();
         GetCustomerTotalAssociation();
@@ -356,16 +354,16 @@
         LoadAssociationByAccount();
         LoadChainToEvidence();
 
-        lnkAssociation.on('click', function () {
+        lnkAssociation.on('click', function() {
             $("#header_associated_account").trigger("click");
         });
 
-        lnkEvidence.on('click', function () {
+        lnkEvidence.on('click', function() {
             $("#header_chains_evidence").trigger("click");
         });
     }
 
-    $(document).ready(function () {
+    $(document).ready(function() {
         Initial();
     });
 }
