@@ -9,7 +9,7 @@ namespace Fanex.NAP.CTS.Criteria.Account
 {
     public class CustomerEsportAutoSuspendStatusCriteria : CriteriaBase
     {
-        public int CustId { get; set; }
+        public long CustId { get; set; }
 
         public override string GetSettingKey()
         {

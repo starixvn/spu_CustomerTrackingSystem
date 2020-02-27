@@ -17,6 +17,7 @@
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.Logging;
+    using Fanex.NAP.CTS.Model;
 
     [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class AccountController : BaseController
@@ -39,7 +40,7 @@
         {
             if (Id > 0)
             {
-                var tasks = new List<Task>();
+                //var tasks = new List<Task>();
 
                 var customerInfoFromCTS = _accountService.GetCustomerInfoByCTSCustId(Id);
 
@@ -50,28 +51,27 @@
                         CTSCustId = Id
                     };
 
-                    var customerStatus = new CustomerGeneralStatusModel();
-                 
-                    var customerProfileFraudInfo = new CustomerProfileFraudInfoModel();
-                    var customerLastTicketDate = new CustomerLastTicketDateModel();
-                    var customerEsportAutoSuspendedStatus = new CustomerEsportAutoSuspendStatusModel();
-                    var customerRobotUserStatusModel = new CustomerRobotUserStatusModel();                 
-                                    
-                    tasks.Add(Task.Run(() => { customerStatus = _accountService.GetCustomerGeneralStatus(customerInfoFromCTS.CustId.ToString()).FirstOrDefault(); }));                 
-                    tasks.Add(Task.Run(() => { customerProfileFraudInfo = _accountService.GetCustomerProfileFraudInfo(customerInfoFromCTS.CustId); }));
-                    tasks.Add(Task.Run(() => { customerLastTicketDate = _accountService.GetCustomerLastTicketDate(customerInfoFromCTS.CustId); }));
-                    tasks.Add(Task.Run(() => { customerEsportAutoSuspendedStatus = _accountService.GetCustomerEsportAutoSuspendedStatus(customerInfoFromCTS.CustId); }));
-                    tasks.Add(Task.Run(() => { customerRobotUserStatusModel = _accountService.GetCustomerRobotUserStatus(customerInfoFromCTS.CustId); }));                   
+                   // var customerStatus = new CustomerGeneralStatusModel();
 
-                    Task.WhenAll(tasks.ToArray()).Wait();
+                    //var customerProfileFraudInfo = new CustomerProfileFraudInfoModel();
+                    //var customerLastTicketDate = new CustomerLastTicketDateModel();
+                    //var customerEsportAutoSuspendedStatus = new CustomerEsportAutoSuspendStatusModel();
+                    //var customerRobotUserStatusModel = new CustomerRobotUserStatusModel();
+
+                    //tasks.Add(Task.Run(() => { customerStatus = _accountService.GetCustomerGeneralStatus(customerInfoFromCTS.CustId.ToString()).FirstOrDefault(); }));                 
+                    //tasks.Add(Task.Run(() => { customerProfileFraudInfo = _accountService.GetCustomerProfileFraudInfo(customerInfoFromCTS.CustId); }));
+                    //tasks.Add(Task.Run(() => {  }));
+                    //tasks.Add(Task.Run(() => { customerEsportAutoSuspendedStatus = _accountService.GetCustomerEsportAutoSuspendedStatus(customerInfoFromCTS.CustId); }));
+                    //tasks.Add(Task.Run(() => { customerRobotUserStatusModel = _accountService.GetCustomerRobotUserStatus(customerInfoFromCTS.CustId); }));                   
+
+                    //Task.WhenAll(tasks.ToArray()).Wait();
+
+                   var customerLastTicketDate = _accountService.GetCustomerLastTicketDate(customerInfoFromCTS.CustId);
 
                     customerGeneralStatusViewModel
                         .BindingGeneralDataFromCTS(customerInfoFromCTS)
-                        .BindingGeneralDataFromMainDB(customerStatus,
-                                                        customerLastTicketDate,
-                                                        customerEsportAutoSuspendedStatus,
-                                                        customerRobotUserStatusModel)
-                        .BindingGeneralDataFromFS(customerProfileFraudInfo);
+                        .BindingGeneralDataFromMainDB(customerLastTicketDate);
+                       // .BindingGeneralDataFromFS(customerProfileFraudInfo);
 
                     return View(customerGeneralStatusViewModel);
                 }
@@ -109,6 +109,50 @@
         public ActionResult GetCustomerFlagInfo(long ctsCustId, int subscriberId)
         {
             var result = _accountService.GetCustomerFlagInfo(ctsCustId, subscriberId);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult GetCustomerGeneralStatus(long custId)
+        {
+            var model = new CustomerGeneralStatusViewModel();
+
+            var result = _accountService.GetCustomerGeneralStatus(custId.ToString()).FirstOrDefault();
+            var accountStatusName = string.Empty;
+
+            if(result != null)
+            {
+                accountStatusName = model.GetAccountStatusName(model.GetAccountStatus(result));
+            }
+           else
+            {
+                accountStatusName = model.GetAccountStatusName(AccountStatus.NA);
+            }
+
+            return Json(new { customerStatus = result, accountStatus = accountStatusName }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult GetCustomerRobotUserStatus(long custId)
+        {
+            var result = _accountService.GetCustomerRobotUserStatus(custId);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult GetCustomerEsportAutoSuspendedStatus(long custId)
+        {
+            var result = _accountService.GetCustomerEsportAutoSuspendedStatus(custId);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult GetCustomerProfileFraudInfo(long custId)
+        {
+            var result = _accountService.GetCustomerProfileFraudInfo(custId);
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -225,9 +269,9 @@
                 var graphCustomerList = customerAssociationList
                     .Select(x => new GraphCustomerItemViewModel
                     {
-                        CTSCustId = x.CTSCustID,                        
-                        ItemCode = (x.CTSCustID == 0 ? x.CTSCustID.ToString() : x.Username2) + "_" + now,                      
-                        DisplayName = !string.IsNullOrWhiteSpace(x.Username) ? x.Username : x.Username2                      
+                        CTSCustId = x.CTSCustID,
+                        ItemCode = (x.CTSCustID == 0 ? x.CTSCustID.ToString() : x.Username2) + "_" + now,
+                        DisplayName = !string.IsNullOrWhiteSpace(x.Username) ? x.Username : x.Username2
                     }).ToList();
 
                 graphCustomer.children = graphCustomerList.ToArray();

@@ -15,52 +15,35 @@
         <p>
             <strong>@Model.Role.Name @(Model.CustSubId != 0 ? "(Sub Account)" : string.Empty) :</strong>
             <span class="username">@(Model.UserName != null ? Model.UserName : Model.UserName2) <span class="nickname" style="color: #c16112">(@(Model.UserName2 != null ? Model.UserName2 : Model.UserName))</span></span>
-            @if (Model.RobotUser)
-            {
-                <span class="icon icon-Robot-User" title="Robot User"></span>
-            }
 
-            @if (Model.ProblemAccountWithBetLimit)
-            {
-                <span class="icon icon-P-with-Bet-Limit" title="Problem Account With Bet Limit reduced"></span>
-            }
+            <span class="icon icon-Robot-User hide" title="Robot User"></span>
 
-            @if (Model.ProblemAccountWithoutBetLimit)
-            {
-                <span class="icon icon-P-without-Bet-Limit" title="Problem Account Without Bet Limit reduced"></span>
-            }
+            <span class="icon icon-P-with-Bet-Limit hide" title="Problem Account With Bet Limit reduced"></span>
 
-            @if (Model.BetRestrictedAccount)
-            {
-                <span class="icon icon-Bet-Restrict-Account" title="Bet Restricted Account"></span>
-            }
+            <span class="icon icon-P-without-Bet-Limit hide" title="Problem Account Without Bet Limit reduced"></span>
 
-            @if (Model.BetRestrictedCurrency)
-            {
-                <span class="icon icon-Bet-Restricted-Currency" title="Bet Restricted Currency"></span>
-            }
+            <span class="icon icon-Bet-Restrict-Account hide" title="Bet Restricted Account"></span>
 
-            @if (Model.BetRestrictedSite)
-            {
-                <span class="icon icon-Bet-Restrict-Site" title="Bet Restricted Site"></span>
-            }
+            <span class="icon icon-Bet-Restricted-Currency hide" title="Bet Restricted Currency"></span>
 
-            @if (Model.BetRestrictedSiteAndCurrency)
-            {
-                <span class="icon icon-Bet-Restricted-SiteandCurrency" title="Bet Restricted Site and Currency"></span>
-            }
+            <span class="icon icon-Bet-Restrict-Site hide" title="Bet Restricted Site"></span>
 
-            @if (Model.SmartPunterAccount)
-            {
-                <span class="icon icon-Smart-Punter-Account" title="Smart Punter Account"></span>
-            }
+            <span class="icon icon-Bet-Restricted-SiteandCurrency hide" title="Bet Restricted Site and Currency"></span>
 
-            <span id="affected" class="icon icon-Affected hide" title="Affected"></span>
-            <span id="flagged" class="icon icon-Flagged hide" title="Flagged"></span>
-            <span id="flagged100" class="icon icon-Flagged-With-Evidence hide" title="Flagged with Evidence 100"></span>
-      
+            <span class="icon icon-Smart-Punter-Account hide" title="Smart Punter Account"></span>
+
+            <span class="icon icon-Affected hide" title="Affected"></span>
+
+            <span class="icon icon-Flagged hide" title="Flagged"></span>
+
+            <span class="icon icon-Flagged-With-Evidence hide" title="Flagged with Evidence 100"></span>
+
+            <span class="icon loading"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+
             <strong style="margin-left: 20px">Account Status: </strong>
-            <span class="badge-label status-active" style="margin-right: 20px">@(Model.AcountStatus == "NA" ? "N/A" : Model.AcountStatus)</span>
+            @*<span class="badge-label status-active" style="margin-right: 20px">@(Model.AcountStatus == "NA" ? "N/A" : Model.AcountStatus)</span>*@
+
+            <span id="accountStatus" class="badge-label status-active" style="margin-right: 20px"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
 
             <strong>Subscribers: </strong>
             <span class="username">@Model.Subscriber</span>
@@ -96,9 +79,9 @@
                     <label>Other Sports</label>
                 </div>
                 <div class="info-text">
-                    <div>@(Model.DangerousOriginal == 0 ? Html.Raw("None") : Html.Raw(string.Format("<span class='dangerous-level-{1}'>{0}</span>", Model.DangerousOriginal.ToString(), Model.DangerousOriginal)))</div>
-                    <div>@(Model.DangerouseABI == 0 ? Html.Raw("None") : Html.Raw(string.Format("<span class='dangerous-level-{1}'>{0}</span>", Model.DangerouseABI.ToString(), Model.DangerouseABI)))</div>
-                    <div>@(Model.DangerouseOtherSports == 0 ? Html.Raw("None") : Html.Raw(string.Format("<span class='dangerous-level-{1}'>{0}</span>", Model.DangerouseOtherSports.ToString(), Model.DangerouseOtherSports)))</div>
+                    <div><span id="dangerousOriginal"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span></div>
+                    <div><span id="dangerouseABI"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span></div>
+                    <div><span id="dangerouseOtherSports"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span></div>                   
                 </div>
             </div>
         </div>
@@ -111,7 +94,8 @@
                     <label>Abnormal</label>
                 </div>
                 <div class="info-text">
-                    <div>@(Model.Abnormal == 0 ? Html.Raw("None") : Html.Raw(string.Format("<span class='abnormal-level-{0}'>{1}</span>", Model.Abnormal.ToString(), Model.Abnormal)))</div>
+                    <div><span id="abnormal"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span></div>
+                    @*<div>@(Model.Abnormal == 0 ? Html.Raw("None") : Html.Raw(string.Format("<span class='abnormal-level-{0}'>{1}</span>", Model.Abnormal.ToString(), Model.Abnormal)))</div>*@
                 </div>
             </div>
         </div>
@@ -126,9 +110,12 @@
                     <label>E-Sports</label>
                 </div>
                 <div class="info-text">
-                    <div>@(Model.AutoSuspendSoccer ? Html.Raw("Yes") : Html.Raw("No"))</div>
-                    <div>@(Model.AutoSuspendOtherSport ? Html.Raw("Yes") : Html.Raw("No"))</div>
-                    <div>@(Model.AutoSuspendESport ? Html.Raw("Yes") : Html.Raw("No"))</div>
+                    <div id="autoSuspendSoccer"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></div>
+                    <div id="autoSuspendOtherSport"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></div>
+                    <div id="autoSuspendESport"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></div>
+                    @*<div>@(Model.AutoSuspendSoccer ? Html.Raw("Yes") : Html.Raw("No"))</div>
+        <div>@(Model.AutoSuspendOtherSport ? Html.Raw("Yes") : Html.Raw("No"))</div>
+        <div>@(Model.AutoSuspendESport ? Html.Raw("Yes") : Html.Raw("No"))</div>*@
                 </div>
             </div>
         </div>
@@ -148,15 +135,13 @@
                                 <img class="icon-loading" src="~/Content/scss/images/loading.svg" />
                             </span>/
                             <span id="totalAssDevice"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>/
-                            <span id="totalAssIP"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
-                            @*@Model.TotalAssociationByAccount/@Model.TotalAssociationByDevice/@Model.TotalAssociationByIp*@
+                            <span id="totalAssIP"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>                           
                         </a>
                     </div>
                     <div>
                         <a id='lnkEvidence' href='javascript:void(0)' class='link'>
                             <span id="evidences"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
-                        </a>
-                        @*@(Model.Evidences != null ? Html.Raw(string.Format("<a id='lnkEvidence' href='javascript:void(0)' class='link'>{0}</a>", Model.Evidences)) : Html.Raw("None"))*@
+                        </a>                        
                     </div>
                 </div>
             </div>
@@ -172,26 +157,34 @@
                 </div>
                 <div class="info-text">
                     <div class="classification">
-                        @if (Model.Delinquency)
-                        {
-                            <span class="icon-delinquency" title="Delinquency" />
-                        }
-                        @if (Model.HedgeAccount)
-                        {
-                            <span class="icon-Hedge-Account" title="Hedge Account" />
-                        }
-                        @if (Model.DirtyAccount)
-                        {
-                            <span class="icon-dirty" title="Dirty Account" />
-                        }
-                        @if (!Model.Delinquency && !Model.HedgeAccount && !Model.DirtyAccount)
-                        {
-                            <span>None</span>
-                        }
+                        <img class="icon-loading" src="~/Content/scss/images/loading.svg" />
+                        <span class="icon-delinquency hide" title="Delinquency" />
+                        <span class="icon-Hedge-Account hide" title="Hedge Account" />
+                        <span class="icon-dirty hide" title="Dirty Account" />
+
+
+
+                        @*@if (Model.Delinquency)
+        {
+            <span class="icon-delinquency" title="Delinquency" />
+        }
+        @if (Model.HedgeAccount)
+        {
+            <span class="icon-Hedge-Account" title="Hedge Account" />
+        }
+        @if (Model.DirtyAccount)
+        {
+            <span class="icon-dirty" title="Dirty Account" />
+        }
+        @if (!Model.Delinquency && !Model.HedgeAccount && !Model.DirtyAccount)
+        {
+            <span>None</span>
+        }*@
 
                     </div>
-                    <div>
-                        @if (Model.FraudCases != null && Model.FraudCases.Any())
+                    <div id="fraudcase">
+                        <span><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+                        @*@if (Model.FraudCases != null && Model.FraudCases.Any())
                         {
                             var fraudCases = new List<string>();
                             foreach (var fraudCase in Model.FraudCases)
@@ -205,7 +198,7 @@
                         else
                         {
                             <span>None</span>
-                        }
+                        }*@
                     </div>
                 </div>
             </div>

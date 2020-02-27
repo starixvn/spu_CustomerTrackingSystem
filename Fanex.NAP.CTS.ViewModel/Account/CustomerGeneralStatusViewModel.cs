@@ -84,48 +84,47 @@ namespace Fanex.NAP.CTS.ViewModel.Account
 
         public List<FraudCaseModel> FraudCases { get; set; }
 
-        public CustomerGeneralStatusViewModel BindingGeneralDataFromMainDB(CustomerGeneralStatusModel customerGeneralStatusModel,
-            CustomerLastTicketDateModel customerLastTicketDateModel,
-            CustomerEsportAutoSuspendStatusModel customerEsportAutoSuspendStatusModel,
-            CustomerRobotUserStatusModel customerRobotUserStatusModel)
+        public CustomerGeneralStatusViewModel BindingGeneralDataFromMainDB(
+            CustomerLastTicketDateModel customerLastTicketDateModel
+           )
         {
-            if (customerGeneralStatusModel != null)
-            {
-                this.AcountStatus = GetAccountStatusName(GetAccountStatus(customerGeneralStatusModel));
-                this.DangerousOriginal = customerGeneralStatusModel.Danger;
-                this.DangerouseABI = customerGeneralStatusModel.Danger2;
-                this.DangerouseOtherSports = customerGeneralStatusModel.Danger3;
+            //if (customerGeneralStatusModel != null)
+            //{
+            //    this.AcountStatus = GetAccountStatusName(GetAccountStatus(customerGeneralStatusModel));
+            //    //this.DangerousOriginal = customerGeneralStatusModel.Danger;
+            //    //this.DangerouseABI = customerGeneralStatusModel.Danger2;
+            //    //this.DangerouseOtherSports = customerGeneralStatusModel.Danger3;
                               
-                this.Abnormal = customerGeneralStatusModel.Abnormal;
-                this.AutoSuspendSoccer = customerGeneralStatusModel.Autosuspend;
-                this.AutoSuspendOtherSport = customerGeneralStatusModel.Autosuspend2;
-                this.ProblemAccountWithBetLimit = customerGeneralStatusModel.ProblemAccountWithBetLimit;
-                this.ProblemAccountWithoutBetLimit = customerGeneralStatusModel.ProblemAccountWithoutBetLimit;
-                this.BetRestrictedAccount = customerGeneralStatusModel.BetRestrictedAccount;
-                this.BetRestrictedCurrency = customerGeneralStatusModel.BetRestrictedCurrency;
-                this.BetRestrictedSite = customerGeneralStatusModel.BetRestrictedSite;
-                this.BetRestrictedSiteAndCurrency = customerGeneralStatusModel.BetRestrictedSiteAndCurrency;
-                this.SmartPunterAccount = customerGeneralStatusModel.SmartPunter;
-            }
-            else
-            {
-                this.AcountStatus = GetAccountStatusName(AccountStatus.NA);
-            }
+            //    //this.Abnormal = customerGeneralStatusModel.Abnormal;
+            //    //this.AutoSuspendSoccer = customerGeneralStatusModel.Autosuspend;
+            //    //this.AutoSuspendOtherSport = customerGeneralStatusModel.Autosuspend2;
+            //    //this.ProblemAccountWithBetLimit = customerGeneralStatusModel.ProblemAccountWithBetLimit;
+            //    //this.ProblemAccountWithoutBetLimit = customerGeneralStatusModel.ProblemAccountWithoutBetLimit;
+            //    //this.BetRestrictedAccount = customerGeneralStatusModel.BetRestrictedAccount;
+            //    //this.BetRestrictedCurrency = customerGeneralStatusModel.BetRestrictedCurrency;
+            //    //this.BetRestrictedSite = customerGeneralStatusModel.BetRestrictedSite;
+            //    //this.BetRestrictedSiteAndCurrency = customerGeneralStatusModel.BetRestrictedSiteAndCurrency;
+            //    //this.SmartPunterAccount = customerGeneralStatusModel.SmartPunter;
+            //}
+            //else
+            //{
+            //    this.AcountStatus = GetAccountStatusName(AccountStatus.NA);
+            //}
 
             if (customerLastTicketDateModel != null)
             {
                 this.LastTicketDate = customerLastTicketDateModel.TransDate;
             }
 
-            if (customerEsportAutoSuspendStatusModel != null)
-            {
-                this.AutoSuspendESport = customerEsportAutoSuspendStatusModel.EsportAutoSuspendStatus;
-            }
+            //if (customerEsportAutoSuspendStatusModel != null)
+            //{
+            //    this.AutoSuspendESport = customerEsportAutoSuspendStatusModel.EsportAutoSuspendStatus;
+            //}
 
-            if (customerRobotUserStatusModel != null)
-            {
-                this.RobotUser = customerRobotUserStatusModel.IsRobotUser;
-            }
+            //if (customerRobotUserStatusModel != null)
+            //{
+            //    this.RobotUser = customerRobotUserStatusModel.IsRobotUser;
+            //}
 
             return this;
         }

@@ -26,17 +26,17 @@
 
         List<CustomerStaticStatusModel> GetCustomerStaticStatus(int listId, bool status);
 
-        CustomerProfileFraudInfoModel GetCustomerProfileFraudInfo(int custId);
+        CustomerProfileFraudInfoModel GetCustomerProfileFraudInfo(long custId);
 
         List<TagModel> GetDirectAssociatedAccountTagAffected(string custIdsAssInfo);
 
         List<TagModel> GetDirectAssociatedAccountTagFlagged(string custIdsAssInfo);
 
-        CustomerLastTicketDateModel GetCustomerLastTicketDate(int custId);
+        CustomerLastTicketDateModel GetCustomerLastTicketDate(long custId);
 
-        CustomerEsportAutoSuspendStatusModel GetCustomerEsportAutoSuspendedStatus(int custId);
+        CustomerEsportAutoSuspendStatusModel GetCustomerEsportAutoSuspendedStatus(long custId);
 
-        CustomerRobotUserStatusModel GetCustomerRobotUserStatus(int custId);
+        CustomerRobotUserStatusModel GetCustomerRobotUserStatus(long custId);
 
         CustomerFlagInfoModel GetCustomerFlagInfo(long ctsCustId, int subscriberId);
 

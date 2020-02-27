@@ -92,7 +92,7 @@
             },
             complete: function () {
                 if (totalAssAccount > 0 && totalEvidence > 0) {
-                    $('#affected').removeClass('hide');
+                    $('span.icon-Affected').removeClass('hide');
                 }                
             },
             error: function (errMsg) {
@@ -113,14 +113,139 @@
                 if (response.Flagged != 0)
                 {
                     if (response.Flagged == 2) {
-                        $('#flagged100').removeClass('hide');
-                       // $('#flagged').remove();
+                        $('span.icon-Flagged').removeClass('hide');                       
                     }
                     else {
-                        $('#flagged').removeClass('hide');
-                        //$('#flagged100').remove();
+                        $('span.icon-Flagged-With-Evidence').removeClass('hide');
                     }
                 }                
+            },
+            complete: function () {
+                $('span.loading').remove(); 
+            },
+            error: function (errMsg) {
+                common.showError(errMsg);
+            }
+        });
+    }
+
+    function GetCustomerGeneralStatus() {
+        $.ajax(common.modifyRelativeUrl('/Account/GetCustomerGeneralStatus'), {
+            type: 'POST',
+            data: {
+                custId: custId               
+            },
+            success: function (response) {
+                if (response != null) {
+
+                    $('#accountStatus').html(response.accountStatus);
+
+                    if (response.customerStatus.ProblemAccountWithBetLimit) {
+                        $('span.icon-P-with-Bet-Limit').removeClass('hide');
+                    }
+
+                    if (response.customerStatus.ProblemAccountWithoutBetLimit) {
+                        $('span.icon-P-without-Bet-Limit').removeClass('hide');
+                    }
+
+                    if (response.customerStatus.BetRestrictedAccount) {
+                        $('span.icon-Bet-Restrict-Account').removeClass('hide');
+                    }
+
+                    if (response.customerStatus.BetRestrictedCurrency) {
+                        $('span.icon-Bet-Restricted-Currency').removeClass('hide');
+                    }
+
+                    if (response.customerStatus.BetRestrictedSite) {
+                        $('span.icon-Bet-Restrict-Site').removeClass('hide');
+                    }
+
+                    if (response.customerStatus.BetRestrictedSiteAndCurrency) {
+                        $('span.icon-Bet-Restricted-SiteandCurrency').removeClass('hide');
+                    }
+
+                    if (response.customerStatus.SmartPunter) {
+                        $('span.icon-Smart-Punter-Account').removeClass('hide');
+                    }
+                    
+                    if (response.customerStatus.Danger == 0) {
+                        $("#dangerousOriginal").html("None");
+                    }
+                    else {
+                        $("#dangerousOriginal").html(response.Danger);
+                        $("#dangerousOriginal").addClass("dangerous-level-" + response.Danger);
+                    }
+
+                    if (response.customerStatus.Danger2 == 0) {
+                        $("#dangerouseABI").html("None");
+                    }
+                    else {
+                        $("#dangerouseABI").html(response.Danger2);
+                        $("#dangerouseABI").addClass("dangerous-level-" + response.Danger2);
+                    }
+
+                    if (response.customerStatus.Danger3 == 0) {
+                        $("#dangerouseOtherSports").html("None");
+                    }
+                    else {
+                        $("#dangerouseOtherSports").html(response.Danger3);
+                        $("#dangerouseOtherSports").addClass("dangerous-level-" + response.Danger3);
+                    }
+
+                    if (response.customerStatus.Abnormal == 0) {
+                        $("#abnormal").html("None");
+                    }
+                    else {
+                        $("#abnormal").html(response.customerStatus.Abnormal);
+                        $("#abnormal").addClass("abnormal-level-" + response.customerStatus.Danger3);
+                    }
+
+                    $('#autoSuspendSoccer').html(response.customerStatus.Autosuspend ? 'Yes' : 'No');
+                    $('#autoSuspendOtherSport').html(response.customerStatus.Autosuspend2 ? 'Yes' : 'No');
+
+                }
+            },
+            complete: function () {
+                                 
+            },
+            error: function (errMsg) {
+                common.showError(errMsg);
+            }
+        });
+    }
+
+    function GetCustomerRobotUserStatus() {
+        $.ajax(common.modifyRelativeUrl('/Account/GetCustomerRobotUserStatus'), {
+            type: 'POST',
+            data: {
+                custId: custId
+            },
+            success: function (response) {
+                if (response != null) {
+                    if (response.IsRobotUser) {
+                        $('span.icon-Robot-User').removeClass('hide');
+                    }
+                }
+            },
+            complete: function () {
+                
+            },
+            error: function (errMsg) {
+                common.showError(errMsg);
+            }
+        });
+    }
+
+    function GetCustomerEsportAutoSuspendedStatus() {
+        $.ajax(common.modifyRelativeUrl('/Account/GetCustomerEsportAutoSuspendedStatus'), {
+            type: 'POST',
+            data: {
+                custId: custId
+            },
+            success: function (response) {
+                if (response != null) {
+                    $('#autoSuspendESport').html(response.EsportAutoSuspendStatus ? 'Yes' : 'No');
+                }
             },
             complete: function () {
 
@@ -131,6 +256,49 @@
         });
     }
 
+
+    function GetCustomerProfileFraudInfo() {
+        $.ajax(common.modifyRelativeUrl('/Account/GetCustomerProfileFraudInfo'), {
+            type: 'POST',
+            data: {
+                custId: custId
+            },
+            success: function (response) {
+                if (response.SuspiciouseCustomer != null) {                  
+
+                    if (response.SuspiciouseCustomer.IsDelinquent) {
+                        $('span.icon-delinquency').removeClass('hide');
+                    }
+
+                    if (response.SuspiciouseCustomer.IsHedge) {
+                        $('span.icon-Hedge-Account').removeClass('hide');
+                    }
+
+                    if (response.SuspiciouseCustomer.IsDirty) {
+                        $('span.icon-dirty').removeClass('hide');
+                    }
+
+                    $('div.classification > img.icon-loading').remove();
+                }
+                else {
+                    $('div.classification').html("<span>None</span>");
+                }
+
+                if (response.FraudCaseList.count > 0) {
+                    $('#fraudcase').html("<span>" + response.FraudCaseList.join(', ') + "</span>");
+                }
+                else {
+                    $('#fraudcase').html("<span>None</span>");
+                }
+            },
+            complete: function () {
+
+            },
+            error: function (errMsg) {
+                common.showError(errMsg);
+            }
+        });
+    }
 
     function CollapseExpandItem() {
         $("#account-detail-container .report-item h3").on('click', function () {
@@ -177,9 +345,14 @@
 
     function Initial() {
         CollapseExpandAll();
-        CollapseExpandItem();        
+        CollapseExpandItem();    
+        GetCustomerRobotUserStatus();
+        GetCustomerGeneralStatus();
         GetCustomerTotalAssociation();
         GetCustomerFlaggInfo();
+        GetCustomerEsportAutoSuspendedStatus();
+        GetCustomerProfileFraudInfo();
+
         LoadAssociationByAccount();
         LoadChainToEvidence();
 

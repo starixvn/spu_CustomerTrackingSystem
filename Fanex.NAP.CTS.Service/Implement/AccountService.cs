@@ -524,7 +524,7 @@
             }
         }
 
-        public CustomerProfileFraudInfoModel GetCustomerProfileFraudInfo(int custId)
+        public CustomerProfileFraudInfoModel GetCustomerProfileFraudInfo(long custId)
         {
             var criteria = new CustomerProfileFraudInfoCriteria
             {
@@ -592,7 +592,7 @@
             }
         }
 
-        public CustomerLastTicketDateModel GetCustomerLastTicketDate(int custId)
+        public CustomerLastTicketDateModel GetCustomerLastTicketDate(long custId)
         {
             var criteria = new CustomerLastTicketDateCriteria
             {
@@ -607,7 +607,7 @@
             }
         }
 
-        public CustomerEsportAutoSuspendStatusModel GetCustomerEsportAutoSuspendedStatus(int custId)
+        public CustomerEsportAutoSuspendStatusModel GetCustomerEsportAutoSuspendedStatus(long custId)
         {
             var criteria = new CustomerEsportAutoSuspendStatusCriteria
             {
@@ -622,7 +622,7 @@
             }
         }
 
-        public CustomerRobotUserStatusModel GetCustomerRobotUserStatus(int custId)
+        public CustomerRobotUserStatusModel GetCustomerRobotUserStatus(long custId)
         {
             var criteria = new CustomerRobotUserStatusCriteria
             {
