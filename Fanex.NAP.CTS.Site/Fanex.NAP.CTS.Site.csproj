@@ -485,9 +485,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\NAPFrameworkSpNames.xml" />
-    <Content Include="App_Data\NAPFSNames.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="App_Data\NAPFSNames.xml" />
     <Content Include="Content\CoreBetList.css" />
     <Content Include="Content\gulpfile.js" />
     <Content Include="Content\images\details_close.png" />
@@ -1170,10 +1168,10 @@
     <Content Include="Views\Account\ChainToEvidence\ChainToEvidence.cshtml" />
     <Content Include="Views\Account\ChainToEvidence\PlaceEvidence.cshtml" />
     <Content Include="Views\Account\ChainToEvidence\AddException.cshtml" />
-    <None Include="Views\Errors\403.cshtml" />
-    <None Include="Views\Errors\404.cshtml" />
-    <None Include="Views\Errors\500.cshtml" />
-    <None Include="Views\Errors\UM.cshtml" />
+    <Content Include="Views\Errors\403.cshtml" />
+    <Content Include="Views\Errors\404.cshtml" />
+    <Content Include="Views\Errors\500.cshtml" />
+    <Content Include="Views\Errors\UM.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
