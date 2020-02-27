@@ -264,17 +264,17 @@
                 custId: custId
             },
             success: function (response) {
-                if (response.SuspiciouseCustomer != null) {                  
+                if (response.suspiciouseCustomer != null) {                  
 
-                    if (response.SuspiciouseCustomer.IsDelinquent) {
+                    if (response.suspiciouseCustomer.IsDelinquent) {
                         $('span.icon-delinquency').removeClass('hide');
                     }
 
-                    if (response.SuspiciouseCustomer.IsHedge) {
+                    if (response.suspiciouseCustomer.IsHedge) {
                         $('span.icon-Hedge-Account').removeClass('hide');
                     }
 
-                    if (response.SuspiciouseCustomer.IsDirty) {
+                    if (response.suspiciouseCustomer.IsDirty) {
                         $('span.icon-dirty').removeClass('hide');
                     }
 
@@ -284,8 +284,8 @@
                     $('div.classification').html("<span>None</span>");
                 }
 
-                if (response.FraudCaseList.count > 0) {
-                    $('#fraudcase').html("<span>" + response.FraudCaseList.join(', ') + "</span>");
+                if (response.fraudCases != null) {
+                    $('#fraudcase').html("<span>" + response.fraudCases + "</span>");
                 }
                 else {
                     $('#fraudcase').html("<span>None</span>");

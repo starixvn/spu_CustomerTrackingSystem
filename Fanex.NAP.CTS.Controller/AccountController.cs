@@ -153,8 +153,14 @@
         public ActionResult GetCustomerProfileFraudInfo(long custId)
         {
             var result = _accountService.GetCustomerProfileFraudInfo(custId);
+            var fraudCaseName = string.Empty;
 
-            return Json(result, JsonRequestBehavior.AllowGet);
+            if(result.FraudCaseList != null && result.FraudCaseList.Any())
+            {
+                fraudCaseName = string.Join(", ", result.FraudCaseList.Select(x => x.FraudCaseName));
+            }
+
+            return Json(new { suspiciouseCustomer = result.SuspiciouseCustomer, fraudCases = fraudCaseName }, JsonRequestBehavior.AllowGet);
         }
 
         #region Associated By Account
