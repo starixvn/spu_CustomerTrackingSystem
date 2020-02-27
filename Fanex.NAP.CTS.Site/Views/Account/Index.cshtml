@@ -144,15 +144,17 @@
                 <div class="info-text">
                     <div>
                         <a id="lnkAssociation" href="javascript:void(0)" class="link">
-                            <span id="totalAssAccount">Loading...</span>/
-                            <span id="totalAssDevice">Loading...</span>/
-                            <span id="totalAssIP">Loading...</span>
+                            <span id="totalAssAccount">
+                                <img class="icon-loading" src="~/Content/scss/images/loading.svg" />
+                            </span>/
+                            <span id="totalAssDevice"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>/
+                            <span id="totalAssIP"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
                             @*@Model.TotalAssociationByAccount/@Model.TotalAssociationByDevice/@Model.TotalAssociationByIp*@
                         </a>
                     </div>
                     <div>
                         <a id='lnkEvidence' href='javascript:void(0)' class='link'>
-                            <span id="evidences">Loading...</span>
+                            <span id="evidences"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
                         </a>
                         @*@(Model.Evidences != null ? Html.Raw(string.Format("<a id='lnkEvidence' href='javascript:void(0)' class='link'>{0}</a>", Model.Evidences)) : Html.Raw("None"))*@
                     </div>

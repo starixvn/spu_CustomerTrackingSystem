@@ -408,6 +408,7 @@
     <Content Include="Content\images\flagged_device_by_evidence.png" />
     <Content Include="Content\images\graph_view.png" />
     <Content Include="Content\scss\fonts\Fraud-Sensor\fonts\CTS.svg" />
+    <Content Include="Content\scss\images\loading.svg" />
     <Content Include="Content\scss\images\login-CTS.png" />
     <Content Include="Content\scss\images\logo-CTS.png" />
     <Content Include="Content\scss\images\logo-CTS.svg" />
