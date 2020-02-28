@@ -715,7 +715,7 @@
 
             if (!statusIdList.Any(x => notYetDepositStatusId == x))
             {
-                customerAssociation = customerAssociation.Where(x => x.StatusId != notYetDepositStatusId).ToList();
+                customerAssociation = customerAssociation.Where(x => statusIdList.Contains(x.StatusId)).ToList();
             }
 
             var result = customerAssociation.Select(x =>

@@ -188,11 +188,13 @@
 
                 var getAllSubscribers = _subscriberAssignmentService.GetSubscribers(0);
 
+                ///LogService.Info("getStatusByCustIds:" + getStatusByCustIds.FirstOrDefault().);
+
                 customerAssociation = _accountService.FilterCustomerAssociationByStatus(statusIds, customerAssociation, getStatusByCustIds);
 
                 customerAssociation = _accountService.FilterCustomerAssociationByAssociationType(associationType, customerAssociation);
 
-                //LogService.Info("customerAssociation:" + customerAssociation.Count.ToString());
+                
 
                 result = customerAssociation.Select(x => new CustomerAssociationByAccountDetailViewModel
                 {
