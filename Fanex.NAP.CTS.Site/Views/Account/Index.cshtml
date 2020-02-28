@@ -81,7 +81,7 @@
                 <div class="info-text">
                     <div><span id="dangerousOriginal"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span></div>
                     <div><span id="dangerouseABI"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span></div>
-                    <div><span id="dangerouseOtherSports"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span></div>                   
+                    <div><span id="dangerouseOtherSports"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span></div>
                 </div>
             </div>
         </div>
@@ -114,8 +114,8 @@
                     <div id="autoSuspendOtherSport"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></div>
                     <div id="autoSuspendESport"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></div>
                     @*<div>@(Model.AutoSuspendSoccer ? Html.Raw("Yes") : Html.Raw("No"))</div>
-        <div>@(Model.AutoSuspendOtherSport ? Html.Raw("Yes") : Html.Raw("No"))</div>
-        <div>@(Model.AutoSuspendESport ? Html.Raw("Yes") : Html.Raw("No"))</div>*@
+                        <div>@(Model.AutoSuspendOtherSport ? Html.Raw("Yes") : Html.Raw("No"))</div>
+                        <div>@(Model.AutoSuspendESport ? Html.Raw("Yes") : Html.Raw("No"))</div>*@
                 </div>
             </div>
         </div>
@@ -135,13 +135,13 @@
                                 <img class="icon-loading" src="~/Content/scss/images/loading.svg" />
                             </span>/
                             <span id="totalAssDevice"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>/
-                            <span id="totalAssIP"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>                           
+                            <span id="totalAssIP"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
                         </a>
                     </div>
                     <div>
                         <a id='lnkEvidence' href='javascript:void(0)' class='link'>
                             <span id="evidences"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
-                        </a>                        
+                        </a>
                     </div>
                 </div>
             </div>
@@ -158,47 +158,12 @@
                 <div class="info-text">
                     <div class="classification">
                         <img class="icon-loading" src="~/Content/scss/images/loading.svg" />
-                        <span class="icon-delinquency hide" title="Delinquency" />
-                        <span class="icon-Hedge-Account hide" title="Hedge Account" />
-                        <span class="icon-dirty hide" title="Dirty Account" />
-
-
-
-                        @*@if (Model.Delinquency)
-        {
-            <span class="icon-delinquency" title="Delinquency" />
-        }
-        @if (Model.HedgeAccount)
-        {
-            <span class="icon-Hedge-Account" title="Hedge Account" />
-        }
-        @if (Model.DirtyAccount)
-        {
-            <span class="icon-dirty" title="Dirty Account" />
-        }
-        @if (!Model.Delinquency && !Model.HedgeAccount && !Model.DirtyAccount)
-        {
-            <span>None</span>
-        }*@
-
+                        <span class="icon-delinquency hide" title="Delinquency"></span>
+                        <span class="icon-Hedge-Account hide" title="Hedge Account"></span>
+                        <span class="icon-dirty hide" title="Dirty Account"></span>
                     </div>
                     <div id="fraudcase">
                         <span><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
-                        @*@if (Model.FraudCases != null && Model.FraudCases.Any())
-                        {
-                            var fraudCases = new List<string>();
-                            foreach (var fraudCase in Model.FraudCases)
-                            {
-                                fraudCases.Add(fraudCase.FraudCaseName);
-
-                            }
-
-                            <span>@string.Join(", ", fraudCases)</span>
-                        }
-                        else
-                        {
-                            <span>None</span>
-                        }*@
                     </div>
                 </div>
             </div>
