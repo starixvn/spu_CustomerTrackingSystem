@@ -1,5 +1,6 @@
 .ui-widget-overlay {
     background: rgba(0,0,0,.4);
+    opacity: 1;
 }
 
 .ui-widget.ui-widget-content {
@@ -11,7 +12,7 @@
     /*top: 120px !important;*/
     padding: 0;
     font-family: $font-family;
-    box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.1);    
 
     .ui-dialog-content {
         padding: 12px;
@@ -102,9 +103,17 @@
 
 // modal-graph-render
 .modal-graph-render {
-    top: 60px !important;
+    top: 62px !important;
     width: 99% !important;
 
+    .ui-dialog-titlebar {
+        background: #233860;
+    }
+
+    .ui-dialog-content {
+        background: #383838;
+    } 
+    
     .ppt-body {
         margin: 5px;
         padding: 0 !important;
@@ -151,7 +160,6 @@
     .ppt-BELONG_TO {
         stroke: #35BAA3;
     }
-
     /*.Customer {
         &.ppt-node__back-text--root, &.ppt-node__text--root--value-selected, &.ppt-node__back-text--root--value-selected {
             transform: translateY(10px);
@@ -171,7 +179,6 @@
             transform: translateY(10px);
         }
     }*/
-
     .ppt-g-node-foreground {
         transform: translateX(-40px);
     }
