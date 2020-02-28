@@ -127,6 +127,66 @@
         });
     }
 
+    function BetLimitAndAccountStatusIcon(response) {
+        $('#accountStatus').html(response.accountStatus);
+
+        if (response.customerStatus.ProblemAccountWithBetLimit) {
+            $('span.icon-P-with-Bet-Limit').removeClass('hide');
+        }
+
+        if (response.customerStatus.ProblemAccountWithoutBetLimit) {
+            $('span.icon-P-without-Bet-Limit').removeClass('hide');
+        }
+    }
+
+    function BetRestrictAndSmartPunterIcon(response) {
+        if (response.customerStatus.BetRestrictedAccount) {
+            $('span.icon-Bet-Restrict-Account').removeClass('hide');
+        }
+
+        if (response.customerStatus.BetRestrictedCurrency) {
+            $('span.icon-Bet-Restricted-Currency').removeClass('hide');
+        }
+
+        if (response.customerStatus.BetRestrictedSite) {
+            $('span.icon-Bet-Restrict-Site').removeClass('hide');
+        }
+
+        if (response.customerStatus.BetRestrictedSiteAndCurrency) {
+            $('span.icon-Bet-Restricted-SiteandCurrency').removeClass('hide');
+        }
+
+        if (response.customerStatus.SmartPunter) {
+            $('span.icon-Smart-Punter-Account').removeClass('hide');
+        }
+    }
+
+    function DangerouseIcon(response) {
+        if (response.customerStatus.Danger == 0) {
+            $("#dangerousOriginal").html("None");
+        }
+        else {
+            $("#dangerousOriginal").html(response.customerStatus.Danger);
+            $("#dangerousOriginal").addClass("dangerous-level-" + response.customerStatus.Danger);
+        }
+
+        if (response.customerStatus.Danger2 == 0) {
+            $("#dangerouseABI").html("None");
+        }
+        else {
+            $("#dangerouseABI").html(response.customerStatus.Danger2);
+            $("#dangerouseABI").addClass("dangerous-level-" + response.customerStatus.Danger2);
+        }
+
+        if (response.customerStatus.Danger3 == 0) {
+            $("#dangerouseOtherSports").html("None");
+        }
+        else {
+            $("#dangerouseOtherSports").html(response.customerStatus.Danger3);
+            $("#dangerouseOtherSports").addClass("dangerous-level-" + response.customerStatus.Danger3);
+        }
+    }
+
     function GetCustomerGeneralStatus() {
         $.ajax(common.modifyRelativeUrl('/Account/GetCustomerGeneralStatus'), {
             type: 'POST',
@@ -136,59 +196,9 @@
             success: function(response) {
                 if (response != null) {
 
-                    $('#accountStatus').html(response.accountStatus);
-
-                    if (response.customerStatus.ProblemAccountWithBetLimit) {
-                        $('span.icon-P-with-Bet-Limit').removeClass('hide');
-                    }
-
-                    if (response.customerStatus.ProblemAccountWithoutBetLimit) {
-                        $('span.icon-P-without-Bet-Limit').removeClass('hide');
-                    }
-
-                    if (response.customerStatus.BetRestrictedAccount) {
-                        $('span.icon-Bet-Restrict-Account').removeClass('hide');
-                    }
-
-                    if (response.customerStatus.BetRestrictedCurrency) {
-                        $('span.icon-Bet-Restricted-Currency').removeClass('hide');
-                    }
-
-                    if (response.customerStatus.BetRestrictedSite) {
-                        $('span.icon-Bet-Restrict-Site').removeClass('hide');
-                    }
-
-                    if (response.customerStatus.BetRestrictedSiteAndCurrency) {
-                        $('span.icon-Bet-Restricted-SiteandCurrency').removeClass('hide');
-                    }
-
-                    if (response.customerStatus.SmartPunter) {
-                        $('span.icon-Smart-Punter-Account').removeClass('hide');
-                    }
-
-                    if (response.customerStatus.Danger == 0) {
-                        $("#dangerousOriginal").html("None");
-                    }
-                    else {
-                        $("#dangerousOriginal").html(response.customerStatus.Danger);
-                        $("#dangerousOriginal").addClass("dangerous-level-" + response.customerStatus.Danger);
-                    }
-
-                    if (response.customerStatus.Danger2 == 0) {
-                        $("#dangerouseABI").html("None");
-                    }
-                    else {
-                        $("#dangerouseABI").html(response.customerStatus.Danger2);
-                        $("#dangerouseABI").addClass("dangerous-level-" + response.customerStatus.Danger2);
-                    }
-
-                    if (response.customerStatus.Danger3 == 0) {
-                        $("#dangerouseOtherSports").html("None");
-                    }
-                    else {
-                        $("#dangerouseOtherSports").html(response.customerStatus.Danger3);
-                        $("#dangerouseOtherSports").addClass("dangerous-level-" + response.customerStatus.Danger3);
-                    }
+                    BetLimitAndAccountStatusIcon(response);                   
+                    BetRestrictAndSmartPunterIcon(response);                     
+                    DangerouseIcon(response);
 
                     if (response.customerStatus.Abnormal == 0) {
                         $("#abnormal").html("None");
@@ -200,7 +210,6 @@
 
                     $('#autoSuspendSoccer').html(response.customerStatus.Autosuspend ? 'Yes' : 'No');
                     $('#autoSuspendOtherSport').html(response.customerStatus.Autosuspend2 ? 'Yes' : 'No');
-
                 }
             },
             complete: function() {
@@ -254,6 +263,36 @@
         });
     }
 
+    function ClassificationIcon(response) {
+        if (response.suspiciouseCustomer != null && (response.suspiciouseCustomer.IsDelinquent || response.suspiciouseCustomer.IsHedge || response.suspiciouseCustomer.IsDirty)) {
+
+            if (response.suspiciouseCustomer.IsDelinquent) {
+                $('span.icon-delinquency').removeClass('hide');
+            }
+
+            if (response.suspiciouseCustomer.IsHedge) {
+                $('span.icon-Hedge-Account').removeClass('hide');
+            }
+
+            if (response.suspiciouseCustomer.IsDirty) {
+                $('span.icon-dirty').removeClass('hide');
+            }
+
+            $('div.classification > img.icon-loading').remove();
+        }
+        else {
+            $('div.classification').html("<span>None</span>");
+        }
+    }
+
+    function FrauseCaseList(response) {
+        if (response.fraudCases != '') {
+            $('#fraudcase').html("<span>" + response.fraudCases + "</span>");
+        }
+        else {
+            $('#fraudcase').html("<span>None</span>");
+        }
+    }
 
     function GetCustomerProfileFraudInfo() {
         $.ajax(common.modifyRelativeUrl('/Account/GetCustomerProfileFraudInfo'), {
@@ -261,33 +300,9 @@
             data: {
                 custId: custId
             },
-            success: function(response) {
-                if (response.suspiciouseCustomer != null && (response.suspiciouseCustomer.IsDelinquent || response.suspiciouseCustomer.IsHedge || response.suspiciouseCustomer.IsDirty)) {
-
-                    if (response.suspiciouseCustomer.IsDelinquent) {
-                        $('span.icon-delinquency').removeClass('hide');
-                    }
-
-                    if (response.suspiciouseCustomer.IsHedge) {
-                        $('span.icon-Hedge-Account').removeClass('hide');
-                    }
-
-                    if (response.suspiciouseCustomer.IsDirty) {
-                        $('span.icon-dirty').removeClass('hide');
-                    }
-
-                    $('div.classification > img.icon-loading').remove();
-                }
-                else {
-                    $('div.classification').html("<span>None</span>");
-                }
-
-                if (response.fraudCases != '') {
-                    $('#fraudcase').html("<span>" + response.fraudCases + "</span>");
-                }
-                else {
-                    $('#fraudcase').html("<span>None</span>");
-                }
+            success: function(response) {                
+                ClassificationIcon(response);
+                FrauseCaseList(response);         
             },
             complete: function() {
 
