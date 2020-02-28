@@ -182,13 +182,17 @@
 
             if (customerAssociation != null && customerAssociation.Any())
             {
-                var getStatusByCustIds = _accountService.GetCustomerGeneralStatus(string.Join(",", customerAssociation.Select(x => x.CustId)));
+                var custIds = string.Join(",", customerAssociation.Select(x => x.CustId));
+
+                var getStatusByCustIds = _accountService.GetCustomerGeneralStatus(custIds);
 
                 var getAllSubscribers = _subscriberAssignmentService.GetSubscribers(0);
 
                 customerAssociation = _accountService.FilterCustomerAssociationByStatus(statusIds, customerAssociation, getStatusByCustIds);
 
                 customerAssociation = _accountService.FilterCustomerAssociationByAssociationType(associationType, customerAssociation);
+
+                LogService.Info("customerAssociation:" + customerAssociation.Count.ToString());
 
                 result = customerAssociation.Select(x => new CustomerAssociationByAccountDetailViewModel
                 {
@@ -206,6 +210,8 @@
                     Subscriber = getAllSubscribers.FirstOrDefault(a => a.SubscriberId == x.SubscriberId).SubscriberName,
                     CTSCustId = x.CTSCustID
                 }).ToList();
+
+                LogService.Info("result:" + result.Count.ToString());
 
                 if (result != null && result.Any())
                 {
