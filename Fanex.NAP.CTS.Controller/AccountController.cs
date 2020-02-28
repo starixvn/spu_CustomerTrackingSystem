@@ -110,6 +110,8 @@
             else
             {
                 accountStatusName = model.GetAccountStatusName(AccountStatus.NA);
+
+                result = new CustomerGeneralStatusModel();
             }
 
             return Json(new { customerStatus = result, accountStatus = accountStatusName }, JsonRequestBehavior.AllowGet);
