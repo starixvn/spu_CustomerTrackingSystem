@@ -38,10 +38,8 @@
 
         public ActionResult Index(long Id)
         {
-            LogService.Info("testing");
-
             if (Id > 0)
-            {               
+            {
                 var customerInfoFromCTS = _accountService.GetCustomerInfoByCTSCustId(Id);
 
                 if (customerInfoFromCTS != null)
@@ -49,13 +47,13 @@
                     var customerGeneralStatusViewModel = new CustomerGeneralStatusViewModel()
                     {
                         CTSCustId = Id
-                    };                  
+                    };
 
-                   var customerLastTicketDate = _accountService.GetCustomerLastTicketDate(customerInfoFromCTS.CustId);
+                    var customerLastTicketDate = _accountService.GetCustomerLastTicketDate(customerInfoFromCTS.CustId);
 
                     customerGeneralStatusViewModel
                         .BindingGeneralDataFromCTS(customerInfoFromCTS)
-                        .BindingGeneralDataFromMainDB(customerLastTicketDate);                     
+                        .BindingGeneralDataFromMainDB(customerLastTicketDate);
 
                     return View(customerGeneralStatusViewModel);
                 }
@@ -105,11 +103,11 @@
             var result = _accountService.GetCustomerGeneralStatus(custId.ToString()).FirstOrDefault();
             var accountStatusName = string.Empty;
 
-            if(result != null)
+            if (result != null)
             {
                 accountStatusName = model.GetAccountStatusName(model.GetAccountStatus(result));
             }
-           else
+            else
             {
                 accountStatusName = model.GetAccountStatusName(AccountStatus.NA);
             }
@@ -139,7 +137,7 @@
             var result = _accountService.GetCustomerProfileFraudInfo(custId);
             var fraudCaseName = string.Empty;
 
-            if(result.FraudCaseList != null && result.FraudCaseList.Any())
+            if (result.FraudCaseList != null && result.FraudCaseList.Any())
             {
                 fraudCaseName = string.Join(", ", result.FraudCaseList.Select(x => x.FraudCaseName));
             }
