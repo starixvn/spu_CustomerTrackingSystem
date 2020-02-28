@@ -1,6 +1,8 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
     using Fanex.Logging;
+    using Fanex.Logging.Extensions;
+    using Fanex.Logging.Extensions.Database;
     using Fanex.NAP.Core.Configuration;
     using Fanex.NAP.Core.Context;
     using Fanex.NAP.Core.Service.Impl;
@@ -10,15 +12,12 @@
     using Fanex.NAP.CTS.Core.ExportExcel;
     using Fanex.NAP.CTS.Resource.Consts;
     using NPOI.SS.UserModel;
+    using Sentry;
     using System;
     using System.Collections.Generic;
+    using System.Configuration;
     using System.IO;
     using System.Web.Mvc;
-    using Fanex.Logging.Sentry;
-    using Sentry;
-    using System.Configuration;
-    using Fanex.Logging.Extensions;
-    using Fanex.Logging.Extensions.Database;
 
     public class BaseController : Controller
     {
@@ -31,16 +30,7 @@
             {
                 CurrentSession = new CurrentSession();
                 ViewBag.Session = CurrentSession;
-            }            
-
-            LogManager.SetDefaultLogCategory("CTS")
-                  .Use(new List<ILogEngine>
-                  {
-                         new SentryLogging(new SentryEngineOptions
-                         {
-                             Dsn = new Dsn(ConfigurationManager.AppSettings["Sentry-Log-Config"])
-                         })
-                  });
+            }         
         }
 
         public virtual string BaseControllerName { get => Consts.BaseController; }

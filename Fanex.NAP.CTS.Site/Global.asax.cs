@@ -60,7 +60,7 @@
 
         protected void Application_Error(object sender, EventArgs e)
         {
-            Exception ex = Server.GetLastError().GetBaseException();            
+            Exception ex = Server.GetLastError().GetBaseException();
 
             var logMessage = new LogMessage(ex.Message)
               .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
