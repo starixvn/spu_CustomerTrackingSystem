@@ -3,11 +3,11 @@ WHERE c.CTSCustID = $CTSCustID
 WITH c,c1,d,r,r1
 OPTIONAL MATCH (c)-[:USED_IP]->(i:IP)<-[:USED_IP]-(c1)
 UNWIND [r.CreatedTime,r1.CreatedTime] AS val
-RETURN c1.CTSCustID as CTSCustID, c1.CustID AS CustId, c1.UserName AS Username, c1.UserName2 AS Username2, 1 AS AssociationType, COUNT(d) AS SharedDevices, COUNT(i) AS SharedIPs, c1.SubscriberID AS SubscriberId, MAX(val) AS AssociationDate
+RETURN c1.CTSCustID as CTSCustID, c1.CustID AS CustId, c1.UserName AS Username, c1.UserName2 AS Username2, 1 AS AssociationType, COUNT(DISTINCT d) AS SharedDevices, COUNT(DISTINCT i) AS SharedIPs, c1.SubscriberID AS SubscriberId, MAX(val) AS AssociationDate
 UNION ALL
 MATCH (c:CTSCustomer)-[r2:USED_IP]->(i:IP)<-[r3:USED_IP]-(c2:CTSCustomer)
 WHERE c.CTSCustID = $CTSCustID
 WITH c,c2,i,r2,r3
 OPTIONAL MATCH (c)-[:USED_DEVICE]->(d:Device)<-[:USED_DEVICE]-(c2)
 UNWIND [r2.CreatedTime,r3.CreatedTime] AS val
-RETURN c2.CTSCustID as CTSCustID, c2.CustID AS CustId, c2.UserName AS Username, c2.UserName2 AS Username2, 2 as AssociationType, COUNT(d) AS SharedDevices, COUNT(i) AS SharedIPs, c2.SubscriberID AS SubscriberId, MAX(val) AS AssociationDate
+RETURN c2.CTSCustID as CTSCustID, c2.CustID AS CustId, c2.UserName AS Username, c2.UserName2 AS Username2, 2 as AssociationType, COUNT(DISTINCT d) AS SharedDevices, COUNT(DISTINCT i) AS SharedIPs, c2.SubscriberID AS SubscriberId, MAX(val) AS AssociationDate

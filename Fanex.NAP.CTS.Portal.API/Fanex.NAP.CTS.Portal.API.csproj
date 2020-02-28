@@ -364,6 +364,7 @@
     <Content Include="App_Data\Graph\scripts\GetAssociationOneLevelByCustId.scrypt" />
     <Content Include="App_Data\Graph\scripts\GetShortestPath.scrypt" />
     <Content Include="App_Data\Graph\scripts\GetAssociationOneLevelByCustIds.scrypt" />
+    <Content Include="App_Data\Graph\scripts\GetStatisticForCustomer.scrypt" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
