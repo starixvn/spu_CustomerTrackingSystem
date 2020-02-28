@@ -691,13 +691,29 @@
             var notYetDepositStatusName = accountStatusViewModel.GetAccountStatusName(Model.AccountStatus.NotYetDeposit);
             var notYetDepositStatusId = accountStatusViewModel.GetAccountStatusId(notYetDepositStatusName);
 
+            var accountStatus = statusByCustIds.Select(x => new AccountStatusModel
+            {
+                CustId = x.CustId,
+                Username = x.Username,
+                StatusName = accountStatusViewModel.GetAccountStatusName(accountStatusViewModel.GetAccountStatus(x)),
+                StatusId = accountStatusViewModel.GetAccountStatusId(accountStatusViewModel.GetAccountStatusName(accountStatusViewModel.GetAccountStatus(x)))
+            });
+
+
             customerAssociation = customerAssociation.Select(x =>
             {
-                if (x.CustId == null)
+                if (x.CustId == null || x.CustId == 0)
                 {
                     x.CustId = 0;
                     x.StatusId = notYetDepositStatusId;
                     x.StatusName = notYetDepositStatusName;
+                }
+                else
+                {
+                    var customerStatus = accountStatus.FirstOrDefault(a => a.CustId == x.CustId);
+
+                    x.StatusId = customerStatus.StatusId;
+                    x.StatusName = customerStatus.StatusName;
                 }
 
                 return x;
@@ -705,34 +721,35 @@
 
             var statusIdList = statusIds.Split(',').Select(Int32.Parse).ToList();
 
-            var accountStatus = statusByCustIds.Select(x => new AccountStatusModel
-            {
-                CustId = x.CustId,
-                Username = x.Username,
-                StatusName = accountStatusViewModel.GetAccountStatusName(accountStatusViewModel.GetAccountStatus(x)),
-                StatusId = accountStatusViewModel.GetAccountStatusId(accountStatusViewModel.GetAccountStatusName(accountStatusViewModel.GetAccountStatus(x)))
-            }).Where(a => statusIdList.Contains(a.StatusId)).ToList();
+            var result = customerAssociation.Where(x => statusIdList.Contains(x.StatusId)).ToList();
 
-            if (!statusIdList.Any(x => notYetDepositStatusId == x))
-            {
-                customerAssociation = customerAssociation.Where(x => statusIdList.Contains(x.StatusId)).ToList();
-            }
 
-            var result = customerAssociation.Select(x =>
-            {
-                if (x.StatusId == 0)
-                {
-                    var status = accountStatus.FirstOrDefault(a => a.CustId == x.CustId);
 
-                    if (status != null)
-                    {
-                        x.StatusId = status.StatusId;
-                        x.StatusName = status.StatusName;
-                    }
-                }
 
-                return x;
-            }).ToList();
+
+
+
+
+            //if (!statusIdList.Any(x => notYetDepositStatusId == x))
+            //{
+            //    customerAssociation = customerAssociation.Where(x => statusIdList.Contains(x.StatusId)).ToList();
+            //}
+
+            //var result = customerAssociation.Select(x =>
+            //{
+            //    if (x.StatusId == 0)
+            //    {
+            //        var status = accountStatus.FirstOrDefault(a => a.CustId == x.CustId);
+
+            //        if (status != null)
+            //        {
+            //            x.StatusId = status.StatusId;
+            //            x.StatusName = status.StatusName;
+            //        }
+            //    }
+
+            //    return x;
+            //}).ToList();
 
             return result;
 
