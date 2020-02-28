@@ -38,10 +38,10 @@
 
         public ActionResult Index(long Id)
         {
-            if (Id > 0)
-            {
-                //var tasks = new List<Task>();
+            LogService.Info("testing");
 
+            if (Id > 0)
+            {               
                 var customerInfoFromCTS = _accountService.GetCustomerInfoByCTSCustId(Id);
 
                 if (customerInfoFromCTS != null)
@@ -49,29 +49,13 @@
                     var customerGeneralStatusViewModel = new CustomerGeneralStatusViewModel()
                     {
                         CTSCustId = Id
-                    };
-
-                   // var customerStatus = new CustomerGeneralStatusModel();
-
-                    //var customerProfileFraudInfo = new CustomerProfileFraudInfoModel();
-                    //var customerLastTicketDate = new CustomerLastTicketDateModel();
-                    //var customerEsportAutoSuspendedStatus = new CustomerEsportAutoSuspendStatusModel();
-                    //var customerRobotUserStatusModel = new CustomerRobotUserStatusModel();
-
-                    //tasks.Add(Task.Run(() => { customerStatus = _accountService.GetCustomerGeneralStatus(customerInfoFromCTS.CustId.ToString()).FirstOrDefault(); }));                 
-                    //tasks.Add(Task.Run(() => { customerProfileFraudInfo = _accountService.GetCustomerProfileFraudInfo(customerInfoFromCTS.CustId); }));
-                    //tasks.Add(Task.Run(() => {  }));
-                    //tasks.Add(Task.Run(() => { customerEsportAutoSuspendedStatus = _accountService.GetCustomerEsportAutoSuspendedStatus(customerInfoFromCTS.CustId); }));
-                    //tasks.Add(Task.Run(() => { customerRobotUserStatusModel = _accountService.GetCustomerRobotUserStatus(customerInfoFromCTS.CustId); }));                   
-
-                    //Task.WhenAll(tasks.ToArray()).Wait();
+                    };                  
 
                    var customerLastTicketDate = _accountService.GetCustomerLastTicketDate(customerInfoFromCTS.CustId);
 
                     customerGeneralStatusViewModel
                         .BindingGeneralDataFromCTS(customerInfoFromCTS)
-                        .BindingGeneralDataFromMainDB(customerLastTicketDate);
-                       // .BindingGeneralDataFromFS(customerProfileFraudInfo);
+                        .BindingGeneralDataFromMainDB(customerLastTicketDate);                     
 
                     return View(customerGeneralStatusViewModel);
                 }

@@ -87,44 +87,12 @@ namespace Fanex.NAP.CTS.ViewModel.Account
         public CustomerGeneralStatusViewModel BindingGeneralDataFromMainDB(
             CustomerLastTicketDateModel customerLastTicketDateModel
            )
-        {
-            //if (customerGeneralStatusModel != null)
-            //{
-            //    this.AcountStatus = GetAccountStatusName(GetAccountStatus(customerGeneralStatusModel));
-            //    //this.DangerousOriginal = customerGeneralStatusModel.Danger;
-            //    //this.DangerouseABI = customerGeneralStatusModel.Danger2;
-            //    //this.DangerouseOtherSports = customerGeneralStatusModel.Danger3;
-                              
-            //    //this.Abnormal = customerGeneralStatusModel.Abnormal;
-            //    //this.AutoSuspendSoccer = customerGeneralStatusModel.Autosuspend;
-            //    //this.AutoSuspendOtherSport = customerGeneralStatusModel.Autosuspend2;
-            //    //this.ProblemAccountWithBetLimit = customerGeneralStatusModel.ProblemAccountWithBetLimit;
-            //    //this.ProblemAccountWithoutBetLimit = customerGeneralStatusModel.ProblemAccountWithoutBetLimit;
-            //    //this.BetRestrictedAccount = customerGeneralStatusModel.BetRestrictedAccount;
-            //    //this.BetRestrictedCurrency = customerGeneralStatusModel.BetRestrictedCurrency;
-            //    //this.BetRestrictedSite = customerGeneralStatusModel.BetRestrictedSite;
-            //    //this.BetRestrictedSiteAndCurrency = customerGeneralStatusModel.BetRestrictedSiteAndCurrency;
-            //    //this.SmartPunterAccount = customerGeneralStatusModel.SmartPunter;
-            //}
-            //else
-            //{
-            //    this.AcountStatus = GetAccountStatusName(AccountStatus.NA);
-            //}
+        {            
 
             if (customerLastTicketDateModel != null)
             {
                 this.LastTicketDate = customerLastTicketDateModel.TransDate;
-            }
-
-            //if (customerEsportAutoSuspendStatusModel != null)
-            //{
-            //    this.AutoSuspendESport = customerEsportAutoSuspendStatusModel.EsportAutoSuspendStatus;
-            //}
-
-            //if (customerRobotUserStatusModel != null)
-            //{
-            //    this.RobotUser = customerRobotUserStatusModel.IsRobotUser;
-            //}
+            }            
 
             return this;
         }
@@ -147,28 +115,6 @@ namespace Fanex.NAP.CTS.ViewModel.Account
            
             return this;
         }
-
-        //public CustomerGeneralStatusViewModel BindingTotalAssociationFromCTS(CustomerAssociationByCTSCustIdModel customerAssociationByCTSCustIdModel)
-        //{
-        //    if (customerAssociationByCTSCustIdModel != null)
-        //    {
-        //        this.TotalAssociationByAccount = customerAssociationByCTSCustIdModel.TotalAccounts;
-        //        this.TotalAssociationByDevice = customerAssociationByCTSCustIdModel.TotalDevices;
-        //        this.TotalAssociationByIp = customerAssociationByCTSCustIdModel.TotalIps;
-        //    }
-
-        //    return this;
-        //}
-
-        //public CustomerGeneralStatusViewModel BindingEvidenceListFromCTS(List<CustomerEvidenceByCTSCustIdModel> customerEvidenceByCTSCustIdModelList)
-        //{
-        //    if (customerEvidenceByCTSCustIdModelList != null && customerEvidenceByCTSCustIdModelList.Any())
-        //    {
-        //        this.Evidences = string.Join(", ", customerEvidenceByCTSCustIdModelList.Select(x => x.EvidenceCode).ToArray());
-        //    }
-
-        //    return this;
-        //}
 
         public CustomerGeneralStatusViewModel BindingGeneralDataFromFS(CustomerProfileFraudInfoModel customerProfileFraudInfoModel)
         {

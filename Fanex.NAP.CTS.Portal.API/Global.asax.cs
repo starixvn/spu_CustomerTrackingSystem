@@ -30,7 +30,7 @@
                 .RegisterCommandExecutor(new Neo4jExecutor())
                 .Run();
 
-            LogManager.SetDefaultLogCategory("CTS/PortalAPI")
+            LogManager.SetDefaultLogCategory("PortalAPI")
                    .Use(new List<ILogEngine>
                    {
                          new SentryLogging(new SentryEngineOptions
