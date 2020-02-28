@@ -97,8 +97,7 @@
             beforeSend: function () {
                 associatedByAccountTable.find('tbody').addClass('loading');
             },
-            data: {
-                custId: custId,
+            data: {               
                 ctsCustId: ctsCustId,
                 statusIds: statusIds,
                 associationType: associationType,

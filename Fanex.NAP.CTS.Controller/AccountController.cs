@@ -167,11 +167,11 @@
         }
 
         [HttpPost]
-        public ActionResult GetAssociatedByAccount(int CustId, long ctsCustId, string statusIds, int associationType, bool isDirect)
+        public ActionResult GetAssociatedByAccount(long ctsCustId, string statusIds, int associationType, bool isDirect)
         {
             var result = new List<CustomerAssociationByAccountDetailViewModel>();
 
-            if (string.IsNullOrWhiteSpace(statusIds) || CustId == 0 || ctsCustId == 0)
+            if (string.IsNullOrWhiteSpace(statusIds) || ctsCustId == 0)
             {
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
@@ -192,7 +192,7 @@
 
                 customerAssociation = _accountService.FilterCustomerAssociationByAssociationType(associationType, customerAssociation);
 
-                LogService.Info("customerAssociation:" + customerAssociation.Count.ToString());
+                //LogService.Info("customerAssociation:" + customerAssociation.Count.ToString());
 
                 result = customerAssociation.Select(x => new CustomerAssociationByAccountDetailViewModel
                 {
@@ -211,7 +211,7 @@
                     CTSCustId = x.CTSCustID
                 }).ToList();
 
-                LogService.Info("result:" + result.Count.ToString());
+                //LogService.Info("result:" + result.Count.ToString());
 
                 if (result != null && result.Any())
                 {

@@ -62,48 +62,48 @@
             Assert.Equal(custId, viewModel.CustId);
         }
 
-        [Theory]
-        [InlineData("", 123, 123)]
-        [InlineData("1,2,3", 0, 0)]
-        public void GetAssociationByAccount_ReturnNoData(string statusId, int custId, int ctsCustId)
-        {
-            // Arrange
-            FakeHttpContext.SetCurrentContext();
-            FakeHttpContext.SetFakeSession();
-            _runner.CurrentSession = FakeSession.CurrentSession;
+        //[Theory]
+        //[InlineData("", 123, 123)]
+        //[InlineData("1,2,3", 0, 0)]
+        //public void GetAssociationByAccount_ReturnNoData(string statusId, int custId, int ctsCustId)
+        //{
+        //    // Arrange
+        //    FakeHttpContext.SetCurrentContext();
+        //    FakeHttpContext.SetFakeSession();
+        //    _runner.CurrentSession = FakeSession.CurrentSession;
 
-            var actualResult = _runner.GetAssociatedByAccount(custId, ctsCustId, statusId, 0, false) as JsonResult;
+        //    var actualResult = _runner.GetAssociatedByAccount(custId, ctsCustId, statusId, 0, false) as JsonResult;
 
-            // Assert
-            var result = actualResult.Data as List<CustomerAssociationByAccountDetailModel>;
+        //    // Assert
+        //    var result = actualResult.Data as List<CustomerAssociationByAccountDetailModel>;
 
-            Assert.Empty(result);
-        }
+        //    Assert.Empty(result);
+        //}
 
-        [Theory]
-        [InlineData(0)]
-        [InlineData(1)]
-        [InlineData(2)]
-        [InlineData(3)]
-        public void GetAssociationByAccount_ReturnData(int associationType)
-        {
-            // Arrange
-            FakeHttpContext.SetCurrentContext();
-            FakeHttpContext.SetFakeSession();
-            _runner.CurrentSession = FakeSession.CurrentSession;
+        //[Theory]
+        //[InlineData(0)]
+        //[InlineData(1)]
+        //[InlineData(2)]
+        //[InlineData(3)]
+        //public void GetAssociationByAccount_ReturnData(int associationType)
+        //{
+        //    // Arrange
+        //    FakeHttpContext.SetCurrentContext();
+        //    FakeHttpContext.SetFakeSession();
+        //    _runner.CurrentSession = FakeSession.CurrentSession;
 
-            var custId = 26722451;
-            var ctsCustId = 502368;
-            var statusId = "1,2,3,4,5,6,7,8,9,10";
-            var isDirect = true;
+        //    var custId = 26722451;
+        //    var ctsCustId = 502368;
+        //    var statusId = "1,2,3,4,5,6,7,8,9,10";
+        //    var isDirect = true;
 
-            var actualResult = _runner.GetAssociatedByAccount(custId, ctsCustId, statusId, associationType, isDirect) as JsonResult;
+        //    var actualResult = _runner.GetAssociatedByAccount(custId, ctsCustId, statusId, associationType, isDirect) as JsonResult;
 
-            // Assert
-            var result = actualResult.Data as List<CustomerAssociationByAccountDetailModel>;
+        //    // Assert
+        //    var result = actualResult.Data as List<CustomerAssociationByAccountDetailModel>;
 
-            Assert.True(result.Count != 0);
-        }
+        //    Assert.True(result.Count != 0);
+        //}
 
 
         //[Fact]
