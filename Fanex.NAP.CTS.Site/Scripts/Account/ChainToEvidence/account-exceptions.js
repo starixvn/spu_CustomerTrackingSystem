@@ -113,6 +113,13 @@
     }
 
     function AddException() {
+
+        if (_rootUsername == username.val()) {
+            common.showError('Username/Login ID "' + username.val() + '" is invalid.');
+
+            return;
+        }
+
         var url = common.modifyRelativeUrl('/Account/AddException');
         var params = {};
         params.FromCTSCustId = _ctsCustId;
