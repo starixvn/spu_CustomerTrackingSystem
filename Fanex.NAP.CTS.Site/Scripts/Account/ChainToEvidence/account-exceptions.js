@@ -114,7 +114,7 @@
 
     function AddException() {
 
-        if (_rootUsername == username.val()) {
+        if (_rootUsername == username.val().trim()) {
             common.showError('Username/Login ID "' + username.val() + '" is invalid.');
 
             return;
