@@ -246,7 +246,17 @@
                             var custIdsAffectedTag = result.Select(a => a.CTSCustId).ToList();
                             getCustIdsAffectedTag = _accountService.GetDirectAssocationByGraph(ConfigSettings.GetDirectAssociationMultiCust, custIdsAffectedTag);
 
-                            getAffectedTags = _accountService.GetDirectAssociatedAccountTagAffected(JsonConvert.SerializeObject(getCustIdsAffectedTag));
+                            if(getCustIdsAffectedTag != null && getCustIdsAffectedTag.Any())
+                            {
+                                var jsonParam = JsonConvert.SerializeObject(getCustIdsAffectedTag);
+                                LogService.Info(jsonParam);
+
+                                getAffectedTags = _accountService.GetDirectAssociatedAccountTagAffected(jsonParam);
+                            }
+                            else
+                            {
+                                LogService.Error("GetDirectAssociationMultiCust is null");
+                            }                            
                         }
                         catch (Exception ex)
                         {
