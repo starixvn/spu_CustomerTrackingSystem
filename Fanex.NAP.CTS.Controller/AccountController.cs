@@ -190,11 +190,11 @@
 
                 customerAssociation = _accountService.FilterCustomerAssociationByStatus(statusIds, customerAssociation, getStatusByCustIds);
 
-                LogService.Info("customerAssociation1:" + JsonConvert.SerializeObject(customerAssociation));
+                //LogService.Info("customerAssociation1:" + JsonConvert.SerializeObject(customerAssociation));
 
                 customerAssociation = _accountService.FilterCustomerAssociationByAssociationType(associationType, customerAssociation);
 
-                LogService.Info("customerAssociation2:" + JsonConvert.SerializeObject(customerAssociation));
+                //LogService.Info("customerAssociation2:" + JsonConvert.SerializeObject(customerAssociation));
 
                 result = customerAssociation.Select(x => new CustomerAssociationByAccountDetailViewModel
                 {
