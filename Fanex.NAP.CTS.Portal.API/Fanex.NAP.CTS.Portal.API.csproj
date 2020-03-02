@@ -323,6 +323,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\CtsController.cs" />
     <Compile Include="Controllers\GraphController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
@@ -423,9 +424,17 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Fanex.NAP.CTS.Core\Fanex.NAP.CTS.Core.csproj">
+      <Project>{5f3abbf7-ea70-4c02-bd47-b427f1a9cc39}</Project>
+      <Name>Fanex.NAP.CTS.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Fanex.NAP.CTS.Model\Fanex.NAP.CTS.Model.csproj">
       <Project>{5CE0BA40-0A37-4C89-A33B-D61C7944BE08}</Project>
       <Name>Fanex.NAP.CTS.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fanex.NAP.CTS.Service\Fanex.NAP.CTS.Service.csproj">
+      <Project>{3ed1d03f-97f1-4826-8cdd-258485a07546}</Project>
+      <Name>Fanex.NAP.CTS.Service</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

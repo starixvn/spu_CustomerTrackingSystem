@@ -471,7 +471,7 @@
         [HttpPost]
         public ActionResult PlaceEvidence(UpdatePlaceEvidenceModel model)
         {
-            model.UserId = CurrentSession.UserId;
+            model.UserId = model.UserId == 0 ? CurrentSession.UserId : model.UserId;
             var result = _accountService.PlaceEvidence(model);
 
             return Json(result, JsonRequestBehavior.AllowGet);
