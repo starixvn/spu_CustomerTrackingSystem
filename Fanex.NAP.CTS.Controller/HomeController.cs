@@ -8,6 +8,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+    using System.Text.RegularExpressions;
     using System.Threading.Tasks;
     using System.Web.Mvc;
 
@@ -107,7 +108,14 @@
                 {
                     if(!string.IsNullOrWhiteSpace(word))
                     {
-                        result.Append($"+{word}* ");
+                        if (Regex.IsMatch(word, "[^0-9]"))
+                        {
+                            result.Append($"+{word} ");
+                        }
+                        else
+                        {
+                            result.Append($"+{word}* ");
+                        }                        
                     }
                 }
             }
