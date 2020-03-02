@@ -188,13 +188,9 @@
 
                 var getAllSubscribers = _subscriberAssignmentService.GetSubscribers(0);
 
-                ///LogService.Info("getStatusByCustIds:" + getStatusByCustIds.FirstOrDefault().);
-
                 customerAssociation = _accountService.FilterCustomerAssociationByStatus(statusIds, customerAssociation, getStatusByCustIds);
 
-                customerAssociation = _accountService.FilterCustomerAssociationByAssociationType(associationType, customerAssociation);
-
-                
+                customerAssociation = _accountService.FilterCustomerAssociationByAssociationType(associationType, customerAssociation);                               
 
                 result = customerAssociation.Select(x => new CustomerAssociationByAccountDetailViewModel
                 {
@@ -212,8 +208,6 @@
                     Subscriber = getAllSubscribers.FirstOrDefault(a => a.SubscriberId == x.SubscriberId).SubscriberName,
                     CTSCustId = x.CTSCustID
                 }).ToList();
-
-                //LogService.Info("result:" + result.Count.ToString());
 
                 if (result != null && result.Any())
                 {
@@ -248,8 +242,7 @@
 
                             if(getCustIdsAffectedTag != null && getCustIdsAffectedTag.Any())
                             {
-                                var jsonParam = JsonConvert.SerializeObject(getCustIdsAffectedTag);
-                                LogService.Info(jsonParam);
+                                var jsonParam = JsonConvert.SerializeObject(getCustIdsAffectedTag);                                
 
                                 getAffectedTags = _accountService.GetDirectAssociatedAccountTagAffected(jsonParam);
                             }
@@ -270,8 +263,13 @@
 
                     result = result.Select(x =>
                     {
-                        x.AffectedTag = getAffectedTags.FirstOrDefault(z => z.FromCTSCustId == x.CTSCustId).AffectedTag;
-                        x.FlaggedTag = getFlaggedTags.FirstOrDefault(z => z.CTSCustId == x.CTSCustId).FlaggedTag;
+                        var affectedTags = getAffectedTags.Where(z => z.FromCTSCustId == x.CTSCustId);
+
+                        x.AffectedTag = (affectedTags != null && affectedTags.Any()) ? affectedTags.FirstOrDefault().AffectedTag : 0;
+
+                        var flaggedTag = getFlaggedTags.Where(z => z.CTSCustId == x.CTSCustId);
+
+                        x.FlaggedTag = (flaggedTag != null && flaggedTag.Any()) ? flaggedTag.FirstOrDefault().FlaggedTag : 0;
 
                         return x;
                     })
