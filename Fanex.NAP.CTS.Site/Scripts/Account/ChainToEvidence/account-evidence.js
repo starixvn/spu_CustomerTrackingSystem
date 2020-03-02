@@ -77,7 +77,7 @@
                 { data: obj => obj.LoginID },
                 { data: obj => obj.AssociationType },
                 { data: obj => obj.AffectedTime },
-                { data: obj => moment.isDate(obj.LastLoginTime) ? obj.LastLoginTime : "None" }
+                { data: obj => obj.LastLoginTime }
             ],
             createdRow: function (row, obj) {
                 $(row).attr('evidence-code', obj.EvidenceCode);

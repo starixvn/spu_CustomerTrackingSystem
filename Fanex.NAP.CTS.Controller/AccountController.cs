@@ -380,7 +380,7 @@
                     UserName = string.IsNullOrEmpty(x.UserName) ? x.LoginID : x.UserName,
                     AssociationType = x.AssociationType,
                     AffectedTime = x.CreatedDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                    LastLoginTime = x.LastLoginTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+                    LastLoginTime = x.LastLoginTime.Year != 0001 ? x.LastLoginTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss) : "None",
                     IsRetract = false
                 }));
             }
