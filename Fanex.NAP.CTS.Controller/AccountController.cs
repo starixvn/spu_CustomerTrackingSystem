@@ -209,7 +209,7 @@
                     Status = x.StatusName,
                     StatusId = x.StatusId,
                     SubscriberId = x.SubscriberId,
-                    Subscriber = getAllSubscribers.FirstOrDefault(a => a.SubscriberId == x.SubscriberId).SubscriberName,
+                    Subscriber = getAllSubscribers.Any(aa => aa.SubscriberId == x.SubscriberId) ? getAllSubscribers.FirstOrDefault(a => a.SubscriberId == x.SubscriberId).SubscriberName : "-",
                     CTSCustId = x.CTSCustID
                 }).ToList();
 
@@ -244,16 +244,16 @@
                             var custIdsAffectedTag = result.Select(a => a.CTSCustId).ToList();
                             getCustIdsAffectedTag = _accountService.GetDirectAssocationByGraph(ConfigSettings.GetDirectAssociationMultiCust, custIdsAffectedTag);
 
-                            if(getCustIdsAffectedTag != null && getCustIdsAffectedTag.Any())
+                            if (getCustIdsAffectedTag != null && getCustIdsAffectedTag.Any())
                             {
-                                var jsonParam = JsonConvert.SerializeObject(getCustIdsAffectedTag);                                
+                                var jsonParam = JsonConvert.SerializeObject(getCustIdsAffectedTag);
 
                                 getAffectedTags = _accountService.GetDirectAssociatedAccountTagAffected(jsonParam);
                             }
                             else
                             {
                                 LogService.Error("GetDirectAssociationMultiCust is null");
-                            }                            
+                            }
                         }
                         catch (Exception ex)
                         {

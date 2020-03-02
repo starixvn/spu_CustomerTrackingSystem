@@ -723,34 +723,6 @@
 
             var result = customerAssociation.Where(x => statusIdList.Contains(x.StatusId)).ToList();
 
-
-
-
-
-
-
-
-            //if (!statusIdList.Any(x => notYetDepositStatusId == x))
-            //{
-            //    customerAssociation = customerAssociation.Where(x => statusIdList.Contains(x.StatusId)).ToList();
-            //}
-
-            //var result = customerAssociation.Select(x =>
-            //{
-            //    if (x.StatusId == 0)
-            //    {
-            //        var status = accountStatus.FirstOrDefault(a => a.CustId == x.CustId);
-
-            //        if (status != null)
-            //        {
-            //            x.StatusId = status.StatusId;
-            //            x.StatusName = status.StatusName;
-            //        }
-            //    }
-
-            //    return x;
-            //}).ToList();
-
             return result;
 
         }
