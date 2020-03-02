@@ -226,16 +226,34 @@
 
                     tasks.Add(Task.Run(() =>
                     {
-                        var custIdsFlaggedTag = result.Select(a => new { a.SubscriberId, a.CTSCustId });
-                        getFlaggedTags = _accountService.GetDirectAssociatedAccountTagFlagged(JsonConvert.SerializeObject(custIdsFlaggedTag));
+                        try
+                        {
+                            var custIdsFlaggedTag = result.Select(a => new { a.SubscriberId, a.CTSCustId });
+                            getFlaggedTags = _accountService.GetDirectAssociatedAccountTagFlagged(JsonConvert.SerializeObject(custIdsFlaggedTag));
+                        }
+                        catch (Exception ex)
+                        {
+                            LogService.Info(ex.Message);
+
+                            throw;
+                        }
                     }));
 
                     tasks.Add(Task.Run(() =>
                     {
-                        var custIdsAffectedTag = result.Select(a => a.CTSCustId).ToList();
-                        getCustIdsAffectedTag = _accountService.GetDirectAssocationByGraph(ConfigSettings.GetDirectAssociationMultiCust, custIdsAffectedTag);
+                        try
+                        {
+                            var custIdsAffectedTag = result.Select(a => a.CTSCustId).ToList();
+                            getCustIdsAffectedTag = _accountService.GetDirectAssocationByGraph(ConfigSettings.GetDirectAssociationMultiCust, custIdsAffectedTag);
 
-                        getAffectedTags = _accountService.GetDirectAssociatedAccountTagAffected(JsonConvert.SerializeObject(getCustIdsAffectedTag));
+                            getAffectedTags = _accountService.GetDirectAssociatedAccountTagAffected(JsonConvert.SerializeObject(getCustIdsAffectedTag));
+                        }
+                        catch (Exception ex)
+                        {
+                            LogService.Info(ex.Message);
+
+                            throw;
+                        }
                     }));
 
                     Task.WhenAll(tasks.ToArray()).Wait();

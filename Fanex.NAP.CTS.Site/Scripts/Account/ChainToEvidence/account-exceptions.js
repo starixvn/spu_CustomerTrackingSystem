@@ -106,6 +106,8 @@
             },
             complete: function () {
                 GetException();
+                var accountEvidence = new account_evidence();
+                accountEvidence.ReloadAccountEvidence(_ctsCustId, _rootUsername);
             }
         });
     }
@@ -137,6 +139,8 @@
             },
             complete: function () {
                 GetException();
+                var accountEvidence = new account_evidence();
+                accountEvidence.ReloadAccountEvidence(_ctsCustId, _rootUsername);
             }
         });
     }

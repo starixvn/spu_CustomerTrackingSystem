@@ -499,6 +499,10 @@
         })
     }
 
+    this.ReloadAccountEvidence = function (ctsCustId, username) {
+        GetAccountEvidence(ctsCustId, username);
+    }
+
     this.Initial = function (ctsCustId, username, subscriberId, subscriber) {
 
         $('#cbbChainToEvidenceListEvidence').multiselect({
@@ -518,5 +522,5 @@
         GetAccountEvidence(ctsCustId, username);
 
         InitialPlaceEvidenceForm(ctsCustId, username, subscriberId, subscriber);
-    }
+    }    
 }
