@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
     using Fanex.Data;
+    using Fanex.Logging;
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.BaseClasses;
     using Fanex.NAP.CTS.Core.Extentions;
@@ -710,10 +711,19 @@
                 }
                 else
                 {
-                    var customerStatus = accountStatus.FirstOrDefault(a => a.CustId == x.CustId);
+                    var customerStatus = accountStatus.Where(a => a.CustId == x.CustId);
 
-                    x.StatusId = customerStatus.StatusId;
-                    x.StatusName = customerStatus.StatusName;
+                    if(customerStatus != null && customerStatus.Any())
+                    {
+                        var status = customerStatus.FirstOrDefault(a => a.CustId == x.CustId);
+
+                        x.StatusId = status.StatusId;
+                        x.StatusName = status.StatusName;
+                    }
+                    else
+                    {
+                        LogService.Error($"Account status is NULL on custid: { x.CustId }");
+                    }                    
                 }
 
                 return x;
