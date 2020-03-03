@@ -101,23 +101,27 @@
             var words = inputUserName.Split(new char[] { '$', '@' });
             var result = new StringBuilder();
 
-            if(words.Length > 0)
+            if(words.Length == 1)
             {
-                foreach(var word in words)
+                result.Append($"+{words[0]}* ");
+            }
+            else
+            {
+                foreach (var word in words)
                 {
-                    if(!string.IsNullOrWhiteSpace(word))
+                    if (!string.IsNullOrWhiteSpace(word))
                     {
-                        if(word.Length > 1)
+                        if (word.Length <= 2)
                         {
                             result.Append($"{word} ");
                         }
                         else
                         {
                             result.Append($"+{word}* ");
-                        }                        
+                        }
                     }
                 }
-            }
+            }            
 
             return  "\'" + result.ToString() + "\'";
         }
