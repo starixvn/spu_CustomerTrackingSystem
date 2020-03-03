@@ -184,6 +184,8 @@
             {
                 var custIds = string.Join(",", customerAssociation.Select(x => x.CustId));
 
+                LogService.Info("custIds:" + custIds);
+
                 var getStatusByCustIds = _accountService.GetCustomerGeneralStatus(custIds);
 
                 var getAllSubscribers = _subscriberAssignmentService.GetSubscribers(0);
