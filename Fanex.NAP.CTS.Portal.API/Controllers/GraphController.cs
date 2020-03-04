@@ -18,6 +18,27 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
     public class GraphController : ApiController
     {
         /// <summary>
+        /// Get association statistic
+        /// </summary>
+        /// <param name="ctsCustId"></param>
+        /// <returns></returns>
+        [System.Web.Http.AcceptVerbs("GetStatisticAssociation")]
+        [HttpGet]
+        public CustomerAssociationByCTSCustIdModel GetStatisticAssociation(int ctsCustId)
+        {
+            try
+            {
+                var result = DbSessionFactory.ExecuteSingle<CustomerAssociationByCTSCustIdModel>("GetStatisticForCustomer", new { CTSCustID = ctsCustId }).Data;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("GetStatisticAssociation failed: " + ex.Message + ex.StackTrace);
+                throw;
+            }
+        }
+
+        /// <summary>
         /// Get Association with one Level
         /// </summary>
         /// <param name="ctsCustId"></param>
@@ -46,7 +67,6 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
             try
             {
                 var result = DbSessionFactory.Execute<GraphDirectAssociationModel>("GetAssociationOneLevelByCustIds", new { CTSCustIDs = ctsCustIds }).Data;
-                LogService.Info("GetDirectAssociationMultiCust result: " + result.Count());
                 return result;
             }
             catch (Exception ex)
@@ -63,7 +83,6 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
         /// <returns></returns>
         [System.Web.Http.AcceptVerbs("GetInDirectAssociation")]
         [HttpPost]
-        [HttpGet]
         public IEnumerable<GraphAssociationModel> GetInDirectAssociation([FromBody] int ctsCustId)
         {
             try

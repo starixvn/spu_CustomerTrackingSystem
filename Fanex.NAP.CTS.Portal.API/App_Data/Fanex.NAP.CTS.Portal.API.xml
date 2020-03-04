@@ -486,6 +486,13 @@
             Graph Controller
             </summary>
         </member>
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetStatisticAssociation(System.Int32)">
+            <summary>
+            Get association statistic
+            </summary>
+            <param name="ctsCustId"></param>
+            <returns></returns>
+        </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetDirectAssociation(System.Int32)">
             <summary>
             Get Association with one Level
