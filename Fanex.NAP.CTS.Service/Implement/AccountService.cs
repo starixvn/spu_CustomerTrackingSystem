@@ -479,19 +479,15 @@
             }
         }
 
-        public CustomerAssociationByCTSCustIdModel GetCustomerTotalAssociationByCTSCustId(long ctsCustId)
+        public CustomerAssociationByCTSCustIdModel GetCustomerTotalAssociationByCTSCustId(long ctsCustId, string apiUrl)
         {
-            var criteria = new CustomerAssociationByCTSCustIdCriteria
-            {
-                CTSCustId = ctsCustId                
-            };
+            var apiPath = string.Format(apiUrl, ctsCustId);
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                var result = db.QueryEntity<CustomerAssociationByCTSCustIdModel>(criteria);
+            var data = ApiHelper.Get<CustomerAssociationByCTSCustIdModel>(apiPath);
 
-                return result;
-            }
+            Task.WhenAll(data);
+
+            return data.Result;
         }
 
         public List<CustomerEvidenceByCTSCustIdModel> GetCustomerEvidenceByCTSCustId(long ctsCustId)

@@ -65,7 +65,7 @@
         [HttpPost]
         public ActionResult GetCustomerTotalAssociationByCTSCustId(long ctsCustId)
         {
-            var result = _accountService.GetCustomerTotalAssociationByCTSCustId(ctsCustId);
+            var result = _accountService.GetCustomerTotalAssociationByCTSCustId(ctsCustId, ConfigSettings.GetStatisticAssociation);
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }

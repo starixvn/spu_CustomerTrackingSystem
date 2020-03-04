@@ -20,7 +20,7 @@
 
         CustomerInfoByCTSCustIdModel GetCustomerInfoByCTSCustId(long ctsCustId);
 
-        CustomerAssociationByCTSCustIdModel GetCustomerTotalAssociationByCTSCustId(long ctsCustId);
+        CustomerAssociationByCTSCustIdModel GetCustomerTotalAssociationByCTSCustId(long ctsCustId, string apiUrl);
 
         List<CustomerEvidenceByCTSCustIdModel> GetCustomerEvidenceByCTSCustId(long ctsCustId);
 

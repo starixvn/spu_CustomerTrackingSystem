@@ -65,5 +65,7 @@
         public static string GetShortestAssociation => GetConfigStringByName("Graph_GetShortestPath");
 
         public static string GetDirectAssociationMultiCust => GetConfigStringByName("Graph_GetDirectAssociationMultiCust");
+
+        public static string GetStatisticAssociation => GetConfigStringByName("Graph_GetStatisticAssociation");
     }
 }
