@@ -1,5 +1,6 @@
 ﻿using Fanex.NAP.CTS.Model.Account;
 using Fanex.NAP.CTS.Service;
+using Fanex.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,10 +28,17 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
                 _accountService.PlaceEvidence(model);
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                LogService.Error("PlaceEvidence exception: " + ex.Message);
                 return false;
             }
+        }
+
+        [HttpGet]
+        public string Test()
+        {
+            return "aa";
         }
     }
 }

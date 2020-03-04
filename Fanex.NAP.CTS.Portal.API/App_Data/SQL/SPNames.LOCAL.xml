@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Functions>
+  <Function Name="Evidence">
+    <Setting Key="CTS_DC_AddEvidence" SpName="CTS_DC_AddEvidence" DbName="MySQL.CTS_DataCenter" />
+  </Function>
+
+</Functions>

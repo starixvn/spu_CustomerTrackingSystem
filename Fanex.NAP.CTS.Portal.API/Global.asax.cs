@@ -1,5 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Portal.API
 {
+    using Fanex.Data;
+    using Fanex.Data.MySql;
     using Fanex.Logging;
     using Fanex.Logging.Sentry.RavenClient;
     using Fanex.NAP.SPU.Graph.Core;
@@ -28,6 +30,13 @@
                 .RegisterDriverFactory(new Neo4jDriverFactory())
                 .RegisterCommandBuilder(new Neo4jCommandBuilder("~/App_Data/Graph/scripts"))
                 .RegisterCommandExecutor(new Neo4jExecutor())
+                .Run();
+
+            DbSettingProviderManager
+                .StartNewSession()
+                .WithMySql()
+                .UseDefaultDbSettingProvider("~/App_Data/SQL")
+                .UseDefaultConnectionStringProvider()
                 .Run();
 
             LogManager.SetDefaultLogCategory("PortalAPI")
