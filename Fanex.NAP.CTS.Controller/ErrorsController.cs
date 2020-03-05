@@ -22,10 +22,5 @@
         {
             return View("500");
         }
-
-        public ActionResult Um()
-        {
-            return View("UM");
-        }
     }
 }
