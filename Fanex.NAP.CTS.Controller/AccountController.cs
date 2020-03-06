@@ -300,12 +300,13 @@
                     .Select(x => new GraphCustomerItemViewModel
                     {
                         CTSCustId = x.CTSCustID,
-                        ItemCode = (x.CTSCustID == 0 ? x.CTSCustID.ToString() : x.Username2) + "_" + now,
+                        ItemCode = x.CTSCustID.ToString() + "_" + now,
                         DisplayName = !string.IsNullOrWhiteSpace(x.Username) ? x.Username : x.Username2
                     }).ToList();
 
                 graphCustomer.children = graphCustomerList.ToArray();
             }
+
             graphCustomer.CTSCustId = ctsCustid;
             graphCustomer.DisplayName = username;
 
