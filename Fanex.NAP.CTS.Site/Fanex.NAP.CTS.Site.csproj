@@ -1165,7 +1165,6 @@
     <Content Include="Views\Errors\403.cshtml" />
     <Content Include="Views\Errors\404.cshtml" />
     <Content Include="Views\Errors\500.cshtml" />
-    <Content Include="Views\Errors\UM.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
