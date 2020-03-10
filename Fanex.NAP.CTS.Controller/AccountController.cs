@@ -208,7 +208,7 @@
                     SharedIps = isDirect ? x.SharedIPs : -1,
                     AssociationType = x.AssociationType,
                     AssociationTypeName = x.AssociationType == 0 ? string.Format("{0}, {1}", x.GetAssociationTypeName(Model.AssociationType.Device), x.GetAssociationTypeName(Model.AssociationType.IP)) : x.AssociationTypeName,
-                    Status = x.StatusName,
+                    Status = x.StatusName == "NA" ? "N/A" : x.StatusName,
                     StatusId = x.StatusId,
                     SubscriberId = x.SubscriberId,
                     Subscriber = getAllSubscribers.Any(aa => aa.SubscriberId == x.SubscriberId) ? getAllSubscribers.FirstOrDefault(a => a.SubscriberId == x.SubscriberId).SubscriberName : "-",

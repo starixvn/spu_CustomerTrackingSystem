@@ -67,5 +67,7 @@
         public static string GetDirectAssociationMultiCust => GetConfigStringByName("Graph_GetDirectAssociationMultiCust");
 
         public static string GetStatisticAssociation => GetConfigStringByName("Graph_GetStatisticAssociation");
+
+        public static string Matomo_SiteId => GetConfigStringByName("Matomo-SiteId");
     }
 }

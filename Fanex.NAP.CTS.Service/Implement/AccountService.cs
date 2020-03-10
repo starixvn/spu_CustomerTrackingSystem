@@ -190,7 +190,7 @@
         private static AccountGeneralInformation GetFraudInformation(AccountGeneralInformation generalInfo, CustomerFraudSuspicious customerFraudSuspicious)
         {
             generalInfo.AutoSuspend = string.Empty;
-            generalInfo.AccountStatus = AccountStatus.NotYetDeposit;
+            generalInfo.AccountStatus = AccountStatus.NA;
 
             if (customerFraudSuspicious.CustomerFrauds.Any())
             {
@@ -685,8 +685,8 @@
             List<CustomerGeneralStatusModel> statusByCustIds)
         {
             var accountStatusViewModel = new CustomerGeneralStatusViewModel();
-            var notYetDepositStatusName = accountStatusViewModel.GetAccountStatusName(Model.AccountStatus.NotYetDeposit);
-            var notYetDepositStatusId = accountStatusViewModel.GetAccountStatusId(notYetDepositStatusName);
+            var notAvailable = accountStatusViewModel.GetAccountStatusName(Model.AccountStatus.NA);
+            var notAvailableId = accountStatusViewModel.GetAccountStatusId(notAvailable);
 
             var accountStatus = statusByCustIds.Select(x => new AccountStatusModel
             {
@@ -702,8 +702,8 @@
                 if (x.CustId == null || x.CustId == 0)
                 {
                     x.CustId = 0;
-                    x.StatusId = notYetDepositStatusId;
-                    x.StatusName = notYetDepositStatusName;
+                    x.StatusId = notAvailableId;
+                    x.StatusName = notAvailable;
                 }
                 else
                 {

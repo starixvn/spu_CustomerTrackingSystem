@@ -23,7 +23,7 @@
                 <image xlink:href="~/Content/scss/images/logo-header.svg" src="~/Content/scss/images/logo-header.png" width="148" height="38" alt="Customer Tracking System" />
             </svg>
         </a>
-        <div class="header-right">          
+        <div class="header-right">
             @Html.Action("Menu", "Home", new { activeMenu = ViewContext.Controller.GetType().BaseType.Name })
             @Html.Partial("_LoginPartial")
         </div>
@@ -45,10 +45,28 @@
     <div id="confirmation" title="Confirmation"></div>
     <div id="success" style="color: #4f971f" class="text-center"></div>
     <div id="error" style="color:red" class="text-center"></div>
+    <!-- Matomo -->
+    <script type="text/javascript">
+        var _paq = window._paq || [];
+        /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+        _paq.push(["setDoNotTrack", true]);
+        _paq.push(["disableCookies"]);
+        _paq.push(['trackPageView']);
+        _paq.push(['enableLinkTracking']);
+        (function () {
+            var u = "//matomo.starific.net/";
+            _paq.push(['setTrackerUrl', u + 'matomo.php']);
+            _paq.push(['setSiteId', '@Fanex.NAP.CTS.Core.Utilities.ConfigSettings.Matomo_SiteId']);
+            var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+            g.type = 'text/javascript'; g.async = true; g.defer = true; g.src = u + 'matomo.js'; s.parentNode.insertBefore(g, s);
+        })();
+    </script>
+    <noscript><p><img src="//matomo.starific.net/matomo.php?idsite=@Fanex.NAP.CTS.Core.Utilities.ConfigSettings.Matomo_SiteId&amp;rec=1" style="border:0;" alt="" /></p></noscript>
+    <!-- End Matomo Code -->
     <script>
         var config = {
-        contextPath: '@Url.Content("~")'
-    };
+            contextPath: '@Url.Content("~")'
+        };
     </script>
     @if (NapSettings.Settings.EnableReCheckIn)
     {

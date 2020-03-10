@@ -128,7 +128,7 @@
     }
 
     function BetLimitAndAccountStatusIcon(response) {
-        $('#accountStatus').html(response.accountStatus);
+        $('#accountStatus').html(response.accountStatus == 'NA' ? 'N/A' : response.accountStatus );
 
         if (response.customerStatus.ProblemAccountWithBetLimit) {
             $('span.icon-P-with-Bet-Limit').removeClass('hide');

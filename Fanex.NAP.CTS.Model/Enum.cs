@@ -11,8 +11,7 @@
         Locked = 7,
         Archived = 8,
         Disable = 9,
-        NotYetDeposit = 10,
-        NA = 11
+        NA = 10
     }
 
     public enum AssociationType
