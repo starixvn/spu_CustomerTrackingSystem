@@ -12,7 +12,7 @@
     var totalEvidence = 0
 
     function LoadAssociationByAccount() {
-        $.ajax(common.modifyRelativeUrl('/Account/AssociatedByAccount'), {
+        $.ajax(common.modifyRelativeUrl('Account/AssociatedByAccount'), {
             type: 'POST',
             data: {
                 username: username
@@ -35,7 +35,7 @@
     }
 
     function LoadChainToEvidence() {
-        $.ajax(common.modifyRelativeUrl('/Account/ChainToEvidence'), {
+        $.ajax(common.modifyRelativeUrl('Account/ChainToEvidence'), {
             type: 'POST',
             success: function(response) {
                 $("#chains_evidence").html(response);
@@ -77,7 +77,7 @@
     }
 
     function GetCustomerEvidences() {
-        $.ajax(common.modifyRelativeUrl('/Account/GetCustomerEvidenceByCTSCustId'), {
+        $.ajax(common.modifyRelativeUrl('Account/GetCustomerEvidenceByCTSCustId'), {
             type: 'POST',
             data: {
                 ctsCustId: ctsCustId
@@ -102,7 +102,7 @@
     }
 
     function GetCustomerFlaggInfo() {
-        $.ajax(common.modifyRelativeUrl('/Account/GetCustomerFlagInfo'), {
+        $.ajax(common.modifyRelativeUrl('Account/GetCustomerFlagInfo'), {
             type: 'POST',
             data: {
                 ctsCustId: ctsCustId,
@@ -222,7 +222,7 @@
     }
 
     function GetCustomerRobotUserStatus() {
-        $.ajax(common.modifyRelativeUrl('/Account/GetCustomerRobotUserStatus'), {
+        $.ajax(common.modifyRelativeUrl('Account/GetCustomerRobotUserStatus'), {
             type: 'POST',
             data: {
                 custId: custId
@@ -244,7 +244,7 @@
     }
 
     function GetCustomerEsportAutoSuspendedStatus() {
-        $.ajax(common.modifyRelativeUrl('/Account/GetCustomerEsportAutoSuspendedStatus'), {
+        $.ajax(common.modifyRelativeUrl('Account/GetCustomerEsportAutoSuspendedStatus'), {
             type: 'POST',
             data: {
                 custId: custId
@@ -295,7 +295,7 @@
     }
 
     function GetCustomerProfileFraudInfo() {
-        $.ajax(common.modifyRelativeUrl('/Account/GetCustomerProfileFraudInfo'), {
+        $.ajax(common.modifyRelativeUrl('Account/GetCustomerProfileFraudInfo'), {
             type: 'POST',
             data: {
                 custId: custId
