@@ -65,7 +65,9 @@
         [HttpPost]
         public ActionResult GetCustomerTotalAssociationByCTSCustId(long ctsCustId)
         {
+            LogService.Info("GetCustomerTotalAssociationByCTSCustId - Before: " + DateTime.Now.ToString());
             var result = _accountService.GetCustomerTotalAssociationByCTSCustId(ctsCustId, ConfigSettings.GetStatisticAssociation);
+            LogService.Info("GetCustomerTotalAssociationByCTSCustId - After: " + DateTime.Now.ToString());
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -90,7 +92,9 @@
         [HttpPost]
         public ActionResult GetCustomerFlagInfo(long ctsCustId, int subscriberId)
         {
+            LogService.Info("GetCustomerFlagInfo - Before: " + DateTime.Now.ToString());
             var result = _accountService.GetCustomerFlagInfo(ctsCustId, subscriberId);
+            LogService.Info("GetCustomerFlagInfo - After: " + DateTime.Now.ToString());
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -120,7 +124,9 @@
         [HttpPost]
         public ActionResult GetCustomerRobotUserStatus(long custId)
         {
+            LogService.Info("GetCustomerRobotUserStatus - Before: " + DateTime.Now.ToString());
             var result = _accountService.GetCustomerRobotUserStatus(custId);
+            LogService.Info("GetCustomerRobotUserStatus - After: " + DateTime.Now.ToString());
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -128,7 +134,9 @@
         [HttpPost]
         public ActionResult GetCustomerEsportAutoSuspendedStatus(long custId)
         {
+            LogService.Info("GetCustomerEsportAutoSuspendedStatus - Before: " + DateTime.Now.ToString());
             var result = _accountService.GetCustomerEsportAutoSuspendedStatus(custId);
+            LogService.Info("GetCustomerEsportAutoSuspendedStatus - After: " + DateTime.Now.ToString());
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -136,7 +144,9 @@
         [HttpPost]
         public ActionResult GetCustomerProfileFraudInfo(long custId)
         {
+            LogService.Info("GetCustomerProfileFraudInfo - Before: " + DateTime.Now.ToString());
             var result = _accountService.GetCustomerProfileFraudInfo(custId);
+            LogService.Info("GetCustomerProfileFraudInfo - After: " + DateTime.Now.ToString());
             var fraudCaseName = string.Empty;
 
             if (result.FraudCaseList != null && result.FraudCaseList.Any())
@@ -144,6 +154,7 @@
                 fraudCaseName = string.Join(", ", result.FraudCaseList.Select(x => x.FraudCaseName));
             }
 
+            LogService.Info("GetCustomerProfileFraudInfo - Done: " + DateTime.Now.ToString());
             return Json(new { suspiciouseCustomer = result.SuspiciouseCustomer, fraudCases = fraudCaseName }, JsonRequestBehavior.AllowGet);
         }
 
@@ -169,6 +180,7 @@
         [HttpPost]
         public ActionResult GetAssociatedByAccount(long ctsCustId, string statusIds, int associationType, bool isDirect)
         {
+            LogService.Info("GetAssociatedByAccount - Before: " + DateTime.Now.ToString());
             var result = new List<CustomerAssociationByAccountDetailViewModel>();
 
             if (string.IsNullOrWhiteSpace(statusIds) || ctsCustId == 0)
@@ -284,6 +296,7 @@
                 }
             }
 
+            LogService.Info("GetAssociatedByAccount - Done: " + DateTime.Now.ToString());
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
