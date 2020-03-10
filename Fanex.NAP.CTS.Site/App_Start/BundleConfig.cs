@@ -37,7 +37,7 @@
 
             bundles.Add(new StyleBundle("~/Content/styles/dashboard").Include(
                       "~/Content/scss/pages/dashboard/dashboard.min.css"));
-
+             
             RegisterFSCoreBundles(bundles);
             RegisterSearchBoxBundles(bundles);
 
@@ -58,6 +58,7 @@
             RegisterTransactionHistoryBundles(bundles);
             RegisterGraphVisualizeBundles(bundles);
             RegisterChainToEvidenceBundles(bundles);
+
         }
 
         private static void RegisterFSCoreBundles(BundleCollection bundles)

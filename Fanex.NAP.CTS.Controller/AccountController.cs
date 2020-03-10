@@ -104,6 +104,7 @@
         {
             var model = new CustomerGeneralStatusViewModel();
 
+            LogService.Info("GetCustomerGeneralStatus - Before: " + DateTime.Now.ToString());
             var result = _accountService.GetCustomerGeneralStatus(custId.ToString()).FirstOrDefault();
             var accountStatusName = string.Empty;
 
@@ -118,6 +119,7 @@
                 result = new CustomerGeneralStatusModel();
             }
 
+            LogService.Info("GetCustomerGeneralStatus - After: " + DateTime.Now.ToString());
             return Json(new { customerStatus = result, accountStatus = accountStatusName }, JsonRequestBehavior.AllowGet);
         }
 

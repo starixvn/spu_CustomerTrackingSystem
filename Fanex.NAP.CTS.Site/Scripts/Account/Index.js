@@ -54,7 +54,7 @@
     }
 
     function GetCustomerTotalAssociation() {
-        $.ajax(common.modifyRelativeUrl('/Account/GetCustomerTotalAssociationByCTSCustId'), {
+        $.ajax(common.modifyRelativeUrl('Account/GetCustomerTotalAssociationByCTSCustId'), {
             type: 'POST',
             data: {
                 ctsCustId: ctsCustId
@@ -188,7 +188,7 @@
     }
 
     function GetCustomerGeneralStatus() {
-        $.ajax(common.modifyRelativeUrl('/Account/GetCustomerGeneralStatus'), {
+        $.ajax(common.modifyRelativeUrl('Account/GetCustomerGeneralStatus'), {
             type: 'POST',
             data: {
                 custId: custId
@@ -357,14 +357,14 @@
     }
 
     function Initial() {
-        CollapseExpandAll();
-        CollapseExpandItem();
-        GetCustomerRobotUserStatus();
         GetCustomerGeneralStatus();
+        GetCustomerProfileFraudInfo();
         GetCustomerTotalAssociation();
+        GetCustomerRobotUserStatus();
         GetCustomerFlaggInfo();
         GetCustomerEsportAutoSuspendedStatus();
-        GetCustomerProfileFraudInfo();
+        CollapseExpandAll();
+        CollapseExpandItem();
 
         LoadAssociationByAccount();
         LoadChainToEvidence();
