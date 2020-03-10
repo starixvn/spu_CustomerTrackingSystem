@@ -1012,6 +1012,8 @@
 
 table.dataTable.no-footer {
   border-bottom: 0; }
+  table.dataTable.no-footer thead th {
+    width: auto !important; }
 
 .modal-content .chains-block {
   display: flex;

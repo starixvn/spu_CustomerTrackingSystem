@@ -506,7 +506,13 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 
 table.dataTable.no-footer {
     border-bottom: 0;
+
+    thead th {
+        width: auto !important;
+    }
 }
+
+
 
 .modal-content {
     .chains-block {
