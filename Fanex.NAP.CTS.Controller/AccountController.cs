@@ -63,6 +63,22 @@
         }
 
         [HttpPost]
+        public ActionResult GetAccountProfile(long custId, long ctsCustId, int subscriberId)
+        {
+            LogService.Info("GetAccountProfile - Before: " + DateTime.Now.ToString());
+            var profile = new AccountProfileViewModel();
+
+            GetCustomerGeneralStatus(custId, ref profile);
+            GetCustomerProfileFraudInfo(custId, ref profile);
+            GetCustomerRobotUserStatus(custId, ref profile);
+            GetCustomerFlagInfo(ctsCustId, subscriberId, ref profile);
+            GetCustomerEsportAutoSuspendedStatus(custId, ref profile);
+
+            LogService.Info("GetAccountProfile - After: " + DateTime.Now.ToString());
+            return Json(profile);
+        }
+
+        [HttpPost]
         public ActionResult GetCustomerTotalAssociationByCTSCustId(long ctsCustId)
         {
             LogService.Info("GetCustomerTotalAssociationByCTSCustId - Before: " + DateTime.Now.ToString());
@@ -92,9 +108,7 @@
         [HttpPost]
         public ActionResult GetCustomerFlagInfo(long ctsCustId, int subscriberId)
         {
-            LogService.Info("GetCustomerFlagInfo - Before: " + DateTime.Now.ToString());
             var result = _accountService.GetCustomerFlagInfo(ctsCustId, subscriberId);
-            LogService.Info("GetCustomerFlagInfo - After: " + DateTime.Now.ToString());
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -104,7 +118,6 @@
         {
             var model = new CustomerGeneralStatusViewModel();
 
-            LogService.Info("GetCustomerGeneralStatus - Before: " + DateTime.Now.ToString());
             var result = _accountService.GetCustomerGeneralStatus(custId.ToString()).FirstOrDefault();
             var accountStatusName = string.Empty;
 
@@ -119,16 +132,13 @@
                 result = new CustomerGeneralStatusModel();
             }
 
-            LogService.Info("GetCustomerGeneralStatus - After: " + DateTime.Now.ToString());
             return Json(new { customerStatus = result, accountStatus = accountStatusName }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         public ActionResult GetCustomerRobotUserStatus(long custId)
         {
-            LogService.Info("GetCustomerRobotUserStatus - Before: " + DateTime.Now.ToString());
             var result = _accountService.GetCustomerRobotUserStatus(custId);
-            LogService.Info("GetCustomerRobotUserStatus - After: " + DateTime.Now.ToString());
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -136,9 +146,7 @@
         [HttpPost]
         public ActionResult GetCustomerEsportAutoSuspendedStatus(long custId)
         {
-            LogService.Info("GetCustomerEsportAutoSuspendedStatus - Before: " + DateTime.Now.ToString());
             var result = _accountService.GetCustomerEsportAutoSuspendedStatus(custId);
-            LogService.Info("GetCustomerEsportAutoSuspendedStatus - After: " + DateTime.Now.ToString());
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -146,9 +154,8 @@
         [HttpPost]
         public ActionResult GetCustomerProfileFraudInfo(long custId)
         {
-            LogService.Info("GetCustomerProfileFraudInfo - Before: " + DateTime.Now.ToString());
             var result = _accountService.GetCustomerProfileFraudInfo(custId);
-            LogService.Info("GetCustomerProfileFraudInfo - After: " + DateTime.Now.ToString());
+
             var fraudCaseName = string.Empty;
 
             if (result.FraudCaseList != null && result.FraudCaseList.Any())
@@ -156,7 +163,6 @@
                 fraudCaseName = string.Join(", ", result.FraudCaseList.Select(x => x.FraudCaseName));
             }
 
-            LogService.Info("GetCustomerProfileFraudInfo - Done: " + DateTime.Now.ToString());
             return Json(new { suspiciouseCustomer = result.SuspiciouseCustomer, fraudCases = fraudCaseName }, JsonRequestBehavior.AllowGet);
         }
 
@@ -542,5 +548,58 @@
         }
 
         #endregion        
+
+        private void GetCustomerGeneralStatus(long custId, ref AccountProfileViewModel profile)
+        {
+            var model = new CustomerGeneralStatusViewModel();
+
+            var result = _accountService.GetCustomerGeneralStatus(custId.ToString()).FirstOrDefault();
+            var accountStatusName = string.Empty;
+
+            if (result != null)
+            {
+                accountStatusName = model.GetAccountStatusName(model.GetAccountStatus(result));
+            }
+            else
+            {
+                accountStatusName = model.GetAccountStatusName(AccountStatus.NA);
+
+                result = new CustomerGeneralStatusModel();
+            }
+
+            profile.GeneralStatusInfo = result;
+            profile.StatusLabel = accountStatusName;
+        }
+
+        private void GetCustomerProfileFraudInfo(long custId, ref AccountProfileViewModel profile)
+        {
+            var result = _accountService.GetCustomerProfileFraudInfo(custId);
+
+            var fraudCaseName = string.Empty;
+
+            if (result.FraudCaseList != null && result.FraudCaseList.Any())
+            {
+                fraudCaseName = string.Join(", ", result.FraudCaseList.Select(x => x.FraudCaseName));
+            }
+
+            profile.SuspiciousInfo = result.SuspiciouseCustomer;
+            profile.FraudCases = fraudCaseName;
+        }
+
+        private void GetCustomerRobotUserStatus(long custId, ref AccountProfileViewModel profile)
+        {
+            profile.RobotUserStatus = _accountService.GetCustomerRobotUserStatus(custId);
+        }
+
+        private void GetCustomerFlagInfo(long ctsCustId, int subscriberId, ref AccountProfileViewModel profile)
+        {
+            profile.FlagInfo = _accountService.GetCustomerFlagInfo(ctsCustId, subscriberId);
+        }
+
+        private void GetCustomerEsportAutoSuspendedStatus(long custId, ref AccountProfileViewModel profile)
+        {
+            profile.EsportAutoSuspendStatus = _accountService.GetCustomerEsportAutoSuspendedStatus(custId);
+        }
+
     }
 }

@@ -67,7 +67,7 @@
                 $('#totalAssDevice').html(response.TotalDevices);
                 $('#totalAssIP').html(response.TotalIps);
             },
-            complete: function() {
+            complete: function () {
                 GetCustomerEvidences();
             },
             error: function(errMsg) {
@@ -94,32 +94,9 @@
                 if (totalAssAccount > 0 && totalEvidence > 0) {
                     $('span.icon-Affected').removeClass('hide');
                 }
-            },
-            error: function(errMsg) {
-                common.showError(errMsg);
-            }
-        });
-    }
 
-    function GetCustomerFlaggInfo() {
-        $.ajax(common.modifyRelativeUrl('Account/GetCustomerFlagInfo'), {
-            type: 'POST',
-            data: {
-                ctsCustId: ctsCustId,
-                subscriberId: subscriberId
-            },
-            success: function(response) {
-                if (response.Flagged != 0) {
-                    if (response.Flagged == 2) {
-                        $('span.icon-Flagged').removeClass('hide');
-                    }
-                    else {
-                        $('span.icon-Flagged-With-Evidence').removeClass('hide');
-                    }
-                }
-            },
-            complete: function() {
-                $('span.loading').remove();
+                LoadAssociationByAccount();
+                LoadChainToEvidence();
             },
             error: function(errMsg) {
                 common.showError(errMsg);
@@ -128,153 +105,77 @@
     }
 
     function BetLimitAndAccountStatusIcon(response) {
-        $('#accountStatus').html(response.accountStatus);
+        $('#accountStatus').html(response.StatusLabel);
 
-        if (response.customerStatus.ProblemAccountWithBetLimit) {
+        if (response.GeneralStatusInfo.ProblemAccountWithBetLimit) {
             $('span.icon-P-with-Bet-Limit').removeClass('hide');
         }
 
-        if (response.customerStatus.ProblemAccountWithoutBetLimit) {
+        if (response.GeneralStatusInfo.ProblemAccountWithoutBetLimit) {
             $('span.icon-P-without-Bet-Limit').removeClass('hide');
         }
     }
 
     function BetRestrictAndSmartPunterIcon(response) {
-        if (response.customerStatus.BetRestrictedAccount) {
+        if (response.GeneralStatusInfo.BetRestrictedAccount) {
             $('span.icon-Bet-Restrict-Account').removeClass('hide');
         }
 
-        if (response.customerStatus.BetRestrictedCurrency) {
+        if (response.GeneralStatusInfo.BetRestrictedCurrency) {
             $('span.icon-Bet-Restricted-Currency').removeClass('hide');
         }
 
-        if (response.customerStatus.BetRestrictedSite) {
+        if (response.GeneralStatusInfo.BetRestrictedSite) {
             $('span.icon-Bet-Restrict-Site').removeClass('hide');
         }
 
-        if (response.customerStatus.BetRestrictedSiteAndCurrency) {
+        if (response.GeneralStatusInfo.BetRestrictedSiteAndCurrency) {
             $('span.icon-Bet-Restricted-SiteandCurrency').removeClass('hide');
         }
 
-        if (response.customerStatus.SmartPunter) {
+        if (response.GeneralStatusInfo.SmartPunter) {
             $('span.icon-Smart-Punter-Account').removeClass('hide');
         }
     }
 
     function DangerouseIcon(response) {
-        if (response.customerStatus.Danger == 0) {
+        if (response.GeneralStatusInfo.Danger == 0) {
             $("#dangerousOriginal").html("None");
         }
         else {
-            $("#dangerousOriginal").html(response.customerStatus.Danger);
-            $("#dangerousOriginal").addClass("dangerous-level-" + response.customerStatus.Danger);
+            $("#dangerousOriginal").html(response.GeneralStatusInfo.Danger);
+            $("#dangerousOriginal").addClass("dangerous-level-" + response.GeneralStatusInfo.Danger);
         }
 
-        if (response.customerStatus.Danger2 == 0) {
+        if (response.GeneralStatusInfo.Danger2 == 0) {
             $("#dangerouseABI").html("None");
         }
         else {
-            $("#dangerouseABI").html(response.customerStatus.Danger2);
-            $("#dangerouseABI").addClass("dangerous-level-" + response.customerStatus.Danger2);
+            $("#dangerouseABI").html(response.GeneralStatusInfo.Danger2);
+            $("#dangerouseABI").addClass("dangerous-level-" + response.GeneralStatusInfo.Danger2);
         }
 
-        if (response.customerStatus.Danger3 == 0) {
+        if (response.GeneralStatusInfo.Danger3 == 0) {
             $("#dangerouseOtherSports").html("None");
         }
         else {
-            $("#dangerouseOtherSports").html(response.customerStatus.Danger3);
-            $("#dangerouseOtherSports").addClass("dangerous-level-" + response.customerStatus.Danger3);
+            $("#dangerouseOtherSports").html(response.GeneralStatusInfo.Danger3);
+            $("#dangerouseOtherSports").addClass("dangerous-level-" + response.GeneralStatusInfo.Danger3);
         }
     }
 
-    function GetCustomerGeneralStatus() {
-        $.ajax(common.modifyRelativeUrl('Account/GetCustomerGeneralStatus'), {
-            type: 'POST',
-            data: {
-                custId: custId
-            },
-            success: function(response) {
-                if (response != null) {
-
-                    BetLimitAndAccountStatusIcon(response);                   
-                    BetRestrictAndSmartPunterIcon(response);                     
-                    DangerouseIcon(response);
-
-                    if (response.customerStatus.Abnormal == 0) {
-                        $("#abnormal").html("None");
-                    }
-                    else {
-                        $("#abnormal").html(response.customerStatus.Abnormal);
-                        $("#abnormal").addClass("abnormal-level-" + response.customerStatus.Abnormal);
-                    }
-
-                    $('#autoSuspendSoccer').html(response.customerStatus.Autosuspend ? 'Yes' : 'No');
-                    $('#autoSuspendOtherSport').html(response.customerStatus.Autosuspend2 ? 'Yes' : 'No');
-                }
-            },
-            complete: function() {
-
-            },
-            error: function(errMsg) {
-                common.showError(errMsg);
-            }
-        });
-    }
-
-    function GetCustomerRobotUserStatus() {
-        $.ajax(common.modifyRelativeUrl('Account/GetCustomerRobotUserStatus'), {
-            type: 'POST',
-            data: {
-                custId: custId
-            },
-            success: function(response) {
-                if (response != null) {
-                    if (response.IsRobotUser) {
-                        $('span.icon-Robot-User').removeClass('hide');
-                    }
-                }
-            },
-            complete: function() {
-
-            },
-            error: function(errMsg) {
-                common.showError(errMsg);
-            }
-        });
-    }
-
-    function GetCustomerEsportAutoSuspendedStatus() {
-        $.ajax(common.modifyRelativeUrl('Account/GetCustomerEsportAutoSuspendedStatus'), {
-            type: 'POST',
-            data: {
-                custId: custId
-            },
-            success: function(response) {
-                if (response != null) {
-                    $('#autoSuspendESport').html(response.EsportAutoSuspendStatus ? 'Yes' : 'No');
-                }
-            },
-            complete: function() {
-
-            },
-            error: function(errMsg) {
-                common.showError(errMsg);
-            }
-        });
-    }
-
     function ClassificationIcon(response) {
-        if (response.suspiciouseCustomer != null && (response.suspiciouseCustomer.IsDelinquent || response.suspiciouseCustomer.IsHedge || response.suspiciouseCustomer.IsDirty)) {
+        if (response.SuspiciousInfo != null && (response.SuspiciousInfo.IsDelinquent || response.SuspiciousInfo.IsHedge || response.SuspiciousInfo.IsDirty)) {
 
-            if (response.suspiciouseCustomer.IsDelinquent) {
+            if (response.SuspiciousInfo.IsDelinquent) {
                 $('span.icon-delinquency').removeClass('hide');
             }
 
-            if (response.suspiciouseCustomer.IsHedge) {
+            if (response.SuspiciousInfo.IsHedge) {
                 $('span.icon-Hedge-Account').removeClass('hide');
             }
 
-            if (response.suspiciouseCustomer.IsDirty) {
+            if (response.SuspiciousInfo.IsDirty) {
                 $('span.icon-dirty').removeClass('hide');
             }
 
@@ -286,28 +187,34 @@
     }
 
     function FrauseCaseList(response) {
-        if (response.fraudCases != '') {
-            $('#fraudcase').html("<span>" + response.fraudCases + "</span>");
+        if (response.FraudCases != '') {
+            $('#fraudcase').html("<span>" + response.FraudCases + "</span>");
         }
         else {
             $('#fraudcase').html("<span>None</span>");
         }
     }
 
-    function GetCustomerProfileFraudInfo() {
-        $.ajax(common.modifyRelativeUrl('Account/GetCustomerProfileFraudInfo'), {
+    function GetAccountProfile() {
+        $.ajax(common.modifyRelativeUrl('Account/GetAccountProfile'), {
             type: 'POST',
             data: {
-                custId: custId
+                custId: custId,
+                ctsCustId: ctsCustId,
+                subscriberId: subscriberId
             },
-            success: function(response) {                
+            success: function (response) {
+                HandleCustomerStatus(response);
                 ClassificationIcon(response);
-                FrauseCaseList(response);         
+                FrauseCaseList(response);
+                HandleRobotUserStatus(response.RobotUserStatus);
+                HandleFlagInfo(response.FlagInfo);
+                HandleEsportAutoSuspendedStatus(response.EsportAutoSuspendStatus);
             },
-            complete: function() {
+            complete: function () {
 
             },
-            error: function(errMsg) {
+            error: function (errMsg) {
                 common.showError(errMsg);
             }
         });
@@ -356,18 +263,58 @@
         $("#account-detail-container .report-item").removeClass('expanded');
     }
 
+    function HandleCustomerStatus(data) {
+        if (data != null) {
+            BetLimitAndAccountStatusIcon(data);
+            BetRestrictAndSmartPunterIcon(data);
+            DangerouseIcon(data);
+
+            if (data.GeneralStatusInfo.Abnormal == 0) {
+                $("#abnormal").html("None");
+            }
+            else {
+                $("#abnormal").html(data.GeneralStatusInfo.Abnormal);
+                $("#abnormal").addClass("abnormal-level-" + data.GeneralStatusInfo.Abnormal);
+            }
+
+            $('#autoSuspendSoccer').html(data.GeneralStatusInfo.Autosuspend ? 'Yes' : 'No');
+            $('#autoSuspendOtherSport').html(data.GeneralStatusInfo.Autosuspend2 ? 'Yes' : 'No');
+        }
+    }
+
+    function HandleRobotUserStatus(data) {
+        if (data != null) {
+            if (data.IsRobotUser) {
+                $('span.icon-Robot-User').removeClass('hide');
+            }
+        }
+    }
+
+    function HandleFlagInfo(data) {
+        if (data.Flagged != 0) {
+            if (data.Flagged == 2) {
+                $('span.icon-Flagged').removeClass('hide');
+            }
+            else {
+                $('span.icon-Flagged-With-Evidence').removeClass('hide');
+            }
+        }
+
+        $('span.loading').remove();
+    }
+
+    function HandleEsportAutoSuspendedStatus(data) {
+        if (data != null) {
+            $('#autoSuspendESport').html(data.EsportAutoSuspendStatus ? 'Yes' : 'No');
+        }
+    }
+
     function Initial() {
-        GetCustomerGeneralStatus();
-        GetCustomerProfileFraudInfo();
-        GetCustomerTotalAssociation();
-        GetCustomerRobotUserStatus();
-        GetCustomerFlaggInfo();
-        GetCustomerEsportAutoSuspendedStatus();
+
         CollapseExpandAll();
         CollapseExpandItem();
-
-        LoadAssociationByAccount();
-        LoadChainToEvidence();
+        GetAccountProfile();
+        GetCustomerTotalAssociation();
 
         lnkAssociation.on('click', function() {
             $("#header_associated_account").trigger("click");

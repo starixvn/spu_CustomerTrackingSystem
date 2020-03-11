@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Account\AccountDetail.cs" />
+    <Compile Include="Account\AccountProfileViewModel.cs" />
     <Compile Include="Account\Associated\AssociatedAccountByAccount.cs" />
     <Compile Include="Account\Associated\AssociatedAccountByAccountFilter.cs" />
     <Compile Include="Account\Associated\AssociatedAccountByCustomer.cs" />

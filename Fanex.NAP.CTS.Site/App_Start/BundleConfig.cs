@@ -19,9 +19,6 @@
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 
-            bundles.Add(new ScriptBundle("~/bundles/multiselectfilter").Include(
-                "~/Scripts/MultipleSelect/jquery.multiselect.filter.js"));
-
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/Bootstrap/bootstrap.js",
                       "~/Scripts/respond.js"));
@@ -53,11 +50,8 @@
             //RegisterSubscriberAssignment(bundles);
             RegisterSearchBundles(bundles);
             RegisterAccountDetailBundles(bundles);
-            RegisterAssociatedByAccountBundles(bundles);
             RegisterEvidenceBundles(bundles);
             RegisterTransactionHistoryBundles(bundles);
-            RegisterGraphVisualizeBundles(bundles);
-            RegisterChainToEvidenceBundles(bundles);
 
         }
 
@@ -164,27 +158,19 @@
 
         private static void RegisterAccountDetailBundles(BundleCollection bundles)
         {
-            bundles.Add(new ScriptBundle("~/account-detail-scripts").Include("~/scripts/Account/index.js"));
-        }
+            bundles.Add(new ScriptBundle("~/account-detail-scripts")
+                .Include("~/Scripts/MultipleSelect/jquery.multiselect.filter.js",
+                        "~/Scripts/popoto/d3.v3.min.js",
+                        "~/scripts/Account/Associated/account-by-account.js",
+                        "~/scripts/Account/Associated/graph.js",
+                        "~/scripts/Account/index.js",
+                        "~/scripts/Account/ChainToEvidence/account-evidence.js",
+                        "~/scripts/Account/ChainToEvidence/account-exceptions.js"));
 
-        private static void RegisterAssociatedByAccountBundles(BundleCollection bundles)
-        {
-            bundles.Add(new ScriptBundle("~/associated-by-account-detail-scripts").Include("~/scripts/Account/Associated/account-by-account.js",
-                "~/scripts/Account/Associated/graph.js"));
-        }
-
-        private static void RegisterGraphVisualizeBundles(BundleCollection bundles)
-        {
-            bundles.Add(new ScriptBundle("~/graph-visualize-lib").Include(
-                "~/Scripts/popoto/d3.v3.min.js"));
-        }
-
-        private static void RegisterChainToEvidenceBundles(BundleCollection bundles)
-        {
-            bundles.Add(new ScriptBundle("~/chain-to-evidence-scripts")
-                .Include("~/scripts/Account/ChainToEvidence/account-evidence.js",
-                "~/scripts/Account/ChainToEvidence/account-exceptions.js"
-                ));
+            bundles.Add(new StyleBundle("~/account-detail-styles").Include(
+                      "~/Content/scss/MultipleSelect/jquery.multiselect.filter.css",
+                      "~/Content/scss/MultipleSelect/jquery.multiselect.css",
+                      "~/Content/scss/pages/account/account.css"));
         }
 
         private static void RegisterEvidenceBundles(BundleCollection bundles)
