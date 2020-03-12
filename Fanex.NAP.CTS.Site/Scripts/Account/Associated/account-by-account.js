@@ -104,8 +104,10 @@
                 isDirect: isDirect
             },
             success: function (response) {
-                associatedByAccountTable.DataTable().clear().rows.add(response).draw();
-                associatedByAccountTable.DataTable().columns.adjust();
+                if (response != null) {
+                    associatedByAccountTable.DataTable().clear().rows.add(response).draw();
+                    associatedByAccountTable.DataTable().columns.adjust();
+                }
             },
             complete: function () {
                 associatedByAccountTable.find('tbody').removeClass('loading');
