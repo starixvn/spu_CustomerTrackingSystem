@@ -29,7 +29,7 @@
                 associationByAccount.Initial(custId, ctsCustId, username, accountStatus, associationType, isDirect);
             },
             error: function(errMsg) {
-                common.showError(errMsg);
+               // common.showError(errMsg);
             }
         });
     }
