@@ -104,17 +104,14 @@
                 isDirect: isDirect
             },
             success: function (response) {
-                if (response != null) {
-                    associatedByAccountTable.DataTable().clear().rows.add(response).draw();
-                    associatedByAccountTable.DataTable().columns.adjust();
-                }
+                associatedByAccountTable.DataTable().clear().rows.add(response).draw();
+                associatedByAccountTable.DataTable().columns.adjust();
             },
             complete: function () {
                 associatedByAccountTable.find('tbody').removeClass('loading');
             },
-            error: function (errMsg) {
-                console.log(errMsg);
-                //common.showError(errMsg);
+            error: function (errMsg) {                
+                common.showError("There is something wrong. Cannot get association list.");
             }
         });
     }
