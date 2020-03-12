@@ -62,7 +62,7 @@
 
     var $this = this;
 
-    $(document).ajaxError(() => this.showError());
+   // $(document).ajaxError(() => this.showError());
 
     this.showLoading = function () {
         loading.show();
