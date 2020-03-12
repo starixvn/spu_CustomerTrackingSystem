@@ -48,7 +48,7 @@
                 exceptions.Initial(ctsCustId, username, subscriberId);
             },
             error: function(errMsg) {
-                common.showError(errMsg);
+               // common.showError(errMsg);
             }
         });
     }
@@ -71,7 +71,7 @@
                 GetCustomerEvidences();
             },
             error: function(errMsg) {
-                common.showError(errMsg);
+               // common.showError(errMsg);
             }
         });
     }
@@ -99,7 +99,7 @@
                 LoadChainToEvidence();
             },
             error: function(errMsg) {
-                common.showError(errMsg);
+               // common.showError(errMsg);
             }
         });
     }
@@ -215,7 +215,7 @@
 
             },
             error: function (errMsg) {
-                common.showError(errMsg);
+               // common.showError(errMsg);
             }
         });
     }

@@ -156,7 +156,7 @@
             },
             error: function (errMsg) {
                 console.log(errMsg);
-                common.showError(errMsg);
+               // common.showError(errMsg);
             }
         })
     }
@@ -187,7 +187,7 @@
             },
             error: function (errMsg) {
                 console.log(errMsg);
-                common.showError(errMsg);
+               // common.showError(errMsg);
             }
         })
     }
@@ -269,7 +269,7 @@
                 error: function (errMsg) {
                     console.log(errMsg);
                     common.closeLoading();
-                    common.showError(errMsg);
+                  //  common.showError(errMsg);
                 }
             })
         })
@@ -310,7 +310,7 @@
                 error: function (errMsg) {
                     console.log(errMsg);
                     common.closeLoading();
-                    common.showError(errMsg);
+                   // common.showError(errMsg);
                 }
             })
         })

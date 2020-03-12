@@ -95,7 +95,7 @@
             },
             error: function (errMsg) {
                 console.log(errMsg);
-                common.showError(errMsg);
+               // common.showError(errMsg);
                 loading.hide();
                 transactionContent.show();
             }
