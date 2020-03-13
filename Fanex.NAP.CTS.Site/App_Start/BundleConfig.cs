@@ -193,7 +193,7 @@
 
         private static void RegisterTransactionHistoryBundles(BundleCollection bundles)
         {
-            bundles.Add(new ScriptBundle("~/account/transaction-hisory/history-scripts").Include("~/Scripts/Account/TransactionHistory/*.js"));
+            bundles.Add(new ScriptBundle("~/account/transaction-history-scripts").Include("~/Scripts/Account/TransactionHistory/*.js"));
         }
 
     }

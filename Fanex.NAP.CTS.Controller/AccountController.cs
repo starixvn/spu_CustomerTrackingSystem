@@ -526,6 +526,20 @@
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        #endregion        
+        #endregion
+
+        #region Transaciton History
+        public ActionResult TransactionHistory()
+
+        {
+            //ViewBag.EvidenceList = _accountService.GetEvidenceList();
+
+            ViewBag.IsPermissionIPLocation = true;
+
+            return PartialView("TransactionHistory/TransactionHistory");
+        }
+
+        #endregion
+
     }
 }

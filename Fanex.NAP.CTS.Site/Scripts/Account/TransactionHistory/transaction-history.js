@@ -124,15 +124,26 @@
         }, 1500);
     }
 
-    loading.hide();
+    this.Initial = function (ctsCustId, username, subscriberId, subscriber) {
 
-    $('#form-ip-information').hide();
+        $('#transaction_history_cbb_report_length').multiselect({
+            menuWidth: 330,
+            menuHeight: 330,
+            selectedText: "# of # selected",
+            noneSelectedText: "Select options"
+        }).multiselectfilter({
+            width: 250,
+            placeholder: ''
+        });
 
-    transactionContent.hide();
+        loading.hide();
 
-    btnSearch.click(GenerateReport);
+        $('#form-ip-information').hide();
 
-    GenerateGrid();    
+        transactionContent.hide();
+
+        //btnSearch.click(GenerateReport);
+
+        GenerateGrid();    
+    }    
 }
-
-$(transaction_history);

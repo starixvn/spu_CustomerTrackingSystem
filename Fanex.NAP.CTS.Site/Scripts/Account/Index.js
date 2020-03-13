@@ -53,6 +53,22 @@
         });
     }
 
+    function LoadTransactionHistory() {
+        $.ajax(common.modifyRelativeUrl('/Account/TransactionHistory'), {
+            type: 'POST',
+            success: function (response) {
+                $("#trans_history").html(response);
+            },
+            complete: function () {
+                var transHistory = new transaction_history();
+                transHistory.Initial(ctsCustId, username, subscriberId, subscriber);
+            },
+            error: function (errMsg) {
+                common.showError(errMsg);
+            }
+        });
+    }
+
     function GetCustomerTotalAssociation() {
         $.ajax(common.modifyRelativeUrl('/Account/GetCustomerTotalAssociationByCTSCustId'), {
             type: 'POST',
@@ -368,6 +384,7 @@
 
         LoadAssociationByAccount();
         LoadChainToEvidence();
+        LoadTransactionHistory();
 
         lnkAssociation.on('click', function() {
             $("#header_associated_account").trigger("click");
