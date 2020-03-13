@@ -71,27 +71,33 @@
 
             }
 
-            var tasks = new List<Task>();
-
             var exactUserName = new List<SearchResultModel>();
-            tasks.Add(Task.Run(() => { exactUserName = result.Where(x => !string.IsNullOrWhiteSpace(x.Username) && x.Username.StartsWith(inputValue, System.StringComparison.CurrentCultureIgnoreCase)).ToList(); }));
-
             var exactUserName2 = new List<SearchResultModel>();
-            tasks.Add(Task.Run(() => { exactUserName2 = result.Where(x => !string.IsNullOrWhiteSpace(x.Username2) && x.Username2.StartsWith(inputValue, System.StringComparison.CurrentCultureIgnoreCase)).ToList(); }));
+            var likeUserName = new List<SearchResultModel>();            
 
-            var likeUserName = new List<SearchResultModel>();
-            tasks.Add(Task.Run(() => { likeUserName = result.Where(x => !string.IsNullOrWhiteSpace(x.Username) && x.Username.StartsWith(inputValue, System.StringComparison.CurrentCultureIgnoreCase)).ToList(); }));
+            result.ForEach(x => {
 
-            var likeUserName2 = new List<SearchResultModel>();
-            tasks.Add(Task.Run(() => { likeUserName2 = result.Where(x => !string.IsNullOrWhiteSpace(x.Username2) && x.Username2.StartsWith(inputValue, System.StringComparison.CurrentCultureIgnoreCase)).ToList(); }));
+                if (!string.IsNullOrWhiteSpace(x.Username) && x.Username.StartsWith(inputValue, System.StringComparison.CurrentCultureIgnoreCase))
+                {
+                    exactUserName.Add(x);
+                }
+                else
+                {
+                    if(!string.IsNullOrWhiteSpace(x.Username2) && x.Username2.StartsWith(inputValue, System.StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        exactUserName2.Add(x);
+                    }
+                    else
+                    {
+                        likeUserName.Add(x);
+                    }
+                }
+            });
 
-            Task.WhenAll(tasks.ToArray()).Wait();
-
-            var newResult = exactUserName
-                .Union(exactUserName2)
-                .Union(likeUserName)
-                .Union(likeUserName2)
-                .Union(result).ToList();
+            var newResult = exactUserName.OrderBy(x=>x.Username)
+                .Union(exactUserName2.OrderBy(x => x.Username2))
+                .Union(likeUserName.OrderBy(x => x.Username))             
+                .ToList();
 
             return View(new SearchResultViewModel { SearchResults = newResult, InputValue = inputValue });
         }
@@ -103,7 +109,7 @@
 
             if(words.Length == 1)
             {
-                result.Append($"+{words[0]}* ");
+                result.Append($"{words[0]}* ");
             }
             else
             {
