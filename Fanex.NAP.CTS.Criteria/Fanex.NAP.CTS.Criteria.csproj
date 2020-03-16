@@ -76,6 +76,7 @@
     <Compile Include="Account\CustomerInfoByCTSCustIdCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\GetFlaggedEvidenceCriteria.cs" />
     <Compile Include="Account\SearchAccountCriteria.cs" />
+    <Compile Include="Account\TransactionHistory\GetTransactionHistoryCriteria.cs" />
     <Compile Include="Api\FlaggedAccountDeleteCriteria.cs" />
     <Compile Include="Api\FlaggedAccountInsertCriteria.cs" />
     <Compile Include="CheckBetReport\CheckBetReportGetCriteria.cs" />

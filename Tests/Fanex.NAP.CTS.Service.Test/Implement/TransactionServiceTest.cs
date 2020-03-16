@@ -17,15 +17,15 @@
             _runner = new TransactionService();
         }
 
-        [Fact]
-        public void Can_GetTransactionHistory()
-        {
-            // Act
-            var actualResult = _runner.GetTransactionHistory(ExpectedFilter.ExpectedTransactionHistoryFilter);
+        //[Fact]
+        //public void Can_GetTransactionHistory()
+        //{
+        //    // Act
+        //    var actualResult = _runner.GetTransactionHistory(ExpectedFilter.ExpectedTransactionHistoryFilter);
 
-            // Assert
-            Assert.IsType<List<Transaction>>(actualResult);
-        }
+        //    // Assert
+        //    Assert.IsType<List<Transaction>>(actualResult);
+        //}
 
         [Theory]
         [InlineData("20.0.255.255")]

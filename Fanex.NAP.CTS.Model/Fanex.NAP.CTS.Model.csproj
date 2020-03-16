@@ -228,6 +228,7 @@
     <Compile Include="SuspiciousInfo\SuspciousCustomerInfo.cs" />
     <Compile Include="SuspiciousInfo\SuspiciousCustomerFraudCaseModel.cs" />
     <Compile Include="Transaction\Transaction.cs" />
+    <Compile Include="Transaction\HistoryTransactionModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

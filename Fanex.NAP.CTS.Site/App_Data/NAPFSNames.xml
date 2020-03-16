@@ -432,5 +432,9 @@
     <Setting Key="CTS_DC_GetDirectAssociatedAccount_TagFlagged"
            SpName="CTS_DC_GetDirectAssociatedAccount_TagFlagged"
            DbName="MySQL.CTS_DataCenter" />
+
+    <Setting Key="DCS_DC_Get_HistoryTransaction"
+          SpName="DCS_DC_Get_HistoryTransaction"
+          DbName="MySQL.DCS_DataCenter" />
   </Function>
 </Functions>

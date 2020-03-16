@@ -12,7 +12,7 @@
     var totalEvidence = 0
 
     function LoadAssociationByAccount() {
-        $.ajax(common.modifyRelativeUrl('/Account/AssociatedByAccount'), {
+        $.ajax(common.modifyRelativeUrl('Account/AssociatedByAccount'), {
             type: 'POST',
             data: {
                 username: username
@@ -35,7 +35,7 @@
     }
 
     function LoadChainToEvidence() {
-        $.ajax(common.modifyRelativeUrl('/Account/ChainToEvidence'), {
+        $.ajax(common.modifyRelativeUrl('Account/ChainToEvidence'), {
             type: 'POST',
             success: function(response) {
                 $("#chains_evidence").html(response);
@@ -54,14 +54,14 @@
     }
 
     function LoadTransactionHistory() {
-        $.ajax(common.modifyRelativeUrl('/Account/TransactionHistory'), {
+        $.ajax(common.modifyRelativeUrl('Account/TransactionHistory'), {
             type: 'POST',
             success: function (response) {
                 $("#trans_history").html(response);
             },
             complete: function () {
                 var transHistory = new transaction_history();
-                transHistory.Initial(ctsCustId, username, subscriberId, subscriber);
+                transHistory.Initial(ctsCustId, subscriberId);
             },
             error: function (errMsg) {
                 common.showError(errMsg);
@@ -70,7 +70,7 @@
     }
 
     function GetCustomerTotalAssociation() {
-        $.ajax(common.modifyRelativeUrl('/Account/GetCustomerTotalAssociationByCTSCustId'), {
+        $.ajax(common.modifyRelativeUrl('Account/GetCustomerTotalAssociationByCTSCustId'), {
             type: 'POST',
             data: {
                 ctsCustId: ctsCustId
@@ -93,7 +93,7 @@
     }
 
     function GetCustomerEvidences() {
-        $.ajax(common.modifyRelativeUrl('/Account/GetCustomerEvidenceByCTSCustId'), {
+        $.ajax(common.modifyRelativeUrl('Account/GetCustomerEvidenceByCTSCustId'), {
             type: 'POST',
             data: {
                 ctsCustId: ctsCustId
@@ -118,7 +118,7 @@
     }
 
     function GetCustomerFlaggInfo() {
-        $.ajax(common.modifyRelativeUrl('/Account/GetCustomerFlagInfo'), {
+        $.ajax(common.modifyRelativeUrl('Account/GetCustomerFlagInfo'), {
             type: 'POST',
             data: {
                 ctsCustId: ctsCustId,

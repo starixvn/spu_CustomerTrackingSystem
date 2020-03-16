@@ -25,6 +25,8 @@
         private readonly IAccountService _accountService;
         private readonly IGraphService _graphService;
 
+        private readonly ITransactionService _transService;
+
         private readonly ISubscriberAssignmentService _subscriberAssignmentService;
 
         public AccountController()
@@ -32,6 +34,7 @@
             _accountService = new AccountService();
             _graphService = new GraphService();
             _subscriberAssignmentService = new SubscriberAssignmentService();
+            _transService = new TransactionService();
         }
 
         public override string BaseControllerName { get => Consts.MenuItemSearch; }
@@ -184,7 +187,7 @@
             {
                 var custIds = string.Join(",", customerAssociation.Select(x => x.CustId));
 
-               // LogService.Info("custIds:" + custIds);
+                // LogService.Info("custIds:" + custIds);
 
                 var getStatusByCustIds = _accountService.GetCustomerGeneralStatus(custIds);
 
@@ -530,15 +533,45 @@
 
         #region Transaciton History
         public ActionResult TransactionHistory()
-
         {
-            //ViewBag.EvidenceList = _accountService.GetEvidenceList();
-
-            ViewBag.IsPermissionIPLocation = true;
-
             return PartialView("TransactionHistory/TransactionHistory");
         }
 
+        public ActionResult GetTransactionHistory(int ctsCustId, int subscriberId, int dateRange)
+        {
+            var fromDate = DateTime.Now;
+            var toDate = DateTime.Now;
+
+            if (dateRange == (int)TransactionHistoryLength.Hours24)
+            {
+                toDate = DateTime.Now;
+                fromDate = toDate.AddDays((int)TransactionHistoryLength.Hours24 * -1);
+            }
+            else if (dateRange == (int)TransactionHistoryLength.Days7)
+            {
+                toDate = DateTime.Now;
+                fromDate = toDate.AddDays((int)TransactionHistoryLength.Days7 * -1);
+            }
+            else if (dateRange == (int)TransactionHistoryLength.Days30)
+            {
+                toDate = DateTime.Now;
+                fromDate = toDate.AddDays((int)TransactionHistoryLength.Days30 * -1);
+            }
+            else
+            {
+                toDate = DateTime.Now;
+                fromDate = toDate.AddDays((int)TransactionHistoryLength.Days180 * -1);
+            }
+
+            if (ctsCustId < 0 || subscriberId < 0 || fromDate > toDate)
+            {
+                return Json(null, JsonRequestBehavior.AllowGet);
+            }
+
+            var result = _transService.GetTransactionHistory(ctsCustId, subscriberId, Convert.ToDateTime(fromDate.ToString("yyyy-MM-dd")), Convert.ToDateTime(toDate.ToString("yyyy-MM-dd")));
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
         #endregion
 
     }

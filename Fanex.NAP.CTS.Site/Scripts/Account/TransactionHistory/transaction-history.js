@@ -1,14 +1,15 @@
 ﻿function transaction_history() {
-    var loading = $('#transaction-history-loading');
     var btnSearch = $('#transaction-history-btn-search');
-    var reportLength = $('#transaction-history-cbb-report-length');
+    var dateRange = $('#history_trans_date_range');
     var transactionTable = $('#transaction-history-table');
     var transactionContent = $('#transaction-history-content');
     var formIPInformation = new form_ip_information();
+    var _ctsCustId = 0;
+    var _subscriberId = 0;
 
     function GenerateGrid() {
         transactionTable.DataTable({
-            dom: 't<"pagination"<"page-size"><"bottom"lp<"clear">>"i>',
+            dom: '<"top"i>rt<"bottom"flp><"clear">',
             language: {
                 lengthMenu: "Page size _MENU_",
                 paginate: {
@@ -17,10 +18,10 @@
                 info: "Displaying _START_ to _END_ of _TOTAL_ item(s)",
                 infoEmpty: "",
                 zeroRecords: "There's no data"
-            },
+            },            
             ordering: false,
             lengthMenu: [10, 20, 50, 100, 200],
-            pageLength: 20,           
+            pageLength: 20,
             scrollX: false,
             scrollCollapse: false,
             columnDefs: [
@@ -34,23 +35,23 @@
                 { targets: [4], width: "15%" },
                 {
                     targets: [5],
-                    width: "15%",
-                    visible: IsPermissionIPLocation.toLowerCase() == 'true' ? true : false
+                    width: "15%"
                 },
                 {
                     targets: [6],
-                    width: "15%",
-                    visible: IsPermissionIPLocation.toLowerCase() == 'true' ? true : false
+                    width: "15%"
                 }
             ],
             columns: [
-                { data: obj => obj.TransDateToString },
-                { data: obj => RenderDevice(obj) },
+                { data: obj => obj.TransTime },
+                { data: obj => obj.DeviceId },
+                { data: obj => obj.Ip },
+                { data: obj => obj.Flagged },
+                { data: obj => obj.Action },
                 { data: obj => obj.ActionResult },
-                { data: obj => obj.DeviceType },
-                { data: obj => obj.Browser },
-                { data: obj => RenderHostName(obj.Domain) },
-                { data: (obj, type, set, meta) => RenderIPInformation(obj, meta.row + 1) }
+                { data: obj => obj.OSName },
+                { data: obj => obj.BrowserName },
+                { data: obj => GetHostName(obj.Url) }
             ]
         });
 
@@ -65,54 +66,57 @@
         html += '</span>';
 
         return html;
-    }  
-
-    function RenderHostName(url) {
-        var urlNew = new URL(url);
-        return urlNew.hostname;
     }
+
+    function GetHostName(url) {
+        if (url != null) {
+            var m = url.match(/^http:\/\/[^/]+/);
+            return m ? m[0] : null;
+        }
+
+        return null;
+    }    
 
     function RenderIPInformation(obj, rowIndex) {
         return "<span class='link ip-link' id=ip-address-" + rowIndex + ">" + obj.IP + "</span>";
     }
 
     function GenerateReport() {
-        transactionContent.hide();
-        loading.show();
 
-        var url = common.modifyRelativeUrl('/Account/GetTransactionHistoryFilter');
-        var lengthReport = $(reportLength).val();
+        var url = common.modifyRelativeUrl('/Account/GetTransactionHistory');
+
+        var params = {};
+        params.ctsCustId = _ctsCustId;
+        params.subscriberId = _subscriberId;
+        params.dateRange = dateRange.val();
 
         $.ajax(url, {
             type: 'POST',
-            data: {
-                AccountId: ACCOUNTID,
-                ReportLength: lengthReport
+            data: params,
+            beforeSend: function () {
+                transactionTable.find('tbody').addClass('loading');
             },
             success: function (response) {
                 BindDataToGrid(response);
-                AnimateContent();
+            },
+            complete: function () {
+                transactionTable.find('tbody').removeClass('loading');
             },
             error: function (errMsg) {
                 console.log(errMsg);
                 common.showError(errMsg);
-                loading.hide();
-                transactionContent.show();
             }
         });
     }
 
     function BindDataToGrid(data) {
-        loading.hide();
-        transactionContent.show();
-
         transactionTable.DataTable().clear().rows.add(data).draw();
-        transactionTable.DataTable().columns.adjust();        
+        transactionTable.DataTable().columns.adjust();
     }
 
     function ShowFormIPInformation() {
         var valueIP = $(this).text();
-       
+
         var targetIPAddress = "#" + $(this).attr("id");
 
         formIPInformation.OpenModal(valueIP, targetIPAddress);
@@ -124,26 +128,11 @@
         }, 1500);
     }
 
-    this.Initial = function (ctsCustId, username, subscriberId, subscriber) {
+    this.Initial = function (ctsCustId, subscriberId) {
+        _ctsCustId = ctsCustId;
+        _subscriberId = subscriberId;
+        btnSearch.click(GenerateReport);
 
-        $('#transaction_history_cbb_report_length').multiselect({
-            menuWidth: 330,
-            menuHeight: 330,
-            selectedText: "# of # selected",
-            noneSelectedText: "Select options"
-        }).multiselectfilter({
-            width: 250,
-            placeholder: ''
-        });
-
-        loading.hide();
-
-        $('#form-ip-information').hide();
-
-        transactionContent.hide();
-
-        //btnSearch.click(GenerateReport);
-
-        GenerateGrid();    
-    }    
+        GenerateGrid();
+    }
 }

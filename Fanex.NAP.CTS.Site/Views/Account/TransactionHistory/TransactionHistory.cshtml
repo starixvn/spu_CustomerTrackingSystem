@@ -4,23 +4,19 @@
     ViewBag.Title = "TransactionHistory";
 }
 
-@Html.Partial("TransactionHistory/IPInformation")
-
 <div id="transaction-history">
-    <div id="transaction-history-filter">
-        <div class="filter">
-            <div class="form-control">
-                <div class="control-label">Report Length</div>
-                <select class="control" id="transaction_history_cbb_report_length">
-                    <option value="@TransactionHistoryLength.Hours24" selected>Last 24 hours</option>
-                    <option value="@TransactionHistoryLength.Days7">Last 7 days</option>
-                    <option value="@TransactionHistoryLength.Days30">Last 30 days</option>
-                    <option value="@TransactionHistoryLength.Days180">Last 180 days</option>
-                </select>
-            </div>
-            <div class="form-control" style="vertical-align: bottom;">
-                <button class="button btn-search" id="transaction-history-btn-search">Search</button>
-            </div>
+    <div class="filter">
+        <div class="form-control">
+            <div class="label">Report Length</div>
+            <select class="control" id="history_trans_date_range">
+                <option value="@((int)TransactionHistoryLength.Hours24)" selected>Last 24 hours</option>
+                <option value="@((int)TransactionHistoryLength.Days7)">Last 7 days</option>
+                <option value="@((int)TransactionHistoryLength.Days30)">Last 30 days</option>
+                <option value="@((int)TransactionHistoryLength.Days180)">Last 180 days</option>
+            </select>
+        </div>
+        <div class="form-control" style="vertical-align: bottom;">
+            <button class="button btn-search" id="transaction-history-btn-search">Search</button>
         </div>
     </div>
   
@@ -28,7 +24,7 @@
         <table id="transaction-history-table" class="table table-striped" style="width: 100%">
             <thead>
                 <tr>
-                    <th>Date/Time</th>
+                    <th>Trans Time</th>
                     <th>Device</th>
                     <th>IP</th>
                     <th>Robot Tracking</th>

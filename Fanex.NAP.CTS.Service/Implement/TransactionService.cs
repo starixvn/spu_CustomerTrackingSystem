@@ -10,20 +10,21 @@
     using Fanex.NAP.CTS.Model.IP;
     using System.Net;
     using System;
-    using System.Numerics;    
+    using System.Numerics;
+    using Fanex.NAP.CTS.Criteria.Account.TransactionHistory;
 
     public class TransactionService : ITransactionService
     {
-        public IEnumerable<Transaction> GetTransactionHistory(TransactionHistoryFilter filter)
-        {
-            var criteria = new TransactionHistoryGetByCustIdCriteria
-            {
-                ip_accountId = filter.AccountId,
-                ip_historyRange = (int)filter.ReportLength
-            };
+        //public IEnumerable<HistoryTransactionModel> GetTransactionHistory(TransactionHistoryFilter filter)
+        //{
+        //    var criteria = new TransactionHistoryGetByCustIdCriteria
+        //    {
+        //        ip_accountId = filter.AccountId,
+        //        ip_historyRange = (int)filter.ReportLength
+        //    };
 
-            return DataService.GetData<Transaction>(criteria);
-        }
+        //    return DataService.GetData<Transaction>(criteria);
+        //}
 
         public IPInformation GetIPInformation(string ipAddress)
         {
@@ -83,6 +84,19 @@
                     IsIpV6 = false
                 };
             }
+        }
+
+        public IEnumerable<HistoryTransactionModel> GetTransactionHistory(long ctsCustId, int subscriberId, DateTime fromDate, DateTime toDate)
+        {
+            var criteria = new GetTransactionHistoryCriteria
+            {
+                CTSCustId = ctsCustId,
+                SubscriberId = subscriberId,
+                FromDate = fromDate,
+                ToDate = toDate
+            };
+
+            return DataService.GetData<HistoryTransactionModel>(criteria);
         }
     }
 }
