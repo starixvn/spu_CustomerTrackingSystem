@@ -1,15 +1,13 @@
 ﻿function transaction_history() {
     var btnSearch = $('#transaction-history-btn-search');
     var dateRange = $('#history_trans_date_range');
-    var transactionTable = $('#transaction-history-table');
-    var transactionContent = $('#transaction-history-content');
+    var transactionTable = $('#transaction-history-table');    
     var formIPInformation = new form_ip_information();
     var _ctsCustId = 0;
     var _subscriberId = 0;
 
     function GenerateGrid() {
-        transactionTable.DataTable({
-            dom: '<"top"i>rt<"bottom"flp><"clear">',
+        transactionTable.DataTable({           
             language: {
                 lengthMenu: "Page size _MENU_",
                 paginate: {
@@ -45,7 +43,7 @@
             columns: [
                 { data: obj => obj.TransTime },
                 { data: obj => obj.DeviceId },
-                { data: obj => obj.Ip },
+                { data: obj => RenderIPInformation(obj) },
                 { data: obj => obj.Flagged },
                 { data: obj => obj.Action },
                 { data: obj => obj.ActionResult },
@@ -56,17 +54,7 @@
         });
 
         transactionTable.on('click', '.ip-link', ShowFormIPInformation);
-    }
-
-    function RenderDevice(obj) {
-        var url = common.modifyRelativeUrl('/Device/DetailDevice/' + obj.DeviceCode);
-
-        var html = '<span class= "device-' + obj.DeviceStatus + '">';
-        html += '<a class="info-bng" href="' + url + '" target="_blank">' + obj.DeviceCode + '</a>';
-        html += '</span>';
-
-        return html;
-    }
+    }        
 
     function GetHostName(url) {
         if (url != null) {
@@ -77,8 +65,9 @@
         return null;
     }    
 
-    function RenderIPInformation(obj, rowIndex) {
-        return "<span class='link ip-link' id=ip-address-" + rowIndex + ">" + obj.IP + "</span>";
+    function RenderIPInformation(obj) {
+        //return "<span class='link ip-link' id=" +  obj.IpId + ">" + obj.Ip + "</span>";
+        return obj.Ip;
     }
 
     function GenerateReport() {
@@ -116,16 +105,9 @@
 
     function ShowFormIPInformation() {
         var valueIP = $(this).text();
-
         var targetIPAddress = "#" + $(this).attr("id");
 
         formIPInformation.OpenModal(valueIP, targetIPAddress);
-    }
-
-    function AnimateContent() {
-        $('html, body').animate({
-            scrollTop: $(transactionContent).offset().top
-        }, 1500);
     }
 
     this.Initial = function (ctsCustId, subscriberId) {
