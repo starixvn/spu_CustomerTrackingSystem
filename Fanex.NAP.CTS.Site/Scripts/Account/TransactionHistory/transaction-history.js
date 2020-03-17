@@ -40,10 +40,11 @@
                 zeroRecords: "There's no data"
             },
             ordering: false,
-            lengthMenu: [2, 10, 20, 50, 100, 200],
+            searching: false,
+            lengthMenu: [2, 100, 200, 500],
             pageLength: 2,
             scrollX: false,
-            scrollCollapse: false,
+            scrollCollapse: false,           
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
                 { targets: [-2, -1], className: "text-center" },
