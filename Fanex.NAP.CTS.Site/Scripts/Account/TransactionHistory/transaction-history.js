@@ -18,7 +18,7 @@
             destroy: true,
             serverSide: true,
             processing: false,
-            stateSave: false,
+            stateSave: true,
             ajax: {
                 url: url,
                 data: params,
