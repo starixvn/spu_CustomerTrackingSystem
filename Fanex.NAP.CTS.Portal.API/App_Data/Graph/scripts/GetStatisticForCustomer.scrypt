@@ -1,12 +1,13 @@
-﻿MATCH (c:CTSCustomer)-[:USED_DEVICE]->(d:Device)
+﻿MATCH (c:CTSCustomer)
 WHERE c.CTSCustID = $CTSCustID
+OPTIONAL MATCH (c)-[:USED_DEVICE]->(d:Device)
 WITH c,d
 OPTIONAL MATCH (d:Device)<-[:USED_DEVICE]-(c1:CTSCustomer)
-WHERE c1.CTSCustID <> $CTSCustID
-WITH  c,d,c1
+WHERE c1.CTSCustID <> c.CTSCustID
+WITH c,d,c1
 OPTIONAL MATCH (c)-[:USED_IP]->(i:IP)
 WITH c,d,c1,i
 OPTIONAL MATCH (i:IP)<-[:USED_IP]-(c2:CTSCustomer)
-WHERE c2.CTSCustID <> $CTSCustID
+WHERE c2.CTSCustID <> c.CTSCustID
 UNWIND [c1,c2] as cus
 RETURN COUNT(DISTINCT cus) as TotalAccounts, COUNT(DISTINCT d) as TotalDevices, COUNT(DISTINCT i) as TotalIps
