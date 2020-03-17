@@ -98,5 +98,25 @@
 
             return DataService.GetData<HistoryTransactionModel>(criteria);
         }
+
+        public IEnumerable<HistoryTransactionModel> GetTransactionHistory(long ctsCustId, int subscriberId, DateTime fromDate, DateTime toDate, int pageSize, int pageNumber, out int totalItem)
+        {
+            var criteria = new GetTransactionHistoryCriteria
+            {
+                CTSCustId = ctsCustId,
+                SubscriberId = subscriberId,
+                FromDate = fromDate,
+                ToDate = toDate,
+                PageSize = pageSize,
+                PageNumber = pageNumber,
+                TotalItem = 0
+            };
+
+            var result = DataService.GetData<HistoryTransactionModel>(criteria);
+
+            totalItem = criteria.TotalItem;
+
+            return result;
+        }
     }
 }

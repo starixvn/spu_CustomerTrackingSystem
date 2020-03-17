@@ -18,6 +18,7 @@
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.Logging;
     using Fanex.NAP.CTS.Model;
+    using Fanex.NAP.CTS.Model.Transaction;
 
     [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class AccountController : BaseController
@@ -537,22 +538,26 @@
             return PartialView("TransactionHistory/TransactionHistory");
         }
 
-        public ActionResult GetTransactionHistory(int ctsCustId, int subscriberId, int dateRange)
+        public ActionResult GetTransactionHistory(DataTableAjaxPostModel model)
         {
+            var take = model.length;
+            var skip = model.start;
+            var totalItem = 0;
+
             var fromDate = DateTime.Now;
             var toDate = DateTime.Now;
 
-            if (dateRange == (int)TransactionHistoryLength.Hours24)
+            if (model.DateRange == (int)TransactionHistoryLength.Hours24)
             {
                 toDate = DateTime.Now;
                 fromDate = toDate.AddDays((int)TransactionHistoryLength.Hours24 * -1);
             }
-            else if (dateRange == (int)TransactionHistoryLength.Days7)
+            else if (model.DateRange == (int)TransactionHistoryLength.Days7)
             {
                 toDate = DateTime.Now;
                 fromDate = toDate.AddDays((int)TransactionHistoryLength.Days7 * -1);
             }
-            else if (dateRange == (int)TransactionHistoryLength.Days30)
+            else if (model.DateRange == (int)TransactionHistoryLength.Days30)
             {
                 toDate = DateTime.Now;
                 fromDate = toDate.AddDays((int)TransactionHistoryLength.Days30 * -1);
@@ -563,14 +568,27 @@
                 fromDate = toDate.AddDays((int)TransactionHistoryLength.Days180 * -1);
             }
 
-            if (ctsCustId < 0 || subscriberId < 0 || fromDate > toDate)
+            if (model.CTSCustId < 0 || model.SubscriberId < 0 || fromDate > toDate)
             {
                 return Json(null, JsonRequestBehavior.AllowGet);
             }
 
-            var result = _transService.GetTransactionHistory(ctsCustId, subscriberId, Convert.ToDateTime(fromDate.ToString("yyyy-MM-dd")), Convert.ToDateTime(toDate.ToString("yyyy-MM-dd")));
+            var result = _transService.GetTransactionHistory(
+                model.CTSCustId,
+                model.SubscriberId,
+                Convert.ToDateTime(fromDate.ToString("yyyy-MM-dd")),
+                Convert.ToDateTime(toDate.ToString("yyyy-MM-dd")),
+                take,
+                skip,
+                out totalItem);
 
-            return Json(result, JsonRequestBehavior.AllowGet);
+            return Json(new
+            {
+                draw = model.draw,
+                recordsTotal = totalItem,
+                recordsFiltered = totalItem,
+                data = result.OrderByDescending(x => x.TransTime)
+            }, JsonRequestBehavior.AllowGet);
         }
         #endregion
 

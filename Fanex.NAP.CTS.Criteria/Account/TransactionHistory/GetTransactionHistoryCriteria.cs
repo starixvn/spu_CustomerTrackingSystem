@@ -18,6 +18,15 @@
         [SpParam(SqlParamName = "ip_CTSCustId")]
         public long CTSCustId { get; set; }
 
+        [SpParam(SqlParamName = "ip_PageSize")]
+        public int PageSize { get; set; }
+
+        [SpParam(SqlParamName = "ip_PageNumber")]
+        public int PageNumber { get; set; }
+
+        [SpParam(SqlParamName = "op_TotalItem")]
+        public int TotalItem { get; set; }
+
         public override string GetSettingKey()
         {
             return "DCS_DC_Get_HistoryTransaction";
