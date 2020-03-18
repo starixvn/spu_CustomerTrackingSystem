@@ -3,11 +3,11 @@
     using System;
 
     public class HistoryTransactionModel
-    {
+    {        
         public long TransId { get; set; }
 
-        public string TransTime { get; set; }
-
+        public DateTime TransTime { get; set; }
+                
         public string DeviceId { get; set; }
 
         public string Ip { get; set; }

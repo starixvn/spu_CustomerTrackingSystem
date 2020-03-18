@@ -12,8 +12,7 @@
         private static SearchAccountFilter expectedSearchAccountFilter;
         private static GeneralInformationFilter expectedGeneralInformationFilter;
         private static ChainsToEvidenceFilter expectedChainsToEvidenceFilter;
-        private static RetractedAndExceptionEvidenceFilter expectedRetractedAndExceptionEvidenceFilter;
-        private static TransactionHistoryFilter expectedTransactionHistoryFilter;
+        private static RetractedAndExceptionEvidenceFilter expectedRetractedAndExceptionEvidenceFilter;        
 
         public static SearchAccountFilter ExpectedSearchAccountFilter
         {
@@ -54,16 +53,7 @@
                 return expectedRetractedAndExceptionEvidenceFilter;
             }
         }    
-
-        public static TransactionHistoryFilter ExpectedTransactionHistoryFilter
-        {
-            get
-            {
-                expectedTransactionHistoryFilter = expectedTransactionHistoryFilter ?? GenerateSampleTransactionHistoryFilter();
-
-                return expectedTransactionHistoryFilter;
-            }
-        }
+                
 
         private static SearchAccountFilter GenerateSampleSearchAccountFilter()
             => new SearchAccountFilter
@@ -97,13 +87,7 @@
                 AccountId = 9,
                 IsMasterSubscriberAssignment = true,
                 UserId = 8
-            };   
-
-        private static TransactionHistoryFilter GenerateSampleTransactionHistoryFilter()
-            => new TransactionHistoryFilter
-            {
-                AccountId = 9,
-                ReportLength = TransactionHistoryLength.Days7
-            };
+            };  
+       
     }
 }

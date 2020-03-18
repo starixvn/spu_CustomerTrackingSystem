@@ -75,6 +75,7 @@
     <Compile Include="Account\GeneralInformation\GeneralInformationFilter.cs" />
     <Compile Include="Account\Search\SearchAccountFilter.cs" />
     <Compile Include="Account\Search\SubscriberAccount.cs" />
+    <Compile Include="Account\TransactionHistory\TransactionHistoryViewModel.cs" />
     <Compile Include="CheckBetReport\CheckBetTicket.cs" />
     <Compile Include="CustomerMonitor\CustomerDetails\CustomerDetailsInfo.cs" />
     <Compile Include="CustomerMonitor\CustomerDetails\TicketDetails.cs" />
@@ -111,8 +112,6 @@
     <Compile Include="SuspiciousCustomerDetails\TicketDetails.cs" />
     <Compile Include="SuspiciousCustomer\SuspiciousCustomerNoteView.cs" />
     <Compile Include="Account\TransactionHistory\IPInformation.cs" />
-    <Compile Include="Account\TransactionHistory\TransactionHistory.cs" />
-    <Compile Include="Account\TransactionHistory\TransactionHistoryFilter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fanex.NAP.CTS.Model\Fanex.NAP.CTS.Model.csproj">

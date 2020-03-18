@@ -19,6 +19,7 @@
     using Fanex.Logging;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Transaction;
+    using Fanex.NAP.CTS.ViewModel.Account.TransactionHistory;
 
     [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class AccountController : BaseController
@@ -573,7 +574,7 @@
                 return Json(null, JsonRequestBehavior.AllowGet);
             }
 
-            var result = _transService.GetTransactionHistory(
+            var data = _transService.GetTransactionHistory(
                 model.CTSCustId,
                 model.SubscriberId,
                 Convert.ToDateTime(fromDate.ToString("yyyy-MM-dd")),
@@ -581,6 +582,21 @@
                 take,
                 skip,
                 out totalItem);
+
+            var result = data.Select(x => new TransactionHistoryViewModel
+            {
+                TransId = x.TransId,
+                Action = x.Action,
+                ActionResult = x.ActionResult,
+                BrowserName = x.BrowserName,
+                DeviceId = x.DeviceId,
+                Flagged = x.Flagged,
+                Ip = x.Ip,
+                IpId = x.IpId,
+                OSName = x.OSName,
+                TransTime = x.TransTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+                Url = x.Url
+            });
 
             return Json(new
             {
