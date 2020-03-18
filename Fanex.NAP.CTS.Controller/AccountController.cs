@@ -587,7 +587,7 @@
                 draw = model.draw,
                 recordsTotal = totalItem,
                 recordsFiltered = totalItem,
-                data = result.OrderByDescending(x => x.TransTime)
+                data = result
             }, JsonRequestBehavior.AllowGet);
         }
         #endregion
