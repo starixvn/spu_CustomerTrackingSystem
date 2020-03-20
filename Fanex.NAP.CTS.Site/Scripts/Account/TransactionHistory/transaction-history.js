@@ -80,6 +80,7 @@
         }
 
         return null;
+               // common.showError(errMsg);
     }
 
     function RenderIPInformation(obj) {

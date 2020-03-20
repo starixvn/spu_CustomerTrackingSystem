@@ -90,7 +90,7 @@
     }
 
     function RenderGrid(custId, ctsCustId, statusIds, associationType, isDirect) {
-        var url = common.modifyRelativeUrl('/Account/GetAssociatedByAccount');
+        var url = common.modifyRelativeUrl('Account/GetAssociatedByAccount');
 
         $.ajax(url, {
             type: 'POST',
@@ -110,9 +110,8 @@
             complete: function () {
                 associatedByAccountTable.find('tbody').removeClass('loading');
             },
-            error: function (errMsg) {
-                console.log(errMsg);
-                common.showError(errMsg);
+            error: function (errMsg) {                
+                common.showError("There is something wrong. Cannot get association list.");
             }
         });
     }

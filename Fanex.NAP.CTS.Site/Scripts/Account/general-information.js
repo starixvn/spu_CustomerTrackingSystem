@@ -4,7 +4,7 @@
     function getGeneralInformation() {
         common.showLoading();
 
-        var url = common.modifyRelativeUrl('/Account/GetGeneralInformation');
+        var url = common.modifyRelativeUrl('Account/GetGeneralInformation');
         var paramsFilter = {};
         paramsFilter.AccountId = ACCOUNTID;
         paramsFilter.CustId = CUSTID;
@@ -17,7 +17,7 @@
             },
             error: function (errMsg) {
                 console.log(errMsg);
-                common.showError(errMsg);
+                //common.showError(errMsg);
                 common.closeLoading();
             }
         });

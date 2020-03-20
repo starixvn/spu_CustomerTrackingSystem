@@ -3,54 +3,34 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section styles{
-    <link href="~/Content/scss/MultipleSelect/jquery.multiselect.filter.css" rel="stylesheet" />
-    <link href="~/Content/scss/MultipleSelect/jquery.multiselect.css" rel="stylesheet" />
-    <link href="~/Content/scss/pages/account/account.css" rel="stylesheet" />
+    @Styles.Render("~/account-detail-styles")
 }
 @model Fanex.NAP.CTS.ViewModel.Account.CustomerGeneralStatusViewModel
 <h2 class="page-title">Account Profile</h2>
-
 <div class="content-card">
     <div class="status-info">
         <p>
             <strong>@Model.Role.Name @(Model.CustSubId != 0 ? "(Sub Account)" : string.Empty) :</strong>
             <span class="username">@(Model.UserName != null ? Model.UserName : Model.UserName2) <span class="nickname" style="color: #c16112">(@(Model.UserName2 != null ? Model.UserName2 : Model.UserName))</span></span>
-
             <span class="icon icon-Robot-User hide" title="Robot User"></span>
-
             <span class="icon icon-P-with-Bet-Limit hide" title="Problem Account With Bet Limit reduced"></span>
-
             <span class="icon icon-P-without-Bet-Limit hide" title="Problem Account Without Bet Limit reduced"></span>
-
             <span class="icon icon-Bet-Restrict-Account hide" title="Bet Restricted Account"></span>
-
             <span class="icon icon-Bet-Restricted-Currency hide" title="Bet Restricted Currency"></span>
-
             <span class="icon icon-Bet-Restrict-Site hide" title="Bet Restricted Site"></span>
-
             <span class="icon icon-Bet-Restricted-SiteandCurrency hide" title="Bet Restricted Site and Currency"></span>
-
             <span class="icon icon-Smart-Punter-Account hide" title="Smart Punter Account"></span>
-
             <span class="icon icon-Affected hide" title="Affected"></span>
-
             <span class="icon icon-Flagged hide" title="Flagged"></span>
-
             <span class="icon icon-Flagged-With-Evidence hide" title="Flagged with Evidence 100"></span>
-
             <span class="icon loading"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
-
             <strong style="margin-left: 20px">Account Status: </strong>
             @*<span class="badge-label status-active" style="margin-right: 20px">@(Model.AcountStatus == "NA" ? "N/A" : Model.AcountStatus)</span>*@
-
             <span id="accountStatus" class="badge-label status-active" style="margin-right: 20px"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
-
             <strong>Subscribers: </strong>
             <span class="username">@Model.Subscriber</span>
         </p>
-
     </div>
-
     <div class="account-info">
         <!-- Dates -->
         <div class="info-item">
@@ -68,7 +48,6 @@
                 </div>
             </div>
         </div>
-
         <!--Dangerous-->
         <div class="info-item">
             <div class="info-title">Dangerous</div>
@@ -85,7 +64,6 @@
                 </div>
             </div>
         </div>
-
         <!--Abnormal-->
         <div class="info-item">
             <div class="info-title">Abnormal</div>
@@ -99,7 +77,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Auto Suspend-->
         <div class="info-item">
             <div class="info-title">Auto Suspend</div>
@@ -119,7 +96,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Association & Evidence-->
         <div class="info-item">
             <div class="info-title">Association & Evidence</div>
@@ -146,7 +122,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Committed Fraud Case -->
         <div class="info-item">
             <div class="info-title">Committed Fraud Case</div>
@@ -215,12 +190,7 @@
     <input id="hdSubscriber" type="hidden" value="@Model.Subscriber" />
 </div>
 @section scripts{
-
-    @Scripts.Render(
-    "~/bundles/multiselectfilter",
-    "~/graph-visualize-lib"
-    , "~/associated-by-account-detail-scripts"
-    , "~/account-detail-scripts"
+    @Scripts.Render("~/account-detail-scripts")
     , "~/chain-to-evidence-scripts"
     , "~/account/transaction-history-scripts")
 }

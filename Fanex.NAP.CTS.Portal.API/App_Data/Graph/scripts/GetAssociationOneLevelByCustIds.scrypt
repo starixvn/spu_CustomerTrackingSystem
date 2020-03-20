@@ -1,3 +1,4 @@
 ﻿MATCH (c:CTSCustomer)-[:USED_DEVICE]->(d:Device)<-[:USED_DEVICE]-(c1:CTSCustomer)
 WHERE c.CTSCustID IN $CTSCustIDs
+WITH DISTINCT c,c1
 RETURN c.CTSCustID AS FromCTSCustId, c1.CTSCustID AS ToCTSCustId, c1.SubscriberID AS SubscriberId

@@ -68,9 +68,27 @@
         }
 
         [HttpPost]
+        public ActionResult GetAccountProfile(long custId, long ctsCustId, int subscriberId)
+        {
+            LogService.Info("GetAccountProfile - Before: " + DateTime.Now.ToString());
+            var profile = new AccountProfileViewModel();
+
+            GetCustomerGeneralStatus(custId, ref profile);
+            GetCustomerProfileFraudInfo(custId, ref profile);
+            GetCustomerRobotUserStatus(custId, ref profile);
+            GetCustomerFlagInfo(ctsCustId, subscriberId, ref profile);
+            GetCustomerEsportAutoSuspendedStatus(custId, ref profile);
+
+            LogService.Info("GetAccountProfile - After: " + DateTime.Now.ToString());
+            return Json(profile);
+        }
+
+        [HttpPost]
         public ActionResult GetCustomerTotalAssociationByCTSCustId(long ctsCustId)
         {
+            LogService.Info("GetCustomerTotalAssociationByCTSCustId - Before: " + DateTime.Now.ToString());
             var result = _accountService.GetCustomerTotalAssociationByCTSCustId(ctsCustId, ConfigSettings.GetStatisticAssociation);
+            LogService.Info("GetCustomerTotalAssociationByCTSCustId - After: " + DateTime.Now.ToString());
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -142,6 +160,7 @@
         public ActionResult GetCustomerProfileFraudInfo(long custId)
         {
             var result = _accountService.GetCustomerProfileFraudInfo(custId);
+
             var fraudCaseName = string.Empty;
 
             if (result.FraudCaseList != null && result.FraudCaseList.Any())
@@ -174,6 +193,7 @@
         [HttpPost]
         public ActionResult GetAssociatedByAccount(long ctsCustId, string statusIds, int associationType, bool isDirect)
         {
+            LogService.Info("GetAssociatedByAccount - Before: " + DateTime.Now.ToString());
             var result = new List<CustomerAssociationByAccountDetailViewModel>();
 
             if (string.IsNullOrWhiteSpace(statusIds) || ctsCustId == 0)
@@ -289,6 +309,7 @@
                 }
             }
 
+            LogService.Info("GetAssociatedByAccount - Done: " + DateTime.Now.ToString());
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -533,50 +554,57 @@
 
         #endregion
 
-        #region Transaciton History
-        public ActionResult TransactionHistory()
+        private void GetCustomerGeneralStatus(long custId, ref AccountProfileViewModel profile)
         {
-            return PartialView("TransactionHistory/TransactionHistory");
+            var model = new CustomerGeneralStatusViewModel();
+
+            var result = _accountService.GetCustomerGeneralStatus(custId.ToString()).FirstOrDefault();
+            var accountStatusName = string.Empty;
+
+            if (result != null)
+            {
+                accountStatusName = model.GetAccountStatusName(model.GetAccountStatus(result));
+            }
+            else
+            {
+                accountStatusName = model.GetAccountStatusName(AccountStatus.NA);
+
+                result = new CustomerGeneralStatusModel();
+            }
+
+            profile.GeneralStatusInfo = result;
+            profile.StatusLabel = accountStatusName;
         }
 
-        public ActionResult GetTransactionHistory(DataTableAjaxPostModel model)
+        private void GetCustomerProfileFraudInfo(long custId, ref AccountProfileViewModel profile)
         {
-            var take = model.length;
-            var skip = model.start;
-            var totalItem = 0;            
+            var result = _accountService.GetCustomerProfileFraudInfo(custId);
 
-            var data = _transService.GetTransactionHistory(
-                model.CTSCustId,
-                model.SubscriberId,
-                model.DateRange,
-                take,
-                skip,
-                out totalItem);
+            var fraudCaseName = string.Empty;
 
-            var result = data.Select(x => new TransactionHistoryViewModel
+            if (result.FraudCaseList != null && result.FraudCaseList.Any())
             {
-                TransId = x.TransId,
-                Action = x.Action,
-                ActionResult = x.ActionResult,
-                BrowserName = x.BrowserName,
-                DeviceId = x.DeviceId,
-                Flagged = x.Flagged,
-                Ip = x.Ip,
-                IpId = x.IpId,
-                OSName = x.OSName,
-                TransTime = x.TransTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                Url = x.Url
-            });
+                fraudCaseName = string.Join(", ", result.FraudCaseList.Select(x => x.FraudCaseName));
+            }
 
-            return Json(new
-            {
-                draw = model.draw,
-                recordsTotal = totalItem,
-                recordsFiltered = totalItem,
-                data = result
-            }, JsonRequestBehavior.AllowGet);
+            profile.SuspiciousInfo = result.SuspiciouseCustomer;
+            profile.FraudCases = fraudCaseName;
         }
-        #endregion
+
+        private void GetCustomerRobotUserStatus(long custId, ref AccountProfileViewModel profile)
+        {
+            profile.RobotUserStatus = _accountService.GetCustomerRobotUserStatus(custId);
+        }
+
+        private void GetCustomerFlagInfo(long ctsCustId, int subscriberId, ref AccountProfileViewModel profile)
+        {
+            profile.FlagInfo = _accountService.GetCustomerFlagInfo(ctsCustId, subscriberId);
+        }
+
+        private void GetCustomerEsportAutoSuspendedStatus(long custId, ref AccountProfileViewModel profile)
+        {
+            profile.EsportAutoSuspendStatus = _accountService.GetCustomerEsportAutoSuspendedStatus(custId);
+        }
 
     }
 }

@@ -62,7 +62,7 @@
 
     var $this = this;
 
-    $(document).ajaxError(() => this.showError());
+   // $(document).ajaxError(() => this.showError());
 
     this.showLoading = function () {
         loading.show();
@@ -179,7 +179,7 @@
         });
     }
 
-    this.showSuccess = function (str = "Success", timeout = 3000) {
+    this.showSuccess = function (str = "Success", timeout = 5000) {
         $.toast({
             text: `<div class='toast-content'>${str}</div>`, // Text that is to be shown in the toast
             heading: 'Successful!', // Optional heading to be shown on the toast
