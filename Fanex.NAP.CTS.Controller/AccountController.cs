@@ -543,42 +543,12 @@
         {
             var take = model.length;
             var skip = model.start;
-            var totalItem = 0;
-
-            var fromDate = DateTime.Now;
-            var toDate = DateTime.Now;
-
-            if (model.DateRange == (int)TransactionHistoryLength.Hours24)
-            {
-                toDate = DateTime.Now;
-                fromDate = toDate.AddDays((int)TransactionHistoryLength.Hours24 * -1);
-            }
-            else if (model.DateRange == (int)TransactionHistoryLength.Days7)
-            {
-                toDate = DateTime.Now;
-                fromDate = toDate.AddDays((int)TransactionHistoryLength.Days7 * -1);
-            }
-            else if (model.DateRange == (int)TransactionHistoryLength.Days30)
-            {
-                toDate = DateTime.Now;
-                fromDate = toDate.AddDays((int)TransactionHistoryLength.Days30 * -1);
-            }
-            else
-            {
-                toDate = DateTime.Now;
-                fromDate = toDate.AddDays((int)TransactionHistoryLength.Days180 * -1);
-            }
-
-            if (model.CTSCustId < 0 || model.SubscriberId < 0 || fromDate > toDate)
-            {
-                return Json(null, JsonRequestBehavior.AllowGet);
-            }
+            var totalItem = 0;            
 
             var data = _transService.GetTransactionHistory(
                 model.CTSCustId,
                 model.SubscriberId,
-                Convert.ToDateTime(fromDate.ToString("yyyy-MM-dd")),
-                Convert.ToDateTime(toDate.ToString("yyyy-MM-dd")),
+                model.DateRange,
                 take,
                 skip,
                 out totalItem);

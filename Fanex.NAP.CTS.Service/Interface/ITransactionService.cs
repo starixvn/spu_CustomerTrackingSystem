@@ -7,7 +7,7 @@
 
     public interface ITransactionService
     {
-        IEnumerable<HistoryTransactionModel> GetTransactionHistory(long ctsCustId, int subscriberId, DateTime fromDate, DateTime toDate, int pageSize, int pageNumber, out int totalItem);
+        IEnumerable<HistoryTransactionModel> GetTransactionHistory(long ctsCustId, int subscriberId, int dateRange, int pageSize, int pageNumber, out int totalItem);
 
         IPInformation GetIPInformation(string ipAddress);
     }

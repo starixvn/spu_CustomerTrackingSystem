@@ -84,29 +84,15 @@
                     IsIpV6 = false
                 };
             }
-        }
+        }        
 
-        public IEnumerable<HistoryTransactionModel> GetTransactionHistory(long ctsCustId, int subscriberId, DateTime fromDate, DateTime toDate)
+        public IEnumerable<HistoryTransactionModel> GetTransactionHistory(long ctsCustId, int subscriberId, int dateRange, int pageSize, int pageNumber, out int totalItem)
         {
             var criteria = new GetTransactionHistoryCriteria
             {
                 CTSCustId = ctsCustId,
                 SubscriberId = subscriberId,
-                FromDate = fromDate,
-                ToDate = toDate
-            };
-
-            return DataService.GetData<HistoryTransactionModel>(criteria);
-        }
-
-        public IEnumerable<HistoryTransactionModel> GetTransactionHistory(long ctsCustId, int subscriberId, DateTime fromDate, DateTime toDate, int pageSize, int pageNumber, out int totalItem)
-        {
-            var criteria = new GetTransactionHistoryCriteria
-            {
-                CTSCustId = ctsCustId,
-                SubscriberId = subscriberId,
-                FromDate = fromDate,
-                ToDate = toDate,
+                DateRange = dateRange,
                 PageSize = pageSize,
                 PageNumber = pageNumber,
                 TotalItem = 0
