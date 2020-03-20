@@ -72,15 +72,83 @@
         {
             LogService.Info("GetAccountProfile - Before: " + DateTime.Now.ToString());
             var profile = new AccountProfileViewModel();
+            var tasks = new List<Task>();
 
-            GetCustomerGeneralStatus(custId, ref profile);
-            GetCustomerProfileFraudInfo(custId, ref profile);
-            GetCustomerRobotUserStatus(custId, ref profile);
-            GetCustomerFlagInfo(ctsCustId, subscriberId, ref profile);
-            GetCustomerEsportAutoSuspendedStatus(custId, ref profile);
+            tasks.Add(Task.Run(() =>
+            {
+                try
+                {
+                    GetCustomerGeneralStatus(custId, ref profile);
+                }
+                catch (Exception ex)
+                {
+                    LogService.Info(ex.Message);
+
+                    throw;
+                }
+            }));
+
+            tasks.Add(Task.Run(() =>
+            {
+                try
+                {
+                    GetCustomerProfileFraudInfo(custId, ref profile);
+                }
+                catch (Exception ex)
+                {
+                    LogService.Info(ex.Message);
+
+                    throw;
+                }
+            }));
+
+            tasks.Add(Task.Run(() =>
+            {
+                try
+                {
+                    GetCustomerRobotUserStatus(custId, ref profile);
+                }
+                catch (Exception ex)
+                {
+                    LogService.Info(ex.Message);
+
+                    throw;
+                }
+            }));
+
+            tasks.Add(Task.Run(() =>
+            {
+                try
+                {
+                    GetCustomerFlagInfo(ctsCustId, subscriberId, ref profile);
+                }
+                catch (Exception ex)
+                {
+                    LogService.Info(ex.Message);
+
+                    throw;
+                }
+            }));
+
+            tasks.Add(Task.Run(() =>
+            {
+                try
+                {
+                    GetCustomerEsportAutoSuspendedStatus(custId, ref profile);
+                }
+                catch (Exception ex)
+                {
+                    LogService.Info(ex.Message);
+
+                    throw;
+                }
+            }));
+
+            Task.WhenAll(tasks.ToArray()).Wait();
 
             LogService.Info("GetAccountProfile - After: " + DateTime.Now.ToString());
-            return Json(profile);
+
+            return Json(profile, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
