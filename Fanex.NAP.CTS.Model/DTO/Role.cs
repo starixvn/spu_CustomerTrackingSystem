@@ -36,7 +36,7 @@ namespace Fanex.NAP.CTS.Model.DTO
                         return "Master";
                 }
 
-                return "Supper";
+                return "Super";
             }
         }
     }

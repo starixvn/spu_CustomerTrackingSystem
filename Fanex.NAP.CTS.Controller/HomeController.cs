@@ -109,7 +109,7 @@
 
             if(words.Length == 1)
             {
-                result.Append($"{words[0]}* ");
+                result.Append($"{words[0]}*");
             }
             else
             {
