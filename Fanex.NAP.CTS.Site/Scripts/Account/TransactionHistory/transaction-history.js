@@ -14,7 +14,7 @@
         params.subscriberId = _subscriberId;
         params.dateRange = dateRange.val();
 
-        transactionTable.DataTable({
+        var table = transactionTable.DataTable({
             destroy: true,
             serverSide: true,
             processing: false,
@@ -41,7 +41,7 @@
             },
             ordering: false,
             searching: false,
-            lengthMenu: [2, 100, 200, 500],
+            lengthMenu: [2, 100, 200, 500],            
             pageLength: 2,
             scrollX: false,
             scrollCollapse: false,           
@@ -69,6 +69,8 @@
                 { data: obj => GetHostName(obj.Url) }
             ]
         });
+
+        table.page(1).draw();
 
         transactionTable.on('click', '.ip-link', ShowFormIPInformation);
     }
