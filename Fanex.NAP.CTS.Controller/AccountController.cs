@@ -606,5 +606,49 @@
             profile.EsportAutoSuspendStatus = _accountService.GetCustomerEsportAutoSuspendedStatus(custId);
         }
 
+         #region Transaciton History
+        public ActionResult TransactionHistory()
+        {
+            return PartialView("TransactionHistory/TransactionHistory");
+        }
+
+        public ActionResult GetTransactionHistory(DataTableAjaxPostModel model)
+        {
+            var take = model.length;
+            var skip = model.start;
+            var totalItem = 0;            
+
+            var data = _transService.GetTransactionHistory(
+                model.CTSCustId,
+                model.SubscriberId,
+                model.DateRange,
+                take,
+                skip,
+                out totalItem);
+
+            var result = data.Select(x => new TransactionHistoryViewModel
+            {
+                TransId = x.TransId,
+                Action = x.Action,
+                ActionResult = x.ActionResult,
+                BrowserName = x.BrowserName,
+                DeviceId = x.DeviceId,
+                Flagged = x.Flagged,
+                Ip = x.Ip,
+                IpId = x.IpId,
+                OSName = x.OSName,
+                TransTime = x.TransTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+                Url = x.Url
+            });
+
+            return Json(new
+            {
+                draw = model.draw,
+                recordsTotal = totalItem,
+                recordsFiltered = totalItem,
+                data = result
+            }, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
     }
 }

@@ -50,7 +50,8 @@
             //RegisterSubscriberAssignment(bundles);
             RegisterSearchBundles(bundles);
             RegisterAccountDetailBundles(bundles);
-            RegisterEvidenceBundles(bundles);
+            RegisterChainToEvidenceBundles(bundles);
+
             RegisterTransactionHistoryBundles(bundles);
 
         }
@@ -183,5 +184,12 @@
             bundles.Add(new ScriptBundle("~/account/transaction-history-scripts").Include("~/Scripts/Account/TransactionHistory/*.js"));
         }
 
+        private static void RegisterChainToEvidenceBundles(BundleCollection bundles)
+        {
+            bundles.Add(new ScriptBundle("~/chain-to-evidence-scripts")
+                .Include("~/scripts/Account/ChainToEvidence/account-evidence.js",
+                "~/scripts/Account/ChainToEvidence/account-exceptions.js"
+                ));
+        }
     }
 }
