@@ -231,7 +231,7 @@
                     Status = x.StatusName,
                     StatusId = x.StatusId,
                     SubscriberId = x.SubscriberId,
-                    Subscriber = getAllSubscribers.Any(aa => aa.SubscriberId == x.SubscriberId) ? getAllSubscribers.FirstOrDefault(a => a.SubscriberId == x.SubscriberId).SubscriberName : "-",
+                    Subscriber = getAllSubscribers.Any(aa => x.SubscriberId != -1 && aa.SubscriberId == x.SubscriberId) ? getAllSubscribers.FirstOrDefault(a => a.SubscriberId == x.SubscriberId).SubscriberName : "-",
                     CTSCustId = x.CTSCustID
                 }).ToList();
 
