@@ -212,7 +212,7 @@
 
                 customerAssociation = _accountService.FilterCustomerAssociationByStatus(statusIds, customerAssociation, getStatusByCustIds);
 
-                //LogService.Info("customerAssociation1:" + JsonConvert.SerializeObject(customerAssociation));
+                LogService.Info("customerAssociation1:" + JsonConvert.SerializeObject(customerAssociation));
 
                 customerAssociation = _accountService.FilterCustomerAssociationByAssociationType(associationType, customerAssociation);
 
