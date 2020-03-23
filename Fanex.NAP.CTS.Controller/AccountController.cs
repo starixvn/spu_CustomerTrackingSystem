@@ -75,7 +75,7 @@
             GetCustomerEsportAutoSuspendedStatus(custId, ref profile);
 
             LogService.Info("GetAccountProfile - After: " + DateTime.Now.ToString());
-            return Json(profile);
+            return Json(profile, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -212,7 +212,7 @@
 
                 customerAssociation = _accountService.FilterCustomerAssociationByStatus(statusIds, customerAssociation, getStatusByCustIds);
 
-                LogService.Info("customerAssociation1:" + JsonConvert.SerializeObject(customerAssociation));
+                //LogService.Info("customerAssociation1:" + JsonConvert.SerializeObject(customerAssociation));
 
                 customerAssociation = _accountService.FilterCustomerAssociationByAssociationType(associationType, customerAssociation);
 
