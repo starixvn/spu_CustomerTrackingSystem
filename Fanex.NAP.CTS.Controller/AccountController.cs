@@ -65,7 +65,7 @@
         [HttpPost]
         public ActionResult GetAccountProfile(long custId, long ctsCustId, int subscriberId)
         {
-            LogService.Info("GetAccountProfile - Before: " + DateTime.Now.ToString());
+           // LogService.Info("GetAccountProfile - Before: " + DateTime.Now.ToString());
             var profile = new AccountProfileViewModel();
 
             GetCustomerGeneralStatus(custId, ref profile);
@@ -74,16 +74,16 @@
             GetCustomerFlagInfo(ctsCustId, subscriberId, ref profile);
             GetCustomerEsportAutoSuspendedStatus(custId, ref profile);
 
-            LogService.Info("GetAccountProfile - After: " + DateTime.Now.ToString());
+           // LogService.Info("GetAccountProfile - After: " + DateTime.Now.ToString());
             return Json(profile, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         public ActionResult GetCustomerTotalAssociationByCTSCustId(long ctsCustId)
         {
-            LogService.Info("GetCustomerTotalAssociationByCTSCustId - Before: " + DateTime.Now.ToString());
+           // LogService.Info("GetCustomerTotalAssociationByCTSCustId - Before: " + DateTime.Now.ToString());
             var result = _accountService.GetCustomerTotalAssociationByCTSCustId(ctsCustId, ConfigSettings.GetStatisticAssociation);
-            LogService.Info("GetCustomerTotalAssociationByCTSCustId - After: " + DateTime.Now.ToString());
+           // LogService.Info("GetCustomerTotalAssociationByCTSCustId - After: " + DateTime.Now.ToString());
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -188,7 +188,7 @@
         [HttpPost]
         public ActionResult GetAssociatedByAccount(long ctsCustId, string statusIds, int associationType, bool isDirect)
         {
-            LogService.Info("GetAssociatedByAccount - Before: " + DateTime.Now.ToString());
+           // LogService.Info("GetAssociatedByAccount - Before: " + DateTime.Now.ToString());
             var result = new List<CustomerAssociationByAccountDetailViewModel>();
 
             if (string.IsNullOrWhiteSpace(statusIds) || ctsCustId == 0)
@@ -304,7 +304,7 @@
                 }
             }
 
-            LogService.Info("GetAssociatedByAccount - Done: " + DateTime.Now.ToString());
+           // LogService.Info("GetAssociatedByAccount - Done: " + DateTime.Now.ToString());
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
