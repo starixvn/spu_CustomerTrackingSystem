@@ -34,9 +34,11 @@ namespace Fanex.NAP.CTS.Model.DTO
                         return "Agent";
                     case 3:
                         return "Master";
+                    case 4:
+                        return "Super";
                 }
 
-                return "Super";
+                return "User";
             }
         }
     }
