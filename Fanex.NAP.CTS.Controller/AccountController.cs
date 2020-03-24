@@ -70,7 +70,7 @@
         [HttpPost]
         public ActionResult GetAccountProfile(long custId, long ctsCustId, int subscriberId)
         {
-            //LogService.Info("GetAccountProfile - Before: " + DateTime.Now.ToString());
+           // LogService.Info("GetAccountProfile - Before: " + DateTime.Now.ToString());
             var profile = new AccountProfileViewModel();
             var tasks = new List<Task>();
 
@@ -154,9 +154,9 @@
         [HttpPost]
         public ActionResult GetCustomerTotalAssociationByCTSCustId(long ctsCustId)
         {
-            //LogService.Info("GetCustomerTotalAssociationByCTSCustId - Before: " + DateTime.Now.ToString());
+           // LogService.Info("GetCustomerTotalAssociationByCTSCustId - Before: " + DateTime.Now.ToString());
             var result = _accountService.GetCustomerTotalAssociationByCTSCustId(ctsCustId, ConfigSettings.GetStatisticAssociation);
-            //LogService.Info("GetCustomerTotalAssociationByCTSCustId - After: " + DateTime.Now.ToString());
+           // LogService.Info("GetCustomerTotalAssociationByCTSCustId - After: " + DateTime.Now.ToString());
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -261,7 +261,7 @@
         [HttpPost]
         public ActionResult GetAssociatedByAccount(long ctsCustId, string statusIds, int associationType, bool isDirect)
         {
-            //LogService.Info("GetAssociatedByAccount - Before: " + DateTime.Now.ToString());
+           // LogService.Info("GetAssociatedByAccount - Before: " + DateTime.Now.ToString());
             var result = new List<CustomerAssociationByAccountDetailViewModel>();
 
             if (string.IsNullOrWhiteSpace(statusIds) || ctsCustId == 0)
@@ -304,7 +304,7 @@
                     Status = x.StatusName == "NA" ? "N/A" : x.StatusName,
                     StatusId = x.StatusId,
                     SubscriberId = x.SubscriberId,
-                    Subscriber = getAllSubscribers.Any(aa => aa.SubscriberId == x.SubscriberId) ? getAllSubscribers.FirstOrDefault(a => a.SubscriberId == x.SubscriberId).SubscriberName : "-",
+                    Subscriber = getAllSubscribers.Any(aa => x.SubscriberId != -1 && aa.SubscriberId == x.SubscriberId) ? getAllSubscribers.FirstOrDefault(a => a.SubscriberId == x.SubscriberId).SubscriberName : "-",
                     CTSCustId = x.CTSCustID
                 }).ToList();
 
