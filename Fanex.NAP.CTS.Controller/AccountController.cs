@@ -261,7 +261,7 @@
         [HttpPost]
         public ActionResult GetAssociatedByAccount(long ctsCustId, string statusIds, int associationType, bool isDirect)
         {
-           // LogService.Info("GetAssociatedByAccount - Before: " + DateTime.Now.ToString());
+            LogService.Info("GetAssociatedByAccount - CTSCustId: "+ ctsCustId + " - Before: " + DateTime.Now.ToString());
             var result = new List<CustomerAssociationByAccountDetailViewModel>();
 
             if (string.IsNullOrWhiteSpace(statusIds) || ctsCustId == 0)
@@ -277,7 +277,7 @@
             {
                 var custIds = string.Join(",", customerAssociation.Select(x => x.CustId));
 
-                //LogService.Info("custIds:" + custIds);
+     
 
                 var getStatusByCustIds = _accountService.GetCustomerGeneralStatus(custIds);
 
@@ -285,11 +285,11 @@
 
                 customerAssociation = _accountService.FilterCustomerAssociationByStatus(statusIds, customerAssociation, getStatusByCustIds);
 
-                //LogService.Info("customerAssociation1:" + JsonConvert.SerializeObject(customerAssociation));
+                
 
                 customerAssociation = _accountService.FilterCustomerAssociationByAssociationType(associationType, customerAssociation);
 
-                //LogService.Info("customerAssociation2:" + JsonConvert.SerializeObject(customerAssociation));
+                
 
                 result = customerAssociation.Select(x => new CustomerAssociationByAccountDetailViewModel
                 {
@@ -308,76 +308,76 @@
                     CTSCustId = x.CTSCustID
                 }).ToList();
 
-                //if (result != null && result.Any())
-                //{
-                //    var tasks = new List<Task>();
+                if (result != null && result.Any())
+                {
+                    var tasks = new List<Task>();
 
 
-                //    var getFlaggedTags = new List<TagModel>();
-                //    var getAffectedTags = new List<TagModel>();
-                //    var getCustIdsAffectedTag = new List<GraphDirectAssociationModel>();
+                    var getFlaggedTags = new List<TagModel>();
+                    var getAffectedTags = new List<TagModel>();
+                    var getCustIdsAffectedTag = new List<GraphDirectAssociationModel>();
 
-                //    tasks.Add(Task.Run(() =>
-                //    {
-                //        try
-                //        {
-                //            var custIdsFlaggedTag = result.Select(a => new { a.SubscriberId, a.CTSCustId });
-                //            getFlaggedTags = _accountService.GetDirectAssociatedAccountTagFlagged(JsonConvert.SerializeObject(custIdsFlaggedTag));
-                //        }
-                //        catch (Exception ex)
-                //        {
-                //            LogService.Info(ex.Message);
+                    tasks.Add(Task.Run(() =>
+                    {
+                        try
+                        {
+                            var custIdsFlaggedTag = result.Select(a => new { a.SubscriberId, a.CTSCustId });
+                            getFlaggedTags = _accountService.GetDirectAssociatedAccountTagFlagged(JsonConvert.SerializeObject(custIdsFlaggedTag));
+                        }
+                        catch (Exception ex)
+                        {
+                            LogService.Info(ex.Message);
 
-                //            throw;
-                //        }
-                //    }));
+                            throw;
+                        }
+                    }));
 
-                //    tasks.Add(Task.Run(() =>
-                //    {
-                //        try
-                //        {
-                //            var custIdsAffectedTag = result.Select(a => a.CTSCustId).ToList();
-                //            getCustIdsAffectedTag = _accountService.GetDirectAssocationByGraph(ConfigSettings.GetDirectAssociationMultiCust, custIdsAffectedTag);
+                    tasks.Add(Task.Run(() =>
+                    {
+                        try
+                        {
+                            var custIdsAffectedTag = result.Select(a => a.CTSCustId).ToList();
+                            getCustIdsAffectedTag = _accountService.GetDirectAssocationByGraph(ConfigSettings.GetDirectAssociationMultiCust, custIdsAffectedTag);
 
-                //            if (getCustIdsAffectedTag != null && getCustIdsAffectedTag.Any())
-                //            {
-                //                var jsonParam = JsonConvert.SerializeObject(getCustIdsAffectedTag);
+                            if (getCustIdsAffectedTag != null && getCustIdsAffectedTag.Any())
+                            {
+                                var jsonParam = JsonConvert.SerializeObject(getCustIdsAffectedTag);
 
-                //                getAffectedTags = _accountService.GetDirectAssociatedAccountTagAffected(jsonParam);
-                //            }
-                //            else
-                //            {
-                //                LogService.Error("GetDirectAssociationMultiCust is null");
-                //            }
-                //        }
-                //        catch (Exception ex)
-                //        {
-                //            LogService.Info(ex.Message);
+                                getAffectedTags = _accountService.GetDirectAssociatedAccountTagAffected(jsonParam);
+                            }
+                            else
+                            {
+                                LogService.Error("GetDirectAssociationMultiCust is null");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            LogService.Info(ex.Message);
 
-                //            throw;
-                //        }
-                //    }));
+                            throw;
+                        }
+                    }));
 
-                //    Task.WhenAll(tasks.ToArray()).Wait();
+                    Task.WhenAll(tasks.ToArray()).Wait();
 
-                //    result = result.Select(x =>
-                //    {
-                //        var affectedTags = getAffectedTags.Where(z => z.FromCTSCustId == x.CTSCustId);
+                    result = result.Select(x =>
+                    {
+                        var affectedTags = getAffectedTags.Where(z => z.FromCTSCustId == x.CTSCustId);
 
-                //        x.AffectedTag = (affectedTags != null && affectedTags.Any()) ? affectedTags.FirstOrDefault().AffectedTag : 0;
+                        x.AffectedTag = (affectedTags != null && affectedTags.Any()) ? affectedTags.FirstOrDefault().AffectedTag : 0;
 
-                //        var flaggedTag = getFlaggedTags.Where(z => z.CTSCustId == x.CTSCustId);
+                        var flaggedTag = getFlaggedTags.Where(z => z.CTSCustId == x.CTSCustId);
 
-                //        x.FlaggedTag = (flaggedTag != null && flaggedTag.Any()) ? flaggedTag.FirstOrDefault().FlaggedTag : 0;
+                        x.FlaggedTag = (flaggedTag != null && flaggedTag.Any()) ? flaggedTag.FirstOrDefault().FlaggedTag : 0;
 
-                //        return x;
-                //    })
-                //    .OrderBy(a => a.StatusId)
-                //    .ToList();
-                //}
+                        return x;
+                    })
+                    .OrderBy(a => a.StatusId)
+                    .ToList();
+                }
             }
 
-           // LogService.Info("GetAssociatedByAccount - Done: " + DateTime.Now.ToString());
+            LogService.Info("GetAssociatedByAccount - CTSCustId: " + ctsCustId + " - Done: " + DateTime.Now.ToString());
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
