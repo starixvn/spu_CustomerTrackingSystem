@@ -60,6 +60,38 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
             }
         }
 
+        [System.Web.Http.AcceptVerbs("GetDirectAssociationByDevice")]
+        [HttpPost]
+        public IEnumerable<GraphAssociationModel> GetDirectAssociationByDevice([FromBody] int ctsCustId)
+        {
+            try
+            {
+                var result = DbSessionFactory.Execute<GraphAssociationModel>("GetAssociationOneLevelByCustIdByDevice", new { CTSCustID = ctsCustId }).Data;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("GetDirectAssociationByDevice failed: " + ex.Message + ex.StackTrace);
+                throw;
+            }
+        }
+
+        [System.Web.Http.AcceptVerbs("GetDirectAssociationByIP")]
+        [HttpPost]
+        public IEnumerable<GraphAssociationModel> GetDirectAssociationByIP([FromBody] int ctsCustId)
+        {
+            try
+            {
+                var result = DbSessionFactory.Execute<GraphAssociationModel>("GetAssociationOneLevelByCustIdByIP", new { CTSCustID = ctsCustId }).Data;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("GetDirectAssociation failed: " + ex.Message + ex.StackTrace);
+                throw;
+            }
+        }
+
         [System.Web.Http.AcceptVerbs("GetDirectAssociationMultiCust")]
         [HttpPost]
         public IEnumerable<GraphDirectAssociationModel> GetDirectAssociationMultiCust([FromBody] List<long> ctsCustIds)

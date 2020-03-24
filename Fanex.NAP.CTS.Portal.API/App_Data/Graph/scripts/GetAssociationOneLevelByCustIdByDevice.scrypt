@@ -1,0 +1,6 @@
+﻿MATCH (c:CTSCustomer)-[r:USED_DEVICE]->(d:Device)<-[r1:USED_DEVICE]-(c1:CTSCustomer)
+WHERE c.CTSCustID = $CTSCustID
+WITH c,c1,d,r,r1
+OPTIONAL MATCH (c)-[:USED_IP]->(i:IP)<-[:USED_IP]-(c1)
+UNWIND [r.CreatedTime,r1.CreatedTime] AS val
+RETURN c1.CTSCustID as CTSCustID, c1.CustID AS CustId, c1.UserName AS Username, c1.UserName2 AS Username2, 1 AS AssociationType, COUNT(DISTINCT d) AS SharedDevices, COUNT(DISTINCT i) AS SharedIPs, c1.SubscriberID AS SubscriberId, MAX(val) AS AssociationDate

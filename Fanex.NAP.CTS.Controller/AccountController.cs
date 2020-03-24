@@ -277,19 +277,13 @@
             {
                 var custIds = string.Join(",", customerAssociation.Select(x => x.CustId));
 
-     
-
                 var getStatusByCustIds = _accountService.GetCustomerGeneralStatus(custIds);
 
                 var getAllSubscribers = _subscriberAssignmentService.GetSubscribers(0);
 
                 customerAssociation = _accountService.FilterCustomerAssociationByStatus(statusIds, customerAssociation, getStatusByCustIds);
 
-                
-
                 customerAssociation = _accountService.FilterCustomerAssociationByAssociationType(associationType, customerAssociation);
-
-                
 
                 result = customerAssociation.Select(x => new CustomerAssociationByAccountDetailViewModel
                 {
