@@ -41,8 +41,8 @@
             },
             ordering: false,
             searching: false,
-            lengthMenu: [2, 100, 200, 500],            
-            pageLength: 2,
+            lengthMenu: [50, 100, 200, 500],            
+            pageLength: 50,
             scrollX: false,
             scrollCollapse: false,           
             columnDefs: [
