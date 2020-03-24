@@ -60,6 +60,10 @@
 
         public static string GetDirectAssociation => GetConfigStringByName("Graph_GetDirectAssociation");
 
+        public static string GetDirectAssociationByDevice => GetConfigStringByName("Graph_GetDirectAssociationByDevice");
+
+        public static string GetDirectAssociationByIP => GetConfigStringByName("Graph_GetDirectAssociationByIP");
+
         public static string GetInDirectAssociation => GetConfigStringByName("Graph_GetInDirectAssociation");
 
         public static string GetShortestAssociation => GetConfigStringByName("Graph_GetShortestPath");
