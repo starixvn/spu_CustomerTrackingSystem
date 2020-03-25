@@ -296,9 +296,9 @@
 
                 var getAllSubscribers = _subscriberAssignmentService.GetSubscribers(0);
 
-                //LogService.Info("Filter Status - CTSCustId: " + ctsCustId + " - Start: " + DateTime.Now.ToString());
-                //customerAssociation = _accountService.FilterCustomerAssociationByStatus(statusIds, customerAssociation, getStatusByCustIds);
-                //LogService.Info("Filter Status - CTSCustId: " + ctsCustId + " - End: " + DateTime.Now.ToString());
+                LogService.Info("Filter Status - CTSCustId: " + ctsCustId + " - Start: " + DateTime.Now.ToString());
+                customerAssociation = _accountService.FilterCustomerAssociationByStatus(statusIds, customerAssociation, getStatusByCustIds);
+                LogService.Info("Filter Status - CTSCustId: " + ctsCustId + " - End: " + DateTime.Now.ToString());
 
                 //LogService.Info("Filter Ass type - CTSCustId: " + ctsCustId + " - Start: " + DateTime.Now.ToString());
                 customerAssociation = _accountService.FilterCustomerAssociationByAssociationType(associationType, customerAssociation);

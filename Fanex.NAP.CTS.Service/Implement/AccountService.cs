@@ -686,16 +686,7 @@
         {
             var accountStatusViewModel = new CustomerGeneralStatusViewModel();
             var notAvailable = accountStatusViewModel.GetAccountStatusName(Model.AccountStatus.NA);
-            var notAvailableId = accountStatusViewModel.GetAccountStatusId(notAvailable);
-
-            var accountStatus = statusByCustIds.Select(x => new AccountStatusModel
-            {
-                CustId = x.CustId,
-                Username = x.Username,
-                StatusName = accountStatusViewModel.GetAccountStatusName(accountStatusViewModel.GetAccountStatus(x)),
-                StatusId = accountStatusViewModel.GetAccountStatusId(accountStatusViewModel.GetAccountStatusName(accountStatusViewModel.GetAccountStatus(x)))
-            });
-
+            var notAvailableId = accountStatusViewModel.GetAccountStatusId(notAvailable);          
 
             customerAssociation = customerAssociation.Select(x =>
             {
@@ -707,14 +698,15 @@
                 }
                 else
                 {
-                    var customerStatus = accountStatus.Where(a => a.CustId == x.CustId);
+                    var customerStatus = statusByCustIds.FirstOrDefault(a => a.CustId == x.CustId);                    
 
-                    if(customerStatus != null && customerStatus.Any())
+                    if (customerStatus != null)
                     {
-                        var status = customerStatus.FirstOrDefault(a => a.CustId == x.CustId);
+                        var accountStatus = accountStatusViewModel.GetAccountStatus(customerStatus);
+                        var statusName = accountStatusViewModel.GetAccountStatusName(accountStatus);
 
-                        x.StatusId = status.StatusId;
-                        x.StatusName = status.StatusName;
+                        x.StatusId = accountStatusViewModel.GetAccountStatusId(statusName);
+                        x.StatusName = statusName;
                     }
                     else
                     {
