@@ -286,12 +286,14 @@
 
            // LogService.Info("From Graph - CTSCustId: " + ctsCustId + " - Start: " + DateTime.Now.ToString());
             var customerAssociation = model.IsDirect ?
-                _accountService.GetCustomerAssociationByGraph(directAssociationUrl, model.CTSCustId) :
-                _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetInDirectAssociation, model.CTSCustId);
+                _accountService.GetCustomerAssociationByGraph(directAssociationUrl, model.CTSCustId,skip, take).AssociationList :
+                _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetInDirectAssociation, model.CTSCustId, skip, take).AssociationList;
            // LogService.Info("From Graph - CTSCustId: " + ctsCustId + " - End: " + DateTime.Now.ToString());
 
             if (customerAssociation != null && customerAssociation.Any())
             {
+                totalItem = customerAssociation.Count;
+
                 var custIds = string.Join(",", customerAssociation.Select(x => x.CustId));
 
                // LogService.Info("GET Status - CTSCustId: " + ctsCustId + " - Start: " + DateTime.Now.ToString());
@@ -396,7 +398,7 @@
                     .OrderBy(a => a.StatusId)
                     .ToList();
 
-                    totalItem = result.Count;                   
+                                       
                 }
             }
 
@@ -405,36 +407,36 @@
                 draw = model.draw,
                 recordsTotal = totalItem,
                 recordsFiltered = totalItem,
-                data = result.Skip(skip).Take(take)
+                data = result
             }, JsonRequestBehavior.AllowGet);
             ///return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpPost]
-        public ActionResult GetDirectAssociationGraph(Int64 ctsCustid, string username)
-        {
-            var graphCustomer = new GraphCustomerItemViewModel();
+        //[HttpPost]
+        //public ActionResult GetDirectAssociationGraph(Int64 ctsCustid, string username)
+        //{
+        //    var graphCustomer = new GraphCustomerItemViewModel();
 
-            var customerAssociationList = _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetDirectAssociation, ctsCustid);
-            if (customerAssociationList != null && customerAssociationList.Any())
-            {
-                var now = DateTime.Now.Ticks.ToString();
-                var graphCustomerList = customerAssociationList
-                    .Select(x => new GraphCustomerItemViewModel
-                    {
-                        CTSCustId = x.CTSCustID,
-                        ItemCode = x.CTSCustID.ToString() + "_" + now,
-                        DisplayName = !string.IsNullOrWhiteSpace(x.Username) ? x.Username : x.Username2
-                    }).ToList();
+        //    var customerAssociationList = _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetDirectAssociation, ctsCustid);
+        //    if (customerAssociationList != null && customerAssociationList.Any())
+        //    {
+        //        var now = DateTime.Now.Ticks.ToString();
+        //        var graphCustomerList = customerAssociationList
+        //            .Select(x => new GraphCustomerItemViewModel
+        //            {
+        //                CTSCustId = x.CTSCustID,
+        //                ItemCode = x.CTSCustID.ToString() + "_" + now,
+        //                DisplayName = !string.IsNullOrWhiteSpace(x.Username) ? x.Username : x.Username2
+        //            }).ToList();
 
-                graphCustomer.children = graphCustomerList.ToArray();
-            }
+        //        graphCustomer.children = graphCustomerList.ToArray();
+        //    }
 
-            graphCustomer.CTSCustId = ctsCustid;
-            graphCustomer.DisplayName = username;
+        //    graphCustomer.CTSCustId = ctsCustid;
+        //    graphCustomer.DisplayName = username;
 
-            return Json(graphCustomer, JsonRequestBehavior.AllowGet);
-        }
+        //    return Json(graphCustomer, JsonRequestBehavior.AllowGet);
+        //}
 
         [HttpPost]
         public ActionResult GetShortestAssociationGraph(int custIdFrom, int custIdTo)

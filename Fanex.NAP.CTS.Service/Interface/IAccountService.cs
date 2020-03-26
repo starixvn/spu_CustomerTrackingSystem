@@ -40,7 +40,7 @@
 
         CustomerFlagInfoModel GetCustomerFlagInfo(long ctsCustId, int subscriberId);
 
-        List<GraphAssociationModel> GetCustomerAssociationByGraph(string apiURL, long ctsCustId);
+        GraphAssociationPaging GetCustomerAssociationByGraph(string apiURL, long ctsCustId, int skipNumber, int takeNumber);
 
         List<GraphDirectAssociationModel> GetDirectAssocationByGraph(string apiURL, List<long> ctsCustIds);
 

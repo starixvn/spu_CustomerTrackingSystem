@@ -46,7 +46,7 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
         /// 
         [System.Web.Http.AcceptVerbs("GetDirectAssociation")]
         [HttpPost]
-        public GraphAssociationPaging GetDirectAssociation([FromBody] int ctsCustId, int takeRow, int skipRow)
+        public GraphAssociationPaging GetDirectAssociation([FromBody] int ctsCustId, [FromBody] int takeRow, [FromBody] int skipRow)
         {
             try
             {
@@ -67,7 +67,7 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
 
         [System.Web.Http.AcceptVerbs("GetDirectAssociationByDevice")]
         [HttpPost]
-        public IEnumerable<GraphAssociationModel> GetDirectAssociationByDevice([FromBody] int ctsCustId, int takeRow, int skipRow)
+        public IEnumerable<GraphAssociationModel> GetDirectAssociationByDevice([FromBody] int ctsCustId, [FromBody] int takeRow, [FromBody] int skipRow)
         {
             try
             {
@@ -88,7 +88,7 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
 
         [System.Web.Http.AcceptVerbs("GetDirectAssociationByIP")]
         [HttpPost]
-        public IEnumerable<GraphAssociationModel> GetDirectAssociationByIP([FromBody] int ctsCustId, int takeRow, int skipRow)
+        public IEnumerable<GraphAssociationModel> GetDirectAssociationByIP([FromBody] int ctsCustId, [FromBody] int takeRow, [FromBody] int skipRow)
         {
             try
             {

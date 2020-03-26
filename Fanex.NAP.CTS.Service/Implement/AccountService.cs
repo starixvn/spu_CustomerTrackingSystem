@@ -650,15 +650,15 @@
             }
         }
 
-        public List<GraphAssociationModel> GetCustomerAssociationByGraph(string apiURL, long ctsCustId)
-        {
-            var data = ApiHelper.Post<List<GraphAssociationModel>>(apiURL, ctsCustId);
+        public GraphAssociationPaging GetCustomerAssociationByGraph(string apiURL, long ctsCustId, int skipNumber, int takeNumber)
+        {            
+            var data = ApiHelper.Post<GraphAssociationPaging>(apiURL, new { ctsCustId = ctsCustId , takeRow= takeNumber, skipRow= skipNumber });
 
             Task.WhenAll(data);
 
             var customersAPI = data.Result;
 
-            return customersAPI ?? new List<GraphAssociationModel>();
+            return customersAPI ?? new GraphAssociationPaging();
         }
 
         public List<GraphDirectAssociationModel> GetDirectAssocationByGraph(string apiURL, List<long> ctsCustIds)
