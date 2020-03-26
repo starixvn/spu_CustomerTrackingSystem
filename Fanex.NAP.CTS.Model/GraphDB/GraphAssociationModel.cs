@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Fanex.NAP.CTS.Model.Account
+namespace Fanex.NAP.CTS.Model.GraphDB
 {
     public class GraphAssociationModel
     {

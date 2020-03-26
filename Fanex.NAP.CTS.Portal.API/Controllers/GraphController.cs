@@ -46,11 +46,16 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
         /// 
         [System.Web.Http.AcceptVerbs("GetDirectAssociation")]
         [HttpPost]
-        public IEnumerable<GraphAssociationModel> GetDirectAssociation([FromBody] int ctsCustId)
+        public GraphAssociationPaging GetDirectAssociation([FromBody] int ctsCustId, int takeRow, int skipRow)
         {
             try
             {
-                var result = DbSessionFactory.Execute<GraphAssociationModel>("GetAssociationOneLevelByCustId", new { CTSCustID = ctsCustId }).Data;
+                var result = DbSessionFactory.ExecuteSingle<GraphAssociationPaging>("GetAssociationOneLevelByCustId", new
+                {
+                    CTSCustID = ctsCustId,
+                    Skip = skipRow,
+                    Pagesize = takeRow
+                }).Data;
                 return result;
             }
             catch (Exception ex)
@@ -62,11 +67,16 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
 
         [System.Web.Http.AcceptVerbs("GetDirectAssociationByDevice")]
         [HttpPost]
-        public IEnumerable<GraphAssociationModel> GetDirectAssociationByDevice([FromBody] int ctsCustId)
+        public IEnumerable<GraphAssociationModel> GetDirectAssociationByDevice([FromBody] int ctsCustId, int takeRow, int skipRow)
         {
             try
             {
-                var result = DbSessionFactory.Execute<GraphAssociationModel>("GetAssociationOneLevelByCustIdByDevice", new { CTSCustID = ctsCustId }).Data;
+                var result = DbSessionFactory.Execute<GraphAssociationModel>("GetAssociationOneLevelByCustIdByDevice", new
+                {
+                    CTSCustID = ctsCustId,
+                    Skip = skipRow,
+                    Pagesize = takeRow
+                }).Data;
                 return result;
             }
             catch (Exception ex)
@@ -78,11 +88,16 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
 
         [System.Web.Http.AcceptVerbs("GetDirectAssociationByIP")]
         [HttpPost]
-        public IEnumerable<GraphAssociationModel> GetDirectAssociationByIP([FromBody] int ctsCustId)
+        public IEnumerable<GraphAssociationModel> GetDirectAssociationByIP([FromBody] int ctsCustId, int takeRow, int skipRow)
         {
             try
             {
-                var result = DbSessionFactory.Execute<GraphAssociationModel>("GetAssociationOneLevelByCustIdByIP", new { CTSCustID = ctsCustId }).Data;
+                var result = DbSessionFactory.Execute<GraphAssociationModel>("GetAssociationOneLevelByCustIdByIP", new
+                {
+                    CTSCustID = ctsCustId,
+                    Skip = skipRow,
+                    Pagesize = takeRow
+                }).Data;
                 return result;
             }
             catch (Exception ex)
@@ -146,19 +161,23 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
 
         [System.Web.Http.AcceptVerbs("TestGetDirectAssociation")]
         [HttpGet]
-        public IEnumerable<GraphAssociationModel> TestGetDirectAssociation(int ctsCustId)
+        public GraphAssociationPaging TestGetDirectAssociation(int ctsCustId, int takeRow, int skipRow)
         {
             try
             {
-                var result = DbSessionFactory.Execute<GraphAssociationModel>("GetAssociationOneLevelByCustId", new { CTSCustID = ctsCustId }).Data;
+                var result = DbSessionFactory.ExecuteSingle<GraphAssociationPaging>("GetAssociationOneLevelByCustId", new
+                {
+                    CTSCustID = ctsCustId,
+                    Skip = skipRow,
+                    Pagesize = takeRow
+                }).Data;
                 return result;
             }
             catch (Exception ex)
             {
-                LogService.Error("TestGetDirectAssociation failed: " + ex.Message + ex.StackTrace + ex.InnerException);
+                LogService.Error("GetDirectAssociation failed: " + ex.Message + ex.StackTrace);
                 throw;
             }
-
         }
 
         [System.Web.Http.AcceptVerbs("TestGetInDirectAssociation")]

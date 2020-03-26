@@ -261,7 +261,7 @@
         [HttpPost]
         public ActionResult GetAssociatedByAccount(long ctsCustId, string statusIds, int associationType, bool isDirect)
         {
-            
+
             var result = new List<CustomerAssociationByAccountDetailViewModel>();
 
             if (string.IsNullOrWhiteSpace(statusIds) || ctsCustId == 0)

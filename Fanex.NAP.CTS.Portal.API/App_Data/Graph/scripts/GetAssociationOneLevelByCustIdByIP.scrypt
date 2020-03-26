@@ -1,6 +1,14 @@
-﻿MATCH (c:CTSCustomer)-[r2:USED_IP]->(i:IP)<-[r3:USED_IP]-(c2:CTSCustomer)
-WHERE c.CTSCustID = $CTSCustID
+﻿CALL apoc.cypher.run('
+MATCH (c:CTSCustomer)-[r2:USED_IP]->(i:IP)<-[r3:USED_IP]-(c2:CTSCustomer)
+WHERE c.CTSCustID = $ip_CTSCustId
 WITH c,c2,i,r2,r3
 OPTIONAL MATCH (c)-[:USED_DEVICE]->(d:Device)<-[:USED_DEVICE]-(c2)
 UNWIND [r2.CreatedTime,r3.CreatedTime] AS val
 RETURN c2.CTSCustID as CTSCustID, c2.CustID AS CustId, c2.UserName AS Username, c2.UserName2 AS Username2, 2 as AssociationType, COUNT(DISTINCT d) AS SharedDevices, COUNT(DISTINCT i) AS SharedIPs, c2.SubscriberID AS SubscriberId, MAX(val) AS AssociationDate
+',{ip_CTSCustId: $CTSCustID}) YIELD value 
+WITH collect(value) as ListAss, count(value) as TotalItems
+UNWIND ListAss as ass
+WITH ass, TotalItems 
+SKIP $Skip
+LIMIT $Pagesize
+RETURN COLLECT(ass) AS AssociationList, TotalItems
