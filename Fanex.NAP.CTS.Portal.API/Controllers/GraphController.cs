@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Results;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace Fanex.NAP.CTS.Portal.API.Controllers
 {
@@ -67,15 +68,18 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
 
         [System.Web.Http.AcceptVerbs("GetDirectAssociationByDevice")]
         [HttpPost]
-        public IEnumerable<GraphAssociationModel> GetDirectAssociationByDevice([FromBody] int ctsCustId, [FromBody] int takeRow, [FromBody] int skipRow)
+        public IEnumerable<GraphAssociationModel> GetDirectAssociationByDevice([FromBody] string param)
         {
+            //int ctsCustId, [FromBody] int takeRow, [FromBody] int skipRow
             try
             {
+                var criteria = JsonConvert.DeserializeObject<GraphFilterModel>(param);
+
                 var result = DbSessionFactory.Execute<GraphAssociationModel>("GetAssociationOneLevelByCustIdByDevice", new
                 {
-                    CTSCustID = ctsCustId,
-                    Skip = skipRow,
-                    Pagesize = takeRow
+                    CTSCustID = criteria.CTSCustId,
+                    Skip = criteria.SkipNumber,
+                    Pagesize = criteria.TakeNumber
                 }).Data;
                 return result;
             }

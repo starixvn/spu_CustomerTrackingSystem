@@ -193,6 +193,7 @@
     <Compile Include="FraudCase\ScannedOfficeIP\OfficeIPInternalAccount.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="GraphDB\GraphDirectAssociationModel.cs" />
+    <Compile Include="GraphDB\GraphFilterModel.cs" />
     <Compile Include="GraphDB\Node.cs" />
     <Compile Include="GraphDB\Relationship.cs" />
     <Compile Include="GraphDB\ShortestPath.cs" />
