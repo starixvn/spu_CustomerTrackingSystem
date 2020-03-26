@@ -16,7 +16,7 @@
                     <input type="radio" id="radio03-02" name="demo03" />
                     <label for="radio03-02">Indirect Association with @Model.Username</label>
                 </div>
-                <div class="form-control dropdown">
+                <div class="form-control dropdown" style="display:none">
                     <div class="control-label">Status</div>
                     <select class="control" id="account-by-account-cbb-status" multiple="multiple">
                         @foreach (var status in Model.AccountStatusList)
@@ -47,7 +47,7 @@
                     <button class="button btn-graph" id="account-by-account-btn-on-graph">View On Graph</button>                    
                 </div>
             </div>
-            <table id="account-by-account-table" class="table table-striped" style="width: 100%">
+            <table id="account-by-account-table-1" class="table table-striped" style="width: 100%">
                 <thead>
                     <tr>
                         <th>Tag</th>

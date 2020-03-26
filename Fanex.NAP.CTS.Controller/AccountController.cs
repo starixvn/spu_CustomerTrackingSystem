@@ -20,6 +20,7 @@
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Transaction;
     using Fanex.NAP.CTS.ViewModel.Account.TransactionHistory;
+    using Fanex.NAP.CTS.Model.Association;
 
     [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class AccountController : BaseController
@@ -240,7 +241,7 @@
         }
 
         #region Associated By Account
-        [HttpPost]
+
         public ActionResult AssociatedByAccount(string username)
         {
             var getCustomerStaticStatus = _accountService.GetCustomerStaticStatus(1, true);
@@ -259,31 +260,34 @@
         }
 
         [HttpPost]
-        public ActionResult GetAssociatedByAccount(long ctsCustId, string statusIds, int associationType, bool isDirect)
+        public ActionResult GetAssociatedByAccount(AssociatedFilterModel model)
         {
+            var take = model.length;
+            var skip = model.start;
+            var totalItem = 0;
 
             var result = new List<CustomerAssociationByAccountDetailViewModel>();
 
-            if (string.IsNullOrWhiteSpace(statusIds) || ctsCustId == 0)
+            if (string.IsNullOrWhiteSpace(model.StatusIds) || model.CTSCustId == 0)
             {
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
 
             var directAssociationUrl = ConfigSettings.GetDirectAssociation;
 
-            if (associationType == 1)
+            if (model.AssociationType == 1)
             {
                 directAssociationUrl = ConfigSettings.GetDirectAssociationByDevice;
             }
-            else if(associationType == 2)
+            else if(model.AssociationType == 2)
             {
                 directAssociationUrl = ConfigSettings.GetDirectAssociationByIP;
             }
 
            // LogService.Info("From Graph - CTSCustId: " + ctsCustId + " - Start: " + DateTime.Now.ToString());
-            var customerAssociation = isDirect ?
-                _accountService.GetCustomerAssociationByGraph(directAssociationUrl, ctsCustId) :
-                _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetInDirectAssociation, ctsCustId);
+            var customerAssociation = model.IsDirect ?
+                _accountService.GetCustomerAssociationByGraph(directAssociationUrl, model.CTSCustId) :
+                _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetInDirectAssociation, model.CTSCustId);
            // LogService.Info("From Graph - CTSCustId: " + ctsCustId + " - End: " + DateTime.Now.ToString());
 
             if (customerAssociation != null && customerAssociation.Any())
@@ -297,11 +301,11 @@
                 var getAllSubscribers = _subscriberAssignmentService.GetSubscribers(0);
 
                 //LogService.Info("Filter Status - CTSCustId: " + ctsCustId + " - Start: " + DateTime.Now.ToString());
-                customerAssociation = _accountService.FilterCustomerAssociationByStatus(statusIds, customerAssociation, getStatusByCustIds);
+                customerAssociation = _accountService.FilterCustomerAssociationByStatus(model.StatusIds, customerAssociation, getStatusByCustIds);
                 //LogService.Info("Filter Status - CTSCustId: " + ctsCustId + " - End: " + DateTime.Now.ToString());
 
                 //LogService.Info("Filter Ass type - CTSCustId: " + ctsCustId + " - Start: " + DateTime.Now.ToString());
-                customerAssociation = _accountService.FilterCustomerAssociationByAssociationType(associationType, customerAssociation);
+                customerAssociation = _accountService.FilterCustomerAssociationByAssociationType(model.AssociationType, customerAssociation);
                // LogService.Info("Filter Ass type - CTSCustId: " + ctsCustId + " - End: " + DateTime.Now.ToString());
 
                 //LogService.Info("Render - CTSCustId: " + ctsCustId + " - Start: " + DateTime.Now.ToString());
@@ -311,8 +315,8 @@
                     Username = !string.IsNullOrWhiteSpace(x.Username) ? x.Username : x.Username2,
                     LoginId = !string.IsNullOrWhiteSpace(x.Username2) ? x.Username2 : x.Username,
                     AssociationDate = x.AssociationDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                    SharedDevices = isDirect ? x.SharedDevices : -1,
-                    SharedIps = isDirect ? x.SharedIPs : -1,
+                    SharedDevices = model.IsDirect ? x.SharedDevices : -1,
+                    SharedIps = model.IsDirect ? x.SharedIPs : -1,
                     AssociationType = x.AssociationType,
                     AssociationTypeName = x.AssociationType == 0 ? string.Format("{0}, {1}", x.GetAssociationTypeName(Model.AssociationType.Device), x.GetAssociationTypeName(Model.AssociationType.IP)) : x.AssociationTypeName,
                     Status = x.StatusName == "NA" ? "N/A" : x.StatusName,
@@ -391,10 +395,19 @@
                     })
                     .OrderBy(a => a.StatusId)
                     .ToList();
+
+                    totalItem = result.Count;                   
                 }
             }
-                       
-            return Json(result, JsonRequestBehavior.AllowGet);
+
+            return Json(new
+            {
+                draw = model.draw,
+                recordsTotal = totalItem,
+                recordsFiltered = totalItem,
+                data = result.Skip(skip).Take(take)
+            }, JsonRequestBehavior.AllowGet);
+            ///return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

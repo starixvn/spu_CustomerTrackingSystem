@@ -155,6 +155,7 @@
     <Compile Include="Account\UpdateAccountExceptionModel.cs" />
     <Compile Include="Account\UpdatePlaceEvidenceModel.cs" />
     <Compile Include="GraphDB\GraphAssociationPaging.cs" />
+    <Compile Include="Association\AssociatedFilterModel.cs" />
     <Compile Include="GraphDB\GraphCustomer.cs" />
     <Compile Include="GraphDB\GraphAssociationModel.cs" />
     <Compile Include="Account\SuspiciousCustomerModel.cs" />

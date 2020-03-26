@@ -717,11 +717,11 @@
                 return x;
             }).ToList();
 
-            var statusIdList = statusIds.Split(',').Select(Int32.Parse).ToList();
+            //var statusIdList = statusIds.Split(',').Select(Int32.Parse).ToList();
 
-            var result = customerAssociation.Where(x => statusIdList.Contains(x.StatusId)).ToList();
+            //var result = customerAssociation.Where(x => statusIdList.Contains(x.StatusId)).ToList();
 
-            return result;
+            return customerAssociation;
 
         }
 

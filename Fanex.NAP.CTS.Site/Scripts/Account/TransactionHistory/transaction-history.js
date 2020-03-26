@@ -7,7 +7,7 @@
     var _subscriberId = 0;
 
     function GenerateGrid() {
-        var url = common.modifyRelativeUrl('/Account/GetTransactionHistory');
+        var url = common.modifyRelativeUrl('Account/GetTransactionHistory');
 
         var params = {};
         params.ctsCustId = _ctsCustId;
@@ -41,7 +41,7 @@
             },
             ordering: false,
             searching: false,
-            lengthMenu: [50, 100, 200, 500],            
+            lengthMenu: [3, 50, 100, 200, 500],            
             pageLength: 50,
             scrollX: false,
             scrollCollapse: false,           
@@ -102,6 +102,6 @@
         _subscriberId = subscriberId;
         btnSearch.click(GenerateGrid);
 
-        GenerateGrid();
+        GenerateGrid(); 
     }
 }
