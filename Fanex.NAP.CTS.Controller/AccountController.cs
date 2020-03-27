@@ -284,11 +284,11 @@
                 directAssociationUrl = ConfigSettings.GetDirectAssociationByIP;
             }
 
-            LogService.Info("From Graph - CTSCustId: " + model.CTSCustId + " - Start: " + DateTime.Now.ToString());
+           // LogService.Info("From Graph - CTSCustId: " + model.CTSCustId + " - Start: " + DateTime.Now.ToString());
             var graphAssociationPage = model.IsDirect ?
                 _accountService.GetCustomerAssociationByGraph(directAssociationUrl, model.CTSCustId, skip, take) : new GraphAssociationPaging();
                 //_accountService.GetCustomerAssociationByGraph(ConfigSettings.GetInDirectAssociation, model.CTSCustId, skip, take);
-             LogService.Info("From Graph - CTSCustId: " + model.CTSCustId + " - End: " + DateTime.Now.ToString());
+            // LogService.Info("From Graph - CTSCustId: " + model.CTSCustId + " - End: " + DateTime.Now.ToString());
 
             if (graphAssociationPage != null && graphAssociationPage.AssociationList != null && graphAssociationPage.AssociationList.Any())
             {
@@ -297,21 +297,21 @@
 
                 var custIds = string.Join(",", customerAssociation.Select(x => x.CustId));
 
-                LogService.Info("GET Status - CTSCustId: " + model.CTSCustId + " - Start: " + DateTime.Now.ToString());
+               // LogService.Info("GET Status - CTSCustId: " + model.CTSCustId + " - Start: " + DateTime.Now.ToString());
                 var getStatusByCustIds = _accountService.GetCustomerGeneralStatus(custIds);
-                LogService.Info("GET Status - CTSCustId: " + model.CTSCustId + " - End: " + DateTime.Now.ToString());
+               // LogService.Info("GET Status - CTSCustId: " + model.CTSCustId + " - End: " + DateTime.Now.ToString());
 
                 var getAllSubscribers = _subscriberAssignmentService.GetSubscribers(0);
 
-                LogService.Info("Filter Status - CTSCustId: " + model.CTSCustId + " - Start: " + DateTime.Now.ToString());
+               // LogService.Info("Filter Status - CTSCustId: " + model.CTSCustId + " - Start: " + DateTime.Now.ToString());
                 customerAssociation = _accountService.FilterCustomerAssociationByStatus(model.StatusIds, customerAssociation, getStatusByCustIds);
-                LogService.Info("Filter Status - CTSCustId: " + model.CTSCustId + " - End: " + DateTime.Now.ToString());
+               // LogService.Info("Filter Status - CTSCustId: " + model.CTSCustId + " - End: " + DateTime.Now.ToString());
 
-                LogService.Info("Filter Ass type - CTSCustId: " + model.CTSCustId + " - Start: " + DateTime.Now.ToString());
+               // LogService.Info("Filter Ass type - CTSCustId: " + model.CTSCustId + " - Start: " + DateTime.Now.ToString());
                 customerAssociation = _accountService.FilterCustomerAssociationByAssociationType(model.AssociationType, customerAssociation);
-                LogService.Info("Filter Ass type - CTSCustId: " + model.CTSCustId + " - End: " + DateTime.Now.ToString());
+               // LogService.Info("Filter Ass type - CTSCustId: " + model.CTSCustId + " - End: " + DateTime.Now.ToString());
 
-                LogService.Info("Render - CTSCustId: " + model.CTSCustId + " - Start: " + DateTime.Now.ToString());
+               // LogService.Info("Render - CTSCustId: " + model.CTSCustId + " - Start: " + DateTime.Now.ToString());
                 result = customerAssociation.Select(x => new CustomerAssociationByAccountDetailViewModel
                 {
                     CustId = x.CustId.HasValue ? x.CustId.Value : 0,
@@ -329,7 +329,7 @@
                     CTSCustId = x.CTSCustID
                 }).ToList();
 
-                 LogService.Info("Render - CTSCustId: " + model.CTSCustId + " - End: " + DateTime.Now.ToString());
+                // LogService.Info("Render - CTSCustId: " + model.CTSCustId + " - End: " + DateTime.Now.ToString());
                 if (result != null && result.Any())
                 {
                     var tasks = new List<Task>();

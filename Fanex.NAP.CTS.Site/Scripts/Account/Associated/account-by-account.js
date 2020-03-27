@@ -41,6 +41,13 @@
         var url = common.modifyRelativeUrl('Account/GetAssociatedByAccount');
         var ctsCustId = $("#hdCTSCustId").val();
 
+        //$('#account-by-account-table thead th').each(function () {
+        //    if ($(this).index() != 0 && $(this).index() != 9) {
+        //        var title = $(this).text();
+        //        $(this).html(title + '<input type="text" class="col-search-input" placeholder="search ' + title + '" />');
+        //    }
+        //});
+
         return associatedByAccountTable.DataTable({
             serverSide: true,
             ajax: {
@@ -65,6 +72,8 @@
                 },
                 complete: function () {
                     associatedByAccountTable.find('tbody').removeClass('loading');
+
+                    btnSearch.prop('disabled', false);
                 }
             },
             language: {
@@ -81,7 +90,7 @@
             lengthMenu: [10, 20, 50, 100, 200],
             pageLength: 50,
             scrollX: false,
-            scrollCollapse: false,
+            scrollCollapse: false,           
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
                 { targets: [-2, -1], className: "text-center" },
@@ -111,7 +120,7 @@
                 },
                 {
                     data: obj => RenderGraphImage(), createdCell: (cell, _, row) => {
-                        $('.icon-path', cell).click(() => HandleGraphShortestPath(row, ctsCustid));
+                        $('.icon-path', cell).click(() => HandleGraphShortestPath(row, ctsCustId));
                     }
                 }
             ]
@@ -130,16 +139,20 @@
         dataTable = RenderGrid();
 
         btnSearch.on('click', function () {
-
+            $(this).prop('disabled', true);
             if (dataTable) {
                 dataTable.ajax.reload(null, true);
-            }
+            }            
         });
 
         btnViewOnGraph.on('click', function () {
             var formGraph = new graph();
             formGraph.GenerateFullPath(ctsCustid, username);
             formGraph.OpenModal();
+        });
+
+        associatedByAccountTable.on('length.dt', function () {
+            btnSearch.prop('disabled', true);
         });
     }
 }
