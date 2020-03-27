@@ -284,10 +284,10 @@
                 directAssociationUrl = ConfigSettings.GetDirectAssociationByIP;
             }
 
-           // LogService.Info("From Graph - CTSCustId: " + ctsCustId + " - Start: " + DateTime.Now.ToString());
+            // LogService.Info("From Graph - CTSCustId: " + ctsCustId + " - Start: " + DateTime.Now.ToString());
             var graphAssociationPage = model.IsDirect ?
-                _accountService.GetCustomerAssociationByGraph(directAssociationUrl, model.CTSCustId,skip, take) :
-                _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetInDirectAssociation, model.CTSCustId, skip, take);
+                _accountService.GetCustomerAssociationByGraph(directAssociationUrl, model.CTSCustId, skip, take) : new GraphAssociationPaging();
+                //_accountService.GetCustomerAssociationByGraph(ConfigSettings.GetInDirectAssociation, model.CTSCustId, skip, take);
            // LogService.Info("From Graph - CTSCustId: " + ctsCustId + " - End: " + DateTime.Now.ToString());
 
             if (graphAssociationPage != null && graphAssociationPage.AssociationList != null && graphAssociationPage.AssociationList.Any())
