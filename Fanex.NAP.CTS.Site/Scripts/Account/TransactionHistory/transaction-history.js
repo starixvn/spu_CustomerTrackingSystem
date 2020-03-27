@@ -5,8 +5,8 @@
     var formIPInformation = new form_ip_information();
     var _ctsCustId = 0;
     var _subscriberId = 0;
-
-    function GenerateGrid() {
+    var dataTable;
+    function RenderGrid() {
         var url = common.modifyRelativeUrl('Account/GetTransactionHistory');
 
         var params = {};
@@ -68,11 +68,11 @@
                 { data: obj => obj.BrowserName },
                 { data: obj => GetHostName(obj.Url) }
             ]
-        });
-
-        table.page(1).draw();
+        });       
 
         transactionTable.on('click', '.ip-link', ShowFormIPInformation);
+
+        return table;
     }
 
     function GetHostName(url) {
@@ -100,8 +100,16 @@
     this.Initial = function (ctsCustId, subscriberId) {
         _ctsCustId = ctsCustId;
         _subscriberId = subscriberId;
-        btnSearch.click(GenerateGrid);
+        var dataTable = RenderGrid(); 
 
-        GenerateGrid(); 
+        btnSearch.on('click', function () {          
+
+            if (dataTable) {
+                dataTable.ajax.reload(null, true);
+            }
+        });
+
+
+        
     }
 }

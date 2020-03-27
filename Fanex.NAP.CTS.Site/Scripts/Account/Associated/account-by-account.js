@@ -1,8 +1,8 @@
 ﻿function account_by_account() {
     var btnSearch = $('#account-by-account-btn-search');
     var btnViewOnGraph = $('#account-by-account-btn-on-graph');
-    var associatedByAccountTable = $('#account-by-account-table-1');
-
+    var associatedByAccountTable = $('#account-by-account-table');
+    var dataTable;
     function RenderTag(obj) {
 
         var html = "";
@@ -38,12 +38,12 @@
     }       
 
     function RenderGrid(custId, ctsCustId, statusIds, associationType, isDirect) {
-        var url = common.modifyRelativeUrl('Account/GetAssociatedByAccount');               
-
-        var table = associatedByAccountTable.DataTable({
+        var url = common.modifyRelativeUrl('Account/GetAssociatedByAccount');              
+                
+        return associatedByAccountTable.DataTable({
             destroy: true,
             serverSide: true,
-            processing: false,
+            //processing: false,
             stateSave: true,
             ajax: {
                 url: url,
@@ -111,7 +111,7 @@
             ]
         }); 
 
-        table.page(1).draw();
+       // table.page(1).draw();
     }
 
     function HandleGraphShortestPath(row, ctsCustid) {
@@ -123,8 +123,7 @@
     this.Initial = function (custId, ctsCustid, username, statusIds, associationType, isDirect) {
         $("#account-by-account-cbb-status").multiselect();
 
-        //InitialGrid(ctsCustid);
-        RenderGrid(custId, ctsCustid, statusIds, associationType, isDirect);
+        dataTable = RenderGrid(custId, ctsCustid, statusIds, associationType, isDirect);
 
         btnSearch.on('click', function () {
             var isDirect = $("#radio03-01").is(':checked');
@@ -133,7 +132,9 @@
             var custId = $("#hdCustId").val();
             var ctsCustId = $("#hdCTSCustId").val();
 
-            RenderGrid(custId, ctsCustId, accountStatus, associationType, isDirect);
+            if (dataTable) {
+                dataTable.ajax.reload(null, true);
+            }
         });
 
         btnViewOnGraph.on('click', function () {
