@@ -285,14 +285,15 @@
             }
 
            // LogService.Info("From Graph - CTSCustId: " + ctsCustId + " - Start: " + DateTime.Now.ToString());
-            var customerAssociation = model.IsDirect ?
-                _accountService.GetCustomerAssociationByGraph(directAssociationUrl, model.CTSCustId,skip, take).AssociationList :
-                _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetInDirectAssociation, model.CTSCustId, skip, take).AssociationList;
+            var graphAssociationPage = model.IsDirect ?
+                _accountService.GetCustomerAssociationByGraph(directAssociationUrl, model.CTSCustId,skip, take) :
+                _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetInDirectAssociation, model.CTSCustId, skip, take);
            // LogService.Info("From Graph - CTSCustId: " + ctsCustId + " - End: " + DateTime.Now.ToString());
 
-            if (customerAssociation != null && customerAssociation.Any())
+            if (graphAssociationPage != null && graphAssociationPage.AssociationList.Any())
             {
-                totalItem = customerAssociation.Count;
+                totalItem = graphAssociationPage.TotalItems;
+                var customerAssociation = graphAssociationPage.AssociationList;
 
                 var custIds = string.Join(",", customerAssociation.Select(x => x.CustId));
 

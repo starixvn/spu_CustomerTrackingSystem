@@ -45,8 +45,8 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
         /// <returns></returns>
         /// 
         [System.Web.Http.AcceptVerbs("GetDirectAssociation")]
-        [HttpPost]
-        public GraphAssociationPaging GetDirectAssociation([FromBody] int ctsCustId, int takeRow, int skipRow)
+        [HttpGet]
+        public GraphAssociationPaging GetDirectAssociation(int ctsCustId, int takeRow, int skipRow)
         {
             try
             {

@@ -43,7 +43,7 @@
         var table = associatedByAccountTable.DataTable({
             destroy: true,
             serverSide: true,
-            processing: true,
+            processing: false,
             stateSave: true,
             ajax: {
                 url: url,
@@ -72,7 +72,7 @@
             },
             ordering: false,
             searching: false,
-            lengthMenu: [10, 25, 50, 100],
+            lengthMenu: [2, 10, 25, 50, 100],
             //pageLength: 20,
             scrollX: false,
             scrollCollapse: false,  
