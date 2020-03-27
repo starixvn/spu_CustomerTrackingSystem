@@ -50,12 +50,18 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
         {
             try
             {
-                var result = DbSessionFactory.ExecuteSingle<GraphAssociationPaging>("GetAssociationOneLevelByCustId", new
+                var result = DbSessionFactory.Execute<GraphAssociationPaging>("GetAssociationOneLevelByCustId", new
                 {
                     CTSCustID = ctsCustId,
                     Skip = skipRow,
                     Pagesize = takeRow
-                }).Data;
+                }).Data.FirstOrDefault();
+
+                if (result == null)
+                {
+                    return new GraphAssociationPaging() { AssociationList = null, TotalItems = 0 };
+                }
+
                 return result;
             }
             catch (Exception ex)
@@ -71,12 +77,17 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
         {
             try
             {
-                var result = DbSessionFactory.ExecuteSingle<GraphAssociationPaging>("GetAssociationOneLevelByCustIdByDevice", new
+                var result = DbSessionFactory.Execute<GraphAssociationPaging>("GetAssociationOneLevelByCustIdByDevice", new
                 {
                     CTSCustID = ctsCustId,
                     Skip = skipRow,
                     Pagesize = takeRow
-                }).Data;
+                }).Data.FirstOrDefault();
+
+                if (result == null)
+                {
+                    return new GraphAssociationPaging() { AssociationList = null, TotalItems = 0 };
+                }
 
                 return result;
             }
@@ -93,12 +104,18 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
         {
             try
             {
-                var result = DbSessionFactory.ExecuteSingle<GraphAssociationPaging>("GetAssociationOneLevelByCustIdByIP", new
+                var result = DbSessionFactory.Execute<GraphAssociationPaging>("GetAssociationOneLevelByCustIdByIP", new
                 {
                     CTSCustID = ctsCustId,
                     Skip = skipRow,
                     Pagesize = takeRow
-                }).Data;
+                }).Data.FirstOrDefault();
+
+                if (result == null)
+                {
+                    return new GraphAssociationPaging() { AssociationList = null, TotalItems = 0 };
+                }
+
                 return result;
             }
             catch (Exception ex)
