@@ -9,7 +9,6 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Results;
 using System.Linq;
-using Newtonsoft.Json;
 
 namespace Fanex.NAP.CTS.Portal.API.Controllers
 {
@@ -46,8 +45,8 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
         /// <returns></returns>
         /// 
         [System.Web.Http.AcceptVerbs("GetDirectAssociation")]
-        [HttpGet]
-        public GraphAssociationPaging GetDirectAssociation(int ctsCustId, int takeRow, int skipRow)
+        [HttpPost]
+        public GraphAssociationPaging GetDirectAssociation([FromBody] int ctsCustId, int takeRow, int skipRow)
         {
             try
             {
@@ -68,18 +67,18 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
 
         [System.Web.Http.AcceptVerbs("GetDirectAssociationByDevice")]
         [HttpGet]
-        public IHttpActionResult GetDirectAssociationByDevice(int ctsCustId, int takeRow, int skipRow)
+        public GraphAssociationPaging GetDirectAssociationByDevice(int ctsCustId, int takeRow, int skipRow)
         {
             try
             {
-                var result = DbSessionFactory.Execute<GraphAssociationModel>("GetAssociationOneLevelByCustIdByDevice", new
+                var result = DbSessionFactory.ExecuteSingle<GraphAssociationPaging>("GetAssociationOneLevelByCustIdByDevice", new
                 {
                     CTSCustID = ctsCustId,
                     Skip = skipRow,
                     Pagesize = takeRow
                 }).Data;
 
-                return Ok(result);
+                return result;
             }
             catch (Exception ex)
             {
@@ -90,18 +89,17 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
 
         [System.Web.Http.AcceptVerbs("GetDirectAssociationByIP")]
         [HttpGet]
-        public IHttpActionResult GetDirectAssociationByIP(int ctsCustId, int takeRow, int skipRow)
+        public GraphAssociationPaging GetDirectAssociationByIP([FromBody] int ctsCustId, int takeRow, int skipRow)
         {
             try
             {
-                var result = DbSessionFactory.Execute<GraphAssociationModel>("GetAssociationOneLevelByCustIdByIP", new
+                var result = DbSessionFactory.ExecuteSingle<GraphAssociationPaging>("GetAssociationOneLevelByCustIdByIP", new
                 {
                     CTSCustID = ctsCustId,
                     Skip = skipRow,
                     Pagesize = takeRow
                 }).Data;
-
-                return Ok(result);
+                return result;
             }
             catch (Exception ex)
             {
@@ -145,7 +143,7 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
                 LogService.Error("GetInDirectAssociation failed: " + ex.Message + ex.StackTrace);
                 throw;
             }
-            
+
         }
 
         /// <summary>
