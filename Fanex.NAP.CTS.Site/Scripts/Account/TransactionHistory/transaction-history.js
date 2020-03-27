@@ -9,19 +9,21 @@
     function RenderGrid() {
         var url = common.modifyRelativeUrl('Account/GetTransactionHistory');
 
-        var params = {};
-        params.ctsCustId = _ctsCustId;
-        params.subscriberId = _subscriberId;
-        params.dateRange = dateRange.val();
-
-        var table = transactionTable.DataTable({
-            destroy: true,
+        var table = transactionTable.DataTable({            
             serverSide: true,
-            processing: false,
-            stateSave: true,
             ajax: {
                 url: url,
-                data: params,
+                data: {
+                    ctsCustId: function () {
+                        return _ctsCustId;
+                    },
+                    subscriberId: function () {
+                        return _subscriberId;
+                    },
+                    dateRange: function () {
+                        return dateRange.val();
+                    }
+                },
                 type: "POST",
                 beforeSend: function () {
                     transactionTable.find('tbody').addClass('loading');
@@ -41,8 +43,8 @@
             },
             ordering: false,
             searching: false,
-            lengthMenu: [3, 50, 100, 200, 500],            
-            pageLength: 50,
+            lengthMenu: [50, 100, 200, 500],            
+            pageLength: 100,
             scrollX: false,
             scrollCollapse: false,           
             columnDefs: [

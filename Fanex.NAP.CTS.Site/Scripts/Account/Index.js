@@ -21,12 +21,8 @@
                 $("#associated_account").html(response);
             },
             complete: function() {
-                var isDirect = $("#radio03-01").is(':checked');
-                var accountStatus = $('#account-by-account-cbb-status').val().join(',');
-                var associationType = $("#account-by-account-cbb-association-type").val();
-
                 var associationByAccount = new account_by_account();
-                associationByAccount.Initial(custId, ctsCustId, username, accountStatus, associationType, isDirect);
+                associationByAccount.Initial(ctsCustId, username);
             },
             error: function(errMsg) {
                // common.showError(errMsg);

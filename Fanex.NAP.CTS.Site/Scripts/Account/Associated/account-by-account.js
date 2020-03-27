@@ -35,23 +35,29 @@
 
     function RenderGraphImage() {
         return '<span class="icon-path graph" title="Graph View"></span>';
-    }       
+    }
 
-    function RenderGrid(custId, ctsCustId, statusIds, associationType, isDirect) {
-        var url = common.modifyRelativeUrl('Account/GetAssociatedByAccount');              
-                
+    function RenderGrid() {
+        var url = common.modifyRelativeUrl('Account/GetAssociatedByAccount');
+        var ctsCustId = $("#hdCTSCustId").val();
+
         return associatedByAccountTable.DataTable({
-            destroy: true,
             serverSide: true,
-            //processing: false,
-            stateSave: true,
             ajax: {
                 url: url,
                 data: {
-                    CTSCustId : ctsCustId,
-                    StatusIds : statusIds,
-                    AssociationType : associationType,
-                    IsDirect: isDirect
+                    CTSCustId: function () {
+                        return $("#hdCTSCustId").val();
+                    },
+                    StatusIds: function () {
+                        return $('#account-by-account-cbb-status').val().join(',');
+                    },
+                    AssociationType: function () {
+                        return $("#account-by-account-cbb-association-type").val();
+                    },
+                    IsDirect: function () {
+                        return $("#radio03-01").is(':checked');
+                    }
                 },
                 type: "POST",
                 beforeSend: function () {
@@ -72,10 +78,10 @@
             },
             ordering: false,
             searching: false,
-            lengthMenu: [2, 10, 25, 50, 100],
-            //pageLength: 20,
+            lengthMenu: [10, 20, 50, 100, 200],
+            pageLength: 50,
             scrollX: false,
-            scrollCollapse: false,  
+            scrollCollapse: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
                 { targets: [-2, -1], className: "text-center" },
@@ -109,9 +115,7 @@
                     }
                 }
             ]
-        }); 
-
-       // table.page(1).draw();
+        });
     }
 
     function HandleGraphShortestPath(row, ctsCustid) {
@@ -120,17 +124,12 @@
         formGraph.OpenModal();
     }
 
-    this.Initial = function (custId, ctsCustid, username, statusIds, associationType, isDirect) {
+    this.Initial = function (ctsCustid, username) {
         $("#account-by-account-cbb-status").multiselect();
 
-        dataTable = RenderGrid(custId, ctsCustid, statusIds, associationType, isDirect);
+        dataTable = RenderGrid();
 
         btnSearch.on('click', function () {
-            var isDirect = $("#radio03-01").is(':checked');
-            var accountStatus = $('#account-by-account-cbb-status').val().join(',');
-            var associationType = $("#account-by-account-cbb-association-type").val();
-            var custId = $("#hdCustId").val();
-            var ctsCustId = $("#hdCTSCustId").val();
 
             if (dataTable) {
                 dataTable.ajax.reload(null, true);
