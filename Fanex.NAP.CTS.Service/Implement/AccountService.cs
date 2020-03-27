@@ -651,9 +651,10 @@
         }
 
         public GraphAssociationPaging GetCustomerAssociationByGraph(string apiURL, long ctsCustId, int skipNumber, int takeNumber)
-        {            
+        {
+            var urlString = string.Format(apiURL + "?ctsCustId={0}&skipRow={1}&takeRow={2}", ctsCustId, skipNumber, takeNumber);
 
-            var data = ApiHelper.Post<GraphAssociationPaging>(apiURL, new GraphFilterModel  { CTSCustId  = ctsCustId , TakeNumber= takeNumber, SkipNumber= skipNumber });
+            var data = ApiHelper.Get<GraphAssociationPaging>(urlString);
 
             Task.WhenAll(data);
 
