@@ -290,7 +290,7 @@
                 _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetInDirectAssociation, model.CTSCustId, skip, take);
            // LogService.Info("From Graph - CTSCustId: " + ctsCustId + " - End: " + DateTime.Now.ToString());
 
-            if (graphAssociationPage != null && graphAssociationPage.AssociationList.Any())
+            if (graphAssociationPage != null && graphAssociationPage.AssociationList != null && graphAssociationPage.AssociationList.Any())
             {
                 totalItem = graphAssociationPage.TotalItems;
                 var customerAssociation = graphAssociationPage.AssociationList;

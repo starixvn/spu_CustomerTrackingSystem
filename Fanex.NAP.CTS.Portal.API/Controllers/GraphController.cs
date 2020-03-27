@@ -100,7 +100,7 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
 
         [System.Web.Http.AcceptVerbs("GetDirectAssociationByIP")]
         [HttpGet]
-        public GraphAssociationPaging GetDirectAssociationByIP([FromBody] int ctsCustId, int takeRow, int skipRow)
+        public GraphAssociationPaging GetDirectAssociationByIP(int ctsCustId, int takeRow, int skipRow)
         {
             try
             {
