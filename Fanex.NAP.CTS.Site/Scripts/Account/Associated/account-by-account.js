@@ -146,8 +146,11 @@
         });
 
         btnViewOnGraph.on('click', function () {
+            var info = dataTable.page.info();
+           // alert(info.start);
+           // alert(info.length);
             var formGraph = new graph();
-            formGraph.GenerateFullPath(ctsCustid, username);
+            formGraph.GenerateFullPath(ctsCustid, username, info.start, info.length);
             formGraph.OpenModal();
         });
 

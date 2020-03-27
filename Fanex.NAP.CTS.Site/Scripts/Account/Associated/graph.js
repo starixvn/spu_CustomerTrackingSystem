@@ -43,10 +43,12 @@
         });
     }
 
-    $this.GenerateFullPath = function (ctsCustId, username) {     
+    $this.GenerateFullPath = function (ctsCustId, username, start, length) {     
         var paramsFilter = {};
         paramsFilter.ctsCustid = ctsCustId;
         paramsFilter.username = username;
+        paramsFilter.start = start;
+        paramsFilter.length = length;
 
         $.ajax(urls.GetDirectAssociationGraph, {
             type: 'POST',
