@@ -41,13 +41,6 @@
         var url = common.modifyRelativeUrl('Account/GetAssociatedByAccount');
         var ctsCustId = $("#hdCTSCustId").val();
 
-        //$('#account-by-account-table thead th').each(function () {
-        //    if ($(this).index() != 0 && $(this).index() != 9) {
-        //        var title = $(this).text();
-        //        $(this).html(title + '<input type="text" class="col-search-input" placeholder="search ' + title + '" />');
-        //    }
-        //});
-
         return associatedByAccountTable.DataTable({
             serverSide: true,
             ajax: {
@@ -94,17 +87,15 @@
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
                 { targets: [-2, -1], className: "text-center" },
-                { targets: [0, 1, 2, 3, 4, 5, 6, 7], className: "text-center" },
+                { targets: [0, 1, 2, 3, 4, 5], className: "text-center" },
                 { targets: [0], width: "5%" },
                 { targets: [1], width: "20%" },
-                { targets: [2], width: "10%" },
-                { targets: [3], width: "10%" },
+                { targets: [2], width: "20%" },
+                { targets: [3], width: "20%" },
                 { targets: [4], width: "10%" },
-                { targets: [5], width: "10%" },
+                { targets: [5], width: "10%" },                
                 { targets: [6], width: "10%" },
-                { targets: [7], width: "10%" },
-                { targets: [8], width: "10%" },
-                { targets: [9], width: "5%" }
+                { targets: [7], width: "5%" }
             ],
             columns: [
                 { data: obj => RenderTag(obj) },
@@ -112,9 +103,7 @@
                 { data: obj => obj.LoginId },
                 { data: obj => obj.Status },
                 { data: obj => obj.Subscriber },
-                { data: obj => obj.AssociationTypeName },
-                { data: obj => obj.SharedDevices == -1 ? "-" : obj.SharedDevices },
-                { data: obj => obj.SharedIps == -1 ? "-" : obj.SharedIps },
+                { data: obj => obj.AssociationTypeName },                
                 {
                     data: obj => obj.AssociationDate
                 },
@@ -147,8 +136,6 @@
 
         btnViewOnGraph.on('click', function () {
             var info = dataTable.page.info();
-           // alert(info.start);
-           // alert(info.length);
             var formGraph = new graph();
             formGraph.GenerateFullPath(ctsCustid, username, info.start, info.length);
             formGraph.OpenModal();
