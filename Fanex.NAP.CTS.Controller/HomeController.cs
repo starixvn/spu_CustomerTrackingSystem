@@ -61,7 +61,7 @@
 
             var inputUsername = ValidateUserName(inputValue);
 
-            var result = accountService.SearchAccounts(inputUsername);
+            var result = accountService.SearchAccounts(inputUsername, inputValue);
 
             if (result.Count == 1 && result.Any(x => (
                         x.Username != null && x.Username.Equals(inputValue, System.StringComparison.CurrentCultureIgnoreCase)) 

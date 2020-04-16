@@ -16,7 +16,7 @@
 
     public interface IAccountService
     {        
-        List<SearchResultModel> SearchAccounts(string username);
+        List<SearchResultModel> SearchAccounts(string username, string originalUsername);
 
         List<CustomerGeneralStatusModel> GetCustomerGeneralStatus(string custIds);
 
