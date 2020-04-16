@@ -104,7 +104,7 @@
 
         private string ValidateUserName(string inputUserName)
         {
-            var words = inputUserName.Split(new char[] { '$', '@', '-' });
+            var words = inputUserName.Split(new char[] { '$', '@', '-', '(', ')' });
             var result = new StringBuilder();
 
             if(words.Length == 1)
