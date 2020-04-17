@@ -427,12 +427,11 @@
 
 
         //CTS new Implement
-        public List<SearchResultModel> SearchAccounts(string username, string originalUsername)
+        public List<SearchResultModel> SearchAccounts(string username)
         {
             var criteria = new SearchResultCriteria
             {
-                Username = username,
-                OriginalUserName = originalUsername
+                Username = username
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))

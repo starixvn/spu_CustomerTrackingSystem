@@ -59,9 +59,9 @@
                 return View(new SearchResultViewModel { SearchResults = null, InputValue = inputValue });
             }
 
-            var inputUsername = ValidateUserName(inputValue);
+            //var inputUsername = ValidateUserName(inputValue);
 
-            var result = accountService.SearchAccounts(inputUsername, inputValue);
+            var result = accountService.SearchAccounts(inputValue);
 
             if (result.Count == 1 && result.Any(x => (
                         x.Username != null && x.Username.Equals(inputValue, System.StringComparison.CurrentCultureIgnoreCase)) 
@@ -71,35 +71,35 @@
 
             }
 
-            var exactUserName = new List<SearchResultModel>();
-            var exactUserName2 = new List<SearchResultModel>();
-            var likeUserName = new List<SearchResultModel>();            
+            //var exactUserName = new List<SearchResultModel>();
+            //var exactUserName2 = new List<SearchResultModel>();
+            //var likeUserName = new List<SearchResultModel>();            
 
-            result.ForEach(x => {
+            //result.ForEach(x => {
 
-                if (!string.IsNullOrWhiteSpace(x.Username) && x.Username.StartsWith(inputValue, System.StringComparison.CurrentCultureIgnoreCase))
-                {
-                    exactUserName.Add(x);
-                }
-                else
-                {
-                    if(!string.IsNullOrWhiteSpace(x.Username2) && x.Username2.StartsWith(inputValue, System.StringComparison.CurrentCultureIgnoreCase))
-                    {
-                        exactUserName2.Add(x);
-                    }
-                    else
-                    {
-                        likeUserName.Add(x);
-                    }
-                }
-            });
+            //    if (!string.IsNullOrWhiteSpace(x.Username) && x.Username.StartsWith(inputValue, System.StringComparison.CurrentCultureIgnoreCase))
+            //    {
+            //        exactUserName.Add(x);
+            //    }
+            //    else
+            //    {
+            //        if(!string.IsNullOrWhiteSpace(x.Username2) && x.Username2.StartsWith(inputValue, System.StringComparison.CurrentCultureIgnoreCase))
+            //        {
+            //            exactUserName2.Add(x);
+            //        }
+            //        else
+            //        {
+            //            likeUserName.Add(x);
+            //        }
+            //    }
+            //});
 
-            var newResult = exactUserName.OrderBy(x=>x.Username)
-                .Union(exactUserName2.OrderBy(x => x.Username2))
-                .Union(likeUserName.OrderBy(x => x.Username))             
-                .ToList();
+            //var newResult = exactUserName.OrderBy(x=>x.Username)
+            //    .Union(exactUserName2.OrderBy(x => x.Username2))
+            //    .Union(likeUserName.OrderBy(x => x.Username))             
+            //    .ToList();
 
-            return View(new SearchResultViewModel { SearchResults = newResult, InputValue = inputValue });
+            return View(new SearchResultViewModel { SearchResults = result, InputValue = inputValue });
         }
 
         private string ValidateUserName(string inputUserName)

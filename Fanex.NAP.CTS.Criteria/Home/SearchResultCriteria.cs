@@ -13,9 +13,6 @@ namespace Fanex.NAP.CTS.Criteria.Home
         [SpParam(SqlParamName = "ip_username")]
         public string Username { get; set; }
 
-        [SpParam(SqlParamName = "ip_original_username")]
-        public string OriginalUserName { get; set; }
-
         public override string GetSettingKey()
         {
             return "CTS_DC_GetUserInfomationByUsername";
