@@ -13,20 +13,18 @@
     using Fanex.NAP.CTS.Criteria.Account.CustomerCategory;
     using Fanex.NAP.CTS.Criteria.Account.GeneralInformation;
     using Fanex.NAP.CTS.Criteria.Home;
-    using Fanex.NAP.CTS.Criteria.SubscriberAssignment;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.Account.CustomerCategory;
+    using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.Home;
-    using Fanex.NAP.CTS.Model.Subscriber;
     using Fanex.NAP.CTS.Resource;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.ViewModel.Account;
     using Fanex.NAP.CTS.ViewModel.Account.Associated;
     using Fanex.NAP.CTS.ViewModel.Account.GeneralInformation;
-    using Fanex.NAP.CTS.ViewModel.Account.Search;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -762,6 +760,46 @@
             return customerAssociation;
         }
 
+        public List<AssociationCustomerModel> SearchAssociatedCustomer(string username)
+        {
+            var criteria = new GetCustomerByUsernameCriteria
+            {
+                Username = username
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                var result = db.Query<AssociationCustomerModel>(criteria);
+
+                return result.ToList();
+            }
+        }
+
+        public DBResult AddAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, string remark, int createdBy)
+        {
+            var criteria = new AddManualAssociationCriteria
+            {
+                FromSubscriberId = fromSubscriberId,
+                FromCTSCustId = fromCTSCustId,
+                ToSubscriberId = toSubscriberId,
+                ToCTSCustId = toCTSCustId,
+                CreatedBy = createdBy,
+                Remark = remark,
+                ErrorMessage = string.Empty
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                db.ExecuteNonQuery(criteria);
+
+                return new DBResult
+                {
+                    ErrorCode = string.IsNullOrWhiteSpace(criteria.ErrorMessage) ? 0 : -1,
+                    ErrorMsg = criteria.ErrorMessage
+                };
+            }
+        }
+
         #endregion
 
         #region Chain To Evidence
@@ -1074,6 +1112,10 @@
                 ErrorMsg = criteria.ErrorMessage
             };
         }
+
+
+
+
 
         #endregion
     }

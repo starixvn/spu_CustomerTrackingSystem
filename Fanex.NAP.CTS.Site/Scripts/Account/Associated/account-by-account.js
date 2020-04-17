@@ -1,7 +1,14 @@
 ﻿function account_by_account() {
+    var divAddAssociation = $('#divAddAssociation');
+    var btnAddAssociation = $('#btnAddAssociation');
     var btnSearch = $('#account-by-account-btn-search');
     var btnViewOnGraph = $('#account-by-account-btn-on-graph');
     var associatedByAccountTable = $('#account-by-account-table');
+    var assusername = $('#txtassusername');
+    var asscomment = $('#txtasscomment');
+    var btnSaveAssociation = $('#btnsaveassociation');
+    var btnCancelAssociation = $('#btncancelassociation');
+
     var dataTable;
     function RenderTag(obj) {
 
@@ -122,7 +129,45 @@
         formGraph.OpenModal();
     }
 
-    this.Initial = function (ctsCustid, username) {
+    function ResetForm() {
+        assusername.val('');
+        asscomment.val('');
+    }
+
+    function AddAssociation(ctsCustId, subscriberId, rootUsername) {
+        var url = common.modifyRelativeUrl('Account/AddAssociation');
+        var params = {};
+        params.Username = assusername.val();   
+        params.RootUsername = rootUsername;
+        params.Comment = asscomment.val();
+        params.FromSubscriberId = subscriberId;
+        params.FromCTSCustId = ctsCustId;
+
+        $.ajax(url, {
+            type: 'POST',
+            data: params,
+            success: function (response) {
+                if (response.errorCode == 0) {
+                    common.showSuccess('Add the association successful!');
+                    divAddAssociation.dialog('close');
+                }
+                else if (response.errorCode == -2) {
+                    common.showError('Username "' + params.Username + '" is invalid.');
+                }
+                else if (response.errorCode == -1) {
+                    common.showError('Username already exists in "' + params.Username + '" exceptions list.');
+                }
+                else {
+                    common.showError('Add the association fail!');
+                }
+            },
+            complete: function () {
+
+            }
+        });
+    }
+
+    this.Initial = function (ctsCustid, username, subscriberId) {
         $("#account-by-account-cbb-status").multiselect();
 
         dataTable = RenderGrid();
@@ -143,6 +188,38 @@
 
         associatedByAccountTable.on('length.dt', function () {
             btnSearch.prop('disabled', true);
+        });
+
+        btnAddAssociation.on('click', function () {
+            ResetForm();
+
+            divAddAssociation.dialog({
+                modal: true,
+                width: '600px',
+                title: 'ADD ASSOCIATION',
+                resizable: true,
+                draggable: true,
+                close: function () { $(this).dialog('close'); }
+            })
+        });
+
+        btnSaveAssociation.on('click', function () {
+            if (assusername.val() == '') {
+                common.showError('Username is require.');
+                assusername.focus();
+            }
+            else if (assusername.val() == username)
+            {
+                common.showError('The username must be different from ' + username);
+                assusername.focus();
+            }
+            else {
+                AddAssociation(ctsCustid, subscriberId, username);
+            }
+        });
+
+        btnCancelAssociation.on('click', function () {
+            divAddAssociation.dialog('close');
         });
     }
 }

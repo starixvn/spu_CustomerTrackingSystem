@@ -440,10 +440,17 @@
     <Setting Key="CTS_DC_GetAllSportGroups"
            SpName="CTS_DC_GetAllSportGroups"
            DbName="MySQL.CTS_DataCenter" />
+	  
+	  <Setting Key="CTS_DC_GetCustomerByUsername"
+          SpName="CTS_DC_GetCustomerByUsername"
+          DbName="MySQL.CTS_DataCenter" />
 
     <Setting Key="CTS_DC_GetCustomerCategoryByCTSCustID"
            SpName="CTS_DC_GetCustomerCategoryByCTSCustID"
            DbName="MySQL.CTS_DataCenter" />
+	  <Setting Key="CTS_DC_AddManualAssociation"
+          SpName="CTS_DC_AddManualAssociation"
+          DbName="MySQL.CTS_DataCenter" />
 
     <Setting Key="CTS_DC_AddCTSCustomerClassification"
            SpName="CTS_DC_AddCTSCustomerClassification"

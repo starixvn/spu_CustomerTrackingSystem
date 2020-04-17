@@ -156,6 +156,7 @@
     <Compile Include="Account\UpdateAccountExceptionModel.cs" />
     <Compile Include="Account\UpdatePlaceEvidenceModel.cs" />
     <Compile Include="DTO\CustomerCategory.cs" />
+    <Compile Include="Association\AssociationCustomerModel.cs" />
     <Compile Include="DTO\SportGroup.cs" />
     <Compile Include="GraphDB\GraphAssociationPaging.cs" />
     <Compile Include="Association\AssociatedFilterModel.cs" />

@@ -22,7 +22,7 @@
             },
             complete: function() {
                 var associationByAccount = new account_by_account();
-                associationByAccount.Initial(ctsCustId, username);
+                associationByAccount.Initial(ctsCustId, username, subscriberId);
             },
             error: function(errMsg) {
                // common.showError(errMsg);

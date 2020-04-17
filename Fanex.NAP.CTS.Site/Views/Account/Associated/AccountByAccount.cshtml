@@ -6,61 +6,65 @@
 @model Fanex.NAP.CTS.ViewModel.Account.Associated.AssociatedByAccountViewModel
 @Html.Partial("./Associated/GraphVisualization")
 
-    <div id="account-by-account">
-        <div id="account-by-account-filter">
-            <div class="filter">
-                <div class="form-control radio-button">                   
-                    <input type="radio" id="radio03-01" name="demo03" checked />
-                    <label for="radio03-01">Direct Association with @Model.Username</label>
+<div id="account-by-account">
+    <div id="account-by-account-filter">
+        <div class="filter">
+            <div class="form-control radio-button">
+                <input type="radio" id="radio03-01" name="demo03" checked />
+                <label for="radio03-01">Direct Association with @Model.Username</label>
 
-                    <input type="radio" id="radio03-02" name="demo03" />
-                    <label for="radio03-02">Indirect Association with @Model.Username</label>
-                </div>
-                <div class="form-control dropdown" style="display:none">
-                    <div class="control-label">Status</div>
-                    <select class="control" id="account-by-account-cbb-status" multiple="multiple">
-                        @foreach (var status in Model.AccountStatusList)
-                        {
-                            <option value="@status.ItemId" selected>@status.ItemNameDisplay</option>
-                        }
-                    </select>
-                </div>
-                <div class="form-control dropdown">
-                    <div class="control-label">Association Type</div>
-                    <select class="control" id="account-by-account-cbb-association-type">
-                        @foreach (var status in Model.AssociationTypeList)
-                        {
-                            <option value="@status.ItemId" @(status.ItemId==1 ? "selected" : "")>@status.ItemNameDisplay</option>
-                        }
-                    </select>
-                </div>
-                <div class="form-control" style="vertical-align: bottom;">
-                    <button class="button btn-search" id="account-by-account-btn-search">Search</button>
-                </div>
-            </div>            
-        </div>
-        
-        <div class="table-report" id="account-by-account-content">
-            <div class="graph-heading">
-                <div class="free-size"></div>
-                <div class="graph-info">
-                    <button class="button btn-graph" id="account-by-account-btn-on-graph">View On Graph</button>                    
-                </div>
+                <input type="radio" id="radio03-02" name="demo03" />
+                <label for="radio03-02">Indirect Association with @Model.Username</label>
             </div>
-            <table id="account-by-account-table" class="table table-striped" style="width: 100%">
-                <thead>
-                    <tr>
-                        <th>Tag</th>
-                        <th>Username</th>
-                        <th>Login ID</th>
-                        <th>Status</th>
-                        <th>Subscriber</th>
-                        <th>Association Type</th>                      
-                        <th>Association Date</th>
-                        <th>Path</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+            <div class="form-control dropdown" style="display:none">
+                <div class="control-label">Status</div>
+                <select class="control" id="account-by-account-cbb-status" multiple="multiple">
+                    @foreach (var status in Model.AccountStatusList)
+                    {
+                        <option value="@status.ItemId" selected>@status.ItemNameDisplay</option>
+                    }
+                </select>
+            </div>
+            <div class="form-control dropdown">
+                <div class="control-label">Association Type</div>
+                <select class="control" id="account-by-account-cbb-association-type">
+                    @foreach (var status in Model.AssociationTypeList)
+                    {
+                        <option value="@status.ItemId" @(status.ItemId == 1 ? "selected" : "")>@status.ItemNameDisplay</option>
+                    }
+                </select>
+            </div>
+            <div class="form-control" style="vertical-align: bottom;">
+                <button class="button btn-search" id="account-by-account-btn-search">Search</button>
+            </div>
         </div>
     </div>
+
+    <div class="table-report" id="account-by-account-content">
+        <div class="graph-heading">
+            <div class="free-size"></div>
+           
+            <div class="graph-info">
+                <button class="button btn-graph" id="btnAddAssociation">Add Association</button>
+                <button class="button btn-graph" id="account-by-account-btn-on-graph">View On Graph</button>
+            </div>
+        </div>
+        <table id="account-by-account-table" class="table table-striped" style="width: 100%">
+            <thead>
+                <tr>
+                    <th>Tag</th>
+                    <th>Username</th>
+                    <th>Login ID</th>
+                    <th>Status</th>
+                    <th>Subscriber</th>
+                    <th>Association Type</th>
+                    <th>Association Date</th>
+                    <th>Path</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+@Html.Partial("Associated/AddAssociation", Model.Username)

@@ -3,6 +3,7 @@
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.Account.CustomerCategory;
+    using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.Home;
@@ -75,7 +76,9 @@
         IEnumerable<AffectedEvidenceListBetweenCustsModel> GetAffectedEvidenceListBetweenCusts(Int64 fromCTSCustID, Int64 toCTSCustID);
 
         IEnumerable<SportGroup> GetAllSportGroup();
+        List<AssociationCustomerModel> SearchAssociatedCustomer(string username);
 
+        DBResult AddAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, string remark, int createdBy);
         IEnumerable<CustomerCategory> GetCustomerCategoryByCTSCustId(long ctsCustId);
 
         IEnumerable<CustomerClassificationModel> GetCustomerClassification(long ctsCustId);

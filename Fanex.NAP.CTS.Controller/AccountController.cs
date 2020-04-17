@@ -318,7 +318,7 @@
                     CustId = x.CustId.HasValue ? x.CustId.Value : 0,
                     Username = !string.IsNullOrWhiteSpace(x.Username) ? x.Username : x.Username2,
                     LoginId = !string.IsNullOrWhiteSpace(x.Username2) ? x.Username2 : x.Username,
-                    AssociationDate = x.AssociationDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),                   
+                    AssociationDate = x.AssociationDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                     AssociationType = x.AssociationType,
                     AssociationTypeName = x.AssociationType == 0 ? string.Format("{0}, {1}", x.GetAssociationTypeName(Model.AssociationType.Device), x.GetAssociationTypeName(Model.AssociationType.IP)) : x.AssociationTypeName,
                     Status = x.StatusName == "NA" ? "N/A" : x.StatusName,
@@ -443,6 +443,40 @@
             var graphCustomer = _graphService.GetGraphCustomerItemByShortestPathOfAccount(shortestPathOfAccount);
 
             return Json(graphCustomer, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult AddAssociation(string username, string comment, int fromSubscriberId, long fromCTSCustId, string rootUsername)
+        {
+            if(string.IsNullOrWhiteSpace(username) || rootUsername == username || fromSubscriberId <= 0 || fromCTSCustId <= 0)
+            {
+                return Json(new
+                {
+                    errorCode = -100,
+                    errorMessage = "Paramater is invalid."
+                }, JsonRequestBehavior.AllowGet);
+            }
+
+            var result = _accountService.SearchAssociatedCustomer(username);
+
+            if (result != null && result.Any())
+            {
+                var toCustomer = result.FirstOrDefault();
+
+                var dbResult = _accountService.AddAssociation(fromSubscriberId, fromCTSCustId, toCustomer.SubscriberId, toCustomer.CTSCustId, comment, CurrentSession.UserId);
+
+                return Json(new
+                {
+                    errorCode = dbResult.ErrorCode,
+                    errorMessage = dbResult.ErrorMsg
+                }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new
+            {
+                errorCode = -2,
+                errorMessage = "Customer dose not exist."
+            }, JsonRequestBehavior.AllowGet);
         }
 
         #endregion
