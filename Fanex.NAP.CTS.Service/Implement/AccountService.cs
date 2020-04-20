@@ -800,6 +800,32 @@
             }
         }
 
+        public DBResult ActiveRemoveAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, string remark, int createdBy, bool isRemoveAction)
+        {
+            var criteria = new ActiveRemoveAssociationCriteria
+            {
+                FromSubscriberId = fromSubscriberId,
+                FromCTSCustId = fromCTSCustId,
+                ToSubscriberId = toSubscriberId,
+                ToCTSCustId = toCTSCustId,
+                CreatedBy = createdBy,
+                Remark = remark,
+                IsActionRemove = isRemoveAction,
+                ErrorMessage = string.Empty
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                db.ExecuteNonQuery(criteria);
+
+                return new DBResult
+                {
+                    ErrorCode = string.IsNullOrWhiteSpace(criteria.ErrorMessage) ? 0 : -1,
+                    ErrorMsg = criteria.ErrorMessage
+                };
+            }
+        }
+
         #endregion
 
         #region Chain To Evidence
@@ -1112,6 +1138,8 @@
                 ErrorMsg = criteria.ErrorMessage
             };
         }
+
+       
 
 
 

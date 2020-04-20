@@ -455,6 +455,9 @@
     <Setting Key="CTS_DC_AddCTSCustomerClassification"
            SpName="CTS_DC_AddCTSCustomerClassification"
            DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_UpdateAssociationRemove"
+         SpName="CTS_DC_UpdateAssociationRemove"
+         DbName="MySQL.CTS_DataCenter" />
 
     <Setting Key="CTS_DC_UpdateCTSCustomerClassification"
            SpName="CTS_DC_UpdateCTSCustomerClassification"

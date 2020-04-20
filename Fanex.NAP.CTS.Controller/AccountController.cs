@@ -479,6 +479,27 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        public ActionResult ActiveRemoveAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, string remark, bool isAction)
+        {
+            if (fromSubscriberId <= 0 || fromCTSCustId <= 0 || toSubscriberId <= 0 || toCTSCustId <= 0)
+            {
+                return Json(new
+                {
+                    errorCode = -100,
+                    errorMessage = "Paramater is invalid."
+                }, JsonRequestBehavior.AllowGet);
+            }
+
+            var dbResult = _accountService.ActiveRemoveAssociation(fromSubscriberId, fromCTSCustId, toSubscriberId, toCTSCustId, remark, CurrentSession.UserId, isAction);
+            
+            return Json(new
+            {
+                errorCode = dbResult.ErrorCode,
+                errorMessage = dbResult.ErrorMsg
+            }, JsonRequestBehavior.AllowGet);
+        }
+
         #endregion
 
         #region Chain To Evidence
