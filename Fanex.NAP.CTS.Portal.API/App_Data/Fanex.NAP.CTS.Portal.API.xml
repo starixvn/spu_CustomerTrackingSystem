@@ -501,6 +501,7 @@
             <returns></returns>
             
         </member>
+        <!-- Badly formed XML comment ignored for member "M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetAssociationException(System.Int32)" -->
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetInDirectAssociation(System.Int32)">
             <summary>
             Get Association with N Level

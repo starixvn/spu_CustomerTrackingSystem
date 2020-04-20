@@ -71,6 +71,32 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
             }
         }
 
+        // <summary>
+        /// Get Association Exception
+        /// </summary>
+        /// <param name="ctsCustId"></param>
+        /// <returns></returns>
+        /// 
+        [System.Web.Http.AcceptVerbs("GetAssociationException")]
+        [HttpGet]
+        public IEnumerable<int> GetAssociationException(int ctsCustId)
+        {
+            try
+            {
+                var result = DbSessionFactory.Execute<IEnumerable<int>>("GetAssociationExceptionByCustId", new
+                {
+                    ip_CTSCustId = ctsCustId
+                }).Data.FirstOrDefault();
+
+                return result ?? new List<int>();
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("GetDirectAssociation failed: " + ex.Message + ex.StackTrace);
+                throw;
+            }
+        }
+
         [System.Web.Http.AcceptVerbs("GetDirectAssociationByDevice")]
         [HttpGet]
         public GraphAssociationPaging GetDirectAssociationByDevice(int ctsCustId, int takeRow, int skipRow)

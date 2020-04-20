@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Functions>
   <Function Name="MiddleSerivce">
+    <GraphSetting Key="GetAssociationExceptionByCustId" SpName="GetAssociationExceptionByCustId" DbName="GraphDB" />
     <GraphSetting Key="GetAssociationOneLevelByCustId" SpName="GetAssociationOneLevelByCustId" DbName="GraphDB" />
     <GraphSetting Key="GetAssociationOneLevelByCustIdByDevice" SpName="GetAssociationOneLevelByCustIdByDevice" DbName="GraphDB" />
     <GraphSetting Key="GetAssociationOneLevelByCustIdByIP" SpName="GetAssociationOneLevelByCustIdByIP" DbName="GraphDB" />
