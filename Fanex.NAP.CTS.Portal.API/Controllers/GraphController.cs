@@ -83,10 +83,10 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
         {
             try
             {
-                var result = DbSessionFactory.Execute<IEnumerable<int>>("GetAssociationExceptionByCustId", new
+                var result = DbSessionFactory.Query<int>("GetAssociationExceptionByCustId", new
                 {
                     ip_CTSCustId = ctsCustId
-                }).Data.FirstOrDefault();
+                });
 
                 return result ?? new List<int>();
             }
