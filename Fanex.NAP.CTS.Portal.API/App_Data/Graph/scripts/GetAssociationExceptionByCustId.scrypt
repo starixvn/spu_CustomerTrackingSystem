@@ -1,0 +1,3 @@
+﻿MATCH (c:CTSCustomer)-[r:HAS_EXCEPTION]-(c2:CTSCustomer)
+WHERE c.CTSCustID = $ip_CTSCustId
+RETURN c2.CTSCustID as CTSCustID
