@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace Fanex.NAP.CTS.Model.GraphDB
 {

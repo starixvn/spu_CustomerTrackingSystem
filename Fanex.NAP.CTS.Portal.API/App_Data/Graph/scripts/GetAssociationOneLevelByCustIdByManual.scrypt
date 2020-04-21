@@ -1,0 +1,12 @@
+﻿CALL apoc.cypher.run('
+MATCH (c:CTSCustomer)-[r:ADD_MANUALLY]->(c2:CTSCustomer)
+WHERE c.CTSCustID = $ip_CTSCustId
+WITH c,c2,r
+RETURN c2.CTSCustID as CTSCustID, c2.CustID AS CustId, c2.UserName AS Username, c2.UserName2 AS Username2, 3 as AssociationType, -1 AS SharedDevices, -1 AS SharedIPs, CASE c2.SubscriberID WHEN null THEN -1 ELSE c2.SubscriberID END AS SubscriberId, apoc.date.format(r.CreatedDate,"ms","yyyy-MM-dd HH:mm:ss") as AssociationDate
+',{ip_CTSCustId: $CTSCustID}) YIELD value 
+WITH collect(value) as ListAss, count(value) as TotalItems
+UNWIND ListAss as ass
+WITH ass, TotalItems 
+SKIP $Skip
+LIMIT $Pagesize
+RETURN COLLECT(ass) AS AssociationList, TotalItems

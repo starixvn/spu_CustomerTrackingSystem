@@ -97,6 +97,28 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
             }
         }
 
+        [System.Web.Http.AcceptVerbs("GetDirectAssociationByManual")]
+        [HttpGet]
+        public GraphAssociationPaging GetDirectAssociationByManual(int ctsCustId, int takeRow, int skipRow)
+        {
+            try
+            {
+                var result = DbSessionFactory.Execute<GraphAssociationPaging>("GetAssociationOneLevelByCustIdByManual", new
+                {
+                    CTSCustID = ctsCustId,
+                    Skip = skipRow,
+                    Pagesize = takeRow
+                }).Data.FirstOrDefault();
+
+                return result ?? new GraphAssociationPaging() { AssociationList = null, TotalItems = 0 };
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("GetDirectAssociationByManual failed: " + ex.Message + ex.StackTrace);
+                throw;
+            }
+        }
+
         [System.Web.Http.AcceptVerbs("GetDirectAssociationByDevice")]
         [HttpGet]
         public GraphAssociationPaging GetDirectAssociationByDevice(int ctsCustId, int takeRow, int skipRow)
