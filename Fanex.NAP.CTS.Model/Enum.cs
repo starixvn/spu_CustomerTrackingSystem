@@ -18,6 +18,7 @@
     {
         Device = 1,
         IP = 2,
+        Manual = 3,
         All = 0
     }
 

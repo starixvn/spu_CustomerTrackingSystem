@@ -287,6 +287,10 @@
             {
                 directAssociationUrl = ConfigSettings.GetDirectAssociationByIP;
             }
+            else if(model.AssociationType == 3)
+            {
+                directAssociationUrl = ConfigSettings.GetDirectAssociationByManual;
+            }
 
             // LogService.Info("From Graph - CTSCustId: " + model.CTSCustId + " - Start: " + DateTime.Now.ToString());
             var graphAssociationPage = model.IsDirect ?
