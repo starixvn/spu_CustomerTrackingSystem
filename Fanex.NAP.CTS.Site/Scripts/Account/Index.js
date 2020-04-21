@@ -2,7 +2,7 @@
     var username = $("#hdUsername").val();
     var custId = $("#hdCustId").val();
     var ctsCustId = $("#hdCTSCustId").val();
-    var subscriberId = $("#hdSubcriberId").val();
+    var subscriberId = $("#hdSubscriberId").val();
     var subscriber = $("#hdSubscriber").val();
 
     var lnkAssociation = $("#lnkAssociation");

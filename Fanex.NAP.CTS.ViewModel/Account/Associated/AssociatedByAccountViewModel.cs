@@ -5,7 +5,7 @@ namespace Fanex.NAP.CTS.ViewModel.Account.Associated
 {
     public class AssociatedByAccountViewModel
     {
-        public List<CustomerStaticStatusModel> AccountStatusList { get; set; }
+        public List<CustomerStaticStatusModel> AssociationStatus { get; set; }
 
         public List<CustomerStaticStatusModel> AssociationTypeList { get; set; }
 

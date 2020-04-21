@@ -245,14 +245,17 @@
 
         public ActionResult AssociatedByAccount(string username)
         {
-            var getCustomerStaticStatus = _accountService.GetCustomerStaticStatus(1, true);
+            var getAssociationStatus = _accountService.GetCustomerStaticStatus(3, true);
+
+            getAssociationStatus.Insert(0, new CustomerStaticStatusModel { ItemId = 0, ItemNameDisplay = "All" });
+
             var getCustomerStaticAssType = _accountService.GetCustomerStaticStatus(2, true);
 
             getCustomerStaticAssType.Insert(0, new CustomerStaticStatusModel { ItemId = 0, ItemNameDisplay = "All" });
 
             var associatedByAccountViewModel = new AssociatedByAccountViewModel
             {
-                AccountStatusList = getCustomerStaticStatus,
+                AssociationStatus  = getAssociationStatus,
                 AssociationTypeList = getCustomerStaticAssType,
                 Username = username
             };
@@ -269,7 +272,7 @@
 
             var result = new List<CustomerAssociationByAccountDetailViewModel>();
 
-            if (string.IsNullOrWhiteSpace(model.StatusIds) || model.CTSCustId == 0)
+            if (model.CTSCustId == 0)
             {
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
@@ -305,7 +308,7 @@
                 var getAllSubscribers = _subscriberAssignmentService.GetSubscribers(0);
 
                 // LogService.Info("Filter Status - CTSCustId: " + model.CTSCustId + " - Start: " + DateTime.Now.ToString());
-                customerAssociation = _accountService.FilterCustomerAssociationByStatus(model.StatusIds, customerAssociation, getStatusByCustIds);
+                customerAssociation = _accountService.FilterCustomerAssociationByStatus(string.Empty, customerAssociation, getStatusByCustIds);
                 // LogService.Info("Filter Status - CTSCustId: " + model.CTSCustId + " - End: " + DateTime.Now.ToString());
 
                 // LogService.Info("Filter Ass type - CTSCustId: " + model.CTSCustId + " - Start: " + DateTime.Now.ToString());
@@ -330,6 +333,11 @@
                     CTSCustId = x.CTSCustID,
                     IsActive = exceptionCustIdList.Contains(x.CTSCustID)
                 }).ToList();
+
+                if(model.AssociationStatus != 0)
+                {
+                    result = result.Where(x => x.IsActive = (model.AssociationStatus == 1)).ToList();
+                }
 
                 // LogService.Info("Render - CTSCustId: " + model.CTSCustId + " - End: " + DateTime.Now.ToString());
                 //if (result != null && result.Any())
@@ -482,7 +490,7 @@
         }
 
         [HttpPost]
-        public ActionResult ActiveRemoveAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, string remark, bool isAction)
+        public ActionResult ActiveRemoveAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, string remark, bool isActive)
         {
             if (fromSubscriberId <= 0 || fromCTSCustId <= 0 || toSubscriberId <= 0 || toCTSCustId <= 0)
             {
@@ -493,7 +501,7 @@
                 }, JsonRequestBehavior.AllowGet);
             }
 
-            var dbResult = _accountService.ActiveRemoveAssociation(fromSubscriberId, fromCTSCustId, toSubscriberId, toCTSCustId, remark, CurrentSession.UserId, isAction);
+            var dbResult = _accountService.ActiveRemoveAssociation(fromSubscriberId, fromCTSCustId, toSubscriberId, toCTSCustId, remark, CurrentSession.UserId, isActive);
 
             return Json(new
             {

@@ -47,6 +47,7 @@
     function RenderGrid() {
         var url = common.modifyRelativeUrl('Account/GetAssociatedByAccount');
         var ctsCustId = $("#hdCTSCustId").val();
+        var subscriberId = $("#hdSubscriberId").val();
 
         return associatedByAccountTable.DataTable({
             serverSide: true,
@@ -56,8 +57,8 @@
                     CTSCustId: function () {
                         return $("#hdCTSCustId").val();
                     },
-                    StatusIds: function () {
-                        return $('#account-by-account-cbb-status').val().join(',');
+                    AssociationStatus: function () {
+                        return $('#association-cbb-status').val();
                     },
                     AssociationType: function () {
                         return $("#account-by-account-cbb-association-type").val();
@@ -98,11 +99,11 @@
                 { targets: [0], width: "5%" },
                 { targets: [1], width: "20%" },
                 { targets: [2], width: "20%" },
-                { targets: [3], width: "20%" },
+                { targets: [3], width: "10%" },
                 { targets: [4], width: "10%" },
                 { targets: [5], width: "10%" },                
                 { targets: [6], width: "10%" },
-                { targets: [7], width: "5%" }
+                { targets: [7], width: "15%" }
             ],
             columns: [
                 { data: obj => RenderTag(obj) },
@@ -110,17 +111,40 @@
                 { data: obj => obj.LoginId },
                 { data: obj => obj.Status },
                 { data: obj => obj.Subscriber },
-                { data: obj => obj.AssociationTypeName },                
+                { data: obj => obj.AssociationTypeName },
+                {
+                    data: obj => AssociationStatus(obj.IsActive), createdCell: (cell, _, row) => {
+                        $('a.info-bng', cell).click(() => ActiveRemove(row, ctsCustId, subscriberId));
+                    }
+                }, 
                 {
                     data: obj => obj.AssociationDate
-                },
-                {
-                    data: obj => RenderGraphImage(), createdCell: (cell, _, row) => {
-                        $('.icon-path', cell).click(() => HandleGraphShortestPath(row, ctsCustId));
-                    }
                 }
+                //,
+                //{
+                //    data: obj => RenderGraphImage(), createdCell: (cell, _, row) => {
+                //        $('.icon-path', cell).click(() => HandleGraphShortestPath(row, ctsCustId));
+                //    }
+                //}
             ]
         });
+    }
+
+    function AssociationStatus(isActive) {
+        if (isActive) {
+            return '<a class="info-bng" href="javascript:void(0)">Removed</a>';
+        }
+        else {
+            return '<a class="info-bng" href="javascript:void(0)">Active</a>';
+        }
+    }
+
+    function ActiveRemove(obj, fromCTSCustId, fromSubscriberId) {
+
+        common.showConfirmation('Are you sure you want to update ASSOCIATION for ' + obj.Username + '?', function () {
+            RemoveAssociation(fromSubscriberId, fromCTSCustId, obj.SubscriberId, obj.CTSCustId, obj.IsActive); 
+        })
+        
     }
 
     function HandleGraphShortestPath(row, ctsCustid) {
@@ -163,6 +187,40 @@
             },
             complete: function () {
 
+            }
+        });
+    }
+
+    function RemoveAssociation(fromSubscriberId, fromCTSCustId, toSubscriberId, toCTSCustId, isActive) {
+        var url = common.modifyRelativeUrl('Account/ActiveRemoveAssociation');
+        var params = {};
+        params.fromSubscriberId = parseInt(fromSubscriberId);
+        params.fromCTSCustId = parseInt(fromCTSCustId);
+        params.toSubscriberId = toSubscriberId;
+        params.toCTSCustId = toCTSCustId;
+        params.Remark = "";
+        params.isActive = isActive;
+
+        $.ajax(url, {
+            type: 'POST',
+            data: params,
+            beforeSend: function () {
+                common.showLoading();
+            },
+            success: function (response) {
+                if (response.errorCode == 0) {
+                    common.showSuccess('Update the association successful!', 2000);                    
+                 }                
+                else {
+                    common.showError('Update the association fail!');
+                }
+            },
+            complete: function () {
+               
+                setTimeout(() => {
+                    common.closeLoading();
+                    btnSearch.trigger("click");
+                }, 2000);               
             }
         });
     }

@@ -16,12 +16,12 @@
                 <input type="radio" id="radio03-02" name="demo03" />
                 <label for="radio03-02">Indirect Association with @Model.Username</label>
             </div>
-            <div class="form-control dropdown" style="display:none">
-                <div class="control-label">Status</div>
-                <select class="control" id="account-by-account-cbb-status" multiple="multiple">
-                    @foreach (var status in Model.AccountStatusList)
+            <div class="form-control dropdown">
+                <div class="control-label">Association Status</div>
+                <select class="control" id="association-cbb-status">
+                    @foreach (var status in Model.AssociationStatus)
                     {
-                        <option value="@status.ItemId" selected>@status.ItemNameDisplay</option>
+                        <option value="@status.ItemId" @(status.ItemId == 0 ? "selected" : "")>@status.ItemNameDisplay</option>
                     }
                 </select>
             </div>
@@ -58,8 +58,8 @@
                     <th>Status</th>
                     <th>Subscriber</th>
                     <th>Association Type</th>
-                    <th>Association Date</th>
-                    <th>Path</th>
+                    <th>Association Status</th>
+                    <th>Association Date</th>                   
                 </tr>
             </thead>
             <tbody></tbody>

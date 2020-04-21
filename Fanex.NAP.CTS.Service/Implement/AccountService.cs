@@ -826,9 +826,11 @@
             }
         }
 
-        public List<long> GetAssociationException(string apiURL, long ctsCustId)
+        public IEnumerable<long> GetAssociationException(string apiURL, long ctsCustId)
         {
-            var data = ApiHelper.Post<List<long>>(apiURL, ctsCustId);
+            var urlString = string.Format(apiURL + "?ctsCustId={0}", ctsCustId);
+
+            var data = ApiHelper.Get<IEnumerable<long>>(urlString);
 
             Task.WhenAll(data);
 
@@ -1148,7 +1150,7 @@
             };
         }
 
-        
+
 
         #endregion
     }
