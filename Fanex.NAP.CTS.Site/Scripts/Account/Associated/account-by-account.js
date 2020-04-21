@@ -155,7 +155,7 @@
                     common.showError('Username "' + params.Username + '" is invalid.');
                 }
                 else if (response.errorCode == -1) {
-                    common.showError('Username already exists in "' + params.Username + '" exceptions list.');
+                    common.showError('Username already exists in "' + params.Username + '" association list.');
                 }
                 else {
                     common.showError('Add the association fail!');
