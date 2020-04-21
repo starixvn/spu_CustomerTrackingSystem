@@ -826,6 +826,15 @@
             }
         }
 
+        public List<long> GetAssociationException(string apiURL, long ctsCustId)
+        {
+            var data = ApiHelper.Post<List<long>>(apiURL, ctsCustId);
+
+            Task.WhenAll(data);
+
+            return data.Result ?? new List<long>();
+        }
+
         #endregion
 
         #region Chain To Evidence
@@ -1139,11 +1148,7 @@
             };
         }
 
-       
-
-
-
-
+        
 
         #endregion
     }

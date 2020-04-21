@@ -79,16 +79,16 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
         /// 
         [System.Web.Http.AcceptVerbs("GetAssociationException")]
         [HttpGet]
-        public IEnumerable<int> GetAssociationException(int ctsCustId)
+        public IEnumerable<long> GetAssociationException(int ctsCustId)
         {
             try
             {
-                var result = DbSessionFactory.Query<int>("GetAssociationExceptionByCustId", new
+                var result = DbSessionFactory.Query<long>("GetAssociationExceptionByCustId", new
                 {
                     ip_CTSCustId = ctsCustId
                 });
 
-                return result ?? new List<int>();
+                return result ?? new List<long>();
             }
             catch (Exception ex)
             {

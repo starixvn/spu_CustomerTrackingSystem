@@ -83,6 +83,8 @@
 
 
         DBResult ActiveRemoveAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, string remark, int createdBy, bool isRemoveAction);
+
+        List<long> GetAssociationException(string apiURL, long ctsCustId);
         IEnumerable<CustomerClassificationModel> GetCustomerClassification(long ctsCustId);
 
         DBResult AddCustomerClassification(long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark, int createdBy);

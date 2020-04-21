@@ -37,5 +37,7 @@ namespace Fanex.NAP.CTS.ViewModel.Account.Associated
         public int SharedIps { get; set; }
 
         public string AssociationDate { get; set; }
+
+        public bool IsActive { get; set; }
     }
 }

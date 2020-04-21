@@ -60,6 +60,8 @@
 
         public static string GetDirectAssociation => GetConfigStringByName("Graph_GetDirectAssociation");
 
+        public static string GetAssociationException => GetConfigStringByName("Graph_GetAssociationException");
+
         public static string GetDirectAssociationByDevice => GetConfigStringByName("Graph_GetDirectAssociationByDevice");
 
         public static string GetDirectAssociationByIP => GetConfigStringByName("Graph_GetDirectAssociationByIP");
