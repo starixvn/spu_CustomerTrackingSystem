@@ -115,9 +115,9 @@
                 {
                     data: obj => AssociationStatus(obj.IsActive), createdCell: (cell, _, row) => {
                         $('.toggle', cell).click(function (e) {
-                            e.preventDefault(); // The flicker is a codepen thing
+                            e.preventDefault(); 
                            
-                            ActiveRemove(row, ctsCustId, subscriberId, $(this))
+                            ActiveRemove(row, ctsCustId, subscriberId)
                         });
                     }
                 },
@@ -141,11 +141,11 @@
 
     }
 
-    function ActiveRemove(obj, fromCTSCustId, fromSubscriberId, event)
+    function ActiveRemove(obj, fromCTSCustId, fromSubscriberId)
     {
         common.showConfirmation('Are you sure you want to update ASSOCIATION for ' + obj.Username + '?',
             function () {
-                RemoveAssociation(fromSubscriberId, fromCTSCustId, obj.SubscriberId, obj.CTSCustId, obj.IsActive);
+                RemoveAssociation(fromSubscriberId, fromCTSCustId, obj.SubscriberId, obj.CTSCustId, !obj.IsActive);
             });
 
     }

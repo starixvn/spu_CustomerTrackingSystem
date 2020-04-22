@@ -335,12 +335,12 @@
                     SubscriberId = x.SubscriberId,
                     Subscriber = getAllSubscribers.Any(aa => x.SubscriberId != -1 && aa.SubscriberId == x.SubscriberId) ? getAllSubscribers.FirstOrDefault(a => a.SubscriberId == x.SubscriberId).SubscriberName : "-",
                     CTSCustId = x.CTSCustID,
-                    IsActive = exceptionCustIdList.Contains(x.CTSCustID)
+                    IsActive = !exceptionCustIdList.Contains(x.CTSCustID)
                 }).ToList();
 
                 if(model.AssociationStatus != 0)
                 {
-                    result = result.Where(x => x.IsActive = (model.AssociationStatus == 1)).ToList();
+                    result = result.Where(x => x.IsActive == (model.AssociationStatus == 1)).ToList();
                 }
 
                 // LogService.Info("Render - CTSCustId: " + model.CTSCustId + " - End: " + DateTime.Now.ToString());
