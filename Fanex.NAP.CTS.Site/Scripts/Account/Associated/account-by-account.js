@@ -114,7 +114,11 @@
                 { data: obj => obj.AssociationTypeName },
                 {
                     data: obj => AssociationStatus(obj.IsActive), createdCell: (cell, _, row) => {
-                        $('.switch-input', cell).click(() => ActiveRemove(row, ctsCustId, subscriberId));
+                        $('.toggle', cell).click(function (e) {
+                            e.preventDefault(); // The flicker is a codepen thing
+                           
+                            ActiveRemove(row, ctsCustId, subscriberId, $(this))
+                        });
                     }
                 },
                 {
@@ -133,18 +137,15 @@
     function AssociationStatus(isActive) {
         //return '<label class="switch-status switch-green"><input type="checkbox" class="switch-input" ' + (isActive ? '' : 'checked') + '><span class="switch-label" data-on="Active" data-off="Removed"></span><span class="switch-handle"></span></label>'
 
-        return '<div class="toggle" id="switch"><div class="toggle-text-off">OFF</div><div class="glow-comp"></div><div class="toggle-button"></div><div class="toggle-text-on">ON</div></div>';
+        return '<div class="toggle ' + (isActive ? 'toggle-on' : '') +'" id="switch"><div class="toggle-text-off">OFF</div><div class="glow-comp"></div><div class="toggle-button"></div><div class="toggle-text-on">ON</div></div>';
 
     }
 
-    function ActiveRemove(obj, fromCTSCustId, fromSubscriberId) {
-
+    function ActiveRemove(obj, fromCTSCustId, fromSubscriberId, event)
+    {
         common.showConfirmation('Are you sure you want to update ASSOCIATION for ' + obj.Username + '?',
             function () {
                 RemoveAssociation(fromSubscriberId, fromCTSCustId, obj.SubscriberId, obj.CTSCustId, obj.IsActive);
-            },
-            function () {
-                
             });
 
     }
@@ -281,10 +282,7 @@
             divAddAssociation.dialog('close');
         });
 
-        $('.toggle').click(function (e) {
-            e.preventDefault(); // The flicker is a codepen thing
-            $(this).toggleClass('toggle-on');
-        });
+
     }
 }
 
