@@ -46,13 +46,14 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
         /// 
         [System.Web.Http.AcceptVerbs("GetDirectAssociation")]
         [HttpGet]
-        public GraphAssociationPaging GetDirectAssociation(int ctsCustId, int takeRow, int skipRow)
+        public GraphAssociationPaging GetDirectAssociation(int ctsCustId, int assStatus, int takeRow, int skipRow)
         {
             try
             {
                 var result = DbSessionFactory.Execute<GraphAssociationPaging>("GetAssociationOneLevelByCustId", new
                 {
                     CTSCustID = ctsCustId,
+                    AssStatus = assStatus,
                     Skip = skipRow,
                     Pagesize = takeRow
                 }).Data.FirstOrDefault();
@@ -71,41 +72,16 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
             }
         }
 
-        // <summary>
-        /// Get Association Exception
-        /// </summary>
-        /// <param name="ctsCustId"></param>
-        /// <returns></returns>
-        /// 
-        [System.Web.Http.AcceptVerbs("GetAssociationException")]
-        [HttpGet]
-        public IEnumerable<long> GetAssociationException(int ctsCustId)
-        {
-            try
-            {
-                var result = DbSessionFactory.Query<long>("GetAssociationExceptionByCustId", new
-                {
-                    ip_CTSCustId = ctsCustId
-                });
-
-                return result ?? new List<long>();
-            }
-            catch (Exception ex)
-            {
-                LogService.Error("GetDirectAssociation failed: " + ex.Message + ex.StackTrace);
-                throw;
-            }
-        }
-
         [System.Web.Http.AcceptVerbs("GetDirectAssociationByManual")]
         [HttpGet]
-        public GraphAssociationPaging GetDirectAssociationByManual(int ctsCustId, int takeRow, int skipRow)
+        public GraphAssociationPaging GetDirectAssociationByManual(int ctsCustId, int assStatus, int takeRow, int skipRow)
         {
             try
             {
                 var result = DbSessionFactory.Execute<GraphAssociationPaging>("GetAssociationOneLevelByCustIdByManual", new
                 {
                     CTSCustID = ctsCustId,
+                    AssStatus = assStatus,
                     Skip = skipRow,
                     Pagesize = takeRow
                 }).Data.FirstOrDefault();
@@ -121,13 +97,14 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
 
         [System.Web.Http.AcceptVerbs("GetDirectAssociationByDevice")]
         [HttpGet]
-        public GraphAssociationPaging GetDirectAssociationByDevice(int ctsCustId, int takeRow, int skipRow)
+        public GraphAssociationPaging GetDirectAssociationByDevice(int ctsCustId, int assStatus, int takeRow, int skipRow)
         {
             try
             {
                 var result = DbSessionFactory.Execute<GraphAssociationPaging>("GetAssociationOneLevelByCustIdByDevice", new
                 {
                     CTSCustID = ctsCustId,
+                    AssStatus = assStatus,
                     Skip = skipRow,
                     Pagesize = takeRow
                 }).Data.FirstOrDefault();
@@ -148,13 +125,14 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
 
         [System.Web.Http.AcceptVerbs("GetDirectAssociationByIP")]
         [HttpGet]
-        public GraphAssociationPaging GetDirectAssociationByIP(int ctsCustId, int takeRow, int skipRow)
+        public GraphAssociationPaging GetDirectAssociationByIP(int ctsCustId, int assStatus, int takeRow, int skipRow)
         {
             try
             {
                 var result = DbSessionFactory.Execute<GraphAssociationPaging>("GetAssociationOneLevelByCustIdByIP", new
                 {
                     CTSCustID = ctsCustId,
+                    AssStatus = assStatus,
                     Skip = skipRow,
                     Pagesize = takeRow
                 }).Data.FirstOrDefault();

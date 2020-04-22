@@ -1,22 +1,33 @@
 ﻿CALL apoc.cypher.run('
 MATCH (c:CTSCustomer)-[r:USED_DEVICE]->(d:Device)<-[r1:USED_DEVICE]-(c1:CTSCustomer)
-WHERE c.CTSCustID = $ip_CTSCustId
+WHERE c.CTSCustID = $ip_CTSCustId AND 
+	(($ip_assStatus = 0) 
+	OR ($ip_assStatus = 1 AND not exists((c)-[:HAS_EXCEPTION]-(c2)))
+    OR ($ip_assStatus = 2 AND exists((c)-[:HAS_EXCEPTION]-(c2))))
 WITH c,c1,d,r,r1
+OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c1)
 UNWIND [r.CreatedTime,r1.CreatedTime] AS val
-RETURN c1.CTSCustID as CTSCustID, c1.CustID AS CustId, c1.UserName AS Username, c1.UserName2 AS Username2, 1 AS AssociationType, -1 AS SharedDevices, -1 AS SharedIPs, CASE c1.SubscriberID WHEN null THEN -1 ELSE c1.SubscriberID END AS SubscriberId, MAX(val) AS AssociationDate
+RETURN c1.CTSCustID as CTSCustID, c1.CustID AS CustId, c1.UserName AS Username, c1.UserName2 AS Username2, 1 AS AssociationType, -1 AS SharedDevices, -1 AS SharedIPs, CASE c1.SubscriberID WHEN null THEN -1 ELSE c1.SubscriberID END AS SubscriberId, MAX(val) AS AssociationDate, CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
 UNION ALL
 MATCH (c:CTSCustomer)-[r2:USED_IP]->(i:IP)<-[r3:USED_IP]-(c2:CTSCustomer)
-WHERE c.CTSCustID = $ip_CTSCustId
+WHERE c.CTSCustID = $ip_CTSCustId AND 
+	(($ip_assStatus = 0) 
+	OR ($ip_assStatus = 1 AND not exists((c)-[:HAS_EXCEPTION]-(c2)))
+    OR ($ip_assStatus = 2 AND exists((c)-[:HAS_EXCEPTION]-(c2))))
 WITH c,c2,i,r2,r3
+OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c2)
 UNWIND [r2.CreatedTime,r3.CreatedTime] AS val
-RETURN c2.CTSCustID as CTSCustID, c2.CustID AS CustId, c2.UserName AS Username, c2.UserName2 AS Username2, 2 as AssociationType, -1 AS SharedDevices, -1 AS SharedIPs, CASE c2.SubscriberID WHEN null THEN -1 ELSE c2.SubscriberID END AS SubscriberId, MAX(val) AS AssociationDate
+RETURN c2.CTSCustID as CTSCustID, c2.CustID AS CustId, c2.UserName AS Username, c2.UserName2 AS Username2, 2 as AssociationType, -1 AS SharedDevices, -1 AS SharedIPs, CASE c2.SubscriberID WHEN null THEN -1 ELSE c2.SubscriberID END AS SubscriberId, MAX(val) AS AssociationDate, CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
 UNION ALL
-MATCH (c:CTSCustomer)-[r:ADD_MANUALLY]->(c2:CTSCustomer)
-WHERE c.CTSCustID = $ip_CTSCustId
+MATCH (c:CTSCustomer)-[r:ADD_MANUALLY]-(c2:CTSCustomer)
+WHERE c.CTSCustID = $ip_CTSCustId AND 
+	(($ip_assStatus = 0) 
+	OR ($ip_assStatus = 1 AND not exists((c)-[:HAS_EXCEPTION]-(c2)))
+    OR ($ip_assStatus = 2 AND exists((c)-[:HAS_EXCEPTION]-(c2))))
 WITH c,c2,r
-UNWIND [r.CreatedDate] AS val
-RETURN c2.CTSCustID as CTSCustID, c2.CustID AS CustId, c2.UserName AS Username, c2.UserName2 AS Username2, 3 as AssociationType, -1 AS SharedDevices, -1 AS SharedIPs, CASE c2.SubscriberID WHEN null THEN -1 ELSE c2.SubscriberID END AS SubscriberId, MAX(val) AS AssociationDate
-',{ip_CTSCustId: $CTSCustID}) YIELD value 
+OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c2)
+RETURN c2.CTSCustID as CTSCustID, c2.CustID AS CustId, c2.UserName AS Username, c2.UserName2 AS Username2, 3 as AssociationType, -1 AS SharedDevices, -1 AS SharedIPs, CASE c2.SubscriberID WHEN null THEN -1 ELSE c2.SubscriberID END AS SubscriberId, apoc.date.format(r.CreatedDate,"ms","yyyy-MM-dd HH:mm:ss") as AssociationDate, CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
+',{ip_CTSCustId: $CTSCustID, ip_assStatus: $AssStatus}) YIELD value 
 WITH collect(value) as ListAss, count(value) as TotalItems
 UNWIND ListAss as ass
 WITH ass, TotalItems 
