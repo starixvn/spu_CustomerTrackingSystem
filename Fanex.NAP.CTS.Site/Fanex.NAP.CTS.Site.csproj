@@ -1256,6 +1256,8 @@
     <Content Include="Views\Home\Search.cshtml" />
     <Content Include="Views\Shared\_HomeLayout.cshtml" />
     <Content Include="Views\Shared\_HomeLoginPartial.cshtml" />
+    <Content Include="Views\Account\CustomerCategory\MarkCatergory.cshtml" />
+    <Content Include="Views\Account\CustomerCategory\CustomerCategory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

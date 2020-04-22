@@ -1,0 +1,29 @@
+﻿@using Fanex.NAP.CTS.Model;
+
+@{
+    ViewBag.Title = "Customer Category";
+}
+@model Fanex.NAP.CTS.ViewModel.Account.Associated.AssociatedByAccountViewModel
+
+    <div id="customer-category">        
+        <div class="table-report" id="customer-category-content">
+            <div class="graph-heading">
+                <div class="free-size"></div>
+                <div class="bold">Exceptions</div>
+                <button id="btnmarkcategory" class="button button-primary-outline" title="Mark Category">Mark Category</button>
+            </div>
+            <table id="customer-category-table" class="table table-striped" style="width: 100%">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Sport</th>
+                        <th>Comment</th>
+                        <th>Last Modified</th>
+                        <th>Date/Time</th>
+                        <th>Action</th>                        
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
