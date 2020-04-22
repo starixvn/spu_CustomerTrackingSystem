@@ -2,8 +2,8 @@
 MATCH (c:CTSCustomer)-[r:USED_DEVICE]->(d:Device)<-[r1:USED_DEVICE]-(c1:CTSCustomer)
 WHERE c.CTSCustID = $ip_CTSCustId AND 
 	(($ip_assStatus = 0) 
-	OR ($ip_assStatus = 1 AND not exists((c)-[:HAS_EXCEPTION]-(c2)))
-    OR ($ip_assStatus = 2 AND exists((c)-[:HAS_EXCEPTION]-(c2))))
+	OR ($ip_assStatus = 1 AND not exists((c)-[:HAS_EXCEPTION]-(c1)))
+    OR ($ip_assStatus = 2 AND exists((c)-[:HAS_EXCEPTION]-(c1))))
 WITH c,c1,d,r,r1
 OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c1)
 UNWIND [r.CreatedTime,r1.CreatedTime] AS val
@@ -19,14 +19,14 @@ OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c2)
 UNWIND [r2.CreatedTime,r3.CreatedTime] AS val
 RETURN c2.CTSCustID as CTSCustID, c2.CustID AS CustId, c2.UserName AS Username, c2.UserName2 AS Username2, 2 as AssociationType, -1 AS SharedDevices, -1 AS SharedIPs, CASE c2.SubscriberID WHEN null THEN -1 ELSE c2.SubscriberID END AS SubscriberId, MAX(val) AS AssociationDate, CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
 UNION ALL
-MATCH (c:CTSCustomer)-[r:ADD_MANUALLY]-(c2:CTSCustomer)
+MATCH (c:CTSCustomer)-[r:ADD_MANUALLY]-(c3:CTSCustomer)
 WHERE c.CTSCustID = $ip_CTSCustId AND 
 	(($ip_assStatus = 0) 
-	OR ($ip_assStatus = 1 AND not exists((c)-[:HAS_EXCEPTION]-(c2)))
-    OR ($ip_assStatus = 2 AND exists((c)-[:HAS_EXCEPTION]-(c2))))
-WITH c,c2,r
-OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c2)
-RETURN c2.CTSCustID as CTSCustID, c2.CustID AS CustId, c2.UserName AS Username, c2.UserName2 AS Username2, 3 as AssociationType, -1 AS SharedDevices, -1 AS SharedIPs, CASE c2.SubscriberID WHEN null THEN -1 ELSE c2.SubscriberID END AS SubscriberId, apoc.date.format(r.CreatedDate,"ms","yyyy-MM-dd HH:mm:ss") as AssociationDate, CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
+	OR ($ip_assStatus = 1 AND not exists((c)-[:HAS_EXCEPTION]-(c3)))
+    OR ($ip_assStatus = 2 AND exists((c)-[:HAS_EXCEPTION]-(c3))))
+WITH c,c3,r
+OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c3)
+RETURN c3.CTSCustID as CTSCustID, c3.CustID AS CustId, c3.UserName AS Username, c3.UserName2 AS Username2, 3 as AssociationType, -1 AS SharedDevices, -1 AS SharedIPs, CASE c3.SubscriberID WHEN null THEN -1 ELSE c3.SubscriberID END AS SubscriberId, apoc.date.format(r.CreatedDate,"ms","yyyy-MM-dd HH:mm:ss") as AssociationDate, CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
 ',{ip_CTSCustId: $CTSCustID, ip_assStatus: $AssStatus}) YIELD value 
 WITH collect(value) as ListAss, count(value) as TotalItems
 UNWIND ListAss as ass

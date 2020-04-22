@@ -388,7 +388,6 @@
     <Content Include="App_Data\Graph\scripts\GetStatisticForCustomer.scrypt" />
     <Content Include="App_Data\Graph\scripts\GetAssociationOneLevelByCustIdByDevice.scrypt" />
     <Content Include="App_Data\Graph\scripts\GetAssociationOneLevelByCustIdByIP.scrypt" />
-    <Content Include="App_Data\Graph\scripts\GetAssociationExceptionByCustId.scrypt" />
     <Content Include="App_Data\Graph\scripts\GetAssociationOneLevelByCustIdByManual.scrypt" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
