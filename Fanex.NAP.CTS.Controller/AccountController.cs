@@ -319,7 +319,7 @@
                 customerAssociation = _accountService.FilterCustomerAssociationByAssociationType(model.AssociationType, customerAssociation);
                 // LogService.Info("Filter Ass type - CTSCustId: " + model.CTSCustId + " - End: " + DateTime.Now.ToString());
 
-                var exceptionCustIdList = _accountService.GetAssociationException(ConfigSettings.GetAssociationException, model.CTSCustId);
+                //var exceptionCustIdList = _accountService.GetAssociationException(ConfigSettings.GetAssociationException, model.CTSCustId);
 
                 // LogService.Info("Render - CTSCustId: " + model.CTSCustId + " - Start: " + DateTime.Now.ToString());
                 result = customerAssociation.Select(x => new CustomerAssociationByAccountDetailViewModel
@@ -335,14 +335,9 @@
                     SubscriberId = x.SubscriberId,
                     Subscriber = getAllSubscribers.Any(aa => x.SubscriberId != -1 && aa.SubscriberId == x.SubscriberId) ? getAllSubscribers.FirstOrDefault(a => a.SubscriberId == x.SubscriberId).SubscriberName : "-",
                     CTSCustId = x.CTSCustID,
-                    IsActive = !exceptionCustIdList.Contains(x.CTSCustID)
+                    IsActive = x.AssociationStatus == 1
                 }).ToList();
-
-                if(model.AssociationStatus != 0)
-                {
-                    result = result.Where(x => x.IsActive == (model.AssociationStatus == 1)).ToList();
-                }
-
+                                
                 // LogService.Info("Render - CTSCustId: " + model.CTSCustId + " - End: " + DateTime.Now.ToString());
                 if (result != null && result.Any())
                 {
