@@ -650,9 +650,9 @@
             }
         }
 
-        public GraphAssociationPaging GetCustomerAssociationByGraph(string apiURL, long ctsCustId, int skipNumber, int takeNumber)
+        public GraphAssociationPaging GetCustomerAssociationByGraph(string apiURL, long ctsCustId, int associationStatus, int skipNumber, int takeNumber)
         {
-            var urlString = string.Format(apiURL + "?ctsCustId={0}&skipRow={1}&takeRow={2}", ctsCustId, skipNumber, takeNumber);
+            var urlString = string.Format(apiURL + "?ctsCustId={0}&assStatus={3}&skipRow={1}&takeRow={2}", ctsCustId, skipNumber, takeNumber, associationStatus);
 
             var data = ApiHelper.Get<GraphAssociationPaging>(urlString);
 

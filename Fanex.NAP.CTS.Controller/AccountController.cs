@@ -294,7 +294,7 @@
 
             // LogService.Info("From Graph - CTSCustId: " + model.CTSCustId + " - Start: " + DateTime.Now.ToString());
             var graphAssociationPage = model.IsDirect ?
-                _accountService.GetCustomerAssociationByGraph(directAssociationUrl, model.CTSCustId, skip, take) : new GraphAssociationPaging();
+                _accountService.GetCustomerAssociationByGraph(directAssociationUrl, model.CTSCustId, model.AssociationStatus, skip, take) : new GraphAssociationPaging();
             //_accountService.GetCustomerAssociationByGraph(ConfigSettings.GetInDirectAssociation, model.CTSCustId, skip, take);
             // LogService.Info("From Graph - CTSCustId: " + model.CTSCustId + " - End: " + DateTime.Now.ToString());
 
@@ -425,11 +425,11 @@
         }
 
         [HttpPost]
-        public ActionResult GetDirectAssociationGraph(Int64 ctsCustid, string username, int start, int length)
+        public ActionResult GetDirectAssociationGraph(Int64 ctsCustid, string username,int associationStatus, int start, int length)
         {
             var graphCustomer = new GraphCustomerItemViewModel();
 
-            var graphAssociationPaging = _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetDirectAssociation, ctsCustid, start, length);
+            var graphAssociationPaging = _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetDirectAssociation, ctsCustid, associationStatus, start, length);
             if (graphAssociationPaging != null && graphAssociationPaging.AssociationList != null && graphAssociationPaging.AssociationList.Any())
             {
                 var now = DateTime.Now.Ticks.ToString();
