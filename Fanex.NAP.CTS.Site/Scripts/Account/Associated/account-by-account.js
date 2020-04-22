@@ -175,7 +175,7 @@
             data: params,
             success: function (response) {
                 if (response.errorCode == 0) {
-                    common.showSuccess('Add the association successful!');
+                    common.showSuccess('Add the association successful!', 2000);
                     divAddAssociation.dialog('close');
                 }
                 else if (response.errorCode == -2) {
