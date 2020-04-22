@@ -91,7 +91,7 @@
             lengthMenu: [10, 20, 50, 100, 200],
             pageLength: 50,
             scrollX: false,
-            scrollCollapse: false,           
+            scrollCollapse: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
                 { targets: [-2, -1], className: "text-center" },
@@ -101,7 +101,7 @@
                 { targets: [2], width: "20%" },
                 { targets: [3], width: "10%" },
                 { targets: [4], width: "10%" },
-                { targets: [5], width: "10%" },                
+                { targets: [5], width: "10%" },
                 { targets: [6], width: "10%" },
                 { targets: [7], width: "15%" }
             ],
@@ -114,9 +114,9 @@
                 { data: obj => obj.AssociationTypeName },
                 {
                     data: obj => AssociationStatus(obj.IsActive), createdCell: (cell, _, row) => {
-                        $('a.info-bng', cell).click(() => ActiveRemove(row, ctsCustId, subscriberId));
+                        $('.switch-input', cell).click(() => ActiveRemove(row, ctsCustId, subscriberId));
                     }
-                }, 
+                },
                 {
                     data: obj => obj.AssociationDate
                 }
@@ -131,22 +131,20 @@
     }
 
     function AssociationStatus(isActive) {
-        //if (isActive) {
-        //    return '<a class="info-bng" href="javascript:void(0)">Removed</a>';
-        //}
-        //else {
-        //    return '<a class="info-bng" href="javascript:void(0)">Active</a>';
-        //}
-        return '<label class="switch-status switch-green"><input type="checkbox" class="switch-input" checked><span class="switch-label" data-on="Active" data-off="Removed"></span><span class="switch-handle"></span></label>'
-            
+        return '<label class="switch-status switch-green"><input type="checkbox" class="switch-input" ' + (isActive ? '' : 'checked') + '><span class="switch-label" data-on="Active" data-off="Removed"></span><span class="switch-handle"></span></label>'
+
     }
 
     function ActiveRemove(obj, fromCTSCustId, fromSubscriberId) {
 
-        common.showConfirmation('Are you sure you want to update ASSOCIATION for ' + obj.Username + '?', function () {
-            RemoveAssociation(fromSubscriberId, fromCTSCustId, obj.SubscriberId, obj.CTSCustId, obj.IsActive); 
-        })
-        
+        common.showConfirmation('Are you sure you want to update ASSOCIATION for ' + obj.Username + '?',
+            function () {
+                RemoveAssociation(fromSubscriberId, fromCTSCustId, obj.SubscriberId, obj.CTSCustId, obj.IsActive);
+            },
+            function () {
+                
+            });
+
     }
 
     function HandleGraphShortestPath(row, ctsCustid) {
@@ -163,7 +161,7 @@
     function AddAssociation(ctsCustId, subscriberId, rootUsername) {
         var url = common.modifyRelativeUrl('Account/AddAssociation');
         var params = {};
-        params.Username = assusername.val();   
+        params.Username = assusername.val();
         params.RootUsername = rootUsername;
         params.Comment = asscomment.val();
         params.FromSubscriberId = subscriberId;
@@ -211,18 +209,18 @@
             },
             success: function (response) {
                 if (response.errorCode == 0) {
-                    common.showSuccess('Update the association successful!', 2000);                    
-                 }                
+                    common.showSuccess('Update the association successful!', 2000);
+                }
                 else {
                     common.showError('Update the association fail!');
                 }
             },
             complete: function () {
-               
+
                 setTimeout(() => {
                     common.closeLoading();
                     btnSearch.trigger("click");
-                }, 2000);               
+                }, 2000);
             }
         });
     }
@@ -236,7 +234,7 @@
             $(this).prop('disabled', true);
             if (dataTable) {
                 dataTable.ajax.reload(null, true);
-            }            
+            }
         });
 
         btnViewOnGraph.on('click', function () {
@@ -268,8 +266,7 @@
                 common.showError('Username is require.');
                 assusername.focus();
             }
-            else if (assusername.val() == username)
-            {
+            else if (assusername.val() == username) {
                 common.showError('The username must be different from ' + username);
                 assusername.focus();
             }
