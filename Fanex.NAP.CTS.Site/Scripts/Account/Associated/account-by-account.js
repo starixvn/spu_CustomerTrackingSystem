@@ -131,7 +131,9 @@
     }
 
     function AssociationStatus(isActive) {
-        return '<label class="switch-status switch-green"><input type="checkbox" class="switch-input" ' + (isActive ? '' : 'checked') + '><span class="switch-label" data-on="Active" data-off="Removed"></span><span class="switch-handle"></span></label>'
+        //return '<label class="switch-status switch-green"><input type="checkbox" class="switch-input" ' + (isActive ? '' : 'checked') + '><span class="switch-label" data-on="Active" data-off="Removed"></span><span class="switch-handle"></span></label>'
+
+        return '<div class="toggle" id="switch"><div class="toggle-text-off">OFF</div><div class="glow-comp"></div><div class="toggle-button"></div><div class="toggle-text-on">ON</div></div>';
 
     }
 
@@ -277,6 +279,11 @@
 
         btnCancelAssociation.on('click', function () {
             divAddAssociation.dialog('close');
+        });
+
+        $('.toggle').click(function (e) {
+            e.preventDefault(); // The flicker is a codepen thing
+            $(this).toggleClass('toggle-on');
         });
     }
 }
