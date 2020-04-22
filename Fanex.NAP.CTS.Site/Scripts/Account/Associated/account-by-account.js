@@ -208,7 +208,7 @@
             type: 'POST',
             data: params,
             beforeSend: function () {
-                common.showLoading();
+                
             },
             success: function (response) {
                 if (response.errorCode == 0) {
@@ -221,7 +221,7 @@
             complete: function () {
 
                 setTimeout(() => {
-                    common.closeLoading();
+                    
                     btnSearch.trigger("click");
                 }, 2000);
             }

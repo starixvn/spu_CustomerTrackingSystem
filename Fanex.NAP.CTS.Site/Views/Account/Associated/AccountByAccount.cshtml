@@ -30,7 +30,7 @@
                 <select class="control" id="association-cbb-status">
                     @foreach (var status in Model.AssociationStatus)
                     {
-                        <option value="@status.ItemId" @(status.ItemId == 0 ? "selected" : "")>@status.ItemNameDisplay</option>
+                        <option value="@status.ItemId" @(status.ItemId == 1 ? "selected" : "")>@status.ItemNameDisplay</option>
                     }
                 </select>
             </div>
