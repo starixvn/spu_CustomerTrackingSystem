@@ -930,14 +930,12 @@ table.dataTable.no-footer {
 }
 
 #switch {
-    top: 50%;
-    left: 50%;
     width: 75px;
     height: 40px;
 }
 
 .toggle {
-    position: absolute;
+    position: relative;
     border: 2px solid #444249;
     border-radius: 20px;
     -webkit-transition: border-color .6s ease-out;
