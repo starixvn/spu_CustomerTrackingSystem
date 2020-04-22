@@ -344,75 +344,75 @@
                 }
 
                 // LogService.Info("Render - CTSCustId: " + model.CTSCustId + " - End: " + DateTime.Now.ToString());
-                //if (result != null && result.Any())
-                //{
-                //    var tasks = new List<Task>();
+                if (result != null && result.Any())
+                {
+                    var tasks = new List<Task>();
 
 
-                //    var getFlaggedTags = new List<TagModel>();
-                //    var getAffectedTags = new List<TagModel>();
-                //    var getCustIdsAffectedTag = new List<GraphDirectAssociationModel>();
+                    var getFlaggedTags = new List<TagModel>();
+                    var getAffectedTags = new List<TagModel>();
+                    var getCustIdsAffectedTag = new List<GraphDirectAssociationModel>();
 
-                //    tasks.Add(Task.Run(() =>
-                //    {
-                //        try
-                //        {
-                //            var custIdsFlaggedTag = result.Select(a => new { a.SubscriberId, a.CTSCustId });
-                //            getFlaggedTags = _accountService.GetDirectAssociatedAccountTagFlagged(JsonConvert.SerializeObject(custIdsFlaggedTag));
-                //        }
-                //        catch (Exception ex)
-                //        {
-                //            LogService.Info(ex.Message);
+                    tasks.Add(Task.Run(() =>
+                    {
+                        try
+                        {
+                            var custIdsFlaggedTag = result.Select(a => new { a.SubscriberId, a.CTSCustId });
+                            getFlaggedTags = _accountService.GetDirectAssociatedAccountTagFlagged(JsonConvert.SerializeObject(custIdsFlaggedTag));
+                        }
+                        catch (Exception ex)
+                        {
+                            LogService.Info(ex.Message);
 
-                //            throw;
-                //        }
-                //    }));
+                            throw;
+                        }
+                    }));
 
-                //    tasks.Add(Task.Run(() =>
-                //    {
-                //        try
-                //        {
-                //            var custIdsAffectedTag = result.Select(a => a.CTSCustId).ToList();
-                //            getCustIdsAffectedTag = _accountService.GetDirectAssocationByGraph(ConfigSettings.GetDirectAssociationMultiCust, custIdsAffectedTag);
+                    tasks.Add(Task.Run(() =>
+                    {
+                        try
+                        {
+                            var custIdsAffectedTag = result.Select(a => a.CTSCustId).ToList();
+                            getCustIdsAffectedTag = _accountService.GetDirectAssocationByGraph(ConfigSettings.GetDirectAssociationMultiCust, custIdsAffectedTag);
 
-                //            if (getCustIdsAffectedTag != null && getCustIdsAffectedTag.Any())
-                //            {
-                //                var jsonParam = JsonConvert.SerializeObject(getCustIdsAffectedTag);
+                            if (getCustIdsAffectedTag != null && getCustIdsAffectedTag.Any())
+                            {
+                                var jsonParam = JsonConvert.SerializeObject(getCustIdsAffectedTag);
 
-                //                getAffectedTags = _accountService.GetDirectAssociatedAccountTagAffected(jsonParam);
-                //            }
-                //            else
-                //            {
-                //                LogService.Error("GetDirectAssociationMultiCust is null");
-                //            }
-                //        }
-                //        catch (Exception ex)
-                //        {
-                //            LogService.Info(ex.Message);
+                                getAffectedTags = _accountService.GetDirectAssociatedAccountTagAffected(jsonParam);
+                            }
+                            else
+                            {
+                                LogService.Error("GetDirectAssociationMultiCust is null");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            LogService.Info(ex.Message);
 
-                //            throw;
-                //        }
-                //    }));
+                            throw;
+                        }
+                    }));
 
-                //    Task.WhenAll(tasks.ToArray()).Wait();
+                    Task.WhenAll(tasks.ToArray()).Wait();
 
-                    
 
-                //    result = result.Select(x =>
-                //    {
-                //        var affectedTags = getAffectedTags.Where(z => z.FromCTSCustId == x.CTSCustId);
 
-                //        x.AffectedTag = (affectedTags != null && affectedTags.Any()) ? affectedTags.FirstOrDefault().AffectedTag : 0;
+                    result = result.Select(x =>
+                    {
+                        var affectedTags = getAffectedTags.Where(z => z.FromCTSCustId == x.CTSCustId);
 
-                //        var flaggedTag = getFlaggedTags.Where(z => z.CTSCustId == x.CTSCustId);
+                        x.AffectedTag = (affectedTags != null && affectedTags.Any()) ? affectedTags.FirstOrDefault().AffectedTag : 0;
 
-                //        x.FlaggedTag = (flaggedTag != null && flaggedTag.Any()) ? flaggedTag.FirstOrDefault().FlaggedTag : 0;
+                        var flaggedTag = getFlaggedTags.Where(z => z.CTSCustId == x.CTSCustId);
 
-                //        return x;
-                //    })
-                //    .OrderBy(a => a.StatusId)
-                //    .ToList();
-                //}
+                        x.FlaggedTag = (flaggedTag != null && flaggedTag.Any()) ? flaggedTag.FirstOrDefault().FlaggedTag : 0;
+
+                        return x;
+                    })
+                    .OrderBy(a => a.StatusId)
+                    .ToList();
+                }
             }
 
             return Json(new
