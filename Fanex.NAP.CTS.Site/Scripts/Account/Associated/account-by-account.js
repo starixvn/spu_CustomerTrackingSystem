@@ -131,12 +131,14 @@
     }
 
     function AssociationStatus(isActive) {
-        if (isActive) {
-            return '<a class="info-bng" href="javascript:void(0)">Removed</a>';
-        }
-        else {
-            return '<a class="info-bng" href="javascript:void(0)">Active</a>';
-        }
+        //if (isActive) {
+        //    return '<a class="info-bng" href="javascript:void(0)">Removed</a>';
+        //}
+        //else {
+        //    return '<a class="info-bng" href="javascript:void(0)">Active</a>';
+        //}
+        return '<label class="switch-status switch-green"><input type="checkbox" class="switch-input" checked><span class="switch-label" data-on="Active" data-off="Removed"></span><span class="switch-handle"></span></label>'
+            
     }
 
     function ActiveRemove(obj, fromCTSCustId, fromSubscriberId) {
