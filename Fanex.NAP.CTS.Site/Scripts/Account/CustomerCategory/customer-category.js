@@ -4,13 +4,13 @@
     var divMarkCategory = $('#divMarkCategory');
     var tblcustomercategory = $('#customer-category-table');
 
-    function BindingMarkCategory() {
+    function BindingMarkCategory(ctsCustId, subscriberId) {
         $('#btncancelcategory').on('click', function () {
             divMarkCategory.dialog('close');
         });
 
         $('#btnsavecategory').on('click', function (e) {
-            //AddPlaceEvidence(ctsCustId, username, subscriberId);
+            AddCustomerClassification(ctsCustId, subscriberId);
         });
 
         $("#ddlcategory").multiselect({
@@ -26,7 +26,41 @@
         });
     }
 
-    function InitialMarkCategory(ctsCustId) {
+    function AddCustomerClassification(ctsCustId, subscriberId)
+    {        
+        if ($('#ddlsports').val() == '') {
+
+            common.showError('Sport is required.');
+            return;
+        }
+
+        var url = common.modifyRelativeUrl('/Account/AddCustomerClassification');
+        var params = {};
+        params.ctsCustId = ctsCustId;
+        params.subscriberId = subscriberId;
+        params.categoryId = $('#ddlcategory').val();
+        params.sportGroupIds = $('#ddlsports').val().join(',');
+        params.remark = $('#txtcategorycomment').val();
+
+        $.ajax(url, {
+            type: 'POST',
+            data: params,
+            success: function (response) {
+                if (response.errorCode == 0) {
+                    common.showSuccess('Add the category successful!', 2000);
+                    divMarkCategory.dialog('close');
+                }                
+                else {
+                    common.showError('Add the category fail!');
+                }
+            },
+            complete: function () {
+                GetCustomerClassification(ctsCustId);
+            }
+        });
+    }
+
+    function InitialMarkCategory(ctsCustId, subscriberId) {
         $.ajax(common.modifyRelativeUrl('Account/MarkCatergory'), {
             type: 'POST',
             data: {
@@ -37,7 +71,7 @@
             },
             success: function (response) {
                 divMarkCategory.html(response);
-                BindingMarkCategory();
+                BindingMarkCategory(ctsCustId, subscriberId);
             },
             complete: function () {
                 divMarkCategory.dialog({
@@ -94,7 +128,7 @@
         })
     }
 
-    function GetException(ctsCustId) {
+    function GetCustomerClassification(ctsCustId) {
         var url = common.modifyRelativeUrl('/Account/GetCustomerClassification');
 
         $.ajax(url, {
@@ -120,10 +154,10 @@
         })
     }
 
-    this.Initial = function (ctsCustid, username) {
-        btnMarkCategory.click(function () { InitialMarkCategory(ctsCustid); });
+    this.Initial = function (ctsCustId, subscriberId) {
+        btnMarkCategory.click(function () { InitialMarkCategory(ctsCustId, subscriberId); });
 
         RenderGrid();
-        GetException(ctsCustid);
+        GetCustomerClassification(ctsCustId);
     }
 }
