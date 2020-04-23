@@ -65,6 +65,22 @@
         });
     }
 
+    function LoadCustomerCategory() {
+        $.ajax(common.modifyRelativeUrl('Account/CustomerCategory'), {
+            type: 'POST',            
+            success: function (response) {
+                $("#customer_category").html(response);
+            },
+            complete: function () {
+                var customerCategory = new customer_category();
+                customerCategory.Initial(ctsCustId);
+            },
+            error: function (errMsg) {
+                common.showError(errMsg);
+            }
+        });
+    }
+
     function GetCustomerTotalAssociation() {
         $.ajax(common.modifyRelativeUrl('Account/GetCustomerTotalAssociationByCTSCustId'), {
             type: 'POST',
@@ -328,6 +344,7 @@
         GetAccountProfile();
         GetCustomerTotalAssociation();
         LoadTransactionHistory();
+        LoadCustomerCategory();
 
         lnkAssociation.on('click', function() {
             $("#header_associated_account").trigger("click");

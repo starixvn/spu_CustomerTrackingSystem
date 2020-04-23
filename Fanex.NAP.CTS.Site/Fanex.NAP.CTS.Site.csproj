@@ -460,6 +460,7 @@
     <Content Include="Scripts\Account\Associated\graph.js" />
     <Content Include="Scripts\Account\ChainToEvidence\account-evidence.js" />
     <Content Include="Scripts\Account\ChainToEvidence\account-exceptions.js" />
+    <Content Include="Scripts\Account\CustomerCategory\customer-category.js" />
     <Content Include="Scripts\Account\index.js" />
     <Content Include="Scripts\Evidence\form-information-evidence.js" />
     <Content Include="Scripts\Evidence\form-place-evidence.js" />

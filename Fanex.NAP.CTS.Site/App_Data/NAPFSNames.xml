@@ -436,5 +436,29 @@
     <Setting Key="DCS_DC_Get_HistoryTransaction"
           SpName="DCS_DC_Get_HistoryTransaction"
           DbName="MySQL.DCS_DataCenter" />
+
+    <Setting Key="CTS_DC_GetAllSportGroups"
+           SpName="CTS_DC_GetAllSportGroups"
+           DbName="MySQL.CTS_DataCenter" />
+
+    <Setting Key="CTS_DC_GetCustomerCategoryByCTSCustID"
+           SpName="CTS_DC_GetCustomerCategoryByCTSCustID"
+           DbName="MySQL.CTS_DataCenter" />
+
+    <Setting Key="CTS_DC_AddCTSCustomerClassification"
+           SpName="CTS_DC_AddCTSCustomerClassification"
+           DbName="MySQL.CTS_DataCenter" />
+
+    <Setting Key="CTS_DC_UpdateCTSCustomerClassification"
+           SpName="CTS_DC_UpdateCTSCustomerClassification"
+           DbName="MySQL.CTS_DataCenter" />
+
+    <Setting Key="CTS_DC_RemoveCTSCustomerClassification"
+           SpName="CTS_DC_RemoveCTSCustomerClassification"
+           DbName="MySQL.CTS_DataCenter" />
+
+    <Setting Key="CTS_DC_GetCTSCustomerClassification"
+           SpName="CTS_DC_GetCTSCustomerClassification"
+           DbName="MySQL.CTS_DataCenter" />
   </Function>
 </Functions>

@@ -54,6 +54,7 @@
 
             RegisterTransactionHistoryBundles(bundles);
 
+            RegisterCustomerCategoryBundles(bundles);
         }
 
         private static void RegisterFSCoreBundles(BundleCollection bundles)
@@ -190,6 +191,11 @@
                 .Include("~/scripts/Account/ChainToEvidence/account-evidence.js",
                 "~/scripts/Account/ChainToEvidence/account-exceptions.js"
                 ));
+        }
+
+        private static void RegisterCustomerCategoryBundles(BundleCollection bundles)
+        {
+            bundles.Add(new ScriptBundle("~/account/customer-category-scripts").Include("~/Scripts/Account/CustomerCategory/*.js"));
         }
     }
 }

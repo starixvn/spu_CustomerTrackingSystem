@@ -10,11 +10,13 @@
     using Fanex.NAP.CTS.Criteria.Account;
     using Fanex.NAP.CTS.Criteria.Account.Associated;
     using Fanex.NAP.CTS.Criteria.Account.ChainToEvidence;
+    using Fanex.NAP.CTS.Criteria.Account.CustomerCategory;
     using Fanex.NAP.CTS.Criteria.Account.GeneralInformation;
     using Fanex.NAP.CTS.Criteria.Home;
     using Fanex.NAP.CTS.Criteria.SubscriberAssignment;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
+    using Fanex.NAP.CTS.Model.Account.CustomerCategory;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.Home;
@@ -688,7 +690,7 @@
         {
             var accountStatusViewModel = new CustomerGeneralStatusViewModel();
             var notAvailable = accountStatusViewModel.GetAccountStatusName(Model.AccountStatus.NA);
-            var notAvailableId = accountStatusViewModel.GetAccountStatusId(notAvailable);          
+            var notAvailableId = accountStatusViewModel.GetAccountStatusId(notAvailable);
 
             customerAssociation = customerAssociation.Select(x =>
             {
@@ -700,7 +702,7 @@
                 }
                 else
                 {
-                    var customerStatus = statusByCustIds.FirstOrDefault(a => a.CustId == x.CustId);                    
+                    var customerStatus = statusByCustIds.FirstOrDefault(a => a.CustId == x.CustId);
 
                     if (customerStatus != null)
                     {
@@ -713,7 +715,7 @@
                     else
                     {
                         LogService.Error($"Account status is NULL on custid: { x.CustId }");
-                    }                    
+                    }
                 }
 
                 return x;
@@ -934,6 +936,143 @@
             {
                 return db.Query<AffectedEvidenceListBetweenCustsModel>(criteria);
             }
+        }
+
+        #endregion
+
+        #region Customer Category
+        public IEnumerable<SportGroup> GetAllSportGroup()
+        {
+            var criteria = new GetAllSportGroupCriteria();
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<SportGroup>(criteria);
+            }
+        }
+
+        public IEnumerable<CustomerCategory> GetCustomerCategoryByCTSCustId(long ctsCustId)
+        {
+            var criteria = new GetCustomerCategoryByCTSCustId
+            {
+                CTSCustId = ctsCustId
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<CustomerCategory>(criteria);
+            }
+        }
+
+        public IEnumerable<CustomerClassificationModel> GetCustomerClassification(long ctsCustId)
+        {
+            var criteria = new GetCTSCustomerClassificationCriteria
+            {
+                CTSCustId = ctsCustId
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<CustomerClassificationModel>(criteria);
+            }
+        }
+
+        public DBResult AddCustomerClassification(long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark, int createdBy)
+        {
+            var criteria = new AddCTSCustomerClassificationCriteria
+            {
+               CTSCustId = ctsCustId,
+               SubscriberId = subscriberId,
+               CategoryId = categoryId,
+               SportGroupIds = sportGroupIds,
+               CreatedBy = createdBy,
+               Remark = remark,
+               ErrorMessage = string.Empty
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                db.ExecuteNonQuery(criteria);
+
+                if(string.IsNullOrWhiteSpace(criteria.ErrorMessage))
+                {
+                    return new DBResult {
+                        ErrorCode = 0,
+                        ErrorMsg = criteria.ErrorMessage
+                    };
+                }
+            }
+
+            return new DBResult
+            {
+                ErrorCode = -1,
+                ErrorMsg = criteria.ErrorMessage
+            };
+        }
+
+        public DBResult UpdateCustomerClassification(long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark, int createdBy)
+        {
+            var criteria = new UpdateCTSCustomerClassificationCriteria
+            {
+                CTSCustId = ctsCustId,
+                SubscriberId = subscriberId,
+                CategoryId = categoryId,
+                SportGroupIds = sportGroupIds,
+                CreatedBy = createdBy,
+                Remark = remark,
+                ErrorMessage = string.Empty
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                db.ExecuteNonQuery(criteria);
+
+                if (string.IsNullOrWhiteSpace(criteria.ErrorMessage))
+                {
+                    return new DBResult
+                    {
+                        ErrorCode = 0,
+                        ErrorMsg = criteria.ErrorMessage
+                    };
+                }
+            }
+
+            return new DBResult
+            {
+                ErrorCode = -1,
+                ErrorMsg = criteria.ErrorMessage
+            };
+        }
+
+        public DBResult RemoveCustomerClassification(long ctsCustId, int subscriberId, int createdBy)
+        {
+            var criteria = new RemoveCTSCustomerClassificationCriteria
+            {
+                CTSCustId = ctsCustId,
+                SubscriberId = subscriberId,               
+                CreatedBy = createdBy,             
+                ErrorMessage = string.Empty
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                db.ExecuteNonQuery(criteria);
+
+                if (string.IsNullOrWhiteSpace(criteria.ErrorMessage))
+                {
+                    return new DBResult
+                    {
+                        ErrorCode = 0,
+                        ErrorMsg = criteria.ErrorMessage
+                    };
+                }
+            }
+
+            return new DBResult
+            {
+                ErrorCode = -1,
+                ErrorMsg = criteria.ErrorMessage
+            };
         }
 
         #endregion

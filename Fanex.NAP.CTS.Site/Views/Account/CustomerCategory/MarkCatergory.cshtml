@@ -1,23 +1,36 @@
-﻿<div id="divMarkCategory" style="display:none;">
-    <div class="form-control">
-        <div class="label">Category</div>
-        <select id="ddlcategory">
-        </select>
-    </div>
-    <div class="form-control">
-        <div class="label">Sports</div>
-        <select id="ddlsports">
-           
-        </select>
-    </div>
-    <div class="form-control">
-        <div class="label">Comment</div>
-        <textarea id="txtcategorycomment" rows="4" class="comment-field full-width" maxlength="200">If we had a dime for every time we said it, and a dollar for ever time it was ignored...</textarea>
-    </div>
+﻿@model Fanex.NAP.CTS.ViewModel.Account.CustomerCategory.MarkCategoryViewModel
 
-    <div class="modal-footer margin-top-10">
-        <button id="btncancelexceptions" class="button btn-cancel-outline" title="Cancel">Cancel</button>
-        <button id="btnsaveexceptions" class="button -add" title="Add Exception">Submit</button>
-    </div>
+<div class="form-control">
+    <div class="label">Category</div>
+    <select id="ddlcategory">
+        @foreach (var categoryParent in Model.CustomerCategoryList.Where(x => x.ParentId == 0))
+        {
+            <optgroup label="@categoryParent.CategoryName">
+
+                @foreach (var category in Model.CustomerCategoryList.Where(x => x.ParentId == categoryParent.CategoryId))
+                {
+                    <option value="@category.CategoryId">@category.CategoryName</option>
+                }
+            </optgroup>
+        }
+    </select>
 </div>
-    
+<div class="form-control">
+    <div class="label">Sports</div>
+    <select id="ddlsports" multiple="multiple">
+        @foreach (var sport in Model.SportGroupList)
+        {
+            <option value="@sport.SportGroupId">@sport.SportGroupName</option>
+        }
+    </select>
+</div>
+<div class="form-control">
+    <div class="label">Comment</div>
+    <textarea id="txtcategorycomment" rows="4" class="comment-field full-width" maxlength="200"></textarea>
+</div>
+
+<div class="modal-footer margin-top-10">
+    <button id="btncancelcategory" class="button btn-cancel-outline" title="Cancel">Cancel</button>
+    <button id="btnsavecategory" class="button -add" title="Add Category">Submit</button>
+</div>
+

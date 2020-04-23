@@ -21,6 +21,7 @@
     using Fanex.NAP.CTS.Model.Transaction;
     using Fanex.NAP.CTS.ViewModel.Account.TransactionHistory;
     using Fanex.NAP.CTS.Model.Association;
+    using Fanex.NAP.CTS.ViewModel.Account.CustomerCategory;
 
     [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class AccountController : BaseController
@@ -71,7 +72,7 @@
         [HttpPost]
         public ActionResult GetAccountProfile(long custId, long ctsCustId, int subscriberId)
         {
-           // LogService.Info("GetAccountProfile - Before: " + DateTime.Now.ToString());
+            // LogService.Info("GetAccountProfile - Before: " + DateTime.Now.ToString());
             var profile = new AccountProfileViewModel();
             var tasks = new List<Task>();
 
@@ -155,9 +156,9 @@
         [HttpPost]
         public ActionResult GetCustomerTotalAssociationByCTSCustId(long ctsCustId)
         {
-           // LogService.Info("GetCustomerTotalAssociationByCTSCustId - Before: " + DateTime.Now.ToString());
+            // LogService.Info("GetCustomerTotalAssociationByCTSCustId - Before: " + DateTime.Now.ToString());
             var result = _accountService.GetCustomerTotalAssociationByCTSCustId(ctsCustId, ConfigSettings.GetStatisticAssociation);
-           // LogService.Info("GetCustomerTotalAssociationByCTSCustId - After: " + DateTime.Now.ToString());
+            // LogService.Info("GetCustomerTotalAssociationByCTSCustId - After: " + DateTime.Now.ToString());
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -279,15 +280,15 @@
             {
                 directAssociationUrl = ConfigSettings.GetDirectAssociationByDevice;
             }
-            else if(model.AssociationType == 2)
+            else if (model.AssociationType == 2)
             {
                 directAssociationUrl = ConfigSettings.GetDirectAssociationByIP;
             }
 
-           // LogService.Info("From Graph - CTSCustId: " + model.CTSCustId + " - Start: " + DateTime.Now.ToString());
+            // LogService.Info("From Graph - CTSCustId: " + model.CTSCustId + " - Start: " + DateTime.Now.ToString());
             var graphAssociationPage = model.IsDirect ?
                 _accountService.GetCustomerAssociationByGraph(directAssociationUrl, model.CTSCustId, skip, take) : new GraphAssociationPaging();
-                //_accountService.GetCustomerAssociationByGraph(ConfigSettings.GetInDirectAssociation, model.CTSCustId, skip, take);
+            //_accountService.GetCustomerAssociationByGraph(ConfigSettings.GetInDirectAssociation, model.CTSCustId, skip, take);
             // LogService.Info("From Graph - CTSCustId: " + model.CTSCustId + " - End: " + DateTime.Now.ToString());
 
             if (graphAssociationPage != null && graphAssociationPage.AssociationList != null && graphAssociationPage.AssociationList.Any())
@@ -297,21 +298,21 @@
 
                 var custIds = string.Join(",", customerAssociation.Select(x => x.CustId));
 
-               // LogService.Info("GET Status - CTSCustId: " + model.CTSCustId + " - Start: " + DateTime.Now.ToString());
+                // LogService.Info("GET Status - CTSCustId: " + model.CTSCustId + " - Start: " + DateTime.Now.ToString());
                 var getStatusByCustIds = _accountService.GetCustomerGeneralStatus(custIds);
-               // LogService.Info("GET Status - CTSCustId: " + model.CTSCustId + " - End: " + DateTime.Now.ToString());
+                // LogService.Info("GET Status - CTSCustId: " + model.CTSCustId + " - End: " + DateTime.Now.ToString());
 
                 var getAllSubscribers = _subscriberAssignmentService.GetSubscribers(0);
 
-               // LogService.Info("Filter Status - CTSCustId: " + model.CTSCustId + " - Start: " + DateTime.Now.ToString());
+                // LogService.Info("Filter Status - CTSCustId: " + model.CTSCustId + " - Start: " + DateTime.Now.ToString());
                 customerAssociation = _accountService.FilterCustomerAssociationByStatus(model.StatusIds, customerAssociation, getStatusByCustIds);
-               // LogService.Info("Filter Status - CTSCustId: " + model.CTSCustId + " - End: " + DateTime.Now.ToString());
+                // LogService.Info("Filter Status - CTSCustId: " + model.CTSCustId + " - End: " + DateTime.Now.ToString());
 
-               // LogService.Info("Filter Ass type - CTSCustId: " + model.CTSCustId + " - Start: " + DateTime.Now.ToString());
+                // LogService.Info("Filter Ass type - CTSCustId: " + model.CTSCustId + " - Start: " + DateTime.Now.ToString());
                 customerAssociation = _accountService.FilterCustomerAssociationByAssociationType(model.AssociationType, customerAssociation);
-               // LogService.Info("Filter Ass type - CTSCustId: " + model.CTSCustId + " - End: " + DateTime.Now.ToString());
+                // LogService.Info("Filter Ass type - CTSCustId: " + model.CTSCustId + " - End: " + DateTime.Now.ToString());
 
-               // LogService.Info("Render - CTSCustId: " + model.CTSCustId + " - Start: " + DateTime.Now.ToString());
+                // LogService.Info("Render - CTSCustId: " + model.CTSCustId + " - Start: " + DateTime.Now.ToString());
                 result = customerAssociation.Select(x => new CustomerAssociationByAccountDetailViewModel
                 {
                     CustId = x.CustId.HasValue ? x.CustId.Value : 0,
@@ -397,7 +398,7 @@
                     .OrderBy(a => a.StatusId)
                     .ToList();
 
-                                       
+
                 }
             }
 
@@ -704,7 +705,7 @@
             profile.EsportAutoSuspendStatus = _accountService.GetCustomerEsportAutoSuspendedStatus(custId);
         }
 
-         #region Transaciton History
+        #region Transaciton History
         public ActionResult TransactionHistory()
         {
             return PartialView("TransactionHistory/TransactionHistory");
@@ -714,7 +715,7 @@
         {
             var take = model.length;
             var skip = model.start;
-            var totalItem = 0;            
+            var totalItem = 0;
 
             var data = _transService.GetTransactionHistory(
                 model.CTSCustId,
@@ -745,6 +746,110 @@
                 recordsTotal = totalItem,
                 recordsFiltered = totalItem,
                 data = result
+            }, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+
+        #region Customer Category
+
+        public ActionResult CustomerCategory()
+        {
+
+            return PartialView("CustomerCategory/CustomerCategory");
+        }
+
+        public ActionResult MarkCatergory(long ctsCustId)
+        {
+            var model = new MarkCategoryViewModel
+            {
+                SportGroupList = _accountService.GetAllSportGroup().ToList(),
+                CustomerCategoryList = _accountService.GetCustomerCategoryByCTSCustId(ctsCustId).ToList()
+            };
+
+            return PartialView("CustomerCategory/MarkCatergory", model);
+        }
+
+        public ActionResult GetCustomerClassification(long ctsCustId)
+        {
+            var data = _accountService.GetCustomerClassification(ctsCustId);
+
+            if (data != null && data.Any())
+            {
+                var result = data.Select(x => new CustomerCategoryViewModel
+                {
+                    CategoryId = x.CategoryId,
+                    CategoryName = x.CategoryName,
+                    LastModifiedBy = x.LastModifiedBy,
+                    LastModifiedDate = x.LastModifiedDate,
+                    Remark = x.Remark,
+                    SportGroupId = x.SportGroupId,
+                    SportGroupName = x.SportGroupName
+                });
+
+
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new List<CustomerCategoryViewModel>(), JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult AddCustomerClassification(long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark)
+        {
+            if (ctsCustId <= 0 || subscriberId <= 0 || categoryId <= 0)
+            {
+                return Json(new
+                {
+                    errorCode = -100,
+                    errorMessage = "Invalid parameter"
+                }, JsonRequestBehavior.AllowGet);
+            }
+
+            var result = _accountService.AddCustomerClassification(ctsCustId, subscriberId, categoryId, sportGroupIds, remark, CurrentSession.UserId);
+
+            return Json(new
+            {
+                errorCode = result.ErrorCode,
+                errorMessage = result.ErrorMsg
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult UpdateCustomerClassification(long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark)
+        {
+            if (ctsCustId <= 0 || subscriberId <= 0 || categoryId <= 0)
+            {
+                return Json(new
+                {
+                    errorCode = -100,
+                    errorMessage = "Invalid parameter"
+                }, JsonRequestBehavior.AllowGet);
+            }
+
+            var result = _accountService.UpdateCustomerClassification(ctsCustId, subscriberId, categoryId, sportGroupIds, remark, CurrentSession.UserId);
+
+            return Json(new
+            {
+                errorCode = result.ErrorCode,
+                errorMessage = result.ErrorMsg
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult RemoveCustomerClassification(long ctsCustId, int subscriberId)
+        {
+            if(ctsCustId <= 0 || subscriberId <= 0)
+            {
+                return Json(new
+                {
+                    errorCode = -100,
+                    errorMessage = "Invalid parameter"
+                }, JsonRequestBehavior.AllowGet);
+            }
+
+            var result = _accountService.RemoveCustomerClassification(ctsCustId, subscriberId, CurrentSession.UserId);
+
+            return Json(new
+            {
+                errorCode = result.ErrorCode,
+                errorMessage = result.ErrorMsg
             }, JsonRequestBehavior.AllowGet);
         }
         #endregion

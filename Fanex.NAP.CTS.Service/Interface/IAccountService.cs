@@ -2,6 +2,8 @@
 {
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Model.Account;
+    using Fanex.NAP.CTS.Model.Account.CustomerCategory;
+    using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.Home;
     using Fanex.NAP.CTS.Model.Subscriber;
@@ -70,6 +72,18 @@
 
         int RestoreAffectedEvidence(RemoveEvidenceModel model);
 
-        IEnumerable<AffectedEvidenceListBetweenCustsModel> GetAffectedEvidenceListBetweenCusts(Int64 fromCTSCustID, Int64 toCTSCustID);        
+        IEnumerable<AffectedEvidenceListBetweenCustsModel> GetAffectedEvidenceListBetweenCusts(Int64 fromCTSCustID, Int64 toCTSCustID);
+
+        IEnumerable<SportGroup> GetAllSportGroup();
+
+        IEnumerable<CustomerCategory> GetCustomerCategoryByCTSCustId(long ctsCustId);
+
+        IEnumerable<CustomerClassificationModel> GetCustomerClassification(long ctsCustId);
+
+        DBResult AddCustomerClassification(long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark, int createdBy);
+        
+        DBResult UpdateCustomerClassification(long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark, int createdBy);
+
+        DBResult RemoveCustomerClassification(long ctsCustId, int subscriberId, int createdBy);
     }
 }
