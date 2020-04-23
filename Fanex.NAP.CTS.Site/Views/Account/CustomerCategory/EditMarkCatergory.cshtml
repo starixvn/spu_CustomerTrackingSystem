@@ -1,0 +1,27 @@
+﻿@model Fanex.NAP.CTS.ViewModel.Account.CustomerCategory.MarkCategoryViewModel
+@{
+    var sportGroupIds = Model.SportGroupIdList.Split(',').Select(Int32.Parse).ToList();
+}
+<div class="form-control">
+    <div class="label">Category</div>
+    @Model.CategoryName
+</div>
+<div class="form-control">
+    <div class="label">Sports</div>
+    <select id="ddlsports" multiple="multiple">
+        @foreach (var sport in Model.SportGroupList)
+        {
+            <option @(sportGroupIds.Contains(sport.SportGroupId) ? "selected" : "") value="@sport.SportGroupId">@sport.SportGroupName</option>
+        }
+    </select>
+</div>
+<div class="form-control">
+    <div class="label">Comment</div>
+    <textarea id="txtcategorycomment" rows="4" class="comment-field full-width" maxlength="500">@Model.Comment</textarea>
+</div>
+
+<div class="modal-footer margin-top-10">
+    <button id="btncancelcategory" class="button btn-cancel-outline" title="Cancel">Cancel</button>
+    <button id="btnsavecategory" class="button -add" title="Add Category">Submit</button>
+</div>
+

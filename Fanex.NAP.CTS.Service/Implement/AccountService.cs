@@ -1044,12 +1044,12 @@
             };
         }
 
-        public DBResult RemoveCustomerClassification(long ctsCustId, int subscriberId, int createdBy)
+        public DBResult RemoveCustomerClassification(long ctsCustId, int categoryId, int createdBy)
         {
             var criteria = new RemoveCTSCustomerClassificationCriteria
             {
                 CTSCustId = ctsCustId,
-                SubscriberId = subscriberId,               
+                CategoryId = categoryId,               
                 CreatedBy = createdBy,             
                 ErrorMessage = string.Empty
             };

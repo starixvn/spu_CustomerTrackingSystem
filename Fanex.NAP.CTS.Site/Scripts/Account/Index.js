@@ -73,7 +73,7 @@
             },
             complete: function () {
                 var customerCategory = new customer_category();
-                customerCategory.Initial(ctsCustId, subscriberId);
+                customerCategory.Initial(ctsCustId, subscriberId, username);
             },
             error: function (errMsg) {
                 common.showError(errMsg);

@@ -12,5 +12,17 @@ namespace Fanex.NAP.CTS.ViewModel.Account.CustomerCategory
         public List<SportGroup> SportGroupList { get; set; }
 
         public List<Model.DTO.CustomerCategory> CustomerCategoryList { get; set; }
+
+        public string CategoryName { get; set; }
+
+        public int CategoryId { get; set; }
+
+        public string SportGroupIdList { get; set; }
+
+        public long CTSCustId { get; set; }
+
+        public int SubscriberId { get; set; }
+
+        public string Comment { get; set; }
     }
 }

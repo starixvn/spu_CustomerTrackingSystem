@@ -84,6 +84,6 @@
         
         DBResult UpdateCustomerClassification(long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark, int createdBy);
 
-        DBResult RemoveCustomerClassification(long ctsCustId, int subscriberId, int createdBy);
+        DBResult RemoveCustomerClassification(long ctsCustId, int categoryId, int createdBy);
     }
 }

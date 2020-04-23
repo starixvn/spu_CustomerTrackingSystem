@@ -769,6 +769,22 @@
             return PartialView("CustomerCategory/MarkCatergory", model);
         }
 
+        public ActionResult EditMarkCatergory(long ctsCustId, int subscriberId , string categoryName, int categoryId, string sportGroupIdList, string comment)
+        {
+            var model = new MarkCategoryViewModel
+            {
+                SportGroupList = _accountService.GetAllSportGroup().ToList(),
+                CategoryId = categoryId,
+                CategoryName = categoryName,
+                SportGroupIdList = sportGroupIdList,
+                CTSCustId = ctsCustId,
+                SubscriberId = subscriberId,
+                Comment = comment
+            };
+
+            return PartialView("CustomerCategory/EditMarkCatergory", model);
+        }
+
         public ActionResult GetCustomerClassification(long ctsCustId)
         {
             var data = _accountService.GetCustomerClassification(ctsCustId);
@@ -833,9 +849,9 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult RemoveCustomerClassification(long ctsCustId, int subscriberId)
+        public ActionResult RemoveCustomerClassification(long ctsCustId, int categoryId)
         {
-            if(ctsCustId <= 0 || subscriberId <= 0)
+            if(ctsCustId <= 0 || categoryId <= 0)
             {
                 return Json(new
                 {
@@ -844,7 +860,7 @@
                 }, JsonRequestBehavior.AllowGet);
             }
 
-            var result = _accountService.RemoveCustomerClassification(ctsCustId, subscriberId, CurrentSession.UserId);
+            var result = _accountService.RemoveCustomerClassification(ctsCustId, categoryId, CurrentSession.UserId);
 
             return Json(new
             {

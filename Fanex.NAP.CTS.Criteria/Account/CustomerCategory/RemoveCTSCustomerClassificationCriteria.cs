@@ -8,8 +8,8 @@ namespace Fanex.NAP.CTS.Criteria.Account.CustomerCategory
         [SpParam(SqlParamName = "ip_CTSCustID")]
         public long CTSCustId { get; set; }
 
-        [SpParam(SqlParamName = "ip_SubscriberID")]
-        public int SubscriberId { get; set; }
+        [SpParam(SqlParamName = "ip_CategoryID")]
+        public int CategoryId { get; set; }
 
         [SpParam(SqlParamName = "ip_CreatedBy")]
         public int CreatedBy { get; set; }
