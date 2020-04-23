@@ -477,6 +477,14 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
         cursor: pointer;
     }
 
+    .icon-edit {
+        color: #3f6ef3;
+        cursor: pointer;
+        font-size: 17px;
+        vertical-align: text-bottom;
+        padding-right: 20px;
+    }
+
     .retract, .affected {
         cursor: pointer;
 

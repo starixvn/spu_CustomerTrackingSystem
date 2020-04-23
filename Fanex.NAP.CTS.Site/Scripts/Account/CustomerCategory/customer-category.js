@@ -84,7 +84,7 @@
                 { data: obj => obj.LastModifiedBy },
                 { data: obj => obj.LastModifiedDate },
                 {
-                    data: obj => '<span class="icon-edit" title="Remove Category"></span><span class="icon-delete" title="Remove Category"></span>', createdCell: (cell, _, row) => {
+                    data: obj => '<span class="icon-edit" title="Edit Category"></span><span class="icon-delete" title="Remove Category"></span>', createdCell: (cell, _, row) => {
                         $('.icon-delete', cell).click(() => {
                             
                         });

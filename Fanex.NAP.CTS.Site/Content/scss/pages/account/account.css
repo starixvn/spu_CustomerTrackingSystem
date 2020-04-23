@@ -995,6 +995,12 @@
   .table-report .icon-delete {
     color: red;
     cursor: pointer; }
+  .table-report .icon-edit {
+    color: #3f6ef3;
+    cursor: pointer;
+    font-size: 17px;
+    vertical-align: text-bottom;
+    padding-right: 20px; }
   .table-report .retract, .table-report .affected {
     cursor: pointer; }
     .table-report .retract .has-tooltip, .table-report .affected .has-tooltip {
