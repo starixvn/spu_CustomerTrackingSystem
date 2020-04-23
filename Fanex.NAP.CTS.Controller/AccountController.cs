@@ -780,10 +780,10 @@
                     CategoryId = x.CategoryId,
                     CategoryName = x.CategoryName,
                     LastModifiedBy = x.LastModifiedBy,
-                    LastModifiedDate = x.LastModifiedDate,
+                    LastModifiedDate = x.LastModifiedDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                     Remark = x.Remark,
-                    SportGroupId = x.SportGroupId,
-                    SportGroupName = x.SportGroupName
+                    SportGroupIdList = x.SportGroupIdList,
+                    SportGroupNameList = x.SportGroupNameList
                 });
 
 

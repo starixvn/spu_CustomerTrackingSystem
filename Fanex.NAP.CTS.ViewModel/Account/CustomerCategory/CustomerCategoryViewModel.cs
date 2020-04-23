@@ -8,14 +8,14 @@ namespace Fanex.NAP.CTS.ViewModel.Account.CustomerCategory
 
         public string CategoryName { get; set; }
 
-        public int SportGroupId { get; set; }
+        public string SportGroupIdList { get; set; }
 
-        public string SportGroupName { get; set; }
+        public string SportGroupNameList { get; set; }
 
         public string Remark { get; set; }
 
         public string LastModifiedBy { get; set; }
 
-        public DateTime LastModifiedDate { get; set; }
+        public string LastModifiedDate { get; set; }
     }
 }

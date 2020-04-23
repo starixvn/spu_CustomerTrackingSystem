@@ -2,6 +2,7 @@
 {
     var btnMarkCategory = $('#btnmarkcategory');
     var divMarkCategory = $('#divMarkCategory');
+    var tblcustomercategory = $('#customer-category-table');
 
     function BindingMarkCategory() {
         $('#btncancelcategory').on('click', function () {
@@ -24,6 +25,7 @@
             noneSelectedText: "Select options"
         });
     }
+
     function InitialMarkCategory(ctsCustId) {
         $.ajax(common.modifyRelativeUrl('Account/MarkCatergory'), {
             type: 'POST',
@@ -55,7 +57,73 @@
         });
     }
 
+    function RenderGrid() {
+        tblcustomercategory.DataTable({
+            language: {
+                zeroRecords: "There's no data"
+            },
+            info: false,
+            ordering: false,
+            paging: false,
+            searching: false,
+            scrollX: false,
+            scrollCollapse: false,
+            columnDefs: [
+                { targets: "_all", defaultContent: "-" },
+                { targets: [0], width: "15%", className: "text-left" },
+                { targets: [1], width: "15%", className: "text-left" },
+                { targets: [2], width: "15%", className: "text-left" },
+                { targets: [3], width: "30%", className: "text-center" },
+                { targets: [4], width: "15%", className: "text-center" },
+                { targets: [5], width: "10%", className: "text-center" }
+            ],
+            columns: [
+                { data: obj => obj.CategoryName },
+                { data: obj => obj.SportGroupNameList },
+                { data: obj => obj.Remark },                
+                { data: obj => obj.LastModifiedBy },
+                { data: obj => obj.LastModifiedDate },
+                {
+                    data: obj => '<span class="icon-edit" title="Remove Category"></span><span class="icon-delete" title="Remove Category"></span>', createdCell: (cell, _, row) => {
+                        $('.icon-delete', cell).click(() => {
+                            
+                        });
+                    }
+                }
+            ]
+        })
+    }
+
+    function GetException(ctsCustId) {
+        var url = common.modifyRelativeUrl('/Account/GetCustomerClassification');
+
+        $.ajax(url, {
+            type: 'POST',
+            beforeSend: function () {
+                tblcustomercategory.find('tbody').addClass('loading');
+            },
+            data: {
+                ctsCustId: ctsCustId
+            },
+            success: function (response) {
+                tblcustomercategory.DataTable().clear();
+                tblcustomercategory.DataTable().rows.add(response).draw();
+                tblcustomercategory.DataTable().columns.adjust();
+            },
+            complete: function () {
+                tblcustomercategory.find('tbody').removeClass('loading');
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+                common.showError(errMsg);
+            }
+        })
+    }
+
     this.Initial = function (ctsCustid, username) {
-        btnMarkCategory.click(function () { InitialMarkCategory(ctsCustid);});
+        btnMarkCategory.click(function () { InitialMarkCategory(ctsCustid); });
+
+        RenderGrid();
+        GetException(ctsCustid);
     }
 }

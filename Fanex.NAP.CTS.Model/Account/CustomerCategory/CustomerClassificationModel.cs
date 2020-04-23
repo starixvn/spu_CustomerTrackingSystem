@@ -8,9 +8,9 @@ namespace Fanex.NAP.CTS.Model.Account.CustomerCategory
 
         public string CategoryName { get; set; }
 
-        public int SportGroupId { get; set; }
+        public string SportGroupIdList { get; set; }
 
-        public string SportGroupName { get; set; }
+        public string SportGroupNameList { get; set; }
 
         public string Remark { get; set; }
 
