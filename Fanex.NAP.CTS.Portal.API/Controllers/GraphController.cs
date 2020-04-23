@@ -39,11 +39,13 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
         }
 
         /// <summary>
-        /// Get Association with one Level
+        /// Get all association one level
         /// </summary>
         /// <param name="ctsCustId"></param>
+        /// <param name="assStatus"></param>
+        /// <param name="takeRow"></param>
+        /// <param name="skipRow"></param>
         /// <returns></returns>
-        /// 
         [System.Web.Http.AcceptVerbs("GetDirectAssociation")]
         [HttpGet]
         public GraphAssociationPaging GetDirectAssociation(int ctsCustId, int assStatus, int takeRow, int skipRow)
@@ -71,6 +73,7 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
                 throw;
             }
         }
+
 
         [System.Web.Http.AcceptVerbs("GetDirectAssociationByManual")]
         [HttpGet]
@@ -201,52 +204,6 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
         {
             var result = DbSessionFactory.ExecuteSingle<ShortestPathOfAccount>("GetShortestPath", new { StartCustId = ctsCustIdFrom, EndCustId = ctsCustIdTo }).Data;
             return Json(result);
-        }
-
-        [System.Web.Http.AcceptVerbs("TestGetDirectAssociation")]
-        [HttpGet]
-        public GraphAssociationPaging TestGetDirectAssociation(int ctsCustId, int takeRow, int skipRow)
-        {
-            try
-            {
-                var result = DbSessionFactory.ExecuteSingle<GraphAssociationPaging>("GetAssociationOneLevelByCustId", new
-                {
-                    CTSCustID = ctsCustId,
-                    Skip = skipRow,
-                    Pagesize = takeRow
-                }).Data;
-                return result;
-            }
-            catch (Exception ex)
-            {
-                LogService.Error("GetDirectAssociation failed: " + ex.Message + ex.StackTrace);
-                throw;
-            }
-        }
-
-        [System.Web.Http.AcceptVerbs("TestGetInDirectAssociation")]
-        [HttpGet]
-        public IEnumerable<GraphAssociationModel> TestGetInDirectAssociation(int ctsCustId)
-        {
-            var result = DbSessionFactory.Execute<GraphAssociationModel>("GetAssociationNLevelByCustId", new { CTSCustID = ctsCustId }).Data;
-            return result;
-        }
-
-        [System.Web.Http.AcceptVerbs("TestGetDirectAssociationMultiCust")]
-        [HttpGet]
-        public IEnumerable<GraphDirectAssociationModel> TestGetDirectAssociationMultiCust(string ctsCustIds)
-        {
-            var param = ctsCustIds.Split(',').Select(a => int.Parse(a));
-            try
-            {
-                var result = DbSessionFactory.Execute<GraphDirectAssociationModel>("GetAssociationOneLevelByCustIds", new { CTSCustIDs = param }).Data;
-                return result;
-            }
-            catch (Exception ex)
-            {
-                LogService.Error("GetDirectAssociationMultiCust failed: " + ex.Message + ex.StackTrace);
-                throw;
-            }
         }
     }
 }
