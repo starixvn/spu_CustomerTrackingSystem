@@ -143,7 +143,7 @@
 
     function ActiveRemove(obj, fromCTSCustId, fromSubscriberId)
     {
-        common.showConfirmation('Do you want update <b>ASSOCIATION STATUS</b> for <b>' + obj.Username + '</b> ?',
+        common.showConfirmation('Do you want to update <b>ASSOCIATION STATUS</b> for <b>' + obj.Username + '</b> ?',
             function () {
                 RemoveAssociation(fromSubscriberId, fromCTSCustId, obj.SubscriberId, obj.CTSCustId, !obj.IsActive);
             });
@@ -175,7 +175,7 @@
             data: params,
             success: function (response) {
                 if (response.errorCode == 0) {
-                    common.showSuccess('Add the association successful!', 2000);
+                    common.showSuccess('Added association successfully!', 2000);
                     divAddAssociation.dialog('close');
 
                     $('#association-cbb-status').val(0).trigger('change');
@@ -187,10 +187,10 @@
                     common.showError('Username "' + params.Username + '" is invalid.');
                 }
                 else if (response.errorCode == -1) {
-                    common.showError('Username already exists in "' + params.Username + '" association list.');
+                    common.showError('Username already existed in "' + params.Username + '" association list.');
                 }
                 else {
-                    common.showError('Add the association fail!');
+                    common.showError('Added association fail!');
                 }
             },
             complete: function () {
@@ -218,10 +218,10 @@
             },
             success: function (response) {
                 if (response.errorCode == 0) {
-                    common.showSuccess('Update the association successful!', 2000);
+                    common.showSuccess('Updated association successful!', 2000);
                 }
                 else {
-                    common.showError('Update the association fail!');
+                    common.showError('Updated association fail!');
                 }
             },
             complete: function () {
@@ -272,7 +272,7 @@
 
         btnSaveAssociation.on('click', function () {
             if (assusername.val() == '') {
-                common.showError('Username is require.');
+                common.showError('Username is required.');
                 assusername.focus();
             }
             else if (assusername.val() == username) {

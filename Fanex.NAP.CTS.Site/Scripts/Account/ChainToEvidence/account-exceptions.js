@@ -98,10 +98,10 @@
             data: params,
             success: function (response) {
                 if (response.errorCode == 0) {
-                    common.showSuccess('Remove the exception successful!');
+                    common.showSuccess('Removed exception successful!');
                 }
                 else {
-                    common.showError('Remove the exception fail!');
+                    common.showError('Removed exception fail!');
                 }
             },
             complete: function () {
@@ -131,7 +131,7 @@
             data: params,
             success: function (response) {
                 if (response.errorCode == 0) {
-                    common.showSuccess('Add the exception successful!');
+                    common.showSuccess('Added exception successfully!');
                     divException.dialog('close');
                 }
                 else if (response.errorCode == 1) {
@@ -141,7 +141,7 @@
                     common.showError('Username/Login ID already exists in "' + params.ToUserName + '" exceptions list.');
                 }
                 else {
-                    common.showError('Add the exception fail!');
+                    common.showError('Added exception fail!');
                 }
             },
             complete: function () {
