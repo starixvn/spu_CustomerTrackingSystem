@@ -4,8 +4,8 @@ OPTIONAL MATCH (c)-[:USED_DEVICE]->(d:Device)
 WITH c, COUNT(DISTINCT d) as TotalDevices
 OPTIONAL MATCH (c)-[:USED_IP]->(i:IP)
 WITH c,TotalDevices,COUNT(DISTINCT i) as TotalIps
+OPTIONAL MATCH (c)-[:ADD_MANUALLY]-(c3:CTSCustomer)
 OPTIONAL MATCH (c)-[:USED_DEVICE]->(:Device)<-[:USED_DEVICE]-(c1:CTSCustomer)
 OPTIONAL MATCH (c)-[:USED_IP]->(:IP)<-[:USED_IP]-(c2:CTSCustomer)
-//OPTIONAL MATCH (c)-[:ADD_MANUALLY]-(c3:CTSCustomer)
-UNWIND [c1,c2] as cus
+UNWIND [c1,c2,c3] as cus
 RETURN COUNT(DISTINCT cus) as TotalAccounts,TotalDevices,TotalIps
