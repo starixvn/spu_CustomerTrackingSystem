@@ -458,6 +458,7 @@
     <Content Include="images\graphrender\group.svg" />
     <Content Include="Scripts\Account\Associated\account-by-account.js" />
     <Content Include="Scripts\Account\Associated\graph.js" />
+    <Content Include="Scripts\Account\association-evidence.js" />
     <Content Include="Scripts\Account\ChainToEvidence\account-evidence.js" />
     <Content Include="Scripts\Account\ChainToEvidence\account-exceptions.js" />
     <Content Include="Scripts\Account\CustomerCategory\customer-category.js" />

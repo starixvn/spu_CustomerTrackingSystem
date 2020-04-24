@@ -8,46 +8,46 @@
     var lnkAssociation = $("#lnkAssociation");
     var lnkEvidence = $("#lnkEvidence");
 
-    var totalAssAccount = 0;
-    var totalEvidence = 0
+    //var totalAssAccount = 0;
+    //var totalEvidence = 0
 
-    function LoadAssociationByAccount() {
-        $.ajax(common.modifyRelativeUrl('Account/AssociatedByAccount'), {
-            type: 'POST',
-            data: {
-                username: username
-            },
-            success: function(response) {
-                $("#associated_account").html(response);
-            },
-            complete: function() {
-                var associationByAccount = new account_by_account();
-                associationByAccount.Initial(ctsCustId, username, subscriberId);
-            },
-            error: function(errMsg) {
-               // common.showError(errMsg);
-            }
-        });
-    }
+    //function LoadAssociationByAccount() {
+    //    $.ajax(common.modifyRelativeUrl('Account/AssociatedByAccount'), {
+    //        type: 'POST',
+    //        data: {
+    //            username: username
+    //        },
+    //        success: function(response) {
+    //            $("#associated_account").html(response);
+    //        },
+    //        complete: function() {
+    //            var associationByAccount = new account_by_account();
+    //            associationByAccount.Initial(ctsCustId, username, subscriberId);
+    //        },
+    //        error: function(errMsg) {
+    //           // common.showError(errMsg);
+    //        }
+    //    });
+    //}
 
-    function LoadChainToEvidence() {
-        $.ajax(common.modifyRelativeUrl('Account/ChainToEvidence'), {
-            type: 'POST',
-            success: function(response) {
-                $("#chains_evidence").html(response);
-            },
-            complete: function() {
-                var accountEvidence = new account_evidence();
-                accountEvidence.Initial(ctsCustId, username, subscriberId, subscriber);
+    //function LoadChainToEvidence() {
+    //    $.ajax(common.modifyRelativeUrl('Account/ChainToEvidence'), {
+    //        type: 'POST',
+    //        success: function(response) {
+    //            $("#chains_evidence").html(response);
+    //        },
+    //        complete: function() {
+    //            var accountEvidence = new account_evidence();
+    //            accountEvidence.Initial(ctsCustId, username, subscriberId, subscriber);
 
-                var exceptions = new account_exceptions();
-                exceptions.Initial(ctsCustId, username, subscriberId);
-            },
-            error: function(errMsg) {
-               // common.showError(errMsg);
-            }
-        });
-    }
+    //            var exceptions = new account_exceptions();
+    //            exceptions.Initial(ctsCustId, username, subscriberId);
+    //        },
+    //        error: function(errMsg) {
+    //           // common.showError(errMsg);
+    //        }
+    //    });
+    //}
 
     function LoadTransactionHistory() {
         $.ajax(common.modifyRelativeUrl('Account/TransactionHistory'), {
@@ -81,56 +81,49 @@
         });
     }
 
-    function GetCustomerTotalAssociation() {
-        $.ajax(common.modifyRelativeUrl('Account/GetCustomerTotalAssociationByCTSCustId'), {
-            type: 'POST',
-            data: {
-                ctsCustId: ctsCustId
-            },
-            success: function(response) {
 
-                totalAssAccount = response.TotalAccounts;
+    //            totalAssAccount = response.TotalAccounts;
 
-                $('#totalAssAccount').html(response.TotalAccounts);
-                $('#totalAssDevice').html(response.TotalDevices);
-                $('#totalAssIP').html(response.TotalIps);
-            },
-            complete: function () {
-                GetCustomerEvidences();
-            },
-            error: function(errMsg) {
-               // common.showError(errMsg);
-            }
-        });
-    }
+    //            $('#totalAssAccount').html(response.TotalAccounts);
+    //            $('#totalAssDevice').html(response.TotalDevices);
+    //            $('#totalAssIP').html(response.TotalIps);
+    //        },
+    //        complete: function () {
+    //            GetCustomerEvidences();
+    //        },
+    //        error: function(errMsg) {
+    //           // common.showError(errMsg);
+    //        }
+    //    });
+    //}
 
-    function GetCustomerEvidences() {
-        $.ajax(common.modifyRelativeUrl('Account/GetCustomerEvidenceByCTSCustId'), {
-            type: 'POST',
-            data: {
-                ctsCustId: ctsCustId
-            },
-            success: function(response) {
-                $('#evidences').html(response.evidences);
-                totalEvidence = response.numberOfItems;
+    //function GetCustomerEvidences() {
+    //    $.ajax(common.modifyRelativeUrl('Account/GetCustomerEvidenceByCTSCustId'), {
+    //        type: 'POST',
+    //        data: {
+    //            ctsCustId: ctsCustId
+    //        },
+    //        success: function(response) {
+    //            $('#evidences').html(response.evidences);
+    //            totalEvidence = response.numberOfItems;
 
-                if (response.numberOfItems == 0) {
-                    $('#lnkEvidence').contents().unwrap();
-                }
-            },
-            complete: function() {
-                if (totalAssAccount > 0 && totalEvidence > 0) {
-                    $('span.icon-Affected').removeClass('hide');
-                }
+    //            if (response.numberOfItems == 0) {
+    //                $('#lnkEvidence').contents().unwrap();
+    //            }
+    //        },
+    //        complete: function() {
+    //            if (totalAssAccount > 0 && totalEvidence > 0) {
+    //                $('span.icon-Affected').removeClass('hide');
+    //            }
 
-                LoadAssociationByAccount();
-                LoadChainToEvidence();
-            },
-            error: function(errMsg) {
-               // common.showError(errMsg);
-            }
-        });
-    }
+    //            LoadAssociationByAccount();
+    //            LoadChainToEvidence();
+    //        },
+    //        error: function(errMsg) {
+    //           // common.showError(errMsg);
+    //        }
+    //    });
+    //}
 
     function BetLimitAndAccountStatusIcon(response) {
         $('#accountStatus').html(response.StatusLabel);
@@ -337,12 +330,12 @@
         }
     }
 
-    function Initial() {
-
+    function Initial() {        
         CollapseExpandAll();
         CollapseExpandItem();
         GetAccountProfile();
-        GetCustomerTotalAssociation();
+        var associationEvidence = new AssociationEvidence();
+        associationEvidence.GetCustomerTotalAssociation(ctsCustId, username, subscriberId, subscriber);
         LoadTransactionHistory();
         LoadCustomerCategory();
 

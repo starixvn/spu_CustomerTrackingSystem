@@ -746,10 +746,9 @@
                             StatusName = g.FirstOrDefault().StatusName,
                             StatusId = g.FirstOrDefault().StatusId,
                             SubscriberId = g.FirstOrDefault().SubscriberId,
-                            CTSCustID = g.FirstOrDefault().CTSCustID
+                            CTSCustID = g.FirstOrDefault().CTSCustID,
+                            AssociationStatus = g.FirstOrDefault().AssociationStatus
                         }).ToList();
-
-
 
                     return groupData;
                 }

@@ -255,7 +255,7 @@
 
             var associatedByAccountViewModel = new AssociatedByAccountViewModel
             {
-                AssociationStatus  = getAssociationStatus,
+                AssociationStatus = getAssociationStatus,
                 AssociationTypeList = getCustomerStaticAssType,
                 Username = username
             };
@@ -287,7 +287,7 @@
             {
                 directAssociationUrl = ConfigSettings.GetDirectAssociationByIP;
             }
-            else if(model.AssociationType == 3)
+            else if (model.AssociationType == 3)
             {
                 directAssociationUrl = ConfigSettings.GetDirectAssociationByManual;
             }
@@ -329,7 +329,7 @@
                     LoginId = !string.IsNullOrWhiteSpace(x.Username2) ? x.Username2 : x.Username,
                     AssociationDate = x.AssociationDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                     AssociationType = x.AssociationType,
-                    AssociationTypeName = x.AssociationType == 0 ? string.Format("{0}, {1}", x.GetAssociationTypeName(Model.AssociationType.Device), x.GetAssociationTypeName(Model.AssociationType.IP)) : x.AssociationTypeName,
+                    AssociationTypeName = x.AssociationType == 0 ? string.Format("{0}, {1}, {2}", x.GetAssociationTypeName(Model.AssociationType.Device), x.GetAssociationTypeName(Model.AssociationType.IP), x.GetAssociationTypeName(Model.AssociationType.Manual)) : x.AssociationTypeName,
                     Status = x.StatusName == "NA" ? "N/A" : x.StatusName,
                     StatusId = x.StatusId,
                     SubscriberId = x.SubscriberId,
@@ -337,7 +337,7 @@
                     CTSCustId = x.CTSCustID,
                     IsActive = x.AssociationStatus == 1
                 }).ToList();
-                                
+
                 // LogService.Info("Render - CTSCustId: " + model.CTSCustId + " - End: " + DateTime.Now.ToString());
                 if (result != null && result.Any())
                 {
@@ -391,8 +391,6 @@
 
                     Task.WhenAll(tasks.ToArray()).Wait();
 
-
-
                     result = result.Select(x =>
                     {
                         var affectedTags = getAffectedTags.Where(z => z.FromCTSCustId == x.CTSCustId);
@@ -405,7 +403,7 @@
 
                         return x;
                     })
-                    .OrderBy(a => a.StatusId)
+                    .OrderBy(a => a.StatusId).ThenBy(a => !a.IsActive)
                     .ToList();
                 }
             }
@@ -420,7 +418,7 @@
         }
 
         [HttpPost]
-        public ActionResult GetDirectAssociationGraph(Int64 ctsCustid, string username,int associationStatus, int start, int length)
+        public ActionResult GetDirectAssociationGraph(Int64 ctsCustid, string username, int associationStatus, int start, int length)
         {
             var graphCustomer = new GraphCustomerItemViewModel();
 

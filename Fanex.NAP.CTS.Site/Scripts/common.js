@@ -147,7 +147,7 @@
 
         var yesBtn =
             {
-            'class': 'button -primary',
+            'class': 'button -add',
                 text: "Yes",
                 click: function () {
                     confirmation.dialog("close");
@@ -160,7 +160,7 @@
 
         var noBtn =
             {
-                'class': 'button -export',
+            'class': 'button btn-cancel-outline',
                 text: "No",
                 click: function () {
                     confirmation.dialog("close");
@@ -174,7 +174,7 @@
         confirmation.dialog("option", {
             dialogClass: "dialog-confirmation",
             buttons: [yesBtn, noBtn],
-            width: 460,
+            width: 560,
             close: noCallback
         });
     }

@@ -143,7 +143,7 @@
 
     function ActiveRemove(obj, fromCTSCustId, fromSubscriberId)
     {
-        common.showConfirmation('Are you sure you want to update ASSOCIATION for ' + obj.Username + '?',
+        common.showConfirmation('Do you want update <b>ASSOCIATION STATUS</b> for <b>' + obj.Username + '</b> ?',
             function () {
                 RemoveAssociation(fromSubscriberId, fromCTSCustId, obj.SubscriberId, obj.CTSCustId, !obj.IsActive);
             });
@@ -161,7 +161,7 @@
         asscomment.val('');
     }
 
-    function AddAssociation(ctsCustId, subscriberId, rootUsername) {
+    function AddAssociation(ctsCustId, subscriberId, rootUsername, subscriber) {
         var url = common.modifyRelativeUrl('Account/AddAssociation');
         var params = {};
         params.Username = assusername.val();
@@ -177,6 +177,11 @@
                 if (response.errorCode == 0) {
                     common.showSuccess('Add the association successful!', 2000);
                     divAddAssociation.dialog('close');
+
+                    $('#association-cbb-status').val(0).trigger('change');
+                    $("#account-by-account-cbb-association-type").val(3).trigger('change');
+
+                    btnSearch.trigger("click");
                 }
                 else if (response.errorCode == -2) {
                     common.showError('Username "' + params.Username + '" is invalid.');
@@ -189,7 +194,8 @@
                 }
             },
             complete: function () {
-
+                var associationEvidence = new AssociationEvidence();
+                associationEvidence.GetCustomerTotalAssociation(ctsCustId, rootUsername, subscriberId, subscriber);
             }
         });
     }
@@ -228,7 +234,7 @@
         });
     }
 
-    this.Initial = function (ctsCustid, username, subscriberId) {
+    this.Initial = function (ctsCustid, username, subscriberId, subscriber) {
         $("#account-by-account-cbb-status").multiselect();
 
         dataTable = RenderGrid();
@@ -243,7 +249,7 @@
         btnViewOnGraph.on('click', function () {
             var info = dataTable.page.info();
             var formGraph = new graph();
-            formGraph.GenerateFullPath(ctsCustid, username, info.start, info.length);
+            formGraph.GenerateFullPath(ctsCustid, username, $('#association-cbb-status').val(), info.start, info.length);
             formGraph.OpenModal();
         });
 
@@ -274,7 +280,7 @@
                 assusername.focus();
             }
             else {
-                AddAssociation(ctsCustid, subscriberId, username);
+                AddAssociation(ctsCustid, subscriberId, username, subscriber);
             }
         });
 
