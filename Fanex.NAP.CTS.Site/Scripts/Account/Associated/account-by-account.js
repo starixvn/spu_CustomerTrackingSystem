@@ -204,7 +204,9 @@
                     $('#association-cbb-status').val(0);
                     $("#account-by-account-cbb-association-type").val(3);
 
-                    btnSearch.trigger("click");
+                    setTimeout(() => {
+                        btnSearch.trigger("click");
+                    }, 2000);
                 }
                 else if (response.errorCode == -2) {
                     common.showError('Username "' + params.Username + '" is invalid.');

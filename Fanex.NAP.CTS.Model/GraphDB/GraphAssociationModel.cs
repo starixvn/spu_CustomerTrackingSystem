@@ -19,10 +19,8 @@ namespace Fanex.NAP.CTS.Model.GraphDB
 
         public string AssociationTypeName
         {
-            get
-            {
-                return Enum.GetName(typeof(AssociationType), AssociationType);
-            }
+            get;
+            set;
         }
 
         public DateTime AssociationDate { get; set; }
@@ -38,6 +36,11 @@ namespace Fanex.NAP.CTS.Model.GraphDB
         public int AssociationStatus { get; set; }
 
         public string GetAssociationTypeName(AssociationType associationType)
+        {
+            return Enum.GetName(typeof(AssociationType), associationType);
+        }
+
+        public string GetAssociationTypeName(int associationType)
         {
             return Enum.GetName(typeof(AssociationType), associationType);
         }

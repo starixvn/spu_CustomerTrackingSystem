@@ -329,7 +329,7 @@
                     LoginId = !string.IsNullOrWhiteSpace(x.Username2) ? x.Username2 : x.Username,
                     AssociationDate = x.AssociationDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                     AssociationType = x.AssociationType,
-                    AssociationTypeName = x.AssociationType == 0 ? string.Format("{0}, {1}, {2}", x.GetAssociationTypeName(Model.AssociationType.Device), x.GetAssociationTypeName(Model.AssociationType.IP), x.GetAssociationTypeName(Model.AssociationType.Manual)) : x.AssociationTypeName,
+                    AssociationTypeName = x.AssociationTypeName,
                     Status = x.StatusName == "NA" ? "N/A" : x.StatusName,
                     StatusId = x.StatusId,
                     SubscriberId = x.SubscriberId,

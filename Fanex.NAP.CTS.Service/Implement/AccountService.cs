@@ -737,7 +737,8 @@
                         .Select(g => new GraphAssociationModel
                         {
                             CustId = g.FirstOrDefault().CustId,
-                            AssociationType = (g.Count() > 1 ? 0 : g.FirstOrDefault().AssociationType),
+                            AssociationType = g.Count() > 1 ? 0 : g.FirstOrDefault().AssociationType,
+                            AssociationTypeName = CalculateAssociationType(g),
                             Username = g.FirstOrDefault().Username,
                             Username2 = g.FirstOrDefault().Username2,
                             AssociationDate = g.FirstOrDefault().AssociationDate,
@@ -757,6 +758,16 @@
             }
 
             return customerAssociation;
+        }
+
+        private string CalculateAssociationType(IGrouping<long, GraphAssociationModel> groupData)
+        {
+            if (groupData.Count() > 1)
+            {
+                return groupData.Select(x => x.GetAssociationTypeName(x.AssociationType)).Join(", ");
+            }
+
+            return groupData.FirstOrDefault().AssociationTypeName;
         }
 
         public List<AssociationCustomerModel> SearchAssociatedCustomer(string username)
