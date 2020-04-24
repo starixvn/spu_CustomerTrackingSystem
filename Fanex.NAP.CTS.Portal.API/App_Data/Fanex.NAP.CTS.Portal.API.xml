@@ -495,11 +495,13 @@
         </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetDirectAssociation(System.Int32,System.Int32,System.Int32,System.Int32)">
             <summary>
-            Get Association with one Level
+            Get all association one level
             </summary>
             <param name="ctsCustId"></param>
+            <param name="assStatus"></param>
+            <param name="takeRow"></param>
+            <param name="skipRow"></param>
             <returns></returns>
-            
         </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetInDirectAssociation(System.Int32)">
             <summary>

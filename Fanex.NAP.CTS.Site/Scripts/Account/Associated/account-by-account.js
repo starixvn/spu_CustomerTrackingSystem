@@ -161,6 +161,29 @@
         asscomment.val('');
     }
 
+    function GetTotalAssociation(ctsCustId) {
+        $.ajax(common.modifyRelativeUrl('Account/GetCustomerTotalAssociationByCTSCustId'), {
+            type: 'POST',
+            data: {
+                ctsCustId: ctsCustId
+            },
+            success: function (response) {
+
+                totalAssAccount = response.TotalAccounts;
+
+                $('#totalAssAccount').html(response.TotalAccounts);
+                $('#totalAssDevice').html(response.TotalDevices);
+                $('#totalAssIP').html(response.TotalIps);
+            },
+            complete: function () {
+                
+            },
+            error: function (errMsg) {
+                // common.showError(errMsg);
+            }
+        });
+    }
+
     function AddAssociation(ctsCustId, subscriberId, rootUsername, subscriber) {
         var url = common.modifyRelativeUrl('Account/AddAssociation');
         var params = {};
@@ -178,8 +201,8 @@
                     common.showSuccess('Added association successfully!', 2000);
                     divAddAssociation.dialog('close');
 
-                    $('#association-cbb-status').val(0).trigger('change');
-                    $("#account-by-account-cbb-association-type").val(3).trigger('change');
+                    $('#association-cbb-status').val(0);
+                    $("#account-by-account-cbb-association-type").val(3);
 
                     btnSearch.trigger("click");
                 }
@@ -194,8 +217,7 @@
                 }
             },
             complete: function () {
-                var associationEvidence = new AssociationEvidence();
-                associationEvidence.GetCustomerTotalAssociation(ctsCustId, rootUsername, subscriberId, subscriber);
+                GetTotalAssociation(ctsCustId);
             }
         });
     }

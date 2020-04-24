@@ -165,7 +165,6 @@
                         "~/Scripts/popoto/d3.v3.min.js",
                         "~/scripts/Account/Associated/account-by-account.js",
                         "~/scripts/Account/Associated/graph.js",
-                        "~/scripts/Account/association-evidence.js",
                         "~/scripts/Account/index.js",
                         "~/scripts/Account/ChainToEvidence/account-evidence.js",
                         "~/scripts/Account/ChainToEvidence/account-exceptions.js"));
