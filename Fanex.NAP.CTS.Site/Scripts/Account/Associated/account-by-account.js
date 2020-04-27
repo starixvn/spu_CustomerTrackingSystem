@@ -143,7 +143,7 @@
 
     function ActiveRemove(obj, fromCTSCustId, fromSubscriberId)
     {
-        common.showConfirmation('Do you want to update <b>ASSOCIATION STATUS</b> for <b>' + _username +'</b> and <b>' + obj.Username + '</b> ?',
+        common.showConfirmation('Do you want to update Association Status between <b>' + _username +'</b> and <b>' + obj.Username + '</b> ?',
             function () {
                 RemoveAssociation(fromSubscriberId, fromCTSCustId, obj.SubscriberId, obj.CTSCustId, !obj.IsActive);
             });
