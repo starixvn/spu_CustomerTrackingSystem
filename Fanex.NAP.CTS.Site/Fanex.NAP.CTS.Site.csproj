@@ -384,12 +384,24 @@
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Content Include="App_Data\Local\NAPFrameworkSpNames.xml" />
-    <Content Include="App_Data\Local\NAPFSNames.xml" />
-    <Content Include="App_Data\PRO\NAPFrameworkSpNames.xml" />
-    <Content Include="App_Data\PRO\NAPFSNames.xml" />
-    <Content Include="App_Data\UAT\NAPFrameworkSpNames.xml" />
-    <Content Include="App_Data\UAT\NAPFSNames.xml" />
+    <Content Include="App_Data\Local\NAPFrameworkSpNames.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Local\NAPFSNames.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\PRO\NAPFrameworkSpNames.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\PRO\NAPFSNames.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\UAT\NAPFrameworkSpNames.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\UAT\NAPFSNames.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Areas\UserLogin\scripts\lib\jquery-1.9.0.min.js" />
     <Content Include="Areas\UserLogin\scripts\ReCheckIn.js" />
     <Content Include="Areas\UserLogin\Views\Common\Style\AccessDenied.css" />
@@ -485,8 +497,6 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\NAPFrameworkSpNames.xml" />
-    <Content Include="App_Data\NAPFSNames.xml" />
     <Content Include="Content\CoreBetList.css" />
     <Content Include="Content\gulpfile.js" />
     <Content Include="Content\images\details_close.png" />
