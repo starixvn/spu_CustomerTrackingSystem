@@ -403,7 +403,7 @@
 
                         return x;
                     })
-                    .OrderBy(a => a.StatusId).ThenBy(a => !a.IsActive)
+                    .OrderBy(a => a.StatusId).ThenBy(a => !a.IsActive).ThenBy(a=>a.AssociationDate)
                     .ToList();
                 }
             }
