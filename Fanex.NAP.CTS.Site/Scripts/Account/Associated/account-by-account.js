@@ -8,7 +8,7 @@
     var asscomment = $('#txtasscomment');
     var btnSaveAssociation = $('#btnsaveassociation');
     var btnCancelAssociation = $('#btncancelassociation');
-
+    var _username;
     var dataTable;
     function RenderTag(obj) {
 
@@ -143,7 +143,7 @@
 
     function ActiveRemove(obj, fromCTSCustId, fromSubscriberId)
     {
-        common.showConfirmation('Do you want to update <b>ASSOCIATION STATUS</b> for <b>' + obj.Username + '</b> ?',
+        common.showConfirmation('Do you want to update <b>ASSOCIATION STATUS</b> for <b>' + _username +'</b> and <b>' + obj.Username + '</b> ?',
             function () {
                 RemoveAssociation(fromSubscriberId, fromCTSCustId, obj.SubscriberId, obj.CTSCustId, !obj.IsActive);
             });
@@ -198,6 +198,7 @@
             data: params,
             success: function (response) {
                 if (response.errorCode == 0) {
+                    associatedByAccountTable.find('tbody').addClass('loading');
                     common.showSuccess('Added association successfully!', 2000);
                     divAddAssociation.dialog('close');
 
@@ -259,6 +260,8 @@
     }
 
     this.Initial = function (ctsCustid, username, subscriberId, subscriber) {
+        _username = username;
+
         $("#account-by-account-cbb-status").multiselect();
 
         dataTable = RenderGrid();
