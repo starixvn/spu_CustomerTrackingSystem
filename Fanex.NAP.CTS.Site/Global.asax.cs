@@ -9,6 +9,7 @@
     using Fanex.Logging.Extensions;
     using Fanex.Logging.Extensions.Database;
     using Fanex.Logging.Sentry;
+    using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.RemotingRef;
     using Sentry;
     using System;
@@ -27,7 +28,7 @@
                 .StartNewSession()
                 .WithSqlServer()
                 .WithMySql()
-                .UseDefaultDbSettingProvider("~/App_Data")
+                .UseDefaultDbSettingProvider(ConfigSettings.StoredProcedurePath)
                 .UseDefaultConnectionStringProvider()
                 .Run();
 

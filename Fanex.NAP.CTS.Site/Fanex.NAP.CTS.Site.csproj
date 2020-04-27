@@ -384,6 +384,12 @@
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="App_Data\Local\NAPFrameworkSpNames.xml" />
+    <Content Include="App_Data\Local\NAPFSNames.xml" />
+    <Content Include="App_Data\PRO\NAPFrameworkSpNames.xml" />
+    <Content Include="App_Data\PRO\NAPFSNames.xml" />
+    <Content Include="App_Data\UAT\NAPFrameworkSpNames.xml" />
+    <Content Include="App_Data\UAT\NAPFSNames.xml" />
     <Content Include="Areas\UserLogin\scripts\lib\jquery-1.9.0.min.js" />
     <Content Include="Areas\UserLogin\scripts\ReCheckIn.js" />
     <Content Include="Areas\UserLogin\Views\Common\Style\AccessDenied.css" />
