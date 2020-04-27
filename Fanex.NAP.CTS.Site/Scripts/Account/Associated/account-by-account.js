@@ -243,7 +243,12 @@
             },
             success: function (response) {
                 if (response.errorCode == 0) {
+                    
                     common.showSuccess('Updated association successful!', 2000);
+                }
+                else if (response.errorCode == -1) {
+             
+                    common.showError('This association is already deactivated!');
                 }
                 else {
                     common.showError('Updated association fail!');
