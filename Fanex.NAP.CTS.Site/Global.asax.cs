@@ -32,7 +32,7 @@
                 .UseDefaultConnectionStringProvider()
                 .Run();
 
-            LogManager.SetDefaultLogCategory("CTS")
+            LogManager.SetDefaultLogCategory(ConfigurationManager.AppSettings["Sentry-Log-Category"])
                   .Use(new List<ILogEngine>
                   {
                          new SentryLogging(new SentryEngineOptions

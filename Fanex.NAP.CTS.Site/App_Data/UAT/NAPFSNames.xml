@@ -438,7 +438,7 @@
           DbName="MySQL.DCS_DataCenter" />
 	  
 	  <Setting Key="CTS_DC_GetCustomerByUsername"
-          SpName="CTS_DC_GetCustomerByUsername"
+          SpName="CTS_DC_GetCustomerByUsername_xtest"
           DbName="MySQL.CTS_DataCenter" />
 
 	  <Setting Key="CTS_DC_AddManualAssociation"
