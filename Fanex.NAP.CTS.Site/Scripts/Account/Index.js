@@ -49,6 +49,22 @@
         });
     }
 
+    function LoadCustomerCategory() {
+        $.ajax(common.modifyRelativeUrl('Account/CustomerCategory'), {
+            type: 'POST',
+            success: function (response) {
+                $("#customer_category").html(response);
+            },
+            complete: function () {
+                var customerCategory = new customer_category();
+                customerCategory.Initial(ctsCustId, subscriberId, username);
+            },
+            error: function (errMsg) {
+                common.showError(errMsg);
+            }
+        });
+    }
+
     function LoadTransactionHistory() {
         $.ajax(common.modifyRelativeUrl('Account/TransactionHistory'), {
             type: 'POST',
@@ -71,16 +87,7 @@
             data: {
                 ctsCustId: ctsCustId
             },
-            success: function(response) {
-                var customerCategory = new customer_category();
-                customerCategory.Initial(ctsCustId, subscriberId, username);
-            },
-            error: function (errMsg) {
-                common.showError(errMsg);
-            }
-        });
-    }
-
+            success: function (response) {
 
                 totalAssAccount = response.TotalAccounts;
 
@@ -91,8 +98,8 @@
             complete: function () {
                 GetCustomerEvidences();
             },
-            error: function(errMsg) {
-               // common.showError(errMsg);
+            error: function (errMsg) {
+                // common.showError(errMsg);
             }
         });
     }
