@@ -455,7 +455,7 @@
         [HttpPost]
         public ActionResult AddAssociation(string username, string comment, int fromSubscriberId, long fromCTSCustId, string rootUsername)
         {
-            if (string.IsNullOrWhiteSpace(username) || rootUsername == username || fromSubscriberId <= 0 || fromCTSCustId <= 0)
+            if (string.IsNullOrWhiteSpace(username) || rootUsername.Trim() == username.Trim() || fromSubscriberId <= 0 || fromCTSCustId <= 0)
             {
                 return Json(new
                 {
@@ -464,7 +464,7 @@
                 }, JsonRequestBehavior.AllowGet);
             }
 
-            var result = _accountService.SearchAssociatedCustomer(username);
+            var result = _accountService.SearchAssociatedCustomer(username.Trim());
 
             if (result != null && result.Any())
             {

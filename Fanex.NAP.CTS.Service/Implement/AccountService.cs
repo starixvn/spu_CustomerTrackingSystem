@@ -754,7 +754,11 @@
                     return groupData;
                 }
 
-                return customerAssociation.Where(x => x.AssociationType == associationType).ToList();
+                return customerAssociation.Where(x => x.AssociationType == associationType).Select(x =>
+                {
+                    x.AssociationTypeName = x.GetAssociationTypeName(x.AssociationType);
+                    return x;
+                }).ToList();
             }
 
             return customerAssociation;
@@ -767,7 +771,7 @@
                 return groupData.Select(x => x.GetAssociationTypeName(x.AssociationType)).Join(", ");
             }
 
-            return groupData.FirstOrDefault().AssociationTypeName;
+            return groupData.FirstOrDefault().GetAssociationTypeName(groupData.FirstOrDefault().AssociationType);
         }
 
         public List<AssociationCustomerModel> SearchAssociatedCustomer(string username)

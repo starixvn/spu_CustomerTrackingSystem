@@ -212,7 +212,7 @@
                 else if (response.errorCode == -2) {
                     common.showError('Username "' + params.Username + '" is invalid.');
                 }
-                else if (response.errorCode == -1) {
+                else if (response.errorCode == -1 || response.errorCode == -100) {
                     common.showError('Username already existed in "' + params.Username + '" association list.');
                 }
                 else {
@@ -307,7 +307,7 @@
                 common.showError('Username is required.');
                 assusername.focus();
             }
-            else if (assusername.val() == username) {
+            else if (assusername.val().trim() == username.trim()) {
                 common.showError('The username must be different from ' + username);
                 assusername.focus();
             }
