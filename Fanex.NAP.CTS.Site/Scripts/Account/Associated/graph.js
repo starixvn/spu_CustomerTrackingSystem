@@ -197,6 +197,9 @@
                     var paramsFilter = {};
                     paramsFilter.ctsCustid = d.CTSCustId;
                     paramsFilter.userName = d.Username;
+                    paramsFilter.start = d.Start;
+                    paramsFilter.length = d.Length;
+                    paramsFilter.associationStatus = d.AssociationStatus;
 
                     $.ajax(urls.GetDirectAssociationGraph, {
                         type: 'POST',

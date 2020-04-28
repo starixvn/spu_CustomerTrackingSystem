@@ -20,6 +20,12 @@ namespace Fanex.NAP.CTS.ViewModel.Account.Associated
 
         public string AssociationTypeName { get; set; }
 
+        public int Start { get; set; }
+
+        public int Length { get; set; }
+
+        public int AssociationStatus { get; set; }
+
         public GraphCustomerItemViewModel[] children { get; set; }     
     }
 }

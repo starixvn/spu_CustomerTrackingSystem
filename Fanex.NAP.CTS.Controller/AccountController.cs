@@ -431,7 +431,10 @@
                     {
                         CTSCustId = x.CTSCustID,
                         ItemCode = x.CTSCustID.ToString() + "_" + now,
-                        DisplayName = !string.IsNullOrWhiteSpace(x.Username) ? x.Username : x.Username2
+                        DisplayName = !string.IsNullOrWhiteSpace(x.Username) ? x.Username : x.Username2,
+                        AssociationStatus = associationStatus,
+                        Start = start,
+                        Length = length
                     }).ToList();
 
                 graphCustomer.children = graphCustomerList.ToArray();
