@@ -499,7 +499,11 @@ body {
 
 .form-control .ui-multiselect {
     background: #fff;
-    width: 260px !important;
+    font-family: inherit;
+}
+
+.ui-multiselect-header .ui-icon {
+    float: none !important;
 }
 
 .form-control .ui-state-active {
