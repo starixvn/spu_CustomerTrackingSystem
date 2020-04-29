@@ -867,7 +867,7 @@
                     ParentCategoryName = x.ParentCategoryName                    
                 });
 
-                return Json(result, JsonRequestBehavior.AllowGet);
+                return Json(new { data = result }, JsonRequestBehavior.AllowGet);
             }           
         
             return Json(new List<CustomerCategoryViewModel>(), JsonRequestBehavior.AllowGet);

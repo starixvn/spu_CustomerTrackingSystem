@@ -1,5 +1,4 @@
-﻿function customer_category()
-{
+﻿function customer_category() {
     var btnMarkCategory = $('#btnmarkcategory');
     var divMarkCategory = $('#divMarkCategory');
     var tblcustomercategory = $('#customer-category-table');
@@ -14,7 +13,7 @@
         });
 
         $("#ddlcategory").select2();
-        
+
         $("#ddlsports").multiselect({
             selectedList: 3,
             selectedText: "# of # selected",
@@ -38,8 +37,7 @@
         });
     }
 
-    function AddCustomerClassification(ctsCustId, subscriberId)
-    {        
+    function AddCustomerClassification(ctsCustId, subscriberId) {
         if ($('#ddlsports').val() == '') {
 
             common.showError('Sport is required.');
@@ -61,7 +59,7 @@
                 if (response.errorCode == 0) {
                     common.showSuccess('Add the category successful!', 2000);
                     divMarkCategory.dialog('close');
-                }                
+                }
                 else {
                     common.showError('Add the category fail!');
                 }
@@ -77,7 +75,7 @@
         var params = {};
         params.ctsCustId = ctsCustId;
         params.categoryId = categoryId;
-        
+
         $.ajax(url, {
             type: 'POST',
             data: params,
@@ -111,7 +109,7 @@
                 if (response.errorCode == 0) {
                     common.showSuccess('Update the category successful!', 2000);
                     divMarkCategory.dialog('close');
-                    
+
                 }
                 else {
                     common.showError('Update the category fail!');
@@ -154,7 +152,7 @@
         });
     }
 
-    function EditCategory(ctsCustId, subscriberId, categoryName, categoryId, sportGroupIdList, comment ) {
+    function EditCategory(ctsCustId, subscriberId, categoryName, categoryId, sportGroupIdList, comment) {
         $.ajax(common.modifyRelativeUrl('Account/EditMarkCatergory'), {
             type: 'POST',
             data: {
@@ -191,16 +189,23 @@
     }
 
     function RenderGrid(ctsCustId, username, subscriberId) {
-        tblcustomercategory.DataTable({            
+        tblcustomercategory.DataTable({
             language: {
                 zeroRecords: "There's no data"
             },
             info: false,
             ordering: false,
-            paging: false,
+            paging: true,
             searching: false,
             scrollX: false,
-            scrollCollapse: false,            
+            scrollCollapse: false,
+            ajax: {
+                url: common.modifyRelativeUrl('/Account/GetCustomerClassification'),
+                data: {
+                    ctsCustId: ctsCustId
+                },
+                type: 'POST'
+            },
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
                 { targets: [0], className: "text-left", defaultContent: "-" },
@@ -229,13 +234,12 @@
                             EditCategory(ctsCustId, subscriberId, row.CategoryName, row.CategoryId, row.SportGroupIdList, row.Remark);
                         });
                     }
-                }
+                }                
             ],
-            order: [[2, 'asc']],
             rowGroup: {
                 dataSrc: 'ParentCategoryName'
             }
-        });        
+        });
     }
 
     function GetCustomerClassification(ctsCustId) {
@@ -252,7 +256,7 @@
             success: function (response) {
                 tblcustomercategory.DataTable().clear();
                 tblcustomercategory.DataTable().rows.add(response).draw();
-                tblcustomercategory.DataTable().columns.adjust();
+                //tblcustomercategory.DataTable().columns.adjust();
             },
             complete: function () {
                 tblcustomercategory.find('tbody').removeClass('loading');
@@ -268,6 +272,6 @@
         btnMarkCategory.click(function () { InitialMarkCategory(ctsCustId, subscriberId); });
 
         RenderGrid(ctsCustId, username, subscriberId);
-        GetCustomerClassification(ctsCustId);
+       // GetCustomerClassification(ctsCustId);
     }
 }
