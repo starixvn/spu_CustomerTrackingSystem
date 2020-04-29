@@ -208,6 +208,12 @@ input[type="password"] {
     input[type="number"].invalid:focus,
     input[type="password"].invalid:focus {
       box-shadow: none; }
+  input[type="text"][disabled],
+  input[type="search"][disabled],
+  input[type="email"][disabled],
+  input[type="number"][disabled],
+  input[type="password"][disabled] {
+    background: #EDEDED; }
 
 textarea {
   outline: none;
