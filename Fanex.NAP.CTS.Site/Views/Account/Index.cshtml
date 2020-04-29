@@ -90,9 +90,7 @@
                     <div id="autoSuspendSoccer"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></div>
                     <div id="autoSuspendOtherSport"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></div>
                     <div id="autoSuspendESport"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></div>
-                    @*<div>@(Model.AutoSuspendSoccer ? Html.Raw("Yes") : Html.Raw("No"))</div>
-                        <div>@(Model.AutoSuspendOtherSport ? Html.Raw("Yes") : Html.Raw("No"))</div>
-                        <div>@(Model.AutoSuspendESport ? Html.Raw("Yes") : Html.Raw("No"))</div>*@
+             
                 </div>
             </div>
         </div>
@@ -175,7 +173,7 @@
         <div class="report-item">
             <h3 id="header_customer_category" class="report-header" ref="customer_category">
                 <i class="icon-chevron-right"></i>
-                <a href="javascript:void(0)">Customer Category</a>
+                <a href="javascript:void(0)">Customer Classification</a>
             </h3>
             <div id="customer_category" class="report-cont hide">
                 <img src="@Url.Content("~/Content/images/ajax-loader.gif")" alt="Loading ..." />
