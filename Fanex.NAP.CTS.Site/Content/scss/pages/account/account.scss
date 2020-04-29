@@ -520,7 +520,10 @@ table.dataTable.no-footer {
     }
 }
 
-
+.table tbody .group-start {
+    font-weight: bold;
+    background: #7B8BAE;
+}
 
 .modal-content {
     .chains-block {
@@ -769,8 +772,9 @@ table.dataTable.no-footer {
 
 
 .ui-multiselect-checkboxes {
-    height: 250px !important;
+    height: 130px !important;
     overflow: auto !important;
+    padding: 4px 0 4px;
 }
 
 .tooltip {
