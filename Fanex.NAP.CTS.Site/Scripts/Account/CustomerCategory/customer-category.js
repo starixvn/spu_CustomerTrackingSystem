@@ -14,18 +14,12 @@
         });
 
         $("#ddlcategory").select2();
-        //$("#ddlcategory").multiselect({
-        //    header: "Select an option",
-        //    noneSelectedText: "Select an Option",
-        //    selectedList: 1
-        //});
-
-        $("#ddlsports").select2();
-        //$("#ddlsports").multiselect({
-        //    selectedList: 5,
-        //    selectedText: "# of # selected",
-        //    noneSelectedText: "Select options"
-        //});
+        
+        $("#ddlsports").multiselect({
+            selectedList: 3,
+            selectedText: "# of # selected",
+            noneSelectedText: "Select options"
+        });
     }
 
     function BindingMarkCategoryForUpdate(ctsCustId, subscriberId, categoryId) {
@@ -37,12 +31,11 @@
             UpdateCustomerClassification(ctsCustId, subscriberId, categoryId);
         });
 
-        $("#ddlsports").select2();
-        //$("#ddlsports").multiselect({
-        //    selectedList: 5,
-        //    selectedText: "# of # selected",
-        //    noneSelectedText: "Select options"
-        //});
+        $("#ddlsports").multiselect({
+            selectedList: 3,
+            selectedText: "# of # selected",
+            noneSelectedText: "Select options"
+        });
     }
 
     function AddCustomerClassification(ctsCustId, subscriberId)
