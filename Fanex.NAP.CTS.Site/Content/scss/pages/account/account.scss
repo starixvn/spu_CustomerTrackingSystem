@@ -512,17 +512,33 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     }
 }
 
-table.dataTable.no-footer {
+.dataTable {
     border-bottom: 0;
 
     thead th {
         width: auto !important;
+
+        &.col-action {
+            width: 120px !important;
+        }
+
+        &.col-category {
+            width: 200px !important;
+        }
+
+        &.col-datetime {
+            width: 200px !important;
+        }
     }
 }
 
 .table tbody .group-start {
     font-weight: bold;
     background: #7B8BAE;
+
+    &:hover td {
+        background: #7B8BAE;
+    }
 }
 
 .modal-content {

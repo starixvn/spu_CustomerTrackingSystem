@@ -1016,14 +1016,22 @@
   .table-report .remove-action {
     width: 170px !important; }
 
-table.dataTable.no-footer {
+.dataTable {
   border-bottom: 0; }
-  table.dataTable.no-footer thead th {
+  .dataTable thead th {
     width: auto !important; }
+    .dataTable thead th.col-action {
+      width: 120px !important; }
+    .dataTable thead th.col-category {
+      width: 200px !important; }
+    .dataTable thead th.col-datetime {
+      width: 200px !important; }
 
 .table tbody .group-start {
   font-weight: bold;
   background: #7B8BAE; }
+  .table tbody .group-start:hover td {
+    background: #7B8BAE; }
 
 .modal-content .chains-block {
   display: flex;
