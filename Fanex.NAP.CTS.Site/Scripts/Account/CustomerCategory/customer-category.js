@@ -231,7 +231,10 @@
                         });
                     }
                 }
-            ]
+            ],
+            rowGroup: {
+                dataSrc: 'ParentCategoryName'
+            }
         })
     }
 

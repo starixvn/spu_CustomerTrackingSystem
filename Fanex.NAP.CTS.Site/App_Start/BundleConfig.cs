@@ -66,6 +66,7 @@
                 "~/Scripts/Fanex.Grid/Fanex.Grid.js",
                 "~/Scripts/Fanex.Grid/Fanex.Pagination.js",
                 "~/Scripts/DataTables/jquery.datatables.js",
+                "~/Scripts/DataTables/dataTables.rowGroup.js",
                 "~/Scripts/toast/jquery.toast.js",
                 "~/Scripts/numeral/numeral.min.js",
                 //"~/scripts/multiple-select.js",

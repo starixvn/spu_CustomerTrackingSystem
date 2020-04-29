@@ -403,7 +403,7 @@
 
                         return x;
                     })
-                    .OrderBy(a => a.StatusId).ThenBy(a => !a.IsActive).ThenBy(a=>a.AssociationDate)
+                    .OrderBy(a => a.StatusId).ThenBy(a => !a.IsActive).ThenBy(a => a.AssociationDate)
                     .ToList();
                 }
             }
@@ -832,7 +832,7 @@
             return PartialView("CustomerCategory/MarkCatergory", model);
         }
 
-        public ActionResult EditMarkCatergory(long ctsCustId, int subscriberId , string categoryName, int categoryId, string sportGroupIdList, string comment)
+        public ActionResult EditMarkCatergory(long ctsCustId, int subscriberId, string categoryName, int categoryId, string sportGroupIdList, string comment)
         {
             var model = new MarkCategoryViewModel
             {
@@ -853,7 +853,7 @@
             var data = _accountService.GetCustomerClassification(ctsCustId);
 
             if (data != null && data.Any())
-            {
+            {               
                 var result = data.Select(x => new CustomerCategoryViewModel
                 {
                     CategoryId = x.CategoryId,
@@ -862,75 +862,76 @@
                     LastModifiedDate = x.LastModifiedDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                     Remark = x.Remark,
                     SportGroupIdList = x.SportGroupIdList,
-                    SportGroupNameList = x.SportGroupNameList
+                    SportGroupNameList = x.SportGroupNameList,
+                    ParentCategoryId = x.ParentCategoryId,
+                    ParentCategoryName = x.ParentCategoryName                    
                 });
 
-
                 return Json(result, JsonRequestBehavior.AllowGet);
-            }
-
+            }           
+        
             return Json(new List<CustomerCategoryViewModel>(), JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult AddCustomerClassification(long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark)
+    public ActionResult AddCustomerClassification(long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark)
+    {
+        if (ctsCustId <= 0 || subscriberId <= 0 || categoryId <= 0)
         {
-            if (ctsCustId <= 0 || subscriberId <= 0 || categoryId <= 0)
-            {
-                return Json(new
-                {
-                    errorCode = -100,
-                    errorMessage = "Invalid parameter"
-                }, JsonRequestBehavior.AllowGet);
-            }
-
-            var result = _accountService.AddCustomerClassification(ctsCustId, subscriberId, categoryId, sportGroupIds, remark, CurrentSession.UserId);
-
             return Json(new
             {
-                errorCode = result.ErrorCode,
-                errorMessage = result.ErrorMsg
+                errorCode = -100,
+                errorMessage = "Invalid parameter"
             }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult UpdateCustomerClassification(long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark)
+        var result = _accountService.AddCustomerClassification(ctsCustId, subscriberId, categoryId, sportGroupIds, remark, CurrentSession.UserId);
+
+        return Json(new
         {
-            if (ctsCustId <= 0 || subscriberId <= 0 || categoryId <= 0)
-            {
-                return Json(new
-                {
-                    errorCode = -100,
-                    errorMessage = "Invalid parameter"
-                }, JsonRequestBehavior.AllowGet);
-            }
-
-            var result = _accountService.UpdateCustomerClassification(ctsCustId, subscriberId, categoryId, sportGroupIds, remark, CurrentSession.UserId);
-
-            return Json(new
-            {
-                errorCode = result.ErrorCode,
-                errorMessage = result.ErrorMsg
-            }, JsonRequestBehavior.AllowGet);
-        }
-
-        public ActionResult RemoveCustomerClassification(long ctsCustId, int categoryId)
-        {
-            if(ctsCustId <= 0 || categoryId <= 0)
-            {
-                return Json(new
-                {
-                    errorCode = -100,
-                    errorMessage = "Invalid parameter"
-                }, JsonRequestBehavior.AllowGet);
-            }
-
-            var result = _accountService.RemoveCustomerClassification(ctsCustId, categoryId, CurrentSession.UserId);
-
-            return Json(new
-            {
-                errorCode = result.ErrorCode,
-                errorMessage = result.ErrorMsg
-            }, JsonRequestBehavior.AllowGet);
-        }
-        #endregion
+            errorCode = result.ErrorCode,
+            errorMessage = result.ErrorMsg
+        }, JsonRequestBehavior.AllowGet);
     }
+
+    public ActionResult UpdateCustomerClassification(long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark)
+    {
+        if (ctsCustId <= 0 || subscriberId <= 0 || categoryId <= 0)
+        {
+            return Json(new
+            {
+                errorCode = -100,
+                errorMessage = "Invalid parameter"
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        var result = _accountService.UpdateCustomerClassification(ctsCustId, subscriberId, categoryId, sportGroupIds, remark, CurrentSession.UserId);
+
+        return Json(new
+        {
+            errorCode = result.ErrorCode,
+            errorMessage = result.ErrorMsg
+        }, JsonRequestBehavior.AllowGet);
+    }
+
+    public ActionResult RemoveCustomerClassification(long ctsCustId, int categoryId)
+    {
+        if (ctsCustId <= 0 || categoryId <= 0)
+        {
+            return Json(new
+            {
+                errorCode = -100,
+                errorMessage = "Invalid parameter"
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        var result = _accountService.RemoveCustomerClassification(ctsCustId, categoryId, CurrentSession.UserId);
+
+        return Json(new
+        {
+            errorCode = result.ErrorCode,
+            errorMessage = result.ErrorMsg
+        }, JsonRequestBehavior.AllowGet);
+    }
+    #endregion
+}
 }

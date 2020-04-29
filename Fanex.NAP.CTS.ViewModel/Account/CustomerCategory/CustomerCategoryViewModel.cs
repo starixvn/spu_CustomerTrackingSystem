@@ -17,5 +17,9 @@ namespace Fanex.NAP.CTS.ViewModel.Account.CustomerCategory
         public string LastModifiedBy { get; set; }
 
         public string LastModifiedDate { get; set; }
+
+        public int ParentCategoryId { get; set; }
+
+        public string ParentCategoryName { get; set; }
     }
 }
