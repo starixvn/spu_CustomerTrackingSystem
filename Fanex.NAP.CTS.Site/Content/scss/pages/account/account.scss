@@ -532,11 +532,12 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     }
 }
 
-.table tbody .group-start {
+.table tbody .group-start td {
     font-weight: bold;
     background: #7B8BAE;
+    color: #16181F;
 
-    &:hover td {
+    &:hover {
         background: #7B8BAE;
     }
 }

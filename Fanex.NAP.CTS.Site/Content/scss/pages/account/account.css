@@ -1027,10 +1027,11 @@
     .dataTable thead th.col-datetime {
       width: 200px !important; }
 
-.table tbody .group-start {
+.table tbody .group-start td {
   font-weight: bold;
-  background: #7B8BAE; }
-  .table tbody .group-start:hover td {
+  background: #7B8BAE;
+  color: #16181F; }
+  .table tbody .group-start td:hover {
     background: #7B8BAE; }
 
 .modal-content .chains-block {
