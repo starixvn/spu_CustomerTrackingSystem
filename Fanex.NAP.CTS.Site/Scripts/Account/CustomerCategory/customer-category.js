@@ -191,8 +191,7 @@
     }
 
     function RenderGrid(ctsCustId, username, subscriberId) {
-        tblcustomercategory.DataTable({
-            responsive: true,
+        tblcustomercategory.DataTable({            
             language: {
                 zeroRecords: "There's no data"
             },
@@ -232,6 +231,7 @@
                     }
                 }
             ],
+            order: [[2, 'asc']],
             rowGroup: {
                 dataSrc: 'ParentCategoryName'
             }
