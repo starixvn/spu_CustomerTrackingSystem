@@ -448,5 +448,25 @@
     <Setting Key="CTS_DC_UpdateAssociationRemove"
          SpName="CTS_DC_UpdateAssociationRemove_xtest"
          DbName="MySQL.CTS_DataCenter" />
+
+    <Setting Key="CTS_DC_GetCustomerCategoryByCTSCustID"
+           SpName="CTS_DC_GetCustomerCategoryByCTSCustID_xtest"
+           DbName="MySQL.CTS_DataCenter" />
+    
+    <Setting Key="CTS_DC_AddCTSCustomerClassification"
+           SpName="CTS_DC_AddCTSCustomerClassification_xtest"
+           DbName="MySQL.CTS_DataCenter" />
+
+    <Setting Key="CTS_DC_UpdateCTSCustomerClassification"
+           SpName="CTS_DC_UpdateCTSCustomerClassification_xtest"
+           DbName="MySQL.CTS_DataCenter" />
+
+    <Setting Key="CTS_DC_RemoveCTSCustomerClassification"
+           SpName="CTS_DC_RemoveCTSCustomerClassification_xtest"
+           DbName="MySQL.CTS_DataCenter" />
+
+    <Setting Key="CTS_DC_GetCTSCustomerClassification"
+           SpName="CTS_DC_GetCTSCustomerClassification_xtest"
+           DbName="MySQL.CTS_DataCenter" />
   </Function>
 </Functions>
