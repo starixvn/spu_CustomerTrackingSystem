@@ -59,13 +59,15 @@
                 if (response.errorCode == 0) {
                     common.showSuccess('Add the category successful!', 2000);
                     divMarkCategory.dialog('close');
+
+                    tblcustomercategory.DataTable().ajax.reload();
                 }
                 else {
                     common.showError('Add the category fail!');
                 }
             },
             complete: function () {
-                GetCustomerClassification(ctsCustId);
+                //GetCustomerClassification(ctsCustId);
             }
         });
     }
@@ -82,7 +84,8 @@
             success: function (response) {
                 if (response.errorCode == 0) {
                     common.showSuccess('Remove the category successful!', 2000);
-                    GetCustomerClassification(ctsCustId);
+                    //GetCustomerClassification(ctsCustId);
+                    tblcustomercategory.DataTable().ajax.reload();
                 }
                 else {
                     common.showError('Remove the category fail!');
@@ -110,13 +113,14 @@
                     common.showSuccess('Update the category successful!', 2000);
                     divMarkCategory.dialog('close');
 
+                    tblcustomercategory.DataTable().ajax.reload();
                 }
                 else {
                     common.showError('Update the category fail!');
                 }
             },
             complete: function () {
-                GetCustomerClassification(ctsCustId);
+                
             }
         });
     }
