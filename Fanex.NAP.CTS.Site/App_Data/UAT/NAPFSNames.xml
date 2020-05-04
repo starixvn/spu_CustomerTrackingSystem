@@ -449,6 +449,10 @@
          SpName="CTS_DC_UpdateAssociationRemove_xtest"
          DbName="MySQL.CTS_DataCenter" />
 
+    <Setting Key="CTS_DC_GetAllSportGroups"
+           SpName="CTS_DC_GetAllSportGroups_xtest"
+           DbName="MySQL.CTS_DataCenter" />
+    
     <Setting Key="CTS_DC_GetCustomerCategoryByCTSCustID"
            SpName="CTS_DC_GetCustomerCategoryByCTSCustID_xtest"
            DbName="MySQL.CTS_DataCenter" />
