@@ -530,6 +530,12 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             width: 200px !important;
         }
     }
+
+    .dtrg-group td {
+        background: #7B8BAE;
+        color: #16181F;
+        font-weight: bold
+    }
 }
 
 .table tbody .group-start td {
