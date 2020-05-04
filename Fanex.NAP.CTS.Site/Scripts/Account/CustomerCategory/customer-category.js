@@ -67,7 +67,7 @@
                 }
             },
             complete: function () {
-                //GetCustomerClassification(ctsCustId);
+
             }
         });
     }
@@ -84,7 +84,7 @@
             success: function (response) {
                 if (response.errorCode == 0) {
                     common.showSuccess('Remove the category successful!', 2000);
-                    //GetCustomerClassification(ctsCustId);
+
                     tblcustomercategory.DataTable().ajax.reload();
                 }
                 else {
@@ -244,32 +244,6 @@
                 dataSrc: 'ParentCategoryName'
             }
         });
-    }
-
-    function GetCustomerClassification(ctsCustId) {
-        var url = common.modifyRelativeUrl('/Account/GetCustomerClassification');
-
-        $.ajax(url, {
-            type: 'POST',
-            beforeSend: function () {
-                tblcustomercategory.find('tbody').addClass('loading');
-            },
-            data: {
-                ctsCustId: ctsCustId
-            },
-            success: function (response) {
-                tblcustomercategory.DataTable().clear();
-                tblcustomercategory.DataTable().rows.add(response).draw();
-                //tblcustomercategory.DataTable().columns.adjust();
-            },
-            complete: function () {
-                tblcustomercategory.find('tbody').removeClass('loading');
-            },
-            error: function (errMsg) {
-                console.log(errMsg);
-                common.showError(errMsg);
-            }
-        })
     }
 
     this.Initial = function (ctsCustId, subscriberId, username) {

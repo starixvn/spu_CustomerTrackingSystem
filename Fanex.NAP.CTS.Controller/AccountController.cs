@@ -870,7 +870,7 @@
                 return Json(new { data = result }, JsonRequestBehavior.AllowGet);
             }           
         
-            return Json(new List<CustomerCategoryViewModel>(), JsonRequestBehavior.AllowGet);
+            return Json(new { data = new List<CustomerCategoryViewModel>() }, JsonRequestBehavior.AllowGet);
         }
 
     public ActionResult AddCustomerClassification(long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark)
