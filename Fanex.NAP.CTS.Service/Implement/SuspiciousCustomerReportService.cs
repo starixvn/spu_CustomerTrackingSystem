@@ -1,15 +1,12 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
-    using Fanex.NAP.CTS.Core.BaseClasses;
-    using Fanex.NAP.CTS.Core.ExportExcel;
     using Criteria.SuspiciousCustomer;
     using ExcelConfig.SuspiciousCustomer;
+    using Fanex.NAP.CTS.Core.BaseClasses;
+    using Fanex.NAP.CTS.Core.ExportExcel;
     using Model.SuspiciousCustomer;
-    using NAP.Core.Service.Impl;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Text;
-    using ViewModel.SuspiciousCustomer;
 
     public class SuspiciousCustomerReportService : ISuspiciousCustomerReportService
     {

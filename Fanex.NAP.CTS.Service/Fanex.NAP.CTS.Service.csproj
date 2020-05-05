@@ -137,8 +137,10 @@
     <PackageReference Include="Fanex.Logging">
       <Version>2.0.1</Version>
     </PackageReference>
-    <PackageReference Include="Fanex.NAP.Core">
-      <Version>2.1.0.6</Version>
+    <PackageReference Include="Fanex.NAP.Core.Client">
+      <Version>1.2.1.8</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="NPOI">
       <Version>2.3.0</Version>

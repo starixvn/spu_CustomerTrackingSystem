@@ -74,7 +74,7 @@
 
         public Match GetMatch(Model.MatchMonitor.Match match, IEnumerable<Model.MatchMonitor.FraudCase> fraudCases)
         {
-            var userService = new Fanex.NAP.Core.Service.Impl.UserService();
+            
             var homeName = CachedRef.GetTeamName(match.HomeId);
             var awayName = CachedRef.GetTeamName(match.AwayId);
 
@@ -93,7 +93,7 @@
                     .ToDictionary(f => f.FraudCaseId.ToString()),
                 MatchId = match.MatchId,
                 Verified = match.IsVerified,
-                VerifiedBy = match.VerifiedBy == null ? null : userService.GetById(match.VerifiedBy.Value).Username,
+                VerifiedBy = string.Empty,
                 Status = (char)(match.EventStatus[0] - 32) + match.EventStatus.Remove(0, 1),
                 Score = string.Format("{0} - {1}", match.LiveHomeScore, match.LiveAwayScore),
                 Notes = string.IsNullOrEmpty(match.Notes) ? "-" : match.Notes
