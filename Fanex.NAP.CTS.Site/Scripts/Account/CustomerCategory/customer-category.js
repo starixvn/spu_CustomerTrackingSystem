@@ -63,7 +63,7 @@
                     tblcustomercategory.DataTable().ajax.reload();
                 }
                 else {
-                    common.showError('Add the category fail!');
+                    common.showError(response.errorMessage);
                 }
             },
             complete: function () {
@@ -116,7 +116,7 @@
                     tblcustomercategory.DataTable().ajax.reload();
                 }
                 else {
-                    common.showError('Update the category fail!');
+                    common.showError(response.errorMessage);
                 }
             },
             complete: function () {
