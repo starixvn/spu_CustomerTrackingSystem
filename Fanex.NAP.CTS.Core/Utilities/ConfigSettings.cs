@@ -79,5 +79,7 @@
         public static string Matomo_SiteId => GetConfigStringByName("Matomo-SiteId");
 
         public static string StoredProcedurePath => GetConfigStringByName("StoredProcedurePath");
+
+        public static string AddNewEvidence => GetConfigStringByName("FPS_AddNewEvidence");
     }
 }

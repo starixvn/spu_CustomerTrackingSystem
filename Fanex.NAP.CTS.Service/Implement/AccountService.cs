@@ -25,6 +25,7 @@
     using Fanex.NAP.CTS.ViewModel.Account;
     using Fanex.NAP.CTS.ViewModel.Account.Associated;
     using Fanex.NAP.CTS.ViewModel.Account.GeneralInformation;
+    using NPOI.SS.Formula.Functions;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -893,6 +894,15 @@
             return DataService.UpdateData(criteria, "Place evidence");
         }
 
+        public void FPSAddNewEvidence(string apiURL, UpdatePlaceEvidenceModel model)
+        {
+            _ = ApiHelper.Post(apiURL, new { 
+                custIds = model.CustId, 
+                eviCodes = model.EvidenceCode, 
+                createdBy = model.UserId, 
+                comment = model.Comment });
+        }
+
         public DBResult RemoveFlaggedEvidence(RemoveEvidenceModel model)
         {
             var criteria = new RemoveFlaggedEvidenceCriteria
@@ -1070,22 +1080,23 @@
         {
             var criteria = new AddCTSCustomerClassificationCriteria
             {
-               CTSCustId = ctsCustId,
-               SubscriberId = subscriberId,
-               CategoryId = categoryId,
-               SportGroupIds = sportGroupIds,
-               CreatedBy = createdBy,
-               Remark = remark,
-               ErrorMessage = string.Empty
+                CTSCustId = ctsCustId,
+                SubscriberId = subscriberId,
+                CategoryId = categoryId,
+                SportGroupIds = sportGroupIds,
+                CreatedBy = createdBy,
+                Remark = remark,
+                ErrorMessage = string.Empty
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 db.ExecuteNonQuery(criteria);
 
-                if(string.IsNullOrWhiteSpace(criteria.ErrorMessage))
+                if (string.IsNullOrWhiteSpace(criteria.ErrorMessage))
                 {
-                    return new DBResult {
+                    return new DBResult
+                    {
                         ErrorCode = 0,
                         ErrorMsg = criteria.ErrorMessage
                     };
@@ -1138,8 +1149,8 @@
             var criteria = new RemoveCTSCustomerClassificationCriteria
             {
                 CTSCustId = ctsCustId,
-                CategoryId = categoryId,               
-                CreatedBy = createdBy,             
+                CategoryId = categoryId,
+                CreatedBy = createdBy,
                 ErrorMessage = string.Empty
             };
 

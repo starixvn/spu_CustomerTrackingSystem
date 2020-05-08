@@ -6,9 +6,13 @@
     {
         public Int64 CTSCustId { get; set; }
 
+        public long CustId { get; set; }
+
         public int SubscriberId { get; set; }
 
         public int EvidenceId { get; set; }
+
+        public string EvidenceCode { get; set; }
 
         public string Comment { get; set; }
 

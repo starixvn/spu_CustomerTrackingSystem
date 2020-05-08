@@ -38,7 +38,7 @@
             },
             complete: function() {
                 var accountEvidence = new account_evidence();
-                accountEvidence.Initial(ctsCustId, username, subscriberId, subscriber);
+                accountEvidence.Initial(ctsCustId, username, subscriberId, subscriber, custId);
 
                 var exceptions = new account_exceptions();
                 exceptions.Initial(ctsCustId, username, subscriberId);

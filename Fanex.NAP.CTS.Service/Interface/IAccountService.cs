@@ -61,6 +61,8 @@
 
         DBResult PlaceEvidence(UpdatePlaceEvidenceModel model);
 
+        void FPSAddNewEvidence(string apiURL, UpdatePlaceEvidenceModel model);
+
         DBResult RemoveFlaggedEvidence(RemoveEvidenceModel model);
 
         List<AccountExceptionsModel> GetAccountExceptions(long ctsCustId);

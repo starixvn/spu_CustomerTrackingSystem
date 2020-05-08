@@ -396,7 +396,7 @@
         })
     }     
 
-    function InitialPlaceEvidenceForm(ctsCustId, username, subscriberId, subscriber) {        
+    function InitialPlaceEvidenceForm(ctsCustId, username, subscriberId, subscriber, custId) {        
         btnChainToEvidenceFlagged.on('click', function () {
             ddlPlaceEvidenceListEvidence.multiselect({
                 multiple: false,
@@ -441,7 +441,7 @@
         })
 
         btnPlaceEvidenceSubmit.on('click', function (e) {
-            AddPlaceEvidence(ctsCustId, username, subscriberId);
+            AddPlaceEvidence(ctsCustId, username, subscriberId, custId);
         })
     }
 
@@ -467,12 +467,14 @@
         return evidenceCodes;
     }
 
-    function AddPlaceEvidence(ctsCustId, username, subscriberId) {
+    function AddPlaceEvidence(ctsCustId, username, subscriberId, custId) {
         var url = common.modifyRelativeUrl('/Account/PlaceEvidence');
         var params = {};
         params.CTSCustId = ctsCustId;
+        params.CustId = custId;
         params.SubscriberId = subscriberId;
         params.EvidenceId = ddlPlaceEvidenceListEvidence.find('option:selected').val();
+        params.EvidenceCode = ddlPlaceEvidenceListEvidence.find('option:selected').attr("code");
         params.Comment = txtPlaceEvidenceComment.val();
 
         $.ajax(url, {

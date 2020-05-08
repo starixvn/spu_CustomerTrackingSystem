@@ -665,6 +665,21 @@
             model.UserId = model.UserId == 0 ? CurrentSession.UserId : model.UserId;
             var result = _accountService.PlaceEvidence(model);
 
+            if(result.ErrorCode == 0)
+            {
+                Task.Run(() => {
+
+                    try
+                    {
+                        _accountService.FPSAddNewEvidence(ConfigSettings.AddNewEvidence, model);
+                    }
+                    catch (Exception ex)
+                    {
+                        LogService.Error(ex.Message);
+                    }
+                });
+            }           
+            
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
