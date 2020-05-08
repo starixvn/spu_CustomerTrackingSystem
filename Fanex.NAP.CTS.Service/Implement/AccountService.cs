@@ -896,11 +896,15 @@
 
         public void FPSAddNewEvidence(string apiURL, UpdatePlaceEvidenceModel model)
         {
-            _ = ApiHelper.Post(apiURL, new { 
-                custIds = model.CustId, 
-                eviCodes = model.EvidenceCode, 
-                createdBy = model.UserId, 
-                comment = model.Comment });
+            var data  = ApiHelper.Post<AddNewEvidenceForFPSModel>(apiURL, new AddNewEvidenceForFPSModel
+            { 
+                CustIds = model.CustId.ToString(), 
+                EviCodes = model.EvidenceCode, 
+                CreatedBy = model.UserId.ToString(), 
+                Comment = model.Comment 
+            });
+
+            Task.WhenAll(data);
         }
 
         public DBResult RemoveFlaggedEvidence(RemoveEvidenceModel model)

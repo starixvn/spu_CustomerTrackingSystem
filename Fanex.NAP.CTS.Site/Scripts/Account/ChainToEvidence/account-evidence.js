@@ -505,7 +505,7 @@
         GetAccountEvidence(ctsCustId, username);
     }
 
-    this.Initial = function (ctsCustId, username, subscriberId, subscriber) {
+    this.Initial = function (ctsCustId, username, subscriberId, subscriber, custId) {
 
         $('#cbbChainToEvidenceListEvidence').multiselect({
             menuWidth: 330,
@@ -523,6 +523,6 @@
 
         GetAccountEvidence(ctsCustId, username);
 
-        InitialPlaceEvidenceForm(ctsCustId, username, subscriberId, subscriber);
+        InitialPlaceEvidenceForm(ctsCustId, username, subscriberId, subscriber, custId);
     }    
 }
