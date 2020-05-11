@@ -226,7 +226,7 @@
                 { data: obj => obj.LastModifiedBy },
                 { data: obj => obj.LastModifiedDate },
                 {
-                    data: obj => '<span class="icon-edit" title="Edit Category"></span><span class="icon-delete" title="Remove Category"></span>', createdCell: (cell, _, row) => {
+                    data: obj => !obj.IsEnabledDelete ? '' : '<span class="icon-edit" title="Edit Category"></span><span class="icon-delete" title="Remove Category"></span>', createdCell: (cell, _, row) => {
                         $('.icon-delete', cell).click(() => {
                             common.showConfirmation("Do you want to remove category <b>" + row.CategoryName + "</b> for <b>" + username + "</b> ?", function () {
                                 RemoveCustomerClassification(ctsCustId, row.CategoryId);

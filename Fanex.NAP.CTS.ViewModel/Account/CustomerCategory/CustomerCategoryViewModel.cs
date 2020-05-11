@@ -21,5 +21,7 @@ namespace Fanex.NAP.CTS.ViewModel.Account.CustomerCategory
         public int ParentCategoryId { get; set; }
 
         public string ParentCategoryName { get; set; }
+
+        public bool IsEnabledDelete { get; set; }
     }
 }
