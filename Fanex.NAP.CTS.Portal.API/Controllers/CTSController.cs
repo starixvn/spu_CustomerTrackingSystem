@@ -7,6 +7,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Threading.Tasks;
+using Fanex.NAP.CTS.Core.Utilities;
 
 namespace Fanex.NAP.CTS.Portal.API.Controllers
 {
@@ -25,7 +27,14 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
         {
             try
             {
-                _accountService.PlaceEvidence(model);
+               var result =_accountService.PlaceEvidence(model);
+
+
+                if (result.ErrorCode == 0)
+                {
+                    _accountService.FPSAddNewEvidence(ConfigSettings.AddNewEvidence, model);                    
+                }
+
                 return true;
             }
             catch (Exception ex)
