@@ -30,10 +30,10 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
                var result =_accountService.PlaceEvidence(model);
 
 
-                if (result.ErrorCode == 0)
-                {
-                    _accountService.FPSAddNewEvidence(ConfigSettings.AddNewEvidence, model);                    
-                }
+                //if (result.ErrorCode == 0)
+                //{
+                //    _accountService.FPSAddNewEvidence(ConfigSettings.AddNewEvidence, model);                    
+                //}
 
                 return true;
             }
