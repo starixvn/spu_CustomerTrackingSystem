@@ -27,7 +27,8 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
         {
             try
             {
-               var result =_accountService.PlaceEvidence(model);
+                //var result =_accountService.PlaceEvidence(model);
+                _accountService.FPSAddNewEvidence(ConfigSettings.AddNewEvidence, model);
 
 
                 //if (result.ErrorCode == 0)
