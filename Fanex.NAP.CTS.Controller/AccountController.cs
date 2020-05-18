@@ -335,7 +335,7 @@
                     SubscriberId = x.SubscriberId,
                     Subscriber = getAllSubscribers.Any(aa => x.SubscriberId != -1 && aa.SubscriberId == x.SubscriberId) ? getAllSubscribers.FirstOrDefault(a => a.SubscriberId == x.SubscriberId).SubscriberName : "-",
                     CTSCustId = x.CTSCustID,
-                    IsActive = x.AssociationStatus == 1
+                    IsLinked = x.AssociationStatus == 1
                 }).ToList();
 
                 // LogService.Info("Render - CTSCustId: " + model.CTSCustId + " - End: " + DateTime.Now.ToString());
@@ -403,7 +403,7 @@
 
                         return x;
                     })
-                    .OrderBy(a => a.StatusId).ThenBy(a => !a.IsActive).ThenBy(a => a.AssociationDate)
+                    .OrderBy(a => a.StatusId).ThenBy(a => !a.IsLinked).ThenBy(a => a.AssociationDate)
                     .ToList();
                 }
             }
@@ -490,7 +490,7 @@
         }
 
         [HttpPost]
-        public ActionResult ActiveRemoveAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, string remark, bool isActive)
+        public ActionResult ActiveRemoveAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, string remark, bool isLinked)
         {
             if (fromSubscriberId <= 0 || fromCTSCustId <= 0 || toSubscriberId <= 0 || toCTSCustId <= 0)
             {
@@ -501,7 +501,7 @@
                 }, JsonRequestBehavior.AllowGet);
             }
 
-            var dbResult = _accountService.ActiveRemoveAssociation(fromSubscriberId, fromCTSCustId, toSubscriberId, toCTSCustId, remark, CurrentSession.UserId, isActive);
+            var dbResult = _accountService.ActiveRemoveAssociation(fromSubscriberId, fromCTSCustId, toSubscriberId, toCTSCustId, remark, CurrentSession.UserId, isLinked);
 
             return Json(new
             {

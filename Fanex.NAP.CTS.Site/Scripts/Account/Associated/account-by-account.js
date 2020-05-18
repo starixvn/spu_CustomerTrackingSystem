@@ -113,7 +113,7 @@
                 { data: obj => obj.Subscriber },
                 { data: obj => obj.AssociationTypeName },
                 {
-                    data: obj => AssociationStatus(obj.IsActive), createdCell: (cell, _, row) => {
+                    data: obj => AssociationStatus(obj.IsLinked), createdCell: (cell, _, row) => {
                         $('.toggle', cell).click(function (e) {
                             e.preventDefault(); 
                            
@@ -134,10 +134,10 @@
         });
     }
 
-    function AssociationStatus(isActive) {
-        //return '<label class="switch-status switch-green"><input type="checkbox" class="switch-input" ' + (isActive ? '' : 'checked') + '><span class="switch-label" data-on="Active" data-off="Removed"></span><span class="switch-handle"></span></label>'
+    function AssociationStatus(isLinked) {
+        //return '<label class="switch-status switch-green"><input type="checkbox" class="switch-input" ' + (isLinked ? '' : 'checked') + '><span class="switch-label" data-on="Active" data-off="Removed"></span><span class="switch-handle"></span></label>'
 
-        return '<div class="toggle ' + (isActive ? 'toggle-on' : '') +'" id="switch"><div class="toggle-text-off">Removed</div><div class="glow-comp"></div><div class="toggle-button"></div><div class="toggle-text-on">Active</div></div>';
+        return '<div class="toggle ' + (isLinked ? 'toggle-on' : '') +'" id="switch"><div class="toggle-text-off">Unlinked</div><div class="glow-comp"></div><div class="toggle-button"></div><div class="toggle-text-on">Linked</div></div>';
 
     }
 
@@ -145,7 +145,7 @@
     {
         common.showConfirmation('Do you want to update Association Status between <b>' + _username +'</b> and <b>' + obj.Username + '</b> ?',
             function () {
-                RemoveAssociation(fromSubscriberId, fromCTSCustId, obj.SubscriberId, obj.CTSCustId, !obj.IsActive);
+                RemoveAssociation(fromSubscriberId, fromCTSCustId, obj.SubscriberId, obj.CTSCustId, !obj.IsLinked);
             });
 
     }
@@ -225,7 +225,7 @@
         });
     }
 
-    function RemoveAssociation(fromSubscriberId, fromCTSCustId, toSubscriberId, toCTSCustId, isActive) {
+    function RemoveAssociation(fromSubscriberId, fromCTSCustId, toSubscriberId, toCTSCustId, isLinked) {
         var url = common.modifyRelativeUrl('Account/ActiveRemoveAssociation');
         var params = {};
         params.fromSubscriberId = parseInt(fromSubscriberId);
@@ -233,7 +233,7 @@
         params.toSubscriberId = toSubscriberId;
         params.toCTSCustId = toCTSCustId;
         params.Remark = "";
-        params.isActive = isActive;
+        params.IsLinked = isLinked;
 
         $.ajax(url, {
             type: 'POST',
@@ -248,7 +248,7 @@
                 }
                 else if (response.errorCode == -1) {
              
-                    common.showError('This association is already deactivated!');
+                    common.showError('This association is already unlinked!');
                 }
                 else {
                     common.showError('Updated association fail!');
