@@ -38,6 +38,6 @@ namespace Fanex.NAP.CTS.ViewModel.Account.Associated
 
         public string AssociationDate { get; set; }
 
-        public bool IsActive { get; set; }
+        public bool IsLinked { get; set; }
     }
 }

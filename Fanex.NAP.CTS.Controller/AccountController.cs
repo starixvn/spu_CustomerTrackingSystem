@@ -22,6 +22,9 @@
     using Fanex.NAP.CTS.ViewModel.Account.TransactionHistory;
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.ViewModel.Account.CustomerCategory;
+    using Fanex.NAP.Core.Service.Interface;
+    using Fanex.NAP.Core.Service.Impl;
+    using Fanex.NAP.Core.Configuration;
 
     [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class AccountController : BaseController
@@ -47,13 +50,16 @@
         {
             if (Id > 0)
             {
+                IUserService userService = new UserService();
+
                 var customerInfoFromCTS = _accountService.GetCustomerInfoByCTSCustId(Id);
 
                 if (customerInfoFromCTS != null)
                 {
                     var customerGeneralStatusViewModel = new CustomerGeneralStatusViewModel()
                     {
-                        CTSCustId = Id
+                        CTSCustId = Id,
+                        IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.AccountDetail, NAP.Core.Business.Constant.Policy.Host)
                     };
 
                     var customerLastTicketDate = _accountService.GetCustomerLastTicketDate(customerInfoFromCTS.CustId);
@@ -335,7 +341,7 @@
                     SubscriberId = x.SubscriberId,
                     Subscriber = getAllSubscribers.Any(aa => x.SubscriberId != -1 && aa.SubscriberId == x.SubscriberId) ? getAllSubscribers.FirstOrDefault(a => a.SubscriberId == x.SubscriberId).SubscriberName : "-",
                     CTSCustId = x.CTSCustID,
-                    IsActive = x.AssociationStatus == 1
+                    IsLinked = x.AssociationStatus == 1
                 }).ToList();
 
                 // LogService.Info("Render - CTSCustId: " + model.CTSCustId + " - End: " + DateTime.Now.ToString());
@@ -403,7 +409,7 @@
 
                         return x;
                     })
-                    .OrderBy(a => a.StatusId).ThenBy(a => !a.IsActive).ThenBy(a => a.AssociationDate)
+                    .OrderBy(a => a.StatusId).ThenBy(a => !a.IsLinked).ThenBy(a => a.AssociationDate)
                     .ToList();
                 }
             }
@@ -418,7 +424,7 @@
         }
 
         [HttpPost]
-        public ActionResult GetDirectAssociationGraph(Int64 ctsCustid, string username, int associationStatus, int start, int length)
+        public ActionResult GetDirectAssociationGraph(Int64 ctsCustid, string displayName, int associationStatus, int start, int length)
         {
             var graphCustomer = new GraphCustomerItemViewModel();
 
@@ -441,7 +447,10 @@
             }
 
             graphCustomer.CTSCustId = ctsCustid;
-            graphCustomer.DisplayName = username;
+            graphCustomer.DisplayName = displayName;
+            graphCustomer.AssociationStatus = associationStatus;
+            graphCustomer.Start = start;
+            graphCustomer.Length = length;
 
             return Json(graphCustomer, JsonRequestBehavior.AllowGet);
         }
@@ -456,6 +465,7 @@
         }
 
         [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult AddAssociation(string username, string comment, int fromSubscriberId, long fromCTSCustId, string rootUsername)
         {
             if (string.IsNullOrWhiteSpace(username) || rootUsername.Trim() == username.Trim() || fromSubscriberId <= 0 || fromCTSCustId <= 0)
@@ -490,7 +500,8 @@
         }
 
         [HttpPost]
-        public ActionResult ActiveRemoveAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, string remark, bool isActive)
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        public ActionResult ActiveRemoveAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, string remark, bool isLinked)
         {
             if (fromSubscriberId <= 0 || fromCTSCustId <= 0 || toSubscriberId <= 0 || toCTSCustId <= 0)
             {
@@ -501,7 +512,7 @@
                 }, JsonRequestBehavior.AllowGet);
             }
 
-            var dbResult = _accountService.ActiveRemoveAssociation(fromSubscriberId, fromCTSCustId, toSubscriberId, toCTSCustId, remark, CurrentSession.UserId, isActive);
+            var dbResult = _accountService.ActiveRemoveAssociation(fromSubscriberId, fromCTSCustId, toSubscriberId, toCTSCustId, remark, CurrentSession.UserId, isLinked);
 
             return Json(new
             {
@@ -634,6 +645,7 @@
         }
 
         [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult AddException(UpdateAccountExceptionModel model)
         {
             model.UserId = CurrentSession.UserId;
@@ -647,6 +659,7 @@
         }
 
         [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult RemoveException(UpdateAccountExceptionModel model)
         {
             model.UserId = CurrentSession.UserId;
@@ -660,6 +673,7 @@
         }
 
         [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult PlaceEvidence(UpdatePlaceEvidenceModel model)
         {
             model.UserId = model.UserId == 0 ? CurrentSession.UserId : model.UserId;
@@ -685,6 +699,7 @@
         }
 
         [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult RemoveFlaggedEvidence(RemoveEvidenceModel model)
         {
             model.UserId = CurrentSession.UserId;
@@ -695,6 +710,7 @@
         }
 
         [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult RetractAffectedEvidence(RemoveEvidenceModel model)
         {
             model.UserId = CurrentSession.UserId;
@@ -705,6 +721,7 @@
         }
 
         [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult RestoreAffectedEvidence(RemoveEvidenceModel model)
         {
             model.UserId = CurrentSession.UserId;
@@ -837,6 +854,7 @@
             return PartialView("CustomerCategory/CustomerCategory");
         }
 
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult MarkCatergory(long ctsCustId)
         {
             var model = new MarkCategoryViewModel
@@ -848,6 +866,7 @@
             return PartialView("CustomerCategory/MarkCatergory", model);
         }
 
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult EditMarkCatergory(long ctsCustId, int subscriberId, string categoryName, int categoryId, string sportGroupIdList, string comment)
         {
             var model = new MarkCategoryViewModel
@@ -890,6 +909,7 @@
             return Json(new { data = new List<CustomerCategoryViewModel>() }, JsonRequestBehavior.AllowGet);
         }
 
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult AddCustomerClassification(long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark)
         {
             if (ctsCustId <= 0 || subscriberId <= 0 || categoryId <= 0)
@@ -910,6 +930,7 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult UpdateCustomerClassification(long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark)
         {
             if (ctsCustId <= 0 || subscriberId <= 0 || categoryId <= 0)
@@ -930,6 +951,7 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult RemoveCustomerClassification(long ctsCustId, int categoryId)
         {
             if (ctsCustId <= 0 || categoryId <= 0)

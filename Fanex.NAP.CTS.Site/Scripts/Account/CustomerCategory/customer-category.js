@@ -226,19 +226,27 @@
                 { data: obj => obj.LastModifiedBy },
                 { data: obj => obj.LastModifiedDate },
                 {
-                    data: obj => !obj.IsEnabledDelete ? '' : '<span class="icon-edit" title="Edit Category"></span><span class="icon-delete" title="Remove Category"></span>', createdCell: (cell, _, row) => {
-                        $('.icon-delete', cell).click(() => {
-                            common.showConfirmation("Do you want to remove category <b>" + row.CategoryName + "</b> for <b>" + username + "</b> ?", function () {
-                                RemoveCustomerClassification(ctsCustId, row.CategoryId);
+                    data: obj => () =>
+                    {
+                        var html = '<span class="icon-edit' + (isHostPermission === "False" ? ' disabled"' : '') +'" title="Edit Category"></span>';
+                        html += '<span class="icon-delete' + (isHostPermission === "False" ? ' disabled"' : '') +'" title="Remove Category"></span>';
+
+                        return obj.IsEnabledDelete ? html : '';
+                    }, createdCell: (cell, _, row) => {
+                        if (isHostPermission === "True") {
+                            $('.icon-delete', cell).click(() => {
+                                common.showConfirmation("Do you want to remove category <b>" + row.CategoryName + "</b> for <b>" + username + "</b> ?", function () {
+                                    RemoveCustomerClassification(ctsCustId, row.CategoryId);
+                                });
+
                             });
 
-                        });
-
-                        $('.icon-edit', cell).click(() => {
-                            EditCategory(ctsCustId, subscriberId, row.CategoryName, row.CategoryId, row.SportGroupIdList, row.Remark);
-                        });
+                            $('.icon-edit', cell).click(() => {
+                                EditCategory(ctsCustId, subscriberId, row.CategoryName, row.CategoryId, row.SportGroupIdList, row.Remark);
+                            });
+                        }                        
                     }
-                }                
+                }
             ],
             rowGroup: {
                 dataSrc: 'ParentCategoryName'
@@ -246,7 +254,16 @@
         });
     }
 
-    this.Initial = function (ctsCustId, subscriberId, username) {
+    function DisableButton(hostPermission) {
+        isHostPermission = hostPermission;
+        if (isHostPermission === "False") {
+            btnMarkCategory.prop('disabled', true);
+        }
+    }
+
+    this.Initial = function (ctsCustId, subscriberId, username, hostPermission) {
+        DisableButton(hostPermission);
+
         btnMarkCategory.click(function () { InitialMarkCategory(ctsCustId, subscriberId); });
 
         RenderGrid(ctsCustId, username, subscriberId);

@@ -10,6 +10,8 @@
     var btnCancelAssociation = $('#btncancelassociation');
     var _username;
     var dataTable;
+    let isHostPermission;
+
     function RenderTag(obj) {
 
         var html = "";
@@ -113,12 +115,14 @@
                 { data: obj => obj.Subscriber },
                 { data: obj => obj.AssociationTypeName },
                 {
-                    data: obj => AssociationStatus(obj.IsActive), createdCell: (cell, _, row) => {
-                        $('.toggle', cell).click(function (e) {
-                            e.preventDefault(); 
-                           
-                            ActiveRemove(row, ctsCustId, subscriberId)
-                        });
+                    data: obj => AssociationStatus(obj.IsLinked), createdCell: (cell, _, row) => {
+                        if (isHostPermission === "True") {
+                            $('.toggle', cell).click(function (e) {
+                                e.preventDefault();
+
+                                ActiveRemove(row, ctsCustId, subscriberId);
+                            });
+                        }                        
                     }
                 },
                 {
@@ -134,18 +138,23 @@
         });
     }
 
-    function AssociationStatus(isActive) {
-        //return '<label class="switch-status switch-green"><input type="checkbox" class="switch-input" ' + (isActive ? '' : 'checked') + '><span class="switch-label" data-on="Active" data-off="Removed"></span><span class="switch-handle"></span></label>'
+    function AssociationStatus(isLinked) {
+        //return '<label class="switch-status switch-green"><input type="checkbox" class="switch-input" ' + (isLinked ? '' : 'checked') + '><span class="switch-label" data-on="Active" data-off="Removed"></span><span class="switch-handle"></span></label>'
 
-        return '<div class="toggle ' + (isActive ? 'toggle-on' : '') +'" id="switch"><div class="toggle-text-off">Removed</div><div class="glow-comp"></div><div class="toggle-button"></div><div class="toggle-text-on">Active</div></div>';
+        var html = '<div class="toggle ' + (isLinked ? 'toggle-on' : '') + '" id="switch">';
+        html += '<div class="toggle-text-off' + (isHostPermission === "False" ? ' disabled"' : '') +'"> Unlinked</div >';
+        html += '<div class="glow-comp"></div> <div class="toggle-button ' + (isHostPermission === "False" ? ' disabled"' : '') +'"></div>';
+        html += '<div class="toggle-text-on' + (isHostPermission === "False" ? ' disabled"' : '') +'"> Linked</div>';
+        html += '</div>';
 
+        return html;
     }
 
     function ActiveRemove(obj, fromCTSCustId, fromSubscriberId)
     {
         common.showConfirmation('Do you want to update Association Status between <b>' + _username +'</b> and <b>' + obj.Username + '</b> ?',
             function () {
-                RemoveAssociation(fromSubscriberId, fromCTSCustId, obj.SubscriberId, obj.CTSCustId, !obj.IsActive);
+                RemoveAssociation(fromSubscriberId, fromCTSCustId, obj.SubscriberId, obj.CTSCustId, !obj.IsLinked);
             });
 
     }
@@ -225,7 +234,7 @@
         });
     }
 
-    function RemoveAssociation(fromSubscriberId, fromCTSCustId, toSubscriberId, toCTSCustId, isActive) {
+    function RemoveAssociation(fromSubscriberId, fromCTSCustId, toSubscriberId, toCTSCustId, isLinked) {
         var url = common.modifyRelativeUrl('Account/ActiveRemoveAssociation');
         var params = {};
         params.fromSubscriberId = parseInt(fromSubscriberId);
@@ -233,7 +242,7 @@
         params.toSubscriberId = toSubscriberId;
         params.toCTSCustId = toCTSCustId;
         params.Remark = "";
-        params.isActive = isActive;
+        params.IsLinked = isLinked;
 
         $.ajax(url, {
             type: 'POST',
@@ -248,7 +257,7 @@
                 }
                 else if (response.errorCode == -1) {
              
-                    common.showError('This association is already deactivated!');
+                    common.showError('This association is already unlinked!');
                 }
                 else {
                     common.showError('Updated association fail!');
@@ -264,8 +273,17 @@
         });
     }
 
-    this.Initial = function (ctsCustid, username, subscriberId, subscriber) {
+    function DisableButton(hostPermission) {
+        isHostPermission = hostPermission;
+        if (isHostPermission === "False") {
+            btnAddAssociation.prop('disabled', true);
+        }
+    }
+
+    this.Initial = function (ctsCustid, username, subscriberId, subscriber, hostPermission) {
         _username = username;
+        
+        DisableButton(hostPermission);
 
         $("#account-by-account-cbb-status").multiselect();
 
@@ -319,7 +337,6 @@
         btnCancelAssociation.on('click', function () {
             divAddAssociation.dialog('close');
         });
-
 
     }
 }

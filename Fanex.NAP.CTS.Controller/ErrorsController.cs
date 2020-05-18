@@ -2,7 +2,7 @@
 {
     using System.Web.Mvc;
 
-    [RoutePrefix("errors")]
+    [RoutePrefix("Errors")]
     public class ErrorsController : Controller
     {
         [Route("404")]

@@ -510,6 +510,16 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     .remove-action {
         width: 170px !important;
     }
+
+    .icon-delete.disabled,
+    .icon-edit.disabled {
+        cursor: not-allowed;
+    }
+
+    .icon-delete.disabled:hover,
+    .icon-edit.disabled:hover {
+        cursor: not-allowed;
+    }
 }
 
 .dataTable {
@@ -718,9 +728,10 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     }
 
     .node text {
-        font: 10px sans-serif;
+        font: 12px sans-serif;
         pointer-events: none;
         text-anchor: middle;
+        fill: #f0edda;
     }
 
     line.link {
@@ -891,7 +902,6 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     right: 2px;
 }
 
-
 .toggle-text-on {
     position: absolute;
     top: 0;
@@ -906,6 +916,14 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* IE10+ */
     color: rgba(255,255,255,0);
+}
+
+.toggle-text-on.disabled {
+    cursor: not-allowed;
+}
+
+.toggle-text-on.disabled:hover {
+    cursor: not-allowed;
 }
 
 .toggle-on .toggle-text-on {
@@ -927,6 +945,14 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     -ms-user-select: none;
     cursor: pointer;
     color: #fff;
+}
+
+.toggle-text-off .disabled {
+    cursor: not-allowed;
+}
+
+.toggle-text-off .disabled:hover {
+    cursor: not-allowed;
 }
 
 .toggle-on .toggle-text-off {
