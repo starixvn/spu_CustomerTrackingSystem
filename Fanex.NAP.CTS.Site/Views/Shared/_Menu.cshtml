@@ -33,25 +33,25 @@
 }
 
 <ul class="main-menu">
-    <li class="menu-item" id="menu-home"><a href="@Url.Action("Index", "Home")" class="link @(controllerBaseType.Contains(Consts.MenuItemHome) ? "active" : "")">@Html.Raw(iconLookup("Home")) Home</a></li>
-    
-    @*@foreach (var menu in Model.Where(m => m.Parent == null && m.IsActive && m.Name != "Home").OrderBy(m => m.DisplayOrder))
-    {
-        var subMenus = Model.Where(m => m.Parent != null && m.IsActive && m.Parent.Id == menu.Id).OrderBy(m => m.DisplayOrder);
+    <li class="menu-item" id="menu-home"><a href="@Url.Action("Index", "Home")" class="link @(controllerBaseType.Contains(Consts.MenuItemHome) ? "active" : "")">@Html.Raw(iconLookup("Home")) Home</a></li>    
 
-        <li class="menu-item" id="@menu.Name">
-            <a href="#@menu.Name" class="link @(subMenus.Any()? "has-child" : "") @(controllerBaseType.Contains(menu.Name) ? "active" : "")">@Html.Raw(iconLookup(menu.Name)) @menu.Name</a>
-            @if (subMenus.Any())
-            {
-            <ul class="sub-menu">
-                @foreach (var subMenu in subMenus)
+    @foreach (var menu in Model.Where(m => m.Parent == null && m.IsActive && m.Name != "Home").OrderBy(m => m.DisplayOrder))
+        {
+            var subMenus = Model.Where(m => m.Parent != null && m.IsActive && m.Parent.Id == menu.Id).OrderBy(m => m.DisplayOrder);
+
+            <li class="menu-item" id="@menu.Name">
+                <a href="#@menu.Name" class="link @(subMenus.Any()? "has-child" : "") @(controllerBaseType.Contains(menu.Name) ? "active" : "")">@Html.Raw(iconLookup(menu.Name)) @menu.Name</a>
+                @if (subMenus.Any())
                 {
-                    <li class="sub-menu-item">
-                        <a href="@Url.Content(subMenu.ValidUrl)" class="link">@subMenu.Name</a>
-                    </li>
+                <ul class="sub-menu">
+                    @foreach (var subMenu in subMenus)
+                    {
+                        <li class="sub-menu-item">
+                            <a href="@Url.Content(subMenu.ValidUrl)" class="link">@subMenu.Name</a>
+                        </li>
+                    }
+                </ul>
                 }
-            </ul>
-            }
-        </li>
-    }*@
+            </li>
+        }
 </ul>

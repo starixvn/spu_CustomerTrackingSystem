@@ -1,0 +1,74 @@
+﻿@{
+    ViewBag.Title = "PROBLEM ACCOUNT MONITOR";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section styles{
+    @Styles.Render("~/problem-account-monitor-styles")
+}
+<h2 class="page-title">Problem Account Monitor</h2>
+
+<div class="form-filter">
+    <div class="group calendar">
+        <label class="text">Date</label>
+        <input type="text" id="event_date" class="control">
+        <span class="icon-calendar-text"></span>
+    </div>
+    <div class="group width-160">
+        <label class="text">Sport</label>
+        <select class="control" id="sport">
+            <option value="1">Soccer</option>
+        </select>
+    </div>
+    <div class="group width-400">
+        <label class="text">League</label>
+        <select class="control" id="league"></select>
+    </div>
+    <div class="group width-160">
+        <label class="text">Match Status</label>
+        <select class="control" id="match_status">
+            <option>All</option>
+            <option value="running" selected>Running</option>
+            <option value="completed">Completed</option>
+        </select>
+    </div>
+    <button class="button -primary" id="generate">Generate</button>
+</div>
+
+<div id="problem_account_monitor_grid" class="div-grid">
+    <div class="top-header">
+        <div class="refresh">
+            <select class="refresh-option first" id="refresh_interval">
+                <option value="--">Not refresh</option>
+                <option value="60">60s</option>
+                <option value="90">90s</option>
+                <option value="120">120s</option>
+                <option value="180">180s</option>
+            </select>
+            <div class="refresh-action">
+                <button class="icon" id="refresh_btn"><span class="icon-autorenew"></span></button>
+                <span class="number" id="refresh_countdown">-</span>
+            </div>
+        </div>
+    </div>
+
+    <table class="table table-striped width-100per" style="width: 100%">
+        <thead>
+            <tr>
+                <th class="col-no">#</th>             
+                <th>Event</th>
+                <th>Match Score</th>
+                <th>Status</th>
+                <th>Group Betting</th>
+                <th>Hedging</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+@section scripts{
+    <script>
+       
+    </script>
+    @Scripts.Render("~/problem-account-monitor-scripts")
+}

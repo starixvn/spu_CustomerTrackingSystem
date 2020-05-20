@@ -55,6 +55,8 @@
             RegisterTransactionHistoryBundles(bundles);
 
             RegisterCustomerCategoryBundles(bundles);
+
+            RegisterProblemAccountMonitorBundles(bundles);
         }
 
         private static void RegisterFSCoreBundles(BundleCollection bundles)
@@ -196,6 +198,15 @@
         private static void RegisterCustomerCategoryBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/account/customer-category-scripts").Include("~/Scripts/Account/CustomerCategory/*.js"));
+        }
+
+        private static void RegisterProblemAccountMonitorBundles(BundleCollection bundles)
+        {
+            bundles.Add(new ScriptBundle("~/scripts/problem-account-monitor-scripts").Include(
+                "~/Scripts/ProblemAccountMonitor/*.js"));
+
+            bundles.Add(new StyleBundle("~/problem-account-monitor-styles").Include(
+                    "~/Content/scss/pages/problem-account-monitor/problem-account-monitor.css"));
         }
     }
 }

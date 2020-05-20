@@ -445,6 +445,13 @@
       <DependentUpon>evidence.css</DependentUpon>
     </Content>
     <Content Include="Content\scss\pages\account\account.scss" />
+    <None Include="Content\scss\pages\problem-account-monitor\problem-account-monitor.scss" />
+    <Content Include="Content\scss\pages\problem-account-monitor\problem-account-monitor.css">
+      <DependentUpon>problem-account-monitor.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\scss\pages\problem-account-monitor\problem-account-monitor.min.css">
+      <DependentUpon>problem-account-monitor.css</DependentUpon>
+    </Content>
     <Content Include="Content\scss\pages\subscriber-assignment\subscriber-assignment.min.css">
       <DependentUpon>subscriber-assignment.css</DependentUpon>
     </Content>
@@ -842,6 +849,7 @@
     <Content Include="Scripts\popoto\d3.v3.min.js" />
     <Content Include="Scripts\popoto\popoto.min.js" />
     <Content Include="Scripts\popoto\vis\vis-network.min.js" />
+    <Content Include="Scripts\ProblemAccountMonitor\index.js" />
     <Content Include="Scripts\search.js" />
     <Content Include="Scripts\Account\detail-account.js" />
     <Content Include="Scripts\Search\Account\search-account.js" />
@@ -1632,6 +1640,7 @@
     <Content Include="Views\Account\Associated\AddAssociation.cshtml" />
     <Content Include="Views\Account\CustomerCategory\CustomerCategory.cshtml" />
     <Content Include="Views\Account\CustomerCategory\EditMarkCatergory.cshtml" />
+    <Content Include="Views\ProblemAccountMonitor\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

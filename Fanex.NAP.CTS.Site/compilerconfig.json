@@ -42,5 +42,9 @@
   {
     "outputFile": "Content/scss/pages/account/account-fps.css",
     "inputFile": "Content/scss/pages/account/account-fps.scss"
+  },
+  {
+    "outputFile": "Content/scss/pages/problem-account-monitor/problem-account-monitor.css",
+    "inputFile": "Content/scss/pages/problem-account-monitor/problem-account-monitor.scss"
   }
 ]
