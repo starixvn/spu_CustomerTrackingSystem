@@ -1015,6 +1015,12 @@
       background: #70809e; }
   .table-report .remove-action {
     width: 170px !important; }
+  .table-report .icon-delete.disabled,
+  .table-report .icon-edit.disabled {
+    cursor: not-allowed; }
+  .table-report .icon-delete.disabled:hover,
+  .table-report .icon-edit.disabled:hover {
+    cursor: not-allowed; }
 
 .dataTable {
   border-bottom: 0; }
@@ -1158,9 +1164,10 @@
   stroke-width: 1.5px; }
 
 .container-graph-render .node text {
-  font: 10px sans-serif;
+  font: 12px sans-serif;
   pointer-events: none;
-  text-anchor: middle; }
+  text-anchor: middle;
+  fill: #f0edda; }
 
 .container-graph-render line.link {
   fill: none;
@@ -1314,6 +1321,12 @@
   /* IE10+ */
   color: rgba(255, 255, 255, 0); }
 
+.toggle-text-on.disabled {
+  cursor: not-allowed; }
+
+.toggle-text-on.disabled:hover {
+  cursor: not-allowed; }
+
 .toggle-on .toggle-text-on {
   color: #fff;
   -webkit-transition: color .3s .15s;
@@ -1332,6 +1345,12 @@
   -ms-user-select: none;
   cursor: pointer;
   color: #fff; }
+
+.toggle-text-off .disabled {
+  cursor: not-allowed; }
+
+.toggle-text-off .disabled:hover {
+  cursor: not-allowed; }
 
 .toggle-on .toggle-text-off {
   color: transparent; }

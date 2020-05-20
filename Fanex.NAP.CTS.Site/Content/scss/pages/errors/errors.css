@@ -2,8 +2,15 @@
   font-family: 'Lato', Arial; }
 
 .page {
-  margin: 150px auto 0;
+  margin: 180px auto 0;
   text-align: center; }
+  .page .message > p {
+    padding: 5px;
+    color: red;
+    line-height: 24px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold; }
 
 .title {
   margin: 25px 0 10px;

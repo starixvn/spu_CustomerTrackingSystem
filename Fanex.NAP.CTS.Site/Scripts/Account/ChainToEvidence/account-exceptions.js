@@ -9,6 +9,7 @@
     var _ctsCustId = 0;
     var _rootUsername = '';
     var _subscriberId = 0;
+    let isHostPermission;
 
     function RenderGrid() {
         tblChainToEvidenceException.DataTable({
@@ -37,11 +38,16 @@
                 { data: obj => obj.Comment },
                 { data: obj => obj.Creator },
                 {
-                    data: obj => '<span class="icon-delete" title="Remove Exception"></span>', createdCell: (cell, _, row) => {
-                        $('.icon-delete', cell).click(() =>
-                        {
-                            ConfirmRemoveException(row.ExceptionCTSCustId, row.UserName);
-                        });
+                    data: obj => () =>
+                    {
+                        var html = '<span class="icon-delete' + (isHostPermission === "False" ? ' disabled"' : '') +'" title="Remove Exception"></span>';
+                        return html;
+                    }, createdCell: (cell, _, row) => {
+                        if (isHostPermission === "True") {
+                            $('.icon-delete', cell).click(() => {
+                                ConfirmRemoveException(row.ExceptionCTSCustId, row.UserName);
+                            });
+                        }                        
                     }
                 }
             ]
@@ -183,11 +189,19 @@
         })
     }
 
-    this.Initial = function (ctsCustId, rootUsername, subscriberId) {
+    function DisableButton(hostPermission) {
+        isHostPermission = hostPermission;
+        if (isHostPermission === "False") {
+            btnAddException.prop('disabled', true);
+        }
+    }
+
+    this.Initial = function (ctsCustId, rootUsername, subscriberId, hostPermission) {
         _ctsCustId = ctsCustId;
         _rootUsername = rootUsername;
         _subscriberId = subscriberId;
 
+        DisableButton(hostPermission);
         RenderGrid();
         GetException();
 

@@ -10,6 +10,8 @@
     var btnCancelAssociation = $('#btncancelassociation');
     var _username;
     var dataTable;
+    let isHostPermission;
+
     function RenderTag(obj) {
 
         var html = "";
@@ -114,11 +116,13 @@
                 { data: obj => obj.AssociationTypeName },
                 {
                     data: obj => AssociationStatus(obj.IsLinked), createdCell: (cell, _, row) => {
-                        $('.toggle', cell).click(function (e) {
-                            e.preventDefault(); 
-                           
-                            ActiveRemove(row, ctsCustId, subscriberId)
-                        });
+                        if (isHostPermission === "True") {
+                            $('.toggle', cell).click(function (e) {
+                                e.preventDefault();
+
+                                ActiveRemove(row, ctsCustId, subscriberId);
+                            });
+                        }                        
                     }
                 },
                 {
@@ -137,8 +141,13 @@
     function AssociationStatus(isLinked) {
         //return '<label class="switch-status switch-green"><input type="checkbox" class="switch-input" ' + (isLinked ? '' : 'checked') + '><span class="switch-label" data-on="Active" data-off="Removed"></span><span class="switch-handle"></span></label>'
 
-        return '<div class="toggle ' + (isLinked ? 'toggle-on' : '') +'" id="switch"><div class="toggle-text-off">Unlinked</div><div class="glow-comp"></div><div class="toggle-button"></div><div class="toggle-text-on">Linked</div></div>';
+        var html = '<div class="toggle ' + (isLinked ? 'toggle-on' : '') + '" id="switch">';
+        html += '<div class="toggle-text-off' + (isHostPermission === "False" ? ' disabled"' : '') +'"> Unlinked</div >';
+        html += '<div class="glow-comp"></div> <div class="toggle-button ' + (isHostPermission === "False" ? ' disabled"' : '') +'"></div>';
+        html += '<div class="toggle-text-on' + (isHostPermission === "False" ? ' disabled"' : '') +'"> Linked</div>';
+        html += '</div>';
 
+        return html;
     }
 
     function ActiveRemove(obj, fromCTSCustId, fromSubscriberId)
@@ -264,8 +273,17 @@
         });
     }
 
-    this.Initial = function (ctsCustid, username, subscriberId, subscriber) {
+    function DisableButton(hostPermission) {
+        isHostPermission = hostPermission;
+        if (isHostPermission === "False") {
+            btnAddAssociation.prop('disabled', true);
+        }
+    }
+
+    this.Initial = function (ctsCustid, username, subscriberId, subscriber, hostPermission) {
         _username = username;
+        
+        DisableButton(hostPermission);
 
         $("#account-by-account-cbb-status").multiselect();
 
@@ -319,7 +337,6 @@
         btnCancelAssociation.on('click', function () {
             divAddAssociation.dialog('close');
         });
-
 
     }
 }

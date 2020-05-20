@@ -9,7 +9,8 @@
     var btnPlaceEvidenceSubmit = $('#btnPlaceEvidenceSubmit');
     var divPlaceEvidenceDescription = $('#divPlaceEvidenceDescription');
     var txtPlaceEvidenceComment = $('#txtPlaceEvidenceComment');    
-    var tblChainToEvidenceAffectedRetract = $('#tblChainToEvidenceAffected');   
+    var tblChainToEvidenceAffectedRetract = $('#tblChainToEvidenceAffected');
+    let isHostPermission;
 
     function InitialFlaggedGrid(ctsCustId, username) {
         tblChainToEvidenceFlagged.DataTable({
@@ -36,19 +37,22 @@
                 { data: obj => obj.Comment },
                 { data: obj => obj.Creator },
                 {
-                    data: obj => '<span class="icon-delete" title="Remove Evidence"></span>', createdCell: (cell, _, row) => {
-                        $('.icon-delete', cell).click(() =>
-                            common.showFormConfirmation(`<div class="popup-content">Do you want remove flagged evidence <br/> <strong style="color: red;">${row.EvidenceDisplay}</strong> from <strong style="color: red;">${username}</strong>?</div>`, 'Confirmation', function () {
-                                RemoveFlaggedEvidence(row.EvidenceID, ctsCustId, username)
-                            })
-                        );
+                    data: obj => '<span class="icon-delete' + (isHostPermission === 'False' ? ' disabled' : '') + '" title="Remove Evidence"></span>',
+                    createdCell: (cell, _, row) => {
+                        if (isHostPermission === "True") {
+                            $('.icon-delete', cell).click(() =>
+                                common.showFormConfirmation(`<div class="popup-content">Do you want remove flagged evidence <br/> <strong style="color: red;">${row.EvidenceDisplay}</strong> from <strong style="color: red;">${username}</strong>?</div>`, 'Confirmation', function () {
+                                    RemoveFlaggedEvidence(row.EvidenceID, ctsCustId, username);
+                                })
+                            );
+                        }
                     }
                 }
             ],
             createdRow: function (row, obj) {
                 $(row).attr('evidence-code', obj.EvidenceCode);
-            },
-        })
+            }
+        });
     }    
 
     function InitialAffectedRetractGrid() {
@@ -62,7 +66,7 @@
             searching: false,
             scrollX: false,
             scrollCollapse: false,
-            columnDefs: [                
+            columnDefs: [
                 { targets: [0], width: "15%", className: "text-left", visible: false },
                 { targets: [1], width: "15%", className: "text-left", defaultContent: "-" },
                 { targets: [2], width: "15%", className: "text-center", defaultContent: "-" },
@@ -102,23 +106,25 @@
                             html += '<div>Removed Date: <strong>' + data[i].AffectedTime + '</strong></div>';
                             html += '<div>Removed By: <strong>' + data[i].Creator + '</strong></div>';
                             html += '<div>Comment:  <strong>' + data[i].Comment + '</strong></div></td>';
-                            html += '<td class="text-center"><span class="icon-delete-restore delete" title="Restore Evidence" evidence-id = "' + data[i].EvidenceID + '" evidence-display = "' + data[i].EvidenceDisplay + '"></span></td>';
-                            html += '</tr>';
+                            html += '<td class="text-center">';
+                            html += '<span class="icon-delete-restore delete' + (isHostPermission === "False" ? ' icon-delete disabled"' : '') +'" title="Restore Evidence" evidence-id = "' + data[i].EvidenceID + '" evidence-display = "' + data[i].EvidenceDisplay + '"></span>';
+                            html += '</td></tr>';
                         } else {
                             html = '<tr class="affected" evidence-code="' + data[i].EvidenceCode + '">';
                             html += '<td class="affected-group" colspan="5">';
                             html += '<span class="icon icon-chevron-up""></span>';
                             html += '<span>' + group + '</span>';
                             html += '</td>';
-                            html += '<td class="text-center"><span class="icon-delete delete" title="Remove Evidence" evidence-id = "' + data[i].EvidenceID + '" evidence-display = "' + data[i].EvidenceDisplay + '"></span></td>';
-                            html += '</tr>';
+                            html += '<td class="text-center">';
+                            html += '<span class="icon-delete delete' + (isHostPermission === "False" ? ' icon-delete disabled"' : '') +'" title="Remove Evidence" evidence-id = "' + data[i].EvidenceID + '" evidence-display = "' + data[i].EvidenceDisplay + '"></span>';
+                            html += '</td></tr>';
                         }
                         $(rows).eq(i).before(html);
                         last = group;
                     }
                 });
             }
-        })
+        });
     }   
 
     function RenderUsername(obj) {
@@ -129,7 +135,7 @@
         }
 
         return null;        
-    }
+    }    
 
     function GetAccountEvidence(ctsCustId, username) {
         var url = common.modifyRelativeUrl('/Account/GetAccountEvidence');
@@ -202,17 +208,19 @@
 
         tblChainToEvidenceAffectedRetract.DataTable().columns.adjust();
 
-        tblChainToEvidenceAffectedRetract.find('span.delete').click(function () {
-            var evidenceId = $(this).attr('evidence-id');
-            var evidenceDisplay = $(this).attr('evidence-display');
+        if (isHostPermission === "True") {
+            tblChainToEvidenceAffectedRetract.find('span.delete').click(function () {
+                var evidenceId = $(this).attr('evidence-id');
+                var evidenceDisplay = $(this).attr('evidence-display');
 
-            if ($(this).hasClass('icon-delete-restore')) {
-                RestoreAffectedEvidence(ctsCustId, username, evidenceId, evidenceDisplay);
-            } else {
-                RetractAffectedEvidence(ctsCustId, username, evidenceId, evidenceDisplay);
-            }
-        })
-
+                if ($(this).hasClass('icon-delete-restore')) {
+                    RestoreAffectedEvidence(ctsCustId, username, evidenceId, evidenceDisplay);
+                } else {
+                    RetractAffectedEvidence(ctsCustId, username, evidenceId, evidenceDisplay);
+                }
+            })
+        }
+        
         tblChainToEvidenceAffectedRetract.find('tr.affected').each(function () {
             AffectedRetractToogleGroup(this);
         })
@@ -501,11 +509,18 @@
         })
     }
 
+    function DisableButton(hostPermission) {
+        isHostPermission = hostPermission;
+        if (isHostPermission === "False") {
+            btnChainToEvidenceFlagged.prop('disabled', true);
+        }
+    }
+
     this.ReloadAccountEvidence = function (ctsCustId, username) {
         GetAccountEvidence(ctsCustId, username);
     }
 
-    this.Initial = function (ctsCustId, username, subscriberId, subscriber, custId) {
+    this.Initial = function (ctsCustId, username, subscriberId, subscriber, custId, hostPermission) {
 
         $('#cbbChainToEvidenceListEvidence').multiselect({
             menuWidth: 330,
@@ -515,14 +530,16 @@
         }).multiselectfilter({
             width: 250,
             placeholder: ''
-            });
+        });
 
-        InitialFlaggedGrid(ctsCustId, username, subscriberId, subscriber);        
+        DisableButton(hostPermission);
+
+        InitialFlaggedGrid(ctsCustId, username, subscriberId, subscriber);
 
         InitialAffectedRetractGrid();
 
         GetAccountEvidence(ctsCustId, username);
 
         InitialPlaceEvidenceForm(ctsCustId, username, subscriberId, subscriber, custId);
-    }    
+    }
 }

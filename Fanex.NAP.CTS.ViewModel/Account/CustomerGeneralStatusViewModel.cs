@@ -82,6 +82,8 @@ namespace Fanex.NAP.CTS.ViewModel.Account
 
         public int SubscriberId { get; set; }
 
+        public bool IsHostPermission { get; set; }
+
         public List<FraudCaseModel> FraudCases { get; set; }
 
         public CustomerGeneralStatusViewModel BindingGeneralDataFromMainDB(
@@ -205,6 +207,6 @@ namespace Fanex.NAP.CTS.ViewModel.Account
                 default:
                     return AccountStatus.Active;
             }
-        }
+        }        
     }
 }

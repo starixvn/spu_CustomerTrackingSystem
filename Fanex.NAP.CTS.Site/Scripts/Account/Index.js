@@ -9,7 +9,8 @@
     var lnkEvidence = $("#lnkEvidence");
 
     var totalAssAccount = 0;
-    var totalEvidence = 0
+    var totalEvidence = 0;
+    var isHostPermission = $("#hdIsHostPermission").attr("IsHostPermission");
 
     function LoadAssociationByAccount() {
         $.ajax(common.modifyRelativeUrl('Account/AssociatedByAccount'), {
@@ -22,7 +23,7 @@
             },
             complete: function() {
                 var associationByAccount = new account_by_account();
-                associationByAccount.Initial(ctsCustId, username, subscriberId);
+                associationByAccount.Initial(ctsCustId, username, subscriberId, subscriber, isHostPermission);
             },
             error: function(errMsg) {
                // common.showError(errMsg);
@@ -38,10 +39,10 @@
             },
             complete: function() {
                 var accountEvidence = new account_evidence();
-                accountEvidence.Initial(ctsCustId, username, subscriberId, subscriber, custId);
+                accountEvidence.Initial(ctsCustId, username, subscriberId, subscriber, custId, isHostPermission);
 
                 var exceptions = new account_exceptions();
-                exceptions.Initial(ctsCustId, username, subscriberId);
+                exceptions.Initial(ctsCustId, username, subscriberId, isHostPermission);
             },
             error: function(errMsg) {
                // common.showError(errMsg);
@@ -57,7 +58,7 @@
             },
             complete: function () {
                 var customerCategory = new customer_category();
-                customerCategory.Initial(ctsCustId, subscriberId, username);
+                customerCategory.Initial(ctsCustId, subscriberId, username, isHostPermission);
             },
             error: function (errMsg) {
                 common.showError(errMsg);

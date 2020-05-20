@@ -1,9 +1,9 @@
 ﻿function graph() {
-    var $this = this;
-    var width = 1850;
-    var height = 800;
+    var $this = this; 
+    var margin = { top: -5, right: -5, bottom: -5, left: -5 };
+    var width = 2000 - margin.left - margin.right, height = 980 - margin.top - margin.bottom;
     var collapse_level = 1;
-    var root;
+    var root;    
 
     var urls = {
         GetShortestAssociationGraph: common.modifyRelativeUrl('/Account/GetShortestAssociationGraph'),
@@ -46,7 +46,7 @@
     $this.GenerateFullPath = function (ctsCustId, username,associationStatus, start, length) {     
         var paramsFilter = {};
         paramsFilter.ctsCustid = ctsCustId;
-        paramsFilter.username = username;
+        paramsFilter.displayName = username;
         paramsFilter.associationStatus = associationStatus;
         paramsFilter.start = start;
         paramsFilter.length = length;
@@ -67,12 +67,35 @@
     function generateGraph(data) {
         root = data;
         var force = d3.layout.force()
-            .size([width, height])
+            .size([width + margin.left + margin.right, height + margin.top + margin.bottom])
             .on("tick", tick);
 
+        var zoom = d3.behavior.zoom()
+            .scaleExtent([1, 2])
+            .on("zoom", () => {
+                svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+            });
+
+        d3.behavior.drag()
+            .origin(function (d) { return d; })
+            .on("dragstart", () => {
+                d3.event.sourceEvent.stopPropagation();
+
+                d3.select(this).classed("dragging", true);
+                force.start();
+            })
+            .on("drag", () => {
+                d3.select(this).attr("cx", d.x = d3.event.x).attr("cy", d.y = d3.event.y);
+            })
+            .on("dragend", () => {
+                d3.select(this).classed("dragging", false);
+            });
+
         var svg = d3.select("#container-graph").append("svg")
-            .attr("width", width)
-            .attr("height", height);
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .attr("transform", "translate(" + margin.left + "," + margin.right + ")")
+            .call(zoom);
 
         var link = svg.selectAll(".link");
         var node = svg.selectAll(".node");        
@@ -127,7 +150,7 @@
             force.nodes(nodes)
                 .links(links)
                 .charge(-600)
-                .linkDistance(180)
+                .linkDistance(100)
                 .friction(0.9)
                 .start();
 
@@ -162,11 +185,40 @@
 
             node.select("circle")
                 .style("fill", color);
+
+            node.on("mouseover", function (d) {
+                node.classed("node-active", function (o) {
+                    thisOpacity = isConnected(d, o) ? true : false;
+                    this.setAttribute('fill-opacity', thisOpacity);
+                    return thisOpacity;
+                });
+
+                link.classed("link-active", function (o) {
+                    return o.source === d || o.target === d ? true : false;
+                });
+
+                d3.select(this).classed("node-active", true);
+                d3.select(this).select("circle").transition();
+                    //.duration(600)
+                    //.attr("r", d.weight * 1.1);
+            })
+                .on("mouseout", function (d) {
+                    node.classed("node-active", false);
+                    link.classed("link-active", false);
+
+                    d3.select(this).select("circle").transition();
+                        //.duration(600)
+                        //.attr("r", d.weight * 1.1);
+                });
+        }
+
+        function isConnected(a, b) {
+            return linkedByIndex[a.index + "," + b.index] || linkedByIndex[b.index + "," + a.index];
         }
         
         function color(d) {
             return d._children ? "#3182bd" // collapsed package
-                    : d.children ? "#c6dbef" // expanded package
+                    : d.children ? "#8dc0f0" // expanded package
                     : "#3182bd"; // leaf node
                     //: "#fd8d3c"; // leaf node
         }
@@ -196,7 +248,7 @@
                 } else {
                     var paramsFilter = {};
                     paramsFilter.ctsCustid = d.CTSCustId;
-                    paramsFilter.userName = d.Username;
+                    paramsFilter.displayName = d.Username;
                     paramsFilter.start = d.Start;
                     paramsFilter.length = d.Length;
                     paramsFilter.associationStatus = d.AssociationStatus;
