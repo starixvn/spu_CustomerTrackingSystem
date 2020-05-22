@@ -21,7 +21,7 @@
                 <select class="control" id="account-by-account-cbb-association-type">
                     @foreach (var status in Model.AssociationTypeList)
                     {
-                        <option value="@status.ItemId" @(status.ItemId == 1 ? "selected" : "")>@status.ItemNameDisplay</option>
+                        <option value="@status.ItemId" @(status.ItemId == 0 ? "selected" : "")>@status.ItemNameDisplay</option>
                     }
                 </select>
             </div>
