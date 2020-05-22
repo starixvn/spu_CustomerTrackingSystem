@@ -247,7 +247,7 @@ function replaceSpecialCharacter(str) {
 function expandNote(cell) {
     var noteExpand = $(cell).find('.input-note-content').val();
 
-    var noteExpand = noteExpand + "  " + '<span class="note-collapse icon-chevron-up" title="click to collapse up"></span>';
+    noteExpand = noteExpand + "  " + '<span class="note-collapse icon-chevron-up" title="click to collapse up"></span>';
 
     $(cell).find("#note-content").html(noteExpand);
 

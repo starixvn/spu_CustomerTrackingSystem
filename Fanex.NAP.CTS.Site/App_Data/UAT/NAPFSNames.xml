@@ -473,4 +473,23 @@
            SpName="CTS_DC_GetCTSCustomerClassification_xtest"
            DbName="MySQL.CTS_DataCenter" />
   </Function>
+
+  <Function Name="ProblemAccountMonitor">
+    <Setting Key="FS_MoveBetBalanceUpDate_Get"
+             SpName="FS_MoveBetBalanceUpDate_Get_xtest"
+             DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
+
+    <Setting Key="FS_CTSSportList_Get"
+            SpName="FS_CTSSportList_Get_xtest"
+            DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
+
+    <Setting Key="FS_League_Get"
+             SpName="FS_League_Get_xtest"
+             DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
+
+    <Setting Key="FS_Rpt_CTSMatchMonitor_Get"
+            SpName="FS_Rpt_CTSMatchMonitor_Get_xtest"
+            DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
+  </Function>
+  
 </Functions>

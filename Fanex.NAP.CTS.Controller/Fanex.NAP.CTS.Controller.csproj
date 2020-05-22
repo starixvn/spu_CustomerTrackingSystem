@@ -182,7 +182,7 @@
     <Compile Include="HomeController.cs" />
     <Compile Include="MatchMonitorController.cs" />
     <Compile Include="NotificationController.cs" />
-    <Compile Include="ProblemAccountMonitorController.cs" />
+    <Compile Include="ProblemMatchMonitorController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReportsController.cs" />
     <Compile Include="ScannedOfficeIpReportController.cs" />

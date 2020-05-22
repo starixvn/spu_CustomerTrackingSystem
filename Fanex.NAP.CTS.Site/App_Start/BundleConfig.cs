@@ -56,7 +56,7 @@
 
             RegisterCustomerCategoryBundles(bundles);
 
-            RegisterProblemAccountMonitorBundles(bundles);
+            RegisterProblemMatchMonitorBundles(bundles);
         }
 
         private static void RegisterFSCoreBundles(BundleCollection bundles)
@@ -200,13 +200,13 @@
             bundles.Add(new ScriptBundle("~/account/customer-category-scripts").Include("~/Scripts/Account/CustomerCategory/*.js"));
         }
 
-        private static void RegisterProblemAccountMonitorBundles(BundleCollection bundles)
+        private static void RegisterProblemMatchMonitorBundles(BundleCollection bundles)
         {
-            bundles.Add(new ScriptBundle("~/scripts/problem-account-monitor-scripts").Include(
-                "~/Scripts/ProblemAccountMonitor/*.js"));
+            bundles.Add(new ScriptBundle("~/problem-match-monitor-scripts").Include(
+                "~/Scripts/ProblemMatchMonitor/*.js"));
 
-            bundles.Add(new StyleBundle("~/problem-account-monitor-styles").Include(
-                    "~/Content/scss/pages/problem-account-monitor/problem-account-monitor.css"));
+            bundles.Add(new StyleBundle("~/problem-match-monitor-styles").Include(
+                    "~/Content/scss/pages/problem-match-monitor/problem-match-monitor.css"));
         }
     }
 }
