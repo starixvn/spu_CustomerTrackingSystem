@@ -39,6 +39,10 @@
 <div id="problemMatchMonitorGrid" class="div-grid">
     <div class="top-header">
         <div class="refresh">
+            <div class="refresh-action">
+                <span class="number" id="refreshCountDown">-</span>
+                <button class="icon" id="btnRefresh"><span class="icon-autorenew"></span></button>
+            </div>
             <select class="refresh-option first" id="refreshInterval">
                 <option value="--">Not refresh</option>
                 <option value="60">60s</option>
@@ -46,10 +50,6 @@
                 <option value="180">180s</option>
                 <option value="300">300s</option>
             </select>
-            <div class="refresh-action">
-                <button class="icon" id="btnRefresh"><span class="icon-autorenew"></span></button>
-                <span class="number" id="refreshCountDown">-</span>
-            </div>
         </div>
     </div>
 

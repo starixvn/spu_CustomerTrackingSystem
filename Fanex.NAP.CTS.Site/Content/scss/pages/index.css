@@ -1106,6 +1106,8 @@ body {
     margin-right: 6px;
     position: relative;
     top: 1px; }
+    .main-menu .menu-item .icon.icon-Controller, .header-info .username .icon.icon-Controller {
+      font-size: 18px; }
   .main-menu .menu-item .sub-menu, .header-info .username .sub-menu {
     position: absolute;
     top: 100%;

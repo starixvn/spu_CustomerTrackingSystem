@@ -1,11 +1,42 @@
 ﻿.content {
     margin-top: 60px;
+
+    .top-header {
+        justify-content: initial;
+        padding-left: 7px;
+
+        .refresh {
+            .refresh-action {
+                grid-template-columns: 30px 26px;
+                margin-left: 0px;
+                background-color: transparent;
+                border: 1px solid #5aab24;
+
+                .number {
+                    color: #474747;
+                    width: 30px;
+                }
+
+                .icon {
+                    background-color: #4AA30E;
+                    span{
+                        font-size:16px;
+                    }
+                }
+            }
+
+            .refresh-option{
+                margin-left:13px;
+                height:28px;
+            }
+        }
+    }
 }
 
 .form-filter {
-    margin: 20px 0 0 15px;
+    margin: 16px 0 0 12px;
 }
 
 .div-grid {
-    margin: 5px 20px 0 15px;
+    margin: 0px 20px 0 15px;
 }
