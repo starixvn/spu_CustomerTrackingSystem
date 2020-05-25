@@ -114,10 +114,14 @@
                     console.log(error);
                 }
             },
+            pagingType: "full_numbers",
             language: {
                 lengthMenu: "Page size _MENU_",
                 paginate: {
-                    previous: "Back"
+                    first: "<span class=\"icon-chevron-left\"></span><span class=\"icon-chevron-left\"></span>",
+                    last: "<span class=\"icon-chevron-right\"></span><span class=\"icon-chevron-right\"></span>",
+                    next: "",
+                    previous: ""
                 },
                 info: "Displaying _START_ to _END_ of _TOTAL_ item(s)",
                 infoEmpty: "",

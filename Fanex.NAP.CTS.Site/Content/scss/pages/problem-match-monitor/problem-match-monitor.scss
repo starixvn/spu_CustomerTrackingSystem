@@ -14,6 +14,28 @@
         .calendar {
             width: 196px;
         }
+
+        input {
+            font-size: 14px;
+            color: #474747;
+            border: 1px solid #E5E5E5;
+            border-radius: 2px;
+        }
+
+        .select2-container--default .select2-selection--single {
+            border: 1px solid #E5E5E5;
+
+            .select2-selection__rendered {
+                color: #474747;
+            }
+        }
+
+        button {
+            background-color: #396EF8;
+            border-radius: 2px;
+            height: 30px;
+            min-width: 80px;
+        }
     }
 
     .top-header {
@@ -44,12 +66,34 @@
             .refresh-option {
                 margin-left: 13px;
                 height: 28px;
+                min-width: 70px;
             }
         }
+    }
+    //select 2
+    .select2-container--default .select2-selection--single .select2-selection__arrow b {
+        border: none !important;
+        margin-left: -10px !important;
+        margin-top: -6px !important;
+        font-family: 'Fraud-Sensor' !important;
+        speak: none;
+        font-style: normal;
+        font-weight: normal;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+    }
 
-        .refresh-option {
-            width: 70px;
-        }
+    .select2-container--default .select2-selection--single .select2-selection__arrow b:before {
+        content: "\e90c";
+    }
+
+    .select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b {
+        border: none !important;
+        transform: rotate(180deg);
+        margin-left: 6px !important;
+        margin-top: 8px !important;
     }
 }
 
@@ -65,6 +109,117 @@
     }
 }
 
+// table
 .div-grid {
     margin: 0px 20px 0 15px;
+
+    .dataTables_length {
+        position: absolute;
+        left: 11px;
+        bottom: 7px;
+        color: #474747;
+        font-size: 13px;
+
+        select {
+            width: 58px;
+        }
+    }
+
+    table {
+        [class^="icon"] {
+            font-size: 22px;
+        }
+
+        thead {
+            tr:first-child {
+                th {
+                    border-bottom: none;
+                }
+            }
+
+            .format-tr {
+                height: 32px;
+
+                .format-th {
+                    background-color: #7B8BAE;
+                    border: none;
+                }
+            }
+        }
+
+        tbody {
+            tr {
+                &:hover {
+                    background-color: #FFF9E9 !important;
+                }
+
+                td:nth-child(4) {
+                    text-transform: capitalize;
+                }
+            }
+
+            .event-league-name {
+                color: #396EF8;
+                text-transform: capitalize;
+            }
+        }
+    }
+
+    .dataTables_info {
+        position: absolute;
+        left: 145px;
+        font-size: 13px;
+        color: #474747;
+        padding: 13px 0;
+    }
+
+    .dataTables_paginate {
+        width: 100%;
+        background: #E3E9F7;
+        height: 40px;
+        text-align: center;
+        padding: 9px 0;
+
+        a {
+            span {
+                padding-left: 0;
+                padding-right: 0;
+            }
+
+            span:before {
+                font-size: 18px;
+                position: relative;
+                top: 3px;
+            }
+
+            span:last-child {
+                margin-left: -13px;
+            }
+        }
+
+        .paginate_button {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .paginate_button.previous:before, .paginate_button.next:after {
+            font-size: 18px;
+            font-family: 'Fraud-Sensor' !important;
+            speak: none;
+            font-style: normal;
+            font-weight: normal;
+            font-variant: normal;
+            text-transform: none;
+            line-height: 1;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .paginate_button.previous:before {
+            content: "\e924";
+        }
+
+        .paginate_button.next:after {
+            content: "\e925";
+        }
+    }
 }
