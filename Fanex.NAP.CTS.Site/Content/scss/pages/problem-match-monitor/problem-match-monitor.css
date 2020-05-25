@@ -1,5 +1,12 @@
 ﻿.content {
   margin-top: 60px; }
+  .content .group {
+    padding-right: 16px; }
+  .content .form-filter label {
+    font-size: 13px;
+    color: #474747; }
+  .content .form-filter .calendar {
+    width: 196px; }
   .content .top-header {
     justify-content: initial;
     padding-left: 7px; }
@@ -18,9 +25,15 @@
     .content .top-header .refresh .refresh-option {
       margin-left: 13px;
       height: 28px; }
+    .content .top-header .refresh-option {
+      width: 70px; }
 
 .form-filter {
   margin: 16px 0 0 12px; }
+  .form-filter .width-196 {
+    width: 196px; }
+  .form-filter .width-336 {
+    width: 336px; }
 
 .div-grid {
   margin: 0px 20px 0 15px; }

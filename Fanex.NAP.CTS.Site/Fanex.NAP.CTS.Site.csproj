@@ -856,6 +856,11 @@
     <Content Include="Scripts\Search\Account\search-account.js" />
     <Content Include="Scripts\SubscriberAssignment\subscriber.js" />
     <Content Include="Scripts\Account\general-information.js" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="Startup.cs" />
     <Content Include="Views\ProblemMatchMonitor\Detail.cshtml" />
   </ItemGroup>
@@ -1368,6 +1373,10 @@
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />
     <Content Include="Scripts\DataTables_New\Buttons-1.6.1\css\common.scss" />
     <Content Include="Scripts\DataTables_New\Buttons-1.6.1\css\mixins.scss" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Scripts\JQuery\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\JQuery\jquery-3.0.0-vsdoc.js" />
     <Content Include="Scripts\finalize.js" />
