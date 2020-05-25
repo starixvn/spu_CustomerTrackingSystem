@@ -490,6 +490,15 @@
     <Setting Key="FS_Rpt_CTSMatchMonitor_Get"
             SpName="FS_Rpt_CTSMatchMonitor_Get"
             DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
+
+    <Setting Key="FS_Rpt_CTSMatchMonitor_Details_GetMatchInfo"
+            SpName="FS_Rpt_CTSMatchMonitor_Details_GetMatchInfo"
+            DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
+
+    <Setting Key="FS_Rpt_CTSMatchMonitor_Details_GetTickets"
+           SpName="FS_Rpt_CTSMatchMonitor_Details_GetTickets"
+           DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
+    
   </Function>
   
 </Functions>

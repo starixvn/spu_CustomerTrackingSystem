@@ -15,5 +15,7 @@
         ProblemMatchMonitorModel GetProblemMatchMonitor(DateTime eventDate, string leagueIds, string matchStatus);
 
         int CountTicketFraud(IEnumerable<SuspiciousTicketInfo> suspiciousTicketInfos, int matchId, int fraudCaseId);
+
+
     }
 }

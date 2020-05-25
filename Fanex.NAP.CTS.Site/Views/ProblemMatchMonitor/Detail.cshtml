@@ -1,0 +1,18 @@
+﻿@model Fanex.NAP.CTS.Model.ProblemMatchMonitor.ProblemMatchMonitorDetailModel
+@{
+    ViewBag.Title = "PROBLEM MATCH MONITOR";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section styles{
+    @Styles.Render("~/problem-match-monitor-styles")
+}
+
+<h2 class="page-title">Problem Match Monitor Detail</h2>
+
+<div class="form-filter">
+    <button class="button -primary" id="btnGenerate">Generate</button>
+</div>
+
+@section scripts{
+    @Scripts.Render("~/problem-match-monitor-scripts")
+}

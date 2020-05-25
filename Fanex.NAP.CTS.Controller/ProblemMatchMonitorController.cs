@@ -91,6 +91,14 @@
                 data = result
             }, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpPost]
+        public ActionResult Detail(int matchId, int fraudCaseId)
+        {
+
+
+            return new JsonResult();
+        }
     }
 
 }

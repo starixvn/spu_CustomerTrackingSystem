@@ -856,6 +856,7 @@
     <Content Include="Scripts\SubscriberAssignment\subscriber.js" />
     <Content Include="Scripts\Account\general-information.js" />
     <Compile Include="Startup.cs" />
+    <Content Include="Views\ProblemMatchMonitor\Detail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CoreBetList.css" />
