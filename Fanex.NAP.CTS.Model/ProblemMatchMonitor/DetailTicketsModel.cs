@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Model.ProblemMatchMonitor
 {
+    using Fanex.BetList.Core.Entities;
     using System;
 
     public class DetailTicketsModel

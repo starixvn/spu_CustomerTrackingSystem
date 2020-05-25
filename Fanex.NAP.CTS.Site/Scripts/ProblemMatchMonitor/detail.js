@@ -27,7 +27,16 @@
                     domElements.ticketsTable.find('tbody').addClass('loading');
                 },
                 dataFilter: function (response) {
-                    return response;
+                    var json = jQuery.parseJSON(response);
+
+                    RefreshFilter(json.data.SiteList, json.data.BetTypeList);
+
+                    var newJson = {};
+                    newJson.data = json.data.TicketList;
+                    newJson.recordsTotal = json.recordsTotal;
+                    newJson.recordsFiltered = json.recordsFiltered;
+
+                    return JSON.stringify(newJson);
                 },
                 complete: function () {
                     domElements.ticketsTable.find('tbody').removeClass('loading');
@@ -83,13 +92,49 @@
                 { data: obj => obj.BetId },
                 { data: obj => obj.Choice },
                 { data: obj => obj.LiveBetScore },
-                { data: obj => obj.Handicap },
+                { data: obj => RenderHandicap(obj.HtmlChoice) },
                 { data: obj => obj.Stake },
                 { data: obj => obj.Odds },
-                { data: obj => obj.Status },
+                { data: obj => obj.TicketStatus },
                 { data: obj => obj.IsVoid }
             ]
         });
+    }
+
+    function RefreshFilter(siteList, betTypeList) {
+        $('option', domElements.cbbSite).filter(function () {
+            return $(this).val() !== '';
+        }).remove();        
+
+        for (let i = 0; i < siteList.length; i++) {
+            domElements.cbbSite.append(`<option selected value='${siteList[i].SiteId}'>${siteList[i].SiteName}</option>`);        
+        }
+
+        domElements.cbbSite.multiselect("refresh");
+
+        $('option', domElements.cbbBetType).filter(function () {
+            return $(this).val() !== '';
+        }).remove();
+
+        for (let i = 0; i < betTypeList.length; i++) {
+            domElements.cbbBetType.append(`<option selected value='${betTypeList[i].BetTypeId}'>${betTypeList[i].BetTypeName}</option>`);
+        }
+
+        domElements.cbbBetType.multiselect("refresh");
+    }
+
+    function RenderHandicap(htmlChoice) {
+        var handicap = '-';
+
+        if (htmlChoice !== undefined) {
+            var spanHandicap = $(htmlChoice).find("span.handicap");
+            if (spanHandicap !== undefined) {
+                console.log(spanHandicap);
+                return spanHandicap.text();
+            }
+        }
+
+        return handicap;
     }
 
     function LoadGrid() {
@@ -104,22 +149,22 @@
     function Initial() {
 
         domElements.cbbSite.multiselect({
-            menuWidth: 330,
-            menuHeight: 330,
+            menuWidth: 320,
+            menuHeight: 320,
             selectedText: "# of # selected",
-            noneSelectedText: "Select options"
+            noneSelectedText: "Select Sites"
         }).multiselectfilter({
             width: 250,
             placeholder: ''
             });
 
         domElements.cbbBetType.multiselect({
-            menuWidth: 200,
-            menuHeight: 200,
+            menuWidth: 180,
+            menuHeight: 180,
             selectedText: "# of # selected",
-            noneSelectedText: "Select options"
+            noneSelectedText: "Select Bet Type"
         }).multiselectfilter({
-            width: 150,
+            width: 130,
             placeholder: ''
         });
 

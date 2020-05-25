@@ -1,5 +1,8 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
+    using Fanex.BetList.Core.Builder;
+    using Fanex.BetList.Core.Entities;
+    using Fanex.BetList.Core.TicketHelper;
     using Fanex.Data;
     using Fanex.NAP.CTS.Criteria.ProblemMatchMonitor;
     using Fanex.NAP.CTS.Model.ProblemMatchMonitor;    
@@ -107,5 +110,31 @@
                 return db.Query<DetailTicketsModel>(criteria);
             }
         }
+
+        public string GetHtmlChoice(DetailTicketsModel ticket)
+        {          
+            var htmlBuilder = new BetListHTMLBuilder();
+            var ticketHelper = new TicketHelper();
+
+            var coreTicket = new Ticket
+            {
+                BetTypeId = ticket.BettypeId,
+                TransId = ticket.TransId,
+                TransDate = ticket.TransDate,
+                BetTeam = ticket.BetTeam,
+                Handicap1 = ticket.Handicap1,
+                Handicap2 = ticket.Handicap2,
+                LiveHomeScore = ticket.LiveHomeScore,
+                LiveAwayScore = ticket.LiveAwayScore,
+                Odds = ticket.Odds,
+                OddsType = ticket.OddsType.ToString(),
+                Stake = ticket.Stake,
+                Winlost = ticket.Winlost,
+                IP = ticket.IP
+            };
+
+            return htmlBuilder.BuildChoice(coreTicket, ticketHelper, null, true);           
+        }
+
     }
 }

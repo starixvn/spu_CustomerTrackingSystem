@@ -123,13 +123,18 @@
         [HttpPost]
         public ActionResult GetTickets(int matchId, int fraudCaseId)
         {
-            var result = Enumerable.Empty<DetailTicketsViewModel>();
-
+            var result = new DetailTicketViewModel();
             var model = _problemMatchMonitorService.GetDetailTickets(matchId, fraudCaseId);
 
             if (model != null && model.Any())
             {
-                result = model.Select(x => new DetailTicketsViewModel
+                result.SiteList = model.GroupBy(x => new { x.SiteId, x.SiteName })
+                              .Select(x => new DetailSite { SiteId = x.Key.SiteId, SiteName = x.Key.SiteName });
+
+                result.BetTypeList = model.GroupBy(x => new { x.BettypeId, x.BettypeName })
+                              .Select(x => new DetailBetType { BetTypeId = x.Key.BettypeId, BetTypeName = x.Key.BettypeName });
+
+                result.TicketList = model.Select(x => new DetailTicket
                 {
                     BetId = x.TransId,
                     BetDate = x.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
@@ -138,7 +143,7 @@
                     SiteName = x.SiteName,
                     Choice = x.BetTeam,
                     LiveBetScore = string.Format("{0}-{1}", x.LiveHomeScore, x.LiveAwayScore),
-                    Handicap = 1,
+                    HtmlChoice = _problemMatchMonitorService.GetHtmlChoice(x),
                     Stake = x.Stake,
                     Odds = x.Odds,
                     TicketStatus = x.TicketStatus,
@@ -148,8 +153,8 @@
 
             return Json(new
             {
-                recordsTotal = result.Count(),
-                recordsFiltered = result.Count(),
+                recordsTotal = result.TicketList.Count(),
+                recordsFiltered = result.TicketList.Count(),
                 data = result
             }, JsonRequestBehavior.AllowGet);
         }

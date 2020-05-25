@@ -1,8 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.ProblemMatchMonitor
 {
-    using System;   
-
-    public class DetailTicketsViewModel
+    public class DetailTicket
     {
         public string Username { get; set; }
 
@@ -24,7 +22,7 @@
 
         public decimal Handicap2 { get; set; }
 
-        public decimal Handicap { get; set; }
+        public string HtmlChoice { get; set; }
 
         public int LiveHomeScore { get; set; }
 

@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section styles{
-    @Styles.Render("~/problem-match-monitor-styles")
+    @Styles.Render("~/problem-match-monitor-detail-styles")
 }
 
 <h2 class="page-title">Problem Match Monitor Detail</h2>
@@ -26,15 +26,17 @@
             </tr>
         </table>
     </div>
-    <div class="group width-240">
+    <div class="group width-336">
         <label class="text">Contain ticket from site</label>
-        <select class="control" id="cbbSite"></select>
+        <select class="control" id="cbbSite" multiple="multiple"></select>
     </div>
-    <div class="group width-160">
+    <div class="group width-196">
         <label class="text">Bet Type</label>
-        <select class="control" id="cbbBetType"></select>
+        <select class="control" id="cbbBetType" multiple="multiple"></select>
     </div>
-    <button class="button -primary" id="btnGenerate">Generate</button>
+    <div>
+        <button class="button -primary" id="btnGenerate">Generate</button>
+    </div>    
 </div>
 
 <div class="div-grid">

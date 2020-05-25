@@ -213,10 +213,13 @@
 
         private static void RegisterProblemMatchMonitorDetailBundles(BundleCollection bundles)
         {
-            bundles.Add(new ScriptBundle("~/problem-match-monitor-detail-scripts").Include(
+            bundles.Add(new ScriptBundle("~/problem-match-monitor-detail-scripts").Include(                
+                "~/Scripts/MultipleSelect/jquery.multiselect.filter.js",
                 "~/Scripts/ProblemMatchMonitor/detail.js"));
 
-            bundles.Add(new StyleBundle("~/problem-match-monitor-styles").Include(
+            bundles.Add(new StyleBundle("~/problem-match-monitor-detail-styles").Include(
+                    "~/Content/scss/MultipleSelect/jquery.multiselect.filter.css",
+                      "~/Content/scss/MultipleSelect/jquery.multiselect.css",
                     "~/Content/scss/pages/problem-match-monitor/problem-match-monitor.css"));
         }
 

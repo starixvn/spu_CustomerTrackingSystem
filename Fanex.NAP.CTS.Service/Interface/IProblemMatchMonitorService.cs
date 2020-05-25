@@ -1,5 +1,5 @@
 ﻿namespace Fanex.NAP.CTS.Service
-{
+{    
     using Fanex.NAP.CTS.Model.ProblemMatchMonitor;
     using System;    
     using System.Collections.Generic;
@@ -19,6 +19,8 @@
         DetailMatchInfoModel GetDetailMatchInfo(int matchId, int fraudCaseId);
 
         IEnumerable<DetailTicketsModel> GetDetailTickets(int matchId, int fraudCaseId);
+
+        string GetHtmlChoice(DetailTicketsModel ticket);
 
     }
 }
