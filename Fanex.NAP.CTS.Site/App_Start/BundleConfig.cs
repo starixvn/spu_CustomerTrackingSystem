@@ -57,6 +57,8 @@
             RegisterCustomerCategoryBundles(bundles);
 
             RegisterProblemMatchMonitorBundles(bundles);
+
+            RegisterProblemMatchMonitorDetailBundles(bundles);
         }
 
         private static void RegisterFSCoreBundles(BundleCollection bundles)
@@ -203,10 +205,20 @@
         private static void RegisterProblemMatchMonitorBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/problem-match-monitor-scripts").Include(
-                "~/Scripts/ProblemMatchMonitor/*.js"));
+                "~/Scripts/ProblemMatchMonitor/index.js"));
 
             bundles.Add(new StyleBundle("~/problem-match-monitor-styles").Include(
                     "~/Content/scss/pages/problem-match-monitor/problem-match-monitor.css"));
         }
+
+        private static void RegisterProblemMatchMonitorDetailBundles(BundleCollection bundles)
+        {
+            bundles.Add(new ScriptBundle("~/problem-match-monitor-detail-scripts").Include(
+                "~/Scripts/ProblemMatchMonitor/detail.js"));
+
+            bundles.Add(new StyleBundle("~/problem-match-monitor-styles").Include(
+                    "~/Content/scss/pages/problem-match-monitor/problem-match-monitor.css"));
+        }
+
     }
 }

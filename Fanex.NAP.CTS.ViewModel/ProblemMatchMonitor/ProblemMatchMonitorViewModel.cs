@@ -14,7 +14,7 @@
 
         public string MatchScore { get; set; }
 
-        public string Status { get; set; }
+        public string Status { get; set; }        
 
         public int GroupBettingCount { get; set; }
 

@@ -110,8 +110,9 @@
     <Compile Include="MatchMonitor\FraudCaseDetails\TicketDetails.cs" />
     <Compile Include="MatchMonitor\Match.cs" />
     <Compile Include="MatchMonitor\MatchList.cs" />
+    <Compile Include="ProblemMatchMonitor\DetailTicketsViewModel.cs" />
     <Compile Include="ProblemMatchMonitor\LeagueViewModel.cs" />
-    <Compile Include="ProblemMatchMonitor\ProblemMatchMonitorDetailViewModel.cs" />
+    <Compile Include="ProblemMatchMonitor\DetailMatchInfoViewModel.cs" />
     <Compile Include="ProblemMatchMonitor\ProblemMatchMonitorViewModel.cs" />
     <Compile Include="ProblemMatchMonitor\SportViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

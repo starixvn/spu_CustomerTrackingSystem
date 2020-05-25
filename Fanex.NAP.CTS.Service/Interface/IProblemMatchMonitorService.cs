@@ -16,6 +16,9 @@
 
         int CountTicketFraud(IEnumerable<SuspiciousTicketInfo> suspiciousTicketInfos, int matchId, int fraudCaseId);
 
+        DetailMatchInfoModel GetDetailMatchInfo(int matchId, int fraudCaseId);
+
+        IEnumerable<DetailTicketsModel> GetDetailTickets(int matchId, int fraudCaseId);
 
     }
 }

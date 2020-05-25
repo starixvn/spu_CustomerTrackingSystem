@@ -1,4 +1,4 @@
-﻿@model Fanex.NAP.CTS.Model.ProblemMatchMonitor.ProblemMatchMonitorDetailModel
+﻿@model Fanex.NAP.CTS.ViewModel.ProblemMatchMonitor.DetailMatchInfoViewModel
 @{
     ViewBag.Title = "PROBLEM MATCH MONITOR";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -10,9 +10,60 @@
 <h2 class="page-title">Problem Match Monitor Detail</h2>
 
 <div class="form-filter">
+    <div class="group">
+        <table class="fraud-case-details">
+            <tr>
+                <td class="info-name">Event</td>
+                <td class="info-value">@Model.MatchName</td>
+                <td class="info-name">Evidence</td>
+                <td class="info-value">@Model.Evendence</td>
+            </tr>
+            <tr>
+                <td class="info-name">Date</td>
+                <td class="info-value">@Model.EventDate</td>
+                <td class="info-name">HT/FT Score</td>
+                <td class="info-value">@Model.Score</td>
+            </tr>
+        </table>
+    </div>
+    <div class="group width-240">
+        <label class="text">Contain ticket from site</label>
+        <select class="control" id="cbbSite"></select>
+    </div>
+    <div class="group width-160">
+        <label class="text">Bet Type</label>
+        <select class="control" id="cbbBetType"></select>
+    </div>
     <button class="button -primary" id="btnGenerate">Generate</button>
 </div>
 
+<div class="div-grid">
+    <table id="ticketsTable" class="table table-striped width-100per" style="width: 100%">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Trans Date</th>
+                <th>Username</th>
+                <th>Currency</th>
+                <th>Site</th>
+                <th>BetID</th>
+                <th>Choice</th>
+                <th>Live Bet Score</th>
+                <th>Handicap</th>
+                <th>Stake</th>
+                <th>Odds</th>
+                <th>Status</th>
+                <th>Void</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<div class="hide">
+    <input id="hdMatchId" type="hidden" value="@Model.MatchId" />
+    <input id="hdFraudCaseId" type="hidden" value="@Model.FraudCaseId" />
+</div>
 @section scripts{
-    @Scripts.Render("~/problem-match-monitor-scripts")
+    @Scripts.Render("~/problem-match-monitor-detail-scripts")
 }

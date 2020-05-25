@@ -78,7 +78,7 @@
             domElements.btnGenerate.prop("disabled", false);
         }
         else {
-            league_selector.append("<option value=''>No available league</option>");
+            leagueSelector.append("<option value=''>No available league</option>");
 
             domElements.btnGenerate.prop("disabled", true);
             domElements.refreshInterval.val("--").change();
@@ -86,17 +86,17 @@
     }
 
     function GenerateGrid() {
-        var url = common.modifyRelativeUrl('ProblemMatchMonitor/GetProblemMatchMonitor');
-        var paramsFilter = {};
-        paramsFilter.eventDate = domElements.dpkDate.val();
-        paramsFilter.leagueIds = domElements.cbbLeague.val();
-        paramsFilter.matchStatus = domElements.cbbMatchStatus.val();
-
         return domElements.problemMatchMonitorTable.DataTable({
             serverSide: true,
             ajax: {
-                url: url,
-                data: paramsFilter,
+                url: common.modifyRelativeUrl('ProblemMatchMonitor/GetProblemMatchMonitor'),
+                data: function () {
+                    var paramsFilter = {};
+                    paramsFilter.eventDate = domElements.dpkDate.val();
+                    paramsFilter.leagueIds = domElements.cbbLeague.val();
+                    paramsFilter.matchStatus = domElements.cbbMatchStatus.val();
+                    return paramsFilter;
+                },
                 type: "POST",
                 beforeSend: function () {
                     domElements.problemMatchMonitorTable.find('tbody').addClass('loading');
@@ -147,8 +147,8 @@
                 { data: obj => RenderMatchName(obj) },
                 { data: obj => obj.MatchScore },
                 { data: obj => obj.Status },
-                { data: obj => RenderTickedFraud(obj.GroupBettingCount) },
-                { data: obj => RenderTickedFraud(obj.HedgingCount) }
+                { data: obj => RenderTickedFraud(obj.MatchId, 13, obj.GroupBettingCount) },
+                { data: obj => RenderTickedFraud(obj.MatchId, 14, obj.HedgingCount) }
             ]
         });
     }
@@ -161,11 +161,11 @@
         return html;
     }
 
-    function RenderTickedFraud(tickedFraudCount) {
+    function RenderTickedFraud(matchId, fraudCaseId, tickedFraudCount) {
         if (tickedFraudCount === 0) return "<span class='icon-approval'></span>";
         else {
-            var link = '';
-            html = "<a class='warning'>" + link + "<span class='icon-alert-circle' ></span>";
+            var link = "href=ProblemMatchMonitor/Detail?matchId=" + matchId + "&fraudCaseId=" + fraudCaseId + " target='_blank'";
+            html = "<a class='warning' " + link + "><span class='icon-alert-circle' ></span>";
             html += "<span class='number'>" + GenerateViolation(tickedFraudCount) + "</span>";
             html += "</a>";
 

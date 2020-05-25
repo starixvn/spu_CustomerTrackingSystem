@@ -849,6 +849,7 @@
     <Content Include="Scripts\popoto\d3.v3.min.js" />
     <Content Include="Scripts\popoto\popoto.min.js" />
     <Content Include="Scripts\popoto\vis\vis-network.min.js" />
+    <Content Include="Scripts\ProblemMatchMonitor\detail.js" />
     <Content Include="Scripts\ProblemMatchMonitor\index.js" />
     <Content Include="Scripts\search.js" />
     <Content Include="Scripts\Account\detail-account.js" />

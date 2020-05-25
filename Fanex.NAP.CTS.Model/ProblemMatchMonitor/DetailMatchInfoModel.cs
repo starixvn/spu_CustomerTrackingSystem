@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class MatchDetailInfo
+    public class DetailMatchInfoModel
     {
         public DateTime EventDate { get; set; }
 

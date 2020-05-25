@@ -79,5 +79,33 @@
 
             return 0;
         }
+
+        public DetailMatchInfoModel GetDetailMatchInfo(int matchId, int fraudCaseId)
+        {
+            var criteria = new DetailMatchInfoGetCriteria()
+            {
+                MatchId = matchId,
+                FraudCaseId = fraudCaseId
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<DetailMatchInfoModel>(criteria).FirstOrDefault();
+            }
+        }
+
+        public IEnumerable<DetailTicketsModel> GetDetailTickets(int matchId, int fraudCaseId)
+        {
+            var criteria = new DetailTicketsGetCriteria()
+            {
+                MatchId = matchId,
+                FraudCaseId = fraudCaseId
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<DetailTicketsModel>(criteria);
+            }
+        }
     }
 }

@@ -2,6 +2,7 @@
 {
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Core.BaseClasses;
+    using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.ViewModel.ProblemMatchMonitor;
     using System;
@@ -92,13 +93,66 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpPost]
+        [HttpGet]
         public ActionResult Detail(int matchId, int fraudCaseId)
         {
+            var model = _problemMatchMonitorService.GetDetailMatchInfo(matchId, fraudCaseId);
 
+            if (model != null)
+            {
+                var viewModel = new DetailMatchInfoViewModel
+                {
+                    MatchId = matchId,
+                    FraudCaseId = fraudCaseId,
+                    EventDate = model.EventDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),                    
+                    MatchName = string.Format("{0} vs {1}", CachedRef.GetTeamName(model.HomeId), CachedRef.GetTeamName(model.AwayId)),
+                    Score = string.Format("{0}-{1}/{2}-{3}", model.HTHomeScore, model.HTAwayScore, model.finalhomescore, model.finalawayscore),
+                    Evendence = model.FraudCaseName
+                };
 
-            return new JsonResult();
+                return View(viewModel);
+            }
+
+            return View(new DetailMatchInfoViewModel
+            {
+                MatchId = matchId,
+                FraudCaseId = fraudCaseId
+            });
         }
-    }
 
+        [HttpPost]
+        public ActionResult GetTickets(int matchId, int fraudCaseId)
+        {
+            var result = Enumerable.Empty<DetailTicketsViewModel>();
+
+            var model = _problemMatchMonitorService.GetDetailTickets(matchId, fraudCaseId);
+
+            if (model != null && model.Any())
+            {
+                result = model.Select(x => new DetailTicketsViewModel
+                {
+                    BetId = x.TransId,
+                    BetDate = x.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+                    Username = x.Username,
+                    CurrencyName = x.CurrencyName,
+                    SiteName = x.SiteName,
+                    Choice = x.BetTeam,
+                    LiveBetScore = string.Format("{0}-{1}", x.LiveHomeScore, x.LiveAwayScore),
+                    Handicap = 1,
+                    Stake = x.Stake,
+                    Odds = x.Odds,
+                    TicketStatus = x.TicketStatus,
+                    IsVoid = false
+                });
+            }
+
+            return Json(new
+            {
+                recordsTotal = result.Count(),
+                recordsFiltered = result.Count(),
+                data = result
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+    }
 }

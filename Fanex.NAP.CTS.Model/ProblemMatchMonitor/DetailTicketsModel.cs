@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class FraudTicketInfo
+    public class DetailTicketsModel
     {
         public string Username { get; set; }
 
@@ -26,7 +26,7 @@
 
         public int LiveHomeScore { get; set; }
 
-        public int LiveAwayScore { get; set; }        
+        public int LiveAwayScore { get; set; }
 
         public bool LiveIndicator { get; set; }
 
@@ -45,6 +45,5 @@
         public string CurrencyName { get; set; }
 
         public int HighlightStatus { get; set; }
-
     }
 }

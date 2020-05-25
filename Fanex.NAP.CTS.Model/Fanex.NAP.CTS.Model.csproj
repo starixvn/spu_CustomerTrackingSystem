@@ -221,11 +221,11 @@
     <Compile Include="MatchMonitor\FraudCaseDetails\TicketInfo.cs" />
     <Compile Include="MatchMonitor\League.cs" />
     <Compile Include="MatchMonitor\Match.cs" />
-    <Compile Include="ProblemMatchMonitor\FraudTicketInfo.cs" />
     <Compile Include="ProblemMatchMonitor\LeagueModel.cs" />
-    <Compile Include="ProblemMatchMonitor\MatchDetailInfo.cs" />
+    <Compile Include="ProblemMatchMonitor\DetailMatchInfoModel.cs" />
     <Compile Include="ProblemMatchMonitor\MatchInfo.cs" />
-    <Compile Include="ProblemMatchMonitor\ProblemMatchMonitorDetailModel.cs" />
+    <Compile Include="ProblemMatchMonitor\MatchInfoModel.cs" />
+    <Compile Include="ProblemMatchMonitor\DetailTicketsModel.cs" />
     <Compile Include="ProblemMatchMonitor\ProblemMatchMonitorModel.cs" />
     <Compile Include="ProblemMatchMonitor\SuspiciousTicketInfo.cs" />
     <Compile Include="ProblemMatchMonitor\SportModel.cs" />
