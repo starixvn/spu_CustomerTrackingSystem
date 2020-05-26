@@ -20,6 +20,8 @@
 
         public ActionResult Index()
         {
+            ViewBag.UserId = CurrentSession.UserId;
+            ViewBag.OnUserId = CurrentSession.OnUserId;
             return View(CurrentSession.MenuItemList);
         }
 

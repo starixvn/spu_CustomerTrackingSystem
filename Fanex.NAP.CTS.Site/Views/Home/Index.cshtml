@@ -23,22 +23,24 @@
 @section styles{
     <link href="~/Content/scss/pages/dashboard/dashboard.min.css" rel="stylesheet" />
 }
-<div class="dashboard">    
-    @using (Html.BeginForm("Search", "Home", FormMethod.Post))
-    {
-        <div class="logo">
-            <svg width="180" height="58">
-                <image xlink:href="~/Content/scss/images/logo-CTS.svg" src="~/Content/scss/images/logo-CTS.png" width="180" height="58" alt="Customer Tracking System" />
-            </svg>
-        </div>
-        <div class="search-box">
-            <input id="txtInput" name="txtInput" class="input-field" placeholder="Type in Username or Login ID to search" type="text" />
-            <i class="icon-magnify"></i>
-        </div>
-        <div id="errMessage" class="error-alert hide">At least two letters are required!</div>
-    }
-
-</div>
+    <div class="dashboard">
+        @using (Html.BeginForm("Search", "Home", FormMethod.Post))
+        {
+            <div class="logo">
+                <svg width="180" height="58">
+                    <image xlink:href="~/Content/scss/images/logo-CTS.svg" src="~/Content/scss/images/logo-CTS.png" width="180" height="58" alt="Customer Tracking System" />
+                </svg>
+            </div>
+            <div class="search-box">
+                <input id="txtInput" name="txtInput" class="input-field" placeholder="Type in Username or Login ID to search" type="text" />
+                <i class="icon-magnify"></i>
+            </div>
+            <div id="errMessage" class="error-alert hide">At least two letters are required!</div>
+        }
+        UserId: @ViewBag.UserId
+            </br>
+        OnUserId: @ViewBag.OnUserId
+    </div>
 
 @section scripts{
     @Scripts.Render("~/scripts/searchbox")
