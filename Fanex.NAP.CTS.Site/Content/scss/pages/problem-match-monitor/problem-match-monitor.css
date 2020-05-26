@@ -1,5 +1,12 @@
 ﻿.content {
   margin-top: 60px; }
+  .content select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: url("../../images/chevron-down.png") white no-repeat 98.5% !important;
+    /* !important used for overriding all other customisations */
+    background: url("../../images/chevron-down.png") white no-repeat calc(100% - 12px) !important; }
   .content .page-title {
     text-transform: capitalize; }
   .content .group {
@@ -54,7 +61,7 @@
   .content .select2-container--default .select2-selection--single .select2-selection__arrow b {
     border: none !important;
     margin-left: -10px !important;
-    margin-top: -6px !important;
+    margin-top: -9px !important;
     font-family: 'Fraud-Sensor' !important;
     speak: none;
     font-style: normal;
@@ -64,12 +71,13 @@
     line-height: 1;
     -webkit-font-smoothing: antialiased; }
   .content .select2-container--default .select2-selection--single .select2-selection__arrow b:before {
-    content: "\e90c"; }
+    content: "\e90c";
+    font-size: 20px; }
   .content .select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b {
     border: none !important;
     transform: rotate(180deg);
-    margin-left: 6px !important;
-    margin-top: 8px !important; }
+    margin-left: 9px !important;
+    margin-top: 11px !important; }
 
 .form-filter {
   margin: 16px 0 0 12px; }
@@ -101,9 +109,8 @@
       border-left: 1px solid #1D2E4F; }
     .div-grid table thead tr:first-child th:last-child {
       border-right: 1px solid #1D2E4F; }
-    .div-grid table thead tr:last-child th:first-child {
-      border-left: 1px solid #7B8BAE; }
-    .div-grid table thead tr:last-child th:last-child {
+    .div-grid table thead tr:last-child th {
+      border-left: 1px solid #7B8BAE;
       border-right: 1px solid #7B8BAE; }
     .div-grid table thead tr th {
       padding-left: 0px;
