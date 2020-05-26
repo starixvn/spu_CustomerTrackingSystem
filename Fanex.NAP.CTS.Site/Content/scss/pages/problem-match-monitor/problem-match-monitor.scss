@@ -1,13 +1,19 @@
 ﻿.content {
     margin-top: 60px;
 
+    .page-title {
+        text-transform: capitalize;
+    }
+
     .group {
         padding-right: 16px;
     }
 
     .form-filter {
+        margin: 16px 0 0 16px;
+
         label {
-            font-size: 13px;
+            font-size: 1.3rem;
             color: #474747;
         }
 
@@ -16,7 +22,7 @@
         }
 
         input {
-            font-size: 14px;
+            font-size: 1.4rem;
             color: #474747;
             border: 1px solid #E5E5E5;
             border-radius: 2px;
@@ -39,8 +45,11 @@
     }
 
     .top-header {
+        height: 40px;
         justify-content: initial;
         padding-left: 7px;
+        padding-top: 4px;
+        padding-bottom: 5px;
 
         .refresh {
             .refresh-action {
@@ -52,21 +61,25 @@
                 .number {
                     color: #474747;
                     width: 30px;
+                    height: 26px;
+                    line-height: 26px;
                 }
 
                 .icon {
                     background-color: #4AA30E;
 
                     span {
-                        font-size: 16px;
+                        font-size: 1.6rem;
                     }
                 }
             }
 
             .refresh-option {
+                border: 1px solid #C4C4C4;
                 margin-left: 13px;
                 height: 28px;
                 min-width: 70px;
+                border-radius: 2px;
             }
         }
     }
@@ -111,29 +124,69 @@
 
 // table
 .div-grid {
-    margin: 0px 20px 0 15px;
+    margin: 3px 16px 0 16px;
 
     .dataTables_length {
         position: absolute;
         left: 11px;
         bottom: 7px;
         color: #474747;
-        font-size: 13px;
+        font-size: 1.3rem;
+
+        label {
+            font-size: 1.4rem;
+        }
 
         select {
             width: 58px;
+            font-size: 1.3rem;
         }
     }
 
     table {
+        table-layout: fixed;
+
         [class^="icon"] {
-            font-size: 22px;
+            font-size: 2.2rem;
         }
 
         thead {
             tr:first-child {
                 th {
                     border-bottom: none;
+                }
+
+                th:first-child {
+                    border-left: 1px solid #1D2E4F;
+                }
+
+                th:last-child {
+                    border-right: 1px solid #1D2E4F;
+                }
+            }
+
+            tr:last-child {
+                th:first-child {
+                    border-left: 1px solid #7B8BAE;
+                }
+
+                th:last-child {
+                    border-right: 1px solid #7B8BAE;
+                }
+            }
+
+            tr {
+                th {
+                    padding-left: 0px;
+                    padding-right: 0px;
+                }
+
+                th:first-child {
+                    width: 30px;
+                }
+
+                th:nth-child(3), th:nth-child(4), th:nth-child(5), th:nth-child(6) {
+                    width: 140px;
                 }
             }
 
@@ -149,6 +202,8 @@
 
         tbody {
             tr {
+                font-size: 1.3rem;
+
                 &:hover {
                     background-color: #FFF9E9 !important;
                 }
@@ -180,7 +235,7 @@
     .dataTables_info {
         position: absolute;
         left: 145px;
-        font-size: 13px;
+        font-size: 1.3rem;
         color: #474747;
         padding: 13px 0;
     }
@@ -192,30 +247,37 @@
         text-align: center;
         padding: 9px 0;
 
-        a {
+        .paginate_button {
+            padding-left: 0;
+            padding-right: 0;
+            font-size: 1.3rem;
+
+            &.previous {
+                margin-right: 0px;
+            }
+
+            &.next {
+                margin-left: 0px;
+            }
+
             span {
                 padding-left: 0;
                 padding-right: 0;
             }
 
             span:before {
-                font-size: 18px;
+                font-size: 1.8rem;
                 position: relative;
                 top: 3px;
             }
 
             span:last-child {
-                margin-left: -13px;
+                margin-left: -14px;
             }
         }
 
-        .paginate_button {
-            padding-left: 0;
-            padding-right: 0;
-        }
-
         .paginate_button.previous:before, .paginate_button.next:after {
-            font-size: 18px;
+            font-size: 1.8rem;
             font-family: 'Fraud-Sensor' !important;
             speak: none;
             font-style: normal;

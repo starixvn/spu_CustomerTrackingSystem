@@ -123,7 +123,7 @@
                     next: "",
                     previous: ""
                 },
-                info: "Displaying _START_ to _END_ of _TOTAL_ item(s)",
+                info: "Displaying _START_ to _END_ of _TOTAL_ item (s)",
                 infoEmpty: "",
                 zeroRecords: "There's no data"
             },
@@ -137,8 +137,8 @@
                 { targets: "_all", defaultContent: "-" },
                 { targets: [0, 2, 3, 4, 5], className: "text-center" },
                 { targets: [1], className: "text-left" },
-                { targets: [0], width: "5%" },
-                { targets: [1], width: "55%" },
+                { targets: [0], width: "3%" },
+                { targets: [1], width: "57%" },
                 { targets: [2], width: "10%" },
                 { targets: [3], width: "10%" },
                 { targets: [4], width: "10%" },
