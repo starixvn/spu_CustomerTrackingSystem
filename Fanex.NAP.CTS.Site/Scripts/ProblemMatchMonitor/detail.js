@@ -6,6 +6,7 @@
         hdFraudCaseId: $("#hdFraudCaseId"),
         cbbSite: $("#cbbSite"),
         cbbBetType: $("#cbbBetType"),
+        cbbVoid: $('#cbbVoid'),
         ticketsTable: $("#ticketsTable"),
         btnGenerate: $('#btnGenerate')
     };
@@ -96,7 +97,7 @@
                 { data: obj => obj.Stake },
                 { data: obj => obj.Odds },
                 { data: obj => obj.TicketStatus },
-                { data: obj => obj.IsVoid }
+                { data: obj => RenderVoidTicket(obj.BetId, obj.IsVoid) }
             ]
         });
     }
@@ -137,6 +138,15 @@
         return handicap;
     }
 
+    function RenderVoidTicket(betId, isVoid) {
+        let html = "<label class='checkbox'>";
+        html += "<input type='checkbox' class='' " + (isVoid ? 'checked' : '') + " data-bet-id=" + betId + " />";
+        html += "<span></span>";
+        html += "</label>";
+
+        return html;
+    }
+
     function LoadGrid() {
         $(this).prop('disabled', true);
         if (dataTable) {
@@ -166,7 +176,17 @@
         }).multiselectfilter({
             width: 130,
             placeholder: ''
-        });
+            });
+
+        domElements.cbbVoid.multiselect({
+            menuWidth: 180,
+            menuHeight: 180,
+            selectedText: "# of # selected",
+            noneSelectedText: "Select Void"
+        }).multiselectfilter({
+            width: 130,
+            placeholder: ''
+            });
 
         LoadGrid();
 

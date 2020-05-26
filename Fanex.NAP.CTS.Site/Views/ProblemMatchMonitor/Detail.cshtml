@@ -11,7 +11,7 @@
 
 <div class="form-filter">
     <div class="group">
-        <table class="fraud-case-details">
+        <table class="">
             <tr>
                 <td class="info-name">Event</td>
                 <td class="info-value">@Model.MatchName</td>
@@ -37,6 +37,19 @@
     <div>
         <button class="button -primary" id="btnGenerate">Generate</button>
     </div>    
+    <div class="group">
+        <table class="">
+            <tr>
+                <td rowspan="2" class="info-name">Special <br /> Notes:</td>
+                <td class="info-value">Red</td>
+                <td class="info-value">Goal Score < Match Goal Score</td>
+            </tr>
+            <tr>
+                <td class="info-value">Green</td>
+                <td class="info-value">Placed after 75 mins</td>
+            </tr>          
+        </table>
+    </div>
 </div>
 
 <div class="div-grid">
@@ -57,9 +70,23 @@
                 <th>Status</th>
                 <th>Void</th>
             </tr>
+            <tr class="format-tr">
+                <th colspan="11" class="format-th"></th>               
+                <th colspan="2" class="format-th">
+                    <select class="control" id="cbbVoid" multiple="multiple"></select>
+                </th>
+            </tr>
         </thead>
         <tbody></tbody>
     </table>
+</div>
+
+<div class="div-grid">
+    <div class="group">
+        <button class="button" id="btnVoidWinningRequest">Void Winning Request</button>
+        <button class="button" id="btnVoidAllRequest">Void All(Instant) Request</button>
+        <button class="button" id="btnVoidManualRequest">Manual Void Request</button>
+    </div>
 </div>
 
 <div class="hide">
