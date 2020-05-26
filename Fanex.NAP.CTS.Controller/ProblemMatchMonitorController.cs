@@ -120,6 +120,28 @@
             });
         }
 
+        [HttpGet]
+        public ActionResult GetMatchInfo(int matchId, int fraudCaseId)
+        {
+            var viewModel = new DetailMatchInfoViewModel();
+            var model = _problemMatchMonitorService.GetDetailMatchInfo(matchId, fraudCaseId);
+
+            if (model != null)
+            {
+                viewModel = new DetailMatchInfoViewModel
+                {
+                    MatchId = matchId,
+                    FraudCaseId = fraudCaseId,
+                    EventDate = model.EventDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+                    MatchName = string.Format("{0} vs {1}", CachedRef.GetTeamName(model.HomeId), CachedRef.GetTeamName(model.AwayId)),
+                    Score = string.Format("{0}-{1}/{2}-{3}", model.HTHomeScore, model.HTAwayScore, model.finalhomescore, model.finalawayscore),
+                    Evendence = model.FraudCaseName
+                };                
+            }
+
+            return Json(viewModel, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpPost]
         public ActionResult GetTickets(int matchId, int fraudCaseId)
         {
@@ -147,7 +169,8 @@
                     Stake = x.Stake,
                     Odds = x.Odds,
                     TicketStatus = x.TicketStatus,
-                    IsVoid = false
+                    IsVoid = false,
+                    HighlightStatus = x.HighlightStatus
                 });
             }
 

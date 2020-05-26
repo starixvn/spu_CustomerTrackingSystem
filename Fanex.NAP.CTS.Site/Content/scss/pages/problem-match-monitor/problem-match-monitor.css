@@ -93,6 +93,12 @@
   .div-grid table tbody .event-league-name {
     color: #396EF8;
     text-transform: capitalize; }
+  .div-grid table tbody .red {
+    background-color: #ff8989; }
+  .div-grid table tbody .green {
+    background-color: #dfff9a; }
+  .div-grid table tbody .white {
+    background-color: #ffffff; }
   .div-grid .dataTables_info {
     position: absolute;
     left: 145px;

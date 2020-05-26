@@ -13,7 +13,7 @@
 
     function GenerateGrid() {
         return domElements.ticketsTable.DataTable({
-            serverSide: true,
+            serverSide: false,
             ajax: {
                 url: common.modifyRelativeUrl('ProblemMatchMonitor/GetTickets'),
                 data: function () {
@@ -57,18 +57,17 @@
                 info: "Displaying _START_ to _END_ of _TOTAL_ item(s)",
                 infoEmpty: "",
                 zeroRecords: "There's no data"
-            },
-            ordering: false,
+            },            
             searching: false,
-            lengthMenu: [20, 50, 100, 200],
-            pageLength: 50,
+            ordering: true,           
+            paging: false,
             scrollX: false,
-            scrollCollapse: false,
+            scrollCollapse: false,           
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
                 { targets: [0, 1, 2, 3, 4, 5, 6, 7, 11, 12], className: "text-center" },
-                { targets: [8,9,10], className: "text-right" },
-                { targets: [0], width: "5%" },
+                { targets: [8, 9, 10], className: "text-right" },
+                { targets: [0], width: "3%" },
                 { targets: [1], width: "10%" },
                 { targets: [2], width: "10%" },
                 { targets: [3], width: "5%" },
@@ -98,7 +97,14 @@
                 { data: obj => obj.Odds },
                 { data: obj => obj.TicketStatus },
                 { data: obj => RenderVoidTicket(obj.BetId, obj.IsVoid) }
-            ]
+            ],
+            createdRow: function (row, data, index) {
+                let cssClassTR = 'white';
+                if (data.HighlightStatus === 1) cssClassTR = 'red';
+                else if (data.HighlightStatus === 2) cssClassTR = 'green';
+                
+                $(row).addClass(cssClassTR);
+            }
         });
     }
 
@@ -129,8 +135,7 @@
 
         if (htmlChoice !== undefined) {
             var spanHandicap = $(htmlChoice).find("span.handicap");
-            if (spanHandicap !== undefined) {
-                console.log(spanHandicap);
+            if (spanHandicap !== undefined) {                
                 return spanHandicap.text();
             }
         }
@@ -183,10 +188,7 @@
             menuHeight: 180,
             selectedText: "# of # selected",
             noneSelectedText: "Select Void"
-        }).multiselectfilter({
-            width: 130,
-            placeholder: ''
-            });
+        });
 
         LoadGrid();
 

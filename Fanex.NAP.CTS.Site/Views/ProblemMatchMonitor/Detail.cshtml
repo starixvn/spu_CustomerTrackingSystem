@@ -53,7 +53,7 @@
 </div>
 
 <div class="div-grid">
-    <table id="ticketsTable" class="table table-striped width-100per" style="width: 100%">
+    <table id="ticketsTable" class="table width-100per" style="width: 100%">
         <thead>
             <tr>
                 <th>#</th>
@@ -73,7 +73,11 @@
             <tr class="format-tr">
                 <th colspan="11" class="format-th"></th>               
                 <th colspan="2" class="format-th">
-                    <select class="control" id="cbbVoid" multiple="multiple"></select>
+                    <select class="control" id="cbbVoid" multiple="multiple">
+                        <option value="red">Red</option>
+                        <option selected value="white">White</option>
+                        <option value="green">Green</option>
+                    </select>
                 </th>
             </tr>
         </thead>
@@ -81,7 +85,7 @@
     </table>
 </div>
 
-<div class="div-grid">
+<div class="div-grid" style="text-align: right">
     <div class="group">
         <button class="button" id="btnVoidWinningRequest">Void Winning Request</button>
         <button class="button" id="btnVoidAllRequest">Void All(Instant) Request</button>
