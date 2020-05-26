@@ -1,5 +1,7 @@
 ﻿.content {
   margin-top: 60px; }
+  .content .width-200 {
+    width: 200px; }
   .content select {
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -9,6 +11,19 @@
     background: url("../../images/chevron-down.png") white no-repeat calc(100% - 12px) !important; }
   .content .page-title {
     text-transform: capitalize; }
+    .content .page-title ol.breadcrumb {
+      list-style: none; }
+      .content .page-title ol.breadcrumb li {
+        display: inline;
+        font-size: 16px; }
+        .content .page-title ol.breadcrumb li a {
+          color: #DF5615; }
+        .content .page-title ol.breadcrumb li.active {
+          color: #545454; }
+    .content .page-title ol.breadcrumb li + li:before {
+      padding: 5px;
+      color: #DF5615;
+      content: "/\00a0"; }
   .content .group {
     padding-right: 16px; }
   .content .form-filter {
@@ -32,6 +47,72 @@
       border-radius: 2px;
       height: 30px;
       min-width: 80px; }
+  .content .form-filter-detail {
+    margin-top: 12px;
+    margin-left: 16px;
+    margin-right: 16px;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap; }
+    .content .form-filter-detail .float-left {
+      display: flex;
+      flex-wrap: wrap; }
+    .content .form-filter-detail .float-right .group {
+      padding-right: 0px; }
+    .content .form-filter-detail .group {
+      padding-right: 12px; }
+      .content .form-filter-detail .group .text {
+        margin-bottom: 6px; }
+      .content .form-filter-detail .group .table__detail-left {
+        color: #404040;
+        font-size: 1.4rem;
+        border: 1px solid #C7C7C7; }
+        .content .form-filter-detail .group .table__detail-left tr:first-child .info-name {
+          border-bottom: 1px solid #fff; }
+        .content .form-filter-detail .group .table__detail-left tr:first-child .info-value {
+          border-bottom: 1px solid #C7C7C7; }
+        .content .form-filter-detail .group .table__detail-left td {
+          padding: 5px 8px; }
+        .content .form-filter-detail .group .table__detail-left .info-name {
+          width: 100px;
+          background-color: #B3D2EF;
+          font-weight: normal; }
+      .content .form-filter-detail .group .table__detail-right {
+        background: #EAEFF9;
+        border: 1px solid #CDD2DE;
+        color: #2B2B2B;
+        font-weight: 600; }
+        .content .form-filter-detail .group .table__detail-right .info-name {
+          width: 70px;
+          vertical-align: middle;
+          background-color: #CDD2DE; }
+        .content .form-filter-detail .group .table__detail-right .info-value {
+          padding: 5px; }
+        .content .form-filter-detail .group .table__detail-right .bg-red, .content .form-filter-detail .group .table__detail-right .bg-green {
+          padding: 3px 0;
+          width: 77px;
+          display: block;
+          text-align: center; }
+        .content .form-filter-detail .group .table__detail-right .bg-red {
+          background: #FF8989;
+          border: 1px solid #CC6E6E;
+          border-radius: 5px; }
+        .content .form-filter-detail .group .table__detail-right .bg-green {
+          background: #DBFF8E;
+          border: 1px solid #AFCC72;
+          border-radius: 5px; }
+    .content .form-filter-detail button {
+      height: 30px;
+      margin-top: 20px;
+      background-color: #396EF8; }
+      .content .form-filter-detail button.ui-multiselect {
+        margin-top: 8px;
+        background: #FFFFFF;
+        border: 1px solid #E5E5E5; }
+        .content .form-filter-detail button.ui-multiselect .ui-icon {
+          background-image: url("../../images/chevron-down.png");
+          background-position: center; }
   .content .top-header {
     height: 40px;
     justify-content: initial;
@@ -182,3 +263,46 @@
       content: "\e924"; }
     .div-grid .dataTables_paginate .paginate_button.next:after {
       content: "\e925"; }
+
+.-detail {
+  table-layout: fixed; }
+  .-detail thead tr:first-child th:nth-child(1) {
+    width: 30px !important; }
+    .-detail thead tr:first-child th:nth-child(1).sorting_asc, .-detail thead tr:first-child th:nth-child(1).sorting {
+      background-image: none; }
+  .-detail thead tr:first-child th:nth-child(2) {
+    width: 180px !important; }
+  .-detail thead tr:first-child th:nth-child(4), .-detail thead tr:first-child th:nth-child(4), .-detail thead tr:first-child th:nth-child(5), .-detail thead tr:first-child th:nth-child(6), .-detail thead tr:first-child th:nth-child(7), .-detail thead tr:first-child th:nth-child(8) {
+    width: 160px !important; }
+  .-detail thead tr:first-child th:nth-child(9), .-detail thead tr:first-child th:nth-child(10), .-detail thead tr:first-child th:nth-child(11), .-detail thead tr:first-child th:nth-child(12), .-detail thead tr:first-child th:nth-child(13), .-detail thead tr:first-child th:nth-child(14) {
+    width: 140px !important; }
+  .-detail thead tr:last-child button {
+    width: 185px !important;
+    margin-right: 38px;
+    float: right; }
+  .-detail .dataTables_info {
+    width: 100%;
+    display: block;
+    background: #E3E9F7;
+    border: 1px solid #C4C4C4;
+    box-sizing: border-box;
+    border-radius: 1px;
+    float: left;
+    position: static;
+    padding: 12px;
+    font-size: 1.4rem;
+    color: #222222;
+    border-top: none; }
+
+.detail__button-bottom button {
+  height: auto !important;
+  padding: 6px 16px;
+  font-size: 1.3rem !important;
+  line-height: 16px;
+  color: #2053D9;
+  background: #E3E9F7;
+  border: 1px solid #2053D9;
+  box-sizing: border-box;
+  border-radius: 3px;
+  margin-right: 13px;
+  margin-top: 13px; }

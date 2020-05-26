@@ -7,52 +7,64 @@
     @Styles.Render("~/problem-match-monitor-detail-styles")
 }
 
-<h2 class="page-title">Problem Match Monitor Detail</h2>
-
-<div class="form-filter">
-    <div class="group">
-        <table class="">
-            <tr>
-                <td class="info-name">Event</td>
-                <td class="info-value">@Model.MatchName</td>
-                <td class="info-name">Evidence</td>
-                <td class="info-value">@Model.Evendence</td>
-            </tr>
-            <tr>
-                <td class="info-name">Date</td>
-                <td class="info-value">@Model.EventDate</td>
-                <td class="info-name">HT/FT Score</td>
-                <td class="info-value">@Model.Score</td>
-            </tr>
-        </table>
-    </div>
-    <div class="group width-336">
-        <label class="text">Contain ticket from site</label>
-        <select class="control" id="cbbSite" multiple="multiple"></select>
-    </div>
-    <div class="group width-196">
-        <label class="text">Bet Type</label>
-        <select class="control" id="cbbBetType" multiple="multiple"></select>
-    </div>
-    <div>
-        <button class="button -primary" id="btnGenerate">Generate</button>
-    </div>    
-    <div class="group">
-        <table class="">
-            <tr>
-                <td rowspan="2" class="info-name">Special <br /> Notes:</td>
-                <td class="info-value">Red</td>
-                <td class="info-value">Goal Score < Match Goal Score</td>
-            </tr>
-            <tr>
-                <td class="info-value">Green</td>
-                <td class="info-value">Placed after 75 mins</td>
-            </tr>          
-        </table>
-    </div>
+<div class="page-title">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Problem Match Monitor</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Detail</li>
+    </ol>
 </div>
 
-<div class="div-grid">
+
+<div class="form-filter-detail">
+    <div class="float-left">
+        <div class="group">
+            <table class="table__detail-left">
+                <tr>
+                    <td class="info-name">Event</td>
+                    <td class="info-value">@Model.MatchName</td>
+                    <td class="info-name">Evidence</td>
+                    <td class="info-value">@Model.Evendence</td>
+                </tr>
+                <tr>
+                    <td class="info-name">Date</td>
+                    <td class="info-value">@Model.EventDate</td>
+                    <td class="info-name">HT/FT Score</td>
+                    <td class="info-value">@Model.Score</td>
+                </tr>
+            </table>
+        </div>
+        <div class="group width-200">
+            <label class="text">Contain ticket from site</label>
+            <select class="control" id="cbbSite" multiple="multiple"></select>
+        </div>
+        <div class="group width-200">
+            <label class="text">Bet Type</label>
+            <select class="control" id="cbbBetType" multiple="multiple"></select>
+        </div>
+        <div>
+            <button class="button -primary" id="btnGenerate">Generate</button>
+        </div>
+    </div>
+
+    <div class="float-right">
+        <div class="group">
+            <table class="table__detail-right">
+                <tr>
+                    <td rowspan="2" class="info-name">Special <br /> Notes:</td>
+                    <td class="info-value"><span class="bg-red">Red</span></td>
+                    <td class="info-value">Goal Score < Match Goal Score</td>
+                </tr>
+                <tr>
+                    <td class="info-value"><span class="bg-green">Green</span></td>
+                    <td class="info-value">Placed after 75 mins</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    
+</div>
+
+<div class="div-grid -detail">
     <table id="ticketsTable" class="table width-100per" style="width: 100%">
         <thead>
             <tr>
@@ -71,7 +83,7 @@
                 <th>Void</th>
             </tr>
             <tr class="format-tr">
-                <th colspan="11" class="format-th"></th>               
+                <th colspan="11" class="format-th"></th>
                 <th colspan="2" class="format-th">
                     <select class="control" id="cbbVoid" multiple="multiple">
                         <option value="red">Red</option>
@@ -85,7 +97,7 @@
     </table>
 </div>
 
-<div class="div-grid" style="text-align: right">
+<div class="div-grid detail__button-bottom" style="text-align: right">
     <div class="group">
         <button class="button" id="btnVoidWinningRequest">Void Winning Request</button>
         <button class="button" id="btnVoidAllRequest">Void All(Instant) Request</button>
