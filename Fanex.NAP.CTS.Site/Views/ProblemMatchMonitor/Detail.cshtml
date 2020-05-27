@@ -108,8 +108,8 @@
 <div class="hide">
     <input id="hdMatchId" type="hidden" value="@Model.MatchId" />
     <input id="hdFraudCaseId" type="hidden" value="@Model.FraudCaseId" />
-    <input id="hdIsHostPermission" type="hidden" IsHostPermission="@Model.IsHostPermission">
+    <input id="hdIsHostPermission" type="hidden" IsHostPermission="@Model.IsHostPermission.ToString()" />
 </div>
-@section scripts{
+@section scripts{    
     @Scripts.Render("~/problem-match-monitor-detail-scripts")
 }

@@ -81,7 +81,7 @@
                     LeagueName = x.LeagueName,
                     HomeName = CachedRef.GetTeamName(x.HomeId),
                     AwayName = CachedRef.GetTeamName(x.AwayId),
-                    MatchScore = x.LiveHomeScore + "-" + x.LiveAwayScore,
+                    MatchScore = x.LiveHomeScore + " - " + x.LiveAwayScore,
                     Status = x.EventStatus,
                     GroupBettingCount = _problemMatchMonitorService.CountTicketFraud(model.SuspiciousTicketInfos, x.MatchId, 13),
                     HedgingCount = _problemMatchMonitorService.CountTicketFraud(model.SuspiciousTicketInfos, x.MatchId, 14)
@@ -124,7 +124,7 @@
                 {                   
                     EventDate = model.EventDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                     MatchName = string.Format("{0} vs {1}", CachedRef.GetTeamName(model.HomeId), CachedRef.GetTeamName(model.AwayId)),
-                    Score = string.Format("{0}-{1}/{2}-{3}", model.HTHomeScore, model.HTAwayScore, model.finalhomescore, model.finalawayscore),
+                    Score = string.Format("{0} - {1} / {2} - {3}", model.HTHomeScore, model.HTAwayScore, model.finalhomescore, model.finalawayscore),
                     Evidence = model.FraudCaseName
                 };                
             }

@@ -1,6 +1,7 @@
 ﻿function ProblemMatchMonitor() {
     let dataTable;
     let timeoutHolder = null;
+    let isInitLeague = true;
 
     let domElements = {
         dpkDate: $('#dpkDate'),
@@ -24,9 +25,7 @@
                 GetLeagues();
             },
             complete: function () {
-                domElements.cbbSport.select2({
-                    allowClear: true
-                });
+                domElements.cbbSport.select2();
             },
             error: function (errMsg) {
                 console.log(errMsg);
@@ -54,11 +53,15 @@
                 GenerateLeagueDropdown(response);
             },
             complete: function () {
-                domElements.cbbLeague.select2({
-                    allowClear: true
-                });
+                domElements.cbbLeague.select2();
+
+                if (isInitLeague) {
+                    LoadGrid();
+                    isInitLeague = false;
+                }
             },
             error: function (errMsg) {
+                console.log(errMsg);
             }
         });
     }
@@ -87,7 +90,7 @@
 
     function GenerateGrid() {
         return domElements.problemMatchMonitorTable.DataTable({
-            serverSide: true,
+            serverSide: false,
             ajax: {
                 url: common.modifyRelativeUrl('ProblemMatchMonitor/GetProblemMatchMonitor'),
                 data: function () {
@@ -160,7 +163,7 @@
     function RenderMatchName(obj) {        
         let html = "<div class='event-match-name'>" + obj.HomeName + " vs " + obj.AwayName + "</div>";
         html += "<div class='event-league-name'>" + obj.LeagueName + "</div>";
-        html += "<div class='event-match-id'> Match ID: " + obj.MatchCode + "</div>";
+        html += "<div class='event-match-id'> Match ID: " + obj.MatchId + "</div>";
 
         return html;
     }
@@ -169,7 +172,7 @@
         if (tickedFraudCount === 0) return "<span class='icon-approval'></span>";
         else {
             var link = "href=ProblemMatchMonitor/Detail?matchId=" + matchId + "&fraudCaseId=" + fraudCaseId + " target='_blank'";
-            html = "<a class='warning' " + link + "><span class='icon-alert-circle' ></span>";
+            html = "<a class='warning' " + link + " title='Click to view details'><span class='icon-alert-circle' ></span>";
             html += "<span class='number'>" + GenerateViolation(tickedFraudCount) + "</span>";
             html += "</a>";
 
@@ -223,7 +226,7 @@
                 changeYear: true
             })
             .datepicker("setDate", new Date())
-            .change(GetLeagues);
+            .change(() => GetLeagues());
        
         GetSports();
 
@@ -234,7 +237,7 @@
     }
 
     $(document).ready(function () {
-        Initial();
+        Initial();        
     });
 }
 
