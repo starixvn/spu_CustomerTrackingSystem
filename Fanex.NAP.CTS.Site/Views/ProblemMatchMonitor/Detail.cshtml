@@ -1,4 +1,4 @@
-﻿@model Fanex.NAP.CTS.ViewModel.ProblemMatchMonitor.DetailMatchInfoViewModel
+﻿@model Fanex.NAP.CTS.ViewModel.ProblemMatchMonitor.DetailViewModel
 @{
     ViewBag.Title = "PROBLEM MATCH MONITOR";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -9,8 +9,8 @@
 
 <div class="page-title">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="#">Problem Match Monitor</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Detail</li>
+        <li class="breadcrumb-item"><a href="@Url.Action("Index", "ProblemMatchMonitor")">PROBLEM MATCH MONITOR</a></li>
+        <li class="breadcrumb-item active" aria-current="page">DETAIL</li>
     </ol>
 </div>
 
@@ -21,15 +21,15 @@
             <table class="table__detail-left">
                 <tr>
                     <td class="info-name">Event</td>
-                    <td class="info-value">@Model.MatchName</td>
+                    <td class="info-value" id="lblMatchName"></td>
                     <td class="info-name">Evidence</td>
-                    <td class="info-value">@Model.Evendence</td>
+                    <td class="info-value" id="lblEvidence"></td>
                 </tr>
                 <tr>
                     <td class="info-name">Date</td>
-                    <td class="info-value">@Model.EventDate</td>
+                    <td class="info-value" id="lblEventDate"></td>
                     <td class="info-name">HT/FT Score</td>
-                    <td class="info-value">@Model.Score</td>
+                    <td class="info-value" id="lblScore"></td>
                 </tr>
             </table>
         </div>
@@ -108,6 +108,7 @@
 <div class="hide">
     <input id="hdMatchId" type="hidden" value="@Model.MatchId" />
     <input id="hdFraudCaseId" type="hidden" value="@Model.FraudCaseId" />
+    <input id="hdIsHostPermission" type="hidden" IsHostPermission="@Model.IsHostPermission">
 </div>
 @section scripts{
     @Scripts.Render("~/problem-match-monitor-detail-scripts")

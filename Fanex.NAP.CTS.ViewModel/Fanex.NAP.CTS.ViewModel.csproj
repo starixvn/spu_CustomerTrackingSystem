@@ -113,6 +113,7 @@
     <Compile Include="ProblemMatchMonitor\DetailBetType.cs" />
     <Compile Include="ProblemMatchMonitor\DetailTicket.cs" />
     <Compile Include="ProblemMatchMonitor\DetailTicketViewModel.cs" />
+    <Compile Include="ProblemMatchMonitor\DetailViewModel.cs" />
     <Compile Include="ProblemMatchMonitor\LeagueViewModel.cs" />
     <Compile Include="ProblemMatchMonitor\DetailMatchInfoViewModel.cs" />
     <Compile Include="ProblemMatchMonitor\ProblemMatchMonitorViewModel.cs" />
