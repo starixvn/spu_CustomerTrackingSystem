@@ -499,6 +499,9 @@
 }
 
 .detail__button-bottom {
+    .group{
+        padding-right: 0px;
+    }
     button {
         height: auto !important;
         padding: 6px 16px;
@@ -509,8 +512,9 @@
         border: 1px solid #2053D9;
         box-sizing: border-box;
         border-radius: 3px;
-        margin-right: 13px;
+        margin-left: 13px;
         margin-top: 13px;
+        margin-bottom: 13px;
 
         &:hover {
             background-color: #2053D9;
