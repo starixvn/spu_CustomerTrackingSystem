@@ -51,7 +51,7 @@
     margin-top: 12px;
     margin-left: 16px;
     margin-right: 16px;
-    margin-bottom: 16px;
+    margin-bottom: 10px;
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap; }
@@ -61,6 +61,7 @@
     .content .form-filter-detail .float-right .group {
       padding-right: 0px; }
     .content .form-filter-detail .group {
+      margin-bottom: 6px;
       padding-right: 12px; }
       .content .form-filter-detail .group .text {
         margin-bottom: 6px; }
@@ -82,18 +83,31 @@
         background: #EAEFF9;
         border: 1px solid #CDD2DE;
         color: #2B2B2B;
-        font-weight: 600; }
+        font-weight: 600;
+        border-radius: 0px 3px 3px 0px;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+        border-collapse: separate; }
         .content .form-filter-detail .group .table__detail-right .info-name {
+          padding: 10px;
           width: 70px;
           vertical-align: middle;
           background-color: #CDD2DE; }
         .content .form-filter-detail .group .table__detail-right .info-value {
-          padding: 5px; }
+          padding-left: 6px;
+          padding-right: 6px;
+          padding-top: 4px;
+          padding-bottom: 0px; }
+        .content .form-filter-detail .group .table__detail-right tr:last-child .info-value:first-child {
+          padding-bottom: 4px; }
         .content .form-filter-detail .group .table__detail-right .bg-red, .content .form-filter-detail .group .table__detail-right .bg-green {
-          padding: 3px 0;
+          padding: 1px 0;
           width: 77px;
           display: block;
           text-align: center; }
+          .content .form-filter-detail .group .table__detail-right .bg-red:hover, .content .form-filter-detail .group .table__detail-right .bg-green:hover {
+            background-color: #fff; }
         .content .form-filter-detail .group .table__detail-right .bg-red {
           background: #FF8989;
           border: 1px solid #CC6E6E;
@@ -102,9 +116,12 @@
           background: #DBFF8E;
           border: 1px solid #AFCC72;
           border-radius: 5px; }
+    .content .form-filter-detail .button-left {
+      display: flex;
+      align-items: flex-end;
+      margin-bottom: 7px; }
     .content .form-filter-detail button {
       height: 30px;
-      margin-top: 20px;
       background-color: #396EF8; }
       .content .form-filter-detail button.ui-multiselect {
         margin-top: 8px;
@@ -137,7 +154,7 @@
       border: 1px solid #C4C4C4;
       margin-left: 13px;
       height: 28px;
-      min-width: 70px;
+      min-width: 110px;
       border-radius: 2px; }
   .content .select2-container--default .select2-selection--single .select2-selection__arrow b {
     border: none !important;
@@ -193,18 +210,14 @@
     .div-grid table thead tr:last-child th {
       border-left: 1px solid #7B8BAE;
       border-right: 1px solid #7B8BAE; }
-    .div-grid table thead tr th {
-      padding-left: 0px;
-      padding-right: 0px; }
     .div-grid table thead tr th:first-child {
       width: 30px; }
-    .div-grid table thead tr th:nth-child(3), .div-grid table thead tr th:nth-child(4), .div-grid table thead tr th:nth-child(5), .div-grid table thead tr th:nth-child(6) {
-      width: 140px; }
     .div-grid table thead .format-tr {
       height: 32px; }
       .div-grid table thead .format-tr .format-th {
         background-color: #7B8BAE;
-        border: none; }
+        border-top: none;
+        border-bottom: none; }
     .div-grid table tbody tr {
       font-size: 1.3rem; }
       .div-grid table tbody tr:hover {
@@ -265,20 +278,15 @@
       content: "\e925"; }
 
 .-detail {
-  table-layout: fixed; }
+  table-layout: fixed;
+  border-radius: 3px 0px 0px 3px; }
   .-detail thead tr:first-child th:nth-child(1) {
     width: 30px !important; }
     .-detail thead tr:first-child th:nth-child(1).sorting_asc, .-detail thead tr:first-child th:nth-child(1).sorting {
       background-image: none; }
-  .-detail thead tr:first-child th:nth-child(2) {
-    width: 180px !important; }
-  .-detail thead tr:first-child th:nth-child(4), .-detail thead tr:first-child th:nth-child(4), .-detail thead tr:first-child th:nth-child(5), .-detail thead tr:first-child th:nth-child(6), .-detail thead tr:first-child th:nth-child(7), .-detail thead tr:first-child th:nth-child(8) {
-    width: 160px !important; }
-  .-detail thead tr:first-child th:nth-child(9), .-detail thead tr:first-child th:nth-child(10), .-detail thead tr:first-child th:nth-child(11), .-detail thead tr:first-child th:nth-child(12), .-detail thead tr:first-child th:nth-child(13), .-detail thead tr:first-child th:nth-child(14) {
-    width: 140px !important; }
   .-detail thead tr:last-child button {
     width: 185px !important;
-    margin-right: 38px;
+    margin-right: 14px;
     float: right; }
   .-detail .dataTables_info {
     width: 100%;
@@ -306,3 +314,6 @@
   border-radius: 3px;
   margin-right: 13px;
   margin-top: 13px; }
+  .detail__button-bottom button:hover {
+    background-color: #2053D9;
+    color: #fff; }
