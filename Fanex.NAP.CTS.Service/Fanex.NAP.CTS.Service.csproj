@@ -75,7 +75,7 @@
     <Compile Include="Implement\NotificationRecipientService.cs" />
     <Compile Include="Implement\NotificationService.cs" />
     <Compile Include="Implement\OfficeIPService.cs" />
-    <Compile Include="Implement\ProblemMatchMonitorService.cs" />
+    <Compile Include="Implement\ProblemAccountMonitorService.cs" />
     <Compile Include="Implement\ScannedOfficeIpReportService.cs" />
     <Compile Include="Implement\SubscriberAssignmentService.cs" />
     <Compile Include="Implement\SuspiciousCustomerReportDetailsService.cs" />
@@ -96,7 +96,7 @@
     <Compile Include="Interface\INotificationRecipientService.cs" />
     <Compile Include="Interface\INotificationService.cs" />
     <Compile Include="Interface\IOfficeIPService.cs" />
-    <Compile Include="Interface\IProblemMatchMonitorService.cs" />
+    <Compile Include="Interface\IProblemAccountMonitorService.cs" />
     <Compile Include="Interface\IScannedOfficeIpReportService.cs" />
     <Compile Include="Interface\ISubscriberAssignmentService.cs" />
     <Compile Include="Interface\ISuspiciousCustomerReportDetailsService.cs" />

@@ -56,9 +56,9 @@
 
             RegisterCustomerCategoryBundles(bundles);
 
-            RegisterProblemMatchMonitorBundles(bundles);
+            RegisterProblemAccountMonitorBundles(bundles);
 
-            RegisterProblemMatchMonitorDetailBundles(bundles);
+            RegisterProblemAccountMonitorDetailBundles(bundles);
         }
 
         private static void RegisterFSCoreBundles(BundleCollection bundles)
@@ -202,25 +202,25 @@
             bundles.Add(new ScriptBundle("~/account/customer-category-scripts").Include("~/Scripts/Account/CustomerCategory/*.js"));
         }
 
-        private static void RegisterProblemMatchMonitorBundles(BundleCollection bundles)
+        private static void RegisterProblemAccountMonitorBundles(BundleCollection bundles)
         {
-            bundles.Add(new ScriptBundle("~/problem-match-monitor-scripts").Include(
-                "~/Scripts/ProblemMatchMonitor/index.js"));
+            bundles.Add(new ScriptBundle("~/problem-account-monitor-scripts").Include(
+                "~/Scripts/ProblemAccountMonitor/index.js"));
 
-            bundles.Add(new StyleBundle("~/problem-match-monitor-styles").Include(
-                    "~/Content/scss/pages/problem-match-monitor/problem-match-monitor.css"));
+            bundles.Add(new StyleBundle("~/problem-account-monitor-styles").Include(
+                    "~/Content/scss/pages/problem-account-monitor/problem-account-monitor.css"));
         }
 
-        private static void RegisterProblemMatchMonitorDetailBundles(BundleCollection bundles)
+        private static void RegisterProblemAccountMonitorDetailBundles(BundleCollection bundles)
         {
-            bundles.Add(new ScriptBundle("~/problem-match-monitor-detail-scripts").Include(                
+            bundles.Add(new ScriptBundle("~/problem-account-monitor-detail-scripts").Include(                
                 "~/Scripts/MultipleSelect/jquery.multiselect.filter.js",
-                "~/Scripts/ProblemMatchMonitor/detail.js"));
+                "~/Scripts/ProblemAccountMonitor/detail.js"));
 
-            bundles.Add(new StyleBundle("~/problem-match-monitor-detail-styles").Include(
+            bundles.Add(new StyleBundle("~/problem-account-monitor-detail-styles").Include(
                     "~/Content/scss/MultipleSelect/jquery.multiselect.filter.css",
                       "~/Content/scss/MultipleSelect/jquery.multiselect.css",
-                    "~/Content/scss/pages/problem-match-monitor/problem-match-monitor.css"));
+                    "~/Content/scss/pages/problem-account-monitor/problem-account-monitor.css"));
         }
 
     }
