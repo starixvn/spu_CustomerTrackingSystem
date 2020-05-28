@@ -122,7 +122,7 @@
             {
                 viewModel = new DetailMatchInfoViewModel
                 {                   
-                    EventDate = model.EventDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+                    EventDate = model.EventDate != DateTime.MinValue ? model.EventDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss) : "",
                     MatchName = string.Format("{0} vs {1}", CachedRef.GetTeamName(model.HomeId), CachedRef.GetTeamName(model.AwayId)),
                     Score = string.Format("{0} - {1} / {2} - {3}", model.HTHomeScore, model.HTAwayScore, model.finalhomescore, model.finalawayscore),
                     Evidence = model.FraudCaseName

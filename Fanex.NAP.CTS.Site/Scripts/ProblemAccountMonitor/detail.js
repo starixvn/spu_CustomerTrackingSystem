@@ -14,9 +14,10 @@
         lblScore: $('#lblScore'),
         ticketsTable: $("#ticketsTable"),
         btnGenerate: $('#btnGenerate'),
-        btnVoidWinningRequest: $('#btnVoidWinningRequest'),
-        btnVoidAllRequest: $('#btnVoidAllRequest'),
-        btnVoidManualRequest: $('#btnVoidManualRequest')
+        btnCopyToClipboard: $('#btnCopyToClipboard')
+        //btnVoidWinningRequest: $('#btnVoidWinningRequest'),
+        //btnVoidAllRequest: $('#btnVoidAllRequest'),
+        //btnVoidManualRequest: $('#btnVoidManualRequest')
     };
 
     let isHostPermission = domElements.hdIsHostPermission.attr('IsHostPermission') === "True";
@@ -158,10 +159,11 @@
         let disabled = !isHostPermission || isVoid;
 
         let html = "<label class='checkbox'>";
+        html += "<span></span>";
         html += "<input type='checkbox'" + (checked ? ' checked' : '') + (disabled ? ' disabled' : '') + " data-bet-id=" + betId + " />";
         html += "<span></span>";
         html += "</label>";
-
+        
         return html;
     }
 
@@ -192,18 +194,17 @@
 
     function LoadGrid() {
         $(this).prop('disabled', true);
-        if (dataTable) {
-            dataTable.ajax.reload(null, true);
-        } else {
-            dataTable = GenerateGrid();
-        }
+
+        dataTable
+            ? dataTable.ajax.reload(null, true)
+            : dataTable = GenerateGrid();
     }
 
     function RefreshVoidTicket(value, checked) {
         domElements.ticketsTable.find('tr').each(function () {
             if ($(this).hasClass(value)) {
                 var input = $(this).find("td input");
-                if (input !== undefined)
+                if (input.length > 0)
                     input.prop('checked', checked);
             }
         });
@@ -212,7 +213,7 @@
     function RefreshAllVoidTicket(checked) {
         domElements.ticketsTable.find('tr').each(function () {
             var input = $(this).find("td input");
-            if (input !== undefined)
+            if (input.length > 0)
                 input.prop('checked', checked);
         });
     }
@@ -241,22 +242,58 @@
         });
     }
 
-    function RequestVoidTicket(actionId) {
+    function CopyToClipboardChecked() {
+        let arrBetIds = [];
+        domElements.ticketsTable.find('tr').each(function () {           
+            let input = $(this).find("td input");
+            let checked = $(this).find("td input:checked");
+            let disabled = input.attr('disabled');
 
+            if (checked.length > 0 && !disabled) {
+                let betId = input.attr('data-bet-id');
+                arrBetIds.push(betId);
+            }
+        });
+
+        CopyToClipboard(arrBetIds.join(','));
+    }
+
+    function CopyToClipboard(text) {
+        let target = document.createElement("textarea");
+        target.style.position = "absolute";
+        target.style.left = "-9999px";
+        target.style.top = "0";
+        target.id = "_hiddenCopyText_";
+        target.textContent = text;
+
+        document.body.appendChild(target);       
+    
+        target.focus();
+        target.setSelectionRange(0, target.value.length);
+        
+        try {
+            return document.execCommand("copy");
+        } catch (e) {
+            console.log("CopyToClipboard exception:");
+            console.log(e);
+            return false;
+        }
     }
 
     function DisableButtons() {
         if (!isHostPermission) {            
-            domElements.btnVoidWinningRequest.prop('disabled', true);
-            domElements.btnVoidAllRequest.prop('disabled', true);
-            domElements.btnVoidManualRequest.prop('disabled', true);
+            //domElements.btnVoidWinningRequest.prop('disabled', true);
+            //domElements.btnVoidAllRequest.prop('disabled', true);
+            //domElements.btnVoidManualRequest.prop('disabled', true);
+            domElements.btnCopyToClipboard.prop('disabled', true);
 
             return;
         }
-
-        domElements.btnVoidWinningRequest.on('click', () => RequestVoidTicket(1));
-        domElements.btnVoidAllRequest.on('click', () => RequestVoidTicket(4));
-        domElements.btnVoidManualRequest.on('click', () => RequestVoidTicket(5));
+        
+        //domElements.btnVoidWinningRequest.on('click', () => RequestVoidTicket(1));
+        //domElements.btnVoidAllRequest.on('click', () => RequestVoidTicket(4));
+        //domElements.btnVoidManualRequest.on('click', () => RequestVoidTicket(5));
+        domElements.btnCopyToClipboard.on('click', () => CopyToClipboardChecked());
     }     
 
     function Initial() {
@@ -288,8 +325,8 @@
             });
 
         domElements.cbbVoid.multiselect({
-            menuWidth: 180,
-            menuHeight: 180,
+            menuWidth: 155,
+            menuHeight: 155,
             selectedText: "# of # color(s) selected",
             noneSelectedText: "0 colors selected",
             click: function (event, ui) { RefreshVoidTicket(ui.value, ui.checked); },

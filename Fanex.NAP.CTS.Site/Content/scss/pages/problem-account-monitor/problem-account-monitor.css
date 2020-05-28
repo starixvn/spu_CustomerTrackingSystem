@@ -228,6 +228,41 @@
       background-color: #FFF9E9 !important; }
     .div-grid table tbody tr td:nth-child(4) {
       text-transform: capitalize; }
+    .div-grid table tbody tr input[type="checkbox"] + span {
+      position: relative;
+      margin: 0px;
+      padding-left: 120px;
+      cursor: pointer; }
+    .div-grid table tbody tr input[type="checkbox"] + span:before {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 16px;
+      width: 16px;
+      border-radius: 2px;
+      border: 1px solid #545454;
+      background-color: #fff;
+      content: '';
+      margin-left: 52px; }
+    .div-grid table tbody tr input[type="checkbox"] + .null {
+      padding-left: 16px; }
+    .div-grid table tbody tr input[type="checkbox"]:checked + span:after {
+      position: absolute;
+      top: 5px;
+      left: 4px;
+      height: 5px;
+      width: 9px;
+      border: 2px solid #fff;
+      border-top: none;
+      border-right: none;
+      transform: rotate(-45deg);
+      content: "";
+      margin-left: 52px; }
+    .div-grid table tbody tr input[type="checkbox"]:checked + span:before {
+      background-color: #458A00;
+      border-color: #458A00; }
+    .div-grid table tbody tr input[type="checkbox"]:disabled + span {
+      opacity: 0.5; }
   .div-grid table tbody .event-league-name {
     color: #396EF8;
     text-transform: capitalize; }
@@ -289,11 +324,11 @@
     .-detail thead tr:first-child th:nth-child(1).sorting_asc, .-detail thead tr:first-child th:nth-child(1).sorting {
       background-image: none; }
   .-detail thead tr:last-child button {
-    width: 185px !important;
-    margin-right: 14px;
+    width: 205px !important;
+    margin-right: 5px;
     float: right; }
     .-detail thead tr:last-child button.ui-multiselect {
-      margin-top: 8px;
+      /*margin-top: 8px;*/
       background: #FFFFFF;
       border: 1px solid #E5E5E5; }
       .-detail thead tr:last-child button.ui-multiselect .ui-icon {

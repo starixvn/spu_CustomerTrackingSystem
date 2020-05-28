@@ -210,11 +210,10 @@
 
     function LoadGrid() {
         $(this).prop('disabled', true);
-        if (dataTable) {
-            dataTable.ajax.reload(null, true);
-        } else {
-            dataTable = GenerateGrid();
-        }
+
+        dataTable 
+            ? dataTable.ajax.reload(null, true)
+            : dataTable = GenerateGrid();
     }
 
     function Initial() {

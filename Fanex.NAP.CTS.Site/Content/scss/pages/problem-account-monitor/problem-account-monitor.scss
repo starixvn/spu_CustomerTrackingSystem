@@ -373,6 +373,53 @@
                 td:nth-child(4) {
                     text-transform: capitalize;
                 }
+
+                input[type="checkbox"] + span {
+                    position: relative;
+                    margin: 0px;
+                    padding-left: 120px;
+                    cursor: pointer;
+                }
+
+                input[type="checkbox"] + span:before {
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    height: 16px;
+                    width: 16px;
+                    border-radius: 2px;
+                    border: 1px solid #545454;
+                    background-color: #fff;
+                    content: '';
+                    margin-left: 52px;
+                }
+
+                input[type="checkbox"] + .null {
+                    padding-left: 16px;
+                }
+
+                input[type="checkbox"]:checked + span:after {
+                    position: absolute;
+                    top: 5px;
+                    left: 4px;
+                    height: 5px;
+                    width: 9px;
+                    border: 2px solid #fff;
+                    border-top: none;
+                    border-right: none;
+                    transform: rotate(-45deg);
+                    content: "";
+                    margin-left: 52px;
+                }
+
+                input[type="checkbox"]:checked + span:before {
+                    background-color: #458A00;
+                    border-color: #458A00;
+                }
+
+                input[type="checkbox"]:disabled + span {
+                    opacity: 0.5;
+                }
             }
 
             .event-league-name {
@@ -478,12 +525,12 @@
 
         tr:last-child {
             button {
-                width: 185px !important;
-                margin-right: 14px;
+                width: 205px !important;
+                margin-right: 5px;
                 float: right;
 
                 &.ui-multiselect {
-                    margin-top: 8px;
+                    /*margin-top: 8px;*/
                     background: #FFFFFF;
                     border: 1px solid #E5E5E5;
 
