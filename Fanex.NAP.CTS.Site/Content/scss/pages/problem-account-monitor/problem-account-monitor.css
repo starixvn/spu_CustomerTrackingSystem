@@ -203,42 +203,40 @@
     .div-grid .dataTables_length select {
       width: 58px;
       font-size: 1.3rem; }
-  .div-grid table {
-    table-layout: fixed; }
-    .div-grid table [class^="icon"] {
-      font-size: 2.2rem; }
-    .div-grid table thead tr:first-child th {
+  .div-grid table [class^="icon"] {
+    font-size: 2.2rem; }
+  .div-grid table thead tr:first-child th {
+    border-bottom: none; }
+  .div-grid table thead tr:first-child th:first-child {
+    border-left: 1px solid #1D2E4F; }
+  .div-grid table thead tr:first-child th:last-child {
+    border-right: 1px solid #1D2E4F; }
+  .div-grid table thead tr:last-child th {
+    border-left: 1px solid #7B8BAE;
+    border-right: 1px solid #7B8BAE; }
+  .div-grid table thead tr th:first-child {
+    width: 30px !important; }
+  .div-grid table thead .format-tr {
+    height: 32px; }
+    .div-grid table thead .format-tr .format-th {
+      background-color: #7B8BAE;
+      border-top: none;
       border-bottom: none; }
-    .div-grid table thead tr:first-child th:first-child {
-      border-left: 1px solid #1D2E4F; }
-    .div-grid table thead tr:first-child th:last-child {
-      border-right: 1px solid #1D2E4F; }
-    .div-grid table thead tr:last-child th {
-      border-left: 1px solid #7B8BAE;
-      border-right: 1px solid #7B8BAE; }
-    .div-grid table thead tr th:first-child {
-      width: 30px; }
-    .div-grid table thead .format-tr {
-      height: 32px; }
-      .div-grid table thead .format-tr .format-th {
-        background-color: #7B8BAE;
-        border-top: none;
-        border-bottom: none; }
-    .div-grid table tbody tr {
-      font-size: 1.3rem; }
-      .div-grid table tbody tr:hover {
-        background-color: #FFF9E9 !important; }
-      .div-grid table tbody tr td:nth-child(4) {
-        text-transform: capitalize; }
-    .div-grid table tbody .event-league-name {
-      color: #396EF8;
+  .div-grid table tbody tr {
+    font-size: 1.3rem; }
+    .div-grid table tbody tr:hover {
+      background-color: #FFF9E9 !important; }
+    .div-grid table tbody tr td:nth-child(4) {
       text-transform: capitalize; }
-    .div-grid table tbody .red {
-      background-color: #ff8989; }
-    .div-grid table tbody .green {
-      background-color: #dfff9a; }
-    .div-grid table tbody .white {
-      background-color: #ffffff; }
+  .div-grid table tbody .event-league-name {
+    color: #396EF8;
+    text-transform: capitalize; }
+  .div-grid table tbody .red {
+    background-color: #ff8989; }
+  .div-grid table tbody .green {
+    background-color: #dfff9a; }
+  .div-grid table tbody .white {
+    background-color: #ffffff; }
   .div-grid .dataTables_info {
     position: absolute;
     left: 145px;
@@ -335,6 +333,5 @@
     background-color: #2053D9;
     color: #fff; }
 
-.ui-widget-content .ui-helper-reset li {
-  display: block;
-  float: none; }
+.ui-widget-content {
+  width: auto !important; }

@@ -318,7 +318,6 @@
     }
 
     table {
-        table-layout: fixed;
 
         [class^="icon"] {
             font-size: 2.2rem;
@@ -348,7 +347,7 @@
 
             tr {
                 th:first-child {
-                    width: 30px;
+                    width: 30px !important;
                 }
             }
 
@@ -494,7 +493,6 @@
                     }
                 }
             }
-
         }
     }
 
@@ -515,9 +513,10 @@
 }
 
 .detail__button-bottom {
-    .group{
+    .group {
         padding-right: 0px;
     }
+
     button {
         height: auto !important;
         padding: 6px 16px;
@@ -540,10 +539,5 @@
 }
 
 .ui-widget-content {
-    .ui-helper-reset {
-        li {
-            display: block;
-            float:none;
-        }
-    }
+   width:auto!important;
 }
