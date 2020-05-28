@@ -156,7 +156,7 @@
                     SiteId = x.SiteId,
                     SiteName = x.SiteName,
                     Choice = x.BetTeam,
-                    LiveBetScore = string.Format("{0}-{1}", x.LiveHomeScore, x.LiveAwayScore),
+                    LiveBetScore = string.Format("{0} - {1}", x.LiveHomeScore, x.LiveAwayScore),
                     HtmlChoice = _probleAccountMonitorService.GetHtmlChoice(x),
                     Stake = x.Stake,
                     Odds = x.Odds,
