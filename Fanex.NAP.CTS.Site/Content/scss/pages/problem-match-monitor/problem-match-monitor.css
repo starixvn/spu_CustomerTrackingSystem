@@ -15,7 +15,8 @@
       list-style: none; }
       .content .page-title ol.breadcrumb li {
         display: inline;
-        font-size: 16px; }
+        font-size: 16px;
+        font-weight: 600; }
         .content .page-title ol.breadcrumb li a {
           color: #DF5615; }
         .content .page-title ol.breadcrumb li.active {
@@ -26,6 +27,14 @@
       content: "/\00a0"; }
   .content .group {
     padding-right: 16px; }
+  .content .button-generate {
+    background-color: #396EF8;
+    border-radius: 2px;
+    height: 30px;
+    min-width: 80px;
+    color: #fff; }
+    .content .button-generate:hover {
+      background-color: #5081ff; }
   .content .form-filter {
     margin: 16px 0 0 16px; }
     .content .form-filter label {
@@ -42,11 +51,6 @@
       border: 1px solid #E5E5E5; }
       .content .form-filter .select2-container--default .select2-selection--single .select2-selection__rendered {
         color: #474747; }
-    .content .form-filter button {
-      background-color: #396EF8;
-      border-radius: 2px;
-      height: 30px;
-      min-width: 80px; }
   .content .form-filter-detail {
     margin-top: 12px;
     margin-left: 16px;
@@ -90,7 +94,10 @@
         border-radius: 3px;
         border-collapse: separate; }
         .content .form-filter-detail .group .table__detail-right .info-name {
-          padding: 10px;
+          padding-top: 10px;
+          padding-bottom: 10px;
+          padding-left: 12px;
+          padding-right: 12px;
           width: 70px;
           vertical-align: middle;
           background-color: #CDD2DE; }
@@ -102,12 +109,11 @@
         .content .form-filter-detail .group .table__detail-right tr:last-child .info-value:first-child {
           padding-bottom: 4px; }
         .content .form-filter-detail .group .table__detail-right .bg-red, .content .form-filter-detail .group .table__detail-right .bg-green {
-          padding: 1px 0;
+          font-size: 1.3rem;
+          padding: 2px 0;
           width: 77px;
           display: block;
           text-align: center; }
-          .content .form-filter-detail .group .table__detail-right .bg-red:hover, .content .form-filter-detail .group .table__detail-right .bg-green:hover {
-            background-color: #fff; }
         .content .form-filter-detail .group .table__detail-right .bg-red {
           background: #FF8989;
           border: 1px solid #CC6E6E;

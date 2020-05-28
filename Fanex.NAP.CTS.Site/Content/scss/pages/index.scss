@@ -87,6 +87,7 @@ body {
         background-color: #fff;
         opacity: 0;
         z-index: -1;
+        visibility: hidden;
 
         .sub-menu-item > .link {
             display: block;
@@ -118,6 +119,10 @@ body {
             font-family: 'Fraud-Sensor';
             content: "\e90c";
             font-size: 14px;
+        }
+
+        &:hover .sub-menu {
+            visibility: visible;
         }
     }
 
@@ -236,6 +241,7 @@ body {
         &:hover {
             .sub-menu {
                 display: block;
+                visibility:visible;
             }
         }
 
@@ -254,7 +260,7 @@ body {
             padding: 5px 0;
             line-height: 1;
             position: absolute;
-            top: 45px;
+            top: 61px;
             background: #fff;
             border-radius: 3px;
             display: none;

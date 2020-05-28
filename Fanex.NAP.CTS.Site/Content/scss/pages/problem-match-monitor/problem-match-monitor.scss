@@ -22,6 +22,7 @@
             li {
                 display: inline;
                 font-size: 16px;
+                font-weight: 600;
 
                 a {
                     color: #DF5615;
@@ -42,6 +43,18 @@
 
     .group {
         padding-right: 16px;
+    }
+
+    .button-generate {
+        background-color: #396EF8;
+        border-radius: 2px;
+        height: 30px;
+        min-width: 80px;
+        color: #fff;
+
+        &:hover {
+            background-color: #5081ff
+        }
     }
 
     .form-filter {
@@ -70,15 +83,7 @@
                 color: #474747;
             }
         }
-
-        button {
-            background-color: #396EF8;
-            border-radius: 2px;
-            height: 30px;
-            min-width: 80px;
-        }
     }
-
     // detail page
     .form-filter-detail {
         margin-top: 12px;
@@ -146,7 +151,10 @@
                 border-collapse: separate;
 
                 .info-name {
-                    padding: 10px;
+                    padding-top: 10px;
+                    padding-bottom: 10px;
+                    padding-left: 12px;
+                    padding-right: 12px;
                     width: 70px;
                     vertical-align: middle;
                     background-color: #CDD2DE;
@@ -166,14 +174,11 @@
                 }
 
                 .bg-red, .bg-green {
-                    padding: 1px 0;
+                    font-size: 1.3rem;
+                    padding: 2px 0;
                     width: 77px;
                     display: block;
                     text-align: center;
-
-                    &:hover {
-                        background-color: #fff;
-                    }
                 }
 
                 .bg-red {
@@ -252,7 +257,6 @@
             }
         }
     }
-
     // select 2 customize arrow
     .select2-container--default .select2-selection--single .select2-selection__arrow b {
         border: none !important;
