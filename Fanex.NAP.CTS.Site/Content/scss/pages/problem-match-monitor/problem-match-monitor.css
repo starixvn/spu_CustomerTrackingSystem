@@ -294,6 +294,13 @@
     width: 185px !important;
     margin-right: 14px;
     float: right; }
+    .-detail thead tr:last-child button.ui-multiselect {
+      margin-top: 8px;
+      background: #FFFFFF;
+      border: 1px solid #E5E5E5; }
+      .-detail thead tr:last-child button.ui-multiselect .ui-icon {
+        background-image: url("../../images/chevron-down.png");
+        background-position: center; }
   .-detail .dataTables_info {
     width: 100%;
     display: block;
@@ -327,3 +334,7 @@
   .detail__button-bottom button:hover {
     background-color: #2053D9;
     color: #fff; }
+
+.ui-widget-content .ui-helper-reset li {
+  display: block;
+  float: none; }

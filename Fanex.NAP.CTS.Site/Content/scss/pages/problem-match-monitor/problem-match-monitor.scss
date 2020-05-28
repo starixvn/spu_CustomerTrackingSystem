@@ -482,7 +482,19 @@
                 width: 185px !important;
                 margin-right: 14px;
                 float: right;
+
+                &.ui-multiselect {
+                    margin-top: 8px;
+                    background: #FFFFFF;
+                    border: 1px solid #E5E5E5;
+
+                    .ui-icon {
+                        background-image: url("../../images/chevron-down.png");
+                        background-position: center;
+                    }
+                }
             }
+
         }
     }
 
@@ -523,6 +535,15 @@
         &:hover {
             background-color: #2053D9;
             color: #fff;
+        }
+    }
+}
+
+.ui-widget-content {
+    .ui-helper-reset {
+        li {
+            display: block;
+            float:none;
         }
     }
 }
