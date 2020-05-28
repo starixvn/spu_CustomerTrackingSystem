@@ -478,6 +478,7 @@
     <Content Include="Content\scss\vendors\popoto\vis\img\network\zoomExtends.png" />
     <Content Include="Content\scss\vendors\popoto\vis\vis-network.min.css" />
     <Content Include="favicon.ico" />
+    <Content Include="images\chevron-down.png" />
     <Content Include="images\graphrender\account.svg" />
     <Content Include="images\graphrender\device_android.svg" />
     <Content Include="images\graphrender\device_ios.svg" />
