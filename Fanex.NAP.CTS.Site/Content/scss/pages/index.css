@@ -1109,9 +1109,9 @@ body {
     .main-menu .menu-item .icon.icon-Controller, .header-info .username .icon.icon-Controller {
       font-size: 18px; }
   .main-menu .menu-item .sub-menu, .header-info .username .sub-menu {
+    top: 60px;
     position: absolute;
-    right: 24px;
-    top: 44px;
+    left: 7px;
     border-radius: 3px;
     display: flex;
     flex-direction: column;
@@ -1127,7 +1127,7 @@ body {
     padding: 5px 0; }
     .main-menu .menu-item .sub-menu .sub-menu-item > .link, .header-info .username .sub-menu .sub-menu-item > .link {
       display: block;
-      padding: 10px 20px;
+      padding: 10px 10px;
       color: #545454;
       font-size: 14px; }
     .main-menu .menu-item .sub-menu .sub-menu-item > .link:hover, .header-info .username .sub-menu .sub-menu-item > .link:hover {
@@ -1261,7 +1261,7 @@ body {
       padding: 5px 0;
       line-height: 1;
       position: absolute;
-      top: 44px;
+      top: 60px;
       background: #fff;
       border-radius: 3px;
       display: none; }

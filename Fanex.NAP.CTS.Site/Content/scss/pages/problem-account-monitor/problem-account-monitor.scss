@@ -16,6 +16,7 @@
     .fixed-header {
         padding-top: 16px;
         position: sticky;
+        position: -webkit-sticky;
         top: 60px;
         background: #fff;
         z-index: 90;
@@ -310,13 +311,27 @@
     }
 }
 // table index
+#problemAccountMonitorTable {
+    thead {
+        tr:first-child {
+            th {
+                position: sticky;
+                position: -webkit-sticky;
+                top: 173px;
+                z-index: 90;
+            }
+        }
+    }
+}
+
 .div-grid {
     position: relative;
     margin: 3px 16px 0 16px;
 
     .wrapper-info-table {
         position: sticky;
-        top: 120px;
+        position: -webkit-sticky;
+        top: 175px;
         z-index: 90;
 
         .wrapper-info {
@@ -327,7 +342,7 @@
 
     .dataTables_length {
         position: absolute;
-        top: -34px;
+        top: -33px;
         left: 12px;
         color: #474747;
         font-size: 1.3rem;
@@ -475,15 +490,20 @@
     }
 
     .dataTables_info {
-
         font-size: 1.3rem;
         color: #474747;
         padding: 13px 0;
-        margin-top: -41px;
-        margin-left: 146px;
+        position: absolute;
+        left: 146px;
+        top: -39px;
     }
 
     .dataTables_paginate {
+        position: absolute;
+        z-index: 90;
+        left: 0;
+        right: 0;
+        top: -38px;
         transform: translate(-50%, 0);
         float: none;
 
@@ -617,7 +637,7 @@
 }
 
 .ui-widget-content {
-   width:auto!important;
+    width: auto !important;
 }
 
 @media screen and (min-width: 1440px) {
@@ -625,6 +645,7 @@
         width: 1440px;
     }
 }
+
 @media screen and (max-width: 1439.99px) {
     .form-filter, #problemAccountMonitorGrid {
         width: 100% !important;

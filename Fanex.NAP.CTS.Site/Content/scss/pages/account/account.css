@@ -744,7 +744,8 @@
   padding: 0 16px 16px; }
   .filter .control-label {
     margin-bottom: 7px;
-    color: #474747; }
+    color: #474747;
+    font-size: 1.3rem; }
   .filter .button {
     margin-bottom: 0; }
   .filter .button-search {
@@ -753,6 +754,8 @@
     margin-right: 20px;
     display: inline-block;
     vertical-align: bottom; }
+    .filter .form-control .label {
+      font-size: 1.3rem; }
     .filter .form-control.dropdown {
       width: 150px; }
     .filter .form-control select.control {

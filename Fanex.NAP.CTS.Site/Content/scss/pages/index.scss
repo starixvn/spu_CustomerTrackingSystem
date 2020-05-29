@@ -70,9 +70,9 @@ body {
     }
 
     .sub-menu {
+        top: 60px;
         position: absolute;
-        right: 24px;
-        top: 44px;
+        left: 7px;
         border-radius: 3px;
         display: flex;
         flex-direction: column;
@@ -91,7 +91,7 @@ body {
 
         .sub-menu-item > .link {
             display: block;
-            padding: 10px 20px;
+            padding: 10px 10px;
             color: #545454;
             font-size: 14px;
         }
@@ -241,7 +241,7 @@ body {
         &:hover {
             .sub-menu {
                 display: block;
-                visibility:visible;
+                visibility: visible;
             }
         }
 
@@ -260,7 +260,7 @@ body {
             padding: 5px 0;
             line-height: 1;
             position: absolute;
-            top: 44px;
+            top: 60px;
             background: #fff;
             border-radius: 3px;
             display: none;
@@ -424,7 +424,7 @@ body {
 // Content
 .page-title {
     padding: 1rem 1.6rem;
-    text-transform: uppercase; 
+    text-transform: uppercase;
     color: #DF5615;
     background: #DDE2E6;
     font-size: 1.6rem;
