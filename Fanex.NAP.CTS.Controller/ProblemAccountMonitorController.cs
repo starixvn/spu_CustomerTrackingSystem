@@ -20,6 +20,8 @@
     {
         private readonly IProblemAccountMonitorService _probleAccountMonitorService;
 
+        public override string BaseControllerName { get => Consts.MenuItemController; }
+
         public ProblemAccountMonitorController() 
             => _probleAccountMonitorService = new ProblemAccountMonitorService();
 

@@ -4,6 +4,7 @@
     {
         public const string BaseController = "BaseController";
         public const string MenuItemHome = "Home";
+        public const string MenuItemController = "Controller";
         public const string MenuItemSearch = "Account & Device Search";
         public const string MenuItemSuspiciousBets = "Suspicious Bets";
         public const string MenuItemReports = "Reports";

@@ -42,7 +42,7 @@
             var subMenus = Model.Where(m => m.Parent != null && m.IsActive && m.Parent.Id == menu.Id).OrderBy(m => m.DisplayOrder);
 
             <li class="menu-item" id="@menu.Name">
-                <a href="#@menu.Name" class="link @(subMenus.Any()? "has-child" : "") @(controllerBaseType.Contains(menu.Name) ? "active" : "")">@Html.Raw(iconLookup(menu.Name)) @menu.Name</a>
+                <a href="#@menu.Name" class="link @(subMenus.Any()? "has-child" : "") @(controllerBaseType.Equals(menu.Name) ? "active" : "")">@Html.Raw(iconLookup(menu.Name)) @menu.Name</a>
                 @if (subMenus.Any())
                 {
                 <ul class="sub-menu">

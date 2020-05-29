@@ -36,6 +36,8 @@
 
         private readonly ISubscriberAssignmentService _subscriberAssignmentService;
 
+        public override string BaseControllerName { get => string.Empty; }
+
         public AccountController()
         {
             _accountService = new AccountService();
@@ -43,9 +45,7 @@
             _subscriberAssignmentService = new SubscriberAssignmentService();
             _transService = new TransactionService();
         }
-
-        public override string BaseControllerName { get => Consts.MenuItemSearch; }
-
+       
         public ActionResult Index(long Id)
         {
             if (Id > 0)
