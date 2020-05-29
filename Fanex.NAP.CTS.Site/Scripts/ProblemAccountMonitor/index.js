@@ -91,6 +91,10 @@
     function GenerateGrid() {
         return domElements.problemAccountMonitorTable.DataTable({
             serverSide: false,
+            "dom": '<"wrapper-info-table"<"wrapper-info"lip>>t',
+            fixedHeader: {
+                header: true,
+            },
             ajax: {
                 url: common.modifyRelativeUrl('ProblemAccountMonitor/GetProblemAccountMonitor'),
                 data: function () {

@@ -9,6 +9,12 @@
     background: url("../../images/chevron-down.png") white no-repeat 98.5% !important;
     /* !important used for overriding all other customisations */
     background: url("../../images/chevron-down.png") white no-repeat calc(100% - 12px) !important; }
+  .content .fixed-header {
+    padding-top: 16px;
+    position: sticky;
+    top: 60px;
+    background: #fff;
+    z-index: 90; }
   .content .page-title {
     text-transform: capitalize; }
     .content .page-title ol.breadcrumb {
@@ -36,7 +42,7 @@
     .content .button-generate:hover {
       background-color: #5081ff; }
   .content .form-filter {
-    margin: 16px 0 0 16px; }
+    margin: 0 0 0 0; }
     .content .form-filter label {
       font-size: 1.3rem;
       color: #474747; }
@@ -142,26 +148,31 @@
     padding-left: 7px;
     padding-top: 4px;
     padding-bottom: 5px; }
-    .content .top-header .refresh .refresh-action {
-      grid-template-columns: 30px 26px;
-      margin-left: 0px;
-      background-color: transparent;
-      border: 1px solid #5aab24; }
-      .content .top-header .refresh .refresh-action .number {
-        color: #474747;
-        width: 30px;
-        height: 26px;
-        line-height: 26px; }
-      .content .top-header .refresh .refresh-action .icon {
-        background-color: #4AA30E; }
-        .content .top-header .refresh .refresh-action .icon span {
-          font-size: 1.6rem; }
-    .content .top-header .refresh .refresh-option {
-      border: 1px solid #C4C4C4;
-      margin-left: 13px;
-      height: 28px;
-      min-width: 110px;
-      border-radius: 2px; }
+    .content .top-header .refresh {
+      position: absolute;
+      right: 0; }
+      .content .top-header .refresh .refresh-action {
+        grid-template-columns: 30px 26px;
+        margin-left: 0px;
+        background-color: transparent;
+        border: 1px solid #5aab24; }
+        .content .top-header .refresh .refresh-action .number {
+          font-size: 1.4rem;
+          color: #474747;
+          width: 30px;
+          height: 26px;
+          line-height: 26px; }
+        .content .top-header .refresh .refresh-action .icon {
+          background-color: #4AA30E; }
+          .content .top-header .refresh .refresh-action .icon span {
+            font-size: 1.6rem; }
+      .content .top-header .refresh .refresh-option {
+        border: 1px solid #C4C4C4;
+        margin-left: 13px;
+        height: 30px;
+        min-width: 110px;
+        border-radius: 2px;
+        font-size: 14px; }
   .content .select2-container--default .select2-selection--single .select2-selection__arrow b {
     border: none !important;
     margin-left: -10px !important;
@@ -191,11 +202,18 @@
     width: 336px; }
 
 .div-grid {
+  position: relative;
   margin: 3px 16px 0 16px; }
+  .div-grid .wrapper-info-table {
+    position: sticky;
+    top: 120px;
+    z-index: 90; }
+    .div-grid .wrapper-info-table .wrapper-info {
+      position: relative; }
   .div-grid .dataTables_length {
     position: absolute;
-    left: 11px;
-    bottom: 7px;
+    top: -34px;
+    left: 12px;
     color: #474747;
     font-size: 1.3rem; }
     .div-grid .dataTables_length label {
@@ -205,25 +223,27 @@
       font-size: 1.3rem; }
   .div-grid table [class^="icon"] {
     font-size: 2.2rem; }
-  .div-grid table thead tr:first-child th {
-    border-bottom: none; }
-  .div-grid table thead tr:first-child th:first-child {
-    border-left: 1px solid #1D2E4F; }
-  .div-grid table thead tr:first-child th:last-child {
-    border-right: 1px solid #1D2E4F; }
-  .div-grid table thead tr:last-child th {
-    border-left: 1px solid #7B8BAE;
-    border-right: 1px solid #7B8BAE; }
-  .div-grid table thead tr th:first-child {
-    width: 30px !important; }
-  .div-grid table thead .format-tr {
-    height: 32px; }
-    .div-grid table thead .format-tr .format-th {
-      background-color: #7B8BAE;
-      border-top: none;
+  .div-grid table thead {
+    border: 1px solid #1D2E4F; }
+    .div-grid table thead tr:first-child th {
       border-bottom: none; }
+    .div-grid table thead tr:first-child th:first-child {
+      border-left: 1px solid #1D2E4F; }
+    .div-grid table thead tr:first-child th:last-child {
+      border-right: 1px solid #1D2E4F; }
+    .div-grid table thead tr:last-child th {
+      border-left: 1px solid #7B8BAE;
+      border-right: 1px solid #7B8BAE; }
+    .div-grid table thead tr th:first-child {
+      width: 30px !important; }
+    .div-grid table thead .format-tr {
+      height: 32px; }
+      .div-grid table thead .format-tr .format-th {
+        background-color: #7B8BAE;
+        border-top: none;
+        border-bottom: none; }
   .div-grid table tbody tr {
-    font-size: 1.3rem; }
+    font-size: 1.4rem; }
     .div-grid table tbody tr:hover {
       background-color: #FFF9E9 !important; }
     .div-grid table tbody tr td:nth-child(4) {
@@ -275,17 +295,14 @@
   .div-grid table tbody .white {
     background-color: #ffffff; }
   .div-grid .dataTables_info {
-    position: absolute;
-    left: 145px;
     font-size: 1.3rem;
     color: #474747;
-    padding: 13px 0; }
+    padding: 13px 0;
+    margin-top: -41px;
+    margin-left: 146px; }
   .div-grid .dataTables_paginate {
-    width: 100%;
-    background: #E3E9F7;
-    height: 40px;
-    text-align: center;
-    padding: 9px 0; }
+    transform: translate(-50%, 0);
+    float: none; }
     .div-grid .dataTables_paginate .paginate_button {
       padding-left: 0;
       padding-right: 0;
@@ -372,3 +389,11 @@
 
 .ui-widget-content {
   width: auto !important; }
+
+@media screen and (min-width: 1440px) {
+  .form-filter, #problemAccountMonitorGrid {
+    width: 1440px; } }
+
+@media screen and (max-width: 1439.99px) {
+  .form-filter, #problemAccountMonitorGrid {
+    width: 100% !important; } }

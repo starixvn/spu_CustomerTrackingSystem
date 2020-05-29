@@ -1110,8 +1110,9 @@ body {
       font-size: 18px; }
   .main-menu .menu-item .sub-menu, .header-info .username .sub-menu {
     position: absolute;
-    top: 100%;
-    left: 0;
+    right: 24px;
+    top: 44px;
+    border-radius: 3px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -1122,15 +1123,16 @@ body {
     background-color: #fff;
     opacity: 0;
     z-index: -1;
-    visibility: hidden; }
+    visibility: hidden;
+    padding: 5px 0; }
     .main-menu .menu-item .sub-menu .sub-menu-item > .link, .header-info .username .sub-menu .sub-menu-item > .link {
       display: block;
       padding: 10px 20px;
       color: #545454;
       font-size: 14px; }
     .main-menu .menu-item .sub-menu .sub-menu-item > .link:hover, .header-info .username .sub-menu .sub-menu-item > .link:hover {
-      background-color: #1d2e4f;
-      color: #fff; }
+      background-color: #ddd;
+      color: #333; }
     .main-menu .menu-item .sub-menu.-small, .header-info .username .sub-menu.-small {
       min-width: 160px; }
 
@@ -1259,7 +1261,7 @@ body {
       padding: 5px 0;
       line-height: 1;
       position: absolute;
-      top: 61px;
+      top: 44px;
       background: #fff;
       border-radius: 3px;
       display: none; }

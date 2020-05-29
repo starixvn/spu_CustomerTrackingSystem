@@ -64,17 +64,16 @@ body {
         position: relative;
         top: 1px;
 
-        &.icon-Controller{
+        &.icon-Controller {
             font-size: 18px;
         }
     }
 
     .sub-menu {
         position: absolute;
-        top: 100%;
-        //bottom: 0;
-        left: 0;
-        //height: 0;
+        right: 24px;
+        top: 44px;
+        border-radius: 3px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -88,6 +87,7 @@ body {
         opacity: 0;
         z-index: -1;
         visibility: hidden;
+        padding: 5px 0;
 
         .sub-menu-item > .link {
             display: block;
@@ -97,8 +97,8 @@ body {
         }
 
         .sub-menu-item > .link:hover {
-            background-color: $primary-color;
-            color: #fff;
+            background-color: #ddd;
+            color: #333;
         }
 
         &.-small {
@@ -260,7 +260,7 @@ body {
             padding: 5px 0;
             line-height: 1;
             position: absolute;
-            top: 61px;
+            top: 44px;
             background: #fff;
             border-radius: 3px;
             display: none;
