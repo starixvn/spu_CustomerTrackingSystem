@@ -233,6 +233,8 @@
       margin: 0px;
       padding-left: 120px;
       cursor: pointer; }
+    .div-grid table tbody tr input[type="checkbox"] + span.disabled {
+      cursor: not-allowed; }
     .div-grid table tbody tr input[type="checkbox"] + span:before {
       position: absolute;
       left: 0;

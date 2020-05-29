@@ -498,7 +498,10 @@
     <Setting Key="FS_Rpt_CTSMatchMonitor_Details_GetTickets"
            SpName="FS_Rpt_CTSMatchMonitor_Details_GetTickets_xtest"
            DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
-    
+
+    <Setting Key="TicketVoiding_TicketsInRequest_Select"
+       SpName="TicketVoiding_TicketsInRequest_Select_xtest"
+       DbName="DBTXN.bodb02.bodbSPUNet" />
   </Function>
   
 </Functions>

@@ -381,6 +381,10 @@
                     cursor: pointer;
                 }
 
+                input[type="checkbox"] + span.disabled {
+                    cursor: not-allowed;
+                }
+
                 input[type="checkbox"] + span:before {
                     position: absolute;
                     left: 0;

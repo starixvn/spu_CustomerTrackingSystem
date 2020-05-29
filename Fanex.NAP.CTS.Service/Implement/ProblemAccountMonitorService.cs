@@ -85,7 +85,7 @@
 
         public DetailMatchInfoModel GetDetailMatchInfo(int matchId, int fraudCaseId)
         {
-            var criteria = new DetailMatchInfoGetCriteria()
+            var criteria = new DetailMatchInfoGetCriteria
             {
                 MatchId = matchId,
                 FraudCaseId = fraudCaseId
@@ -99,7 +99,7 @@
 
         public IEnumerable<DetailTicketsModel> GetDetailTickets(int matchId, int fraudCaseId)
         {
-            var criteria = new DetailTicketsGetCriteria()
+            var criteria = new DetailTicketsGetCriteria
             {
                 MatchId = matchId,
                 FraudCaseId = fraudCaseId
@@ -108,6 +108,20 @@
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 return db.Query<DetailTicketsModel>(criteria);
+            }
+        }
+
+        public IEnumerable<DetailTicketVoidingInRequestModel> GetTicketVoidingInRequest(int matchId, string tranIdList)
+        {
+            var criteria = new DetailTicketVoidingInRequestGetCriteria
+            {
+                 MatchId = matchId,
+                 TransIds = tranIdList
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<DetailTicketVoidingInRequestModel>(criteria);
             }
         }
 

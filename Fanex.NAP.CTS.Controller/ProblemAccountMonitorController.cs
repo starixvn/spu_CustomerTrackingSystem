@@ -5,11 +5,14 @@
     using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Core.BaseClasses;
+    using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.ViewModel.ProblemAccountMonitor;
     using System;
+    using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using System.Web.Mvc;
 
     [NapAuth(FunctionKey = FSFunctionKeys.ProblemAccountMonitor, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -85,7 +88,7 @@
                     Status = x.EventStatus,
                     GroupBettingCount = _probleAccountMonitorService.CountTicketFraud(model.SuspiciousTicketInfos, x.MatchId, 13),
                     HedgingCount = _probleAccountMonitorService.CountTicketFraud(model.SuspiciousTicketInfos, x.MatchId, 14)
-                });
+                }).OrderByDescending(x => x.GroupBettingCount + x.HedgingCount);
             }
 
             return Json(new
@@ -135,18 +138,35 @@
         [HttpPost]
         public ActionResult GetTickets(int matchId, int fraudCaseId)
         {
-            var result = new DetailTicketViewModel();          
-            var model = _probleAccountMonitorService.GetDetailTickets(matchId, fraudCaseId);
+            var result = new DetailTicketViewModel();
+            var tasks = new List<Task>();
+            var ticketVoidingsModel = Enumerable.Empty<DetailTicketVoidingInRequestModel>();
+            var ticketsModel = _probleAccountMonitorService.GetDetailTickets(matchId, fraudCaseId);
 
-            if (model != null && model.Any())
+            if (ticketsModel != null && ticketsModel.Any())
             {
-                result.SiteList = model.GroupBy(x => new { x.SiteId, x.SiteName })
+                tasks.Add(Task.Run(() =>
+                {
+                    result.SiteList = ticketsModel.GroupBy(x => new { x.SiteId, x.SiteName })
                               .Select(x => new DetailSite { SiteId = x.Key.SiteId, SiteName = x.Key.SiteName });
+                }));
 
-                result.BetTypeList = model.GroupBy(x => new { x.BettypeId, x.BettypeName })
-                              .Select(x => new DetailBetType { BetTypeId = x.Key.BettypeId, BetTypeName = x.Key.BettypeName });
+                tasks.Add(Task.Run(() =>
+                {
+                    result.BetTypeList = ticketsModel.GroupBy(x => new { x.BettypeId, x.BettypeName })
+                                    .Select(x => new DetailBetType { BetTypeId = x.Key.BettypeId, BetTypeName = x.Key.BettypeName });
+                }));
 
-                result.TicketList = model.Select(x => new DetailTicket
+                tasks.Add(Task.Run(() =>
+                {
+                    var tranIdList = string.Join(",", ticketsModel.Select(x => x.TransId));
+
+                    ticketVoidingsModel = _probleAccountMonitorService.GetTicketVoidingInRequest(matchId, tranIdList);
+                }));
+
+                Task.WhenAll(tasks.ToArray()).Wait();
+
+                result.TicketList = ticketsModel.Select(x => new DetailTicket
                 {
                     BetId = x.TransId,
                     BetDate = x.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
@@ -161,9 +181,11 @@
                     Stake = x.Stake,
                     Odds = x.Odds,
                     TicketStatus = x.TicketStatus,
-                    IsVoid = false,
+                    IsVoid = ticketVoidingsModel
+                                    .Select(s => s.transid)
+                                    .Contains(x.TransId),
                     HighlightStatus = x.HighlightStatus
-                });
+                }).OrderByDescending(x=>x.BetDate);
             }
 
             return Json(new
@@ -173,6 +195,5 @@
                 data = result
             }, JsonRequestBehavior.AllowGet);
         }
-
     }
 }

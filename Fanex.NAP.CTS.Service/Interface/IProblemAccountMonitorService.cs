@@ -20,6 +20,8 @@
 
         IEnumerable<DetailTicketsModel> GetDetailTickets(int matchId, int fraudCaseId);
 
+        IEnumerable<DetailTicketVoidingInRequestModel> GetTicketVoidingInRequest(int matchId, string tranIdList);
+
         string GetHtmlChoice(DetailTicketsModel ticket);
 
     }

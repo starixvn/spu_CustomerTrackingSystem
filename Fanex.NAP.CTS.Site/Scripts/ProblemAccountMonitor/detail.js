@@ -15,9 +15,6 @@
         ticketsTable: $("#ticketsTable"),
         btnGenerate: $('#btnGenerate'),
         btnCopyToClipboard: $('#btnCopyToClipboard')
-        //btnVoidWinningRequest: $('#btnVoidWinningRequest'),
-        //btnVoidAllRequest: $('#btnVoidAllRequest'),
-        //btnVoidManualRequest: $('#btnVoidManualRequest')
     };
 
     let isHostPermission = domElements.hdIsHostPermission.attr('IsHostPermission') === "True";
@@ -106,7 +103,13 @@
                 { data: obj => RenderHandicap(obj.HtmlChoice) },
                 { data: obj => obj.Stake },
                 { data: obj => obj.Odds },
-                { data: obj => obj.TicketStatus },
+                {
+                    data: obj => () => {
+                        let capitalize = obj.TicketStatus;
+                        if (typeof capitalize !== 'string') return '';
+                        return capitalize.charAt(0).toUpperCase() + capitalize.slice(1);
+                    }
+                },
                 { data: obj => RenderVoidTicket(obj.BetId, obj.IsVoid, obj.HighlightStatus) }
             ],
             createdRow: function (row, data, index) {
@@ -158,10 +161,9 @@
         let checked = highlightStatus === 0;
         let disabled = !isHostPermission || isVoid;
 
-        let html = "<label class='checkbox'>";
-        html += "<span></span>";
-        html += "<input type='checkbox'" + (checked ? ' checked' : '') + (disabled ? ' disabled' : '') + " data-bet-id=" + betId + " />";
-        html += "<span></span>";
+        let html = "<label class='checkbox'>";       
+        html += "<input type='checkbox'" + (checked ? ' checked' : '') + (disabled ? ' disabled' : '') +" data-bet-id=" + betId + " />";
+        html += "<span class='" + (disabled ? 'disabled' : '') + "'></span>";
         html += "</label>";
         
         return html;
@@ -244,15 +246,14 @@
 
     function CopyToClipboardChecked() {
         let arrBetIds = [];
-        domElements.ticketsTable.find('tr').each(function () {           
+
+        domElements.ticketsTable.find('tr').each(function () {
             let input = $(this).find("td input");
             let checked = $(this).find("td input:checked");
             let disabled = input.attr('disabled');
 
-            if (checked.length > 0 && !disabled) {
-                let betId = input.attr('data-bet-id');
-                arrBetIds.push(betId);
-            }
+            if (checked.length > 0 && !disabled) 
+                arrBetIds.push(input.attr('data-bet-id'));
         });
 
         CopyToClipboard(arrBetIds.join(','));
@@ -281,18 +282,11 @@
     }
 
     function DisableButtons() {
-        if (!isHostPermission) {            
-            //domElements.btnVoidWinningRequest.prop('disabled', true);
-            //domElements.btnVoidAllRequest.prop('disabled', true);
-            //domElements.btnVoidManualRequest.prop('disabled', true);
+        if (!isHostPermission) {                      
             domElements.btnCopyToClipboard.prop('disabled', true);
-
             return;
         }
         
-        //domElements.btnVoidWinningRequest.on('click', () => RequestVoidTicket(1));
-        //domElements.btnVoidAllRequest.on('click', () => RequestVoidTicket(4));
-        //domElements.btnVoidManualRequest.on('click', () => RequestVoidTicket(5));
         domElements.btnCopyToClipboard.on('click', () => CopyToClipboardChecked());
     }     
 
