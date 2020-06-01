@@ -170,6 +170,7 @@
                 Task.WhenAll(tasks.ToArray()).Wait();
 
                 total = ticketsModel.Count();
+
                 result.TicketList = ticketsModel.Select(x => new DetailTicket
                 {
                     BetId = x.TransId,
@@ -185,9 +186,7 @@
                     Stake = x.Stake,
                     Odds = x.Odds,
                     TicketStatus = x.TicketStatus,
-                    IsVoid = ticketVoidingsModel
-                                    .Select(s => s.transid)
-                                    .Contains(x.TransId),
+                    VoidRequestId = _probleAccountMonitorService.GetVoidRequestId(ticketVoidingsModel, x.TransId),
                     HighlightStatus = x.HighlightStatus
                 }).OrderByDescending(x=>x.BetDate);
             }

@@ -150,5 +150,14 @@
             return htmlBuilder.BuildChoice(coreTicket, ticketHelper, null, true);           
         }
 
+        public string GetVoidRequestId(IEnumerable<DetailTicketVoidingInRequestModel> ticketList, long tranId)
+        {
+            var voidTicket = ticketList.FirstOrDefault(x => x.transid.Equals(tranId));
+
+            return voidTicket != null
+                ? voidTicket.RequestId.ToString()
+                : string.Empty;
+        }
+
     }
 }

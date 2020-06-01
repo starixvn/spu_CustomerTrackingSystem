@@ -24,5 +24,7 @@
 
         string GetHtmlChoice(DetailTicketsModel ticket);
 
+        string GetVoidRequestId(IEnumerable<DetailTicketVoidingInRequestModel> ticketList, long tranId);
+
     }
 }

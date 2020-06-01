@@ -110,7 +110,15 @@
                         return capitalize.charAt(0).toUpperCase() + capitalize.slice(1);
                     }
                 },
-                { data: obj => RenderVoidTicket(obj.BetId, obj.IsVoid, obj.HighlightStatus) }
+                {
+                    data: obj => () => {
+                        let spanRequestId = '<span> RID: ' + obj.VoidRequestId + '</span>';
+
+                        return obj.VoidRequestId === ''
+                            ? RenderVoidTicket(obj.BetId, obj.HighlightStatus)
+                            : spanRequestId;
+                    }
+                }
             ],
             createdRow: function (row, data, index) {
                 let cssClassTR = 'white';
@@ -157,15 +165,15 @@
         return handicap;
     }
 
-    function RenderVoidTicket(betId, isVoid, highlightStatus) {
+    function RenderVoidTicket(betId, highlightStatus) {
         let checked = highlightStatus === 0;
-        let disabled = !isHostPermission || isVoid;
+        let disabled = !isHostPermission;
 
-        let html = "<label class='checkbox'>";       
-        html += "<input type='checkbox'" + (checked ? ' checked' : '') + (disabled ? ' disabled' : '') +" data-bet-id=" + betId + " />";
+        let html = "<label class='checkbox'>";
+        html += "<input type='checkbox'" + (checked ? ' checked' : '') + (disabled ? ' disabled' : '') + " data-bet-id=" + betId + " />";
         html += "<span class='" + (disabled ? 'disabled' : '') + "'></span>";
         html += "</label>";
-        
+     
         return html;
     }
 

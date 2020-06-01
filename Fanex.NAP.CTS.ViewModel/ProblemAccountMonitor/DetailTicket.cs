@@ -48,7 +48,7 @@
 
         public int HighlightStatus { get; set; }
 
-        public bool IsVoid { get; set; }
+        public string VoidRequestId { get; set; }
 
     }
 }
