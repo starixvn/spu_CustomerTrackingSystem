@@ -15,7 +15,7 @@
     position: -webkit-sticky;
     top: 60px;
     background: #fff;
-    z-index: 90; }
+    z-index: 9; }
   .content .page-title {
     text-transform: capitalize; }
     .content .page-title ol.breadcrumb {
@@ -206,7 +206,7 @@
   position: sticky;
   position: -webkit-sticky;
   top: 173px;
-  z-index: 90; }
+  z-index: 9; }
 
 .div-grid {
   position: relative;
@@ -215,7 +215,7 @@
     position: sticky;
     position: -webkit-sticky;
     top: 175px;
-    z-index: 90; }
+    z-index: 9; }
     .div-grid .wrapper-info-table .wrapper-info {
       position: relative; }
   .div-grid .dataTables_length {
@@ -311,7 +311,7 @@
     top: -39px; }
   .div-grid .dataTables_paginate {
     position: absolute;
-    z-index: 90;
+    z-index: 10;
     left: 0;
     right: 0;
     top: -38px;
@@ -402,7 +402,8 @@
     color: #fff; }
 
 .ui-widget-content {
-  width: auto !important; }
+  width: auto !important;
+  z-index: 10 !important; }
 
 @media screen and (min-width: 1440px) {
   .form-filter, #problemAccountMonitorGrid {
