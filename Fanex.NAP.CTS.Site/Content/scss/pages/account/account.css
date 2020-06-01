@@ -740,31 +740,38 @@
   font-family: 'Fraud-Sensor', sans-serif !important;
   content: "\e933"; }
 
-.filter {
-  padding: 0 16px 16px; }
-  .filter .control-label {
-    margin-bottom: 7px;
-    color: #474747;
-    font-size: 1.3rem; }
-  .filter .button {
-    margin-bottom: 0; }
-  .filter .button-search {
-    margin-top: 10px; }
-  .filter .form-control {
-    margin-right: 20px;
-    display: inline-block;
-    vertical-align: bottom; }
-    .filter .form-control .label {
-      font-size: 1.3rem; }
-    .filter .form-control.dropdown {
-      width: 150px; }
-    .filter .form-control select.control {
-      width: 100%; }
-  .filter .button-group {
-    margin-top: 9px; }
-  .filter .input-field {
-    width: 220px;
-    border-color: #e5e5e5; }
+.fixed-header {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 60px;
+  background: #fff;
+  z-index: 9; }
+
+.fixed-header .graph-heading, .table-report .graph-heading {
+  /*        margin-top: 12px;*/
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 38px;
+  border: 1px solid #c1c1c1;
+  padding: 4px 10px;
+  background-color: #e3e9f6;
+  border-bottom: none; }
+  .fixed-header .graph-heading .bold, .table-report .graph-heading .bold {
+    color: #444; }
+  .fixed-header .graph-heading .free-size, .table-report .graph-heading .free-size {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; }
+  .fixed-header .graph-heading .graph-info, .table-report .graph-heading .graph-info {
+    padding-top: 0;
+    text-align: right;
+    float: right;
+    color: #333; }
+    .fixed-header .graph-heading .graph-info .btn-graph, .table-report .graph-heading .graph-info .btn-graph {
+      background-color: #e3e9f6;
+      color: #2f79ed;
+      border: 1px solid #2f79ed; }
 
 .radio-button input[type="radio"] {
   display: none; }
@@ -922,9 +929,57 @@
     .report-cont .filter .button-group {
       margin-top: 13px; }
 
+.filter {
+  padding: 0 16px 16px; }
+  .filter .control-label {
+    margin-bottom: 7px;
+    color: #474747;
+    font-size: 1.3rem; }
+  .filter .button {
+    margin-bottom: 0; }
+  .filter .button-search {
+    margin-top: 10px; }
+  .filter .form-control {
+    margin-right: 20px;
+    display: inline-block;
+    vertical-align: bottom; }
+    .filter .form-control .label {
+      font-size: 1.3rem; }
+    .filter .form-control.dropdown {
+      width: 150px; }
+    .filter .form-control select.control {
+      width: 100%; }
+  .filter .button-group {
+    margin-top: 9px; }
+  .filter .input-field {
+    width: 220px;
+    border-color: #e5e5e5; }
+
 .table-report {
-  position: relative;
-  margin-top: 12px; }
+  position: relative; }
+  .table-report .wrapper-info-table {
+    position: sticky;
+    position: -webkit-sticky;
+    top: 175px;
+    z-index: 9; }
+    .table-report .wrapper-info-table .wrapper-info {
+      position: relative; }
+      .table-report .wrapper-info-table .wrapper-info .dataTables_length {
+        position: absolute;
+        top: -33px;
+        left: 10px; }
+        .table-report .wrapper-info-table .wrapper-info .dataTables_length select {
+          margin-left: 4px; }
+      .table-report .wrapper-info-table .wrapper-info .dataTables_info {
+        position: absolute;
+        left: 147px;
+        top: -36px; }
+      .table-report .wrapper-info-table .wrapper-info .dataTables_paginate {
+        position: absolute;
+        z-index: 10;
+        left: 50%;
+        top: -32px;
+        transform: translate(-50%, 0); }
   .table-report .search-table {
     position: absolute;
     right: 0;
@@ -941,33 +996,6 @@
   .table-report [class^="icon"] {
     font-size: 15px;
     padding-right: 5px; }
-  .table-report .graph-heading {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 38px;
-    border: 1px solid #c1c1c1;
-    padding: 4px 10px;
-    background-color: #e3e9f6; }
-    .table-report .graph-heading .bold {
-      color: #444; }
-    .table-report .graph-heading .free-size {
-      display: flex;
-      justify-content: space-between;
-      align-items: center; }
-    .table-report .graph-heading .graph-info {
-      padding-top: 0;
-      text-align: right;
-      float: right;
-      color: #333; }
-      .table-report .graph-heading .graph-info .btn-graph {
-        background-color: #e3e9f6;
-        color: #2f79ed;
-        border: 1px solid #2f79ed; }
-  .table-report .dataTables_length {
-    position: absolute;
-    top: -35px;
-    left: 10px; }
   .table-report .dataTables_filter {
     position: absolute;
     right: 0;
@@ -1025,11 +1053,63 @@
   .table-report .icon-edit.disabled:hover {
     cursor: not-allowed; }
 
+#account-by-account .wrapper-info-table {
+  top: 165px; }
+
+#account-by-account #account-by-account-table thead th {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 163px;
+  z-index: 10; }
+
+#chains_evidence.report-cont {
+  padding-top: 0; }
+  #chains_evidence.report-cont .filter {
+    padding-top: 12px; }
+  #chains_evidence.report-cont #tblChainToEvidenceFlagged thead th {
+    position: sticky;
+    position: -webkit-sticky;
+    top: 169px;
+    z-index: 10; }
+
+#customer-category .graph-heading {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 60px;
+  z-index: 9; }
+
+#customer-category .wrapper-info-table {
+  top: 98px; }
+
+#customer-category #customer-category-table thead th {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 98px;
+  z-index: 10; }
+
+#customer-category #customer-category-table tbody tr:first-child td {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 130px;
+  z-index: 10; }
+
+#transaction-history .fixed-header {
+  padding-top: 12px; }
+
+#transaction-history .wrapper-info-table {
+  top: 171px; }
+
+#transaction-history #transaction-history-table thead th {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 170px;
+  z-index: 10; }
+
 .dataTable {
   border-bottom: 0; }
   .dataTable thead th {
     width: auto !important; }
-    .dataTable thead th.col-action {
+    z-index .dataTable thead th.col-action {
       width: 120px !important; }
     .dataTable thead th.col-category {
       width: 200px !important; }

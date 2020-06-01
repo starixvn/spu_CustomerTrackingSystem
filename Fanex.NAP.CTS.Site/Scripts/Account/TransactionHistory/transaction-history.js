@@ -9,7 +9,8 @@
     function RenderGrid() {
         var url = common.modifyRelativeUrl('Account/GetTransactionHistory');
 
-        var table = transactionTable.DataTable({            
+        var table = transactionTable.DataTable({ 
+            "dom": '<"wrapper-info-table"<"wrapper-info"lip>>t',
             serverSide: true,
             ajax: {
                 url: url,
@@ -35,7 +36,10 @@
             language: {
                 lengthMenu: "Page size _MENU_",
                 paginate: {
-                    previous: "Back"
+                    first: "<span class=\"icon-chevron-left\"></span><span class=\"icon-chevron-left\"></span>",
+                    last: "<span class=\"icon-chevron-right\"></span><span class=\"icon-chevron-right\"></span>",
+                    next: "",
+                    previous: ""
                 },
                 info: "Displaying _START_ to _END_ of _TOTAL_ item(s)",
                 infoEmpty: "",

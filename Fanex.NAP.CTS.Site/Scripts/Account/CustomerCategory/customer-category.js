@@ -195,8 +195,15 @@
 
     function RenderGrid(ctsCustId, username, subscriberId) {
         tblcustomercategory.DataTable({
+            "dom": '<"wrapper-info-table"<"wrapper-info"lip>>t',
             language: {
-                zeroRecords: "There's no data"
+                zeroRecords: "There's no data",
+                paginate: {
+                    first: "<span class=\"icon-chevron-left\"></span><span class=\"icon-chevron-left\"></span>",
+                    last: "<span class=\"icon-chevron-right\"></span><span class=\"icon-chevron-right\"></span>",
+                    next: "",
+                    previous: ""
+                },
             },
             info: false,
             ordering: false,

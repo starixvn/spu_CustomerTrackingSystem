@@ -10,7 +10,7 @@
     /* !important used for overriding all other customisations */
     background: url("../../images/chevron-down.png") white no-repeat calc(100% - 12px) !important; }
   .content .fixed-header {
-    padding-top: 16px;
+    padding-top: 12px;
     position: sticky;
     position: -webkit-sticky;
     top: 60px;
@@ -43,7 +43,7 @@
     .content .button-generate:hover {
       background-color: #5081ff; }
   .content .form-filter {
-    margin: 0 0 0 0; }
+    margin: 4px 0 0 0; }
     .content .form-filter label {
       font-size: 1.3rem;
       color: #474747; }
@@ -62,7 +62,7 @@
     margin-top: 12px;
     margin-left: 16px;
     margin-right: 16px;
-    margin-bottom: 10px;
+    padding-bottom: 10px;
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap; }
@@ -210,6 +210,23 @@
     top: 173px;
     z-index: 9; }
 
+#ticketsTable_wrapper .wrapper-info-table {
+  top: 140px; }
+
+#ticketsTable_wrapper #ticketsTable thead tr:first-child th {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 178px;
+  z-index: 9; }
+
+#ticketsTable_wrapper #ticketsTable thead tr:last-child th {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 211px;
+  z-index: 9;
+  border-left: #7B8BAE;
+  border-right: #7B8BAE; }
+
 .div-grid {
   position: relative;
   margin: 3px 16px 0 16px; }
@@ -234,16 +251,14 @@
   .div-grid table [class^="icon"] {
     font-size: 2.2rem; }
   .div-grid table thead {
-    border: 1px solid #1D2E4F; }
+    border: 1px solid #c1c1c1;
+    border-bottom: none; }
     .div-grid table thead tr:first-child th {
       border-bottom: none; }
     .div-grid table thead tr:first-child th:first-child {
       border-left: 1px solid #1D2E4F; }
     .div-grid table thead tr:first-child th:last-child {
       border-right: 1px solid #1D2E4F; }
-    .div-grid table thead tr:last-child th {
-      border-left: 1px solid #7B8BAE;
-      border-right: 1px solid #7B8BAE; }
     .div-grid table thead tr th:first-child {
       width: 30px !important; }
     .div-grid table thead .format-tr {
@@ -295,6 +310,9 @@
       border-color: #458A00; }
     .div-grid table tbody tr input[type="checkbox"]:disabled + span {
       opacity: 0.5; }
+    .div-grid table tbody tr td {
+      position: relative;
+      z-index: 1; }
   .div-grid table tbody .event-league-name {
     color: #396EF8;
     text-transform: capitalize; }
@@ -381,7 +399,7 @@
     padding: 12px;
     font-size: 1.4rem;
     color: #222222;
-    border-top: none; }
+    border-bottom: none; }
 
 .detail__button-bottom .group {
   padding-right: 0px; }

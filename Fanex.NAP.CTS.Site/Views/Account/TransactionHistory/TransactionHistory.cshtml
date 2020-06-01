@@ -4,41 +4,44 @@
     ViewBag.Title = "TransactionHistory";
 }
 
-<div id="transaction-history">
-    <div class="filter">
-        <div class="form-control">
-            <div class="label">Report Length</div>
-            <select class="control" id="history_trans_date_range">
-                <option value="@((int)TransactionHistoryLength.Hours24)" selected>Last 24 hours</option>
-                <option value="@((int)TransactionHistoryLength.Days7)">Last 7 days</option>
-                @*<option value="@((int)TransactionHistoryLength.Days30)">Last 30 days</option>
-                <option value="@((int)TransactionHistoryLength.Days180)">Last 180 days</option>*@
-            </select>
+    <div id="transaction-history">
+        <div class="fixed-header">
+            <div class="filter">
+                <div class="form-control">
+                    <div class="label">Report Length</div>
+                    <select class="control" id="history_trans_date_range">
+                        <option value="@((int)TransactionHistoryLength.Hours24)" selected>Last 24 hours</option>
+                        <option value="@((int)TransactionHistoryLength.Days7)">Last 7 days</option>
+                        @*<option value="@((int)TransactionHistoryLength.Days30)">Last 30 days</option>
+                    <option value="@((int)TransactionHistoryLength.Days180)">Last 180 days</option>*@
+                    </select>
+                </div>
+                <div class="form-control" style="vertical-align: bottom;">
+                    <button class="button btn-search" id="transaction-history-btn-search">Search</button>
+                </div>
+            </div>
+
+            <div class="graph-heading">
+                <div class="free-size"></div>
+            </div>
         </div>
-        <div class="form-control" style="vertical-align: bottom;">
-            <button class="button btn-search" id="transaction-history-btn-search">Search</button>
+
+        <div id="transaction-history-content" class="table-report">
+            <table id="transaction-history-table" class="table table-striped" style="width: 100%">
+                <thead>
+                    <tr>
+                        <th>Date/Time</th>
+                        <th>Device</th>
+                        <th>IP</th>
+                        <th>Robot Tracking</th>
+                        <th>Action</th>
+                        <th>Action Result</th>
+                        <th>Device Type</th>
+                        <th>Browser</th>
+                        <th>Domain</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
     </div>
-  
-    <div id="transaction-history-content" class="table-report">
-        <div class="graph-heading">
-            <div class="free-size"></div>          
-        </div>
-        <table id="transaction-history-table" class="table table-striped" style="width: 100%">
-            <thead>
-                <tr>
-                    <th>Date/Time</th>
-                    <th>Device</th>
-                    <th>IP</th>
-                    <th>Robot Tracking</th>
-                    <th>Action</th>
-                    <th>Action Result</th>
-                    <th>Device Type</th>
-                    <th>Browser</th>
-                    <th>Domain</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
-</div>

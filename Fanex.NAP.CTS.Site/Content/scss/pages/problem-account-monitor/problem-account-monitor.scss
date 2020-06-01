@@ -14,7 +14,7 @@
     }
 
     .fixed-header {
-        padding-top: 16px;
+        padding-top: 12px;
         position: sticky;
         position: -webkit-sticky;
         top: 60px;
@@ -67,7 +67,7 @@
     }
 
     .form-filter {
-        margin: 0 0 0 0;
+        margin: 4px 0 0 0;
 
         label {
             font-size: 1.3rem;
@@ -98,7 +98,7 @@
         margin-top: 12px;
         margin-left: 16px;
         margin-right: 16px;
-        margin-bottom: 10px;
+        padding-bottom: 10px;
         display: flex;
         justify-content: space-between;
         flex-wrap: wrap;
@@ -310,9 +310,10 @@
         width: 336px;
     }
 }
-// table index
+// table header account
 #problemAccountMonitorTable {
     margin-bottom: 12px;
+
     thead {
         tr:first-child {
             th {
@@ -321,6 +322,31 @@
                 top: 173px;
                 z-index: 9;
             }
+        }
+    }
+}
+
+// sticky header account detail
+#ticketsTable_wrapper {
+    .wrapper-info-table {
+        top: 140px;
+    }
+
+    #ticketsTable {
+        thead tr:first-child th {
+            position: sticky;
+            position: -webkit-sticky;
+            top: 178px;
+            z-index: 9;
+        }
+
+        thead tr:last-child th {
+            position: sticky;
+            position: -webkit-sticky;
+            top: 211px;
+            z-index: 9;
+            border-left: #7B8BAE;
+            border-right: #7B8BAE;
         }
     }
 }
@@ -367,7 +393,8 @@
         }
 
         thead {
-            border: 1px solid #1D2E4F;
+            border: 1px solid #c1c1c1;
+            border-bottom: none;
 
             tr:first-child {
                 th {
@@ -380,13 +407,6 @@
 
                 th:last-child {
                     border-right: 1px solid #1D2E4F;
-                }
-            }
-
-            tr:last-child {
-                th {
-                    border-left: 1px solid #7B8BAE;
-                    border-right: 1px solid #7B8BAE;
                 }
             }
 
@@ -468,6 +488,11 @@
 
                 input[type="checkbox"]:disabled + span {
                     opacity: 0.5;
+                }
+
+                td {
+                    position: relative;
+                    z-index: 1;
                 }
             }
 
@@ -607,7 +632,7 @@
         padding: 12px;
         font-size: 1.4rem;
         color: #222222;
-        border-top: none;
+        border-bottom: none;
     }
 }
 
@@ -639,7 +664,7 @@
 
 .ui-widget-content {
     width: auto !important;
-    z-index: 10!important;
+    z-index: 10 !important;
 }
 
 @media screen and (min-width: 1440px) {

@@ -21,6 +21,7 @@
 
     function GenerateGrid() {
         return domElements.ticketsTable.DataTable({
+            "dom": '<"wrapper-info-table"<"wrapper-info"lip>>t',
             serverSide: false,
             ajax: {
                 url: common.modifyRelativeUrl('ProblemAccountMonitor/GetTickets'),

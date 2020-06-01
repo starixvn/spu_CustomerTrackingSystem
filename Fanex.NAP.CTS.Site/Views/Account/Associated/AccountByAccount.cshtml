@@ -7,7 +7,7 @@
 @Html.Partial("./Associated/GraphVisualization")
 
 <div id="account-by-account">
-    <div id="account-by-account-filter">
+    <div id="account-by-account-filter" class="fixed-header">
         <div class="filter">
             <div class="form-control radio-button">
                 <input type="radio" id="radio03-01" name="demo03" checked />
@@ -38,17 +38,19 @@
                 <button class="button btn-search" id="account-by-account-btn-search">Search</button>
             </div>
         </div>
-    </div>
 
-    <div class="table-report" id="account-by-account-content">
         <div class="graph-heading">
             <div class="free-size"></div>
-           
+
             <div class="graph-info">
                 <button class="button button-primary-outline" id="btnAddAssociation">Add Association</button>
                 <button class="button button-primary-outline" id="account-by-account-btn-on-graph">View On Graph</button>
             </div>
         </div>
+    </div>
+
+    <div class="table-report" id="account-by-account-content">
+       
         <table id="account-by-account-table" class="table table-striped" style="width: 100%">
             <thead>
                 <tr>
