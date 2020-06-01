@@ -1219,6 +1219,18 @@
     border: 1px solid #E5E5E5;
     line-height: 1.3;
     border-radius: 2px; }
+  .flex .quick-group-comment {
+    border: 1px solid #ddd;
+    padding: 5px; }
+    .flex .quick-group-comment .button-quick-comment {
+      border: 1px solid #ddd;
+      background-color: #e7eeff;
+      color: #2e60e1;
+      margin: 2px;
+      padding-left: 10px;
+      padding-right: 10px; }
+    .flex .quick-group-comment .-quick-comment:hover:not(:disabled) {
+      background: rgba(32, 83, 217, 0.2); }
 
 .ui-multiselect-checkboxes {
   height: 130px !important;

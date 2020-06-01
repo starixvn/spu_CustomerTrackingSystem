@@ -1,19 +1,24 @@
 ﻿function account_evidence() {
-    var tblChainToEvidenceFlagged = $('#tblChainToEvidenceFlagged');
-    var btnChainToEvidenceFlagged = $('#btnChainToEvidenceFlagged');
-    var divPlaceEvidence = $('#divPlaceEvidence');
-    var lblPlaceEvidenceAccount = $('#lblPlaceEvidenceAccount');
-    var lblPlaceEvidenceSubscriber = $('#lblPlaceEvidenceSubscriber');
-    var ddlPlaceEvidenceListEvidence = $('#ddlPlaceEvidenceListEvidence');
-    var btnPlaceEvidenceCancel = $('#btnPlaceEvidenceCancel');
-    var btnPlaceEvidenceSubmit = $('#btnPlaceEvidenceSubmit');
-    var divPlaceEvidenceDescription = $('#divPlaceEvidenceDescription');
-    var txtPlaceEvidenceComment = $('#txtPlaceEvidenceComment');    
-    var tblChainToEvidenceAffectedRetract = $('#tblChainToEvidenceAffected');
     let isHostPermission;
 
+    let domElements = {
+        tblChainToEvidenceFlagged: $('#tblChainToEvidenceFlagged'),
+        btnChainToEvidenceFlagged: $('#btnChainToEvidenceFlagged'),
+        divPlaceEvidence: $('#divPlaceEvidence'),
+        lblPlaceEvidenceAccount: $('#lblPlaceEvidenceAccount'),
+        lblPlaceEvidenceSubscriber: $('#lblPlaceEvidenceSubscriber'),
+        ddlPlaceEvidenceListEvidence: $('#ddlPlaceEvidenceListEvidence'),
+        btnPlaceEvidenceCancel: $('#btnPlaceEvidenceCancel'),
+        btnPlaceEvidenceSubmit: $('#btnPlaceEvidenceSubmit'),
+        divPlaceEvidenceDescription: $('#divPlaceEvidenceDescription'),
+        txtPlaceEvidenceComment: $('#txtPlaceEvidenceComment'),
+        tblChainToEvidenceAffectedRetract: $('#tblChainToEvidenceAffected'),
+        cbbChainToEvidenceListEvidence: $('#cbbChainToEvidenceListEvidence'),
+        btnQuickComment: $('.button-quick-comment')
+    };
+
     function InitialFlaggedGrid(ctsCustId, username) {
-        tblChainToEvidenceFlagged.DataTable({
+        domElements.tblChainToEvidenceFlagged.DataTable({
             language: {
                 zeroRecords: "There's no data"
             },
@@ -37,9 +42,9 @@
                 { data: obj => obj.Comment },
                 { data: obj => obj.Creator },
                 {
-                    data: obj => '<span class="icon-delete' + (isHostPermission === 'False' ? ' disabled' : '') + '" title="Remove Evidence"></span>',
+                    data: obj => '<span class="icon-delete' + (!isHostPermission ? ' disabled' : '') + '" title="Remove Evidence"></span>',
                     createdCell: (cell, _, row) => {
-                        if (isHostPermission === "True") {
+                        if (isHostPermission) {
                             $('.icon-delete', cell).click(() =>
                                 common.showFormConfirmation(`<div class="popup-content">Do you want remove flagged evidence <br/> <strong style="color: red;">${row.EvidenceDisplay}</strong> from <strong style="color: red;">${username}</strong>?</div>`, 'Confirmation', function () {
                                     RemoveFlaggedEvidence(row.EvidenceID, ctsCustId, username);
@@ -56,7 +61,7 @@
     }    
 
     function InitialAffectedRetractGrid() {
-        tblChainToEvidenceAffectedRetract.DataTable({
+        domElements.tblChainToEvidenceAffectedRetract.DataTable({
             language: {
                 zeroRecords: "There's no data"
             },
@@ -107,7 +112,7 @@
                             html += '<div>Removed By: <strong>' + data[i].Creator + '</strong></div>';
                             html += '<div>Comment:  <strong>' + data[i].Comment + '</strong></div></td>';
                             html += '<td class="text-center">';
-                            html += '<span class="icon-delete-restore delete' + (isHostPermission === "False" ? ' icon-delete disabled"' : '') +'" title="Restore Evidence" evidence-id = "' + data[i].EvidenceID + '" evidence-display = "' + data[i].EvidenceDisplay + '"></span>';
+                            html += '<span class="icon-delete-restore delete' + (!isHostPermission ? ' icon-delete disabled"' : '') +'" title="Restore Evidence" evidence-id = "' + data[i].EvidenceID + '" evidence-display = "' + data[i].EvidenceDisplay + '"></span>';
                             html += '</td></tr>';
                         } else {
                             html = '<tr class="affected" evidence-code="' + data[i].EvidenceCode + '">';
@@ -116,7 +121,7 @@
                             html += '<span>' + group + '</span>';
                             html += '</td>';
                             html += '<td class="text-center">';
-                            html += '<span class="icon-delete delete' + (isHostPermission === "False" ? ' icon-delete disabled"' : '') +'" title="Remove Evidence" evidence-id = "' + data[i].EvidenceID + '" evidence-display = "' + data[i].EvidenceDisplay + '"></span>';
+                            html += '<span class="icon-delete delete' + (!isHostPermission ? ' icon-delete disabled"' : '') +'" title="Remove Evidence" evidence-id = "' + data[i].EvidenceID + '" evidence-display = "' + data[i].EvidenceDisplay + '"></span>';
                             html += '</td></tr>';
                         }
                         $(rows).eq(i).before(html);
@@ -128,7 +133,7 @@
     }   
 
     function RenderUsername(obj) {
-        if (obj.UserName != null) {
+        if (obj.UserName !== null) {
             var url = common.modifyRelativeUrl('/Account/Index/' + obj.CTSCustID);
 
             return '<a class="info-bng" href="' + url + '">' + obj.UserName + '</a>';
@@ -143,13 +148,13 @@
         $.ajax(url, {
             type: 'POST',
             beforeSend: function () {
-                tblChainToEvidenceFlagged.find('tbody').addClass('loading');
-                tblChainToEvidenceAffectedRetract.find('tbody').addClass('loading');
+                domElements.tblChainToEvidenceFlagged.find('tbody').addClass('loading');
+                domElements.tblChainToEvidenceAffectedRetract.find('tbody').addClass('loading');
             },
             data: {
                 ctsCustId: ctsCustId
             },
-            success: function (response) {                
+            success: function (response) {
                 GenerateFlaggedEvidences(response.FlaggedEvidenceList);
 
                 GenerateAffectedRetractEvidences(response.AffectedRetractEvidenceList, ctsCustId, username);
@@ -157,19 +162,18 @@
                 GenerateEvidenceList(response.EvidenceList);
             },
             complete: function () {
-                tblChainToEvidenceFlagged.find('tbody').removeClass('loading');
-                tblChainToEvidenceAffectedRetract.find('tbody').removeClass('loading');
+                domElements.tblChainToEvidenceFlagged.find('tbody').removeClass('loading');
+                domElements.tblChainToEvidenceAffectedRetract.find('tbody').removeClass('loading');
             },
             error: function (errMsg) {
-                console.log(errMsg);
-               // common.showError(errMsg);
+                console.log(errMsg);                
             }
-        })
+        });
     }
 
     function GenerateFlaggedEvidences(data) {
-        tblChainToEvidenceFlagged.DataTable().clear().rows.add(data).draw();
-        tblChainToEvidenceFlagged.DataTable().columns.adjust();
+        domElements.tblChainToEvidenceFlagged.DataTable().clear().rows.add(data).draw();
+        domElements.tblChainToEvidenceFlagged.DataTable().columns.adjust();
     }
 
     function RemoveFlaggedEvidence(evidenceId, ctsCustId, username) {
@@ -192,40 +196,36 @@
                 GetAccountEvidence(ctsCustId, username);
             },
             error: function (errMsg) {
-                console.log(errMsg);
-               // common.showError(errMsg);
+                console.log(errMsg);                
             }
-        })
+        });
     }
 
     function GenerateAffectedRetractEvidences(data, ctsCustId, username) {
-        tblChainToEvidenceAffectedRetract.DataTable().clear().rows.add(data).draw();
-        tblChainToEvidenceAffectedRetract.find('tr').each(function () {
-            if ($(this).attr('cust-retract') == "true") {
+        domElements.tblChainToEvidenceAffectedRetract.DataTable().clear().rows.add(data).draw();
+        domElements.tblChainToEvidenceAffectedRetract.find('tr').each(function () {
+            if ($(this).attr('cust-retract') === "true")
                 $(this).addClass('hide');
-            }
-        })
+        });
 
-        tblChainToEvidenceAffectedRetract.DataTable().columns.adjust();
+        domElements.tblChainToEvidenceAffectedRetract.DataTable().columns.adjust();
 
-        if (isHostPermission === "True") {
-            tblChainToEvidenceAffectedRetract.find('span.delete').click(function () {
+        if (isHostPermission) {
+            domElements.tblChainToEvidenceAffectedRetract.find('span.delete').click(function () {
                 var evidenceId = $(this).attr('evidence-id');
                 var evidenceDisplay = $(this).attr('evidence-display');
 
-                if ($(this).hasClass('icon-delete-restore')) {
-                    RestoreAffectedEvidence(ctsCustId, username, evidenceId, evidenceDisplay);
-                } else {
-                    RetractAffectedEvidence(ctsCustId, username, evidenceId, evidenceDisplay);
-                }
-            })
+                $(this).hasClass('icon-delete-restore')
+                    ? RestoreAffectedEvidence(ctsCustId, username, evidenceId, evidenceDisplay)
+                    : RetractAffectedEvidence(ctsCustId, username, evidenceId, evidenceDisplay);
+            });
         }
         
-        tblChainToEvidenceAffectedRetract.find('tr.affected').each(function () {
+        domElements.tblChainToEvidenceAffectedRetract.find('tr.affected').each(function () {
             AffectedRetractToogleGroup(this);
-        })
+        });
 
-        tblChainToEvidenceAffectedRetract.find('tr td.affected-group').on('click', function () {
+        domElements.tblChainToEvidenceAffectedRetract.find('tr td.affected-group').on('click', function () {
             AffectedRetractToogleGroup($(this).closest('tr'));
         });        
     }
@@ -233,17 +233,17 @@
     function AffectedRetractToogleGroup(target) {
         var evidenceCode = $(target).attr('evidence-code');
 
-        $('tr[evidence-code="' + evidenceCode + '"]', tblChainToEvidenceAffectedRetract).each(function () {
-            if (!$(this).hasClass('affected')) {               
+        $('tr[evidence-code="' + evidenceCode + '"]', domElements.tblChainToEvidenceAffectedRetract).each(function () {
+            if (!$(this).hasClass('affected')) {
                 if ($(this).hasClass('hide')) {
-                    $(this).removeClass('hide');                    
+                    $(this).removeClass('hide');
                     $('span.icon', $(target)).removeClass('icon-chevron-down').addClass('icon-chevron-up');
                 } else {
                     $(this).addClass('hide');
                     $('span.icon', $(target)).removeClass('icon-chevron-up').addClass('icon-chevron-down');
                 }
             }
-        })
+        });
     }
 
     function RestoreAffectedEvidence(ctsCustId, username, evidenceId, evidenceDisplay) {   
@@ -276,11 +276,10 @@
                 },
                 error: function (errMsg) {
                     console.log(errMsg);
-                    common.closeLoading();
-                  //  common.showError(errMsg);
+                    common.closeLoading();                    
                 }
-            })
-        })
+            });
+        });
     }
 
     function RetractAffectedEvidence(ctsCustId, username, evidenceId, evidenceDisplay) {
@@ -317,17 +316,16 @@
                 },
                 error: function (errMsg) {
                     console.log(errMsg);
-                    common.closeLoading();
-                   // common.showError(errMsg);
+                    common.closeLoading();                    
                 }
-            })
-        })
+            });
+        });
     }
 
     function GenerateEvidenceList(data) {
-        $('option', '#cbbChainToEvidenceListEvidence').filter(function () {          
-            return $(this).val() != '';
-        }).remove()
+        $('option', '#cbbChainToEvidenceListEvidence').filter(function () {
+            return $(this).val() !== '';
+        }).remove();
 
         $('#cbbChainToEvidenceListEvidence').multiselect("refresh");
 
@@ -359,118 +357,105 @@
     }
 
     function RefreshFlaggedEvidence (evidenceCode, checked) {
-        tblChainToEvidenceFlagged.find('tr').each(function () {
-            if ($(this).attr('evidence-code') == evidenceCode) {
-                if (checked) {
-                    $(this).removeClass('hide');
-                } else {
-                    $(this).addClass('hide');
-                }
-            }
-        })
+        domElements.tblChainToEvidenceFlagged.find('tr').each(function () {
+            $(this).attr('evidence-code') === evidenceCode
+                ? $(this).removeClass('hide')
+                : $(this).addClass('hide');
+        });
     }
 
     function RefreshAllFlaggedEvidence(checked) {
-        tblChainToEvidenceFlagged.find('tr').each(function () {
-            if (checked) {
-                $(this).removeClass('hide');
-            } else {
-                $(this).addClass('hide');
-            }
-        })
+        domElements.tblChainToEvidenceFlagged.find('tr').each(function () {
+            checked
+                ? $(this).removeClass('hide')
+                : $(this).addClass('hide');            
+        });
     }    
 
     function RefreshAllAffectedRetractEvidence(checked) {
-        tblChainToEvidenceAffectedRetract.find('tr').each(function () {
-            if (checked && $(this).attr('cust-retract') != "true") {
-                $(this).removeClass('hide');
-            } else {
-                $(this).addClass('hide');
-            }
-        })
+        domElements.tblChainToEvidenceAffectedRetract.find('tr').each(function () {
+            checked && $(this).attr('cust-retract') !== "true"
+                ? $(this).removeClass('hide')
+                : $(this).addClass('hide');
+        });
     }
    
     function RefreshAffectedRetractEvidence(evidenceCode, checked) {
-        tblChainToEvidenceAffectedRetract.find('tr').each(function () {            
-            if (!$(this).attr('cust-retract') == true) {
-                if ($(this).attr('evidence-code') == evidenceCode) {
-                    if (checked) {
-                        $(this).removeClass('hide');
-                    } else {
-                        $(this).addClass('hide');
-                    }
-                }
-            }            
-        })
+        domElements.tblChainToEvidenceAffectedRetract.find('tr').each(function () {
+            if (!$(this).attr('cust-retract') === true) {
+                $(this).attr('evidence-code') === evidenceCode
+                    ? $(this).removeClass('hide')
+                    : $(this).addClass('hide');               
+            }
+        });
     }     
 
     function InitialPlaceEvidenceForm(ctsCustId, username, subscriberId, subscriber, custId) {        
-        btnChainToEvidenceFlagged.on('click', function () {
-            ddlPlaceEvidenceListEvidence.multiselect({
+        domElements.btnChainToEvidenceFlagged.on('click', function () {
+            domElements.ddlPlaceEvidenceListEvidence.multiselect({
                 multiple: false,
                 selectedList: 1,
                 menuWidth: 340,
-                menuHeight: 300,              
+                menuHeight: 300
             }).multiselectfilter({
                 width: 250,
                 placeholder: ''
-                });
+            });
 
             var flaggedEvidenceCodes = GetEvidenceInFlaggedEvidenceGrid();
 
-            $('option', ddlPlaceEvidenceListEvidence).filter(function () {
+            $('option', domElements.ddlPlaceEvidenceListEvidence).filter(function () {
                 return $.inArray($(this).attr('code'), flaggedEvidenceCodes) !== -1
             }).remove();
-                        
-            $('option:first-child', ddlPlaceEvidenceListEvidence).prop("selected", true);
-            ddlPlaceEvidenceListEvidence.multiselect('refresh');
 
-            ddlPlaceEvidenceListEvidence.bind('change', function (e) {
+            $('option:first-child', domElements.ddlPlaceEvidenceListEvidence).prop("selected", true);
+            domElements.ddlPlaceEvidenceListEvidence.multiselect('refresh');
+
+            domElements.ddlPlaceEvidenceListEvidence.bind('change', function (e) {
                 var desc = $('#ddlPlaceEvidenceListEvidence :selected').attr('desc');
                 if (desc === undefined)
                     desc = '';
-                divPlaceEvidenceDescription.html(desc);
-            })
+                domElements.divPlaceEvidenceDescription.html(desc);
+            });
 
             ResetPlaceEvidence(username, subscriber);
 
-            divPlaceEvidence.dialog({
+            domElements.divPlaceEvidence.dialog({
                 modal: true,
                 width: '900px',
                 title: 'ADD EVIDENCE',
                 resizable: true,
                 draggable: true,
                 close: function () { $(this).dialog('close'); }
-            })
-        })
+            });
+        });
 
-        btnPlaceEvidenceCancel.on('click', function () {
-            divPlaceEvidence.dialog('close');
-        })
+        domElements.btnPlaceEvidenceCancel.on('click', function () {
+            domElements.divPlaceEvidence.dialog('close');
+        });
 
-        btnPlaceEvidenceSubmit.on('click', function (e) {
+        domElements.btnPlaceEvidenceSubmit.on('click', function () {
             AddPlaceEvidence(ctsCustId, username, subscriberId, custId);
-        })
+        });
     }
 
     function ResetPlaceEvidence(username, subscriber) {
-        lblPlaceEvidenceAccount.text(username);
-        lblPlaceEvidenceSubscriber.text(subscriber);
-        var desc = $('option:first-child', ddlPlaceEvidenceListEvidence).attr('desc');
+        domElements.lblPlaceEvidenceAccount.text(username);
+        domElements.lblPlaceEvidenceSubscriber.text(subscriber);
+        var desc = $('option:first-child', domElements.ddlPlaceEvidenceListEvidence).attr('desc');
         if (desc === undefined)
             desc = '';
-        divPlaceEvidenceDescription.text(desc);
-        txtPlaceEvidenceComment.val('');
+        domElements.divPlaceEvidenceDescription.text(desc);
+        domElements.txtPlaceEvidenceComment.val('');
     }
 
     function GetEvidenceInFlaggedEvidenceGrid() {
         var evidenceCodes = [];
 
-        tblChainToEvidenceFlagged.find('tr').each(function () {
-            if ($(this).attr('evidence-code') != undefined) {
+        domElements.tblChainToEvidenceFlagged.find('tr').each(function () {
+            if ($(this).attr('evidence-code') !== undefined) 
                 evidenceCodes.push($(this).attr('evidence-code'));
-            }
-        })
+        });
 
         return evidenceCodes;
     }
@@ -481,48 +466,53 @@
         params.CTSCustId = ctsCustId;
         params.CustId = custId;
         params.SubscriberId = subscriberId;
-        params.EvidenceId = ddlPlaceEvidenceListEvidence.find('option:selected').val();
-        params.EvidenceCode = ddlPlaceEvidenceListEvidence.find('option:selected').attr("code");
-        params.Comment = txtPlaceEvidenceComment.val();
+        params.EvidenceId = domElements.ddlPlaceEvidenceListEvidence.find('option:selected').val();
+        params.EvidenceCode = domElements.ddlPlaceEvidenceListEvidence.find('option:selected').attr("code");
+        params.Comment = domElements.txtPlaceEvidenceComment.val();
 
         $.ajax(url, {
             type: 'POST',
             data: params,
             beforeSend: function () {
-                btnPlaceEvidenceSubmit.prop('disabled', true);
+                domElements.btnPlaceEvidenceSubmit.prop('disabled', true);
                 common.showLoading();
             },
             success: function (response) {
                 common.showSuccess('Add the evidence successful!');
-                divPlaceEvidence.dialog('close');
+                domElements.divPlaceEvidence.dialog('close');
             },
             complete: function () {
                 GetAccountEvidence(ctsCustId, username);
                 common.closeLoading();
-                btnPlaceEvidenceSubmit.prop('disabled', false);
+                domElements.btnPlaceEvidenceSubmit.prop('disabled', false);
             },
             error: function (errorMessage) {
                 console.log(errorMessage);
                 common.showError('Add the evidence fail!');
                 common.closeLoading();
             }
-        })
+        });
+    }
+
+    function AddQuickComment(text) {
+        let currentText = domElements.txtPlaceEvidenceComment.val();
+        currentText += " " + text;
+        domElements.txtPlaceEvidenceComment.val(currentText);
     }
 
     function DisableButton(hostPermission) {
-        isHostPermission = hostPermission;
-        if (isHostPermission === "False") {
-            btnChainToEvidenceFlagged.prop('disabled', true);
-        }
+        isHostPermission = hostPermission === "True";
+
+        if (!isHostPermission)
+            domElements.btnChainToEvidenceFlagged.prop('disabled', true);
     }
 
     this.ReloadAccountEvidence = function (ctsCustId, username) {
         GetAccountEvidence(ctsCustId, username);
-    }
+    };
 
     this.Initial = function (ctsCustId, username, subscriberId, subscriber, custId, hostPermission) {
-
-        $('#cbbChainToEvidenceListEvidence').multiselect({
+        domElements.cbbChainToEvidenceListEvidence.multiselect({
             menuWidth: 330,
             menuHeight: 330,
             selectedText: "# of # selected",
@@ -541,5 +531,9 @@
         GetAccountEvidence(ctsCustId, username);
 
         InitialPlaceEvidenceForm(ctsCustId, username, subscriberId, subscriber, custId);
-    }
+
+        domElements.btnQuickComment.on('click', function () {
+            AddQuickComment($(this).text());
+        });
+    };
 }
