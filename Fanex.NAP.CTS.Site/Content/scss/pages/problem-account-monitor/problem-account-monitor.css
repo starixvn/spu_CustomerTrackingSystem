@@ -202,11 +202,13 @@
   .form-filter .width-336 {
     width: 336px; }
 
-#problemAccountMonitorTable thead tr:first-child th {
-  position: sticky;
-  position: -webkit-sticky;
-  top: 173px;
-  z-index: 9; }
+#problemAccountMonitorTable {
+  margin-bottom: 12px; }
+  #problemAccountMonitorTable thead tr:first-child th {
+    position: sticky;
+    position: -webkit-sticky;
+    top: 173px;
+    z-index: 9; }
 
 .div-grid {
   position: relative;

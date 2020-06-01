@@ -1124,12 +1124,12 @@ body {
     opacity: 0;
     z-index: -1;
     visibility: hidden;
-    padding: 5px 0; }
+    padding: 7px 0; }
     .main-menu .menu-item .sub-menu .sub-menu-item > .link, .header-info .username .sub-menu .sub-menu-item > .link {
       display: block;
-      padding: 10px 10px;
-      color: #545454;
-      font-size: 14px; }
+      padding: 5px 12px;
+      color: #333333;
+      font-size: 13px; }
     .main-menu .menu-item .sub-menu .sub-menu-item > .link:hover, .header-info .username .sub-menu .sub-menu-item > .link:hover {
       background-color: #ddd;
       color: #333; }
