@@ -241,8 +241,7 @@
     position: absolute;
     top: -33px;
     left: 12px;
-    color: #474747;
-    font-size: 1.3rem; }
+    color: #474747; }
     .div-grid .dataTables_length label {
       font-size: 1.4rem; }
     .div-grid .dataTables_length select {
@@ -323,8 +322,6 @@
   .div-grid table tbody .white {
     background-color: #ffffff; }
   .div-grid .dataTables_info {
-    font-size: 1.3rem;
-    color: #474747;
     padding: 13px 0;
     position: absolute;
     left: 146px;
@@ -334,40 +331,9 @@
     z-index: 10;
     left: 0;
     right: 0;
-    top: -38px;
+    top: -40px;
     transform: translate(-50%, 0);
     float: none; }
-    .div-grid .dataTables_paginate .paginate_button {
-      padding-left: 0;
-      padding-right: 0;
-      font-size: 1.3rem; }
-      .div-grid .dataTables_paginate .paginate_button.previous {
-        margin-right: 0px; }
-      .div-grid .dataTables_paginate .paginate_button.next {
-        margin-left: 0px; }
-      .div-grid .dataTables_paginate .paginate_button span {
-        padding-left: 0;
-        padding-right: 0; }
-      .div-grid .dataTables_paginate .paginate_button span:before {
-        font-size: 1.8rem;
-        position: relative;
-        top: 3px; }
-      .div-grid .dataTables_paginate .paginate_button span:last-child {
-        margin-left: -14px; }
-    .div-grid .dataTables_paginate .paginate_button.previous:before, .div-grid .dataTables_paginate .paginate_button.next:after {
-      font-size: 1.8rem;
-      font-family: 'Fraud-Sensor' !important;
-      speak: none;
-      font-style: normal;
-      font-weight: normal;
-      font-variant: normal;
-      text-transform: none;
-      line-height: 1;
-      -webkit-font-smoothing: antialiased; }
-    .div-grid .dataTables_paginate .paginate_button.previous:before {
-      content: "\e924"; }
-    .div-grid .dataTables_paginate .paginate_button.next:after {
-      content: "\e925"; }
 
 .-detail {
   table-layout: fixed;
@@ -397,7 +363,6 @@
     float: left;
     position: static;
     padding: 12px;
-    font-size: 1.4rem;
     color: #222222;
     border-bottom: none; }
 

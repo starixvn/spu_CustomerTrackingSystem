@@ -372,7 +372,6 @@
         top: -33px;
         left: 12px;
         color: #474747;
-        font-size: 1.3rem;
 
         label {
             font-size: 1.4rem;
@@ -516,8 +515,6 @@
     }
 
     .dataTables_info {
-        font-size: 1.3rem;
-        color: #474747;
         padding: 13px 0;
         position: absolute;
         left: 146px;
@@ -529,58 +526,9 @@
         z-index: 10;
         left: 0;
         right: 0;
-        top: -38px;
+        top: -40px;
         transform: translate(-50%, 0);
         float: none;
-
-        .paginate_button {
-            padding-left: 0;
-            padding-right: 0;
-            font-size: 1.3rem;
-
-            &.previous {
-                margin-right: 0px;
-            }
-
-            &.next {
-                margin-left: 0px;
-            }
-
-            span {
-                padding-left: 0;
-                padding-right: 0;
-            }
-
-            span:before {
-                font-size: 1.8rem;
-                position: relative;
-                top: 3px;
-            }
-
-            span:last-child {
-                margin-left: -14px;
-            }
-        }
-
-        .paginate_button.previous:before, .paginate_button.next:after {
-            font-size: 1.8rem;
-            font-family: 'Fraud-Sensor' !important;
-            speak: none;
-            font-style: normal;
-            font-weight: normal;
-            font-variant: normal;
-            text-transform: none;
-            line-height: 1;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        .paginate_button.previous:before {
-            content: "\e924";
-        }
-
-        .paginate_button.next:after {
-            content: "\e925";
-        }
     }
 }
 // detail page: table
@@ -630,7 +578,6 @@
         float: left;
         position: static;
         padding: 12px;
-        font-size: 1.4rem;
         color: #222222;
         border-bottom: none;
     }

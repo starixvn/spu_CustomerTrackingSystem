@@ -196,6 +196,7 @@
     function RenderGrid(ctsCustId, username, subscriberId) {
         tblcustomercategory.DataTable({
             "dom": '<"wrapper-info-table"<"wrapper-info"lip>>t',
+            pagingType: "full_numbers",
             language: {
                 zeroRecords: "There's no data",
                 paginate: {

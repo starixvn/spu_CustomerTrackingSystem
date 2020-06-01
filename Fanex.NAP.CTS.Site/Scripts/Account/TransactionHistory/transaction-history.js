@@ -45,6 +45,7 @@
                 infoEmpty: "",
                 zeroRecords: "There's no data"
             },
+            pagingType: "full_numbers",
             ordering: false,
             searching: false,
             lengthMenu: [50, 100, 200, 500],            

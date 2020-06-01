@@ -866,6 +866,48 @@ table.dataTable {
 table.dataTable tbody tr.selected td {
   background-color: #ffccc4; }
 
+.dataTables_paginate .paginate_button {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  font-size: 1.3rem; }
+  .dataTables_paginate .paginate_button.previous {
+    margin-right: 0px; }
+  .dataTables_paginate .paginate_button.next {
+    margin-left: 0px; }
+  .dataTables_paginate .paginate_button span {
+    padding-left: 0;
+    padding-right: 0; }
+  .dataTables_paginate .paginate_button span:before {
+    font-size: 1.8rem;
+    position: relative;
+    top: 3px; }
+  .dataTables_paginate .paginate_button span:last-child {
+    margin-left: -14px; }
+
+.dataTables_paginate .paginate_button.previous:before, .dataTables_paginate .paginate_button.next:after {
+  font-size: 1.8rem;
+  font-family: 'Fraud-Sensor' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased; }
+
+.dataTables_paginate .paginate_button.previous:before {
+  content: "\e924"; }
+
+.dataTables_paginate .paginate_button.next:after {
+  content: "\e925"; }
+
+.dataTables_info {
+  font-size: 1.3rem;
+  color: #474747; }
+
+.dataTables_length label {
+  font-size: 1.4rem; }
+
 .ui-widget-overlay {
   background: rgba(0, 0, 0, 0.4);
   opacity: 1; }

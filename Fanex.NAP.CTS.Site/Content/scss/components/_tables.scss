@@ -1,32 +1,32 @@
 // Search Table
 .top-header {
-  @include border-radius(2px 2px 0 0);
-  @include align-items($justify-content: flex-end);
-  padding: 8px;
-  border: 1px solid $table-border;
-  border-bottom: none;
-  background-color: #ebebeb;
+    @include border-radius(2px 2px 0 0);
+    @include align-items($justify-content: flex-end);
+    padding: 8px;
+    border: 1px solid $table-border;
+    border-bottom: none;
+    background-color: #ebebeb;
 
-  .button-export-excel {
-    @include align-items($justify-content: center);
-    border: 1px solid $btn-primary-bg;
-    border-radius: 2px;
-    width: 28px;
-    height: 28px;
-    font-size: 16px;
-    color: #3a6e17;
-    cursor: pointer;
+    .button-export-excel {
+        @include align-items($justify-content: center);
+        border: 1px solid $btn-primary-bg;
+        border-radius: 2px;
+        width: 28px;
+        height: 28px;
+        font-size: 16px;
+        color: #3a6e17;
+        cursor: pointer;
 
-    &:hover {
-      border-color: $btn-primary-bg-hover;
-      background-color: $btn-primary-bg-hover;
-      color: #fff;
+        &:hover {
+            border-color: $btn-primary-bg-hover;
+            background-color: $btn-primary-bg-hover;
+            color: #fff;
+        }
     }
-  }
 
-  &.-only-icon {
-    padding: 4px;
-  }
+    &.-only-icon {
+        padding: 4px;
+    }
 }
 
 .refresh {
@@ -76,7 +76,7 @@
 }
 
 .top-header-in-popup {
-  @include align-items();
+    @include align-items();
 
     .info-left {
         @include align-items($justify-content: flex-start);
@@ -195,9 +195,7 @@
         .new-value {
             color: #f76617;
         }
-
         // Arbitrage
-
         .group {
             position: relative;
 
@@ -219,7 +217,6 @@
                 border-color: $btn-primary-bg-hover;
                 background-color: $btn-primary-bg-hover;
                 color: #fff;
-                                
             }
 
             .button.-export:hover {
@@ -231,9 +228,8 @@
                 margin-right: 0;
                 font-size: 14px;
             }
-
         }
-        
+
         .plit-table {
             background-color: #eee;
         }
@@ -274,7 +270,6 @@ table.dataTable {
             background-image: url(../images/sort_asc.png);
         }
     }
-
 }
 
 .dataTables_scrollHeadInner {
@@ -392,4 +387,66 @@ table.dataTable {
 
 table.dataTable tbody tr.selected td {
     background-color: #ffccc4;
+}
+
+.dataTables_paginate {
+    .paginate_button {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        font-size: 1.3rem;
+
+        &.previous {
+            margin-right: 0px;
+        }
+
+        &.next {
+            margin-left: 0px;
+        }
+
+        span {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        span:before {
+            font-size: 1.8rem;
+            position: relative;
+            top: 3px;
+        }
+
+        span:last-child {
+            margin-left: -14px;
+        }
+    }
+
+    .paginate_button.previous:before, .paginate_button.next:after {
+        font-size: 1.8rem;
+        font-family: 'Fraud-Sensor' !important;
+        speak: none;
+        font-style: normal;
+        font-weight: normal;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    .paginate_button.previous:before {
+        content: "\e924";
+    }
+
+    .paginate_button.next:after {
+        content: "\e925";
+    }
+}
+
+.dataTables_info {
+    font-size: 1.3rem;
+    color: #474747;
+}
+
+.dataTables_length {
+    label {
+        font-size: 1.4rem;
+    }
 }

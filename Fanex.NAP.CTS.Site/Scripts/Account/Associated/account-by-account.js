@@ -54,6 +54,7 @@
         return associatedByAccountTable.DataTable({
             serverSide: true,
             "dom": '<"wrapper-info-table"<"wrapper-info"lip>>t',
+            pagingType: "full_numbers",
             ajax: {
                 url: url,
                 data: {
