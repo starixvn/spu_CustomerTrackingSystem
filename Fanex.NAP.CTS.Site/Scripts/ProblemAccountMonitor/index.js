@@ -13,7 +13,9 @@
         btnRefresh: $('#btnRefresh'),
         refreshCountDown: $('#refreshCountDown'),
         problemAccountMonitorTable: $('#problemAccountMonitorTable'),
-        iconCalendarText: $('.icon-calendar-text')
+        iconCalendarText: $('.icon-calendar-text'),
+        tableLength: null,
+        tablePaginate: null
     };
 
     function GetSports() {
@@ -90,8 +92,7 @@
 
     function GenerateGrid() {
         return domElements.problemAccountMonitorTable.DataTable({
-            serverSide: false,
-            "dom": '<"wrapper-info-table"<"wrapper-info"lip>>t',
+            serverSide: false,            
             ajax: {
                 url: common.modifyRelativeUrl('ProblemAccountMonitor/GetProblemAccountMonitor'),
                 data: function () {
@@ -104,13 +105,24 @@
                 type: "POST",
                 beforeSend: function () {
                     domElements.problemAccountMonitorTable.find('tbody').addClass('loading');
+                    domElements.btnGenerate.prop('disabled', true);
                 },
                 dataFilter: function (response) {
+                    var json = jQuery.parseJSON(response);
+                    domElements.tableLength = $('#problemAccountMonitorTable_length');
+                    domElements.tablePaginate = $('#problemAccountMonitorTable_paginate');
+
+                    if (json.recordsTotal === 0) {
+                        domElements.tableLength.hide();
+                        domElements.tablePaginate.hide();
+                    } else {
+                        domElements.tableLength.show();
+                        domElements.tablePaginate.show();
+                    }                       
                     return response;
                 },
                 complete: function () {
                     domElements.problemAccountMonitorTable.find('tbody').removeClass('loading');
-
                     domElements.btnGenerate.prop('disabled', false);
                 },
                 error: function (error) {
@@ -118,6 +130,7 @@
                     console.log(error);
                 }
             },
+            dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
             pagingType: "full_numbers",
             language: {
                 lengthMenu: "Page size _MENU_",

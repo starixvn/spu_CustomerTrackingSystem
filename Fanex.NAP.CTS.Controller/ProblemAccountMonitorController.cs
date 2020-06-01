@@ -73,13 +73,14 @@
         [HttpPost]
         public ActionResult GetProblemAccountMonitor(DateTime eventDate, string leagueIds, string matchStatus)
         {
-            var result = Enumerable.Empty<ProblemAccountMonitorViewModel>();
-
+            var viewModel = Enumerable.Empty<ProblemAccountMonitorViewModel>();
+            var total = 0;
             var model = _probleAccountMonitorService.GetProblemAccountMonitor(eventDate, leagueIds, matchStatus);
 
             if (model != null || model.MatchInfos != null)
             {
-                result = model.MatchInfos.Select(x => new ProblemAccountMonitorViewModel
+                total = model.MatchInfos.Count();
+                viewModel = model.MatchInfos.Select(x => new ProblemAccountMonitorViewModel
                 {
                     MatchId = x.MatchId,
                     MatchCode = x.MatchCode,
@@ -93,11 +94,10 @@
                 }).OrderByDescending(x => x.GroupBettingCount + x.HedgingCount);
             }
 
-            return Json(new
-            {                
-                recordsTotal = result.Count(),
-                recordsFiltered = result.Count(),
-                data = result
+            return Json(new {
+                recordsTotal = total,
+                recordsFiltered = total,
+                data = viewModel
             }, JsonRequestBehavior.AllowGet);
         }
 
@@ -141,6 +141,7 @@
         public ActionResult GetTickets(int matchId, int fraudCaseId)
         {
             var result = new DetailTicketViewModel();
+            var total = 0;
             var tasks = new List<Task>();
             var ticketVoidingsModel = Enumerable.Empty<DetailTicketVoidingInRequestModel>();
             var ticketsModel = _probleAccountMonitorService.GetDetailTickets(matchId, fraudCaseId);
@@ -168,6 +169,7 @@
 
                 Task.WhenAll(tasks.ToArray()).Wait();
 
+                total = ticketsModel.Count();
                 result.TicketList = ticketsModel.Select(x => new DetailTicket
                 {
                     BetId = x.TransId,
@@ -192,8 +194,8 @@
 
             return Json(new
             {
-                recordsTotal = result.TicketList.Count(),
-                recordsFiltered = result.TicketList.Count(),
+                recordsTotal = total,
+                recordsFiltered = total,
                 data = result
             }, JsonRequestBehavior.AllowGet);
         }
