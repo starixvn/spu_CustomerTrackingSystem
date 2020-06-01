@@ -10,7 +10,7 @@
         var url = common.modifyRelativeUrl('Account/GetTransactionHistory');
 
         var table = transactionTable.DataTable({ 
-            "dom": '<"wrapper-info-table"<"wrapper-info"lip>>t',
+            dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
             serverSide: true,
             ajax: {
                 url: url,
