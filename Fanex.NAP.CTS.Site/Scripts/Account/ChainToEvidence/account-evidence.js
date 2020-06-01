@@ -495,9 +495,12 @@
     }
 
     function AddQuickComment(text) {
-        let currentText = domElements.txtPlaceEvidenceComment.val();
+        let maxLength = domElements.txtPlaceEvidenceComment.attr('maxlength');
+        let currentText = domElements.txtPlaceEvidenceComment.val();        
         currentText += " " + text;
-        domElements.txtPlaceEvidenceComment.val(currentText);
+
+        if (currentText.length <= maxLength) 
+            domElements.txtPlaceEvidenceComment.val(currentText);
     }
 
     function DisableButton(hostPermission) {

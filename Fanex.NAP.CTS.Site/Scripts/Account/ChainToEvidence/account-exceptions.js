@@ -38,20 +38,19 @@
                 { data: obj => obj.Comment },
                 { data: obj => obj.Creator },
                 {
-                    data: obj => () =>
-                    {
-                        var html = '<span class="icon-delete' + (isHostPermission === "False" ? ' disabled"' : '') +'" title="Remove Exception"></span>';
+                    data: obj => () => {
+                        var html = '<span class="icon-delete' + (!isHostPermission ? ' disabled"' : '') + '" title="Remove Exception"></span>';
                         return html;
                     }, createdCell: (cell, _, row) => {
-                        if (isHostPermission === "True") {
+                        if (isHostPermission) {
                             $('.icon-delete', cell).click(() => {
                                 ConfirmRemoveException(row.ExceptionCTSCustId, row.UserName);
                             });
-                        }                        
+                        }
                     }
                 }
             ]
-        })
+        });
     }
 
     function RenderUsername(obj) {
@@ -186,14 +185,14 @@
                 console.log(errMsg);
                 common.showError(errMsg);
             }
-        })
+        });
     }
 
     function DisableButton(hostPermission) {
-        isHostPermission = hostPermission;
-        if (isHostPermission === "False") {
+        isHostPermission = hostPermission === "True";
+
+        if (!isHostPermission)
             btnAddException.prop('disabled', true);
-        }
     }
 
     this.Initial = function (ctsCustId, rootUsername, subscriberId, hostPermission) {
@@ -210,25 +209,25 @@
 
             divException.dialog({
                 modal: true,
-                width: '600px',               
-                title: 'ADD EXCEPTIONS',                
+                width: '600px',
+                title: 'ADD EXCEPTIONS',
                 resizable: true,
                 draggable: true,
                 close: function () { $(this).dialog('close'); }
-            })
+            });
         });
 
         btnSaveException.on('click', function () {
-            if (username.val() == '') {
+            if (username.val() === '') {
                 common.showError('Username/Login ID is require.');
                 username.focus();
             } else {
                 AddException();
-            }            
+            }
         });
 
         btnCancelException.on('click', function () {
             divException.dialog('close');
         });
-    }    
+    };   
 }

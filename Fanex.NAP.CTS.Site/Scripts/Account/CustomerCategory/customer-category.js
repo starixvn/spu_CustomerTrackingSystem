@@ -1,7 +1,8 @@
 ﻿function customer_category() {
-    var btnMarkCategory = $('#btnmarkcategory');
-    var divMarkCategory = $('#divMarkCategory');
-    var tblcustomercategory = $('#customer-category-table');
+    let btnMarkCategory = $('#btnmarkcategory');
+    let divMarkCategory = $('#divMarkCategory');
+    let tblcustomercategory = $('#customer-category-table');
+    let isHostPermission;
 
     function BindingMarkCategoryForAddNew(ctsCustId, subscriberId) {
         $('#btncancelcategory').on('click', function () {
@@ -38,7 +39,7 @@
     }
 
     function AddCustomerClassification(ctsCustId, subscriberId) {
-        if ($('#ddlsports').val() == '') {
+        if ($('#ddlsports').val() === '') {
 
             common.showError('Sport is required.');
             return;
@@ -82,7 +83,7 @@
             type: 'POST',
             data: params,
             success: function (response) {
-                if (response.errorCode == 0) {
+                if (response.errorCode === 0) {
                     common.showSuccess('Remove the category successful!', 2000);
 
                     tblcustomercategory.DataTable().ajax.reload();
@@ -228,12 +229,12 @@
                 {
                     data: obj => () =>
                     {
-                        var html = '<span class="icon-edit' + (isHostPermission === "False" ? ' disabled"' : '') +'" title="Edit Category"></span>';
-                        html += '<span class="icon-delete' + (isHostPermission === "False" ? ' disabled"' : '') +'" title="Remove Category"></span>';
+                        var html = '<span class="icon-edit' + (!isHostPermission ? ' disabled"' : '') +'" title="Edit Category"></span>';
+                        html += '<span class="icon-delete' + (!isHostPermission ? ' disabled"' : '') +'" title="Remove Category"></span>';
 
                         return obj.IsEnabledDelete ? html : '';
                     }, createdCell: (cell, _, row) => {
-                        if (isHostPermission === "True") {
+                        if (isHostPermission) {
                             $('.icon-delete', cell).click(() => {
                                 common.showConfirmation("Do you want to remove category <b>" + row.CategoryName + "</b> for <b>" + username + "</b> ?", function () {
                                     RemoveCustomerClassification(ctsCustId, row.CategoryId);
@@ -255,10 +256,10 @@
     }
 
     function DisableButton(hostPermission) {
-        isHostPermission = hostPermission;
-        if (isHostPermission === "False") {
+        isHostPermission = hostPermission === "True";
+
+        if (!isHostPermission)
             btnMarkCategory.prop('disabled', true);
-        }
     }
 
     this.Initial = function (ctsCustId, subscriberId, username, hostPermission) {
@@ -267,6 +268,6 @@
         btnMarkCategory.click(function () { InitialMarkCategory(ctsCustId, subscriberId); });
 
         RenderGrid(ctsCustId, username, subscriberId);
-       // GetCustomerClassification(ctsCustId);
-    }
+        // GetCustomerClassification(ctsCustId);
+    };
 }
