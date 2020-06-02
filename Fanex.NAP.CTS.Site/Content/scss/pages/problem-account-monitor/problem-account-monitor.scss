@@ -5,13 +5,13 @@
         width: 200px;
     }
 
-    select {
+    /*select {
         -webkit-appearance: none;
         -moz-appearance: none;
         appearance: none;
-        background: url("/images/chevron-down.png") white no-repeat 98.5% !important; /* !important used for overriding all other customisations */
+        background: url("/images/chevron-down.png") white no-repeat 98.5% !important;
         background: url("/images/chevron-down.png") white no-repeat calc(100% - 12px) !important;
-    }
+    }*/
 
     .fixed-header {
         padding-top: 12px;
@@ -219,10 +219,10 @@
                 background: #FFFFFF;
                 border: 1px solid #E5E5E5;
 
-                .ui-icon {
+                /*.ui-icon {
                     background-image: url("/images/chevron-down.png");
                     background-position: center;
-                }
+                }*/
             }
         }
     }
@@ -559,10 +559,10 @@
                     background: #FFFFFF;
                     border: 1px solid #E5E5E5;
 
-                    .ui-icon {
+                    /*.ui-icon {
                         background-image: url("/images/chevron-down.png");
                         background-position: center;
-                    }
+                    }*/
                 }
             }
         }
