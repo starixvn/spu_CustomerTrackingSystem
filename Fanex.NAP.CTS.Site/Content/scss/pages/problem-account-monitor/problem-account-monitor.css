@@ -1,12 +1,5 @@
 ﻿.content {
-  margin-top: 60px;
-  /*select {
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-        background: url("/images/chevron-down.png") white no-repeat 98.5% !important;
-        background: url("/images/chevron-down.png") white no-repeat calc(100% - 12px) !important;
-    }*/ }
+  margin-top: 60px; }
   .content .width-200 {
     width: 200px; }
   .content .fixed-header {
@@ -139,11 +132,7 @@
       .content .form-filter-detail button.ui-multiselect {
         margin-top: 8px;
         background: #FFFFFF;
-        border: 1px solid #E5E5E5;
-        /*.ui-icon {
-                    background-image: url("/images/chevron-down.png");
-                    background-position: center;
-                }*/ }
+        border: 1px solid #E5E5E5; }
   .content .top-header {
     height: 40px;
     justify-content: initial;
@@ -350,11 +339,7 @@
     .-detail thead tr:last-child button.ui-multiselect {
       /*margin-top: 8px;*/
       background: #FFFFFF;
-      border: 1px solid #E5E5E5;
-      /*.ui-icon {
-                        background-image: url("/images/chevron-down.png");
-                        background-position: center;
-                    }*/ }
+      border: 1px solid #E5E5E5; }
   .-detail .dataTables_info {
     width: 100%;
     display: block;

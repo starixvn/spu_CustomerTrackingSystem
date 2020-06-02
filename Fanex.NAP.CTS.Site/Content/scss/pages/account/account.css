@@ -1099,6 +1099,9 @@
 #transaction-history .wrapper-info-table {
   top: 171px; }
 
+#transaction-history #history_trans_date_range {
+  min-width: 125px; }
+
 #transaction-history #transaction-history-table thead th {
   position: sticky;
   position: -webkit-sticky;
@@ -1482,3 +1485,7 @@
     -ms-transform: rotate(360deg);
     -o-transform: rotate(360deg);
     transform: rotate(360deg); } }
+
+/*custom table*/
+.dataTables_length select {
+  min-width: 58px; }
