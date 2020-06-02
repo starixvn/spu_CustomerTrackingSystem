@@ -115,6 +115,8 @@
                     data: obj => () => {
                         let spanRequestId = '<span> RID: ' + obj.VoidRequestId + '</span>';
 
+                        if (obj.TicketStatusId === 102) return '';
+
                         return obj.VoidRequestId === ''
                             ? RenderVoidTicket(obj.BetId, obj.HighlightStatus)
                             : spanRequestId;

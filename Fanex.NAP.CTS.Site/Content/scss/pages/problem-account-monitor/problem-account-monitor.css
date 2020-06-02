@@ -6,9 +6,9 @@
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    background: url("../../images/chevron-down.png") white no-repeat 98.5% !important;
+    background: url("/images/chevron-down.png") white no-repeat 98.5% !important;
     /* !important used for overriding all other customisations */
-    background: url("../../images/chevron-down.png") white no-repeat calc(100% - 12px) !important; }
+    background: url("/images/chevron-down.png") white no-repeat calc(100% - 12px) !important; }
   .content .fixed-header {
     padding-top: 12px;
     position: sticky;
@@ -141,7 +141,7 @@
         background: #FFFFFF;
         border: 1px solid #E5E5E5; }
         .content .form-filter-detail button.ui-multiselect .ui-icon {
-          background-image: url("../../images/chevron-down.png");
+          background-image: url("/images/chevron-down.png");
           background-position: center; }
   .content .top-header {
     height: 40px;
@@ -351,7 +351,7 @@
       background: #FFFFFF;
       border: 1px solid #E5E5E5; }
       .-detail thead tr:last-child button.ui-multiselect .ui-icon {
-        background-image: url("../../images/chevron-down.png");
+        background-image: url("/images/chevron-down.png");
         background-position: center; }
   .-detail .dataTables_info {
     width: 100%;

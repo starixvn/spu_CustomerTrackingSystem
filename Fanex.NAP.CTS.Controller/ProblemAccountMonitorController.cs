@@ -186,7 +186,10 @@
                     Stake = x.Stake,
                     Odds = x.Odds,
                     TicketStatus = x.TicketStatus,
-                    VoidRequestId = _probleAccountMonitorService.GetVoidRequestId(ticketVoidingsModel, x.TransId),
+                    TicketStatusId = x.TicketStatusId,
+                    VoidRequestId = x.TicketStatusId != 102 // Void
+                                    ? _probleAccountMonitorService.GetVoidRequestId(ticketVoidingsModel, x.TransId)
+                                    : string.Empty,
                     HighlightStatus = x.HighlightStatus
                 }).OrderByDescending(x=>x.BetDate);
             }

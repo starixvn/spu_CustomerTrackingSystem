@@ -9,8 +9,8 @@
         -webkit-appearance: none;
         -moz-appearance: none;
         appearance: none;
-        background: url("../../images/chevron-down.png") white no-repeat 98.5% !important; /* !important used for overriding all other customisations */
-        background: url("../../images/chevron-down.png") white no-repeat calc(100% - 12px) !important;
+        background: url("/images/chevron-down.png") white no-repeat 98.5% !important; /* !important used for overriding all other customisations */
+        background: url("/images/chevron-down.png") white no-repeat calc(100% - 12px) !important;
     }
 
     .fixed-header {
@@ -220,7 +220,7 @@
                 border: 1px solid #E5E5E5;
 
                 .ui-icon {
-                    background-image: url("../../images/chevron-down.png");
+                    background-image: url("/images/chevron-down.png");
                     background-position: center;
                 }
             }
@@ -560,7 +560,7 @@
                     border: 1px solid #E5E5E5;
 
                     .ui-icon {
-                        background-image: url("../../images/chevron-down.png");
+                        background-image: url("/images/chevron-down.png");
                         background-position: center;
                     }
                 }

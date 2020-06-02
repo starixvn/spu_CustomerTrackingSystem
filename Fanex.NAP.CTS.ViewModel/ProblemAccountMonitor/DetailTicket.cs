@@ -42,6 +42,8 @@
 
         public string TicketStatus { get; set; }
 
+        public int TicketStatusId { get; set; }
+
         public string IP { get; set; }
 
         public string CurrencyName { get; set; }
