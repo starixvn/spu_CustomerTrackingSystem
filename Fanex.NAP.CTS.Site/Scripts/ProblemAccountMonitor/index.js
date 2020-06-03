@@ -247,6 +247,7 @@
         domElements.iconCalendarText.on('click', () => domElements.dpkDate.focus());
         domElements.btnRefresh.on('click', () => LoadGrid());
         domElements.btnGenerate.on('click', () => LoadGrid());
+        domElements.cbbSport.on('change', () => GetLeagues());
     }
 
     $(document).ready(function () {
