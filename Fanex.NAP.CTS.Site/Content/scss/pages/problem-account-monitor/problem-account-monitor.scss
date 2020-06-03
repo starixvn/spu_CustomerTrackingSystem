@@ -258,32 +258,6 @@
             }
         }
     }
-    // select 2 customize arrow
-    .select2-container--default .select2-selection--single .select2-selection__arrow b {
-        border: none !important;
-        margin-left: -10px !important;
-        margin-top: -9px !important;
-        font-family: 'Fraud-Sensor' !important;
-        speak: none;
-        font-style: normal;
-        font-weight: normal;
-        font-variant: normal;
-        text-transform: none;
-        line-height: 1;
-        -webkit-font-smoothing: antialiased;
-    }
-
-    .select2-container--default .select2-selection--single .select2-selection__arrow b:before {
-        content: "\e90c";
-        font-size: 20px;
-    }
-
-    .select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b {
-        border: none !important;
-        transform: rotate(180deg);
-        margin-left: 9px !important;
-        margin-top: 11px !important;
-    }
 }
 
 .form-filter {
@@ -323,14 +297,14 @@
         thead tr:first-child th {
             position: sticky;
             position: -webkit-sticky;
-            top: 178px;
+            top: 177px;
             z-index: 9;
         }
 
         thead tr:last-child th {
             position: sticky;
             position: -webkit-sticky;
-            top: 211px;
+            top: 210px;
             z-index: 9;
             border-left: #7B8BAE;
             border-right: #7B8BAE;
@@ -508,6 +482,27 @@
         top: -39px;
     }
 
+    .loading {
+        position: relative;       
+        &:after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 42%;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            border: 0.25rem solid rgba(57, 110, 248, 0.2);
+            border-top-color: rgba(57, 110, 248, 1);
+            -webkit-animation: spin 1s infinite linear;
+            animation: spin 1s infinite linear;
+        }
+
+        tr {
+            opacity: .3;
+        }
+    }
+
     .dataTables_paginate {
         position: absolute;
         z-index: 10;
@@ -562,6 +557,28 @@
         padding: 12px;
         color: #222222;
         border-bottom: none;
+    }
+
+    .loading {
+        position: relative;
+
+        &:after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 42%;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            border: 0.25rem solid rgba(57, 110, 248, 0.2);
+            border-top-color: rgba(57, 110, 248, 1);
+            -webkit-animation: spin 1s infinite linear;
+            animation: spin 1s infinite linear;
+        }
+
+        tr {
+            opacity: .3;
+        }
     }
 }
 

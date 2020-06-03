@@ -164,26 +164,6 @@
         min-width: 110px;
         border-radius: 2px;
         font-size: 14px; }
-  .content .select2-container--default .select2-selection--single .select2-selection__arrow b {
-    border: none !important;
-    margin-left: -10px !important;
-    margin-top: -9px !important;
-    font-family: 'Fraud-Sensor' !important;
-    speak: none;
-    font-style: normal;
-    font-weight: normal;
-    font-variant: normal;
-    text-transform: none;
-    line-height: 1;
-    -webkit-font-smoothing: antialiased; }
-  .content .select2-container--default .select2-selection--single .select2-selection__arrow b:before {
-    content: "\e90c";
-    font-size: 20px; }
-  .content .select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b {
-    border: none !important;
-    transform: rotate(180deg);
-    margin-left: 9px !important;
-    margin-top: 11px !important; }
 
 .form-filter {
   margin: 16px 0 0 12px; }
@@ -206,13 +186,13 @@
 #ticketsTable_wrapper #ticketsTable thead tr:first-child th {
   position: sticky;
   position: -webkit-sticky;
-  top: 178px;
+  top: 177px;
   z-index: 9; }
 
 #ticketsTable_wrapper #ticketsTable thead tr:last-child th {
   position: sticky;
   position: -webkit-sticky;
-  top: 211px;
+  top: 210px;
   z-index: 9;
   border-left: #7B8BAE;
   border-right: #7B8BAE; }
@@ -316,6 +296,22 @@
     position: absolute;
     left: 146px;
     top: -39px; }
+  .div-grid .loading {
+    position: relative; }
+    .div-grid .loading:after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 42%;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      border: 0.25rem solid rgba(57, 110, 248, 0.2);
+      border-top-color: #396ef8;
+      -webkit-animation: spin 1s infinite linear;
+      animation: spin 1s infinite linear; }
+    .div-grid .loading tr {
+      opacity: .3; }
   .div-grid .dataTables_paginate {
     position: absolute;
     z-index: 10;
@@ -352,6 +348,22 @@
     padding: 12px;
     color: #222222;
     border-bottom: none; }
+  .-detail .loading {
+    position: relative; }
+    .-detail .loading:after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 42%;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      border: 0.25rem solid rgba(57, 110, 248, 0.2);
+      border-top-color: #396ef8;
+      -webkit-animation: spin 1s infinite linear;
+      animation: spin 1s infinite linear; }
+    .-detail .loading tr {
+      opacity: .3; }
 
 .detail__button-bottom .group {
   padding-right: 0px; }

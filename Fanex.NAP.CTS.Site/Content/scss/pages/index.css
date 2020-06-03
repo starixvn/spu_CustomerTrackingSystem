@@ -606,6 +606,29 @@ select {
   /* !important used for overriding all other customisations */
   background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAGCAYAAAD68A/GAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAB/SURBVHgBbY3NDYUgEITZB4XwjtwsQTsgUIBSmR69QLQCy6AZQpw9kBDiJpv9mW9nyXu/CiHmGGMQQ1hrtVJqL6WEH+aFiDYc7CMkpXzYBHWSOefLGPNnGFVjvhuEna61hpTSSc0BjgeEFXlBnDroYJ36dw3mvoc+g2Hn3DbuX6+RNKJozoYAAAAAAElFTkSuQmCC") white no-repeat calc(100% - 12px) !important; }
 
+.select2-container--default .select2-selection--single .select2-selection__arrow b {
+  border: none !important;
+  margin-left: -10px !important;
+  margin-top: -9px !important;
+  font-family: 'Fraud-Sensor' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased; }
+
+.select2-container--default .select2-selection--single .select2-selection__arrow b:before {
+  content: "\e90c";
+  font-size: 20px; }
+
+.select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b {
+  border: none !important;
+  transform: rotate(180deg);
+  margin-left: 9px !important;
+  margin-top: 11px !important; }
+
 .top-header {
   -webkit-border-radius: 2px 2px 0 0;
   -khtml-border-radius: 2px 2px 0 0;
