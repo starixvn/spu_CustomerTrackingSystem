@@ -501,7 +501,7 @@
 
     <Setting Key="TicketVoiding_TicketsInRequest_Select"
        SpName="TicketVoiding_TicketsInRequest_Select_xtest"
-       DbName="DBTXN.bodb02.bodbSPUNet" />
+       DbName="DBCTS.bodb02.bodbSPUNet" />
   </Function>
   
 </Functions>
