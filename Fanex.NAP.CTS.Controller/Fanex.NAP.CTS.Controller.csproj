@@ -188,6 +188,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="HomeController.cs" />
+    <Compile Include="ImportEvidencesController.cs" />
     <Compile Include="MatchMonitorController.cs" />
     <Compile Include="NotificationController.cs" />
     <Compile Include="ProblemAccountMonitorController.cs" />

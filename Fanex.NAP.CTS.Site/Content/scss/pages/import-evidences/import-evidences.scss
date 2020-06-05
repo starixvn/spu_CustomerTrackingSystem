@@ -1,0 +1,27 @@
+﻿.content {
+    margin-top: 60px;
+   
+    .button-import {
+        background-color: #396EF8;
+        border-radius: 2px;
+        height: 30px;
+        min-width: 80px;
+        color: #fff;
+
+        &:hover {
+            background-color: #5081ff
+        }
+    }
+}
+
+.form-filter {
+    margin: 16px 0 0 12px;
+
+    .width-196 {
+        width: 196px;
+    }
+
+    .width-336 {
+        width: 336px;
+    }
+}

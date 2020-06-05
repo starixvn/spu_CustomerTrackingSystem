@@ -453,6 +453,13 @@
     </Content>
     <Content Include="Content\scss\pages\account\account.scss" />
     <None Include="Content\scss\pages\problem-account-monitor\problem-account-monitor.scss" />
+    <None Include="Content\scss\pages\import-evidences\import-evidences.scss" />
+    <Content Include="Content\scss\pages\import-evidences\import-evidences.css">
+      <DependentUpon>import-evidences.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\scss\pages\import-evidences\import-evidences.min.css">
+      <DependentUpon>import-evidences.css</DependentUpon>
+    </Content>
     <Content Include="Content\scss\pages\problem-account-monitor\problem-account-monitor.css">
       <DependentUpon>problem-account-monitor.scss</DependentUpon>
     </Content>
@@ -853,6 +860,7 @@
     <Content Include="Scripts\Evidence\form-exception.js" />
     <Content Include="Scripts\Evidence\form-retract-evidence.js" />
     <Content Include="Scripts\Home\SearchPage.js" />
+    <Content Include="Scripts\ImportEvidences\index.js" />
     <Content Include="Scripts\popoto\d3.min.js" />
     <Content Include="Scripts\popoto\d3.v3.min.js" />
     <Content Include="Scripts\popoto\popoto.min.js" />
@@ -871,6 +879,7 @@
     </Compile>
     <Compile Include="Startup.cs" />
     <Content Include="Views\ProblemAccountMonitor\Detail.cshtml" />
+    <Content Include="Views\ImportEvidences\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CoreBetList.css" />

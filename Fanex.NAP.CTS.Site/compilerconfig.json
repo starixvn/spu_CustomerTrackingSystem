@@ -50,5 +50,9 @@
   {
     "outputFile": "Content/scss/pages/problem-match-monitor/problem-match-monitor.css",
     "inputFile": "Content/scss/pages/problem-match-monitor/problem-match-monitor.scss"
+  },
+  {
+    "outputFile": "Content/scss/pages/import-evidences/import-evidences.css",
+    "inputFile": "Content/scss/pages/import-evidences/import-evidences.scss"
   }
 ]

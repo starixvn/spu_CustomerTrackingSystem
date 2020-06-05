@@ -94,6 +94,8 @@
     <Compile Include="FraudCase\FraudCaseViewModel.cs" />
     <Compile Include="History.cs" />
     <Compile Include="Home\SearchResultViewModel.cs" />
+    <Compile Include="ImportEvidences\ImportFileResult.cs" />
+    <Compile Include="ImportEvidences\RuleCheckViewModel.cs" />
     <Compile Include="MatchMonitor\Event.cs" />
     <Compile Include="MatchMonitor\FraudCase.cs" />
     <Compile Include="MatchMonitor\FraudCaseDetails\ArbitrageGroupTicketList.cs" />
