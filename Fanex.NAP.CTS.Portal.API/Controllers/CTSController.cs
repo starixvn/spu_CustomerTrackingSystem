@@ -30,14 +30,13 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
         {
             try
             {
-                //var result =_accountService.PlaceEvidence(model);
-                _accountService.FPSAddNewEvidence(ConfigSettings.AddNewEvidence, model);
+                var result = _accountService.PlaceEvidence(model);
 
 
-                //if (result.ErrorCode == 0)
-                //{
-                //    _accountService.FPSAddNewEvidence(ConfigSettings.AddNewEvidence, model);                    
-                //}
+                if (result.ErrorCode == 0)
+                {
+                    _accountService.FPSAddNewEvidence(ConfigSettings.AddNewEvidence, model);
+                }
 
                 return true;
             }
@@ -47,6 +46,11 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
                 return false;
             }
         }
+
+        /// <summary>
+        /// This controller is only for testing
+        /// </summary>
+        /// <returns></returns>
 
         [HttpPost]
         public IEnumerable<CustomerEvidence> GetFlaggedCustomersByLevel(string CustIdList, int AssociatedLevel)
