@@ -324,7 +324,7 @@
              DbName="MySQL.CTS_DataCenter"/>           
     
     <Setting Key="CTS_DC_GetUserInfomationByUsername"
-            SpName="CTS_DC_GetUserInfomationByUsername"
+            SpName="CTS_DC_GetUserInfomationByUsername_xtest"
             DbName="MySQL.CTS_DataCenter">      
       <Mapping DataField="CurrencyId" ObjectProperty="Id" Class="Currency"/>
       <Mapping DataField="Currency" ObjectProperty="Name" Class="Currency"/>

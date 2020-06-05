@@ -62,13 +62,18 @@
 
             var result = accountService.SearchAccounts(inputValue);
 
-            if (result.Count == 1 && result.Any(x => (
-                        x.Username != null && x.Username.Equals(inputValue, System.StringComparison.CurrentCultureIgnoreCase)) 
-                        || (x.Username2 != null && x.Username2.Equals(inputValue, System.StringComparison.CurrentCultureIgnoreCase))))
+            if (result.Count.Equals(1))
             {
                 return RedirectToAction("Index", "Account", new { Id = result.FirstOrDefault().CTSCustId });
-
             }
+
+            //if (result.Count == 1 && result.Any(x => (
+            //            x.Username != null && x.Username.Equals(inputValue, System.StringComparison.CurrentCultureIgnoreCase)) 
+            //            || (x.Username2 != null && x.Username2.Equals(inputValue, System.StringComparison.CurrentCultureIgnoreCase))))
+            //{
+            //    return RedirectToAction("Index", "Account", new { Id = result.FirstOrDefault().CTSCustId });
+
+            //}
 
             //var exactUserName = new List<SearchResultModel>();
             //var exactUserName2 = new List<SearchResultModel>();
