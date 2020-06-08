@@ -883,9 +883,9 @@
             return PartialView("CustomerCategory/EditMarkCatergory", model);
         }
 
-        public ActionResult GetCustomerClassification(long ctsCustId)
+        public ActionResult GetCustomerClassification(long custId)
         {
-            var data = _accountService.GetCustomerClassification(ctsCustId);
+            var data = _accountService.GetCustomerClassification(custId);
 
             if (data != null && data.Any())
             {
@@ -910,7 +910,7 @@
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult AddCustomerClassification(long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark)
+        public ActionResult AddCustomerClassification(long custId, long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark)
         {
             if (ctsCustId <= 0 || subscriberId <= 0 || categoryId <= 0)
             {
@@ -921,7 +921,7 @@
                 }, JsonRequestBehavior.AllowGet);
             }
 
-            var result = _accountService.AddCustomerClassification(ctsCustId, subscriberId, categoryId, sportGroupIds, remark, CurrentSession.UserId);
+            var result = _accountService.AddCustomerClassification(custId, ctsCustId, subscriberId, categoryId, sportGroupIds, remark, CurrentSession.UserId);
 
             return Json(new
             {

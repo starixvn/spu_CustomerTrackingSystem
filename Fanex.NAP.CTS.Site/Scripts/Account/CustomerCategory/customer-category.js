@@ -4,13 +4,13 @@
     let tblcustomercategory = $('#customer-category-table');
     let isHostPermission;
 
-    function BindingMarkCategoryForAddNew(ctsCustId, subscriberId) {
+    function BindingMarkCategoryForAddNew(custId, ctsCustId, subscriberId) {
         $('#btncancelcategory').on('click', function () {
             divMarkCategory.dialog('close');
         });
 
         $('#btnsavecategory').on('click', function (e) {
-            AddCustomerClassification(ctsCustId, subscriberId);
+            AddCustomerClassification(custId, ctsCustId, subscriberId);
         });
 
         $("#ddlcategory").select2();
@@ -38,7 +38,7 @@
         });
     }
 
-    function AddCustomerClassification(ctsCustId, subscriberId) {
+    function AddCustomerClassification(custId, ctsCustId, subscriberId) {
         if ($('#ddlsports').val() === '') {
 
             common.showError('Sport is required.');
@@ -47,6 +47,7 @@
 
         var url = common.modifyRelativeUrl('/Account/AddCustomerClassification');
         var params = {};
+        params.custId = custId;
         params.ctsCustId = ctsCustId;
         params.subscriberId = subscriberId;
         params.categoryId = $('#ddlcategory').val();
@@ -126,7 +127,7 @@
         });
     }
 
-    function InitialMarkCategory(ctsCustId, subscriberId) {
+    function InitialMarkCategory(custId, ctsCustId, subscriberId) {
         $.ajax(common.modifyRelativeUrl('Account/MarkCatergory'), {
             type: 'POST',
             data: {
@@ -137,7 +138,7 @@
             },
             success: function (response) {
                 divMarkCategory.html(response);
-                BindingMarkCategoryForAddNew(ctsCustId, subscriberId);
+                BindingMarkCategoryForAddNew(custId, ctsCustId, subscriberId);
             },
             complete: function () {
                 divMarkCategory.dialog({
@@ -193,7 +194,7 @@
         });
     }
 
-    function RenderGrid(ctsCustId, username, subscriberId) {
+    function RenderGrid(custId, ctsCustId, username, subscriberId) {
         tblcustomercategory.DataTable({
             dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
             pagingType: "full_numbers",
@@ -215,7 +216,7 @@
             ajax: {
                 url: common.modifyRelativeUrl('/Account/GetCustomerClassification'),
                 data: {
-                    ctsCustId: ctsCustId
+                    custId: custId
                 },
                 type: 'POST'
             },
@@ -270,12 +271,12 @@
             btnMarkCategory.prop('disabled', true);
     }
 
-    this.Initial = function (ctsCustId, subscriberId, username, hostPermission) {
+    this.Initial = function (custId, ctsCustId, subscriberId, username, hostPermission) {
         DisableButton(hostPermission);
 
-        btnMarkCategory.click(function () { InitialMarkCategory(ctsCustId, subscriberId); });
+        btnMarkCategory.click(function () { InitialMarkCategory(custId, ctsCustId, subscriberId); });
 
-        RenderGrid(ctsCustId, username, subscriberId);
+        RenderGrid(custId, ctsCustId, username, subscriberId);
         // GetCustomerClassification(ctsCustId);
     };
 }

@@ -1067,11 +1067,11 @@
             }
         }
 
-        public IEnumerable<CustomerClassificationModel> GetCustomerClassification(long ctsCustId)
+        public IEnumerable<CustomerClassificationModel> GetCustomerClassification(long custId)
         {
             var criteria = new GetCTSCustomerClassificationCriteria
             {
-                CTSCustId = ctsCustId
+                CustId = custId
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -1080,10 +1080,11 @@
             }
         }
 
-        public DBResult AddCustomerClassification(long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark, int createdBy)
+        public DBResult AddCustomerClassification(long custId, long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark, int createdBy)
         {
             var criteria = new AddCTSCustomerClassificationCriteria
             {
+                CustId = custId,
                 CTSCustId = ctsCustId,
                 SubscriberId = subscriberId,
                 CategoryId = categoryId,
