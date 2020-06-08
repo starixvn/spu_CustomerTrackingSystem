@@ -502,6 +502,20 @@
     <Setting Key="TicketVoiding_TicketsInRequest_Select"
        SpName="TicketVoiding_TicketsInRequest_Select_xtest"
        DbName="DBCTS.bodb02.bodbSPUNet" />
+
+    <Setting Key="CTS_DC_CheckMultiAccountEvidence"
+        SpName="CTS_DC_CheckMultiAccountEvidence_xtest"
+        DbName="MySQL.CTS_DataCenter" />
+  </Function>
+  
+  <Function Name="ImportEvidences">
+    <Setting Key="CTS_DC_CheckMultiAccountEvidence"
+            SpName="CTS_DC_CheckMultiAccountEvidence_xtest"
+            DbName="MySQL.CTS_DataCenter" />
+
+    <Setting Key="CTS_DC_AddMultiAccountEvidence"
+           SpName="CTS_DC_AddMultiAccountEvidence_xtest"
+           DbName="MySQL.CTS_DataCenter" />
   </Function>
   
 </Functions>

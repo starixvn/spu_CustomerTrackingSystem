@@ -11,34 +11,43 @@
     using Fanex.NAP.CTS.Criteria.ImportEvidences;
     using Fanex.Data;
     using Fanex.NAP.CTS.Core;
+    using Newtonsoft.Json;
 
     public class ImportEvidencesService : IImportEvidencesService
     {
-        public IEnumerable<AddEvidenceModel> ParseFileXls(Stream fileContent)
+        private readonly List<CheckAccountEvidenceModel> checkAccountEvidenceList;
+        private readonly List<RawAccountEvidenceModel> rawAccountEvidenceList;
+
+        public ImportEvidencesService()
+        {
+            checkAccountEvidenceList = new List<CheckAccountEvidenceModel>();
+            rawAccountEvidenceList = new List<RawAccountEvidenceModel>();
+        }
+
+        public void ParseFileXls(Stream fileContent)
         {
             using (fileContent)
             {
                 var workbook = new HSSFWorkbook(fileContent);
                
-                return ParseFile(workbook.GetSheetAt(0));
+                ParseFile(workbook.GetSheetAt(0));
             }
         }
 
-        public IEnumerable<AddEvidenceModel> ParseFileXlsx(Stream fileContent)
+        public void ParseFileXlsx(Stream fileContent)
         {
             using (fileContent)
             {
                 var workbook = new XSSFWorkbook(fileContent);
 
-                return ParseFile(workbook.GetSheetAt(0));
+                ParseFile(workbook.GetSheetAt(0));
             }
         }
 
-        private IEnumerable<AddEvidenceModel> ParseFile(ISheet sheet)
+        private void ParseFile(ISheet sheet)
         {
             var firstRowNum = 0;
             var lastRowNum = sheet.LastRowNum;
-            var evidenceAddList = new List<AddEvidenceModel>();
 
             for (int i = firstRowNum; i < lastRowNum; i++)
             {
@@ -47,26 +56,66 @@
                 if (row == null || row.Cells.All(d => d.CellType == CellType.Blank))
                     continue;
 
-                evidenceAddList.Add(new AddEvidenceModel
+                checkAccountEvidenceList.Add(new CheckAccountEvidenceModel
                 {
-                    UserName = row.GetCell(0).ToString(),
-                    EvidenceCode = row.GetCell(1).ToString(),
-                    Comment = row.GetCell(2).ToString(),
+                    RowId = i + 1,
+                    Username = ParseCell(row.GetCell(0)),
+                    EvidenceCode = ParseCell(row.GetCell(1)),
+                });
+
+                rawAccountEvidenceList.Add(new RawAccountEvidenceModel
+                {
+                    RowId = i + 1,
+                    Username = ParseCell(row.GetCell(0)),
+                    EvidenceCode = ParseCell(row.GetCell(1)),
+                    Comment = ParseCell(row.GetCell(2)),
                 });
             }
-
-            return evidenceAddList;
         }
 
-        public IEnumerable<RuleCheckViewModel> CheckRule(IEnumerable<AddEvidenceModel> addEvidenceList)
+        private string ParseCell(object cellValue)
         {
-            return new List<RuleCheckViewModel>();
+            if (cellValue == null)
+                return string.Empty;
+
+            return cellValue.ToString();
         }
 
-        public DBResult AddEvidenceList(IEnumerable<AddEvidenceModel> evidenceList)
+        public IEnumerable<ResultCheckAccountEvidenceModel> CheckRuleAddAccountEvidence()
         {
-            var criteria = new AddEvidenceCriteria
+            var jsonData = JsonConvert.SerializeObject(checkAccountEvidenceList);
+
+            var criteria = new CheckAccountEvidenceCriteria
             {
+                NewAccountEvidences = jsonData
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<ResultCheckAccountEvidenceModel>(criteria);
+            }
+        }
+
+        public DBResult InsertAccountEvidence(IEnumerable<ResultCheckAccountEvidenceModel> resultCheckAccountEvidenceList, int userId, bool isCreatedByMaster)
+        {
+            var addAccountEvidenceList = resultCheckAccountEvidenceList
+                .Join(rawAccountEvidenceList,
+                    x => x.RowId,
+                    y => y.RowId,
+                    (x, y) => new AddAccountEvidenceModel
+                    {
+                        CTSCustID = x.CTSCustID,
+                        EvidenceID = x.EvidenceID,
+                        Comment = y.Comment
+                    });
+
+            var jsonData = JsonConvert.SerializeObject(addAccountEvidenceList);
+
+            var criteria = new InsertAccountEvidenceCriteria
+            {
+                NewAccountEvidences = jsonData,
+                UserId = userId,
+                IsCreatedByMaster = isCreatedByMaster,
                 ErrorMessage = string.Empty
             };
 

@@ -1,8 +1,10 @@
 ﻿namespace Fanex.NAP.CTS.Model.ImportEvidences
 {
-    public class AddEvidenceModel
+    public class RawAccountEvidenceModel
     {
-        public string UserName { get; set; }
+        public int RowId { get; set; }
+
+        public string Username { get; set; }
 
         public string EvidenceCode { get; set; }
 

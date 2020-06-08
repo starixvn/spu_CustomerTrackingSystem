@@ -2,10 +2,10 @@
 {
     using System.Collections.Generic;
 
-    public class ImportFileResultViewModel
+    public class ResultImportViewModel
     {
         public string FileName { get; set; }
 
-        public IEnumerable<RuleCheckViewModel> CheckRuleResultList { get; set; }
+        public IEnumerable<ResultCheckAccountEvidenceViewModel> ResultCheckAccountEvidenceList { get; set; }
     }
 }

@@ -125,7 +125,8 @@
     <Compile Include="FraudSensorTask\OfficeIPPreconditionCriteria.cs" />
     <Compile Include="FraudSensorTask\OfficeIPRuleCriteria.cs" />
     <Compile Include="Home\SearchResultCriteria.cs" />
-    <Compile Include="ImportEvidences\AddEvidenceCriteria.cs" />
+    <Compile Include="ImportEvidences\InsertAccountEvidenceCriteria.cs" />
+    <Compile Include="ImportEvidences\CheckAccountEvidenceCriteria.cs" />
     <Compile Include="MatchMonitor\BalanceUpDateGetCriteria.cs" />
     <Compile Include="MatchMonitor\FraudCaseDetails\ArbitrageDetailsCriteria.cs" />
     <Compile Include="MatchMonitor\FraudCaseDetails\FlaggedAccountCriteria.cs" />

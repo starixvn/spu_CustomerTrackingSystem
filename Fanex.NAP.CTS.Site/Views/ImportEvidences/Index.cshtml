@@ -7,21 +7,36 @@
 }
 <h2 class="page-title">IMPORT EVIDENCES</h2>
 
-<form method="POST" enctype="multipart/form-data">
-    <div class="form-filter">
-        <div class="col-md-8">
-            <input type="file" id="inputFileUpload" name="inputFileUpload" class="form-control" />
-        </div>        
+<div class="form-filter">
+    <div class="col-md-8">
+        <input type="file" id="inputFileUpload" name="inputFileUpload" class="form-control" />
     </div>
-    <div class="form-filter">        
-        <div class="col-md-8">
-            <button class="button button-import" id="btnImport">Import</button>
-        </div>
+</div>
+<div class="form-filter">
+    <div class="col-md-8">
+        <button class="button button-import" id="btnImport">Import</button>
     </div>
-</form>
+</div>
 
-<div id="divResult">
+<div id="divResult" class="div-grid">
+    <table id="tableResult" class="table table-striped width-100per" style="width: 100%">
+        <thead>
+            <tr class="format-tr">
+                <th colspan="4" class="format-th">Error List</th>
+            </tr>
+            <tr>
+                <th>Line</th>
+                <th>Username</th>
+                <th>Evidence Code</th>
+                <th>Error</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
 
+<div class="hide">
+    <input id="hdIsHostPermission" type="hidden" IsHostPermission="@Model.ToString()" />
 </div>
 
 @section scripts{

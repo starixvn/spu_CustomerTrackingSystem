@@ -3,15 +3,17 @@
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
-    using System;
     using System.Linq;
     using System.IO;
     using System.Web;
     using System.Web.Mvc;
     using Fanex.NAP.CTS.ViewModel.ImportEvidences;
     using System.Collections.Generic;
-    using System.Threading.Tasks;
     using Fanex.Logging;
+    using Fanex.NAP.Core.Service.Interface;
+    using Fanex.NAP.Core.Service.Impl;
+    using Fanex.NAP.Core.Configuration;
+    using Fanex.NAP.CTS.Model.ImportEvidences;
 
     [NapAuth(FunctionKey = FSFunctionKeys.ImportEvidences, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class ImportEvidencesController : BaseController
@@ -25,7 +27,14 @@
 
         public ActionResult Index()
         {
-            return View();
+            IUserService userService = new UserService();
+
+            var isHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
+                            NapSettings.Settings.SiteId,
+                            FSFunctionKeys.ImportEvidences,
+                            NAP.Core.Business.Constant.Policy.Host);
+
+            return View(isHostPermission);
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.ImportEvidences, Policy = NAP.Core.Business.Constant.Policy.Host)]
@@ -36,33 +45,57 @@
             var fileName = file.FileName;
             var fileExtension = Path.GetExtension(file.FileName).ToLower();
 
-            var importFileResult = new ImportFileResultViewModel
+            if (fileExtension == ".xls")
+                _importEvidencesService.ParseFileXls(file.InputStream);
+            else
+                _importEvidencesService.ParseFileXlsx(file.InputStream);
+
+            var resultCheckAccountEvidenceList = _importEvidencesService.CheckRuleAddAccountEvidence();
+
+            var accountEvidenceNotExistList = resultCheckAccountEvidenceList
+                .Where(x => x.RowStatus != string.Empty)
+                .Select(x => x);
+
+            return accountEvidenceNotExistList.Any()
+                ? ReturnResultCheckAccountEvidence(fileName, accountEvidenceNotExistList)
+                : ReturnResultCheckAccountEvidence(fileName, accountEvidenceNotExistList);
+                //: InsertAccountEvidence(fileName, resultCheckAccountEvidenceList);
+        }
+
+        private ActionResult ReturnResultCheckAccountEvidence(string fileName, IEnumerable<ResultCheckAccountEvidenceModel> accountEvidenceNotExistList)
+        {
+            var resultCheckAccountEvidenceList = accountEvidenceNotExistList.Select(x => new ResultCheckAccountEvidenceViewModel
+            {
+                RowId = x.RowId,
+                RowStatus = x.RowStatus,
+                CTSCustID = x.CTSCustID,
+                EvidenceID = x.EvidenceID
+            });
+
+            var resultImport = new ResultImportViewModel
             {
                 FileName = fileName,
-                CheckRuleResultList = null
+                ResultCheckAccountEvidenceList = resultCheckAccountEvidenceList
             };
 
-            var evidenceAddList = fileExtension == ".xls"
-                ? _importEvidencesService.ParseFileXls(file.InputStream)
-                : _importEvidencesService.ParseFileXlsx(file.InputStream);
+            return Json(resultImport, JsonRequestBehavior.AllowGet);
+        }
 
-            var checkRuleList = _importEvidencesService.CheckRule(evidenceAddList);
-
-            if (checkRuleList.Any())
+        private ActionResult InsertAccountEvidence(string fileName, IEnumerable<ResultCheckAccountEvidenceModel> resultCheckAccountEvidenceList)
+        {
+            var resultImport = new ResultImportViewModel
             {
-                importFileResult.CheckRuleResultList = checkRuleList;
+                FileName = fileName
+            };
 
-                return Json(importFileResult, JsonRequestBehavior.AllowGet);
+            var resultInsertDB = _importEvidencesService.InsertAccountEvidence(resultCheckAccountEvidenceList, CurrentSession.UserId, true);
+
+            if (resultInsertDB.ErrorCode != 0)
+            {
+                LogService.Error(string.Format("File name: {0} import with content {1} - error: {2}", fileName, "", resultInsertDB.ErrorMsg));
             }
 
-            var insertDbResult = _importEvidencesService.AddEvidenceList(evidenceAddList);
-
-            if (insertDbResult.ErrorCode != 0)
-            {
-                LogService.Error(string.Format("File name: {0} import with content {1} - error: {2}", file.FileName, "", insertDbResult.ErrorMsg));
-            }
-
-            return Json(importFileResult, JsonRequestBehavior.AllowGet);
-        }      
+            return Json(resultImport, JsonRequestBehavior.AllowGet);
+        }
     }
 }
