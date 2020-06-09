@@ -931,7 +931,7 @@
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult UpdateCustomerClassification(long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark)
+        public ActionResult UpdateCustomerClassification(long custId, long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark)
         {
             if (ctsCustId <= 0 || subscriberId <= 0 || categoryId <= 0)
             {
@@ -942,7 +942,7 @@
                 }, JsonRequestBehavior.AllowGet);
             }
 
-            var result = _accountService.UpdateCustomerClassification(ctsCustId, subscriberId, categoryId, sportGroupIds, remark, CurrentSession.UserId);
+            var result = _accountService.UpdateCustomerClassification(custId, ctsCustId, subscriberId, categoryId, sportGroupIds, remark, CurrentSession.UserId);
 
             return Json(new
             {
@@ -952,9 +952,9 @@
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult RemoveCustomerClassification(long ctsCustId, int categoryId)
+        public ActionResult RemoveCustomerClassification(long custId, long ctsCustId, int categoryId)
         {
-            if (ctsCustId <= 0 || categoryId <= 0)
+            if (custId <= 0 || categoryId <= 0)
             {
                 return Json(new
                 {
@@ -963,7 +963,7 @@
                 }, JsonRequestBehavior.AllowGet);
             }
 
-            var result = _accountService.RemoveCustomerClassification(ctsCustId, categoryId, CurrentSession.UserId);
+            var result = _accountService.RemoveCustomerClassification(custId, ctsCustId, categoryId, CurrentSession.UserId);
 
             return Json(new
             {

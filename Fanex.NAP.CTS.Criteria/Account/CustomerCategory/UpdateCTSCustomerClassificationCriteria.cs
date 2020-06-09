@@ -10,6 +10,9 @@ namespace Fanex.NAP.CTS.Criteria.Account.CustomerCategory
 {
     public class UpdateCTSCustomerClassificationCriteria : NonQueryCommand
     {
+        [SpParam(SqlParamName = "ip_CustId")]
+        public long CustId { get; set; }
+
         [SpParam(SqlParamName = "ip_CTSCustID")]
         public long CTSCustId { get; set; }
 
