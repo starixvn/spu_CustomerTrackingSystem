@@ -81,5 +81,18 @@
         public static string StoredProcedurePath => GetConfigStringByName("StoredProcedurePath");
 
         public static string AddNewEvidence => GetConfigStringByName("FPS_AddNewEvidence");
+
+        public static int ImportEvidenceChunkSize
+        {
+            get
+            {
+                var size = 500;
+                var configSize = GetConfigStringByName("Import-Evidence-ChunkSize");
+
+                int.TryParse(configSize, out size);
+
+                return size == 0 ? 500 : size;
+            }
+        }
     }
 }

@@ -18,7 +18,16 @@
     </div>
 </div>
 
-<div id="divResult" class="div-grid">
+<div id="divNote">
+    <div>- You can use 2 rows for adding evidence for 1 account</div>
+    <div>- Import file structure:</div>
+    <div>    + First Column: Username</div>
+    <div>    + Second Column: Evidence Code</div>
+    <div>    + Third Column: Comment</div>
+    <div>For importing file template, please following this <span id="btnDownloadTemplate" style="cursor:pointer; color:deepskyblue">file</span></div>
+</div>
+
+<div id="divResult" class="div-grid" hidden="hidden">
     <table id="tableResult" class="table table-striped width-100per" style="width: 100%">
         <thead>
             <tr class="format-tr">
@@ -33,6 +42,14 @@
         </thead>
         <tbody></tbody>
     </table>
+</div>
+
+<div id="divResultParseFile" hidden="hidden"></div>
+
+<div id="divValidation" hidden="hidden">
+    <div>Your file has been validated.</div>
+    <div>System is automatically importing the evidence data.</div>
+    <div>You can start work on other function.</div>
 </div>
 
 <div class="hide">

@@ -14,10 +14,13 @@
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Configuration;
     using Fanex.NAP.CTS.Model.ImportEvidences;
+    using System;
+    using System.Threading.Tasks;
 
     [NapAuth(FunctionKey = FSFunctionKeys.ImportEvidences, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class ImportEvidencesController : BaseController
     {
+        private const string ImportTemplate = "~/App_Data/Excel Template/ImportEvidences/template.xlsx";
         private readonly IImportEvidencesService _importEvidencesService;
 
         public override string BaseControllerName { get => Consts.MenuItemController; }
@@ -37,6 +40,15 @@
             return View(isHostPermission);
         }
 
+        public ActionResult DownloadTemplateExcel()
+        {
+            var template = Server.MapPath(ImportTemplate);
+
+            var file = _importEvidencesService.DownloadTemplateExcel(template);
+
+            return ExcelFile(file, "Template");
+        }
+
         [NapAuth(FunctionKey = FSFunctionKeys.ImportEvidences, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [HttpPost]
         public ActionResult ImportFromExcel()
@@ -45,57 +57,63 @@
             var fileName = file.FileName;
             var fileExtension = Path.GetExtension(file.FileName).ToLower();
 
-            if (fileExtension == ".xls")
-                _importEvidencesService.ParseFileXls(file.InputStream);
-            else
-                _importEvidencesService.ParseFileXlsx(file.InputStream);
+            var errorParseFile = fileExtension == ".xls"
+                ? _importEvidencesService.ParseFileXls(file.InputStream, fileName)
+                : _importEvidencesService.ParseFileXlsx(file.InputStream, fileName);
 
-            var resultCheckAccountEvidenceList = _importEvidencesService.CheckRuleAddAccountEvidence();
+            if (errorParseFile == string.Empty)
+            {
+                var resultCheckAccountEvidenceList = _importEvidencesService.CheckRuleAddAccountEvidence();
 
-            var accountEvidenceNotExistList = resultCheckAccountEvidenceList
-                .Where(x => x.RowStatus != string.Empty)
-                .Select(x => x);
+                var accountEvidenceErrorList = resultCheckAccountEvidenceList
+                    .Where(x => x.RowStatus != string.Empty)
+                    .Select(x => x);
 
-            return accountEvidenceNotExistList.Any()
-                ? ReturnResultCheckAccountEvidence(fileName, accountEvidenceNotExistList)
-                : ReturnResultCheckAccountEvidence(fileName, accountEvidenceNotExistList);
-                //: InsertAccountEvidence(fileName, resultCheckAccountEvidenceList);
+                if (!accountEvidenceErrorList.Any())
+                    InsertAccountEvidence(fileName, resultCheckAccountEvidenceList);
+
+                return ReturnResultCheckAccountEvidence(fileName, accountEvidenceErrorList);
+            }
+
+            return Json(new ResultImportViewModel {
+                FileName = fileName,
+                ErrorCode = 1,
+                ErrorMessage = errorParseFile
+            }, JsonRequestBehavior.AllowGet);
         }
 
-        private ActionResult ReturnResultCheckAccountEvidence(string fileName, IEnumerable<ResultCheckAccountEvidenceModel> accountEvidenceNotExistList)
+        private ActionResult ReturnResultCheckAccountEvidence(string fileName, IEnumerable<ResultCheckAccountEvidenceModel> accountEvidenceErrorList)
         {
-            var resultCheckAccountEvidenceList = accountEvidenceNotExistList.Select(x => new ResultCheckAccountEvidenceViewModel
-            {
-                RowId = x.RowId,
-                RowStatus = x.RowStatus,
-                CTSCustID = x.CTSCustID,
-                EvidenceID = x.EvidenceID
-            });
+            var rawAccountEvidenceList = _importEvidencesService.GetRawAccountEvidences();
 
+            var resultCheckAccountEvidenceList = accountEvidenceErrorList
+                    .Join(rawAccountEvidenceList,
+                     x => x.RowId,
+                     y => y.RowId,
+                    (x, y) => new ResultCheckAccountEvidenceViewModel
+                    {
+                        RowId = x.RowId,
+                        RowStatus = x.RowStatus,
+                        Username = y.Username,
+                        EvidenceCode = y.EvidenceCode
+                    });
+           
             var resultImport = new ResultImportViewModel
             {
                 FileName = fileName,
-                ResultCheckAccountEvidenceList = resultCheckAccountEvidenceList
+                ResultCheckAccountEvidenceList = resultCheckAccountEvidenceList,
+                ErrorCode = accountEvidenceErrorList.Any() ? 1 : -1
             };
 
             return Json(resultImport, JsonRequestBehavior.AllowGet);
         }
 
-        private ActionResult InsertAccountEvidence(string fileName, IEnumerable<ResultCheckAccountEvidenceModel> resultCheckAccountEvidenceList)
+        private void InsertAccountEvidence(string fileName, IEnumerable<ResultCheckAccountEvidenceModel> resultCheckAccountEvidenceList)
         {
-            var resultImport = new ResultImportViewModel
+            Task.Run(() =>
             {
-                FileName = fileName
-            };
-
-            var resultInsertDB = _importEvidencesService.InsertAccountEvidence(resultCheckAccountEvidenceList, CurrentSession.UserId, true);
-
-            if (resultInsertDB.ErrorCode != 0)
-            {
-                LogService.Error(string.Format("File name: {0} import with content {1} - error: {2}", fileName, "", resultInsertDB.ErrorMsg));
-            }
-
-            return Json(resultImport, JsonRequestBehavior.AllowGet);
+                _importEvidencesService.InsertAccountEvidence(resultCheckAccountEvidenceList, fileName, CurrentSession.UserId, true);
+            });
         }
     }
 }

@@ -162,6 +162,12 @@
   <data name="AUTO_SUSPEND_SOCCER" xml:space="preserve">
     <value>Auto Suspend Soccer</value>
   </data>
+  <data name="IMPORT_ACCOUNT_EVIDENCE_DUPLICATE" xml:space="preserve">
+    <value>This row is already exist.</value>
+  </data>
+  <data name="IMPORT_ACCOUNT_EVIDENCE_PARSE_FILE_ERROR" xml:space="preserve">
+    <value>Read file {0} error.</value>
+  </data>
   <data name="NONE" xml:space="preserve">
     <value>None</value>
   </data>

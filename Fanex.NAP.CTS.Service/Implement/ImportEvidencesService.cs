@@ -7,11 +7,16 @@
     using System.IO;
     using Fanex.NAP.CTS.Model.ImportEvidences;    
     using System.Collections.Generic;
-    using Fanex.NAP.CTS.ViewModel.ImportEvidences;
+    using Fanex.NAP.CTS.Core.Extentions;    
     using Fanex.NAP.CTS.Criteria.ImportEvidences;
     using Fanex.Data;
     using Fanex.NAP.CTS.Core;
     using Newtonsoft.Json;
+    using Fanex.NAP.CTS.Resource;
+    using Fanex.NAP.CTS.Core.ExportExcel;
+    using System;
+    using Fanex.Logging;
+    using Fanex.NAP.CTS.Core.Utilities;
 
     public class ImportEvidencesService : IImportEvidencesService
     {
@@ -24,52 +29,64 @@
             rawAccountEvidenceList = new List<RawAccountEvidenceModel>();
         }
 
-        public void ParseFileXls(Stream fileContent)
+        public string ParseFileXls(Stream fileContent, string fileName)
         {
             using (fileContent)
             {
                 var workbook = new HSSFWorkbook(fileContent);
                
-                ParseFile(workbook.GetSheetAt(0));
+                return ParseFile(workbook.GetSheetAt(0), fileName);
             }
         }
 
-        public void ParseFileXlsx(Stream fileContent)
+        public string ParseFileXlsx(Stream fileContent, string fileName)
         {
             using (fileContent)
             {
                 var workbook = new XSSFWorkbook(fileContent);
 
-                ParseFile(workbook.GetSheetAt(0));
+                return ParseFile(workbook.GetSheetAt(0), fileName);
             }
         }
 
-        private void ParseFile(ISheet sheet)
+        private string ParseFile(ISheet sheet, string fileName)
         {
             var firstRowNum = 0;
-            var lastRowNum = sheet.LastRowNum;
+            var lastRowNum = sheet.LastRowNum + 1;
 
-            for (int i = firstRowNum; i < lastRowNum; i++)
+            try
             {
-                IRow row = sheet.GetRow(i);
-
-                if (row == null || row.Cells.All(d => d.CellType == CellType.Blank))
-                    continue;
-
-                checkAccountEvidenceList.Add(new CheckAccountEvidenceModel
+                for (int i = firstRowNum; i < lastRowNum; i++)
                 {
-                    RowId = i + 1,
-                    Username = ParseCell(row.GetCell(0)),
-                    EvidenceCode = ParseCell(row.GetCell(1)),
-                });
+                    IRow row = sheet.GetRow(i);
 
-                rawAccountEvidenceList.Add(new RawAccountEvidenceModel
-                {
-                    RowId = i + 1,
-                    Username = ParseCell(row.GetCell(0)),
-                    EvidenceCode = ParseCell(row.GetCell(1)),
-                    Comment = ParseCell(row.GetCell(2)),
-                });
+                    if (row == null || row.Cells.All(d => d.CellType == CellType.Blank))
+                        continue;
+
+                    checkAccountEvidenceList.Add(new CheckAccountEvidenceModel
+                    {
+                        RowId = i + 1,
+                        Username = ParseCell(row.GetCell(0)),
+                        EvidenceCode = ParseCell(row.GetCell(1)),
+                    });
+
+                    rawAccountEvidenceList.Add(new RawAccountEvidenceModel
+                    {
+                        RowId = i + 1,
+                        Username = ParseCell(row.GetCell(0)),
+                        EvidenceCode = ParseCell(row.GetCell(1)),
+                        Comment = ParseCell(row.GetCell(2)),
+                    });
+                }
+
+                return string.Empty;
+            }
+            catch (Exception ex)
+            {
+                var errorMessage = string.Format(ResourcesManager.GetValue(ConstsResources.IMPORT_ACCOUNT_EVIDENCE_PARSE_FILE_ERROR), fileName);
+                LogService.Error(errorMessage, ex);
+
+                return errorMessage;
             }
         }
 
@@ -81,9 +98,31 @@
             return cellValue.ToString();
         }
 
+        public IEnumerable<RawAccountEvidenceModel> GetRawAccountEvidences()
+           => rawAccountEvidenceList;
+
+        public byte[] DownloadTemplateExcel(string template)
+        {
+            var wb = ExcelUtilities.GetWorkbook(template);
+
+            return wb.ToBytes();
+        }
+
         public IEnumerable<ResultCheckAccountEvidenceModel> CheckRuleAddAccountEvidence()
         {
-            var jsonData = JsonConvert.SerializeObject(checkAccountEvidenceList);
+            var duplicateList = checkAccountEvidenceList.GroupBy(x => new { x.Username, x.EvidenceCode })
+                    .Where(g => g.Count() > 1)
+                    .Select(x => x.Last())
+                    .Select(x=> new ResultCheckAccountEvidenceModel {
+                        CTSCustID = 0,
+                        EvidenceID = 0,
+                        RowId = x.RowId,
+                        RowStatus = ResourcesManager.GetValue(ConstsResources.IMPORT_ACCOUNT_EVIDENCE_DUPLICATE)
+                    });
+
+            var noDuplicateList = checkAccountEvidenceList.Distinct(x => new { x.Username, x.EvidenceCode });
+
+            var jsonData = JsonConvert.SerializeObject(noDuplicateList);
 
             var criteria = new CheckAccountEvidenceCriteria
             {
@@ -92,11 +131,15 @@
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<ResultCheckAccountEvidenceModel>(criteria);
+                var resultVerifyDbList = db.Query<ResultCheckAccountEvidenceModel>(criteria);
+
+                return resultVerifyDbList
+                    .Union(duplicateList)
+                    .OrderBy(x=>x.RowId);
             }
         }
-
-        public DBResult InsertAccountEvidence(IEnumerable<ResultCheckAccountEvidenceModel> resultCheckAccountEvidenceList, int userId, bool isCreatedByMaster)
+        
+        public void InsertAccountEvidence(IEnumerable<ResultCheckAccountEvidenceModel> resultCheckAccountEvidenceList, string fileName, int userId, bool isCreatedByMaster)
         {
             var addAccountEvidenceList = resultCheckAccountEvidenceList
                 .Join(rawAccountEvidenceList,
@@ -109,25 +152,40 @@
                         Comment = y.Comment
                     });
 
-            var jsonData = JsonConvert.SerializeObject(addAccountEvidenceList);
+            var loopAddAccountEvidenceList = addAccountEvidenceList.Chunk(ConfigSettings.ImportEvidenceChunkSize);
 
-            var criteria = new InsertAccountEvidenceCriteria
+            foreach (var accountEvidence in loopAddAccountEvidenceList)
             {
-                NewAccountEvidences = jsonData,
-                UserId = userId,
-                IsCreatedByMaster = isCreatedByMaster,
-                ErrorMessage = string.Empty
-            };
+                var jsonData = JsonConvert.SerializeObject(accountEvidence);
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                db.ExecuteNonQuery(criteria);
-
-                return new DBResult
+                try
                 {
-                    ErrorCode = string.IsNullOrWhiteSpace(criteria.ErrorMessage) ? 0 : -1,
-                    ErrorMsg = criteria.ErrorMessage
-                };
+                    var criteria = new InsertAccountEvidenceCriteria
+                    {
+                        NewAccountEvidences = jsonData,
+                        UserId = userId,
+                        IsCreatedByMaster = isCreatedByMaster,
+                        ErrorMessage = string.Empty
+                    };
+
+                    using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+                    {
+                        db.ExecuteNonQuery(criteria);
+      
+                        if (!string.IsNullOrWhiteSpace(criteria.ErrorMessage))
+                        {
+                            var errorMessage = string.Format("File name: {0} - userId: {2} - import error: {1} - content: {3}"
+                                                        , fileName, userId, criteria.ErrorMessage, jsonData);
+                            LogService.Error(errorMessage);
+                        } 
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var errorMessage = string.Format("File name: {0} - userId: {2} - import error: {1} - content: {3}"
+                                                       , fileName, userId, ex.ToString(), jsonData);
+                    LogService.Error(errorMessage, ex);
+                }
             }
         }
     }

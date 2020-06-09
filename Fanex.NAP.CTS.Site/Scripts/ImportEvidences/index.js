@@ -4,7 +4,10 @@
         hdIsHostPermission: $('#hdIsHostPermission'),
         inputFileUpload: $('#inputFileUpload'),
         divResult: $('#divResult'),
+        divValidation: $('#divValidation'),
+        divResultParseFile: $('#divResultParseFile'),
         tableResult: $('#tableResult'),
+        btnDownloadTemplate: $('#btnDownloadTemplate'),
         btnImport: $('#btnImport')
     };
 
@@ -27,6 +30,7 @@
                 processData: false,
                 beforeSend: function () {
                     common.showLoading();
+                    domElements.divResultParseFile.prop('hidden', true);
                     domElements.divResult.prop('hidden', true);
                 },
                 success: function (response) {
@@ -61,22 +65,39 @@
     }
 
     function ResultCheckAccountEvidence(data) {
-        domElements.divResult.prop('hidden', false);
-        
-        dataTable
-            ? domElements.tableResult.DataTable().clear().rows.add(data).draw()
-            : dataTable = GenerateGrid(data.ResultCheckAccountEvidenceList);
+        if (data.ErrorCode === 1) {
+            domElements.divResult.prop('hidden', false);
+
+            dataTable
+                ? domElements.tableResult.DataTable().clear().rows.add(data.ResultCheckAccountEvidenceList).draw()
+                : dataTable = GenerateGrid(data.ResultCheckAccountEvidenceList);
+        } else if (data.ErrorCode === 2) {
+            var html = "<span>" + data.ErrorMessage + "</span>";
+            domElements.divResultParseFile.prop('hidden', false);
+            domElements.divResultParseFile.html(html);
+        } else {
+            domElements.divValidation.prop('hidden', false);
+
+            domElements.divValidation.dialog({
+                modal: true,
+                width: '400px',
+                title: 'Successul Validation',
+                resizable: true,
+                draggable: true,
+                close: function () { $(this).dialog('close'); }
+            });
+        }
     }
 
     function GenerateGrid(data) {
         return domElements.tableResult.DataTable({
-            serverSide: false,                        
             language: {
-                lengthMenu: "Page size _MENU_",
+                lengthMenu: "",
                 info: "",
                 infoEmpty: "",
-                zeroRecords: "There's no data"
+                zeroRecords: ""
             },
+            serverSide: false,
             paging: false,
             ordering: false,
             searching: false,
@@ -93,17 +114,23 @@
                 { data: obj => obj.RowId },
                 { data: obj => obj.Username },
                 { data: obj => obj.EvidenceCode },
-                { data: obj => obj.Error }
+                { data: obj => obj.RowStatus }
             ]
         }).rows.add(data).draw();
     }
 
     function Initial() {
+        domElements.divResultParseFile.prop('hidden', true);
         domElements.divResult.prop('hidden', true);
+        domElements.divValidation.prop('hidden', true);        
         domElements.btnImport.prop('disabled', !isHostPermission);
 
         if (isHostPermission)
             domElements.btnImport.on('click', () => ImportEvidences());
+
+        domElements.btnDownloadTemplate.on('click', function () {
+            common.downloadFile(common.modifyRelativeUrl('ImportEvidences/DownloadTemplateExcel'), '0');
+        });
     }
 
     $(document).ready(function () {

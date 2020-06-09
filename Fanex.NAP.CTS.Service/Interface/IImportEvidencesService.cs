@@ -9,12 +9,17 @@
 
     public interface IImportEvidencesService
     {
-        void ParseFileXls(Stream fileContent);
+        string ParseFileXls(Stream fileContent, string fileName);
 
-        void ParseFileXlsx(Stream fileContent);
+        string ParseFileXlsx(Stream fileContent, string fileName);
+
+        byte[] DownloadTemplateExcel(string template);
 
         IEnumerable<ResultCheckAccountEvidenceModel> CheckRuleAddAccountEvidence();
 
-        DBResult InsertAccountEvidence(IEnumerable<ResultCheckAccountEvidenceModel> resultCheckAccountEvidenceList, int userId, bool isCreatedByMaster);
+        void InsertAccountEvidence(IEnumerable<ResultCheckAccountEvidenceModel> resultCheckAccountEvidenceList, string fileName, int userId, bool isCreatedByMaster);
+
+        IEnumerable<RawAccountEvidenceModel> GetRawAccountEvidences();
+
     }
 }

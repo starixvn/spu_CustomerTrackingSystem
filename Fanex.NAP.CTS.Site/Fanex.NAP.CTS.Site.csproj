@@ -452,6 +452,7 @@
       <DependentUpon>evidence.css</DependentUpon>
     </Content>
     <Content Include="Content\scss\pages\account\account.scss" />
+    <Content Include="App_Data\Excel Template\ImportEvidences\template.xlsx" />
     <None Include="Content\scss\pages\problem-account-monitor\problem-account-monitor.scss" />
     <None Include="Content\scss\pages\import-evidences\import-evidences.scss" />
     <Content Include="Content\scss\pages\import-evidences\import-evidences.css">

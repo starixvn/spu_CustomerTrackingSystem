@@ -39,7 +39,7 @@ namespace Fanex.NAP.CTS.Resource {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Fanex.NAP.CTS.Core.Resources.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Fanex.NAP.CTS.Resource.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -192,6 +192,24 @@ namespace Fanex.NAP.CTS.Resource {
         internal static string AUTO_SUSPEND_SOCCER {
             get {
                 return ResourceManager.GetString("AUTO_SUSPEND_SOCCER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This row is already exist..
+        /// </summary>
+        internal static string IMPORT_ACCOUNT_EVIDENCE_DUPLICATE {
+            get {
+                return ResourceManager.GetString("IMPORT_ACCOUNT_EVIDENCE_DUPLICATE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Read file {0} error..
+        /// </summary>
+        internal static string IMPORT_ACCOUNT_EVIDENCE_PARSE_FILE_ERROR {
+            get {
+                return ResourceManager.GetString("IMPORT_ACCOUNT_EVIDENCE_PARSE_FILE_ERROR", resourceCulture);
             }
         }
         

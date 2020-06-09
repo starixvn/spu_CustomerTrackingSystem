@@ -6,9 +6,9 @@
 
         public string RowStatus { get; set; }
 
-        public long CTSCustID { get; set; }
+        public string Username { get; set; }
 
-        public int EvidenceID { get; set; }
+        public string EvidenceCode { get; set; }
 
     }
 }
