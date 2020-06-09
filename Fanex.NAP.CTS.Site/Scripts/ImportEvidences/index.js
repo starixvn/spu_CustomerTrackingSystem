@@ -1,5 +1,5 @@
 ﻿function ImportEvidences() {
-
+    let dataTable;
     let domElements = {
         hdIsHostPermission: $('#hdIsHostPermission'),
         inputFileUpload: $('#inputFileUpload'),
@@ -27,6 +27,7 @@
                 processData: false,
                 beforeSend: function () {
                     common.showLoading();
+                    domElements.divResult.prop('hidden', true);
                 },
                 success: function (response) {
                     ResultCheckAccountEvidence(response);
@@ -60,30 +61,25 @@
     }
 
     function ResultCheckAccountEvidence(data) {
-        let html = "<span>Import file succesful</span>";
-
-        domElements.divResult.html(html);
-
-        let accountEvidenceList = data.ResultCheckAccountEvidenceList;
-        console.log(data);
-        GenerateGrid(accountEvidenceList);
+        domElements.divResult.prop('hidden', false);
+        
+        dataTable
+            ? domElements.tableResult.DataTable().clear().rows.add(data).draw()
+            : dataTable = GenerateGrid(data.ResultCheckAccountEvidenceList);
     }
 
     function GenerateGrid(data) {
-        return domElements.problemAccountMonitorTable.DataTable({
-            serverSide: false,
-            ajax: data,
-            pagingType: "full_numbers",
+        return domElements.tableResult.DataTable({
+            serverSide: false,                        
             language: {
-                lengthMenu: "Page size _MENU_",                
-                info: "Displaying _START_ to _END_ of _TOTAL_ item (s)",
+                lengthMenu: "Page size _MENU_",
+                info: "",
                 infoEmpty: "",
                 zeroRecords: "There's no data"
             },
+            paging: false,
             ordering: false,
             searching: false,
-            lengthMenu: [20, 50, 100, 200],
-            pageLength: 50,
             scrollX: false,
             scrollCollapse: false,
             columnDefs: [
@@ -99,7 +95,7 @@
                 { data: obj => obj.EvidenceCode },
                 { data: obj => obj.Error }
             ]
-        });
+        }).rows.add(data).draw();
     }
 
     function Initial() {
