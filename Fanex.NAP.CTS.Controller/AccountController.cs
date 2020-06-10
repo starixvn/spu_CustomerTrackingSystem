@@ -885,26 +885,26 @@
 
         public ActionResult GetCustomerClassification(long custId)
         {
-            var data = _accountService.GetCustomerClassification(custId);
+            //var data = _accountService.GetCustomerClassification(custId);
 
-            if (data != null && data.Any())
-            {
-                var result = data.Select(x => new CustomerCategoryViewModel
-                {
-                    CategoryId = x.CategoryId,
-                    CategoryName = x.CategoryName,
-                    LastModifiedBy = x.LastModifiedBy,
-                    LastModifiedDate = x.LastModifiedDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                    Remark = x.Remark,
-                    SportGroupIdList = x.SportGroupIdList,
-                    SportGroupNameList = x.SportGroupNameList,
-                    ParentCategoryId = x.ParentCategoryId,
-                    ParentCategoryName = x.ParentCategoryName,
-                    IsEnabledDelete = x.IsEnabledDelete
-                });
+            //if (data != null && data.Any())
+            //{
+            //    var result = data.Select(x => new CustomerCategoryViewModel
+            //    {
+            //        CategoryId = x.CategoryId,
+            //        CategoryName = x.CategoryName,
+            //        LastModifiedBy = x.LastModifiedBy,
+            //        LastModifiedDate = x.LastModifiedDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+            //        Remark = x.Remark,
+            //        SportGroupIdList = x.SportGroupIdList,
+            //        SportGroupNameList = x.SportGroupNameList,
+            //        ParentCategoryId = x.ParentCategoryId,
+            //        ParentCategoryName = x.ParentCategoryName,
+            //        IsEnabledDelete = x.IsEnabledDelete
+            //    });
 
-                return Json(new { data = result }, JsonRequestBehavior.AllowGet);
-            }
+            //    return Json(new { data = result }, JsonRequestBehavior.AllowGet);
+            //}
 
             return Json(new { data = new List<CustomerCategoryViewModel>() }, JsonRequestBehavior.AllowGet);
         }
