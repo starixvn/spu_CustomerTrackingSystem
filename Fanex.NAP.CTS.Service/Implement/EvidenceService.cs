@@ -9,6 +9,8 @@
     using Fanex.NAP.CTS.Model.Account.Evidence;
     using Fanex.NAP.CTS.ViewModel.Account.Evidence.Exception;
     using Fanex.NAP.CTS.Core;
+    using Fanex.NAP.CTS.Model.DTO;
+    using Fanex.NAP.CTS.Criteria.Api;
 
     public class EvidenceService : IEvidenceService
     {
@@ -249,6 +251,28 @@
                 .OrderBy(c => c.DirectedUserName)
                 .ThenBy(c => c.EvidenceCode);            
         }
+
+        public void AddCustomersEvidences(CustomerEvidenceList customerEvidenceList)
+        {
+            var criteria = new MultiCustomerEvidencesInsertCriteria
+            {
+                ip_CustIds = customerEvidenceList.CustIdList,
+                ip_EvidenceCodes = customerEvidenceList.EvidenceCodeList
+            };
+
+            DataService.Execute(criteria);
+        }
+
+        public IEnumerable<CustomerEvidence> GetFlaggedCustomersByLevel(string custIdList)
+        {
+            var criteria = new FlaggedAccountSelectCriteria
+            {
+                ip_CustIds = custIdList
+            };
+
+            return DataService.GetData<CustomerEvidence>(criteria);
+        }
+
         #endregion
 
         #region Evidence Management
