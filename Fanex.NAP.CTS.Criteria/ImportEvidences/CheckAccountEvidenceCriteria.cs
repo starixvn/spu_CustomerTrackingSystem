@@ -9,7 +9,7 @@
         public string NewAccountEvidences { get; set; }
 
         public override string GetSettingKey()
-            => "CTS_DC_CheckMultiAccountEvidence";
+            => "CTS_DC_CheckMultiCustomerEvidence";
 
         public override bool IsValid()
             => true;

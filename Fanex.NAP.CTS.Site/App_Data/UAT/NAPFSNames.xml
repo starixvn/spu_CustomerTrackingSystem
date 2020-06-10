@@ -509,12 +509,12 @@
   </Function>
   
   <Function Name="ImportEvidences">
-    <Setting Key="CTS_DC_CheckMultiAccountEvidence"
-            SpName="CTS_DC_CheckMultiAccountEvidence_xtest"
+    <Setting Key="CTS_DC_CheckMultiCustomerEvidence"
+            SpName="CTS_DC_CheckMultiCustomerEvidence_xtest"
             DbName="MySQL.CTS_DataCenter" />
 
-    <Setting Key="CTS_DC_AddMultiAccountEvidence"
-           SpName="CTS_DC_AddMultiAccountEvidence_xtest"
+    <Setting Key="CTS_DC_AddMultiCustomerEvidence"
+           SpName="CTS_DC_AddMultiCustomerEvidence_xtest"
            DbName="MySQL.CTS_DataCenter" />
   </Function>
   

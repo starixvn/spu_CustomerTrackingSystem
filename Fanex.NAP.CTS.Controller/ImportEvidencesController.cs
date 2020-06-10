@@ -97,15 +97,12 @@
                         Username = y.Username,
                         EvidenceCode = y.EvidenceCode
                     });
-           
-            var resultImport = new ResultImportViewModel
-            {
+
+            return Json(new ResultImportViewModel {
                 FileName = fileName,
                 ResultCheckAccountEvidenceList = resultCheckAccountEvidenceList,
                 ErrorCode = accountEvidenceErrorList.Any() ? 1 : -1
-            };
-
-            return Json(resultImport, JsonRequestBehavior.AllowGet);
+            }, JsonRequestBehavior.AllowGet);
         }
 
         private void InsertAccountEvidence(string fileName, IEnumerable<ResultCheckAccountEvidenceModel> resultCheckAccountEvidenceList)

@@ -18,7 +18,7 @@
         public string ErrorMessage { get; set; }
 
         public override string GetSettingKey()
-            => "CTS_DC_AddMultiAccountEvidence";
+            => "CTS_DC_AddMultiCustomerEvidence";
 
         public override bool IsValid()
             => true;
