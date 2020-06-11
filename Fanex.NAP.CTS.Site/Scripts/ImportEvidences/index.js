@@ -76,6 +76,7 @@
             dataTable
                 ? domElements.tableResult.DataTable().clear().rows.add(data.ResultCheckAccountEvidenceList).draw()
                 : dataTable = GenerateGrid(data.ResultCheckAccountEvidenceList);
+
         } else if (data.ErrorCode === 2) {
             var html = "<span>" + data.ErrorMessage + "</span>";
             domElements.divResultParseFile.prop('hidden', false);
@@ -84,8 +85,9 @@
             domElements.divValidation.prop('hidden', false);
 
             domElements.divValidation.dialog({
+                appendTo: '.import-evidences',
                 modal: true,
-                width: '400px',
+                width: '600px',
                 title: 'Successul Validation',
                 resizable: true,
                 draggable: true,

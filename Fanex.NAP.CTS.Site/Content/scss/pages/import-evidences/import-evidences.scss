@@ -3,6 +3,52 @@
 
     .import-evidences {
         padding: 16px;
+
+        .ui-widget {
+            .ui-dialog-titlebar {
+                background-color: #1D2E4F;
+                padding-top: 9px;
+                padding-bottom: 9px;
+                padding-left: 16px;
+                padding-right: 14px;
+
+                .ui-dialog-title {
+                    font-size: 16px;
+                    line-height: 19px;
+                    color: #FFFFFF;
+                }
+
+                .ui-button .ui-icon:before {
+                    color: #FFFFFF;
+                }
+            }
+
+            .ui-dialog-content {
+                min-height: 151px;
+                padding: 16px;
+                padding-top: 24px;
+                text-align: center;
+                font-size: 16px;
+                line-height: 150%;
+                color: #545454;
+
+                .button-close {
+                    float: right;
+                    width: 92px;
+                    height: 30px;
+                    background: #396EF8;
+                    border-radius: 2px;
+                    color: #FFFFFF;
+                    font-size: 13px;
+                    line-height: 16px;
+                    margin-top: 16px;
+
+                    &:hover {
+                        background-color: #5081ff
+                    }
+                }
+            }
+        }
     }
 
     .form-upload {
@@ -198,7 +244,7 @@
 
 @media screen and (min-width: 1440px) {
     .content .tableResult {
-        width: 963px!important;
+        width: 963px !important;
     }
 }
 
