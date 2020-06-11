@@ -11,20 +11,19 @@
     <div class="form-upload">
         <div class="upload">
             <input type="file" name="inputFileUpload" id="inputFileUpload" />
-            <span class="fileName">Select file..</span>
-            <input type="button" class="uploadButton" value="Browse..." />
+            <span id="spanFileName" class="fileName">Select file..</span>
+            <input id="btnBrowse" type="button" class="uploadButton" value="Browse..." />
         </div>
         <button class="button button-import" id="btnImport">Import file</button>
     </div>
 
-    <div id="" class="note">
+    <div class="note">
         <div class="group-icon">
-            <i class="note-icon icon-chevron-up"></i>
-            @*<i class="note-icon icon-chevron-down"></i>*@
-            <a href="javascript:void(0)" class="note-title">Note:</a>
+            <i id="btnNoteToggle" class="note-icon icon-chevron-down"></i>
+            <span class="note-title">Note:</span>
         </div>
 
-        <div id="divNote">
+        <div id="divNote" hidden="hidden">
             <div class="wrapper-info">
                 <div>- You can use 2 rows for adding evidence for 1 account</div>
                 <div>- Import file structure:</div>
@@ -134,6 +133,7 @@
         <div>Your file has been validated.</div>
         <div>System is automatically importing the evidence data.</div>
         <div>You can start work on other function.</div>
+        <button class="button button-close" id="btnResultValidationClose">Close</button>
     </div>
 
     <div class="hide">

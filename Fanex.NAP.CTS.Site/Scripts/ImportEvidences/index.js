@@ -2,13 +2,18 @@
     let dataTable;
     let domElements = {
         hdIsHostPermission: $('#hdIsHostPermission'),
+        spanFileName: $('#spanFileName'),
         inputFileUpload: $('#inputFileUpload'),
+        btnBrowse: $('#btnBrowse'),
+        btnNoteToggle: $('#btnNoteToggle'),
+        divNote: $('#divNote'),
         divResult: $('#divResult'),
         divValidation: $('#divValidation'),
         divResultParseFile: $('#divResultParseFile'),
         tableResult: $('#tableResult'),
         btnDownloadTemplate: $('#btnDownloadTemplate'),
-        btnImport: $('#btnImport')
+        btnImport: $('#btnImport'),
+        btnResultValidationClose: $('#btnResultValidationClose')
     };
 
     let isHostPermission = domElements.hdIsHostPermission.attr('IsHostPermission') === "True";
@@ -119,18 +124,36 @@
         }).rows.add(data).draw();
     }
 
+    function ToggleNote() {
+        let classChevronUp = domElements.btnNoteToggle.hasClass('icon-chevron-up');
+        if (classChevronUp) {
+            domElements.btnNoteToggle.removeClass('icon-chevron-up').addClass('icon-chevron-down');
+            domElements.divNote.prop('hidden', true);
+        } else {
+            domElements.btnNoteToggle.removeClass('icon-chevron-down').addClass('icon-chevron-up');
+            domElements.divNote.prop('hidden', false);
+        }        
+    }
+
     function Initial() {
+        domElements.divNote.prop('hidden', true);
         domElements.divResultParseFile.prop('hidden', true);
         domElements.divResult.prop('hidden', true);
         domElements.divValidation.prop('hidden', true);        
         domElements.btnImport.prop('disabled', !isHostPermission);
 
-        if (isHostPermission)
-            domElements.btnImport.on('click', () => ImportEvidences());
-
         domElements.btnDownloadTemplate.on('click', function () {
             common.downloadFile(common.modifyRelativeUrl('ImportEvidences/DownloadTemplateExcel'), '0');
         });
+
+        domElements.inputFileUpload.on('change', function () {
+            domElements.spanFileName.text(domElements.inputFileUpload.get(0).files[0].name);
+        });
+
+        domElements.btnNoteToggle.on('click', () => ToggleNote());        
+
+        if(isHostPermission)
+            domElements.btnImport.on('click', () => ImportEvidences());
     }
 
     $(document).ready(function () {
