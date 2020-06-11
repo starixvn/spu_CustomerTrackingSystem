@@ -168,6 +168,15 @@
   <data name="IMPORT_ACCOUNT_EVIDENCE_PARSE_FILE_ERROR" xml:space="preserve">
     <value>Read file {0} error.</value>
   </data>
+  <data name="IMPORT_ACCOUNT_EVIDENCE_SENDMAIL_ATTACHMENT_FILENAME" xml:space="preserve">
+    <value>Account Evidence Error List Report.xlsx</value>
+  </data>
+  <data name="IMPORT_ACCOUNT_EVIDENCE_SENDMAIL_BODY" xml:space="preserve">
+    <value>Dear all, &lt;br /&gt;&lt;br /&gt;CTS Import Account Evidence Error. Please see attachment. &lt;br /&gt;This is an auto-generated email, please do not reply!</value>
+  </data>
+  <data name="IMPORT_ACCOUNT_EVIDENCE_SENDMAIL_SUBJECT" xml:space="preserve">
+    <value>CTS Import Account Evidence Error ({0}), UserId={1} at {2}</value>
+  </data>
   <data name="NONE" xml:space="preserve">
     <value>None</value>
   </data>

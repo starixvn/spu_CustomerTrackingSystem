@@ -152,6 +152,10 @@
             domElements.spanFileName.text(domElements.inputFileUpload.get(0).files[0].name);
         });
 
+        domElements.btnResultValidationClose.on('click', function () {
+            domElements.divValidation.dialog('close');
+        });
+
         domElements.btnNoteToggle.on('click', () => ToggleNote());        
 
         if(isHostPermission)

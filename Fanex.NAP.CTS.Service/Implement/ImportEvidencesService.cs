@@ -20,13 +20,14 @@
 
     public class ImportEvidencesService : IImportEvidencesService
     {
-        private readonly List<CheckAccountEvidenceModel> checkAccountEvidenceList;
-        private readonly List<RawAccountEvidenceModel> rawAccountEvidenceList;
+        private readonly List<CheckAccountEvidenceModel> _checkAccountEvidenceList;
+        private readonly List<RawAccountEvidenceModel> _rawAccountEvidenceList;
+        private string _fileErrorTemplate = string.Empty;
 
         public ImportEvidencesService()
         {
-            checkAccountEvidenceList = new List<CheckAccountEvidenceModel>();
-            rawAccountEvidenceList = new List<RawAccountEvidenceModel>();
+            _checkAccountEvidenceList = new List<CheckAccountEvidenceModel>();
+            _rawAccountEvidenceList = new List<RawAccountEvidenceModel>();
         }
 
         public string ParseFileXls(Stream fileContent, string fileName)
@@ -63,14 +64,14 @@
                     if (row == null || row.Cells.All(d => d.CellType == CellType.Blank))
                         continue;
 
-                    checkAccountEvidenceList.Add(new CheckAccountEvidenceModel
+                    _checkAccountEvidenceList.Add(new CheckAccountEvidenceModel
                     {
                         RowId = i + 1,
                         Username = ParseCell(row.GetCell(0)),
                         EvidenceCode = ParseCell(row.GetCell(1)),
                     });
 
-                    rawAccountEvidenceList.Add(new RawAccountEvidenceModel
+                    _rawAccountEvidenceList.Add(new RawAccountEvidenceModel
                     {
                         RowId = i + 1,
                         Username = ParseCell(row.GetCell(0)),
@@ -99,18 +100,18 @@
         }
 
         public IEnumerable<RawAccountEvidenceModel> GetRawAccountEvidences()
-           => rawAccountEvidenceList;
+           => _rawAccountEvidenceList;
 
         public byte[] DownloadTemplateExcel(string template)
         {
-            var wb = ExcelUtilities.GetWorkbook(template);
+            var workbook = ExcelUtilities.GetWorkbook(template);
 
-            return wb.ToBytes();
+            return workbook.ToBytes();
         }
 
         public IEnumerable<ResultCheckAccountEvidenceModel> CheckRuleAddAccountEvidence()
         {
-            var duplicateList = checkAccountEvidenceList.GroupBy(x => new { x.Username, x.EvidenceCode })
+            var duplicateList = _checkAccountEvidenceList.GroupBy(x => new { x.Username, x.EvidenceCode })
                     .Where(g => g.Count() > 1)
                     .Select(x => x.Last())
                     .Select(x=> new ResultCheckAccountEvidenceModel {
@@ -120,7 +121,7 @@
                         RowStatus = ResourcesManager.GetValue(ConstsResources.IMPORT_ACCOUNT_EVIDENCE_DUPLICATE)
                     });
 
-            var noDuplicateList = checkAccountEvidenceList.Distinct(x => new { x.Username, x.EvidenceCode });
+            var noDuplicateList = _checkAccountEvidenceList.Distinct(x => new { x.Username, x.EvidenceCode });
 
             var jsonData = JsonConvert.SerializeObject(noDuplicateList);
 
@@ -139,12 +140,12 @@
             }
         }
         
-        public void InsertAccountEvidence(IEnumerable<ResultCheckAccountEvidenceModel> resultCheckAccountEvidenceList, string fileName, int userId, bool isCreatedByMaster)
+        public void InsertAccountEvidence(IEnumerable<ResultCheckAccountEvidenceModel> resultCheckAccountEvidenceList, string fileName, int userId, string fileErrorTemplate)
         {
+            _fileErrorTemplate = fileErrorTemplate;
+
             var addAccountEvidenceList = resultCheckAccountEvidenceList
-                .Join(rawAccountEvidenceList,
-                    x => x.RowId,
-                    y => y.RowId,
+                .Join(_rawAccountEvidenceList, x => x.RowId, y => y.RowId,
                     (x, y) => new AddAccountEvidenceModel
                     {
                         CTSCustID = x.CTSCustID,
@@ -164,7 +165,7 @@
                     {
                         NewAccountEvidences = jsonData,
                         UserId = userId,
-                        IsCreatedByMaster = isCreatedByMaster,
+                        IsCreatedByMaster = true,
                         ErrorMessage = string.Empty
                     };
 
@@ -174,19 +175,90 @@
       
                         if (!string.IsNullOrWhiteSpace(criteria.ErrorMessage))
                         {
-                            var errorMessage = string.Format("File name: {0} - userId: {2} - import error: {1} - content: {3}"
-                                                        , fileName, userId, criteria.ErrorMessage, jsonData);
-                            LogService.Error(errorMessage);
+                            SendMail(resultCheckAccountEvidenceList, accountEvidence, userId);
+                            LogError(fileName, userId, criteria.ErrorMessage, jsonData);
                         } 
                     }
                 }
                 catch (Exception ex)
                 {
-                    var errorMessage = string.Format("File name: {0} - userId: {2} - import error: {1} - content: {3}"
-                                                       , fileName, userId, ex.ToString(), jsonData);
-                    LogService.Error(errorMessage, ex);
+                    SendMail(resultCheckAccountEvidenceList, accountEvidence, userId);
+                    LogError(fileName, userId, ex.Message, jsonData, ex);
                 }
             }
         }
+
+        private void LogError(string fileName, int userId, string error, string jsonData, Exception ex = null)
+        {
+            var errorMessage = string.Format("CTS - Import file name: {0} - userId: {2} - import error: {1} - content: {3}"
+                                                       , fileName, userId, error, jsonData);
+            if (ex == null)
+                LogService.Error(errorMessage);
+            else
+                LogService.Error(errorMessage, ex);
+        }
+
+        private void SendMail(IEnumerable<ResultCheckAccountEvidenceModel> accountEvidenceCheckedList, IEnumerable<AddAccountEvidenceModel> errorAccountEvidenceModelList, int userId)
+        {
+            var attachmentFileName = ResourcesManager.GetValue(ConstsResources.IMPORT_ACCOUNT_EVIDENCE_SENDMAIL_ATTACHMENT_FILENAME);
+            var subject = string.Format(ResourcesManager.GetValue(ConstsResources.IMPORT_ACCOUNT_EVIDENCE_SENDMAIL_SUBJECT),
+                    ConfigSettings.EnvironmentName, userId, DateTime.Now);
+            var body = ResourcesManager.GetValue(ConstsResources.IMPORT_ACCOUNT_EVIDENCE_SENDMAIL_BODY);
+
+            try
+            {
+                var attachmentContent = ExportExcel(accountEvidenceCheckedList, errorAccountEvidenceModelList);
+                IMailStationService mailService = new MailStationService(ConfigSettings.SPUMMailingListId)
+                        .GenerateAttachment(attachmentFileName, attachmentContent)
+                        .GenerateMail(subject, subject, body);
+
+                mailService.SendMail();
+            }
+            catch (Exception ex)
+            {
+                LogService.Error(string.Format("CTS - Import file - send mail error: ", ex.Message), ex);
+            }
+        }
+
+        private byte[] ExportExcel(IEnumerable<ResultCheckAccountEvidenceModel> accountEvidenceCheckedList, IEnumerable<AddAccountEvidenceModel> errorAccountEvidenceModelList)
+        {
+            var errorDetailList = errorAccountEvidenceModelList
+                    .Join(accountEvidenceCheckedList, x => x.CTSCustID, y => y.CTSCustID, (x, y) => y)
+                    .Join(_rawAccountEvidenceList, x => x.RowId, y => y.RowId, (x, y) => y);
+
+            var workbook = ExcelUtilities.GetWorkbook(_fileErrorTemplate);
+
+            if (errorDetailList.Any())
+            {
+                var sheet = workbook.GetSheetAt(0);
+                do
+                {
+                    var rowOld = sheet.GetRow(sheet.LastRowNum);
+                    if (rowOld != null)
+                        sheet.RemoveRow(rowOld);
+                } while (sheet.LastRowNum > 0);
+
+                var rowTemplate = sheet.GetRow(sheet.LastRowNum);
+                rowTemplate.GetCell(0).SetCellValue(string.Empty);
+                rowTemplate.GetCell(1).SetCellValue(string.Empty);
+                rowTemplate.GetCell(2).SetCellValue(string.Empty);
+
+                foreach (var data in errorDetailList)
+                {
+                    sheet.ShiftRows(sheet.LastRowNum, sheet.LastRowNum, 1, true, false);
+
+                    var newRowIndex = sheet.LastRowNum - 1;                    
+                    var rowNew = sheet.CreateRow(newRowIndex);
+                    ExcelUtilities.CopyRow(rowTemplate, rowNew);
+
+                    rowNew.GetCell(0).SetCellValue(data.Username);
+                    rowNew.GetCell(1).SetCellValue(data.EvidenceCode);
+                    rowNew.GetCell(2).SetCellValue(data.Comment);
+                }
+            }
+
+            return workbook.ToBytes();
+        }
+
     }
 }

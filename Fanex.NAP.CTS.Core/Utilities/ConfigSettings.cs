@@ -94,5 +94,38 @@
                 return size == 0 ? 500 : size;
             }
         }
+
+        public static int SPUMMailingListId
+        {
+            get
+            {
+                var mailingListId = 80;
+                var id = GetConfigStringByName("SPU_MailingListId");
+
+                int.TryParse(id, out mailingListId);
+
+                return mailingListId == 0 ? 80 : mailingListId;
+            }
+        }
+
+        public static string EnvironmentName
+        {
+            get
+            {
+                var environment = GetConfigStringByName("Environment");
+
+                switch (environment)
+                {
+                    case "1":
+                        return "LOCAL";
+                    case "2":
+                        return "UAT";
+                    case "3":
+                        return "PRO";
+                    default:
+                        return "LOCAL";
+                }
+            }
+        }
     }
 }

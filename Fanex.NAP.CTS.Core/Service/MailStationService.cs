@@ -2,14 +2,18 @@
 {
     using Fanex.MailDelivery.Client;
     using Fanex.MailDelivery.Core.Models;
+    using OfficeOpenXml;
+    using System;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
 
     public class MailStationService : IMailStationService
     {
         private Mail _mail;
         private int _mailingListId;
         private List<MailAttachment> _attachmentList;
-
+      
         public MailStationService(int mailingListId)
         {
             _mailingListId = mailingListId;
@@ -36,14 +40,41 @@
 
             return this;
         }
-
-        public void SendMail()
+        
+        public bool SendMail()
         {
             MailClientHandler.Start();
 
             MailClientHandler.SendFunctionMail(_mail);
 
             MailClientHandler.Stop();
+
+            return true;
         }
+
+        public bool SaveToExcelFile(string savePath, string password)
+        {
+            if (_attachmentList.Any())
+            {
+                var fileBytes = _attachmentList[0].FileContent;
+
+                try
+                {
+                    using (var memoryStream = new MemoryStream(fileBytes))
+                    {
+                        var excelPackage = new ExcelPackage(memoryStream);
+
+                        excelPackage.SaveAs(new FileInfo(savePath), password);
+                    }
+                }
+                catch
+                {
+                    return false;
+                }                
+            }
+
+            return true;
+        }
+
     }
 }

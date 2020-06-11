@@ -87,9 +87,7 @@
             var rawAccountEvidenceList = _importEvidencesService.GetRawAccountEvidences();
 
             var resultCheckAccountEvidenceList = accountEvidenceErrorList
-                    .Join(rawAccountEvidenceList,
-                     x => x.RowId,
-                     y => y.RowId,
+                    .Join(rawAccountEvidenceList, x => x.RowId, y => y.RowId,
                     (x, y) => new ResultCheckAccountEvidenceViewModel
                     {
                         RowId = x.RowId,
@@ -109,7 +107,8 @@
         {
             Task.Run(() =>
             {
-                _importEvidencesService.InsertAccountEvidence(resultCheckAccountEvidenceList, fileName, CurrentSession.UserId, true);
+                var template = Server.MapPath(ImportTemplate);
+                _importEvidencesService.InsertAccountEvidence(resultCheckAccountEvidenceList, fileName, CurrentSession.UserId, template);
             });
         }
     }

@@ -6,6 +6,8 @@
 
         IMailStationService GenerateMail(string subject, string title, string body);
 
-        void SendMail();
+        bool SendMail();
+
+        bool SaveToExcelFile(string path, string password);
     }
 }
