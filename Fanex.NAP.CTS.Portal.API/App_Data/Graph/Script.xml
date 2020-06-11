@@ -10,5 +10,6 @@
     <GraphSetting Key="GetAssociationNLevelByCustId" SpName="GetAssociationNLevelByCustId" DbName="GraphDB" />
     <GraphSetting Key="GetShortestPath" SpName="GetShortestPath" DbName="GraphDB" />
     <GraphSetting Key="GetStatisticForCustomer" SpName="GetStatisticForCustomer" DbName="GraphDB" />
+    <GraphSetting Key="GetAssociationByCustIdAndLevel" SpName="GetAssociationByCustIdAndLevel" DbName="GraphDB" />
   </Function>
 </Functions>

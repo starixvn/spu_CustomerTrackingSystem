@@ -10,6 +10,7 @@ using System.Web.Http;
 using System.Threading.Tasks;
 using Fanex.NAP.CTS.Core.Utilities;
 using Fanex.NAP.CTS.Model.DTO;
+using Fanex.NAP.SPU.Graph.Core;
 
 namespace Fanex.NAP.CTS.Portal.API.Controllers
 {
@@ -45,19 +46,19 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
                 LogService.Error("PlaceEvidence exception: " + ex.Message);
                 return false;
             }
-        }
+        }        
 
-        /// <summary>
-        /// This controller is only for testing
-        /// </summary>
-        /// <returns></returns>
-
-        [HttpPost]
+        [HttpGet]
         public IEnumerable<CustomerEvidence> GetFlaggedCustomersByLevel(string CustIdList, int AssociatedLevel)
         {
             try
             {
-                return _evidenceService.GetFlaggedCustomersByLevel(CustIdList);
+                // get association from graph
+                var associationList = DbSessionFactory.Execute<CustomerEvidence>("GetAssociationByCustIdAndLevel"
+                                        ,new { CustIdList, AssociatedLevel }).Data;
+                var custIdList = string.Join(",",associationList.Select(c => c.CustId));
+
+                return _evidenceService.GetFlaggedCustomersByLevel(custIdList);
             }
             catch (Exception ex)
             {
@@ -82,6 +83,10 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
             }
         }
 
+        /// <summary>
+        /// This controller is only for testing
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public string Test()
         {

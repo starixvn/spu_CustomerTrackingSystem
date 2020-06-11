@@ -1,16 +1,16 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
-    using System.Linq;
-    using System.Collections.Generic;
-    using Fanex.NAP.CTS.ViewModel.Account.Evidence;
-    using Fanex.NAP.CTS.ViewModel.Evidence;
-    using Fanex.NAP.CTS.Criteria.Account.Evidence;
-    using Fanex.NAP.CTS.Core.BaseClasses;
-    using Fanex.NAP.CTS.Model.Account.Evidence;
-    using Fanex.NAP.CTS.ViewModel.Account.Evidence.Exception;
     using Fanex.NAP.CTS.Core;
-    using Fanex.NAP.CTS.Model.DTO;
+    using Fanex.NAP.CTS.Core.BaseClasses;
+    using Fanex.NAP.CTS.Criteria.Account.Evidence;
     using Fanex.NAP.CTS.Criteria.Api;
+    using Fanex.NAP.CTS.Model.Account.Evidence;
+    using Fanex.NAP.CTS.Model.DTO;
+    using Fanex.NAP.CTS.ViewModel.Account.Evidence;
+    using Fanex.NAP.CTS.ViewModel.Account.Evidence.Exception;
+    using Fanex.NAP.CTS.ViewModel.Evidence;
+    using System.Collections.Generic;
+    using System.Linq;
 
     public class EvidenceService : IEvidenceService
     {
@@ -136,7 +136,7 @@
                     DirectedUserName = c.MainAccount,
                     EvidenceCode = c.EvidenceCode
                 })
-                .OrderBy(c=>c.EvidenceCode);
+                .OrderBy(c => c.EvidenceCode);
         }
 
         private static IEnumerable<ChainNode> GetChainsAffected(IEnumerable<AccountEvidence> accounts)
@@ -215,7 +215,7 @@
                 {
                     DirectedAccountId = c.MainAccountID,
                     DirectedUserName = c.MainAccount,
-                    EvidenceCode = c.EvidenceCode                    
+                    EvidenceCode = c.EvidenceCode
                 })
                 .OrderBy(c => c.EvidenceCode);
         }
@@ -230,7 +230,7 @@
                      AffectedUserName = c.MainAccount,
                      DirectedAccountId = c.RootAccountID,
                      DirectedUserName = c.RootAccount,
-                     EvidenceCode = c.EvidenceCode,                     
+                     EvidenceCode = c.EvidenceCode,
                  })
                  .OrderBy(c => c.DirectedUserName)
                  .ThenBy(c => c.EvidenceCode);
@@ -249,7 +249,7 @@
                     IsActive = c.IsActive
                 })
                 .OrderBy(c => c.DirectedUserName)
-                .ThenBy(c => c.EvidenceCode);            
+                .ThenBy(c => c.EvidenceCode);
         }
 
         public void AddCustomersEvidences(CustomerEvidenceList customerEvidenceList)
@@ -280,7 +280,7 @@
         {
             var evidences = new List<Evidence>();
 
-            evidences.Add(new Evidence { EvidenceGroupID = 1, EvidenceGroupName = "Financial", EvidenceTypeID = 1 , EvidenceTypeCode = "1.1", EvidenceTypeName = "Credit Card Fraud", Description = "Description Credit Card Fraud" });
+            evidences.Add(new Evidence { EvidenceGroupID = 1, EvidenceGroupName = "Financial", EvidenceTypeID = 1, EvidenceTypeCode = "1.1", EvidenceTypeName = "Credit Card Fraud", Description = "Description Credit Card Fraud" });
             evidences.Add(new Evidence { EvidenceGroupID = 1, EvidenceGroupName = "Financial", EvidenceTypeID = 2, EvidenceTypeCode = "1.2", EvidenceTypeName = "ACH/Debit Fraud", Description = "Description ACH/Debit Fraud" });
             evidences.Add(new Evidence { EvidenceGroupID = 1, EvidenceGroupName = "Financial", EvidenceTypeID = 3, EvidenceTypeCode = "1.3", EvidenceTypeName = "Friendly Chargeback", Description = "Description Friendly Chargeback" });
             evidences.Add(new Evidence { EvidenceGroupID = 2, EvidenceGroupName = "Cheating", EvidenceTypeID = 4, EvidenceTypeCode = "2.1", EvidenceTypeName = "Collusion", Description = "Description Collusion" });
@@ -293,7 +293,7 @@
         public IEnumerable<Evidence> GetEvidencesByAccount(int accountId)
         {
             return new List<Evidence>();
-        }       
+        }
         #endregion
     }
 }

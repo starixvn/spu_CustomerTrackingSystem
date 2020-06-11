@@ -481,6 +481,12 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.Test">
+            <summary>
+            This controller is only for testing
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Fanex.NAP.CTS.Portal.API.Controllers.GraphController">
             <summary>
             Graph Controller
@@ -517,6 +523,11 @@
             <param name="ctsCustIdFrom"></param>
             <param name="ctsCustIdTo"></param>
             <returns>Json string</returns>
+        </member>
+        <member name="T:Fanex.NAP.CTS.Portal.API.Controllers.HomeController">
+            <summary>
+            This is a test controller for make sure it run properly
+            </summary>
         </member>
     </members>
 </doc>
