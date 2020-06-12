@@ -26,7 +26,6 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
             _evidenceService = new EvidenceService();
         }
 
-
         [HttpPost]
         public bool PlaceEvidence(UpdatePlaceEvidenceModel model)
         {
@@ -49,13 +48,13 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
             }
         }
 
-        /// <summary>
+        /// <summary>   
         /// Get flagged customers by level
         /// </summary>
         /// <param name="CustIdList">CustId in string format (saparate by comma) </param>
-        /// <param name="AssociatedLevel"></param>
-        /// <returns></returns>
-        [HttpGet]
+        /// <param name="AssociatedLevel"> Level 0, 1 or 2</param>
+        /// <returns>A list of customer evidence in JSON format</returns>
+        [HttpPost]
         public JsonResult<List<CustomerEvidence>> GetFlaggedCustomersByLevel(string CustIdList, int AssociatedLevel)
         {
             try
@@ -87,6 +86,11 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Add evidences to customers
+        /// </summary>
+        /// <param name="customerEvidenceList"></param>
+        /// <returns></returns>
         [HttpPost]
         public bool AddCustomersEvidences(CustomerEvidenceList customerEvidenceList)
         {

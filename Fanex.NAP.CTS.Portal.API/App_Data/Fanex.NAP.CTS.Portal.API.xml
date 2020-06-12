@@ -481,12 +481,19 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetFlaggedCustomersByLevel(System.String,System.Int32)">
-            <summary>
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetFlaggedCustomersByLevel(System.String,System.Int32,System.String)">
+            <summary>   
             Get flagged customers by level
             </summary>
             <param name="CustIdList">CustId in string format (saparate by comma) </param>
-            <param name="AssociatedLevel"></param>
+            <param name="AssociatedLevel"> Level 0, 1 or 2</param>
+            <returns>A list of customer evidence in JSON format</returns>
+        </member>
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.AddCustomersEvidences(Fanex.NAP.CTS.Model.DTO.CustomerEvidenceList)">
+            <summary>
+            Add evidences to customers
+            </summary>
+            <param name="customerEvidenceList"></param>
             <returns></returns>
         </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.Test">
