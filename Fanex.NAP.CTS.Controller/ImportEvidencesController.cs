@@ -70,8 +70,8 @@
                     .Select(x => x);
 
                 if (!accountEvidenceErrorList.Any())
-                    InsertAccountEvidence(fileName, resultCheckAccountEvidenceList);
-
+                    InsertAccountEvidence(fileName, CurrentSession.UserId, resultCheckAccountEvidenceList);
+                
                 return ReturnResultCheckAccountEvidence(fileName, accountEvidenceErrorList);
             }
 
@@ -103,12 +103,12 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private void InsertAccountEvidence(string fileName, IEnumerable<ResultCheckAccountEvidenceModel> resultCheckAccountEvidenceList)
+        private void InsertAccountEvidence(string fileName, int userId, IEnumerable<ResultCheckAccountEvidenceModel> resultCheckAccountEvidenceList)
         {
             Task.Run(() =>
             {
                 var template = Server.MapPath(ImportTemplate);
-                _importEvidencesService.InsertAccountEvidence(resultCheckAccountEvidenceList, fileName, CurrentSession.UserId, template);
+                _importEvidencesService.InsertAccountEvidence(resultCheckAccountEvidenceList, fileName, userId, template);
             });
         }
     }

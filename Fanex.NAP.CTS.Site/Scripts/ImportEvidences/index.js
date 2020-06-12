@@ -88,7 +88,7 @@
                 appendTo: '.import-evidences',
                 modal: true,
                 width: '600px',
-                title: 'Successul Validation',
+                title: 'Successful Validation',
                 resizable: true,
                 draggable: true,
                 close: function () { $(this).dialog('close'); }
