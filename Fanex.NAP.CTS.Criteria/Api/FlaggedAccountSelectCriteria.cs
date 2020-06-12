@@ -1,8 +1,9 @@
 ﻿namespace Fanex.NAP.CTS.Criteria.Api
 {
+    using Fanex.Data.Repository;
     using Fanex.NAP.CTS.Core.BaseClasses;
 
-    public class FlaggedAccountSelectCriteria : CommandBase
+    public class FlaggedAccountSelectCriteria : CriteriaBase
     {
         public string ip_CustIds { get; set; }
 

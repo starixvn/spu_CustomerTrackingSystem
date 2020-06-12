@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Fanex.NAP.CTS.Core.Utilities;
 using Fanex.NAP.CTS.Model.DTO;
 using Fanex.NAP.SPU.Graph.Core;
+using System.Web.Http.Results;
 
 namespace Fanex.NAP.CTS.Portal.API.Controllers
 {
@@ -46,33 +47,43 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
                 LogService.Error("PlaceEvidence exception: " + ex.Message);
                 return false;
             }
-        }        
+        }
 
+        /// <summary>
+        /// Get flagged customers by level
+        /// </summary>
+        /// <param name="CustIdList">CustId in string format (saparate by comma) </param>
+        /// <param name="AssociatedLevel"></param>
+        /// <returns></returns>
         [HttpGet]
-        public IEnumerable<CustomerEvidence> GetFlaggedCustomersByLevel(string CustIdList, int AssociatedLevel)
+        public JsonResult<List<CustomerEvidence>> GetFlaggedCustomersByLevel(string CustIdList, int AssociatedLevel)
         {
             try
             {
+                var convertedCustIdList = CustIdList.Split(',').Select(a => Convert.ToInt32(a));
                 // get association from graph
                 var associationList = DbSessionFactory.Execute<CustomerEvidence>("GetAssociationByCustIdAndLevel"
-                                        ,new { CustIdList, AssociatedLevel }).Data;
+                                        ,new { CustIdList = convertedCustIdList, AssociatedLevel }).Data;
                 var custIdList = string.Join(",",associationList.Select(c => c.CustId));
-
                 var flaggedCustomers = _evidenceService.GetFlaggedCustomersByLevel(custIdList);
-                return (from f in flaggedCustomers
-                        join a in associationList on f.CustId equals a.Level0CustId
-                        select new CustomerEvidence {
-                            CustId = a.CustId,
-                            Level0CustId = a.Level0CustId,
-                            EvidenceCode = f.EvidenceCode,
-                            EvidenceName = f.EvidenceName,
-                            CreatedDate = f.CreatedDate
-                        });
+                
+                var result = (from f in flaggedCustomers
+                              join a in associationList on f.CustId equals a.CustId
+                              select new CustomerEvidence
+                              {
+                                  CustId = a.CustId,
+                                  Level0CustId = a.Level0CustId,
+                                  EvidenceCode = f.EvidenceCode,
+                                  EvidenceName = f.EvidenceName,
+                                  CreatedDate = f.CreatedDate
+                              });
+
+                return Json(result.ToList());
             }
             catch (Exception ex)
             {
                 LogService.Error("Get Flagged Customers By Level exception: " + ex.Message);
-                return new List<CustomerEvidence>();
+                return Json(new List<CustomerEvidence>());
             }
         }
 
