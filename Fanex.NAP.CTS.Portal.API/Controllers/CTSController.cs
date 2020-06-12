@@ -58,7 +58,16 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
                                         ,new { CustIdList, AssociatedLevel }).Data;
                 var custIdList = string.Join(",",associationList.Select(c => c.CustId));
 
-                return _evidenceService.GetFlaggedCustomersByLevel(custIdList);
+                var flaggedCustomers = _evidenceService.GetFlaggedCustomersByLevel(custIdList);
+                return (from f in flaggedCustomers
+                        join a in associationList on f.CustId equals a.Level0CustId
+                        select new CustomerEvidence {
+                            CustId = a.CustId,
+                            Level0CustId = a.Level0CustId,
+                            EvidenceCode = f.EvidenceCode,
+                            EvidenceName = f.EvidenceName,
+                            CreatedDate = f.CreatedDate
+                        });
             }
             catch (Exception ex)
             {
