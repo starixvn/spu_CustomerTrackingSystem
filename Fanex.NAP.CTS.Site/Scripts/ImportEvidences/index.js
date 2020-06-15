@@ -71,6 +71,7 @@
 
     function ResultCheckAccountEvidence(data) {
         if (data.ErrorCode === 1) {
+            ToggleNoteHidden();
             domElements.divNote.prop('hidden', true);
             domElements.divResult.prop('hidden', false);
 
@@ -128,14 +129,22 @@
     }
 
     function ToggleNote() {
-        let classChevronUp = domElements.btnNoteToggle.hasClass('icon-chevron-up');
-        if (classChevronUp) {
-            domElements.btnNoteToggle.removeClass('icon-chevron-up').addClass('icon-chevron-down');
+        let classChevronDown = domElements.btnNoteToggle.hasClass('icon-chevron-down');
+        if (classChevronDown) {
+            domElements.btnNoteToggle.removeClass('icon-chevron-down').addClass('icon-chevron-right');
             domElements.divNote.prop('hidden', true);
         } else {
-            domElements.btnNoteToggle.removeClass('icon-chevron-down').addClass('icon-chevron-up');
+            domElements.btnNoteToggle.removeClass('icon-chevron-right').addClass('icon-chevron-down');
             domElements.divNote.prop('hidden', false);
         }        
+    }
+
+    function ToggleNoteHidden() {
+        let classChevronDown = domElements.btnNoteToggle.hasClass('icon-chevron-down');
+        if (classChevronDown) {
+            domElements.btnNoteToggle.removeClass('icon-chevron-down').addClass('icon-chevron-right');
+            domElements.divNote.prop('hidden', true);
+        }
     }
 
     function Initial() {
