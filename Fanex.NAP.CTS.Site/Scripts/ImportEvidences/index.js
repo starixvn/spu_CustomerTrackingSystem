@@ -71,6 +71,7 @@
 
     function ResultCheckAccountEvidence(data) {
         if (data.ErrorCode === 1) {
+            domElements.divNote.prop('hidden', true);
             domElements.divResult.prop('hidden', false);
 
             dataTable
@@ -138,7 +139,7 @@
     }
 
     function Initial() {
-        domElements.divNote.prop('hidden', true);
+        domElements.divNote.prop('hidden', false);
         domElements.divResultParseFile.prop('hidden', true);
         domElements.divResult.prop('hidden', true);
         domElements.divValidation.prop('hidden', true);        
