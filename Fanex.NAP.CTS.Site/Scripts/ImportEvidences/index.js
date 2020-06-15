@@ -71,8 +71,8 @@
 
     function ResultCheckAccountEvidence(data) {
         if (data.ErrorCode === 1) {
-            ToggleNoteHidden();
-            domElements.divNote.prop('hidden', true);
+            HiddenNote();
+
             domElements.divResult.prop('hidden', false);
 
             dataTable
@@ -80,7 +80,9 @@
                 : dataTable = GenerateGrid(data.ResultCheckAccountEvidenceList);
 
         } else if (data.ErrorCode === 2) {
-            var html = "<span>" + data.ErrorMessage + "</span>";
+            HiddenNote();
+
+            var html = "<span style='color:red; font-weight: bold'>" + data.ErrorMessage + "</span>";
             domElements.divResultParseFile.prop('hidden', false);
             domElements.divResultParseFile.html(html);
         } else {
@@ -121,11 +123,17 @@
             ],
             columns: [
                 { data: obj => obj.RowId },
-                { data: obj => obj.Username },
-                { data: obj => obj.EvidenceCode },
+                { data: obj => SubString(obj.Username) },
+                { data: obj => SubString(obj.EvidenceCode) },
                 { data: obj => obj.RowStatus }
             ]
         }).rows.add(data).draw();
+    }
+
+    function SubString(text) {
+        return text !== '' && text.length > 50
+            ? text.substring(0, 47) + '...'
+            : text;
     }
 
     function ToggleNote() {
@@ -139,7 +147,7 @@
         }        
     }
 
-    function ToggleNoteHidden() {
+    function HiddenNote() {
         let classChevronDown = domElements.btnNoteToggle.hasClass('icon-chevron-down');
         if (classChevronDown) {
             domElements.btnNoteToggle.removeClass('icon-chevron-down').addClass('icon-chevron-right');

@@ -205,7 +205,16 @@ namespace Fanex.NAP.CTS.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Read file {0} error..
+        ///   Looks up a localized string similar to Invalid Evidence Code..
+        /// </summary>
+        internal static string IMPORT_ACCOUNT_EVIDENCE_EVIDENCECODE_INVALID {
+            get {
+                return ResourceManager.GetString("IMPORT_ACCOUNT_EVIDENCE_EVIDENCECODE_INVALID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Can not read a file &quot;{0}&quot;.
         /// </summary>
         internal static string IMPORT_ACCOUNT_EVIDENCE_PARSE_FILE_ERROR {
             get {
@@ -237,6 +246,15 @@ namespace Fanex.NAP.CTS.Resource {
         internal static string IMPORT_ACCOUNT_EVIDENCE_SENDMAIL_SUBJECT {
             get {
                 return ResourceManager.GetString("IMPORT_ACCOUNT_EVIDENCE_SENDMAIL_SUBJECT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid Username..
+        /// </summary>
+        internal static string IMPORT_ACCOUNT_EVIDENCE_USERNAME_INVALID {
+            get {
+                return ResourceManager.GetString("IMPORT_ACCOUNT_EVIDENCE_USERNAME_INVALID", resourceCulture);
             }
         }
         

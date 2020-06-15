@@ -34,9 +34,19 @@
         {
             using (fileContent)
             {
-                var workbook = new HSSFWorkbook(fileContent);
-               
-                return ParseFile(workbook.GetSheetAt(0), fileName);
+                try
+                {
+                    var workbook = new HSSFWorkbook(fileContent);
+
+                    return ParseFile(workbook.GetSheetAt(0), fileName);
+                }
+                catch (Exception ex)
+                {
+                    var errorMessage = string.Format(ResourcesManager.GetValue(ConstsResources.IMPORT_ACCOUNT_EVIDENCE_PARSE_FILE_ERROR), fileName);
+                    LogService.Error(errorMessage, ex);
+
+                    return errorMessage;
+                }                
             }
         }
 
@@ -44,9 +54,19 @@
         {
             using (fileContent)
             {
-                var workbook = new XSSFWorkbook(fileContent);
+                try
+                {
+                    var workbook = new XSSFWorkbook(fileContent);
 
-                return ParseFile(workbook.GetSheetAt(0), fileName);
+                    return ParseFile(workbook.GetSheetAt(0), fileName);
+                }
+                catch (Exception ex)
+                {
+                    var errorMessage = string.Format(ResourcesManager.GetValue(ConstsResources.IMPORT_ACCOUNT_EVIDENCE_PARSE_FILE_ERROR), fileName);
+                    LogService.Error(errorMessage, ex);
+
+                    return errorMessage;
+                }                
             }
         }
 
@@ -55,40 +75,30 @@
             var firstRowNum = 0;
             var lastRowNum = sheet.LastRowNum + 1;
 
-            try
+            for (int i = firstRowNum; i < lastRowNum; i++)
             {
-                for (int i = firstRowNum; i < lastRowNum; i++)
+                IRow row = sheet.GetRow(i);
+
+                if (row == null || row.Cells.All(d => d.CellType == CellType.Blank))
+                    continue;
+
+                _checkAccountEvidenceList.Add(new CheckAccountEvidenceModel
                 {
-                    IRow row = sheet.GetRow(i);
+                    RowId = i + 1,
+                    Username = ParseCell(row.GetCell(0)),
+                    EvidenceCode = ParseCell(row.GetCell(1)),
+                });
 
-                    if (row == null || row.Cells.All(d => d.CellType == CellType.Blank))
-                        continue;
-
-                    _checkAccountEvidenceList.Add(new CheckAccountEvidenceModel
-                    {
-                        RowId = i + 1,
-                        Username = ParseCell(row.GetCell(0)),
-                        EvidenceCode = ParseCell(row.GetCell(1)),
-                    });
-
-                    _rawAccountEvidenceList.Add(new RawAccountEvidenceModel
-                    {
-                        RowId = i + 1,
-                        Username = ParseCell(row.GetCell(0)),
-                        EvidenceCode = ParseCell(row.GetCell(1)),
-                        Comment = ParseCell(row.GetCell(2)),
-                    });
-                }
-
-                return string.Empty;
+                _rawAccountEvidenceList.Add(new RawAccountEvidenceModel
+                {
+                    RowId = i + 1,
+                    Username = ParseCell(row.GetCell(0)),
+                    EvidenceCode = ParseCell(row.GetCell(1)),
+                    Comment = ParseCell(row.GetCell(2)),
+                });
             }
-            catch (Exception ex)
-            {
-                var errorMessage = string.Format(ResourcesManager.GetValue(ConstsResources.IMPORT_ACCOUNT_EVIDENCE_PARSE_FILE_ERROR), fileName);
-                LogService.Error(errorMessage, ex);
 
-                return errorMessage;
-            }
+            return string.Empty;
         }
 
         private string ParseCell(object cellValue)
@@ -111,17 +121,38 @@
 
         public IEnumerable<ResultCheckAccountEvidenceModel> CheckRuleAddAccountEvidence()
         {
+            var exceedlengthUsernameList = _checkAccountEvidenceList
+                    .Where(x => x.Username.Length > 50)
+                    .Select(x=> new ResultCheckAccountEvidenceModel {
+                        CTSCustID = 0,
+                        EvidenceID = 0,
+                        RowId = x.RowId,
+                        RowStatus = ResourcesManager.GetValue(ConstsResources.IMPORT_ACCOUNT_EVIDENCE_USERNAME_INVALID)
+                    });
+
+            var exceedlengthEvidenceCodeList = _checkAccountEvidenceList
+                    .Where(x => x.EvidenceCode.Length > 10)
+                    .Select(x => new ResultCheckAccountEvidenceModel
+                    {
+                        CTSCustID = 0,
+                        EvidenceID = 0,
+                        RowId = x.RowId,
+                        RowStatus = ResourcesManager.GetValue(ConstsResources.IMPORT_ACCOUNT_EVIDENCE_EVIDENCECODE_INVALID)
+                    });
+
             var duplicateList = _checkAccountEvidenceList.GroupBy(x => new { x.Username, x.EvidenceCode })
                     .Where(g => g.Count() > 1)
                     .Select(x => x.Last())
                     .Select(x=> new ResultCheckAccountEvidenceModel {
                         CTSCustID = 0,
                         EvidenceID = 0,
-                        RowId = x.RowId,
+                        RowId = x.RowId,                        
                         RowStatus = ResourcesManager.GetValue(ConstsResources.IMPORT_ACCOUNT_EVIDENCE_DUPLICATE)
                     });
 
-            var noDuplicateList = _checkAccountEvidenceList.Distinct(x => new { x.Username, x.EvidenceCode });
+            var noDuplicateList = _checkAccountEvidenceList
+                    .Where(x => x.Username.Length <= 50 && x.EvidenceCode.Length <= 10)
+                    .Distinct(x => new { x.Username, x.EvidenceCode });
 
             var jsonData = JsonConvert.SerializeObject(noDuplicateList);
 
@@ -136,6 +167,8 @@
 
                 return resultVerifyDbList
                     .Union(duplicateList)
+                    .Union(exceedlengthUsernameList)
+                    .Union(exceedlengthEvidenceCodeList)
                     .OrderBy(x=>x.RowId);
             }
         }

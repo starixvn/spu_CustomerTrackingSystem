@@ -77,7 +77,7 @@
 
             return Json(new ResultImportViewModel {
                 FileName = fileName,
-                ErrorCode = 1,
+                ErrorCode = 2,
                 ErrorMessage = errorParseFile
             }, JsonRequestBehavior.AllowGet);
         }
