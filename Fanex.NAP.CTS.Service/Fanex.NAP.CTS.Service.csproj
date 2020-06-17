@@ -82,6 +82,7 @@
     <Compile Include="Implement\SuspiciousCustomerReportDetailsService.cs" />
     <Compile Include="Implement\SuspiciousCustomerReportService.cs" />
     <Compile Include="Implement\TransactionService.cs" />
+    <Compile Include="Implement\CTSUserService.cs" />
     <Compile Include="Interface\IAccountService.cs" />
     <Compile Include="Interface\ICheckBetReportService.cs" />
     <Compile Include="Interface\ICustomerMonitorService.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="Interface\ISuspiciousCustomerReportDetailsService.cs" />
     <Compile Include="Interface\ISuspiciousCustomerReportService.cs" />
     <Compile Include="Interface\ITransactionService.cs" />
+    <Compile Include="Interface\ICTSUserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

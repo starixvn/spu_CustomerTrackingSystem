@@ -142,7 +142,7 @@
                             var hashPw = GetHash(user.Password + loginToken);
 
                             if (password == hashPw)
-                            {
+                            {                                
                                 var group = user.Group == null ? null : _groupService.Get(user.Group.Id);
 
                                 // gets all sites of logging-in user
@@ -159,14 +159,6 @@
                                     // Saves user session
                                     SaveUserSession(user, username, onId);
 
-                                    //var currentFunction = _userService.GetPermissions(user.Id, NapSettings.Settings.SiteId, null, NapSettings.Settings.Environment);
-                                    //AppSession.CurrentUser = user;
-                                    //AppSession.RoleAccess = PermissionService.GetRoleAccess(currentFunction);
-                                    //var accountService = new AccountService();
-                                    //var subscribersAssignments = accountService.GetSubscribers(user.Id);
-                                    //AppSession.IsMasterSubscriberAssignment = accountService.CheckIsMasterSubscriber(subscribersAssignments);
-                                    //AppSession.IsPermissionCN88 = accountService.CheckIsPermissionCN88(subscribersAssignments);                                    
-
                                     if (AppSession.CurrentUserMenu != null &&
                                         AppSession.CurrentUserMenu.Where(m => m.Parent == null).ToList().Count > 0)
                                     {
@@ -175,6 +167,8 @@
                                         {
                                             if (UserIsActiveOnThisSite(siteLevelList))
                                             {
+                                                InsertCTSUser(user.Id, username);
+
                                                 var returnUrl = FormsAuthentication.GetRedirectUrl(username, true);
                                                 returnUrl = string.IsNullOrEmpty(returnUrl) ? FormsAuthentication.DefaultUrl : returnUrl;
                                                 return Redirect(returnUrl);
@@ -237,6 +231,20 @@
             {
                 Logger.Log.Error(ex.Message, ex);
                 throw;
+            }
+        }
+
+        private void InsertCTSUser(int userId, string userName)
+        {
+            try
+            {
+                ICTSUserService ctsUserService = new CTSUserService();
+
+                ctsUserService.InsertCTSUser(userId, userName);
+            }
+            catch (Exception ex)
+            {
+                Logger.Log.Error(ex.Message, ex);
             }
         }
 
