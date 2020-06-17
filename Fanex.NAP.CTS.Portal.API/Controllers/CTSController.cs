@@ -64,8 +64,9 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
                 var associationList = DbSessionFactory.Execute<CustomerEvidence>("GetAssociationByCustIdAndLevel"
                                         ,new { CustIdList = convertedCustIdList, AssociatedLevel }).Data;
                 var custIdList = string.Join(",",associationList.Select(c => c.CustId));
+                LogService.Info("GetFlaggedCustomersByLevel - custIdList: " + custIdList);
                 var flaggedCustomers = _evidenceService.GetFlaggedCustomersByLevel(custIdList);
-                
+                LogService.Info("GetFlaggedCustomersByLevel - flaggedCustomers: " + flaggedCustomers.Count());
                 var result = (from f in flaggedCustomers
                               join a in associationList on f.CustId equals a.CustId
                               select new CustomerEvidence

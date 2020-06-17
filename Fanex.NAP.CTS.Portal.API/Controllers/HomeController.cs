@@ -15,7 +15,6 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
         public ActionResult Index()
         {
             ViewBag.Title = "Home Page";
-            LogService.Info("CTS - PortalAPI run successfully!");
 
             return View();
         }
