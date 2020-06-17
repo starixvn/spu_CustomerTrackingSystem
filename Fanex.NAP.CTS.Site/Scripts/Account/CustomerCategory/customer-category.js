@@ -4,13 +4,13 @@
     let tblcustomercategory = $('#customer-category-table');
     let isHostPermission;
 
-    function BindingMarkCategoryForAddNew(ctsCustId, subscriberId) {
+    function BindingMarkCategoryForAddNew(custId, ctsCustId, subscriberId) {
         $('#btncancelcategory').on('click', function () {
             divMarkCategory.dialog('close');
         });
 
         $('#btnsavecategory').on('click', function (e) {
-            AddCustomerClassification(ctsCustId, subscriberId);
+            AddCustomerClassification(custId, ctsCustId, subscriberId);
         });
 
         $("#ddlcategory").select2();
@@ -22,13 +22,13 @@
         });
     }
 
-    function BindingMarkCategoryForUpdate(ctsCustId, subscriberId, categoryId) {
+    function BindingMarkCategoryForUpdate(custId, ctsCustId, subscriberId, categoryId) {
         $('#btncancelcategory').on('click', function () {
             divMarkCategory.dialog('close');
         });
 
         $('#btnsavecategory').on('click', function (e) {
-            UpdateCustomerClassification(ctsCustId, subscriberId, categoryId);
+            UpdateCustomerClassification(custId, ctsCustId, subscriberId, categoryId);
         });
 
         $("#ddlsports").multiselect({
@@ -38,7 +38,7 @@
         });
     }
 
-    function AddCustomerClassification(ctsCustId, subscriberId) {
+    function AddCustomerClassification(custId, ctsCustId, subscriberId) {
         if ($('#ddlsports').val() === '') {
 
             common.showError('Sport is required.');
@@ -47,6 +47,7 @@
 
         var url = common.modifyRelativeUrl('/Account/AddCustomerClassification');
         var params = {};
+        params.custId = custId;
         params.ctsCustId = ctsCustId;
         params.subscriberId = subscriberId;
         params.categoryId = $('#ddlcategory').val();
@@ -57,7 +58,7 @@
             type: 'POST',
             data: params,
             success: function (response) {
-                if (response.errorCode == 0) {
+                if (response.errorCode === 0) {
                     common.showSuccess('Add the category successful!', 2000);
                     divMarkCategory.dialog('close');
 
@@ -73,9 +74,10 @@
         });
     }
 
-    function RemoveCustomerClassification(ctsCustId, categoryId) {
+    function RemoveCustomerClassification(custId, ctsCustId, categoryId) {
         var url = common.modifyRelativeUrl('/Account/RemoveCustomerClassification');
         var params = {};
+        params.custId = custId;
         params.ctsCustId = ctsCustId;
         params.categoryId = categoryId;
 
@@ -97,9 +99,10 @@
         });
     }
 
-    function UpdateCustomerClassification(ctsCustId, subscriberId, categoryId) {
+    function UpdateCustomerClassification(custId, ctsCustId, subscriberId, categoryId) {
         var url = common.modifyRelativeUrl('/Account/UpdateCustomerClassification');
         var params = {};
+        params.custId = custId;
         params.ctsCustId = ctsCustId;
         params.categoryId = categoryId;
         params.subscriberId = subscriberId;
@@ -110,7 +113,7 @@
             type: 'POST',
             data: params,
             success: function (response) {
-                if (response.errorCode == 0) {
+                if (response.errorCode === 0) {
                     common.showSuccess('Update the category successful!', 2000);
                     divMarkCategory.dialog('close');
 
@@ -126,7 +129,7 @@
         });
     }
 
-    function InitialMarkCategory(ctsCustId, subscriberId) {
+    function InitialMarkCategory(custId, ctsCustId, subscriberId) {
         $.ajax(common.modifyRelativeUrl('Account/MarkCatergory'), {
             type: 'POST',
             data: {
@@ -137,7 +140,7 @@
             },
             success: function (response) {
                 divMarkCategory.html(response);
-                BindingMarkCategoryForAddNew(ctsCustId, subscriberId);
+                BindingMarkCategoryForAddNew(custId, ctsCustId, subscriberId);
             },
             complete: function () {
                 divMarkCategory.dialog({
@@ -157,10 +160,11 @@
         });
     }
 
-    function EditCategory(ctsCustId, subscriberId, categoryName, categoryId, sportGroupIdList, comment) {
+    function EditCategory(custId, ctsCustId, subscriberId, categoryName, categoryId, sportGroupIdList, comment) {
         $.ajax(common.modifyRelativeUrl('Account/EditMarkCatergory'), {
             type: 'POST',
             data: {
+                custId: custId,
                 ctsCustId: ctsCustId,
                 subscriberId: subscriberId,
                 categoryName: categoryName,
@@ -173,7 +177,7 @@
             },
             success: function (response) {
                 divMarkCategory.html(response);
-                BindingMarkCategoryForUpdate(ctsCustId, subscriberId, categoryId);
+                BindingMarkCategoryForUpdate(custId, ctsCustId, subscriberId, categoryId);
             },
             complete: function () {
                 divMarkCategory.dialog({
@@ -193,7 +197,7 @@
         });
     }
 
-    function RenderGrid(ctsCustId, username, subscriberId) {
+    function RenderGrid(custId, ctsCustId, username, subscriberId) {
         tblcustomercategory.DataTable({
             dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
             pagingType: "full_numbers",
@@ -215,7 +219,7 @@
             ajax: {
                 url: common.modifyRelativeUrl('/Account/GetCustomerClassification'),
                 data: {
-                    ctsCustId: ctsCustId
+                    custId: custId
                 },
                 type: 'POST'
             },
@@ -245,13 +249,13 @@
                         if (isHostPermission) {
                             $('.icon-delete', cell).click(() => {
                                 common.showConfirmation("Do you want to remove category <b>" + row.CategoryName + "</b> for <b>" + username + "</b> ?", function () {
-                                    RemoveCustomerClassification(ctsCustId, row.CategoryId);
+                                    RemoveCustomerClassification(custId, ctsCustId, row.CategoryId);
                                 });
 
                             });
 
                             $('.icon-edit', cell).click(() => {
-                                EditCategory(ctsCustId, subscriberId, row.CategoryName, row.CategoryId, row.SportGroupIdList, row.Remark);
+                                EditCategory(custId, ctsCustId, subscriberId, row.CategoryName, row.CategoryId, row.SportGroupIdList, row.Remark);
                             });
                         }                        
                     }
@@ -270,12 +274,12 @@
             btnMarkCategory.prop('disabled', true);
     }
 
-    this.Initial = function (ctsCustId, subscriberId, username, hostPermission) {
+    this.Initial = function (custId, ctsCustId, subscriberId, username, hostPermission) {
         DisableButton(hostPermission);
 
-        btnMarkCategory.click(function () { InitialMarkCategory(ctsCustId, subscriberId); });
+        btnMarkCategory.click(function () { InitialMarkCategory(custId, ctsCustId, subscriberId); });
 
-        RenderGrid(ctsCustId, username, subscriberId);
+        RenderGrid(custId, ctsCustId, username, subscriberId);
         // GetCustomerClassification(ctsCustId);
     };
 }

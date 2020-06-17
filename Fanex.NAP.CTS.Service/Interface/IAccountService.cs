@@ -6,12 +6,7 @@
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
-    using Fanex.NAP.CTS.Model.Home;
-    using Fanex.NAP.CTS.Model.Subscriber;
-    using Fanex.NAP.CTS.ViewModel.Account;
-    using Fanex.NAP.CTS.ViewModel.Account.Associated;
-    using Fanex.NAP.CTS.ViewModel.Account.GeneralInformation;
-    using Fanex.NAP.CTS.ViewModel.Account.Search;
+    using Fanex.NAP.CTS.Model.Home;   
     using System;
     using System.Collections.Generic;
 
@@ -87,12 +82,13 @@
         DBResult ActiveRemoveAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, string remark, int createdBy, bool isRemoveAction);
 
         IEnumerable<long> GetAssociationException(string apiURL, long ctsCustId);
-        IEnumerable<CustomerClassificationModel> GetCustomerClassification(long ctsCustId);
 
-        DBResult AddCustomerClassification(long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark, int createdBy);
+        IEnumerable<CustomerClassificationModel> GetCustomerClassification(long custId);
+
+        DBResult AddCustomerClassification(long custId, long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark, int createdBy);
         
-        DBResult UpdateCustomerClassification(long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark, int createdBy);
+        DBResult UpdateCustomerClassification(long custId, long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark, int createdBy);
 
-        DBResult RemoveCustomerClassification(long ctsCustId, int categoryId, int createdBy);
+        DBResult RemoveCustomerClassification(long custId, long ctsCustId, int categoryId, int createdBy);
     }
 }

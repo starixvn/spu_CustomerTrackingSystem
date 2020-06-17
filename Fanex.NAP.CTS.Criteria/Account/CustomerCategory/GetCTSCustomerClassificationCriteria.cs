@@ -5,8 +5,8 @@ namespace Fanex.NAP.CTS.Criteria.Account.CustomerCategory
 {
     public class GetCTSCustomerClassificationCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_CTSCustID")]
-        public long CTSCustId { get; set; }
+        [SpParam(SqlParamName = "ip_CustID")]
+        public long CustId { get; set; }
 
         public override string GetSettingKey()
         {

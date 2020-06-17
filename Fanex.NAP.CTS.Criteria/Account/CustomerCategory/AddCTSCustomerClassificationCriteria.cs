@@ -5,6 +5,9 @@ namespace Fanex.NAP.CTS.Criteria.Account.CustomerCategory
 {
     public class AddCTSCustomerClassificationCriteria : NonQueryCommand
     {
+        [SpParam(SqlParamName = "ip_CustID")]
+        public long CustId { get; set; }
+
         [SpParam(SqlParamName = "ip_CTSCustID")]
         public long CTSCustId { get; set; }
 

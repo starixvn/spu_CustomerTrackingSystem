@@ -883,34 +883,34 @@
             return PartialView("CustomerCategory/EditMarkCatergory", model);
         }
 
-        public ActionResult GetCustomerClassification(long ctsCustId)
+        public ActionResult GetCustomerClassification(long custId)
         {
-            //var data = _accountService.GetCustomerClassification(ctsCustId);
+            var data = _accountService.GetCustomerClassification(custId);
 
-            //if (data != null && data.Any())
-            //{
-            //    var result = data.Select(x => new CustomerCategoryViewModel
-            //    {
-            //        CategoryId = x.CategoryId,
-            //        CategoryName = x.CategoryName,
-            //        LastModifiedBy = x.LastModifiedBy,
-            //        LastModifiedDate = x.LastModifiedDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-            //        Remark = x.Remark,
-            //        SportGroupIdList = x.SportGroupIdList,
-            //        SportGroupNameList = x.SportGroupNameList,
-            //        ParentCategoryId = x.ParentCategoryId,
-            //        ParentCategoryName = x.ParentCategoryName,
-            //        IsEnabledDelete = x.IsEnabledDelete
-            //    });
+            if (data != null && data.Any())
+            {
+                var result = data.Select(x => new CustomerCategoryViewModel
+                {
+                    CategoryId = x.CategoryId,
+                    CategoryName = x.CategoryName,
+                    LastModifiedBy = x.LastModifiedBy,
+                    LastModifiedDate = x.LastModifiedDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+                    Remark = x.Remark,
+                    SportGroupIdList = x.SportGroupIdList,
+                    SportGroupNameList = x.SportGroupNameList,
+                    ParentCategoryId = x.ParentCategoryId,
+                    ParentCategoryName = x.ParentCategoryName,
+                    IsEnabledDelete = x.IsEnabledDelete
+                });
 
-            //    return Json(new { data = result }, JsonRequestBehavior.AllowGet);
-            //}
+                return Json(new { data = result }, JsonRequestBehavior.AllowGet);
+            }
 
             return Json(new { data = new List<CustomerCategoryViewModel>() }, JsonRequestBehavior.AllowGet);
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult AddCustomerClassification(long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark)
+        public ActionResult AddCustomerClassification(long custId, long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark)
         {
             if (ctsCustId <= 0 || subscriberId <= 0 || categoryId <= 0)
             {
@@ -921,7 +921,7 @@
                 }, JsonRequestBehavior.AllowGet);
             }
 
-            var result = _accountService.AddCustomerClassification(ctsCustId, subscriberId, categoryId, sportGroupIds, remark, CurrentSession.UserId);
+            var result = _accountService.AddCustomerClassification(custId, ctsCustId, subscriberId, categoryId, sportGroupIds, remark, CurrentSession.UserId);
 
             return Json(new
             {
@@ -931,7 +931,7 @@
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult UpdateCustomerClassification(long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark)
+        public ActionResult UpdateCustomerClassification(long custId, long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark)
         {
             if (ctsCustId <= 0 || subscriberId <= 0 || categoryId <= 0)
             {
@@ -942,7 +942,7 @@
                 }, JsonRequestBehavior.AllowGet);
             }
 
-            var result = _accountService.UpdateCustomerClassification(ctsCustId, subscriberId, categoryId, sportGroupIds, remark, CurrentSession.UserId);
+            var result = _accountService.UpdateCustomerClassification(custId, ctsCustId, subscriberId, categoryId, sportGroupIds, remark, CurrentSession.UserId);
 
             return Json(new
             {
@@ -952,9 +952,9 @@
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult RemoveCustomerClassification(long ctsCustId, int categoryId)
+        public ActionResult RemoveCustomerClassification(long custId, long ctsCustId, int categoryId)
         {
-            if (ctsCustId <= 0 || categoryId <= 0)
+            if (custId <= 0 || categoryId <= 0)
             {
                 return Json(new
                 {
@@ -963,7 +963,7 @@
                 }, JsonRequestBehavior.AllowGet);
             }
 
-            var result = _accountService.RemoveCustomerClassification(ctsCustId, categoryId, CurrentSession.UserId);
+            var result = _accountService.RemoveCustomerClassification(custId, ctsCustId, categoryId, CurrentSession.UserId);
 
             return Json(new
             {
