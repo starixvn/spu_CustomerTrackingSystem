@@ -39,7 +39,7 @@ namespace Fanex.NAP.CTS.Resource {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Fanex.NAP.CTS.Core.Resources.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Fanex.NAP.CTS.Resource.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -192,6 +192,69 @@ namespace Fanex.NAP.CTS.Resource {
         internal static string AUTO_SUSPEND_SOCCER {
             get {
                 return ResourceManager.GetString("AUTO_SUSPEND_SOCCER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This row is already exist..
+        /// </summary>
+        internal static string IMPORT_ACCOUNT_EVIDENCE_DUPLICATE {
+            get {
+                return ResourceManager.GetString("IMPORT_ACCOUNT_EVIDENCE_DUPLICATE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid Evidence Code..
+        /// </summary>
+        internal static string IMPORT_ACCOUNT_EVIDENCE_EVIDENCECODE_INVALID {
+            get {
+                return ResourceManager.GetString("IMPORT_ACCOUNT_EVIDENCE_EVIDENCECODE_INVALID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Can not read a file &quot;{0}&quot;.
+        /// </summary>
+        internal static string IMPORT_ACCOUNT_EVIDENCE_PARSE_FILE_ERROR {
+            get {
+                return ResourceManager.GetString("IMPORT_ACCOUNT_EVIDENCE_PARSE_FILE_ERROR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Account Evidence Error List Report.xlsx.
+        /// </summary>
+        internal static string IMPORT_ACCOUNT_EVIDENCE_SENDMAIL_ATTACHMENT_FILENAME {
+            get {
+                return ResourceManager.GetString("IMPORT_ACCOUNT_EVIDENCE_SENDMAIL_ATTACHMENT_FILENAME", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dear all, &lt;br /&gt;&lt;br /&gt;CTS Import Account Evidence Error. Please see attachment. &lt;br /&gt;This is an auto-generated email, please do not reply!.
+        /// </summary>
+        internal static string IMPORT_ACCOUNT_EVIDENCE_SENDMAIL_BODY {
+            get {
+                return ResourceManager.GetString("IMPORT_ACCOUNT_EVIDENCE_SENDMAIL_BODY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CTS Import Account Evidence Error ({0}), UserId={1} at {2}.
+        /// </summary>
+        internal static string IMPORT_ACCOUNT_EVIDENCE_SENDMAIL_SUBJECT {
+            get {
+                return ResourceManager.GetString("IMPORT_ACCOUNT_EVIDENCE_SENDMAIL_SUBJECT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid Username..
+        /// </summary>
+        internal static string IMPORT_ACCOUNT_EVIDENCE_USERNAME_INVALID {
+            get {
+                return ResourceManager.GetString("IMPORT_ACCOUNT_EVIDENCE_USERNAME_INVALID", resourceCulture);
             }
         }
         

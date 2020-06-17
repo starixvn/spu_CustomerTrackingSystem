@@ -207,6 +207,10 @@
     <Compile Include="GraphDB\ShortestPath.cs" />
     <Compile Include="GraphDB\ShortestPathOfAccount.cs" />
     <Compile Include="Home\SearchResultModel.cs" />
+    <Compile Include="ImportEvidences\AddAccountEvidenceModel.cs" />
+    <Compile Include="ImportEvidences\CheckAccountEvidenceModel.cs" />
+    <Compile Include="ImportEvidences\RawAccountEvidenceModel.cs" />
+    <Compile Include="ImportEvidences\ResultCheckAccountEvidenceModel.cs" />
     <Compile Include="IP\IpModel.cs" />
     <Compile Include="MatchMonitor\BalanceUpDate.cs" />
     <Compile Include="MatchMonitor\FraudCase.cs" />

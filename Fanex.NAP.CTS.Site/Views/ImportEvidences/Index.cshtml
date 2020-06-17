@@ -1,0 +1,147 @@
+﻿@{
+    ViewBag.Title = "IMPORT EVIDENCES";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section styles{
+    @Styles.Render("~/import-evidences-styles")
+}
+<h2 class="page-title">MULTIPLE IMPORT EVIDENCES</h2>
+
+<div class="import-evidences">
+    <div class="form-upload">
+        <div class="upload">
+            <input type="file" name="inputFileUpload" id="inputFileUpload" />
+            <span id="spanFileName" class="fileName">Select file..</span>
+            <input id="btnBrowse" type="button" class="uploadButton" value="Browse..." />
+        </div>
+        <button class="button button-import" id="btnImport">Import file</button>
+    </div>
+
+    <div class="note">
+        <div class="group-icon">
+            <i id="btnNoteToggle" class="note-icon icon-chevron-down"></i>
+            <span class="note-title">Note:</span>
+        </div>
+
+        <div id="divNote" hidden="hidden">
+            <div class="wrapper-info">
+                <div>- You can also add multiple evidence for one account</div>
+                <div>- Import File Structure:</div>
+                <div class="column-text">    + Column A: Username</div>
+                <div class="column-text">    + Column B: Evidence Code</div>
+                <div class="required-text">
+                    * Requirement: This column must be in Text format
+                </div>
+                <div class="column-text">    + Column C: Comment</div>
+            </div>
+
+            <table id="" class="table table-striped table-note-info">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>A</th>
+                        <th>B</th>
+                        <th>C</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Sample1</td>
+                        <td>6.4</td>
+                        <td>test</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Sample2</td>
+                        <td>6.4</td>
+                        <td>test</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Sample3</td>
+                        <td>6.4</td>
+                        <td>test</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Sample4</td>
+                        <td>6.4</td>
+                        <td>test</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Sample5</td>
+                        <td>6.4</td>
+                        <td>test</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>Sample6</td>
+                        <td>6.4</td>
+                        <td>test</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>Sample7</td>
+                        <td>6.4</td>
+                        <td>test</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>Sample8</td>
+                        <td>6.4</td>
+                        <td>test</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>Sample9</td>
+                        <td>6.4</td>
+                        <td>test</td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+            <div class="get-file">
+                For importing file template, please following this
+                <span class="btnDownloadTemplate" id="btnDownloadTemplate" style="cursor:pointer; color:deepskyblue">file</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="divResult" class="div-grid" hidden="hidden">
+        <table id="tableResult" class="table table-striped tableResult" style="width: 100%">
+            <thead>
+                <tr class="format-tr">
+                    <th colspan="4" class="format-th">Error List</th>
+                </tr>
+                <tr>
+                    <th>Line</th>
+                    <th>Username</th>
+                    <th>Evidence Code</th>
+                    <th>Error</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div id="divResultParseFile" hidden="hidden"></div>
+
+    <div id="divValidation" hidden="hidden">
+        <div>Your file has been validated.</div>
+        <div>System is automatically importing the evidence data.</div>
+        <div>You can start work on other function.</div>
+        <button class="button button-close" id="btnResultValidationClose">Close</button>
+    </div>
+
+    <div class="hide">
+        <input id="hdIsHostPermission" type="hidden" IsHostPermission="@Model.ToString()" />
+    </div>
+</div>
+
+
+@section scripts{
+    @Scripts.Render("~/import-evidences-scripts")
+}

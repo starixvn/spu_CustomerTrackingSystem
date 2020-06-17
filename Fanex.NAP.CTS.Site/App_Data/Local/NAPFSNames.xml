@@ -501,7 +501,17 @@
     
     <Setting Key="TicketVoiding_TicketsInRequest_Select"
         SpName="TicketVoiding_TicketsInRequest_Select"
-        DbName="DBCTS.bodb02.bodbSPUNet" />
+        DbName="DBCTS.bodb02.bodbSPUNet" />    
   </Function>
-  
+
+  <Function Name="ImportEvidences">
+    <Setting Key="CTS_DC_CheckMultiCustomerEvidence"
+            SpName="CTS_DC_CheckMultiCustomerEvidence"
+            DbName="MySQL.CTS_DataCenter" />
+
+    <Setting Key="CTS_DC_AddMultiCustomerEvidence"
+            SpName="CTS_DC_AddMultiCustomerEvidence"
+            DbName="MySQL.CTS_DataCenter" />
+  </Function>
+
 </Functions>

@@ -59,6 +59,8 @@
             RegisterProblemAccountMonitorBundles(bundles);
 
             RegisterProblemAccountMonitorDetailBundles(bundles);
+
+            RegisterImportEvidencesBundles(bundles);
         }
 
         private static void RegisterFSCoreBundles(BundleCollection bundles)
@@ -223,5 +225,13 @@
                     "~/Content/scss/pages/problem-account-monitor/problem-account-monitor.css"));
         }
 
+        private static void RegisterImportEvidencesBundles(BundleCollection bundles)
+        {
+            bundles.Add(new ScriptBundle("~/import-evidences-scripts").Include(
+               "~/Scripts/ImportEvidences/index.js"));
+
+            bundles.Add(new StyleBundle("~/import-evidences-styles").Include(
+                    "~/Content/scss/pages/import-evidences/import-evidences.css"));
+        }
     }
 }

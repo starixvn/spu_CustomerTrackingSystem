@@ -37,9 +37,11 @@
             </div>
             <div id="errMessage" class="error-alert hide">At least two letters are required!</div>
         }
-        @*UserId: @ViewBag.UserId
-            </br>
-        OnUserId: @ViewBag.OnUserId*@
+
+            <div hidden>
+                <div id="divUserId">@ViewBag.UserId</div>
+                <div id="divOnUserId">@ViewBag.OnUserId</div>
+            </div>      
     </div>
 
 @section scripts{
