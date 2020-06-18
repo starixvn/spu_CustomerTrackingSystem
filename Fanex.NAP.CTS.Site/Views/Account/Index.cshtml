@@ -7,141 +7,208 @@
 }
 @model Fanex.NAP.CTS.ViewModel.Account.CustomerGeneralStatusViewModel
 <h2 class="page-title">Account Profile</h2>
-<div class="content-card">
-    <div class="status-info">
-        <p>
-            <strong>@Model.Role.Name @(Model.CustSubId != 0 ? "(Sub Account)" : string.Empty) :</strong>
-            <span class="username">@(Model.UserName != null ? Model.UserName : Model.UserName2) <span class="nickname" style="color: #c16112">(@(Model.UserName2 != null ? Model.UserName2 : Model.UserName))</span></span>
-            <span class="icon icon-Robot-User hide" title="Robot User"></span>
-            <span class="icon icon-P-with-Bet-Limit hide" title="Problem Account With Bet Limit reduced"></span>
-            <span class="icon icon-P-without-Bet-Limit hide" title="Problem Account Without Bet Limit reduced"></span>
-            <span class="icon icon-Bet-Restrict-Account hide" title="Bet Restricted Account"></span>
-            <span class="icon icon-Bet-Restricted-Currency hide" title="Bet Restricted Currency"></span>
-            <span class="icon icon-Bet-Restrict-Site hide" title="Bet Restricted Site"></span>
-            <span class="icon icon-Bet-Restricted-SiteandCurrency hide" title="Bet Restricted Site and Currency"></span>
-            <span class="icon icon-Smart-Punter-Account hide" title="Smart Punter Account"></span>
-            <span class="icon icon-Affected hide" title="Affected"></span>
-            <span class="icon icon-Flagged hide" title="Flagged"></span>
-            <span class="icon icon-Flagged-With-Evidence hide" title="Flagged with Evidence 100"></span>
-            <span class="icon loading"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
-            <strong style="margin-left: 20px">Account Status: </strong>
-            @*<span class="badge-label status-active" style="margin-right: 20px">@(Model.AcountStatus == "NA" ? "N/A" : Model.AcountStatus)</span>*@
-            <span id="accountStatus" class="badge-label status-active" style="margin-right: 20px"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
-            <strong>Subscribers: </strong>
-            <span class="username">@Model.Subscriber</span>
-        </p>
-    </div>
-    <div class="account-info">
-        <!-- Dates -->
-        <div class="info-item">
-            <div class="info-title">Dates</div>
-            <div class="info-block">
-                <div class="info-label">
-                    <label>Created</label>
-                    <label>Last Login</label>
-                    <label>Last Ticket</label>
+<div class="content-info">
+    <div class="header-info">
+        <div class="header-username">
+            <span class="icon-Avarta">
+                <span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span>
+            </span>
+            <span class="username">Username</span>
+        </div>
+        <div class="wrapper-status">
+            <div class="info-status">
+                <div class="status-left">
+                    <span class="circle bg-yellow"></span>
+                    <span class="text-status text-left">
+                        Smart Punter
+                    </span>
                 </div>
-                <div class="info-text">
-                    <div>@(Model.CreatedDate.Year == 0001 ? "None" : Model.CreatedDate.ToString("MMM dd, yyyy HH:mm"))</div>
-                    <div>@(Model.LastLoginDate.Year == 0001 ? "None" : Model.LastLoginDate.ToString("MMM dd, yyyy HH:mm"))</div>
-                    <div>@(Model.LastTicketDate.Year == 0001 ? "None" : Model.LastTicketDate.ToString("MMM dd, yyyy HH:mm"))</div>
+                <div class="status-right">
+                    <span class="text-status text-right">
+                        Soccer,E-Sport
+                    </span>
                 </div>
             </div>
-        </div>
-        <!--Dangerous-->
-        <div class="info-item">
-            <div class="info-title">Dangerous</div>
-            <div class="info-block">
-                <div class="info-label">
-                    <label>Original</label>
-                    <label>ABI</label>
-                    <label>Other Sports</label>
+
+            <div class="info-status">
+                <div class="status-left">
+                    <span class="circle bg-yellow"></span>
+                    <span class="text-status text-left">
+                        High Risk Punter
+                    </span>
                 </div>
-                <div class="info-text">
-                    <div><span id="dangerousOriginal"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span></div>
-                    <div><span id="dangerouseABI"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span></div>
-                    <div><span id="dangerouseOtherSports"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span></div>
+                <div class="status-right">
+                    <span class="text-status text-right">
+                        Basketball
+                    </span>
                 </div>
             </div>
-        </div>
-        <!--Abnormal-->
-        <div class="info-item">
-            <div class="info-title">Abnormal</div>
-            <div class="info-block">
-                <div class="info-label">
-                    <label>Abnormal</label>
+            <div class="info-status">
+                <div class="status-left">
+                    <span class="circle bg-green"></span>
+                    <span class="text-status text-left">
+                        Limited Punter
+                    </span>
                 </div>
-                <div class="info-text">
-                    <div><span id="abnormal"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span></div>
-                    @*<div>@(Model.Abnormal == 0 ? Html.Raw("None") : Html.Raw(string.Format("<span class='abnormal-level-{0}'>{1}</span>", Model.Abnormal.ToString(), Model.Abnormal)))</div>*@
-                </div>
-            </div>
-        </div>
-        <!-- Auto Suspend-->
-        <div class="info-item">
-            <div class="info-title">Auto Suspend</div>
-            <div class="info-block">
-                <div class="info-label">
-                    <label>Soccer</label>
-                    <label>Other Sports</label>
-                    <label>E-Sports</label>
-                </div>
-                <div class="info-text">
-                    <div id="autoSuspendSoccer"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></div>
-                    <div id="autoSuspendOtherSport"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></div>
-                    <div id="autoSuspendESport"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></div>
-             
+                <div class="status-right">
+                    <span class="text-status text-right">
+                        Other Sports
+                    </span>
                 </div>
             </div>
-        </div>
-        <!-- Association & Evidence-->
-        <div class="info-item">
-            <div class="info-title">Association & Evidence</div>
-            <div class="info-block">
-                <div class="info-label">
-                    <label>Accounts / Devices / IP</label>
-                    <label>Evidence</label>
+            <div class="info-status">
+                <div class="status-left">
+                    <span class="circle bg-red"></span>
+                    <span class="text-status text-left">
+                        System Formular Bet
+                    </span>
                 </div>
-                <div class="info-text">
-                    <div>
-                        <a id="lnkAssociation" href="javascript:void(0)" class="link">
-                            <span id="totalAssAccount">
-                                <img class="icon-loading" src="~/Content/scss/images/loading.svg" />
-                            </span>/
-                            <span id="totalAssDevice"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>/
-                            <span id="totalAssIP"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
-                        </a>
-                    </div>
-                    <div>
-                        <a id='lnkEvidence' href='javascript:void(0)' class='link'>
-                            <span id="evidences"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Committed Fraud Case -->
-        <div class="info-item">
-            <div class="info-title">Committed Fraud Case</div>
-            <div class="info-block">
-                <div class="info-label">
-                    <label>Classification</label>
-                    <label>Fraud case</label>
-                </div>
-                <div class="info-text">
-                    <div class="classification">
-                        <img class="icon-loading" src="~/Content/scss/images/loading.svg" />
-                        <span class="icon-delinquency hide" title="Delinquency"></span>
-                        <span class="icon-Hedge-Account hide" title="Hedge Account"></span>
-                        <span class="icon-dirty hide" title="Dirty Account"></span>
-                    </div>
-                    <div id="fraudcase">
-                        <span><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
-                    </div>
+                <div class="status-right">
+                    <span class="text-status text-right">
+                        Non-Sport
+                    </span>
                 </div>
             </div>
         </div>
     </div>
+    <div class="wrapper-content">
+        <div class="tag-info">
+            <div class="wrapper-tag-info">
+                <span class="tag-text-left">Login Name: </span>
+                <span class="tag-text-left">Name</span>
+            </div>
+            <div class="wrapper-tag-info">
+                <span class="tag-text-left">Account Status: </span>
+                <span class="tag-text-left">Active</span>
+            </div>
+            <div class="wrapper-tag-info">
+                <span class="tag-text-left">Subscriber: </span>
+                <span class="tag-text-left">Maxbet</span>
+            </div>
+        </div>
+        <div class="account-info">
+            <!-- Association & Evidence -->
+            <div class="info-item association">
+                <div class="info-title">Association & Evidence</div>
+                <div class="info-block">
+                    <div class="info-text left">
+                        <span>
+                            Accounts / Devices
+                        </span>
+                        <span>
+                            Evidence
+                        </span>
+                    </div>
+                    <div class="info-text right">
+                        <span>
+                            15 /25
+                        </span>
+                        <span>  6.7, 6.8</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dangerous -->
+            <div class="info-item dangerous">
+                <div class="info-title">Dangerous</div>
+                <div class="info-block">
+                    <div class="info-text left">
+                        <span>
+                            Orignal:
+                        </span>
+                        <span>
+                            ABI:
+                        </span>
+                        <span>
+                            Other Sports:
+                        </span>
+                    </div>
+                    <div class="info-text right">
+                        <span>
+                            20
+                        </span>
+                        <span> 19</span>
+                        <span>18</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Auto suspend -->
+            <div class="info-item auto-suspend">
+                <div class="info-title">Auto suspend</div>
+                <div class="info-block">
+                    <div class="info-text left">
+                        <span>
+                            Soccer
+                        </span>
+                        <span>
+                            Other Sports
+                        </span>
+                        <span>
+                            E-Sports
+                        </span>
+                    </div>
+                    <div class="info-text right">
+                        <span>Yes</span>
+                        <span> Yes</span>
+                        <span>Yes</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Committed Fraud Case -->
+            <div class="info-item committed-fraud-case">
+                <div class="info-title">Committed Fraud Case</div>
+                <div class="info-block">
+                    <div class="info-text left">
+                        <span>
+                            Classification:
+                        </span>
+                        <span>
+                            Fraud case:
+                        </span>
+                    </div>
+                    <div class="info-text right">
+                        <span>
+                            <i class="icon-Delinquency"></i>
+                            <i class="icon-Dirty-Account"></i>
+                            <i class="icon-Hedge-Account"></i>
+                        </span>
+
+                        <span>
+                            BNG, Check Bet, Bets Near Goal,
+                            Flagged Account, Delay Goal
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dates -->
+            <div class="info-item dates">
+                <div class="info-title">Dates</div>
+                <div class="info-block">
+                    <div class="info-text left">
+                        <span>
+                            Created
+                        </span>
+                        <span>
+                            Last Login
+                        </span>
+                        <span>
+                            Last Ticket
+                        </span>
+                    </div>
+                    <div class="info-text right">
+                        <span>Jan 31, 2019, 23:59</span>
+                        <span> Jan 31, 2019, 23:59</span>
+                        <span>Jan 31, 2019, 23:59</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
 </div>
 <div class="content-card">
     <div class="status" id="account-detail-header">
@@ -196,7 +263,7 @@
     <input id="hdUsername" type="hidden" value="@Model.UserName" />
     <input id="hdSubscriberId" type="hidden" value="@Model.SubscriberId" />
     <input id="hdSubscriber" type="hidden" value="@Model.Subscriber" />
-    <input id="hdIsHostPermission" type="hidden" IsHostPermission ="@Model.IsHostPermission.ToString()" />
+    <input id="hdIsHostPermission" type="hidden" IsHostPermission="@Model.IsHostPermission.ToString()" />
 </div>
 @section scripts{
     @Scripts.Render("~/account-detail-scripts"
