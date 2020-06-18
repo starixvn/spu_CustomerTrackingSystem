@@ -15,5 +15,7 @@
         public string EvidenceName { get; set; }
 
         public DateTime CreatedDate { get; set; }
+
+        public int AssociatedLevel { get; set; }
     }
 }

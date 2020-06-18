@@ -60,6 +60,7 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
             try
             {
                 var convertedCustIdList = CustIdList.Split(',').Select(a => Convert.ToInt32(a));
+
                 // get association from graph
                 var associationList = DbSessionFactory.Execute<CustomerEvidence>("GetAssociationByCustIdAndLevel"
                                         ,new { CustIdList = convertedCustIdList, AssociatedLevel }).Data;
@@ -75,7 +76,8 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
                                   Level0CustId = a.Level0CustId,
                                   EvidenceCode = f.EvidenceCode,
                                   EvidenceName = f.EvidenceName,
-                                  CreatedDate = f.CreatedDate
+                                  CreatedDate = f.CreatedDate,
+                                  AssociatedLevel = AssociatedLevel
                               });
 
                 return Json(result.ToList());
