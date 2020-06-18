@@ -13,7 +13,7 @@
             <span class="icon-Avarta">
                 <span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span>
             </span>
-            <span class="username">Username</span>
+            <span class="username">@(Model.UserName != null ? Model.UserName : Model.UserName2)</span>
         </div>
         <div class="wrapper-status">
             <div class="info-status">
@@ -43,6 +43,7 @@
                     </span>
                 </div>
             </div>
+
             <div class="info-status">
                 <div class="status-left">
                     <span class="circle bg-green"></span>
@@ -56,6 +57,7 @@
                     </span>
                 </div>
             </div>
+
             <div class="info-status">
                 <div class="status-left">
                     <span class="circle bg-red"></span>
@@ -75,35 +77,30 @@
         <div class="tag-info">
             <div class="wrapper-tag-info">
                 <span class="tag-text-left">Login Name: </span>
-                <span class="tag-text-left">Name</span>
+                <span class="tag-text-left">@(Model.UserName2 != null ? Model.UserName2 : Model.UserName)</span>
             </div>
             <div class="wrapper-tag-info">
-                <span class="tag-text-left">Account Status: </span>
-                <span class="tag-text-left">Active</span>
+                <span class="tag-text-left">Account Status: </span>                
+                <span id="spanAccountStatus" class="tag-text-left"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
             </div>
             <div class="wrapper-tag-info">
                 <span class="tag-text-left">Subscriber: </span>
-                <span class="tag-text-left">Maxbet</span>
+                <span class="username tag-text-left">@Model.Subscriber</span>
             </div>
         </div>
+
         <div class="account-info">
             <!-- Association & Evidence -->
             <div class="info-item association">
                 <div class="info-title">Association & Evidence</div>
                 <div class="info-block">
                     <div class="info-text left">
-                        <span>
-                            Accounts / Devices
-                        </span>
-                        <span>
-                            Evidence
-                        </span>
+                        <span>Accounts / Devices</span>
+                        <span>Evidence</span>
                     </div>
-                    <div class="info-text right">
-                        <span>
-                            15 /25
-                        </span>
-                        <span>  6.7, 6.8</span>
+                    <div class="info-text right">                        
+                        <span id="totalAssAccount"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>                        
+                        <span id="evidences"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>                        
                     </div>
                 </div>
             </div>
@@ -161,20 +158,11 @@
                 <div class="info-title">Committed Fraud Case</div>
                 <div class="info-block">
                     <div class="info-text left">
-                        <span>
-                            Classification:
-                        </span>
-                        <span>
-                            Fraud case:
-                        </span>
+                        <span>Classification:</span>
+                        <span>Fraud case:</span>
                     </div>
                     <div class="info-text right">
-                        <span>
-                            <i class="icon-Delinquency"></i>
-                            <i class="icon-Dirty-Account"></i>
-                            <i class="icon-Hedge-Account"></i>
-                        </span>
-
+                        <span></span>
                         <span>
                             BNG, Check Bet, Bets Near Goal,
                             Flagged Account, Delay Goal
@@ -188,20 +176,14 @@
                 <div class="info-title">Dates</div>
                 <div class="info-block">
                     <div class="info-text left">
-                        <span>
-                            Created
-                        </span>
-                        <span>
-                            Last Login
-                        </span>
-                        <span>
-                            Last Ticket
-                        </span>
+                        <span>Created</span>
+                        <span>Last Login</span>
+                        <span>Last Ticket</span>
                     </div>
                     <div class="info-text right">
-                        <span>Jan 31, 2019, 23:59</span>
-                        <span> Jan 31, 2019, 23:59</span>
-                        <span>Jan 31, 2019, 23:59</span>
+                        <span>@(Model.CreatedDate.Year == 0001 ? "None" : Model.CreatedDate.ToString("MMM dd, yyyy HH:mm"))</span>
+                        <span>@(Model.LastLoginDate.Year == 0001 ? "None" : Model.LastLoginDate.ToString("MMM dd, yyyy HH:mm"))</span>
+                        <span>@(Model.LastTicketDate.Year == 0001 ? "None" : Model.LastTicketDate.ToString("MMM dd, yyyy HH:mm"))</span>
                     </div>
                 </div>
             </div>

@@ -26,7 +26,7 @@
                 associationByAccount.Initial(ctsCustId, username, subscriberId, subscriber, isHostPermission);
             },
             error: function (errMsg) {
-                // common.showError(errMsg);
+                console.log(errMsg);
             }
         });
     }
@@ -45,7 +45,7 @@
                 exceptions.Initial(ctsCustId, username, subscriberId, isHostPermission);
             },
             error: function (errMsg) {
-                // common.showError(errMsg);
+                console.log(errMsg);
             }
         });
     }
@@ -58,10 +58,10 @@
             },
             complete: function () {
                 var customerCategory = new customer_category();
-                customerCategory.Initial(ctsCustId, subscriberId, username, isHostPermission);
+                customerCategory.Initial(custId, ctsCustId, subscriberId, username, isHostPermission);
             },
             error: function (errMsg) {
-                common.showError(errMsg);
+                console.log(errMsg);
             }
         });
     }
@@ -77,7 +77,7 @@
                 transHistory.Initial(ctsCustId, subscriberId);
             },
             error: function (errMsg) {
-                common.showError(errMsg);
+                console.log(errMsg);
             }
         });
     }
@@ -93,14 +93,13 @@
                 totalAssAccount = response.TotalAccounts;
 
                 $('#totalAssAccount').html(response.TotalAccounts);
-                $('#totalAssDevice').html(response.TotalDevices);
-                $('#totalAssIP').html(response.TotalIps);
+                $('#totalAssDevice').html(response.TotalDevices);                
             },
             complete: function () {
                 GetCustomerEvidences();
             },
             error: function (errMsg) {
-                // common.showError(errMsg);
+                console.log(errMsg);
             }
         });
     }
@@ -115,7 +114,7 @@
                 $('#evidences').html(response.evidences);
                 totalEvidence = response.numberOfItems;
 
-                if (response.numberOfItems == 0) {
+                if (response.numberOfItems === 0) {
                     $('#lnkEvidence').contents().unwrap();
                 }
             },
@@ -128,13 +127,13 @@
                 LoadChainToEvidence();
             },
             error: function (errMsg) {
-                // common.showError(errMsg);
+                console.log(errMsg);
             }
         });
     }
 
     function DangerouseIcon(response) {
-        if (response.GeneralStatusInfo.Danger == 0) {
+        if (response.GeneralStatusInfo.Danger === 0) {
             $("#dangerousOriginal").html("None");
         }
         else {
@@ -142,7 +141,7 @@
             $("#dangerousOriginal").addClass("dangerous-level-" + response.GeneralStatusInfo.Danger);
         }
 
-        if (response.GeneralStatusInfo.Danger2 == 0) {
+        if (response.GeneralStatusInfo.Danger2 === 0) {
             $("#dangerouseABI").html("None");
         }
         else {
@@ -150,7 +149,7 @@
             $("#dangerouseABI").addClass("dangerous-level-" + response.GeneralStatusInfo.Danger2);
         }
 
-        if (response.GeneralStatusInfo.Danger3 == 0) {
+        if (response.GeneralStatusInfo.Danger3 === 0) {
             $("#dangerouseOtherSports").html("None");
         }
         else {
@@ -160,7 +159,7 @@
     }
 
     function FrauseCaseList(response) {
-        if (response.FraudCases != '') {
+        if (response.FraudCases !== '') {
             $('#fraudcase').html("<span>" + response.FraudCases + "</span>");
         }
         else {
@@ -188,7 +187,7 @@
 
             },
             error: function (errMsg) {
-                // common.showError(errMsg);
+                console.log(errMsg);
             }
         });
     }
@@ -236,11 +235,13 @@
         $("#account-detail-container .report-item").removeClass('expanded');
     }
 
-    function HandleCustomerStatus(data) {
-        if (data != null) {
+    function HandleCustomerStatus(data) {       
+        if (data !== null) {
+            $('#spanAccountStatus').html(data.StatusLabel);
+
             DangerouseIcon(data);
 
-            if (data.GeneralStatusInfo.Abnormal == 0) {
+            if (data.GeneralStatusInfo.Abnormal === 0) {
                 $("#abnormal").html("None");
             }
             else {
@@ -254,7 +255,7 @@
     }
 
     function HandleRobotUserStatus(data) {
-        if (data != null) {
+        if (data !== null) {
             if (data.IsRobotUser) {
                 $('span.icon-Robot-User').removeClass('hide');
             }
@@ -262,8 +263,8 @@
     }
 
     function HandleFlagInfo(data) {
-        if (data.Flagged != 0) {
-            if (data.Flagged == 2) {
+        if (data.Flagged !== 0) {
+            if (data.Flagged === 2) {
                 $('span.icon-Flagged').removeClass('hide');
             }
             else {
@@ -275,7 +276,7 @@
     }
 
     function HandleEsportAutoSuspendedStatus(data) {
-        if (data != null) {
+        if (data !== null) {
             $('#autoSuspendESport').html(data.EsportAutoSuspendStatus ? 'Yes' : 'No');
         }
     }
