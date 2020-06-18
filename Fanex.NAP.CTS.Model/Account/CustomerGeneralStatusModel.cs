@@ -34,20 +34,6 @@
 
         public int Abnormal { get; set; }
 
-        public bool ProblemAccountWithoutBetLimit { get; set; }
-
-        public bool ProblemAccountWithBetLimit { get; set; }
-
-        public bool BetRestrictedAccount { get; set; }
-
-        public bool BetRestrictedCurrency { get; set; }
-
-        public bool BetRestrictedSite { get; set; }
-
-        public bool BetRestrictedSiteAndCurrency { get; set; }
-
-        public bool SmartPunter { get; set; }
-
         public int IsLicensee { get; set; }
 
         public bool Enabled { get; set; }

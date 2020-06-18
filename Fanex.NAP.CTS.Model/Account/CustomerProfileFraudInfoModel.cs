@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Fanex.NAP.CTS.Model.Account
 {
-   public class CustomerProfileFraudInfoModel
+    public class CustomerProfileFraudInfoModel
     {
         public SuspiciousCustomerModel SuspiciouseCustomer { get; set; }
 
