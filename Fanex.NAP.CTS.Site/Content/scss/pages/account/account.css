@@ -818,7 +818,8 @@
   padding: 12px 16px; }
   .content-info .header-info {
     margin-right: 0px;
-    height: 38px; }
+    min-height: 38px;
+    align-items: inherit; }
     .content-info .header-info .header-username {
       display: flex;
       position: relative;
@@ -826,8 +827,9 @@
       border-top-left-radius: 3px;
       width: 265px;
       padding: 11px 12px;
-      height: 38px;
-      margin-right: 28px; }
+      min-height: 38px;
+      margin-right: 28px;
+      align-items: center; }
       .content-info .header-info .header-username .username {
         position: absolute;
         left: 38px;
@@ -848,19 +850,21 @@
         transform: skew(28deg); }
       .content-info .header-info .header-username .icon-Avarta {
         position: absolute;
-        top: 8px; }
+        top: 50%;
+        transform: translate(0, -50%); }
         .content-info .header-info .header-username .icon-Avarta span:before {
           font-size: 22px; }
     .content-info .header-info .wrapper-status {
       position: relative;
       width: 100%;
-      height: 38px;
+      min-height: 38px;
       border-bottom: 2px solid #FF7676;
-      display: flex; }
-      .content-info .header-info .wrapper-status .info-status:first-child {
-        margin-left: 17px; }
+      display: flex;
+      flex-wrap: wrap;
+      padding-top: 7px;
+      padding-left: 17px; }
       .content-info .header-info .wrapper-status .info-status {
-        margin-top: 7px;
+        margin-bottom: 6px;
         margin-right: 6px;
         display: flex;
         border-radius: 11px;
@@ -918,11 +922,15 @@
           color: #545454; }
         .content-info .wrapper-content .tag-info .wrapper-tag-info .tag-text-right {
           color: #2B2B2B; }
+    @media (min-width: 1200px) {
+      .content-info .wrapper-content .account-info {
+        grid-template-columns: repeat(5, 1fr); } }
+    @media (max-width: 1199.99px) {
+      .content-info .wrapper-content .account-info {
+        grid-template-columns: repeat(3, 1fr); } }
     .content-info .wrapper-content .account-info {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
       grid-gap: 12px;
-      margin-bottom: 12px;
       background: #fff;
       border-radius: 3px;
       min-height: 113px; }

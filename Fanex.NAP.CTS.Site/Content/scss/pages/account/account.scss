@@ -206,7 +206,8 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 
     .header-info {
         margin-right: 0px;
-        height: 38px;
+        min-height: 38px;
+        align-items: inherit;
 
         .header-username {
             display: flex;
@@ -215,8 +216,9 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             border-top-left-radius: 3px;
             width: 265px;
             padding: 11px 12px;
-            height: 38px;
+            min-height: 38px;
             margin-right: 28px;
+            align-items: center;
 
             .username {
                 position: absolute;
@@ -242,7 +244,8 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 
             .icon-Avarta {
                 position: absolute;
-                top: 8px;
+                top: 50%;
+                transform: translate(0, -50%);
 
                 span:before {
                     font-size: 22px;
@@ -253,16 +256,15 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
         .wrapper-status {
             position: relative;
             width: 100%;
-            height: 38px;
+            min-height: 38px;
             border-bottom: 2px solid #FF7676;
             display: flex;
-
-            .info-status:first-child {
-                margin-left: 17px;
-            }
+            flex-wrap: wrap;
+            padding-top: 7px;
+            padding-left: 17px;
 
             .info-status {
-                margin-top: 7px;
+                margin-bottom: 6px;
                 margin-right: 6px;
                 display: flex;
                 border-radius: 11px;
@@ -351,11 +353,21 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             }
         }
 
+        @media (min-width: 1200px) {
+            .account-info {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+
+        @media (max-width: 1199.99px) {
+            .account-info {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
         .account-info {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
             grid-gap: 12px;
-            margin-bottom: 12px;
             background: #fff;
             border-radius: 3px;
             min-height: 113px;

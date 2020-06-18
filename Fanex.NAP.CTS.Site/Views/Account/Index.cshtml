@@ -77,15 +77,15 @@
         <div class="tag-info">
             <div class="wrapper-tag-info">
                 <span class="tag-text-left">Login Name: </span>
-                <span class="tag-text-left">@(Model.UserName2 != null ? Model.UserName2 : Model.UserName)</span>
+                <span class="tag-text-right">@(Model.UserName2 != null ? Model.UserName2 : Model.UserName)</span>
             </div>
             <div class="wrapper-tag-info">
                 <span class="tag-text-left">Account Status: </span>                
-                <span id="spanAccountStatus" class="tag-text-left"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+                <span id="spanAccountStatus" class="tag-text-right"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
             </div>
             <div class="wrapper-tag-info">
                 <span class="tag-text-left">Subscriber: </span>
-                <span class="username tag-text-left">@Model.Subscriber</span>
+                <span class="username tag-text-right">@Model.Subscriber</span>
             </div>
         </div>
 
