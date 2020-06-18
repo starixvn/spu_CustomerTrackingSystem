@@ -5,12 +5,30 @@
     var subscriberId = $("#hdSubscriberId").val();
     var subscriber = $("#hdSubscriber").val();
 
-    var lnkAssociation = $("#lnkAssociation");
-    var lnkEvidence = $("#lnkEvidence");
-
     var totalAssAccount = 0;
     var totalEvidence = 0;
     var isHostPermission = $("#hdIsHostPermission").attr("IsHostPermission");
+
+    let domElements = {
+        tabAssociatedAccount: $("#associated_account"),
+        tabChainEvidence: $("#chains_evidence"),
+        tabCustomerCategory: $("#customer_category"),
+        tabTransactionHistory: $("#trans_history"),
+        spanTotalAssociated: $('#spanTotalAssociated'),
+        spanTotalEvidences: $('#spanTotalEvidences'),
+        spanIconAffected: $('span.icon-Affected'),
+        spanDangerousOriginal: $("#dangerousOriginal"),
+        spanDangerouseABI: $("#dangerouseABI"),
+        spanDangerouseOtherSports: $("#dangerouseOtherSports"),
+        spanFraudcase: $('#fraudcase'),
+        spanAccountStatus: $('#spanAccountStatus'),
+        spanAbnormal: $("#abnormal"),
+        spanAutoSuspendSoccer: $('#autoSuspendSoccer'),
+        spanAutoSuspendOtherSport: $('#autoSuspendOtherSport'),
+        spanAutoSuspendESport: $('#autoSuspendESport'),
+        headerAssociatedAccount: $("#header_associated_account"),
+        headerChainEvidence: $("#header_chains_evidence")
+    };
 
     function LoadAssociationByAccount() {
         $.ajax(common.modifyRelativeUrl('Account/AssociatedByAccount'), {
@@ -19,7 +37,7 @@
                 username: username
             },
             success: function (response) {
-                $("#associated_account").html(response);
+                domElements.tabAssociatedAccount.html(response);
             },
             complete: function () {
                 var associationByAccount = new account_by_account();
@@ -35,7 +53,7 @@
         $.ajax(common.modifyRelativeUrl('Account/ChainToEvidence'), {
             type: 'POST',
             success: function (response) {
-                $("#chains_evidence").html(response);
+                domElements.tabChainEvidence.html(response);
             },
             complete: function () {
                 var accountEvidence = new account_evidence();
@@ -54,7 +72,7 @@
         $.ajax(common.modifyRelativeUrl('Account/CustomerCategory'), {
             type: 'POST',
             success: function (response) {
-                $("#customer_category").html(response);
+                domElements.tabCustomerCategory.html(response);
             },
             complete: function () {
                 var customerCategory = new customer_category();
@@ -70,7 +88,7 @@
         $.ajax(common.modifyRelativeUrl('Account/TransactionHistory'), {
             type: 'POST',
             success: function (response) {
-                $("#trans_history").html(response);
+                domElements.tabTransactionHistory.html(response);
             },
             complete: function () {
                 var transHistory = new transaction_history();
@@ -89,11 +107,8 @@
                 ctsCustId: ctsCustId
             },
             success: function (response) {
-
                 totalAssAccount = response.TotalAccounts;
-
-                $('#totalAssAccount').html(response.TotalAccounts);
-                $('#totalAssDevice').html(response.TotalDevices);                
+                domElements.spanTotalAssociated.html(response.TotalAccounts + " / " + response.TotalDevices);               
             },
             complete: function () {
                 GetCustomerEvidences();
@@ -111,16 +126,17 @@
                 ctsCustId: ctsCustId
             },
             success: function (response) {
-                $('#evidences').html(response.evidences);
+                domElements.spanTotalEvidences.html(response.evidences);
+
                 totalEvidence = response.numberOfItems;
 
                 if (response.numberOfItems === 0) {
-                    $('#lnkEvidence').contents().unwrap();
+                    domElements.spanTotalEvidences.contents().unwrap();
                 }
             },
             complete: function () {
                 if (totalAssAccount > 0 && totalEvidence > 0) {
-                    $('span.icon-Affected').removeClass('hide');
+                    domElements.spanIconAffected.removeClass('hide');
                 }
 
                 LoadAssociationByAccount();
@@ -134,37 +150,35 @@
 
     function DangerouseIcon(response) {
         if (response.GeneralStatusInfo.Danger === 0) {
-            $("#dangerousOriginal").html("None");
+            domElements.spanDangerousOriginal.html("None");
         }
         else {
-            $("#dangerousOriginal").html(response.GeneralStatusInfo.Danger);
-            $("#dangerousOriginal").addClass("dangerous-level-" + response.GeneralStatusInfo.Danger);
+            domElements.spanDangerousOriginal.html(response.GeneralStatusInfo.Danger);
+            domElements.spanDangerousOriginal.addClass("dangerous-level-" + response.GeneralStatusInfo.Danger);
         }
 
         if (response.GeneralStatusInfo.Danger2 === 0) {
-            $("#dangerouseABI").html("None");
+            domElements.spanDangerouseABI.html("None");
         }
         else {
-            $("#dangerouseABI").html(response.GeneralStatusInfo.Danger2);
-            $("#dangerouseABI").addClass("dangerous-level-" + response.GeneralStatusInfo.Danger2);
+            domElements.spanDangerouseABI.html(response.GeneralStatusInfo.Danger2);
+            domElements.spanDangerouseABI.addClass("dangerous-level-" + response.GeneralStatusInfo.Danger2);
         }
 
         if (response.GeneralStatusInfo.Danger3 === 0) {
-            $("#dangerouseOtherSports").html("None");
+            domElements.spanDangerouseOtherSports.html("None");
         }
         else {
-            $("#dangerouseOtherSports").html(response.GeneralStatusInfo.Danger3);
-            $("#dangerouseOtherSports").addClass("dangerous-level-" + response.GeneralStatusInfo.Danger3);
+            domElements.spanDangerouseOtherSports.html(response.GeneralStatusInfo.Danger3);
+            domElements.spanDangerouseOtherSports.addClass("dangerous-level-" + response.GeneralStatusInfo.Danger3);
         }
     }
 
     function FrauseCaseList(response) {
-        if (response.FraudCases !== '') {
-            $('#fraudcase').html("<span>" + response.FraudCases + "</span>");
-        }
-        else {
-            $('#fraudcase').html("<span>None</span>");
-        }
+        if (response.FraudCases !== '')
+            domElements.spanFraudcase.html(response.FraudCases);
+        else
+            domElements.spanFraudcase.html("None");
     }
 
     function GetAccountProfile() {
@@ -237,20 +251,20 @@
 
     function HandleCustomerStatus(data) {       
         if (data !== null) {
-            $('#spanAccountStatus').html(data.StatusLabel);
+            domElements.spanAccountStatus.html(data.StatusLabel);
 
             DangerouseIcon(data);
 
             if (data.GeneralStatusInfo.Abnormal === 0) {
-                $("#abnormal").html("None");
+                domElements.spanAbnormal.html("None");
             }
             else {
-                $("#abnormal").html(data.GeneralStatusInfo.Abnormal);
-                $("#abnormal").addClass("abnormal-level-" + data.GeneralStatusInfo.Abnormal);
+                domElements.spanAbnormal.html(data.GeneralStatusInfo.Abnormal);
+                domElements.spanAbnormal.addClass("abnormal-level-" + data.GeneralStatusInfo.Abnormal);
             }
 
-            $('#autoSuspendSoccer').html(data.GeneralStatusInfo.Autosuspend ? 'Yes' : 'No');
-            $('#autoSuspendOtherSport').html(data.GeneralStatusInfo.Autosuspend2 ? 'Yes' : 'No');
+            domElements.spanAutoSuspendSoccer.html(data.GeneralStatusInfo.Autosuspend ? 'Yes' : 'No');
+            domElements.spanAutoSuspendOtherSport.html(data.GeneralStatusInfo.Autosuspend2 ? 'Yes' : 'No');
         }
     }
 
@@ -277,7 +291,7 @@
 
     function HandleEsportAutoSuspendedStatus(data) {
         if (data !== null) {
-            $('#autoSuspendESport').html(data.EsportAutoSuspendStatus ? 'Yes' : 'No');
+            domElements.spanAutoSuspendESport.html(data.EsportAutoSuspendStatus ? 'Yes' : 'No');
         }
     }
 
@@ -289,12 +303,12 @@
         LoadTransactionHistory();
         LoadCustomerCategory();
 
-        lnkAssociation.on('click', function () {
-            $("#header_associated_account").trigger("click");
+        domElements.spanTotalAssociated.on('click', function () {
+            domElements.headerAssociatedAccount.trigger("click");
         });
 
-        lnkEvidence.on('click', function () {
-            $("#header_chains_evidence").trigger("click");
+        domElements.spanTotalEvidences.on('click', function () {
+            domElements.headerChainEvidence.trigger("click");
         });
     }
 

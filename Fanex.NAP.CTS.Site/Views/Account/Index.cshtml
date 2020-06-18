@@ -73,6 +73,7 @@
             </div>
         </div>
     </div>
+
     <div class="wrapper-content">
         <div class="tag-info">
             <div class="wrapper-tag-info">
@@ -98,9 +99,9 @@
                         <span>Accounts / Devices</span>
                         <span>Evidence</span>
                     </div>
-                    <div class="info-text right">                        
-                        <span id="totalAssAccount"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>                        
-                        <span id="evidences"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>                        
+                    <div class="info-text right">
+                        <span id="spanTotalAssociated"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>                       
+                        <span id="spanTotalEvidences"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
                     </div>
                 </div>
             </div>
@@ -119,13 +120,11 @@
                         <span>
                             Other Sports:
                         </span>
-                    </div>
+                    </div>                  
                     <div class="info-text right">
-                        <span>
-                            20
-                        </span>
-                        <span> 19</span>
-                        <span>18</span>
+                        <span id="dangerousOriginal"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+                        <span id="dangerouseABI"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+                        <span id="dangerouseOtherSports"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
                     </div>
                 </div>
             </div>
@@ -145,10 +144,10 @@
                             E-Sports
                         </span>
                     </div>
-                    <div class="info-text right">
-                        <span>Yes</span>
-                        <span> Yes</span>
-                        <span>Yes</span>
+                    <div class="info-text right">                      
+                        <span id="autoSuspendSoccer"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+                        <span id="autoSuspendOtherSport"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+                        <span id="autoSuspendESport"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
                     </div>
                 </div>
             </div>
@@ -162,11 +161,8 @@
                         <span>Fraud case:</span>
                     </div>
                     <div class="info-text right">
-                        <span></span>
-                        <span>
-                            BNG, Check Bet, Bets Near Goal,
-                            Flagged Account, Delay Goal
-                        </span>
+                        <span></span>                      
+                        <span id="fraudcase"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
                     </div>
                 </div>
             </div>
@@ -192,6 +188,7 @@
     </div>
 
 </div>
+
 <div class="content-card">
     <div class="status" id="account-detail-header">
         <p class="info" style="margin-bottom: 0">
@@ -239,6 +236,7 @@
         </div>
     </div>
 </div>
+
 <div class="hide">
     <input id="hdCTSCustId" type="hidden" value="@Model.CTSCustId" />
     <input id="hdCustId" type="hidden" value="@Model.CustId" />
