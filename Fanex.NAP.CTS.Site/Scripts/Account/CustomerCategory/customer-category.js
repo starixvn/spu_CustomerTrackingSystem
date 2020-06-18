@@ -1,21 +1,29 @@
 ﻿function customer_category() {
-    let btnMarkCategory = $('#btnmarkcategory');
-    let divMarkCategory = $('#divMarkCategory');
-    let tblcustomercategory = $('#customer-category-table');
     let isHostPermission;
 
+    let domElements = {
+        btnMarkCategory: $('#btnmarkcategory'),
+        btnCancelCategory: $('#btncancelcategory'),
+        btnSaveCategory: $('#btnsavecategory'),
+        divMarkCategory: $('#divMarkCategory'),
+        tblcustomercategory: $('#customer-category-table'),
+        ddlCategory: $("#ddlcategory"),
+        ddlSports: $("#ddlsports"),
+        txtCategoryComment: $('#txtcategorycomment')
+    };
+
     function BindingMarkCategoryForAddNew(custId, ctsCustId, subscriberId) {
-        $('#btncancelcategory').on('click', function () {
-            divMarkCategory.dialog('close');
+        domElements.btnCancelCategory.on('click', function () {
+            domElements.divMarkCategory.dialog('close');
         });
 
-        $('#btnsavecategory').on('click', function (e) {
+        domElements.btnSaveCategory.on('click', function (e) {
             AddCustomerClassification(custId, ctsCustId, subscriberId);
         });
 
-        $("#ddlcategory").select2();
+        domElements.ddlCategory.select2();
 
-        $("#ddlsports").multiselect({
+        domElements.ddlSports.multiselect({
             selectedList: 3,
             selectedText: "# of # selected",
             noneSelectedText: "Select options"
@@ -23,15 +31,15 @@
     }
 
     function BindingMarkCategoryForUpdate(custId, ctsCustId, subscriberId, categoryId) {
-        $('#btncancelcategory').on('click', function () {
-            divMarkCategory.dialog('close');
+        domElements.btnCancelCategory.on('click', function () {
+            domElements.divMarkCategory.dialog('close');
         });
 
-        $('#btnsavecategory').on('click', function (e) {
+        domElements.btnSaveCategory.on('click', function (e) {
             UpdateCustomerClassification(custId, ctsCustId, subscriberId, categoryId);
         });
 
-        $("#ddlsports").multiselect({
+        domElements.ddlSports.multiselect({
             selectedList: 3,
             selectedText: "# of # selected",
             noneSelectedText: "Select options"
@@ -39,7 +47,7 @@
     }
 
     function AddCustomerClassification(custId, ctsCustId, subscriberId) {
-        if ($('#ddlsports').val() === '') {
+        if (domElements.ddlSports.val() === '') {
 
             common.showError('Sport is required.');
             return;
@@ -50,9 +58,9 @@
         params.custId = custId;
         params.ctsCustId = ctsCustId;
         params.subscriberId = subscriberId;
-        params.categoryId = $('#ddlcategory').val();
-        params.sportGroupIds = $('#ddlsports').val().join(',');
-        params.remark = $('#txtcategorycomment').val();
+        params.categoryId = domElements.ddlCategory.val();
+        params.sportGroupIds = domElements.ddlSports.val().join(',');
+        params.remark = domElements.txtCategoryComment.val();
 
         $.ajax(url, {
             type: 'POST',
@@ -60,16 +68,16 @@
             success: function (response) {
                 if (response.errorCode === 0) {
                     common.showSuccess('Add the category successful!', 2000);
-                    divMarkCategory.dialog('close');
+                    domElements.divMarkCategory.dialog('close');
 
-                    tblcustomercategory.DataTable().ajax.reload();
+                    domElements.tblcustomercategory.DataTable().ajax.reload();
                 }
                 else {
                     common.showError(response.errorMessage);
+                    console.log(response.errorMessage);
                 }
             },
             complete: function () {
-
             }
         });
     }
@@ -88,7 +96,7 @@
                 if (response.errorCode === 0) {
                     common.showSuccess('Remove the category successful!', 2000);
 
-                    tblcustomercategory.DataTable().ajax.reload();
+                    domElements.tblcustomercategory.DataTable().ajax.reload();
                 }
                 else {
                     common.showError('Remove the category fail!');
@@ -106,8 +114,8 @@
         params.ctsCustId = ctsCustId;
         params.categoryId = categoryId;
         params.subscriberId = subscriberId;
-        params.sportGroupIds = $('#ddlsports').val().join(',');;
-        params.remark = $('#txtcategorycomment').val();
+        params.sportGroupIds = domElements.ddlSports.val().join(',');
+        params.remark = domElements.txtCategoryComment.val();
 
         $.ajax(url, {
             type: 'POST',
@@ -115,9 +123,9 @@
             success: function (response) {
                 if (response.errorCode === 0) {
                     common.showSuccess('Update the category successful!', 2000);
-                    divMarkCategory.dialog('close');
+                    domElements.divMarkCategory.dialog('close');
 
-                    tblcustomercategory.DataTable().ajax.reload();
+                    domElements.tblcustomercategory.DataTable().ajax.reload();
                 }
                 else {
                     common.showError(response.errorMessage);
@@ -156,6 +164,7 @@
             },
             error: function (errMsg) {
                 common.showError(errMsg);
+                console.log(errMsg);
             }
         });
     }
@@ -176,7 +185,7 @@
                 common.showLoading();
             },
             success: function (response) {
-                divMarkCategory.html(response);
+                domElements.divMarkCategory.html(response);
                 BindingMarkCategoryForUpdate(custId, ctsCustId, subscriberId, categoryId);
             },
             complete: function () {
@@ -193,6 +202,7 @@
             },
             error: function (errMsg) {
                 common.showError(errMsg);
+                console.log(errMsg);
             }
         });
     }
@@ -271,15 +281,14 @@
         isHostPermission = hostPermission === "True";
 
         if (!isHostPermission)
-            btnMarkCategory.prop('disabled', true);
+            domElements.btnMarkCategory.prop('disabled', true);
     }
 
     this.Initial = function (custId, ctsCustId, subscriberId, username, hostPermission) {
         DisableButton(hostPermission);
 
-        btnMarkCategory.click(function () { InitialMarkCategory(custId, ctsCustId, subscriberId); });
+        domElements.btnMarkCategory.click(function () { InitialMarkCategory(custId, ctsCustId, subscriberId); });
 
         RenderGrid(custId, ctsCustId, username, subscriberId);
-        // GetCustomerClassification(ctsCustId);
     };
 }
