@@ -13,8 +13,7 @@
         tabAssociatedAccount: $("#associated_account"),
         tabChainEvidence: $("#chains_evidence"),
         tabCustomerCategory: $("#customer_category"),
-        tabTransactionHistory: $("#trans_history"),
-        divCustomerCategorySummary: $("#divCustomerCategorySummary"),
+        tabTransactionHistory: $("#trans_history"),        
         spanTotalAssociated: $('#spanTotalAssociated'),
         spanTotalEvidences: $('#spanTotalEvidences'),
         spanIconAffected: $('span.icon-Affected'),
@@ -74,8 +73,6 @@
             type: 'POST',
             success: function (response) {
                 domElements.tabCustomerCategory.html(response);
-
-                RenderCustomerCategorySummary(response);
             },
             complete: function () {
                 var customerCategory = new customer_category();
@@ -101,16 +98,7 @@
                 console.log(errMsg);
             }
         });
-    }
-
-    function RenderCustomerCategorySummary(data) {
-        console.log(data);
-
-        var html = "";
-        html += "";
-
-        //domElements.divCustomerCategorySummary.html(html);
-    }
+    }  
 
     function GetCustomerTotalAssociation() {
         $.ajax(common.modifyRelativeUrl('Account/GetCustomerTotalAssociationByCTSCustId'), {

@@ -1,29 +1,21 @@
 ﻿function customer_category() {
+    let btnMarkCategory = $('#btnmarkcategory');
+    let divMarkCategory = $('#divMarkCategory');
+    let tblcustomercategory = $('#customer-category-table');
     let isHostPermission;
 
-    let domElements = {
-        btnMarkCategory: $('#btnmarkcategory'),
-        btnCancelCategory: $('#btncancelcategory'),
-        btnSaveCategory: $('#btnsavecategory'),
-        divMarkCategory: $('#divMarkCategory'),
-        tblcustomercategory: $('#customer-category-table'),
-        ddlCategory: $("#ddlcategory"),
-        ddlSports: $("#ddlsports"),
-        txtCategoryComment: $('#txtcategorycomment')
-    };
-
     function BindingMarkCategoryForAddNew(custId, ctsCustId, subscriberId) {
-        domElements.btnCancelCategory.on('click', function () {
-            domElements.divMarkCategory.dialog('close');
+        $('#btncancelcategory').on('click', function () {
+            divMarkCategory.dialog('close');
         });
 
-        domElements.btnSaveCategory.on('click', function (e) {
+        $('#btnsavecategory').on('click', function (e) {
             AddCustomerClassification(custId, ctsCustId, subscriberId);
         });
 
-        domElements.ddlCategory.select2();
+        $("#ddlcategory").select2();
 
-        domElements.ddlSports.multiselect({
+        $("#ddlsports").multiselect({
             selectedList: 3,
             selectedText: "# of # selected",
             noneSelectedText: "Select options"
@@ -31,15 +23,15 @@
     }
 
     function BindingMarkCategoryForUpdate(custId, ctsCustId, subscriberId, categoryId) {
-        domElements.btnCancelCategory.on('click', function () {
-            domElements.divMarkCategory.dialog('close');
+        $('#btncancelcategory').on('click', function () {
+            divMarkCategory.dialog('close');
         });
 
-        domElements.btnSaveCategory.on('click', function (e) {
+        $('#btnsavecategory').on('click', function (e) {
             UpdateCustomerClassification(custId, ctsCustId, subscriberId, categoryId);
         });
 
-        domElements.ddlSports.multiselect({
+        $("#ddlsports").multiselect({
             selectedList: 3,
             selectedText: "# of # selected",
             noneSelectedText: "Select options"
@@ -47,7 +39,7 @@
     }
 
     function AddCustomerClassification(custId, ctsCustId, subscriberId) {
-        if (domElements.ddlSports.val() === '') {
+        if ($('#ddlsports').val() === '') {
 
             common.showError('Sport is required.');
             return;
@@ -58,9 +50,9 @@
         params.custId = custId;
         params.ctsCustId = ctsCustId;
         params.subscriberId = subscriberId;
-        params.categoryId = domElements.ddlCategory.val();
-        params.sportGroupIds = domElements.ddlSports.val().join(',');
-        params.remark = domElements.txtCategoryComment.val();
+        params.categoryId = $('#ddlcategory').val();
+        params.sportGroupIds = $('#ddlsports').val().join(',');
+        params.remark = $('#txtcategorycomment').val();
 
         $.ajax(url, {
             type: 'POST',
@@ -68,16 +60,16 @@
             success: function (response) {
                 if (response.errorCode === 0) {
                     common.showSuccess('Add the category successful!', 2000);
-                    domElements.divMarkCategory.dialog('close');
+                    divMarkCategory.dialog('close');
 
-                    domElements.tblcustomercategory.DataTable().ajax.reload();
+                    tblcustomercategory.DataTable().ajax.reload();
                 }
                 else {
                     common.showError(response.errorMessage);
-                    console.log(response.errorMessage);
                 }
             },
             complete: function () {
+
             }
         });
     }
@@ -96,7 +88,7 @@
                 if (response.errorCode === 0) {
                     common.showSuccess('Remove the category successful!', 2000);
 
-                    domElements.tblcustomercategory.DataTable().ajax.reload();
+                    tblcustomercategory.DataTable().ajax.reload();
                 }
                 else {
                     common.showError('Remove the category fail!');
@@ -114,8 +106,8 @@
         params.ctsCustId = ctsCustId;
         params.categoryId = categoryId;
         params.subscriberId = subscriberId;
-        params.sportGroupIds = domElements.ddlSports.val().join(',');
-        params.remark = domElements.txtCategoryComment.val();
+        params.sportGroupIds = $('#ddlsports').val().join(',');;
+        params.remark = $('#txtcategorycomment').val();
 
         $.ajax(url, {
             type: 'POST',
@@ -123,16 +115,16 @@
             success: function (response) {
                 if (response.errorCode === 0) {
                     common.showSuccess('Update the category successful!', 2000);
-                    domElements.divMarkCategory.dialog('close');
+                    divMarkCategory.dialog('close');
 
-                    domElements.tblcustomercategory.DataTable().ajax.reload();
+                    tblcustomercategory.DataTable().ajax.reload();
                 }
                 else {
                     common.showError(response.errorMessage);
                 }
             },
             complete: function () {
-                
+
             }
         });
     }
@@ -164,7 +156,6 @@
             },
             error: function (errMsg) {
                 common.showError(errMsg);
-                console.log(errMsg);
             }
         });
     }
@@ -185,7 +176,7 @@
                 common.showLoading();
             },
             success: function (response) {
-                domElements.divMarkCategory.html(response);
+                divMarkCategory.html(response);
                 BindingMarkCategoryForUpdate(custId, ctsCustId, subscriberId, categoryId);
             },
             complete: function () {
@@ -202,7 +193,6 @@
             },
             error: function (errMsg) {
                 common.showError(errMsg);
-                console.log(errMsg);
             }
         });
     }
@@ -231,7 +221,20 @@
                 data: {
                     custId: custId
                 },
-                type: 'POST'
+                type: 'POST',
+                dataFilter: function (response) {
+                    if (response !== undefined) {
+                        var json = jQuery.parseJSON(response);
+                        RenderCustomerCategorySummary(json.data);
+                    }
+                    return response;
+                },
+                beforeSend: function () {
+                    tblcustomercategory.find('tbody').addClass('loading');
+                },
+                complete: function () {
+                    tblcustomercategory.find('tbody').removeClass('loading');
+                }
             },
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
@@ -249,10 +252,9 @@
                 { data: obj => obj.LastModifiedBy },
                 { data: obj => obj.LastModifiedDate },
                 {
-                    data: obj => () =>
-                    {
-                        var html = '<span class="icon-edit' + (!isHostPermission ? ' disabled"' : '') +'" title="Edit Category"></span>';
-                        html += '<span class="icon-delete' + (!isHostPermission ? ' disabled"' : '') +'" title="Remove Category"></span>';
+                    data: obj => () => {
+                        var html = '<span class="icon-edit' + (!isHostPermission ? ' disabled"' : '') + '" title="Edit Category"></span>';
+                        html += '<span class="icon-delete' + (!isHostPermission ? ' disabled"' : '') + '" title="Remove Category"></span>';
 
                         return obj.IsEnabledDelete ? html : '';
                     }, createdCell: (cell, _, row) => {
@@ -267,7 +269,7 @@
                             $('.icon-edit', cell).click(() => {
                                 EditCategory(custId, ctsCustId, subscriberId, row.CategoryName, row.CategoryId, row.SportGroupIdList, row.Remark);
                             });
-                        }                        
+                        }
                     }
                 }
             ],
@@ -277,18 +279,66 @@
         });
     }
 
+    function RenderCustomerCategorySummary(data) {
+        let html = "";
+        let defaultCategoryList = GetCustomerCategoryList();
+
+        for (let i = 0; i < defaultCategoryList.length; i++) {
+            data.map(function (x) {
+                let isEquals = x.CategoryName === defaultCategoryList[i].name;
+                if (isEquals) {
+                    let classIconColor = defaultCategoryList[i].cssClass;
+
+                    html = BuildCustomerCategoryToHtmlDiv(html, classIconColor, x.CategoryName, x.SportGroupNameList);
+                }
+            });
+        }
+        
+        $('#divCustomerCategorySummary').html(html);
+    }
+
+    function BuildCustomerCategoryToHtmlDiv(html, classIconColor, categoryName, sportGroupNameList){
+        html += "<div class='info-status'>";
+        html += "<div class='status-left'>";
+        html += "<span class='" + classIconColor + "'></span>";
+        html += "<span class='text-status text-left'>" + categoryName + "</span>";
+        html += "</div>";
+        html += "<div class='status-right'>";
+        html += "<span class='text-status text-right'>" + sportGroupNameList + "</span>";
+        html += "</div>";
+        html += "</div>";
+
+        return html;
+    }
+
+    function GetCustomerCategoryList() {
+        var list = [];
+
+        list.push({ 'name': 'High Risk Punter', 'cssClass': 'circle bg-yellow', 'order': 1 });
+        list.push({ 'name': 'Smart Punter', 'cssClass': 'circle bg-yellow', 'order': 2 });
+        list.push({ 'name': 'Probation', 'cssClass': 'circle bg-yellow', 'order': 3 });
+        list.push({ 'name': 'Limited Punter', 'cssClass': 'circle bg-yellow', 'order': 4 }); 
+        list.push({ 'name': 'Lucky Punter', 'cssClass': 'circle bg-yellow', 'order': 5 });
+        list.push({ 'name': 'VVIP', 'cssClass': 'circle bg-green', 'order': 6 });
+        list.push({ 'name': 'VIP', 'cssClass': 'circle bg-green', 'order': 7 });
+        list.push({ 'name': 'Normal Member', 'cssClass': 'circle bg-green', 'order': 8 });
+        list.push({ 'name': 'New Member', 'cssClass': 'circle bg-green', 'order': 9 });
+           
+        return list;
+    }
+
     function DisableButton(hostPermission) {
         isHostPermission = hostPermission === "True";
 
         if (!isHostPermission)
-            domElements.btnMarkCategory.prop('disabled', true);
+            btnMarkCategory.prop('disabled', true);
     }
 
     this.Initial = function (custId, ctsCustId, subscriberId, username, hostPermission) {
         DisableButton(hostPermission);
 
-        domElements.btnMarkCategory.click(function () { InitialMarkCategory(custId, ctsCustId, subscriberId); });
+        btnMarkCategory.click(function () { InitialMarkCategory(custId, ctsCustId, subscriberId); });
 
-        RenderGrid(custId, ctsCustId, username, subscriberId);
+        RenderGrid(custId, ctsCustId, username, subscriberId);        
     };
 }
