@@ -815,10 +815,7 @@
   transform: scale(1); }
 
 .content-info {
-  padding-top: 12px;
-  padding-bottom: 12px;
-  padding-right: 0;
-  padding-left: 16px; }
+  padding: 12px 16px; }
   .content-info .header-info {
     margin-right: 0px;
     height: 38px; }
@@ -906,7 +903,7 @@
     box-sizing: border-box;
     border-radius: 0px 0px 3px 3px;
     background-color: #FFFFFF;
-    height: 168px;
+    min-height: 168px;
     padding: 12px;
     padding-top: 11px; }
     .content-info .wrapper-content .tag-info {
@@ -923,7 +920,7 @@
           color: #2B2B2B; }
     .content-info .wrapper-content .account-info {
       display: grid;
-      grid-template-columns: repeat(5, 363px);
+      grid-template-columns: repeat(5, 1fr);
       grid-gap: 12px;
       margin-bottom: 12px;
       background: #fff;
@@ -932,7 +929,8 @@
       .content-info .wrapper-content .account-info .info-item {
         background-color: #E6ECF9;
         border-radius: 3px;
-        padding: 11px 4px; }
+        padding: 9px 5px;
+        min-height: 113px; }
       .content-info .wrapper-content .account-info .info-title {
         font-weight: bold;
         font-size: 14px;
@@ -947,7 +945,7 @@
         .content-info .wrapper-content .account-info .info-text span {
           display: block; }
       .content-info .wrapper-content .account-info .info-block {
-        margin-top: 8px; }
+        margin-top: 10px; }
       .content-info .wrapper-content .account-info .association .info-block {
         display: grid;
         grid-template-columns: 134px repeat(1, 1fr); }

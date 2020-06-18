@@ -1180,9 +1180,11 @@ body {
     z-index: 111;
     opacity: 1; }
   .main-menu .menu-item .icon, .header-info .username .icon {
-    margin-right: 6px;
+    margin-right: 0;
     position: relative;
-    top: 1px; }
+    top: 2px; }
+    .main-menu .menu-item .icon.icon-home, .header-info .username .icon.icon-home {
+      font-size: 19px; }
     .main-menu .menu-item .icon.icon-Controller, .header-info .username .icon.icon-Controller {
       font-size: 18px; }
   .main-menu .menu-item .sub-menu, .header-info .username .sub-menu {
@@ -1219,7 +1221,7 @@ body {
   align-items: center; }
   .main-menu .menu-item .link.has-child:after {
     display: inline-block;
-    margin-left: 6px;
+    margin-left: 4px;
     font-family: 'Fraud-Sensor';
     content: "\e90c";
     font-size: 14px; }
@@ -1227,14 +1229,16 @@ body {
     visibility: visible; }
   .main-menu .menu-item > .link {
     display: block;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 17px;
+    padding-right: 14px;
     line-height: 60px;
-    color: #9AA2B5; }
+    color: #9AA2B5;
+    font-size: 16px; }
     .main-menu .menu-item > .link:hover {
       color: #fff; }
     .main-menu .menu-item > .link .icon:before {
-      color: #9aa2b5; }
+      color: #9aa2b5;
+      font-size: 19px; }
     .main-menu .menu-item > .link.active {
       color: #fff; }
     .main-menu .menu-item > .link:hover .icon:before, .main-menu .menu-item > .link.active .icon:before {
@@ -1248,7 +1252,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-right: 20px;
+  margin-right: 12px;
   /*.search-component {
         position: relative;
         display: flex;
@@ -1323,7 +1327,8 @@ body {
     cursor: pointer;
     color: #fff;
     height: 60px;
-    line-height: 60px; }
+    line-height: 60px;
+    margin-left: 24px; }
     .header-info .username:hover .sub-menu {
       display: block;
       visibility: visible; }
@@ -1363,8 +1368,9 @@ body {
       z-index: 2;
       pointer-events: none; }
     .header-info .search-header .search-field {
+      margin-right: 28px;
       position: relative;
-      width: 200px;
+      width: 288px;
       border: 0;
       padding: 10px 0 10px 32px;
       background: #fff;

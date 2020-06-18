@@ -202,10 +202,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 }
 
 .content-info {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    padding-right: 0;
-    padding-left: 16px;
+    padding: 12px 16px;
 
     .header-info {
         margin-right: 0px;
@@ -330,7 +327,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
         box-sizing: border-box;
         border-radius: 0px 0px 3px 3px;
         background-color: #FFFFFF;
-        height: 168px;
+        min-height: 168px;
         padding: 12px;
         padding-top: 11px;
 
@@ -356,7 +353,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 
         .account-info {
             display: grid;
-            grid-template-columns: repeat(5, 363px);
+            grid-template-columns: repeat(5, 1fr);
             grid-gap: 12px;
             margin-bottom: 12px;
             background: #fff;
@@ -366,7 +363,8 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             .info-item {
                 background-color: #E6ECF9;
                 border-radius: 3px;
-                padding: 11px 4px;
+                padding: 9px 5px;
+                min-height: 113px;
             }
 
             .info-title {
@@ -392,7 +390,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             }
 
             .info-block {
-                margin-top: 8px;
+                margin-top: 10px;
             }
 
             .association {
