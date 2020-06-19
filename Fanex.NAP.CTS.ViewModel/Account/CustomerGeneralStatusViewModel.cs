@@ -117,25 +117,7 @@ namespace Fanex.NAP.CTS.ViewModel.Account
            
             return this;
         }
-
-        public CustomerGeneralStatusViewModel BindingGeneralDataFromFS(CustomerProfileFraudInfoModel customerProfileFraudInfoModel)
-        {
-            if (customerProfileFraudInfoModel.SuspiciouseCustomer != null)
-            {
-                this.Delinquency = customerProfileFraudInfoModel.SuspiciouseCustomer.IsDelinquent;
-                this.DirtyAccount = customerProfileFraudInfoModel.SuspiciouseCustomer.IsDirty;
-                this.HedgeAccount = customerProfileFraudInfoModel.SuspiciouseCustomer.IsHedge;
-
-            }
-
-            if (customerProfileFraudInfoModel.FraudCaseList != null && customerProfileFraudInfoModel.FraudCaseList.Any())
-            {
-                this.FraudCases = customerProfileFraudInfoModel.FraudCaseList;
-            }
-
-            return this;
-        }
-
+      
         public AccountStatus GetAccountStatus(CustomerGeneralStatusModel model)
         {
             if (model.CN88Status == -1)

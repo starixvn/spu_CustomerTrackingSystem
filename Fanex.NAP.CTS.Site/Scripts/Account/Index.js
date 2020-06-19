@@ -149,29 +149,20 @@
     }
 
     function DangerouseIcon(response) {
-        if (response.GeneralStatusInfo.Danger === 0) {
+        if (response.GeneralStatusInfo.Danger === 0)
             domElements.spanDangerousOriginal.html("None");
-        }
-        else {
+        else
             domElements.spanDangerousOriginal.html(response.GeneralStatusInfo.Danger);
-            domElements.spanDangerousOriginal.addClass("dangerous-level-" + response.GeneralStatusInfo.Danger);
-        }
 
-        if (response.GeneralStatusInfo.Danger2 === 0) {
+        if (response.GeneralStatusInfo.Danger2 === 0)
             domElements.spanDangerouseABI.html("None");
-        }
-        else {
+        else
             domElements.spanDangerouseABI.html(response.GeneralStatusInfo.Danger2);
-            domElements.spanDangerouseABI.addClass("dangerous-level-" + response.GeneralStatusInfo.Danger2);
-        }
 
-        if (response.GeneralStatusInfo.Danger3 === 0) {
+        if (response.GeneralStatusInfo.Danger3 === 0)
             domElements.spanDangerouseOtherSports.html("None");
-        }
-        else {
+        else
             domElements.spanDangerouseOtherSports.html(response.GeneralStatusInfo.Danger3);
-            domElements.spanDangerouseOtherSports.addClass("dangerous-level-" + response.GeneralStatusInfo.Danger3);
-        }
     }
 
     function FrauseCaseList(response) {
@@ -271,7 +262,7 @@
     function HandleRobotUserStatus(data) {
         if (data !== null) {
             if (data.IsRobotUser) {
-                $('span.icon-Robot-User').removeClass('hide');
+                $('span.icon-Robot').removeClass('hide');
             }
         }
     }
