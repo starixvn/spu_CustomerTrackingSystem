@@ -3,7 +3,7 @@
   .content .width-200 {
     width: 200px; }
   .content .fixed-header {
-    padding-top: 12px;
+    padding-top: 9px;
     position: sticky;
     position: -webkit-sticky;
     top: 60px;
@@ -26,7 +26,8 @@
       color: #DF5615;
       content: "/\00a0"; }
   .content .group {
-    padding-right: 16px; }
+    padding-right: 0;
+    margin-right: 16px; }
   .content .button-generate {
     background-color: #396EF8;
     border-radius: 2px;
@@ -40,8 +41,6 @@
     .content .form-filter label {
       font-size: 1.3rem;
       color: #474747; }
-    .content .form-filter .calendar {
-      width: 196px; }
     .content .form-filter input {
       font-size: 1.4rem;
       color: #474747;
@@ -51,6 +50,14 @@
       border: 1px solid #E5E5E5; }
       .content .form-filter .select2-container--default .select2-selection--single .select2-selection__rendered {
         color: #474747; }
+    .content .form-filter .group .text {
+      margin-bottom: 6px; }
+    .content .form-filter .group .control {
+      min-height: 30px;
+      line-height: 17px;
+      padding-left: 12px; }
+    .content .form-filter .icon-calendar-text {
+      right: 6px; }
   .content .form-filter-detail {
     margin-top: 12px;
     margin-left: 16px;
@@ -138,7 +145,8 @@
     justify-content: initial;
     padding-left: 7px;
     padding-top: 4px;
-    padding-bottom: 5px; }
+    padding-bottom: 5px;
+    margin-top: 5px; }
     .content .top-header .refresh {
       position: absolute;
       right: 0; }
@@ -167,10 +175,10 @@
 
 .form-filter {
   margin: 16px 0 0 12px; }
-  .form-filter .width-196 {
-    width: 196px; }
-  .form-filter .width-336 {
-    width: 336px; }
+  .form-filter .width-180 {
+    min-width: 180px; }
+  .form-filter .width-320 {
+    min-width: 320px; }
 
 #problemAccountMonitorTable {
   margin-bottom: 12px; }
@@ -391,7 +399,7 @@
 
 @media screen and (min-width: 1440px) {
   .form-filter, #problemAccountMonitorGrid {
-    width: 1440px; } }
+    width: 1408px; } }
 
 @media screen and (max-width: 1439.99px) {
   .form-filter, #problemAccountMonitorGrid {
