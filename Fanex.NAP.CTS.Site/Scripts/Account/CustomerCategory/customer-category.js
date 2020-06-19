@@ -292,10 +292,51 @@
                     
                     html = BuildCustomerCategoryToHtmlDiv(html, classIconColor, x.CategoryName, x.SportGroupNameList);
 
-                    indexColorProfile = indexColorProfile < x.indexColor ? x.indexColor : indexColorProfile;
+                    indexColorProfile = indexColorProfile < defaultCategoryList[i].indexColor
+                        ? defaultCategoryList[i].indexColor
+                        : indexColorProfile;
                 }
             });
-        }
+        }        
+
+        switch (indexColorProfile) {
+            case 1:
+                $('#divHeaderUsername')
+                    .removeClass('bg-red')
+                    .removeClass('bg-yellow')
+                    .addClass('bg-green');
+                $('#divCustomerCategorySummary')
+                    .removeClass('border-red')
+                    .removeClass('border-yellow')
+                    .addClass('border-green');
+                break;
+            case 2:
+                $('#divHeaderUsername')
+                    .removeClass('bg-red')
+                    .removeClass('bg-green')
+                    .addClass('bg-yellow');
+                $('#divCustomerCategorySummary')
+                    .removeClass('border-red')
+                    .removeClass('border-green')
+                    .addClass('border-yellow');
+                break;
+            case 3:
+                $('#divHeaderUsername')
+                    .removeClass('bg-yellow')
+                    .removeClass('bg-green')
+                    .addClass('bg-red');
+                $('#divCustomerCategorySummary')
+                    .removeClass('border-yellow')
+                    .removeClass('border-green')
+                    .addClass('border-red');
+                break;
+            default:
+                break;
+        }       
+
+        $('#divCustomerCategorySummary').html(html);
+        $('#spanContentInfoLoading').css('visibility', 'hidden');
+        $('#divHeaderInfo').css('visibility', 'visible');
     }
 
     function BuildCustomerCategoryToHtmlDiv(html, classIconColor, categoryName, sportGroupNameList){
