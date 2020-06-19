@@ -828,6 +828,12 @@
       background-color: #2BC769; }
       .content-info .header-info .bg-green:after {
         background-color: #2BC769; }
+    .content-info .header-info.border-red {
+      border-bottom: 2px solid #FF7676; }
+    .content-info .header-info.border-green {
+      border-bottom: 2px solid #2BC769; }
+    .content-info .header-info.border-yellow {
+      border-bottom: 2px solid #FDB703; }
     .content-info .header-info .header-username {
       display: flex;
       position: relative;
@@ -848,7 +854,8 @@
         font-weight: bold;
         font-size: 16px;
         color: #2B2B2B;
-        line-height: 1; }
+        line-height: 1;
+        cursor: inherit; }
       .content-info .header-info .header-username:after {
         content: " ";
         position: absolute;
@@ -872,12 +879,6 @@
       flex-wrap: wrap;
       padding-top: 7px;
       padding-left: 17px; }
-      .content-info .header-info .wrapper-status.border-red {
-        border-bottom: 2px solid #FF7676; }
-      .content-info .header-info .wrapper-status.border-green {
-        border-bottom: 2px solid #2BC769; }
-      .content-info .header-info .wrapper-status.border-yellow {
-        border-bottom: 2px solid #FDB703; }
       .content-info .header-info .wrapper-status .info-status {
         margin-bottom: 6px;
         margin-right: 6px;
@@ -974,7 +975,6 @@
         display: grid;
         grid-template-columns: 96px repeat(1, 1fr); }
       .content-info .wrapper-content .account-info .dangerous .right {
-        font-size: 12px;
         color: #000000; }
       .content-info .wrapper-content .account-info .auto-suspend .info-block {
         display: grid;
