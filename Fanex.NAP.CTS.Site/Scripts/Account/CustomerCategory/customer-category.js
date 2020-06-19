@@ -306,7 +306,7 @@
                     .removeClass('bg-red')
                     .removeClass('bg-yellow')
                     .addClass('bg-green');
-                $('#divCustomerCategorySummary')
+                $('#divHeaderInfo')
                     .removeClass('border-red')
                     .removeClass('border-yellow')
                     .addClass('border-green');
@@ -316,7 +316,7 @@
                     .removeClass('bg-red')
                     .removeClass('bg-green')
                     .addClass('bg-yellow');
-                $('#divCustomerCategorySummary')
+                $('#divHeaderInfo')
                     .removeClass('border-red')
                     .removeClass('border-green')
                     .addClass('border-yellow');
@@ -326,7 +326,7 @@
                     .removeClass('bg-yellow')
                     .removeClass('bg-green')
                     .addClass('bg-red');
-                $('#divCustomerCategorySummary')
+                $('#divHeaderInfo')
                     .removeClass('border-yellow')
                     .removeClass('border-green')
                     .addClass('border-red');
