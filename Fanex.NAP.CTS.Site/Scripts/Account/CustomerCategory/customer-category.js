@@ -289,8 +289,9 @@
                 let isEquals = x.CategoryName === defaultCategoryList[i].name;
                 if (isEquals) {
                     let classIconColor = defaultCategoryList[i].cssClass;
-                    
-                    html = BuildCustomerCategoryToHtmlDiv(html, classIconColor, x.CategoryName, x.SportGroupNameList);
+                    let sportGroupNameList = x.SportGroupNameList ? x.SportGroupNameList : "None";
+
+                    html = BuildCustomerCategoryToHtmlDiv(html, classIconColor, x.CategoryName, sportGroupNameList);
 
                     indexColorProfile = indexColorProfile < defaultCategoryList[i].indexColor
                         ? defaultCategoryList[i].indexColor

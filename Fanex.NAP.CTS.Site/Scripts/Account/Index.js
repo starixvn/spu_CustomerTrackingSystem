@@ -21,8 +21,7 @@
         spanDangerouseABI: $("#dangerouseABI"),
         spanDangerouseOtherSports: $("#dangerouseOtherSports"),
         spanFraudcase: $('#fraudcase'),
-        spanAccountStatus: $('#spanAccountStatus'),
-        spanAbnormal: $("#abnormal"),
+        spanAccountStatus: $('#spanAccountStatus'),        
         spanAutoSuspendSoccer: $('#autoSuspendSoccer'),
         spanAutoSuspendOtherSport: $('#autoSuspendOtherSport'),
         spanAutoSuspendESport: $('#autoSuspendESport'),
@@ -242,18 +241,8 @@
 
     function HandleCustomerStatus(data) {       
         if (data !== null) {
-            domElements.spanAccountStatus.html(data.StatusLabel);
-
             DangerouseIcon(data);
-
-            if (data.GeneralStatusInfo.Abnormal === 0) {
-                domElements.spanAbnormal.html("None");
-            }
-            else {
-                domElements.spanAbnormal.html(data.GeneralStatusInfo.Abnormal);
-                domElements.spanAbnormal.addClass("abnormal-level-" + data.GeneralStatusInfo.Abnormal);
-            }
-
+            domElements.spanAccountStatus.html(data.StatusLabel);
             domElements.spanAutoSuspendSoccer.html(data.GeneralStatusInfo.Autosuspend ? 'Yes' : 'No');
             domElements.spanAutoSuspendOtherSport.html(data.GeneralStatusInfo.Autosuspend2 ? 'Yes' : 'No');
         }
