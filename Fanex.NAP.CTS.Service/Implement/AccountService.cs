@@ -338,17 +338,15 @@
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                using (var result = db.QueryMultiple(criteria))
-                {
-                    var fraudCaseList = result.Read<FraudCaseModel>().ToList();
+                var fraudCaseList = db.Query<FraudCaseModel>(criteria).ToList();
 
-                    return new CustomerProfileFraudInfoModel
-                    {
-                        FraudCaseList = fraudCaseList
-                    };
-                }
+                return new CustomerProfileFraudInfoModel
+                {
+                    FraudCaseList = fraudCaseList
+                };
             }
-        }       
+        }
+        
         public List<TagModel> GetDirectAssociatedAccountTagAffected(string custIdsAssInfo)
         {
             var criteria = new GetDirectAssociatedAccountTagAffectedCriteria

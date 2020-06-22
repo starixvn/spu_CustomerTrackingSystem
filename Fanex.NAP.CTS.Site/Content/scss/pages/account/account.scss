@@ -6,6 +6,8 @@ $dangerousBackgroundColor_21_30: ( level-21: #3366ff, level-22: #ff0000, level-2
 $dangerousBackgroundColor_31_40: ( level-31: #00ff00, level-32: #ffff00, level-33: #8db4e2, level-34: #9cf1fc, level-35: #ccc0da, level-36: #ff7f66, level-37: #ffa500, level-38: #d8e4bc, level-39: #babd97, level-40: #ff66cc);
 $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-43: #ffff00, level-44: #9cf1fc, level-45: #ccc0da, level-46: #00ff00, level-47: #ffa500, level-48: #d8e4bc, level-49: #babd97, level-50: #000);
 
+@import "../../abstracts/variables";
+
 @mixin badge-label($color) {
     width: 6.2rem;
     padding: 2px 0;
@@ -209,16 +211,52 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
         min-height: 38px;
         align-items: inherit;
 
+        .bg-yellow {
+            background-color: $account-high;
+
+            &:after {
+                background-color: $account-high;
+            }
+        }
+
+        .bg-green {
+            background-color: $account-limited;
+
+            &:after {
+                background-color: $account-limited;
+            }
+        }
+
+        &.border-red {
+            border-bottom: 2px solid $account-formular;
+        }
+
+        &.border-green {
+            border-bottom: 2px solid $account-limited;
+        }
+
+        &.border-yellow {
+            border-bottom: 2px solid $account-high;
+        }
+
+
         .header-username {
             display: flex;
             position: relative;
-            background-color: #FF7676;
             border-top-left-radius: 3px;
             width: 265px;
             padding: 11px 12px;
             min-height: 38px;
             margin-right: 28px;
             align-items: center;
+
+            &.bg-red {
+                background-color: $account-formular;
+
+                &:after {
+                    background-color: $account-formular;
+                }
+            }
 
             .username {
                 position: absolute;
@@ -228,6 +266,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
                 font-size: 16px;
                 color: #2B2B2B;
                 line-height: 1;
+                cursor: inherit;
             }
 
             &:after {
@@ -235,7 +274,6 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
                 position: absolute;
                 height: 100%;
                 width: 48px;
-                background-color: #FF7676;
                 top: 0;
                 right: -23px;
                 border-top-right-radius: 3px;
@@ -257,7 +295,6 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             position: relative;
             width: 100%;
             min-height: 38px;
-            border-bottom: 2px solid #FF7676;
             display: flex;
             flex-wrap: wrap;
             padding-top: 7px;
@@ -292,16 +329,8 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
                         margin-left: 4px;
                         margin-right: 4px;
 
-                        &.bg-yellow {
-                            background: #FDB703;
-                        }
-
-                        &.bg-green {
-                            background: #2BC769;
-                        }
-
                         &.bg-red {
-                            background: #EE4D4D;
+                            background-color: #EE4D4D;
                         }
                     }
 
@@ -424,7 +453,6 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 
 
                 .right {
-                    font-size: 12px;
                     color: #000000;
                 }
             }

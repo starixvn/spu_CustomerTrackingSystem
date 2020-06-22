@@ -820,16 +820,33 @@
     margin-right: 0px;
     min-height: 38px;
     align-items: inherit; }
+    .content-info .header-info .bg-yellow {
+      background-color: #FDB703; }
+      .content-info .header-info .bg-yellow:after {
+        background-color: #FDB703; }
+    .content-info .header-info .bg-green {
+      background-color: #2BC769; }
+      .content-info .header-info .bg-green:after {
+        background-color: #2BC769; }
+    .content-info .header-info.border-red {
+      border-bottom: 2px solid #FF7676; }
+    .content-info .header-info.border-green {
+      border-bottom: 2px solid #2BC769; }
+    .content-info .header-info.border-yellow {
+      border-bottom: 2px solid #FDB703; }
     .content-info .header-info .header-username {
       display: flex;
       position: relative;
-      background-color: #FF7676;
       border-top-left-radius: 3px;
       width: 265px;
       padding: 11px 12px;
       min-height: 38px;
       margin-right: 28px;
       align-items: center; }
+      .content-info .header-info .header-username.bg-red {
+        background-color: #FF7676; }
+        .content-info .header-info .header-username.bg-red:after {
+          background-color: #FF7676; }
       .content-info .header-info .header-username .username {
         position: absolute;
         left: 15px;
@@ -837,13 +854,13 @@
         font-weight: bold;
         font-size: 16px;
         color: #2B2B2B;
-        line-height: 1; }
+        line-height: 1;
+        cursor: inherit; }
       .content-info .header-info .header-username:after {
         content: " ";
         position: absolute;
         height: 100%;
         width: 48px;
-        background-color: #FF7676;
         top: 0;
         right: -23px;
         border-top-right-radius: 3px;
@@ -858,7 +875,6 @@
       position: relative;
       width: 100%;
       min-height: 38px;
-      border-bottom: 2px solid #FF7676;
       display: flex;
       flex-wrap: wrap;
       padding-top: 7px;
@@ -887,12 +903,8 @@
             border-radius: 50%;
             margin-left: 4px;
             margin-right: 4px; }
-            .content-info .header-info .wrapper-status .info-status .status-left .circle.bg-yellow {
-              background: #FDB703; }
-            .content-info .header-info .wrapper-status .info-status .status-left .circle.bg-green {
-              background: #2BC769; }
             .content-info .header-info .wrapper-status .info-status .status-left .circle.bg-red {
-              background: #EE4D4D; }
+              background-color: #EE4D4D; }
           .content-info .header-info .wrapper-status .info-status .status-left .text-left {
             text-transform: uppercase;
             margin-right: 7px; }
@@ -963,7 +975,6 @@
         display: grid;
         grid-template-columns: 96px repeat(1, 1fr); }
       .content-info .wrapper-content .account-info .dangerous .right {
-        font-size: 12px;
         color: #000000; }
       .content-info .wrapper-content .account-info .auto-suspend .info-block {
         display: grid;

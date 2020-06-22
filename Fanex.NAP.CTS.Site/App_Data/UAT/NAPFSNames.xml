@@ -337,7 +337,7 @@
     </Setting>
 
     <Setting Key="CTS_CustomerGeneralStatus_Get"
-         SpName="CTS_CustomerGeneralStatus_Get"
+         SpName="CTS_CustomerGeneralStatus_Get_xtest"
          DbName="DBCTS.bodb02.bodbSPUNet" />
 
     <Setting Key="CTS_CustomerLastTicketDate_Get"
@@ -369,11 +369,11 @@
     </Setting>
 
     <Setting Key="CTS_CustomerProfile_FraudInfo_Get"
-            SpName="CTS_CustomerProfile_FraudInfo_Get"
+            SpName="CTS_CustomerProfile_FraudInfo_Get_xtest"
             DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
 
     <Setting Key="CTS_RobotUserStatus_Get"
-            SpName="CTS_RobotUserStatus_Get"
+            SpName="CTS_RobotUserStatus_Get_xtest"
             DbName="DBONUSER.ON_USER.bodbSPUNet" />
 
     <Setting Key="CTS_DC_GetCustomerFlagInfo"
@@ -430,7 +430,7 @@
            DbName="MySQL.CTS_DataCenter" />
 
     <Setting Key="CTS_DC_GetDirectAssociatedAccount_TagFlagged"
-           SpName="CTS_DC_GetDirectAssociatedAccount_TagFlagged"
+           SpName="CTS_DC_GetDirectAssociatedAccount_TagFlagged_xtest"
            DbName="MySQL.CTS_DataCenter" />
 
     <Setting Key="DCS_DC_Get_HistoryTransaction"

@@ -21,8 +21,7 @@
         spanDangerouseABI: $("#dangerouseABI"),
         spanDangerouseOtherSports: $("#dangerouseOtherSports"),
         spanFraudcase: $('#fraudcase'),
-        spanAccountStatus: $('#spanAccountStatus'),
-        spanAbnormal: $("#abnormal"),
+        spanAccountStatus: $('#spanAccountStatus'),        
         spanAutoSuspendSoccer: $('#autoSuspendSoccer'),
         spanAutoSuspendOtherSport: $('#autoSuspendOtherSport'),
         spanAutoSuspendESport: $('#autoSuspendESport'),
@@ -149,29 +148,20 @@
     }
 
     function DangerouseIcon(response) {
-        if (response.GeneralStatusInfo.Danger === 0) {
+        if (response.GeneralStatusInfo.Danger === 0)
             domElements.spanDangerousOriginal.html("None");
-        }
-        else {
+        else
             domElements.spanDangerousOriginal.html(response.GeneralStatusInfo.Danger);
-            domElements.spanDangerousOriginal.addClass("dangerous-level-" + response.GeneralStatusInfo.Danger);
-        }
 
-        if (response.GeneralStatusInfo.Danger2 === 0) {
+        if (response.GeneralStatusInfo.Danger2 === 0)
             domElements.spanDangerouseABI.html("None");
-        }
-        else {
+        else
             domElements.spanDangerouseABI.html(response.GeneralStatusInfo.Danger2);
-            domElements.spanDangerouseABI.addClass("dangerous-level-" + response.GeneralStatusInfo.Danger2);
-        }
 
-        if (response.GeneralStatusInfo.Danger3 === 0) {
+        if (response.GeneralStatusInfo.Danger3 === 0)
             domElements.spanDangerouseOtherSports.html("None");
-        }
-        else {
+        else
             domElements.spanDangerouseOtherSports.html(response.GeneralStatusInfo.Danger3);
-            domElements.spanDangerouseOtherSports.addClass("dangerous-level-" + response.GeneralStatusInfo.Danger3);
-        }
     }
 
     function FrauseCaseList(response) {
@@ -251,18 +241,8 @@
 
     function HandleCustomerStatus(data) {       
         if (data !== null) {
-            domElements.spanAccountStatus.html(data.StatusLabel);
-
             DangerouseIcon(data);
-
-            if (data.GeneralStatusInfo.Abnormal === 0) {
-                domElements.spanAbnormal.html("None");
-            }
-            else {
-                domElements.spanAbnormal.html(data.GeneralStatusInfo.Abnormal);
-                domElements.spanAbnormal.addClass("abnormal-level-" + data.GeneralStatusInfo.Abnormal);
-            }
-
+            domElements.spanAccountStatus.html(data.StatusLabel);
             domElements.spanAutoSuspendSoccer.html(data.GeneralStatusInfo.Autosuspend ? 'Yes' : 'No');
             domElements.spanAutoSuspendOtherSport.html(data.GeneralStatusInfo.Autosuspend2 ? 'Yes' : 'No');
         }
@@ -271,7 +251,7 @@
     function HandleRobotUserStatus(data) {
         if (data !== null) {
             if (data.IsRobotUser) {
-                $('span.icon-Robot-User').removeClass('hide');
+                $('span.icon-Robot').removeClass('hide');
             }
         }
     }
