@@ -155,6 +155,7 @@
     <Compile Include="ProblemAccountMonitor\DetailMatchInfoGetCriteria.cs" />
     <Compile Include="ProblemAccountMonitor\DetailTicketsGetCriteria.cs" />
     <Compile Include="ProblemAccountMonitor\DetailTicketVoidingInRequestGetCriteria.cs" />
+    <Compile Include="ProblemAccountMonitor\GetAllSubscriberGroupsCriteria.cs" />
     <Compile Include="ProblemAccountMonitor\LeagueListGetCriteria.cs" />
     <Compile Include="ProblemAccountMonitor\MoveBetBalanceUpDateGetCriteria.cs" />
     <Compile Include="ProblemAccountMonitor\ProblemAccountMonitorGetCriteria.cs" />

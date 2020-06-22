@@ -483,8 +483,8 @@
             SpName="FS_CTSSportList_Get_xtest"
             DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
 
-    <Setting Key="FS_League_Get"
-             SpName="FS_League_Get_xtest"
+    <Setting Key="FS_CTSLeagueList_GetBySports"
+             SpName="FS_CTSLeagueList_GetBySports_xtest"
              DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
 
     <Setting Key="FS_Rpt_CTSMatchMonitor_Get"
@@ -506,6 +506,10 @@
     <Setting Key="CTS_DC_CheckMultiAccountEvidence"
         SpName="CTS_DC_CheckMultiAccountEvidence_xtest"
         DbName="MySQL.CTS_DataCenter" />
+
+    <Setting Key="CTS_DC_GetAllSubscriberGroups"
+           SpName="CTS_DC_GetAllSubscriberGroups_xtest"
+           DbName="MySQL.CTS_DataCenter" />
   </Function>
   
   <Function Name="ImportEvidences">

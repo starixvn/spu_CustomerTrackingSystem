@@ -207,10 +207,15 @@
         private static void RegisterProblemAccountMonitorBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/problem-account-monitor-scripts").Include(
+                "~/Scripts/select2.min.js",
+                "~/Scripts/MultipleSelect/jquery.multiselect.filter.js",
                 "~/Scripts/ProblemAccountMonitor/index.js"));
 
             bundles.Add(new StyleBundle("~/problem-account-monitor-styles").Include(
-                    "~/Content/scss/pages/problem-account-monitor/problem-account-monitor.css"));
+                "~/Content/scss/vendors/select2.min.css",
+                 "~/Content/scss/MultipleSelect/jquery.multiselect.filter.css",
+                 "~/Content/scss/MultipleSelect/jquery.multiselect.css",
+                "~/Content/scss/pages/problem-account-monitor/problem-account-monitor.css"));
         }
 
         private static void RegisterProblemAccountMonitorDetailBundles(BundleCollection bundles)
@@ -221,7 +226,7 @@
 
             bundles.Add(new StyleBundle("~/problem-account-monitor-detail-styles").Include(
                     "~/Content/scss/MultipleSelect/jquery.multiselect.filter.css",
-                      "~/Content/scss/MultipleSelect/jquery.multiselect.css",
+                    "~/Content/scss/MultipleSelect/jquery.multiselect.css",
                     "~/Content/scss/pages/problem-account-monitor/problem-account-monitor.css"));
         }
 

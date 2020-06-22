@@ -9,7 +9,9 @@
 
         public string LeagueIds { get; set; }
 
-        public string MatchStatus { get; set; } // completed, running
+        public string MatchStatus { get; set; } // All, completed, running
+
+        public string SiteIds { get; set; }
 
         public override string GetSettingKey()
            => "FS_Rpt_CTSMatchMonitor_Get";

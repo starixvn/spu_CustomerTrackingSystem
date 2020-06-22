@@ -8,6 +8,8 @@
 
         public string LeagueName { get; set; }
 
+        public string SportName { get; set; }
+
         public int HomeId { get; set; }
 
         public int AwayId { get; set; }

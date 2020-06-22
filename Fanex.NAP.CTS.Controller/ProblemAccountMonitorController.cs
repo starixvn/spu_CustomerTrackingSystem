@@ -52,11 +52,11 @@
         }
 
         [HttpGet]
-        public ActionResult GetLeagues(DateTime eventDate, int sportId)
+        public ActionResult GetLeagues(DateTime eventDate, string sportIds)
         {
             var viewModel = Enumerable.Empty<LeagueViewModel>();
 
-            var model = _probleAccountMonitorService.GetLeagues(eventDate, sportId);
+            var model = _probleAccountMonitorService.GetLeagues(eventDate, sportIds);
 
             if (model != null)
             {
@@ -70,12 +70,39 @@
             return Json(viewModel, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult GetAllSubscriberGroups()
+        {
+            var viewModel = Enumerable.Empty<SubscriberGroupViewModel>();
+
+            var model = _probleAccountMonitorService.GetAllSubscriberGroups();
+
+            if (model != null)
+            {
+                viewModel = model.Where(x => x.IsActive)
+                    .GroupBy(g => new { g.SubscriberGroupID, g.SubscriberGroupName })
+                    .Select(x => new { Group = x.Key, SiteList = x.ToList() })
+                    .Select(x => new SubscriberGroupViewModel
+                    {
+                        SubscriberGroupID = x.Group.SubscriberGroupID,
+                        SubscriberGroupName = x.Group.SubscriberGroupName,
+                        SiteList = x.SiteList.Select(y => new SiteViewModel
+                        {
+                            SiteID = y.SiteID,
+                            SiteName = y.SiteName,
+                            DisplayOrder = y.DisplayOrder
+                        })
+                    });
+            }
+
+            return Json(viewModel, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpPost]
-        public ActionResult GetProblemAccountMonitor(DateTime eventDate, string leagueIds, string matchStatus)
+        public ActionResult GetProblemAccountMonitor(DateTime eventDate, string leagueIds, string matchStatus, string siteIds)
         {
             var viewModel = Enumerable.Empty<ProblemAccountMonitorViewModel>();
             var total = 0;
-            var model = _probleAccountMonitorService.GetProblemAccountMonitor(eventDate, leagueIds, matchStatus);
+            var model = _probleAccountMonitorService.GetProblemAccountMonitor(eventDate, leagueIds, matchStatus, siteIds);
 
             if (model != null || model.MatchInfos != null)
             {
@@ -85,6 +112,7 @@
                     MatchId = x.MatchId,
                     MatchCode = x.MatchCode,
                     LeagueName = x.LeagueName,
+                    SportName = x.SportName,
                     HomeName = CachedRef.GetTeamName(x.HomeId),
                     AwayName = CachedRef.GetTeamName(x.AwayId),
                     MatchScore = x.LiveHomeScore + " - " + x.LiveAwayScore,

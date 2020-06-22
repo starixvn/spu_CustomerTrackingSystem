@@ -10,9 +10,11 @@
 
         IEnumerable<SportModel> GetSports();
 
-        IEnumerable<LeagueModel> GetLeagues(DateTime eventDate, int sportId);
+        IEnumerable<LeagueModel> GetLeagues(DateTime eventDate, string sportIds);
 
-        ProblemAccountMonitorModel GetProblemAccountMonitor(DateTime eventDate, string leagueIds, string matchStatus);
+        IEnumerable<SubscriberGroupModel> GetAllSubscriberGroups();
+
+        ProblemAccountMonitorModel GetProblemAccountMonitor(DateTime eventDate, string leagueIds, string matchStatus, string siteIds);
 
         int CountTicketFraud(IEnumerable<SuspiciousTicketInfo> suspiciousTicketInfos, int matchId, int fraudCaseId);
 

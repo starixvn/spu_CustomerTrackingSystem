@@ -232,6 +232,7 @@
     <Compile Include="ProblemAccountMonitor\MatchInfoModel.cs" />
     <Compile Include="ProblemAccountMonitor\DetailTicketsModel.cs" />
     <Compile Include="ProblemAccountMonitor\ProblemMatchMonitorModel.cs" />
+    <Compile Include="ProblemAccountMonitor\SubscriberGroupModel.cs" />
     <Compile Include="ProblemAccountMonitor\SuspiciousTicketInfo.cs" />
     <Compile Include="ProblemAccountMonitor\SportModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

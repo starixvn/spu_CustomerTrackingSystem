@@ -483,8 +483,8 @@
             SpName="FS_CTSSportList_Get"
             DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
 
-    <Setting Key="FS_League_Get"
-             SpName="FS_League_Get"
+    <Setting Key="FS_CTSLeagueList_GetBySports"
+             SpName="FS_CTSLeagueList_GetBySports"
              DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
 
     <Setting Key="FS_Rpt_CTSMatchMonitor_Get"
@@ -501,7 +501,11 @@
 
     <Setting Key="TicketVoiding_TicketsInRequest_Select"
       SpName="TicketVoiding_TicketsInRequest_Select"
-      DbName="DBCTS.bodb02.bodbSPUNet" />    
+      DbName="DBCTS.bodb02.bodbSPUNet" />
+
+    <Setting Key="CTS_DC_GetAllSubscriberGroups"
+           SpName="CTS_DC_GetAllSubscriberGroups"
+           DbName="MySQL.CTS_DataCenter" />
   </Function>
 
   <Function Name="ImportEvidences">

@@ -7,10 +7,10 @@
     {
         public DateTime EventDate { get; set; }
 
-        public int SportId { get; set; }
+        public string SportIds { get; set; }
 
         public override string GetSettingKey()
-            => "FS_League_Get";
+            => "FS_CTSLeagueList_GetBySports";
 
         public override bool IsValid()
             => true;

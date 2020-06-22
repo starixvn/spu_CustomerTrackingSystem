@@ -12,6 +12,8 @@
 
         public string LeagueName { get; set; }
 
+        public string SportName { get; set; }
+
         public string MatchScore { get; set; }
 
         public string Status { get; set; }        

@@ -7,6 +7,7 @@
         dpkDate: $('#dpkDate'),
         cbbSport: $('#cbbSport'),
         cbbLeague: $('#cbbLeague'),
+        cbbSite: $('#cbbSite'),
         cbbMatchStatus: $('#cbbMatchStatus'),
         btnGenerate: $('#btnGenerate'),
         refreshInterval: $('#refreshInterval'),
@@ -23,11 +24,9 @@
             type: 'GET',
             success: function (response) {
                 GenerateSportDropdown(response);
-
-                GetLeagues();
             },
             complete: function () {
-                domElements.cbbSport.select2();
+                GetLeagues();
             },
             error: function (errMsg) {
                 console.log(errMsg);
@@ -38,15 +37,23 @@
     function GenerateSportDropdown(data) {
         let sportSelector = domElements.cbbSport.empty();
 
-        for (var i = 0; i < data.length; i++) {
-            sportSelector.append("<option value='" + data[i].SportType + "'>" + data[i].SportName + "</option>");
+        if (data.length > 0) {
+            sportSelector.append("<option selected value='" + data[0].SportType + "'>" + data[0].SportName + "</option>");
         }
+
+        for (var i = 1; i < data.length; i++) {
+            sportSelector.append("<option value='" + data[i].SportType + "'>" + data[i].SportName + "</option>");
+        }    
+        domElements.cbbSport.multiselect("refresh");
     }
 
     function GetLeagues() {
+        if (domElements.cbbSport.val().length === 0)
+            return GenerateEmptyLeagueDropdown();
+
         var paramsFilter = {};
         paramsFilter.EventDate = domElements.dpkDate.val();
-        paramsFilter.SportId = domElements.cbbSport.val();
+        paramsFilter.SportIds = domElements.cbbSport.val().join();
 
         $.ajax(common.modifyRelativeUrl('ProblemAccountMonitor/GetLeagues'), {
             type: 'GET',
@@ -68,10 +75,18 @@
         });
     }
 
-    function GenerateLeagueDropdown(data) {
+    function GenerateEmptyLeagueDropdown() {
         let leagueSelector = domElements.cbbLeague.empty();
+        leagueSelector.append("<option value=''>No available league</option>");
+        domElements.btnGenerate.prop("disabled", true);
+        domElements.refreshInterval.val("--").change();
+    }
 
-        if (data.length !== 0) {
+    function GenerateLeagueDropdown(data) {
+        if (data.length === 0) {
+            return GenerateEmptyLeagueDropdown();
+        } else {
+            let leagueSelector = domElements.cbbLeague.empty();
             var allLeague = data.map(l => l.LeagueId).join();
 
             leagueSelector.append("<option value='" + allLeague + "'>All League</option>");
@@ -82,12 +97,39 @@
 
             domElements.btnGenerate.prop("disabled", false);
         }
-        else {
-            leagueSelector.append("<option value=''>No available league</option>");
+    }
 
-            domElements.btnGenerate.prop("disabled", true);
-            domElements.refreshInterval.val("--").change();
-        }
+    function GetAllSubscriberGroups() {
+        $.ajax(common.modifyRelativeUrl('ProblemAccountMonitor/GetAllSubscriberGroups'), {
+            type: 'GET',
+            success: function (response) {
+                GenerateSubscriberGroup(response);
+            },
+            complete: function () {
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+            }
+        });
+    }
+
+    function GenerateSubscriberGroup(data) {
+        let siteSelector = domElements.cbbSite.empty();
+
+        data.map(function (x) {
+            var optgroup = "<optgroup label='" + x.SubscriberGroupName + "'>";
+
+            if (x.SiteList.length > 0)
+                x.SiteList.map(function (y) {
+                    optgroup += "<option selected value='" + y.SiteID + "'>" + y.SiteName + "</option>";
+                });
+
+            optgroup += "</optgroup>";
+
+            siteSelector.append(optgroup);
+        });
+
+        domElements.cbbSite.multiselect("refresh");
     }
 
     function GenerateGrid() {
@@ -100,6 +142,7 @@
                     paramsFilter.eventDate = domElements.dpkDate.val();
                     paramsFilter.leagueIds = domElements.cbbLeague.val();
                     paramsFilter.matchStatus = domElements.cbbMatchStatus.val();
+                    paramsFilter.siteIds = domElements.cbbSite.val().join();
                     return paramsFilter;
                 },
                 type: "POST",
@@ -176,7 +219,9 @@
 
     function RenderMatchName(obj) {        
         let html = "<div class='event-match-name'>" + obj.HomeName + " vs " + obj.AwayName + "</div>";
-        html += "<div class='event-league-name'>" + obj.LeagueName + "</div>";
+        html += "<div class='event-league-name'>" + obj.LeagueName + " - ";
+        html += "<span>" + obj.SportName + "</span>";
+        html += "</div>";
         html += "<div class='event-match-id'> Match ID: " + obj.MatchId + "</div>";
 
         return html;
@@ -240,8 +285,40 @@
             })
             .datepicker("setDate", new Date())
             .change(() => GetLeagues());
-       
+
+        domElements.cbbSport.multiselect({
+            menuWidth: 170,
+            menuHeight: 300,
+            selectedText: "# of # selected",
+            noneSelectedText: "Select Sport"
+        }).multiselectfilter({
+            width: 125,
+            placeholder: ''
+            });
+        
+        domElements.cbbSite.multiselect({
+            menuWidth: 320,
+            menuHeight: 320,
+            selectedText: "# of # selected",
+            noneSelectedText: "Select Site",            
+            click: function (event, ui) {
+                domElements.cbbSite.text(ui.value + ' ' + (ui.checked ? 'checked' : 'unchecked'));
+            },
+            optgrouptoggle: function (event, ui) {
+                var values = $.map(ui.inputs, function (checkbox) {
+                    return checkbox.value;
+                }).join(", ");
+
+                domElements.cbbSite.html("Checkboxes " + (ui.checked ? "checked" : "unchecked") + ": " + values);
+            },            
+            groupsCollapsable: true            
+        }).multiselectfilter({
+            width: 250,
+            placeholder: ''
+            });
+
         GetSports();
+        GetAllSubscriberGroups();
 
         domElements.refreshInterval.val(60).change(e => RefreshChange($(e.target))).change();
         domElements.iconCalendarText.on('click', () => domElements.dpkDate.focus());

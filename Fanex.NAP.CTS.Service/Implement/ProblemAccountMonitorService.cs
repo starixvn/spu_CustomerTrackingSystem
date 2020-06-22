@@ -35,12 +35,12 @@
             }
         }
 
-        public IEnumerable<LeagueModel> GetLeagues(DateTime eventDate, int sportId)
+        public IEnumerable<LeagueModel> GetLeagues(DateTime eventDate, string sportIds)
         {
             var criteria = new LeagueListGetCriteria()
             {
                 EventDate = eventDate,
-                SportId = sportId
+                SportIds = sportIds
             };
             
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -49,12 +49,23 @@
             }
         }
 
-        public ProblemAccountMonitorModel GetProblemAccountMonitor(DateTime eventDate, string leagueIds, string matchStatus)
+        public IEnumerable<SubscriberGroupModel> GetAllSubscriberGroups()
+        {
+            var criteria = new GetAllSubscriberGroupsCriteria();
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<SubscriberGroupModel>(criteria);
+            }
+        }
+
+        public ProblemAccountMonitorModel GetProblemAccountMonitor(DateTime eventDate, string leagueIds, string matchStatus, string siteIds)
         {
             var criteria = new ProblemAccountMonitorGetCriteria
             {
                 EventDate = eventDate,
                 LeagueIds = leagueIds,
+                SiteIds = siteIds,
                 MatchStatus = matchStatus
             };
 
