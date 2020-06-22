@@ -74,7 +74,7 @@
             scrollCollapse: false,           
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 11, 12], className: "text-center" },
+                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 11, 12, 13], className: "text-center" },
                 { targets: [8, 9, 10], className: "text-right" },
                 { targets: [0], width: "3%" },
                 { targets: [1], width: "10%" },
@@ -82,13 +82,14 @@
                 { targets: [3], width: "5%" },
                 { targets: [4], width: "10%" },
                 { targets: [5], width: "10%" },
-                { targets: [6], width: "5%" },
-                { targets: [7], width: "7%" },
-                { targets: [8], width: "5%" },
+                { targets: [6], width: "10%" },
+                { targets: [7], width: "5%" },
+                { targets: [8], width: "7%" },
                 { targets: [9], width: "5%" },
                 { targets: [10], width: "5%" },
                 { targets: [11], width: "5%" },
-                { targets: [12], width: "5%" }
+                { targets: [12], width: "5%" },
+                { targets: [13], width: "5%" }
             ],
             columns: [
                 {
@@ -98,6 +99,7 @@
                 { data: obj => obj.Username },
                 { data: obj => obj.CurrencyName },
                 { data: obj => () => { return "<span class=site data-site-id=" + obj.SiteId + ">" + obj.SiteName + "</span>"; } },
+                { data: obj => obj.BettypeName },
                 { data: obj => () => { return "<span class=bettype data-bettype-id=" + obj.BettypeId + ">" + obj.BetId + "</span>"; } },
                 { data: obj => obj.Choice },
                 { data: obj => obj.LiveBetScore },

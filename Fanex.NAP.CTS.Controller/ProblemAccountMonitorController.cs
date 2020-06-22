@@ -179,13 +179,20 @@
                 tasks.Add(Task.Run(() =>
                 {
                     result.SiteList = ticketsModel.GroupBy(x => new { x.SiteId, x.SiteName })
-                              .Select(x => new DetailSite { SiteId = x.Key.SiteId, SiteName = x.Key.SiteName });
+                        .Select(x => new DetailSite { SiteId = x.Key.SiteId, SiteName = x.Key.SiteName });
                 }));
 
                 tasks.Add(Task.Run(() =>
                 {
                     result.BetTypeList = ticketsModel.GroupBy(x => new { x.BettypeId, x.BettypeName })
-                                    .Select(x => new DetailBetType { BetTypeId = x.Key.BettypeId, BetTypeName = x.Key.BettypeName });
+                        .Select(x => new DetailBetType { BetTypeId = x.Key.BettypeId, BetTypeName = x.Key.BettypeName });
+                }));
+
+                tasks.Add(Task.Run(() =>
+                {
+                    result.CurrencyList = ticketsModel.GroupBy(x => new { x.CurrencyId, x.CurrencyName })
+                        .Select(x => new DetailCurrency { CurrencyId = x.Key.CurrencyId, CurrencyName = x.Key.CurrencyName });
+                                
                 }));
 
                 tasks.Add(Task.Run(() =>
@@ -194,7 +201,7 @@
 
                     ticketVoidingsModel = _probleAccountMonitorService.GetTicketVoidingInRequest(matchId, tranIdList);
                 }));
-
+          
                 Task.WhenAll(tasks.ToArray()).Wait();
 
                 total = ticketsModel.Count();
@@ -204,6 +211,7 @@
                     BetId = x.TransId,
                     BetDate = x.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                     BettypeId = x.BettypeId,
+                    BettypeName = x.BettypeName,
                     Username = x.Username,
                     CurrencyName = x.CurrencyName,
                     SiteId = x.SiteId,
