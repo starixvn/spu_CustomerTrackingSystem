@@ -9,14 +9,14 @@
 
 <div class="page-title">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="@Url.Action("Index", "ProblemAccountMonitor")">PROBLEM ACCOUNT MONITOR</a></li>
+        <li class="breadcrumb-item"><a href="@Url.Action("Index", "ProblemAccountMonitor")">PROBLEM MATCH MONITOR</a></li>
         <li class="breadcrumb-item active" aria-current="page">DETAIL</li>
     </ol>
 </div>
 
 
 <div class="form-filter-detail fixed-header">
-    <div class="float-left">
+    <div class="block-top">
         <div class="group">
             <table class="table__detail-left">
                 <tr>
@@ -33,20 +33,7 @@
                 </tr>
             </table>
         </div>
-        <div class="group width-200">
-            <label class="text">Contain ticket from site</label>
-            <select class="control" id="cbbSite" multiple="multiple"></select>
-        </div>
-        <div class="group width-200">
-            <label class="text">Bet Type</label>
-            <select class="control" id="cbbBetType" multiple="multiple"></select>
-        </div>
-        <div class="button-left">
-            <button class="button button-generate" id="btnGenerate">Generate</button>
-        </div>
-    </div>
 
-    <div class="float-right">
         <div class="group">
             <table class="table__detail-right">
                 <tr>
@@ -56,9 +43,36 @@
                 </tr>
                 <tr>
                     <td class="info-value"><span class="bg-green">Green</span></td>
-                    <td class="info-value">Placed after 75 mins</td>
+                    <td class="info-value">Placed after 75<span class="sup">th</span> min</td>
                 </tr>
             </table>
+        </div>
+    </div>
+
+    <div class="block-bottom">
+        <div class="group width-200">
+            <label class="text">Contain ticket from site</label>
+            <select class="control" id="cbbSite" multiple="multiple"></select>
+        </div>
+        <div class="group width-200">
+            <label class="text">Bet Type</label>
+            <select class="control" id="cbbBetType" multiple="multiple"></select>
+        </div>
+        <div class="group width-200">
+            <label class="text">Currency</label>
+            <select class="control" id="cbbCurrency">
+                <option value="1">USD</option>
+            </select>
+        </div>
+        <div class="group width-200">
+            <label class="text">Stake Range</label>
+            <div class="block-range">
+                <i class="icon-down icon-chevron-down"></i>
+                <input class="control cbbStake" type="text" disabled="disabled" value="0 - 1000" id="cbbStake">
+            </div>
+        </div>
+        <div class="button-left">
+            <button class="button button-generate" id="btnGenerate">Generate</button>
         </div>
     </div>
     
@@ -83,13 +97,18 @@
                 <th>Void</th>
             </tr>
             <tr class="format-tr">
-                <th colspan="11" class="format-th"></th>
-                <th colspan="2" class="format-th">
-                    <select class="control" id="cbbVoid" multiple="multiple">
-                        <option value="red">Red</option>
-                        <option selected value="white">White</option>
-                        <option value="green">Green</option>
-                    </select>
+                <th colspan="13" class="format-th">
+                    <div class="wrapper-selections">
+                        <span class="detail-selections">
+                            Total: 232 selections (Max: 2000 selections)
+                        </span>
+                        <select class="control" id="cbbVoid" multiple="multiple">
+                            <option value="red">Red</option>
+                            <option selected value="white">White</option>
+                            <option value="green">Green</option>
+                        </select>
+                    </div>
+                   
                 </th>
             </tr>
         </thead>

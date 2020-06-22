@@ -6,7 +6,7 @@
     padding-top: 9px;
     position: sticky;
     position: -webkit-sticky;
-    top: 60px;
+    top: 57px;
     background: #fff;
     z-index: 9; }
   .content .page-title {
@@ -32,7 +32,7 @@
     background-color: #396EF8;
     border-radius: 2px;
     height: 30px;
-    min-width: 80px;
+    width: 80px;
     color: #fff; }
     .content .button-generate:hover {
       background-color: #5081ff; }
@@ -59,24 +59,43 @@
     .content .form-filter .icon-calendar-text {
       right: 6px; }
   .content .form-filter-detail {
-    margin-top: 12px;
+    margin-top: 1px;
     margin-left: 16px;
     margin-right: 16px;
-    padding-bottom: 10px;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap; }
-    .content .form-filter-detail .float-left {
+    padding-bottom: 9px; }
+    .content .form-filter-detail .block-top {
+      display: flex;
+      flex-wrap: wrap;
+      margin-bottom: 11px; }
+      .content .form-filter-detail .block-top .sup {
+        vertical-align: super;
+        font-size: smaller;
+        font-size: 8px;
+        margin-left: -1px; }
+    .content .form-filter-detail .block-bottom {
       display: flex;
       flex-wrap: wrap; }
-    .content .form-filter-detail .float-right .group {
-      padding-right: 0px; }
+      .content .form-filter-detail .block-bottom .text {
+        display: block; }
+      .content .form-filter-detail .block-bottom .control {
+        width: 100%;
+        height: 30px;
+        padding-left: 12px; }
+      .content .form-filter-detail .block-bottom .block-range {
+        position: relative; }
+        .content .form-filter-detail .block-bottom .block-range .icon-down {
+          position: absolute;
+          right: 5px;
+          font-size: 21px;
+          top: 5px; }
+        .content .form-filter-detail .block-bottom .block-range input[type="text"][disabled] {
+          background: transparent; }
     .content .form-filter-detail .group {
-      margin-bottom: 6px;
-      padding-right: 12px; }
+      margin-bottom: 6px; }
       .content .form-filter-detail .group .text {
         margin-bottom: 6px; }
       .content .form-filter-detail .group .table__detail-left {
+        min-width: 562px;
         color: #404040;
         font-size: 1.4rem;
         border: 1px solid #C7C7C7; }
@@ -90,6 +109,8 @@
           width: 100px;
           background-color: #B3D2EF;
           font-weight: normal; }
+        .content .form-filter-detail .group .table__detail-left .info-value {
+          min-width: 180px; }
       .content .form-filter-detail .group .table__detail-right {
         background: #EAEFF9;
         border: 1px solid #CDD2DE;
@@ -101,13 +122,14 @@
         border-radius: 3px;
         border-collapse: separate; }
         .content .form-filter-detail .group .table__detail-right .info-name {
-          padding-top: 10px;
-          padding-bottom: 10px;
-          padding-left: 12px;
-          padding-right: 12px;
+          padding-top: 0;
+          padding-bottom: 0;
+          padding-left: 15px;
+          padding-right: 10px;
           width: 70px;
           vertical-align: middle;
-          background-color: #CDD2DE; }
+          background-color: #CDD2DE;
+          line-height: 21px; }
         .content .form-filter-detail .group .table__detail-right .info-value {
           padding-left: 6px;
           padding-right: 6px;
@@ -117,7 +139,7 @@
           padding-bottom: 4px; }
         .content .form-filter-detail .group .table__detail-right .bg-red, .content .form-filter-detail .group .table__detail-right .bg-green {
           font-size: 1.3rem;
-          padding: 2px 0;
+          padding: 2px 0 1px;
           width: 77px;
           display: block;
           text-align: center; }
@@ -135,9 +157,10 @@
       margin-bottom: 7px; }
     .content .form-filter-detail button {
       height: 30px;
-      background-color: #396EF8; }
+      background-color: #396EF8;
+      padding-left: 11px;
+      padding-right: 11px; }
       .content .form-filter-detail button.ui-multiselect {
-        margin-top: 8px;
         background: #FFFFFF;
         border: 1px solid #E5E5E5; }
   .content .top-header {
@@ -185,25 +208,27 @@
   #problemAccountMonitorTable thead tr:first-child th {
     position: sticky;
     position: -webkit-sticky;
-    top: 173px;
+    top: 174px;
     z-index: 9; }
 
 #ticketsTable_wrapper .wrapper-info-table {
-  top: 140px; }
+  top: 199px; }
 
 #ticketsTable_wrapper #ticketsTable thead tr:first-child th {
   position: sticky;
   position: -webkit-sticky;
-  top: 177px;
-  z-index: 9; }
+  top: 237px;
+  z-index: 9;
+  line-height: 19px; }
 
 #ticketsTable_wrapper #ticketsTable thead tr:last-child th {
   position: sticky;
   position: -webkit-sticky;
-  top: 210px;
+  top: 269px;
   z-index: 9;
   border-left: #7B8BAE;
-  border-right: #7B8BAE; }
+  border-right: #7B8BAE;
+  padding: 2px; }
 
 .div-grid {
   position: relative;
@@ -337,13 +362,20 @@
     .-detail thead tr:first-child th:nth-child(1).sorting_asc, .-detail thead tr:first-child th:nth-child(1).sorting {
       background-image: none; }
   .-detail thead tr:last-child button {
-    width: 205px !important;
+    width: 190px !important;
     margin-right: 5px;
-    float: right; }
+    height: 24px; }
     .-detail thead tr:last-child button.ui-multiselect {
-      /*margin-top: 8px;*/
       background: #FFFFFF;
       border: 1px solid #E5E5E5; }
+  .-detail thead .wrapper-selections {
+    float: right; }
+    .-detail thead .wrapper-selections .detail-selections {
+      font-size: 14px;
+      line-height: 17px;
+      font-weight: bold;
+      color: #FFFFFF;
+      margin-right: 6px; }
   .-detail .dataTables_info {
     width: 100%;
     display: block;
@@ -355,7 +387,9 @@
     position: static;
     padding: 12px;
     color: #222222;
-    border-bottom: none; }
+    border-bottom: none;
+    line-height: 15px;
+    min-height: 40px; }
   .-detail .loading {
     position: relative; }
     .-detail .loading:after {
@@ -403,4 +437,14 @@
 
 @media screen and (max-width: 1439.99px) {
   .form-filter, #problemAccountMonitorGrid {
-    width: 100% !important; } }
+    width: 100% !important; }
+  .div-grid {
+    padding-right: 16px; } }
+
+@media screen and (max-width: 1266px) {
+  #problemAccountMonitorTable thead tr:first-child th {
+    top: 220px; }
+  .div-grid .wrapper-info-table {
+    top: 220px; }
+  .content .fixed-header {
+    top: 60px; } }
