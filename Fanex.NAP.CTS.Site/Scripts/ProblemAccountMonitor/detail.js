@@ -13,6 +13,11 @@
         lblEventDate: $('#lblEventDate'),
         lblScore: $('#lblScore'),
         ticketsTable: $("#ticketsTable"),
+        btnShowStakeRange: $('#btnShowStakeRange'),
+        lblStakeRange: $('#lblStakeRange'),
+        formInputStakeRange: $('#formInputStakeRange'),
+        inputStakeMin: $('#inputStakeMin'),
+        inputStakeMax: $('#inputStakeMax'),
         btnGenerate: $('#btnGenerate'),
         btnCopyToClipboard: $('#btnCopyToClipboard')
     };
@@ -304,7 +309,6 @@
     }     
 
     function Initial() {
-
         domElements.cbbSite.multiselect({
             menuWidth: 320,
             menuHeight: 320,
@@ -339,6 +343,11 @@
             click: function (event, ui) { RefreshVoidTicket(ui.value, ui.checked); },
             checkAll: function () { RefreshAllVoidTicket(true); },
             uncheckAll: function () { RefreshAllVoidTicket(false); }
+        });
+
+        domElements.btnShowStakeRange.on('click', function () {
+            domElements.formInputStakeRange.toggle();
+            $('.dataTables_wrapper').css("position", "sticky");
         });
 
         LoadMatchInfo();
