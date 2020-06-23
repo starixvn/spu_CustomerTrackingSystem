@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
+    using Fanex.Common;
     using Fanex.NAP.Core.Configuration;
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Service.Interface;
@@ -133,11 +134,19 @@
         public ActionResult Detail(int matchId, int fraudCaseId)
         {
             IUserService userService = new UserService();
+            ISecurityService securityService = new SecurityService();
+            var userId = CurrentSession.UserId.ToString();
+            var onUserId = CurrentSession.OnUserId.ToString();
+            var time = securityService.GetTime();
 
             var voidRequestToTVSParam = new VoidRequestToTVSParam
             {
-                UserId = "8",
-                OnUserId = "257051",
+                UserId = Cryptography.CfsEnCrypt(userId),
+                OnUserId = Cryptography.CfsEnCrypt(onUserId),
+                Time = Cryptography.CfsEnCrypt(time),
+                SubIssueTypeId = 27,
+                ActionId = 5,
+                TransIds = "456789",
                 TargetUrl = "http://ha.nexdev.net:7307/L1/TicketVoidingSystem/AddRequest/FromOtherSites"
             };
 

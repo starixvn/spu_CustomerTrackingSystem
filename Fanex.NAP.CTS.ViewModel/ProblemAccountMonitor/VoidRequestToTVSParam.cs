@@ -12,8 +12,13 @@
 
         public bool IsTest { get; set; }
 
-        public IEnumerable<long> TransIds { get; set; }
+        public int SubIssueTypeId { get; set; }
+
+        public int ActionId { get; set; }
+
+        public string TransIds { get; set; }
 
         public string TargetUrl { get; set; }
+
     }
 }

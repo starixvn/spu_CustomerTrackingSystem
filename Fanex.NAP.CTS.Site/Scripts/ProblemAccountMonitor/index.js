@@ -142,6 +142,8 @@
                     paramsFilter.eventDate = domElements.dpkDate.val();
                     paramsFilter.leagueIds = domElements.cbbLeague.val();
                     paramsFilter.matchStatus = domElements.cbbMatchStatus.val();
+                    var sitexxx = $("option", domElements.cbbSite);
+                    console.log(sitexxx);
                     paramsFilter.siteIds = domElements.cbbSite.val().join();
                     return paramsFilter;
                 },
@@ -312,8 +314,8 @@
                 }).join(", ");
 
                 domElements.cbbSite.html("Checkboxes " + (ui.checked ? "checked" : "unchecked") + ": " + values);
-            },            
-            groupsCollapsable: true            
+            },
+            groupsCollapsable: true
         }).multiselectfilter({
             width: 217,
             placeholder: '',

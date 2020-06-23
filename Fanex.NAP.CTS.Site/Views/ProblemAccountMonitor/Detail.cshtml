@@ -132,11 +132,13 @@
         <button class="button" id="btnVoidManualRequest">Manual Void Request</button>*@
 
         <form action="@Model.VoidRequestToTVSParam.TargetUrl" id="formCreateVoidRequest" enctype="multipart/form-data" method="post" target="_blank" hidden>
-            <input id="UserId" type="hidden" value="@Model.VoidRequestToTVSParam.UserId" />
-            <input id="OnUserId" type="hidden" value="@Model.VoidRequestToTVSParam.OnUserId" />
-            <input id="Time" type="hidden" value="@Model.VoidRequestToTVSParam.Time" />
-            <input id="IsTest" type="hidden" value="@Model.VoidRequestToTVSParam.IsTest" />
-            <input id="TransIds" type="hidden" value="@Model.VoidRequestToTVSParam.TransIds" />
+            <input name="userId" type="hidden" value="@Model.VoidRequestToTVSParam.UserId" />
+            <input name="onuserId" type="hidden" value="@Model.VoidRequestToTVSParam.OnUserId" />
+            <input name="time" type="hidden" value="@Model.VoidRequestToTVSParam.Time" />
+            <input name="isTest" type="hidden" value="@Model.VoidRequestToTVSParam.IsTest" />
+            <input name="subIssueTypeId" type="hidden" value="@Model.VoidRequestToTVSParam.SubIssueTypeId" />
+            <input name="ActionId" type="hidden" value="@Model.VoidRequestToTVSParam.ActionId" />
+            <input name="transIds" type="hidden" value="@Model.VoidRequestToTVSParam.TransIds" />
             <button class="button" id="btnCreateVoidRequest">Create Void Request</button>
         </form>
 </div>
