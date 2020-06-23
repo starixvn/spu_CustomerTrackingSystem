@@ -298,7 +298,8 @@
     position: absolute;
     top: -33px;
     left: 12px;
-    color: #474747; }
+    color: #474747;
+    z-index: 11; }
     .div-grid .dataTables_length label {
       font-size: 1.4rem; }
     .div-grid .dataTables_length select {
@@ -389,7 +390,8 @@
     padding: 13px 0;
     position: absolute;
     left: 146px;
-    top: -39px; }
+    top: -39px;
+    z-index: 12; }
   .div-grid .loading {
     position: relative; }
     .div-grid .loading:after {

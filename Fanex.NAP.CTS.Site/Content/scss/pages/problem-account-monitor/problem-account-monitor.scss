@@ -452,6 +452,7 @@
         top: -33px;
         left: 12px;
         color: #474747;
+        z-index: 11;
 
         label {
             font-size: 1.4rem;
@@ -610,6 +611,7 @@
         position: absolute;
         left: 146px;
         top: -39px;
+        z-index: 12;
     }
 
     .loading {
