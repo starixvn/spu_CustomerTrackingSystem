@@ -9,7 +9,7 @@
         padding-top: 9px;
         position: sticky;
         position: -webkit-sticky;
-        top: 57px;
+        top: 60px;
         background: #fff;
         z-index: 9;
     }
@@ -142,8 +142,76 @@
                     top: 5px;
                 }
 
-                input[type="text"][disabled] {
-                    background: transparent;
+                .cbbStake {
+                    display: block;
+                    background: #FFFFFF;
+                    border: 1px solid #E5E5E5;
+                    border-radius: 2px;
+                    min-width: 200px;
+                    height: 30px;
+                    font-size: 14px;
+                    line-height: 17px;
+                    color: #474747;
+                    padding: 5px 12px;
+                }
+            }
+
+            .formInputStakeRange {
+                display: none;
+                position: absolute;
+                background: #FFFFFF;
+                box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
+                border-radius: 3px;
+                min-width: 260px;
+                padding-left: 12px;
+                padding-right: 16px;
+                padding-top: 12px;
+                padding-bottom: 16px;
+
+                .text {
+                    font-weight: bold;
+                    font-size: 13px;
+                    line-height: 16px;
+                    color: #333333;
+                    margin-bottom: 8px;
+                }
+
+                .block-input {
+                    display: flex;
+                    align-items: center;
+
+                    .text {
+                        font-weight: normal;
+                        margin-right: 10px;
+                        min-width: 30px;
+                    }
+
+                    .control {
+                        min-width: 193px;
+                        height: 24px;
+                        background: #FFFFFF;
+                        border: 1px solid #E5E5E5;
+                        border-radius: 2px;
+                        margin-bottom: 4px;
+                    }
+                }
+
+                .button-generate {
+                    width: 62px;
+                    height: 24px;
+                    background: #E3E9F7;
+                    border: 1px solid #ADBDE0;
+                    border-radius: 3px;
+                    font-size: 13px;
+                    line-height: 16px;
+                    color: #2053D9;
+                    float: right;
+                    margin-top: 8px;
+
+                    &:hover {
+                        background-color: #2053D9;
+                        color: #fff;
+                    }
                 }
             }
         }
@@ -422,8 +490,12 @@
             }
 
             tr {
-                th:first-child {
-                    width: 30px !important;
+                th {
+                    line-height: 19px;
+
+                    &:first-child {
+                        width: 30px !important;
+                    }
                 }
             }
 
@@ -504,11 +576,18 @@
                 td {
                     position: relative;
                     z-index: 1;
+                    line-height: 18px;
+                    padding: 5px 6px;
                 }
             }
 
             .event-league-name {
                 color: #396EF8;
+                text-transform: capitalize;
+            }
+
+            .event-sport-name {
+                color: #F87239;
                 text-transform: capitalize;
             }
 
@@ -678,31 +757,66 @@
     z-index: 10 !important;
 }
 
+/*main*/
 @media screen and (min-width: 1440px) {
     .form-filter, #problemAccountMonitorGrid {
         width: 1408px;
     }
 }
 
-@media screen and (max-width: 1439.99px) {
-    .form-filter, #problemAccountMonitorGrid {
-        width: 100% !important;
+@media screen and (min-width: 1415.99px) {
+    .div-grid .wrapper-info-table, #problemAccountMonitorTable thead tr:first-child th {
+        top: 178px;
     }
-    .div-grid{
-        padding-right: 16px;
+}
+
+@media screen and (max-width: 1415px) {
+    .div-grid .wrapper-info-table, #problemAccountMonitorTable thead tr:first-child th {
+        top: 220px;
+    }
+}
+
+@media screen and (max-width: 1311px) {
+    .div-grid .wrapper-info-table, #problemAccountMonitorTable thead tr:first-child th {
+        top: 237px;
     }
 }
 
 @media screen and (max-width: 1266px) {
-    #problemAccountMonitorTable thead tr:first-child th {
-        top: 220px;
+    .div-grid .wrapper-info-table, #problemAccountMonitorTable thead tr:first-child th {
+        top: 237px;
     }
-    .div-grid .wrapper-info-table{
-        top: 220px;
-    }
+}
 
-    .content .fixed-header{
-        top: 60px;
+/*detail*/
+@media screen and (max-width: 1504px) {
+    .-detail {
+        #ticketsTable_wrapper #ticketsTable thead tr:last-child th {
+            top: 287px;
+        }
     }
- }
+}
 
+@media screen and (max-width: 1174px) {
+    .-detail {
+        #ticketsTable_wrapper #ticketsTable thead tr:last-child th {
+            top: 306px;
+        }
+    }
+}
+
+@media screen and (max-width: 1060px) {
+    .-detail {
+        #ticketsTable_wrapper .wrapper-info-table {
+            top: 258px;
+        }
+
+        #ticketsTable_wrapper #ticketsTable thead tr:first-child th {
+            top: 296px;
+        }
+
+        #ticketsTable_wrapper #ticketsTable thead tr:last-child th {
+            top: 364px;
+        }
+    }
+}

@@ -66,16 +66,16 @@
             <label class="text">Stake Range</label>
             <div class="block-range">
                 <i class="icon-down icon-chevron-down" style="cursor:pointer;" id="btnShowStakeRange"></i>
-                <input class="control cbbStake" type="text" disabled="disabled" value="0 - 1000" id="lblStakeRange" />
+                <span class="control cbbStake" id="lblStakeRange">0 - 1000</span>
             </div>
-            <div id="formInputStakeRange" style="display:none; position: absolute; background: #ffffff">
+            <div id="formInputStakeRange" class="formInputStakeRange">
                 <label class="text">Stake Range</label>
-                <div>
-                    <span>Min:</span>
+                <div class="block-input">
+                    <span class="text">Min:</span>
                     <input class="control" type="text" value="0" id="inputStakeMin" />
                 </div>
-                <div>
-                    <span>Max:</span>
+                <div class="block-input">
+                    <span class="text">Max:</span>
                     <input class="control" type="text" value="1000" id="inputStakeMax" />
                 </div>
                 <button class="button button-generate" id="btnApply">Apply</button>

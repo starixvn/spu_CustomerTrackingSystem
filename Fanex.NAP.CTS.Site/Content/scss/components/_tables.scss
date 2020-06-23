@@ -311,7 +311,8 @@ table.dataTable {
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button {
-    padding: 2px 5px;
+    min-width: 22px;
+    padding: 3px 5px;
     color: #444 !important;
     font-weight: bold;
 
@@ -349,7 +350,7 @@ table.dataTable {
     }
 
     &.next {
-        margin-left: 8px;
+        margin-left: 1px;
 
         &:after {
             content: "\e925";
@@ -357,7 +358,7 @@ table.dataTable {
     }
 
     &.previous {
-        margin-right: 8px;
+        margin-right: 1px;
 
         &:before {
             content: "\e924";
@@ -394,6 +395,7 @@ table.dataTable tbody tr.selected td {
         padding-left: 0 !important;
         padding-right: 0 !important;
         font-size: 1.3rem;
+        margin-left: 0!important;
 
         &.previous {
             margin-right: 0px;
