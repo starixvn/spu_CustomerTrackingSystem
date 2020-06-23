@@ -108,12 +108,19 @@
             }
         }
 
-        public IEnumerable<DetailTicketsModel> GetDetailTickets(int matchId, int fraudCaseId, decimal stakeFrom, decimal stakeTo)
+        public IEnumerable<DetailTicketsModel> GetDetailTickets(int matchId, int fraudCaseId, string stakeFrom, string stakeTo)
         {
+            decimal numStakeFrom = 0;
+            decimal numStakeTo = 0;
+            decimal.TryParse(stakeFrom, out numStakeFrom);
+            decimal.TryParse(stakeTo, out numStakeTo);
+
             var criteria = new DetailTicketsGetCriteria
             {
                 MatchId = matchId,
-                FraudCaseId = fraudCaseId
+                FraudCaseId = fraudCaseId,
+                StakeFrom = numStakeFrom,
+                StakeTo = numStakeTo
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))

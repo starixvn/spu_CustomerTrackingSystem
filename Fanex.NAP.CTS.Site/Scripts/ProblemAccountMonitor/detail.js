@@ -16,11 +16,13 @@
         ticketsTable: $("#ticketsTable"),
         btnShowStakeRange: $('#btnShowStakeRange'),
         lblStakeRange: $('#lblStakeRange'),
+        divStakeRangeContainer: $('#divStakeRangeContainer'),
         formInputStakeRange: $('#formInputStakeRange'),
         tblDataTablesWrapper: $(".dataTables_wrapper"),
         inputStakeMin: $('#inputStakeMin'),
         inputStakeMax: $('#inputStakeMax'),
         spanTotalSelections: $('#spanTotalSelections'),
+        btnApply: $('#btnApply'),
         btnGenerate: $('#btnGenerate'),
         btnCopyToClipboard: $('#btnCopyToClipboard')
     };
@@ -113,7 +115,7 @@
                 { data: obj => obj.Choice },
                 { data: obj => obj.LiveBetScore },
                 { data: obj => RenderHandicap(obj.HtmlChoice) },
-                { data: obj => obj.Stake },
+                { data: obj => () => { return "<span class=stake data-stake= " + obj.Stake + ">" + obj.Stake + "</span>"; } },
                 { data: obj => obj.Odds },
                 {
                     data: obj => () => {
@@ -279,6 +281,28 @@
         domElements.spanTotalSelections.text(newTotalSelections);
     }
 
+    function RefreshGridByFilterStakeRange() {
+        domElements.formInputStakeRange.toggle();
+
+        let minValue = parseFloat(domElements.inputStakeMin.val());
+        let maxValue = parseFloat(domElements.inputStakeMax.val());
+        let html = minValue + " - " + maxValue;
+        domElements.lblStakeRange.text(html);        
+
+        domElements.ticketsTable.find('tr').each(function () {
+            let tr = $(this);
+            let span = tr.find('span.stake');
+            if (span.length > 0) {
+                let stakeValue = parseFloat(span.attr('data-stake'));
+                let isEqual = stakeValue >= minValue && stakeValue <= maxValue;
+
+                isEqual
+                    ? tr.removeClass('hide')
+                    : tr.addClass('hide');
+            }            
+        });
+    }
+
     function RefreshGridByFilter(criteria, attrName, value, checked) {
         domElements.ticketsTable.find('tr').each(function () {
             let tr = $(this);
@@ -301,7 +325,7 @@
                     : tr.addClass('hide');
             }
         });
-    }
+    }   
 
     function CopyToClipboardChecked() {
         let arrBetIds = [];
@@ -380,7 +404,7 @@
             menuWidth: 180,
             menuHeight: 300,
             selectedText: "# of # selected",
-            noneSelectedText: "Select Bet Type",
+            noneSelectedText: "Select Currency",
             click: function (event, ui) { RefreshGridByFilter("td span.currency", "data-currency-id", ui.value, ui.checked); },
             checkAll: function () { RefreshAllGridByFilter("td span.currency", true); },
             uncheckAll: function () { RefreshAllGridByFilter("td span.currency", false); }
@@ -401,14 +425,25 @@
 
         domElements.btnShowStakeRange.on('click', function () {
             domElements.formInputStakeRange.toggle();
+            domElements.inputStakeMin.focus();
             $(".dataTables_wrapper").css("position", "sticky");
+        });
+
+        $(document).mouseup(function (e) {
+            if (domElements.formInputStakeRange.css('display') === 'none') return;
+
+            let container = domElements.divStakeRangeContainer;
+            if (!container.is(e.target) && container.has(e.target).length === 0) {
+                domElements.formInputStakeRange.toggle();                
+            }
         });
 
         LoadMatchInfo();
         LoadGrid();
-        DisableButtons();
+        DisableButtons();        
 
-        domElements.btnGenerate.on('click', () => LoadGrid());       
+        domElements.btnApply.on('click', () => RefreshGridByFilterStakeRange());
+        domElements.btnGenerate.on('click', () => LoadGrid());
     }
 
     $(document).ready(function () {

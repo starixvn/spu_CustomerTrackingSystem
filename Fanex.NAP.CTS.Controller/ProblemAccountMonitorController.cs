@@ -166,7 +166,7 @@
         }
 
         [HttpPost]
-        public ActionResult GetTickets(int matchId, int fraudCaseId, decimal stakeFrom, decimal stakeTo)
+        public ActionResult GetTickets(int matchId, int fraudCaseId, string stakeFrom, string stakeTo)
         {
             var result = new DetailTicketViewModel();
             var total = 0;
@@ -213,6 +213,7 @@
                     BettypeId = x.BettypeId,
                     BettypeName = x.BettypeName,
                     Username = x.Username,
+                    CurrencyId = x.CurrencyId,
                     CurrencyName = x.CurrencyName,
                     SiteId = x.SiteId,
                     SiteName = x.SiteName,

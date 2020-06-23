@@ -46,6 +46,8 @@
 
         public string IP { get; set; }
 
+        public int CurrencyId { get; set; }
+
         public string CurrencyName { get; set; }
 
         public int HighlightStatus { get; set; }

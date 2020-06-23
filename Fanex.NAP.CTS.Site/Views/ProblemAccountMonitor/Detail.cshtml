@@ -62,21 +62,21 @@
             <label class="text">Currency</label>
             <select class="control" id="cbbCurrency" multiple="multiple"></select>
         </div>
-        <div class="group width-200">
+        <div class="group width-200" id="divStakeRangeContainer">
             <label class="text">Stake Range</label>
-            <div class="block-range">
-                <i class="icon-down icon-chevron-down" style="cursor:pointer;" id="btnShowStakeRange"></i>
-                <span class="control cbbStake" id="lblStakeRange">0 - 1000</span>
+            <div class="block-range" style="cursor:pointer;" id="btnShowStakeRange">
+                <i class="icon-down icon-chevron-down"></i>
+                <span class="control cbbStake" id="lblStakeRange">0 - 10000</span>
             </div>
             <div id="formInputStakeRange" class="formInputStakeRange">
                 <label class="text">Stake Range</label>
                 <div class="block-input">
                     <span class="text">Min:</span>
-                    <input class="control" type="text" value="0" id="inputStakeMin" />
+                    <input class="control" type="number" min="0" value="0" id="inputStakeMin" />
                 </div>
                 <div class="block-input">
                     <span class="text">Max:</span>
-                    <input class="control" type="text" value="1000" id="inputStakeMax" />
+                    <input class="control" type="number"  min="0" maxlength="15" value="10000" id="inputStakeMax" />
                 </div>
                 <button class="button button-generate" id="btnApply">Apply</button>
             </div>
