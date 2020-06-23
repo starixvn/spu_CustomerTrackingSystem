@@ -536,6 +536,45 @@ select[disabled] {
   border-color: #d9d9d9;
   color: #777; }
 
+.ui-multiselect-header {
+  padding: 0 !important;
+  background: transparent;
+  border: 0; }
+  .ui-multiselect-header .ui-multiselect-filter {
+    margin-bottom: 3px; }
+    .ui-multiselect-header .ui-multiselect-filter input {
+      width: 98% !important;
+      margin-left: 0 !important;
+      background: #FFFFFF;
+      border: 1px solid #E5E5E5 !important;
+      border-radius: 2px;
+      height: 16px !important; }
+      .ui-multiselect-header .ui-multiselect-filter input:focus {
+        box-shadow: 0px 0px 6px rgba(57, 110, 248, 0.5);
+        border-color: #396EF8 !important; }
+  .ui-multiselect-header .ui-helper-reset span {
+    text-transform: capitalize;
+    font-size: 13px; }
+  .ui-multiselect-header .ui-helper-reset .ui-multiselect-all {
+    margin-right: 32px; }
+
+.ui-multiselect-checkboxes {
+  padding-top: 1px; }
+  .ui-multiselect-checkboxes li {
+    font-size: 13px;
+    line-height: 17px;
+    margin-top: 2px; }
+    .ui-multiselect-checkboxes li label > span {
+      color: #333333;
+      font-size: 13px;
+      padding-left: 20px; }
+      .ui-multiselect-checkboxes li label > span:before {
+        height: 14px;
+        width: 14px; }
+      .ui-multiselect-checkboxes li label > span:after {
+        top: 3px !important;
+        left: 3px !important; }
+
 .ui-multiselect-menu {
   display: none;
   padding: 12px !important;
@@ -1243,7 +1282,7 @@ body {
     visibility: visible; }
   .main-menu .menu-item > .link {
     display: block;
-    padding-left: 17px;
+    padding-left: 21px;
     padding-right: 14px;
     line-height: 60px;
     color: #9AA2B5;
@@ -1348,7 +1387,8 @@ body {
       visibility: visible; }
     .header-info .username > span, .header-info .username .icon-chevron-down {
       display: inline-block;
-      vertical-align: middle; }
+      vertical-align: middle;
+      margin-top: -6px; }
     .header-info .username .icon-chevron-down {
       margin-left: 5px; }
     .header-info .username .sub-menu {

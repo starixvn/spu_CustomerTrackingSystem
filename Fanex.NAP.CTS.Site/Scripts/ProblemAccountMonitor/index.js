@@ -287,13 +287,15 @@
             .change(() => GetLeagues());
 
         domElements.cbbSport.multiselect({
+            header: ['checkAll', 'uncheckAll'],
             menuWidth: 170,
             menuHeight: 300,
             selectedText: "# of # selected",
             noneSelectedText: "Select Sport"
         }).multiselectfilter({
-            width: 125,
-            placeholder: ''
+            width: 217,
+            placeholder: '',
+            label: ''
             });
         
         domElements.cbbSite.multiselect({
@@ -313,8 +315,9 @@
             },            
             groupsCollapsable: true            
         }).multiselectfilter({
-            width: 250,
-            placeholder: ''
+            width: 217,
+            placeholder: '',
+            label: ''
             });
 
         GetSports();

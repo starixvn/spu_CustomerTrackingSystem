@@ -383,8 +383,9 @@
             checkAll: function () { RefreshAllGridByFilter("td span.site", true); },
             uncheckAll: function () { RefreshAllGridByFilter("td span.site", false); }
         }).multiselectfilter({
-            width: 250,
-            placeholder: ''
+            width: 217,
+            placeholder: '',
+            label: ''
             });
 
         domElements.cbbBetType.multiselect({
@@ -396,8 +397,9 @@
             checkAll: function () { RefreshAllGridByFilter("td span.bettype", true); },
             uncheckAll: function () { RefreshAllGridByFilter("td span.bettype", false); }
         }).multiselectfilter({
-            width: 130,
-            placeholder: ''
+            width: 217,
+            placeholder: '',
+            label: ''
             });
 
         domElements.cbbCurrency.multiselect({
@@ -409,8 +411,9 @@
             checkAll: function () { RefreshAllGridByFilter("td span.currency", true); },
             uncheckAll: function () { RefreshAllGridByFilter("td span.currency", false); }
         }).multiselectfilter({
-            width: 130,
-            placeholder: ''
+            width: 217,
+            placeholder: '',
+            label: ''
             });
 
         domElements.cbbVoid.multiselect({

@@ -132,7 +132,7 @@ body {
 
     .menu-item > .link {
         display: block;
-        padding-left: 17px;
+        padding-left: 21px;
         padding-right: 14px;
         line-height: 60px;
         color: #9AA2B5;
@@ -255,6 +255,7 @@ body {
         > span, .icon-chevron-down {
             display: inline-block;
             vertical-align: middle;
+            margin-top: -6px;
         }
 
         .icon-chevron-down {

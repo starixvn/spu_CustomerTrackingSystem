@@ -16,6 +16,7 @@
         $("#ddlcategory").select2();
 
         $("#ddlsports").multiselect({
+            menuWidth: 340,
             selectedList: 3,
             selectedText: "# of # selected",
             noneSelectedText: "Select options"

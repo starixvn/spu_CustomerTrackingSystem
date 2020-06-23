@@ -351,8 +351,9 @@
                 RefreshAllAffectedRetractEvidence(false);
             }
         }).multiselectfilter({
-            width: 250,
-            placeholder: ''
+            width: 217,
+            placeholder: '',
+            label: ''
         });
     }
 
@@ -398,8 +399,9 @@
                 menuWidth: 340,
                 menuHeight: 300
             }).multiselectfilter({
-                width: 250,
-                placeholder: ''
+                width: 217,
+                placeholder: '',
+                label: ''
             });
 
             var flaggedEvidenceCodes = GetEvidenceInFlaggedEvidenceGrid();
@@ -521,8 +523,9 @@
             selectedText: "# of # selected",
             noneSelectedText: "Select options"
         }).multiselectfilter({
-            width: 250,
-            placeholder: ''
+            width: 217,
+            placeholder: '',
+            label: ''
         });
 
         DisableButton(hostPermission);
