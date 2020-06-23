@@ -7,6 +7,7 @@
         hdIsHostPermission: $('#hdIsHostPermission'),
         cbbSite: $("#cbbSite"),
         cbbBetType: $("#cbbBetType"),
+        cbbCurrency: $("#cbbCurrency"),
         cbbVoid: $('#cbbVoid'),
         lblMatchName: $('#lblMatchName'),
         lblEvidence: $('#lblEvidence'),
@@ -16,8 +17,10 @@
         btnShowStakeRange: $('#btnShowStakeRange'),
         lblStakeRange: $('#lblStakeRange'),
         formInputStakeRange: $('#formInputStakeRange'),
+        tblDataTablesWrapper: $(".dataTables_wrapper"),
         inputStakeMin: $('#inputStakeMin'),
         inputStakeMax: $('#inputStakeMax'),
+        spanTotalSelections: $('#spanTotalSelections'),
         btnGenerate: $('#btnGenerate'),
         btnCopyToClipboard: $('#btnCopyToClipboard')
     };
@@ -44,7 +47,8 @@
                 dataFilter: function (response) {
                     var json = jQuery.parseJSON(response);
 
-                    RefreshFilter(json.data.SiteList, json.data.BetTypeList);
+                    RefreshFilter(json.data.SiteList, json.data.BetTypeList, json.data.CurrencyList);
+                    domElements.spanTotalSelections.text(json.data.TotalHighlightStatusGreen);
 
                     var newJson = {};
                     newJson.data = json.data.TicketList;
@@ -55,7 +59,6 @@
                 },
                 complete: function () {
                     domElements.ticketsTable.find('tbody').removeClass('loading');
-
                     domElements.btnGenerate.prop('disabled', false);
                 },
                 error: function (error) {
@@ -102,7 +105,7 @@
                 },
                 { data: obj => obj.BetDate },
                 { data: obj => obj.Username },
-                { data: obj => obj.CurrencyName },
+                { data: obj => () => { return "<span class=currency data-currency-id=" + obj.CurrencyId + ">" + obj.CurrencyName + "</span>" } },
                 { data: obj => () => { return "<span class=site data-site-id=" + obj.SiteId + ">" + obj.SiteName + "</span>"; } },
                 { data: obj => obj.BettypeName },
                 { data: obj => () => { return "<span class=bettype data-bettype-id=" + obj.BettypeId + ">" + obj.BetId + "</span>"; } },
@@ -127,6 +130,12 @@
                         return obj.VoidRequestId === ''
                             ? RenderVoidTicket(obj.BetId, obj.HighlightStatus)
                             : spanRequestId;
+                    }, createdCell: (cell, _, row) => {
+                        $(".inputSelect", cell).click((e) => {                            
+                            let isChecked = $(e.target).is(":checked");
+
+                            RefreshTotalSelections(isChecked);
+                        });
                     }
                 }
             ],
@@ -138,29 +147,51 @@
                 $(row).addClass(cssClassTR);
             }
         });
-    }
+    }    
 
-    function RefreshFilter(siteList, betTypeList) {
+    function RefreshFilter(siteList, betTypeList, currencyList) {
         $('option', domElements.cbbSite).filter(function () {
             return $(this).val() !== '';
         }).remove();        
-
-        for (let i = 0; i < siteList.length; i++) {
-            domElements.cbbSite.append(`<option selected value='${siteList[i].SiteId}'>${siteList[i].SiteName}</option>`);        
-        }
+       
+        siteList.map(function (x) {
+            domElements.cbbSite.append(`<option selected value='${x.SiteId}'>${x.SiteName}</option>`);      
+        });
 
         domElements.cbbSite.multiselect("refresh");
 
         $('option', domElements.cbbBetType).filter(function () {
             return $(this).val() !== '';
         }).remove();
-
-        for (let i = 0; i < betTypeList.length; i++) {
-            domElements.cbbBetType.append(`<option selected value='${betTypeList[i].BetTypeId}'>${betTypeList[i].BetTypeName}</option>`);
-        }
+        
+        betTypeList.map(function (x) {
+            domElements.cbbBetType.append(`<option selected value='${x.BetTypeId}'>${x.BetTypeName}</option>`);
+        });
 
         domElements.cbbBetType.multiselect("refresh");
-    } 
+
+        $('option', domElements.cbbCurrency).filter(function () {
+            return $(this).val() !== '';
+        }).remove();
+
+        currencyList.map(function (x) {
+            domElements.cbbCurrency.append(`<option selected value='${x.CurrencyId}'>${x.CurrencyName}</option>`);
+        });
+
+        domElements.cbbCurrency.multiselect("refresh");
+    }
+
+    function RefreshTotalSelections(checked) {
+        let totalSelections = domElements.spanTotalSelections.text();
+        let newTotalSelections = parseInt(totalSelections);
+
+        if (checked)
+            newTotalSelections = newTotalSelections + 1;
+        else
+            newTotalSelections = newTotalSelections - 1;
+
+        domElements.spanTotalSelections.text(newTotalSelections);
+    }
 
     function RenderHandicap(htmlChoice) {
         var handicap = '-';
@@ -180,7 +211,7 @@
         let disabled = !isHostPermission;
 
         let html = "<label class='checkbox'>";
-        html += "<input type='checkbox'" + (checked ? ' checked' : '') + (disabled ? ' disabled' : '') + " data-bet-id=" + betId + " />";
+        html += "<input type='checkbox'" + (checked ? ' checked' : '') + (disabled ? ' disabled' : '') + " data-bet-id=" + betId + " class='inputSelect' />";
         html += "<span class='" + (disabled ? 'disabled' : '') + "'></span>";
         html += "</label>";
      
@@ -224,18 +255,27 @@
         domElements.ticketsTable.find('tr').each(function () {
             if ($(this).hasClass(value)) {
                 var input = $(this).find("td input");
-                if (input.length > 0)
+                if (input.length > 0) {
                     input.prop('checked', checked);
+                    RefreshTotalSelections(checked);
+                }
             }
         });
     }
 
-    function RefreshAllVoidTicket(checked) {
+    function RefreshAllVoidTicket(checked) {        
+        let newTotalSelections = 0;
+
         domElements.ticketsTable.find('tr').each(function () {
             var input = $(this).find("td input");
-            if (input.length > 0)
+            if (input.length > 0) {
                 input.prop('checked', checked);
+                if (checked)
+                    newTotalSelections = newTotalSelections + 1;
+            }
         });
+
+        domElements.spanTotalSelections.text(newTotalSelections);
     }
 
     function RefreshGridByFilter(criteria, attrName, value, checked) {
@@ -335,6 +375,19 @@
             placeholder: ''
             });
 
+        domElements.cbbCurrency.multiselect({
+            menuWidth: 180,
+            menuHeight: 300,
+            selectedText: "# of # selected",
+            noneSelectedText: "Select Bet Type",
+            click: function (event, ui) { RefreshGridByFilter("td span.currency", "data-currency-id", ui.value, ui.checked); },
+            checkAll: function () { RefreshAllGridByFilter("td span.currency", true); },
+            uncheckAll: function () { RefreshAllGridByFilter("td span.currency", false); }
+        }).multiselectfilter({
+            width: 130,
+            placeholder: ''
+            });
+
         domElements.cbbVoid.multiselect({
             menuWidth: 155,
             menuHeight: 155,
@@ -347,7 +400,7 @@
 
         domElements.btnShowStakeRange.on('click', function () {
             domElements.formInputStakeRange.toggle();
-            $('.dataTables_wrapper').css("position", "sticky");
+            $(".dataTables_wrapper").css("position", "sticky");
         });
 
         LoadMatchInfo();

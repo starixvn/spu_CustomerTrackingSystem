@@ -20,5 +20,7 @@
 
         public IEnumerable<DetailCurrency> CurrencyList { get; set; }
 
+        public int TotalHighlightStatusGreen { get; set; }
+
     }
 }

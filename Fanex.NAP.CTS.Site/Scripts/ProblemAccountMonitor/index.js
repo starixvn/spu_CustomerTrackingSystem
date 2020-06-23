@@ -220,7 +220,7 @@
     function RenderMatchName(obj) {        
         let html = "<div class='event-match-name'>" + obj.HomeName + " vs " + obj.AwayName + "</div>";
         html += "<div class='event-league-name'>" + obj.LeagueName + " - ";
-        html += "<span>" + obj.SportName + "</span>";
+        html += "<span class='event-sport-name'>" + obj.SportName + "</span>";
         html += "</div>";
         html += "<div class='event-match-id'> Match ID: " + obj.MatchId + "</div>";
 

@@ -203,7 +203,7 @@
                 }));
           
                 Task.WhenAll(tasks.ToArray()).Wait();
-
+                
                 total = ticketsModel.Count();
 
                 result.TicketList = ticketsModel.Select(x => new DetailTicket
@@ -228,6 +228,8 @@
                                     : string.Empty,
                     HighlightStatus = x.HighlightStatus
                 }).OrderByDescending(x=>x.BetDate);
+
+                result.TotalHighlightStatusGreen = result.TicketList.Count(x => x.HighlightStatus.Equals(0) && x.VoidRequestId == string.Empty);
             }
 
             return Json(new
