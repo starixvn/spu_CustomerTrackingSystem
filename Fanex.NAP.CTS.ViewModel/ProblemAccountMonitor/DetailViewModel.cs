@@ -7,5 +7,8 @@
         public int FraudCaseId { get; set; }
 
         public bool IsHostPermission { get; set; }
+
+        public VoidRequestToTVSParam VoidRequestToTVSParam { get; set; }
+
     }
 }

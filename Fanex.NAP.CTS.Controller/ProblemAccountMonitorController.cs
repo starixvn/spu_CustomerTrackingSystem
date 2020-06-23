@@ -134,13 +134,21 @@
         {
             IUserService userService = new UserService();
 
+            var voidRequestToTVSParam = new VoidRequestToTVSParam
+            {
+                UserId = "8",
+                OnUserId = "257051",
+                TargetUrl = "http://ha.nexdev.net:7307/L1/TicketVoidingSystem/AddRequest/FromOtherSites"
+            };
+
             return View(new DetailViewModel
             {
                 MatchId = matchId,
                 FraudCaseId = fraudCaseId,
-                IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId, 
+                VoidRequestToTVSParam = voidRequestToTVSParam,
+                IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
                             NapSettings.Settings.SiteId,
-                            FSFunctionKeys.ProblemAccountMonitor, 
+                            FSFunctionKeys.ProblemAccountMonitor,
                             NAP.Core.Business.Constant.Policy.Host)
             });
         }
@@ -239,6 +247,6 @@
                 recordsFiltered = total,
                 data = result
             }, JsonRequestBehavior.AllowGet);
-        }
+        }       
     }
 }

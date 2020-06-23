@@ -24,7 +24,9 @@
         spanTotalSelections: $('#spanTotalSelections'),
         btnApply: $('#btnApply'),
         btnGenerate: $('#btnGenerate'),
-        btnCopyToClipboard: $('#btnCopyToClipboard')
+        btnCopyToClipboard: $('#btnCopyToClipboard'),
+        formCreateVoidRequest: $('#formCreateVoidRequest'),
+        btnCreateVoidRequest: $('#btnCreateVoidRequest')
     };
 
     let isHostPermission = domElements.hdIsHostPermission.attr('IsHostPermission') === "True";
@@ -108,7 +110,7 @@
                 },
                 { data: obj => obj.BetDate },
                 { data: obj => obj.Username },
-                { data: obj => () => { return "<span class=currency data-currency-id=" + obj.CurrencyId + ">" + obj.CurrencyName + "</span>" } },
+                { data: obj => () => { return "<span class=currency data-currency-id=" + obj.CurrencyId + ">" + obj.CurrencyName + "</span>"; } },
                 { data: obj => () => { return "<span class=site data-site-id=" + obj.SiteId + ">" + obj.SiteName + "</span>"; } },
                 { data: obj => obj.BettypeName },
                 { data: obj => () => { return "<span class=bettype data-bettype-id=" + obj.BettypeId + ">" + obj.BetId + "</span>"; } },
@@ -222,8 +224,8 @@
     }
 
     function LoadMatchInfo() {
-        var url = common.modifyRelativeUrl('/ProblemAccountMonitor/GetMatchInfo');
-        var params = {};
+        let url = common.modifyRelativeUrl('/ProblemAccountMonitor/GetMatchInfo');
+        let params = {};
         params.matchId = domElements.hdMatchId.val();
         params.fraudCaseId = domElements.hdFraudCaseId.val();
 
@@ -364,6 +366,10 @@
         }
     }
 
+    function CreateVoidRequestToTVS() {
+               
+    }
+
     function DisableButtons() {
         if (!isHostPermission) {                      
             domElements.btnCopyToClipboard.prop('disabled', true);
@@ -446,6 +452,7 @@
         DisableButtons();        
 
         domElements.btnApply.on('click', () => RefreshGridByFilterStakeRange());
+        domElements.btnCreateVoidRequest.on('click', () => CreateVoidRequestToTVS());
         domElements.btnGenerate.on('click', () => LoadGrid());
     }
 

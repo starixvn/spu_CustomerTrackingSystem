@@ -119,6 +119,7 @@
     <Compile Include="ProblemAccountMonitor\DetailViewModel.cs" />
     <Compile Include="ProblemAccountMonitor\LeagueViewModel.cs" />
     <Compile Include="ProblemAccountMonitor\DetailMatchInfoViewModel.cs" />
+    <Compile Include="ProblemAccountMonitor\VoidRequestToTVSParam.cs" />
     <Compile Include="ProblemAccountMonitor\ProblemMatchMonitorViewModel.cs" />
     <Compile Include="ProblemAccountMonitor\DetailSite.cs" />
     <Compile Include="ProblemAccountMonitor\SiteViewModel.cs" />

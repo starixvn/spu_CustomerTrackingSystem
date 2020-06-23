@@ -128,10 +128,18 @@
 <div class="div-grid detail__button-bottom" style="text-align: right">
     <div class="group">
         <button class="button" id="btnCopyToClipboard">Copy to clipboard</button>
-        @*<button class="button" id="btnVoidWinningRequest">Void Winning Request</button>
-        <button class="button" id="btnVoidAllRequest">Void All(Instant) Request</button>
+        @*@<button class="button" id="btnVoidAllRequest">Void All(Instant) Request</button>
         <button class="button" id="btnVoidManualRequest">Manual Void Request</button>*@
-    </div>
+
+        <form action="@Model.VoidRequestToTVSParam.TargetUrl" id="formCreateVoidRequest" enctype="multipart/form-data" method="post" target="_blank" hidden>
+            <input id="UserId" type="hidden" value="@Model.VoidRequestToTVSParam.UserId" />
+            <input id="OnUserId" type="hidden" value="@Model.VoidRequestToTVSParam.OnUserId" />
+            <input id="Time" type="hidden" value="@Model.VoidRequestToTVSParam.Time" />
+            <input id="IsTest" type="hidden" value="@Model.VoidRequestToTVSParam.IsTest" />
+            <input id="TransIds" type="hidden" value="@Model.VoidRequestToTVSParam.TransIds" />
+            <button class="button" id="btnCreateVoidRequest">Create Void Request</button>
+        </form>
+</div>
 </div>
 
 <div class="hide">
