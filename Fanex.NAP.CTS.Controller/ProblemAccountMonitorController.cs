@@ -130,8 +130,8 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpGet]
-        public ActionResult Detail(int matchId, int fraudCaseId)
+        [HttpPost]
+        public ActionResult Detail(int matchId, int fraudCaseId, string siteIds)
         {
             IUserService userService = new UserService();
             ISecurityService securityService = new SecurityService();
@@ -154,6 +154,7 @@
             {
                 MatchId = matchId,
                 FraudCaseId = fraudCaseId,
+                SiteIds = siteIds,
                 VoidRequestToTVSParam = voidRequestToTVSParam,
                 IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
                             NapSettings.Settings.SiteId,
@@ -183,13 +184,13 @@
         }
 
         [HttpPost]
-        public ActionResult GetTickets(int matchId, int fraudCaseId, string stakeFrom, string stakeTo)
+        public ActionResult GetTickets(int matchId, int fraudCaseId, string stakeFrom, string stakeTo, string siteIds)
         {
             var result = new DetailTicketViewModel();
             var total = 0;
             var tasks = new List<Task>();
             var ticketVoidingsModel = Enumerable.Empty<DetailTicketVoidingInRequestModel>();
-            var ticketsModel = _probleAccountMonitorService.GetDetailTickets(matchId, fraudCaseId, stakeFrom, stakeTo);
+            var ticketsModel = _probleAccountMonitorService.GetDetailTickets(matchId, fraudCaseId, stakeFrom, stakeTo, siteIds);
 
             if (ticketsModel != null && ticketsModel.Any())
             {

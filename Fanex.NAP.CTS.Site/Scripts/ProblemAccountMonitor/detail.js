@@ -4,6 +4,7 @@
     let domElements = {
         hdMatchId: $("#hdMatchId"),
         hdFraudCaseId: $("#hdFraudCaseId"),
+        hdSiteIds: $('#hdSiteIds'),
         hdIsHostPermission: $('#hdIsHostPermission'),
         cbbSite: $("#cbbSite"),
         cbbBetType: $("#cbbBetType"),
@@ -41,6 +42,7 @@
                     var paramsFilter = {};
                     paramsFilter.matchId = domElements.hdMatchId.val();
                     paramsFilter.fraudCaseId = domElements.hdFraudCaseId.val();
+                    paramsFilter.siteIds = domElements.hdSiteIds.val();
                     paramsFilter.stakeFrom = domElements.inputStakeMin.val();
                     paramsFilter.stakeTo = domElements.inputStakeMax.val();
                     return paramsFilter;

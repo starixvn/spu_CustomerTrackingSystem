@@ -108,7 +108,7 @@
             }
         }
 
-        public IEnumerable<DetailTicketsModel> GetDetailTickets(int matchId, int fraudCaseId, string stakeFrom, string stakeTo)
+        public IEnumerable<DetailTicketsModel> GetDetailTickets(int matchId, int fraudCaseId, string stakeFrom, string stakeTo, string siteIds)
         {
             decimal numStakeFrom = 0;
             decimal numStakeTo = 0;
@@ -119,6 +119,7 @@
             {
                 MatchId = matchId,
                 FraudCaseId = fraudCaseId,
+                SiteIds = siteIds,
                 StakeFrom = numStakeFrom,
                 StakeTo = numStakeTo
             };

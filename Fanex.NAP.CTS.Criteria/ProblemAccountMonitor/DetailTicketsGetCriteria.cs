@@ -8,7 +8,7 @@
 
         public int FraudCaseId { get; set; }
 
-        public int SiteId { get; set; }
+        public string SiteIds { get; set; }
 
         public int BettypeId { get; set; }
 

@@ -15,6 +15,10 @@
         refreshCountDown: $('#refreshCountDown'),
         problemAccountMonitorTable: $('#problemAccountMonitorTable'),
         iconCalendarText: $('.icon-calendar-text'),
+        formViewDetail: $('#formViewDetail'),
+        hdMatchId: $('#matchId'),
+        hdFraudCaseId: $('#fraudCaseId'),
+        hdSiteIds: $('#siteIds'),
         tableLength: null,
         tablePaginate: null
     };
@@ -141,9 +145,7 @@
                     var paramsFilter = {};
                     paramsFilter.eventDate = domElements.dpkDate.val();
                     paramsFilter.leagueIds = domElements.cbbLeague.val();
-                    paramsFilter.matchStatus = domElements.cbbMatchStatus.val();
-                    var sitexxx = $("option", domElements.cbbSite);
-                    console.log(sitexxx);
+                    paramsFilter.matchStatus = domElements.cbbMatchStatus.val();                   
                     paramsFilter.siteIds = domElements.cbbSite.val().join();
                     return paramsFilter;
                 },
@@ -213,8 +215,22 @@
                 { data: obj => RenderMatchName(obj) },
                 { data: obj => obj.MatchScore },
                 { data: obj => obj.Status },
-                { data: obj => RenderTickedFraud(obj.MatchId, 13, obj.GroupBettingCount) },
-                { data: obj => RenderTickedFraud(obj.MatchId, 14, obj.HedgingCount) }
+                {
+                    data: obj => RenderTickedFraud(obj.MatchId, 13, obj.GroupBettingCount)
+                    , createdCell: (cell, _, row) => {
+                        $(".divViewDetail", cell).click(() => {
+                            ViewDetailTickets(row.MatchId, 13);
+                        });
+                    }
+                },
+                {
+                    data: obj => RenderTickedFraud(obj.MatchId, 14, obj.HedgingCount)
+                    , createdCell: (cell, _, row) => {
+                        $(".divViewDetail", cell).click(() => {
+                            ViewDetailTickets(row.MatchId, 14);
+                        });
+                    }
+                }
             ]
         });
     }
@@ -231,14 +247,22 @@
 
     function RenderTickedFraud(matchId, fraudCaseId, tickedFraudCount) {
         if (tickedFraudCount === 0) return "<span class='icon-approval'></span>";
-        else {
-            var link = "href=ProblemAccountMonitor/Detail?matchId=" + matchId + "&fraudCaseId=" + fraudCaseId + " target='_blank'";
-            html = "<a class='warning' " + link + " title='Click to view details'><span class='icon-alert-circle' ></span>";
+        else {           
+            html = "<div class='warning divViewDetail' title='Click to view details'>";
+            html += "<span class='icon-alert-circle'></span >";
             html += "<span class='number'>" + GenerateViolation(tickedFraudCount) + "</span>";
-            html += "</a>";
+            html += "</div>";
 
             return html;
         }
+    }
+
+    function ViewDetailTickets(matchId, fraudCaseId) {               
+        let siteIds = domElements.cbbSite.val().join();
+        domElements.hdSiteIds.val(siteIds);
+        domElements.hdMatchId.val(matchId);
+        domElements.hdFraudCaseId.val(fraudCaseId);
+        domElements.formViewDetail.submit();
     }
 
     function GenerateViolation(violation = 1) {
@@ -304,17 +328,9 @@
             menuWidth: 320,
             menuHeight: 320,
             selectedText: "# of # selected",
-            noneSelectedText: "Select Site",            
-            click: function (event, ui) {
-                domElements.cbbSite.text(ui.value + ' ' + (ui.checked ? 'checked' : 'unchecked'));
-            },
-            optgrouptoggle: function (event, ui) {
-                var values = $.map(ui.inputs, function (checkbox) {
-                    return checkbox.value;
-                }).join(", ");
-
-                domElements.cbbSite.html("Checkboxes " + (ui.checked ? "checked" : "unchecked") + ": " + values);
-            },
+            noneSelectedText: "Select Site",        
+            enableClickableOptGroups: true,
+            includeSelectAllOption: true,
             groupsCollapsable: true
         }).multiselectfilter({
             width: 217,

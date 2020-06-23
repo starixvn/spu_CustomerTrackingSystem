@@ -128,8 +128,6 @@
 <div class="div-grid detail__button-bottom" style="text-align: right">
     <div class="group">
         <button class="button" id="btnCopyToClipboard">Copy to clipboard</button>
-        @*@<button class="button" id="btnVoidAllRequest">Void All(Instant) Request</button>
-        <button class="button" id="btnVoidManualRequest">Manual Void Request</button>*@
 
         <form action="@Model.VoidRequestToTVSParam.TargetUrl" id="formCreateVoidRequest" enctype="multipart/form-data" method="post" target="_blank" hidden>
             <input name="userId" type="hidden" value="@Model.VoidRequestToTVSParam.UserId" />
@@ -141,12 +139,13 @@
             <input name="transIds" type="hidden" value="@Model.VoidRequestToTVSParam.TransIds" />
             <button class="button" id="btnCreateVoidRequest">Create Void Request</button>
         </form>
-</div>
+    </div>
 </div>
 
 <div class="hide">
     <input id="hdMatchId" type="hidden" value="@Model.MatchId" />
     <input id="hdFraudCaseId" type="hidden" value="@Model.FraudCaseId" />
+    <input id="hdSiteIds" type="hidden" value="@Model.SiteIds" />
     <input id="hdIsHostPermission" type="hidden" IsHostPermission="@Model.IsHostPermission.ToString()" />
 </div>
 @section scripts{    
