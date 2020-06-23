@@ -108,7 +108,7 @@
             }
         }
 
-        public IEnumerable<DetailTicketsModel> GetDetailTickets(int matchId, int fraudCaseId)
+        public IEnumerable<DetailTicketsModel> GetDetailTickets(int matchId, int fraudCaseId, decimal stakeFrom, decimal stakeTo)
         {
             var criteria = new DetailTicketsGetCriteria
             {

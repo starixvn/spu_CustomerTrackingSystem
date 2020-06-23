@@ -37,7 +37,8 @@
                     var paramsFilter = {};
                     paramsFilter.matchId = domElements.hdMatchId.val();
                     paramsFilter.fraudCaseId = domElements.hdFraudCaseId.val();
-
+                    paramsFilter.stakeFrom = domElements.inputStakeMin.val();
+                    paramsFilter.stakeTo = domElements.inputStakeMax.val();
                     return paramsFilter;
                 },
                 type: "POST",

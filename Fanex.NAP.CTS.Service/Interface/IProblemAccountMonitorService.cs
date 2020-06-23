@@ -20,7 +20,7 @@
 
         DetailMatchInfoModel GetDetailMatchInfo(int matchId, int fraudCaseId);
 
-        IEnumerable<DetailTicketsModel> GetDetailTickets(int matchId, int fraudCaseId);
+        IEnumerable<DetailTicketsModel> GetDetailTickets(int matchId, int fraudCaseId, decimal stakeFrom, decimal stakeTo);
 
         IEnumerable<DetailTicketVoidingInRequestModel> GetTicketVoidingInRequest(int matchId, string tranIdList);
 

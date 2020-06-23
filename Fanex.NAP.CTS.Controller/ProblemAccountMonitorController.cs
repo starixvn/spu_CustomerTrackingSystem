@@ -166,13 +166,13 @@
         }
 
         [HttpPost]
-        public ActionResult GetTickets(int matchId, int fraudCaseId)
+        public ActionResult GetTickets(int matchId, int fraudCaseId, decimal stakeFrom, decimal stakeTo)
         {
             var result = new DetailTicketViewModel();
             var total = 0;
             var tasks = new List<Task>();
             var ticketVoidingsModel = Enumerable.Empty<DetailTicketVoidingInRequestModel>();
-            var ticketsModel = _probleAccountMonitorService.GetDetailTickets(matchId, fraudCaseId);
+            var ticketsModel = _probleAccountMonitorService.GetDetailTickets(matchId, fraudCaseId, stakeFrom, stakeTo);
 
             if (ticketsModel != null && ticketsModel.Any())
             {
