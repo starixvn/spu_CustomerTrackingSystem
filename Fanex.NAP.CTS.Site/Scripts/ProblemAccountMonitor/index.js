@@ -39,15 +39,13 @@
     }
 
     function GenerateSportDropdown(data) {
-        let sportSelector = domElements.cbbSport.empty();
+        let sportSelector = domElements.cbbSport.empty();              
 
-        if (data.length > 0) {
-            sportSelector.append("<option selected value='" + data[0].SportType + "'>" + data[0].SportName + "</option>");
-        }
+        data.map(function (x) {
+            let option = "<option selected value='" + x.SportType + "'>" + x.SportName + "</option>";
+            sportSelector.append(option);
+        });
 
-        for (var i = 1; i < data.length; i++) {
-            sportSelector.append("<option value='" + data[i].SportType + "'>" + data[i].SportName + "</option>");
-        }    
         domElements.cbbSport.multiselect("refresh");
     }
 
@@ -121,7 +119,7 @@
         let siteSelector = domElements.cbbSite.empty();
 
         data.map(function (x) {
-            var optgroup = "<optgroup label='" + x.SubscriberGroupName + "'>";
+            let optgroup = "<optgroup label='" + x.SubscriberGroupName + "'>";
 
             if (x.SiteList.length > 0)
                 x.SiteList.map(function (y) {

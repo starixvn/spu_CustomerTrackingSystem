@@ -67,8 +67,8 @@
             <div class="block-range" id="btnShowStakeRange">
                 <div class="group-min">
                     <span class="text">Min</span>
-                    <div class="group width-100" id="inputMin">
-                        <input class="control" type="number" min="0" value="0" id="" />
+                    <div class="group width-100">
+                        <input class="control" type="number" min="0" value="0" id="inputStakeMin"/>
                         <span class="icon icon-chevron-up arrowStake" data-type="up"></span>
                         <span class="icon icon-chevron-down arrowStake" data-type="down"></span>
                     </div>
@@ -76,8 +76,8 @@
 
                 <div class="group-max">
                     <span class="text">Max</span>
-                    <div class="group width-100" id="inputMax">
-                        <input class="control" type="number" min="0" maxlength="15" value="10000" id="" />
+                    <div class="group width-100">
+                        <input class="control" type="number" min="0" maxlength="15" value="10000" id="inputStakeMax" />
                         <span class="icon icon-chevron-up arrowStake" data-type="up"></span>
                         <span class="icon icon-chevron-down arrowStake" data-type="down"></span>
                     </div>
@@ -132,6 +132,16 @@
     <div class="group">
         <button class="button" id="btnCopyToClipboard">Copy to clipboard</button>        
         <button class="button" id="btnCreateVoidRequest">Create Void Request</button>
+    </div>
+</div>
+
+<div id="divNotificationWarning" class="hide">
+    <div>You can not select more than 2000 bet tickets for 1 request.</div>
+    <div>Please make second request for the rest.</div>
+    <div>Thanks You.</div>
+
+    <div class="group">
+        <button class="button" id="btnNotificationWarningClose">Close</button>
     </div>
 </div>
 

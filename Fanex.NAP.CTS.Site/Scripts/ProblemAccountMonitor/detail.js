@@ -15,19 +15,18 @@
         lblEventDate: $('#lblEventDate'),
         lblScore: $('#lblScore'),
         ticketsTable: $("#ticketsTable"),
-        btnShowStakeRange: $('#btnShowStakeRange'),
-        lblStakeRange: $('#lblStakeRange'),
-        divStakeRangeContainer: $('#divStakeRangeContainer'),
-        formInputStakeRange: $('#formInputStakeRange'),
+        divStakeRangeContainer: $('#divStakeRangeContainer'),  
         tblDataTablesWrapper: $(".dataTables_wrapper"),
         inputStakeMin: $('#inputStakeMin'),
         inputStakeMax: $('#inputStakeMax'),
         spanTotalSelections: $('#spanTotalSelections'),
-        btnApply: $('#btnApply'),
         btnGenerate: $('#btnGenerate'),
+        btnArrowStake: $('.arrowStake'),
         btnCopyToClipboard: $('#btnCopyToClipboard'),
         formCreateVoidRequest: $('#formCreateVoidRequest'),
         btnCreateVoidRequest: $('#btnCreateVoidRequest'),
+        divNotificationWarning: $('#divNotificationWarning'),
+        btnNotificationWarningClose: $('#btnNotificationWarningClose'),
         hdUserId: $('#hdUserId'),
         hdOnUserId: $('#hdOnUserId'),
         hdTime: $('#hdTime'),
@@ -35,7 +34,7 @@
         hdSubIssueTypeId: $('#hdSubIssueTypeId'),
         hdActionId: $('#hdActionId'),
         hdTransIds: $('hdTransIds')
-    };
+    }; 
 
     let isHostPermission = domElements.hdIsHostPermission.attr('IsHostPermission') === "True";
 
@@ -293,12 +292,21 @@
     }
 
     function RefreshGridByFilterStakeRange() {
-        domElements.formInputStakeRange.toggle();
+        let minText = domElements.inputStakeMin.val();
+        let maxText = domElements.inputStakeMax.val();
 
-        let minValue = parseFloat(domElements.inputStakeMin.val());
-        let maxValue = parseFloat(domElements.inputStakeMax.val());
-        let html = minValue + " - " + maxValue;
-        domElements.lblStakeRange.text(html);        
+        if (minText === "")
+            minText = "0";
+        if (maxText === "")
+            maxVmaxTextalueText = "0";
+
+        let minValue = parseFloat(minText);
+        let maxValue = parseFloat(maxText);
+
+        if (minValue > maxValue) {
+            common.showError("Stake Range Min must be less than Max");
+            return;
+        }
 
         domElements.ticketsTable.find('tr').each(function () {
             let tr = $(this);
@@ -376,8 +384,7 @@
     }
 
     function CreateVoidRequestToTVS() {
-        let url = common.modifyRelativeUrl('/ProblemAccountMonitor/GetGetInfoVoidRequestToTVS');       
-
+        let url = common.modifyRelativeUrl('/ProblemAccountMonitor/GetGetInfoVoidRequestToTVS');
         $.ajax(url, {
             type: 'GET',
             async: false,
@@ -398,6 +405,41 @@
                 console.log(errorMessage);
             }
         });
+    }
+
+    function ValidateVoidRequest() {
+        let totalSelections = domElements.spanTotalSelections.text();
+        let isPass = parseInt(totalSelections) <= 2000;
+
+        if (!isPass) {
+            domElements.btnNotificationWarningClose.on('click', () => {
+                domElements.divNotificationWarning.dialog('close');
+            });
+
+            domElements.divNotificationWarning.dialog({
+                modal: true,
+                width: '600px',
+                title: 'Notification',
+                resizable: false,
+                draggable: false,
+                close: function () { $(this).dialog('close'); }
+            });
+        }
+
+        return isPass;
+    }
+
+    function UpDownStakeRangeInput(e) {
+        let $button = $(e.target);
+        let oldValue = $button.parent().find("input").val();
+        let newVal = 0;
+
+        if ($button.attr('data-type') === "up")
+            newVal = parseFloat(oldValue) + 1;
+        else if (oldValue > 0)
+            newVal = parseFloat(oldValue) - 1;
+
+        $button.parent().find("input").val(newVal);
     }
 
     function DisableButtons() {
@@ -460,50 +502,30 @@
             click: function (event, ui) { RefreshVoidTicket(ui.value, ui.checked); },
             checkAll: function () { RefreshAllVoidTicket(true); },
             uncheckAll: function () { RefreshAllVoidTicket(false); }
-        });
-
-        domElements.btnShowStakeRange.on('click', function () {
-            domElements.formInputStakeRange.toggle();
-            domElements.inputStakeMin.focus();
-            $(".dataTables_wrapper").css("position", "sticky");
-        });
-
-        $(document).mouseup(function (e) {
-            if (domElements.formInputStakeRange.css('display') === 'none') return;
-
-            let container = domElements.divStakeRangeContainer;
-            if (!container.is(e.target) && container.has(e.target).length === 0) {
-                domElements.formInputStakeRange.toggle();                
-            }
-        });
+        });    
 
         LoadMatchInfo();
         LoadGrid();
         DisableButtons();        
-
-        domElements.btnApply.on('click', () => RefreshGridByFilterStakeRange());
-        domElements.btnCreateVoidRequest.on('click', () => CreateVoidRequestToTVS());
-        domElements.btnGenerate.on('click', () => LoadGrid());
-
-        // handle up and down
-        $('.arrowStake').on("click", function () {
-
-            var $button = $(this);
-            var oldValue = $button.parent().find("input").val();
-
-            if ($button.attr('data-type') == "up") {
-                var newVal = parseFloat(oldValue) + 1;
-            } else {
-                // Don't allow decrementing below zero
-                if (oldValue > 0) {
-                    var newVal = parseFloat(oldValue) - 1;
-                } else {
-                    newVal = 0;
-                }
+        
+        domElements.inputStakeMin.on('keypress', (e) => {
+            if ((e.keyCode ? e.keyCode : e.which) === 13) {
+                RefreshGridByFilterStakeRange();
             }
-
-            $button.parent().find("input").val(newVal);
         });
+        domElements.inputStakeMax.on('keypress', (e) => {
+            if ((e.keyCode ? e.keyCode : e.which) === 13) {
+                RefreshGridByFilterStakeRange();
+            }
+        });
+        domElements.inputStakeMin.on('blur', () => RefreshGridByFilterStakeRange());
+        domElements.inputStakeMax.on('blur', () => RefreshGridByFilterStakeRange());
+        domElements.btnArrowStake.on('click', (e) => UpDownStakeRangeInput(e));
+        domElements.btnGenerate.on('click', () => LoadGrid());        
+        domElements.btnCreateVoidRequest.on('click', () => {
+            if (ValidateVoidRequest()) 
+                CreateVoidRequestToTVS();
+        });              
     }
 
     $(document).ready(function () {
