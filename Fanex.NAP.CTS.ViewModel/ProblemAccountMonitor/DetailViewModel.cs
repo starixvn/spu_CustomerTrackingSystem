@@ -8,9 +8,7 @@
 
         public string SiteIds { get; set; }
 
-        public bool IsHostPermission { get; set; }
-
-        public VoidRequestToTVSParam VoidRequestToTVSParam { get; set; }
+        public bool IsHostPermission { get; set; }        
 
     }
 }

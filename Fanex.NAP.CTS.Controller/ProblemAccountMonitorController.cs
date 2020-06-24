@@ -6,6 +6,7 @@
     using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Core.BaseClasses;
+    using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
@@ -133,29 +134,13 @@
         [HttpPost]
         public ActionResult Detail(int matchId, int fraudCaseId, string siteIds)
         {
-            IUserService userService = new UserService();
-            ISecurityService securityService = new SecurityService();
-            var userId = CurrentSession.UserId.ToString();
-            var onUserId = CurrentSession.OnUserId.ToString();
-            var time = securityService.GetTime();
-
-            var voidRequestToTVSParam = new VoidRequestToTVSParam
-            {
-                UserId = Cryptography.CfsEnCrypt(userId),
-                OnUserId = Cryptography.CfsEnCrypt(onUserId),
-                Time = Cryptography.CfsEnCrypt(time),
-                SubIssueTypeId = 27,
-                ActionId = 5,
-                TransIds = "456789",
-                TargetUrl = "http://ha.nexdev.net:7307/L1/TicketVoidingSystem/AddRequest/FromOtherSites"
-            };
+            IUserService userService = new UserService();           
 
             return View(new DetailViewModel
             {
                 MatchId = matchId,
                 FraudCaseId = fraudCaseId,
                 SiteIds = siteIds,
-                VoidRequestToTVSParam = voidRequestToTVSParam,
                 IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
                             NapSettings.Settings.SiteId,
                             FSFunctionKeys.ProblemAccountMonitor,
@@ -257,6 +242,27 @@
                 recordsFiltered = total,
                 data = result
             }, JsonRequestBehavior.AllowGet);
-        }       
+        }
+
+        [HttpGet]
+        public ActionResult GetGetInfoVoidRequestToTVS()
+        {
+            ISecurityService securityService = new SecurityService();
+            var userId = CurrentSession.UserId.ToString();
+            var onUserId = CurrentSession.OnUserId.ToString();
+            var time = securityService.GetTime();
+
+            var voidRequestToTVSParam = new VoidRequestToTVSParam
+            {
+                EnCryptedUserId = Cryptography.CfsEnCrypt(userId),
+                EnCryptedOnUserId = Cryptography.CfsEnCrypt(onUserId),
+                EnCryptedTime = Cryptography.CfsEnCrypt(time),
+                SubIssueTypeId = ConfigSettings.VoidRequestToTVSSubIssueTypeId,
+                ActionId = ConfigSettings.VoidRequestToTVSActionId,
+                RedirectUrl = ConfigSettings.VoidRequestToTVSURL
+            };
+
+            return Json(voidRequestToTVSParam, JsonRequestBehavior.AllowGet);
+        }
     }
 }

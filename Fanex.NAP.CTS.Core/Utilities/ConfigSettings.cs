@@ -1,5 +1,5 @@
 ﻿namespace Fanex.NAP.CTS.Core.Utilities
-{
+{    
     using System.Configuration;
 
     public static class ConfigSettings
@@ -125,6 +125,34 @@
                     default:
                         return "LOCAL";
                 }
+            }
+        }
+
+        public static string VoidRequestToTVSURL => GetConfigStringByName("VoidRequestToTVS-URL");
+        
+        public static int VoidRequestToTVSSubIssueTypeId
+        {
+            get
+            {
+                var subIssueTypeId = 0;
+                var id = GetConfigStringByName("VoidRequestToTVS-SubIssueTypeId");
+
+                int.TryParse(id, out subIssueTypeId);
+
+                return subIssueTypeId == 0 ? 27 : subIssueTypeId;
+            }
+        }
+            
+        public static int VoidRequestToTVSActionId
+        {
+            get
+            {
+                var actionId = 0;
+                var id = GetConfigStringByName("VoidRequestToTVS-ActionId");
+
+                int.TryParse(id, out actionId);
+
+                return actionId == 0 ? 27 : actionId;
             }
         }
     }

@@ -80,8 +80,8 @@
     <div>
         @using (Html.BeginForm("Detail", "ProblemAccountMonitor", FormMethod.Post, new { id = "formViewDetail", target = "_blank" }))
         {
-            @Html.Hidden("matchId", "123456", new { id = "matchId" });
-            @Html.Hidden("fraudCaseId", "13", new { id = "fraudCaseId" });
+            @Html.Hidden("matchId", "", new { id = "matchId" });
+            @Html.Hidden("fraudCaseId", "", new { id = "fraudCaseId" });
             @Html.Hidden("siteIds", "", new { id = "siteIds" });
         }
     </div>

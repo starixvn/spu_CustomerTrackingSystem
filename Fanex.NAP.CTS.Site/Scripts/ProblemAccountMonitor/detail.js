@@ -27,7 +27,14 @@
         btnGenerate: $('#btnGenerate'),
         btnCopyToClipboard: $('#btnCopyToClipboard'),
         formCreateVoidRequest: $('#formCreateVoidRequest'),
-        btnCreateVoidRequest: $('#btnCreateVoidRequest')
+        btnCreateVoidRequest: $('#btnCreateVoidRequest'),
+        hdUserId: $('#hdUserId'),
+        hdOnUserId: $('#hdOnUserId'),
+        hdTime: $('#hdTime'),
+        hdIsTest: $('#hdIsTest'),
+        hdSubIssueTypeId: $('#hdSubIssueTypeId'),
+        hdActionId: $('#hdActionId'),
+        hdTransIds: $('hdTransIds')
     };
 
     let isHostPermission = domElements.hdIsHostPermission.attr('IsHostPermission') === "True";
@@ -369,7 +376,28 @@
     }
 
     function CreateVoidRequestToTVS() {
-               
+        let url = common.modifyRelativeUrl('/ProblemAccountMonitor/GetGetInfoVoidRequestToTVS');       
+
+        $.ajax(url, {
+            type: 'GET',
+            async: false,
+            success: function (response) {
+                domElements.hdUserId.val(response.EnCryptedUserId);
+                domElements.hdOnUserId.val(response.EnCryptedOnUserId);
+                domElements.hdTime.val(response.EnCryptedTime);
+                domElements.hdIsTest.val(response.IsTest);
+                domElements.hdSubIssueTypeId.val(response.SubIssueTypeId);
+                domElements.hdActionId.val(response.ActionId);
+                domElements.hdTransIds.val("123456");
+                domElements.formCreateVoidRequest.attr('action', response.RedirectUrl);
+            },
+            complete: function () {
+                domElements.formCreateVoidRequest.submit();
+            },
+            error: function (errorMessage) {
+                console.log(errorMessage);
+            }
+        });
     }
 
     function DisableButtons() {

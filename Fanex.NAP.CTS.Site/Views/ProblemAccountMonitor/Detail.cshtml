@@ -130,20 +130,20 @@
 
 <div class="div-grid detail__button-bottom" style="text-align: right">
     <div class="group">
-        <button class="button" id="btnCopyToClipboard">Copy to clipboard</button>
-
-        <form action="@Model.VoidRequestToTVSParam.TargetUrl" id="formCreateVoidRequest" enctype="multipart/form-data" method="post" target="_blank" hidden>
-            <input name="userId" type="hidden" value="@Model.VoidRequestToTVSParam.UserId" />
-            <input name="onuserId" type="hidden" value="@Model.VoidRequestToTVSParam.OnUserId" />
-            <input name="time" type="hidden" value="@Model.VoidRequestToTVSParam.Time" />
-            <input name="isTest" type="hidden" value="@Model.VoidRequestToTVSParam.IsTest" />
-            <input name="subIssueTypeId" type="hidden" value="@Model.VoidRequestToTVSParam.SubIssueTypeId" />
-            <input name="ActionId" type="hidden" value="@Model.VoidRequestToTVSParam.ActionId" />
-            <input name="transIds" type="hidden" value="@Model.VoidRequestToTVSParam.TransIds" />
-            <button class="button" id="btnCreateVoidRequest">Create Void Request</button>
-        </form>
+        <button class="button" id="btnCopyToClipboard">Copy to clipboard</button>        
+        <button class="button" id="btnCreateVoidRequest">Create Void Request</button>
     </div>
 </div>
+
+<form action="" id="formCreateVoidRequest" enctype="multipart/form-data" method="post" target="_blank" hidden>
+    <input id="hdUserId" name="userId" type="hidden" value="" />
+    <input id="hdOnUserId" name="onuserId" type="hidden" value="" />
+    <input id="hdTime" name="time" type="hidden" value="" />
+    <input id="hdIsTest" name="isTest" type="hidden" value="" />
+    <input id="hdSubIssueTypeId" name="subIssueTypeId" type="hidden"  value="" />
+    <input id="hdActionId" name="ActionId" type="hidden" value="" />
+    <input id="hdTransIds" name="transIds" type="hidden" value="" />
+</form>
 
 <div class="hide">
     <input id="hdMatchId" type="hidden" value="@Model.MatchId" />
