@@ -1,22 +1,40 @@
 ﻿@model string
 
-    <div id="divAddAssociation" style="display:none;">
+    <div id="divAddAssociation" class="divAddAssociation" style="display:none;">
+        <div class="group-title">
+            <div class="label">Username/Login ID</div>
+            <div class="wrapper-title">
+                <div class="wrapper-rule wrapper-rule-left">
+                    <span class="text bg-red">Red</span>
+                    <span class="text">Invalid username</span>
+                </div>
+                <div class="wrapper-rule wrapper-rule-right">
+                    <span class="text bg-yellow">Yellow</span>
+                    <span class="text">Duplicated username</span>
+                </div>
+            </div>
 
-        <div class="form-control">
-            <div class="label">Username</div>
-            <input id="txtassusername" type="text" class="input-field full-width" maxlength="50" />
         </div>
-        <div class="form-control">
-            <div class="label">To: Associated Account List Of <b>@(Model)</b> </div>
+        <span class="wrapper-value">
+            <input id="txtassusername" type="text" class="input-field full-width" placeholder="Type username or login ID (Separate by comma, tab and enter)" />
+            <ul>
+                <li>
+                    12Bet$Kevin
+                </li>
+            </ul>
+
+        </span>
+        <div class="form-control wrapper-to">
+            <div class="label"><span class="text">To:</span> <b>@(Model)</b> Associated Account List</div>
         </div>
-        <div class="form-control">
+        <div class="form-control wrapper-comment">
             <div class="label">Comment</div>
-            <textarea id="txtasscomment" rows="4" class="comment-field full-width" maxlength="500">If we had a dime for every time we said it, and a dollar for ever time it was ignored...</textarea>
+            <textarea id="txtasscomment" rows="3" class="comment-field full-width" maxlength="500" placeholder="If we had a dime for every time we said it, and a dollar for ever time it was ignored..."></textarea>
         </div>
 
         <div class="modal-footer margin-top-10">
             <button id="btncancelassociation" class="button btn-cancel-outline" title="Cancel">Cancel</button>
-            <button id="btnsaveassociation" class="button -add" title="Add Exception">Submit</button>
+            <button id="btnsaveassociation" class="button -add" title="Add Exception">Add</button>
         </div>
     </div>
     

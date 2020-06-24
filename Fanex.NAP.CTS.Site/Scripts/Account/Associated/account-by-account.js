@@ -317,7 +317,7 @@
 
             divAddAssociation.dialog({
                 modal: true,
-                width: '600px',
+                width: '800px',
                 title: 'ADD ASSOCIATION',
                 resizable: true,
                 draggable: true,

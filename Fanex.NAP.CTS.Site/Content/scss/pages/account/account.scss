@@ -788,7 +788,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     }
 }
 
-//account-by-accoun
+//account-by-account
 #account-by-account {
     .wrapper-info-table {
         top: 165px;
@@ -921,11 +921,6 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
         margin-left: 5px;
     }
 
-    .comment-field {
-        width: 100%;
-        margin-top: 5px;
-    }
-
     .ui-widget-content a {
         color: #396EF8;
     }
@@ -936,10 +931,18 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 
     button {
         font-family: 'Lato', sans-serif;
+        font-weight: normal;
+        font-size: 13px;
+        padding: 4px 29px;
     }
 
     .btn-cancel-outline {
-        margin-right: 10px;
+        margin-right: 13px;
+        height: 30px;
+    }
+
+    .-add {
+        height: 30px;
     }
 }
 
@@ -1373,5 +1376,120 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 .dataTables_length {
     select {
         min-width: 58px;
+    }
+}
+
+// association acount
+
+#divAddAssociation {
+    padding-top: 25px;
+    padding-bottom: 16px;
+    padding-left: 13px;
+    padding-right: 11px;
+
+    .group-title {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+
+        .label {
+            font-size: 13px;
+            line-height: 16px;
+            color: #474747;
+        }
+
+        .wrapper-title {
+            display: flex;
+        }
+
+        .wrapper-rule {
+            .text {
+                color: #2B2B2B;
+                font-weight: 600;
+                font-size: 13px;
+                line-height: 16px;
+            }
+
+            .bg-red, .bg-yellow {
+                height: 18px;
+                border-radius: 11px;
+                padding: 0 11px;
+            }
+
+            .bg-red {
+                background: #FFE0E0;
+                border: 1px solid #E6CACA;
+            }
+
+            .bg-yellow {
+                background: #FFEDC0;
+                border: 1px solid #E6D6AD;
+            }
+        }
+
+        .wrapper-rule-left {
+            margin-right: 14px;
+        }
+    }
+
+    .wrapper-value {
+        display: block;
+        height: 200px;
+        width: 100%;
+        overflow: auto;
+        background: #FFFFFF;
+        border: 1px solid #E5E5E5;
+        box-sizing: border-box;
+        border-radius: 2px;
+        margin-bottom: 14px;
+
+        .input-field {
+            margin-top: 2px;
+            padding-left: 3px;
+            width: 100%;
+            border: none;
+            outline: 0;
+            font-size: 13px;
+            line-height: 16px;
+            color: #818181;
+        }
+    }
+
+    .wrapper-to {
+        margin-bottom: 9px;
+
+        .label {
+            font-weight: bold;
+            font-size: 16px;
+            line-height: 150%;
+            color: #474747;
+
+            .text {
+                font-size: 16px;
+                line-height: 150%;
+                color: #474747;
+                margin-bottom: 12px;
+            }
+        }
+    }
+
+    .wrapper-comment {
+        margin-bottom: 14px;
+        .label {
+            font-size: 13px;
+            line-height: 16px;
+            color: #474747;
+            margin-bottom: 5px;
+        }
+
+        .comment-field {
+            border: 1px solid #E5E5E5;
+            border-radius: 2px;
+            font-size: 14px;
+            line-height: 17px;
+            color: #474747;
+            min-height: 80px;
+            padding: 10px 16px;
+        }
     }
 }
