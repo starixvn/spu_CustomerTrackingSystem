@@ -1,6 +1,11 @@
 ﻿.content {
     margin-top: 60px;
 
+    .width-100 {
+        min-width: 100px;
+    }
+
+
     .width-200 {
         width: 200px;
     }
@@ -134,85 +139,61 @@
 
             .block-range {
                 position: relative;
+                display: flex;
+                align-items: center;
 
-                .icon-down {
-                    position: absolute;
-                    right: 5px;
-                    font-size: 21px;
-                    top: 5px;
-                }
-
-                .cbbStake {
-                    display: block;
-                    background: #FFFFFF;
-                    border: 1px solid #E5E5E5;
-                    border-radius: 2px;
-                    min-width: 200px;
-                    height: 30px;
-                    font-size: 14px;
-                    line-height: 17px;
-                    color: #474747;
-                    padding: 5px 12px;
-                }
-            }
-
-            .formInputStakeRange {
-                display: none;
-                position: absolute;
-                background: #FFFFFF;
-                box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
-                border-radius: 3px;
-                min-width: 260px;
-                padding-left: 12px;
-                padding-right: 16px;
-                padding-top: 12px;
-                padding-bottom: 16px;
-
-                .text {
-                    font-weight: bold;
-                    font-size: 13px;
-                    line-height: 16px;
-                    color: #333333;
-                    margin-bottom: 8px;
-                }
-
-                .block-input {
+                .group-min, .group-max {
                     display: flex;
                     align-items: center;
 
                     .text {
-                        font-weight: normal;
-                        margin-right: 10px;
-                        min-width: 30px;
+                        margin-right: 6px;
+                        color: #474747;
+                        font-size: 14px;
                     }
 
-                    .control {
-                        min-width: 193px;
-                        height: 24px;
-                        background: #FFFFFF;
-                        border: 1px solid #E5E5E5;
-                        border-radius: 2px;
-                        margin-bottom: 4px;
+                    .group {
+                        margin-right: 0;
+                        position: relative;
+
+                        .control {
+                            width: 100px;
+                            background: #FFFFFF;
+                            border: 1px solid #E5E5E5;
+                            border-radius: 2px;
+                            color: #474747;
+                            font-size: 14px;
+                        }
+
+                        .icon {
+                            position: absolute;
+                            right: 5px;
+                            font-size: 20px;
+
+                            &.icon-chevron-down {
+                                top: 11px;
+                            }
+                        }
+                    }
+                    /* Chrome, Safari, Edge, Opera */
+                    input::-webkit-outer-spin-button,
+                    input::-webkit-inner-spin-button {
+                        -webkit-appearance: none;
+                        margin: 0;
+                    }
+                    /* Firefox */
+                    input[type=number] {
+                        -moz-appearance: textfield;
                     }
                 }
 
-                .button-generate {
-                    width: 62px;
-                    height: 24px;
-                    background: #E3E9F7;
-                    border: 1px solid #ADBDE0;
-                    border-radius: 3px;
-                    font-size: 13px;
-                    line-height: 16px;
-                    color: #2053D9;
-                    float: right;
-                    margin-top: 8px;
-
-                    &:hover {
-                        background-color: #2053D9;
-                        color: #fff;
-                    }
+                .group-min {
+                    margin-right: 12px;
                 }
+            }
+
+            .ui-multiselect .ui-icon {
+                margin-right: -3px;
             }
         }
 
@@ -313,8 +294,8 @@
 
         .button-left {
             display: flex;
-            align-items: flex-end;
-            margin-bottom: 7px;
+            align-items: center;
+            margin-top: 8px;
         }
 
         button {

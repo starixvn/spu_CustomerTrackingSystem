@@ -613,7 +613,7 @@ select[disabled] {
 
 .ui-multiselect {
   width: 100% !important;
-  height: 28px;
+  height: 30px !important;
   background-color: #fff;
   border: 1px solid #d6d6d6;
   border-radius: 2px;
@@ -651,6 +651,9 @@ select {
   background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAGCAYAAAD68A/GAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAB/SURBVHgBbY3NDYUgEITZB4XwjtwsQTsgUIBSmR69QLQCy6AZQpw9kBDiJpv9mW9nyXu/CiHmGGMQQ1hrtVJqL6WEH+aFiDYc7CMkpXzYBHWSOefLGPNnGFVjvhuEna61hpTSSc0BjgeEFXlBnDroYJ36dw3mvoc+g2Hn3DbuX6+RNKJozoYAAAAAAElFTkSuQmCC") white no-repeat 98.5% !important;
   /* !important used for overriding all other customisations */
   background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAGCAYAAAD68A/GAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAB/SURBVHgBbY3NDYUgEITZB4XwjtwsQTsgUIBSmR69QLQCy6AZQpw9kBDiJpv9mW9nyXu/CiHmGGMQQ1hrtVJqL6WEH+aFiDYc7CMkpXzYBHWSOefLGPNnGFVjvhuEna61hpTSSc0BjgeEFXlBnDroYJ36dw3mvoc+g2Hn3DbuX6+RNKJozoYAAAAAAElFTkSuQmCC") white no-repeat calc(100% - 6px) !important; }
+
+.select2-container .select2-selection--single {
+  height: 30px !important; }
 
 .select2-container--default .select2-selection--single .select2-selection__arrow {
   right: 3px !important; }

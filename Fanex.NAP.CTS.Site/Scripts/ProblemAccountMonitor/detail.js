@@ -456,6 +456,26 @@
         domElements.btnApply.on('click', () => RefreshGridByFilterStakeRange());
         domElements.btnCreateVoidRequest.on('click', () => CreateVoidRequestToTVS());
         domElements.btnGenerate.on('click', () => LoadGrid());
+
+        // handle up and down
+        $('.arrowStake').on("click", function () {
+
+            var $button = $(this);
+            var oldValue = $button.parent().find("input").val();
+
+            if ($button.attr('data-type') == "up") {
+                var newVal = parseFloat(oldValue) + 1;
+            } else {
+                // Don't allow decrementing below zero
+                if (oldValue > 0) {
+                    var newVal = parseFloat(oldValue) - 1;
+                } else {
+                    newVal = 0;
+                }
+            }
+
+            $button.parent().find("input").val(newVal);
+        });
     }
 
     $(document).ready(function () {
