@@ -331,7 +331,8 @@
             noneSelectedText: "Select Site",        
             enableClickableOptGroups: true,
             includeSelectAllOption: true,
-            groupsCollapsable: true
+            groupsCollapsable: true,
+            optGroupChecked: true
         }).multiselectfilter({
             width: 217,
             placeholder: '',
