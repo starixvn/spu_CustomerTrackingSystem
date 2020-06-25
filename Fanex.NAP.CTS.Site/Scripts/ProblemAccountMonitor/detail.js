@@ -33,8 +33,8 @@
         hdIsTest: $('#hdIsTest'),
         hdSubIssueTypeId: $('#hdSubIssueTypeId'),
         hdActionId: $('#hdActionId'),
-        hdTransIds: $('#hdTransIds')
-    }; 
+        hdTransids: $('#hdTransids')
+    };
 
     let isHostPermission = domElements.hdIsHostPermission.attr('IsHostPermission') === "True";
 
@@ -399,8 +399,20 @@
         return arrBetIds;
     }
 
+    function AppendBetIdsToForm(arrBetIds) {
+        domElements.hdTransids.empty();
+
+        arrBetIds.map(function (betId) {
+            let input = $(document.createElement("input"))
+                .attr({ "name": "transIds[]", "value": betId });
+
+            domElements.hdTransids.append(input);
+        });
+    }
+
     function CreateVoidRequestToTVS() {
-        let arrBetIds = GetTickedChecked();        
+        let arrBetIds = GetTickedChecked();
+        AppendBetIdsToForm(arrBetIds);
 
         let url = common.modifyRelativeUrl('/ProblemAccountMonitor/GetGetInfoVoidRequestToTVS');
         $.ajax(url, {
@@ -413,7 +425,6 @@
                 domElements.hdIsTest.val(response.IsTest);
                 domElements.hdSubIssueTypeId.val(response.SubIssueTypeId);
                 domElements.hdActionId.val(response.ActionId);
-                domElements.hdTransIds.val(arrBetIds);
                 domElements.formCreateVoidRequest.attr('action', response.RedirectUrl);               
             },
             complete: function () {
@@ -426,7 +437,8 @@
     }
 
     function ValidateVoidRequest() {
-        let totalSelections = domElements.spanTotalSelections.text();
+        let checkeds = domElements.ticketsTable.find('tr td input:checked');
+        let totalSelections = checkeds.length;
         let isPass = parseInt(totalSelections) <= 2000;
 
         if (!isPass) {
@@ -465,10 +477,15 @@
     function DisableButtons() {
         if (!isHostPermission) {                      
             domElements.btnCopyToClipboard.prop('disabled', true);
+            domElements.btnCreateVoidRequest.prop('disabled', true);
             return;
         }
         
         domElements.btnCopyToClipboard.on('click', () => CopyToClipboardChecked());
+        domElements.btnCreateVoidRequest.on('click', () => {
+            if (ValidateVoidRequest())
+                CreateVoidRequestToTVS();
+        });
     }     
 
     function Initial() {
@@ -541,11 +558,7 @@
         domElements.inputStakeMin.on('blur', () => RefreshGridByFilterStakeRange());
         domElements.inputStakeMax.on('blur', () => RefreshGridByFilterStakeRange());
         domElements.btnArrowStake.on('click', (e) => UpDownStakeRangeInput(e));
-        domElements.btnGenerate.on('click', () => LoadGrid());        
-        domElements.btnCreateVoidRequest.on('click', () => {
-            if (ValidateVoidRequest()) 
-                CreateVoidRequestToTVS();
-        });              
+        domElements.btnGenerate.on('click', () => LoadGrid());                           
     }
 
     $(document).ready(function () {
