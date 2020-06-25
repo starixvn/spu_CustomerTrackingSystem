@@ -1763,7 +1763,8 @@
         font-size: 16px;
         line-height: 150%;
         color: #474747;
-        margin-bottom: 12px; }
+        margin-bottom: 12px;
+        font-weight: normal; }
   #divAddAssociation .wrapper-comment {
     margin-bottom: 14px; }
     #divAddAssociation .wrapper-comment .label {
