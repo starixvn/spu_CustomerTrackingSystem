@@ -251,6 +251,7 @@
     }
 
     function InitInputTagUsername() {
+        let input = document.querySelector('input[name=tags-outside]');
         inputTagUsername.tagify({
             pattern: null,           
             keepInvalidTags: true,
@@ -259,7 +260,11 @@
             duplicates: false,
             whitelist: [],
             blacklist: [],
-            enforceWhitelist: false
+            enforceWhitelist: false,
+            dropdown: {
+                position: "input",
+                enabled: 0
+            }
         })
             .on('add', function (e, tagName) {
                 let $tag = $(tagName.tag);
