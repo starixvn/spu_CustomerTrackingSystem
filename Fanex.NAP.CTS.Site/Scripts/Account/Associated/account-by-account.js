@@ -3,8 +3,7 @@
     var btnAddAssociation = $('#btnAddAssociation');
     var btnSearch = $('#account-by-account-btn-search');
     var btnViewOnGraph = $('#account-by-account-btn-on-graph');
-    var associatedByAccountTable = $('#account-by-account-table');
-    var assusername = $('#txtassusername');
+    var associatedByAccountTable = $('#account-by-account-table');    
     var asscomment = $('#txtasscomment');
     var btnSaveAssociation = $('#btnsaveassociation');
     var btnCancelAssociation = $('#btncancelassociation');
@@ -306,7 +305,7 @@
 
     function InitInputTagUsername(fromSubscriberId, fromCTSCustId) {
         spanAddAssociationUserName.find('tags tag').remove();
-	let input = document.querySelector('input[name=tags-outside]');
+
         inputTagUsername.tagify({
             pattern: null,           
             keepInvalidTags: true,
@@ -330,6 +329,8 @@
                 $tag.addClass('invalid-duplicated');
             });
 
+        spanAddAssociationUserName.find('tags').attr('tabindex', "1");
+        
         inputTagUsername.on('blur', () => ValidateManualAssociationMultiple(fromCTSCustId));
         btnSaveAssociation.on('click', () => InsertManualAssociationMultiple(fromSubscriberId, fromCTSCustId));
         btnCancelAssociation.on('click', () => {
@@ -371,12 +372,11 @@
             btnSearch.prop('disabled', true);
         });
 
-        btnAddAssociation.on('click', function () {
-            assusername.val('');
+        btnAddAssociation.on('click', function () {            
             asscomment.val('');            
 
             InitInputTagUsername(subscriberId, ctsCustid);
-
+            
             divAddAssociation.dialog({
                 modal: true,
                 width: '800px',
@@ -384,7 +384,7 @@
                 resizable: true,
                 draggable: true,
                 close: function () { $(this).dialog('close'); }
-            });
+            });            
         });        
     };
 }
