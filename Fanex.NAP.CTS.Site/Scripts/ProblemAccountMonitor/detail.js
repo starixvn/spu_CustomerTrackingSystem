@@ -33,7 +33,7 @@
         hdIsTest: $('#hdIsTest'),
         hdSubIssueTypeId: $('#hdSubIssueTypeId'),
         hdActionId: $('#hdActionId'),
-        hdTransIds: $('hdTransIds')
+        hdTransIds: $('#hdTransIds')
     }; 
 
     let isHostPermission = domElements.hdIsHostPermission.attr('IsHostPermission') === "True";
@@ -298,7 +298,7 @@
         if (minText === "")
             minText = "0";
         if (maxText === "")
-            maxVmaxTextalueText = "0";
+            maxText = "0";
 
         let minValue = parseFloat(minText);
         let maxValue = parseFloat(maxText);
@@ -313,7 +313,8 @@
             let span = tr.find('span.stake');
             if (span.length > 0) {
                 let stakeValue = parseFloat(span.attr('data-stake'));
-                let isEqual = stakeValue >= minValue && stakeValue <= maxValue;
+                let defaultValue = minValue === 0 && maxValue === 0;
+                let isEqual = stakeValue >= minValue && stakeValue <= maxValue || defaultValue;
 
                 isEqual
                     ? tr.removeClass('hide')
@@ -383,7 +384,24 @@
         }
     }
 
+    function GetTickedChecked() {
+        let arrBetIds = [];
+
+        domElements.ticketsTable.find('tr').each(function () {
+            let input = $(this).find("td input");
+            let checked = $(this).find("td input:checked");
+            let disabled = input.attr('disabled');
+
+            if (checked.length > 0 && !disabled)
+                arrBetIds.push(input.attr('data-bet-id'));
+        });
+
+        return arrBetIds;
+    }
+
     function CreateVoidRequestToTVS() {
+        let arrBetIds = GetTickedChecked();        
+
         let url = common.modifyRelativeUrl('/ProblemAccountMonitor/GetGetInfoVoidRequestToTVS');
         $.ajax(url, {
             type: 'GET',
@@ -395,8 +413,8 @@
                 domElements.hdIsTest.val(response.IsTest);
                 domElements.hdSubIssueTypeId.val(response.SubIssueTypeId);
                 domElements.hdActionId.val(response.ActionId);
-                domElements.hdTransIds.val("123456");
-                domElements.formCreateVoidRequest.attr('action', response.RedirectUrl);
+                domElements.hdTransIds.val(arrBetIds);
+                domElements.formCreateVoidRequest.attr('action', response.RedirectUrl);               
             },
             complete: function () {
                 domElements.formCreateVoidRequest.submit();
@@ -430,16 +448,18 @@
     }
 
     function UpDownStakeRangeInput(e) {
+        let newValue = 0;
         let $button = $(e.target);
         let oldValue = $button.parent().find("input").val();
-        let newVal = 0;
+        if (oldValue === "")
+            oldValue = 0;        
 
         if ($button.attr('data-type') === "up")
-            newVal = parseFloat(oldValue) + 1;
+            newValue = parseFloat(oldValue) + 1;
         else if (oldValue > 0)
-            newVal = parseFloat(oldValue) - 1;
+            newValue = parseFloat(oldValue) - 1;
 
-        $button.parent().find("input").val(newVal);
+        $button.parent().find("input").val(newValue);
     }
 
     function DisableButtons() {
