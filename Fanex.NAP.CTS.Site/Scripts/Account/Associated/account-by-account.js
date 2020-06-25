@@ -262,10 +262,12 @@
             enforceWhitelist: false
         })
             .on('add', function (e, tagName) {
-                console.log('JQEURY EVENT: ', 'added', tagName);
+                let $tag = $(tagName.tag);
+                $tag.addClass('valid');
             })
             .on('invalid', function (e, tagName) {
-                console.log('JQEURY EVENT: ', "invalid", e, ' ', tagName);
+                let $tag = $(tagName.tag);
+                $tag.addClass('invalid-duplicated');
             });
     }
 
