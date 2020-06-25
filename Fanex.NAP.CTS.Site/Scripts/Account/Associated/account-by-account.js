@@ -11,17 +11,18 @@
     var _username;
     var dataTable;
     let isHostPermission;
+    let inputTagUsername = $('#inputTagUsername');
 
     function RenderTag(obj) {
 
         var html = "";
 
-        if (obj.AffectedTag == 1) {
+        if (obj.AffectedTag === 1) {
             html += "<span class='icon icon-Affected'  title='Affected'></span>";
         }
 
-        if (obj.FlaggedTag != 0) {
-            if (obj.FlaggedTag == 2) {
+        if (obj.FlaggedTag !== 0) {
+            if (obj.FlaggedTag === 2) {
                 html += "<span class='icon icon-Flagged' title='Flagged'></span>";
             }
             else {
@@ -29,21 +30,17 @@
             }
         }
 
-        return html == "" ? "-" : html;
+        return html === "" ? "-" : html;
     }
 
     function RenderUsername(obj) {
-        if (obj.Username != null) {
+        if (obj.Username !== null) {
             var url = common.modifyRelativeUrl('Account/Index/' + obj.CTSCustId);
 
             return '<a class="info-bng" href="' + url + '">' + obj.Username + '</a>';
         }
 
         return null;
-    }
-
-    function RenderGraphImage() {
-        return '<span class="icon-path graph" title="Graph View"></span>';
     }
 
     function RenderGrid() {
@@ -127,7 +124,7 @@
 
                                 ActiveRemove(row, ctsCustId, subscriberId);
                             });
-                        }                        
+                        }
                     }
                 },
                 {
@@ -144,35 +141,21 @@
     }
 
     function AssociationStatus(isLinked) {
-        //return '<label class="switch-status switch-green"><input type="checkbox" class="switch-input" ' + (isLinked ? '' : 'checked') + '><span class="switch-label" data-on="Active" data-off="Removed"></span><span class="switch-handle"></span></label>'
-
         var html = '<div class="toggle ' + (isLinked ? 'toggle-on' : '') + '" id="switch">';
-        html += '<div class="toggle-text-off' + (isHostPermission === "False" ? ' disabled"' : '') +'"> Unlinked</div >';
-        html += '<div class="glow-comp"></div> <div class="toggle-button ' + (isHostPermission === "False" ? ' disabled"' : '') +'"></div>';
-        html += '<div class="toggle-text-on' + (isHostPermission === "False" ? ' disabled"' : '') +'"> Linked</div>';
+        html += '<div class="toggle-text-off' + (isHostPermission === "False" ? ' disabled"' : '') + '"> Unlinked</div >';
+        html += '<div class="glow-comp"></div> <div class="toggle-button ' + (isHostPermission === "False" ? ' disabled"' : '') + '"></div>';
+        html += '<div class="toggle-text-on' + (isHostPermission === "False" ? ' disabled"' : '') + '"> Linked</div>';
         html += '</div>';
 
         return html;
     }
 
-    function ActiveRemove(obj, fromCTSCustId, fromSubscriberId)
-    {
-        common.showConfirmation('Do you want to update Association Status between <b>' + _username +'</b> and <b>' + obj.Username + '</b> ?',
+    function ActiveRemove(obj, fromCTSCustId, fromSubscriberId) {
+        common.showConfirmation('Do you want to update Association Status between <b>' + _username + '</b> and <b>' + obj.Username + '</b> ?',
             function () {
                 RemoveAssociation(fromSubscriberId, fromCTSCustId, obj.SubscriberId, obj.CTSCustId, !obj.IsLinked);
             });
 
-    }
-
-    function HandleGraphShortestPath(row, ctsCustid) {
-        var formGraph = new graph();
-        formGraph.GenerateShortestPath(ctsCustid, row.CTSCustId);
-        formGraph.OpenModal();
-    }
-
-    function ResetForm() {
-        assusername.val('');
-        asscomment.val('');
     }
 
     function GetTotalAssociation(ctsCustId) {
@@ -182,18 +165,14 @@
                 ctsCustId: ctsCustId
             },
             success: function (response) {
-
                 totalAssAccount = response.TotalAccounts;
 
                 $('#totalAssAccount').html(response.TotalAccounts);
                 $('#totalAssDevice').html(response.TotalDevices);
                 $('#totalAssIP').html(response.TotalIps);
             },
-            complete: function () {
-                
-            },
             error: function (errMsg) {
-                // common.showError(errMsg);
+                console.log(errMsg);
             }
         });
     }
@@ -211,7 +190,7 @@
             type: 'POST',
             data: params,
             success: function (response) {
-                if (response.errorCode == 0) {
+                if (response.errorCode === 0) {
                     associatedByAccountTable.find('tbody').addClass('loading');
                     common.showSuccess('Added association successfully!', 2000);
                     divAddAssociation.dialog('close');
@@ -223,10 +202,10 @@
                         btnSearch.trigger("click");
                     }, 2000);
                 }
-                else if (response.errorCode == -2) {
+                else if (response.errorCode === -2) {
                     common.showError('Username "' + params.Username + '" is invalid.');
                 }
-                else if (response.errorCode == -1 || response.errorCode == -100) {
+                else if (response.errorCode === -1 || response.errorCode === -100) {
                     common.showError('Username already existed in "' + params.Username + '" association list.');
                 }
                 else {
@@ -252,16 +231,11 @@
         $.ajax(url, {
             type: 'POST',
             data: params,
-            beforeSend: function () {
-                
-            },
             success: function (response) {
-                if (response.errorCode == 0) {
-                    
+                if (response.errorCode === 0) {
                     common.showSuccess('Updated association successful!', 2000);
                 }
-                else if (response.errorCode == -1) {
-             
+                else if (response.errorCode === -1) {
                     common.showError('This association is already unlinked!');
                 }
                 else {
@@ -269,13 +243,30 @@
                 }
             },
             complete: function () {
-
                 setTimeout(() => {
-                    
                     btnSearch.trigger("click");
                 }, 2000);
             }
         });
+    }
+
+    function InitInputTagUsername() {
+        inputTagUsername.tagify({
+            pattern: null,           
+            keepInvalidTags: true,
+            callbacks: {},
+            addTagOnBlur: true,
+            duplicates: false,
+            whitelist: [],
+            blacklist: [],
+            enforceWhitelist: false
+        })
+            .on('add', function (e, tagName) {
+                console.log('JQEURY EVENT: ', 'added', tagName);
+            })
+            .on('invalid', function (e, tagName) {
+                console.log('JQEURY EVENT: ', "invalid", e, ' ', tagName);
+            });
     }
 
     function DisableButton(hostPermission) {
@@ -287,7 +278,7 @@
 
     this.Initial = function (ctsCustid, username, subscriberId, subscriber, hostPermission) {
         _username = username;
-        
+
         DisableButton(hostPermission);
 
         $("#account-by-account-cbb-status").multiselect();
@@ -313,7 +304,10 @@
         });
 
         btnAddAssociation.on('click', function () {
-            ResetForm();
+            assusername.val('');
+            asscomment.val('');
+            
+            InitInputTagUsername();            
 
             divAddAssociation.dialog({
                 modal: true,
@@ -322,17 +316,17 @@
                 resizable: true,
                 draggable: true,
                 close: function () { $(this).dialog('close'); }
-            })
+            });
         });
 
         btnSaveAssociation.on('click', function () {
-            if (assusername.val() == '') {
+            if (assusername.val() === '') {
                 common.showError('Username is required.');
-                assusername.focus();
+                inputTagUsername.focus();
             }
-            else if (assusername.val().trim() == username.trim()) {
+            else if (assusername.val().trim() === username.trim()) {
                 common.showError('The username must be different from ' + username);
-                assusername.focus();
+                inputTagUsername.focus();
             }
             else {
                 AddAssociation(ctsCustid, subscriberId, username, subscriber);
@@ -341,10 +335,6 @@
 
         btnCancelAssociation.on('click', function () {
             divAddAssociation.dialog('close');
-        });
-
-    }
+        });        
+    };
 }
-
-
-

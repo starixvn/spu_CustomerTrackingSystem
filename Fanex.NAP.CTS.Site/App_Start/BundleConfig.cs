@@ -169,6 +169,8 @@
             bundles.Add(new ScriptBundle("~/account-detail-scripts")
                 .Include("~/Scripts/MultipleSelect/jquery.multiselect.filter.js",
                         "~/Scripts/popoto/d3.v3.min.js",
+                        "~/Scripts/tagify/jquery.tagify.min.js",
+                        "~/Scripts/tagify/tagify.min.js",
                         "~/scripts/Account/Associated/account-by-account.js",
                         "~/scripts/Account/Associated/graph.js",
                         "~/scripts/Account/index.js",
@@ -178,6 +180,7 @@
             bundles.Add(new StyleBundle("~/account-detail-styles").Include(
                       "~/Content/scss/MultipleSelect/jquery.multiselect.filter.css",
                       "~/Content/scss/MultipleSelect/jquery.multiselect.css",
+                      "~/Content/scss/vendors/jquery-ui/base/tagify.css",
                       "~/Content/scss/pages/account/account.css"));
         }
 

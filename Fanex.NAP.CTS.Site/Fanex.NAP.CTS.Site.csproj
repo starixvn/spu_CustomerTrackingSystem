@@ -470,6 +470,7 @@
     <Content Include="Content\scss\pages\subscriber-assignment\subscriber-assignment.min.css">
       <DependentUpon>subscriber-assignment.css</DependentUpon>
     </Content>
+    <Content Include="Content\scss\vendors\jquery-ui\base\tagify.css" />
     <Content Include="Content\scss\vendors\MultipleSelect\jquery.multiselect.css" />
     <Content Include="Content\scss\vendors\MultipleSelect\jquery.multiselect.filter.css" />
     <Content Include="Content\scss\vendors\popoto\font-icon-list.html" />
@@ -879,6 +880,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Startup.cs" />
+    <Content Include="Scripts\tagify\jquery.tagify.min.js" />
+    <Content Include="Scripts\tagify\tagify.min.js" />
     <Content Include="Views\ProblemAccountMonitor\Detail.cshtml" />
     <Content Include="Views\ImportEvidences\Index.cshtml" />
   </ItemGroup>
