@@ -1619,6 +1619,11 @@
 .dataTables_length select {
   min-width: 58px; }
 
+.ui-dialog .ui-dialog-titlebar {
+  padding-left: 17px; }
+  .ui-dialog .ui-dialog-titlebar .ui-dialog-title {
+    font-size: 16px; }
+
 #divAddAssociation {
   padding-top: 25px;
   padding-bottom: 16px;
@@ -1642,7 +1647,7 @@
     #divAddAssociation .group-title .wrapper-rule .bg-red, #divAddAssociation .group-title .wrapper-rule .bg-yellow {
       height: 18px;
       border-radius: 11px;
-      padding: 0 11px; }
+      padding: 0 10px; }
     #divAddAssociation .group-title .wrapper-rule .bg-red {
       background: #FFE0E0;
       border: 1px solid #E6CACA; }
@@ -1650,10 +1655,11 @@
       background: #FFEDC0;
       border: 1px solid #E6D6AD; }
     #divAddAssociation .group-title .wrapper-rule-left {
-      margin-right: 14px; }
+      margin-right: 16px; }
   #divAddAssociation .wrapper-value {
     display: block;
-    height: 200px;
+    min-height: 60px;
+    max-height: 200px;
     width: 100%;
     overflow: auto;
     background: #FFFFFF;
@@ -1670,6 +1676,38 @@
       font-size: 13px;
       line-height: 16px;
       color: #818181; }
+    #divAddAssociation .wrapper-value .wrapper-events {
+      display: flex;
+      flex-wrap: wrap;
+      padding-top: 3px;
+      padding-bottom: 7px;
+      padding-left: 5px;
+      padding-right: 5px; }
+      #divAddAssociation .wrapper-value .wrapper-events .block-event {
+        min-width: 115px;
+        height: 22px;
+        line-height: 16px;
+        border-radius: 11px;
+        margin-right: 4px;
+        margin-bottom: 4px; }
+        #divAddAssociation .wrapper-value .wrapper-events .block-event.valid {
+          background-color: #EAF0FF; }
+        #divAddAssociation .wrapper-value .wrapper-events .block-event.invalid {
+          background-color: #FFE0E0; }
+        #divAddAssociation .wrapper-value .wrapper-events .block-event.duplicate {
+          background-color: #FFEDC0; }
+        #divAddAssociation .wrapper-value .wrapper-events .block-event .text {
+          display: inline-block;
+          font-weight: 600;
+          font-size: 13px;
+          line-height: 16px;
+          color: #474747;
+          padding-left: 11px;
+          padding-right: 4px; }
+        #divAddAssociation .wrapper-value .wrapper-events .block-event .cross {
+          display: inline-block;
+          font-size: 14px;
+          padding: 4px; }
   #divAddAssociation .wrapper-to {
     margin-bottom: 9px; }
     #divAddAssociation .wrapper-to .label {

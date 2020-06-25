@@ -1380,6 +1380,13 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 }
 
 // association acount
+.ui-dialog .ui-dialog-titlebar {
+    padding-left: 17px;
+
+    .ui-dialog-title {
+        font-size: 16px;
+    }
+}
 
 #divAddAssociation {
     padding-top: 25px;
@@ -1413,7 +1420,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             .bg-red, .bg-yellow {
                 height: 18px;
                 border-radius: 11px;
-                padding: 0 11px;
+                padding: 0 10px;
             }
 
             .bg-red {
@@ -1428,13 +1435,14 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
         }
 
         .wrapper-rule-left {
-            margin-right: 14px;
+            margin-right: 16px;
         }
     }
 
     .wrapper-value {
         display: block;
-        height: 200px;
+        min-height: 60px;
+        max-height: 200px;
         width: 100%;
         overflow: auto;
         background: #FFFFFF;
@@ -1452,6 +1460,52 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             font-size: 13px;
             line-height: 16px;
             color: #818181;
+        }
+
+        .wrapper-events {
+            display: flex;
+            flex-wrap: wrap;
+            padding-top: 3px;
+            padding-bottom: 7px;
+            padding-left: 5px;
+            padding-right: 5px;
+
+            .block-event {
+                min-width: 115px;
+                height: 22px;
+                line-height: 16px;
+                border-radius: 11px;
+                margin-right: 4px;
+                margin-bottom: 4px;
+
+                &.valid {
+                    background-color: #EAF0FF;
+                }
+
+                &.invalid {
+                    background-color: #FFE0E0;
+                }
+
+                &.duplicate {
+                    background-color: #FFEDC0;
+                }
+
+                .text {
+                    display: inline-block;
+                    font-weight: 600;
+                    font-size: 13px;
+                    line-height: 16px;
+                    color: #474747;
+                    padding-left: 11px;
+                    padding-right: 4px;
+                }
+
+                .cross {
+                    display: inline-block;
+                    font-size: 14px;
+                    padding: 4px;
+                }
+            }
         }
     }
 
@@ -1475,6 +1529,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 
     .wrapper-comment {
         margin-bottom: 14px;
+
         .label {
             font-size: 13px;
             line-height: 16px;
