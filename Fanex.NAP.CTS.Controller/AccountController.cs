@@ -501,6 +501,44 @@
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        public ActionResult ValidateManualAssociationMultiple(long fromCTSCustId, string toUserNameList)
+        {
+            var resultValidated = _accountService.ValidateManualAssociationMultiple(fromCTSCustId, toUserNameList);
+
+            return Json(resultValidated, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        public ActionResult InsertManualAssociationMultiple(int fromSubscriberId, long fromCTSCustId, string toUserNameList, string remark)
+        {
+            var associationList = new List<InsertManualAssociationMultipleModel>();
+            var userId = CurrentSession.UserId;
+
+            var resultValidated = _accountService.ValidateManualAssociationMultiple(fromCTSCustId, toUserNameList);
+                        
+            foreach (var association in resultValidated)
+            {
+                associationList.Add(new InsertManualAssociationMultipleModel
+                {
+                    FromSubscriberID = fromSubscriberId,
+                    FromCTSCustID = fromCTSCustId,
+                    ToSubscriberID = association.SubscriberID,
+                    ToCTSCustID = association.CTSCustID,
+                    Remark = remark,
+                    CreatedBy = userId
+                });
+            }
+
+            var associationListJson = JsonConvert.SerializeObject(associationList);
+
+            var resultInsert = _accountService.InsertManualAssociationMultiple(associationListJson);
+
+            return Json(resultInsert, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult ActiveRemoveAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, string remark, bool isLinked)
         {
             if (fromSubscriberId <= 0 || fromCTSCustId <= 0 || toSubscriberId <= 0 || toCTSCustId <= 0)
@@ -519,8 +557,7 @@
                 errorCode = dbResult.ErrorCode,
                 errorMessage = dbResult.ErrorMsg
             }, JsonRequestBehavior.AllowGet);
-        }
-
+        }       
         #endregion
 
         #region Chain To Evidence

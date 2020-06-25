@@ -51,6 +51,7 @@
     <Compile Include="Account\Associated\AssociatedDeviceByAccountFilter.cs" />
     <Compile Include="Account\Associated\CustomerAssociationByAccountDetailViewModel.cs" />
     <Compile Include="Account\Associated\GraphCustomerItemViewModel.cs" />
+    <Compile Include="Account\Associated\ValidateManualAssociationMultipleViewModel.cs" />
     <Compile Include="Account\ChainToEvidence\AccountEvidenceViewModel.cs" />
     <Compile Include="Account\ChainToEvidence\AffectedEvidenceListBetweenCustsViewModel.cs" />
     <Compile Include="Account\ChainToEvidence\AffectedRetractEvidenceViewModel.cs" />

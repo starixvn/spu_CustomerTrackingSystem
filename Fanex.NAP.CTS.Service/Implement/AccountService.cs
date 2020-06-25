@@ -602,6 +602,30 @@
             }
         }
 
+        public IEnumerable<ValidateManualAssociationMultipleModel> ValidateManualAssociationMultiple(long fromCTSCustId, string toUserNameList)
+        {
+            var criteria = new ValidateManualAssociationMultipleCriteria
+            {
+                ToUserNameList = toUserNameList,
+                FromCTSCustID = fromCTSCustId
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<ValidateManualAssociationMultipleModel>(criteria).ToList();
+            }
+        }
+
+        public DBResult InsertManualAssociationMultiple(string associationListJson)
+        {
+
+            return new DBResult
+            {
+                ErrorCode = 0,
+                ErrorMsg = ""
+            };
+        }
+
         public DBResult ActiveRemoveAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, string remark, int createdBy, bool isRemoveAction)
         {
             var criteria = new ActiveRemoveAssociationCriteria

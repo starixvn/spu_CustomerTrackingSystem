@@ -155,10 +155,12 @@
     <Compile Include="Account\Evidence\AccountExceptionEvidence.cs" />
     <Compile Include="Account\FlaggedEvidenceModel.cs" />
     <Compile Include="Account\FraudCaseModel.cs" />
+    <Compile Include="Account\InsertManualAssociationMultipleModel.cs" />
     <Compile Include="Account\RemoveEvidenceModel.cs" />
     <Compile Include="Account\TagModel.cs" />
     <Compile Include="Account\UpdateAccountExceptionModel.cs" />
     <Compile Include="Account\UpdatePlaceEvidenceModel.cs" />
+    <Compile Include="Account\ValidateManualAssociationMultipleModel.cs" />
     <Compile Include="DTO\CustomerCategory.cs" />
     <Compile Include="Association\AssociationCustomerModel.cs" />
     <Compile Include="DTO\SportGroup.cs" />

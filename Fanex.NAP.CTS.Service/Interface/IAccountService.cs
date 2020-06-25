@@ -73,11 +73,16 @@
         IEnumerable<AffectedEvidenceListBetweenCustsModel> GetAffectedEvidenceListBetweenCusts(Int64 fromCTSCustID, Int64 toCTSCustID);
 
         IEnumerable<SportGroup> GetAllSportGroup();
+
         List<AssociationCustomerModel> SearchAssociatedCustomer(string username);
 
         DBResult AddAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, string remark, int createdBy);
-        IEnumerable<CustomerCategory> GetCustomerCategoryByCTSCustId(long ctsCustId);
 
+        IEnumerable<ValidateManualAssociationMultipleModel> ValidateManualAssociationMultiple(long fromCTSCustId, string toUserNameList);
+
+        DBResult InsertManualAssociationMultiple(string associationListJson);
+
+        IEnumerable<CustomerCategory> GetCustomerCategoryByCTSCustId(long ctsCustId);
 
         DBResult ActiveRemoveAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, string remark, int createdBy, bool isRemoveAction);
 

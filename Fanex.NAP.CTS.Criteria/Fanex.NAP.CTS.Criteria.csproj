@@ -45,6 +45,8 @@
   <ItemGroup>
     <Compile Include="Account\Associated\ActiveRemoveAssociationCriteria.cs" />
     <Compile Include="Account\Associated\AddManualAssociationCriteria.cs" />
+    <Compile Include="Account\Associated\InsertManualAssociationMultipleCriteria.cs" />
+    <Compile Include="Account\Associated\ValidateManualAssociationMultipleCriteria.cs" />
     <Compile Include="Account\Associated\GetAssociatedAccountByAccountCriteria.cs" />
     <Compile Include="Account\Associated\GetCustomerByUsernameCriteria.cs" />
     <Compile Include="Account\Associated\GetCustomerFraudInfoCriteria.cs" />
