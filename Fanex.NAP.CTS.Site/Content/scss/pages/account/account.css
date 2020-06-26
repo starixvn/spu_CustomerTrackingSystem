@@ -1691,6 +1691,7 @@
     #divAddAssociation .group-title .wrapper-rule-left {
       margin-right: 16px; }
   #divAddAssociation .wrapper-value {
+    position: relative;
     display: block;
     min-height: 60px;
     max-height: 200px;
@@ -1711,6 +1712,13 @@
       line-height: 16px;
       color: #818181;
       padding-bottom: 8px; }
+    #divAddAssociation .wrapper-value .limit-username {
+      position: absolute;
+      top: 9px;
+      right: 18px;
+      font-size: 12px;
+      line-height: 14px;
+      color: #818181; }
     #divAddAssociation .wrapper-value .tagify--outside .tagify__input {
       order: -1;
       flex: 100%;

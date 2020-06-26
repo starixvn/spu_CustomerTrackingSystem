@@ -1484,6 +1484,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     }
 
     .wrapper-value {
+        position: relative;
         display: block;
         min-height: 60px;
         max-height: 200px;
@@ -1505,6 +1506,15 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             line-height: 16px;
             color: #818181;
             padding-bottom: 8px;
+        }
+
+        .limit-username {
+            position: absolute;
+            top: 9px;
+            right: 18px;
+            font-size: 12px;
+            line-height: 14px;
+            color: #818181;
         }
 
         .tagify--outside .tagify__input {
