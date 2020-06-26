@@ -1388,6 +1388,50 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     }
 }
 
+.loading-block {
+    position: relative;
+
+    &:after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 42%;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        border: 0.25rem solid rgba(57, 110, 248, 0.2);
+        border-top-color: rgba(57, 110, 248, 1);
+        -webkit-animation: spin 1s infinite linear;
+        animation: spin 1s infinite linear;
+    }
+
+    &.divAddAssociation {
+        opacity: .3;
+    }
+}
+
+.loading-value {
+    position: relative;
+
+    &:after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 30%;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        border: 0.25rem solid rgba(57, 110, 248, 0.2);
+        border-top-color: rgba(57, 110, 248, 1);
+        -webkit-animation: spin 1s infinite linear;
+        animation: spin 1s infinite linear;
+    }
+
+    &.wrapper-value {
+        opacity: .3;
+    }
+}
+
 #divAddAssociation {
     padding-top: 25px;
     padding-bottom: 16px;
