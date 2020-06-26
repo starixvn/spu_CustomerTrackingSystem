@@ -12,6 +12,7 @@
     let isHostPermission;
     let spanAddAssociationUserName = $('#spanAddAssociationUserName');
     let inputTagUsername = $('#inputTagUsername');
+    let maxCountTags = 2;
 
     function RenderTag(obj) {
 
@@ -255,16 +256,43 @@
             $.ajax(common.modifyRelativeUrl('Account/ValidateManualAssociationMultiple'), {
                 type: 'POST',
                 data: params,
-                beforeSend: function () { },
-                success: function (response) {
-                    console.log(response);
+                beforeSend: function () {
+                    spanAddAssociationUserName.addClass("loading");
                 },
-                complete: function () { },
+                success: function (response) {
+                    BindResultValidatedManualAssociationMultiple(response);
+                },
+                complete: function () {
+                    spanAddAssociationUserName.removeClass("loading");
+                },
                 error: function (errMsg) {
                     console.log(errMsg);
                 }
             });
         }
+    }
+
+    function BindResultValidatedManualAssociationMultiple(data) {
+        data.UserNameInvalidList.map(function (x) {
+            let usernameEqual = $("tag[data-user-name='" + x + "']");
+            if (usernameEqual !== undefined) {
+                usernameEqual.removeClass('valid').addClass('invalid-username');
+            }            
+        });
+
+        data.UserNameDuplicatedList.map(function (x) {
+            let usernameEqual = $("tag[data-user-name='" + x + "']");
+            if (usernameEqual !== undefined) {
+                usernameEqual.removeClass('valid').addClass('invalid-duplicated');
+            }
+        });
+
+        let isEnableAdd = data.UserNameInvalidList.length === 0 && data.UserNameDuplicatedList.length === 0;
+
+        if (isEnableAdd)
+            btnSaveAssociation.prop('disabled', false);
+        else
+            btnSaveAssociation.prop('disabled', true);
     }
 
     function InsertManualAssociationMultiple(fromSubscriberId, fromCTSCustId) {
@@ -280,11 +308,21 @@
             $.ajax(common.modifyRelativeUrl('Account/InsertManualAssociationMultiple'), {
                 type: 'POST',
                 data: params,
-                beforeSend: function () { },
-                success: function (response) {
-                    console.log(response);
+                beforeSend: function () {
                 },
-                complete: function () { },
+                success: function (response) {
+                    if (response.ErrorCode === 0) {
+                        setTimeout(() => {
+                            common.showSuccess("Add association successful");
+                            divAddAssociation.dialog('close');                            
+                        }, 2000);
+                    } else {
+                        BindResultValidatedManualAssociationMultiple(response.ResultValidated);
+                    }
+                },
+                complete: function () {
+                    btnSearch.trigger("click");
+                },
                 error: function (errMsg) {
                     console.log(errMsg);
                 }
@@ -301,41 +339,52 @@
         });
 
         return userNameList.join();
+    }   
+
+    function OnChangeTags(tagName, cssClass) {
+        if (maxCountTags > 0) {
+            let $tag = $(tagName.tag);
+
+            $tag.attr('data-user-name', $tag.text());
+            $tag.addClass(cssClass);
+        } else {
+            var tagify = inputTagUsername.tagify().data('tagify');
+            tagify.removeTags(tagName.tag);            
+        }
+
+        maxCountTags = maxCountTags > 0
+            ? maxCountTags - 1
+            : 0;
     }
 
-    function InitInputTagUsername(fromSubscriberId, fromCTSCustId) {
-        spanAddAssociationUserName.find('tags tag').remove();
-
+    function InitInputTagUsername() {
         inputTagUsername.tagify({
-            pattern: null,           
+            pattern: null,
             keepInvalidTags: true,
+            skipInvalid: false,
             callbacks: {},
             addTagOnBlur: true,
             duplicates: false,
+            editTags: 0,
             whitelist: [],
             blacklist: [],
+            maxTags: maxCountTags,
             enforceWhitelist: false,
             dropdown: {
                 position: "input",
                 enabled: 0
             }
-        })
+        })            
             .on('add', function (_, tagName) {
-                let $tag = $(tagName.tag);
-                $tag.addClass('valid');
+                OnChangeTags(tagName, 'valid');
+                isValidated = false;
             })
             .on('invalid', function (_, tagName) {
-                let $tag = $(tagName.tag);
-                $tag.addClass('invalid-duplicated');
+                OnChangeTags(tagName, 'invalid-duplicated');
             });
-
-        spanAddAssociationUserName.find('tags').attr('tabindex', "1");
-        
-        inputTagUsername.on('blur', () => ValidateManualAssociationMultiple(fromCTSCustId));
-        btnSaveAssociation.on('click', () => InsertManualAssociationMultiple(fromSubscriberId, fromCTSCustId));
-        btnCancelAssociation.on('click', () => {
-            divAddAssociation.dialog('close');
-        });
+    
+        spanAddAssociationUserName.find('tags').attr('tabindex', "1");        
+        btnSaveAssociation.prop('disabled', true);        
     }
 
     function DisableButton(hostPermission) {
@@ -347,6 +396,7 @@
 
     this.Initial = function (ctsCustid, username, subscriberId, subscriber, hostPermission) {
         _username = username;
+        let isValidated = true;
 
         DisableButton(hostPermission);
 
@@ -370,21 +420,37 @@
 
         associatedByAccountTable.on('length.dt', function () {
             btnSearch.prop('disabled', true);
-        });
+        });        
 
-        btnAddAssociation.on('click', function () {            
-            asscomment.val('');            
+        InitInputTagUsername();
 
-            InitInputTagUsername(subscriberId, ctsCustid);
-            
+        btnAddAssociation.on('click', function () {
+            asscomment.val('');   
+            maxCountTags = 50;
+
+            var tagify = inputTagUsername.tagify().data('tagify');
+            tagify.removeAllTags();
+
             divAddAssociation.dialog({
                 modal: true,
                 width: '800px',
                 title: 'ADD ASSOCIATION',
                 resizable: true,
                 draggable: true,
-                close: function () { $(this).dialog('close'); }
+                close: function () {                    
+                    $(this).dialog('close');
+                }
             });            
         });        
+        btnSaveAssociation.on('click', () => InsertManualAssociationMultiple(subscriberId, ctsCustid));
+        btnCancelAssociation.on('click', () => {
+            divAddAssociation.dialog('close');
+        });
+        inputTagUsername.on('blur', () => {
+            if (!isValidated) {
+                ValidateManualAssociationMultiple(ctsCustid);
+                isValidated = true;
+            }
+        });
     };
 }

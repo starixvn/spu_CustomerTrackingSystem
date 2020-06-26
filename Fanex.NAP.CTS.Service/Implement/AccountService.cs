@@ -618,12 +618,34 @@
 
         public DBResult InsertManualAssociationMultiple(string associationListJson)
         {
-
-            return new DBResult
+            var criteria = new InsertManualAssociationMultipleCriteria
             {
-                ErrorCode = 0,
-                ErrorMsg = ""
+                AssociationListJson = associationListJson
             };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                try
+                {
+                    db.ExecuteNonQuery(criteria);
+
+                    return new DBResult
+                    {
+                        ErrorCode = 0,
+                        ErrorMsg = string.Empty
+                    };
+                }
+                catch (Exception ex)
+                {
+                    LogService.Error("CTS - Insert manual association multiple - exception: " + ex.Message, ex);
+
+                    return new DBResult
+                    {
+                        ErrorCode = -1,
+                        ErrorMsg = ex.Message
+                    };
+                }
+            }
         }
 
         public DBResult ActiveRemoveAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, string remark, int createdBy, bool isRemoveAction)

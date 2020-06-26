@@ -503,21 +503,55 @@
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult ValidateManualAssociationMultiple(long fromCTSCustId, string toUserNameList)
         {
+            var viewModel = new ValidateManualAssociationMultipleViewModel();
             var resultValidated = _accountService.ValidateManualAssociationMultiple(fromCTSCustId, toUserNameList);
 
-            return Json(resultValidated, JsonRequestBehavior.AllowGet);
+            return resultValidated.Any()
+                ? Json(GetInvalidOrDuplicated(resultValidated), JsonRequestBehavior.AllowGet)
+                : Json(viewModel, JsonRequestBehavior.AllowGet);
         }
+
+        private ValidateManualAssociationMultipleViewModel GetInvalidOrDuplicated(IEnumerable<ValidateManualAssociationMultipleModel> list)
+        {
+            return new ValidateManualAssociationMultipleViewModel
+            {
+                UserNameInvalidList = list.Where(x => x.CTSCustID.Equals(0))
+                                          .Select(x => x.UserName),
+                UserNameDuplicatedList = list.Where(x => x.IsDuplicated)
+                                             .Select(x => x.UserName)
+            };
+        }       
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult InsertManualAssociationMultiple(int fromSubscriberId, long fromCTSCustId, string toUserNameList, string remark)
         {
+            var resultInsert = new InsertManualAssociationMultipleViewModel();
+
+            var resultValidated = _accountService.ValidateManualAssociationMultiple(fromCTSCustId, toUserNameList);
+           
+            if (resultValidated.Any())
+            {
+                var invalidOrDuplicatedList = GetInvalidOrDuplicated(resultValidated);
+
+                resultInsert.ResultValidated = invalidOrDuplicatedList;
+
+                var isNotAllowInsert = invalidOrDuplicatedList.UserNameInvalidList.Any() || invalidOrDuplicatedList.UserNameDuplicatedList.Any();
+
+                return isNotAllowInsert
+                    ? Json(resultInsert, JsonRequestBehavior.AllowGet)
+                    : InsertManualAssociationMultiple(resultValidated, fromSubscriberId, fromCTSCustId, remark);
+            }
+
+            return Json(resultInsert, JsonRequestBehavior.AllowGet);
+        }
+
+        private ActionResult InsertManualAssociationMultiple(IEnumerable<ValidateManualAssociationMultipleModel> list, int fromSubscriberId, long fromCTSCustId, string remark)
+        {
             var associationList = new List<InsertManualAssociationMultipleModel>();
             var userId = CurrentSession.UserId;
 
-            var resultValidated = _accountService.ValidateManualAssociationMultiple(fromCTSCustId, toUserNameList);
-                        
-            foreach (var association in resultValidated)
+            foreach (var association in list)
             {
                 associationList.Add(new InsertManualAssociationMultipleModel
                 {
@@ -532,7 +566,13 @@
 
             var associationListJson = JsonConvert.SerializeObject(associationList);
 
-            var resultInsert = _accountService.InsertManualAssociationMultiple(associationListJson);
+            var dbInsert = _accountService.InsertManualAssociationMultiple(associationListJson);
+
+            var resultInsert = new InsertManualAssociationMultipleViewModel()
+            {
+                ErrorCode = dbInsert.ErrorCode,
+                ErrorMessage = dbInsert.ErrorMsg
+            };
 
             return Json(resultInsert, JsonRequestBehavior.AllowGet);
         }

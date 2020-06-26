@@ -1,14 +1,19 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.Account.Associated
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
     public class ValidateManualAssociationMultipleViewModel
     {
-        public string UserName { get; set; }
+        public ValidateManualAssociationMultipleViewModel()
+        {
+            UserNameInvalidList = Enumerable.Empty<string>();
+            UserNameDuplicatedList = Enumerable.Empty<string>();
+        }
 
-        public long CTSCustID { get; set; }
+        public IEnumerable<string> UserNameInvalidList { get; set; }
 
-        public int SubscriberID { get; set; }
-
-        public string StatusCode { get; set; }
+        public IEnumerable<string> UserNameDuplicatedList { get; set; }
 
     }
 }

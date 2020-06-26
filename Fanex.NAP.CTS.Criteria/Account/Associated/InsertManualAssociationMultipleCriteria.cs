@@ -6,7 +6,7 @@
     public class InsertManualAssociationMultipleCriteria : NonQueryCommand
     {
         [SpParam(SqlParamName = "ip_ManualAssociationList")]
-        public string AssociationList { get; set; }
+        public string AssociationListJson { get; set; }
 
         public override string GetSettingKey()
             => "CTS_DC_AddManualAssociationMultiple";
