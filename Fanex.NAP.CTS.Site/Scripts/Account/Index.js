@@ -259,10 +259,10 @@
     function HandleFlagInfo(data) {
         if (data.Flagged !== 0) {
             if (data.Flagged === 2) {
-                $('span.icon-Flagged').removeClass('hide');
+                $('span.icon-error').removeClass('hide');
             }
             else {
-                $('span.icon-Flagged-With-Evidence').removeClass('hide');
+                $('span.icon-flag').removeClass('hide');
             }
         }
 
