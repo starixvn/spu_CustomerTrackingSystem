@@ -244,8 +244,8 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             display: flex;
             position: relative;
             border-top-left-radius: 3px;
-            padding: 11px 12px;
-            min-height: 38px;
+            padding: 7px 12px;
+            min-height: 36px;
             margin-right: 28px;
             align-items: center;
 
@@ -266,7 +266,8 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
                 color: #2B2B2B;
                 line-height: 1;
                 cursor: inherit;
-                min-width: 182px;
+                top: 3px;
+                margin-left: 0;
             }
 
             &:after {
@@ -281,13 +282,34 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
                 z-index: 1;
             }
 
-            .icon-Avarta {
-                position: absolute;
-                top: 50%;
-                transform: translate(0, -50%);
+            .block-icon {
+                min-width: 207px;
+                display: flex;
+                align-items: flex-start;
+                justify-items: left;
+            }
+
+            .icon-Avarta, .icon-error, .icon-flag {
+                margin-right: 7px;
+                display: inline-block;
+                vertical-align: middle;
 
                 span:before {
                     font-size: 22px;
+                }
+            }
+
+            .icon-Avarta {
+                span:before {
+                    font-size: 22px;
+                }
+            }
+
+            .icon-error, .icon-flag {
+                margin-top: 2px;
+
+                span:before {
+                    font-size: 18px;
                 }
             }
         }

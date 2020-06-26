@@ -838,8 +838,8 @@
       display: flex;
       position: relative;
       border-top-left-radius: 3px;
-      padding: 11px 12px;
-      min-height: 38px;
+      padding: 7px 12px;
+      min-height: 36px;
       margin-right: 28px;
       align-items: center; }
       .content-info .header-info .header-username.bg-red {
@@ -855,7 +855,8 @@
         color: #2B2B2B;
         line-height: 1;
         cursor: inherit;
-        min-width: 182px; }
+        top: 3px;
+        margin-left: 0; }
       .content-info .header-info .header-username:after {
         content: " ";
         position: absolute;
@@ -866,12 +867,23 @@
         border-top-right-radius: 3px;
         transform: skew(28deg);
         z-index: 1; }
-      .content-info .header-info .header-username .icon-Avarta {
-        position: absolute;
-        top: 50%;
-        transform: translate(0, -50%); }
-        .content-info .header-info .header-username .icon-Avarta span:before {
+      .content-info .header-info .header-username .block-icon {
+        min-width: 207px;
+        display: flex;
+        align-items: flex-start;
+        justify-items: left; }
+      .content-info .header-info .header-username .icon-Avarta, .content-info .header-info .header-username .icon-error, .content-info .header-info .header-username .icon-flag {
+        margin-right: 7px;
+        display: inline-block;
+        vertical-align: middle; }
+        .content-info .header-info .header-username .icon-Avarta span:before, .content-info .header-info .header-username .icon-error span:before, .content-info .header-info .header-username .icon-flag span:before {
           font-size: 22px; }
+      .content-info .header-info .header-username .icon-Avarta span:before {
+        font-size: 22px; }
+      .content-info .header-info .header-username .icon-error, .content-info .header-info .header-username .icon-flag {
+        margin-top: 2px; }
+        .content-info .header-info .header-username .icon-error span:before, .content-info .header-info .header-username .icon-flag span:before {
+          font-size: 18px; }
     .content-info .header-info .wrapper-status {
       position: relative;
       width: 100%;

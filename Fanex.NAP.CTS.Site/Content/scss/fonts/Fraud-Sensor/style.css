@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'Fraud-Sensor';
-  src:  url('fonts/Fraud-Sensor.eot?bi6gvl');
-  src:  url('fonts/Fraud-Sensor.eot?bi6gvl#iefix') format('embedded-opentype'),
-    url('fonts/Fraud-Sensor.ttf?bi6gvl') format('truetype'),
-    url('fonts/Fraud-Sensor.woff?bi6gvl') format('woff'),
-    url('fonts/Fraud-Sensor.svg?bi6gvl#Fraud-Sensor') format('svg');
+  src:  url('fonts/Fraud-Sensor.eot?l5o55u');
+  src:  url('fonts/Fraud-Sensor.eot?l5o55u#iefix') format('embedded-opentype'),
+    url('fonts/Fraud-Sensor.ttf?l5o55u') format('truetype'),
+    url('fonts/Fraud-Sensor.woff?l5o55u') format('woff'),
+    url('fonts/Fraud-Sensor.svg?l5o55u#Fraud-Sensor') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,24 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-error .path1:before {
+  content: "\e95f";
+  color: rgb(255, 255, 255);
+}
+.icon-error .path2:before {
+  content: "\e960";
+  margin-left: -1em;
+  color: rgb(255, 0, 0);
+}
+.icon-flag .path1:before {
+  content: "\e961";
+  color: rgb(255, 255, 255);
+}
+.icon-flag .path2:before {
+  content: "\e962";
+  margin-left: -1em;
+  color: rgb(255, 0, 0);
+}
 .icon-Avarta .path1:before {
   content: "\e952";
   color: rgb(255, 255, 255);
@@ -362,4 +380,16 @@
 }
 .icon-settings:before {
   content: "\e91e";
+}
+.icon-cross-blue:before {
+  content: "\e95c";
+  color: #396ef8;
+}
+.icon-cross-brown:before {
+  content: "\e95d";
+  color: #849bbe;
+}
+.icon-cross-red:before {
+  content: "\e95e";
+  color: #ff5757;
 }
