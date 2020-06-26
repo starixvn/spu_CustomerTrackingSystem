@@ -11,8 +11,10 @@
     var dataTable;
     let isHostPermission;
     let spanAddAssociationUserName = $('#spanAddAssociationUserName');
+    let spanAddAssociationUserNameMaxTag = $('#spanAddAssociationUserNameMaxTag');
+    let spanAddAssociationUserNameMaxTagHidden = $('#spanAddAssociationUserNameMaxTagHidden');
     let inputTagUsername = $('#inputTagUsername');
-    let maxCountTags = 2;
+    let maxCountTags = 50;    
 
     function RenderTag(obj) {
 
@@ -257,13 +259,13 @@
                 type: 'POST',
                 data: params,
                 beforeSend: function () {
-                    spanAddAssociationUserName.addClass("loading");
+                    spanAddAssociationUserName.addClass("loading-value");
                 },
                 success: function (response) {
                     BindResultValidatedManualAssociationMultiple(response);
                 },
                 complete: function () {
-                    spanAddAssociationUserName.removeClass("loading");
+                    spanAddAssociationUserName.removeClass("loading-value");
                 },
                 error: function (errMsg) {
                     console.log(errMsg);
@@ -309,6 +311,7 @@
                 type: 'POST',
                 data: params,
                 beforeSend: function () {
+                    divAddAssociation.addClass("loading-block");
                 },
                 success: function (response) {
                     if (response.ErrorCode === 0) {
@@ -321,6 +324,7 @@
                     }
                 },
                 complete: function () {
+                    divAddAssociation.addClass("loading-block");
                     btnSearch.trigger("click");
                 },
                 error: function (errMsg) {
@@ -347,6 +351,13 @@
 
             $tag.attr('data-user-name', $tag.text());
             $tag.addClass(cssClass);
+            let btnRemove = $tag.find('x');
+
+            btnRemove.on('click', function () {
+                isValidated = false;
+                maxCountTags = maxCountTags + 1;
+                spanAddAssociationUserNameMaxTag.text(maxCountTags);                
+            });
         } else {
             var tagify = inputTagUsername.tagify().data('tagify');
             tagify.removeTags(tagName.tag);            
@@ -355,6 +366,8 @@
         maxCountTags = maxCountTags > 0
             ? maxCountTags - 1
             : 0;
+
+        spanAddAssociationUserNameMaxTag.text(maxCountTags);
     }
 
     function InitInputTagUsername() {
@@ -377,12 +390,11 @@
         })            
             .on('add', function (_, tagName) {
                 OnChangeTags(tagName, 'valid');
-                isValidated = false;
             })
             .on('invalid', function (_, tagName) {
                 OnChangeTags(tagName, 'invalid-duplicated');
             });
-    
+        
         spanAddAssociationUserName.find('tags').attr('tabindex', "1");        
         btnSaveAssociation.prop('disabled', true);        
     }
@@ -395,8 +407,7 @@
     }
 
     this.Initial = function (ctsCustid, username, subscriberId, subscriber, hostPermission) {
-        _username = username;
-        let isValidated = true;
+        _username = username;        
 
         DisableButton(hostPermission);
 
@@ -431,6 +442,9 @@
             var tagify = inputTagUsername.tagify().data('tagify');
             tagify.removeAllTags();
 
+            spanAddAssociationUserNameMaxTag.text(maxCountTags);
+            spanAddAssociationUserNameMaxTagHidden.text(maxCountTags);
+
             divAddAssociation.dialog({
                 modal: true,
                 width: '800px',
@@ -447,9 +461,13 @@
             divAddAssociation.dialog('close');
         });
         inputTagUsername.on('blur', () => {
+            let maxTag = spanAddAssociationUserNameMaxTag.text();
+            let maxTagHidden = spanAddAssociationUserNameMaxTagHidden.text();
+            let isValidated = maxTag === maxTagHidden;
+
             if (!isValidated) {
                 ValidateManualAssociationMultiple(ctsCustid);
-                isValidated = true;
+                spanAddAssociationUserNameMaxTagHidden.text(maxCountTags);
             }
         });
     };

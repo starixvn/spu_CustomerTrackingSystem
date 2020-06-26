@@ -15,11 +15,12 @@
             </div>
 
         </div>
-        <span class="wrapper-value" id="spanAddAssociationUserName">            
+        <span class="wrapper-value" id="spanAddAssociationUserName">
             <input id="inputTagUsername" type="text" name='tags-outside' class="input-field full-width tagify--outside" placeholder="Type username or login ID (Separate by comma, tab and enter)" />
             <span class="limit-username">
-                Max: 50 usernames
+                Max: <span id="spanAddAssociationUserNameMaxTag">50</span> usernames
             </span>
+            <span id="spanAddAssociationUserNameMaxTagHidden" hidden></span>
         </span>
         <div class="form-control wrapper-to">
             <div class="label"><span class="text">To:</span> <b>@(Model)</b> Associated Account List</div>
@@ -31,7 +32,7 @@
 
         <div class="modal-footer margin-top-10">
             <button id="btncancelassociation" class="button btn-cancel-outline" title="Cancel">Cancel</button>
-            <button id="btnsaveassociation" class="button -add" title="Add Exception">Add</button>
+            <button id="btnsaveassociation" class="button -add" title="Add Association">Add</button>
         </div>
     </div>
     
