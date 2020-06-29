@@ -13,25 +13,16 @@
     let spanAddAssociationUserName = $('#spanAddAssociationUserName');
     let spanAddAssociationUserNameMaxTag = $('#spanAddAssociationUserNameMaxTag');
     let spanAddAssociationUserNameMaxTagHidden = $('#spanAddAssociationUserNameMaxTagHidden');
-    let inputTagUsername = $('#inputTagUsername');
-    let maxCountTags = 50;    
+    let inputTagUsername = $('#inputTagUsername');       
 
     function RenderTag(obj) {
+        let html = "";
 
-        var html = "";
+        if (obj.AffectedTag === 1)
+            html += "<span class='icon icon-Affected'  title='Affected'></span>";       
 
-        if (obj.AffectedTag === 1) {
-            html += "<span class='icon icon-Affected'  title='Affected'></span>";
-        }
-
-        if (obj.FlaggedTag !== 0) {
-            if (obj.FlaggedTag === 2) {
-                html += "<span class='icon icon-Flagged' title='Flagged'></span>";
-            }
-            else {
-                html += "<span class='icon icon-Flagged-With-Evidence' title='Flagged with Evidence 100'></span>";
-            }
-        }
+        if (obj.FlaggedTag === 2)
+            html += "<span class='icon icon-Flagged' title='Flagged'></span>";        
 
         return html === "" ? "-" : html;
     }
@@ -121,7 +112,7 @@
                 { data: obj => obj.AssociationTypeName },
                 {
                     data: obj => AssociationStatus(obj.IsLinked), createdCell: (cell, _, row) => {
-                        if (isHostPermission === "True") {
+                        if (isHostPermission) {
                             $('.toggle', cell).click(function (e) {
                                 e.preventDefault();
 
@@ -139,9 +130,9 @@
 
     function AssociationStatus(isLinked) {
         var html = '<div class="toggle ' + (isLinked ? 'toggle-on' : '') + '" id="switch">';
-        html += '<div class="toggle-text-off' + (isHostPermission === "False" ? ' disabled"' : '') + '"> Unlinked</div >';
-        html += '<div class="glow-comp"></div> <div class="toggle-button ' + (isHostPermission === "False" ? ' disabled"' : '') + '"></div>';
-        html += '<div class="toggle-text-on' + (isHostPermission === "False" ? ' disabled"' : '') + '"> Linked</div>';
+        html += '<div class="toggle-text-off' + (!isHostPermission ? ' disabled"' : '') + '"> Unlinked</div >';
+        html += '<div class="glow-comp"></div> <div class="toggle-button ' + (!isHostPermission ? ' disabled"' : '') + '"></div>';
+        html += '<div class="toggle-text-on' + (!isHostPermission ? ' disabled"' : '') + '"> Linked</div>';
         html += '</div>';
 
         return html;
@@ -172,48 +163,7 @@
                 console.log(errMsg);
             }
         });
-    }
-
-    function AddAssociation(ctsCustId, subscriberId, rootUsername, subscriber) {
-        var url = common.modifyRelativeUrl('Account/AddAssociation');
-        var params = {};
-        params.Username = assusername.val();
-        params.RootUsername = rootUsername;
-        params.Comment = asscomment.val();
-        params.FromSubscriberId = subscriberId;
-        params.FromCTSCustId = ctsCustId;
-
-        $.ajax(url, {
-            type: 'POST',
-            data: params,
-            success: function (response) {
-                if (response.errorCode === 0) {
-                    associatedByAccountTable.find('tbody').addClass('loading');
-                    common.showSuccess('Added association successfully!', 2000);
-                    divAddAssociation.dialog('close');
-
-                    $('#association-cbb-status').val(0);
-                    $("#account-by-account-cbb-association-type").val(3);
-
-                    setTimeout(() => {
-                        btnSearch.trigger("click");
-                    }, 2000);
-                }
-                else if (response.errorCode === -2) {
-                    common.showError('Username "' + params.Username + '" is invalid.');
-                }
-                else if (response.errorCode === -1 || response.errorCode === -100) {
-                    common.showError('Username already existed in "' + params.Username + '" association list.');
-                }
-                else {
-                    common.showError('Added association fail!');
-                }
-            },
-            complete: function () {
-                GetTotalAssociation(ctsCustId);
-            }
-        });
-    }
+    } 
 
     function RemoveAssociation(fromSubscriberId, fromCTSCustId, toSubscriberId, toCTSCustId, isLinked) {
         var url = common.modifyRelativeUrl('Account/ActiveRemoveAssociation');
@@ -315,17 +265,18 @@
                 },
                 success: function (response) {
                     if (response.ErrorCode === 0) {
+                        common.showSuccess("Add association successful");
                         setTimeout(() => {
-                            common.showSuccess("Add association successful");
-                            divAddAssociation.dialog('close');                            
-                        }, 2000);
+                            divAddAssociation.dialog('close');                                                
+                        }, 1000);                        
                     } else {
                         BindResultValidatedManualAssociationMultiple(response.ResultValidated);
                     }
                 },
                 complete: function () {
-                    divAddAssociation.addClass("loading-block");
+                    divAddAssociation.removeClass("loading-block");
                     btnSearch.trigger("click");
+                    GetTotalAssociation(fromCTSCustId);
                 },
                 error: function (errMsg) {
                     console.log(errMsg);
@@ -343,67 +294,80 @@
         });
 
         return userNameList.join();
-    }   
+    }       
 
-    function OnChangeTags(tagName, cssClass) {
-        if (maxCountTags > 0) {
-            let $tag = $(tagName.tag);
+    function InitInputTagUsername(fromCTSCustid) {
+        spanAddAssociationUserNameMaxTag.text("50");
+        spanAddAssociationUserNameMaxTagHidden.text("50");
 
-            $tag.attr('data-user-name', $tag.text());
-            $tag.addClass(cssClass);
-            let btnRemove = $tag.find('x');
+        function OnChangeTags(tagName, cssClass) {
+            let maxCountTags = parseInt(spanAddAssociationUserNameMaxTag.text());
 
-            btnRemove.on('click', function () {
-                isValidated = false;
-                maxCountTags = maxCountTags + 1;
-                spanAddAssociationUserNameMaxTag.text(maxCountTags);                
-            });
-        } else {
-            var tagify = inputTagUsername.tagify().data('tagify');
-            tagify.removeTags(tagName.tag);            
+            if (maxCountTags > 0) {
+                let $tag = $(tagName.tag);
+
+                $tag.attr('data-user-name', $tag.text());
+                $tag.addClass(cssClass);
+                let btnRemove = $tag.find('x');
+
+                btnRemove.on('click', function () {
+                    btnSaveAssociation.prop('disabled', true);
+                    let maxCountTags = parseInt(spanAddAssociationUserNameMaxTag.text());
+                    spanAddAssociationUserNameMaxTag.text(maxCountTags + 1);
+                });
+
+                spanAddAssociationUserNameMaxTag.text(maxCountTags - 1);
+            } else {
+                var tagify = inputTagUsername.tagify().data('tagify');
+                tagify.removeTags(tagName.tag);
+            }
+            btnSaveAssociation.prop('disabled', true);
         }
-
-        maxCountTags = maxCountTags > 0
-            ? maxCountTags - 1
-            : 0;
-
-        spanAddAssociationUserNameMaxTag.text(maxCountTags);
-    }
-
-    function InitInputTagUsername() {
+        
         inputTagUsername.tagify({
             pattern: null,
             keepInvalidTags: true,
             skipInvalid: false,
             callbacks: {},
-            addTagOnBlur: true,
+            addTagOnBlur: false,
             duplicates: false,
             editTags: 0,
             whitelist: [],
             blacklist: [],
-            maxTags: maxCountTags,
+            maxTags: 50,
             enforceWhitelist: false,
             dropdown: {
                 position: "input",
                 enabled: 0
             }
         })            
-            .on('add', function (_, tagName) {
+            .off('add').on('add', function (_, tagName) {         
                 OnChangeTags(tagName, 'valid');
             })
-            .on('invalid', function (_, tagName) {
+            .off('invalid').on('invalid', function (_, tagName) {             
                 OnChangeTags(tagName, 'invalid-duplicated');
+            })
+            .off('blur').on('blur', function (_, tagName) {                
+                let maxTag = spanAddAssociationUserNameMaxTag.text();
+                let maxTagHidden = spanAddAssociationUserNameMaxTagHidden.text();
+                let isValidated = maxTag === maxTagHidden;
+
+                if (!isValidated) {
+                    ValidateManualAssociationMultiple(fromCTSCustid);
+                    spanAddAssociationUserNameMaxTagHidden.text(maxTag);
+                }
             });
-        
-        spanAddAssociationUserName.find('tags').attr('tabindex', "1");        
-        btnSaveAssociation.prop('disabled', true);        
+
+        inputTagUsername.tagify().data('tagify').removeAllTags();
+        spanAddAssociationUserName.find('tags').attr('tabindex', "1");
+        btnSaveAssociation.prop('disabled', true);
     }
 
     function DisableButton(hostPermission) {
-        isHostPermission = hostPermission;
-        if (isHostPermission === "False") {
+        isHostPermission = hostPermission === "True";
+
+        if (!isHostPermission)
             btnAddAssociation.prop('disabled', true);
-        }
     }
 
     this.Initial = function (ctsCustid, username, subscriberId, subscriber, hostPermission) {
@@ -431,19 +395,12 @@
 
         associatedByAccountTable.on('length.dt', function () {
             btnSearch.prop('disabled', true);
-        });        
-
-        InitInputTagUsername();
+        });
 
         btnAddAssociation.on('click', function () {
-            asscomment.val('');   
-            maxCountTags = 50;
+            asscomment.val('');
 
-            var tagify = inputTagUsername.tagify().data('tagify');
-            tagify.removeAllTags();
-
-            spanAddAssociationUserNameMaxTag.text(maxCountTags);
-            spanAddAssociationUserNameMaxTagHidden.text(maxCountTags);
+            InitInputTagUsername(ctsCustid);            
 
             divAddAssociation.dialog({
                 modal: true,
@@ -459,16 +416,6 @@
         btnSaveAssociation.on('click', () => InsertManualAssociationMultiple(subscriberId, ctsCustid));
         btnCancelAssociation.on('click', () => {
             divAddAssociation.dialog('close');
-        });
-        inputTagUsername.on('blur', () => {
-            let maxTag = spanAddAssociationUserNameMaxTag.text();
-            let maxTagHidden = spanAddAssociationUserNameMaxTagHidden.text();
-            let isValidated = maxTag === maxTagHidden;
-
-            if (!isValidated) {
-                ValidateManualAssociationMultiple(ctsCustid);
-                spanAddAssociationUserNameMaxTagHidden.text(maxCountTags);
-            }
-        });
+        });        
     };
 }

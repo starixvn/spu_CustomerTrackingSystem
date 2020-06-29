@@ -575,32 +575,7 @@
 
                 return result.ToList();
             }
-        }
-
-        public DBResult AddAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, string remark, int createdBy)
-        {
-            var criteria = new AddManualAssociationCriteria
-            {
-                FromSubscriberId = fromSubscriberId,
-                FromCTSCustId = fromCTSCustId,
-                ToSubscriberId = toSubscriberId,
-                ToCTSCustId = toCTSCustId,
-                CreatedBy = createdBy,
-                Remark = remark,
-                ErrorMessage = string.Empty
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                db.ExecuteNonQuery(criteria);
-
-                return new DBResult
-                {
-                    ErrorCode = string.IsNullOrWhiteSpace(criteria.ErrorMessage) ? 0 : -1,
-                    ErrorMsg = criteria.ErrorMessage
-                };
-            }
-        }
+        }       
 
         public IEnumerable<ValidateManualAssociationMultipleModel> ValidateManualAssociationMultiple(long fromCTSCustId, string toUserNameList)
         {

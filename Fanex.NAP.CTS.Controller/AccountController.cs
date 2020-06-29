@@ -462,42 +462,7 @@
             var graphCustomer = _graphService.GetGraphCustomerItemByShortestPathOfAccount(shortestPathOfAccount);
 
             return Json(graphCustomer, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult AddAssociation(string username, string comment, int fromSubscriberId, long fromCTSCustId, string rootUsername)
-        {
-            if (string.IsNullOrWhiteSpace(username) || rootUsername.Trim() == username.Trim() || fromSubscriberId <= 0 || fromCTSCustId <= 0)
-            {
-                return Json(new
-                {
-                    errorCode = -100,
-                    errorMessage = "Paramater is invalid."
-                }, JsonRequestBehavior.AllowGet);
-            }
-
-            var result = _accountService.SearchAssociatedCustomer(username.Trim());
-
-            if (result != null && result.Any())
-            {
-                var toCustomer = result.FirstOrDefault();
-
-                var dbResult = _accountService.AddAssociation(fromSubscriberId, fromCTSCustId, toCustomer.SubscriberId, toCustomer.CTSCustId, comment, CurrentSession.UserId);
-
-                return Json(new
-                {
-                    errorCode = dbResult.ErrorCode,
-                    errorMessage = dbResult.ErrorMsg
-                }, JsonRequestBehavior.AllowGet);
-            }
-
-            return Json(new
-            {
-                errorCode = -2,
-                errorMessage = "Customer dose not exist."
-            }, JsonRequestBehavior.AllowGet);
-        }
+        }       
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
