@@ -214,7 +214,7 @@
                 { data: obj => obj.MatchScore },
                 { data: obj => obj.Status },
                 {
-                    data: obj => RenderTickedFraud(obj.MatchId, 13, obj.GroupBettingCount)
+                    data: obj => RenderTickedFraud(obj.GroupBettingCount)
                     , createdCell: (cell, _, row) => {
                         $(".divViewDetail", cell).click(() => {
                             ViewDetailTickets(row.MatchId, 13);
@@ -222,7 +222,7 @@
                     }
                 },
                 {
-                    data: obj => RenderTickedFraud(obj.MatchId, 14, obj.HedgingCount)
+                    data: obj => RenderTickedFraud(obj.HedgingCount)
                     , createdCell: (cell, _, row) => {
                         $(".divViewDetail", cell).click(() => {
                             ViewDetailTickets(row.MatchId, 14);
@@ -243,10 +243,10 @@
         return html;
     }
 
-    function RenderTickedFraud(matchId, fraudCaseId, tickedFraudCount) {
+    function RenderTickedFraud(tickedFraudCount) {
         if (tickedFraudCount === 0) return "<span class='icon-approval'></span>";
         else {           
-            html = "<div class='warning divViewDetail' title='Click to view details'>";
+            let html = "<div class='warning divViewDetail' title='Click to view details'>";
             html += "<span class='icon-alert-circle'></span >";
             html += "<span class='number'>" + GenerateViolation(tickedFraudCount) + "</span>";
             html += "</div>";
@@ -255,11 +255,14 @@
         }
     }
 
-    function ViewDetailTickets(matchId, fraudCaseId) {               
+    function ViewDetailTickets(matchId, fraudCaseId) { 
+        let url = common.modifyRelativeUrl('/ProblemAccountMonitor/Detail/' + matchId);
+
         let siteIds = domElements.cbbSite.val().join();
         domElements.hdSiteIds.val(siteIds);
         domElements.hdMatchId.val(matchId);
         domElements.hdFraudCaseId.val(fraudCaseId);
+        domElements.formViewDetail.attr('action', url);
         domElements.formViewDetail.submit();
     }
 
