@@ -301,15 +301,25 @@
         spanAddAssociationUserNameMaxTag.text(maxTags);
         spanAddAssociationUserNameMaxTagHidden.text(maxTags);
 
-        function RemoveTag() {
+        function AddBorderTags() {
+            let allTags = spanAddAssociationUserName.find('tags tag.tagify__tag');
+            allTags.each(function (_, tag) {
+                $(tag).css('border', '1px solid #6187E7');
+            });
+        }
+
+        function ResetMaxTag() {
             let maxCountTags = parseInt(spanAddAssociationUserNameMaxTag.text());
             if (maxCountTags < maxTags)
-                spanAddAssociationUserNameMaxTag.text(maxCountTags + 1);
+                spanAddAssociationUserNameMaxTag.text(maxCountTags + 1);            
+        }
 
+        function EnableButtonAdd() {
+            let validTags = spanAddAssociationUserName.find('tags tag.valid');
             let invalidDuplicatedTags = spanAddAssociationUserName.find('tags tag.invalid-duplicated');
             let invalidUsernameTags = spanAddAssociationUserName.find('tags tag.invalid-username');
             let notInvalid = invalidDuplicatedTags.length + invalidUsernameTags.length;
-            if (notInvalid <= 1)
+            if (notInvalid <= 1 && validTags.length > 1)
                 btnSaveAssociation.prop('disabled', false);
             else
                 btnSaveAssociation.prop('disabled', true);
@@ -325,7 +335,10 @@
                 $tag.addClass(cssClass);
                 let btnRemove = $tag.find('x');
 
-                btnRemove.on('click', () => RemoveTag());
+                btnRemove.on('click', function () {
+                    ResetMaxTag();
+                    EnableButtonAdd();
+                });
 
                 spanAddAssociationUserNameMaxTag.text(maxCountTags - 1);
             } else {
@@ -368,13 +381,24 @@
                     ValidateManualAssociationMultiple(fromCTSCustid);
                     spanAddAssociationUserNameMaxTagHidden.text(maxTag);
                 }
-            });
-
+            });        
+       
         inputTagUsername.off('keydown').on('keydown', function () {
-            var key = event.keyCode || event.charCode;
-
+            let key = event.keyCode || event.charCode;
+           
             if (key === 8)
-                RemoveTag();
+                ResetMaxTag();
+
+            if (key === 46) {
+                inputTagUsername.tagify().data('tagify').removeAllTags();
+                spanAddAssociationUserNameMaxTag.text(maxTags);
+            }
+
+            if (event.ctrlKey) {
+                if (event.keyCode === 65 || event.keyCode === 97) {
+                    return AddBorderTags();
+                }
+            }
         });
 
         inputTagUsername.tagify().data('tagify').removeAllTags();

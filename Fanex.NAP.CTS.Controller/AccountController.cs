@@ -491,7 +491,7 @@
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult InsertManualAssociationMultiple(int fromSubscriberId, long fromCTSCustId, string toUserNameList, string remark)
         {
-            var resultInsert = new InsertManualAssociationMultipleViewModel();
+            var resultInsert = new InsertManualAssociationMultipleViewModel { ErrorCode = -1 };
 
             var resultValidated = _accountService.ValidateManualAssociationMultiple(fromCTSCustId, toUserNameList);
            
