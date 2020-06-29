@@ -13,7 +13,8 @@
     let spanAddAssociationUserName = $('#spanAddAssociationUserName');
     let spanAddAssociationUserNameMaxTag = $('#spanAddAssociationUserNameMaxTag');
     let spanAddAssociationUserNameMaxTagHidden = $('#spanAddAssociationUserNameMaxTagHidden');
-    let inputTagUsername = $('#inputTagUsername');       
+    let inputTagUsername = $('#inputTagUsername'); 
+    let maxTags = 50;
 
     function RenderTag(obj) {
         let html = "";
@@ -297,8 +298,22 @@
     }       
 
     function InitInputTagUsername(fromCTSCustid) {
-        spanAddAssociationUserNameMaxTag.text("50");
-        spanAddAssociationUserNameMaxTagHidden.text("50");
+        spanAddAssociationUserNameMaxTag.text(maxTags);
+        spanAddAssociationUserNameMaxTagHidden.text(maxTags);
+
+        function RemoveTag() {
+            let maxCountTags = parseInt(spanAddAssociationUserNameMaxTag.text());
+            if (maxCountTags < maxTags)
+                spanAddAssociationUserNameMaxTag.text(maxCountTags + 1);
+
+            let invalidDuplicatedTags = spanAddAssociationUserName.find('tags tag.invalid-duplicated');
+            let invalidUsernameTags = spanAddAssociationUserName.find('tags tag.invalid-username');
+            let notInvalid = invalidDuplicatedTags.length + invalidUsernameTags.length;
+            if (notInvalid <= 1)
+                btnSaveAssociation.prop('disabled', false);
+            else
+                btnSaveAssociation.prop('disabled', true);
+        }
 
         function OnChangeTags(tagName, cssClass) {
             let maxCountTags = parseInt(spanAddAssociationUserNameMaxTag.text());
@@ -310,11 +325,7 @@
                 $tag.addClass(cssClass);
                 let btnRemove = $tag.find('x');
 
-                btnRemove.on('click', function () {
-                    btnSaveAssociation.prop('disabled', true);
-                    let maxCountTags = parseInt(spanAddAssociationUserNameMaxTag.text());
-                    spanAddAssociationUserNameMaxTag.text(maxCountTags + 1);
-                });
+                btnRemove.on('click', () => RemoveTag());
 
                 spanAddAssociationUserNameMaxTag.text(maxCountTags - 1);
             } else {
@@ -326,28 +337,29 @@
         
         inputTagUsername.tagify({
             pattern: null,
+            delimiters: /\r?\n|\r| |,/,
             keepInvalidTags: true,
             skipInvalid: false,
             callbacks: {},
             addTagOnBlur: false,
-            duplicates: false,
+            duplicates: true,
             editTags: 0,
             whitelist: [],
             blacklist: [],
-            maxTags: 50,
+            maxTags: maxTags,
             enforceWhitelist: false,
             dropdown: {
                 position: "input",
                 enabled: 0
             }
-        })            
-            .off('add').on('add', function (_, tagName) {         
+        })
+            .off('add').on('add', function (_, tagName) {
                 OnChangeTags(tagName, 'valid');
             })
-            .off('invalid').on('invalid', function (_, tagName) {             
+            .off('invalid').on('invalid', function (_, tagName) {
                 OnChangeTags(tagName, 'invalid-duplicated');
             })
-            .off('blur').on('blur', function (_, tagName) {                
+            .off('blur').on('blur', function (_, tagName) {
                 let maxTag = spanAddAssociationUserNameMaxTag.text();
                 let maxTagHidden = spanAddAssociationUserNameMaxTagHidden.text();
                 let isValidated = maxTag === maxTagHidden;
@@ -357,6 +369,13 @@
                     spanAddAssociationUserNameMaxTagHidden.text(maxTag);
                 }
             });
+
+        inputTagUsername.off('keydown').on('keydown', function () {
+            var key = event.keyCode || event.charCode;
+
+            if (key === 8)
+                RemoveTag();
+        });
 
         inputTagUsername.tagify().data('tagify').removeAllTags();
         spanAddAssociationUserName.find('tags').attr('tabindex', "1");
