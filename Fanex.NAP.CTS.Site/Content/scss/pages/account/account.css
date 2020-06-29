@@ -874,7 +874,6 @@
         justify-items: left; }
       .content-info .header-info .header-username .icon-Avarta, .content-info .header-info .header-username .icon-error, .content-info .header-info .header-username .icon-flag {
         margin-right: 7px;
-        display: inline-block;
         vertical-align: middle; }
         .content-info .header-info .header-username .icon-Avarta span:before, .content-info .header-info .header-username .icon-error span:before, .content-info .header-info .header-username .icon-flag span:before {
           font-size: 22px; }
