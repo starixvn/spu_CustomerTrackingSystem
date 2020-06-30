@@ -577,18 +577,44 @@
             }
         }       
 
-        public IEnumerable<ValidateManualAssociationMultipleModel> ValidateManualAssociationMultiple(long fromCTSCustId, string toUserNameList)
+        public IEnumerable<ValidateManualAssociationMultipleModel> ValidateManualAssociationMultiple(long fromCTSCustId, string toUserNameList, out bool isException)
         {
+            isException = false;
+
             var criteria = new ValidateManualAssociationMultipleCriteria
             {
                 ToUserNameList = toUserNameList,
                 FromCTSCustID = fromCTSCustId
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            try
             {
-                return db.Query<ValidateManualAssociationMultipleModel>(criteria).ToList();
+                using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+                {
+                    return db.Query<ValidateManualAssociationMultipleModel>(criteria).ToList();
+                }
             }
+            catch
+            {
+                isException = true;
+                return GenerateAssociationErrorList(fromCTSCustId, toUserNameList);
+            }           
+        }
+
+        private IEnumerable<ValidateManualAssociationMultipleModel> GenerateAssociationErrorList(long fromCTSCustId, string toUserNameList)
+        {
+            var errorList = new List<ValidateManualAssociationMultipleModel>();
+            var userNameList = toUserNameList.Split(',').AsEnumerable();
+            
+            errorList.AddRange(userNameList.Select(x => new ValidateManualAssociationMultipleModel
+            {
+                CTSCustID = 0,
+                SubscriberID = 0,
+                UserName = x,
+                IsDuplicated = false
+            }));
+
+            return errorList;
         }
 
         public DBResult InsertManualAssociationMultiple(string associationListJson)

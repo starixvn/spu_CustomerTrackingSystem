@@ -76,7 +76,7 @@
 
         List<AssociationCustomerModel> SearchAssociatedCustomer(string username);        
 
-        IEnumerable<ValidateManualAssociationMultipleModel> ValidateManualAssociationMultiple(long fromCTSCustId, string toUserNameList);
+        IEnumerable<ValidateManualAssociationMultipleModel> ValidateManualAssociationMultiple(long fromCTSCustId, string toUserNameList, out bool isException);
 
         DBResult InsertManualAssociationMultiple(string associationListJson);
 

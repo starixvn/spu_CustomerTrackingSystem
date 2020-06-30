@@ -469,17 +469,19 @@
         public ActionResult ValidateManualAssociationMultiple(long fromCTSCustId, string toUserNameList)
         {
             var viewModel = new ValidateManualAssociationMultipleViewModel();
-            var resultValidated = _accountService.ValidateManualAssociationMultiple(fromCTSCustId, toUserNameList);
+            bool isException = false;
+            var resultValidated = _accountService.ValidateManualAssociationMultiple(fromCTSCustId, toUserNameList, out isException);
 
             return resultValidated.Any()
-                ? Json(GetInvalidOrDuplicated(resultValidated), JsonRequestBehavior.AllowGet)
+                ? Json(GetInvalidOrDuplicated(resultValidated, isException), JsonRequestBehavior.AllowGet)
                 : Json(viewModel, JsonRequestBehavior.AllowGet);
         }
 
-        private ValidateManualAssociationMultipleViewModel GetInvalidOrDuplicated(IEnumerable<ValidateManualAssociationMultipleModel> list)
+        private ValidateManualAssociationMultipleViewModel GetInvalidOrDuplicated(IEnumerable<ValidateManualAssociationMultipleModel> list, bool isException)
         {
             return new ValidateManualAssociationMultipleViewModel
             {
+                IsException = isException,
                 UserNameInvalidList = list.Where(x => x.CTSCustID.Equals(0))
                                           .Select(x => x.UserName),
                 UserNameDuplicatedList = list.Where(x => x.IsDuplicated)
@@ -492,12 +494,13 @@
         public ActionResult InsertManualAssociationMultiple(int fromSubscriberId, long fromCTSCustId, string toUserNameList, string remark)
         {
             var resultInsert = new InsertManualAssociationMultipleViewModel { ErrorCode = -1 };
+            bool isException = false;
 
-            var resultValidated = _accountService.ValidateManualAssociationMultiple(fromCTSCustId, toUserNameList);
+            var resultValidated = _accountService.ValidateManualAssociationMultiple(fromCTSCustId, toUserNameList, out isException);
            
             if (resultValidated.Any())
             {
-                var invalidOrDuplicatedList = GetInvalidOrDuplicated(resultValidated);
+                var invalidOrDuplicatedList = GetInvalidOrDuplicated(resultValidated, isException);
 
                 resultInsert.ResultValidated = invalidOrDuplicatedList;
 

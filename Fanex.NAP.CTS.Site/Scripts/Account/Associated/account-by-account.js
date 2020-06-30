@@ -198,8 +198,8 @@
         });
     }
 
-    function ValidateManualAssociationMultiple(fromCTSCustId) {
-        let userNameList = GetInputUserName();
+    function ValidateManualAssociationMultiple(fromCTSCustId, textTagRemove) {
+        let userNameList = GetInputUserName(textTagRemove);
 
         if (userNameList !== '') {
             let params = {};
@@ -213,7 +213,10 @@
                     spanAddAssociationUserName.addClass("loading-value");
                 },
                 success: function (response) {
-                    BindResultValidatedManualAssociationMultiple(response);
+                    if (response.IsException)
+                        BindExceptionValidateManualAssociationMultiple();
+                    else
+                        BindResultValidatedManualAssociationMultiple(response);
                 },
                 complete: function () {
                     spanAddAssociationUserName.removeClass("loading-value");
@@ -225,7 +228,17 @@
         }
     }
 
+    function BindExceptionValidateManualAssociationMultiple() {
+        spanAddAssociationUserName.find('tags tag').each(function (_, tag) {
+            $(tag).removeClass('valid').addClass('invalid-username');
+        });
+    }
+
     function BindResultValidatedManualAssociationMultiple(data) {
+        spanAddAssociationUserName.find('tags tag').each(function (_, tag) {
+            $(tag).removeClass('invalid-username').removeClass('invalid-duplicated').addClass('valid');
+        });
+
         data.UserNameInvalidList.map(function (x) {
             let usernameEqual = $("tag[data-user-name='" + x + "']");
             if (usernameEqual !== undefined) {
@@ -286,12 +299,17 @@
         }
     }
 
-    function GetInputUserName() {
+    function GetInputUserName(textTagRemove) {
         let userNameList = [];
         let tags = spanAddAssociationUserName.find('tags tag');
 
         tags.map(function (_, ele) {
-            userNameList.push($(ele).text().trim());
+            let text = $(ele).text().trim();
+            if (textTagRemove !== "" && text === textTagRemove) {
+                textTagRemove = "";
+                return;
+            }
+            userNameList.push(text);
         });
 
         return userNameList.join();
@@ -330,14 +348,22 @@
 
             if (maxCountTags > 0) {
                 let $tag = $(tagName.tag);
-
-                $tag.attr('data-user-name', $tag.text());
+                let textReplaced = $tag.text();
+                textReplaced = textReplaced.replace(new RegExp("'", 'g'), "").replace(new RegExp("\"", 'g'), "");                
+                if (textReplaced.length > 50)
+                    textReplaced = textReplaced.substr(0, 50);
+                $tag.val(textReplaced);
+                $tag.attr('data-user-name', textReplaced);
+                $tag.prop('title', textReplaced);
+                $tag.find('span.tagify__tag-text').text(textReplaced);
                 $tag.addClass(cssClass);
                 let btnRemove = $tag.find('x');
 
-                btnRemove.on('click', function () {
+                btnRemove.on('click', function (e) {
+                    let currentTag = $(e.target).parent();
+                    
                     ResetMaxTag();
-                    ValidateManualAssociationMultiple(fromCTSCustid);
+                    ValidateManualAssociationMultiple(fromCTSCustid, currentTag.text().trim());
                     EnableButtonAdd();
                 });
 
@@ -375,7 +401,7 @@
                 OnChangeTags(tagName, 'invalid-duplicated');
                 spanAddAssociationChangeHidden.text("1");
             });            
-       
+        
         inputTagUsername.off('keydown').on('keydown', function () {
             let key = event.keyCode || event.charCode;
            
@@ -402,7 +428,7 @@
                 asscomment.focus();
                 spanAddAssociationUserName.addClass("loading-value");
                 setTimeout(() => {
-                    ValidateManualAssociationMultiple(fromCTSCustid);
+                    ValidateManualAssociationMultiple(fromCTSCustid, "");
                     spanAddAssociationUserName.removeClass("loading-value");
                     spanAddAssociationChangeHidden.text("0");
                 }, 500);

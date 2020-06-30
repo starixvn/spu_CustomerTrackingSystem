@@ -11,6 +11,8 @@
             UserNameDuplicatedList = Enumerable.Empty<string>();
         }
 
+        public bool IsException { get; set; }
+
         public IEnumerable<string> UserNameInvalidList { get; set; }
 
         public IEnumerable<string> UserNameDuplicatedList { get; set; }
