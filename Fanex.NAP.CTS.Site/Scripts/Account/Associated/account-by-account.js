@@ -12,7 +12,7 @@
     let isHostPermission;
     let spanAddAssociationUserName = $('#spanAddAssociationUserName');
     let spanAddAssociationUserNameMaxTag = $('#spanAddAssociationUserNameMaxTag');
-    let spanAddAssociationUserNameMaxTagHidden = $('#spanAddAssociationUserNameMaxTagHidden');
+    let spanAddAssociationChangeHidden = $('#spanAddAssociationChangeHidden');
     let inputTagUsername = $('#inputTagUsername'); 
     let maxTags = 50;
 
@@ -299,7 +299,7 @@
 
     function InitInputTagUsername(fromCTSCustid) {
         spanAddAssociationUserNameMaxTag.text(maxTags);
-        spanAddAssociationUserNameMaxTagHidden.text(maxTags);
+        spanAddAssociationChangeHidden.text("0");
 
         function AddBorderTags() {
             let allTags = spanAddAssociationUserName.find('tags tag.tagify__tag');
@@ -337,6 +337,7 @@
 
                 btnRemove.on('click', function () {
                     ResetMaxTag();
+                    ValidateManualAssociationMultiple(fromCTSCustid);
                     EnableButtonAdd();
                 });
 
@@ -354,7 +355,7 @@
             keepInvalidTags: true,
             skipInvalid: false,
             callbacks: {},
-            addTagOnBlur: false,
+            addTagOnBlur: true,
             duplicates: true,
             editTags: 0,
             whitelist: [],
@@ -368,20 +369,12 @@
         })
             .off('add').on('add', function (_, tagName) {
                 OnChangeTags(tagName, 'valid');
+                spanAddAssociationChangeHidden.text("1");
             })
             .off('invalid').on('invalid', function (_, tagName) {
                 OnChangeTags(tagName, 'invalid-duplicated');
-            })
-            .off('blur').on('blur', function (_, tagName) {
-                let maxTag = spanAddAssociationUserNameMaxTag.text();
-                let maxTagHidden = spanAddAssociationUserNameMaxTagHidden.text();
-                let isValidated = maxTag === maxTagHidden;
-
-                if (!isValidated) {
-                    ValidateManualAssociationMultiple(fromCTSCustid);
-                    spanAddAssociationUserNameMaxTagHidden.text(maxTag);
-                }
-            });        
+                spanAddAssociationChangeHidden.text("1");
+            });            
        
         inputTagUsername.off('keydown').on('keydown', function () {
             let key = event.keyCode || event.charCode;
@@ -398,6 +391,21 @@
                 if (event.keyCode === 65 || event.keyCode === 97) {
                     return AddBorderTags();
                 }
+            }
+        });
+
+        $(document).on('mouseup', function (e) {
+            let isOutSiteInput = !spanAddAssociationUserName.is(e.target) && spanAddAssociationUserName.has(e.target).length === 0;
+            let isTagsFocus = spanAddAssociationUserName.find('tags.tagify--focus').length > 0;
+            let isChange = spanAddAssociationChangeHidden.text();
+            if (isOutSiteInput && isTagsFocus || isChange === "1") {               
+                asscomment.focus();
+                spanAddAssociationUserName.addClass("loading-value");
+                setTimeout(() => {
+                    ValidateManualAssociationMultiple(fromCTSCustid);
+                    spanAddAssociationUserName.removeClass("loading-value");
+                    spanAddAssociationChangeHidden.text("0");
+                }, 500);
             }
         });
 
