@@ -1,0 +1,26 @@
+﻿@{
+    ViewBag.Title = "Associated Account Monitor";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section styles{
+    @Styles.Render("~/associated-account-monitor-styles")
+}
+
+<h2 class="page-title">Associated Account Monitor</h2>
+<div class="associated-account-monitor">
+    <div class="group calendar width-180">
+        <label class="text">Username</label>
+        <input type="text" class="control" readonly>
+    </div>
+    <div class="group width-180">
+        <label class="text">Subscriber</label>
+        <select class="control" id="cbbSubscriber" multiple="multiple">
+        </select>
+    </div>
+
+    <button class="button button-search" id="btnGenerate">Search</button>
+</div>
+
+@section scripts{
+    @Scripts.Render("~/associated-account-monitor-scripts")
+}

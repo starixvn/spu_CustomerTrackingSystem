@@ -445,6 +445,12 @@
     <Content Include="Content\scss\pages\account\account.min.css">
       <DependentUpon>account.css</DependentUpon>
     </Content>
+    <Content Include="Content\scss\pages\associated-account-monitor\associated-account-monitor.css">
+      <DependentUpon>associated-account-monitor.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\scss\pages\associated-account-monitor\associated-account-monitor.min.css">
+      <DependentUpon>associated-account-monitor.css</DependentUpon>
+    </Content>
     <Content Include="Content\scss\pages\evidence\evidence.css">
       <DependentUpon>evidence.scss</DependentUpon>
     </Content>
@@ -453,6 +459,7 @@
     </Content>
     <Content Include="Content\scss\pages\account\account.scss" />
     <Content Include="App_Data\Excel Template\ImportEvidences\template.xlsx" />
+    <Content Include="Content\scss\pages\associated-account-monitor\associated-account-monitor.scss" />
     <None Include="Content\scss\pages\problem-account-monitor\problem-account-monitor.scss" />
     <None Include="Content\scss\pages\import-evidences\import-evidences.scss" />
     <Content Include="Content\scss\pages\import-evidences\import-evidences.css">
@@ -505,6 +512,7 @@
     <Content Include="Scripts\Account\ChainToEvidence\account-exceptions.js" />
     <Content Include="Scripts\Account\CustomerCategory\customer-category.js" />
     <Content Include="Scripts\Account\index.js" />
+    <Content Include="Scripts\AssociatedAccountMonitor\index.js" />
     <Content Include="Scripts\DataTables_New\AutoFill-2.3.4\css\autoFill.bootstrap.css" />
     <Content Include="Scripts\DataTables_New\AutoFill-2.3.4\css\autoFill.bootstrap.min.css" />
     <Content Include="Scripts\DataTables_New\AutoFill-2.3.4\css\autoFill.bootstrap4.css" />
@@ -882,6 +890,7 @@
     <Content Include="Scripts\tagify\tagify.min.js" />
     <Content Include="Views\ProblemAccountMonitor\Detail.cshtml" />
     <Content Include="Views\ImportEvidences\Index.cshtml" />
+    <Content Include="Views\AssociatedAccountMonitor\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CoreBetList.css" />
