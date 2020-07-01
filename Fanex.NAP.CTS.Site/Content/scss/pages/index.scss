@@ -60,9 +60,13 @@ body {
     }
 
     .icon {
-        margin-right: 6px;
+        margin-right: 0;
         position: relative;
-        top: 1px;
+        top: 2px;
+
+        &.icon-home {
+            font-size: 19px;
+        }
 
         &.icon-Controller {
             font-size: 18px;
@@ -115,7 +119,7 @@ body {
 
         .link.has-child:after {
             display: inline-block;
-            margin-left: 6px;
+            margin-left: 4px;
             font-family: 'Fraud-Sensor';
             content: "\e90c";
             font-size: 14px;
@@ -128,10 +132,11 @@ body {
 
     .menu-item > .link {
         display: block;
-        padding-left: 20px;
-        padding-right: 20px;
+        padding-left: 17px;
+        padding-right: 14px;
         line-height: 60px;
         color: #9AA2B5;
+        font-size: 16px;
 
         &:hover {
             color: #fff;
@@ -139,6 +144,7 @@ body {
 
         .icon:before {
             color: #9aa2b5;
+            font-size: 19px;
         }
 
         &.active {
@@ -160,7 +166,7 @@ body {
 
 .header-info {
     @include align-items;
-    margin-right: 20px;
+    margin-right: 12px;
     /*.search-component {
         position: relative;
         display: flex;
@@ -237,6 +243,7 @@ body {
         color: #fff;
         height: 60px;
         line-height: 60px;
+        margin-left: 24px;
 
         &:hover {
             .sub-menu {
@@ -295,8 +302,9 @@ body {
         }
 
         .search-field {
+            margin-right: 28px;
             position: relative;
-            width: 200px;
+            width: 288px;
             border: 0;
             padding: 10px 0 10px 32px;
             background: #fff;

@@ -208,14 +208,14 @@
       
                         if (!string.IsNullOrWhiteSpace(criteria.ErrorMessage))
                         {
-                            SendMail(resultCheckAccountEvidenceList, accountEvidence, userId);
+                            SendMail(resultCheckAccountEvidenceList, accountEvidence, userId, criteria.ErrorMessage);
                             LogError(fileName, userId, criteria.ErrorMessage, jsonData);
                         } 
                     }
                 }
                 catch (Exception ex)
                 {
-                    SendMail(resultCheckAccountEvidenceList, accountEvidence, userId);
+                    SendMail(resultCheckAccountEvidenceList, accountEvidence, userId, ex.Message);
                     LogError(fileName, userId, ex.Message, jsonData, ex);
                 }
             }
@@ -231,12 +231,16 @@
                 LogService.Error(errorMessage, ex);
         }
 
-        private void SendMail(IEnumerable<ResultCheckAccountEvidenceModel> accountEvidenceCheckedList, IEnumerable<AddAccountEvidenceModel> errorAccountEvidenceModelList, int userId)
+        private void SendMail(IEnumerable<ResultCheckAccountEvidenceModel> accountEvidenceCheckedList
+            , IEnumerable<AddAccountEvidenceModel> errorAccountEvidenceModelList
+            , int userId
+            , string errorMessage)
         {
             var attachmentFileName = ResourcesManager.GetValue(ConstsResources.IMPORT_ACCOUNT_EVIDENCE_SENDMAIL_ATTACHMENT_FILENAME);
             var subject = string.Format(ResourcesManager.GetValue(ConstsResources.IMPORT_ACCOUNT_EVIDENCE_SENDMAIL_SUBJECT),
-                    ConfigSettings.EnvironmentName, userId, DateTime.Now);
-            var body = ResourcesManager.GetValue(ConstsResources.IMPORT_ACCOUNT_EVIDENCE_SENDMAIL_BODY);
+                    ConfigSettings.EnvironmentName, userId, DateTime.Now);            
+            var errorContent = string.Format(ResourcesManager.GetValue(ConstsResources.IMPORT_ACCOUNT_EVIDENCE_SENDMAIL_ERROR_CONTENT), errorMessage);
+            var body = ResourcesManager.GetValue(ConstsResources.IMPORT_ACCOUNT_EVIDENCE_SENDMAIL_BODY) + errorContent;
 
             try
             {

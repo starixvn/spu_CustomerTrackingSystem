@@ -124,7 +124,7 @@
                 }
             },
             complete: function () {
-                
+
             }
         });
     }
@@ -221,7 +221,20 @@
                 data: {
                     custId: custId
                 },
-                type: 'POST'
+                type: 'POST',
+                dataFilter: function (response) {
+                    if (response !== undefined) {
+                        var json = jQuery.parseJSON(response);
+                        RenderCustomerCategorySummary(json.data);
+                    }
+                    return response;
+                },
+                beforeSend: function () {
+                    tblcustomercategory.find('tbody').addClass('loading');
+                },
+                complete: function () {
+                    tblcustomercategory.find('tbody').removeClass('loading');
+                }
             },
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
@@ -239,10 +252,9 @@
                 { data: obj => obj.LastModifiedBy },
                 { data: obj => obj.LastModifiedDate },
                 {
-                    data: obj => () =>
-                    {
-                        var html = '<span class="icon-edit' + (!isHostPermission ? ' disabled"' : '') +'" title="Edit Category"></span>';
-                        html += '<span class="icon-delete' + (!isHostPermission ? ' disabled"' : '') +'" title="Remove Category"></span>';
+                    data: obj => () => {
+                        var html = '<span class="icon-edit' + (!isHostPermission ? ' disabled"' : '') + '" title="Edit Category"></span>';
+                        html += '<span class="icon-delete' + (!isHostPermission ? ' disabled"' : '') + '" title="Remove Category"></span>';
 
                         return obj.IsEnabledDelete ? html : '';
                     }, createdCell: (cell, _, row) => {
@@ -257,7 +269,7 @@
                             $('.icon-edit', cell).click(() => {
                                 EditCategory(custId, ctsCustId, subscriberId, row.CategoryName, row.CategoryId, row.SportGroupIdList, row.Remark);
                             });
-                        }                        
+                        }
                     }
                 }
             ],
@@ -265,6 +277,97 @@
                 dataSrc: 'ParentCategoryName'
             }
         });
+    }
+
+    function RenderCustomerCategorySummary(data) {
+        let html = "";
+        let defaultCategoryList = GetCustomerCategoryList();
+        let indexColorProfile = 1;
+
+        for (let i = 0; i < defaultCategoryList.length; i++) {
+            data.map(function (x) {
+                let isEquals = x.CategoryName === defaultCategoryList[i].name;
+                if (isEquals) {
+                    let classIconColor = defaultCategoryList[i].cssClass;
+                    let sportGroupNameList = x.SportGroupNameList ? x.SportGroupNameList : "None";
+
+                    html = BuildCustomerCategoryToHtmlDiv(html, classIconColor, x.CategoryName, sportGroupNameList);
+
+                    indexColorProfile = indexColorProfile < defaultCategoryList[i].indexColor
+                        ? defaultCategoryList[i].indexColor
+                        : indexColorProfile;
+                }
+            });
+        }        
+
+        switch (indexColorProfile) {
+            case 1:
+                $('#divHeaderUsername')
+                    .removeClass('bg-red')
+                    .removeClass('bg-yellow')
+                    .addClass('bg-green');
+                $('#divHeaderInfo')
+                    .removeClass('border-red')
+                    .removeClass('border-yellow')
+                    .addClass('border-green');
+                break;
+            case 2:
+                $('#divHeaderUsername')
+                    .removeClass('bg-red')
+                    .removeClass('bg-green')
+                    .addClass('bg-yellow');
+                $('#divHeaderInfo')
+                    .removeClass('border-red')
+                    .removeClass('border-green')
+                    .addClass('border-yellow');
+                break;
+            case 3:
+                $('#divHeaderUsername')
+                    .removeClass('bg-yellow')
+                    .removeClass('bg-green')
+                    .addClass('bg-red');
+                $('#divHeaderInfo')
+                    .removeClass('border-yellow')
+                    .removeClass('border-green')
+                    .addClass('border-red');
+                break;
+            default:
+                break;
+        }       
+
+        $('#divCustomerCategorySummary').html(html);
+        $('#spanContentInfoLoading').css('visibility', 'hidden');
+        $('#divHeaderInfo').css('visibility', 'visible');
+    }
+
+    function BuildCustomerCategoryToHtmlDiv(html, classIconColor, categoryName, sportGroupNameList){
+        html += "<div class='info-status'>";
+        html += "<div class='status-left'>";
+        html += "<span class='" + classIconColor + "'></span>";
+        html += "<span class='text-status text-left'>" + categoryName + "</span>";
+        html += "</div>";
+        html += "<div class='status-right'>";
+        html += "<span class='text-status text-right'>" + sportGroupNameList + "</span>";
+        html += "</div>";
+        html += "</div>";
+
+        return html;
+    }
+
+    function GetCustomerCategoryList() {
+        var list = [];
+
+        list.push({ 'name': 'High Risk Punter', 'cssClass': 'circle bg-yellow', 'indexColor': 2, 'order': 1 });
+        list.push({ 'name': 'Smart Punter', 'cssClass': 'circle bg-yellow', 'indexColor': 2, 'order': 2 });
+        list.push({ 'name': 'Probation', 'cssClass': 'circle bg-yellow', 'indexColor': 2, 'order': 3 });
+        list.push({ 'name': 'Limited Punter', 'cssClass': 'circle bg-yellow', 'indexColor': 2, 'order': 4 }); 
+        list.push({ 'name': 'Lucky Punter', 'cssClass': 'circle bg-yellow', 'indexColor': 2, 'order': 5 });
+        list.push({ 'name': 'VVIP', 'cssClass': 'circle bg-green', 'indexColor': 1, 'order': 6 });
+        list.push({ 'name': 'VIP', 'cssClass': 'circle bg-green', 'indexColor': 1, 'order': 7 });
+        list.push({ 'name': 'Normal Member', 'cssClass': 'circle bg-green', 'indexColor': 1, 'order': 8 });
+        list.push({ 'name': 'New Member', 'cssClass': 'circle bg-green', 'indexColor': 1, 'order': 9 });
+           
+        return list;
     }
 
     function DisableButton(hostPermission) {
@@ -279,7 +382,6 @@
 
         btnMarkCategory.click(function () { InitialMarkCategory(custId, ctsCustId, subscriberId); });
 
-        RenderGrid(custId, ctsCustId, username, subscriberId);
-        // GetCustomerClassification(ctsCustId);
+        RenderGrid(custId, ctsCustId, username, subscriberId);        
     };
 }

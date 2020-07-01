@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'Fraud-Sensor';
-  src:  url('fonts/Fraud-Sensor.eot?htujuv');
-  src:  url('fonts/Fraud-Sensor.eot?htujuv#iefix') format('embedded-opentype'),
-    url('fonts/Fraud-Sensor.ttf?htujuv') format('truetype'),
-    url('fonts/Fraud-Sensor.woff?htujuv') format('woff'),
-    url('fonts/Fraud-Sensor.svg?htujuv#Fraud-Sensor') format('svg');
+  src:  url('fonts/Fraud-Sensor.eot?bi6gvl');
+  src:  url('fonts/Fraud-Sensor.eot?bi6gvl#iefix') format('embedded-opentype'),
+    url('fonts/Fraud-Sensor.ttf?bi6gvl') format('truetype'),
+    url('fonts/Fraud-Sensor.woff?bi6gvl') format('woff'),
+    url('fonts/Fraud-Sensor.svg?bi6gvl#Fraud-Sensor') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -13,7 +13,7 @@
 [class^="icon-"], [class*=" icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: 'Fraud-Sensor' !important;
-  speak: none;
+  speak: never;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
@@ -25,6 +25,52 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-Avarta .path1:before {
+  content: "\e952";
+  color: rgb(255, 255, 255);
+}
+.icon-Avarta .path2:before {
+  content: "\e953";
+  margin-left: -0.63671875em;
+  color: rgb(84, 89, 110);
+}
+.icon-Avarta .path3:before {
+  content: "\e954";
+  margin-left: -0.63671875em;
+  color: rgb(255, 255, 255);
+}
+.icon-Avarta .path4:before {
+  content: "\e955";
+  margin-left: -0.63671875em;
+  color: rgb(255, 255, 255);
+}
+.icon-Avarta .path5:before {
+  content: "\e956";
+  margin-left: -0.63671875em;
+  color: rgb(255, 255, 255);
+}
+.icon-Avarta .path6:before {
+  content: "\e957";
+  margin-left: -0.63671875em;
+  color: rgb(255, 255, 255);
+}
+.icon-Avarta .path7:before {
+  content: "\e958";
+  margin-left: -0.63671875em;
+  color: rgb(255, 255, 255);
+}
+.icon-Delinquency:before {
+  content: "\e959";
+  color: #e7363c;
+}
+.icon-Dirty-Account:before {
+  content: "\e95a";
+  color: #e67148;
+}
+.icon-Hedge-Account:before {
+  content: "\e95b";
+  color: #475162;
+}
 .icon-Controller:before {
   content: "\e951";
   color: #fff;
@@ -68,11 +114,11 @@
   content: "\e946";
   color: #f00;
 }
-.icon-Delinquency:before {
+.icon-Delinquency1:before {
   content: "\e949";
   color: #e7363c;
 }
-.icon-Dirty-Account:before {
+.icon-Dirty-Account1:before {
   content: "\e94a";
   color: #e67148;
 }
@@ -83,7 +129,7 @@
 .icon-Flagged-With-Evidence:before {
   content: "\e94c";
 }
-.icon-Hedge-Account:before {
+.icon-Hedge-Account1:before {
   content: "\e94d";
   color: #475162;
 }

@@ -782,7 +782,6 @@
                 fraudCaseName = string.Join(", ", result.FraudCaseList.Select(x => x.FraudCaseName));
             }
 
-            profile.SuspiciousInfo = result.SuspiciouseCustomer;
             profile.FraudCases = fraudCaseName;
         }
 
