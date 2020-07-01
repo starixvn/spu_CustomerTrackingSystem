@@ -1,4 +1,7 @@
-﻿namespace Fanex.NAP.CTS.ViewModel.ProblemAccountMonitor
+﻿using Fanex.NAP.CTS.Resource;
+using System;
+
+namespace Fanex.NAP.CTS.ViewModel.ProblemAccountMonitor
 {
     public class DetailTicket
     {
@@ -54,5 +57,26 @@
 
         public string VoidRequestId { get; set; }
 
+        public int? GroupId { get; set; }
+
+        private string _GroupName;
+        public string GroupName
+        {
+            get
+            {
+                return _GroupName;
+            }
+            set
+            {
+                if (String.IsNullOrEmpty(value))
+                {
+                    _GroupName = ConstsResources.EMPTY;
+                }
+                else
+                {
+                    _GroupName = value;
+                }
+            }
+        }
     }
 }

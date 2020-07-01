@@ -88,6 +88,10 @@
                 </div>
             </div>
         </div>
+        <div class="group width-200">
+            <label class="text">Group ID</label>
+            <select class="control" id="cbbGroupId" multiple="multiple"></select>
+        </div>
         <div class="button-left">
             <button class="button button-generate" id="btnGenerate">Generate</button>
         </div>
@@ -99,6 +103,7 @@
         <thead>
             <tr>
                 <th>#</th>
+                <th>Group ID</th>
                 <th>Trans Date</th>
                 <th>Username</th>
                 <th>Currency</th>
@@ -114,7 +119,7 @@
                 <th>Void</th>
             </tr>
             <tr class="format-tr">
-                <th colspan="14" class="format-th">
+                <th colspan="15" class="format-th">
                     <div class="wrapper-selections">
                         <span class="detail-selections">
                             Total: <span id="spanTotalSelections">0</span> selections (Max: 2000 selections)

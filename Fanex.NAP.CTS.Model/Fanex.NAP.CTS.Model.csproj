@@ -227,6 +227,7 @@
     <Compile Include="MatchMonitor\FraudCaseDetails\TicketInfo.cs" />
     <Compile Include="MatchMonitor\League.cs" />
     <Compile Include="MatchMonitor\Match.cs" />
+    <Compile Include="ProblemAccountMonitor\DetailCustomerGroupsModel.cs" />
     <Compile Include="ProblemAccountMonitor\DetailTicketVoidingInRequestModel.cs" />
     <Compile Include="ProblemAccountMonitor\LeagueModel.cs" />
     <Compile Include="ProblemAccountMonitor\DetailMatchInfoModel.cs" />

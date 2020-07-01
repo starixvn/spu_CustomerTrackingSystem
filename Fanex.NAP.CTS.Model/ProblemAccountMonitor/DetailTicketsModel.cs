@@ -4,6 +4,8 @@
 
     public class DetailTicketsModel
     {
+        public int  CustID { get; set; }
+
         public string Username { get; set; }
 
         public int SiteId { get; set; }
@@ -49,5 +51,7 @@
         public string CurrencyName { get; set; }
 
         public int HighlightStatus { get; set; }
+
+        public int? GroupID { get; set; }
     }
 }

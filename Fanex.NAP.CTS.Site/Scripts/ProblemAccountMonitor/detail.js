@@ -12,6 +12,7 @@
         cbbCurrency: $("#cbbCurrency"),
         cbbTicketStatus: $('#cbbTicketStatus'),
         cbbVoid: $('#cbbVoid'),
+        cbbGroupId: $('#cbbGroupId'),
         lblMatchName: $('#lblMatchName'),
         lblEvidence: $('#lblEvidence'),
         lblEventDate: $('#lblEventDate'),
@@ -62,7 +63,7 @@
                 dataFilter: function (response) {
                     var json = jQuery.parseJSON(response);
 
-                    RefreshFilter(json.data.SiteList, json.data.BetTypeList, json.data.CurrencyList, json.data.TicketStatusList);
+                    RefreshFilter(json.data.SiteList, json.data.BetTypeList, json.data.CurrencyList, json.data.TicketStatusList, json.data.GroupList);
                     domElements.spanTotalSelections.text(json.data.TotalHighlightStatusWhite);
 
                     var newJson = {};
@@ -97,27 +98,29 @@
             scrollCollapse: false,           
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 11, 12, 13], className: "text-center" },
+                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 11, 12, 13, 14], className: "text-center" },
                 { targets: [8, 9, 10], className: "text-right" },
                 { targets: [0], width: "3%" },
-                { targets: [1], width: "10%" },
+                { targets: [1], width: "7%" },
                 { targets: [2], width: "10%" },
-                { targets: [3], width: "5%" },
-                { targets: [4], width: "10%" },
+                { targets: [3], width: "10%" },
+                { targets: [4], width: "5%" },
                 { targets: [5], width: "10%" },
                 { targets: [6], width: "10%" },
-                { targets: [7], width: "5%" },
-                { targets: [8], width: "7%" },
-                { targets: [9], width: "5%" },
+                { targets: [7], width: "10%" },
+                { targets: [8], width: "5%" },
+                { targets: [9], width: "7%" },
                 { targets: [10], width: "5%" },
                 { targets: [11], width: "5%" },
                 { targets: [12], width: "5%" },
-                { targets: [13], width: "5%" }
+                { targets: [13], width: "5%" },
+                { targets: [14], width: "5%" }
             ],
             columns: [
                 {
                     render: function (data, type, full, meta) { return meta.row + 1; }
                 },
+                { data: obj => () => { return "<span class=group data-group-id=" + obj.GroupId + ">" + obj.GroupName + "</span>"; }},
                 { data: obj => obj.BetDate },
                 { data: obj => obj.Username },
                 { data: obj => () => { return "<span class=currency data-currency-id=" + obj.CurrencyId + ">" + obj.CurrencyName + "</span>"; } },
@@ -175,7 +178,7 @@
         });
     }    
 
-    function RefreshFilter(siteList, betTypeList, currencyList, ticketStatusList) {
+    function RefreshFilter(siteList, betTypeList, currencyList, ticketStatusList, groupList) {
         $('option', domElements.cbbSite).filter(function () {
             return $(this).val() !== '';
         }).remove();        
@@ -225,6 +228,18 @@
         });
 
         domElements.cbbTicketStatus.multiselect("refresh");
+
+
+        $('option', domElements.cbbGroupId).filter(function () {
+            return $(this).val() !== '';
+        }).remove();
+
+        groupList.map(function (x) {
+            domElements.cbbGroupId.append(`<option selected value='${x.GroupId}'>${x.GroupName}</option>`);
+        });
+
+        domElements.cbbGroupId.multiselect("refresh");
+
     }
 
     function RefreshTotalSelections(checked) {
@@ -611,6 +626,20 @@
             uncheckAll: function () { RefreshAllVoidTicket(false); }
         });  
 
+        domElements.cbbGroupId.multiselect({
+            menuWidth: 180,
+            menuHeight: 300,
+            selectedText: "# of # selected",
+            noneSelectedText: "Selected Group",
+            click: function (event, ui) { RefreshGridByFilter("td span.group", "data-group-id", ui.value, ui.checked); },
+            checkAll: function () { RefreshAllGridByFilter("td span.group", true); },
+            uncheckAll: function () { RefreshAllGridByFilter("td span.group", false); }
+        }).multiselectfilter({
+            width: 217,
+            placeholder: '',
+            label: ''
+        });
+
         LoadMatchInfo();
         LoadGrid();
         DisableButtons();        
@@ -628,7 +657,7 @@
         domElements.inputStakeMin.on('blur', () => RefreshGridByFilterStakeRange());
         domElements.inputStakeMax.on('blur', () => RefreshGridByFilterStakeRange());
         domElements.btnArrowStake.on('click', (e) => UpDownStakeRangeInput(e));
-        domElements.btnGenerate.on('click', () => LoadGrid());                           
+        domElements.btnGenerate.on('click', () => LoadGrid());      
     }
 
     $(document).ready(function () {

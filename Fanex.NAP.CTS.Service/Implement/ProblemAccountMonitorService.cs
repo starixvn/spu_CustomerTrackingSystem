@@ -5,7 +5,8 @@
     using Fanex.BetList.Core.TicketHelper;
     using Fanex.Data;
     using Fanex.NAP.CTS.Criteria.ProblemAccountMonitor;
-    using Fanex.NAP.CTS.Model.ProblemAccountMonitor;    
+    using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
+    using Newtonsoft.Json;
     using System;    
     using System.Collections.Generic;
     using System.Linq;
@@ -130,6 +131,25 @@
             }
         }
 
+        public IEnumerable<DetailCustomerGroupsModel> GetCustomerGroup(List<DetailTicketsModel> detailTicketsModels)
+        {
+            var custLists = detailTicketsModels.Select(c => new { c.CustID, c.TransDate });
+
+            var jsonData = JsonConvert.SerializeObject(custLists);
+
+            var criteria = new DetailCustomerGroupsGetCriteria
+            {
+                CustomerTransDateList = jsonData
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<DetailCustomerGroupsModel>(criteria);
+            }
+
+
+        }
+
         public IEnumerable<DetailTicketVoidingInRequestModel> GetTicketVoidingInRequest(int matchId, string tranIdList)
         {
             var criteria = new DetailTicketVoidingInRequestGetCriteria
@@ -177,6 +197,6 @@
                 ? voidTicket.RequestId.ToString()
                 : string.Empty;
         }
-
+        
     }
 }

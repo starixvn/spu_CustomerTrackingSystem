@@ -5,6 +5,8 @@
         public const string AUTO_SUSPEND_OTHER_SPORTS = "AUTO_SUSPEND_OTHER_SPORTS";
         public const string AUTO_SUSPEND_SOCCER = "AUTO_SUSPEND_SOCCER";
         public const string NONE = "NONE";
+        public const string NULL = "NULL";
+        public const string EMPTY = "_";
 
         public const string ACCOUNT_STATUS_CN88_NAME_ACTIVE = "ACCOUNT_STATUS_CN88_NAME_ACTIVE";
         public const string ACCOUNT_STATUS_CN88_NAME_INACTIVE = "ACCOUNT_STATUS_CN88_NAME_INACTIVE";

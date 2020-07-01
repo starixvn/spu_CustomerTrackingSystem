@@ -510,6 +510,10 @@
     <Setting Key="CTS_DC_GetAllSubscriberGroups"
            SpName="CTS_DC_GetAllSubscriberGroups"
            DbName="MySQL.CTS_DataCenter" />
+
+    <Setting Key="CTS_DC_GetCustomerGroup"
+      SpName="CTS_DC_GetCustomerGroup"
+      DbName="MySQL.CTS_DataCenter" />
   </Function>
 
   <Function Name="ImportEvidences">

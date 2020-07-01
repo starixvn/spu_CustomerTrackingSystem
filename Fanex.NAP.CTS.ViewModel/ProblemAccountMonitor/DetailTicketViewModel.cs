@@ -23,6 +23,8 @@
 
         public IEnumerable<DetailTicketStatus> TicketStatusList { get; set; }
 
+        public IEnumerable<DetailGroup> GroupList { get; set; }
+
         public int TotalHighlightStatusWhite { get; set; }
 
     }

@@ -22,6 +22,8 @@
 
         IEnumerable<DetailTicketsModel> GetDetailTickets(int matchId, int fraudCaseId, string stakeFrom, string stakeTo, string siteIds);
 
+        IEnumerable<DetailCustomerGroupsModel> GetCustomerGroup(List<DetailTicketsModel> detailTicketsModels);
+
         IEnumerable<DetailTicketVoidingInRequestModel> GetTicketVoidingInRequest(int matchId, string tranIdList);
 
         string GetHtmlChoice(DetailTicketsModel ticket);

@@ -6,6 +6,7 @@
     using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Core.BaseClasses;
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
     using Fanex.NAP.CTS.Resource.Consts;
@@ -177,6 +178,8 @@
             var tasks = new List<Task>();
             var ticketVoidingsModel = Enumerable.Empty<DetailTicketVoidingInRequestModel>();
             var ticketsModel = _probleAccountMonitorService.GetDetailTickets(matchId, fraudCaseId, stakeFrom, stakeTo, siteIds);
+            var customerGroupModel = _probleAccountMonitorService.GetCustomerGroup(ticketsModel.ToList());
+            GetGroupIDForDeTailTicketModel(ticketsModel, customerGroupModel);
 
             if (ticketsModel != null && ticketsModel.Any())
             {
@@ -202,6 +205,13 @@
                 {
                     result.TicketStatusList = ticketsModel.GroupBy(x => new { x.TicketStatusId, x.TicketStatus })
                         .Select(x => new DetailTicketStatus { TicketStatusId = x.Key.TicketStatusId, TicketStatusName = x.Key.TicketStatus });
+                }));
+
+                tasks.Add(Task.Run(() =>
+                {
+                    result.GroupList = ticketsModel.GroupBy(x=> new { x.GroupID })
+                          .Select(s => new DetailGroup { GroupId = s.Key.GroupID, GroupName =s.Key.GroupID.ToString()}).Distinct();
+
                 }));
 
                 tasks.Add(Task.Run(() =>
@@ -236,7 +246,9 @@
                     VoidRequestId = x.TicketStatusId != 102 // Void
                                     ? _probleAccountMonitorService.GetVoidRequestId(ticketVoidingsModel, x.TransId)
                                     : string.Empty,
-                    HighlightStatus = x.HighlightStatus
+                    HighlightStatus = x.HighlightStatus,
+                    GroupId = x.GroupID,
+                    GroupName = x.GroupID.ToString()
                 }).OrderByDescending(x=>x.BetDate);
 
                 result.TotalHighlightStatusWhite = result.TicketList.Count(x => x.HighlightStatus.Equals(0) && x.VoidRequestId == string.Empty);
@@ -270,5 +282,21 @@
 
             return Json(voidRequestToTVSParam, JsonRequestBehavior.AllowGet);
         }
+
+        private void GetGroupIDForDeTailTicketModel(IEnumerable<DetailTicketsModel> ticketsModel, IEnumerable<DetailCustomerGroupsModel> customerGroupsModel)
+        {
+            foreach (var ticket in ticketsModel)
+            {
+                foreach (var customerGroup in customerGroupsModel)
+                {
+                    if (ticket.CustID == customerGroup.CustID)
+                    {
+                        ticket.GroupID = customerGroup.GroupID;
+                        break;
+                    }
+                }
+            }
+        }
+
     }
 }
