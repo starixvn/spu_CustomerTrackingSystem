@@ -194,8 +194,13 @@
                 tasks.Add(Task.Run(() =>
                 {
                     result.CurrencyList = ticketsModel.GroupBy(x => new { x.CurrencyId, x.CurrencyName })
-                        .Select(x => new DetailCurrency { CurrencyId = x.Key.CurrencyId, CurrencyName = x.Key.CurrencyName });
-                                
+                        .Select(x => new DetailCurrency { CurrencyId = x.Key.CurrencyId, CurrencyName = x.Key.CurrencyName });                                
+                }));
+
+                tasks.Add(Task.Run(() =>
+                {
+                    result.TicketStatusList = ticketsModel.GroupBy(x => new { x.TicketStatusId, x.TicketStatus })
+                        .Select(x => new DetailTicketStatus { TicketStatusId = x.Key.TicketStatusId, TicketStatusName = x.Key.TicketStatus });
                 }));
 
                 tasks.Add(Task.Run(() =>
@@ -233,7 +238,7 @@
                     HighlightStatus = x.HighlightStatus
                 }).OrderByDescending(x=>x.BetDate);
 
-                result.TotalHighlightStatusGreen = result.TicketList.Count(x => x.HighlightStatus.Equals(0) && x.VoidRequestId == string.Empty);
+                result.TotalHighlightStatusWhite = result.TicketList.Count(x => x.HighlightStatus.Equals(0) && x.VoidRequestId == string.Empty);
             }
 
             return Json(new

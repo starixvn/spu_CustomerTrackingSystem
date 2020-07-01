@@ -62,13 +62,17 @@
             <label class="text">Currency</label>
             <select class="control" id="cbbCurrency" multiple="multiple"></select>
         </div>
+        <div class="group width-200">
+            <label class="text">Status</label>
+            <select class="control" id="cbbTicketStatus" multiple="multiple"></select>
+        </div>
         <div class="group" id="divStakeRangeContainer">
             <label class="text">Stake Range</label>
             <div class="block-range" id="btnShowStakeRange">
                 <div class="group-min">
                     <span class="text">Min</span>
                     <div class="group width-100">
-                        <input class="control" type="number" min="0" value="" id="inputStakeMin"/>
+                        <input class="control" type="number" min="0" value="" id="inputStakeMin" />
                         <span class="icon icon-chevron-up arrowStake" data-type="up"></span>
                         <span class="icon icon-chevron-down arrowStake" data-type="down"></span>
                     </div>
@@ -84,7 +88,7 @@
                 </div>
             </div>
         </div>
-        <div class="button-left">            
+        <div class="button-left">
             <button class="button button-generate" id="btnGenerate">Generate</button>
         </div>
     </div>    

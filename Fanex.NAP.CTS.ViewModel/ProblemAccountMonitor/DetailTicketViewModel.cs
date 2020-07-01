@@ -10,6 +10,7 @@
             SiteList = Enumerable.Empty<DetailSite>();
             BetTypeList = Enumerable.Empty<DetailBetType>();
             CurrencyList = Enumerable.Empty<DetailCurrency>();
+            TicketStatusList = Enumerable.Empty<DetailTicketStatus>();
         }
 
         public IEnumerable<DetailTicket> TicketList { get; set; }
@@ -20,7 +21,9 @@
 
         public IEnumerable<DetailCurrency> CurrencyList { get; set; }
 
-        public int TotalHighlightStatusGreen { get; set; }
+        public IEnumerable<DetailTicketStatus> TicketStatusList { get; set; }
+
+        public int TotalHighlightStatusWhite { get; set; }
 
     }
 }

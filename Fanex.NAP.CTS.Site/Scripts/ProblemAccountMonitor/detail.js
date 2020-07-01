@@ -9,6 +9,7 @@
         cbbSite: $("#cbbSite"),
         cbbBetType: $("#cbbBetType"),
         cbbCurrency: $("#cbbCurrency"),
+        cbbTicketStatus: $('#cbbTicketStatus'),
         cbbVoid: $('#cbbVoid'),
         lblMatchName: $('#lblMatchName'),
         lblEvidence: $('#lblEvidence'),
@@ -60,8 +61,8 @@
                 dataFilter: function (response) {
                     var json = jQuery.parseJSON(response);
 
-                    RefreshFilter(json.data.SiteList, json.data.BetTypeList, json.data.CurrencyList);
-                    domElements.spanTotalSelections.text(json.data.TotalHighlightStatusGreen);
+                    RefreshFilter(json.data.SiteList, json.data.BetTypeList, json.data.CurrencyList, json.data.TicketStatusList);
+                    domElements.spanTotalSelections.text(json.data.TotalHighlightStatusWhite);
 
                     var newJson = {};
                     newJson.data = json.data.TicketList;
@@ -131,14 +132,18 @@
                     data: obj => () => {
                         let capitalize = obj.TicketStatus;
                         if (typeof capitalize !== 'string') return '';
-                        return capitalize.charAt(0).toUpperCase() + capitalize.slice(1);
+                        let ticketStatusName = capitalize.charAt(0).toUpperCase() + capitalize.slice(1);
+                        let html = "<span class=ticketStatus data-ticket-status-id=" + obj.TicketStatusId + ">" + ticketStatusName + "</span>";
+                        return html;
                     }
                 },
                 {
                     data: obj => () => {
                         let spanRequestId = '<span> RID: ' + obj.VoidRequestId + '</span>';
 
-                        if (obj.TicketStatusId === 102) return '';
+                        // TicketStatusId = 0 => running, 102 => void
+                        if (obj.TicketStatusId === 102 || obj.TicketStatusId !== 0)
+                            return '';
 
                         return obj.VoidRequestId === ''
                             ? RenderVoidTicket(obj.BetId, obj.HighlightStatus)
@@ -155,14 +160,18 @@
             createdRow: function (row, data, index) {
                 let cssClassTR = 'white';
                 if (data.HighlightStatus === 1) cssClassTR = 'red';
-                else if (data.HighlightStatus === 2) cssClassTR = 'green';
-                
+                else if (data.HighlightStatus === 2) cssClassTR = 'green';                
+
                 $(row).addClass(cssClassTR);
+                $(row).attr('criteria-hide', '');
+                // TicketStatusId = 0 => running
+                if (data.TicketStatusId !== 0)
+                    $(row).addClass("hide");
             }
         });
     }    
 
-    function RefreshFilter(siteList, betTypeList, currencyList) {
+    function RefreshFilter(siteList, betTypeList, currencyList, ticketStatusList) {
         $('option', domElements.cbbSite).filter(function () {
             return $(this).val() !== '';
         }).remove();        
@@ -192,6 +201,20 @@
         });
 
         domElements.cbbCurrency.multiselect("refresh");
+
+        $('option', domElements.cbbTicketStatus).filter(function () {
+            return $(this).val() !== '';
+        }).remove();
+
+        ticketStatusList.map(function (x) {
+            let capitalize = x.TicketStatusName;
+            if (typeof capitalize !== 'string') return '';
+            let ticketStatusName = capitalize.charAt(0).toUpperCase() + capitalize.slice(1);
+            let isSelected = ticketStatusName === "Running";
+            domElements.cbbTicketStatus.append("<option " + (isSelected ? "selected" : "") + " value=" + x.TicketStatusId + ">" + ticketStatusName + "</option>");
+        });
+
+        domElements.cbbTicketStatus.multiselect("refresh");
     }
 
     function RefreshTotalSelections(checked) {
@@ -316,7 +339,10 @@
                 let defaultValue = minValue === 0 && maxValue === 0;
                 let isEqual = stakeValue >= minValue && stakeValue <= maxValue || defaultValue;
 
-                isEqual
+                let criteriaHideList = GetCriteriaHideList(tr, "stake-range", isEqual);
+                tr.attr("criteria-hide", criteriaHideList.join());
+
+                criteriaHideList.length === 1
                     ? tr.removeClass('hide')
                     : tr.addClass('hide');
             }            
@@ -328,24 +354,44 @@
             let tr = $(this);
             let span = tr.find(criteria);            
             if (span.attr(attrName) === value) {
-                checked
+                let criteriaHideList = GetCriteriaHideList(tr, attrName, checked);
+                tr.attr("criteria-hide", criteriaHideList.join());
+
+                criteriaHideList.length === 1
                     ? tr.removeClass('hide')
                     : tr.addClass('hide');
             }
         });
     }
 
-    function RefreshAllGridByFilter(criteria, checked) {
+    function RefreshAllGridByFilter(criteria, attrName, checked) {
         domElements.ticketsTable.find('tr').each(function () {
             let tr = $(this);
             let span = tr.find(criteria);
             if (span.length > 0) {
-                checked
+
+                let criteriaHideList = GetCriteriaHideList(tr, attrName, checked);
+                tr.attr("criteria-hide", criteriaHideList.join());
+
+                criteriaHideList.length === 1
                     ? tr.removeClass('hide')
                     : tr.addClass('hide');
             }
         });
     }   
+
+    function GetCriteriaHideList(tr, attrName, checked) {
+        let criteriaHide = tr.attr("criteria-hide");
+        let criteriaHideList = criteriaHide.split(',');
+
+        checked
+            ? criteriaHideList = $.grep(criteriaHideList, function (ele) {
+                return ele !== attrName;
+            })
+            : criteriaHideList.push(attrName);
+
+        return criteriaHideList;
+    }
 
     function CopyToClipboardChecked() {
         let arrBetIds = [];
@@ -495,8 +541,8 @@
             selectedText: "# of # selected",
             noneSelectedText: "Select Sites",
             click: function (event, ui) { RefreshGridByFilter("td span.site", "data-site-id", ui.value, ui.checked); },
-            checkAll: function () { RefreshAllGridByFilter("td span.site", true); },
-            uncheckAll: function () { RefreshAllGridByFilter("td span.site", false); }
+            checkAll: function () { RefreshAllGridByFilter("td span.site", "data-site-id", true); },
+            uncheckAll: function () { RefreshAllGridByFilter("td span.site", "data-site-id", false); }
         }).multiselectfilter({
             width: 217,
             placeholder: '',
@@ -509,8 +555,8 @@
             selectedText: "# of # selected",
             noneSelectedText: "Select Bet Type",
             click: function (event, ui) { RefreshGridByFilter("td span.bettype", "data-bettype-id", ui.value, ui.checked); },
-            checkAll: function () { RefreshAllGridByFilter("td span.bettype", true); },
-            uncheckAll: function () { RefreshAllGridByFilter("td span.bettype", false); }
+            checkAll: function () { RefreshAllGridByFilter("td span.bettype", "data-bettype-id", true); },
+            uncheckAll: function () { RefreshAllGridByFilter("td span.bettype", "data-bettype-id", false); }
         }).multiselectfilter({
             width: 217,
             placeholder: '',
@@ -523,13 +569,27 @@
             selectedText: "# of # selected",
             noneSelectedText: "Select Currency",
             click: function (event, ui) { RefreshGridByFilter("td span.currency", "data-currency-id", ui.value, ui.checked); },
-            checkAll: function () { RefreshAllGridByFilter("td span.currency", true); },
-            uncheckAll: function () { RefreshAllGridByFilter("td span.currency", false); }
+            checkAll: function () { RefreshAllGridByFilter("td span.currency", "data-currency-id", true); },
+            uncheckAll: function () { RefreshAllGridByFilter("td span.currency", "data-currency-id", false); }
         }).multiselectfilter({
             width: 217,
             placeholder: '',
             label: ''
             });
+
+        domElements.cbbTicketStatus.multiselect({
+            menuWidth: 180,
+            menuHeight: 300,
+            selectedText: "# of # selected",
+            noneSelectedText: "Select Status",
+            click: function (event, ui) { RefreshGridByFilter("td span.ticketStatus", "data-ticket-status-id", ui.value, ui.checked); },
+            checkAll: function () { RefreshAllGridByFilter("td span.ticketStatus","data-ticket-status-id" , true); },
+            uncheckAll: function () { RefreshAllGridByFilter("td span.ticketStatus","data-ticket-status-id",  false); }
+        }).multiselectfilter({
+            width: 217,
+            placeholder: '',
+            label: ''
+        });
 
         domElements.cbbVoid.multiselect({
             menuWidth: 155,
@@ -539,7 +599,7 @@
             click: function (event, ui) { RefreshVoidTicket(ui.value, ui.checked); },
             checkAll: function () { RefreshAllVoidTicket(true); },
             uncheckAll: function () { RefreshAllVoidTicket(false); }
-        });    
+        });  
 
         LoadMatchInfo();
         LoadGrid();

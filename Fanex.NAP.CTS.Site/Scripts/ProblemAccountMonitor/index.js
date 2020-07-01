@@ -256,7 +256,7 @@
     }
 
     function ViewDetailTickets(matchId, fraudCaseId) { 
-        let url = common.modifyRelativeUrl('/ProblemAccountMonitor/Detail/' + matchId);
+        let url = common.modifyRelativeUrl('ProblemAccountMonitor/Detail/' + matchId);
 
         let siteIds = domElements.cbbSite.val().join();
         domElements.hdSiteIds.val(siteIds);

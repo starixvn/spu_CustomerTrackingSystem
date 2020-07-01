@@ -115,6 +115,7 @@
     <Compile Include="ProblemAccountMonitor\DetailBetType.cs" />
     <Compile Include="ProblemAccountMonitor\DetailCurrency.cs" />
     <Compile Include="ProblemAccountMonitor\DetailTicket.cs" />
+    <Compile Include="ProblemAccountMonitor\DetailTicketStatus.cs" />
     <Compile Include="ProblemAccountMonitor\DetailTicketViewModel.cs" />
     <Compile Include="ProblemAccountMonitor\DetailViewModel.cs" />
     <Compile Include="ProblemAccountMonitor\LeagueViewModel.cs" />
