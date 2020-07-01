@@ -3,17 +3,23 @@
     flex-wrap: wrap;
 
     .group {
-        padding-right: 24px;
+        padding-right: 16px;
         padding-bottom: 12px;
 
         .text {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
+            font-size: 1.3rem;
+            color: #474747;
         }
 
         .control {
             display: block;
             width: 100%;
+            font-size: 1.4rem;
+            color: #474747;
+            border: 1px solid #E5E5E5;
+            border-radius: 2px;
         }
     }
 

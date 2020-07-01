@@ -8,17 +8,56 @@
 
 <h2 class="page-title">Associated Account Monitor</h2>
 <div class="associated-account-monitor">
-    <div class="group calendar width-180">
-        <label class="text">Username</label>
-        <input type="text" class="control" readonly>
+    <div class="form-filter">
+        <div class="group width-180">
+            <label class="text" for="username">Username</label>
+            <input type="text" class="control" id="username">
+        </div>
+        <div class="group width-180">
+            <label class="text">Subscriber</label>
+            <select class="control" id="cbbSubscriber" multiple="multiple">
+            </select>
+        </div>
+
+        <button class="button -search" id="btnSearch">Search</button>
     </div>
-    <div class="group width-180">
-        <label class="text">Subscriber</label>
-        <select class="control" id="cbbSubscriber" multiple="multiple">
-        </select>
+    <div class="top-header">
+        <div class="add-username">
+            <button class="button button-primary-outline" id="btnAddUsername">Add Username(s)</button>
+        </div>
     </div>
 
-    <button class="button button-search" id="btnGenerate">Search</button>
+    <table id="asociatedAccountMonitorTable" class="table table-striped width-100per asociatedAccountMonitorTable">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Username</th>
+                <th>Login ID</th>
+                <th>Status</th>
+                <th>Subscriber </th>
+                <th>Remark</th>
+                <th>Add By</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <div id="divAddUsername" style="display:none;">
+        <div class="form-control">
+            <span class="label">
+            Do you want to remove 
+                <span class="text-username">CN88$Kevin</span> 
+            from Associated Account Monitor list?</span>
+        </div>
+    
+        <div class="modal-footer">
+            <button id="btnyesusername" class="button -add" >Yes</button>
+            <button id="btnnousername" class="button btn-cancel-outline" >No</button>
+        </div>
+    </div>
+
+
 </div>
 
 @section scripts{
