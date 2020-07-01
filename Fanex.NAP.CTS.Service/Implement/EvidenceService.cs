@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
+    using Fanex.Data.Repository;
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.BaseClasses;
     using Fanex.NAP.CTS.Criteria.Account.Evidence;
@@ -265,12 +266,13 @@
 
         public IEnumerable<CustomerEvidence> GetFlaggedCustomersByLevel(string custIdList)
         {
+            DynamicRepository repository = new DynamicRepository();
             var criteria = new FlaggedAccountSelectCriteria
             {
                 ip_CustIds = custIdList
             };
 
-            return DataService.GetData<CustomerEvidence>(criteria);
+            return repository.Fetch<CustomerEvidence>(criteria);
         }
 
         #endregion
