@@ -320,6 +320,7 @@
         spanAddAssociationChangeHidden.text("0");
 
         function AddBorderTags() {
+            spanAddAssociationUserName.find('tags').addClass('ctrlA');
             let allTags = spanAddAssociationUserName.find('tags tag.tagify__tag');
             allTags.each(function (_, tag) {
                 $(tag).css('border', '1px solid #6187E7');
@@ -327,9 +328,9 @@
         }
 
         function ResetMaxTag() {
-            let maxCountTags = parseInt(spanAddAssociationUserNameMaxTag.text());
-            if (maxCountTags < maxTags)
-                spanAddAssociationUserNameMaxTag.text(maxCountTags + 1);            
+            let currentTagsLength = spanAddAssociationUserName.find('tags tag').length;
+            if (currentTagsLength < maxTags)
+                spanAddAssociationUserNameMaxTag.text(maxTags - currentTagsLength + 1);
         }
 
         function EnableButtonAdd() {
@@ -343,10 +344,19 @@
                 btnSaveAssociation.prop('disabled', true);
         }
 
+        function IsTextUnicode(text) {
+            var pattern = /^[\x20-\x7E]*$/;
+            return pattern.test(text);
+        }
+
         function OnChangeTags(tagName, cssClass) {
             let maxCountTags = parseInt(spanAddAssociationUserNameMaxTag.text());
+            let isTextUnicode = IsTextUnicode($(tagName.tag).text()); 
 
-            if (maxCountTags > 0) {
+            if (!isTextUnicode) {
+                inputTagUsername.tagify().data('tagify').removeTags(tagName.tag);                
+            }
+            else if (maxCountTags > 0) {
                 let $tag = $(tagName.tag);
                 let textReplaced = $tag.text();
                 textReplaced = textReplaced.replace(new RegExp("'", 'g'), "").replace(new RegExp("\"", 'g'), "");                
@@ -369,8 +379,7 @@
 
                 spanAddAssociationUserNameMaxTag.text(maxCountTags - 1);
             } else {
-                var tagify = inputTagUsername.tagify().data('tagify');
-                tagify.removeTags(tagName.tag);
+                inputTagUsername.tagify().data('tagify').removeTags(tagName.tag);                
             }
             btnSaveAssociation.prop('disabled', true);
         }
@@ -403,21 +412,22 @@
             });            
         
         inputTagUsername.off('keydown').on('keydown', function () {
-            let key = event.keyCode || event.charCode;
-           
-            if (key === 8)
-                ResetMaxTag();
+            let keyCode = event.keyCode;
 
-            if (key === 46) {
-                inputTagUsername.tagify().data('tagify').removeAllTags();
-                spanAddAssociationUserNameMaxTag.text(maxTags);
+            if (keyCode === 46) {
+                if (spanAddAssociationUserName.find('tags').hasClass('ctrlA')) {
+                    inputTagUsername.tagify().data('tagify').removeAllTags();
+                    spanAddAssociationUserNameMaxTag.text(maxTags);
+                    spanAddAssociationUserName.find('tags').removeClass('ctrlA');
+                }
             }
-
+            
             if (event.ctrlKey) {
-                if (event.keyCode === 65 || event.keyCode === 97) {
+                if (keyCode === 65 || keyCode === 97) {
                     return AddBorderTags();
                 }
             }
+
         });
 
         $(document).on('mouseup', function (e) {
