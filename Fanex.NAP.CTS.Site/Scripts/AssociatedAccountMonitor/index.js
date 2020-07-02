@@ -4,11 +4,13 @@
     let domElements = {
         cbbSubscriber: $('#cbbSubscriber'),
         btnSearch: $('#btnSearch'),
+        btnAddUsername: $('#btnAddUsername'),
+        asscomment: $('#txtasscomment'),
+        inputTagUsername : $('#inputTagUsername'),
         asociatedAccountMonitorTable: $('#asociatedAccountMonitorTable'),
         btnIconDelete: $('.sub-icon.-delete'),
         divAddUsername: $('#divAddUsername'),
     };
-
 
     function GenerateGrid() {
         var smallTable = [
@@ -120,8 +122,10 @@
                 {
                     'data': 'action',
                     createdCell: (cell, _, row) => {
+                        let title = 'Confirmation';
+                        let text = '<div class="popup - content">Do you want remove <strong>CN88$Kevin </strong> from Associated Account Monitor list? </div>';
                         $('.sub-icon.-delete', cell).click(() =>
-                            common.showFormConfirmation(`<div class="popup-content">Do you want remove <strong>CN88$Kevin </strong> from Associated Account Monitor list? </div>`, 'Confirmation', function () {
+                            CreateFormConfirmation(text, title, function () {
                                 
                             })
                         );
@@ -146,6 +150,81 @@
             : dataTable = GenerateGrid();
     }
 
+    function CreateFormConfirmation(html, title, yesCallback, noCallback) {
+
+        var formconfirmation = $("#formconfirmation").dialog({
+            autoOpen: false,
+            modal: true,
+            draggable: true,
+            resizable: false,
+        });
+
+        formconfirmation.empty().html(html).dialog("open");
+
+        var yesBtn =
+        {
+            'class': 'button btn-cancel-outline',
+            text: "Yes",
+            click: function () {
+                formconfirmation.dialog("close");
+
+                if (yesCallback != null) {
+                    yesCallback(this)
+                }
+            }
+        };
+
+        var noBtn =
+        {
+            'class': 'button -add',
+            text: "No",
+            click: function () {
+                formconfirmation.dialog("close");
+
+                if (noCallback != null) {
+                    noCallback()
+                }
+            }
+        }
+
+        formconfirmation.dialog("option", {
+            dialogClass: "dialog-confirmation-associated",
+            title: title,
+            buttons: [yesBtn, noBtn],
+            width: 460,
+            close: noCallback
+        });
+    }
+
+    function InitInputTagUsername() {
+
+        domElements.inputTagUsername.tagify({
+            pattern: null,
+            delimiters: /\r?\n|\r| |,/,
+            keepInvalidTags: true,
+            skipInvalid: false,
+            callbacks: {},
+            addTagOnBlur: true,
+            duplicates: true,
+            editTags: 0,
+            whitelist: [],
+            blacklist: [],
+            maxTags: 50,
+            enforceWhitelist: false,
+            dropdown: {
+                position: "input",
+                enabled: 0
+            }
+        })
+        .off('add').on('add', function (_, tagName) {
+            $(tagName.tag).addClass('valid');
+        })
+        .off('invalid').on('invalid', function (_, tagName) {
+            $(tagName.tag).addClass('invalid-duplicated');
+        });
+    }
+
+
     function Initial() {
         domElements.cbbSubscriber.multiselect({
             header: ['checkAll', 'uncheckAll'],
@@ -165,6 +244,30 @@
     $(document).ready(function () {
         Initial();
         domElements.btnSearch.on('click', () => LoadGrid());
+        domElements.btnAddUsername.on('click', function () {
+            domElements.asscomment.val('');
+
+            InitInputTagUsername();
+
+            domElements.divAddUsername.dialog({
+                modal: true,
+                width: '800px',
+                title: 'ADD USERNAME',
+                resizable: true,
+                draggable: true,
+                close: function () {
+                    $(this).dialog('close');
+                }
+            });
+
+
+            domElements.divAddUsername.dialog("option", {
+                dialogClass: "dialog-addd-username",
+                title: null,
+                buttons: [],
+                width: 460,
+            });
+        });        
     });
 }
 

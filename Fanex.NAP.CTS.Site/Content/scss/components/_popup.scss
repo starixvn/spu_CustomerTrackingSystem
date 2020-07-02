@@ -189,3 +189,254 @@
         rx: 6;
     }
 }
+
+// popup add
+
+.popup-add {
+    padding-top: 25px;
+    padding-bottom: 16px;
+    padding-left: 13px;
+    padding-right: 11px;
+
+    .group-title {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+
+        .label {
+            font-size: 13px;
+            line-height: 16px;
+            color: #474747;
+        }
+
+        .wrapper-title {
+            display: flex;
+        }
+
+        .wrapper-rule {
+            .text {
+                color: #2B2B2B;
+                font-weight: 600;
+                font-size: 13px;
+                line-height: 16px;
+            }
+
+            .bg-red, .bg-yellow {
+                height: 18px;
+                border-radius: 11px;
+                padding: 0 10px;
+            }
+
+            .bg-red {
+                background: #FFE0E0;
+                border: 1px solid #E6CACA;
+            }
+
+            .bg-yellow {
+                background: #FFEDC0;
+                border: 1px solid #E6D6AD;
+            }
+        }
+
+        .wrapper-rule-left {
+            margin-right: 16px;
+        }
+    }
+
+    .wrapper-value {
+        position: relative;
+        display: block;
+        min-height: 60px;
+        max-height: 200px;
+        width: 100%;
+        overflow: auto;
+        background: #FFFFFF;
+        border: 1px solid #E5E5E5;
+        box-sizing: border-box;
+        border-radius: 2px;
+        margin-bottom: 14px;
+        overflow-y: auto;
+
+        .input-field {
+            padding-left: 3px;
+            width: 100%;
+            border: none;
+            outline: 0;
+            font-size: 13px;
+            line-height: 16px;
+            color: #818181;
+            padding-bottom: 8px;
+        }
+
+        .limit-username {
+            position: absolute;
+            top: 9px;
+            right: 18px;
+            font-size: 12px;
+            line-height: 14px;
+            color: #818181;
+        }
+
+        .tagify--outside .tagify__input {
+            order: -1;
+            flex: 100%;
+            transition: .1s;
+            margin-left: 0;
+            padding-left: 2px;
+            margin-top: 5px;
+            margin-bottom: 6px;
+            font-style: italic;
+        }
+
+        .tagify__tag {
+            height: 22px;
+            border-radius: 11px;
+            line-height: 16px;
+            margin-right: 4px;
+            margin-bottom: 2px;
+            margin-top: 2px;
+            background-color: #EAF0FF;
+
+            &:hover {
+                > div::before {
+                    border: 1px solid #6187E7;
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    left: 0;
+                    box-shadow: none !important;
+                }
+
+                .tagify__tag__removeBtn::after {
+                    content: "\e95c" !important;
+                    color: #396ef8;
+                }
+            }
+
+            .tagify__tag__removeBtn::after {
+                content: "\e95d" !important;
+                color: #849bbe;
+            }
+
+            .tagify__tag__removeBtn {
+                font-family: 'Fraud-Sensor' !important;
+                speak: never;
+                font-style: normal;
+                font-weight: normal;
+                font-variant: normal;
+                text-transform: none;
+                line-height: 1;
+                -webkit-font-smoothing: antialiased;
+            }
+
+            &.valid {
+                background-color: #EAF0FF;
+
+                .tagify__tag__removeBtn::after {
+                    content: "\e95d" !important;
+                    color: #849bbe;
+                }
+
+                &:hover {
+                    > div::before {
+                        border: 1px solid #6187E7;
+                    }
+
+                    .tagify__tag__removeBtn::after {
+                        content: "\e95c" !important;
+                        color: #396ef8;
+                    }
+                }
+            }
+
+            &.invalid-duplicated, &.tagify--notAllowed {
+                background-color: #FFEDC0;
+
+                .tagify__tag__removeBtn::after {
+                    content: "\e95e" !important;
+                    color: #ff5757;
+                }
+
+                > div::before {
+                    background-color: #FFEDC0;
+                }
+
+                &:hover {
+                    > div::before {
+                        border: 1px solid #DEAE34 !important;
+                    }
+                }
+            }
+
+            &.invalid-username {
+                background-color: #FFE0E0;
+
+                .tagify__tag__removeBtn::after {
+                    content: "\e95e" !important;
+                    color: #ff5757;
+                }
+
+                &:hover {
+                    > div::before {
+                        border: 1px solid #FF3131 !important;
+                    }
+                }
+            }
+
+            .tagify__tag-text {
+                font-weight: 600;
+                font-size: 13px;
+                color: #474747;
+                padding-left: 2px;
+                padding-right: 6px;
+                opacity: 1;
+            }
+
+            > div::before {
+                border-radius: 11px;
+                box-shadow: none !important;
+            }
+        }
+    }
+
+    .wrapper-to {
+        margin-bottom: 9px;
+
+        .label {
+            font-weight: bold;
+            font-size: 16px;
+            line-height: 150%;
+            color: #474747;
+
+            .text {
+                font-size: 16px;
+                line-height: 150%;
+                color: #474747;
+                margin-bottom: 12px;
+                font-weight: normal;
+            }
+        }
+    }
+
+    .wrapper-comment {
+        margin-bottom: 14px;
+
+        .label {
+            font-size: 13px;
+            line-height: 16px;
+            color: #474747;
+            margin-bottom: 5px;
+        }
+
+        .comment-field {
+            border: 1px solid #E5E5E5;
+            border-radius: 2px;
+            font-size: 14px;
+            line-height: 17px;
+            color: #474747;
+            min-height: 80px;
+            padding: 10px 16px;
+            letter-spacing: 0.1px;
+        }
+    }
+}

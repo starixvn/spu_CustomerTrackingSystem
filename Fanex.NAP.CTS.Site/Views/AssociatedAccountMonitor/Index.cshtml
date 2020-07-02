@@ -46,18 +46,52 @@
     <div id="divAddUsername" style="display:none;">
         <div class="form-control">
             <span class="label">
-            Do you want to remove 
-                <span class="text-username">CN88$Kevin</span> 
-            from Associated Account Monitor list?</span>
+                Do you want to remove
+                <span class="text-username">CN88$Kevin</span>
+                from Associated Account Monitor list?
+            </span>
         </div>
-    
+
         <div class="modal-footer">
-            <button id="btnyesusername" class="button -add" >Yes</button>
-            <button id="btnnousername" class="button btn-cancel-outline" >No</button>
+            <button id="btnyesusername" class="button -add">Yes</button>
+            <button id="btnnousername" class="button btn-cancel-outline">No</button>
         </div>
     </div>
 
 
+</div>
+
+<div id="divAddUsername" class="popup-add divAddUsername" style="display:none;">
+    <div class="group-title">
+        <div class="label">Username/Login ID</div>
+        <div class="wrapper-title">
+            <div class="wrapper-rule wrapper-rule-left">
+                <span class="text bg-red">Red</span>
+                <span class="text">Invalid username</span>
+            </div>
+            <div class="wrapper-rule wrapper-rule-right">
+                <span class="text bg-yellow">Yellow</span>
+                <span class="text">Duplicated username</span>
+            </div>
+        </div>
+    </div>
+    <span class="wrapper-value" id="spanAddAssociationUserName">
+        <input id="inputTagUsername" type="text" name='tags-outside' class="input-field full-width tagify--outside" placeholder="Type username or login ID (Separate by comma, tab and enter)" />
+        <span class="limit-username">
+            Max: <span id="spanAddAssociationUserNameMaxTag">50</span> usernames
+        </span>
+        <span id="spanAddAssociationChangeHidden" hidden></span>
+    </span>
+
+    <div class="form-control wrapper-comment">
+        <div class="label">Comment</div>
+        <textarea id="txtasscomment" rows="3" class="comment-field full-width" maxlength="500"></textarea>
+    </div>
+
+    <div class="modal-footer margin-top-10">
+        <button id="btncancelusername" class="button btn-cancel-outline" title="Cancel">Cancel</button>
+        <button id="btnsaveusername" class="button -add" title="Add Username">Add</button>
+    </div>
 </div>
 
 @section scripts{

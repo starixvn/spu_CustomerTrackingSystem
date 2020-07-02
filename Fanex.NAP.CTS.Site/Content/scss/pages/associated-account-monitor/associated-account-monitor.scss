@@ -84,3 +84,62 @@
         color: #FF0000;
     }
 }
+
+.dialog-confirmation-associated {
+    min-width: 600px;
+
+    .ui-dialog-titlebar {
+        padding: 11px;
+        padding-left: 14px;
+        background-color: #1D2E4F;
+
+        .ui-dialog-title {
+            font-size: 16px;
+            line-height: 18px;
+            margin: 0;
+        }
+
+        .ui-button .ui-icon {
+            margin-left: -15px;
+
+            &:before {
+                font-size: 21px
+            }
+        }
+    }
+
+    .ui-dialog-content {
+        padding-top: 24px;
+        padding-bottom: 16px;
+
+        .content {
+            margin-top: 0;
+            font-size: 16px;
+            line-height: 19px;
+            color: #545454;
+            letter-spacing: 0.3px;
+        }
+    }
+
+    .ui-dialog-buttonpane {
+        padding-bottom: 16px;
+        padding-top: 3px;
+
+        .ui-dialog-buttonset {
+            .button {
+                font-size: 13px !important;
+                font-weight: normal;
+                padding: 3px 30px;
+            }
+
+            .btn-cancel-outline {
+                width: 80px;
+                border: 1px solid #545454;
+                color: #545454;
+                &:hover{
+                    color: #fff;
+                }
+            }
+        }
+    }
+}
