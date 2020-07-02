@@ -348,10 +348,14 @@
   <ItemGroup>
     <Content Include="App_Data\Fanex.NAP.CTS.Portal.API.xml" />
     <Content Include="App_Data\Graph\Script.xml" />
-    <Content Include="App_Data\SQL\SPNames.UAT.xml" />
+    <Content Include="App_Data\SQL\SPNames.UAT.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="App_Data\SQL\SPNames.PRO.xml" />
     <Content Include="App_Data\SQL\SPNames.LOCAL.xml" />
-    <Content Include="App_Data\SQL\SPNames.xml" />
+    <Content Include="App_Data\SQL\SPNames.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -389,7 +393,8 @@
     <Content Include="App_Data\Graph\scripts\GetAssociationOneLevelByCustIdByDevice.scrypt" />
     <Content Include="App_Data\Graph\scripts\GetAssociationOneLevelByCustIdByIP.scrypt" />
     <Content Include="App_Data\Graph\scripts\GetAssociationOneLevelByCustIdByManual.scrypt" />
-    <Content Include="App_Data\Graph\scripts\GetAssociationByCustIdAndLevel.scrypt" />
+    <Content Include="App_Data\Graph\scripts\GetAssociationByDeviceByCustIdAndLevel.scrypt" />
+    <Content Include="App_Data\Graph\scripts\GetAssociationByManualByCustIdAndLevel.scrypt" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />

@@ -2,7 +2,7 @@
 <Functions>
   <Function Name="Evidence">
     <Setting Key="CTS_DC_AddEvidence" SpName="CTS_DC_AddEvidence" DbName="MySQL.CTS_DataCenter" />
-    <Setting Key="CTS_DC_API_GetFlaggedCustomers" SpName="CTS_DC_API_GetFlaggedCustomers" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_API_GetFlaggedCustomers" SpName="CTS_DC_API_GetFlaggedCustomers" DbName="MySQL.CTS_DataCenter"  Timeout="600"/>
     <Setting Key="CTS_DC_API_AddEvidencesForCustomers" SpName="CTS_DC_API_AddEvidencesForCustomers" DbName="MySQL.CTS_DataCenter" />
   </Function>
 

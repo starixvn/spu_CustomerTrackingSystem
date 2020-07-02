@@ -241,6 +241,15 @@ namespace Fanex.NAP.CTS.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;br /&gt;&lt;br /&gt; Error content: {0}.
+        /// </summary>
+        internal static string IMPORT_ACCOUNT_EVIDENCE_SENDMAIL_ERROR_CONTENT {
+            get {
+                return ResourceManager.GetString("IMPORT_ACCOUNT_EVIDENCE_SENDMAIL_ERROR_CONTENT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to CTS Import Account Evidence Error ({0}), UserId={1} at {2}.
         /// </summary>
         internal static string IMPORT_ACCOUNT_EVIDENCE_SENDMAIL_SUBJECT {
@@ -255,6 +264,15 @@ namespace Fanex.NAP.CTS.Resource {
         internal static string IMPORT_ACCOUNT_EVIDENCE_USERNAME_INVALID {
             get {
                 return ResourceManager.GetString("IMPORT_ACCOUNT_EVIDENCE_USERNAME_INVALID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CTS - Insert CTS User error with content: userId: {0} - userName: {1}.
+        /// </summary>
+        internal static string INSERT_CTS_USER_ERROR {
+            get {
+                return ResourceManager.GetString("INSERT_CTS_USER_ERROR", resourceCulture);
             }
         }
         

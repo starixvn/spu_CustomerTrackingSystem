@@ -93,6 +93,7 @@
     <Compile Include="Api\FlaggedAccountInsertCriteria.cs" />
     <Compile Include="CheckBetReport\CheckBetReportGetCriteria.cs" />
     <Compile Include="CheckBetReport\CheckBetReportUpdateNoteCriteria.cs" />
+    <Compile Include="CTSUser\InsertCTSUserCriteria.cs" />
     <Compile Include="CustomerMonitor\CustomerDetails\GetCustomerTicketsCriteria.cs" />
     <Compile Include="CustomerMonitor\CustomerGetCriteria.cs" />
     <Compile Include="CustomerMonitor\UpdateNoteCriteria.cs" />

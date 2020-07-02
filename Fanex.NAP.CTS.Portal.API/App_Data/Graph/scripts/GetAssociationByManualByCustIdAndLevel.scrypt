@@ -1,0 +1,7 @@
+﻿WITH $AssociatedLevel AS level
+CALL apoc.do.case([
+level = 0,'MATCH (c:CTSCustomer)-[:ADD_MANUALLY*0]-(c1:CTSCustomer) WHERE c.CustID IN $custIdList AND c1.CustID IS NOT NULL AND NOT c1.CustID IN $custIdList RETURN c.CustID AS Level0CustId, c1.CustID AS CustId'
+,level = 1,'MATCH (c:CTSCustomer)-[:ADD_MANUALLY*1]-(c1:CTSCustomer) WHERE c.CustID IN $custIdList AND c1.CustID IS NOT NULL AND NOT c1.CustID IN $custIdList RETURN c.CustID AS Level0CustId, c1.CustID AS CustId'
+,level = 2,'MATCH (c:CTSCustomer)-[:ADD_MANUALLY*2]-(c1:CTSCustomer) WHERE c.CustID IN $custIdList AND c1.CustID IS NOT NULL AND NOT c1.CustID IN $custIdList RETURN c.CustID AS Level0CustId, c1.CustID AS CustId'
+],'',{custIdList: $CustIdList}) YIELD value
+RETURN DISTINCT value.Level0CustId AS Level0CustId, value.CustId AS CustId

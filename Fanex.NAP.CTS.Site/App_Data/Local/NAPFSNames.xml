@@ -522,4 +522,10 @@
             DbName="MySQL.CTS_DataCenter" />
   </Function>
 
+  <Function Name="InsertCTSUser">
+    <Setting Key="CTS_AD_InsertCTSUser"
+            SpName="CTS_AD_InsertCTSUser"
+            DbName="MySQL.CTS_Admin" />
+  </Function>
+
 </Functions>

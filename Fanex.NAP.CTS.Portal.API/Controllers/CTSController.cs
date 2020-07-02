@@ -60,12 +60,20 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
             try
             {
                 var convertedCustIdList = CustIdList.Split(',').Select(a => Convert.ToInt32(a));
+                var associationList = new List<CustomerEvidence>();
+
                 // get association from graph
-                var associationList = DbSessionFactory.Execute<CustomerEvidence>("GetAssociationByCustIdAndLevel"
-                                        ,new { CustIdList = convertedCustIdList, AssociatedLevel }).Data;
-                var custIdList = string.Join(",",associationList.Select(c => c.CustId));
+                var associationByDeviceList = DbSessionFactory.Execute<CustomerEvidence>("GetAssociationByDeviceByCustIdAndLevel"
+                                        , new { CustIdList = convertedCustIdList, AssociatedLevel }).Data;
+                var associationByManualList = DbSessionFactory.Execute<CustomerEvidence>("GetAssociationByManualByCustIdAndLevel"
+                                        , new { CustIdList = convertedCustIdList, AssociatedLevel }).Data;
+                associationList.AddRange(associationByDeviceList);
+                associationList.AddRange(associationByManualList);
+
+                var custIdList = string.Join(",",associationList.Select(c => c.CustId).Distinct());
+                LogService.Info("GetFlaggedCustomersByLevel - custIdList: " + custIdList);
                 var flaggedCustomers = _evidenceService.GetFlaggedCustomersByLevel(custIdList);
-                
+                LogService.Info("GetFlaggedCustomersByLevel - flaggedCustomers: " + flaggedCustomers.Count());
                 var result = (from f in flaggedCustomers
                               join a in associationList on f.CustId equals a.CustId
                               select new CustomerEvidence
@@ -74,7 +82,8 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
                                   Level0CustId = a.Level0CustId,
                                   EvidenceCode = f.EvidenceCode,
                                   EvidenceName = f.EvidenceName,
-                                  CreatedDate = f.CreatedDate
+                                  CreatedDate = f.CreatedDate,
+                                  AssociatedLevel = AssociatedLevel
                               });
 
                 return Json(result.ToList());
