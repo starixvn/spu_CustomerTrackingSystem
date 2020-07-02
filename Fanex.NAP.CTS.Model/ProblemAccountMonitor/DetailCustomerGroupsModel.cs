@@ -11,6 +11,8 @@ namespace Fanex.NAP.CTS.Model.ProblemAccountMonitor
     {
         public int CustID { get; set; }
 
+        public long  TransID { get; set; }
+
         public int? GroupID { get; set; }
     }
 }

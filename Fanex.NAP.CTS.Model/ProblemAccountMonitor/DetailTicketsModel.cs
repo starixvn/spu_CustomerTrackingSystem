@@ -16,7 +16,7 @@
 
         public string BettypeName { get; set; }
 
-        public long TransId { get; set; }
+        public long TransID { get; set; }
 
         public DateTime TransDate { get; set; }
 

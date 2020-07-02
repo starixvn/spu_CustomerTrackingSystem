@@ -133,7 +133,7 @@
 
         public IEnumerable<DetailCustomerGroupsModel> GetCustomerGroup(List<DetailTicketsModel> detailTicketsModels)
         {
-            var custLists = detailTicketsModels.Select(c => new { c.CustID, c.TransDate });
+            var custLists = detailTicketsModels.Select(c => new { c.CustID, c.TransID, c.TransDate });
 
             var jsonData = JsonConvert.SerializeObject(custLists);
 
@@ -146,8 +146,6 @@
             {
                 return db.Query<DetailCustomerGroupsModel>(criteria);
             }
-
-
         }
 
         public IEnumerable<DetailTicketVoidingInRequestModel> GetTicketVoidingInRequest(int matchId, string tranIdList)
@@ -172,7 +170,7 @@
             var coreTicket = new Ticket
             {
                 BetTypeId = ticket.BettypeId,
-                TransId = ticket.TransId,
+                TransId = ticket.TransID,
                 TransDate = ticket.TransDate,
                 BetTeam = ticket.BetTeam,
                 Handicap1 = ticket.Handicap1,

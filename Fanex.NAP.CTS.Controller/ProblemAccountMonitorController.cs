@@ -216,7 +216,7 @@
 
                 tasks.Add(Task.Run(() =>
                 {
-                    var tranIdList = string.Join(",", ticketsModel.Select(x => x.TransId));
+                    var tranIdList = string.Join(",", ticketsModel.Select(x => x.TransID));
 
                     ticketVoidingsModel = _probleAccountMonitorService.GetTicketVoidingInRequest(matchId, tranIdList);
                 }));
@@ -227,7 +227,7 @@
 
                 result.TicketList = ticketsModel.Select(x => new DetailTicket
                 {
-                    BetId = x.TransId,
+                    BetId = x.TransID,
                     BetDate = x.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                     BettypeId = x.BettypeId,
                     BettypeName = x.BettypeName,
@@ -244,7 +244,7 @@
                     TicketStatus = x.TicketStatus,
                     TicketStatusId = x.TicketStatusId,
                     VoidRequestId = x.TicketStatusId != 102 // Void
-                                    ? _probleAccountMonitorService.GetVoidRequestId(ticketVoidingsModel, x.TransId)
+                                    ? _probleAccountMonitorService.GetVoidRequestId(ticketVoidingsModel, x.TransID)
                                     : string.Empty,
                     HighlightStatus = x.HighlightStatus,
                     GroupId = x.GroupID,
@@ -289,10 +289,9 @@
             {
                 foreach (var customerGroup in customerGroupsModel)
                 {
-                    if (ticket.CustID == customerGroup.CustID)
+                    if (ticket.CustID == customerGroup.CustID && ticket.TransID == customerGroup.TransID)
                     {
                         ticket.GroupID = customerGroup.GroupID;
-                        break;
                     }
                 }
             }
