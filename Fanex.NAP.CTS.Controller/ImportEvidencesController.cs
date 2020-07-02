@@ -9,12 +9,10 @@
     using System.Web.Mvc;
     using Fanex.NAP.CTS.ViewModel.ImportEvidences;
     using System.Collections.Generic;
-    using Fanex.Logging;
     using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Configuration;
     using Fanex.NAP.CTS.Model.ImportEvidences;
-    using System;
     using System.Threading.Tasks;
 
     [NapAuth(FunctionKey = FSFunctionKeys.ImportEvidences, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -84,17 +82,33 @@
 
         private ActionResult ReturnResultCheckAccountEvidence(string fileName, IEnumerable<ResultCheckAccountEvidenceModel> accountEvidenceErrorList)
         {
-            var rawAccountEvidenceList = _importEvidencesService.GetRawAccountEvidences();
+            var resultCheckAccountEvidenceList = new List<ResultCheckAccountEvidenceViewModel>();
+            var validateException = accountEvidenceErrorList.FirstOrDefault(x => x.RowId.Equals(-1));
 
-            var resultCheckAccountEvidenceList = accountEvidenceErrorList
-                    .Join(rawAccountEvidenceList, x => x.RowId, y => y.RowId,
-                    (x, y) => new ResultCheckAccountEvidenceViewModel
-                    {
-                        RowId = x.RowId,
-                        RowStatus = x.RowStatus,
-                        Username = y.Username,
-                        EvidenceCode = y.EvidenceCode
-                    });
+            if (validateException == null)
+            {
+                var rawAccountEvidenceList = _importEvidencesService.GetRawAccountEvidences();
+
+                resultCheckAccountEvidenceList = accountEvidenceErrorList
+                        .Join(rawAccountEvidenceList, x => x.RowId, y => y.RowId,
+                        (x, y) => new ResultCheckAccountEvidenceViewModel
+                        {
+                            RowId = x.RowId,
+                            RowStatus = x.RowStatus,
+                            Username = y.Username,
+                            EvidenceCode = y.EvidenceCode
+                        }).ToList();
+            }
+            else
+            {
+                resultCheckAccountEvidenceList.Add(new ResultCheckAccountEvidenceViewModel
+                {
+                    RowId = 0,
+                    RowStatus = validateException.RowStatus,
+                    Username = string.Empty,
+                    EvidenceCode = string.Empty
+                });
+            }
 
             return Json(new ResultImportViewModel {
                 FileName = fileName,
