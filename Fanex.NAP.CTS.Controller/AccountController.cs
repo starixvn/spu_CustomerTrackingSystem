@@ -409,7 +409,7 @@
 
                         return x;
                     })
-                    .OrderBy(a => a.StatusId).ThenBy(a => !a.IsLinked).ThenBy(a => a.AssociationDate)
+                    .OrderBy(a => a.StatusId).ThenBy(a => !a.IsLinked).ThenByDescending(a => a.AssociationDate)
                     .ToList();
                 }
             }

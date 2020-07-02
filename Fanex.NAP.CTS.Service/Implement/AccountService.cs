@@ -594,11 +594,13 @@
                     return db.Query<ValidateManualAssociationMultipleModel>(criteria).ToList();
                 }
             }
-            catch
+            catch(Exception ex)
             {
                 isException = true;
+                LogService.Error("CTS - Validate manual association multiple - exception: " + ex.Message, ex);
+
                 return GenerateAssociationErrorList(fromCTSCustId, toUserNameList);
-            }           
+            }
         }
 
         private IEnumerable<ValidateManualAssociationMultipleModel> GenerateAssociationErrorList(long fromCTSCustId, string toUserNameList)

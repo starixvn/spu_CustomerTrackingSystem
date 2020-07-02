@@ -158,7 +158,6 @@
 
                 $('#totalAssAccount').html(response.TotalAccounts);
                 $('#totalAssDevice').html(response.TotalDevices);
-                $('#totalAssIP').html(response.TotalIps);
             },
             error: function (errMsg) {
                 console.log(errMsg);
@@ -281,16 +280,18 @@
                     if (response.ErrorCode === 0) {
                         common.showSuccess("Add association successful");
                         setTimeout(() => {
-                            divAddAssociation.dialog('close');                                                
+                            divAddAssociation.dialog('close');
+                            $('#association-cbb-status').val(0);
+                            $("#account-by-account-cbb-association-type").val(3);
+                            btnSearch.trigger("click");
+                            GetTotalAssociation(fromCTSCustId);
                         }, 1000);                        
                     } else {
                         BindResultValidatedManualAssociationMultiple(response.ResultValidated);
                     }
                 },
                 complete: function () {
-                    divAddAssociation.removeClass("loading-block");
-                    btnSearch.trigger("click");
-                    GetTotalAssociation(fromCTSCustId);
+                    divAddAssociation.removeClass("loading-block");                   
                 },
                 error: function (errMsg) {
                     console.log(errMsg);
