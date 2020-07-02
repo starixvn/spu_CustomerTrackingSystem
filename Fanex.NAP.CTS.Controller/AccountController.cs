@@ -462,41 +462,87 @@
             var graphCustomer = _graphService.GetGraphCustomerItemByShortestPathOfAccount(shortestPathOfAccount);
 
             return Json(graphCustomer, JsonRequestBehavior.AllowGet);
-        }
+        }       
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult AddAssociation(string username, string comment, int fromSubscriberId, long fromCTSCustId, string rootUsername)
+        public ActionResult ValidateManualAssociationMultiple(long fromCTSCustId, string toUserNameList)
         {
-            if (string.IsNullOrWhiteSpace(username) || rootUsername.Trim() == username.Trim() || fromSubscriberId <= 0 || fromCTSCustId <= 0)
+            var viewModel = new ValidateManualAssociationMultipleViewModel();
+            bool isException = false;
+            var resultValidated = _accountService.ValidateManualAssociationMultiple(fromCTSCustId, toUserNameList, out isException);
+
+            return resultValidated.Any()
+                ? Json(GetInvalidOrDuplicated(resultValidated, isException), JsonRequestBehavior.AllowGet)
+                : Json(viewModel, JsonRequestBehavior.AllowGet);
+        }
+
+        private ValidateManualAssociationMultipleViewModel GetInvalidOrDuplicated(IEnumerable<ValidateManualAssociationMultipleModel> list, bool isException)
+        {
+            return new ValidateManualAssociationMultipleViewModel
             {
-                return Json(new
-                {
-                    errorCode = -100,
-                    errorMessage = "Paramater is invalid."
-                }, JsonRequestBehavior.AllowGet);
+                IsException = isException,
+                UserNameInvalidList = list.Where(x => x.CTSCustID.Equals(0))
+                                          .Select(x => x.UserName),
+                UserNameDuplicatedList = list.Where(x => x.IsDuplicated)
+                                             .Select(x => x.UserName)
+            };
+        }       
+
+        [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        public ActionResult InsertManualAssociationMultiple(int fromSubscriberId, long fromCTSCustId, string toUserNameList, string remark)
+        {
+            var resultInsert = new InsertManualAssociationMultipleViewModel { ErrorCode = -1 };
+            bool isException = false;
+
+            var resultValidated = _accountService.ValidateManualAssociationMultiple(fromCTSCustId, toUserNameList, out isException);
+           
+            if (resultValidated.Any())
+            {
+                var invalidOrDuplicatedList = GetInvalidOrDuplicated(resultValidated, isException);
+
+                resultInsert.ResultValidated = invalidOrDuplicatedList;
+
+                var isNotAllowInsert = invalidOrDuplicatedList.UserNameInvalidList.Any() || invalidOrDuplicatedList.UserNameDuplicatedList.Any();
+
+                return isNotAllowInsert
+                    ? Json(resultInsert, JsonRequestBehavior.AllowGet)
+                    : InsertManualAssociationMultiple(resultValidated, fromSubscriberId, fromCTSCustId, remark);
             }
 
-            var result = _accountService.SearchAssociatedCustomer(username.Trim());
+            return Json(resultInsert, JsonRequestBehavior.AllowGet);
+        }
 
-            if (result != null && result.Any())
+        private ActionResult InsertManualAssociationMultiple(IEnumerable<ValidateManualAssociationMultipleModel> list, int fromSubscriberId, long fromCTSCustId, string remark)
+        {
+            var associationList = new List<InsertManualAssociationMultipleModel>();
+            var userId = CurrentSession.UserId;
+
+            foreach (var association in list)
             {
-                var toCustomer = result.FirstOrDefault();
-
-                var dbResult = _accountService.AddAssociation(fromSubscriberId, fromCTSCustId, toCustomer.SubscriberId, toCustomer.CTSCustId, comment, CurrentSession.UserId);
-
-                return Json(new
+                associationList.Add(new InsertManualAssociationMultipleModel
                 {
-                    errorCode = dbResult.ErrorCode,
-                    errorMessage = dbResult.ErrorMsg
-                }, JsonRequestBehavior.AllowGet);
+                    FromSubscriberID = fromSubscriberId,
+                    FromCTSCustID = fromCTSCustId,
+                    ToSubscriberID = association.SubscriberID,
+                    ToCTSCustID = association.CTSCustID,
+                    Remark = remark,
+                    CreatedBy = userId
+                });
             }
 
-            return Json(new
+            var associationListJson = JsonConvert.SerializeObject(associationList);
+
+            var dbInsert = _accountService.InsertManualAssociationMultiple(associationListJson);
+
+            var resultInsert = new InsertManualAssociationMultipleViewModel()
             {
-                errorCode = -2,
-                errorMessage = "Customer dose not exist."
-            }, JsonRequestBehavior.AllowGet);
+                ErrorCode = dbInsert.ErrorCode,
+                ErrorMessage = dbInsert.ErrorMsg
+            };
+
+            return Json(resultInsert, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -519,8 +565,7 @@
                 errorCode = dbResult.ErrorCode,
                 errorMessage = dbResult.ErrorMsg
             }, JsonRequestBehavior.AllowGet);
-        }
-
+        }       
         #endregion
 
         #region Chain To Evidence

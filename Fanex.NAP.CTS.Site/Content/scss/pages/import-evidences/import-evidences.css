@@ -127,7 +127,9 @@
       margin-top: 12px;
       color: #333333; }
       .content .note .get-file .btnDownloadTemplate {
-        text-decoration: underline; }
+        text-decoration: underline;
+        color: #2053D9;
+        cursor: pointer; }
   .content .tableResult {
     margin-top: 10px;
     border: 1px solid #C4C4C4; }

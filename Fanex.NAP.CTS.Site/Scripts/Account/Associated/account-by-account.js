@@ -3,47 +3,39 @@
     var btnAddAssociation = $('#btnAddAssociation');
     var btnSearch = $('#account-by-account-btn-search');
     var btnViewOnGraph = $('#account-by-account-btn-on-graph');
-    var associatedByAccountTable = $('#account-by-account-table');
-    var assusername = $('#txtassusername');
+    var associatedByAccountTable = $('#account-by-account-table');    
     var asscomment = $('#txtasscomment');
     var btnSaveAssociation = $('#btnsaveassociation');
     var btnCancelAssociation = $('#btncancelassociation');
     var _username;
     var dataTable;
     let isHostPermission;
+    let spanAddAssociationUserName = $('#spanAddAssociationUserName');
+    let spanAddAssociationUserNameMaxTag = $('#spanAddAssociationUserNameMaxTag');
+    let spanAddAssociationChangeHidden = $('#spanAddAssociationChangeHidden');
+    let inputTagUsername = $('#inputTagUsername'); 
+    let maxTags = 50;
 
     function RenderTag(obj) {
+        let html = "";
 
-        var html = "";
+        if (obj.AffectedTag === 1)
+            html += "<span class='icon icon-Affected'  title='Affected'></span>";       
 
-        if (obj.AffectedTag == 1) {
-            html += "<span class='icon icon-Affected'  title='Affected'></span>";
-        }
+        if (obj.FlaggedTag === 2)
+            html += "<span class='icon icon-Flagged' title='Flagged'></span>";        
 
-        if (obj.FlaggedTag != 0) {
-            if (obj.FlaggedTag == 2) {
-                html += "<span class='icon icon-Flagged' title='Flagged'></span>";
-            }
-            else {
-                html += "<span class='icon icon-Flagged-With-Evidence' title='Flagged with Evidence 100'></span>";
-            }
-        }
-
-        return html == "" ? "-" : html;
+        return html === "" ? "-" : html;
     }
 
     function RenderUsername(obj) {
-        if (obj.Username != null) {
+        if (obj.Username !== null) {
             var url = common.modifyRelativeUrl('Account/Index/' + obj.CTSCustId);
 
             return '<a class="info-bng" href="' + url + '">' + obj.Username + '</a>';
         }
 
         return null;
-    }
-
-    function RenderGraphImage() {
-        return '<span class="icon-path graph" title="Graph View"></span>';
     }
 
     function RenderGrid() {
@@ -121,58 +113,38 @@
                 { data: obj => obj.AssociationTypeName },
                 {
                     data: obj => AssociationStatus(obj.IsLinked), createdCell: (cell, _, row) => {
-                        if (isHostPermission === "True") {
+                        if (isHostPermission) {
                             $('.toggle', cell).click(function (e) {
                                 e.preventDefault();
 
                                 ActiveRemove(row, ctsCustId, subscriberId);
                             });
-                        }                        
+                        }
                     }
                 },
                 {
                     data: obj => obj.AssociationDate
                 }
-                //,
-                //{
-                //    data: obj => RenderGraphImage(), createdCell: (cell, _, row) => {
-                //        $('.icon-path', cell).click(() => HandleGraphShortestPath(row, ctsCustId));
-                //    }
-                //}
             ]
         });
     }
 
     function AssociationStatus(isLinked) {
-        //return '<label class="switch-status switch-green"><input type="checkbox" class="switch-input" ' + (isLinked ? '' : 'checked') + '><span class="switch-label" data-on="Active" data-off="Removed"></span><span class="switch-handle"></span></label>'
-
         var html = '<div class="toggle ' + (isLinked ? 'toggle-on' : '') + '" id="switch">';
-        html += '<div class="toggle-text-off' + (isHostPermission === "False" ? ' disabled"' : '') +'"> Unlinked</div >';
-        html += '<div class="glow-comp"></div> <div class="toggle-button ' + (isHostPermission === "False" ? ' disabled"' : '') +'"></div>';
-        html += '<div class="toggle-text-on' + (isHostPermission === "False" ? ' disabled"' : '') +'"> Linked</div>';
+        html += '<div class="toggle-text-off' + (!isHostPermission ? ' disabled"' : '') + '"> Unlinked</div >';
+        html += '<div class="glow-comp"></div> <div class="toggle-button ' + (!isHostPermission ? ' disabled"' : '') + '"></div>';
+        html += '<div class="toggle-text-on' + (!isHostPermission ? ' disabled"' : '') + '"> Linked</div>';
         html += '</div>';
 
         return html;
     }
 
-    function ActiveRemove(obj, fromCTSCustId, fromSubscriberId)
-    {
-        common.showConfirmation('Do you want to update Association Status between <b>' + _username +'</b> and <b>' + obj.Username + '</b> ?',
+    function ActiveRemove(obj, fromCTSCustId, fromSubscriberId) {
+        common.showConfirmation('Do you want to update Association Status between <b>' + _username + '</b> and <b>' + obj.Username + '</b> ?',
             function () {
                 RemoveAssociation(fromSubscriberId, fromCTSCustId, obj.SubscriberId, obj.CTSCustId, !obj.IsLinked);
             });
 
-    }
-
-    function HandleGraphShortestPath(row, ctsCustid) {
-        var formGraph = new graph();
-        formGraph.GenerateShortestPath(ctsCustid, row.CTSCustId);
-        formGraph.OpenModal();
-    }
-
-    function ResetForm() {
-        assusername.val('');
-        asscomment.val('');
     }
 
     function GetTotalAssociation(ctsCustId) {
@@ -182,62 +154,17 @@
                 ctsCustId: ctsCustId
             },
             success: function (response) {
-
                 totalAssAccount = response.TotalAccounts;
 
                 $('#totalAssAccount').html(response.TotalAccounts);
                 $('#totalAssDevice').html(response.TotalDevices);
                 $('#totalAssIP').html(response.TotalIps);
             },
-            complete: function () {
-                
-            },
             error: function (errMsg) {
-                // common.showError(errMsg);
+                console.log(errMsg);
             }
         });
-    }
-
-    function AddAssociation(ctsCustId, subscriberId, rootUsername, subscriber) {
-        var url = common.modifyRelativeUrl('Account/AddAssociation');
-        var params = {};
-        params.Username = assusername.val();
-        params.RootUsername = rootUsername;
-        params.Comment = asscomment.val();
-        params.FromSubscriberId = subscriberId;
-        params.FromCTSCustId = ctsCustId;
-
-        $.ajax(url, {
-            type: 'POST',
-            data: params,
-            success: function (response) {
-                if (response.errorCode == 0) {
-                    associatedByAccountTable.find('tbody').addClass('loading');
-                    common.showSuccess('Added association successfully!', 2000);
-                    divAddAssociation.dialog('close');
-
-                    $('#association-cbb-status').val(0);
-                    $("#account-by-account-cbb-association-type").val(3);
-
-                    setTimeout(() => {
-                        btnSearch.trigger("click");
-                    }, 2000);
-                }
-                else if (response.errorCode == -2) {
-                    common.showError('Username "' + params.Username + '" is invalid.');
-                }
-                else if (response.errorCode == -1 || response.errorCode == -100) {
-                    common.showError('Username already existed in "' + params.Username + '" association list.');
-                }
-                else {
-                    common.showError('Added association fail!');
-                }
-            },
-            complete: function () {
-                GetTotalAssociation(ctsCustId);
-            }
-        });
-    }
+    } 
 
     function RemoveAssociation(fromSubscriberId, fromCTSCustId, toSubscriberId, toCTSCustId, isLinked) {
         var url = common.modifyRelativeUrl('Account/ActiveRemoveAssociation');
@@ -252,16 +179,11 @@
         $.ajax(url, {
             type: 'POST',
             data: params,
-            beforeSend: function () {
-                
-            },
             success: function (response) {
-                if (response.errorCode == 0) {
-                    
+                if (response.errorCode === 0) {
                     common.showSuccess('Updated association successful!', 2000);
                 }
-                else if (response.errorCode == -1) {
-             
+                else if (response.errorCode === -1) {
                     common.showError('This association is already unlinked!');
                 }
                 else {
@@ -269,25 +191,275 @@
                 }
             },
             complete: function () {
-
                 setTimeout(() => {
-                    
                     btnSearch.trigger("click");
                 }, 2000);
             }
         });
     }
 
-    function DisableButton(hostPermission) {
-        isHostPermission = hostPermission;
-        if (isHostPermission === "False") {
-            btnAddAssociation.prop('disabled', true);
+    function ValidateManualAssociationMultiple(fromCTSCustId, textTagRemove) {
+        let userNameList = GetInputUserName(textTagRemove);
+
+        if (userNameList !== '') {
+            let params = {};
+            params.fromCTSCustId = fromCTSCustId;
+            params.toUserNameList = userNameList;
+
+            $.ajax(common.modifyRelativeUrl('Account/ValidateManualAssociationMultiple'), {
+                type: 'POST',
+                data: params,
+                beforeSend: function () {
+                    spanAddAssociationUserName.addClass("loading-value");
+                },
+                success: function (response) {
+                    if (response.IsException)
+                        BindExceptionValidateManualAssociationMultiple();
+                    else
+                        BindResultValidatedManualAssociationMultiple(response);
+                },
+                complete: function () {
+                    spanAddAssociationUserName.removeClass("loading-value");
+                },
+                error: function (errMsg) {
+                    console.log(errMsg);
+                }
+            });
         }
     }
 
-    this.Initial = function (ctsCustid, username, subscriberId, subscriber, hostPermission) {
-        _username = username;
+    function BindExceptionValidateManualAssociationMultiple() {
+        spanAddAssociationUserName.find('tags tag').each(function (_, tag) {
+            $(tag).removeClass('valid').addClass('invalid-username');
+        });
+    }
+
+    function BindResultValidatedManualAssociationMultiple(data) {
+        spanAddAssociationUserName.find('tags tag').each(function (_, tag) {
+            $(tag).removeClass('invalid-username').removeClass('invalid-duplicated').addClass('valid');
+        });
+
+        data.UserNameInvalidList.map(function (x) {
+            let usernameEqual = $("tag[data-user-name='" + x + "']");
+            if (usernameEqual !== undefined) {
+                usernameEqual.removeClass('valid').addClass('invalid-username');
+            }            
+        });
+
+        data.UserNameDuplicatedList.map(function (x) {
+            let usernameEqual = $("tag[data-user-name='" + x + "']");
+            if (usernameEqual !== undefined) {
+                usernameEqual.removeClass('valid').addClass('invalid-duplicated');
+            }
+        });
+
+        let isEnableAdd = data.UserNameInvalidList.length === 0 && data.UserNameDuplicatedList.length === 0;
+
+        if (isEnableAdd)
+            btnSaveAssociation.prop('disabled', false);
+        else
+            btnSaveAssociation.prop('disabled', true);
+    }
+
+    function InsertManualAssociationMultiple(fromSubscriberId, fromCTSCustId) {
+        let userNameList = GetInputUserName();
+
+        if (userNameList !== '') {
+            let params = {};
+            params.fromSubscriberId = fromSubscriberId;
+            params.fromCTSCustId = fromCTSCustId;
+            params.toUserNameList = userNameList;
+            params.remark = asscomment.val().trim();
+
+            $.ajax(common.modifyRelativeUrl('Account/InsertManualAssociationMultiple'), {
+                type: 'POST',
+                data: params,
+                beforeSend: function () {
+                    divAddAssociation.addClass("loading-block");
+                },
+                success: function (response) {
+                    if (response.ErrorCode === 0) {
+                        common.showSuccess("Add association successful");
+                        setTimeout(() => {
+                            divAddAssociation.dialog('close');                                                
+                        }, 1000);                        
+                    } else {
+                        BindResultValidatedManualAssociationMultiple(response.ResultValidated);
+                    }
+                },
+                complete: function () {
+                    divAddAssociation.removeClass("loading-block");
+                    btnSearch.trigger("click");
+                    GetTotalAssociation(fromCTSCustId);
+                },
+                error: function (errMsg) {
+                    console.log(errMsg);
+                }
+            });
+        }
+    }
+
+    function GetInputUserName(textTagRemove) {
+        let userNameList = [];
+        let tags = spanAddAssociationUserName.find('tags tag');
+
+        tags.map(function (_, ele) {
+            let text = $(ele).text().trim();
+            if (textTagRemove !== "" && text === textTagRemove) {
+                textTagRemove = "";
+                return;
+            }
+            userNameList.push(text);
+        });
+
+        return userNameList.join();
+    }       
+
+    function InitInputTagUsername(fromCTSCustid) {
+        spanAddAssociationUserNameMaxTag.text(maxTags);
+        spanAddAssociationChangeHidden.text("0");
+
+        function AddBorderTags() {
+            spanAddAssociationUserName.find('tags').addClass('ctrlA');
+            let allTags = spanAddAssociationUserName.find('tags tag.tagify__tag');
+            allTags.each(function (_, tag) {
+                $(tag).css('border', '1px solid #6187E7');
+            });
+        }
+
+        function ResetMaxTag() {
+            let currentTagsLength = spanAddAssociationUserName.find('tags tag').length;
+            if (currentTagsLength < maxTags)
+                spanAddAssociationUserNameMaxTag.text(maxTags - currentTagsLength + 1);
+        }
+
+        function EnableButtonAdd() {
+            let validTags = spanAddAssociationUserName.find('tags tag.valid');
+            let invalidDuplicatedTags = spanAddAssociationUserName.find('tags tag.invalid-duplicated');
+            let invalidUsernameTags = spanAddAssociationUserName.find('tags tag.invalid-username');
+            let notInvalid = invalidDuplicatedTags.length + invalidUsernameTags.length;
+            if (notInvalid <= 1 && validTags.length > 1)
+                btnSaveAssociation.prop('disabled', false);
+            else
+                btnSaveAssociation.prop('disabled', true);
+        }
+
+        function IsTextUnicode(text) {
+            var pattern = /^[\x20-\x7E]*$/;
+            return pattern.test(text);
+        }
+
+        function OnChangeTags(tagName, cssClass) {
+            let maxCountTags = parseInt(spanAddAssociationUserNameMaxTag.text());
+            let isTextUnicode = IsTextUnicode($(tagName.tag).text()); 
+
+            if (!isTextUnicode) {
+                inputTagUsername.tagify().data('tagify').removeTags(tagName.tag);                
+            }
+            else if (maxCountTags > 0) {
+                let $tag = $(tagName.tag);
+                let textReplaced = $tag.text();
+                textReplaced = textReplaced.replace(new RegExp("'", 'g'), "").replace(new RegExp("\"", 'g'), "");                
+                if (textReplaced.length > 50)
+                    textReplaced = textReplaced.substr(0, 50);
+                $tag.val(textReplaced);
+                $tag.attr('data-user-name', textReplaced);
+                $tag.prop('title', textReplaced);
+                $tag.find('span.tagify__tag-text').text(textReplaced);
+                $tag.addClass(cssClass);
+                let btnRemove = $tag.find('x');
+
+                btnRemove.on('click', function (e) {
+                    let currentTag = $(e.target).parent();
+                    
+                    ResetMaxTag();
+                    ValidateManualAssociationMultiple(fromCTSCustid, currentTag.text().trim());
+                    EnableButtonAdd();
+                });
+
+                spanAddAssociationUserNameMaxTag.text(maxCountTags - 1);
+            } else {
+                inputTagUsername.tagify().data('tagify').removeTags(tagName.tag);                
+            }
+            btnSaveAssociation.prop('disabled', true);
+        }
         
+        inputTagUsername.tagify({
+            pattern: null,
+            delimiters: /\r?\n|\r| |,/,
+            keepInvalidTags: true,
+            skipInvalid: false,
+            callbacks: {},
+            addTagOnBlur: true,
+            duplicates: true,
+            editTags: 0,
+            whitelist: [],
+            blacklist: [],
+            maxTags: maxTags,
+            enforceWhitelist: false,
+            dropdown: {
+                position: "input",
+                enabled: 0
+            }
+        })
+            .off('add').on('add', function (_, tagName) {
+                OnChangeTags(tagName, 'valid');
+                spanAddAssociationChangeHidden.text("1");
+            })
+            .off('invalid').on('invalid', function (_, tagName) {
+                OnChangeTags(tagName, 'invalid-duplicated');
+                spanAddAssociationChangeHidden.text("1");
+            });            
+        
+        inputTagUsername.off('keydown').on('keydown', function () {
+            let keyCode = event.keyCode;
+
+            if (keyCode === 46) {
+                if (spanAddAssociationUserName.find('tags').hasClass('ctrlA')) {
+                    inputTagUsername.tagify().data('tagify').removeAllTags();
+                    spanAddAssociationUserNameMaxTag.text(maxTags);
+                    spanAddAssociationUserName.find('tags').removeClass('ctrlA');
+                }
+            }
+            
+            if (event.ctrlKey) {
+                if (keyCode === 65 || keyCode === 97) {
+                    return AddBorderTags();
+                }
+            }
+
+        });
+
+        $(document).on('mouseup', function (e) {
+            let isOutSiteInput = !spanAddAssociationUserName.is(e.target) && spanAddAssociationUserName.has(e.target).length === 0;
+            let isTagsFocus = spanAddAssociationUserName.find('tags.tagify--focus').length > 0;
+            let isChange = spanAddAssociationChangeHidden.text();
+            if (isOutSiteInput && isTagsFocus || isChange === "1") {               
+                asscomment.focus();
+                spanAddAssociationUserName.addClass("loading-value");
+                setTimeout(() => {
+                    ValidateManualAssociationMultiple(fromCTSCustid, "");
+                    spanAddAssociationUserName.removeClass("loading-value");
+                    spanAddAssociationChangeHidden.text("0");
+                }, 500);
+            }
+        });
+
+        inputTagUsername.tagify().data('tagify').removeAllTags();
+        spanAddAssociationUserName.find('tags').attr('tabindex', "1");
+        btnSaveAssociation.prop('disabled', true);
+    }
+
+    function DisableButton(hostPermission) {
+        isHostPermission = hostPermission === "True";
+
+        if (!isHostPermission)
+            btnAddAssociation.prop('disabled', true);
+    }
+
+    this.Initial = function (ctsCustid, username, subscriberId, subscriber, hostPermission) {
+        _username = username;        
+
         DisableButton(hostPermission);
 
         $("#account-by-account-cbb-status").multiselect();
@@ -313,38 +485,24 @@
         });
 
         btnAddAssociation.on('click', function () {
-            ResetForm();
+            asscomment.val('');
+
+            InitInputTagUsername(ctsCustid);            
 
             divAddAssociation.dialog({
                 modal: true,
-                width: '600px',
+                width: '800px',
                 title: 'ADD ASSOCIATION',
                 resizable: true,
                 draggable: true,
-                close: function () { $(this).dialog('close'); }
-            })
-        });
-
-        btnSaveAssociation.on('click', function () {
-            if (assusername.val() == '') {
-                common.showError('Username is required.');
-                assusername.focus();
-            }
-            else if (assusername.val().trim() == username.trim()) {
-                common.showError('The username must be different from ' + username);
-                assusername.focus();
-            }
-            else {
-                AddAssociation(ctsCustid, subscriberId, username, subscriber);
-            }
-        });
-
-        btnCancelAssociation.on('click', function () {
+                close: function () {                    
+                    $(this).dialog('close');
+                }
+            });            
+        });        
+        btnSaveAssociation.on('click', () => InsertManualAssociationMultiple(subscriberId, ctsCustid));
+        btnCancelAssociation.on('click', () => {
             divAddAssociation.dialog('close');
-        });
-
-    }
+        });        
+    };
 }
-
-
-

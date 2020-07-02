@@ -123,7 +123,8 @@
         {
             var exceedlengthUsernameList = _checkAccountEvidenceList
                     .Where(x => x.Username.Length > 50)
-                    .Select(x=> new ResultCheckAccountEvidenceModel {
+                    .Select(x => new ResultCheckAccountEvidenceModel
+                    {
                         CTSCustID = 0,
                         EvidenceID = 0,
                         RowId = x.RowId,
@@ -161,15 +162,31 @@
                 NewAccountEvidences = jsonData
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            try
             {
-                var resultVerifyDbList = db.Query<ResultCheckAccountEvidenceModel>(criteria);
+                using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+                {
+                    var resultVerifyDbList = db.Query<ResultCheckAccountEvidenceModel>(criteria);
 
-                return resultVerifyDbList
-                    .Union(duplicateList)
-                    .Union(exceedlengthUsernameList)
-                    .Union(exceedlengthEvidenceCodeList)
-                    .OrderBy(x=>x.RowId);
+                    return resultVerifyDbList
+                        .Union(duplicateList)
+                        .Union(exceedlengthUsernameList)
+                        .Union(exceedlengthEvidenceCodeList)
+                        .OrderBy(x => x.RowId);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("CTS - Import Evidence - CheckRuleAddAccountEvidence exception: ", ex);
+
+                var resultException = new List<ResultCheckAccountEvidenceModel>();
+                resultException.Add(new ResultCheckAccountEvidenceModel
+                {
+                    RowId = -1,
+                    RowStatus = "Exception: " + ex.Message                    
+                });
+
+                return resultException;
             }
         }
         

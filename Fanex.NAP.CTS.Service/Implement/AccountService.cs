@@ -575,30 +575,77 @@
 
                 return result.ToList();
             }
+        }       
+
+        public IEnumerable<ValidateManualAssociationMultipleModel> ValidateManualAssociationMultiple(long fromCTSCustId, string toUserNameList, out bool isException)
+        {
+            isException = false;
+
+            var criteria = new ValidateManualAssociationMultipleCriteria
+            {
+                ToUserNameList = toUserNameList,
+                FromCTSCustID = fromCTSCustId
+            };
+
+            try
+            {
+                using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+                {
+                    return db.Query<ValidateManualAssociationMultipleModel>(criteria).ToList();
+                }
+            }
+            catch
+            {
+                isException = true;
+                return GenerateAssociationErrorList(fromCTSCustId, toUserNameList);
+            }           
         }
 
-        public DBResult AddAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, string remark, int createdBy)
+        private IEnumerable<ValidateManualAssociationMultipleModel> GenerateAssociationErrorList(long fromCTSCustId, string toUserNameList)
         {
-            var criteria = new AddManualAssociationCriteria
+            var errorList = new List<ValidateManualAssociationMultipleModel>();
+            var userNameList = toUserNameList.Split(',').AsEnumerable();
+            
+            errorList.AddRange(userNameList.Select(x => new ValidateManualAssociationMultipleModel
             {
-                FromSubscriberId = fromSubscriberId,
-                FromCTSCustId = fromCTSCustId,
-                ToSubscriberId = toSubscriberId,
-                ToCTSCustId = toCTSCustId,
-                CreatedBy = createdBy,
-                Remark = remark,
-                ErrorMessage = string.Empty
+                CTSCustID = 0,
+                SubscriberID = 0,
+                UserName = x,
+                IsDuplicated = false
+            }));
+
+            return errorList;
+        }
+
+        public DBResult InsertManualAssociationMultiple(string associationListJson)
+        {
+            var criteria = new InsertManualAssociationMultipleCriteria
+            {
+                AssociationListJson = associationListJson
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                db.ExecuteNonQuery(criteria);
-
-                return new DBResult
+                try
                 {
-                    ErrorCode = string.IsNullOrWhiteSpace(criteria.ErrorMessage) ? 0 : -1,
-                    ErrorMsg = criteria.ErrorMessage
-                };
+                    db.ExecuteNonQuery(criteria);
+
+                    return new DBResult
+                    {
+                        ErrorCode = 0,
+                        ErrorMsg = string.Empty
+                    };
+                }
+                catch (Exception ex)
+                {
+                    LogService.Error("CTS - Insert manual association multiple - exception: " + ex.Message, ex);
+
+                    return new DBResult
+                    {
+                        ErrorCode = -1,
+                        ErrorMsg = ex.Message
+                    };
+                }
             }
         }
 

@@ -441,9 +441,13 @@
           SpName="CTS_DC_GetCustomerByUsername_xtest"
           DbName="MySQL.CTS_DataCenter" />
 
-	  <Setting Key="CTS_DC_AddManualAssociation"
-          SpName="CTS_DC_AddManualAssociation_xtest"
+    <Setting Key="CTS_DC_AddManualAssociationMultipleValidation"
+          SpName="CTS_DC_AddManualAssociationMultipleValidation_xtest"
           DbName="MySQL.CTS_DataCenter" />
+
+    <Setting Key="CTS_DC_AddManualAssociationMultiple"
+          SpName="CTS_DC_AddManualAssociationMultiple_xtest"
+          DbName="MySQL.CTS_DataCenter" />	 
 
     <Setting Key="CTS_DC_UpdateAssociationRemove"
          SpName="CTS_DC_UpdateAssociationRemove_xtest"
