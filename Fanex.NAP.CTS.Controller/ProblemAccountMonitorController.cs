@@ -132,13 +132,14 @@
         }
 
         [HttpPost]
-        public ActionResult Detail(int matchId, int fraudCaseId, string siteIds)
+        public ActionResult Detail(int matchId, string matchStatus, int fraudCaseId, string siteIds)
         {
-            IUserService userService = new UserService();           
-
+            IUserService userService = new UserService();
+            
             return View(new DetailViewModel
             {
                 MatchId = matchId,
+                MatchStatus = matchStatus.ToLower(),
                 FraudCaseId = fraudCaseId,
                 SiteIds = siteIds,
                 IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId,

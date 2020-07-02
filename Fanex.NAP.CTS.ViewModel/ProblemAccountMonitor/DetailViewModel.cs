@@ -4,6 +4,8 @@
     {
         public int MatchId { get; set; }
 
+        public string MatchStatus { get; set; }
+
         public int FraudCaseId { get; set; }
 
         public string SiteIds { get; set; }

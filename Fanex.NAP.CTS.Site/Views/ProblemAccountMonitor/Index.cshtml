@@ -79,6 +79,7 @@
         @using (Html.BeginForm("Detail", "ProblemAccountMonitor", FormMethod.Post, new { id = "formViewDetail", target = "_blank" }))
         {
             @Html.Hidden("matchId", "", new { id = "matchId" });
+            @Html.Hidden("matchStatus", "", new { id = "matchStatus" });
             @Html.Hidden("fraudCaseId", "", new { id = "fraudCaseId" });
             @Html.Hidden("siteIds", "", new { id = "siteIds" });
         }

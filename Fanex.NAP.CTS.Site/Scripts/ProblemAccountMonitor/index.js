@@ -17,6 +17,7 @@
         iconCalendarText: $('.icon-calendar-text'),
         formViewDetail: $('#formViewDetail'),
         hdMatchId: $('#matchId'),
+        hdMatchStatus: $('#matchStatus'),
         hdFraudCaseId: $('#fraudCaseId'),
         hdSiteIds: $('#siteIds'),
         tableLength: null,
@@ -217,7 +218,7 @@
                     data: obj => RenderTickedFraud(obj.GroupBettingCount)
                     , createdCell: (cell, _, row) => {
                         $(".divViewDetail", cell).click(() => {
-                            ViewDetailTickets(row.MatchId, 13);
+                            ViewDetailTickets(row.MatchId, row.Status, 13);
                         });
                     }
                 },
@@ -225,7 +226,7 @@
                     data: obj => RenderTickedFraud(obj.HedgingCount)
                     , createdCell: (cell, _, row) => {
                         $(".divViewDetail", cell).click(() => {
-                            ViewDetailTickets(row.MatchId, 14);
+                            ViewDetailTickets(row.MatchId, row.Status, 14);
                         });
                     }
                 }
@@ -255,12 +256,13 @@
         }
     }
 
-    function ViewDetailTickets(matchId, fraudCaseId) { 
+    function ViewDetailTickets(matchId, matchStatus, fraudCaseId) { 
         let url = common.modifyRelativeUrl('ProblemAccountMonitor/Detail/' + matchId);
 
         let siteIds = domElements.cbbSite.val().join();
         domElements.hdSiteIds.val(siteIds);
         domElements.hdMatchId.val(matchId);
+        domElements.hdMatchStatus.val(matchStatus);
         domElements.hdFraudCaseId.val(fraudCaseId);
         domElements.formViewDetail.attr('action', url);
         domElements.formViewDetail.submit();

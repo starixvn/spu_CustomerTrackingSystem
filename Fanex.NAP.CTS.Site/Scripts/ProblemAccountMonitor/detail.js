@@ -3,6 +3,7 @@
     
     let domElements = {
         hdMatchId: $("#hdMatchId"),
+        hdMatchStatus: $("#hdMatchStatus"),
         hdFraudCaseId: $("#hdFraudCaseId"),
         hdSiteIds: $('#hdSiteIds'),
         hdIsHostPermission: $('#hdIsHostPermission'),
@@ -164,9 +165,12 @@
 
                 $(row).addClass(cssClassTR);
                 $(row).attr('criteria-hide', '');
-                // TicketStatusId = 0 => running
-                if (data.TicketStatusId !== 0)
-                    $(row).addClass("hide");
+
+                // match is running
+                if (domElements.hdMatchStatus.val() === "running") {
+                    if (data.TicketStatusId !== 0)
+                        $(row).addClass("hide");
+                }
             }
         });
     }    
@@ -210,7 +214,13 @@
             let capitalize = x.TicketStatusName;
             if (typeof capitalize !== 'string') return '';
             let ticketStatusName = capitalize.charAt(0).toUpperCase() + capitalize.slice(1);
-            let isSelected = ticketStatusName === "Running";
+            let isSelected = false;
+
+            if (domElements.hdMatchStatus.val() !== "running")
+                isSelected = true;
+            else if (ticketStatusName === "Running")
+                isSelected = true;
+
             domElements.cbbTicketStatus.append("<option " + (isSelected ? "selected" : "") + " value=" + x.TicketStatusId + ">" + ticketStatusName + "</option>");
         });
 
