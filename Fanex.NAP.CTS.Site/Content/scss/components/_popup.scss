@@ -439,4 +439,24 @@
             letter-spacing: 0.1px;
         }
     }
+
+    .modal-footer {
+        text-align: right;
+
+        button {
+            font-weight: normal;
+            font-size: 13px;
+            padding: 4px 29px;
+        }
+
+
+        .btn-cancel-outline {
+            margin-right: 13px;
+            height: 30px;
+        }
+
+        .-add {
+            height: 30px;
+        }
+    }
 }

@@ -5,7 +5,7 @@
         cbbSubscriber: $('#cbbSubscriber'),
         btnSearch: $('#btnSearch'),
         btnAddUsername: $('#btnAddUsername'),
-        asscomment: $('#txtasscomment'),
+        txtAsscomment: $('#txtasscomment'),
         inputTagUsername : $('#inputTagUsername'),
         asociatedAccountMonitorTable: $('#asociatedAccountMonitorTable'),
         btnIconDelete: $('.sub-icon.-delete'),
@@ -245,9 +245,10 @@
         Initial();
         domElements.btnSearch.on('click', () => LoadGrid());
         domElements.btnAddUsername.on('click', function () {
-            domElements.asscomment.val('');
+            domElements.txtAsscomment.val('');
 
             InitInputTagUsername();
+
 
             domElements.divAddUsername.dialog({
                 modal: true,
@@ -261,12 +262,12 @@
             });
 
 
-            domElements.divAddUsername.dialog("option", {
-                dialogClass: "dialog-addd-username",
-                title: null,
-                buttons: [],
-                width: 460,
-            });
+            //domElements.divAddUsername.dialog("option", {
+            //    dialogClass: "dialog-addd-username",
+            //    title: null,
+            //    buttons: [],
+            //    width: 460,
+            //});
         });        
     });
 }
