@@ -239,7 +239,6 @@
         });
 
         domElements.cbbGroupId.multiselect("refresh");
-
     }
 
     function RefreshTotalSelections(checked) {
