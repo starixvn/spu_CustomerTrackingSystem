@@ -12,5 +12,6 @@
     <GraphSetting Key="GetStatisticForCustomer" SpName="GetStatisticForCustomer" DbName="GraphDB" />
     <GraphSetting Key="GetAssociationByDeviceByCustIdAndLevel" SpName="GetAssociationByDeviceByCustIdAndLevel" DbName="GraphDB" />
     <GraphSetting Key="GetAssociationByManualByCustIdAndLevel" SpName="GetAssociationByManualByCustIdAndLevel" DbName="GraphDB" />
+    <GraphSetting Key="GroupCustomerByAssociationOneLevel" SpName="GroupCustomerByAssociationOneLevel" DbName="GraphDB" />    
   </Function>
 </Functions>

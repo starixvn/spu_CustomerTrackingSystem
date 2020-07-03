@@ -4,11 +4,9 @@ using Fanex.NAP.CTS.Model.GraphDB;
 using Fanex.NAP.SPU.Graph.Core;
 using System;
 using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
+using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Results;
-using System.Linq;
 
 namespace Fanex.NAP.CTS.Portal.API.Controllers
 {
@@ -204,6 +202,30 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
         {
             var result = DbSessionFactory.ExecuteSingle<ShortestPathOfAccount>("GetShortestPath", new { StartCustId = ctsCustIdFrom, EndCustId = ctsCustIdTo }).Data;
             return Json(result);
+        }
+
+        /// <summary>
+        /// Grouping customer
+        /// </summary>
+        /// <param name="custIds">List custId</param>
+        /// <returns></returns>
+        [HttpPost]
+        public IEnumerable<CustomerGroup> GroupingCustomer([FromBody] IEnumerable<int> custIds)
+        {
+            IEnumerable<CustomerGroup> result = null;
+            try
+            {
+                if (custIds.Any())
+                {
+                    result = DbSessionFactory.Execute<CustomerGroup>("GroupCustomerByAssociationOneLevel", new { CustIds = custIds.Distinct() }).Data;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("GroupingCustomer failed: " + ex.Message + ex.StackTrace);
+            }
+
+            return result;
         }
     }
 }

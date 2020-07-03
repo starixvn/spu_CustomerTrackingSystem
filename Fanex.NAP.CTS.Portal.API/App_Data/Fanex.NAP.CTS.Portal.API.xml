@@ -539,6 +539,13 @@
             <param name="ctsCustIdTo"></param>
             <returns>Json string</returns>
         </member>
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GroupingCustomer(System.Collections.Generic.IEnumerable{System.Int32})">
+            <summary>
+            Grouping customer
+            </summary>
+            <param name="custIds">List custId</param>
+            <returns></returns>
+        </member>
         <member name="T:Fanex.NAP.CTS.Portal.API.Controllers.HomeController">
             <summary>
             This is a test controller for make sure it run properly

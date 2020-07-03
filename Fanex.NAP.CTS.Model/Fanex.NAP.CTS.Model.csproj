@@ -164,6 +164,7 @@
     <Compile Include="DTO\CustomerCategory.cs" />
     <Compile Include="Association\AssociationCustomerModel.cs" />
     <Compile Include="DTO\SportGroup.cs" />
+    <Compile Include="GraphDB\CustomerGroup.cs" />
     <Compile Include="GraphDB\GraphAssociationPaging.cs" />
     <Compile Include="Association\AssociatedFilterModel.cs" />
     <Compile Include="GraphDB\GraphCustomer.cs" />

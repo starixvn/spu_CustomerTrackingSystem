@@ -395,6 +395,7 @@
     <Content Include="App_Data\Graph\scripts\GetAssociationOneLevelByCustIdByManual.scrypt" />
     <Content Include="App_Data\Graph\scripts\GetAssociationByDeviceByCustIdAndLevel.scrypt" />
     <Content Include="App_Data\Graph\scripts\GetAssociationByManualByCustIdAndLevel.scrypt" />
+    <Content Include="App_Data\Graph\scripts\GroupCustomerByAssociationOneLevel.scrypt" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
