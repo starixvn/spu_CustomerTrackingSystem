@@ -11,6 +11,8 @@
             BetTypeList = Enumerable.Empty<DetailBetType>();
             CurrencyList = Enumerable.Empty<DetailCurrency>();
             TicketStatusList = Enumerable.Empty<DetailTicketStatus>();
+            GroupList = Enumerable.Empty<DetailGroup>();
+            AssociatedGroupList = Enumerable.Empty<string>();
         }
 
         public IEnumerable<DetailTicket> TicketList { get; set; }
@@ -24,6 +26,8 @@
         public IEnumerable<DetailTicketStatus> TicketStatusList { get; set; }
 
         public IEnumerable<DetailGroup> GroupList { get; set; }
+
+        public IEnumerable<string> AssociatedGroupList { get; set; }
 
         public int TotalHighlightStatusWhite { get; set; }
 

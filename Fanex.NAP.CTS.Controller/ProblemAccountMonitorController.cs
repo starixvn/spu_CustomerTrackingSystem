@@ -282,6 +282,7 @@
                                 ? _probleAccountMonitorService.GetVoidRequestId(ticketVoidingsModel, x.TransID)
                                 : string.Empty,
                 HighlightStatus = x.HighlightStatus,
+                AssociatedGroupName = string.Empty,
                 GroupId = x.GroupID,
                 GroupName = x.GroupID.ToString()
             }).OrderByDescending(x=>x.BetDate);

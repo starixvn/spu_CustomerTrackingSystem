@@ -13,6 +13,7 @@
         cbbTicketStatus: $('#cbbTicketStatus'),
         cbbVoid: $('#cbbVoid'),
         cbbGroupId: $('#cbbGroupId'),
+        cbbAssociatedGroup: $('#cbbAssociatedGroup'),
         lblMatchName: $('#lblMatchName'),
         lblEvidence: $('#lblEvidence'),
         lblEventDate: $('#lblEventDate'),
@@ -63,7 +64,13 @@
                 dataFilter: function (response) {
                     var json = jQuery.parseJSON(response);
 
-                    RefreshFilter(json.data.SiteList, json.data.BetTypeList, json.data.CurrencyList, json.data.TicketStatusList, json.data.GroupList);
+                    RefreshFilter(json.data.SiteList
+                        , json.data.BetTypeList
+                        , json.data.CurrencyList
+                        , json.data.TicketStatusList
+                        , json.data.GroupList
+                        , json.data.AssociatedGroupList);
+
                     domElements.spanTotalSelections.text(json.data.TotalHighlightStatusWhite);
 
                     var newJson = {};
@@ -98,29 +105,31 @@
             scrollCollapse: false,           
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 11, 12, 13, 14], className: "text-center" },
-                { targets: [8, 9, 10], className: "text-right" },
+                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 13, 14, 15], className: "text-center" },
+                { targets: [10, 11, 12], className: "text-right" },
                 { targets: [0], width: "3%" },
-                { targets: [1], width: "7%" },
-                { targets: [2], width: "10%" },
-                { targets: [3], width: "10%" },
-                { targets: [4], width: "5%" },
-                { targets: [5], width: "10%" },
-                { targets: [6], width: "10%" },
-                { targets: [7], width: "10%" },
-                { targets: [8], width: "5%" },
-                { targets: [9], width: "7%" },
+                { targets: [1], width: "5%" },
+                { targets: [2], width: "5%" },
+                { targets: [3], width: "8%" },
+                { targets: [4], width: "8%" },
+                { targets: [5], width: "5%" },
+                { targets: [6], width: "5%" },
+                { targets: [7], width: "8%" },
+                { targets: [8], width: "8%" },
+                { targets: [9], width: "5%" },
                 { targets: [10], width: "5%" },
                 { targets: [11], width: "5%" },
                 { targets: [12], width: "5%" },
                 { targets: [13], width: "5%" },
-                { targets: [14], width: "5%" }
+                { targets: [14], width: "5%" },
+                { targets: [15], width: "5%" }
             ],
             columns: [
                 {
                     render: function (data, type, full, meta) { return meta.row + 1; }
-                },
-                { data: obj => () => { return "<span class=group data-group-id=" + obj.GroupId + ">" + obj.GroupName + "</span>"; }},
+                },               
+                { data: obj => () => { return "<span class=group data-group-id=" + obj.GroupId + ">" + obj.GroupName + "</span>"; } },
+                { data: obj => () => { return "<span class=associatedGroup data-associated-group=" + obj.AssociatedGroupName + ">" + obj.AssociatedGroupName + "</span>"; } },
                 { data: obj => obj.BetDate },
                 { data: obj => obj.Username },
                 { data: obj => () => { return "<span class=currency data-currency-id=" + obj.CurrencyId + ">" + obj.CurrencyName + "</span>"; } },
@@ -178,7 +187,7 @@
         });
     }    
 
-    function RefreshFilter(siteList, betTypeList, currencyList, ticketStatusList, groupList) {
+    function RefreshFilter(siteList, betTypeList, currencyList, ticketStatusList, groupList, associatedGroupList) {
         $('option', domElements.cbbSite).filter(function () {
             return $(this).val() !== '';
         }).remove();        
@@ -239,6 +248,16 @@
         });
 
         domElements.cbbGroupId.multiselect("refresh");
+
+        $('option', domElements.cbbAssociatedGroup).filter(function () {
+            return $(this).val() !== '';
+        }).remove();
+
+        associatedGroupList.map(function (x) {
+            domElements.cbbAssociatedGroup.append(`<option selected value='${x.AssociatedGroupName}'>${x.AssociatedGroupName}</option>`);
+        });
+
+        domElements.cbbAssociatedGroup.multiselect("refresh");
     }
 
     function RefreshTotalSelections(checked) {
@@ -556,9 +575,9 @@
             if (ValidateVoidRequest())
                 CreateVoidRequestToTVS();
         });
-    }     
+    } 
 
-    function Initial() {
+    function InitMultiselectFilter() {
         domElements.cbbSite.multiselect({
             menuWidth: 320,
             menuHeight: 320,
@@ -571,7 +590,7 @@
             width: 217,
             placeholder: '',
             label: ''
-            });
+        });
 
         domElements.cbbBetType.multiselect({
             menuWidth: 180,
@@ -585,7 +604,7 @@
             width: 217,
             placeholder: '',
             label: ''
-            });
+        });
 
         domElements.cbbCurrency.multiselect({
             menuWidth: 180,
@@ -599,7 +618,7 @@
             width: 217,
             placeholder: '',
             label: ''
-            });
+        });
 
         domElements.cbbTicketStatus.multiselect({
             menuWidth: 180,
@@ -607,8 +626,8 @@
             selectedText: "# of # selected",
             noneSelectedText: "Select Status",
             click: function (event, ui) { RefreshGridByFilter("td span.ticketStatus", "data-ticket-status-id", ui.value, ui.checked); },
-            checkAll: function () { RefreshAllGridByFilter("td span.ticketStatus","data-ticket-status-id" , true); },
-            uncheckAll: function () { RefreshAllGridByFilter("td span.ticketStatus","data-ticket-status-id",  false); }
+            checkAll: function () { RefreshAllGridByFilter("td span.ticketStatus", "data-ticket-status-id", true); },
+            uncheckAll: function () { RefreshAllGridByFilter("td span.ticketStatus", "data-ticket-status-id", false); }
         }).multiselectfilter({
             width: 217,
             placeholder: '',
@@ -623,7 +642,7 @@
             click: function (event, ui) { RefreshVoidTicket(ui.value, ui.checked); },
             checkAll: function () { RefreshAllVoidTicket(true); },
             uncheckAll: function () { RefreshAllVoidTicket(false); }
-        });  
+        });
 
         domElements.cbbGroupId.multiselect({
             menuWidth: 180,
@@ -631,14 +650,31 @@
             selectedText: "# of # selected",
             noneSelectedText: "Selected Group",
             click: function (event, ui) { RefreshGridByFilter("td span.group", "data-group-id", ui.value, ui.checked); },
-            checkAll: function () { RefreshAllGridByFilter("td span.group", true); },
-            uncheckAll: function () { RefreshAllGridByFilter("td span.group", false); }
+            checkAll: function () { RefreshAllGridByFilter("td span.group", "data-group-id", true); },
+            uncheckAll: function () { RefreshAllGridByFilter("td span.group", "data-group-id", false); }
         }).multiselectfilter({
             width: 217,
             placeholder: '',
             label: ''
         });
 
+        domElements.cbbAssociatedGroup.multiselect({
+            menuWidth: 180,
+            menuHeight: 300,
+            selectedText: "# of # selected",
+            noneSelectedText: "Selected Ass Group",
+            click: function (event, ui) { RefreshGridByFilter("td span.associatedGroup", "data-associated-group-id", ui.value, ui.checked); },
+            checkAll: function () { RefreshAllGridByFilter("td span.associatedGroup", "data-associated-group-id", true); },
+            uncheckAll: function () { RefreshAllGridByFilter("td span.associatedGroup", "data-associated-group-id", false); }
+        }).multiselectfilter({
+            width: 217,
+            placeholder: '',
+            label: ''
+        });
+    }
+
+    function Initial() {
+        InitMultiselectFilter();
         LoadMatchInfo();
         LoadGrid();
         DisableButtons();        

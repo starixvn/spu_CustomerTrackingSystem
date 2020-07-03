@@ -66,6 +66,14 @@
             <label class="text">Status</label>
             <select class="control" id="cbbTicketStatus" multiple="multiple"></select>
         </div>
+        <div class="group width-200">
+            <label class="text">Group ID</label>
+            <select class="control" id="cbbGroupId" multiple="multiple"></select>
+        </div>
+        <div class="group width-200">
+            <label class="text">Associated Group</label>
+            <select class="control" id="cbbAssociatedGroup" multiple="multiple"></select>
+        </div>
         <div class="group" id="divStakeRangeContainer">
             <label class="text">Stake Range</label>
             <div class="block-range" id="btnShowStakeRange">
@@ -88,10 +96,6 @@
                 </div>
             </div>
         </div>
-        <div class="group width-200">
-            <label class="text">Group ID</label>
-            <select class="control" id="cbbGroupId" multiple="multiple"></select>
-        </div>
         <div class="button-left">
             <button class="button button-generate" id="btnGenerate">Generate</button>
         </div>
@@ -104,6 +108,7 @@
             <tr>
                 <th>#</th>
                 <th>Group ID</th>
+                <th>Associated Group</th>
                 <th>Trans Date</th>
                 <th>Username</th>
                 <th>Currency</th>
@@ -119,7 +124,7 @@
                 <th>Void</th>
             </tr>
             <tr class="format-tr">
-                <th colspan="15" class="format-th">
+                <th colspan="16" class="format-th">
                     <div class="wrapper-selections">
                         <span class="detail-selections">
                             Total: <span id="spanTotalSelections">0</span> selections (Max: 2000 selections)

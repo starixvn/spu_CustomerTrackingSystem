@@ -57,6 +57,8 @@ namespace Fanex.NAP.CTS.ViewModel.ProblemAccountMonitor
 
         public string VoidRequestId { get; set; }
 
+        public string AssociatedGroupName { get; set; }
+
         public int? GroupId { get; set; }
 
         private string _GroupName;
