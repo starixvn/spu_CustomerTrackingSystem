@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
     using Fanex.Common;
+    using Fanex.Logging;
     using Fanex.NAP.Core.Configuration;
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Service.Interface;
@@ -179,7 +180,9 @@
 
             if (ticketsModel != null && ticketsModel.Any())
             {
-               total = GetResultTicketData(result, ticketsModel, matchId);
+                total = ticketsModel.Count();
+
+                result = GetResultTicketData(ticketsModel, matchId);
             }
 
             return Json(new
@@ -211,9 +214,11 @@
             return Json(voidRequestToTVSParam, JsonRequestBehavior.AllowGet);
         }
 
-        private int GetResultTicketData(DetailTicketViewModel result, IEnumerable<DetailTicketsModel> ticketsModel, int matchId)
+        private DetailTicketViewModel GetResultTicketData(IEnumerable<DetailTicketsModel> ticketsModel, int matchId)
         {
-            var ticketVoidingsModel = Enumerable.Empty<DetailTicketVoidingInRequestModel>();
+            var result = new DetailTicketViewModel();
+            var ticketVoidingsModels = Enumerable.Empty<DetailTicketVoidingInRequestModel>();
+            var associatedGroupModels = Enumerable.Empty<DetailAssociatedGroupModel>();
             var tasks = new List<Task>
             {
                 Task.Run(() =>
@@ -223,6 +228,19 @@
 
                     result.GroupList = ticketsModel.GroupBy(x => new { x.GroupID })
                          .Select(s => new DetailGroup { GroupId = s.Key.GroupID, GroupName = s.Key.GroupID.ToString() }).Distinct();
+                }),
+
+                Task.Run(() =>
+                {
+                    try
+                    {
+                        var custIds = ticketsModel.Select(x => x.CustID).Distinct();
+                        associatedGroupModels = _probleAccountMonitorService.GetAssociatedGroup(custIds, ConfigSettings.GetAssociatedGroup);
+                    }
+                    catch (Exception ex)
+                    {
+                         LogService.Error(ex.Message, ex);
+                    }
                 }),
 
                 Task.Run(() =>
@@ -249,47 +267,73 @@
                         .Select(x => new DetailTicketStatus { TicketStatusId = x.Key.TicketStatusId, TicketStatusName = x.Key.TicketStatus });
                 }),
 
-
                 Task.Run(() =>
                 {
                     var tranIdList = string.Join(",", ticketsModel.Select(x => x.TransID));
 
-                    ticketVoidingsModel = _probleAccountMonitorService.GetTicketVoidingInRequest(matchId, tranIdList);
+                    ticketVoidingsModels = _probleAccountMonitorService.GetTicketVoidingInRequest(matchId, tranIdList);
                 })
             };
           
             Task.WhenAll(tasks.ToArray()).Wait();
 
-            result.TicketList = ticketsModel.Select(x => new DetailTicket
-            {
-                BetId = x.TransID,
-                BetDate = x.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                BettypeId = x.BettypeId,
-                BettypeName = x.BettypeName,
-                Username = x.Username,
-                CurrencyId = x.CurrencyId,
-                CurrencyName = x.CurrencyName,
-                SiteId = x.SiteId,
-                SiteName = x.SiteName,
-                Choice = x.BetTeam,
-                LiveBetScore = string.Format("{0} - {1}", x.LiveHomeScore, x.LiveAwayScore),
-                HtmlChoice = _probleAccountMonitorService.GetHtmlChoice(x),
-                Stake = x.Stake,
-                Odds = x.Odds,
-                TicketStatus = x.TicketStatus,
-                TicketStatusId = x.TicketStatusId,
-                VoidRequestId = x.TicketStatusId != 102 // Void
-                                ? _probleAccountMonitorService.GetVoidRequestId(ticketVoidingsModel, x.TransID)
-                                : string.Empty,
-                HighlightStatus = x.HighlightStatus,
-                AssociatedGroupName = string.Empty,
-                GroupId = x.GroupID,
-                GroupName = x.GroupID.ToString()
-            }).OrderByDescending(x=>x.BetDate);
+            result.TicketList = ticketsModel
+                                    .Select(x => SelectDetailTicket(x, ticketVoidingsModels, associatedGroupModels))
+                                    .OrderByDescending(x=>x.BetDate);
+
+            result.AssociatedGroupList = result.TicketList.GroupBy(x => x.AssociatedGroupName)              
+                .Where(x => x.Key != string.Empty)
+                .Select(x => x.Key)
+                .OrderBy(x=> x);
 
             result.TotalHighlightStatusWhite = result.TicketList.Count(x => x.HighlightStatus.Equals(0) && x.VoidRequestId == string.Empty);
 
-            return ticketsModel.Count();
+            return result;
+        }
+
+        private DetailTicket SelectDetailTicket(DetailTicketsModel ticketModel
+            , IEnumerable<DetailTicketVoidingInRequestModel> ticketVoidingsModels
+            , IEnumerable<DetailAssociatedGroupModel> associatedGroupModels)
+        {
+            var requestId = string.Empty;
+            // Void
+            if (ticketModel.TicketStatusId != 102)
+            {
+                var voidTicket = ticketVoidingsModels.FirstOrDefault(x => x.transid.Equals(ticketModel.TransID));
+
+                if (voidTicket != null)
+                    requestId = voidTicket.RequestId.ToString();
+            }           
+
+            var associatedGroupName = string.Empty;
+            var associatedGroup = associatedGroupModels.FirstOrDefault(x => x.CustId.Equals(ticketModel.CustID));
+            if (associatedGroup != null)
+                associatedGroupName = associatedGroup.GroupId.ToString();
+
+            return new DetailTicket
+            {
+                BetId = ticketModel.TransID,
+                BetDate = ticketModel.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+                BettypeId = ticketModel.BettypeId,
+                BettypeName = ticketModel.BettypeName,
+                Username = ticketModel.Username,
+                CurrencyId = ticketModel.CurrencyId,
+                CurrencyName = ticketModel.CurrencyName,
+                SiteId = ticketModel.SiteId,
+                SiteName = ticketModel.SiteName,
+                Choice = ticketModel.BetTeam,
+                LiveBetScore = string.Format("{0} - {1}", ticketModel.LiveHomeScore, ticketModel.LiveAwayScore),
+                HtmlChoice = _probleAccountMonitorService.GetHtmlChoice(ticketModel),
+                Stake = ticketModel.Stake,
+                Odds = ticketModel.Odds,
+                TicketStatus = ticketModel.TicketStatus,
+                TicketStatusId = ticketModel.TicketStatusId,
+                VoidRequestId = requestId,
+                HighlightStatus = ticketModel.HighlightStatus,
+                AssociatedGroupName = associatedGroupName,
+                GroupId = ticketModel.GroupID,
+                GroupName = ticketModel.GroupID.ToString()
+            };
         }
 
         private void GetGroupForDeTailTicketModel(IEnumerable<DetailTicketsModel> ticketsModel, IEnumerable<DetailCustomerGroupsModel> customerGroupsModel)

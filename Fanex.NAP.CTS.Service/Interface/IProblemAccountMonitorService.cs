@@ -24,11 +24,10 @@
 
         IEnumerable<DetailCustomerGroupsModel> GetCustomerGroup(List<DetailTicketsModel> detailTicketsModels);
 
+        IEnumerable<DetailAssociatedGroupModel> GetAssociatedGroup(IEnumerable<int> custIds, string apiUrl);
+
         IEnumerable<DetailTicketVoidingInRequestModel> GetTicketVoidingInRequest(int matchId, string tranIdList);
 
-        string GetHtmlChoice(DetailTicketsModel ticket);
-
-        string GetVoidRequestId(IEnumerable<DetailTicketVoidingInRequestModel> ticketList, long tranId);
-
+        string GetHtmlChoice(DetailTicketsModel ticket);      
     }
 }

@@ -4,12 +4,14 @@
     using Fanex.BetList.Core.Entities;
     using Fanex.BetList.Core.TicketHelper;
     using Fanex.Data;
+    using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Criteria.ProblemAccountMonitor;
     using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
     using Newtonsoft.Json;
     using System;    
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
 
     public class ProblemAccountMonitorService : IProblemAccountMonitorService
     {
@@ -148,6 +150,15 @@
             }
         }
 
+        public IEnumerable<DetailAssociatedGroupModel> GetAssociatedGroup(IEnumerable<int> custIds, string apiUrl)
+        {
+            var data = ApiHelper.Post<IEnumerable<DetailAssociatedGroupModel>>(apiUrl, custIds);
+
+            Task.WhenAll(data);
+
+            return data.Result;
+        }
+
         public IEnumerable<DetailTicketVoidingInRequestModel> GetTicketVoidingInRequest(int matchId, string tranIdList)
         {
             var criteria = new DetailTicketVoidingInRequestGetCriteria
@@ -185,16 +196,6 @@
             };
 
             return htmlBuilder.BuildChoice(coreTicket, ticketHelper, null, true);           
-        }
-
-        public string GetVoidRequestId(IEnumerable<DetailTicketVoidingInRequestModel> ticketList, long tranId)
-        {
-            var voidTicket = ticketList.FirstOrDefault(x => x.transid.Equals(tranId));
-
-            return voidTicket != null
-                ? voidTicket.RequestId.ToString()
-                : string.Empty;
-        }
-        
+        }       
     }
 }

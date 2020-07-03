@@ -155,5 +155,7 @@
                 return actionId == 0 ? 27 : actionId;
             }
         }
+
+        public static string GetAssociatedGroup => GetConfigStringByName("Graph_GetAssociatedGroup");
     }
 }

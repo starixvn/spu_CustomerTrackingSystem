@@ -129,7 +129,12 @@
                     render: function (data, type, full, meta) { return meta.row + 1; }
                 },               
                 { data: obj => () => { return "<span class=group data-group-id=" + obj.GroupId + ">" + obj.GroupName + "</span>"; } },
-                { data: obj => () => { return "<span class=associatedGroup data-associated-group=" + obj.AssociatedGroupName + ">" + obj.AssociatedGroupName + "</span>"; } },
+                {
+                    data: obj => () => {
+                        name = obj.AssociatedGroupName === "" ? "-" : obj.AssociatedGroupName;
+                        return "<span class=associatedGroup data-associated-group=" + name + ">" + name + "</span>";
+                    }
+                },
                 { data: obj => obj.BetDate },
                 { data: obj => obj.Username },
                 { data: obj => () => { return "<span class=currency data-currency-id=" + obj.CurrencyId + ">" + obj.CurrencyName + "</span>"; } },
@@ -173,7 +178,7 @@
             createdRow: function (row, data, index) {
                 let cssClassTR = 'white';
                 if (data.HighlightStatus === 1) cssClassTR = 'red';
-                else if (data.HighlightStatus === 2) cssClassTR = 'green';                
+                else if (data.HighlightStatus === 2) cssClassTR = 'green';
 
                 $(row).addClass(cssClassTR);
                 $(row).attr('criteria-hide', '');
@@ -254,7 +259,7 @@
         }).remove();
 
         associatedGroupList.map(function (x) {
-            domElements.cbbAssociatedGroup.append(`<option selected value='${x.AssociatedGroupName}'>${x.AssociatedGroupName}</option>`);
+            domElements.cbbAssociatedGroup.append(`<option selected value='${x}'>${x}</option>`);
         });
 
         domElements.cbbAssociatedGroup.multiselect("refresh");
@@ -663,9 +668,9 @@
             menuHeight: 300,
             selectedText: "# of # selected",
             noneSelectedText: "Selected Ass Group",
-            click: function (event, ui) { RefreshGridByFilter("td span.associatedGroup", "data-associated-group-id", ui.value, ui.checked); },
-            checkAll: function () { RefreshAllGridByFilter("td span.associatedGroup", "data-associated-group-id", true); },
-            uncheckAll: function () { RefreshAllGridByFilter("td span.associatedGroup", "data-associated-group-id", false); }
+            click: function (event, ui) { RefreshGridByFilter("td span.associatedGroup", "data-associated-group", ui.value, ui.checked); },
+            checkAll: function () { RefreshAllGridByFilter("td span.associatedGroup", "data-associated-group", true); },
+            uncheckAll: function () { RefreshAllGridByFilter("td span.associatedGroup", "data-associated-group", false); }
         }).multiselectfilter({
             width: 217,
             placeholder: '',
