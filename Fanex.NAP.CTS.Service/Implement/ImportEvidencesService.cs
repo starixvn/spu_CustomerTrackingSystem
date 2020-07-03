@@ -121,7 +121,9 @@
 
         public IEnumerable<ResultCheckAccountEvidenceModel> CheckRuleAddAccountEvidence()
         {
-            var exceedlengthUsernameList = _checkAccountEvidenceList
+            try
+            {
+                var exceedlengthUsernameList = _checkAccountEvidenceList
                     .Where(x => x.Username.Length > 50)
                     .Select(x => new ResultCheckAccountEvidenceModel
                     {
@@ -131,39 +133,37 @@
                         RowStatus = ResourcesManager.GetValue(ConstsResources.IMPORT_ACCOUNT_EVIDENCE_USERNAME_INVALID)
                     });
 
-            var exceedlengthEvidenceCodeList = _checkAccountEvidenceList
-                    .Where(x => x.EvidenceCode.Length > 10)
-                    .Select(x => new ResultCheckAccountEvidenceModel
-                    {
-                        CTSCustID = 0,
-                        EvidenceID = 0,
-                        RowId = x.RowId,
-                        RowStatus = ResourcesManager.GetValue(ConstsResources.IMPORT_ACCOUNT_EVIDENCE_EVIDENCECODE_INVALID)
-                    });
+                var exceedlengthEvidenceCodeList = _checkAccountEvidenceList
+                        .Where(x => x.EvidenceCode.Length > 10)
+                        .Select(x => new ResultCheckAccountEvidenceModel
+                        {
+                            CTSCustID = 0,
+                            EvidenceID = 0,
+                            RowId = x.RowId,
+                            RowStatus = ResourcesManager.GetValue(ConstsResources.IMPORT_ACCOUNT_EVIDENCE_EVIDENCECODE_INVALID)
+                        });
 
-            var duplicateList = _checkAccountEvidenceList.GroupBy(x => new { x.Username, x.EvidenceCode })
-                    .Where(g => g.Count() > 1)
-                    .Select(x => x.Last())
-                    .Select(x=> new ResultCheckAccountEvidenceModel {
-                        CTSCustID = 0,
-                        EvidenceID = 0,
-                        RowId = x.RowId,                        
-                        RowStatus = ResourcesManager.GetValue(ConstsResources.IMPORT_ACCOUNT_EVIDENCE_DUPLICATE)
-                    });
+                var duplicateList = _checkAccountEvidenceList.GroupBy(x => new { x.Username, x.EvidenceCode })
+                        .Where(g => g.Count() > 1)
+                        .Select(x => x.Last())
+                        .Select(x=> new ResultCheckAccountEvidenceModel {
+                            CTSCustID = 0,
+                            EvidenceID = 0,
+                            RowId = x.RowId,                        
+                            RowStatus = ResourcesManager.GetValue(ConstsResources.IMPORT_ACCOUNT_EVIDENCE_DUPLICATE)
+                        });
 
-            var noDuplicateList = _checkAccountEvidenceList
-                    .Where(x => x.Username.Length <= 50 && x.EvidenceCode.Length <= 10)
-                    .Distinct(x => new { x.Username, x.EvidenceCode });
+                var noDuplicateList = _checkAccountEvidenceList
+                        .Where(x => x.Username.Length <= 50 && x.EvidenceCode.Length <= 10)
+                        .Distinct(x => new { x.Username, x.EvidenceCode });
 
-            var jsonData = JsonConvert.SerializeObject(noDuplicateList);
+                var jsonData = JsonConvert.SerializeObject(noDuplicateList);
 
-            var criteria = new CheckAccountEvidenceCriteria
-            {
-                NewAccountEvidences = jsonData
-            };
-
-            try
-            {
+                var criteria = new CheckAccountEvidenceCriteria
+                {
+                    NewAccountEvidences = jsonData
+                };
+            
                 using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
                 {
                     var resultVerifyDbList = db.Query<ResultCheckAccountEvidenceModel>(criteria);
@@ -219,6 +219,8 @@
                         ErrorMessage = string.Empty
                     };
 
+                    LogInfo(fileName, userId, "db.ExecuteNonQuery(criteria) START at " + DateTime.Now, jsonData);
+
                     using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
                     {
                         db.ExecuteNonQuery(criteria);
@@ -226,21 +228,30 @@
                         if (!string.IsNullOrWhiteSpace(criteria.ErrorMessage))
                         {
                             SendMail(resultCheckAccountEvidenceList, accountEvidence, userId, criteria.ErrorMessage);
-                            LogError(fileName, userId, criteria.ErrorMessage, jsonData);
+                            LogError(fileName, userId, "at " + DateTime.Now + " " + criteria.ErrorMessage, jsonData);
                         } 
                     }
+
+                    LogInfo(fileName, userId, "db.ExecuteNonQuery(criteria) END at " + DateTime.Now, jsonData);
                 }
                 catch (Exception ex)
                 {
                     SendMail(resultCheckAccountEvidenceList, accountEvidence, userId, ex.Message);
-                    LogError(fileName, userId, ex.Message, jsonData, ex);
+                    LogError(fileName, userId, "at " + DateTime.Now + " " + ex.Message, jsonData, ex);
                 }
             }
         }
 
+        private void LogInfo(string fileName, int userId, string message, string jsonData)
+        {
+            var infoMessage = string.Format("CTS - Import file name: {0} - userId: {1} - infomation message: {2} - content: {3}"
+                                                      , fileName, userId, message, jsonData);
+            LogService.Info(infoMessage);
+        }
+
         private void LogError(string fileName, int userId, string error, string jsonData, Exception ex = null)
         {
-            var errorMessage = string.Format("CTS - Import file name: {0} - userId: {2} - import error: {1} - content: {3}"
+            var errorMessage = string.Format("CTS - Import file name: {0} - userId: {1} - import error: {2} - content: {3}"
                                                        , fileName, userId, error, jsonData);
             if (ex == null)
                 LogService.Error(errorMessage);
