@@ -297,12 +297,9 @@
             {
                 directAssociationUrl = ConfigSettings.GetDirectAssociationByManual;
             }
-
-            // LogService.Info("From Graph - CTSCustId: " + model.CTSCustId + " - Start: " + DateTime.Now.ToString());
+           
             var graphAssociationPage = model.IsDirect ?
                 _accountService.GetCustomerAssociationByGraph(directAssociationUrl, model.CTSCustId, model.AssociationStatus, skip, take) : new GraphAssociationPaging();
-            //_accountService.GetCustomerAssociationByGraph(ConfigSettings.GetInDirectAssociation, model.CTSCustId, skip, take);
-            // LogService.Info("From Graph - CTSCustId: " + model.CTSCustId + " - End: " + DateTime.Now.ToString());
 
             if (graphAssociationPage != null && graphAssociationPage.AssociationList != null && graphAssociationPage.AssociationList.Any())
             {
@@ -311,23 +308,14 @@
 
                 var custIds = string.Join(",", customerAssociation.Select(x => x.CustId));
 
-                // LogService.Info("GET Status - CTSCustId: " + model.CTSCustId + " - Start: " + DateTime.Now.ToString());
                 var getStatusByCustIds = _accountService.GetCustomerGeneralStatus(custIds);
-                // LogService.Info("GET Status - CTSCustId: " + model.CTSCustId + " - End: " + DateTime.Now.ToString());
 
                 var getAllSubscribers = _subscriberAssignmentService.GetSubscribers(0);
 
-                // LogService.Info("Filter Status - CTSCustId: " + model.CTSCustId + " - Start: " + DateTime.Now.ToString());
                 customerAssociation = _accountService.FilterCustomerAssociationByStatus(string.Empty, customerAssociation, getStatusByCustIds);
-                // LogService.Info("Filter Status - CTSCustId: " + model.CTSCustId + " - End: " + DateTime.Now.ToString());
 
-                // LogService.Info("Filter Ass type - CTSCustId: " + model.CTSCustId + " - Start: " + DateTime.Now.ToString());
                 customerAssociation = _accountService.FilterCustomerAssociationByAssociationType(model.AssociationType, customerAssociation);
-                // LogService.Info("Filter Ass type - CTSCustId: " + model.CTSCustId + " - End: " + DateTime.Now.ToString());
 
-                //var exceptionCustIdList = _accountService.GetAssociationException(ConfigSettings.GetAssociationException, model.CTSCustId);
-
-                // LogService.Info("Render - CTSCustId: " + model.CTSCustId + " - Start: " + DateTime.Now.ToString());
                 result = customerAssociation.Select(x => new CustomerAssociationByAccountDetailViewModel
                 {
                     CustId = x.CustId.HasValue ? x.CustId.Value : 0,
@@ -343,23 +331,20 @@
                     CTSCustId = x.CTSCustID,
                     IsLinked = x.AssociationStatus == 1
                 }).ToList();
-
-                // LogService.Info("Render - CTSCustId: " + model.CTSCustId + " - End: " + DateTime.Now.ToString());
+              
                 if (result != null && result.Any())
                 {
                     var tasks = new List<Task>();
-
-
-                    var getFlaggedTags = new List<TagModel>();
-                    var getAffectedTags = new List<TagModel>();
-                    var getCustIdsAffectedTag = new List<GraphDirectAssociationModel>();
+                    var flaggedTagList = new List<TagModel>();
+                    var affectedTagList = new List<TagModel>();
+                    var custIdsAffectedTagList = new List<GraphDirectAssociationModel>();
 
                     tasks.Add(Task.Run(() =>
                     {
                         try
                         {
                             var custIdsFlaggedTag = result.Select(a => new { a.SubscriberId, a.CTSCustId });
-                            getFlaggedTags = _accountService.GetDirectAssociatedAccountTagFlagged(JsonConvert.SerializeObject(custIdsFlaggedTag));
+                            flaggedTagList = _accountService.GetDirectAssociatedAccountTagFlagged(JsonConvert.SerializeObject(custIdsFlaggedTag));
                         }
                         catch (Exception ex)
                         {
@@ -374,17 +359,13 @@
                         try
                         {
                             var custIdsAffectedTag = result.Select(a => a.CTSCustId).ToList();
-                            getCustIdsAffectedTag = _accountService.GetDirectAssocationByGraph(ConfigSettings.GetDirectAssociationMultiCust, custIdsAffectedTag);
+                            custIdsAffectedTagList = _accountService.GetDirectAssocationByGraph(ConfigSettings.GetDirectAssociationMultiCust, custIdsAffectedTag);
 
-                            if (getCustIdsAffectedTag != null && getCustIdsAffectedTag.Any())
+                            if (custIdsAffectedTagList != null && custIdsAffectedTagList.Any())
                             {
-                                var jsonParam = JsonConvert.SerializeObject(getCustIdsAffectedTag);
+                                var jsonParam = JsonConvert.SerializeObject(custIdsAffectedTagList);
 
-                                getAffectedTags = _accountService.GetDirectAssociatedAccountTagAffected(jsonParam);
-                            }
-                            else
-                            {
-                                LogService.Error("GetDirectAssociationMultiCust is null");
+                                affectedTagList = _accountService.GetDirectAssociatedAccountTagAffected(jsonParam);
                             }
                         }
                         catch (Exception ex)
@@ -399,13 +380,11 @@
 
                     result = result.Select(x =>
                     {
-                        var affectedTags = getAffectedTags.Where(z => z.FromCTSCustId == x.CTSCustId);
+                        var flaggedTags = flaggedTagList.Where(z => z.FromCTSCustId.Equals(x.CTSCustId) && z.FlaggedTag > 0);
+                        x.IsFlaggedTag = flaggedTags.Any() ? true : false;
 
-                        x.AffectedTag = (affectedTags != null && affectedTags.Any()) ? affectedTags.FirstOrDefault().AffectedTag : 0;
-
-                        var flaggedTag = getFlaggedTags.Where(z => z.CTSCustId == x.CTSCustId);
-
-                        x.FlaggedTag = (flaggedTag != null && flaggedTag.Any()) ? flaggedTag.FirstOrDefault().FlaggedTag : 0;
+                        var affectedTags = affectedTagList.Where(z => z.FromCTSCustId.Equals(x.CTSCustId) && z.AffectedTag > 0);
+                        x.IsAffectedTag = affectedTags.Any() ? true : false;
 
                         return x;
                     })
@@ -837,7 +816,7 @@
 
         private void GetCustomerFlagInfo(long ctsCustId, int subscriberId, ref AccountProfileViewModel profile)
         {
-            profile.FlagInfo = _accountService.GetCustomerFlagInfo(ctsCustId, subscriberId);
+            profile.FlagedAffectedEvidence = _accountService.GetCustomerFlagInfo(ctsCustId, subscriberId);
         }
 
         private void GetCustomerEsportAutoSuspendedStatus(long custId, ref AccountProfileViewModel profile)

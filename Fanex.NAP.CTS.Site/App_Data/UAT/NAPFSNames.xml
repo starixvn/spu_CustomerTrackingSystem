@@ -377,7 +377,7 @@
             DbName="DBONUSER.ON_USER.bodbSPUNet" />
 
     <Setting Key="CTS_DC_GetCustomerFlagInfo"
-            SpName="CTS_DC_GetCustomerFlagInfo"
+            SpName="CTS_DC_GetCustomerFlagInfo_xtest"
             DbName="MySQL.CTS_DataCenter" />  
       
 

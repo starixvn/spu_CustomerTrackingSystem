@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Fanex.NAP.CTS.ViewModel.Account.Associated
+﻿namespace Fanex.NAP.CTS.ViewModel.Account.Associated
 {
     public class CustomerAssociationByAccountDetailViewModel
-    {
-        public int AffectedTag { get; set; }
-
-        public int FlaggedTag { get; set; }
-
+    {       
         public long CTSCustId { get; set; }
 
         public long CustId { get; set; }
@@ -21,6 +11,10 @@ namespace Fanex.NAP.CTS.ViewModel.Account.Associated
         public string Username { get; set; }
 
         public string LoginId { get; set; }
+
+        public bool IsAffectedTag { get; set; }
+
+        public bool IsFlaggedTag { get; set; }
 
         public string Status { get; set; }
 

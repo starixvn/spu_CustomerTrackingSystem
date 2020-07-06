@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Fanex.NAP.CTS.Model.Account
+﻿namespace Fanex.NAP.CTS.Model.Account
 {
     public class CustomerFlagInfoModel
     {
-        public int Flagged { get; set; }
+        public bool Flagged { get; set; }
+
+        public bool Affected { get; set; }
     }
 }

@@ -19,10 +19,10 @@
     function RenderTag(obj) {
         let html = "";
 
-        if (obj.AffectedTag === 1)
+        if (obj.IsFlaggedTag)
             html += "<span class='icon icon-Affected'  title='Affected'></span>";       
 
-        if (obj.FlaggedTag === 2)
+        if (obj.IsAffectedTag)
             html += "<span class='icon icon-Flagged' title='Flagged'></span>";        
 
         return html === "" ? "-" : html;

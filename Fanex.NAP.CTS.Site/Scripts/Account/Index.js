@@ -3,10 +3,7 @@
     var custId = $("#hdCustId").val();
     var ctsCustId = $("#hdCTSCustId").val();
     var subscriberId = $("#hdSubscriberId").val();
-    var subscriber = $("#hdSubscriber").val();
-
-    var totalAssAccount = 0;
-    var totalEvidence = 0;
+    var subscriber = $("#hdSubscriber").val();   
     var isHostPermission = $("#hdIsHostPermission").attr("IsHostPermission");
 
     let domElements = {        
@@ -16,7 +13,6 @@
         tabTransactionHistory: $("#trans_history"),        
         spanTotalAssociated: $('#spanTotalAssociated'),
         spanTotalEvidences: $('#spanTotalEvidences'),
-        spanIconAffected: $('span.icon-Affected'),
         spanDangerousOriginal: $("#dangerousOriginal"),
         spanDangerouseABI: $("#dangerouseABI"),
         spanDangerouseOtherSports: $("#dangerouseOtherSports"),
@@ -134,10 +130,6 @@
                 }
             },
             complete: function () {
-                if (totalAssAccount > 0 && totalEvidence > 0) {
-                    domElements.spanIconAffected.removeClass('hide');
-                }
-
                 LoadAssociationByAccount();
                 LoadChainToEvidence();
             },
@@ -184,11 +176,10 @@
                 HandleCustomerStatus(response);
                 FrauseCaseList(response);
                 HandleRobotUserStatus(response.RobotUserStatus);
-                HandleFlagInfo(response.FlagInfo);
+                HandleFlagedAffectedEvidence(response.FlagedAffectedEvidence);
                 HandleEsportAutoSuspendedStatus(response.EsportAutoSuspendStatus);
             },
             complete: function () {
-
             },
             error: function (errMsg) {
                 console.log(errMsg);
@@ -249,24 +240,17 @@
     }
 
     function HandleRobotUserStatus(data) {
-        if (data !== null) {
-            if (data.IsRobotUser) {
-                $('span.icon-Robot').removeClass('hide');
-            }
-        }
+        if (data !== null && data.IsRobotUser) 
+            $('span.icon-Robot').removeClass('hide');
     }
 
-    function HandleFlagInfo(data) {
-        if (data.Flagged !== 0) {
-            if (data.Flagged === 2) {
-                $('span.icon-error').removeClass('hide');
-            }
-            else {
-                $('span.icon-flag').removeClass('hide');
-            }
-        }
-
+    function HandleFlagedAffectedEvidence(data) {
         $('span.loading').remove();
+
+        if (data.Flagged)
+            $('span.icon-flag').removeClass('hide');
+        if (data.Affected)
+            $('span.icon-error').removeClass('hide');
     }
 
     function HandleEsportAutoSuspendedStatus(data) {

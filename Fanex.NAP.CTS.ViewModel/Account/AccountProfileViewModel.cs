@@ -12,7 +12,7 @@
 
         public CustomerRobotUserStatusModel RobotUserStatus { get; set; }
 
-        public CustomerFlagInfoModel FlagInfo { get; set; }
+        public CustomerFlagInfoModel FlagedAffectedEvidence { get; set; }
 
         public CustomerEsportAutoSuspendStatusModel EsportAutoSuspendStatus { get; set; }
     }
