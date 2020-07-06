@@ -286,7 +286,9 @@
                 .Select(x => x.Key)
                 .OrderBy(x=> x);
 
-            result.TotalHighlightStatusWhite = result.TicketList.Count(x => x.HighlightStatus.Equals(0) && x.VoidRequestId == string.Empty);
+            result.TotalHighlightStatusWhite = result.TicketList.Count(x => x.HighlightStatus.Equals(0) 
+                && x.VoidRequestId == string.Empty
+                && x.TicketStatusId.Equals(0));
 
             return result;
         }

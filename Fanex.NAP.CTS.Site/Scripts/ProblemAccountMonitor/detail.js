@@ -185,8 +185,10 @@
 
                 // match is running
                 if (domElements.hdMatchStatus.val() === "running") {
-                    if (data.TicketStatusId !== 0)
+                    if (data.TicketStatusId !== 0) {
+                        $(row).attr('criteria-hide', ',data-ticket-status-id');
                         $(row).addClass("hide");
+                    }
                 }
             }
         });
@@ -371,62 +373,82 @@
         if (maxText === "")
             maxText = "0";
 
-        let minValue = parseFloat(minText);
-        let maxValue = parseFloat(maxText);
+        try {            
+            let minValue = parseFloat(minText);
+            let maxValue = parseFloat(maxText);
 
-        if (minValue > maxValue) {
-            common.showError("Stake Range Min must be less than Max");
-            return;
+            if (minValue > maxValue) {                
+                common.showError("Stake Range Min must be less than Max");                
+                return;
+            }
+            domElements.ticketsTable.find('tbody').addClass('loading');
+            domElements.ticketsTable.find('tr').each(function () {
+                let tr = $(this);
+                let span = tr.find('span.stake');
+                if (span.length > 0) {
+                    let stakeValue = parseFloat(span.attr('data-stake'));
+                    let defaultValue = minValue === 0 && maxValue === 0;
+                    let isEqual = stakeValue >= minValue && stakeValue <= maxValue || defaultValue;
+
+                    let criteriaHideList = GetCriteriaHideList(tr, "stake-range", isEqual);
+                    tr.attr("criteria-hide", criteriaHideList.join());
+
+                    criteriaHideList.length === 1
+                        ? tr.removeClass('hide')
+                        : tr.addClass('hide');
+                }
+            });
+            domElements.ticketsTable.find('tbody').removeClass('loading');
+        } catch (e) {
+            domElements.ticketsTable.find('tbody').removeClass('loading');
+            console.log(e);
         }
-
-        domElements.ticketsTable.find('tr').each(function () {
-            let tr = $(this);
-            let span = tr.find('span.stake');
-            if (span.length > 0) {
-                let stakeValue = parseFloat(span.attr('data-stake'));
-                let defaultValue = minValue === 0 && maxValue === 0;
-                let isEqual = stakeValue >= minValue && stakeValue <= maxValue || defaultValue;
-
-                let criteriaHideList = GetCriteriaHideList(tr, "stake-range", isEqual);
-                tr.attr("criteria-hide", criteriaHideList.join());
-
-                criteriaHideList.length === 1
-                    ? tr.removeClass('hide')
-                    : tr.addClass('hide');
-            }            
-        });
     }
 
     function RefreshGridByFilter(criteria, attrName, value, checked) {
-        domElements.ticketsTable.find('tr').each(function () {
-            let tr = $(this);
-            let span = tr.find(criteria);            
-            if (span.attr(attrName) === value) {
-                let criteriaHideList = GetCriteriaHideList(tr, attrName, checked);
-                tr.attr("criteria-hide", criteriaHideList.join());
+        try {
+            domElements.ticketsTable.find('tbody').addClass('loading');
+            domElements.ticketsTable.find('tr').each(function () {
+                let tr = $(this);
+                let span = tr.find(criteria);
+                if (span.attr(attrName) === value) {
+                    let criteriaHideList = GetCriteriaHideList(tr, attrName, checked);
+                    tr.attr("criteria-hide", criteriaHideList.join());
 
-                criteriaHideList.length === 1
-                    ? tr.removeClass('hide')
-                    : tr.addClass('hide');
-            }
-        });
+                    criteriaHideList.length === 1
+                        ? tr.removeClass('hide')
+                        : tr.addClass('hide');
+                }
+            });
+            domElements.ticketsTable.find('tbody').removeClass('loading');
+        } catch (e) {
+            domElements.ticketsTable.find('tbody').removeClass('loading');
+            console.log(e);
+        }        
     }
 
     function RefreshAllGridByFilter(criteria, attrName, checked) {
-        domElements.ticketsTable.find('tr').each(function () {
-            let tr = $(this);
-            let span = tr.find(criteria);
-            if (span.length > 0) {
+        try {
+            domElements.ticketsTable.find('tbody').addClass('loading');
+            domElements.ticketsTable.find('tr').each(function () {
+                let tr = $(this);
+                let span = tr.find(criteria);
+                if (span.length > 0) {
 
-                let criteriaHideList = GetCriteriaHideList(tr, attrName, checked);
-                tr.attr("criteria-hide", criteriaHideList.join());
+                    let criteriaHideList = GetCriteriaHideList(tr, attrName, checked);
+                    tr.attr("criteria-hide", criteriaHideList.join());
 
-                criteriaHideList.length === 1
-                    ? tr.removeClass('hide')
-                    : tr.addClass('hide');
-            }
-        });
-    }   
+                    criteriaHideList.length === 1
+                        ? tr.removeClass('hide')
+                        : tr.addClass('hide');
+                }
+            });
+            domElements.ticketsTable.find('tbody').removeClass('loading');
+        } catch (e) {
+            domElements.ticketsTable.find('tbody').removeClass('loading');
+            console.log(e);
+        }
+    }
 
     function GetCriteriaHideList(tr, attrName, checked) {
         let criteriaHide = tr.attr("criteria-hide");
