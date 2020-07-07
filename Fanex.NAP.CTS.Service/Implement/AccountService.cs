@@ -345,22 +345,7 @@
                     FraudCaseList = fraudCaseList
                 };
             }
-        }
-        
-        public List<TagModel> GetDirectAssociatedAccountTagAffected(string custIdsAssInfo)
-        {
-            var criteria = new GetDirectAssociatedAccountTagAffectedCriteria
-            {
-                CustAssInfo = custIdsAssInfo
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                var result = db.Query<TagModel>(criteria);
-
-                return result.ToList();
-            }
-        }
+        }              
 
         public List<TagModel> GetDirectAssociatedAccountTagFlagged(string custIdsAssInfo)
         {

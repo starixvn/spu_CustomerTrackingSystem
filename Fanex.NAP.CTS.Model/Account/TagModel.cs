@@ -2,14 +2,12 @@
 {
     public class TagModel
     {
-        public int SubscriberId { get; set; }
+        public int SubscriberID { get; set; }
 
-        public int CTSCustId { get; set; }
+        public long CTSCustID { get; set; }
 
-        public int FlaggedTag { get; set; }
+        public bool IsFlagged { get; set; }        
 
-        public int FromCTSCustId { get; set; }
-
-        public int AffectedTag { get; set; }
+        public bool IsAffected { get; set; }
     }
 }

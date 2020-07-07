@@ -423,11 +423,7 @@
 
     <Setting Key="CTS_DC_GetAffectedEvidenListBetweenCusts"
            SpName="CTS_DC_GetAffectedEvidenListBetweenCusts"
-           DbName="MySQL.CTS_DataCenter" />
-
-    <Setting Key="CTS_DC_GetDirectAssociatedAccount_TagAffected"
-           SpName="CTS_DC_GetDirectAssociatedAccount_TagAffected"
-           DbName="MySQL.CTS_DataCenter" />
+           DbName="MySQL.CTS_DataCenter" />  
 
     <Setting Key="CTS_DC_GetDirectAssociatedAccount_TagFlagged"
            SpName="CTS_DC_GetDirectAssociatedAccount_TagFlagged_xtest"

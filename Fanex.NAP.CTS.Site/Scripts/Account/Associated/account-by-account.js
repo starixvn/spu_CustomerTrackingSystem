@@ -20,10 +20,10 @@
         let html = "";
 
         if (obj.IsFlaggedTag)
-            html += "<span class='icon icon-Affected'  title='Affected'></span>";       
+            html += "<span class='icon icon-Flagged' title='Flagged'></span>";        
 
         if (obj.IsAffectedTag)
-            html += "<span class='icon icon-Flagged' title='Flagged'></span>";        
+            html += "<span class='icon icon-Affected'  title='Affected'></span>";            
 
         return html === "" ? "-" : html;
     }

@@ -24,9 +24,7 @@
 
         List<CustomerStaticStatusModel> GetCustomerStaticStatus(int listId, bool status);
 
-        CustomerProfileFraudInfoModel GetCustomerProfileFraudInfo(long custId);
-
-        List<TagModel> GetDirectAssociatedAccountTagAffected(string custIdsAssInfo);
+        CustomerProfileFraudInfoModel GetCustomerProfileFraudInfo(long custId);        
 
         List<TagModel> GetDirectAssociatedAccountTagFlagged(string custIdsAssInfo);
 

@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Fanex.NAP.CTS.Model.GraphDB
+﻿namespace Fanex.NAP.CTS.Model.GraphDB
 {
+    using System.Collections.Generic;
+
     public class GraphAssociationPaging
     {
+        public GraphAssociationPaging()
+        {
+            AssociationList = new List<GraphAssociationModel>();
+        }
+
         public List<GraphAssociationModel> AssociationList { get; set; }
 
         public int TotalItems { get; set; }

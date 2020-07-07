@@ -50,7 +50,6 @@
     <Compile Include="Account\Associated\GetCustomerByUsernameCriteria.cs" />
     <Compile Include="Account\Associated\GetCustomerFraudInfoCriteria.cs" />
     <Compile Include="Account\Associated\CustomerStaticAccountStatusCriteria.cs" />
-    <Compile Include="Account\Associated\GetDirectAssociatedAccountTagAffectedCriteria.cs" />
     <Compile Include="Account\Associated\GetDirectAssociatedAccountTagFlaggedCriteria.cs" />
     <Compile Include="Account\Associated\GetDirectAssociationByAccountCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\AddAccountExceptionCriteria.cs" />
