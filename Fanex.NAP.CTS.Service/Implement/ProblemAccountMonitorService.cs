@@ -156,7 +156,9 @@
 
             Task.WhenAll(data);
 
-            return data.Result;
+            return data.Result != null
+                ? data.Result
+                : Enumerable.Empty<DetailAssociatedGroupModel>();
         }
 
         public IEnumerable<DetailTicketVoidingInRequestModel> GetTicketVoidingInRequest(int matchId, string tranIdList)

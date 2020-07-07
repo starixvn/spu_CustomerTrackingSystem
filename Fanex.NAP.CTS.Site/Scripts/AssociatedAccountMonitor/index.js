@@ -22,6 +22,7 @@
                 "subscriber": "Maxbwt",
                 "remark": "Dangerous Ban Account",
                 "add-by": "sa",
+                "add-time": "sa",
                 "action": RenderAction(),
             },
             {
@@ -32,6 +33,7 @@
                 "subscriber": "CN75",
                 "remark": "Continuous Winning",
                 "add-by": "sa",
+                "add-time": "sa",
                 "action": RenderAction(),
             },
             {
@@ -42,6 +44,7 @@
                 "subscriber": "CN75",
                 "remark": "Dangerous Ban Account",
                 "add-by": "sa",
+                "add-time": "sa",
                 "action": RenderAction(),
             },
             {
@@ -52,6 +55,7 @@
                 "subscriber": "CN75",
                 "remark": "Continuous Winning",
                 "add-by": "sa",
+                "add-time": "sa",
                 "action": RenderAction(),
             },
             {
@@ -62,6 +66,7 @@
                 "subscriber": "Maxbwt",
                 "remark": "Dangerous Ban Account",
                 "add-by": "sa",
+                "add-time": "sa",
                 "action": RenderAction(),
             },
             {
@@ -72,6 +77,7 @@
                 "subscriber": "Maxbwt",
                 "remark": "Continuous Winning",
                 "add-by": "sa",
+                "add-time": "sa",
                 "action": RenderAction(),
             },
         ];
@@ -103,13 +109,14 @@
                 { targets: "_all", defaultContent: "-" },
                 { targets: [0, 1, 2, 3, 4, 5, 6, 7], className: "text-center" },
                 { targets: [0], width: "2%" },
-                { targets: [1], width: "17%" },
+                { targets: [1], width: "15%" },
                 { targets: [2], width: "12%" },
                 { targets: [3], width: "12%" },
                 { targets: [4], width: "12%" },
-                { targets: [5], width: "21%" },
-                { targets: [6], width: "12%" },
-                { targets: [7], width: "12%" }
+                { targets: [5], width: "14%" },
+                { targets: [6], width: "11%" },
+                { targets: [7], width: "11%" },
+                { targets: [8], width: "11%" }
             ],
             columns: [
                 {'data':'id'},
@@ -119,6 +126,7 @@
                 { 'data':'subscriber'},
                 { 'data':'remark'},
                 { 'data':'add-by'},
+                { 'data':'add-time'},
                 {
                     'data': 'action',
                     createdCell: (cell, _, row) => {
@@ -136,8 +144,7 @@
     }
 
     function RenderAction() {
-        let html = "<span class='sub-icon -edit'><i class='icon-edit-sub'></i></span>";
-        html += "<span class='sub-icon -delete'><i class='icon-delete'></i></span>";
+        let html = "<span class='sub-icon -delete'><i class='icon-delete'></i></span>";
 
         return html;
     }
@@ -261,13 +268,18 @@
                 }
             });
 
+            // handle freeze header
+            $(window).scroll(function (event) {
+                var scroll = $(window).scrollTop();
+                if (scroll >= 96) {
+                    let height_filter = $(".form-filter").height() + 16;
+                    console.log(height_filter);
 
-            //domElements.divAddUsername.dialog("option", {
-            //    dialogClass: "dialog-addd-username",
-            //    title: null,
-            //    buttons: [],
-            //    width: 460,
-            //});
+                    $(".asociatedAccountMonitorTable  thead tr:first-child th").css({ "top": height_filter + 108 })
+                    $(".wrapper-info-table").css({ "top": height_filter + 96 })
+                }
+                console.log(scroll);
+            });
         });        
     });
 }

@@ -362,8 +362,9 @@
             th {
                 position: sticky;
                 position: -webkit-sticky;
-                top: 174px;
                 z-index: 9;
+                transition: top 0.01s linear;
+                top: 178px;
             }
         }
     }
@@ -373,6 +374,7 @@
 #ticketsTable_wrapper {
     .wrapper-info-table {
         top: 199px;
+        transition: top 0.01s linear;
     }
 
     #ticketsTable {
@@ -380,6 +382,7 @@
             position: sticky;
             position: -webkit-sticky;
             top: 237px;
+            transition: top 0.01s linear;
             z-index: 9;
             line-height: 19px;
         }
@@ -388,6 +391,7 @@
             position: sticky;
             position: -webkit-sticky;
             top: 269px;
+            transition: top 0.01s linear;
             z-index: 9;
             border-left: #7B8BAE;
             border-right: #7B8BAE;
@@ -403,8 +407,9 @@
     .wrapper-info-table {
         position: sticky;
         position: -webkit-sticky;
-        top: 175px;
         z-index: 9;
+        top: 178px;
+        transition: top 0.01s linear;
 
         .wrapper-info {
             position: relative;
@@ -595,7 +600,7 @@
             button {
                 width: 190px !important;
                 margin-right: 5px;
-                height: 24px;
+                height: 24px!important;
 
                 &.ui-multiselect {
                     background: #FFFFFF;
@@ -628,8 +633,7 @@
         position: static;
         padding: 12px;
         color: #222222;
-        border-bottom: none;
-        line-height: 15px;
+        line-height: 14px;
         min-height: 40px;
     }
 
@@ -691,62 +695,5 @@
 @media screen and (min-width: 1440px) {
     .form-filter, #problemAccountMonitorGrid {
         width: 1408px;
-    }
-}
-
-@media screen and (min-width: 1415.99px) {
-    .div-grid .wrapper-info-table, #problemAccountMonitorTable thead tr:first-child th {
-        top: 178px;
-    }
-}
-
-@media screen and (max-width: 1415px) {
-    .div-grid .wrapper-info-table, #problemAccountMonitorTable thead tr:first-child th {
-        top: 220px;
-    }
-}
-
-@media screen and (max-width: 1311px) {
-    .div-grid .wrapper-info-table, #problemAccountMonitorTable thead tr:first-child th {
-        top: 237px;
-    }
-}
-
-@media screen and (max-width: 1266px) {
-    .div-grid .wrapper-info-table, #problemAccountMonitorTable thead tr:first-child th {
-        top: 237px;
-    }
-}
-
-/*detail*/
-@media screen and (max-width: 1504px) {
-    .-detail {
-        #ticketsTable_wrapper #ticketsTable thead tr:last-child th {
-            top: 287px;
-        }
-    }
-}
-
-@media screen and (max-width: 1174px) {
-    .-detail {
-        #ticketsTable_wrapper #ticketsTable thead tr:last-child th {
-            top: 306px;
-        }
-    }
-}
-
-@media screen and (max-width: 1060px) {
-    .-detail {
-        #ticketsTable_wrapper .wrapper-info-table {
-            top: 258px;
-        }
-
-        #ticketsTable_wrapper #ticketsTable thead tr:first-child th {
-            top: 296px;
-        }
-
-        #ticketsTable_wrapper #ticketsTable thead tr:last-child th {
-            top: 364px;
-        }
     }
 }

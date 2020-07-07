@@ -3,10 +3,28 @@
 
     .associated-account-monitor {
         padding: 16px;
+        padding-top: 0;
 
         .group {
             padding-right: 0;
             margin-right: 16px;
+        }
+
+        .fixed-header {
+            padding-top: 16px;
+            position: sticky;
+            position: -webkit-sticky;
+            top: 60px;
+            background: #fff;
+            z-index: 9;
+        }
+
+        .wrapper-info-table {
+            position: sticky;
+            position: -webkit-sticky;
+            z-index: 9;
+            top: 173px;
+            transition: top 0.01s linear;
         }
     }
 }
@@ -41,13 +59,26 @@
 }
 
 .asociatedAccountMonitorTable {
-    width: 100%!important;
-    thead tr th {
-        border: 1px solid #C4C4C4;
-        line-height: 19px;
-        font-size: 14px;
-        font-weight: 600;
-        vertical-align: middle;
+    width: 100% !important;
+
+    thead {
+        tr:first-child {
+            th {
+                position: sticky;
+                position: -webkit-sticky;
+                z-index: 9;
+                transition: top 0.01s linear;
+                top: 173px;
+            }
+        }
+
+        tr th {
+            border: 1px solid #C4C4C4;
+            line-height: 19px;
+            font-size: 14px;
+            font-weight: 600;
+            vertical-align: middle;
+        }
     }
 
     tbody tr td {
@@ -68,13 +99,9 @@
             border-radius: 50%;
             background: #E7EDFF;
         }
-
-        &.-edit {
-            margin-right: 23px;
-        }
     }
 
-    .icon-edit-sub, .icon-delete {
+    .icon-delete {
         font-size: 14px;
         position: absolute;
         top: 5px;
