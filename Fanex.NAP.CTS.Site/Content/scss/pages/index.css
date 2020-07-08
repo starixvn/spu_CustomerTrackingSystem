@@ -1689,7 +1689,7 @@ body {
           color: #333; }
   .header-info .search-header {
     position: relative;
-    margin-right: 15px; }
+    margin-right: 17px; }
     .header-info .search-header:before {
       content: "\e919";
       font-family: 'Fraud-Sensor' !important;
@@ -1721,8 +1721,7 @@ body {
 .notification-container {
   position: relative; }
   .notification-container .notification-icon {
-    position: relative;
-    margin-right: 47px; }
+    position: relative; }
     .notification-container .notification-icon .icon-bell {
       position: relative;
       color: #fff;
