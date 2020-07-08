@@ -289,7 +289,7 @@
                 ?_accountService.GetCustomerAssociationByGraph(directAssociationUrl, model.CTSCustId, model.AssociationStatus, skip, take) 
                 : new GraphAssociationPaging();
 
-            if (graphAssociationPage != null && graphAssociationPage.AssociationList.Any())
+            if (graphAssociationPage != null && graphAssociationPage.AssociationList != null && graphAssociationPage.AssociationList.Any())
             {
                 totalItem = graphAssociationPage.TotalItems;
                 var getAllSubscribers = _subscriberAssignmentService.GetSubscribers(0);
