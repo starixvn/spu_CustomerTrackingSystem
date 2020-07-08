@@ -650,10 +650,11 @@ select[disabled] {
   width: 100% !important;
   height: 30px !important;
   background-color: #fff;
-  border: 1px solid #d6d6d6;
+  border: 1px solid #E5E5E5;
   border-radius: 2px;
   text-align: left;
-  padding-left: 12px !important; }
+  padding-left: 12px !important;
+  color: #474747; }
   .ui-multiselect .ui-icon {
     background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAGCAYAAAD68A/GAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAB/SURBVHgBbY3NDYUgEITZB4XwjtwsQTsgUIBSmR69QLQCy6AZQpw9kBDiJpv9mW9nyXu/CiHmGGMQQ1hrtVJqL6WEH+aFiDYc7CMkpXzYBHWSOefLGPNnGFVjvhuEna61hpTSSc0BjgeEFXlBnDroYJ36dw3mvoc+g2Hn3DbuX6+RNKJozoYAAAAAAElFTkSuQmCC");
     background-position: center;
@@ -1044,7 +1045,7 @@ table.dataTable tbody tr.selected td {
 
 .wrapper-info-table .dataTables_length {
   position: absolute;
-  top: -33px;
+  top: -34px;
   left: 12px;
   color: #474747;
   z-index: 11; }
@@ -1702,7 +1703,7 @@ body {
       z-index: 2;
       pointer-events: none; }
     .header-info .search-header .search-field {
-      margin-right: 28px;
+      margin-right: 7px;
       position: relative;
       width: 288px;
       border: 0;
@@ -1720,84 +1721,82 @@ body {
 .notification-container {
   position: relative; }
   .notification-container .notification-icon {
-    position: relative; }
-    .notification-container .notification-icon.has-arrow-down:after {
-      position: absolute;
-      right: 5px;
-      bottom: -25px;
-      content: '';
-      border: 7px solid;
-      border-color: transparent transparent #fff transparent;
-      z-index: 1002; }
-  .notification-container .icon-bell {
     position: relative;
-    color: #fff;
-    font-size: 22px;
-    cursor: pointer; }
-  .notification-container .circle {
-    position: absolute;
-    top: 0;
-    min-width: 8px;
-    min-height: 8px;
-    border-radius: 50%;
-    background-color: #ff4242;
-    color: #fff;
-    font-size: 10px;
-    padding: 2px 4px;
-    left: 12px; }
-  .notification-container .notification-list {
-    position: absolute;
-    top: 46px;
-    right: -23px;
-    z-index: 1000;
-    width: 320px;
-    max-height: 352px;
-    overflow: auto;
-    border: 1px solid #ddd;
-    background-color: #fff;
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.2); }
-    .notification-container .notification-list::-webkit-scrollbar-track {
-      background-color: #ededed; }
-    .notification-container .notification-list::-webkit-scrollbar {
-      width: 10px; }
-    .notification-container .notification-list::-webkit-scrollbar-thumb {
-      border-radius: 5px;
-      background-color: #bababa; }
-
-.notification {
-  display: flex;
-  justify-content: space-between;
-  align-items: stretch;
-  flex-direction: column;
-  padding: 10px 20px 8px;
-  border-bottom: 1px solid #ddd;
-  font-size: 13px; }
-  .notification.-unread {
-    background-color: #f2f6ff; }
-    .notification.-unread .notification-header:before {
+    margin-right: 47px; }
+    .notification-container .notification-icon .icon-bell {
+      position: relative;
+      color: #fff;
+      font-size: 21px;
+      cursor: pointer; }
+    .notification-container .notification-icon .circle {
       position: absolute;
-      left: -12px;
-      top: 3px;
-      width: 6px;
-      height: 6px;
-      background-color: #ff4342;
+      top: -1px;
+      min-width: 14px;
+      min-height: 14px;
       border-radius: 50%;
-      content: ''; }
-  .notification .notification-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
-    padding-bottom: 2px; }
-  .notification .notification-title {
-    color: #2b4475;
-    font-weight: bold; }
-  .notification .notification-content {
-    line-height: 18px;
-    color: #545454; }
-  .notification .notification-date {
-    font-size: 10px;
-    color: #8a8a8a; }
+      background-color: #FF5F5F;
+      color: #fff;
+      font-size: 10px;
+      left: 12px;
+      padding-top: 2px;
+      padding-left: 1px; }
+  .notification-container .notification-list {
+    display: none;
+    position: absolute;
+    top: 41px;
+    right: 4px;
+    z-index: 1000;
+    width: 350px;
+    min-height: 38px;
+    max-height: 441px;
+    overflow: auto;
+    border: 1px solid #E5E5E5;
+    box-sizing: border-box;
+    box-shadow: 0px 7px 25px rgba(0, 0, 0, 0.3);
+    border-radius: 2px;
+    background: #FFFFFF; }
+    .notification-container .notification-list .notification-title {
+      border-bottom: 1px solid #EBEBEB;
+      max-height: 30px;
+      padding: 8px; }
+      .notification-container .notification-list .notification-title h3 {
+        font-weight: 600;
+        font-size: 12px;
+        line-height: 14px;
+        color: #777777; }
+    .notification-container .notification-list .notification-content {
+      padding: 7px; }
+      .notification-container .notification-list .notification-content .no-notification {
+        display: block;
+        font-size: 13px;
+        line-height: 16px;
+        color: #474747;
+        padding: 2px 15px; }
+      .notification-container .notification-list .notification-content .unread, .notification-container .notification-list .notification-content .read {
+        margin-bottom: 6px;
+        padding: 7px 9px;
+        border-radius: 3px; }
+        .notification-container .notification-list .notification-content .unread a, .notification-container .notification-list .notification-content .read a {
+          font-size: 13px;
+          line-height: 16px;
+          color: #474747; }
+          .notification-container .notification-list .notification-content .unread a .name, .notification-container .notification-list .notification-content .read a .name {
+            color: #2053D9; }
+      .notification-container .notification-list .notification-content ul li:last-child {
+        margin-bottom: 0; }
+      .notification-container .notification-list .notification-content .unread {
+        background: #E0F3FF; }
+        .notification-container .notification-list .notification-content .unread a {
+          font-weight: bold; }
+      .notification-container .notification-list .notification-content .read {
+        background: #F2F5F7;
+        font-weight: normal; }
+      .notification-container .notification-list .notification-content .datetime {
+        display: block;
+        font-size: 10px;
+        line-height: 12px;
+        color: #737373;
+        margin-top: 2px; }
 
 .page-title {
   padding: 1rem 1.6rem;

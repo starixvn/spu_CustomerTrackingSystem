@@ -3,6 +3,10 @@ var unreadMsgCounter = 0;
 var top20Messages = null;
 
 function notification() {
+    let domElements = {
+        notificationIcon: $('#notification-icon'),
+        notificationList: $('#notification-list')
+    };
     
     String.prototype.format = function () {
         var a = this;
@@ -81,6 +85,13 @@ function notification() {
 
     getUnreadMessageCount();
     setInterval(getUnreadMessageCount, 3000);
+
+    $(document).ready(function () {
+        domElements.notificationIcon.on('click', function () {
+            console.log('aa');
+            domElements.notificationList.toggle();
+        });        
+    });
 }
 
 $(notification);

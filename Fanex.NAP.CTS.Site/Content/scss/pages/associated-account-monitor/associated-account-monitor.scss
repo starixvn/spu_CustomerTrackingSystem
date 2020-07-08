@@ -55,6 +55,7 @@
         font-weight: normal;
         line-height: 16px;
         padding: 0px 10px;
+        text-transform: none;
     }
 }
 
@@ -164,7 +165,8 @@
                 width: 80px;
                 border: 1px solid #545454;
                 color: #545454;
-                &:hover{
+
+                &:hover {
                     color: #fff;
                 }
             }

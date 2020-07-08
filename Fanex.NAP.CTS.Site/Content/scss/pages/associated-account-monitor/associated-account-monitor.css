@@ -39,7 +39,8 @@
     font-size: 13px !important;
     font-weight: normal;
     line-height: 16px;
-    padding: 0px 10px; }
+    padding: 0px 10px;
+    text-transform: none; }
 
 .asociatedAccountMonitorTable {
   width: 100% !important; }

@@ -9,6 +9,75 @@
             </label>
         }
     </div>
+    <div class="notification-container">
+        <div id="notification-icon" class="notification-icon">
+            <span class="icon-bell"></span>
+            <span class="circle">12</span>
+        </div>
+        
+        <div id="notification-list"  class="notification-list">
+            <div class="notification-title">
+                <h3>
+                    NOTIFICATION
+                </h3>
+            </div>
+            <div class="notification-content">
+                @*<span class="no-notification">
+                    There is no notification
+                </span>*@
+                <ul>
+                    <li class="unread">
+                        <a href=""> Account <span class="name">Sample1</span> has 3 new associated accounts.</a>
+                        <span class="datetime">
+                            19 Dec 2020 9:59 AM
+                        </span>
+                    </li>
+                    <li class="unread">
+                        <a href=""> Account <span class="name">Sample2</span> has 3 new associated accounts.</a>
+                        <span class="datetime">
+                            19 Dec 2020 9:59 AM
+                        </span>
+                    </li>
+                    <li class="unread">
+                        <a href=""> Account <span class="name">Sample3</span> has 3 new associated accounts.</a>
+                        <span class="datetime">
+                            19 Dec 2020 9:59 AM
+                        </span>
+                    </li>
+                    <li class="unread">
+                        <a href=""> Account <span class="name">Sample4</span> has 3 new associated accounts.</a>
+                        <span class="datetime">
+                            19 Dec 2020 9:59 AM
+                        </span>
+                    </li>
+                    <li class="unread">
+                        <a href=""> Account <span class="name">Sample5</span> has 3 new associated accounts.</a>
+                        <span class="datetime">
+                            19 Dec 2020 9:59 AM
+                        </span>
+                    </li>
+                    <li class="unread">
+                        <a href=""> Account <span class="name">Sample6</span> has 3 new associated accounts.</a>
+                        <span class="datetime">
+                            19 Dec 2020 9:59 AM
+                        </span>
+                    </li>
+                    <li class="read">
+                        <a href=""> Account <span class="name">Sample7</span> has 3 new associated accounts.</a>
+                        <span class="datetime">
+                            19 Dec 2020 9:59 AM
+                        </span>
+                    </li>
+                    <li class="read">
+                        <a href=""> Account <span class="name">Sample8</span> has 3 new associated accounts.</a>
+                        <span class="datetime">
+                            19 Dec 2020 9:59 AM
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
     <div class="username">
         <span>
             @User.Identity.GetUserName()

@@ -43,7 +43,9 @@
             //RegisterSuspiciousCustomerBundles(bundles);
             //RegisterSuspiciousCustomerDetailsBundles(bundles);
             //RegisterScannedOfficeIpBundles(bundles);
-            //RegisterNotificationBundles(bundles);
+
+            RegisterNotificationBundles(bundles);
+
             //RegisterDailyDataCaptureBundles(bundles);
             //RegisterCheckBetReportBundles(bundles);
             //RegisterCustomerMonitorBundles(bundles);
