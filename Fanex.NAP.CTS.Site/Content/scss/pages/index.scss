@@ -12,6 +12,7 @@
 @import "../components/tables";
 @import "../components/popup";
 @import "../components/loading";
+@import "../components/notification";
 
 html {
     font-size: 10px;
@@ -328,6 +329,7 @@ body {
         position: relative;
 
         .icon-bell {
+            display:block;
             position: relative;
             color: #fff;
             font-size: 21px;

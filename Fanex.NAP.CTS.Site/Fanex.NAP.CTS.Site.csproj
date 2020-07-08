@@ -425,6 +425,7 @@
     <Content Include="Content\images\expand_all.png" />
     <Content Include="Content\images\flagged_device_by_evidence.png" />
     <Content Include="Content\images\graph_view.png" />
+    <None Include="Content\scss\components\_notification.scss" />
     <Content Include="Content\scss\fonts\Fraud-Sensor\fonts\CTS.svg" />
     <Content Include="Content\scss\images\chevron-down.png" />
     <Content Include="Content\scss\images\loading.svg" />
