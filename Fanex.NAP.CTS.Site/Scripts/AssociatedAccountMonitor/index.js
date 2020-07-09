@@ -17,6 +17,7 @@
         spanAddAssociationUserName : $('#spanAddAssociationUserName'),
         spanAddAssociationUserNameMaxTag : $('#spanAddAssociationUserNameMaxTag'),
         spanAddAssociationChangeHidden: $('#spanAddAssociationChangeHidden'),
+        searchInput: $('#username'),
         maxTags : 50
     };
 
@@ -90,8 +91,7 @@
                 //{ data: obj => obj.Username },
                 { data: obj => obj.Username2 },
                 { data: obj => obj.AccountStatus },
-                { data: obj => () => { return "<span class=subcriberGroup data-subcriber-group=" + obj.SubscriberName + ">" + obj.SubscriberName + "</span>"; } },
-                //{ data: obj => obj.SubscriberName },
+                { data: obj => obj.SubscriberName },
                 { data: obj => obj.Remark },
                 { data: obj => obj.CreatedBy },
                 { data: obj => obj.CreatedTime},
@@ -130,6 +130,13 @@
         });
     }
 
+    function SearchAssociatedAccount() {
+        var value = domElements.searchInput.val().toLowerCase();
+
+        $("#asociatedAccountMonitorTable > tbody > tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    }
 
     function RefreshFilter(userName, subscriberName) {
         $('option', domElements.cbbSubscriber).filter(function () {
@@ -562,6 +569,8 @@
         domElements.btncancelusername.on('click', () => {
             domElements.divAddUsername.dialog('close');
         });
+
+        domElements.searchInput.keyup('onkeyup', () => SearchAssociatedAccount());
     });
 }
 

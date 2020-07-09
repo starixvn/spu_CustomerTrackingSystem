@@ -161,7 +161,6 @@
     <Compile Include="Account\UpdateAccountExceptionModel.cs" />
     <Compile Include="Account\UpdatePlaceEvidenceModel.cs" />
     <Compile Include="Account\ValidateManualAssociationMultipleModel.cs" />
-    <Compile Include="AssociatedAccountMonitor\AssociatedAccountFilterModel.cs" />
     <Compile Include="AssociatedAccountMonitor\AssociatedAccountMonitorModel.cs" />
     <Compile Include="AssociatedAccountMonitor\CustProfilerModel.cs" />
     <Compile Include="AssociatedAccountMonitor\ValidateAssociatedAccountModel.cs" />
