@@ -103,7 +103,7 @@ body {
 
         .sub-menu-item > .link:hover {
             background-color: #ddd;
-            color: #fff;
+            color: #333;
         }
 
         &.-small {
@@ -799,6 +799,7 @@ body {
 
                     &:hover {
                         background: transparent;
+                        color: white;
                     }
                 }
             }

@@ -1606,7 +1606,7 @@ body {
       font-size: 13px; }
     .main-menu .menu-item .sub-menu .sub-menu-item > .link:hover, .header-info .username .sub-menu .sub-menu-item > .link:hover {
       background-color: #ddd;
-      color: #fff; }
+      color: #333; }
     .main-menu .menu-item .sub-menu.-small, .header-info .username .sub-menu.-small {
       min-width: 160px; }
 
@@ -2129,7 +2129,8 @@ body {
         color: #9AA2B5;
         padding-left: 44px; }
         .main-menu .menu-item .sub-menu .sub-menu-item > .link:hover {
-          background: transparent; }
+          background: transparent;
+          color: white; }
     .main-menu .menu-item:target .sub-menu {
       height: auto;
       max-height: 15rem;
