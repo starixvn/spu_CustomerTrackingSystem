@@ -1860,11 +1860,12 @@ body {
         margin-top: 2px; }
 
 .page-title {
-  padding: 1rem 1.6rem;
+  padding: 8px 16px;
   text-transform: uppercase;
   color: #DF5615;
   background: #DDE2E6;
-  font-size: 1.6rem; }
+  font-size: 1.6rem;
+  line-height: 18px; }
 
 .title {
   margin-bottom: 15px;

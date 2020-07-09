@@ -5,7 +5,7 @@
     padding-top: 0; }
     .content .associated-account-monitor .group {
       padding-right: 0;
-      margin-right: 16px; }
+      margin-right: 6px; }
     .content .associated-account-monitor .fixed-header {
       padding-top: 16px;
       position: sticky;
@@ -17,30 +17,49 @@
       position: sticky;
       position: -webkit-sticky;
       z-index: 9;
-      top: 173px;
+      top: 116px;
       transition: top 0.01s linear; }
 
-.form-filter .width-180 {
-  min-width: 180px; }
+.top-header .width-200 {
+  min-width: 200px; }
 
-.form-filter label {
-  font-size: 1.3rem;
-  color: #474747; }
+.top-header .search-username {
+  margin-top: -2px;
+  height: 28px;
+  position: relative; }
+  .top-header .search-username:before {
+    content: "\e919";
+    font-family: 'Fraud-Sensor' !important;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 35px;
+    font-size: 18px;
+    color: #868686;
+    text-align: left;
+    z-index: 2;
+    pointer-events: none; }
+  .top-header .search-username .username {
+    width: 100%;
+    font-style: italic;
+    font-size: 14px;
+    line-height: 17px;
+    color: #868686;
+    border: 1px solid #C4C4C4;
+    border-radius: 3px;
+    padding: 6px;
+    padding-left: 30px; }
+    .top-header .search-username .username::placeholder {
+      color: #868686;
+      font-style: italic;
+      font-size: 14px; }
 
-.form-filter input {
-  font-size: 1.4rem;
-  color: #474747;
-  border: 1px solid #E5E5E5;
-  border-radius: 2px; }
-
-.top-header {
-  margin-top: 4px; }
-  .top-header .button-primary-outline {
-    font-size: 13px !important;
-    font-weight: normal;
-    line-height: 16px;
-    padding: 0px 10px;
-    text-transform: none; }
+.top-header .button-primary-outline {
+  font-size: 13px !important;
+  font-weight: normal;
+  line-height: 16px;
+  padding: 0px 10px;
+  text-transform: none; }
 
 .asociatedAccountMonitorTable {
   width: 100% !important; }
@@ -49,7 +68,7 @@
     position: -webkit-sticky;
     z-index: 9;
     transition: top 0.01s linear;
-    top: 173px; }
+    top: 115px; }
   .asociatedAccountMonitorTable thead tr th {
     border: 1px solid #C4C4C4;
     line-height: 19px;

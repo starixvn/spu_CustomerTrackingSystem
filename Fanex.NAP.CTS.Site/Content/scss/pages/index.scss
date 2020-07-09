@@ -440,11 +440,12 @@ body {
 
 // Content
 .page-title {
-    padding: 1rem 1.6rem;
+    padding: 8px 16px;
     text-transform: uppercase;
     color: #DF5615;
     background: #DDE2E6;
     font-size: 1.6rem;
+    line-height: 18px;
 }
 
 
@@ -753,6 +754,10 @@ body {
 
         .header-right {
             justify-content: flex-end;
+        }
+
+        .logo {
+            margin-left: 35px;
         }
     }
 
