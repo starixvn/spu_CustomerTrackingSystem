@@ -532,4 +532,18 @@
             DbName="MySQL.CTS_Admin" />
   </Function>
 
+  <Function name="AssociatedAccountMonitor">
+    <Setting Key="CTS_DC_InsertAssociatedAccountMonitorValidation"
+             SpName="CTS_DC_InsertAssociatedAccountMonitorValidation"
+             DbName="MySQL.CTS_DataCenter"/>
+
+    <Setting Key="CTS_DC_InsertAssociatedAccountMonitor"
+          SpName="CTS_DC_InsertAssociatedAccountMonitor"
+          DbName="MySQL.CTS_DataCenter"/>
+
+    <Setting Key="CTS_DC_RPT_AssociatedAccountMonitor"
+          SpName="CTS_DC_RPT_AssociatedAccountMonitor"
+          DbName="MySQL.CTS_DataCenter"/>
+  </Function>
+
 </Functions>

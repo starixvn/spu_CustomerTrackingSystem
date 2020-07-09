@@ -91,6 +91,9 @@
     <Compile Include="Api\MultiCustomerEvidencesInsertCriteria.cs" />
     <Compile Include="Api\FlaggedAccountSelectCriteria.cs" />
     <Compile Include="Api\FlaggedAccountInsertCriteria.cs" />
+    <Compile Include="AssociatedAccountMonitor\AssociatedAccountMonitorGetCriteria.cs" />
+    <Compile Include="AssociatedAccountMonitor\InsertAssociatedAccountCriteria.cs" />
+    <Compile Include="AssociatedAccountMonitor\ValidateAssociatedAccountCriteria.cs" />
     <Compile Include="CheckBetReport\CheckBetReportGetCriteria.cs" />
     <Compile Include="CheckBetReport\CheckBetReportUpdateNoteCriteria.cs" />
     <Compile Include="CTSUser\InsertCTSUserCriteria.cs" />
