@@ -104,9 +104,8 @@ namespace Fanex.NAP.CTS.Controller
         [HttpPost]
         public ActionResult GetAssociatedAccountMonitor()
         {
-            var result = new AssociatedAccountMonitorDetailViewModel();
+            var result = new List<AssociatedAccountMonitorViewModel>();
             var totalItem = 0;
-            //.toString("MMM dd, yyyy")
 
             var associatedAccounts = _associatedAccountService.GetAssociatedAccountMonitor();
 
@@ -117,7 +116,6 @@ namespace Fanex.NAP.CTS.Controller
                 result = GetResultAccountData(associatedAccounts);
             }
 
-
             return Json(new
             {
                 recordsTotal = totalItem,
@@ -126,31 +124,43 @@ namespace Fanex.NAP.CTS.Controller
             }, JsonRequestBehavior.AllowGet);
         }
 
-
-        private AssociatedAccountMonitorDetailViewModel GetResultAccountData(IEnumerable<AssociatedAccountMonitorModel> associatedAccounts)
+        [NapAuth(FunctionKey = FSFunctionKeys.AssociatedAccountMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        public ActionResult RemoveAssociatedaccount(long ctsCustId)
         {
-            var result = new AssociatedAccountMonitorDetailViewModel();
-
-            result.AssociatedAccount = associatedAccounts;
-            var tasks = new List<Task>
+            if (ctsCustId <= 0)
             {
-                Task.Run(() =>
+                return Json(new
                 {
-                    result.Subscriber = associatedAccounts.Select(c=>c.SubscriberName).Distinct();
+                    errorCode = -100,
+                    errorMessage = "Invalid parameter"
+                }, JsonRequestBehavior.AllowGet);
+            }
 
-                    //result.AssociatedAccount..GroupList = ticketsModel.GroupBy(x => new { x.GroupID })
-                    //     .Select(s => new DetailGroup { GroupId = s.Key.GroupID, GroupName = s.Key.GroupID.ToString() }).Distinct();
-                }),
+            var result = _associatedAccountService.RemoveAssociatedAccount(ctsCustId, CurrentSession.UserId);
 
-                Task.Run(() =>
+            return Json(new
+            {
+                errorCode = result.ErrorCode,
+                errorMessage = result.ErrorMsg
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        private List<AssociatedAccountMonitorViewModel> GetResultAccountData(IEnumerable<AssociatedAccountMonitorModel> associatedAccounts)
+        {
+            var result = associatedAccounts.Select(x => new AssociatedAccountMonitorViewModel
                 {
-                    result.UserName =  associatedAccounts.Select(c=>c.Username).Distinct();
-                    //     .Select(s => new DetailGroup { GroupId = s.Key.GroupID, GroupName = s.Key.GroupID.ToString() }).Distinct();
-                }),
-            };
+                    CTSCustId = x.CTSCustId,
+                    CustId = x.CustId,
+                    Username = x.Username,
+                    Login = x.Username2,
+                    AccountStatus = x.AccountStatus,
+                    SubscriberName = x.SubscriberName,
+                    Remark = x.Remark,
+                    CreatedBy = x.CreatedBy,
+                    CreatedTime = x.CreatedTime.ToString("MMM dd, yyyy")
+                }).OrderByDescending(x => x.Username);
 
-            Task.WhenAll(tasks.ToArray()).Wait();
-            return result;
+            return result.ToList();
         }
 
         private ValidatedAcssociatedAccountViewModel GetInvalidOrDuplicated(IEnumerable<ValidateAssociatedAccountModel> userNameList, bool isException)

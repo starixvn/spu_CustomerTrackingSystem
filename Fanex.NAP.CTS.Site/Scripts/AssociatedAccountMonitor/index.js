@@ -1,7 +1,7 @@
 ﻿function AssociatedAccountMonitor() {
     let dataTable;
     let userID;
-    let IsHostPermission;
+    let IsHostPermission = true;   //TODO
     let validCTSCustID;
 
     let domElements = {
@@ -38,11 +38,8 @@
                 },
                 dataFilter: function (response) {
                     var json = jQuery.parseJSON(response);
-
-                    RefreshFilter(json.data.UserName, json.data.Subscriber);
-
                     var newJson = {};
-                    newJson.data = json.data.AssociatedAccount;
+                    newJson.data = json.data;
                     newJson.recordsTotal = json.recordsTotal;
                     newJson.recordsFiltered = json.recordsFiltered;
 
@@ -87,8 +84,7 @@
                 {
                     render: function (data, type, full, meta) { return meta.row + 1; }
                 },
-                { data: obj => () => { return "<span class=currency data-currency-username=" + obj.Username + ">" + obj.Username + "</span>"; } },
-                //{ data: obj => obj.Username },
+                { data: obj => obj.Username },
                 { data: obj => obj.Username2 },
                 { data: obj => obj.AccountStatus },
                 { data: obj => obj.SubscriberName },
@@ -96,58 +92,57 @@
                 { data: obj => obj.CreatedBy },
                 { data: obj => obj.CreatedTime},
                 {
-                //    'data': 'action',
-                //    createdCell: (cell, _, row) => {
-                //        let title = 'Confirmation';
-                //        let text = '<div class="popup - content">Do you want remove <strong>CN88$Kevin </strong> from Associated Account Monitor list? </div>';
-                //        $('.sub-icon.-delete', cell).click(() =>
-                //            CreateFormConfirmation(text, title, function () {
-
-                //            })
-                //        );
-                //    }
                     data: obj => () => {
-                        var html = '<span class="sub-icon - delete' + (!IsHostPermission ? ' disabled"' : '') + '" title="Remove Category"><i class="icon-delete"></i></span>';
-    
-                        return obj.IsEnabledDelete ? html : '';
+                        return html = '<span class="sub-icon - delete' + (!IsHostPermission ? ' disabled"' : '') + '" title="Remove Category"><i class="icon-delete"></i></span>';
                     }, createdCell: (cell, _, row) => {
                         if (IsHostPermission) {
                             $('.icon-delete', cell).click(() => {
-                                common.showConfirmation("Do you want to remove category <b>" + row.CategoryName + "</b> for <b>" + username + "</b> ?", function () {
-                                    RemoveCustomerClassification(custId, ctsCustId, row.CategoryId);
+                                common.showConfirmation("Do you want to remove username <b>" + row.Username + "</b> ?", function () {
+                                    RemoveAssociatedAccount(row.CTSCustId);
                                 });
-
-                            });
-
-                            $('.icon-edit', cell).click(() => {
-                                EditCategory(custId, ctsCustId, subscriberId, row.CategoryName, row.CategoryId, row.SportGroupIdList, row.Remark);
                             });
                         }
                     }
-
                 }
             ]
+        });
+    }
+
+    function RemoveAssociatedAccount(ctsCustId) {
+        var url = common.modifyRelativeUrl('/AssociatedAccountMonitor/RemoveAssociatedaccount');
+        var params = {};
+        params.ctsCustId = ctsCustId;
+
+        $.ajax(url, {
+            type: 'POST',
+            data: params,
+            success: function (response) {
+                if (response.errorCode === 0) {
+                    common.showSuccess('Remove the associated account successful!',1000);
+                    LoadGrid();
+                    RefreshTotalAssociatedAccount(); 
+                }
+                else {
+                    common.showError('Remove the associated account fail!');
+                }
+            },
+            complete: function () {
+            }
         });
     }
 
     function SearchAssociatedAccount() {
         var value = domElements.searchInput.val().toLowerCase();
 
-        $("#asociatedAccountMonitorTable > tbody > tr").filter(function () {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-        });
-    }
+        $("#asociatedAccountMonitorTable > tbody").addClass("search");
 
-    function RefreshFilter(userName, subscriberName) {
-        $('option', domElements.cbbSubscriber).filter(function () {
-            return $(this).val() !== '';
-        }).remove();
-
-        subscriberName.map(function (x) {
-            domElements.cbbSubscriber.append(`<option selected value='${x}'>${x}</option>`);
-        });
-
-        domElements.cbbSubscriber.multiselect("refresh");
+        var rex = new RegExp(value, 'i');
+            $('.search tr ').hide();
+            $('.search tr ').filter(function (i, v) {
+                //Get the 1rd column object here which is userNamecolumn
+                var $t = $(this).children(":eq(" + "1" + ")");
+                return rex.test($t.text());
+            }).show();
 
     }
 
@@ -163,52 +158,6 @@
         dataTable
             ? dataTable.ajax.reload(null, true)
             : dataTable = RenderGrid();
-    }
-
-    function CreateFormConfirmation(html, title, yesCallback, noCallback) {
-
-        var formconfirmation = $("#formconfirmation").dialog({
-            autoOpen: false,
-            modal: true,
-            draggable: true,
-            resizable: false,
-        });
-
-        formconfirmation.empty().html(html).dialog("open");
-
-        var yesBtn =
-        {
-            'class': 'button btn-cancel-outline',
-            text: "Yes",
-            click: function () {
-                formconfirmation.dialog("close");
-
-                if (yesCallback !== null) {
-                    yesCallback(this)
-                }
-            }
-        };
-
-        var noBtn =
-        {
-            'class': 'button -add',
-            text: "No",
-            click: function () {
-                formconfirmation.dialog("close");
-
-                if (noCallback !== null) {
-                    noCallback()
-                }
-            }
-        }
-
-        formconfirmation.dialog("option", {
-            dialogClass: "dialog-confirmation-associated",
-            title: title,
-            buttons: [yesBtn, noBtn],
-            width: 460,
-            close: noCallback
-        });
     }
 
     function ValidateManualAssociationMultiple(textTagRemove) {   //TODO input then space, enter press ??? -> still not handle
@@ -385,7 +334,7 @@
             let isTextUnicode = IsTextUnicode($(tagName.tag).text());
 
             if (!isTextUnicode) {
-                inputTagUsername.tagify().data('tagify').removeTags(tagName.tag);
+                domElements.inputTagUsername.tagify().data('tagify').removeTags(tagName.tag);
             }
             else if (maxCountTags > 0) {
                 let $tag = $(tagName.tag);
@@ -495,44 +444,13 @@
         });
     } 
 
-    function InitMultiselectFilter() {
-        domElements.cbbSubscriber.multiselect({
-            menuWidth: 180,
-            menuHeight: 300,
-            selectedText: "# of # selected",
-            noneSelectedText: "Selected Ass Group",
-            click: function (event, ui) { RefreshGridByFilter("td span.subcriberGroup", "data-subcriber-group", ui.value, ui.checked); },
-            checkAll: function () { RefreshAllGridByFilter("td span.subcriberGroup", "data-subcriber-group", true); },
-            uncheckAll: function () { RefreshAllGridByFilter("td span.subcriberGroup", "data-subcriber-group", false); }
-        }).multiselectfilter({
-            width: 217,
-            placeholder: '',
-            label: ''
-        });
-    }
-
     function Initial() {
-        InitMultiselectFilter();
-
-        domElements.cbbSubscriber.multiselect({
-            header: ['checkAll', 'uncheckAll'],
-            menuWidth: 170,
-            menuHeight: 300,
-            selectedText: "# of # selected", 
-            noneSelectedText: "4 of 4 selected"
-        }).multiselectfilter({
-            width: 217,
-            placeholder: '',
-            label: ''
-        });
-
         LoadGrid(); 
     }
 
     $(document).ready(function () {
-        Initial();
-
         GetCustProfile();
+        Initial();     
 
         domElements.btnAddUsername.on('click', function () {
             domElements.txtAsscomment.val('');

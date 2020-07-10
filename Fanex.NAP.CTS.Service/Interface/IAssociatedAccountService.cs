@@ -12,5 +12,7 @@ namespace Fanex.NAP.CTS.Service.Interface
         DBResult InsertAssociatedAccountMultiple(int userID, string custIDList, string remark);
 
         IEnumerable<AssociatedAccountMonitorModel> GetAssociatedAccountMonitor();
+
+         DBResult RemoveAssociatedAccount(long ctsCustId, int userID);
     }
 }

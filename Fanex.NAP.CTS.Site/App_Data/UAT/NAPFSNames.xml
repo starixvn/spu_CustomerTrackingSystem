@@ -548,6 +548,10 @@
     <Setting Key="CTS_DC_RPT_AssociatedAccountMonitor"
           SpName="CTS_DC_RPT_AssociatedAccountMonitor"
           DbName="MySQL.CTS_DataCenter"/>
+
+    <Setting Key="CTS_DC_RemoveAssociatedAccountMonitor"
+      SpName="CTS_DC_RemoveAssociatedAccountMonitor"
+      DbName="MySQL.CTS_DataCenter"/>
   </Function>
   
 </Functions>

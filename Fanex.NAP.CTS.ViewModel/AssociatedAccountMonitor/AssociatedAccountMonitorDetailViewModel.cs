@@ -7,20 +7,24 @@ using System.Threading.Tasks;
 
 namespace Fanex.NAP.CTS.ViewModel.AssociatedAccountMonitor
 {
-    public class AssociatedAccountMonitorDetailViewModel
+    public class AssociatedAccountMonitorViewModel
     {
-        public AssociatedAccountMonitorDetailViewModel()
-        {
-            AssociatedAccount = Enumerable.Empty<AssociatedAccountMonitorModel>();
-            UserName = Enumerable.Empty<string>();
-            Subscriber = Enumerable.Empty<string>();
-        }
+        public long CTSCustId { get; set; }
 
-        public IEnumerable<AssociatedAccountMonitorModel> AssociatedAccount { get; set; }
+        public long CustId { get; set; }
 
-        public IEnumerable<string> UserName { get; set; }
+        public string Username { get; set; }
 
-        public IEnumerable<string> Subscriber { get; set; }
+        public string Login { get; set; }
 
+        public string AccountStatus { get; set; }
+
+        public string SubscriberName { get; set; }
+
+        public string Remark { get; set; }
+
+        public string CreatedBy { get; set; }
+
+        public string CreatedTime { get; set; }
     }
 }
