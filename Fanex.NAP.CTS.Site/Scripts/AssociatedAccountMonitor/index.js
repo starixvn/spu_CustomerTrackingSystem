@@ -1,7 +1,7 @@
 ﻿function AssociatedAccountMonitor() {
     let dataTable;
     let userID;
-    let IsHostPermission = true;   //TODO
+    let IsHostPermission;  
     let validCTSCustID;
 
     let domElements = {
@@ -25,7 +25,7 @@
         var url = common.modifyRelativeUrl('AssociatedAccountMonitor/GetAssociatedAccountMonitor');
 
         return domElements.asociatedAccountMonitorTable.DataTable({
-            serverSide: true,
+            serverSide: false,
             dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
             pagingType: "full_numbers",
             ajax: {
@@ -437,12 +437,19 @@
             success: function (response) {
                 userID = response.CustID;
                 IsHostPermission = response.IsHostPermission;
+                IsDisableButton();
             },
             error: function (errMsg) {
                 console.log(errMsg);
             }
         });
     } 
+
+    function IsDisableButton() {
+        if (!IsHostPermission) {
+            domElements.btnAddUsername.prop('disabled', true);           
+        }
+    }
 
     function Initial() {
         LoadGrid(); 
@@ -478,7 +485,6 @@
                     $(".asociatedAccountMonitorTable  thead tr:first-child th").css({ "top": height_filter + 108 })
                     $(".wrapper-info-table").css({ "top": height_filter + 96 })
                 }
-                console.log(scroll);
             });
         });
 
