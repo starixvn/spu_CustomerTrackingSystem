@@ -474,18 +474,6 @@
                     $(this).dialog('close');
                 }
             });
-
-            // handle freeze header
-            $(window).scroll(function (event) {
-                var scroll = $(window).scrollTop();
-                if (scroll >= 96) {
-                    let height_filter = $(".form-filter").height() + 16;
-                    console.log(height_filter);
-
-                    $(".asociatedAccountMonitorTable  thead tr:first-child th").css({ "top": height_filter + 108 })
-                    $(".wrapper-info-table").css({ "top": height_filter + 96 })
-                }
-            });
         });
 
         domElements.btnsaveusername.on('click', () => InsertManualAssociationMultiple(userID));

@@ -136,7 +136,7 @@
     }
 }
 
-.dialog-confirmation-associated {
+.dialog-confirmation {
     min-width: 600px;
 
     .ui-dialog-titlebar {
@@ -183,13 +183,30 @@
                 padding: 3px 30px;
             }
 
+            .-add {
+                background: #FFFFFF;
+                border: 1px solid #545454;
+                border-radius: 2px;
+                color: #545454;
+                margin-right: 6px;
+
+                &:hover {
+                    background-color: #545454;
+                    color: #fff;
+                }
+            }
+
             .btn-cancel-outline {
+                background: #396EF8;
+                border-radius: 2px;
                 width: 80px;
                 border: 1px solid #545454;
                 color: #545454;
+                color: #fff;
+                margin-right: -2px;
 
                 &:hover {
-                    color: #fff;
+                    background-color: #5081ff;
                 }
             }
         }

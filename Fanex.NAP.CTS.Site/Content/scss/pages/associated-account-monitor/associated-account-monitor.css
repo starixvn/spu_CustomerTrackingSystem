@@ -97,39 +97,52 @@
   .asociatedAccountMonitorTable .icon-delete:before {
     color: #FF0000; }
 
-.dialog-confirmation-associated {
+.dialog-confirmation {
   min-width: 600px; }
-  .dialog-confirmation-associated .ui-dialog-titlebar {
+  .dialog-confirmation .ui-dialog-titlebar {
     padding: 11px;
     padding-left: 14px;
     background-color: #1D2E4F; }
-    .dialog-confirmation-associated .ui-dialog-titlebar .ui-dialog-title {
+    .dialog-confirmation .ui-dialog-titlebar .ui-dialog-title {
       font-size: 16px;
       line-height: 18px;
       margin: 0; }
-    .dialog-confirmation-associated .ui-dialog-titlebar .ui-button .ui-icon {
+    .dialog-confirmation .ui-dialog-titlebar .ui-button .ui-icon {
       margin-left: -15px; }
-      .dialog-confirmation-associated .ui-dialog-titlebar .ui-button .ui-icon:before {
+      .dialog-confirmation .ui-dialog-titlebar .ui-button .ui-icon:before {
         font-size: 21px; }
-  .dialog-confirmation-associated .ui-dialog-content {
+  .dialog-confirmation .ui-dialog-content {
     padding-top: 24px;
     padding-bottom: 16px; }
-    .dialog-confirmation-associated .ui-dialog-content .content {
+    .dialog-confirmation .ui-dialog-content .content {
       margin-top: 0;
       font-size: 16px;
       line-height: 19px;
       color: #545454;
       letter-spacing: 0.3px; }
-  .dialog-confirmation-associated .ui-dialog-buttonpane {
+  .dialog-confirmation .ui-dialog-buttonpane {
     padding-bottom: 16px;
     padding-top: 3px; }
-    .dialog-confirmation-associated .ui-dialog-buttonpane .ui-dialog-buttonset .button {
+    .dialog-confirmation .ui-dialog-buttonpane .ui-dialog-buttonset .button {
       font-size: 13px !important;
       font-weight: normal;
       padding: 3px 30px; }
-    .dialog-confirmation-associated .ui-dialog-buttonpane .ui-dialog-buttonset .btn-cancel-outline {
+    .dialog-confirmation .ui-dialog-buttonpane .ui-dialog-buttonset .-add {
+      background: #FFFFFF;
+      border: 1px solid #545454;
+      border-radius: 2px;
+      color: #545454;
+      margin-right: 6px; }
+      .dialog-confirmation .ui-dialog-buttonpane .ui-dialog-buttonset .-add:hover {
+        background-color: #545454;
+        color: #fff; }
+    .dialog-confirmation .ui-dialog-buttonpane .ui-dialog-buttonset .btn-cancel-outline {
+      background: #396EF8;
+      border-radius: 2px;
       width: 80px;
       border: 1px solid #545454;
-      color: #545454; }
-      .dialog-confirmation-associated .ui-dialog-buttonpane .ui-dialog-buttonset .btn-cancel-outline:hover {
-        color: #fff; }
+      color: #545454;
+      color: #fff;
+      margin-right: -2px; }
+      .dialog-confirmation .ui-dialog-buttonpane .ui-dialog-buttonset .btn-cancel-outline:hover {
+        background-color: #5081ff; }
