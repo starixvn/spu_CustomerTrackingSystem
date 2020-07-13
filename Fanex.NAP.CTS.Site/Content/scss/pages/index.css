@@ -2210,3 +2210,8 @@ body {
     z-index: 9; }
     .cover-bg.visible {
       display: block; } }
+
+.none-pointer {
+  opacity: 0.2;
+  pointer-events: none;
+  cursor: not-allowed; }
