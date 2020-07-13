@@ -235,6 +235,10 @@
     <Setting Key="FS_Recipients_Delete"
      SpName="FS_Recipients_Delete"
      DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
+
+    <Setting Key="CTS_DC_GetAssociatedAccountNewAssNotification"
+        SpName="CTS_DC_GetAssociatedAccountNewAssNotification_xtest"
+        DbName="MySQL.CTS_DataCenter"/>
   </Function>
 
   <Function Name="OfficeIPReport">
@@ -538,19 +542,19 @@
 
   <Function name="AssociatedAccountMonitor">
     <Setting Key="CTS_DC_InsertAssociatedAccountMonitorValidation"
-             SpName="CTS_DC_InsertAssociatedAccountMonitorValidation_xtest"
-             DbName="MySQL.CTS_DataCenter"/>
+      SpName="CTS_DC_InsertAssociatedAccountMonitorValidation_xtest"
+      DbName="MySQL.CTS_DataCenter"/>
 
     <Setting Key="CTS_DC_InsertAssociatedAccountMonitor"
       SpName="CTS_DC_InsertAssociatedAccountMonitor_xtest"
       DbName="MySQL.CTS_DataCenter"/>
 
     <Setting Key="CTS_DC_RPT_AssociatedAccountMonitor"
-          SpName="CTS_DC_RPT_AssociatedAccountMonitor"
-          DbName="MySQL.CTS_DataCenter"/>
+      SpName="CTS_DC_RPT_AssociatedAccountMonitor_xtest"
+      DbName="MySQL.CTS_DataCenter"/>
 
     <Setting Key="CTS_DC_RemoveAssociatedAccountMonitor"
-      SpName="CTS_DC_RemoveAssociatedAccountMonitor"
+      SpName="CTS_DC_RemoveAssociatedAccountMonitor_xtest"
       DbName="MySQL.CTS_DataCenter"/>
   </Function>
   

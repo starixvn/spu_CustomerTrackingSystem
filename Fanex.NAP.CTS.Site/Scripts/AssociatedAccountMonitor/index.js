@@ -97,7 +97,7 @@
                     }, createdCell: (cell, _, row) => {
                         if (IsHostPermission) {
                             $('.icon-delete', cell).click(() => {
-                                common.showConfirmation("Do you want to remove username <b>" + row.Username + "</b> ?", function () {
+                                common.showConfirmation("<div class='popup - content'>Do you want remove <strong>" + row.Username + "</strong> from Associated Account Monitor list? </div>", function () {
                                     RemoveAssociatedAccount(row.CTSCustId);
                                 });
                             });

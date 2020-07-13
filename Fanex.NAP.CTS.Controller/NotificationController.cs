@@ -15,21 +15,12 @@
         }
 
         [HttpGet]
-        public JsonResult GetAllMessages()
+        public JsonResult GetAllMessages(bool isRead)
         {
             var userId = CurrentSession.UserId;
-            var messages = _notificationService.Get(userId).ToList();
+            var messages = _notificationService.Get(userId, isRead).ToList();
 
             return Json(messages, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpGet]
-        public JsonResult ReCheckNotification()
-        {
-            var userId = CurrentSession.UserId;
-            var unreadMessageCounter = _notificationService.GetUnreadMessageCounter(userId);
-
-            return Json(new { UnreadMessageCounter = unreadMessageCounter }, JsonRequestBehavior.AllowGet);
         }
     }
 }

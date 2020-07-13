@@ -1,19 +1,25 @@
 ﻿namespace Fanex.NAP.CTS.Criteria.Notification
 {
+    using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class UserMessageGetCriteria : CriteriaBase
     {
-        public int CustId { get; set; }
+        [SpParam(SqlParamName = "ip_UserID")]
+        public int UserID { get; set; }
 
-        public UserMessageGetCriteria(int custId)
+        [SpParam(SqlParamName = "ip_IsViewed")]
+        public int IsRead { get; set; }
+
+        public UserMessageGetCriteria(int userId, int isRead)
         {
-            CustId = custId;
+            UserID = userId;
+            IsRead = isRead;
         }
 
         public override string GetSettingKey()
         {
-            return "FS_Tbl_UserMessage_Get";
+            return "CTS_DC_GetAssociatedAccountNewAssNotification";
         }
 
         public override bool IsValid()

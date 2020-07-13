@@ -1,11 +1,14 @@
-﻿var showNotification = false;
-var unreadMsgCounter = 0;
-var top20Messages = null;
+﻿let unreadMsgCounter = 0; 
+let messages;
+let isNotificationListOpen = false;
 
 function notification() {
     let domElements = {
         notificationIcon: $('#notification-icon'),
-        notificationList: $('#notification-list')
+        notificationList: $('#notification-list'),
+        notificationContent: $('#notification-content'),
+        notificationBell: $('#icon-bell'),
+        circle: $('#circle')
     };
     
     String.prototype.format = function () {
@@ -18,80 +21,65 @@ function notification() {
 
     function getMessage()
     {
-        var url = common.modifyRelativeUrl("/Notification/GetAllMessages");
+        var messagesHtmlString = "";
+        var htmlTemplateRead = "<li class='unread'> <a href=''> Account <span class='name'>{0}</span> has {1} new associated accounts.</a> <span class='datetime'> {2}</span ></li >";
+        for (var i = 0; i < unreadMsgCounter; i++) {
+            messagesHtmlString += htmlTemplateRead.format(messages[i].UserName, messages[i].NewAssocitionCount, messages[i].CreatedDateString);
+        }
 
-        $.get(url, function (json) {
-            top20Messages = json;
-
-            $('#noti-unread-msg').hide();
-
-            var messagesHtmlString = "";
-            var messagesCount = top20Messages.length;
-            var htmlTemplateRead = "<div class='notification'><div class='notification-header'><div class='notification-title'>{0}</div> <div class='notification-date'>{1}</div></div><div class='notification-content'>{2}</div></div>";
-            var htmlTemplateUnRead = "<div class='notification -unread'><div class='notification-header'><div class='notification-title'>{0}</div> <div class='notification-date'>{1}</div></div><div class='notification-content'>{2}</div></div>";
-            for (var i = 0; i < messagesCount; i++) {
-                var message = top20Messages[i];
-                if (message.IsViewed == true) {
-                    messagesHtmlString += htmlTemplateRead.format(message.FraudCaseName, message.LogDateString, message.MessageContent);
-                }
-                else {
-                    messagesHtmlString += htmlTemplateUnRead.format(message.FraudCaseName, message.LogDateString, message.MessageContent);
-                }
-            }
-
-            $('#notificationContainer').html(messagesCount > 0 ? messagesHtmlString : "<div class='notification'>There is no message.</div>");
-            $('#notificationContainer').show();
-            $('.notification-icon').addClass('has-arrow-down');
-        });
+        console.log(unreadMsgCounter);
+        domElements.notificationContent.html(unreadMsgCounter > 0 ? messagesHtmlString : "<div class='no-notification'>There is no notification.</div>");
+        $('.notification-icon').addClass('has-arrow-down');
     }
 
     function getUnreadMessageCount()
     {
-        var url = common.modifyRelativeUrl("/Notification/ReCheckNotification");
-
-        $.get(url, function (json) {
-            unreadMsgCounter = json.UnreadMessageCounter;
-
-            if (unreadMsgCounter <= 0) {
-                $('#noti-unread-msg').hide();
-            }
-            else {
-                $('#noti-unread-msg').show();
-                $('#noti-unread-msg').html(unreadMsgCounter);
-            }
-        });
+        if ($('#notification-list').is(':visible')) {
+            isNotificationListOpen = true
+            GetNewNotification(true);
+        }
+        else
+           GetNewNotification(false);      
     }
 
-    $('#notificationContainer').hide();
-    $('#notification-icon').off("click");    
-    $('#notification-icon').on("click", function (event) {
-        $('#noti-unread-msg').hide();
-        if (!$('#notificationContainer').is(':visible')) {
-            getMessage();
-        }
-        else {
-            $('#notificationContainer').hide();
-            $('.notification-icon').removeClass('has-arrow-down');
-        }
+    domElements.notificationIcon.off("click");
+    domElements.notificationIcon.on("click", function (event) {
+          GetNewNotification(true);
     });
 
-    $(document).mouseup(function (e) {
-        if (e.target.id != $("#notificationContainer").attr('id') && !$("#notificationContainer").has(e.target).length &&
-            e.target.id != $("#notification-icon").attr('id') && !$("#notification-icon").has(e.target).length) {
-            $("#notificationContainer").hide();
-            $('.notification-icon').removeClass('has-arrow-down');
-        }
-    });
 
     getUnreadMessageCount();
-    setInterval(getUnreadMessageCount, 3000);
+    setInterval(getUnreadMessageCount, 500000);
 
     $(document).ready(function () {
         domElements.notificationIcon.on('click', function () {
-            console.log('aa');
             domElements.notificationList.toggle();
+
         });        
     });
+
+    function GetNewNotification(isRead)
+    {
+        var url = common.modifyRelativeUrl("/Notification/GetAllMessages");
+
+        $.get(url, { isRead: isRead}, function (json) {
+            unreadMsgCounter = json.length;
+            messages = json
+            getMessage();
+
+            if (unreadMsgCounter <= 0
+                || (isNotificationListOpen == true && isRead == true && !$('#notification-list').is(':visible'))) {
+                domElements.notificationBell.remove('bell-shake');
+                domElements.circle.hide();  
+                isNotificationListOpen = false;
+            }
+            else {
+                domElements.notificationBell.addClass('bell-shake');
+                domElements.circle.html(unreadMsgCounter);
+                domElements.circle.show();
+            }
+        });
+    }
 }
 
 $(notification);

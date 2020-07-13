@@ -7,18 +7,16 @@
 
     public class NotificationService : INotificationService
     {
-        public int GetUnreadMessageCounter(int custId)
+        //public int GetUnreadMessageCounter(int custId)
+        //{
+        //    var result = DataService.GetData<Message>(new UserMessageGetCriteria(custId));
+
+        //    return result.UnreadMessageCounter;
+        //}
+
+        public IEnumerable<Message> Get(int custId, bool isRead)
         {
-            var criteria = new UserMessageUnreadCounterGetCriteria(custId);
-
-            var result = DataService.GetSingle<dynamic>(criteria);
-
-            return result.UnreadMessageCounter;
-        }
-
-        public IEnumerable<Message> Get(int custId)
-        {
-            return DataService.GetData<Message>(new UserMessageGetCriteria(custId));
+            return DataService.GetData<Message>(new UserMessageGetCriteria(custId, (isRead == true)? 1 : 0 ));
         }
     }
 }
