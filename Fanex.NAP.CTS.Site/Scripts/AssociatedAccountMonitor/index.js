@@ -93,13 +93,16 @@
                 { data: obj => obj.CreatedTime},
                 {
                     data: obj => () => {
-                        return html = '<span class="sub-icon - delete' + (!IsHostPermission ? ' disabled"' : '') + '" title="Remove Category"><i class="icon-delete"></i></span>';
+                        return html = '<span class="sub-icon - delete' + (!IsHostPermission ? ' disabled"' : '') + '" id="sub-icon" title="Remove Category"><i class="icon-delete"></i></span>';
                     }, createdCell: (cell, _, row) => {
                         if (IsHostPermission) {
                             $('.icon-delete', cell).click(() => {
+                                $('td #sub-icon').addClass('none-pointer');
                                 common.showConfirmation("<div class='popup - content'>Do you want remove <strong>" + row.Username + "</strong> from Associated Account Monitor list? </div>", function () {
                                     RemoveAssociatedAccount(row.CTSCustId);
-                                });
+                                }, () =>{
+                                        $('td #sub-icon').removeClass('none-pointer');
+                                 });
                             });
                         }
                     }

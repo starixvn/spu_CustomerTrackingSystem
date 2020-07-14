@@ -1,6 +1,7 @@
 ﻿let unreadMsgCounter = 0; 
 let messages;
-let isNotificationListOpen = false;
+let isRefreshNewMessage = false;
+let isFirstRead = true;
 
 function notification() {
     let domElements = {
@@ -19,42 +20,42 @@ function notification() {
         return a
     }
 
-    function getMessage()
+    function GetMessage()
     {
-        var messagesHtmlString = "";
+        var messagesHtmlString = "<ul>";
         var htmlTemplateRead = "<li class='unread'> <a href=''> Account <span class='name'>{0}</span> has {1} new associated accounts.</a> <span class='datetime'> {2}</span ></li >";
         for (var i = 0; i < unreadMsgCounter; i++) {
             messagesHtmlString += htmlTemplateRead.format(messages[i].UserName, messages[i].NewAssocitionCount, messages[i].CreatedDateString);
         }
-
-        console.log(unreadMsgCounter);
+        messagesHtmlString += "</ul>";
         domElements.notificationContent.html(unreadMsgCounter > 0 ? messagesHtmlString : "<div class='no-notification'>There is no notification.</div>");
         $('.notification-icon').addClass('has-arrow-down');
     }
 
     function getUnreadMessageCount()
     {
-        if ($('#notification-list').is(':visible')) {
-            isNotificationListOpen = true
-            GetNewNotification(true);
-        }
-        else
-           GetNewNotification(false);      
+        isFirstRead = true;
+        GetNewNotification(false);   
+        isRefreshNewMessage = true;
     }
 
     domElements.notificationIcon.off("click");
     domElements.notificationIcon.on("click", function (event) {
-          GetNewNotification(true);
+        domElements.notificationBell.removeClass('bell-shake');
+        domElements.circle.hide(); 
+        ChangeStatusMessage();
     });
 
 
     getUnreadMessageCount();
-    setInterval(getUnreadMessageCount, 500000);
+    setInterval(getUnreadMessageCount, 300000);
 
     $(document).ready(function () {
         domElements.notificationIcon.on('click', function () {
+            isFirstRead = false;
+            isRefreshNewMessage = false;
+            GetNewNotification(true); 
             domElements.notificationList.toggle();
-
         });        
     });
 
@@ -62,23 +63,37 @@ function notification() {
     {
         var url = common.modifyRelativeUrl("/Notification/GetAllMessages");
 
-        $.get(url, { isRead: isRead}, function (json) {
-            unreadMsgCounter = json.length;
-            messages = json
-            getMessage();
-
-            if (unreadMsgCounter <= 0
-                || (isNotificationListOpen == true && isRead == true && !$('#notification-list').is(':visible'))) {
-                domElements.notificationBell.remove('bell-shake');
-                domElements.circle.hide();  
-                isNotificationListOpen = false;
+        $.get(url, { isRead: isRead }, function (json) {
+            if (isRefreshNewMessage) {
+                unreadMsgCounter = json.length;
+                messages = json
+                GetMessage();
             }
-            else {
-                domElements.notificationBell.addClass('bell-shake');
-                domElements.circle.html(unreadMsgCounter);
-                domElements.circle.show();
-            }
+  
+            SetupBellNotification()
         });
+    }
+
+    function SetupBellNotification()
+    {
+        if (unreadMsgCounter <= 0) {
+            domElements.notificationBell.removeClass('bell-shake');
+            domElements.circle.hide();
+        }
+        else if (isRefreshNewMessage){
+            domElements.circle.html(unreadMsgCounter);
+            domElements.circle.show();
+            domElements.notificationBell.addClass('bell-shake');
+
+        }
+    }
+
+    function ChangeStatusMessage()
+    {
+        if (!isFirstRead)
+        {
+            $("li").removeClass("unread").addClass("read");
+        }
     }
 }
 
