@@ -65,11 +65,15 @@ function notification() {
 
         $.get(url, { isRead: isRead }, function (json) {
             if (isRefreshNewMessage) {
+                if (json.length != unreadMsgCounter && json.length > 0) {
+                    NotifyToDesktop(json.length);
+                }
+
                 unreadMsgCounter = json.length;
                 messages = json
                 GetMessage();
             }
-  
+
             SetupBellNotification()
         });
     }
@@ -93,6 +97,35 @@ function notification() {
         if (!isFirstRead)
         {
             $("li").removeClass("unread").addClass("read");
+        }
+    }
+
+    function NotifyToDesktop(notificationCounter) {
+        if (!window.Notification)
+            console.log('Browser does not support notifications.');
+        else
+            GenerateMessageNotify(notificationCounter);
+    }
+
+    function GenerateMessageNotify(notificationCounter) {
+        var mess = notificationCounter > 1 ? notificationCounter + " new associated accounts were added." : notificationCounter + " new associated accounts was added.";
+        console.log(mess);
+        if (Notification.permission === 'granted') {
+            new Notification('CTS Notification', {
+                body: mess
+            });
+        } else {
+            Notification.requestPermission().then(function (p) {
+                if (p === 'granted') {
+                    new Notification('CTS Notification', {
+                        body: mess
+                    });
+                } else {
+                    console.log('User blocked notifications.');
+                }
+            }).catch(function (error) {
+                console.error(error);
+            });
         }
     }
 }
