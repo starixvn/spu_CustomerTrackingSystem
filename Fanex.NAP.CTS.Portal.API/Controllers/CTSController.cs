@@ -63,8 +63,8 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
                 var associationList = new List<CustomerEvidence>();
 
                 // get association from graph
-                var associationByDeviceList = DbSessionFactory.Execute<CustomerEvidence>("GetAssociationByDeviceByCustIdAndLevel"
-                                        , new { CustIdList = convertedCustIdList, AssociatedLevel }).Data;
+                var associationByDeviceList = DbSessionFactory.Execute<CustomerEvidence>("GetAssociationByDeviceByCustIdLevel" + AssociatedLevel
+                                        , new { CustIdList = convertedCustIdList }).Data;
                 var associationByManualList = DbSessionFactory.Execute<CustomerEvidence>("GetAssociationByManualByCustIdAndLevel"
                                         , new { CustIdList = convertedCustIdList, AssociatedLevel }).Data;
                 associationList.AddRange(associationByDeviceList);

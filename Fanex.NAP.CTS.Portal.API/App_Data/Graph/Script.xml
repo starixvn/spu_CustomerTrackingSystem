@@ -10,7 +10,9 @@
     <GraphSetting Key="GetAssociationNLevelByCustId" SpName="GetAssociationNLevelByCustId" DbName="GraphDB" />
     <GraphSetting Key="GetShortestPath" SpName="GetShortestPath" DbName="GraphDB" />
     <GraphSetting Key="GetStatisticForCustomer" SpName="GetStatisticForCustomer" DbName="GraphDB" />
-    <GraphSetting Key="GetAssociationByDeviceByCustIdAndLevel" SpName="GetAssociationByDeviceByCustIdAndLevel" DbName="GraphDB" />
+    <GraphSetting Key="GetAssociationByDeviceByCustIdLevel0" SpName="GetAssociationByDeviceByCustIdLevel0" DbName="GraphDB" />
+    <GraphSetting Key="GetAssociationByDeviceByCustIdLevel1" SpName="GetAssociationByDeviceByCustIdLevel1" DbName="GraphDB" />
+    <GraphSetting Key="GetAssociationByDeviceByCustIdLevel2" SpName="GetAssociationByDeviceByCustIdLevel2" DbName="GraphDB" />
     <GraphSetting Key="GetAssociationByManualByCustIdAndLevel" SpName="GetAssociationByManualByCustIdAndLevel" DbName="GraphDB" />
     <GraphSetting Key="GroupCustomerByAssociationOneLevel" SpName="GroupCustomerByAssociationOneLevel" DbName="GraphDB" />    
   </Function>
