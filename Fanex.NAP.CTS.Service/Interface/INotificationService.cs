@@ -5,8 +5,6 @@
 
     public interface INotificationService
     {
-        //int GetUnreadMessageCounter(int custId);
-
         IEnumerable<Message> Get(int custId, bool isRead);
     }
 }

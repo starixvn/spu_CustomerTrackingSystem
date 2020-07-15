@@ -22,6 +22,7 @@
         public const string FormatDateToString_MMMddyyyy = "MMM dd, yyyy";
         public const string FormatDateToString_MMMddyyyyhhmmss = "MMM dd, yyyy HH:mm:ss";
         public const string FormatDateToString_MMMddyyyyhhmmsstt = "MMM dd, yyyy HH:mm:ss tt";
+        public const string FormatDateToString_MMMddyyyyhhmm = "MMM dd, yyyy H:mm";
 
         public const string CurrentSubscriberAssignmentsKey = "CurrentSubscriberAssignmentsKey";        
         public const string IsMasterSubscriberAssignmentKey = "IsMasterSubscriberAssignmentKey";
@@ -31,5 +32,13 @@
         public const string SettingEnvironmentLocalValue = "1";
         public const string SettingSiteIdKey = "SiteId";
         public const string SettingSiteIdValue = "108";
+
+        public const string INVALID_PARAMETERS_ERROR = "Invalid parameter";
+
+        public const int VALID_INPUT = 0;
+        public const int DUPLICATED_INPUT = 1;
+        public const int DUPLICATED_DB = 2;
+        public const int NOT_EXIST = 3;
+        public const int INVALID_INPUT = 4;
     }
 }

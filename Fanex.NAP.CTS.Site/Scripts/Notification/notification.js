@@ -1,5 +1,5 @@
 ﻿let unreadMsgCounter = 0; 
-let messages;
+let messages = null;
 let isRefreshNewMessage = false;
 let isFirstRead = true;
 
@@ -45,10 +45,6 @@ function notification() {
         domElements.circle.hide(); 
         ChangeStatusMessage();
     });
-
-
-    getUnreadMessageCount();
-    setInterval(getUnreadMessageCount, 300000);
 
     $(document).ready(function () {
         domElements.notificationIcon.on('click', function () {
@@ -109,7 +105,6 @@ function notification() {
 
     function GenerateMessageNotify(notificationCounter) {
         var mess = notificationCounter > 1 ? notificationCounter + " new associated accounts were added." : notificationCounter + " new associated accounts was added.";
-        console.log(mess);
         if (Notification.permission === 'granted') {
             new Notification('CTS Notification', {
                 body: mess
@@ -128,6 +123,13 @@ function notification() {
             });
         }
     }
+
+    setInterval(getUnreadMessageCount, 300000);
+
+
+    $(document).ready(function () {
+        getUnreadMessageCount();
+    });
 }
 
 $(notification);

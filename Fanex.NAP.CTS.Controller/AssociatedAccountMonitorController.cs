@@ -1,17 +1,11 @@
 ﻿
 namespace Fanex.NAP.CTS.Controller
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Threading.Tasks;
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Resource.Consts;
-    using Fanex.NAP.CTS.Service;
-    using System.IO;
-    using System.Web;
     using System.Web.Mvc;
-    using Fanex.Logging;
     using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Configuration;
@@ -85,8 +79,6 @@ namespace Fanex.NAP.CTS.Controller
             return Json(resultInsert, JsonRequestBehavior.AllowGet);
         }
         
-       
-        
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AssociatedAccountMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult ValidateManualAssociationMultiple(string userNameList)
@@ -132,7 +124,7 @@ namespace Fanex.NAP.CTS.Controller
                 return Json(new
                 {
                     errorCode = -100,
-                    errorMessage = "Invalid parameter"
+                    errorMessage = Consts.INVALID_PARAMETERS_ERROR
                 }, JsonRequestBehavior.AllowGet);
             }
 
@@ -157,7 +149,7 @@ namespace Fanex.NAP.CTS.Controller
                     SubscriberName = x.SubscriberName,
                     Remark = x.Remark,
                     CreatedBy = x.CreatedBy,
-                    CreatedTime = x.CreatedTime.ToString("MMM dd, yyyy")
+                    CreatedTime = x.CreatedTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmm)
                 }).OrderByDescending(x => x.Username);
 
             return result.ToList();
@@ -168,9 +160,9 @@ namespace Fanex.NAP.CTS.Controller
             return new ValidatedAcssociatedAccountViewModel
             {
                 IsException = isException,
-                ValideCTSCustId = string.Join(",",userNameList.Where(x => x.CTSCustID.HasValue == true && x.AccountStatus == 0).Select(c=>c.CTSCustID)),
-                UserNameInvalidList = userNameList.Where(x => x.AccountStatus == 3 || x.AccountStatus == 4).Select(x => x.UserName),
-                UserNameDuplicatedList = userNameList.Where(x => x.AccountStatus == 1 || x.AccountStatus == 2).Select(x => x.UserName)
+                ValideCTSCustId = string.Join(",",userNameList.Where(x => x.CTSCustID.HasValue == true && x.AccountStatus == Consts.VALID_INPUT).Select(c=>c.CTSCustID)),
+                UserNameInvalidList = userNameList.Where(x => x.AccountStatus == Consts.NOT_EXIST || x.AccountStatus == Consts.INVALID_INPUT).Select(x => x.UserName),
+                UserNameDuplicatedList = userNameList.Where(x => x.AccountStatus == Consts.DUPLICATED_INPUT || x.AccountStatus == Consts.DUPLICATED_DB).Select(x => x.UserName)
             };
         }
 

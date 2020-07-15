@@ -4,6 +4,7 @@ using Fanex.NAP.CTS.Core;
 using Fanex.NAP.CTS.Criteria.AssociatedAccount;
 using Fanex.NAP.CTS.Criteria.AssociatedAccountMonitor;
 using Fanex.NAP.CTS.Model.AssociatedAccountMonitor;
+using Fanex.NAP.CTS.Resource.Consts;
 using Fanex.NAP.CTS.Service.Interface;
 using Fanex.NAP.CTS.ViewModel;
 using System;
@@ -48,7 +49,7 @@ namespace Fanex.NAP.CTS.Service.Implement
                 errorList.AddRange(userNameList.Select(x => new ValidateAssociatedAccountModel
                 {
                     UserName = x,
-                    AccountStatus = 5
+                    AccountStatus = Consts.INVALID_INPUT
                 }));
             }
 
