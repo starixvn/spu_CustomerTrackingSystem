@@ -187,6 +187,11 @@
         });
     }
 
+    function GetBettingStatistic() {
+        let chartTurnoverByBettype = new turnover_by_bettype();
+        chartTurnoverByBettype.DisplayChart();
+    }
+
     function CollapseExpandItem() {
         $("#account-detail-container .report-item h3").on('click', function () {
 
@@ -263,6 +268,7 @@
         CollapseExpandAll();
         CollapseExpandItem();
         GetAccountProfile();
+        GetBettingStatistic();
         GetCustomerTotalAssociation();
         LoadTransactionHistory();
         LoadCustomerCategory();

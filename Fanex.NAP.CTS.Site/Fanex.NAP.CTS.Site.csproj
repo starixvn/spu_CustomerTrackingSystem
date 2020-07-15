@@ -478,6 +478,12 @@
     <Content Include="Content\scss\pages\subscriber-assignment\subscriber-assignment.min.css">
       <DependentUpon>subscriber-assignment.css</DependentUpon>
     </Content>
+    <Content Include="Content\scss\vendors\highcharts\highcharts.css">
+      <DependentUpon>highcharts.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\scss\vendors\highcharts\highcharts.min.css">
+      <DependentUpon>highcharts.css</DependentUpon>
+    </Content>
     <Content Include="Content\scss\vendors\jquery-ui\base\tagify.css" />
     <Content Include="Content\scss\vendors\MultipleSelect\jquery.multiselect.css" />
     <Content Include="Content\scss\vendors\MultipleSelect\jquery.multiselect.filter.css" />
@@ -509,6 +515,7 @@
     <Content Include="images\graphrender\group.svg" />
     <Content Include="Scripts\Account\Associated\account-by-account.js" />
     <Content Include="Scripts\Account\Associated\graph.js" />
+    <Content Include="Scripts\Account\BettingStatistic\turnover-by-bettype.js" />
     <Content Include="Scripts\Account\ChainToEvidence\account-evidence.js" />
     <Content Include="Scripts\Account\ChainToEvidence\account-exceptions.js" />
     <Content Include="Scripts\Account\CustomerCategory\customer-category.js" />
@@ -870,6 +877,7 @@
     <Content Include="Scripts\Evidence\form-place-evidence.js" />
     <Content Include="Scripts\Evidence\form-exception.js" />
     <Content Include="Scripts\Evidence\form-retract-evidence.js" />
+    <Content Include="Scripts\highcharts\highcharts.js" />
     <Content Include="Scripts\Home\SearchPage.js" />
     <Content Include="Scripts\ImportEvidences\index.js" />
     <Content Include="Scripts\popoto\d3.min.js" />
@@ -892,6 +900,7 @@
     <Content Include="Views\ProblemAccountMonitor\Detail.cshtml" />
     <Content Include="Views\ImportEvidences\Index.cshtml" />
     <Content Include="Views\AssociatedAccountMonitor\Index.cshtml" />
+    <Content Include="Views\Account\BettingStatistic\TurnoverByBetType.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CoreBetList.css" />
@@ -1397,6 +1406,7 @@
     <Content Include="Content\scss\fonts\Fraud-Sensor\fonts\CTS.eot" />
     <Content Include="Content\scss\fonts\Fraud-Sensor\fonts\CTS.ttf" />
     <Content Include="Content\scss\fonts\Fraud-Sensor\fonts\CTS.woff" />
+    <Content Include="Content\scss\vendors\highcharts\highcharts.scss" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />
