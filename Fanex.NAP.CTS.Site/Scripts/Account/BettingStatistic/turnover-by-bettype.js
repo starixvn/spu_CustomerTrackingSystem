@@ -1,20 +1,21 @@
 ﻿function turnover_by_bettype() {
     this.DisplayChart = function () {
-        Highcharts.chart('container', {
+        Highcharts.chart('bet-type', {
             chart: {
                 type: 'bar'
             },
             title: {
-                text: 'Stacked bar chart'
+                text: 'Turnover By Bet Type'
             },
             xAxis: {
-                categories: ['Apples', 'Oranges', 'Pears', 'Grapes', 'Bananas']
+                categories: ['Handicap', 'Over/Under', 'Outright', 'Others'],
+                startOnTick: false,
+                endOnTick: false,
+                lineWidth: 0,
             },
             yAxis: {
                 min: 0,
-                title: {
-                    text: 'Total fruit consumption'
-                }
+                visible: false,
             },
             legend: {
                 reversed: true
@@ -25,14 +26,14 @@
                 }
             },
             series: [{
-                name: 'John',
-                data: [5, 3, 4, 7, 2]
+                name: 'None-Live',
+                data: [5, 3, 4, 7]
             }, {
-                name: 'Jane',
-                data: [2, 2, 3, 2, 1]
+                name: 'Live',
+                data: [2, 2, 3, 2]
             }, {
                 name: 'Joe',
-                data: [3, 4, 4, 2, 5]
+                data: [3, 4, 4, 2]
             }]
         });
     };

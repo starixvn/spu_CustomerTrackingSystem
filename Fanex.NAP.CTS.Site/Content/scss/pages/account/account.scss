@@ -7,6 +7,7 @@ $dangerousBackgroundColor_31_40: ( level-31: #00ff00, level-32: #ffff00, level-3
 $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-43: #ffff00, level-44: #9cf1fc, level-45: #ccc0da, level-46: #00ff00, level-47: #ffa500, level-48: #d8e4bc, level-49: #babd97, level-50: #000);
 
 @import "../../abstracts/variables";
+@import "../../components/charts";
 
 @mixin badge-label($color) {
     width: 6.2rem;

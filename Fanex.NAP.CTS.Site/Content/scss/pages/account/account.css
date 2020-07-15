@@ -1,4 +1,7 @@
-﻿.abnormal-level-0 {
+﻿.bar-stacked .highcharts-axis-line {
+  display: none; }
+
+.abnormal-level-0 {
   width: 6.2rem;
   padding: 2px 0;
   display: inline-block;
