@@ -1835,14 +1835,15 @@ body {
       position: absolute;
       top: -1px;
       min-width: 14px;
-      min-height: 14px;
-      border-radius: 50%;
+      height: 14px;
+      border-radius: 7px;
       background-color: #FF5F5F;
       color: #fff;
       font-size: 10px;
       left: 12px;
-      padding-top: 2px;
-      padding-left: 1px; }
+      padding: 0 3px;
+      text-align: center;
+      line-height: 14px; }
   .notification-container .notification-list {
     display: none;
     position: absolute;

@@ -1,6 +1,23 @@
 ﻿@using Microsoft.AspNet.Identity
 
-<div class="header-info">    
+<div class="header-info">
+    <div class="notification-container">
+        <div id="notification-icon" class="notification-icon">
+            <span class="icon-bell" id="icon-bell"></span>
+            <span class="circle" id="circle"><span class="plus hide">+</span></span>
+            
+        </div>
+
+        <div id="notification-list" class="notification-list">
+            <div class="notification-title">
+                <h3>
+                    NOTIFICATION
+                </h3>
+            </div>
+            <div class="notification-content" id="notification-content">
+            </div>
+        </div>
+    </div>
     <div class="username">
         <span>
             @User.Identity.GetUserName()
