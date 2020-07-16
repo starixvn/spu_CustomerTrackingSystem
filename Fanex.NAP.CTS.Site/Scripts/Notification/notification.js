@@ -27,14 +27,17 @@ function notification() {
         var htmlTemplateRead = "<li class='read'> <a href=''> Account <span class='name'>{0}</span> has {1} new associated accounts.</a> <span class='datetime'> {2}</span ></li >";
         var htmlTemplateUnRead = "<li class='unread'> <a href=''> Account <span class='name'>{0}</span> has {1} new associated accounts.</a> <span class='datetime'> {2}</span ></li >";
 
-        for (var i = 0; i < msgCounter; i++) {
-            if (messages[i].IsSeen) {
-                messagesHtmlString += htmlTemplateRead.format(messages[i].UserName, messages[i].NewAssocitionCount, messages[i].CreatedDateString);
-            }
-            else {
-                messagesHtmlString += htmlTemplateUnRead.format(messages[i].UserName, messages[i].NewAssocitionCount, messages[i].CreatedDateString);
+        if (msgCounter != null) {
+            for (var i = 0; i < msgCounter; i++) {
+                if (messages[i].IsSeen) {
+                    messagesHtmlString += htmlTemplateRead.format(messages[i].UserName, messages[i].NewAssocitionCount, messages[i].CreatedDateString);
+                }
+                else {
+                    messagesHtmlString += htmlTemplateUnRead.format(messages[i].UserName, messages[i].NewAssocitionCount, messages[i].CreatedDateString);
+                }
             }
         }
+
         messagesHtmlString += "</ul>";
         domElements.notificationContent.html(msgCounter > 0 ? messagesHtmlString : "<div class='no-notification'>There is no notification.</div>");
         $('.notification-icon').addClass('has-arrow-down');
@@ -65,13 +68,17 @@ function notification() {
             type: 'GET',
             data: { aMaxAssociationID: aMaxAssociationID },
             success: function (json) {
-                CheckDifferentCurrentAndPreviousMessages(json);
-                SetUnReadCounterToCookie(json.unReadMessageCounter);
-                maxAssociationId = json.maxAssociationID;
-                messages = json.messages;
-                msgCounter = json.messageCounter;
-                GetMessage();
-                SetupBellNotification();
+                if (!CheckValid(json)) {
+                    ReCheckin();
+                } else {
+                    CheckDifferentCurrentAndPreviousMessages(json);
+                    SetUnReadCounterToCookie(json.unReadMessageCounter);
+                    maxAssociationId = json.maxAssociationID;
+                    messages = json.messages;
+                    msgCounter = json.messageCounter;
+                    GetMessage();
+                    SetupBellNotification();
+                }   
             },
             complete: function () {
                 if (GetUnReadFlagFromCookie() == "true") {
@@ -88,33 +95,6 @@ function notification() {
                 console.log(errMsg);
             }
         });
-
-        //$.get(url, { aMaxAssociationID: aMaxAssociationID }, function (json) {
-        //    //if (getunreadlistfromcookie() === undefined) {
-        //    //    setunreadlisttocookie(json.unreadlist);
-        //    //}
-
-        //    CheckDifferentCurrentAndPreviousMessages(json);
-        //    SetUnReadCounterToCookie(json.unReadMessageCounter);
-        //    maxAssociationId = json.maxAssociationID;
-        //    messages = json.messages;
-        //    msgCounter = json.messageCounter; 
-        //    GetMessage();
-        //    SetupBellNotification()
-        //})
-        //    .done(() => {
-        //        if (GetUnReadFlagFromCookie() == "true") {
-        //            NotifyToDesktop(unreadMsgCounter);
-        //            document.cookie = "isUnReadStatusChanged=false";
-        //       }
-        //    })
-        //    .fail(function (jqxhr, settings, ex) {
-        //        console.log('Get notification Error, ' + ex);
-        //        SetUnReadCounterToCookie(0);
-        //        msgCounter = 0;
-        //        messages = null;
-        //        GetMessage();
-        //    });
     }
 
     function SetupBellNotification()
@@ -165,16 +145,14 @@ function notification() {
         }
     }
 
-    setInterval(getUnreadMessageCount, 10000);
+    setInterval(getUnreadMessageCount, 3000);
 
     function CheckDifferentCurrentAndPreviousMessages(json)
     {
          if (json.unReadMessageCounter != GetUnReadCounterFromCookie()
-            && json.unReadMessageCounter != 0)
-            //&& !CompareUnreadList(json.unReadList, GetUnReadListFromCookie())) 
+             && json.unReadMessageCounter != 0)
         {
             document.cookie = "isUnReadStatusChanged=true";
-           // SetUnReadListToCookie(json.unReadList);
         }
         else {
             document.cookie = "isUnReadStatusChanged=false";
@@ -204,42 +182,41 @@ function notification() {
         return 0;
     }
 
-    function GetUnReadListFromCookie() {
-
-        if (document.cookie.split(';').some((item) => item.trim().startsWith('unReadList='))) {
-            return document.cookie
-                .split('; ')
-                .find(row => row.startsWith('unReadList'))
-                .split('=')[1];
-        }
-    }
-
     function SetUnReadCounterToCookie(counter) {
         document.cookie = "unReadCountFromCookie=" + counter;
         unreadMsgCounter = counter;
     }
 
-
-    function SetUnReadListToCookie(unReadList) {
-        document.cookie = "unReadList=" + unReadList;
-    }
-
-    function CompareUnreadList(unReadListFromAPI, unReadListFromCookie) {
-        var isTheSame = true;
-
-        if (GetUnReadListFromCookie() === undefined) {
+    function CheckValid(json) {
+        if (json.maxAssociationID === undefined
+            && json.unReadMessageCounter === undefined
+            && json.messageCounter === undefined)
+        {
             return false;
         }
-        for (var i in unReadListFromAPI) {
-            if (unReadListFromAPI[i] !== unReadListFromCookie[i]) {
-                isTheSame = false;
-                break;
-            }
-        }
 
-        return isTheSame;
+        return true;
     }
 
+    function ReCheckin() {
+        var urlRecheck = common.modifyRelativeUrl("UserLogin/Login/ReCheckLogin");
+        var urlLogout = common.modifyRelativeUrl("UserLogin/Login/LogOut");
+
+        $.ajax({
+            url: urlRecheck,
+            type: "POST",
+            dataType: "json",
+            success: function (result) {
+                if (result.IsKickedOut === "1") {
+                    //alert('You have logged in from another session or your login session has expired!');
+                    window.location.href = urlLogout;
+                }
+            },
+            error: function () {
+                location.reload();
+            }
+        });
+    }
 
     $(document).ready(function () {
         getUnreadMessageCount();

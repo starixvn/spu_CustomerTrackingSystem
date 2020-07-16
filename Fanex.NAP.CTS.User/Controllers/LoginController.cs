@@ -271,50 +271,42 @@
         {
             try
             {
-                if (!ConfigurationManager.AppSettings["Environment"].Equals("1"))
+                var maintenanceInfo = _maintenanceService.GetUnderMaintenanceTime();
+
+                if (maintenanceInfo.IsUnderMaintenanceTime)
                 {
-                    var maintenanceInfo = _maintenanceService.GetUnderMaintenanceTime();
-
-                    if (maintenanceInfo.IsUnderMaintenanceTime)
-                    {
-                        Logger.Log.Info("UM");
-
-                        return Json(new
-                        {
-                            IsKickedOut = "3"
-                        });
-                    }
-
-                    var siteStatus = _siteService.IsActivated(SiteId);
-
-                    if (!siteStatus)
-                    {
-                        return Json(new
-                        {
-                            IsKickedOut = "2"
-                        });
-                    }
-
-                    if (_currentSession == null || _currentSession.OnUserId == 0)
-                    {
-                        return Json(new
-                        {
-                            IsKickedOut = "1"
-                        });
-                    }
-
-                    var isKickedOut = _securityService.ReCheckIn(_currentSession.OnUserId, SiteId);
+                    Logger.Log.Info("UM");
 
                     return Json(new
                     {
-                        OnUserId = Convert.ToInt32(_currentSession.OnUserId),
-                        IsKickedOut = isKickedOut
+                        IsKickedOut = "3"
                     });
                 }
 
+                var siteStatus = _siteService.IsActivated(SiteId);
+
+                if (!siteStatus)
+                {
+                    return Json(new
+                    {
+                        IsKickedOut = "2"
+                    });
+                }
+
+                if (_currentSession == null || _currentSession.OnUserId == 0)
+                {
+                    return Json(new
+                    {
+                        IsKickedOut = "1"
+                    });
+                }
+
+                var isKickedOut = _securityService.ReCheckIn(_currentSession.OnUserId, SiteId);
+
                 return Json(new
                 {
-                    IsKickedOut = "0"
+                    OnUserId = Convert.ToInt32(_currentSession.OnUserId),
+                    IsKickedOut = isKickedOut
                 });
             }
             catch (Exception ex)
@@ -335,10 +327,13 @@
 
         private void DoSignOut()
         {
-            _securityService.Logout(_currentSession.OnUserId);
-            FormsAuthentication.SignOut();
-            _currentSession.ClearAll();
-            DeleteCookiesAndClearSession();
+            if (_currentSession.OnUserId != 0)
+            {
+                _securityService.Logout(_currentSession.OnUserId);
+                FormsAuthentication.SignOut();
+                _currentSession.ClearAll();
+                DeleteCookiesAndClearSession();
+            }
         }
 
         private void CreateUserMenu(User user)

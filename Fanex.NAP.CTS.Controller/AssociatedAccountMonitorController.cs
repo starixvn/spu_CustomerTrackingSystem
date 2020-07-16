@@ -99,7 +99,7 @@ namespace Fanex.NAP.CTS.Controller
             var result = new List<AssociatedAccountMonitorViewModel>();
             var totalItem = 0;
 
-            var associatedAccounts = _associatedAccountService.GetAssociatedAccountMonitor();
+            var associatedAccounts = _associatedAccountService.GetAssociatedAccountMonitor().OrderByDescending(x=> x.CreatedTime).ThenBy(x=> x.AccountStatus);
 
             if (associatedAccounts != null && associatedAccounts.Any())
             {
@@ -144,13 +144,13 @@ namespace Fanex.NAP.CTS.Controller
                     CTSCustId = x.CTSCustId,
                     CustId = x.CustId,
                     Username = x.Username,
-                    Login = x.Username2,
+                    Login = (x.Username2 != null) ? x.Username2 : x.Username,
                     AccountStatus = x.AccountStatus,
                     SubscriberName = x.SubscriberName,
                     Remark = x.Remark,
                     CreatedBy = x.CreatedBy,
                     CreatedTime = x.CreatedTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmm)
-                }).OrderByDescending(x => x.Username);
+                });
 
             return result.ToList();
         }

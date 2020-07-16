@@ -85,7 +85,7 @@
                     render: function (data, type, full, meta) { return meta.row + 1; }
                 },
                 { data: obj => obj.Username },
-                { data: obj => obj.Username2 },
+                { data: obj => obj.Login},
                 { data: obj => obj.AccountStatus },
                 { data: obj => obj.SubscriberName },
                 { data: obj => obj.Remark },
@@ -123,7 +123,6 @@
                 if (response.errorCode === 0) {
                     common.showSuccess('Remove the associated account successful!',1000);
                     LoadGrid();
-                    RefreshTotalAssociatedAccount(); 
                 }
                 else {
                     common.showError('Remove the associated account fail!');
@@ -163,7 +162,7 @@
             : dataTable = RenderGrid();
     }
 
-    function ValidateManualAssociationMultiple(textTagRemove) {   //TODO input then space, enter press ??? -> still not handle
+    function ValidateManualAssociationMultiple(textTagRemove) { 
         domElements.btnsaveusername.prop('disabled', false);
         let userNameList = GetInputUserName(textTagRemove);
 
@@ -259,7 +258,7 @@
                 type: 'POST',
                 data: params,
                 beforeSend: function () {
-                    domElements.divAddUsername.addClass("loading-block");  //TODO
+                    domElements.divAddUsername.addClass("loading-block"); 
                 },
                 success: function (response) {
                     if (response.ErrorCode === 0) {
@@ -267,7 +266,6 @@
                         domElements.divAddUsername.dialog('close');
                         setTimeout(() => {
                             LoadGrid();
-                            RefreshTotalAssociatedAccount();   //TODO
                         }, 1000);
                     } else {
                         BindResultValidatedManualAccountMultiple(response.ResultValidated);
@@ -282,21 +280,6 @@
             });
         }
     }
-
-    function RefreshTotalAssociatedAccount() {
-        $.ajax(common.modifyRelativeUrl('AssociatedAccountMonitor/GetAssociatedAccountMonitor'), {
-            type: 'POST',
-            data: {},
-            success: function (response) {
-                ////totalAssAccount = response.TotalAccounts;
-
-                //$('#totalAssAccount').html(response.TotalAccounts);
-            },
-            error: function (errMsg) {
-                console.log(errMsg);
-            }
-        });
-    } 
 
     function InitInputTagUsername() {
         domElements.spanAddAssociationUserNameMaxTag.text(domElements.maxTags);

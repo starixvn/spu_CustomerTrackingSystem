@@ -22,7 +22,7 @@
         public const string FormatDateToString_MMMddyyyy = "MMM dd, yyyy";
         public const string FormatDateToString_MMMddyyyyhhmmss = "MMM dd, yyyy HH:mm:ss";
         public const string FormatDateToString_MMMddyyyyhhmmsstt = "MMM dd, yyyy HH:mm:ss tt";
-        public const string FormatDateToString_MMMddyyyyhhmm = "MMM dd, yyyy H:mm";
+        public const string FormatDateToString_MMMddyyyyhhmm = "MMM dd, yyyy HH:mm";
 
         public const string CurrentSubscriberAssignmentsKey = "CurrentSubscriberAssignmentsKey";        
         public const string IsMasterSubscriberAssignmentKey = "IsMasterSubscriberAssignmentKey";
