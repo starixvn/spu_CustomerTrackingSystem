@@ -5,7 +5,7 @@
         <div id="notification-icon" class="notification-icon">
             <span class="icon-bell" id="icon-bell"></span>
             <span class="circle" id="circle"><span class="plus hide">+</span></span>
-            
+
         </div>
 
         <div id="notification-list" class="notification-list">
@@ -23,10 +23,12 @@
             @User.Identity.GetUserName()
             <i class="icon-chevron-down"></i>
         </span>
-        <ul class="sub-menu -small">            
+        <ul class="sub-menu -small">
             <li class="sub-menu-item">
                 <a href="~/UserLogin/Login/Logout" class="link">Log Out</a>
             </li>
         </ul>
     </div>
 </div>
+
+@Scripts.Render("~/notification")

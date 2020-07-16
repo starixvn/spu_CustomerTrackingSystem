@@ -24,9 +24,10 @@
             return Json(new
             {
                 messages,
-                maxAssociationID = (messages?.Count() > 0)?  messages.Max(c=>c.MaxNewAssociationID) : 0,
+                maxAssociationID = (unReadList?.Count() > 0)?  messages.Max(c=>c.MaxNewAssociationID) : 0,
                 unReadList,
-                unReadMessage = unReadList?.Count()
+                unReadMessageCounter = unReadList?.Count(),
+                messageCounter = messages?.Count()
             }, JsonRequestBehavior.AllowGet);
         }
     }

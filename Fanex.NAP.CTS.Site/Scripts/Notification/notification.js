@@ -1,8 +1,8 @@
 ﻿let unreadMsgCounter = 0; 
+let msgCounter = 0;
 let messages = null;
-let isRefreshNewMessage = false;
-let isFirstRead = true;
 let maxAssociationId = 0;
+let isNoticedAlready = false;
 
 function notification() {
     let domElements = {
@@ -10,7 +10,6 @@ function notification() {
         notificationList: $('#notification-list'),
         notificationContent: $('#notification-content'),
         notificationBell: $('#icon-bell'),
-        notificationPlusIcon: $('#plus-hide'),
         circle: $('#circle')
     };
     
@@ -28,7 +27,7 @@ function notification() {
         var htmlTemplateRead = "<li class='read'> <a href=''> Account <span class='name'>{0}</span> has {1} new associated accounts.</a> <span class='datetime'> {2}</span ></li >";
         var htmlTemplateUnRead = "<li class='unread'> <a href=''> Account <span class='name'>{0}</span> has {1} new associated accounts.</a> <span class='datetime'> {2}</span ></li >";
 
-        for (var i = 0; i < unreadMsgCounter; i++) {
+        for (var i = 0; i < msgCounter; i++) {
             if (messages[i].IsSeen) {
                 messagesHtmlString += htmlTemplateRead.format(messages[i].UserName, messages[i].NewAssocitionCount, messages[i].CreatedDateString);
             }
@@ -37,28 +36,23 @@ function notification() {
             }
         }
         messagesHtmlString += "</ul>";
-        domElements.notificationContent.html(unreadMsgCounter > 0 ? messagesHtmlString : "<div class='no-notification'>There is no notification.</div>");
+        domElements.notificationContent.html(msgCounter > 0 ? messagesHtmlString : "<div class='no-notification'>There is no notification.</div>");
         $('.notification-icon').addClass('has-arrow-down');
     }
 
     function getUnreadMessageCount()
     {
-        isFirstRead = true;
         GetNewNotification(0);   //Default GET to load para = 0
-        isRefreshNewMessage = true;
     }
 
     domElements.notificationIcon.off("click");
     domElements.notificationIcon.on("click", function (event) {
         domElements.notificationBell.removeClass('bell-shake');
         domElements.circle.hide(); 
-        ChangeStatusMessage();
     });
 
     $(document).ready(function () {
         domElements.notificationIcon.on('click', function () {
-            isFirstRead = false;
-            isRefreshNewMessage = false;
             GetNewNotification(maxAssociationId);        //Get to update
             domElements.notificationList.toggle();
         });        
@@ -67,42 +61,72 @@ function notification() {
     function GetNewNotification(aMaxAssociationID) {
         var url = common.modifyRelativeUrl("/Notification/GetAllMessages");
 
-        $.get(url, { aMaxAssociationID: aMaxAssociationID }, function (json) {
-            if (isRefreshNewMessage) {
-                //if (json.length != unreadMsgCounter && json.length > 0) {
-                //    NotifyToDesktop(json.length);
-                //}
-
-                unreadMsgCounter = json.unReadMessage;
+        $.ajax(url, {
+            type: 'GET',
+            data: { aMaxAssociationID: aMaxAssociationID },
+            success: function (json) {
+                CheckDifferentCurrentAndPreviousMessages(json);
+                SetUnReadCounterToCookie(json.unReadMessageCounter);
                 maxAssociationId = json.maxAssociationID;
                 messages = json.messages;
+                msgCounter = json.messageCounter;
                 GetMessage();
-            }
-
-            SetupBellNotification()
-        })
-            .done(() => {
-
-            })
-            .fail(function (jqxhr, settings, ex) {
+                SetupBellNotification();
+            },
+            complete: function () {
+                if (GetUnReadFlagFromCookie() == "true") {
+                    NotifyToDesktop(unreadMsgCounter);
+                    document.cookie = "isUnReadStatusChanged=false";
+                }
+            },
+            error: function (errMsg) {
                 console.log('Get notification Error, ' + ex);
-                unreadMsgCounter = 0;
+                SetUnReadCounterToCookie(0);
+                msgCounter = 0;
                 messages = null;
                 GetMessage();
-            });
+                console.log(errMsg);
+            }
+        });
+
+        //$.get(url, { aMaxAssociationID: aMaxAssociationID }, function (json) {
+        //    //if (getunreadlistfromcookie() === undefined) {
+        //    //    setunreadlisttocookie(json.unreadlist);
+        //    //}
+
+        //    CheckDifferentCurrentAndPreviousMessages(json);
+        //    SetUnReadCounterToCookie(json.unReadMessageCounter);
+        //    maxAssociationId = json.maxAssociationID;
+        //    messages = json.messages;
+        //    msgCounter = json.messageCounter; 
+        //    GetMessage();
+        //    SetupBellNotification()
+        //})
+        //    .done(() => {
+        //        if (GetUnReadFlagFromCookie() == "true") {
+        //            NotifyToDesktop(unreadMsgCounter);
+        //            document.cookie = "isUnReadStatusChanged=false";
+        //       }
+        //    })
+        //    .fail(function (jqxhr, settings, ex) {
+        //        console.log('Get notification Error, ' + ex);
+        //        SetUnReadCounterToCookie(0);
+        //        msgCounter = 0;
+        //        messages = null;
+        //        GetMessage();
+        //    });
     }
 
     function SetupBellNotification()
     {
         if (unreadMsgCounter <= 0) {
             domElements.notificationBell.removeClass('bell-shake');
-            domElements.notificationPlusIcon.hide();
             domElements.circle.hide();
         }
-        else if (isRefreshNewMessage) {
+        else {
             if (unreadMsgCounter > 99) {
-                domElements.circle.html("99");
-                domElements.notificationPlusIcon.show();
+                var readTempHTML = "<span class='plus' id='plus-hide'>99+</span>"
+                domElements.circle.html(readTempHTML);
             }
             else {
                 domElements.circle.html(unreadMsgCounter);
@@ -110,15 +134,6 @@ function notification() {
 
             domElements.circle.show();
             domElements.notificationBell.addClass('bell-shake');
-
-        }
-    }
-
-    function ChangeStatusMessage()
-    {
-        if (!isFirstRead)
-        {
-            $("li").removeClass("unread").addClass("read");
         }
     }
 
@@ -150,7 +165,81 @@ function notification() {
         }
     }
 
-    setInterval(getUnreadMessageCount, 300000);
+    setInterval(getUnreadMessageCount, 10000);
+
+    function CheckDifferentCurrentAndPreviousMessages(json)
+    {
+         if (json.unReadMessageCounter != GetUnReadCounterFromCookie()
+            && json.unReadMessageCounter != 0)
+            //&& !CompareUnreadList(json.unReadList, GetUnReadListFromCookie())) 
+        {
+            document.cookie = "isUnReadStatusChanged=true";
+           // SetUnReadListToCookie(json.unReadList);
+        }
+        else {
+            document.cookie = "isUnReadStatusChanged=false";
+        }
+    }
+
+    function GetUnReadFlagFromCookie() {
+
+        if (document.cookie.split(';').some((item) => item.trim().startsWith('isUnReadStatusChanged='))) {
+            return document.cookie
+                .split('; ')
+                .find(row => row.startsWith('isUnReadStatusChanged'))
+                .split('=')[1];
+        } 
+        return "false";
+    }
+
+    function GetUnReadCounterFromCookie() {
+
+        if (document.cookie.split(';').some((item) => item.trim().startsWith('unReadCountFromCookie='))) {
+            return document.cookie
+                .split('; ')
+                .find(row => row.startsWith('unReadCountFromCookie'))
+                .split('=')[1];
+        }
+
+        return 0;
+    }
+
+    function GetUnReadListFromCookie() {
+
+        if (document.cookie.split(';').some((item) => item.trim().startsWith('unReadList='))) {
+            return document.cookie
+                .split('; ')
+                .find(row => row.startsWith('unReadList'))
+                .split('=')[1];
+        }
+    }
+
+    function SetUnReadCounterToCookie(counter) {
+        document.cookie = "unReadCountFromCookie=" + counter;
+        unreadMsgCounter = counter;
+    }
+
+
+    function SetUnReadListToCookie(unReadList) {
+        document.cookie = "unReadList=" + unReadList;
+    }
+
+    function CompareUnreadList(unReadListFromAPI, unReadListFromCookie) {
+        var isTheSame = true;
+
+        if (GetUnReadListFromCookie() === undefined) {
+            return false;
+        }
+        for (var i in unReadListFromAPI) {
+            if (unReadListFromAPI[i] !== unReadListFromCookie[i]) {
+                isTheSame = false;
+                break;
+            }
+        }
+
+        return isTheSame;
+    }
+
 
     $(document).ready(function () {
         getUnreadMessageCount();
