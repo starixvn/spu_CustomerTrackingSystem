@@ -5,6 +5,6 @@
 
     public interface INotificationService
     {
-        IEnumerable<Message> Get(int custId, bool isRead);
+        IEnumerable<Message> Get(int custId, int maxAssociationID);
     }
 }

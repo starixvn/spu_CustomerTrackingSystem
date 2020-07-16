@@ -8,13 +8,13 @@
         [SpParam(SqlParamName = "ip_UserID")]
         public int UserID { get; set; }
 
-        [SpParam(SqlParamName = "ip_IsViewed")]
-        public int IsRead { get; set; }
+        [SpParam(SqlParamName = "ip_MaxNewAssID")]
+        public int MaxNewAssID { get; set; }
 
-        public UserMessageGetCriteria(int userId, int isRead)
+        public UserMessageGetCriteria(int userId, int aMaxNewAssID)
         {
             UserID = userId;
-            IsRead = isRead;
+            MaxNewAssID = aMaxNewAssID;
         }
 
         public override string GetSettingKey()

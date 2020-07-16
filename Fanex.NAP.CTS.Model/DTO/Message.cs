@@ -8,6 +8,8 @@
 
         public string UserName { get; set; }
 
+        public int NewAssocitionCount { get; set; }
+
         public DateTime CreatedDate { get; set; }
         
         public string CreatedDateString
@@ -18,6 +20,8 @@
             }
         }
 
-        public int NewAssocitionCount { get; set; }
+        public int MaxNewAssociationID { get; set; }
+
+        public bool IsSeen { get; set; }
     }
 }

@@ -15,12 +15,19 @@
         }
 
         [HttpGet]
-        public JsonResult GetAllMessages(bool isRead)
+        public JsonResult GetAllMessages(int aMaxAssociationID)
         {
             var userId = CurrentSession.UserId;
-            var messages = _notificationService.Get(userId, isRead).ToList();
+            var messages = _notificationService.Get(userId, aMaxAssociationID).ToList();
+            var unReadList = messages.Select(c => c).Where(x => x.IsSeen == false);
 
-            return Json(messages, JsonRequestBehavior.AllowGet);
+            return Json(new
+            {
+                messages,
+                maxAssociationID = (messages?.Count() > 0)?  messages.Max(c=>c.MaxNewAssociationID) : 0,
+                unReadList,
+                unReadMessage = unReadList?.Count()
+            }, JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -7,9 +7,9 @@
 
     public class NotificationService : INotificationService
     {
-        public IEnumerable<Message> Get(int custId, bool isRead)
+        public IEnumerable<Message> Get(int custId, int maxAssociationID)
         {
-            return DataService.GetData<Message>(new UserMessageGetCriteria(custId, (isRead == true)? 1 : 0 ));
+            return DataService.GetData<Message>(new UserMessageGetCriteria(custId, maxAssociationID));
         }
     }
 }
