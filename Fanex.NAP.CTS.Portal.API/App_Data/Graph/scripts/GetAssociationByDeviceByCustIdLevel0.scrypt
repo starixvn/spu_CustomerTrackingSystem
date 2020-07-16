@@ -1,6 +1,8 @@
-﻿MATCH (c:CTSCustomer)
+﻿WITH $AssociatedLevel AS level
+MATCH (c:CTSCustomer)
 WHERE c.CustID IN $CustIdList
-MATCH (c)-[:USED_DEVICE*0]-(c1:CTSCustomer)
-WITH DISTINCT c,c1
+MATCH (c)-[:USED_DEVICE*0]-(c1:CTSCustomer)-[r:HAS_EVIDENCE]->(e:Evidence)
+WITH DISTINCT c,c1,r,e,level
 WHERE c1.CustID IS NOT NULL AND NOT c1.CustID IN $CustIdList
-RETURN c.CustID AS Level0CustId, c1.CustID AS CustId
+RETURN c.CustID AS Level0CustId, c1.CustID AS CustId, e.EvidenceCode AS EvidenceCode, e.EvidenceName AS EvidenceName, level AS AssociatedLevel,r.CreatedDate AS CreatedDateInTicks
+LIMIT 100

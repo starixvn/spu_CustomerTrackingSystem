@@ -163,6 +163,7 @@
     <Compile Include="Account\ValidateManualAssociationMultipleModel.cs" />
     <Compile Include="DTO\CustomerCategory.cs" />
     <Compile Include="Association\AssociationCustomerModel.cs" />
+    <Compile Include="DTO\CustomerEvidenceComparer.cs" />
     <Compile Include="DTO\SportGroup.cs" />
     <Compile Include="GraphDB\CustomerGroup.cs" />
     <Compile Include="GraphDB\GraphAssociationPaging.cs" />

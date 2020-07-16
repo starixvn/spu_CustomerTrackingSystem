@@ -64,27 +64,12 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
 
                 // get association from graph
                 var associationByDeviceList = DbSessionFactory.Execute<CustomerEvidence>("GetAssociationByDeviceByCustIdLevel" + AssociatedLevel
-                                        , new { CustIdList = convertedCustIdList }).Data;
-                var associationByManualList = DbSessionFactory.Execute<CustomerEvidence>("GetAssociationByManualByCustIdAndLevel"
+                                        , new { CustIdList = convertedCustIdList, AssociatedLevel }).Data;
+                var associationByManualList = DbSessionFactory.Execute<CustomerEvidence>("GetAssociationByManualByCustIdAndLevel" + AssociatedLevel
                                         , new { CustIdList = convertedCustIdList, AssociatedLevel }).Data;
                 associationList.AddRange(associationByDeviceList);
                 associationList.AddRange(associationByManualList);
-
-                var custIdList = string.Join(",",associationList.Select(c => c.CustId).Distinct());
-                LogService.Info("GetFlaggedCustomersByLevel - custIdList: " + custIdList);
-                var flaggedCustomers = _evidenceService.GetFlaggedCustomersByLevel(custIdList);
-                LogService.Info("GetFlaggedCustomersByLevel - flaggedCustomers: " + flaggedCustomers.Count());
-                var result = (from f in flaggedCustomers
-                              join a in associationList on f.CustId equals a.CustId
-                              select new CustomerEvidence
-                              {
-                                  CustId = a.CustId,
-                                  Level0CustId = a.Level0CustId,
-                                  EvidenceCode = f.EvidenceCode,
-                                  EvidenceName = f.EvidenceName,
-                                  CreatedDate = f.CreatedDate,
-                                  AssociatedLevel = AssociatedLevel
-                              });
+                var result = associationList.Distinct(new CustomerEvidenceComparer());
 
                 return Json(result.ToList());
             }

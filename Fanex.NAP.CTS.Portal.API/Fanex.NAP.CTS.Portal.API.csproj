@@ -394,10 +394,12 @@
     <Content Include="App_Data\Graph\scripts\GetAssociationOneLevelByCustIdByIP.scrypt" />
     <Content Include="App_Data\Graph\scripts\GetAssociationOneLevelByCustIdByManual.scrypt" />
     <Content Include="App_Data\Graph\scripts\GetAssociationByDeviceByCustIdLevel0.scrypt" />
-    <Content Include="App_Data\Graph\scripts\GetAssociationByManualByCustIdAndLevel.scrypt" />
+    <Content Include="App_Data\Graph\scripts\GetAssociationByManualByCustIdAndLevel0.scrypt" />
     <Content Include="App_Data\Graph\scripts\GroupCustomerByAssociationOneLevel.scrypt" />
     <Content Include="App_Data\Graph\scripts\GetAssociationByDeviceByCustIdLevel1.scrypt" />
     <Content Include="App_Data\Graph\scripts\GetAssociationByDeviceByCustIdLevel2.scrypt" />
+    <Content Include="App_Data\Graph\scripts\GetAssociationByManualByCustIdAndLevel1.scrypt" />
+    <Content Include="App_Data\Graph\scripts\GetAssociationByManualByCustIdAndLevel2.scrypt" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
