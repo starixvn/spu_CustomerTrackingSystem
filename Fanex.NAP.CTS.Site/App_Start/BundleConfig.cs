@@ -178,8 +178,8 @@
                 .Include("~/Scripts/highcharts/highcharts.js",
                 "~/Scripts/Account/BettingStatistic/turnover-by-bettype.js"));
 
-            bundles.Add(new StyleBundle("~/betting-statistic-styles").Include(
-                      "~/Content/scss/vendors/highcharts/highcharts.css"));
+            //bundles.Add(new StyleBundle("~/betting-statistic-styles").Include(
+            //          "~/Content/scss/vendors/highcharts/highcharts.css"));
         }
 
         private static void RegisterAccountDetailBundles(BundleCollection bundles)

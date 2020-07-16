@@ -1,5 +1,32 @@
-﻿.bar-stacked {
+﻿.wapper-chart-sport {
+    .highcharts-data-label {
+        font-size: 12px;
+        line-height: 14px;
+        color: #000000;
+        &.highcharts-data-label-color-1{
+            color: #fff;
+        }
+    }
+}
+.bar-stacked {
     .highcharts-axis-line {
         display: none;
     }
+
+    .highcharts-series-group {
+        width: 100% !important;
+    }
+
+    .highcharts-axis-labels {
+        text {
+            color: #333333!important;
+            fill: #333333!important;
+            font-size: 12px!important;
+            line-height: 14px;
+        }
+    }
+}
+
+.highcharts-credits {
+    display: none;
 }

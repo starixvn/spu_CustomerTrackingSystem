@@ -1377,3 +1377,135 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
         font-size: 16px;
     }
 }
+
+// chart
+.wrapper-chart {
+    margin-top: 12px;
+    height: 160px;
+    border: 1px solid #DFDFDF;
+    box-sizing: border-box;
+    border-radius: 3px;
+}
+.container-grid {
+    padding: 10px;
+    display: grid;
+    grid-template-columns: repeat(32, 1fr);
+    grid-column-gap: 0;
+    grid-row-gap: 0;
+
+    .summary-detail {
+        grid-column: 1 / span 9;
+        grid-row: row;
+        border-right: 1px solid #DFDFDF;
+    }
+
+    .chart-sport {
+        grid-column: 10 / span 5;
+        grid-row: row;
+        position: relative;
+        border-right: 1px solid #DFDFDF;
+
+        .title {
+            position: absolute;
+            z-index: 2;
+            left: 24px;
+        }
+
+        .wapper-chart-sport {
+            margin-top: 12px;
+            position: relative;
+            left: -54px;
+        }
+
+        .note {
+            position: absolute;
+            right: 15px;
+            top: 34%;
+
+            .soccer::before {
+                background: #F15D21;
+            }
+
+            .basket-ball::before {
+                background: #1D2E4F;
+            }
+
+            .other-sport::before {
+                background: #37C2CC;
+            }
+        }
+    }
+
+    .title {
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 17px;
+        text-transform: capitalize;
+        color: #2B2B2B;
+        margin-left: 24px;
+    }
+
+    .note-title {
+        font-size: 13px;
+        line-height: 15px;
+        color: #333333;
+        display: block;
+        margin-bottom: 6px;
+
+        &::before {
+            content: " ";
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 6px;
+        }
+    }
+
+    .chart-bet-type {
+        grid-column: 15 / span 8;
+        grid-row: row;
+        border-right: 1px solid #DFDFDF;
+
+        .bet-grid {
+            margin-top: 10px;
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            grid-column-gap: 0;
+            grid-row-gap: 0;
+
+            .bar-stacked {
+                grid-column: 1 / span 6;
+                grid-row: row;
+            }
+
+            .note {
+                grid-column: 7 / span 2;
+                grid-row: row;
+
+                .position-note {
+                    margin-top: 25px;
+                }
+
+                .none-live::before {
+                    background: #3773CC;
+                }
+
+                .live::before {
+                    background: #FF4343;
+                }
+            }
+        }
+    }
+
+    .chart-win-lost {
+        grid-column: 23 / span 10;
+        grid-row: row;
+    }
+}
+.bar-stacked {
+
+   
+}
+
+
