@@ -188,8 +188,13 @@
     }
 
     function GetBettingStatistic() {
+        let chartTurnoverBySport = new turnover_by_sport();
         let chartTurnoverByBettype = new turnover_by_bettype();
+        let chartWinLost = new win_lost();
+
+        chartTurnoverBySport.DisplayChart();
         chartTurnoverByBettype.DisplayChart();
+        chartWinLost.DisplayChart();
     }
 
     function CollapseExpandItem() {

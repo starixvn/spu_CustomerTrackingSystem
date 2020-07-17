@@ -527,6 +527,9 @@
     <Content Include="Scripts\Account\ChainToEvidence\account-exceptions.js" />
     <Content Include="Scripts\Account\CustomerCategory\customer-category.js" />
     <Content Include="Scripts\Account\index.js" />
+    <Content Include="Scripts\Account\BettingStatistic\sport-statistic-scripts.js" />
+    <Content Include="Scripts\Account\BettingStatistic\summary-statistic-scripts.js" />
+    <Content Include="Scripts\Account\BettingStatistic\winlost-statistic-scripts.js" />
     <Content Include="Scripts\AssociatedAccountMonitor\index.js" />
     <Content Include="Scripts\DataTables_New\AutoFill-2.3.4\css\autoFill.bootstrap.css" />
     <Content Include="Scripts\DataTables_New\AutoFill-2.3.4\css\autoFill.bootstrap.min.css" />
@@ -908,6 +911,9 @@
     <Content Include="Views\ImportEvidences\Index.cshtml" />
     <Content Include="Views\AssociatedAccountMonitor\Index.cshtml" />
     <Content Include="Views\Account\BettingStatistic\TurnoverByBetType.cshtml" />
+    <Content Include="Views\Account\BettingStatistic\TurnoverBySport.cshtml" />
+    <Content Include="Views\Account\BettingStatistic\TurnoverWinLost.cshtml" />
+    <Content Include="Views\Account\BettingStatistic\Summary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CoreBetList.css" />

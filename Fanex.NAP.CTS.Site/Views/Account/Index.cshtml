@@ -3,8 +3,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section styles{
-    @Styles.Render("~/betting-statistic-styles"
-    , "~/account-detail-styles")
+    @Styles.Render("~/account-detail-styles")
 }
 @model Fanex.NAP.CTS.ViewModel.Account.CustomerGeneralStatusViewModel
 <h2 class="page-title">Account Profile</h2>
@@ -137,7 +136,12 @@
         </div>
     </div>
     <div class="wrapper-chart">
-        @Html.Partial("BettingStatistic/TurnoverByBetType")
+        <div class="container-grid">
+            @Html.Partial("BettingStatistic/Summary")
+            @Html.Partial("BettingStatistic/TurnoverBySport")
+            @Html.Partial("BettingStatistic/TurnoverByBetType")
+            @Html.Partial("BettingStatistic/TurnoverWinLost")
+        </div>
     </div>
 </div>
 
@@ -198,7 +202,7 @@
     <input id="hdIsHostPermission" type="hidden" IsHostPermission="@Model.IsHostPermission.ToString()" />
 </div>
 @section scripts{
-    @Scripts.Render("~/betting-statistic-scripts"
+    @Scripts.Render("~/statistic-scripts"
     , "~/account-detail-scripts"
     , "~/chain-to-evidence-scripts"
     , "~/account/transaction-history-scripts"

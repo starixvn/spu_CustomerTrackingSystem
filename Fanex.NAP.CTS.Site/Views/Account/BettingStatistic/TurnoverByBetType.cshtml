@@ -2,40 +2,16 @@
     ViewBag.Title = "Turnover By Bet Type";
 }
 
-<div class="container-grid">
-    <div class="summary-detail">
-        <span class="title">
-            Summary of Last 3 Months
-        </span>
-    </div>
-    <div class="chart-sport">
-        <span class="title">Turnover By Sport</span>
-        <div id="chart-sport" class="wapper-chart-sport">
-        </div>
+<div class="chart-bet-type">
+    <span class="title">Turnover By Bet Type</span>
+    <div class=bet-grid>
+        <div id="bet-type" class="bar-stacked"></div>
         <div class="note">
-            <div class="soccer note-title">Soccer</div>
-            <div class="basket-ball note-title">Basket ball</div>
-            <div class="other-sport note-title">Other Sport</div>
-        </div>
-    </div>
-    <div class="chart-bet-type">
-        <span class="title">Turnover By Bet Type</span>
-        <div class=bet-grid>
-            <div id="bet-type" class="bar-stacked"></div>
-            <div class="note">
-                <div class="position-note">
-                    <div class="none-live note-title">Non-Live</div>
-                    <div class="live note-title">Live</div>
-                </div>
+            <div class="position-note">
+                <div class="circle-blue note-title">Non-Live</div>
+                <div class="circle-red note-title">Live</div>
             </div>
         </div>
+    </div>
 
-    </div>
-    <div class="chart-win-lost">
-        <span class="title">
-            Turnover & Win Lost Last 3 Months
-        </span>
-        <div id="chart-win-lost" class="wapper-win-lost">
-        </div>
-    </div>
 </div>

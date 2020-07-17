@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'Fraud-Sensor';
-  src:  url('fonts/Fraud-Sensor.eot?l5o55u');
-  src:  url('fonts/Fraud-Sensor.eot?l5o55u#iefix') format('embedded-opentype'),
-    url('fonts/Fraud-Sensor.ttf?l5o55u') format('truetype'),
-    url('fonts/Fraud-Sensor.woff?l5o55u') format('woff'),
-    url('fonts/Fraud-Sensor.svg?l5o55u#Fraud-Sensor') format('svg');
+  src:  url('fonts/Fraud-Sensor.eot?ipgv8i');
+  src:  url('fonts/Fraud-Sensor.eot?ipgv8i#iefix') format('embedded-opentype'),
+    url('fonts/Fraud-Sensor.ttf?ipgv8i') format('truetype'),
+    url('fonts/Fraud-Sensor.woff?ipgv8i') format('woff'),
+    url('fonts/Fraud-Sensor.svg?ipgv8i#Fraud-Sensor') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-zoom:before {
+  content: "\e963";
+}
 .icon-error .path1:before {
   content: "\e95f";
   color: rgb(255, 255, 255);
