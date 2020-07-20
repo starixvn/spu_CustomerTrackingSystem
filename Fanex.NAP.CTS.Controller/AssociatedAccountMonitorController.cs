@@ -20,6 +20,8 @@ namespace Fanex.NAP.CTS.Controller
     {
         private readonly IAssociatedAccountService _associatedAccountService;
 
+        public override string BaseControllerName { get => Consts.MenuItemController; }
+
         public AssociatedAccountMonitorController()
         {
             _associatedAccountService = new AssociatedAccountService();
