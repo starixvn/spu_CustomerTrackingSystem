@@ -1790,7 +1790,6 @@
       grid-row-gap: 0; }
       .container-grid .chart-win-lost .win-lost-grid .wapper-win-lost {
         padding-top: 11px;
-        height: 134px;
         grid-column: 1 / span 8;
         grid-row: row; }
       .container-grid .chart-win-lost .win-lost-grid .note {
@@ -1800,3 +1799,25 @@
     .container-grid .chart-win-lost .icon {
       font-size: 12px;
       margin-left: 4px; }
+
+@media screen and (max-width: 1699.99px) {
+  .container-grid {
+    grid-template-rows: 160px 160px;
+    grid-row-gap: 10px; }
+    .container-grid .summary-detail {
+      grid-column: 1 / span 16;
+      grid-row: 1/2; }
+    .container-grid .chart-sport {
+      grid-column: 17 / span 16;
+      grid-row: 1/2;
+      border-right: none; }
+      .container-grid .chart-sport .wapper-chart-sport {
+        margin-top: 16px;
+        position: relative;
+        left: 0; }
+    .container-grid .chart-bet-type {
+      grid-column: 1 / span 16;
+      grid-row: 2/3; }
+    .container-grid .chart-win-lost {
+      grid-column: 17 / span 16;
+      grid-row: 2/3; } }
