@@ -24,16 +24,16 @@ function notification() {
     function GetMessage()
     {
         var messagesHtmlString = "<ul>";
-        var htmlTemplateRead = "<li class='read'> <a href=''> Account <span class='name'>{0}</span> has {1} new associated accounts.</a> <span class='datetime'> {2}</span ></li >";
-        var htmlTemplateUnRead = "<li class='unread'> <a href=''> Account <span class='name'>{0}</span> has {1} new associated accounts.</a> <span class='datetime'> {2}</span ></li >";
+        var htmlTemplateRead = "<li class='read'>" + RenderUsername() +"<span class='datetime'> {2}</span ></li >";
+        var htmlTemplateUnRead = "<li class='unread'>" + RenderUsername()+"<span class='datetime'> {2}</span ></li >";
 
         if (msgCounter != null) {
             for (var i = 0; i < msgCounter; i++) {
                 if (messages[i].IsSeen) {
-                    messagesHtmlString += htmlTemplateRead.format(messages[i].UserName, messages[i].NewAssocitionCount, messages[i].CreatedDateString);
+                    messagesHtmlString += htmlTemplateRead.format(messages[i].UserName, messages[i].NewAssocitionCount, messages[i].CreatedDateString, messages[i].CTSCustID);
                 }
                 else {
-                    messagesHtmlString += htmlTemplateUnRead.format(messages[i].UserName, messages[i].NewAssocitionCount, messages[i].CreatedDateString);
+                    messagesHtmlString += htmlTemplateUnRead.format(messages[i].UserName, messages[i].NewAssocitionCount, messages[i].CreatedDateString, messages[i].CTSCustID);
                 }
             }
         }
@@ -41,6 +41,12 @@ function notification() {
         messagesHtmlString += "</ul>";
         domElements.notificationContent.html(msgCounter > 0 ? messagesHtmlString : "<div class='no-notification'>There is no notification.</div>");
         $('.notification-icon').addClass('has-arrow-down');
+    }
+
+    function RenderUsername() {
+            var url = common.modifyRelativeUrl('Account/Index/{3}');
+
+            return '<a href="' + url + '"> Account <span class="name">{0}</span> has {1} new associated accounts. </a>';
     }
 
     function getUnreadMessageCount()
