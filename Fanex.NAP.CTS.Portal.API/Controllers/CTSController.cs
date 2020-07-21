@@ -12,6 +12,8 @@ using Fanex.NAP.CTS.Core.Utilities;
 using Fanex.NAP.CTS.Model.DTO;
 using Fanex.NAP.SPU.Graph.Core;
 using System.Web.Http.Results;
+using Fanex.NAP.CTS.Model.GraphDB;
+using Fanex.NAP.CTS.Core.Helpers.Xml;
 
 namespace Fanex.NAP.CTS.Portal.API.Controllers
 {
@@ -20,6 +22,9 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
         private readonly IAccountService _accountService;
         private readonly IEvidenceService _evidenceService;
 
+        /// <summary>
+        /// Using for external site (TW, ExtAcc site...)
+        /// </summary>
         public CtsController()
         {
             _accountService = new AccountService();
@@ -98,6 +103,46 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
             {
                 LogService.Error("Add Customers Evidences exception: " + ex.Message);
                 return false;
+            }
+        }
+
+        [System.Web.Http.AcceptVerbs("GetAssociationForExtAcc")]
+        [HttpGet]
+        public string GetAssociationForExtAcc(int custId)
+        {
+            var xmlString = string.Empty;
+            try
+            {
+                var cust = DbSessionFactory.Execute<GraphCustomer>("GetCustomerByCustId", new
+                {
+                    CustID = custId
+                }).Data.FirstOrDefault();
+
+                var result = DbSessionFactory.Execute<GraphAssociationPaging>("GetAssociationOneLevelByCustIdByDevice", new
+                {
+                    CTSCustID = cust.CTSCustId,
+                    AssStatus = 1,
+                    Skip = 0,
+                    Pagesize = 100000
+                }).Data.FirstOrDefault();
+
+                if (result != null)
+                {
+                    var associationList = result.AssociationList.Select(a => new AssociationForExtAcc
+                    {
+                        CustId = a.CustId == null ? 0 : a.CustId.Value,
+                        AssociationDate = a.AssociationDate.ToString()
+                    });
+
+                    xmlString = XmlHelper.ToXmlString(associationList);
+                }
+
+                return xmlString;
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("GetDirectAssociationByDevice failed: " + ex.Message + ex.StackTrace);
+                throw;
             }
         }
 

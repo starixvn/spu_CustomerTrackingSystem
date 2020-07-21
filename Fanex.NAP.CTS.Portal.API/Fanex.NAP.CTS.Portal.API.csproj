@@ -400,6 +400,7 @@
     <Content Include="App_Data\Graph\scripts\GetAssociationByDeviceByCustIdLevel2.scrypt" />
     <Content Include="App_Data\Graph\scripts\GetAssociationByManualByCustIdAndLevel1.scrypt" />
     <Content Include="App_Data\Graph\scripts\GetAssociationByManualByCustIdAndLevel2.scrypt" />
+    <Content Include="App_Data\Graph\scripts\GetCustomerByCustId.scrypt" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />

@@ -16,6 +16,7 @@
     <GraphSetting Key="GetAssociationByManualByCustIdAndLevel0" SpName="GetAssociationByManualByCustIdAndLevel0" DbName="GraphDB" />
     <GraphSetting Key="GetAssociationByManualByCustIdAndLevel1" SpName="GetAssociationByManualByCustIdAndLevel1" DbName="GraphDB" />
     <GraphSetting Key="GetAssociationByManualByCustIdAndLevel2" SpName="GetAssociationByManualByCustIdAndLevel2" DbName="GraphDB" />
-    <GraphSetting Key="GroupCustomerByAssociationOneLevel" SpName="GroupCustomerByAssociationOneLevel" DbName="GraphDB" />    
+    <GraphSetting Key="GroupCustomerByAssociationOneLevel" SpName="GroupCustomerByAssociationOneLevel" DbName="GraphDB" />
+    <GraphSetting Key="GetCustomerByCustId" SpName="GetCustomerByCustId" DbName="GraphDB" />
   </Function>
 </Functions>

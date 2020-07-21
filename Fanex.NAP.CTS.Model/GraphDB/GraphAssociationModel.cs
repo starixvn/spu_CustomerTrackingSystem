@@ -1,38 +1,40 @@
-﻿using System;
+﻿using Fanex.NAP.CTS.Core.Helpers.Xml;
+using System;
 using System.Globalization;
+using System.Xml.Serialization;
 
 namespace Fanex.NAP.CTS.Model.GraphDB
 {
     public class GraphAssociationModel
-    {
+    {        
         public long CTSCustID { get; set; }
 
         public int? CustId { get; set; }
-
+        
         public int SubscriberId { get; set; }
-
+        
         public string Username { get; set; }
-
+        
         public string Username2 { get; set; }
-
+        
         public int AssociationType { get; set; }
-
+        
         public string AssociationTypeName
         {
             get;
             set;
         }
-
+                
         public DateTime AssociationDate { get; set; }
-
+                
         public int SharedDevices { get; set; }
-
+                
         public int SharedIPs { get; set; }
-
+                
         public string StatusName { get; set; }
-
+                
         public int StatusId { get; set; }
-
+                
         public int AssociationStatus { get; set; }
 
         public string GetAssociationTypeName(AssociationType associationType)

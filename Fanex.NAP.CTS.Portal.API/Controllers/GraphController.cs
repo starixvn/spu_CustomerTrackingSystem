@@ -11,7 +11,7 @@ using System.Web.Http.Results;
 namespace Fanex.NAP.CTS.Portal.API.Controllers
 {
     /// <summary>
-    /// Graph Controller
+    /// Graph Controller - Using for CTS site
     /// </summary>
     public class GraphController : ApiController
     {
