@@ -1558,25 +1558,27 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     }
 
     .chart-bet-type {
+        overflow: hidden;
+        position: relative;
         grid-column: 15 / span 8;
         grid-row: row;
         border-right: 1px solid #DFDFDF;
 
         .bet-grid {
-            margin-top: 5px;
+            margin-top: 1px;
             display: grid;
             grid-template-columns: repeat(8, 1fr);
             grid-column-gap: 0;
             grid-row-gap: 0;
 
             .bar-stacked {
-                grid-column: 1 / span 6;
+                grid-column: 1 / span 7;
                 grid-row: row;
             }
 
             .note {
-                grid-column: 7 / span 2;
-                grid-row: row;
+                position: absolute;
+                right: 7%;
 
                 .position-note {
                     margin-top: 25px;
@@ -1586,28 +1588,29 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     }
 
     .chart-win-lost {
+        overflow: hidden;
+        position: relative;
+        z-index: 10;
         grid-column: 23 / span 10;
         grid-row: row;
 
         .win-lost-grid {
-            display: grid;
-            grid-template-columns: repeat(10, 1fr);
-            grid-column-gap: 0;
-            grid-row-gap: 0;
+            position: relative;
 
             .wapper-win-lost {
-                padding-top: 11px;
-                grid-column: 1 / span 8;
-                grid-row: row;
+                position: absolute;
+                top: 8px;
+                width: 80%;
             }
 
             .note {
-                grid-column: 9 / span 2;
-                grid-row: row;
-                padding-top: 45%;
+                position: absolute;
+                right: 15px;
+                top: 45px;
             }
         }
-        .icon{
+
+        .icon {
             font-size: 12px;
             margin-left: 4px;
         }
@@ -1632,18 +1635,41 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             .wapper-chart-sport {
                 margin-top: 16px;
                 position: relative;
-                left:0;
+                left: 0;
+            }
+
+            .note {
+                right: 26%;
             }
         }
 
         .chart-bet-type {
             grid-column: 1 / span 16;
             grid-row: 2/3;
+
+            .bet-grid {
+                position: relative;
+
+                .note {
+                }
+            }
         }
 
         .chart-win-lost {
             grid-column: 17 / span 16;
             grid-row: 2/3;
+
+           /* .wapper-win-lost {
+                padding-top: 11px;
+                grid-column: 1 / span 8;
+                grid-row: row;
+            }
+
+            .note {
+                grid-column: 9 / span 2;
+                grid-row: row;
+                padding-top: 45%;
+            }*/
         }
     }
 }

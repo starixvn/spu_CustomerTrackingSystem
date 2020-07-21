@@ -1763,39 +1763,41 @@
     .container-grid .note-title.circle-navy-blue::before {
       background: #1D2E4F; }
   .container-grid .chart-bet-type {
+    overflow: hidden;
+    position: relative;
     grid-column: 15 / span 8;
     grid-row: row;
     border-right: 1px solid #DFDFDF; }
     .container-grid .chart-bet-type .bet-grid {
-      margin-top: 5px;
+      margin-top: 1px;
       display: grid;
       grid-template-columns: repeat(8, 1fr);
       grid-column-gap: 0;
       grid-row-gap: 0; }
       .container-grid .chart-bet-type .bet-grid .bar-stacked {
-        grid-column: 1 / span 6;
+        grid-column: 1 / span 7;
         grid-row: row; }
       .container-grid .chart-bet-type .bet-grid .note {
-        grid-column: 7 / span 2;
-        grid-row: row; }
+        position: absolute;
+        right: 7%; }
         .container-grid .chart-bet-type .bet-grid .note .position-note {
           margin-top: 25px; }
   .container-grid .chart-win-lost {
+    overflow: hidden;
+    position: relative;
+    z-index: 10;
     grid-column: 23 / span 10;
     grid-row: row; }
     .container-grid .chart-win-lost .win-lost-grid {
-      display: grid;
-      grid-template-columns: repeat(10, 1fr);
-      grid-column-gap: 0;
-      grid-row-gap: 0; }
+      position: relative; }
       .container-grid .chart-win-lost .win-lost-grid .wapper-win-lost {
-        padding-top: 11px;
-        grid-column: 1 / span 8;
-        grid-row: row; }
+        position: absolute;
+        top: 8px;
+        width: 80%; }
       .container-grid .chart-win-lost .win-lost-grid .note {
-        grid-column: 9 / span 2;
-        grid-row: row;
-        padding-top: 45%; }
+        position: absolute;
+        right: 15px;
+        top: 45px; }
     .container-grid .chart-win-lost .icon {
       font-size: 12px;
       margin-left: 4px; }
@@ -1815,9 +1817,24 @@
         margin-top: 16px;
         position: relative;
         left: 0; }
+      .container-grid .chart-sport .note {
+        right: 26%; }
     .container-grid .chart-bet-type {
       grid-column: 1 / span 16;
       grid-row: 2/3; }
+      .container-grid .chart-bet-type .bet-grid {
+        position: relative; }
     .container-grid .chart-win-lost {
       grid-column: 17 / span 16;
-      grid-row: 2/3; } }
+      grid-row: 2/3;
+      /* .wapper-win-lost {
+                padding-top: 11px;
+                grid-column: 1 / span 8;
+                grid-row: row;
+            }
+
+            .note {
+                grid-column: 9 / span 2;
+                grid-row: row;
+                padding-top: 45%;
+            }*/ } }

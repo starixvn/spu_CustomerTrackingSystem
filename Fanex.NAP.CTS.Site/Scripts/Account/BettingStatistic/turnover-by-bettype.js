@@ -3,7 +3,7 @@
         Highcharts.chart('bet-type', {
             chart: {
                 type: 'bar',    
-                height: 95,
+                height: 125,
                 marginRight: 0,
                 spacingLeft: 30,
                 style: {

@@ -3,8 +3,7 @@
         Highcharts.chart('chart-win-lost', {
             chart: {
                 zoomType: 'xy',
-                height: 114,
-                width: 400,
+                height: 135,
                 spacingLeft: 30,
                 spacingRight: 0,
             },
