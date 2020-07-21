@@ -20,6 +20,16 @@
 .highcharts-credits {
   display: none; }
 
+.highcharts-legend-item rect {
+  width: 14px;
+  height: 14px;
+  /* height = width */
+  rx: 50%;
+  ry: 50%; }
+
+.highcharts-legend-item tspan {
+  font-weight: 500; }
+
 .abnormal-level-0 {
   width: 6.2rem;
   padding: 2px 0;
@@ -1638,15 +1648,35 @@
   .ui-dialog .ui-dialog-titlebar .ui-dialog-title {
     font-size: 16px; }
 
-.wrapper-chart {
+.wrapper-statistic {
   margin-top: 12px;
-  min-height: 160px;
   border: 1px solid #DFDFDF;
   box-sizing: border-box;
   border-radius: 3px; }
+  .wrapper-statistic .statistic-title {
+    height: 31px;
+    padding: 5px; }
+    .wrapper-statistic .statistic-title .icon {
+      margin-top: -2px; }
+    .wrapper-statistic .statistic-title .title {
+      margin-left: 6px; }
+  .wrapper-statistic .statistic-detail {
+    min-height: 158px; }
+  .wrapper-statistic .icon {
+    display: inline-block;
+    font-size: 22px;
+    vertical-align: middle;
+    cursor: pointer; }
+  .wrapper-statistic .title {
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 17px;
+    text-transform: capitalize;
+    color: #2B2B2B;
+    margin-left: 24px; }
 
 .container-grid {
-  padding: 7px 10px;
+  padding: 5px 10px;
   display: grid;
   grid-template-columns: repeat(32, 1fr);
   grid-column-gap: 0;
@@ -1655,10 +1685,16 @@
     grid-column: 1 / span 9;
     grid-row: row;
     border-right: 1px solid #DFDFDF; }
-    .container-grid .summary-detail .title {
-      margin-left: 12px; }
+    .container-grid .summary-detail .wrapper-title {
+      cursor: pointer; }
+      .container-grid .summary-detail .wrapper-title .icon-chevron-right {
+        transform: rotate(90deg);
+        margin-left: -4px; }
+      .container-grid .summary-detail .wrapper-title .title {
+        margin-left: 5px; }
     .container-grid .summary-detail .wrapper-data {
-      padding: 9px 32px; }
+      padding: 4px 32px;
+      padding-right: 37px; }
       .container-grid .summary-detail .wrapper-data .summary-top {
         display: flex;
         flex-wrap: wrap; }
@@ -1726,20 +1762,15 @@
       z-index: 2;
       left: 0; }
     .container-grid .chart-sport .wapper-chart-sport {
-      margin-top: 16px;
+      width: 60%;
       position: relative;
-      left: -54px; }
+      left: 5px;
+      top: 16px; }
     .container-grid .chart-sport .note {
+      width: 40%;
       position: absolute;
-      right: 17px;
+      right: 0;
       top: 56px; }
-  .container-grid .title {
-    font-weight: bold;
-    font-size: 14px;
-    line-height: 17px;
-    text-transform: capitalize;
-    color: #2B2B2B;
-    margin-left: 24px; }
   .container-grid .note-title {
     font-size: 13px;
     line-height: 15px;
@@ -1770,16 +1801,13 @@
     border-right: 1px solid #DFDFDF; }
     .container-grid .chart-bet-type .bet-grid {
       margin-top: 1px;
-      display: grid;
-      grid-template-columns: repeat(8, 1fr);
-      grid-column-gap: 0;
-      grid-row-gap: 0; }
+      position: relative; }
       .container-grid .chart-bet-type .bet-grid .bar-stacked {
-        grid-column: 1 / span 7;
-        grid-row: row; }
+        width: 90%; }
       .container-grid .chart-bet-type .bet-grid .note {
         position: absolute;
-        right: 7%; }
+        top: 22px;
+        right: 6%; }
         .container-grid .chart-bet-type .bet-grid .note .position-note {
           margin-top: 25px; }
   .container-grid .chart-win-lost {
@@ -1793,11 +1821,8 @@
       .container-grid .chart-win-lost .win-lost-grid .wapper-win-lost {
         position: absolute;
         top: 8px;
-        width: 80%; }
-      .container-grid .chart-win-lost .win-lost-grid .note {
-        position: absolute;
-        right: 15px;
-        top: 45px; }
+        left: 10px;
+        width: 100%; }
     .container-grid .chart-win-lost .icon {
       font-size: 12px;
       margin-left: 4px; }
@@ -1814,11 +1839,13 @@
       grid-row: 1/2;
       border-right: none; }
       .container-grid .chart-sport .wapper-chart-sport {
+        width: 100%;
         margin-top: 16px;
         position: relative;
-        left: 0; }
+        left: 0;
+        top: 0; }
       .container-grid .chart-sport .note {
-        right: 26%; }
+        right: 0; }
     .container-grid .chart-bet-type {
       grid-column: 1 / span 16;
       grid-row: 2/3; }
@@ -1826,15 +1853,4 @@
         position: relative; }
     .container-grid .chart-win-lost {
       grid-column: 17 / span 16;
-      grid-row: 2/3;
-      /* .wapper-win-lost {
-                padding-top: 11px;
-                grid-column: 1 / span 8;
-                grid-row: row;
-            }
-
-            .note {
-                grid-column: 9 / span 2;
-                grid-row: row;
-                padding-top: 45%;
-            }*/ } }
+      grid-row: 2/3; } }

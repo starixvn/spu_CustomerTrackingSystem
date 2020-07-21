@@ -30,3 +30,16 @@
 .highcharts-credits {
     display: none;
 }
+
+.highcharts-legend-item {
+    rect {
+        width: 14px;
+        height: 14px; /* height = width */
+        rx: 50%;
+        ry: 50%;
+    }
+
+    tspan{
+        font-weight: 500;
+    }
+}

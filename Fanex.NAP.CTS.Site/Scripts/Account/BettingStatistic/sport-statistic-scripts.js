@@ -3,7 +3,7 @@
         Highcharts.chart('chart-sport', {
             chart: {
                 type: 'pie',
-                height: 128,
+                height: 135,
                 margin: [0, 0, 0, 0],
                 spacing: [0, 0, 0, 0],
                 plotBackgroundColor: null,

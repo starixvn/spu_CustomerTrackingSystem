@@ -22,7 +22,9 @@
         spanAutoSuspendOtherSport: $('#autoSuspendOtherSport'),
         spanAutoSuspendESport: $('#autoSuspendESport'),
         headerAssociatedAccount: $("#header_associated_account"),
-        headerChainEvidence: $("#header_chains_evidence")
+        headerChainEvidence: $("#header_chains_evidence"),
+        statisticTitle: $("#statistic-title"),
+        statisticDetail: $("#statistic-detail")
     };
 
     function LoadAssociationByAccount() {
@@ -198,6 +200,21 @@
     }
 
     function CollapseExpandItem() {
+        //statistic
+        $("#wrapper-statistic .statistic-title").on('click', function () {
+            $(this).addClass("hide");
+            var $this = $(this).next();
+
+            if ($this.hasClass('hide')) {
+                $this.removeClass('hide');
+            }
+        });
+
+        $("#wrapper-statistic #statistic-detail .wrapper-title .icon").on('click', function () {
+            domElements.statisticDetail.addClass("hide");
+            domElements.statisticTitle.removeClass("hide");
+        });
+
         $("#account-detail-container .report-item h3").on('click', function () {
 
             var $this = $(this).next();

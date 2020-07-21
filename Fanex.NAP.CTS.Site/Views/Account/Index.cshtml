@@ -135,12 +135,20 @@
 
         </div>
     </div>
-    <div class="wrapper-chart">
-        <div class="container-grid">
-            @Html.Partial("BettingStatistic/Summary")
-            @Html.Partial("BettingStatistic/TurnoverBySport")
-            @Html.Partial("BettingStatistic/TurnoverByBetType")
-            @Html.Partial("BettingStatistic/TurnoverWinLost")
+    <div class="wrapper-statistic" id="wrapper-statistic">
+        <div class="statistic-title hide" id="statistic-title" ref="statistic-detail">
+            <i class="icon icon-chevron-right"></i>
+            <a class="title" href="javascript:void(0)">
+                Summary of Last 3 Months
+            </a>
+        </div>
+        <div id="statistic-detail" class="statistic-detail ">
+            <div class="container-grid">
+                @Html.Partial("BettingStatistic/Summary")
+                @Html.Partial("BettingStatistic/TurnoverBySport")
+                @Html.Partial("BettingStatistic/TurnoverByBetType")
+                @Html.Partial("BettingStatistic/TurnoverWinLost")
+            </div>
         </div>
     </div>
 </div>

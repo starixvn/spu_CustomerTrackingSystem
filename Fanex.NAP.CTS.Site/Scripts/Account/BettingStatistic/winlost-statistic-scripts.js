@@ -1,11 +1,17 @@
 ﻿function win_lost() {
     this.DisplayChart = function () {
-        Highcharts.chart('chart-win-lost', {
+        let domElements = {
+            iconFullScreen: $("#icon-full-screen"),
+        };
+
+        let chart = Highcharts.chart('chart-win-lost', {
             chart: {
                 zoomType: 'xy',
-                height: 135,
-                spacingLeft: 30,
-                spacingRight: 0,
+                height: 130,
+                spacing: [10, 45, 10, 30],
+                style: {
+                    fontFamily: '"Lato", Arial, Tahoma, sans-serif'
+                }
             },
             title: {
                 text: ''
@@ -61,10 +67,17 @@
                 shared: true
             },
             legend: {
-                enabled: false
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                itemMarginTop: 0,
+                itemMarginBottom: 5,
+                itemStyle: {
+                    fontSize: '13px',
+                },
             },
             series: [{
-                name: '',
+                name: 'Turnover',
                 type: 'column',
                 yAxis: 1,
                 pointWidth: 8,
@@ -75,7 +88,7 @@
                 }
 
             }, {
-                name: '',
+                name: 'Win Lost',
                 type: 'line',
                 data: [-50, 210, 50, 20, 180, 20, -50, 150, 170, 100, 230, -110, 50, -30, 190],
                 color: "#F15D21",
@@ -85,5 +98,30 @@
                 }
             }]
         });
+
+        domElements.iconFullScreen.on('click', function () {
+            Highcharts.FullScreen = function (container) {
+                this.init(container.parentNode); // main div of the chart
+            };
+
+            Highcharts.FullScreen.prototype = {
+                init: function (container) {
+                    if (container.requestFullscreen) {
+                        container.requestFullscreen();
+                    } else if (container.mozRequestFullScreen) {
+                        container.mozRequestFullScreen();
+                    } else if (container.webkitRequestFullscreen) {
+                        container.webkitRequestFullscreen();
+                    } else if (container.msRequestFullscreen) {
+                        container.msRequestFullscreen();
+                    }
+
+                    //chart.setSize($(window).width(), $(window).height());
+                }
+            };
+
+            chart.fullscreen = new Highcharts.FullScreen(chart.container);
+        })
+
     };
 }
