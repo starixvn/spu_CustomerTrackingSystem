@@ -118,23 +118,26 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
                     CustID = custId
                 }).Data.FirstOrDefault();
 
-                var result = DbSessionFactory.Execute<GraphAssociationPaging>("GetAssociationOneLevelByCustIdByDevice", new
+                if (cust != null)
                 {
-                    CTSCustID = cust.CTSCustId,
-                    AssStatus = 1,
-                    Skip = 0,
-                    Pagesize = 100000
-                }).Data.FirstOrDefault();
-
-                if (result != null)
-                {
-                    var associationList = result.AssociationList.Select(a => new AssociationForExtAcc
+                    var result = DbSessionFactory.Execute<GraphAssociationPaging>("GetAssociationOneLevelByCustIdByDevice", new
                     {
-                        CustId = a.CustId == null ? 0 : a.CustId.Value,
-                        AssociationDate = a.AssociationDate.ToString()
-                    });
+                        CTSCustID = cust.CTSCustId,
+                        AssStatus = 1,
+                        Skip = 0,
+                        Pagesize = 100000
+                    }).Data.FirstOrDefault();
 
-                    xmlString = XmlHelper.ToXmlString(associationList);
+                    if (result != null)
+                    {
+                        var associationList = result.AssociationList.Select(a => new AssociationForExtAcc
+                        {
+                            CustId = a.CustId == null ? 0 : a.CustId.Value,
+                            AssociationDate = a.AssociationDate.ToString()
+                        });
+
+                        xmlString = XmlHelper.ToXmlString(associationList);
+                    }
                 }
 
                 return xmlString;
