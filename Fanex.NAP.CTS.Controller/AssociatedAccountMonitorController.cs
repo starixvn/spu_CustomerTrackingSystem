@@ -39,23 +39,6 @@ namespace Fanex.NAP.CTS.Controller
             return View(isHostPermission);
         }
 
-        [HttpGet]
-        public ActionResult GetCustProfile()
-        {
-            IUserService userService = new UserService();
-
-            var result = new CustProfilerModel
-            {
-                CustID = CurrentSession.UserId,
-                IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
-                            NapSettings.Settings.SiteId,
-                            FSFunctionKeys.AssociatedAccountMonitor,
-                            NAP.Core.Business.Constant.Policy.Host)
-            };
-
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
-
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AssociatedAccountMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult InsertManualAssociatedAccount(string custIDList, string toUserNameList, string remark)

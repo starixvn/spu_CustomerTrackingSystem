@@ -151,7 +151,7 @@ function notification() {
         }
     }
 
-    setInterval(getUnreadMessageCount, 3000);
+    setInterval(getUnreadMessageCount, 10000);
 
     function CheckDifferentCurrentAndPreviousMessages(json)
     {

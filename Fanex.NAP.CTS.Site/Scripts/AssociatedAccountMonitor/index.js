@@ -1,10 +1,10 @@
 ﻿function AssociatedAccountMonitor() {
     let dataTable;
-    let userID;
     let IsHostPermission;  
     let validCTSCustID;
 
     let domElements = {
+        hdIsHostPermission: $('#hdIsHostPermission'),
         cbbSubscriber: $('#cbbSubscriber'),
         btnAddUsername: $('#btnAddUsername'),
         txtAsscomment: $('#txtasscomment'),
@@ -23,7 +23,7 @@
 
     function RenderGrid() {
         var url = common.modifyRelativeUrl('AssociatedAccountMonitor/GetAssociatedAccountMonitor');
-
+        
         return domElements.asociatedAccountMonitorTable.DataTable({
             serverSide: false,
             dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
@@ -92,8 +92,8 @@
                 { data: obj => obj.CreatedBy },
                 { data: obj => obj.CreatedTime},
                 {
-                    data: obj => () => {
-                        return html = '<span class="sub-icon - delete' + (!IsHostPermission ? ' disabled"' : '') + '" id="sub-icon" title="Remove Category"><i class="icon-delete"></i></span>';
+                    data: obj => () => {                       
+                        return html = '<span class="sub-icon - delete " id="sub-icon " title="Remove Category"><i class="icon-delete ' + (!IsHostPermission ? ' disabled' : '') + '"></i></span>';
                     }, createdCell: (cell, _, row) => {
                         if (IsHostPermission) {
                             $('.icon-delete', cell).click(() => {
@@ -244,12 +244,11 @@
             domElements.btnsaveusername.prop('disabled', true);
     }
 
-    function InsertManualAssociationMultiple(fromUserID) {
+    function InsertManualAssociationMultiple() {
         let userNameList = GetInputUserName();
 
         if (validCTSCustID !== '') {
             let params = {};
-            params.fromCTSCustId = fromUserID;
             params.custIDList = validCTSCustID;
             params.toUserNameList = userNameList;
             params.remark = domElements.txtAsscomment.val().trim();
@@ -416,34 +415,18 @@
         domElements.btnsaveusername.prop('disabled', true);
     }
 
-    function GetCustProfile() {
-        $.ajax(common.modifyRelativeUrl('AssociatedAccountMonitor/GetCustProfile'), {
-            type: 'GET',
-            data: {},
-            success: function (response) {
-                userID = response.CustID;
-                IsHostPermission = response.IsHostPermission;
-                IsDisableButton();
-            },
-            error: function (errMsg) {
-                console.log(errMsg);
-            }
-        });
-    } 
 
     function IsDisableButton() {
+        IsHostPermission = domElements.hdIsHostPermission.attr('IsHostPermission') === "True";
+        
         if (!IsHostPermission) {
             domElements.btnAddUsername.prop('disabled', true);           
         }
     }
 
     function Initial() {
+        IsDisableButton();
         LoadGrid(); 
-    }
-
-    $(document).ready(function () {
-        GetCustProfile();
-        Initial();     
 
         domElements.btnAddUsername.on('click', function () {
             domElements.txtAsscomment.val('');
@@ -462,13 +445,17 @@
             });
         });
 
-        domElements.btnsaveusername.on('click', () => InsertManualAssociationMultiple(userID));
+        domElements.btnsaveusername.on('click', () => InsertManualAssociationMultiple());
 
         domElements.btncancelusername.on('click', () => {
             domElements.divAddUsername.dialog('close');
         });
 
         domElements.searchInput.keyup('onkeyup', () => SearchAssociatedAccount());
+    }
+
+    $(document).ready(function () {
+        Initial();            
     });
 }
 
