@@ -122,6 +122,10 @@
             border-radius: 50%;
             background: #E7EDFF;
         }
+
+        .disabled {
+            cursor: not-allowed;
+        }
     }
 
     .icon-delete {

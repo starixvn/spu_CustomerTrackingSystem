@@ -89,6 +89,8 @@
     .asociatedAccountMonitorTable .sub-icon:hover {
       border-radius: 50%;
       background: #E7EDFF; }
+    .asociatedAccountMonitorTable .sub-icon .disabled {
+      cursor: not-allowed; }
   .asociatedAccountMonitorTable .icon-delete {
     font-size: 14px;
     position: absolute;
