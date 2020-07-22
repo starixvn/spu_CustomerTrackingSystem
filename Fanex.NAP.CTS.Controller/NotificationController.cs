@@ -1,6 +1,10 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
     using Fanex.Logging;
+    using Fanex.NAP.Core.Configuration;
+    using Fanex.NAP.Core.Service.Impl;
+    using Fanex.NAP.Core.Service.Interface;
+    using Fanex.NAP.Core.Web.Attribute;
     using Service;
     using System.Linq;
     using System.Web.Mvc;
@@ -15,20 +19,45 @@
         }
 
         [HttpGet]
-        public JsonResult GetAllMessages(int aMaxAssociationID)
+        [NapAuth(FunctionKey = FSFunctionKeys.NotificationSettings, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        public JsonResult GetAllMessages(int maxAssociationID)
         {
+            IUserService userService = new UserService();
+
+            var isHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
+                            NapSettings.Settings.SiteId,
+                            FSFunctionKeys.AssociatedAccountMonitor,
+                            NAP.Core.Business.Constant.Policy.Host);
+
             var userId = CurrentSession.UserId;
-            var messages = _notificationService.Get(userId, aMaxAssociationID).ToList();
+            var messages = _notificationService.Get(userId, maxAssociationID).ToList();
             var unReadList = messages.Select(c => c).Where(x => x.IsSeen == false);
+            var readList = messages.Select(c => c).Where(x => x.IsSeen == true);
 
             return Json(new
             {
                 messages,
+                messageCounter = messages?.Count(),
                 maxAssociationID = (unReadList?.Count() > 0)?  messages.Max(c=>c.MaxNewAssociationID) : 0,
                 unReadList,
                 unReadMessageCounter = unReadList?.Count(),
-                messageCounter = messages?.Count()
+                readList,
+                readListCounter = readList?.Count(),
+                isHostPermission
             }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult GetUserPermission()
+        {
+            IUserService userService = new UserService();
+
+            var isHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
+                            NapSettings.Settings.SiteId,
+                            FSFunctionKeys.NotificationSettings,
+                            NAP.Core.Business.Constant.Policy.Host);
+           
+            return Json(isHostPermission, JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -3,6 +3,7 @@ let msgCounter = 0;
 let messages = null;
 let maxAssociationId = 0;
 let isNoticedAlready = false;
+let isHostPermission;
 
 function notification() {
     let domElements = {
@@ -67,39 +68,69 @@ function notification() {
         });        
     });
 
-    function GetNewNotification(aMaxAssociationID) {
+    function GetNewNotification(maxAssociationID) {
         var url = common.modifyRelativeUrl("/Notification/GetAllMessages");
 
-        $.ajax(url, {
-            type: 'GET',
-            data: { aMaxAssociationID: aMaxAssociationID },
-            success: function (json) {
-                if (!CheckValid(json)) {
-                    ReCheckin();
-                } else {
-                    CheckDifferentCurrentAndPreviousMessages(json);
-                    SetUnReadCounterToCookie(json.unReadMessageCounter);
-                    maxAssociationId = json.maxAssociationID;
-                    messages = json.messages;
-                    msgCounter = json.messageCounter;
+        if (isHostPermission === undefined)
+        {
+            GetCTSCustPermission();
+        }
+
+        if (isHostPermission == true) {
+            $.ajax(url, {
+                type: 'GET',
+                data: { maxAssociationID: maxAssociationID },
+                success: function (json) {
+                    if (!CheckValid(json)) {
+                        ReCheckin();
+                    } else {
+                        isHostPermission = json.isHostPermission;
+                        CheckDifferentCurrentAndPreviousMessages(json);
+                        SetUnReadCounterToCookie(json.unReadMessageCounter);
+                        maxAssociationId = json.maxAssociationID;
+                        messages = json.messages;
+                        msgCounter = json.messageCounter;
+                        GetMessage();
+                        SetupBellNotification();
+                    }
+                },
+                complete: function () {
+                    if (GetUnReadFlagFromCookie() == "true") {
+                        NotifyToDesktop(unreadMsgCounter);
+                        document.cookie = "isUnReadStatusChanged=false";
+                    }
+                },
+                error: function (errMsg) {
+                    console.log('Get notification Error, ' + ex);
+                    SetUnReadCounterToCookie(0);
+                    msgCounter = 0;
+                    messages = null;
                     GetMessage();
-                    SetupBellNotification();
-                }   
-            },
-            complete: function () {
-                if (GetUnReadFlagFromCookie() == "true") {
-                    NotifyToDesktop(unreadMsgCounter);
-                    document.cookie = "isUnReadStatusChanged=false";
+                    console.log(errMsg);
                 }
+            });
+        }
+        else {
+            messages = null;
+            msgCounter = 0;
+            unreadMsgCounter = 0;
+            document.cookie = "isUnReadStatusChanged=false";
+            GetMessage();
+            SetupBellNotification();
+        }
+    }
+
+    function GetCTSCustPermission() {
+        $.ajax(common.modifyRelativeUrl('/Notification/GetUserPermission'), {
+            type: 'GET',
+            data: {},
+            success: function (response) {
+                isHostPermission = response;
             },
             error: function (errMsg) {
-                console.log('Get notification Error, ' + ex);
-                SetUnReadCounterToCookie(0);
-                msgCounter = 0;
-                messages = null;
-                GetMessage();
                 console.log(errMsg);
-            }
+            },
+            async: false
         });
     }
 
@@ -225,6 +256,7 @@ function notification() {
     }
 
     $(document).ready(function () {
+        GetCTSCustPermission();
         getUnreadMessageCount();
     });
 }

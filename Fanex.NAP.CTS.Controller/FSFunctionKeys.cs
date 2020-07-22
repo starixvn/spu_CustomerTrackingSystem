@@ -78,4 +78,6 @@ public static class FSFunctionKeys
     public const string ImportEvidences = "ImportEvidences";
 
     public const string AssociatedAccountMonitor = "AssociatedAccountMonitor";
+
+    public const string NotificationSettings = "NotificationSettings";
 }
