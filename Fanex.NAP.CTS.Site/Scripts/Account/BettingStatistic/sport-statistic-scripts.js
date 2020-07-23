@@ -4,8 +4,11 @@
             chart: {
                 type: 'pie',
                 height: 135,
-                margin: [0, 0, 0, 0],
-                spacing: [0, 0, 0, 0],
+                marginTop: 0,
+                marginBottom: 0,
+                marginRight: 0,
+                marginLeft: -120,
+                spacing: [12, 35, 35, 12],
                 plotBackgroundColor: null,
                 plotBorderWidth: null,
                 plotShadow: false,
@@ -22,7 +25,19 @@
                     valueSuffix: '%'
                 }
             },
-
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                y: 14,
+                x: 0,
+                padding: 0,
+                itemMarginTop: 0,
+                itemMarginBottom: 5,
+                itemStyle: {
+                    fontSize: '13px',
+                },
+            },
             plotOptions: {
                 pie: {
                     allowPointSelect: true,
@@ -36,7 +51,8 @@
                             operator: '>',
                             value: 4
                         }
-                    }
+                    },
+                    showInLegend: true
                 }
             },
 

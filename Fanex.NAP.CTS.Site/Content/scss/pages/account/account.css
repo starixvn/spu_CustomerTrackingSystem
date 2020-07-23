@@ -1756,21 +1756,22 @@
     grid-row: row;
     position: relative;
     border-right: 1px solid #DFDFDF;
-    overflow: hidden; }
+    overflow: hidden;
+    /*   .note {
+            width: 40%;
+            position: absolute;
+            right: 0;
+            top: 56px;
+        }*/ }
     .container-grid .chart-sport .title {
       position: absolute;
       z-index: 2;
       left: 0; }
     .container-grid .chart-sport .wapper-chart-sport {
-      width: 60%;
+      width: 100%;
       position: relative;
       left: 5px;
       top: 16px; }
-    .container-grid .chart-sport .note {
-      width: 40%;
-      position: absolute;
-      right: 0;
-      top: 56px; }
   .container-grid .note-title {
     font-size: 13px;
     line-height: 15px;
