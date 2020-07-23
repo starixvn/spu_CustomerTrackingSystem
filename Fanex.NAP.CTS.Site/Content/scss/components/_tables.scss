@@ -470,7 +470,7 @@ table.dataTable tbody tr.selected td {
         top: -34px;
         left: 12px;
         color: #474747;
-        z-index: 11;
+        z-index: 7;
     }
 
     .dataTables_info {
@@ -478,12 +478,12 @@ table.dataTable tbody tr.selected td {
         position: absolute;
         left: 146px;
         top: -39px;
-        z-index: 12;
+        z-index: 8;
     }
 
     .dataTables_paginate {
         position: absolute;
-        z-index: 10;
+        z-index: 6;
         left: 0;
         right: 0;
         top: -40px;
