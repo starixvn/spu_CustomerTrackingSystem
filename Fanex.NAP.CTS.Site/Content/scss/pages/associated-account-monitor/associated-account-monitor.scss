@@ -1,0 +1,141 @@
+﻿.content {
+    margin-top: 60px;
+
+    .associated-account-monitor {
+        padding: 16px;
+        padding-top: 0;
+
+        .group {
+            padding-right: 0;
+            margin-right: 6px;
+        }
+
+        .fixed-header {
+            padding-top: 16px;
+            position: sticky;
+            position: -webkit-sticky;
+            top: 60px;
+            background: #fff;
+            z-index: 9;
+        }
+
+        .wrapper-info-table {
+            position: sticky;
+            position: -webkit-sticky;
+            z-index: 9;
+            top: 116px;
+            transition: top 0.01s linear;
+        }
+    }
+}
+
+.top-header {
+    .width-200 {
+        min-width: 200px;
+    }
+
+    .search-username {
+        margin-top: -2px;
+        height: 28px;
+        position: relative;
+
+        &:before {
+            content: "\e919";
+            font-family: 'Fraud-Sensor' !important;
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            width: 35px;
+            font-size: 18px;
+            color: #868686;
+            text-align: left;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .username {
+            width: 100%;
+            font-style: italic;
+            font-size: 14px;
+            line-height: 17px;
+            color: #868686;
+            border: 1px solid #C4C4C4;
+            border-radius: 3px;
+            padding: 6px;
+            padding-left: 30px;
+
+            &::placeholder {
+                color: #868686;
+                font-style: italic;
+                font-size: 14px;
+            }
+        }
+    }
+
+    .button-primary-outline {
+        font-size: 13px !important;
+        font-weight: normal;
+        line-height: 16px;
+        padding: 0px 10px;
+        text-transform: none;
+    }
+}
+
+.asociatedAccountMonitorTable {
+    width: 100% !important;
+
+    thead {
+        tr:first-child {
+            th {
+                position: sticky;
+                position: -webkit-sticky;
+                z-index: 9;
+                transition: top 0.01s linear;
+                top: 115px;
+            }
+        }
+
+        tr th {
+            border: 1px solid #C4C4C4;
+            line-height: 19px;
+            font-size: 14px;
+            font-weight: 600;
+            vertical-align: middle;
+        }
+    }
+
+    tbody tr td {
+        font-size: 14px;
+        line-height: 17px;
+        text-align: center;
+        padding: 3px 6px 3px 6px;
+    }
+
+    .sub-icon {
+        width: 24px;
+        height: 24px;
+        display: inline-block;
+        position: relative;
+        cursor: pointer;
+
+        &:hover {
+            border-radius: 50%;
+            background: #E7EDFF;
+        }
+
+        .disabled {
+            cursor: not-allowed;
+        }
+    }
+
+    .icon-delete {
+        font-size: 14px;
+        position: absolute;
+        top: 5px;
+        left: 6px;
+    }
+
+    .icon-delete:before {
+        color: #FF0000;
+    }
+}

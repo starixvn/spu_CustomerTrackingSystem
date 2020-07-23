@@ -217,9 +217,7 @@
                         UserId = userId,
                         IsCreatedByMaster = true,
                         ErrorMessage = string.Empty
-                    };
-
-                    LogInfo(fileName, userId, "db.ExecuteNonQuery(criteria) START at " + DateTime.Now, jsonData);
+                    };                    
 
                     using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
                     {
@@ -230,9 +228,7 @@
                             SendMail(resultCheckAccountEvidenceList, accountEvidence, userId, criteria.ErrorMessage);
                             LogError(fileName, userId, "at " + DateTime.Now + " " + criteria.ErrorMessage, jsonData);
                         } 
-                    }
-
-                    LogInfo(fileName, userId, "db.ExecuteNonQuery(criteria) END at " + DateTime.Now, jsonData);
+                    }                    
                 }
                 catch (Exception ex)
                 {
@@ -240,13 +236,6 @@
                     LogError(fileName, userId, "at " + DateTime.Now + " " + ex.Message, jsonData, ex);
                 }
             }
-        }
-
-        private void LogInfo(string fileName, int userId, string message, string jsonData)
-        {
-            var infoMessage = string.Format("CTS - Import file name: {0} - userId: {1} - infomation message: {2} - content: {3}"
-                                                      , fileName, userId, message, jsonData);
-            LogService.Info(infoMessage);
         }
 
         private void LogError(string fileName, int userId, string error, string jsonData, Exception ex = null)

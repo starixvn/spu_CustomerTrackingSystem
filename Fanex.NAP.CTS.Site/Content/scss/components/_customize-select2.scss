@@ -6,10 +6,34 @@
         .select2-selection__rendered {
             line-height: 25px;
             color: $input-color;
+            padding-left: 13px !important;
         }
 
         &.invalid {
             border-color: #ff0000;
+        }
+
+        .select2-selection__arrow {
+            right: 3px !important;
+
+            b {
+                border: none !important;
+                margin-left: -10px !important;
+                margin-top: -9px !important;
+                font-family: 'Fraud-Sensor' !important;
+                speak: none;
+                font-style: normal;
+                font-weight: normal;
+                font-variant: normal;
+                text-transform: none;
+                line-height: 1;
+                -webkit-font-smoothing: antialiased;
+
+                &:before {
+                    content: "\e90c";
+                    font-size: 20px;
+                }
+            }
         }
     }
 
@@ -20,5 +44,12 @@
     .select2-results__option[aria-selected=true] {
         background-color: #ddd;
         color: $input-color;
+    }
+
+    &.select2-container--open .select2-selection--single .select2-selection__arrow b {
+        border: none !important;
+        transform: rotate(180deg);
+        margin-left: 9px !important;
+        margin-top: 11px !important;
     }
 }

@@ -1,0 +1,78 @@
+﻿@{
+    ViewBag.Title = "Associated Account Monitor";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section styles{
+    @Styles.Render("~/associated-account-monitor-styles")
+}
+
+<h2 class="page-title">Associated Account Monitor</h2>
+<div class="associated-account-monitor">
+    <div class="fixed-header">
+        <div class="top-header">
+            <div class="group width-200 search-username">
+                <input type="text" class="control username" id="username" placeholder="Search Username" autocomplete="off">
+            </div>
+            <div class="add-username">
+                <button class="button button-primary-outline" id="btnAddUsername">Add Account(s)</button>
+            </div>
+        </div>
+    </div>
+
+    <table id="asociatedAccountMonitorTable" class="table table-striped width-100per asociatedAccountMonitorTable">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Username</th>
+                <th>Login ID</th>
+                <th>Status</th>
+                <th>Subscriber </th>
+                <th>Comment</th>
+                <th>Creator</th>
+                <th>Added Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<div id="divAddUsername" class="popup-add divAddUsername" style="display:none;">
+    <div class="group-title">
+        <div class="label">Username</div>
+        <div class="wrapper-title">
+            <div class="wrapper-rule wrapper-rule-left">
+                <span class="text bg-red">Red</span>
+                <span class="text">Invalid username</span>
+            </div>
+            <div class="wrapper-rule wrapper-rule-right">
+                <span class="text bg-yellow">Yellow</span>
+                <span class="text">Duplicated username</span>
+            </div>
+        </div>
+    </div>
+    <span class="wrapper-value" id="spanAddAssociationUserName">
+        <input id="inputTagUsername" type="text" name='tags-outside' class="input-field full-width tagify--outside" placeholder="Type username (Separate by comma, tab and enter)" />
+        <span class="limit-username">
+            Max: <span id="spanAddAssociationUserNameMaxTag">50</span> usernames
+        </span>
+        <span id="spanAddAssociationChangeHidden" hidden></span>
+    </span>
+
+    <div class="form-control wrapper-comment">
+        <div class="label">Comment</div>
+        <textarea id="txtasscomment" rows="3" class="comment-field full-width" maxlength="500"></textarea>
+    </div>
+
+    <div class="modal-footer margin-top-10">
+        <button id="btncancelusername" class="button btn-cancel-outline" title="Cancel">Cancel</button>
+        <button id="btnsaveusername" class="button -add" title="Add Username">Add</button>
+    </div>
+    <div class="hide">       
+        <input id="hdIsHostPermission" type="hidden" IsHostPermission="@Model.ToString()" />
+    </div>
+</div>
+
+@section scripts{
+    @Scripts.Render("~/associated-account-monitor-scripts")
+}

@@ -719,7 +719,22 @@
         domElements.inputStakeMin.on('blur', () => RefreshGridByFilterStakeRange());
         domElements.inputStakeMax.on('blur', () => RefreshGridByFilterStakeRange());
         domElements.btnArrowStake.on('click', (e) => UpDownStakeRangeInput(e));
-        domElements.btnGenerate.on('click', () => LoadGrid());      
+        domElements.btnGenerate.on('click', () => LoadGrid());
+
+         // handle freeze header
+        $(window).scroll(function (event) {
+            var scroll = $(window).scrollTop();
+            if (scroll >= 96) {
+                let height_filter_detail = $(".form-filter-detail").height() + 22; //208
+                let height_info = $(".dataTables_info").height() + 25; //40
+                let height_header = $("#ticketsTable_wrapper #ticketsTable thead tr:first-child th").height() + 13;//70
+
+                $("#ticketsTable_wrapper .wrapper-info-table").css({ "top": height_filter_detail + 56 })
+                $("#ticketsTable_wrapper #ticketsTable thead tr:first-child th").css({ "top": height_filter_detail + height_info + 55 })
+                $("#ticketsTable_wrapper #ticketsTable thead tr:last-child th").css({ "top": height_filter_detail + height_info + height_header + 55 })
+            }
+            //console.log(scroll);
+        });
     }
 
     $(document).ready(function () {

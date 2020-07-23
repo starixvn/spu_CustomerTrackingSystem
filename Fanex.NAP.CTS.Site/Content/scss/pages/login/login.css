@@ -114,6 +114,11 @@ input, button {
     .button.btn-cancel-outline:hover:not(:disabled) {
       background-color: #545454;
       color: #fff; }
+  .button.-search {
+    background-color: #3362DE;
+    color: #fff; }
+    .button.-search:hover:not(:disabled) {
+      background-color: #5081ff; }
 
 .btn-search, .btn-submit {
   background-color: #396EF8;

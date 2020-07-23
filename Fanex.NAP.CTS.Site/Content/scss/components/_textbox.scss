@@ -5,7 +5,7 @@ input[type="number"],
 input[type="password"] {
     @include input-placeholder($input-color);
     outline: none;
-    height: 28px;
+    height: 30px;
     line-height: 28px;
     padding-left: 6px;
     padding-right: 6px;

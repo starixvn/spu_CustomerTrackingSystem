@@ -2,10 +2,10 @@
 .top-header {
     @include border-radius(2px 2px 0 0);
     @include align-items($justify-content: flex-end);
-    padding: 8px;
+    padding: 5px;
     border: 1px solid $table-border;
-    border-bottom: none;
-    background-color: #ebebeb;
+    background-color: #E3E9F6;
+    border-radius: 1px;
 
     .button-export-excel {
         @include align-items($justify-content: center);
@@ -135,8 +135,8 @@
 
     thead tr th, tbody tr td {
         border: 1px solid $table-border;
-        line-height: 20px;
-        padding: 6px;
+        line-height: 17px;
+        padding: 7px;
         vertical-align: middle;
     }
 
@@ -166,7 +166,7 @@
         }
 
         td {
-            color: #545454;
+            color: #474747;
         }
 
         td.group {
@@ -448,7 +448,46 @@ table.dataTable tbody tr.selected td {
 }
 
 .dataTables_length {
+    min-width: 58px;
+
     label {
         font-size: 1.4rem;
+    }
+
+    select {
+        min-width: 58px;
+        font-size: 1.3rem;
+    }
+}
+
+.wrapper-info{
+    position: relative;
+}
+
+.wrapper-info-table {
+    .dataTables_length {
+        position: absolute;
+        top: -34px;
+        left: 12px;
+        color: #474747;
+        z-index: 11;
+    }
+
+    .dataTables_info {
+        padding: 13px 0;
+        position: absolute;
+        left: 146px;
+        top: -39px;
+        z-index: 12;
+    }
+
+    .dataTables_paginate {
+        position: absolute;
+        z-index: 10;
+        left: 0;
+        right: 0;
+        top: -40px;
+        transform: translate(-50%, 0);
+        float: none;
     }
 }
