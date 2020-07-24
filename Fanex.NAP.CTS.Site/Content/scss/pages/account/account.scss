@@ -1545,13 +1545,13 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
         }
 
         .wapper-chart-sport {
+            height: 135px;
             width: 100%;
             position: relative;
             left: 5px;
             top: 16px;
         }
-
-     /*   .note {
+        /*   .note {
             width: 40%;
             position: absolute;
             right: 0;
@@ -1604,7 +1604,8 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             margin-top: 1px;
             position: relative;
 
-            .bar-stacked {
+            .wapper-bet-type {
+                height: 125px;
                 width: 90%;
             }
 
@@ -1631,6 +1632,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             position: relative;
 
             .wapper-win-lost {
+                height: 130px;
                 position: absolute;
                 top: 8px;
                 left: 10px;
@@ -1661,7 +1663,6 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             border-right: none;
 
             .wapper-chart-sport {
-                width: 100%;
                 margin-top: 16px;
                 position: relative;
                 left: 0;

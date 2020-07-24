@@ -3,18 +3,20 @@
         Highcharts.chart('chart-sport', {
             chart: {
                 type: 'pie',
-                height: 135,
                 marginTop: 0,
                 marginBottom: 0,
-                marginRight: 0,
-                marginLeft: -120,
+                marginRight: 10,
+                marginLeft: 0,
                 spacing: [12, 35, 35, 12],
                 plotBackgroundColor: null,
                 plotBorderWidth: null,
                 plotShadow: false,
                 style: {
                     fontFamily: '"Lato", Arial, Tahoma, sans-serif'
-                }
+                },
+            },
+            credits: {
+                enabled: false
             },
             colors: ['#F15D21', '#1D2E4F', '#37C2CC'],
             title: {
@@ -42,17 +44,27 @@
                 pie: {
                     allowPointSelect: true,
                     cursor: 'pointer',
+                    borderWidth: 1,
+                    borderColor: null,
                     dataLabels: {
+                        color: '#000000',
                         enabled: true,
-                        distance: -20,
-                        format: '{point.percentage:.1f} %',
+                        distance: -30,
+                        format: '{point.percentage} %',
                         filter: {
                             property: 'percentage',
                             operator: '>',
-                            value: 4
-                        }
+                            value: 1
+                        },
+                        style: {
+                            fontWeight: 'normal',
+                            fontSize: '12px',
+                        },
                     },
-                    showInLegend: true
+                    showInLegend: true,
+                },
+                series: {
+                    shadow: true
                 }
             },
 
@@ -65,12 +77,27 @@
                     name: 'Basket ball',
                     y: 45,
                     selected: true,
+                    dataLabels: {
+                        color: '#fff'
+                    }
                 }, {
                     name: 'Other Sport',
                     y: 23,
                     selected: true,
                 }]
-            }]
+            }],
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 350
+                    },
+                    chartOptions: {
+                        chart: {
+                            marginLeft: -110,
+                        },
+                    }
+                }]
+            }
         });
     };
 }

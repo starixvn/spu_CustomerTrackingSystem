@@ -2,13 +2,15 @@
     this.DisplayChart = function () {
         Highcharts.chart('bet-type', {
             chart: {
-                type: 'bar',    
-                height: 125,
+                type: 'bar',
                 marginRight: 0,
                 spacingLeft: 30,
                 style: {
                     fontFamily: '"Lato", Arial, Tahoma, sans-serif'
                 }
+            },
+            credits: {
+                enabled: false
             },
             colors: ['#EBEBEB', '#3773CC', '#FF4343'],
             title: {

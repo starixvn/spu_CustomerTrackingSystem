@@ -1,7 +1,6 @@
 ﻿.wapper-chart-sport .highcharts-data-label {
   font-size: 12px;
-  line-height: 14px;
-  color: #000000; }
+  line-height: 14px; }
   .wapper-chart-sport .highcharts-data-label.highcharts-data-label-color-1 {
     color: #fff; }
 
@@ -1768,6 +1767,7 @@
       z-index: 2;
       left: 0; }
     .container-grid .chart-sport .wapper-chart-sport {
+      height: 135px;
       width: 100%;
       position: relative;
       left: 5px;
@@ -1803,7 +1803,8 @@
     .container-grid .chart-bet-type .bet-grid {
       margin-top: 1px;
       position: relative; }
-      .container-grid .chart-bet-type .bet-grid .bar-stacked {
+      .container-grid .chart-bet-type .bet-grid .wapper-bet-type {
+        height: 125px;
         width: 90%; }
       .container-grid .chart-bet-type .bet-grid .note {
         position: absolute;
@@ -1820,6 +1821,7 @@
     .container-grid .chart-win-lost .win-lost-grid {
       position: relative; }
       .container-grid .chart-win-lost .win-lost-grid .wapper-win-lost {
+        height: 130px;
         position: absolute;
         top: 8px;
         left: 10px;
@@ -1840,7 +1842,6 @@
       grid-row: 1/2;
       border-right: none; }
       .container-grid .chart-sport .wapper-chart-sport {
-        width: 100%;
         margin-top: 16px;
         position: relative;
         left: 0;

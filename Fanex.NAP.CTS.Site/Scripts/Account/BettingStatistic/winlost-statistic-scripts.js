@@ -1,17 +1,21 @@
 ﻿function win_lost() {
+    var chart;
     this.DisplayChart = function () {
         let domElements = {
             iconFullScreen: $("#icon-full-screen"),
+            wrapperChartWinLost: $("#chart-win-lost"),
         };
 
-        let chart = Highcharts.chart('chart-win-lost', {
+        chart = Highcharts.chart('chart-win-lost', {
             chart: {
                 zoomType: 'xy',
-                height: 130,
                 spacing: [10, 45, 10, 30],
                 style: {
                     fontFamily: '"Lato", Arial, Tahoma, sans-serif'
-                }
+                },
+            },
+            credits: {
+                enabled: false
             },
             title: {
                 text: ''
@@ -96,32 +100,12 @@
                 tooltip: {
                     valueSuffix: 'K'
                 }
-            }]
+                }],
         });
 
-        domElements.iconFullScreen.on('click', function () {
-            Highcharts.FullScreen = function (container) {
-                this.init(container.parentNode); // main div of the chart
-            };
-
-            Highcharts.FullScreen.prototype = {
-                init: function (container) {
-                    if (container.requestFullscreen) {
-                        container.requestFullscreen();
-                    } else if (container.mozRequestFullScreen) {
-                        container.mozRequestFullScreen();
-                    } else if (container.webkitRequestFullscreen) {
-                        container.webkitRequestFullscreen();
-                    } else if (container.msRequestFullscreen) {
-                        container.msRequestFullscreen();
-                    }
-
-                    //chart.setSize($(window).width(), $(window).height());
-                }
-            };
-
-            chart.fullscreen = new Highcharts.FullScreen(chart.container);
+        domElements.iconFullScreen.on('click', function (e) {
+            e.preventDefault();
+            chart.fullscreen.toggle();
         })
-
     };
 }

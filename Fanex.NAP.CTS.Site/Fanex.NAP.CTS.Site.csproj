@@ -887,6 +887,7 @@
     <Content Include="Scripts\Evidence\form-place-evidence.js" />
     <Content Include="Scripts\Evidence\form-exception.js" />
     <Content Include="Scripts\Evidence\form-retract-evidence.js" />
+    <Content Include="Scripts\highcharts\full-screen.js" />
     <Content Include="Scripts\highcharts\highcharts.js" />
     <Content Include="Scripts\Home\SearchPage.js" />
     <Content Include="Scripts\ImportEvidences\index.js" />
