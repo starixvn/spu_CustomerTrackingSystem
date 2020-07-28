@@ -226,7 +226,9 @@
                 dataFilter: function (response) {
                     if (response !== undefined) {
                         var json = jQuery.parseJSON(response);
-                        RenderCustomerCategorySummary(json.data);
+
+                        if (!RenderProblemAccountCategorySummary(json.data))
+                            RenderCustomerCategorySummary(json.data);
                     }
                     return response;
                 },
@@ -280,22 +282,56 @@
         });
     }
 
+    function RenderProblemAccountCategorySummary(data) {
+        var isExistProblemAccount = false;
+        let html = "";
+
+        data.map(function (x) {
+            let isEquals = x.ParentCategoryName.toUpperCase().includes("PROBLEM ACCOUNT");
+            if (isEquals) {
+                let classIconColor = "circle bg-red";
+                let sportGroupNameList = x.SportGroupNameList ? x.SportGroupNameList : "None";
+
+                html = BuildCustomerCategoryToHtmlDiv(html, classIconColor, x.CategoryName, sportGroupNameList);
+               
+                isExistProblemAccount = true;
+            }
+        });
+
+        if (isExistProblemAccount) {
+            $('#divHeaderUsername')
+                .removeClass('bg-yellow')
+                .removeClass('bg-green')
+                .addClass('bg-red');
+            $('#divHeaderInfo')
+                .removeClass('border-yellow')
+                .removeClass('border-green')
+                .addClass('border-red');
+
+            $('#divCustomerCategorySummary').html(html);
+            $('#spanContentInfoLoading').css('visibility', 'hidden');
+            $('#divHeaderInfo').css('visibility', 'visible');
+        }
+
+        return isExistProblemAccount;
+    }
+
     function RenderCustomerCategorySummary(data) {
         let html = "";
-        let defaultCategoryList = GetCustomerCategoryList();
+        let defaultNormalCategoryList = GetNormalCustomerCategoryList();
         let indexColorProfile = 1;
-
-        for (let i = 0; i < defaultCategoryList.length; i++) {
+       
+        for (let i = 0; i < defaultNormalCategoryList.length; i++) {
             data.map(function (x) {
-                let isEquals = x.CategoryName === defaultCategoryList[i].name;
+                let isEquals = x.CategoryName === defaultNormalCategoryList[i].name;
                 if (isEquals) {
-                    let classIconColor = defaultCategoryList[i].cssClass;
+                    let classIconColor = defaultNormalCategoryList[i].cssClass;
                     let sportGroupNameList = x.SportGroupNameList ? x.SportGroupNameList : "None";
 
                     html = BuildCustomerCategoryToHtmlDiv(html, classIconColor, x.CategoryName, sportGroupNameList);
 
-                    indexColorProfile = indexColorProfile < defaultCategoryList[i].indexColor
-                        ? defaultCategoryList[i].indexColor
+                    indexColorProfile = indexColorProfile < defaultNormalCategoryList[i].indexColor
+                        ? defaultNormalCategoryList[i].indexColor
                         : indexColorProfile;
                 }
             });
@@ -322,16 +358,6 @@
                     .removeClass('border-green')
                     .addClass('border-yellow');
                 break;
-            case 3:
-                $('#divHeaderUsername')
-                    .removeClass('bg-yellow')
-                    .removeClass('bg-green')
-                    .addClass('bg-red');
-                $('#divHeaderInfo')
-                    .removeClass('border-yellow')
-                    .removeClass('border-green')
-                    .addClass('border-red');
-                break;
             default:
                 break;
         }       
@@ -355,18 +381,18 @@
         return html;
     }
 
-    function GetCustomerCategoryList() {
+    function GetNormalCustomerCategoryList() {
         var list = [];
 
-        list.push({ 'name': 'High Risk Punter', 'cssClass': 'circle bg-yellow', 'indexColor': 2, 'order': 1 });
-        list.push({ 'name': 'Smart Punter', 'cssClass': 'circle bg-yellow', 'indexColor': 2, 'order': 2 });
-        list.push({ 'name': 'Probation', 'cssClass': 'circle bg-yellow', 'indexColor': 2, 'order': 3 });
-        list.push({ 'name': 'Limited Punter', 'cssClass': 'circle bg-yellow', 'indexColor': 2, 'order': 4 }); 
-        list.push({ 'name': 'Lucky Punter', 'cssClass': 'circle bg-yellow', 'indexColor': 2, 'order': 5 });
-        list.push({ 'name': 'VVIP', 'cssClass': 'circle bg-green', 'indexColor': 1, 'order': 6 });
-        list.push({ 'name': 'VIP', 'cssClass': 'circle bg-green', 'indexColor': 1, 'order': 7 });
-        list.push({ 'name': 'Normal Member', 'cssClass': 'circle bg-green', 'indexColor': 1, 'order': 8 });
-        list.push({ 'name': 'New Member', 'cssClass': 'circle bg-green', 'indexColor': 1, 'order': 9 });
+        list.push({ 'name': 'High Risk Punter', 'cssClass': 'circle bg-yellow', 'indexColor': 2 });
+        list.push({ 'name': 'Smart Punter', 'cssClass': 'circle bg-yellow', 'indexColor': 2});
+        list.push({ 'name': 'Probation', 'cssClass': 'circle bg-yellow', 'indexColor': 2 });
+        list.push({ 'name': 'Limited Punter', 'cssClass': 'circle bg-yellow', 'indexColor': 2 }); 
+        list.push({ 'name': 'Lucky Punter', 'cssClass': 'circle bg-yellow', 'indexColor': 2 });
+        list.push({ 'name': 'VVIP', 'cssClass': 'circle bg-green', 'indexColor': 1 });
+        list.push({ 'name': 'VIP', 'cssClass': 'circle bg-green', 'indexColor': 1 });
+        list.push({ 'name': 'Normal Member', 'cssClass': 'circle bg-green', 'indexColor': 1 });
+        list.push({ 'name': 'New Member', 'cssClass': 'circle bg-green', 'indexColor': 1 });
            
         return list;
     }
