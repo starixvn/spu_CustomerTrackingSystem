@@ -47,7 +47,7 @@ function notification() {
     function RenderUsername() {
             var url = common.modifyRelativeUrl('Account/Index/{3}');
 
-            return '<a href="' + url + '"> Account <span class="name">{0}</span> has {1} new associated accounts. </a>';
+            return '<a href="' + url + '"> Account <span class="name">{0}</span> has {1} new associated account(s). </a>';
     }
 
     function getUnreadMessageCount()
