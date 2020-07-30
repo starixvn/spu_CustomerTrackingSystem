@@ -12,6 +12,8 @@ namespace Fanex.NAP.CTS.Model.GraphDB
     {
         public int CustId { get; set; }
 
+        public int CustSubId { get; set; }
+
         [XName("Date")]
         public string AssociationDate { get; set; }
     }

@@ -10,7 +10,9 @@ namespace Fanex.NAP.CTS.Model.GraphDB
         public long CTSCustID { get; set; }
 
         public int? CustId { get; set; }
-        
+
+        public int CustSubId { get; set; }
+
         public int SubscriberId { get; set; }
         
         public string Username { get; set; }

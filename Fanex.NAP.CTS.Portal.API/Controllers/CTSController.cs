@@ -14,6 +14,7 @@ using Fanex.NAP.SPU.Graph.Core;
 using System.Web.Http.Results;
 using Fanex.NAP.CTS.Model.GraphDB;
 using Fanex.NAP.CTS.Core.Helpers.Xml;
+using Fanex.NAP.CTS.Core.Helpers.Api;
 
 namespace Fanex.NAP.CTS.Portal.API.Controllers
 {
@@ -115,7 +116,8 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
             {
                 var cust = DbSessionFactory.Execute<GraphCustomer>("GetCustomerByCustId", new
                 {
-                    CustID = custId
+                    CustID = custId,
+                    CustSubID = 0
                 }).Data.FirstOrDefault();
 
                 if (cust != null)
@@ -133,6 +135,7 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
                         var associationList = result.AssociationList.Select(a => new AssociationForExtAcc
                         {
                             CustId = a.CustId == null ? 0 : a.CustId.Value,
+                            CustSubId = a.CustSubId,
                             AssociationDate = a.AssociationDate.ToString()
                         });
 
@@ -154,9 +157,13 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public string Test()
+        public void Test()
         {
-            return "OK";
+            var ctsClient = new WebClient();
+            ctsClient.QueryString.Add("CustId", "43913195");
+            var e = ctsClient.DownloadString("http://ha.nexdev.net:7723/api/cts/GetAssociationForExtAcc");
+
+            var a = ApiHelper.Get<string>("http://ha.nexdev.net:7723/api/cts/GetAssociationForExtAcc?CustId=43913195").Result;
         }
     }
 }
