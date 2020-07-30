@@ -21,7 +21,14 @@
                 startOnTick: false,
                 endOnTick: false,
                 lineWidth: 0,
-                tickLength: 0
+                tickLength: 0,
+                labels: {
+                    style: {
+                        color: '#333333',
+                        fontWeight: 'normal',
+                        fontSize: '12px',
+                    }
+                }
             },
             yAxis: {
                 min: 0,

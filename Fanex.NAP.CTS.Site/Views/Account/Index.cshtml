@@ -139,15 +139,29 @@
         <div class="statistic-title hide" id="statistic-title" ref="statistic-detail">
             <i class="icon icon-chevron-right"></i>
             <a class="title" href="javascript:void(0)">
-                Summary of Last 3 Months
+                Betting Statistic of Last 90 Days
             </a>
         </div>
-        <div id="statistic-detail" class="statistic-detail ">
-            <div class="container-grid">
-                @Html.Partial("BettingStatistic/Summary")
-                @Html.Partial("BettingStatistic/TurnoverBySport")
-                @Html.Partial("BettingStatistic/TurnoverByBetType")
-                @Html.Partial("BettingStatistic/TurnoverWinLost")
+        <div id="statistic-detail" class="statistic-detail">
+            <div class="chart_empty hide">
+                <div class="wrapper-title">
+                    <i class="icon icon-chevron-right"></i>
+                    <span class="title">
+                        Summary Of Last 90 Days
+                    </span>
+                </div>
+                <div class="wrapper_content">
+                    <img class="" src="@Url.Content("~/Content/images/statistic_empty.png")" alt="Loading ..." />
+                    <span class="text">There’s no activity to report yet.</span>
+                </div>
+            </div>
+            <div class="chart-default">
+                <div class="container-grid">
+                    @Html.Partial("BettingStatistic/Summary")
+                    @Html.Partial("BettingStatistic/TurnoverBySport")
+                    @Html.Partial("BettingStatistic/TurnoverByBetType")
+                    @Html.Partial("BettingStatistic/TurnoverWinLost")
+                </div>
             </div>
         </div>
     </div>

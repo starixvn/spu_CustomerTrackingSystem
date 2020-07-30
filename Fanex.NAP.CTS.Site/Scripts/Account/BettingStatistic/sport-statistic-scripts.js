@@ -18,7 +18,7 @@
             credits: {
                 enabled: false
             },
-            colors: ['#F15D21', '#1D2E4F', '#37C2CC'],
+            colors: ['#F15D21','#FFD643', '#1D2E4F', '#37C2CC'],
             title: {
                 text: ''
             },
@@ -49,7 +49,7 @@
                     dataLabels: {
                         color: '#000000',
                         enabled: true,
-                        distance: -30,
+                        distance: -25,
                         format: '{point.percentage} %',
                         filter: {
                             property: 'percentage',
@@ -71,11 +71,16 @@
             series: [{
                 data: [{
                     name: 'Soccer',
-                    y: 32,
+                    y: 26,
                     selected: true,
                 }, {
                     name: 'Basket ball',
-                    y: 45,
+                    y: 11,
+                    selected: true
+                },
+                {
+                    name: 'Volleyball',
+                    y: 40,
                     selected: true,
                     dataLabels: {
                         color: '#fff'

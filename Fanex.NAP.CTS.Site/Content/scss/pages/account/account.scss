@@ -1401,6 +1401,23 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 
     .statistic-detail {
         min-height: 158px;
+
+        .chart_empty {
+            padding: 12px;
+            .wrapper_content{
+                display:block;
+                text-align: center;
+                margin-top: 30px;
+            }
+            .text {
+                font-weight: bold;
+                font-size: 14px;
+                line-height: 17px;
+                display: flex;
+                align-items: center;
+                color: #2B2B2B;
+            }
+        }
     }
 
     .icon {
@@ -1445,12 +1462,16 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
         }
 
         .wrapper-data {
-            padding: 4px 32px;
+            padding: 4px 31px;
             padding-right: 37px;
 
             .summary-top {
                 display: flex;
                 flex-wrap: wrap;
+
+                .name {
+                    margin-bottom: 5px;
+                }
             }
 
             .border-divide {
@@ -1464,6 +1485,11 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
                 display: flex;
                 flex-wrap: wrap;
                 margin-top: 14px;
+
+                .name {
+                    margin-bottom: 3px;
+                    margin-left: 1px;
+                }
             }
 
             .wrapper-title {
@@ -1476,13 +1502,12 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
                     text-transform: capitalize;
                     color: #2B2B2B;
                     text-align: center;
-                    margin-bottom: 5px;
                 }
 
                 .alert {
+                    padding-top: 2px;
                     min-width: 90px;
                     height: 18px;
-                    color: #fff;
                     font-weight: bold;
                     font-size: 12px;
                     line-height: 14px;
@@ -1491,13 +1516,21 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 
 
                     &.high-stake {
-                        background: #F15D21;
-                        border: 1px solid #D94D14;
+                        background: #FF6565;
+                        border: 1px solid #D95656;
+                        color: #610000;
                     }
 
                     &.medium-stake {
-                        background: #4F971F;
-                        border: 1px solid #387B0B;
+                        background: #F1AA21;
+                        border: 1px solid #CC901C;
+                        color: #422B00;
+                    }
+
+                    &.normal-stake {
+                        background: #99DB6E;
+                        border: 1px solid #7FB55B;
+                        color: #205200;
                     }
                 }
             }
@@ -1516,6 +1549,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
                 }
 
                 .text {
+                    padding-top: 1px;
                     font-size: 13px;
                     line-height: 16px;
                     align-items: center;
@@ -1548,15 +1582,9 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             height: 135px;
             width: 100%;
             position: relative;
-            left: 5px;
-            top: 16px;
+            left: 7px;
+            top: 18px;
         }
-        /*   .note {
-            width: 40%;
-            position: absolute;
-            right: 0;
-            top: 56px;
-        }*/
     }
 
     .note-title {
@@ -1632,9 +1660,9 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             position: relative;
 
             .wapper-win-lost {
-                height: 130px;
+                height: 120px;
                 position: absolute;
-                top: 8px;
+                top: 12px;
                 left: 10px;
                 width: 100%;
             }
