@@ -2,7 +2,6 @@
 let msgCounter = 0;
 let messages = null;
 let maxAssociationId = 0;
-let isHostPermission;
 let isFirstNotification = false;
 
 function notification() {
@@ -71,67 +70,42 @@ function notification() {
     function GetNewNotification(maxAssociationID) {
         var url = common.modifyRelativeUrl("/Notification/GetAllMessages");
 
-        if (isHostPermission === undefined)
-        {
-            GetCTSCustPermission();
-        }
-
-        if (isHostPermission == true) {
-            $.ajax(url, {
-                type: 'GET',
-                data: { maxAssociationID: maxAssociationID },
-                success: function (json) {
-                    if (!CheckValid(json)) {
-                        ReCheckin();
-                    } else {
-                        isHostPermission = json.isHostPermission;
-                        CheckDifferentCurrentAndPreviousMessages(json);
-                        SetUnReadCounterToCookie(json.unReadMessageCounter);
-                        maxAssociationId = json.maxAssociationID;
-                        messages = json.messages;
-                        msgCounter = json.messageCounter;
-                        GetMessage();
-                        SetupBellNotification();
-                        isFirstNotification = json.isFirstNotification;
-                    }
-                },
-                complete: function () {
-                    if (isFirstNotification == false && GetUnReadFlagFromCookie() == "true") {
-                        NotifyToDesktop(unreadMsgCounter);
-                        document.cookie = "isUnReadStatusChanged=false";
-                    }
-                },
-                error: function (errMsg) {
-                    console.log('Get notification Error, ' + ex);
-                    SetUnReadCounterToCookie(0);
-                    msgCounter = 0;
-                    messages = null;
-                    GetMessage();
-                    console.log(errMsg);
-                }
-            });
-        }
-        else {
-            messages = null;
-            msgCounter = 0;
-            unreadMsgCounter = 0;
-            document.cookie = "isUnReadStatusChanged=false";
-            GetMessage();
-            SetupBellNotification();
-        }
-    }
-
-    function GetCTSCustPermission() {
-        $.ajax(common.modifyRelativeUrl('/Notification/GetUserPermission'), {
+        $.ajax(url, {
             type: 'GET',
-            data: {},
-            success: function (response) {
-                isHostPermission = response;
+            data: { maxAssociationID: maxAssociationID },
+            success: function (json) {
+                if (!CheckValid(json)) {
+                    ReCheckin();
+                } else {
+                    CheckDifferentCurrentAndPreviousMessages(json);
+                    SetUnReadCounterToCookie(json.unReadMessageCounter);
+                    maxAssociationId = json.maxAssociationID;
+                    messages = json.messages;
+                    msgCounter = json.messageCounter;
+                    GetMessage();
+                    SetupBellNotification();
+                    isFirstNotification = json.isFirstNotification;
+                }
+            },
+            complete: function () {
+                if (isFirstNotification == false && GetUnReadFlagFromCookie() == "true") {
+                    NotifyToDesktop(unreadMsgCounter);
+                    document.cookie = "isUnReadStatusChanged=false";
+                }
+
+                if (unreadMsgCounter == 0) {
+                    GetMessage();
+                }
+                
             },
             error: function (errMsg) {
+                console.log('Get notification Error, ' + ex);
+                SetUnReadCounterToCookie(0);
+                msgCounter = 0;
+                messages = null;
+                GetMessage();
                 console.log(errMsg);
-            },
-            async: false
+            }
         });
     }
 
@@ -257,7 +231,6 @@ function notification() {
     }
 
     $(document).ready(function () {
-        GetCTSCustPermission();
         getUnreadMessageCount();
     });
 

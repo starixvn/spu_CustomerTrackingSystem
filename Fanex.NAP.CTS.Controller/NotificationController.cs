@@ -20,17 +20,10 @@
         }
 
         [HttpGet]
-        [NapAuth(FunctionKey = FSFunctionKeys.NotificationSettings, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [NapAuth(FunctionKey = FSFunctionKeys.NotificationSettings, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public JsonResult GetAllMessages(int maxAssociationID)
         {
             var isFirstNotification = CheckFirstNotification();
-
-            IUserService userService = new UserService();
-
-            var isHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
-                            NapSettings.Settings.SiteId,
-                            FSFunctionKeys.AssociatedAccountMonitor,
-                            NAP.Core.Business.Constant.Policy.Host);
 
             var userId = CurrentSession.UserId;
             var messages = _notificationService.Get(userId, maxAssociationID).ToList();
@@ -46,22 +39,8 @@
                 unReadMessageCounter = unReadList?.Count(),
                 readList,
                 readListCounter = readList?.Count(),
-                isHostPermission,
                 isFirstNotification
             }, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpGet]
-        public JsonResult GetUserPermission()
-        {
-            IUserService userService = new UserService();
-
-            var isHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
-                            NapSettings.Settings.SiteId,
-                            FSFunctionKeys.NotificationSettings,
-                            NAP.Core.Business.Constant.Policy.Host);
-           
-            return Json(isHostPermission, JsonRequestBehavior.AllowGet);
         }
 
         private bool CheckFirstNotification()
