@@ -5,6 +5,7 @@
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Web.Attribute;
+    using Fanex.NAP.CTS.Core.Utilities;
     using Service;
     using System.Linq;
     using System.Web.Mvc;
@@ -22,6 +23,8 @@
         [NapAuth(FunctionKey = FSFunctionKeys.NotificationSettings, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public JsonResult GetAllMessages(int maxAssociationID)
         {
+            var isFirstNotification = CheckFirstNotification();
+
             IUserService userService = new UserService();
 
             var isHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
@@ -43,7 +46,8 @@
                 unReadMessageCounter = unReadList?.Count(),
                 readList,
                 readListCounter = readList?.Count(),
-                isHostPermission
+                isHostPermission,
+                isFirstNotification
             }, JsonRequestBehavior.AllowGet);
         }
 
@@ -58,6 +62,18 @@
                             NAP.Core.Business.Constant.Policy.Host);
            
             return Json(isHostPermission, JsonRequestBehavior.AllowGet);
+        }
+
+        private bool CheckFirstNotification()
+        {
+            var isFirst = AppSession.IsFirstGetDataNotification;
+
+            if(isFirst)
+            {
+                AppSession.IsFirstGetDataNotification = false;
+            }
+
+            return isFirst;
         }
     }
 }

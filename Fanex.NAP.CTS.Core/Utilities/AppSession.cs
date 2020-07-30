@@ -124,5 +124,11 @@
 
             set { SessionManager.Set(ViewIpVnKey, value); }
         }
+
+        public static bool IsFirstGetDataNotification
+        {
+            get { return SessionManager.Get<bool>(Consts.IsFirstGetDataNotification); }
+            set { SessionManager.Set<bool>(Consts.IsFirstGetDataNotification, value); }
+        }
     }
 }

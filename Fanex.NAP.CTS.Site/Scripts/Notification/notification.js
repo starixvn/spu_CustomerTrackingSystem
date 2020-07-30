@@ -2,8 +2,8 @@
 let msgCounter = 0;
 let messages = null;
 let maxAssociationId = 0;
-let isNoticedAlready = false;
 let isHostPermission;
+let isFirstNotification = false;
 
 function notification() {
     let domElements = {
@@ -92,10 +92,11 @@ function notification() {
                         msgCounter = json.messageCounter;
                         GetMessage();
                         SetupBellNotification();
+                        isFirstNotification = json.isFirstNotification;
                     }
                 },
                 complete: function () {
-                    if (GetUnReadFlagFromCookie() == "true") {
+                    if (isFirstNotification == false && GetUnReadFlagFromCookie() == "true") {
                         NotifyToDesktop(unreadMsgCounter);
                         document.cookie = "isUnReadStatusChanged=false";
                     }
@@ -258,6 +259,17 @@ function notification() {
     $(document).ready(function () {
         GetCTSCustPermission();
         getUnreadMessageCount();
+    });
+
+    $(document).click(function (e) {
+        if (!domElements.notificationIcon.is(e.target) && domElements.notificationIcon.has(e.target).length === 0
+            && domElements.notificationList.is(":visible"))
+        {
+            domElements.notificationBell.removeClass('bell-shake');
+            domElements.circle.hide(); 
+            GetNewNotification(maxAssociationId);     
+            domElements.notificationList.toggle();
+        }
     });
 }
 
