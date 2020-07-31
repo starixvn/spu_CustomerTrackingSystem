@@ -1403,19 +1403,34 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
         min-height: 158px;
 
         .chart_empty {
-            padding: 12px;
-            .wrapper_content{
-                display:block;
-                text-align: center;
-                margin-top: 30px;
+            padding: 5px 10px;
+
+            .wrapper-title {
+                .icon-chevron-right {
+                    transform: rotate(90deg);
+                    margin-left: -4px;
+                }
+
+                .title {
+                    margin-left: 4px;
+                }
             }
-            .text {
-                font-weight: bold;
-                font-size: 14px;
-                line-height: 17px;
-                display: flex;
-                align-items: center;
-                color: #2B2B2B;
+
+            .wrapper_content {
+                display: block;
+                text-align: center;
+
+                .report_empty{
+                    margin-top: 1px;
+                }
+                .text {
+                    display: block;
+                    font-weight: bold;
+                    font-size: 14px;
+                    line-height: 17px;
+                    align-items: center;
+                    color: #2B2B2B;
+                }
             }
         }
     }
@@ -1583,7 +1598,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             width: 100%;
             position: relative;
             left: 7px;
-            top: 18px;
+            top: 16px;
         }
     }
 
@@ -1718,6 +1733,14 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             grid-column: 17 / span 16;
             grid-row: 2/3;
         }
+    }
+}
+
+
+@media screen and (max-width: 1072.99px) {
+    .container-grid {
+        grid-template-rows: 220px 160px;
+        grid-row-gap: 10px;
     }
 }
 

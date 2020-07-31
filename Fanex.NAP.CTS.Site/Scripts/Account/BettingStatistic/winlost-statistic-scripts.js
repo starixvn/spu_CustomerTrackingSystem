@@ -104,6 +104,17 @@
                     fontSize: '13px',
                 },
             },
+            plotOptions: {
+                series: {
+                    marker: {
+                        radius: 4,
+                        fillColor: '#F15D21',
+                        lineWidth: 1,
+                        lineColor: '#FFFFFF'
+                    }
+                }
+            },
+
             series: [{
                 name: 'Turnover',
                 type: 'area',

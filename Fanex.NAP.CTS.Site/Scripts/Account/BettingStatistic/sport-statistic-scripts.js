@@ -60,6 +60,8 @@
                             fontWeight: 'normal',
                             fontSize: '12px',
                         },
+                        connectorColor: 'inherit',
+                        connectorPadding: 0
                     },
                     showInLegend: true,
                 },

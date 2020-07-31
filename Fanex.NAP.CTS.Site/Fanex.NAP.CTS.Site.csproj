@@ -425,6 +425,7 @@
     <Content Include="Content\images\expand_all.png" />
     <Content Include="Content\images\flagged_device_by_evidence.png" />
     <Content Include="Content\images\graph_view.png" />
+    <Content Include="Content\images\statistic_empty.png" />
     <Content Include="Content\scss\components\_charts.css">
       <DependentUpon>_charts.scss</DependentUpon>
     </Content>
