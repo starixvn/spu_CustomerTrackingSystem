@@ -88,7 +88,7 @@
                         color: '#fff'
                     }
                 }, {
-                    name: 'Other Sport',
+                    name: 'Other Sports',
                     y: 23,
                     selected: true,
                 }]
