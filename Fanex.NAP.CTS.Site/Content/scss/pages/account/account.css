@@ -1694,7 +1694,7 @@
     margin-left: 24px; }
 
 .container-grid {
-  padding: 5px 10px;
+  padding: 7px 10px;
   display: grid;
   grid-template-columns: repeat(32, 1fr);
   grid-column-gap: 0;
