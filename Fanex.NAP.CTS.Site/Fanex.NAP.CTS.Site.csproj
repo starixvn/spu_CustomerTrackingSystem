@@ -529,7 +529,6 @@
     <Content Include="Scripts\Account\CustomerCategory\customer-category.js" />
     <Content Include="Scripts\Account\index.js" />
     <Content Include="Scripts\Account\BettingStatistic\sport-statistic-scripts.js" />
-    <Content Include="Scripts\Account\BettingStatistic\summary-statistic-scripts.js" />
     <Content Include="Scripts\Account\BettingStatistic\winlost-statistic-scripts.js" />
     <Content Include="Scripts\AssociatedAccountMonitor\index.js" />
     <Content Include="Scripts\DataTables_New\AutoFill-2.3.4\css\autoFill.bootstrap.css" />

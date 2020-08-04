@@ -25,6 +25,7 @@
     using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Configuration;
+    using Fanex.NAP.CTS.ViewModel.Account.BettingStatistic;
 
     [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class AccountController : BaseController
@@ -45,7 +46,7 @@
             _subscriberAssignmentService = new SubscriberAssignmentService();
             _transService = new TransactionService();
         }
-       
+
         public ActionResult Index(long Id)
         {
             if (Id > 0)
@@ -59,7 +60,8 @@
                     var customerGeneralStatusViewModel = new CustomerGeneralStatusViewModel()
                     {
                         CTSCustId = Id,
-                        IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.AccountDetail, NAP.Core.Business.Constant.Policy.Host)
+                        IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.AccountDetail, NAP.Core.Business.Constant.Policy.Host),
+                        CurrentUserId = CurrentSession.UserId
                     };
 
                     var customerLastTicketDate = _accountService.GetCustomerLastTicketDate(customerInfoFromCTS.CustId);
@@ -284,9 +286,9 @@
             }
 
             var directAssociationUrl = GetDirectAssociationUrl(model.AssociationType);
-           
-            var graphAssociationPage = model.IsDirect 
-                ?_accountService.GetCustomerAssociationByGraph(directAssociationUrl, model.CTSCustId, model.AssociationStatus, skip, take) 
+
+            var graphAssociationPage = model.IsDirect
+                ? _accountService.GetCustomerAssociationByGraph(directAssociationUrl, model.CTSCustId, model.AssociationStatus, skip, take)
                 : new GraphAssociationPaging();
 
             if (graphAssociationPage != null && graphAssociationPage.AssociationList != null && graphAssociationPage.AssociationList.Any())
@@ -298,8 +300,8 @@
 
                 var custIds = string.Join(",", customerAssociation.Select(x => x.CustId));
 
-                var getStatusByCustIds = _accountService.GetCustomerGeneralStatus(custIds);                
-               
+                var getStatusByCustIds = _accountService.GetCustomerGeneralStatus(custIds);
+
                 customerAssociation = _accountService.FilterCustomerAssociationByStatus(string.Empty, customerAssociation, getStatusByCustIds);
 
                 customerAssociation = _accountService.FilterCustomerAssociationByAssociationType(model.AssociationType, customerAssociation);
@@ -320,8 +322,8 @@
                         Status = x.StatusName == "NA" ? "N/A" : x.StatusName,
                         StatusId = x.StatusId,
                         SubscriberId = x.SubscriberId,
-                        Subscriber = getAllSubscribers.Any(aa => x.SubscriberId != -1 && aa.SubscriberId == x.SubscriberId) 
-                                        ? getAllSubscribers.FirstOrDefault(a => a.SubscriberId == x.SubscriberId).SubscriberName 
+                        Subscriber = getAllSubscribers.Any(aa => x.SubscriberId != -1 && aa.SubscriberId == x.SubscriberId)
+                                        ? getAllSubscribers.FirstOrDefault(a => a.SubscriberId == x.SubscriberId).SubscriberName
                                         : "-",
                         CTSCustId = x.CTSCustID,
                         IsLinked = x.AssociationStatus == 1
@@ -338,7 +340,7 @@
                 }).OrderBy(a => a.StatusId)
                 .ThenBy(a => !a.IsLinked)
                 .ThenByDescending(a => a.AssociationDate)
-                .ToList();                              
+                .ToList();
             }
 
             return Json(new
@@ -364,7 +366,7 @@
                     return ConfigSettings.GetDirectAssociation;
             }
         }
-     
+
         [HttpPost]
         public ActionResult GetDirectAssociationGraph(Int64 ctsCustid, string displayName, int associationStatus, int start, int length)
         {
@@ -404,7 +406,7 @@
             var graphCustomer = _graphService.GetGraphCustomerItemByShortestPathOfAccount(shortestPathOfAccount);
 
             return Json(graphCustomer, JsonRequestBehavior.AllowGet);
-        }       
+        }
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
@@ -429,7 +431,7 @@
                 UserNameDuplicatedList = list.Where(x => x.IsDuplicated)
                                              .Select(x => x.UserName)
             };
-        }       
+        }
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
@@ -439,7 +441,7 @@
             bool isException = false;
 
             var resultValidated = _accountService.ValidateManualAssociationMultiple(fromCTSCustId, toUserNameList, out isException);
-           
+
             if (resultValidated.Any())
             {
                 var invalidOrDuplicatedList = GetInvalidOrDuplicated(resultValidated, isException);
@@ -507,7 +509,7 @@
                 errorCode = dbResult.ErrorCode,
                 errorMessage = dbResult.ErrorMsg
             }, JsonRequestBehavior.AllowGet);
-        }       
+        }
         #endregion
 
         #region Chain To Evidence
@@ -957,6 +959,186 @@
                 errorMessage = result.ErrorMsg
             }, JsonRequestBehavior.AllowGet);
         }
+        #endregion
+
+        #region Betting Statistic
+        //[NapAuth(FunctionKey = FSFunctionKeys.BettingStatistics, Policy = NAP.Core.Business.Constant.Policy.Read)]
+        public ActionResult GetPerformanceBySport(long custId, int getTop) ///TODO  NAP Authentication
+        {
+            var tasks = new List<Task>();
+            var result = _accountService.GetPerformanceBySport(custId, getTop);     //TODO CHECK Other NULL
+            var totalSportBettingStatistic = new SportBettingStatisticViewModel();
+            var bestSportBettingStatistic = new SportBettingStatisticViewModel();
+            var pieChartSportStatisticSessions = new List<SportStatisticPieChartViewModel>();
+
+            tasks.Add(Task.Run(() =>
+            {
+                try
+                {
+                    totalSportBettingStatistic.TurnOver = result.Sum(c => c.TurnOver);
+                    totalSportBettingStatistic.WinLoss = result.Sum(c => c.WinLoss);
+                    totalSportBettingStatistic.BetCount = result.Sum(c => c.BetCount);
+                    totalSportBettingStatistic.BetCount14 = result.Sum(c => c.BetCount14);
+                    totalSportBettingStatistic.TurnOver14 = result.Sum(c => c.TurnOver14);
+                }
+                catch (Exception ex)
+                {
+                    LogService.Info(ex.Message);
+
+                    throw;
+                }
+            }));
+
+            tasks.Add(Task.Run(() =>
+            {
+                try
+                {
+                    var tempBestSport = result.FirstOrDefault(c => c.Ranking == result.Min(x => x.Ranking));
+                    bestSportBettingStatistic.SportID = tempBestSport.SportID;
+                    bestSportBettingStatistic.SportName = tempBestSport.SportName;
+                    bestSportBettingStatistic.TurnOver = tempBestSport.TurnOver;
+                    bestSportBettingStatistic.WinLoss = tempBestSport.WinLoss;
+                    bestSportBettingStatistic.BetCount = tempBestSport.BetCount;
+                    totalSportBettingStatistic.TurnOver14 = tempBestSport.TurnOver14;
+                    totalSportBettingStatistic.BetCount14 = tempBestSport.BetCount14;
+                }
+                catch (Exception ex)
+                {
+                    LogService.Info(ex.Message);
+
+                    throw;
+                }
+            }));
+
+            tasks.Add(Task.Run(() =>
+            {
+                try
+                {
+                    CalculatePieChartTurnOverPercantage(result, pieChartSportStatisticSessions);
+                }
+                catch (Exception ex)
+                {
+                    LogService.Info(ex.Message);
+
+                    throw;
+                }
+            }));
+
+            Task.WhenAll(tasks.ToArray()).Wait();
+
+            return Json(new
+            {
+               totalSportBettingStatistic,
+               bestSportBettingStatistic,
+               pieChartSportStatisticSessions
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        //[NapAuth(FunctionKey = FSFunctionKeys.BettingStatistics, Policy = NAP.Core.Business.Constant.Policy.Read)]
+        public ActionResult GetPerformanceByBettype(long custId, int getTop) ///TODO Adjust name function & NAP Authentication
+        {
+            var result = _accountService.GetPerformanceByBettype(custId, getTop).OrderBy(c => c.Ranking);
+            var liveIndicatorList = new List<LiveIndicatorViewModel>();
+            var betTypeCategories = new List<string>();
+            CalculateLiveIndicatorPercentage(result, liveIndicatorList, betTypeCategories);
+
+            return Json(new
+            {
+                betTypeCategories,
+                liveIndicatorList 
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        //[NapAuth(FunctionKey = FSFunctionKeys.BettingStatistics, Policy = NAP.Core.Business.Constant.Policy.Read)]
+        public ActionResult GetPerformanceDaily(long custId) ///TODO Adjust name function & NAP Authentication
+        {
+            var result = _accountService.GetPerformanceDaily(custId).OrderByDescending(c=>c.RptDate);
+            var turnOverAreaData = new List<decimal>();
+            var winLossAreaDate = new List<decimal>();
+            var days = new List<string>();
+
+            if (result.Any())
+            {
+                result.ToList().ForEach(c =>
+                {
+                    days.Add(c.RptDate.ToString("dd - MM"));
+                    turnOverAreaData.Add(c.Turnover);
+                    winLossAreaDate.Add(c.Winloss);
+                });
+            }
+
+            return Json(new
+            {
+                turnOverAreaData,
+                winLossAreaDate,
+                days
+            }, JsonRequestBehavior.AllowGet);
+        }
+      
+
+        private IEnumerable<SportStatisticPieChartViewModel> CalculatePieChartTurnOverPercantage(IEnumerable<PerformanceBySportModel> result, List<SportStatisticPieChartViewModel> pieChartSportStatisticSessions)
+        {
+            decimal sumTurnOver = result.Sum(c => c.TurnOver);
+
+            if (sumTurnOver != 0)
+            {
+                result.ToList().ForEach(c =>
+                {
+                    if((c.SportID == -99 && c.BetCount != 0) || c.SportID != -99)
+                    {
+                        pieChartSportStatisticSessions.Add(new SportStatisticPieChartViewModel
+                        {
+                            name = c.SportName,
+                            selected = true,
+                            y = (c.TurnOver != 0) ? ((c.TurnOver / sumTurnOver) * 100) : 0
+                        });
+                    }
+                });
+            }
+            
+            return pieChartSportStatisticSessions;
+        }
+
+        private void CalculateLiveIndicatorPercentage(IEnumerable<PerformanceByBettypeModel> result, List<LiveIndicatorViewModel> liveIndicatorList, List<string> betTypeCategories)
+        {
+            if (!result.Any())
+            {
+                return;
+            }
+
+            decimal maxTurnOverOfBetType = (result.GroupBy(c => new { c.BettypeId })
+                                              .Select(x => new { BettypeId = x.Key,TotalTurnOver = x.Sum(w => w.Turnover) }))
+                                              .Max(c => c.TotalTurnOver);
+
+            liveIndicatorList.Add(new LiveIndicatorViewModel { name = "None", data = new List<decimal>() });
+            liveIndicatorList.Add(new LiveIndicatorViewModel { name = "None-Live", data = new List<decimal>() });
+            liveIndicatorList.Add(new LiveIndicatorViewModel { name = "Live", data = new List<decimal>() });
+
+
+            result.GroupBy(c => c.Ranking).ToList().ForEach(c =>
+            {
+                decimal live = c.FirstOrDefault(x => x.LiveIndicator == true).Turnover;
+                decimal nonelive = c.FirstOrDefault(x => x.LiveIndicator == false).Turnover;
+
+                liveIndicatorList.ElementAt(2).data.Add(live);
+                liveIndicatorList.ElementAt(1).data.Add(nonelive);
+                liveIndicatorList.ElementAt(0).data.Add(maxTurnOverOfBetType - nonelive - live);
+                betTypeCategories.Add(c.FirstOrDefault().BettypeName);
+            });
+
+
+            if(result.Count() < 8)
+            {
+                for (int i=8; i> result.Count(); i-=2)
+                {
+                    liveIndicatorList.ElementAt(0).data.Add(maxTurnOverOfBetType);
+                    liveIndicatorList.ElementAt(1).data.Add(0);
+                    liveIndicatorList.ElementAt(2).data.Add(0);
+                    betTypeCategories.Add("-");
+                }
+            }
+        }
+        
         #endregion
     }
 }

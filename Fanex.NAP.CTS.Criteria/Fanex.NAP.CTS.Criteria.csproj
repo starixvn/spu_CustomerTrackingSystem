@@ -52,6 +52,9 @@
     <Compile Include="Account\Associated\CustomerStaticAccountStatusCriteria.cs" />
     <Compile Include="Account\Associated\GetDirectAssociatedAccountTagFlaggedCriteria.cs" />
     <Compile Include="Account\Associated\GetDirectAssociationByAccountCriteria.cs" />
+    <Compile Include="Account\BettingStatistic\BettingStaisticBySportGetCriteria.cs" />
+    <Compile Include="Account\BettingStatistic\BettingStaisticByBetTypeGetCriteria.cs" />
+    <Compile Include="Account\BettingStatistic\BettingStatictisDaily.cs" />
     <Compile Include="Account\ChainToEvidence\AddAccountExceptionCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\GetAccountExceptionsCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\GetAffectedEvidenceBetweenCustsCriteria.cs" />

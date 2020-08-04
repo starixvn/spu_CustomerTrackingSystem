@@ -1,6 +1,9 @@
 ﻿function win_lost() {
-    var chart;
-    this.DisplayChart = function () {
+    let turnOverAreaData = null;
+    let winLossAreaDate = null;
+    let days = null;
+
+    function  DisplayChart (){
         let domElements = {
             iconFullScreen: $("#icon-full-screen"),
             wrapperChartWinLost: $("#chart-win-lost"),
@@ -21,12 +24,7 @@
                 text: ''
             },
             xAxis: [{
-                categories: [1,2,3,4,5,6,7,8, 9, 10, 11, 12, 13,
-                    14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26,
-                    27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44,
-                    45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63,
-                    64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80,
-                    81, 82, 83, 84, 85, 86, 87, 88, 89, 90],
+                categories: days,
                 crosshair: true,
                 labels: {
                     style: {
@@ -121,9 +119,7 @@
                 opacity: 0.8,
                 lineWidth: 0.5,
                 color: "#3773CC",
-                data: [50, 30, 41, 32, 41, 50, 58, 70, 88, 77, 58, 77, 50, 59, 77, 70, 70, 81, 52, 51, 80, 58, 70, 98, 67, 68, 77, 40, 58, 75
-                    , 40, 80, 31, 52, 31, 40, 48, 60, 78, 67, 48, 67, 45, 54, 72, 42, 23, 34, 75, 35, 43, 56, 68, 86, 75, 56, 75, 48, 57, 75
-                    , 60, 80, 91, 62, 51, 50, 38, 50, 68, 57, 38, 57, 90, 39, 57, 60, 50, 61, 62, 51, 60, 68, 80, 98, 87, 68, 87, 60, 69, 87],
+                data: turnOverAreaData,
                 tooltip: {
                     valueSuffix: 'K'
                 },
@@ -141,11 +137,7 @@
                 tooltip: {
                     valueSuffix: 'K'
                 },
-
-                data: [200, 150, 150, 130, 180, 200, 150, 150, 170, 100, 230, 125, 100, 130, 190, -50, 50, 100, 120, -100, -50, -50, -20, 50, 100, 130, -100, -120, -200, 390
-                    , -150, -110, -120, -100, -50, -100, -150, -125, -70, -25, 10, -20, 50, -30, 100, 80, 60, 100, 70, 60, 150, 120, 135, 120, 100, 75, 65, 75, 85, 95
-                    , 100, 110, 90, 120, 130, 120, 60, 150, 170, 100, 230, 56, 100, 30, 290, 150, 210, 100, 120, 115, 95, 200, 150, 170, 100, 130, 90, 100, 30, 190],
-
+               data: winLossAreaDate,
             }]
         });
 
@@ -154,4 +146,26 @@
             chart.fullscreen.toggle();
         })
     };
+
+    function GetTurnOverByBetTypeData(custId) {
+        $.ajax(common.modifyRelativeUrl('Account/GetPerformanceDaily'), {
+            type: 'POST',
+            data: {
+                custId: custId
+            },
+            success: function (response) {
+                turnOverAreaData = response.turnOverAreaData; 
+                winLossAreaDate = response.winLossAreaDate;
+                days = response.days;
+                DisplayChart();
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+            }
+        });
+    }
+
+    this.Initial = function (custId) {
+        GetTurnOverByBetTypeData(custId);
+    }
 }

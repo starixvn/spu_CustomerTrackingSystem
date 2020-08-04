@@ -136,14 +136,14 @@
         </div>
     </div>
     <div class="wrapper-statistic" id="wrapper-statistic">
-        <div class="statistic-title hide" id="statistic-title" ref="statistic-detail">
+        <div class="statistic-title " id="statistic-title" ref="statistic-detail">
             <i class="icon icon-chevron-right"></i>
             <a class="title" href="javascript:void(0)">
                 Betting Statistic Last 90 Days
             </a>
         </div>
-        <div id="statistic-detail" class="statistic-detail">
-            <div class="chart_empty hide">
+        <div id="statistic-detail" class="statistic-detail hide">
+            <div class="chart_empty hide" id="chart_empty">
                 <div class="wrapper-title">
                     <i class="icon icon-chevron-right"></i>
                     <span class="title">
@@ -155,7 +155,7 @@
                     <span class="text">There’s no activity to report yet.</span>
                 </div>
             </div>
-            <div class="chart-default">
+            <div class="chart-default"  id="chart-default">
                 <div class="container-grid">
                     @Html.Partial("BettingStatistic/Summary")
                     @Html.Partial("BettingStatistic/TurnoverBySport")
@@ -222,6 +222,7 @@
     <input id="hdSubscriberId" type="hidden" value="@Model.SubscriberId" />
     <input id="hdSubscriber" type="hidden" value="@Model.Subscriber" />
     <input id="hdIsHostPermission" type="hidden" IsHostPermission="@Model.IsHostPermission.ToString()" />
+    <input id="hdCurrentUserId" type="hidden" value="@Model.CurrentUserId" />
 </div>
 @section scripts{
     @Scripts.Render("~/statistic-scripts"

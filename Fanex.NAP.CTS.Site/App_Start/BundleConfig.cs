@@ -177,7 +177,6 @@
             bundles.Add(new ScriptBundle("~/statistic-scripts")
                 .Include("~/Scripts/highcharts/highcharts.js",
                 "~/Scripts/highcharts/full-screen.js",
-                "~/Scripts/Account/BettingStatistic/summary-statistic-scripts.js",
                 "~/Scripts/Account/BettingStatistic/sport-statistic-scripts.js",
                 "~/Scripts/Account/BettingStatistic/turnover-by-bettype.js",
                 "~/Scripts/Account/BettingStatistic/winlost-statistic-scripts.js"

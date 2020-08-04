@@ -477,6 +477,18 @@
     <Setting Key="CTS_DC_GetCTSCustomerClassification"
            SpName="CTS_DC_GetCTSCustomerClassification"
            DbName="MySQL.CTS_DataCenter" />
+
+    <Setting Key="CTS_CustomerStatistics_GetPerformance_BySport"
+       SpName="CTS_CustomerStatistics_GetPerformance_BySport"
+       DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
+
+    <Setting Key="CTS_CustomerStatistics_GetPerformance_ByBettype"
+      SpName="CTS_CustomerStatistics_GetPerformance_ByBettype"
+      DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
+
+    <Setting Key="CTS_CustomerStatistics_GetPerformanceDaily"
+      SpName="CTS_CustomerStatistics_GetPerformanceDaily"
+      DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
   </Function>
 
   <Function Name="ProblemAccountMonitor">

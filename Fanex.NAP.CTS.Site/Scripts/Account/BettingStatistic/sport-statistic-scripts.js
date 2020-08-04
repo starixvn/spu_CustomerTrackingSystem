@@ -1,5 +1,20 @@
 ﻿function turnover_by_sport() {
-    this.DisplayChart = function () {
+    let domElements = {
+        totalstakeTurnOver: $('#totalstake_turnover'),
+        totalstakeWinLoss: $('#totalstake_winloss'),
+        totalstakeMargin: $('#totalstake_margin'),
+        totalstakeBetCount: $('#totalstake_betcount'),
+        bestsportSportName: $('#bestsport_sportname'),
+        bestsportTurnOver: $('#bestsport_turnover'),
+        bestsportWinLoss: $('#bestsport_winloss'),
+        bestsportMargin: $('#bestsport_margin'),
+        bestsportBetCount: $('#bestsport_betcount'),
+        chartDefault: $('#chart-default'),
+        chartEmpty: $('#chart_empty'),
+
+    }
+
+    function DisplayPieChart(resource) {
         Highcharts.chart('chart-sport', {
             chart: {
                 type: 'pie',
@@ -18,7 +33,7 @@
             credits: {
                 enabled: false
             },
-            colors: ['#F15D21','#FFD643', '#1D2E4F', '#37C2CC'],
+            colors: ['#F15D21', '#FFD643', '#1D2E4F', '#37C2CC'],
             title: {
                 text: ''
             },
@@ -71,27 +86,7 @@
             },
 
             series: [{
-                data: [{
-                    name: 'Soccer',
-                    y: 26,
-                    selected: true,
-                }, {
-                    name: 'Basket ball',
-                    y: 11,
-                    selected: true
-                },
-                {
-                    name: 'Volleyball',
-                    y: 40,
-                    selected: true,
-                    dataLabels: {
-                        color: '#fff'
-                    }
-                }, {
-                    name: 'Other Sports',
-                    y: 23,
-                    selected: true,
-                }]
+                data: resource
             }],
             responsive: {
                 rules: [{
@@ -107,4 +102,63 @@
             }
         });
     };
+
+    function GetPerformanceBySport(ctsCustId) {
+        $.ajax(common.modifyRelativeUrl('Account/GetPerformanceBySport'), {
+            type: 'POST',
+            data: {
+                custId: ctsCustId,
+                getTop: 3
+            },
+            success: function (response) {
+                if (response.totalSportBettingStatistic.BetCount == 0) {
+                    domElements.chartDefault.addClass('hide');               
+                    domElements.chartEmpty.removeClass('hide');
+                }
+                else {
+                    domElements.chartDefault.removeClass('hide');
+                    domElements.chartEmpty.addClass('hide');
+                }
+
+                domElements.totalstakeTurnOver.html(RoundNumber(response.totalSportBettingStatistic.TurnOver));
+                domElements.totalstakeWinLoss.html(RoundNumber(response.totalSportBettingStatistic.WinLoss));
+                domElements.totalstakeMargin.html(response.totalSportBettingStatistic.Margin.toFixed(0) + "%");
+                domElements.totalstakeBetCount.html(response.totalSportBettingStatistic.BetCount);
+
+                domElements.bestsportSportName.html(response.bestSportBettingStatistic.SportName);
+                domElements.bestsportTurnOver.html(RoundNumber(response.bestSportBettingStatistic.TurnOver));
+                domElements.bestsportWinLoss.html(RoundNumber(response.bestSportBettingStatistic.WinLoss));
+                domElements.bestsportMargin.html(response.bestSportBettingStatistic.Margin.toFixed(0) + "%");
+                domElements.bestsportBetCount.html(response.bestSportBettingStatistic.BetCount);
+
+                DisplayPieChart(response.pieChartSportStatisticSessions);
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+            }
+        });
+    }
+
+    function RoundNumber(number)
+    {
+        if (number == 0) return 0;
+
+        var num = number.toFixed(0);
+
+        if ((num > 999 && num <= 999999) || (num <= -1000 && num > -999999)) {
+            return (num / 1000).toFixed(0) + "K";
+        }
+        else if ((num > 999999 && num <= 999999999) || (num <= -1000000 && num > -999999999)) {
+            return (num / 1000000).toFixed(0) + "M";
+        }
+        else if (num >= 1000000000 || num <= -1000000000) {
+            return (num / 1000000).toFixed(0) + "M";
+        }
+
+        return num;
+    }
+
+    this.Initial = function (ctsCustId) {
+        GetPerformanceBySport(ctsCustId);
+    }
 }

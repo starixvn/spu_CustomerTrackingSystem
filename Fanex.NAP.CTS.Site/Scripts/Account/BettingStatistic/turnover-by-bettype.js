@@ -1,5 +1,26 @@
 ﻿function turnover_by_bettype() {
-    this.DisplayChart = function () {
+    let betTypeCategories = null;
+    let liveIndicatorList = null;
+
+    function GetTurnOverByBetTypeData(custId) {
+        $.ajax(common.modifyRelativeUrl('Account/GetPerformanceByBettype'), {
+            type: 'POST',
+            data: {
+                custId: custId,
+                getTop: 3
+            },
+            success: function (response) {
+                betTypeCategories = response.betTypeCategories;
+                liveIndicatorList = response.liveIndicatorList;
+                DisplayChart();
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+            }
+        });
+    }
+
+    function DisplayChart() {
         Highcharts.chart('bet-type', {
             chart: {
                 type: 'bar',
@@ -17,7 +38,7 @@
                 text: ''
             },
             xAxis: {
-                categories: ['Handicap', 'Over/Under', 'Outright', 'Others'],
+                categories: betTypeCategories,
                 startOnTick: false,
                 endOnTick: false,
                 lineWidth: 0,
@@ -51,16 +72,11 @@
                     shadow: false,
                 },
             },
-            series: [{
-                name: 'None',
-                data: [2, 3, 2, 1],
-            }, {
-                name: 'None-Live',
-                data: [1, 0, 1, 1],
-            }, {
-                name: 'Live',
-                data: [0, 0, 0, 1],
-            }]
+            series: liveIndicatorList
         });
     };
+
+    this.Initial = function (custId) {
+        GetTurnOverByBetTypeData(custId);
+    }
 }

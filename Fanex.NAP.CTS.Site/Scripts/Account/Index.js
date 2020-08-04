@@ -5,6 +5,8 @@
     var subscriberId = $("#hdSubscriberId").val();
     var subscriber = $("#hdSubscriber").val();   
     var isHostPermission = $("#hdIsHostPermission").attr("IsHostPermission");
+    var currentUserId = $("#hdCurrentUserId").val();
+    var isPreviousStatisticOpen = false;
 
     let domElements = {        
         tabAssociatedAccount: $("#associated_account"),
@@ -194,9 +196,9 @@
         let chartTurnoverByBettype = new turnover_by_bettype();
         let chartWinLost = new win_lost();
 
-        chartTurnoverBySport.DisplayChart();
-        chartTurnoverByBettype.DisplayChart();
-        chartWinLost.DisplayChart();
+        chartTurnoverBySport.Initial(ctsCustId); 
+        chartWinLost.Initial(ctsCustId);
+        chartTurnoverByBettype.Initial(ctsCustId);
     }
 
     function CollapseExpandItem() {
@@ -207,12 +209,14 @@
 
             if ($this.hasClass('hide')) {
                 $this.removeClass('hide');
+                setStorageStatisticUserBehavior(currentUserId, 'isStatisticOpen=true');
             }
         });
 
         $("#wrapper-statistic #statistic-detail .wrapper-title .icon").on('click', function () {
             domElements.statisticDetail.addClass("hide");
             domElements.statisticTitle.removeClass("hide");
+            setStorageStatisticUserBehavior(currentUserId, 'isStatisticOpen=false');
         });
 
         $("#account-detail-container .report-item h3").on('click', function () {
@@ -286,6 +290,19 @@
         }
     }
 
+    function getStorageStatisticUserBehavior (key) {
+        if (typeof Storage !== "undefined") {
+            return localStorage.getItem(key);
+        }
+        return '';
+    };
+
+    function setStorageStatisticUserBehavior (key, value) {
+        if (typeof Storage !== "undefined") {
+            localStorage.setItem(key, value);
+        }
+    };
+
     function Initial() {
         CollapseExpandAll();
         CollapseExpandItem();
@@ -304,7 +321,28 @@
         });
     }
 
+    function DisplayStatistic() {
+        if (getStorageStatisticUserBehavior(currentUserId) === null) {
+            isPreviousStatisticOpen = true;
+        }
+        else {
+            isPreviousStatisticOpen = (getStorageStatisticUserBehavior(currentUserId) == 'isStatisticOpen=true') ? true : false;
+        }
+     
+        if (isPreviousStatisticOpen == true) {
+            domElements.statisticDetail.removeClass("hide");
+            domElements.statisticTitle.addClass("hide");
+        }
+        else 
+        {
+            domElements.statisticDetail.addClass("hide");
+            domElements.statisticTitle.removeClass("hide");
+        }
+           
+    }
+
     $(document).ready(function () {
+        DisplayStatistic();
         Initial();
     });
 }
