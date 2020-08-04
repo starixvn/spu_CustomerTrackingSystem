@@ -45,6 +45,12 @@
                     valueSuffix: '%'
                 }
             },
+            tooltip: {
+                formatter: function () {
+                    return '<b><small>' + this.key +'</small></b><br>' +'Turnover: <b>' + this.y +
+                        '</b>';
+                }
+            },
             legend: {
                 layout: 'vertical',
                 align: 'right',
