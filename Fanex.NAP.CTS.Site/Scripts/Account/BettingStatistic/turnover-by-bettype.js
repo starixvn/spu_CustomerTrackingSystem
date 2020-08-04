@@ -2,7 +2,13 @@
     let betTypeCategories = null;
     let liveIndicatorList = null;
 
+    let domElements = {
+        statisticLoading: $('#statistic_bettype_loading')
+    }
+    
     function GetTurnOverByBetTypeData(custId) {
+        domElements.statisticLoading.removeClass('hide');
+
         $.ajax(common.modifyRelativeUrl('Account/GetPerformanceByBettype'), {
             type: 'POST',
             data: {
@@ -13,6 +19,8 @@
                 betTypeCategories = response.betTypeCategories;
                 liveIndicatorList = response.liveIndicatorList;
                 DisplayChart();
+
+                domElements.statisticLoading.addClass('hide');
             },
             error: function (errMsg) {
                 console.log(errMsg);

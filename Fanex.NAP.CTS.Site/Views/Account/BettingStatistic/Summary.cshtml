@@ -7,7 +7,7 @@
             <i class="icon icon-chevron-right"></i>
             <span class="title">
                 Summary Of Last 90 Days
-                <span class="statistic_loading hide">
+                <span class="statistic_loading hide" id="statistic_summary_loading">
                     <img src="@Url.Content("~/Content/images/ajax-loader.gif")" alt="Loading ..." />
                 </span>
             </span>
@@ -17,8 +17,7 @@
             <div class="summary-top">
                 <div class="wrapper-title">
                     <div class="name">Total</div>
-                    <div class="alert high-stake">
-                        High Stake
+                    <div class="alert" id="summary-top">
                     </div>
                 </div>
                 <div class="wrapper-value">
@@ -44,8 +43,7 @@
             <div class="summary-bottom">
                 <div class="wrapper-title">
                     <div class="name" id="bestsport_sportname"></div>
-                    <div class="alert normal-stake">
-                        Normal Stake
+                    <div class="alert" id="summary-bottom">
                     </div>
                 </div>
                 <div class="wrapper-value">

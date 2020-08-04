@@ -135,7 +135,7 @@
 
         </div>
     </div>
-    <div class="wrapper-statistic" id="wrapper-statistic">
+    <div class="wrapper-statistic hide" id="wrapper-statistic">
         <div class="statistic-title " id="statistic-title" ref="statistic-detail">
             <i class="icon icon-chevron-right"></i>
             <a class="title" href="javascript:void(0)">
@@ -223,6 +223,7 @@
     <input id="hdSubscriber" type="hidden" value="@Model.Subscriber" />
     <input id="hdIsHostPermission" type="hidden" IsHostPermission="@Model.IsHostPermission.ToString()" />
     <input id="hdCurrentUserId" type="hidden" value="@Model.CurrentUserId" />
+    <input id="hdIsBettingStatisticPermission" type="hidden" IsBettingStatisticPermission="@Model.IsBettingStatisticPermission.ToString()"/>
 </div>
 @section scripts{
     @Scripts.Render("~/statistic-scripts"

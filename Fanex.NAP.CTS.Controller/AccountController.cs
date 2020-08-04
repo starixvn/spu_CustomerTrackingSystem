@@ -61,6 +61,7 @@
                     {
                         CTSCustId = Id,
                         IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.AccountDetail, NAP.Core.Business.Constant.Policy.Host),
+                        IsBettingStatisticPermission = CheckBettingStatisticPermission(userService, customerInfoFromCTS.RoleId),
                         CurrentUserId = CurrentSession.UserId
                     };
 
@@ -1139,6 +1140,19 @@
             }
         }
         
+        private bool CheckBettingStatisticPermission(IUserService userService, int roleID)
+        {
+            if (roleID == Consts.AGENT_ROLE || roleID == Consts.MASTER_ROLE || roleID == Consts.SUPER_ROLE)
+            {
+                return false;
+            }
+
+            bool temp = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.AccountDetail, NAP.Core.Business.Constant.Policy.Read);
+
+            if (!temp) return false;
+
+            return temp = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.BettingStatistics, NAP.Core.Business.Constant.Policy.Read);
+        }
         #endregion
     }
 }

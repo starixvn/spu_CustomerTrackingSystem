@@ -5,6 +5,7 @@
     var subscriberId = $("#hdSubscriberId").val();
     var subscriber = $("#hdSubscriber").val();   
     var isHostPermission = $("#hdIsHostPermission").attr("IsHostPermission");
+    var isBettingStatisticPermission = $("#hdIsBettingStatisticPermission").attr("IsBettingStatisticPermission");
     var currentUserId = $("#hdCurrentUserId").val();
     var isPreviousStatisticOpen = false;
 
@@ -26,7 +27,8 @@
         headerAssociatedAccount: $("#header_associated_account"),
         headerChainEvidence: $("#header_chains_evidence"),
         statisticTitle: $("#statistic-title"),
-        statisticDetail: $("#statistic-detail")
+        statisticDetail: $("#statistic-detail"),
+        wrapperStatistic: $("#wrapper-statistic")
     };
 
     function LoadAssociationByAccount() {
@@ -307,7 +309,6 @@
         CollapseExpandAll();
         CollapseExpandItem();
         GetAccountProfile();
-        GetBettingStatistic();
         GetCustomerTotalAssociation();
         LoadTransactionHistory();
         LoadCustomerCategory();
@@ -322,11 +323,19 @@
     }
 
     function DisplayStatistic() {
-        if (getStorageStatisticUserBehavior(currentUserId) === null) {
+        if (isBettingStatisticPermission == "False" || isBettingStatisticPermission === undefined) {
+            return;
+        }
+
+        var userBehavior = getStorageStatisticUserBehavior(currentUserId);
+
+        domElements.wrapperStatistic.removeClass('hide');  
+
+        if (userBehavior === null) {
             isPreviousStatisticOpen = true;
         }
         else {
-            isPreviousStatisticOpen = (getStorageStatisticUserBehavior(currentUserId) == 'isStatisticOpen=true') ? true : false;
+            isPreviousStatisticOpen = (userBehavior == 'isStatisticOpen=true') ? true : false;
         }
      
         if (isPreviousStatisticOpen == true) {
@@ -338,6 +347,8 @@
             domElements.statisticDetail.addClass("hide");
             domElements.statisticTitle.removeClass("hide");
         }
+
+        GetBettingStatistic();
            
     }
 

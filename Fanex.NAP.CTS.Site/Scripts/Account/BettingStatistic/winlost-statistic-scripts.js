@@ -3,6 +3,10 @@
     let winLossAreaDate = null;
     let days = null;
 
+    let domElements = {
+        statisticWinlostLoading: $('#statistic_winlost_loading')
+    }
+    
     function  DisplayChart (){
         let domElements = {
             iconFullScreen: $("#icon-full-screen"),
@@ -148,6 +152,8 @@
     };
 
     function GetTurnOverByBetTypeData(custId) {
+        domElements.statisticWinlostLoading.removeClass('hide');
+
         $.ajax(common.modifyRelativeUrl('Account/GetPerformanceDaily'), {
             type: 'POST',
             data: {
@@ -158,6 +164,8 @@
                 winLossAreaDate = response.winLossAreaDate;
                 days = response.days;
                 DisplayChart();
+
+                domElements.statisticWinlostLoading.addClass('hide');
             },
             error: function (errMsg) {
                 console.log(errMsg);

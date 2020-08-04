@@ -42,5 +42,9 @@
         public const int INVALID_INPUT = 4;
 
         public const string IsFirstGetDataNotification = "false";
+
+        public const int SUPER_ROLE = 4;
+        public const int MASTER_ROLE = 3;
+        public const int AGENT_ROLE = 2;
     }
 }

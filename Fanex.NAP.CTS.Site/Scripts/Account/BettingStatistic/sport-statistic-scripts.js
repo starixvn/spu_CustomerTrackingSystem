@@ -11,7 +11,10 @@
         bestsportBetCount: $('#bestsport_betcount'),
         chartDefault: $('#chart-default'),
         chartEmpty: $('#chart_empty'),
-
+        summaryTop: $('#summary-top'),
+        summaryBottom: $('#summary-bottom'),
+        summaryStatisticLoading: $('#statistic_summary_loading'),
+        sportStatisticLoading: $('#statistic_bysport_loading')
     }
 
     function DisplayPieChart(resource) {
@@ -104,6 +107,9 @@
     };
 
     function GetPerformanceBySport(ctsCustId) {
+        domElements.summaryStatisticLoading.removeClass('hide');
+        domElements.sportStatisticLoading.removeClass('hide');
+        
         $.ajax(common.modifyRelativeUrl('Account/GetPerformanceBySport'), {
             type: 'POST',
             data: {
@@ -119,19 +125,26 @@
                     domElements.chartDefault.removeClass('hide');
                     domElements.chartEmpty.addClass('hide');
                 }
-
+                
+                domElements.summaryTop.html(response.totalSportBettingStatistic.StakeLevel);
+                HighlightStakeLevel(response.totalSportBettingStatistic.StakeLevel, domElements.summaryTop);
                 domElements.totalstakeTurnOver.html(RoundNumber(response.totalSportBettingStatistic.TurnOver));
                 domElements.totalstakeWinLoss.html(RoundNumber(response.totalSportBettingStatistic.WinLoss));
                 domElements.totalstakeMargin.html(response.totalSportBettingStatistic.Margin.toFixed(0) + "%");
                 domElements.totalstakeBetCount.html(response.totalSportBettingStatistic.BetCount);
 
                 domElements.bestsportSportName.html(response.bestSportBettingStatistic.SportName);
+                domElements.summaryBottom.html(response.bestSportBettingStatistic.StakeLevel);
+                HighlightStakeLevel(response.bestSportBettingStatistic.StakeLevel, domElements.summaryBottom);
                 domElements.bestsportTurnOver.html(RoundNumber(response.bestSportBettingStatistic.TurnOver));
                 domElements.bestsportWinLoss.html(RoundNumber(response.bestSportBettingStatistic.WinLoss));
                 domElements.bestsportMargin.html(response.bestSportBettingStatistic.Margin.toFixed(0) + "%");
                 domElements.bestsportBetCount.html(response.bestSportBettingStatistic.BetCount);
 
+                domElements.summaryStatisticLoading.addClass('hide');
+
                 DisplayPieChart(response.pieChartSportStatisticSessions);
+                domElements.sportStatisticLoading.addClass('hide');
             },
             error: function (errMsg) {
                 console.log(errMsg);
@@ -156,6 +169,22 @@
         }
 
         return num;
+    }
+
+    function HighlightStakeLevel(stakeLevel, targetElement)
+    {
+        if (stakeLevel == "High Stake")
+        {
+            targetElement.addClass('high-stake');
+        }
+        else if (stakeLevel == "Medium Stake")
+        {
+            targetElement.addClass('medium-stake');
+        }
+        else
+        {
+            targetElement.addClass('normal-stake');
+        }
     }
 
     this.Initial = function (ctsCustId) {

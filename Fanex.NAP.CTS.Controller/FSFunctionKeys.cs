@@ -80,4 +80,6 @@ public static class FSFunctionKeys
     public const string AssociatedAccountMonitor = "AssociatedAccountMonitor";
 
     public const string NotificationSettings = "NotificationSettings";
+
+    public const string BettingStatistics = "BettingStatistics";
 }
