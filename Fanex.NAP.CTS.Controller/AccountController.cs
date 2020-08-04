@@ -963,7 +963,7 @@
         #endregion
 
         #region Betting Statistic
-        //[NapAuth(FunctionKey = FSFunctionKeys.BettingStatistics, Policy = NAP.Core.Business.Constant.Policy.Read)]
+        [NapAuth(FunctionKey = FSFunctionKeys.BettingStatistics, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetPerformanceBySport(long custId, int getTop) ///TODO  NAP Authentication
         {
             var tasks = new List<Task>();
@@ -1000,8 +1000,8 @@
                     bestSportBettingStatistic.TurnOver = tempBestSport.TurnOver;
                     bestSportBettingStatistic.WinLoss = tempBestSport.WinLoss;
                     bestSportBettingStatistic.BetCount = tempBestSport.BetCount;
-                    totalSportBettingStatistic.TurnOver14 = tempBestSport.TurnOver14;
-                    totalSportBettingStatistic.BetCount14 = tempBestSport.BetCount14;
+                    bestSportBettingStatistic.TurnOver14 = tempBestSport.TurnOver14;
+                    bestSportBettingStatistic.BetCount14 = tempBestSport.BetCount14;
                 }
                 catch (Exception ex)
                 {
@@ -1035,7 +1035,7 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        //[NapAuth(FunctionKey = FSFunctionKeys.BettingStatistics, Policy = NAP.Core.Business.Constant.Policy.Read)]
+        [NapAuth(FunctionKey = FSFunctionKeys.BettingStatistics, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetPerformanceByBettype(long custId, int getTop) ///TODO Adjust name function & NAP Authentication
         {
             var result = _accountService.GetPerformanceByBettype(custId, getTop).OrderBy(c => c.Ranking);
@@ -1050,7 +1050,7 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        //[NapAuth(FunctionKey = FSFunctionKeys.BettingStatistics, Policy = NAP.Core.Business.Constant.Policy.Read)]
+        [NapAuth(FunctionKey = FSFunctionKeys.BettingStatistics, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetPerformanceDaily(long custId) ///TODO Adjust name function & NAP Authentication
         {
             var result = _accountService.GetPerformanceDaily(custId).OrderByDescending(c=>c.RptDate);

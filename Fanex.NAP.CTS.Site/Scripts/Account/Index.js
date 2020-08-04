@@ -198,9 +198,9 @@
         let chartTurnoverByBettype = new turnover_by_bettype();
         let chartWinLost = new win_lost();
 
-        chartTurnoverBySport.Initial(ctsCustId); 
-        chartWinLost.Initial(ctsCustId);
-        chartTurnoverByBettype.Initial(ctsCustId);
+        chartTurnoverBySport.Initial(custId); 
+        chartWinLost.Initial(custId);
+        chartTurnoverByBettype.Initial(custId);
     }
 
     function CollapseExpandItem() {
