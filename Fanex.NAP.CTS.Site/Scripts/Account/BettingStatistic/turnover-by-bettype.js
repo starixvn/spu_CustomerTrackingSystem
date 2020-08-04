@@ -25,7 +25,7 @@
             chart: {
                 type: 'bar',
                 marginRight: 0,
-                spacingLeft: 30,
+                spacingLeft: 32,
                 style: {
                     fontFamily: '"Lato", Arial, Tahoma, sans-serif'
                 }

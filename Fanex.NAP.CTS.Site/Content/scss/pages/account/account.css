@@ -1699,7 +1699,10 @@
   grid-template-columns: repeat(32, 1fr);
   grid-column-gap: 0;
   grid-row-gap: 0; }
+  .container-grid .statistic_loading {
+    margin-left: 5px; }
   .container-grid .summary-detail {
+    position: relative;
     grid-column: 1 / span 9;
     grid-row: row;
     border-right: 1px solid #DFDFDF; }
@@ -1781,6 +1784,7 @@
         .container-grid .summary-detail .wrapper-data .wrapper-value:last-child {
           margin-right: 0; }
   .container-grid .chart-sport {
+    position: relative;
     grid-column: 10 / span 5;
     grid-row: row;
     position: relative;
@@ -1819,6 +1823,7 @@
     .container-grid .note-title.circle-navy-blue::before {
       background: #1D2E4F; }
   .container-grid .chart-bet-type {
+    position: relative;
     overflow: hidden;
     position: relative;
     grid-column: 15 / span 8;
@@ -1829,7 +1834,7 @@
       position: relative; }
       .container-grid .chart-bet-type .bet-grid .wapper-bet-type {
         height: 125px;
-        width: 90%; }
+        width: 78%; }
       .container-grid .chart-bet-type .bet-grid .note {
         position: absolute;
         top: 22px;
