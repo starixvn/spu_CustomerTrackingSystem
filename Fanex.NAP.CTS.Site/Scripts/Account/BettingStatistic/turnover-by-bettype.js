@@ -41,7 +41,7 @@
             credits: {
                 enabled: false
             },
-            colors: ['#EBEBEB', '#3773CC', '#FF4343'],
+            colors: ['#EBEBEB','#FF4343', '#3773CC'],
             title: {
                 text: ''
             },
