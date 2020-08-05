@@ -1854,9 +1854,9 @@
     .container-grid .chart-win-lost .win-lost-grid {
       position: relative; }
       .container-grid .chart-win-lost .win-lost-grid .wapper-win-lost {
-        height: 120px;
+        height: 130px;
         position: absolute;
-        top: 12px;
+        top: 7px;
         left: 10px;
         width: 100%; }
     .container-grid .chart-win-lost .icon {

@@ -33,11 +33,15 @@
                 labels: {
                     style: {
                         'color': '#333333',
-                        'font-size': '10px'
-                    }
+                        'font-size': '9px'
+                    },
+                    distance: 0,
+                    padding: 0
                 },
                 gridLineColor: '#C4C4C4',
-                lineWidth: 2
+                lineWidth: 2,
+                type: 'datetime',
+             
             }],
             yAxis: [{
                 labels: {
