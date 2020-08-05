@@ -12,6 +12,11 @@
             iconFullScreen: $("#icon-full-screen"),
             wrapperChartWinLost: $("#chart-win-lost"),
         };
+        Highcharts.setOptions({
+            lang: {
+                thousandsSep: ','
+            }
+        });
 
         chart = Highcharts.chart('chart-win-lost', {
             chart: {
@@ -45,7 +50,9 @@
             }],
             yAxis: [{
                 labels: {
-                    format: '{value}K',
+                    formatter: function () {
+                        return this.axis.defaultLabelFormatter.call(this);
+                    },
                     style: {
                         'color': '#333333',
                         'font-size': '12px'
@@ -78,7 +85,9 @@
                     }
                 },
                 labels: {
-                    format: '{value}K',
+                    formatter: function () {
+                        return this.axis.defaultLabelFormatter.call(this);
+                    } ,
                     style: {
                         'color': '#333333',
                         'font-size': '12px'
@@ -98,7 +107,7 @@
                 lineColor: '#C4C4C4'
             }],
             tooltip: {
-                shared: true
+                shared: true,
             },
             legend: {
                 layout: 'vertical',
@@ -128,9 +137,6 @@
                 lineWidth: 0.5,
                 color: "#3773CC",
                 data: turnOverAreaData,
-                tooltip: {
-                    valueSuffix: 'K'
-                },
                 marker: {
                     enabled: false,
                     symbol: 'circle',
@@ -142,9 +148,6 @@
                 yAxis: 1,
                 color: "#F15D21",
                 lineWidth: 0.8,
-                tooltip: {
-                    valueSuffix: 'K'
-                },
                data: winLossAreaDate,
             }]
         });

@@ -47,7 +47,7 @@
             },
             tooltip: {
                 formatter: function () {
-                    return '<b><small>' + this.key +'</small></b><br>' +'Turnover: <b>' + this.y +
+                    return '<b><small>' + this.key + '</small></b><br>' + 'Turnover: <b>' + this.point.turnOver +
                         '</b>';
                 }
             },
