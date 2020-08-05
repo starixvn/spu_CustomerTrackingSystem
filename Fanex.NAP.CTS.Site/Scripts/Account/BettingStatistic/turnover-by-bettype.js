@@ -29,6 +29,11 @@
     }
 
     function DisplayChart() {
+        Highcharts.setOptions({
+            lang: {
+                thousandsSep: ','
+            }
+        });
         Highcharts.chart('bet-type', {
             chart: {
                 type: 'bar',

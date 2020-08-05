@@ -18,6 +18,11 @@
     }
 
     function DisplayPieChart(resource) {
+        Highcharts.setOptions({
+            lang: {
+                thousandsSep: ','
+            }
+        });
         Highcharts.chart('chart-sport', {
             chart: {
                 type: 'pie',
@@ -47,7 +52,7 @@
             },
             tooltip: {
                 formatter: function () {
-                    return '<b><small>' + this.key + '</small></b><br>' + 'Turnover: <b>' + this.point.turnOver +
+                    return '<b><small>' + this.key + '</small></b><br>' + 'Turnover: <b>' + Highcharts.numberFormat(this.point.turnOver, 0, '', ',')  +
                         '</b>';
                 }
             },
