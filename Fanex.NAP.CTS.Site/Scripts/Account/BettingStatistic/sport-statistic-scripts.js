@@ -120,7 +120,7 @@
             type: 'POST',
             data: {
                 custId: ctsCustId,
-                getTop: 3
+                getTop: 4
             },
             success: function (response) {
                 if (response.totalSportBettingStatistic.BetCount == 0) {

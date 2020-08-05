@@ -964,10 +964,10 @@
 
         #region Betting Statistic
         [NapAuth(FunctionKey = FSFunctionKeys.BettingStatistics, Policy = NAP.Core.Business.Constant.Policy.Read)]
-        public ActionResult GetPerformanceBySport(long custId, int getTop) ///TODO  NAP Authentication
+        public ActionResult GetPerformanceBySport(long custId, int getTop) 
         {
             var tasks = new List<Task>();
-            var result = _accountService.GetPerformanceBySport(custId, getTop);     //TODO CHECK Other NULL
+            var result = _accountService.GetPerformanceBySport(custId, getTop).OrderByDescending(c=>c.SportID);
             var totalSportBettingStatistic = new SportBettingStatisticViewModel();
             var bestSportBettingStatistic = new SportBettingStatisticViewModel();
             var pieChartSportStatisticSessions = new List<SportStatisticPieChartViewModel>();
@@ -1036,7 +1036,7 @@
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.BettingStatistics, Policy = NAP.Core.Business.Constant.Policy.Read)]
-        public ActionResult GetPerformanceByBettype(long custId, int getTop) ///TODO Adjust name function & NAP Authentication
+        public ActionResult GetPerformanceByBettype(long custId, int getTop)
         {
             var result = _accountService.GetPerformanceByBettype(custId, getTop).OrderBy(c => c.Ranking);
             var liveIndicatorList = new List<LiveIndicatorViewModel>();
@@ -1051,7 +1051,7 @@
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.BettingStatistics, Policy = NAP.Core.Business.Constant.Policy.Read)]
-        public ActionResult GetPerformanceDaily(long custId) ///TODO Adjust name function & NAP Authentication
+        public ActionResult GetPerformanceDaily(long custId)
         {
             var result = _accountService.GetPerformanceDaily(custId).OrderByDescending(c=>c.RptDate);
             var turnOverAreaData = new List<decimal>();
@@ -1091,7 +1091,8 @@
                         {
                             name = c.SportName,
                             selected = true,
-                            y = (c.TurnOver != 0) ? ((c.TurnOver / sumTurnOver) * 100) : 0
+                            y = (c.TurnOver != 0) ? Math.Round(((c.TurnOver / sumTurnOver) * 100)) : 0,
+                            turnOver = Math.Round(c.TurnOver)
                         });
                     }
                 });
@@ -1107,9 +1108,9 @@
                 return;
             }
 
-            decimal maxTurnOverOfBetType = (result.GroupBy(c => new { c.BettypeId })
+            decimal maxTurnOverOfBetType = Math.Round((result.GroupBy(c => new { c.BettypeId })
                                               .Select(x => new { BettypeId = x.Key,TotalTurnOver = x.Sum(w => w.Turnover) }))
-                                              .Max(c => c.TotalTurnOver);
+                                              .Max(c => c.TotalTurnOver));
 
             liveIndicatorList.Add(new LiveIndicatorViewModel { name = "None", data = new List<decimal>() });
             liveIndicatorList.Add(new LiveIndicatorViewModel { name = "None-Live", data = new List<decimal>() });
@@ -1118,8 +1119,8 @@
 
             result.GroupBy(c => c.Ranking).ToList().ForEach(c =>
             {
-                decimal live = c.FirstOrDefault(x => x.LiveIndicator == true).Turnover;
-                decimal nonelive = c.FirstOrDefault(x => x.LiveIndicator == false).Turnover;
+                decimal live = Math.Round(c.FirstOrDefault(x => x.LiveIndicator == true).Turnover);
+                decimal nonelive = Math.Round(c.FirstOrDefault(x => x.LiveIndicator == false).Turnover);
 
                 liveIndicatorList.ElementAt(2).data.Add(live);
                 liveIndicatorList.ElementAt(1).data.Add(nonelive);

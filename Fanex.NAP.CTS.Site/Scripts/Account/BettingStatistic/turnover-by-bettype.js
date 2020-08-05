@@ -13,7 +13,7 @@
             type: 'POST',
             data: {
                 custId: custId,
-                getTop: 3
+                getTop: 4
             },
             success: function (response) {
                 betTypeCategories = response.betTypeCategories;

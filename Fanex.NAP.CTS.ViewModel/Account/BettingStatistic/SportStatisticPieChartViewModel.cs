@@ -13,5 +13,7 @@ namespace Fanex.NAP.CTS.ViewModel.Account.BettingStatistic
         public decimal y { get; set; }
 
         public bool selected { get; set; } 
+
+        public decimal turnOver { get; set; }
     }
 }
