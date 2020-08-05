@@ -1653,24 +1653,25 @@
   box-sizing: border-box;
   border-radius: 3px; }
   .wrapper-statistic .statistic-title {
+    margin-top: 4px;
     height: 31px;
-    padding: 5px; }
+    padding: 5px;
+    width: 100%; }
+    .wrapper-statistic .statistic-title.expanded {
+      border-bottom: 1px solid #DDE2E5; }
     .wrapper-statistic .statistic-title .icon {
-      margin-top: -2px; }
+      margin-top: -5px; }
     .wrapper-statistic .statistic-title .title {
-      margin-left: 6px; }
+      margin-left: 4px;
+      font-size: 15px; }
   .wrapper-statistic .statistic-detail {
     min-height: 158px; }
     .wrapper-statistic .statistic-detail .chart_empty {
       padding: 5px 10px; }
-      .wrapper-statistic .statistic-detail .chart_empty .wrapper-title .icon-chevron-right {
-        transform: rotate(90deg);
-        margin-left: -4px; }
-      .wrapper-statistic .statistic-detail .chart_empty .wrapper-title .title {
-        margin-left: 4px; }
       .wrapper-statistic .statistic-detail .chart_empty .wrapper_content {
         display: block;
-        text-align: center; }
+        text-align: center;
+        margin-top: 15px; }
         .wrapper-statistic .statistic-detail .chart_empty .wrapper_content .report_empty {
           margin-top: 1px; }
         .wrapper-statistic .statistic-detail .chart_empty .wrapper_content .text {
@@ -1685,6 +1686,9 @@
     font-size: 22px;
     vertical-align: middle;
     cursor: pointer; }
+    .wrapper-statistic .icon.icon-open {
+      transform: rotate(90deg);
+      margin-left: 2px; }
   .wrapper-statistic .title {
     font-weight: bold;
     font-size: 14px;
@@ -1694,7 +1698,7 @@
     margin-left: 24px; }
 
 .container-grid {
-  padding: 7px 10px;
+  padding: 9px 10px 11px;
   display: grid;
   grid-template-columns: repeat(32, 1fr);
   grid-column-gap: 0;
@@ -1712,9 +1716,9 @@
         transform: rotate(90deg);
         margin-left: -4px; }
       .container-grid .summary-detail .wrapper-title .title {
-        margin-left: 5px; }
+        margin-left: 13px; }
     .container-grid .summary-detail .wrapper-data {
-      padding: 4px 31px;
+      padding: 8px 19px;
       padding-right: 37px; }
       .container-grid .summary-detail .wrapper-data .summary-top {
         display: flex;

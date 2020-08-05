@@ -1387,15 +1387,22 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     border-radius: 3px;
 
     .statistic-title {
+        margin-top: 4px;
         height: 31px;
         padding: 5px;
+        width: 100%;
+
+        &.expanded {
+            border-bottom: 1px solid #DDE2E5;
+        }
 
         .icon {
-            margin-top: -2px;
+            margin-top: -5px;
         }
 
         .title {
-            margin-left: 6px;
+            margin-left: 4px;
+            font-size: 15px;
         }
     }
 
@@ -1405,24 +1412,15 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
         .chart_empty {
             padding: 5px 10px;
 
-            .wrapper-title {
-                .icon-chevron-right {
-                    transform: rotate(90deg);
-                    margin-left: -4px;
-                }
-
-                .title {
-                    margin-left: 4px;
-                }
-            }
-
             .wrapper_content {
                 display: block;
                 text-align: center;
+                margin-top: 15px;
 
-                .report_empty{
+                .report_empty {
                     margin-top: 1px;
                 }
+
                 .text {
                     display: block;
                     font-weight: bold;
@@ -1440,6 +1438,11 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
         font-size: 22px;
         vertical-align: middle;
         cursor: pointer;
+
+        &.icon-open {
+            transform: rotate(90deg);
+            margin-left: 2px;
+        }
     }
 
     .title {
@@ -1452,7 +1455,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     }
 }
 .container-grid {
-    padding: 7px 10px;
+    padding: 9px 10px 11px;
     display: grid;
     grid-template-columns: repeat(32, 1fr);
     grid-column-gap: 0;
@@ -1478,12 +1481,12 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             }
 
             .title {
-                margin-left: 5px;
+                margin-left: 13px;
             }
         }
 
         .wrapper-data {
-            padding: 4px 31px;
+            padding: 8px 19px;
             padding-right: 37px;
 
             .summary-top {

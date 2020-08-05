@@ -27,6 +27,7 @@
         headerAssociatedAccount: $("#header_associated_account"),
         headerChainEvidence: $("#header_chains_evidence"),
         statisticTitle: $("#statistic-title"),
+        statisticIcon: $("#statistic-title .icon"),
         statisticDetail: $("#statistic-detail"),
         wrapperStatistic: $("#wrapper-statistic")
     };
@@ -206,19 +207,23 @@
     function CollapseExpandItem() {
         //statistic
         $("#wrapper-statistic .statistic-title").on('click', function () {
-            $(this).addClass("hide");
             var $this = $(this).next();
 
-            if ($this.hasClass('hide')) {
-                $this.removeClass('hide');
+            if ($(this).hasClass("expanded")) {
+                $(this).removeClass("expanded");
+                domElements.statisticIcon.removeClass("icon-open");
+                if (!$this.hasClass('hide')) {
+                    $this.addClass('hide');
+                }
+                setStorageStatisticUserBehavior(currentUserId, 'isStatisticOpen=false');
+            } else {
+                $(this).addClass("expanded");
+                domElements.statisticIcon.addClass("icon-open");
+                if ($this.hasClass('hide')) {
+                    $this.removeClass('hide');
+                }
                 setStorageStatisticUserBehavior(currentUserId, 'isStatisticOpen=true');
             }
-        });
-
-        $("#wrapper-statistic #statistic-detail .wrapper-title .icon").on('click', function () {
-            domElements.statisticDetail.addClass("hide");
-            domElements.statisticTitle.removeClass("hide");
-            setStorageStatisticUserBehavior(currentUserId, 'isStatisticOpen=false');
         });
 
         $("#account-detail-container .report-item h3").on('click', function () {
@@ -340,12 +345,16 @@
      
         if (isPreviousStatisticOpen == true) {
             domElements.statisticDetail.removeClass("hide");
-            domElements.statisticTitle.addClass("hide");
+            domElements.statisticIcon.addClass("icon-open");
+
+            if (!domElements.statisticTitle.hasClass("expanded")) {
+                domElements.statisticTitle.addClass("expanded");
+            }
         }
         else 
         {
             domElements.statisticDetail.addClass("hide");
-            domElements.statisticTitle.removeClass("hide");
+            domElements.statisticIcon.removeClass("icon-open");
         }
 
         GetBettingStatistic();

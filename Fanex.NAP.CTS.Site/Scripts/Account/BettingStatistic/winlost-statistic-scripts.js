@@ -33,7 +33,7 @@
                 labels: {
                     style: {
                         'color': '#333333',
-                        'font-size': '12px'
+                        'font-size': '10px'
                     }
                 },
                 gridLineColor: '#C4C4C4',
