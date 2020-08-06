@@ -17,7 +17,7 @@
                 type: 'POST',
                 data: {
                     custId: custId,
-                    getTop: 4
+                    getTop: 3
                 },
                 success: function (response) {
                     SetBettingStatisticToCookie(custId + '-' + username + "-ByBettype", response, expireCookie);

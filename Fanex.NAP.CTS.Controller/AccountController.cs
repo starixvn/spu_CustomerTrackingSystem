@@ -967,65 +967,68 @@
         public ActionResult GetPerformanceBySport(long custId, int getTop) 
         {
             var tasks = new List<Task>();
-            var result = _accountService.GetPerformanceBySport(custId, getTop).OrderByDescending(c=>c.SportID);
+            var result = _accountService.GetPerformanceBySport(custId, getTop)?.OrderBy(c=>c.Ranking);
             var totalSportBettingStatistic = new SportBettingStatisticViewModel();
             var bestSportBettingStatistic = new SportBettingStatisticViewModel();
             var pieChartSportStatisticSessions = new List<SportStatisticPieChartViewModel>();
 
-            tasks.Add(Task.Run(() =>
+            if(result != null && result.Any())
             {
-                try
+                tasks.Add(Task.Run(() =>
                 {
-                    totalSportBettingStatistic.TurnOver = result.Sum(c => c.TurnOver);
-                    totalSportBettingStatistic.WinLoss = result.Sum(c => c.WinLoss);
-                    totalSportBettingStatistic.BetCount = result.Sum(c => c.BetCount);
-                    totalSportBettingStatistic.BetCount14 = result.Sum(c => c.BetCount14);
-                    totalSportBettingStatistic.TurnOver14 = result.Sum(c => c.TurnOver14);
-                }
-                catch (Exception ex)
+                    try
+                    {
+                        totalSportBettingStatistic.TurnOver = result.Sum(c => c.TurnOver);
+                        totalSportBettingStatistic.WinLoss = result.Sum(c => c.WinLoss);
+                        totalSportBettingStatistic.BetCount = result.Sum(c => c.BetCount);
+                        totalSportBettingStatistic.BetCount14 = result.Sum(c => c.BetCount14);
+                        totalSportBettingStatistic.TurnOver14 = result.Sum(c => c.TurnOver14);
+                    }
+                    catch (Exception ex)
+                    {
+                        LogService.Info(ex.Message);
+
+                        throw;
+                    }
+                }));
+
+                tasks.Add(Task.Run(() =>
                 {
-                    LogService.Info(ex.Message);
+                    try
+                    {
+                        var tempBestSport = result.FirstOrDefault(c => c.Ranking == result.Min(x => x.Ranking));
+                        bestSportBettingStatistic.SportID = tempBestSport.SportID;
+                        bestSportBettingStatistic.SportName = tempBestSport.SportName;
+                        bestSportBettingStatistic.TurnOver = tempBestSport.TurnOver;
+                        bestSportBettingStatistic.WinLoss = tempBestSport.WinLoss;
+                        bestSportBettingStatistic.BetCount = tempBestSport.BetCount;
+                        bestSportBettingStatistic.TurnOver14 = tempBestSport.TurnOver14;
+                        bestSportBettingStatistic.BetCount14 = tempBestSport.BetCount14;
+                    }
+                    catch (Exception ex)
+                    {
+                        LogService.Info(ex.Message);
 
-                    throw;
-                }
-            }));
+                        throw;
+                    }
+                }));
 
-            tasks.Add(Task.Run(() =>
-            {
-                try
+                tasks.Add(Task.Run(() =>
                 {
-                    var tempBestSport = result.FirstOrDefault(c => c.Ranking == result.Min(x => x.Ranking));
-                    bestSportBettingStatistic.SportID = tempBestSport.SportID;
-                    bestSportBettingStatistic.SportName = tempBestSport.SportName;
-                    bestSportBettingStatistic.TurnOver = tempBestSport.TurnOver;
-                    bestSportBettingStatistic.WinLoss = tempBestSport.WinLoss;
-                    bestSportBettingStatistic.BetCount = tempBestSport.BetCount;
-                    bestSportBettingStatistic.TurnOver14 = tempBestSport.TurnOver14;
-                    bestSportBettingStatistic.BetCount14 = tempBestSport.BetCount14;
-                }
-                catch (Exception ex)
-                {
-                    LogService.Info(ex.Message);
+                    try
+                    {
+                        CalculatePieChartTurnOverPercantage(result, pieChartSportStatisticSessions);
+                    }
+                    catch (Exception ex)
+                    {
+                        LogService.Info(ex.Message);
 
-                    throw;
-                }
-            }));
+                        throw;
+                    }
+                }));
 
-            tasks.Add(Task.Run(() =>
-            {
-                try
-                {
-                    CalculatePieChartTurnOverPercantage(result, pieChartSportStatisticSessions);
-                }
-                catch (Exception ex)
-                {
-                    LogService.Info(ex.Message);
-
-                    throw;
-                }
-            }));
-
-            Task.WhenAll(tasks.ToArray()).Wait();
+                Task.WhenAll(tasks.ToArray()).Wait();
+            }
 
             return Json(new
             {
@@ -1038,9 +1041,10 @@
         [NapAuth(FunctionKey = FSFunctionKeys.BettingStatistics, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetPerformanceByBettype(long custId, int getTop)
         {
-            var result = _accountService.GetPerformanceByBettype(custId, getTop).OrderBy(c => c.Ranking);
+            var result = _accountService.GetPerformanceByBettype(custId, getTop)?.OrderBy(c => c.Ranking);
             var liveIndicatorList = new List<LiveIndicatorViewModel>();
             var betTypeCategories = new List<string>();
+
             CalculateLiveIndicatorPercentage(result, liveIndicatorList, betTypeCategories);
 
             return Json(new
@@ -1058,13 +1062,13 @@
             var winLossAreaDate = new List<decimal>();
             var days = new List<string>();
 
-            if (result.Any())
+            if (result != null && result.Any())
             {
                 result.ToList().ForEach(c =>
                 {
                     days.Add(c.RptDate.ToString("dd - MM"));
-                    turnOverAreaData.Add(c.Turnover);
-                    winLossAreaDate.Add(c.Winloss);
+                    turnOverAreaData.Add(Math.Round(c.Turnover));
+                    winLossAreaDate.Add(Math.Round(c.Winloss));
                 });
             }
 
@@ -1080,6 +1084,7 @@
         private IEnumerable<SportStatisticPieChartViewModel> CalculatePieChartTurnOverPercantage(IEnumerable<PerformanceBySportModel> result, List<SportStatisticPieChartViewModel> pieChartSportStatisticSessions)
         {
             decimal sumTurnOver = result.Sum(c => c.TurnOver);
+            decimal totalPercentage = 0;
 
             if (sumTurnOver != 0)
             {
@@ -1087,13 +1092,22 @@
                 {
                     if((c.SportID == -99 && c.BetCount != 0) || c.SportID != -99)
                     {
+                        decimal percentage = (c.TurnOver != 0) ? Math.Round(((c.TurnOver / sumTurnOver) * 100)) : 0;
+
+                        if((totalPercentage + percentage) > 100)
+                        {
+                            percentage = percentage - ((totalPercentage + percentage) - 100);
+                        }
+
                         pieChartSportStatisticSessions.Add(new SportStatisticPieChartViewModel
                         {
                             name = c.SportName,
                             selected = true,
-                            y = (c.TurnOver != 0) ? Math.Round(((c.TurnOver / sumTurnOver) * 100)) : 0,
+                            y = percentage,
                             turnOver = Math.Round(c.TurnOver)
                         });
+
+                        totalPercentage += percentage;
                     }
                 });
             }
@@ -1103,7 +1117,7 @@
 
         private void CalculateLiveIndicatorPercentage(IEnumerable<PerformanceByBettypeModel> result, List<LiveIndicatorViewModel> liveIndicatorList, List<string> betTypeCategories)
         {
-            if (!result.Any())
+            if (result == null || !result.Any())
             {
                 return;
             }
@@ -1111,6 +1125,7 @@
             decimal maxTurnOverOfBetType = Math.Round((result.GroupBy(c => new { c.BettypeId })
                                               .Select(x => new { BettypeId = x.Key,TotalTurnOver = x.Sum(w => w.Turnover) }))
                                               .Max(c => c.TotalTurnOver));
+
             liveIndicatorList.Add(new LiveIndicatorViewModel { name = "None", data = new List<decimal>() });
             liveIndicatorList.Add(new LiveIndicatorViewModel { name = "Live", data = new List<decimal>() });
             liveIndicatorList.Add(new LiveIndicatorViewModel { name = "Non-Live", data = new List<decimal>() });
@@ -1118,11 +1133,11 @@
 
             result.GroupBy(c => c.Ranking).ToList().ForEach(c =>
             {
-                decimal live = Math.Round(c.FirstOrDefault(x => x.LiveIndicator == true).Turnover);
-                decimal nonelive = Math.Round(c.FirstOrDefault(x => x.LiveIndicator == false).Turnover);
+                decimal live = (c.FirstOrDefault(x => x.LiveIndicator == true)?.Turnover).GetValueOrDefault();
+                decimal nonelive = (c.FirstOrDefault(x => x.LiveIndicator == false)?.Turnover).GetValueOrDefault();
 
-                liveIndicatorList.ElementAt(1).data.Add(live);
-                liveIndicatorList.ElementAt(2).data.Add(nonelive);
+                liveIndicatorList.ElementAt(1).data.Add(Math.Round(live));
+                liveIndicatorList.ElementAt(2).data.Add(Math.Round(nonelive));
                 liveIndicatorList.ElementAt(0).data.Add(maxTurnOverOfBetType - nonelive - live);
                 betTypeCategories.Add(c.FirstOrDefault().BettypeName);
             });

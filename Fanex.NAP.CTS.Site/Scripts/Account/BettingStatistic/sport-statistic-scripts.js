@@ -29,7 +29,7 @@
                 type: 'POST',
                 data: {
                     custId: ctsCustId,
-                    getTop: 4
+                    getTop: 3
                 },
                 success: function (response) {
                     SetBettingStatisticToCookie(custId + '-' + username + "-BySport", response, expireCookie);
