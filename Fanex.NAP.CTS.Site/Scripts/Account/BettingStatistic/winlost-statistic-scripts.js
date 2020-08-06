@@ -172,9 +172,6 @@
                 lineWidth: 0.5,
                 color: "#3773CC",
                 data: turnOverAreaData,
-                tooltip: {
-                    valueSuffix: 'K'
-                },
                 marker: {
                     enabled: false,
                     symbol: 'circle',
@@ -186,9 +183,6 @@
                 yAxis: 1,
                 color: "#F15D21",
                 lineWidth: 0.8,
-                tooltip: {
-                    valueSuffix: 'K'
-                },
                 data: winLossAreaDate,
             }]
         });
