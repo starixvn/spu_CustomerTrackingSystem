@@ -5,6 +5,7 @@
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Web.Attribute;
+    using Fanex.NAP.CTS.Core.Utilities;
     using Service;
     using System.Linq;
     using System.Web.Mvc;
@@ -19,15 +20,10 @@
         }
 
         [HttpGet]
-        [NapAuth(FunctionKey = FSFunctionKeys.NotificationSettings, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [NapAuth(FunctionKey = FSFunctionKeys.NotificationSettings, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public JsonResult GetAllMessages(int maxAssociationID)
         {
-            IUserService userService = new UserService();
-
-            var isHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
-                            NapSettings.Settings.SiteId,
-                            FSFunctionKeys.AssociatedAccountMonitor,
-                            NAP.Core.Business.Constant.Policy.Host);
+            var isFirstNotification = CheckFirstNotification();
 
             var userId = CurrentSession.UserId;
             var messages = _notificationService.Get(userId, maxAssociationID).ToList();
@@ -43,21 +39,20 @@
                 unReadMessageCounter = unReadList?.Count(),
                 readList,
                 readListCounter = readList?.Count(),
-                isHostPermission
+                isFirstNotification
             }, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpGet]
-        public JsonResult GetUserPermission()
+        private bool CheckFirstNotification()
         {
-            IUserService userService = new UserService();
+            var isFirst = AppSession.IsFirstGetDataNotification;
 
-            var isHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
-                            NapSettings.Settings.SiteId,
-                            FSFunctionKeys.NotificationSettings,
-                            NAP.Core.Business.Constant.Policy.Host);
-           
-            return Json(isHostPermission, JsonRequestBehavior.AllowGet);
+            if(isFirst)
+            {
+                AppSession.IsFirstGetDataNotification = false;
+            }
+
+            return isFirst;
         }
     }
 }

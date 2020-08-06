@@ -40,5 +40,7 @@
         public const int DUPLICATED_DB = 2;
         public const int NOT_EXIST = 3;
         public const int INVALID_INPUT = 4;
+
+        public const string IsFirstGetDataNotification = "false";
     }
 }
