@@ -1398,6 +1398,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 
         .icon {
             margin-top: -5px;
+            margin-left: 2px;
         }
 
         .title {
@@ -1441,7 +1442,6 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 
         &.icon-open {
             transform: rotate(90deg);
-            margin-left: 2px;
         }
     }
 

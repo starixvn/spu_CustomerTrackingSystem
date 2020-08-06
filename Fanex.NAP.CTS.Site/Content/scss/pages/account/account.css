@@ -1660,7 +1660,8 @@
     .wrapper-statistic .statistic-title.expanded {
       border-bottom: 1px solid #DDE2E5; }
     .wrapper-statistic .statistic-title .icon {
-      margin-top: -5px; }
+      margin-top: -5px;
+      margin-left: 2px; }
     .wrapper-statistic .statistic-title .title {
       margin-left: 4px;
       font-size: 15px; }
@@ -1687,8 +1688,7 @@
     vertical-align: middle;
     cursor: pointer; }
     .wrapper-statistic .icon.icon-open {
-      transform: rotate(90deg);
-      margin-left: 2px; }
+      transform: rotate(90deg); }
   .wrapper-statistic .title {
     font-weight: bold;
     font-size: 14px;
