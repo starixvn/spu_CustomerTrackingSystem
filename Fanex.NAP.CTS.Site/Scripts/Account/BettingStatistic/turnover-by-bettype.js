@@ -1,31 +1,44 @@
 ﻿function turnover_by_bettype() {
     let betTypeCategories = null;
     let liveIndicatorList = null;
+    let cookiedata = null;
+    let custId = $("#hdCustId").val();
+    let username = $("#hdUsername").val();
 
     let domElements = {
         statisticLoading: $('#statistic_bettype_loading')
     }
     
-    function GetTurnOverByBetTypeData(custId) {
+    function GetTurnOverByBetTypeData(custId, expireCookie) {
         domElements.statisticLoading.removeClass('hide');
 
-        $.ajax(common.modifyRelativeUrl('Account/GetPerformanceByBettype'), {
-            type: 'POST',
-            data: {
-                custId: custId,
-                getTop: 4
-            },
-            success: function (response) {
-                betTypeCategories = response.betTypeCategories;
-                liveIndicatorList = response.liveIndicatorList;
-                DisplayChart();
+        if (cookiedata == 0) {
+            $.ajax(common.modifyRelativeUrl('Account/GetPerformanceByBettype'), {
+                type: 'POST',
+                data: {
+                    custId: custId,
+                    getTop: 4
+                },
+                success: function (response) {
+                    SetBettingStatisticToCookie(custId + '-' + username + "-ByBettype", response, expireCookie);
+                    RenderDataToUI(response);                 
+                },
+                error: function (errMsg) {
+                    console.log(errMsg);
+                }
+            });
+        }
+        else {
+            RenderDataToUI(JSON.parse(cookiedata));
+        }
+    }
 
-                domElements.statisticLoading.addClass('hide');
-            },
-            error: function (errMsg) {
-                console.log(errMsg);
-            }
-        });
+    function RenderDataToUI(response) {
+        betTypeCategories = response.betTypeCategories;
+        liveIndicatorList = response.liveIndicatorList;
+        DisplayChart();
+
+        domElements.statisticLoading.addClass('hide');
     }
 
     function DisplayChart() {
@@ -89,7 +102,26 @@
         });
     };
 
-    this.Initial = function (custId) {
-        GetTurnOverByBetTypeData(custId);
+    function SetBettingStatisticToCookie(name, value, expireCookie) {
+        var cookie = [name, '=', JSON.stringify(value), '; expires=' + expireCookie, , '; path=/;'].join('');
+        document.cookie = cookie;
+    }
+
+    function GetStatisticByBetTypeFromCookie() {
+
+        if (document.cookie.split(';').some((item) => item.trim().startsWith(custId + '-' + username + '-ByBettype='))) {
+            return document.cookie
+                .split('; ')
+                .find(row => row.startsWith(custId + '-' + username + '-ByBettype='))
+                .split('=')[1];
+        }
+
+        return 0;
+    }
+
+
+    this.Initial = function (custId, expireCookie) {
+        cookiedata = GetStatisticByBetTypeFromCookie();
+        GetTurnOverByBetTypeData(custId, expireCookie);
     }
 }

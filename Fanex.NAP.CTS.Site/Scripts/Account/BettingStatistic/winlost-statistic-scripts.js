@@ -2,12 +2,47 @@
     let turnOverAreaData = null;
     let winLossAreaDate = null;
     let days = null;
+    let cookiedata = null;
+    let custId = $("#hdCustId").val();
+    let username = $("#hdUsername").val();
 
     let domElements = {
         statisticWinlostLoading: $('#statistic_winlost_loading')
     }
-    
-    function  DisplayChart (){
+
+    function GetTurnOverByBetTypeData(custId, expireCookie) {
+        domElements.statisticWinlostLoading.removeClass('hide');
+
+        if (cookiedata == 0) {
+            $.ajax(common.modifyRelativeUrl('Account/GetPerformanceDaily'), {
+                type: 'POST',
+                data: {
+                    custId: custId
+                },
+                success: function (response) {
+                    SetBettingStatisticToCookie(custId + '-' + username + "-WinLost", response, expireCookie);
+                    RenderDataToUI(response);
+                },
+                error: function (errMsg) {
+                    console.log(errMsg);
+                }
+            });
+        }
+        else {
+            RenderDataToUI(JSON.parse(cookiedata));
+        }
+    }
+
+    function RenderDataToUI(response) {
+        turnOverAreaData = response.turnOverAreaData;
+        winLossAreaDate = response.winLossAreaDate;
+        days = response.days;
+        DisplayChart();
+
+        domElements.statisticWinlostLoading.addClass('hide');
+    }
+
+    function DisplayChart() {
         let domElements = {
             iconFullScreen: $("#icon-full-screen"),
             wrapperChartWinLost: $("#chart-win-lost"),
@@ -137,6 +172,9 @@
                 lineWidth: 0.5,
                 color: "#3773CC",
                 data: turnOverAreaData,
+                tooltip: {
+                    valueSuffix: 'K'
+                },
                 marker: {
                     enabled: false,
                     symbol: 'circle',
@@ -148,7 +186,10 @@
                 yAxis: 1,
                 color: "#F15D21",
                 lineWidth: 0.8,
-               data: winLossAreaDate,
+                tooltip: {
+                    valueSuffix: 'K'
+                },
+                data: winLossAreaDate,
             }]
         });
 
@@ -158,29 +199,25 @@
         })
     };
 
-    function GetTurnOverByBetTypeData(custId) {
-        domElements.statisticWinlostLoading.removeClass('hide');
-
-        $.ajax(common.modifyRelativeUrl('Account/GetPerformanceDaily'), {
-            type: 'POST',
-            data: {
-                custId: custId
-            },
-            success: function (response) {
-                turnOverAreaData = response.turnOverAreaData; 
-                winLossAreaDate = response.winLossAreaDate;
-                days = response.days;
-                DisplayChart();
-
-                domElements.statisticWinlostLoading.addClass('hide');
-            },
-            error: function (errMsg) {
-                console.log(errMsg);
-            }
-        });
+    function SetBettingStatisticToCookie(name, value, expireCookie) {
+        var cookie = [name, '=', JSON.stringify(value), '; expires=' + expireCookie, , '; path=/;'].join('');
+        document.cookie = cookie;
     }
 
-    this.Initial = function (custId) {
-        GetTurnOverByBetTypeData(custId);
+    function GetStatisticWinLostFromCookie() {
+
+        if (document.cookie.split(';').some((item) => item.trim().startsWith(custId + '-' + username + '-WinLost='))) {
+            return document.cookie
+                .split('; ')
+                .find(row => row.startsWith(custId + '-' + username + '-WinLost='))
+                .split('=')[1];
+        }
+
+        return 0;
+    }
+
+    this.Initial = function (custId, expireCookie) {
+        cookiedata = GetStatisticWinLostFromCookie();
+        GetTurnOverByBetTypeData(custId, expireCookie);
     }
 }

@@ -198,10 +198,11 @@
         let chartTurnoverBySport = new turnover_by_sport();
         let chartTurnoverByBettype = new turnover_by_bettype();
         let chartWinLost = new win_lost();
+        let expireCookie = GetExpireCookieTime();
 
-        chartTurnoverBySport.Initial(custId); 
-        chartWinLost.Initial(custId);
-        chartTurnoverByBettype.Initial(custId);
+        chartTurnoverBySport.Initial(custId,expireCookie);
+        chartWinLost.Initial(custId,expireCookie);
+        chartTurnoverByBettype.Initial(custId, expireCookie);
     }
 
     function CollapseExpandItem() {
@@ -359,6 +360,25 @@
 
         GetBettingStatistic();
            
+    }
+
+    function GetExpireCookieTime() {
+        var now = new Date();
+        var utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+        var nowServerTime = new Date(utc + (3600000 * "-4"));
+        var temp = new Date(utc + (3600000 * "-4"));
+
+        temp.setFullYear(nowServerTime.getFullYear());
+        temp.setMonth(nowServerTime.getMonth());
+        temp.setDate(nowServerTime.getDate() + 1);
+        temp.setHours(0);
+        temp.setMinutes(0);
+        temp.setSeconds(0);
+
+        var cookieLifeTime = temp - nowServerTime;
+        var expireDateTime = new Date(utc + cookieLifeTime); 
+        
+        return expireDateTime.toString();
     }
 
     $(document).ready(function () {

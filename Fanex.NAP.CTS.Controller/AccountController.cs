@@ -1111,10 +1111,9 @@
             decimal maxTurnOverOfBetType = Math.Round((result.GroupBy(c => new { c.BettypeId })
                                               .Select(x => new { BettypeId = x.Key,TotalTurnOver = x.Sum(w => w.Turnover) }))
                                               .Max(c => c.TotalTurnOver));
-
             liveIndicatorList.Add(new LiveIndicatorViewModel { name = "None", data = new List<decimal>() });
-            liveIndicatorList.Add(new LiveIndicatorViewModel { name = "None-Live", data = new List<decimal>() });
             liveIndicatorList.Add(new LiveIndicatorViewModel { name = "Live", data = new List<decimal>() });
+            liveIndicatorList.Add(new LiveIndicatorViewModel { name = "Non-Live", data = new List<decimal>() });
 
 
             result.GroupBy(c => c.Ranking).ToList().ForEach(c =>
@@ -1122,8 +1121,8 @@
                 decimal live = Math.Round(c.FirstOrDefault(x => x.LiveIndicator == true).Turnover);
                 decimal nonelive = Math.Round(c.FirstOrDefault(x => x.LiveIndicator == false).Turnover);
 
-                liveIndicatorList.ElementAt(2).data.Add(live);
-                liveIndicatorList.ElementAt(1).data.Add(nonelive);
+                liveIndicatorList.ElementAt(1).data.Add(live);
+                liveIndicatorList.ElementAt(2).data.Add(nonelive);
                 liveIndicatorList.ElementAt(0).data.Add(maxTurnOverOfBetType - nonelive - live);
                 betTypeCategories.Add(c.FirstOrDefault().BettypeName);
             });
