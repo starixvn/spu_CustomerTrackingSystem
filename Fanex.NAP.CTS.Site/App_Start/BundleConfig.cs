@@ -43,7 +43,9 @@
             //RegisterSuspiciousCustomerBundles(bundles);
             //RegisterSuspiciousCustomerDetailsBundles(bundles);
             //RegisterScannedOfficeIpBundles(bundles);
-            //RegisterNotificationBundles(bundles);
+
+            RegisterNotificationBundles(bundles);
+
             //RegisterDailyDataCaptureBundles(bundles);
             //RegisterCheckBetReportBundles(bundles);
             //RegisterCustomerMonitorBundles(bundles);
@@ -61,6 +63,8 @@
             RegisterProblemAccountMonitorDetailBundles(bundles);
 
             RegisterImportEvidencesBundles(bundles);
+
+            RegisterAssociatedAccountMonitorBundles(bundles);
         }
 
         private static void RegisterFSCoreBundles(BundleCollection bundles)
@@ -240,6 +244,23 @@
 
             bundles.Add(new StyleBundle("~/import-evidences-styles").Include(
                     "~/Content/scss/pages/import-evidences/import-evidences.css"));
+        }
+
+        private static void RegisterAssociatedAccountMonitorBundles(BundleCollection bundles)
+        {
+            bundles.Add(new ScriptBundle("~/associated-account-monitor-scripts").Include(
+                "~/Scripts/select2.min.js",
+                "~/Scripts/MultipleSelect/jquery.multiselect.filter.js",
+                "~/Scripts/tagify/jquery.tagify.min.js",
+                "~/Scripts/tagify/tagify.min.js",
+                "~/Scripts/AssociatedAccountMonitor/index.js"));
+
+            bundles.Add(new StyleBundle("~/associated-account-monitor-styles").Include(
+                 "~/Content/scss/vendors/select2.min.css",
+                 "~/Content/scss/MultipleSelect/jquery.multiselect.filter.css",
+                 "~/Content/scss/MultipleSelect/jquery.multiselect.css",
+                 "~/Content/scss/vendors/jquery-ui/base/tagify.css",
+                 "~/Content/scss/pages/associated-account-monitor/associated-account-monitor.css"));
         }
     }
 }

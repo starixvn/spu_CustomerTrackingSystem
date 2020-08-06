@@ -350,6 +350,17 @@
         domElements.btnRefresh.on('click', () => LoadGrid());
         domElements.btnGenerate.on('click', () => LoadGrid());
         domElements.cbbSport.on('change', () => GetLeagues());
+
+        // handle freeze header
+        $(window).scroll(function (event) {
+            var scroll = $(window).scrollTop();
+            if (scroll >= 96) {
+                let height_filter = $(".form-filter").height() + 9;
+
+                $(".wrapper-info-table").css({ "top": height_filter + 108 })
+                $("#problemAccountMonitorTable thead tr:first-child th").css({ "top": height_filter + 108 })
+            }
+        });
     }
 
     $(document).ready(function () {

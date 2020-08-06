@@ -7,18 +7,9 @@
 
     public class NotificationService : INotificationService
     {
-        public int GetUnreadMessageCounter(int custId)
+        public IEnumerable<Message> Get(int custId, int maxAssociationID)
         {
-            var criteria = new UserMessageUnreadCounterGetCriteria(custId);
-
-            var result = DataService.GetSingle<dynamic>(criteria);
-
-            return result.UnreadMessageCounter;
-        }
-
-        public IEnumerable<Message> Get(int custId)
-        {
-            return DataService.GetData<Message>(new UserMessageGetCriteria(custId));
+            return DataService.GetData<Message>(new UserMessageGetCriteria(custId, maxAssociationID));
         }
     }
 }

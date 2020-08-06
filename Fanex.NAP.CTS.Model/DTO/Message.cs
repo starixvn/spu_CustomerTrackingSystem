@@ -4,20 +4,24 @@
 
     public class Message
     {
-        public string FraudCaseName { get; set; }
+        public int CTSCustID { get; set; }
 
-        public string MessageContent { get; set; }
+        public string UserName { get; set; }
 
-        public DateTime LogDate { get; set; }
+        public int NewAssocitionCount { get; set; }
 
-        public string LogDateString
+        public DateTime CreatedDate { get; set; }
+        
+        public string CreatedDateString
         {
             get
             {
-                return LogDate == DateTime.MinValue ? "" : LogDate.ToString("MMM dd, yyyy H:mm");
+                return CreatedDate == DateTime.MinValue ? "" : CreatedDate.ToString("MMM dd, yyyy H:mm");
             }
         }
 
-        public bool IsViewed { get; set; }
+        public int MaxNewAssociationID { get; set; }
+
+        public bool IsSeen { get; set; }
     }
 }

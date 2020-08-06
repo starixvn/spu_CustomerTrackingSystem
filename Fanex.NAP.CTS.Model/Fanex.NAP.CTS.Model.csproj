@@ -161,6 +161,9 @@
     <Compile Include="Account\UpdateAccountExceptionModel.cs" />
     <Compile Include="Account\UpdatePlaceEvidenceModel.cs" />
     <Compile Include="Account\ValidateManualAssociationMultipleModel.cs" />
+    <Compile Include="AssociatedAccountMonitor\AssociatedAccountMonitorModel.cs" />
+    <Compile Include="AssociatedAccountMonitor\CustProfilerModel.cs" />
+    <Compile Include="AssociatedAccountMonitor\ValidateAssociatedAccountModel.cs" />
     <Compile Include="DTO\CustomerCategory.cs" />
     <Compile Include="Association\AssociationCustomerModel.cs" />
     <Compile Include="DTO\CustomerEvidenceComparer.cs" />

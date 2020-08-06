@@ -156,8 +156,8 @@
 
             Task.WhenAll(data);
 
-            return data.Result != null 
-                ? data.Result 
+            return data.Result != null
+                ? data.Result
                 : Enumerable.Empty<DetailAssociatedGroupModel>();
         }
 

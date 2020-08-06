@@ -71,6 +71,15 @@
             color: #fff;
         }
     }
+
+    &.-search {
+        background-color: $btn-search-bg;
+        color: $btn-search-color;
+
+        &:hover:not(:disabled) {
+            background-color: $btn-search-bg-hover;
+        }
+    }
 }
 
 .btn-search, .btn-submit {

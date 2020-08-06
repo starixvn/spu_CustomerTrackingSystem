@@ -10,12 +10,12 @@ namespace Fanex.NAP.CTS.Model.DTO
     {
         public bool Equals(CustomerEvidence x, CustomerEvidence y)
         {
-            return x.CustId == y.CustId && x.EvidenceCode == y.EvidenceCode;
+            return x.Level0CustId ==y.Level0CustId && x.CustId == y.CustId && x.EvidenceCode == y.EvidenceCode;
         }
 
         public int GetHashCode(CustomerEvidence obj)
         {
-            return obj.CustId.GetHashCode() ^ obj.EvidenceCode.GetHashCode();
+            return obj.Level0CustId.GetHashCode() ^ obj.CustId.GetHashCode() ^ obj.EvidenceCode.GetHashCode();
         }
     }
 }
