@@ -1094,9 +1094,13 @@
                     {
                         decimal percentage = (c.TurnOver != 0) ? Math.Round(((c.TurnOver / sumTurnOver) * 100)) : 0;
 
-                        if((totalPercentage + percentage) > 100)
+                        if ((totalPercentage + percentage) > 100)
                         {
                             percentage = percentage - ((totalPercentage + percentage) - 100);
+                        }
+                        else if ((totalPercentage + percentage) == 99 && result.ToList()[result.Count() - 1] == c)
+                        {
+                            percentage ++;
                         }
 
                         pieChartSportStatisticSessions.Add(new SportStatisticPieChartViewModel

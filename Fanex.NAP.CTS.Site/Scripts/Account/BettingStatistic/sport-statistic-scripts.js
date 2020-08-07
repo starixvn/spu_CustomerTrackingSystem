@@ -65,6 +65,17 @@
         domElements.totalstakeBetCount.html(response.totalSportBettingStatistic.BetCount);
 
         domElements.bestsportSportName.html(response.bestSportBettingStatistic.SportName);
+
+        if (isEllipsisActive(domElements.bestsportSportName)) {
+            domElements.bestsportSportName.prop('title', response.bestSportBettingStatistic.SportName);
+            domElements.bestsportSportName.tooltip();
+        }
+        else {
+            domElements.bestsportSportName.tooltip({
+                disabled: true
+            });
+        }
+
         domElements.summaryBottom.html(response.bestSportBettingStatistic.StakeLevel);
         HighlightStakeLevel(response.bestSportBettingStatistic.StakeLevel, domElements.summaryBottom);
         domElements.bestsportTurnOver.html(RoundNumber(response.bestSportBettingStatistic.TurnOver));
@@ -128,6 +139,10 @@
         }
 
         return 0;
+    }
+
+    function isEllipsisActive(element) {
+        return element[0].offsetWidth < element[0].scrollWidth;
     }
 
     function DisplayPieChart(resource) {
