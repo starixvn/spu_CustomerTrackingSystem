@@ -112,17 +112,17 @@
 
     function HighlightStakeLevel(stakeLevel, targetElement)
     {
-        if (stakeLevel == "High Stake")
-        {
+        if (stakeLevel == "High Stake") {
             targetElement.addClass('high-stake');
         }
-        else if (stakeLevel == "Medium Stake")
-        {
+        else if (stakeLevel == "Medium Stake") {
             targetElement.addClass('medium-stake');
         }
-        else
-        {
+        else if (stakeLevel == "Low Stake") {
             targetElement.addClass('normal-stake');
+        }
+        else {
+            targetElement.addClass('inactive-stake');
         }
     }
 

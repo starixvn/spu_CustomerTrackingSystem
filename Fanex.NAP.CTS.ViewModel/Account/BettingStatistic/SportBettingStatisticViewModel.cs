@@ -26,9 +26,9 @@ namespace Fanex.NAP.CTS.ViewModel.Account.BettingStatistic
         {
             get
             {
-                if (TurnOver14 == 0 || BetCount14 == 0)
+                if (BetCount14 == 0 || TurnOver14 == 0)
                 {
-                    return "Low Stake";
+                    return "Inactive";
                 }
 
                 decimal tempValue = TurnOver14 / BetCount14;
@@ -37,7 +37,7 @@ namespace Fanex.NAP.CTS.ViewModel.Account.BettingStatistic
                 {
                     return "High Stake";
                 }
-                else if (tempValue<=1000)
+                else if (tempValue <= 1000)
                 {
                     return "Low Stake";
                 }

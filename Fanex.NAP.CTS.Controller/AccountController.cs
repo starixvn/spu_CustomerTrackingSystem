@@ -1057,7 +1057,7 @@
         [NapAuth(FunctionKey = FSFunctionKeys.BettingStatistics, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetPerformanceDaily(long custId)
         {
-            var result = _accountService.GetPerformanceDaily(custId).OrderByDescending(c=>c.RptDate);
+            var result = _accountService.GetPerformanceDaily(custId).OrderBy(c=>c.RptDate);
             var turnOverAreaData = new List<decimal>();
             var winLossAreaDate = new List<decimal>();
             var days = new List<string>();
