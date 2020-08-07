@@ -1142,10 +1142,11 @@
                 betTypeCategories.Add(c.FirstOrDefault().BettypeName);
             });
 
-
-            if(result.Count() < 8)
+            int numberOfBettype = result.GroupBy(c => c.Ranking).Count();
+            if (numberOfBettype < 4)
             {
-                for (int i=8; i> result.Count(); i-=2)
+                int loop = 4 - numberOfBettype;
+                for (int i= 0; i < loop; i++)
                 {
                     liveIndicatorList.ElementAt(0).data.Add(maxTurnOverOfBetType);
                     liveIndicatorList.ElementAt(1).data.Add(0);
