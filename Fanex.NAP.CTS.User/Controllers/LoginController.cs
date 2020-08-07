@@ -158,6 +158,7 @@
 
                                     // Saves user session
                                     SaveUserSession(user, username, onId);
+                                    AppSession.IsFirstGetDataNotification = true;
 
                                     if (AppSession.CurrentUserMenu != null &&
                                         AppSession.CurrentUserMenu.Where(m => m.Parent == null).ToList().Count > 0)

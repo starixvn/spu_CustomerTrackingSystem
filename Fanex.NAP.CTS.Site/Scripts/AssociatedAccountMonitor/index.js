@@ -93,7 +93,7 @@
                 { data: obj => obj.CreatedTime},
                 {
                     data: obj => () => {                       
-                        return html = '<span class="sub-icon - delete " id="sub-icon " title="Remove Category"><i class="icon-delete ' + (!IsHostPermission ? ' disabled' : '') + '"></i></span>';
+                        return html = '<span class="sub-icon - delete " id="sub-icon " title="Remove Account"><i class="icon-delete ' + (!IsHostPermission ? ' disabled' : '') + '"></i></span>';
                     }, createdCell: (cell, _, row) => {
                         if (IsHostPermission) {
                             $('.icon-delete', cell).click(() => {
