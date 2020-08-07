@@ -137,6 +137,7 @@
     <Compile Include="Account\AffectedEvidenceModel.cs" />
     <Compile Include="Account\AffectedEvidenListBetweenCustsModel.cs" />
     <Compile Include="Account\AffectedRetractEvidenceModel.cs" />
+    <Compile Include="Account\BettingStatistic\PerformanceBySportModel.cs" />
     <Compile Include="Account\CustomerAssociationByCTSCustIdModel.cs" />
     <Compile Include="Account\CustomerByGraphDB.cs" />
     <Compile Include="Account\CustomerCategory\CustomerClassificationModel.cs" />
@@ -157,7 +158,9 @@
     <Compile Include="Account\FraudCaseModel.cs" />
     <Compile Include="Account\InsertManualAssociationMultipleModel.cs" />
     <Compile Include="Account\RemoveEvidenceModel.cs" />
+    <Compile Include="Account\BettingStatistic\PerformanceByBettypeModel.cs" />
     <Compile Include="Account\TagModel.cs" />
+    <Compile Include="Account\BettingStatistic\PerformanceDailyModel.cs" />
     <Compile Include="Account\UpdateAccountExceptionModel.cs" />
     <Compile Include="Account\UpdatePlaceEvidenceModel.cs" />
     <Compile Include="Account\ValidateManualAssociationMultipleModel.cs" />

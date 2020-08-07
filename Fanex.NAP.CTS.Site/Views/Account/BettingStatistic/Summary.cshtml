@@ -1,0 +1,66 @@
+﻿@{
+    ViewBag.Title = "Summary of Last 90 Days";
+}
+
+    <div class="summary-detail">
+        <div class="wrapper-title">
+            <span class="title">
+                Summary Of Last 90 Days
+                <span class="statistic_loading hide" id="statistic_summary_loading">
+                    <img src="@Url.Content("~/Content/images/ajax-loader.gif")" alt="Loading ..." />
+                </span>
+            </span>
+        </div>
+
+        <div class="wrapper-data">
+            <div class="summary-top">
+                <div class="wrapper-title">
+                    <div class="name">Total</div>
+                    <div class="alert" id="summary-top">
+                    </div>
+                </div>
+                <div class="wrapper-value">
+                    <div class="value" id="totalstake_turnover"></div>
+                    <div class="text">Turnover</div>
+                </div>
+                <div class="wrapper-value">
+                    <div class="value" id="totalstake_winloss"></div>
+                    <div class="text">Win Lost</div>
+                </div>
+                <div class="wrapper-value">
+                    <div class="value" id="totalstake_margin"></div>
+                    <div class="text">Margin</div>
+                </div>
+                <div class="wrapper-value">
+                    <div class="value" id="totalstake_betcount"></div>
+                    <div class="text">Bet Count</div>
+                </div>
+            </div>
+            <div class="border-divide">
+
+            </div>
+            <div class="summary-bottom">
+                <div class="wrapper-title">
+                    <div class="name" id="bestsport_sportname"></div>
+                    <div class="alert" id="summary-bottom">
+                    </div>
+                </div>
+                <div class="wrapper-value">
+                    <div class="value" id="bestsport_turnover"></div>
+                    <div class="text">Turnover</div>
+                </div>
+                <div class="wrapper-value">
+                    <div class="value" id="bestsport_winloss"></div>
+                    <div class="text">Win Lost</div>
+                </div>
+                <div class="wrapper-value">
+                    <div class="value" id="bestsport_margin"></div>
+                    <div class="text">Margin</div>
+                </div>
+                <div class="wrapper-value">
+                    <div class="value" id="bestsport_betcount"></div>
+                    <div class="text">Bet Count</div>
+                </div>
+            </div>
+        </div>
+    </div>

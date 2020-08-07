@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "Turnover By Sport";
+}
+
+    <div class="chart-sport">
+        <span class="title">
+            Turnover By Sport Last 90 Days
+            <span class="statistic_loading hide" id="statistic_bysport_loading">
+                <img src="@Url.Content("~/Content/images/ajax-loader.gif")" alt="Loading ..." />
+            </span>
+        </span>
+        
+        <div id="chart-sport" class="wapper-chart-sport">
+        </div>
+    </div>
+    

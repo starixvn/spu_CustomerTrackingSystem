@@ -22,7 +22,7 @@
         </div>
         <div class="wrapper-status" id="divCustomerCategorySummary"></div>
     </div>
-    
+
     <div class="wrapper-content">
         <div class="tag-info">
             <div class="wrapper-tag-info">
@@ -135,7 +135,31 @@
 
         </div>
     </div>
-
+    <div class="wrapper-statistic hide" id="wrapper-statistic">
+        <div class="statistic-title" id="statistic-title" ref="statistic-detail">
+            <i class="icon icon-chevron-right"></i>
+            <a class="title" href="javascript:void(0)">
+                Betting Statistic Last 90 Days
+            </a>
+        </div>
+       
+        <div id="statistic-detail" class="statistic-detail hide">
+            <div class="chart_empty hide" id="chart_empty">
+                <div class="wrapper_content">
+                    <img class="report_empty" src="@Url.Content("~/Content/images/statistic_empty.png")" alt="Loading ..." />
+                    <span class="text">There’s no activity to report yet.</span>
+                </div>
+            </div>
+            <div class="chart-default" id="chart-default">
+                <div class="container-grid">
+                    @Html.Partial("BettingStatistic/Summary")
+                    @Html.Partial("BettingStatistic/TurnoverBySport")
+                    @Html.Partial("BettingStatistic/TurnoverByBetType")
+                    @Html.Partial("BettingStatistic/TurnoverWinLost")
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="content-card">
@@ -193,9 +217,12 @@
     <input id="hdSubscriberId" type="hidden" value="@Model.SubscriberId" />
     <input id="hdSubscriber" type="hidden" value="@Model.Subscriber" />
     <input id="hdIsHostPermission" type="hidden" IsHostPermission="@Model.IsHostPermission.ToString()" />
+    <input id="hdCurrentUserId" type="hidden" value="@Model.CurrentUserId" />
+    <input id="hdIsBettingStatisticPermission" type="hidden" IsBettingStatisticPermission="@Model.IsBettingStatisticPermission.ToString()"/>
 </div>
 @section scripts{
-    @Scripts.Render("~/account-detail-scripts"
+    @Scripts.Render("~/statistic-scripts"
+    , "~/account-detail-scripts"
     , "~/chain-to-evidence-scripts"
     , "~/account/transaction-history-scripts"
     , "~/account/customer-category-scripts")

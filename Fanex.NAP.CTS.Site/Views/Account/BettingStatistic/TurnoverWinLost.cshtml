@@ -1,0 +1,18 @@
+﻿@{
+    ViewBag.Title = "Turnover & Win Lost Last 3 Months";
+}
+
+    <div class="chart-win-lost">
+        <span class="title">
+            Turnover & Win Lost Last 90 Days
+            <span class="icon icon-zoom" id="icon-full-screen"></span>
+            <span class="statistic_loading hide" id="statistic_winlost_loading">
+                <img src="@Url.Content("~/Content/images/ajax-loader.gif")" alt="Loading ..." />
+            </span>
+        </span>
+        
+        <div class="win-lost-grid">
+            <div id="chart-win-lost" class="wapper-win-lost">
+            </div>
+        </div>
+    </div>        

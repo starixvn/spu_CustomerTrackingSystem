@@ -91,5 +91,11 @@
         DBResult UpdateCustomerClassification(long custId, long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark, int createdBy);
 
         DBResult RemoveCustomerClassification(long custId, long ctsCustId, int categoryId, int createdBy);
+
+        IEnumerable<PerformanceBySportModel> GetPerformanceBySport(long custId, int getTop);
+
+        IEnumerable<PerformanceByBettypeModel> GetPerformanceByBettype(long custId, int getTop);
+
+        IEnumerable<PerformanceDailyModel> GetPerformanceDaily(long custId);
     }
 }

@@ -1,62 +1,82 @@
-﻿[
+[
   {
     "outputFile": "Content/scss/pages/dashboard/dashboard.css",
-    "inputFile": "Content/scss/pages/dashboard/dashboard.scss"
+    "inputFile": "Content/scss/pages/dashboard/dashboard.scss",
+    "sourceMap": false
   },
   {
     "outputFile": "Content/scss/pages/index.css",
-    "inputFile": "Content/scss/pages/index.scss"
+    "inputFile": "Content/scss/pages/index.scss",
+    "sourceMap": false
   },
   {
     "outputFile": "Content/scss/pages/suspicious-customer/suspicious-customer.css",
-    "inputFile": "Content/scss/pages/suspicious-customer/suspicious-customer.scss"
+    "inputFile": "Content/scss/pages/suspicious-customer/suspicious-customer.scss",
+    "sourceMap": false
   },
   {
     "outputFile": "Content/scss/pages/login/login.css",
-    "inputFile": "Content/scss/pages/login/login.scss"
+    "inputFile": "Content/scss/pages/login/login.scss",
+    "sourceMap": false
   },
   {
     "outputFile": "Content/scss/pages/errors/errors.css",
-    "inputFile": "Content/scss/pages/errors/errors.scss"
+    "inputFile": "Content/scss/pages/errors/errors.scss",
+    "sourceMap": false
   },
   {
     "outputFile": "Content/scss/pages/customer-monitor/customer-monitor.css",
-    "inputFile": "Content/scss/pages/customer-monitor/customer-monitor.scss"
+    "inputFile": "Content/scss/pages/customer-monitor/customer-monitor.scss",
+    "sourceMap": false
   },
   {
     "outputFile": "Content/scss/pages/configurations/fraud-case.css",
-    "inputFile": "Content/scss/pages/configurations/fraud-case.scss"
+    "inputFile": "Content/scss/pages/configurations/fraud-case.scss",
+    "sourceMap": false
   },
   {
     "outputFile": "Content/scss/pages/subscriber-assignment/subscriber-assignment.css",
-    "inputFile": "Content/scss/pages/subscriber-assignment/subscriber-assignment.scss"
+    "inputFile": "Content/scss/pages/subscriber-assignment/subscriber-assignment.scss",
+    "sourceMap": false
   },
   {
     "outputFile": "Content/scss/pages/account/account.css",
-    "inputFile": "Content/scss/pages/account/account.scss"
+    "inputFile": "Content/scss/pages/account/account.scss",
+    "sourceMap": false
   },
   {
     "outputFile": "Content/scss/pages/evidence/evidence.css",
-    "inputFile": "Content/scss/pages/evidence/evidence.scss"
+    "inputFile": "Content/scss/pages/evidence/evidence.scss",
+    "sourceMap": false
   },
   {
     "outputFile": "Content/scss/pages/account/account-fps.css",
-    "inputFile": "Content/scss/pages/account/account-fps.scss"
+    "inputFile": "Content/scss/pages/account/account-fps.scss",
+    "sourceMap": false
   },
   {
     "outputFile": "Content/scss/pages/problem-account-monitor/problem-account-monitor.css",
-    "inputFile": "Content/scss/pages/problem-account-monitor/problem-account-monitor.scss"
+    "inputFile": "Content/scss/pages/problem-account-monitor/problem-account-monitor.scss",
+    "sourceMap": false
   },
   {
     "outputFile": "Content/scss/pages/problem-match-monitor/problem-match-monitor.css",
-    "inputFile": "Content/scss/pages/problem-match-monitor/problem-match-monitor.scss"
+    "inputFile": "Content/scss/pages/problem-match-monitor/problem-match-monitor.scss",
+    "sourceMap": false
   },
   {
     "outputFile": "Content/scss/pages/import-evidences/import-evidences.css",
-    "inputFile": "Content/scss/pages/import-evidences/import-evidences.scss"
+    "inputFile": "Content/scss/pages/import-evidences/import-evidences.scss",
+    "sourceMap": false
   },
   {
     "outputFile": "Content/scss/pages/associated-account-monitor/associated-account-monitor.css",
-    "inputFile": "Content/scss/pages/associated-account-monitor/associated-account-monitor.scss"
+    "inputFile": "Content/scss/pages/associated-account-monitor/associated-account-monitor.scss",
+    "sourceMap": false
+  },
+  {
+    "outputFile": "Content/scss/vendors/highcharts/highcharts.css",
+    "inputFile": "Content/scss/vendors/highcharts/highcharts.scss",
+    "sourceMap": false
   }
 ]

@@ -53,6 +53,9 @@
     <Compile Include="Account\Associated\GraphCustomerItemViewModel.cs" />
     <Compile Include="Account\Associated\InsertManualAssociationMultipleViewModel.cs" />
     <Compile Include="Account\Associated\ValidateManualAssociationMultipleViewModel.cs" />
+    <Compile Include="Account\BettingStatistic\LiveIndicatorViewModel.cs" />
+    <Compile Include="Account\BettingStatistic\SportBettingStatisticViewModel.cs" />
+    <Compile Include="Account\BettingStatistic\SportStatisticPieChartViewModel.cs" />
     <Compile Include="Account\ChainToEvidence\AccountEvidenceViewModel.cs" />
     <Compile Include="Account\ChainToEvidence\AffectedEvidenceListBetweenCustsViewModel.cs" />
     <Compile Include="Account\ChainToEvidence\AffectedRetractEvidenceViewModel.cs" />
@@ -159,5 +162,6 @@
       <Version>2.3.0</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -5,6 +5,9 @@
     var subscriberId = $("#hdSubscriberId").val();
     var subscriber = $("#hdSubscriber").val();   
     var isHostPermission = $("#hdIsHostPermission").attr("IsHostPermission");
+    var isBettingStatisticPermission = $("#hdIsBettingStatisticPermission").attr("IsBettingStatisticPermission");
+    var currentUserId = $("#hdCurrentUserId").val();
+    var isPreviousStatisticOpen = false;
 
     let domElements = {        
         tabAssociatedAccount: $("#associated_account"),
@@ -22,7 +25,11 @@
         spanAutoSuspendOtherSport: $('#autoSuspendOtherSport'),
         spanAutoSuspendESport: $('#autoSuspendESport'),
         headerAssociatedAccount: $("#header_associated_account"),
-        headerChainEvidence: $("#header_chains_evidence")
+        headerChainEvidence: $("#header_chains_evidence"),
+        statisticTitle: $("#statistic-title"),
+        statisticIcon: $("#statistic-title .icon"),
+        statisticDetail: $("#statistic-detail"),
+        wrapperStatistic: $("#wrapper-statistic")
     };
 
     function LoadAssociationByAccount() {
@@ -187,7 +194,39 @@
         });
     }
 
+    function GetBettingStatistic() {
+        let chartTurnoverBySport = new turnover_by_sport();
+        let chartTurnoverByBettype = new turnover_by_bettype();
+        let chartWinLost = new win_lost();
+        let expireCookie = GetExpireCookieTime();
+
+        chartTurnoverBySport.Initial(custId,expireCookie);
+        chartWinLost.Initial(custId,expireCookie);
+        chartTurnoverByBettype.Initial(custId, expireCookie);
+    }
+
     function CollapseExpandItem() {
+        //statistic
+        $("#wrapper-statistic .statistic-title").on('click', function () {
+            var $this = $(this).next();
+
+            if ($(this).hasClass("expanded")) {
+                $(this).removeClass("expanded");
+                domElements.statisticIcon.removeClass("icon-open");
+                if (!$this.hasClass('hide')) {
+                    $this.addClass('hide');
+                }
+                setStorageStatisticUserBehavior(currentUserId, 'isStatisticOpen=false');
+            } else {
+                $(this).addClass("expanded");
+                domElements.statisticIcon.addClass("icon-open");
+                if ($this.hasClass('hide')) {
+                    $this.removeClass('hide');
+                }
+                setStorageStatisticUserBehavior(currentUserId, 'isStatisticOpen=true');
+            }
+        });
+
         $("#account-detail-container .report-item h3").on('click', function () {
 
             var $this = $(this).next();
@@ -259,6 +298,19 @@
         }
     }
 
+    function getStorageStatisticUserBehavior (key) {
+        if (typeof Storage !== "undefined") {
+            return localStorage.getItem(key);
+        }
+        return '';
+    };
+
+    function setStorageStatisticUserBehavior (key, value) {
+        if (typeof Storage !== "undefined") {
+            localStorage.setItem(key, value);
+        }
+    };
+
     function Initial() {
         CollapseExpandAll();
         CollapseExpandItem();
@@ -276,7 +328,61 @@
         });
     }
 
+    function DisplayStatistic() {
+        if (isBettingStatisticPermission == "False" || isBettingStatisticPermission === undefined) {
+            return;
+        }
+
+        var userBehavior = getStorageStatisticUserBehavior(currentUserId);
+
+        domElements.wrapperStatistic.removeClass('hide');  
+
+        if (userBehavior === null) {
+            isPreviousStatisticOpen = true;
+        }
+        else {
+            isPreviousStatisticOpen = (userBehavior == 'isStatisticOpen=true') ? true : false;
+        }
+     
+        if (isPreviousStatisticOpen == true) {
+            domElements.statisticDetail.removeClass("hide");
+            domElements.statisticIcon.addClass("icon-open");
+
+            if (!domElements.statisticTitle.hasClass("expanded")) {
+                domElements.statisticTitle.addClass("expanded");
+            }
+        }
+        else 
+        {
+            domElements.statisticDetail.addClass("hide");
+            domElements.statisticIcon.removeClass("icon-open");
+        }
+
+        GetBettingStatistic();
+           
+    }
+
+    function GetExpireCookieTime() {
+        var now = new Date();
+        var utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+        var nowServerTime = new Date(utc + (3600000 * "-4"));
+        var temp = new Date(utc + (3600000 * "-4"));
+
+        temp.setFullYear(nowServerTime.getFullYear());
+        temp.setMonth(nowServerTime.getMonth());
+        temp.setDate(nowServerTime.getDate() + 1);
+        temp.setHours(0);
+        temp.setMinutes(0);
+        temp.setSeconds(0);
+
+        var cookieLifeTime = temp - nowServerTime;
+        var expireDateTime = new Date(utc + cookieLifeTime); 
+        
+        return expireDateTime.toString();
+    }
+
     $(document).ready(function () {
+        DisplayStatistic();
         Initial();
     });
 }

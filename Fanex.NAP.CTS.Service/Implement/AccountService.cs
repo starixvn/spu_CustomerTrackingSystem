@@ -9,6 +9,7 @@
     using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Criteria.Account;
     using Fanex.NAP.CTS.Criteria.Account.Associated;
+    using Fanex.NAP.CTS.Criteria.Account.BettingStatistic;
     using Fanex.NAP.CTS.Criteria.Account.ChainToEvidence;
     using Fanex.NAP.CTS.Criteria.Account.CustomerCategory;
     using Fanex.NAP.CTS.Criteria.Account.GeneralInformation;
@@ -1002,9 +1003,50 @@
                 ErrorMsg = criteria.ErrorMessage
             };
         }
+        #endregion
+
+        #region Betting Statistic
+        public IEnumerable<PerformanceBySportModel> GetPerformanceBySport(long custId, int getTop)
+        {
+            var criteria = new BettingPerformanceBySportGetCriteria
+            {
+                CustID = custId,
+                GetTop = getTop
+            };
 
 
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<PerformanceBySportModel>(criteria);
+            }
+        }
 
+        public IEnumerable<PerformanceByBettypeModel> GetPerformanceByBettype(long custId, int getTop)
+        {
+            var criteria = new BettingStaisticByBetTypeGetCriteria
+            {
+                CustID = custId,
+                GetTop = getTop
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<PerformanceByBettypeModel>(criteria);
+            }
+        }
+
+        public IEnumerable<PerformanceDailyModel> GetPerformanceDaily(long custId)
+        {
+            var criteria = new BettingStatictisDaily
+            {
+                CustId = custId
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<PerformanceDailyModel>(criteria);
+            }
+        }
         #endregion
     }
 }

@@ -1,4 +1,35 @@
-﻿.abnormal-level-0 {
+﻿.wapper-chart-sport .highcharts-data-label {
+  font-size: 12px;
+  line-height: 14px; }
+  .wapper-chart-sport .highcharts-data-label.highcharts-data-label-color-1 {
+    color: #fff; }
+
+.bar-stacked .highcharts-axis-line {
+  display: none; }
+
+.bar-stacked .highcharts-series-group {
+  width: 100% !important; }
+
+.bar-stacked .highcharts-axis-labels text {
+  color: #333333 !important;
+  fill: #333333 !important;
+  font-size: 12px !important;
+  line-height: 14px; }
+
+.highcharts-credits {
+  display: none; }
+
+.highcharts-legend-item rect {
+  width: 14px;
+  height: 14px;
+  /* height = width */
+  rx: 50%;
+  ry: 50%; }
+
+.highcharts-legend-item tspan {
+  font-weight: 500; }
+
+.abnormal-level-0 {
   width: 6.2rem;
   padding: 2px 0;
   display: inline-block;
@@ -1615,3 +1646,266 @@
   padding-left: 17px; }
   .ui-dialog .ui-dialog-titlebar .ui-dialog-title {
     font-size: 16px; }
+
+.custom-tooltip-styling {
+  font-size: 12px;
+  line-height: 17px;
+  text-transform: capitalize;
+  color: #2B2B2B; }
+
+.wrapper-statistic {
+  margin-top: 12px;
+  border: 1px solid #DFDFDF;
+  box-sizing: border-box;
+  border-radius: 3px; }
+  .wrapper-statistic .statistic-title {
+    margin-top: 4px;
+    height: 31px;
+    padding: 5px;
+    width: 100%; }
+    .wrapper-statistic .statistic-title.expanded {
+      border-bottom: 1px solid #DDE2E5; }
+    .wrapper-statistic .statistic-title .icon {
+      margin-top: -5px;
+      margin-left: 2px; }
+    .wrapper-statistic .statistic-title .title {
+      margin-left: 4px;
+      font-size: 15px; }
+  .wrapper-statistic .statistic-detail {
+    min-height: 158px; }
+    .wrapper-statistic .statistic-detail .chart_empty {
+      padding: 5px 10px; }
+      .wrapper-statistic .statistic-detail .chart_empty .wrapper_content {
+        display: block;
+        text-align: center;
+        margin-top: 15px; }
+        .wrapper-statistic .statistic-detail .chart_empty .wrapper_content .report_empty {
+          margin-top: 1px; }
+        .wrapper-statistic .statistic-detail .chart_empty .wrapper_content .text {
+          display: block;
+          font-weight: bold;
+          font-size: 14px;
+          line-height: 17px;
+          align-items: center;
+          color: #2B2B2B; }
+  .wrapper-statistic .icon {
+    display: inline-block;
+    font-size: 22px;
+    vertical-align: middle;
+    cursor: pointer; }
+    .wrapper-statistic .icon.icon-open {
+      transform: rotate(90deg); }
+  .wrapper-statistic .title {
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 17px;
+    text-transform: capitalize;
+    color: #2B2B2B;
+    margin-left: 24px; }
+
+.container-grid {
+  padding: 9px 10px 11px;
+  display: grid;
+  grid-template-columns: repeat(32, 1fr);
+  grid-column-gap: 0;
+  grid-row-gap: 0; }
+  .container-grid .statistic_loading {
+    margin-left: 5px; }
+  .container-grid .summary-detail {
+    position: relative;
+    grid-column: 1 / span 9;
+    grid-row: row;
+    border-right: 1px solid #DFDFDF; }
+    .container-grid .summary-detail .wrapper-title {
+      cursor: pointer; }
+      .container-grid .summary-detail .wrapper-title .icon-chevron-right {
+        transform: rotate(90deg);
+        margin-left: -4px; }
+      .container-grid .summary-detail .wrapper-title .title {
+        margin-left: 13px; }
+    .container-grid .summary-detail .wrapper-data {
+      padding: 8px 19px;
+      padding-right: 37px; }
+      .container-grid .summary-detail .wrapper-data .summary-top {
+        display: flex;
+        flex-wrap: wrap; }
+        .container-grid .summary-detail .wrapper-data .summary-top .name {
+          margin-bottom: 5px; }
+      .container-grid .summary-detail .wrapper-data .border-divide {
+        width: 100%;
+        height: 1px;
+        background: #DFDFDF;
+        margin-top: 11px; }
+      .container-grid .summary-detail .wrapper-data .summary-bottom {
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 14px; }
+        .container-grid .summary-detail .wrapper-data .summary-bottom .name {
+          margin-bottom: 3px;
+          margin-left: 1px; }
+      .container-grid .summary-detail .wrapper-data .wrapper-title {
+        margin-right: 22px; }
+        .container-grid .summary-detail .wrapper-data .wrapper-title .name {
+          font-weight: bold;
+          font-size: 14px;
+          line-height: 17px;
+          text-transform: capitalize;
+          color: #2B2B2B;
+          text-align: center;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          width: 90px;
+          overflow: hidden; }
+        .container-grid .summary-detail .wrapper-data .wrapper-title .alert {
+          padding-top: 2px;
+          width: 90px;
+          height: 18px;
+          font-weight: bold;
+          font-size: 12px;
+          line-height: 14px;
+          border-radius: 5px;
+          text-align: center;
+          margin: 0 auto; }
+          .container-grid .summary-detail .wrapper-data .wrapper-title .alert.high-stake {
+            background: #FF6565;
+            border: 1px solid #D95656;
+            color: #610000; }
+          .container-grid .summary-detail .wrapper-data .wrapper-title .alert.medium-stake {
+            background: #F1AA21;
+            border: 1px solid #CC901C;
+            color: #422B00; }
+          .container-grid .summary-detail .wrapper-data .wrapper-title .alert.normal-stake {
+            background: #99DB6E;
+            border: 1px solid #7FB55B;
+            color: #205200; }
+          .container-grid .summary-detail .wrapper-data .wrapper-title .alert.inactive-stake {
+            background: #DDE2E5;
+            border: 1px solid #94AABA;
+            color: #455058; }
+      .container-grid .summary-detail .wrapper-data .wrapper-value {
+        margin-right: 40px; }
+        .container-grid .summary-detail .wrapper-data .wrapper-value .value {
+          font-weight: bold;
+          font-size: 20px;
+          line-height: 24px;
+          align-items: center;
+          text-align: center;
+          text-transform: capitalize;
+          color: #2B2B2B; }
+        .container-grid .summary-detail .wrapper-data .wrapper-value .text {
+          padding-top: 1px;
+          font-size: 13px;
+          line-height: 16px;
+          align-items: center;
+          text-align: center;
+          text-transform: capitalize;
+          color: #2B2B2B; }
+        .container-grid .summary-detail .wrapper-data .wrapper-value:last-child {
+          margin-right: 0; }
+  .container-grid .chart-sport {
+    position: relative;
+    grid-column: 10 / span 5;
+    grid-row: row;
+    position: relative;
+    border-right: 1px solid #DFDFDF;
+    overflow: hidden; }
+    .container-grid .chart-sport .title {
+      position: absolute;
+      z-index: 2;
+      left: 0; }
+    .container-grid .chart-sport .wapper-chart-sport {
+      height: 135px;
+      width: 100%;
+      position: relative;
+      left: 7px;
+      top: 16px; }
+  .container-grid .note-title {
+    font-size: 13px;
+    line-height: 15px;
+    color: #333333;
+    display: block;
+    margin-bottom: 10px;
+    margin-top: -3px; }
+    .container-grid .note-title::before {
+      content: " ";
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 6px; }
+    .container-grid .note-title.circle-blue::before {
+      background: #3773CC; }
+    .container-grid .note-title.circle-red::before {
+      background: #FF4343; }
+    .container-grid .note-title.circle-green::before {
+      background: #37C2CC; }
+    .container-grid .note-title.circle-navy-blue::before {
+      background: #1D2E4F; }
+  .container-grid .chart-bet-type {
+    position: relative;
+    overflow: hidden;
+    position: relative;
+    grid-column: 15 / span 8;
+    grid-row: row;
+    border-right: 1px solid #DFDFDF; }
+    .container-grid .chart-bet-type .bet-grid {
+      margin-top: 1px;
+      position: relative; }
+      .container-grid .chart-bet-type .bet-grid .wapper-bet-type {
+        height: 125px;
+        width: 78%; }
+      .container-grid .chart-bet-type .bet-grid .note {
+        position: absolute;
+        top: 22px;
+        right: 6%; }
+        .container-grid .chart-bet-type .bet-grid .note .position-note {
+          margin-top: 25px; }
+  .container-grid .chart-win-lost {
+    overflow: hidden;
+    position: relative;
+    z-index: 10;
+    grid-column: 23 / span 10;
+    grid-row: row; }
+    .container-grid .chart-win-lost .win-lost-grid {
+      position: relative; }
+      .container-grid .chart-win-lost .win-lost-grid .wapper-win-lost {
+        height: 130px;
+        position: absolute;
+        top: 7px;
+        left: 10px;
+        width: 100%; }
+    .container-grid .chart-win-lost .icon {
+      font-size: 12px;
+      margin-left: 4px; }
+
+@media screen and (max-width: 1699.99px) {
+  .container-grid {
+    grid-template-rows: 160px 160px;
+    grid-row-gap: 10px; }
+    .container-grid .summary-detail {
+      grid-column: 1 / span 16;
+      grid-row: 1/2; }
+    .container-grid .chart-sport {
+      grid-column: 17 / span 16;
+      grid-row: 1/2;
+      border-right: none; }
+      .container-grid .chart-sport .wapper-chart-sport {
+        margin-top: 16px;
+        position: relative;
+        left: 0;
+        top: 0; }
+      .container-grid .chart-sport .note {
+        right: 0; }
+    .container-grid .chart-bet-type {
+      grid-column: 1 / span 16;
+      grid-row: 2/3; }
+      .container-grid .chart-bet-type .bet-grid {
+        position: relative; }
+    .container-grid .chart-win-lost {
+      grid-column: 17 / span 16;
+      grid-row: 2/3; } }
+
+@media screen and (max-width: 1072.99px) {
+  .container-grid {
+    grid-template-rows: 220px 160px;
+    grid-row-gap: 10px; } }

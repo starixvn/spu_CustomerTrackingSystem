@@ -84,6 +84,10 @@ namespace Fanex.NAP.CTS.ViewModel.Account
 
         public bool IsHostPermission { get; set; }
 
+        public bool IsBettingStatisticPermission { get; set; }
+
+        public int CurrentUserId { get; set; }
+
         public List<FraudCaseModel> FraudCases { get; set; }
 
         public CustomerGeneralStatusViewModel BindingGeneralDataFromMainDB(

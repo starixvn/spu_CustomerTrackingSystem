@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "Turnover By Bet Type";
+}
+
+    <div class="chart-bet-type">
+        <span class="title">
+            Turnover By Bet Type Last 90 Days
+            <span class="statistic_loading hide" id="statistic_bettype_loading">
+                <img src="@Url.Content("~/Content/images/ajax-loader.gif")" alt="Loading ..." />
+            </span>
+        </span>
+        
+        <div class=bet-grid>
+            <div id="bet-type" class="wapper-bet-type"></div>
+            <div class="note">
+                <div class="position-note">
+                    <div class="circle-blue note-title">Non-Live</div>
+                    <div class="circle-red note-title">Live</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
