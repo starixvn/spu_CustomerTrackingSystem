@@ -1526,6 +1526,10 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
                     text-transform: capitalize;
                     color: #2B2B2B;
                     text-align: center;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    width: 90px;
+                    overflow: hidden;
                 }
 
                 .alert {

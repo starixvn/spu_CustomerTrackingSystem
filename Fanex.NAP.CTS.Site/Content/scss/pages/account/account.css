@@ -1745,7 +1745,11 @@
           line-height: 17px;
           text-transform: capitalize;
           color: #2B2B2B;
-          text-align: center; }
+          text-align: center;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          width: 90px;
+          overflow: hidden; }
         .container-grid .summary-detail .wrapper-data .wrapper-title .alert {
           padding-top: 2px;
           width: 90px;
