@@ -68,7 +68,9 @@
 
         if (isEllipsisActive(domElements.bestsportSportName)) {
             domElements.bestsportSportName.prop('title', response.bestSportBettingStatistic.SportName);
-            domElements.bestsportSportName.tooltip();
+            domElements.bestsportSportName.tooltip({
+                tooltipClass: "custom-tooltip-styling",
+            })
         }
         else {
             domElements.bestsportSportName.tooltip({

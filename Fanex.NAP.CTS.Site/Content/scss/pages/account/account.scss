@@ -1379,7 +1379,12 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 }
 
 // chart
-
+.custom-tooltip-styling {
+    font-size: 12px;
+    line-height: 17px;
+    text-transform: capitalize;
+    color: #2B2B2B;
+}
 .wrapper-statistic {
     margin-top: 12px;
     border: 1px solid #DFDFDF;
