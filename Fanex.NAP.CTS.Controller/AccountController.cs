@@ -1107,7 +1107,7 @@
                         {
                             name = c.SportName,
                             selected = true,
-                            y = percentage,
+                            y = Decimal.ToInt32(percentage),
                             turnOver = Math.Round(c.TurnOver)
                         });
 

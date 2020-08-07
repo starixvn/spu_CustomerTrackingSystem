@@ -1,7 +1,6 @@
 ﻿function turnover_by_bettype() {
     let betTypeCategories = null;
     let liveIndicatorList = null;
-    let cookiedata = null;
     let custId = $("#hdCustId").val();
     let username = $("#hdUsername").val();
 
@@ -9,28 +8,22 @@
         statisticLoading: $('#statistic_bettype_loading')
     }
     
-    function GetTurnOverByBetTypeData(custId, expireCookie) {
+    function GetTurnOverByBetTypeData(custId) {
         domElements.statisticLoading.removeClass('hide');
 
-        if (cookiedata == 0) {
-            $.ajax(common.modifyRelativeUrl('Account/GetPerformanceByBettype'), {
-                type: 'POST',
-                data: {
-                    custId: custId,
-                    getTop: 3
-                },
-                success: function (response) {
-                    SetBettingStatisticToCookie(custId + '-' + username + "-ByBettype", response, expireCookie);
-                    RenderDataToUI(response);                 
-                },
-                error: function (errMsg) {
-                    console.log(errMsg);
-                }
-            });
-        }
-        else {
-            RenderDataToUI(JSON.parse(cookiedata));
-        }
+        $.ajax(common.modifyRelativeUrl('Account/GetPerformanceByBettype'), {
+            type: 'POST',
+            data: {
+                custId: custId,
+                getTop: 3
+            },
+            success: function (response) {
+                RenderDataToUI(response);
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+            }
+        });
     }
 
     function RenderDataToUI(response) {
@@ -102,26 +95,7 @@
         });
     };
 
-    function SetBettingStatisticToCookie(name, value, expireCookie) {
-        var cookie = [name, '=', JSON.stringify(value), '; expires=' + expireCookie, , '; path=/;'].join('');
-        document.cookie = cookie;
-    }
-
-    function GetStatisticByBetTypeFromCookie() {
-
-        if (document.cookie.split(';').some((item) => item.trim().startsWith(custId + '-' + username + '-ByBettype='))) {
-            return document.cookie
-                .split('; ')
-                .find(row => row.startsWith(custId + '-' + username + '-ByBettype='))
-                .split('=')[1];
-        }
-
-        return 0;
-    }
-
-
-    this.Initial = function (custId, expireCookie) {
-        cookiedata = GetStatisticByBetTypeFromCookie();
-        GetTurnOverByBetTypeData(custId, expireCookie);
+    this.Initial = function (custId) {
+        GetTurnOverByBetTypeData(custId);
     }
 }

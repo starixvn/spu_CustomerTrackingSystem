@@ -1,7 +1,6 @@
 ﻿function turnover_by_sport() {
     let custId = $("#hdCustId").val();
     let username = $("#hdUsername").val();
-    let cookiedata = null;
 
     let domElements = {
         totalstakeTurnOver: $('#totalstake_turnover'),
@@ -21,29 +20,23 @@
         sportStatisticLoading: $('#statistic_bysport_loading')
     }
 
-    function GetPerformanceBySport(ctsCustId, expireCookie) {
+    function GetPerformanceBySport(ctsCustId) {
         domElements.summaryStatisticLoading.removeClass('hide');
         domElements.sportStatisticLoading.removeClass('hide');
-        if (cookiedata == 0) {
-            $.ajax(common.modifyRelativeUrl('Account/GetPerformanceBySport'), {
-                type: 'POST',
-                data: {
-                    custId: ctsCustId,
-                    getTop: 3
-                },
-                success: function (response) {
-                    SetBettingStatisticToCookie(custId + '-' + username + "-BySport", response, expireCookie);
-                    RenderDataToUI(response);
-                },
-                error: function (errMsg) {
-                    console.log(errMsg);
-                }
-            });
-        }
-        else
-        {
-            RenderDataToUI(JSON.parse(cookiedata));
-        }
+
+        $.ajax(common.modifyRelativeUrl('Account/GetPerformanceBySport'), {
+            type: 'POST',
+            data: {
+                custId: ctsCustId,
+                getTop: 3
+            },
+            success: function (response) {
+                RenderDataToUI(response);
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+            }
+        });
     }
 
     function RenderDataToUI(response)
@@ -124,23 +117,6 @@
         else {
             targetElement.addClass('inactive-stake');
         }
-    }
-
-    function SetBettingStatisticToCookie(name, value, expireCookie) {
-        var cookie = [name, '=', JSON.stringify(value), '; expires=' + expireCookie, , '; path=/;'].join('');
-        document.cookie = cookie;
-    }
-
-    function GetStatisticBySportFromCookie() {
-
-        if (document.cookie.split(';').some((item) => item.trim().startsWith(custId + '-' + username + '-BySport='))) {
-            return document.cookie
-                .split('; ')
-                .find(row => row.startsWith(custId + '-' + username + '-BySport='))
-                .split('=')[1];
-        }
-
-        return 0;
     }
 
     function isEllipsisActive(element) {
@@ -259,8 +235,7 @@
         });
     };
 
-    this.Initial = function (ctsCustId, expireCookie) {
-        cookiedata = GetStatisticBySportFromCookie();
-        GetPerformanceBySport(ctsCustId, expireCookie);
+    this.Initial = function (ctsCustId) {
+        GetPerformanceBySport(ctsCustId);
     }
 }

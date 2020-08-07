@@ -2,7 +2,6 @@
     let turnOverAreaData = null;
     let winLossAreaDate = null;
     let days = null;
-    let cookiedata = null;
     let custId = $("#hdCustId").val();
     let username = $("#hdUsername").val();
 
@@ -10,27 +9,21 @@
         statisticWinlostLoading: $('#statistic_winlost_loading')
     }
 
-    function GetTurnOverByBetTypeData(custId, expireCookie) {
+    function GetTurnOverByBetTypeData(custId) {
         domElements.statisticWinlostLoading.removeClass('hide');
 
-        if (cookiedata == 0) {
-            $.ajax(common.modifyRelativeUrl('Account/GetPerformanceDaily'), {
-                type: 'POST',
-                data: {
-                    custId: custId
-                },
-                success: function (response) {
-                    SetBettingStatisticToCookie(custId + '-' + username + "-WinLost", response, expireCookie);
-                    RenderDataToUI(response);
-                },
-                error: function (errMsg) {
-                    console.log(errMsg);
-                }
-            });
-        }
-        else {
-            RenderDataToUI(JSON.parse(cookiedata));
-        }
+        $.ajax(common.modifyRelativeUrl('Account/GetPerformanceDaily'), {
+            type: 'POST',
+            data: {
+                custId: custId
+            },
+            success: function (response) {
+                RenderDataToUI(response);
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+            }
+        });
     }
 
     function RenderDataToUI(response) {
@@ -198,25 +191,7 @@
         })
     };
 
-    function SetBettingStatisticToCookie(name, value, expireCookie) {
-        var cookie = [name, '=', JSON.stringify(value), '; expires=' + expireCookie, , '; path=/;'].join('');
-        document.cookie = cookie;
-    }
-
-    function GetStatisticWinLostFromCookie() {
-
-        if (document.cookie.split(';').some((item) => item.trim().startsWith(custId + '-' + username + '-WinLost='))) {
-            return document.cookie
-                .split('; ')
-                .find(row => row.startsWith(custId + '-' + username + '-WinLost='))
-                .split('=')[1];
-        }
-
-        return 0;
-    }
-
-    this.Initial = function (custId, expireCookie) {
-        cookiedata = GetStatisticWinLostFromCookie();
-        GetTurnOverByBetTypeData(custId, expireCookie);
+    this.Initial = function (custId) {
+        GetTurnOverByBetTypeData(custId);
     }
 }

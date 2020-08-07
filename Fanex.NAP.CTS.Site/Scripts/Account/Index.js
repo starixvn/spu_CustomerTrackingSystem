@@ -198,11 +198,10 @@
         let chartTurnoverBySport = new turnover_by_sport();
         let chartTurnoverByBettype = new turnover_by_bettype();
         let chartWinLost = new win_lost();
-        let expireCookie = GetExpireCookieTime();
 
-        chartTurnoverBySport.Initial(custId,expireCookie);
-        chartWinLost.Initial(custId,expireCookie);
-        chartTurnoverByBettype.Initial(custId, expireCookie);
+        chartTurnoverBySport.Initial(custId);
+        chartWinLost.Initial(custId);
+        chartTurnoverByBettype.Initial(custId);
     }
 
     function CollapseExpandItem() {
