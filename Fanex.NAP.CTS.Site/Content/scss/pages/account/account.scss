@@ -1566,38 +1566,45 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
                         border: 1px solid #7FB55B;
                         color: #205200;
                     }
-                }
-            }
 
-            .wrapper-value {
-                margin-right: 40px;
-
-                .value {
-                    font-weight: bold;
-                    font-size: 20px;
-                    line-height: 24px;
-                    align-items: center;
-                    text-align: center;
-                    text-transform: capitalize;
-                    color: #2B2B2B;
-                }
-
-                .text {
-                    padding-top: 1px;
-                    font-size: 13px;
-                    line-height: 16px;
-                    align-items: center;
-                    text-align: center;
-                    text-transform: capitalize;
-                    color: #2B2B2B;
-                }
-
-                &:last-child {
-                    margin-right: 0;
+                    &.inactive-stake {
+                        background: #BBC2C8;
+                        border: 1px solid #94AABA;
+                        color: #637079;
+                    }
                 }
             }
         }
+
+        .wrapper-value {
+            margin-right: 40px;
+
+            .value {
+                font-weight: bold;
+                font-size: 20px;
+                line-height: 24px;
+                align-items: center;
+                text-align: center;
+                text-transform: capitalize;
+                color: #2B2B2B;
+            }
+
+            .text {
+                padding-top: 1px;
+                font-size: 13px;
+                line-height: 16px;
+                align-items: center;
+                text-align: center;
+                text-transform: capitalize;
+                color: #2B2B2B;
+            }
+
+            &:last-child {
+                margin-right: 0;
+            }
+        }
     }
+}
 
     .chart-sport {
         position: relative;

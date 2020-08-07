@@ -1778,6 +1778,10 @@
             background: #99DB6E;
             border: 1px solid #7FB55B;
             color: #205200; }
+          .container-grid .summary-detail .wrapper-data .wrapper-title .alert.inactive-stake {
+            background: #DDE2E5;
+            border: 1px solid #94AABA;
+            color: #455058; }
       .container-grid .summary-detail .wrapper-data .wrapper-value {
         margin-right: 40px; }
         .container-grid .summary-detail .wrapper-data .wrapper-value .value {
