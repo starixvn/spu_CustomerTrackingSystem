@@ -161,8 +161,13 @@
                         fillColor: '#F15D21',
                         lineWidth: 1,
                         lineColor: '#FFFFFF'
+                    },
+                    events: {
+                        legendItemClick: function (e) {
+                            e.preventDefault();
+                        }
                     }
-                }
+                },
             },
 
             series: [{

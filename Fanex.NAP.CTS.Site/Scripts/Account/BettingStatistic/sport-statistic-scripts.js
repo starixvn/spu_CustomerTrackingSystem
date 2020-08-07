@@ -141,9 +141,9 @@
                 type: 'pie',
                 marginTop: 0,
                 marginBottom: 0,
-                marginRight: 10,
+                marginRight: 25,
                 marginLeft: 0,
-                spacing: [12, 35, 35, 12],
+                spacing: [12, 12, 32, 0],
                 plotBackgroundColor: null,
                 plotBorderWidth: null,
                 plotShadow: false,
@@ -175,12 +175,14 @@
                 verticalAlign: 'middle',
                 y: 14,
                 x: 0,
-                padding: 0,
+                padding: 10,
                 itemMarginTop: 0,
                 itemMarginBottom: 5,
                 itemStyle: {
                     fontSize: '13px',
+                    textOverflow: "ellipsis"
                 },
+                itemWidth: null,
             },
             plotOptions: {
                 pie: {
@@ -206,6 +208,13 @@
                         connectorPadding: 0
                     },
                     showInLegend: true,
+                    point: {
+                        events: {
+                            legendItemClick: function () {
+                                return false;
+                            }
+                        }
+                    }
                 },
                 series: {
                     shadow: true
@@ -222,7 +231,10 @@
                     },
                     chartOptions: {
                         chart: {
-                            marginLeft: -110,
+                            marginLeft: -95,
+                        },
+                        legend: {
+                            itemWidth: 105,
                         },
                     }
                 }]

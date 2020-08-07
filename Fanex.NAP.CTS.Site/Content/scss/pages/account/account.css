@@ -1748,13 +1748,14 @@
           text-align: center; }
         .container-grid .summary-detail .wrapper-data .wrapper-title .alert {
           padding-top: 2px;
-          min-width: 90px;
+          width: 90px;
           height: 18px;
           font-weight: bold;
           font-size: 12px;
           line-height: 14px;
           border-radius: 5px;
-          text-align: center; }
+          text-align: center;
+          margin: 0 auto; }
           .container-grid .summary-detail .wrapper-data .wrapper-title .alert.high-stake {
             background: #FF6565;
             border: 1px solid #D95656;
