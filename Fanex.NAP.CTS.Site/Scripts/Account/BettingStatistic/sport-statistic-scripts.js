@@ -50,11 +50,12 @@
             domElements.chartEmpty.addClass('hide');
         }
 
+        var totalstakeMargin = response.totalSportBettingStatistic.Margin.toFixed(3);
         domElements.summaryTop.html(response.totalSportBettingStatistic.StakeLevel);
         HighlightStakeLevel(response.totalSportBettingStatistic.StakeLevel, domElements.summaryTop);
         domElements.totalstakeTurnOver.html(RoundNumber(response.totalSportBettingStatistic.TurnOver));
         domElements.totalstakeWinLoss.html(RoundNumber(response.totalSportBettingStatistic.WinLoss));
-        domElements.totalstakeMargin.html(response.totalSportBettingStatistic.Margin.toFixed(2) + "%");
+        domElements.totalstakeMargin.html(totalstakeMargin.substring(0, totalstakeMargin.length - 1) + "%");
         domElements.totalstakeBetCount.html(RoundNumber(response.totalSportBettingStatistic.BetCount));
 
         domElements.bestsportSportName.html(response.bestSportBettingStatistic.SportName);
@@ -71,11 +72,13 @@
             });
         }
 
+
+        var bestsportMargin = response.bestSportBettingStatistic.Margin.toFixed(3);
         domElements.summaryBottom.html(response.bestSportBettingStatistic.StakeLevel);
         HighlightStakeLevel(response.bestSportBettingStatistic.StakeLevel, domElements.summaryBottom);
         domElements.bestsportTurnOver.html(RoundNumber(response.bestSportBettingStatistic.TurnOver));
         domElements.bestsportWinLoss.html(RoundNumber(response.bestSportBettingStatistic.WinLoss));
-        domElements.bestsportMargin.html(response.bestSportBettingStatistic.Margin.toFixed(2) + "%");
+        domElements.bestsportMargin.html(bestsportMargin.substring(0, bestsportMargin.length - 1) + "%");
         domElements.bestsportBetCount.html(RoundNumber(response.bestSportBettingStatistic.BetCount));
 
         domElements.summaryStatisticLoading.addClass('hide');

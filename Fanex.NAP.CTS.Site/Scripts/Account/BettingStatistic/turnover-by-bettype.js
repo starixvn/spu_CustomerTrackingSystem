@@ -93,8 +93,7 @@
             },
             tooltip: {
                 formatter: function (tooltip) {
-                    console.log(this);
-                    if (this.x == "-") {
+                    if (this.color == "#EBEBEB") {
                         return false;
                     }
                     else {
