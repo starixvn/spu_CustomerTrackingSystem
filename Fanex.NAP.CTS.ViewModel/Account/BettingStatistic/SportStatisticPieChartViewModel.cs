@@ -10,7 +10,7 @@ namespace Fanex.NAP.CTS.ViewModel.Account.BettingStatistic
     {
         public string name { get; set; }
 
-        public int y { get; set; }
+        public decimal y { get; set; }
 
         public bool selected { get; set; } 
 

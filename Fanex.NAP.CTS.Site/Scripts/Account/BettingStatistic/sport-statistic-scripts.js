@@ -54,8 +54,8 @@
         HighlightStakeLevel(response.totalSportBettingStatistic.StakeLevel, domElements.summaryTop);
         domElements.totalstakeTurnOver.html(RoundNumber(response.totalSportBettingStatistic.TurnOver));
         domElements.totalstakeWinLoss.html(RoundNumber(response.totalSportBettingStatistic.WinLoss));
-        domElements.totalstakeMargin.html(response.totalSportBettingStatistic.Margin.toFixed(0) + "%");
-        domElements.totalstakeBetCount.html(response.totalSportBettingStatistic.BetCount);
+        domElements.totalstakeMargin.html(response.totalSportBettingStatistic.Margin.toFixed(2) + "%");
+        domElements.totalstakeBetCount.html(RoundNumber(response.totalSportBettingStatistic.BetCount));
 
         domElements.bestsportSportName.html(response.bestSportBettingStatistic.SportName);
 
@@ -75,8 +75,8 @@
         HighlightStakeLevel(response.bestSportBettingStatistic.StakeLevel, domElements.summaryBottom);
         domElements.bestsportTurnOver.html(RoundNumber(response.bestSportBettingStatistic.TurnOver));
         domElements.bestsportWinLoss.html(RoundNumber(response.bestSportBettingStatistic.WinLoss));
-        domElements.bestsportMargin.html(response.bestSportBettingStatistic.Margin.toFixed(0) + "%");
-        domElements.bestsportBetCount.html(response.bestSportBettingStatistic.BetCount);
+        domElements.bestsportMargin.html(response.bestSportBettingStatistic.Margin.toFixed(2) + "%");
+        domElements.bestsportBetCount.html(RoundNumber(response.bestSportBettingStatistic.BetCount));
 
         domElements.summaryStatisticLoading.addClass('hide');
 
@@ -90,13 +90,13 @@
 
         var num = number.toFixed(0);
 
-        if ((num > 999 && num <= 999999) || (num <= -1000 && num > -999999)) {
+        if ((num > 999 && num < 999999) || (num < -999 && num > -999999)) {
             return (num / 1000).toFixed(0) + "K";
         }
-        else if ((num > 999999 && num <= 999999999) || (num <= -1000000 && num > -999999999)) {
+        else if ((num >= 999999 && num < 999999999) || (num <= -999999 && num > -999999999)) {
             return (num / 1000000).toFixed(0) + "M";
         }
-        else if (num >= 1000000000 || num <= -1000000000) {
+        else if (num >= 999999999 || num <= -999999999) {
             return (num / 1000000000).toFixed(0) + "B";
         }
 

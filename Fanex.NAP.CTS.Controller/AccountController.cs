@@ -1017,7 +1017,7 @@
                 {
                     try
                     {
-                        CalculatePieChartTurnOverPercantage(result, pieChartSportStatisticSessions);
+                        CalculatePieChartTurnOverPercentage(result, pieChartSportStatisticSessions);
                     }
                     catch (Exception ex)
                     {
@@ -1066,7 +1066,7 @@
             {
                 result.ToList().ForEach(c =>
                 {
-                    days.Add(c.RptDate.ToString("dd - MM"));
+                    days.Add(c.RptDate.ToString("MM - dd"));
                     turnOverAreaData.Add(Math.Round(c.Turnover));
                     winLossAreaDate.Add(Math.Round(c.Winloss));
                 });
@@ -1081,42 +1081,21 @@
         }
       
 
-        private IEnumerable<SportStatisticPieChartViewModel> CalculatePieChartTurnOverPercantage(IEnumerable<PerformanceBySportModel> result, List<SportStatisticPieChartViewModel> pieChartSportStatisticSessions)
+        private void CalculatePieChartTurnOverPercentage(IEnumerable<PerformanceBySportModel> result, List<SportStatisticPieChartViewModel> pieChartSportStatisticSessions)
         {
-            decimal sumTurnOver = result.Sum(c => c.TurnOver);
-            decimal totalPercentage = 0;
-
-            if (sumTurnOver != 0)
+            result.ToList().ForEach(c =>
             {
-                result.ToList().ForEach(c =>
+                if ((c.SportID == -99 && c.BetCount != 0) || c.SportID != -99)
                 {
-                    if((c.SportID == -99 && c.BetCount != 0) || c.SportID != -99)
+                    pieChartSportStatisticSessions.Add(new SportStatisticPieChartViewModel
                     {
-                        decimal percentage = (c.TurnOver != 0) ? Math.Round(((c.TurnOver / sumTurnOver) * 100)) : 0;
-
-                        if ((totalPercentage + percentage) > 100)
-                        {
-                            percentage = percentage - ((totalPercentage + percentage) - 100);
-                        }
-                        else if ((totalPercentage + percentage) == 99 && result.ToList()[result.Count() - 1] == c)
-                        {
-                            percentage ++;
-                        }
-
-                        pieChartSportStatisticSessions.Add(new SportStatisticPieChartViewModel
-                        {
-                            name = c.SportName,
-                            selected = true,
-                            y = Decimal.ToInt32(percentage),
-                            turnOver = Math.Round(c.TurnOver)
-                        });
-
-                        totalPercentage += percentage;
-                    }
-                });
-            }
-            
-            return pieChartSportStatisticSessions;
+                        name = c.SportName,
+                        selected = true,
+                        y = c.TurnOver,
+                        turnOver = Math.Round(c.TurnOver)
+                    });
+                }
+            });
         }
 
         private void CalculateLiveIndicatorPercentage(IEnumerable<PerformanceByBettypeModel> result, List<LiveIndicatorViewModel> liveIndicatorList, List<string> betTypeCategories)
