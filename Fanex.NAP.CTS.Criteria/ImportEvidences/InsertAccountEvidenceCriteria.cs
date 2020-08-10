@@ -11,9 +11,6 @@
         [SpParam(SqlParamName = "ip_UserID")]
         public int UserId { get; set; }
 
-        [SpParam(SqlParamName = "ip_IsCreatedByMaster")]
-        public bool IsCreatedByMaster { get; set; }
-
         [SpParam(SqlParamName = "op_ErrorMessage")]
         public string ErrorMessage { get; set; }
 

@@ -13,9 +13,6 @@ namespace Fanex.NAP.CTS.Criteria.Account
         [SpParam(SqlParamName = "ip_CTSCustID")]
         public Int64 CTSCustId { get; set; }
 
-        [SpParam(SqlParamName = "ip_SubscriberID")]
-        public int SubscriberId { get; set; }
-
         public override string GetSettingKey()
         {
             return "CTS_DC_GetCustomerFlagInfo";

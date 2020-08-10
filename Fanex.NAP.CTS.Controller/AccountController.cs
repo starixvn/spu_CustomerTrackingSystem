@@ -131,7 +131,7 @@
             {
                 try
                 {
-                    GetCustomerFlagInfo(ctsCustId, subscriberId, ref profile);
+                    GetCustomerFlagInfo(ctsCustId, ref profile);
                 }
                 catch (Exception ex)
                 {
@@ -190,9 +190,9 @@
         }
 
         [HttpPost]
-        public ActionResult GetCustomerFlagInfo(long ctsCustId, int subscriberId)
+        public ActionResult GetCustomerFlagInfo(long ctsCustId)
         {
-            var result = _accountService.GetCustomerFlagInfo(ctsCustId, subscriberId);
+            var result = _accountService.GetCustomerFlagInfo(ctsCustId);
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -780,9 +780,9 @@
             profile.RobotUserStatus = _accountService.GetCustomerRobotUserStatus(custId);
         }
 
-        private void GetCustomerFlagInfo(long ctsCustId, int subscriberId, ref AccountProfileViewModel profile)
+        private void GetCustomerFlagInfo(long ctsCustId, ref AccountProfileViewModel profile)
         {
-            profile.FlagedAffectedEvidence = _accountService.GetCustomerFlagInfo(ctsCustId, subscriberId);
+            profile.FlagedAffectedEvidence = _accountService.GetCustomerFlagInfo(ctsCustId);
         }
 
         private void GetCustomerEsportAutoSuspendedStatus(long custId, ref AccountProfileViewModel profile)
