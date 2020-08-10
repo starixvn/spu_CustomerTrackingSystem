@@ -1568,20 +1568,20 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
                     }
 
                     &.inactive-stake {
-                        background: #BBC2C8;
-                        border: 1px solid #94AABA;
-                        color: #637079;
+                        background: #D1D1D1;
+                        border: 1px solid #A9A9A9;
+                        color: #4E4E4E;
                     }
                 }
             }
         }
 
         .wrapper-value {
-            margin-right: 40px;
+            margin-right: 30px;
 
             .value {
                 font-weight: bold;
-                font-size: 20px;
+                font-size: 18px;
                 line-height: 24px;
                 align-items: center;
                 text-align: center;
@@ -1604,7 +1604,6 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             }
         }
     }
-}
 
     .chart-sport {
         position: relative;

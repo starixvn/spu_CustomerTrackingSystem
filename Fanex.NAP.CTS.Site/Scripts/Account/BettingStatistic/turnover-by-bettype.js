@@ -91,6 +91,17 @@
                     shadow: false,
                 },
             },
+            tooltip: {
+                formatter: function (tooltip) {
+                    console.log(this);
+                    if (this.x == "-") {
+                        return false;
+                    }
+                    else {
+                        return tooltip.defaultFormatter.call(this, tooltip);
+                    }
+                }
+            },
             series: liveIndicatorList
         });
     };

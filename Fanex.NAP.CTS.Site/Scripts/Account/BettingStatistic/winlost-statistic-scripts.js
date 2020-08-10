@@ -95,7 +95,7 @@
                 },
                 plotLines: [{
                     color: '#FF3D3D',
-                    width: 2,
+                    width: 1,
                     value: 0
                 }],
                 maxPadding: 0.01,
@@ -123,7 +123,7 @@
                 },
                 plotLines: [{
                     color: '#FF3D3D',
-                    width: 2,
+                    width: 1,
                     value: 0
                 }],
                 opposite: true,

@@ -187,7 +187,7 @@
                         color: '#000000',
                         enabled: true,
                         distance: -25,
-                        format: '{point.percentage} %',
+                        format: '{point.percentage:.0f} %',
                         filter: {
                             property: 'percentage',
                             operator: '>',

@@ -1779,29 +1779,29 @@
             border: 1px solid #7FB55B;
             color: #205200; }
           .container-grid .summary-detail .wrapper-data .wrapper-title .alert.inactive-stake {
-            background: #DDE2E5;
-            border: 1px solid #94AABA;
-            color: #455058; }
-      .container-grid .summary-detail .wrapper-data .wrapper-value {
-        margin-right: 40px; }
-        .container-grid .summary-detail .wrapper-data .wrapper-value .value {
-          font-weight: bold;
-          font-size: 20px;
-          line-height: 24px;
-          align-items: center;
-          text-align: center;
-          text-transform: capitalize;
-          color: #2B2B2B; }
-        .container-grid .summary-detail .wrapper-data .wrapper-value .text {
-          padding-top: 1px;
-          font-size: 13px;
-          line-height: 16px;
-          align-items: center;
-          text-align: center;
-          text-transform: capitalize;
-          color: #2B2B2B; }
-        .container-grid .summary-detail .wrapper-data .wrapper-value:last-child {
-          margin-right: 0; }
+            background: #D1D1D1;
+            border: 1px solid #A9A9A9;
+            color: #4E4E4E; }
+    .container-grid .summary-detail .wrapper-value {
+      margin-right: 30px; }
+      .container-grid .summary-detail .wrapper-value .value {
+        font-weight: bold;
+        font-size: 18px;
+        line-height: 24px;
+        align-items: center;
+        text-align: center;
+        text-transform: capitalize;
+        color: #2B2B2B; }
+      .container-grid .summary-detail .wrapper-value .text {
+        padding-top: 1px;
+        font-size: 13px;
+        line-height: 16px;
+        align-items: center;
+        text-align: center;
+        text-transform: capitalize;
+        color: #2B2B2B; }
+      .container-grid .summary-detail .wrapper-value:last-child {
+        margin-right: 0; }
   .container-grid .chart-sport {
     position: relative;
     grid-column: 10 / span 5;
