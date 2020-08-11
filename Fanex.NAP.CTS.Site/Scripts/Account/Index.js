@@ -24,8 +24,8 @@
         spanAutoSuspendSoccer: $('#autoSuspendSoccer'),
         spanAutoSuspendOtherSport: $('#autoSuspendOtherSport'),
         spanAutoSuspendESport: $('#autoSuspendESport'),
-        headerAssociatedAccount: $("#header_associated_account"),
-        headerChainEvidence: $("#header_chains_evidence"),
+        associatedAccountTab: $("#associated_account-tab"),
+        evidenceTab: $("#evidence-tab"),
         statisticTitle: $("#statistic-title"),
         statisticIcon: $("#statistic-title .icon"),
         statisticDetail: $("#statistic-detail"),
@@ -204,8 +204,7 @@
         chartTurnoverByBettype.Initial(custId);
     }
 
-    function CollapseExpandItem() {
-        //statistic
+    function CollapseExpandStatistic() {
         $("#wrapper-statistic .statistic-title").on('click', function () {
             var $this = $(this).next();
 
@@ -225,47 +224,6 @@
                 setStorageStatisticUserBehavior(currentUserId, 'isStatisticOpen=true');
             }
         });
-
-        $("#account-detail-container .report-item h3").on('click', function () {
-
-            var $this = $(this).next();
-
-            if ($this.hasClass('hide')) {
-                CollapseAll();
-                $this.removeClass('hide');
-                $this.parent().addClass("expanded");
-            }
-            else {
-                $this.parent().removeClass('expanded');
-                $this.addClass("hide");
-            }
-        });
-    }
-
-    function CollapseExpandAll() {
-        $("#account-detail-header").on('click', function () {
-            var $this = $(this).find("span");
-
-            if ($this.hasClass("expand-all")) {
-                $this.removeClass("expand-all").addClass("collapse-all");
-                ExpandAll();
-            }
-            else {
-                $this.removeClass("collapse-all").addClass("expand-all");
-
-                CollapseAll();
-            }
-        });
-    }
-
-    function ExpandAll() {
-        $("#account-detail-container .report-item .report-cont").removeClass('hide');
-        $("#account-detail-container .report-item").addClass('expanded');
-    }
-
-    function CollapseAll() {
-        $("#account-detail-container .report-item .report-cont").addClass('hide');
-        $("#account-detail-container .report-item").removeClass('expanded');
     }
 
     function HandleCustomerStatus(data) {       
@@ -311,19 +269,18 @@
     };
 
     function Initial() {
-        CollapseExpandAll();
-        CollapseExpandItem();
+        CollapseExpandStatistic();
         GetAccountProfile();
         GetCustomerTotalAssociation();
         LoadTransactionHistory();
         LoadCustomerCategory();
 
         domElements.spanTotalAssociated.on('click', function () {
-            domElements.headerAssociatedAccount.trigger("click");
+            domElements.associatedAccountTab.trigger("click");
         });
 
         domElements.spanTotalEvidences.on('click', function () {
-            domElements.headerChainEvidence.trigger("click");
+            domElements.evidenceTab.trigger("click");
         });
 
         $("#tabs-account-detail").tabs();
