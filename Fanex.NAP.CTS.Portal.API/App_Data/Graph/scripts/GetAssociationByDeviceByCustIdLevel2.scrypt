@@ -4,5 +4,5 @@ WHERE c.CustID IN $CustIdList
 MATCH (c)-[:USED_DEVICE*4]-(c1:CTSCustomer)-[r:HAS_EVIDENCE]->(e:Evidence)
 WITH DISTINCT c,c1,r,e,level
 WHERE c1.CustID IS NOT NULL AND c1.CustID <> c.CustID
-RETURN c.CustID AS Level0CustId, c1.CustID AS CustId, e.EvidenceCode AS EvidenceCode, e.EvidenceName AS EvidenceName, level AS AssociatedLevel,r.CreatedDate AS CreatedDateInTicks
+RETURN c.CustID AS Level0CustId, c1.CustID AS CustId, e.EvidenceCode AS EvidenceCode, e.EvidenceName AS EvidenceName, level AS AssociatedLevel, apoc.date.format(r.CreatedDate,"ms","yyyy-MM-dd HH:mm:ss", "America/Aruba") AS CreatedDateInTicks
 LIMIT 500
