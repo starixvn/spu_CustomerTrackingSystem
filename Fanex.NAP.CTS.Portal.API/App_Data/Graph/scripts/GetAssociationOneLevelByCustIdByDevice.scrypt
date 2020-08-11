@@ -7,7 +7,7 @@ WHERE c.CTSCustID = $ip_CTSCustId AND c1.CustID IS NOT NULL AND
 WITH c,c1,d,r,r1
 OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c1)
 WITH c1,d,e,MAX(r.CreatedTime,r1.CreatedTime) AS AssociationDate
-RETURN c1.CTSCustID as CTSCustID, c1.CustID AS CustId, c1.CustSubID AS CustSubId, c1.UserName AS Username, c1.UserName2 AS Username2, 1 AS AssociationType, -1 AS SharedDevices, -1 AS SharedIPs, CASE c1.SubscriberID WHEN null THEN -1 ELSE c1.SubscriberID END AS SubscriberId, apoc.date.format(MIN(AssociationDate),"ms","yyyy-MM-dd HH:mm:ss", "America/Aruba") AS AssociationDate, CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
+RETURN c1.CTSCustID as CTSCustID, c1.CustID AS CustId, c1.CustSubID AS CustSubId, c1.UserName AS Username, c1.UserName2 AS Username2, 1 AS AssociationType, -1 AS SharedDevices, -1 AS SharedIPs, CASE c1.SubscriberID WHEN null THEN -1 ELSE c1.SubscriberID END AS SubscriberId, MIN(AssociationDate) AS AssociationDate, CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
 ',{ip_CTSCustId: $CTSCustID, ip_assStatus: $AssStatus}) YIELD value 
 WITH collect(value) as ListAss, count(value) as TotalItems
 UNWIND ListAss as ass
