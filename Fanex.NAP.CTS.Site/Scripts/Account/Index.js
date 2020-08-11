@@ -325,6 +325,8 @@
         domElements.spanTotalEvidences.on('click', function () {
             domElements.headerChainEvidence.trigger("click");
         });
+
+        $("#tabs-account-detail").tabs();
     }
 
     function DisplayStatistic() {

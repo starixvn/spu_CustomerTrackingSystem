@@ -533,77 +533,80 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
         }
     }
 }
-
+// tabs account detail
 .content-card {
     margin: 12px 16px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    border: 1px solid #DFDFDF;
+    box-sizing: border-box;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.15);
     border-radius: 3px;
-    padding-bottom: 12px;
 
     .status {
-        padding: 8px 12px;
+        padding: 10px 10px;
         border-bottom: 1px solid #DDE2E5;
         font-size: 15px;
 
         .info {
             margin-bottom: 8px;
-            color: #475A7C;
+            color: #1E2D4C;
             font-weight: bold;
             cursor: pointer;
         }
     }
-}
 
-.report-content {
-    padding: 10px;
+    .tabs-account-detail {
+        padding: 12px;
 
-    .report-header {
-        padding: 9px 10px;
-        border-top-left-radius: 3px;
-        border-top-right-radius: 3px;
-
-        .icon-chevron-right {
-            display: inline-block;
-            font-size: 18px;
-            vertical-align: middle;
+        .ui-widget-header {
+            border: 0;
+            padding: 0;
+            border-bottom: 1px solid #DDDDDD;
+            background: #FFFFFF;
         }
 
-        a {
-            display: inline-block;
-            vertical-align: middle;
-            font-size: 14px;
-            color: #475A7C;
-        }
-    }
-}
-
-.report-item {
-    border: 1px solid #D6D4BD;
-    border-radius: 3px;
-
-    &:not(:last-child) {
-        margin-bottom: 5px;
-    }
-
-    .report-header {
-        background: #FCF9DE;
-    }
-
-    &.expanded .report-header {
-        background: #396EF8;
-
-        a, .icon-chevron-right {
-            color: #fff;
+        .ui-tabs-panel {
+            padding: 0;
+            background: #FFFFFF;
+            box-sizing: border-box;
+            border: 1px solid #DDDDDD;
+            border-top: 0;
         }
 
-        .icon-chevron-right {
-            transform: rotate(90deg);
+        .ui-tabs-nav li {
+            margin: 0;
+            border: 0;
+            border-bottom: 0 !important;
+            position: relative;
+            top: 1px;
+
+            .ui-tabs-anchor {
+                padding: 7px 20px;
+                font-size: 14px;
+                line-height: 18px;
+                color: #475A7C;
+                font-family: "Lato", Arial, Tahoma, sans-serif !important
+            }
+        }
+
+        .ui-tabs-tab {
+            background: #FFFFFF;
+
+            &.ui-state-active {
+                border: 1px solid #DDDDDD;
+                border-top: 2px solid #E15F00;
+                border-radius: 0;
+
+                .ui-tabs-anchor {
+                    font-weight: bold;
+                    color: #E15F00;
+                }
+            }
         }
     }
 }
 
 .report-cont {
-    padding: 12px;
+    padding: 6px 9px;
 
     .filter {
         padding: 0;
@@ -821,6 +824,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 }
 // customer-category-content
 #customer-category {
+    margin-top: 12px;
     .graph-heading {
         position: sticky;
         position: -webkit-sticky;
@@ -850,8 +854,13 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
         }
     }
 }
+
 // transaction-history
+#trans_history {
+    padding-top: 0;
+}
 #transaction-history {
+   
     .fixed-header {
         padding-top: 12px;
     }

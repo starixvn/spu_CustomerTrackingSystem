@@ -163,48 +163,38 @@
 </div>
 
 <div class="content-card">
-    <div class="status" id="account-detail-header">
+    <div class="status" id="account-detail-header-remove">
         <p class="info" style="margin-bottom: 0">
-            <span class="expand-all" title="Expand All"></span>
-            Account Details
+            Account Detail
         </p>
     </div>
     <div id="account-detail-container" class="report-content">
-        <div class="report-item">
-            <h3 id="header_associated_account" class="report-header" ref="associated_account">
-                <i class="icon-chevron-right"></i>
-                <a href="javascript:void(0)">Associated Accounts</a>
-            </h3>
-            <div id="associated_account" class="report-cont hide">
-                <img src="@Url.Content("~/Content/images/ajax-loader.gif")" alt="Loading ..." />
+        <div id="tabs-account-detail" class="tabs-account-detail">
+            <ul>
+                <li><a href="#tabs-1">Associated Accounts</a></li>
+                <li><a href="#tabs-2">Retracted Evidence & Exception</a></li>
+                <li><a href="#tabs-3">Transaction History</a></li>
+                <li><a href="#tabs-4">Problem Account</a></li>
+            </ul>
+            <div id="tabs-1">
+                <div id="associated_account" class="report-cont">
+                    <img src="@Url.Content("~/Content/images/ajax-loader.gif")" alt="Loading ..." />
+                </div>
             </div>
-        </div>
-        <div class="report-item">
-            <h3 id="header_chains_evidence" class="report-header" ref="chains_evidence">
-                <i class="icon-chevron-right"></i>
-                <a href="javascript:void(0)">Chains to Evidence and Exceptions</a>
-            </h3>
-            <div id="chains_evidence" class="report-cont hide">
-                <img src="@Url.Content("~/Content/images/ajax-loader.gif")" alt="Loading ..." />
+            <div id="tabs-2">
+                <div id="chains_evidence" class="report-cont">
+                    <img src="@Url.Content("~/Content/images/ajax-loader.gif")" alt="Loading ..." />
+                </div>
             </div>
-        </div>
-
-        <div class="report-item">
-            <h3 id="header_customer_category" class="report-header" ref="customer_category">
-                <i class="icon-chevron-right"></i>
-                <a href="javascript:void(0)">Customer Classification</a>
-            </h3>
-            <div id="customer_category" class="report-cont hide">
-                <img src="@Url.Content("~/Content/images/ajax-loader.gif")" alt="Loading ..." />
-            </div>
-        </div>
-        <div class="report-item">
-            <h3 id="header_trans_history" class="report-header" ref="trans_history">
-                <i class="icon-chevron-right"></i>
-                <a href="javascript:void(0)">Transaction History</a>
-            </h3>
-            <div id="trans_history" class="report-cont hide">
-                <img src="@Url.Content("~/Content/images/ajax-loader.gif")" alt="Loading ..." />
+            <div id="tabs-3">
+                <div id="trans_history" class="report-cont">
+                    <img src="@Url.Content("~/Content/images/ajax-loader.gif")" alt="Loading ..." />
+                </div>
+            </div> 
+            <div id="tabs-4">
+                <div id="customer_category" class="report-cont">
+                    <img src="@Url.Content("~/Content/images/ajax-loader.gif")" alt="Loading ..." />
+                </div>
             </div>
         </div>
     </div>
