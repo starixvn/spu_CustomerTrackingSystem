@@ -515,7 +515,7 @@
                             AssociationTypeName = CalculateAssociationType(g),
                             Username = g.FirstOrDefault().Username,
                             Username2 = g.FirstOrDefault().Username2,
-                            AssociationDate = g.FirstOrDefault().AssociationDate,
+                            AssociationDateGMT0 = g.FirstOrDefault().AssociationDateGMT0,
                             SharedDevices = g.FirstOrDefault().SharedDevices,
                             SharedIPs = g.FirstOrDefault().SharedIPs,
                             StatusName = g.FirstOrDefault().StatusName,

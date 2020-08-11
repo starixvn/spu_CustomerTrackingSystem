@@ -26,9 +26,14 @@ namespace Fanex.NAP.CTS.Model.GraphDB
             get;
             set;
         }
-                
-        public DateTime AssociationDate { get; set; }
-                
+
+        public DateTime AssociationDateGMT0 { get; set; }
+
+        public DateTime AssociationDate
+        {
+            get => AssociationDateGMT0.AddHours(-4);
+        }
+
         public int SharedDevices { get; set; }
                 
         public int SharedIPs { get; set; }
