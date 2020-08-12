@@ -90,7 +90,7 @@ function notification() {
             complete: function () {
                 if (isFirstNotification == false && GetUnReadFlagFromCookie() == "true") {
                     NotifyToDesktop(unreadMsgCounter);
-                    document.cookie = "isUnReadStatusChanged=false";
+                    document.cookie = "hasNewUnreadMessages=false; path=/";
                 }
 
                 if (unreadMsgCounter == 0) {
@@ -99,7 +99,7 @@ function notification() {
                 
             },
             error: function (errMsg) {
-                console.log('Get notification Error, ' + ex);
+                console.log('Get notification Error, ' + errMsg);
                 SetUnReadCounterToCookie(0);
                 msgCounter = 0;
                 messages = null;
@@ -164,19 +164,19 @@ function notification() {
          if (json.unReadMessageCounter != GetUnReadCounterFromCookie()
              && json.unReadMessageCounter != 0)
         {
-            document.cookie = "isUnReadStatusChanged=true";
+             document.cookie = "hasNewUnreadMessages=true; path=/";
         }
         else {
-            document.cookie = "isUnReadStatusChanged=false";
+             document.cookie = "hasNewUnreadMessages=false; path=/";
         }
     }
 
     function GetUnReadFlagFromCookie() {
 
-        if (document.cookie.split(';').some((item) => item.trim().startsWith('isUnReadStatusChanged='))) {
+        if (document.cookie.split(';').some((item) => item.trim().startsWith('hasNewUnreadMessages='))) {
             return document.cookie
                 .split('; ')
-                .find(row => row.startsWith('isUnReadStatusChanged'))
+                .find(row => row.startsWith('hasNewUnreadMessages'))
                 .split('=')[1];
         } 
         return "false";
@@ -184,10 +184,10 @@ function notification() {
 
     function GetUnReadCounterFromCookie() {
 
-        if (document.cookie.split(';').some((item) => item.trim().startsWith('unReadCountFromCookie='))) {
+        if (document.cookie.split(';').some((item) => item.trim().startsWith('unreadMessagesFromCookie='))) {
             return document.cookie
                 .split('; ')
-                .find(row => row.startsWith('unReadCountFromCookie'))
+                .find(row => row.startsWith('unreadMessagesFromCookie'))
                 .split('=')[1];
         }
 
@@ -195,7 +195,7 @@ function notification() {
     }
 
     function SetUnReadCounterToCookie(counter) {
-        document.cookie = "unReadCountFromCookie=" + counter;
+        document.cookie = "unreadMessagesFromCookie=" + counter + "; path=/";
         unreadMsgCounter = counter;
     }
 

@@ -1,9 +1,5 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
-    using Fanex.Logging;
-    using Fanex.NAP.Core.Configuration;
-    using Fanex.NAP.Core.Service.Impl;
-    using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Core.Utilities;
     using Service;
