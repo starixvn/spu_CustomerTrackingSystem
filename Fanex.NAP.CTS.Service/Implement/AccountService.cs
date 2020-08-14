@@ -408,12 +408,11 @@
             }
         }
 
-        public CustomerFlagInfoModel GetCustomerFlagInfo(Int64 ctsCustId, int subscriberId)
+        public CustomerFlagInfoModel GetCustomerFlagInfo(Int64 ctsCustId)
         {
             var criteria = new CustomerFlagInfoByCTSCustIdCriteria
             {
-                CTSCustId = ctsCustId,
-                SubscriberId = subscriberId
+                CTSCustId = ctsCustId
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -486,7 +485,7 @@
                     }
                     else
                     {
-                        LogService.Error($"Account status is NULL on custid: { x.CustId }");
+                        LogService.Error($"AccountService - FilterCustomerAssociationByStatus - Account status is NULL on custid: { x.CustId }");
                     }
                 }
 
@@ -706,11 +705,9 @@
             var criteria = new PlaceEvidenceCriteria
             {
                 CTSCustId = model.CTSCustId,
-                SubscriberId = model.SubscriberId,
                 EvidenceId = model.EvidenceId,
                 Remark = model.Comment,
-                UserId = model.UserId,
-                IsCreatedByMaster = true
+                UserId = model.UserId
             };
 
             return DataService.UpdateData(criteria, "Place evidence");
@@ -786,7 +783,6 @@
             var criteria = new RemoveAccountExceptionCriteria
             {
                 UserId = model.UserId,
-                SubscriberId = model.SubscriberId,
                 FromCTSCustId = model.FromCTSCustId,
                 ToCTSCustId = model.ToCTSCustId
             };

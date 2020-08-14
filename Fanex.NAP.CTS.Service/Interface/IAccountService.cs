@@ -34,7 +34,7 @@
 
         CustomerRobotUserStatusModel GetCustomerRobotUserStatus(long custId);
 
-        CustomerFlagInfoModel GetCustomerFlagInfo(long ctsCustId, int subscriberId);
+        CustomerFlagInfoModel GetCustomerFlagInfo(long ctsCustId);
 
         GraphAssociationPaging GetCustomerAssociationByGraph(string apiURL, long ctsCustId, int associationStatus, int skipNumber, int takeNumber);
 

@@ -215,7 +215,6 @@
                     {
                         NewAccountEvidences = jsonData,
                         UserId = userId,
-                        IsCreatedByMaster = true,
                         ErrorMessage = string.Empty
                     };                    
 
