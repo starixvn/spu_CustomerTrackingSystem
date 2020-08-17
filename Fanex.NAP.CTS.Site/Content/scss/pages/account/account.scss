@@ -542,11 +542,15 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     border-radius: 3px;
 
     .status {
-        padding: 10px 10px;
+        padding: 10px 12px;
         border-bottom: 1px solid #DDE2E5;
         font-size: 15px;
 
+        .icon{
+            font-size: 10px;
+        }
         .info {
+            margin-left: 8px;
             margin-bottom: 8px;
             color: #1E2D4C;
             font-weight: bold;
@@ -555,7 +559,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     }
 
     .tabs-account-detail {
-        padding: 12px;
+        padding: 11px;
 
         .ui-widget-header {
             border: 0;
@@ -580,7 +584,8 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             top: 1px;
 
             .ui-tabs-anchor {
-                padding: 7px 20px;
+                padding: 10px 20px;
+                padding-bottom: 5px;
                 font-size: 14px;
                 line-height: 18px;
                 color: #475A7C;
