@@ -1047,25 +1047,24 @@
         color: #404040; }
 
 .content-card {
-  margin: 12px 16px;
+  margin: 0 1.6rem;
   border: 1px solid #DFDFDF;
   box-sizing: border-box;
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.15);
   border-radius: 3px; }
   .content-card .status {
-    padding: 10px 12px;
+    padding: 1rem 1.2rem;
     border-bottom: 1px solid #DDE2E5;
-    font-size: 15px; }
+    font-size: 1.5rem; }
     .content-card .status .icon {
-      font-size: 10px; }
+      font-size: 1rem; }
     .content-card .status .info {
-      margin-left: 8px;
-      margin-bottom: 8px;
+      margin: 0 0.8rem 0.8rem;
       color: #1E2D4C;
       font-weight: bold;
       cursor: pointer; }
   .content-card .tabs-account-detail {
-    padding: 11px; }
+    padding: 1.1rem; }
     .content-card .tabs-account-detail .ui-widget-header {
       border: 0;
       padding: 0;
@@ -1084,9 +1083,9 @@
       position: relative;
       top: 1px; }
       .content-card .tabs-account-detail .ui-tabs-nav li .ui-tabs-anchor {
-        padding: 10px 20px;
-        padding-bottom: 5px;
-        font-size: 14px;
+        padding: 1rem 2rem;
+        padding-bottom: 0.5rem;
+        font-size: 1.4rem;
         line-height: 18px;
         color: #475A7C;
         font-family: "Lato", Arial, Tahoma, sans-serif !important; }
@@ -1101,28 +1100,28 @@
           color: #E15F00; }
 
 .report-cont {
-  padding: 6px 9px; }
+  padding: .6rem .9rem; }
   .report-cont .filter {
     padding: 0; }
     .report-cont .filter .checkbox {
       display: block; }
       .report-cont .filter .checkbox:not(:last-child) {
-        margin-bottom: 12px; }
+        margin-bottom: 1.2rem; }
     .report-cont .filter .button-group {
-      margin-top: 13px; }
+      margin-top: 1.3rem; }
 
 .filter {
-  padding: 0 16px 16px; }
+  padding: 0 1.6rem 1.6rem; }
   .filter .control-label {
-    margin-bottom: 7px;
+    margin-bottom: .7rem;
     color: #474747;
     font-size: 1.3rem; }
   .filter .button {
     margin-bottom: 0; }
   .filter .button-search {
-    margin-top: 10px; }
+    margin-top: 1rem; }
   .filter .form-control {
-    margin-right: 20px;
+    margin-right: 2rem;
     display: inline-block;
     vertical-align: bottom; }
     .filter .form-control .label {
@@ -1132,7 +1131,7 @@
     .filter .form-control select.control {
       width: 100%; }
   .filter .button-group {
-    margin-top: 9px; }
+    margin-top: .9rem; }
   .filter .input-field {
     width: 220px;
     border-color: #e5e5e5; }
@@ -1715,13 +1714,13 @@
     margin-left: 24px; }
 
 .container-grid {
-  padding: 9px 10px 11px;
+  padding: .9rem 1rem 1.1rem;
   display: grid;
   grid-template-columns: repeat(32, 1fr);
   grid-column-gap: 0;
   grid-row-gap: 0; }
   .container-grid .statistic_loading {
-    margin-left: 5px; }
+    margin-left: .5rem; }
   .container-grid .summary-detail {
     position: relative;
     grid-column: 1 / span 9;
@@ -1731,34 +1730,34 @@
       cursor: pointer; }
       .container-grid .summary-detail .wrapper-title .icon-chevron-right {
         transform: rotate(90deg);
-        margin-left: -4px; }
+        margin-left: -0.4rem; }
       .container-grid .summary-detail .wrapper-title .title {
-        margin-left: 13px; }
+        margin-left: 1.3rem; }
     .container-grid .summary-detail .wrapper-data {
-      padding: 8px 19px;
-      padding-right: 37px; }
+      padding: .8rem 1.9rem;
+      padding-right: 3.7rem; }
       .container-grid .summary-detail .wrapper-data .summary-top {
         display: flex;
         flex-wrap: wrap; }
         .container-grid .summary-detail .wrapper-data .summary-top .name {
-          margin-bottom: 5px; }
+          margin-bottom: .5rem; }
       .container-grid .summary-detail .wrapper-data .border-divide {
         width: 100%;
         height: 1px;
         background: #DFDFDF;
-        margin-top: 11px; }
+        margin-top: 1.1rem; }
       .container-grid .summary-detail .wrapper-data .summary-bottom {
         display: flex;
         flex-wrap: wrap;
-        margin-top: 14px; }
+        margin-top: 1.4rem; }
         .container-grid .summary-detail .wrapper-data .summary-bottom .name {
-          margin-bottom: 3px;
-          margin-left: 1px; }
+          margin-bottom: .3rem;
+          margin-left: .1rem; }
       .container-grid .summary-detail .wrapper-data .wrapper-title {
-        margin-right: 22px; }
+        margin-right: 2.2rem; }
         .container-grid .summary-detail .wrapper-data .wrapper-title .name {
           font-weight: bold;
-          font-size: 14px;
+          font-size: 1.4rem;
           line-height: 17px;
           text-transform: capitalize;
           color: #2B2B2B;
@@ -1772,7 +1771,7 @@
           width: 90px;
           height: 18px;
           font-weight: bold;
-          font-size: 12px;
+          font-size: 1.2rem;
           line-height: 14px;
           border-radius: 5px;
           text-align: center;
@@ -1794,18 +1793,18 @@
             border: 1px solid #A9A9A9;
             color: #4E4E4E; }
     .container-grid .summary-detail .wrapper-value {
-      margin-right: 30px; }
+      margin-right: 3rem; }
       .container-grid .summary-detail .wrapper-value .value {
         font-weight: bold;
-        font-size: 18px;
+        font-size: 1.8rem;
         line-height: 24px;
         align-items: center;
         text-align: center;
         text-transform: capitalize;
         color: #2B2B2B; }
       .container-grid .summary-detail .wrapper-value .text {
-        padding-top: 1px;
-        font-size: 13px;
+        padding-top: .1rem;
+        font-size: 1.3rem;
         line-height: 16px;
         align-items: center;
         text-align: center;
@@ -1825,25 +1824,25 @@
       z-index: 2;
       left: 0; }
     .container-grid .chart-sport .wapper-chart-sport {
-      height: 135px;
+      height: 125px;
       width: 100%;
       position: relative;
-      left: 7px;
-      top: 16px; }
+      left: .7rem;
+      top: 2.2rem; }
   .container-grid .note-title {
-    font-size: 13px;
+    font-size: 1.3rem;
     line-height: 15px;
     color: #333333;
     display: block;
-    margin-bottom: 10px;
-    margin-top: -3px; }
+    margin-bottom: 1rem;
+    margin-top: -0.3rem; }
     .container-grid .note-title::before {
       content: " ";
       width: 14px;
       height: 14px;
       border-radius: 50%;
       display: inline-block;
-      margin-right: 6px; }
+      margin-right: .6rem; }
     .container-grid .note-title.circle-blue::before {
       background: #3773CC; }
     .container-grid .note-title.circle-red::before {
@@ -1860,17 +1859,17 @@
     grid-row: row;
     border-right: 1px solid #DFDFDF; }
     .container-grid .chart-bet-type .bet-grid {
-      margin-top: 1px;
+      margin-top: .1rem;
       position: relative; }
       .container-grid .chart-bet-type .bet-grid .wapper-bet-type {
         height: 125px;
         width: 78%; }
       .container-grid .chart-bet-type .bet-grid .note {
         position: absolute;
-        top: 22px;
+        top: 2.2rem;
         right: 6%; }
         .container-grid .chart-bet-type .bet-grid .note .position-note {
-          margin-top: 25px; }
+          margin-top: 2.5rem; }
   .container-grid .chart-win-lost {
     overflow: hidden;
     position: relative;
@@ -1882,12 +1881,12 @@
       .container-grid .chart-win-lost .win-lost-grid .wapper-win-lost {
         height: 130px;
         position: absolute;
-        top: 7px;
-        left: 10px;
+        top: .7rem;
+        left: 1rem;
         width: 100%; }
     .container-grid .chart-win-lost .icon {
-      font-size: 12px;
-      margin-left: 4px; }
+      font-size: 1.2rem;
+      margin-left: .4rem; }
 
 @media screen and (max-width: 1699.99px) {
   .container-grid {
