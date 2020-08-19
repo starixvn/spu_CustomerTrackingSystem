@@ -158,6 +158,7 @@
     <Compile Include="Controllers\CommonController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\SSOController.cs" />
+    <Compile Include="Helper\UMHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserLoginAreaRegistration.cs" />
   </ItemGroup>

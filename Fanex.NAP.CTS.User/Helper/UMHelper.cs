@@ -1,0 +1,27 @@
+﻿using ONEbook.UM.Services;
+using System;
+
+namespace Fanex.NAP.CTS.User.Helper
+{
+    public static class UMHelper
+    {
+        public static bool IsUnderMaintainaceHappen(IMaintenanceService maintenanceService)
+        {
+            var maintenanceInfo = maintenanceService.GetUnderMaintenanceTime();
+            var currentTime = DateTime.Now;
+            DateTime maintainceFrom;
+            DateTime maintainceTo;
+
+            if (maintenanceInfo.IsUnderMaintenanceTime
+                && DateTime.TryParse(maintenanceInfo.From, out maintainceFrom)
+                && DateTime.TryParse(maintenanceInfo.To, out maintainceTo)
+                && currentTime >= maintainceFrom
+                && currentTime <= maintainceTo)
+            {
+                return true;
+            }
+
+            return false;
+        }
+    }
+}

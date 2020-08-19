@@ -19,6 +19,9 @@
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.Logging.Extensions;
     using Fanex.Logging.Extensions.Database;
+    using ONEbook.UM.Services;
+    using ONEbook.UM.Services.Impl;
+    using Fanex.NAP.CTS.User.Helper;
 
     /// <summary>
     /// SSO Controller.
@@ -32,22 +35,25 @@
         private readonly int _timeExipration = 20;
         private readonly IUserService _userService;
         private readonly ISecurityService _securityService;
+        private readonly IMaintenanceService _maintenanceService;
 
         #endregion members
 
         #region ctors
 
         public SsoController()
-            : this(null, null)
+            : this(null, null,null)
         {
         }
 
         public SsoController(
             IUserService userService,
-            ICurrentSession currentSession)
+            ICurrentSession currentSession,
+            IMaintenanceService maintenanceService)
         {
             _userService = userService ?? new UserService();
             _currentSession = currentSession ?? new CurrentSession();
+            _maintenanceService = maintenanceService ?? new MaintenanceService();
             _securityService = new SecurityService();
         }
 
@@ -67,6 +73,11 @@
         {
             try
             {
+                if (UMHelper.IsUnderMaintainaceHappen(_maintenanceService))
+                {
+                    return RedirectToAction("Offline", "Common");
+                }
+
                 userId = Cryptography.CfsDeCrypt(userId.Replace(" ", "+"));
                 onuserId = Cryptography.CfsDeCrypt(onuserId.Replace(" ", "+"));
                 time = Cryptography.CfsDeCrypt(time.Replace(" ", "+"));

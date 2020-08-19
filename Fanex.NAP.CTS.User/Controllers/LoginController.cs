@@ -17,7 +17,6 @@
     using ONEbook.UM.Services.Impl;
     using System;
     using System.Collections.Generic;
-    using System.Configuration;
     using System.Linq;
     using System.Security.Cryptography;
     using System.Text;
@@ -26,6 +25,7 @@
     using System.Web.Security;
     using Fanex.Logging.Extensions;
     using Fanex.Logging.Extensions.Database;
+    using Fanex.NAP.CTS.User.Helper;
 
     /// <summary>
     /// Login controller.
@@ -107,7 +107,7 @@
                 return Redirect(NapSettings.Settings.HubUrl);
             }
 
-            if (_maintenanceService.GetUnderMaintenanceTime().IsUnderMaintenanceTime)
+            if (UMHelper.IsUnderMaintainaceHappen(_maintenanceService))
             {
                 return RedirectToAction("Offline", "Common");
             }
@@ -272,9 +272,7 @@
         {
             try
             {
-                var maintenanceInfo = _maintenanceService.GetUnderMaintenanceTime();
-
-                if (maintenanceInfo.IsUnderMaintenanceTime)
+                if (UMHelper.IsUnderMaintainaceHappen(_maintenanceService))
                 {
                     Logger.Log.Info("UM");
 
@@ -538,7 +536,6 @@
             Session.Clear();
             Session.Abandon();
         }
-
         #endregion helpers
     }
 }
