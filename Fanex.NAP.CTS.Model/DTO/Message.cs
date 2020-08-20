@@ -16,7 +16,7 @@
         {
             get
             {
-                return CreatedDate == DateTime.MinValue ? "" : CreatedDate.ToString("MMM dd, yyyy H:mm");
+                return CreatedDate == DateTime.MinValue ? "" : CreatedDate.ToString("MMM dd, yyyy HH:mm:ss");
             }
         }
 
