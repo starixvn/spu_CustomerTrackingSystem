@@ -1,0 +1,17 @@
+﻿.container {
+  margin: 0 auto;
+  padding: 100px 155px;
+  width: 100%; }
+
+h1 {
+  color: #1A5290;
+  font-weight: 900;
+  font-size: 56px;
+  line-height: 67px;
+  margin-bottom: 16px; }
+
+h4 {
+  font-weight: bold;
+  font-size: 26px;
+  line-height: 31px;
+  color: #474747; }
