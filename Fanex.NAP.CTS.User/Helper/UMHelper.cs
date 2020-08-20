@@ -8,7 +8,8 @@ namespace Fanex.NAP.CTS.User.Helper
         public static bool IsUnderMaintainaceHappen(IMaintenanceService maintenanceService)
         {
             var maintenanceInfo = maintenanceService.GetUnderMaintenanceTime();
-            var currentTime = DateTime.Now;
+            //GMT+8 Taiwan
+            var currentTime = DateTime.UtcNow.AddHours(8);
             DateTime maintainceFrom;
             DateTime maintainceTo;
 
