@@ -413,7 +413,12 @@
     <Content Include="Areas\UserLogin\Views\Common\Style\AccessDenied.css" />
     <Content Include="Areas\UserLogin\Views\Common\Style\Error.css" />
     <Content Include="Areas\UserLogin\Views\Common\Style\Images\accessDenied.gif" />
+    <Content Include="Areas\UserLogin\Views\Common\Style\Images\logo.jpg" />
+    <Content Include="Areas\UserLogin\Views\Common\Style\Images\logo.png" />
+    <Content Include="Areas\UserLogin\Views\Common\Style\Images\maintenance.jpg" />
+    <Content Include="Areas\UserLogin\Views\Common\Style\Images\maintenance.png" />
     <Content Include="Areas\UserLogin\Views\Common\Style\Images\UnderMaintenance.gif" />
+    <Content Include="Areas\UserLogin\Views\Common\Style\Maintenance.css" />
     <Content Include="Content\images\account_not_flagged_with_evidence.png" />
     <Content Include="Content\images\affected_account_by_link_to_evidence.png" />
     <Content Include="Content\images\affected_device_by_link_to_evidence.png" />
@@ -427,6 +432,8 @@
     <Content Include="Content\images\graph_view.png" />
     <Content Include="Content\images\statistic_empty.png" />
     <Content Include="Content\scss\components\_charts.scss" />
+    <Content Include="Areas\UserLogin\Views\Common\Style\Images\logo.webp" />
+    <Content Include="Areas\UserLogin\Views\Common\Style\Images\maintenance.webp" />
     <None Include="Content\scss\components\_notification.scss" />
     <Content Include="Content\scss\fonts\Fraud-Sensor\fonts\CTS.svg" />
     <Content Include="Content\scss\images\chevron-down.png" />
