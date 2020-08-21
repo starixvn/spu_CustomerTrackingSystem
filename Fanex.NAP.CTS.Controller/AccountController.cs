@@ -984,7 +984,8 @@
                     SportGroupNameList = x.SportGroupNameList,
                     ParentCategoryId = x.ParentCategoryId,
                     ParentCategoryName = x.ParentCategoryName,
-                    IsEnabledDelete = x.IsEnabledDelete
+                    IsEnabledDelete = x.IsEnabledDelete,
+                    NextScanDatePeriod = x.NextScanDatePeriod 
                 });
 
                 return Json(new { data = result }, JsonRequestBehavior.AllowGet);

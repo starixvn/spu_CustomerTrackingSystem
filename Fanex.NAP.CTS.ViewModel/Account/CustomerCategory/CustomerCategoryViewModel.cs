@@ -23,5 +23,7 @@ namespace Fanex.NAP.CTS.ViewModel.Account.CustomerCategory
         public string ParentCategoryName { get; set; }
 
         public bool IsEnabledDelete { get; set; }
+
+        public string NextScanDatePeriod { get; set; }
     }
 }
