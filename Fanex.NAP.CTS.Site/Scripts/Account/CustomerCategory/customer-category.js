@@ -241,13 +241,13 @@
             },
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0], width: "8%", className: "text-left", defaultContent: "-" },
-                { targets: [1], width: "20%", className: "text-left", defaultContent: "-" },
-                { targets: [2], width: "20%", className: "text-left", defaultContent: "-" },
-                { targets: [3], width: "10%", className: "text-center", defaultContent: "-" },
-                { targets: [4], width: "15%", className: "text-center", defaultContent: "-" },
-                { targets: [5], width: "20%", className: "text-center", defaultContent: "-"},
-                { targets: [6], width: "7%", className: "text-center", defaultContent: "-" }
+                { targets: [0], className: "text-left", defaultContent: "-" },
+                { targets: [1], className: "text-left", defaultContent: "-" },
+                { targets: [2], className: "text-left", defaultContent: "-" },
+                { targets: [3], className: "text-center", defaultContent: "-" },
+                { targets: [4], className: "text-center", defaultContent: "-" },
+                { targets: [5], className: "text-center", defaultContent: "-"},
+                { targets: [6], className: "text-center", defaultContent: "-" }
             ],
             columns: [
                 { data: obj => obj.CategoryName },
