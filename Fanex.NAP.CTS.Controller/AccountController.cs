@@ -1,34 +1,34 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
+    using Fanex.Logging;
+    using Fanex.NAP.Core.Configuration;
+    using Fanex.NAP.Core.Service.Impl;
+    using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Web.Attribute;
+    using Fanex.NAP.CTS.Core.Extentions;
+    using Fanex.NAP.CTS.Core.Helpers.Xml;
     using Fanex.NAP.CTS.Core.Utilities;
+    using Fanex.NAP.CTS.Criteria.Account;
+    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
+    using Fanex.NAP.CTS.Model.Association;
+    using Fanex.NAP.CTS.Model.GraphDB;
+    using Fanex.NAP.CTS.Model.Transaction;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
+    using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.ViewModel.Account;
     using Fanex.NAP.CTS.ViewModel.Account.Associated;
+    using Fanex.NAP.CTS.ViewModel.Account.BettingStatistic;
     using Fanex.NAP.CTS.ViewModel.Account.ChainToEvidence;
+    using Fanex.NAP.CTS.ViewModel.Account.CustomerCategory;
+    using Fanex.NAP.CTS.ViewModel.Account.TransactionHistory;
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using System.Web.Mvc;
-    using Fanex.NAP.CTS.Core.Extentions;
-    using Fanex.NAP.CTS.Model.GraphDB;
-    using Fanex.Logging;
-    using Fanex.NAP.CTS.Model;
-    using Fanex.NAP.CTS.Model.Transaction;
-    using Fanex.NAP.CTS.ViewModel.Account.TransactionHistory;
-    using Fanex.NAP.CTS.Model.Association;
-    using Fanex.NAP.CTS.ViewModel.Account.CustomerCategory;
-    using Fanex.NAP.Core.Service.Interface;
-    using Fanex.NAP.Core.Service.Impl;
-    using Fanex.NAP.Core.Configuration;
-    using Fanex.NAP.CTS.ViewModel.Account.BettingStatistic;
-    using Fanex.NAP.CTS.Service.Implement;
-    using Fanex.NAP.CTS.Criteria.Account;
-    using Fanex.NAP.CTS.Core.Helpers.Xml;
 
     [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class AccountController : BaseController
@@ -1037,15 +1037,15 @@
 
         #region Betting Statistic
         [NapAuth(FunctionKey = FSFunctionKeys.BettingStatistics, Policy = NAP.Core.Business.Constant.Policy.Read)]
-        public ActionResult GetPerformanceBySport(long custId, int getTop) 
+        public ActionResult GetPerformanceBySport(long custId, int getTop)
         {
             var tasks = new List<Task>();
-            var result = _accountService.GetPerformanceBySport(custId, getTop)?.OrderBy(c=>c.Ranking);
+            var result = _accountService.GetPerformanceBySport(custId, getTop)?.OrderBy(c => c.Ranking);
             var totalSportBettingStatistic = new SportBettingStatisticViewModel();
             var bestSportBettingStatistic = new SportBettingStatisticViewModel();
             var pieChartSportStatisticSessions = new List<SportStatisticPieChartViewModel>();
 
-            if(result != null && result.Any())
+            if (result != null && result.Any())
             {
                 tasks.Add(Task.Run(() =>
                 {
@@ -1105,9 +1105,9 @@
 
             return Json(new
             {
-               totalSportBettingStatistic,
-               bestSportBettingStatistic,
-               pieChartSportStatisticSessions
+                totalSportBettingStatistic,
+                bestSportBettingStatistic,
+                pieChartSportStatisticSessions
             }, JsonRequestBehavior.AllowGet);
         }
 
@@ -1123,14 +1123,14 @@
             return Json(new
             {
                 betTypeCategories,
-                liveIndicatorList 
+                liveIndicatorList
             }, JsonRequestBehavior.AllowGet);
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.BettingStatistics, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetPerformanceDaily(long custId)
         {
-            var result = _accountService.GetPerformanceDaily(custId).OrderBy(c=>c.RptDate);
+            var result = _accountService.GetPerformanceDaily(custId).OrderBy(c => c.RptDate);
             var turnOverAreaData = new List<decimal>();
             var winLossAreaDate = new List<decimal>();
             var days = new List<string>();
@@ -1152,7 +1152,7 @@
                 days
             }, JsonRequestBehavior.AllowGet);
         }
-      
+
 
         private void CalculatePieChartTurnOverPercentage(IEnumerable<PerformanceBySportModel> result, List<SportStatisticPieChartViewModel> pieChartSportStatisticSessions)
         {
@@ -1179,7 +1179,7 @@
             }
 
             decimal maxTurnOverOfBetType = Math.Round((result.GroupBy(c => new { c.BettypeId })
-                                              .Select(x => new { BettypeId = x.Key,TotalTurnOver = x.Sum(w => w.Turnover) }))
+                                              .Select(x => new { BettypeId = x.Key, TotalTurnOver = x.Sum(w => w.Turnover) }))
                                               .Max(c => c.TotalTurnOver));
 
             liveIndicatorList.Add(new LiveIndicatorViewModel { name = "None", data = new List<decimal>() });
@@ -1202,7 +1202,7 @@
             if (numberOfBettype < 4)
             {
                 int loop = 4 - numberOfBettype;
-                for (int i= 0; i < loop; i++)
+                for (int i = 0; i < loop; i++)
                 {
                     liveIndicatorList.ElementAt(0).data.Add(maxTurnOverOfBetType);
                     liveIndicatorList.ElementAt(1).data.Add(0);
@@ -1211,7 +1211,7 @@
                 }
             }
         }
-        
+
         private bool CheckBettingStatisticPermission(IUserService userService, int roleID)
         {
             if (roleID == Consts.AGENT_ROLE || roleID == Consts.MASTER_ROLE || roleID == Consts.SUPER_ROLE)
