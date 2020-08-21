@@ -1,20 +1,17 @@
 ﻿.content {
-    margin-top: 60px;
+    margin-top: 6rem;
 
     .import-evidences {
-        padding: 14px 16px;
+        padding: 1.6rem 1.4rem;
 
         .ui-widget {
             .ui-dialog-titlebar {
                 background-color: #1D2E4F;
-                padding-top: 9px;
-                padding-bottom: 9px;
-                padding-left: 16px;
-                padding-right: 14px;
+                padding: .9rem 1.4rem .9rem 1.6rem;
 
                 .ui-dialog-title {
-                    font-size: 16px;
-                    line-height: 19px;
+                    font-size: 1.6rem;
+                    line-height: 1.1875;
                     color: #FFFFFF;
                 }
 
@@ -25,10 +22,9 @@
 
             .ui-dialog-content {
                 min-height: 151px;
-                padding: 16px;
-                padding-top: 24px;
+                padding: 2.4rem 1.6rem 1.6rem;
                 text-align: center;
-                font-size: 16px;
+                font-size: 1.6rem;
                 line-height: 150%;
                 color: #545454;
 
@@ -39,9 +35,9 @@
                     background: #396EF8;
                     border-radius: 2px;
                     color: #FFFFFF;
-                    font-size: 13px;
-                    line-height: 16px;
-                    margin-top: 16px;
+                    font-size: 1.3rem;
+                    line-height: 1.230769;
+                    margin-top: 1.6rem;
 
                     &:hover {
                         background-color: #5081ff
@@ -55,7 +51,7 @@
         display: flex;
 
         .button-import {
-            margin-left: 12px;
+            margin-left: 2.2rem;
             background-color: #396EF8;
             border-radius: 2px;
             height: 30px;
@@ -74,10 +70,10 @@
             border-radius: 2px;
             display: inline-block;
             height: 30px;
-            padding: 3px 40px 3px 3px;
+            padding: .3rem 4rem .3rem .3rem;
             position: relative;
             width: 360px;
-            margin-left: 2px;
+            margin-left: .2rem;
         }
 
         .upload input[type="file"] {
@@ -93,10 +89,10 @@
         }
 
         .fileName {
-            font-size: 14px;
-            line-height: 17px;
+            font-size: 1.4rem;
+            line-height: 1.21;
             color: #474747;
-            padding: 2px 9px;
+            padding: .2rem .9rem;
             position: absolute;
             z-index: 1;
         }
@@ -105,10 +101,10 @@
             width: 86px;
             z-index: 1;
             position: absolute;
-            right: 2px;
-            top: 2px;
-            font-size: 14px;
-            line-height: 18px;
+            right: .2rem;
+            top: .2rem;
+            font-size: 1.4rem;
+            line-height: 1.285714;
             color: #46672F;
             height: 24px;
             background: #CDE9BA;
@@ -117,11 +113,16 @@
             border-radius: 2px;
             font-weight: bold;
         }
+
+        .container-checkbox {
+            margin-left: 15px;
+            margin-top: 8px;
+        }
     }
 
     .note {
-        margin-top: 9px;
-        font-size: 14px;
+        margin-top: .9rem;
+        font-size: 1.4rem;
         line-height: 150%;
         color: #333333;
 
@@ -129,10 +130,10 @@
             display: flex;
 
             .note-icon {
-                margin-left: -3px;
+                margin-left: -0.3rem;
 
                 &:before {
-                    font-size: 20px;
+                    font-size: 2rem;
                 }
             }
 
@@ -141,22 +142,28 @@
             }
         }
 
-        .column-text {
-            padding-left: 12px;
+        .wrapper-info {
+            padding: .1rem;
+
+            .column-text {
+                padding-left: .8rem;
+            }
+
+            .required-text {
+                color: #DF5615;
+                padding-left: 1.7rem;
+                font-weight: bold;
+            }
         }
 
-        .required-text {
-            color: #DF5615;
-            padding-left: 24px;
-            font-weight: bold;
-        }
+
 
         .table-note-info {
-            margin-top: 14px;
+            margin-top: 1.1rem;
             min-width: 409px;
             color: #474747;
-            font-size: 12px;
-            line-height: 14px;
+            font-size: 1.2rem;
+            line-height: 1.166667;
 
             thead th {
                 background-color: #FFFFFF;
@@ -173,35 +180,35 @@
 
             thead tr th, tbody tr td {
                 line-height: 13px;
-                padding: 4px;
+                padding: .4rem;
             }
         }
 
         .get-file {
-            margin-top: 12px;
+            margin-top: 1.2rem;
             color: #333333;
 
             .btnDownloadTemplate {
                 text-decoration: underline;
                 color: #2053D9;
-                cursor:pointer;
+                cursor: pointer;
             }
         }
     }
 
     .tableResult {
-        margin-top: 10px;
+        margin-top: 1rem;
         border: 1px solid #C4C4C4;
 
         thead {
             tr:first-child {
                 th {
-                    padding-left: 12px;
+                    padding-left: 1.2rem;
                     text-align: left;
                     color: #FF0000;
                     font-weight: bold;
-                    font-size: 14px;
-                    line-height: 17px;
+                    font-size: 1.4rem;
+                    line-height: 1.214286;
                     background: #FFDADA;
                     border-radius: 1px;
                     border: 1px solid #FF9B9B;
@@ -229,8 +236,8 @@
 
         tbody {
             td {
-                font-size: 13px;
-                line-height: 16px;
+                font-size: 1.3rem;
+                line-height: 1.230769;
                 color: #474747;
                 border: 1px solid #C4C4C4;
             }
@@ -239,7 +246,7 @@
 }
 
 .form-filter {
-    margin: 16px 0 0 12px;
+    margin: 1.6rem 0 0 1.2rem;
 
     .width-196 {
         width: 196px;

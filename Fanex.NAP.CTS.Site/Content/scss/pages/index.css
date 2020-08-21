@@ -260,8 +260,8 @@ input[type="checkbox"] + span {
     position: absolute;
     left: 0;
     top: 0;
-    height: 16px;
-    width: 16px;
+    height: 14px;
+    width: 14px;
     border-radius: 2px;
     border: 1px solid #545454;
     background-color: #fff;
@@ -272,10 +272,10 @@ input[type="checkbox"] + .null {
 
 input[type="checkbox"]:checked + span:after {
   position: absolute;
-  top: 5px;
-  left: 4px;
+  top: 3px;
+  left: 2px;
   height: 5px;
-  width: 9px;
+  width: 10px;
   border: 2px solid #fff;
   border-top: none;
   border-right: none;
@@ -288,6 +288,47 @@ input[type="checkbox"]:checked + span:before {
 
 input[type="checkbox"]:disabled + span {
   opacity: 0.5; }
+
+.container-checkbox {
+  display: block;
+  position: relative;
+  padding-left: 19px;
+  cursor: pointer;
+  font-size: 14px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  color: #474747;
+  /* Create a custom checkbox */ }
+  .container-checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0; }
+    .container-checkbox input:checked ~ .checkmark {
+      background-color: #458A00; }
+      .container-checkbox input:checked ~ .checkmark:after {
+        display: block; }
+  .container-checkbox .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 14px;
+    width: 14px;
+    background-color: #eee;
+    padding-left: 0;
+    /* Create the checkmark/indicator (hidden when not checked) */ }
+    .container-checkbox .checkmark:after {
+      content: "";
+      position: absolute;
+      display: none;
+      border: solid white;
+      border-width: 0 3px 3px 0;
+      -webkit-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+      transform: rotate(45deg); }
 
 .select2-container--default .select2-selection--single {
   border-color: #d6d6d6;
