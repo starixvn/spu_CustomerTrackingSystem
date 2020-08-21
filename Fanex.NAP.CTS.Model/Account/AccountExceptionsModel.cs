@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Fanex.NAP.CTS.Model.Account
+﻿namespace Fanex.NAP.CTS.Model.Account
 {
+    using System;
+
     public class AccountExceptionsModel
     {
         public Int64 ExceptionCTSCustId { get; set; }

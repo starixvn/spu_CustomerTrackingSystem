@@ -4,7 +4,6 @@
     using Fanex.NAP.CTS.Core.Helpers;
     using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Service.ExcelConfig.FraudCase.ScannedOfficeIP;
-    using Fanex.NAP.CTS.Core.FSMQ;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;

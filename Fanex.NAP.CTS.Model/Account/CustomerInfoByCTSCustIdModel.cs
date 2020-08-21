@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Fanex.NAP.CTS.Model.Account
+﻿namespace Fanex.NAP.CTS.Model.Account
 {
-   public class CustomerInfoByCTSCustIdModel
+    using System;
+
+    public class CustomerInfoByCTSCustIdModel
     {
         public DateTime LastLoginTime { get; set; }
 

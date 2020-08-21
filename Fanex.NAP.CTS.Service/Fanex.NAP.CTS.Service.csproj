@@ -63,6 +63,7 @@
     <Compile Include="Implement\AccountService.cs" />
     <Compile Include="Implement\AssociatedAccountService.cs" />
     <Compile Include="Implement\CheckBetReportService.cs" />
+    <Compile Include="Implement\CustomerEvidenceService.cs" />
     <Compile Include="Implement\CustomerMonitorService.cs" />
     <Compile Include="Implement\DailyCaptureDataService.cs" />
     <Compile Include="Implement\DelayGoalAccountService.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="Interface\IFraudCaseService.cs" />
     <Compile Include="Interface\IFraudSensorTaskService.cs" />
     <Compile Include="Interface\IGraphService.cs" />
+    <Compile Include="Interface\ICustomerEvidenceService.cs" />
     <Compile Include="Interface\IImportEvidencesService.cs" />
     <Compile Include="Interface\IMatchMonitorService.cs" />
     <Compile Include="Interface\INotificationRecipientService.cs" />

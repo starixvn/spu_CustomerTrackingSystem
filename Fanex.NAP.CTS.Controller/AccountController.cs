@@ -26,6 +26,9 @@
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Configuration;
     using Fanex.NAP.CTS.ViewModel.Account.BettingStatistic;
+    using Fanex.NAP.CTS.Service.Implement;
+    using Fanex.NAP.CTS.Criteria.Account;
+    using Fanex.NAP.CTS.Core.Helpers.Xml;
 
     [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class AccountController : BaseController
@@ -37,6 +40,8 @@
 
         private readonly ISubscriberAssignmentService _subscriberAssignmentService;
 
+        private readonly ICustomerEvidenceService _customerEvidenceService;
+
         public override string BaseControllerName { get => string.Empty; }
 
         public AccountController()
@@ -45,6 +50,7 @@
             _graphService = new GraphService();
             _subscriberAssignmentService = new SubscriberAssignmentService();
             _transService = new TransactionService();
+            _customerEvidenceService = new CustomerEvidenceService();
         }
 
         public ActionResult Index(long Id)
@@ -642,10 +648,26 @@
 
             var result = _accountService.AddAccountException(model);
 
-            return Json(new
+            if (result == 0)
             {
-                errorCode = result
-            }, JsonRequestBehavior.AllowGet);
+                var associatedAccountList = _customerEvidenceService.GetCleanAccounts(
+                      new GetCleanAccountByCTSCustIdsCriteria
+                      {
+                          CTSCustIdList = model.FromCTSCustId.ToString() + "," + model.ToCTSCustId.ToString()
+                      });
+
+                if (associatedAccountList.Any())
+                {
+                    var a = string.Join(",", associatedAccountList);
+                    _customerEvidenceService.UpdateBetLimitOfUnflaggedCustomer(
+                        new UpdateBetLimitByEvidenceRemovingCriteria
+                        {
+                            CustIDList = string.Join(",", associatedAccountList)
+                        });
+                }
+            }
+
+            return Json(new { errorCode = result }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -671,6 +693,18 @@
 
             if (result.ErrorCode == 0)
             {
+                var associatedAccountList = _customerEvidenceService.GetAssociatedAccounts(new GetAssociatedAccountByCTSCustIdsCriteria { CTSCustIdList = model.CTSCustId.ToString() });
+
+                if (associatedAccountList.Any())
+                {
+                    var a = string.Join(",", associatedAccountList);
+                    _customerEvidenceService.UpdateBetLimitOfFlaggedCustomer(
+                        new UpdateBetLimitByEvidenceAddingCriteria
+                        {
+                            CustIDList = string.Join(",", associatedAccountList)
+                        });
+                }
+
                 Task.Run(() =>
                 {
 
@@ -696,6 +730,26 @@
 
             var result = _accountService.RemoveFlaggedEvidence(model);
 
+            if (result.ErrorCode == 0)
+            {
+                var associatedAccountList = _customerEvidenceService.GetRemoveEvidenceAssociatedAccounts(
+                    new GetRemoveEvidenceAssociatedAccountCriteria
+                    {
+                        CTSCustIdList = model.CTSCustId.ToString(),
+                        EvidenceID = model.EvidenceId
+                    });
+
+                if (associatedAccountList.Any())
+                {
+                    var a = string.Join(",", associatedAccountList);
+                    _customerEvidenceService.UpdateBetLimitOfUnflaggedCustomer(
+                        new UpdateBetLimitByEvidenceRemovingCriteria
+                        {
+                            CustIDList = string.Join(",", associatedAccountList)
+                        });
+                }
+            }
+
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -706,6 +760,25 @@
             model.UserId = CurrentSession.UserId;
 
             var result = _accountService.RetractAffectedEvidence(model);
+
+            if (result == 0)
+            {
+                var associatedAccountList = _customerEvidenceService.GetCleanAccounts(
+                      new GetCleanAccountByCTSCustIdsCriteria
+                      {
+                          CTSCustIdList = model.CTSCustId.ToString()
+                      });
+
+                if (associatedAccountList.Any())
+                {
+                    var a = string.Join(",", associatedAccountList);
+                    _customerEvidenceService.UpdateBetLimitOfUnflaggedCustomer(
+                        new UpdateBetLimitByEvidenceRemovingCriteria
+                        {
+                            CustIDList = string.Join(",", associatedAccountList)
+                        });
+                }
+            }
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
