@@ -1,5 +1,6 @@
 ﻿function ImportEvidences() {
     let dataTable;
+    let isOverwriteEvidence = false;
     let domElements = {
         hdIsHostPermission: $('#hdIsHostPermission'),
         spanFileName: $('#spanFileName'),
@@ -13,7 +14,8 @@
         tableResult: $('#tableResult'),
         btnDownloadTemplate: $('#btnDownloadTemplate'),
         btnImport: $('#btnImport'),
-        btnResultValidationClose: $('#btnResultValidationClose')
+        btnResultValidationClose: $('#btnResultValidationClose'),
+        overwriteCheckBox: $('#overwriteCheckbox')
     };
 
     let isHostPermission = domElements.hdIsHostPermission.attr('IsHostPermission') === "True";
@@ -155,6 +157,23 @@
         }
     }
 
+    function OverwirteEvidences()
+    {
+        if (domElements.overwriteCheckBox.prop('checked')) {
+            common.showConfirmation("<div class='popup - content'>Are you sure about this? For confirm this action, all evidences from account in the list will be <strong style='color: red'> REMOVED </strong></div>",
+                () => {
+                    isOverwriteEvidence = true;
+                    domElements.overwriteCheckBox.prop('checked', true);},
+                () => {
+                    isOverwriteEvidence = false;
+                    domElements.overwriteCheckBox.prop('checked', false);
+                }
+            );
+        }
+        else
+            isOverwriteEvidence = false;
+    }
+
     function Initial() {
         domElements.divNote.prop('hidden', false);
         domElements.divResultParseFile.prop('hidden', true);
@@ -176,8 +195,10 @@
 
         domElements.btnNoteToggle.on('click', () => ToggleNote());        
 
-        if(isHostPermission)
+        if (isHostPermission) {
             domElements.btnImport.on('click', () => ImportEvidences());
+            domElements.overwriteCheckBox.on('click', () => OverwirteEvidences());
+        }
     }
 
     $(document).ready(function () {
