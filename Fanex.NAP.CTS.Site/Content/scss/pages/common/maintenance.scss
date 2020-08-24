@@ -1,0 +1,131 @@
+﻿
+html {
+    font-size: 10px;
+    /*font-size: calc(100vw / 19.2);*/
+}
+body {
+    font-family: "Lato", Arial, Tahoma, sans-serif;
+}
+
+.container {
+    margin: 9.9rem 14.7rem 10rem 16.4rem;
+
+    .img {
+        width: 100%;
+        height: auto;
+    }
+}
+
+.header {
+    .img-logo {
+        max-width: 141px;
+    }
+}
+
+.content {
+    margin-top: 4.7rem;
+    display: flex;
+
+    .content-left {
+        width: 46.265%;
+
+        .img-content {
+            max-width: 737px;
+            margin-left: -0.9rem;
+        }
+    }
+
+    .content-right {
+        flex: 1;
+        text-align: center;
+        align-self: center;
+        margin-left: 2.6rem;
+
+        .title {
+            color: #1A5290;
+            font-weight: 900;
+            font-size: 5.6rem;
+            line-height: 1.196429;
+            margin-bottom: 1.9rem;
+        }
+
+        .text {
+            font-weight: bold;
+            font-size: 2.6rem;
+            line-height: 1.192308;
+            color: #474747;
+            padding: 0 15rem;
+        }
+    }
+}
+
+@media screen and (max-width: 1525.99px) {
+    .container {
+        margin: 5.9rem 10.7rem 0 10.4rem;
+    }
+    .content {
+        display: block;
+
+        .content-left {
+            width: 100%;
+            text-align: center;
+
+            .img-content {
+                width: 45%;
+            }
+        }
+
+        .content-right {
+            margin-top: 3rem;
+            .title {
+                font-size: 3.6rem;
+            }
+
+            .text {
+                font-size: 2rem;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 767.99px) {
+    .container {
+        margin: 3rem;
+    }
+
+    .content {
+      
+        .content-right {
+            margin-top: 3rem;
+
+            .title {
+                font-size: 3.6rem;
+            }
+
+            .text {
+                font-size: 2rem;
+                padding: 0 6rem;
+            }
+        }
+    }
+}
+
+
+@media screen and (max-width: 539.99px) {
+    .container {
+        margin: 2rem;
+    }
+
+    .content {
+        .content-right {
+            .title {
+                font-size: 2.6rem;
+            }
+
+            .text {
+                padding: 0;
+                font-size: 1.6rem;
+            }
+        }
+    }
+}

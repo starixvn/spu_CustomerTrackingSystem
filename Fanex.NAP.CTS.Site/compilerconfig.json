@@ -78,5 +78,10 @@
     "outputFile": "Content/scss/vendors/highcharts/highcharts.css",
     "inputFile": "Content/scss/vendors/highcharts/highcharts.scss",
     "sourceMap": false
+  },
+  {
+    "outputFile": "Content/scss/pages/common/maintenance.css",
+    "inputFile": "Content/scss/pages/common/maintenance.scss",
+    "sourceMap": false
   }
 ]

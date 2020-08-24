@@ -139,7 +139,7 @@
                 marginBottom: 0,
                 marginRight: 25,
                 marginLeft: 0,
-                spacing: [12, 12, 32, 0],
+                spacing: [0, 12, 0, 0],
                 plotBackgroundColor: null,
                 plotBorderWidth: null,
                 plotShadow: false,
@@ -161,7 +161,7 @@
             },
             tooltip: {
                 formatter: function () {
-                    return '<b><small>' + this.key + '</small></b><br>' + 'Turnover: <b>' + Highcharts.numberFormat(this.point.turnOver, 0, '', ',')  +
+                    return '<b><small>' + this.key + '</small></b><br>' + 'Turnover: <b>' + Highcharts.numberFormat(this.point.turnOver, 0, '', ',') +
                         '</b>';
                 }
             },
@@ -169,9 +169,9 @@
                 layout: 'vertical',
                 align: 'right',
                 verticalAlign: 'middle',
-                y: 14,
+                y: 2,
                 x: 0,
-                padding: 10,
+                padding: -3,
                 itemMarginTop: 0,
                 itemMarginBottom: 5,
                 itemStyle: {
@@ -184,24 +184,19 @@
                 pie: {
                     allowPointSelect: true,
                     cursor: 'pointer',
-                    borderWidth: 1,
                     borderColor: null,
+                    borderWidth: 0,
                     dataLabels: {
-                        color: '#000000',
                         enabled: true,
-                        distance: -25,
-                        format: '{point.percentage:.0f} %',
-                        filter: {
-                            property: 'percentage',
-                            operator: '>',
-                            value: 1
-                        },
+                        distance: 5,
+                        format: '{point.percentage:.1f} %',
+                        padding: 0,
                         style: {
                             fontWeight: 'normal',
                             fontSize: '12px',
                         },
-                        connectorColor: 'inherit',
-                        connectorPadding: 0
+                        connectorPadding: 0,
+                        crookDistance: "50%",
                     },
                     showInLegend: true,
                     point: {
@@ -227,7 +222,7 @@
                     },
                     chartOptions: {
                         chart: {
-                            marginLeft: -95,
+                            marginLeft: -100,
                         },
                         legend: {
                             itemWidth: 105,

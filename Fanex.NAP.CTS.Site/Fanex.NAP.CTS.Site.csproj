@@ -425,8 +425,14 @@
     <Content Include="Content\images\expand_all.png" />
     <Content Include="Content\images\flagged_device_by_evidence.png" />
     <Content Include="Content\images\graph_view.png" />
+    <Content Include="Content\images\logo.jpeg" />
+    <Content Include="Content\images\logo.png" />
+    <Content Include="Content\images\maintenance.jpeg" />
+    <Content Include="Content\images\maintenance.png" />
     <Content Include="Content\images\statistic_empty.png" />
     <Content Include="Content\scss\components\_charts.scss" />
+    <Content Include="Content\images\logo.webp" />
+    <Content Include="Content\images\maintenance.webp" />
     <None Include="Content\scss\components\_notification.scss" />
     <Content Include="Content\scss\fonts\Fraud-Sensor\fonts\CTS.svg" />
     <Content Include="Content\scss\images\chevron-down.png" />
@@ -454,6 +460,12 @@
     <Content Include="Content\scss\pages\associated-account-monitor\associated-account-monitor.min.css">
       <DependentUpon>associated-account-monitor.css</DependentUpon>
     </Content>
+    <Content Include="Content\scss\pages\common\maintenance.css">
+      <DependentUpon>maintenance.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\scss\pages\common\maintenance.min.css">
+      <DependentUpon>maintenance.css</DependentUpon>
+    </Content>
     <Content Include="Content\scss\pages\evidence\evidence.css">
       <DependentUpon>evidence.scss</DependentUpon>
     </Content>
@@ -463,6 +475,7 @@
     <Content Include="Content\scss\pages\account\account.scss" />
     <Content Include="App_Data\Excel Template\ImportEvidences\template.xlsx" />
     <Content Include="Content\scss\pages\associated-account-monitor\associated-account-monitor.scss" />
+    <Content Include="Content\scss\pages\common\maintenance.scss" />
     <None Include="Content\scss\pages\problem-account-monitor\problem-account-monitor.scss" />
     <None Include="Content\scss\pages\import-evidences\import-evidences.scss" />
     <Content Include="Content\scss\pages\import-evidences\import-evidences.css">

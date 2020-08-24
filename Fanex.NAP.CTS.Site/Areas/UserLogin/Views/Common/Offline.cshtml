@@ -1,64 +1,50 @@
 ﻿@{
     Layout = null;
 }
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,900" rel="stylesheet">
+    <link rel="stylesheet" href="~/Content/scss/fonts/Fraud-Sensor/style.css">
+    <link rel="stylesheet" href="~/Content/scss/base/reset.css">
+    <link rel="stylesheet" href="~/Content/scss/pages/common/maintenance.css">
+    <link rel="shortcut icon" href="~/favicon.ico" />
     <title>@ViewResources.Offline</title>
-    <style type="text/css">
-        html, body
-        {
-            border: 0;
-            margin: 0;
-            outline: 0;
-            padding: 0;
-        }
-
-        body
-        {
-            color: #333;
-            font-family: 'Segoe UI' , Tahoma, Arial, Sans-Serif;
-        }
-
-        .container
-        {
-            background-color: #549cba;
-            margin: 0 auto;
-            padding: 20px;
-            width: 960px;
-        }
-
-        h1
-        {
-            border-bottom: solid 1px #fff;
-            color: #fff;
-            font-weight: normal;
-            padding: 0 0 10px;
-        }
-
-        a
-        {
-            color: #fff;
-            text-decoration: none;
-        }
-
-        a:hover
-        {
-            text-decoration: underline;
-        }
-    </style>
 </head>
 <body>
     <div class="container">
-        <h1>
-            @ViewResources.Maintenance</h1>
-        <p>
-            This site is currently unavailable due to scheduled maintenance.<br />
-            This downtime will last from <span class="em">@(ViewBag.UmtFrom)</span> &rarr; <span
-                class="em">@(ViewBag.UmtTo)</span> (GMT+8). Thanks for your patience!
-        </p>
+        <div class="header">
+            <picture>
+                <source srcset="@Url.Content("~/Content/images/logo.webp")" type="image/webp">
+                <source srcset="@Url.Content("~/Content/images/logo.jpeg")" type="image/jpeg">
+                <img class="img img-logo" src="@Url.Content("~/Content/images/logo.png")" alt="maintenance">
+            </picture>
+        </div>
+
+        <div class="content">
+            <div class="content-left">
+                <picture>
+                    <source srcset="@Url.Content("~/Content/images/maintenance.webp")" type="image/webp">
+                    <source srcset="@Url.Content("~/Content/images/maintenance.jpeg")" type="image/jpeg">
+                    <img class="img img-content" src="@Url.Content("~/Content/images/maintenance.png")" alt="maintenance">
+                </picture>
+            </div>
+
+            <div class="content-right">
+                <h1 class="title">
+                    This site is currently unavailable due to scheduled maintenance.
+                </h1>
+                <h4 class="text">
+                    This downtime will last from <span class="em">@(ViewBag.UmtFrom)</span> &rarr; <span class="em">@(ViewBag.UmtTo)</span> (GMT+8). Thanks for your patience!
+                </h4>
+            </div>
+        </div>
+        @*<h1>
+            @ViewResources.Maintenance</h1>*@
     </div>
 </body>
 </html>
