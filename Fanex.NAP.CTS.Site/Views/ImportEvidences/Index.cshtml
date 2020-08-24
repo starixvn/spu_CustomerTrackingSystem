@@ -14,7 +14,7 @@
             <span id="spanFileName" class="fileName">Select file..</span>
             <input id="btnBrowse" type="button" class="uploadButton" value="Browse..." />
         </div>
-        <label class="container-checkbox">
+        <label class="container-checkbox" id="containerCheckbox">
             Overwrite Evidence List
             <input id="overwriteCheckbox" type="checkbox">
             <span class="checkmark"></span>
@@ -142,7 +142,8 @@
     </div>
 
     <div class="hide">
-        <input id="hdIsHostPermission" type="hidden" IsHostPermission="@Model.ToString()" />
+        <input id="hdIsHostPermission" type="hidden" IsHostPermission="@Model.IsHostPermission.ToString()" />
+        <input id="hdIsOverwritePermission" type="hidden" IsOverwritePermission="@Model.IsOverwritePermission.ToString()" />
     </div>
 </div>
 

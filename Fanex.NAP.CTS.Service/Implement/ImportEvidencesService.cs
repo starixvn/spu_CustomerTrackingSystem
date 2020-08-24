@@ -190,7 +190,7 @@
             }
         }
         
-        public void InsertAccountEvidence(IEnumerable<ResultCheckAccountEvidenceModel> resultCheckAccountEvidenceList, string fileName, int userId, string fileErrorTemplate)
+        public void InsertAccountEvidence(IEnumerable<ResultCheckAccountEvidenceModel> resultCheckAccountEvidenceList, string fileName, int userId, string fileErrorTemplate, bool isOverwrite)
         {
             _fileErrorTemplate = fileErrorTemplate;
 
@@ -215,6 +215,7 @@
                     {
                         NewAccountEvidences = jsonData,
                         UserId = userId,
+                        IsOverwrite = isOverwrite,
                         ErrorMessage = string.Empty
                     };                    
 

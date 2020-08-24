@@ -82,4 +82,6 @@ public static class FSFunctionKeys
     public const string NotificationSettings = "NotificationSettings";
 
     public const string BettingStatistics = "BettingStatistics";
+
+    public const string OverwriteEvidences = "OverwriteEvidences";
 }

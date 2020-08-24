@@ -44,7 +44,16 @@
                             FSFunctionKeys.ImportEvidences,
                             NAP.Core.Business.Constant.Policy.Host);
 
-            return View(isHostPermission);
+            var isOverwritePermission = userService.IsHavingPermission(CurrentSession.UserId,
+                          NapSettings.Settings.SiteId,
+                          FSFunctionKeys.OverwriteEvidences,
+                          NAP.Core.Business.Constant.Policy.Read);
+
+            return View(new EvidencePermissionViewModel
+            {
+                IsHostPermission = isHostPermission,
+                IsOverwritePermission = isOverwritePermission
+            });
         }
 
         public ActionResult DownloadTemplateExcel()
@@ -57,8 +66,9 @@
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.ImportEvidences, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [NapAuth(FunctionKey = FSFunctionKeys.OverwriteEvidences, Policy = NAP.Core.Business.Constant.Policy.Read)]
         [HttpPost]
-        public ActionResult ImportFromExcel()
+        public ActionResult ImportFromExcel(bool isOverwrite)
         {
             var file = Request.Files[0] as HttpPostedFileBase;
             var fileName = file.FileName;
@@ -77,8 +87,7 @@
                     .Select(x => x);
 
                 if (!accountEvidenceErrorList.Any())
-                {
-                    InsertAccountEvidence(fileName, CurrentSession.UserId, resultCheckAccountEvidenceList);
+                    InsertAccountEvidence(fileName, CurrentSession.UserId, resultCheckAccountEvidenceList, isOverwrite);
 
                     var associatedAccountList = _customerEvidenceService.GetAssociatedAccounts(
                         new GetAssociatedAccountByCTSCustIdsCriteria
@@ -143,12 +152,12 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private void InsertAccountEvidence(string fileName, int userId, IEnumerable<ResultCheckAccountEvidenceModel> resultCheckAccountEvidenceList)
+        private void InsertAccountEvidence(string fileName, int userId, IEnumerable<ResultCheckAccountEvidenceModel> resultCheckAccountEvidenceList, bool isOverwrite)
         {
             Task.Run(() =>
             {
                 var template = Server.MapPath(ImportTemplate);
-                _importEvidencesService.InsertAccountEvidence(resultCheckAccountEvidenceList, fileName, userId, template);
+                _importEvidencesService.InsertAccountEvidence(resultCheckAccountEvidenceList, fileName, userId, template, isOverwrite);
             });
         }
     }

@@ -17,7 +17,7 @@
 
         IEnumerable<ResultCheckAccountEvidenceModel> CheckRuleAddAccountEvidence();
 
-        void InsertAccountEvidence(IEnumerable<ResultCheckAccountEvidenceModel> resultCheckAccountEvidenceList, string fileName, int userId, string fileErrorTemplate);
+        void InsertAccountEvidence(IEnumerable<ResultCheckAccountEvidenceModel> resultCheckAccountEvidenceList, string fileName, int userId, string fileErrorTemplate, bool isOverwrite);
 
         IEnumerable<RawAccountEvidenceModel> GetRawAccountEvidences();
 

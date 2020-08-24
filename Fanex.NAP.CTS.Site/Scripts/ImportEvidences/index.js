@@ -3,6 +3,7 @@
     let isOverwriteEvidence = false;
     let domElements = {
         hdIsHostPermission: $('#hdIsHostPermission'),
+        hdIsOverwritePermission: $('#hdIsOverwritePermission'),
         spanFileName: $('#spanFileName'),
         inputFileUpload: $('#inputFileUpload'),
         btnBrowse: $('#btnBrowse'),
@@ -15,10 +16,13 @@
         btnDownloadTemplate: $('#btnDownloadTemplate'),
         btnImport: $('#btnImport'),
         btnResultValidationClose: $('#btnResultValidationClose'),
-        overwriteCheckBox: $('#overwriteCheckbox')
+        overwriteCheckBox: $('#overwriteCheckbox'),
+        containerCheckBox: $('#containerCheckbox')
     };
 
     let isHostPermission = domElements.hdIsHostPermission.attr('IsHostPermission') === "True";
+    let isOverwritePermission = domElements.hdIsOverwritePermission.attr('IsOverwritePermission') === "True";
+    let isEnableOverwriteButton = (isHostPermission && isOverwritePermission);
 
     function ImportEvidences() {
         let fileName = domElements.inputFileUpload.val();
@@ -29,9 +33,10 @@
             let files = fileUpload.files;
 
             formdata.append(files[0].name, files[0]);
-            
+            formdata.append("isOverwrite", isOverwriteEvidence);
+
             $.ajax(common.modifyRelativeUrl('ImportEvidences/ImportFromExcel'), {
-                type: 'POST',               
+                type: 'POST',
                 data: formdata,
                 contentType: false,
                 processData: false,
@@ -180,6 +185,8 @@
         domElements.divResult.prop('hidden', true);
         domElements.divValidation.prop('hidden', true);        
         domElements.btnImport.prop('disabled', !isHostPermission);
+        domElements.overwriteCheckBox.prop('disabled', !isEnableOverwriteButton);
+
 
         domElements.btnDownloadTemplate.on('click', function () {
             common.downloadFile(common.modifyRelativeUrl('ImportEvidences/DownloadTemplateExcel'), '0');
@@ -196,8 +203,14 @@
         domElements.btnNoteToggle.on('click', () => ToggleNote());        
 
         if (isHostPermission) {
-            domElements.btnImport.on('click', () => ImportEvidences());
+            domElements.btnImport.on('click', () => ImportEvidences());      
+        }
+
+        if (isEnableOverwriteButton) {
             domElements.overwriteCheckBox.on('click', () => OverwirteEvidences());
+        }
+        else {
+            domElements.containerCheckBox.addClass('none-pointer');
         }
     }
 
