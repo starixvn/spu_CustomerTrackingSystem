@@ -2254,6 +2254,6 @@ body {
       display: block; } }
 
 .none-pointer {
-  opacity: 0.2;
+  color: #B1B1B1;
   pointer-events: none;
   cursor: not-allowed; }
