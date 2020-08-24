@@ -642,7 +642,7 @@
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult AddException(UpdateAccountExceptionModel model)
+        public string AddException(UpdateAccountExceptionModel model)
         {
             model.UserId = CurrentSession.UserId;
 
@@ -665,28 +665,50 @@
                             CustIDList = string.Join(",", associatedAccountList)
                         });
                 }
+
+                return "Cleaned Accounts: " + string.Join(",", associatedAccountList);
             }
 
-            return Json(new { errorCode = result }, JsonRequestBehavior.AllowGet);
+            return "";// Json(new { errorCode = result }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult RemoveException(UpdateAccountExceptionModel model)
+        public string RemoveException(UpdateAccountExceptionModel model)
         {
             model.UserId = CurrentSession.UserId;
 
             var result = _accountService.RemoveAccountException(model);
 
-            return Json(new
+            if (result == 0)
+            {
+                var associatedAccountList = _customerEvidenceService.GetAssociatedAccounts(
+                          new GetAssociatedAccountByCTSCustIdsCriteria
+                          {
+                              CTSCustIdList = model.FromCTSCustId.ToString() + "," + model.ToCTSCustId.ToString()
+                          });
+
+                if (associatedAccountList.Any())
+                {
+                    _customerEvidenceService.UpdateBetLimitOfFlaggedCustomer(
+                        new UpdateBetLimitByEvidenceAddingCriteria
+                        {
+                            CustIDList = string.Join(",", associatedAccountList)
+                        });
+                }
+
+                return "Evidenced Accounts: " + string.Join(",", associatedAccountList);
+            }
+
+            return "";/* Json(new
             {
                 errorCode = result
-            }, JsonRequestBehavior.AllowGet);
+            }, JsonRequestBehavior.AllowGet);*/
         }
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult PlaceEvidence(UpdatePlaceEvidenceModel model)
+        public string PlaceEvidence(UpdatePlaceEvidenceModel model)
         {
             model.UserId = model.UserId == 0 ? CurrentSession.UserId : model.UserId;
             var result = _accountService.PlaceEvidence(model);
@@ -704,7 +726,7 @@
                             CustIDList = string.Join(",", associatedAccountList)
                         });
                 }
-
+                
                 Task.Run(() =>
                 {
 
@@ -717,14 +739,16 @@
                         LogService.Error(ex.Message);
                     }
                 });
-            }
+                
 
-            return Json(result, JsonRequestBehavior.AllowGet);
+                return "Evidenced Accounts: " + string.Join(",", associatedAccountList);
+            }
+            return ""; // Json(result, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult RemoveFlaggedEvidence(RemoveEvidenceModel model)
+        public string RemoveFlaggedEvidence(RemoveEvidenceModel model)
         {
             model.UserId = CurrentSession.UserId;
 
@@ -748,14 +772,16 @@
                             CustIDList = string.Join(",", associatedAccountList)
                         });
                 }
+
+                return "Cleaned Accounts: " + string.Join(",", associatedAccountList);
             }
 
-            return Json(result, JsonRequestBehavior.AllowGet);
+            return ""; // Json(result, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult RetractAffectedEvidence(RemoveEvidenceModel model)
+        public string RetractAffectedEvidence(RemoveEvidenceModel model)
         {
             model.UserId = CurrentSession.UserId;
 
@@ -778,20 +804,31 @@
                             CustIDList = string.Join(",", associatedAccountList)
                         });
                 }
+
+                return "Cleaned Accounts: " + string.Join(",", associatedAccountList);
             }
 
-            return Json(result, JsonRequestBehavior.AllowGet);
+            return "";// Json(result, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult RestoreAffectedEvidence(RemoveEvidenceModel model)
+        public string RestoreAffectedEvidence(RemoveEvidenceModel model)
         {
             model.UserId = CurrentSession.UserId;
 
             var result = _accountService.RestoreAffectedEvidence(model);
 
-            return Json(result, JsonRequestBehavior.AllowGet);
+            if (result == 0)
+            {
+                _customerEvidenceService.UpdateBetLimitOfFlaggedCustomer(
+                          new UpdateBetLimitByEvidenceAddingCriteria
+                          {
+                              CustIDList = model.CTSCustId.ToString()
+                          });
+            }
+
+            return "Evidenced Accounts: " + model.CTSCustId.ToString();// Json(result, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

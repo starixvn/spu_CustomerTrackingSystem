@@ -58,7 +58,7 @@
 
         [NapAuth(FunctionKey = FSFunctionKeys.ImportEvidences, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [HttpPost]
-        public ActionResult ImportFromExcel()
+        public string ImportFromExcel()
         {
             var file = Request.Files[0] as HttpPostedFileBase;
             var fileName = file.FileName;
@@ -94,16 +94,18 @@
                                 CustIDList = string.Join(",", associatedAccountList)
                             });
                     }
+
+                    return "Evidenced Accounts: " + string.Join(",", associatedAccountList);
                 }
-                
-                return ReturnResultCheckAccountEvidence(fileName, accountEvidenceErrorList);
+
+                //return ReturnResultCheckAccountEvidence(fileName, accountEvidenceErrorList);
             }
 
-            return Json(new ResultImportViewModel {
+            return "";/* Json(new ResultImportViewModel {
                 FileName = fileName,
                 ErrorCode = 2,
                 ErrorMessage = errorParseFile
-            }, JsonRequestBehavior.AllowGet);
+            }, JsonRequestBehavior.AllowGet);*/
         }
 
         private ActionResult ReturnResultCheckAccountEvidence(string fileName, IEnumerable<ResultCheckAccountEvidenceModel> accountEvidenceErrorList)
