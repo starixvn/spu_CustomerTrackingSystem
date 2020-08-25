@@ -66,10 +66,19 @@
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.ImportEvidences, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        [NapAuth(FunctionKey = FSFunctionKeys.OverwriteEvidences, Policy = NAP.Core.Business.Constant.Policy.Read)]
         [HttpPost]
         public ActionResult ImportFromExcel(bool isOverwrite)
         {
+            IUserService userService = new UserService();
+
+            var isOverwritePermission = userService.IsHavingPermission(CurrentSession.UserId,
+                    NapSettings.Settings.SiteId,
+                    FSFunctionKeys.OverwriteEvidences,
+                    NAP.Core.Business.Constant.Policy.Read);
+
+            //case: being updated overwrite per while using import evidence feature
+            isOverwrite = isOverwritePermission ? isOverwrite : false;   
+
             var file = Request.Files[0] as HttpPostedFileBase;
             var fileName = file.FileName;
             var fileExtension = Path.GetExtension(file.FileName).ToLower();
@@ -80,7 +89,7 @@
 
             if (errorParseFile == string.Empty)
             {
-                var resultCheckAccountEvidenceList = _importEvidencesService.CheckRuleAddAccountEvidence();
+                var resultCheckAccountEvidenceList = _importEvidencesService.CheckRuleAddAccountEvidence(isOverwrite);
 
                 var accountEvidenceErrorList = resultCheckAccountEvidenceList
                     .Where(x => x.RowStatus != string.Empty)

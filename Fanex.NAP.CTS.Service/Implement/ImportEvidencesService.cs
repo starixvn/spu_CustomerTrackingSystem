@@ -119,7 +119,7 @@
             return workbook.ToBytes();
         }
 
-        public IEnumerable<ResultCheckAccountEvidenceModel> CheckRuleAddAccountEvidence()
+        public IEnumerable<ResultCheckAccountEvidenceModel> CheckRuleAddAccountEvidence(bool isOverwrite)
         {
             try
             {
@@ -161,7 +161,8 @@
 
                 var criteria = new CheckAccountEvidenceCriteria
                 {
-                    NewAccountEvidences = jsonData
+                    NewAccountEvidences = jsonData,
+                    IsOverwrite = isOverwrite
                 };
             
                 using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
