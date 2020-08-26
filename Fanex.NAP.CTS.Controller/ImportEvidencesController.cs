@@ -14,17 +14,26 @@
     using Fanex.NAP.Core.Configuration;
     using Fanex.NAP.CTS.Model.ImportEvidences;
     using System.Threading.Tasks;
+    using Fanex.NAP.CTS.Service.Implement;
+    using Fanex.NAP.CTS.Criteria.Account;
+    using Fanex.NAP.CTS.Core.Helpers.Xml;
 
     [NapAuth(FunctionKey = FSFunctionKeys.ImportEvidences, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class ImportEvidencesController : BaseController
     {
         private const string ImportTemplate = "~/App_Data/Excel Template/ImportEvidences/template.xlsx";
+
         private readonly IImportEvidencesService _importEvidencesService;
+
+        private readonly ICustomerEvidenceService _customerEvidenceService;
 
         public override string BaseControllerName { get => Consts.MenuItemController; }
 
-        public ImportEvidencesController() 
-            => _importEvidencesService = new ImportEvidencesService();
+        public ImportEvidencesController()
+        {
+            _importEvidencesService = new ImportEvidencesService();
+            _customerEvidenceService = new CustomerEvidenceService();
+        }
 
         public ActionResult Index()
         {
@@ -68,8 +77,25 @@
                     .Select(x => x);
 
                 if (!accountEvidenceErrorList.Any())
+                {
                     InsertAccountEvidence(fileName, CurrentSession.UserId, resultCheckAccountEvidenceList);
-                
+
+                    var associatedAccountList = _customerEvidenceService.GetAssociatedAccounts(
+                        new GetAssociatedAccountByCTSCustIdsCriteria
+                        {
+                            CTSCustIdList = string.Join(",", resultCheckAccountEvidenceList.Select(c => c.CTSCustID).ToList())
+                        });
+
+                    if (associatedAccountList.Any())
+                    {
+                        _customerEvidenceService.UpdateBetLimitOfFlaggedCustomer(
+                            new UpdateBetLimitByEvidenceAddingCriteria
+                            {
+                                CustIDList = string.Join(",", associatedAccountList)
+                            });
+                    }
+                }
+
                 return ReturnResultCheckAccountEvidence(fileName, accountEvidenceErrorList);
             }
 

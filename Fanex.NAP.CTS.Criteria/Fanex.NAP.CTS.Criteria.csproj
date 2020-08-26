@@ -74,6 +74,11 @@
     <Compile Include="Account\CustomerEsportAutoSuspendStatusCriteria.cs" />
     <Compile Include="Account\CustomerEvidenceByCTSCustIdCriteria.cs" />
     <Compile Include="Account\CustomerAssociationByCTSCustIdCriteria.cs" />
+    <Compile Include="Account\CustomerEvidence\GetCleanAccountByCTSCustIdsCriteria.cs" />
+    <Compile Include="Account\CustomerEvidence\UpdateBetLimitByEvidenceRemovingCriteria.cs" />
+    <Compile Include="Account\CustomerEvidence\UpdateBetLimitByEvidenceAddingCriteria.cs" />
+    <Compile Include="Account\CustomerEvidence\GetRemoveEvidenceAssociatedAccountCriteria.cs" />
+    <Compile Include="Account\CustomerEvidence\GetAssociatedAccountByCTSCustIdsCriteria.cs" />
     <Compile Include="Account\CustomerFlagInfoByCTSCustIdCriteria.cs" />
     <Compile Include="Account\CustomerGeneralStatusCriteria.cs" />
     <Compile Include="Account\CustomerLastTicketDateCriteria.cs" />

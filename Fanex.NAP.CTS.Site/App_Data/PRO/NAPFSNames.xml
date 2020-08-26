@@ -561,5 +561,27 @@
         SpName="CTS_DC_RemoveAssociatedAccountMonitor"
         DbName="MySQL.CTS_DataCenter"/>
   </Function>
+
+  <Function name="BetLimit">
+    <Setting Key="NAP_BLControl_EvidenceFlagged"
+        SpName="NAP_BLControl_EvidenceFlagged"
+        DbName="DBTXN.CustDB.bodbAdminNet"/>
+
+    <Setting Key="NAP_BLControl_EvidenceUnflagged"
+        SpName="NAP_BLControl_EvidenceUnflagged"
+        DbName="DBTXN.CustDB.bodbAdminNet"/>
+
+    <Setting Key="CTS_DC_GetAssociationCustomersByCTSCustIDList"
+        SpName="CTS_DC_GetAssociationCustomersByCTSCustIDList"
+        DbName="MySQL.CTS_DataCenter"/>
+
+    <Setting Key="CTS_DC_GetCleanCustIDsFromCustIDList"
+        SpName="CTS_DC_GetCleanCustIDsFromCustIDList"
+        DbName="MySQL.CTS_DataCenter"/>
+
+    <Setting Key="CTS_DC_GetAssociatedCustIDsWithOtherEvidence"
+        SpName="CTS_DC_GetAssociatedCustIDsWithOtherEvidence"
+        DbName="MySQL.CTS_DataCenter"/>
+  </Function>
   
 </Functions>
