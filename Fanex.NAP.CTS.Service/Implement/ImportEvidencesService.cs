@@ -193,7 +193,7 @@
         
         public void InsertAccountEvidence(IEnumerable<ResultCheckAccountEvidenceModel> resultCheckAccountEvidenceList, string fileName, int userId, string fileErrorTemplate, bool isOverride)
         {
-            var timeSpan = long.Parse(DateTime.Now.ToString("yyyyMMddHHmmss"));
+            var sessionId = long.Parse(DateTime.Now.ToString("yyyyMMddHHmmss"));
 
             _fileErrorTemplate = fileErrorTemplate;
 
@@ -208,7 +208,7 @@
 
             var loopAddAccountEvidenceList = addAccountEvidenceList.Chunk(ConfigSettings.ImportEvidenceChunkSize);
 
-            var hasOverrideSelection = isOverride ? RemoveOldEvidence(addAccountEvidenceList, timeSpan, false, false) : null;
+            var hasOverrideSelection = isOverride ? RemoveOldEvidence(addAccountEvidenceList, sessionId, false, false) : null;
 
             if (hasOverrideSelection == null || hasOverrideSelection.ErrorCode == 0)
             {
@@ -230,7 +230,7 @@
                     catch (Exception ex)
                     {
                         if (isOverride)
-                            RemoveOldEvidence(addAccountEvidenceList, timeSpan, true, false);
+                            RemoveOldEvidence(addAccountEvidenceList, sessionId, true, false);
 
                         SendMail(resultCheckAccountEvidenceList, accountEvidence, userId, ex.Message);
                         LogError(fileName, userId, "at " + DateTime.Now + " " + ex.Message, JsonConvert.SerializeObject(accountEvidence), ex);
@@ -240,7 +240,7 @@
                 }
 
                 if (isOverride)
-                    RemoveOldEvidence(addAccountEvidenceList, timeSpan, false, true);
+                    RemoveOldEvidence(addAccountEvidenceList, sessionId, false, true);
             }
             else
             {
@@ -273,14 +273,14 @@
             }
         }
 
-        public DBResult RemoveOldEvidence(IEnumerable<AddAccountEvidenceModel> accountEvidences, long timeSpan, bool isRollBack, bool isClearLog)
+        public DBResult RemoveOldEvidence(IEnumerable<AddAccountEvidenceModel> accountEvidences, long sessionId, bool isRollBack, bool isClearLog)
         {
             var jsonData = JsonConvert.SerializeObject(accountEvidences.Select(c => new {c.CTSCustID}).Distinct());
 
             var criteria = new RemoveOldEvidencesCriteria
             {
                 NewAccountEvidences = jsonData,
-                TimeSpan = timeSpan,
+                SessionId = sessionId,
                 IsRollBack = isRollBack, 
                 IsClearLog = isClearLog
             };

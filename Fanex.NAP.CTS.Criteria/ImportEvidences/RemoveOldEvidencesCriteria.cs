@@ -8,13 +8,13 @@
         [SpParam(SqlParamName = "ip_CTSCustIDs")]
         public string NewAccountEvidences { get; set; }
 
-        [SpParam(SqlParamName = "ip_Timetemp")]
-        public long TimeSpan { get; set; }
+        [SpParam(SqlParamName = "ip_SesionId")]
+        public long SessionId { get; set; }
 
-        [SpParam(SqlParamName = "ip_Rollback")]
+        [SpParam(SqlParamName = "ip_IsRollback")]
         public bool IsRollBack { get; set; }
 
-        [SpParam(SqlParamName = "ip_ClearHistory")]
+        [SpParam(SqlParamName = "ip_IsClearLog")]
         public bool IsClearLog { get; set; }
 
         [SpParam(SqlParamName = "op_ErrorMessage")]
