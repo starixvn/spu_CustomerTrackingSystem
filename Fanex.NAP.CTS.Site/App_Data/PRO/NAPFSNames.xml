@@ -536,6 +536,10 @@
     <Setting Key="CTS_DC_AddMultiCustomerEvidence"
            SpName="CTS_DC_AddMultiCustomerEvidence"
            DbName="MySQL.CTS_DataCenter" />
+
+    <Setting Key="CTS_DC_RemoveOldEvidence"
+          SpName="CTS_DC_RemoveOldEvidence"
+          DbName="MySQL.CTS_DataCenter" />
   </Function>
 
   <Function Name="InsertCTSUser">

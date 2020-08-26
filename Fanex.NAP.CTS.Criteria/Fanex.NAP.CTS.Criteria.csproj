@@ -142,6 +142,7 @@
     <Compile Include="Home\SearchResultCriteria.cs" />
     <Compile Include="ImportEvidences\InsertAccountEvidenceCriteria.cs" />
     <Compile Include="ImportEvidences\CheckAccountEvidenceCriteria.cs" />
+    <Compile Include="ImportEvidences\RemoveOldEvidencesCriteria.cs" />
     <Compile Include="MatchMonitor\BalanceUpDateGetCriteria.cs" />
     <Compile Include="MatchMonitor\FraudCaseDetails\ArbitrageDetailsCriteria.cs" />
     <Compile Include="MatchMonitor\FraudCaseDetails\FlaggedAccountCriteria.cs" />

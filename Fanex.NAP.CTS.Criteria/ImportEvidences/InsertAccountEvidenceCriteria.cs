@@ -12,7 +12,7 @@
         public int UserId { get; set; }
 
         [SpParam(SqlParamName = "ip_Override")]
-        public bool IsOverwrite { get; set; }
+        public bool IsOverride { get; set; }
 
         [SpParam(SqlParamName = "op_ErrorMessage")]
         public string ErrorMessage { get; set; }

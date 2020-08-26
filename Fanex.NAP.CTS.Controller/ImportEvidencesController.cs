@@ -70,7 +70,6 @@
         public ActionResult ImportFromExcel(bool isOverwrite)
         {
             IUserService userService = new UserService();
-
             var isOverwritePermission = userService.IsHavingPermission(CurrentSession.UserId,
                     NapSettings.Settings.SiteId,
                     FSFunctionKeys.OverwriteEvidences,
@@ -161,12 +160,12 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private void InsertAccountEvidence(string fileName, int userId, IEnumerable<ResultCheckAccountEvidenceModel> resultCheckAccountEvidenceList, bool isOverwrite)
+        private void InsertAccountEvidence(string fileName, int userId, IEnumerable<ResultCheckAccountEvidenceModel> resultCheckAccountEvidenceList, bool isOverride)
         {
             Task.Run(() =>
             {
                 var template = Server.MapPath(ImportTemplate);
-                _importEvidencesService.InsertAccountEvidence(resultCheckAccountEvidenceList, fileName, userId, template, isOverwrite);
+                _importEvidencesService.InsertAccountEvidence(resultCheckAccountEvidenceList, fileName, userId, template, isOverride);
             });
         }
     }

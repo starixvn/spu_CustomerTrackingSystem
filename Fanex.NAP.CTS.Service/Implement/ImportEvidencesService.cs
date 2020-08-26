@@ -191,8 +191,10 @@
             }
         }
         
-        public void InsertAccountEvidence(IEnumerable<ResultCheckAccountEvidenceModel> resultCheckAccountEvidenceList, string fileName, int userId, string fileErrorTemplate, bool isOverwrite)
+        public void InsertAccountEvidence(IEnumerable<ResultCheckAccountEvidenceModel> resultCheckAccountEvidenceList, string fileName, int userId, string fileErrorTemplate, bool isOverride)
         {
+            var timeSpan = long.Parse(DateTime.Now.ToString("yyyyMMddHHmmss"));
+
             _fileErrorTemplate = fileErrorTemplate;
 
             var addAccountEvidenceList = resultCheckAccountEvidenceList
@@ -206,37 +208,102 @@
 
             var loopAddAccountEvidenceList = addAccountEvidenceList.Chunk(ConfigSettings.ImportEvidenceChunkSize);
 
-            foreach (var accountEvidence in loopAddAccountEvidenceList)
+            var hasOverrideSelection = isOverride ? RemoveOldEvidence(addAccountEvidenceList, timeSpan, false, false) : null;
+
+            if (hasOverrideSelection == null || hasOverrideSelection.ErrorCode == 0)
             {
-                var jsonData = JsonConvert.SerializeObject(accountEvidence);
-
-                try
+                foreach (var accountEvidence in loopAddAccountEvidenceList)
                 {
-                    var criteria = new InsertAccountEvidenceCriteria
+                    try
                     {
-                        NewAccountEvidences = jsonData,
-                        UserId = userId,
-                        IsOverwrite = isOverwrite,
-                        ErrorMessage = string.Empty
-                    };                    
-
-                    using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-                    {
-                        db.ExecuteNonQuery(criteria);
-      
-                        if (!string.IsNullOrWhiteSpace(criteria.ErrorMessage))
+                        var evidencePara = new InsertEvidenceParametersModel
                         {
-                            SendMail(resultCheckAccountEvidenceList, accountEvidence, userId, criteria.ErrorMessage);
-                            LogError(fileName, userId, "at " + DateTime.Now + " " + criteria.ErrorMessage, jsonData);
-                        } 
-                    }                    
+                            CheckAccountEvidenceList = resultCheckAccountEvidenceList,
+                            AccountEvidences = accountEvidence,
+                            FileName = fileName,
+                            UserId = userId,
+                            IsOverride = isOverride
+                        };
+
+                        InsertAccountEvicence(evidencePara);
+                    }
+                    catch (Exception ex)
+                    {
+                        if (isOverride)
+                            RemoveOldEvidence(addAccountEvidenceList, timeSpan, true, false);
+
+                        SendMail(resultCheckAccountEvidenceList, accountEvidence, userId, ex.Message);
+                        LogError(fileName, userId, "at " + DateTime.Now + " " + ex.Message, JsonConvert.SerializeObject(accountEvidence), ex);
+
+                        return;
+                    }
                 }
-                catch (Exception ex)
+
+                if (isOverride)
+                    RemoveOldEvidence(addAccountEvidenceList, timeSpan, false, true);
+            }
+            else
+            {
+                SendMail(resultCheckAccountEvidenceList, null, userId, hasOverrideSelection.ErrorMsg);
+                LogError(fileName, userId, "at " + DateTime.Now + " " + hasOverrideSelection.ErrorMsg, JsonConvert.SerializeObject(addAccountEvidenceList));
+            }         
+        }
+
+        public void InsertAccountEvicence(InsertEvidenceParametersModel evidenceParas)
+        {
+            var jsonData = JsonConvert.SerializeObject(evidenceParas.AccountEvidences);
+
+            var criteria = new InsertAccountEvidenceCriteria
+            {
+                NewAccountEvidences = jsonData,
+                UserId = evidenceParas.UserId,
+                IsOverride = evidenceParas.IsOverride,
+                ErrorMessage = string.Empty
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                db.ExecuteNonQuery(criteria);
+
+                if (!string.IsNullOrWhiteSpace(criteria.ErrorMessage))
                 {
-                    SendMail(resultCheckAccountEvidenceList, accountEvidence, userId, ex.Message);
-                    LogError(fileName, userId, "at " + DateTime.Now + " " + ex.Message, jsonData, ex);
+                    SendMail(evidenceParas.CheckAccountEvidenceList, evidenceParas.AccountEvidences, evidenceParas.UserId, criteria.ErrorMessage);
+                    LogError(evidenceParas.FileName, evidenceParas.UserId, "at " + DateTime.Now + " " + criteria.ErrorMessage, jsonData);
                 }
             }
+        }
+
+        public DBResult RemoveOldEvidence(IEnumerable<AddAccountEvidenceModel> accountEvidences, long timeSpan, bool isRollBack, bool isClearLog)
+        {
+            var jsonData = JsonConvert.SerializeObject(accountEvidences.Select(c => new {c.CTSCustID}).Distinct());
+
+            var criteria = new RemoveOldEvidencesCriteria
+            {
+                NewAccountEvidences = jsonData,
+                TimeSpan = timeSpan,
+                IsRollBack = isRollBack, 
+                IsClearLog = isClearLog
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                db.ExecuteNonQuery(criteria);
+
+                if (string.IsNullOrWhiteSpace(criteria.ErrorMessage))
+                {
+                    return new DBResult
+                    {
+                        ErrorCode = 0,
+                        ErrorMsg = criteria.ErrorMessage
+                    };
+                }
+            }
+
+            return new DBResult
+            {
+                ErrorCode = -1,
+                ErrorMsg = criteria.ErrorMessage
+            };
         }
 
         private void LogError(string fileName, int userId, string error, string jsonData, Exception ex = null)
