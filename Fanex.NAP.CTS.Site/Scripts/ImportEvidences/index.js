@@ -47,6 +47,8 @@
                 },
                 success: function (response) {
                     ResultCheckAccountEvidence(response);
+                    domElements.inputFileUpload.val("");
+                    domElements.spanFileName.text("");
                 },
                 complete: function () {
                     common.closeLoading();
