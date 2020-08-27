@@ -95,6 +95,7 @@
                     .Select(x => x);
 
                 if (!accountEvidenceErrorList.Any())
+                { 
                     InsertAccountEvidence(fileName, CurrentSession.UserId, resultCheckAccountEvidenceList, isOverwrite);
 
                     var associatedAccountList = _customerEvidenceService.GetAssociatedAccounts(
