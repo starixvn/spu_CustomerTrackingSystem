@@ -186,6 +186,9 @@
   <data name="IMPORT_ACCOUNT_EVIDENCE_USERNAME_INVALID" xml:space="preserve">
     <value>Invalid Username.</value>
   </data>
+  <data name="IMPORT_FILE_EMPTY" xml:space="preserve">
+    <value>Empty File</value>
+  </data>
   <data name="INSERT_CTS_USER_ERROR" xml:space="preserve">
     <value>CTS - Insert CTS User error with content: userId: {0} - userName: {1}</value>
   </data>

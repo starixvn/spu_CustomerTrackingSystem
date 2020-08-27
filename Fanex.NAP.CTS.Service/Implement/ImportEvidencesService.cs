@@ -123,6 +123,18 @@
         {
             try
             {
+                if (_checkAccountEvidenceList.Count == 0)
+                {
+                    return new List<ResultCheckAccountEvidenceModel>()
+                    {
+                        new ResultCheckAccountEvidenceModel (){
+                        RowId = -1,
+                        EvidenceID = 0,
+                        CTSCustID = 0,
+                        RowStatus = ResourcesManager.GetValue(ConstsResources.IMPORT_FILE_EMPTY)
+                    }};
+                }
+
                 var exceedlengthUsernameList = _checkAccountEvidenceList
                     .Where(x => x.Username.Length > 50)
                     .Select(x => new ResultCheckAccountEvidenceModel
@@ -146,10 +158,11 @@
                 var duplicateList = _checkAccountEvidenceList.GroupBy(x => new { x.Username, x.EvidenceCode })
                         .Where(g => g.Count() > 1)
                         .Select(x => x.Last())
-                        .Select(x=> new ResultCheckAccountEvidenceModel {
+                        .Select(x => new ResultCheckAccountEvidenceModel
+                        {
                             CTSCustID = 0,
                             EvidenceID = 0,
-                            RowId = x.RowId,                        
+                            RowId = x.RowId,
                             RowStatus = ResourcesManager.GetValue(ConstsResources.IMPORT_ACCOUNT_EVIDENCE_DUPLICATE)
                         });
 
@@ -164,7 +177,7 @@
                     NewAccountEvidences = jsonData,
                     IsOverwrite = isOverwrite
                 };
-            
+
                 using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
                 {
                     var resultVerifyDbList = db.Query<ResultCheckAccountEvidenceModel>(criteria);
@@ -184,7 +197,7 @@
                 resultException.Add(new ResultCheckAccountEvidenceModel
                 {
                     RowId = -1,
-                    RowStatus = "Exception: " + ex.Message                    
+                    RowStatus = "Exception: " + ex.Message
                 });
 
                 return resultException;

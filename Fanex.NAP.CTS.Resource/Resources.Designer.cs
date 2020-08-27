@@ -268,6 +268,15 @@ namespace Fanex.NAP.CTS.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Empty File.
+        /// </summary>
+        internal static string IMPORT_FILE_EMPTY {
+            get {
+                return ResourceManager.GetString("IMPORT_FILE_EMPTY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to CTS - Insert CTS User error with content: userId: {0} - userName: {1}.
         /// </summary>
         internal static string INSERT_CTS_USER_ERROR {
