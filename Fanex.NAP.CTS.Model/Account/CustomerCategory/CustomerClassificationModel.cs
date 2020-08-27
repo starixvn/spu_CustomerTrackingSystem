@@ -33,9 +33,14 @@ namespace Fanex.NAP.CTS.Model.Account.CustomerCategory
         {
             get
             {
-                if(NextScanFromDate == DateTime.MinValue || NextScanToDate == DateTime.MinValue)
+                if (NextScanFromDate == DateTime.MinValue || NextScanToDate == DateTime.MinValue)
                 {
                     return null;
+                }
+
+                if (Equals(NextScanFromDate, NextScanToDate))
+                {
+                    return NextScanFromDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss);
                 }
 
                 return NextScanFromDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss) + " - " + NextScanToDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss);
