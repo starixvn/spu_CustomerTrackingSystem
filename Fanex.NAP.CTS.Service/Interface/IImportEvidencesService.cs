@@ -15,7 +15,7 @@
 
         byte[] DownloadTemplateExcel(string template);
 
-        IEnumerable<ResultCheckAccountEvidenceModel> CheckRuleAddAccountEvidence(bool isOverwrite);
+        IEnumerable<ResultCheckAccountEvidenceModel> CheckRuleAddAccountEvidence(bool isOverride);
 
         void InsertAccountEvidence(IEnumerable<ResultCheckAccountEvidenceModel> resultCheckAccountEvidenceList, string fileName, int userId, string fileErrorTemplate, bool isOverride);
 

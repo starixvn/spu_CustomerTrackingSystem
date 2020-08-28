@@ -101,7 +101,7 @@
                     var associatedAccountList = _customerEvidenceService.GetAssociatedAccounts(
                         new GetAssociatedAccountByCTSCustIdsCriteria
                         {
-                            CTSCustIdList = string.Join(",", resultCheckAccountEvidenceList.Select(c => c.CTSCustID).ToList())
+                            CTSCustIdList = string.Join(",", resultCheckAccountEvidenceList.Select(c => c.CTSCustID).Distinct().ToList())
                         });
 
                     if (associatedAccountList.Any())

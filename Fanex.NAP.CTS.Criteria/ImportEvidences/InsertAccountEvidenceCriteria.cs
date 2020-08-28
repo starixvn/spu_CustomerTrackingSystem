@@ -11,7 +11,7 @@
         [SpParam(SqlParamName = "ip_UserID")]
         public int UserId { get; set; }
 
-        [SpParam(SqlParamName = "ip_Override")]
+        [SpParam(SqlParamName = "ip_IsOverride")]
         public bool IsOverride { get; set; }
 
         [SpParam(SqlParamName = "op_ErrorMessage")]

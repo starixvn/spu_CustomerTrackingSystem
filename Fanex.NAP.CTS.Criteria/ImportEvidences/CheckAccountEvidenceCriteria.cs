@@ -8,8 +8,8 @@
         [SpParam(SqlParamName = "ip_NewAccountEvidences")]
         public string NewAccountEvidences { get; set; }
 
-        [SpParam(SqlParamName = "ip_Override")]
-        public bool IsOverwrite { get; set; }
+        [SpParam(SqlParamName = "ip_IsOverride")]
+        public bool IsOverride { get; set; }
 
         public override string GetSettingKey()
             => "CTS_DC_CheckMultiCustomerEvidence";
