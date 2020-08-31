@@ -8,7 +8,7 @@
         [SpParam(SqlParamName = "ip_CTSCustIDs")]
         public string NewAccountEvidences { get; set; }
 
-        [SpParam(SqlParamName = "ip_SesionId")]
+        [SpParam(SqlParamName = "ip_SessionId")]
         public long SessionId { get; set; }
 
         [SpParam(SqlParamName = "ip_IsRollback")]
