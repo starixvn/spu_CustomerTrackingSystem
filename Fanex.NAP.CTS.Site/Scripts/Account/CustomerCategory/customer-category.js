@@ -246,7 +246,8 @@
                 { targets: [2], className: "text-left", defaultContent: "-" },
                 { targets: [3], className: "text-center", defaultContent: "-" },
                 { targets: [4], className: "text-center", defaultContent: "-" },
-                { targets: [5], className: "text-center", defaultContent: "-" }
+                { targets: [5], className: "text-center", defaultContent: "-"},
+                { targets: [6], className: "text-center", defaultContent: "-" }
             ],
             columns: [
                 { data: obj => obj.CategoryName },
@@ -254,6 +255,7 @@
                 { data: obj => obj.Remark },
                 { data: obj => obj.LastModifiedBy },
                 { data: obj => obj.LastModifiedDate },
+                { data: obj => obj.NextScanDatePeriod },
                 {
                     data: obj => () => {
                         var html = '<span class="icon-edit' + (!isHostPermission ? ' disabled"' : '') + '" title="Edit Category"></span>';

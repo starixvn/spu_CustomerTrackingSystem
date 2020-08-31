@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Fanex.NAP.CTS.Resource.Consts;
+using System;
 
 namespace Fanex.NAP.CTS.Model.Account.CustomerCategory
 {
@@ -23,5 +24,27 @@ namespace Fanex.NAP.CTS.Model.Account.CustomerCategory
         public string ParentCategoryName { get; set; }
 
         public bool IsEnabledDelete { get; set; }
+
+        public DateTime NextScanFromDate { get; set; }
+
+        public DateTime NextScanToDate { get; set; }
+
+        public string NextScanDatePeriod
+        {
+            get
+            {
+                if (NextScanFromDate == DateTime.MinValue || NextScanToDate == DateTime.MinValue)
+                {
+                    return null;
+                }
+
+                if (Equals(NextScanFromDate, NextScanToDate))
+                {
+                    return NextScanFromDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss);
+                }
+
+                return NextScanFromDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss) + " - " + NextScanToDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss);
+            }
+        }
     }
 }
