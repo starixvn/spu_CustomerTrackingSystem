@@ -1,20 +1,21 @@
-﻿using Fanex.NAP.CTS.Model.Account;
+﻿using Fanex.Logging;
+using Fanex.NAP.CTS.Core.Helpers.Api;
+using Fanex.NAP.CTS.Core.Helpers.Xml;
+using Fanex.NAP.CTS.Core.Utilities;
+using Fanex.NAP.CTS.Model.Account;
+using Fanex.NAP.CTS.Model.DTO;
+using Fanex.NAP.CTS.Model.GraphDB;
 using Fanex.NAP.CTS.Service;
-using Fanex.Logging;
+using Fanex.NAP.CTS.Service.Implement;
+using Fanex.NAP.CTS.Service.Interface;
+using Fanex.NAP.SPU.Graph.Core;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Web.Http;
-using System.Threading.Tasks;
-using Fanex.NAP.CTS.Core.Utilities;
-using Fanex.NAP.CTS.Model.DTO;
-using Fanex.NAP.SPU.Graph.Core;
 using System.Web.Http.Results;
-using Fanex.NAP.CTS.Model.GraphDB;
-using Fanex.NAP.CTS.Core.Helpers.Xml;
-using Fanex.NAP.CTS.Core.Helpers.Api;
 
 namespace Fanex.NAP.CTS.Portal.API.Controllers
 {
@@ -22,6 +23,8 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
     {
         private readonly IAccountService _accountService;
         private readonly IEvidenceService _evidenceService;
+        private readonly IAssociatedAccountService _associationService;
+
 
         /// <summary>
         /// Using for external site (TW, ExtAcc site...)
@@ -30,6 +33,7 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
         {
             _accountService = new AccountService();
             _evidenceService = new EvidenceService();
+            _associationService = new AssociatedAccountService();
         }
 
         [HttpPost]
@@ -65,16 +69,9 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
         {
             try
             {
+                string[] eviList = { "-1" }; // set default for getting all 
                 var convertedCustIdList = CustIdList.Split(',').Select(a => Convert.ToInt32(a));
-                var associationList = new List<CustomerEvidence>();
-
-                // get association from graph
-                var associationByDeviceList = DbSessionFactory.Execute<CustomerEvidence>("GetAssociationByDeviceByCustIdLevel" + AssociatedLevel
-                                        , new { CustIdList = convertedCustIdList, AssociatedLevel }).Data;
-                var associationByManualList = DbSessionFactory.Execute<CustomerEvidence>("GetAssociationByManualByCustIdAndLevel" + AssociatedLevel
-                                        , new { CustIdList = convertedCustIdList, AssociatedLevel }).Data;
-                associationList.AddRange(associationByDeviceList);
-                associationList.AddRange(associationByManualList);
+                var associationList = _associationService.GetFlaggedCustomerByLevel(convertedCustIdList, AssociatedLevel, eviList);
                 var result = associationList.Distinct(new CustomerEvidenceComparer());
 
                 return Json(result.ToList());
@@ -84,6 +81,19 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
                 LogService.Error("Get Flagged Customers By Level exception: " + ex.Message);
                 return Json(new List<CustomerEvidence>());
             }
+        }
+
+        public JsonResult<string> GetAssociationForLetTalk(string custIdList)
+        {
+            var result = string.Empty;
+            var eviList = ConfigurationManager.AppSettings["Environment"].ToString().Split(',');
+            var convertedCustIdList = custIdList.Split(',').Select(a => Convert.ToInt32(a));
+            var associationList = _associationService.GetFlaggedCustomerByLevel(convertedCustIdList, 0, eviList);
+            var assList = associationList.Distinct(new CustomerEvidenceComparer());
+
+
+
+            return Json(result);
         }
 
         /// <summary>

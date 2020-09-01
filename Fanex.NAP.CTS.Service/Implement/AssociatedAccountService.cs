@@ -4,12 +4,14 @@ using Fanex.NAP.CTS.Core;
 using Fanex.NAP.CTS.Criteria.AssociatedAccount;
 using Fanex.NAP.CTS.Criteria.AssociatedAccountMonitor;
 using Fanex.NAP.CTS.Model.AssociatedAccountMonitor;
+using Fanex.NAP.CTS.Model.DTO;
 using Fanex.NAP.CTS.Resource.Consts;
 using Fanex.NAP.CTS.Service.Interface;
 using Fanex.NAP.CTS.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Fanex.NAP.SPU.Graph.Core;
 
 namespace Fanex.NAP.CTS.Service.Implement
 {
@@ -128,6 +130,21 @@ namespace Fanex.NAP.CTS.Service.Implement
                 ErrorCode = -1,
                 ErrorMsg = criteria.ErrorMessage
             };
+        }
+
+        public List<CustomerEvidence> GetFlaggedCustomerByLevel(IEnumerable<int> custIds, int associatedLevel, IEnumerable<string> eviIdList)
+        {
+            var associationList = new List<CustomerEvidence>();
+
+            // get association from graph
+            var associationByDeviceList = DbSessionFactory.Execute<CustomerEvidence>("GetFlaggedAssociationByDeviceByCustIdLevel" + associatedLevel
+                                    , new { CustIdList = custIds, AssociatedLevel = associatedLevel, EvidenceList = eviIdList }).Data;
+            var associationByManualList = DbSessionFactory.Execute<CustomerEvidence>("GetFlaggedAssociationByManualByCustIdLevel" + associatedLevel
+                                    , new { CustIdList = custIds, AssociatedLevel = associatedLevel }).Data;
+            associationList.AddRange(associationByDeviceList);
+            associationList.AddRange(associationByManualList);
+
+            return associationList;
         }
 
     }
