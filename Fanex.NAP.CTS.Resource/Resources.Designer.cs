@@ -196,6 +196,24 @@ namespace Fanex.NAP.CTS.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to External Category.
+        /// </summary>
+        internal static string CUSTOMER_EXTERNAL_CATEGORY {
+            get {
+                return ResourceManager.GetString("CUSTOMER_EXTERNAL_CATEGORY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Intenal Category.
+        /// </summary>
+        internal static string CUSTOMER_INTERNAL_CATEGORY {
+            get {
+                return ResourceManager.GetString("CUSTOMER_INTERNAL_CATEGORY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This row is already exist..
         /// </summary>
         internal static string IMPORT_ACCOUNT_EVIDENCE_DUPLICATE {

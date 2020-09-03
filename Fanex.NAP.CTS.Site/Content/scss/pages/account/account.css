@@ -987,10 +987,10 @@
             .content-info .header-info .container-status .can-toggle input[type="checkbox"][disabled] ~ label .can-toggle__switch {
               opacity: 0.4; }
           .content-info .header-info .container-status .can-toggle input[type="checkbox"]:checked ~ label .can-toggle__switch:before {
-            content: attr(data-checked);
+            content: attr(data-unchecked);
             left: 0; }
           .content-info .header-info .container-status .can-toggle input[type="checkbox"]:checked ~ label .can-toggle__switch:after {
-            content: attr(data-unchecked); }
+            content: attr(data-checked); }
         .content-info .header-info .container-status .can-toggle label {
           user-select: none;
           position: relative;
@@ -999,13 +999,13 @@
           .content-info .header-info .container-status .can-toggle label .can-toggle__switch {
             position: relative; }
             .content-info .header-info .container-status .can-toggle label .can-toggle__switch:before {
-              content: attr(data-unchecked);
+              content: attr(data-checked);
               position: absolute;
               top: 0;
               text-transform: uppercase;
               text-align: center; }
             .content-info .header-info .container-status .can-toggle label .can-toggle__switch:after {
-              content: attr(data-checked);
+              content: attr(data-unchecked);
               position: absolute;
               z-index: 5;
               text-transform: uppercase;

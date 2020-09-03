@@ -3,6 +3,8 @@
     let divMarkCategory = $('#divMarkCategory');
     let tblcustomercategory = $('#customer-category-table');
     let isHostPermission;
+    let inputSwitchCategorySummary = $('#account-switch');
+    let divToogleSwitch = $('#divToogleSwitch');
 
     function BindingMarkCategoryForAddNew(custId, ctsCustId, subscriberId) {
         $('#btncancelcategory').on('click', function () {
@@ -209,7 +211,7 @@
                     last: "<span class=\"icon-chevron-right\"></span><span class=\"icon-chevron-right\"></span>",
                     next: "",
                     previous: ""
-                },
+                }
             },
             info: false,
             ordering: false,
@@ -225,10 +227,11 @@
                 type: 'POST',
                 dataFilter: function (response) {
                     if (response !== undefined) {
-                        var json = jQuery.parseJSON(response);
+                        let json = jQuery.parseJSON(response);
 
-                        if (!RenderProblemAccountCategorySummary(json.data))
-                            RenderCustomerCategorySummary(json.data);
+                        SwitchCategorySummary(json.internalCategoryList, json.externalCategoryList);
+
+                        inputSwitchCategorySummary.click(function () { SwitchCategorySummary(json.internalCategoryList, json.externalCategoryList); });
                     }
                     return response;
                 },
@@ -268,7 +271,6 @@
                                 common.showConfirmation("Do you want to remove category <b>" + row.CategoryName + "</b> for <b>" + username + "</b> ?", function () {
                                     RemoveCustomerClassification(custId, ctsCustId, row.CategoryId);
                                 });
-
                             });
 
                             $('.icon-edit', cell).click(() => {
@@ -284,17 +286,16 @@
         });
     }
 
-    function RenderProblemAccountCategorySummary(data) {
+    function RenderInternalProblemAccount(data) {
         var isExistProblemAccount = false;
         let html = "";
 
         data.map(function (x) {
-            let isEquals = x.ParentCategoryName.toUpperCase().includes("PROBLEM ACCOUNT");
-            if (isEquals) {
+            if (x.IsProblemAccount) {
                 let classIconColor = "circle bg-red";
                 let sportGroupNameList = x.SportGroupNameList ? x.SportGroupNameList : "None";
 
-                html = BuildCustomerCategoryToHtmlDiv(html, classIconColor, x.CategoryName, sportGroupNameList);
+                html = BuildInternalCategoryToHtmlDiv(html, classIconColor, x.CategoryName, sportGroupNameList);
                
                 isExistProblemAccount = true;
             }
@@ -318,9 +319,41 @@
         return isExistProblemAccount;
     }
 
-    function RenderCustomerCategorySummary(data) {
+    function RenderExternalProblemAccount(data) {
+        var isExistProblemAccount = false;
         let html = "";
-        let defaultNormalCategoryList = GetNormalCustomerCategoryList();
+
+        data.map(function (x) {
+            if (x.IsProblemAccount) {
+                let classIconColor = "circle bg-red";
+                
+                html = BuildExternalCategoryToHtmlDiv(html, classIconColor, x.CategoryName);
+
+                isExistProblemAccount = true;
+            }
+        });
+
+        if (isExistProblemAccount) {
+            $('#divHeaderUsername')
+                .removeClass('bg-yellow')
+                .removeClass('bg-green')
+                .addClass('bg-red');
+            $('#divHeaderInfo')
+                .removeClass('border-yellow')
+                .removeClass('border-green')
+                .addClass('border-red');
+
+            $('#divCustomerCategorySummary').html(html);
+            $('#spanContentInfoLoading').css('visibility', 'hidden');
+            $('#divHeaderInfo').css('visibility', 'visible');
+        }
+
+        return isExistProblemAccount;
+    }
+
+    function RenderInternalCategorySummary(data) {
+        let html = "";
+        let defaultNormalCategoryList = GetInternalNormalCategoryList();
         let indexColorProfile = 1;
        
         for (let i = 0; i < defaultNormalCategoryList.length; i++) {
@@ -330,7 +363,7 @@
                     let classIconColor = defaultNormalCategoryList[i].cssClass;
                     let sportGroupNameList = x.SportGroupNameList ? x.SportGroupNameList : "None";
 
-                    html = BuildCustomerCategoryToHtmlDiv(html, classIconColor, x.CategoryName, sportGroupNameList);
+                    html = BuildInternalCategoryToHtmlDiv(html, classIconColor, x.CategoryName, sportGroupNameList);
 
                     indexColorProfile = indexColorProfile < defaultNormalCategoryList[i].indexColor
                         ? defaultNormalCategoryList[i].indexColor
@@ -369,7 +402,57 @@
         $('#divHeaderInfo').css('visibility', 'visible');
     }
 
-    function BuildCustomerCategoryToHtmlDiv(html, classIconColor, categoryName, sportGroupNameList){
+    function RenderExternalCategorySummary(data) {
+        let html = "";
+        let defaultNormalCategoryList = GetExternalNormalCategoryList();
+        let indexColorProfile = 1;
+
+        for (let i = 0; i < defaultNormalCategoryList.length; i++) {
+            data.map(function (x) {
+                let isEquals = x.CategoryName.includes(defaultNormalCategoryList[i].name);
+                if (isEquals) {
+                    let classIconColor = defaultNormalCategoryList[i].cssClass;
+                    
+                    html = BuildExternalCategoryToHtmlDiv(html, classIconColor, x.CategoryName);
+
+                    indexColorProfile = indexColorProfile < defaultNormalCategoryList[i].indexColor
+                        ? defaultNormalCategoryList[i].indexColor
+                        : indexColorProfile;
+                }
+            });
+        }
+
+        switch (indexColorProfile) {
+            case 1:
+                $('#divHeaderUsername')
+                    .removeClass('bg-red')
+                    .removeClass('bg-yellow')
+                    .addClass('bg-green');
+                $('#divHeaderInfo')
+                    .removeClass('border-red')
+                    .removeClass('border-yellow')
+                    .addClass('border-green');
+                break;
+            case 2:
+                $('#divHeaderUsername')
+                    .removeClass('bg-red')
+                    .removeClass('bg-green')
+                    .addClass('bg-yellow');
+                $('#divHeaderInfo')
+                    .removeClass('border-red')
+                    .removeClass('border-green')
+                    .addClass('border-yellow');
+                break;
+            default:
+                break;
+        }
+
+        $('#divCustomerCategorySummary').html(html);
+        $('#spanContentInfoLoading').css('visibility', 'hidden');
+        $('#divHeaderInfo').css('visibility', 'visible');
+    }
+
+    function BuildInternalCategoryToHtmlDiv(html, classIconColor, categoryName, sportGroupNameList){
         html += "<div class='info-status'>";
         html += "<div class='status-left'>";
         html += "<span class='" + classIconColor + "'></span>";
@@ -383,7 +466,18 @@
         return html;
     }
 
-    function GetNormalCustomerCategoryList() {
+    function BuildExternalCategoryToHtmlDiv(html, classIconColor, categoryName) {
+        html += "<div class='info-status'>";
+        html += "<div class='status-left'>";
+        html += "<span class='" + classIconColor + "'></span>";
+        html += "<span class='text-status text-left'>" + categoryName + "</span>";
+        html += "</div>";
+        html += "</div>";
+
+        return html;
+    }
+
+    function GetInternalNormalCategoryList() {
         var list = [];
 
         list.push({ 'name': 'High Risk Punter', 'cssClass': 'circle bg-yellow', 'indexColor': 2 });
@@ -399,6 +493,41 @@
         return list;
     }
 
+    function GetExternalNormalCategoryList() {
+        var list = [];
+
+        list.push({ 'name': 'High Risk Punter', 'cssClass': 'circle bg-yellow', 'indexColor': 2 });
+        list.push({ 'name': 'Smart Punter', 'cssClass': 'circle bg-yellow', 'indexColor': 2 });
+        list.push({ 'name': 'Probation', 'cssClass': 'circle bg-yellow', 'indexColor': 2 });
+        list.push({ 'name': 'Normal Account', 'cssClass': 'circle bg-green', 'indexColor': 1 });
+        list.push({ 'name': 'VIP', 'cssClass': 'circle bg-green', 'indexColor': 1 });
+
+        return list;
+    }
+
+    function SwitchCategorySummary(dataInternal, dataExternal) {
+        let isExternalChecked = inputSwitchCategorySummary.is(':checked');
+
+        let isProblemAccount = isExternalChecked
+            ? RenderExternalProblemAccount(dataExternal)
+            : RenderInternalProblemAccount(dataInternal);
+
+        if (!isProblemAccount)
+        {
+            isExternalChecked
+                ? RenderExternalCategorySummary(dataExternal)
+                : RenderInternalCategorySummary(dataInternal);
+        }
+
+        if (isExternalChecked) {
+            divToogleSwitch.attr('data-checked', 'EXTERNAL');
+            divToogleSwitch.attr('data-unchecked', '');
+        } else {
+            divToogleSwitch.attr('data-checked', '');
+            divToogleSwitch.attr('data-unchecked', 'INTERNAL');
+        }
+    }
+
     function DisableButton(hostPermission) {
         isHostPermission = hostPermission === "True";
 
@@ -409,8 +538,8 @@
     this.Initial = function (custId, ctsCustId, subscriberId, username, hostPermission) {
         DisableButton(hostPermission);
 
-        btnMarkCategory.click(function () { InitialMarkCategory(custId, ctsCustId, subscriberId); });
+        btnMarkCategory.click(function () { InitialMarkCategory(custId, ctsCustId, subscriberId); });        
 
-        RenderGrid(custId, ctsCustId, username, subscriberId);        
+        RenderGrid(custId, ctsCustId, username, subscriberId);
     };
 }

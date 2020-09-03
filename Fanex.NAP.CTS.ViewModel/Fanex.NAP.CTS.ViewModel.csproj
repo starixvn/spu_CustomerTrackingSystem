@@ -62,6 +62,8 @@
     <Compile Include="Account\ChainToEvidence\EvidenceViewModel.cs" />
     <Compile Include="Account\ChainToEvidence\FlaggedEvidenceViewModel.cs" />
     <Compile Include="Account\ChainToEvidence\AccountExceptionsViewModel.cs" />
+    <Compile Include="Account\CustomerCategory\CustomerCategory.cs" />
+    <Compile Include="Account\CustomerCategory\CustomerCategorySummaryViewModel.cs" />
     <Compile Include="Account\CustomerCategory\CustomerCategoryViewModel.cs" />
     <Compile Include="Account\CustomerCategory\MarkCategoryViewModel.cs" />
     <Compile Include="Account\CustomerFraud.cs" />

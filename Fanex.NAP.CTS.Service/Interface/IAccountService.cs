@@ -1,8 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
     using Fanex.NAP.CTS.Core;
-    using Fanex.NAP.CTS.Model.Account;
-    using Fanex.NAP.CTS.Model.Account.CustomerCategory;
+    using Fanex.NAP.CTS.Model.Account;    
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;

@@ -15,8 +15,7 @@
     using Fanex.NAP.CTS.Criteria.Account.GeneralInformation;
     using Fanex.NAP.CTS.Criteria.Home;
     using Fanex.NAP.CTS.Model;
-    using Fanex.NAP.CTS.Model.Account;
-    using Fanex.NAP.CTS.Model.Account.CustomerCategory;
+    using Fanex.NAP.CTS.Model.Account;    
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
@@ -896,7 +895,7 @@
             {
                 return db.Query<CustomerClassificationModel>(criteria);
             }
-        }
+        }     
 
         public DBResult AddCustomerClassification(long custId, long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark, int createdBy)
         {

@@ -426,12 +426,12 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
                             .can-toggle__switch {
 
                                 &:before {
-                                    content: attr(data-checked);
+                                    content: attr(data-unchecked);
                                     left: 0;
                                 }
 
                                 &:after {
-                                    content: attr(data-unchecked);
+                                    content: attr(data-checked);
                                 }
                             }
                         }
@@ -448,7 +448,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
                         position: relative;
 
                         &:before {
-                            content: attr(data-unchecked);
+                            content: attr(data-checked);
                             position: absolute;
                             top: 0;
                             text-transform: uppercase;
@@ -456,7 +456,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
                         }
 
                         &:after {
-                            content: attr(data-checked);
+                            content: attr(data-unchecked);
                             position: absolute;
                             z-index: 5;
                             text-transform: uppercase;

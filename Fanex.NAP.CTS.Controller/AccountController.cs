@@ -5,15 +5,15 @@
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Web.Attribute;
-    using Fanex.NAP.CTS.Core.Extentions;
-    using Fanex.NAP.CTS.Core.Helpers.Xml;
+    using Fanex.NAP.CTS.Core.Extentions;    
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria.Account;
     using Fanex.NAP.CTS.Model;
-    using Fanex.NAP.CTS.Model.Account;
+    using Fanex.NAP.CTS.Model.Account;    
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.Transaction;
+    using Fanex.NAP.CTS.Resource;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.Service.Implement;
@@ -968,30 +968,66 @@
         }
 
         public ActionResult GetCustomerClassification(long custId)
-        {
+        {            
+            var customerCategoryList = new List<CustomerCategoryViewModel>();
+            var internalCategoryList = new List<CustomerCategorySummaryViewModel>();
+            var externalCategoryList = new List<CustomerCategorySummaryViewModel>();
+
             var data = _accountService.GetCustomerClassification(custId);
 
             if (data != null && data.Any())
             {
-                var result = data.Select(x => new CustomerCategoryViewModel
-                {
-                    CategoryId = x.CategoryId,
-                    CategoryName = x.CategoryName,
-                    LastModifiedBy = x.LastModifiedBy,
-                    LastModifiedDate = x.LastModifiedDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                    Remark = x.Remark,
-                    SportGroupIdList = x.SportGroupIdList,
-                    SportGroupNameList = x.SportGroupNameList,
-                    ParentCategoryId = x.ParentCategoryId,
-                    ParentCategoryName = x.ParentCategoryName,
-                    IsEnabledDelete = x.IsEnabledDelete,
-                    NextScanDatePeriod = x.NextScanDatePeriod 
-                });
+                var internals = data
+                    .Where(x => x.CategoryType == 0 || x.CategoryType == 2)
+                    .Select(x => GetCustomerCategory(x, ResourcesManager.GetValue(ConstsResources.CUSTOMER_INTERNAL_CATEGORY)));
 
-                return Json(new { data = result }, JsonRequestBehavior.AllowGet);
+                var externals = data
+                    .Where(x => x.CategoryType == 1 || x.CategoryType == 2)
+                   .Select(x => GetCustomerCategory(x, ResourcesManager.GetValue(ConstsResources.CUSTOMER_EXTERNAL_CATEGORY)));
+
+                customerCategoryList.AddRange(internals);
+                customerCategoryList.AddRange(externals);
+
+                internalCategoryList = internals.Select(x => GetCustomerCategorySummary(x)).ToList();
+                externalCategoryList = externals.Select(x => GetCustomerCategorySummary(x)).ToList();
             }
 
-            return Json(new { data = new List<CustomerCategoryViewModel>() }, JsonRequestBehavior.AllowGet);
+            return Json(new
+            {
+                internalCategoryList,
+                externalCategoryList,
+                data = customerCategoryList,
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        private CustomerCategoryViewModel GetCustomerCategory(CustomerClassificationModel model, string parentName)
+        {
+            return new CustomerCategoryViewModel
+            {
+                ParentCategoryId = model.ParentCategoryID,
+                ParentCategoryName = parentName,
+                CategoryId = model.CategoryID,
+                CategoryName = model.CategoryName,
+                CategoryType = model.CategoryType,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedDate = model.LastModifiedDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+                Remark = model.Remark,
+                SportGroupIdList = model.SportGroupIDList,
+                SportGroupNameList = model.SportGroupNameList,                
+                NextScanDatePeriod = model.NextScanDatePeriod,
+                IsEnabledDelete = model.IsEnabledDelete
+            };
+        }
+
+        public CustomerCategorySummaryViewModel GetCustomerCategorySummary(CustomerCategoryViewModel category)
+        {
+            return new CustomerCategorySummaryViewModel
+            {
+                ParentCategoryName = category.ParentCategoryName,
+                CategoryName = category.CategoryName,
+                SportGroupNameList = category.SportGroupNameList,
+                IsProblemAccount = category.CategoryType == 2
+            };
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
