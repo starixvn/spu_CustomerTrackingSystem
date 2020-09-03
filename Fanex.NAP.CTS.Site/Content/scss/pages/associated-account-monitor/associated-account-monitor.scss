@@ -1,20 +1,15 @@
 ﻿.content {
-    margin-top: 60px;
-
     .associated-account-monitor {
-        padding: 16px;
-        padding-top: 0;
-
         .group {
             padding-right: 0;
-            margin-right: 6px;
+            margin-right: .6rem;
         }
 
         .fixed-header {
-            padding-top: 16px;
+            padding-top: 1.6rem;
             position: sticky;
             position: -webkit-sticky;
-            top: 60px;
+            top: 6rem;
             background: #fff;
             z-index: 9;
         }
@@ -23,7 +18,7 @@
             position: sticky;
             position: -webkit-sticky;
             z-index: 9;
-            top: 116px;
+            top: 11.6rem;
             transition: top 0.01s linear;
         }
     }
@@ -35,7 +30,7 @@
     }
 
     .search-username {
-        margin-top: -2px;
+        margin-top: -0.2rem;
         height: 28px;
         position: relative;
 
@@ -43,10 +38,10 @@
             content: "\e919";
             font-family: 'Fraud-Sensor' !important;
             position: absolute;
-            top: 5px;
-            left: 5px;
+            top: .5rem;
+            left: .5rem;
             width: 35px;
-            font-size: 18px;
+            font-size: 1.8rem;
             color: #868686;
             text-align: left;
             z-index: 2;
@@ -56,34 +51,31 @@
         .username {
             width: 100%;
             font-style: italic;
-            font-size: 14px;
-            line-height: 17px;
+            font-size: 1.4rem;
+            line-height: 1.214286;
             color: #868686;
             border: 1px solid #C4C4C4;
             border-radius: 3px;
-            padding: 6px;
-            padding-left: 30px;
+            padding: .6rem .6rem .6rem 3rem;
 
             &::placeholder {
                 color: #868686;
                 font-style: italic;
-                font-size: 14px;
+                font-size: 1.4rem;
             }
         }
     }
 
     .button-primary-outline {
-        font-size: 13px !important;
+        font-size: 1.3rem !important;
         font-weight: normal;
-        line-height: 16px;
-        padding: 0px 10px;
+        line-height: .230769;
+        padding: 0 1rem;
         text-transform: none;
     }
 }
 
 .asociatedAccountMonitorTable {
-    width: 100% !important;
-
     thead {
         tr:first-child {
             th {
@@ -91,24 +83,9 @@
                 position: -webkit-sticky;
                 z-index: 9;
                 transition: top 0.01s linear;
-                top: 115px;
+                top: 11.5rem;
             }
         }
-
-        tr th {
-            border: 1px solid #C4C4C4;
-            line-height: 19px;
-            font-size: 14px;
-            font-weight: 600;
-            vertical-align: middle;
-        }
-    }
-
-    tbody tr td {
-        font-size: 14px;
-        line-height: 17px;
-        text-align: center;
-        padding: 3px 6px 3px 6px;
     }
 
     .sub-icon {
@@ -129,10 +106,10 @@
     }
 
     .icon-delete {
-        font-size: 14px;
+        font-size: 1.4rem;
         position: absolute;
-        top: 5px;
-        left: 6px;
+        top: .5rem;
+        left: .6rem;
     }
 
     .icon-delete:before {

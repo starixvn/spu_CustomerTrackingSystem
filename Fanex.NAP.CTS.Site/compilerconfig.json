@@ -74,5 +74,10 @@
   {
     "outputFile": "Content/scss/pages/probation-management/probation-management.css",
     "inputFile": "Content/scss/pages/probation-management/probation-management.scss"
+  },
+  {
+    "outputFile": "Content/scss/pages/manage-subscriber/manage-subscriber.css",
+    "inputFile": "Content/scss/pages/manage-subscriber/manage-subscriber.scss",
+    "sourceMap": false
   }
 ]

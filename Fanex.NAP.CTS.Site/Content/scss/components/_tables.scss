@@ -492,3 +492,25 @@ table.dataTable tbody tr.selected td {
         float: none;
     }
 }
+
+.table-basic {
+    width: 100% !important;
+
+    thead {
+
+        tr th {
+            border: 1px solid #C4C4C4;
+            line-height: 19px;
+            font-size: 14px;
+            font-weight: 600;
+            vertical-align: middle;
+        }
+    }
+
+    tbody tr td {
+        font-size: 14px;
+        line-height: 17px;
+        text-align: center;
+        padding: 3px 6px 3px 6px;
+    }
+}

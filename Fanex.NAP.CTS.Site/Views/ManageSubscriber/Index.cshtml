@@ -3,3 +3,97 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+@section styles{
+    @Styles.Render("~/manage-subscriber-styles")
+}
+
+<h2 class="page-title">Manage Subscriber</h2>
+<div class="wrapper-content manage-subscriber">
+    <div class="fixed-header">
+        <div class="top-header">
+            <button class="button button-primary-outline" id="btnAdd">Add</button>
+        </div>
+    </div>
+
+    <table id="manageSubscriberTable" class="table table-striped table-basic manageSubscriberTable">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>Sub ID</th>
+                <th>Subscriber Name</th>
+                <th>IBCUserName_Prefix</th>
+                <th>Subscriber Group</th>
+                <th>Role Mapping</th>
+                <th>Site ID</th>
+                <th>Site</th>
+                <th>IsActive</th>
+                <th>Release Date</th>
+                <th>Terminated</th>
+            </tr>
+        </thead>
+        <tbody>
+            @*<tr role="row" class="odd deleted">
+            <td class=" text-center">1</td>
+            <td class=" text-center">123</td>
+            <td class=" text-center">Vano</td>
+            <td class=" text-center">Vano$</td>
+            <td class=" text-center">Credit Site</td>
+            <td class=" text-center">1</td>
+            <td class=" text-center">239</td>
+            <td class=" text-center">NovaCash</td>
+            <td class=" text-center">1</td>
+            <td class=" text-center">4-Mar-20</td>
+            <td class=" text-center">2-Mar-20</td>
+        </tr>*@
+        </tbody>
+    </table>
+</div>
+
+<div id="divAddSubscriber" class="popup-add divAddSubscriber" style="display: none;">
+    <div class="group">
+        <div class="label">Site</div>
+        <input class="default" type="text">
+    </div>
+    <div class="group">
+        <div class="label">Site ID</div>
+        <input class="default" type="text">
+    </div>
+    <div class="group">
+        <div class="label">IBCUserName_Prefix</div>
+        <input class="default" type="text">
+    </div>
+    <div class="group">
+        <div class="label">Subscriber Group</div>
+        <input class="default" type="text">
+    </div>
+    <div class="group">
+        <div class="label">Subscriber Name</div>
+        <input class="default" type="text">
+    </div>
+    <div class="group">
+        <div class="label">Role Mapping</div>
+        <input class="default" type="text">
+    </div>
+
+    <div class="note">
+        <p>
+            Note
+            <span>
+                Role Mapping format
+            </span>
+        </p>
+        <p>- 0: is for Licensee site</p>
+        <p>- 1: is for Membersite of Credit Site</p>
+        <p>- 2: is for Alpha site of Credit Site</p>
+    </div>
+
+    <div class="modal-footer margin-top-10">
+        <button id="btnCancel" class="button btn-cancel-outline" title="Cancel">Cancel</button>
+        <button id="btnSave" class="button -add" title="Add Username">Add</button>
+    </div>
+</div>
+
+@section scripts{
+    @Scripts.Render("~/manage-subscriber-scripts")
+}

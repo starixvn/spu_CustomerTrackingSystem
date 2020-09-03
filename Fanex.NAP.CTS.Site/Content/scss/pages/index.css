@@ -1111,6 +1111,20 @@ table.dataTable tbody tr.selected td {
   transform: translate(-50%, 0);
   float: none; }
 
+.table-basic {
+  width: 100% !important; }
+  .table-basic thead tr th {
+    border: 1px solid #C4C4C4;
+    line-height: 19px;
+    font-size: 14px;
+    font-weight: 600;
+    vertical-align: middle; }
+  .table-basic tbody tr td {
+    font-size: 14px;
+    line-height: 17px;
+    text-align: center;
+    padding: 3px 6px 3px 6px; }
+
 .ui-widget-overlay {
   background: rgba(0, 0, 0, 0.4);
   opacity: 1; }
@@ -1943,6 +1957,11 @@ body {
         line-height: 12px;
         color: #737373;
         margin-top: 2px; }
+
+.content {
+  margin-top: 6rem; }
+  .content .wrapper-content {
+    padding: 0 1.6rem 1.6rem; }
 
 .page-title {
   padding: 8px 16px;

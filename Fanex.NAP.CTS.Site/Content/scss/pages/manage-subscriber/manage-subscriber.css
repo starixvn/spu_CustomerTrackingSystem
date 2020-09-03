@@ -1,0 +1,64 @@
+﻿.manage-subscriber .fixed-header {
+  padding-top: 1.6rem;
+  position: sticky;
+  position: -webkit-sticky;
+  top: 6rem;
+  background: #fff;
+  z-index: 9; }
+
+.manage-subscriber .wrapper-info-table {
+  position: sticky;
+  position: -webkit-sticky;
+  z-index: 9;
+  top: 11.6rem;
+  transition: top 0.01s linear; }
+
+.top-header .width-200 {
+  min-width: 200px; }
+
+.top-header .button-primary-outline {
+  font-size: 1.3rem !important;
+  font-weight: normal;
+  line-height: .230769;
+  padding: 0 1rem;
+  text-transform: none; }
+
+.paginate_button, .dataTables_length {
+  display: none !important; }
+
+.wrapper-info-table .dataTables_info {
+  left: 12px; }
+
+.manageSubscriberTable .deleted {
+  background-color: #D9D9D9; }
+
+.manageSubscriberTable .sub-icon {
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+  position: relative;
+  cursor: pointer; }
+  .manageSubscriberTable .sub-icon:hover {
+    border-radius: 50%;
+    background: #E7EDFF; }
+  .manageSubscriberTable .sub-icon .disabled {
+    cursor: not-allowed; }
+
+.manageSubscriberTable .icon-delete {
+  font-size: 1.4rem;
+  position: absolute;
+  top: .5rem;
+  left: .6rem; }
+
+.manageSubscriberTable .icon-delete:before {
+  color: #FF0000; }
+
+.popup-content {
+  text-align: center;
+  font-family: Lato;
+  font-size: 1.6rem;
+  line-height: 1.1875;
+  color: #545454; }
+
+.divAddSubscriber {
+  width: 700px; }

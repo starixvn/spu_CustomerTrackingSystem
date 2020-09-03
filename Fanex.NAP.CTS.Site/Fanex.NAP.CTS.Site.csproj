@@ -494,6 +494,13 @@
       <DependentUpon>probation-management.css</DependentUpon>
     </Content>
     <Content Include="Content\scss\pages\probation-management\probation-management.scss" />
+    <Content Include="Content\scss\pages\manage-subscriber\manage-subscriber.css">
+      <DependentUpon>manage-subscriber.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\scss\pages\manage-subscriber\manage-subscriber.min.css">
+      <DependentUpon>manage-subscriber.css</DependentUpon>
+    </Content>
+    <Content Include="Content\scss\pages\manage-subscriber\manage-subscriber.scss" />
     <None Include="Content\scss\pages\problem-account-monitor\problem-account-monitor.scss" />
     <None Include="Content\scss\pages\import-evidences\import-evidences.scss" />
     <Content Include="Content\scss\pages\import-evidences\import-evidences.css">
@@ -922,6 +929,7 @@
     <Content Include="Scripts\highcharts\highcharts.js" />
     <Content Include="Scripts\Home\SearchPage.js" />
     <Content Include="Scripts\ImportEvidences\index.js" />
+    <Content Include="Scripts\ManageSubscriber\index.js" />
     <Content Include="Scripts\popoto\d3.min.js" />
     <Content Include="Scripts\popoto\d3.v3.min.js" />
     <Content Include="Scripts\popoto\popoto.min.js" />
