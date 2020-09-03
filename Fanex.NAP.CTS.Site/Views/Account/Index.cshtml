@@ -20,7 +20,17 @@
                 <span class="username">@(Model.UserName != null ? Model.UserName : Model.UserName2)</span>
             </div>
         </div>
-        <div class="wrapper-status" id="divCustomerCategorySummary"></div>
+        <div class="container-status">
+            <div class="wrapper-status" id="divCustomerCategorySummary">
+            </div>
+            <div class="can-toggle">
+                <input id="account-switch" type="checkbox">
+                <label for="account-switch">
+                    <div class="can-toggle__switch" data-checked="INTERNAL" data-unchecked="EXTERNAL"></div>
+                </label>
+            </div>
+        </div>
+       
     </div>
 
     <div class="wrapper-content">
@@ -167,9 +177,9 @@
         <span class="icon icon-account_detail"></span>
         <span class="info"> Account Detail</span>
     </div>
-    <div id="account-detail-container" class="re    port-content">
+    <div id="account-detail-container" class="report-content">
         <div id="tabs-account-detail" class="tabs-account-detail">
-            <ul>
+            <ul class="fixed-tabs">
                 <li><a href="#tabs-1" id="associated_account-tab">Associated Accounts</a></li>
                 <li><a href="#tabs-2" id="evidence-tab">Chains to Evidence and Exceptions</a></li>
                 <li><a href="#tabs-3">Customer Classification</a></li>
