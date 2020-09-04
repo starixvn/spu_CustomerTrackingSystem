@@ -520,11 +520,11 @@
         }
 
         if (isExternalChecked) {
-            divToogleSwitch.attr('data-checked', 'EXTERNAL');
+            divToogleSwitch.attr('data-checked', 'GENERAL');
             divToogleSwitch.attr('data-unchecked', '');
         } else {
             divToogleSwitch.attr('data-checked', '');
-            divToogleSwitch.attr('data-unchecked', 'INTERNAL');
+            divToogleSwitch.attr('data-unchecked', 'DETAILED');
         }
     }
 

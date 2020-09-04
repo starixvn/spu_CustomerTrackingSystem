@@ -163,10 +163,10 @@
     <value>Auto Suspend Soccer</value>
   </data>
   <data name="CUSTOMER_EXTERNAL_CATEGORY" xml:space="preserve">
-    <value>External Category</value>
+    <value>General Category</value>
   </data>
   <data name="CUSTOMER_INTERNAL_CATEGORY" xml:space="preserve">
-    <value>Intenal Category</value>
+    <value>Detailed Category</value>
   </data>
   <data name="IMPORT_ACCOUNT_EVIDENCE_DUPLICATE" xml:space="preserve">
     <value>This row is already exist.</value>

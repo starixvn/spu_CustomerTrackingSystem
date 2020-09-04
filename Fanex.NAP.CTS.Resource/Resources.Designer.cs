@@ -196,7 +196,7 @@ namespace Fanex.NAP.CTS.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to External Category.
+        ///   Looks up a localized string similar to General Category.
         /// </summary>
         internal static string CUSTOMER_EXTERNAL_CATEGORY {
             get {
@@ -205,7 +205,7 @@ namespace Fanex.NAP.CTS.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Intenal Category.
+        ///   Looks up a localized string similar to Detailed Category.
         /// </summary>
         internal static string CUSTOMER_INTERNAL_CATEGORY {
             get {
