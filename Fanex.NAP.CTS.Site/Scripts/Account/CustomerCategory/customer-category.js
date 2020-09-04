@@ -5,6 +5,7 @@
     let isHostPermission;
     let inputSwitchCategorySummary = $('#account-switch');
     let divToogleSwitch = $('#divToogleSwitch');
+    let chooseExternalCategory = "ChooseExternalCategory";
 
     function BindingMarkCategoryForAddNew(custId, ctsCustId, subscriberId) {
         $('#btncancelcategory').on('click', function () {
@@ -228,10 +229,18 @@
                 dataFilter: function (response) {
                     if (response !== undefined) {
                         let json = jQuery.parseJSON(response);
+                        let isExternalChecked = true;
+                        let isCache = GetStorageToggleCategory(chooseExternalCategory);
 
-                        SwitchCategorySummary(json.internalCategoryList, json.externalCategoryList);
+                        if (isCache !== null) {
+                            isExternalChecked = isCache === "true";
+                        }
 
-                        inputSwitchCategorySummary.click(function () { SwitchCategorySummary(json.internalCategoryList, json.externalCategoryList); });
+                        SwitchCategorySummary(json.internalCategoryList, json.externalCategoryList, isExternalChecked);
+
+                        inputSwitchCategorySummary.click(function () {                            
+                            SwitchCategorySummary(json.internalCategoryList, json.externalCategoryList, inputSwitchCategorySummary.is(':checked'));
+                        });
                     }
                     return response;
                 },
@@ -505,8 +514,8 @@
         return list;
     }
 
-    function SwitchCategorySummary(dataInternal, dataExternal) {
-        let isExternalChecked = inputSwitchCategorySummary.is(':checked');
+    function SwitchCategorySummary(dataInternal, dataExternal, isExternalChecked) {
+        SetStorageToggleCategory(chooseExternalCategory, isExternalChecked);
 
         let isProblemAccount = isExternalChecked
             ? RenderExternalProblemAccount(dataExternal)
@@ -520,12 +529,23 @@
         }
 
         if (isExternalChecked) {
-            divToogleSwitch.attr('data-checked', 'GENERAL');
-            divToogleSwitch.attr('data-unchecked', '');
+            divToogleSwitch.attr('data-checked', '-');
+            divToogleSwitch.attr('data-unchecked', 'GENERAL');
         } else {
-            divToogleSwitch.attr('data-checked', '');
-            divToogleSwitch.attr('data-unchecked', 'DETAILED');
+            divToogleSwitch.attr('data-checked', 'DETAILED');
+            divToogleSwitch.attr('data-unchecked', '-');
         }
+    }
+
+    function GetStorageToggleCategory(key) {
+        return typeof (Storage) !== "undefined"
+            ? localStorage.getItem(key)
+            : null;
+    }
+
+    function SetStorageToggleCategory(key, value) {
+        if (typeof (Storage) !== "undefined")
+            localStorage.setItem(key, value);
     }
 
     function DisableButton(hostPermission) {
@@ -537,6 +557,10 @@
 
     this.Initial = function (custId, ctsCustId, subscriberId, username, hostPermission) {
         DisableButton(hostPermission);
+
+        let isCache = GetStorageToggleCategory(chooseExternalCategory);
+        if (isCache === null || isCache === "true") 
+            inputSwitchCategorySummary.attr('checked', true);
 
         btnMarkCategory.click(function () { InitialMarkCategory(custId, ctsCustId, subscriberId); });        
 
