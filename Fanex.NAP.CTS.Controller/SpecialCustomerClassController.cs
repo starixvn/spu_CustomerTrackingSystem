@@ -20,7 +20,7 @@
     using System.Threading.Tasks;
     using System.Web.Mvc;
 
-    [NapAuth(FunctionKey = FSFunctionKeys.SpecialCustomerClass, Policy = NAP.Core.Business.Constant.Policy.Host)]
+    [NapAuth(FunctionKey = FSFunctionKeys.SpecialCustomerClass, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class SpecialCustomerClassController : BaseController
     {
         private readonly CustomerClassService _customerClassService;
@@ -31,9 +31,19 @@
             => _customerClassService = new CustomerClassService();
 
         public ActionResult Index()
-        {
-            var listCustomerClass = _customerClassService.GetAllCustomerClass();
+        {           
             return View();
+        }
+
+        [HttpGet]
+        public ActionResult GetCustomerClass()
+        {
+            var viewModel = _customerClassService.GetAllCustomerClass();
+
+            return Json(new
+            {               
+                data = viewModel
+            }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

@@ -587,5 +587,10 @@
         SpName="CTS_DC_GetAssociatedCustIDsWithOtherEvidence"
         DbName="MySQL.CTS_DataCenter"/>
   </Function>
-  
+	<Function name="SpecialCustomerClass">
+		<Setting Key="CTS_DC_GetAllSpecialCustomerClass"
+	       SpName="CTS_DC_GetAllSpecialCustomerClass"
+	       DbName="MySQL.CTS_DataCenter"/>
+	</Function>
+
 </Functions>

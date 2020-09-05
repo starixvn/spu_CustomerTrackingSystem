@@ -7,122 +7,89 @@
 }
 <h2 class="page-title">SPECIAL CUSTOMER CLASS</h2>
 
-    <div id="problemAccountMonitorGrid" class="div-grid">
-        <div class="fixed-header">
-            <div class="form-filter">
-                <button class="button button-generate" id="btnAdd">Add</button>
-            </div>
+<div id="problemAccountMonitorGrid" class="div-grid">
+    <div class="fixed-header">
+        <div class="form-filter">
+            <button class="button button-generate" id="btnAdd">Add</button>
         </div>
-        
+    </div>
 
-        <table id="tblSpecialCustomerClass" class="table table-striped width-100per" style="width: 100%">
-            <thead>
-                <tr>
-                    <th>Username</th>
-                    <th>Site</th>
-                    <th>Customer Class</th>
-                    <th>Added By</th>
-                    <th>Added Date</th>
-                </tr>
-                @*<tr class="format-tr">
+
+    <table id="tblSpecialCustomerClass" class="table table-striped width-100per" style="width: 100%">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Site</th>
+                <th>Customer Class</th>
+                <th>Added By</th>
+                <th>Added Date</th>
+            </tr>
+            @*<tr class="format-tr">
                     <th colspan="6" class="format-th"></th>
                 </tr>*@
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
 
-    <div id="divAddCustomerClass" style="display:none;">
-        <div class="form-control">
-            <div class="label">Username</div>
-            <input id="txtUsername" type="text" class="input-field full-width" maxlength="50" />
-        </div>
-        <div class="form-control">
-            <div class="label">Class</div>
-            <input id="txtCustomerClass" type="number" min="1" max="100" class="input-field full-width" maxlength="50" />
-        </div>
-        <div class="modal-footer margin-top-10">
-            <button id="btnCancel" class="button btn-cancel-outline" title="Cancel">Cancel</button>
-            <button id="btnSave" class="button -add" title="Add Association">Save</button>
-
-        </div>
+<div id="divAddCustomerClass" style="display:none;">
+    <div class="form-control">
+        <div class="label">Username</div>
+        <input id="txtUsername" type="text" class="input-field full-width" maxlength="50" />
     </div>
+    <div class="form-control">
+        <div class="label">Class</div>
+        <input id="txtCustomerClass" type="number" min="1" max="100" class="input-field full-width" maxlength="50" />
+    </div>
+    <div class="group">
+        <label class="checkbox">
+            <input type="checkbox" id="isAffectedToAssociation" />
+            <span>Update for Affected Customers</span>
+        </label>
+    </div>
+    <div class="modal-footer margin-top-10">
+        <button id="btnCancel" class="button btn-cancel-outline" title="Cancel">Cancel</button>
+        <button id="btnSave" class="button -add" title="Add Association">Save</button>
+
+    </div>
+</div>
 
 @section scripts{
-    <script>
-        var divCustomerClass = $('#divAddCustomerClass');
-        var btnAddCustomerClass = $('#btnAdd');
-        var btnSave = $('#btnSave');
-        var username = $('#txtUsername');
-        var custClass = $('#txtCustomerClass');
+    @*<script>
+            var divCustomerClass = $('#divAddCustomerClass');
+            var btnAddCustomerClass = $('#btnAdd');
+            var btnSave = $('#btnSave');
+            var username = $('#txtUsername');
+            var custClass = $('#txtCustomerClass');
+             var btnIsAffectToAssociation = $('#isAffectedToAssociation');
 
-        btnAddCustomerClass.on('click', function () {
-            divCustomerClass.dialog({
-                modal: true,
-                width: '500px',
-                title: 'ADD CUSTOMER CLASS',
-                resizable: true,
-                draggable: true,
-                close: function () {
-                    $(this).dialog('close');
+            btnAddCustomerClass.on('click', function () {
+                divCustomerClass.dialog({
+                    modal: true,
+                    width: '500px',
+                    title: 'ADD CUSTOMER CLASS',
+                    resizable: true,
+                    draggable: true,
+                    close: function () {
+                        $(this).dialog('close');
+                    }
+                });
+            });
+
+            btnSave.on('click', function () {
+                if (username.val() === '') {
+                    common.showError('Username is required.');
+                    username.focus();
+                } else {
+                    AddCustomerClass();
                 }
             });
-        });
 
-        btnSave.on('click', function () {
-            if (username.val() === '') {
-                common.showError('Username is required.');
-                username.focus();
-            } else {
-                AddCustomerClass();
-            }
-        });
-
-        $('#btnCancel').on('click', () => {
-            divCustomerClass.dialog('close');
-        });  
-
-        function AddCustomerClass() {
-
-            if (username.val() == "") {
-                common.showError('Username "' + username.val() + '" is invalid.');
-
-                return;
-            }
-
-            var url = common.modifyRelativeUrl('/SpecialCustomerClass/AddCustomerClass');
-            var params = {};
-            params.UserName = username.val();
-            params.custClass = custClass.val();
-
-            $.ajax(url, {
-                type: 'POST',
-                data: params,
-                success: function (response) {
-                    //if (response.errorCode == 0) {
-                    //    common.showSuccess('Added exception successfully!');
-                    //    divException.dialog('close');
-                    //}
-                    //else if (response.errorCode == 1) {
-                    //    common.showError('Username/Login ID "' + params.ToUserName + '" is invalid.');
-                    //}
-                    //else if (response.errorCode == 1062) {
-                    //    common.showError('Username/Login ID already exists in "' + params.ToUserName + '" exceptions list.');
-                    //}
-                    //else {
-                    //    common.showError('Added exception fail!');
-                    //}
-                    username.val("");
-                    custClass.val("");
-
-                },
-                complete: function () {
-                    //GetException();
-                    //var accountEvidence = new account_evidence();
-                    //accountEvidence.ReloadAccountEvidence(_ctsCustId, _rootUsername);
-                }
+            $('#btnCancel').on('click', () => {
+                divCustomerClass.dialog('close');
             });
-        }
-    </script>    
-    @*@Scripts.Render("~/problem-account-monitor-scripts")*@
+
+
+        </script>*@
+    @Scripts.Render("~/special-customer-class-scripts")
 }

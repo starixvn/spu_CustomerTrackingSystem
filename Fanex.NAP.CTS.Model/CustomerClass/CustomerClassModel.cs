@@ -1,9 +1,21 @@
-﻿namespace Fanex.NAP.CTS.Model.CustomerClass
+﻿using System;
+
+namespace Fanex.NAP.CTS.Model.CustomerClass
 {
     public class CustomerClassModel
     {
-        public int Username { get; set; }
+        public long CTSCustID { get; set; }
 
-        public int Class { get; set; }
+        public string Username { get; set; }
+
+        public long RootCTSCustID { get; set; }
+
+        public string SubscriberName { get; set; }
+
+        public int CustomerClass { get; set; }
+
+        public string CreatedBy { get; set; }
+
+        public DateTime CreatedDate { get; set; }
     }
 }

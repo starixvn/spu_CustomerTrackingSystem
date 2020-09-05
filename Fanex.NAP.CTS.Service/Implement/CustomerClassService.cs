@@ -18,16 +18,17 @@ namespace Fanex.NAP.CTS.Service.Implement
             {
                 IsGetAllInfo = true
             };
+
             return DataService.GetData<CustomerClassModel>(criteria);
         }
 
-        public void InsertCustomerClass(string username, int custClass, bool isAffectToAssociation)
+        public void InsertCustomerClass(string username, int custClass, bool isAffectToAssociation, int createdBy)
         {
             var criteria = new InsertSpecialCustomerClassCriteria()
             {
                 Username = username,
                 CustomerClass = custClass,
-                CreatedBy = 1,
+                CreatedBy = createdBy,
                 IsAffectToAssociation = isAffectToAssociation
             };
 

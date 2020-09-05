@@ -906,6 +906,7 @@
     <Content Include="Scripts\ProblemAccountMonitor\index.js" />
     <Content Include="Scripts\search.js" />
     <Content Include="Scripts\Search\Account\search-account.js" />
+    <Content Include="Scripts\SpecialCustomerClass\index.js" />
     <Content Include="Scripts\SubscriberAssignment\subscriber.js" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
