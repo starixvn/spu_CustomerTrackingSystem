@@ -63,6 +63,7 @@
     <Compile Include="Implement\AccountService.cs" />
     <Compile Include="Implement\AssociatedAccountService.cs" />
     <Compile Include="Implement\CheckBetReportService.cs" />
+    <Compile Include="Implement\CustomerClassService.cs" />
     <Compile Include="Implement\CustomerEvidenceService.cs" />
     <Compile Include="Implement\CustomerMonitorService.cs" />
     <Compile Include="Implement\DailyCaptureDataService.cs" />
