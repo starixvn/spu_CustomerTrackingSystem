@@ -17,5 +17,13 @@ namespace Fanex.NAP.CTS.Model.CustomerClass
         public string CreatedBy { get; set; }
 
         public DateTime CreatedDate { get; set; }
+
+        public string CreatedDateString { 
+            get 
+            {
+                return CreatedDate.ToString("MMM dd, yyyy");
+            } 
+        }
+
     }
 }

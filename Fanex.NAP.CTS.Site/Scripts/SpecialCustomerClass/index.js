@@ -1,8 +1,14 @@
 ﻿function SpecialCustomerClass() {
-    let dataTable;
+    let dataTable;  
     
     let domElements = {       
-        specialCustomerClassTable: $('#tblSpecialCustomerClass')       
+        specialCustomerClassTable: $('#tblSpecialCustomerClass'),      
+        divCustomerClass: $('#divAddCustomerClass'),
+        btnAddCustomerClass : $('#btnAdd'),
+        btnSave: $('#btnSave'),
+        btnCancel: $('#btnCancel'),
+        custClass: $('#txtCustomerClass'),
+        btnIsAffectToAssociation: $('#isAffectedToAssociation')
     };
 
     function GenerateGrid() {
@@ -25,14 +31,7 @@
             dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
             pagingType: "full_numbers",
             language: {
-                lengthMenu: "Page size _MENU_",
-                paginate: {
-                    first: "<span class=\"icon-chevron-left\"></span><span class=\"icon-chevron-left\"></span>",
-                    last: "<span class=\"icon-chevron-right\"></span><span class=\"icon-chevron-right\"></span>",
-                    next: "",
-                    previous: ""
-                },
-                info: "Displaying _START_ to _END_ of _TOTAL_ item (s)",
+                lengthMenu: "Page size _MENU_",               
                 infoEmpty: "",
                 zeroRecords: "There's no data"
             },
@@ -40,6 +39,7 @@
             searching: false,            
             scrollX: false,
             scrollCollapse: false,
+            paging: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
                 { targets: [2], className: "text-right" },
@@ -56,7 +56,7 @@
                 { data: obj => obj.SubscriberName },
                 { data: obj => obj.CustomerClass },
                 { data: obj => obj.CreatedBy },
-                { data: obj => obj.CreatedDate }
+                { data: obj => obj.CreatedDateString }
             ]
         });
     }
@@ -113,6 +113,32 @@
 
     function Initial() {
         LoadGrid();
+
+        domElements.btnAddCustomerClass.on('click', function () {
+            domElements.divCustomerClass.dialog({
+                modal: true,
+                width: '500px',
+                title: 'ADD CUSTOMER CLASS',
+                resizable: true,
+                draggable: true,
+                close: function () {
+                    $(this).dialog('close');
+                }
+            });
+        });
+
+        domElements.btnSave.on('click', function () {
+            if (username.val() === '') {
+                common.showError('Username is required.');
+                username.focus();
+            } else {
+                AddCustomerClass();
+            }
+        });
+
+        domElements.btnCancel.on('click', () => {
+            domElements.divCustomerClass.dialog('close');
+        });
     };
 
     $(document).ready(function () {
