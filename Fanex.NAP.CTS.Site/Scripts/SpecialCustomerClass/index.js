@@ -42,11 +42,11 @@
             scrollCollapse: false,
             paging: false,
             columnDefs: [
-                { targets: "_all", defaultContent: "-" },
-                { targets: [2], className: "text-right" },
+                { targets: "_all", defaultContent: "-" },                
                 { targets: [0, 1], className: "text-left" },
+                { targets: [2], className: "text-right" },
                 { targets: [3, 4], className: "text-center" },
-                //{ targets: [0], width: "30%" },
+                { targets: [0], width: "30%" },
                 { targets: [1], width: "30%" },
                 { targets: [2], width: "10%" },
                 { targets: [3], width: "15%" },
@@ -64,21 +64,21 @@
 
     function ValidateInputs() {
         if (domElements.txtUsername.val() === "") {
-            common.showError('Username "' + username.val() + '" is invalid.');
+            common.showError('Username "' + domElements.txtUsername.val() + '" is invalid.');
             return false;
         }
 
         let inputClass = domElements.txtCustomerClass.val();
 
         if (inputClass === "") {
-            common.showError('Class "' + username.val() + '" is invalid.');
+            common.showError('Class "' + domElements.txtCustomerClass.val() + '" is invalid.');
             return false;
         }
 
         let parseInputClass = parseInt(inputClass);
 
         if (parseInputClass === undefined) {
-            common.showError('Class "' + username.val() + '" is number.');
+            common.showError('Class "' + domElements.txtCustomerClass.val() + '" is number.');
 
             return false;
         }
@@ -97,7 +97,10 @@
             $.ajax(url, {
                 type: 'POST',
                 data: params,
-                success: function (response) {                   
+                success: function (response) {
+                    if (response != undefined) {
+
+                    }
                     common.showSuccess("Add successful");
                     domElements.txtUsername.val("");
                     domElements.txtCustomerClass.val("");
