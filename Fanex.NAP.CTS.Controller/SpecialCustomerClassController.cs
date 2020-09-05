@@ -54,12 +54,13 @@
 
             if (string.IsNullOrEmpty(resultInsertToCTS.OpErrorMessage))
             {
+                resultInsertToCTS.ErrorCode = 0;
+
                 if (resultInsertToCTS.CustomerClassList != null && resultInsertToCTS.CustomerClassList.Any())
                 {
                     var list = resultInsertToCTS.CustomerClassList.Where(c => c.CustID != 0);
-                    var resultInsertToMainDb = _customerClassService.SyncCustomerClassToMainDb(list);
 
-                    resultInsertToCTS.ErrorCode = resultInsertToMainDb;
+                    _customerClassService.SyncCustomerClassToMainDb(list);
                 }
             }
             else
