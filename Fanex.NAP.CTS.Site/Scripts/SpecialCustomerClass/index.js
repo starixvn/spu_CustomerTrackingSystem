@@ -46,11 +46,11 @@
                 { targets: [2], className: "text-right" },
                 { targets: [0, 1], className: "text-left" },
                 { targets: [3, 4], className: "text-center" },
-                { targets: [0], width: "20%" },
-                { targets: [1], width: "20%" },
-                { targets: [2], width: "20%" },
-                { targets: [3], width: "20%" },
-                { targets: [4], width: "20%" }                
+                //{ targets: [0], width: "30%" },
+                { targets: [1], width: "30%" },
+                { targets: [2], width: "10%" },
+                { targets: [3], width: "15%" },
+                { targets: [4], width: "15%" }                
             ],
             columns: [               
                 { data: obj => obj.Username },

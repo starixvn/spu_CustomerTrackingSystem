@@ -598,6 +598,9 @@
 		<Setting Key="CTS_DC_InsertSpecialCustomerClass"
 				   SpName="CTS_DC_InsertSpecialCustomerClass_xtest"
 				   DbName="MySQL.CTS_DataCenter"/>
+		<Setting Key="Acc_CustomerUpdateCustomerClass"
+				 SpName="Acc_CustomerUpdateCustomerClass_xtest"
+				 DbName="DBCust.CustDB.bodbAdminNet" TimeOut="300" />
 	</Function>
 
 </Functions>

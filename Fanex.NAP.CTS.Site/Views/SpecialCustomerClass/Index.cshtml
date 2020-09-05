@@ -15,7 +15,7 @@
     </div>
 
 
-    <table id="tblSpecialCustomerClass" class="table" style="width: 100%">
+    <table id="tblSpecialCustomerClass" class="table table-striped width-100per" style="width: 100%">
         <thead>
             <tr>
                 <th>Username</th>
@@ -24,9 +24,6 @@
                 <th>Added By</th>
                 <th>Added Date</th>
             </tr>
-            @*<tr class="format-tr">
-                    <th colspan="6" class="format-th"></th>
-                </tr>*@
         </thead>
         <tbody></tbody>
     </table>
@@ -55,41 +52,6 @@
 </div>
 
 @section scripts{
-    @*<script>
-            var divCustomerClass = $('#divAddCustomerClass');
-            var btnAddCustomerClass = $('#btnAdd');
-            var btnSave = $('#btnSave');
-            var username = $('#txtUsername');
-            var custClass = $('#txtCustomerClass');
-             var btnIsAffectToAssociation = $('#isAffectedToAssociation');
-
-            btnAddCustomerClass.on('click', function () {
-                divCustomerClass.dialog({
-                    modal: true,
-                    width: '500px',
-                    title: 'ADD CUSTOMER CLASS',
-                    resizable: true,
-                    draggable: true,
-                    close: function () {
-                        $(this).dialog('close');
-                    }
-                });
-            });
-
-            btnSave.on('click', function () {
-                if (username.val() === '') {
-                    common.showError('Username is required.');
-                    username.focus();
-                } else {
-                    AddCustomerClass();
-                }
-            });
-
-            $('#btnCancel').on('click', () => {
-                divCustomerClass.dialog('close');
-            });
-
-
-        </script>*@
     @Scripts.Render("~/special-customer-class-scripts")
 }
+

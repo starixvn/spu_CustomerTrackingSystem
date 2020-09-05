@@ -52,7 +52,10 @@
         {
             var resultInsertToCTS = _customerClassService.InsertCustomerClass(username, custClass, isAffectToAss, CurrentSession.UserId);
 
-            var a = username;
+            if (resultInsertToCTS.CustomerClassList != null && resultInsertToCTS.CustomerClassList.Any())
+            {
+                var resultInsertToMainDb = _customerClassService.SyncCustomerClassToMainDb(resultInsertToCTS.CustomerClassList);
+            }
 
             return Json(new
             {

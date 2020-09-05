@@ -170,6 +170,7 @@
     <Compile Include="AssociatedAccountMonitor\ValidateAssociatedAccountModel.cs" />
     <Compile Include="CustomerClass\CustomerClassForMainDb.cs" />
     <Compile Include="CustomerClass\CustomerClassModel.cs" />
+    <Compile Include="CustomerClass\InsertCustomerClassResult.cs" />
     <Compile Include="DTO\CustomerCategory.cs" />
     <Compile Include="Association\AssociationCustomerModel.cs" />
     <Compile Include="DTO\CustomerEvidenceComparer.cs" />
