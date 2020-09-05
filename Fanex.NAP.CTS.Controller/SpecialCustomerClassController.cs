@@ -47,12 +47,17 @@
         }
 
         [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.SpecialCustomerClass, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult AddCustomerClass(string username, int custClass, bool isAffectToAss)
         {
-            int createBy = CurrentSession.UserId;
-            _customerClassService.InsertCustomerClass(username, custClass, isAffectToAss, createBy);
+            var resultInsertToCTS = _customerClassService.InsertCustomerClass(username, custClass, isAffectToAss, CurrentSession.UserId);
+
             var a = username;
-            return View();
+
+            return Json(new
+            {
+                resultInsertToCTS
+            }, JsonRequestBehavior.AllowGet);
         }
         
     }

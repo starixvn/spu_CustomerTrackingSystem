@@ -6,9 +6,10 @@
         divCustomerClass: $('#divAddCustomerClass'),
         btnAddCustomerClass : $('#btnAdd'),
         btnSave: $('#btnSave'),
-        btnCancel: $('#btnCancel'),
-        custClass: $('#txtCustomerClass'),
-        btnIsAffectToAssociation: $('#isAffectedToAssociation')
+        btnCancel: $('#btnCancel'),       
+        btnIsAffectToAssociation: $('#isAffectedToAssociation'),
+        txtUsername: $('#txtUsername'),
+        txtCustomerClass: $('#txtCustomerClass')
     };
 
     function GenerateGrid() {
@@ -61,46 +62,52 @@
         });
     }
 
-    function AddCustomerClass() {
-        if (username.val() == "") {
+    function ValidateInputs() {
+        if (domElements.txtUsername.val() === "") {
             common.showError('Username "' + username.val() + '" is invalid.');
-
-            return;
+            return false;
         }
 
-        var url = common.modifyRelativeUrl('/SpecialCustomerClass/AddCustomerClass');
-        var params = {};
-        params.UserName = username.val();
-        params.custClass = custClass.val();
-        params.isAffectToAss = btnIsAffectToAssociation.val();
+        let inputClass = domElements.txtCustomerClass.val();
 
-        $.ajax(url, {
-            type: 'POST',
-            data: params,
-            success: function (response) {
-                //if (response.errorCode == 0) {
-                //    common.showSuccess('Added exception successfully!');
-                //    divException.dialog('close');
-                //}
-                //else if (response.errorCode == 1) {
-                //    common.showError('Username/Login ID "' + params.ToUserName + '" is invalid.');
-                //}
-                //else if (response.errorCode == 1062) {
-                //    common.showError('Username/Login ID already exists in "' + params.ToUserName + '" exceptions list.');
-                //}
-                //else {
-                //    common.showError('Added exception fail!');
-                //}
-                username.val("");
-                custClass.val("");
+        if (inputClass === "") {
+            common.showError('Class "' + username.val() + '" is invalid.');
+            return false;
+        }
 
-            },
-            complete: function () {
-                //GetException();
-                //var accountEvidence = new account_evidence();
-                //accountEvidence.ReloadAccountEvidence(_ctsCustId, _rootUsername);
-            }
-        });
+        let parseInputClass = parseInt(inputClass);
+
+        if (parseInputClass === undefined) {
+            common.showError('Class "' + username.val() + '" is number.');
+
+            return false;
+        }
+
+        return true;
+    }
+
+    function AddCustomerClass() {
+        if (ValidateInputs()) {
+            var url = common.modifyRelativeUrl('/SpecialCustomerClass/AddCustomerClass');
+            var params = {};
+            params.UserName = domElements.txtUsername.val();
+            params.custClass = domElements.txtCustomerClass.val();
+            params.isAffectToAss = domElements.btnIsAffectToAssociation.is(':checked');
+
+            $.ajax(url, {
+                type: 'POST',
+                data: params,
+                success: function (response) {                   
+                    common.showSuccess("Add successful");
+                    domElements.txtUsername.val("");
+                    domElements.txtCustomerClass.val("");
+                    domElements.divCustomerClass.dialog('close');
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        }        
     }  
 
     function LoadGrid() {
@@ -128,12 +135,7 @@
         });
 
         domElements.btnSave.on('click', function () {
-            if (username.val() === '') {
-                common.showError('Username is required.');
-                username.focus();
-            } else {
-                AddCustomerClass();
-            }
+            AddCustomerClass();
         });
 
         domElements.btnCancel.on('click', () => {

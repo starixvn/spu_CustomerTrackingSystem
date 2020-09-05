@@ -595,6 +595,9 @@
 		<Setting Key="CTS_DC_GetAllSpecialCustomerClass"
 	       SpName="CTS_DC_GetAllSpecialCustomerClass_xtest"
 	       DbName="MySQL.CTS_DataCenter"/>
+		<Setting Key="CTS_DC_InsertSpecialCustomerClass"
+				   SpName="CTS_DC_InsertSpecialCustomerClass_xtest"
+				   DbName="MySQL.CTS_DataCenter"/>
 	</Function>
 
 </Functions>
