@@ -128,6 +128,9 @@
         LoadGrid();
 
         domElements.btnAddCustomerClass.on('click', function () {
+            domElements.txtUsername.val("");
+            domElements.txtCustomerClass.val("");            
+
             domElements.divCustomerClass.dialog({
                 modal: true,
                 width: '500px',
