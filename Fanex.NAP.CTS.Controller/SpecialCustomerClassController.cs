@@ -52,16 +52,21 @@
         {
             var resultInsertToCTS = _customerClassService.InsertCustomerClass(username, custClass, isAffectToAss, CurrentSession.UserId);
 
-            if (resultInsertToCTS.CustomerClassList != null && resultInsertToCTS.CustomerClassList.Any())
+            if (resultInsertToCTS.OpErrorMessage == string.Empty)
             {
-                var resultInsertToMainDb = _customerClassService.SyncCustomerClassToMainDb(resultInsertToCTS.CustomerClassList);
+                if (resultInsertToCTS.CustomerClassList != null && resultInsertToCTS.CustomerClassList.Any())
+                {
+                    var resultInsertToMainDb = _customerClassService.SyncCustomerClassToMainDb(resultInsertToCTS.CustomerClassList);
+
+                    resultInsertToCTS.ErrorCode = resultInsertToMainDb;
+                }
+            }
+            else
+            {
+                resultInsertToCTS.ErrorCode = -1;
             }
 
-            return Json(new
-            {
-                resultInsertToCTS
-            }, JsonRequestBehavior.AllowGet);
-        }
-        
+            return Json(resultInsertToCTS, JsonRequestBehavior.AllowGet);
+        }        
     }
 }

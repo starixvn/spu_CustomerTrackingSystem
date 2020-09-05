@@ -8,5 +8,7 @@
 
         public string OpErrorMessage { get; set; }
 
+        public int ErrorCode { get; set; }
+
     }
 }

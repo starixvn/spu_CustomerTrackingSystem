@@ -19,8 +19,7 @@
             ajax: {
                 url: common.modifyRelativeUrl('/SpecialCustomerClass/GetCustomerClass'),                
                 type: "GET",      
-                dataFilter: function (response) {
-                    console.log(response);
+                dataFilter: function (response) {                   
                     return response;
                 },
                 complete: function () {                    
@@ -98,13 +97,17 @@
                 type: 'POST',
                 data: params,
                 success: function (response) {
-                    if (response != undefined) {
-
+                    if (response != undefined) {                        
+                        if (response.ErrorCode === 0) {
+                            common.showSuccess("Add Customer Class successful");
+                            domElements.txtUsername.val("");
+                            domElements.txtCustomerClass.val("");
+                            domElements.divCustomerClass.dialog('close');
+                        } else {
+                            common.showError("Add Customer Class fail " + response.OpErrorMessage);
+                            console.log(response.OpErrorMessage);
+                        }    
                     }
-                    common.showSuccess("Add successful");
-                    domElements.txtUsername.val("");
-                    domElements.txtCustomerClass.val("");
-                    domElements.divCustomerClass.dialog('close');
                 },
                 error: function (err) {
                     console.log(err);
