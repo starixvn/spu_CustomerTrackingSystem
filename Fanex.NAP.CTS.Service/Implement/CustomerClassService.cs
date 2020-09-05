@@ -1,8 +1,6 @@
-﻿using Fanex.Data;
-using Fanex.Data.Repository;
-using Fanex.Logging;
-using Fanex.NAP.CTS.Core;
+﻿using Fanex.Data.Repository;
 using Fanex.NAP.CTS.Core.BaseClasses;
+using Fanex.NAP.CTS.Core.Helpers.Xml;
 using Fanex.NAP.CTS.Criteria.CustomerClass;
 using Fanex.NAP.CTS.Model.CustomerClass;
 using System;
@@ -25,7 +23,7 @@ namespace Fanex.NAP.CTS.Service.Implement
             return DataService.GetData<CustomerClassModel>(criteria);
         }
 
-        public DBResult InsertCustomerClass(string username, int custClass, bool isAffectToAssociation, int createdBy)
+        public IEnumerable<CustomerClassForMainDb> InsertCustomerClass(string username, int custClass, bool isAffectToAssociation, int createdBy)
         {
             var criteria = new InsertSpecialCustomerClassCriteria()
             {
@@ -35,29 +33,20 @@ namespace Fanex.NAP.CTS.Service.Implement
                 IsAffectToAssociation = isAffectToAssociation
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            var repository = new DynamicRepository();
+            var customerClassList = repository.Fetch<CustomerClassForMainDb>(criteria);
+            return customerClassList;
+        }
+
+        public void SyncCustomerClassToMainDb(IEnumerable<CustomerClassForMainDb> customerClassList)
+        {
+            var criteria = new SyncCustomerClassToMainDbCriteria()
             {
-                try
-                {
-                    db.ExecuteNonQuery(criteria);
+                custList = customerClassList.ToXmlString()
+            };
 
-                    return new DBResult
-                    {
-                        ErrorCode = 0,
-                        ErrorMsg = string.Empty
-                    };
-                }
-                catch (Exception ex)
-                {
-                    LogService.Error("CTS - Add Special Customer Class - exception: " + ex.Message, ex);
-
-                    return new DBResult
-                    {
-                        ErrorCode = -1,
-                        ErrorMsg = ex.Message
-                    };
-                }
-            }            
+            var repository = new DynamicRepository();
+            repository.Execute(criteria);
         }
     }
 }

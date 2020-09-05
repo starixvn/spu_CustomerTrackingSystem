@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Fanex.NAP.CTS.Criteria.CustomerClass
 {
-    public class InsertSpecialCustomerClassCriteria : NonQueryCommand
+    public class InsertSpecialCustomerClassCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_Username")]
         public string Username { get; set; }

@@ -107,6 +107,7 @@
     <Compile Include="CTSUser\InsertCTSUserCriteria.cs" />
     <Compile Include="CustomerClass\InsertSpecialCustomerClassCriteria.cs" />
     <Compile Include="CustomerClass\GetAllSpecialCustomerClassCriteria.cs" />
+    <Compile Include="CustomerClass\SyncCustomerClassToMainDbCriteria.cs" />
     <Compile Include="CustomerMonitor\CustomerDetails\GetCustomerTicketsCriteria.cs" />
     <Compile Include="CustomerMonitor\CustomerGetCriteria.cs" />
     <Compile Include="CustomerMonitor\UpdateNoteCriteria.cs" />
