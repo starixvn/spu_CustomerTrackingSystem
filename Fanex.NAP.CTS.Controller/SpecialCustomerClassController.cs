@@ -49,7 +49,8 @@
         [HttpPost]
         public ActionResult AddCustomerClass(string username, int custClass, bool isAffectToAss)
         {
-            _customerClassService.InsertCustomerClass(username, custClass, isAffectToAss);
+            int createBy = CurrentSession.UserId;
+            _customerClassService.InsertCustomerClass(username, custClass, isAffectToAss, createBy);
             var a = username;
             return View();
         }
