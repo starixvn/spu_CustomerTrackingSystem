@@ -37,26 +37,27 @@ namespace Fanex.NAP.CTS.Service.Implement
                 IsAffectToAssociation = isAffectToAssociation
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                using (var query = db.QueryMultiple(criteria))
-                {
-                    insertCTSResult.CustomerClassList = query.Read<CustomerClassForMainDb>();
-                    var opErrorMessage = query.Read<string>();
+            //using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            //{
+            //    using (var query = db.QueryMultiple(criteria))
+            //    {
+            //        insertCTSResult.CustomerClassList = query.Read<CustomerClassForMainDb>();
+            //        var opErrorMessage = query.Read<string>();
 
-                    if (opErrorMessage != null && opErrorMessage.Any())
-                    {
-                        insertCTSResult.OpErrorMessage = opErrorMessage.ToList()[0];
-                    }                    
+            //        if (opErrorMessage != null && opErrorMessage.Any())
+            //        {
+            //            insertCTSResult.OpErrorMessage = opErrorMessage.ToList()[0];
+            //        }                    
 
-                    return insertCTSResult;
-                }
-            }
+            //        return insertCTSResult;
+            //    }
+            //}
 
-            //var repository = new DynamicRepository();
-            //var customerClassList = repository.Fetch<CustomerClassForMainDb>(criteria);
+            var repository = new DynamicRepository();
+            insertCTSResult.CustomerClassList = repository.Fetch<CustomerClassForMainDb>(criteria);
+            insertCTSResult.OpErrorMessage = criteria.ErrorMessage;
 
-            //return customerClassList;
+            return insertCTSResult;
         }
 
         public int SyncCustomerClassToMainDb(IEnumerable<CustomerClassForMainDb> customerClassList)
@@ -71,7 +72,7 @@ namespace Fanex.NAP.CTS.Service.Implement
             try
             {
                 var repository = new DynamicRepository();
-                insertCode = repository.Execute(criteria);
+                //insertCode = repository.Execute(criteria);
             }
             catch (Exception ex)
             {
