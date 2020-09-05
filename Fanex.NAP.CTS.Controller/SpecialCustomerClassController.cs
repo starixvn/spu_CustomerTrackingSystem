@@ -52,11 +52,12 @@
         {
             var resultInsertToCTS = _customerClassService.InsertCustomerClass(username, custClass, isAffectToAss, CurrentSession.UserId);
 
-            if (resultInsertToCTS.OpErrorMessage == string.Empty)
+            if (string.IsNullOrEmpty(resultInsertToCTS.OpErrorMessage))
             {
                 if (resultInsertToCTS.CustomerClassList != null && resultInsertToCTS.CustomerClassList.Any())
                 {
-                    var resultInsertToMainDb = _customerClassService.SyncCustomerClassToMainDb(resultInsertToCTS.CustomerClassList);
+                    var list = resultInsertToCTS.CustomerClassList.Where(c => c.CustID != 0);
+                    var resultInsertToMainDb = _customerClassService.SyncCustomerClassToMainDb(list);
 
                     resultInsertToCTS.ErrorCode = resultInsertToMainDb;
                 }
