@@ -51,41 +51,51 @@
 </div>
 
 <div id="divAddSubscriber" class="popup-add divAddSubscriber" style="display: none;">
-    <div class="group">
+    <div class="form-control">
         <div class="label">Site</div>
-        <input class="default" type="text">
+        <input id="txtSite" type="text" class="input-field full-width" maxlength="50">
     </div>
-    <div class="group">
+    <div class="form-control">
         <div class="label">Site ID</div>
-        <input class="default" type="text">
+        <input id="txtSiteID" type="text" class="input-field full-width" maxlength="50">
     </div>
-    <div class="group">
+    <div class="form-control">
         <div class="label">IBCUserName_Prefix</div>
-        <input class="default" type="text">
+        <input id="txtIBCUserNamePrefix" type="text" class="input-field full-width" maxlength="50">
     </div>
-    <div class="group">
+    <div class="form-control">
         <div class="label">Subscriber Group</div>
-        <input class="default" type="text">
+        <select class="control full-width" id="txtSubscriberGroup">
+            <option value="All" selected="">Credit Site</option>
+            <option value="running">None</option>
+        </select>
     </div>
-    <div class="group">
+    <div class="form-control">
         <div class="label">Subscriber Name</div>
-        <input class="default" type="text">
+        <input id="txtSubscriberName" type="text" class="input-field full-width" maxlength="50">
     </div>
-    <div class="group">
+    <div class="form-control">
         <div class="label">Role Mapping</div>
-        <input class="default" type="text">
+        <select class="control full-width" id="txtRoleMapping">
+            <option value="0" selected="">0</option>
+            <option value="1">1</option>
+        </select>
     </div>
 
     <div class="note">
-        <p>
-            Note
-            <span>
-                Role Mapping format
-            </span>
-        </p>
-        <p>- 0: is for Licensee site</p>
-        <p>- 1: is for Membersite of Credit Site</p>
-        <p>- 2: is for Alpha site of Credit Site</p>
+        <span class="text-title">
+            Note: 
+        </span>
+
+        <span class="text-description">
+            Role Mapping format
+        </span>
+        <div class="text-detail">
+            <p class="text">- 0: is for Licensee site</p>
+            <p class="text">- 1: is for Membersite of Credit Site</p>
+            <p class="text">- 2: is for Alpha site of Credit Site</p>
+        </div>
+       
     </div>
 
     <div class="modal-footer margin-top-10">

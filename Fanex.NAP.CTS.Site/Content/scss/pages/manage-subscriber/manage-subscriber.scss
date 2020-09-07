@@ -82,6 +82,32 @@
     color: #545454;
 }
 
-.divAddSubscriber{
+.divAddSubscriber {
     width: 700px;
+
+    .label{
+        color: #333;
+    }
+
+    .note {
+        padding-left: 2rem;
+
+        .text-title {
+            color: #FF0000
+        }
+
+        .text-detail {
+            margin-top: .5rem;
+            padding-left: .8rem;
+
+            .text {
+                margin-bottom: .3rem;
+            }
+        }
+    }
+
+
+    .modal-footer {
+        margin-top: 1rem;
+    }
 }

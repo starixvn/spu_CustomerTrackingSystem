@@ -102,11 +102,10 @@
                     data: obj => () => {
                         return html = '<span class="sub-icon delete test" id="sub-icon " title="Remove Account"><i class="icon-delete ' + ('') + '"></i></span>';
                     }, createdCell: (cell, _, row) => {
-                        console.log('aaaaaa');
                         $('.icon-delete', cell).click(() => {
                             $('td #sub-icon').addClass('none-pointer');
                             common.showConfirmation("<div class='popup-content'><div class='popup-title'>Are you sure about this?</div>For confirm this action, this account will not automatically update by our service in the future </div>", function () {
-                                console.log("remove");
+                                // Handle delete
                             }, () => {
                                 $('td #sub-icon').removeClass('none-pointer');
                             });
@@ -129,8 +128,8 @@
         domElements.btnAdd.on('click', function () {
             domElements.divAddSubscriber.dialog({
                 modal: true,
-                width: '800px',
-                title: 'ADD Subscriber',
+                width: '500px',
+                title: 'ADD SUBSCRIBER',
                 resizable: true,
                 draggable: true,
                 close: function () {
