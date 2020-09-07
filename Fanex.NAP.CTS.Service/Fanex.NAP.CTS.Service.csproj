@@ -63,7 +63,7 @@
     <Compile Include="Implement\AccountService.cs" />
     <Compile Include="Implement\AssociatedAccountService.cs" />
     <Compile Include="Implement\CheckBetReportService.cs" />
-    <Compile Include="Implement\CustomerClassService.cs" />
+    <Compile Include="Implement\SpecialCustomerClassService.cs" />
     <Compile Include="Implement\CustomerEvidenceService.cs" />
     <Compile Include="Implement\CustomerMonitorService.cs" />
     <Compile Include="Implement\DailyCaptureDataService.cs" />
@@ -106,6 +106,7 @@
     <Compile Include="Interface\IOfficeIPService.cs" />
     <Compile Include="Interface\IProblemAccountMonitorService.cs" />
     <Compile Include="Interface\IScannedOfficeIpReportService.cs" />
+    <Compile Include="Interface\ISpecialCustomerClassService.cs" />
     <Compile Include="Interface\ISubscriberAssignmentService.cs" />
     <Compile Include="Interface\ISuspiciousCustomerReportDetailsService.cs" />
     <Compile Include="Interface\ISuspiciousCustomerReportService.cs" />

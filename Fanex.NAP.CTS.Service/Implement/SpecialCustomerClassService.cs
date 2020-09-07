@@ -1,34 +1,29 @@
-﻿using Fanex.Data;
-using Fanex.Data.Repository;
-using Fanex.Logging;
-using Fanex.NAP.CTS.Core;
-using Fanex.NAP.CTS.Core.BaseClasses;
-using Fanex.NAP.CTS.Core.Helpers.Xml;
-using Fanex.NAP.CTS.Criteria.CustomerClass;
-using Fanex.NAP.CTS.Model.CustomerClass;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Fanex.NAP.CTS.Service.Implement
+﻿namespace Fanex.NAP.CTS.Service
 {
-    public class CustomerClassService
+    using Fanex.Data.Repository;
+    using Fanex.Logging;    
+    using Fanex.NAP.CTS.Core.BaseClasses;
+    using Fanex.NAP.CTS.Core.Helpers.Xml;
+    using Fanex.NAP.CTS.Criteria.CustomerClass;
+    using Fanex.NAP.CTS.Model.SpecialCustomerClass;
+    using System;
+    using System.Collections.Generic;
+
+    public class SpecialCustomerClassService : ISpecialCustomerClassService
     {
-        public IEnumerable<CustomerClassModel> GetAllCustomerClass()
+        public IEnumerable<SpecialCustomerClassModel> GetAllCustomerClass()
         {
             var criteria = new GetAllSpecialCustomerClassCriteria()
             {
                 IsGetAllInfo = true
             };
 
-            return DataService.GetData<CustomerClassModel>(criteria);
+            return DataService.GetData<SpecialCustomerClassModel>(criteria);
         }
 
-        public InsertCustomerClassResult InsertCustomerClass(string username, int custClass, bool isAffectToAssociation, int createdBy)
+        public InsertSpecialCustomerClassResult InsertCustomerClass(string username, int custClass, bool isAffectToAssociation, int createdBy)
         {
-            var insertCTSResult = new InsertCustomerClassResult();
+            var insertCTSResult = new InsertSpecialCustomerClassResult();
             var criteria = new InsertSpecialCustomerClassCriteria()
             {
                 Username = username,
@@ -38,13 +33,13 @@ namespace Fanex.NAP.CTS.Service.Implement
             };
 
             var repository = new DynamicRepository();
-            insertCTSResult.CustomerClassList = repository.Fetch<CustomerClassForMainDb>(criteria);
+            insertCTSResult.CustomerClassList = repository.Fetch<SpecialCustomerClassForMainDb>(criteria);
             insertCTSResult.OpErrorMessage = criteria.ErrorMessage;
 
             return insertCTSResult;
         }
 
-        public int SyncCustomerClassToMainDb(IEnumerable<CustomerClassForMainDb> customerClassList)
+        public int SyncCustomerClassToMainDb(IEnumerable<SpecialCustomerClassForMainDb> customerClassList)
         {
             var insertCode = 0;
 
@@ -65,6 +60,11 @@ namespace Fanex.NAP.CTS.Service.Implement
             }
 
             return insertCode;
+        }
+
+        public int RemoveCustomerClass(long ctsCustId)
+        {
+            return 0;
         }
     }
 }

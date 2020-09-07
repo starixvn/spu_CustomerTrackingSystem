@@ -58,7 +58,7 @@
                 { targets: [2], width: "10%" },
                 { targets: [3], width: "15%" },
                 { targets: [4], width: "15%" },               
-                { targets: [4], width: "10%" },               
+                { targets: [5], width: "10%" }
             ],
             columns: [               
                 { data: obj => obj.Username },
@@ -72,8 +72,10 @@
                     }, createdCell: (cell, _, row) => {
                         $('.icon-delete', cell).click(() => {
                             $('td #sub-icon').addClass('none-pointer');
-                            common.showConfirmation("<div class='popup - content'>Do you want remove <strong>" + row.Username + "</strong> from Special Customer Class list? </div>", function () {
-                               //handle there
+                            let html = "<div class='popup - content'>Do you want remove <strong>" + row.Username + "</strong> from Special Customer Class list? </div>";                            
+                           
+                            common.showConfirmation(html, function () {
+                                RemoveCustomerClass(row.CTSCustID);
                             }, () => {
                                 $('td #sub-icon').removeClass('none-pointer');
                             });
@@ -81,6 +83,28 @@
                     }
                 }
             ]
+        });
+    }
+
+    function RemoveCustomerClass(ctsCustId) {
+        var url = common.modifyRelativeUrl('/SpecialCustomerClass/RemoveCustomerClass');
+        var params = {};
+        params.ctsCustId = ctsCustId;
+
+        $.ajax(url, {
+            type: 'POST',
+            data: params,
+            success: function (response) {
+                if (response.errorCode === 0) {
+                    common.showSuccess('Remove the Special Customer Class successful!');
+                    domElements.specialCustomerClassTable.DataTable().ajax.reload();
+                }
+                else {
+                    common.showError('Remove the Special Customer Class fail!' + response.opErrorMessage);
+                }
+            },
+            complete: function () {
+            }
         });
     }
 
@@ -120,16 +144,14 @@
                 type: 'POST',
                 data: params,
                 success: function (response) {
-                    if (response != undefined) {                        
+                    if (response !== undefined) {                        
                         if (response.ErrorCode === 0) {
                             common.showSuccess("Add Customer Class successful");
-                            domElements.txtUsername.val("");
-                            domElements.txtCustomerClass.val("");
                             domElements.divCustomerClass.dialog('close');
+                            domElements.specialCustomerClassTable.DataTable().ajax.reload();
                         } else {
                             common.showError("Add Customer Class fail " + response.OpErrorMessage);
-                            console.log(response.OpErrorMessage);
-                        }    
+                        }
                     }
                 },
                 error: function (err) {
@@ -173,7 +195,7 @@
         domElements.btnCancel.on('click', () => {
             domElements.divCustomerClass.dialog('close');
         });
-    };
+    }
 
     $(document).ready(function () {
         Initial();

@@ -1,19 +1,22 @@
 ﻿namespace Fanex.NAP.CTS.Controller
-{  
-    using Fanex.NAP.Core.Web.Attribute;  
+{
+    using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Resource.Consts;    
-    using Fanex.NAP.CTS.Service.Implement;        
+    using Fanex.NAP.CTS.Service;
+    using Fanex.NAP.CTS.ViewModel.SpecialCustomerClass;
+    using System;
     using System.Linq;    
-    using System.Web.Mvc;
-    
+    using System.Web.Mvc;    
+
+    [NapAuth(FunctionKey = FSFunctionKeys.SpecialCustomerClass, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class SpecialCustomerClassController : BaseController
     {
-        private readonly CustomerClassService _customerClassService;
+        private readonly ISpecialCustomerClassService _customerClassService;
 
         public override string BaseControllerName { get => Consts.MenuItemController; }
 
         public SpecialCustomerClassController() 
-            => _customerClassService = new CustomerClassService();
+            => _customerClassService = new SpecialCustomerClassService();
 
         public ActionResult Index()
         {           
@@ -23,15 +26,30 @@
         [HttpGet]
         public ActionResult GetCustomerClass()
         {
-            var viewModel = _customerClassService.GetAllCustomerClass();
+            var viewModel = Enumerable.Empty<SpecialCustomerClassViewModel>();
+            var specialCustomers = _customerClassService.GetAllCustomerClass();
 
-            return Json(new
-            {               
-                data = viewModel
-            }, JsonRequestBehavior.AllowGet);
+            if (specialCustomers != null && specialCustomers.Any())
+            {
+                viewModel = specialCustomers.Select(x => new SpecialCustomerClassViewModel
+                {
+                    CTSCustID = x.CTSCustID,
+                    RootCTSCustID = x.RootCTSCustID,
+                    Username = x.Username,
+                    SubscriberName = x.SubscriberName,
+                    CustomerClass = x.CustomerClass,
+                    CreatedBy = x.CreatedBy,
+                    CreatedDateString = x.CreatedDate != DateTime.MinValue 
+                        ? x.CreatedDate.ToString(Consts.FormatDateToString_MMMddyyyy) 
+                        : string.Empty
+                });
+            }
+
+            return Json(new { data = viewModel }, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpPost]        
+        [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.SpecialCustomerClass, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult AddCustomerClass(string username, int custClass, bool isAffectToAss)
         {
             var resultInsertToCTS = _customerClassService.InsertCustomerClass(username, custClass, isAffectToAss, CurrentSession.UserId);
@@ -53,6 +71,21 @@
             }
 
             return Json(resultInsertToCTS, JsonRequestBehavior.AllowGet);
-        }        
+        }
+
+        [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.SpecialCustomerClass, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        public ActionResult RemoveCustomerClass(long ctsCustId)
+        {
+            var opErrorMessage = string.Empty;
+            var errorCode = _customerClassService.RemoveCustomerClass(ctsCustId);
+
+            return Json(new
+            {
+                errorCode,
+                opErrorMessage
+            }, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

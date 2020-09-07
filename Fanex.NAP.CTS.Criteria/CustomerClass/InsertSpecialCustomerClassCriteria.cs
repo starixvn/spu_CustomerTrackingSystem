@@ -1,8 +1,8 @@
-﻿using Fanex.Data;
-using Fanex.Data.Repository;
-
-namespace Fanex.NAP.CTS.Criteria.CustomerClass
+﻿namespace Fanex.NAP.CTS.Criteria.CustomerClass
 {
+    using Fanex.Data;
+    using Fanex.Data.Repository;
+
     public class InsertSpecialCustomerClassCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_Username")]
