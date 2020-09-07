@@ -3,19 +3,20 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section styles{
-    @Styles.Render("~/problem-account-monitor-styles")
+    @Styles.Render("~/special-customer-class-styles")
 }
 <h2 class="page-title">SPECIAL CUSTOMER CLASS</h2>
 
-<div id="problemAccountMonitorGrid" class="div-grid">
+<div id="problemAccountMonitorGrid" class="special-customer-class">
     <div class="fixed-header">
-        <div class="form-filter">
-            <button class="button button-generate" id="btnAdd">Add</button>
+        <div class="top-header">
+            <div class="add-special">
+                <button class="button button-primary-outline" id="btnAdd">Add</button>
+            </div>
         </div>
     </div>
 
-
-    <table id="tblSpecialCustomerClass" class="table table-striped width-100per" style="width: 100%">
+    <table id="tblSpecialCustomerClass" class="table table-striped width-100per tblSpecialCustomerClass" style="width: 100%">
         <thead>
             <tr>
                 <th>Username</th>
@@ -23,6 +24,7 @@
                 <th>Customer Class</th>
                 <th>Added By</th>
                 <th>Added Date</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody></tbody>
@@ -44,10 +46,9 @@
             <span>Update for Affected Customers</span>
         </label>
     </div>
-    <div class="modal-footer margin-top-10" style="margin-top: 30px;">
+    <div class="modal-footer">
         <button id="btnCancel" class="button btn-cancel-outline" title="Cancel">Cancel</button>
         <button id="btnSave" class="button -add" title="Add Association">Save</button>
-
     </div>
 </div>
 

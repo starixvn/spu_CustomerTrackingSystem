@@ -286,7 +286,10 @@
         private static void RegisterSpecialCustomerClassBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/special-customer-class-scripts").Include(                        
-                "~/Scripts/SpecialCustomerClass/index.js"));          
+                "~/Scripts/SpecialCustomerClass/index.js"));
+
+            bundles.Add(new StyleBundle("~/special-customer-class-styles").Include(
+                 "~/Content/scss/pages/special-customer-class/special-customer-class.css"));
         }
     }
 }

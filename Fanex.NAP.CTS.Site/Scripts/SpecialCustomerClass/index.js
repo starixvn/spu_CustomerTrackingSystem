@@ -31,32 +31,55 @@
             dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
             pagingType: "full_numbers",
             language: {
-                lengthMenu: "Page size _MENU_",               
+                lengthMenu: "Page size _MENU_",
+                paginate: {
+                    first: "<span class=\"icon-chevron-left\"></span><span class=\"icon-chevron-left\"></span>",
+                    last: "<span class=\"icon-chevron-right\"></span><span class=\"icon-chevron-right\"></span>",
+                    next: "",
+                    previous: ""
+                },
+                info: "Displaying _START_ to _END_ of _TOTAL_ item(s)",
                 infoEmpty: "",
                 zeroRecords: "There's no data"
             },
             ordering: false,
-            searching: false,            
+            searching: false,
+            lengthMenu: [20, 50, 100, 200],
+            pageLength: 50,
             scrollX: false,
             scrollCollapse: false,
-            paging: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },                
                 { targets: [0, 1], className: "text-left" },
                 { targets: [2], className: "text-right" },
-                { targets: [3, 4], className: "text-center" },
-                { targets: [0], width: "30%" },
-                { targets: [1], width: "30%" },
+                { targets: [3, 4, 5], className: "text-center" },
+                { targets: [0], width: "25%" },
+                { targets: [1], width: "25%" },
                 { targets: [2], width: "10%" },
                 { targets: [3], width: "15%" },
-                { targets: [4], width: "15%" }                
+                { targets: [4], width: "15%" },               
+                { targets: [4], width: "10%" },               
             ],
             columns: [               
                 { data: obj => obj.Username },
                 { data: obj => obj.SubscriberName },
                 { data: obj => obj.CustomerClass },
                 { data: obj => obj.CreatedBy },
-                { data: obj => obj.CreatedDateString }
+                { data: obj => obj.CreatedDateString },
+                {
+                    data: obj => () => {
+                        return html = '<span class="sub-icon - delete " id="sub-icon " title="Remove Account"><i class="icon-delete"></i></span>';
+                    }, createdCell: (cell, _, row) => {
+                        $('.icon-delete', cell).click(() => {
+                            $('td #sub-icon').addClass('none-pointer');
+                            common.showConfirmation("<div class='popup - content'>Do you want remove <strong>" + row.Username + "</strong> from Associated Account Monitor list? </div>", function () {
+                               //handle there
+                            }, () => {
+                                $('td #sub-icon').removeClass('none-pointer');
+                            });
+                        });
+                    }
+                }
             ]
         });
     }

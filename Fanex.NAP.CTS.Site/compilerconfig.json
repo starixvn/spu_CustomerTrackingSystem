@@ -83,5 +83,10 @@
     "outputFile": "Content/scss/pages/common/maintenance.css",
     "inputFile": "Content/scss/pages/common/maintenance.scss",
     "sourceMap": false
+  },
+  {
+    "outputFile": "Content/scss/pages/special-customer-class/special-customer-class.css",
+    "inputFile": "Content/scss/pages/special-customer-class/special-customer-class.scss",
+    "sourceMap": false
   }
 ]
