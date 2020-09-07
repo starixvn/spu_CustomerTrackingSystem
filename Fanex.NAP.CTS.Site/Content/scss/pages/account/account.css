@@ -921,7 +921,7 @@
     .content-info .header-info .container-status {
       width: 100%;
       position: relative;
-      padding-right: 18rem; }
+      padding-right: 11rem; }
       .content-info .header-info .container-status .wrapper-status {
         position: relative;
         width: 100%;
@@ -973,99 +973,115 @@
               margin-right: .7rem; }
       .content-info .header-info .container-status .can-toggle {
         position: absolute;
-        right: 110px;
-        top: 10px; }
-        .content-info .header-info .container-status .can-toggle *, .content-info .header-info .container-status .can-toggle *:before, .content-info .header-info .container-status .can-toggle *:after {
+        right: 56px;
+        top: 10px;
+        /*  Toggle Switch  */ }
+        .content-info .header-info .container-status .can-toggle .toggleSwitch span span {
+          display: none; }
+        .content-info .header-info .container-status .can-toggle .toggleSwitch {
+          display: inline-block;
+          height: 18px;
+          position: relative;
+          overflow: visible;
+          padding: 0;
+          margin-left: 50px;
+          cursor: pointer;
+          width: 40px; }
+        .content-info .header-info .container-status .can-toggle .toggleSwitch * {
+          -webkit-box-sizing: border-box;
+          -moz-box-sizing: border-box;
           box-sizing: border-box; }
-        .content-info .header-info .container-status .can-toggle input[type="checkbox"] {
+        .content-info .header-info .container-status .can-toggle .toggleSwitch label,
+        .content-info .header-info .container-status .can-toggle .toggleSwitch > span {
+          line-height: 20px;
+          height: 20px;
+          vertical-align: middle; }
+        .content-info .header-info .container-status .can-toggle .toggleSwitch input:focus ~ a,
+        .content-info .header-info .container-status .can-toggle .toggleSwitch input:focus + label {
+          outline: none; }
+        .content-info .header-info .container-status .can-toggle .toggleSwitch label {
+          position: relative;
+          z-index: 3;
+          display: block;
+          width: 100%; }
+        .content-info .header-info .container-status .can-toggle .toggleSwitch input {
+          position: absolute;
           opacity: 0;
+          z-index: 5; }
+        .content-info .header-info .container-status .can-toggle .toggleSwitch > span {
+          position: absolute;
+          left: -50px;
+          width: 100%;
+          margin: 0;
+          padding-right: 50px;
+          text-align: left;
+          white-space: nowrap; }
+        .content-info .header-info .container-status .can-toggle .toggleSwitch > span span {
           position: absolute;
           top: 0;
-          left: 0; }
-          .content-info .header-info .container-status .can-toggle input[type="checkbox"][disabled] ~ label {
-            pointer-events: none; }
-            .content-info .header-info .container-status .can-toggle input[type="checkbox"][disabled] ~ label .can-toggle__switch {
-              opacity: 0.4; }
-          .content-info .header-info .container-status .can-toggle input[type="checkbox"]:checked ~ label .can-toggle__switch:before {
-            content: attr(data-unchecked);
-            left: 0; }
-          .content-info .header-info .container-status .can-toggle input[type="checkbox"]:checked ~ label .can-toggle__switch:after {
-            content: attr(data-checked); }
-        .content-info .header-info .container-status .can-toggle label {
-          user-select: none;
-          position: relative;
+          left: 0;
+          z-index: 5;
+          display: block;
+          width: 50%;
+          margin-left: 50px;
+          text-align: left;
+          font-size: 0.9em;
+          width: 100%;
+          left: 12%;
+          top: 2px;
+          opacity: 0; }
+        .content-info .header-info .container-status .can-toggle .toggleSwitch a {
+          position: absolute;
+          right: 50%;
+          z-index: 4;
+          display: block;
+          height: 100%;
+          padding: 0;
+          left: 2px;
+          width: 18px;
+          background-color: #fff;
+          border-radius: 100%;
+          transition: all 0.2s ease-out;
+          box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25); }
+        .content-info .header-info .container-status .can-toggle .toggleSwitch > span span:first-of-type {
+          font-weight: bold;
+          font-size: 12px;
+          line-height: 14px;
           display: flex;
-          align-items: center; }
-          .content-info .header-info .container-status .can-toggle label .can-toggle__switch {
-            position: relative; }
-            .content-info .header-info .container-status .can-toggle label .can-toggle__switch:before {
-              content: attr(data-checked);
-              position: absolute;
-              top: 0;
-              text-transform: uppercase;
-              text-align: center; }
-            .content-info .header-info .container-status .can-toggle label .can-toggle__switch:after {
-              content: attr(data-unchecked);
-              position: absolute;
-              z-index: 5;
-              text-transform: uppercase;
-              text-align: center;
-              background: white;
-              transform: translate3d(0, 0, 0); }
-        .content-info .header-info .container-status .can-toggle input[type="checkbox"][disabled] ~ label {
-          color: rgba(79, 151, 31, 0.5); }
-        .content-info .header-info .container-status .can-toggle input[type="checkbox"]:focus ~ label .can-toggle__switch, .content-info .header-info .container-status .can-toggle input[type="checkbox"]:hover ~ label .can-toggle__switch {
-          background-color: #4f971f; }
-          .content-info .header-info .container-status .can-toggle input[type="checkbox"]:focus ~ label .can-toggle__switch:after, .content-info .header-info .container-status .can-toggle input[type="checkbox"]:hover ~ label .can-toggle__switch:after {
-            color: #396d16; }
-        .content-info .header-info .container-status .can-toggle input[type="checkbox"]:hover ~ label {
-          color: #44821b; }
-        .content-info .header-info .container-status .can-toggle input[type="checkbox"]:checked ~ label:hover {
-          color: #2a63f7; }
-        .content-info .header-info .container-status .can-toggle input[type="checkbox"]:checked ~ label .can-toggle__switch {
-          background-color: #5280f9; }
-          .content-info .header-info .container-status .can-toggle input[type="checkbox"]:checked ~ label .can-toggle__switch:after {
-            color: #205cf7; }
-        .content-info .header-info .container-status .can-toggle input[type="checkbox"]:checked:focus ~ label .can-toggle__switch, .content-info .header-info .container-status .can-toggle input[type="checkbox"]:checked:hover ~ label .can-toggle__switch {
-          background-color: #396EF8; }
-          .content-info .header-info .container-status .can-toggle input[type="checkbox"]:checked:focus ~ label .can-toggle__switch:after, .content-info .header-info .container-status .can-toggle input[type="checkbox"]:checked:hover ~ label .can-toggle__switch:after {
-            color: #094af5; }
-        .content-info .header-info .container-status .can-toggle label .can-toggle__switch {
-          transition: background-color 0.3s cubic-bezier(0, 1, 0.5, 1);
-          background: #5aac23; }
-          .content-info .header-info .container-status .can-toggle label .can-toggle__switch:before {
-            color: #FFFFFF; }
-          .content-info .header-info .container-status .can-toggle label .can-toggle__switch:after {
-            -webkit-transition: -webkit-transform 0.3s cubic-bezier(0, 1, 0.5, 1);
-            transition: transform 0.3s cubic-bezier(0, 1, 0.5, 1);
-            color: #4f971f; }
-        .content-info .header-info .container-status .can-toggle input[type="checkbox"]:focus ~ label .can-toggle__switch:after, .content-info .header-info .container-status .can-toggle input[type="checkbox"]:hover ~ label .can-toggle__switch:after {
-          box-shadow: 0 3px 3px rgba(0, 0, 0, 0.4); }
-        .content-info .header-info .container-status .can-toggle input[type="checkbox"]:checked ~ label .can-toggle__switch:after {
-          transform: translate3d(82px, 0, 0); }
-        .content-info .header-info .container-status .can-toggle input[type="checkbox"]:checked:focus ~ label .can-toggle__switch:after, .content-info .header-info .container-status .can-toggle input[type="checkbox"]:checked:hover ~ label .can-toggle__switch:after {
-          box-shadow: 0 3px 3px rgba(0, 0, 0, 0.4); }
-        .content-info .header-info .container-status .can-toggle label {
-          font-size: 12px; }
-          .content-info .header-info .container-status .can-toggle label .can-toggle__switch {
-            height: 22px;
-            flex: 0 0 108px;
-            border-radius: 11px; }
-            .content-info .header-info .container-status .can-toggle label .can-toggle__switch:before {
-              left: 24px;
-              font-size: 12px;
-              line-height: 22px;
-              width: 54px;
-              padding: 0 12px; }
-            .content-info .header-info .container-status .can-toggle label .can-toggle__switch:after {
-              top: 2px;
-              left: 2px;
-              border-radius: 9px;
-              width: 22px;
-              line-height: 18px;
-              font-size: 12px; }
-            .content-info .header-info .container-status .can-toggle label .can-toggle__switch:hover:after {
-              box-shadow: 0 3px 3px rgba(0, 0, 0, 0.4); }
+          align-items: center;
+          text-transform: uppercase;
+          color: #FFFFFF;
+          opacity: 1;
+          left: 39%; }
+        .content-info .header-info .container-status .can-toggle .toggleSwitch > span:before {
+          content: '';
+          display: block;
+          width: 95px;
+          height: 22px;
+          position: absolute;
+          left: 50px;
+          top: -2px;
+          background-color: #2E487C;
+          border-radius: 11px;
+          transition: all 0.2s ease-out; }
+        .content-info .header-info .container-status .can-toggle .toggleSwitch input:checked ~ a {
+          border-color: #fff;
+          left: 207%;
+          margin-left: -8px; }
+        .content-info .header-info .container-status .can-toggle .toggleSwitch input:checked ~ span:before {
+          border-color: #396EF8;
+          box-shadow: inset 0 0 0 30px #396EF8; }
+        .content-info .header-info .container-status .can-toggle .toggleSwitch input:checked ~ span span:first-of-type {
+          opacity: 0; }
+        .content-info .header-info .container-status .can-toggle .toggleSwitch input:checked ~ span span:last-of-type {
+          opacity: 1;
+          color: #fff;
+          font-weight: bold;
+          font-size: 12px;
+          line-height: 14px;
+          display: flex;
+          align-items: center;
+          text-transform: uppercase; }
   .content-info .wrapper-content {
     border: 1px solid #DFDFDF;
     box-sizing: border-box;
