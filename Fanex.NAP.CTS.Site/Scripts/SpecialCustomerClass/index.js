@@ -72,7 +72,7 @@
                     }, createdCell: (cell, _, row) => {
                         $('.icon-delete', cell).click(() => {
                             $('td #sub-icon').addClass('none-pointer');
-                            common.showConfirmation("<div class='popup - content'>Do you want remove <strong>" + row.Username + "</strong> from Associated Account Monitor list? </div>", function () {
+                            common.showConfirmation("<div class='popup - content'>Do you want remove <strong>" + row.Username + "</strong> from Special Customer Class list? </div>", function () {
                                //handle there
                             }, () => {
                                 $('td #sub-icon').removeClass('none-pointer');
