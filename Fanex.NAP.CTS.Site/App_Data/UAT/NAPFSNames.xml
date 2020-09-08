@@ -591,13 +591,20 @@
         SpName="CTS_DC_GetAssociatedCustIDsWithOtherEvidence"
         DbName="MySQL.CTS_DataCenter"/>
   </Function>
+  
 	<Function name="SpecialCustomerClass">
 		<Setting Key="CTS_DC_GetAllSpecialCustomerClass"
 	       SpName="CTS_DC_GetAllSpecialCustomerClass_xtest"
 	       DbName="MySQL.CTS_DataCenter"/>
+    
 		<Setting Key="CTS_DC_InsertSpecialCustomerClass"
 				   SpName="CTS_DC_InsertSpecialCustomerClass_xtest"
 				   DbName="MySQL.CTS_DataCenter"/>
+
+    <Setting Key="CTS_DC_RemoveSpecialCustomerClass"
+				   SpName="CTS_DC_RemoveSpecialCustomerClass_xtest"
+				   DbName="MySQL.CTS_DataCenter"/>
+    
 		<Setting Key="Acc_CustomerUpdateCustomerClass"
 				 SpName="Acc_CustomerUpdateCustomerClass_xtest"
 				 DbName="DBCust.CustDB.bodbAdminNet" TimeOut="300" />

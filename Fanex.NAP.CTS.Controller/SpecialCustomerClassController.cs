@@ -1,10 +1,12 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
     using Fanex.NAP.Core.Web.Attribute;
+    using Fanex.NAP.CTS.Model.SpecialCustomerClass;
     using Fanex.NAP.CTS.Resource.Consts;    
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.ViewModel.SpecialCustomerClass;
     using System;
+    using System.Collections.Generic;
     using System.Linq;    
     using System.Web.Mvc;    
 
@@ -26,14 +28,15 @@
         [HttpGet]
         public ActionResult GetCustomerClass()
         {
-            var viewModel = Enumerable.Empty<SpecialCustomerClassViewModel>();
+            var viewModel = Enumerable.Empty<CustomerClassViewModel>();
             var specialCustomers = _customerClassService.GetAllCustomerClass();
 
             if (specialCustomers != null && specialCustomers.Any())
             {
-                viewModel = specialCustomers.Select(x => new SpecialCustomerClassViewModel
+                viewModel = specialCustomers.Select(x => new CustomerClassViewModel
                 {
                     CTSCustID = x.CTSCustID,
+                    CustID = x.CustID,
                     RootCTSCustID = x.RootCTSCustID,
                     Username = x.Username,
                     SubscriberName = x.SubscriberName,
@@ -52,39 +55,67 @@
         [NapAuth(FunctionKey = FSFunctionKeys.SpecialCustomerClass, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult AddCustomerClass(string username, int custClass, bool isAffectToAss)
         {
+            var resultInsert = new ResultInsertRemoveViewModel
+            {
+                ErrorCode = 0,
+                ErrorMessage = string.Empty
+            };
+
             var resultInsertToCTS = _customerClassService.InsertCustomerClass(username, custClass, isAffectToAss, CurrentSession.UserId);
 
             if (string.IsNullOrEmpty(resultInsertToCTS.OpErrorMessage))
             {
-                resultInsertToCTS.ErrorCode = 0;
-
                 if (resultInsertToCTS.CustomerClassList != null && resultInsertToCTS.CustomerClassList.Any())
                 {
                     var list = resultInsertToCTS.CustomerClassList.Where(c => c.CustID != 0);
 
-                    _customerClassService.SyncCustomerClassToMainDb(list);
+                    _customerClassService.SyncCustomerClassToMainDb(list, "Insert");
                 }
             }
             else
             {
-                resultInsertToCTS.ErrorCode = -1;
+                resultInsert.ErrorCode = -1;
+                resultInsert.ErrorMessage = resultInsertToCTS.OpErrorMessage;
             }
 
-            return Json(resultInsertToCTS, JsonRequestBehavior.AllowGet);
+            return Json(resultInsert, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.SpecialCustomerClass, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult RemoveCustomerClass(long ctsCustId)
+        public ActionResult RemoveCustomerClass(int custID, long ctsCustID)
         {
-            var opErrorMessage = string.Empty;
-            var errorCode = _customerClassService.RemoveCustomerClass(ctsCustId);
-
-            return Json(new
+            var result = new ResultInsertRemoveViewModel
             {
-                errorCode,
-                opErrorMessage
-            }, JsonRequestBehavior.AllowGet);
+                ErrorCode = 0,
+                ErrorMessage = string.Empty
+            };
+
+            var custToMainDbList = new List<CustomerClassForMainDb>
+            {
+                new CustomerClassForMainDb
+                {
+                    CustID = custID,
+                    CustomerClass = -1
+                }
+            };
+
+            var resultSyncToMainDb = _customerClassService.SyncCustomerClassToMainDb(custToMainDbList, "Remove");
+
+            if (resultSyncToMainDb.ErrorCode == 0)
+            {
+                var resultRemoveToCTS = _customerClassService.RemoveCustomerClass(ctsCustID, CurrentSession.UserId);
+
+                result.ErrorCode = resultRemoveToCTS.ErrorCode;
+                result.ErrorMessage = resultRemoveToCTS.ErrorMsg;
+            }
+            else
+            {
+                result.ErrorCode = resultSyncToMainDb.ErrorCode;
+                result.ErrorMessage = resultSyncToMainDb.ErrorMsg;
+            }
+           
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
     }

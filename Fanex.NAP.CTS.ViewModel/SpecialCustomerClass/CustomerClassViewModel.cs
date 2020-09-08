@@ -1,10 +1,10 @@
-﻿namespace Fanex.NAP.CTS.Model.SpecialCustomerClass
+﻿namespace Fanex.NAP.CTS.ViewModel.SpecialCustomerClass
 {
-    using System;
-
-    public class SpecialCustomerClassModel
+    public class CustomerClassViewModel
     {
         public long CTSCustID { get; set; }
+
+        public int CustID { get; set; }
 
         public string Username { get; set; }
 
@@ -16,6 +16,6 @@
 
         public string CreatedBy { get; set; }
 
-        public DateTime CreatedDate { get; set; }
+        public string CreatedDateString { get; set; }
     }
 }

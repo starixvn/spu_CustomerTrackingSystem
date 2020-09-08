@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Criteria.CustomerClass
+﻿namespace Fanex.NAP.CTS.Criteria.SpecialCustomerClass
 {
     using Fanex.Data;
     using Fanex.Data.Repository;

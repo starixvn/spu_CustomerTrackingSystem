@@ -18,11 +18,12 @@
             serverSide: false,
             ajax: {
                 url: common.modifyRelativeUrl('/SpecialCustomerClass/GetCustomerClass'),                
-                type: "GET",      
-                dataFilter: function (response) {                   
-                    return response;
+                type: "GET",
+                beforeSend: function () {
+                    domElements.specialCustomerClassTable.find('tbody').addClass('loading');
                 },
-                complete: function () {                    
+                complete: function () {
+                    domElements.specialCustomerClassTable.find('tbody').removeClass('loading');
                 },
                 error: function (error) {                    
                     console.log(error);
@@ -75,7 +76,7 @@
                             let html = "<div class='popup - content'>Do you want remove <strong>" + row.Username + "</strong> from Special Customer Class list? </div>";                            
                            
                             common.showConfirmation(html, function () {
-                                RemoveCustomerClass(row.CTSCustID);
+                                RemoveCustomerClass(row.CustID, row.CTSCustID);
                             }, () => {
                                 $('td #sub-icon').removeClass('none-pointer');
                             });
@@ -86,24 +87,33 @@
         });
     }
 
-    function RemoveCustomerClass(ctsCustId) {
+    function RemoveCustomerClass(custID, ctsCustID) {
         var url = common.modifyRelativeUrl('/SpecialCustomerClass/RemoveCustomerClass');
         var params = {};
-        params.ctsCustId = ctsCustId;
+        params.custID = custID;
+        params.ctsCustID = ctsCustID;
 
         $.ajax(url, {
             type: 'POST',
             data: params,
             success: function (response) {
-                if (response.errorCode === 0) {
-                    common.showSuccess('Remove the Special Customer Class successful!');
+                if (response.ErrorCode === 0) {
+                    common.showSuccess('Remove the Customer Class successful');
                     domElements.specialCustomerClassTable.DataTable().ajax.reload();
                 }
                 else {
-                    common.showError('Remove the Special Customer Class fail!' + response.opErrorMessage);
+                    common.showError('Remove the Customer Class fail ' + response.ErrorMessage);
                 }
             },
+            beforeSend: function () {
+                common.showLoading();
+            },
             complete: function () {
+                common.closeLoading();
+            },
+            error: function (err) {
+                console.log(err);
+                common.closeLoading();
             }
         });
     }
@@ -146,20 +156,27 @@
                 success: function (response) {
                     if (response !== undefined) {                        
                         if (response.ErrorCode === 0) {
-                            common.showSuccess("Add Customer Class successful");
+                            common.showSuccess("Add the Customer Class successful");
                             domElements.divCustomerClass.dialog('close');
                             domElements.specialCustomerClassTable.DataTable().ajax.reload();
                         } else {
-                            common.showError("Add Customer Class fail " + response.OpErrorMessage);
+                            common.showError("Add the Customer Class fail " + response.ErrorMessage);
                         }
                     }
                 },
+                beforeSend: function () {
+                    common.showLoading();
+                },
+                complete: function () {
+                    common.closeLoading();
+                },
                 error: function (err) {
                     console.log(err);
+                    common.closeLoading();
                 }
             });
         }        
-    }  
+    }
 
     function LoadGrid() {
         $(this).prop('disabled', true);
@@ -174,7 +191,8 @@
 
         domElements.btnAddCustomerClass.on('click', function () {
             domElements.txtUsername.val("");
-            domElements.txtCustomerClass.val("");            
+            domElements.txtCustomerClass.val("");
+            domElements.btnIsAffectToAssociation.prop('checked', false);
 
             domElements.divCustomerClass.dialog({
                 modal: true,

@@ -105,9 +105,10 @@
     <Compile Include="CheckBetReport\CheckBetReportGetCriteria.cs" />
     <Compile Include="CheckBetReport\CheckBetReportUpdateNoteCriteria.cs" />
     <Compile Include="CTSUser\InsertCTSUserCriteria.cs" />
-    <Compile Include="CustomerClass\InsertSpecialCustomerClassCriteria.cs" />
-    <Compile Include="CustomerClass\GetAllSpecialCustomerClassCriteria.cs" />
-    <Compile Include="CustomerClass\SyncCustomerClassToMainDbCriteria.cs" />
+    <Compile Include="SpecialCustomerClass\InsertSpecialCustomerClassCriteria.cs" />
+    <Compile Include="SpecialCustomerClass\GetAllSpecialCustomerClassCriteria.cs" />
+    <Compile Include="SpecialCustomerClass\RemoveSpecialCustomerClassCriteria.cs" />
+    <Compile Include="SpecialCustomerClass\SyncCustomerClassToMainDbCriteria.cs" />
     <Compile Include="CustomerMonitor\CustomerDetails\GetCustomerTicketsCriteria.cs" />
     <Compile Include="CustomerMonitor\CustomerGetCriteria.cs" />
     <Compile Include="CustomerMonitor\UpdateNoteCriteria.cs" />

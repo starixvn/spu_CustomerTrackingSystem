@@ -61,6 +61,22 @@
     left: .6rem; }
   .tblSpecialCustomerClass .icon-delete:before {
     color: #FF0000; }
+  .tblSpecialCustomerClass .loading {
+    position: relative; }
+    .tblSpecialCustomerClass .loading:after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 42%;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      border: 0.25rem solid rgba(57, 110, 248, 0.2);
+      border-top-color: #396ef8;
+      -webkit-animation: spin 1s infinite linear;
+      animation: spin 1s infinite linear; }
+    .tblSpecialCustomerClass .loading tr {
+      opacity: .3; }
 
 @media screen and (min-width: 1440px) {
   .special-customer-class {

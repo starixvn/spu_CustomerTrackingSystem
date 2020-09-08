@@ -3,7 +3,7 @@
     using Fanex.NAP.CTS.Core.Helpers.Xml;
 
     [XName("r")]
-    public class SpecialCustomerClassForMainDb
+    public class CustomerClassForMainDb
     {
         [XName("id")]
         public int CustID { get; set; }
