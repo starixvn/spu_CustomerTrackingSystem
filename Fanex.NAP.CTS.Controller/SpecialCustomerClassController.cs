@@ -1,5 +1,8 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
+    using Fanex.NAP.Core.Configuration;
+    using Fanex.NAP.Core.Service.Impl;
+    using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Model.SpecialCustomerClass;
     using Fanex.NAP.CTS.Resource.Consts;    
@@ -21,8 +24,15 @@
             => _customerClassService = new SpecialCustomerClassService();
 
         public ActionResult Index()
-        {           
-            return View();
+        {
+            IUserService userService = new UserService();
+
+            var isHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
+                            NapSettings.Settings.SiteId,
+                            FSFunctionKeys.SpecialCustomerClass,
+                            NAP.Core.Business.Constant.Policy.Host);
+            
+            return View(isHostPermission);
         }
 
         [HttpGet]
@@ -43,7 +53,7 @@
                     CustomerClass = x.CustomerClass,
                     CreatedBy = x.CreatedBy,
                     CreatedDateString = x.CreatedDate != DateTime.MinValue 
-                        ? x.CreatedDate.ToString(Consts.FormatDateToString_MMMddyyyy) 
+                        ? x.CreatedDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss) 
                         : string.Empty
                 });
             }

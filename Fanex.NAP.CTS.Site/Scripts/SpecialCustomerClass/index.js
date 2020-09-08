@@ -1,6 +1,6 @@
 ﻿function SpecialCustomerClass() {
-    let dataTable;  
-    
+    let dataTable;    
+
     let domElements = {       
         specialCustomerClassTable: $('#tblSpecialCustomerClass'),      
         divCustomerClass: $('#divAddCustomerClass'),
@@ -9,8 +9,11 @@
         btnCancel: $('#btnCancel'),       
         btnIsAffectToAssociation: $('#isAffectedToAssociation'),
         txtUsername: $('#txtUsername'),
-        txtCustomerClass: $('#txtCustomerClass')
+        txtCustomerClass: $('#txtCustomerClass'),
+        hdIsHostPermission: $('#hdIsHostPermission')
     };
+
+    let isHostPermission = domElements.hdIsHostPermission.attr('IsHostPermission') === "True";
 
     function GenerateGrid() {
         
@@ -69,18 +72,21 @@
                 { data: obj => obj.CreatedDateString },
                 {
                     data: obj => () => {
-                        return html = '<span class="sub-icon - delete " id="sub-icon " title="Remove Account"><i class="icon-delete"></i></span>';
+                        return html = '<span class="sub-icon - delete" id="sub-icon " title="Remove Account"><i class="icon-delete ' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
+
                     }, createdCell: (cell, _, row) => {
-                        $('.icon-delete', cell).click(() => {
-                            $('td #sub-icon').addClass('none-pointer');
-                            let html = "<div class='popup - content'>Do you want remove <strong>" + row.Username + "</strong> from Special Customer Class list? </div>";                            
-                           
-                            common.showConfirmation(html, function () {
-                                RemoveCustomerClass(row.CustID, row.CTSCustID);
-                            }, () => {
-                                $('td #sub-icon').removeClass('none-pointer');
+                        if (isHostPermission) {
+                            $('.icon-delete', cell).click(() => {
+                                $('td #sub-icon').addClass('none-pointer');
+                                let html = "<div class='popup - content'>Do you want remove <strong>" + row.Username + "</strong> from Special Customer Class list? </div>";
+
+                                common.showConfirmation(html, function () {
+                                    RemoveCustomerClass(row.CustID, row.CTSCustID);
+                                }, () => {
+                                    $('td #sub-icon').removeClass('none-pointer');
+                                });
                             });
-                        });
+                        }                        
                     }
                 }
             ]
@@ -102,7 +108,7 @@
                     domElements.specialCustomerClassTable.DataTable().ajax.reload();
                 }
                 else {
-                    common.showError('Remove the Customer Class fail ' + response.ErrorMessage);
+                    common.showError('Failed! ' + response.ErrorMessage);
                 }
             },
             beforeSend: function () {
@@ -160,7 +166,7 @@
                             domElements.divCustomerClass.dialog('close');
                             domElements.specialCustomerClassTable.DataTable().ajax.reload();
                         } else {
-                            common.showError("Add the Customer Class fail " + response.ErrorMessage);
+                            common.showError("Failed! " + response.ErrorMessage);
                         }
                     }
                 },
@@ -187,32 +193,36 @@
     }
 
     function Initial() {
+        domElements.btnAddCustomerClass.prop('disabled', !isHostPermission);
+
         LoadGrid();
 
-        domElements.btnAddCustomerClass.on('click', function () {
-            domElements.txtUsername.val("");
-            domElements.txtCustomerClass.val("");
-            domElements.btnIsAffectToAssociation.prop('checked', false);
+        if (isHostPermission) {
+            domElements.btnAddCustomerClass.on('click', function () {
+                domElements.txtUsername.val("");
+                domElements.txtCustomerClass.val("");
+                domElements.btnIsAffectToAssociation.prop('checked', false);
 
-            domElements.divCustomerClass.dialog({
-                modal: true,
-                width: '500px',
-                title: 'ADD CUSTOMER CLASS',
-                resizable: true,
-                draggable: true,
-                close: function () {
-                    $(this).dialog('close');
-                }
+                domElements.divCustomerClass.dialog({
+                    modal: true,
+                    width: '500px',
+                    title: 'ADD CUSTOMER CLASS',
+                    resizable: true,
+                    draggable: true,
+                    close: function () {
+                        $(this).dialog('close');
+                    }
+                });
             });
-        });
 
-        domElements.btnSave.on('click', function () {
-            AddCustomerClass();
-        });
+            domElements.btnSave.on('click', function () {
+                AddCustomerClass();
+            });
 
-        domElements.btnCancel.on('click', () => {
-            domElements.divCustomerClass.dialog('close');
-        });
+            domElements.btnCancel.on('click', () => {
+                domElements.divCustomerClass.dialog('close');
+            });
+        }
     }
 
     $(document).ready(function () {

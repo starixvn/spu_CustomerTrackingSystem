@@ -115,6 +115,10 @@
             opacity: .3;
         }
     }
+
+    .icon-delete.disabled {
+        cursor: not-allowed;
+    }
 }
 
 @media screen and (min-width: 1440px) {

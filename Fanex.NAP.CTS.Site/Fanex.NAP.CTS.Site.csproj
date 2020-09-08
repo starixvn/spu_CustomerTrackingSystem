@@ -929,7 +929,6 @@
     <Content Include="Views\Account\BettingStatistic\TurnoverBySport.cshtml" />
     <Content Include="Views\Account\BettingStatistic\TurnoverWinLost.cshtml" />
     <Content Include="Views\Account\BettingStatistic\Summary.cshtml" />
-    <Content Include="Views\SpecialCustomerClass\Detail.cshtml" />
     <Content Include="Views\SpecialCustomerClass\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>

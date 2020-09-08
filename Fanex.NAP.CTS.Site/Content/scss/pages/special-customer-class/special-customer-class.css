@@ -77,6 +77,8 @@
       animation: spin 1s infinite linear; }
     .tblSpecialCustomerClass .loading tr {
       opacity: .3; }
+  .tblSpecialCustomerClass .icon-delete.disabled {
+    cursor: not-allowed; }
 
 @media screen and (min-width: 1440px) {
   .special-customer-class {
