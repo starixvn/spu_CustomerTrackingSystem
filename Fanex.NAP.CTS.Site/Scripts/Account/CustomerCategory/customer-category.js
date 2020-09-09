@@ -3,8 +3,7 @@
     let divMarkCategory = $('#divMarkCategory');
     let tblcustomercategory = $('#customer-category-table');
     let isHostPermission;
-    let inputSwitchCategorySummary = $('#account-switch');
-    let divToogleSwitch = $('#divToogleSwitch');
+    let inputSwitchCategorySummary = $('#inputSwitchCategorySummary');
     let chooseExternalCategory = "ChooseExternalCategory";
 
     function BindingMarkCategoryForAddNew(custId, ctsCustId, subscriberId) {
@@ -527,14 +526,6 @@
                 ? RenderExternalCategorySummary(dataExternal)
                 : RenderInternalCategorySummary(dataInternal);
         }
-
-        if (isExternalChecked) {
-            divToogleSwitch.attr('data-checked', '-');
-            divToogleSwitch.attr('data-unchecked', 'GENERAL');
-        } else {
-            divToogleSwitch.attr('data-checked', 'DETAILED');
-            divToogleSwitch.attr('data-unchecked', '-');
-        }
     }
 
     function GetStorageToggleCategory(key) {
@@ -561,6 +552,8 @@
         let isCache = GetStorageToggleCategory(chooseExternalCategory);
         if (isCache === null || isCache === "true") 
             inputSwitchCategorySummary.attr('checked', true);
+        else
+            inputSwitchCategorySummary.attr('checked', false);
 
         btnMarkCategory.click(function () { InitialMarkCategory(custId, ctsCustId, subscriberId); });        
 
