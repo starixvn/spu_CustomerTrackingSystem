@@ -1,8 +1,0 @@
-﻿MATCH (c:CTSCustomer)
-WHERE c.CustID IN $CustIdList
-MATCH (c)-[:USED_DEVICE*2]-(c1:CTSCustomer)
-WHERE c1.CustID IS NOT NULL AND c1.CustID <> c.CustID AND c1.Site
-WITH DISTINCT c,c1
-OPTIONAL MATCH (c1)-[r:HAS_EVIDENCE]->(e:Evidence)
-RETURN c.CustID AS Level0CustId, c1.CustID AS CustId, e.EvidenceCode AS EvidenceCode, e.EvidenceName AS EvidenceName, level AS AssociatedLevel,r.CreatedDate AS CreatedDateInTicks
-LIMIT 5000

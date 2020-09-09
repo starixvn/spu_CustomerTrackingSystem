@@ -3,6 +3,7 @@ using Fanex.NAP.CTS.Core.Helpers.Api;
 using Fanex.NAP.CTS.Core.Helpers.Xml;
 using Fanex.NAP.CTS.Core.Utilities;
 using Fanex.NAP.CTS.Model.Account;
+using Fanex.NAP.CTS.Model.API;
 using Fanex.NAP.CTS.Model.DTO;
 using Fanex.NAP.CTS.Model.GraphDB;
 using Fanex.NAP.CTS.Service;
@@ -83,7 +84,7 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
             }
         }
 
-        public JsonResult<string> GetAssociationForLetTalk(string custIdList)
+        public JsonResult<string> GetAssociationForLetsTalk(string custIdList)
         {
             var result = string.Empty;
             var eviList = ConfigurationManager.AppSettings["Environment"].ToString().Split(',');
@@ -160,6 +161,38 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
                 LogService.Error("GetDirectAssociationByDevice failed: " + ex.Message + ex.StackTrace);
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Get classification of customer
+        /// </summary>
+        /// <param name="custIdList"></param>
+        /// <returns>Customer classification in XML format</returns>
+        [HttpGet]
+        public string GetCustomerClassification(string custIdList)
+        {
+            var custClassifications= _accountService.GetCustomerClassification(custIdList, 200);
+            var result = custClassifications.Select(c => new CustomerClassification()
+            {
+                CustID = c.CustID,
+                ParentCategoryName = c.ParentCategoryName,
+                CategoryName = c.CategoryName
+            });
+
+            return result.ToXmlString();
+        }
+
+        /// <summary>
+        /// Get class of customer
+        /// </summary>
+        /// <param name="custIdList"></param>
+        /// <returns>Customer class in XML format</returns>
+        [HttpGet]
+        public string GetCustomerClass(string custIdList)
+        {
+            var custClasses = _accountService.GetCustomerClassByCustId(custIdList);
+
+            return custClasses.ToXmlString();
         }
 
         /// <summary>

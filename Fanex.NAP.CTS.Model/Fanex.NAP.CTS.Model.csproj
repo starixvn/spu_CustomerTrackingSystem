@@ -143,6 +143,8 @@
     <Compile Include="Account\CustomerCategory\CustomerClassificationModel.cs" />
     <Compile Include="Account\CustomerEsportAutoSuspendStatusModel.cs" />
     <Compile Include="Account\CustomerEvidenceByCTSCustIdModel.cs" />
+    <Compile Include="API\CustomerClass.cs" />
+    <Compile Include="API\CustomerClassification.cs" />
     <Compile Include="CustomerAssociationModel.cs" />
     <Compile Include="Account\CustomerFlagInfoModel.cs" />
     <Compile Include="Account\CustomerGeneralStatusModel.cs" />

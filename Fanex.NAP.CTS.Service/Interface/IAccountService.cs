@@ -3,6 +3,7 @@
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.Account.CustomerCategory;
+    using Fanex.NAP.CTS.Model.API;
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
@@ -84,7 +85,7 @@
 
         IEnumerable<long> GetAssociationException(string apiURL, long ctsCustId);
 
-        IEnumerable<CustomerClassificationModel> GetCustomerClassification(long custId);
+        IEnumerable<CustomerClassificationModel> GetCustomerClassification(string custIdList, int parentCateId);
 
         DBResult AddCustomerClassification(long custId, long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark, int createdBy);
         
@@ -97,5 +98,7 @@
         IEnumerable<PerformanceByBettypeModel> GetPerformanceByBettype(long custId, int getTop);
 
         IEnumerable<PerformanceDailyModel> GetPerformanceDaily(long custId);
+
+        IEnumerable<CustomerClass> GetCustomerClassByCustId(string custIdList);
     }
 }

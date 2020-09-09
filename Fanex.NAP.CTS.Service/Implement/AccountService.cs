@@ -17,16 +17,14 @@
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.Account.CustomerCategory;
+    using Fanex.NAP.CTS.Model.API;
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.Home;
     using Fanex.NAP.CTS.Resource;
-    using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.ViewModel.Account;
-    using Fanex.NAP.CTS.ViewModel.Account.Associated;
     using Fanex.NAP.CTS.ViewModel.Account.GeneralInformation;
-    using NPOI.SS.Formula.Functions;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -346,7 +344,7 @@
                     FraudCaseList = fraudCaseList
                 };
             }
-        }              
+        }
 
         public List<TagModel> GetDirectAssociatedAccountTagFlagged(string custIdsAssInfo)
         {
@@ -560,7 +558,7 @@
 
                 return result.ToList();
             }
-        }       
+        }
 
         public IEnumerable<ValidateManualAssociationMultipleModel> ValidateManualAssociationMultiple(long fromCTSCustId, string toUserNameList, out bool isException)
         {
@@ -579,7 +577,7 @@
                     return db.Query<ValidateManualAssociationMultipleModel>(criteria).ToList();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 isException = true;
                 LogService.Error("CTS - Validate manual association multiple - exception: " + ex.Message, ex);
@@ -592,7 +590,7 @@
         {
             var errorList = new List<ValidateManualAssociationMultipleModel>();
             var userNameList = toUserNameList.Split(',').AsEnumerable();
-            
+
             errorList.AddRange(userNameList.Select(x => new ValidateManualAssociationMultipleModel
             {
                 CTSCustID = 0,
@@ -715,12 +713,12 @@
 
         public void FPSAddNewEvidence(string apiURL, UpdatePlaceEvidenceModel model)
         {
-            var data  = ApiHelper.Post<AddNewEvidenceForFPSModel>(apiURL, new AddNewEvidenceForFPSModel
-            { 
-                CustIds = model.CustId.ToString(), 
-                EviCodes = model.EvidenceCode, 
-                CreatedBy = model.UserId.ToString(), 
-                Comment = model.Comment 
+            var data = ApiHelper.Post<AddNewEvidenceForFPSModel>(apiURL, new AddNewEvidenceForFPSModel
+            {
+                CustIds = model.CustId.ToString(),
+                EviCodes = model.EvidenceCode,
+                CreatedBy = model.UserId.ToString(),
+                Comment = model.Comment
             });
 
             Task.WhenAll(data);
@@ -885,16 +883,30 @@
             }
         }
 
-        public IEnumerable<CustomerClassificationModel> GetCustomerClassification(long custId)
+        public IEnumerable<CustomerClassificationModel> GetCustomerClassification(string custIdList, int parentCateId)
         {
             var criteria = new GetCTSCustomerClassificationCriteria
             {
-                CustId = custId
+                CustIdList = custIdList,
+                ParentCateId = parentCateId
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 return db.Query<CustomerClassificationModel>(criteria);
+            }
+        }
+
+        public IEnumerable<CustomerClass> GetCustomerClassByCustId(string custIdList)
+        {
+            var criteria = new GetCustomerClassByCustIdCriteria
+            {
+                CustIds = custIdList
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<CustomerClass>(criteria);
             }
         }
 

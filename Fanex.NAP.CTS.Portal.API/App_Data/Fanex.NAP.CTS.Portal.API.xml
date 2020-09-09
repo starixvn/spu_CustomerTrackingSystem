@@ -501,6 +501,20 @@
             <param name="customerEvidenceList"></param>
             <returns></returns>
         </member>
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetCustomerClassification(System.String)">
+            <summary>
+            Get classification of customer
+            </summary>
+            <param name="custIdList"></param>
+            <returns>Customer classification in XML format</returns>
+        </member>
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetCustomerClass(System.String)">
+            <summary>
+            Get class of customer
+            </summary>
+            <param name="custIdList"></param>
+            <returns>Customer class in XML format</returns>
+        </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.Test">
             <summary>
             This controller is only for testing

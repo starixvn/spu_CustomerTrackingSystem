@@ -69,6 +69,7 @@
     <Compile Include="Account\CustomerCategory\GetAllSportGroupCriteria.cs" />
     <Compile Include="Account\CustomerCategory\GetCTSCustomerClassificationCriteria.cs" />
     <Compile Include="Account\CustomerCategory\GetCustomerCategoryByCTSCustId.cs" />
+    <Compile Include="Account\CustomerCategory\GetCustomerClassByCustIdCriteria.cs" />
     <Compile Include="Account\CustomerCategory\RemoveCTSCustomerClassificationCriteria.cs" />
     <Compile Include="Account\CustomerCategory\UpdateCTSCustomerClassificationCriteria.cs" />
     <Compile Include="Account\CustomerEsportAutoSuspendStatusCriteria.cs" />

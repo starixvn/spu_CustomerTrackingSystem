@@ -969,7 +969,7 @@
 
         public ActionResult GetCustomerClassification(long custId)
         {
-            var data = _accountService.GetCustomerClassification(custId);
+            var data = _accountService.GetCustomerClassification(custId.ToString(), -1);
 
             if (data != null && data.Any())
             {

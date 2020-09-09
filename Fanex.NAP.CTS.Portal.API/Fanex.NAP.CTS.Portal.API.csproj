@@ -55,6 +55,9 @@
     <Reference Include="Fanex.Data.MySql, Version=4.2.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Fanex.Data.MySql.4.2.2\lib\net461\Fanex.Data.MySql.dll</HintPath>
     </Reference>
+    <Reference Include="Fanex.Data.SqlServer, Version=4.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.Data.SqlServer.4.2.2\lib\net461\Fanex.Data.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Fanex.Logging, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Fanex.Logging.2.0.1\lib\net461\Fanex.Logging.dll</HintPath>
     </Reference>
@@ -401,7 +404,7 @@
     <Content Include="App_Data\Graph\scripts\GetFlaggedAssociationByManualByCustIdLevel1.scrypt" />
     <Content Include="App_Data\Graph\scripts\GetFlaggedAssociationByManualByCustIdLevel2.scrypt" />
     <Content Include="App_Data\Graph\scripts\GetCustomerByCustId.scrypt" />
-    <Content Include="App_Data\Graph\scripts\GetAssociationByDeviceByCustIdLevel1.scrypt" />
+    <Content Include="App_Data\Graph\scripts\GetAssociationByCustIdLevel1.scrypt" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />

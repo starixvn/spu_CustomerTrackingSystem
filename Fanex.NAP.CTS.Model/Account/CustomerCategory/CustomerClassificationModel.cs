@@ -5,6 +5,7 @@ namespace Fanex.NAP.CTS.Model.Account.CustomerCategory
 {
     public class CustomerClassificationModel
     {
+        public long CustID { get; set; }
         public int CategoryId { get; set; }
 
         public string CategoryName { get; set; }
