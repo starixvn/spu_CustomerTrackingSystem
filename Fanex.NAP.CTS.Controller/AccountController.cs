@@ -12,6 +12,7 @@
     using Fanex.NAP.CTS.Model.Account;    
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.GraphDB;
+    using Fanex.NAP.CTS.Model.SpecialCustomerClass;
     using Fanex.NAP.CTS.Model.Transaction;
     using Fanex.NAP.CTS.Resource;
     using Fanex.NAP.CTS.Resource.Consts;
@@ -941,10 +942,12 @@
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult MarkCatergory(long ctsCustId)
         {
+            var customerCategoryList = _accountService.GetCustomerCategoryByCTSCustId(ctsCustId).ToList();
+            
             var model = new MarkCategoryViewModel
             {
-                SportGroupList = _accountService.GetAllSportGroup().ToList(),
-                CustomerCategoryList = _accountService.GetCustomerCategoryByCTSCustId(ctsCustId).ToList()
+                //SportGroupList = _accountService.GetAllSportGroup().ToList(),
+                CustomerCategoryList = customerCategoryList.Where(x=>x.CategoryName.Equals("VVIP") || x.ParentId == 0).ToList()
             };
 
             return PartialView("CustomerCategory/MarkCatergory", model);
@@ -968,12 +971,14 @@
         }
 
         public ActionResult GetCustomerClassification(long custId)
-        {            
+        {
+            var isPinCategory = false;
+            var isVVip = false;
             var customerCategoryList = new List<CustomerCategoryViewModel>();
             var internalCategoryList = new List<CustomerCategorySummaryViewModel>();
             var externalCategoryList = new List<CustomerCategorySummaryViewModel>();
-
-            var data = _accountService.GetCustomerClassification(custId);
+            
+            var data = _accountService.GetCustomerClassification(custId, out isPinCategory);
 
             if (data != null && data.Any())
             {
@@ -990,10 +995,13 @@
 
                 internalCategoryList = internals.Select(x => GetCustomerCategorySummary(x)).ToList();
                 externalCategoryList = externals.Select(x => GetCustomerCategorySummary(x)).ToList();
+                isVVip = data.Where(x => x.CategoryName.Equals("VVIP")).Count() > 0;
             }
 
             return Json(new
             {
+                isPinCategory,
+                isVVip,
                 internalCategoryList,
                 externalCategoryList,
                 data = customerCategoryList,
@@ -1033,6 +1041,9 @@
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult AddCustomerClassification(long custId, long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark)
         {
+            var errorCode = 0;
+            var errorMessage = string.Empty;
+
             if (ctsCustId <= 0 || subscriberId <= 0 || categoryId <= 0)
             {
                 return Json(new
@@ -1042,12 +1053,35 @@
                 }, JsonRequestBehavior.AllowGet);
             }
 
-            var result = _accountService.AddCustomerClassification(custId, ctsCustId, subscriberId, categoryId, sportGroupIds, remark, CurrentSession.UserId);
+            var resultToCTS = _accountService.AddCustomerClassification(custId, ctsCustId, subscriberId, categoryId, sportGroupIds, remark, CurrentSession.UserId);
+
+            if (resultToCTS.ErrorCode == 0)
+            {
+                var custIdInt = 0;
+                int.TryParse(custId.ToString(), out custIdInt);
+
+                if (custIdInt != 0)
+                {
+                    var custToMainDbList = new List<CustomerClassForMainDb>
+                    {
+                        new CustomerClassForMainDb
+                        {
+                            CustID = custIdInt,
+                            CustomerClass = -1
+                        }
+                    };
+
+                    var resultSyncToMainDb = _accountService.SyncCustomerClassToMainDb(custToMainDbList, "Insert");
+
+                    errorCode = resultSyncToMainDb.ErrorCode;
+                    errorMessage = resultSyncToMainDb.ErrorMsg;
+                }
+            }
 
             return Json(new
             {
-                errorCode = result.ErrorCode,
-                errorMessage = result.ErrorMsg
+                errorCode,
+                errorMessage
             }, JsonRequestBehavior.AllowGet);
         }
 
@@ -1075,6 +1109,9 @@
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult RemoveCustomerClassification(long custId, long ctsCustId, int categoryId)
         {
+            var errorCode = 0;
+            var errorMessage = string.Empty;
+
             if (custId <= 0 || categoryId <= 0)
             {
                 return Json(new
@@ -1083,8 +1120,39 @@
                     errorMessage = "Invalid parameter"
                 }, JsonRequestBehavior.AllowGet);
             }
+            
+            var resultToCTS = _accountService.RemoveCustomerClassification(custId, ctsCustId, categoryId, CurrentSession.UserId);
 
-            var result = _accountService.RemoveCustomerClassification(custId, ctsCustId, categoryId, CurrentSession.UserId);
+            if (string.IsNullOrEmpty(resultToCTS.OpErrorMessage))
+            {
+                if (resultToCTS.CustomerClassList != null && resultToCTS.CustomerClassList.Any())
+                {
+                    var customerClassListToMainDb = resultToCTS.CustomerClassList.Where(c => c.CustID != 0);
+
+                    var resultSyncToMainDb = _accountService.SyncCustomerClassToMainDb(customerClassListToMainDb, "Remove");
+
+                    errorCode = resultSyncToMainDb.ErrorCode;
+                    errorMessage = resultSyncToMainDb.ErrorMsg;
+                }
+            }
+            else
+            {
+                errorCode = -1;
+                errorMessage = resultToCTS.OpErrorMessage;
+            }
+
+            return Json(new
+            {
+                errorCode,
+                errorMessage
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [HttpPost]
+        public ActionResult PinCategoryCustomerClassification(int custId, long ctsCustId, int subscriberId, bool isPinCategory)
+        {
+            var result = _accountService.PinCategoryCustomerClassification(custId, ctsCustId, subscriberId, isPinCategory, CurrentSession.UserId);
 
             return Json(new
             {

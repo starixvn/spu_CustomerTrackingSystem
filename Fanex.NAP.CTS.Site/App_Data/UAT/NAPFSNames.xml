@@ -477,6 +477,10 @@
            SpName="CTS_DC_GetCTSCustomerClassification_xtest"
            DbName="MySQL.CTS_DataCenter" />
 
+    <Setting Key="CTS_DC_VerifyPinCTSCustomerClassification"
+           SpName="CTS_DC_VerifyPinCTSCustomerClassification_xtest"
+           DbName="MySQL.CTS_DataCenter" />
+
     <Setting Key="CTS_CustomerStatistics_GetPerformance_BySport"
           SpName="CTS_CustomerStatistics_GetPerformance_BySport_xtest"
           DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />

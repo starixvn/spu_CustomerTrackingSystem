@@ -476,6 +476,10 @@
     <Setting Key="CTS_DC_GetCTSCustomerClassification"
            SpName="CTS_DC_GetCTSCustomerClassification"
            DbName="MySQL.CTS_DataCenter" />
+
+    <Setting Key="CTS_DC_VerifyPinCTSCustomerClassification"
+           SpName="CTS_DC_VerifyPinCTSCustomerClassification"
+           DbName="MySQL.CTS_DataCenter" />
     
     <Setting Key="CTS_CustomerStatistics_GetPerformance_BySport"
            SpName="CTS_CustomerStatistics_GetPerformance_BySport"

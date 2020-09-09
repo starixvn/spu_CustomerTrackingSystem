@@ -141,6 +141,7 @@
     <Compile Include="Account\CustomerAssociationByCTSCustIdModel.cs" />
     <Compile Include="Account\CustomerByGraphDB.cs" />
     <Compile Include="Account\CustomerCategory\CustomerClassificationModel.cs" />
+    <Compile Include="Account\CustomerCategory\ResultInsertRemoveCustomerClassificationModel.cs" />
     <Compile Include="Account\CustomerEsportAutoSuspendStatusModel.cs" />
     <Compile Include="Account\CustomerEvidenceByCTSCustIdModel.cs" />
     <Compile Include="CustomerAssociationModel.cs" />

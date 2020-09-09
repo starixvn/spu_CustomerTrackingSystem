@@ -5,6 +5,7 @@
     let isHostPermission;
     let inputSwitchCategorySummary = $('#inputSwitchCategorySummary');
     let chooseExternalCategory = "ChooseExternalCategory";
+    let inputPinCategory = $('#inputPinCategory');
 
     function BindingMarkCategoryForAddNew(custId, ctsCustId, subscriberId) {
         $('#btncancelcategory').on('click', function () {
@@ -17,12 +18,12 @@
 
         $("#ddlcategory").select2();
 
-        $("#ddlsports").multiselect({
-            menuWidth: 340,
-            selectedList: 3,
-            selectedText: "# of # selected",
-            noneSelectedText: "Select options"
-        });
+        //$("#ddlsports").multiselect({
+        //    menuWidth: 340,
+        //    selectedList: 3,
+        //    selectedText: "# of # selected",
+        //    noneSelectedText: "Select options"
+        //});
     }
 
     function BindingMarkCategoryForUpdate(custId, ctsCustId, subscriberId, categoryId) {
@@ -34,19 +35,19 @@
             UpdateCustomerClassification(custId, ctsCustId, subscriberId, categoryId);
         });
 
-        $("#ddlsports").multiselect({
-            selectedList: 3,
-            selectedText: "# of # selected",
-            noneSelectedText: "Select options"
-        });
+        //$("#ddlsports").multiselect({
+        //    selectedList: 3,
+        //    selectedText: "# of # selected",
+        //    noneSelectedText: "Select options"
+        //});
     }
 
     function AddCustomerClassification(custId, ctsCustId, subscriberId) {
-        if ($('#ddlsports').val() === '') {
+        //if ($('#ddlsports').val() === '') {
 
-            common.showError('Sport is required.');
-            return;
-        }
+        //    common.showError('Sport is required.');
+        //    return;
+        //}
 
         var url = common.modifyRelativeUrl('/Account/AddCustomerClassification');
         var params = {};
@@ -54,7 +55,8 @@
         params.ctsCustId = ctsCustId;
         params.subscriberId = subscriberId;
         params.categoryId = $('#ddlcategory').val();
-        params.sportGroupIds = $('#ddlsports').val().join(',');
+        params.sportGroupIds = '';
+        //params.sportGroupIds = $('#ddlsports').val().join(',');
         params.remark = $('#txtcategorycomment').val();
 
         $.ajax(url, {
@@ -109,7 +111,8 @@
         params.ctsCustId = ctsCustId;
         params.categoryId = categoryId;
         params.subscriberId = subscriberId;
-        params.sportGroupIds = $('#ddlsports').val().join(',');;
+        params.sportGroupIds = '';
+        //params.sportGroupIds = $('#ddlsports').val().join(',');;
         params.remark = $('#txtcategorycomment').val();
 
         $.ajax(url, {
@@ -235,9 +238,12 @@
                             isExternalChecked = isCache === "true";
                         }
 
+                        inputPinCategory.prop('checked', json.isPinCategory);
+                        btnMarkCategory.prop('disabled', json.isVVip);
+
                         SwitchCategorySummary(json.internalCategoryList, json.externalCategoryList, isExternalChecked);
 
-                        inputSwitchCategorySummary.click(function () {                            
+                        inputSwitchCategorySummary.off('click').on('click', function () {                            
                             SwitchCategorySummary(json.internalCategoryList, json.externalCategoryList, inputSwitchCategorySummary.is(':checked'));
                         });
                     }
@@ -269,7 +275,8 @@
                 { data: obj => obj.NextScanDatePeriod },
                 {
                     data: obj => () => {
-                        var html = '<span class="icon-edit' + (!isHostPermission ? ' disabled"' : '') + '" title="Edit Category"></span>';
+                        var html = '';
+                        //html = '<span class="icon-edit' + (!isHostPermission ? ' disabled"' : '') + '" title="Edit Category"></span>';
                         html += '<span class="icon-delete' + (!isHostPermission ? ' disabled"' : '') + '" title="Remove Category"></span>';
 
                         return obj.IsEnabledDelete ? html : '';
@@ -281,9 +288,9 @@
                                 });
                             });
 
-                            $('.icon-edit', cell).click(() => {
-                                EditCategory(custId, ctsCustId, subscriberId, row.CategoryName, row.CategoryId, row.SportGroupIdList, row.Remark);
-                            });
+                            //$('.icon-edit', cell).click(() => {
+                            //    EditCategory(custId, ctsCustId, subscriberId, row.CategoryName, row.CategoryId, row.SportGroupIdList, row.Remark);
+                            //});
                         }
                     }
                 }
@@ -539,11 +546,52 @@
             localStorage.setItem(key, value);
     }
 
+    function PinCategory(custId, ctsCustId, subscriberId) {
+        let html = "<div style='text-align:center'>Are you sure about this? </div>";
+
+        let isPinCategory = inputPinCategory.is(":checked");
+
+        if (isPinCategory) {
+            html += "For confirm this action, this account will not automatically update by our service in the future.";
+        } else {
+            html += "For confirm this action, this account will automatically update by our service in the future.";
+        }
+
+        common.showFormConfirmation(html, 'Confirmation', function () {
+            var url = common.modifyRelativeUrl('/Account/PinCategoryCustomerClassification');
+            var params = {};     
+            params.custId = custId;
+            params.ctsCustId = ctsCustId;
+            params.subscriberId = subscriberId;
+            params.isPinCategory = isPinCategory;
+
+            $.ajax(url, {
+                type: 'POST',
+                data: params,
+                success: function (response) {
+                    if (response.errorCode === 0) {
+                        common.showSuccess('Pin category successful!');
+                    }
+                    else {
+                        common.showError('Failed! ' + response.errorMessage);
+                        inputPinCategory.prop('checked', !isPinCategory);
+                    }
+                },
+                error: function (error) {
+                    console.log(error);
+                    inputPinCategory.prop('checked', !isPinCategory);
+                }
+            });
+        });
+    }
+
     function DisableButton(hostPermission) {
         isHostPermission = hostPermission === "True";
 
-        if (!isHostPermission)
-            btnMarkCategory.prop('disabled', true);
+        if (!isHostPermission) {
+            inputPinCategory.prop('disabled', true);
+            btnMarkCategory.prop('disabled', true);            
+        }
     }
 
     this.Initial = function (custId, ctsCustId, subscriberId, username, hostPermission) {
@@ -555,7 +603,11 @@
         else
             inputSwitchCategorySummary.attr('checked', false);
 
-        btnMarkCategory.click(function () { InitialMarkCategory(custId, ctsCustId, subscriberId); });        
+        if (isHostPermission) {
+            inputPinCategory.click(function () { PinCategory(custId, ctsCustId, subscriberId); });
+
+            btnMarkCategory.click(function () { InitialMarkCategory(custId, ctsCustId, subscriberId); });   
+        }
 
         RenderGrid(custId, ctsCustId, username, subscriberId);
     };
