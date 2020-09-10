@@ -1,13 +1,13 @@
 .button {
     display: inline-block;
     font-family: 'Lato', Tahoma, sans-serif !important;
-    height: 28px;
-    font-size: 14px !important;
+    height: 26px;
+    font-size: 1.3rem !important;
     font-weight: bold;
-    line-height: 20px;
-    padding-left: 12px;
-    padding-right: 12px;
-    border-radius: 2px;
+    line-height: 1.230769;
+    padding-left: 1.6rem;
+    padding-right: 1.6rem;
+    border-radius: 3px;
     border: none;
     outline: none;
     text-transform: capitalize;
@@ -38,7 +38,7 @@
         color: #3a6e17;
 
         .icon-export-excel {
-            margin-right: 10px;
+            margin-right: 1rem;
         }
 
         &:hover:not(:disabled) {

@@ -798,6 +798,14 @@
     text-align: right;
     float: right;
     color: #333; }
+    .fixed-header .graph-heading .graph-info .checkbox, .table-report .graph-heading .graph-info .checkbox {
+      margin-right: 16px; }
+      .fixed-header .graph-heading .graph-info .checkbox span, .table-report .graph-heading .graph-info .checkbox span {
+        padding-left: 24px; }
+        .fixed-header .graph-heading .graph-info .checkbox span::before, .table-report .graph-heading .graph-info .checkbox span::before {
+          top: 1px; }
+        .fixed-header .graph-heading .graph-info .checkbox span::after, .table-report .graph-heading .graph-info .checkbox span::after {
+          top: 4px; }
     .fixed-header .graph-heading .graph-info .btn-graph, .table-report .graph-heading .graph-info .btn-graph {
       background-color: #e3e9f6;
       color: #2f79ed;

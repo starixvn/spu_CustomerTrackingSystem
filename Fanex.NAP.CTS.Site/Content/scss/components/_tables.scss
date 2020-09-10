@@ -146,6 +146,7 @@
         color: $table-header-color;
         text-align: center;
         font-weight: normal;
+        border-top: 0!important;
 
         &.sub-header {
             background-color: $table-sub-header-bg;

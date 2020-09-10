@@ -142,6 +142,22 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             float: right;
             color: #333;
 
+            .checkbox {
+                margin-right: 16px;
+
+                span {
+                    padding-left: 24px;
+
+                    &::before {
+                        top: 1px;
+                    }
+
+                    &::after{
+                        top: 4px;
+                    }
+                }
+            }
+
             .btn-graph {
                 background-color: #e3e9f6;
                 color: #2f79ed;
