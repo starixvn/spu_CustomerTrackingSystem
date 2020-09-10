@@ -547,14 +547,14 @@
     }
 
     function PinCategory(custId, ctsCustId, subscriberId) {
-        let html = "<div style='text-align:center'>Are you sure about this? </div>";
+        let html = "<div style='text-align:center'>Are you sure about this action? </div>";
 
         let isPinCategory = inputPinCategory.is(":checked");
 
         if (isPinCategory) {
-            html += "For confirm this action, this account will not automatically update by our service in the future.";
+            html += "By enabling pin option, this account will not be classified automatically by our service in future";
         } else {
-            html += "For confirm this action, this account will automatically update by our service in the future.";
+            html += "By unpin option, this account will be classified automatically by our service in future";
         }
 
         common.showFormConfirmation(html, 'Confirmation', function () {
@@ -571,8 +571,8 @@
                 success: function (response) {
                     if (response.errorCode === 0) {
                         let message = isPinCategory
-                            ? "Pin category successful!"
-                            : "Unpin category successful!";
+                            ? "Pinned category successfully!"
+                            : "Unpinned category successfully!";
 
                         common.showSuccess(message);
                     }
@@ -581,7 +581,14 @@
                         inputPinCategory.prop('checked', !isPinCategory);
                     }
                 },
+                beforeSend: function () {
+                    common.showLoading();
+                },
+                complete: function () {
+                    common.closeLoading();
+                },
                 error: function (error) {
+                    common.closeLoading();
                     console.log(error);
                     inputPinCategory.prop('checked', !isPinCategory);
                 }
