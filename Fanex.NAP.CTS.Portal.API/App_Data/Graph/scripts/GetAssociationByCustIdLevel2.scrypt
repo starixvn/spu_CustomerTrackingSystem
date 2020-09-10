@@ -1,0 +1,18 @@
+﻿MATCH (c:CTSCustomer)
+WHERE c.CustID = $CustId
+OPTIONAL MATCH (c)-[:USED_DEVICE*4]-(c1:CTSCustomer)
+WITH collect(c1) as assByDev,c
+OPTIONAL MATCH (c)-[:ADD_MANUALLY*2]-(c1:CTSCustomer)
+WITH assByDev + collect(c1) as allAss,c
+UNWIND allAss as ass
+WITH DISTINCT ass, c
+WHERE ass.CustID IS NOT NULL AND ass.CustID <> c.CustID
+OPTIONAL MATCH (c)-[rd1:USED_DEVICE]->(:Device)<-[rd2:USED_DEVICE]-(:CTSCustomer)-[rd3:USED_DEVICE]->(:Device)<-[rd4:USED_DEVICE]-(ass)
+WITH c, ass, MAX(rd1.CreatedTime,rd2.CreatedTime,rd3.CreatedTime,rd4.CreatedTime) as AssociatedDate
+WITH collect({assDate: AssociatedDate}) as rows, c, ass
+OPTIONAL MATCH (c)-[rm1:ADD_MANUALLY]-(:CTSCustomer)-[rm2:ADD_MANUALLY]-(ass)
+WITH rows, ass, MAX(rm1.CreatedDate,rm2.CreatedDate) AS AssociatedDate
+WITH rows + collect({assDate: AssociatedDate}) as allRows, ass
+UNWIND allRows as row
+RETURN ass.CustID AS CustId, MIN(row.assDate) AS FirstAssociatedDate, ass.CreatedDate as CreatedDate
+ORDER BY FirstAssociatedDate DESC

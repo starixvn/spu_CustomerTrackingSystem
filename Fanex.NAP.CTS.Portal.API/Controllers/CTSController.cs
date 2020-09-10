@@ -164,6 +164,24 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
         }
 
         /// <summary>
+        /// Get association by custId and level
+        /// </summary>
+        /// <param name="custId"></param>
+        /// <param name="level">Level 1 for direct, level 2 for indirect</param>
+        /// <returns>Association list in XML format</returns>
+        [HttpGet]
+        public string GetAssociationByCustId(int custId, int level)
+        {
+            var spName = "GetAssociationByCustIdLevel" + level;
+            var result = DbSessionFactory.Execute<Association>(spName, new
+            {
+                CustId = custId
+            }).Data;
+
+            return result.ToXmlString();
+        }
+
+        /// <summary>
         /// Get classification of customer
         /// </summary>
         /// <param name="custIdList"></param>

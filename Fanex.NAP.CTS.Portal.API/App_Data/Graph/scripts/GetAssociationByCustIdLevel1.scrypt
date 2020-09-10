@@ -14,3 +14,4 @@ OPTIONAL MATCH (c)-[rm:ADD_MANUALLY]-(ass)
 WITH rows + collect({assDate: rm.CreatedDate}) as allRows, ass
 UNWIND allRows as row
 RETURN ass.CustID AS CustId, MIN(row.assDate) AS FirstAssociatedDate, ass.CreatedDate as CreatedDate
+ORDER BY FirstAssociatedDate DESC
