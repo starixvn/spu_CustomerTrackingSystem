@@ -38,7 +38,7 @@
                 }
                 catch (Exception)
                 {
-                    firstAssociationDateInMiliseconds = (Convert.ToDateTime(value)).Millisecond;
+                    firstAssociationDateInMiliseconds = (Convert.ToDateTime(value)).Ticks;
                 }
             }
         }

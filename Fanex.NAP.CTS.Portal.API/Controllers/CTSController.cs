@@ -172,13 +172,21 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
         [HttpGet]
         public string GetAssociationByCustId(int custId, int level)
         {
-            var spName = "GetAssociationByCustIdLevel" + level;
-            var result = DbSessionFactory.Execute<Association>(spName, new
+            var result = string.Empty;
+            try
             {
-                CustId = custId
-            }).Data;
+                var spName = "GetAssociationByCustIdLevel" + level;
+                result = DbSessionFactory.Execute<Association>(spName, new
+                {
+                    CustId = custId
+                }).Data.ToXmlString();
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("GetAssociationByCustId failed: " + ex.Message + ex.StackTrace);
+            }
 
-            return result.ToXmlString();
+            return result;
         }
 
         /// <summary>
@@ -189,15 +197,23 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
         [HttpGet]
         public string GetCustomerClassification(string custIdList)
         {
-            var custClassifications= _accountService.GetCustomerClassification(custIdList, 200);
-            var result = custClassifications.Select(c => new CustomerClassification()
+            var result = string.Empty;
+            try
             {
-                CustID = c.CustID,
-                ParentCategoryName = c.ParentCategoryName,
-                CategoryName = c.CategoryName
-            });
+                var custClassifications = _accountService.GetCustomerClassification(custIdList, 200);
+                result = custClassifications.Select(c => new CustomerClassification()
+                {
+                    CustID = c.CustID,
+                    ParentCategoryName = c.ParentCategoryName,
+                    CategoryName = c.CategoryName
+                }).ToXmlString();
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("GetCustomerClassification failed: " + ex.Message + ex.StackTrace);
+            }
 
-            return result.ToXmlString();
+            return result;
         }
 
         /// <summary>
@@ -208,9 +224,18 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
         [HttpGet]
         public string GetCustomerClass(string custIdList)
         {
-            var custClasses = _accountService.GetCustomerClassByCustId(custIdList);
+            var result = string.Empty;
+            try
+            {
+                var custClasses = _accountService.GetCustomerClassByCustId(custIdList);
+                result = custClasses.ToXmlString();
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("GetCustomerClass failed: " + ex.Message + ex.StackTrace);
+            }
 
-            return custClasses.ToXmlString();
+            return result;
         }
 
         /// <summary>

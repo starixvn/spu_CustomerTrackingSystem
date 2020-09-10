@@ -14,5 +14,5 @@ OPTIONAL MATCH (c)-[rm1:ADD_MANUALLY]-(:CTSCustomer)-[rm2:ADD_MANUALLY]-(ass)
 WITH rows, ass, MAX(rm1.CreatedDate,rm2.CreatedDate) AS AssociatedDate
 WITH rows + collect({assDate: AssociatedDate}) as allRows, ass
 UNWIND allRows as row
-RETURN ass.CustID AS CustId, MIN(row.assDate) AS FirstAssociatedDateInTicks, ass.CreatedDate as CreatedDateInMili
-ORDER BY FirstAssociatedDateInTicks DESC
+RETURN ass.CustID AS CustId, MIN(row.assDate) AS FirstAssociatedDateInMili, ass.CreatedDate as CreatedDateInMili
+ORDER BY FirstAssociatedDateInMili DESC
