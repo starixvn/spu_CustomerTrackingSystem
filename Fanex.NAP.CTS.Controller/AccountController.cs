@@ -1071,10 +1071,7 @@
                         }
                     };
 
-                    var resultSyncToMainDb = _accountService.SyncCustomerClassToMainDb(custToMainDbList, "Insert");
-
-                    errorCode = resultSyncToMainDb.ErrorCode;
-                    errorMessage = resultSyncToMainDb.ErrorMsg;
+                    _accountService.SyncCustomerClassToMainDb(custToMainDbList, "Insert");
                 }
             }
 
@@ -1129,10 +1126,7 @@
                 {
                     var customerClassListToMainDb = resultToCTS.CustomerClassList.Where(c => c.CustID != 0);
 
-                    var resultSyncToMainDb = _accountService.SyncCustomerClassToMainDb(customerClassListToMainDb, "Remove");
-
-                    errorCode = resultSyncToMainDb.ErrorCode;
-                    errorMessage = resultSyncToMainDb.ErrorMsg;
+                    _accountService.SyncCustomerClassToMainDb(customerClassListToMainDb, "Remove");
                 }
             }
             else

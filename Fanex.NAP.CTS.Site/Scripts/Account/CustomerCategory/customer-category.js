@@ -570,7 +570,11 @@
                 data: params,
                 success: function (response) {
                     if (response.errorCode === 0) {
-                        common.showSuccess('Pin category successful!');
+                        let message = isPinCategory
+                            ? "Pin category successful!"
+                            : "Unpin category successful!";
+
+                        common.showSuccess(message);
                     }
                     else {
                         common.showError('Failed! ' + response.errorMessage);
