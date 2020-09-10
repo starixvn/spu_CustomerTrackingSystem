@@ -1039,7 +1039,7 @@
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult AddCustomerClassification(long custId, long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark)
+        public ActionResult AddCustomerClassification(long custId, long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark, bool isVVip)
         {
             var errorCode = 0;
             var errorMessage = string.Empty;
@@ -1057,22 +1057,30 @@
 
             if (resultToCTS.ErrorCode == 0)
             {
-                var custIdInt = 0;
-                int.TryParse(custId.ToString(), out custIdInt);
-
-                if (custIdInt != 0)
+                if (isVVip)
                 {
-                    var custToMainDbList = new List<CustomerClassForMainDb>
+                    var custIdInt = 0;
+                    int.TryParse(custId.ToString(), out custIdInt);
+
+                    if (custIdInt != 0)
+                    {
+                        var custToMainDbList = new List<CustomerClassForMainDb>
                     {
                         new CustomerClassForMainDb
                         {
                             CustID = custIdInt,
-                            CustomerClass = -1
+                            CustomerClass = 100
                         }
                     };
 
-                    _accountService.SyncCustomerClassToMainDb(custToMainDbList, "Insert");
+                        _accountService.SyncCustomerClassToMainDb(custToMainDbList, "Insert");
+                    }
                 }
+            }
+            else
+            {
+                errorCode = resultToCTS.ErrorCode;
+                errorMessage = resultToCTS.ErrorMsg;
             }
 
             return Json(new

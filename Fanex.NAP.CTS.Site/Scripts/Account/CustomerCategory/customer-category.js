@@ -16,14 +16,7 @@
             AddCustomerClassification(custId, ctsCustId, subscriberId);
         });
 
-        $("#ddlcategory").select2();
-
-        //$("#ddlsports").multiselect({
-        //    menuWidth: 340,
-        //    selectedList: 3,
-        //    selectedText: "# of # selected",
-        //    noneSelectedText: "Select options"
-        //});
+        $("#ddlcategory").select2();      
     }
 
     function BindingMarkCategoryForUpdate(custId, ctsCustId, subscriberId, categoryId) {
@@ -34,30 +27,18 @@
         $('#btnsavecategory').on('click', function (e) {
             UpdateCustomerClassification(custId, ctsCustId, subscriberId, categoryId);
         });
-
-        //$("#ddlsports").multiselect({
-        //    selectedList: 3,
-        //    selectedText: "# of # selected",
-        //    noneSelectedText: "Select options"
-        //});
     }
 
-    function AddCustomerClassification(custId, ctsCustId, subscriberId) {
-        //if ($('#ddlsports').val() === '') {
-
-        //    common.showError('Sport is required.');
-        //    return;
-        //}
-
+    function AddCustomerClassification(custId, ctsCustId, subscriberId) {      
         var url = common.modifyRelativeUrl('/Account/AddCustomerClassification');
         var params = {};
         params.custId = custId;
         params.ctsCustId = ctsCustId;
         params.subscriberId = subscriberId;
         params.categoryId = $('#ddlcategory').val();
-        params.sportGroupIds = '';
-        //params.sportGroupIds = $('#ddlsports').val().join(',');
+        params.sportGroupIds = '';        
         params.remark = $('#txtcategorycomment').val();
+        params.isVVip = true;
 
         $.ajax(url, {
             type: 'POST',
@@ -73,8 +54,15 @@
                     common.showError(response.errorMessage);
                 }
             },
+            beforeSend: function () {
+                common.showLoading();
+            },
             complete: function () {
-
+                common.closeLoading();
+            },
+            error: function (error) {
+                console.log(error);
+                common.closeLoading();
             }
         });
     }
@@ -99,7 +87,15 @@
                     common.showError('Remove the category fail!');
                 }
             },
+            beforeSend: function () {
+                common.showLoading();
+            },
             complete: function () {
+                common.closeLoading();
+            },
+            error: function (error) {
+                console.log(error);
+                common.closeLoading();
             }
         });
     }
@@ -130,7 +126,6 @@
                 }
             },
             complete: function () {
-
             }
         });
     }
