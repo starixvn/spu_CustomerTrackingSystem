@@ -897,7 +897,7 @@
             }
         }
 
-        public IEnumerable<CustomerClass> GetCustomerClassByCustId(string custIdList)
+        public IEnumerable<CustomerClassModel> GetCustomerClassByCustId(string custIdList)
         {
             var criteria = new GetCustomerClassByCustIdCriteria
             {
@@ -906,7 +906,7 @@
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<CustomerClass>(criteria);
+                return db.Query<CustomerClassModel>(criteria);
             }
         }
 

@@ -11,7 +11,7 @@
   </Function>
 
   <Function Name="CustomerClass">
-    <Setting Key="CTS_CustomerClass_GetByCustId" SpName="CTS_CustomerClass_GetByCustId" DbName="DBCTS.bodb02.bodbSPUNet" />
+    <Setting Key="CTS_CustomerClass_GetByCustId13" SpName="CTS_CustomerClass_GetByCustId" DbName="DBCTS.bodb02.bodbSPUNet" />
   </Function>
 
 </Functions>

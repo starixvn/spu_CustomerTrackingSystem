@@ -37,7 +37,7 @@
                 .StartNewSession()
                 .WithMySql()
                 .WithSqlServer()
-                .UseDefaultDbSettingProvider("~/App_Data/SQL")
+                .UseDefaultDbSettingProvider(resourcePath: "~/App_Data/SQL")
                 .UseDefaultConnectionStringProvider()
                 .Run();
 

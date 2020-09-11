@@ -99,6 +99,6 @@
 
         IEnumerable<PerformanceDailyModel> GetPerformanceDaily(long custId);
 
-        IEnumerable<CustomerClass> GetCustomerClassByCustId(string custIdList);
+        IEnumerable<CustomerClassModel> GetCustomerClassByCustId(string custIdList);
     }
 }
