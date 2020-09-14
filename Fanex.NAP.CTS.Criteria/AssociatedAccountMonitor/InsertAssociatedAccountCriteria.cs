@@ -15,7 +15,7 @@ namespace Fanex.NAP.CTS.Criteria.AssociatedAccount
         public int userID { get; set; }
         
         public override string GetSettingKey()
-            => "CTS_DC_InsertAssociatedAccountMonitor";
+            => "CTS_DC_AssociatedAccountMonitor_Insert";
 
         public override bool IsValid()
             => true;

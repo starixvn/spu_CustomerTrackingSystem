@@ -9,7 +9,7 @@
         public string AssociationListJson { get; set; }
 
         public override string GetSettingKey()
-            => "CTS_DC_AddManualAssociationMultiple";
+            => "CTS_DC_Association_InsertManualMultiple";
 
         public override bool IsValid()
             => true;

@@ -36,7 +36,7 @@ namespace Fanex.NAP.CTS.Criteria.Account.CustomerCategory
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_UpdateCTSCustomerClassification";
+            return "CTS_DC_CustClassification_Update";
         }
 
         public override bool IsValid()

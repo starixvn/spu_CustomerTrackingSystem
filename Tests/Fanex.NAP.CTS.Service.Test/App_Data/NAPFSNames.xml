@@ -279,44 +279,44 @@
   </Function>
 
   <Function name="AccountDetail">
-    <Setting Key="CTS_DC_GetFlaggedEvidence"
-             SpName="CTS_DC_GetFlaggedEvidence"
+    <Setting Key="CTS_DC_CustEvidence_GetFlaggedEvidences"
+             SpName="CTS_DC_CustEvidence_GetFlaggedEvidences"
              DbName="MySQL.CTS_DataCenter" />    
 
-    <Setting Key="CTS_DC_AddEvidence"
-            SpName="CTS_DC_AddEvidence"
+    <Setting Key="CTS_DC_CustEvidence_InsertSingle"
+            SpName="CTS_DC_CustEvidence_InsertSingle"
             DbName="MySQL.CTS_DataCenter" />    
 
-    <Setting Key="CTS_DC_RemoveFlaggedEvidence"
-         SpName="CTS_DC_RemoveFlaggedEvidence"
+    <Setting Key="CTS_DC_CustEvidence_RemoveFlagged"
+         SpName="CTS_DC_CustEvidence_RemoveFlagged"
          DbName="MySQL.CTS_DataCenter" />    
 
-    <Setting Key="CTS_DC_GetAffectedEvidence"
-             SpName="CTS_DC_GetAffectedEvidence"
+    <Setting Key="CTS_DC_CustEvidence_GetAffectedEvidences"
+             SpName="CTS_DC_CustEvidence_GetAffectedEvidences"
              DbName="MySQL.CTS_DataCenter" />   
 
-    <Setting Key="CTS_DC_RetractAffectedEvidence"
-            SpName="CTS_DC_RetractAffectedEvidence"
+    <Setting Key="CTS_DC_CustEvidence_RemoveAffected"
+            SpName="CTS_DC_CustEvidence_RemoveAffected"
             DbName="MySQL.CTS_DataCenter" />
 
-    <Setting Key="CTS_DC_RestoreAffectedEvidence"
-           SpName="CTS_DC_RestoreAffectedEvidence"
+    <Setting Key="CTS_DC_CustEvidence_RestoreAffected"
+           SpName="CTS_DC_CustEvidence_RestoreAffected"
            DbName="MySQL.CTS_DataCenter" />
     
-    <Setting Key="CTS_DC_GetAllEvidences"
-           SpName="CTS_DC_GetAllEvidences"
+    <Setting Key="CTS_DC_Evidences_GetAll"
+           SpName="CTS_DC_Evidences_GetAll"
            DbName="MySQL.CTS_DataCenter" />
 
-    <Setting Key="CTS_DC_GetAffectedEvidenListBetweenCusts"
-          SpName="CTS_DC_GetAffectedEvidenListBetweenCusts"
+    <Setting Key="CTS_DC_CustEvidence_GetFlaggedFromCustList"
+          SpName="CTS_DC_CustEvidence_GetFlaggedFromCustList"
           DbName="MySQL.CTS_DataCenter" />
 
-    <Setting Key="CTS_DC_AddException"
-          SpName="CTS_DC_AddException"
+    <Setting Key="CTS_DC_Association_InsertException"
+          SpName="CTS_DC_Association_InsertException"
           DbName="MySQL.CTS_DataCenter" />
 
-    <Setting Key="CTS_DC_RemoveException"
-         SpName="CTS_DC_RemoveException"
+    <Setting Key="CTS_DC_Association_RemoveException"
+         SpName="CTS_DC_Association_RemoveException"
          DbName="MySQL.CTS_DataCenter" />
     
   </Function>

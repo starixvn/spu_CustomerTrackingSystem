@@ -13,7 +13,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_GetAssociatedCustIDsWithOtherEvidence";
+            return "CTS_DC_Association_GetCleanAssociatedCustExceptAEvidence";
         }
 
         public override bool IsValid()

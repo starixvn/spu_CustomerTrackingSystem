@@ -10,7 +10,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_GetDirectAssociatedAccount_TagFlagged";
+            return "CTS_DC_CustEvidence_GetFlaggedStatus";
         }
 
         public override bool IsValid()

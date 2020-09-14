@@ -13,7 +13,7 @@
         public Int64 ToCTSCustID { get; set; }
 
         public override string GetSettingKey()
-            => "CTS_DC_GetAffectedEvidenListBetweenCusts";       
+            => "CTS_DC_CustEvidence_GetFlaggedFromCustList";       
 
         public override bool IsValid()
             => true;       

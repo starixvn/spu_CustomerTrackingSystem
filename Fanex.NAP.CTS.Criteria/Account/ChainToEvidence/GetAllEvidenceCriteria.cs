@@ -5,7 +5,7 @@
     public class GetAllEvidenceCriteria : CriteriaBase
     {
         public override string GetSettingKey()
-         => "CTS_DC_GetAllEvidences";
+         => "CTS_DC_Evidences_GetAll";
 
         public override bool IsValid()
             => true;

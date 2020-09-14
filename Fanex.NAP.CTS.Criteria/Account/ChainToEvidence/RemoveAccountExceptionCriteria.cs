@@ -16,7 +16,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_RemoveException";
+            return "CTS_DC_Association_RemoveException";
         }
 
         public override bool IsValid()

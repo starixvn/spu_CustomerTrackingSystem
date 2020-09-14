@@ -9,7 +9,7 @@
         public bool IsGetAllInfo { get; set; }
 
         public override string GetSettingKey()
-            => "CTS_DC_GetAllSpecialCustomerClass";
+            => "CTS_DC_SpecialCustClass_GetAll";
 
         public override bool IsValid()
             => true;

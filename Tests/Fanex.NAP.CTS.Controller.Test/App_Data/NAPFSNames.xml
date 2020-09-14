@@ -279,8 +279,8 @@
   </Function>
 
   <Function name="AccountDetail">
-    <Setting Key="CTS_DC_GetUserInfomationByUsername"
-            SpName="CTS_DC_GetUserInfomationByUsername"
+    <Setting Key="CTS_DC_CustInfo_GetByUsername"
+            SpName="CTS_DC_CustInfo_GetByUsername"
             DbName="MySQL.CTS_DataCenter">
       <Mapping DataField="CurrencyId" ObjectProperty="Id" Class="Currency"/>
       <Mapping DataField="Currency" ObjectProperty="Name" Class="Currency"/>
@@ -304,13 +304,13 @@
         SpName="CTS_CustomerEsportAutoSuspendStatus_Get"
         DbName="DBCTS.bodb02.bodbSPUNet" />
 
-    <Setting Key="CTS_DC_GetCustomerInfoByCTSCustId"
-            SpName="CTS_DC_GetCustomerInfoByCTSCustId"
+    <Setting Key="CTS_DC_CustInfo_GetByCTSCustID"
+            SpName="CTS_DC_CustInfo_GetByCTSCustID"
             DbName="MySQL.CTS_DataCenter">
     </Setting>
 
-    <Setting Key="CTS_DC_GetAssociationByCTSCustID"
-            SpName="CTS_DC_GetAssociationByCTSCustID"
+    <Setting Key="CTS_DC_Association_Get"
+            SpName="CTS_DC_Association_Get"
             DbName="MySQL.CTS_DataCenter">
     </Setting>
 
@@ -332,13 +332,13 @@
             SpName="CTS_RobotUserStatus_Get"
             DbName="DBONUSER.ON_USER.bodbSPUNet" />
 
-    <Setting Key="CTS_DC_GetCustomerFlagInfo"
-            SpName="CTS_DC_GetCustomerFlagInfo"
+    <Setting Key="CTS_DC_CustInfo_GetFlagged"
+            SpName="CTS_DC_CustInfo_GetFlagged"
             DbName="MySQL.CTS_DataCenter">
     </Setting>
 
-    <Setting Key="CTS_DC_GetDirectAssociatedAccount"
-            SpName="CTS_DC_GetDirectAssociatedAccount"
+    <Setting Key="CTS_DC_CustEvidence_Get"
+            SpName="CTS_DC_CustEvidence_Get"
             DbName="MySQL.CTS_DataCenter">
     </Setting>
   </Function>

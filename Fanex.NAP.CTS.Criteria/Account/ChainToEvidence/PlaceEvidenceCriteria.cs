@@ -22,7 +22,7 @@
         public override int ErrCode { get; set; }
 
         public override string GetSettingKey()
-            => "CTS_DC_AddEvidence";
+            => "CTS_DC_CustEvidence_InsertSingle";
 
         public override bool IsValid() => true;
     }

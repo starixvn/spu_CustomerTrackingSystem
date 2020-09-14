@@ -10,7 +10,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_GetCleanCustIDsFromCustIDList";
+            return "CTS_DC_CustEvidence_GetCleanCustFromList";
         }
 
         public override bool IsValid()

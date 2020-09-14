@@ -15,7 +15,7 @@ namespace Fanex.NAP.CTS.Criteria.Home
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_GetUserInfomationByUsername";
+            return "CTS_DC_CustInfo_GetByUsername";
         }
 
         public override bool IsValid()

@@ -19,7 +19,7 @@
         public override int ErrCode { get; set; }
 
         public override string GetSettingKey()
-            => "CTS_DC_RemoveFlaggedEvidence";
+            => "CTS_DC_CustEvidence_RemoveFlagged";
 
         public override bool IsValid() => true;
     }

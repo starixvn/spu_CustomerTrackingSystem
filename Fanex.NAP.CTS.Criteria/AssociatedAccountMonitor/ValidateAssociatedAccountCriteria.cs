@@ -9,7 +9,7 @@
         public string UserNameList { get; set; }
 
         public override string GetSettingKey()
-            => "CTS_DC_InsertAssociatedAccountMonitorValidation";
+            => "CTS_DC_AssociatedAccountMonitor_ValidateInput";
 
         public override bool IsValid()
             => true;

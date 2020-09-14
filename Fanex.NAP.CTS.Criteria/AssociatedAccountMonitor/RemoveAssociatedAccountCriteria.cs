@@ -17,7 +17,7 @@ namespace Fanex.NAP.CTS.Criteria.AssociatedAccountMonitor
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_RemoveAssociatedAccountMonitor";
+            return "CTS_DC_AssociatedAccountMonitor_Remove";
         }
 
         public override bool IsValid()
