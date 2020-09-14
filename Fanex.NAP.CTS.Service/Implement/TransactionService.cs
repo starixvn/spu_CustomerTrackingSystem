@@ -2,9 +2,7 @@
 {
     using System.Collections.Generic;
     using Fanex.NAP.CTS.Model.Transaction;
-    using Fanex.NAP.CTS.Criteria.Transaction.History;
     using Fanex.NAP.CTS.Core.BaseClasses;
-    using Fanex.NAP.CTS.Criteria.Transaction;
     using Fanex.NAP.CTS.ViewModel.Account.TransactionHistory;
     using System.Linq;
     using Fanex.NAP.CTS.Model.IP;
@@ -26,24 +24,6 @@
         //    return DataService.GetData<Transaction>(criteria);
         //}
 
-        public IPInformation GetIPInformation(string ipAddress)
-        {
-            var ipModel = Ip2Long(ipAddress);
-
-            var criteria = new IPInformationGetByRangeLocationCriteria
-            {
-                ip_IP = ipModel.IsIpV6 ? ipModel.IpNumber : ipModel.IpNumber + 281470681743360
-            };
-
-            var data = DataService.GetData<IPInformation>(criteria);
-
-            if (data.Any())
-            {
-                return data.ToList()[0];
-            }
-
-            return new IPInformation();
-        }
 
         private IpModel Ip2Long(string ipAddress)
         {

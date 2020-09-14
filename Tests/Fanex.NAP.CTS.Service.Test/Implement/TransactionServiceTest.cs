@@ -26,16 +26,5 @@
         //    // Assert
         //    Assert.IsType<List<Transaction>>(actualResult);
         //}
-
-        [Theory]
-        [InlineData("20.0.255.255")]
-        public void Can_GetIPInformation(string ipAddress)
-        {
-            // Act
-            var actualResult = _runner.GetIPInformation(ipAddress);
-
-            // Assert
-            Assert.IsType<IPInformation>(actualResult);
-        }
     }
 }

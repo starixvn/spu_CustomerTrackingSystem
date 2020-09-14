@@ -8,13 +8,7 @@
     using Fanex.NAP.CTS.ViewModel.Evidence;    
 
     public interface IEvidenceService
-    {
-        ChainsToEvidence GetChainsToEvidence(ChainsToEvidenceFilter filter);
-
-        DBResult AddExceptionEvidence(ExceptionEvidenceAdd exceptionEvidenceAdd);
-
-        RetractedAndExceptionEvidence GetRetractedAndExceptionEvidence(RetractedAndExceptionEvidenceFilter filter);
-
+    { 
         IEnumerable<Evidence> GetAllEvidences();
 
         IEnumerable<Evidence> GetEvidencesByAccount(int accountId);
