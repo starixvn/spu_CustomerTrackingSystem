@@ -7,7 +7,7 @@
   </Function>
 
   <Function Name="CustomerClassification">
-    <Setting Key="CTS_DC_GetCTSCustomerClassification" SpName="CTS_DC_GetCTSCustomerClassification" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_GetCTSCustomerClassificationForAPI" SpName="CTS_DC_GetCTSCustomerClassificationForAPI" DbName="MySQL.CTS_DataCenter" />
   </Function>
 
   <Function Name="CustomerClass">

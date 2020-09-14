@@ -84,18 +84,18 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
             }
         }
 
-        public JsonResult<string> GetAssociationForLetsTalk(string custIdList)
-        {
-            var result = string.Empty;
-            var eviList = ConfigurationManager.AppSettings["Environment"].ToString().Split(',');
-            var convertedCustIdList = custIdList.Split(',').Select(a => Convert.ToInt32(a));
-            var associationList = _associationService.GetFlaggedCustomerByLevel(convertedCustIdList, 0, eviList);
-            var assList = associationList.Distinct(new CustomerEvidenceComparer());
+        //public JsonResult<string> GetAssociationForLetsTalk(string custIdList)
+        //{
+        //    var result = string.Empty;
+        //    var eviList = ConfigurationManager.AppSettings["Environment"].ToString().Split(',');
+        //    var convertedCustIdList = custIdList.Split(',').Select(a => Convert.ToInt32(a));
+        //    var associationList = _associationService.GetFlaggedCustomerByLevel(convertedCustIdList, 0, eviList);
+        //    var assList = associationList.Distinct(new CustomerEvidenceComparer());
 
 
 
-            return Json(result);
-        }
+        //    return Json(result);
+        //}
 
         /// <summary>
         /// Add evidences to customers
@@ -200,7 +200,7 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
             var result = string.Empty;
             try
             {
-                var custClassifications = _accountService.GetCustomerClassification(custIdList, 200);
+                var custClassifications = _accountService.GetCustomerClassificationForAPI(custIdList, 200);
                 result = custClassifications.Select(c => new CustomerClassification()
                 {
                     CustID = c.CustID,

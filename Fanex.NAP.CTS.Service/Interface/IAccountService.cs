@@ -100,5 +100,6 @@
         IEnumerable<PerformanceDailyModel> GetPerformanceDaily(long custId);
 
         IEnumerable<CustomerClassModel> GetCustomerClassByCustId(string custIdList);
+        IEnumerable<CustomerClassificationModel> GetCustomerClassificationForAPI(string custIdList, int parentCateId);
     }
 }

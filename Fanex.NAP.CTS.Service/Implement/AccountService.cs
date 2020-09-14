@@ -896,6 +896,20 @@
                 return db.Query<CustomerClassificationModel>(criteria);
             }
         }
+        public IEnumerable<CustomerClassificationModel> GetCustomerClassificationForAPI(string custIdList, int parentCateId)
+        {
+            var criteria = new GetCTSCustomerClassificationForAPICriteria
+            {
+                CustIdList = custIdList,
+                ParentCateId = parentCateId
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<CustomerClassificationModel>(criteria);
+            }
+        }
+        
 
         public IEnumerable<CustomerClassModel> GetCustomerClassByCustId(string custIdList)
         {
