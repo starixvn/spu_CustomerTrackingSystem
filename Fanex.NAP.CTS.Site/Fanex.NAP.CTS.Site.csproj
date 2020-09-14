@@ -390,22 +390,31 @@
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="App_Data\Local\InternalSPNames.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="App_Data\Local\NAPFrameworkSpNames.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="App_Data\Local\NAPFSNames.xml">
+    <Content Include="App_Data\Local\ExternalSPNames.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\PRO\InternalSPNames.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="App_Data\PRO\NAPFrameworkSpNames.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="App_Data\PRO\NAPFSNames.xml">
+    <Content Include="App_Data\PRO\ExternalSPNames.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\UAT\InternalSPName.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="App_Data\UAT\NAPFrameworkSpNames.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="App_Data\UAT\NAPFSNames.xml">
+    <Content Include="App_Data\UAT\ExternalSPName.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Areas\UserLogin\scripts\lib\jquery-1.9.0.min.js" />

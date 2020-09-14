@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Functions>
+  <Function name="SubscriberAssignment">
+    <Setting Key="FPS_AD_InsertSubscriberByUser" SpName="FPS_AD_InsertSubscriberByUser" DbName="MySQL.CTS_Admin"/>
+    <Setting Key="CTS_AD_GetAllSubscribers" SpName="CTS_AD_GetAllSubscribers" DbName="MySQL.CTS_Admin"/>
+  </Function>
+
+  <Function Name="InsertCTSUser"> 
+    <Setting Key="CTS_AD_InsertCTSUser" SpName="CTS_AD_InsertCTSUser" DbName="MySQL.CTS_Admin" />
+  </Function>
+
+  <Function Name="Common">
+    <Setting Key="CTS_DC_GetAllSportGroups" SpName="CTS_DC_GetAllSportGroups" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_GetStaticList" SpName="CTS_DC_GetStaticList" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_GetAllSubscriberGroups" SpName="CTS_DC_GetAllSubscriberGroups" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_GetCustomerGroup" SpName="CTS_DC_GetCustomerGroup" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="DCS_DC_Get_HistoryTransaction" SpName="DCS_DC_Get_HistoryTransaction" DbName="MySQL.DCS_DataCenter" />
+  </Function>
+
+  <Function name="CustInfo">
+    <Setting Key="CTS_DC_GetUserInfomationByUsername" SpName="CTS_DC_GetUserInfomationByUsername" DbName="MySQL.CTS_DataCenter">
+      <Mapping DataField="CurrencyId" ObjectProperty="Id" Class="Currency"/>
+      <Mapping DataField="Currency" ObjectProperty="Name" Class="Currency"/>
+      <Mapping DataField="RoleId" ObjectProperty="Id" Class="Role"/>
+      <Mapping DataField="RoleName" ObjectProperty="Name" Class="Role"/>
+      <Mapping DataField="SubscriberId" ObjectProperty="Id" Class="Subscriber"/>
+      <Mapping DataField="SubscriberName" ObjectProperty="Name" Class="Subscriber"/>
+    </Setting>
+    <Setting Key="CTS_DC_GetCustomerInfoByCTSCustId" SpName="CTS_DC_GetCustomerInfoByCTSCustId" DbName="MySQL.CTS_DataCenter"/>
+    <Setting Key="CTS_DC_GetCustomerFlagInfo" SpName="CTS_DC_GetCustomerFlagInfo" DbName="MySQL.CTS_DataCenter"/>
+    <Setting Key="CTS_DC_GetCustomerByUsername" SpName="CTS_DC_GetCustomerByUsername" DbName="MySQL.CTS_DataCenter"/>
+  </Function>
+
+  <Function Name="Notification">
+    <Setting Key="CTS_DC_GetAssociatedAccountNewAssNotification" SpName="CTS_DC_GetAssociatedAccountNewAssNotification" DbName="MySQL.CTS_DataCenter"/>
+  </Function>
+
+  <Function Name="Evidence">
+    <Setting Key="CTS_DC_GetAllEvidences" SpName="CTS_DC_GetAllEvidences" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_GetFlaggedEvidence" SpName="CTS_DC_GetFlaggedEvidence" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_AddEvidence" SpName="CTS_DC_AddEvidence" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_RemoveFlaggedEvidence" SpName="CTS_DC_RemoveFlaggedEvidence" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_GetAffectedEvidence" SpName="CTS_DC_GetAffectedEvidence" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_RetractAffectedEvidence" SpName="CTS_DC_RetractAffectedEvidence" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_RestoreAffectedEvidence" SpName="CTS_DC_RestoreAffectedEvidence" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_GetAffectedEvidenListBetweenCusts" SpName="CTS_DC_GetAffectedEvidenListBetweenCusts" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_CheckMultiCustomerEvidence" SpName="CTS_DC_CheckMultiCustomerEvidence" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_AddMultiCustomerEvidence" SpName="CTS_DC_AddMultiCustomerEvidence" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_RemoveOldEvidence" SpName="CTS_DC_RemoveOldEvidence" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_GetEvidenceByCTSCustID" SpName="CTS_DC_GetEvidenceByCTSCustID" DbName="MySQL.CTS_DataCenter"/>
+    <Setting Key="CTS_DC_GetCleanCustIDsFromCustIDList" SpName="CTS_DC_GetCleanCustIDsFromCustIDList" DbName="MySQL.CTS_DataCenter"/>
+    <Setting Key="CTS_DC_GetDirectAssociatedAccount_TagFlagged" SpName="CTS_DC_GetDirectAssociatedAccount_TagFlagged" DbName="MySQL.CTS_DataCenter" />
+  </Function>
+
+  <Function Name="Association">
+    <Setting Key="CTS_DC_AddException" SpName="CTS_DC_AddException" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_RemoveException" SpName="CTS_DC_RemoveException" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_GetExceptionByCTSCustID" SpName="CTS_DC_GetExceptionByCTSCustID" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_GetAssociationByCTSCustID" SpName="CTS_DC_GetAssociationByCTSCustID" DbName="MySQL.CTS_DataCenter"/>
+    <Setting Key="CTS_DC_AddManualAssociationMultipleValidation" SpName="CTS_DC_AddManualAssociationMultipleValidation" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_AddManualAssociationMultiple" SpName="CTS_DC_AddManualAssociationMultiple" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_UpdateAssociationRemove" SpName="CTS_DC_UpdateAssociationRemove" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_GetAssociationCustomersByCTSCustIDList" SpName="CTS_DC_GetAssociationCustomersByCTSCustIDList" DbName="MySQL.CTS_DataCenter"/>
+    <Setting Key="CTS_DC_GetAssociatedCustIDsWithOtherEvidence" SpName="CTS_DC_GetAssociatedCustIDsWithOtherEvidence" DbName="MySQL.CTS_DataCenter"/>
+  </Function>
+
+  <Function Name="CustomerClassification">
+    <Setting Key="CTS_DC_GetCustomerCategoryByCTSCustID" SpName="CTS_DC_GetCustomerCategoryByCTSCustID" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_AddCTSCustomerClassification" SpName="CTS_DC_AddCTSCustomerClassification" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_UpdateCTSCustomerClassification" SpName="CTS_DC_UpdateCTSCustomerClassification" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_RemoveCTSCustomerClassification" SpName="CTS_DC_RemoveCTSCustomerClassification" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_GetCTSCustomerClassification" SpName="CTS_DC_GetCTSCustomerClassification" DbName="MySQL.CTS_DataCenter" />
+  </Function>
+
+  <Function name="AssociatedAccountMonitor">
+    <Setting Key="CTS_DC_InsertAssociatedAccountMonitorValidation" SpName="CTS_DC_InsertAssociatedAccountMonitorValidation" DbName="MySQL.CTS_DataCenter"/>
+    <Setting Key="CTS_DC_InsertAssociatedAccountMonitor" SpName="CTS_DC_InsertAssociatedAccountMonitor" DbName="MySQL.CTS_DataCenter"/>
+    <Setting Key="CTS_DC_RPT_AssociatedAccountMonitor" SpName="CTS_DC_RPT_AssociatedAccountMonitor" DbName="MySQL.CTS_DataCenter"/>
+    <Setting Key="CTS_DC_RemoveAssociatedAccountMonitor" SpName="CTS_DC_RemoveAssociatedAccountMonitor" DbName="MySQL.CTS_DataCenter"/>
+  </Function>
+
+  <Function name="SpecialCustomerClass">
+    <Setting Key="CTS_DC_GetAllSpecialCustomerClass" SpName="CTS_DC_GetAllSpecialCustomerClass" DbName="MySQL.CTS_DataCenter"/>
+    <Setting Key="CTS_DC_InsertSpecialCustomerClass" SpName="CTS_DC_InsertSpecialCustomerClass" DbName="MySQL.CTS_DataCenter"/>
+    <Setting Key="CTS_DC_RemoveSpecialCustomerClass" SpName="CTS_DC_RemoveSpecialCustomerClass" DbName="MySQL.CTS_DataCenter"/>
+  </Function>
+</Functions>
