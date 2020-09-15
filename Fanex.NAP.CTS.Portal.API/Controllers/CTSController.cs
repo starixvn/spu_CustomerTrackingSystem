@@ -1,25 +1,24 @@
-﻿using Fanex.Logging;
-using Fanex.NAP.CTS.Core.Helpers.Api;
-using Fanex.NAP.CTS.Core.Helpers.Xml;
-using Fanex.NAP.CTS.Core.Utilities;
-using Fanex.NAP.CTS.Model.Account;
-using Fanex.NAP.CTS.Model.API;
-using Fanex.NAP.CTS.Model.DTO;
-using Fanex.NAP.CTS.Model.GraphDB;
-using Fanex.NAP.CTS.Service;
-using Fanex.NAP.CTS.Service.Implement;
-using Fanex.NAP.CTS.Service.Interface;
-using Fanex.NAP.SPU.Graph.Core;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Net;
-using System.Web.Http;
-using System.Web.Http.Results;
-
-namespace Fanex.NAP.CTS.Portal.API.Controllers
+﻿namespace Fanex.NAP.CTS.Portal.API.Controllers
 {
+    using Fanex.Logging;
+    using Fanex.NAP.CTS.Core.Helpers.Api;
+    using Fanex.NAP.CTS.Core.Helpers.Xml;
+    using Fanex.NAP.CTS.Core.Utilities;
+    using Fanex.NAP.CTS.Model.Account;
+    using Fanex.NAP.CTS.Model.API;
+    using Fanex.NAP.CTS.Model.DTO;
+    using Fanex.NAP.CTS.Model.GraphDB;
+    using Fanex.NAP.CTS.Service;
+    using Fanex.NAP.CTS.Service.Implement;
+    using Fanex.NAP.CTS.Service.Interface;
+    using Fanex.NAP.SPU.Graph.Core;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Web.Http;
+    using System.Web.Http.Results;
+
     public class CtsController : ApiController
     {
         private readonly IAccountService _accountService;
