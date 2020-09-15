@@ -14,7 +14,7 @@
     <Setting Key="CTS_DC_GetStaticList" SpName="CTS_DC_GetStaticList" DbName="MySQL.CTS_DataCenter" />
     <Setting Key="CTS_DC_GetAllSubscriberGroups" SpName="CTS_DC_GetAllSubscriberGroups_xtest" DbName="MySQL.CTS_DataCenter" />
     <Setting Key="CTS_DC_GetCustomerGroup" SpName="CTS_DC_GetCustomerGroup_xtest" DbName="MySQL.CTS_DataCenter" />
-    <Setting Key="DCS_DC_GetTransactionHistory" SpName="DCS_DC_GetTransactionHistory" DbName="MySQL.DCS_DataCenter" />
+    <Setting Key="DCS_DC_Transaction_GetHistory" SpName="DCS_DC_Transaction_GetHistory" DbName="MySQL.DCS_DataCenter" />
   </Function>
 
   <Function name="CustInfo">
@@ -74,8 +74,9 @@
   <Function name="AssociatedAccountMonitor">
     <Setting Key="CTS_DC_AssociatedAccountMonitor_ValidateInput" SpName="CTS_DC_AssociatedAccountMonitor_ValidateInput_xtest" DbName="MySQL.CTS_DataCenter"/>
     <Setting Key="CTS_DC_AssociatedAccountMonitor_Insert" SpName="CTS_DC_AssociatedAccountMonitor_Insert_xtest" DbName="MySQL.CTS_DataCenter"/>
-    <Setting Key="CTS_DC_RPT_AssociatedAccountMonitor" SpName="CTS_DC_RPT_AssociatedAccountMonitor_xtest" DbName="MySQL.CTS_DataCenter"/>
+    <Setting Key="CTS_DC_AssociatedAccountMonitor_Get" SpName="CTS_DC_AssociatedAccountMonitor_Get_xtest" DbName="MySQL.CTS_DataCenter"/>
     <Setting Key="CTS_DC_AssociatedAccountMonitor_Remove" SpName="CTS_DC_AssociatedAccountMonitor_Remove_xtest" DbName="MySQL.CTS_DataCenter"/>
+    <Setting Key="CTS_DC_AssociatedAccountMonitor_VerifyPin" SpName="CTS_DC_AssociatedAccountMonitor_VerifyPin_xtest" DbName="MySQL.CTS_DataCenter" />
   </Function>
 
   <Function name="SpecialCustomerClass">
