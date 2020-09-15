@@ -1,16 +1,23 @@
-﻿using Fanex.NAP.CTS.Resource.Consts;
-using System;
-
-namespace Fanex.NAP.CTS.Model.Account.CustomerCategory
+﻿namespace Fanex.NAP.CTS.Model.Account
 {
+    using Fanex.NAP.CTS.Resource.Consts;
+    using System;
+
     public class CustomerClassificationModel
     {
-        public long CustID { get; set; }
-        public int CategoryId { get; set; }
+        public int CustID { get; set; }
+
+        public int ParentCategoryID { get; set; }
+
+        public string ParentCategoryName { get; set; }
+
+        public int CategoryType { get; set; }
+
+        public int CategoryID { get; set; }
 
         public string CategoryName { get; set; }
 
-        public string SportGroupIdList { get; set; }
+        public string SportGroupIDList { get; set; }
 
         public string SportGroupNameList { get; set; }
 
@@ -18,11 +25,7 @@ namespace Fanex.NAP.CTS.Model.Account.CustomerCategory
 
         public string LastModifiedBy { get; set; }
 
-        public DateTime LastModifiedDate { get; set; }
-
-        public int ParentCategoryId { get; set; }
-
-        public string ParentCategoryName { get; set; }
+        public DateTime LastModifiedDate { get; set; }        
 
         public bool IsEnabledDelete { get; set; }
 

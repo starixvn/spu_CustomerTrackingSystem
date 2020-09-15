@@ -141,6 +141,7 @@
     <Compile Include="Account\CustomerAssociationByCTSCustIdModel.cs" />
     <Compile Include="Account\CustomerByGraphDB.cs" />
     <Compile Include="Account\CustomerCategory\CustomerClassificationModel.cs" />
+    <Compile Include="Account\CustomerCategory\ResultInsertRemoveCustomerClassificationModel.cs" />
     <Compile Include="Account\CustomerEsportAutoSuspendStatusModel.cs" />
     <Compile Include="Account\CustomerEvidenceByCTSCustIdModel.cs" />
     <Compile Include="API\CustomerClassModel.cs" />
@@ -170,6 +171,9 @@
     <Compile Include="AssociatedAccountMonitor\AssociatedAccountMonitorModel.cs" />
     <Compile Include="AssociatedAccountMonitor\CustProfilerModel.cs" />
     <Compile Include="AssociatedAccountMonitor\ValidateAssociatedAccountModel.cs" />
+    <Compile Include="SpecialCustomerClass\CustomerClassForMainDb.cs" />
+    <Compile Include="SpecialCustomerClass\CustomerClassModel.cs" />
+    <Compile Include="SpecialCustomerClass\ResultInsertCustomerClass.cs" />
     <Compile Include="DTO\CustomerCategory.cs" />
     <Compile Include="Association\AssociationCustomerModel.cs" />
     <Compile Include="DTO\CustomerEvidenceComparer.cs" />

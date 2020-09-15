@@ -478,6 +478,10 @@
            SpName="CTS_DC_GetCTSCustomerClassification"
            DbName="MySQL.CTS_DataCenter" />
 
+    <Setting Key="CTS_DC_VerifyPinCTSCustomerClassification"
+           SpName="CTS_DC_VerifyPinCTSCustomerClassification"
+           DbName="MySQL.CTS_DataCenter" />
+
     <Setting Key="CTS_CustomerStatistics_GetPerformance_BySport"
        SpName="CTS_CustomerStatistics_GetPerformance_BySport"
        DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
@@ -589,5 +593,23 @@
         SpName="CTS_DC_GetAssociatedCustIDsWithOtherEvidence"
         DbName="MySQL.CTS_DataCenter"/>
   </Function>
+  
+	<Function name="SpecialCustomerClass">
+		<Setting Key="CTS_DC_GetAllSpecialCustomerClass"
+	       SpName="CTS_DC_GetAllSpecialCustomerClass"
+	       DbName="MySQL.CTS_DataCenter"/>
+    
+		<Setting Key="CTS_DC_InsertSpecialCustomerClass"
+				   SpName="CTS_DC_InsertSpecialCustomerClass"
+				   DbName="MySQL.CTS_DataCenter"/>
+
+    <Setting Key="CTS_DC_RemoveSpecialCustomerClass"
+				   SpName="CTS_DC_RemoveSpecialCustomerClass"
+				   DbName="MySQL.CTS_DataCenter"/>
+    
+		<Setting Key="Acc_CustomerUpdateCustomerClass" 
+				 SpName="Acc_CustomerUpdateCustomerClass" 
+				 DbName="DBCust.CustDB.bodbAdminNet" TimeOut="300" />
+	</Function>
 
 </Functions>

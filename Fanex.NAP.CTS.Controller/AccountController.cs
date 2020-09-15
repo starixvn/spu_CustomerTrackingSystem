@@ -5,15 +5,16 @@
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Web.Attribute;
-    using Fanex.NAP.CTS.Core.Extentions;
-    using Fanex.NAP.CTS.Core.Helpers.Xml;
+    using Fanex.NAP.CTS.Core.Extentions;    
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria.Account;
     using Fanex.NAP.CTS.Model;
-    using Fanex.NAP.CTS.Model.Account;
+    using Fanex.NAP.CTS.Model.Account;    
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.GraphDB;
+    using Fanex.NAP.CTS.Model.SpecialCustomerClass;
     using Fanex.NAP.CTS.Model.Transaction;
+    using Fanex.NAP.CTS.Resource;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.Service.Implement;
@@ -941,10 +942,12 @@
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult MarkCatergory(long ctsCustId)
         {
+            var customerCategoryList = _accountService.GetCustomerCategoryByCTSCustId(ctsCustId).ToList();
+            
             var model = new MarkCategoryViewModel
             {
-                SportGroupList = _accountService.GetAllSportGroup().ToList(),
-                CustomerCategoryList = _accountService.GetCustomerCategoryByCTSCustId(ctsCustId).ToList()
+                //SportGroupList = _accountService.GetAllSportGroup().ToList(),
+                CustomerCategoryList = customerCategoryList.Where(x=>x.CategoryName.Equals("VVIP") || x.ParentId == 0).ToList()
             };
 
             return PartialView("CustomerCategory/MarkCatergory", model);
@@ -969,34 +972,78 @@
 
         public ActionResult GetCustomerClassification(long custId)
         {
-            var data = _accountService.GetCustomerClassification(custId.ToString(), -1);
+            var isPinCategory = false;
+            var isVVip = false;
+            var customerCategoryList = new List<CustomerCategoryViewModel>();
+            var internalCategoryList = new List<CustomerCategorySummaryViewModel>();
+            var externalCategoryList = new List<CustomerCategorySummaryViewModel>();
+            
+            var data = _accountService.GetCustomerClassification(custId, out isPinCategory);
 
             if (data != null && data.Any())
             {
-                var result = data.Select(x => new CustomerCategoryViewModel
-                {
-                    CategoryId = x.CategoryId,
-                    CategoryName = x.CategoryName,
-                    LastModifiedBy = x.LastModifiedBy,
-                    LastModifiedDate = x.LastModifiedDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                    Remark = x.Remark,
-                    SportGroupIdList = x.SportGroupIdList,
-                    SportGroupNameList = x.SportGroupNameList,
-                    ParentCategoryId = x.ParentCategoryId,
-                    ParentCategoryName = x.ParentCategoryName,
-                    IsEnabledDelete = x.IsEnabledDelete,
-                    NextScanDatePeriod = x.NextScanDatePeriod 
-                });
+                var internals = data
+                    .Where(x => x.CategoryType == 0 || x.CategoryType == 2)
+                    .Select(x => GetCustomerCategory(x, ResourcesManager.GetValue(ConstsResources.CUSTOMER_INTERNAL_CATEGORY)));
 
-                return Json(new { data = result }, JsonRequestBehavior.AllowGet);
+                var externals = data
+                    .Where(x => x.CategoryType == 1 || x.CategoryType == 2)
+                   .Select(x => GetCustomerCategory(x, ResourcesManager.GetValue(ConstsResources.CUSTOMER_EXTERNAL_CATEGORY)));
+
+                customerCategoryList.AddRange(internals);
+                customerCategoryList.AddRange(externals);
+
+                internalCategoryList = internals.Select(x => GetCustomerCategorySummary(x)).ToList();
+                externalCategoryList = externals.Select(x => GetCustomerCategorySummary(x)).ToList();
+                isVVip = data.Where(x => x.CategoryName.Equals("VVIP")).Count() > 0;
             }
 
-            return Json(new { data = new List<CustomerCategoryViewModel>() }, JsonRequestBehavior.AllowGet);
+            return Json(new
+            {
+                isPinCategory,
+                isVVip,
+                internalCategoryList,
+                externalCategoryList,
+                data = customerCategoryList,
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        private CustomerCategoryViewModel GetCustomerCategory(CustomerClassificationModel model, string parentName)
+        {
+            return new CustomerCategoryViewModel
+            {
+                ParentCategoryId = model.ParentCategoryID,
+                ParentCategoryName = parentName,
+                CategoryId = model.CategoryID,
+                CategoryName = model.CategoryName,
+                CategoryType = model.CategoryType,
+                LastModifiedBy = model.LastModifiedBy,
+                LastModifiedDate = model.LastModifiedDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+                Remark = model.Remark,
+                SportGroupIdList = model.SportGroupIDList,
+                SportGroupNameList = model.SportGroupNameList,                
+                NextScanDatePeriod = model.NextScanDatePeriod,
+                IsEnabledDelete = model.IsEnabledDelete
+            };
+        }
+
+        public CustomerCategorySummaryViewModel GetCustomerCategorySummary(CustomerCategoryViewModel category)
+        {
+            return new CustomerCategorySummaryViewModel
+            {
+                ParentCategoryName = category.ParentCategoryName,
+                CategoryName = category.CategoryName,
+                SportGroupNameList = category.SportGroupNameList,
+                IsProblemAccount = category.CategoryType == 2
+            };
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult AddCustomerClassification(long custId, long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark)
+        public ActionResult AddCustomerClassification(long custId, long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark, bool isVVip)
         {
+            var errorCode = 0;
+            var errorMessage = string.Empty;
+
             if (ctsCustId <= 0 || subscriberId <= 0 || categoryId <= 0)
             {
                 return Json(new
@@ -1006,12 +1053,40 @@
                 }, JsonRequestBehavior.AllowGet);
             }
 
-            var result = _accountService.AddCustomerClassification(custId, ctsCustId, subscriberId, categoryId, sportGroupIds, remark, CurrentSession.UserId);
+            var resultToCTS = _accountService.AddCustomerClassification(custId, ctsCustId, subscriberId, categoryId, sportGroupIds, remark, CurrentSession.UserId);
+
+            if (resultToCTS.ErrorCode == 0)
+            {
+                if (isVVip)
+                {
+                    var custIdInt = 0;
+                    int.TryParse(custId.ToString(), out custIdInt);
+
+                    if (custIdInt != 0)
+                    {
+                        var custToMainDbList = new List<CustomerClassForMainDb>
+                    {
+                        new CustomerClassForMainDb
+                        {
+                            CustID = custIdInt,
+                            CustomerClass = 100
+                        }
+                    };
+
+                        _accountService.SyncCustomerClassToMainDb(custToMainDbList, "Insert");
+                    }
+                }
+            }
+            else
+            {
+                errorCode = resultToCTS.ErrorCode;
+                errorMessage = resultToCTS.ErrorMsg;
+            }
 
             return Json(new
             {
-                errorCode = result.ErrorCode,
-                errorMessage = result.ErrorMsg
+                errorCode,
+                errorMessage
             }, JsonRequestBehavior.AllowGet);
         }
 
@@ -1039,6 +1114,9 @@
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult RemoveCustomerClassification(long custId, long ctsCustId, int categoryId)
         {
+            var errorCode = 0;
+            var errorMessage = string.Empty;
+
             if (custId <= 0 || categoryId <= 0)
             {
                 return Json(new
@@ -1047,8 +1125,36 @@
                     errorMessage = "Invalid parameter"
                 }, JsonRequestBehavior.AllowGet);
             }
+            
+            var resultToCTS = _accountService.RemoveCustomerClassification(custId, ctsCustId, categoryId, CurrentSession.UserId);
 
-            var result = _accountService.RemoveCustomerClassification(custId, ctsCustId, categoryId, CurrentSession.UserId);
+            if (string.IsNullOrEmpty(resultToCTS.OpErrorMessage))
+            {
+                if (resultToCTS.CustomerClassList != null && resultToCTS.CustomerClassList.Any())
+                {
+                    var customerClassListToMainDb = resultToCTS.CustomerClassList.Where(c => c.CustID != 0);
+
+                    _accountService.SyncCustomerClassToMainDb(customerClassListToMainDb, "Remove");
+                }
+            }
+            else
+            {
+                errorCode = -1;
+                errorMessage = resultToCTS.OpErrorMessage;
+            }
+
+            return Json(new
+            {
+                errorCode,
+                errorMessage
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [HttpPost]
+        public ActionResult PinCategoryCustomerClassification(int custId, long ctsCustId, int subscriberId, bool isPinCategory)
+        {
+            var result = _accountService.PinCategoryCustomerClassification(custId, ctsCustId, subscriberId, isPinCategory, CurrentSession.UserId);
 
             return Json(new
             {

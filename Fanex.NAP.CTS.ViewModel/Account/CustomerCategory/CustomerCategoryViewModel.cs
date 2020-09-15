@@ -1,9 +1,13 @@
-﻿using System;
-
-namespace Fanex.NAP.CTS.ViewModel.Account.CustomerCategory
-{
+﻿namespace Fanex.NAP.CTS.ViewModel.Account.CustomerCategory
+{    
     public class CustomerCategoryViewModel
     {
+        public int ParentCategoryId { get; set; }
+
+        public string ParentCategoryName { get; set; }
+
+        public int CategoryType { get; set; }
+
         public int CategoryId { get; set; }
 
         public string CategoryName { get; set; }
@@ -18,12 +22,9 @@ namespace Fanex.NAP.CTS.ViewModel.Account.CustomerCategory
 
         public string LastModifiedDate { get; set; }
 
-        public int ParentCategoryId { get; set; }
-
-        public string ParentCategoryName { get; set; }
+        public string NextScanDatePeriod { get; set; }
 
         public bool IsEnabledDelete { get; set; }
-
-        public string NextScanDatePeriod { get; set; }
     }
+  
 }

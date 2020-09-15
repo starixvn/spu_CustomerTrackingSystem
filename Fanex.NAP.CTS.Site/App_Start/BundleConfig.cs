@@ -68,7 +68,9 @@
             RegisterImportEvidencesBundles(bundles);
 
             RegisterAssociatedAccountMonitorBundles(bundles);
-            
+
+            RegisterSpecialCustomerClassBundles(bundles);
+
         }
 
         private static void RegisterFSCoreBundles(BundleCollection bundles)
@@ -279,6 +281,15 @@
                  "~/Content/scss/MultipleSelect/jquery.multiselect.css",
                  "~/Content/scss/vendors/jquery-ui/base/tagify.css",
                  "~/Content/scss/pages/associated-account-monitor/associated-account-monitor.css"));
+        }
+
+        private static void RegisterSpecialCustomerClassBundles(BundleCollection bundles)
+        {
+            bundles.Add(new ScriptBundle("~/special-customer-class-scripts").Include(                        
+                "~/Scripts/SpecialCustomerClass/index.js"));
+
+            bundles.Add(new StyleBundle("~/special-customer-class-styles").Include(
+                 "~/Content/scss/pages/special-customer-class/special-customer-class.css"));
         }
     }
 }

@@ -68,13 +68,13 @@ input, button {
 .button {
   display: inline-block;
   font-family: 'Lato', Tahoma, sans-serif !important;
-  height: 28px;
-  font-size: 14px !important;
+  height: 26px;
+  font-size: 1.3rem !important;
   font-weight: bold;
-  line-height: 20px;
-  padding-left: 12px;
-  padding-right: 12px;
-  border-radius: 2px;
+  line-height: 1.230769;
+  padding-left: 1.6rem;
+  padding-right: 1.6rem;
+  border-radius: 3px;
   border: none;
   outline: none;
   text-transform: capitalize;
@@ -95,7 +95,7 @@ input, button {
     background-color: #fff;
     color: #3a6e17; }
     .button.-export .icon-export-excel {
-      margin-right: 10px; }
+      margin-right: 1rem; }
     .button.-export:hover:not(:disabled) {
       border-color: #5bb023;
       background-color: #5bb023;
@@ -885,7 +885,8 @@ select {
     background-color: #1D2E4F;
     color: #fff;
     text-align: center;
-    font-weight: normal; }
+    font-weight: normal;
+    border-top: 0 !important; }
     .table thead th.sub-header {
       background-color: #465262; }
     .table thead th .new-value {

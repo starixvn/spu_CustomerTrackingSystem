@@ -1,0 +1,62 @@
+﻿@{
+    ViewBag.Title = "SPECIAL CUSTOMER CLASS";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section styles{
+    @Styles.Render("~/special-customer-class-styles")
+}
+<h2 class="page-title">SPECIAL CUSTOMER CLASS</h2>
+
+<div id="problemAccountMonitorGrid" class="special-customer-class">
+    <div class="fixed-header">
+        <div class="top-header">
+            <div class="add-special">
+                <button class="button button-primary-outline" id="btnAdd">Add</button>
+            </div>
+        </div>
+    </div>
+
+    <table id="tblSpecialCustomerClass" class="table table-striped width-100per tblSpecialCustomerClass" style="width: 100%">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Site</th>
+                <th>Customer Class</th>
+                <th>Added By</th>
+                <th>Added Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<div id="divAddCustomerClass" style="display:none;">
+    <div class="form-control">
+        <div class="label">Username</div>
+        <input id="txtUsername" type="text" class="input-field full-width" maxlength="50" />
+    </div>
+    <div class="form-control">
+        <div class="label">Class</div>
+        <input id="txtCustomerClass" type="number" min="1" max="100" class="input-field full-width" maxlength="50" />
+    </div>
+    <div class="group">
+        <label class="checkbox">
+            <input type="checkbox" id="isAffectedToAssociation" />
+            <span>Update for Affected Customers</span>
+        </label>
+    </div>
+    <div class="modal-footer">
+        <button id="btnCancel" class="button btn-cancel-outline" title="Cancel">Cancel</button>
+        <button id="btnSave" class="button -add" title="Add Association">Save</button>
+    </div>
+</div>
+
+<div class="hide">
+    <input id="hdIsHostPermission" type="hidden" IsHostPermission="@Model.ToString()" />
+</div>
+
+@section scripts{
+    @Scripts.Render("~/special-customer-class-scripts")
+}
+

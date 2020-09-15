@@ -476,6 +476,7 @@
     <Content Include="App_Data\Excel Template\ImportEvidences\template.xlsx" />
     <Content Include="Content\scss\pages\associated-account-monitor\associated-account-monitor.scss" />
     <Content Include="Content\scss\pages\common\maintenance.scss" />
+    <Content Include="Content\scss\components\_toggle-switch.scss" />
     <None Include="Content\scss\pages\problem-account-monitor\problem-account-monitor.scss" />
     <None Include="Content\scss\pages\import-evidences\import-evidences.scss" />
     <Content Include="Content\scss\pages\import-evidences\import-evidences.css">
@@ -489,6 +490,12 @@
     </Content>
     <Content Include="Content\scss\pages\problem-account-monitor\problem-account-monitor.min.css">
       <DependentUpon>problem-account-monitor.css</DependentUpon>
+    </Content>
+    <Content Include="Content\scss\pages\special-customer-class\special-customer-class.css">
+      <DependentUpon>special-customer-class.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\scss\pages\special-customer-class\special-customer-class.min.css">
+      <DependentUpon>special-customer-class.css</DependentUpon>
     </Content>
     <Content Include="Content\scss\pages\subscriber-assignment\subscriber-assignment.min.css">
       <DependentUpon>subscriber-assignment.css</DependentUpon>
@@ -906,6 +913,7 @@
     <Content Include="Scripts\ProblemAccountMonitor\index.js" />
     <Content Include="Scripts\search.js" />
     <Content Include="Scripts\Search\Account\search-account.js" />
+    <Content Include="Scripts\SpecialCustomerClass\index.js" />
     <Content Include="Scripts\SubscriberAssignment\subscriber.js" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -922,6 +930,7 @@
     <Content Include="Views\Account\BettingStatistic\TurnoverBySport.cshtml" />
     <Content Include="Views\Account\BettingStatistic\TurnoverWinLost.cshtml" />
     <Content Include="Views\Account\BettingStatistic\Summary.cshtml" />
+    <Content Include="Views\SpecialCustomerClass\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CoreBetList.css" />
@@ -1428,6 +1437,7 @@
     <Content Include="Content\scss\fonts\Fraud-Sensor\fonts\CTS.ttf" />
     <Content Include="Content\scss\fonts\Fraud-Sensor\fonts\CTS.woff" />
     <Content Include="Content\scss\vendors\highcharts\highcharts.scss" />
+    <Content Include="Content\scss\pages\special-customer-class\special-customer-class.scss" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />

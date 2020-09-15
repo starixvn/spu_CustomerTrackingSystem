@@ -36,5 +36,7 @@
         public const string IMPORT_FILE_EMPTY = "IMPORT_FILE_EMPTY";
 
         public const string INSERT_CTS_USER_ERROR = "INSERT_CTS_USER_ERROR";
+        public const string CUSTOMER_INTERNAL_CATEGORY = "CUSTOMER_INTERNAL_CATEGORY";
+        public const string CUSTOMER_EXTERNAL_CATEGORY = "CUSTOMER_EXTERNAL_CATEGORY";
     }
 }

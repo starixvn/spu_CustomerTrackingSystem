@@ -1,12 +1,14 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
     using Fanex.Data;
+    using Fanex.Data.Repository;
     using Fanex.Logging;
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.BaseClasses;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Helpers;
     using Fanex.NAP.CTS.Core.Helpers.Api;
+    using Fanex.NAP.CTS.Core.Helpers.Xml;
     using Fanex.NAP.CTS.Criteria.Account;
     using Fanex.NAP.CTS.Criteria.Account.Associated;
     using Fanex.NAP.CTS.Criteria.Account.BettingStatistic;
@@ -14,14 +16,15 @@
     using Fanex.NAP.CTS.Criteria.Account.CustomerCategory;
     using Fanex.NAP.CTS.Criteria.Account.GeneralInformation;
     using Fanex.NAP.CTS.Criteria.Home;
+    using Fanex.NAP.CTS.Criteria.SpecialCustomerClass;
     using Fanex.NAP.CTS.Model;
-    using Fanex.NAP.CTS.Model.Account;
-    using Fanex.NAP.CTS.Model.Account.CustomerCategory;
+    using Fanex.NAP.CTS.Model.Account;    
     using Fanex.NAP.CTS.Model.API;
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.Home;
+    using Fanex.NAP.CTS.Model.SpecialCustomerClass;
     using Fanex.NAP.CTS.Resource;
     using Fanex.NAP.CTS.ViewModel.Account;
     using Fanex.NAP.CTS.ViewModel.Account.GeneralInformation;
@@ -883,17 +886,28 @@
             }
         }
 
-        public IEnumerable<CustomerClassificationModel> GetCustomerClassification(string custIdList, int parentCateId)
+        public IEnumerable<CustomerClassificationModel> GetCustomerClassification(long custId, out bool isPinCategory)
         {
+            isPinCategory = false;
             var criteria = new GetCTSCustomerClassificationCriteria
             {
-                CustIdList = custIdList,
-                ParentCateId = parentCateId
+                CustId = custId
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<CustomerClassificationModel>(criteria);
+                using (var result = db.QueryMultiple(criteria))
+                {
+                    var categories = result.Read<CustomerClassificationModel>();
+                    var pinCategories = result.Read<bool>();
+
+                    if (pinCategories != null && pinCategories.Any())
+                    {
+                        isPinCategory = pinCategories.ToList()[0];
+                    }
+
+                    return categories;
+                }
             }
         }
         public IEnumerable<CustomerClassificationModel> GetCustomerClassificationForAPI(string custIdList, int parentCateId)
@@ -911,7 +925,7 @@
         }
         
 
-        public IEnumerable<CustomerClassModel> GetCustomerClassByCustId(string custIdList)
+        public IEnumerable<Model.API.CustomerClassModel> GetCustomerClassByCustId(string custIdList)
         {
             var criteria = new GetCustomerClassByCustIdCriteria
             {
@@ -920,7 +934,7 @@
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<CustomerClassModel>(criteria);
+                return db.Query<Model.API.CustomerClassModel>(criteria);
             }
         }
 
@@ -994,30 +1008,112 @@
             };
         }
 
-        public DBResult RemoveCustomerClassification(long custId, long ctsCustId, int categoryId, int createdBy)
+        public ResultInsertRemoveCustomerClassificationModel RemoveCustomerClassification(long custId, long ctsCustId, int categoryId, int createdBy)
         {
+            var insertCTSResult = new ResultInsertRemoveCustomerClassificationModel();
             var criteria = new RemoveCTSCustomerClassificationCriteria
             {
                 CustId = custId,
                 CTSCustId = ctsCustId,
                 CategoryId = categoryId,
-                CreatedBy = createdBy,
+                CreatedBy = createdBy                
+            };
+            
+            var repository = new DynamicRepository();
+            insertCTSResult.CustomerClassList = repository.Fetch<CustomerClassForMainDb>(criteria);
+            insertCTSResult.OpErrorMessage = criteria.ErrorMessage;
+
+            return insertCTSResult;
+        }
+
+        public DBResult SyncCustomerClassToMainDb(IEnumerable<CustomerClassForMainDb> customerClassList, string syncAction)
+        {
+            var criteria = new SyncCustomerClassToMainDbCriteria()
+            {
+                custList = customerClassList.ToXmlString(),
+                ErrorCode = 0,
                 ErrorMessage = string.Empty
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            try
             {
-                db.ExecuteNonQuery(criteria);
+                var repository = new DynamicRepository();
 
-                if (string.IsNullOrWhiteSpace(criteria.ErrorMessage))
+                repository.Execute(criteria);
+
+                if (criteria.ErrorCode != 0)
                 {
+                    var errorMessage = "CTS - " + syncAction + " Customer Classification - SyncCustomerClassToMainDb fail:";
+                    errorMessage += " errorCode = " + criteria.ErrorCode;
+                    errorMessage += "; customerClassList = " + criteria.custList;
+
+                    LogService.Error(errorMessage);
+
                     return new DBResult
                     {
-                        ErrorCode = 0,
+                        ErrorCode = criteria.ErrorCode,
                         ErrorMsg = criteria.ErrorMessage
                     };
                 }
             }
+            catch (Exception ex)
+            {
+                var errorMessage = "CTS - " + syncAction + " Customer Classification - SyncCustomerClassToMainDb exception:";
+                errorMessage += " customerClassList = " + criteria.custList;
+
+                LogService.Error(errorMessage, ex);
+
+                return new DBResult
+                {
+                    ErrorCode = -1,
+                    ErrorMsg = ex.Message
+                };
+            }
+
+            return new DBResult
+            {
+                ErrorCode = 0,
+                ErrorMsg = string.Empty
+            };
+        }
+
+        public DBResult PinCategoryCustomerClassification(int custId, long ctsCustId, int subscriberId, bool isPinCategory, int createdBy)
+        {
+            var criteria = new PinCTSCategoryCustomerClassificationCriteria
+            {
+                CustId = custId,
+                CTSCustId = ctsCustId,
+                SubscriberId = subscriberId,
+                IsPinCategory = isPinCategory,
+                CreatedBy = createdBy
+            };
+
+            try
+            {
+                using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+                {
+                    db.ExecuteNonQuery(criteria);
+
+                    if (string.IsNullOrWhiteSpace(criteria.ErrorMessage))
+                    {
+                        return new DBResult
+                        {
+                            ErrorCode = 0,
+                            ErrorMsg = criteria.ErrorMessage
+                        };
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("CTS - Pin Category - PinCategoryCustomerClassification exception: " + ex.Message, ex);
+
+                return new DBResult
+                {
+                    ErrorCode = -1,
+                    ErrorMsg = ex.Message
+                };
+            }            
 
             return new DBResult
             {

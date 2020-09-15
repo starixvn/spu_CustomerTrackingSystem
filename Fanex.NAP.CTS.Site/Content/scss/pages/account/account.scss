@@ -8,12 +8,13 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 
 @import "../../abstracts/variables";
 @import "../../components/charts";
+@import "../../abstracts/mixins";
 
 @mixin badge-label($color) {
-    width: 6.2rem;
-    padding: 2px 0;
+    width: 62px;
+    padding: .2rem 0;
     display: inline-block;
-    font-size: 12px;
+    font-size: 1.2rem;
     font-weight: 600;
     border-radius: 3px;
     text-align: center;
@@ -68,7 +69,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 }
 
 .content {
-    margin-top: 60px;
+    margin-top: 6rem;
 }
 
 .classification {
@@ -107,22 +108,22 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 .fixed-header {
     position: sticky;
     position: -webkit-sticky;
-    top: 60px;
+    top: 9.7rem;
     background: #fff;
     z-index: 9;
+    padding-top: 0.6rem;
 
     @extend %graph-heading;
 }
 
 %graph-heading {
     .graph-heading {
-        /*        margin-top: 12px;*/
         display: flex;
         justify-content: space-between;
         align-items: center;
         height: 40px;
         border: 1px solid #C4C4C4;
-        padding: 4px 10px;
+        padding: .4rem 1rem;
         background-color: #E3E9F6;
 
         .bold {
@@ -141,6 +142,22 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             float: right;
             color: #333;
 
+            .checkbox {
+                margin-right: 16px;
+
+                span {
+                    padding-left: 16px;
+
+                    &::before {
+                        top: 1px;
+                    }
+
+                    &::after{
+                        top: 4px;
+                    }
+                }
+            }
+
             .btn-graph {
                 background-color: #e3e9f6;
                 color: #2f79ed;
@@ -158,7 +175,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     label {
         position: relative;
         display: block;
-        padding: 13px 3px 0 25px;
+        padding: 1.3rem .3rem 0 2.5rem;
         cursor: pointer;
 
         &:before, &:after {
@@ -174,14 +191,14 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             left: 0;
             width: 16px;
             height: 16px;
-            margin-top: -4px;
+            margin-top: -0.4rem;
             background: #f3f3f3;
             border: 1px solid #ccc;
         }
 
         &:after {
             opacity: 0;
-            left: 4px;
+            left: .4rem;
             width: 8px;
             height: 8px;
             margin-top: 0;
@@ -204,16 +221,17 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 }
 
 .content-info {
-    padding: 12px 16px;
+    padding: 1.2rem 1.6rem;
     position: relative;
-    .spanContentInfoLoading{
+
+    .spanContentInfoLoading {
         position: absolute;
         z-index: 10;
         top: 0;
     }
 
     .header-info {
-        margin-right: 0px;
+        margin-right: 0;
         min-height: 38px;
         align-items: inherit;
 
@@ -250,9 +268,9 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             display: flex;
             position: relative;
             border-top-left-radius: 3px;
-            padding: 7px 12px;
+            padding: .7rem 1.2rem;
             min-height: 36px;
-            margin-right: 28px;
+            margin-right: 2.8rem;
             align-items: center;
 
             &.bg-red {
@@ -268,11 +286,11 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
                 z-index: 2;
                 height: auto;
                 font-weight: bold;
-                font-size: 16px;
+                font-size: 1.6rem;
                 color: #2B2B2B;
                 line-height: 1;
                 cursor: inherit;
-                top: 3px;
+                top: .3rem;
                 margin-left: 0;
             }
 
@@ -282,7 +300,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
                 height: 100%;
                 width: 48px;
                 top: 0;
-                right: -23px;
+                right: -2.3rem;
                 border-top-right-radius: 3px;
                 transform: skew(28deg);
                 z-index: 1;
@@ -296,86 +314,246 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             }
 
             .icon-Avarta, .icon-error, .icon-flag {
-                margin-right: 7px;
+                margin-right: .7rem;
                 vertical-align: middle;
 
                 span:before {
-                    font-size: 22px;
+                    font-size: 2.2rem;
                 }
             }
 
             .icon-Avarta {
                 span:before {
-                    font-size: 22px;
+                    font-size: 2.2rem;
                 }
             }
 
             .icon-error, .icon-flag {
-                margin-top: 2px;
+                margin-top: .2rem;
 
                 span:before {
-                    font-size: 18px;
+                    font-size: 1.8rem;
                 }
             }
         }
 
-        .wrapper-status {
-            position: relative;
+        .container-status {
             width: 100%;
-            min-height: 38px;
-            display: flex;
-            flex-wrap: wrap;
-            padding-top: 7px;
-            padding-left: 17px;
+            position: relative;
+            padding-right: 11rem;
 
-            .info-status {
-                margin-bottom: 6px;
-                margin-right: 6px;
+            .wrapper-status {
+                position: relative;
+                width: 100%;
+                min-height: 38px;
                 display: flex;
-                border-radius: 11px;
-                height: 22px;
-                border: 1px solid #C2CFEE;
-                overflow: hidden;
+                flex-wrap: wrap;
+                padding-top: .9rem;
+                padding-left: 1.7rem;
 
-                .text-status {
-                    font-weight: bold;
-                    font-size: 12px;
-                    color: #2B2B2B;
-                }
-
-                .status-left {
+                .info-status {
+                    margin-bottom: .6rem;
+                    margin-right: .6rem;
                     display: flex;
-                    border-right: 1px solid #C2CFEE;
-                    background: #EAF0FF;
-                    align-items: center;
+                    border-radius: 11px;
+                    height: 22px;
+                    border: 1px solid #C2CFEE;
+                    overflow: hidden;
 
-                    .circle {
-                        width: 14px;
-                        height: 14px;
-                        border: 1px solid #FFFFFF;
-                        border-radius: 50%;
-                        margin-left: 4px;
-                        margin-right: 4px;
+                    .text-status {
+                        font-weight: bold;
+                        font-size: 1.2rem;
+                        color: #2B2B2B;
+                    }
 
-                        &.bg-red {
-                            background-color: #EE4D4D;
+                    .status-left {
+                        display: flex;
+                        background: #EAF0FF;
+                        align-items: center;
+
+                        .circle {
+                            width: 14px;
+                            height: 14px;
+                            border-radius: 50%;
+                            margin-left: .4rem;
+                            margin-right: .4rem;
+
+                            &.bg-red {
+                                background-color: #EE4D4D;
+                                border: 1px solid #D44545;
+                            }
+
+                            &.bg-yellow {
+                                background-color: #FDB703;
+                                border: 1px solid #D69A00;
+                            }
+
+                            &.bg-green {
+                                background-color: #2BC769;
+                                border: 1px solid #25AB5A;
+                            }
+                        }
+
+                        .text-left {
+                            text-transform: uppercase;
+                            margin-right: .7rem;
                         }
                     }
 
-                    .text-left {
-                        text-transform: uppercase;
-                        margin-right: 7px;
+                    .status-right {
+                        display: flex;
+                        align-items: center;
+                        border-left: 1px solid #C2CFEE;
+
+                        .text-right {
+                            margin-left: .8rem;
+                            margin-right: .7rem;
+                        }
                     }
                 }
+            }
 
-                .status-right {
+            .can-toggle {
+                position: absolute;
+                right: 56px;
+                top: 10px;
+                /*  Toggle Switch  */
+                .toggleSwitch span span {
+                    display: none;
+                }
+
+                .toggleSwitch {
+                    display: inline-block;
+                    height: 18px;
+                    position: relative;
+                    overflow: visible;
+                    padding: 0;
+                    margin-left: 50px;
+                    cursor: pointer;
+                    width: 40px
+                }
+
+                .toggleSwitch * {
+                    -webkit-box-sizing: border-box;
+                    -moz-box-sizing: border-box;
+                    box-sizing: border-box;
+                }
+
+                .toggleSwitch label,
+                .toggleSwitch > span {
+                    line-height: 20px;
+                    height: 20px;
+                    vertical-align: middle;
+                }
+
+                .toggleSwitch input:focus ~ a,
+                .toggleSwitch input:focus + label {
+                    outline: none;
+                }
+
+                .toggleSwitch label {
+                    position: relative;
+                    z-index: 3;
+                    display: block;
+                    width: 100%;
+                }
+
+                .toggleSwitch input {
+                    position: absolute;
+                    opacity: 0;
+                    z-index: 5;
+                }
+
+                .toggleSwitch > span {
+                    position: absolute;
+                    left: -50px;
+                    width: 100%;
+                    margin: 0;
+                    padding-right: 50px;
+                    text-align: left;
+                    white-space: nowrap;
+                }
+
+                .toggleSwitch > span span {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    z-index: 5;
+                    display: block;
+                    width: 50%;
+                    margin-left: 50px;
+                    text-align: left;
+                    font-size: 0.9em;
+                    width: 100%;
+                    left: 12%;
+                    top: 2px;
+                    opacity: 0;
+                }
+
+                .toggleSwitch a {
+                    position: absolute;
+                    right: 50%;
+                    z-index: 4;
+                    display: block;
+                    height: 100%;
+                    padding: 0;
+                    left: 2px;
+                    width: 18px;
+                    background-color: #fff;
+                    border-radius: 100%;
+                    transition: all 0.2s ease-out;
+                    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
+                }
+
+                .toggleSwitch > span span:first-of-type {
+                    font-weight: bold;
+                    font-size: 12px;
+                    line-height: 14px;
                     display: flex;
                     align-items: center;
+                    text-transform: uppercase;
+                    color: #FFFFFF;
+                    opacity: 1;
+                    left: 39%;
+                }
 
-                    .text-right {
-                        margin-left: 9px;
-                        margin-right: 6px;
-                    }
+                .toggleSwitch > span:before {
+                    content: '';
+                    display: block;
+                    width: 95px;
+                    height: 22px;
+                    position: absolute;
+                    left: 50px;
+                    top: -2px;
+                    background-color: #2E487C;
+                    border-radius: 11px;
+                    transition: all 0.2s ease-out;
+                }
+
+                .toggleSwitch input:checked ~ a {
+                    border-color: #fff;
+                    left: 207%;
+                    margin-left: -8px;
+                }
+
+                .toggleSwitch input:checked ~ span:before {
+                    border-color: #396EF8;
+                    box-shadow: inset 0 0 0 30px #396EF8;
+                }
+
+                .toggleSwitch input:checked ~ span span:first-of-type {
+                    opacity: 0;
+                }
+
+                .toggleSwitch input:checked ~ span span:last-of-type {
+                    opacity: 1;
+                    color: #fff;
+                    font-weight: bold;
+                    font-size: 12px;
+                    line-height: 14px;
+                    display: flex;
+                    align-items: center;
+                    text-transform: uppercase;
                 }
             }
         }
@@ -384,21 +562,20 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     .wrapper-content {
         border: 1px solid #DFDFDF;
         box-sizing: border-box;
-        border-radius: 0px 0px 3px 3px;
+        border-radius: 0 0 3px 3px;
         background-color: #FFFFFF;
         min-height: 168px;
-        padding: 12px;
-        padding-top: 11px;
+        padding: 1.1rem 1.2rem 1.2rem;
 
         .tag-info {
             display: flex;
-            margin-bottom: 12px;
+            margin-bottom: 1.2rem;
 
             .wrapper-tag-info {
-                margin-right: 24px;
+                margin-right: 2.4rem;
                 font-weight: bold;
-                font-size: 15px;
-                line-height: 18px;
+                font-size: 1.5rem;
+                line-height: 1.2;
 
                 .tag-text-left {
                     color: #545454;
@@ -432,22 +609,22 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             .info-item {
                 background-color: #E6ECF9;
                 border-radius: 3px;
-                padding: 9px 5px;
+                padding: .9rem .5rem;
                 min-height: 113px;
             }
 
             .info-title {
                 font-weight: bold;
-                font-size: 14px;
-                line-height: 17px;
+                font-size: 1.4rem;
+                line-height: 1.214286;
                 text-transform: uppercase;
                 color: #2B2B2B;
             }
 
 
             .info-text {
-                font-size: 14px;
-                line-height: 24px;
+                font-size: 1.4rem;
+                line-height: 1.714286;
 
                 &.left {
                     color: #2B2B2B;
@@ -459,7 +636,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             }
 
             .info-block {
-                margin-top: 10px;
+                margin-top: 1rem;
             }
 
             .association {
@@ -506,16 +683,16 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
                     color: #3270D0;
 
                     i {
-                        margin-right: 2px;
+                        margin-right: .2rem;
 
                         &:before {
-                            font-size: 16px;
+                            font-size: 1.6rem;
                         }
                     }
 
                     span:first-child {
-                        margin-top: -2px;
-                        margin-bottom: 2px;
+                        margin-top: -0.2rem;
+                        margin-bottom: .2rem;
                     }
                 }
             }
@@ -560,6 +737,13 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 
     .tabs-account-detail {
         padding: 1.1rem;
+
+        .fixed-tabs {
+            top: 60px;
+            position: sticky;
+            position: -webkit-sticky;
+            z-index: 11;
+        }
 
         .ui-widget-header {
             border: 0;
@@ -611,7 +795,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 }
 
 .report-cont {
-    padding: .6rem .9rem;
+    padding: 0 .9rem .6rem;
 
     .filter {
         padding: 0;
@@ -684,18 +868,18 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     .wrapper-info-table {
         position: sticky;
         position: -webkit-sticky;
-        top: 175px;
+        top: 17.5rem;
         z-index: 9;
     }
 
     .search-table {
         position: absolute;
         right: 0;
-        top: -40px;
-        margin-bottom: 12px;
+        top: -4rem;
+        margin-bottom: 1.2rem;
         border: 1px solid #E5E5E5;
         border-radius: 3px;
-        padding: 0 5px;
+        padding: 0 .5rem;
 
         input[type="text"] {
             border: 1px solid transparent;
@@ -708,25 +892,19 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     }
 
     [class^="icon"] {
-        font-size: 15px;
-        padding-right: 5px;
+        font-size: 1.5rem;
+        padding-right: .5rem;
     }
 
     .dataTables_filter {
         position: absolute;
         right: 0;
-        top: -77px;
+        top: -7.7rem;
     }
 
     .loading {
         position: relative;
-        /*&:before {
-            content: '';
-            position: absolute;
-            background: rgba(0,0,0,.1);
-            width: 100%;
-            height: calc(100% - 60px);
-        }*/
+
         &:after {
             content: '';
             position: absolute;
@@ -754,9 +932,9 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     .icon-edit {
         color: #3f6ef3;
         cursor: pointer;
-        font-size: 17px;
+        font-size: 1.7rem;
         vertical-align: text-bottom;
-        padding-right: 20px;
+        padding-right: 2rem;
     }
 
     .retract, .affected {
@@ -799,14 +977,14 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 //account-by-account
 #account-by-account {
     .wrapper-info-table {
-        top: 165px;
+        top: 20.9rem;
     }
 
     #account-by-account-table {
         thead th {
             position: sticky;
             position: -webkit-sticky;
-            top: 163px;
+            top: 20.8rem;
             z-index: 10;
         }
     }
@@ -816,37 +994,39 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     padding-top: 0;
 
     .filter {
-        padding-top: 12px;
+        padding-top: 1.2rem;
     }
 
     #tblChainToEvidenceFlagged {
         thead th {
             position: sticky;
             position: -webkit-sticky;
-            top: 169px;
+            top: 21.6rem;
             z-index: 10;
         }
     }
 }
 // customer-category-content
 #customer-category {
-    margin-top: 12px;
-    .graph-heading {
+    padding-top: 1.2rem;
+
+    .fixed-header {
         position: sticky;
         position: -webkit-sticky;
-        top: 60px;
+        top: 9.7rem;
         z-index: 9;
+        padding-top: 1.2rem;
     }
 
     .wrapper-info-table {
-        top: 98px;
+        top: 14.9rem;
     }
 
     #customer-category-table {
         thead th {
             position: sticky;
             position: -webkit-sticky;
-            top: 98px;
+            top: 14.8rem;
             z-index: 10;
         }
 
@@ -854,7 +1034,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             td {
                 position: sticky;
                 position: -webkit-sticky;
-                top: 130px;
+                top: 17.9rem;
                 z-index: 10;
             }
         }
@@ -865,14 +1045,15 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 #trans_history {
     padding-top: 0;
 }
+
 #transaction-history {
-   
+
     .fixed-header {
-        padding-top: 12px;
+        padding-top: 1.2rem;
     }
 
     .wrapper-info-table {
-        top: 171px;
+        top: 21rem;
     }
 
     #history_trans_date_range {
@@ -883,7 +1064,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
         thead th {
             position: sticky;
             position: -webkit-sticky;
-            top: 170px;
+            top: 20.8rem;
             z-index: 10;
         }
     }
@@ -913,9 +1094,9 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     }
 
     .dtrg-group td {
-        background: #7B8BAE;
-        color: #16181F;
-        font-weight: bold
+        background: #A1AFCD;
+        color: #070F1F;
+        font-weight: 600;
     }
 }
 
@@ -932,11 +1113,11 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 .modal-content {
     .chains-block {
         display: flex;
-        margin-bottom: 10px;
+        margin-bottom: 1rem;
     }
 
     .chain-row {
-        margin-left: 5px;
+        margin-left: .5rem;
     }
 
     .ui-widget-content a {
@@ -950,23 +1131,23 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     button {
         font-family: 'Lato', sans-serif;
         font-weight: normal;
-        font-size: 13px;
-        padding: 4px 29px;
+        font-size: 1.3rem;
+        padding: .4rem 2.9rem;
     }
 }
 
 .caption-error {
-    margin-top: 3px;
+    margin-top: .3rem;
 }
 
 .content-account {
     width: 654px;
-    padding: 0 16px;
+    padding: 0 1.6rem;
 }
 
 .box-header-title {
     font-weight: bold;
-    padding: 5px;
+    padding: .5rem;
 }
 
 .red {
@@ -1017,12 +1198,12 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     }
 
     &.header-content {
-        margin-left: 16px;
+        margin-left: 1.6rem;
 
         span {
             color: #fff;
             background: #1D2E4F;
-            padding: 15px 0;
+            padding: 1.5rem 0;
             font-weight: bold;
 
             &:first-child {
@@ -1037,13 +1218,13 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 }
 
 .body-content {
-    margin-left: 16px;
+    margin-left: 1.6rem;
     max-height: calc(100vh - 255px);
     overflow: auto;
     width: 1000px;
 
     .grid-content span {
-        padding: 8px 0;
+        padding: .8rem 0;
     }
 
     .dataTables_info {
@@ -1064,7 +1245,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 }
 
 .ip-info-text {
-    padding: 5px;
+    padding: .5rem;
 
     label {
         width: 130px;
@@ -1093,7 +1274,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     }
 
     .node text {
-        font: 12px sans-serif;
+        font: 1.2rem sans-serif;
         pointer-events: none;
         text-anchor: middle;
         fill: #f0edda;
@@ -1118,19 +1299,19 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 }
 
 .box {
-    margin-bottom: 12px;
+    margin-bottom: 1.2rem;
 
     .box-heading {
-        padding: 9px 12px;
+        padding: .9rem 1.2rem;
         background: #396EF8;
-        font-size: 14px;
+        font-size: 1.4rem;
         color: #fff;
         border-top-left-radius: 3px;
         border-top-right-radius: 3px;
     }
 
     .box-content {
-        padding: 12px;
+        padding: 1.2rem;
         border: 1px solid #ddd;
         border-bottom-left-radius: 3px;
         border-bottom-right-radius: 3px;
@@ -1151,7 +1332,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     }
 
     .label {
-        margin-bottom: 7px;
+        margin-bottom: .7rem;
     }
 
     .comment-field {
@@ -1159,8 +1340,8 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     }
 
     .content-description {
-        margin-right: 10px;
-        padding: 10px;
+        margin-right: 1rem;
+        padding: 1rem;
         background: #ECF1FB;
         border: 1px solid #E5E5E5;
         line-height: 1.3;
@@ -1169,15 +1350,14 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 
     .quick-group-comment {
         border: 1px solid #ddd;
-        padding: 5px;
+        padding: .5rem;
 
         .button-quick-comment {
             border: 1px solid #ddd;
             background-color: #e7eeff;
             color: #2e60e1;
             margin: 2px;
-            padding-left: 10px;
-            padding-right: 10px;
+            padding: 0 1rem;
         }
 
         .-quick-comment:hover:not(:disabled) {
@@ -1191,7 +1371,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 .ui-multiselect-checkboxes {
     height: 130px !important;
     overflow: auto !important;
-    padding: 4px 0 4px;
+    padding: .4rem 0 .4rem;
 }
 
 .tooltip {
@@ -1201,18 +1381,18 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     box-shadow: 0 1px 2px 0 rgba(60,64,67,.3), 0 2px 6px 2px rgba(60,64,67,.15);
     border-radius: 2px;
     position: absolute;
-    top: 32px;
-    left: -1px;
+    top: 3.2rem;
+    left: -0.1rem;
     display: none;
     z-index: 100;
 
     &:before {
         position: absolute;
-        top: -5px;
+        top: -0.5rem;
         display: block;
         content: '';
-        width: 0px;
-        height: 0px;
+        width: 0;
+        height: 0;
         border-left: 5px solid transparent;
         border-right: 5px solid transparent;
         border-bottom: 5px solid #fff;
@@ -1269,10 +1449,10 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 .toggle-button {
     height: 16px;
     position: absolute;
-    top: 2px;
+    top: .2rem;
     width: 16px;
-    bottom: 4px;
-    right: 68px;
+    bottom: .4rem;
+    right: 6.8rem;
     background-color: #fff;
     border-radius: 19px;
     cursor: pointer;
@@ -1282,17 +1462,17 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 }
 
 .toggle-on .toggle-button {
-    right: 2px;
+    right: .2rem;
 }
 
 .toggle-text-on {
     position: absolute;
     top: 0;
     bottom: 0;
-    left: -12px;
+    left: -1.2rem;
     right: 0;
     text-align: center;
-    font-size: 13px;
+    font-size: 1.3rem;
     font-weight: bold;
     cursor: pointer;
     -webkit-user-select: none; /* Chrome/Safari */
@@ -1319,9 +1499,9 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     position: absolute;
     top: 0;
     bottom: 0;
-    right: 8px;
+    right: .8rem;
     text-align: center;
-    font-size: 13px;
+    font-size: 1.3rem;
     font-weight: bold;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -1346,10 +1526,10 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 .glow-comp {
     position: absolute;
     opacity: 0;
-    top: 10px;
-    bottom: 10px;
-    left: 10px;
-    right: 10px;
+    top: 1rem;
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
     border-radius: 6px;
     background-color: rgba(75, 122, 141, .1);
     box-shadow: 0 0 12px rgba(75, 122, 141, .2);
@@ -1390,30 +1570,31 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 
 // association acount
 .ui-dialog .ui-dialog-titlebar {
-    padding-left: 17px;
+    padding-left: 1.7rem;
 
     .ui-dialog-title {
-        font-size: 16px;
+        font-size: 1.6rem;
     }
 }
 
 // chart
 .custom-tooltip-styling {
-    font-size: 12px;
-    line-height: 17px;
+    font-size: 1.2rem;
+    line-height: 1.416667;
     text-transform: capitalize;
     color: #2B2B2B;
 }
+
 .wrapper-statistic {
-    margin-top: 12px;
+    margin-top: 1.2rem;
     border: 1px solid #DFDFDF;
     box-sizing: border-box;
     border-radius: 3px;
 
     .statistic-title {
-        margin-top: 4px;
+        margin-top: .4rem;
         height: 31px;
-        padding: 5px;
+        padding: .5rem;
         width: 100%;
 
         &.expanded {
@@ -1421,13 +1602,13 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
         }
 
         .icon {
-            margin-top: -5px;
-            margin-left: 2px;
+            margin-top: -0.5rem;
+            margin-left: .2rem;
         }
 
         .title {
-            margin-left: 4px;
-            font-size: 15px;
+            margin-left: .4rem;
+            font-size: 1.5rem;
         }
     }
 
@@ -1435,12 +1616,12 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
         min-height: 158px;
 
         .chart_empty {
-            padding: 5px 10px;
+            padding: .5rem 1rem;
 
             .wrapper_content {
                 display: block;
                 text-align: center;
-                margin-top: 15px;
+                margin-top: 1.5rem;
 
                 .report_empty {
                     margin-top: 1px;
@@ -1449,8 +1630,8 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
                 .text {
                     display: block;
                     font-weight: bold;
-                    font-size: 14px;
-                    line-height: 17px;
+                    font-size: 1.4rem;
+                    line-height: 1.214286;
                     align-items: center;
                     color: #2B2B2B;
                 }
@@ -1460,7 +1641,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 
     .icon {
         display: inline-block;
-        font-size: 22px;
+        font-size: 2.2rem;
         vertical-align: middle;
         cursor: pointer;
 
@@ -1471,13 +1652,14 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 
     .title {
         font-weight: bold;
-        font-size: 14px;
-        line-height: 17px;
+        font-size: 1.4rem;
+        line-height: 1.214286;
         text-transform: capitalize;
         color: #2B2B2B;
-        margin-left: 24px;
+        margin-left: 2.4rem;
     }
 }
+
 .container-grid {
     padding: .9rem 1rem 1.1rem;
     display: grid;
@@ -1546,7 +1728,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
                 .name {
                     font-weight: bold;
                     font-size: 1.4rem;
-                    line-height: 17px;
+                    line-height: 1.214286;
                     text-transform: capitalize;
                     color: #2B2B2B;
                     text-align: center;
@@ -1557,12 +1739,12 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
                 }
 
                 .alert {
-                    padding-top: 2px;
+                    padding-top: .2rem;
                     width: 90px;
                     height: 18px;
                     font-weight: bold;
                     font-size: 1.2rem;
-                    line-height: 14px;
+                    line-height: 1.167;
                     border-radius: 5px;
                     text-align: center;
                     margin: 0 auto;
@@ -1752,7 +1934,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             border-right: none;
 
             .wapper-chart-sport {
-                margin-top: 16px;
+                margin-top: 1.6rem;
                 position: relative;
                 left: 0;
                 top: 0;
@@ -1789,5 +1971,3 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
         grid-row-gap: 10px;
     }
 }
-
-
