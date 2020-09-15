@@ -28,7 +28,6 @@
     </Setting>
     <Setting Key="CTS_DC_CustInfo_GetByCTSCustID" SpName="CTS_DC_CustInfo_GetByCTSCustID" DbName="MySQL.CTS_DataCenter"/>
     <Setting Key="CTS_DC_CustInfo_GetFlagged" SpName="CTS_DC_CustInfo_GetFlagged" DbName="MySQL.CTS_DataCenter"/>
-    <Setting Key="CTS_DC_GetCustomerByUsername" SpName="CTS_DC_GetCustomerByUsername" DbName="MySQL.CTS_DataCenter"/>
   </Function>
 
   <Function Name="Notification">
