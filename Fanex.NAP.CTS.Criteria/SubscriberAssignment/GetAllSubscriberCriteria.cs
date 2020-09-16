@@ -8,7 +8,7 @@
         [SpParam(SqlParamName = "ip_userId")]
         public int UserId { get; set; }
 
-        public override string GetSettingKey() => "CTS_AD_GetAllSubscribers";
+        public override string GetSettingKey() => "CTS_AD_Subscriber_GetAll";
 
         public override bool IsValid() => true;
 

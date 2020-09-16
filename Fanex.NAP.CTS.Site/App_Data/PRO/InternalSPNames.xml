@@ -2,18 +2,18 @@
 <Functions>
   <Function name="SubscriberAssignment">
     <Setting Key="FPS_AD_InsertSubscriberByUser" SpName="FPS_AD_InsertSubscriberByUser" DbName="MySQL.CTS_Admin"/>
-    <Setting Key="CTS_AD_GetAllSubscribers" SpName="CTS_AD_GetAllSubscribers" DbName="MySQL.CTS_Admin"/>
+    <Setting Key="CTS_AD_Subscriber_GetAll" SpName="CTS_AD_Subscriber_GetAll" DbName="MySQL.CTS_Admin"/>
   </Function>
 
   <Function Name="InsertCTSUser"> 
-    <Setting Key="CTS_AD_InsertCTSUser" SpName="CTS_AD_InsertCTSUser" DbName="MySQL.CTS_Admin" />
+    <Setting Key="CTS_AD_CTSUser_Insert" SpName="CTS_AD_CTSUser_Insert" DbName="MySQL.CTS_Admin" />
   </Function>
 
   <Function Name="Common">
-    <Setting Key="CTS_DC_GetAllSportGroups" SpName="CTS_DC_GetAllSportGroups" DbName="MySQL.CTS_DataCenter" />
-    <Setting Key="CTS_DC_GetStaticList" SpName="CTS_DC_GetStaticList" DbName="MySQL.CTS_DataCenter" />
-    <Setting Key="CTS_DC_GetAllSubscriberGroups" SpName="CTS_DC_GetAllSubscriberGroups" DbName="MySQL.CTS_DataCenter" />
-    <Setting Key="CTS_DC_GetCustomerGroup" SpName="CTS_DC_GetCustomerGroup" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_Common_GetAllSportGroups" SpName="CTS_DC_Common_GetAllSportGroups" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_Common_GetStaticList" SpName="CTS_DC_Common_GetStaticList" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_Common_GetAllSubscriberGroups" SpName="CTS_DC_Common_GetAllSubscriberGroups" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_Common_GetCustomerGroup" SpName="CTS_DC_Common_GetCustomerGroup" DbName="MySQL.CTS_DataCenter" />
     <Setting Key="DCS_DC_Transaction_GetHistory" SpName="DCS_DC_Transaction_GetHistory" DbName="MySQL.DCS_DataCenter" />
   </Function>
 

@@ -11,7 +11,7 @@ namespace Fanex.NAP.CTS.Criteria.ProblemAccountMonitor
         public string CustomerTransDateList { get; set; }
 
         public override string GetSettingKey()
-           => "CTS_DC_GetCustomerGroup";
+           => "CTS_DC_Common_GetCustomerGroup";
 
         public override bool IsValid()
            => true;

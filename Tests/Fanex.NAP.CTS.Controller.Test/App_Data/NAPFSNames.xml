@@ -319,8 +319,8 @@
             DbName="MySQL.CTS_DataCenter">
     </Setting>
 
-    <Setting Key="CTS_DC_GetStaticList"
-            SpName="CTS_DC_GetStaticList"
+    <Setting Key="CTS_DC_Common_GetStaticList"
+            SpName="CTS_DC_Common_GetStaticList"
             DbName="MySQL.CTS_DataCenter">
     </Setting>
 
