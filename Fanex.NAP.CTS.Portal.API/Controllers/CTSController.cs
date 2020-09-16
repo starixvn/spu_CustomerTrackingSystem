@@ -69,7 +69,7 @@
         {
             try
             {
-                string[] eviList = { "-1" }; // set default for getting all 
+                int[] eviList = { -1 }; // set default for getting all 
                 var convertedCustIdList = CustIdList.Split(',').Select(a => Convert.ToInt32(a));
                 var associationList = _associationService.GetFlaggedCustomerByLevel(convertedCustIdList, AssociatedLevel, eviList);
                 var result = associationList.Distinct(new CustomerEvidenceComparer());
@@ -83,13 +83,21 @@
             }
         }
 
-        public JsonResult<List<CustomerEvidence>> GetFlaggedCustByLvlNEvi(string custIdList, int AssociatedLevel, string eviList)
+        /// <summary>   
+        /// Get flagged customers by level and evidence
+        /// </summary>
+        /// <param name="custIdList">CustId in string format (saparate by comma) </param>
+        /// <param name="associatedLevel"> Level 0, 1 or 2</param>
+        /// <param name="eviIdList"> Evidence in string format (saparate by comma) (</param>
+        /// <returns>A list of customer evidence in JSON format</returns>
+        [HttpGet]
+        public JsonResult<List<CustomerEvidence>> GetFlaggedCustByLvlNEvi(string custIdList, int associatedLevel, string eviIdList)
         {
             try
             {
-                var convertedEviList = eviList.Split(',');
+                var convertedEviList = eviIdList.Split(',').Select(a => Convert.ToInt32(a));
                 var convertedCustIdList = custIdList.Split(',').Select(a => Convert.ToInt32(a));
-                var associationList = _associationService.GetFlaggedCustomerByLevel(convertedCustIdList, AssociatedLevel, convertedEviList);
+                var associationList = _associationService.GetFlaggedCustomerByLevel(convertedCustIdList, associatedLevel, convertedEviList);
                 var result = associationList.Distinct(new CustomerEvidenceComparer());
 
                 return Json(result.ToList());

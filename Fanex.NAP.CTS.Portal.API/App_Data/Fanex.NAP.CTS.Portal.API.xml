@@ -494,6 +494,15 @@
             <param name="AssociatedLevel"> Level 0, 1 or 2</param>
             <returns>A list of customer evidence in JSON format</returns>
         </member>
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetFlaggedCustByLvlNEvi(System.String,System.Int32,System.String)">
+            <summary>   
+            Get flagged customers by level and evidence
+            </summary>
+            <param name="custIdList">CustId in string format (saparate by comma) </param>
+            <param name="associatedLevel"> Level 0, 1 or 2</param>
+            <param name="eviIdList"> Evidence in string format (saparate by comma) (</param>
+            <returns>A list of customer evidence in JSON format</returns>
+        </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.AddCustomersEvidences(Fanex.NAP.CTS.Model.DTO.CustomerEvidenceList)">
             <summary>
             Add evidences to customers

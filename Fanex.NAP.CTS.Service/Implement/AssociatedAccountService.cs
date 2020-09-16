@@ -132,7 +132,7 @@ namespace Fanex.NAP.CTS.Service.Implement
             };
         }
 
-        public List<CustomerEvidence> GetFlaggedCustomerByLevel(IEnumerable<int> custIds, int associatedLevel, IEnumerable<string> eviIdList)
+        public List<CustomerEvidence> GetFlaggedCustomerByLevel(IEnumerable<int> custIds, int associatedLevel, IEnumerable<int> eviIdList)
         {
             var associationList = new List<CustomerEvidence>();
 
