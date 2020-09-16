@@ -4,7 +4,7 @@
     };
 
     function Initial() {
-
+        $("#tabs-account-detail").tabs();
     }
 
     $(document).ready(function () {
