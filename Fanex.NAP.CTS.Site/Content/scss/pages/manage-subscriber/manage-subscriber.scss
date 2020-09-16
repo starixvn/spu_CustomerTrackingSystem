@@ -90,7 +90,6 @@
     }
 
     .note {
-        padding-left: 2rem;
 
         .text-title {
             color: #FF0000
@@ -111,3 +110,19 @@
         margin-top: 1rem;
     }
 }
+#divAddSubscriber {
+    padding: 1.6rem 1.2rem;
+    .mbform {
+        margin-bottom: 1.4rem;
+
+        .ischeckInput {
+            display: flex;
+            align-items: center;
+
+            #txtSite {
+                margin-right: 1.5rem;
+            }
+        }
+    }
+}
+

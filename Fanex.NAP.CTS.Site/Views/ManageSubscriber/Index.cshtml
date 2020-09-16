@@ -29,6 +29,7 @@
                 <th>Site</th>
                 <th>IsActive</th>
                 <th>Release Date</th>
+                <th>Edit</th>
                 <th>Terminated</th>
             </tr>
         </thead>
@@ -51,30 +52,37 @@
 </div>
 
 <div id="divAddSubscriber" class="popup-add divAddSubscriber" style="display: none;">
-    <div class="form-control">
+    <div class="form-control mbform">
         <div class="label">Site</div>
-        <input id="txtSite" type="text" class="input-field full-width" maxlength="50">
+        <div class="ischeckInput">
+            <input id="txtSite" type="text" class="input-field full-width" maxlength="50">
+            <label class="container-checkbox" id="containerCheckbox">
+                IsTest
+                <input id="overwriteCheckbox" type="checkbox">
+                <span class="checkmark"></span>
+            </label>
+        </div>
     </div>
-    <div class="form-control">
+    <div class="form-control mbform">
         <div class="label">Site ID</div>
         <input id="txtSiteID" type="text" class="input-field full-width" maxlength="50">
     </div>
-    <div class="form-control">
+    <div class="form-control mbform">
         <div class="label">IBCUserName_Prefix</div>
         <input id="txtIBCUserNamePrefix" type="text" class="input-field full-width" maxlength="50">
     </div>
-    <div class="form-control">
+    <div class="form-control mbform">
         <div class="label">Subscriber Group</div>
         <select class="control full-width" id="txtSubscriberGroup">
             <option value="All" selected="">Credit Site</option>
             <option value="running">None</option>
         </select>
     </div>
-    <div class="form-control">
+    <div class="form-control mbform">
         <div class="label">Subscriber Name</div>
         <input id="txtSubscriberName" type="text" class="input-field full-width" maxlength="50">
     </div>
-    <div class="form-control">
+    <div class="form-control mbform">
         <div class="label">Role Mapping</div>
         <select class="control full-width" id="txtRoleMapping">
             <option value="0" selected="">0</option>

@@ -64,14 +64,22 @@
   width: 700px; }
   .divAddSubscriber .label {
     color: #333; }
-  .divAddSubscriber .note {
-    padding-left: 2rem; }
-    .divAddSubscriber .note .text-title {
-      color: #FF0000; }
-    .divAddSubscriber .note .text-detail {
-      margin-top: .5rem;
-      padding-left: .8rem; }
-      .divAddSubscriber .note .text-detail .text {
-        margin-bottom: .3rem; }
+  .divAddSubscriber .note .text-title {
+    color: #FF0000; }
+  .divAddSubscriber .note .text-detail {
+    margin-top: .5rem;
+    padding-left: .8rem; }
+    .divAddSubscriber .note .text-detail .text {
+      margin-bottom: .3rem; }
   .divAddSubscriber .modal-footer {
     margin-top: 1rem; }
+
+#divAddSubscriber {
+  padding: 1.6rem 1.2rem; }
+  #divAddSubscriber .mbform {
+    margin-bottom: 1.4rem; }
+    #divAddSubscriber .mbform .ischeckInput {
+      display: flex;
+      align-items: center; }
+      #divAddSubscriber .mbform .ischeckInput #txtSite {
+        margin-right: 1.5rem; }

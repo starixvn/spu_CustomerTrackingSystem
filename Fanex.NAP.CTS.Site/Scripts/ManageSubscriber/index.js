@@ -100,6 +100,11 @@
                 { data: obj => obj.Release },
                 {
                     data: obj => () => {
+                        return html = '<span class="sub-icon delete test" id="sub-icon " title="Remove Account"><i class="icon-edit ' + ('') + '"></i></span>';
+                    }
+                },
+                {
+                    data: obj => () => {
                         return html = '<span class="sub-icon delete test" id="sub-icon " title="Remove Account"><i class="icon-delete ' + ('') + '"></i></span>';
                     }, createdCell: (cell, _, row) => {
                         $('.icon-delete', cell).click(() => {
