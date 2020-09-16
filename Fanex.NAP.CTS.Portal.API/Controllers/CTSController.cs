@@ -83,18 +83,23 @@
             }
         }
 
-        //public JsonResult<string> GetAssociationForLetsTalk(string custIdList)
-        //{
-        //    var result = string.Empty;
-        //    var eviList = ConfigurationManager.AppSettings["Environment"].ToString().Split(',');
-        //    var convertedCustIdList = custIdList.Split(',').Select(a => Convert.ToInt32(a));
-        //    var associationList = _associationService.GetFlaggedCustomerByLevel(convertedCustIdList, 0, eviList);
-        //    var assList = associationList.Distinct(new CustomerEvidenceComparer());
+        public JsonResult<List<CustomerEvidence>> GetFlaggedCustByLvlNEvi(string custIdList, int AssociatedLevel, string eviList)
+        {
+            try
+            {
+                var convertedEviList = eviList.Split(',');
+                var convertedCustIdList = custIdList.Split(',').Select(a => Convert.ToInt32(a));
+                var associationList = _associationService.GetFlaggedCustomerByLevel(convertedCustIdList, AssociatedLevel, convertedEviList);
+                var result = associationList.Distinct(new CustomerEvidenceComparer());
 
-
-
-        //    return Json(result);
-        //}
+                return Json(result.ToList());
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("Get Flagged Customers By Level exception: " + ex.Message);
+                return Json(new List<CustomerEvidence>());
+            }
+        }
 
         /// <summary>
         /// Add evidences to customers
@@ -117,7 +122,7 @@
             }
         }
 
-        [System.Web.Http.AcceptVerbs("GetAssociationForExtAcc")]
+        [AcceptVerbs("GetAssociationForExtAcc")]
         [HttpGet]
         public string GetAssociationForExtAcc(int custId)
         {
