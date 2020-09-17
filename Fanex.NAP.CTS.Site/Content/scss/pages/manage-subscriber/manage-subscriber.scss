@@ -112,9 +112,13 @@
 }
 #divAddSubscriber {
     padding: 1.6rem 1.2rem;
+
     .mbform {
         margin-bottom: 1.4rem;
-
+        .validate-form {
+            color: red;
+            margin-top: .6rem;
+        }
         .ischeckInput {
             display: flex;
             align-items: center;
