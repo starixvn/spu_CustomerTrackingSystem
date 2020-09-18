@@ -9,6 +9,7 @@
     using System.Web.Mvc;
     using Fanex.NAP.Core.Web.Session;
 
+    [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.SuspiciousCustomerDetails, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class SuspiciousCustomerDetailsController : ReportsController
     {

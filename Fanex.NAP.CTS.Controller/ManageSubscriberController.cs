@@ -8,10 +8,10 @@
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.ManageSubscriber;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
 
+    [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.ManageSubscriber, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class ManageSubscriberController : BaseController
     {

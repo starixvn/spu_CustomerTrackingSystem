@@ -32,6 +32,7 @@
     using System.Threading.Tasks;
     using System.Web.Mvc;
 
+    [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class AccountController : BaseController
     {

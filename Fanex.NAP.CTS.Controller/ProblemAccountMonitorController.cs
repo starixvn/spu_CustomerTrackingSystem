@@ -19,6 +19,7 @@
     using System.Threading.Tasks;
     using System.Web.Mvc;
 
+    [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.ProblemAccountMonitor, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class ProblemAccountMonitorController : BaseController
     {

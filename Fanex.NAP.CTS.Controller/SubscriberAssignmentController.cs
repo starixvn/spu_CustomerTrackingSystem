@@ -9,6 +9,7 @@
     using System.Web.Mvc;
     using Fanex.NAP.CTS.Model.Subscriber;
 
+    [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.SubscriberAssignment, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class SubscriberAssignmentController : BaseController
     {

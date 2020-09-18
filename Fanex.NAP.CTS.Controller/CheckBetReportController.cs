@@ -10,6 +10,7 @@
     using System.Web.Mvc;
     using Fanex.NAP.Core.Web.Session;
 
+    [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.CheckBetReport, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class CheckBetReportController : ReportsController
     {

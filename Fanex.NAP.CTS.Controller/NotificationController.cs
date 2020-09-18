@@ -6,7 +6,8 @@
     using Service;
     using System.Linq;
     using System.Web.Mvc;
-    
+
+    [NapSuperAuth]
     public class NotificationController : ConfigurationsController
     {
         private readonly INotificationService _notificationService;
