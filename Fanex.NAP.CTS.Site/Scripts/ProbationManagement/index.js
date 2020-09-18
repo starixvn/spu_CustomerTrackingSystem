@@ -65,11 +65,11 @@
             scrollX: false,
             scrollCollapse: false,
             columnDefs: [
-                { targets: "_all", defaultContent: "-" },
-                { targets: [1, 2, 3, 4], className: "text-left" },
-                { targets: [0, 5, 9], className: "text-center" },
+                { targets: "_all", defaultContent: "-"},
+                { targets: [1], className: "text-left" },
+                { targets: [0, 5, 9, 2, 3, 4], className: "text-center" },
                 { targets: [6, 7, 8], className: "text-right" },
-                { targets: [0], width: "1.8%" },
+                { targets: [0], width: "3%" },
                 { targets: [1], width: "12%" },
                 { targets: [2], width: "9%" },
                 { targets: [3], width: "9%" },
@@ -165,8 +165,8 @@
             scrollCollapse: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
-                { targets: [1, 2, 3, 4], className: "text-left" },
-                { targets: [0, 5, 9], className: "text-center" },
+                { targets: [1, 4], className: "text-left" },
+                { targets: [0, 5, 9, 2, 3, 4 ], className: "text-center" },
                 { targets: [6, 7, 8], className: "text-right" },
                 { targets: [0], width: "4%" },
                 { targets: [1], width: "9%" },
@@ -240,8 +240,7 @@
         let offset = $(element).offset();
 
         var top = offset.top + 30;
-        var left = offset.left - 40;
-
+        var left = offset.left - 110;
         domElements.formChangeCategory.css({
             'top': top,
             'left': left,
