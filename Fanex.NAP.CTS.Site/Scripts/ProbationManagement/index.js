@@ -34,8 +34,8 @@
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
                 { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], className: "text-center" },
-                { targets: [0], width: "4%" },
-                { targets: [1], width: "9%" },
+                { targets: [0], width: "1.8%" },
+                { targets: [1], width: "12%" },
                 { targets: [2], width: "9%" },
                 { targets: [3], width: "9%" },
                 { targets: [4], width: "9%" },
@@ -137,6 +137,17 @@
                 },
                 {
                     "No": "9",
+                    "Username": "Brook",
+                    "Site": "12Bet",
+                    "Sport": "Vano",
+                    "Target_Category": "Smart Punter",
+                    "Tagged_Date": "2020",
+                    "First_Margin": "0.5",
+                    "Current_margin": 1,
+                    "Probation_Day_Left": 30
+                },
+                {
+                    "No": "10",
                     "Username": "Brook",
                     "Site": "12Bet",
                     "Sport": "Vano",
