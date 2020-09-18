@@ -11,6 +11,7 @@
     using System.Collections.Generic;
     using Fanex.NAP.CTS.ViewModel.ProbationManagement;
     using System;
+    using System.Linq;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.ProbationManagement, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -38,37 +39,35 @@
         }
 
         [HttpPost]
-        public ActionResult GetProbationCategory(string username, int dayLeft, decimal minMargin, decimal maxMargin)
+        public ActionResult GetProbationCategory(string username, int dayLeft, decimal minMargin, decimal maxMargin, int categoryMode)
         {
-            var data = _probationService.GetProbationCategory(username, dayLeft, minMargin, maxMargin);
-            var viewModel = GenerateDataTest();
+            var viewModel = Enumerable.Empty<ProbationCategoryViewModel>();
+
+            var data = _probationService.GetProbationCategory(username, dayLeft, categoryMode);
+
+            if (data != null && data.Any())
+            {
+                viewModel = data.Select(x => new ProbationCategoryViewModel
+                {
+                    CustId = x.CustID,
+                    UserName = x.Username,
+                    SiteName = x.Site,
+                    SportGroupId = x.SportGroupID,
+                    SportName = x.Sport,
+                    TargetCategoryName = x.TargetCategory,
+                    TaggedDate = x.TaggedDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmm),
+                    FirstMargin = x.FirstMargin,
+                    CurrentMargin = x.CurrentMargin,
+                    DaysLeft = x.DaysLeft
+                });
+            }
 
             return Json(new
             {
                 data = viewModel
             }, JsonRequestBehavior.AllowGet);
         }
-
-        private List<ProbationCategoryViewModel> GenerateDataTest()
-        {
-            var list = new List<ProbationCategoryViewModel>();
-            list.Add(new ProbationCategoryViewModel
-            {
-                CTSCustId = 1,
-                CustId = 1,
-                UserName = "username1",
-                SiteName = "12Bet",
-                SportName = string.Empty,
-                TargetCategoryName = "Smart Punter",
-                TargetDate = DateTime.Now.ToString(Consts.FormatDateToString_MMMddyyyyhhmm),
-                FirstMargin = 1,
-                CurrentMargin = 1,
-                DayLeft = 20
-            });
-
-            return list;
-        }
-
+        
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.ProbationManagement, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult ChangeCategory()

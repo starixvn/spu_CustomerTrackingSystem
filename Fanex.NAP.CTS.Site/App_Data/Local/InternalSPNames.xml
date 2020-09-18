@@ -84,4 +84,10 @@
     <Setting Key="CTS_DC_SpecialCustClass_Insert" SpName="CTS_DC_SpecialCustClass_Insert" DbName="MySQL.CTS_DataCenter"/>
     <Setting Key="CTS_DC_SpecialCustClass_Remove" SpName="CTS_DC_SpecialCustClass_Remove" DbName="MySQL.CTS_DataCenter"/>
   </Function>
+
+  <Function name="ProbationManagement">
+    <Setting Key="CTS_DC_CustClassification_Probation_Get" SpName="CTS_DC_CustClassification_Probation_Get" DbName="MySQL.CTS_DataCenter"/>
+    <Setting Key="CTS_DC_CustClassification_Probation_GetCategory" SpName="CTS_DC_CustClassification_Probation_GetCategory" DbName="MySQL.CTS_DataCenter"/>
+  </Function>
+    
 </Functions>

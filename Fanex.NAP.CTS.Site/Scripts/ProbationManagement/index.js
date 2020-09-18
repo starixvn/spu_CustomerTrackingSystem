@@ -89,10 +89,10 @@
                 { data: obj => obj.SiteName },
                 { data: obj => obj.SportName },
                 { data: obj => obj.TargetCategoryName },
-                { data: obj => obj.TargetDate },
+                { data: obj => obj.TaggedDate },
                 { data: obj => obj.FirstMargin },
                 { data: obj => obj.CurrentMargin },
-                { data: obj => obj.DayLeft },
+                { data: obj => obj.DaysLeft },
                 {
                     data: obj => () => {
                         let html = '<span class="sub-icon delete" id="sub-icon " title="Change Category"><i class="icon-edit"></i></span>';
@@ -114,9 +114,10 @@
         let maxMargin = domElements.inputMaxMarginGeneral.val();
 
         paramsFilter.username = domElements.inputUserNameGeneral.val();
-        paramsFilter.dayLeft = dayLeft === '' ? 0 : dayLeft;
+        paramsFilter.dayLeft = dayLeft === '' ? -1 : dayLeft;
         paramsFilter.minMargin = minMargin === '' ? 0 : minMargin;
         paramsFilter.maxMargin = maxMargin === '' ? 0 : maxMargin;
+        paramsFilter.categoryMode = 1;
 
         return paramsFilter;
     }
@@ -188,10 +189,10 @@
                 { data: obj => obj.SiteName },
                 { data: obj => obj.SportName },
                 { data: obj => obj.TargetCategoryName },
-                { data: obj => obj.TargetDate },
+                { data: obj => obj.TaggedDate },
                 { data: obj => obj.FirstMargin },
                 { data: obj => obj.CurrentMargin },
-                { data: obj => obj.DayLeft },
+                { data: obj => obj.DaysLeft },
                 {
                     data: obj => () => {
                         let html = '<span class="sub-icon delete" title="Change Category"><i class="icon-edit"></i></span>';
@@ -213,9 +214,10 @@
         let maxMargin = domElements.inputMaxMarginDetailed.val();
 
         paramsFilter.username = domElements.inputUserNameDetailed.val();
-        paramsFilter.dayLeft = dayLeft === '' ? 0 : dayLeft;
+        paramsFilter.dayLeft = dayLeft === '' ? -1 : dayLeft;
         paramsFilter.minMargin = minMargin === '' ? 0 : minMargin;
         paramsFilter.maxMargin = maxMargin === '' ? 0 : maxMargin;
+        paramsFilter.categoryMode = 2;
 
         return paramsFilter;
     }
