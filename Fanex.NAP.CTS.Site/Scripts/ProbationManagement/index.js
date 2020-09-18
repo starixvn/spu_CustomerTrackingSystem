@@ -18,7 +18,8 @@
         btnGenerateDetailed: $('#btnGenerateDetailed'),
         gridDetailed: $('#gridDetailed'),
         tblDetailed: $('#tblDetailed'),
-        btnEdit: $('.sub-icon.icon-edit')
+        btnEdit: $('.sub-icon.icon-edit'),
+        formChangeCategory: $('#formChangeCategory')
     };
 
     function GenerateGridGeneral() {
@@ -66,6 +67,8 @@
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
                 { targets: [1, 2, 3, 4], className: "text-left" },
+                { targets: [0, 5, 9], className: "text-center" },
+                { targets: [6, 7, 8], className: "text-right" },
                 { targets: [0], width: "1.8%" },
                 { targets: [1], width: "12%" },
                 { targets: [2], width: "9%" },
@@ -95,7 +98,8 @@
                         let html = '<span class="sub-icon delete" id="sub-icon " title="Change Category"><i class="icon-edit"></i></span>';
                         return html;
                     }, createdCell: (cell, _, row) => {
-                        $('.icon-edit', cell).click(() => {
+                        $('.icon-edit', cell).click((event) => {
+                            ChangeCategory(cell, 1);
                         });
                     }
                 }
@@ -190,11 +194,11 @@
                 { data: obj => obj.DayLeft },
                 {
                     data: obj => () => {
-                        let html = '<span class="sub-icon delete" id="sub-icon " title="Change Category"><i class="icon-edit"></i></span>';
+                        let html = '<span class="sub-icon delete" title="Change Category"><i class="icon-edit"></i></span>';
                         return html;
                     }, createdCell: (cell, _, row) => {
-                        $('.icon-edit', cell).click(() => {
-                            ChangeCategory(custId);
+                        $('.icon-edit', cell).click((event) => {
+                            ChangeCategory(cell, 1);
                         });
                     }
                 }
@@ -232,14 +236,31 @@
             : dataTableDetailed = GenerateGridDetailed();
     }
 
-    function ChangeCategory(custId) {
+    function ChangeCategory(element, custId) {
+        let offset = $(element).offset();
 
+        var top = offset.top + 30;
+        var left = offset.left - 40;
+
+        domElements.formChangeCategory.css({
+            'top': top,
+            'left': left,
+            'position': 'absolute'
+        }).toggle();
     }
 
     function Initial() {
+        domElements.formChangeCategory.hide();
         domElements.tabs.tabs();
         domElements.btnGenerateGeneral.on('click', function () { LoadGridGeneral(); });
         domElements.btnGenerateDetailed.on('click', function () { LoadGridDetailed(); });
+
+        $(window).click(function (e) {
+            let container = $('.icon-edit');
+            if (!container.is(e.target) && container.has(e.target).length === 0) {
+                domElements.formChangeCategory.hide();
+            }            
+        });
     }
 
     $(document).ready(function () {
