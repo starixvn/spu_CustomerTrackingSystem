@@ -95,6 +95,8 @@
     <Compile Include="ImportEvidences\EvidencePermissionViewModel.cs" />
     <Compile Include="ImportEvidences\ResultImportViewModel.cs" />
     <Compile Include="ImportEvidences\ResultCheckAccountEvidenceViewModel.cs" />
+    <Compile Include="ManageSubscriber\ManageSubscriberGetViewModel.cs" />
+    <Compile Include="ManageSubscriber\ManageSubscriberViewModel.cs" />
     <Compile Include="MatchMonitor\Event.cs" />
     <Compile Include="MatchMonitor\FraudCase.cs" />
     <Compile Include="MatchMonitor\FraudCaseDetails\ArbitrageGroupTicketList.cs" />

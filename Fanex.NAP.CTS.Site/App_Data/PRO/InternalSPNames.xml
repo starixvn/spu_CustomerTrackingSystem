@@ -91,4 +91,12 @@
     <Setting Key="CTS_DC_CustClassification_Probation_GetCategory" SpName="CTS_DC_CustClassification_Probation_GetCategory" DbName="MySQL.CTS_DataCenter"/>
     <Setting Key="CTS_DC_CustClassification_Probation_Update" SpName="CTS_DC_CustClassification_Probation_Update" DbName="MySQL.CTS_DataCenter"/>
   </Function>
+
+  <Function name="Subscriber">
+    <Setting Key="CTS_DC_Subscriber_GetAll " SpName="CTS_DC_Subscriber_GetAll" DbName="MySQL.CTS_DataCenter"/>
+    <Setting Key="CTS_DC_Subscriber_Insert" SpName="CTS_DC_Subscriber_Insert" DbName="MySQL.CTS_DataCenter"/>
+    <Setting Key="CTS_DC_Subscriber_Remove" SpName="CTS_DC_Subscriber_Remove" DbName="MySQL.CTS_DataCenter"/>
+    <Setting Key="CTS_DC_Subscriber_Update" SpName="CTS_DC_Subscriber_Update" DbName="MySQL.CTS_DataCenter"/>
+    <Setting Key="CTS_DC_Subscriber_ValidatePrefix" SpName="CTS_DC_Subscriber_ValidatePrefix" DbName="MySQL.CTS_DataCenter"/>
+  </Function>
 </Functions>

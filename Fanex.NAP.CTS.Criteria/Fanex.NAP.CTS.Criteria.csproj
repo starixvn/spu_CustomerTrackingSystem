@@ -105,6 +105,11 @@
     <Compile Include="ProbationManagement\GetCategoryCriteria.cs" />
     <Compile Include="ProbationManagement\GetProbationCategoryCriteria.cs" />
     <Compile Include="ProbationManagement\UpdateProbationCategory.cs" />
+    <Compile Include="ManageSubscriber\SubscriberGetCriteria.cs" />
+    <Compile Include="ManageSubscriber\SubscriberInsertCriteria.cs" />
+    <Compile Include="ManageSubscriber\SubscriberPrefixVerifyCriteria.cs" />
+    <Compile Include="ManageSubscriber\SubscriberRemoveCriteria.cs" />
+    <Compile Include="ManageSubscriber\SubscriberUpdateCriteria.cs" />
     <Compile Include="SpecialCustomerClass\InsertSpecialCustomerClassCriteria.cs" />
     <Compile Include="SpecialCustomerClass\GetAllSpecialCustomerClassCriteria.cs" />
     <Compile Include="SpecialCustomerClass\RemoveSpecialCustomerClassCriteria.cs" />

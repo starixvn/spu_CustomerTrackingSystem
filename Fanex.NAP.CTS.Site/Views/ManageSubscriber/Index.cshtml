@@ -8,6 +8,8 @@
     @Styles.Render("~/manage-subscriber-styles")
 }
 
+@model Fanex.NAP.CTS.ViewModel.ManageSubscriber.ManageSubscriberViewModel
+
 <h2 class="page-title">Manage Subscriber</h2>
 <div class="wrapper-content manage-subscriber">
     <div class="fixed-header">
@@ -35,18 +37,18 @@
         </thead>
         <tbody>
             @*<tr role="row" class="odd deleted">
-            <td class=" text-center">1</td>
-            <td class=" text-center">123</td>
-            <td class=" text-center">Vano</td>
-            <td class=" text-center">Vano$</td>
-            <td class=" text-center">Credit Site</td>
-            <td class=" text-center">1</td>
-            <td class=" text-center">239</td>
-            <td class=" text-center">NovaCash</td>
-            <td class=" text-center">1</td>
-            <td class=" text-center">4-Mar-20</td>
-            <td class=" text-center">2-Mar-20</td>
-        </tr>*@
+                    <td class=" text-center">1</td>
+                    <td class=" text-center">123</td>
+                    <td class=" text-center">Vano</td>
+                    <td class=" text-center">Vano$</td>
+                    <td class=" text-center">Credit Site</td>
+                    <td class=" text-center">1</td>
+                    <td class=" text-center">239</td>
+                    <td class=" text-center">NovaCash</td>
+                    <td class=" text-center">1</td>
+                    <td class=" text-center">4-Mar-20</td>
+                    <td class=" text-center">2-Mar-20</td>
+                </tr>*@
         </tbody>
     </table>
 </div>
@@ -62,43 +64,42 @@
                 <span class="checkmark"></span>
             </label>
         </div>
-        <p class="validate-form">Please fill out this field</p>
+        <p class="validate-form" id="siteValidation">Please fill out this field</p>
     </div>
     <div class="form-control mbform">
         <div class="label">Site ID</div>
-        <input id="txtSiteID" type="text" class="input-field full-width" maxlength="50">
-        <p class="validate-form">Please fill out this field</p>
+        <input id="txtSiteID" type="number" class="input-field full-width" maxlength="50">
+        <p class="validate-form" id="siteIDValidation">Please fill out this field</p>
     </div>
     <div class="form-control mbform">
         <div class="label">IBCUserName_Prefix</div>
         <input id="txtIBCUserNamePrefix" type="text" class="input-field full-width" maxlength="50">
-        <p class="validate-form">Please fill out this field</p>
+        <p class="validate-form" id="prefixValidation">Please fill out this field</p>
     </div>
     <div class="form-control mbform">
         <div class="label">Subscriber Type</div>
         <select class="control full-width" id="txtSubscriberGroup">
-            <option value="All" selected="">Credit Site</option>
-            <option value="running">None</option>
+            <option value="0" selected="">Credit Site</option>
+            <option value="1">Licensees</option>
         </select>
-        <p class="validate-form">Please fill out this field</p>
     </div>
     <div class="form-control mbform">
         <div class="label">Subscriber Name</div>
         <input id="txtSubscriberName" type="text" class="input-field full-width" maxlength="50">
-        <p class="validate-form">Please fill out this field</p>
+        <p class="validate-form" id="subNameValidation">Please fill out this field</p>
     </div>
     <div class="form-control mbform">
         <div class="label">Role Mapping</div>
         <select class="control full-width" id="txtRoleMapping">
             <option value="0" selected="">0</option>
             <option value="1">1</option>
+            <option value="2">2</option>
         </select>
-        <p class="validate-form">Please fill out this field</p>
     </div>
 
     <div class="note">
         <span class="text-title">
-            Note: 
+            Note:
         </span>
 
         <span class="text-description">
@@ -109,12 +110,17 @@
             <p class="text">- 1: is for Membersite of Credit Site</p>
             <p class="text">- 2: is for Alpha site of Credit Site</p>
         </div>
-       
+
     </div>
 
     <div class="modal-footer margin-top-10">
         <button id="btnCancel" class="button btn-cancel-outline" title="Cancel">Cancel</button>
         <button id="btnSave" class="button -add" title="Add Username">Add</button>
+    </div>
+
+    <div class="hide">
+        <input id="hdIsHostPermission" type="hidden" IsHostPermission="@Model.IsHostPermission.ToString()" />
+        <input id="hdCTSCustId" type="hidden" value="@Model.CustId" />
     </div>
 </div>
 
