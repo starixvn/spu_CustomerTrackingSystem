@@ -41,8 +41,10 @@
 
 .manageSubscriberTable {
 
-    .deleted {
-        background-color: #D9D9D9;
+    .odd, .even {
+        .deleted {
+            background-color: #D9D9D9;
+        }
     }
 
     .sub-icon {
