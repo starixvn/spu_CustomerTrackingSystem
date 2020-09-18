@@ -49,6 +49,8 @@
   position: absolute;
   top: .5rem;
   left: .6rem; }
+  .manageSubscriberTable .icon-delete .disabled {
+    cursor: not-allowed; }
 
 .manageSubscriberTable .icon-delete:before {
   color: #FF0000; }

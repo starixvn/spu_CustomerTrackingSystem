@@ -100,7 +100,7 @@
                 { data: obj => obj.Release },
                 {
                     data: obj => () => {
-                        return html = '<span class="sub-icon delete test" id="sub-icon " title="Remove Account"><i class="icon-edit ' + ('') + '"></i></span>';
+                        return html = '<span class="sub-icon delete test" id="sub-icon no-pointer" title="Remove Account"><i class="icon-edit ' + ('') + '"></i></span>';
                     }
                 },
                 {

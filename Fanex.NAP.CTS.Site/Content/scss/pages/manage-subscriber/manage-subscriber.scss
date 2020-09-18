@@ -62,11 +62,18 @@
         }
     }
 
+    .no-pointer {
+    }
+
     .icon-delete {
         font-size: 1.4rem;
         position: absolute;
         top: .5rem;
         left: .6rem;
+
+        .disabled {
+            cursor: not-allowed;
+        }
     }
 
     .icon-delete:before {
