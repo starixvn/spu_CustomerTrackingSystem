@@ -15,7 +15,7 @@
                 <li><a href="#tabGeneral" id="greneral-tab">Greneral Category</a></li>
                 <li><a href="#tabDetailed" id="detailed-tab">Detailed Category</a></li>
             </ul>
-            <div id="tabGeneral">
+            <div id="tabGeneral" class="tblGeneral">
                 <div class="probation-table">
                     <div class="form-control mb-0">
                         <div class="label">Username</div>
@@ -65,7 +65,7 @@
                     </div>
                 </div>
             </div>
-            <div id="tabDetailed">
+            <div id="tabDetailed" class="tabDetailed">
                 <div class="probation-table">
                     <div class="form-control mb-0">
                         <div class="label">Username</div>
@@ -80,11 +80,11 @@
                         <div class="flex-form">
                             <div class="form-control mb-0 variable">
                                 <label>Min</label>
-                                <input type="number" id="inputMinMarginDetailed" />
+                                <input type="number" id="inputMinMarginDetailed" class="number-min"/>
                             </div>
                             <div class="form-control mb-0 variable">
                                 <label>Max</label>
-                                <input type="number" id="inputMaxMarginDetailed" />
+                                <input type="number" id="inputMaxMarginDetailed" class="number-max"/>
                             </div>
                         </div>
                     </div>
@@ -117,7 +117,7 @@
             </div>
         </div>
 
-        <div id="formChangeCategory" hidden>
+        <div id="formChangeCategory" hidden class="formChangeCategory">
             <div>
                 <ul class="ui-menu ui-corner-bottom ui-widget ui-widget-content">
                     <li class="ui-menu-item"><span>Change to High Risk</span></li>
