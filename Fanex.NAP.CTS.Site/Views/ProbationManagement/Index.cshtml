@@ -20,14 +20,14 @@
                 <div class="probation-table">
                     <div class="form-control mb-0">
                         <div class="label">Username</div>
-                        <input type="text" id="inputUserNameGeneral" value="" placeholder="" />
+                        <input type="text" id="inputUserNameGeneral" value="" placeholder="" maxlength="50" />
                     </div>
                     <div class="form-control mb-0">
                         <div class="label">Probation Day Left:</div>
-                        <input type="number" id="inputDayLeftGeneral" value="" placeholder="" />
+                        <input type="number" id="inputDayLeftGeneral" value="" placeholder="" min="0" />
                     </div>
                     <div class="form-control form-group mb-0">
-                        <div class="label">Current Margin:</div>
+                        <div class="label">Current Margin (%):</div>
                         <div class="flex-form">
                             <div class="form-control mb-0 variable">
                                 <label>Min</label>
@@ -70,22 +70,22 @@
                 <div class="probation-table">
                     <div class="form-control mb-0">
                         <div class="label">Username</div>
-                        <input type="text" id="inputUserNameDetailed" placeholder="" />
+                        <input type="text" id="inputUserNameDetailed" placeholder="" maxlength="50" />
                     </div>
                     <div class="form-control mb-0">
                         <div class="label">Probation Day Left:</div>
-                        <input type="number" id="inputDayLeftDetailed" placeholder="" />
+                        <input type="number" id="inputDayLeftDetailed" placeholder="" min="0" />
                     </div>
                     <div class="form-control form-group mb-0">
-                        <div class="label">Current Margin:</div>
+                        <div class="label">Current Margin (%):</div>
                         <div class="flex-form">
                             <div class="form-control mb-0 variable">
                                 <label>Min</label>
-                                <input type="number" id="inputMinMarginDetailed" />
+                                <input type="number" id="inputMinMarginDetailed" class="number-min" />
                             </div>
                             <div class="form-control mb-0 variable">
                                 <label>Max</label>
-                                <input type="number" id="inputMaxMarginDetailed" />
+                                <input type="number" id="inputMaxMarginDetailed" class="number-max" />
                             </div>
                         </div>
                     </div>
@@ -123,7 +123,7 @@
                 <ul class="ui-menu ui-corner-bottom ui-widget ui-widget-content">
                     @foreach (var item in (IEnumerable<CategoryViewModel>)ViewBag.GeneralCategories)
                     {
-                        <li class="ui-menu-item"><span id="@item.CategoryID">@item.CategoryName</span></li>
+                        <li class="ui-menu-item" data-category-id="@item.CategoryID" data-category-name="@item.CategoryName"><span>@item.CategoryName</span></li>
                     }
                 </ul>
             </div>
@@ -134,7 +134,7 @@
                 <ul class="ui-menu ui-corner-bottom ui-widget ui-widget-content">
                     @foreach (var item in (IEnumerable<CategoryViewModel>)ViewBag.DetailedCategories)
                     {
-                        <li class="ui-menu-item"><span id="@item.CategoryID">@item.CategoryName</span></li>
+                        <li class="ui-menu-item" data-category-id="@item.CategoryID" data-category-name="@item.CategoryName"><span>@item.CategoryName</span></li>
                     }
                 </ul>
             </div>

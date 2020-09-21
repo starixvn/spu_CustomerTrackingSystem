@@ -9,9 +9,9 @@
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.Service.Implement;
     using System.Collections.Generic;
-    using Fanex.NAP.CTS.ViewModel.ProbationManagement;
-    using System;
+    using Fanex.NAP.CTS.ViewModel.ProbationManagement;    
     using System.Linq;
+    using Newtonsoft.Json;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.ProbationManagement, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -73,9 +73,11 @@
         
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.ProbationManagement, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult ChangeCategory(string custIdList, string remark)
+        public ActionResult ChangeCategory(int custId, int sportGroupId, int targetCategoryId)
         {
-            var updatedDBResult = _probationService.ChangeCategory(custIdList, remark, CurrentSession.UserId);
+            var jsonData = JsonConvert.SerializeObject(new { custId, sportGroupId, targetCategoryId });
+
+            var updatedDBResult = _probationService.ChangeCategory(jsonData, string.Empty, CurrentSession.UserId);
 
             return Json(updatedDBResult, JsonRequestBehavior.AllowGet);
         }

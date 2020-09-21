@@ -26,12 +26,28 @@
 
     let isHostPermission = domElements.hdIsHostPermission.attr('IsHostPermission') === "True";
 
+    function LoadGridGeneral() {
+        domElements.gridGeneral.prop('hidden', false);
+
+        dataTableGeneral
+            ? dataTableGeneral.ajax.reload(null, true)
+            : dataTableGeneral = GenerateGridGeneral();
+    }
+
+    function LoadGridDetailed() {
+        domElements.gridDetailed.prop('hidden', false);
+
+        dataTableDetailed
+            ? dataTableDetailed.ajax.reload(null, true)
+            : dataTableDetailed = GenerateGridDetailed();
+    }
+
     function GenerateGridGeneral() {
         return domElements.tblGeneral.DataTable({
             ajax: {
                 url: common.modifyRelativeUrl('ProbationManagement/GetProbationCategory'),
                 data: function () {
-                    return GetGeneralFilter();
+                    return GetParamFilters(1);
                 },
                 type: "POST",
                 beforeSend: function () {
@@ -101,37 +117,24 @@
                     data: obj => () => {
                         let html = '<span class="sub-icon delete" id="sub-icon " title="Change Category"><i class="icon-edit"></i></span>';
                         return html;
-                    }, createdCell: (cell, _, row) => {
-                        $('.icon-edit', cell).click((event) => {
-                            ChangeGeneralCategory(cell, 1);
-                        });
+                    }, createdCell: (cell, _, obj) => {
+                        if (isHostPermission) {
+                            $('.icon-edit', cell).click((event) => {
+                                ShowFormChangeCategory(cell, obj.UserName, obj.CustId, obj.SportGroupId, 1);
+                            });
+                        }
                     }
                 }
             ]
         });
-    }
-
-    function GetGeneralFilter() {
-        let paramsFilter = {};
-        let daysLeft = domElements.inputDayLeftGeneral.val();
-        let minMargin = domElements.inputMinMarginGeneral.val();
-        let maxMargin = domElements.inputMaxMarginGeneral.val();
-
-        paramsFilter.username = domElements.inputUserNameGeneral.val();
-        paramsFilter.daysLeft = daysLeft === '' ? -1 : daysLeft;
-        paramsFilter.minMargin = minMargin === '' ? 0 : minMargin;
-        paramsFilter.maxMargin = maxMargin === '' ? 0 : maxMargin;
-        paramsFilter.categoryMode = 1;
-
-        return paramsFilter;
-    }
+    }  
 
     function GenerateGridDetailed() {
         return domElements.tblDetailed.DataTable({
             ajax: {
                 url: common.modifyRelativeUrl('ProbationManagement/GetProbationCategory'),
                 data: function () {
-                    return GetDetailedFilter();
+                    return GetParamFilters(2);
                 },
                 type: "POST",
                 beforeSend: function () {
@@ -201,57 +204,124 @@
                     data: obj => () => {
                         let html = '<span class="sub-icon delete" title="Change Category"><i class="icon-edit"></i></span>';
                         return html;
-                    }, createdCell: (cell, _, row) => {
-                        $('.icon-edit', cell).click((event) => {
-                            ChangeGeneralCategory(cell, 1);
-                        });
+                    }, createdCell: (cell, _, obj) => {
+                        if (isHostPermission) {
+                            $('.icon-edit', cell).click((event) => {
+                                ShowFormChangeCategory(cell, obj.UserName, obj.CustId, obj.SportGroupId, 2);
+                            });
+                        }
                     }
                 }
-            ]
+            ],
+            createdRow: function (row, obj, _) {
+                let cssClassTR = '';
+                if (obj.DaysLeft > 60) {
+                    cssClassTR = 'red';
+                } else if (obj.CurrentMargin < 0) {
+                    cssClassTR = 'green';
+                }
+                $(row).addClass(cssClassTR);
+            }
         });
     }
 
-    function GetDetailedFilter() {
+    function GetParamFilters(categoryMode) {
         let paramsFilter = {};
-        let daysLeft = domElements.inputDayLeftDetailed.val();
-        let minMargin = domElements.inputMinMarginDetailed.val();
-        let maxMargin = domElements.inputMaxMarginDetailed.val();
+        let daysLeft = -1, minMargin = 0, maxMargin = 0, username = '';
 
-        paramsFilter.username = domElements.inputUserNameDetailed.val();
+        if (categoryMode === 1) {
+            daysLeft = domElements.inputDayLeftGeneral.val();
+            minMargin = domElements.inputMinMarginGeneral.val();
+            maxMargin = domElements.inputMaxMarginGeneral.val();
+            username = domElements.inputUserNameGeneral.val();
+        } else {
+            daysLeft = domElements.inputDayLeftDetailed.val();
+            minMargin = domElements.inputMinMarginDetailed.val();
+            maxMargin = domElements.inputMaxMarginDetailed.val();
+            username = domElements.inputUserNameDetailed.val();
+        }
+
+        paramsFilter.username = username;
         paramsFilter.daysLeft = daysLeft === '' ? -1 : daysLeft;
         paramsFilter.minMargin = minMargin === '' ? 0 : minMargin;
         paramsFilter.maxMargin = maxMargin === '' ? 0 : maxMargin;
-        paramsFilter.categoryMode = 2;
+        paramsFilter.categoryMode = categoryMode;
 
         return paramsFilter;
-    }
+    }    
 
-    function LoadGridGeneral() {
-        domElements.gridGeneral.prop('hidden', false);
-
-        dataTableGeneral
-            ? dataTableGeneral.ajax.reload(null, true)
-            : dataTableGeneral = GenerateGridGeneral();
-    }   
-
-    function LoadGridDetailed() {
-        domElements.gridDetailed.prop('hidden', false);
-
-        dataTableDetailed
-            ? dataTableDetailed.ajax.reload(null, true)
-            : dataTableDetailed = GenerateGridDetailed();
-    }
-
-    function ChangeGeneralCategory(element, custId) {
+    function ShowFormChangeCategory(element, username, custId, sportGroupId, categoryMode) {
         let offset = $(element).offset();
+        let top = offset.top + 30;
+        let left = offset.left - 110;
 
-        var top = offset.top + 30;
-        var left = offset.left - 110;
-        domElements.formGeneralCategories.css({
-            'top': top,
-            'left': left,
-            'position': 'absolute'
-        }).show();
+        if (categoryMode === 1) {
+            $('.ui-menu-item', domElements.formGeneralCategories).off('click').on('click', function () {
+                let categoryId = $(this).attr('data-category-id');
+                let categoryName = $(this).attr('data-category-name');
+
+                ChangeCategory(username, custId, sportGroupId, categoryId, categoryName, categoryMode);
+            });
+
+            domElements.formGeneralCategories.css({
+                'top': top,
+                'left': left,
+                'position': 'absolute'
+            }).show();
+        } else {
+            $('.ui-menu-item', domElements.formDetailedCategories).off('click').on('click', function () {
+                let categoryId = $(this).attr('data-category-id');
+                let categoryName = $(this).attr('data-category-name');
+
+                ChangeCategory(username, custId, sportGroupId, categoryId, categoryName, categoryMode);
+            });
+
+            domElements.formDetailedCategories.css({
+                'top': top,
+                'left': left,
+                'position': 'absolute'
+            }).show();
+        }
+    }
+
+    function ChangeCategory(username, custId, sportGroupId, targetCategoryId, targetCategoryName, categoryMode) {
+        let html = "<div style='text-align:center'>Are you sure about this action? </div>";
+        html += "<div>For confirm this action, account <strong>" + username + "</strong> will change to <strong> " + targetCategoryName + "</strong> category</div>";
+
+        common.showFormConfirmation(html, 'Confirmation', function () {
+            let params = {};
+            params.custId = custId;
+            params.sportGroupId = sportGroupId;
+            params.targetCategoryId = targetCategoryId;
+
+            $.ajax(common.modifyRelativeUrl('ProbationManagement/ChangeCategory'), {
+                type: 'POST',
+                data: params,
+                beforeSend: function () {
+                    common.showLoading();
+                },
+                success: function (response) {
+                    if (response !== undefined) {
+                        if (response.ErrorCode === 0) {
+                            common.showSuccess('Changed category successfully!');
+
+                            categoryMode
+                                ? LoadGridGeneral()
+                                : LoadGridDetailed();
+                        } else {
+                            common.showError('Failed! ' + response.ErrorMsg);
+                        }
+                    }
+                },
+                complete: function () {
+                    common.closeLoading();
+                },
+                error: function (errMsg) {
+                    console.log(errMsg);
+                    common.closeLoading();
+                }
+            });
+        });
     }
 
     function Initial() {
@@ -264,6 +334,7 @@
             let container = $('.icon-edit');
             if (!container.is(e.target) && container.has(e.target).length === 0) {
                 domElements.formGeneralCategories.hide();
+                domElements.formDetailedCategories.hide();
             }            
         });
     }

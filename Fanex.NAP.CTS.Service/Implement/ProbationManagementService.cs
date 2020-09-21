@@ -1,11 +1,12 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement
 {
     using Fanex.Data;
+    using Fanex.Logging;
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Criteria.ProbationManagement;
     using Fanex.NAP.CTS.Model.ProbationManagement;
     using Fanex.NAP.CTS.Service.Interface;
-    using Newtonsoft.Json;
+    using System;
     using System.Collections.Generic;
 
     public class ProbationManagementService : IProbationManagementService
@@ -38,10 +39,8 @@
             }
         }       
 
-        public DBResult ChangeCategory(string custIdList, string remark, int createdBy)
+        public DBResult ChangeCategory(string jsonData, string remark, int createdBy)
         {
-            var jsonData = JsonConvert.SerializeObject(custIdList);
-
             var criteria = new UpdateProbationCategory
             {
                 CustIdList = jsonData,
@@ -49,25 +48,40 @@
                 CreatedBy = createdBy
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            try
             {
-                db.ExecuteNonQuery(criteria);
-
-                if (string.IsNullOrWhiteSpace(criteria.ErrorMessage))
+                using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
                 {
-                    return new DBResult
-                    {
-                        ErrorCode = 0,
-                        ErrorMsg = criteria.ErrorMessage
-                    };
-                }
-            }
+                    db.ExecuteNonQuery(criteria);
 
-            return new DBResult
+                    if (string.IsNullOrWhiteSpace(criteria.ErrorMessage))
+                    {
+                        return new DBResult
+                        {
+                            ErrorCode = 0,
+                            ErrorMsg = criteria.ErrorMessage
+                        };
+                    }
+                }
+
+                return new DBResult
+                {
+                    ErrorCode = -1,
+                    ErrorMsg = criteria.ErrorMessage
+                };
+            }
+            catch (Exception ex)
             {
-                ErrorCode = -1,
-                ErrorMsg = criteria.ErrorMessage
-            };
+                var errorMessage = "CTS - Probation Management - ChangeCategory exception: " + ex.Message;
+
+                LogService.Error(errorMessage, ex);
+
+                return new DBResult
+                {
+                    ErrorCode = -1,
+                    ErrorMsg = ex.Message
+                };
+            }            
         }
     }
 }

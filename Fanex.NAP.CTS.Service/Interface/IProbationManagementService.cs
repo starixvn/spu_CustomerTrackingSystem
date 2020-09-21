@@ -10,7 +10,7 @@
 
         IEnumerable<ProbationCategoryModel> GetProbationCategory(string username, int dayLeft, int categoryMode);
 
-        DBResult ChangeCategory(string custIdList, string remark, int createdBy);
+        DBResult ChangeCategory(string jsonData, string remark, int createdBy);
 
     }
 }
