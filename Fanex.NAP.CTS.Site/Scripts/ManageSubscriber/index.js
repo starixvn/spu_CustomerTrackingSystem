@@ -15,6 +15,7 @@
         siteIDValidation: $('#siteIDValidation'),
         prefixValidation: $('#prefixValidation'),
         subNameValidation: $('#subNameValidation'),
+        childTable: $('#childTable'),
     };
 
     function InsertSubscriber() {
@@ -211,8 +212,8 @@
                 { targets: [3], width: "9%" },
                 { targets: [4], width: "9%" },
                 { targets: [5], width: "9%" },
-                { targets: [6], width: "9%" },
-                { targets: [7], width: "9%" },
+                { targets: [6], width: "9%"},
+                { targets: [7], width: "9%"},
                 { targets: [8], width: "9%" },
                 { targets: [9], width: "9%" },
                 { targets: [10], width: "10%" }
@@ -227,7 +228,15 @@
                 { data: obj => obj.SubscriberGroupName },
                 { data: obj => obj.RoleMapping },
                 { data: obj => obj.SiteID },
-                { data: obj => obj.SiteName },
+                {
+                    data: obj => LoadPopup(obj), createdCell: (cell, _, row) => {
+                        if (domElements.isHostPermission === "True") {
+                            $('.click-popup', cell).click(() => {
+                                childTable(row);
+                            });
+                        }
+                    }
+                },
                 { data: obj => obj.IsActive },
                 { data: obj => obj.CreatedDateString },
                 {
@@ -260,6 +269,26 @@
             }
         });
     }
+
+
+    function LoadPopup(obj) {
+        let html = "<a class='click-popup'>" + obj.SiteName + "</a>";
+        return html;
+    }
+
+    function childTable() {
+        domElements.childTable.dialog({
+            modal: true,
+            width: '900px',
+            title: 'SanJi',
+            resizable: true,
+            draggable: true,
+            close: function () {
+                $(this).dialog('close');
+            }
+        });
+    }
+    
 
     function DisplayEditSubscriberForm(rowInfo)
     {
@@ -372,6 +401,11 @@
                     $(this).dialog('close');
                 }
             });
+        });
+
+
+        $('.toggle-add-sub').on('click', function () {
+            console.log(11);
         });
 
         domElements.btnCancel.on('click', () => {

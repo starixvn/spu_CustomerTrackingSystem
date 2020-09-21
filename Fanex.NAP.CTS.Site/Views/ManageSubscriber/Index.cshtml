@@ -18,7 +18,7 @@
         </div>
     </div>
 
-    <table id="manageSubscriberTable" class="table table-striped table-basic manageSubscriberTable">
+    <table id="manageSubscriberTable" class="manage-subscriber-table table table-striped table-basic">
         <thead>
             <tr>
                 <th>No.</th>
@@ -53,48 +53,165 @@
     </table>
 </div>
 
+<div id="childTable" class="popup-child-table divAddSubscriber" style="display: none;">
+    <table class="child-table">
+        <thead>
+            <tr role="row">
+                <th>IBCUserName_Prefix</th>
+                <th>Role Mapping</th>
+                <th>Site ID</th>
+                <th>Site</th>
+                <th>IsActive</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr role="row">
+                <td>SanJi Choan</td>
+                <td>123</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+            </tr>
+            <tr role="row">
+                <td>SanJi Choan</td>
+                <td>123</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+            </tr>
+            <tr role="row">
+                <td>SanJi Choan</td>
+                <td>123</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+            </tr>
+            <tr role="row">
+                <td>SanJi Choan</td>
+                <td>123</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+            </tr>
+            <tr role="row">
+                <td>SanJi Choan</td>
+                <td>123</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+
 <div id="divAddSubscriber" class="popup-add divAddSubscriber" style="display: none;">
-    <div class="form-control mbform">
-        <div class="label">Site</div>
-        <div class="ischeckInput">
-            <input id="txtSite" type="text" class="input-field full-width" maxlength="50">
-            <label class="container-checkbox" id="containerCheckbox">
-                IsTest
-                <input id="overwriteCheckbox" type="checkbox">
-                <span class="checkmark"></span>
-            </label>
+
+
+    <div class="group-border">
+        <div class="form-control mbform">
+            <div class="ischeckInput">
+                <div class="label">Subscriber Name</div>
+                <input id="txtSubscriberName" type="text" class="input-field sub-name full-width" maxlength="50">
+                <label class="container-checkbox" id="containerCheckbox">
+                    IsTest
+                    <input id="overwriteCheckbox" type="checkbox">
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+            <p class="validate-form" id="siteValidation">Please fill out this field</p>
         </div>
-        <p class="validate-form" id="siteValidation">Please fill out this field</p>
+
+        <div class="form-control mbform">
+            <div class="ischeckInput">
+                <div class="label">Subscriber Type</div>
+                <select class="control full-width" id="txtSubscriberGroup">
+                    <option value="0" selected="">Credit Site</option>
+                    <option value="1">Licensees</option>
+                </select>
+            </div>
+        </div>
     </div>
-    <div class="form-control mbform">
-        <div class="label">Site ID</div>
-        <input id="txtSiteID" type="number" class="input-field full-width" maxlength="50">
-        <p class="validate-form" id="siteIDValidation">Please fill out this field</p>
+    <div class="group-border">
+        <div class="form-control mbform">
+            <div class="ischeckInput">
+                <div class="label">Site</div>
+                <input id="txtSite" type="text" class="input-field full-width" maxlength="50">
+                <span class="deleted-input">
+                    <i class="icon-delete"></i>
+                </span>
+                <button class="toggle-add-sub"></button>
+            </div>
+            <p class="validate-form" id="siteValidation">Please fill out this field</p>
+        </div>
+        <div class="form-control mbform">
+            <div class="ischeckInput">
+                <div class="label">Site ID</div>
+                <input id="txtSiteID" type="number" class="input-field full-width" maxlength="50">
+            </div>
+            <p class="validate-form" id="siteValidation">Please fill out this field</p>
+        </div>
+        <div class="form-control mbform">
+            <div class="ischeckInput">
+                <div class="label">IBCUserName_Prefix</div>
+                <input id="txtIBCUserNamePrefix" type="text" class="input-field full-width" maxlength="50">
+            </div>
+            <p class="validate-form" id="prefixValidation">Please fill out this field</p>
+        </div>
+
+        <div class="form-control mbform">
+            <div class="ischeckInput">
+                <div class="label">Role Mapping</div>
+                <select class="control full-width" id="txtRoleMapping">
+                    <option value="0" selected="">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                </select>
+            </div>
+        </div>
     </div>
-    <div class="form-control mbform">
-        <div class="label">IBCUserName_Prefix</div>
-        <input id="txtIBCUserNamePrefix" type="text" class="input-field full-width" maxlength="50">
-        <p class="validate-form" id="prefixValidation">Please fill out this field</p>
-    </div>
-    <div class="form-control mbform">
-        <div class="label">Subscriber Type</div>
-        <select class="control full-width" id="txtSubscriberGroup">
-            <option value="0" selected="">Credit Site</option>
-            <option value="1">Licensees</option>
-        </select>
-    </div>
-    <div class="form-control mbform">
-        <div class="label">Subscriber Name</div>
-        <input id="txtSubscriberName" type="text" class="input-field full-width" maxlength="50">
-        <p class="validate-form" id="subNameValidation">Please fill out this field</p>
-    </div>
-    <div class="form-control mbform">
-        <div class="label">Role Mapping</div>
-        <select class="control full-width" id="txtRoleMapping">
-            <option value="0" selected="">0</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-        </select>
+
+    <div class="group-border">
+        <div class="form-control mbform">
+            <div class="ischeckInput">
+                <div class="label">Site</div>
+                <input id="txtSite" type="text" class="input-field full-width" maxlength="50">
+                <span class="deleted-input">
+                    <i class="icon-delete"></i>
+                </span>
+                <button class="toggle-add-sub"></button>
+            </div>
+            <p class="validate-form" id="siteValidation">Please fill out this field</p>
+        </div>
+        <div class="form-control mbform">
+            <div class="ischeckInput">
+                <div class="label">Site ID</div>
+                <input id="txtSiteID" type="number" class="input-field full-width" maxlength="50">
+            </div>
+            <p class="validate-form" id="siteValidation">Please fill out this field</p>
+        </div>
+        <div class="form-control mbform">
+            <div class="ischeckInput">
+                <div class="label">IBCUserName_Prefix</div>
+                <input id="txtIBCUserNamePrefix" type="text" class="input-field full-width" maxlength="50">
+            </div>
+            <p class="validate-form" id="prefixValidation">Please fill out this field</p>
+        </div>
+
+        <div class="form-control mbform">
+            <div class="ischeckInput">
+                <div class="label">Role Mapping</div>
+                <select class="control full-width" id="txtRoleMapping">
+                    <option value="0" selected="">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                </select>
+            </div>
+        </div>
     </div>
 
     <div class="note">
