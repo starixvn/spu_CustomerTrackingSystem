@@ -88,5 +88,6 @@
   <Function name="ProbationManagement">
     <Setting Key="CTS_DC_CustClassification_Probation_Get" SpName="CTS_DC_CustClassification_Probation_Get_xtest" DbName="MySQL.CTS_DataCenter"/>
     <Setting Key="CTS_DC_CustClassification_Probation_GetCategory" SpName="CTS_DC_CustClassification_Probation_GetCategory_xtest" DbName="MySQL.CTS_DataCenter"/>
+    <Setting Key="CTS_DC_CustClassification_Probation_Update" SpName="CTS_DC_CustClassification_Probation_Update_xtest" DbName="MySQL.CTS_DataCenter"/>
   </Function>
 </Functions>

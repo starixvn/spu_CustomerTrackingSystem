@@ -3,6 +3,7 @@
     let dataTableDetailed;
 
     let domElements = {
+        hdIsHostPermission: $('#hdIsHostPermission'),
         tabs: $("#tabs-probation-detail"),        
         inputUserNameGeneral: $('#inputUserNameGeneral'),
         inputDayLeftGeneral: $('#inputDayLeftGeneral'),
@@ -19,8 +20,11 @@
         gridDetailed: $('#gridDetailed'),
         tblDetailed: $('#tblDetailed'),
         btnEdit: $('.sub-icon.icon-edit'),
-        formChangeCategory: $('#formChangeCategory')
+        formGeneralCategories: $('#formGeneralCategories'),
+        formDetailedCategories: $('#formDetailedCategories')
     };
+
+    let isHostPermission = domElements.hdIsHostPermission.attr('IsHostPermission') === "True";
 
     function GenerateGridGeneral() {
         return domElements.tblGeneral.DataTable({
@@ -99,7 +103,7 @@
                         return html;
                     }, createdCell: (cell, _, row) => {
                         $('.icon-edit', cell).click((event) => {
-                            ChangeCategory(cell, 1);
+                            ChangeGeneralCategory(cell, 1);
                         });
                     }
                 }
@@ -109,12 +113,12 @@
 
     function GetGeneralFilter() {
         let paramsFilter = {};
-        let dayLeft = domElements.inputDayLeftGeneral.val();
+        let daysLeft = domElements.inputDayLeftGeneral.val();
         let minMargin = domElements.inputMinMarginGeneral.val();
         let maxMargin = domElements.inputMaxMarginGeneral.val();
 
         paramsFilter.username = domElements.inputUserNameGeneral.val();
-        paramsFilter.dayLeft = dayLeft === '' ? -1 : dayLeft;
+        paramsFilter.daysLeft = daysLeft === '' ? -1 : daysLeft;
         paramsFilter.minMargin = minMargin === '' ? 0 : minMargin;
         paramsFilter.maxMargin = maxMargin === '' ? 0 : maxMargin;
         paramsFilter.categoryMode = 1;
@@ -199,7 +203,7 @@
                         return html;
                     }, createdCell: (cell, _, row) => {
                         $('.icon-edit', cell).click((event) => {
-                            ChangeCategory(cell, 1);
+                            ChangeGeneralCategory(cell, 1);
                         });
                     }
                 }
@@ -209,12 +213,12 @@
 
     function GetDetailedFilter() {
         let paramsFilter = {};
-        let dayLeft = domElements.inputDayLeftDetailed.val();
+        let daysLeft = domElements.inputDayLeftDetailed.val();
         let minMargin = domElements.inputMinMarginDetailed.val();
         let maxMargin = domElements.inputMaxMarginDetailed.val();
 
         paramsFilter.username = domElements.inputUserNameDetailed.val();
-        paramsFilter.dayLeft = dayLeft === '' ? -1 : dayLeft;
+        paramsFilter.daysLeft = daysLeft === '' ? -1 : daysLeft;
         paramsFilter.minMargin = minMargin === '' ? 0 : minMargin;
         paramsFilter.maxMargin = maxMargin === '' ? 0 : maxMargin;
         paramsFilter.categoryMode = 2;
@@ -238,20 +242,20 @@
             : dataTableDetailed = GenerateGridDetailed();
     }
 
-    function ChangeCategory(element, custId) {
+    function ChangeGeneralCategory(element, custId) {
         let offset = $(element).offset();
 
         var top = offset.top + 30;
         var left = offset.left - 110;
-        domElements.formChangeCategory.css({
+        domElements.formGeneralCategories.css({
             'top': top,
             'left': left,
             'position': 'absolute'
-        }).toggle();
+        }).show();
     }
 
     function Initial() {
-        domElements.formChangeCategory.hide();
+        domElements.formGeneralCategories.hide();
         domElements.tabs.tabs();
         domElements.btnGenerateGeneral.on('click', function () { LoadGridGeneral(); });
         domElements.btnGenerateDetailed.on('click', function () { LoadGridDetailed(); });
@@ -259,7 +263,7 @@
         $(window).click(function (e) {
             let container = $('.icon-edit');
             if (!container.is(e.target) && container.has(e.target).length === 0) {
-                domElements.formChangeCategory.hide();
+                domElements.formGeneralCategories.hide();
             }            
         });
     }

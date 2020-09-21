@@ -35,15 +35,18 @@
                             FSFunctionKeys.ProbationManagement,
                             NAP.Core.Business.Constant.Policy.Host);
 
+            ViewBag.GeneralCategories = GetCategories(1);
+            ViewBag.DetailedCategories = GetCategories(2);
+
             return View(isHostPermission);
         }
 
         [HttpPost]
-        public ActionResult GetProbationCategory(string username, int dayLeft, decimal minMargin, decimal maxMargin, int categoryMode)
+        public ActionResult GetProbationCategory(string username, int daysLeft, decimal minMargin, decimal maxMargin, int categoryMode)
         {
             var viewModel = Enumerable.Empty<ProbationCategoryViewModel>();
 
-            var data = _probationService.GetProbationCategory(username, dayLeft, categoryMode);
+            var data = _probationService.GetProbationCategory(username, daysLeft, categoryMode);
 
             if (data != null && data.Any())
             {
@@ -70,11 +73,30 @@
         
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.ProbationManagement, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult ChangeCategory()
+        public ActionResult ChangeCategory(string custIdList, string remark)
         {
-            var data = "";
+            var updatedDBResult = _probationService.ChangeCategory(custIdList, remark, CurrentSession.UserId);
 
-            return Json(data, JsonRequestBehavior.AllowGet);
+            return Json(updatedDBResult, JsonRequestBehavior.AllowGet);
+        }
+
+        private IEnumerable<CategoryViewModel> GetCategories(int categoryMode)
+        {
+            var categoriesViewModel = Enumerable.Empty<CategoryViewModel>();
+            
+            var data = _probationService.GetCategories(categoryMode);
+            if (data != null && data.Any())
+            {
+                categoriesViewModel = data
+                    .OrderBy(x => x.DisplayOrder)
+                    .Select(x => new CategoryViewModel
+                    {
+                        CategoryID = x.CategoryID,
+                        CategoryName = x.CategoryName
+                    });
+            }
+
+            return categoriesViewModel;
         }
     }
 }

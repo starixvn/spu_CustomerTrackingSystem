@@ -6,9 +6,11 @@
 
     public interface IProbationManagementService
     {
+        IEnumerable<CategoryModel> GetCategories(int categoryMode);
+
         IEnumerable<ProbationCategoryModel> GetProbationCategory(string username, int dayLeft, int categoryMode);
 
-        DBResult ChangeCategory(long ctsCustId, string newCategoryName);
+        DBResult ChangeCategory(string custIdList, string remark, int createdBy);
 
     }
 }

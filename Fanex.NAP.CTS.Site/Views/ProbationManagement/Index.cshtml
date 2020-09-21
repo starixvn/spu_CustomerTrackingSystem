@@ -1,4 +1,5 @@
-﻿@{
+﻿@using Fanex.NAP.CTS.ViewModel.ProbationManagement
+@{
     ViewBag.Title = "Probation Management";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -15,7 +16,7 @@
                 <li><a href="#tabGeneral" id="greneral-tab">Greneral Category</a></li>
                 <li><a href="#tabDetailed" id="detailed-tab">Detailed Category</a></li>
             </ul>
-            <div id="tabGeneral" class="tbl-general">
+            <div id="tabGeneral">
                 <div class="probation-table">
                     <div class="form-control mb-0">
                         <div class="label">Username</div>
@@ -65,7 +66,7 @@
                     </div>
                 </div>
             </div>
-            <div id="tabDetailed" class="tab-detailed">
+            <div id="tabDetailed">
                 <div class="probation-table">
                     <div class="form-control mb-0">
                         <div class="label">Username</div>
@@ -80,11 +81,11 @@
                         <div class="flex-form">
                             <div class="form-control mb-0 variable">
                                 <label>Min</label>
-                                <input type="number" id="inputMinMarginDetailed" class="number-min"/>
+                                <input type="number" id="inputMinMarginDetailed" />
                             </div>
                             <div class="form-control mb-0 variable">
                                 <label>Max</label>
-                                <input type="number" id="inputMaxMarginDetailed" class="number-max"/>
+                                <input type="number" id="inputMaxMarginDetailed" />
                             </div>
                         </div>
                     </div>
@@ -117,17 +118,32 @@
             </div>
         </div>
 
-        <div id="formChangeCategory" hidden class="form-change-category">
+        <div id="formGeneralCategories" hidden class="form-change-category">
             <div>
                 <ul class="ui-menu ui-corner-bottom ui-widget ui-widget-content">
-                    <li class="ui-menu-item"><span>Change to High Risk</span></li>
-                    <li class="ui-menu-item"><span>Change to Smart</span></li>
-                    <li class="ui-menu-item"><span>Change to VIP</span></li>
-                    <li class="ui-menu-item"><span>Change to Normal</span></li>
+                    @foreach (var item in (IEnumerable<CategoryViewModel>)ViewBag.GeneralCategories)
+                    {
+                        <li class="ui-menu-item"><span id="@item.CategoryID">@item.CategoryName</span></li>
+                    }
                 </ul>
             </div>
-        </div>      
+        </div>
+
+        <div id="formDetailedCategories" hidden class="form-change-category">
+            <div>
+                <ul class="ui-menu ui-corner-bottom ui-widget ui-widget-content">
+                    @foreach (var item in (IEnumerable<CategoryViewModel>)ViewBag.DetailedCategories)
+                    {
+                        <li class="ui-menu-item"><span id="@item.CategoryID">@item.CategoryName</span></li>
+                    }
+                </ul>
+            </div>
+        </div>
     </div>
+</div>
+
+<div hidden>
+    <input id="hdIsHostPermission" type="hidden" IsHostPermission="@Model.ToString()" />
 </div>
 
 @section scripts{

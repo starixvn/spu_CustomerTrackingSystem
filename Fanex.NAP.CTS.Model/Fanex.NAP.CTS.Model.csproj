@@ -172,6 +172,7 @@
     <Compile Include="AssociatedAccountMonitor\AssociatedAccountMonitorModel.cs" />
     <Compile Include="AssociatedAccountMonitor\CustProfilerModel.cs" />
     <Compile Include="AssociatedAccountMonitor\ValidateAssociatedAccountModel.cs" />
+    <Compile Include="ProbationManagement\CategoryModel.cs" />
     <Compile Include="ProbationManagement\ProbationCategoryModel.cs" />
     <Compile Include="SpecialCustomerClass\CustomerClassForMainDb.cs" />
     <Compile Include="SpecialCustomerClass\CustomerClassModel.cs" />

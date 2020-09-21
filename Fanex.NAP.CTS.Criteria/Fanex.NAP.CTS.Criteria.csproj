@@ -100,7 +100,9 @@
     <Compile Include="CheckBetReport\CheckBetReportGetCriteria.cs" />
     <Compile Include="CheckBetReport\CheckBetReportUpdateNoteCriteria.cs" />
     <Compile Include="CTSUser\InsertCTSUserCriteria.cs" />
+    <Compile Include="ProbationManagement\GetCategoryCriteria.cs" />
     <Compile Include="ProbationManagement\GetProbationCategoryCriteria.cs" />
+    <Compile Include="ProbationManagement\UpdateProbationCategory.cs" />
     <Compile Include="SpecialCustomerClass\InsertSpecialCustomerClassCriteria.cs" />
     <Compile Include="SpecialCustomerClass\GetAllSpecialCustomerClassCriteria.cs" />
     <Compile Include="SpecialCustomerClass\RemoveSpecialCustomerClassCriteria.cs" />
