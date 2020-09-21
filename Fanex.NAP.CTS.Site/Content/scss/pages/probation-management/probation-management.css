@@ -23,17 +23,17 @@
     @media screen and (max-width: 1024px) {
       .probation-content .dataTables_paginate {
         margin-top: 0 !important; } }
-  .probation-content .tblGeneral thead tr th, .probation-content .tblDetailed thead tr th {
+  .probation-content .tblGeneral thead tr th, .probation-content .tabDetailed thead tr th {
     padding: .7rem .7rem .8rem .7rem;
     font-family: "Lato", Arial, Tahoma, sans-serif !important;
     font-style: normal;
     font-weight: 500; }
-  .probation-content .tblGeneral tbody tr td, .probation-content .tblDetailed tbody tr td {
+  .probation-content .tblGeneral tbody tr td, .probation-content .tabDetailed tbody tr td {
     font-family: "Lato", Arial, Tahoma, sans-serif !important;
     font-style: normal;
     font-weight: 500;
     padding: .4rem .7rem; }
-    .probation-content .tblGeneral tbody tr td span .icon-edit, .probation-content .tblDetailed tbody tr td span .icon-edit {
+    .probation-content .tblGeneral tbody tr td span .icon-edit, .probation-content .tabDetailed tbody tr td span .icon-edit {
       color: #396EF8;
       cursor: pointer; }
   .probation-content .wrapper-info-table {

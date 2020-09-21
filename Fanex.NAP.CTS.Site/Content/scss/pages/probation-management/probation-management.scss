@@ -35,7 +35,7 @@
         }
     }
 
-    .tblGeneral,.tblDetailed {
+    .tblGeneral, .tabDetailed {
         thead {
             tr {
                 th {
@@ -153,6 +153,7 @@
                 @media screen and (max-width: 1024px) {
                     margin-right: 1rem;
                 }
+
                 &:last-child {
                     margin-right: 0;
                 }
