@@ -35,7 +35,8 @@
     padding: .4rem .7rem; }
     .probation-content .tbl-general tbody tr td span .icon-edit, .probation-content .tab-detailed tbody tr td span .icon-edit {
       color: #396EF8;
-      cursor: pointer; }
+      cursor: pointer;
+      display: block; }
   .probation-content .wrapper-info-table {
     height: 4rem;
     border: 1px solid #C4C4C4;
