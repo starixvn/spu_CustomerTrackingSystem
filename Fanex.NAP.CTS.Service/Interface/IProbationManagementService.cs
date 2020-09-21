@@ -2,6 +2,7 @@
 {
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Model.ProbationManagement;
+    using Fanex.NAP.CTS.Model.SpecialCustomerClass;
     using System.Collections.Generic;
 
     public interface IProbationManagementService
@@ -10,7 +11,10 @@
 
         IEnumerable<ProbationCategoryModel> GetProbationCategory(string username, int dayLeft, int categoryMode);
 
-        DBResult ChangeCategory(string jsonData, string remark, int createdBy);
+        IEnumerable<AccumulatedInfoModel> GetAccummulatedInfo(IEnumerable<ProbationModel> probationModelList);
 
+        ResultChangeCategoryToCts ChangeCategory(string jsonData, string remark, int createdBy);
+
+        DBResult SyncCustomerClassToMainDb(IEnumerable<CustomerClassForMainDb> customerClassList);
     }
 }

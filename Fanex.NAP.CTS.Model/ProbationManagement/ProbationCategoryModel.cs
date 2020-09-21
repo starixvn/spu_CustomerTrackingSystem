@@ -14,7 +14,9 @@ namespace Fanex.NAP.CTS.Model.ProbationManagement
 
         public string Sport { get; set; }
 
-        public string TargetCategory { get; set; }
+        public int TargetCategoryID { get; set; }
+
+        public string TargetCategoryName { get; set; }
 
         public DateTime TaggedDate { get; set; }
 

@@ -20,6 +20,8 @@
 
         public decimal CurrentMargin { get; set; }
 
+        public string CurrentMarginString { get; set; }
+
         public int DaysLeft { get; set; }
     }
 }

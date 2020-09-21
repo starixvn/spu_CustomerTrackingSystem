@@ -111,7 +111,7 @@
                 { data: obj => obj.TargetCategoryName },
                 { data: obj => obj.TaggedDate },
                 { data: obj => obj.FirstMargin },
-                { data: obj => obj.CurrentMargin },
+                { data: obj => obj.CurrentMarginString },
                 { data: obj => obj.DaysLeft },
                 {
                     data: obj => () => {
@@ -198,7 +198,7 @@
                 { data: obj => obj.TargetCategoryName },
                 { data: obj => obj.TaggedDate },
                 { data: obj => obj.FirstMargin },
-                { data: obj => obj.CurrentMargin },
+                { data: obj => obj.CurrentMarginString },
                 { data: obj => obj.DaysLeft },
                 {
                     data: obj => () => {
@@ -227,7 +227,7 @@
 
     function GetParamFilters(categoryMode) {
         let paramsFilter = {};
-        let daysLeft = -1, minMargin = 0, maxMargin = 0, username = '';
+        let daysLeft = -1, minMargin = '', maxMargin = '', username = '';
 
         if (categoryMode === 1) {
             daysLeft = domElements.inputDayLeftGeneral.val();
@@ -243,8 +243,8 @@
 
         paramsFilter.username = username;
         paramsFilter.daysLeft = daysLeft === '' ? -1 : daysLeft;
-        paramsFilter.minMargin = minMargin === '' ? 0 : minMargin;
-        paramsFilter.maxMargin = maxMargin === '' ? 0 : maxMargin;
+        paramsFilter.minMargin = minMargin;
+        paramsFilter.maxMargin = maxMargin;
         paramsFilter.categoryMode = categoryMode;
 
         return paramsFilter;

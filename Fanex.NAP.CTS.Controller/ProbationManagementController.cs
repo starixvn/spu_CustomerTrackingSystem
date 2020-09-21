@@ -12,6 +12,7 @@
     using Fanex.NAP.CTS.ViewModel.ProbationManagement;    
     using System.Linq;
     using Newtonsoft.Json;
+    using Fanex.NAP.CTS.Model.ProbationManagement;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.ProbationManagement, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -42,27 +43,68 @@
         }
 
         [HttpPost]
-        public ActionResult GetProbationCategory(string username, int daysLeft, decimal minMargin, decimal maxMargin, int categoryMode)
+        public ActionResult GetProbationCategory(string username, int daysLeft, string minMargin, string maxMargin, int categoryMode)
         {
             var viewModel = Enumerable.Empty<ProbationCategoryViewModel>();
+            var minMarginDecimal = new decimal();
+            var maxMarginDecimal = new decimal();
+
+            decimal.TryParse(minMargin, out minMarginDecimal);
+            decimal.TryParse(maxMargin, out maxMarginDecimal);
 
             var data = _probationService.GetProbationCategory(username, daysLeft, categoryMode);
 
             if (data != null && data.Any())
             {
-                viewModel = data.Select(x => new ProbationCategoryViewModel
+                var probationModelList = data.Select(x => new ProbationModel
                 {
                     CustId = x.CustID,
-                    UserName = x.Username,
-                    SiteName = x.Site,
-                    SportGroupId = x.SportGroupID,
-                    SportName = x.Sport,
-                    TargetCategoryName = x.TargetCategory,
-                    TaggedDate = x.TaggedDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmm),
-                    FirstMargin = x.FirstMargin,
-                    CurrentMargin = x.CurrentMargin,
-                    DaysLeft = x.DaysLeft
+                    CategoryId = x.TargetCategoryID,
+                    SportGroupId = x.SportGroupID
                 });
+
+                var accumulatedData = _probationService.GetAccummulatedInfo(probationModelList);
+
+                viewModel = data.Select(x =>
+                {
+                    var accumulatedItem = accumulatedData.FirstOrDefault(y => y.CustId == x.CustID && y.SportId == y.SportId);
+                    var currentMargin = new decimal();
+                    var currentMarginString = "N/A";
+
+                    if (accumulatedItem != null)
+                    {
+                        currentMargin = accumulatedItem.Margin;
+                        currentMarginString = accumulatedItem.Margin.ToString("0.00");
+                    }
+
+                    return new ProbationCategoryViewModel
+                    {
+                        CustId = x.CustID,
+                        UserName = x.Username,
+                        SiteName = x.Site,
+                        SportGroupId = x.SportGroupID,
+                        SportName = x.Sport,
+                        TargetCategoryName = x.TargetCategoryName,
+                        TaggedDate = x.TaggedDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmm),
+                        FirstMargin = x.FirstMargin,
+                        CurrentMargin = currentMargin,
+                        CurrentMarginString = currentMarginString,
+                        DaysLeft = x.DaysLeft
+                    };
+                });
+
+                if (!string.IsNullOrEmpty(minMargin) && !string.IsNullOrEmpty(maxMargin))
+                {
+                    viewModel = viewModel.Where(x => x.CurrentMargin >= minMarginDecimal && x.CurrentMargin <= maxMarginDecimal);
+                }
+                else if(!string.IsNullOrEmpty(minMargin) && string.IsNullOrEmpty(maxMargin))
+                {
+                    viewModel = viewModel.Where(x => x.CurrentMargin >= minMarginDecimal);
+                }
+                else if (string.IsNullOrEmpty(minMargin) && !string.IsNullOrEmpty(maxMargin))
+                {
+                    viewModel = viewModel.Where(x => x.CurrentMargin <= maxMarginDecimal);
+                }
             }
 
             return Json(new
@@ -77,10 +119,15 @@
         {
             var jsonData = JsonConvert.SerializeObject(new { custId, sportGroupId, targetCategoryId });
 
-            var updatedDBResult = _probationService.ChangeCategory(jsonData, string.Empty, CurrentSession.UserId);
+            var updatedResult = _probationService.ChangeCategory(jsonData, string.Empty, CurrentSession.UserId);
 
-            return Json(updatedDBResult, JsonRequestBehavior.AllowGet);
-        }
+            if (updatedResult.DBResult.ErrorCode == 0)
+            {
+                _probationService.SyncCustomerClassToMainDb(updatedResult.CustomerClassList);
+            }
+
+            return Json(updatedResult.DBResult, JsonRequestBehavior.AllowGet);
+        }       
 
         private IEnumerable<CategoryViewModel> GetCategories(int categoryMode)
         {
