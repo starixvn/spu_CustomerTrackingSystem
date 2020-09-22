@@ -13,7 +13,7 @@
         public string EvidenceCodes { get; set; }       
 
         public override string GetSettingKey()
-            => "CTS_DC_GetFlaggedEvidence";
+            => "CTS_DC_CustEvidence_GetFlaggedEvidences";
 
         public override bool IsValid()
             => true;

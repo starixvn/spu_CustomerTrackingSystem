@@ -12,7 +12,7 @@
         public string UserName { get; set; }
       
         public override string GetSettingKey()
-            => "CTS_AD_InsertCTSUser";
+            => "CTS_AD_CTSUser_Insert";
 
         public override bool IsValid()
             => true;

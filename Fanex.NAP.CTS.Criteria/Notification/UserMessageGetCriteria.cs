@@ -19,7 +19,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_GetAssociatedAccountNewAssNotification";
+            return "CTS_DC_Notification_GetAssociatedAccountNewAssociation";
         }
 
         public override bool IsValid()

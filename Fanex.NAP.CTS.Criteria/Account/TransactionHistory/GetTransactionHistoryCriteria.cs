@@ -26,7 +26,7 @@
 
         public override string GetSettingKey()
         {
-            return "DCS_DC_Get_HistoryTransaction";
+            return "DCS_DC_Transaction_GetHistory";
         }
 
         public override bool IsValid()

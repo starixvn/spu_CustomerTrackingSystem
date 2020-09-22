@@ -15,7 +15,7 @@ namespace Fanex.NAP.CTS.Criteria.Account
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_GetCustomerInfoByCTSCustId";
+            return "CTS_DC_CustInfo_GetByCTSCustID";
         }
 
         public override bool IsValid()

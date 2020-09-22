@@ -15,7 +15,7 @@ namespace Fanex.NAP.CTS.Criteria.Account
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_GetCustomerFlagInfo";
+            return "CTS_DC_CustInfo_GetFlagged";
         }
 
         public override bool IsValid()

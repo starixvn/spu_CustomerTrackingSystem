@@ -9,7 +9,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_API_GetFlaggedCustomers";
+            return "CTS_DC_CustEvidence_GetFlaggedCustomers";
         }
 
         public override bool IsValid()

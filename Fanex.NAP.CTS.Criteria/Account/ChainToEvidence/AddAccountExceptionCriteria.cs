@@ -23,7 +23,7 @@ namespace Fanex.NAP.CTS.Criteria.Account.ChainToEvidence
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_AddException";
+            return "CTS_DC_Association_InsertException";
         }
 
         public override bool IsValid()

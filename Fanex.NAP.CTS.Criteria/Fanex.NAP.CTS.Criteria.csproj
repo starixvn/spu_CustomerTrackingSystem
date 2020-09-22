@@ -46,9 +46,7 @@
     <Compile Include="Account\Associated\ActiveRemoveAssociationCriteria.cs" />
     <Compile Include="Account\Associated\InsertManualAssociationMultipleCriteria.cs" />
     <Compile Include="Account\Associated\ValidateManualAssociationMultipleCriteria.cs" />
-    <Compile Include="Account\Associated\GetAssociatedAccountByAccountCriteria.cs" />
     <Compile Include="Account\Associated\GetCustomerByUsernameCriteria.cs" />
-    <Compile Include="Account\Associated\GetCustomerFraudInfoCriteria.cs" />
     <Compile Include="Account\Associated\CustomerStaticAccountStatusCriteria.cs" />
     <Compile Include="Account\Associated\GetDirectAssociatedAccountTagFlaggedCriteria.cs" />
     <Compile Include="Account\Associated\GetDirectAssociationByAccountCriteria.cs" />
@@ -87,15 +85,8 @@
     <Compile Include="Account\CustomerLastTicketDateCriteria.cs" />
     <Compile Include="Account\CustomerProfileFraudInfoCriteria.cs" />
     <Compile Include="Account\CustomerRobotUserStatusCriteria.cs" />
-    <Compile Include="Account\Evidence\GetAccountEvidenceCriteria.cs" />
-    <Compile Include="Account\Evidence\GetExceptionAccountEvidenceCriteria.cs" />
-    <Compile Include="Account\Evidence\InsertExceptionEvidenceCriteria.cs" />
-    <Compile Include="Account\GeneralInformation\GetAssociationByAccountCriteria.cs" />
-    <Compile Include="Account\GeneralInformation\GetCustomerGeneralInformationCriteria.cs" />
-    <Compile Include="Account\GeneralInformation\GetEvidenceByTargetIdCriteria.cs" />
     <Compile Include="Account\CustomerInfoByCTSCustIdCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\GetFlaggedEvidenceCriteria.cs" />
-    <Compile Include="Account\SearchAccountCriteria.cs" />
     <Compile Include="Account\TransactionHistory\GetTransactionHistoryCriteria.cs" />
     <Compile Include="Api\FlaggedAccountDeleteCriteria.cs" />
     <Compile Include="Api\MultiCustomerEvidencesInsertCriteria.cs" />
@@ -202,8 +193,6 @@
     <Compile Include="SuspiciousInfo\SuspiciousInfoGetCriteria.cs" />
     <Compile Include="SuspiciousInfo\SuspiciousInfoUpdateCriteria.cs" />
     <Compile Include="SuspiciousInfo\SuspicousCustomerCurrencyGetCriteria.cs" />
-    <Compile Include="Transaction\History\TransactionHistoryGetByCustIdCriteria.cs" />
-    <Compile Include="Transaction\IPInformationGetByRangeLocationCriteria.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fanex.NAP.CTS.Core\Fanex.NAP.CTS.Core.csproj">

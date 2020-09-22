@@ -11,7 +11,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_API_AddEvidencesForCustomers";
+            return "CTS_DC_CustEvidence_InsertMultilpleEvidencesForCustomers";
         }
 
         public override bool IsValid()

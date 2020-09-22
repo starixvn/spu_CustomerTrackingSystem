@@ -12,7 +12,7 @@
         public string ToUserNameList { get; set; }        
 
         public override string GetSettingKey()
-            => "CTS_DC_AddManualAssociationMultipleValidation";
+            => "CTS_DC_Association_ValidateManualMultipleInput";
 
         public override bool IsValid()
             => true;

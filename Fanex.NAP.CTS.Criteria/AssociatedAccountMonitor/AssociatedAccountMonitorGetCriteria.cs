@@ -6,7 +6,7 @@ namespace Fanex.NAP.CTS.Criteria.AssociatedAccountMonitor
     public class AssociatedAccountMonitorGetCriteria : CriteriaBase
     {
         public override string GetSettingKey()
-            => "CTS_DC_RPT_AssociatedAccountMonitor";
+            => "CTS_DC_AssociatedAccountMonitor_Get";
 
         public override bool IsValid()
             => true;

@@ -10,7 +10,7 @@ namespace Fanex.NAP.CTS.Criteria.Account.CustomerCategory
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_GetCustomerCategoryByCTSCustID";
+            return "CTS_DC_CustClassification_GetCategory";
         }
 
         public override bool IsValid()

@@ -12,7 +12,7 @@
         public bool IsOverride { get; set; }
 
         public override string GetSettingKey()
-            => "CTS_DC_CheckMultiCustomerEvidence";
+            => "CTS_DC_CustEvidence_ValidateMultipleInput";
 
         public override bool IsValid()
             => true;

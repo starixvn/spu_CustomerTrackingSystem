@@ -97,30 +97,16 @@
     <Setting Key="FPS_AD_InsertSubscriberByUser" SpName="FPS_AD_InsertSubscriberByUser_xtest" DbName="MySQL.FPS_Admin" />
     <Setting Key="FPS_AD_GetAllSubscribers" SpName="FPS_AD_GetAllSubscribers_xtest" DbName="MySQL.FPS_Admin" />
   </Function>
-  <Function name="SearchAccount">
-    <Setting Key="FPS_DC_SearchAccount" SpName="FPS_DC_SearchAccount_xtest" DbName="MySQL.CTS_DataCenter" />
-  </Function>
   <Function name="AccountDetail">
-    <Setting Key="FPS_DC_GetCustomerGeneralInfo" SpName="FPS_DC_GetCustomerGeneralInfo_xtest" DbName="MySQL.CTS_DataCenter" />
-    <Setting Key="FPS_DC_GetEvidenceByTargetId" SpName="FPS_DC_GetEvidenceByTargetId_xtest" DbName="MySQL.CTS_DataCenter" />
-    <Setting Key="FPS_DC_Rpt_GetAssociationByAccount" SpName="FPS_DC_Rpt_GetAssociationByAccount_xtest" DbName="MySQL.CTS_DataCenter" />
-    <Setting Key="FPS_DC_Rpt_ChainToEvidence" SpName="FPS_DC_Rpt_ChainToEvidence_xtest" DbName="MySQL.FPS_DataCenter" />
-    <Setting Key="FPS_DC_InsertException" SpName="FPS_DC_InsertException_xtest" DbName="MySQL.FPS_DataCenter" />
-    <Setting Key="FPS_DC_Rpt_GetExceptionByAccountId" SpName="FPS_DC_Rpt_GetExceptionByAccountId_xtest" DbName="MySQL.CTS_DataCenter" />
-    <Setting Key="FPS_DC_Rpt_GetAssociatedAccountByAccount" SpName="FPS_DC_Rpt_GetAssociatedAccountByAccount_xtest" DbName="MySQL.CTS_DataCenter" />
-    <Setting Key="FS_CustomerFraudInfo_Get" SpName="FS_CustomerFraudInfo_Get_xtest" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
-    <Setting Key="FPS_DC_GetTransactionHistoryByCustId" SpName="FPS_DC_GetTransactionHistoryByCustId_xtest" DbName="MySQL.CTS_DataCenter" />
-    <Setting Key="FPS_DC_GetLocationInfobyIP" SpName="FPS_DC_GetLocationInfobyIP_xtest" DbName="MySQL.CTS_DataCenter" />
-
-    <Setting Key="CTS_DC_GetFlaggedEvidence" SpName="CTS_DC_GetFlaggedEvidence_xtest" DbName="MySQL.CTS_DataCenter" />
-    <Setting Key="CTS_DC_GetAffectedEvidence" SpName="CTS_DC_GetAffectedEvidence_xtest" DbName="MySQL.CTS_DataCenter" />
-    <Setting Key="CTS_DC_RemoveFlaggedEvidence" SpName="CTS_DC_RemoveFlaggedEvidence_xtest" DbName="MySQL.CTS_DataCenter" />    
-    <Setting Key="CTS_DC_AddEvidence" SpName="CTS_DC_AddEvidence_xtest" DbName="MySQL.CTS_DataCenter" />
-    <Setting Key="CTS_DC_RetractAffectedEvidence" SpName="CTS_DC_RetractAffectedEvidence_xtest" DbName="MySQL.CTS_DataCenter" />
-    <Setting Key="CTS_DC_RestoreAffectedEvidence" SpName="CTS_DC_RestoreAffectedEvidence_xtest" DbName="MySQL.CTS_DataCenter" />
-    <Setting Key="CTS_DC_GetAllEvidences" SpName="CTS_DC_GetAllEvidences_xtest" DbName="MySQL.CTS_DataCenter" />
-    <Setting Key="CTS_DC_GetAffectedEvidenListBetweenCusts" SpName="CTS_DC_GetAffectedEvidenListBetweenCusts_xtest" DbName="MySQL.CTS_DataCenter" />
-    <Setting Key="CTS_DC_AddException" SpName="CTS_DC_AddException_xtest" DbName="MySQL.CTS_DataCenter" />
-    <Setting Key="CTS_DC_RemoveException" SpName="CTS_DC_RemoveException_xtest" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_CustEvidence_GetFlaggedEvidences" SpName="CTS_DC_CustEvidence_GetFlaggedEvidences_xtest" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_CustEvidence_GetAffectedEvidences" SpName="CTS_DC_CustEvidence_GetAffectedEvidences_xtest" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_CustEvidence_RemoveFlagged" SpName="CTS_DC_CustEvidence_RemoveFlagged_xtest" DbName="MySQL.CTS_DataCenter" />    
+    <Setting Key="CTS_DC_CustEvidence_InsertSingle" SpName="CTS_DC_CustEvidence_InsertSingle_xtest" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_CustEvidence_RemoveAffected" SpName="CTS_DC_CustEvidence_RemoveAffected_xtest" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_CustEvidence_RestoreAffected" SpName="CTS_DC_CustEvidence_RestoreAffected_xtest" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_Evidences_GetAll" SpName="CTS_DC_Evidences_GetAll_xtest" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_CustEvidence_GetFlaggedFromCustList" SpName="CTS_DC_CustEvidence_GetFlaggedFromCustList_xtest" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_Association_InsertException" SpName="CTS_DC_Association_InsertException_xtest" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_Association_RemoveException" SpName="CTS_DC_Association_RemoveException_xtest" DbName="MySQL.CTS_DataCenter" />
   </Function>
 </Functions>

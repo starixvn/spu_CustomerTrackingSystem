@@ -22,7 +22,7 @@
         public int UserId { get; set; }
 
         public override string GetSettingKey()
-            => "CTS_DC_RetractAffectedEvidence";
+            => "CTS_DC_CustEvidence_RemoveAffected";
 
         public override bool IsValid()
             => true;

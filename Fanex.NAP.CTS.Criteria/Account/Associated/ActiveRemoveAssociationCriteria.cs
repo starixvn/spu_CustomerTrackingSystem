@@ -31,7 +31,7 @@ namespace Fanex.NAP.CTS.Criteria.Account.Associated
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_UpdateAssociationRemove";
+            return "CTS_DC_Association_UpdateAssociationRemove";
         }
 
         public override bool IsValid()

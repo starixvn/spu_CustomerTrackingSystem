@@ -15,7 +15,7 @@
         public string ErrorMessage { get; set; }
 
         public override string GetSettingKey()
-            => "CTS_DC_RemoveSpecialCustomerClass";
+            => "CTS_DC_SpecialCustClass_Remove";
 
         public override bool IsValid()
             => true;

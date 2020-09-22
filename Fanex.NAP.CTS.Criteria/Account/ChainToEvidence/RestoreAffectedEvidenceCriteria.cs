@@ -19,7 +19,7 @@
         public int UserId { get; set; }
 
         public override string GetSettingKey()
-            => "CTS_DC_RestoreAffectedEvidence";
+            => "CTS_DC_CustEvidence_RestoreAffected";
 
         public override bool IsValid()
             => true;
