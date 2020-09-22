@@ -1,4 +1,5 @@
 ﻿function ManageSubscriber() {
+    var isPreviousStatisticOpen = false;
     let dataTable;
     let isAddSub = 1;
     let subID = -1;
@@ -16,6 +17,8 @@
         prefixValidation: $('#prefixValidation'),
         subNameValidation: $('#subNameValidation'),
         childTable: $('#childTable'),
+        statisticIcon: $('.toggle-add-sub'),
+
     };
 
     function InsertSubscriber() {
@@ -404,8 +407,14 @@
         });
 
 
-        $('.toggle-add-sub').on('click', function () {
-            console.log(11);
+
+
+
+
+
+        domElements.statisticIcon.on('click', function () {
+            $(this).closest('.group-border').find('.group-toggle-btn').toggleClass("hide");
+            $(this).toggleClass("icon-open");
         });
 
         domElements.btnCancel.on('click', () => {

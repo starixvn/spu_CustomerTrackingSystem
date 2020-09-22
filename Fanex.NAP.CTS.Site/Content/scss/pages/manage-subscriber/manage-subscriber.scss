@@ -131,12 +131,13 @@
 }
 #divAddSubscriber {
     padding: 0;
-
+    max-height : 60rem !important;
     .note {
         padding: 1.6rem 1.2rem 0 1.2rem;
     }
-    .modal-footer{
-        padding : 0 1.2rem 1.6rem 1.2rem;
+
+    .modal-footer {
+        padding: 0 1.2rem 1.6rem 1.2rem;
     }
 
     .group-border {
@@ -151,8 +152,17 @@
             width: 34rem;
         }
 
+        .group-toggle-btn {
+            margin-top: 1.4rem;
+        }
+
         .mbform {
-            margin-bottom: 1.4rem;
+            margin-top: 1.4rem;
+            margin-bottom: 0 !important;
+
+            &:first-child {
+                margin-top: 0 !important;
+            }
 
             &:last-child {
                 margin-bottom: 0 !important;
@@ -161,34 +171,43 @@
             .validate-form {
                 color: red;
                 margin-top: .6rem;
+                display: none;
             }
 
             .ischeckInput {
                 display: flex;
                 align-items: center;
-                position : relative;
+                position: relative;
+
                 .label {
                     width: 20rem;
                     margin-bottom: 0 !important;
                 }
-                .deleted-input{
-                    position : absolute;
-                    top : .7rem;
-                    right : .7rem;
-                    cursor : pointer;
-                    color : #FF0000;
+
+                .deleted-input {
+                    position: absolute;
+                    top: .7rem;
+                    right: .7rem;
+                    cursor: pointer;
+                    color: #FF0000;
                 }
-                .toggle-add-sub{
-                    outline : none;
-                    width : 2rem;
-                    height : 2rem;
-                    background : url('/Content/images/details_open.png');
-                    background-size : 100%;
-                    position : absolute;
-                    right : -2.8rem;
-                    border : 0;
-                    cursor:pointer;
+
+                .toggle-add-sub {
+                    outline: none;
+                    background: none;
+                    font-size: 2.2rem;
+                    position: absolute;
+                    right: -3.5rem;
+                    border: 0;
+                    cursor: pointer;
+                    display : flex;
+                    align-items : center;
                 }
+
+                .icon-open {
+                    transform: rotate(90deg);
+                }
+
                 .sub-name {
                     margin-right: 1.5rem;
                 }

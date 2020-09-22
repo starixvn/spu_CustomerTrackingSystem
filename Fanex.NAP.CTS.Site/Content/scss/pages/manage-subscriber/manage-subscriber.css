@@ -80,7 +80,8 @@
     margin-top: 1rem; }
 
 #divAddSubscriber {
-  padding: 0; }
+  padding: 0;
+  max-height: 60rem !important; }
   #divAddSubscriber .note {
     padding: 1.6rem 1.2rem 0 1.2rem; }
   #divAddSubscriber .modal-footer {
@@ -92,13 +93,19 @@
       margin-bottom: 1.3rem; }
     #divAddSubscriber .group-border .sub-name {
       width: 34rem; }
+    #divAddSubscriber .group-border .group-toggle-btn {
+      margin-top: 1.4rem; }
     #divAddSubscriber .group-border .mbform {
-      margin-bottom: 1.4rem; }
+      margin-top: 1.4rem;
+      margin-bottom: 0 !important; }
+      #divAddSubscriber .group-border .mbform:first-child {
+        margin-top: 0 !important; }
       #divAddSubscriber .group-border .mbform:last-child {
         margin-bottom: 0 !important; }
       #divAddSubscriber .group-border .mbform .validate-form {
         color: red;
-        margin-top: .6rem; }
+        margin-top: .6rem;
+        display: none; }
       #divAddSubscriber .group-border .mbform .ischeckInput {
         display: flex;
         align-items: center;
@@ -114,14 +121,16 @@
           color: #FF0000; }
         #divAddSubscriber .group-border .mbform .ischeckInput .toggle-add-sub {
           outline: none;
-          width: 2rem;
-          height: 2rem;
-          background: url("/Content/images/details_open.png");
-          background-size: 100%;
+          background: none;
+          font-size: 2.2rem;
           position: absolute;
-          right: -2.8rem;
+          right: -3.5rem;
           border: 0;
-          cursor: pointer; }
+          cursor: pointer;
+          display: flex;
+          align-items: center; }
+        #divAddSubscriber .group-border .mbform .ischeckInput .icon-open {
+          transform: rotate(90deg); }
         #divAddSubscriber .group-border .mbform .ischeckInput .sub-name {
           margin-right: 1.5rem; }
 
