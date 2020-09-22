@@ -23,6 +23,7 @@
         public const string FormatDateToString_MMMddyyyyhhmmss = "MMM dd, yyyy HH:mm:ss";
         public const string FormatDateToString_MMMddyyyyhhmmsstt = "MMM dd, yyyy HH:mm:ss tt";
         public const string FormatDateToString_MMMddyyyyhhmm = "MMM dd, yyyy HH:mm";
+        public const string FormatDecimalToString_Thousands2Places = "#,##0.00";
 
         public const string CurrentSubscriberAssignmentsKey = "CurrentSubscriberAssignmentsKey";        
         public const string IsMasterSubscriberAssignmentKey = "IsMasterSubscriberAssignmentKey";
@@ -45,6 +46,6 @@
 
         public const int SUPER_ROLE = 4;
         public const int MASTER_ROLE = 3;
-        public const int AGENT_ROLE = 2;
+        public const int AGENT_ROLE = 2;        
     }
 }

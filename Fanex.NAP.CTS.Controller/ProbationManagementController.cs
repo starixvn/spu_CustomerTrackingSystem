@@ -72,7 +72,7 @@
                     if (accumulatedItem != null)
                     {
                         currentMargin = accumulatedItem.Margin;
-                        currentMarginString = accumulatedItem.Margin.ToString("0.00");
+                        currentMarginString = accumulatedItem.Margin.ToString(Consts.FormatDecimalToString_Thousands2Places);
                     }
 
                     return new ProbationCategoryViewModel
@@ -163,7 +163,6 @@
             var probationModelList = data.Select(x => new ProbationModel
             {
                 CustId = x.CustID,
-                CategoryId = x.TargetCategoryID,
                 SportGroupId = x.SportGroupID
             });
 
