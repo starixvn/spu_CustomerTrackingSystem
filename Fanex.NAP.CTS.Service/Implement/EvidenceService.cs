@@ -88,17 +88,6 @@
             DataService.Execute(criteria);
         }
 
-        public IEnumerable<CustomerEvidence> GetFlaggedCustomersByLevel(string custIdList)
-        {
-            DynamicRepository repository = new DynamicRepository();
-            var criteria = new FlaggedAccountSelectCriteria
-            {
-                ip_CustIds = custIdList
-            };
-
-            return repository.Fetch<CustomerEvidence>(criteria);
-        }
-
         #endregion
 
         #region Evidence Management

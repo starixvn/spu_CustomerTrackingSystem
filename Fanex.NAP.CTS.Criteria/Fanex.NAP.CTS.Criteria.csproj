@@ -90,7 +90,6 @@
     <Compile Include="Account\TransactionHistory\GetTransactionHistoryCriteria.cs" />
     <Compile Include="Api\FlaggedAccountDeleteCriteria.cs" />
     <Compile Include="Api\MultiCustomerEvidencesInsertCriteria.cs" />
-    <Compile Include="Api\FlaggedAccountSelectCriteria.cs" />
     <Compile Include="Api\FlaggedAccountInsertCriteria.cs" />
     <Compile Include="AssociatedAccountMonitor\AssociatedAccountMonitorGetCriteria.cs" />
     <Compile Include="AssociatedAccountMonitor\InsertAssociatedAccountCriteria.cs" />

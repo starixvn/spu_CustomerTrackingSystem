@@ -2,7 +2,6 @@
 <Functions>
   <Function Name="Evidence">
     <Setting Key="CTS_DC_CustEvidence_InsertSingle" SpName="CTS_DC_CustEvidence_InsertSingle_xtest" DbName="MySQL.CTS_DataCenter" />
-    <Setting Key="CTS_DC_CustEvidence_GetFlaggedCustomers" SpName="CTS_DC_CustEvidence_GetFlaggedCustomers_xtest" DbName="MySQL.CTS_DataCenter" />
     <Setting Key="CTS_DC_CustEvidence_InsertMultilpleEvidencesForCustomers" SpName="CTS_DC_CustEvidence_InsertMultilpleEvidencesForCustomers_xtest" DbName="MySQL.CTS_DataCenter" />
   </Function>
 

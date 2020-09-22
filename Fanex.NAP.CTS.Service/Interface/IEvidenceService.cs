@@ -22,7 +22,5 @@
         DBResult RetractEvidenceByAccount(InformationEvidenceByAccountRetractEvidence evidenceRetract);
         
         void AddCustomersEvidences(CustomerEvidenceList customerEvidenceList);
-
-        IEnumerable<CustomerEvidence> GetFlaggedCustomersByLevel(string custIdList);
     }
 }
