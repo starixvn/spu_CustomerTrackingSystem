@@ -102,21 +102,20 @@
         }
     }
 
-    #probation-managament_wrapper {
+    .dataTables_wrapper {
         padding: 0;
 
         .dataTable {
-            .odd, .even {
-                .red {
-                    background: #FFC7CE;
-                }
+            .red {
+                background: #FFC7CE;
+            }
 
-                .green {
-                    background: #E2FFE8;
-                }
+            .green {
+                background: #E2FFE8;
             }
         }
     }
+
 
     .dataTables_info {
         left: 13.5rem;

@@ -5,10 +5,9 @@
     using Fanex.Logging;
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.Helpers.Xml;
-    using Fanex.NAP.CTS.Criteria.ProbationManagement;
-    using Fanex.NAP.CTS.Criteria.SpecialCustomerClass;
+    using Fanex.NAP.CTS.Criteria.ProbationManagement;    
     using Fanex.NAP.CTS.Model.ProbationManagement;
-    using Fanex.NAP.CTS.Model.SpecialCustomerClass;
+    using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Service.Interface;
     using System;
     using System.Collections.Generic;
@@ -105,43 +104,6 @@
                 result.DBResult = new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
                 return result;
             }
-        }
-
-        public DBResult SyncCustomerClassToMainDb(IEnumerable<CustomerClassForMainDb> customerClassList)
-        {
-            var criteria = new SyncCustomerClassToMainDbCriteria()
-            {
-                custList = customerClassList.ToXmlString()
-            };
-
-            try
-            {
-                var repository = new DynamicRepository();
-
-                repository.Execute(criteria);
-
-                if (criteria.ErrorCode != 0)
-                {
-                    var errorMessage = "CTS - Probation Management - SyncCustomerClassToMainDb fail:";
-                    errorMessage += " errorCode = " + criteria.ErrorCode;
-                    errorMessage += "; customerClassList = " + criteria.custList;
-
-                    LogService.Error(errorMessage);
-
-                    return new DBResult { ErrorCode = criteria.ErrorCode, ErrorMsg = criteria.ErrorMessage };
-                }
-            }
-            catch (Exception ex)
-            {
-                var errorMessage = "CTS - Probation Management - SyncCustomerClassToMainDb exception: ";
-                errorMessage += " customerClassList = " + criteria.custList;
-
-                LogService.Error(errorMessage, ex);
-
-                return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
-            }
-
-            return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
-        }
+        }        
     }
 }

@@ -98,7 +98,7 @@
                 { targets: [6], width: "9%" },
                 { targets: [7], width: "9%" },
                 { targets: [8], width: "9%" },
-                { targets: [9], width: "4%" }
+                { targets: [9], width: "4%", orderable: false }
 
             ],
             columns: [
@@ -115,7 +115,7 @@
                 { data: obj => obj.DaysLeft },
                 {
                     data: obj => () => {
-                        let html = '<span class="sub-icon delete" id="sub-icon " title="Change Category"><i class="icon-edit"></i></span>';
+                        let html = '<span class="sub-icon delete" id="sub-icon " title="Change Category"><i class="icon-edit ' + (!isHostPermission ? 'disabled' : '') + '"></i></span>';
                         return html;
                     }, createdCell: (cell, _, obj) => {
                         if (isHostPermission) {
@@ -125,7 +125,16 @@
                         }
                     }
                 }
-            ]
+            ],
+            createdRow: function (row, obj, _) {
+                let cssClassTR = '';
+                if (obj.DaysLeft === 0) {
+                    cssClassTR = 'red';
+                } else if (obj.CurrentMargin < 0) {
+                    cssClassTR = 'green';
+                }
+                $(row).addClass(cssClassTR);
+            }
         });
     }  
 
@@ -165,7 +174,7 @@
                 infoEmpty: "",
                 zeroRecords: "There's no data"
             },
-            ordering: true,
+            ordering: true,            
             searching: false,
             lengthMenu: [20, 50, 100, 200],
             pageLength: 50,
@@ -185,8 +194,7 @@
                 { targets: [6], width: "9%" },
                 { targets: [7], width: "9%" },
                 { targets: [8], width: "9%" },
-                { targets: [9], width: "4%" }
-
+                { targets: [9], width: "4%", orderable: false }
             ],
             columns: [
                 {
@@ -202,7 +210,7 @@
                 { data: obj => obj.DaysLeft },
                 {
                     data: obj => () => {
-                        let html = '<span class="sub-icon delete" title="Change Category"><i class="icon-edit"></i></span>';
+                        let html = '<span class="sub-icon delete" title="Change Category"><i class="icon-edit ' + (!isHostPermission ? 'disabled' : '') + '"></i></span>';
                         return html;
                     }, createdCell: (cell, _, obj) => {
                         if (isHostPermission) {
@@ -215,7 +223,7 @@
             ],
             createdRow: function (row, obj, _) {
                 let cssClassTR = '';
-                if (obj.DaysLeft > 60) {
+                if (obj.DaysLeft === 0) {
                     cssClassTR = 'red';
                 } else if (obj.CurrentMargin < 0) {
                     cssClassTR = 'green';
@@ -305,7 +313,7 @@
                         if (response.ErrorCode === 0) {
                             common.showSuccess('Changed category successfully!');
 
-                            categoryMode
+                            categoryMode === 1
                                 ? LoadGridGeneral()
                                 : LoadGridDetailed();
                         } else {

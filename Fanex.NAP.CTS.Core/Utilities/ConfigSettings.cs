@@ -157,5 +157,18 @@
         }
 
         public static string GetAssociatedGroup => GetConfigStringByName("Graph_GetAssociatedGroup");
+
+        public static int GetAccummulatedChunkSize
+        {
+            get
+            {
+                var size = 500;
+                var configSize = GetConfigStringByName("Get-Accummulated-ChunkSize");
+
+                int.TryParse(configSize, out size);
+
+                return size == 0 ? 500 : size;
+            }
+        }
     }
 }

@@ -61,11 +61,11 @@
     margin-top: 1.6rem; }
     .probation-content .wrapper-info-table .wrapper-info {
       width: 100%; }
-  .probation-content #probation-managament_wrapper {
+  .probation-content .dataTables_wrapper {
     padding: 0; }
-    .probation-content #probation-managament_wrapper .dataTable .odd .red, .probation-content #probation-managament_wrapper .dataTable .even .red {
+    .probation-content .dataTables_wrapper .dataTable .red {
       background: #FFC7CE; }
-    .probation-content #probation-managament_wrapper .dataTable .odd .green, .probation-content #probation-managament_wrapper .dataTable .even .green {
+    .probation-content .dataTables_wrapper .dataTable .green {
       background: #E2FFE8; }
   .probation-content .dataTables_info {
     left: 13.5rem;

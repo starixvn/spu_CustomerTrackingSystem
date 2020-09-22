@@ -5,8 +5,11 @@
     using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Model.SpecialCustomerClass;
+    using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Resource.Consts;    
     using Fanex.NAP.CTS.Service;
+    using Fanex.NAP.CTS.Service.Implement;
+    using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.SpecialCustomerClass;
     using System;
     using System.Collections.Generic;
@@ -17,11 +20,15 @@
     public class SpecialCustomerClassController : BaseController
     {
         private readonly ISpecialCustomerClassService _customerClassService;
+        private readonly ISyncCustomerToMainDbService _syncToMainDbService;
 
         public override string BaseControllerName { get => Consts.MenuItemController; }
 
-        public SpecialCustomerClassController() 
-            => _customerClassService = new SpecialCustomerClassService();
+        public SpecialCustomerClassController()
+        {
+            _customerClassService = new SpecialCustomerClassService();
+            _syncToMainDbService = new SyncCustomerToMainDbService();
+        }            
 
         public ActionResult Index()
         {
@@ -78,8 +85,8 @@
                 if (resultInsertToCTS.CustomerClassList != null && resultInsertToCTS.CustomerClassList.Any())
                 {
                     var list = resultInsertToCTS.CustomerClassList.Where(c => c.CustID != 0);
-
-                    _customerClassService.SyncCustomerClassToMainDb(list, "Insert");
+                    
+                    _syncToMainDbService.SyncCustomerClassToMainDb(list, "Insert Special Customer Class");
                 }
             }
             else
@@ -110,7 +117,7 @@
                 }
             };
 
-            var resultSyncToMainDb = _customerClassService.SyncCustomerClassToMainDb(custToMainDbList, "Remove");
+            var resultSyncToMainDb = _syncToMainDbService.SyncCustomerClassToMainDb(custToMainDbList, "Remove Special Customer Class");
 
             if (resultSyncToMainDb.ErrorCode == 0)
             {

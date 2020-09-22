@@ -198,6 +198,7 @@
     <Compile Include="SuspiciousInfo\SuspiciousInfoGetCriteria.cs" />
     <Compile Include="SuspiciousInfo\SuspiciousInfoUpdateCriteria.cs" />
     <Compile Include="SuspiciousInfo\SuspicousCustomerCurrencyGetCriteria.cs" />
+    <Compile Include="SyncCustomerToMainDb\SyncCustomerClassToMainDbCriteria.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fanex.NAP.CTS.Core\Fanex.NAP.CTS.Core.csproj">
