@@ -27,7 +27,11 @@
     padding: .7rem .7rem .8rem .7rem;
     font-family: "Lato", Arial, Tahoma, sans-serif !important;
     font-style: normal;
-    font-weight: 500; }
+    font-weight: 500;
+    position: sticky;
+    position: -webkit-sticky;
+    top: 20.7rem;
+    z-index: 10; }
   .probation-content .tbl-general tbody tr td, .probation-content .tab-detailed tbody tr td {
     font-family: "Lato", Arial, Tahoma, sans-serif !important;
     font-style: normal;
@@ -58,7 +62,10 @@
     border: 1px solid #C4C4C4;
     padding: 0 1rem;
     background-color: #e3e9f6;
-    margin-top: 1.6rem; }
+    top: 16.7rem;
+    position: sticky;
+    position: -webkit-sticky;
+    z-index: 11; }
     .probation-content .wrapper-info-table .wrapper-info {
       width: 100%; }
   .probation-content .dataTables_wrapper {
@@ -89,14 +96,57 @@
   .probation-content .tabs-probation-detail {
     padding: 0;
     box-shadow: none !important; }
+    .probation-content .tabs-probation-detail .header-fixed {
+      background: #fff;
+      top: 6rem;
+      position: sticky;
+      position: -webkit-sticky;
+      z-index: 11; }
+      .probation-content .tabs-probation-detail .header-fixed ul.fixed-tabs {
+        border: 0;
+        padding: 0;
+        border-bottom: 1px solid #ddd;
+        background: #fff;
+        border-radius: 0;
+        top: 6rem;
+        position: sticky;
+        position: -webkit-sticky;
+        z-index: 11; }
+        .probation-content .tabs-probation-detail .header-fixed ul.fixed-tabs li {
+          background: #fff;
+          margin: 0;
+          border: 0;
+          border-top: 0 !important;
+          border-right: 0 !important;
+          border-left: 0 !important;
+          position: relative;
+          top: 1px; }
+          .probation-content .tabs-probation-detail .header-fixed ul.fixed-tabs li a {
+            padding: 1rem 1.8rem;
+            padding-bottom: .5rem;
+            font-size: 1.4rem;
+            line-height: 1.8rem;
+            color: #474747;
+            font-family: "Lato", Arial, Tahoma, sans-serif !important; }
+        .probation-content .tabs-probation-detail .header-fixed ul.fixed-tabs li.ui-state-active {
+          border-bottom: 2px solid #e15f00;
+          border-radius: 0;
+          background: #fff; }
+          .probation-content .tabs-probation-detail .header-fixed ul.fixed-tabs li.ui-state-active a {
+            font-weight: bold;
+            color: #e15f00 !important; }
     .probation-content .tabs-probation-detail .probation-table {
       display: flex;
       align-items: flex-end;
-      max-width: 102rem;
       margin-right: auto;
       flex-wrap: wrap;
-      margin-top: 1.2rem;
-      margin-bottom: 1.2rem; }
+      padding: 1rem 0;
+      top: 9.7rem;
+      background: #fff;
+      position: sticky;
+      position: -webkit-sticky;
+      z-index: 11;
+      width: 100%; }
       @media screen and (max-width: 1024px) {
         .probation-content .tabs-probation-detail .probation-table {
           justify-content: flex-start; } }
@@ -148,32 +198,3 @@
       background: #fff;
       box-sizing: border-box;
       border-top: 0; }
-    .probation-content .tabs-probation-detail ul.fixed-tabs {
-      border: 0;
-      padding: 0;
-      border-bottom: 1px solid #ddd;
-      background: #fff;
-      border-radius: 0; }
-      .probation-content .tabs-probation-detail ul.fixed-tabs li {
-        background: #fff;
-        margin: 0;
-        border: 0;
-        border-top: 0 !important;
-        border-right: 0 !important;
-        border-left: 0 !important;
-        position: relative;
-        top: 1px; }
-        .probation-content .tabs-probation-detail ul.fixed-tabs li a {
-          padding: 1rem 1.8rem;
-          padding-bottom: .5rem;
-          font-size: 1.4rem;
-          line-height: 1.8rem;
-          color: #474747;
-          font-family: "Lato", Arial, Tahoma, sans-serif !important; }
-      .probation-content .tabs-probation-detail ul.fixed-tabs li.ui-state-active {
-        border-bottom: 2px solid #e15f00;
-        border-radius: 0;
-        background: #fff; }
-        .probation-content .tabs-probation-detail ul.fixed-tabs li.ui-state-active a {
-          font-weight: bold;
-          color: #e15f00 !important; }

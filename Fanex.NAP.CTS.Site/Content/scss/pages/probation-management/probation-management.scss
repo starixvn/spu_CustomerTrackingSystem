@@ -39,11 +39,16 @@
     .tbl-general, .tab-detailed {
         thead {
             tr {
+
                 th {
                     padding: .7rem .7rem .8rem .7rem;
                     font-family: $font-family !important;
                     font-style: normal;
                     font-weight: 500;
+                    position: sticky;
+                    position: -webkit-sticky;
+                    top: 20.7rem;
+                    z-index: 10;
                 }
             }
         }
@@ -95,7 +100,10 @@
         border: 1px solid $table-border;
         padding: 0 1rem;
         background-color: #e3e9f6;
-        margin-top: 1.6rem;
+        top: 16.7rem;
+        position: sticky;
+        position: -webkit-sticky;
+        z-index: 11;
 
         .wrapper-info {
             width: 100%;
@@ -152,15 +160,69 @@
         padding: 0;
         box-shadow: none !important;
 
+        .header-fixed {
+            background: $page-bg;
+            top: 6rem;
+            position: sticky;
+            position: -webkit-sticky;
+            z-index: 11;
+
+            ul.fixed-tabs {
+                border: 0;
+                padding: 0;
+                border-bottom: 1px solid #ddd;
+                background: $page-bg;
+                border-radius: 0;
+                top: 6rem;
+                position: sticky;
+                position: -webkit-sticky;
+                z-index: 11;
+
+                li {
+                    background: $page-bg;
+                    margin: 0;
+                    border: 0;
+                    border-top: 0 !important;
+                    border-right: 0 !important;
+                    border-left: 0 !important;
+                    position: relative;
+                    top: 1px;
+
+                    a {
+                        padding: 1rem 1.8rem;
+                        padding-bottom: .5rem;
+                        font-size: 1.4rem;
+                        line-height: 1.8rem;
+                        color: #474747;
+                        font-family: $font-family !important;
+                    }
+                }
+
+                li.ui-state-active {
+                    border-bottom: 2px solid #e15f00;
+                    border-radius: 0;
+                    background: $page-bg;
+
+                    a {
+                        font-weight: bold;
+                        color: #e15f00 !important;
+                    }
+                }
+            }
+        }
+
         .probation-table {
             display: flex;
             align-items: flex-end;
-            max-width: 102rem;
             margin-right: auto;
             flex-wrap: wrap;
-            margin-top: 1.2rem;
-            margin-bottom: 1.2rem;
-
+            padding : 1rem 0;
+            top: 9.7rem;
+            background: $page-bg;
+            position: sticky;
+            position: -webkit-sticky;
+            z-index: 11;
+            width : 100%;
             @media screen and (max-width: 1024px) {
                 justify-content: flex-start;
             }
@@ -240,45 +302,6 @@
             background: $page-bg;
             box-sizing: border-box;
             border-top: 0;
-        }
-
-        ul.fixed-tabs {
-            border: 0;
-            padding: 0;
-            border-bottom: 1px solid #ddd;
-            background: $page-bg;
-            border-radius: 0;
-
-            li {
-                background: $page-bg;
-                margin: 0;
-                border: 0;
-                border-top: 0 !important;
-                border-right: 0 !important;
-                border-left: 0 !important;
-                position: relative;
-                top: 1px;
-
-                a {
-                    padding: 1rem 1.8rem;
-                    padding-bottom: .5rem;
-                    font-size: 1.4rem;
-                    line-height: 1.8rem;
-                    color: #474747;
-                    font-family: $font-family !important;
-                }
-            }
-
-            li.ui-state-active {
-                border-bottom: 2px solid #e15f00;
-                border-radius: 0;
-                background: $page-bg;
-
-                a {
-                    font-weight: bold;
-                    color: #e15f00 !important;
-                }
-            }
         }
     }
 }

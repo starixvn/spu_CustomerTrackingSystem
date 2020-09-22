@@ -104,6 +104,7 @@
                     viewModel = viewModel.Where(x => x.CurrentMargin <= maxMarginDecimal);
                 }
                 viewModel = viewModel.OrderByDescending(x => x.DaysLeft);
+           
             }
 
             return Json(new
