@@ -32,11 +32,11 @@
                         <div class="label">Current Margin (%):</div>
                         <div class="flex-form">
                             <div class="form-control mb-0 variable">
-                                <label>Min</label>
+                                <label>Min:</label>
                                 <input type="number" id="inputMinMarginGeneral" value="" class="number-min" step="0.01" />
                             </div>
                             <div class="form-control mb-0 variable">
-                                <label>Max</label>
+                                <label>Max:</label>
                                 <input type="number" id="inputMaxMarginGeneral" value="" class="number-max" step="0.01" />
                             </div>
                         </div>
@@ -71,7 +71,7 @@
             <div id="tabDetailed" class="tab-detailed">
                 <div class="probation-table">
                     <div class="form-control mb-0">
-                        <div class="label">Username</div>
+                        <div class="label">Username:</div>
                         <input type="text" id="inputUserNameDetailed" placeholder="" maxlength="50" />
                     </div>
                     <div class="form-control mb-0">
@@ -82,11 +82,11 @@
                         <div class="label">Current Margin (%):</div>
                         <div class="flex-form">
                             <div class="form-control mb-0 variable">
-                                <label>Min</label>
+                                <label>Min:</label>
                                 <input type="number" id="inputMinMarginDetailed" class="number-min" step="0.01" />
                             </div>
                             <div class="form-control mb-0 variable">
-                                <label>Max</label>
+                                <label>Max:</label>
                                 <input type="number" id="inputMaxMarginDetailed" class="number-max" step="0.01" />
                             </div>
                         </div>
@@ -145,7 +145,8 @@
 </div>
 
 <div hidden>
-    <input id="hdIsHostPermission" type="hidden" IsHostPermission="@Model.ToString()" />
+    <input id="hdIsHostPermission" type="hidden" IsHostPermission="@Model.IsHostPermission.ToString()" />
+    <input id="hdProbationFilterType" type="hidden" value="@Model.ProbationFilterType" />
 </div>
 
 @section scripts{

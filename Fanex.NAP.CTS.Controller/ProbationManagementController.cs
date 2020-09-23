@@ -32,7 +32,7 @@
             _syncToMainDbService = new SyncCustomerToMainDbService();
         }
 
-        public ActionResult Index()
+        public ActionResult Index(int filterType=0)
         {
             IUserService userService = new UserService();
 
@@ -44,7 +44,11 @@
             ViewBag.GeneralCategories = GetCategories(1);
             ViewBag.DetailedCategories = GetCategories(2);
 
-            return View(isHostPermission);
+            return View(new RenderProbationViewModel()
+            {
+                IsHostPermission = isHostPermission,
+                ProbationFilterType = filterType
+            });
         }
 
         [HttpPost]

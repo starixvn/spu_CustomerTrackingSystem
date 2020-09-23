@@ -31,7 +31,8 @@
   </Function>
 
   <Function Name="Notification">
-    <Setting Key="CTS_DC_Notification_GetAssociatedAccountNewAssociation" SpName="CTS_DC_Notification_GetAssociatedAccountNewAssociation" DbName="MySQL.CTS_DataCenter"/>
+    <Setting Key="CTS_DC_Notification_GetNewAssociation" SpName="CTS_DC_Notification_GetNewAssociation" DbName="MySQL.CTS_DataCenter"/>
+    <Setting Key="CTS_DC_Notification_GetProbation" SpName="CTS_DC_Notification_GetProbation" DbName="MySQL.CTS_DataCenter"/>
   </Function>
 
   <Function Name="Evidence">

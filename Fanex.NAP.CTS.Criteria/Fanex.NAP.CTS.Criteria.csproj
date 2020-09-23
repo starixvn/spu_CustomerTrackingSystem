@@ -100,6 +100,7 @@
     <Compile Include="CheckBetReport\CheckBetReportGetCriteria.cs" />
     <Compile Include="CheckBetReport\CheckBetReportUpdateNoteCriteria.cs" />
     <Compile Include="CTSUser\InsertCTSUserCriteria.cs" />
+    <Compile Include="Notification\ProbationMessagesGetCriteria.cs" />
     <Compile Include="ProbationManagement\GetAccummulatedInfoCriteria.cs" />
     <Compile Include="ProbationManagement\GetCategoryCriteria.cs" />
     <Compile Include="ProbationManagement\GetProbationCategoryCriteria.cs" />
@@ -167,7 +168,7 @@
     <Compile Include="Notification\RecipientAddCriteria.cs" />
     <Compile Include="Notification\RecipientGetCriteria.cs" />
     <Compile Include="Notification\RecipientRemoveCriteria.cs" />
-    <Compile Include="Notification\UserMessageGetCriteria.cs" />
+    <Compile Include="Notification\AssociatedMessagesGetCriteria.cs" />
     <Compile Include="Notification\UserMessageUnreadCounterGetCriteria.cs" />
     <Compile Include="ProblemAccountMonitor\DetailCustomerGroupsGetCriteria.cs" />
     <Compile Include="ProblemAccountMonitor\DetailMatchInfoGetCriteria.cs" />
@@ -207,7 +208,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+      <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Fanex.Data.Repository">

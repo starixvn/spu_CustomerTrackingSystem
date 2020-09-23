@@ -172,6 +172,7 @@
     <Compile Include="AssociatedAccountMonitor\AssociatedAccountMonitorModel.cs" />
     <Compile Include="AssociatedAccountMonitor\CustProfilerModel.cs" />
     <Compile Include="AssociatedAccountMonitor\ValidateAssociatedAccountModel.cs" />
+    <Compile Include="DTO\ProbationMessageModel.cs" />
     <Compile Include="ProbationManagement\AccumulatedInfoModel.cs" />
     <Compile Include="ProbationManagement\CategoryModel.cs" />
     <Compile Include="ProbationManagement\ChangeCategoryModel.cs" />
@@ -207,7 +208,7 @@
     <Compile Include="DTO\CustomerTotalAssociation.cs" />
     <Compile Include="DTO\FraudCase.cs" />
     <Compile Include="DTO\Match.cs" />
-    <Compile Include="DTO\Message.cs" />
+    <Compile Include="DTO\AssociatedMessageModel.cs" />
     <Compile Include="DTO\Role.cs" />
     <Compile Include="DTO\SuspiciousCustomer.cs" />
     <Compile Include="Enum.cs" />

@@ -5,6 +5,9 @@
 
     public interface INotificationService
     {
-        IEnumerable<Message> Get(int custId, int maxAssociationID);
+        IEnumerable<AssociatedMessageModel> GetAssociatedMessages(int custId, long maxAssociationID);
+
+        IEnumerable<ProbationMessageModel> GetProbationMessages(int custId, long maxNotificationID);
+
     }
 }

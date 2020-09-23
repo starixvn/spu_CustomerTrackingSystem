@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class Message
+    public class AssociatedMessageModel
     {
         public int CTSCustID { get; set; }
 

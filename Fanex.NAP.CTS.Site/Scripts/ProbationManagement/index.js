@@ -1,9 +1,11 @@
 ﻿function ProbationManagement() {
     let dataTableGeneral;
     let dataTableDetailed;
+    let isRejectFilter4Notification = false;
 
     let domElements = {
         hdIsHostPermission: $('#hdIsHostPermission'),
+        hdProbationFilterType: $('#hdProbationFilterType').val(),
         tabs: $("#tabs-probation-detail"),        
         inputUserNameGeneral: $('#inputUserNameGeneral'),
         inputDayLeftGeneral: $('#inputDayLeftGeneral'),
@@ -237,6 +239,13 @@
         let paramsFilter = {};
         let daysLeft = -1, minMargin = '', maxMargin = '', username = '';
 
+        if (!isRejectFilter4Notification)
+        {
+            FilterParamaters4Notification();
+            isRejectFilter4Notification = true;
+        };
+      
+
         if (categoryMode === 1) {
             daysLeft = domElements.inputDayLeftGeneral.val();
             minMargin = domElements.inputMinMarginGeneral.val();
@@ -257,6 +266,17 @@
 
         return paramsFilter;
     }    
+
+    function FilterParamaters4Notification()
+    {
+        if (domElements.hdProbationFilterType === "1") {
+            domElements.inputDayLeftGeneral.val(0);
+        }
+        else if (domElements.hdProbationFilterType === "2")
+        {
+            domElements.inputMaxMarginGeneral.val("0");
+        }
+    }
 
     function ShowFormChangeCategory(element, username, custId, sportGroupId, categoryMode) {
         let offset = $(element).offset();
@@ -345,6 +365,11 @@
                 domElements.formDetailedCategories.hide();
             }            
         });
+
+        if (domElements.hdProbationFilterType !== "0")
+        {
+            LoadGridGeneral();
+        }
     }
 
     $(document).ready(function () {
