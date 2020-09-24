@@ -182,7 +182,6 @@
     <Compile Include="ManageSubscriber\SubscriberInsertModel.cs" />
     <Compile Include="ManageSubscriber\SubscriberModel.cs" />
     <Compile Include="ManageSubscriber\ValidateSubscriberPrefixModel.cs" />
-    <Compile Include="SpecialCustomerClass\CustomerClassForMainDb.cs" />
     <Compile Include="SpecialCustomerClass\CustomerClassModel.cs" />
     <Compile Include="SpecialCustomerClass\ResultInsertCustomerClass.cs" />
     <Compile Include="DTO\CustomerCategory.cs" />
