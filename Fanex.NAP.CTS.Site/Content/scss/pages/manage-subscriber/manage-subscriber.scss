@@ -1,10 +1,14 @@
-﻿.manage-subscriber {
+﻿
+@import '../../abstracts/_variables.scss';
+
+
+.manage-subscriber {
     .fixed-header {
         padding-top: 1.6rem;
         position: sticky;
         position: -webkit-sticky;
         top: 6rem;
-        background: #fff;
+        background: $page-bg;
         z-index: 9;
     }
 
@@ -36,7 +40,7 @@
 }
 
 .wrapper-info-table .dataTables_info {
-    left: 12px;
+    left: 1.2rem;
 }
 
 .manage-subscriber-table {
@@ -47,19 +51,19 @@
         }
     }
 
-    tbody{
-        tr{
-            td{
-                .click-popup{
-                    cursor : pointer;
+    tbody {
+        tr {
+            td {
+                .click-popup {
+                    cursor: pointer;
                 }
             }
         }
     }
 
     .sub-icon {
-        width: 24px;
-        height: 24px;
+        width: 2.4rem;
+        height: 2.4rem;
         display: inline-block;
         position: relative;
         cursor: pointer;
@@ -89,7 +93,7 @@
     }
 
     .icon-delete:before {
-        color: #FF0000;
+        color: $msg-error-border;
     }
 }
 
@@ -98,22 +102,17 @@
     font-family: Lato;
     font-size: 1.6rem;
     line-height: 1.1875;
-    color: #545454;
+    color: $table-color;
 }
 
 .divAddSubscriber {
     width: 700px;
 
-    .label{
+    .label {
         color: #333;
     }
 
     .note {
-
-        .text-title {
-            color: #FF0000
-        }
-
         .text-detail {
             margin-top: .5rem;
             padding-left: .8rem;
@@ -131,7 +130,18 @@
 }
 #divAddSubscriber {
     padding: 0;
-    max-height : 60rem !important;
+    max-height: 60rem !important;
+
+    #btnSave {
+        background-color: darken($color: #396EF8, $amount: 5%);
+        transition: background-color .2s ease;
+
+        &:hover {
+            background-color: darken($color: #396EF8, $amount: 1%);
+            color: $page-bg;
+        }
+    }
+
     .note {
         padding: 1.6rem 1.2rem 0 1.2rem;
     }
@@ -141,15 +151,37 @@
     }
 
     .group-border {
-        padding: 1.6rem 4.5rem 1.6rem 1.2rem;
-        border-bottom: 1px solid #d6d6d6;
+        padding: 1.2rem 1.4rem 1.2rem 1.4rem;
+        border-bottom: 1px solid #E5E5E5;
+
+        &:first-child {
+            padding: 1.6rem 1.4rem 1.6rem 1.4rem;
+        }
 
         &:last-child {
             margin-bottom: 1.3rem;
         }
 
-        .sub-name {
-            width: 34rem;
+        .btn-add-site {
+            padding: .7rem 1.2rem;
+            border: 1px solid #396EF8;
+            color: #396EF8;
+            border-radius: 2px;
+            background: $page-bg;
+            cursor: pointer;
+            transition: background-color .2s ease;
+            font-family: $font-family;
+
+            &:hover {
+                background-color: darken($color: #396EF8, $amount: 1%);
+                color: $page-bg;
+            }
+        }
+
+        .border-form-toggle {
+            border-bottom: 1px solid #E5E5E5;
+            padding-bottom: 1.2rem;
+            margin-bottom: 1.2rem;
         }
 
         .group-toggle-btn {
@@ -157,7 +189,7 @@
         }
 
         .mbform {
-            margin-top: 1.4rem;
+            margin-top: 1.2rem;
             margin-bottom: 0 !important;
 
             &:first-child {
@@ -176,42 +208,68 @@
 
             .ischeckInput {
                 display: flex;
-                align-items: center;
+                align-items: flex-end;
                 position: relative;
 
-                .label {
-                    width: 20rem;
-                    margin-bottom: 0 !important;
+                .container-checkbox {
+                    margin-bottom: 1rem;
+                    margin-left: 1rem;
                 }
 
                 .deleted-input {
-                    position: absolute;
-                    top: .7rem;
-                    right: .7rem;
                     cursor: pointer;
-                    color: #FF0000;
+                    color: #9E9E9E;
+                    height: 3rem;
+                    width: 3rem;
+                    margin-left: .6rem;
+                    background: $page-bg;
+                    border: 1px solid #E5E5E5;
+                    border-radius: 2px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
                 }
 
-                .toggle-add-sub {
-                    outline: none;
-                    background: none;
-                    font-size: 2.2rem;
-                    position: absolute;
-                    right: -3.5rem;
-                    border: 0;
-                    cursor: pointer;
-                    display : flex;
-                    align-items : center;
-                }
+                .group-input {
+                    width: 100%;
 
-                .icon-open {
-                    transform: rotate(90deg);
-                }
+                    .label {
+                        margin-bottom: .6rem !important;
+                        display: flex;
+                        align-items: center;
+                    }
 
-                .sub-name {
-                    margin-right: 1.5rem;
+                    input {
+                        border: 1px solid #E5E5E5;
+                    }
+
+                    .toggle-add-sub {
+                        font-size: 2rem;
+                        cursor: pointer;
+                    }
+
+                    .icon-open {
+                        transform: rotate(90deg);
+                    }
                 }
             }
+        }
+    }
+}
+
+.top-header {
+    .button-primary-outline {
+        padding: .7rem 1.2rem;
+        border: 1px solid #396EF8;
+        color: #396EF8;
+        border-radius: 2px;
+        background: transparent;
+        cursor: pointer;
+        transition: background-color .2s ease;
+
+        &:hover {
+            background-color: darken($color: #396EF8, $amount: 1%);
+            color: $page-bg;
         }
     }
 }
@@ -223,13 +281,13 @@
         thead {
             tr {
                 th {
-                    border: 1px solid #C4C4C4;
+                    border: 1px solid $table-border;
                     line-height: 19px;
                     font-size: 14px;
                     font-weight: 600;
                     vertical-align: middle;
-                    background-color: #1D2E4F;
-                    color: #fff;
+                    background-color: $table-header-bg;
+                    color: $page-bg;
                     text-align: center;
                     padding: 7px;
                 }
@@ -241,7 +299,7 @@
                 td {
                     font-size: 14px;
                     text-align: center;
-                    border: 1px solid #C4C4C4;
+                    border: 1px solid $table-border;
                     line-height: 17px;
                     padding: 7px;
                     vertical-align: middle;
@@ -250,4 +308,5 @@
         }
     }
 }
+
 

@@ -413,7 +413,7 @@
 
 
         domElements.statisticIcon.on('click', function () {
-            $(this).closest('.group-border').find('.group-toggle-btn').toggleClass("hide");
+            $(this).closest('.border-form-toggle').find('.group-toggle-btn').toggleClass("hide");
             $(this).toggleClass("icon-open");
         });
 

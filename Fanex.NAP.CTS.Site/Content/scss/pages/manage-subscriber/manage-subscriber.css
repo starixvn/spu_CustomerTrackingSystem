@@ -27,7 +27,7 @@
   display: none !important; }
 
 .wrapper-info-table .dataTables_info {
-  left: 12px; }
+  left: 1.2rem; }
 
 .manage-subscriber-table .odd .deleted, .manage-subscriber-table .even .deleted {
   background-color: #D9D9D9; }
@@ -36,8 +36,8 @@
   cursor: pointer; }
 
 .manage-subscriber-table .sub-icon {
-  width: 24px;
-  height: 24px;
+  width: 2.4rem;
+  height: 2.4rem;
   display: inline-block;
   position: relative;
   cursor: pointer; }
@@ -56,7 +56,7 @@
     cursor: not-allowed; }
 
 .manage-subscriber-table .icon-delete:before {
-  color: #FF0000; }
+  color: #ff0000; }
 
 .popup-content {
   text-align: center;
@@ -69,8 +69,6 @@
   width: 700px; }
   .divAddSubscriber .label {
     color: #333; }
-  .divAddSubscriber .note .text-title {
-    color: #FF0000; }
   .divAddSubscriber .note .text-detail {
     margin-top: .5rem;
     padding-left: .8rem; }
@@ -82,21 +80,43 @@
 #divAddSubscriber {
   padding: 0;
   max-height: 60rem !important; }
+  #divAddSubscriber #btnSave {
+    background-color: #205cf7;
+    transition: background-color .2s ease; }
+    #divAddSubscriber #btnSave:hover {
+      background-color: #346af8;
+      color: #fff; }
   #divAddSubscriber .note {
     padding: 1.6rem 1.2rem 0 1.2rem; }
   #divAddSubscriber .modal-footer {
     padding: 0 1.2rem 1.6rem 1.2rem; }
   #divAddSubscriber .group-border {
-    padding: 1.6rem 4.5rem 1.6rem 1.2rem;
-    border-bottom: 1px solid #d6d6d6; }
+    padding: 1.2rem 1.4rem 1.2rem 1.4rem;
+    border-bottom: 1px solid #E5E5E5; }
+    #divAddSubscriber .group-border:first-child {
+      padding: 1.6rem 1.4rem 1.6rem 1.4rem; }
     #divAddSubscriber .group-border:last-child {
       margin-bottom: 1.3rem; }
-    #divAddSubscriber .group-border .sub-name {
-      width: 34rem; }
+    #divAddSubscriber .group-border .btn-add-site {
+      padding: .7rem 1.2rem;
+      border: 1px solid #396EF8;
+      color: #396EF8;
+      border-radius: 2px;
+      background: #fff;
+      cursor: pointer;
+      transition: background-color .2s ease;
+      font-family: "Lato", Arial, Tahoma, sans-serif; }
+      #divAddSubscriber .group-border .btn-add-site:hover {
+        background-color: #346af8;
+        color: #fff; }
+    #divAddSubscriber .group-border .border-form-toggle {
+      border-bottom: 1px solid #E5E5E5;
+      padding-bottom: 1.2rem;
+      margin-bottom: 1.2rem; }
     #divAddSubscriber .group-border .group-toggle-btn {
       margin-top: 1.4rem; }
     #divAddSubscriber .group-border .mbform {
-      margin-top: 1.4rem;
+      margin-top: 1.2rem;
       margin-bottom: 0 !important; }
       #divAddSubscriber .group-border .mbform:first-child {
         margin-top: 0 !important; }
@@ -108,31 +128,48 @@
         display: none; }
       #divAddSubscriber .group-border .mbform .ischeckInput {
         display: flex;
-        align-items: center;
+        align-items: flex-end;
         position: relative; }
-        #divAddSubscriber .group-border .mbform .ischeckInput .label {
-          width: 20rem;
-          margin-bottom: 0 !important; }
+        #divAddSubscriber .group-border .mbform .ischeckInput .container-checkbox {
+          margin-bottom: 1rem;
+          margin-left: 1rem; }
         #divAddSubscriber .group-border .mbform .ischeckInput .deleted-input {
-          position: absolute;
-          top: .7rem;
-          right: .7rem;
           cursor: pointer;
-          color: #FF0000; }
-        #divAddSubscriber .group-border .mbform .ischeckInput .toggle-add-sub {
-          outline: none;
-          background: none;
-          font-size: 2.2rem;
-          position: absolute;
-          right: -3.5rem;
-          border: 0;
-          cursor: pointer;
+          color: #9E9E9E;
+          height: 3rem;
+          width: 3rem;
+          margin-left: .6rem;
+          background: #fff;
+          border: 1px solid #E5E5E5;
+          border-radius: 2px;
           display: flex;
-          align-items: center; }
-        #divAddSubscriber .group-border .mbform .ischeckInput .icon-open {
-          transform: rotate(90deg); }
-        #divAddSubscriber .group-border .mbform .ischeckInput .sub-name {
-          margin-right: 1.5rem; }
+          align-items: center;
+          justify-content: center; }
+        #divAddSubscriber .group-border .mbform .ischeckInput .group-input {
+          width: 100%; }
+          #divAddSubscriber .group-border .mbform .ischeckInput .group-input .label {
+            margin-bottom: .6rem !important;
+            display: flex;
+            align-items: center; }
+          #divAddSubscriber .group-border .mbform .ischeckInput .group-input input {
+            border: 1px solid #E5E5E5; }
+          #divAddSubscriber .group-border .mbform .ischeckInput .group-input .toggle-add-sub {
+            font-size: 2rem;
+            cursor: pointer; }
+          #divAddSubscriber .group-border .mbform .ischeckInput .group-input .icon-open {
+            transform: rotate(90deg); }
+
+.top-header .button-primary-outline {
+  padding: .7rem 1.2rem;
+  border: 1px solid #396EF8;
+  color: #396EF8;
+  border-radius: 2px;
+  background: transparent;
+  cursor: pointer;
+  transition: background-color .2s ease; }
+  .top-header .button-primary-outline:hover {
+    background-color: #346af8;
+    color: #fff; }
 
 .popup-child-table .child-table {
   width: 100%; }
