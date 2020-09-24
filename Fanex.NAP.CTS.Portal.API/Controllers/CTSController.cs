@@ -244,6 +244,33 @@
         }
 
         /// <summary>
+        /// Get VVIP Customers
+        /// </summary>
+        /// <returns>Customer classification in XML format</returns>
+        [HttpGet]
+        public string GetVVIPCustomer()
+        {
+            try
+            {
+                var custClassifications = _accountService.GetCustomerClassificationByCategory("3");
+                return custClassifications.Any()
+                    ? custClassifications.Select(c => new CustomerClassification()
+                    {
+                        CustID = c.CustID,
+                        ParentCategoryName = "",
+                        CategoryName = c.CategoryName
+                    }).ToXmlString()
+                    : string.Empty;
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("GetCustomerClassificationByCategoryIDs failed: " + ex.Message + ex.StackTrace);
+            }
+
+            return string.Empty;
+        }
+
+        /// <summary>
         /// Get class of customer
         /// </summary>
         /// <param name="custIdList"></param>
