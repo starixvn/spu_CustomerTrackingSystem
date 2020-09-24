@@ -396,7 +396,7 @@
             isAddSub = 1;
             domElements.divAddSubscriber.dialog({
                 modal: true,
-                width: '500px',
+                width: '430px',
                 title: 'ADD SUBSCRIBER',
                 resizable: true,
                 draggable: true,
