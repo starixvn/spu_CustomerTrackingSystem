@@ -225,7 +225,6 @@
         {
             try
             {
-                categoryIDList = "5";
                 var custClassifications = _accountService.GetCustomerClassificationByCategory(categoryIDList);
                 return custClassifications.Any() 
                     ? custClassifications.Select(c => new CustomerClassification()
