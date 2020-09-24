@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Model.DTO
+﻿namespace Fanex.NAP.CTS.Model.Notification
 {
     using System;
 

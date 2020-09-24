@@ -84,7 +84,7 @@ function notification() {
         if (notificationType == 1) 
             content = content + ' cannot pass Probation on {1}. </a>';
         else 
-            content = content + ((totalFail > 1) ? ', were' : ', was') + ' tagged Probation and negative margin on {1}. </a>';
+            content = content + ((totalFail > 1) ? 'who were' : 'who was') + ' tagged Probation and negative margin on {1}. </a>';
 
         if (isRead == 1)
             return "<li class='read'>" + content + "</li >";

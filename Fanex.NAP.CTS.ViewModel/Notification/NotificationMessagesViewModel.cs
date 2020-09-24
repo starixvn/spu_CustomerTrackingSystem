@@ -1,6 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.Notification
 { 
-    using Fanex.NAP.CTS.Model.DTO;
+    using Fanex.NAP.CTS.Model.Notification;
     using System.Collections.Generic;
 
     public class NotificationMessagesViewModel

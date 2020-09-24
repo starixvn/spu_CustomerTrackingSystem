@@ -1,7 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
     using Fanex.NAP.CTS.Core.BaseClasses;    
-    using Fanex.NAP.CTS.Model.DTO;
+    using Fanex.NAP.CTS.Model.Notification;
     using Criteria.Notification;
     using System.Collections.Generic;
     using Fanex.Data;
