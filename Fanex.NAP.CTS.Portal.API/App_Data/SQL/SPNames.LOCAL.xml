@@ -8,6 +8,7 @@
 
   <Function Name="CustomerClassification">
     <Setting Key="CTS_DC_CustClassification_Get4API" SpName="CTS_DC_CustClassification_Get4API" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_CustClassification_GetAllByCategory" SpName="CTS_DC_CustClassification_GetAllByCategory" DbName="MySQL.CTS_DataCenter" />
   </Function>
 
   <Function Name="CustomerClass">

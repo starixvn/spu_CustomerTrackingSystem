@@ -216,6 +216,35 @@
         }
 
         /// <summary>
+        /// Get classification of customer by Category's IDs
+        /// </summary>
+        /// <param name="categoryIDList"></param>
+        /// <returns>Customer classification in XML format</returns>
+        [HttpGet]
+        public string GetCustomerClassificationByCategoryIDs(string categoryIDList)
+        {
+            try
+            {
+                categoryIDList = "5";
+                var custClassifications = _accountService.GetCustomerClassificationByCategory(categoryIDList);
+                return custClassifications.Any() 
+                    ? custClassifications.Select(c => new CustomerClassification()
+                                                        {
+                                                            CustID = c.CustID,
+                                                            ParentCategoryName = "",
+                                                            CategoryName = c.CategoryName
+                                                        }).ToXmlString()
+                    : string.Empty;
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("GetCustomerClassificationByCategoryIDs failed: " + ex.Message + ex.StackTrace);
+            }
+
+            return string.Empty;
+        }
+
+        /// <summary>
         /// Get class of customer
         /// </summary>
         /// <param name="custIdList"></param>

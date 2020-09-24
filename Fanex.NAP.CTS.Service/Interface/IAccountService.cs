@@ -106,5 +106,7 @@
         IEnumerable<Model.API.CustomerClassModel> GetCustomerClassByCustId(string custIdList);
 
         IEnumerable<CustomerClassificationModel> GetCustomerClassificationForAPI(string custIdList, int parentCateId);
+
+        IEnumerable<CustomerClassificationGeneralInfoModel> GetCustomerClassificationByCategory(string categoryIdList);
     }
 }

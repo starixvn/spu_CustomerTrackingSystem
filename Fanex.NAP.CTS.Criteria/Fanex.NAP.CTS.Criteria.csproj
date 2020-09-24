@@ -65,6 +65,7 @@
     <Compile Include="Account\ChainToEvidence\RetractAffectedEvidenceCriteria.cs" />
     <Compile Include="Account\CustomerCategory\AddCTSCustomerClassificationCriteria.cs" />
     <Compile Include="Account\CustomerCategory\GetAllSportGroupCriteria.cs" />
+    <Compile Include="Account\CustomerCategory\GetCustomerCategoryByCategoryIdsCriteria.cs" />
     <Compile Include="Account\CustomerCategory\GetCTSCustomerClassificationForAPICriteria.cs" />
     <Compile Include="Account\CustomerCategory\GetCTSCustomerClassificationCriteria.cs" />
     <Compile Include="Account\CustomerCategory\GetCustomerCategoryByCTSCustId.cs" />

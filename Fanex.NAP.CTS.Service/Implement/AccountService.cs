@@ -921,6 +921,20 @@
                 ErrorMsg = criteria.ErrorMessage
             };
         }
+
+        public
+        IEnumerable<CustomerClassificationGeneralInfoModel> GetCustomerClassificationByCategory(string categoryIdList)
+        {
+            var criteria = new GetCustomerCategoryByCategoryIdsCriteria
+            {
+                CategoryIDList = categoryIdList
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<CustomerClassificationGeneralInfoModel>(criteria);
+            }
+        }
         #endregion
 
         #region Betting Statistic
