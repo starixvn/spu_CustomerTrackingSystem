@@ -31,7 +31,8 @@
   </Function>
 
   <Function Name="Notification">
-    <Setting Key="CTS_DC_Notification_GetAssociatedAccountNewAssociation" SpName="CTS_DC_Notification_GetAssociatedAccountNewAssociation" DbName="MySQL.CTS_DataCenter"/>
+    <Setting Key="CTS_DC_Notification_GetNewAssociation" SpName="CTS_DC_Notification_GetNewAssociation" DbName="MySQL.CTS_DataCenter"/>
+    <Setting Key="CTS_DC_Notification_GetProbation" SpName="CTS_DC_Notification_GetProbation" DbName="MySQL.CTS_DataCenter"/>
   </Function>
 
   <Function Name="Evidence">
@@ -83,5 +84,11 @@
     <Setting Key="CTS_DC_SpecialCustClass_GetAll" SpName="CTS_DC_SpecialCustClass_GetAll" DbName="MySQL.CTS_DataCenter"/>
     <Setting Key="CTS_DC_SpecialCustClass_Insert" SpName="CTS_DC_SpecialCustClass_Insert" DbName="MySQL.CTS_DataCenter"/>
     <Setting Key="CTS_DC_SpecialCustClass_Remove" SpName="CTS_DC_SpecialCustClass_Remove" DbName="MySQL.CTS_DataCenter"/>
+  </Function>
+
+  <Function name="ProbationManagement">
+    <Setting Key="CTS_DC_CustClassification_Probation_Get" SpName="CTS_DC_CustClassification_Probation_Get" DbName="MySQL.CTS_DataCenter"/>
+    <Setting Key="CTS_DC_CustClassification_Probation_GetCategory" SpName="CTS_DC_CustClassification_Probation_GetCategory" DbName="MySQL.CTS_DataCenter"/>
+    <Setting Key="CTS_DC_CustClassification_Probation_Update" SpName="CTS_DC_CustClassification_Probation_Update" DbName="MySQL.CTS_DataCenter"/>
   </Function>
 </Functions>

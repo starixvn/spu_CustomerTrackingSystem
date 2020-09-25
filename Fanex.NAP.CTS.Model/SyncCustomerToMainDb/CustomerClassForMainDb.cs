@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Model.SpecialCustomerClass
+﻿namespace Fanex.NAP.CTS.Model.SyncCustomerToMainDb
 {
     using Fanex.NAP.CTS.Core.Helpers.Xml;
 

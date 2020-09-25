@@ -487,6 +487,13 @@
     <Content Include="Content\scss\pages\associated-account-monitor\associated-account-monitor.scss" />
     <Content Include="Content\scss\pages\common\maintenance.scss" />
     <Content Include="Content\scss\components\_toggle-switch.scss" />
+    <Content Include="Content\scss\pages\probation-management\probation-management.css">
+      <DependentUpon>probation-management.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\scss\pages\probation-management\probation-management.min.css">
+      <DependentUpon>probation-management.css</DependentUpon>
+    </Content>
+    <Content Include="Content\scss\pages\probation-management\probation-management.scss" />
     <None Include="Content\scss\pages\problem-account-monitor\problem-account-monitor.scss" />
     <None Include="Content\scss\pages\import-evidences\import-evidences.scss" />
     <Content Include="Content\scss\pages\import-evidences\import-evidences.css">
@@ -919,6 +926,7 @@
     <Content Include="Scripts\popoto\d3.v3.min.js" />
     <Content Include="Scripts\popoto\popoto.min.js" />
     <Content Include="Scripts\popoto\vis\vis-network.min.js" />
+    <Content Include="Scripts\ProbationManagement\index.js" />
     <Content Include="Scripts\ProblemAccountMonitor\detail.js" />
     <Content Include="Scripts\ProblemAccountMonitor\index.js" />
     <Content Include="Scripts\search.js" />
@@ -941,6 +949,7 @@
     <Content Include="Views\Account\BettingStatistic\TurnoverWinLost.cshtml" />
     <Content Include="Views\Account\BettingStatistic\Summary.cshtml" />
     <Content Include="Views\SpecialCustomerClass\Index.cshtml" />
+    <Content Include="Views\ProbationManagement\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CoreBetList.css" />

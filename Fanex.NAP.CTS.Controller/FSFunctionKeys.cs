@@ -86,4 +86,6 @@ public static class FSFunctionKeys
     public const string OverwriteEvidences = "OverwriteEvidences";
 
     public const string SpecialCustomerClass = "SpecialCustomerClass";
+
+    public const string ProbationManagement = "ProbationManagement";
 }

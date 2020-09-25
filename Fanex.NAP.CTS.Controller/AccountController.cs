@@ -12,12 +12,13 @@
     using Fanex.NAP.CTS.Model.Account;    
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.GraphDB;
-    using Fanex.NAP.CTS.Model.SpecialCustomerClass;
+    using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Model.Transaction;
     using Fanex.NAP.CTS.Resource;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.Service.Implement;
+    using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.Account;
     using Fanex.NAP.CTS.ViewModel.Account.Associated;
     using Fanex.NAP.CTS.ViewModel.Account.BettingStatistic;
@@ -36,12 +37,10 @@
     {
         private readonly IAccountService _accountService;
         private readonly IGraphService _graphService;
-
         private readonly ITransactionService _transService;
-
         private readonly ISubscriberAssignmentService _subscriberAssignmentService;
-
         private readonly ICustomerEvidenceService _customerEvidenceService;
+        private readonly ISyncCustomerToMainDbService _syncToMainDbService;
 
         public override string BaseControllerName { get => string.Empty; }
 
@@ -52,6 +51,7 @@
             _subscriberAssignmentService = new SubscriberAssignmentService();
             _transService = new TransactionService();
             _customerEvidenceService = new CustomerEvidenceService();
+            _syncToMainDbService = new SyncCustomerToMainDbService();
         }
 
         public ActionResult Index(long Id)
@@ -1064,16 +1064,13 @@
 
                     if (custIdInt != 0)
                     {
-                        var custToMainDbList = new List<CustomerClassForMainDb>
-                    {
-                        new CustomerClassForMainDb
-                        {
+                        var custToMainDbList = new List<CustomerClassForMainDb>();
+                        custToMainDbList.Add(new CustomerClassForMainDb {
                             CustID = custIdInt,
                             CustomerClass = 100
-                        }
-                    };
-
-                        _accountService.SyncCustomerClassToMainDb(custToMainDbList, "Insert");
+                        });               
+                        
+                        _syncToMainDbService.SyncCustomerClassToMainDb(custToMainDbList, "Insert Customer Classification");
                     }
                 }
             }
@@ -1133,8 +1130,8 @@
                 if (resultToCTS.CustomerClassList != null && resultToCTS.CustomerClassList.Any())
                 {
                     var customerClassListToMainDb = resultToCTS.CustomerClassList.Where(c => c.CustID != 0);
-
-                    _accountService.SyncCustomerClassToMainDb(customerClassListToMainDb, "Remove");
+                    
+                    _syncToMainDbService.SyncCustomerClassToMainDb(customerClassListToMainDb, "Remove Customer Classification");
                 }
             }
             else

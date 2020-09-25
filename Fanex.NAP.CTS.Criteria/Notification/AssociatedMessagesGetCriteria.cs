@@ -3,15 +3,15 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
 
-    public class UserMessageGetCriteria : CriteriaBase
+    public class AssociatedMessagesGetCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_UserID")]
         public int UserID { get; set; }
 
         [SpParam(SqlParamName = "ip_MaxNewAssID")]
-        public int MaxNewAssID { get; set; }
+        public long MaxNewAssID { get; set; }
 
-        public UserMessageGetCriteria(int userId, int aMaxNewAssID)
+        public AssociatedMessagesGetCriteria(int userId, long aMaxNewAssID)
         {
             UserID = userId;
             MaxNewAssID = aMaxNewAssID;
@@ -19,7 +19,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_Notification_GetAssociatedAccountNewAssociation";
+            return "CTS_DC_Notification_GetNewAssociation";
         }
 
         public override bool IsValid()

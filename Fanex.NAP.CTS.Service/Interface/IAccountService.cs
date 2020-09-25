@@ -1,13 +1,11 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
     using Fanex.NAP.CTS.Core;
-    using Fanex.NAP.CTS.Model.Account;    
-    using Fanex.NAP.CTS.Model.API;
+    using Fanex.NAP.CTS.Model.Account;       
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
-    using Fanex.NAP.CTS.Model.Home;
-    using Fanex.NAP.CTS.Model.SpecialCustomerClass;
+    using Fanex.NAP.CTS.Model.Home;    
     using System;
     using System.Collections.Generic;
 
@@ -91,9 +89,7 @@
         
         DBResult UpdateCustomerClassification(long custId, long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark, int createdBy);
 
-        ResultInsertRemoveCustomerClassificationModel RemoveCustomerClassification(long custId, long ctsCustId, int categoryId, int createdBy);
-
-        DBResult SyncCustomerClassToMainDb(IEnumerable<CustomerClassForMainDb> customerClassList, string syncAction);
+        ResultInsertRemoveCustomerClassificationModel RemoveCustomerClassification(long custId, long ctsCustId, int categoryId, int createdBy);        
 
         DBResult PinCategoryCustomerClassification(int custId, long ctsCustId, int subscriberId, bool isPinCategory, int createdBy);
 

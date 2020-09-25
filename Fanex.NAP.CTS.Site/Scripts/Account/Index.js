@@ -287,7 +287,7 @@
     }
 
     function DisplayStatistic() {
-        if (isBettingStatisticPermission == "False" || isBettingStatisticPermission === undefined) {
+        if (isBettingStatisticPermission === "False" || isBettingStatisticPermission === undefined) {
             return;
         }
 
@@ -299,10 +299,10 @@
             isPreviousStatisticOpen = true;
         }
         else {
-            isPreviousStatisticOpen = (userBehavior == 'isStatisticOpen=true') ? true : false;
+            isPreviousStatisticOpen = (userBehavior === 'isStatisticOpen=true') ? true : false;
         }
      
-        if (isPreviousStatisticOpen == true) {
+        if (isPreviousStatisticOpen === true) {
             domElements.statisticDetail.removeClass("hide");
             domElements.statisticIcon.addClass("icon-open");
 
