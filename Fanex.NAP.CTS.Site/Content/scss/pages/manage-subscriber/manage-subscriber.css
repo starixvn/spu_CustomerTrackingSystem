@@ -206,6 +206,8 @@
   cursor: not-allowed;
   background-color: #dde2e6;
   color: #fff; }
+  .top-header .disabled:hover {
+    background-color: #dde2e6; }
 
 .popup-child-table {
   max-height: 65rem !important; }
