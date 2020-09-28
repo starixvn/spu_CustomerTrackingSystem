@@ -336,10 +336,10 @@
                 title: 'EDIT SUBSCRIBER',
                 resizable: true,
                 draggable: true,
-                close: function () {
-                    $(this).dialog('close');
-                    detailedSiteCounter = 1;
+                close: function () {            
                     RefreshInputData();
+                    detailedSiteCounter = 1;
+                    $(this).dialog('close');
                 }
             });
         }
@@ -458,35 +458,31 @@
     function EditSubscriber() {
         let subscriberInsertModel = GetInputUser();        
 
-        //common.showConfirmation("<div class='popup-content'><div class='popup-title'>Are you sure update these changes?</div>" + backupEditInfo.Message + "</div > ", function () {
-            $.ajax(common.modifyRelativeUrl('ManageSubscriber/UpdateSubscriber'), {
-                type: 'POST',
-                data: subscriberInsertModel,
-                beforeSend: function () {
-                    domElements.divAddSubscriber.addClass("loading-block");
-                },
-                success: function (response) {
-                    if (response.ErrorCode === 0) {
-                        common.showSuccess("Edit subscriber successful");
-                        RefreshInputData();
-                        domElements.divAddSubscriber.dialog('close');
-                        setTimeout(() => {
-                            LoadGrid();
-                        }, 1000);
-                    } else {
-                        common.showError("Edit subscriber fail! - " + response.ErrorMsg);
-                    }
-                },
-                complete: function () {
-                    domElements.divAddSubscriber.removeClass("loading-block");
-                },
-                error: function (errMsg) {
-                    console.log(errMsg);
+        $.ajax(common.modifyRelativeUrl('ManageSubscriber/UpdateSubscriber'), {
+            type: 'POST',
+            data: subscriberInsertModel,
+            beforeSend: function () {
+                domElements.divAddSubscriber.addClass("loading-block");
+            },
+            success: function (response) {
+                if (response.ErrorCode === 0) {
+                    common.showSuccess("Edit subscriber successful");
+                    RefreshInputData();
+                    domElements.divAddSubscriber.dialog('close');
+                    setTimeout(() => {
+                        LoadGrid();
+                    }, 1000);
+                } else {
+                    common.showError("Edit subscriber fail! - " + response.ErrorMsg);
                 }
-            });
-        //}, () => {
-        //    return;
-        //});
+            },
+            complete: function () {
+                domElements.divAddSubscriber.removeClass("loading-block");
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+            }
+        });
     }
 
     function GetInputUser() {
@@ -512,30 +508,8 @@
             SiteListJson: JSON.stringify(rawSiteList)                     
         };
 
-        //CompareEditDifferenceVersion(subscriberInsertModel);
-
         return subscriberInsertModel;
     }
-
-    //function CompareEditDifferenceVersion(subscriberInsertModel)
-    //{
-    //    if (subscriberInsertModel.SubscriberID != backupEditInfo.SubscriberID) backupEditInfo.Message = "SubscriberID: " + subscriberInsertModel.SubscriberID + "->" + backupEditInfo.SubscriberID +"\n";
-    //    if (subscriberInsertModel.SubscriberName !== backupEditInfo.SubscriberName) backupEditInfo.Message += "SubscriberName:" + subscriberInsertModel.SubscriberName + "->" + backupEditInfo.SubscriberName + "\n";
-    //    if ($('#overwriteCheckbox').prop('checked') !== backupEditInfo.IsTest) backupEditInfo.Message += "IsTest: " + subscriberInsertModel.IsTest + "->" + backupEditInfo.IsTest ? "1" : "0" ;
-    //    if (subscriberInsertModel.SubscriberType !== backupEditInfo.SubscriberType) backupEditInfo.Message += "SubscriberType: " + subscriberInsertModel.SubscriberType + "->" + backupEditInfo.SubscriberType + "\n";
-    //    if (subscriberInsertModel.IBCUserNamePrefix !== backupEditInfo.IBCUserNamePrefix) backupEditInfo.Message += "IBCUserNamePrefix: " + subscriberInsertModel.IBCUserNamePrefix + "->" + backupEditInfo.IBCUserNamePrefix + "\n";
-
-    //    //for (let i = 0; i <= backupEditInfo.SiteListJson.Count(); i++) {
-    //    //    let obj = {
-    //    //        SiteID: $('#txtSiteID' + i).val().trim(),
-    //    //        SiteName: $('#txtSite' + i).val().trim(),
-    //    //        RoleMapping: $('#txtRoleMapping' + i).val()
-    //    //    };
-    //    //    for (let j = 0; j <= detailedSiteCounter; i++) {
-    //    //        if (backupEditInfo.SiteListJson.SiteID !== $('#txtSiteID' + i+1).val().trim()) backupEditInfo.Message = "SubscriberID: " + subscriberInsertModel.SubscriberID + "->" + backupEditInfo.SubscriberID + "\n";
-    //    //    }
-    //    //}
-    //}
 
     function IsInputValidation() {
         let invalidElement = 0;
