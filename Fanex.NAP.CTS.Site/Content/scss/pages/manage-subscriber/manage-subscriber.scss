@@ -8,9 +8,12 @@
     .ui-dialog {
         position: fixed !important;
         top: 50% !important;
-        right: -50% !important;
-        transform: translate(50%,-50%);
-        left: 0 !important;
+        right: 50% !important;
+        transform: translate(50%, -50%);
+        left: auto !important;
+        .ui-dialog-titlebar{
+            cursor : auto;
+        }
     }
 }
 .manage-subscriber {

@@ -1,9 +1,11 @@
 ﻿.manage-subscriber-page .ui-dialog {
   position: fixed !important;
   top: 50% !important;
-  right: -50% !important;
+  right: 50% !important;
   transform: translate(50%, -50%);
-  left: 0 !important; }
+  left: auto !important; }
+  .manage-subscriber-page .ui-dialog .ui-dialog-titlebar {
+    cursor: auto; }
 
 .manage-subscriber .fixed-header {
   padding-top: 1.6rem;
