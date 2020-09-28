@@ -53,19 +53,17 @@
     </table>
 </div>
 
-<div id="childTable" class="popup-child-table divAddSubscriber" style="display: none;">
-    <table class="child-table">
+<div id="divDetailedSiteTable" class="popup-child-table divAddSubscriber" style="display: none;">
+    <table class="child-table" id="detailedSiteTable">
         <thead>
             <tr role="row">
-                <th>IBCUserName_Prefix</th>
                 <th>Role Mapping</th>
                 <th>Site ID</th>
                 <th>Site</th>
-                <th>IsActive</th>
             </tr>
         </thead>
         <tbody>
-            <tr role="row">
+            @*<tr role="row">
                 <td>SanJi Choan</td>
                 <td>123</td>
                 <td>1</td>
@@ -99,7 +97,7 @@
                 <td>1</td>
                 <td>0</td>
                 <td>1</td>
-            </tr>
+            </tr>*@
         </tbody>
     </table>
 </div>
@@ -117,6 +115,7 @@
             <div class="ischeckInput">
                 <div class="group-input">
                     <div class="label">Subscriber Name</div>
+                    <input id="txtSubscriberId" type="text" hidden>
                     <input id="txtSubscriberName" type="text" class="input-field sub-name full-width" maxlength="50">
                 </div>
                 <label class="container-checkbox" id="containerCheckbox">
@@ -125,13 +124,13 @@
                     <span class="checkmark"></span>
                 </label>
             </div>
-            <p class="validate-form" id="siteValidation">Please fill out this field</p>
+            <p class="validate-form" id="subNameValidation" hidden>Please fill out this field</p>
         </div>
         <div class="form-control mbform">
             <div class="ischeckInput">
                 <div class="group-input">
                     <div class="label">Subscriber Type</div>
-                    <select class="control full-width" id="txtSubscriberGroup">
+                    <select class="control full-width" id="txtSubscriberType">
                         <option value="0" selected="">Credit Site</option>
                         <option value="1">Licensees</option>
                     </select>
@@ -145,38 +144,35 @@
                     <input id="txtIBCUserNamePrefix" type="text" class="input-field full-width" maxlength="50">
                  </div>
             </div>
-            <p class="validate-form" id="prefixValidation">Please fill out this field</p>
+            <p class="validate-form" id="prefixValidation" hidden>Please fill out this field</p>
         </div>
     </div>
-    <div class="group-border">
+    <div class="group-border" id="detailedSiteGroup">
         <div class="border-form-toggle">
             <div class="form-control mbform">
                 <div class="ischeckInput">
                     <div class="group-input">
-                        <div class="label"><span class="toggle-add-sub icon-open"><i class="icon icon-chevron-right"></i></span> Site</div>
-                        <input id="txtSite" type="text" class="input-field full-width" maxlength="50">
+                        <div class="label"><span class="toggle-add-sub icon-open" id="toggleAddSub"><i class="icon icon-chevron-right"></i></span> Site</div>
+                        <input id="txtSite1" type="text" class="input-field full-width" maxlength="50">
                     </div>
-                    <button class="deleted-input">
-                        <i class="icon-delete"></i>
-                    </button>
                 </div>
-                <p class="validate-form" id="siteValidation">Please fill out this field</p>
+                <p class="validate-form" id="siteValidation1" hidden>Please fill out this field</p>
             </div>
             <div id="statistic-detail" class="group-toggle-btn">
                 <div class="form-control mbform">
                     <div class="ischeckInput">
                         <div class="group-input">
                             <div class="label">Site ID</div>
-                            <input id="txtSiteID" type="number" class="input-field full-width" maxlength="50">
+                            <input id="txtSiteID1" type="number" class="input-field full-width" maxlength="50">
                         </div>
                     </div>
-                    <p class="validate-form" id="siteValidation">Please fill out this field</p>
+                    <p class="validate-form" id="siteIDValidation1" hidden>Please fill out this field</p>
                 </div>
                 <div class="form-control mbform">
                     <div class="ischeckInput">
                         <div class="group-input">
                             <div class="label">Role Mapping</div>
-                            <select class="control full-width" id="txtRoleMapping">
+                            <select class="control full-width" id="txtRoleMapping1">
                                 <option value="0" selected="">0</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
@@ -187,7 +183,7 @@
             </div>
         </div>
 
-        <div class="border-form-toggle">
+        @*<div class="border-form-toggle">
             <div class="form-control mbform">
                 <div class="ischeckInput">
                     <div class="group-input">
@@ -223,8 +219,9 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <button class=" btn btn-default btn-add-site">Add Site</button>
+        </div>*@
+
+        <button class=" btn btn-default btn-add-site" id="addSiteButton">Add Site</button>
     </div>
 
    

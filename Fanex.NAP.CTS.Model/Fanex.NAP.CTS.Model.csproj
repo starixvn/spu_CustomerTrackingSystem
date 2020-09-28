@@ -172,6 +172,7 @@
     <Compile Include="AssociatedAccountMonitor\AssociatedAccountMonitorModel.cs" />
     <Compile Include="AssociatedAccountMonitor\CustProfilerModel.cs" />
     <Compile Include="AssociatedAccountMonitor\ValidateAssociatedAccountModel.cs" />
+    <Compile Include="ManageSubscriber\DetailedSiteModel.cs" />
     <Compile Include="Notification\ProbationMessageModel.cs" />
     <Compile Include="ProbationManagement\AccumulatedInfoModel.cs" />
     <Compile Include="ProbationManagement\CategoryModel.cs" />
@@ -179,9 +180,8 @@
     <Compile Include="ProbationManagement\ProbationCategoryModel.cs" />
     <Compile Include="ProbationManagement\ProbationModel.cs" />
     <Compile Include="ProbationManagement\ResultChangeCategoryToCTS.cs" />
-    <Compile Include="ManageSubscriber\SubscriberInsertModel.cs" />
+    <Compile Include="ManageSubscriber\SubscriberUpdateModel.cs" />
     <Compile Include="ManageSubscriber\SubscriberModel.cs" />
-    <Compile Include="ManageSubscriber\ValidateSubscriberPrefixModel.cs" />
     <Compile Include="SpecialCustomerClass\CustomerClassModel.cs" />
     <Compile Include="SpecialCustomerClass\ResultInsertCustomerClass.cs" />
     <Compile Include="DTO\CustomerCategory.cs" />

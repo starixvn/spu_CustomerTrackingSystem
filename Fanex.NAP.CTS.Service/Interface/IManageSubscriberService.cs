@@ -8,12 +8,10 @@
     {
         List<SubscriberModel> GetSubscribers();
 
-        DBResult InsertSubscriber(SubscriberInsertModel subscriberInsertModel, long userId);
+        List<DetailedSiteModel> GetDetailedSite(long subscriberID);
 
-        List<ValidateSubscriberPrefixModel> VerifySubscriberToInsert(string prefixSubscriberName);
+        DBResult RemoveSubscriber(int subscriberID, long userId);
 
-        DBResult RemoveSubscriber(int subscriberID, int siteID);
-
-        DBResult UpdateSubscriber(SubscriberInsertModel subscriberInsertModel);
+        DBResult UpdateSubscriber(SubscriberUpdateModel subscriberInsertModel, long userId);
     }
 }

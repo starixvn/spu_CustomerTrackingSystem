@@ -23,59 +23,31 @@
             }
         }
 
-        public DBResult InsertSubscriber(SubscriberInsertModel subscriberInsertModel, long userId)
+        public List<DetailedSiteModel> GetDetailedSite(long subscriberID)
         {
-            var criteria = new SubscriberInsertCriteria
+            var criteria = new SubscriberGetDetailedSiteCriteria()
             {
-                SubscriberList = JsonConvert.SerializeObject(new List<SubscriberInsertModel>() { subscriberInsertModel }),
-                UserID = userId
+                ip_SubscriberID = subscriberID
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                try
-                {
-                    db.ExecuteNonQuery(criteria);
-
-                    return new DBResult
-                    {
-                        ErrorCode = 0,
-                        ErrorMsg = string.Empty
-                    };
-                }
-                catch (Exception ex)
-                {
-                    LogService.Error("CTS - Insert Manage Subscriber throws exception: " + ex.Message, ex);
-
-                    return new DBResult
-                    {
-                        ErrorCode = -1,
-                        ErrorMsg = ex.Message
-                    };
-                }
+                return db.Query<DetailedSiteModel>(criteria).ToList();
             }
         }
 
-        public List<ValidateSubscriberPrefixModel> VerifySubscriberToInsert(string prefixSubscriberName)
-        {
-            var criteria = new SubscriberPrefixVerifyCriteria()
-            {
-                SubscriberPrefix = prefixSubscriberName
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                var result = db.Query<ValidateSubscriberPrefixModel>(criteria);
-
-                return result.ToList();
-            }
-        }
-
-        public DBResult UpdateSubscriber(SubscriberInsertModel subscriberInsertModel)
+        public DBResult UpdateSubscriber(SubscriberUpdateModel subscriberInsertModel, long userId)
         {
             var criteria = new SubscriberUpdateCriteria
             {
-                SubscriberList = JsonConvert.SerializeObject(new List<SubscriberInsertModel>() { subscriberInsertModel })
+                SubscriberName = subscriberInsertModel.SubscriberName,
+                SubscriberID = subscriberInsertModel.SubscriberID,
+                SubscriberPrefix = subscriberInsertModel.IBCUserNamePrefix,
+                SubscriberType = subscriberInsertModel.SubscriberType,
+                IsTest = subscriberInsertModel.IsTest,
+                UserID=userId,
+                SiteList = subscriberInsertModel.SiteListJson
+
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -84,11 +56,21 @@
                 {
                     db.ExecuteNonQuery(criteria);
 
-                    return new DBResult
+                    if (!string.IsNullOrEmpty(criteria.ErrorMessage))
                     {
-                        ErrorCode = 0,
-                        ErrorMsg = string.Empty
-                    };
+                        return new DBResult
+                        {
+                            ErrorCode = -1,
+                            ErrorMsg = criteria.ErrorMessage
+                        };
+                    }
+                    else {
+                        return new DBResult
+                        {
+                            ErrorCode = 0,
+                            ErrorMsg = string.Empty
+                        };
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -103,12 +85,12 @@
             }
         }
 
-        public DBResult RemoveSubscriber(int subscriberID, int siteID)
+        public DBResult RemoveSubscriber(int subscriberID, long userId)
         {
             var criteria = new SubscriberRemoveCriteria
             {
                 SubscriberID = subscriberID,
-                SiteID = siteID
+                UserID = userId
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -117,11 +99,22 @@
                 {
                     db.ExecuteNonQuery(criteria);
 
-                    return new DBResult
+                    if (!string.IsNullOrEmpty(criteria.ErrorMessage))
                     {
-                        ErrorCode = 0,
-                        ErrorMsg = string.Empty
-                    };
+                        return new DBResult
+                        {
+                            ErrorCode = -1,
+                            ErrorMsg = criteria.ErrorMessage
+                        };
+                    }
+                    else
+                    {
+                        return new DBResult
+                        {
+                            ErrorCode = 0,
+                            ErrorMsg = string.Empty
+                        };
+                    }
                 }
                 catch (Exception ex)
                 {

@@ -3,13 +3,13 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
 
-    public class SubscriberPrefixVerifyCriteria : CriteriaBase
+    public class SubscriberGetDetailedSiteCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_SubscriberPrefix")]
-        public string SubscriberPrefix { get; set; }
+        [SpParam(SqlParamName = "ip_SubscriberID")]
+        public long ip_SubscriberID { get; set; }
 
         public override string GetSettingKey()
-            => "CTS_DC_Subscriber_ValidatePrefix";
+            => "CTS_DC_Subscriber_GetDetails";
 
         public override bool IsValid()
             => true;

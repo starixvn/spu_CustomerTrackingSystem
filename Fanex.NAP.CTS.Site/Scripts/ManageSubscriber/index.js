@@ -1,8 +1,9 @@
 ﻿function ManageSubscriber() {
-    var isPreviousStatisticOpen = false;
     let dataTable;
     let isAddSub = 1;
-    let subID = -1;
+    let detailedSiteCounter = 1;
+    let backupEditInfo = null;
+
     let domElements = {
         isHostPermission: $("#hdIsHostPermission").attr("IsHostPermission"),
         userId: $("#hdCTSCustId").val(),
@@ -10,163 +11,20 @@
         btnSave: $('#btnSave'),
         btnCancel: $('#btnCancel'),
         manageSubscriberTable: $('#manageSubscriberTable'),
+        detailedSiteTable: $('#detailedSiteTable'),
+        divDetailedSiteTable: $('#divDetailedSiteTable'),
+        detailedSiteGroup: $('#detailedSiteGroup'),
         btnIconDelete: $('.sub-icon.-delete'),
         divAddSubscriber: $('#divAddSubscriber'),
         siteValidation: $('#siteValidation'),
         siteIDValidation: $('#siteIDValidation'),
         prefixValidation: $('#prefixValidation'),
         subNameValidation: $('#subNameValidation'),
-        childTable: $('#childTable'),
-        statisticIcon: $('.toggle-add-sub'),
-
+        statisticIcon: $('#toggleAddSub'),
+        addSiteButton: $('#addSiteButton')
     };
 
-    function InsertSubscriber() {
-        let subscriberInsertModel = GetInputUser();
-
-        $.ajax(common.modifyRelativeUrl('ManageSubscriber/InsertSubscriber'), {
-            type: 'POST',
-            data: subscriberInsertModel,
-            beforeSend: function () {
-                domElements.divAddSubscriber.addClass("loading-block");
-            },
-            success: function (response) {
-                if (response.ErrorCode === 0) {
-                    common.showSuccess("Add subscriber successful");
-                    RefreshInputData();
-                    domElements.divAddSubscriber.dialog('close');
-                    setTimeout(() => {
-                        LoadGrid();
-                    }, 1000);
-                } else {
-                    common.showError("Add subscriber fail! - " + response.ErrorMsg);
-                }
-            },
-            complete: function () {
-                domElements.divAddSubscriber.removeClass("loading-block");
-            },
-            error: function (errMsg) {
-                console.log(errMsg);
-            }
-        });
-    }
-
-    function EditSubscriber() {
-        let subscriberInsertModel = GetInputUser();
-
-        $.ajax(common.modifyRelativeUrl('ManageSubscriber/EditSubscriber'), {
-            type: 'POST',
-            data: subscriberInsertModel,
-            beforeSend: function () {
-                domElements.divAddSubscriber.addClass("loading-block");
-            },
-            success: function (response) {
-                if (response.ErrorCode === 0) {
-                    common.showSuccess("Edit subscriber successful");
-                    RefreshInputData();
-                    domElements.divAddSubscriber.dialog('close');
-                    setTimeout(() => {
-                        LoadGrid();
-                    }, 1000);
-                } else {
-                    common.showError("Edit subscriber fail! - " + response.ErrorMsg);
-                }
-            },
-            complete: function () {
-                domElements.divAddSubscriber.removeClass("loading-block");
-                subID = -1;
-            },
-            error: function (errMsg) {
-                console.log(errMsg);
-            }
-        });
-    }
-
-    function GetInputUser()
-    {
-        let subscriberInsertModel = {
-            SiteID: $('#txtSiteID').val().trim(),
-            Site: $('#txtSite').val().trim(),
-            IBCUserNamePrefix: $('#txtIBCUserNamePrefix').val().trim(),
-            SubscriberType: $('#txtSubscriberGroup').val(),
-            SubscriberID: subID,
-            SubscriberName: $('#txtSubscriberName').val().trim(),
-            RoleMapping: $('#txtRoleMapping').val(),
-            IsTest: $('#overwriteCheckbox').prop('checked') ? "1" : "0"
-        };
-
-        return subscriberInsertModel;
-    }
-
-    function IsInputValidation() {
-        let invalidElement = 0;
-
-        if ($('#txtSite').val() !== undefined && $('#txtSite').val().trim() !== "")
-            domElements.siteValidation.hide();
-        else {
-            domElements.siteValidation.show();
-            invalidElement++;
-        }
-
-        if ($('#txtSiteID').val() !== undefined && $('#txtSiteID').val().trim() !== "")
-            domElements.siteIDValidation.hide();
-        else {
-            domElements.siteIDValidation.show();
-            invalidElement++;
-        }
-
-        if ($('#txtIBCUserNamePrefix').val() !== undefined && $('#txtIBCUserNamePrefix').val().trim() !== "")
-            domElements.prefixValidation.hide();
-        else {
-            domElements.prefixValidation.show();
-            invalidElement++;
-        }
-
-        if ($('#txtSubscriberName').val() !== undefined && $('#txtSubscriberName').val().trim() !== "")
-            domElements.subNameValidation.hide();
-        else {
-            domElements.subNameValidation.show();
-            invalidElement++;
-        }
-
-        return (invalidElement === 0) ? true : false;
-    }
-
-    function CheckBusinessValidationToInsertOrEdit() {
-        let params = {};
-        params.prefixSubscriberName = $('#txtIBCUserNamePrefix').val().trim();
-
-        $.ajax(common.modifyRelativeUrl('ManageSubscriber/VerifySubscriberToInsert'), {
-            type: 'POST',
-            data: params,
-            beforeSend: function () {
-                domElements.divAddSubscriber.addClass("loading-block");
-            },
-            success: function (response) {
-                if (response.IsSubscriberPrefixValidation === 1) {
-                    common.showConfirmation("<div class='popup-content'><div class='popup-title'>There is a subscriber with this IBCUserName_Prefix. Please check before submit. </div>", function () {
-                        isAddSub === 1 ? InsertSubscriber() : EditSubscriber();
-                    }, () => {
-                        $('td #sub-icon').removeClass('none-pointer');
-                        domElements.divAddSubscriber.removeClass("loading-block");
-                    });
-                } else {
-                    isAddSub === 1? InsertSubscriber() : EditSubscriber();
-                }
-            },
-            error: function (errMsg) {
-                console.log(errMsg);
-            }
-        });
-    }
-
-    function DoInsertOrEdit() {
-        if (!IsInputValidation()) {
-            return;
-        }
-        CheckBusinessValidationToInsertOrEdit();
-    }
-
+    //Region: Main Page 
     function RenderGrid() {
 
         return domElements.manageSubscriberTable.DataTable({
@@ -232,12 +90,10 @@
                 { data: obj => obj.RoleMapping },
                 { data: obj => obj.SiteID },
                 {
-                    data: obj => LoadPopup(obj), createdCell: (cell, _, row) => {
-                        if (domElements.isHostPermission === "True") {
-                            $('.click-popup', cell).click(() => {
-                                childTable(row);
+                    data: obj => HyperlinkSiteName(obj), createdCell: (cell, _, row) => {
+                        $('.click-popup', cell).click(() => {                            
+                                OpenSiteDetailTable(row);
                             });
-                        }
                     }
                 },
                 { data: obj => obj.IsActive },
@@ -257,7 +113,7 @@
                             $('.icon-delete', cell).click(() => {
                                 $('td #sub-icon').addClass('none-pointer');
                                 common.showConfirmation("<div class='popup-content'><div class='popup-title'>Are you sure about this?</div>For confirm this action, this account will not automatically update by our service in the future </div>", function () {
-                                    RemoveSubscriber(row.SubscriberID, row.SiteID);
+                                    RemoveSubscriber(row.SubscriberID);
                                 }, () => {
                                     $('td #sub-icon').removeClass('none-pointer');
                                 });
@@ -273,43 +129,12 @@
         });
     }
 
-
-    function LoadPopup(obj) {
-        let html = "<a class='click-popup'>" + obj.SiteName + "</a>";
-        return html;
-    }
-
-    function childTable() {
-        domElements.childTable.dialog({
-            modal: true,
-            width: '900px',
-            title: 'SanJi',
-            resizable: true,
-            draggable: true,
-            close: function () {
-                $(this).dialog('close');
-            }
-        });
-    }
-    
-
-    function DisplayEditSubscriberForm(rowInfo)
-    {
-        isAddSub = 0;
-        DisplaySubscriberInfoToEdit(rowInfo);
-        IsInputValidation();
-
-        domElements.divAddSubscriber.dialog({
-            modal: true,
-            width: '500px',
-            title: 'EDIT SUBSCRIBER',
-            resizable: true,
-            draggable: true,
-            close: function () {
-                $(this).dialog('close');
-            }
-        });
-    }
+    function LoadGrid() {
+        $(this).prop('disabled', true);
+        dataTable
+            ? dataTable.ajax.reload(null, true)
+            : dataTable = RenderGrid();
+    } 
 
     function RenderEditUI(IsActive) {
         return IsActive === 1 ? html = '<span class="sub-icon delete test" id="sub-icon " title="Edit Subscriber"><i class="icon-edit ' + (domElements.isHostPermission === "False" ? ' disabled' : '') + '"></i></span>' : "";
@@ -320,12 +145,30 @@
             '<span class="sub-icon delete test" id="sub-icon " title="Remove Subscriber"><i class="icon-delete ' + (domElements.isHostPermission === "False" ? ' disabled' : '') + '"></i></span>'
             : '<span>' + TerminatedDateString + '</span>';
     }
+    
+    function HyperlinkSiteName(obj) {
+        return (obj.SiteCount > 1) ? "<a class='click-popup'>" + obj.SiteName + "</a>" : obj.SiteName;
+    }
 
-    function RemoveSubscriber(SubscriberID, SiteID) {
+    function OpenSiteDetailTable(row) {        
+        LoadDetailedSiteGrid(row.SubscriberID);
+        domElements.divDetailedSiteTable.dialog({
+            modal: true,
+            width: '900px',            
+            title: row.SubscriberNameValidation,
+            resizable: false,
+            draggable: true,
+            close: function () {
+                domElements.detailedSiteTable.DataTable().clear().draw(true);
+                $(this).dialog('close');
+            }
+        });
+    }
+
+    function RemoveSubscriber(SubscriberID) {
         var url = common.modifyRelativeUrl('ManageSubscriber/RemoveSubscriber');
         var params = {};
         params.subscriberID = SubscriberID;
-        params.siteID = SiteID;
 
         $.ajax(url, {
             type: 'POST',
@@ -347,30 +190,6 @@
         });
     }
 
-    function RefreshInputData()
-    {
-        $('#txtSite').val("");     
-        $('#txtSiteID').val("");      
-        $('#txtIBCUserNamePrefix').val("");      
-        $('#txtSubscriberName').val("");
-        $('#overwriteCheckbox').prop('checked', false);
-        domElements.siteValidation.hide();
-        domElements.siteIDValidation.hide();
-        domElements.prefixValidation.hide();
-        domElements.subNameValidation.hide();
-    }
-
-    function DisplaySubscriberInfoToEdit(rowInfo) {
-        $('#txtSite').val(rowInfo.SiteName);
-        $('#txtSiteID').val(rowInfo.SiteID);
-        $('#txtIBCUserNamePrefix').val(rowInfo.SubscriberPrefixValidation);
-        $('#txtSubscriberGroup').val(rowInfo.SubscriberGroupName === "Credit" ? 0 : 1);
-        $('#txtSubscriberName').val(rowInfo.SubscriberNameValidation);
-        $('#txtRoleMapping').val(rowInfo.RoleMapping);    
-        $('#overwriteCheckbox').prop('checked', rowInfo.IsTest === 1 ? true : false);
-        subID = rowInfo.SubscriberID;
-    }
-
     function IsDisableAddButton() {
         if (domElements.isHostPermission === "False") {
             domElements.btnAdd.prop('disabled', true);
@@ -379,21 +198,410 @@
             domElements.btnAdd.prop('disabled', false);
     }
 
-    function LoadGrid() {
-        $(this).prop('disabled', true);
-        dataTable
-            ? dataTable.ajax.reload(null, true)
-            : dataTable = RenderGrid();
+    function LoadDetailedSiteGrid(subscriberID) {
+        $.ajax(common.modifyRelativeUrl('ManageSubscriber/GetDetailedSite'), {
+            type: 'GET',
+            data: { subscriberID: subscriberID },
+            success: function (response) {
+                domElements.detailedSiteTable.DataTable().clear().rows.add(response).draw(true);
+            },
+            complete: function () {
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+            }
+        });
     }
 
+    //Region: Pop-up Implementation (Edit - Insert - Delete Functions)
+    function AddSite(siteName) {
+        detailedSiteCounter++;
+        domElements.addSiteButton.before(CreateAddedSiteHTML());
+
+        $('#toggleAddSub' + detailedSiteCounter).on('click', function () {
+            $(this).closest('.border-form-toggle').find('.group-toggle-btn').toggleClass("hide");
+            $(this).toggleClass("icon-open");
+        });
+
+        $('#btnDeletedSite' + detailedSiteCounter).on('click', function () {
+            common.showConfirmation("<div class='popup-content'><div class='popup-title'>Are you sure to delete Site " + siteName +"?</div></div >", ()=> {
+                $(this).parents()[2].remove();
+                detailedSiteCounter--;
+            }, () => {
+                return;
+            });
+        });
+    }
+
+    function CreateAddedSiteHTML()
+    {
+        var html =
+            '<div class="border-form-toggle" id="addedDetailedSite' + detailedSiteCounter +'">' 
+            + '<div class="form-control mbform">'
+            + '<div class="ischeckInput">'
+            + '<div class="group-input">'
+            + '<div class="label"><span class="toggle-add-sub icon-open" id="toggleAddSub' + detailedSiteCounter + '"><i class="icon icon-chevron-right"></i></span> Site</div>'
+            + '<input id="txtSite' + detailedSiteCounter +'" type="text" class="input-field full-width" maxlength="50">'
+            + '</div>'
+            + '<button class="deleted-input" id="btnDeletedSite' + detailedSiteCounter + '">'
+            + '<i class="icon-delete"></i>'
+            + '</button>'
+            + '</div>'
+            + '<p class="validate-form" id="siteValidation' + detailedSiteCounter +'" hidden>Please fill out this field</p>'
+            + '</div>'
+            + '<div id="statistic-detail" class="group-toggle-btn">'
+            + ' <div class="form-control mbform">'
+            + '<div class="ischeckInput">'
+            + '<div class="group-input">'
+            + '<div class="label">Site ID</div>'
+            + '<input id="txtSiteID' + detailedSiteCounter +'" type="number" class="input-field full-width" maxlength="50">'
+            + '</div>'
+            + '</div>'
+            + '<p class="validate-form" id="siteIDValidation' + detailedSiteCounter +'" hidden>Please fill out this field</p>'
+            + '</div>'
+            + '<div class="form-control mbform">'
+            + '<div class="ischeckInput">'
+            + '<div class="group-input">'
+            + '<div class="label">Role Mapping</div>'
+            + '<select class="control full-width" id="txtRoleMapping' + detailedSiteCounter +'">'
+            + '<option value="0" selected="">0</option>'
+            + '<option value="1">1</option>'
+            + '<option value="2">2</option>'
+            + '</select>'
+            + '</div>'
+            + '</div>'
+            + '</div>'
+            + '</div>'
+            + '</div>';
+
+        return html;
+    }
+
+    function DisplayEditSubscriberForm(rowInfo) {
+        isAddSub = 0;
+        GetSubscriberInfoToEdit(rowInfo);
+    }
+
+    function GetSubscriberInfoToEdit(rowInfo) {
+        backupEditInfo = {
+            SubscriberID: rowInfo.SubscriberID,
+            SubscriberName: rowInfo.SubscriberNameValidation,
+            IsTest: rowInfo.IsTest === 1 ? true : false,
+            SubscriberType: rowInfo.SubscriberGroupName,
+            IBCUserNamePrefix: rowInfo.SubscriberPrefixValidation,
+            SiteListJson: null,
+            Message: null
+        };
+
+        $('#txtSubscriberId').val(rowInfo.SubscriberID);
+        $('#txtSubscriberName').val(rowInfo.SubscriberNameValidation);
+        $('#txtSubscriberType').val(rowInfo.SubscriberGroupName === "Credit" ? 0 : 1);
+        $('#txtIBCUserNamePrefix').val(rowInfo.SubscriberPrefixValidation);
+        $('#overwriteCheckbox').prop('checked', rowInfo.IsTest === 1 ? true : false);  
+
+        if (rowInfo.SiteCount > 1) {
+            GetSites(rowInfo.SubscriberID, rowInfo.SiteCount);
+        }
+        else {
+            backupEditInfo.SiteListJson = {
+                SiteID: rowInfo.SiteName,
+                SiteName: rowInfo.SiteID,
+                RoleMapping: rowInfo.RoleMapping
+            };
+
+            $('#txtSite1').val(rowInfo.SiteName);
+            $('#txtSiteID1').val(rowInfo.SiteID);
+            $('#txtRoleMapping1').val(rowInfo.RoleMapping);  
+
+            detailedSiteCounter = rowInfo.SiteCount;
+
+            domElements.divAddSubscriber.dialog({
+                modal: true,
+                width: '500px',
+                title: 'EDIT SUBSCRIBER',
+                resizable: true,
+                draggable: true,
+                close: function () {
+                    $(this).dialog('close');
+                    detailedSiteCounter = 1;
+                    RefreshInputData();
+                }
+            });
+        }
+
+    }
+
+    function GetSites(subscriberID, siteCount) {
+        $.ajax(common.modifyRelativeUrl('ManageSubscriber/GetDetailedSite'), {
+            type: 'GET',
+            data: { subscriberID: subscriberID },
+            success: function (response) {
+                LoadMoreDetailedSite(response, siteCount);
+            },
+            complete: function () {
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+            }
+        });
+    }
+
+    function LoadMoreDetailedSite(response, siteCount) {
+        backupEditInfo.SiteListJson = response;
+
+        for (let i = 1; i <= siteCount; i++)
+        {
+            if (i > 1) AddSite(response[i - 1].SiteName);
+            $('#txtSite' + i).val(response[i-1].SiteName);
+            $('#txtSiteID' + i).val(response[i-1].SiteID);
+            $('#txtRoleMapping' + i).val(response[i-1].RoleMapping);  
+        }
+
+        domElements.divAddSubscriber.dialog({
+            modal: true,
+            width: '500px',
+            title: 'EDIT SUBSCRIBER',
+            resizable: true,
+            draggable: true,
+            close: function () {
+                RefreshInputData();
+                $(this).dialog('close');
+            }
+        });
+    }
+
+    function RefreshInputData() {
+        $('#txtSubscriberName').val("");
+        $('#txtSubscriberType').val("");
+        $('#txtIBCUserNamePrefix').val(""); 
+        $('#txtSubscriberId').val(0);
+        $('#overwriteCheckbox').prop('checked', false);
+
+        for (let i = 1; i <= detailedSiteCounter; i++) {
+            if (i === 1) {
+                $('#txtSite' + i).val("");
+                $('#txtSiteID' + i).val("");
+                $('#txtRoleMapping' + i).val(0);
+            }
+            else {
+                $('#btnDeletedSite' + i).parents()[2].remove();
+            }
+        }
+
+        domElements.prefixValidation.hide();
+        domElements.subNameValidation.hide();
+        for (let i = 1; i <= detailedSiteCounter; i++) {
+            $('#siteValidation' + i).hide();
+            $('#siteIDValidation' + i).hide();
+        }
+
+        detailedSiteCounter = 1;
+        backupEditInfo
+    }
+
+    function InsertSubscriber() {
+        let subscriberInsertModel = GetInputUser();
+
+        $.ajax(common.modifyRelativeUrl('ManageSubscriber/UpdateSubscriber'), {
+            type: 'POST',
+            data: subscriberInsertModel,
+            beforeSend: function () {
+                domElements.divAddSubscriber.addClass("loading-block");
+            },
+            success: function (response) {
+                if (response.ErrorCode === 0) {
+                    common.showSuccess("Add subscriber successful");
+                    RefreshInputData();
+                    domElements.divAddSubscriber.dialog('close');
+                    setTimeout(() => {
+                        LoadGrid();
+                    }, 1000);
+                } else {
+                    common.showError("Add subscriber fail! - " + response.ErrorMsg);
+                }
+            },
+            complete: function () {
+                domElements.divAddSubscriber.removeClass("loading-block");
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+            }
+        });
+    }
+
+    function EditSubscriber() {
+        let subscriberInsertModel = GetInputUser();        
+
+        //common.showConfirmation("<div class='popup-content'><div class='popup-title'>Are you sure update these changes?</div>" + backupEditInfo.Message + "</div > ", function () {
+            $.ajax(common.modifyRelativeUrl('ManageSubscriber/UpdateSubscriber'), {
+                type: 'POST',
+                data: subscriberInsertModel,
+                beforeSend: function () {
+                    domElements.divAddSubscriber.addClass("loading-block");
+                },
+                success: function (response) {
+                    if (response.ErrorCode === 0) {
+                        common.showSuccess("Edit subscriber successful");
+                        RefreshInputData();
+                        domElements.divAddSubscriber.dialog('close');
+                        setTimeout(() => {
+                            LoadGrid();
+                        }, 1000);
+                    } else {
+                        common.showError("Edit subscriber fail! - " + response.ErrorMsg);
+                    }
+                },
+                complete: function () {
+                    domElements.divAddSubscriber.removeClass("loading-block");
+                },
+                error: function (errMsg) {
+                    console.log(errMsg);
+                }
+            });
+        //}, () => {
+        //    return;
+        //});
+    }
+
+    function GetInputUser() {
+        backupEditInfo;
+
+        let rawSiteList = [];
+
+        for (let i = 1; i <= detailedSiteCounter; i++) {
+            let obj = {
+                SiteID: $('#txtSiteID' + i).val().trim(),
+                SiteName: $('#txtSite' + i).val().trim(),
+                RoleMapping: $('#txtRoleMapping' + i).val()
+            };
+            rawSiteList.push(obj);
+        }
+
+        let subscriberInsertModel = {
+            SubscriberID: $('#txtSubscriberId').val(),
+            SubscriberName: $('#txtSubscriberName').val().trim(),
+            IsTest: $('#overwriteCheckbox').prop('checked') ? "1" : "0",
+            SubscriberType: $('#txtSubscriberType').val(),
+            IBCUserNamePrefix: $('#txtIBCUserNamePrefix').val().trim(),
+            SiteListJson: JSON.stringify(rawSiteList)                     
+        };
+
+        //CompareEditDifferenceVersion(subscriberInsertModel);
+
+        return subscriberInsertModel;
+    }
+
+    //function CompareEditDifferenceVersion(subscriberInsertModel)
+    //{
+    //    if (subscriberInsertModel.SubscriberID != backupEditInfo.SubscriberID) backupEditInfo.Message = "SubscriberID: " + subscriberInsertModel.SubscriberID + "->" + backupEditInfo.SubscriberID +"\n";
+    //    if (subscriberInsertModel.SubscriberName !== backupEditInfo.SubscriberName) backupEditInfo.Message += "SubscriberName:" + subscriberInsertModel.SubscriberName + "->" + backupEditInfo.SubscriberName + "\n";
+    //    if ($('#overwriteCheckbox').prop('checked') !== backupEditInfo.IsTest) backupEditInfo.Message += "IsTest: " + subscriberInsertModel.IsTest + "->" + backupEditInfo.IsTest ? "1" : "0" ;
+    //    if (subscriberInsertModel.SubscriberType !== backupEditInfo.SubscriberType) backupEditInfo.Message += "SubscriberType: " + subscriberInsertModel.SubscriberType + "->" + backupEditInfo.SubscriberType + "\n";
+    //    if (subscriberInsertModel.IBCUserNamePrefix !== backupEditInfo.IBCUserNamePrefix) backupEditInfo.Message += "IBCUserNamePrefix: " + subscriberInsertModel.IBCUserNamePrefix + "->" + backupEditInfo.IBCUserNamePrefix + "\n";
+
+    //    //for (let i = 0; i <= backupEditInfo.SiteListJson.Count(); i++) {
+    //    //    let obj = {
+    //    //        SiteID: $('#txtSiteID' + i).val().trim(),
+    //    //        SiteName: $('#txtSite' + i).val().trim(),
+    //    //        RoleMapping: $('#txtRoleMapping' + i).val()
+    //    //    };
+    //    //    for (let j = 0; j <= detailedSiteCounter; i++) {
+    //    //        if (backupEditInfo.SiteListJson.SiteID !== $('#txtSiteID' + i+1).val().trim()) backupEditInfo.Message = "SubscriberID: " + subscriberInsertModel.SubscriberID + "->" + backupEditInfo.SubscriberID + "\n";
+    //    //    }
+    //    //}
+    //}
+
+    function IsInputValidation() {
+        let invalidElement = 0;
+
+        if ($('#txtIBCUserNamePrefix').val() !== undefined && $('#txtIBCUserNamePrefix').val().trim() !== "")
+            domElements.prefixValidation.hide();
+        else {
+            domElements.prefixValidation.show();
+            invalidElement++;
+        }
+
+        if ($('#txtSubscriberName').val() !== undefined && $('#txtSubscriberName').val().trim() !== "")
+            domElements.subNameValidation.hide();
+        else {
+            domElements.subNameValidation.show();
+            invalidElement++;
+        }
+
+        for (let i = 1; i <= detailedSiteCounter; i++) {
+            if ($('#txtSite' + i).val() !== undefined && $('#txtSite' + i).val().trim() !== "")
+                $('#siteValidation' + i).hide();
+            else {
+                $('#siteValidation' + i).show();
+                invalidElement++;
+            }
+
+            if ($('#txtSiteID' + i).val() !== undefined && $('#txtSiteID' + i).val().trim() !== "")
+                $('#siteIDValidation' + i).hide();
+            else {
+                $('#siteIDValidation' + i).show();
+                invalidElement++;
+            }
+        }
+
+        return (invalidElement === 0) ? true : false;
+    }
+
+    function DoInsertOrEdit() {
+        if (!IsInputValidation()) {
+            return;
+        }
+
+        isAddSub === 1 ? InsertSubscriber() : EditSubscriber();
+    }
+
+    function InitDetailSiteTable() {
+        domElements.detailedSiteTable.DataTable({
+            serverSide: false,           
+            dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
+            pagingType: "simple",
+            language: {
+                lengthMenu: "",
+                paginate: {
+                },
+                info: "",
+                infoEmpty: "",
+                zeroRecords: "There's no data"
+            },
+            ordering: false,
+            searching: false,
+            lengthMenu: [20, 50, 100, 200],
+            pageLength: 1000,
+            scrollX: false,
+            //scrollY: '18vh',
+            scrollCollapse: false,            
+            columnDefs: [
+                { targets: "_all", defaultContent: "-" },
+                { targets: [0, 1, 2], className: "text-center" },
+                { targets: [0] },
+                { targets: [1] },
+                { targets: [2] }
+            ],
+            columns: [
+                { data: obj => obj.RoleMapping },
+                { data: obj => obj.SiteID },
+                { data: obj => obj.SiteName }
+            ]
+        });
+    }
+
+    //Region: Initialization
     function Initial() {
         LoadGrid();
+
+        InitDetailSiteTable();
 
         IsDisableAddButton();
 
         domElements.btnAdd.on('click', function () {
             RefreshInputData();
             isAddSub = 1;
+
             domElements.divAddSubscriber.dialog({
                 modal: true,
                 width: '430px',
@@ -402,31 +610,23 @@
                 draggable: true,
                 close: function () {
                     $(this).dialog('close');
+                    RefreshInputData();
                 }
             });
         });
-
-
-
-
-
-
 
         domElements.statisticIcon.on('click', function () {
             $(this).closest('.border-form-toggle').find('.group-toggle-btn').toggleClass("hide");
             $(this).toggleClass("icon-open");
         });
-
+  
         domElements.btnCancel.on('click', () => {
             domElements.divAddSubscriber.dialog('close');
         });
 
         domElements.btnSave.on('click', () => DoInsertOrEdit());
 
-        $('#txtSite').on('input', () => ($('#txtSite').val() !== undefined && $('#txtSite').val().trim() !== "") ? domElements.siteValidation.hide() : domElements.siteValidation.show());
-        $('#txtSiteID').on('input', () => ($('#txtSiteID').val() !== undefined && $('#txtSiteID').val().trim() !== "") ? domElements.siteIDValidation.hide() : domElements.siteIDValidation.show());
-        $('#txtIBCUserNamePrefix').on('input', () => ($('#txtIBCUserNamePrefix').val() !== undefined && $('#txtIBCUserNamePrefix').val().trim() !== "") ? domElements.prefixValidation.hide() : domElements.prefixValidation.show());
-        $('#txtSubscriberName').on('input', () => ($('#txtSubscriberName').val() !== undefined && $('#txtSubscriberName').val().trim() !== "") ? domElements.subNameValidation.hide() : domElements.subNameValidation.show());
+        domElements.addSiteButton.on('click', () => AddSite());
     }
 
     $(document).ready(function () {

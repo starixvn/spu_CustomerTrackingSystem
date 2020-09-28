@@ -8,6 +8,7 @@
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.ManageSubscriber;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
 
@@ -22,6 +23,7 @@
             _manageSubscriberService = new ManageSubscriberService();
 
         }
+
         public ActionResult Index()
         {
             IUserService userService = new UserService();
@@ -51,11 +53,18 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult GetDetailedSite(long subscriberID)
+        {
+            var detailedSites = _manageSubscriberService.GetDetailedSite(subscriberID);
+
+            return Json(detailedSites, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.ManageSubscriber, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult InsertSubscriber(SubscriberInsertModel subscriberInsertModel)
+        public ActionResult UpdateSubscriber(SubscriberUpdateModel subscriberInsertModel)
         {
-            var result = _manageSubscriberService.InsertSubscriber(subscriberInsertModel, CurrentSession.UserId);
+            var result = _manageSubscriberService.UpdateSubscriber(subscriberInsertModel, CurrentSession.UserId);
 
             return Json(new
             {
@@ -64,37 +73,10 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-
-        [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.ManageSubscriber, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult VerifySubscriberToInsert(string prefixSubscriberName)
+        public ActionResult RemoveSubscriber(int subscriberID)
         {
-            var result = _manageSubscriberService.VerifySubscriberToInsert(prefixSubscriberName);
-
-            return Json(new
-            {
-               IsSubscriberPrefixValidation = (result != null && result.Count > 0)? 1 : 0
-            }, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        [NapAuth(FunctionKey = FSFunctionKeys.ManageSubscriber, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult EditSubscriber(SubscriberInsertModel subscriberInsertModel)
-        {
-            var result = _manageSubscriberService.UpdateSubscriber(subscriberInsertModel);
-
-            return Json(new
-            {
-                result.ErrorCode,
-                result.ErrorMsg
-            }, JsonRequestBehavior.AllowGet);
-        }
-
-
-        [NapAuth(FunctionKey = FSFunctionKeys.ManageSubscriber, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult RemoveSubscriber(int subscriberID, int siteID)
-        {
-            var result = _manageSubscriberService.RemoveSubscriber(subscriberID, siteID);
+            var result = _manageSubscriberService.RemoveSubscriber(subscriberID, CurrentSession.UserId);
 
             return Json(new
             {

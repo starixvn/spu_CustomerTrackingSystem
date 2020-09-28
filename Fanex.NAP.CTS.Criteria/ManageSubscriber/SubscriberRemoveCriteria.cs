@@ -8,8 +8,11 @@
         [SpParam(SqlParamName = "ip_SubscriberID")]
         public int SubscriberID { get; set; }
 
-        [SpParam(SqlParamName = "ip_SiteID")]
-        public int SiteID { get; set; }
+        [SpParam(SqlParamName = "ip_UserID")]
+        public long UserID { get; set; }
+
+        [SpParam(SqlParamName = "op_ErrorMessage")]
+        public string ErrorMessage { get; set; }
 
         public override string GetSettingKey()
             => "CTS_DC_Subscriber_Remove";

@@ -12,9 +12,9 @@
 
         public string SubscriberGroupName { get; set; }
 
-        public int RoleMapping { get; set; }
+        public int? RoleMapping { get; set; }
 
-        public int SiteID { get; set; }
+        public int? SiteID { get; set; }
 
         public string SiteName { get; set; }
 
@@ -25,6 +25,8 @@
         public DateTime TerminatedDate { get; set; }
 
         public int IsTest { get; set; }
+
+        public int SiteCount { get; set; }
 
         public string CreatedDateString
         {
