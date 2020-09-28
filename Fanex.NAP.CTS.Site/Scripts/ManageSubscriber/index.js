@@ -150,19 +150,8 @@
         return (obj.SiteCount > 1) ? "<a class='click-popup'>" + obj.SiteName + "</a>" : obj.SiteName;
     }
 
-    function OpenSiteDetailTable(row) {        
-        LoadDetailedSiteGrid(row.SubscriberID);
-        domElements.divDetailedSiteTable.dialog({
-            modal: true,
-            width: '900px',            
-            title: row.SubscriberNameValidation,
-            resizable: false,
-            draggable: true,
-            close: function () {
-                domElements.detailedSiteTable.DataTable().clear().draw(true);
-                $(this).dialog('close');
-            }
-        });
+    function OpenSiteDetailTable(row) {            
+        LoadDetailedSiteGrid(row);
     }
 
     function RemoveSubscriber(SubscriberID) {
@@ -198,17 +187,34 @@
             domElements.btnAdd.prop('disabled', false);
     }
 
-    function LoadDetailedSiteGrid(subscriberID) {
+    function LoadDetailedSiteGrid(row) {
         $.ajax(common.modifyRelativeUrl('ManageSubscriber/GetDetailedSite'), {
             type: 'GET',
-            data: { subscriberID: subscriberID },
+            data: { subscriberID: row.SubscriberID },
+            beforeSend: function () {
+                domElements.divDetailedSiteTable.dialog({
+                    modal: true,
+                    width: '900px',
+                    title: row.SubscriberNameValidation,
+                    resizable: false,
+                    draggable: true,
+                    close: function () {
+                        domElements.detailedSiteTable.DataTable().clear().draw(true);
+                        $(this).dialog('close');
+                    }
+                });
+
+                domElements.detailedSiteTable.find('tbody').addClass('loading');
+            },
             success: function (response) {
-                domElements.detailedSiteTable.DataTable().clear().rows.add(response).draw(true);
+               domElements.detailedSiteTable.DataTable().clear().rows.add(response).draw(true);             
             },
             complete: function () {
+               domElements.detailedSiteTable.find('tbody').removeClass('loading');
             },
             error: function (errMsg) {
-                console.log(errMsg);
+               domElements.detailedSiteTable.find('tbody').removeClass('loading');
+               console.log(errMsg);
             }
         });
     }
@@ -225,12 +231,18 @@
         });
 
         $('#btnDeletedSite' + detailedSiteCounter).on('click', function () {
-            common.showConfirmation("<div class='popup-content'><div class='popup-title'>Are you sure to delete Site " + siteName +"?</div></div >", ()=> {
+            if (siteName !== undefined) {
+                common.showConfirmation("<div class='popup-content'><div class='popup-title'>Are you sure to delete Site " + siteName + "?</div></div >", () => {
+                    $(this).parents()[2].remove();
+                    detailedSiteCounter--;
+                }, () => {
+                    return;
+                });
+            }
+            else {
                 $(this).parents()[2].remove();
                 detailedSiteCounter--;
-            }, () => {
-                return;
-            });
+            }
         });
     }
 
@@ -583,9 +595,7 @@
             ordering: false,
             searching: false,
             lengthMenu: [20, 50, 100, 200],
-            pageLength: 1000,
             scrollX: false,
-            //scrollY: '18vh',
             scrollCollapse: false,            
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
