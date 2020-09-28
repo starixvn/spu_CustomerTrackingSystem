@@ -20,7 +20,7 @@
         siteIDValidation: $('#siteIDValidation'),
         prefixValidation: $('#prefixValidation'),
         subNameValidation: $('#subNameValidation'),
-        statisticIcon: $('#toggleAddSub'),
+        statisticIcon: $('#toggleAddSub1'),
         addSiteButton: $('#addSiteButton')
     };
 
@@ -215,6 +215,7 @@
 
     //Region: Pop-up Implementation (Edit - Insert - Delete Functions)
     function AddSite(siteName) {
+        CollapseSite();
         detailedSiteCounter++;
         domElements.addSiteButton.before(CreateAddedSiteHTML());
 
@@ -249,7 +250,7 @@
             + '</div>'
             + '<p class="validate-form" id="siteValidation' + detailedSiteCounter +'" hidden>Please fill out this field</p>'
             + '</div>'
-            + '<div id="statistic-detail" class="group-toggle-btn">'
+            + '<div id="statistic-detail' + detailedSiteCounter +'" class="group-toggle-btn">'
             + ' <div class="form-control mbform">'
             + '<div class="ischeckInput">'
             + '<div class="group-input">'
@@ -357,6 +358,9 @@
             $('#txtRoleMapping' + i).val(response[i-1].RoleMapping);  
         }
 
+        $('#toggleAddSub' + siteCount).removeClass("icon-open");
+        $('#statistic-detail' + siteCount).addClass("hide");
+
         domElements.divAddSubscriber.dialog({
             modal: true,
             width: '500px',
@@ -396,7 +400,15 @@
         }
 
         detailedSiteCounter = 1;
-        backupEditInfo
+        //backupEditInfo
+    }
+
+    function CollapseSite()
+    {
+        for (let i = 1; i <= detailedSiteCounter; i++) {
+            $('#toggleAddSub' + i).removeClass("icon-open");
+            $('#statistic-detail' + i ).addClass("hide");
+        }
     }
 
     function InsertSubscriber() {
