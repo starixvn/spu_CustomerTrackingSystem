@@ -257,7 +257,7 @@
             }
             else
             {
-                SendMail(resultCheckAccountEvidenceList, null, userId, hasOverrideSelection.ErrorMsg);
+                SendMail(resultCheckAccountEvidenceList, addAccountEvidenceList, userId, hasOverrideSelection.ErrorMsg);
                 LogError(fileName, userId, "at " + DateTime.Now + " " + hasOverrideSelection.ErrorMsg, JsonConvert.SerializeObject(addAccountEvidenceList));
             }         
         }

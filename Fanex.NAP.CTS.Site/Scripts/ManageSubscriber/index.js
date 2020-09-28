@@ -45,6 +45,7 @@
                 }
             },
             dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
+            paging: false,
             pagingType: "simple",
             language: {
                 lengthMenu: "Page size _MENU_",
@@ -60,8 +61,6 @@
             },
             ordering: false,
             searching: false,
-            lengthMenu: [20, 50, 100, 200],
-            pageLength: 1000,
             scrollX: false,
             scrollCollapse: false,
             columnDefs: [
@@ -182,11 +181,14 @@
     function IsDisableAddButton() {
         if (domElements.isHostPermission === "False") {
             domElements.btnAdd.prop('disabled', true);
+            domElements.btnAdd.addClass('disabled');
         }
-        else 
+        else {
             domElements.btnAdd.prop('disabled', false);
+            domElements.btnAdd.removeClass('disabled');
+        }
     }
-
+    
     function LoadDetailedSiteGrid(row) {
         $.ajax(common.modifyRelativeUrl('ManageSubscriber/GetDetailedSite'), {
             type: 'GET',
@@ -594,7 +596,7 @@
             },
             ordering: false,
             searching: false,
-            lengthMenu: [20, 50, 100, 200],
+            paging: false,
             scrollX: false,
             scrollCollapse: false,            
             columnDefs: [
