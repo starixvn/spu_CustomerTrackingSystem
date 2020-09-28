@@ -225,6 +225,7 @@
             }
         }
 
+
         .border-form-toggle {
             border-bottom: 1px solid #E5E5E5;
             padding-bottom: 1.2rem;
@@ -318,6 +319,10 @@
             background-color: darken($color: #396EF8, $amount: 1%);
             color: $page-bg;
         }
+    }
+
+    .disabled {
+        cursor: not-allowed;
     }
 }
 
