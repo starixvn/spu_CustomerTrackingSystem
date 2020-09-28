@@ -39,6 +39,23 @@
 .manage-subscriber-table .odd .deleted, .manage-subscriber-table .even .deleted {
   background-color: #D9D9D9; }
 
+.manage-subscriber-table .loading {
+  position: relative; }
+  .manage-subscriber-table .loading:after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 75%;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    border: 0.25rem solid rgba(57, 110, 248, 0.2);
+    border-top-color: #396ef8;
+    -webkit-animation: spin 1s infinite linear;
+    animation: spin 1s infinite linear; }
+  .manage-subscriber-table .loading tr {
+    opacity: .3; }
+
 .manage-subscriber-table thead tr th {
   position: sticky;
   position: -webkit-sticky;
