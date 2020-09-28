@@ -39,6 +39,12 @@
 .manage-subscriber-table .odd .deleted, .manage-subscriber-table .even .deleted {
   background-color: #D9D9D9; }
 
+.manage-subscriber-table thead tr th {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 11.4rem;
+  z-index: 10; }
+
 .manage-subscriber-table tbody tr td .click-popup {
   cursor: pointer; }
 

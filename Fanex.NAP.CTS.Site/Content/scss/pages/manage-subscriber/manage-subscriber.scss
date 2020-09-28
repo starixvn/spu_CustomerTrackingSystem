@@ -60,6 +60,17 @@
         }
     }
 
+    thead {
+        tr {
+            th {
+                position: sticky;
+                position: -webkit-sticky;
+                top: 11.4rem;
+                z-index: 10;
+            }
+        }
+    }
+
     tbody {
         tr {
             td {
