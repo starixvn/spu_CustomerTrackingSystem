@@ -2,6 +2,15 @@
 @import '../../abstracts/_variables.scss';
 
 
+
+
+.popup-subscriber-page {
+    position: fixed !important;
+    top: 50% !important;
+    right: -50% !important;
+    transform: translate(50%,-50%);
+    left: 0 !important;
+}
 .manage-subscriber {
     .fixed-header {
         padding-top: 1.6rem;

@@ -1699,7 +1699,7 @@ body {
     padding: 7px 0; }
     .main-menu .menu-item .sub-menu .sub-menu-item > .link, .header-info .username .sub-menu .sub-menu-item > .link {
       display: block;
-      padding: 5px 12px;
+      padding: .7rem 1.2rem;
       color: #333333;
       font-size: 13px; }
     .main-menu .menu-item .sub-menu .sub-menu-item > .link:hover, .header-info .username .sub-menu .sub-menu-item > .link:hover {
