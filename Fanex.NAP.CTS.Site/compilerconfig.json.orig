@@ -76,17 +76,12 @@
     "inputFile": "Content/scss/pages/probation-management/probation-management.scss"
   },
   {
-<<<<<<< Updated upstream
     "outputFile": "Content/scss/pages/manage-subscriber/manage-subscriber.css",
     "inputFile": "Content/scss/pages/manage-subscriber/manage-subscriber.scss",
     "sourceMap": false
   },
   {
-    "outputFile": "Content/scss/pages/notification/notification.css",
-    "inputFile": "Content/scss/pages/notification/notification.scss"
-=======
     "outputFile": "Content/scss/pages/notification-setting/notification-setting.css",
     "inputFile": "Content/scss/pages/notification-setting/notification-setting.scss"
->>>>>>> Stashed changes
   }
 ]
