@@ -90,4 +90,6 @@ public static class FSFunctionKeys
     public const string ProbationManagement = "ProbationManagement";
 
     public const string ManageSubscriber = "ManageSubscriber";
+    
+    public const string ViewIP = "ViewIP";
 }

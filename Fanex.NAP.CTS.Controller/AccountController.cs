@@ -70,6 +70,7 @@
                         CTSCustId = Id,
                         IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.AccountDetail, NAP.Core.Business.Constant.Policy.Host),
                         IsBettingStatisticPermission = CheckBettingStatisticPermission(userService, customerInfoFromCTS.RoleId),
+                        IsViewIPTransactionPermission = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.ViewIP, NAP.Core.Business.Constant.Policy.Read),
                         CurrentUserId = CurrentSession.UserId
                     };
 
@@ -895,6 +896,9 @@
 
         public ActionResult GetTransactionHistory(DataTableAjaxPostModel model)
         {
+            IUserService userService = new UserService();
+            var isViewIPPermission = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.ViewIP, NAP.Core.Business.Constant.Policy.Read);
+
             var take = model.length;
             var skip = model.start;
             var totalItem = 0;
@@ -915,7 +919,7 @@
                 BrowserName = x.BrowserName,
                 DeviceId = x.DeviceId,
                 Flagged = x.Flagged,
-                Ip = x.Ip,
+                Ip = isViewIPPermission ? x.Ip : string.Empty,
                 IpId = x.IpId,
                 OSName = x.OSName,
                 TransTime = x.TransTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
