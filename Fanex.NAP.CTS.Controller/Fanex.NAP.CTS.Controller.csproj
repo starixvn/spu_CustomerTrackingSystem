@@ -190,8 +190,10 @@
     </Compile>
     <Compile Include="HomeController.cs" />
     <Compile Include="ImportEvidencesController.cs" />
+    <Compile Include="ManageSubscriberController.cs" />
     <Compile Include="MatchMonitorController.cs" />
     <Compile Include="NotificationController.cs" />
+    <Compile Include="ProbationManagementController.cs" />
     <Compile Include="SpecialCustomerClassController.cs" />
     <Compile Include="ProblemAccountMonitorController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -63,6 +63,8 @@
     <Compile Include="Implement\AccountService.cs" />
     <Compile Include="Implement\AssociatedAccountService.cs" />
     <Compile Include="Implement\CheckBetReportService.cs" />
+    <Compile Include="Implement\ProbationManagementService.cs" />
+    <Compile Include="Implement\ManageSubscriberService.cs" />
     <Compile Include="Implement\SpecialCustomerClassService.cs" />
     <Compile Include="Implement\CustomerEvidenceService.cs" />
     <Compile Include="Implement\CustomerMonitorService.cs" />
@@ -84,6 +86,7 @@
     <Compile Include="Implement\SubscriberAssignmentService.cs" />
     <Compile Include="Implement\SuspiciousCustomerReportDetailsService.cs" />
     <Compile Include="Implement\SuspiciousCustomerReportService.cs" />
+    <Compile Include="Implement\SyncCustomerToMainDbService.cs" />
     <Compile Include="Implement\TransactionService.cs" />
     <Compile Include="Implement\CTSUserService.cs" />
     <Compile Include="Interface\IAccountService.cs" />
@@ -100,16 +103,19 @@
     <Compile Include="Interface\IGraphService.cs" />
     <Compile Include="Interface\ICustomerEvidenceService.cs" />
     <Compile Include="Interface\IImportEvidencesService.cs" />
+    <Compile Include="Interface\IManageSubscriberService.cs" />
     <Compile Include="Interface\IMatchMonitorService.cs" />
     <Compile Include="Interface\INotificationRecipientService.cs" />
     <Compile Include="Interface\INotificationService.cs" />
     <Compile Include="Interface\IOfficeIPService.cs" />
+    <Compile Include="Interface\IProbationManagementService.cs" />
     <Compile Include="Interface\IProblemAccountMonitorService.cs" />
     <Compile Include="Interface\IScannedOfficeIpReportService.cs" />
     <Compile Include="Interface\ISpecialCustomerClassService.cs" />
     <Compile Include="Interface\ISubscriberAssignmentService.cs" />
     <Compile Include="Interface\ISuspiciousCustomerReportDetailsService.cs" />
     <Compile Include="Interface\ISuspiciousCustomerReportService.cs" />
+    <Compile Include="Interface\ISyncCustomerToMainDbService.cs" />
     <Compile Include="Interface\ITransactionService.cs" />
     <Compile Include="Interface\ICTSUserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

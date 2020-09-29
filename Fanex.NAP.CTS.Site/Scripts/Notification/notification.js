@@ -1,8 +1,19 @@
 ﻿let unreadMsgCounter = 0; 
-let msgCounter = 0;
-let messages = null;
-let maxAssociationId = 0;
 let isFirstNotification = false;
+
+let associatedMessages = {
+    messages : null,
+    msgCounter: 0,
+    msgUnreadCounter: 0,
+    maxAssociationId: 0
+};
+
+let probationMessages = {
+    messages : null,
+    msgCounter: 0,
+    msgUnreadCounter: 0,
+    maxProbationID: 0
+};
 
 function notification() {
     let domElements = {
@@ -18,40 +29,72 @@ function notification() {
         for (var k in arguments) {
             a = a.replace(new RegExp("\\{" + k + "\\}", 'g'), arguments[k]);
         }
-        return a
+        return a;
     }
 
     function GetMessage()
     {
         var messagesHtmlString = "<ul>";
-        var htmlTemplateRead = "<li class='read'>" + RenderUsername() +"<span class='datetime'> {2}</span ></li >";
-        var htmlTemplateUnRead = "<li class='unread'>" + RenderUsername()+"<span class='datetime'> {2}</span ></li >";
+        var htmlTemplateAssociatedRead = RenderMessageForAAM(1);
+        var htmlTemplateAssociatedUnRead = RenderMessageForAAM(0);
 
-        if (msgCounter != null) {
-            for (var i = 0; i < msgCounter; i++) {
-                if (messages[i].IsSeen) {
-                    messagesHtmlString += htmlTemplateRead.format(messages[i].UserName, messages[i].NewAssocitionCount, messages[i].CreatedDateString, messages[i].CTSCustID);
+        if (probationMessages.msgCounter != null) {
+            for (var i = 0; i < probationMessages.msgCounter; i++) {
+                if (probationMessages.messages[i].IsSeen) {
+                    messagesHtmlString += RenderMessgaeForProbation(1, probationMessages.messages[i].NotificationType, probationMessages.messages[i].TotalFailed).format(probationMessages.messages[i].TotalFailed, probationMessages.messages[i].CreatedDateString);
                 }
                 else {
-                    messagesHtmlString += htmlTemplateUnRead.format(messages[i].UserName, messages[i].NewAssocitionCount, messages[i].CreatedDateString, messages[i].CTSCustID);
+                    messagesHtmlString += RenderMessgaeForProbation(0, probationMessages.messages[i].NotificationType, probationMessages.messages[i].TotalFailed).format(probationMessages.messages[i].TotalFailed, probationMessages.messages[i].CreatedDateString);
+                }
+            }
+        }
+
+        if (associatedMessages.msgCounter != null) {
+            for (var i = 0; i < associatedMessages.msgCounter; i++)
+            {
+                if (associatedMessages.messages[i].IsSeen) {
+                    messagesHtmlString += htmlTemplateAssociatedRead.format(associatedMessages.messages[i].UserName, associatedMessages.messages[i].NewAssocitionCount, associatedMessages.messages[i].CreatedDateString, associatedMessages.messages[i].CTSCustID);
+                }
+                else {
+                    messagesHtmlString += htmlTemplateAssociatedUnRead.format(associatedMessages.messages[i].UserName, associatedMessages.messages[i].NewAssocitionCount, associatedMessages.messages[i].CreatedDateString, associatedMessages.messages[i].CTSCustID);
                 }
             }
         }
 
         messagesHtmlString += "</ul>";
-        domElements.notificationContent.html(msgCounter > 0 ? messagesHtmlString : "<div class='no-notification'>There is no notification.</div>");
+        domElements.notificationContent.html((associatedMessages.msgCounter + probationMessages.msgCounter) > 0 ? messagesHtmlString : "<div class='no-notification'>There is no notification.</div>");
         $('.notification-icon').addClass('has-arrow-down');
     }
 
-    function RenderUsername() {
-            var url = common.modifyRelativeUrl('Account/Index/{3}');
+    function RenderMessageForAAM(isRead)
+    {
+        var url = common.modifyRelativeUrl('Account/Index/{3}');
+        var content = '<a href="' + url + '"> Account <span class="name">{0}</span> has {1} new associated account(s). </a>';
+        if (isRead == 1)
+            return "<li class='read'>" + content + "<span class='datetime'> {2}</span ></li >";
+        else
+            return "<li class='unread'>" + content + "<span class='datetime'> {2}</span ></li >";
+    }
 
-            return '<a href="' + url + '"> Account <span class="name">{0}</span> has {1} new associated account(s). </a>';
+    function RenderMessgaeForProbation(isRead, notificationType, totalFail)
+    {
+        var url = common.modifyRelativeUrl('ProbationManagement/Index?filterType=' + notificationType);
+        var content = '<a href="' + url + '"> There are <span class="name">{0}</span> account(s) '; 
+
+        if (notificationType == 1) 
+            content = content + ' cannot pass Probation on {1}. </a>';
+        else 
+            content = content + ((totalFail > 1) ? 'who were' : 'who was') + ' tagged Probation and negative margin on {1}. </a>';
+
+        if (isRead == 1)
+            return "<li class='read'>" + content + "</li >";
+        else
+            return "<li class='unread'>" + content + "</li >";
     }
 
     function getUnreadMessageCount()
     {
-        GetNewNotification(0);   //Default GET to load para = 0
+        GetNewNotification(0,0);   //Default GET to load para = 0
     }
 
     domElements.notificationIcon.off("click");
@@ -62,26 +105,37 @@ function notification() {
 
     $(document).ready(function () {
         domElements.notificationIcon.on('click', function () {
-            GetNewNotification(maxAssociationId);        //Get to update
+            GetNewNotification(associatedMessages.maxAssociationId, probationMessages.maxProbationID);        //Get to update
             domElements.notificationList.toggle();
         });        
     });
 
-    function GetNewNotification(maxAssociationID) {
+    function GetNewNotification(maxAssociationID, maxProbationID) {
         var url = common.modifyRelativeUrl("/Notification/GetAllMessages");
 
         $.ajax(url, {
-            type: 'GET',
-            data: { maxAssociationID: maxAssociationID },
+            type: 'POST',
+            data: {
+                maxAssociationID: maxAssociationID,
+                maxProbationID: maxProbationID
+            },
             success: function (json) {
                 if (!CheckValid(json)) {
                     ReCheckin();
                 } else {
                     CheckDifferentCurrentAndPreviousMessages(json);
                     SetUnReadCounterToCookie(json.unReadMessageCounter);
-                    maxAssociationId = json.maxAssociationID;
-                    messages = json.messages;
-                    msgCounter = json.messageCounter;
+
+                    associatedMessages.messages = json.messages.AssociatedMessages;
+                    associatedMessages.msgCounter = json.associatedMessagesCounter;
+                    associatedMessages.msgUnreadCounter = json.associatedUnreadCounter;
+                    associatedMessages.maxAssociationId = json.associatedMaxAssociationID;
+
+                    probationMessages.messages = json.messages.ProbationMessages;
+                    probationMessages.msgCounter = json.probationMessagesCounter;
+                    probationMessages.msgUnreadCounter = json.probationUnreadCounter;
+                    probationMessages.maxProbationID = json.probationMaxProbationID;
+
                     GetMessage();
                     SetupBellNotification();
                     isFirstNotification = json.isFirstNotification;
@@ -89,7 +143,7 @@ function notification() {
             },
             complete: function () {
                 if (isFirstNotification == false && GetUnReadFlagFromCookie() == "true") {
-                    NotifyToDesktop(unreadMsgCounter);
+                    NotifyToDesktop();
                     document.cookie = "hasNewUnreadMessages=false; path=/";
                 }
 
@@ -129,15 +183,23 @@ function notification() {
         }
     }
 
-    function NotifyToDesktop(notificationCounter) {
+    function NotifyToDesktop() {
         if (!window.Notification)
             console.log('Browser does not support notifications.');
         else
-            GenerateMessageNotify(notificationCounter);
+            GenerateMessageNotify();
     }
 
-    function GenerateMessageNotify(notificationCounter) {
-        var mess = notificationCounter > 1 ? notificationCounter + " new associated accounts were added." : notificationCounter + " new associated accounts was added.";
+    function GenerateMessageNotify() {
+        var mess = "";
+        if (associatedMessages.msgUnreadCounter > 0) {
+            mess += associatedMessages.msgUnreadCounter > 1 ? associatedMessages.msgUnreadCounter + " new associated accounts were added.\n\ " : associatedMessages.msgUnreadCounter + " new associated accounts was added.\n\ ";
+        }
+
+        if (probationMessages.msgUnreadCounter > 0) {
+            mess += probationMessages.msgUnreadCounter + " new probation notification message(s).";
+        }
+
         if (Notification.permission === 'granted') {
             new Notification('CTS Notification', {
                 body: mess
@@ -200,9 +262,9 @@ function notification() {
     }
 
     function CheckValid(json) {
-        if (json.maxAssociationID === undefined
+        if (json.messages === undefined
             && json.unReadMessageCounter === undefined
-            && json.messageCounter === undefined)
+            && json.associatedMessagesCounter === undefined)
         {
             return false;
         }
@@ -239,8 +301,8 @@ function notification() {
             && domElements.notificationList.is(":visible"))
         {
             domElements.notificationBell.removeClass('bell-shake');
-            domElements.circle.hide(); 
-            GetNewNotification(maxAssociationId);     
+            domElements.circle.hide();
+            GetNewNotification(associatedMessages.maxAssociationId, probationMessages.maxProbationID);     
             domElements.notificationList.toggle();
         }
     });

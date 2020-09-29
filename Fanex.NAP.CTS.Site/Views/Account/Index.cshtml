@@ -223,7 +223,8 @@
     <input id="hdSubscriber" type="hidden" value="@Model.Subscriber" />
     <input id="hdIsHostPermission" type="hidden" IsHostPermission="@Model.IsHostPermission.ToString()" />
     <input id="hdCurrentUserId" type="hidden" value="@Model.CurrentUserId" />
-    <input id="hdIsBettingStatisticPermission" type="hidden" IsBettingStatisticPermission="@Model.IsBettingStatisticPermission.ToString()"/>
+    <input id="hdIsBettingStatisticPermission" type="hidden" IsBettingStatisticPermission="@Model.IsBettingStatisticPermission.ToString()" />
+    <input id="hdIsViewIPTransactionPermission" type="hidden" IsViewIPTransactionPermission="@Model.IsViewIPTransactionPermission.ToString()" />
 </div>
 @section scripts{
     @Scripts.Render("~/statistic-scripts"

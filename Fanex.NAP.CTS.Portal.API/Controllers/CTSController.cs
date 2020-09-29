@@ -212,7 +212,7 @@
             var result = string.Empty;
             try
             {
-                var custClassifications = _accountService.GetCustomerClassificationForAPI(custIdList, 200);
+                var custClassifications = _accountService.GetCustomerClassificationForAPI(custIdList, "50,200");
                 result = custClassifications.Select(c => new CustomerClassification()
                 {
                     CustID = c.CustID,
@@ -226,6 +226,61 @@
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Get classification of customer by Category's IDs
+        /// </summary>
+        /// <param name="categoryIDList"></param>
+        /// <returns>Customer classification in XML format</returns>
+        [HttpGet]
+        public string GetCustomerClassificationByCategoryIDs(string categoryIDList)
+        {
+            try
+            {
+                var custClassifications = _accountService.GetCustomerClassificationByCategory(categoryIDList);
+                return custClassifications.Any() 
+                    ? custClassifications.Select(c => new CustomerClassification()
+                                                        {
+                                                            CustID = c.CustID,
+                                                            ParentCategoryName = "",
+                                                            CategoryName = c.CategoryName
+                                                        }).ToXmlString()
+                    : string.Empty;
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("GetCustomerClassificationByCategoryIDs failed: " + ex.Message + ex.StackTrace);
+            }
+
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Get VVIP Customers
+        /// </summary>
+        /// <returns>Customer classification in XML format</returns>
+        [HttpGet]
+        public string GetVVIPCustomer()
+        {
+            try
+            {
+                var custClassifications = _accountService.GetCustomerClassificationByCategory("3");
+                return custClassifications.Any()
+                    ? custClassifications.Select(c => new CustomerClassification()
+                    {
+                        CustID = c.CustID,
+                        ParentCategoryName = "",
+                        CategoryName = c.CategoryName
+                    }).ToXmlString()
+                    : string.Empty;
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("GetCustomerClassificationByCategoryIDs failed: " + ex.Message + ex.StackTrace);
+            }
+
+            return string.Empty;
         }
 
         /// <summary>

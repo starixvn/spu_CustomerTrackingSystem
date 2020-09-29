@@ -5,7 +5,8 @@
     var subscriberId = $("#hdSubscriberId").val();
     var subscriber = $("#hdSubscriber").val();   
     var isHostPermission = $("#hdIsHostPermission").attr("IsHostPermission");
-    var isBettingStatisticPermission = $("#hdIsBettingStatisticPermission").attr("IsBettingStatisticPermission");
+    var isBettingStatisticPermission = $("#hdIsBettingStatisticPermission").attr("IsBettingStatisticPermission");  
+    var isViewIPTransactionPermission = $("#hdIsViewIPTransactionPermission").attr("IsViewIPTransactionPermission");
     var currentUserId = $("#hdCurrentUserId").val();
     var isPreviousStatisticOpen = false;
 
@@ -87,6 +88,8 @@
     }
 
     function LoadTransactionHistory() {
+        let isViewIP = (isViewIPTransactionPermission === "False" || isViewIPTransactionPermission === undefined) ? false : true;
+
         $.ajax(common.modifyRelativeUrl('Account/TransactionHistory'), {
             type: 'POST',
             success: function (response) {
@@ -94,7 +97,7 @@
             },
             complete: function () {
                 var transHistory = new transaction_history();
-                transHistory.Initial(ctsCustId, subscriberId);
+                transHistory.Initial(ctsCustId, subscriberId, isViewIP);
             },
             error: function (errMsg) {
                 console.log(errMsg);
@@ -287,7 +290,7 @@
     }
 
     function DisplayStatistic() {
-        if (isBettingStatisticPermission == "False" || isBettingStatisticPermission === undefined) {
+        if (isBettingStatisticPermission === "False" || isBettingStatisticPermission === undefined) {
             return;
         }
 
@@ -299,10 +302,10 @@
             isPreviousStatisticOpen = true;
         }
         else {
-            isPreviousStatisticOpen = (userBehavior == 'isStatisticOpen=true') ? true : false;
+            isPreviousStatisticOpen = (userBehavior === 'isStatisticOpen=true') ? true : false;
         }
      
-        if (isPreviousStatisticOpen == true) {
+        if (isPreviousStatisticOpen === true) {
             domElements.statisticDetail.removeClass("hide");
             domElements.statisticIcon.addClass("icon-open");
 

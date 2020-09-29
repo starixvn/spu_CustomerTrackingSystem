@@ -31,7 +31,8 @@
   </Function>
 
   <Function Name="Notification">
-    <Setting Key="CTS_DC_Notification_GetAssociatedAccountNewAssociation" SpName="CTS_DC_Notification_GetAssociatedAccountNewAssociation_xtest" DbName="MySQL.CTS_DataCenter"/>
+    <Setting Key="CTS_DC_Notification_GetNewAssociation" SpName="CTS_DC_Notification_GetNewAssociation_xtest" DbName="MySQL.CTS_DataCenter"/>
+    <Setting Key="CTS_DC_Notification_GetProbation" SpName="CTS_DC_Notification_GetProbation_xtest" DbName="MySQL.CTS_DataCenter"/>
   </Function>
 
   <Function Name="Evidence">
@@ -83,5 +84,18 @@
     <Setting Key="CTS_DC_SpecialCustClass_GetAll" SpName="CTS_DC_SpecialCustClass_GetAll_xtest" DbName="MySQL.CTS_DataCenter"/>
     <Setting Key="CTS_DC_SpecialCustClass_Insert" SpName="CTS_DC_SpecialCustClass_Insert_xtest" DbName="MySQL.CTS_DataCenter"/>
     <Setting Key="CTS_DC_SpecialCustClass_Remove" SpName="CTS_DC_SpecialCustClass_Remove_xtest" DbName="MySQL.CTS_DataCenter"/>
+  </Function>
+
+  <Function name="ProbationManagement">
+    <Setting Key="CTS_DC_CustClassification_Probation_Get" SpName="CTS_DC_CustClassification_Probation_Get_xtest" DbName="MySQL.CTS_DataCenter"/>
+    <Setting Key="CTS_DC_CustClassification_Probation_GetCategory" SpName="CTS_DC_CustClassification_Probation_GetCategory_xtest" DbName="MySQL.CTS_DataCenter"/>
+    <Setting Key="CTS_DC_CustClassification_Probation_Update" SpName="CTS_DC_CustClassification_Probation_Update_xtest" DbName="MySQL.CTS_DataCenter"/>
+  </Function>
+
+  <Function name="Subscriber">
+    <Setting Key="CTS_DC_Subscriber_GetAll " SpName="CTS_DC_Subscriber_GetAll_xtest" DbName="MySQL.CTS_DataCenter"/>
+    <Setting Key="CTS_DC_Subscriber_GetDetails" SpName="CTS_DC_Subscriber_GetDetails_xtest" DbName="MySQL.CTS_DataCenter"/>
+    <Setting Key="CTS_DC_Subscriber_Remove" SpName="CTS_DC_Subscriber_Remove_xtest" DbName="MySQL.CTS_DataCenter"/>
+    <Setting Key="CTS_DC_Subscriber_Update" SpName="CTS_DC_Subscriber_Update_xtest" DbName="MySQL.CTS_DataCenter"/>
   </Function>
 </Functions>

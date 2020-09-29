@@ -96,7 +96,7 @@ body {
 
         .sub-menu-item > .link {
             display: block;
-            padding: 5px 12px;
+            padding: .7rem 1.2rem;
             color: #333333;
             font-size: 13px;
         }
@@ -440,6 +440,14 @@ body {
 
 
 // Content
+.content {
+    margin-top: 6rem;
+
+    .wrapper-content {
+        padding: 0 1.6rem 1.6rem;
+    }
+}
+
 .page-title {
     padding: 8px 16px;
     text-transform: uppercase;

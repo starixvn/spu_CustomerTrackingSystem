@@ -11,7 +11,5 @@
         ResultInsertCustomerClass InsertCustomerClass(string username, int custClass, bool isAffectToAssociation, int createdBy);
 
         DBResult RemoveCustomerClass(long ctsCustID, int createdBy);
-
-        DBResult SyncCustomerClassToMainDb(IEnumerable<CustomerClassForMainDb> customerClassList, string syncAction);        
     }
 }

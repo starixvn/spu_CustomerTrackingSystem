@@ -12,12 +12,13 @@
     using Fanex.NAP.CTS.Model.Account;    
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.GraphDB;
-    using Fanex.NAP.CTS.Model.SpecialCustomerClass;
+    using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Model.Transaction;
     using Fanex.NAP.CTS.Resource;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.Service.Implement;
+    using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.Account;
     using Fanex.NAP.CTS.ViewModel.Account.Associated;
     using Fanex.NAP.CTS.ViewModel.Account.BettingStatistic;
@@ -31,17 +32,16 @@
     using System.Threading.Tasks;
     using System.Web.Mvc;
 
+    [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class AccountController : BaseController
     {
         private readonly IAccountService _accountService;
         private readonly IGraphService _graphService;
-
         private readonly ITransactionService _transService;
-
         private readonly ISubscriberAssignmentService _subscriberAssignmentService;
-
         private readonly ICustomerEvidenceService _customerEvidenceService;
+        private readonly ISyncCustomerToMainDbService _syncToMainDbService;
 
         public override string BaseControllerName { get => string.Empty; }
 
@@ -52,6 +52,7 @@
             _subscriberAssignmentService = new SubscriberAssignmentService();
             _transService = new TransactionService();
             _customerEvidenceService = new CustomerEvidenceService();
+            _syncToMainDbService = new SyncCustomerToMainDbService();
         }
 
         public ActionResult Index(long Id)
@@ -69,6 +70,7 @@
                         CTSCustId = Id,
                         IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.AccountDetail, NAP.Core.Business.Constant.Policy.Host),
                         IsBettingStatisticPermission = CheckBettingStatisticPermission(userService, customerInfoFromCTS.RoleId),
+                        IsViewIPTransactionPermission = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.ViewIP, NAP.Core.Business.Constant.Policy.Read),
                         CurrentUserId = CurrentSession.UserId
                     };
 
@@ -894,6 +896,9 @@
 
         public ActionResult GetTransactionHistory(DataTableAjaxPostModel model)
         {
+            IUserService userService = new UserService();
+            var isViewIPPermission = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.ViewIP, NAP.Core.Business.Constant.Policy.Read);
+
             var take = model.length;
             var skip = model.start;
             var totalItem = 0;
@@ -914,7 +919,7 @@
                 BrowserName = x.BrowserName,
                 DeviceId = x.DeviceId,
                 Flagged = x.Flagged,
-                Ip = x.Ip,
+                Ip = isViewIPPermission ? x.Ip : string.Empty,
                 IpId = x.IpId,
                 OSName = x.OSName,
                 TransTime = x.TransTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
@@ -1064,16 +1069,13 @@
 
                     if (custIdInt != 0)
                     {
-                        var custToMainDbList = new List<CustomerClassForMainDb>
-                    {
-                        new CustomerClassForMainDb
-                        {
+                        var custToMainDbList = new List<CustomerClassForMainDb>();
+                        custToMainDbList.Add(new CustomerClassForMainDb {
                             CustID = custIdInt,
                             CustomerClass = 100
-                        }
-                    };
-
-                        _accountService.SyncCustomerClassToMainDb(custToMainDbList, "Insert");
+                        });               
+                        
+                        _syncToMainDbService.SyncCustomerClassToMainDb(custToMainDbList, "Insert Customer Classification");
                     }
                 }
             }
@@ -1133,8 +1135,8 @@
                 if (resultToCTS.CustomerClassList != null && resultToCTS.CustomerClassList.Any())
                 {
                     var customerClassListToMainDb = resultToCTS.CustomerClassList.Where(c => c.CustID != 0);
-
-                    _accountService.SyncCustomerClassToMainDb(customerClassListToMainDb, "Remove");
+                    
+                    _syncToMainDbService.SyncCustomerClassToMainDb(customerClassListToMainDb, "Remove Customer Classification");
                 }
             }
             else

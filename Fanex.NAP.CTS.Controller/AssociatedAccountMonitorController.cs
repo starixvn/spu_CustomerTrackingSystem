@@ -15,6 +15,7 @@ namespace Fanex.NAP.CTS.Controller
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.ViewModel.AssociatedAccountMonitor;
 
+    [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.AssociatedAccountMonitor, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class AssociatedAccountMonitorController: BaseController
     {

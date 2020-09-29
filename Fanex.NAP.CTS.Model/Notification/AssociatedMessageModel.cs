@@ -1,8 +1,8 @@
-﻿namespace Fanex.NAP.CTS.Model.DTO
+﻿namespace Fanex.NAP.CTS.Model.Notification
 {
     using System;
 
-    public class Message
+    public class AssociatedMessageModel
     {
         public int CTSCustID { get; set; }
 

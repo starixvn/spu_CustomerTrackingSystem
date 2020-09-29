@@ -71,6 +71,9 @@
 
             RegisterSpecialCustomerClassBundles(bundles);
 
+            RegisterProbationManagementBundles(bundles);
+
+            RegisterManagerSubscriberBundles(bundles);           
         }
 
         private static void RegisterFSCoreBundles(BundleCollection bundles)
@@ -290,6 +293,24 @@
 
             bundles.Add(new StyleBundle("~/special-customer-class-styles").Include(
                  "~/Content/scss/pages/special-customer-class/special-customer-class.css"));
+        }
+
+        private static void RegisterProbationManagementBundles(BundleCollection bundles)
+        {
+            bundles.Add(new StyleBundle("~/probation-management-styles").Include(
+                "~/Content/scss/pages/probation-management/probation-management.css"));
+
+            bundles.Add(new ScriptBundle("~/probation-management-scripts").Include(
+                "~/Scripts/ProbationManagement/index.js"));
+        }
+
+        private static void RegisterManagerSubscriberBundles(BundleCollection bundles)
+        {
+            bundles.Add(new ScriptBundle("~/manage-subscriber-scripts").Include(
+               "~/Scripts/ManageSubscriber/index.js"));
+
+            bundles.Add(new StyleBundle("~/manage-subscriber-styles").Include(
+                    "~/Content/scss/pages/manage-subscriber/manage-subscriber.css"));
         }
     }
 }

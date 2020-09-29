@@ -1,0 +1,164 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles{
+    @Styles.Render("~/manage-subscriber-styles")
+}
+
+@model Fanex.NAP.CTS.ViewModel.ManageSubscriber.ManageSubscriberViewModel
+<body class="manage-subscriber-page">
+    <h2 class="page-title">Manage Subscriber</h2>
+    <div class="wrapper-content manage-subscriber">
+        <div class="fixed-header">
+            <div class="top-header">
+                <button class="button button-primary-outline" id="btnAdd">Add</button>
+            </div>
+        </div>
+
+        <table id="manageSubscriberTable" class="manage-subscriber-table table table-striped table-basic">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Sub ID</th>
+                    <th>Subscriber Name</th>
+                    <th>IBCUserName_Prefix</th>
+                    <th>Subscriber Group</th>
+                    <th>Role Mapping</th>
+                    <th>Site ID</th>
+                    <th>Site</th>
+                    <th>IsActive</th>
+                    <th>Release Date</th>
+                    <th>Edit</th>
+                    <th>Terminated</th>
+                </tr>
+            </thead>
+            <tbody/>         
+        </table>
+    </div>
+
+    <div id="divDetailedSiteTable" class="popup-child-table divAddSubscriber" style="display: none;">
+        <table class="child-table" id="detailedSiteTable">
+            <thead>
+                <tr role="row">
+                    <th>Role Mapping</th>
+                    <th>Site ID</th>
+                    <th>Site</th>
+                </tr>
+            </thead>
+            <tbody/>
+        </table>
+    </div>
+
+    <div id="divAddSubscriber" class="popup-add divAddSubscriber" style="display: none;">
+
+
+        <div class="group-border">
+            <div class="form-control mbform">
+                <div class="ischeckInput">
+                    <div class="group-input">
+                        <div class="label">Subscriber Name</div>
+                        <input id="txtSubscriberId" type="text" hidden>
+                        <input id="txtSubscriberName" type="text" class="input-field sub-name full-width" maxlength="50">
+                    </div>
+                    <label class="container-checkbox" id="containerCheckbox">
+                        IsTest
+                        <input id="overwriteCheckbox" type="checkbox">
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+                <p class="validate-form" id="subNameValidation" hidden>Please fill out this field</p>
+            </div>
+            <div class="form-control mbform">
+                <div class="ischeckInput">
+                    <div class="group-input">
+                        <div class="label">Subscriber Type</div>
+                        <select class="control full-width" id="txtSubscriberType">
+                            <option value="0" selected="">Credit Site</option>
+                            <option value="1">Licensees</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form-control mbform">
+                <div class="ischeckInput">
+                    <div class="group-input">
+                        <div class="label">IBCUserName_Prefix</div>
+                        <input id="txtIBCUserNamePrefix" type="text" class="input-field full-width" maxlength="50">
+                    </div>
+                </div>
+                <p class="validate-form" id="prefixValidation" hidden>Please fill out this field</p>
+            </div>
+        </div>
+        <div class="group-border" id="detailedSiteGroup">
+            <div class="border-form-toggle">
+                <div class="form-control mbform">
+                    <div class="ischeckInput">
+                        <div class="group-input">
+                            <div class="label"><span class="toggle-add-sub icon-open" id="toggleAddSub1"><i class="icon icon-chevron-right"></i></span> Site</div>
+                            <input id="txtSite1" type="text" class="input-field full-width" maxlength="50">
+                        </div>
+                    </div>
+                    <p class="validate-form" id="siteValidation1" hidden>Please fill out this field</p>
+                </div>
+                <div id="statistic-detail1" class="group-toggle-btn">
+                    <div class="form-control mbform">
+                        <div class="ischeckInput">
+                            <div class="group-input">
+                                <div class="label">Site ID</div>
+                                <input id="txtSiteID1" type="number" class="input-field full-width" maxlength="50">
+                            </div>
+                        </div>
+                        <p class="validate-form" id="siteIDValidation1" hidden>Please fill out this field</p>
+                    </div>
+                    <div class="form-control mbform">
+                        <div class="ischeckInput">
+                            <div class="group-input">
+                                <div class="label">Role Mapping</div>
+                                <select class="control full-width" id="txtRoleMapping1">
+                                    <option value="0" selected="">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class=" btn btn-default btn-add-site" id="addSiteButton">Add Site</button>
+        </div>
+
+        <div class="note">
+            <span class="text-title">
+                Note:
+            </span>
+
+            <span class="text-description">
+                Role Mapping format
+            </span>
+            <div class="text-detail">
+                <p class="text">- 0: is for Licensee site</p>
+                <p class="text">- 1: is for Membersite of Credit Site</p>
+                <p class="text">- 2: is for Alpha site of Credit Site</p>
+            </div>
+
+        </div>
+
+        <div class="modal-footer margin-top-10">
+            <button id="btnCancel" class="button btn-cancel-outline" title="Cancel">Cancel</button>
+            <button id="btnSave" class="button -add" title="Add Subscriber">Submit</button>
+        </div>
+
+        <div class="hide">
+            <input id="hdIsHostPermission" type="hidden" IsHostPermission="@Model.IsHostPermission.ToString()" />
+            <input id="hdCTSCustId" type="hidden" value="@Model.CustId" />
+        </div>
+    </div>
+</body>
+
+@section scripts{
+    @Scripts.Render("~/manage-subscriber-scripts")
+}

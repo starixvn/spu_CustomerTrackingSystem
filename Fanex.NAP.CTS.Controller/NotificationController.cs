@@ -2,10 +2,12 @@
 {
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Core.Utilities;
+    using Fanex.NAP.CTS.ViewModel.Notification;
     using Service;
     using System.Linq;
     using System.Web.Mvc;
-    
+
+    [NapSuperAuth]
     public class NotificationController : ConfigurationsController
     {
         private readonly INotificationService _notificationService;
@@ -15,26 +17,34 @@
             _notificationService = new NotificationService();
         }
 
-        [HttpGet]
         [NapAuth(FunctionKey = FSFunctionKeys.NotificationSettings, Policy = NAP.Core.Business.Constant.Policy.Read)]
-        public JsonResult GetAllMessages(int maxAssociationID)
+        public JsonResult GetAllMessages(long maxAssociationID, long maxProbationID)
         {
             var isFirstNotification = CheckFirstNotification();
 
             var userId = CurrentSession.UserId;
-            var messages = _notificationService.Get(userId, maxAssociationID).ToList();
-            var unReadList = messages.Select(c => c).Where(x => x.IsSeen == false);
-            var readList = messages.Select(c => c).Where(x => x.IsSeen == true);
+            var associatedMessages = _notificationService.GetAssociatedMessages(userId, maxAssociationID).ToList();
+            var probationMessages = _notificationService.GetProbationMessages(userId, maxProbationID).ToList();
+
+            var associatedUnreadMessages = associatedMessages.Select(c => c).Where(x => x.IsSeen == false);
+            var probationUnreadMessages = probationMessages.Select(c => c).Where(x => x.IsSeen == false);
 
             return Json(new
             {
-                messages,
-                messageCounter = messages?.Count(),
-                maxAssociationID = (unReadList?.Count() > 0)?  messages.Max(c=>c.MaxNewAssociationID) : 0,
-                unReadList,
-                unReadMessageCounter = unReadList?.Count(),
-                readList,
-                readListCounter = readList?.Count(),
+                messages = new NotificationMessagesViewModel()
+                {
+                    AssociatedMessages = associatedMessages,
+                    ProbationMessages = probationMessages
+                },
+                associatedMessagesCounter = associatedMessages?.Count(),
+                associatedMaxAssociationID = (associatedUnreadMessages?.Count() > 0)? associatedMessages.Max(c=>c.MaxNewAssociationID) : 0,
+                associatedUnreadCounter = associatedUnreadMessages?.Count(),
+
+                probationMessagesCounter = probationMessages?.Count(),
+                probationMaxProbationID = (probationUnreadMessages?.Count() > 0) ? probationMessages.Max(c => c.MaxNotificationID) : 0,
+                probationUnreadCounter = probationUnreadMessages?.Count(),
+
+                unReadMessageCounter = associatedUnreadMessages?.Count() + probationUnreadMessages?.Count(),
                 isFirstNotification
             }, JsonRequestBehavior.AllowGet);
         }

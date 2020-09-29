@@ -15,18 +15,14 @@
     using Fanex.NAP.CTS.Criteria.Account.ChainToEvidence;
     using Fanex.NAP.CTS.Criteria.Account.CustomerCategory;
     using Fanex.NAP.CTS.Criteria.Home;
-    using Fanex.NAP.CTS.Criteria.SpecialCustomerClass;
-    using Fanex.NAP.CTS.Model;
-    using Fanex.NAP.CTS.Model.Account;    
-    using Fanex.NAP.CTS.Model.API;
+    using Fanex.NAP.CTS.Criteria.SpecialCustomerClass;    
+    using Fanex.NAP.CTS.Model.Account;        
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.Home;
-    using Fanex.NAP.CTS.Model.SpecialCustomerClass;
-    using Fanex.NAP.CTS.Resource;
-    using Fanex.NAP.CTS.ViewModel.Account;
-    using Fanex.NAP.CTS.ViewModel.Account.GeneralInformation;
+    using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
+    using Fanex.NAP.CTS.ViewModel.Account;    
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -710,12 +706,12 @@
                 }
             }
         }
-        public IEnumerable<CustomerClassificationModel> GetCustomerClassificationForAPI(string custIdList, int parentCateId)
+        public IEnumerable<CustomerClassificationModel> GetCustomerClassificationForAPI(string custIdList, string parentCateIdList)
         {
             var criteria = new GetCTSCustomerClassificationForAPICriteria
             {
                 CustIdList = custIdList,
-                ParentCateId = parentCateId
+                ParentCateIdList = parentCateIdList
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -824,58 +820,7 @@
             insertCTSResult.OpErrorMessage = criteria.ErrorMessage;
 
             return insertCTSResult;
-        }
-
-        public DBResult SyncCustomerClassToMainDb(IEnumerable<CustomerClassForMainDb> customerClassList, string syncAction)
-        {
-            var criteria = new SyncCustomerClassToMainDbCriteria()
-            {
-                custList = customerClassList.ToXmlString(),
-                ErrorCode = 0,
-                ErrorMessage = string.Empty
-            };
-
-            try
-            {
-                var repository = new DynamicRepository();
-
-                repository.Execute(criteria);
-
-                if (criteria.ErrorCode != 0)
-                {
-                    var errorMessage = "CTS - " + syncAction + " Customer Classification - SyncCustomerClassToMainDb fail:";
-                    errorMessage += " errorCode = " + criteria.ErrorCode;
-                    errorMessage += "; customerClassList = " + criteria.custList;
-
-                    LogService.Error(errorMessage);
-
-                    return new DBResult
-                    {
-                        ErrorCode = criteria.ErrorCode,
-                        ErrorMsg = criteria.ErrorMessage
-                    };
-                }
-            }
-            catch (Exception ex)
-            {
-                var errorMessage = "CTS - " + syncAction + " Customer Classification - SyncCustomerClassToMainDb exception:";
-                errorMessage += " customerClassList = " + criteria.custList;
-
-                LogService.Error(errorMessage, ex);
-
-                return new DBResult
-                {
-                    ErrorCode = -1,
-                    ErrorMsg = ex.Message
-                };
-            }
-
-            return new DBResult
-            {
-                ErrorCode = 0,
-                ErrorMsg = string.Empty
-            };
-        }
+        }        
 
         public DBResult PinCategoryCustomerClassification(int custId, long ctsCustId, int subscriberId, bool isPinCategory, int createdBy)
         {
@@ -920,6 +865,20 @@
                 ErrorCode = -1,
                 ErrorMsg = criteria.ErrorMessage
             };
+        }
+
+        public
+        IEnumerable<CustomerClassificationGeneralInfoModel> GetCustomerClassificationByCategory(string categoryIdList)
+        {
+            var criteria = new GetCustomerCategoryByCategoryIdsCriteria
+            {
+                CategoryIDList = categoryIdList
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<CustomerClassificationGeneralInfoModel>(criteria);
+            }
         }
         #endregion
 

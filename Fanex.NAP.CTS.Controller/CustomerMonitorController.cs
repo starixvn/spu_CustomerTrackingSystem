@@ -16,6 +16,7 @@
     using System.Web.Mvc;
     using Fanex.NAP.Core.Web.Session;
 
+    [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.CustomerMonitor, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class CustomerMonitorController : ReportsController
     {

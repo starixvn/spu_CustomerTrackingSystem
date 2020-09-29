@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Model.SpecialCustomerClass
 {
+    using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using System.Collections.Generic;
 
     public class ResultInsertCustomerClass

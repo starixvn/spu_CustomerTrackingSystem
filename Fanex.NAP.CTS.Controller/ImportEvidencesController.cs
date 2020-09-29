@@ -18,6 +18,7 @@
     using Fanex.NAP.CTS.Criteria.Account;
     using Fanex.NAP.CTS.Core.Helpers.Xml;
 
+    [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.ImportEvidences, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class ImportEvidencesController : BaseController
     {

@@ -1,10 +1,13 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
-    using Fanex.NAP.CTS.Model.DTO;
+    using Fanex.NAP.CTS.Model.Notification;
     using System.Collections.Generic;
 
     public interface INotificationService
     {
-        IEnumerable<Message> Get(int custId, int maxAssociationID);
+        IEnumerable<AssociatedMessageModel> GetAssociatedMessages(int custId, long maxAssociationID);
+
+        IEnumerable<ProbationMessageModel> GetProbationMessages(int custId, long maxNotificationID);
+
     }
 }

@@ -12,6 +12,7 @@
     using System.Linq;
     using System.Web.Mvc;
 
+    [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.MatchMonitoring, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class MatchMonitorController : ReportsController
     {
