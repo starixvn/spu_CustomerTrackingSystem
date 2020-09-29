@@ -192,6 +192,7 @@
     <Compile Include="ImportEvidencesController.cs" />
     <Compile Include="ManageSubscriberController.cs" />
     <Compile Include="MatchMonitorController.cs" />
+    <Compile Include="NotificationSettingController.cs" />
     <Compile Include="NotificationController.cs" />
     <Compile Include="ProbationManagementController.cs" />
     <Compile Include="SpecialCustomerClassController.cs" />

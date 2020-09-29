@@ -959,6 +959,7 @@
     <Content Include="Views\SpecialCustomerClass\Index.cshtml" />
     <Content Include="Views\ProbationManagement\Index.cshtml" />
     <Content Include="Views\ManageSubscriber\Index.cshtml" />
+    <Content Include="Views\NotificationSetting\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CoreBetList.css" />
