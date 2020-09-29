@@ -74,6 +74,8 @@
             RegisterProbationManagementBundles(bundles);
 
             RegisterManagerSubscriberBundles(bundles);           
+
+            RegisterNotificationSettingBundles(bundles);
         }
 
         private static void RegisterFSCoreBundles(BundleCollection bundles)
@@ -311,6 +313,15 @@
 
             bundles.Add(new StyleBundle("~/manage-subscriber-styles").Include(
                     "~/Content/scss/pages/manage-subscriber/manage-subscriber.css"));
+        }
+
+        private static void RegisterNotificationSettingBundles(BundleCollection bundles)
+        {
+            bundles.Add(new StyleBundle("~/notification-setting-styles").Include(
+                "~/Content/scss/pages/notification-setting/notification-setting.css"));
+
+            bundles.Add(new ScriptBundle("~/notification-setting-scripts").Include(
+                "~/Scripts/Notification/notification-setting.js"));
         }
     }
 }
