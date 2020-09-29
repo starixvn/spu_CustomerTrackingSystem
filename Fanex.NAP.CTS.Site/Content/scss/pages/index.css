@@ -1842,7 +1842,7 @@ body {
       border-radius: 3px;
       display: none; }
       .header-info .username .sub-menu .sub-menu-item > .link {
-        padding: 5px 20px; }
+        padding: .7rem 1.2rem; }
         .header-info .username .sub-menu .sub-menu-item > .link:hover {
           background: #ddd;
           color: #333; }
