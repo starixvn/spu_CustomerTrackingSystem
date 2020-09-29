@@ -79,5 +79,9 @@
     "outputFile": "Content/scss/pages/manage-subscriber/manage-subscriber.css",
     "inputFile": "Content/scss/pages/manage-subscriber/manage-subscriber.scss",
     "sourceMap": false
+  },
+  {
+    "outputFile": "Content/scss/pages/notification/notification.css",
+    "inputFile": "Content/scss/pages/notification/notification.scss"
   }
 ]
