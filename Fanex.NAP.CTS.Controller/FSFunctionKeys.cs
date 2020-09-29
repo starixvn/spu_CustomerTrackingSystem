@@ -88,4 +88,6 @@ public static class FSFunctionKeys
     public const string SpecialCustomerClass = "SpecialCustomerClass";
 
     public const string ProbationManagement = "ProbationManagement";
+
+    public const string ViewIP = "ViewIP";
 }

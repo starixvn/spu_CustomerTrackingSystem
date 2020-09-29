@@ -6,7 +6,8 @@
     var _ctsCustId = 0;
     var _subscriberId = 0;
     var dataTable;
-    function RenderGrid() {
+
+    function RenderGrid(isViewIP) {
         var url = common.modifyRelativeUrl('Account/GetTransactionHistory');
 
         var table = transactionTable.DataTable({ 
@@ -79,6 +80,11 @@
 
         transactionTable.on('click', '.ip-link', ShowFormIPInformation);
 
+        if (!isViewIP)
+        {
+            table.columns([2]).visible(false);
+        }
+
         return table;
     }
 
@@ -104,10 +110,10 @@
         formIPInformation.OpenModal(valueIP, targetIPAddress);
     }
 
-    this.Initial = function (ctsCustId, subscriberId) {
+    this.Initial = function (ctsCustId, subscriberId, isViewIP) {
         _ctsCustId = ctsCustId;
         _subscriberId = subscriberId;
-        var dataTable = RenderGrid(); 
+        var dataTable = RenderGrid(isViewIP); 
 
         btnSearch.on('click', function () {          
 
