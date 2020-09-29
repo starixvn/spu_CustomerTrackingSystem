@@ -199,7 +199,7 @@
             var result = string.Empty;
             try
             {
-                var custClassifications = _accountService.GetCustomerClassificationForAPI(custIdList, 200);
+                var custClassifications = _accountService.GetCustomerClassificationForAPI(custIdList, "50,200");
                 result = custClassifications.Select(c => new CustomerClassification()
                 {
                     CustID = c.CustID,

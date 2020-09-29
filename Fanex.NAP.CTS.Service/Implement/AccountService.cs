@@ -706,12 +706,12 @@
                 }
             }
         }
-        public IEnumerable<CustomerClassificationModel> GetCustomerClassificationForAPI(string custIdList, int parentCateId)
+        public IEnumerable<CustomerClassificationModel> GetCustomerClassificationForAPI(string custIdList, string parentCateIdList)
         {
             var criteria = new GetCTSCustomerClassificationForAPICriteria
             {
                 CustIdList = custIdList,
-                ParentCateId = parentCateId
+                ParentCateIdList = parentCateIdList
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))

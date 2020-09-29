@@ -8,8 +8,8 @@ namespace Fanex.NAP.CTS.Criteria.Account.CustomerCategory
         [SpParam(SqlParamName = "ip_CustIDs")]
         public string CustIdList { get; set; }
 
-        [SpParam(SqlParamName = "ip_ParentCateID")]
-        public int ParentCateId { get; set; }
+        [SpParam(SqlParamName = "ip_ParentCateIDs")]
+        public string ParentCateIdList { get; set; }
 
         public override string GetSettingKey()
         {
