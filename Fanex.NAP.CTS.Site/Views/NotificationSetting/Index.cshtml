@@ -8,9 +8,52 @@
     @Styles.Render("~/notification-setting-styles")
 }
 
-<h1>notification</h1>
-<h1>This is a Heading</h1>
-<p>This is a paragraph.</p>
+<h2 class="page-title">Notification Setting</h2>
+
+
+
+<div class="notification-content">
+    <div class="notification-setting">
+        <div class="notification-title">
+            <h4 class="title">Notification</h4>
+        </div>
+
+        <div class="notification-body">
+            <div class="switch-control">
+                <div class="name"> Associated Account Monitor </div>
+                <div class="btn-switch">
+
+                    <label class="toggleSwitch nolabel">
+                        <input type="checkbox"/>
+                        <span>
+                            <span>OFF</span>
+                            <span>ON</span>
+                        </span>
+                        <a></a>
+                    </label>
+
+
+                </div>
+            </div>
+
+
+            <div class="switch-control">
+                <div class="name"> Probation Management </div>
+                <div class="btn-switch">
+                    <label class="toggleSwitch nolabel">
+                        <input type="checkbox" />
+                        <span>
+                            <span>OFF</span>
+                            <span>ON</span>
+                        </span>
+                        <a></a>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 @section scripts{

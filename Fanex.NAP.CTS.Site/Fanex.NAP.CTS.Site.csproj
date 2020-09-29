@@ -487,6 +487,12 @@
     <Content Include="Content\scss\pages\associated-account-monitor\associated-account-monitor.scss" />
     <Content Include="Content\scss\pages\common\maintenance.scss" />
     <Content Include="Content\scss\components\_toggle-switch.scss" />
+    <Content Include="Content\scss\pages\notification-setting\notification-setting.css">
+      <DependentUpon>notification-setting.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\scss\pages\notification-setting\notification-setting.min.css">
+      <DependentUpon>notification-setting.css</DependentUpon>
+    </Content>
     <Content Include="Content\scss\pages\probation-management\probation-management.css">
       <DependentUpon>probation-management.scss</DependentUpon>
     </Content>

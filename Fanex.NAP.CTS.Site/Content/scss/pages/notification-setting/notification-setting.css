@@ -1,0 +1,144 @@
+﻿.content {
+  margin-top: 6rem; }
+
+.notification-content {
+  padding: 1.6rem 1.6rem; }
+  .notification-content .notification-setting {
+    width: 100%;
+    max-width: 43.2rem;
+    border: 1px solid #C4C4C4; }
+    .notification-content .notification-setting .notification-title {
+      line-height: 1.9rem;
+      font-size: 1.6rem;
+      border-bottom: 1px solid #C4C4C4; }
+      .notification-content .notification-setting .notification-title .title {
+        margin-bottom: 0;
+        padding: .6rem 1.6rem;
+        color: #1D2E4F;
+        font-family: "Lato", Arial, Tahoma, sans-serif;
+        font-weight: bold;
+        text-transform: inherit; }
+    .notification-content .notification-setting .notification-body {
+      padding: 1rem 1.6rem; }
+      .notification-content .notification-setting .notification-body .switch-control {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #D7D7D7;
+        margin-bottom: 1rem; }
+        .notification-content .notification-setting .notification-body .switch-control:last-child {
+          border-bottom: none;
+          padding-bottom: 0;
+          margin-bottom: 0; }
+        .notification-content .notification-setting .notification-body .switch-control .name {
+          color: #474747;
+          font-size: 1.4rem;
+          line-height: 1.7rem;
+          font-family: "Lato", Arial, Tahoma, sans-serif; }
+        .notification-content .notification-setting .notification-body .switch-control .btn-switch .toggleSwitch {
+          display: inline-block;
+          height: 1.5rem;
+          position: relative;
+          overflow: visible;
+          padding: 0;
+          margin-left: 5rem;
+          cursor: pointer;
+          width: 5rem; }
+        .notification-content .notification-setting .notification-body .switch-control .btn-switch .toggleSwitch * {
+          -webkit-box-sizing: border-box;
+          -moz-box-sizing: border-box;
+          box-sizing: border-box; }
+        .notification-content .notification-setting .notification-body .switch-control .btn-switch .toggleSwitch label,
+        .notification-content .notification-setting .notification-body .switch-control .btn-switch .toggleSwitch > span {
+          line-height: 2rem;
+          height: 2rem;
+          vertical-align: middle; }
+        .notification-content .notification-setting .notification-body .switch-control .btn-switch .toggleSwitch input:focus ~ a,
+        .notification-content .notification-setting .notification-body .switch-control .btn-switch .toggleSwitch input:focus + label {
+          outline: none; }
+        .notification-content .notification-setting .notification-body .switch-control .btn-switch .toggleSwitch label {
+          position: relative;
+          z-index: 3;
+          display: block;
+          width: 100%; }
+        .notification-content .notification-setting .notification-body .switch-control .btn-switch .toggleSwitch input {
+          position: absolute;
+          opacity: 0;
+          z-index: 5; }
+        .notification-content .notification-setting .notification-body .switch-control .btn-switch .toggleSwitch > span {
+          position: absolute;
+          left: -50px;
+          width: 100%;
+          margin: 0;
+          padding-right: 50px;
+          text-align: left;
+          white-space: nowrap; }
+        .notification-content .notification-setting .notification-body .switch-control .btn-switch .toggleSwitch > span span {
+          position: absolute;
+          top: 0;
+          left: 0;
+          z-index: 5;
+          display: block;
+          width: 50%;
+          margin-left: 4.5rem;
+          text-align: left;
+          font-size: 0.9em;
+          width: 100%;
+          left: 12%;
+          top: .1rem;
+          opacity: 0; }
+        .notification-content .notification-setting .notification-body .switch-control .btn-switch .toggleSwitch a {
+          position: absolute;
+          right: 50%;
+          z-index: 4;
+          display: block;
+          height: 1.6rem;
+          padding: 0;
+          left: .2rem;
+          width: 1.6rem;
+          background-color: #fff;
+          border-radius: 100%;
+          transition: all 0.2s ease-out;
+          box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25); }
+        .notification-content .notification-setting .notification-body .switch-control .btn-switch .toggleSwitch > span span:first-of-type {
+          font-weight: bold;
+          font-size: 1.2rem;
+          line-height: 1.4rem;
+          display: flex;
+          align-items: center;
+          text-transform: uppercase;
+          color: #FFFFFF;
+          opacity: 1;
+          left: 36%; }
+        .notification-content .notification-setting .notification-body .switch-control .btn-switch .toggleSwitch > span:before {
+          content: '';
+          display: block;
+          width: 5rem;
+          height: 2rem;
+          position: absolute;
+          left: 5rem;
+          top: -.2rem;
+          background-color: #7D7D7D;
+          border-radius: 1.1rem;
+          transition: all 0.2s ease-out;
+          border: 1px solid #7D7D7D; }
+        .notification-content .notification-setting .notification-body .switch-control .btn-switch .toggleSwitch input:checked ~ a {
+          border-color: #fff;
+          left: 80%;
+          margin-left: -8px; }
+        .notification-content .notification-setting .notification-body .switch-control .btn-switch .toggleSwitch input:checked ~ span:before {
+          border-color: #396EF8;
+          box-shadow: inset 0 0 0 30px #4f971f;
+          border: 1px solid #4f971f; }
+        .notification-content .notification-setting .notification-body .switch-control .btn-switch .toggleSwitch input:checked ~ span span:first-of-type {
+          opacity: 0; }
+        .notification-content .notification-setting .notification-body .switch-control .btn-switch .toggleSwitch input:checked ~ span span:last-of-type {
+          opacity: 1;
+          color: #fff;
+          font-weight: bold;
+          font-size: 1.2rem;
+          line-height: 1.4rem;
+          display: flex;
+          align-items: center;
+          text-transform: uppercase; }
