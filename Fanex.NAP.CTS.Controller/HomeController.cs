@@ -1,5 +1,8 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
+    using Fanex.NAP.Core.Configuration;
+    using Fanex.NAP.Core.Service.Impl;
+    using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
@@ -12,16 +15,29 @@
     public class HomeController : BaseController
     {
         private readonly IAccountService accountService;
+        private readonly IUserService userService;
 
         public HomeController()
         {
             accountService = new AccountService();
+            userService = new UserService();
         }
 
         public ActionResult Index()
         {
             ViewBag.UserId = CurrentSession.UserId;
             ViewBag.OnUserId = CurrentSession.OnUserId;
+            ViewBag.IsAssociationPermission = userService.IsHavingPermission(CurrentSession.UserId, 
+                            NapSettings.Settings.SiteId,
+                            FSFunctionKeys.AssociatedAccountMonitor,
+                            NAP.Core.Business.Constant.Policy.Read);
+
+            ViewBag.IsProbationPermission = userService.IsHavingPermission(CurrentSession.UserId,
+                       NapSettings.Settings.SiteId,
+                       FSFunctionKeys.ProbationManagement,
+                       NAP.Core.Business.Constant.Policy.Read);
+
+
             return View(CurrentSession.MenuItemList);
         }
 
@@ -134,6 +150,21 @@
             }            
 
             return  "\'" + result.ToString() + "\'";
+        }
+
+        public ActionResult UpdateMenuSetting()
+        {
+            ViewBag.IsAssociationPermission = userService.IsHavingPermission(CurrentSession.UserId,
+                            NapSettings.Settings.SiteId,
+                            FSFunctionKeys.AssociatedAccountMonitor,
+                            NAP.Core.Business.Constant.Policy.Read);
+
+            ViewBag.IsProbationPermission = userService.IsHavingPermission(CurrentSession.UserId,
+                       NapSettings.Settings.SiteId,
+                       FSFunctionKeys.ProbationManagement,
+                       NAP.Core.Business.Constant.Policy.Read);
+
+            return PartialView("~/Views/Shared/_LoginPartial.cshtml");
         }
     }
 }

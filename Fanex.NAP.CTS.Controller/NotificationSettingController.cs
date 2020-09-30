@@ -24,7 +24,7 @@
             var isAssociationPermission = userService.IsHavingPermission(CurrentSession.UserId,
                             NapSettings.Settings.SiteId,
                             FSFunctionKeys.AssociatedAccountMonitor,
-                            NAP.Core.Business.Constant.Policy.Host);
+                            NAP.Core.Business.Constant.Policy.Read);
 
             var isProbationPermission = userService.IsHavingPermission(CurrentSession.UserId,
                           NapSettings.Settings.SiteId,
