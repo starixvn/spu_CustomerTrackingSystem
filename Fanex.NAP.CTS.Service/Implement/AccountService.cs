@@ -138,7 +138,7 @@
                 return result.ToList();
             }
         }
-
+        
         public CustomerProfileFraudInfoModel GetCustomerProfileFraudInfo(long custId)
         {
             var criteria = new CustomerProfileFraudInfoCriteria
@@ -154,6 +154,21 @@
                 {
                     FraudCaseList = fraudCaseList
                 };
+            }
+        }
+
+        public CustomerPoliciesModel GetCustomerProfilePoliciesInfo(long custId)
+        {
+            var criteria = new CustomerProfilePoliciesInfoCriteria
+            {
+                CustID = custId
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                var result = db.QueryEntity<CustomerPoliciesModel>(criteria);
+
+                return result;
             }
         }
 

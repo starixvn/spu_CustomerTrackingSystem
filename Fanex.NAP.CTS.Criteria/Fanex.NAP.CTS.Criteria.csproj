@@ -86,6 +86,7 @@
     <Compile Include="Account\CustomerGeneralStatusCriteria.cs" />
     <Compile Include="Account\CustomerLastTicketDateCriteria.cs" />
     <Compile Include="Account\CustomerProfileFraudInfoCriteria.cs" />
+    <Compile Include="Account\CustomerProfilePoliciesInfoCriteria.cs" />
     <Compile Include="Account\CustomerRobotUserStatusCriteria.cs" />
     <Compile Include="Account\CustomerInfoByCTSCustIdCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\GetFlaggedEvidenceCriteria.cs" />

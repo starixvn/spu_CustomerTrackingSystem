@@ -108,6 +108,7 @@
 
   <Function name="Common">
     <Setting Key="CTS_CustomerGeneralStatus_Get" SpName="CTS_CustomerGeneralStatus_Get" DbName="DBCTS.bodb02.bodbSPUNet" />
+    <Setting Key="CTS_CustomerClass_GetByCustId" SpName="CTS_CustomerClass_GetByCustId" DbName="DBCTS.bodb02.bodbSPUNet" />
     <Setting Key="CTS_CustomerLastTicketDate_Get" SpName="CTS_CustomerLastTicketDate_Get" DbName="DBCTS.bodb02.bodbSPUNet" />
     <Setting Key="CTS_CustomerEsportAutoSuspendStatus_Get" SpName="CTS_CustomerEsportAutoSuspendStatus_Get" DbName="DBCTS.bodb02.bodbSPUNet" />
     <Setting Key="CTS_CustomerStatistics_GetPerformance_ByBettype" SpName="CTS_CustomerStatistics_GetPerformance_ByBettype" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
@@ -125,6 +126,7 @@
     <Setting Key="TicketVoiding_TicketsInRequest_Select" SpName="TicketVoiding_TicketsInRequest_Select" DbName="DBCTS.bodb02.bodbSPUNet" />
     <Setting Key="CTS_CustomerProfile_FraudInfo_Get" SpName="CTS_CustomerProfile_FraudInfo_Get" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
     <Setting Key="CTS_RobotUserStatus_Get" SpName="CTS_RobotUserStatus_Get" DbName="DBONUSER.ON_USER.bodbSPUNet" />
+    <Setting Key="BLC_SettingSelect_ByCust" SpName="BLC_SettingSelect_ByCust" DbName="DBCust.CustDB.bodbAdminNet"/>
   </Function>
 
   <Function name="ProbationManagement">

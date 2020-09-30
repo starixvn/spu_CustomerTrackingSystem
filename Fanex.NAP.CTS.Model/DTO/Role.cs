@@ -38,7 +38,7 @@ namespace Fanex.NAP.CTS.Model.DTO
                         return "Super";
                 }
 
-                return "User";
+                return "Others";
             }
         }
     }

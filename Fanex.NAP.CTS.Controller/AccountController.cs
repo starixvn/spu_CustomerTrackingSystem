@@ -112,7 +112,7 @@
             {
                 try
                 {
-                    GetCustomerProfileFraudInfo(custId, ref profile);
+                   GetCustomerProfilePoliciesInfo(custId, ref profile);
                 }
                 catch (Exception ex)
                 {
@@ -832,18 +832,16 @@
             profile.StatusLabel = accountStatusName;
         }
 
-        private void GetCustomerProfileFraudInfo(long custId, ref AccountProfileViewModel profile)
+        private void GetCustomerProfilePoliciesInfo(long custId, ref AccountProfileViewModel profile)
         {
-            var result = _accountService.GetCustomerProfileFraudInfo(custId);
+            profile.PoliciesInfo = _accountService.GetCustomerProfilePoliciesInfo(custId);
+          
+            var customerClass = _accountService.GetCustomerClassByCustId(custId.ToString());
 
-            var fraudCaseName = string.Empty;
-
-            if (result.FraudCaseList != null && result.FraudCaseList.Any())
+            if(customerClass != null && customerClass.Any())
             {
-                fraudCaseName = string.Join(", ", result.FraudCaseList.Select(x => x.FraudCaseName));
+                profile.PoliciesInfo.CustomerClass = customerClass.First().CustomerClass;
             }
-
-            profile.FraudCases = fraudCaseName;
         }
 
         private void GetCustomerRobotUserStatus(long custId, ref AccountProfileViewModel profile)

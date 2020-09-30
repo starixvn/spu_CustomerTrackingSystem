@@ -20,7 +20,9 @@
         spanDangerousOriginal: $("#dangerousOriginal"),
         spanDangerouseABI: $("#dangerouseABI"),
         spanDangerouseOtherSports: $("#dangerouseOtherSports"),
-        spanFraudcase: $('#fraudcase'),
+        spanClass: $('#spanClass'),
+        spanBetLimit: $('#spanBetLimit'),
+        spanLicVIP: $('#spanLicVIP'),
         spanAccountStatus: $('#spanAccountStatus'),        
         spanAutoSuspendSoccer: $('#autoSuspendSoccer'),
         spanAutoSuspendOtherSport: $('#autoSuspendOtherSport'),
@@ -166,11 +168,12 @@
             domElements.spanDangerouseOtherSports.html(response.GeneralStatusInfo.Danger3);
     }
 
-    function FrauseCaseList(response) {
-        if (response.FraudCases !== '')
-            domElements.spanFraudcase.html(response.FraudCases);
-        else
-            domElements.spanFraudcase.html("None");
+    function HandlePolicies(response) {
+        domElements.spanClass.html((response.PoliciesInfo.CustomerClass === 0) ? " -" : response.PoliciesInfo.CustomerClass);
+
+        domElements.spanBetLimit.html(response.PoliciesInfo.MaxBet + "/" + response.PoliciesInfo.MaxPerMatch);
+
+        domElements.spanLicVIP.html(response.PoliciesInfo.IsVIP ? "Yes" : "No");
     }
 
     function GetAccountProfile() {
@@ -184,7 +187,7 @@
             success: function (response) {
                 $('div.classification').html("<span>None</span>");
                 HandleCustomerStatus(response);
-                FrauseCaseList(response);
+                HandlePolicies(response);
                 HandleRobotUserStatus(response.RobotUserStatus);
                 HandleFlagedAffectedEvidence(response.FlagedAffectedEvidence);
                 HandleEsportAutoSuspendedStatus(response.EsportAutoSuspendStatus);

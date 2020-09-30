@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.Account
 {
     using Fanex.NAP.CTS.Model.Account;
+    using Fanex.NAP.CTS.Model.API;
 
     public class AccountProfileViewModel
     {
@@ -8,7 +9,7 @@
 
         public string StatusLabel { get; set; }
 
-        public string FraudCases { get; set; }
+        public CustomerPoliciesModel PoliciesInfo { get; set; }
 
         public CustomerRobotUserStatusModel RobotUserStatus { get; set; }
 

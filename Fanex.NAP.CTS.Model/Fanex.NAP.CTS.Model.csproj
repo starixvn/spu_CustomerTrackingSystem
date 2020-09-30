@@ -145,6 +145,7 @@
     <Compile Include="Account\CustomerCategory\ResultInsertRemoveCustomerClassificationModel.cs" />
     <Compile Include="Account\CustomerEsportAutoSuspendStatusModel.cs" />
     <Compile Include="Account\CustomerEvidenceByCTSCustIdModel.cs" />
+    <Compile Include="Account\CustomerPoliciesModel.cs" />
     <Compile Include="API\CustomerClassModel.cs" />
     <Compile Include="API\CustomerClassification.cs" />
     <Compile Include="Customer.cs" />

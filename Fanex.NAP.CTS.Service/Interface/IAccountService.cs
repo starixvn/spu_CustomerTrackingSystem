@@ -1,8 +1,9 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
     using Fanex.NAP.CTS.Core;
-    using Fanex.NAP.CTS.Model;
-    using Fanex.NAP.CTS.Model.Account;       
+    using Fanex.NAP.CTS.Model.Account;
+    using Fanex.NAP.CTS.Model.API;
+    using Fanex.NAP.CTS.Model;   
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
@@ -24,7 +25,9 @@
 
         List<CustomerStaticStatusModel> GetCustomerStaticStatus(int listId, bool status);
 
-        CustomerProfileFraudInfoModel GetCustomerProfileFraudInfo(long custId);        
+        CustomerProfileFraudInfoModel GetCustomerProfileFraudInfo(long custId);    
+
+        CustomerPoliciesModel GetCustomerProfilePoliciesInfo(long custId);        
 
         List<TagModel> GetDirectAssociatedAccountTagFlagged(string custIdsAssInfo);
 
@@ -100,7 +103,7 @@
 
         IEnumerable<PerformanceDailyModel> GetPerformanceDaily(long custId);
 
-        IEnumerable<Model.API.CustomerClassModel> GetCustomerClassByCustId(string custIdList);
+        IEnumerable<CustomerClassModel> GetCustomerClassByCustId(string custIdList);
 
         IEnumerable<CustomerClassificationModel> GetCustomerClassificationForAPI(string custIdList, string parentCateIdList);
 
