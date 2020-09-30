@@ -8,8 +8,10 @@
     @Styles.Render("~/notification-setting-styles")
 }
 
+@model Fanex.NAP.CTS.ViewModel.Notification.NotificationSettingViewModel
+
 <body class="notification-setting">
-     <h2 class="page-title">Notification Setting</h2>
+    <h2 class="page-title">Notification Setting</h2>
 
 
 
@@ -19,44 +21,54 @@
                 <h4 class="title">Notification</h4>
             </div>
 
+
             <div class="notification-body">
-                <div class="switch-control">
-                    <div class="name"> Associated Account Monitor </div>
-                    <div class="btn-switch">
+                @if (Model.IsAssociationPermission)
+                {
+                    <div class="switch-control">
+                        <div class="name"> Associated Account Monitor </div>
+                        <div class="btn-switch">
+                            <label class="toggleSwitch nolabel" id="inputSwitchAAM">
+                                <input type="checkbox" />
+                                <span>
+                                    <span>OFF</span>
+                                    <span>ON</span>
+                                </span>
+                                <a></a>
+                            </label>
 
-                        <label class="toggleSwitch nolabel">
-                            <input type="checkbox"/>
-                            <span>
-                                <span>OFF</span>
-                                <span>ON</span>
-                            </span>
-                            <a></a>
-                        </label>
 
-
+                        </div>
                     </div>
-                </div>
+                }
 
+                @if (Model.IsProbationPermission)
+                {
 
-                <div class="switch-control">
-                    <div class="name"> Probation Management </div>
-                    <div class="btn-switch">
-                        <label class="toggleSwitch nolabel">
-                            <input type="checkbox" checked="checked"/>
-                            <span>
-                                <span>OFF</span>
-                                <span>ON</span>
-                            </span>
-                            <a></a>
-                        </label>
+                    <div class="switch-control">
+                        <div class="name"> Probation Management </div>
+                        <div class="btn-switch">
+                            <label class="toggleSwitch nolabel">
+                                <input type="checkbox" checked="checked" id="inputSwitchProbation"/>
+                                <span>
+                                    <span>OFF</span>
+                                    <span>ON</span>
+                                </span>
+                                <a></a>
+                            </label>
+                        </div>
                     </div>
-                </div>
+                }
+
             </div>
         </div>
     </div>
 </body>
 
-
+<div hidden>
+    <input id="hdIsAssociationPermission" type="hidden" IsAssociationPermission="@Model.IsAssociationPermission.ToString()" />
+    <input id="hdIsProbationPermission" type="hidden" IsProbationPermission="@Model.IsProbationPermission.ToString()" />
+</div>
 
 @section scripts{
     @Scripts.Render("~/notification-setting-scripts")

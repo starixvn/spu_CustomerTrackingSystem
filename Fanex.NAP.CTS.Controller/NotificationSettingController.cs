@@ -3,6 +3,7 @@
     using Fanex.NAP.Core.Configuration;
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Service.Interface;
+    using Fanex.NAP.CTS.ViewModel.Notification;
     using Service;
     using System.Linq;
     using System.Web.Mvc;
@@ -20,17 +21,21 @@
         {
             IUserService userService = new UserService();
 
-            var isHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
+            var isAssociationPermission = userService.IsHavingPermission(CurrentSession.UserId,
                             NapSettings.Settings.SiteId,
-                            FSFunctionKeys.ImportEvidences,
+                            FSFunctionKeys.AssociatedAccountMonitor,
                             NAP.Core.Business.Constant.Policy.Host);
 
-            var isOverwritePermission = userService.IsHavingPermission(CurrentSession.UserId,
+            var isProbationPermission = userService.IsHavingPermission(CurrentSession.UserId,
                           NapSettings.Settings.SiteId,
-                          FSFunctionKeys.OverwriteEvidences,
+                          FSFunctionKeys.ProbationManagement,
                           NAP.Core.Business.Constant.Policy.Read);
 
-            return View();
+            return View(new NotificationSettingViewModel
+            {
+                IsAssociationPermission = isAssociationPermission,
+                IsProbationPermission = isProbationPermission
+            });
         }
 
     }

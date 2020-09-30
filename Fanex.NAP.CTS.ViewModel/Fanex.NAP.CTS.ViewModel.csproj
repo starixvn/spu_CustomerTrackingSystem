@@ -114,6 +114,7 @@
     <Compile Include="MatchMonitor\Match.cs" />
     <Compile Include="MatchMonitor\MatchList.cs" />
     <Compile Include="Notification\NotificationMessagesViewModel.cs" />
+    <Compile Include="Notification\NotificationSettingViewModel.cs" />
     <Compile Include="ProbationManagement\CategoryViewModel.cs" />
     <Compile Include="ProbationManagement\ProbationCategoryViewModel.cs" />
     <Compile Include="ProbationManagement\RenderProbationViewModel.cs" />
