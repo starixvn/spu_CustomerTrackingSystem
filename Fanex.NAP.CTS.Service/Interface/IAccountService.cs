@@ -106,5 +106,7 @@
         IEnumerable<CustomerClassificationGeneralInfoModel> GetCustomerClassificationByCategory(string categoryIdList);
 
         DBResult ProcessPlaceEvidence(UpdatePlaceEvidenceModel model);
+
+        DBResult ProcessPlaceEvidenceByCustId(UpdatePlaceEvidenceModel model);
     }
 }

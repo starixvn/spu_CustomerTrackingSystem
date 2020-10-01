@@ -3,7 +3,6 @@
     using Fanex.Logging;
     using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Core.Helpers.Xml;
-    using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.API;
     using Fanex.NAP.CTS.Model.DTO;
@@ -14,6 +13,7 @@
     using Fanex.NAP.SPU.Graph.Core;
     using System;
     using System.Collections.Generic;
+    using System.Configuration;
     using System.Linq;
     using System.Net;
     using System.Web.Http;
@@ -23,6 +23,7 @@
     {
         private readonly IAccountService _accountService;
         private readonly IEvidenceService _evidenceService;
+        private readonly ICustomerEvidenceService _custEvidenceService;
         private readonly IAssociatedAccountService _associationService;
 
 
@@ -34,6 +35,7 @@
             _accountService = new AccountService();
             _evidenceService = new EvidenceService();
             _associationService = new AssociatedAccountService();
+            _custEvidenceService = new CustomerEvidenceService();
         }
 
         /// <summary>
@@ -46,9 +48,37 @@
         {
             try
             {
-                _accountService.ProcessPlaceEvidence(evidence);
+                _accountService.ProcessPlaceEvidenceByCustId(evidence);
 
                 return true;
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("PlaceEvidence exception: " + ex.Message);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Place evidence for multiple customer
+        /// </summary>
+        /// <param name="custIds">List custId in string format, separated by comma</param>
+        /// <param name="evidenceId">Evidence Id in CTS system</param>
+        /// <returns>true: success; false: failed</returns>
+        [HttpPost]
+        public bool PlaceEvidenceMultipleByCustId(string custIds, int evidenceId)
+        {
+            try
+            {
+                int userId = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);
+                var result = _custEvidenceService.AddCustEvidenceMultipleByCustId(custIds, evidenceId, userId);
+
+                if (string.IsNullOrEmpty(result))
+                {
+                    return true;
+                }
+
+                return false;
             }
             catch (Exception ex)
             {
@@ -238,13 +268,13 @@
             try
             {
                 var custClassifications = _accountService.GetCustomerClassificationByCategory(categoryIDList);
-                return custClassifications.Any() 
+                return custClassifications.Any()
                     ? custClassifications.Select(c => new CustomerClassification()
-                                                        {
-                                                            CustID = c.CustID,
-                                                            ParentCategoryName = "",
-                                                            CategoryName = c.CategoryName
-                                                        }).ToXmlString()
+                    {
+                        CustID = c.CustID,
+                        ParentCategoryName = "",
+                        CategoryName = c.CategoryName
+                    }).ToXmlString()
                     : string.Empty;
             }
             catch (Exception ex)

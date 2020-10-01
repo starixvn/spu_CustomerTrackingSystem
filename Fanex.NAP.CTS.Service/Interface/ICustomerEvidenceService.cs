@@ -1,7 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
     using Fanex.NAP.CTS.Criteria.Account;
-    using Fanex.NAP.CTS.Model.Account;
+    using Fanex.NAP.CTS.Model.ImportEvidences;
     using System.Collections.Generic;
 
     public interface ICustomerEvidenceService
@@ -15,6 +15,8 @@
         void UpdateBetLimitOfFlaggedCustomer(UpdateBetLimitByEvidenceAddingCriteria criteria);
 
         void UpdateBetLimitOfUnflaggedCustomer(UpdateBetLimitByEvidenceRemovingCriteria criteria);
+
+        string AddCustEvidenceMultipleByCustId(string custIds, int evidenceId, int userId);
 
     }
 }

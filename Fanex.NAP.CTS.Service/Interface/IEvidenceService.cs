@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Model.DTO;
+    using Fanex.NAP.CTS.Model.ImportEvidences;
     using Fanex.NAP.CTS.ViewModel.Account.Evidence;
     using Fanex.NAP.CTS.ViewModel.Account.Evidence.Exception;
     using Fanex.NAP.CTS.ViewModel.Evidence;    

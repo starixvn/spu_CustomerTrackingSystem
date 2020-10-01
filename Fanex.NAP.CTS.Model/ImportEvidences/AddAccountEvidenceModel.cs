@@ -4,6 +4,8 @@
     {
         public long CTSCustID { get; set; }
 
+        public int CustID { get; set; }
+
         public int EvidenceID { get; set; }
 
         public string Comment { get; set; }

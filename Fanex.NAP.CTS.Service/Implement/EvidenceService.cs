@@ -4,12 +4,21 @@
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.BaseClasses;
     using Fanex.NAP.CTS.Criteria.Api;
+    using Fanex.NAP.CTS.Criteria.ImportEvidences;
     using Fanex.NAP.CTS.Model.DTO;
+    using Fanex.NAP.CTS.Model.ImportEvidences;
     using Fanex.NAP.CTS.ViewModel.Evidence;
+    using Newtonsoft.Json;
     using System.Collections.Generic;
 
     public class EvidenceService : IEvidenceService
     {
+        IDynamicRepository _repository;
+
+        public EvidenceService()
+        {
+            _repository = new DynamicRepository();
+        }
         #region General Information
         public DBResult PlaceEvidenceByAccount(GeneralInformationPlaceEvidenceByAccount evidenceByAccount)
         {

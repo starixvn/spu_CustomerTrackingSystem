@@ -552,6 +552,40 @@
             return result;
         }
 
+        public DBResult ProcessPlaceEvidenceByCustId(UpdatePlaceEvidenceModel model)
+        {
+            var result = PlaceEvidence(model);
+
+            if (result.ErrorCode == 0)
+            {
+                var associatedAccountList = customerEvidenceService.GetAssociatedAccounts(new GetAssociatedAccountByCTSCustIdsCriteria { CTSCustIdList = model.CTSCustId.ToString() });
+
+                if (associatedAccountList.Any())
+                {
+                    customerEvidenceService.UpdateBetLimitOfFlaggedCustomer(
+                        new UpdateBetLimitByEvidenceAddingCriteria
+                        {
+                            CustIDList = string.Join(",", associatedAccountList)
+                        });
+                }
+
+                Task.Run(() =>
+                {
+
+                    try
+                    {
+                        FPSAddNewEvidence(ConfigSettings.AddNewEvidence, model);
+                    }
+                    catch (Exception ex)
+                    {
+                        LogService.Error(ex.Message);
+                    }
+                });
+            }
+
+            return result;
+        }
+
         public void FPSAddNewEvidence(string apiURL, UpdatePlaceEvidenceModel model)
         {
             var data = ApiHelper.Post<AddNewEvidenceForFPSModel>(apiURL, new AddNewEvidenceForFPSModel

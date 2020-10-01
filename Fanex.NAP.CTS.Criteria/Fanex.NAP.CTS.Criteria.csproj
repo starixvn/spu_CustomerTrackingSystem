@@ -99,6 +99,7 @@
     <Compile Include="CheckBetReport\CheckBetReportGetCriteria.cs" />
     <Compile Include="CheckBetReport\CheckBetReportUpdateNoteCriteria.cs" />
     <Compile Include="CTSUser\InsertCTSUserCriteria.cs" />
+    <Compile Include="ImportEvidences\InsertMultipleCustEviByCustIdCriteria.cs" />
     <Compile Include="ManageSubscriber\SubscriberGetDetailedSiteCriteria.cs" />
     <Compile Include="Notification\ProbationMessagesGetCriteria.cs" />
     <Compile Include="ProbationManagement\GetAccummulatedInfoCriteria.cs" />
