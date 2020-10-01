@@ -937,7 +937,7 @@
     <Content Include="Scripts\Home\SearchPage.js" />
     <Content Include="Scripts\ImportEvidences\index.js" />
     <Content Include="Scripts\ManageSubscriber\index.js" />
-    <Content Include="Scripts\Notification\notification-setting.js" />
+    <Content Include="Scripts\NotificationSetting\notification-setting.js" />
     <Content Include="Scripts\popoto\d3.min.js" />
     <Content Include="Scripts\popoto\d3.v3.min.js" />
     <Content Include="Scripts\popoto\popoto.min.js" />

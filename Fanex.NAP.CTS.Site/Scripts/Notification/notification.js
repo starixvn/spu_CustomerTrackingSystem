@@ -111,7 +111,7 @@ function notification() {
     });
 
     function GetNewNotification(maxAssociationID, maxProbationID) {
-        var url = common.modifyRelativeUrl("/Notification/GetAllMessages");
+        var url = common.modifyRelativeUrl("/NotificationSetting/GetAllMessages");
 
         $.ajax(url, {
             type: 'POST',

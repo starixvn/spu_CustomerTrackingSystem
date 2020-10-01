@@ -28,8 +28,8 @@
                     <div class="switch-control">
                         <div class="name"> Associated Account Monitor </div>
                         <div class="btn-switch">
-                            <label class="toggleSwitch nolabel" id="inputSwitchAAM">
-                                <input type="checkbox" />
+                            <label class="toggleSwitch nolabel">
+                                <input type="checkbox" id="inputSwitchAAM" />
                                 <span>
                                     <span>OFF</span>
                                     <span>ON</span>
@@ -49,7 +49,7 @@
                         <div class="name"> Probation Management </div>
                         <div class="btn-switch">
                             <label class="toggleSwitch nolabel">
-                                <input type="checkbox" checked="checked" id="inputSwitchProbation"/>
+                                <input type="checkbox" @*checked="checked"*@ id="inputSwitchProbation" />
                                 <span>
                                     <span>OFF</span>
                                     <span>ON</span>
@@ -63,12 +63,13 @@
             </div>
         </div>
     </div>
-</body>
 
-<div hidden>
-    <input id="hdIsAssociationPermission" type="hidden" IsAssociationPermission="@Model.IsAssociationPermission.ToString()" />
-    <input id="hdIsProbationPermission" type="hidden" IsProbationPermission="@Model.IsProbationPermission.ToString()" />
-</div>
+    <div hidden>
+        <input id="hdCTSCustId" type="hidden" value="@Model.CTSCustId" />
+        <input id="hdIsAssociationPermission" type="hidden" IsAssociationPermission="@Model.IsAssociationPermission.ToString()" />
+        <input id="hdIsProbationPermission" type="hidden" IsProbationPermission="@Model.IsProbationPermission.ToString()" />
+    </div>
+</body>
 
 @section scripts{
     @Scripts.Render("~/notification-setting-scripts")

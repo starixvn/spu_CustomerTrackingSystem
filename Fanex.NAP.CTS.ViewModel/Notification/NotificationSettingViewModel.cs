@@ -8,6 +8,8 @@ namespace Fanex.NAP.CTS.ViewModel.Notification
 {
     public class NotificationSettingViewModel
     {
+        public long CTSCustId { get; set; }
+
         public bool IsAssociationPermission { get; set; }
 
         public bool IsProbationPermission { get; set; }
