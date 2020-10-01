@@ -169,11 +169,11 @@
     }
 
     function HandlePolicies(response) {
-        domElements.spanClass.html((response.PoliciesInfo.CustomerClass === 0) ? " -" : response.PoliciesInfo.CustomerClass);
+        domElements.spanClass.html(response.PoliciesInfo.CustomerClassToString + "  ");
 
-        domElements.spanBetLimit.html(response.PoliciesInfo.MaxBet + "/" + response.PoliciesInfo.MaxPerMatch);
+        domElements.spanBetLimit.html(response.PoliciesInfo.BetLimitToString);
 
-        domElements.spanLicVIP.html(response.PoliciesInfo.IsVIP ? "Yes" : "No");
+        domElements.spanLicVIP.html(response.PoliciesInfo.LicVip);
     }
 
     function GetAccountProfile() {

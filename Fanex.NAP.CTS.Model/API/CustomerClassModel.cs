@@ -8,6 +8,6 @@
         public int CustId { get; set; }
 
         [XName("Class")]
-        public int CustomerClass { get; set; }
+        public int? CustomerClass { get; set; }
     }
 }
