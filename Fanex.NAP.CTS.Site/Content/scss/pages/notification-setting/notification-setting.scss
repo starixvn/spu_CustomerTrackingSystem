@@ -1,0 +1,193 @@
+﻿@import "../../abstracts/variables";
+.content {
+    margin-top: 6rem;
+}
+
+.notification-content {
+    padding: 1.6rem 1.6rem;
+
+    .notification-setting {
+        width: 100%;
+        max-width: 43.2rem;
+        border: 1px solid $table-border;
+
+        .notification-title {
+            line-height: 1.9rem;
+            font-size: 1.6rem;
+            border-bottom: 1px solid $table-border;
+
+            .title {
+                margin-bottom: 0;
+                padding: .6rem 1.6rem;
+                color: $table-header-bg;
+                font-family: $font-family;
+                font-weight: bold;
+                text-transform: inherit;
+            }
+        }
+
+        .notification-body {
+            padding: 1rem 1.6rem;
+
+            .switch-control {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding-bottom: 1rem;
+                border-bottom: 1px solid #D7D7D7;
+                margin-bottom: 1rem;
+
+                &:last-child {
+                    border-bottom: none;
+                    padding-bottom: 0;
+                    margin-bottom: 0;
+                }
+
+                .name {
+                    color: #474747;
+                    font-size: 1.4rem;
+                    line-height: 1.7rem;
+                    font-family: $font-family;
+                }
+
+                .btn-switch {
+                    .toggleSwitch {
+                        display: inline-block;
+                        height: 1.5rem;
+                        position: relative;
+                        overflow: visible;
+                        padding: 0;
+                        margin-left: 5rem;
+                        cursor: pointer;
+                        width: 5rem;
+                    }
+
+                    .toggleSwitch * {
+                        -webkit-box-sizing: border-box;
+                        -moz-box-sizing: border-box;
+                        box-sizing: border-box;
+                    }
+
+                    .toggleSwitch label,
+                    .toggleSwitch > span {
+                        line-height: 2rem;
+                        height: 2rem;
+                        vertical-align: middle;
+                    }
+
+                    .toggleSwitch input:focus ~ a,
+                    .toggleSwitch input:focus + label {
+                        outline: none;
+                    }
+
+                    .toggleSwitch label {
+                        position: relative;
+                        z-index: 3;
+                        display: block;
+                        width: 100%;
+                    }
+
+                    .toggleSwitch input {
+                        position: absolute;
+                        opacity: 0;
+                        z-index: 5;
+                    }
+
+                    .toggleSwitch > span {
+                        position: absolute;
+                        left: -50px;
+                        width: 100%;
+                        margin: 0;
+                        padding-right: 50px;
+                        text-align: left;
+                        white-space: nowrap;
+                    }
+
+                    .toggleSwitch > span span {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        z-index: 5;
+                        display: block;
+                        width: 50%;
+                        margin-left: 4.5rem;
+                        text-align: left;
+                        font-size: 0.9em;
+                        width: 100%;
+                        left: 12%;
+                        top: .1rem;
+                        opacity: 0;
+                    }
+
+                    .toggleSwitch a {
+                        position: absolute;
+                        right: 50%;
+                        z-index: 4;
+                        display: block;
+                        height: 1.6rem;
+                        padding: 0;
+                        left: .2rem;
+                        width: 1.6rem;
+                        background-color: #fff;
+                        border-radius: 100%;
+                        transition: all 0.2s ease-out;
+                        box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
+                    }
+
+                    .toggleSwitch > span span:first-of-type {
+                        font-weight: bold;
+                        font-size: 1.2rem;
+                        line-height: 1.4rem;
+                        display: flex;
+                        align-items: center;
+                        text-transform: uppercase;
+                        color: #FFFFFF;
+                        opacity: 1;
+                        left: 36%;
+                    }
+
+                    .toggleSwitch > span:before {
+                        content: '';
+                        display: block;
+                        width: 5rem;
+                        height: 2rem;
+                        position: absolute;
+                        left: 5rem;
+                        top: -.2rem;
+                        background-color: #7D7D7D;
+                        border-radius: 1.1rem;
+                        transition: all 0.2s ease-out;
+                        border: 1px solid #7D7D7D;
+                    }
+
+                    .toggleSwitch input:checked ~ a {
+                        border-color: #fff;
+                        left: 80%;
+                        margin-left: -8px;
+                    }
+
+                    .toggleSwitch input:checked ~ span:before {
+                        border-color: #396EF8;
+                        box-shadow: inset 0 0 0 30px $btn-primary-bg;
+                        border: 1px solid $btn-primary-bg;
+                    }
+
+                    .toggleSwitch input:checked ~ span span:first-of-type {
+                        opacity: 0;
+                    }
+
+                    .toggleSwitch input:checked ~ span span:last-of-type {
+                        opacity: 1;
+                        color: #fff;
+                        font-weight: bold;
+                        font-size: 1.2rem;
+                        line-height: 1.4rem;
+                        display: flex;
+                        align-items: center;
+                        text-transform: uppercase;
+                    }
+                }
+            }
+        }
+    }
+}

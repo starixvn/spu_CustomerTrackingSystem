@@ -1138,7 +1138,8 @@
         .content-info .wrapper-content .account-info .info-text.left {
           color: #2B2B2B; }
         .content-info .wrapper-content .account-info .info-text span {
-          display: block; }
+          display: block;
+          height: 2.4rem; }
       .content-info .wrapper-content .account-info .info-block {
         margin-top: 1rem; }
       .content-info .wrapper-content .account-info .association .info-block {
