@@ -709,34 +709,7 @@
         public ActionResult PlaceEvidence(UpdatePlaceEvidenceModel model)
         {
             model.UserId = model.UserId == 0 ? CurrentSession.UserId : model.UserId;
-            var result = _accountService.PlaceEvidence(model);
-
-            if (result.ErrorCode == 0)
-            {
-                var associatedAccountList = _customerEvidenceService.GetAssociatedAccounts(new GetAssociatedAccountByCTSCustIdsCriteria { CTSCustIdList = model.CTSCustId.ToString() });
-
-                if (associatedAccountList.Any())
-                {
-                    _customerEvidenceService.UpdateBetLimitOfFlaggedCustomer(
-                        new UpdateBetLimitByEvidenceAddingCriteria
-                        {
-                            CustIDList = string.Join(",", associatedAccountList)
-                        });
-                }
-                
-                Task.Run(() =>
-                {
-
-                    try
-                    {
-                        _accountService.FPSAddNewEvidence(ConfigSettings.AddNewEvidence, model);
-                    }
-                    catch (Exception ex)
-                    {
-                        LogService.Error(ex.Message);
-                    }
-                });
-            }
+            var result = _accountService.ProcessPlaceEvidence(model);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 

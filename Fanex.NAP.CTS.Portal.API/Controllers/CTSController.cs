@@ -36,18 +36,17 @@
             _associationService = new AssociatedAccountService();
         }
 
+        /// <summary>
+        /// Place Evidence on CTS
+        /// </summary>
+        /// <param name="evidence"></param>
+        /// <returns></returns>
         [HttpPost]
-        public bool PlaceEvidence(UpdatePlaceEvidenceModel model)
+        public bool PlaceEvidence(UpdatePlaceEvidenceModel evidence)
         {
             try
             {
-                var result = _accountService.PlaceEvidence(model);
-
-
-                if (result.ErrorCode == 0)
-                {
-                    _accountService.FPSAddNewEvidence(ConfigSettings.AddNewEvidence, model);
-                }
+                _accountService.ProcessPlaceEvidence(evidence);
 
                 return true;
             }

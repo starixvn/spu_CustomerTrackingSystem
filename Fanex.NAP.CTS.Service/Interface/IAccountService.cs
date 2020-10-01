@@ -104,5 +104,7 @@
         IEnumerable<CustomerClassificationModel> GetCustomerClassificationForAPI(string custIdList, string parentCateIdList);
 
         IEnumerable<CustomerClassificationGeneralInfoModel> GetCustomerClassificationByCategory(string categoryIdList);
+
+        DBResult ProcessPlaceEvidence(UpdatePlaceEvidenceModel model);
     }
 }

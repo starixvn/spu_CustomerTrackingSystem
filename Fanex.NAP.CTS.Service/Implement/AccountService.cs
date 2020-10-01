@@ -9,6 +9,7 @@
     using Fanex.NAP.CTS.Core.Helpers;
     using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Core.Helpers.Xml;
+    using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria.Account;
     using Fanex.NAP.CTS.Criteria.Account.Associated;
     using Fanex.NAP.CTS.Criteria.Account.BettingStatistic;
@@ -22,6 +23,7 @@
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.Home;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
+    using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.ViewModel.Account;    
     using System;
     using System.Collections.Generic;
@@ -30,6 +32,13 @@
 
     public class AccountService : IAccountService
     {
+        private readonly ICustomerEvidenceService customerEvidenceService;
+
+        public AccountService()
+        {
+            customerEvidenceService = new CustomerEvidenceService();
+        }
+
         #region Associated account by account
         public List<SearchResultModel> SearchAccounts(string username)
         {
@@ -508,6 +517,39 @@
             };
 
             return DataService.UpdateData(criteria, "Place evidence");
+        }
+        public DBResult ProcessPlaceEvidence(UpdatePlaceEvidenceModel model)
+        {
+            var result = PlaceEvidence(model);
+
+            if (result.ErrorCode == 0)
+            {
+                var associatedAccountList = customerEvidenceService.GetAssociatedAccounts(new GetAssociatedAccountByCTSCustIdsCriteria { CTSCustIdList = model.CTSCustId.ToString() });
+
+                if (associatedAccountList.Any())
+                {
+                    customerEvidenceService.UpdateBetLimitOfFlaggedCustomer(
+                        new UpdateBetLimitByEvidenceAddingCriteria
+                        {
+                            CustIDList = string.Join(",", associatedAccountList)
+                        });
+                }
+
+                Task.Run(() =>
+                {
+
+                    try
+                    {
+                        FPSAddNewEvidence(ConfigSettings.AddNewEvidence, model);
+                    }
+                    catch (Exception ex)
+                    {
+                        LogService.Error(ex.Message);
+                    }
+                });
+            }
+
+            return result;
         }
 
         public void FPSAddNewEvidence(string apiURL, UpdatePlaceEvidenceModel model)
