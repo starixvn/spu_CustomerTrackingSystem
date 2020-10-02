@@ -63,6 +63,7 @@
     <Compile Include="Account\ChainToEvidence\RemoveAccountExceptionCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\RestoreAffectedEvidenceCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\RetractAffectedEvidenceCriteria.cs" />
+    <Compile Include="Account\CheckCustNotExistedByCustIdsCriteria.cs" />
     <Compile Include="Account\CustomerCategory\AddCTSCustomerClassificationCriteria.cs" />
     <Compile Include="Account\CustomerCategory\GetAllSportGroupCriteria.cs" />
     <Compile Include="Account\CustomerCategory\GetCustomerCategoryByCategoryIdsCriteria.cs" />

@@ -16,7 +16,8 @@
     using Fanex.NAP.CTS.Criteria.Account.ChainToEvidence;
     using Fanex.NAP.CTS.Criteria.Account.CustomerCategory;
     using Fanex.NAP.CTS.Criteria.Home;
-    using Fanex.NAP.CTS.Criteria.SpecialCustomerClass;    
+    using Fanex.NAP.CTS.Criteria.SpecialCustomerClass;
+    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;        
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.DTO;
@@ -33,10 +34,12 @@
     public class AccountService : IAccountService
     {
         private readonly ICustomerEvidenceService customerEvidenceService;
+        private readonly IDynamicRepository repository;
 
         public AccountService()
         {
             customerEvidenceService = new CustomerEvidenceService();
+            repository = new DynamicRepository();
         }
 
         #region Associated account by account
@@ -1001,5 +1004,15 @@
             }
         }
         #endregion
+
+        public IEnumerable<CTSCustomer> CheckCustomerNotExisted(string custIds)
+        {
+            var criteria = new CheckCustNotExistedByCustIdsCriteria
+            {
+                CustIds = custIds
+            };
+
+            return repository.Fetch<CTSCustomer>(criteria);
+        }
     }
 }

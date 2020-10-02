@@ -318,21 +318,23 @@
         /// <param name="custIdList"></param>
         /// <returns>Customer class in XML format</returns>
         [HttpGet]
-        public string GetCustomerClass(string custIdList)
+        public string CheckCustomerNotExisted(string custIdList)
         {
             var result = string.Empty;
             try
             {
-                var custClasses = _accountService.GetCustomerClassByCustId(custIdList);
-                result = custClasses.ToXmlString();
+                var customers = _accountService.CheckCustomerNotExisted(custIdList);
+                result = string.Join(",", customers.Select(c => c.CustID));
             }
             catch (Exception ex)
             {
-                LogService.Error("GetCustomerClass failed: " + ex.Message + ex.StackTrace);
+                LogService.Error("CheckCustomerNotExisted failed: " + ex.Message + ex.StackTrace);
             }
 
             return result;
         }
+
+
 
         /// <summary>
         /// This controller is only for testing

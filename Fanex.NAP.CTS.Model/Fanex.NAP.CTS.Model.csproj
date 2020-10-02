@@ -147,6 +147,7 @@
     <Compile Include="Account\CustomerEvidenceByCTSCustIdModel.cs" />
     <Compile Include="API\CustomerClassModel.cs" />
     <Compile Include="API\CustomerClassification.cs" />
+    <Compile Include="Customer.cs" />
     <Compile Include="CustomerAssociationModel.cs" />
     <Compile Include="Account\CustomerFlagInfoModel.cs" />
     <Compile Include="Account\CustomerGeneralStatusModel.cs" />

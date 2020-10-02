@@ -16,4 +16,8 @@
     <Setting Key="CTS_CustomerClass_GetByCustId" SpName="CTS_CustomerClass_GetByCustId_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
   </Function>
 
+  <Function Name="Customer">
+    <Setting Key="CTS_DC_CustInfo_CheckCustNotExistedByCustIds" SpName="CTS_DC_CustInfo_CheckCustNotExistedByCustIds" DbName="MySQL.CTS_DataCenter" />
+  </Function>
+
 </Functions>

@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
     using Fanex.NAP.CTS.Core;
+    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;       
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.DTO;
@@ -108,5 +109,7 @@
         DBResult ProcessPlaceEvidence(UpdatePlaceEvidenceModel model);
 
         DBResult ProcessPlaceEvidenceByCustId(UpdatePlaceEvidenceModel model);
+
+        IEnumerable<CTSCustomer> CheckCustomerNotExisted(string custIds);
     }
 }
