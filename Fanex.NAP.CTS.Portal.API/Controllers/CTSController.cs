@@ -317,7 +317,7 @@
         /// </summary>
         /// <param name="custIdList"></param>
         /// <returns>Customer class in XML format</returns>
-        [HttpGet]
+        [HttpPost]
         public string CheckCustomerNotExisted(string custIdList)
         {
             var result = string.Empty;
