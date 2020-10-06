@@ -2,17 +2,10 @@
     let domElements = {
         ctsCustId : $("#hdCTSCustId").val(),
         notificationBody: $(".notification-body"),
-        isAssociationPermission: $('#hdIsAssociationPermission'),
-        isProbationPermission: $('#hdIsProbationPermission'),
+        isTurnOnAssociationStatus: $('#hdIsTurnOnAssociationStatus').val() === "True"? true : false,
+        isTurnOnProbationStatus: $('#hdIsTurnOnProbationStatus').val() === "True" ? true : false,
         inputSwitchAAM: $("#inputSwitchAAM"),
         inputSwitchProbation: $("#inputSwitchProbation")
-    };
-
-    let NS_CONST = "-NotificationSetting";
-
-    let notificationPermissions = {
-        associationPermission: { isTurnOn: true },
-        probationPermission: { isTurnOn: true }
     };
 
     function SwitchPopup() {
@@ -23,14 +16,14 @@
             if ($(this).is(":checked")) {
                 common.showConfirmation("<div class='popup-content'><div class='popup-title'>Are you sure about this?</div>For confirm this action, you will receive new notification from <span>" + funcName + "</span> function</div>",
                     () => {
-                        UpdateTempPermission(funcID, true); 
+                        UpdateNotificationSettingStatus(funcID, true); 
                     }, () => {
                        return;
                 });
             } else {
                 common.showConfirmation("<div class='popup-content'><div class='popup-title'>Are you sure about this?</div>For confirm this action, you will not receive any new notification from <span>" + funcName + "</span> function</div>",
                     () => {
-                        UpdateTempPermission(funcID, false);
+                        UpdateNotificationSettingStatus(funcID, false);
                     }, () => {
                         return;
                     });
@@ -38,65 +31,10 @@
         });
     }
 
-    function UpdateTempPermission(funcID, isTurnOnPermission)
-    {
-        //TODO: call controller to update message + notification
-        UpdateNotificationSettingStatus(funcID, isTurnOnPermission);
-
-        //update temp variables
-        //if (funcID === 1) {
-        //    notificationPermissions.associationPermisson.isTurnOn = isTurnOnPermission;
-        //}
-        //else
-        //    notificationPermissions.probationPermisson.isTurnOn = isTurnOnPermission;
-
-        // storage local state
-        //setStorageNotificationSettingBehavior(domElements.ctsCustId + NS_CONST, JSON.stringify(notificationPermissions));
-    }
-
-    //function getStorageNotificationSettingBehavior(key) {
-    //    if (typeof Storage !== "undefined") {
-    //        return localStorage.getItem(key);
-    //    }
-    //    return '';
-    //};
-
-    //function setStorageNotificationSettingBehavior(key, value) {
-    //    if (typeof Storage !== "undefined") {
-    //        localStorage.setItem(key, value);
-    //    }
-    //};
-
-    function RetrieveCurrentPermissions() {
-        //Retrieve from local storage
-        //let retrievedObj = getStorageNotificationSettingBehavior(domElements.ctsCustId + NS_CONST);
-
-        //if (retrievedObj !== undefined) {
-        //    notificationPermissions = JSON.parse(retrievedObj);
-        //}
-
-        ///TODO: Retrieve from API  && display permission setting status
-        GetPermissionSettingStatus();
-    }
-
-    function GetPermissionSettingStatus()
-    {
-        $.ajax(common.modifyRelativeUrl('ManageSubscriber/GetPermissionSettingStatus'), {
-            type: 'GET',
-            success: function (response) {
-                DisplayPermissionStatus(response);
-                //SaveTempPermissionStatus();
-            },
-            error: function (errMsg) {
-                console.log(errMsg);
-            }
-        });
-    }
-
     function UpdateNotificationSettingStatus(funcId, isTurnOnPermission) {
         let notifiedSettingStatusModel = {
-            FuncId: funcId,
-            IsTurnOnPermission: isTurnOnPermission
+            FunctionId: funcId,
+            IsTurningOnPermission: isTurnOnPermission
         };
 
         $.ajax(common.modifyRelativeUrl('NotificationSetting/UpdateNotificationSettingStatus'), {
@@ -104,7 +42,6 @@
             data: notifiedSettingStatusModel,
             success: function (response) {
                 if (response.ErrorCode !== 0) {
-                    //SaveTempPermissionStatus();
                     common.showError(response.ErrorMsg);
                 }
             },
@@ -114,21 +51,15 @@
         });
     }
 
-    function DisplayPermissionStatus(response)
+    function DisplayPermissionStatus()
     {
-        domElements.inputSwitchAAM.prop('checked', response.IsTurnOnAssociationPermission);
-        domElements.inputSwitchProbation.prop('checked', response.IsTurnOnProbationPermission);
+        domElements.inputSwitchAAM.prop('checked', domElements.isTurnOnAssociationStatus);
+        domElements.inputSwitchProbation.prop('checked', domElements.isTurnOnProbationStatus);
     }
-
-    //function SaveTempPermissionStatus()
-    //{
-    //    notificationPermissions.associationPermisson.isTurnOn = response.IsTurnOnAssociationPermission;
-    //    notificationPermissions.associationPermisson.isTurnOn = response.IsTurnOnProbationPermission;
-    //}
 
     function Initial() {
         SwitchPopup();
-        RetrieveCurrentPermissions();
+        DisplayPermissionStatus();
     }
 
     $(document).ready(function () {

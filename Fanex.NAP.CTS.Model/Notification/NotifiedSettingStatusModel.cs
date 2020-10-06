@@ -2,8 +2,10 @@
 {
     public class NotifiedSettingStatusModel
     {
-        public bool IsTurnOnAssociationPermission { get; set; }
+        public int FunctionID { get; set; }
 
-        public bool IsTurnOnProbationPermission { get; set; }
+        public string FunctionName { get; set; }
+
+        public bool IsTurnedOnNotification { get; set; }
     }
 }

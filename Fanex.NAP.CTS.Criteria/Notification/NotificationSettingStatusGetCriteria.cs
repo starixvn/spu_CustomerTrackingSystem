@@ -10,7 +10,7 @@
 
         public override string GetSettingKey()
         {
-            return "";
+            return "CTS_DC_Notification_GetSettings";
         }
 
         public override bool IsValid()

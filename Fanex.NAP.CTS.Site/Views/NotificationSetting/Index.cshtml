@@ -49,7 +49,7 @@
                         <div class="name"> Probation Management </div>
                         <div class="btn-switch">
                             <label class="toggleSwitch nolabel">
-                                <input type="checkbox" @*checked="checked"*@ id="inputSwitchProbation" />
+                                <input type="checkbox" id="inputSwitchProbation" />
                                 <span>
                                     <span>OFF</span>
                                     <span>ON</span>
@@ -66,8 +66,8 @@
 
     <div hidden>
         <input id="hdCTSCustId" type="hidden" value="@Model.CTSCustId" />
-        <input id="hdIsAssociationPermission" type="hidden" IsAssociationPermission="@Model.IsAssociationPermission.ToString()" />
-        <input id="hdIsProbationPermission" type="hidden" IsProbationPermission="@Model.IsProbationPermission.ToString()" />
+        <input id="hdIsTurnOnAssociationStatus" type="hidden" value="@Model.NotificationSettingStatus.IsTurnOnAssociationStatus.ToString()" />
+        <input id="hdIsTurnOnProbationStatus" type="hidden" value="@Model.NotificationSettingStatus.IsTurnOnProbationStatus.ToString()" />
     </div>
 </body>
 

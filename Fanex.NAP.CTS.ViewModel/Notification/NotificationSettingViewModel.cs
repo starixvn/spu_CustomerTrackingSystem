@@ -13,5 +13,7 @@ namespace Fanex.NAP.CTS.ViewModel.Notification
         public bool IsAssociationPermission { get; set; }
 
         public bool IsProbationPermission { get; set; }
+
+        public NotificationSettingStatusViewModel NotificationSettingStatus { get; set; }
     }
 }

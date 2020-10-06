@@ -53,7 +53,7 @@
             }
         }
 
-        public NotifiedSettingStatusModel GetNotificationSettingStatus(long custId)
+        public IEnumerable<NotifiedSettingStatusModel> GetNotificationSettingStatus(long custId)
         {
             var criteria = new NotificationSettingStatusGetCriteria
             {
@@ -64,7 +64,7 @@
             {
                 using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
                 {
-                    return db.Query<NotifiedSettingStatusModel>(criteria).FirstOrDefault();
+                    return db.Query<NotifiedSettingStatusModel>(criteria);
                 }
             }
             catch (Exception ex)
@@ -73,7 +73,7 @@
 
                 LogService.Error(errorMessage, ex);
 
-                return new NotifiedSettingStatusModel();
+                return new List<NotifiedSettingStatusModel>();
             }
         }
 
@@ -81,7 +81,9 @@
         {
             var criteria = new NotificationSettingStatusUpdateCriteria
             {
-                UserID = custId
+                UserID = custId,
+                FunctionID = notifiedSettingStatus.FunctionId,
+                IsTurningOnPermission = notifiedSettingStatus.IsTurningOnPermission
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))

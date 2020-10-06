@@ -33,6 +33,8 @@
   <Function Name="Notification">
     <Setting Key="CTS_DC_Notification_GetNewAssociation" SpName="CTS_DC_Notification_GetNewAssociation" DbName="MySQL.CTS_DataCenter"/>
     <Setting Key="CTS_DC_Notification_GetProbation" SpName="CTS_DC_Notification_GetProbation" DbName="MySQL.CTS_DataCenter"/>
+    <Setting Key="CTS_DC_Notification_GetSettings" SpName="CTS_DC_Notification_GetSettings" DbName="MySQL.CTS_DataCenter"/>
+    <Setting Key="CTS_DC_Notification_UpdateSettings" SpName="CTS_DC_Notification_UpdateSettings" DbName="MySQL.CTS_DataCenter"/>
   </Function>
 
   <Function Name="Evidence">

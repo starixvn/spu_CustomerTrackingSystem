@@ -10,7 +10,7 @@
 
         IEnumerable<ProbationMessageModel> GetProbationMessages(long custId, long maxNotificationID);
 
-        NotifiedSettingStatusModel GetNotificationSettingStatus(long custId);
+        IEnumerable<NotifiedSettingStatusModel> GetNotificationSettingStatus(long custId);
 
         DBResult UpdateNotificationSetting(long custId, UpdateNotifiedSettingStatusModel notifiedSettingStatus);
 

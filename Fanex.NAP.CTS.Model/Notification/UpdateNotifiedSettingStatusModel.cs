@@ -2,8 +2,8 @@
 {
     public class UpdateNotifiedSettingStatusModel
     {
-        public int FuncId { get; set; }
+        public int FunctionId { get; set; }
 
-        public bool IsTurnOnPermission { get; set; }
+        public bool IsTurningOnPermission { get; set; }
     }
 }
