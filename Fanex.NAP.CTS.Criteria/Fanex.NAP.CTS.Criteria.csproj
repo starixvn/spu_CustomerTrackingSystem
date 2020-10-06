@@ -103,6 +103,8 @@
     <Compile Include="CTSUser\InsertCTSUserCriteria.cs" />
     <Compile Include="ImportEvidences\InsertMultipleCustEviByCustIdCriteria.cs" />
     <Compile Include="ManageSubscriber\SubscriberGetDetailedSiteCriteria.cs" />
+    <Compile Include="Notification\NotificationSettingStatusUpdateCriteria.cs" />
+    <Compile Include="Notification\NotificationSettingStatusGetCriteria.cs" />
     <Compile Include="Notification\ProbationMessagesGetCriteria.cs" />
     <Compile Include="ProbationManagement\GetAccummulatedInfoCriteria.cs" />
     <Compile Include="ProbationManagement\GetCategoryCriteria.cs" />

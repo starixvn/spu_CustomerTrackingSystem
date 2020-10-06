@@ -175,6 +175,8 @@
     <Compile Include="AssociatedAccountMonitor\CustProfilerModel.cs" />
     <Compile Include="AssociatedAccountMonitor\ValidateAssociatedAccountModel.cs" />
     <Compile Include="ManageSubscriber\DetailedSiteModel.cs" />
+    <Compile Include="Notification\UpdateNotifiedSettingStatusModel.cs" />
+    <Compile Include="Notification\NotifiedSettingStatusModel.cs" />
     <Compile Include="Notification\ProbationMessageModel.cs" />
     <Compile Include="ProbationManagement\AccumulatedInfoModel.cs" />
     <Compile Include="ProbationManagement\CategoryModel.cs" />

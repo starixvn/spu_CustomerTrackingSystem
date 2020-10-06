@@ -5,6 +5,7 @@
     using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Core.Utilities;
+    using Fanex.NAP.CTS.Model.Notification;
     using Fanex.NAP.CTS.ViewModel.Notification;
     using Service;
     using System.Linq;
@@ -71,6 +72,25 @@
 
                 unReadMessageCounter = associatedUnreadMessages?.Count() + probationUnreadMessages?.Count(),
                 isFirstNotification
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetPermissionSettingStatus()
+        {
+            var permissionSettingStatus = _notificationSettingService.GetNotificationSettingStatus(CurrentSession.UserId);
+
+            return Json(permissionSettingStatus, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult UpdateNotificationSettingStatus(UpdateNotifiedSettingStatusModel notifiedSettingStatusModel)
+        {
+            var result = _notificationSettingService.UpdateNotificationSetting(CurrentSession.UserId, notifiedSettingStatusModel);
+
+            return Json(new
+            {
+                result.ErrorCode,
+                result.ErrorMsg
             }, JsonRequestBehavior.AllowGet);
         }
 

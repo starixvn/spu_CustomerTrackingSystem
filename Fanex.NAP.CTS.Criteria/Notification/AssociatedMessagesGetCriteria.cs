@@ -6,12 +6,12 @@
     public class AssociatedMessagesGetCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_UserID")]
-        public int UserID { get; set; }
+        public long UserID { get; set; }
 
         [SpParam(SqlParamName = "ip_MaxNewAssID")]
         public long MaxNewAssID { get; set; }
 
-        public AssociatedMessagesGetCriteria(int userId, long aMaxNewAssID)
+        public AssociatedMessagesGetCriteria(long userId, long aMaxNewAssID)
         {
             UserID = userId;
             MaxNewAssID = aMaxNewAssID;
