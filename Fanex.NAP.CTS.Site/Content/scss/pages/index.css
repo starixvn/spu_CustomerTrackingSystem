@@ -1903,60 +1903,239 @@ body {
   .notification-container .notification-list {
     display: none;
     position: absolute;
-    top: 41px;
-    right: 4px;
+    top: 4.1rem;
+    right: .4rem;
     z-index: 1000;
-    width: 350px;
-    min-height: 38px;
-    max-height: 441px;
-    overflow: auto;
-    border: 1px solid #E5E5E5;
+    width: 40rem;
+    min-height: 3.8rem;
     box-sizing: border-box;
     box-shadow: 0px 7px 25px rgba(0, 0, 0, 0.3);
     border-radius: 2px;
     background: #FFFFFF; }
     .notification-container .notification-list .notification-title {
       border-bottom: 1px solid #EBEBEB;
-      max-height: 30px;
-      padding: 8px; }
+      padding: 10px 18px; }
       .notification-container .notification-list .notification-title h3 {
         font-weight: 600;
-        font-size: 12px;
-        line-height: 14px;
-        color: #777777; }
-    .notification-container .notification-list .notification-content {
-      padding: 7px; }
-      .notification-container .notification-list .notification-content .no-notification {
+        font-size: 1.4rem;
+        line-height: 1.7rem;
+        color: #4B4B4B;
+        display: flex;
+        align-items: center; }
+        .notification-container .notification-list .notification-title h3 span {
+          font-size: 1rem;
+          width: 2.4rem;
+          height: 2rem;
+          background: #2053D9;
+          color: #fff;
+          line-height: 1.2rem;
+          padding: .3rem .6rem;
+          border-radius: 10px;
+          display: flex;
+          align-items: center;
+          margin-left: .5rem; }
+    .notification-container .notification-list .notification-content .group-select {
+      padding: 1rem 1.8rem;
+      position: relative; }
+      .notification-container .notification-list .notification-content .group-select .select-box {
+        width: 100%;
+        max-width: 23rem;
+        position: relative; }
+        .notification-container .notification-list .notification-content .group-select .select-box__icon {
+          position: absolute;
+          top: 50%;
+          right: .6rem;
+          transform: translateY(-50%);
+          width: 1rem;
+          opacity: 0.3;
+          transition: 0.2s ease; }
+        .notification-container .notification-list .notification-content .group-select .select-box__value {
+          display: flex; }
+        .notification-container .notification-list .notification-content .group-select .select-box__current {
+          box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.35);
+          border-radius: 5px;
+          padding: .8rem 3.5rem .8rem 1rem;
+          cursor: pointer;
+          outline: none; }
+          .notification-container .notification-list .notification-content .group-select .select-box__current:focus + .select-box__list {
+            opacity: 1;
+            animation-name: none; }
+            .notification-container .notification-list .notification-content .group-select .select-box__current:focus + .select-box__list .select-box__option {
+              cursor: pointer; }
+          .notification-container .notification-list .notification-content .group-select .select-box__current:focus .select-box__icon {
+            transform: translateY(-50%) rotate(180deg); }
+        .notification-container .notification-list .notification-content .group-select .select-box__input {
+          display: none; }
+          .notification-container .notification-list .notification-content .group-select .select-box__input:checked + .select-box__input-text {
+            display: flex;
+            align-items: center;
+            justify-content: space-between; }
+        .notification-container .notification-list .notification-content .group-select .select-box__input-text {
+          display: none;
+          width: 100%;
+          margin: 0;
+          background-color: #fff;
+          color: #2053D9;
+          font-weight: bold;
+          font-size: 1.2rem;
+          line-height: 1.4rem;
+          text-transform: uppercase; }
+          .notification-container .notification-list .notification-content .group-select .select-box__input-text .count {
+            width: 2rem;
+            height: 1.6rem;
+            background: #2053D9;
+            border-radius: 10px;
+            padding: .1rem .4rem;
+            font-weight: bold;
+            font-size: 10px;
+            line-height: 12px;
+            color: #FFFFFF;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center; }
+        .notification-container .notification-list .notification-content .group-select .select-box__list {
+          position: absolute;
+          width: 100%;
+          padding: 1.2rem 0;
+          list-style: none;
+          opacity: 0;
+          animation-name: HideList;
+          animation-duration: 0.5s;
+          animation-delay: 0.5s;
+          animation-fill-mode: forwards;
+          animation-timing-function: step-start;
+          background: #FFFFFF;
+          box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.35);
+          border-radius: 5px;
+          z-index: 9999;
+          margin-top: .4rem; }
+          .notification-container .notification-list .notification-content .group-select .select-box__list li:hover {
+            background: #D9D9D9; }
+          .notification-container .notification-list .notification-content .group-select .select-box__list li label {
+            color: #545454; }
+        .notification-container .notification-list .notification-content .group-select .select-box__option {
+          display: block;
+          padding: .7rem 3.5rem .7rem 1rem;
+          font-size: 1.2rem;
+          line-height: 1.4rem;
+          text-transform: uppercase;
+          display: flex;
+          align-items: center;
+          justify-content: space-between; }
+          .notification-container .notification-list .notification-content .group-select .select-box__option .count {
+            width: 2rem;
+            height: 1.6rem;
+            background: #2053D9;
+            border-radius: 10px;
+            padding: .1rem .4rem;
+            font-weight: bold;
+            font-size: 10px;
+            line-height: 12px;
+            color: #FFFFFF;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center; }
+    .notification-container .notification-list .notification-content .btn-show-all {
+      background: #EEEEEE;
+      margin-top: 1.6rem;
+      padding: .8rem 0;
+      text-align: center; }
+      .notification-container .notification-list .notification-content .btn-show-all a {
+        font-size: 1.3rem;
+        line-height: 1.6rem;
+        color: #2053D9;
+        display: block; }
+    .notification-container .notification-list .notification-content .scroll-bar {
+      padding: 0 1rem 0 1.7rem;
+      max-height: 54.3rem;
+      overflow-y: scroll;
+      margin-right: .4rem; }
+      .notification-container .notification-list .notification-content .scroll-bar::-webkit-scrollbar {
         display: block;
+        width: .8rem; }
+      .notification-container .notification-list .notification-content .scroll-bar::-webkit-scrollbar-track {
+        background: transparent; }
+      .notification-container .notification-list .notification-content .scroll-bar::-webkit-scrollbar-thumb {
+        background: #B5B5B5;
+        border-radius: 4px; }
+    .notification-container .notification-list .notification-content .no-notification {
+      display: block;
+      font-size: 13px;
+      line-height: 16px;
+      color: #474747;
+      padding: 2px 15px; }
+    .notification-container .notification-list .notification-content .box-notification {
+      background: #F2F5F7;
+      border-radius: 3px;
+      padding: .6rem .8rem .6rem 1.6rem;
+      margin-bottom: .6rem; }
+      .notification-container .notification-list .notification-content .box-notification:last-child {
+        margin-bottom: 0; }
+      .notification-container .notification-list .notification-content .box-notification .line-border {
+        position: relative; }
+        .notification-container .notification-list .notification-content .box-notification .line-border:after {
+          content: "";
+          display: block;
+          height: 100%;
+          width: .4rem;
+          border-radius: 2px;
+          position: absolute;
+          top: 0;
+          left: -1.2rem; }
+        .notification-container .notification-list .notification-content .box-notification .line-border .heading-category {
+          font-size: 1.3rem;
+          line-height: 1.6rem;
+          padding: .1rem 0;
+          font-weight: bold; }
+        .notification-container .notification-list .notification-content .box-notification .line-border .time-box {
+          font-style: italic;
+          font-weight: normal;
+          font-size: 1.2rem;
+          line-height: 1.4rem;
+          color: #737373;
+          margin-top: .8rem; }
+        .notification-container .notification-list .notification-content .box-notification .line-border .des-box {
+          color: #3D3D3D;
+          font-size: 1.2rem;
+          line-height: 1.4rem; }
+          .notification-container .notification-list .notification-content .box-notification .line-border .des-box .color-txt {
+            color: #2053D9;
+            font-weight: bold; }
+    .notification-container .notification-list .notification-content .notification-new {
+      background: #E0F3FF; }
+    .notification-container .notification-list .notification-content .general .line-border:after {
+      background: #4A7CFF; }
+    .notification-container .notification-list .notification-content .general .line-border .heading-category {
+      color: #4370E6; }
+    .notification-container .notification-list .notification-content .detailed .line-border:after {
+      background: #F15D21; }
+    .notification-container .notification-list .notification-content .detailed .line-border .heading-category {
+      color: #F15D21; }
+    .notification-container .notification-list .notification-content .unread, .notification-container .notification-list .notification-content .read {
+      margin-bottom: 6px;
+      padding: 7px 9px;
+      border-radius: 3px; }
+      .notification-container .notification-list .notification-content .unread a, .notification-container .notification-list .notification-content .read a {
         font-size: 13px;
         line-height: 16px;
-        color: #474747;
-        padding: 2px 15px; }
-      .notification-container .notification-list .notification-content .unread, .notification-container .notification-list .notification-content .read {
-        margin-bottom: 6px;
-        padding: 7px 9px;
-        border-radius: 3px; }
-        .notification-container .notification-list .notification-content .unread a, .notification-container .notification-list .notification-content .read a {
-          font-size: 13px;
-          line-height: 16px;
-          color: #474747; }
-          .notification-container .notification-list .notification-content .unread a .name, .notification-container .notification-list .notification-content .read a .name {
-            color: #2053D9; }
-      .notification-container .notification-list .notification-content ul li:last-child {
-        margin-bottom: 0; }
-      .notification-container .notification-list .notification-content .unread {
-        background: #E0F3FF; }
-        .notification-container .notification-list .notification-content .unread a {
-          font-weight: bold; }
-      .notification-container .notification-list .notification-content .read {
-        background: #F2F5F7;
-        font-weight: normal; }
-      .notification-container .notification-list .notification-content .datetime {
-        display: block;
-        font-size: 10px;
-        line-height: 12px;
-        color: #737373;
-        margin-top: 2px; }
+        color: #474747; }
+        .notification-container .notification-list .notification-content .unread a .name, .notification-container .notification-list .notification-content .read a .name {
+          color: #2053D9; }
+    .notification-container .notification-list .notification-content ul li:last-child {
+      margin-bottom: 0; }
+    .notification-container .notification-list .notification-content .unread {
+      background: #E0F3FF; }
+      .notification-container .notification-list .notification-content .unread a {
+        font-weight: bold; }
+    .notification-container .notification-list .notification-content .read {
+      background: #F2F5F7;
+      font-weight: normal; }
+    .notification-container .notification-list .notification-content .datetime {
+      display: block;
+      font-size: 10px;
+      line-height: 12px;
+      color: #737373;
+      margin-top: 2px; }
 
 .content {
   margin-top: 6rem; }
@@ -2277,3 +2456,9 @@ body {
   color: #B1B1B1;
   pointer-events: none;
   cursor: not-allowed; }
+
+@keyframes HideList {
+  from {
+    transform: scaleY(1); }
+  to {
+    transform: scaleY(0); } }

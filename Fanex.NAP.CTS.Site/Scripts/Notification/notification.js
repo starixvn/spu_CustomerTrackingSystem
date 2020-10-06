@@ -61,8 +61,8 @@ function notification() {
             }
         }
 
-        messagesHtmlString += "</ul>";
-        domElements.notificationContent.html((associatedMessages.msgCounter + probationMessages.msgCounter) > 0 ? messagesHtmlString : "<div class='no-notification'>There is no notification.</div>");
+        //messagesHtmlString += "</ul>";
+       // domElements.notificationContent.html((associatedMessages.msgCounter + probationMessages.msgCounter) > 0 ? messagesHtmlString : "<div class='no-notification'>There is no notification.</div>");
         $('.notification-icon').addClass('has-arrow-down');
     }
 
@@ -303,7 +303,7 @@ function notification() {
             domElements.notificationBell.removeClass('bell-shake');
             domElements.circle.hide();
             GetNewNotification(associatedMessages.maxAssociationId, probationMessages.maxProbationID);     
-            domElements.notificationList.toggle();
+            //domElements.notificationList.toggle();
         }
     });
 }
