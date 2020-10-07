@@ -1,5 +1,6 @@
 ﻿let unreadMsgCounter = 0; 
 let isFirstNotification = false;
+let selectionCheckbox = 1;
 
 let associatedMessages = {
     messages : null,
@@ -23,8 +24,19 @@ function notification() {
         notificationIcon: $('#notification-icon'),
         notificationList: $('#notification-list'),
         notificationContent: $('#notification-content'),
+        notificationScrollBarArea: $('#scrollBarArea'),
         notificationBell: $('#icon-bell'),
-        circle: $('#circle')
+        circle: $('#circle'),
+        allSelection: $('#allSelection'),
+        associationSelection: $('#associationSelection'),
+        probationSelection: $('#probationSelection'),
+        notificationTitle: $('#notification-title'),
+        allMessAmount: $('#notification-allAmount'),
+        associationAmount: $('#notification-AAMAmount'),
+        probationAmount: $('#notification-ProbationAmount'),
+        selectionAllMessAmount: $('#selection-allAmount'),
+        selectionAssociationAmount: $('#selection-AAMAmount'),
+        selectionProbationAmount: $('#selection-ProbationAmount')
     };
     
     String.prototype.format = function () {
@@ -33,28 +45,29 @@ function notification() {
             a = a.replace(new RegExp("\\{" + k + "\\}", 'g'), arguments[k]);
         }
         return a;
-    }
-
+    };
 
     domElements.selectBoxNotification.click(() => {
         domElements.selectBoxList.toggleClass('block-notification');
         domElements.selectBoxIcon.toggleClass('show-toggle');
-    })
+    });
 
-
-    function GetMessage()
+    function GetAllMessage()
     {
-        var messagesHtmlString = "<ul>";
+        var messagesHtmlString = "";
+
         var htmlTemplateAssociatedRead = RenderMessageForAAM(1);
         var htmlTemplateAssociatedUnRead = RenderMessageForAAM(0);
 
         if (probationMessages.msgCounter != null) {
             for (var i = 0; i < probationMessages.msgCounter; i++) {
                 if (probationMessages.messages[i].IsSeen) {
-                    messagesHtmlString += RenderMessgaeForProbation(1, probationMessages.messages[i].NotificationType, probationMessages.messages[i].TotalFailed).format(probationMessages.messages[i].TotalFailed, probationMessages.messages[i].CreatedDateString);
+                    messagesHtmlString += RenderMessgaeForProbation(1, probationMessages.messages[i].NotificationType,true).format(probationMessages.messages[i].TotalGeneralFailed, probationMessages.messages[i].CreatedDateString);
+                    messagesHtmlString += RenderMessgaeForProbation(1, probationMessages.messages[i].NotificationType,false).format(probationMessages.messages[i].TotalFailed - probationMessages.messages[i].TotalGeneralFailed, probationMessages.messages[i].CreatedDateString);
                 }
                 else {
-                    messagesHtmlString += RenderMessgaeForProbation(0, probationMessages.messages[i].NotificationType, probationMessages.messages[i].TotalFailed).format(probationMessages.messages[i].TotalFailed, probationMessages.messages[i].CreatedDateString);
+                    messagesHtmlString += RenderMessgaeForProbation(0, probationMessages.messages[i].NotificationType,true).format(probationMessages.messages[i].TotalGeneralFailed, probationMessages.messages[i].CreatedDateString);
+                    messagesHtmlString += RenderMessgaeForProbation(0, probationMessages.messages[i].NotificationType,false).format(probationMessages.messages[i].TotalFailed - probationMessages.messages[i].TotalGeneralFailed, probationMessages.messages[i].CreatedDateString);
                 }
             }
         }
@@ -71,35 +84,102 @@ function notification() {
             }
         }
 
-        //messagesHtmlString += "</ul>";
-       // domElements.notificationContent.html((associatedMessages.msgCounter + probationMessages.msgCounter) > 0 ? messagesHtmlString : "<div class='no-notification'>There is no notification.</div>");
+        domElements.notificationScrollBarArea.html((associatedMessages.msgCounter + probationMessages.msgCounter) > 0 ? messagesHtmlString : "<div class='no-data'>You don't have any notifications right now.</div>");
         $('.notification-icon').addClass('has-arrow-down');
+    }
+
+    function GetAssociationMessages()
+    {
+        var messagesHtmlString = "";
+
+        var htmlTemplateAssociatedRead = RenderMessageForAAM(1);
+        var htmlTemplateAssociatedUnRead = RenderMessageForAAM(0);
+
+        if (associatedMessages.msgCounter != null) {
+            for (var i = 0; i < associatedMessages.msgCounter; i++) {
+                if (associatedMessages.messages[i].IsSeen) {
+                    messagesHtmlString += htmlTemplateAssociatedRead.format(associatedMessages.messages[i].UserName, associatedMessages.messages[i].NewAssocitionCount, associatedMessages.messages[i].CreatedDateString, associatedMessages.messages[i].CTSCustID);
+                }
+                else {
+                    messagesHtmlString += htmlTemplateAssociatedUnRead.format(associatedMessages.messages[i].UserName, associatedMessages.messages[i].NewAssocitionCount, associatedMessages.messages[i].CreatedDateString, associatedMessages.messages[i].CTSCustID);
+                }
+            }
+        }
+
+        domElements.notificationScrollBarArea.html(associatedMessages.msgCounter > 0 ? messagesHtmlString : "<div class='no-data'>You don't have any notifications right now.</div>");
+        $('.notification-icon').addClass('has-arrow-down');
+    }
+
+    function GetProbationMessages() {
+        var messagesHtmlString = "";
+
+        if (probationMessages.msgCounter != null) {
+            for (var i = 0; i < probationMessages.msgCounter; i++) {
+                if (probationMessages.messages[i].IsSeen) {
+                    messagesHtmlString += RenderMessgaeForProbation(1, probationMessages.messages[i].NotificationType, true).format(probationMessages.messages[i].TotalGeneralFailed, probationMessages.messages[i].CreatedDateString);
+                    messagesHtmlString += RenderMessgaeForProbation(1, probationMessages.messages[i].NotificationType, false).format(probationMessages.messages[i].TotalFailed - probationMessages.messages[i].TotalGeneralFailed, probationMessages.messages[i].CreatedDateString);
+                }
+                else {
+                    messagesHtmlString += RenderMessgaeForProbation(0, probationMessages.messages[i].NotificationType, true).format(probationMessages.messages[i].TotalGeneralFailed, probationMessages.messages[i].CreatedDateString);
+                    messagesHtmlString += RenderMessgaeForProbation(0, probationMessages.messages[i].NotificationType, false).format(probationMessages.messages[i].TotalFailed - probationMessages.messages[i].TotalGeneralFailed, probationMessages.messages[i].CreatedDateString);
+                }
+            }
+        }
+
+        domElements.notificationScrollBarArea.html(probationMessages.msgCounter > 0 ? messagesHtmlString : "<div class='no-data'>You don't have any notifications right now.</div>");
+        $('.notification-icon').addClass('has-arrow-down');
+    }
+
+    function GetMessages()
+    {
+        switch (selectionCheckbox) {
+            case 2:
+                GetAssociationMessages();
+                break;
+            case 3:
+                GetProbationMessages();
+                break;
+            default:
+                GetAllMessage();
+        }
     }
 
     function RenderMessageForAAM(isRead)
     {
         var url = common.modifyRelativeUrl('Account/Index/{3}');
-        var content = '<a href="' + url + '"> Account <span class="name">{0}</span> has {1} new associated account(s). </a>';
-        if (isRead == 1)
-            return "<li class='read'>" + content + "<span class='datetime'> {2}</span ></li >";
-        else
-            return "<li class='unread'>" + content + "<span class='datetime'> {2}</span ></li >";
+        var content = '<a href="' + url + '" class="link - notification">'
+            + ' <div class="box-notification associated' + ((isRead == 1) ? '' : ' notification-new') + '">'
+            + ' <div class="line-border">'
+            + ' <h5 class="heading-category">Associated Acccount Monitor</h5>'
+            + ' <div class="des-box">'
+            + ' Account <span class="color-txt">{0}</span> has <span class="color-txt">{1}</span> new associated account(s). </span >'
+            + ' </div>'
+            + ' <div class="time-box">{2}'
+            + ' </div >'
+            + ' </div>'
+            + ' </div>'
+            + ' </a>';
+            
+        return content;
     }
 
-    function RenderMessgaeForProbation(isRead, notificationType, totalFail)
+    function RenderMessgaeForProbation(isRead, notificationType, isGeneral)
     {
         var url = common.modifyRelativeUrl('ProbationManagement/Index?filterType=' + notificationType);
-        var content = '<a href="' + url + '"> There are <span class="name">{0}</span> account(s) '; 
+        var content =   '<a href="' + url + '" class="link - notification">'
+                        + '<div class="box-notification' + ((isGeneral) ? " general" : " detailed") + ((isRead == 1) ? '' : ' notification-new') + '">'
+                        + '<div class="line-border">'
+                        + '<h5 class="heading-category">' + ((isGeneral) ? "Genaral Category" : "Detailed Category") + '</h5>'
+                        + '<div class="des-box">'
+                        + ((notificationType == 1) ? ' There are <span class="color-txt">{0}</span> account(s) cannot pass Probation.'
+                            : ' There are <span class="color-txt">{0}</span> account(s) have Probation and negative margin.')
+                        + '</div>'
+                        + '<div class="time-box">{1} </div >'
+                        + '</div>'
+                        + '</div>'
+                        + '</a>';
 
-        if (notificationType == 1) 
-            content = content + ' cannot pass Probation on {1}. </a>';
-        else 
-            content = content + ((totalFail > 1) ? 'who were' : 'who was') + ' tagged Probation and negative margin on {1}. </a>';
-
-        if (isRead == 1)
-            return "<li class='read'>" + content + "</li >";
-        else
-            return "<li class='unread'>" + content + "</li >";
+        return content;
     }
 
     function getUnreadMessageCount()
@@ -133,7 +213,7 @@ function notification() {
                 if (!CheckValid(json)) {
                     ReCheckin();
                 } else {
-                    CheckDifferentCurrentAndPreviousMessages(json);
+                    HasNewMessages(json);
                     SetUnReadCounterToCookie(json.unReadMessageCounter);
 
                     associatedMessages.messages = json.messages.AssociatedMessages;
@@ -146,19 +226,19 @@ function notification() {
                     probationMessages.msgUnreadCounter = json.probationUnreadCounter;
                     probationMessages.maxProbationID = json.probationMaxProbationID;
 
-                    GetMessage();
+                    GetMessages();
                     SetupBellNotification();
                     isFirstNotification = json.isFirstNotification;
                 }
             },
             complete: function () {
-                if (isFirstNotification == false && GetUnReadFlagFromCookie() == "true") {
+                if (isFirstNotification == false && IsNewMessageFromCookie() == "true") {
                     NotifyToDesktop();
                     document.cookie = "hasNewUnreadMessages=false; path=/";
                 }
 
                 if (unreadMsgCounter == 0) {
-                    GetMessage();
+                    GetMessages();
                 }
                 
             },
@@ -167,7 +247,7 @@ function notification() {
                 SetUnReadCounterToCookie(0);
                 msgCounter = 0;
                 messages = null;
-                GetMessage();
+                GetMessages();
                 console.log(errMsg);
             }
         });
@@ -178,15 +258,43 @@ function notification() {
         if (unreadMsgCounter <= 0) {
             domElements.notificationBell.removeClass('bell-shake');
             domElements.circle.hide();
+            domElements.notificationTitle.hide();
+            domElements.allMessAmount.hide();
+            domElements.associationAmount.hide();
+            domElements.probationAmount.hide();
+            domElements.selectionAllMessAmount.hide();
+            domElements.selectionAssociationAmount.hide();
+            domElements.selectionProbationAmount.hide();
         }
         else {
             if (unreadMsgCounter > 99) {
-                var readTempHTML = "<span class='plus' id='plus-hide'>99+</span>"
+                var readTempHTML = "<span class='plus' id='plus-hide'>99+</span>";
                 domElements.circle.html(readTempHTML);
             }
             else {
                 domElements.circle.html(unreadMsgCounter);
             }
+
+            domElements.notificationTitle.text(unreadMsgCounter);
+            domElements.notificationTitle.show();
+
+            domElements.allMessAmount.show();
+            domElements.allMessAmount.text(unreadMsgCounter);
+
+            domElements.associationAmount.show();
+            domElements.associationAmount.text(associatedMessages.msgUnreadCounter);
+
+            domElements.probationAmount.show();
+            domElements.probationAmount.text(probationMessages.msgUnreadCounter);
+
+            domElements.selectionAllMessAmount.show();
+            domElements.selectionAllMessAmount.text(unreadMsgCounter);
+
+            domElements.selectionAssociationAmount.show();
+            domElements.selectionAssociationAmount.text(associatedMessages.msgUnreadCounter);
+
+            domElements.selectionProbationAmount.show();
+            domElements.selectionProbationAmount.text(probationMessages.msgUnreadCounter);
 
             domElements.circle.show();
             domElements.notificationBell.addClass('bell-shake');
@@ -231,10 +339,10 @@ function notification() {
 
     setInterval(getUnreadMessageCount, 10000);
 
-    function CheckDifferentCurrentAndPreviousMessages(json)
+    function HasNewMessages(json)
     {
-         if (json.unReadMessageCounter != GetUnReadCounterFromCookie()
-             && json.unReadMessageCounter != 0)
+        if (json.unReadMessageCounter != GetOldUnReadMessageFromCookie()
+                && json.unReadMessageCounter != 0)
         {
              document.cookie = "hasNewUnreadMessages=true; path=/";
         }
@@ -243,7 +351,7 @@ function notification() {
         }
     }
 
-    function GetUnReadFlagFromCookie() {
+    function IsNewMessageFromCookie() {
 
         if (document.cookie.split(';').some((item) => item.trim().startsWith('hasNewUnreadMessages='))) {
             return document.cookie
@@ -254,7 +362,7 @@ function notification() {
         return "false";
     }
 
-    function GetUnReadCounterFromCookie() {
+    function GetOldUnReadMessageFromCookie() {
 
         if (document.cookie.split(';').some((item) => item.trim().startsWith('unreadMessagesFromCookie='))) {
             return document.cookie
@@ -304,20 +412,33 @@ function notification() {
 
     $(document).ready(function () {
         getUnreadMessageCount();
-    });
-
-
-
-    $(document).click(function (e) {
-        if (!domElements.notificationIcon.is(e.target) && domElements.notificationIcon.has(e.target).length === 0
-            && domElements.notificationList.is(":visible"))
+        domElements.allSelection.on('click', function() 
         {
-            domElements.notificationBell.removeClass('bell-shake');
-            domElements.circle.hide();
-            GetNewNotification(associatedMessages.maxAssociationId, probationMessages.maxProbationID);     
-            //domElements.notificationList.toggle();
-        }
+            GetAllMessage();
+            selectionCheckbox = 1;
+        });
+
+        domElements.associationSelection.on('click', function () {
+            GetAssociationMessages();
+            selectionCheckbox = 2;
+        });   
+
+        domElements.probationSelection.on('click', function () {
+            GetProbationMessages();
+            selectionCheckbox = 3;
+        });   
     });
+
+    //$(document).click(function (e) {
+    //    if (!domElements.notificationIcon.is(e.target) && domElements.notificationIcon.has(e.target).length === 0
+    //        && domElements.notificationList.is(":visible"))
+    //    {
+    //        domElements.notificationBell.removeClass('bell-shake');
+    //        domElements.circle.hide();
+    //        GetNewNotification(associatedMessages.maxAssociationId, probationMessages.maxProbationID);     
+    //        //domElements.notificationList.toggle();
+    //    }
+    //});
 }
 
 $(notification);

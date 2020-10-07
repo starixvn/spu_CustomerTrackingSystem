@@ -22,7 +22,7 @@
         {
             get
             {
-                return CreatedDate == DateTime.MinValue ? "" : CreatedDate.ToString("dd-MMM-yyyy");
+                return CreatedDate == DateTime.MinValue ? "" : CreatedDate.ToString("MMM dd, yyyy HH:mm:ss");
             }
         }
     }

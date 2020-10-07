@@ -15,16 +15,44 @@
             <span class="circle" id="circle" hidden><span class="plus hide">+</span></span>
         </div>
         
-        <div id="notification-list"  class="notification-list">
+        <div id="notification-list" class="notification-list">
             <div class="notification-title">
                 <h3>
                     NOTIFICATION
                 </h3>
             </div>
             <div class="notification-content" id="notification-content">
-                <div class="no-data">
-                    You don't have any notifications right now.
+                <div class="group-select">
+                    <div class="select-box">
+                        <div class="select-box__current" tabindex="1">
+                            <div class="select-box__value">
+                                <input class="select-box__input" type="radio" id="0" value="1" name="Ben" checked="checked" />
+                                <p class="select-box__input-text">all <span class="count" id="notification-allAmount">36</span></p>
+                            </div>
+                            <div class="select-box__value">
+                                <input class="select-box__input" type="radio" id="1" value="2" name="Ben" />
+                                <p class="select-box__input-text">Associated Accounts <span class="count" id="notification-AAMAmount">10</span></p>
+                            </div>
+                            <div class="select-box__value">
+                                <input class="select-box__input" type="radio" id="2" value="3" name="Ben" />
+                                <p class="select-box__input-text">Probation Management <span class="count" id="notification-ProbationAmount">12</span></p>
+                            </div>
+                            <img class="select-box__icon" src="../../images/chevron-down.png" alt="Arrow Icon" />
+                        </div>
+                        <ul class="select-box__list">
+                            <li><label class="select-box__option" id="allSelection" for="0">all <span class="count" id="selection-allAmount">36</span></label></li>
+                            <li><label class="select-box__option" id="associationSelection" for="1">Associated Accounts <span class="count" id="selection-AAMAmount">10</span></label></li>
+                            <li><label class="select-box__option" id="probationSelection" for="2">Probation Management <span class="count" id="selection-ProbationAmount">12</span></label></li>
+                        </ul>
+                    </div>
                 </div>
+
+                <div class="scroll-bar" id="scrollBarArea">
+                </div>
+
+                @*<div class="btn-show-all">
+            <a href="#">show all</a>
+        </div>*@
             </div>
         </div>
     </div>
