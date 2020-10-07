@@ -398,6 +398,13 @@ body {
         }
 
         .notification-content {
+            .no-data {
+                font-size: 1.6rem;
+                line-height: 1.9rem;
+                text-align: center;
+                padding : 1.5rem 0;
+            }
+
             .group-select {
                 padding: 1rem 1.8rem;
                 position: relative;
@@ -559,7 +566,7 @@ body {
 
             .scroll-bar {
                 padding: 0 1rem 0 1.7rem;
-                max-height: 54.3rem;
+                max-height: 40.2rem;
                 overflow-y: scroll;
                 margin-right: .4rem;
 
@@ -577,9 +584,13 @@ body {
                     border-radius: 4px;
                 }
 
-                .link-notification{
-                    margin-bottom : .6rem;
-                    display : block;
+                .link-notification {
+                    margin-bottom: .6rem;
+                    display: block;
+
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
                 }
             }
 
@@ -648,6 +659,19 @@ body {
 
             .notification-new {
                 background: #E0F3FF;
+            }
+
+
+            .associated {
+                .line-border {
+                    &:after {
+                        background: #7187B2;
+                    }
+
+                    .heading-category {
+                        color: #4370E6;
+                    }
+                }
             }
 
             .general {

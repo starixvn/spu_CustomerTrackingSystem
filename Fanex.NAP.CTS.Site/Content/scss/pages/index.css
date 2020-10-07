@@ -1934,6 +1934,11 @@ body {
           display: flex;
           align-items: center;
           margin-left: .5rem; }
+    .notification-container .notification-list .notification-content .no-data {
+      font-size: 1.6rem;
+      line-height: 1.9rem;
+      text-align: center;
+      padding: 1.5rem 0; }
     .notification-container .notification-list .notification-content .group-select {
       padding: 1rem 1.8rem;
       position: relative; }
@@ -2050,7 +2055,7 @@ body {
         display: block; }
     .notification-container .notification-list .notification-content .scroll-bar {
       padding: 0 1rem 0 1.7rem;
-      max-height: 54.3rem;
+      max-height: 40.2rem;
       overflow-y: scroll;
       margin-right: .4rem; }
       .notification-container .notification-list .notification-content .scroll-bar::-webkit-scrollbar {
@@ -2064,6 +2069,8 @@ body {
       .notification-container .notification-list .notification-content .scroll-bar .link-notification {
         margin-bottom: .6rem;
         display: block; }
+        .notification-container .notification-list .notification-content .scroll-bar .link-notification:last-child {
+          margin-bottom: 0; }
     .notification-container .notification-list .notification-content .no-notification {
       display: block;
       font-size: 13px;
@@ -2109,6 +2116,10 @@ body {
             font-weight: bold; }
     .notification-container .notification-list .notification-content .notification-new {
       background: #E0F3FF; }
+    .notification-container .notification-list .notification-content .associated .line-border:after {
+      background: #7187B2; }
+    .notification-container .notification-list .notification-content .associated .line-border .heading-category {
+      color: #4370E6; }
     .notification-container .notification-list .notification-content .general .line-border:after {
       background: #4A7CFF; }
     .notification-container .notification-list .notification-content .general .line-border .heading-category {
