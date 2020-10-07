@@ -1941,6 +1941,8 @@ body {
         width: 100%;
         max-width: 23rem;
         position: relative; }
+        .notification-container .notification-list .notification-content .group-select .select-box .show-toggle {
+          transform: translateY(-50%) rotate(180deg); }
         .notification-container .notification-list .notification-content .group-select .select-box__icon {
           position: absolute;
           top: 50%;
@@ -1962,8 +1964,6 @@ body {
             animation-name: none; }
             .notification-container .notification-list .notification-content .group-select .select-box__current:focus + .select-box__list .select-box__option {
               cursor: pointer; }
-          .notification-container .notification-list .notification-content .group-select .select-box__current:focus .select-box__icon {
-            transform: translateY(-50%) rotate(180deg); }
         .notification-container .notification-list .notification-content .group-select .select-box__input {
           display: none; }
           .notification-container .notification-list .notification-content .group-select .select-box__input:checked + .select-box__input-text {
@@ -1993,7 +1993,10 @@ body {
             display: inline-flex;
             align-items: center;
             justify-content: center; }
+        .notification-container .notification-list .notification-content .group-select .select-box .block-notification {
+          display: block; }
         .notification-container .notification-list .notification-content .group-select .select-box__list {
+          display: none;
           position: absolute;
           width: 100%;
           padding: 1.2rem 0;
@@ -2058,6 +2061,9 @@ body {
       .notification-container .notification-list .notification-content .scroll-bar::-webkit-scrollbar-thumb {
         background: #B5B5B5;
         border-radius: 4px; }
+      .notification-container .notification-list .notification-content .scroll-bar .link-notification {
+        margin-bottom: .6rem;
+        display: block; }
     .notification-container .notification-list .notification-content .no-notification {
       display: block;
       font-size: 13px;

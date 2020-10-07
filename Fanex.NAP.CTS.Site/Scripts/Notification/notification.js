@@ -17,6 +17,9 @@ let probationMessages = {
 
 function notification() {
     let domElements = {
+        selectBoxList: $('.select-box__list'),
+        selectBoxIcon: $('.select-box__icon'),
+        selectBoxNotification: $('.select-box__current'),
         notificationIcon: $('#notification-icon'),
         notificationList: $('#notification-list'),
         notificationContent: $('#notification-content'),
@@ -31,6 +34,13 @@ function notification() {
         }
         return a;
     }
+
+
+    domElements.selectBoxNotification.click(() => {
+        domElements.selectBoxList.toggleClass('block-notification');
+        domElements.selectBoxIcon.toggleClass('show-toggle');
+    })
+
 
     function GetMessage()
     {
@@ -295,6 +305,8 @@ function notification() {
     $(document).ready(function () {
         getUnreadMessageCount();
     });
+
+
 
     $(document).click(function (e) {
         if (!domElements.notificationIcon.is(e.target) && domElements.notificationIcon.has(e.target).length === 0

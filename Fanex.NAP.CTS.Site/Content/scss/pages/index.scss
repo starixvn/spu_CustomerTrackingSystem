@@ -408,6 +408,10 @@ body {
                     max-width: 23rem;
                     position: relative;
 
+                    .show-toggle {
+                        transform: translateY(-50%) rotate(180deg);
+                    }
+
                     &__icon {
                         position: absolute;
                         top: 50%;
@@ -437,10 +441,6 @@ body {
                                 .select-box__option {
                                     cursor: pointer;
                                 }
-                            }
-
-                            .select-box__icon {
-                                transform: translateY(-50%) rotate(180deg);
                             }
                         }
                     }
@@ -482,7 +482,12 @@ body {
                         }
                     }
 
+                    .block-notification {
+                        display: block;
+                    }
+
                     &__list {
+                        display: none;
                         position: absolute;
                         width: 100%;
                         padding: 1.2rem 0;
@@ -570,6 +575,11 @@ body {
                 &::-webkit-scrollbar-thumb {
                     background: #B5B5B5;
                     border-radius: 4px;
+                }
+
+                .link-notification{
+                    margin-bottom : .6rem;
+                    display : block;
                 }
             }
 
