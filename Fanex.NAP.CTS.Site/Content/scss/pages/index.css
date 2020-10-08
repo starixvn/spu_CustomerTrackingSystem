@@ -1935,10 +1935,17 @@ body {
           align-items: center;
           margin-left: .5rem; }
     .notification-container .notification-list .notification-content .no-data {
+      overflow: auto !important;
       font-size: 1.6rem;
       line-height: 1.9rem;
-      text-align: center;
-      padding: 1.5rem 0; }
+      height: 4rem;
+      display: flex;
+      max-height: 40.2rem;
+      overflow-y: scroll;
+      margin-right: .4rem;
+      align-items: center;
+      margin-top: -.5rem;
+      text-align: left; }
     .notification-container .notification-list .notification-content .group-select {
       padding: 1rem 1.8rem;
       position: relative; }
