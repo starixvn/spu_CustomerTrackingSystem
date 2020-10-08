@@ -147,7 +147,7 @@ function notification() {
     function RenderMessageForAAM(isRead)
     {
         var url = common.modifyRelativeUrl('Account/Index/{3}');
-        var content = '<a href="' + url + '" class="link - notification">'
+        var content = '<a href="' + url + '" class="link-notification">'
             + ' <div class="box-notification associated' + ((isRead == 1) ? '' : ' notification-new') + '">'
             + ' <div class="line-border">'
             + ' <h5 class="heading-category">Associated Acccount Monitor</h5>'
@@ -166,7 +166,7 @@ function notification() {
     function RenderMessgaeForProbation(isRead, notificationType, isGeneral)
     {
         var url = common.modifyRelativeUrl('ProbationManagement/Index?filterType=' + notificationType);
-        var content =   '<a href="' + url + '" class="link - notification">'
+        var content =   '<a href="' + url + '" class="link-notification">'
                         + '<div class="box-notification' + ((isGeneral) ? " general" : " detailed") + ((isRead == 1) ? '' : ' notification-new') + '">'
                         + '<div class="line-border">'
                         + '<h5 class="heading-category">' + ((isGeneral) ? "Genaral Category" : "Detailed Category") + '</h5>'

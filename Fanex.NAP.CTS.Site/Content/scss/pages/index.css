@@ -2054,7 +2054,7 @@ body {
         color: #2053D9;
         display: block; }
     .notification-container .notification-list .notification-content .scroll-bar {
-      padding: 0 1rem 0 1.7rem;
+      padding: 0 1rem .6rem 1.7rem;
       max-height: 40.2rem;
       overflow-y: scroll;
       margin-right: .4rem; }
