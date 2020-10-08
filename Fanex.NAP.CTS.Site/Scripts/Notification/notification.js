@@ -36,7 +36,8 @@ function notification() {
         probationAmount: $('#notification-ProbationAmount'),
         selectionAllMessAmount: $('#selection-allAmount'),
         selectionAssociationAmount: $('#selection-AAMAmount'),
-        selectionProbationAmount: $('#selection-ProbationAmount')
+        selectionProbationAmount: $('#selection-ProbationAmount'),
+        selectionCheckBox: $('#select-checkBox')
     };
     
     String.prototype.format = function () {
@@ -455,16 +456,17 @@ function notification() {
         });   
     });
 
-    //$(document).click(function (e) {
-    //    if (!domElements.notificationIcon.is(e.target) && domElements.notificationIcon.has(e.target).length === 0
-    //        && domElements.notificationList.is(":visible"))
-    //    {
-    //        domElements.notificationBell.removeClass('bell-shake');
-    //        domElements.circle.hide();
-    //        GetNewNotification(associatedMessages.maxAssociationId, probationMessages.maxProbationID);     
-    //        //domElements.notificationList.toggle();
-    //    }
-    //});
+    $(document).click(function (e) {
+        if (!domElements.notificationIcon.is(e.target) && domElements.notificationIcon.has(e.target).length === 0
+            && domElements.notificationList.is(":visible")
+            && !domElements.selectionCheckBox.is(e.target) && domElements.selectionCheckBox.has(e.target).length === 0)
+        {
+            domElements.notificationBell.removeClass('bell-shake');
+            domElements.circle.hide();
+            GetNewNotification(associatedMessages.maxAssociationId, probationMessages.maxProbationID);     
+            domElements.notificationList.toggle();
+        }
+    });
 }
 
 $(notification);
