@@ -383,7 +383,7 @@ body {
 
                 span {
                     font-size: 1rem;
-                    width: 2.4rem;
+                    width: auto;
                     height: 2rem;
                     background: #2053D9;
                     color: $btn-search-color;
@@ -402,7 +402,7 @@ body {
                 font-size: 1.6rem;
                 line-height: 1.9rem;
                 text-align: center;
-                padding : 1.5rem 0;
+                padding: 1.5rem 0;
             }
 
             .group-select {
@@ -474,7 +474,7 @@ body {
                         text-transform: uppercase;
 
                         .count {
-                            width: 2rem;
+                            width: auto;
                             height: 1.6rem;
                             background: #2053D9;
                             border-radius: 10px;

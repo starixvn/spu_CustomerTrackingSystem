@@ -1924,7 +1924,7 @@ body {
         align-items: center; }
         .notification-container .notification-list .notification-title h3 span {
           font-size: 1rem;
-          width: 2.4rem;
+          width: auto;
           height: 2rem;
           background: #2053D9;
           color: #fff;
@@ -1986,7 +1986,7 @@ body {
           line-height: 1.4rem;
           text-transform: uppercase; }
           .notification-container .notification-list .notification-content .group-select .select-box__input-text .count {
-            width: 2rem;
+            width: auto;
             height: 1.6rem;
             background: #2053D9;
             border-radius: 10px;

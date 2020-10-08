@@ -151,7 +151,7 @@ function notification() {
             '<a href="' + url + '" class="link-notification">'
             + ' <div class="box-notification associated' + ((isRead == 1) ? '' : ' notification-new') + '">'
             + ' <div class="line-border">'
-            + ' <h5 class="heading-category">Associated Acccount Monitor</h5>'
+            //+ ' <h5 class="heading-category">Associated Acccount Monitor</h5>'
             + ' <div class="des-box">'
             + ' Account <span class="color-txt">{0}</span> has <span class="color-txt">{1}</span> new associated account(s). </span >'
             + ' </div>'
