@@ -7,6 +7,7 @@
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model.Notification;
+    using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.ViewModel.Notification;
     using Service;
     using System.Linq;
@@ -100,7 +101,7 @@
             {
                 return Json(new DBResult
                 {
-                    ErrorCode = -99,
+                    ErrorCode = Consts.ErrorMess_LosingAllFuncNotificaionSetting,
                     ErrorMsg = string.Empty
                 }, JsonRequestBehavior.AllowGet);
             }
@@ -110,7 +111,7 @@
             {
                 return Json(new DBResult
                 {
-                    ErrorCode = -98,
+                    ErrorCode = Consts.ErrorMess_LosingFuncNotificaionSetting,
                     ErrorMsg = string.Empty
                 }, JsonRequestBehavior.AllowGet);
             }

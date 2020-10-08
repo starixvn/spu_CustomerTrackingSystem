@@ -43,6 +43,8 @@
         public const int INVALID_INPUT = 4;
 
         public const string IsFirstGetDataNotification = "false";
+        public const int ErrorMess_LosingFuncNotificaionSetting = -98;
+        public const int ErrorMess_LosingAllFuncNotificaionSetting = -99;
 
         public const int SUPER_ROLE = 4;
         public const int MASTER_ROLE = 3;
