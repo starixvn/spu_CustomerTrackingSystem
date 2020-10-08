@@ -2031,7 +2031,7 @@ body {
           align-items: center;
           justify-content: space-between; }
           .notification-container .notification-list .notification-content .group-select .select-box__option .count {
-            width: 2rem;
+            width: auto;
             height: 1.6rem;
             background: #2053D9;
             border-radius: 10px;
