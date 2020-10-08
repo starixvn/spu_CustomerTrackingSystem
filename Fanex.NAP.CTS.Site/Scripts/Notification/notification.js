@@ -63,11 +63,11 @@ function notification() {
             for (var i = 0; i < probationMessages.msgCounter; i++) {
                 if (probationMessages.messages[i].IsSeen) {
                     messagesHtmlString += RenderMessgaeForProbation(1, probationMessages.messages[i].NotificationType,true).format(probationMessages.messages[i].TotalGeneralFailed, probationMessages.messages[i].CreatedDateString);
-                    messagesHtmlString += RenderMessgaeForProbation(1, probationMessages.messages[i].NotificationType,false).format(probationMessages.messages[i].TotalFailed - probationMessages.messages[i].TotalGeneralFailed, probationMessages.messages[i].CreatedDateString);
+                    //messagesHtmlString += RenderMessgaeForProbation(1, probationMessages.messages[i].NotificationType,false).format(probationMessages.messages[i].TotalFailed - probationMessages.messages[i].TotalGeneralFailed, probationMessages.messages[i].CreatedDateString);
                 }
                 else {
                     messagesHtmlString += RenderMessgaeForProbation(0, probationMessages.messages[i].NotificationType,true).format(probationMessages.messages[i].TotalGeneralFailed, probationMessages.messages[i].CreatedDateString);
-                    messagesHtmlString += RenderMessgaeForProbation(0, probationMessages.messages[i].NotificationType,false).format(probationMessages.messages[i].TotalFailed - probationMessages.messages[i].TotalGeneralFailed, probationMessages.messages[i].CreatedDateString);
+                    //messagesHtmlString += RenderMessgaeForProbation(0, probationMessages.messages[i].NotificationType,false).format(probationMessages.messages[i].TotalFailed - probationMessages.messages[i].TotalGeneralFailed, probationMessages.messages[i].CreatedDateString);
                 }
             }
         }
@@ -117,11 +117,11 @@ function notification() {
             for (var i = 0; i < probationMessages.msgCounter; i++) {
                 if (probationMessages.messages[i].IsSeen) {
                     messagesHtmlString += RenderMessgaeForProbation(1, probationMessages.messages[i].NotificationType, true).format(probationMessages.messages[i].TotalGeneralFailed, probationMessages.messages[i].CreatedDateString);
-                    messagesHtmlString += RenderMessgaeForProbation(1, probationMessages.messages[i].NotificationType, false).format(probationMessages.messages[i].TotalFailed - probationMessages.messages[i].TotalGeneralFailed, probationMessages.messages[i].CreatedDateString);
+                    //messagesHtmlString += RenderMessgaeForProbation(1, probationMessages.messages[i].NotificationType, false).format(probationMessages.messages[i].TotalFailed - probationMessages.messages[i].TotalGeneralFailed, probationMessages.messages[i].CreatedDateString);
                 }
                 else {
                     messagesHtmlString += RenderMessgaeForProbation(0, probationMessages.messages[i].NotificationType, true).format(probationMessages.messages[i].TotalGeneralFailed, probationMessages.messages[i].CreatedDateString);
-                    messagesHtmlString += RenderMessgaeForProbation(0, probationMessages.messages[i].NotificationType, false).format(probationMessages.messages[i].TotalFailed - probationMessages.messages[i].TotalGeneralFailed, probationMessages.messages[i].CreatedDateString);
+                    //messagesHtmlString += RenderMessgaeForProbation(0, probationMessages.messages[i].NotificationType, false).format(probationMessages.messages[i].TotalFailed - probationMessages.messages[i].TotalGeneralFailed, probationMessages.messages[i].CreatedDateString);
                 }
             }
         }
@@ -147,7 +147,8 @@ function notification() {
     function RenderMessageForAAM(isRead)
     {
         var url = common.modifyRelativeUrl('Account/Index/{3}');
-        var content = '<a href="' + url + '" class="link-notification">'
+        var content =
+            '<a href="' + url + '" class="link-notification">'
             + ' <div class="box-notification associated' + ((isRead == 1) ? '' : ' notification-new') + '">'
             + ' <div class="line-border">'
             + ' <h5 class="heading-category">Associated Acccount Monitor</h5>'
@@ -165,19 +166,30 @@ function notification() {
 
     function RenderMessgaeForProbation(isRead, notificationType, isGeneral)
     {
-        var url = common.modifyRelativeUrl('ProbationManagement/Index?filterType=' + notificationType);
-        var content =   '<a href="' + url + '" class="link-notification">'
-                        + '<div class="box-notification' + ((isGeneral) ? " general" : " detailed") + ((isRead == 1) ? '' : ' notification-new') + '">'
+        //var url = common.modifyRelativeUrl('ProbationManagement/Index?filterType=' + notificationType);
+        var content = '<div class="box-notification link-notification general' + ((isRead == 1) ? '' : ' notification-new') + '">'
                         + '<div class="line-border">'
-                        + '<h5 class="heading-category">' + ((isGeneral) ? "Genaral Category" : "Detailed Category") + '</h5>'
+                        + '<h5 class="heading-category"> Genaral Category </h5>'
                         + '<div class="des-box">'
                         + ((notificationType == 1) ? ' There are <span class="color-txt">{0}</span> account(s) cannot pass Probation.'
                             : ' There are <span class="color-txt">{0}</span> account(s) have Probation and negative margin.')
                         + '</div>'
                         + '<div class="time-box">{1} </div >'
                         + '</div>'
-                        + '</div>'
-                        + '</a>';
+                        + '</div>';
+
+                        //'<a href="' + url + '" class="link-notification">'
+                        //'<div class="box-notification link-notification' + ((isGeneral) ? " general" : " detailed") + ((isRead == 1) ? '' : ' notification-new') + '">'
+                        //+ '<div class="line-border">'
+                        //+ '<h5 class="heading-category">' + ((isGeneral) ? "Genaral Category" : "Detailed Category") + '</h5>'
+                        //+ '<div class="des-box">'
+                        //+ ((notificationType == 1) ? ' There are <span class="color-txt">{0}</span> account(s) cannot pass Probation.'
+                        //    : ' There are <span class="color-txt">{0}</span> account(s) have Probation and negative margin.')
+                        //+ '</div>'
+                        //+ '<div class="time-box">{1} </div >'
+                        //+ '</div>'
+                        //+ '</div>'
+                        //+ '</a>';
 
         return content;
     }
@@ -270,31 +282,45 @@ function notification() {
             if (unreadMsgCounter > 99) {
                 var readTempHTML = "<span class='plus' id='plus-hide'>99+</span>";
                 domElements.circle.html(readTempHTML);
+                domElements.notificationTitle.text("99+");
+                domElements.allMessAmount.text("99+");
+                domElements.selectionAllMessAmount.text("99+");
             }
             else {
+                domElements.notificationTitle.text(unreadMsgCounter);
+                domElements.allMessAmount.text(unreadMsgCounter);
                 domElements.circle.html(unreadMsgCounter);
+                domElements.selectionAllMessAmount.text(unreadMsgCounter);
             }
 
-            domElements.notificationTitle.text(unreadMsgCounter);
-            domElements.notificationTitle.show();
 
+            if (associatedMessages.msgUnreadCounter > 99) {
+                domElements.associationAmount.text("99+");
+                domElements.selectionAssociationAmount.text("99+");
+            }
+            else {
+                domElements.associationAmount.text(associatedMessages.msgUnreadCounter);
+                domElements.selectionAssociationAmount.text(associatedMessages.msgUnreadCounter);
+            }
+
+            if (probationMessages.msgUnreadCounter > 99) {
+                domElements.probationAmount.text("99+");
+                domElements.selectionProbationAmount.text("99+");
+            }
+            else {
+                domElements.probationAmount.text(probationMessages.msgUnreadCounter);
+                domElements.selectionProbationAmount.text(probationMessages.msgUnreadCounter);
+            }
+
+            domElements.notificationTitle.show();
             domElements.allMessAmount.show();
-            domElements.allMessAmount.text(unreadMsgCounter);
+            domElements.selectionAllMessAmount.show();
 
             domElements.associationAmount.show();
-            domElements.associationAmount.text(associatedMessages.msgUnreadCounter);
+            domElements.selectionAssociationAmount.show();
 
             domElements.probationAmount.show();
-            domElements.probationAmount.text(probationMessages.msgUnreadCounter);
-
-            domElements.selectionAllMessAmount.show();
-            domElements.selectionAllMessAmount.text(unreadMsgCounter);
-
-            domElements.selectionAssociationAmount.show();
-            domElements.selectionAssociationAmount.text(associatedMessages.msgUnreadCounter);
-
             domElements.selectionProbationAmount.show();
-            domElements.selectionProbationAmount.text(probationMessages.msgUnreadCounter);
 
             domElements.circle.show();
             domElements.notificationBell.addClass('bell-shake');
