@@ -4,6 +4,7 @@
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Web.Attribute;
+    using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model.Notification;
     using Fanex.NAP.CTS.ViewModel.Notification;
@@ -34,6 +35,11 @@
                           NapSettings.Settings.SiteId,
                           FSFunctionKeys.ProbationManagement,
                           NAP.Core.Business.Constant.Policy.Read);
+
+            if(!isAssociationPermission && !isProbationPermission)
+            {
+                return RedirectToAction("Index", "Home");
+            }
 
             return View(new NotificationSettingViewModel
             {
@@ -78,6 +84,37 @@
         [HttpPost]
         public ActionResult UpdateNotificationSettingStatus(UpdateNotifiedSettingStatusModel notifiedSettingStatusModel)
         {
+            IUserService userService = new UserService();
+
+            var isAssociationPermission = userService.IsHavingPermission(CurrentSession.UserId,
+                            NapSettings.Settings.SiteId,
+                            FSFunctionKeys.AssociatedAccountMonitor,
+                            NAP.Core.Business.Constant.Policy.Read);
+
+            var isProbationPermission = userService.IsHavingPermission(CurrentSession.UserId,
+                          NapSettings.Settings.SiteId,
+                          FSFunctionKeys.ProbationManagement,
+                          NAP.Core.Business.Constant.Policy.Read);
+
+            if (!isAssociationPermission && !isProbationPermission)
+            {
+                return Json(new DBResult
+                {
+                    ErrorCode = -99,
+                    ErrorMsg = string.Empty
+                }, JsonRequestBehavior.AllowGet);
+            }
+
+            if((!isAssociationPermission && notifiedSettingStatusModel.FunctionId == 1)
+                || !isProbationPermission && notifiedSettingStatusModel.FunctionId == 2)
+            {
+                return Json(new DBResult
+                {
+                    ErrorCode = -98,
+                    ErrorMsg = string.Empty
+                }, JsonRequestBehavior.AllowGet);
+            }
+
             var result = _notificationSettingService.UpdateNotificationSetting(CurrentSession.UserId, notifiedSettingStatusModel);
 
             return Json(new

@@ -41,7 +41,13 @@
             type: 'POST',
             data: notifiedSettingStatusModel,
             success: function (response) {
-                if (response.ErrorCode !== 0) {
+                if (response.ErrorCode === -98) {   //lose func permission that is being used 
+                    window.location.reload();
+                }
+                else if (response.ErrorCode === -99) { //lose all func permission that are being used
+                    window.location.href = common.modifyRelativeUrl("Home/Index");
+                }
+                else if (response.ErrorCode !== 0) {
                     common.showError(response.ErrorMsg);
                 }
             },
