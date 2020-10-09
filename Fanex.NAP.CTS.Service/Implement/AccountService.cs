@@ -1020,11 +1020,13 @@
         }
         #endregion
 
-        public IEnumerable<CTSCustomer> CheckCustomerNotExisted(string custIds)
+        public IEnumerable<CTSCustomer> CheckCustomerNotExisted(string custIds, DateTime fromDate, DateTime toDate)
         {
             var criteria = new CheckCustNotExistedByCustIdsCriteria
             {
-                CustIds = custIds
+                CustIds = custIds,
+                FromDate = fromDate,
+                ToDate = toDate
             };
 
             return repository.Fetch<CTSCustomer>(criteria);

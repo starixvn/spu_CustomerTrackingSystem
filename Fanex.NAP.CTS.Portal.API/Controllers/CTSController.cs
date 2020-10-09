@@ -316,14 +316,16 @@
         /// Get class of customer
         /// </summary>
         /// <param name="custIdList"></param>
+        /// <param name="fromDate"></param>
+        /// <param name="toDate"></param>
         /// <returns>Customer class in XML format</returns>
         [HttpPost]
-        public string CheckCustomerNotExisted(string custIdList)
+        public string CheckCustomerNotExisted(string custIdList, DateTime fromDate, DateTime toDate)
         {
             var result = string.Empty;
             try
             {
-                var customers = _accountService.CheckCustomerNotExisted(custIdList);
+                var customers = _accountService.CheckCustomerNotExisted(custIdList, fromDate, toDate);
                 result = string.Join(",", customers.Select(c => c.CustID));
             }
             catch (Exception ex)

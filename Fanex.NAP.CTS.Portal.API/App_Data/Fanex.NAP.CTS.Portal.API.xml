@@ -553,11 +553,13 @@
             </summary>
             <returns>Customer classification in XML format</returns>
         </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.CheckCustomerNotExisted(System.String)">
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.CheckCustomerNotExisted(System.String,System.DateTime,System.DateTime)">
             <summary>
             Get class of customer
             </summary>
             <param name="custIdList"></param>
+            <param name="fromDate"></param>
+            <param name="toDate"></param>
             <returns>Customer class in XML format</returns>
         </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.Test">

@@ -113,6 +113,6 @@
 
         DBResult ProcessPlaceEvidenceByCustId(UpdatePlaceEvidenceModel model);
 
-        IEnumerable<CTSCustomer> CheckCustomerNotExisted(string custIds);
+        IEnumerable<CTSCustomer> CheckCustomerNotExisted(string custIds, DateTime fromDate, DateTime toDate);
     }
 }
