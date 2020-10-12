@@ -17,15 +17,18 @@
                 common.showConfirmation("<div class='popup-content'><div class='popup-title'>Are you sure about this?</div>For confirm this action, you will receive new notification from <span>" + funcName + "</span> function</div>",
                     () => {
                         UpdateNotificationSettingStatus(funcID, true); 
+                        (funcID === 1) ? domElements.inputSwitchAAM.prop('checked', true) : domElements.inputSwitchProbation.prop('checked', true);
                     }, () => {
-                       return;
+                        (funcID === 1) ? domElements.inputSwitchAAM.prop('checked', false) : domElements.inputSwitchProbation.prop('checked', false);
                 });
             } else {
                 common.showConfirmation("<div class='popup-content'><div class='popup-title'>Are you sure about this?</div>For confirm this action, you will not receive any new notification from <span>" + funcName + "</span> function</div>",
                     () => {
                         UpdateNotificationSettingStatus(funcID, false);
-                    }, () => {
-                        return;
+                        (funcID === 1) ? domElements.inputSwitchAAM.prop('checked', false) : domElements.inputSwitchProbation.prop('checked', false);
+                    },
+                    () => {
+                        (funcID === 1) ? domElements.inputSwitchAAM.prop('checked', true) : domElements.inputSwitchProbation.prop('checked', true);
                     });
             }
         });
