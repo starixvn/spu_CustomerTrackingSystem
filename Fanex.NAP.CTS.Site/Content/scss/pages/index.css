@@ -1960,9 +1960,9 @@ body {
           top: 50%;
           right: .6rem;
           transform: translateY(-50%);
-          width: 1rem;
           opacity: 0.3;
-          transition: 0.2s ease; }
+          transition: 0.2s ease;
+          font-size: 17px; }
         .notification-container .notification-list .notification-content .group-select .select-box__value {
           display: flex; }
         .notification-container .notification-list .notification-content .group-select .select-box__current {
