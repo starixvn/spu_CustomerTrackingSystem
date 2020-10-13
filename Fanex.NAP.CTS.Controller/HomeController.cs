@@ -4,9 +4,11 @@
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Web.Attribute;
+    using Fanex.NAP.CTS.Model.Home;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.ViewModel.Home;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
     using System.Web.Mvc;
@@ -81,7 +83,7 @@
             if (result.Count.Equals(1))
             {
                 return RedirectToAction("Index", "Account", new { Id = result.FirstOrDefault().CTSCustId });
-            }
+            }             
 
             //if (result.Count == 1 && result.Any(x => (
             //            x.Username != null && x.Username.Equals(inputValue, System.StringComparison.CurrentCultureIgnoreCase)) 
@@ -152,7 +154,7 @@
             return  "\'" + result.ToString() + "\'";
         }
 
-        public ActionResult UpdateMenuSetting()
+        public ActionResult UpdateMenuSettingForLoginPartialPage()
         {
             ViewBag.IsAssociationPermission = userService.IsHavingPermission(CurrentSession.UserId,
                             NapSettings.Settings.SiteId,
@@ -165,6 +167,21 @@
                        NAP.Core.Business.Constant.Policy.Read);
 
             return PartialView("~/Views/Shared/_LoginPartial.cshtml");
+        }
+
+        public ActionResult UpdateMenuSettingForHomePartialPage()
+        {
+            ViewBag.IsAssociationPermission = userService.IsHavingPermission(CurrentSession.UserId,
+                            NapSettings.Settings.SiteId,
+                            FSFunctionKeys.AssociatedAccountMonitor,
+                            NAP.Core.Business.Constant.Policy.Read);
+
+            ViewBag.IsProbationPermission = userService.IsHavingPermission(CurrentSession.UserId,
+                       NapSettings.Settings.SiteId,
+                       FSFunctionKeys.ProbationManagement,
+                       NAP.Core.Business.Constant.Policy.Read);
+
+            return PartialView("~/Views/Shared/_HomeLoginPartial.cshtml");
         }
     }
 }

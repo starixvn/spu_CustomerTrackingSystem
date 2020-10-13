@@ -32,7 +32,7 @@
             }
 
             @Html.Action("Menu", "Home", new { activeMenu = baseControllerName })
-            @Html.Partial("_HomeLoginPartial")
+            @Html.Action("UpdateMenuSettingForHomePartialPage", "Home")
         </div>
     </header>
     <section class="wrapper">
