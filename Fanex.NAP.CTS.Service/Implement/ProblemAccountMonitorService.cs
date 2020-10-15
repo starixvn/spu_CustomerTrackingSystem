@@ -4,9 +4,11 @@
     using Fanex.BetList.Core.Entities;
     using Fanex.BetList.Core.TicketHelper;
     using Fanex.Data;
+    using Fanex.Logging;
     using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Criteria.ProblemAccountMonitor;
     using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
+    using Fanex.NAP.CTS.Resource.Consts;
     using Newtonsoft.Json;
     using System;    
     using System.Collections.Generic;
@@ -198,6 +200,27 @@
             };
 
             return htmlBuilder.BuildChoice(coreTicket, ticketHelper, null, true);           
-        }       
+        }
+
+        public void UpdateRemovedProblemAccountToCTS(string custid)
+        {
+            var removedProblemAccounts = custid.Split(',').Select(a => new InsertProblemAccountsModel()
+            {
+                CustId = Convert.ToInt32(a),
+                CategoryId = Consts.REMOVE_CATEGORYID
+            });
+
+            var problemAccountJson = JsonConvert.SerializeObject(removedProblemAccounts);
+
+            var criteria = new InsertProblemAccountCriteria
+            {
+                ProblemAccountJson = problemAccountJson
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                db.ExecuteNonQuery(criteria);
+            }
+        }
     }
 }

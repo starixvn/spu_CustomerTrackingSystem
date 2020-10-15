@@ -1,0 +1,22 @@
+﻿using System;
+namespace Fanex.NAP.CTS.Criteria.ProblemAccountMonitor
+{
+    using Fanex.Data;
+    using Fanex.Data.Repository;
+
+    public class InsertProblemAccountCriteria : NonQueryCommand
+    {
+        [SpParam(SqlParamName = "ip_ProblemAccounts")]
+        public string ProblemAccountJson { get; set; }
+
+        public override string GetSettingKey()
+        {
+            return "CTS_DC_InsertCategorizedProblemAccounts";
+        }
+
+        public override bool IsValid()
+        {
+            return true;
+        }
+    }
+}

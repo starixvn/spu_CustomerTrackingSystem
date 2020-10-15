@@ -568,6 +568,13 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.RemoveProblemAccounts(System.String)">
+            <summary>
+             Update Removed Problem Account into CTS
+            </summary>
+            <param name="custIds">List custId in string format, separated by comma</param>
+            <returns>true: success; false: failed</returns>
+        </member>
         <member name="T:Fanex.NAP.CTS.Portal.API.Controllers.GraphController">
             <summary>
             Graph Controller - Using for CTS site

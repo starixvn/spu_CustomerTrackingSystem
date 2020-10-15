@@ -28,6 +28,8 @@
 
         IEnumerable<DetailTicketVoidingInRequestModel> GetTicketVoidingInRequest(int matchId, string tranIdList);
 
-        string GetHtmlChoice(DetailTicketsModel ticket);      
+        string GetHtmlChoice(DetailTicketsModel ticket);
+
+        void UpdateRemovedProblemAccountToCTS(string custid);
     }
 }

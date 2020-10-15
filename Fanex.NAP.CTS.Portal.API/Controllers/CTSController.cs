@@ -26,6 +26,7 @@
         private readonly ICustomerEvidenceService _custEvidenceService;
         private readonly IAssociatedAccountService _associationService;
         private readonly ISyncCustomerToMainDbService _syncToMainDbService;
+        private readonly IProblemAccountMonitorService _problemAccountMonitorService;
 
         /// <summary>
         /// Using for external site (TW, ExtAcc site...)
@@ -37,6 +38,7 @@
             _associationService = new AssociatedAccountService();
             _custEvidenceService = new CustomerEvidenceService();
             _syncToMainDbService = new SyncCustomerToMainDbService();
+            _problemAccountMonitorService = new ProblemAccountMonitorService();
         }
 
         /// <summary>
@@ -360,6 +362,28 @@
             var e = ctsClient.DownloadString("http://ha.nexdev.net:7723/api/cts/GetAssociationForExtAcc");
 
             var a = ApiHelper.Get<string>("http://ha.nexdev.net:7723/api/cts/GetAssociationForExtAcc?CustId=43913195").Result;
+        }
+
+        /// <summary>
+        ///  Update Removed Problem Account into CTS
+        /// </summary>
+        /// <param name="custIds">List custId in string format, separated by comma</param>
+        /// <returns>true: success; false: failed</returns>
+        [HttpPost]
+        public bool RemoveProblemAccounts(string custIds)
+        {
+            try
+            {              
+                _problemAccountMonitorService.UpdateRemovedProblemAccountToCTS(custIds);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("CTS Portal API - Remove Problem Account API - exception: " + ex.Message, ex);
+
+                return false;
+            }
         }
     }
 }
