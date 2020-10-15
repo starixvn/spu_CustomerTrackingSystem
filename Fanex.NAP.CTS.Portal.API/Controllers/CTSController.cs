@@ -36,6 +36,7 @@
             _evidenceService = new EvidenceService();
             _associationService = new AssociatedAccountService();
             _custEvidenceService = new CustomerEvidenceService();
+            _syncToMainDbService = new SyncCustomerToMainDbService();
         }
 
         /// <summary>
