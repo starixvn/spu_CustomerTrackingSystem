@@ -22,6 +22,6 @@
 
         DBResult RetractEvidenceByAccount(InformationEvidenceByAccountRetractEvidence evidenceRetract);
         
-        void AddCustomersEvidences(CustomerEvidenceList customerEvidenceList);
+        string AddCustomersEvidences(CustomerEvidenceList customerEvidenceList);
     }
 }

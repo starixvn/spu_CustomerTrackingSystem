@@ -17,17 +17,21 @@
     using System;
     using Fanex.Logging;
     using Fanex.NAP.CTS.Core.Utilities;
+    using Fanex.NAP.CTS.Service.Interface;
+    using Fanex.NAP.CTS.Service.Implement;
 
     public class ImportEvidencesService : IImportEvidencesService
     {
         private readonly List<CheckAccountEvidenceModel> _checkAccountEvidenceList;
         private readonly List<RawAccountEvidenceModel> _rawAccountEvidenceList;
         private string _fileErrorTemplate = string.Empty;
+        private readonly ISyncCustomerToMainDbService _syncToMainDbService;
 
         public ImportEvidencesService()
         {
             _checkAccountEvidenceList = new List<CheckAccountEvidenceModel>();
             _rawAccountEvidenceList = new List<RawAccountEvidenceModel>();
+            _syncToMainDbService = new SyncCustomerToMainDbService();
         }
 
         public string ParseFileXls(Stream fileContent, string fileName)
@@ -238,31 +242,62 @@
                             IsOverride = isOverride
                         };
 
-                        InsertAccountEvicence(evidencePara);
+                        var result = InsertAccountEvicence(evidencePara);
+
+                        if (result.ErrorCode != 0)
+                        {
+                            throw new Exception(result.ErrorMsg);
+                        }
                     }
                     catch (Exception ex)
                     {
+                        string rollBackStatus = "";
+
                         if (isOverride)
-                            RemoveOldEvidence(addAccountEvidenceList, sessionId, true, false);
+                        {
+                            rollBackStatus = IsRollBackInsertMultiEvidenceSuccess(addAccountEvidenceList, sessionId) ? "Override import type (rollback successfully) - " : "Override import type (rollback fail) - ";
+                        }
 
                         SendMail(resultCheckAccountEvidenceList, accountEvidence, userId, ex.Message);
-                        LogError(fileName, userId, "at " + DateTime.Now + " " + ex.Message, JsonConvert.SerializeObject(accountEvidence), ex);
-
+                        LogError(fileName, userId, "at " + DateTime.Now + " " + ex.Message, JsonConvert.SerializeObject(addAccountEvidenceList), rollBackStatus, ex);
                         return;
                     }
                 }
 
                 if (isOverride)
+                {
                     RemoveOldEvidence(addAccountEvidenceList, sessionId, false, true);
+                }
+
+                _syncToMainDbService.SyncCustomerClassToMainDb(string.Join(",", resultCheckAccountEvidenceList?.Select(c => c.CTSCustID).Distinct().ToList()), false, false);
             }
             else
             {
                 SendMail(resultCheckAccountEvidenceList, addAccountEvidenceList, userId, hasOverrideSelection.ErrorMsg);
-                LogError(fileName, userId, "at " + DateTime.Now + " " + hasOverrideSelection.ErrorMsg, JsonConvert.SerializeObject(addAccountEvidenceList));
-            }         
+                LogError(fileName, userId, "at " + DateTime.Now + " " + hasOverrideSelection.ErrorMsg, JsonConvert.SerializeObject(addAccountEvidenceList), string.Empty);
+            } 
         }
 
-        public void InsertAccountEvicence(InsertEvidenceParametersModel evidenceParas)
+        private bool IsRollBackInsertMultiEvidenceSuccess(IEnumerable<AddAccountEvidenceModel> addAccountEvidenceList, long sessionId)
+        {
+            try
+            {
+                var result = RemoveOldEvidence(addAccountEvidenceList, sessionId, true, false);
+
+                if (result.ErrorCode != 0)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public DBResult InsertAccountEvicence(InsertEvidenceParametersModel evidenceParas)
         {
             var jsonData = JsonConvert.SerializeObject(evidenceParas.AccountEvidences);
 
@@ -278,11 +313,12 @@
             {
                 db.ExecuteNonQuery(criteria);
 
-                if (!string.IsNullOrWhiteSpace(criteria.ErrorMessage))
+                if (string.IsNullOrEmpty(criteria.ErrorMessage))
                 {
-                    SendMail(evidenceParas.CheckAccountEvidenceList, evidenceParas.AccountEvidences, evidenceParas.UserId, criteria.ErrorMessage);
-                    LogError(evidenceParas.FileName, evidenceParas.UserId, "at " + DateTime.Now + " " + criteria.ErrorMessage, jsonData);
+                    return new DBResult { ErrorCode = 0, ErrorMsg = criteria.ErrorMessage };
                 }
+
+                return new DBResult { ErrorCode = -1, ErrorMsg = criteria.ErrorMessage };
             }
         }
 
@@ -302,7 +338,7 @@
             {
                 db.ExecuteNonQuery(criteria);
 
-                if (string.IsNullOrWhiteSpace(criteria.ErrorMessage))
+                if (string.IsNullOrEmpty(criteria.ErrorMessage))
                 {
                     return new DBResult
                     {
@@ -319,10 +355,10 @@
             };
         }
 
-        private void LogError(string fileName, int userId, string error, string jsonData, Exception ex = null)
+        private void LogError(string fileName, int userId, string error, string jsonData, string rollBackStatus, Exception ex = null)
         {
-            var errorMessage = string.Format("CTS - Import file name: {0} - userId: {1} - import error: {2} - content: {3}"
-                                                       , fileName, userId, error, jsonData);
+            var errorMessage = string.Format("CTS - Import file name: {0} - userId: {1} - import error: {2} - {4} Content: {3}"
+                                                       , fileName, userId, error, jsonData, rollBackStatus);
             if (ex == null)
                 LogService.Error(errorMessage);
             else

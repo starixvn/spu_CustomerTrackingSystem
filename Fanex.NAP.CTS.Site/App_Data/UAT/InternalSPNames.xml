@@ -72,6 +72,7 @@
     <Setting Key="CTS_DC_CustClassification_Update" SpName="CTS_DC_CustClassification_Update_xtest" DbName="MySQL.CTS_DataCenter" />
     <Setting Key="CTS_DC_CustClassification_Remove" SpName="CTS_DC_CustClassification_Remove_xtest" DbName="MySQL.CTS_DataCenter" />
     <Setting Key="CTS_DC_CustClassification_Get" SpName="CTS_DC_CustClassification_Get_xtest" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_CustClassification_GetLatestCategory" SpName="CTS_DC_CustClassification_GetLatestCategory" DbName="MySQL.CTS_DataCenter" />
   </Function>
 
   <Function name="AssociatedAccountMonitor">

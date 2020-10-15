@@ -710,6 +710,12 @@
         {
             model.UserId = model.UserId == 0 ? CurrentSession.UserId : model.UserId;
             var result = _accountService.ProcessPlaceEvidence(model);
+            
+            if (result.ErrorCode == 0)
+            {
+                _syncToMainDbService.SyncCustomerClassToMainDb(model.CTSCustId.ToString(), false, false);
+            }
+
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -738,6 +744,8 @@
                             CustIDList = string.Join(",", associatedAccountList)
                         });
                 }
+
+                _syncToMainDbService.SyncCustomerClassToMainDb(model.CTSCustId.ToString(), false, false);
             }
 
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -807,7 +815,7 @@
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
-
+        
         #endregion
 
         private void GetCustomerGeneralStatus(long custId, ref AccountProfileViewModel profile)

@@ -534,8 +534,30 @@
                 UserId = model.UserId
             };
 
-            return DataService.UpdateData(criteria, "Place evidence");
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                try
+                {
+                    db.ExecuteNonQuery(criteria);
+
+                    if (!string.IsNullOrEmpty(criteria.ErrorMessage))
+                    {
+                        return new DBResult { ErrorCode = -1, ErrorMsg = criteria.ErrorMessage };
+                    }
+                    else
+                    {
+                        return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogService.Error("CTS - Place Evidence Manual throws exception: " + ex.Message, ex);
+
+                    return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
+                }
+            }
         }
+
         public DBResult ProcessPlaceEvidence(UpdatePlaceEvidenceModel model)
         {
             var result = PlaceEvidence(model);
@@ -626,7 +648,28 @@
                 UserId = model.UserId
             };
 
-            return DataService.UpdateData(criteria, "Remove flagged evidence");
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                try
+                {
+                    db.ExecuteNonQuery(criteria);
+
+                    if (!string.IsNullOrEmpty(criteria.ErrorMessage))
+                    {
+                        return new DBResult { ErrorCode = -1, ErrorMsg = criteria.ErrorMessage };
+                    }
+                    else
+                    {
+                        return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogService.Error("CTS - Remove Flagged Evidence Manual throws exception: " + ex.Message, ex);
+
+                    return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
+                }
+            }
         }
 
         public List<AccountExceptionsModel> GetAccountExceptions(Int64 ctsCustId)

@@ -25,7 +25,7 @@
         private readonly IEvidenceService _evidenceService;
         private readonly ICustomerEvidenceService _custEvidenceService;
         private readonly IAssociatedAccountService _associationService;
-
+        private readonly ISyncCustomerToMainDbService _syncToMainDbService;
 
         /// <summary>
         /// Using for external site (TW, ExtAcc site...)
@@ -75,6 +75,8 @@
 
                 if (string.IsNullOrEmpty(result))
                 {
+                    _syncToMainDbService.SyncCustomerClassToMainDb(custIds, true, false);
+
                     return true;
                 }
 
@@ -148,9 +150,16 @@
         {
             try
             {
-                _evidenceService.AddCustomersEvidences(customerEvidenceList);
+                var result = _evidenceService.AddCustomersEvidences(customerEvidenceList);
 
-                return true;
+                if (string.IsNullOrEmpty(result))
+                {
+                    _syncToMainDbService.SyncCustomerClassToMainDb(customerEvidenceList.CustIdList, true, false);
+
+                    return true;
+                }
+
+                return false;
             }
             catch (Exception ex)
             {

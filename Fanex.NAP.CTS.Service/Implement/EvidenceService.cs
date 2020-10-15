@@ -86,7 +86,7 @@
 
         #region Retracted And Exception Evidence
 
-        public void AddCustomersEvidences(CustomerEvidenceList customerEvidenceList)
+        public string AddCustomersEvidences(CustomerEvidenceList customerEvidenceList)
         {
             var criteria = new MultiCustomerEvidencesInsertCriteria
             {
@@ -95,6 +95,8 @@
             };
 
             DataService.Execute(criteria);
+
+            return criteria.ErrorMessage;
         }
 
         #endregion

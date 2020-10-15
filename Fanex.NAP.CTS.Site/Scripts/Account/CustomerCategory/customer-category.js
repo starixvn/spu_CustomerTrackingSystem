@@ -199,7 +199,7 @@
     }
 
     function RenderGrid(custId, ctsCustId, username, subscriberId) {
-        tblcustomercategory.DataTable({
+         tblcustomercategory.DataTable({
             dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
             pagingType: "full_numbers",
             language: {
@@ -292,6 +292,44 @@
             ],
             rowGroup: {
                 dataSrc: 'ParentCategoryName'
+            }
+        });
+    }
+
+    function ReloadGrid(custId)
+    {
+        $.ajax(common.modifyRelativeUrl('/Account/GetCustomerClassification'), {
+            type: 'POST',
+            data: { custId: custId },
+            dataFilter: function (response) {
+                if (response !== undefined) {
+                    let json = jQuery.parseJSON(response);
+                    let isExternalChecked = true;
+                    let isCache = GetStorageToggleCategory(chooseExternalCategory);
+
+                    if (isCache !== null) {
+                        isExternalChecked = isCache === "true";
+                    }
+
+                    inputPinCategory.prop('checked', json.isPinCategory);
+                    btnMarkCategory.prop('disabled', json.isVVip);
+
+                    SwitchCategorySummary(json.internalCategoryList, json.externalCategoryList, isExternalChecked);
+
+                    inputSwitchCategorySummary.off('click').on('click', function () {
+                        SwitchCategorySummary(json.internalCategoryList, json.externalCategoryList, inputSwitchCategorySummary.is(':checked'));
+                    });
+                }
+                return response;
+            },
+            beforeSend: function () {
+                tblcustomercategory.find('tbody').addClass('loading');
+            },
+            success: function (response) {
+                tblcustomercategory.DataTable().clear().rows.add(response.data).draw(true);
+            },
+            complete: function () {
+                tblcustomercategory.find('tbody').removeClass('loading');
             }
         });
     }
@@ -616,5 +654,9 @@
         }
 
         RenderGrid(custId, ctsCustId, username, subscriberId);
+    };
+
+    this.ReloadTab = function (custId) {
+        ReloadGrid(custId);
     };
 }

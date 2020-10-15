@@ -8,7 +8,9 @@
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Service.Interface;
     using System;
+    using Fanex.Data;
     using System.Collections.Generic;
+    using System.Linq;
 
     public class SyncCustomerToMainDbService : ISyncCustomerToMainDbService
     {
@@ -47,6 +49,47 @@
             }
 
             return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
+        }
+
+        public DBResult SyncCustomerClassToMainDb(string ctsCustID, bool isCustId, bool isExcludedDetailedCategory)
+        {
+            var result = new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
+
+            if (string.IsNullOrEmpty(ctsCustID))
+            {
+                return result;
+            }
+
+            var custEvidenceCategory = GetLatestEvidenceCategory(ctsCustID, isCustId, isExcludedDetailedCategory).Where(c => c.CategoryIdMapping != -99);
+
+            if (custEvidenceCategory == null || !custEvidenceCategory.Any())
+            {
+                return result;
+            }
+
+            var customerClassList = custEvidenceCategory.Select(c => new CustomerClassForMainDb
+            {
+                CustID = c.CustID,
+                CustomerClass = c.CategoryIdMapping
+            }).Distinct();
+
+            return SyncCustomerClassToMainDb(customerClassList, "Update Evidence Category");
+        }
+
+        public IEnumerable<EvidenceCategoryToCustomerClassForMainDb> GetLatestEvidenceCategory(string ctsCustID, bool isCustId, bool isExcludedDetailedCategory)
+        {
+            var criteria = new GetLastestEvidenceCategoryCriteria()
+            {
+                CustIDList = ctsCustID,
+                IsUsingCustID = isCustId,
+                IsExcludedDetailedCategory = isExcludedDetailedCategory
+
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<EvidenceCategoryToCustomerClassForMainDb>(criteria).ToList();
+            }
         }
     }
 }

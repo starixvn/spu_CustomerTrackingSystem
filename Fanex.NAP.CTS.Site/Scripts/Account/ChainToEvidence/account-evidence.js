@@ -17,7 +17,7 @@
         btnQuickComment: $('.button-quick-comment')
     };
 
-    function InitialFlaggedGrid(ctsCustId, username) {
+    function InitialFlaggedGrid(ctsCustId, username, custId) {
         domElements.tblChainToEvidenceFlagged.DataTable({
             language: {
                 zeroRecords: "There's no data"
@@ -47,7 +47,7 @@
                         if (isHostPermission) {
                             $('.icon-delete', cell).click(() =>
                                 common.showFormConfirmation(`<div class="popup-content">Do you want remove flagged evidence <br/> <strong style="color: red;">${row.EvidenceDisplay}</strong> from <strong style="color: red;">${username}</strong>?</div>`, 'Confirmation', function () {
-                                    RemoveFlaggedEvidence(row.EvidenceID, ctsCustId, username);
+                                    RemoveFlaggedEvidence(row.EvidenceID, ctsCustId, username, custId);
                                 })
                             );
                         }
@@ -176,7 +176,7 @@
         domElements.tblChainToEvidenceFlagged.DataTable().columns.adjust();
     }
 
-    function RemoveFlaggedEvidence(evidenceId, ctsCustId, username) {
+    function RemoveFlaggedEvidence(evidenceId, ctsCustId, username, custId) {
         var url = common.modifyRelativeUrl('/Account/RemoveFlaggedEvidence');
 
         $.ajax(url, {
@@ -190,6 +190,8 @@
             },
             success: function (response) {
                 common.showSuccess();
+                var customerCategory = new customer_category();
+                customerCategory.ReloadTab(custId);
             },
             complete: function () {
                 common.closeLoading();
@@ -482,6 +484,8 @@
             success: function (response) {
                 common.showSuccess('Add the evidence successful!');
                 domElements.divPlaceEvidence.dialog('close');
+                var customerCategory = new customer_category();
+                customerCategory.ReloadTab(custId);
             },
             complete: function () {
                 GetAccountEvidence(ctsCustId, username);
@@ -530,7 +534,7 @@
 
         DisableButton(hostPermission);
 
-        InitialFlaggedGrid(ctsCustId, username, subscriberId, subscriber);
+        InitialFlaggedGrid(ctsCustId, username, custId);
 
         InitialAffectedRetractGrid();
 
