@@ -370,7 +370,7 @@
         /// <param name="custIds">List custId in string format, separated by comma</param>
         /// <returns>true: success; false: failed</returns>
         [HttpPost]
-        public bool RemoveProblemAccounts(string custIds)
+        public bool RemoveProblemAccounts([FromBody] string custIds)
         {
             try
             {              
