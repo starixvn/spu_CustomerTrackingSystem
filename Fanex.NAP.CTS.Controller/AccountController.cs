@@ -259,6 +259,20 @@
             return Json(new { suspiciouseCustomer = result.SuspiciouseCustomer, fraudCases = fraudCaseName }, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        public ActionResult GetLastestCustomerClassification(long custId)
+        {
+            var result = _accountService.GetCustomerClassByCustId(custId.ToString());
+            var customerClassification = string.Empty;
+
+            if (result != null && result.Any())
+            {
+                customerClassification = result.First().CustomerClass.ToString();
+            }
+
+            return Json(new { customerClassification = customerClassification }, JsonRequestBehavior.AllowGet);
+        }
+
         #region Associated By Account
 
         public ActionResult AssociatedByAccount(string username)

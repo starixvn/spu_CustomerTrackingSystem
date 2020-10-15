@@ -14,7 +14,8 @@
         txtPlaceEvidenceComment: $('#txtPlaceEvidenceComment'),
         tblChainToEvidenceAffectedRetract: $('#tblChainToEvidenceAffected'),
         cbbChainToEvidenceListEvidence: $('#cbbChainToEvidenceListEvidence'),
-        btnQuickComment: $('.button-quick-comment')
+        btnQuickComment: $('.button-quick-comment'),
+        spanClass: $('#spanClass')
     };
 
     function InitialFlaggedGrid(ctsCustId, username, custId) {
@@ -192,6 +193,7 @@
                 common.showSuccess();
                 var customerCategory = new customer_category();
                 customerCategory.ReloadTab(custId);
+                GetCustomerClassification(custId);
             },
             complete: function () {
                 common.closeLoading();
@@ -486,6 +488,7 @@
                 domElements.divPlaceEvidence.dialog('close');
                 var customerCategory = new customer_category();
                 customerCategory.ReloadTab(custId);
+                GetCustomerClassification(custId);
             },
             complete: function () {
                 GetAccountEvidence(ctsCustId, username);
@@ -514,6 +517,23 @@
 
         if (!isHostPermission)
             domElements.btnChainToEvidenceFlagged.prop('disabled', true);
+    }
+
+    function GetCustomerClassification(custId) {
+        $.ajax(common.modifyRelativeUrl('Account/GetLastestCustomerClassification'), {
+            type: 'POST',
+            data: {
+                custId: custId
+            },
+            success: function (response) {
+                domElements.spanClass.html(response.customerClassification+ "  ");
+            },
+            complete: function () {
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+            }
+        });
     }
 
     this.ReloadAccountEvidence = function (ctsCustId, username) {
