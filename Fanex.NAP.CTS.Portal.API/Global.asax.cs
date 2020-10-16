@@ -10,6 +10,7 @@
     using Newtonsoft.Json.Serialization;
     using SharpRaven;
     using System.Collections.Generic;
+    using System.Configuration;
     using System.Web.Http;
     using System.Web.Mvc;
     using System.Web.Optimization;
@@ -46,7 +47,7 @@
                    {
                          new SentryLogging(new SentryEngineOptions
                          {
-                             Dsn = new Dsn("http://49a89a5c0163465895db709864620c65@10.99.99.51:801/103")
+                             Dsn = new Dsn(ConfigurationManager.AppSettings["Sentry-Log-Config"])
                          })
                    });
 

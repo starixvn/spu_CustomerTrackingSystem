@@ -370,19 +370,28 @@
         /// <param name="custIds">List custId in string format, separated by comma</param>
         /// <returns>true: success; false: failed</returns>
         [HttpPost]
-        public bool RemoveProblemAccounts([FromBody] string custIds)
+        public ApiResultModel RemoveProblemAccounts([FromBody] string custIds)
         {
             try
-            {              
+            {       
                 _problemAccountMonitorService.UpdateRemovedProblemAccountToCTS(custIds);
 
-                return true;
+                _syncToMainDbService.SyncCustomerClassToMainDb(custIds, true, false);
+
+                return new ApiResultModel {
+                    ErrorMessage = string.Empty,
+                    StatusMessage= "success"
+                };
             }
             catch (Exception ex)
             {
-                LogService.Error("CTS Portal API - Remove Problem Account API - exception: " + ex.Message, ex);
+                LogService.Error($"CTS Portal API - Remove Problem Account API - Exception: {ex.Message} - List custIds: {custIds}.", ex);
 
-                return false;
+                return new ApiResultModel
+                {
+                    ErrorMessage =  ex.Message,
+                    StatusMessage = "fail"
+                };
             }
         }
     }
