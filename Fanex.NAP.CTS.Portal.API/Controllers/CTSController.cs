@@ -89,6 +89,11 @@
                     return true;
                 }
 
+                if (!string.IsNullOrEmpty(result.ErrorMessage))
+                {
+                    LogService.Error($"CTS Portal API - Add Customers Evidences exception: {result.ErrorMessage} - List custIds: {custIds} - EvidenceId: {evidenceId}");
+                }
+
                 return false;
             }
             catch (Exception ex)
@@ -164,9 +169,9 @@
         {
             try
             {
-                var result = _evidenceService.AddCustomersEvidences(customerEvidenceList);
+                var errorMessage = _evidenceService.AddCustomersEvidences(customerEvidenceList);
 
-                if (string.IsNullOrEmpty(result)
+                if (string.IsNullOrEmpty(errorMessage)
                     && !string.IsNullOrEmpty(customerEvidenceList.CustIdList)
                     && !string.IsNullOrWhiteSpace(customerEvidenceList.CustIdList))
                 {
@@ -174,6 +179,11 @@
                     _syncToMainDbService.SyncCustomerClassToMainDb(string.Join(",", distinctCustIds?.Select(c => c).Distinct().ToList()), true, false);
 
                     return true;
+                }
+
+                if (!string.IsNullOrEmpty(errorMessage))
+                {
+                    LogService.Error($"CTS Portal API - Add Customers Evidences exception: {errorMessage} - List custIds: {customerEvidenceList.CustIdList} - List EvidenceCode: {customerEvidenceList.EvidenceCodeList}");
                 }
 
                 return false;
@@ -184,7 +194,7 @@
                     .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
                     .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
 
-                LogService.Error("Add Customers Evidences exception: " + logMessage);
+                LogService.Error("CTS Portal API - Add Customers Evidences exception: " + logMessage);
                 return false;
             }
         }
