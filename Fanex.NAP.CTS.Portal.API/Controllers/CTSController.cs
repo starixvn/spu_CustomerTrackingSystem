@@ -167,8 +167,8 @@
                 var result = _evidenceService.AddCustomersEvidences(customerEvidenceList);
 
                 if (string.IsNullOrEmpty(result)
-                    && string.IsNullOrEmpty(customerEvidenceList.CustIdList)
-                    && string.IsNullOrWhiteSpace(customerEvidenceList.CustIdList))
+                    && !string.IsNullOrEmpty(customerEvidenceList.CustIdList)
+                    && !string.IsNullOrWhiteSpace(customerEvidenceList.CustIdList))
                 {
                     var distinctCustIds = customerEvidenceList.CustIdList.Split(',').Select(a => Convert.ToInt32(a));
                     _syncToMainDbService.SyncCustomerClassToMainDb(string.Join(",", distinctCustIds?.Select(c => c).Distinct().ToList()), true, false);
