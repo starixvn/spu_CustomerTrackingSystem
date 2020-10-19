@@ -6,6 +6,7 @@
     let inputSwitchCategorySummary = $('#inputSwitchCategorySummary');
     let chooseExternalCategory = "ChooseExternalCategory";
     let inputPinCategory = $('#inputPinCategory');
+    let spanClass =  $('#spanClass');
 
     function BindingMarkCategoryForAddNew(custId, ctsCustId, subscriberId) {
         $('#btncancelcategory').on('click', function () {
@@ -49,6 +50,7 @@
                     divMarkCategory.dialog('close');
 
                     tblcustomercategory.DataTable().ajax.reload();
+                    GetCustomerClassification(custId);
                 }
                 else {
                     common.showError(response.errorMessage);
@@ -82,6 +84,7 @@
                     common.showSuccess('Remove the category successful!', 2000);
 
                     tblcustomercategory.DataTable().ajax.reload();
+                    GetCustomerClassification(custId);
                 }
                 else {
                     common.showError('Remove the category fail!');
@@ -120,12 +123,30 @@
                     divMarkCategory.dialog('close');
 
                     tblcustomercategory.DataTable().ajax.reload();
+                    GetCustomerClassification(custId);
                 }
                 else {
                     common.showError(response.errorMessage);
                 }
             },
             complete: function () {
+            }
+        });
+    }
+
+    function GetCustomerClassification(custId) {
+        $.ajax(common.modifyRelativeUrl('Account/GetLastestCustomerClassification'), {
+            type: 'POST',
+            data: {
+                custId: custId
+            },
+            success: function (response) {
+                spanClass.html(response.customerClassification + "  ");
+            },
+            complete: function () {
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
             }
         });
     }
