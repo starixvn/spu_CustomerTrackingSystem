@@ -49,6 +49,9 @@
                     case 80:
                     case 156:
                         return 11;
+                    case 57:
+                    case 157:
+                        return 13;
                     case -1:
                         return -1;
                     default:
