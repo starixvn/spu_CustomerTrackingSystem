@@ -16,7 +16,7 @@
 
         void UpdateBetLimitOfUnflaggedCustomer(UpdateBetLimitByEvidenceRemovingCriteria criteria);
 
-        string AddCustEvidenceMultipleByCustId(string custIds, int evidenceId, int userId);
-
+        AddEvidenceResultModel AddCustEvidenceMultipleByCustId(string custIds, int evidenceId, int userId);
+    
     }
 }

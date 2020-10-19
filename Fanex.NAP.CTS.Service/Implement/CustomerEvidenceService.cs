@@ -43,7 +43,7 @@
             DataService.Execute(criteria);
         }
 
-        public string AddCustEvidenceMultipleByCustId(string custIds, int evidenceId, int userId)
+        public AddEvidenceResultModel AddCustEvidenceMultipleByCustId(string custIds, int evidenceId, int userId)
         {
             var custEvidenceList = custIds.Split(',').Select(a => new AddAccountEvidenceModel()
             {
@@ -62,7 +62,7 @@
 
             _repository.Execute(criteria);
 
-            return criteria.ErrorMessage;
+            return new AddEvidenceResultModel { ErrorMessage = criteria.ErrorMessage, Eivdences = custEvidenceList };
         }
     }
 }

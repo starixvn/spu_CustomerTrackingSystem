@@ -9,6 +9,7 @@
     using Fanex.NAP.CTS.Model.API;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
+    using Fanex.NAP.CTS.Model.ImportEvidences;
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
@@ -76,11 +77,14 @@
             try
             {
                 int userId = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);
+
                 var result = _custEvidenceService.AddCustEvidenceMultipleByCustId(custIds, evidenceId, userId);
 
-                if (string.IsNullOrEmpty(result))
+                if (string.IsNullOrEmpty(result.ErrorMessage)
+                    && result.Eivdences != null
+                    && result.Eivdences.Any())
                 {
-                    _syncToMainDbService.SyncCustomerClassToMainDb(custIds, true, false);
+                    _syncToMainDbService.SyncCustomerClassToMainDb(string.Join(",", result?.Eivdences?.Select(c => c.CustID).Distinct().ToList()), true, false);
 
                     return true;
                 }
@@ -162,9 +166,12 @@
             {
                 var result = _evidenceService.AddCustomersEvidences(customerEvidenceList);
 
-                if (string.IsNullOrEmpty(result))
+                if (string.IsNullOrEmpty(result)
+                    && string.IsNullOrEmpty(customerEvidenceList.CustIdList)
+                    && string.IsNullOrWhiteSpace(customerEvidenceList.CustIdList))
                 {
-                    _syncToMainDbService.SyncCustomerClassToMainDb(customerEvidenceList.CustIdList, true, false);
+                    var distinctCustIds = customerEvidenceList.CustIdList.Split(',').Select(a => Convert.ToInt32(a));
+                    _syncToMainDbService.SyncCustomerClassToMainDb(string.Join(",", distinctCustIds?.Select(c => c).Distinct().ToList()), true, false);
 
                     return true;
                 }
