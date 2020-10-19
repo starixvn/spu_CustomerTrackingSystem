@@ -1,6 +1,8 @@
 ﻿namespace Fanex.NAP.CTS.Portal.API.Controllers
 {
     using Fanex.Logging;
+    using Fanex.Logging.Extensions;
+    using Fanex.Logging.Extensions.Database;
     using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Core.Helpers.Xml;
     using Fanex.NAP.CTS.Model.Account;
@@ -87,7 +89,12 @@
             }
             catch (Exception ex)
             {
-                LogService.Error("PlaceEvidence exception: " + ex.Message);
+                var logMessage = new LogMessage(ex.Message)
+                        .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                        .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error("PlaceEvidence exception: " + logMessage);
+
                 return false;
             }
         }
@@ -166,7 +173,11 @@
             }
             catch (Exception ex)
             {
-                LogService.Error("Add Customers Evidences exception: " + ex.Message);
+                var logMessage = new LogMessage(ex.Message)
+                    .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                    .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error("Add Customers Evidences exception: " + logMessage);
                 return false;
             }
         }
@@ -373,10 +384,13 @@
         public ApiResultModel RemoveProblemAccounts([FromBody] string custIds)
         {
             try
-            {       
-                _problemAccountMonitorService.UpdateRemovedProblemAccountToCTS(custIds);
+            {
+                var lastestCustIds = _problemAccountMonitorService.UpdateRemovedProblemAccountToCTS(custIds);
 
-                _syncToMainDbService.SyncCustomerClassToMainDb(custIds, true, false);
+                if (lastestCustIds != null && lastestCustIds.Any())
+                {
+                    _syncToMainDbService.SyncCustomerClassToMainDb(string.Join(",", lastestCustIds.Select(c => c)), true, false);
+                }
 
                 return new ApiResultModel {
                     ErrorMessage = string.Empty,

@@ -30,6 +30,6 @@
 
         string GetHtmlChoice(DetailTicketsModel ticket);
 
-        void UpdateRemovedProblemAccountToCTS(string custid);
+        IEnumerable<string> UpdateRemovedProblemAccountToCTS(string custid);
     }
 }

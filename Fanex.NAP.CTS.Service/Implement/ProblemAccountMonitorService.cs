@@ -4,6 +4,7 @@
     using Fanex.BetList.Core.Entities;
     using Fanex.BetList.Core.TicketHelper;
     using Fanex.Data;
+    using Fanex.Data.Repository;
     using Fanex.Logging;
     using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Criteria.ProblemAccountMonitor;
@@ -202,7 +203,7 @@
             return htmlBuilder.BuildChoice(coreTicket, ticketHelper, null, true);           
         }
 
-        public void UpdateRemovedProblemAccountToCTS(string custid)
+        public IEnumerable<string> UpdateRemovedProblemAccountToCTS(string custid)
         {
             var removedProblemAccounts = custid.Split(',').Select(a => new InsertProblemAccountsModel()
             {
@@ -212,6 +213,8 @@
 
             var problemAccountJson = JsonConvert.SerializeObject(removedProblemAccounts);
 
+            var repository = new DynamicRepository();
+
             var criteria = new InsertProblemAccountCriteria
             {
                 ProblemAccountJson = problemAccountJson
@@ -219,7 +222,7 @@
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                db.ExecuteNonQuery(criteria);
+                return repository.Fetch<string>(criteria);
             }
         }
     }
