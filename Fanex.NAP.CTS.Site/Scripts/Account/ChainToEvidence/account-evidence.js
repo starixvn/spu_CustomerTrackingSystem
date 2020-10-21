@@ -520,20 +520,22 @@
     }
 
     function GetCustomerClassification(custId) {
-        $.ajax(common.modifyRelativeUrl('Account/GetLastestCustomerClassification'), {
-            type: 'POST',
-            data: {
-                custId: custId
-            },
-            success: function (response) {
-                domElements.spanClass.html(response.customerClassification+ "  ");
-            },
-            complete: function () {
-            },
-            error: function (errMsg) {
-                console.log(errMsg);
-            }
-        });
+        setTimeout(function () {
+            $.ajax(common.modifyRelativeUrl('Account/GetLastestCustomerClassification'), {
+                type: 'POST',
+                data: {
+                    custId: custId
+                },
+                success: function (response) {
+                    domElements.spanClass.html(response.customerClassification + "  ");
+                },
+                complete: function () {
+                },
+                error: function (errMsg) {
+                    console.log(errMsg);
+                }
+            });
+        }, 10000);
     }
 
     this.ReloadAccountEvidence = function (ctsCustId, username) {
