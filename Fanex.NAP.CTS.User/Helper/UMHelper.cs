@@ -14,10 +14,10 @@ namespace Fanex.NAP.CTS.User.Helper
             DateTime maintainceTo;
 
             if (maintenanceInfo.IsUnderMaintenanceTime
-                && DateTime.TryParse(maintenanceInfo.From, out maintainceFrom)
+                /*&& DateTime.TryParse(maintenanceInfo.From, out maintainceFrom)
                 && DateTime.TryParse(maintenanceInfo.To, out maintainceTo)
                 && currentTime >= maintainceFrom
-                && currentTime <= maintainceTo)
+                && currentTime <= maintainceTo*/)
             {
                 return true;
             }
