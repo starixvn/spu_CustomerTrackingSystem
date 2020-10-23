@@ -307,10 +307,10 @@
                         x.StatusId = accountStatusViewModel.GetAccountStatusId(statusName);
                         x.StatusName = statusName;
                     }
-                    else
-                    {
-                        LogService.Error($"AccountService - FilterCustomerAssociationByStatus - Account status is NULL on custid: { x.CustId }");
-                    }
+                    //else
+                    //{
+                    //    LogService.Error($"AccountService - FilterCustomerAssociationByStatus - Account status is NULL on custid: { x.CustId }");
+                    //}
                 }
 
                 return x;

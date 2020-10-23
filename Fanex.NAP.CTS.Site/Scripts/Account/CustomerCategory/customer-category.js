@@ -480,7 +480,7 @@
 
         for (let i = 0; i < defaultNormalCategoryList.length; i++) {
             data.map(function (x) {
-                let isEquals = x.CategoryName.includes(defaultNormalCategoryList[i].name);
+                let isEquals = x.CategoryName === defaultNormalCategoryList[i].name;
                 if (isEquals) {
                     let classIconColor = defaultNormalCategoryList[i].cssClass;
                     
@@ -571,7 +571,9 @@
         list.push({ 'name': 'Smart Punter', 'cssClass': 'circle bg-yellow', 'indexColor': 2 });
         list.push({ 'name': 'Probation', 'cssClass': 'circle bg-yellow', 'indexColor': 2 });
         list.push({ 'name': 'Normal Account', 'cssClass': 'circle bg-green', 'indexColor': 1 });
+        list.push({ 'name': 'VVIP', 'cssClass': 'circle bg-green', 'indexColor': 1 });
         list.push({ 'name': 'VIP', 'cssClass': 'circle bg-green', 'indexColor': 1 });
+        list.push({ 'name': 'New Member', 'cssClass': 'circle bg-green', 'indexColor': 1 });
 
         return list;
     }
