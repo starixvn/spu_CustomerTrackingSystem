@@ -1,4 +1,4 @@
-﻿function ProblemAccountMonitor() {
+﻿function ProblemAccountMonitor() {dpkDate: $('#dpkDate'),
     let dataTable;
     let timeoutHolder = null;
     let isInitLeague = true;
