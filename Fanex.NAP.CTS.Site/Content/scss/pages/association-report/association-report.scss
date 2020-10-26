@@ -1,2 +1,46 @@
-﻿body {
+﻿@import "../../abstracts/variables";
+@import "../../abstracts/mixins";
+
+
+body {
+    font-family: $font-family;
+}
+.association-content {
+    .table-report {
+        font-family: $font-family;
+
+        .wrapper-info-table {
+            height: 4rem;
+            border: 1px solid #c4c4c4;
+            padding: 0 1rem;
+            background-color: #e3e9f6;
+            position: -webkit-sticky;
+            z-index: 11;
+
+            .dataTables_length {
+                position: absolute;
+                top: .5rem;
+                left: 0;
+            }
+
+            .dataTables_paginate {
+                position: absolute !important;
+                padding-top: 0 !important;
+                top: 1.6rem !important;
+                right: 50%;
+                transform: translate(50%,-50%);
+                text-align: center;
+            }
+        }
+
+        #tblGeneral {
+            thead {
+                tr {
+                    th {
+                        font-weight: 300;
+                    }
+                }
+            }
+        }
+    }
 }
