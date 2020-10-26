@@ -470,6 +470,12 @@
     <Content Include="Content\scss\pages\associated-account-monitor\associated-account-monitor.min.css">
       <DependentUpon>associated-account-monitor.css</DependentUpon>
     </Content>
+    <Content Include="Content\scss\pages\association-report\association-report.css">
+      <DependentUpon>association-report.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\scss\pages\association-report\association-report.min.css">
+      <DependentUpon>association-report.css</DependentUpon>
+    </Content>
     <Content Include="Content\scss\pages\common\maintenance.css">
       <DependentUpon>maintenance.scss</DependentUpon>
     </Content>
@@ -508,6 +514,7 @@
     </Content>
     <Content Include="Content\scss\pages\manage-subscriber\manage-subscriber.scss" />
     <Content Include="Content\scss\pages\notification-setting\notification-setting.scss" />
+    <Content Include="Content\scss\pages\association-report\association-report.scss" />
     <None Include="Content\scss\pages\problem-account-monitor\problem-account-monitor.scss" />
     <None Include="Content\scss\pages\import-evidences\import-evidences.scss" />
     <Content Include="Content\scss\pages\import-evidences\import-evidences.css">
@@ -576,6 +583,8 @@
     <Content Include="Scripts\Account\BettingStatistic\sport-statistic-scripts.js" />
     <Content Include="Scripts\Account\BettingStatistic\winlost-statistic-scripts.js" />
     <Content Include="Scripts\AssociatedAccountMonitor\index.js" />
+    <Content Include="Scripts\AssociationReport\detail.js" />
+    <Content Include="Scripts\AssociationReport\index.js" />
     <Content Include="Scripts\DataTables_New\AutoFill-2.3.4\css\autoFill.bootstrap.css" />
     <Content Include="Scripts\DataTables_New\AutoFill-2.3.4\css\autoFill.bootstrap.min.css" />
     <Content Include="Scripts\DataTables_New\AutoFill-2.3.4\css\autoFill.bootstrap4.css" />
@@ -968,6 +977,8 @@
     <Content Include="Views\ProbationManagement\Index.cshtml" />
     <Content Include="Views\ManageSubscriber\Index.cshtml" />
     <Content Include="Views\NotificationSetting\Index.cshtml" />
+    <Content Include="Views\AssociationReport\Index.cshtml" />
+    <Content Include="Views\AssociationReport\Detail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CoreBetList.css" />

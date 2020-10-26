@@ -77,11 +77,14 @@
   },
   {
     "outputFile": "Content/scss/pages/manage-subscriber/manage-subscriber.css",
-    "inputFile": "Content/scss/pages/manage-subscriber/manage-subscriber.scss",
-    "sourceMap": false
+    "inputFile": "Content/scss/pages/manage-subscriber/manage-subscriber.scss"
   },
   {
     "outputFile": "Content/scss/pages/notification-setting/notification-setting.css",
     "inputFile": "Content/scss/pages/notification-setting/notification-setting.scss"
+  },
+  {
+    "outputFile": "Content/scss/pages/association-report/association-report.css",
+    "inputFile": "Content/scss/pages/association-report/association-report.scss"
   }
 ]

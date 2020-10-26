@@ -176,6 +176,7 @@
     <Compile Include="AccountController.cs" />
     <Compile Include="Api\ApiFPSController.cs" />
     <Compile Include="AssociatedAccountMonitorController.cs" />
+    <Compile Include="AssociationReportController.cs" />
     <Compile Include="BaseController.cs" />
     <Compile Include="CheckBetReportController.cs" />
     <Compile Include="ConfigurationsController.cs" />

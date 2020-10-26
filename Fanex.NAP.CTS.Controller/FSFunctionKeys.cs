@@ -92,4 +92,6 @@ public static class FSFunctionKeys
     public const string ManageSubscriber = "ManageSubscriber";
     
     public const string ViewIP = "ViewIP";
+
+    public const string AssociationReport = "AssociationReport";
 }

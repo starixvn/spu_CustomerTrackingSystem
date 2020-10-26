@@ -73,7 +73,10 @@
 
             RegisterProbationManagementBundles(bundles);
 
-            RegisterManagerSubscriberBundles(bundles); 
+            RegisterManagerSubscriberBundles(bundles);
+
+            RegisterAssociationReport(bundles);
+            RegisterAssociationDetailReport(bundles);
         }
 
         private static void RegisterFSCoreBundles(BundleCollection bundles)
@@ -315,5 +318,26 @@
             bundles.Add(new StyleBundle("~/manage-subscriber-styles").Include(
                     "~/Content/scss/pages/manage-subscriber/manage-subscriber.css"));
         }
+
+        private static void RegisterAssociationReport(BundleCollection bundles)
+        {
+            bundles.Add(new ScriptBundle("~/association-report-scripts").Include(
+                "~/Scripts/select2.min.js",
+                "~/Scripts/AssociationReport/index.js"));
+
+            bundles.Add(new StyleBundle("~/association-report-styles").Include(
+                "~/Content/scss/vendors/select2.min.css",
+                "~/Content/scss/pages/association-report/association-report.css"));
+        }
+
+        private static void RegisterAssociationDetailReport(BundleCollection bundles)
+        {
+            bundles.Add(new ScriptBundle("~/association-detail-report-scripts").Include(
+              "~/Scripts/AssociationReport/detail.js"));
+
+            bundles.Add(new StyleBundle("~/association-detail-report-styles").Include(
+                    "~/Content/scss/pages/association-report/association-report.css"));
+        }
+
     }
 }

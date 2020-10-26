@@ -7,7 +7,7 @@
         public const string MenuItemController = "Controller";
         public const string MenuItemSearch = "Account & Device Search";
         public const string MenuItemSuspiciousBets = "Suspicious Bets";
-        public const string MenuItemReports = "Reports";
+        public const string MenuItemReport = "Report";
         public const string MenuItemSettings = "Settings";
 
         public const string SearchAccountKey = "search-account";

@@ -62,6 +62,7 @@
     <Compile Include="ExcelConfig\Utilities.cs" />
     <Compile Include="Implement\AccountService.cs" />
     <Compile Include="Implement\AssociatedAccountService.cs" />
+    <Compile Include="Implement\AssociationReportService.cs" />
     <Compile Include="Implement\CheckBetReportService.cs" />
     <Compile Include="Implement\FeedDataToSoon88Service.cs" />
     <Compile Include="Implement\ProbationManagementService.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="Implement\CTSUserService.cs" />
     <Compile Include="Interface\IAccountService.cs" />
     <Compile Include="Interface\IAssociatedAccountService.cs" />
+    <Compile Include="Interface\IAssociationReportService.cs" />
     <Compile Include="Interface\ICheckBetReportService.cs" />
     <Compile Include="Interface\ICustomerMonitorService.cs" />
     <Compile Include="Interface\IDailyDataCaptureService.cs" />
