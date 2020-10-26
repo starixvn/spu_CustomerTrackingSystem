@@ -7,6 +7,8 @@
     var asscomment = $('#txtasscomment');
     var btnSaveAssociation = $('#btnsaveassociation');
     var btnCancelAssociation = $('#btncancelassociation');
+    var cbbAssociationAccountStatus = $('#cbbAssociationAccountStatus');
+    var cbbAssociationSite = $('#cbbAssociationSite');
     var _username;
     var dataTable;
     let isHostPermission;
@@ -464,6 +466,17 @@
         DisableButton(hostPermission);
 
         $("#account-by-account-cbb-status").multiselect();
+
+        cbbAssociationSite.multiselect({
+            menuWidth: 330,
+            menuHeight: 330,
+            selectedText: "# of # selected",
+            noneSelectedText: "Select Sites"
+        }).multiselectfilter({
+            width: 217,
+            placeholder: '',
+            label: ''
+        });
 
         dataTable = RenderGrid();
 
