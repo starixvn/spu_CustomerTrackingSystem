@@ -42,6 +42,7 @@
         private readonly ISubscriberAssignmentService _subscriberAssignmentService;
         private readonly ICustomerEvidenceService _customerEvidenceService;
         private readonly ISyncCustomerToMainDbService _syncToMainDbService;
+        private readonly IManageSubscriberService _subscriberService;
 
         public override string BaseControllerName { get => string.Empty; }
 
@@ -53,6 +54,7 @@
             _transService = new TransactionService();
             _customerEvidenceService = new CustomerEvidenceService();
             _syncToMainDbService = new SyncCustomerToMainDbService();
+            _subscriberService = new ManageSubscriberService();
         }
 
         public ActionResult Index(long Id)
@@ -285,10 +287,15 @@
 
             getCustomerStaticAssType.Insert(0, new CustomerStaticStatusModel { ItemId = 0, ItemNameDisplay = "All" });
 
+            var accountStatus = _accountService.GetAccountStaticStatuses();
+            var subscribers = _subscriberService.GetSubscribers();
+
             var associatedByAccountViewModel = new AssociatedByAccountViewModel
             {
                 AssociationStatus = getAssociationStatus,
                 AssociationTypeList = getCustomerStaticAssType,
+                AccountStatusList = accountStatus,
+                SubscribersList = subscribers,
                 Username = username
             };
 

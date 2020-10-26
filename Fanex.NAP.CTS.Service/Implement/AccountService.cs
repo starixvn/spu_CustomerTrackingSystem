@@ -260,6 +260,37 @@
             return customersAPI ?? new GraphAssociationPaging();
         }
 
+        public List<AccountStaticStatusModel> GetAccountStaticStatuses()
+        {
+            var statusList = new List<AccountStaticStatusModel>();
+
+            statusList.Add(new AccountStaticStatusModel
+            {
+                Ids = "1,11", // 1: Open, 11: Active
+                Name = "Open"
+            });
+
+            statusList.Add(new AccountStaticStatusModel
+            {
+                Ids = "3,13", // Closed, View Only
+                Name = "Closed"
+            });
+
+            statusList.Add(new AccountStaticStatusModel
+            {
+                Ids = "4,14", // Suspended
+                Name = "Suspended"
+            });
+
+            statusList.Add(new AccountStaticStatusModel
+            {
+                Ids = "2,12", // Disabled, Inactive
+                Name = "Disabled"
+            });
+
+            return statusList;
+        }
+
         public List<GraphDirectAssociationModel> GetDirectAssocationByGraph(string apiURL, List<long> ctsCustIds)
         {
             var data = ApiHelper.Post<List<GraphDirectAssociationModel>>(apiURL, ctsCustIds);

@@ -36,11 +36,29 @@
             </div>
             <div class="form-control dropdown">
                 <div class="control-label">Account Status</div>
-                <select class="control" id="cbbAssociationAccountStatus"></select>
+                <select class="control" id="cbbAssociationAccountStatus">
+                    @{ var defaultSelecteds = "OPEN"; }
+                    @foreach (var item in Model.AccountStatusList)
+                    {
+                        if (defaultSelecteds.Contains(item.Name.ToUpper()))
+                        {
+                            <option value="@item.Ids" selected>@item.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@item.Ids">@item.Name</option>
+                        }
+                    }
+                </select>
             </div>
-            <div class="form-control dropdown">
+            <div class="form-control dropdown" style="width: 258px;">
                 <div class="control-label">Site</div>
-                <select class="control" id="cbbAssociationSite" multiple="multiple"></select>
+                <select class="control" id="cbbAssociationSite" multiple="multiple">                    
+                    @foreach (var item in Model.SubscribersList)
+                    {
+                        <option value="@item.SubscriberID" selected>@item.SubscriberName</option>
+                    }
+                </select>
             </div>
             <div class="form-control" style="vertical-align: bottom;">
                 <button class="button btn-search" id="account-by-account-btn-search">Search</button>

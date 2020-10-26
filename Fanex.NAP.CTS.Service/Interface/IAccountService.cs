@@ -41,6 +41,8 @@
 
         GraphAssociationPaging GetCustomerAssociationByGraph(string apiURL, long ctsCustId, int associationStatus, int skipNumber, int takeNumber);
 
+        List<AccountStaticStatusModel> GetAccountStaticStatuses();
+
         List<GraphDirectAssociationModel> GetDirectAssocationByGraph(string apiURL, List<long> ctsCustIds);
 
         ShortestPathOfAccount GetShortestPathAssociationByGraph(string apiURL, int custIdFrom, int custIdTo);        
