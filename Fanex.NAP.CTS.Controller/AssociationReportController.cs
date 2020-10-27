@@ -33,5 +33,10 @@
             return View(isHostPermission);
         }
 
+        public ActionResult Detail(int id)
+        {
+            return View();
+        }
+
     }
 }

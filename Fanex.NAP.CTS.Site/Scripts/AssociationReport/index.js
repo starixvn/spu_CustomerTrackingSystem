@@ -1,13 +1,10 @@
 ﻿function AssociationReport() {
     let domElements = {
         tblGeneral: $('#tblGeneral'),
-        dpkDate: $('#dpkDate'),
-    };
-
-
+        dpkDate: $('#dpkDate')
+    };    
     
-
-    function LoadGirdAssociationReport() {
+    function LoadGridAssociationReport() {
         return domElements.tblGeneral.DataTable({
             serverSide: false,
             dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
@@ -132,19 +129,15 @@
                 { data: obj => obj.General_category },
                 {
                     data: obj => () => {
-                        return html = '<a class="click-view-details">View</a>';
-                    }, createdCell: (cell, _, row) => {
-                        $('.click-view-details', cell).click(() => {
-                            console.log( row, 'click view');
-                        });
+                        return html = '<a class="click-view-details" href="AssociationReport/Detail?id=1" target="_blank">View</a>';
                     }
                 }
-            ],  
+            ]
         });
     }
-
+  
     function Initial() {
-        LoadGirdAssociationReport();
+        LoadGridAssociationReport();
     }
 
 
@@ -153,6 +146,5 @@
     });
  
 }
-
 
 $(AssociationReport);
