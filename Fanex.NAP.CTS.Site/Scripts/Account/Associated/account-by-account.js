@@ -38,14 +38,14 @@
         }
 
         return null;
-    }
+    }   
 
     function RenderGrid() {
-        var url = common.modifyRelativeUrl('Account/GetAssociatedByAccount');
-        var ctsCustId = $("#hdCTSCustId").val();
-        var subscriberId = $("#hdSubscriberId").val();
+        let url = common.modifyRelativeUrl('Account/GetAssociatedByAccount');
+        let ctsCustId = $("#hdCTSCustId").val();
+        let subscriberId = $("#hdSubscriberId").val();
 
-        return associatedByAccountTable.DataTable({
+        let table = associatedByAccountTable.DataTable({
             serverSide: true,
             dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
             pagingType: "full_numbers",
@@ -101,7 +101,7 @@
                 { targets: [1], width: "20%" },
                 { targets: [2], width: "20%" },
                 { targets: [3], width: "10%" },
-                { targets: [4], width: "10%" },
+                { targets: [4], width: "10%", visible: false },
                 { targets: [5], width: "10%" },
                 { targets: [6], width: "10%" },
                 { targets: [7], width: "15%" }
@@ -127,8 +127,48 @@
                 {
                     data: obj => obj.AssociationDate
                 }
-            ]
+            ],
+            createdRow: function (row, obj) {
+                $(row).attr('data-site-id', obj.SubscriberId);
+            },
+            drawCallback: function () {
+                let api = this.api();
+                let rows = api.rows({ page: 'current' }).nodes();
+                var data = api.rows({ page: 'current' }).data();
+                let last = null;
+
+                api.column(4, { page: 'current' }).data().each(function (group, i) {
+                    if (last !== group) {
+                        let html = '<tr class="group group-site">';
+                        html += '<td colspan="7">';
+                        html += '<span class="column-group-site" data-site-id=' + data[i].SubscriberId + '><i class="icon icon-chevron-right icon-open">' + group + '</i></span>';
+                        html += '</td></tr>';
+
+                        $(rows).eq(i).before(html);
+                        last = group;
+                    }
+                });
+            }
         });
+
+        $('tbody', associatedByAccountTable).on('click', 'tr.group', function () {
+            let tr = $(this);
+            let siteId = $(this).find('.column-group-site').attr('data-site-id');
+
+            if (siteId !== undefined) {
+                $('tr[data-site-id="' + siteId + '"]', associatedByAccountTable).each(function () {
+                    if ($(this).hasClass('hide')) {
+                        $(this).removeClass('hide');
+                        $('span.icon', tr).removeClass('icon-chevron-down').addClass('icon-chevron-up');
+                    } else {
+                        $(this).addClass('hide');
+                        $('span.icon', tr).removeClass('icon-chevron-up').addClass('icon-chevron-down');
+                    }
+                });
+            }
+        });
+        
+        return table;
     }
 
     function AssociationStatus(isLinked) {

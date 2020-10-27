@@ -925,6 +925,14 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
         }
     }
 
+    .group-site {
+        td {
+            background: #70809e;
+            color: #ffffff;
+            cursor: pointer;         
+        }
+    }
+
     .icon-delete {
         color: red;
         cursor: pointer;

@@ -368,7 +368,7 @@
                     }
 
                     return newX;
-                }).OrderBy(a => a.StatusId)
+                }).OrderBy(a => a.SubscriberId)
                 .ThenBy(a => !a.IsLinked)
                 .ThenByDescending(a => a.AssociationDate)
                 .ToList();

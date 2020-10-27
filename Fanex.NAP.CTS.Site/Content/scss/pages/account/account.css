@@ -1313,6 +1313,10 @@
       animation: spin 1s infinite linear; }
     .table-report .loading tr {
       opacity: .3; }
+  .table-report .group-site td {
+    background: #70809e;
+    color: #ffffff;
+    cursor: pointer; }
   .table-report .icon-delete {
     color: red;
     cursor: pointer; }
