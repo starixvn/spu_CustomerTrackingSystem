@@ -46,7 +46,7 @@
                     "Status": "Open",
                     "Evidence": "6.1",
                     "General_category": "Group Betting",
-                    "Associated_accounts" : "View"
+                    "Associated_accounts": "View"
                 },
                 {
                     "no": "2",
