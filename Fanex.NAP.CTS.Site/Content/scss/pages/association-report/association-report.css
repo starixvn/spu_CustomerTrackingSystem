@@ -10,10 +10,17 @@
     background: #fff;
     padding: 1rem 0 0 0; }
     .association-content .association-table .gorup-control .title-association {
-      margin-bottom: .5rem; }
-    .association-content .association-table .gorup-control .form-filter .calendar .icon-calendar-text {
-      right: 2.2rem;
-      bottom: 1.7rem; }
+      margin-bottom: -1.3rem; }
+    .association-content .association-table .gorup-control .form-filter .calendar {
+      display: flex;
+      align-items: center;
+      width: 20rem; }
+      .association-content .association-table .gorup-control .form-filter .calendar .icon-calendar-text {
+        right: 2.2rem;
+        bottom: 1.7rem; }
+      .association-content .association-table .gorup-control .form-filter .calendar .text {
+        margin-right: .7rem;
+        margin-bottom: 0; }
     .association-content .association-table .gorup-control .form-filter .button-generate {
       background-color: #396ef8;
       border-radius: 2px;
