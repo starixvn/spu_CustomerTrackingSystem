@@ -4,6 +4,9 @@
 
 body {
     font-family: $font-family;
+    #ui-datepicker-div{
+        z-index : 999999999999999 !important;
+    }
 }
 .association-content {
     margin: 1rem 1.6rem 1rem 1.6rem;
@@ -32,9 +35,15 @@ body {
                     }
 
 
-                    .text{
+                    .text {
                         margin-right: .7rem;
-                        margin-bottom : 0;
+                        margin-bottom: 0;
+                    }
+                }
+
+                .group {
+                    .width-select {
+                        width: 15.5rem;
                     }
                 }
 
@@ -84,7 +93,7 @@ body {
                     }
                 }
 
-                #tblGeneral, #tblGeneralDetail {
+                #tblGeneral, #tblGeneralDetail, #tblAssociation {
                     width: 100% !important;
 
                     .loading {
