@@ -58,6 +58,7 @@
     <Compile Include="Account\ChainToEvidence\GetAffectedEvidenceBetweenCustsCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\GetAffectedEvidenceCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\GetAllEvidenceCriteria.cs" />
+    <Compile Include="Account\GetAssociationWithCategoryCriteria.cs" />
     <Compile Include="ProblemAccountMonitor\InsertProblemAccountCriteria.cs" />
     <Compile Include="SyncCustomerToMainDb\GetLastestEvidenceCategoryCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\PlaceEvidenceCriteria.cs" />
@@ -118,7 +119,6 @@
     <Compile Include="SpecialCustomerClass\InsertSpecialCustomerClassCriteria.cs" />
     <Compile Include="SpecialCustomerClass\GetAllSpecialCustomerClassCriteria.cs" />
     <Compile Include="SpecialCustomerClass\RemoveSpecialCustomerClassCriteria.cs" />
-    <Compile Include="SpecialCustomerClass\SyncCustomerClassToMainDbCriteria.cs" />
     <Compile Include="CustomerMonitor\CustomerDetails\GetCustomerTicketsCriteria.cs" />
     <Compile Include="CustomerMonitor\CustomerGetCriteria.cs" />
     <Compile Include="CustomerMonitor\UpdateNoteCriteria.cs" />

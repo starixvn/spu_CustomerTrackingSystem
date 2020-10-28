@@ -149,6 +149,7 @@
     <Compile Include="API\ApiIResultModel.cs" />
     <Compile Include="API\CustomerClassModel.cs" />
     <Compile Include="API\CustomerClassification.cs" />
+    <Compile Include="Association\AssociationWithCategory.cs" />
     <Compile Include="Customer.cs" />
     <Compile Include="CustomerAssociationModel.cs" />
     <Compile Include="Account\CustomerFlagInfoModel.cs" />
