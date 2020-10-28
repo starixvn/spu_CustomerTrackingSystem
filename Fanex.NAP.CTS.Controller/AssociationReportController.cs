@@ -34,12 +34,17 @@
             return View(isHostPermission);
         }
 
-        [HttpGet]
+        [HttpPost]
         public ActionResult GetAssociations(AssociationFilterViewModel filter)
         {
             var result = _associationService.GetAssociations(filter);
 
-            return Json(result, JsonRequestBehavior.AllowGet);
+            var categories = _associationService.GetCategories("1,2");
+
+            return Json( new
+                {
+                    data = result
+                }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
@@ -48,12 +53,15 @@
             return View();
         }
 
-        [HttpGet]
+        [HttpPost]
         public ActionResult GetAssociationDetail(AssociationDetailFilterViewModel filter)
         {
             var result = _associationService.GetAssociationDetail(filter);
 
-            return Json(result, JsonRequestBehavior.AllowGet);
+            return Json(new
+            {
+                data = result
+            }, JsonRequestBehavior.AllowGet);
         }
 
     }

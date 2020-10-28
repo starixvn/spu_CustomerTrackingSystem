@@ -106,4 +106,8 @@
   <Function name="Report">
     <Setting Key="CTS_DC_Report_GetAssociatedAccount " SpName="CTS_DC_Report_GetAssociatedAccount" DbName="MySQL.CTS_DataCenter.Reporter"/>
   </Function>
+
+  <Function name="AssociationReport">
+    <Setting Key="CTS_DC_AssociatedAccountReport_Get " SpName="CTS_DC_AssociatedAccountReport_Get" DbName="MySQL.CTS_DataCenter"/>
+  </Function>
 </Functions>

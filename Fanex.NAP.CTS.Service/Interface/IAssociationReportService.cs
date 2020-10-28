@@ -8,6 +8,8 @@
     {
         IEnumerable<AssociationModel> GetAssociations(AssociationFilterViewModel filter);
 
+        IEnumerable<CategoriesModel> GetCategories(string ctsCustIdList);
+
         IEnumerable<AssociationDetailModel> GetAssociationDetail(AssociationDetailFilterViewModel filter);
     }
 }

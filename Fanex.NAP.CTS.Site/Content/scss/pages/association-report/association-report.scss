@@ -12,7 +12,7 @@ body {
     margin: 1rem 1.6rem 1rem 1.6rem;
 
     .association-table {
-        .gorup-control {
+        .group-control {
             position: sticky;
             top: 6rem;
             z-index: 99;
@@ -93,7 +93,7 @@ body {
                     }
                 }
 
-                #tblGeneral, #tblGeneralDetail, #tblAssociation {
+                .table-association, .table-association-detail {
                     width: 100% !important;
 
                     .loading {
@@ -218,7 +218,7 @@ body {
                     }
                 }
 
-                #tblGeneralDetail {
+                .table-association-detail {
                     thead {
                         tr {
 

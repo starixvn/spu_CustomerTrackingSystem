@@ -6,6 +6,8 @@
 
         public int CustId { get; set; }
 
+        public string UserName { get; set; }
+
         public int SiteId { get; set; }
 
         public string SiteName { get; set; }
@@ -14,7 +16,7 @@
 
         public string EvidenceCodes { get; set; }
 
-        public string CategoryName { get; set; }        
+        public string CategoryNames { get; set; }        
 
     }
 }

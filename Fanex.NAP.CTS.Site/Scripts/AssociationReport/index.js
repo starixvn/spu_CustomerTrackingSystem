@@ -1,5 +1,5 @@
 ﻿function AssociationReport() {
-
+    let dataTable;
     let domElements = {
         dpkFromDate: $('#dpkFromDate'),
         dpkToDate: $('#dpkToDate'),
@@ -11,10 +11,48 @@
         btnGenerate: $('#btnGenerate'),
         tblAssociation: $('#tblAssociation')
     };    
-    
-    function LoadGridAssociationReport() {
+
+    function GetAssociationReport() {
+        dataTable
+            ? dataTable.ajax.reload(null, true)
+            : dataTable = GenerateGrid();
+    }
+
+    function GenerateGrid() {
         return domElements.tblAssociation.DataTable({
             serverSide: false,
+            ajax: {
+                url: common.modifyRelativeUrl('AssociationReport/GetAssociations'),
+                data: function () {
+                    var paramsFilter = {};
+                    paramsFilter.FromDate = domElements.dpkFromDate.val();
+                    paramsFilter.ToDate = domElements.dpkToDate.val();
+                    paramsFilter.AccountStatusIds = "1";
+                    paramsFilter.SiteId = 1;
+                    paramsFilter.AssociationStatuses = "1";
+                    paramsFilter.EvidenceId = 1;
+                    paramsFilter.AssociationType = 1;
+
+                    return paramsFilter;
+                },
+                type: "POST",
+                beforeSend: function () {
+                    domElements.tblAssociation.find('tbody').addClass('loading');
+                    domElements.btnGenerate.prop('disabled', true);
+                },
+                dataFilter: function (response) {
+                    
+                    return response;
+                },
+                complete: function () {
+                    domElements.tblAssociation.find('tbody').removeClass('loading');
+                    domElements.btnGenerate.prop('disabled', false);
+                },
+                error: function (error) {
+                    domElements.tblAssociation.find('tbody').removeClass('loading');
+                    console.log(error);
+                }
+            },
             dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
             pagingType: "full_numbers",
             language: {
@@ -44,84 +82,10 @@
                 { targets: [3], width: "15%" },
                 { targets: [4], width: "15%" },
                 { targets: [5], width: "15%" },
-                { targets: [6], width: "15%" },
-            ],
-            data: [
-                {
-                    "no": "1",
-                    "UserName": "12Bet001",
-                    "SiteName": "12Bet",
-                    "Status": "Open",
-                    "Evidence": "6.1",
-                    "General_category": "Group Betting",
-                    "Associated_accounts": "View"
-                },
-                {
-                    "no": "2",
-                    "UserName": "12Bet001",
-                    "SiteName": "12Bet",
-                    "Status": "Open",
-                    "Evidence": "6.1",
-                    "General_category": "Group Betting",
-                    "Associated_accounts": "View"
-                },
-                {
-                    "no": "3",
-                    "UserName": "12Bet001",
-                    "SiteName": "12Bet",
-                    "Status": "Close",
-                    "Evidence": "6.1",
-                    "General_category": "Group Betting",
-                    "Associated_accounts": "View"
-                },
-                {
-                    "no": "4",
-                    "UserName": "12Bet001",
-                    "SiteName": "12Bet",
-                    "Status": "Close",
-                    "Evidence": "6.1",
-                    "General_category": "Group Betting",
-                    "Associated_accounts": "View"
-                },
-                {
-                    "no": "5",
-                    "UserName": "12Bet00156565",
-                    "SiteName": "12Bet",
-                    "Status": "Open",
-                    "Evidence": "6.1",
-                    "General_category": "Group Betting",
-                    "Associated_accounts": "View"
-                },
-                {
-                    "no": "6",
-                    "UserName": "12Bet001",
-                    "SiteName": "12Bet",
-                    "Status": "Open",
-                    "Evidence": "6.1",
-                    "General_category": "Group Betting",
-                    "Associated_accounts": "View"
-                },
-                {
-                    "no": "7",
-                    "UserName": "12Bet00100",
-                    "SiteName": "12Bet",
-                    "Status": "Close",
-                    "Evidence": "6.1",
-                    "General_category": "Group Betting",
-                    "Associated_accounts": "View"
-                },
-                {
-                    "no": "8",
-                    "UserName": "12Bet001",
-                    "SiteName": "12Bet",
-                    "Status": "Close",
-                    "Evidence": "6.1",
-                    "General_category": "Group Betting",
-                    "Associated_accounts": "View"
-                },
-            ],
+                { targets: [6], width: "15%" }
+            ],            
             columns: [
-                { data: obj => obj.no },
+                { data: obj => obj.UserName },
                 {
                     data: obj => () => {
                         return html = `<a class='click-view-name'> ${obj.UserName} </a>`;
@@ -132,12 +96,12 @@
                     }
                 },
                 { data: obj => obj.SiteName },
-                { data: obj => obj.Status },
-                { data: obj => obj.Evidence },
-                { data: obj => obj.General_category },
+                { data: obj => obj.AccountStatus },
+                { data: obj => obj.EvidenceCodes },
+                { data: obj => obj.CategoryNames },
                 {
                     data: obj => () => {
-                        return html = '<a class="click-view-details" href="AssociationReport/Detail?id=1" target="_blank">View</a>';
+                        return html = '<a class="click-view-details" href="AssociationReport/Detail/' + obj.CTSCustId +'" target="_blank">View</a>';
                     }
                 }
             ]
@@ -161,7 +125,7 @@
             })
             .datepicker("setDate", new Date());
 
-        LoadGridAssociationReport();
+        domElements.btnGenerate.on('click', function () { GetAssociationReport(); });
     }
 
     $(document).ready(function () {

@@ -1,12 +1,49 @@
 ﻿function AssociationReportDetail() {
+    let dataTable;
     let domElements = {
-        tblGeneralDetail: $('#tblGeneralDetail'),
+        lblAccount: $('#lblAccount'),
+        lblRangeDate: $('#lblRangeDate'),
+        lblAssociatedType: $('#lblAssociatedType'),
+        tblAssociationDetail: $('#tblAssociationDetail')
     };
 
+    function GetAssociationDetailReport() {
+        dataTable
+            ? dataTable.ajax.reload(null, true)
+            : dataTable = GenerateGrid();
+    } 
 
-    function LoadGridAssociationReportDetail() {
-        return domElements.tblGeneralDetail.DataTable({
+    function GenerateGrid() {
+        return domElements.tblAssociationDetail.DataTable({
             serverSide: false,
+            ajax: {
+                url: common.modifyRelativeUrl('AssociationReport/GetAssociationDetail'),
+                data: function () {
+                    var paramsFilter = {};                
+                    paramsFilter.AccountStatusIds = "1";
+                    paramsFilter.SiteId = 1;
+                    paramsFilter.AssociationStatuses = "1";
+                    paramsFilter.EvidenceId = 1;
+                    paramsFilter.AssociationType = 1;
+
+                    return paramsFilter;
+                },
+                type: "POST",
+                beforeSend: function () {
+                    domElements.tblAssociationDetail.find('tbody').addClass('loading');                   
+                },
+                dataFilter: function (response) {
+
+                    return response;
+                },
+                complete: function () {
+                    domElements.tblAssociationDetail.find('tbody').removeClass('loading');                    
+                },
+                error: function (error) {
+                    domElements.tblAssociationDetail.find('tbody').removeClass('loading');
+                    console.log(error);
+                }
+            },
             dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
             pagingType: "full_numbers",
             language: {
@@ -30,49 +67,15 @@
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
                 { targets: [0, 1, 2, 3, 4, 5], className: "text-center" },
-                { targets: [0], width: "9%" },
-                { targets: [1], width: "15%" },
+                { targets: [0], width: "10%", visible: false },
+                { targets: [1], width: "10%" },
                 { targets: [2], width: "15%" },
                 { targets: [3], width: "15%" },
                 { targets: [4], width: "15%" },
-                { targets: [5], width: "15%" },
-            ],
-            data: [
-                {
-                    "no": "1",
-                    "UserName": "12Bet001",
-                    "Status": "Open",
-                    "Account_Date": "27/10/2020",
-                    "Associated_Status": "...",
-                    "Associated_Type": "Device",
-                },
-                {
-                    "no": "1",
-                    "UserName": "12Bet001",
-                    "Status": "Open",
-                    "Account_Date": "27/10/2020",
-                    "Associated_Status": "...",
-                    "Associated_Type": "Device",
-                },
-                {
-                    "no": "1",
-                    "UserName": "12Bet001",
-                    "Status": "Open",
-                    "Account_Date": "27/10/2020",
-                    "Associated_Status": "...",
-                    "Associated_Type": "Device",
-                },
-                {
-                    "no": "1",
-                    "UserName": "12Bet001",
-                    "Status": "Open",
-                    "Account_Date": "27/10/2020",
-                    "Associated_Status": "...",
-                    "Associated_Type": "Device",
-                },
+                { targets: [5], width: "15%" }
             ],
             columns: [
-                { data: obj => obj.no },
+                { data: obj => obj.UserName },
                 {
                     data: obj => () => {
                         return html = `<a class='click-view-name'> ${obj.UserName} </a>`;
@@ -82,64 +85,43 @@
                         });
                     }
                 },
-                { data: obj => obj.Status },
-                { data: obj => obj.Account_Date },
+                { data: obj => obj.AccountStatus },
+                { data: obj => obj.AssociatedDateString },
                 {
-                    data: obj => AssociationStatus(obj.IsLinked), createdCell: (cell, _, row) => {
+                    data: obj => RenderAssociationStatus(obj.IsLinked), createdCell: (cell, _, row) => {
      
                             $('.toggle', cell).click(function (e) {
                                 e.preventDefault();
-    
                             });
                     }
                 },
-                { data: obj => obj.Associated_Type },
+                { data: obj => obj.AssociaionType }
             ],
             createdRow: function (row, obj) {
-                $(row).attr('evidence-code', obj.EvidenceCode);
-                if (obj.IsRetract) {
-                    $(row).attr('cust-retract', true);
-                }
+                $(row).attr('data-site-id', obj.SiteId);
             },
-            drawCallback: function (settings) {
-                var api = this.api();
-                var rows = api.rows({ page: 'current' }).nodes();
-                var data = api.rows({ page: 'current' }).data();
-                var last = null;
+            drawCallback: function () {
+                let api = this.api();
+                let rows = api.rows({ page: 'current' }).nodes();
+                let data = api.rows({ page: 'current' }).data();
+                let last = null;
 
                 api.column(0, { page: 'current' }).data().each(function (group, i) {
                     if (last !== group) {
-                        var html = '';
-                        if (data[i].IsRetract) {
-                            html = '<tr class="affected" evidence-code="' + data[i].EvidenceCode + '">';
-                            html += '<td colspan="5" class="has-tooltip">';
-                            html += '<span class="evidence-retract">' + group + '</span>';
-                            html += '<td class="text-center">';
-                            html += '</td></tr>';
-                        } else {
-                            html = '<tr class="affected" evidence-code="' + data[i].EvidenceCode + '">';
-                            html += '<td class="affected-group" colspan="5">';
-                            html += '<span class="icon icon-chevron-right""></span>';
-                            html += "<span class='name-group'> 12Bet </span>";
-                            html += '<td class="text-left">';
-                            html += "<span class='name-group total-accounts'> Total: 3 Association Accounts </span>"
-                            html += '</td></tr>';
-                        }
+                        let html = '<tr class="group group-site">';
+                        html += '<td colspan="5">';
+                        html += '<span class="column-group-site" data-site-id=' + data[i].SiteId + '><i class="icon icon-chevron-right icon-open">' + group + '</i></span>';
+                        html += '</td></tr>';
+
                         $(rows).eq(i).before(html);
                         last = group;
-                        $('.affected').click(() => {
-                            $('.affected-group .icon').toggleClass('active-icon');
-                           
-                        });
-                    }
-              
+                    }       
                 });
             }
-
         });
     }
 
-    function AssociationStatus(isLinked) {
+    function RenderAssociationStatus(isLinked) {
         var html = '<div class="toggle toggle-on" id="switch">';
         html += '<div class="toggle-text-off"> Unlinked</div >';
         html += '<div class="glow-comp"></div> <div class="toggle-button"></div>';
@@ -150,12 +132,13 @@
     }
 
     function Initial() {
-        LoadGridAssociationReportDetail();
+        GetAssociationDetailReport();
     }
-
 
     $(document).ready(function () {
         Initial();
     });
+
 }
+
 $(AssociationReportDetail);
