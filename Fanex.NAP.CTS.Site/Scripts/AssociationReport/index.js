@@ -1,11 +1,19 @@
 ﻿function AssociationReport() {
+
     let domElements = {
-        tblGeneral: $('#tblGeneral'),
-        dpkDate: $('#dpkDate')
+        dpkFromDate: $('#dpkFromDate'),
+        dpkToDate: $('#dpkToDate'),
+        cbbAccountStatus: $('#cbbAccountStatus'),
+        cbbSite: $('#cbbSite'),
+        cbbAssociationStatus: $('#cbbAssociationStatus'),
+        cbbEvidence: $('#cbbEvidence'),
+        cbbAssociationType: $('#cbbAssociationType'),
+        btnGenerate: $('#btnGenerate'),
+        tblAssociation: $('#tblAssociation')
     };    
     
     function LoadGridAssociationReport() {
-        return domElements.tblGeneral.DataTable({
+        return domElements.tblAssociation.DataTable({
             serverSide: false,
             dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
             pagingType: "full_numbers",
@@ -30,7 +38,7 @@
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
                 { targets: [0, 1, 2, 3, 4, 5, 6], className: "text-center" },
-                { targets: [0], width: "9%" },
+                { targets: [0], width: "5%" },
                 { targets: [1], width: "15%" },
                 { targets: [2], width: "15%" },
                 { targets: [3], width: "15%" },
@@ -137,9 +145,24 @@
     }
   
     function Initial() {
+        domElements.dpkFromDate
+            .datepicker({
+                dateFormat: "M dd, yy",              
+                changeMonth: true,
+                changeYear: true
+            })
+            .datepicker("setDate", new Date());
+
+        domElements.dpkToDate
+            .datepicker({
+                dateFormat: "M dd, yy",                
+                changeMonth: true,
+                changeYear: true
+            })
+            .datepicker("setDate", new Date());
+
         LoadGridAssociationReport();
     }
-
 
     $(document).ready(function () {
         Initial();

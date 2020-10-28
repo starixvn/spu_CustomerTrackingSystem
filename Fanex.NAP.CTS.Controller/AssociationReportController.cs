@@ -7,6 +7,7 @@
     using Fanex.NAP.Core.Configuration;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
+    using Fanex.NAP.CTS.ViewModel.AssociationReport;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.AssociationReport, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -33,9 +34,26 @@
             return View(isHostPermission);
         }
 
+        [HttpGet]
+        public ActionResult GetAssociations(AssociationFilterViewModel filter)
+        {
+            var result = _associationService.GetAssociations(filter);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
         public ActionResult Detail(int id)
         {
             return View();
+        }
+
+        [HttpGet]
+        public ActionResult GetAssociationDetail(AssociationDetailFilterViewModel filter)
+        {
+            var result = _associationService.GetAssociationDetail(filter);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
     }
