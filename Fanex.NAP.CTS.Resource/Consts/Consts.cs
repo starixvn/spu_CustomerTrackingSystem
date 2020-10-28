@@ -51,5 +51,7 @@
         public const int AGENT_ROLE = 2;
 
         public const int REMOVE_CATEGORYID = -1;
+
+        public const string SALT = "!%HGDwweHqw#";
     }
 }

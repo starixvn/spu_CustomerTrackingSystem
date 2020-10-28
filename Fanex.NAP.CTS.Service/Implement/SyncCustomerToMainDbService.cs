@@ -37,6 +37,9 @@
 
                     return new DBResult { ErrorCode = criteria.ErrorCode, ErrorMsg = criteria.ErrorMessage };
                 }
+
+                var feedDataToSoon88Service = new FeedDataToSoon88Service();
+                feedDataToSoon88Service.FeedDataToSoon88(customerClassList);
             }
             catch (Exception ex)
             {

@@ -11,6 +11,8 @@
     using System.Threading.Tasks;
     using Newtonsoft.Json;
     using System.Security.Cryptography;
+    using Fanex.NAP.CTS.ViewModel.FeedDataToSoon88;
+    using Fanex.NAP.CTS.Resource.Consts;
 
     public class FeedDataToSoon88Service
     {
@@ -28,7 +30,6 @@
 
             var data = GetAssociationWithCategory(updateList);
             
-            
         }
 
         private IEnumerable<AssociationWithCategory> GetAssociationWithCategory(IEnumerable<CustomerClassForMainDb> custClasses)
@@ -43,21 +44,31 @@
             var dataGroupByAccount = result.GroupBy(a => a.RegisterName);
             foreach (var groupAcc in dataGroupByAccount)
             {
-                var a = new
+                var soon88Temp = StatisticAccountByCategoryInS88(groupAcc.Where(c => c.IsSoon88));
+                var othersTemp = StatisticAccountByCategoryNotInS88(groupAcc.Where(c => !c.IsSoon88));
+
+                var tempData = new PreparedDataToSoon88ViewModel()
+                {
+                    Action = "block",
+                    Reason = groupAcc.FirstOrDefault().CategoryName,
+                    Account = groupAcc.Key,
+                    Association = new 
+                    {
+                        soon88Temp,
+                        othersTemp
+                    }                  
+                };               
+
+                var a = new FeedDataToSoon88ViewModel()
                 {
                     action = "block",
                     reason = groupAcc.FirstOrDefault().CategoryName,
                     account = groupAcc.Key,
-                    association = new
-                    {
-                        soon88 = StatisticAccountByCategoryInS88(groupAcc.Where(c => c.IsSoon88)),
-                        others = StatisticAccountByCategoryNotInS88(groupAcc.Where(c => !c.IsSoon88)),
-                    }
+                    association = tempData.Association,
+                    signature = CreateMD5Hash(JsonConvert.SerializeObject(tempData) + Consts.SALT)
                 };
             }
             
-            var minifiedData = JsonConvert.SerializeObject(a);
-
             return result;
         }
 
