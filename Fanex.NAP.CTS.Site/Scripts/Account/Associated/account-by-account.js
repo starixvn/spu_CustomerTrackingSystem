@@ -63,6 +63,17 @@
                     },
                     IsDirect: function () {
                         return $("#radio03-01").is(':checked');
+                    },
+                    AccountStatusIds: function () {
+                        return cbbAssociationAccountStatus.val();
+                    },
+                    SiteIds: function () {
+                        var selectedSites = [];
+                        cbbAssociationSite.find('option:selected').each(function () { selectedSites.push($(this).val()); });
+                        if (selectedSites.length === 0) {
+                            cbbAssociationSite.find('option').not(':selected').each(function () { selectedSites.push($(this).val()); });
+                        }
+                        return selectedSites.join(',');
                     }
                 },
                 type: "POST",
@@ -130,6 +141,7 @@
             ],
             createdRow: function (row, obj) {
                 $(row).attr('data-site-id', obj.SubscriberId);
+                $(row).addClass('hide');
             },
             drawCallback: function () {
                 let api = this.api();
@@ -152,17 +164,18 @@
         });
 
         $('tbody', associatedByAccountTable).on('click', 'tr.group', function () {
-            let tr = $(this);
-            let siteId = $(this).find('.column-group-site').attr('data-site-id');
+            let trGroup = $(this);
+            let siteId = trGroup.find('.column-group-site').attr('data-site-id');
 
             if (siteId !== undefined) {
                 $('tr[data-site-id="' + siteId + '"]', associatedByAccountTable).each(function () {
-                    if ($(this).hasClass('hide')) {
-                        $(this).removeClass('hide');
-                        $('span.icon', tr).removeClass('icon-chevron-down').addClass('icon-chevron-up');
+                    let trCurrent = $(this);
+                    if (trCurrent.hasClass('hide')) {
+                        trCurrent.removeClass('hide');
+                        $('i.icon', trGroup).removeClass('icon-chevron-right').addClass('icon-chevron-down');
                     } else {
-                        $(this).addClass('hide');
-                        $('span.icon', tr).removeClass('icon-chevron-up').addClass('icon-chevron-down');
+                        trCurrent.addClass('hide');
+                        $('i.icon', trGroup).removeClass('icon-chevron-down').addClass('icon-chevron-right');
                     }
                 });
             }

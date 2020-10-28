@@ -266,26 +266,14 @@
 
             statusList.Add(new AccountStaticStatusModel
             {
-                Ids = "1,11", // 1: Open, 11: Active
+                Ids = "1,11", // 1:Open, 11:Active
                 Name = "Open"
             });
 
             statusList.Add(new AccountStaticStatusModel
             {
-                Ids = "3,13", // Closed, View Only
+                Ids = "2,3,4,12,13,14", // 2:Disabled, 3:Closed, 4:Suspended, 12:Inactive, 13:View Only, 14:Suspended
                 Name = "Closed"
-            });
-
-            statusList.Add(new AccountStaticStatusModel
-            {
-                Ids = "4,14", // Suspended
-                Name = "Suspended"
-            });
-
-            statusList.Add(new AccountStaticStatusModel
-            {
-                Ids = "2,12", // Disabled, Inactive
-                Name = "Disabled"
             });
 
             return statusList;

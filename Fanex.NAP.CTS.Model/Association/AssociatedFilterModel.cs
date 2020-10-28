@@ -15,5 +15,9 @@
         public bool IsDirect { get; set; }
 
         public int AssociationStatus { get; set; }
+
+        public string AccountStatusIds { get; set; }
+
+        public string SiteIds { get; set; }
     }
 }
