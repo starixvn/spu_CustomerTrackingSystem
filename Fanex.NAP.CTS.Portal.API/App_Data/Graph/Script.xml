@@ -22,5 +22,6 @@
     <GraphSetting Key="GetAssociationByCustIdLevel2" SpName="GetAssociationByCustIdLevel2" DbName="GraphDB" />
     <GraphSetting Key="GetAssociatedDevicesByCustId" SpName="GetAssociatedDevicesByCustId" DbName="GraphDB" />
     <GraphSetting Key="GetDevicesIdByCustId" SpName="GetDevicesIdByCustId" DbName="GraphDB" />
+    <GraphSetting Key="GetAssociationReport" SpName="GetAssociationReport" DbName="GraphDB" />
   </Function>
 </Functions>

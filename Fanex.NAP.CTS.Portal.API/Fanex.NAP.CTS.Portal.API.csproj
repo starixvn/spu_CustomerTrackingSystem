@@ -423,6 +423,7 @@
     <Content Include="App_Data\Graph\scripts\GetAssociationByCustIdLevel2.scrypt" />
     <Content Include="App_Data\Graph\scripts\GetDevicesIdByCustId.scrypt" />
     <Content Include="App_Data\Graph\scripts\GetAssociatedDevicesByCustId.scrypt" />
+    <Content Include="App_Data\Graph\scripts\GetAssociationReport.scrypt" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />

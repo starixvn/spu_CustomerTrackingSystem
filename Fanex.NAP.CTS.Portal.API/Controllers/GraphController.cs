@@ -246,6 +246,37 @@
             catch (Exception ex)
             {
                 LogService.Error("GetDirectAssociationDevices failed: " + ex.Message + ex.StackTrace);
+
+            }
+        }
+
+        /// <summary>
+        /// Get association report
+        /// </summary>
+        /// <param name="paras"></param>
+        /// <returns></returns>
+        [System.Web.Http.AcceptVerbs("GetAssociationReport")]
+        [HttpGet]
+        public IEnumerable<AssociationReportModel> GetAssociationReport([FromBody] AssociationReportParameterModel paras)
+        {
+            try
+            {
+                var result = DbSessionFactory.Execute<AssociationReportModel>("GetAssociationReport", new
+                {
+                   ip_AssCreatedFrom = paras.AssociatedDateFrom,
+                   ip_AssCreatedTo = paras.AssociatedDateTo,
+                   ip_AccountStatus = paras.AccountStatus,
+                   ip_EvidenceCode = paras.EvidenceCode,
+                   ip_SiteName = paras.SiteName,
+                   ip_AssStatus = paras.AssociationStatus,
+                   ip_AssType = paras.AssociationType
+                }).Data;
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("GetAssociationReport failed: " + ex.Message + ex.StackTrace);
                 throw;
             }
         }
