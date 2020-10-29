@@ -76,6 +76,8 @@
 
         public static string GetStatisticAssociation => GetConfigStringByName("Graph_GetStatisticAssociation");
 
+        public static string GetAssociations => GetConfigStringByName("Graph_GetAssociations");
+
         public static string Matomo_SiteId => GetConfigStringByName("Matomo-SiteId");
 
         public static string StoredProcedurePath => GetConfigStringByName("StoredProcedurePath");

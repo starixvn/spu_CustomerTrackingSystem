@@ -97,7 +97,7 @@
                 },
                 { data: obj => obj.SiteName },
                 { data: obj => obj.AccountStatus },
-                { data: obj => obj.EvidenceCodes },
+                { data: obj => obj.EvidenceCode },
                 { data: obj => obj.CategoryNames },
                 {
                     data: obj => () => {
@@ -124,6 +124,9 @@
                 changeYear: true
             })
             .datepicker("setDate", new Date());
+
+        domElements.cbbEvidence.select2();
+        domElements.cbbSite.select2();
 
         domElements.btnGenerate.on('click', function () { GetAssociationReport(); });
     }

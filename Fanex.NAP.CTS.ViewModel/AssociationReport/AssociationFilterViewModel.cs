@@ -10,13 +10,17 @@
 
         public string AccountStatusIds { get; set; }
 
-        public int SiteId { get; set; }
+        public string SiteName { get; set; }
 
         public string AssociationStatuses { get; set; }
 
-        public int EvidenceId { get; set; }
+        public string EvidenceCode { get; set; }
 
         public int AssociationType { get; set; }
+
+        public int Skip { get; set; }
+
+        public int Take { get; set; }
 
     }
 }
