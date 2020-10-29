@@ -269,7 +269,9 @@
                    ip_EvidenceCode = paras.EvidenceCode,
                    ip_SiteName = paras.SiteName,
                    ip_AssStatus = paras.AssociationStatus,
-                   ip_AssType = paras.AssociationType
+                   ip_AssType = paras.AssociationType,
+                   ip_TakeRow = paras.TakeRows,
+                   ip_SkipRow = paras.SkipRows
                 }).Data;
 
                 return result;

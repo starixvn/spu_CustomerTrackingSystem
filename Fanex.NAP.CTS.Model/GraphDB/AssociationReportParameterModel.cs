@@ -17,5 +17,9 @@
         public string EvidenceCode { get; set; }
 
         public int AssociationType { get; set; }
+
+        public int TakeRows { get; set; }
+
+        public int SkipRows { get; set; }
     }
 }
