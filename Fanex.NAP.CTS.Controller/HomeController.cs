@@ -13,6 +13,9 @@
     using System.Text;
     using System.Web.Mvc;
 
+    using Fanex.NAP.CTS.Service.Implement;
+    using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
+
     [NapSuperAuth]
     public class HomeController : BaseController
     {
@@ -24,6 +27,26 @@
             accountService = new AccountService();
             userService = new UserService();
         }
+
+        //[HttpGet]
+        //public void HarveyTest()
+        //{
+        //    var customerClassList = new List<CustomerClassForMainDb>()
+        //    {
+        //        new CustomerClassForMainDb()
+        //        {
+        //            CustID = 443153,
+        //            CustomerClass = -1
+        //        },
+        //        new CustomerClassForMainDb()
+        //        {
+        //            CustID = 40290200,
+        //            CustomerClass = 10
+        //        }
+        //    };
+        //    var feedDataToSoon88Service = new FeedDataToSoon88Service();
+        //    feedDataToSoon88Service.FeedDataToSoon88(customerClassList);
+        //}
 
         public ActionResult Index()
         {

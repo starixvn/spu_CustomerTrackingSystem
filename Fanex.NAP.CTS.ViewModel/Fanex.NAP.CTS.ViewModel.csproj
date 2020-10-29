@@ -88,8 +88,11 @@
     <Compile Include="Evidence\InformationEvidenceByAccountHistory.cs" />
     <Compile Include="Evidence\InformationEvidenceByAccountRetractEvidence.cs" />
     <Compile Include="Evidence\InformationEvidenceByAccountUpdateOfComment.cs" />
-    <Compile Include="FeedDataToSoon88\FeedDataToSoon88ViewModel.cs" />
-    <Compile Include="FeedDataToSoon88\PreparedDataToSoon88ViewModel.cs" />
+    <Compile Include="FeedDataToSoon88\DeleteDataToSoon88ViewModel.cs" />
+    <Compile Include="FeedDataToSoon88\UpdateDataToSoon88ViewModel.cs" />
+    <Compile Include="FeedDataToSoon88\PreparedDeleteDataToSoon88ViewModel.cs" />
+    <Compile Include="FeedDataToSoon88\PreparedUpdateDataToSoon88ViewModel.cs" />
+    <Compile Include="FeedDataToSoon88\S88Result.cs" />
     <Compile Include="FraudCase\DelayedGoal\Customer.cs" />
     <Compile Include="FraudCase\FraudCaseViewModel.cs" />
     <Compile Include="History.cs" />

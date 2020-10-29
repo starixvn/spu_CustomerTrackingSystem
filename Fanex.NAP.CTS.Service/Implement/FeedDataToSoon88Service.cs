@@ -1,18 +1,18 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement
 {
     using Fanex.Data.Repository;
+    using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Criteria.Account;
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
-    using System;
+    using Fanex.NAP.CTS.Resource.Consts;
+    using Fanex.NAP.CTS.ViewModel.FeedDataToSoon88;
+    using Newtonsoft.Json;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Security.Cryptography;
     using System.Text;
     using System.Threading.Tasks;
-    using Newtonsoft.Json;
-    using System.Security.Cryptography;
-    using Fanex.NAP.CTS.ViewModel.FeedDataToSoon88;
-    using Fanex.NAP.CTS.Resource.Consts;
 
     public class FeedDataToSoon88Service
     {
@@ -25,50 +25,91 @@
 
         public void FeedDataToSoon88(IEnumerable<CustomerClassForMainDb> custClasses)
         {
+            var url = "https://player.xoon88.com/fps/updateFPSstatus";
             var updateList = custClasses.Where(c => c.CustomerClass != -1);
             var deleteList = custClasses.Where(c => c.CustomerClass == -1);
 
-            var data = GetAssociationWithCategory(updateList);
-            
+            if (updateList.Any())
+            {
+                UpdateDataToSoon88(updateList, url);
+            }
+
+            if (deleteList.Any())
+            {
+                DeleteDataInSoon88(deleteList, url);
+            }
         }
 
-        private IEnumerable<AssociationWithCategory> GetAssociationWithCategory(IEnumerable<CustomerClassForMainDb> custClasses)
+        private void UpdateDataToSoon88(IEnumerable<CustomerClassForMainDb> updateList, string url)
         {
-            var criteria = new GetAssociationWithCategoryCriteria()
-            {
-                CustIds = string.Join(",", custClasses.Select(c => c.CustID))
-            };
-
-            var result = repository.Fetch<AssociationWithCategory>(criteria);
+            var result = GetAssociationWithCategory(updateList, false);
 
             var dataGroupByAccount = result.GroupBy(a => a.RegisterName);
             foreach (var groupAcc in dataGroupByAccount)
             {
-                var soon88Temp = StatisticAccountByCategoryInS88(groupAcc.Where(c => c.IsSoon88));
-                var othersTemp = StatisticAccountByCategoryNotInS88(groupAcc.Where(c => !c.IsSoon88));
+                var soon88 = StatisticAccountByCategoryInS88(groupAcc.Where(c => c.IsSoon88));
+                var others = StatisticAccountByCategoryNotInS88(groupAcc.Where(c => !c.IsSoon88));
 
-                var tempData = new PreparedDataToSoon88ViewModel()
+                var tempData = new PreparedUpdateDataToSoon88ViewModel()
                 {
-                    Action = "block",
-                    Reason = groupAcc.FirstOrDefault().CategoryName,
-                    Account = groupAcc.Key,
-                    Association = new 
-                    {
-                        soon88Temp,
-                        othersTemp
-                    }                  
-                };               
-
-                var a = new FeedDataToSoon88ViewModel()
-                {
-                    action = "block",
                     reason = groupAcc.FirstOrDefault().CategoryName,
                     account = groupAcc.Key,
-                    association = tempData.Association,
+                    association = new
+                    {
+                        soon88,
+                        others
+                    }
+                };
+
+                var finalData = new UpdateDataToSoon88ViewModel()
+                {
+                    reason = groupAcc.FirstOrDefault().CategoryName,
+                    account = groupAcc.Key,
+                    association = tempData.association,
                     signature = CreateMD5Hash(JsonConvert.SerializeObject(tempData) + Consts.SALT)
                 };
+
+                var returnedData = ApiHelper.Post<S88Result>(url, finalData);
+                Task.WhenAll(returnedData);
+                var a = returnedData.Result;
             }
-            
+        }
+
+        private void DeleteDataInSoon88(IEnumerable<CustomerClassForMainDb> deleteList, string url)
+        {
+            var result = GetAssociationWithCategory(deleteList, true);
+
+            foreach (var item in result)
+            {
+                var tempData = new PreparedDeleteDataToSoon88ViewModel()
+                {
+                    reason = item.CategoryName,
+                    account = item.RegisterName
+                };
+
+                var finalData = new DeleteDataToSoon88ViewModel()
+                {
+                    reason = item.CategoryName,
+                    account = item.RegisterName,
+                    signature = CreateMD5Hash(JsonConvert.SerializeObject(tempData) + Consts.SALT)
+                };
+
+                var returnedData = ApiHelper.Post<S88Result>(url, finalData);
+                Task.WhenAll(returnedData);
+                var a = returnedData.Result;
+                
+            }
+        }
+
+        private IEnumerable<AssociationWithCategory> GetAssociationWithCategory(IEnumerable<CustomerClassForMainDb> custClasses, bool isDelete)
+        {
+            var criteria = new GetAssociationWithCategoryCriteria()
+            {
+                CustIds = string.Join(",", custClasses.Select(c => c.CustID)),
+                IsDelete = isDelete
+            };
+
+            var result = repository.Fetch<AssociationWithCategory>(criteria);
             return result;
         }
 
@@ -96,18 +137,21 @@
 
         private string CreateMD5Hash(string input)
         {
-            // Step 1, calculate MD5 hash from input
-            MD5 md5 = MD5.Create();
-            byte[] inputBytes = Encoding.ASCII.GetBytes(input);
-            byte[] hashBytes = md5.ComputeHash(inputBytes);
-
-            // Step 2, convert byte array to hex string
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < hashBytes.Length; i++)
+            // Use input string to calculate MD5 hash
+            using (MD5 md5 = MD5.Create())
             {
-                sb.Append(hashBytes[i].ToString("X2"));
+                byte[] inputBytes = Encoding.ASCII.GetBytes(input);
+                byte[] hashBytes = md5.ComputeHash(inputBytes);
+
+                // Convert the byte array to hexadecimal string
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < hashBytes.Length; i++)
+                {
+                    sb.Append(hashBytes[i].ToString("x2"));
+                }
+
+                return sb.ToString();
             }
-            return sb.ToString();
         }
 
     }
