@@ -1,5 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Model.AssociationReport
 {
+    using System;
+
     public class AssociationModel
     {
         public int CTSCustId { get; set; }
@@ -16,7 +18,6 @@
 
         public string EvidenceCode { get; set; }
 
-        public string CategoryNames { get; set; }        
-
+        public string CategoryNames { get; set; }
     }
 }

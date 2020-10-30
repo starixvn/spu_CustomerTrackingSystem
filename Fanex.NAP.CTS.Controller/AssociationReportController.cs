@@ -54,8 +54,8 @@
         [HttpPost]
         public ActionResult GetAssociations(AssociationFilterViewModel filter)
         {
+            var associationList = Enumerable.Empty<AssociationViewModel>();           
             var graphAssociations = _associationService.GetAssociations(ConfigSettings.GetAssociations, filter);
-            var associationList = Enumerable.Empty<AssociationViewModel>();
 
             if (graphAssociations != null && graphAssociations.Any())
             {
@@ -80,25 +80,36 @@
             }
 
             return Json( new
-            {
-                data = associationList
+            {                
+                draw = filter.draw,
+                recordsTotal = 9,
+                recordsFiltered = 9,
+                data = associationList               
             }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
-        public ActionResult Detail(int id)
+        public ActionResult Detail(AssociationDetailFilterViewModel filter)
         {
+            ViewBag.UserName = filter.UserName;
+            ViewBag.FromDate = filter.FromDate.ToShortDateString();
+            ViewBag.ToDate = filter.ToDate.ToShortDateString();
+            ViewBag.AssociationType = filter.AssociationType;
+
             return View();
         }
 
         [HttpPost]
         public ActionResult GetAssociationDetail(AssociationDetailFilterViewModel filter)
         {
-            var result = _associationService.GetAssociationDetail(filter);
+            var associationList = _associationService.GetAssociationDetail(filter);
 
             return Json(new
             {
-                data = result
+                draw = filter.draw,
+                recordsTotal = 6,
+                recordsFiltered = 6,
+                data = associationList,
             }, JsonRequestBehavior.AllowGet);
         }
 

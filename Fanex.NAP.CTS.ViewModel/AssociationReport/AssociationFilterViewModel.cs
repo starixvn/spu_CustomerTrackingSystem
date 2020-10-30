@@ -4,6 +4,12 @@
 
     public class AssociationFilterViewModel
     {
+        public int draw { get; set; }
+
+        public int start { get; set; }
+
+        public int length { get; set; }
+
         public DateTime FromDate { get; set; }
 
         public DateTime ToDate { get; set; }
@@ -17,10 +23,6 @@
         public string EvidenceCode { get; set; }
 
         public int AssociationType { get; set; }
-
-        public int Skip { get; set; }
-
-        public int Take { get; set; }
 
     }
 }

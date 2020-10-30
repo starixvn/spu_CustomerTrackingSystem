@@ -1,6 +1,10 @@
 ﻿function AssociationReportDetail() {
     let dataTable;
     let domElements = {
+        hdUserName: $('#hdUserName'),
+        hdFromDate: $('#hdFromDate'),
+        hdToDate: $('#hdToDate'),
+        hdAssociationType: $('#hdAssociationType'),
         lblAccount: $('#lblAccount'),
         lblRangeDate: $('#lblRangeDate'),
         lblAssociatedType: $('#lblAssociatedType'),
@@ -11,33 +15,46 @@
         dataTable
             ? dataTable.ajax.reload(null, true)
             : dataTable = GenerateGrid();
+
+        $('tbody', domElements.tblAssociationDetail).on('click', 'tr.group', function () {
+            let trGroup = $(this);
+            let siteId = trGroup.find('.column-group-site').attr('data-site-id');
+
+            if (siteId !== undefined) {
+                $('tr[data-site-id="' + siteId + '"]', domElements.tblAssociationDetail).each(function () {
+                    let trCurrent = $(this);
+                    if (trCurrent.hasClass('hide')) {
+                        trCurrent.removeClass('hide');
+                        $('i.icon', trGroup).removeClass('icon-chevron-right').addClass('icon-chevron-down');
+                    } else {
+                        trCurrent.addClass('hide');
+                        $('i.icon', trGroup).removeClass('icon-chevron-down').addClass('icon-chevron-right');
+                    }
+                });
+            }
+        });
     } 
 
     function GenerateGrid() {
         return domElements.tblAssociationDetail.DataTable({
-            serverSide: false,
+            serverSide: true,
             ajax: {
                 url: common.modifyRelativeUrl('AssociationReport/GetAssociationDetail'),
-                data: function () {
-                    var paramsFilter = {};                
-                    paramsFilter.AccountStatusIds = "1";
-                    paramsFilter.SiteId = 1;
-                    paramsFilter.AssociationStatuses = "1";
-                    paramsFilter.EvidenceId = 1;
-                    paramsFilter.AssociationType = 1;
-
-                    return paramsFilter;
+                data: {
+                    UserName: domElements.hdUserName.val(),
+                    FromDate: domElements.hdFromDate.val(),
+                    ToDate: domElements.hdToDate.val(),
+                    AssociationType: domElements.hdAssociationType.val()
                 },
                 type: "POST",
                 beforeSend: function () {
-                    domElements.tblAssociationDetail.find('tbody').addClass('loading');                   
+                    domElements.tblAssociationDetail.find('tbody').addClass('loading');
                 },
                 dataFilter: function (response) {
-
                     return response;
                 },
                 complete: function () {
-                    domElements.tblAssociationDetail.find('tbody').removeClass('loading');                    
+                    domElements.tblAssociationDetail.find('tbody').removeClass('loading');
                 },
                 error: function (error) {
                     domElements.tblAssociationDetail.find('tbody').removeClass('loading');
@@ -60,8 +77,8 @@
             },
             ordering: false,
             searching: false,
-            lengthMenu: [20, 50, 100, 200],
-            pageLength: 20,
+            lengthMenu: [2, 50, 100, 200],
+            pageLength: 2,
             scrollX: false,
             scrollCollapse: false,
             columnDefs: [
@@ -72,19 +89,11 @@
                 { targets: [2], width: "15%" },
                 { targets: [3], width: "15%" },
                 { targets: [4], width: "15%" },
-                { targets: [5], width: "15%" }
+                { targets: [5], width: "15%" }                
             ],
             columns: [
-                { data: obj => obj.UserName },
-                {
-                    data: obj => () => {
-                        return html = `<a class='click-view-name'> ${obj.UserName} </a>`;
-                    }, createdCell: (cell, _, row) => {
-                        $('.click-view-name', cell).click(() => {
-                            console.log(row, 'click name');
-                        });
-                    }
-                },
+                { data: obj => obj.SiteName },
+                { data: obj => obj.UserName },               
                 { data: obj => obj.AccountStatus },
                 { data: obj => obj.AssociatedDateString },
                 {

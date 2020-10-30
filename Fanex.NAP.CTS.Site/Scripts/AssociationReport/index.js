@@ -10,7 +10,7 @@
         cbbAssociationType: $('#cbbAssociationType'),
         btnGenerate: $('#btnGenerate'),
         tblAssociation: $('#tblAssociation')
-    };    
+    };
 
     function GetAssociationReport() {
         dataTable
@@ -20,20 +20,17 @@
 
     function GenerateGrid() {
         return domElements.tblAssociation.DataTable({
-            serverSide: false,
+            serverSide: true,
             ajax: {
                 url: common.modifyRelativeUrl('AssociationReport/GetAssociations'),
-                data: function () {
-                    var paramsFilter = {};
-                    paramsFilter.FromDate = domElements.dpkFromDate.val();
-                    paramsFilter.ToDate = domElements.dpkToDate.val();
-                    paramsFilter.AccountStatusIds = "1";
-                    paramsFilter.SiteId = 1;
-                    paramsFilter.AssociationStatuses = "1";
-                    paramsFilter.EvidenceId = 1;
-                    paramsFilter.AssociationType = 1;
-
-                    return paramsFilter;
+                data: {
+                    FromDate: function () { return domElements.dpkFromDate.val(); },
+                    ToDate: function () { return domElements.dpkToDate.val(); },
+                    AccountStatusIds: function () { return domElements.cbbAccountStatus.val(); },
+                    SiteId: function () { return domElements.cbbSite.val(); },
+                    AssociationStatuses: function () { return domElements.cbbAssociationStatus.val(); },
+                    EvidenceId: function () { return domElements.cbbEvidence.val(); },
+                    AssociationType: function () { return domElements.cbbAssociationType.val(); }
                 },
                 type: "POST",
                 beforeSend: function () {
@@ -41,7 +38,6 @@
                     domElements.btnGenerate.prop('disabled', true);
                 },
                 dataFilter: function (response) {
-                    
                     return response;
                 },
                 complete: function () {
@@ -52,7 +48,7 @@
                     domElements.tblAssociation.find('tbody').removeClass('loading');
                     console.log(error);
                 }
-            },
+            },           
             dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
             pagingType: "full_numbers",
             language: {
@@ -69,8 +65,8 @@
             },
             ordering: false,
             searching: false,
-            lengthMenu: [20, 50, 100, 200],
-            pageLength: 50,
+            lengthMenu: [3, 50, 100, 200],
+            pageLength: 3,
             scrollX: false,
             scrollCollapse: false,
             columnDefs: [
@@ -101,7 +97,10 @@
                 { data: obj => obj.CategoryNames },
                 {
                     data: obj => () => {
-                        return html = '<a class="click-view-details" href="AssociationReport/Detail/' + obj.CTSCustId +'" target="_blank">View</a>';
+                        let paramTemplate = "UserName={0}&FromDate={1}&ToDate={2}&AssociationType={4}";
+                        let params = paramTemplate.format(obj.UserName, domElements.dpkFromDate.val(), domElements.dpkToDate.val(), domElements.cbbAssociationType.val());
+
+                        return '<a class="click-view-details" href="AssociationReport/Detail?' + params + '" target="_blank">View</a>';
                     }
                 }
             ]
@@ -134,7 +133,6 @@
     $(document).ready(function () {
         Initial();
     });
- 
 }
 
 $(AssociationReport);

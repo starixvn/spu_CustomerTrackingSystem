@@ -63,24 +63,69 @@
 
         public IEnumerable<AssociationModel> GetAssociations(string apiEndPoint, AssociationFilterViewModel filter)
         {
-            var paramFormat = "AssociatedDateFrom={0}&AssociatedDateTo={1}&AccountStatus={2}&SiteName={3}&AssociationStatus={4}&EvidenceCode={5}&AssociationType={6}";
-            var param = string.Format(paramFormat, filter.FromDate, filter.ToDate, filter.AccountStatusIds, filter.SiteName, filter.AssociationStatuses, filter.EvidenceCode, filter.AssociationType);
-            var urlString = string.Format(apiEndPoint + "?" + param);
+            //var paramFormat = "AssociatedDateFrom={0}&AssociatedDateTo={1}&AccountStatus={2}&SiteName={3}&AssociationStatus={4}&EvidenceCode={5}&AssociationType={6}";
+            //var param = string.Format(paramFormat, filter.FromDate, filter.ToDate, filter.AccountStatusIds, filter.SiteName, filter.AssociationStatuses, filter.EvidenceCode, filter.AssociationType);
+            //var urlString = string.Format(apiEndPoint + "?" + param);
 
-            try
+            //try
+            //{
+            //    var data = ApiHelper.Get<IEnumerable<AssociationModel>>(urlString);
+
+            //    Task.WhenAll(data);
+
+            //    return data.Result ?? new List<AssociationModel>();
+            //}
+            //catch (Exception ex)
+            //{
+            //    LogService.Error("CTS - AssociationReportService GetAssociations - Exception: " + ex.Message, ex);
+            //}
+
+            //return new List<AssociationModel>();
+
+            return GenerateTest();
+        }
+
+        private IEnumerable<AssociationModel> GenerateTest()
+        {
+            var list = new List<AssociationModel>();
+
+            list.Add(new AssociationModel
             {
-                var data = ApiHelper.Get<IEnumerable<AssociationModel>>(urlString);
+                CustId = 1,
+                CTSCustId = 1,
+                AccountStatus = "AccountStatus1",
+                CategoryNames = "CategoryNames1",
+                EvidenceCode = "EvidenceCode1",
+                SiteId = 1,
+                SiteName = "SiteName1",
+                UserName = "UserName1"
+            });
 
-                Task.WhenAll(data);
-
-                return data.Result ?? new List<AssociationModel>();
-            }
-            catch (Exception ex)
+            list.Add(new AssociationModel
             {
-                LogService.Error("CTS - AssociationReportService GetAssociations - Exception: " + ex.Message, ex);
-            }
+                CustId = 2,
+                CTSCustId = 2,
+                AccountStatus = "AccountStatus2",
+                CategoryNames = "CategoryNames2",
+                EvidenceCode = "EvidenceCode2",
+                SiteId = 2,
+                SiteName = "SiteName2",
+                UserName = "UserName2"
+            });
 
-            return new List<AssociationModel>();
+            list.Add(new AssociationModel
+            {
+                CustId = 3,
+                CTSCustId = 3,
+                AccountStatus = "AccountStatus2",
+                CategoryNames = "CategoryNames2",
+                EvidenceCode = "EvidenceCode2",
+                SiteId = 2,
+                SiteName = "SiteName2",
+                UserName = "UserName2"
+            });
+
+            return list;
         }
 
         public IEnumerable<CategoriesModel> GetCategories(string ctsCustIdList)
