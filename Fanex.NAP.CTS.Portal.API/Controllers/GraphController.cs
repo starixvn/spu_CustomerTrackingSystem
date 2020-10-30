@@ -1,15 +1,16 @@
-﻿using Fanex.Logging;
-using Fanex.NAP.CTS.Model.Account;
-using Fanex.NAP.CTS.Model.GraphDB;
-using Fanex.NAP.SPU.Graph.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Http;
-using System.Web.Http.Results;
-
-namespace Fanex.NAP.CTS.Portal.API.Controllers
+﻿namespace Fanex.NAP.CTS.Portal.API.Controllers
 {
+    using Fanex.Logging;
+    using Fanex.NAP.CTS.Model.Account;
+    using Fanex.NAP.CTS.Model.GraphDB;
+    using Fanex.NAP.SPU.Graph.Core;
+    using Newtonsoft.Json;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Http;
+    using System.Web.Http.Results;
+
     /// <summary>
     /// Graph Controller - Using for CTS site
     /// </summary>
@@ -226,6 +227,27 @@ namespace Fanex.NAP.CTS.Portal.API.Controllers
             }
 
             return result;
+        }
+
+
+        [System.Web.Http.AcceptVerbs("GetDirectAssociationDevices")]
+        [HttpGet]
+        public DirectAssociationDeviceModel GetDirectAssociationDevices(long custId)
+        {
+            try
+            {
+               var result = new DirectAssociationDeviceModel();
+               result = DbSessionFactory.Execute<DirectAssociationDeviceModel>("GetDevicesIdByCustId", new { ip_CustID = custId }).Data.SingleOrDefault();
+               result.DirectAssociation = DbSessionFactory.Execute<DirectAssociationModel>("GetAssociatedDevicesByCustId", new { ip_CustID = custId }).Data.ToList();
+               result.TotalDirectAssociation = result.DirectAssociation.Count();
+
+               return result;
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("GetDirectAssociationDevices failed: " + ex.Message + ex.StackTrace);
+                throw;
+            }
         }
     }
 }
