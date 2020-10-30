@@ -28,25 +28,49 @@
             userService = new UserService();
         }
 
-        //[HttpGet]
-        //public void HarveyTest()
-        //{
-        //    var customerClassList = new List<CustomerClassForMainDb>()
-        //    {
-        //        new CustomerClassForMainDb()
-        //        {
-        //            CustID = 443153,
-        //            CustomerClass = -1
-        //        },
-        //        new CustomerClassForMainDb()
-        //        {
-        //            CustID = 40290200,
-        //            CustomerClass = 10
-        //        }
-        //    };
-        //    var feedDataToSoon88Service = new FeedDataToSoon88Service();
-        //    feedDataToSoon88Service.FeedDataToSoon88(customerClassList);
-        //}
+        [HttpGet]
+        public void HarveyTest()
+        {
+            var customerClassList = new List<CustomerClassForMainDb>()
+            {
+                new CustomerClassForMainDb()
+                {
+                    CustID = 40290200,
+                    CustomerClass = -1
+                },
+                new CustomerClassForMainDb()
+                {
+                    CustID = 40290201,
+                    CustomerClass = 10
+                }
+                ,
+                new CustomerClassForMainDb()
+                {
+                    CustID = 40290202,
+                    CustomerClass = 10
+                }
+                ,
+                new CustomerClassForMainDb()
+                {
+                    CustID = 43600928,
+                    CustomerClass = 10
+                }
+                ,
+                new CustomerClassForMainDb()
+                {
+                    CustID = 43600929,
+                    CustomerClass = 10
+                }
+                ,
+                new CustomerClassForMainDb()
+                {
+                    CustID = 443153,
+                    CustomerClass = 10
+                }
+            };
+            var feedDataToSoon88Service = new FeedDataToSoon88Service();
+            feedDataToSoon88Service.FeedDataToSoon88(customerClassList);
+        }
 
         public ActionResult Index()
         {

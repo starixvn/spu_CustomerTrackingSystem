@@ -47,8 +47,8 @@
             var dataGroupByAccount = result.GroupBy(a => a.RegisterName);
             foreach (var groupAcc in dataGroupByAccount)
             {
-                var soon88 = StatisticAccountByCategoryInS88(groupAcc.Where(c => c.IsSoon88));
-                var others = StatisticAccountByCategoryNotInS88(groupAcc.Where(c => !c.IsSoon88));
+                var soon88 = StatisticAccountByCategoryInS88(groupAcc.Where(c => c.IsSoon88.HasValue && c.IsSoon88.Value));
+                var others = StatisticAccountByCategoryNotInS88(groupAcc.Where(c => c.IsSoon88.HasValue && !c.IsSoon88.Value));
 
                 var tempData = new PreparedUpdateDataToSoon88ViewModel()
                 {
@@ -97,7 +97,6 @@
                 var returnedData = ApiHelper.Post<S88Result>(url, finalData);
                 Task.WhenAll(returnedData);
                 var a = returnedData.Result;
-                
             }
         }
 

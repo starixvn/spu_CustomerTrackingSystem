@@ -6,7 +6,7 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    public class UpdateDataToSoon88ViewModel : PreparedUpdateDataToSoon88ViewModel
+    public class DeleteDataToSoon88ViewModel : PreparedDeleteDataToSoon88ViewModel
     {
         public string signature { get; set; }
     }

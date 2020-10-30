@@ -16,6 +16,6 @@
 
         public string AssCategoryName { get; set; }
 
-        public bool IsSoon88 { get; set; }
+        public bool? IsSoon88 { get; set; }
     }
 }
