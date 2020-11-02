@@ -17,5 +17,8 @@
         public string EvidenceCode { get; set; }
 
         public string CategoryNames { get; set; }
+
+        public string AssociationType { get; set; }
+        
     }
 }

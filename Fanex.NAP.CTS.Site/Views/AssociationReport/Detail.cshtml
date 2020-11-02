@@ -24,7 +24,7 @@
                     </div>
                     <div class="group width-180">
                         <label class="text">Association Type:</label>
-                        <p id="lblAssociatedType">@ViewBag.AssociationType</p>
+                        <p id="lblAssociatedType">@ViewBag.AssociationTypeName</p>
                     </div>
                 </div>
             </div>
@@ -51,10 +51,13 @@
 </section>
 
 <div class="hide">
+    <input id="hdSiteId" type="hidden" value="@ViewBag.SiteId" />
+    <input id="hdCTSCustId" type="hidden" value="@ViewBag.CTSCustId" />
     <input id="hdUserName" type="hidden" value="@ViewBag.UserName" />
     <input id="hdFromDate" type="hidden" value="@ViewBag.FromDate" />
     <input id="hdToDate" type="hidden" value="@ViewBag.ToDate" />
     <input id="hdAssociationType" type="hidden" value="@ViewBag.AssociationType" />
+    <input id="hdIsHostPermission" type="hidden" IsHostPermission="@ViewBag.IsHostPermission.ToString()" />
 </div>
 
 @section scripts{

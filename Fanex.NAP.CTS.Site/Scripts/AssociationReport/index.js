@@ -13,9 +13,26 @@
     };
 
     function GetAssociationReport() {
-        dataTable
-            ? dataTable.ajax.reload(null, true)
-            : dataTable = GenerateGrid();
+        if (ValidateRangeDate()) {
+            dataTable
+                ? dataTable.ajax.reload(null, true)
+                : dataTable = GenerateGrid();
+        }        
+    }
+
+    function ValidateRangeDate() {
+        let fromDateValue = domElements.dpkFromDate.datepicker("getDate");
+        let toDateValue = domElements.dpkToDate.datepicker("getDate");
+
+        let differenceDays = toDateValue.getDay() - fromDateValue.getDay();
+
+        if (differenceDays > 3) {
+            common.showError("");
+
+            return false;
+        }
+
+        return true;
     }
 
     function GenerateGrid() {
@@ -30,7 +47,7 @@
                     SiteId: function () { return domElements.cbbSite.val(); },
                     AssociationStatuses: function () { return domElements.cbbAssociationStatus.val(); },
                     EvidenceId: function () { return domElements.cbbEvidence.val(); },
-                    AssociationType: function () { return domElements.cbbAssociationType.val(); }
+                    AssociationType: function () { return domElements.cbbAssociationType.val(); }                    
                 },
                 type: "POST",
                 beforeSend: function () {
@@ -97,8 +114,10 @@
                 { data: obj => obj.CategoryNames },
                 {
                     data: obj => () => {
-                        let paramTemplate = "UserName={0}&FromDate={1}&ToDate={2}&AssociationType={4}";
-                        let params = paramTemplate.format(obj.UserName, domElements.dpkFromDate.val(), domElements.dpkToDate.val(), domElements.cbbAssociationType.val());
+                        let paramTemplate = "SiteId={0}&CTSCustId={1}&UserName={2}&FromDate={3}&ToDate={4}&AssociationType={5}&AssociationTypeName={6}";
+                        let associationTypeName = "";                  
+                        domElements.cbbAssociationType.find('option:selected').each(function () { associationTypeName = $(this).text(); });
+                        let params = paramTemplate.format(obj.SiteId, obj.CTSCustId, obj.UserName, domElements.dpkFromDate.val(), domElements.dpkToDate.val(), domElements.cbbAssociationType.val(), associationTypeName);
 
                         return '<a class="click-view-details" href="AssociationReport/Detail?' + params + '" target="_blank">View</a>';
                     }
@@ -106,23 +125,39 @@
             ]
         });
     }
-  
+
+    function SetRestrictFromDate() {
+        let toDateValue = domElements.dpkToDate.datepicker("getDate");
+
+        domElements.dpkFromDate.datepicker("option", "maxDate", toDateValue);
+    }
+
+    function SetRestrictToDate() {
+        let fromDateValue = domElements.dpkFromDate.datepicker("getDate");
+
+        domElements.dpkToDate
+            .datepicker("option", "minDate", fromDateValue)
+            .datepicker("option", "maxDate", moment(fromDateValue).add(1, "year").toDate());
+    }    
+
     function Initial() {
         domElements.dpkFromDate
             .datepicker({
-                dateFormat: "M dd, yy",              
+                dateFormat: "M dd, yy",
                 changeMonth: true,
                 changeYear: true
             })
-            .datepicker("setDate", new Date());
+            .datepicker("setDate", new Date())
+            .change(SetRestrictToDate);
 
         domElements.dpkToDate
             .datepicker({
-                dateFormat: "M dd, yy",                
+                dateFormat: "M dd, yy",
                 changeMonth: true,
                 changeYear: true
             })
-            .datepicker("setDate", new Date());
+            .datepicker("setDate", new Date())
+            .change(SetRestrictFromDate);
 
         domElements.cbbEvidence.select2();
         domElements.cbbSite.select2();

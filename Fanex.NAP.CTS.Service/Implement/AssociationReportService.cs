@@ -6,6 +6,7 @@
     using System.Threading.Tasks;
     using Fanex.Data;
     using Fanex.Logging;
+    using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Criteria.Account;
     using Fanex.NAP.CTS.Criteria.Account.Associated;
@@ -153,29 +154,59 @@
         {
             var list = new List<AssociationDetailModel>();
 
-            list.Add(new AssociationDetailModel
+            for (int i = 0; i < 100; i++)
             {
-                SiteId = 1,
-                SiteName = "12Bet",
-                AccountStatus = "Open",
-                AssociaionType = "IP",
-                AssociatedDate = DateTime.Now,
-                AssociatedDateString = DateTime.Now.ToShortDateString(),
-                IsLinked = false
-            });
+                list.Add(new AssociationDetailModel
+                {
+                    SiteId = 1,
+                    SiteName = "12Bet",
+                    UserName = "UserName2",
+                    AccountStatus = "Open",
+                    AssociaionType = "IP",
+                    AssociatedDate = DateTime.Now,
+                    AssociatedDateString = DateTime.Now.ToShortDateString(),
+                    IsLinked = false
+                });
 
-            list.Add(new AssociationDetailModel
-            {
-                SiteId = 1,
-                SiteName = "12Bet",
-                AccountStatus = "Open",
-                AssociaionType = "IP",
-                AssociatedDate = DateTime.Now,
-                AssociatedDateString = DateTime.Now.ToShortDateString(),
-                IsLinked = true
-            });
+                list.Add(new AssociationDetailModel
+                {
+                    SiteId = 1,
+                    SiteName = "12Bet",
+                    AccountStatus = "Open",
+                    AssociaionType = "IP",
+                    UserName = "UserName3",
+                    AssociatedDate = DateTime.Now,
+                    AssociatedDateString = DateTime.Now.ToShortDateString(),
+                    IsLinked = true
+                });
+            }           
 
             return list;
         }
+
+        public DBResult ActiveRemoveAssociation(int fromSiteId, long fromCTSCustId, int toSiteId, long toCTSCustId, int createdBy, bool isRemoveAction)
+        {
+            var criteria = new ActiveRemoveAssociationCriteria
+            {
+                FromSubscriberId = fromSiteId,
+                FromCTSCustId = fromCTSCustId,
+                ToSubscriberId = toSiteId,
+                ToCTSCustId = toCTSCustId,
+                CreatedBy = createdBy,
+                IsActionRemove = isRemoveAction
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                db.ExecuteNonQuery(criteria);
+
+                return new DBResult
+                {
+                    ErrorCode = string.IsNullOrWhiteSpace(criteria.ErrorMessage) ? 0 : -1,
+                    ErrorMsg = criteria.ErrorMessage
+                };
+            }
+        }
+
     }
 }

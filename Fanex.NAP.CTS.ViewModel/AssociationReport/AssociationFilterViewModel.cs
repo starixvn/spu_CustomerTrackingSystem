@@ -22,7 +22,6 @@
 
         public string EvidenceCode { get; set; }
 
-        public int AssociationType { get; set; }
-
+        public int AssociationType { get; set; }        
     }
 }

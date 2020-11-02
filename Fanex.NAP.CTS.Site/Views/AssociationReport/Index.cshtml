@@ -68,13 +68,15 @@
                         </div>                        
                     </div>
                     <div class="group width-180">
-                        <label class="text">Association Status:</label>                        
-                        <select class="control width-select" id="cbbAssociationStatus" multiple="multiple">                            
-                            @foreach (var item in ViewBag.AssociationStatus)
-                            {
-                                <option value=@item.ItemId selected>@item.ItemNameDisplay</option>
-                            }
-                        </select>
+                        <label class="text">Association Status:</label>
+                        <div style="width:200px">
+                            <select class="control width-select" id="cbbAssociationStatus" multiple="multiple">
+                                @foreach (var item in ViewBag.AssociationStatus)
+                                {
+                                    <option value=@item.ItemId selected>@item.ItemNameDisplay</option>
+                                }
+                            </select>
+                        </div>                        
                     </div>
                     <div class="group">
                         <label class="text">Evidence:</label> 

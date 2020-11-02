@@ -14,6 +14,7 @@
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Model.Account;
+    using Fanex.NAP.Core.Web.Session;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.AssociationReport, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -31,27 +32,20 @@
         }
 
         public ActionResult Index()
-        {
-            IUserService userService = new UserService();
-
-            var isHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
-                            NapSettings.Settings.SiteId,
-                            FSFunctionKeys.AssociationReport,
-                            NAP.Core.Business.Constant.Policy.Host);
-         
+        {         
             ViewBag.AccountStatus = _associationService.GetAccountStaticStatuses();
             ViewBag.Subscribers = _subscriberService.GetSubscribers();
             ViewBag.Evidences = _associationService.GetEvidenceList();
             ViewBag.AssociationStatus = _associationService.GetCustomerStaticStatus(3, true);
             ViewBag.AssociationTypes = _associationService.GetCustomerStaticStatus(2, true);
 
-            return View(isHostPermission);
+            return View();
         }
 
         [HttpPost]
         public ActionResult GetAssociations(AssociationFilterViewModel filter)
         {
-            var associationList = Enumerable.Empty<AssociationViewModel>();           
+            var associationList = Enumerable.Empty<AssociationViewModel>();
             var graphAssociations = _associationService.GetAssociations(ConfigSettings.GetAssociations, filter);
 
             if (graphAssociations != null && graphAssociations.Any())
@@ -67,6 +61,7 @@
                     return new AssociationViewModel
                     {
                         CTSCustId = x.CTSCustId,
+                        SiteId = x.SiteId,
                         SiteName = x.SiteName,
                         UserName = x.UserName,
                         EvidenceCode = x.EvidenceCode,
@@ -77,21 +72,30 @@
             }
 
             return Json( new
-            {                
+            {
                 draw = filter.draw,
                 recordsTotal = 9,
                 recordsFiltered = 9,
-                data = associationList               
+                data = associationList
             }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
         public ActionResult Detail(AssociationDetailFilterViewModel filter)
         {
+            IUserService userService = new UserService();
+
+            ViewBag.CTSCustId = filter.CTSCustId;
+            ViewBag.SiteId = filter.SiteId;
             ViewBag.UserName = filter.UserName;
             ViewBag.FromDate = filter.FromDate.ToShortDateString();
             ViewBag.ToDate = filter.ToDate.ToShortDateString();
             ViewBag.AssociationType = filter.AssociationType;
+            ViewBag.AssociationTypeName = filter.AssociationTypeName;
+            ViewBag.IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
+                            NapSettings.Settings.SiteId,
+                            FSFunctionKeys.AssociationReport,
+                            NAP.Core.Business.Constant.Policy.Host);
 
             return View();
         }
@@ -104,11 +108,32 @@
             return Json(new
             {
                 draw = filter.draw,
-                recordsTotal = 6,
-                recordsFiltered = 6,
+                recordsTotal = associationList.Count(),
+                recordsFiltered = associationList.Count(),
                 data = associationList,
             }, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.AssociationReport, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        public ActionResult ActiveRemoveAssociation(int fromSiteId, long fromCTSCustId, int toSiteId, long toCTSCustId, bool isLinked)
+        {
+            if (fromSiteId <= 0 || fromCTSCustId <= 0 || toSiteId <= 0 || toCTSCustId <= 0)
+            {
+                return Json(new
+                {
+                    errorCode = -100,
+                    errorMessage = "Paramater is invalid."
+                }, JsonRequestBehavior.AllowGet);
+            }
+            
+            var dbResult = _associationService.ActiveRemoveAssociation(fromSiteId, fromCTSCustId, toSiteId, toCTSCustId, CurrentSession.UserId, isLinked);
+
+            return Json(new
+            {
+                errorCode = dbResult.ErrorCode,
+                errorMessage = dbResult.ErrorMsg
+            }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

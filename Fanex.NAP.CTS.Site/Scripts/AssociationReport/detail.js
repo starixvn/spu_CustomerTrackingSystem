@@ -1,15 +1,20 @@
 ﻿function AssociationReportDetail() {
-    let dataTable;
+    let dataTable;    
     let domElements = {
+        hdSiteId: $('#hdSiteId'),
+        hdCTSCustId: $('#hdCTSCustId'),
         hdUserName: $('#hdUserName'),
         hdFromDate: $('#hdFromDate'),
         hdToDate: $('#hdToDate'),
+        hdIsHostPermission: $('#hdIsHostPermission'),
         hdAssociationType: $('#hdAssociationType'),
         lblAccount: $('#lblAccount'),
         lblRangeDate: $('#lblRangeDate'),
         lblAssociatedType: $('#lblAssociatedType'),
         tblAssociationDetail: $('#tblAssociationDetail')
     };
+
+    let isHostPermission = domElements.hdIsHostPermission.attr('IsHostPermission') === "True";
 
     function GetAssociationDetailReport() {
         dataTable
@@ -77,8 +82,8 @@
             },
             ordering: false,
             searching: false,
-            lengthMenu: [2, 50, 100, 200],
-            pageLength: 2,
+            lengthMenu: [20, 50, 100, 200],
+            pageLength: 50,
             scrollX: false,
             scrollCollapse: false,
             columnDefs: [
@@ -98,10 +103,13 @@
                 { data: obj => obj.AssociatedDateString },
                 {
                     data: obj => RenderAssociationStatus(obj.IsLinked), createdCell: (cell, _, row) => {
-     
+                        if (isHostPermission) {
                             $('.toggle', cell).click(function (e) {
                                 e.preventDefault();
+
+                                ActiveRemove(row, domElements.hdCTSCustId.val(), domElements.hdSiteId.val());
                             });
+                        }
                     }
                 },
                 { data: obj => obj.AssociaionType }
@@ -119,7 +127,7 @@
                     if (last !== group) {
                         let html = '<tr class="group group-site">';
                         html += '<td colspan="5">';
-                        html += '<span class="column-group-site" data-site-id=' + data[i].SiteId + '><i class="icon icon-chevron-right icon-open">' + group + '</i></span>';
+                        html += '<span class="column-group-site" data-site-id=' + data[i].SiteId + '><i class="icon icon-chevron-down icon-open">' + group + '</i></span>';
                         html += '</td></tr>';
 
                         $(rows).eq(i).before(html);
@@ -131,16 +139,59 @@
     }
 
     function RenderAssociationStatus(isLinked) {
-        var html = '<div class="toggle toggle-on" id="switch">';
-        html += '<div class="toggle-text-off"> Unlinked</div >';
-        html += '<div class="glow-comp"></div> <div class="toggle-button"></div>';
-        html += '<div class="toggle-text-on"> Linked</div>';
+        var html = '<div class="toggle ' + (isLinked ? 'toggle-on' : '') + '" id="switch">';
+        html += '<div class="toggle-text-off' + (!isHostPermission ? ' disabled"' : '') + '"> Unlinked</div >';
+        html += '<div class="glow-comp"></div> <div class="toggle-button ' + (!isHostPermission ? ' disabled"' : '') + '"></div>';
+        html += '<div class="toggle-text-on' + (!isHostPermission ? ' disabled"' : '') + '"> Linked</div>';
         html += '</div>';
 
         return html;
     }
 
-    function Initial() {
+    function ActiveRemove(obj, fromSiteId, fromCTSCustId) {
+        common.showConfirmation('Do you want to update Association Status?',
+            function () {
+                RemoveAssociation(fromSiteId, fromCTSCustId, obj.SiteId, obj.CTSCustId, !obj.IsLinked);
+            });
+    }
+
+    function RemoveAssociation(fromSiteId, fromCTSCustId, toSiteId, toCTSCustId, isLinked) {
+        var url = common.modifyRelativeUrl('AssociationReport/ActiveRemoveAssociation');
+        var params = {};
+        params.fromSiteId = parseInt(fromSiteId);
+        params.fromCTSCustId = parseInt(fromCTSCustId);
+        params.toSiteId = toSiteId;
+        params.toCTSCustId = toCTSCustId;
+        params.isLinked = isLinked;
+
+        $.ajax(url, {
+            type: 'POST',
+            data: params,
+            success: function (response) {
+                if (response.errorCode === 0) {
+                    common.showSuccess('Updated association successful!', 2000);
+                }
+                else if (response.errorCode === -1) {
+                    common.showError('This association is already unlinked!');
+                }
+                else {
+                    common.showError('Updated association fail!');
+                }
+            },
+            beforeSend: function () {
+                domElements.tblAssociationDetail.find('tbody').addClass('loading');
+            },          
+            complete: function () {
+                domElements.tblAssociationDetail.find('tbody').removeClass('loading');
+            },
+            error: function (error) {
+                domElements.tblAssociationDetail.find('tbody').removeClass('loading');
+                console.log(error);
+            }
+        });
+    }
+
+    function Initial() {        
         GetAssociationDetailReport();
     }
 

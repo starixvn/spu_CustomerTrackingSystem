@@ -327,6 +327,7 @@
 
             bundles.Add(new StyleBundle("~/association-report-styles").Include(
                 "~/Content/scss/vendors/select2.min.css",
+                "~/Content/scss/MultipleSelect/jquery.multiselect.css",
                 "~/Content/scss/pages/association-report/association-report.css"));
         }
 
