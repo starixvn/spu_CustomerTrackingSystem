@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement
 {
     using Fanex.Data.Repository;
+    using Fanex.Logging;
     using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Criteria.Account;
     using Fanex.NAP.CTS.Model.Association;
@@ -9,6 +10,7 @@
     using Fanex.NAP.CTS.ViewModel.FeedDataToSoon88;
     using Newtonsoft.Json;
     using System.Collections.Generic;
+    using System.Configuration;
     using System.Linq;
     using System.Security.Cryptography;
     using System.Text;
@@ -25,7 +27,8 @@
 
         public void FeedDataToSoon88(IEnumerable<CustomerClassForMainDb> custClasses)
         {
-            var url = "https://player.xoon88.com/fps/updateFPSstatus";
+            //var url = "https://player.xoon88.com/fps/updateFPSstatus";
+            var url = ConfigurationManager.AppSettings["Soon88FeedDataAPI"];
             var updateList = custClasses.Where(c => c.CustomerClass != -1);
             var deleteList = custClasses.Where(c => c.CustomerClass == -1);
 
@@ -71,7 +74,14 @@
 
                 var returnedData = ApiHelper.Post<S88Result>(url, finalData);
                 Task.WhenAll(returnedData);
-                var a = returnedData.Result;
+                if (returnedData.Result.result == "success")
+                {
+                    LogService.Info($"FeedDataToSoon88Helper - UpdateDataToSoon88 success");
+                }
+                else
+                {
+                    LogService.Info($"FeedDataToSoon88Helper - DeleteDataInSoon88 failed");
+                }
             }
         }
 
@@ -96,7 +106,14 @@
 
                 var returnedData = ApiHelper.Post<S88Result>(url, finalData);
                 Task.WhenAll(returnedData);
-                var a = returnedData.Result;
+                if (returnedData.Result.result == "success")
+                {
+                    LogService.Info($"FeedDataToSoon88Helper - UpdateDataToSoon88 success");
+                }
+                else
+                {
+                    LogService.Info($"FeedDataToSoon88Helper - DeleteDataInSoon88 failed");
+                }
             }
         }
 
