@@ -126,6 +126,12 @@
 
         domElements.cbbEvidence.select2();
         domElements.cbbSite.select2();
+        domElements.cbbAssociationStatus.multiselect({
+            menuWidth: 250,
+            menuHeight: 250,
+            selectedText: "# of # selected",
+            noneSelectedText: "Select Association Status"
+        });
 
         domElements.btnGenerate.on('click', function () { GetAssociationReport(); });
     }

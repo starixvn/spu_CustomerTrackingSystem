@@ -38,14 +38,11 @@
                             NapSettings.Settings.SiteId,
                             FSFunctionKeys.AssociationReport,
                             NAP.Core.Business.Constant.Policy.Host);
-
-            var getAssociationStatus = _associationService.GetCustomerStaticStatus(3, true);
-            getAssociationStatus.Insert(0, new CustomerStaticStatusModel { ItemId = 0, ItemNameDisplay = "All" });
-           
+         
             ViewBag.AccountStatus = _associationService.GetAccountStaticStatuses();
             ViewBag.Subscribers = _subscriberService.GetSubscribers();
             ViewBag.Evidences = _associationService.GetEvidenceList();
-            ViewBag.AssociationStatus = getAssociationStatus;
+            ViewBag.AssociationStatus = _associationService.GetCustomerStaticStatus(3, true);
             ViewBag.AssociationTypes = _associationService.GetCustomerStaticStatus(2, true);
 
             return View(isHostPermission);

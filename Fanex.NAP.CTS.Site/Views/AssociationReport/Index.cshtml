@@ -69,21 +69,10 @@
                     </div>
                     <div class="group width-180">
                         <label class="text">Association Status:</label>                        
-                        <select class="control width-select" id="cbbAssociationStatus">
-                            @{
-                                optionSelect = true;
-                            }
+                        <select class="control width-select" id="cbbAssociationStatus" multiple="multiple">                            
                             @foreach (var item in ViewBag.AssociationStatus)
                             {
-                                if (optionSelect)
-                                {
-                                    optionSelect = false;
-                                    <option value=@item.ItemId selected>@item.ItemNameDisplay</option>
-                                }
-                                else
-                                {
-                                    <option value=@item.ItemId>@item.ItemNameDisplay</option>
-                                }
+                                <option value=@item.ItemId selected>@item.ItemNameDisplay</option>
                             }
                         </select>
                     </div>
