@@ -143,24 +143,17 @@
           right: .2rem; }
     .association-content .association-table #association-datatable .table-report .table-association-detail thead tr th {
       position: sticky;
-      top: 17rem;
+      top: 15rem;
       font-weight: 300;
       z-index: 9999; }
-    .association-content .association-table #association-datatable .table-report .table-association-detail tbody .retract, .association-content .association-table #association-datatable .table-report .table-association-detail tbody .affected {
+    .association-content .association-table #association-datatable .table-report .table-association-detail tbody .group-site {
+      background-color: #70809e !important;
       cursor: pointer; }
-      .association-content .association-table #association-datatable .table-report .table-association-detail tbody .retract td, .association-content .association-table #association-datatable .table-report .table-association-detail tbody .affected td {
-        background: #70809e;
-        color: #fff;
-        border: 1px solid #70809e !important; }
-        .association-content .association-table #association-datatable .table-report .table-association-detail tbody .retract td .name-group, .association-content .association-table #association-datatable .table-report .table-association-detail tbody .affected td .name-group {
-          font-size: 1.5rem; }
-        .association-content .association-table #association-datatable .table-report .table-association-detail tbody .retract td .icon, .association-content .association-table #association-datatable .table-report .table-association-detail tbody .affected td .icon {
-          font-size: initial;
-          display: inline-block;
-          transition: all .3s ease; }
-        .association-content .association-table #association-datatable .table-report .table-association-detail tbody .retract td .active-icon, .association-content .association-table #association-datatable .table-report .table-association-detail tbody .affected td .active-icon {
-          display: inline-block;
-          transition: all .3s ease;
-          transform: rotate(90deg); }
+      .association-content .association-table #association-datatable .table-report .table-association-detail tbody .group-site:hover {
+        background-color: #70809e !important; }
+      .association-content .association-table #association-datatable .table-report .table-association-detail tbody .group-site td .column-group-site {
+        font-size: 1.6rem;
+        text-transform: uppercase;
+        color: #fff; }
   .association-content .association-table .detail-association .wrapper-info-table {
-    top: 13rem !important; }
+    top: 11.5rem !important; }

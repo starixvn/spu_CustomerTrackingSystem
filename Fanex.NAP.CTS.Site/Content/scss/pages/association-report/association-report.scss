@@ -224,7 +224,7 @@ body {
 
                             th {
                                 position: sticky;
-                                top: 17rem;
+                                top: 15rem;
                                 font-weight: 300;
                                 z-index: 9999;
                             }
@@ -232,28 +232,18 @@ body {
                     }
 
                     tbody {
-                        .retract, .affected {
-                            cursor: pointer;
+                        .group-site {
+                            background-color: #70809e !important;
+                            cursor : pointer;
+                            &:hover {
+                                background-color: #70809e !important;
+                            }
 
                             td {
-                                background: #70809e;
-                                color: $page-bg;
-                                border: 1px solid #70809e !important;
-
-                                .name-group {
-                                    font-size: 1.5rem;
-                                }
-
-                                .icon {
-                                    font-size: initial;
-                                    display: inline-block;
-                                    transition: all .3s ease;
-                                }
-
-                                .active-icon {
-                                    display: inline-block;
-                                    transition: all .3s ease;
-                                    transform: rotate(90deg);
+                                .column-group-site {
+                                    font-size: 1.6rem;
+                                    text-transform: uppercase;
+                                    color: $page-bg;
                                 }
                             }
                         }
@@ -264,7 +254,7 @@ body {
 
         .detail-association {
             .wrapper-info-table {
-                top: 13rem !important;
+                top: 11.5rem !important;
             }
         }
     }
