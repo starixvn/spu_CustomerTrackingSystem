@@ -126,8 +126,11 @@
                 api.column(0, { page: 'current' }).data().each(function (group, i) {
                     if (last !== group) {
                         let html = '<tr class="group group-site">';
-                        html += '<td colspan="5">';
+                        html += '<td colspan="4">';
                         html += '<span class="column-group-site" data-site-id=' + data[i].SiteId + '><i class="icon icon-chevron-down icon-open"></i>' + group + '</span>';
+                        html += '</td>';
+                        html += '<td class="text-left">';
+                        html += '<span class="name-group total-accounts">Total: ' + data[i].TotalAssociationAccount +' Association Accounts </span>';
                         html += '</td></tr>';
 
                         $(rows).eq(i).before(html);

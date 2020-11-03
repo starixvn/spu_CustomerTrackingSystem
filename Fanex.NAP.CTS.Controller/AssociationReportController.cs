@@ -103,7 +103,25 @@
         [HttpPost]
         public ActionResult GetAssociationDetail(AssociationDetailFilterViewModel filter)
         {
-            var associationList = _associationService.GetAssociationDetail(filter);
+            var associationList = Enumerable.Empty<AssociationDetailViewModel>();
+            var graphAssociations = _associationService.GetAssociationDetail(filter);
+
+            if (graphAssociations != null && graphAssociations.Any())
+            {
+                associationList = graphAssociations.Select(x => new AssociationDetailViewModel
+                {
+                    CTSCustId = x.CTSCustId,
+                    UserName = x.UserName,
+                    SiteId = x.SiteId,
+                    SiteName = x.SiteName,
+                    AccountStatus = x.AccountStatus,
+                    AssociatedDate = x.AssociatedDate,
+                    AssociatedDateString = x.AssociatedDate.ToString(Consts.FormatDateToString_MMMddyyyy),
+                    IsLinked = x.IsLinked,
+                    AssociaionType = x.AssociaionType,
+                    TotalAssociationAccount = 1
+                });
+            }
 
             return Json(new
             {

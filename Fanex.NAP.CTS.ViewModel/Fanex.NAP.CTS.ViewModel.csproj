@@ -78,6 +78,7 @@
     <Compile Include="AssociatedAccountMonitor\AssociatedAccountMonitorDetailViewModel.cs" />
     <Compile Include="AssociatedAccountMonitor\InsertManualAssociatedAccountViewModel.cs" />
     <Compile Include="AssociationReport\AssociationDetailFilterViewModel.cs" />
+    <Compile Include="AssociationReport\AssociationDetailViewModel.cs" />
     <Compile Include="AssociationReport\AssociationFilterViewModel.cs" />
     <Compile Include="AssociationReport\AssociationViewModel.cs" />
     <Compile Include="CheckBetReport\CheckBetTicket.cs" />
