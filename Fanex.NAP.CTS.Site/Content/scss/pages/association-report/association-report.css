@@ -151,9 +151,15 @@
       cursor: pointer; }
       .association-content .association-table #association-datatable .table-report .table-association-detail tbody .group-site:hover {
         background-color: #70809e !important; }
-      .association-content .association-table #association-datatable .table-report .table-association-detail tbody .group-site td .column-group-site {
-        font-size: 1.6rem;
-        text-transform: uppercase;
-        color: #fff; }
+      .association-content .association-table #association-datatable .table-report .table-association-detail tbody .group-site td {
+        border: 1px solid #70809e; }
+        .association-content .association-table #association-datatable .table-report .table-association-detail tbody .group-site td .column-group-site, .association-content .association-table #association-datatable .table-report .table-association-detail tbody .group-site td .total-accounts {
+          font-size: 1.6rem;
+          text-transform: uppercase;
+          color: #fff; }
+        .association-content .association-table #association-datatable .table-report .table-association-detail tbody .group-site td .total-accounts {
+          text-transform: inherit !important;
+          display: block;
+          text-align: center; }
   .association-content .association-table .detail-association .wrapper-info-table {
     top: 11.5rem !important; }
