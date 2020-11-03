@@ -137,7 +137,7 @@
 
         domElements.dpkToDate
             .datepicker("option", "minDate", fromDateValue)
-            .datepicker("option", "maxDate", moment(fromDateValue).add(1, "year").toDate());
+            .datepicker("option", "maxDate", moment(fromDateValue).add(2, "day").toDate());
     }    
 
     function Initial() {

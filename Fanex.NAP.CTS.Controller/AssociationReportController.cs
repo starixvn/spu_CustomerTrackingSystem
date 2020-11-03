@@ -88,8 +88,8 @@
             ViewBag.CTSCustId = filter.CTSCustId;
             ViewBag.SiteId = filter.SiteId;
             ViewBag.UserName = filter.UserName;
-            ViewBag.FromDate = filter.FromDate.ToShortDateString();
-            ViewBag.ToDate = filter.ToDate.ToShortDateString();
+            ViewBag.FromDate = filter.FromDate.ToString(Consts.FormatDateToString_MMMddyyyy);
+            ViewBag.ToDate = filter.ToDate.ToString(Consts.FormatDateToString_MMMddyyyy);
             ViewBag.AssociationType = filter.AssociationType;
             ViewBag.AssociationTypeName = filter.AssociationTypeName;
             ViewBag.IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
@@ -108,6 +108,9 @@
 
             if (graphAssociations != null && graphAssociations.Any())
             {
+                var groupForSite = graphAssociations.GroupBy(x => x.SiteId)
+                    .Select(g => new { SiteId = g.Key, TotalAccounts = g.Count() });
+
                 associationList = graphAssociations.Select(x => new AssociationDetailViewModel
                 {
                     CTSCustId = x.CTSCustId,
@@ -119,7 +122,7 @@
                     AssociatedDateString = x.AssociatedDate.ToString(Consts.FormatDateToString_MMMddyyyy),
                     IsLinked = x.IsLinked,
                     AssociaionType = x.AssociaionType,
-                    TotalAssociationAccount = 1
+                    TotalAssociationAccount = groupForSite.FirstOrDefault(y=>y.SiteId == x.SiteId).TotalAccounts
                 });
             }
 
