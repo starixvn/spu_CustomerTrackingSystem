@@ -265,7 +265,7 @@
         /// <param name="paras"></param>
         /// <returns></returns>
         [System.Web.Http.AcceptVerbs("GetAssociationReport")]
-        [HttpGet]
+        [HttpPost]
         public IEnumerable<AssociationReportModel> GetAssociationReport([FromBody] AssociationReportParameterModel paras)
         {
             IEnumerable<AssociationReportModel> result = null;
@@ -329,7 +329,7 @@
         /// <param name="paras"></param>
         /// <returns></returns>
         [System.Web.Http.AcceptVerbs("GetDetailAssociationReport")]
-        [HttpGet]
+        [HttpPost]
         public GraphAssociationPaging GetDetailAssociationReport([FromBody] AssociationDetailReportParameterModel paras)
         {
             var result = new GraphAssociationPaging() { AssociationList = null, TotalItems = 0 };
