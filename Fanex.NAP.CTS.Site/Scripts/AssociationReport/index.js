@@ -45,7 +45,14 @@
                     ToDate: function () { return domElements.dpkToDate.val(); },
                     AccountStatusIds: function () { return domElements.cbbAccountStatus.val(); },
                     SiteId: function () { return domElements.cbbSite.val(); },
-                    AssociationStatuses: function () { return domElements.cbbAssociationStatus.val(); },
+                    AssociationStatus: function () {
+                        let options = domElements.cbbAssociationStatus.find('option:selected');
+                        let optionSelecteds = domElements.cbbAssociationStatus.find('option:selected');
+
+                        return options.length !== optionSelecteds.length
+                            ? domElements.cbbAssociationStatus.val()
+                            : 0;
+                    },
                     EvidenceId: function () { return domElements.cbbEvidence.val(); },
                     AssociationType: function () { return domElements.cbbAssociationType.val(); }                    
                 },

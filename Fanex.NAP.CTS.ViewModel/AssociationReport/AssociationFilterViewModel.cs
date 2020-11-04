@@ -18,7 +18,7 @@
 
         public string SiteName { get; set; }
 
-        public string AssociationStatuses { get; set; }
+        public int AssociationStatus { get; set; }
 
         public string EvidenceCode { get; set; }
 

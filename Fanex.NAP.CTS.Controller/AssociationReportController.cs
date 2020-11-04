@@ -74,8 +74,8 @@
             return Json( new
             {
                 draw = filter.draw,
-                recordsTotal = 9,
-                recordsFiltered = 9,
+                recordsTotal = associationList.Count(),
+                recordsFiltered = associationList.Count(),
                 data = associationList
             }, JsonRequestBehavior.AllowGet);
         }

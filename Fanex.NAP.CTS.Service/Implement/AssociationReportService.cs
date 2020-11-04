@@ -64,26 +64,20 @@
 
         public IEnumerable<AssociationModel> GetAssociations(string apiEndPoint, AssociationFilterViewModel filter)
         {
-            //var paramFormat = "AssociatedDateFrom={0}&AssociatedDateTo={1}&AccountStatus={2}&SiteName={3}&AssociationStatus={4}&EvidenceCode={5}&AssociationType={6}";
-            //var param = string.Format(paramFormat, filter.FromDate, filter.ToDate, filter.AccountStatusIds, filter.SiteName, filter.AssociationStatuses, filter.EvidenceCode, filter.AssociationType);
-            //var urlString = string.Format(apiEndPoint + "?" + param);
+            try
+            {
+                var data = ApiHelper.Post<IEnumerable<AssociationModel>>(apiEndPoint, filter);
 
-            //try
-            //{
-            //    var data = ApiHelper.Get<IEnumerable<AssociationModel>>(urlString);
+                Task.WhenAll(data);
 
-            //    Task.WhenAll(data);
+                return data.Result ?? new List<AssociationModel>();
+            }
+            catch (Exception ex)
+            {
+                //LogService.Error("CTS - AssociationReportService GetAssociations - Exception: " + ex.Message, ex);
+            }
 
-            //    return data.Result ?? new List<AssociationModel>();
-            //}
-            //catch (Exception ex)
-            //{
-            //    LogService.Error("CTS - AssociationReportService GetAssociations - Exception: " + ex.Message, ex);
-            //}
-
-            //return new List<AssociationModel>();
-
-            return GenerateTest();
+            return new List<AssociationModel>();
         }
 
         private IEnumerable<AssociationModel> GenerateTest()
