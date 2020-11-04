@@ -9,7 +9,9 @@ WHERE c.CTSCustID = $ip_CTSCustId AND
 	OR  ($ip_CheckCreatedTime = 1 AND datetime(r.CreatedDate) >= datetime($ip_AssCreatedFrom) AND datetime(r.CreatedDate) <= datetime($ip_AssCreatedTo))
 
 WITH c,c2,r
-OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c2)-[rs:BELONG_TO_SITE]->(s:Site)
+OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c2)
+WITH c,c2,r,e
+OPTIONAL MATCH (c2)-[rs:BELONG_TO_SITE]->(s:Site)
 RETURN c2.CTSCustID as CTSCustID, c2.CustID AS CustId, c2.UserName AS Username, c2.UserName2 AS Username2, 3 as AssociationType, -1 AS SharedDevices, -1 AS SharedIPs, CASE c2.SubscriberID WHEN null THEN -1 ELSE c2.SubscriberID END AS SubscriberId, apoc.date.format(r.CreatedDate,"ms","yyyy-MM-dd HH:mm:ss") as AssociationDateGMT0, CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus,
 		s.SiteID as SiteID, s.Site as SiteName
 ',{ip_CTSCustId: $CTSCustID, ip_assStatus: $AssStatus, ip_CheckCreatedTime: $CheckCreatedTime, ip_AssCreatedFrom: $AssCreatedFrom, ip_AssCreatedTo: $AssCreatedTo}) YIELD value 

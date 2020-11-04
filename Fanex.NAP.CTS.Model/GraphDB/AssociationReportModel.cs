@@ -12,5 +12,7 @@
         public string AccountStatus { get; set; }
 
         public List<string> EvidenceCodes { get; set; }
+
+        public int SubscriberId { get; set; }
     }
 }
