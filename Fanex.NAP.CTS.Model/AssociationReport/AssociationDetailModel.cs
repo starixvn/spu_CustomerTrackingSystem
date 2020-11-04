@@ -8,7 +8,9 @@
 
         public string UserName { get; set; }
 
-        public int SiteId { get; set; }
+        public int SubscriberId { get; set; }
+
+        public int? SiteID { get; set; }
 
         public string SiteName { get; set; }
 
@@ -18,7 +20,7 @@
 
         public string AssociatedDateString { get; set; }
 
-        public bool IsLinked { get; set; }
+        public int AssociationStatus { get; set; }
 
         public string AssociaionType { get; set; }
     }

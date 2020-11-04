@@ -10,6 +10,8 @@
 
         public int length { get; set; }
 
+        public int SubscriberId { get; set; }
+
         public int SiteId { get; set; }
 
         public int CTSCustId { get; set; }

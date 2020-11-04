@@ -1,7 +1,7 @@
 ﻿function AssociationReportDetail() {
     let dataTable;    
     let domElements = {
-        hdSiteId: $('#hdSiteId'),
+        hdSubscriberId: $('#hdSubscriberId'),
         hdCTSCustId: $('#hdCTSCustId'),
         hdUserName: $('#hdUserName'),
         hdFromDate: $('#hdFromDate'),
@@ -91,7 +91,8 @@
             scrollCollapse: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 3, 4, 5], className: "text-center" },
+                { targets: [1], className: "text-left" },
+                { targets: [0, 2, 3, 4, 5], className: "text-center" },
                 { targets: [0], width: "10%", visible: false },
                 { targets: [1], width: "10%" },
                 { targets: [2], width: "15%" },
@@ -110,7 +111,7 @@
                             $('.toggle', cell).click(function (e) {
                                 e.preventDefault();
 
-                                ActiveRemove(row, domElements.hdCTSCustId.val(), domElements.hdSiteId.val());
+                                ActiveRemove(cell, row, domElements.hdCTSCustId.val(), domElements.hdSubscriberId.val());
                             });
                         }
                     }
@@ -145,7 +146,7 @@
     }
 
     function RenderAssociationStatus(isLinked) {
-        var html = '<div class="toggle ' + (isLinked ? 'toggle-on' : '') + '" id="switch">';
+        let html = '<div class="toggle ' + (isLinked ? 'toggle-on' : '') + '" id="switch">';
         html += '<div class="toggle-text-off' + (!isHostPermission ? ' disabled"' : '') + '"> Unlinked</div >';
         html += '<div class="glow-comp"></div> <div class="toggle-button ' + (!isHostPermission ? ' disabled"' : '') + '"></div>';
         html += '<div class="toggle-text-on' + (!isHostPermission ? ' disabled"' : '') + '"> Linked</div>';
@@ -154,19 +155,25 @@
         return html;
     }
 
-    function ActiveRemove(obj, fromSiteId, fromCTSCustId) {
+    function ActiveRemove(cell, obj, fromCTSCustId, fromSubscriberId) {
         common.showConfirmation('Do you want to update Association Status?',
             function () {
-                RemoveAssociation(fromSiteId, fromCTSCustId, obj.SiteId, obj.CTSCustId, !obj.IsLinked);
+                let toggleElement = $("#switch", cell);
+                let isLinked = false;
+                if (toggleElement.hasClass("toggle-on")) {
+                    isLinked = true;
+                }
+
+                RemoveAssociation(cell, fromSubscriberId, fromCTSCustId, obj.SubscriberId, obj.CTSCustId, isLinked);
             });
     }
 
-    function RemoveAssociation(fromSiteId, fromCTSCustId, toSiteId, toCTSCustId, isLinked) {
+    function RemoveAssociation(cell, fromSubscriberId, fromCTSCustId, toSubscriberId, toCTSCustId, isLinked) {
         var url = common.modifyRelativeUrl('AssociationReport/ActiveRemoveAssociation');
         var params = {};
-        params.fromSiteId = parseInt(fromSiteId);
+        params.fromSubscriberId = parseInt(fromSubscriberId);
         params.fromCTSCustId = parseInt(fromCTSCustId);
-        params.toSiteId = toSiteId;
+        params.toSubscriberId = toSubscriberId;
         params.toCTSCustId = toCTSCustId;
         params.isLinked = isLinked;
 
@@ -176,6 +183,7 @@
             success: function (response) {
                 if (response.errorCode === 0) {
                     common.showSuccess('Updated association successful!', 2000);
+                    ToggleLinked(cell);
                 }
                 else if (response.errorCode === -1) {
                     common.showError('This association is already unlinked!');
@@ -195,6 +203,16 @@
                 console.log(error);
             }
         });
+    }
+
+    function ToggleLinked(cell) {
+        let toggleElement = $("#switch", cell);
+
+        if (toggleElement.hasClass("toggle-on")) {
+            toggleElement.addClass("toggle-off").removeClass("toggle-on");
+        } else {
+            toggleElement.addClass("toggle-on").removeClass("toggle-off");
+        }
     }
 
     function Initial() {        

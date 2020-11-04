@@ -107,7 +107,7 @@
                 { data: obj => obj.CategoryNames },
                 {
                     data: obj => () => {
-                        let paramTemplate = "SiteId={0}&CTSCustId={1}&UserName={2}&FromDate={3}&ToDate={4}&AssociationStatus={5}&AssociationType={6}&AssociationTypeName={7}";
+                        let paramTemplate = "SubscriberId={0}&CTSCustId={1}&UserName={2}&FromDate={3}&ToDate={4}&AssociationStatus={5}&AssociationType={6}&AssociationTypeName={7}";
                         let associationTypeName = "";                  
                         domElements.cbbAssociationType.find('option:selected').each(function () { associationTypeName = $(this).text(); });
 
@@ -117,8 +117,9 @@
                             ? domElements.cbbAssociationStatus.val()
                             : 0;
                         
-                        let params = paramTemplate.format(obj.SiteId,
-                            obj.CTSCustId, obj.UserName,
+                        let params = paramTemplate.format(obj.SubscriberId,
+                            obj.CTSCustId, 
+                            obj.UserName,
                             domElements.dpkFromDate.val(),
                             domElements.dpkToDate.val(),
                             associationStatus,

@@ -9,12 +9,9 @@
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.ViewModel.AssociationReport;
     using Fanex.NAP.CTS.Core.Utilities;
-    using System.Linq;
-    using System.Collections.Generic;
+    using System.Linq;    
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.Service.Implement;
-    using Fanex.NAP.CTS.Model.Account;
-    using Fanex.NAP.Core.Web.Session;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.AssociationReport, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -61,6 +58,7 @@
                     return new AssociationViewModel
                     {
                         CTSCustId = x.CTSCustId,
+                        SubscriberId = x.SubscriberId,
                         SiteId = x.SiteId,
                         SiteName = filter.SiteName,
                         UserName = x.UserName,
@@ -86,7 +84,7 @@
             IUserService userService = new UserService();
 
             ViewBag.CTSCustId = filter.CTSCustId;
-            ViewBag.SiteId = filter.SiteId;
+            ViewBag.SubscriberId = filter.SubscriberId;            
             ViewBag.UserName = filter.UserName;
             ViewBag.FromDate = filter.FromDate.ToString(Consts.FormatDateToString_MMMddyyyy);
             ViewBag.ToDate = filter.ToDate.ToString(Consts.FormatDateToString_MMMddyyyy);
@@ -109,21 +107,22 @@
 
             if (graphAssociations != null && graphAssociations.Any())
             {
-                var groupForSite = graphAssociations.GroupBy(x => x.SiteId)
+                var groupForSite = graphAssociations.GroupBy(x => x.SiteID)
                     .Select(g => new { SiteId = g.Key, TotalAccounts = g.Count() });
 
                 associationList = graphAssociations.Select(x => new AssociationDetailViewModel
                 {
                     CTSCustId = x.CTSCustId,
                     UserName = x.UserName,
-                    SiteId = x.SiteId,
-                    SiteName = x.SiteName,
+                    SubscriberId = x.SubscriberId,
+                    SiteId = x.SiteID.HasValue ? x.SiteID.Value : 0,
+                    SiteName = !string.IsNullOrEmpty(x.SiteName) ? x.SiteName : "-",
                     AccountStatus = x.AccountStatus,
                     AssociatedDate = x.AssociatedDate,
                     AssociatedDateString = x.AssociatedDate.ToString(Consts.FormatDateToString_MMMddyyyy),
-                    IsLinked = x.IsLinked,
+                    IsLinked = x.AssociationStatus == 1,
                     AssociaionType = x.AssociaionType,
-                    TotalAssociationAccount = groupForSite.FirstOrDefault(y=>y.SiteId == x.SiteId).TotalAccounts
+                    TotalAssociationAccount = groupForSite.FirstOrDefault(y=>y.SiteId == x.SiteID).TotalAccounts
                 });
             }
 
@@ -138,9 +137,9 @@
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AssociationReport, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult ActiveRemoveAssociation(int fromSiteId, long fromCTSCustId, int toSiteId, long toCTSCustId, bool isLinked)
+        public ActionResult ActiveRemoveAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, bool isLinked)
         {
-            if (fromSiteId <= 0 || fromCTSCustId <= 0 || toSiteId <= 0 || toCTSCustId <= 0)
+            if (fromSubscriberId <= 0 || fromCTSCustId <= 0 || toSubscriberId <= 0 || toCTSCustId <= 0)
             {
                 return Json(new
                 {
@@ -149,7 +148,7 @@
                 }, JsonRequestBehavior.AllowGet);
             }
             
-            var dbResult = _associationService.ActiveRemoveAssociation(fromSiteId, fromCTSCustId, toSiteId, toCTSCustId, CurrentSession.UserId, isLinked);
+            var dbResult = _associationService.ActiveRemoveAssociation(fromSubscriberId, fromCTSCustId, toSubscriberId, toCTSCustId, CurrentSession.UserId, isLinked);
 
             return Json(new
             {

@@ -143,13 +143,13 @@
             return new List<AssociationDetailModel>();
         }       
 
-        public DBResult ActiveRemoveAssociation(int fromSiteId, long fromCTSCustId, int toSiteId, long toCTSCustId, int createdBy, bool isRemoveAction)
+        public DBResult ActiveRemoveAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, int createdBy, bool isRemoveAction)
         {
             var criteria = new ActiveRemoveAssociationCriteria
             {
-                FromSubscriberId = fromSiteId,
+                FromSubscriberId = fromSubscriberId,
                 FromCTSCustId = fromCTSCustId,
-                ToSubscriberId = toSiteId,
+                ToSubscriberId = toSubscriberId,
                 ToCTSCustId = toCTSCustId,
                 CreatedBy = createdBy,
                 IsActionRemove = isRemoveAction
