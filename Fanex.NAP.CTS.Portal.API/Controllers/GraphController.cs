@@ -84,6 +84,9 @@
                 {
                     CTSCustID = ctsCustId,
                     AssStatus = assStatus,
+                    CheckCreatedTime = 0,
+                    AssCreatedFrom = DateTime.MinValue,
+                    AssCreatedTo = DateTime.MinValue,
                     Skip = skipRow,
                     Pagesize = takeRow
                 }).Data.FirstOrDefault();
@@ -107,6 +110,9 @@
                 {
                     CTSCustID = ctsCustId,
                     AssStatus = assStatus,
+                    CheckCreatedTime = 0,
+                    AssCreatedFrom = DateTime.MinValue,
+                    AssCreatedTo = DateTime.MinValue,
                     Skip = skipRow,
                     Pagesize = takeRow
                 }).Data.FirstOrDefault();
@@ -135,6 +141,9 @@
                 {
                     CTSCustID = ctsCustId,
                     AssStatus = assStatus,
+                    CheckCreatedTime = 0,
+                    AssCreatedFrom = DateTime.MinValue,
+                    AssCreatedTo = DateTime.MinValue,
                     Skip = skipRow,
                     Pagesize = takeRow
                 }).Data.FirstOrDefault();
@@ -259,28 +268,118 @@
         [HttpGet]
         public IEnumerable<AssociationReportModel> GetAssociationReport([FromBody] AssociationReportParameterModel paras)
         {
+            IEnumerable<AssociationReportModel> result = null;
+
             try
             {
-                var result = DbSessionFactory.Execute<AssociationReportModel>("GetAssociationReport", new
+                if (paras != null)
                 {
-                   ip_AssCreatedFrom = paras.AssociatedDateFrom,
-                   ip_AssCreatedTo = paras.AssociatedDateTo,
-                   ip_AccountStatus = paras.AccountStatus,
-                   ip_EvidenceCode = paras.EvidenceCode,
-                   ip_SiteName = paras.SiteName,
-                   ip_AssStatus = paras.AssociationStatus,
-                   ip_AssType = paras.AssociationType,
-                   ip_TakeRow = paras.TakeRows,
-                   ip_SkipRow = paras.SkipRows
-                }).Data;
+                    string script = string.Empty;
+                    switch (paras.AssociationType)
+                    {
+                        case 1:
+                            {
+                                script = "GetAssociationReportByDevice";
+                                break;
+                            }
+                        case 2:
+                            {
+                                script = "GetAssociationReportByManual";
+                                break;
+                            }
+                        case 3:
+                            {
+                                script = "GetAssociationReportByIP";
+                                break;
+                            }
+                    }
 
-                return result;
+                    if(string.IsNullOrEmpty(script))
+                    {
+                        return result;
+                    }
+
+                    var queryResult = DbSessionFactory.Execute<AssociationReportModel>(script, new
+                    {
+                        ip_AssCreatedFrom = paras.AssociatedDateFrom,
+                        ip_AssCreatedTo = paras.AssociatedDateTo,
+                        ip_AccountStatus = paras.AccountStatuses,
+                        ip_EvidenceCode = paras.EvidenceCode,
+                        ip_SiteName = paras.SiteName,
+                        ip_AssStatus = paras.AssociationStatus,
+                        ip_TakeRows = paras.TakeRow,
+                        ip_SkipRows = paras.SkipRow
+                    }).Data;
+
+                    return queryResult;
+                }
             }
             catch (Exception ex)
             {
                 LogService.Error("GetAssociationReport failed: " + ex.Message + ex.StackTrace);
                 throw;
             }
+
+            return result;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="paras"></param>
+        /// <returns></returns>
+        [System.Web.Http.AcceptVerbs("GetDetailAssociationReport")]
+        [HttpGet]
+        public GraphAssociationPaging GetDetailAssociationReport([FromBody] AssociationDetailReportParameterModel paras)
+        {
+            var result = new GraphAssociationPaging() { AssociationList = null, TotalItems = 0 };
+            try
+            {
+                if (paras != null)
+                {
+                    string script = string.Empty;
+                    switch (paras.AssociationType)
+                    {
+                        case 1:
+                            {
+                                script = "GetAssociationOneLevelByCustIdByDevice";
+                                break;
+                            }
+                        case 2:
+                            {
+                                script = "GetAssociationOneLevelByCustIdByManual";
+                                break;
+                            }
+                        case 3:
+                            {
+                                script = "GetAssociationOneLevelByCustIdByIP";
+                                break;
+                            }
+                    }
+
+                    if (!string.IsNullOrEmpty(script))
+                    {
+                        result = DbSessionFactory.Execute<GraphAssociationPaging>(script, new
+                        {
+                            CTSCustID = paras.CTSCustId,
+                            AssStatus = paras.AssociationStatus,
+                            CheckCreatedTime = 1,
+                            AssCreatedFrom = paras.AssociatedDateFrom,
+                            AssCreatedTo = paras.AssociatedDateTo,
+                            Skip = paras.SkipRow,
+                            Pagesize = paras.TakeRow
+                        }).Data.FirstOrDefault();
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("GetDetailAssociationReport failed: " + ex.Message + ex.StackTrace);
+                throw;
+            }
+
+            return result;
         }
     }
 }

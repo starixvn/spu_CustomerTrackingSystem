@@ -1,0 +1,34 @@
+﻿//
+// Generate Site node label 
+//
+CALL apoc.periodic.commit(
+" MATCH (c:CTSCustomer)  WHERE exists(c.SiteID) and  exists(c.Site)
+  WITH c LIMIT {size}
+  MERGE (s:Site {SiteID: c.SiteID})
+  ON CREATE SET s.Site = c.Site
+  MERGE (c)-[:BELONG_TO_SITE]->(s)
+  REMOVE c.SiteID, c.Site
+  RETURN count(*)",
+  {size:5000})
+
+//
+// Generate Static node label
+//
+USING PERIODIC COMMIT 10000
+LOAD CSV WITH HEADERS FROM 'file:///static_list.csv' as line
+WITH line
+MERGE (s:Static {ItemID: toInteger(line.ItemID)})
+ON CREATE SET s.ListID = toInteger(line.ListID), s.ListName = line.ListName, s.ListNameDisplay = line.ListNameDisplay, s.ItemName = line.ItemName, s.ItemNameDisplay = line.ItemNameDisplay
+              , s.PriorityOrder = line.PriorityOrder, s.Status = line.Status, s.Description = line.Description, s.CreatedDate = line.CreatedDate
+
+//
+// Generate Relationship between CTSCustomer and Static
+//
+CALL apoc.periodic.commit(
+ " MATCH (c:CTSCustomer) WHERE exists(c.CustStatusID)
+  WITH c LIMIT {size}
+  MATCH (s:Static), (c)  WHERE c.CustStatusID = s.ItemID
+  MERGE (c)-[:HAS_STATIC]->(s)
+  REMOVE c.CustStatusID
+  RETURN count(*)",
+  {size:5000})

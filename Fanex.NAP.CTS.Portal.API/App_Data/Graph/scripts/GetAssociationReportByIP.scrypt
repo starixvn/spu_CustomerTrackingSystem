@@ -1,0 +1,34 @@
+﻿//      Created:	jonas.huynh
+//		Task:		Association Report [Redmine ID: #131499]       
+//		Param's Explanation (filtered by):
+//				- ip_AssCreatedFrom, ip_AssCreatedTo
+//				- ip_AccountStatus : (single selection) Disabled ; Open includes Active; Closed includes Suspended, View Only, Disabled, Inactive
+//				- ip_SiteName 
+//				- ip_AssStatus: 0:All; 1:Link; 2: Unlink  (multi-selection)
+//				- ip_EvidenceCode
+//				- ip_AssType:  1: Device; 2:Manual; 3:IP  (single-selction)
+
+CALL apoc.cypher.run('
+MATCH (site:Site) <-[:BELONG_TO_SITE]-(c:CTSCustomer)-[:HAS_STATIC]->(s:Static)
+WHERE s.ItemID IN $ip_AccountStatus AND site.Site = trim($ip_SiteName)
+WITH c
+MATCH (e:Evidence)<-[re1:HAS_EVIDENCE]-(c)-[rp1:USED_IP]->(i:IP)<-[rp2:USED_IP]-(c1:CTSCustomer)
+WHERE   c.Site = trim($ip_SiteName)
+		AND e.EvidenceCode = trim($ip_EvidenceCode)
+		AND 
+        	    (($ip_AssStatus = 0) 
+         	 OR ($ip_AssStatus = 1 AND NOT EXISTS ((c)-[:HAS_EXCEPTION]-(c1)))
+         	 OR ($ip_AssStatus = 2 AND EXISTS ((c)-[:HAS_EXCEPTION]-(c1))))  
+		AND	 
+			    ((datetime(rp1.CreatedTime) > datetime(rp2.CreatedTime) AND datetime(rp1.CreatedTime) >= datetime($ip_AssCreatedFrom) AND datetime(rp1.CreatedTime) <= datetime($ip_AssCreatedTo))
+			 OR (datetime(rp2.CreatedTime) > datetime(rp1.CreatedTime) AND datetime(rp2.CreatedTime) >= datetime($ip_AssCreatedFrom) AND datetime(rp2.CreatedTime) <= datetime($ip_AssCreatedTo)))
+WITH c,e
+OPTIONAL MATCH (s:Static) <-[:HAS_STATIC]-(c)-[HAS_EVIDENCE]->(e1:Evidence)
+with  c,s, collect(Distinct e1.EvidenceCode) as listEvidenceCode
+RETURN Distinct c.CTSCustID as CTSCustID, c.UserName AS Username, s.ItemName as AccountStatus, listEvidenceCode as EvidenceCode
+',{ip_AssCreatedFrom: $ip_AssCreatedFrom, ip_AssCreatedTo: $ip_AssCreatedTo,ip_AccountStatus: $ip_AccountStatus,ip_SiteName:$ip_SiteName, ip_AssStatus: $ip_AssStatus,ip_EvidenceCode: $ip_EvidenceCode}) YIELD value
+WITH value
+ORDER BY value.AccountStatus DESC
+SKIP $ip_SkipRows
+LIMIT $ip_TakeRows
+RETURN value

@@ -8,7 +8,7 @@
 
         public DateTime AssociatedDateTo { get; set; }
 
-        public int AccountStatus { get; set; }
+        public string AccountStatuses { get; set; }
 
         public string SiteName { get; set; }
 
@@ -18,8 +18,8 @@
 
         public int AssociationType { get; set; }
 
-        public int TakeRows { get; set; }
+        public int TakeRow { get; set; }
 
-        public int SkipRows { get; set; }
+        public int SkipRow { get; set; }
     }
 }

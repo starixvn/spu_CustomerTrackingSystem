@@ -8,7 +8,7 @@
 
         public string Username { get; set; }
 
-        public string AccountStatus { get; set; } //todo: update after restructure grapdb
+        public string AccountStatus { get; set; }
 
         public string EvidenceCode { get; set; }
     }
