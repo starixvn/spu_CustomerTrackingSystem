@@ -1,16 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Functions>
   <Function Name="Evidence">
-    <Setting Key="CTS_DC_CustEvidence_InsertSingle" SpName="CTS_DC_CustEvidence_InsertSingle" DbName="MySQL.CTS_DataCenter" />
-    <Setting Key="CTS_DC_CustEvidence_InsertMultilpleEvidencesForCustomers" SpName="CTS_DC_CustEvidence_InsertMultilpleEvidencesForCustomers" DbName="MySQL.CTS_DataCenter" />
-    <Setting Key="CTS_DC_CustEvidence_InsertMultiple_ByCustId"
-             SpName="CTS_DC_CustEvidence_InsertMultiple_ByCustId" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_CustEvidence_InsertSingle" SpName="CTS_DC_CustEvidence_InsertSingle" DbName="MySQL.CTS_DataCenter.Admin" />
+    <Setting Key="CTS_DC_CustEvidence_InsertMultilpleEvidencesForCustomers" SpName="CTS_DC_CustEvidence_InsertMultilpleEvidencesForCustomers" DbName="MySQL.CTS_DataCenter.Admin" />
+    <Setting Key="CTS_DC_CustEvidence_InsertMultiple_ByCustId" SpName="CTS_DC_CustEvidence_InsertMultiple_ByCustId" DbName="MySQL.CTS_DataCenter.Admin" />
   </Function>
 
   <Function Name="CustomerClassification">
-    <Setting Key="CTS_DC_CustClassification_Get4API" SpName="CTS_DC_CustClassification_Get4API" DbName="MySQL.CTS_DataCenter" />
-    <Setting Key="CTS_DC_CustClassification_GetAllByCategory" SpName="CTS_DC_CustClassification_GetAllByCategory" DbName="MySQL.CTS_DataCenter" />
-    <Setting Key="CTS_DC_CustClassification_GetLatestCategory" SpName="CTS_DC_CustClassification_GetLatestCategory" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_CustClassification_Get4API" SpName="CTS_DC_CustClassification_Get4API" DbName="MySQL.CTS_DataCenter.Reporter" />
+    <Setting Key="CTS_DC_CustClassification_GetAllByCategory" SpName="CTS_DC_CustClassification_GetAllByCategory" DbName="MySQL.CTS_DataCenter.Reporter" />
+    <Setting Key="CTS_DC_CustClassification_GetLatestCategory" SpName="CTS_DC_CustClassification_GetLatestCategory" DbName="MySQL.CTS_DataCenter.Reporter" />
+    <Setting Key="CTS_DC_InsertCategorizedProblemAccounts" SpName="CTS_DC_InsertCategorizedProblemAccounts" DbName="MySQL.CTS_DataCenter.Admin"/>
     <Setting Key="Acc_CustomerUpdateCustomerClass" SpName="Acc_CustomerUpdateCustomerClass" DbName="DBCust.CustDB.bodbAdminNet" TimeOut="300" />
   </Function>
 
@@ -19,11 +19,6 @@
   </Function>
 
   <Function Name="Customer">
-    <Setting Key="CTS_DC_CustInfo_CheckCustNotExistedByCustIds" SpName="CTS_DC_CustInfo_CheckCustNotExistedByCustIds" DbName="MySQL.CTS_DataCenter" />
+    <Setting Key="CTS_DC_CustInfo_CheckCustNotExistedByCustIds" SpName="CTS_DC_CustInfo_CheckCustNotExistedByCustIds" DbName="MySQL.CTS_DataCenter.Reporter" />
   </Function>
-
-  <Function Name="Auto Mark Problem Account">
-    <Setting Key="CTS_DC_InsertCategorizedProblemAccounts" SpName="CTS_DC_InsertCategorizedProblemAccounts" DbName="MySQL.CTS_DataCenter"/>
-  </Function>
-  
 </Functions>

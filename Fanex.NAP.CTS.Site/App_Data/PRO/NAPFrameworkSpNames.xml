@@ -1,5 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-
 <Functions>
 
   <Function Name="Site">
@@ -189,7 +188,7 @@
       <Mapping DataField="ModifierId" ObjectProperty="Id" />
       <Mapping DataField="ModifierUsername" ObjectProperty="Username" />
     </Setting>
-    <Setting Key="NAP_Cust_UpdatePassword" SpName="NAP_Cust_UpdatePassword" DbName="DBTXN.CustDB.bodbAdminNet" />
+    <Setting Key="NAP_Cust_UpdatePassword" SpName="NAP_Cust_UpdatePassword" DbName="DBCust.CustDB.bodbAdminNet" />
     <Setting Key="NAP_Cust_Update" SpName="NAP_Cust_Update" DbName="DBNAP.bodb_NAP.bodbAdminNet" />
     <Setting Key="NAP_User_SSOGetTime" SpName="NAP_User_SSOGetTime" DbName="DBNAP.bodb_NAP.bodbAdminNet" />
   </Function>
