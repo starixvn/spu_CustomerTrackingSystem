@@ -62,7 +62,7 @@
                     {
                         CTSCustId = x.CTSCustId,
                         SiteId = x.SiteId,
-                        SiteName = x.SiteName,
+                        SiteName = filter.SiteName,
                         UserName = x.UserName,
                         EvidenceCode = x.EvidenceCode,
                         AccountStatus = x.AccountStatus,
@@ -90,6 +90,7 @@
             ViewBag.UserName = filter.UserName;
             ViewBag.FromDate = filter.FromDate.ToString(Consts.FormatDateToString_MMMddyyyy);
             ViewBag.ToDate = filter.ToDate.ToString(Consts.FormatDateToString_MMMddyyyy);
+            ViewBag.AssociationStatus = filter.AssociationStatus;
             ViewBag.AssociationType = filter.AssociationType;
             ViewBag.AssociationTypeName = filter.AssociationTypeName;
             ViewBag.IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
@@ -104,7 +105,7 @@
         public ActionResult GetAssociationDetail(AssociationDetailFilterViewModel filter)
         {
             var associationList = Enumerable.Empty<AssociationDetailViewModel>();
-            var graphAssociations = _associationService.GetAssociationDetail(filter);
+            var graphAssociations = _associationService.GetAssociationDetail(ConfigSettings.GetAssociationDetail, filter);
 
             if (graphAssociations != null && graphAssociations.Any())
             {

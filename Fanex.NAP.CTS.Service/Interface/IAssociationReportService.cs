@@ -18,7 +18,7 @@
 
         IEnumerable<CategoriesModel> GetCategories(string ctsCustIdList);
 
-        IEnumerable<AssociationDetailModel> GetAssociationDetail(AssociationDetailFilterViewModel filter);
+        IEnumerable<AssociationDetailModel> GetAssociationDetail(string apiEndPoint, AssociationDetailFilterViewModel filter);
 
         DBResult ActiveRemoveAssociation(int fromSiteId, long fromCTSCustId, int toSiteId, long toCTSCustId, int createdBy, bool isRemoveAction);
     }

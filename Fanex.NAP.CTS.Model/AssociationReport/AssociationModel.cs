@@ -1,6 +1,8 @@
 ﻿namespace Fanex.NAP.CTS.Model.AssociationReport
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
     public class AssociationModel
     {
@@ -16,7 +18,19 @@
 
         public string AccountStatus { get; set; }
 
-        public string EvidenceCode { get; set; }
+        public string EvidenceCode {
+            get
+            {
+                if (EvidenceCodes == null || EvidenceCodes.Any())
+                {
+                    return string.Join(",", EvidenceCodes);
+                }
+
+                return string.Empty;
+            }
+        }
+
+        public List<string> EvidenceCodes { get; set; }
 
         public string CategoryNames { get; set; }
     }

@@ -13,26 +13,9 @@
     };
 
     function GetAssociationReport() {
-        if (ValidateRangeDate()) {
-            dataTable
-                ? dataTable.ajax.reload(null, true)
-                : dataTable = GenerateGrid();
-        }        
-    }
-
-    function ValidateRangeDate() {
-        let fromDateValue = domElements.dpkFromDate.datepicker("getDate");
-        let toDateValue = domElements.dpkToDate.datepicker("getDate");
-
-        let differenceDays = toDateValue.getDay() - fromDateValue.getDay();
-
-        if (differenceDays > 3) {
-            common.showError("");
-
-            return false;
-        }
-
-        return true;
+        dataTable
+            ? dataTable.ajax.reload(null, true)
+            : dataTable = GenerateGrid();
     }
 
     function GenerateGrid() {
@@ -44,16 +27,21 @@
                     FromDate: function () { return domElements.dpkFromDate.val(); },
                     ToDate: function () { return domElements.dpkToDate.val(); },
                     AccountStatusIds: function () { return domElements.cbbAccountStatus.val(); },
-                    SiteId: function () { return domElements.cbbSite.val(); },
+                    SiteName: function () {
+                        var selectedSites = [];
+                        domElements.cbbSite.find('option:selected').each(function () { selectedSites.push($(this).text()); });
+
+                        return selectedSites.length !== 0 ? selectedSites.join(',') : "";
+                    },
                     AssociationStatus: function () {
-                        let options = domElements.cbbAssociationStatus.find('option:selected');
+                        let options = domElements.cbbAssociationStatus.find('option');
                         let optionSelecteds = domElements.cbbAssociationStatus.find('option:selected');
 
                         return options.length !== optionSelecteds.length
                             ? domElements.cbbAssociationStatus.val()
                             : 0;
                     },
-                    EvidenceId: function () { return domElements.cbbEvidence.val(); },
+                    EvidenceCode: function () { return domElements.cbbEvidence.val(); },
                     AssociationType: function () { return domElements.cbbAssociationType.val(); }                    
                 },
                 type: "POST",
@@ -95,17 +83,15 @@
             scrollCollapse: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 3, 4, 5, 6], className: "text-center" },
-                { targets: [0], width: "5%" },
+                { targets: [0, 1, 2, 3, 4, 5], className: "text-center" },
+                { targets: [0], width: "15%" },
                 { targets: [1], width: "15%" },
                 { targets: [2], width: "15%" },
                 { targets: [3], width: "15%" },
                 { targets: [4], width: "15%" },
-                { targets: [5], width: "15%" },
-                { targets: [6], width: "15%" }
+                { targets: [5], width: "15%" }
             ],            
-            columns: [
-                { data: obj => obj.UserName },
+            columns: [                
                 {
                     data: obj => () => {
                         return html = `<a class='click-view-name'> ${obj.UserName} </a>`;
@@ -121,10 +107,23 @@
                 { data: obj => obj.CategoryNames },
                 {
                     data: obj => () => {
-                        let paramTemplate = "SiteId={0}&CTSCustId={1}&UserName={2}&FromDate={3}&ToDate={4}&AssociationType={5}&AssociationTypeName={6}";
+                        let paramTemplate = "SiteId={0}&CTSCustId={1}&UserName={2}&FromDate={3}&ToDate={4}&AssociationStatus={5}&AssociationType={6}&AssociationTypeName={7}";
                         let associationTypeName = "";                  
                         domElements.cbbAssociationType.find('option:selected').each(function () { associationTypeName = $(this).text(); });
-                        let params = paramTemplate.format(obj.SiteId, obj.CTSCustId, obj.UserName, domElements.dpkFromDate.val(), domElements.dpkToDate.val(), domElements.cbbAssociationType.val(), associationTypeName);
+
+                        let statusOptions = domElements.cbbAssociationStatus.find('option');
+                        let statusOptionSelecteds = domElements.cbbAssociationStatus.find('option:selected');
+                        let associationStatus = statusOptions.length !== statusOptionSelecteds.length
+                            ? domElements.cbbAssociationStatus.val()
+                            : 0;
+                        
+                        let params = paramTemplate.format(obj.SiteId,
+                            obj.CTSCustId, obj.UserName,
+                            domElements.dpkFromDate.val(),
+                            domElements.dpkToDate.val(),
+                            associationStatus,
+                            domElements.cbbAssociationType.val(),
+                            associationTypeName);
 
                         return '<a class="click-view-details" href="AssociationReport/Detail?' + params + '" target="_blank">View</a>';
                     }

@@ -66,7 +66,20 @@
         {
             try
             {
-                var data = ApiHelper.Post<IEnumerable<AssociationModel>>(apiEndPoint, filter);
+                var param = new
+                {
+                    AssociatedDateFrom = filter.FromDate,
+                    AssociatedDateTo = filter.ToDate,
+                    AccountStatuses = filter.AccountStatusIds,
+                    filter.SiteName,
+                    filter.AssociationStatus,
+                    filter.EvidenceCode,
+                    filter.AssociationType,
+                    TakeRow = filter.length,
+                    SkipRow = filter.start
+                };
+
+                var data = ApiHelper.Post<IEnumerable<AssociationModel>>(apiEndPoint, param);
 
                 Task.WhenAll(data);
 
@@ -74,7 +87,7 @@
             }
             catch (Exception ex)
             {
-                //LogService.Error("CTS - AssociationReportService GetAssociations - Exception: " + ex.Message, ex);
+                LogService.Error("CTS - AssociationReportService GetAssociations - Exception: " + ex.Message, ex);
             }
 
             return new List<AssociationModel>();
@@ -90,7 +103,7 @@
                 CTSCustId = 1,
                 AccountStatus = "AccountStatus1",
                 CategoryNames = "CategoryNames1",
-                EvidenceCode = "EvidenceCode1",
+                EvidenceCodes = new List<string>() { "EvidenceCodes" },
                 SiteId = 1,
                 SiteName = "SiteName1",
                 UserName = "UserName1"
@@ -102,7 +115,7 @@
                 CTSCustId = 2,
                 AccountStatus = "AccountStatus2",
                 CategoryNames = "CategoryNames2",
-                EvidenceCode = "EvidenceCode2",
+                EvidenceCodes = new List<string>() { "EvidenceCodes" },
                 SiteId = 2,
                 SiteName = "SiteName2",
                 UserName = "UserName2"
@@ -114,7 +127,7 @@
                 CTSCustId = 3,
                 AccountStatus = "AccountStatus2",
                 CategoryNames = "CategoryNames2",
-                EvidenceCode = "EvidenceCode2",
+                EvidenceCodes = new List<string>() { "EvidenceCodes" },
                 SiteId = 2,
                 SiteName = "SiteName2",
                 UserName = "UserName2"
@@ -144,7 +157,36 @@
             return new List<CategoriesModel>();
         }
 
-        public IEnumerable<AssociationDetailModel> GetAssociationDetail(AssociationDetailFilterViewModel filter)
+        public IEnumerable<AssociationDetailModel> GetAssociationDetail(string apiEndPoint, AssociationDetailFilterViewModel filter)
+        {
+            try
+            {
+                var param = new
+                {
+                    filter.CTSCustId,
+                    AssociatedDateFrom = filter.FromDate,
+                    AssociatedDateTo = filter.ToDate,
+                    filter.AssociationStatus,
+                    filter.AssociationType,
+                    TakeRow = filter.length,
+                    SkipRow = filter.start
+                };
+
+                var data = ApiHelper.Post<IEnumerable<AssociationDetailModel>>(apiEndPoint, param);
+
+                Task.WhenAll(data);
+
+                return data.Result ?? new List<AssociationDetailModel>();
+            }
+            catch (Exception ex)
+            {
+                //LogService.Error("CTS - AssociationReportService GetAssociationDetail - Exception: " + ex.Message, ex);
+            }
+
+            return new List<AssociationDetailModel>();
+        }
+
+        public IEnumerable<AssociationDetailModel> GenerateDetailTest(AssociationDetailFilterViewModel filter)
         {
             var list = new List<AssociationDetailModel>();
 
@@ -173,7 +215,7 @@
                     AssociatedDateString = DateTime.Now.ToShortDateString(),
                     IsLinked = true
                 });
-            }           
+            }
 
             return list;
         }

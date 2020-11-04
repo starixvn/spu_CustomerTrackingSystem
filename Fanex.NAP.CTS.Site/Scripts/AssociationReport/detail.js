@@ -6,8 +6,9 @@
         hdUserName: $('#hdUserName'),
         hdFromDate: $('#hdFromDate'),
         hdToDate: $('#hdToDate'),
-        hdIsHostPermission: $('#hdIsHostPermission'),
+        hdAssociationStatus: $('#hdAssociationStatus'),        
         hdAssociationType: $('#hdAssociationType'),
+        hdIsHostPermission: $('#hdIsHostPermission'),
         lblAccount: $('#lblAccount'),
         lblRangeDate: $('#lblRangeDate'),
         lblAssociatedType: $('#lblAssociatedType'),
@@ -49,6 +50,7 @@
                     UserName: domElements.hdUserName.val(),
                     FromDate: domElements.hdFromDate.val(),
                     ToDate: domElements.hdToDate.val(),
+                    AssociationStatus: domElements.hdAssociationStatus.val(),
                     AssociationType: domElements.hdAssociationType.val()
                 },
                 type: "POST",

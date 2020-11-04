@@ -19,8 +19,10 @@
         public DateTime FromDate { get; set; }
 
         public DateTime ToDate { get; set; }
-     
-        public string AssociationType { get; set; }
+
+        public int AssociationStatus { get; set; }
+
+        public int AssociationType { get; set; }
 
         public string AssociationTypeName { get; set; }
         
