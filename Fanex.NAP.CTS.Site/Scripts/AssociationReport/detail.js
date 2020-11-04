@@ -47,6 +47,7 @@
             ajax: {
                 url: common.modifyRelativeUrl('AssociationReport/GetAssociationDetail'),
                 data: {
+                    CTSCustId: domElements.hdCTSCustId.val(),
                     UserName: domElements.hdUserName.val(),
                     FromDate: domElements.hdFromDate.val(),
                     ToDate: domElements.hdToDate.val(),

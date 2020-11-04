@@ -77,8 +77,8 @@
             },
             ordering: false,
             searching: false,
-            lengthMenu: [3, 50, 100, 200],
-            pageLength: 3,
+            lengthMenu: [20, 50, 100, 200],
+            pageLength: 50,
             scrollX: false,
             scrollCollapse: false,
             columnDefs: [

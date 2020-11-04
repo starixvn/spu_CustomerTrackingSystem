@@ -93,49 +93,6 @@
             return new List<AssociationModel>();
         }
 
-        private IEnumerable<AssociationModel> GenerateTest()
-        {
-            var list = new List<AssociationModel>();
-
-            list.Add(new AssociationModel
-            {
-                CustId = 1,
-                CTSCustId = 1,
-                AccountStatus = "AccountStatus1",
-                CategoryNames = "CategoryNames1",
-                EvidenceCodes = new List<string>() { "EvidenceCodes" },
-                SiteId = 1,
-                SiteName = "SiteName1",
-                UserName = "UserName1"
-            });
-
-            list.Add(new AssociationModel
-            {
-                CustId = 2,
-                CTSCustId = 2,
-                AccountStatus = "AccountStatus2",
-                CategoryNames = "CategoryNames2",
-                EvidenceCodes = new List<string>() { "EvidenceCodes" },
-                SiteId = 2,
-                SiteName = "SiteName2",
-                UserName = "UserName2"
-            });
-
-            list.Add(new AssociationModel
-            {
-                CustId = 3,
-                CTSCustId = 3,
-                AccountStatus = "AccountStatus2",
-                CategoryNames = "CategoryNames2",
-                EvidenceCodes = new List<string>() { "EvidenceCodes" },
-                SiteId = 2,
-                SiteName = "SiteName2",
-                UserName = "UserName2"
-            });
-
-            return list;
-        }
-
         public IEnumerable<CategoriesModel> GetCategories(string ctsCustIdList)
         {
             var criteria = new AssociationReportGetCategoriesCriteria
@@ -180,45 +137,11 @@
             }
             catch (Exception ex)
             {
-                //LogService.Error("CTS - AssociationReportService GetAssociationDetail - Exception: " + ex.Message, ex);
+                LogService.Error("CTS - AssociationReportService GetAssociationDetail - Exception: " + ex.Message, ex);
             }
 
             return new List<AssociationDetailModel>();
-        }
-
-        public IEnumerable<AssociationDetailModel> GenerateDetailTest(AssociationDetailFilterViewModel filter)
-        {
-            var list = new List<AssociationDetailModel>();
-
-            for (int i = 0; i < 100; i++)
-            {
-                list.Add(new AssociationDetailModel
-                {
-                    SiteId = 1,
-                    SiteName = "12Bet",
-                    UserName = "UserName2",
-                    AccountStatus = "Open",
-                    AssociaionType = "IP",
-                    AssociatedDate = DateTime.Now,
-                    AssociatedDateString = DateTime.Now.ToShortDateString(),
-                    IsLinked = false
-                });
-
-                list.Add(new AssociationDetailModel
-                {
-                    SiteId = 1,
-                    SiteName = "12Bet",
-                    AccountStatus = "Open",
-                    AssociaionType = "IP",
-                    UserName = "UserName3",
-                    AssociatedDate = DateTime.Now,
-                    AssociatedDateString = DateTime.Now.ToShortDateString(),
-                    IsLinked = true
-                });
-            }
-
-            return list;
-        }
+        }       
 
         public DBResult ActiveRemoveAssociation(int fromSiteId, long fromCTSCustId, int toSiteId, long toCTSCustId, int createdBy, bool isRemoveAction)
         {
