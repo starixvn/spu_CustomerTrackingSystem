@@ -21,14 +21,14 @@ WHERE   e.EvidenceCode = trim($ip_EvidenceCode)
 	    AND 
 			    ((datetime(r1.CreatedTime) > datetime(r2.CreatedTime) AND datetime(r1.CreatedTime) >= datetime($ip_AssCreatedFrom) AND datetime(r1.CreatedTime) <= datetime($ip_AssCreatedTo))
        	     OR 
-                (datetime(r2.CreatedTime) >= datetime(r1.CreatedTime) AND datetime(r2.CreatedTime) >= datetime($ip_AssCreatedFrom) AND datetime(r2.CreatedTime) <= datetime($ip_AssCreatedTo)))
+               (datetime(r2.CreatedTime) >= datetime(r1.CreatedTime) AND datetime(r2.CreatedTime) >= datetime($ip_AssCreatedFrom) AND datetime(r2.CreatedTime) <= datetime($ip_AssCreatedTo)))
 WITH c,e
 OPTIONAL MATCH (s:Static) <-[:HAS_STATIC]-(c)-[HAS_EVIDENCE]->(e1:Evidence)
 with c, s, collect(Distinct e1.EvidenceCode) as listEvidenceCode
 RETURN Distinct c.CTSCustID as CTSCustID, c.UserName AS Username, s.ItemName as AccountStatus, listEvidenceCode as EvidenceCode
-',{ip_AssCreatedFrom: $ip_AssCreatedFrom, ip_AssCreatedTo: $ip_AssCreatedTo,ip_AccountStatus: $ip_AccountStatus,ip_SiteName:$ip_SiteName, ip_AssStatus: $ip_AssStatus,ip_EvidenceCode: $ip_EvidenceCode}) YIELD value
+',{ip_AssCreatedFrom: $ip_AssCreatedFrom, ip_AssCreatedTo: $ip_AssCreatedTo, ip_AccountStatus: $ip_AccountStatus, ip_SiteName:$ip_SiteName, ip_AssStatus: $ip_AssStatus,ip_EvidenceCode: $ip_EvidenceCode}) YIELD value
 WITH value
 ORDER BY value.AccountStatus DESC
 SKIP $ip_SkipRows
 LIMIT $ip_TakeRows
-RETURN value
+RETURN  COLLECT(value) as AssociationList

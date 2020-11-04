@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Model.GraphDB
 {
     using System;
+    using System.Collections.Generic;
 
     public class AssociationReportModel
     {
@@ -10,6 +11,6 @@
 
         public string AccountStatus { get; set; }
 
-        public string EvidenceCode { get; set; }
+        public List<string> EvidenceCode { get; set; }
     }
 }

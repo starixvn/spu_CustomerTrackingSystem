@@ -299,25 +299,24 @@
                         return result;
                     }
 
-                    var queryResult = DbSessionFactory.Execute<AssociationReportModel>(script, new
+                    var queryResult = DbSessionFactory.Execute<AssociationReportPagingModel>(script, new
                     {
                         ip_AssCreatedFrom = paras.AssociatedDateFrom,
                         ip_AssCreatedTo = paras.AssociatedDateTo,
-                        ip_AccountStatus = paras.AccountStatuses,
+                        ip_AccountStatus = paras.AccountStatuses.Split(',').Select(int.Parse),
                         ip_EvidenceCode = paras.EvidenceCode,
                         ip_SiteName = paras.SiteName,
                         ip_AssStatus = paras.AssociationStatus,
                         ip_TakeRows = paras.TakeRow,
                         ip_SkipRows = paras.SkipRow
-                    }).Data;
+                    }).Data.FirstOrDefault();
 
-                    return queryResult;
+                    return queryResult.AssociationList;
                 }
             }
             catch (Exception ex)
             {
                 LogService.Error("GetAssociationReport failed: " + ex.Message + ex.StackTrace);
-                throw;
             }
 
             return result;
@@ -376,7 +375,6 @@
             catch (Exception ex)
             {
                 LogService.Error("GetDetailAssociationReport failed: " + ex.Message + ex.StackTrace);
-                throw;
             }
 
             return result;

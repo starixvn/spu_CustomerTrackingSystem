@@ -26,9 +26,9 @@ WITH c,e
 OPTIONAL MATCH (s:Static) <-[:HAS_STATIC]-(c)-[HAS_EVIDENCE]->(e1:Evidence)
 with  c,s, collect(Distinct e1.EvidenceCode) as listEvidenceCode
 RETURN Distinct c.CTSCustID as CTSCustID, c.UserName AS Username, s.ItemName as AccountStatus, listEvidenceCode as EvidenceCode
-',{ip_AssCreatedFrom: $ip_AssCreatedFrom, ip_AssCreatedTo: $ip_AssCreatedTo,ip_AccountStatus: $ip_AccountStatus,ip_SiteName:$ip_SiteName, ip_AssStatus: $ip_AssStatus,ip_EvidenceCode: $ip_EvidenceCode}) YIELD value
+',{ip_AssCreatedFrom:$ip_AssCreatedFrom, ip_AssCreatedTo:$ip_AssCreatedTo, ip_AccountStatus:$ip_AccountStatus, ip_SiteName:$ip_SiteName, ip_AssStatus:$ip_AssStatus, ip_EvidenceCode:$ip_EvidenceCode}) YIELD value
 WITH value
 ORDER BY value.AccountStatus DESC
 SKIP $ip_SkipRows
 LIMIT $ip_TakeRows
-RETURN value
+RETURN  COLLECT(value) as AssociationList
