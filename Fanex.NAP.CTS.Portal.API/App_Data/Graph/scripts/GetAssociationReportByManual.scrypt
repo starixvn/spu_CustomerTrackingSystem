@@ -23,7 +23,7 @@ WHERE   e.EvidenceCode = trim($ip_EvidenceCode)
 WITH c,e,s
 OPTIONAL MATCH (s:Static) <-[:HAS_STATIC]-(c)-[HAS_EVIDENCE]->(e1:Evidence)
 with c, s, collect(Distinct e1.EvidenceCode) as listEvidenceCode
-RETURN Distinct c.CTSCustID as CTSCustID, c.UserName AS Username, s.ItemName AS AccountStatus, listEvidenceCode as EvidenceCode
+RETURN Distinct c.CTSCustID as CTSCustID, c.UserName AS Username, s.ItemName AS AccountStatus, listEvidenceCode as EvidenceCodes
 ',{ip_AssCreatedFrom:$ip_AssCreatedFrom, ip_AssCreatedTo:$ip_AssCreatedTo, ip_AccountStatus:$ip_AccountStatus, ip_SiteName:$ip_SiteName, ip_AssStatus:$ip_AssStatus, ip_EvidenceCode:$ip_EvidenceCode}) YIELD value
 WITH value
 ORDER BY value.AccountStatus DESC

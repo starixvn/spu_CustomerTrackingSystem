@@ -11,6 +11,6 @@
 
         public string AccountStatus { get; set; }
 
-        public List<string> EvidenceCode { get; set; }
+        public List<string> EvidenceCodes { get; set; }
     }
 }
