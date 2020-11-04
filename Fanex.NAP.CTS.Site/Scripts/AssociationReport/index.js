@@ -94,11 +94,8 @@
             columns: [                
                 {
                     data: obj => () => {
-                        return html = `<a class='click-view-name'> ${obj.UserName} </a>`;
-                    }, createdCell: (cell, _, row) => {
-                        $('.click-view-name', cell).click(() => {
-                            console.log(row, 'click name');
-                        });
+                        let url = common.modifyRelativeUrl('Account/Index/' + obj.CTSCustId);
+                        return html = `<a class='click-view-name' href=${url}> ${obj.UserName} </a>`;
                     }
                 },
                 { data: obj => obj.SiteName },

@@ -90,9 +90,8 @@
             scrollX: false,
             scrollCollapse: false,
             columnDefs: [
-                { targets: "_all", defaultContent: "-" },
-                { targets: [1], className: "text-left" },
-                { targets: [0, 2, 3, 4, 5], className: "text-center" },
+                { targets: "_all", defaultContent: "-" },                
+                { targets: [0, 1, 2, 3, 4, 5], className: "text-center" },
                 { targets: [0], width: "10%", visible: false },
                 { targets: [1], width: "10%" },
                 { targets: [2], width: "15%" },
@@ -102,7 +101,12 @@
             ],
             columns: [
                 { data: obj => obj.SiteName },
-                { data: obj => obj.UserName },               
+                {
+                    data: obj => () => {
+                        let url = common.modifyRelativeUrl('Account/Index/' + obj.CTSCustId);
+                        return html = `<a class='click-view-name' href=${url}> ${obj.UserName} </a>`;
+                    }
+                },
                 { data: obj => obj.AccountStatus },
                 { data: obj => obj.AssociatedDateString },
                 {
