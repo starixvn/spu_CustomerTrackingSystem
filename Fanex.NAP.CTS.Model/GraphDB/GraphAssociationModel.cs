@@ -54,7 +54,7 @@ namespace Fanex.NAP.CTS.Model.GraphDB
             return Enum.GetName(typeof(AssociationType), associationType);
         }
 
-        public int SiteID { get; set; }
+        public int? SiteID { get; set; }
 
         public string SiteName { get; set; }
     }

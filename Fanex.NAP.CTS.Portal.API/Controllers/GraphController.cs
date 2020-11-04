@@ -329,9 +329,10 @@
         /// <returns></returns>
         [System.Web.Http.AcceptVerbs("GetDetailAssociationReport")]
         [HttpPost]
-        public GraphAssociationPaging GetDetailAssociationReport([FromBody] AssociationDetailReportParameterModel paras)
+        public IEnumerable<GraphAssociationModel> GetDetailAssociationReport([FromBody] AssociationDetailReportParameterModel paras)
         {
-            var result = new GraphAssociationPaging() { AssociationList = null, TotalItems = 0 };
+            IEnumerable<GraphAssociationModel> result = null;
+
             try
             {
                 if (paras != null)
@@ -358,7 +359,7 @@
 
                     if (!string.IsNullOrEmpty(script))
                     {
-                        result = DbSessionFactory.Execute<GraphAssociationPaging>(script, new
+                        var queryResult = DbSessionFactory.Execute<GraphAssociationPaging>(script, new
                         {
                             CTSCustID = paras.CTSCustId,
                             AssStatus = paras.AssociationStatus,
@@ -369,6 +370,7 @@
                             Pagesize = paras.TakeRow
                         }).Data.FirstOrDefault();
 
+                        return queryResult.AssociationList;
                     }
                 }
             }
