@@ -12,7 +12,7 @@ CALL apoc.cypher.run('
 MATCH (site:Site) <-[:BELONG_TO_SITE]-(c:CTSCustomer)-[:HAS_STATIC]->(s:Static)
 WHERE s.ItemID IN $ip_AccountStatus AND site.Site = trim($ip_SiteName)
 WITH c
-MATCH (e:Evidence)<-[re1:HAS_EVIDENCE]-(c:CTSCustomer)-[m:ADD_MANUALLY]-(c1:CTSCustomer)
+MATCH (e:Evidence)<-[re1:HAS_EVIDENCE]-(c)-[m:ADD_MANUALLY]-(c1:CTSCustomer)
 WHERE   e.EvidenceCode = trim($ip_EvidenceCode)
 		AND 
         	    (($ip_AssStatus = 0) 
@@ -20,7 +20,7 @@ WHERE   e.EvidenceCode = trim($ip_EvidenceCode)
          	 OR ($ip_AssStatus = 2 AND EXISTS ((c)-[:HAS_EXCEPTION]-(c1))))
 	    AND 	 
 			 (datetime(m.CreatedDate) >= datetime($ip_AssCreatedFrom) AND datetime(m.CreatedDate) <= datetime($ip_AssCreatedTo))
-WITH c,e,s
+WITH c,e
 OPTIONAL MATCH (s:Static) <-[:HAS_STATIC]-(c)-[HAS_EVIDENCE]->(e1:Evidence)
 with c, s, collect(Distinct e1.EvidenceCode) as listEvidenceCode
 RETURN Distinct c.CTSCustID as CTSCustID, c.UserName AS Username, s.ItemName AS AccountStatus, listEvidenceCode as EvidenceCodes, CASE c.SubscriberID WHEN null THEN -1 ELSE c.SubscriberID END AS SubscriberId
