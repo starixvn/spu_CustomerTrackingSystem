@@ -50,7 +50,7 @@
 
             if (graphAssociations != null && graphAssociations.AssociationList != null && graphAssociations.AssociationList.Any())
             {
-                total = graphAssociations.Total;
+                total = graphAssociations.TotalItems;
                 var ctsCustIdList = string.Join(",", graphAssociations.AssociationList.Select(x => x.CTSCustId).Distinct());
 
                 var categories = _associationService.GetCategories(ctsCustIdList);
@@ -112,7 +112,7 @@
 
             if (graphAssociations != null && graphAssociations.AssociationList != null && graphAssociations.AssociationList.Any())
             {
-                total = graphAssociations.Total;
+                total = graphAssociations.TotalItems;
                 var associationTypes = _associationService.GetCustomerStaticStatus(2, true);
 
                 var groupForSite = graphAssociations.AssociationList.GroupBy(x => x.SiteID)
