@@ -27,25 +27,32 @@
 
         public void FeedDataToSoon88(IEnumerable<CustomerClassForMainDb> custClasses)
         {
-            //var url = "https://player.xoon88.com/fps/updateFPSstatus";
+            LogService.Info("FeedDataToSoon88 is starting...");
             var url = ConfigurationManager.AppSettings["Soon88FeedDataAPI"];
             var updateList = custClasses.Where(c => c.CustomerClass != -1);
             var deleteList = custClasses.Where(c => c.CustomerClass == -1);
 
             if (updateList.Any())
             {
+                LogService.Info("FeedDataToSoon88 - UpdateDataToSoon88 is starting.");
                 UpdateDataToSoon88(updateList, url);
+                LogService.Info("FeedDataToSoon88 - UpdateDataToSoon88 has done.");
             }
 
             if (deleteList.Any())
             {
+                LogService.Info("FeedDataToSoon88 - DeleteDataInSoon88 is starting.");
                 DeleteDataInSoon88(deleteList, url);
+                LogService.Info("FeedDataToSoon88 - DeleteDataInSoon88 has done.");
             }
         }
 
         private void UpdateDataToSoon88(IEnumerable<CustomerClassForMainDb> updateList, string url)
         {
             var result = GetAssociationWithCategory(updateList, false);
+            var custids = string.Join(",", updateList.Select(c => c.CustID));
+            LogService.Info("FeedDataToSoon88 - UpdateDataToSoon88 - custids param: " + custids);
+            LogService.Info("FeedDataToSoon88 - UpdateDataToSoon88 - GetAssociationWithCategory result: " + result.Count());
 
             var dataGroupByAccount = result.GroupBy(a => a.RegisterName);
             foreach (var groupAcc in dataGroupByAccount)
@@ -71,16 +78,23 @@
                     association = tempData.association,
                     signature = CreateMD5Hash(JsonConvert.SerializeObject(tempData) + Consts.SALT)
                 };
-
-                var returnedData = ApiHelper.PostWithProxy<S88Result>(url, finalData);
-                Task.WhenAll(returnedData);
-                if (returnedData.Result.result == "success")
+                try
                 {
-                    LogService.Info($"FeedDataToSoon88Helper - UpdateDataToSoon88 success");
+                    var returnedData = ApiHelper.PostWithProxy<S88Result>(url, finalData);
+                    Task.WhenAll(returnedData);
+                    if (returnedData.Result.result == "success")
+                    {
+                        LogService.Info($"FeedDataToSoon88Helper - UpdateDataToSoon88 success");
+                    }
+                    else
+                    {
+                        LogService.Info($"FeedDataToSoon88Helper - UpdateDataToSoon88 failed");
+                    }
                 }
-                else
+                catch (System.Exception ex)
                 {
-                    LogService.Info($"FeedDataToSoon88Helper - DeleteDataInSoon88 failed");
+                    LogService.Error($"FeedDataToSoon88Helper - UpdateDataToSoon88 exception: " + ex.Message + ex.StackTrace + ex.InnerException);
+                    throw;
                 }
             }
         }
@@ -104,15 +118,23 @@
                     signature = CreateMD5Hash(JsonConvert.SerializeObject(tempData) + Consts.SALT)
                 };
 
-                var returnedData = ApiHelper.PostWithProxy<S88Result>(url, finalData);
-                Task.WhenAll(returnedData);
-                if (returnedData.Result.result == "success")
+                try
                 {
-                    LogService.Info($"FeedDataToSoon88Helper - UpdateDataToSoon88 success");
+                    var returnedData = ApiHelper.PostWithProxy<S88Result>(url, finalData);
+                    Task.WhenAll(returnedData);
+                    if (returnedData.Result.result == "success")
+                    {
+                        LogService.Info($"FeedDataToSoon88Helper - UpdateDataToSoon88 success");
+                    }
+                    else
+                    {
+                        LogService.Info($"FeedDataToSoon88Helper - DeleteDataInSoon88 failed");
+                    }
                 }
-                else
+                catch (System.Exception ex)
                 {
-                    LogService.Info($"FeedDataToSoon88Helper - DeleteDataInSoon88 failed");
+                    LogService.Error($"FeedDataToSoon88Helper - DeleteDataInSoon88 exception: " + ex.Message + ex.StackTrace + ex.InnerException);
+                    throw;
                 }
             }
         }
