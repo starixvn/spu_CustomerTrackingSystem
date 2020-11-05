@@ -11,6 +11,7 @@
     using Fanex.Logging.Sentry;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.RemotingRef;
+    using ONEbook.UM.Filters;
     using Sentry;
     using System;
     using System.Collections.Generic;
@@ -52,6 +53,8 @@
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            GlobalFilters.Filters.Add(new CheckUMFilter());
         }
 
         protected void Application_AuthenticateRequest(object sender, EventArgs e)

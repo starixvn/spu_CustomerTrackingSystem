@@ -106,11 +106,11 @@
                 // if login-directly feature is disabled then redirect users to NAP Hub
                 return Redirect(NapSettings.Settings.HubUrl);
             }
-
+            /*
             if (UMHelper.IsUnderMaintainaceHappen(_maintenanceService))
             {
                 return RedirectToAction("Offline", "Common");
-            }
+            }*/
 
             GenerateToken();
 
