@@ -14,11 +14,11 @@
 
         IEnumerable<EvidenceModel> GetEvidenceList();
 
-        IEnumerable<AssociationModel> GetAssociations(string apiEndPoint, AssociationFilterViewModel filter);
+        GraphAssociationModel GetAssociations(string apiEndPoint, AssociationFilterViewModel filter);
 
         IEnumerable<CategoriesModel> GetCategories(string ctsCustIdList);
 
-        IEnumerable<AssociationDetailModel> GetAssociationDetail(string apiEndPoint, AssociationDetailFilterViewModel filter);
+        GraphAssociationDetailModel GetAssociationDetail(string apiEndPoint, AssociationDetailFilterViewModel filter);
 
         DBResult ActiveRemoveAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, int createdBy, bool isRemoveAction);
     }

@@ -62,7 +62,7 @@
             }
         }
 
-        public IEnumerable<AssociationModel> GetAssociations(string apiEndPoint, AssociationFilterViewModel filter)
+        public GraphAssociationModel GetAssociations(string apiEndPoint, AssociationFilterViewModel filter)
         {
             try
             {
@@ -79,18 +79,18 @@
                     SkipRow = filter.start
                 };
 
-                var data = ApiHelper.Post<IEnumerable<AssociationModel>>(apiEndPoint, param);
+                var data = ApiHelper.Post<GraphAssociationModel> (apiEndPoint, param);
 
                 Task.WhenAll(data);
 
-                return data.Result ?? new List<AssociationModel>();
+                return data.Result ?? new GraphAssociationModel();
             }
             catch (Exception ex)
             {
                 LogService.Error("CTS - AssociationReportService GetAssociations - Exception: " + ex.Message, ex);
             }
 
-            return new List<AssociationModel>();
+            return new GraphAssociationModel();
         }
 
         public IEnumerable<CategoriesModel> GetCategories(string ctsCustIdList)
@@ -114,7 +114,7 @@
             return new List<CategoriesModel>();
         }
 
-        public IEnumerable<AssociationDetailModel> GetAssociationDetail(string apiEndPoint, AssociationDetailFilterViewModel filter)
+        public GraphAssociationDetailModel GetAssociationDetail(string apiEndPoint, AssociationDetailFilterViewModel filter)
         {
             try
             {
@@ -129,18 +129,18 @@
                     SkipRow = filter.start
                 };
 
-                var data = ApiHelper.Post<IEnumerable<AssociationDetailModel>>(apiEndPoint, param);
+                var data = ApiHelper.Post<GraphAssociationDetailModel>(apiEndPoint, param);
 
                 Task.WhenAll(data);
 
-                return data.Result ?? new List<AssociationDetailModel>();
+                return data.Result ?? new GraphAssociationDetailModel();
             }
             catch (Exception ex)
             {
                 LogService.Error("CTS - AssociationReportService GetAssociationDetail - Exception: " + ex.Message, ex);
             }
 
-            return new List<AssociationDetailModel>();
+            return new GraphAssociationDetailModel();
         }       
 
         public DBResult ActiveRemoveAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, int createdBy, bool isRemoveAction)

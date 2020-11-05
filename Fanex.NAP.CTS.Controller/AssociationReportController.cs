@@ -46,14 +46,16 @@
         {
             var associationList = Enumerable.Empty<AssociationViewModel>();
             var graphAssociations = _associationService.GetAssociations(ConfigSettings.GetAssociations, filter);
+            var total = 0;
 
-            if (graphAssociations != null && graphAssociations.Any())
+            if (graphAssociations != null && graphAssociations.AssociationList != null && graphAssociations.AssociationList.Any())
             {
-                var ctsCustIdList = string.Join(",", graphAssociations.Select(x => x.CTSCustId).Distinct());
+                total = graphAssociations.Total;
+                var ctsCustIdList = string.Join(",", graphAssociations.AssociationList.Select(x => x.CTSCustId).Distinct());
 
                 var categories = _associationService.GetCategories(ctsCustIdList);
 
-                associationList = graphAssociations.Select(x =>
+                associationList = graphAssociations.AssociationList.Select(x =>
                 {
                     var category = categories.FirstOrDefault(y=>y.CTSCustID == x.CTSCustId);
 
@@ -74,8 +76,8 @@
             return Json( new
             {
                 draw = filter.draw,
-                recordsTotal = associationList.Count(),
-                recordsFiltered = associationList.Count(),
+                recordsTotal = total,
+                recordsFiltered = total,
                 data = associationList
             }, JsonRequestBehavior.AllowGet);
         }
@@ -106,15 +108,17 @@
         {
             var associationList = Enumerable.Empty<AssociationDetailViewModel>();
             var graphAssociations = _associationService.GetAssociationDetail(ConfigSettings.GetAssociationDetail, filter);
+            var total = 0;
 
-            if (graphAssociations != null && graphAssociations.Any())
+            if (graphAssociations != null && graphAssociations.AssociationList != null && graphAssociations.AssociationList.Any())
             {
+                total = graphAssociations.Total;
                 var associationTypes = _associationService.GetCustomerStaticStatus(2, true);
 
-                var groupForSite = graphAssociations.GroupBy(x => x.SiteID)
+                var groupForSite = graphAssociations.AssociationList.GroupBy(x => x.SiteID)
                     .Select(g => new { SiteId = g.Key, TotalAccounts = g.Count() });
 
-                associationList = graphAssociations.Select(x => new AssociationDetailViewModel
+                associationList = graphAssociations.AssociationList.Select(x => new AssociationDetailViewModel
                 {
                     CTSCustId = x.CTSCustId,
                     UserName = x.UserName,
@@ -133,8 +137,8 @@
             return Json(new
             {
                 draw = filter.draw,
-                recordsTotal = associationList.Count(),
-                recordsFiltered = associationList.Count(),
+                recordsTotal = total,
+                recordsFiltered = total,
                 data = associationList,
             }, JsonRequestBehavior.AllowGet);
         }

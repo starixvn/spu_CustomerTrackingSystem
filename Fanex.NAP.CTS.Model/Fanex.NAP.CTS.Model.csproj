@@ -154,6 +154,8 @@
     <Compile Include="AssociationReport\AssociationDetailModel.cs" />
     <Compile Include="AssociationReport\AssociationModel.cs" />
     <Compile Include="AssociationReport\CategoriesModel.cs" />
+    <Compile Include="AssociationReport\GraphAssociationDetailModel.cs" />
+    <Compile Include="AssociationReport\GraphAssociationModel.cs" />
     <Compile Include="Customer.cs" />
     <Compile Include="CustomerAssociationModel.cs" />
     <Compile Include="Account\CustomerFlagInfoModel.cs" />
