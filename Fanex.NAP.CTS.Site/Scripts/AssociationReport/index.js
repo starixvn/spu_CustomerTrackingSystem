@@ -13,9 +13,25 @@
     };
 
     function GetAssociationReport() {
-        dataTable
-            ? dataTable.ajax.reload(null, true)
-            : dataTable = GenerateGrid();
+        if (ValidateRangeDate()) {
+            dataTable
+                ? dataTable.ajax.reload(null, true)
+                : dataTable = GenerateGrid();
+        }
+    }
+
+    function ValidateRangeDate() {        
+        let toDateValue = domElements.dpkToDate.datepicker("getDate");
+        let toDateValueAllow = domElements.dpkFromDate.datepicker("getDate");
+        toDateValueAllow.setDate(toDateValueAllow.getDate() + 3);        
+
+        if (toDateValue > toDateValueAllow) {
+            common.showError("Invalid date range, please select not more than 3 days");
+
+            return false;
+        }
+
+        return true;
     }
 
     function GenerateGrid() {
@@ -141,7 +157,7 @@
 
         domElements.dpkToDate
             .datepicker("option", "minDate", fromDateValue)
-            .datepicker("option", "maxDate", moment(fromDateValue).add(2, "day").toDate());
+            .datepicker("option", "maxDate", moment(fromDateValue).add(1, "year").toDate());
     }    
 
     function Initial() {

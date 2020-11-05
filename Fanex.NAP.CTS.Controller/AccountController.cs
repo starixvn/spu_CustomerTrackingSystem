@@ -351,7 +351,7 @@
                         AssociationType = x.AssociationType,
                         AssociationTypeName = x.AssociationTypeName,
                         Status = x.StatusName == "NA" ? "N/A" : x.StatusName,
-                        StatusId = x.StatusId,
+                        StatusId = x.StatusId.HasValue ? x.StatusId.Value : 0,
                         SubscriberId = x.SubscriberId,
                         Subscriber = getAllSubscribers.Any(aa => x.SubscriberId != -1 && aa.SubscriberId == x.SubscriberId)
                                         ? getAllSubscribers.FirstOrDefault(a => a.SubscriberId == x.SubscriberId).SubscriberName
