@@ -1,24 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Functions>
   <Function name="SubscriberAssignment">
-    <Setting Key="FPS_AD_InsertSubscriberByUser" SpName="FPS_AD_InsertSubscriberByUser_xtest_xtest" DbName="MySQL.CTS_Admin.Admin"/>
-    <Setting Key="CTS_AD_Subscriber_GetAll" SpName="CTS_AD_Subscriber_GetAll_xtest_xtest" DbName="MySQL.CTS_Admin.Admin"/>
+    <Setting Key="FPS_AD_InsertSubscriberByUser" SpName="FPS_AD_InsertSubscriberByUser_xtest" DbName="MySQL.CTS_Admin.Admin"/>
+    <Setting Key="CTS_AD_Subscriber_GetAll" SpName="CTS_AD_Subscriber_GetAll_xtest" DbName="MySQL.CTS_Admin.Admin"/>
   </Function>
 
   <Function Name="InsertCTSUser">
-    <Setting Key="CTS_AD_CTSUser_Insert" SpName="CTS_AD_CTSUser_Insert_xtest_xtest" DbName="MySQL.CTS_Admin.Admin" />
+    <Setting Key="CTS_AD_CTSUser_Insert" SpName="CTS_AD_CTSUser_Insert_xtest" DbName="MySQL.CTS_Admin.Admin" />
   </Function>
 
   <Function Name="Common">
-    <Setting Key="CTS_DC_Common_GetAllSportGroups" SpName="CTS_DC_Common_GetAllSportGroups_xtest_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-    <Setting Key="CTS_DC_Common_GetStaticList" SpName="CTS_DC_Common_GetStaticList_xtest_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-    <Setting Key="CTS_DC_Common_GetAllSubscriberGroups" SpName="CTS_DC_Common_GetAllSubscriberGroups_xtest_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-    <Setting Key="CTS_DC_Common_GetCustomerGroup" SpName="CTS_DC_Common_GetCustomerGroup_xtest_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-    <Setting Key="DCS_DC_Transaction_GetHistory" SpName="DCS_DC_Transaction_GetHistory_xtest_xtest" DbName="MySQL.DCS_DataCenter.Reporter" />
+    <Setting Key="CTS_DC_Common_GetAllSportGroups" SpName="CTS_DC_Common_GetAllSportGroups_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+    <Setting Key="CTS_DC_Common_GetStaticList" SpName="CTS_DC_Common_GetStaticList_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+    <Setting Key="CTS_DC_Common_GetAllSubscriberGroups" SpName="CTS_DC_Common_GetAllSubscriberGroups_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+    <Setting Key="CTS_DC_Common_GetCustomerGroup" SpName="CTS_DC_Common_GetCustomerGroup_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+    <Setting Key="DCS_DC_Transaction_GetHistory" SpName="DCS_DC_Transaction_GetHistory_xtest" DbName="MySQL.DCS_DataCenter.Reporter" />
   </Function>
 
   <Function name="CustInfo">
-    <Setting Key="CTS_DC_CustInfo_GetByUsername" SpName="CTS_DC_CustInfo_GetByUsername_xtest_xtest" DbName="MySQL.CTS_DataCenter.Reporter">
+    <Setting Key="CTS_DC_CustInfo_GetByUsername" SpName="CTS_DC_CustInfo_GetByUsername_xtest" DbName="MySQL.CTS_DataCenter.Reporter">
       <Mapping DataField="CurrencyId" ObjectProperty="Id" Class="Currency"/>
       <Mapping DataField="Currency" ObjectProperty="Name" Class="Currency"/>
       <Mapping DataField="RoleId" ObjectProperty="Id" Class="Role"/>
@@ -26,20 +26,20 @@
       <Mapping DataField="SubscriberId" ObjectProperty="Id" Class="Subscriber"/>
       <Mapping DataField="SubscriberName" ObjectProperty="Name" Class="Subscriber"/>
     </Setting>
-    <Setting Key="CTS_DC_CustInfo_GetByCTSCustID" SpName="CTS_DC_CustInfo_GetByCTSCustID_xtest_xtest" DbName="MySQL.CTS_DataCenter.Reporter"/>
-    <Setting Key="CTS_DC_CustInfo_GetFlagged" SpName="CTS_DC_CustInfo_GetFlagged_xtest_xtest" DbName="MySQL.CTS_DataCenter.Reporter"/>
+    <Setting Key="CTS_DC_CustInfo_GetByCTSCustID" SpName="CTS_DC_CustInfo_GetByCTSCustID_xtest" DbName="MySQL.CTS_DataCenter.Reporter"/>
+    <Setting Key="CTS_DC_CustInfo_GetFlagged" SpName="CTS_DC_CustInfo_GetFlagged_xtest" DbName="MySQL.CTS_DataCenter.Reporter"/>
   </Function>
 
   <Function Name="Notification">
-    <Setting Key="CTS_DC_Notification_GetNewAssociation" SpName="CTS_DC_Notification_GetNewAssociation_xtest_xtest" DbName="MySQL.CTS_DataCenter.Admin"/>
-    <Setting Key="CTS_DC_Notification_GetProbation" SpName="CTS_DC_Notification_GetProbation_xtest_xtest" DbName="MySQL.CTS_DataCenter.Admin"/>
-    <Setting Key="CTS_DC_Notification_GetSettings" SpName="CTS_DC_Notification_GetSettings_xtest_xtest" DbName="MySQL.CTS_DataCenter.Admin"/>
-    <Setting Key="CTS_DC_Notification_UpdateSettings" SpName="CTS_DC_Notification_UpdateSettings_xtest_xtest" DbName="MySQL.CTS_DataCenter.Admin"/>
+    <Setting Key="CTS_DC_Notification_GetNewAssociation" SpName="CTS_DC_Notification_GetNewAssociation_xtest" DbName="MySQL.CTS_DataCenter.Admin"/>
+    <Setting Key="CTS_DC_Notification_GetProbation" SpName="CTS_DC_Notification_GetProbation_xtest" DbName="MySQL.CTS_DataCenter.Admin"/>
+    <Setting Key="CTS_DC_Notification_GetSettings" SpName="CTS_DC_Notification_GetSettings_xtest" DbName="MySQL.CTS_DataCenter.Admin"/>
+    <Setting Key="CTS_DC_Notification_UpdateSettings" SpName="CTS_DC_Notification_UpdateSettings_xtest" DbName="MySQL.CTS_DataCenter.Admin"/>
   </Function>
 
   <Function Name="Evidence">
-    <Setting Key="CTS_DC_Evidences_GetAll" SpName="CTS_DC_Evidences_GetAll_xtest_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-    <Setting Key="CTS_DC_CustEvidence_GetFlaggedEvidences" SpName="CTS_DC_CustEvidence_GetFlaggedEvidences_xtest_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+    <Setting Key="CTS_DC_Evidences_GetAll" SpName="CTS_DC_Evidences_GetAll_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+    <Setting Key="CTS_DC_CustEvidence_GetFlaggedEvidences" SpName="CTS_DC_CustEvidence_GetFlaggedEvidences_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
     <Setting Key="CTS_DC_CustEvidence_InsertSingle" SpName="CTS_DC_CustEvidence_InsertSingle_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
     <Setting Key="CTS_DC_CustEvidence_RemoveFlagged" SpName="CTS_DC_CustEvidence_RemoveFlagged_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
     <Setting Key="CTS_DC_CustEvidence_GetAffectedEvidences" SpName="CTS_DC_CustEvidence_GetAffectedEvidences_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
