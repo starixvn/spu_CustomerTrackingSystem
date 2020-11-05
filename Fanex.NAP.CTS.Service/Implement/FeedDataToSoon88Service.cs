@@ -72,7 +72,7 @@
                     signature = CreateMD5Hash(JsonConvert.SerializeObject(tempData) + Consts.SALT)
                 };
 
-                var returnedData = ApiHelper.Post<S88Result>(url, finalData);
+                var returnedData = ApiHelper.PostWithProxy<S88Result>(url, finalData);
                 Task.WhenAll(returnedData);
                 if (returnedData.Result.result == "success")
                 {
@@ -104,7 +104,7 @@
                     signature = CreateMD5Hash(JsonConvert.SerializeObject(tempData) + Consts.SALT)
                 };
 
-                var returnedData = ApiHelper.Post<S88Result>(url, finalData);
+                var returnedData = ApiHelper.PostWithProxy<S88Result>(url, finalData);
                 Task.WhenAll(returnedData);
                 if (returnedData.Result.result == "success")
                 {
