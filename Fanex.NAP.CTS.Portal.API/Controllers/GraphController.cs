@@ -266,9 +266,9 @@
         /// <returns></returns>
         [System.Web.Http.AcceptVerbs("GetAssociationReport")]
         [HttpPost]
-        public IEnumerable<AssociationReportModel> GetAssociationReport([FromBody] AssociationReportParameterModel paras)
+        public GraphAssociationReportPaging GetAssociationReport([FromBody] AssociationReportParameterModel paras)
         {
-            IEnumerable<AssociationReportModel> result = null;
+            var result = new GraphAssociationReportPaging() { AssociationList = null, TotalItems = 0 }; ;
 
             try
             {
@@ -299,7 +299,7 @@
                         return result;
                     }
 
-                    var queryResult = DbSessionFactory.Execute<AssociationReportPagingModel>(script, new
+                    var queryResult = DbSessionFactory.Execute<GraphAssociationReportPaging>(script, new
                     {
                         ip_AssCreatedFrom = paras.AssociatedDateFrom,
                         ip_AssCreatedTo = paras.AssociatedDateTo,
@@ -311,7 +311,7 @@
                         ip_SkipRows = paras.SkipRow
                     }).Data.FirstOrDefault();
 
-                    return queryResult.AssociationList;
+                    return queryResult;
                 }
             }
             catch (Exception ex)
@@ -329,9 +329,9 @@
         /// <returns></returns>
         [System.Web.Http.AcceptVerbs("GetDetailAssociationReport")]
         [HttpPost]
-        public IEnumerable<GraphAssociationModel> GetDetailAssociationReport([FromBody] AssociationDetailReportParameterModel paras)
+        public GraphAssociationPaging GetDetailAssociationReport([FromBody] AssociationDetailReportParameterModel paras)
         {
-            IEnumerable<GraphAssociationModel> result = null;
+            var result = new GraphAssociationPaging() { AssociationList = null, TotalItems = 0};
 
             try
             {
@@ -370,7 +370,7 @@
                             Pagesize = paras.TakeRow
                         }).Data.FirstOrDefault();
 
-                        return queryResult.AssociationList;
+                        return queryResult;
                     }
                 }
             }

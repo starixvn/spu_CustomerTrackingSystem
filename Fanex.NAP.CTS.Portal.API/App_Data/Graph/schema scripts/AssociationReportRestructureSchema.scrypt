@@ -2,11 +2,12 @@
 // Generate Site node label 
 //
 CALL apoc.periodic.commit(
-" MATCH (c:CTSCustomer)  WHERE exists(c.SiteID) and  exists(c.Site)
+" MATCH (c:CTSCustomer)  WHERE exists(c.SiteID) and exists(c.Site)
   WITH c LIMIT {size}
   MERGE (s:Site {SiteID: c.SiteID})
   ON CREATE SET s.Site = c.Site
-  MERGE (c)-[:BELONG_TO_SITE]->(s)
+  MERGE (c)-[r:BELONG_TO_SITE]->(s)
+  ON CREATE SET r.CreatedDate = datetime()
   REMOVE c.SiteID, c.Site
   RETURN count(*)",
   {size:5000})
@@ -25,10 +26,13 @@ ON CREATE SET s.ListID = toInteger(line.ListID), s.ListName = line.ListName, s.L
 // Generate Relationship between CTSCustomer and Static
 //
 CALL apoc.periodic.commit(
- " MATCH (c:CTSCustomer) WHERE exists(c.CustStatusID)
+ "MATCH (c:CTSCustomer) 
+  WHERE exists(c.CustStatusID)
   WITH c LIMIT {size}
-  MATCH (s:Static), (c)  WHERE c.CustStatusID = s.ItemID
-  MERGE (c)-[:HAS_STATIC]->(s)
+  MATCH (s:Static), (c) 
+  WHERE c.CustStatusID = s.ItemID
+  MERGE (c)-[r:HAS_STATIC]->(s)
+  ON CREATE SET r.CreatedDate = datetime()
   REMOVE c.CustStatusID
   RETURN count(*)",
   {size:5000})

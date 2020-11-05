@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    public class AssociationReportPagingModel
+    public class GraphAssociationReportPaging
     {
         public List<AssociationReportModel> AssociationList { get; set; }
 
