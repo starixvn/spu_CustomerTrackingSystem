@@ -14,14 +14,14 @@
 
         public string SiteName { get; set; }
 
-        public string AccountStatus { get; set; }
+        public string StatusName { get; set; }
 
-        public DateTime AssociatedDate { get; set; }
+        public DateTime AssociationDate { get; set; }
 
-        public string AssociatedDateString { get; set; }
+        public string AssociationDateString { get; set; }
 
         public int AssociationStatus { get; set; }
 
-        public string AssociaionType { get; set; }
+        public int AssociationType { get; set; }
     }
 }

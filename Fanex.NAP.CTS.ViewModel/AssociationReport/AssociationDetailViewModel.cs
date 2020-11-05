@@ -22,7 +22,7 @@
 
         public bool IsLinked { get; set; }
 
-        public string AssociaionType { get; set; }
+        public string AssociationTypeName { get; set; }
 
         public int TotalAssociationAccount { get; set; }
     }

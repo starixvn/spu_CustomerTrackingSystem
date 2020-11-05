@@ -12,6 +12,8 @@
     using System.Linq;    
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.Service.Implement;
+    using Fanex.NAP.CTS.Model.Account;
+    using System.Collections.Generic;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.AssociationReport, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -107,6 +109,8 @@
 
             if (graphAssociations != null && graphAssociations.Any())
             {
+                var associationTypes = _associationService.GetCustomerStaticStatus(2, true);
+
                 var groupForSite = graphAssociations.GroupBy(x => x.SiteID)
                     .Select(g => new { SiteId = g.Key, TotalAccounts = g.Count() });
 
@@ -117,11 +121,11 @@
                     SubscriberId = x.SubscriberId,
                     SiteId = x.SiteID.HasValue ? x.SiteID.Value : 0,
                     SiteName = !string.IsNullOrEmpty(x.SiteName) ? x.SiteName : "-",
-                    AccountStatus = x.AccountStatus,
-                    AssociatedDate = x.AssociatedDate,
-                    AssociatedDateString = x.AssociatedDate.ToString(Consts.FormatDateToString_MMMddyyyy),
+                    AccountStatus = x.StatusName,
+                    AssociatedDate = x.AssociationDate,
+                    AssociatedDateString = x.AssociationDate.ToString(Consts.FormatDateToString_MMMddyyyy),
                     IsLinked = x.AssociationStatus == 1,
-                    AssociaionType = x.AssociaionType,
+                    AssociationTypeName = GetAssociationTypeName(associationTypes, x.AssociationType),
                     TotalAssociationAccount = groupForSite.FirstOrDefault(y=>y.SiteId == x.SiteID).TotalAccounts
                 });
             }
@@ -133,6 +137,13 @@
                 recordsFiltered = associationList.Count(),
                 data = associationList,
             }, JsonRequestBehavior.AllowGet);
+        }
+
+        private string GetAssociationTypeName(List<CustomerStaticStatusModel> associationTypes, int associaionType)
+        {
+            var association = associationTypes.FirstOrDefault(x => x.ItemId == associaionType);
+
+            return association != null ? association.ItemName : string.Empty;
         }
 
         [HttpPost]

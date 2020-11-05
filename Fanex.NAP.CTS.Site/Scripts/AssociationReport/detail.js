@@ -120,7 +120,7 @@
                         }
                     }
                 },
-                { data: obj => obj.AssociaionType }
+                { data: obj => obj.AssociationTypeName }
             ],
             createdRow: function (row, obj) {
                 $(row).attr('data-site-id', obj.SiteId);
