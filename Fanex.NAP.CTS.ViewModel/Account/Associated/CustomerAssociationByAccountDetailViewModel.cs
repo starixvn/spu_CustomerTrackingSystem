@@ -20,6 +20,10 @@
 
         public int StatusId { get; set; }
 
+        public int SiteId { get; set; }
+
+        public string SiteName { get; set; }
+
         public string Subscriber { get; set; }
 
         public int AssociationType { get; set; }

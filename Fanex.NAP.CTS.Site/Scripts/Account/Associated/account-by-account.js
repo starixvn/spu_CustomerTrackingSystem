@@ -122,7 +122,7 @@
                 { data: obj => RenderUsername(obj, ctsCustId) },
                 { data: obj => obj.LoginId },
                 { data: obj => obj.Status },
-                { data: obj => obj.Subscriber },
+                { data: obj => obj.SiteName },
                 { data: obj => obj.AssociationTypeName },
                 {
                     data: obj => AssociationStatus(obj.IsLinked), createdCell: (cell, _, row) => {
@@ -140,7 +140,7 @@
                 }
             ],
             createdRow: function (row, obj) {
-                $(row).attr('data-site-id', obj.SubscriberId);
+                $(row).attr('data-site-id', obj.SiteId);
                 $(row).addClass('hide');
             },
             drawCallback: function () {
@@ -153,7 +153,7 @@
                     if (last !== group) {
                         let html = '<tr class="group group-site">';
                         html += '<td colspan="7">';
-                        html += '<span class="column-group-site" data-site-id=' + data[i].SubscriberId + '><i class="icon icon-chevron-right icon-open">' + group + '</i></span>';
+                        html += '<span class="column-group-site" data-site-id=' + data[i].SiteId + '><i class="icon icon-chevron-right icon-open">' + group + '</i></span>';
                         html += '</td></tr>';
 
                         $(rows).eq(i).before(html);

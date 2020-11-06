@@ -389,6 +389,8 @@
                             SharedIPs = g.FirstOrDefault().SharedIPs,
                             StatusName = g.FirstOrDefault().StatusName,
                             StatusId = g.FirstOrDefault().StatusId,
+                            SiteID = g.FirstOrDefault().SiteID,
+                            SiteName = g.FirstOrDefault().SiteName,
                             SubscriberId = g.FirstOrDefault().SubscriberId,
                             CTSCustID = g.FirstOrDefault().CTSCustID,
                             AssociationStatus = g.FirstOrDefault().AssociationStatus

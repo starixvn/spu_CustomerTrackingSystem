@@ -350,6 +350,8 @@
                         AssociationTypeName = x.AssociationTypeName,
                         Status = x.StatusName == "NA" ? "N/A" : x.StatusName,
                         StatusId = x.StatusId.HasValue ? x.StatusId.Value : 0,
+                        SiteId = x.SiteID.HasValue ? x.SiteID.Value : 0,
+                        SiteName = !string.IsNullOrEmpty(x.SiteName) ? x.SiteName : "-",
                         SubscriberId = x.SubscriberId,
                         Subscriber = getAllSubscribers.Any(aa => x.SubscriberId != -1 && aa.SubscriberId == x.SubscriberId)
                                         ? getAllSubscribers.FirstOrDefault(a => a.SubscriberId == x.SubscriberId).SubscriberName
