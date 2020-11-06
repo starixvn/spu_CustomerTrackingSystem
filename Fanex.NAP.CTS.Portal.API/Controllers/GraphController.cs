@@ -46,17 +46,19 @@
         /// <param name="skipRow"></param>
         /// <returns></returns>
         [System.Web.Http.AcceptVerbs("GetDirectAssociation")]
-        [HttpGet]
-        public GraphAssociationPaging GetDirectAssociation(int ctsCustId, int assStatus, int takeRow, int skipRow)
+        [HttpPost]
+        public GraphAssociationPaging GetDirectAssociation([FromBody] DirectAssociationParameterModel paras)
         {
             try
             {
                 var result = DbSessionFactory.Execute<GraphAssociationPaging>("GetAssociationOneLevelByCustId", new
                 {
-                    CTSCustID = ctsCustId,
-                    AssStatus = assStatus,
-                    Skip = skipRow,
-                    Pagesize = takeRow
+                    CTSCustID = paras.ctsCustId,
+                    AssStatus = paras.assStatus,
+                    AccountStatuses = paras.accountStatuses.Split(',').Select(int.Parse),
+                    SiteIDs = paras.siteIDs.Split(',').Select(int.Parse),
+                    Skip = paras.skipRow,
+                    Pagesize = paras.takeRow
                 }).Data.FirstOrDefault();
 
                 if (result == null)

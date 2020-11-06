@@ -587,7 +587,7 @@
             <param name="ctsCustId"></param>
             <returns></returns>
         </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetDirectAssociation(System.Int32,System.Int32,System.Int32,System.Int32)">
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetDirectAssociation(Fanex.NAP.CTS.Model.GraphDB.DirectAssociationParameterModel)">
             <summary>
             Get all association one level
             </summary>

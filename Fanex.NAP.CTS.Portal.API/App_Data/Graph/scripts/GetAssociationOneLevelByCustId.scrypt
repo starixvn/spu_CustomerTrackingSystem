@@ -6,9 +6,15 @@ WHERE c.CTSCustID = $ip_CTSCustId AND
     OR ($ip_assStatus = 2 AND exists((c)-[:HAS_EXCEPTION]-(c1))))
 WITH c,c1,d,r,r1
 OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c1)
+OPTIONAL MATCH (c1)-[:BELONG_TO_SITE]->(s:Site)
+OPTIONAL MATCH (c1)-[:HAS_STATIC]->(st:Static)
+WITH c,c1,d,r,r1,st,e,s
+WHERE   st.ItemID IS NOT NULL AND st.ItemID IN $ip_AccountStatuses AND s.SiteID IS NOT NULL AND s.SiteID IN $ip_SiteIDs  
 UNWIND [r.CreatedTime,r1.CreatedTime] AS val
 RETURN c1.CTSCustID as CTSCustID, c1.CustID AS CustId, c1.UserName AS Username, c1.UserName2 AS Username2, 1 AS AssociationType, -1 AS SharedDevices, -1 AS SharedIPs, CASE c1.SubscriberID WHEN null THEN -1 ELSE c1.SubscriberID END AS SubscriberId, MAX(val) AS AssociationDateGMT0, CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
+	   , s.SiteID as SiteID, s.Site as SiteName, st.ItemID as StatusId, st.ItemName as StatusName
 UNION ALL
+
 MATCH (c:CTSCustomer)-[r2:USED_IP]->(i:IP)<-[r3:USED_IP]-(c2:CTSCustomer)
 WHERE c.CTSCustID = $ip_CTSCustId AND 
 	(($ip_assStatus = 0) 
@@ -16,9 +22,15 @@ WHERE c.CTSCustID = $ip_CTSCustId AND
     OR ($ip_assStatus = 2 AND exists((c)-[:HAS_EXCEPTION]-(c2))))
 WITH c,c2,i,r2,r3
 OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c2)
+OPTIONAL MATCH (c2)-[:BELONG_TO_SITE]->(s:Site)
+OPTIONAL MATCH (c2)-[:HAS_STATIC]->(st:Static)
+WITH c,c2,i,r2,r3,st,e,s
+WHERE   st.ItemID IS NOT NULL AND st.ItemID IN $ip_AccountStatuses AND s.SiteID IS NOT NULL AND s.SiteID IN $ip_SiteIDs 
 UNWIND [r2.CreatedTime,r3.CreatedTime] AS val
 RETURN c2.CTSCustID as CTSCustID, c2.CustID AS CustId, c2.UserName AS Username, c2.UserName2 AS Username2, 2 as AssociationType, -1 AS SharedDevices, -1 AS SharedIPs, CASE c2.SubscriberID WHEN null THEN -1 ELSE c2.SubscriberID END AS SubscriberId, MAX(val) AS AssociationDateGMT0, CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
+		, s.SiteID as SiteID, s.Site as SiteName, st.ItemID as StatusId, st.ItemName as StatusName
 UNION ALL
+
 MATCH (c:CTSCustomer)-[r:ADD_MANUALLY]-(c3:CTSCustomer)
 WHERE c.CTSCustID = $ip_CTSCustId AND 
 	(($ip_assStatus = 0) 
@@ -26,8 +38,13 @@ WHERE c.CTSCustID = $ip_CTSCustId AND
     OR ($ip_assStatus = 2 AND exists((c)-[:HAS_EXCEPTION]-(c3))))
 WITH c,c3,r
 OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c3)
+OPTIONAL MATCH (c3)-[:BELONG_TO_SITE]->(s:Site)
+OPTIONAL MATCH (c3)-[:HAS_STATIC]->(st:Static)
+WITH c,c3,r,st,e,s
+WHERE   st.ItemID IS NOT NULL AND st.ItemID IN $ip_AccountStatuses AND s.SiteID IS NOT NULL AND s.SiteID IN $ip_SiteIDs 
 RETURN c3.CTSCustID as CTSCustID, c3.CustID AS CustId, c3.UserName AS Username, c3.UserName2 AS Username2, 3 as AssociationType, -1 AS SharedDevices, -1 AS SharedIPs, CASE c3.SubscriberID WHEN null THEN -1 ELSE c3.SubscriberID END AS SubscriberId, apoc.date.format(r.CreatedDate,"ms","yyyy-MM-dd HH:mm:ss") as AssociationDateGMT0, CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
-',{ip_CTSCustId: $CTSCustID, ip_assStatus: $AssStatus}) YIELD value 
+		, s.SiteID as SiteID, s.Site as SiteName, st.ItemID as StatusId, st.ItemName as StatusName
+',{ip_CTSCustId: $CTSCustID, ip_assStatus: $AssStatus, ip_SiteIDs: $SiteIDs, ip_AccountStatuses: $AccountStatuses}) YIELD value 
 WITH collect(value) as ListAss, count(value) as TotalItems
 UNWIND ListAss as ass
 WITH ass, TotalItems 
