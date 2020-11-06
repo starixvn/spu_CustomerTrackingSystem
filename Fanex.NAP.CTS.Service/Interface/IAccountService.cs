@@ -10,6 +10,7 @@
     using Fanex.NAP.CTS.Model.Home;    
     using System;
     using System.Collections.Generic;
+    using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
 
     public interface IAccountService
     {        
@@ -39,9 +40,11 @@
 
         CustomerFlagInfoModel GetCustomerFlagInfo(long ctsCustId);
 
-        GraphAssociationPaging GetCustomerAssociationByGraph(string apiURL, long ctsCustId, int associationStatus, int skipNumber, int takeNumber);
+        GraphAssociationPaging GetCustomerAssociationByGraph(string apiURL, long ctsCustId, int associationStatus, string accountStatusIds, string siteIds, int skipNumber, int takeNumber);
 
         List<AccountStaticStatusModel> GetAccountStaticStatuses();
+
+        IEnumerable<SubscriberGroupModel> GetAllSubscriberGroups();
 
         List<GraphDirectAssociationModel> GetDirectAssocationByGraph(string apiURL, List<long> ctsCustIds);
 

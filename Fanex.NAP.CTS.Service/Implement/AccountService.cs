@@ -16,6 +16,7 @@
     using Fanex.NAP.CTS.Criteria.Account.ChainToEvidence;
     using Fanex.NAP.CTS.Criteria.Account.CustomerCategory;
     using Fanex.NAP.CTS.Criteria.Home;
+    using Fanex.NAP.CTS.Criteria.ProblemAccountMonitor;
     using Fanex.NAP.CTS.Criteria.SpecialCustomerClass;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;        
@@ -23,6 +24,7 @@
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.Home;
+    using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.ViewModel.Account;    
@@ -247,17 +249,32 @@
             }
         }
 
-        public GraphAssociationPaging GetCustomerAssociationByGraph(string apiURL, long ctsCustId, int associationStatus, int skipNumber, int takeNumber)
+        public GraphAssociationPaging GetCustomerAssociationByGraph(string apiURL, long ctsCustId, int associationStatus, string accountStatusIds, string siteIds, int skipNumber, int takeNumber)
         {
-            var urlString = string.Format(apiURL + "?ctsCustId={0}&assStatus={3}&skipRow={1}&takeRow={2}", ctsCustId, skipNumber, takeNumber, associationStatus);
+            try
+            {
+                var param = new
+                {
+                    ctsCustId,
+                    assStatus = associationStatus,
+                    siteIDs = siteIds,
+                    accountStatuses = accountStatusIds,
+                    takeRow = takeNumber,
+                    skipRow = skipNumber
+                };
 
-            var data = ApiHelper.Get<GraphAssociationPaging>(urlString);
+                var data = ApiHelper.Post<GraphAssociationPaging>(apiURL, param);
 
-            Task.WhenAll(data);
+                Task.WhenAll(data);
 
-            var customersAPI = data.Result;
+                return data.Result ?? new GraphAssociationPaging();
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("CTS - AccountService GetCustomerAssociationByGraph - Exception: " + ex.Message, ex);                
+            }
 
-            return customersAPI ?? new GraphAssociationPaging();
+            return new GraphAssociationPaging();
         }
 
         public List<AccountStaticStatusModel> GetAccountStaticStatuses()
@@ -277,6 +294,16 @@
             });
 
             return statusList;
+        }
+
+        public IEnumerable<SubscriberGroupModel> GetAllSubscriberGroups()
+        {
+            var criteria = new GetAllSubscriberGroupsCriteria();
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<SubscriberGroupModel>(criteria);
+            }
         }
 
         public List<GraphDirectAssociationModel> GetDirectAssocationByGraph(string apiURL, List<long> ctsCustIds)

@@ -21,11 +21,11 @@
             resizable: true,
             draggable: true,
             close: function () { $(this).dialog('close'); }
-        })
-    }
+        });
+    };
       
     $this.GenerateShortestPath = function (custIdFrom, custIdTo) {
-        collapse_level = 0;        
+        collapse_level = 0;
         var paramsFilter = {};
         paramsFilter.custIdFrom = custIdFrom;
         paramsFilter.custIdTo = custIdTo;
@@ -41,13 +41,15 @@
                 common.showError(errMsg);
             }
         });
-    }
+    };
 
-    $this.GenerateFullPath = function (ctsCustId, username,associationStatus, start, length) {     
+    $this.GenerateFullPath = function (ctsCustId, username, associationStatus, accountStatusIds, siteIds, start, length) {
         var paramsFilter = {};
         paramsFilter.ctsCustid = ctsCustId;
         paramsFilter.displayName = username;
         paramsFilter.associationStatus = associationStatus;
+        paramsFilter.accountStatusIds = accountStatusIds;
+        paramsFilter.siteIds = siteIds;
         paramsFilter.start = start;
         paramsFilter.length = length;
 
@@ -62,7 +64,7 @@
                 common.showError(errMsg);
             }
         });
-    }   
+    }; 
 
     function generateGraph(data) {
         root = data;
@@ -293,12 +295,12 @@
         function xposition(source, target) {
             var angle = Math.atan2(target.y - source.y, target.x - source.x);
             return 100 * Math.cos(angle) + source.x;
-        };
+        }
 
         function yposition(source, target) {
             var angle = Math.atan2(target.y - source.y, target.x - source.x);
             return 100 * Math.sin(angle) + source.y;
-        };
+        }
 
         function addLink(linkEnter) {
             linkEnter.append('svg:line')
@@ -307,6 +309,6 @@
                 .attr("y1", function (d) { return d.source.y; })
                 .attr("x2", function (d) { return d.target.x; })
                 .attr("y2", function (d) { return d.target.y; });
-        };
+        }
     }
 }

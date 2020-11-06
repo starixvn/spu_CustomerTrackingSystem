@@ -542,8 +542,17 @@
 
         btnViewOnGraph.on('click', function () {
             var info = dataTable.page.info();
+            var accountStatusIds = cbbAssociationAccountStatus.val();
+          
+            var selectedSites = [];
+            cbbAssociationSite.find('option:selected').each(function () { selectedSites.push($(this).val()); });
+            if (selectedSites.length === 0) {
+                cbbAssociationSite.find('option').not(':selected').each(function () { selectedSites.push($(this).val()); });
+            }
+            var siteIds = selectedSites.join(',');
+
             var formGraph = new graph();
-            formGraph.GenerateFullPath(ctsCustid, username, $('#association-cbb-status').val(), info.start, info.length);
+            formGraph.GenerateFullPath(ctsCustid, username, $('#association-cbb-status').val(), accountStatusIds, siteIds, info.start, info.length);
             formGraph.OpenModal();
         });
 

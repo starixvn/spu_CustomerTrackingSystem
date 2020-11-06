@@ -19,21 +19,19 @@
     [NapAuth(FunctionKey = FSFunctionKeys.AssociationReport, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class AssociationReportController : BaseController
     {
-        private readonly IAssociationReportService _associationService;
-        private readonly IManageSubscriberService _subscriberService;
+        private readonly IAssociationReportService _associationService;        
 
         public override string BaseControllerName { get => Consts.MenuItemReport; }        
 
         public AssociationReportController()
         {
             _associationService = new AssociationReportService();
-            _subscriberService = new ManageSubscriberService();
         }
 
         public ActionResult Index()
         {         
             ViewBag.AccountStatus = _associationService.GetAccountStaticStatuses();
-            ViewBag.Subscribers = _subscriberService.GetSubscribers();
+            ViewBag.Subscribers = _associationService.GetAllSubscriberGroups();
             ViewBag.Evidences = _associationService.GetEvidenceList();
             ViewBag.AssociationStatus = _associationService.GetCustomerStaticStatus(3, true);
             ViewBag.AssociationTypes = _associationService.GetCustomerStaticStatus(2, true);

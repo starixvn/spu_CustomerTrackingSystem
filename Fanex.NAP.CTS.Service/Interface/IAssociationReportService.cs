@@ -3,6 +3,7 @@
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.AssociationReport;
+    using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
     using Fanex.NAP.CTS.ViewModel.AssociationReport;
     using System.Collections.Generic;
 
@@ -13,6 +14,8 @@
         IEnumerable<AccountStaticStatusModel> GetAccountStaticStatuses();
 
         IEnumerable<EvidenceModel> GetEvidenceList();
+
+        IEnumerable<SubscriberGroupModel> GetAllSubscriberGroups();
 
         GraphAssociationModel GetAssociations(string apiEndPoint, AssociationFilterViewModel filter);
 

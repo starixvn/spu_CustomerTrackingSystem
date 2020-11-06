@@ -11,8 +11,10 @@
     using Fanex.NAP.CTS.Criteria.Account;
     using Fanex.NAP.CTS.Criteria.Account.Associated;
     using Fanex.NAP.CTS.Criteria.AssociationReport;
+    using Fanex.NAP.CTS.Criteria.ProblemAccountMonitor;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.AssociationReport;
+    using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
     using Fanex.NAP.CTS.ViewModel.AssociationReport;
 
     public class AssociationReportService : IAssociationReportService
@@ -59,6 +61,16 @@
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 return db.Query<EvidenceModel>(criteria);
+            }
+        }
+
+        public IEnumerable<SubscriberGroupModel> GetAllSubscriberGroups()
+        {
+            var criteria = new GetAllSubscriberGroupsCriteria();
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<SubscriberGroupModel>(criteria);
             }
         }
 

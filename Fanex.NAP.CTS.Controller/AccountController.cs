@@ -41,8 +41,7 @@
         private readonly ITransactionService _transService;
         private readonly ISubscriberAssignmentService _subscriberAssignmentService;
         private readonly ICustomerEvidenceService _customerEvidenceService;
-        private readonly ISyncCustomerToMainDbService _syncToMainDbService;
-        private readonly IManageSubscriberService _subscriberService;
+        private readonly ISyncCustomerToMainDbService _syncToMainDbService;        
 
         public override string BaseControllerName { get => string.Empty; }
 
@@ -54,7 +53,6 @@
             _transService = new TransactionService();
             _customerEvidenceService = new CustomerEvidenceService();
             _syncToMainDbService = new SyncCustomerToMainDbService();
-            _subscriberService = new ManageSubscriberService();
         }
 
         public ActionResult Index(long Id)
@@ -288,14 +286,14 @@
             getCustomerStaticAssType.Insert(0, new CustomerStaticStatusModel { ItemId = 0, ItemNameDisplay = "All" });
 
             var accountStatus = _accountService.GetAccountStaticStatuses();
-            var subscribers = _subscriberService.GetSubscribers();
+            var subscribers = _accountService.GetAllSubscriberGroups();
 
             var associatedByAccountViewModel = new AssociatedByAccountViewModel
             {
                 AssociationStatus = getAssociationStatus,
                 AssociationTypeList = getCustomerStaticAssType,
                 AccountStatusList = accountStatus,
-                SubscribersList = subscribers,
+                SubscribersList = subscribers.ToList(),
                 Username = username
             };
 
@@ -319,7 +317,7 @@
             var directAssociationUrl = GetDirectAssociationUrl(model.AssociationType);
 
             var graphAssociationPage = model.IsDirect
-                ? _accountService.GetCustomerAssociationByGraph(directAssociationUrl, model.CTSCustId, model.AssociationStatus, skip, take)
+                ? _accountService.GetCustomerAssociationByGraph(directAssociationUrl, model.CTSCustId, model.AssociationStatus, model.AccountStatusIds, model.SiteIds, skip, take)
                 : new GraphAssociationPaging();
 
             if (graphAssociationPage != null && graphAssociationPage.AssociationList != null && graphAssociationPage.AssociationList.Any())
@@ -399,11 +397,11 @@
         }
 
         [HttpPost]
-        public ActionResult GetDirectAssociationGraph(Int64 ctsCustid, string displayName, int associationStatus, int start, int length)
+        public ActionResult GetDirectAssociationGraph(Int64 ctsCustid, string displayName, int associationStatus, string accountStatusIds, string siteIds, int start, int length)
         {
             var graphCustomer = new GraphCustomerItemViewModel();
 
-            var graphAssociationPaging = _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetDirectAssociation, ctsCustid, associationStatus, start, length);
+            var graphAssociationPaging = _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetDirectAssociation, ctsCustid, associationStatus, accountStatusIds, siteIds, start, length);
             if (graphAssociationPaging != null && graphAssociationPaging.AssociationList != null && graphAssociationPaging.AssociationList.Any())
             {
                 var now = DateTime.Now.Ticks.ToString();
