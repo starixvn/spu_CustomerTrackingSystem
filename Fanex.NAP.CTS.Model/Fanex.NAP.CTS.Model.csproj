@@ -187,6 +187,7 @@
     <Compile Include="GraphDB\AssociationReportModel.cs" />
     <Compile Include="GraphDB\AssociationDetailReportParameterModel.cs" />
     <Compile Include="GraphDB\AssociationReportParameterModel.cs" />
+    <Compile Include="GraphDB\DirectAssociationParameterModel.cs" />
     <Compile Include="GraphDB\GraphAssociationReportPaging.cs" />
     <Compile Include="ImportEvidences\AddEvidenceResultModel.cs" />
     <Compile Include="ManageSubscriber\DetailedSiteModel.cs" />

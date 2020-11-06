@@ -214,13 +214,10 @@
 
                 if (cust != null)
                 {
-                    var result = DbSessionFactory.Execute<GraphAssociationPaging>("GetAssociationOneLevelByCustIdByDevice", new
+                    var result = DbSessionFactory.Execute<GraphAssociationPaging>("GetAssociationOneLevelForExtAcc", new
                     {
                         CTSCustID = cust.CTSCustId,
                         AssStatus = 1,
-                        CheckCreatedTime = 0,
-                        AssCreatedFrom = DateTime.MinValue,
-                        AssCreatedTo = DateTime.MinValue,
                         Skip = 0,
                         Pagesize = 100000
                     }).Data.FirstOrDefault();

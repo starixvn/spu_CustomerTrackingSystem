@@ -1,20 +1,23 @@
 ﻿CALL apoc.cypher.run('
 MATCH (c:CTSCustomer)-[r:USED_DEVICE]->(d:Device)<-[r1:USED_DEVICE]-(c1:CTSCustomer)
 WHERE c.CTSCustID = $ip_CTSCustId AND c1.CustID IS NOT NULL AND
-	(($ip_assStatus = 0) 
-	OR ($ip_assStatus = 1 AND not exists((c)-[:HAS_EXCEPTION]-(c1)))
-    OR ($ip_assStatus = 2 AND exists((c)-[:HAS_EXCEPTION]-(c1))))
+		(($ip_assStatus = 0) 
+		OR ($ip_assStatus = 1 AND not exists((c)-[:HAS_EXCEPTION]-(c1)))
+		OR ($ip_assStatus = 2 AND exists((c)-[:HAS_EXCEPTION]-(c1))))
 	AND
-	   (($ip_CheckCreatedTime = 0)
-	OR  ($ip_CheckCreatedTime = 1 AND datetime(r.CreatedTime) > datetime(r1.CreatedTime) AND datetime(r.CreatedTime) >= datetime($ip_AssCreatedFrom) AND datetime(r.CreatedTime) <= datetime($ip_AssCreatedTo))
-	OR  ($ip_CheckCreatedTime = 1 AND datetime(r1.CreatedTime) >= datetime(r.CreatedTime) AND datetime(r1.CreatedTime) >= datetime($ip_AssCreatedFrom) AND datetime(r1.CreatedTime) <= datetime($ip_AssCreatedTo)))
+		   (($ip_IsAssReport = 0)
+		OR  ($ip_IsAssReport = 1 AND datetime(r.CreatedTime) > datetime(r1.CreatedTime) AND datetime(r.CreatedTime) >= datetime($ip_AssCreatedFrom) AND datetime(r.CreatedTime) <= datetime($ip_AssCreatedTo))
+		OR  ($ip_IsAssReport = 1 AND datetime(r1.CreatedTime) >= datetime(r.CreatedTime) AND datetime(r1.CreatedTime) >= datetime($ip_AssCreatedFrom) AND datetime(r1.CreatedTime) <= datetime($ip_AssCreatedTo)))
 WITH c,c1,d,r,r1,MAX(r.CreatedTime,r1.CreatedTime) AS AssociationDate
 OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c1)
-OPTIONAL MATCH (c1)-[rs:BELONG_TO_SITE]->(s:Site)
+OPTIONAL MATCH (c1)-[:BELONG_TO_SITE]->(s:Site)
 OPTIONAL MATCH (c1)-[:HAS_STATIC]->(st:Static)
+WITH c,c1,d,r,r1, AssociationDate,st,e,s
+WHERE   (($ip_IsAssReport = 1)
+		OR  ($ip_IsAssReport = 0 AND st.ItemID IS NOT NULL AND st.ItemID IN $ip_AccountStatuses AND s.SiteID IS NOT NULL AND s.SiteID IN $ip_SiteIDs))  
 RETURN c1.CTSCustID as CTSCustID, c1.CustID AS CustId, c1.CustSubID AS CustSubId, c1.UserName AS Username, c1.UserName2 AS Username2, 1 AS AssociationType, -1 AS SharedDevices, -1 AS SharedIPs, CASE c1.SubscriberID WHEN null THEN -1 ELSE c1.SubscriberID END AS SubscriberId, MIN(AssociationDate) AS AssociationDateGMT0, CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus,
       s.SiteID as SiteID, s.Site as SiteName, st.ItemID as StatusId, st.ItemName as StatusName
-',{ip_CTSCustId: $CTSCustID, ip_assStatus: $AssStatus, ip_CheckCreatedTime: $CheckCreatedTime, ip_AssCreatedFrom: $AssCreatedFrom, ip_AssCreatedTo: $AssCreatedTo}) YIELD value 
+',{ip_CTSCustId: $CTSCustID, ip_assStatus: $AssStatus, ip_IsAssReport: $IsAssReport, ip_AssCreatedFrom: $AssCreatedFrom, ip_AssCreatedTo: $AssCreatedTo, ip_SiteIDs: $SiteIDs, ip_AccountStatuses: $AccountStatuses}) YIELD value 
 WITH collect(value) as ListAss, count(value) as TotalItems
 UNWIND ListAss as ass
 WITH ass, TotalItems 

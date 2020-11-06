@@ -75,20 +75,22 @@
 
 
         [System.Web.Http.AcceptVerbs("GetDirectAssociationByManual")]
-        [HttpGet]
-        public GraphAssociationPaging GetDirectAssociationByManual(int ctsCustId, int assStatus, int takeRow, int skipRow)
+        [HttpPost]
+        public GraphAssociationPaging GetDirectAssociationByManual([FromBody] DirectAssociationParameterModel paras)
         {
             try
             {
                 var result = DbSessionFactory.Execute<GraphAssociationPaging>("GetAssociationOneLevelByCustIdByManual", new
                 {
-                    CTSCustID = ctsCustId,
-                    AssStatus = assStatus,
-                    CheckCreatedTime = 0,
+                    CTSCustID = paras.ctsCustId,
+                    AssStatus = paras.assStatus,
+                    IsAssReport = 0,
                     AssCreatedFrom = DateTime.MinValue,
                     AssCreatedTo = DateTime.MinValue,
-                    Skip = skipRow,
-                    Pagesize = takeRow
+                    AccountStatuses = paras.accountStatuses.Split(',').Select(int.Parse),
+                    SiteIDs = paras.siteIDs.Split(',').Select(int.Parse),
+                    Skip = paras.skipRow,
+                    Pagesize = paras.takeRow
                 }).Data.FirstOrDefault();
 
                 return result ?? new GraphAssociationPaging() { AssociationList = null, TotalItems = 0 };
@@ -101,20 +103,22 @@
         }
 
         [System.Web.Http.AcceptVerbs("GetDirectAssociationByDevice")]
-        [HttpGet]
-        public GraphAssociationPaging GetDirectAssociationByDevice(int ctsCustId, int assStatus, int takeRow, int skipRow)
+        [HttpPost]
+        public GraphAssociationPaging GetDirectAssociationByDevice([FromBody] DirectAssociationParameterModel paras)
         {
             try
             {
                 var result = DbSessionFactory.Execute<GraphAssociationPaging>("GetAssociationOneLevelByCustIdByDevice", new
                 {
-                    CTSCustID = ctsCustId,
-                    AssStatus = assStatus,
-                    CheckCreatedTime = 0,
+                    CTSCustID = paras.ctsCustId,
+                    AssStatus = paras.assStatus,
+                    IsAssReport = 0,
                     AssCreatedFrom = DateTime.MinValue,
                     AssCreatedTo = DateTime.MinValue,
-                    Skip = skipRow,
-                    Pagesize = takeRow
+                    AccountStatuses = paras.accountStatuses.Split(',').Select(int.Parse),
+                    SiteIDs = paras.siteIDs.Split(',').Select(int.Parse),
+                    Skip = paras.skipRow,
+                    Pagesize = paras.takeRow
                 }).Data.FirstOrDefault();
 
                 if (result == null)
@@ -132,20 +136,22 @@
         }
 
         [System.Web.Http.AcceptVerbs("GetDirectAssociationByIP")]
-        [HttpGet]
-        public GraphAssociationPaging GetDirectAssociationByIP(int ctsCustId, int assStatus, int takeRow, int skipRow)
+        [HttpPost]
+        public GraphAssociationPaging GetDirectAssociationByIP([FromBody] DirectAssociationParameterModel paras)
         {
             try
             {
                 var result = DbSessionFactory.Execute<GraphAssociationPaging>("GetAssociationOneLevelByCustIdByIP", new
                 {
-                    CTSCustID = ctsCustId,
-                    AssStatus = assStatus,
-                    CheckCreatedTime = 0,
+                    CTSCustID = paras.ctsCustId,
+                    AssStatus = paras.assStatus,
+                    IsAssReport = 0,
                     AssCreatedFrom = DateTime.MinValue,
                     AssCreatedTo = DateTime.MinValue,
-                    Skip = skipRow,
-                    Pagesize = takeRow
+                    AccountStatuses = paras.accountStatuses.Split(',').Select(int.Parse),
+                    SiteIDs = paras.siteIDs.Split(',').Select(int.Parse),
+                    Skip = paras.skipRow,
+                    Pagesize = paras.takeRow
                 }).Data.FirstOrDefault();
 
                 if (result == null)
@@ -363,9 +369,11 @@
                         {
                             CTSCustID = paras.CTSCustId,
                             AssStatus = paras.AssociationStatus,
-                            CheckCreatedTime = 1,
+                            IsAssReport = 1,
                             AssCreatedFrom = paras.AssociatedDateFrom,
                             AssCreatedTo = paras.AssociatedDateTo,
+                            AccountStatuses = new List<int>(),
+                            SiteIDs = new List<int>(),
                             Skip = paras.SkipRow,
                             Pagesize = paras.TakeRow
                         }).Data.FirstOrDefault();
