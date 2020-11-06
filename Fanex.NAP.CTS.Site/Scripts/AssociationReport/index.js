@@ -23,7 +23,7 @@
     function ValidateRangeDate() {        
         let toDateValue = domElements.dpkToDate.datepicker("getDate");
         let toDateValueAllow = domElements.dpkFromDate.datepicker("getDate");
-        toDateValueAllow.setDate(toDateValueAllow.getDate() + 3);        
+        toDateValueAllow.setDate(toDateValueAllow.getDate() + 2);        
 
         if (toDateValue > toDateValueAllow) {
             common.showError("Invalid date range, please select not more than 3 days");
