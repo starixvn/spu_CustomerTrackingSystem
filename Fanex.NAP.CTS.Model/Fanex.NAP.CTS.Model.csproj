@@ -176,6 +176,8 @@
     <Compile Include="AssociatedAccountMonitor\AssociatedAccountMonitorModel.cs" />
     <Compile Include="AssociatedAccountMonitor\CustProfilerModel.cs" />
     <Compile Include="AssociatedAccountMonitor\ValidateAssociatedAccountModel.cs" />
+    <Compile Include="GraphDB\DirectAssociationDeviceModel.cs" />
+    <Compile Include="GraphDB\DirectAssociationModel.cs" />
     <Compile Include="ImportEvidences\AddEvidenceResultModel.cs" />
     <Compile Include="ManageSubscriber\DetailedSiteModel.cs" />
     <Compile Include="Notification\UpdateNotifiedSettingStatusModel.cs" />
