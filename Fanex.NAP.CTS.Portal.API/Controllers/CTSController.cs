@@ -5,6 +5,7 @@
     using Fanex.Logging.Extensions.Database;
     using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Core.Helpers.Xml;
+    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.API;
     using Fanex.NAP.CTS.Model.DTO;
@@ -363,20 +364,19 @@
         /// <param name="toDate"></param>
         /// <returns>Customer class in XML format</returns>
         [HttpPost]
-        public string CheckCustomerNotExisted(string custIdList, DateTime fromDate, DateTime toDate)
-        {
-            var result = string.Empty;
+        public IEnumerable<CTSCustomer> CheckCustomerNotExisted(string custIdList, DateTime fromDate, DateTime toDate)
+        {            
             try
             {
-                var customers = _accountService.CheckCustomerNotExisted(custIdList, fromDate, toDate);
-                result = string.Join(",", customers.Select(c => c.CustID));
+                return _accountService.CheckCustomerNotExisted(custIdList, fromDate, toDate);
+                
             }
             catch (Exception ex)
             {
                 LogService.Error("CheckCustomerNotExisted failed: " + ex.Message + ex.StackTrace);
             }
 
-            return result;
+            return null;
         }
 
 
