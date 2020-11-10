@@ -246,14 +246,14 @@
             return result;
         }
 
-
         [System.Web.Http.AcceptVerbs("GetDirectAssociationDevices")]
         [HttpGet]
         public DirectAssociationDeviceModel GetDirectAssociationDevices(long custId)
         {
+            var result = new DirectAssociationDeviceModel();
+
             try
             {
-               var result = new DirectAssociationDeviceModel();
                result = DbSessionFactory.Execute<DirectAssociationDeviceModel>("GetDevicesIdByCustId", new { ip_CustID = custId }).Data.SingleOrDefault();
                result.DirectAssociation = DbSessionFactory.Execute<DirectAssociationModel>("GetAssociatedDevicesByCustId", new { ip_CustID = custId }).Data.ToList();
                result.TotalDirectAssociation = result.DirectAssociation.Count();
@@ -265,6 +265,8 @@
                 LogService.Error("GetDirectAssociationDevices failed: " + ex.Message + ex.StackTrace);
 
             }
+
+            return result;
         }
 
         /// <summary>
