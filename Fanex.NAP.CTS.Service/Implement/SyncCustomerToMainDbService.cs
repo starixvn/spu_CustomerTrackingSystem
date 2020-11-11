@@ -79,11 +79,11 @@
             return SyncCustomerClassToMainDb(customerClassList, "Update Evidence Category");
         }
 
-        public IEnumerable<EvidenceCategoryToCustomerClassForMainDb> GetLatestEvidenceCategory(string ctsCustID, bool isCustId, bool isExcludedDetailedCategory)
+        public IEnumerable<EvidenceCategoryToCustomerClassForMainDb> GetLatestEvidenceCategory(string ctsCustIDs, bool isCustId, bool isExcludedDetailedCategory)
         {
             var criteria = new GetLastestEvidenceCategoryCriteria()
             {
-                CustIDList = ctsCustID,
+                CustIDList = ctsCustIDs,
                 IsUsingCustID = isCustId,
                 IsExcludedDetailedCategory = isExcludedDetailedCategory
 

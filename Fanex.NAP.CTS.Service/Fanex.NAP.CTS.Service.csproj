@@ -64,6 +64,7 @@
     <Compile Include="Implement\AssociatedAccountService.cs" />
     <Compile Include="Implement\AssociationReportService.cs" />
     <Compile Include="Implement\CheckBetReportService.cs" />
+    <Compile Include="Implement\ClassifyCustomerService.cs" />
     <Compile Include="Implement\FeedDataToSoon88Service.cs" />
     <Compile Include="Implement\ProbationManagementService.cs" />
     <Compile Include="Implement\ManageSubscriberService.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="Interface\IAssociatedAccountService.cs" />
     <Compile Include="Interface\IAssociationReportService.cs" />
     <Compile Include="Interface\ICheckBetReportService.cs" />
+    <Compile Include="Interface\IClassifyCustomerService.cs" />
     <Compile Include="Interface\ICustomerMonitorService.cs" />
     <Compile Include="Interface\IDailyDataCaptureService.cs" />
     <Compile Include="Interface\IDelayGoalAccountService.cs" />

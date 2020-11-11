@@ -8,7 +8,7 @@
     {
         DBResult SyncCustomerClassToMainDb(IEnumerable<CustomerClassForMainDb> customerClassList, string syncAction);
 
-        IEnumerable<EvidenceCategoryToCustomerClassForMainDb> GetLatestEvidenceCategory(string ctsCustID, bool isCustId, bool isExcludedDetailedCategory);
+        IEnumerable<EvidenceCategoryToCustomerClassForMainDb> GetLatestEvidenceCategory(string ctsCustIDs, bool isCustId, bool isExcludedDetailedCategory);
 
         DBResult SyncCustomerClassToMainDb(string ctsCustID, bool isCustId, bool isExcludedDetailedCategory);
     }

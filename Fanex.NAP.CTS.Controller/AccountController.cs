@@ -40,8 +40,9 @@
         private readonly IGraphService _graphService;
         private readonly ITransactionService _transService;
         private readonly ISubscriberAssignmentService _subscriberAssignmentService;
-        private readonly ICustomerEvidenceService _customerEvidenceService;
-        private readonly ISyncCustomerToMainDbService _syncToMainDbService;        
+        private readonly ICustomerEvidenceService _customerEvidenceService;    
+        private readonly ISyncCustomerToMainDbService _syncToMainDbService;
+        private readonly IClassifyCustomerService _classifyCustomerService;
 
         public override string BaseControllerName { get => string.Empty; }
 
@@ -53,6 +54,7 @@
             _transService = new TransactionService();
             _customerEvidenceService = new CustomerEvidenceService();
             _syncToMainDbService = new SyncCustomerToMainDbService();
+            _classifyCustomerService = new ClassifyCustomerService();
         }
 
         public ActionResult Index(long Id)
@@ -767,6 +769,8 @@
                 }
 
                 _syncToMainDbService.SyncCustomerClassToMainDb(model.CTSCustId.ToString(), false, false);
+
+                ClassifyCustomerGeneral(string.Join(",", associatedAccountList));
             }
 
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -1164,6 +1168,7 @@
                 errorMessage = result.ErrorMsg
             }, JsonRequestBehavior.AllowGet);
         }
+
         #endregion
 
         #region Betting Statistic
@@ -1356,6 +1361,20 @@
 
             return temp = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.BettingStatistics, NAP.Core.Business.Constant.Policy.Read);
         }
+        #endregion
+
+        #region Classification
+        public void ClassifyCustomerGeneral(string custIds)
+        {
+            var custWithoutEvidence = _syncToMainDbService.GetLatestEvidenceCategory(custIds, true, true)
+                .Where(c => c.CategoryIdMapping != -1);
+
+            if (custWithoutEvidence.Any())
+            {
+                _classifyCustomerService.ClassifyCustomerGeneralCategoryDaily(string.Join(",", custWithoutEvidence.Select(cust => cust.CustID)));
+            }
+        }
+
         #endregion
     }
 }

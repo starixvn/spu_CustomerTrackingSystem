@@ -60,6 +60,7 @@
     <Compile Include="Account\ChainToEvidence\GetAllEvidenceCriteria.cs" />
     <Compile Include="Account\GetAssociationWithCategoryCriteria.cs" />
     <Compile Include="AssociationReport\AssociationReportGetCategoriesCriteria.cs" />
+    <Compile Include="CustomerClassification\NormalAccountsClassificationGeneralCategorizeDailyCriteria.cs" />
     <Compile Include="ProblemAccountMonitor\InsertProblemAccountCriteria.cs" />
     <Compile Include="SyncCustomerToMainDb\GetLastestEvidenceCategoryCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\PlaceEvidenceCriteria.cs" />

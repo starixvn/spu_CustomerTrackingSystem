@@ -30,6 +30,7 @@
         private readonly IAssociatedAccountService _associationService;
         private readonly ISyncCustomerToMainDbService _syncToMainDbService;
         private readonly IProblemAccountMonitorService _problemAccountMonitorService;
+        private readonly IClassifyCustomerService _classifyCustomerService;
 
         /// <summary>
         /// Using for external site (TW, ExtAcc site...)
@@ -42,6 +43,7 @@
             _custEvidenceService = new CustomerEvidenceService();
             _syncToMainDbService = new SyncCustomerToMainDbService();
             _problemAccountMonitorService = new ProblemAccountMonitorService();
+            _classifyCustomerService = new ClassifyCustomerService();
         }
 
         /// <summary>
@@ -407,6 +409,8 @@
                 if (lastestCustIds != null && lastestCustIds.Any())
                 {
                     _syncToMainDbService.SyncCustomerClassToMainDb(string.Join(",", lastestCustIds.Select(c => c)), true, false);
+
+                    ClassifyCustomerGeneral(string.Join(",", lastestCustIds));
                 }
 
                 return new ApiResultModel {
@@ -423,6 +427,17 @@
                     ErrorMessage =  ex.Message,
                     StatusMessage = "fail"
                 };
+            }
+        }
+
+        private void ClassifyCustomerGeneral(string custIds)
+        {
+            var custWithoutEvidence = _syncToMainDbService.GetLatestEvidenceCategory(custIds, true, true)
+                .Where(c => c.CategoryIdMapping != -1);
+
+            if (custWithoutEvidence.Any())
+            {
+                _classifyCustomerService.ClassifyCustomerGeneralCategoryDaily(string.Join(",", custWithoutEvidence.Select(cust => cust.CustID)));
             }
         }
     }
