@@ -329,9 +329,9 @@
 
                 var custIds = string.Join(",", customerAssociation.Select(x => x.CustId));
 
-                var getStatusByCustIds = _accountService.GetCustomerGeneralStatus(custIds);
+                //var getStatusByCustIds = _accountService.GetCustomerGeneralStatus(custIds);
 
-                customerAssociation = _accountService.FilterCustomerAssociationByStatus(string.Empty, customerAssociation, getStatusByCustIds);
+                //customerAssociation = _accountService.FilterCustomerAssociationByStatus(string.Empty, customerAssociation, getStatusByCustIds);
 
                 customerAssociation = _accountService.FilterCustomerAssociationByAssociationType(model.AssociationType, customerAssociation);
 

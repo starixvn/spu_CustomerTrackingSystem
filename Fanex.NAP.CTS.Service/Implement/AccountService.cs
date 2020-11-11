@@ -384,7 +384,7 @@
                             AssociationTypeName = CalculateAssociationType(g),
                             Username = g.FirstOrDefault().Username,
                             Username2 = g.FirstOrDefault().Username2,
-                            AssociationDateGMT0 = g.FirstOrDefault().AssociationDateGMT0,
+                            AssociationDateGMT0 = GetMinDate(g),
                             SharedDevices = g.FirstOrDefault().SharedDevices,
                             SharedIPs = g.FirstOrDefault().SharedIPs,
                             StatusName = g.FirstOrDefault().StatusName,
@@ -399,7 +399,7 @@
                     return groupData;
                 }
 
-                return customerAssociation.Where(x => x.AssociationType == associationType).Select(x =>
+                return customerAssociation.Select(x =>
                 {
                     x.AssociationTypeName = x.GetAssociationTypeName(x.AssociationType);
                     return x;
@@ -417,6 +417,19 @@
             }
 
             return groupData.FirstOrDefault().GetAssociationTypeName(groupData.FirstOrDefault().AssociationType);
+        }
+
+        private DateTime GetMinDate(IGrouping<long, GraphAssociationModel> groupData)
+        {
+            var minDate = DateTime.MaxValue;
+
+            foreach (var item in groupData)
+            {
+                if (item.AssociationDateGMT0 < minDate)
+                    minDate = item.AssociationDateGMT0;
+            }
+
+            return minDate;
         }
 
         public List<AssociationCustomerModel> SearchAssociatedCustomer(string username)
@@ -891,6 +904,7 @@
                 }
             }
         }
+
         public IEnumerable<CustomerClassificationModel> GetCustomerClassificationForAPI(string custIdList, string parentCateIdList)
         {
             var criteria = new GetCTSCustomerClassificationForAPICriteria
