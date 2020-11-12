@@ -278,7 +278,7 @@
         [HttpPost]
         public GraphAssociationReportPaging GetAssociationReport([FromBody] AssociationReportParameterModel paras)
         {
-            var result = new GraphAssociationReportPaging() { AssociationList = null, TotalItems = 0 }; ;
+            var result = new GraphAssociationReportPaging() { AssociationList = null, TotalItems = 0 };
 
             try
             {

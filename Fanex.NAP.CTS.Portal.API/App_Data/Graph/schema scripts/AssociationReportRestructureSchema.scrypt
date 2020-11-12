@@ -29,7 +29,7 @@ CALL apoc.periodic.commit(
  "MATCH (c:CTSCustomer) 
   WHERE exists(c.CustStatusID)
   WITH c LIMIT {size}
-  MATCH (s:Static), (c) 
+  MATCH (s:Static) 
   WHERE c.CustStatusID = s.ItemID
   MERGE (c)-[r:HAS_STATIC]->(s)
   ON CREATE SET r.CreatedDate = datetime()
