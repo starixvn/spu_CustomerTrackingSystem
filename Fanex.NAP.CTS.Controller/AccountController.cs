@@ -770,7 +770,10 @@
 
                 _syncToMainDbService.SyncCustomerClassToMainDb(model.CTSCustId.ToString(), false, false);
 
-                ClassifyCustomerGeneral(string.Join(",", associatedAccountList));
+                if (associatedAccountList.Any())
+                {
+                    ClassifyCustomerGeneral(string.Join(",", associatedAccountList));
+                }
             }
 
             return Json(result, JsonRequestBehavior.AllowGet);
