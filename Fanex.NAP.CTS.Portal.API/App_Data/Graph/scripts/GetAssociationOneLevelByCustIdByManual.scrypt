@@ -11,7 +11,7 @@ WHERE c.CTSCustID = $ip_CTSCustId AND
 WITH c,c2,r
 OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c2)
 OPTIONAL MATCH (c2)-[:BELONG_TO_SITE]->(s:Site)
-OPTIONAL MATCH (c2)-[:HAS_STATIC]->(st:Static)
+OPTIONAL MATCH (c2)-[:HAS_STATUS]->(st:StaticList)
 WITH c,c2,r,st,e,s
 WHERE   (($ip_IsAssReport = 1)
 		OR  ($ip_IsAssReport = 0 AND st.ItemID IS NOT NULL AND st.ItemID IN $ip_AccountStatuses AND s.SiteID IS NOT NULL AND s.SiteID IN $ip_SiteIDs))  

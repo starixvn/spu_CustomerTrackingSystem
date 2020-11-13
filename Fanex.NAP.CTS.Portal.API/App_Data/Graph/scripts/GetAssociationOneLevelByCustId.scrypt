@@ -7,7 +7,7 @@ WHERE c.CTSCustID = $ip_CTSCustId AND
 WITH c,c1,d,r,r1
 OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c1)
 OPTIONAL MATCH (c1)-[:BELONG_TO_SITE]->(s:Site)
-OPTIONAL MATCH (c1)-[:HAS_STATIC]->(st:Static)
+OPTIONAL MATCH (c1)-[:HAS_STATUS]->(st:StaticList)
 WITH c,c1,d,r,r1,st,e,s
 WHERE   st.ItemID IS NOT NULL AND st.ItemID IN $ip_AccountStatuses AND s.SiteID IS NOT NULL AND s.SiteID IN $ip_SiteIDs  
 UNWIND [r.CreatedTime,r1.CreatedTime] AS val
@@ -23,7 +23,7 @@ WHERE c.CTSCustID = $ip_CTSCustId AND
 WITH c,c2,i,r2,r3
 OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c2)
 OPTIONAL MATCH (c2)-[:BELONG_TO_SITE]->(s:Site)
-OPTIONAL MATCH (c2)-[:HAS_STATIC]->(st:Static)
+OPTIONAL MATCH (c2)-[:HAS_STATUS]->(st:StaticList)
 WITH c,c2,i,r2,r3,st,e,s
 WHERE   st.ItemID IS NOT NULL AND st.ItemID IN $ip_AccountStatuses AND s.SiteID IS NOT NULL AND s.SiteID IN $ip_SiteIDs 
 UNWIND [r2.CreatedTime,r3.CreatedTime] AS val
@@ -38,7 +38,7 @@ WHERE c.CTSCustID = $ip_CTSCustId AND
 WITH c,c3,r
 OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c3)
 OPTIONAL MATCH (c3)-[:BELONG_TO_SITE]->(s:Site)
-OPTIONAL MATCH (c3)-[:HAS_STATIC]->(st:Static)
+OPTIONAL MATCH (c3)-[:HAS_STATUS]->(st:StaticList)
 WITH  c,c3,r,st,e,s
 WHERE   st.ItemID IS NOT NULL AND st.ItemID IN $ip_AccountStatuses AND s.SiteID IS NOT NULL AND s.SiteID IN $ip_SiteIDs 
 RETURN  c3.CTSCustID as CTSCustID, c3.CustID AS CustId, c3.UserName AS Username, c3.UserName2 AS Username2, 3 as AssociationType, -1 AS SharedDevices, -1 AS SharedIPs, CASE c3.SubscriberID WHEN null THEN -1 ELSE c3.SubscriberID END AS SubscriberId, apoc.date.format(r.CreatedDate,"ms","yyyy-MM-dd HH:mm:ss") as AssociationDateGMT0, CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus

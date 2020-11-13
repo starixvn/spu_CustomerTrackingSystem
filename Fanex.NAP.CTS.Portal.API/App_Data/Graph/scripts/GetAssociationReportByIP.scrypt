@@ -9,7 +9,7 @@
 //				- ip_AssType:  1: Device; 2:Manual; 3:IP  (single-selction)
 
 CALL apoc.cypher.run('
-MATCH (site:Site) <-[:BELONG_TO_SITE]-(c:CTSCustomer)-[:HAS_STATIC]->(s:Static)
+MATCH (site:Site) <-[:BELONG_TO_SITE]-(c:CTSCustomer)-[:HAS_STATUS]->(s:StaticList)
 WHERE s.ItemID IN $ip_AccountStatus AND site.Site = trim($ip_SiteName)
 WITH c
 MATCH (e:Evidence)<-[re1:HAS_EVIDENCE]-(c)-[rp1:USED_IP]->(i:IP)<-[rp2:USED_IP]-(c1:CTSCustomer)
@@ -22,7 +22,7 @@ WHERE   e.EvidenceCode = trim($ip_EvidenceCode)
 			    ((datetime(rp1.CreatedTime) > datetime(rp2.CreatedTime) AND datetime(rp1.CreatedTime) >= datetime($ip_AssCreatedFrom) AND datetime(rp1.CreatedTime) <= datetime($ip_AssCreatedTo))
 			 OR (datetime(rp2.CreatedTime) > datetime(rp1.CreatedTime) AND datetime(rp2.CreatedTime) >= datetime($ip_AssCreatedFrom) AND datetime(rp2.CreatedTime) <= datetime($ip_AssCreatedTo)))
 WITH c,e
-OPTIONAL MATCH (s:Static) <-[:HAS_STATIC]-(c)-[HAS_EVIDENCE]->(e1:Evidence)
+OPTIONAL MATCH (s:StaticList) <-[:HAS_STATUS]-(c)-[HAS_EVIDENCE]->(e1:Evidence)
 with  c,s, collect(Distinct e1.EvidenceCode) as listEvidenceCode
 RETURN Distinct c.CTSCustID as CTSCustID, c.UserName AS Username, s.ItemName as AccountStatus, listEvidenceCode as EvidenceCodes, CASE c.SubscriberID WHEN null THEN -1 ELSE c.SubscriberID END AS SubscriberId
 ',{ip_AssCreatedFrom:$ip_AssCreatedFrom, ip_AssCreatedTo:$ip_AssCreatedTo, ip_AccountStatus:$ip_AccountStatus, ip_SiteName:$ip_SiteName, ip_AssStatus:$ip_AssStatus, ip_EvidenceCode:$ip_EvidenceCode}) YIELD value
