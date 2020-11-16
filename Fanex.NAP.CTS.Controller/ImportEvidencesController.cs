@@ -96,23 +96,25 @@
                     .Select(x => x);
 
                 if (!accountEvidenceErrorList.Any())
-                { 
-                    InsertAccountEvidence(fileName, CurrentSession.UserId, resultCheckAccountEvidenceList, isOverwrite);
+                {
+                    InsertCustomerEvidence(fileName, CurrentSession.UserId, resultCheckAccountEvidenceList, isOverwrite);
 
-                    var associatedAccountList = _customerEvidenceService.GetAssociatedAccounts(
-                        new GetAssociatedAccountByCTSCustIdsCriteria
-                        {
-                            CTSCustIdList = string.Join(",", resultCheckAccountEvidenceList.Select(c => c.CTSCustID).Distinct().ToList())
-                        });
+                    //InsertAccountEvidence(fileName, CurrentSession.UserId, resultCheckAccountEvidenceList, isOverwrite);
+                    
+                    //var associatedAccountList = _customerEvidenceService.GetAssociatedAccounts(
+                    //    new GetAssociatedAccountByCTSCustIdsCriteria
+                    //    {
+                    //        CTSCustIdList = string.Join(",", resultCheckAccountEvidenceList.Select(c => c.CTSCustID).Distinct().ToList())
+                    //    });
 
-                    if (associatedAccountList.Any())
-                    {
-                        _customerEvidenceService.UpdateBetLimitOfFlaggedCustomer(
-                            new UpdateBetLimitByEvidenceAddingCriteria
-                            {
-                                CustIDList = string.Join(",", associatedAccountList)
-                            });
-                    }
+                    //if (associatedAccountList.Any())
+                    //{
+                    //    _customerEvidenceService.UpdateBetLimitOfFlaggedCustomer(
+                    //        new UpdateBetLimitByEvidenceAddingCriteria
+                    //        {
+                    //            CustIDList = string.Join(",", associatedAccountList)
+                    //        });
+                    //}
                 }
 
                 return ReturnResultCheckAccountEvidence(fileName, accountEvidenceErrorList);
@@ -168,6 +170,15 @@
             {
                 var template = Server.MapPath(ImportTemplate);
                 _importEvidencesService.InsertAccountEvidence(resultCheckAccountEvidenceList, fileName, userId, template, isOverride);
+            });
+        }
+
+        private void InsertCustomerEvidence(string fileName, int userId, IEnumerable<ResultCheckAccountEvidenceModel> resultCheckAccountEvidenceList, bool isOverride)
+        {
+            Task.Run(() =>
+            {
+                var template = Server.MapPath(ImportTemplate);
+                _importEvidencesService.InsertCustEvidenceFromFile(resultCheckAccountEvidenceList, fileName, userId, template, isOverride);
             });
         }
     }

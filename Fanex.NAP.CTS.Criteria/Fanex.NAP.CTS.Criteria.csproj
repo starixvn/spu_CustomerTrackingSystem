@@ -59,9 +59,12 @@
     <Compile Include="Account\ChainToEvidence\GetAffectedEvidenceCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\GetAllEvidenceCriteria.cs" />
     <Compile Include="Account\GetAssociationWithCategoryCriteria.cs" />
+    <Compile Include="ImportEvidences\InsertCustEvidenceFromFileCriteria.cs" />
 	<Compile Include="AssociationReport\AssociationReportGetCategoriesCriteria.cs" />
-    <Compile Include="CustomerClassification\NormalAccountsClassificationGeneralCategorizeDailyCriteria.cs" />	<Compile Include="ProbationManagement\GetAccountStaticStatusCriteria.cs" />
-    <Compile Include="ProbationManagement\GetSubscriberCriteria.cs" />    <Compile Include="ProblemAccountMonitor\InsertProblemAccountCriteria.cs" />
+    <Compile Include="CustomerClassification\NormalAccountsClassificationGeneralCategorizeDailyCriteria.cs" />
+    <Compile Include="ProbationManagement\GetAccountStaticStatusCriteria.cs" />
+    <Compile Include="ProbationManagement\GetSubscriberCriteria.cs" />
+    <Compile Include="ProblemAccountMonitor\InsertProblemAccountCriteria.cs" />
     <Compile Include="SyncCustomerToMainDb\GetLastestEvidenceCategoryCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\PlaceEvidenceCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\RemoveFlaggedEvidenceCriteria.cs" />
@@ -114,7 +117,7 @@
     <Compile Include="ProbationManagement\GetAccummulatedInfoCriteria.cs" />
     <Compile Include="ProbationManagement\GetCategoryCriteria.cs" />
     <Compile Include="ProbationManagement\GetProbationCategoryCriteria.cs" />
-    <Compile Include="ProbationManagement\UpdateProbationCategoryCriteria.cs" />
+    <Compile Include="ProbationManagement\UpdateProbationCategory.cs" />
     <Compile Include="ManageSubscriber\SubscriberGetCriteria.cs" />
     <Compile Include="ManageSubscriber\SubscriberRemoveCriteria.cs" />
     <Compile Include="ManageSubscriber\SubscriberUpdateCriteria.cs" />

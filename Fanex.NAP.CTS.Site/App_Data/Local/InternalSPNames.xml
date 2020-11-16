@@ -52,6 +52,7 @@
     <Setting Key="CTS_DC_CustEvidence_Get" SpName="CTS_DC_CustEvidence_Get" DbName="MySQL.CTS_DataCenter.Reporter"/>
     <Setting Key="CTS_DC_CustEvidence_GetCleanCustFromList" SpName="CTS_DC_CustEvidence_GetCleanCustFromList" DbName="MySQL.CTS_DataCenter.Reporter"/>
     <Setting Key="CTS_DC_CustEvidence_GetFlaggedStatus" SpName="CTS_DC_CustEvidence_GetFlaggedStatus" DbName="MySQL.CTS_DataCenter.Reporter" />
+    <Setting Key="CTS_DC_CustEvidenceFromFile_Insert" SpName="CTS_DC_CustEvidenceFromFile_Insert" DbName="MySQL.CTS_DataCenter.Admin" />
   </Function>
 
   <Function Name="Association">

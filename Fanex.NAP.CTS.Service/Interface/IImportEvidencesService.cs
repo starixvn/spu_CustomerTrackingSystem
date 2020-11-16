@@ -1,8 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Service
-{
-    using Fanex.NAP.CTS.Core;
+{    
     using Fanex.NAP.CTS.Model.ImportEvidences;
-    using Fanex.NAP.CTS.ViewModel.ImportEvidences;
     using System.Collections;
     using System.Collections.Generic;
     using System.IO;
@@ -20,6 +18,8 @@
         void InsertAccountEvidence(IEnumerable<ResultCheckAccountEvidenceModel> resultCheckAccountEvidenceList, string fileName, int userId, string fileErrorTemplate, bool isOverride);
 
         IEnumerable<RawAccountEvidenceModel> GetRawAccountEvidences();
+
+        void InsertCustEvidenceFromFile(IEnumerable<ResultCheckAccountEvidenceModel> resultCheckAccountEvidenceList, string fileName, int userId, string fileErrorTemplate, bool isOverride);
 
     }
 }

@@ -258,7 +258,7 @@
                             rollBackStatus = IsRollBackInsertMultiEvidenceSuccess(addAccountEvidenceList, sessionId) ? "Override import type (rollback successfully) - " : "Override import type (rollback fail) - ";
                         }
 
-                        SendMail(resultCheckAccountEvidenceList, accountEvidence, userId, ex.Message);
+                        //SendMail(resultCheckAccountEvidenceList, accountEvidence, userId, ex.Message);
                         LogError(fileName, userId, "at " + DateTime.Now + " " + ex.Message, JsonConvert.SerializeObject(addAccountEvidenceList), rollBackStatus, ex);
                         return;
                     }
@@ -273,7 +273,7 @@
             }
             else
             {
-                SendMail(resultCheckAccountEvidenceList, addAccountEvidenceList, userId, hasOverrideSelection.ErrorMsg);
+                //SendMail(resultCheckAccountEvidenceList, addAccountEvidenceList, userId, hasOverrideSelection.ErrorMsg);
                 LogError(fileName, userId, "at " + DateTime.Now + " " + hasOverrideSelection.ErrorMsg, JsonConvert.SerializeObject(addAccountEvidenceList), string.Empty);
             } 
         }
@@ -355,6 +355,58 @@
             };
         }
 
+        public void InsertCustEvidenceFromFile(IEnumerable<ResultCheckAccountEvidenceModel> resultCheckCustEvidenceList, string fileName, int userId, string fileErrorTemplate, bool isOverwrite)
+        {
+            var customerEvidences = resultCheckCustEvidenceList
+              .Join(_rawAccountEvidenceList, x => x.RowId, y => y.RowId,
+                  (x, y) => new AddCustomerEvidenceFromFileModel
+                  {
+                      CTSCustID = x.CTSCustID,
+                      CustID = x.CustID,
+                      SubscriberID = x.SubscriberID,
+                      EvidenceID = x.EvidenceID,
+                      Remark = y.Comment
+                  });
+
+            var jsonData = JsonConvert.SerializeObject(customerEvidences);
+            var fileKey = long.Parse(DateTime.Now.ToString("yyyyMMddHHmmssffff"));
+
+            try
+            {
+                var criteria = new InsertCustEvidenceFromFileCriteria
+                {
+                    CustomerEvidencesJson = jsonData,
+                    IsOverwrite = isOverwrite,
+                    UserId = userId,
+                    FileName = fileName,
+                    FileKey = fileKey
+                };
+
+                using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+                {
+                    db.ExecuteNonQuery(criteria);
+
+                    if (!string.IsNullOrEmpty(criteria.ErrorMessage))
+                    {
+                        var errorMessage = string.Format("CTS - Import file name: {0} - userId: {1} - import error: {2} - Content: {3}"
+                                                      , fileName, userId, criteria.ErrorMessage, jsonData);
+                        LogService.Error(errorMessage);
+
+                        SendMail(resultCheckCustEvidenceList, customerEvidences, userId, criteria.ErrorMessage);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                var errorMessage = string.Format("CTS - Import file name: {0} - userId: {1} - import error: {2} - Content: {3}"
+                                               , fileName, userId, ex.Message, jsonData);
+
+                LogService.Error(errorMessage, ex);
+
+                SendMail(resultCheckCustEvidenceList, customerEvidences, userId, ex.Message);                
+            }
+        }
+
         private void LogError(string fileName, int userId, string error, string jsonData, string rollBackStatus, Exception ex = null)
         {
             var errorMessage = string.Format("CTS - Import file name: {0} - userId: {1} - import error: {2} - {4} Content: {3}"
@@ -366,7 +418,7 @@
         }
 
         private void SendMail(IEnumerable<ResultCheckAccountEvidenceModel> accountEvidenceCheckedList
-            , IEnumerable<AddAccountEvidenceModel> errorAccountEvidenceModelList
+            , IEnumerable<AddCustomerEvidenceFromFileModel> errorAccountEvidenceModelList
             , int userId
             , string errorMessage)
         {
@@ -391,7 +443,7 @@
             }
         }
 
-        private byte[] ExportExcel(IEnumerable<ResultCheckAccountEvidenceModel> accountEvidenceCheckedList, IEnumerable<AddAccountEvidenceModel> errorAccountEvidenceModelList)
+        private byte[] ExportExcel(IEnumerable<ResultCheckAccountEvidenceModel> accountEvidenceCheckedList, IEnumerable<AddCustomerEvidenceFromFileModel> errorAccountEvidenceModelList)
         {
             var errorDetailList = errorAccountEvidenceModelList
                     .Join(accountEvidenceCheckedList, x => x.CTSCustID, y => y.CTSCustID, (x, y) => y)
