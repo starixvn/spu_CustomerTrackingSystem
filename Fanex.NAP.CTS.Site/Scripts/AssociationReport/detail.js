@@ -168,11 +168,11 @@
                     isLinked = true;
                 }
 
-                RemoveAssociation(cell, fromSubscriberId, fromCTSCustId, obj.SubscriberId, obj.CTSCustId, isLinked);
+                RemoveAssociation(fromSubscriberId, fromCTSCustId, obj.SubscriberId, obj.CTSCustId, isLinked);
             });
     }
 
-    function RemoveAssociation(cell, fromSubscriberId, fromCTSCustId, toSubscriberId, toCTSCustId, isLinked) {
+    function RemoveAssociation(fromSubscriberId, fromCTSCustId, toSubscriberId, toCTSCustId, isLinked) {
         var url = common.modifyRelativeUrl('AssociationReport/ActiveRemoveAssociation');
         var params = {};
         params.fromSubscriberId = parseInt(fromSubscriberId);
@@ -187,7 +187,10 @@
             success: function (response) {
                 if (response.errorCode === 0) {
                     common.showSuccess('Updated association successful!', 2000);
-                    ToggleLinked(cell);
+
+                    setTimeout(() => {
+                        GetAssociationDetailReport();
+                    }, 2000);                    
                 }
                 else if (response.errorCode === -1) {
                     common.showError('This association is already unlinked!');
@@ -207,16 +210,6 @@
                 console.log(error);
             }
         });
-    }
-
-    function ToggleLinked(cell) {
-        let toggleElement = $("#switch", cell);
-
-        if (toggleElement.hasClass("toggle-on")) {
-            toggleElement.addClass("toggle-off").removeClass("toggle-on");
-        } else {
-            toggleElement.addClass("toggle-on").removeClass("toggle-off");
-        }
     }
 
     function Initial() {        
