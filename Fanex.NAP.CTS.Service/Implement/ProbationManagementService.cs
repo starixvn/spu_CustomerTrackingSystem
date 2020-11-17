@@ -4,8 +4,7 @@
     using Fanex.Data.Repository;
     using Fanex.Logging;
     using Fanex.NAP.CTS.Core;
-    using Fanex.NAP.CTS.Core.ExportExcel;
-    using Fanex.NAP.CTS.Core.Helpers.Xml;
+    using Fanex.NAP.CTS.Core.ExportExcel;    
     using Fanex.NAP.CTS.Criteria.ProbationManagement;
     using Fanex.NAP.CTS.Model.ProbationManagement;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
@@ -15,8 +14,7 @@
     using NPOI.SS.UserModel;
     using NPOI.XSSF.UserModel;
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
+    using System.Collections.Generic;    
     using System.Text;
 
     public class ProbationManagementService : IProbationManagementService
@@ -27,26 +25,14 @@
 
             statusList.Add(new AccountStaticStatusModel
             {
-                ItemName = "1,11", // 1: Open, 11: Active
-                ItemNameDisplay = "Open"
+                Ids = "1,11", // 1:Open, 11:Active
+                Name = "Open"
             });
 
             statusList.Add(new AccountStaticStatusModel
             {
-                ItemName = "3,13", // Closed, View Only
-                ItemNameDisplay = "Closed"
-            });
-
-            statusList.Add(new AccountStaticStatusModel
-            {
-                ItemName = "4,14", // Suspended
-                ItemNameDisplay = "Suspended"
-            });
-
-            statusList.Add(new AccountStaticStatusModel
-            {
-                ItemName = "2,12", // Disabled, Inactive
-                ItemNameDisplay = "Disabled"
+                Ids = "2,3,4,12,13,14", // 2:Disabled, 3:Closed, 4:Suspended, 12:Inactive, 13:View Only, 14:Suspended
+                Name = "Closed"
             });
 
             return statusList;

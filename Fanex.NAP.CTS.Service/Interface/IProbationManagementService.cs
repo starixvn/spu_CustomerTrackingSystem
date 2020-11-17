@@ -7,9 +7,7 @@
 
     public interface IProbationManagementService
     {
-        List<AccountStaticStatusModel> GetAccountStaticStatuses();
-
-        IEnumerable<CategoryModel> GetCategories(int categoryMode);
+        List<AccountStaticStatusModel> GetAccountStaticStatuses();        
 
         IEnumerable<ProbationCategoryModel> GetProbationCategory(string username, int dayLeft, int categoryMode);
 

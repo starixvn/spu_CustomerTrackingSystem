@@ -48,13 +48,13 @@
                             @{ var defaultSelecteds = "OPEN"; }
                             @foreach (var item in (IEnumerable<AccountStaticStatusModel>)ViewBag.AccountStaticStatuses)
                             {
-                                if (defaultSelecteds.Contains(item.ItemName.ToUpper()))
+                                if (defaultSelecteds.Contains(item.Name.ToUpper()))
                                 {
-                                    <option value="@item.ItemName" selected>@item.ItemNameDisplay</option>
+                                    <option value="@item.Ids" selected>@item.Name</option>
                                 }
                                 else
                                 {
-                                    <option value="@item.ItemName">@item.ItemNameDisplay</option>
+                                    <option value="@item.Ids">@item.Name</option>
                                 }
                             }
                         </select>
