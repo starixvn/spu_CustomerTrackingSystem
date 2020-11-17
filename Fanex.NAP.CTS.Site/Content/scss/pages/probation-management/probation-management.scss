@@ -216,13 +216,14 @@
             align-items: flex-end;
             margin-right: auto;
             flex-wrap: wrap;
-            padding : 1rem 0;
+            padding: 1rem 0;
             top: 9.7rem;
             background: $page-bg;
             position: sticky;
             position: -webkit-sticky;
             z-index: 11;
-            width : 100%;
+            width: 100%;
+
             @media screen and (max-width: 1024px) {
                 justify-content: flex-start;
             }
@@ -303,5 +304,9 @@
             box-sizing: border-box;
             border-top: 0;
         }
+    }
+
+    option {
+        font-size: 115%;
     }
 }

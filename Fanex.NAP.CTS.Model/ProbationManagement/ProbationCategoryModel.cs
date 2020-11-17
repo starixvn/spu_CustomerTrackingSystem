@@ -10,6 +10,10 @@ namespace Fanex.NAP.CTS.Model.ProbationManagement
 
         public string Site { get; set; }
 
+        public string Status { get; set; }
+
+        public bool AssociatedWithPA { get; set; }
+
         public int SportGroupID { get; set; }
 
         public string Sport { get; set; }

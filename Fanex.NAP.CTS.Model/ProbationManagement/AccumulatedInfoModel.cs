@@ -6,6 +6,8 @@
 
         public int SportId { get; set; }
 
+        public decimal Winloss { get; set; }
+
         public decimal Margin { get; set; }
 
         public long BetCount { get; set; }

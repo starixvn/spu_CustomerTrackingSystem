@@ -304,9 +304,14 @@
         private static void RegisterProbationManagementBundles(BundleCollection bundles)
         {
             bundles.Add(new StyleBundle("~/probation-management-styles").Include(
+                "~/Content/scss/vendors/select2.min.css",
+                "~/Content/scss/MultipleSelect/jquery.multiselect.filter.css",
+                "~/Content/scss/MultipleSelect/jquery.multiselect.css",
                 "~/Content/scss/pages/probation-management/probation-management.css"));
 
             bundles.Add(new ScriptBundle("~/probation-management-scripts").Include(
+                "~/Scripts/select2.min.js",
+                "~/Scripts/MultipleSelect/jquery.multiselect.filter.js",
                 "~/Scripts/ProbationManagement/index.js"));
         }
 

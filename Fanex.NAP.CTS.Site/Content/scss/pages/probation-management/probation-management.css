@@ -198,3 +198,5 @@
       background: #fff;
       box-sizing: border-box;
       border-top: 0; }
+  .probation-content option {
+    font-size: 115%; }

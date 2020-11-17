@@ -8,8 +8,20 @@
         [SpParam(SqlParamName = "ip_Username")]
         public string UserName { get; set; }
 
-        [SpParam(SqlParamName = "ip_DaysLeft")]
-        public int DaysLeft { get; set; }
+        [SpParam(SqlParamName = "ip_FromDaysLeft")]
+        public int FromDaysLeft { get; set; }
+
+        [SpParam(SqlParamName = "ip_ToDaysLeft")]
+        public int ToDaysLeft { get; set; }
+
+        [SpParam(SqlParamName = "ip_SubscriberID")]
+        public int SubscriberID { get; set; }
+
+        [SpParam(SqlParamName = "ip_StatusIDs")]
+        public string StatusIDs { get; set; }       
+
+        [SpParam(SqlParamName = "ip_isAssociatedPA")]
+        public int IsAssociatedPA { get; set; }
 
         [SpParam(SqlParamName = "ip_CategoryMode")]
         public int CategoryMode { get; set; }

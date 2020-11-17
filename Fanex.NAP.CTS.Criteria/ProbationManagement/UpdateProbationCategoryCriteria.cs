@@ -3,7 +3,7 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
 
-    public class UpdateProbationCategory : CriteriaBase
+    public class UpdateProbationCategoryCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_CustidList")]
         public string CustIdList { get; set; }

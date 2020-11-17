@@ -194,6 +194,7 @@
     <Compile Include="Notification\UpdateNotifiedSettingStatusModel.cs" />
     <Compile Include="Notification\NotifiedSettingStatusModel.cs" />
     <Compile Include="Notification\ProbationMessageModel.cs" />
+    <Compile Include="ProbationManagement\AccountStaticStatusModel.cs" />
     <Compile Include="ProbationManagement\AccumulatedInfoModel.cs" />
     <Compile Include="ProbationManagement\CategoryModel.cs" />
     <Compile Include="ProbationManagement\ChangeCategoryModel.cs" />

@@ -126,6 +126,7 @@
     <Compile Include="Notification\NotificationSettingStatusViewModel.cs" />
     <Compile Include="Notification\NotificationSettingViewModel.cs" />
     <Compile Include="ProbationManagement\CategoryViewModel.cs" />
+    <Compile Include="ProbationManagement\ExportProbationCategoryFilter.cs" />
     <Compile Include="ProbationManagement\ProbationCategoryViewModel.cs" />
     <Compile Include="ProbationManagement\RenderProbationViewModel.cs" />
     <Compile Include="ProblemAccountMonitor\DetailBetType.cs" />

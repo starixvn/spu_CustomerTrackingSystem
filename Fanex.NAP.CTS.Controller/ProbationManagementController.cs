@@ -9,30 +9,35 @@
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.Service.Implement;
     using System.Collections.Generic;
-    using Fanex.NAP.CTS.ViewModel.ProbationManagement;    
+    using Fanex.NAP.CTS.ViewModel.ProbationManagement;
     using System.Linq;
-    using Newtonsoft.Json;
     using Fanex.NAP.CTS.Model.ProbationManagement;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Core.Extentions;
     using System.Threading.Tasks;
+    using System;
+    using System.Text;
+    using Fanex.NAP.CTS.Core;
+    using Fanex.Logging;
+    using Fanex.NAP.CTS.Core.Helpers.Xml;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.ProbationManagement, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class ProbationManagementController : BaseController
     {
+        private const string ExportTemplate = "~/App_Data/Excel Template/ProbationManagement/ExportTemplate.xlsx";
         private readonly IProbationManagementService _probationService;
-        private readonly ISyncCustomerToMainDbService _syncToMainDbService;
+        private readonly ManageSubscriberService _subscriberService;
 
         public override string BaseControllerName { get => Consts.MenuItemController; }
 
         public ProbationManagementController()
         {
             _probationService = new ProbationManagementService();
-            _syncToMainDbService = new SyncCustomerToMainDbService();
+            _subscriberService = new ManageSubscriberService();
         }
 
-        public ActionResult Index(int filterType=0)
+        public ActionResult Index(int filterType = 0)
         {
             IUserService userService = new UserService();
 
@@ -41,123 +46,154 @@
                             FSFunctionKeys.ProbationManagement,
                             NAP.Core.Business.Constant.Policy.Host);
 
-            ViewBag.GeneralCategories = GetCategories(1);
-            ViewBag.DetailedCategories = GetCategories(2);
-
+            ViewBag.Subscribers = _subscriberService.GetSubscribers();
+            ViewBag.AccountStaticStatuses = _probationService.GetAccountStaticStatuses();
+          
             return View(new RenderProbationViewModel()
             {
                 IsHostPermission = isHostPermission,
                 ProbationFilterType = filterType
             });
+        }      
+
+        [HttpGet]
+        public ActionResult ExportProbationCategory(ExportProbationCategoryFilter filter)
+        {
+            var probationCategoryList = Enumerable.Empty<ProbationCategoryViewModel>();
+            var dBResult = new DBResult();
+
+            filter = ParseFilter(filter);
+
+            var data = _probationService.GetProbationCategory(filter, out dBResult);
+
+            if (dBResult.ErrorCode != 0)
+                return new HttpStatusCodeResult(dBResult.ErrorCode, dBResult.ErrorMsg);
+
+            if (data != null && data.Any())
+            {
+                probationCategoryList = FillAccumulatedInfo(data, filter);
+            }
+
+            var csvData = _probationService.ExportCSV(probationCategoryList, filter);
+
+            var csvFileName = string.Format("Probations_{0}.csv", DateTime.Now.ToString("yyyyMMdd"));
+
+            var fileBytes = Encoding.UTF8.GetBytes(csvData);
+
+            return File(fileBytes, "text/plain", csvFileName);
         }
 
-        [HttpPost]
-        public ActionResult GetProbationCategory(string username, int daysLeft, string minMargin, string maxMargin, int categoryMode)
+        private ExportProbationCategoryFilter ParseFilter(ExportProbationCategoryFilter filter)
         {
-            var viewModel = Enumerable.Empty<ProbationCategoryViewModel>();
+            if (filter.DaysLeft != null && filter.DaysLeft.Contains("-"))
+            {
+                var arr = filter.DaysLeft.Split(new char[] { '-' });
+                int fromDaysLeft = 0, toDaysLeft = 0;
+
+                int.TryParse(arr[0], out fromDaysLeft);
+                int.TryParse(arr[1], out toDaysLeft);
+
+                filter.FromDaysLeft = fromDaysLeft;
+                filter.ToDaysLeft = toDaysLeft;
+            }
+
+            return filter;
+        }
+
+        private IEnumerable<ProbationCategoryViewModel> FillAccumulatedInfo(IEnumerable<ProbationCategoryModel> data, ExportProbationCategoryFilter filter)
+        {
+            var probationCategoryList = Enumerable.Empty<ProbationCategoryViewModel>();
+            var minWinLossDecimal = new decimal();
+            var maxWinLossDecimal = new decimal();
             var minMarginDecimal = new decimal();
             var maxMarginDecimal = new decimal();
 
-            decimal.TryParse(minMargin, out minMarginDecimal);
-            decimal.TryParse(maxMargin, out maxMarginDecimal);
+            decimal.TryParse(filter.MinWinLoss, out minWinLossDecimal);
+            decimal.TryParse(filter.MaxWinLoss, out maxWinLossDecimal);
+            decimal.TryParse(filter.MinMargin, out minMarginDecimal);
+            decimal.TryParse(filter.MaxMargin, out maxMarginDecimal);
 
-            var data = _probationService.GetProbationCategory(username, daysLeft, categoryMode);
+            var accumulatedData = GetAccumulatedInfo(data);
 
-            if (data != null && data.Any())
+            probationCategoryList = data.Select(x =>
             {
-                var accumulatedData = GetAccumulatedInfo(data);
+                var isNotAccumulatedInfo = false;
+                var accumulatedItem = accumulatedData.FirstOrDefault(y => y.CustId == x.CustID && y.SportId == x.SportGroupID);
+                var currentWinLoss = new decimal();
+                var currentWinLossString = "N/A";
+                var currentMargin = new decimal();
+                var currentMarginString = "N/A";
 
-                viewModel = data.Select(x =>
+                if (accumulatedItem != null)
                 {
-                    var accumulatedItem = accumulatedData.FirstOrDefault(y => y.CustId == x.CustID && y.SportId == y.SportId);
-                    var currentMargin = new decimal();
-                    var currentMarginString = "N/A";
-
-                    if (accumulatedItem != null)
-                    {
-                        currentMargin = accumulatedItem.Margin;
-                        currentMarginString = accumulatedItem.Margin.ToString(Consts.FormatDecimalToString_Thousands2Places);
-                    }
-
-                    return new ProbationCategoryViewModel
-                    {
-                        CustId = x.CustID,
-                        UserName = x.Username,
-                        SiteName = x.Site,
-                        SportGroupId = x.SportGroupID,
-                        SportName = x.Sport,
-                        TargetCategoryName = x.TargetCategoryName,
-                        TaggedDate = x.TaggedDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmm),
-                        FirstMargin = x.FirstMargin,
-                        CurrentMargin = currentMargin,
-                        CurrentMarginString = currentMarginString,
-                        DaysLeft = x.DaysLeft
-                    };
-                });
-
-                if (!string.IsNullOrEmpty(minMargin) && !string.IsNullOrEmpty(maxMargin))
-                {
-                    viewModel = viewModel.Where(x => x.CurrentMargin >= minMarginDecimal && x.CurrentMargin <= maxMarginDecimal);
+                    currentWinLoss = accumulatedItem.Winloss;
+                    currentWinLossString = accumulatedItem.Winloss.ToString(Consts.FormatDecimalToString_2Places);
+                    currentMargin = accumulatedItem.Margin;
+                    currentMarginString = accumulatedItem.Margin.ToString(Consts.FormatDecimalToString_2Places);
                 }
-                else if(!string.IsNullOrEmpty(minMargin) && string.IsNullOrEmpty(maxMargin))
+                else
                 {
-                    viewModel = viewModel.Where(x => x.CurrentMargin >= minMarginDecimal);
+                    isNotAccumulatedInfo = true;
                 }
-                else if (string.IsNullOrEmpty(minMargin) && !string.IsNullOrEmpty(maxMargin))
-                {
-                    viewModel = viewModel.Where(x => x.CurrentMargin <= maxMarginDecimal);
-                }
-                viewModel = viewModel.OrderByDescending(x => x.DaysLeft);
-           
-            }
 
-            return Json(new
-            {
-                data = viewModel
-            }, JsonRequestBehavior.AllowGet);
-        }
-        
-        [HttpPost]
-        [NapAuth(FunctionKey = FSFunctionKeys.ProbationManagement, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult ChangeCategory(int custId, int sportGroupId, int targetCategoryId)
-        {
-            var custList = new List<ChangeCategoryModel>();
-            custList.Add(new ChangeCategoryModel
-            {
-                CustID = custId,
-                SportGroupID = sportGroupId,
-                NewCategoryID = targetCategoryId
+                return new ProbationCategoryViewModel
+                {
+                    CustId = x.CustID,
+                    IsNotAccumulatedInfo = isNotAccumulatedInfo,
+                    UserName = x.Username,
+                    SiteName = x.Site,
+                    Status = x.Status,
+                    AssociatedWithPA = x.AssociatedWithPA,
+                    SportGroupId = x.SportGroupID,
+                    SportName = x.Sport,
+                    TargetCategoryName = x.TargetCategoryName,
+                    TaggedDate = x.TaggedDate.ToString(Consts.FormatDateToString_MMMddyyyy2),
+                    CurrentWinLoss = currentWinLoss,
+                    CurrentWinLossString = currentWinLossString,
+                    FirstMargin = x.FirstMargin,
+                    CurrentMargin = currentMargin,
+                    CurrentMarginString = currentMarginString,
+                    DaysLeft = x.DaysLeft
+                };
             });
 
-            var jsonData = JsonConvert.SerializeObject(custList);
-
-            var updatedResult = _probationService.ChangeCategory(jsonData, string.Empty, CurrentSession.UserId);
-
-            if (updatedResult.DBResult.ErrorCode == 0)
+            if (!string.IsNullOrEmpty(filter.MinWinLoss) && !string.IsNullOrEmpty(filter.MaxWinLoss))
             {
-                _syncToMainDbService.SyncCustomerClassToMainDb(updatedResult.CustomerClassList, "Probation Management");
+                probationCategoryList = probationCategoryList.Where(x => x.CurrentWinLoss >= minWinLossDecimal && x.CurrentWinLoss <= maxWinLossDecimal);
+            }
+            else if (!string.IsNullOrEmpty(filter.MinWinLoss) && string.IsNullOrEmpty(filter.MaxWinLoss))
+            {
+                probationCategoryList = probationCategoryList.Where(x => x.CurrentWinLoss >= minWinLossDecimal);
+            }
+            else if (string.IsNullOrEmpty(filter.MinWinLoss) && !string.IsNullOrEmpty(filter.MaxWinLoss))
+            {
+                probationCategoryList = probationCategoryList.Where(x => x.CurrentWinLoss <= maxWinLossDecimal);
             }
 
-            return Json(updatedResult.DBResult, JsonRequestBehavior.AllowGet);
-        }       
-
-        private IEnumerable<CategoryViewModel> GetCategories(int categoryMode)
-        {
-            var categoriesViewModel = Enumerable.Empty<CategoryViewModel>();
-            
-            var data = _probationService.GetCategories(categoryMode);
-            if (data != null && data.Any())
+            if (!string.IsNullOrEmpty(filter.MinMargin) && !string.IsNullOrEmpty(filter.MaxMargin))
             {
-                categoriesViewModel = data
-                    .OrderBy(x => x.DisplayOrder)
-                    .Select(x => new CategoryViewModel
-                    {
-                        CategoryID = x.CategoryID,
-                        CategoryName = x.CategoryName
-                    });
+                probationCategoryList = probationCategoryList.Where(x => x.CurrentMargin >= minMarginDecimal && x.CurrentMargin <= maxMarginDecimal);
+            }
+            else if (!string.IsNullOrEmpty(filter.MinMargin) && string.IsNullOrEmpty(filter.MaxMargin))
+            {
+                probationCategoryList = probationCategoryList.Where(x => x.CurrentMargin >= minMarginDecimal);
+            }
+            else if (string.IsNullOrEmpty(filter.MinMargin) && !string.IsNullOrEmpty(filter.MaxMargin))
+            {
+                probationCategoryList = probationCategoryList.Where(x => x.CurrentMargin <= maxMarginDecimal);
+            }
+            probationCategoryList = probationCategoryList.OrderByDescending(x => x.DaysLeft);
+
+            var custNotAccumulateds = probationCategoryList.Where(x => x.IsNotAccumulatedInfo);
+
+            if (custNotAccumulateds.Any())
+            {
+                var custHasNotAccumulatedList = custNotAccumulateds.Select(x => new ProbationModel { CustId = x.CustId, SportGroupId = x.SportGroupId });
+
+                LogService.Error("CTS - Probation Management - FillAccumulatedInfo List Cust has not Accumulated info: " + custHasNotAccumulatedList.ToXmlString());
             }
 
-            return categoriesViewModel;
+            return probationCategoryList;
         }
 
         private IEnumerable<AccumulatedInfoModel> GetAccumulatedInfo(IEnumerable<ProbationCategoryModel> data)
@@ -169,23 +205,34 @@
             {
                 CustId = x.CustID,
                 SportGroupId = x.SportGroupID
-            });
+            }).OrderBy(x => x.CustId);
 
-            var loopProbationModelList = probationModelList.Chunk(ConfigSettings.GetAccummulatedChunkSize);
-            
-            foreach (var item in loopProbationModelList)
+            var loopProbationModelList = probationModelList.Chunk(ConfigSettings.GetAccummulatedChunkSize).ToList();
+            var batchTotal = loopProbationModelList.Count();
+            var batchStart = 0;
+
+            do
             {
+                batchStart++;
+
+                var customersXML = loopProbationModelList[batchStart - 1].ToXmlString();
+
                 tasks.Add(Task.Run(() =>
                 {
-                    var accumulatedData = _probationService.GetAccummulatedInfo(item);
+                    var accumulatedData = _probationService.GetAccummulatedInfo(customersXML);
 
                     accumulatedList.AddRange(accumulatedData);
                 }));
-            }
 
-            Task.WhenAll(tasks.ToArray()).Wait();
+                if (batchStart % 4 == 0 || batchStart == batchTotal)
+                {
+                    Task.WhenAll(tasks.ToArray()).Wait();
+                    tasks = new List<Task>();
+                }
+            } while (batchStart < batchTotal);
 
             return accumulatedList;
         }
+
     }
 }
