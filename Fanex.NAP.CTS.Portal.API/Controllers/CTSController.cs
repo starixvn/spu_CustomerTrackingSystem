@@ -433,7 +433,7 @@
         private void ClassifyCustomerGeneral(string custIds)
         {
             var custWithoutEvidence = _syncToMainDbService.GetLatestEvidenceCategory(custIds, true, true)
-                .Where(c => c.CategoryIdMapping != -1);
+                .Where(c => c.CategoryIdMapping == -1);
 
             if (custWithoutEvidence.Any())
             {

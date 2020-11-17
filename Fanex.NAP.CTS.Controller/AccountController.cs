@@ -770,10 +770,9 @@
 
                 _syncToMainDbService.SyncCustomerClassToMainDb(model.CTSCustId.ToString(), false, false);
 
-                if (associatedAccountList.Any())
-                {
-                    ClassifyCustomerGeneral(string.Join(",", associatedAccountList));
-                }
+                var customerInfoFromCTS = _accountService.GetCustomerInfoByCTSCustId(model.CTSCustId);
+
+                ClassifyCustomerGeneral(customerInfoFromCTS.CustId.ToString());
             }
 
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -1370,7 +1369,7 @@
         public void ClassifyCustomerGeneral(string custIds)
         {
             var custWithoutEvidence = _syncToMainDbService.GetLatestEvidenceCategory(custIds, true, true)
-                .Where(c => c.CategoryIdMapping != -1);
+                .Where(c => c.CategoryIdMapping == -1);
 
             if (custWithoutEvidence.Any())
             {
