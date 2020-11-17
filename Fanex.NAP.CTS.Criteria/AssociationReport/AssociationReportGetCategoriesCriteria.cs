@@ -9,7 +9,7 @@
         public string CTSCustIdList { get; set; }
 
         public override string GetSettingKey()
-            => "CTS_DC_AssociatedAccountReport_Get";
+            => "CTS_DC_Report_GetAssociatedAccount";
 
         public override bool IsValid()
             => true;

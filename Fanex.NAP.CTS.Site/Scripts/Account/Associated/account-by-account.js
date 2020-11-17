@@ -140,8 +140,7 @@
                 }
             ],
             createdRow: function (row, obj) {
-                $(row).attr('data-site-id', obj.SiteId);
-                $(row).addClass('hide');
+                $(row).attr('data-site-id', obj.SiteId);                
             },
             drawCallback: function () {
                 let api = this.api();

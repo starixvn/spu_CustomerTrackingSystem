@@ -179,7 +179,7 @@
         params.fromCTSCustId = parseInt(fromCTSCustId);
         params.toSubscriberId = toSubscriberId;
         params.toCTSCustId = toCTSCustId;
-        params.isLinked = isLinked;
+        params.isLinked = !isLinked;        
 
         $.ajax(url, {
             type: 'POST',
