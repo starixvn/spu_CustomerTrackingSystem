@@ -125,7 +125,7 @@
                     SiteName = !string.IsNullOrEmpty(x.SiteName) ? x.SiteName : "-",
                     AccountStatus = x.StatusName,
                     AssociatedDate = x.AssociationDate,
-                    AssociatedDateString = x.AssociationDate.ToString(Consts.FormatDateToString_MMMddyyyy),
+                    AssociatedDateString = x.AssociationDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                     IsLinked = x.AssociationStatus == 1,
                     AssociationTypeName = GetAssociationTypeName(associationTypes, x.AssociationType),
                     TotalAssociationAccount = groupForSite.FirstOrDefault(y=>y.SiteId == x.SiteID).TotalAccounts
