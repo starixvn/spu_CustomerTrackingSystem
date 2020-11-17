@@ -294,12 +294,12 @@
                             }
                         case 2:
                             {
-                                script = "GetAssociationReportByManual";
+                                script = "GetAssociationReportByIP";
                                 break;
                             }
                         case 3:
                             {
-                                script = "GetAssociationReportByIP";
+                                script = "GetAssociationReportByManual";
                                 break;
                             }
                     }
@@ -357,12 +357,12 @@
                             }
                         case 2:
                             {
-                                script = "GetAssociationOneLevelByCustIdByManual";
+                                script = "GetAssociationOneLevelByCustIdByIP";
                                 break;
                             }
                         case 3:
                             {
-                                script = "GetAssociationOneLevelByCustIdByIP";
+                                script = "GetAssociationOneLevelByCustIdByManual";
                                 break;
                             }
                     }
