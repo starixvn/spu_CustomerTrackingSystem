@@ -6,7 +6,7 @@ WHERE c.CTSCustID = $ip_CTSCustId AND
     OR ($ip_assStatus = 2 AND exists((c)-[:HAS_EXCEPTION]-(c2))))
 	AND
 	   (($ip_IsAssReport = 0)
-	OR  ($ip_IsAssReport = 1 AND datetime ({epochMillis: r.CreatedDate}) >= datetime($ip_AssCreatedFrom) AND datetime ({epochMillis: r.CreatedDate}) <= datetime($ip_AssCreatedTo)))
+	OR  ($ip_IsAssReport = 1 AND date(datetime ({epochMillis: r.CreatedDate})) >= date(datetime($ip_AssCreatedFrom)) AND date(datetime ({epochMillis: r.CreatedDate})) <= date(datetime($ip_AssCreatedTo))))
 
 WITH c,c2,r
 OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c2)

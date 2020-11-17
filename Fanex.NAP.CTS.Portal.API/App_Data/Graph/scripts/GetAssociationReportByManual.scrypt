@@ -19,7 +19,7 @@ WHERE   e.EvidenceCode = trim($ip_EvidenceCode)
          	 OR ($ip_AssStatus = 1 AND NOT EXISTS ((c)-[:HAS_EXCEPTION]-(c1)))
          	 OR ($ip_AssStatus = 2 AND EXISTS ((c)-[:HAS_EXCEPTION]-(c1))))
 	    AND 	 
-			 (datetime ({epochMillis: m.CreatedDate}) >= datetime($ip_AssCreatedFrom) AND datetime ({epochMillis: m.CreatedDate}) <= datetime($ip_AssCreatedTo))
+			 (date(datetime({epochMillis: m.CreatedDate})) >= date(datetime($ip_AssCreatedFrom)) AND date(datetime({epochMillis: m.CreatedDate})) <= date(datetime($ip_AssCreatedTo)))
 WITH c,e
 OPTIONAL MATCH (s:StaticList) <-[:HAS_STATUS]-(c)-[HAS_EVIDENCE]->(e1:Evidence)
 with c, s, collect(Distinct e1.EvidenceCode) as listEvidenceCode

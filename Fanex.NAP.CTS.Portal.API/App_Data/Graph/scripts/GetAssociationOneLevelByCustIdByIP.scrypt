@@ -6,8 +6,8 @@ WHERE c.CTSCustID = $ip_CTSCustId AND
     OR ($ip_assStatus = 2 AND exists((c)-[:HAS_EXCEPTION]-(c2))))
 	AND
 	  	   (($ip_IsAssReport = 0)
-	OR  ($ip_IsAssReport = 1 AND datetime(r2.CreatedTime) > datetime(r3.CreatedTime) AND datetime(r2.CreatedTime) >= datetime($ip_AssCreatedFrom) AND datetime(r2.CreatedTime) <= datetime($ip_AssCreatedTo))
-	OR  ($ip_IsAssReport = 1 AND datetime(r3.CreatedTime) >= datetime(r2.CreatedTime) AND datetime(r3.CreatedTime) >= datetime($ip_AssCreatedFrom) AND datetime(r3.CreatedTime) <= datetime($ip_AssCreatedTo)))
+	OR  ($ip_IsAssReport = 1 AND datetime(r2.CreatedTime) > datetime(r3.CreatedTime) AND date(datetime(r2.CreatedTime)) >= date(datetime($ip_AssCreatedFrom)) AND date(datetime(r2.CreatedTime)) <= date(datetime($ip_AssCreatedTo)))
+	OR  ($ip_IsAssReport = 1 AND datetime(r3.CreatedTime) >= datetime(r2.CreatedTime) AND date(datetime(r3.CreatedTime)) >= date(datetime($ip_AssCreatedFrom)) AND date(datetime(r3.CreatedTime)) <= date(datetime($ip_AssCreatedTo))))
 WITH c,c2,i,r2,r3
 OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c2)
 OPTIONAL MATCH (c2)-[:BELONG_TO_SITE]->(s:Site)
