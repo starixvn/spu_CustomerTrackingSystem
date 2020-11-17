@@ -736,6 +736,17 @@
             
             if (result.ErrorCode == 0)
             {
+                var objects = new
+                {
+                    model.CustId,
+                    model.CTSCustId,                    
+                    model.SubscriberId,
+                    model.EvidenceId,
+                    ActionType = 1
+                };
+                var custEvidenceJson = JsonConvert.SerializeObject(objects);
+                _accountService.SyncCustEvidenceToCategory(custEvidenceJson);
+
                 _syncToMainDbService.SyncCustomerClassToMainDb(model.CTSCustId.ToString(), false, false);
             }
 
@@ -767,6 +778,17 @@
                             CustIDList = string.Join(",", associatedAccountList)
                         });
                 }
+
+                var objects = new
+                {
+                    model.CustId,
+                    model.CTSCustId,                   
+                    model.SubscriberId,
+                    model.EvidenceId,
+                    ActionType = 2
+                };
+                var custEvidenceJson = JsonConvert.SerializeObject(objects);
+                _accountService.SyncCustEvidenceToCategory(custEvidenceJson);
 
                 _syncToMainDbService.SyncCustomerClassToMainDb(model.CTSCustId.ToString(), false, false);
 

@@ -733,6 +733,33 @@
             }
         }
 
+        public DBResult SyncCustEvidenceToCategory(string custEvidencesJson)
+        {
+            var criteria = new CustEvidenceSyncToCategoryCriteria
+            {
+                CustEvidencesJson = custEvidencesJson
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                try
+                {
+                    db.ExecuteNonQuery(criteria);
+
+                    if (!string.IsNullOrEmpty(criteria.ErrorMessage))
+                        return new DBResult { ErrorCode = -1, ErrorMsg = criteria.ErrorMessage };
+                    else
+                        return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
+                }
+                catch (Exception ex)
+                {
+                    LogService.Error("CTS - AccountService SyncCustEvidenceToCategory exception: " + ex.Message, ex);
+
+                    return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
+                }
+            }
+        }
+
         public List<AccountExceptionsModel> GetAccountExceptions(Int64 ctsCustId)
         {
             var criteria = new GetAccountExceptionsCriteria

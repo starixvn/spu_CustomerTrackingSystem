@@ -18,7 +18,7 @@
         spanClass: $('#spanClass')
     };
 
-    function InitialFlaggedGrid(ctsCustId, username, custId) {
+    function InitialFlaggedGrid(ctsCustId, username, custId, subscriberId) {
         domElements.tblChainToEvidenceFlagged.DataTable({
             language: {
                 zeroRecords: "There's no data"
@@ -48,7 +48,7 @@
                         if (isHostPermission) {
                             $('.icon-delete', cell).click(() =>
                                 common.showFormConfirmation(`<div class="popup-content">Do you want remove flagged evidence <br/> <strong style="color: red;">${row.EvidenceDisplay}</strong> from <strong style="color: red;">${username}</strong>?</div>`, 'Confirmation', function () {
-                                    RemoveFlaggedEvidence(row.EvidenceID, ctsCustId, username, custId);
+                                    RemoveFlaggedEvidence(row.EvidenceID, ctsCustId, username, custId, subscriberId);
                                 })
                             );
                         }
@@ -177,7 +177,7 @@
         domElements.tblChainToEvidenceFlagged.DataTable().columns.adjust();
     }
 
-    function RemoveFlaggedEvidence(evidenceId, ctsCustId, username, custId) {
+    function RemoveFlaggedEvidence(evidenceId, ctsCustId, username, custId, subscriberId) {
         var url = common.modifyRelativeUrl('/Account/RemoveFlaggedEvidence');
 
         $.ajax(url, {
@@ -186,7 +186,9 @@
                 common.showLoading();
             },
             data: {
+                CustId: custId,
                 CTSCustId: ctsCustId,
+                SubscriberId: subscriberId,
                 EvidenceId: evidenceId
             },
             success: function (response) {
@@ -556,7 +558,7 @@
 
         DisableButton(hostPermission);
 
-        InitialFlaggedGrid(ctsCustId, username, custId);
+        InitialFlaggedGrid(ctsCustId, username, custId, subscriberId);
 
         InitialAffectedRetractGrid();
 
