@@ -247,12 +247,13 @@ body {
                                     font-size: 1.6rem;
                                     text-transform: uppercase;
                                     color: $page-bg;
+                                    font-family: $font-family !important;
                                 }
 
                                 .total-accounts {
                                     text-transform: inherit !important;
-                                    display : block;
-                                    text-align : center;
+                                    display: block;
+                                    text-align: center;
                                 }
                             }
                         }

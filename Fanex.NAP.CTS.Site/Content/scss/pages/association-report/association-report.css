@@ -156,7 +156,8 @@
         .association-content .association-table #association-datatable .table-report .table-association-detail tbody .group-site td .column-group-site, .association-content .association-table #association-datatable .table-report .table-association-detail tbody .group-site td .total-accounts {
           font-size: 1.6rem;
           text-transform: uppercase;
-          color: #fff; }
+          color: #fff;
+          font-family: "Lato", Arial, Tahoma, sans-serif !important; }
         .association-content .association-table #association-datatable .table-report .table-association-detail tbody .group-site td .total-accounts {
           text-transform: inherit !important;
           display: block;

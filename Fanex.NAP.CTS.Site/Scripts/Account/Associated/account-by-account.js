@@ -152,7 +152,7 @@
                     if (last !== group) {
                         let html = '<tr class="group group-site">';
                         html += '<td colspan="7">';
-                        html += '<span class="column-group-site" data-site-id=' + data[i].SiteId + '><i class="icon icon-chevron-right icon-open">' + group + '</i></span>';
+                        html += '<span class="column-group-site" data-site-id=' + data[i].SiteId + '><i class="icon icon-chevron-right icon-open"></i> ' + group + ' </span>';
                         html += '</td></tr>';
 
                         $(rows).eq(i).before(html);

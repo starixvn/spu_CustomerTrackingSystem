@@ -2052,3 +2052,9 @@
   .container-grid {
     grid-template-rows: 220px 160px;
     grid-row-gap: 10px; } }
+
+.column-group-site {
+  font-family: "Lato", Arial, Tahoma, sans-serif !important;
+  font-size: 1.6rem;
+  display: flex;
+  align-items: center; }

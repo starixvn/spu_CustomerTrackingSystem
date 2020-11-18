@@ -1980,3 +1980,9 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
         grid-row-gap: 10px;
     }
 }
+.column-group-site {
+    font-family: $font-family !important;
+    font-size: 1.6rem;
+    display: flex;
+    align-items: center;
+}
