@@ -514,7 +514,7 @@
     function IsInputValidation() {
         let invalidElement = 0;
 
-        if ($('#txtIBCUserNamePrefix').val() !== undefined && $('#txtIBCUserNamePrefix').val().trim() !== "")
+        if (($('#txtIBCUserNamePrefix').val() !== undefined && $('#txtIBCUserNamePrefix').val().trim() !== "") || detailedSiteCounter > 1)
             domElements.prefixValidation.hide();
         else {
             domElements.prefixValidation.show();
