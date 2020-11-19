@@ -18,8 +18,8 @@ CALL apoc.periodic.commit(
 USING PERIODIC COMMIT 1000
 LOAD CSV WITH HEADERS FROM 'file:///static_list.csv' as line
 WITH line
-MERGE (s:StaticList {ItemID: toInteger(line.ItemID)})
-ON CREATE SET s.ListID = toInteger(line.ListID), s.ListName = line.ListName, s.ListNameDisplay = line.ListNameDisplay, s.ItemName = line.ItemName, s.ItemNameDisplay = line.ItemNameDisplay
+MERGE (s:StaticList {ItemID: toInteger(line.ItemID), ListID: toInteger(line.ListID))}
+ON CREATE SET s.ListName = line.ListName, s.ListNameDisplay = line.ListNameDisplay, s.ItemName = line.ItemName, s.ItemNameDisplay = line.ItemNameDisplay
               , s.PriorityOrder = line.PriorityOrder, s.Status = line.Status, s.Description = line.Description, s.CreatedDate = line.CreatedDate
 
 //
@@ -30,7 +30,7 @@ CALL apoc.periodic.commit(
   WHERE exists(c.CustStatusID)
   WITH c LIMIT {size}
   MATCH (s:StaticList) 
-  WHERE c.CustStatusID = s.ItemID
+  WHERE c.CustStatusID = s.ItemID and ListID = 1
   MERGE (c)-[r:HAS_STATUS]->(s)
   ON CREATE SET r.CreatedDate = datetime()
   REMOVE c.CustStatusID
