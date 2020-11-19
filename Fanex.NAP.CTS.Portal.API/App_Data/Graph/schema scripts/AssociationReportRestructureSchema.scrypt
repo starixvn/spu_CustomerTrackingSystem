@@ -15,7 +15,7 @@ CALL apoc.periodic.commit(
 //
 // Generate Static node label
 //
-USING PERIODIC COMMIT 10000
+USING PERIODIC COMMIT 1000
 LOAD CSV WITH HEADERS FROM 'file:///static_list.csv' as line
 WITH line
 MERGE (s:StaticList {ItemID: toInteger(line.ItemID)})
