@@ -10,7 +10,7 @@
 
 CALL apoc.cypher.run('
 MATCH (site:Site) <-[:BELONG_TO_SITE]-(c:CTSCustomer)-[:HAS_STATUS]->(s:StaticList)
-WHERE s.ItemID IN $ip_AccountStatus AND site.Site = trim($ip_SiteName)
+WHERE s.ItemID IN $ip_AccountStatus AND s.ListID = 1 AND site.Site = trim($ip_SiteName)
 WITH c
 MATCH (e:Evidence)<-[re1:HAS_EVIDENCE]-(c)-[rp1:USED_IP]->(i:IP)<-[rp2:USED_IP]-(c1:CTSCustomer)
 WHERE   e.EvidenceCode = trim($ip_EvidenceCode)
