@@ -129,7 +129,7 @@
                     IsLinked = x.AssociationStatus == 1,
                     AssociationTypeName = GetAssociationTypeName(associationTypes, x.AssociationType),
                     TotalAssociationAccount = groupForSite.FirstOrDefault(y=>y.SiteId == x.SiteID).TotalAccounts
-                });
+                }).OrderBy(x=>x.SiteId);
             }
 
             return Json(new
