@@ -1,37 +1,38 @@
 ﻿CALL apoc.cypher.run('
 MATCH (c:CTSCustomer)-[r:USED_DEVICE]->(d:Device)<-[r1:USED_DEVICE]-(c1:CTSCustomer)
-WHERE c.CTSCustID = $ip_CTSCustId AND 
-	(($ip_assStatus = 0) 
+WHERE c.CTSCustID = $ip_CTSCustId AND c1.CustID IS NOT NULL
+    AND (($ip_assStatus = 0) 
 	OR ($ip_assStatus = 1 AND not exists((c)-[:HAS_EXCEPTION]-(c1)))
     OR ($ip_assStatus = 2 AND exists((c)-[:HAS_EXCEPTION]-(c1))))
-WITH c,c1,d,r,r1
+UNWIND [r.CreatedTime,r1.CreatedTime]  as val
+WITH c,d,c1, Max(val) as firstAssDate
 OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c1)
 OPTIONAL MATCH (c1)-[:BELONG_TO_SITE]->(s:Site)
 OPTIONAL MATCH (c1)-[:HAS_STATUS]->(st:StaticList)
-WITH c,c1,d,r,r1,st,e,s
+WITH c,c1,d,st,e,s, firstAssDate
 WHERE   st.ItemID IS NOT NULL AND st.ItemID IN $ip_AccountStatuses AND st.ListID = 1 AND s.SiteID IS NOT NULL AND s.SiteID IN $ip_SiteIDs  
-UNWIND [r.CreatedTime,r1.CreatedTime] AS val
-RETURN c1.CTSCustID as CTSCustID, c1.CustID AS CustId, c1.UserName AS Username, c1.UserName2 AS Username2, 1 AS AssociationType, -1 AS SharedDevices, -1 AS SharedIPs, CASE c1.SubscriberID WHEN null THEN -1 ELSE c1.SubscriberID END AS SubscriberId, MAX(val) AS AssociationDateGMT0, CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
+RETURN c1.CTSCustID as CTSCustID, c1.CustID AS CustId, c1.UserName AS Username, c1.UserName2 AS Username2, 1 AS AssociationType, -1 AS SharedDevices, -1 AS SharedIPs, CASE c1.SubscriberID WHEN null THEN -1 ELSE c1.SubscriberID END AS SubscriberId, Min(firstAssDate) AS AssociationDateGMT0, CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
 	   , s.SiteID as SiteID, s.Site as SiteName, st.ItemID as StatusId, st.ItemName as StatusName
 UNION
 
 MATCH (c:CTSCustomer)-[r2:USED_IP]->(i:IP)<-[r3:USED_IP]-(c2:CTSCustomer)
-WHERE c.CTSCustID = $ip_CTSCustId AND 
+WHERE c.CTSCustID = $ip_CTSCustId AND c2.CustID IS NOT NULL AND
 	(($ip_assStatus = 0) 
 	OR ($ip_assStatus = 1 AND not exists((c)-[:HAS_EXCEPTION]-(c2)))
     OR ($ip_assStatus = 2 AND exists((c)-[:HAS_EXCEPTION]-(c2))))
-WITH c,c2,i,r2,r3
+UNWIND [r2.CreatedTime,r3.CreatedTime]  as val
+WITH c,c2,i,Max(val) as firstAssDate
 OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c2)
 OPTIONAL MATCH (c2)-[:BELONG_TO_SITE]->(s:Site)
 OPTIONAL MATCH (c2)-[:HAS_STATUS]->(st:StaticList)
-WITH c,c2,i,r2,r3,st,e,s
+WITH c,c2,i,st,e,s, firstAssDate
 WHERE   st.ItemID IS NOT NULL AND st.ItemID IN $ip_AccountStatuses AND st.ListID = 1 AND s.SiteID IS NOT NULL AND s.SiteID IN $ip_SiteIDs 
-UNWIND [r2.CreatedTime,r3.CreatedTime] AS val
-RETURN c2.CTSCustID as CTSCustID, c2.CustID AS CustId, c2.UserName AS Username, c2.UserName2 AS Username2, 2 as AssociationType, -1 AS SharedDevices, -1 AS SharedIPs, CASE c2.SubscriberID WHEN null THEN -1 ELSE c2.SubscriberID END AS SubscriberId, MAX(val) AS AssociationDateGMT0, CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
+RETURN c2.CTSCustID as CTSCustID, c2.CustID AS CustId, c2.UserName AS Username, c2.UserName2 AS Username2, 2 as AssociationType, -1 AS SharedDevices, -1 AS SharedIPs, CASE c2.SubscriberID WHEN null THEN -1 ELSE c2.SubscriberID END AS SubscriberId, Min(firstAssDate) AS AssociationDateGMT0, CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
 		, s.SiteID as SiteID, s.Site as SiteName, st.ItemID as StatusId, st.ItemName as StatusName
+
 UNION 
 MATCH (c:CTSCustomer)-[r:ADD_MANUALLY]-(c3:CTSCustomer)
-WHERE c.CTSCustID = $ip_CTSCustId AND 
+WHERE c.CTSCustID = $ip_CTSCustId AND c3.CustID IS NOT NULL AND
 	(($ip_assStatus = 0) 
 	OR ($ip_assStatus = 1 AND not exists((c)-[:HAS_EXCEPTION]-(c3)))
     OR ($ip_assStatus = 2 AND exists((c)-[:HAS_EXCEPTION]-(c3))))
@@ -46,7 +47,7 @@ RETURN  c3.CTSCustID as CTSCustID, c3.CustID AS CustId, c3.UserName AS Username,
 ',{ip_CTSCustId: $CTSCustID, ip_assStatus: $AssStatus, ip_SiteIDs: $SiteIDs, ip_AccountStatuses: $AccountStatuses}) YIELD value 
 WITH collect(value) as ListAss, count(value) as TotalItems
 UNWIND ListAss as ass
-WITH ass, TotalItems 
+WITH distinct ass, TotalItems 
 ORDER BY ass.Site, ass.AssociationDateGMT0 DESC
 SKIP $Skip
 LIMIT $Pagesize

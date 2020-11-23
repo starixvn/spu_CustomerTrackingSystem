@@ -1,6 +1,6 @@
 ﻿CALL apoc.cypher.run('
 MATCH (c:CTSCustomer)-[r2:USED_IP]->(i:IP)<-[r3:USED_IP]-(c2:CTSCustomer)
-WHERE c.CTSCustID = $ip_CTSCustId AND 
+WHERE c.CTSCustID = $ip_CTSCustId AND c2.CustID IS NOT NULL AND
 	(($ip_assStatus = 0) 
 	OR ($ip_assStatus = 1 AND not exists((c)-[:HAS_EXCEPTION]-(c2)))
     OR ($ip_assStatus = 2 AND exists((c)-[:HAS_EXCEPTION]-(c2))))
