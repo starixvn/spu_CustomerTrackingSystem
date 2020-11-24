@@ -311,8 +311,8 @@
 
                     var queryResult = DbSessionFactory.Execute<GraphAssociationReportPaging>(script, new
                     {
-                        ip_AssCreatedFrom = paras.AssociatedDateFrom,
-                        ip_AssCreatedTo = paras.AssociatedDateTo,
+                        ip_AssCreatedFrom = paras.AssociatedDateFrom.AddHours(4),
+                        ip_AssCreatedTo = paras.AssociatedDateTo.AddHours(4),
                         ip_AccountStatus = paras.AccountStatuses.Split(',').Select(int.Parse),
                         ip_EvidenceCode = paras.EvidenceCode,
                         ip_SiteName = paras.SiteName,
