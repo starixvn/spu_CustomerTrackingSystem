@@ -5,13 +5,13 @@ WHERE c.CTSCustID = $ip_CTSCustId AND c1.CustID IS NOT NULL
 	OR ($ip_assStatus = 1 AND not exists((c)-[:HAS_EXCEPTION]-(c1)))
     OR ($ip_assStatus = 2 AND exists((c)-[:HAS_EXCEPTION]-(c1))))
 UNWIND [r.CreatedTime,r1.CreatedTime]  as val
-WITH c,d,c1, Max(val) as firstAssDate
+WITH c,d,c1, Max(val) as AssDate
 OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c1)
 OPTIONAL MATCH (c1)-[:BELONG_TO_SITE]->(s:Site)
 OPTIONAL MATCH (c1)-[:HAS_STATUS]->(st:StaticList)
-WITH c,c1,d,st,e,s, firstAssDate
+WITH c,c1,d,st,e,s, AssDate
 WHERE   st.ItemID IS NOT NULL AND st.ItemID IN $ip_AccountStatuses AND st.ListID = 1 AND s.SiteID IS NOT NULL AND s.SiteID IN $ip_SiteIDs  
-RETURN c1.CTSCustID as CTSCustID, c1.CustID AS CustId, c1.UserName AS Username, c1.UserName2 AS Username2, 1 AS AssociationType, -1 AS SharedDevices, -1 AS SharedIPs, CASE c1.SubscriberID WHEN null THEN -1 ELSE c1.SubscriberID END AS SubscriberId, Min(firstAssDate) AS AssociationDateGMT0, CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
+RETURN c1.CTSCustID as CTSCustID, c1.CustID AS CustId, c1.UserName AS Username, c1.UserName2 AS Username2, 1 AS AssociationType, -1 AS SharedDevices, -1 AS SharedIPs, CASE c1.SubscriberID WHEN null THEN -1 ELSE c1.SubscriberID END AS SubscriberId, Min(AssDate) AS AssociationDateGMT0, CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
 	   , s.SiteID as SiteID, s.Site as SiteName, st.ItemID as StatusId, st.ItemName as StatusName
 UNION
 
@@ -21,13 +21,13 @@ WHERE c.CTSCustID = $ip_CTSCustId AND c2.CustID IS NOT NULL AND
 	OR ($ip_assStatus = 1 AND not exists((c)-[:HAS_EXCEPTION]-(c2)))
     OR ($ip_assStatus = 2 AND exists((c)-[:HAS_EXCEPTION]-(c2))))
 UNWIND [r2.CreatedTime,r3.CreatedTime]  as val
-WITH c,c2,i,Max(val) as firstAssDate
+WITH c,c2,i,Max(val) as AssDate
 OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c2)
 OPTIONAL MATCH (c2)-[:BELONG_TO_SITE]->(s:Site)
 OPTIONAL MATCH (c2)-[:HAS_STATUS]->(st:StaticList)
-WITH c,c2,i,st,e,s, firstAssDate
+WITH c,c2,i,st,e,s, AssDate
 WHERE   st.ItemID IS NOT NULL AND st.ItemID IN $ip_AccountStatuses AND st.ListID = 1 AND s.SiteID IS NOT NULL AND s.SiteID IN $ip_SiteIDs 
-RETURN c2.CTSCustID as CTSCustID, c2.CustID AS CustId, c2.UserName AS Username, c2.UserName2 AS Username2, 2 as AssociationType, -1 AS SharedDevices, -1 AS SharedIPs, CASE c2.SubscriberID WHEN null THEN -1 ELSE c2.SubscriberID END AS SubscriberId, Min(firstAssDate) AS AssociationDateGMT0, CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
+RETURN c2.CTSCustID as CTSCustID, c2.CustID AS CustId, c2.UserName AS Username, c2.UserName2 AS Username2, 2 as AssociationType, -1 AS SharedDevices, -1 AS SharedIPs, CASE c2.SubscriberID WHEN null THEN -1 ELSE c2.SubscriberID END AS SubscriberId, Min(AssDate) AS AssociationDateGMT0, CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
 		, s.SiteID as SiteID, s.Site as SiteName, st.ItemID as StatusId, st.ItemName as StatusName
 
 UNION 

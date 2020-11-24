@@ -12,7 +12,7 @@ OPTIONAL MATCH (c1)-[:HAS_STATUS]->(st:StaticList)
 WITH c,c1,d,st,e,s, AssDate
 WHERE      (($ip_IsAssReport = 1)
 		OR ($ip_IsAssReport = 0 AND st.ItemID IS NOT NULL AND st.ListID = 1 AND st.ItemID IN $ip_AccountStatuses AND s.SiteID IS NOT NULL AND s.SiteID IN $ip_SiteIDs))  
-WITH c,c1,d,st,e,s, Min(AssDate) as firstAssDate
+WITH c,c1,st,e,s, Min(AssDate) as firstAssDate
 WHERE      (($ip_IsAssReport = 0)
 		OR ($ip_IsAssReport = 1 AND date(datetime(firstAssDate)) >= date(datetime($ip_AssCreatedFrom)) AND date(datetime(firstAssDate)) <= date(datetime($ip_AssCreatedTo))))
 RETURN c1.CTSCustID as CTSCustID, c1.CustID AS CustId, c1.CustSubID AS CustSubId, c1.UserName AS Username, c1.UserName2 AS Username2, 1 AS AssociationType, -1 AS SharedDevices, -1 AS SharedIPs, CASE c1.SubscriberID WHEN null THEN -1 ELSE c1.SubscriberID END AS SubscriberId, firstAssDate as AssociationDateGMT0, CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus,
