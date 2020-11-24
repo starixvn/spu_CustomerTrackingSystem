@@ -10,9 +10,7 @@
                 
         public string DeviceId { get; set; }
 
-        public string Ip { get; set; }
-
-        public long IpId { get; set; }
+        public string Ip { get; set; }        
 
         public string Flagged { get; set; }
 

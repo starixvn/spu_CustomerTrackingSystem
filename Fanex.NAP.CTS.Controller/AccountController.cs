@@ -926,7 +926,7 @@
                 DeviceId = x.DeviceId,
                 Flagged = x.Flagged,
                 Ip = isViewIPPermission ? x.Ip : string.Empty,
-                IpId = x.IpId,
+                IpId = 0,
                 OSName = x.OSName,
                 TransTime = x.TransTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                 Url = x.Url

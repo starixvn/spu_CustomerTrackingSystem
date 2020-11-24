@@ -20,6 +20,7 @@
     using Fanex.NAP.CTS.Core;
     using Fanex.Logging;
     using Fanex.NAP.CTS.Core.Helpers.Xml;
+    using System.Net;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.ProbationManagement, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -67,8 +68,10 @@
             var data = _probationService.GetProbationCategory(filter, out dBResult);
 
             if (dBResult.ErrorCode != 0)
-                return new HttpStatusCodeResult(dBResult.ErrorCode, dBResult.ErrorMsg);
-
+            {               
+                return new HttpStatusCodeResult(HttpStatusCode.RequestTimeout, dBResult.ErrorMsg);
+            }
+                
             if (data != null && data.Any())
             {
                 probationCategoryList = FillAccumulatedInfo(data, filter);
