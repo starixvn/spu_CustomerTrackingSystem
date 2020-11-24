@@ -74,6 +74,7 @@
     <Setting Key="CTS_DC_CustClassification_Remove" SpName="CTS_DC_CustClassification_Remove_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
     <Setting Key="CTS_DC_CustClassification_Get" SpName="CTS_DC_CustClassification_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
     <Setting Key="CTS_DC_CustClassification_GetLatestCategory" SpName="CTS_DC_CustClassification_GetLatestCategory_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+    <Setting Key="CTS_NormalAccountsClassification_GeneralCategorize_Daily" SpName="CTS_NormalAccountsClassification_GeneralCategorize_Daily_xtest" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
   </Function>
 
   <Function name="AssociatedAccountMonitor">
