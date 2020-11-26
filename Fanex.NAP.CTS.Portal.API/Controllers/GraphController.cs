@@ -311,11 +311,11 @@
 
                     var queryResult = DbSessionFactory.Execute<GraphAssociationReportPaging>(script, new
                     {
-                        ip_AssCreatedFrom = paras.AssociatedDateFrom.AddHours(4),
-                        ip_AssCreatedTo = paras.AssociatedDateTo.AddHours(4),
+                        ip_AssCreatedFrom = paras.AssociatedDateFrom.AddHours(4).ToString("yyyy-MM-dd'T'HH:mm:ss"),
+                        ip_AssCreatedTo = paras.AssociatedDateTo.AddHours(4).ToString("yyyy-MM-dd'T'HH:mm:ss"),
                         ip_AccountStatus = paras.AccountStatuses.Split(',').Select(int.Parse),
-                        ip_EvidenceCode = paras.EvidenceCode,
-                        ip_SiteName = paras.SiteName,
+                        ip_EvidenceCode = paras.EvidenceCode?.Trim(),
+                        ip_SiteName = paras.SiteName?.Trim(),
                         ip_AssStatus = paras.AssociationStatus,
                         ip_TakeRows = paras.TakeRow,
                         ip_SkipRows = paras.SkipRow
