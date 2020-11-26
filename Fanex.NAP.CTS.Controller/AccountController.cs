@@ -736,14 +736,14 @@
             
             if (result.ErrorCode == 0)
             {
-                var objects = new
-                {
+                var objects = new[] { new {
                     model.CustId,
-                    model.CTSCustId,                    
+                    model.CTSCustId,
                     model.SubscriberId,
                     model.EvidenceId,
-                    ActionType = 1
-                };
+                    ActionType = 0
+                } };
+
                 var custEvidenceJson = JsonConvert.SerializeObject(objects);
                 _accountService.SyncCustEvidenceToCategory(custEvidenceJson);
 
@@ -763,6 +763,19 @@
 
             if (result.ErrorCode == 0)
             {
+                var objects = new[] { new {
+                    model.CustId,
+                    model.CTSCustId,
+                    model.SubscriberId,
+                    model.EvidenceId,
+                    ActionType = 2
+                } };
+                
+                var custEvidenceJson = JsonConvert.SerializeObject(objects);
+                _accountService.SyncCustEvidenceToCategory(custEvidenceJson);
+
+                _syncToMainDbService.SyncCustomerClassToMainDb(model.CTSCustId.ToString(), false, false);
+
                 var associatedAccountList = _customerEvidenceService.GetRemoveEvidenceAssociatedAccounts(
                     new GetRemoveEvidenceAssociatedAccountCriteria
                     {
@@ -778,19 +791,6 @@
                             CustIDList = string.Join(",", associatedAccountList)
                         });
                 }
-
-                var objects = new
-                {
-                    model.CustId,
-                    model.CTSCustId,                   
-                    model.SubscriberId,
-                    model.EvidenceId,
-                    ActionType = 2
-                };
-                var custEvidenceJson = JsonConvert.SerializeObject(objects);
-                _accountService.SyncCustEvidenceToCategory(custEvidenceJson);
-
-                _syncToMainDbService.SyncCustomerClassToMainDb(model.CTSCustId.ToString(), false, false);
 
                 var customerInfoFromCTS = _accountService.GetCustomerInfoByCTSCustId(model.CTSCustId);
 
