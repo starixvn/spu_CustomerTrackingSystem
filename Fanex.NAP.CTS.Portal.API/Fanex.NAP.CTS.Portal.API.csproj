@@ -482,6 +482,10 @@
       <Project>{5CE0BA40-0A37-4C89-A33B-D61C7944BE08}</Project>
       <Name>Fanex.NAP.CTS.Model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Fanex.NAP.CTS.Resource\Fanex.NAP.CTS.Resource.csproj">
+      <Project>{AE6C4B2A-8CD3-433A-8F42-D8272390CF61}</Project>
+      <Name>Fanex.NAP.CTS.Resource</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Fanex.NAP.CTS.Service\Fanex.NAP.CTS.Service.csproj">
       <Project>{3ed1d03f-97f1-4826-8cdd-258485a07546}</Project>
       <Name>Fanex.NAP.CTS.Service</Name>

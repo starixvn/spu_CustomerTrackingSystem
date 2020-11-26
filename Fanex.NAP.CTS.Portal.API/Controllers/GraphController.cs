@@ -3,6 +3,7 @@
     using Fanex.Logging;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.GraphDB;
+    using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.SPU.Graph.Core;
     using Newtonsoft.Json;
     using System;
@@ -311,8 +312,8 @@
 
                     var queryResult = DbSessionFactory.Execute<GraphAssociationReportPaging>(script, new
                     {
-                        ip_AssCreatedFrom = paras.AssociatedDateFrom.AddHours(4).ToString("yyyy-MM-dd'T'HH:mm:ss"),
-                        ip_AssCreatedTo = paras.AssociatedDateTo.AddHours(4).ToString("yyyy-MM-dd'T'HH:mm:ss"),
+                        ip_AssCreatedFrom = paras.AssociatedDateFrom.AddHours(4).ToString(Consts.FormatDateTimeToString_YYYYmmddThhddmm),
+                        ip_AssCreatedTo = paras.AssociatedDateTo.AddHours(4).AddDays(1).ToString(Consts.FormatDateTimeToString_YYYYmmddThhddmm),
                         ip_AccountStatus = paras.AccountStatuses.Split(',').Select(int.Parse),
                         ip_EvidenceCode = paras.EvidenceCode?.Trim(),
                         ip_SiteName = paras.SiteName?.Trim(),

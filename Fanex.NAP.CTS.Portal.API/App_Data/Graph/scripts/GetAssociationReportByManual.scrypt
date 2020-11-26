@@ -20,9 +20,9 @@ WHERE   e.EvidenceCode = $ip_EvidenceCode
          	 OR ($ip_AssStatus = 2 AND EXISTS ((c)-[:HAS_EXCEPTION]-(c1))))
 	    AND 	 
 			 (date(datetime({epochMillis: m.CreatedDate})) >= date(datetime($ip_AssCreatedFrom)) AND date(datetime({epochMillis: m.CreatedDate})) <= date(datetime($ip_AssCreatedTo)))
-WITH c,e,s
+WITH DISTINCT c,s
 OPTIONAL MATCH (c)-[HAS_EVIDENCE]->(e1:Evidence)
-with c, s, collect(Distinct e1.EvidenceCode) as listEvidenceCode
+WITH c, s, collect(Distinct e1.EvidenceCode) as listEvidenceCode
 RETURN Distinct c.CTSCustID as CTSCustID, c.UserName AS Username, s.ItemName AS AccountStatus, listEvidenceCode as EvidenceCodes, CASE c.SubscriberID WHEN null THEN -1 ELSE c.SubscriberID END AS SubscriberId
 ',{ip_AssCreatedFrom:$ip_AssCreatedFrom, ip_AssCreatedTo:$ip_AssCreatedTo, ip_AccountStatus:$ip_AccountStatus, ip_SiteName:$ip_SiteName, ip_AssStatus:$ip_AssStatus, ip_EvidenceCode:$ip_EvidenceCode}) YIELD value
 WITH collect(value) as ListAss, count(value) as TotalItems
