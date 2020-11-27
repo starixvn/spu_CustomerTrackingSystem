@@ -2,9 +2,7 @@
     let btnMarkCategory = $('#btnmarkcategory');
     let divMarkCategory = $('#divMarkCategory');
     let tblcustomercategory = $('#customer-category-table');
-    let isHostPermission;
-    let inputSwitchCategorySummary = $('#inputSwitchCategorySummary');
-    let chooseExternalCategory = "ChooseExternalCategory";
+    let isHostPermission;        
     let inputPinCategory = $('#inputPinCategory');
     let spanClass =  $('#spanClass');
 
@@ -110,8 +108,7 @@
         params.ctsCustId = ctsCustId;
         params.categoryId = categoryId;
         params.subscriberId = subscriberId;
-        params.sportGroupIds = '';
-        //params.sportGroupIds = $('#ddlsports').val().join(',');;
+        params.sportGroupIds = '';        
         params.remark = $('#txtcategorycomment').val();
 
         $.ajax(url, {
@@ -249,21 +246,15 @@
                 dataFilter: function (response) {
                     if (response !== undefined) {
                         let json = jQuery.parseJSON(response);
-                        let isExternalChecked = true;
-                        let isCache = GetStorageToggleCategory(chooseExternalCategory);
-
-                        if (isCache !== null) {
-                            isExternalChecked = isCache === "true";
-                        }
 
                         inputPinCategory.prop('checked', json.isPinCategory);
                         btnMarkCategory.prop('disabled', json.isVVip);
 
-                        SwitchCategorySummary(json.internalCategoryList, json.externalCategoryList, isExternalChecked);
+                        let isProblemAccount = RenderExternalProblemAccount(json.data);
 
-                        inputSwitchCategorySummary.off('click').on('click', function () {                            
-                            SwitchCategorySummary(json.internalCategoryList, json.externalCategoryList, inputSwitchCategorySummary.is(':checked'));
-                        });
+                        if (!isProblemAccount) {
+                            RenderExternalCategorySummary(json.data);
+                        }
                     }
                     return response;
                 },
@@ -312,10 +303,7 @@
                         }
                     }
                 }
-            ],
-            rowGroup: {
-                dataSrc: 'ParentCategoryName'
-            }
+            ]            
         });
     }
 
@@ -326,22 +314,16 @@
             data: { custId: custId },
             dataFilter: function (response) {
                 if (response !== undefined) {
-                    let json = jQuery.parseJSON(response);
-                    let isExternalChecked = true;
-                    let isCache = GetStorageToggleCategory(chooseExternalCategory);
-
-                    if (isCache !== null) {
-                        isExternalChecked = isCache === "true";
-                    }
+                    let json = jQuery.parseJSON(response);                  
 
                     inputPinCategory.prop('checked', json.isPinCategory);
                     btnMarkCategory.prop('disabled', json.isVVip);
+                    
+                    let isProblemAccount = RenderExternalProblemAccount(json.data);
 
-                    SwitchCategorySummary(json.internalCategoryList, json.externalCategoryList, isExternalChecked);
-
-                    inputSwitchCategorySummary.off('click').on('click', function () {
-                        SwitchCategorySummary(json.internalCategoryList, json.externalCategoryList, inputSwitchCategorySummary.is(':checked'));
-                    });
+                    if (!isProblemAccount) {
+                        RenderExternalCategorySummary(json.data);
+                    }
                 }
                 return response;
             },
@@ -355,40 +337,7 @@
                 tblcustomercategory.find('tbody').removeClass('loading');
             }
         });
-    }
-
-    function RenderInternalProblemAccount(data) {
-        var isExistProblemAccount = false;
-        let html = "";
-
-        data.map(function (x) {
-            if (x.IsProblemAccount) {
-                let classIconColor = "circle bg-red";
-                let sportGroupNameList = x.SportGroupNameList ? x.SportGroupNameList : "None";
-
-                html = BuildInternalCategoryToHtmlDiv(html, classIconColor, x.CategoryName, sportGroupNameList);
-               
-                isExistProblemAccount = true;
-            }
-        });
-
-        if (isExistProblemAccount) {
-            $('#divHeaderUsername')
-                .removeClass('bg-yellow')
-                .removeClass('bg-green')
-                .addClass('bg-red');
-            $('#divHeaderInfo')
-                .removeClass('border-yellow')
-                .removeClass('border-green')
-                .addClass('border-red');
-
-            $('#divCustomerCategorySummary').html(html);
-            $('#spanContentInfoLoading').css('visibility', 'hidden');
-            $('#divHeaderInfo').css('visibility', 'visible');
-        }
-
-        return isExistProblemAccount;
-    }
+    }    
 
     function RenderExternalProblemAccount(data) {
         var isExistProblemAccount = false;
@@ -420,58 +369,7 @@
         }
 
         return isExistProblemAccount;
-    }
-
-    function RenderInternalCategorySummary(data) {
-        let html = "";
-        let defaultNormalCategoryList = GetInternalNormalCategoryList();
-        let indexColorProfile = 1;
-       
-        for (let i = 0; i < defaultNormalCategoryList.length; i++) {
-            data.map(function (x) {
-                let isEquals = x.CategoryName === defaultNormalCategoryList[i].name;
-                if (isEquals) {
-                    let classIconColor = defaultNormalCategoryList[i].cssClass;
-                    let sportGroupNameList = x.SportGroupNameList ? x.SportGroupNameList : "None";
-
-                    html = BuildInternalCategoryToHtmlDiv(html, classIconColor, x.CategoryName, sportGroupNameList);
-
-                    indexColorProfile = indexColorProfile < defaultNormalCategoryList[i].indexColor
-                        ? defaultNormalCategoryList[i].indexColor
-                        : indexColorProfile;
-                }
-            });
-        }        
-
-        switch (indexColorProfile) {
-            case 1:
-                $('#divHeaderUsername')
-                    .removeClass('bg-red')
-                    .removeClass('bg-yellow')
-                    .addClass('bg-green');
-                $('#divHeaderInfo')
-                    .removeClass('border-red')
-                    .removeClass('border-yellow')
-                    .addClass('border-green');
-                break;
-            case 2:
-                $('#divHeaderUsername')
-                    .removeClass('bg-red')
-                    .removeClass('bg-green')
-                    .addClass('bg-yellow');
-                $('#divHeaderInfo')
-                    .removeClass('border-red')
-                    .removeClass('border-green')
-                    .addClass('border-yellow');
-                break;
-            default:
-                break;
-        }       
-
-        $('#divCustomerCategorySummary').html(html);
-        $('#spanContentInfoLoading').css('visibility', 'hidden');
-        $('#divHeaderInfo').css('visibility', 'visible');
-    }
+    }    
 
     function RenderExternalCategorySummary(data) {
         let html = "";
@@ -523,20 +421,6 @@
         $('#divHeaderInfo').css('visibility', 'visible');
     }
 
-    function BuildInternalCategoryToHtmlDiv(html, classIconColor, categoryName, sportGroupNameList){
-        html += "<div class='info-status'>";
-        html += "<div class='status-left'>";
-        html += "<span class='" + classIconColor + "'></span>";
-        html += "<span class='text-status text-left'>" + categoryName + "</span>";
-        html += "</div>";
-        html += "<div class='status-right'>";
-        html += "<span class='text-status text-right'>" + sportGroupNameList + "</span>";
-        html += "</div>";
-        html += "</div>";
-
-        return html;
-    }
-
     function BuildExternalCategoryToHtmlDiv(html, classIconColor, categoryName) {
         html += "<div class='info-status'>";
         html += "<div class='status-left'>";
@@ -546,23 +430,7 @@
         html += "</div>";
 
         return html;
-    }
-
-    function GetInternalNormalCategoryList() {
-        var list = [];
-
-        list.push({ 'name': 'High Risk Punter', 'cssClass': 'circle bg-yellow', 'indexColor': 2 });
-        list.push({ 'name': 'Smart Punter', 'cssClass': 'circle bg-yellow', 'indexColor': 2});
-        list.push({ 'name': 'Probation', 'cssClass': 'circle bg-yellow', 'indexColor': 2 });
-        list.push({ 'name': 'Limited Punter', 'cssClass': 'circle bg-yellow', 'indexColor': 2 }); 
-        list.push({ 'name': 'Lucky Punter', 'cssClass': 'circle bg-yellow', 'indexColor': 2 });
-        list.push({ 'name': 'VVIP', 'cssClass': 'circle bg-green', 'indexColor': 1 });
-        list.push({ 'name': 'VIP', 'cssClass': 'circle bg-green', 'indexColor': 1 });
-        list.push({ 'name': 'Normal Member', 'cssClass': 'circle bg-green', 'indexColor': 1 });
-        list.push({ 'name': 'New Member', 'cssClass': 'circle bg-green', 'indexColor': 1 });
-           
-        return list;
-    }
+    }    
 
     function GetExternalNormalCategoryList() {
         var list = [];
@@ -576,33 +444,7 @@
         list.push({ 'name': 'New Member', 'cssClass': 'circle bg-green', 'indexColor': 1 });
 
         return list;
-    }
-
-    function SwitchCategorySummary(dataInternal, dataExternal, isExternalChecked) {
-        SetStorageToggleCategory(chooseExternalCategory, isExternalChecked);
-
-        let isProblemAccount = isExternalChecked
-            ? RenderExternalProblemAccount(dataExternal)
-            : RenderInternalProblemAccount(dataInternal);
-
-        if (!isProblemAccount)
-        {
-            isExternalChecked
-                ? RenderExternalCategorySummary(dataExternal)
-                : RenderInternalCategorySummary(dataInternal);
-        }
-    }
-
-    function GetStorageToggleCategory(key) {
-        return typeof (Storage) !== "undefined"
-            ? localStorage.getItem(key)
-            : null;
-    }
-
-    function SetStorageToggleCategory(key, value) {
-        if (typeof (Storage) !== "undefined")
-            localStorage.setItem(key, value);
-    }
+    }   
 
     function PinCategory(custId, ctsCustId, subscriberId) {
         let html = "<div style='text-align:center'>Are you sure about this action? </div>";
@@ -665,12 +507,6 @@
 
     this.Initial = function (custId, ctsCustId, subscriberId, username, hostPermission) {
         DisableButton(hostPermission);
-
-        let isCache = GetStorageToggleCategory(chooseExternalCategory);
-        if (isCache === null || isCache === "true") 
-            inputSwitchCategorySummary.attr('checked', true);
-        else
-            inputSwitchCategorySummary.attr('checked', false);
 
         if (isHostPermission) {
             inputPinCategory.click(function () { PinCategory(custId, ctsCustId, subscriberId); });

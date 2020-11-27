@@ -24,6 +24,8 @@
 
         public string NextScanDatePeriod { get; set; }
 
+        public bool IsProblemAccount { get; set; }
+
         public bool IsEnabledDelete { get; set; }
     }
   

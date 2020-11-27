@@ -170,7 +170,7 @@ function notification() {
         //var url = common.modifyRelativeUrl('ProbationManagement/Index?filterType=' + notificationType);
         var content = '<div class="box-notification link-notification general' + ((isRead == 1) ? '' : ' notification-new') + '">'
                         + '<div class="line-border">'
-                        + '<h5 class="heading-category"> General Category </h5>'
+                        + '<h5 class="heading-category"> Category </h5>'
                         + '<div class="des-box">'
                         + ((notificationType == 1) ? ' There are <span class="color-txt">{0}</span> account(s) cannot pass Probation.'
                             : ' There are <span class="color-txt">{0}</span> account(s) have Probation and negative margin.')

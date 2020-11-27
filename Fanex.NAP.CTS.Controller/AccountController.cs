@@ -1008,26 +1008,15 @@
             var isPinCategory = false;
             var isVVip = false;
             var customerCategoryList = new List<CustomerCategoryViewModel>();
-            var internalCategoryList = new List<CustomerCategorySummaryViewModel>();
-            var externalCategoryList = new List<CustomerCategorySummaryViewModel>();
             
             var data = _accountService.GetCustomerClassification(custId, out isPinCategory);
 
             if (data != null && data.Any())
             {
-                var internals = data
-                    .Where(x => x.CategoryType == 0 || x.CategoryType == 2)
-                    .Select(x => GetCustomerCategory(x, ResourcesManager.GetValue(ConstsResources.CUSTOMER_INTERNAL_CATEGORY)));
-
-                var externals = data
+                customerCategoryList = data
                     .Where(x => x.CategoryType == 1 || x.CategoryType == 2)
-                   .Select(x => GetCustomerCategory(x, ResourcesManager.GetValue(ConstsResources.CUSTOMER_EXTERNAL_CATEGORY)));
-
-                customerCategoryList.AddRange(internals);
-                customerCategoryList.AddRange(externals);
-
-                internalCategoryList = internals.Select(x => GetCustomerCategorySummary(x)).ToList();
-                externalCategoryList = externals.Select(x => GetCustomerCategorySummary(x)).ToList();
+                    .Select(x => GetCustomerCategory(x)).ToList();
+                                
                 isVVip = data.Where(x => x.CategoryName.Equals("VVIP")).Count() > 0;
             }
 
@@ -1035,18 +1024,15 @@
             {
                 isPinCategory,
                 isVVip,
-                internalCategoryList,
-                externalCategoryList,
                 data = customerCategoryList,
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private CustomerCategoryViewModel GetCustomerCategory(CustomerClassificationModel model, string parentName)
+        private CustomerCategoryViewModel GetCustomerCategory(CustomerClassificationModel model)
         {
             return new CustomerCategoryViewModel
             {
                 ParentCategoryId = model.ParentCategoryID,
-                ParentCategoryName = parentName,
                 CategoryId = model.CategoryID,
                 CategoryName = model.CategoryName,
                 CategoryType = model.CategoryType,
@@ -1056,18 +1042,8 @@
                 SportGroupIdList = model.SportGroupIDList,
                 SportGroupNameList = model.SportGroupNameList,                
                 NextScanDatePeriod = model.NextScanDatePeriod,
-                IsEnabledDelete = model.IsEnabledDelete
-            };
-        }
-
-        public CustomerCategorySummaryViewModel GetCustomerCategorySummary(CustomerCategoryViewModel category)
-        {
-            return new CustomerCategorySummaryViewModel
-            {
-                ParentCategoryName = category.ParentCategoryName,
-                CategoryName = category.CategoryName,
-                SportGroupNameList = category.SportGroupNameList,
-                IsProblemAccount = category.CategoryType == 2
+                IsProblemAccount = model.CategoryType == 2,
+                IsEnabledDelete = model.IsEnabledDelete                
             };
         }
 
