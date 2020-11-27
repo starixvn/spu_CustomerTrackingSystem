@@ -16,7 +16,7 @@
     .association-content .association-table .group-control .form-filter .calendar {
       display: flex;
       align-items: center;
-      width: 20rem; }
+      width: auto; }
       .association-content .association-table .group-control .form-filter .calendar .icon-calendar-text {
         right: 2.2rem;
         bottom: 1.7rem; }
