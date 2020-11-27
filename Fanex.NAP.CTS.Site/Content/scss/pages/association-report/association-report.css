@@ -40,7 +40,7 @@
       background-color: #e3e9f6;
       position: -webkit-sticky;
       position: sticky;
-      top: 15rem;
+      top: 13.2rem;
       z-index: 11; }
       .association-content .association-table #association-datatable .table-report .wrapper-info-table .dataTables_length {
         position: absolute;
@@ -75,7 +75,7 @@
           opacity: .3; }
       .association-content .association-table #association-datatable .table-report .table-association thead tr th, .association-content .association-table #association-datatable .table-report .table-association-detail thead tr th {
         position: sticky;
-        top: 19rem;
+        top: 17.2rem;
         font-weight: 300; }
       .association-content .association-table #association-datatable .table-report .table-association tbody tr td .click-view-details, .association-content .association-table #association-datatable .table-report .table-association tbody tr td .click-view-name, .association-content .association-table #association-datatable .table-report .table-association-detail tbody tr td .click-view-details, .association-content .association-table #association-datatable .table-report .table-association-detail tbody tr td .click-view-name {
         cursor: pointer; }
