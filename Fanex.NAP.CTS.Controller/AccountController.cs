@@ -1048,7 +1048,7 @@
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult AddCustomerClassification(long custId, long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark, bool isVVip)
+        public ActionResult AddCustomerClassification(long custId, long ctsCustId, int subscriberId, int categoryId, string remark, bool isVVip)
         {
             var errorCode = 0;
             var errorMessage = string.Empty;
@@ -1062,7 +1062,7 @@
                 }, JsonRequestBehavior.AllowGet);
             }
 
-            var resultToCTS = _accountService.AddCustomerClassification(custId, ctsCustId, subscriberId, categoryId, sportGroupIds, remark, CurrentSession.UserId);
+            var resultToCTS = _accountService.AddCustomerClassification(custId, ctsCustId, subscriberId, categoryId, remark, CurrentSession.UserId);
 
             if (resultToCTS.ErrorCode == 0)
             {

@@ -34,8 +34,7 @@
         params.custId = custId;
         params.ctsCustId = ctsCustId;
         params.subscriberId = subscriberId;
-        params.categoryId = $('#ddlcategory').val();
-        params.sportGroupIds = '';        
+        params.categoryId = $('#ddlcategory').val();    
         params.remark = $('#txtcategorycomment').val();
         params.isVVip = true;
 

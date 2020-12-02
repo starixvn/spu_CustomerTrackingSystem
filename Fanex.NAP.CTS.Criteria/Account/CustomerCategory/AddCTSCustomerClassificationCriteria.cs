@@ -15,10 +15,7 @@ namespace Fanex.NAP.CTS.Criteria.Account.CustomerCategory
         public int SubscriberId { get; set; }
 
         [SpParam(SqlParamName = "ip_CategoryID")]
-        public int CategoryId { get; set; }
-
-        [SpParam(SqlParamName = "ip_SportGroupIDList")]
-        public string SportGroupIds { get; set; }
+        public int CategoryId { get; set; }    
 
         [SpParam(SqlParamName = "ip_Remark")]
         public string Remark { get; set; }

@@ -960,15 +960,14 @@
             }
         }
 
-        public DBResult AddCustomerClassification(long custId, long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark, int createdBy)
+        public DBResult AddCustomerClassification(long custId, long ctsCustId, int subscriberId, int categoryId, string remark, int createdBy)
         {
             var criteria = new AddCTSCustomerClassificationCriteria
             {
                 CustId = custId,
                 CTSCustId = ctsCustId,
                 SubscriberId = subscriberId,
-                CategoryId = categoryId,
-                SportGroupIds = sportGroupIds,
+                CategoryId = categoryId,            
                 CreatedBy = createdBy,
                 Remark = remark,
                 ErrorMessage = string.Empty

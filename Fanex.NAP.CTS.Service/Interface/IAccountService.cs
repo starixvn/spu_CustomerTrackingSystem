@@ -96,7 +96,7 @@
 
         IEnumerable<CustomerClassificationModel> GetCustomerClassification(long custId, out bool isPinCategory);
 
-        DBResult AddCustomerClassification(long custId, long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark, int createdBy);
+        DBResult AddCustomerClassification(long custId, long ctsCustId, int subscriberId, int categoryId, string remark, int createdBy);
         
         DBResult UpdateCustomerClassification(long custId, long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark, int createdBy);
 
