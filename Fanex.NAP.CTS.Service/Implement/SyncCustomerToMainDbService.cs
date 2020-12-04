@@ -11,6 +11,8 @@
     using Fanex.Data;
     using System.Collections.Generic;
     using System.Linq;
+    using Fanex.NAP.CTS.Core.Extentions;
+    using System.Configuration;
 
     public class SyncCustomerToMainDbService : ISyncCustomerToMainDbService
     {
@@ -63,20 +65,27 @@
                 return result;
             }
 
-            var custEvidenceCategory = GetLatestEvidenceCategory(ctsCustID, isCustId, isExcludedDetailedCategory).Where(c => c.CategoryIdMapping != -99);
+            var batchSize = Convert.ToInt32(ConfigurationManager.AppSettings["Batch-Size"]);
 
-            if (custEvidenceCategory == null || !custEvidenceCategory.Any())
+            var ctsCustIDsChunk = ctsCustID.Split(',').Chunk(batchSize).ToList();
+
+            for (int i = 0; i < ctsCustIDsChunk.Count; i++)
             {
-                return result;
+                var custEvidenceCategory = GetLatestEvidenceCategory(string.Join(",", ctsCustIDsChunk[i]), isCustId, isExcludedDetailedCategory).Where(c => c.CategoryIdMapping != -99);
+
+                if (custEvidenceCategory != null && custEvidenceCategory.Any())
+                {
+                    var customerClassList = custEvidenceCategory.Select(c => new CustomerClassForMainDb
+                    {
+                        CustID = c.CustID,
+                        CustomerClass = c.CategoryIdMapping
+                    }).Distinct();
+
+                   SyncCustomerClassToMainDb(customerClassList, "Update Evidence Category");
+                }
             }
 
-            var customerClassList = custEvidenceCategory.Select(c => new CustomerClassForMainDb
-            {
-                CustID = c.CustID,
-                CustomerClass = c.CategoryIdMapping
-            }).Distinct();
-
-            return SyncCustomerClassToMainDb(customerClassList, "Update Evidence Category");
+            return result;
         }
 
         public IEnumerable<EvidenceCategoryToCustomerClassForMainDb> GetLatestEvidenceCategory(string ctsCustIDs, bool isCustId, bool isExcludedDetailedCategory)
