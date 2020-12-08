@@ -427,6 +427,7 @@
     <Content Include="App_Data\Graph\scripts\GetAssociationReportByManual.scrypt" />
     <Content Include="App_Data\Graph\scripts\GetAssociationReportByIP.scrypt" />
     <Content Include="App_Data\Graph\scripts\GetAssociationOneLevelForExtAcc.scrypt" />
+    <Content Include="App_Data\Graph\scripts\GetProbationManagement.scrypt" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />

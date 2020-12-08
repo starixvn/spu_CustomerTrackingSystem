@@ -201,6 +201,8 @@
     <Compile Include="ProbationManagement\ChangeCategoryModel.cs" />
     <Compile Include="ProbationManagement\ProbationCategoryModel.cs" />
     <Compile Include="ProbationManagement\ProbationModel.cs" />
+    <Compile Include="ProbationManagement\ProbationParameterModel.cs" />
+    <Compile Include="ProbationManagement\AssociationWithPAModel.cs" />
     <Compile Include="ProbationManagement\ResultChangeCategoryToCTS.cs" />
     <Compile Include="ManageSubscriber\SubscriberUpdateModel.cs" />
     <Compile Include="ManageSubscriber\SubscriberModel.cs" />

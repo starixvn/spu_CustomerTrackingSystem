@@ -3,7 +3,9 @@
     using Fanex.Logging;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.GraphDB;
+    using Fanex.NAP.CTS.Model.ProbationManagement;
     using Fanex.NAP.CTS.Resource.Consts;
+    using Fanex.NAP.CTS.ViewModel.ProbationManagement;
     using Fanex.NAP.SPU.Graph.Core;
     using Newtonsoft.Json;
     using System;
@@ -390,6 +392,36 @@
             catch (Exception ex)
             {
                 LogService.Error("GetDetailAssociationReport failed: " + ex.Message + ex.StackTrace);
+            }
+
+            return result;
+        }
+
+
+        /// <summary>
+        /// Get association report
+        /// </summary>
+        /// <param name="paras"></param>
+        /// <returns></returns>
+        [System.Web.Http.AcceptVerbs("GetProbationReport")]
+        [HttpPost]
+        public IEnumerable<AssociationWithPAModel> GetProbationReport([FromBody] ProbationParameterModel paras)
+        {
+            IEnumerable<AssociationWithPAModel> result = null;
+            try
+            {
+                result = DbSessionFactory.Execute<AssociationWithPAModel>("GetProbationWithAssociatedPA",
+                    new
+                    {
+                        ip_CustIds = paras.CustIDs,
+                        ip_isAssociatedWithPA = paras.IsAssociatedWithPA
+                    }).Data;
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("GetAssociationReport failed: " + ex.Message + ex.StackTrace);
             }
 
             return result;
