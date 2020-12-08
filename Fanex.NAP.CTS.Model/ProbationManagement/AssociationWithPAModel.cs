@@ -2,7 +2,7 @@
 {
     public class AssociationWithPAModel
     {
-        public int CustID { get; set; }
+        public int CustId { get; set; }
 
         public bool IsAssociationWithPA { get; set; }
     }

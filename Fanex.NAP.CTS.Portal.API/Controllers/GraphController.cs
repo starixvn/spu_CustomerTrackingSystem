@@ -413,7 +413,7 @@
                 result = DbSessionFactory.Execute<AssociationWithPAModel>("GetProbationWithAssociatedPA",
                     new
                     {
-                        ip_CustIds = paras.CustIDs,
+                        ip_CustIDs = paras.CustIDs,
                         ip_isAssociatedWithPA = paras.IsAssociatedWithPA
                     }).Data;
 

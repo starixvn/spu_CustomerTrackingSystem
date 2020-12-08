@@ -6,6 +6,6 @@
     {
         public List<long> CustIDs { get; set; }
 
-        public bool IsAssociatedWithPA { get; set; }
+        public int IsAssociatedWithPA { get; set; }
     }
 }

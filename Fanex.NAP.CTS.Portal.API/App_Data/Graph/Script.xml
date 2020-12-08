@@ -27,5 +27,6 @@
     <GraphSetting Key="GetAssociationReportByManual" SpName="GetAssociationReportByManual" DbName="GraphDB" />
     <GraphSetting Key="GetAssociationReportByIP" SpName="GetAssociationReportByIP" DbName="GraphDB" />
     <GraphSetting Key="GetAssociationOneLevelForExtAcc" SpName="GetAssociationOneLevelForExtAcc" DbName="GraphDB" />
+    <GraphSetting Key="GetProbationWithAssociatedPA" SpName="GetProbationWithAssociatedPA" DbName="GraphDB" />
   </Function>
 </Functions>

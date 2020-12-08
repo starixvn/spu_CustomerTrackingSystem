@@ -9,4 +9,4 @@ WHERE
 		OR ($ip_isAssociatedWithPA = 0 AND isAssociatedPA = 0)
         OR ($ip_isAssociatedWithPA = 1 AND isAssociatedPA = 1)
 
-RETURN c.CustID as CustIDs , isAssociatedPA as IsAssociationWithPA
+RETURN c.CustID as CustId , isAssociatedPA as IsAssociationWithPA
