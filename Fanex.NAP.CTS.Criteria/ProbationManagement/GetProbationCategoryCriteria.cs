@@ -18,13 +18,7 @@
         public int SubscriberID { get; set; }
 
         [SpParam(SqlParamName = "ip_StatusIDs")]
-        public string StatusIDs { get; set; }       
-
-        [SpParam(SqlParamName = "ip_isAssociatedPA")]
-        public int IsAssociatedPA { get; set; }
-
-        [SpParam(SqlParamName = "ip_CategoryMode")]
-        public int CategoryMode { get; set; }
+        public string StatusIDs { get; set; }                    
 
         public override string GetSettingKey()
         {

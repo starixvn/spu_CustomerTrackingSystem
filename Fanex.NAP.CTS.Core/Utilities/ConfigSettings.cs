@@ -80,6 +80,8 @@
 
         public static string GetAssociationDetail => GetConfigStringByName("Graph_GetAssociationDetail");
 
+        public static string GetAssociatedWithPA => GetConfigStringByName("Graph_GetAssociatedWithPA");
+
         public static string Matomo_SiteId => GetConfigStringByName("Matomo-SiteId");
 
         public static string StoredProcedurePath => GetConfigStringByName("StoredProcedurePath");

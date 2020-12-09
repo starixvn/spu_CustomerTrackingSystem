@@ -7,11 +7,11 @@
 
     public interface IProbationManagementService
     {
-        List<AccountStaticStatusModel> GetAccountStaticStatuses();        
-
-        IEnumerable<ProbationCategoryModel> GetProbationCategory(string username, int dayLeft, int categoryMode);
+        List<AccountStaticStatusModel> GetAccountStaticStatuses();                
 
         IEnumerable<ProbationCategoryModel> GetProbationCategory(ExportProbationCategoryFilter filter, out DBResult dBResult);
+
+        IEnumerable<AssociationWithPAViewModel> GetAssociatedWithPAByGraph(string apiEndPoint, IEnumerable<int> custIds, int statusWithPA);
 
         IEnumerable<AccumulatedInfoModel> GetAccummulatedInfo(string customersXML);
 

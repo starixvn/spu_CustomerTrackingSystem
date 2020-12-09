@@ -125,6 +125,7 @@
     <Compile Include="Notification\NotificationMessagesViewModel.cs" />
     <Compile Include="Notification\NotificationSettingStatusViewModel.cs" />
     <Compile Include="Notification\NotificationSettingViewModel.cs" />
+    <Compile Include="ProbationManagement\AssociationWithPAViewModel.cs" />
     <Compile Include="ProbationManagement\CategoryViewModel.cs" />
     <Compile Include="ProbationManagement\ExportProbationCategoryFilter.cs" />
     <Compile Include="ProbationManagement\ProbationCategoryViewModel.cs" />

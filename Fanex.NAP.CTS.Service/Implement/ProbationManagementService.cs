@@ -4,7 +4,8 @@
     using Fanex.Data.Repository;
     using Fanex.Logging;
     using Fanex.NAP.CTS.Core;
-    using Fanex.NAP.CTS.Core.ExportExcel;    
+    using Fanex.NAP.CTS.Core.ExportExcel;
+    using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Criteria.ProbationManagement;
     using Fanex.NAP.CTS.Model.ProbationManagement;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
@@ -16,6 +17,7 @@
     using System;
     using System.Collections.Generic;    
     using System.Text;
+    using System.Threading.Tasks;
 
     public class ProbationManagementService : IProbationManagementService
     {
@@ -36,22 +38,7 @@
             });
 
             return statusList;
-        }
-      
-        public IEnumerable<ProbationCategoryModel> GetProbationCategory(string username, int daysLeft, int categoryMode)
-        {
-            var criteria = new GetProbationCategoryCriteria
-            {
-                UserName = username,
-                FromDaysLeft = daysLeft,
-                CategoryMode = categoryMode
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<ProbationCategoryModel>(criteria);
-            }
-        }
+        }           
 
         public IEnumerable<ProbationCategoryModel> GetProbationCategory(ExportProbationCategoryFilter filter, out DBResult dBResult)
         {
@@ -63,9 +50,7 @@
                 SubscriberID = filter.SubscriberID,
                 FromDaysLeft = filter.FromDaysLeft,
                 ToDaysLeft = filter.ToDaysLeft,
-                StatusIDs = filter.StatusIDs,
-                IsAssociatedPA = filter.IsAssociatedPA,
-                CategoryMode = filter.CategoryMode
+                StatusIDs = filter.StatusIDs
             };
 
             try
@@ -85,6 +70,32 @@
             }
 
             return new List<ProbationCategoryModel>();
+        }
+
+        public IEnumerable<AssociationWithPAViewModel> GetAssociatedWithPAByGraph(string apiEndPoint, IEnumerable<int> custIds, int statusWithPA)
+        {
+            try
+            {
+                var param = new
+                {
+                    CustIDs = custIds,
+                    IsAssociatedWithPA = statusWithPA
+                };
+
+                var data = ApiHelper.Post<IEnumerable<AssociationWithPAViewModel>>(apiEndPoint, param);
+
+                Task.WhenAll(data);
+
+                return data.Result ?? new List<AssociationWithPAViewModel>();
+            }
+            catch (Exception ex)
+            {
+                var errorMessage = "CTS - Probation Management - GetAssociationWithPAByGraph exception: " + ex.Message;
+
+                LogService.Error(errorMessage, ex);
+            }
+
+            return new List<AssociationWithPAViewModel>();
         }
 
         public IEnumerable<AccumulatedInfoModel> GetAccummulatedInfo(string customersXML)
