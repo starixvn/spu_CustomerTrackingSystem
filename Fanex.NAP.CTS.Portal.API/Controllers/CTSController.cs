@@ -9,7 +9,6 @@
     using Fanex.NAP.CTS.Model.API;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
-    using Fanex.NAP.CTS.Model.ImportEvidences;
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
@@ -31,6 +30,7 @@
         private readonly ISyncCustomerToMainDbService _syncToMainDbService;
         private readonly IProblemAccountMonitorService _problemAccountMonitorService;
         private readonly IClassifyCustomerService _classifyCustomerService;
+        private readonly ICategoryService _categoryService;
 
         /// <summary>
         /// Using for external site (TW, ExtAcc site...)
@@ -44,6 +44,7 @@
             _syncToMainDbService = new SyncCustomerToMainDbService();
             _problemAccountMonitorService = new ProblemAccountMonitorService();
             _classifyCustomerService = new ClassifyCustomerService();
+            _categoryService = new CategoryService();
         }
 
         /// <summary>
@@ -427,6 +428,24 @@
                     ErrorMessage =  ex.Message,
                     StatusMessage = "fail"
                 };
+            }
+        }
+
+        /// <summary>   
+        /// Get customer class's categories
+        /// </summary>
+        /// <returns>A list of customer class's categories in JSON format</returns>
+        [HttpGet]
+        public JsonResult<List<CategoryCustomerClassModel>> GetCustomerClassCategory()
+        {
+            try
+            {
+                return Json(_categoryService.GetCustomerClassCategory().ToList());
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("Get Customer Class's Categories exception: " + ex.Message);
+                return Json(new List<CategoryCustomerClassModel>());
             }
         }
 

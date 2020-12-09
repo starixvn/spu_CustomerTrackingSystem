@@ -575,6 +575,12 @@
             <param name="custIds">List custId in string format, separated by comma</param>
             <returns>true: success; false: failed</returns>
         </member>
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetCustomerClassCategory">
+            <summary>   
+            Get customer class's categories
+            </summary>
+            <returns>A list of customer class's categories in JSON format</returns>
+        </member>
         <member name="T:Fanex.NAP.CTS.Portal.API.Controllers.GraphController">
             <summary>
             Graph Controller - Using for CTS site

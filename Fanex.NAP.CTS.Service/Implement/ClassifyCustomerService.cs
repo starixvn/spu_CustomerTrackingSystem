@@ -1,18 +1,12 @@
-﻿using Fanex.Data.Repository;
-using Fanex.Logging;
-using Fanex.NAP.CTS.Core;
-using Fanex.NAP.CTS.Criteria.CustomerClassification;
-using Fanex.NAP.CTS.Model.Account;
-using Fanex.NAP.CTS.Resource;
-using Fanex.NAP.CTS.Service.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Fanex.NAP.CTS.Service.Implement
+﻿namespace Fanex.NAP.CTS.Service.Implement
 {
+    using Fanex.Data.Repository;
+    using Fanex.Logging;
+    using Fanex.NAP.CTS.Criteria.CustomerClassification;
+    using Fanex.NAP.CTS.Resource;
+    using Fanex.NAP.CTS.Service.Interface;
+    using System;
+
     public class ClassifyCustomerService : IClassifyCustomerService
     {
         private IDynamicRepository _repository;
