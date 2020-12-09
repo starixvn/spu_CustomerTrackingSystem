@@ -64,6 +64,11 @@
         [NapAuth(FunctionKey = FSFunctionKeys.ManageSubscriber, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult UpdateSubscriber(SubscriberUpdateModel subscriberInsertModel)
         {
+            if (string.IsNullOrEmpty(subscriberInsertModel.IBCUserNamePrefix))
+            {
+                subscriberInsertModel.IBCUserNamePrefix = string.Empty;
+            }
+
             var result = _manageSubscriberService.UpdateSubscriber(subscriberInsertModel, CurrentSession.UserId);
 
             return Json(new
