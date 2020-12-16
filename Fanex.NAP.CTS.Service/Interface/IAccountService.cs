@@ -94,7 +94,9 @@
 
         IEnumerable<long> GetAssociationException(string apiURL, long ctsCustId);
 
-        IEnumerable<CustomerClassificationModel> GetCustomerClassification(long custId, out bool isPinCategory);
+        IEnumerable<CustomerClassificationModel> GetCustomerClassification(long custId);
+
+        IEnumerable<CustomerClassificationHistoryModel> GetCustomerClassificationHistory(long custId, out bool isPinCategory);
 
         DBResult AddCustomerClassification(long custId, long ctsCustId, int subscriberId, int categoryId, string remark, int createdBy);
         

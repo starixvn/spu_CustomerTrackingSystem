@@ -60,6 +60,7 @@
     <Compile Include="Account\CustomerCategory\CustomerCategory.cs" />
     <Compile Include="Account\CustomerCategory\CustomerCategorySummaryViewModel.cs" />
     <Compile Include="Account\CustomerCategory\CustomerCategoryViewModel.cs" />
+    <Compile Include="Account\CustomerCategory\CustomerClassificationHistoryViewModel.cs" />
     <Compile Include="Account\CustomerCategory\MarkCategoryViewModel.cs" />
     <Compile Include="Account\CustomerFraud.cs" />
     <Compile Include="Account\CustomerGeneralStatusViewModel.cs" />

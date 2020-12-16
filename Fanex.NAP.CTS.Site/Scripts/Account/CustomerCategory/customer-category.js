@@ -236,6 +236,8 @@
             searching: false,
             scrollX: false,
             scrollCollapse: false,
+            lengthMenu: [20, 50, 100, 200],
+            pageLength: 50,
             ajax: {
                 url: common.modifyRelativeUrl('/Account/GetCustomerClassification'),
                 data: {
@@ -249,10 +251,10 @@
                         inputPinCategory.prop('checked', json.isPinCategory);
                         btnMarkCategory.prop('disabled', json.isVVip);
 
-                        let isProblemAccount = RenderExternalProblemAccount(json.data);
+                        let isProblemAccount = RenderExternalProblemAccount(json.categoryList);
 
                         if (!isProblemAccount) {
-                            RenderExternalCategorySummary(json.data);
+                            RenderExternalCategorySummary(json.categoryList);
                         }
                     }
                     return response;
@@ -266,43 +268,35 @@
             },
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0], className: "text-left", defaultContent: "-" },
-                { targets: [1], className: "text-left", defaultContent: "-" },
-                { targets: [2], className: "text-left", defaultContent: "-" },
+                { targets: [0], className: "text-center", defaultContent: "-" },
+                { targets: [1], className: "text-center", defaultContent: "-" },
+                { targets: [2], className: "text-center", defaultContent: "-" },
                 { targets: [3], className: "text-center", defaultContent: "-" },
-                { targets: [4], className: "text-center", defaultContent: "-" },
-                { targets: [5], className: "text-center", defaultContent: "-"},
-                { targets: [6], className: "text-center", defaultContent: "-" }
+                { targets: [4], className: "text-center", defaultContent: "-" }
             ],
             columns: [
+                { data: obj => obj.CreatedTimeString },
                 { data: obj => obj.CategoryName },
-                { data: obj => obj.SportGroupNameList },
-                { data: obj => obj.Remark },
-                { data: obj => obj.LastModifiedBy },
-                { data: obj => obj.LastModifiedDate },
-                { data: obj => obj.NextScanDatePeriod },
-                {
-                    data: obj => () => {
-                        var html = '';
-                        //html = '<span class="icon-edit' + (!isHostPermission ? ' disabled"' : '') + '" title="Edit Category"></span>';
-                        html += '<span class="icon-delete' + (!isHostPermission ? ' disabled"' : '') + '" title="Remove Category"></span>';
+                { data: obj => obj.CustomerClass },
+                { data: obj => obj.Reason },
+                { data: obj => obj.CreatedBy }                
+                //{
+                //    data: obj => () => {
+                //        var html = '';                        
+                //        html += '<span class="icon-delete' + (!isHostPermission ? ' disabled"' : '') + '" title="Remove Category"></span>';
 
-                        return obj.IsEnabledDelete ? html : '';
-                    }, createdCell: (cell, _, row) => {
-                        if (isHostPermission) {
-                            $('.icon-delete', cell).click(() => {
-                                common.showConfirmation("Do you want to remove category <b>" + row.CategoryName + "</b> for <b>" + username + "</b> ?", function () {
-                                    RemoveCustomerClassification(custId, ctsCustId, row.CategoryId);
-                                });
-                            });
-
-                            //$('.icon-edit', cell).click(() => {
-                            //    EditCategory(custId, ctsCustId, subscriberId, row.CategoryName, row.CategoryId, row.SportGroupIdList, row.Remark);
-                            //});
-                        }
-                    }
-                }
-            ]            
+                //        return obj.IsEnabledDelete ? html : '';
+                //    }, createdCell: (cell, _, row) => {
+                //        if (isHostPermission) {
+                //            $('.icon-delete', cell).click(() => {
+                //                common.showConfirmation("Do you want to remove category <b>" + row.CategoryName + "</b> for <b>" + username + "</b> ?", function () {
+                //                    RemoveCustomerClassification(custId, ctsCustId, row.CategoryId);
+                //                });
+                //            });
+                //        }
+                //    }
+                //}
+            ]
         });
     }
 
@@ -318,10 +312,10 @@
                     inputPinCategory.prop('checked', json.isPinCategory);
                     btnMarkCategory.prop('disabled', json.isVVip);
                     
-                    let isProblemAccount = RenderExternalProblemAccount(json.data);
+                    let isProblemAccount = RenderExternalProblemAccount(json.categoryList);
 
                     if (!isProblemAccount) {
-                        RenderExternalCategorySummary(json.data);
+                        RenderExternalCategorySummary(json.categoryList);
                     }
                 }
                 return response;

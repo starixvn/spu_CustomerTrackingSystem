@@ -907,20 +907,34 @@
             }
         }
 
-        public IEnumerable<CustomerClassificationModel> GetCustomerClassification(long custId, out bool isPinCategory)
-        {
-            isPinCategory = false;
+        public IEnumerable<CustomerClassificationModel> GetCustomerClassification(long custId)
+        {          
             var criteria = new GetCTSCustomerClassificationCriteria
             {
                 CustId = custId
             };
+          
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<CustomerClassificationModel>(criteria);
+            }
+        }
+
+        public IEnumerable<CustomerClassificationHistoryModel> GetCustomerClassificationHistory(long custId, out bool isPinCategory)
+        {
+            isPinCategory = false;
+
+            var criteria = new GetCTSCustomerClassificationHistoryCriteria
+            {
+                CustId = custId
+            };            
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 using (var result = db.QueryMultiple(criteria))
                 {
-                    var categories = result.Read<CustomerClassificationModel>();
                     var pinCategories = result.Read<bool>();
+                    var categories = result.Read<CustomerClassificationHistoryModel>();                    
 
                     if (pinCategories != null && pinCategories.Any())
                     {
@@ -944,8 +958,7 @@
             {
                 return db.Query<CustomerClassificationModel>(criteria);
             }
-        }
-        
+        }        
 
         public IEnumerable<Model.API.CustomerClassModel> GetCustomerClassByCustId(string custIdList)
         {

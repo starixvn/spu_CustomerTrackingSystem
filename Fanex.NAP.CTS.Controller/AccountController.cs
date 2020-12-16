@@ -1007,25 +1007,83 @@
         {
             var isPinCategory = false;
             var isVVip = false;
-            var customerCategoryList = new List<CustomerCategoryViewModel>();
-            
-            var data = _accountService.GetCustomerClassification(custId, out isPinCategory);
+            var categoryList = new List<CustomerCategoryViewModel>();
+            var classificationHistoryList = new List<CustomerClassificationHistoryViewModel>();
 
-            if (data != null && data.Any())
+            var classification = _accountService.GetCustomerClassification(custId);
+
+            if (classification != null && classification.Any())
             {
-                customerCategoryList = data
+                categoryList = classification
                     .Where(x => x.CategoryType == 1 || x.CategoryType == 2)
                     .Select(x => GetCustomerCategory(x)).ToList();
                                 
-                isVVip = data.Where(x => x.CategoryName.Equals("VVIP")).Count() > 0;
+                isVVip = classification.Where(x => x.CategoryName.Equals("VVIP")).Count() > 0;
+            }
+
+            var classificationHistory = _accountService.GetCustomerClassificationHistory(custId, out isPinCategory);
+
+            if (classificationHistory != null && classificationHistory.Any())
+            {
+                classificationHistoryList = classificationHistory.Select(x => new CustomerClassificationHistoryViewModel
+                {
+                    CreatedTimeString = x.CreatedTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+                    SourceTypeName = x.SourceTypeName,
+                    CategoryName = x.CategoryName,
+                    CustomerClass = x.CustomerClass,
+                    Reason = GetReason(x),
+                    TurnOver = x.TurnOver,
+                    Winloss = x.Winloss,
+                    Margin = x.Margin,
+                    BetCount = x.BetCount,
+                    ActiveDays = x.ActiveDays,
+                    LastXDaysMargin = x.LastXDaysMargin,
+                    ProbationPeriodWinloss = x.ProbationPeriodWinloss,
+                    CreatedBy = x.CreatedBy
+                }).ToList();
             }
 
             return Json(new
             {
                 isPinCategory,
                 isVVip,
-                data = customerCategoryList,
+                categoryList,
+                data = classificationHistoryList,
             }, JsonRequestBehavior.AllowGet);
+        }
+
+        private string GetReason(CustomerClassificationHistoryModel cc)
+        {
+            var reason = string.Empty;
+           
+            switch (cc.CategoryID)
+            {
+                case (int)ClassificationSourceType.NormalAccount:
+                    reason = "Margin: " + Math.Round(cc.Margin, 2) 
+                        + " - Bet Count" + cc.BetCount;
+                    break;
+                case (int)ClassificationSourceType.VIP:
+                    reason = "Margin: " + Math.Round(cc.Margin, 2) 
+                        + " - Turn Over: " + cc.TurnOver 
+                        + " - Active Date: " + cc.ActiveDays 
+                        + " - Bet Count: " + cc.BetCount;
+                    break;
+                case (int)ClassificationSourceType.Probation:
+                    reason = "Margin: " + Math.Round(cc.Margin, 2);
+                    break;
+                case (int)ClassificationSourceType.SmartPunter:
+                case (int)ClassificationSourceType.HighRiskPunter:
+                    reason = "Margin: " + Math.Round(cc.Margin, 2) 
+                        + " - Win Loss: " + cc.Winloss 
+                        + " - Bet Count: " + cc.BetCount 
+                        + " - Last 7 day's Margin: " + Math.Round(cc.LastXDaysMargin) 
+                        + " - Total WinLoss(20 days): " + cc.ProbationPeriodWinloss;
+                    break;
+                default:
+                    break;
+            }
+
+            return reason;
         }
 
         private CustomerCategoryViewModel GetCustomerCategory(CustomerClassificationModel model)

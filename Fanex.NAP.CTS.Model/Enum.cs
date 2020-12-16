@@ -55,4 +55,15 @@
         Start,
         End
     }
+
+    public enum ClassificationSourceType
+    {
+        NewMember = 201,
+        NormalAccount = 202,
+        SmartPunter = 203,
+        HighRiskPunter = 204,        
+        VIP = 205,
+        Probation = 206
+    }
+
 }
