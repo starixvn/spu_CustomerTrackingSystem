@@ -2,7 +2,7 @@
 {
     public class TypeCategoryCustomerModel
     {
-        public long CustId { get; set; }
+        public int CustId { get; set; }
        
         public int TypeId { get; set; }
     }

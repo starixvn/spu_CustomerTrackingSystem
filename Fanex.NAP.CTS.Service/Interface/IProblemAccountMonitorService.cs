@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Service
-{    
+{
+    using Fanex.NAP.CTS.Model.CustomerClassify;
     using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
     using System;    
     using System.Collections.Generic;
@@ -30,6 +31,6 @@
 
         string GetHtmlChoice(DetailTicketsModel ticket);
 
-        IEnumerable<string> UpdateRemovedProblemAccountToCTS(string custid);
+        IEnumerable<TypeCategoryCustomerModel> UpdateRemovedProblemAccountToCTS(string custids);
     }
 }

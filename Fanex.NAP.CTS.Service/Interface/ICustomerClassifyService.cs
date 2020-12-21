@@ -2,7 +2,7 @@
 {    
     using System.Collections.Generic;
 
-    public interface IRescanCustomerClassifyService
+    public interface ICustomerClassifyService
     {
         bool RescanCustomerClassify(List<int> custIds);        
     }

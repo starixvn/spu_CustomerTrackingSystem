@@ -22,7 +22,7 @@
     {
         private readonly ISpecialCustomerClassService _customerClassService;
         private readonly ISyncCustomerToMainDbService _syncToMainDbService;
-        private readonly IRescanCustomerClassifyService _rescanCustomerClassifyService;
+        private readonly ICustomerClassifyService _rescanCustomerClassifyService;
 
         public override string BaseControllerName { get => Consts.MenuItemController; }
 
@@ -30,7 +30,7 @@
         {
             _customerClassService = new SpecialCustomerClassService();
             _syncToMainDbService = new SyncCustomerToMainDbService();
-            _rescanCustomerClassifyService = new RescanCustomerClassifyService();
+            _rescanCustomerClassifyService = new CustomerClassifyService();
         }
 
         public ActionResult Index()

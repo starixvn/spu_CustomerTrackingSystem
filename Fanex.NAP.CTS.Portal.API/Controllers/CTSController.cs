@@ -32,6 +32,7 @@
         private readonly IProblemAccountMonitorService _problemAccountMonitorService;
         private readonly IClassifyCustomerService _classifyCustomerService;
         private readonly ICategoryService _categoryService;
+        private readonly ICustomerClassifyService _customerClassifyService;
 
         /// <summary>
         /// Using for external site (TW, ExtAcc site...)
@@ -46,6 +47,7 @@
             _problemAccountMonitorService = new ProblemAccountMonitorService();
             _classifyCustomerService = new ClassifyCustomerService();
             _categoryService = new CategoryService();
+            _customerClassifyService = new CustomerClassifyService();
         }
 
         /// <summary>
@@ -407,12 +409,9 @@
             {
                 var lastestCustIds = _problemAccountMonitorService.UpdateRemovedProblemAccountToCTS(custIds);
 
-                if (lastestCustIds != null && lastestCustIds.Any())
-                {
-                    _syncToMainDbService.SyncCustomerClassToMainDb(string.Join(",", lastestCustIds.Select(c => c)), true, false);
+                var custIdList = lastestCustIds.Select(x => x.CustId).ToList();
 
-                    ClassifyCustomerGeneral(string.Join(",", lastestCustIds));
-                }
+                _customerClassifyService.RescanCustomerClassify(custIdList);               
 
                 return new ApiResultModel {
                     ErrorMessage = string.Empty,

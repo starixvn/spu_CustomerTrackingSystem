@@ -12,11 +12,11 @@
     using Fanex.NAP.CTS.Model.CustomerClassify;
     using Newtonsoft.Json;
 
-    public class RescanCustomerClassifyService : IRescanCustomerClassifyService
+    public class CustomerClassifyService : ICustomerClassifyService
     {
         private readonly IPushDataToExternalService _pushDataToExternalService;
 
-        public RescanCustomerClassifyService()
+        public CustomerClassifyService()
         {
             _pushDataToExternalService = new PushDataToExternalService();
         }

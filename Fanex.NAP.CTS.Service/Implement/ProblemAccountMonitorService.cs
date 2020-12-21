@@ -8,6 +8,7 @@
     using Fanex.Logging;
     using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Criteria.ProblemAccountMonitor;
+    using Fanex.NAP.CTS.Model.CustomerClassify;
     using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
     using Fanex.NAP.CTS.Resource.Consts;
     using Newtonsoft.Json;
@@ -203,7 +204,7 @@
             return htmlBuilder.BuildChoice(coreTicket, ticketHelper, null, true);           
         }
 
-        public IEnumerable<string> UpdateRemovedProblemAccountToCTS(string custid)
+        public IEnumerable<TypeCategoryCustomerModel> UpdateRemovedProblemAccountToCTS(string custid)
         {
             var removedProblemAccounts = custid.Split(',').Select(a => new InsertProblemAccountsModel()
             {
@@ -222,7 +223,7 @@
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return repository.Fetch<string>(criteria);
+                return repository.Fetch<TypeCategoryCustomerModel>(criteria);
             }
         }
     }
