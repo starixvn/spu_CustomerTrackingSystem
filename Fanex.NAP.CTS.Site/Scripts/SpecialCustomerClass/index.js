@@ -96,7 +96,7 @@
                     LoadGrid("");
                 }
                 else {
-                    common.showError('Failed! ' + response.ErrorMessage);
+                    common.showError('Failed! ' + response.ErrorMsg);
                 }
             },
             beforeSend: function () {

@@ -1,0 +1,17 @@
+﻿namespace Fanex.NAP.CTS.Criteria.CustomerClassify
+{
+    using Fanex.Data;
+    using Fanex.Data.Repository;
+
+    public class GetLastestClassificationCriteria : CriteriaBase
+    {
+        [SpParam(SqlParamName = "ip_CustomerIDs")]
+        public string CustIds { get; set; }
+
+        public override string GetSettingKey()
+            => "CTS_DC_CustClassification_GetLatestClassification";
+
+        public override bool IsValid()
+            => true;
+    }
+}

@@ -176,5 +176,18 @@
                 return size == 0 ? 500 : size;
             }
         }
+
+        public static int PushCCToExternalChunkSize
+        {
+            get
+            {
+                var size = 200;
+                var configSize = GetConfigStringByName("PushCCToExternal-ChunkSize");
+
+                int.TryParse(configSize, out size);
+
+                return size == 0 ? 200 : size;
+            }
+        }
     }
 }

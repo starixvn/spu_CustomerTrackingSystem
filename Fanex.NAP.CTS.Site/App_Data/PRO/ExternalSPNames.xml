@@ -132,4 +132,11 @@
   <Function name="ProbationManagement">
     <Setting Key="CTS_NormalAccountsClassification_GetAccummulatedInfo" SpName="CTS_NormalAccountsClassification_GetAccummulatedInfo" DbName="DBVR2.bodb_VR2Model.bodbSPUNet"/>
   </Function>
+
+  <Function name="CustomerClassification">
+    <Setting Key="CTS_NormalAccountsClassification_GeneralCategorize_Daily" SpName="CTS_NormalAccountsClassification_GeneralCategorize_Daily" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
+    <Setting Key="TicketVoiding_CTS_ProblemAccountSelect" SpName="TicketVoiding_CTS_ProblemAccountSelect" DbName="DBCTS.bodb02.bodbSPUNet"/>
+    <Setting Key="TicketVoiding_CTS_ProblemAccountSelect_CN88" SpName="TicketVoiding_CTS_ProblemAccountSelect_CN88" DbName="DBCTS.bodb02.bodbSPUNet"/>
+  </Function>
+  
 </Functions>

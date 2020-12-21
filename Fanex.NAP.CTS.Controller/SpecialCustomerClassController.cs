@@ -22,6 +22,7 @@
     {
         private readonly ISpecialCustomerClassService _customerClassService;
         private readonly ISyncCustomerToMainDbService _syncToMainDbService;
+        private readonly IRescanCustomerClassifyService _rescanCustomerClassifyService;
 
         public override string BaseControllerName { get => Consts.MenuItemController; }
 
@@ -29,7 +30,8 @@
         {
             _customerClassService = new SpecialCustomerClassService();
             _syncToMainDbService = new SyncCustomerToMainDbService();
-        }            
+            _rescanCustomerClassifyService = new RescanCustomerClassifyService();
+        }
 
         public ActionResult Index()
         {
@@ -103,37 +105,16 @@
         [NapAuth(FunctionKey = FSFunctionKeys.SpecialCustomerClass, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult RemoveCustomerClass(int custID, long ctsCustID)
         {
-            var result = new ResultInsertRemoveViewModel
+            var resultRemoveToCTS = _customerClassService.RemoveCustomerClass(ctsCustID, CurrentSession.UserId);
+
+            if (resultRemoveToCTS.ErrorCode == 0)
             {
-                ErrorCode = 0,
-                ErrorMessage = string.Empty
-            };
+                var custIdList = new List<int> { custID };
 
-            var custToMainDbList = new List<CustomerClassForMainDb>
-            {
-                new CustomerClassForMainDb
-                {
-                    CustID = custID,
-                    CustomerClass = -1
-                }
-            };
-
-            var resultSyncToMainDb = _syncToMainDbService.SyncCustomerClassToMainDb(custToMainDbList, "Remove Special Customer Class");
-
-            if (resultSyncToMainDb.ErrorCode == 0)
-            {
-                var resultRemoveToCTS = _customerClassService.RemoveCustomerClass(ctsCustID, CurrentSession.UserId);
-
-                result.ErrorCode = resultRemoveToCTS.ErrorCode;
-                result.ErrorMessage = resultRemoveToCTS.ErrorMsg;
+                _rescanCustomerClassifyService.RescanCustomerClassify(custIdList);
             }
-            else
-            {
-                result.ErrorCode = resultSyncToMainDb.ErrorCode;
-                result.ErrorMessage = resultSyncToMainDb.ErrorMsg;
-            }
-           
-            return Json(result, JsonRequestBehavior.AllowGet);
+
+            return Json(resultRemoveToCTS, JsonRequestBehavior.AllowGet);
         }
 
     }

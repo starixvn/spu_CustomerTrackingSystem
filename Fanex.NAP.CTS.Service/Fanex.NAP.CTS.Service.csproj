@@ -69,6 +69,8 @@
     <Compile Include="Implement\FeedDataToSoon88Service.cs" />
     <Compile Include="Implement\ProbationManagementService.cs" />
     <Compile Include="Implement\ManageSubscriberService.cs" />
+    <Compile Include="Implement\PushDataToExternalService.cs" />
+    <Compile Include="Implement\RescanCustomerClassifyService.cs" />
     <Compile Include="Implement\SpecialCustomerClassService.cs" />
     <Compile Include="Implement\CustomerEvidenceService.cs" />
     <Compile Include="Implement\CustomerMonitorService.cs" />
@@ -117,6 +119,8 @@
     <Compile Include="Interface\IOfficeIPService.cs" />
     <Compile Include="Interface\IProbationManagementService.cs" />
     <Compile Include="Interface\IProblemAccountMonitorService.cs" />
+    <Compile Include="Interface\IPushDataToExternalService.cs" />
+    <Compile Include="Interface\IRescanCustomerClassifyService.cs" />
     <Compile Include="Interface\IScannedOfficeIpReportService.cs" />
     <Compile Include="Interface\ISpecialCustomerClassService.cs" />
     <Compile Include="Interface\ISubscriberAssignmentService.cs" />
