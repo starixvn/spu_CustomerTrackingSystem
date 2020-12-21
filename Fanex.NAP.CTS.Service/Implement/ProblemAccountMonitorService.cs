@@ -204,12 +204,12 @@
             return htmlBuilder.BuildChoice(coreTicket, ticketHelper, null, true);           
         }
 
-        public IEnumerable<TypeCategoryCustomerModel> UpdateRemovedProblemAccountToCTS(string custid)
+        public IEnumerable<int> UpdateRemovedProblemAccountToCTS(string custid)
         {
             var removedProblemAccounts = custid.Split(',').Select(a => new InsertProblemAccountsModel()
             {
                 CustId = Convert.ToInt32(a),
-                CategoryId = Consts.REMOVE_CATEGORYID
+                CategoryId = Consts.REMOVE_PROBLEMACCOUNT_CATEGORYID
             });
 
             var problemAccountJson = JsonConvert.SerializeObject(removedProblemAccounts);
@@ -223,7 +223,7 @@
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return repository.Fetch<TypeCategoryCustomerModel>(criteria);
+                return repository.Fetch<int>(criteria);
             }
         }
     }

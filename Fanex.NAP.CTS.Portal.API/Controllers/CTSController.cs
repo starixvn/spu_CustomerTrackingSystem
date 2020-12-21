@@ -407,11 +407,9 @@
         {
             try
             {
-                var lastestCustIds = _problemAccountMonitorService.UpdateRemovedProblemAccountToCTS(custIds);
+                var custIdsToSyncCC = _problemAccountMonitorService.UpdateRemovedProblemAccountToCTS(custIds).ToList();
 
-                var custIdList = lastestCustIds.Select(x => x.CustId).ToList();
-
-                _customerClassifyService.RescanCustomerClassify(custIdList);               
+                _customerClassifyService.RescanCustomerClassify(custIdsToSyncCC);               
 
                 return new ApiResultModel {
                     ErrorMessage = string.Empty,

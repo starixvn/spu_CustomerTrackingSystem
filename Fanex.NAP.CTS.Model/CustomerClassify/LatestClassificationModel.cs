@@ -1,14 +1,19 @@
 ﻿namespace Fanex.NAP.CTS.Model.CustomerClassify
 {
+    using Fanex.NAP.CTS.Core.Helpers.Xml;
     using System;
-  
+    using System.Xml.Serialization;
+
+    [XName("r")]
     public class LatestClassificationModel
     {
-        public long CustId { get; set; }
-       
-        public int CustomerClass { get; set; }
-       
-        public DateTime ScannedTime { get; set; }
+        [XName("id")]
+        public int CustId { get; set; }
 
+        [XName("c")]
+        public int CustomerClass { get; set; }
+
+        [XmlIgnore]
+        public DateTime ScannedTime { get; set; }
     }
 }

@@ -186,7 +186,6 @@
     <Compile Include="AssociatedAccountMonitor\ValidateAssociatedAccountModel.cs" />
     <Compile Include="CustomerClassify\LatestClassificationModel.cs" />
     <Compile Include="CustomerClassify\MultipleProblemAccountsModel.cs" />
-    <Compile Include="CustomerClassify\TypeCategoryCustomerModel.cs" />
     <Compile Include="GraphDB\DirectAssociationDeviceModel.cs" />
     <Compile Include="GraphDB\DirectAssociationModel.cs" />
     <Compile Include="ImportEvidences\AddCustomerEvidenceFromFileModel.cs" />

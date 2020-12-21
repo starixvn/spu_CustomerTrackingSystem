@@ -31,6 +31,6 @@
 
         string GetHtmlChoice(DetailTicketsModel ticket);
 
-        IEnumerable<TypeCategoryCustomerModel> UpdateRemovedProblemAccountToCTS(string custids);
+        IEnumerable<int> UpdateRemovedProblemAccountToCTS(string custids);
     }
 }

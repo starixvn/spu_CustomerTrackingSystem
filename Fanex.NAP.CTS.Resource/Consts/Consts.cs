@@ -53,7 +53,7 @@
         public const int MASTER_ROLE = 3;
         public const int AGENT_ROLE = 2;
 
-        public const int REMOVE_CATEGORYID = -1;
+        public const int REMOVE_PROBLEMACCOUNT_CATEGORYID = -1;
 
         public const string SALT = "!%HGDwweHqw#";
     }

@@ -114,9 +114,12 @@
 
                 if (lastestClassifications != null && lastestClassifications.Any())
                 {
-                    _pushDataToExternalService.PushCustomerClassificationToMain(lastestClassifications, 2);
+                    bool isSyncMainSuccessfully = _pushDataToExternalService.PushCustomerClassificationToMain(lastestClassifications, 3);
 
-                    UpdateAppliedCustomerClassification(JsonConvert.SerializeObject(lastestClassifications));
+                    if (isSyncMainSuccessfully)
+                    {
+                        UpdateAppliedCustomerClassification(JsonConvert.SerializeObject(lastestClassifications));
+                    }
 
                     _pushDataToExternalService.PushCustomerClassificationToSoon88(lastestClassifications);
                 }
@@ -179,11 +182,6 @@
             }
         }
 
-        private bool RescanProblemAccount()
-        {
-            throw new NotImplementedException();
-        }
-
         private bool RescanNormalAccount(List<int> customers)
         {
             if (customers != null || customers.Any())
@@ -192,9 +190,7 @@
 
                 foreach (var custIds in custIdsChunk)
                 {
-                    var lastestClassifications = GetLatestClassification(string.Join(",", custIds));
-
-                    var custIdsToBeRescaned = string.Join(",", lastestClassifications.Select(cust => cust.CustId));
+                    var custIdsToBeRescaned = string.Join(",", custIds);
 
                     ClassifyCustomerGeneralCategoryDaily(custIdsToBeRescaned, false);
                 }

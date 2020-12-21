@@ -181,12 +181,12 @@
         {
             get
             {
-                var size = 200;
+                var size = 150;
                 var configSize = GetConfigStringByName("PushCCToExternal-ChunkSize");
 
                 int.TryParse(configSize, out size);
 
-                return size == 0 ? 200 : size;
+                return size == 0 ? 150 : size;
             }
         }
     }
