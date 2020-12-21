@@ -336,7 +336,7 @@
         {
             try
             {
-                var custClassifications = _accountService.GetCustomerClassificationByCategory("3");
+                var custClassifications = _accountService.GetCustomerClassificationByCategory("213");
                 return custClassifications.Any()
                     ? custClassifications.Select(c => new CustomerClassification()
                     {
