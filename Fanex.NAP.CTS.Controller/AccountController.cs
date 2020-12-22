@@ -42,7 +42,8 @@
         private readonly ISubscriberAssignmentService _subscriberAssignmentService;
         private readonly ICustomerEvidenceService _customerEvidenceService;    
         private readonly ISyncCustomerToMainDbService _syncToMainDbService;
-        private readonly IClassifyCustomerService _classifyCustomerService;
+        private readonly ICustomerClassifyService _customerClassifyService;
+        private readonly IPushDataToExternalService _pushDataToExternalService;
 
         public override string BaseControllerName { get => string.Empty; }
 
@@ -54,7 +55,8 @@
             _transService = new TransactionService();
             _customerEvidenceService = new CustomerEvidenceService();
             _syncToMainDbService = new SyncCustomerToMainDbService();
-            _classifyCustomerService = new ClassifyCustomerService();
+            _customerClassifyService = new CustomerClassifyService();
+            _pushDataToExternalService = new PushDataToExternalService();
         }
 
         public ActionResult Index(long Id)
@@ -737,17 +739,40 @@
             if (result.ErrorCode == 0)
             {
                 var objects = new[] { new {
-                    model.CustId,
                     model.CTSCustId,
+                    model.CustId,                    
                     model.SubscriberId,
                     model.EvidenceId,
                     ActionType = 0
                 } };
-
+                var syncCustIds = Enumerable.Empty<int>();
                 var custEvidenceJson = JsonConvert.SerializeObject(objects);
-                _accountService.SyncCustEvidenceToCategory(custEvidenceJson);
+                // Sync Evidence to Category
+                var syncResult =_accountService.SyncCustEvidenceToCategory(custEvidenceJson, out syncCustIds);
 
-                _syncToMainDbService.SyncCustomerClassToMainDb(model.CTSCustId.ToString(), false, false);
+                if (syncResult.ErrorCode == 0)
+                {
+                    var lastestClassifications = _customerClassifyService.GetLatestClassification(string.Join(",", syncCustIds));
+
+                    if (lastestClassifications != null && lastestClassifications.Any())
+                    {
+                        // Update CC in table custinfo to MainDB
+                        var isSuccessToMain = _pushDataToExternalService.PushCustomerClassificationToMain(lastestClassifications, 2);
+
+                        if (isSuccessToMain)
+                        {
+                            var updateApplyCCs = lastestClassifications.Select(x => new { x.CustId, x.ScannedTime });
+
+                            var jsonUpdateApplyCCs = JsonConvert.SerializeObject(updateApplyCCs);
+
+                            // Update IsAppliedCC = 1 in CTS
+                            _customerClassifyService.UpdateAppliedCustomerClassification(jsonUpdateApplyCCs);
+                        }
+
+                        // Push CC to Soon88
+                        _pushDataToExternalService.PushCustomerClassificationToSoon88(lastestClassifications);
+                    }                   
+                }
             }
 
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -764,17 +789,24 @@
             if (result.ErrorCode == 0)
             {
                 var objects = new[] { new {
-                    model.CustId,
                     model.CTSCustId,
+                    model.CustId,                    
                     model.SubscriberId,
                     model.EvidenceId,
                     ActionType = 2
                 } };
-                
-                var custEvidenceJson = JsonConvert.SerializeObject(objects);
-                _accountService.SyncCustEvidenceToCategory(custEvidenceJson);
 
-                _syncToMainDbService.SyncCustomerClassToMainDb(model.CTSCustId.ToString(), false, false);
+                var syncCustIds = Enumerable.Empty<int>();
+                var custEvidenceJson = JsonConvert.SerializeObject(objects);
+
+                // Sync Evidence to Category
+                var syncResult = _accountService.SyncCustEvidenceToCategory(custEvidenceJson, out syncCustIds);
+
+                if (syncResult.ErrorCode == 0)
+                {
+                    // Rescan Problem Account & Normal Account
+                    _customerClassifyService.RescanCustomerClassify(syncCustIds.ToList());                   
+                }
 
                 var associatedAccountList = _customerEvidenceService.GetRemoveEvidenceAssociatedAccounts(
                     new GetRemoveEvidenceAssociatedAccountCriteria
@@ -791,10 +823,6 @@
                             CustIDList = string.Join(",", associatedAccountList)
                         });
                 }
-
-                var customerInfoFromCTS = _accountService.GetCustomerInfoByCTSCustId(model.CTSCustId);
-
-                ClassifyCustomerGeneral(customerInfoFromCTS.CustId.ToString());
             }
 
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -1420,19 +1448,6 @@
             return temp = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.BettingStatistics, NAP.Core.Business.Constant.Policy.Read);
         }
         #endregion
-
-        #region Classification
-        public void ClassifyCustomerGeneral(string custIds)
-        {
-            var custWithoutEvidence = _syncToMainDbService.GetLatestEvidenceCategory(custIds, true, true)
-                .Where(c => c.CategoryIdMapping == -1);
-
-            if (custWithoutEvidence.Any())
-            {
-                _classifyCustomerService.ClassifyCustomerGeneralCategoryDaily(string.Join(",", custWithoutEvidence.Select(cust => cust.CustID)));
-            }
-        }
-
-        #endregion
+        
     }
 }

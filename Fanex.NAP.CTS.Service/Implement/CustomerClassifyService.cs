@@ -149,7 +149,7 @@
             }
         }
 
-        private IEnumerable<LatestClassificationModel> GetLatestClassification(string custIds)
+        public IEnumerable<LatestClassificationModel> GetLatestClassification(string custIds)
         {
             var criteria = new GetLastestClassificationCriteria
             {
@@ -162,7 +162,7 @@
             }
         }
 
-        private void UpdateAppliedCustomerClassification(string jsonData)
+        public void UpdateAppliedCustomerClassification(string jsonData)
         {
             var repository = new DynamicRepository();
 

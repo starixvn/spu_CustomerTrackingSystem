@@ -733,31 +733,36 @@
             }
         }
 
-        public DBResult SyncCustEvidenceToCategory(string custEvidencesJson)
+        public DBResult SyncCustEvidenceToCategory(string custEvidencesJson, out IEnumerable<int> custIds)
         {
+            custIds = new List<int>();
+
             var criteria = new CustEvidenceSyncToCategoryCriteria
             {
                 CustEvidencesJson = custEvidencesJson
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            try
             {
-                try
-                {
-                    db.ExecuteNonQuery(criteria);
+                var repository = new DynamicRepository();
 
-                    if (!string.IsNullOrEmpty(criteria.ErrorMessage))
-                        return new DBResult { ErrorCode = -1, ErrorMsg = criteria.ErrorMessage };
-                    else
-                        return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
-                }
-                catch (Exception ex)
-                {
-                    LogService.Error("CTS - AccountService SyncCustEvidenceToCategory exception: " + ex.Message, ex);
+                custIds = repository.Fetch<int>(criteria);
 
-                    return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
+                if (!string.IsNullOrEmpty(criteria.ErrorMessage))
+                {
+                    LogService.Error("CTS - AccountService SyncCustEvidenceToCategory failed: " + criteria.ErrorMessage);
+
+                    return new DBResult { ErrorCode = -1, ErrorMsg = criteria.ErrorMessage };
                 }
+
+                return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
             }
+            catch (Exception ex)
+            {
+                LogService.Error("CTS - AccountService SyncCustEvidenceToCategory exception: " + ex.Message, ex);
+
+                return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
+            }           
         }
 
         public List<AccountExceptionsModel> GetAccountExceptions(Int64 ctsCustId)
