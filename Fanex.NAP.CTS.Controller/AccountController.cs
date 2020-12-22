@@ -1038,18 +1038,28 @@
             var categoryList = new List<CustomerCategoryViewModel>();
             var classificationHistoryList = new List<CustomerClassificationHistoryViewModel>();
 
-            var classification = _accountService.GetCustomerClassification(custId);
+            var classification = _accountService.GetCustomerClassification(custId, out isPinCategory);
 
             if (classification != null && classification.Any())
             {
                 categoryList = classification
-                    .Where(x => x.CategoryType == 1 || x.CategoryType == 2)
-                    .Select(x => GetCustomerCategory(x)).ToList();
-                                
-                isVVip = classification.Where(x => x.CategoryName.Equals("VVIP")).Count() > 0;
+                    .Select(x => new CustomerCategoryViewModel {
+                        ParentCategoryId = x.ParentCategoryID,
+                        CategoryId = x.CategoryID,
+                        CategoryName = x.CategoryName,
+                        CategoryType = x.CategoryType,
+                        LastModifiedBy = x.LastModifiedBy,
+                        LastModifiedDate = x.LastModifiedDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+                        Remark = x.Remark,
+                        SportGroupIdList = x.SportGroupIDList,
+                        SportGroupNameList = x.SportGroupNameList,
+                        NextScanDatePeriod = x.NextScanDatePeriod,
+                        IsProblemAccount = x.CategoryType == 2,
+                        IsEnabledDelete = x.IsEnabledDelete
+                    }).ToList();
             }
 
-            var classificationHistory = _accountService.GetCustomerClassificationHistory(custId, out isPinCategory);
+            var classificationHistory = _accountService.GetCustomerClassificationHistory(custId);
 
             if (classificationHistory != null && classificationHistory.Any())
             {
@@ -1069,6 +1079,8 @@
                     ProbationPeriodWinloss = x.ProbationPeriodWinloss,
                     CreatedBy = x.CreatedBy
                 }).ToList();
+
+                isVVip = classificationHistoryList.Where(x => x.CategoryName.Equals("VVIP")).Count() > 0;
             }
 
             return Json(new
@@ -1112,26 +1124,7 @@
             }
 
             return reason;
-        }
-
-        private CustomerCategoryViewModel GetCustomerCategory(CustomerClassificationModel model)
-        {
-            return new CustomerCategoryViewModel
-            {
-                ParentCategoryId = model.ParentCategoryID,
-                CategoryId = model.CategoryID,
-                CategoryName = model.CategoryName,
-                CategoryType = model.CategoryType,
-                LastModifiedBy = model.LastModifiedBy,
-                LastModifiedDate = model.LastModifiedDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                Remark = model.Remark,
-                SportGroupIdList = model.SportGroupIDList,
-                SportGroupNameList = model.SportGroupNameList,                
-                NextScanDatePeriod = model.NextScanDatePeriod,
-                IsProblemAccount = model.CategoryType == 2,
-                IsEnabledDelete = model.IsEnabledDelete                
-            };
-        }
+        }       
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult AddCustomerClassification(long custId, long ctsCustId, int subscriberId, int categoryId, string remark, bool isVVip)

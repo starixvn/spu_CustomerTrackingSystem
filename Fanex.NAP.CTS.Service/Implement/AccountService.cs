@@ -912,34 +912,21 @@
             }
         }
 
-        public IEnumerable<CustomerClassificationModel> GetCustomerClassification(long custId)
-        {          
+        public IEnumerable<CustomerClassificationModel> GetCustomerClassification(long custId, out bool isPinCategory)
+        {
+            isPinCategory = false;
+
             var criteria = new GetCTSCustomerClassificationCriteria
             {
                 CustId = custId
             };
-          
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<CustomerClassificationModel>(criteria);
-            }
-        }
-
-        public IEnumerable<CustomerClassificationHistoryModel> GetCustomerClassificationHistory(long custId, out bool isPinCategory)
-        {
-            isPinCategory = false;
-
-            var criteria = new GetCTSCustomerClassificationHistoryCriteria
-            {
-                CustId = custId
-            };            
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 using (var result = db.QueryMultiple(criteria))
                 {
                     var pinCategories = result.Read<bool>();
-                    var categories = result.Read<CustomerClassificationHistoryModel>();                    
+                    var categories = result.Read<CustomerClassificationModel>();
 
                     if (pinCategories != null && pinCategories.Any())
                     {
@@ -949,6 +936,28 @@
                     return categories;
                 }
             }
+        }
+
+        public IEnumerable<CustomerClassificationHistoryModel> GetCustomerClassificationHistory(long custId)
+        {
+            var criteria = new GetCTSCustomerClassificationHistoryCriteria
+            {
+                CustId = custId
+            };
+
+            try
+            {
+                using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+                {
+                    return db.Query<CustomerClassificationHistoryModel>(criteria);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("CTS - AccountService - GetCustomerClassificationHistory exception: " + ex.Message, ex);
+            }
+
+            return new List<CustomerClassificationHistoryModel>();
         }
 
         public IEnumerable<CustomerClassificationModel> GetCustomerClassificationForAPI(string custIdList, string parentCateIdList)
