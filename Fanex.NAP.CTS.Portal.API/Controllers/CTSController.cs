@@ -447,9 +447,17 @@
         {
             try
             {
-                var custIdsToSyncCC = _problemAccountMonitorService.UpdateRemovedProblemAccountToCTS(custIds).ToList();
+                var output = _problemAccountMonitorService.UpdateRemovedProblemAccountToCTS(custIds);
 
-                _customerClassifyService.RescanCustomerClassify(custIdsToSyncCC);               
+                if (string.IsNullOrEmpty(output.ErrorMessage) && output.CustIds != null && output.CustIds.Any())
+                {
+                    _customerClassifyService.RescanCustomerClassify(output.CustIds.ToList());
+                }
+                else if (!string.IsNullOrEmpty(output.ErrorMessage))
+                {
+                    LogService.Error($"CTS Portal API - Remove Problem Account API - Rescan Problem Account Exception: {output.ErrorMessage} - List custIds: {custIds}.");
+                    return new ApiResultModel { ErrorMessage = string.Empty, StatusMessage = "fail" };
+                }
 
                 return new ApiResultModel {
                     ErrorMessage = string.Empty,

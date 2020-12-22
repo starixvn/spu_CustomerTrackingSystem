@@ -2,7 +2,6 @@
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
-    using Fanex.NAP.CTS.Core.BaseClasses;
 
     public class MultiCustomerEvidencesInsertCriteria : CriteriaBase
     {

@@ -2,6 +2,7 @@
 {
     using Fanex.NAP.CTS.Model.CustomerClassify;
     using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
+    using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using System;    
     using System.Collections.Generic;
 
@@ -31,6 +32,6 @@
 
         string GetHtmlChoice(DetailTicketsModel ticket);
 
-        IEnumerable<int> UpdateRemovedProblemAccountToCTS(string custids);
+        InsertCategoryResultModel UpdateRemovedProblemAccountToCTS(string custids);
     }
 }

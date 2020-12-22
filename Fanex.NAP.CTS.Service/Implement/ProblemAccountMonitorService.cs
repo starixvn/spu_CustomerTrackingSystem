@@ -10,6 +10,7 @@
     using Fanex.NAP.CTS.Criteria.ProblemAccountMonitor;
     using Fanex.NAP.CTS.Model.CustomerClassify;
     using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
+    using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Resource.Consts;
     using Newtonsoft.Json;
     using System;    
@@ -204,27 +205,28 @@
             return htmlBuilder.BuildChoice(coreTicket, ticketHelper, null, true);           
         }
 
-        public IEnumerable<int> UpdateRemovedProblemAccountToCTS(string custid)
+        public InsertCategoryResultModel UpdateRemovedProblemAccountToCTS(string custid)
         {
+            var custIds = new List<int>();
+            var repository = new DynamicRepository();
+
             var removedProblemAccounts = custid.Split(',').Select(a => new InsertProblemAccountsModel()
             {
                 CustId = Convert.ToInt32(a),
                 CategoryId = Consts.REMOVE_PROBLEMACCOUNT_CATEGORYID
             });
 
-            var problemAccountJson = JsonConvert.SerializeObject(removedProblemAccounts);
-
-            var repository = new DynamicRepository();
-
             var criteria = new InsertProblemAccountCriteria
             {
-                ProblemAccountJson = problemAccountJson
+                ProblemAccountJson = JsonConvert.SerializeObject(removedProblemAccounts)
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return repository.Fetch<int>(criteria);
+                custIds = repository.Fetch<int>(criteria).ToList();
             }
+
+            return new InsertCategoryResultModel() { ErrorMessage = criteria.ErrorMessage, CustIds = custIds };
         }
     }
 }

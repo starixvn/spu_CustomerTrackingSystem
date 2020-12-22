@@ -8,8 +8,10 @@
     using Fanex.Logging;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Utilities;
-    using Fanex.NAP.CTS.Criteria.CustomerClassify;    
+    using Fanex.NAP.CTS.Criteria.CustomerClassify;
+    using Fanex.NAP.CTS.Criteria.ProblemAccountMonitor;
     using Fanex.NAP.CTS.Model.CustomerClassify;
+    using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Newtonsoft.Json;
 
     public class CustomerClassifyService : ICustomerClassifyService
@@ -99,35 +101,42 @@
                 return;
             }
 
-            var latestCustIds = InsertProblemAccountToCTS(problemAccounts);
+            var output = InsertProblemAccountToCTS(problemAccounts);
 
-            if (latestCustIds == null && !latestCustIds.Any())
+            if (string.IsNullOrEmpty(output.ErrorMessage) && output.CustIds != null && output.CustIds.Any())
             {
-                return;
-            }
+                var latestCustIdsChunk = output.CustIds.Chunk(ConfigSettings.PushCCToExternalChunkSize);
 
-            var latestCustIdsChunk = latestCustIds.Chunk(ConfigSettings.PushCCToExternalChunkSize);
-
-            foreach (var custids in latestCustIdsChunk)
-            {
-                var lastestClassifications = GetLatestClassification(string.Join(",", custids));
-
-                if (lastestClassifications != null && lastestClassifications.Any())
+                foreach (var custids in latestCustIdsChunk)
                 {
-                    bool isSyncMainSuccessfully = _pushDataToExternalService.PushCustomerClassificationToMain(lastestClassifications, 3);
+                    var lastestClassifications = GetLatestClassification(string.Join(",", custids));
 
-                    if (isSyncMainSuccessfully)
+                    if (lastestClassifications != null && lastestClassifications.Any())
                     {
-                        UpdateAppliedCustomerClassification(JsonConvert.SerializeObject(lastestClassifications));
-                    }
+                        bool isSyncMainSuccessfully = _pushDataToExternalService.PushCustomerClassificationToMain(lastestClassifications, 3);
 
-                    _pushDataToExternalService.PushCustomerClassificationToSoon88(lastestClassifications);
+                        if (isSyncMainSuccessfully)
+                        {
+                            UpdateAppliedCustomerClassification(JsonConvert.SerializeObject(lastestClassifications));
+                        }
+
+                        _pushDataToExternalService.PushCustomerClassificationToSoon88(lastestClassifications);
+                    }
                 }
+            }
+            else if (!string.IsNullOrEmpty(output.ErrorMessage))
+            {
+
+                LogService.Error($"CTS - Rescan Problem Account Exception: {output.ErrorMessage} - Data: {JsonConvert.SerializeObject(problemAccounts)}");
+
+                return;
             }
         }
 
-        private IEnumerable<int> InsertProblemAccountToCTS(List<MultipleProblemAccountsModel> problemAccounts)
+        private InsertCategoryResultModel InsertProblemAccountToCTS(List<MultipleProblemAccountsModel> problemAccounts)
         {
+            var custIds = new List<int>();
+
             var result = problemAccounts.Select(x => new
             {
                 CustId = x.CustID,
@@ -145,8 +154,10 @@
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return repository.Fetch<int>(criteria);
+                custIds = repository.Fetch<int>(criteria).ToList();
             }
+
+            return new InsertCategoryResultModel() { ErrorMessage = criteria.ErrorMessage, CustIds = custIds };
         }
 
         public IEnumerable<LatestClassificationModel> GetLatestClassification(string custIds)

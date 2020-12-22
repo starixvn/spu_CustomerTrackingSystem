@@ -316,6 +316,7 @@
     <Compile Include="SuspiciousInfo\SuspiciousCustomerFraudCaseModel.cs" />
     <Compile Include="SyncCustomerToMainDb\CustomerClassForMainDb.cs" />
     <Compile Include="SyncCustomerToMainDb\EvidenceCategoryToCustomerClassForMainDb.cs" />
+    <Compile Include="SyncCustomerToMainDb\InsertCategoryResultModel.cs" />
     <Compile Include="Transaction\DataTableAjaxPostModel.cs" />
     <Compile Include="Transaction\Transaction.cs" />
     <Compile Include="Transaction\HistoryTransactionModel.cs" />

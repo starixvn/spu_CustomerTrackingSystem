@@ -65,7 +65,6 @@
     <Compile Include="CustomerClassify\GetLastestClassificationCriteria.cs" />
     <Compile Include="CustomerClassify\GetProblemAccountsCN88Criteria.cs" />
     <Compile Include="CustomerClassify\GetProblemAccountsCriteria.cs" />
-    <Compile Include="CustomerClassify\InsertProblemAccountCriteria.cs" />
     <Compile Include="CustomerClassify\NormalAccountsClassificationGeneralCategorizeDailyCriteria.cs" />
     <Compile Include="CustomerClassify\UpdateAppliedCustomerClassificationCriteria.cs" />
     <Compile Include="ImportEvidences\InsertCustEvidenceFromFileCriteria.cs" />

@@ -1,10 +1,5 @@
 ﻿namespace Fanex.NAP.CTS.Criteria.ImportEvidences
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using Fanex.Data.Repository;
     using Fanex.Data;
 
