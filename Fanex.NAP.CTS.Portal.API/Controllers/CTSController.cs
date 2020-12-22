@@ -440,7 +440,17 @@
         {
             try
             {
-                return Json(_categoryService.GetCustomerClassCategory().ToList());
+                var customerClassCategories = _categoryService.GetCustomerClassCategory().ToList();
+                customerClassCategories.Add(
+                    new CategoryCustomerClassModel
+                    {
+                        CategoryName = "VIP designated by licensee",
+                        CategoryNameCN = "承租公司指定为VIP玩家",
+                        CustomerClass = 99
+                    }
+                );
+
+                return Json(customerClassCategories);
             }
             catch (Exception ex)
             {
