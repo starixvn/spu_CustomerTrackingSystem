@@ -1,15 +1,14 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
+    using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.NAP.CTS.Core;
-    using Fanex.NAP.CTS.Core.BaseClasses;
     using Fanex.NAP.CTS.Criteria.Api;
-    using Fanex.NAP.CTS.Criteria.ImportEvidences;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.ImportEvidences;
     using Fanex.NAP.CTS.ViewModel.Evidence;
-    using Newtonsoft.Json;
     using System.Collections.Generic;
+    using System.Linq;
 
     public class EvidenceService : IEvidenceService
     {
@@ -86,17 +85,22 @@
 
         #region Retracted And Exception Evidence
 
-        public string AddCustomersEvidences(CustomerEvidenceList customerEvidenceList)
+        public AddEvidenceResultModel AddCustomersEvidences(CustomerEvidenceList customerEvidenceList)
         {
+            var result = new List<AddMultiEvidenceResultModel>();
+
             var criteria = new MultiCustomerEvidencesInsertCriteria
             {
                 ip_CustIds = customerEvidenceList.CustIdList,
                 ip_EvidenceCodes = customerEvidenceList.EvidenceCodeList
             };
 
-            DataService.Execute(criteria);
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                result = db.Query<AddMultiEvidenceResultModel>(criteria).ToList();
+            }
 
-            return criteria.ErrorMessage;
+            return new AddEvidenceResultModel { ErrorMessage = criteria.ErrorMessage, Eivdences = result };
         }
 
         #endregion

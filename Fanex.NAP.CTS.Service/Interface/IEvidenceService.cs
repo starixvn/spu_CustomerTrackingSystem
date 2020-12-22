@@ -21,7 +21,7 @@
         DBResult UpdateEvidenceByAccountOfComment(InformationEvidenceByAccountUpdateOfComment evidenceOfComment);
 
         DBResult RetractEvidenceByAccount(InformationEvidenceByAccountRetractEvidence evidenceRetract);
-        
-        string AddCustomersEvidences(CustomerEvidenceList customerEvidenceList);
+
+        AddEvidenceResultModel AddCustomersEvidences(CustomerEvidenceList customerEvidenceList);
     }
 }

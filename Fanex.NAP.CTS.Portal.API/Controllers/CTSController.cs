@@ -198,24 +198,41 @@
         {
             try
             {
-                var errorMessage = _evidenceService.AddCustomersEvidences(customerEvidenceList);
+                int retryTime = Convert.ToInt32(ConfigurationManager.AppSettings["RetryTime"]);
+                var result = _evidenceService.AddCustomersEvidences(customerEvidenceList);
 
-                if (string.IsNullOrEmpty(errorMessage)
-                    && !string.IsNullOrEmpty(customerEvidenceList.CustIdList)
-                    && !string.IsNullOrWhiteSpace(customerEvidenceList.CustIdList))
+                if (string.IsNullOrEmpty(result.ErrorMessage) && result.Eivdences != null && result.Eivdences.Any())
                 {
-                    var distinctCustIds = customerEvidenceList.CustIdList.Split(',').Select(a => Convert.ToInt32(a));
-                    _syncToMainDbService.SyncCustomerClassToMainDb(string.Join(",", distinctCustIds?.Select(c => c).Distinct().ToList()), true, false);
+                    var syncCustIds = Enumerable.Empty<int>();
 
-                    return true;
+                    var syncResult = _accountService.SyncCustEvidenceToCategory(JsonConvert.SerializeObject(result.Eivdences), out syncCustIds);
+
+                    if (syncResult.ErrorCode == 0 && syncCustIds != null && syncCustIds.Any())
+                    {
+                        var latestCustIdsChunk = syncCustIds.Chunk(ConfigSettings.PushCCToExternalChunkSize);
+
+                        foreach (var custids in latestCustIdsChunk)
+                        {
+                            var lastestClassification = _customerClassifyService.GetLatestClassification(string.Join(",", custids));
+                            bool isSyncMainSuccessfully = _pushDataToExternalService.PushCustomerClassificationToMain(lastestClassification, retryTime);
+
+                            if (isSyncMainSuccessfully)
+                            {
+                                _customerClassifyService.UpdateAppliedCustomerClassification(JsonConvert.SerializeObject(lastestClassification));
+                            }
+
+                            _pushDataToExternalService.PushCustomerClassificationToSoon88(lastestClassification);
+                        }
+                    }
                 }
 
-                if (!string.IsNullOrEmpty(errorMessage))
+                if (!string.IsNullOrEmpty(result.ErrorMessage))
                 {
-                    LogService.Error($"CTS Portal API - Add Customers Evidences exception: {errorMessage} - List custIds: {customerEvidenceList.CustIdList} - List EvidenceCode: {customerEvidenceList.EvidenceCodeList}");
+                    LogService.Error($"CTS Portal API - Add Customers Evidences exception: {result.ErrorMessage} - List custIds: {customerEvidenceList.CustIdList} - List EvidenceCode: {customerEvidenceList.EvidenceCodeList}");
+                    return false;
                 }
 
-                return false;
+                return true;
             }
             catch (Exception ex)
             {
@@ -223,7 +240,7 @@
                     .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
                     .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
 
-                LogService.Error("CTS Portal API - Add Customers Evidences exception: " + logMessage);
+                LogService.Error($"CTS Portal API - Add Customers Evidences exception: {logMessage} - Data: {JsonConvert.SerializeObject(customerEvidenceList)}");
                 return false;
             }
         }
