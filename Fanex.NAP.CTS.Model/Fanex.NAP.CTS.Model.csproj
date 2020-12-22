@@ -195,6 +195,7 @@
     <Compile Include="GraphDB\DirectAssociationParameterModel.cs" />
     <Compile Include="GraphDB\GraphAssociationReportPaging.cs" />
     <Compile Include="ImportEvidences\AddEvidenceResultModel.cs" />
+    <Compile Include="ImportEvidences\AddMultiEvidenceResultModel.cs" />
     <Compile Include="ManageSubscriber\DetailedSiteModel.cs" />
     <Compile Include="Notification\UpdateNotifiedSettingStatusModel.cs" />
     <Compile Include="Notification\NotifiedSettingStatusModel.cs" />

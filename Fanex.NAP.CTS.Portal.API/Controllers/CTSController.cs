@@ -3,9 +3,11 @@
     using Fanex.Logging;
     using Fanex.Logging.Extensions;
     using Fanex.Logging.Extensions.Database;
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Core.Helpers.Xml;
     using Fanex.NAP.CTS.Model;
+    using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.API;
     using Fanex.NAP.CTS.Model.DTO;
@@ -14,6 +16,7 @@
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.SPU.Graph.Core;
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.Configuration;
@@ -33,6 +36,7 @@
         private readonly IClassifyCustomerService _classifyCustomerService;
         private readonly ICategoryService _categoryService;
         private readonly ICustomerClassifyService _customerClassifyService;
+        private readonly IPushDataToExternalService _pushDataToExternalService;
 
         /// <summary>
         /// Using for external site (TW, ExtAcc site...)
@@ -48,6 +52,7 @@
             _classifyCustomerService = new ClassifyCustomerService();
             _categoryService = new CategoryService();
             _customerClassifyService = new CustomerClassifyService();
+            _pushDataToExternalService = new PushDataToExternalService();
         }
 
         /// <summary>
@@ -83,24 +88,42 @@
             try
             {
                 int userId = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);
+                int retryTime = Convert.ToInt32(ConfigurationManager.AppSettings["RetryTime"]);
 
                 var result = _custEvidenceService.AddCustEvidenceMultipleByCustId(custIds, evidenceId, userId);
 
-                if (string.IsNullOrEmpty(result.ErrorMessage)
-                    && result.Eivdences != null
-                    && result.Eivdences.Any())
+                if (string.IsNullOrEmpty(result.ErrorMessage) && result.Eivdences != null && result.Eivdences.Any())
                 {
-                    _syncToMainDbService.SyncCustomerClassToMainDb(string.Join(",", result?.Eivdences?.Select(c => c.CustID).Distinct().ToList()), true, false);
+                    var syncCustIds = Enumerable.Empty<int>();
 
-                    return true;
+                    var syncResult = _accountService.SyncCustEvidenceToCategory(JsonConvert.SerializeObject(result.Eivdences), out syncCustIds);
+
+                    if (syncResult.ErrorCode == 0 && syncCustIds != null && syncCustIds.Any())
+                    {
+                        var latestCustIdsChunk = syncCustIds.Chunk(ConfigSettings.PushCCToExternalChunkSize);
+
+                        foreach (var custids in latestCustIdsChunk)
+                        {
+                            var lastestClassification = _customerClassifyService.GetLatestClassification(string.Join(",", custids));
+                            bool isSyncMainSuccessfully = _pushDataToExternalService.PushCustomerClassificationToMain(lastestClassification, retryTime);
+
+                            if (isSyncMainSuccessfully)
+                            {
+                                _customerClassifyService.UpdateAppliedCustomerClassification(JsonConvert.SerializeObject(lastestClassification));
+                            }
+
+                            _pushDataToExternalService.PushCustomerClassificationToSoon88(lastestClassification);
+                        }
+                    }
                 }
 
                 if (!string.IsNullOrEmpty(result.ErrorMessage))
                 {
                     LogService.Error($"CTS Portal API - Add Customers Evidences exception: {result.ErrorMessage} - List custIds: {custIds} - EvidenceId: {evidenceId}");
+                    return false;
                 }
 
-                return false;
+                return true;
             }
             catch (Exception ex)
             {
@@ -108,7 +131,7 @@
                         .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
                         .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
 
-                LogService.Error("PlaceEvidence exception: " + logMessage);
+                LogService.Error($"CTS Portal API - PlaceEvidence exception: {logMessage} - CustIds: {custIds} - EvidenceId: {evidenceId}");
 
                 return false;
             }

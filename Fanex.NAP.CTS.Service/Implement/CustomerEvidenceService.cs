@@ -10,6 +10,7 @@
     using Fanex.Data.Repository;
     using System.Linq;
     using System;
+    using Fanex.Data;
 
     public class CustomerEvidenceService : ICustomerEvidenceService
     {
@@ -45,9 +46,11 @@
 
         public AddEvidenceResultModel AddCustEvidenceMultipleByCustId(string custIds, int evidenceId, int userId)
         {
-            var custEvidenceList = custIds.Split(',').Select(a => new AddAccountEvidenceModel()
+            var result = new List<AddMultiEvidenceResultModel>();
+
+            var custEvidenceList = custIds.Split(',').Select(ids => new AddAccountEvidenceModel()
             {
-                CustID = Convert.ToInt32(a),
+                CustID = Convert.ToInt32(ids),
                 EvidenceID = evidenceId
             });
 
@@ -60,9 +63,12 @@
                 ErrorMessage = string.Empty
             };
 
-            _repository.Execute(criteria);
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                result = db.Query<AddMultiEvidenceResultModel>(criteria).ToList();
+            }
 
-            return new AddEvidenceResultModel { ErrorMessage = criteria.ErrorMessage, Eivdences = custEvidenceList };
+            return new AddEvidenceResultModel { ErrorMessage = criteria.ErrorMessage, Eivdences = result };   
         }
     }
 }

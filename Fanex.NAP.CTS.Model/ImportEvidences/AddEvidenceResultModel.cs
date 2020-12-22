@@ -6,6 +6,6 @@
     {
         public string ErrorMessage { get; set; }
 
-        public IEnumerable<AddAccountEvidenceModel> Eivdences { get; set; }
+        public IEnumerable<AddMultiEvidenceResultModel> Eivdences { get; set; }
     }
 }
