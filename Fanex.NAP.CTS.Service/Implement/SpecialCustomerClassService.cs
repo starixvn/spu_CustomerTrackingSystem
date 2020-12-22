@@ -7,6 +7,7 @@
     using Fanex.NAP.CTS.Core.BaseClasses;
     using Fanex.NAP.CTS.Core.Helpers.Xml;
     using Fanex.NAP.CTS.Criteria.SpecialCustomerClass;
+    using Fanex.NAP.CTS.Model.CustomerClassify;
     using Fanex.NAP.CTS.Model.SpecialCustomerClass;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using System;
@@ -28,7 +29,7 @@
         public ResultInsertCustomerClass InsertCustomerClass(string username, int custClass, bool isAffectToAssociation, int createdBy)
         {
             var insertCTSResult = new ResultInsertCustomerClass();
-            var criteria = new InsertSpecialCustomerClassCriteria()
+            var criteria = new InsertSpecialCustomerClassCriteria
             {
                 Username = username,
                 CustomerClass = custClass,
@@ -37,7 +38,7 @@
             };
 
             var repository = new DynamicRepository();
-            insertCTSResult.CustomerClassList = repository.Fetch<CustomerClassForMainDb>(criteria);
+            insertCTSResult.CustomerClassList = repository.Fetch<LatestClassificationModel>(criteria);
             insertCTSResult.OpErrorMessage = criteria.ErrorMessage;
 
             return insertCTSResult;

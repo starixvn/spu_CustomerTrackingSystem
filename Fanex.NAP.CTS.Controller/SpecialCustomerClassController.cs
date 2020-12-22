@@ -11,6 +11,7 @@
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.SpecialCustomerClass;
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.Linq;    
@@ -21,16 +22,16 @@
     public class SpecialCustomerClassController : BaseController
     {
         private readonly ISpecialCustomerClassService _customerClassService;
-        private readonly ISyncCustomerToMainDbService _syncToMainDbService;
-        private readonly ICustomerClassifyService _rescanCustomerClassifyService;
+        private readonly ICustomerClassifyService _customerClassifyService;
+        private readonly IPushDataToExternalService _pushDataToExternalService;        
 
         public override string BaseControllerName { get => Consts.MenuItemController; }
 
         public SpecialCustomerClassController()
         {
             _customerClassService = new SpecialCustomerClassService();
-            _syncToMainDbService = new SyncCustomerToMainDbService();
-            _rescanCustomerClassifyService = new CustomerClassifyService();
+            _pushDataToExternalService = new PushDataToExternalService();
+            _customerClassifyService = new CustomerClassifyService();
         }
 
         public ActionResult Index()
@@ -87,9 +88,23 @@
             {
                 if (resultInsertToCTS.CustomerClassList != null && resultInsertToCTS.CustomerClassList.Any())
                 {
-                    var list = resultInsertToCTS.CustomerClassList.Where(c => c.CustID != 0);
-                    
-                    _syncToMainDbService.SyncCustomerClassToMainDb(list, "Insert Special Customer Class");
+                    var latestClassifications = resultInsertToCTS.CustomerClassList.Where(c => c.CustId != 0);                    
+
+                    if (latestClassifications != null && latestClassifications.Any())
+                    {
+                        // Update CC in table custinfo to MainDB
+                        var isSuccessToMain = _pushDataToExternalService.PushCustomerClassificationToMain(latestClassifications, 2);
+
+                        if (isSuccessToMain)
+                        {
+                            var updateApplyCCs = latestClassifications.Select(x => new { x.CustId, x.ScannedTime });
+
+                            var jsonUpdateApplyCCs = JsonConvert.SerializeObject(updateApplyCCs);
+
+                            // Update IsAppliedCC = 1 in CTS
+                            _customerClassifyService.UpdateAppliedCustomerClassification(jsonUpdateApplyCCs);
+                        }
+                    }
                 }
             }
             else
@@ -111,7 +126,7 @@
             {
                 var custIdList = new List<int> { custID };
 
-                _rescanCustomerClassifyService.RescanCustomerClassify(custIdList);
+                _customerClassifyService.RescanCustomerClassify(custIdList);
             }
 
             return Json(resultRemoveToCTS, JsonRequestBehavior.AllowGet);
