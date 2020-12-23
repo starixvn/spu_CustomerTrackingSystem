@@ -6,6 +6,8 @@
     {
         public DateTime CreatedTime { get; set; }
 
+        public int ItemID { get; set; }
+
         public string SourceTypeName { get; set; }
 
         public int CategoryID { get; set; }
@@ -20,7 +22,7 @@
 
         public decimal Margin { get; set; }
 
-        public decimal BetCount { get; set; }
+        public int BetCount { get; set; }
 
         public int ActiveDays { get; set; }
 

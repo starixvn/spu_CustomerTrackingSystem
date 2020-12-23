@@ -216,6 +216,7 @@
                         let json = jQuery.parseJSON(response);
 
                         inputPinCategory.prop('checked', json.isPinCategory);
+                        inputPinCategory.prop('disabled', json.isVVip);
                         btnMarkCategory.prop('disabled', json.isVVip);
                         btnRemoveCategory.prop('disabled', !json.isVVip);
 
@@ -262,6 +263,7 @@
                     let json = jQuery.parseJSON(response);                  
 
                     inputPinCategory.prop('checked', json.isPinCategory);
+                    inputPinCategory.prop('disabled', json.isVVip);
                     btnMarkCategory.prop('disabled', json.isVVip);
                     btnRemoveCategory.prop('disabled', !json.isVVip);
                     

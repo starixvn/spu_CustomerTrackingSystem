@@ -1054,34 +1054,64 @@
 
         private string GetReason(CustomerClassificationHistoryModel cc)
         {
-            var reason = cc.SourceTypeName + " \n ";
+            var reason = "<div>";
+            reason += "<span>" + cc.SourceTypeName + "</span><br>";
 
             switch (cc.CategoryID)
             {
                 case (int)ClassificationSourceType.NormalAccount:
-                    reason = "Margin: " + Math.Round(cc.Margin, 2)
+                    reason += "Margin: " + Math.Round(cc.Margin, 3)
                         + " - Bet Count" + cc.BetCount;
                     break;
                 case (int)ClassificationSourceType.VIP:
-                    reason = "Margin: " + Math.Round(cc.Margin, 2)
-                        + " - Turn Over: " + cc.TurnOver
+                    reason += "Margin: " + Math.Round(cc.Margin, 3)
+                        + " - Turn Over: " + Math.Round(cc.TurnOver, 3)
                         + " - Active Date: " + cc.ActiveDays
                         + " - Bet Count: " + cc.BetCount;
                     break;
                 case (int)ClassificationSourceType.Probation:
-                    reason = "Margin: " + Math.Round(cc.Margin, 2);
+                    if (cc.ItemID == 5)
+                    {
+                        reason += "Margin: " + Math.Round(cc.Margin, 3)
+                           + " - Win Loss: " + Math.Round(cc.Winloss, 3)
+                           + " - Bet Count: " + cc.BetCount
+                           + " - Last 7 day's Margin: " + Math.Round(cc.LastXDaysMargin, 3)
+                           + " - Total WinLoss(20 days): " + Math.Round(cc.ProbationPeriodWinloss, 3);
+                    }
+                    else
+                    {
+                        reason += "Margin: " + Math.Round(cc.Margin, 3);
+                    }                   
                     break;
                 case (int)ClassificationSourceType.SmartPunter:
+                    if (cc.ItemID == 4)
+                    {
+                        reason += "Margin: " + Math.Round(cc.Margin, 3)
+                           + " - Win Loss: " + Math.Round(cc.Winloss, 3)
+                           + " - Bet Count: " + cc.BetCount
+                           + " - Last 7 day's Margin: " + Math.Round(cc.LastXDaysMargin, 3)
+                           + " - Total WinLoss(20 days): " + Math.Round(cc.ProbationPeriodWinloss, 3);
+                    }
+                    else
+                    {
+                        reason += "Margin: " + Math.Round(cc.Margin, 3)
+                            + " - Turn Over: " + cc.TurnOver
+                            + " - Active Date: " + cc.ActiveDays
+                            + " - Bet Count: " + cc.BetCount;
+                    }
+                    break;
                 case (int)ClassificationSourceType.HighRiskPunter:
-                    reason = "Margin: " + Math.Round(cc.Margin, 2)
-                        + " - Win Loss: " + cc.Winloss
+                    reason += "Margin: " + Math.Round(cc.Margin, 3)
+                        + " - Win Loss: " + Math.Round(cc.Winloss, 3)
                         + " - Bet Count: " + cc.BetCount
-                        + " - Last 7 day's Margin: " + Math.Round(cc.LastXDaysMargin)
-                        + " - Total WinLoss(20 days): " + cc.ProbationPeriodWinloss;
+                        + " - Last 7 day's Margin: " + Math.Round(cc.LastXDaysMargin, 3)
+                        + " - Total WinLoss(20 days): " + Math.Round(cc.ProbationPeriodWinloss, 3);
                     break;
                 default:
                     break;
             }
+
+            reason += "</div>";
 
             return reason;
         }
