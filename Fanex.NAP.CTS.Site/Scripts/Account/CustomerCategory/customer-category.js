@@ -1,8 +1,10 @@
 ﻿function customer_category() {
     let btnMarkCategory = $('#btnmarkcategory');
+    let btnRemoveCategory = $('#btnremovecategory');
     let divMarkCategory = $('#divMarkCategory');
+    let divRemoveCategory = $('#divRemoveCategory');
     let tblcustomercategory = $('#customer-category-table');
-    let isHostPermission;        
+    let isHostPermission;
     let inputPinCategory = $('#inputPinCategory');
     let spanClass =  $('#spanClass');
 
@@ -12,125 +14,13 @@
         });
 
         $('#btnsavecategory').on('click', function (e) {
-            AddCustomerClassification(custId, ctsCustId, subscriberId);
+            AddCustomerCategory(custId, ctsCustId, subscriberId);
         });
 
         $("#ddlcategory").select2();      
     }
 
-    function BindingMarkCategoryForUpdate(custId, ctsCustId, subscriberId, categoryId) {
-        $('#btncancelcategory').on('click', function () {
-            divMarkCategory.dialog('close');
-        });
-
-        $('#btnsavecategory').on('click', function (e) {
-            UpdateCustomerClassification(custId, ctsCustId, subscriberId, categoryId);
-        });
-    }
-
-    function AddCustomerClassification(custId, ctsCustId, subscriberId) {      
-        var url = common.modifyRelativeUrl('/Account/AddCustomerClassification');
-        var params = {};
-        params.custId = custId;
-        params.ctsCustId = ctsCustId;
-        params.subscriberId = subscriberId;
-        params.categoryId = $('#ddlcategory').val();    
-        params.remark = $('#txtcategorycomment').val();
-        params.isVVip = true;
-
-        $.ajax(url, {
-            type: 'POST',
-            data: params,
-            success: function (response) {
-                if (response.errorCode === 0) {
-                    common.showSuccess('Add the category successful!', 2000);
-                    divMarkCategory.dialog('close');
-
-                    tblcustomercategory.DataTable().ajax.reload();
-                    GetCustomerClassification(custId);
-                }
-                else {
-                    common.showError(response.errorMessage);
-                }
-            },
-            beforeSend: function () {
-                common.showLoading();
-            },
-            complete: function () {
-                common.closeLoading();
-            },
-            error: function (error) {
-                console.log(error);
-                common.closeLoading();
-            }
-        });
-    }
-
-    function RemoveCustomerClassification(custId, ctsCustId, categoryId) {
-        var url = common.modifyRelativeUrl('/Account/RemoveCustomerClassification');
-        var params = {};
-        params.custId = custId;
-        params.ctsCustId = ctsCustId;
-        params.categoryId = categoryId;
-
-        $.ajax(url, {
-            type: 'POST',
-            data: params,
-            success: function (response) {
-                if (response.errorCode === 0) {
-                    common.showSuccess('Remove the category successful!', 2000);
-
-                    tblcustomercategory.DataTable().ajax.reload();
-                    GetCustomerClassification(custId);
-                }
-                else {
-                    common.showError('Remove the category fail!');
-                }
-            },
-            beforeSend: function () {
-                common.showLoading();
-            },
-            complete: function () {
-                common.closeLoading();
-            },
-            error: function (error) {
-                console.log(error);
-                common.closeLoading();
-            }
-        });
-    }
-
-    function UpdateCustomerClassification(custId, ctsCustId, subscriberId, categoryId) {
-        var url = common.modifyRelativeUrl('/Account/UpdateCustomerClassification');
-        var params = {};
-        params.custId = custId;
-        params.ctsCustId = ctsCustId;
-        params.categoryId = categoryId;
-        params.subscriberId = subscriberId;
-        params.sportGroupIds = '';        
-        params.remark = $('#txtcategorycomment').val();
-
-        $.ajax(url, {
-            type: 'POST',
-            data: params,
-            success: function (response) {
-                if (response.errorCode === 0) {
-                    common.showSuccess('Update the category successful!', 2000);
-                    divMarkCategory.dialog('close');
-
-                    tblcustomercategory.DataTable().ajax.reload();
-                    GetCustomerClassification(custId);
-                }
-                else {
-                    common.showError(response.errorMessage);
-                }
-            },
-            complete: function () {
-            }
-        });
-    }
-
-    function GetCustomerClassification(custId) {
+    function GetCustomerCategory(custId) {
         setTimeout(function () {
             $.ajax(common.modifyRelativeUrl('Account/GetLastestCustomerClassification'), {
                 type: 'POST',
@@ -149,7 +39,7 @@
         }, 10000);
     }
 
-    function InitialMarkCategory(custId, ctsCustId, subscriberId) {
+    function DisplayMarkCategory(custId, ctsCustId, subscriberId) {
         $.ajax(common.modifyRelativeUrl('Account/MarkCatergory'), {
             type: 'POST',
             data: {
@@ -180,30 +70,71 @@
         });
     }
 
-    function EditCategory(custId, ctsCustId, subscriberId, categoryName, categoryId, sportGroupIdList, comment) {
-        $.ajax(common.modifyRelativeUrl('Account/EditMarkCatergory'), {
+    function AddCustomerCategory(custId, ctsCustId, subscriberId) {
+        var url = common.modifyRelativeUrl('Account/AddCustomerCategory');
+        var params = {};
+        params.CustId = custId;
+        params.CTSCustId = ctsCustId;
+        params.SubscriberId = subscriberId;
+        params.CategoryId = $('#ddlcategory').val();
+        params.Remark = $('#txtcategorycomment').val();
+        params.isVVip = true;
+
+        $.ajax(url, {
+            type: 'POST',
+            data: params,
+            success: function (response) {
+                if (response.errorCode === 0) {
+                    common.showSuccess('Add the category successful!', 2000);
+                    divMarkCategory.dialog('close');
+
+                    tblcustomercategory.DataTable().ajax.reload();
+                    GetCustomerCategory(custId);
+                }
+                else {
+                    common.showError(response.errorMessage);
+                }
+            },
+            beforeSend: function () {
+                common.showLoading();
+            },
+            complete: function () {
+                common.closeLoading();
+            },
+            error: function (error) {
+                console.log(error);
+                common.closeLoading();
+            }
+        });
+    }
+
+    function DisplayRemoveCategory(custId, ctsCustId, subscriberId) {
+        $.ajax(common.modifyRelativeUrl('Account/RemoveCatergory'), {
             type: 'POST',
             data: {
-                custId: custId,
-                ctsCustId: ctsCustId,
-                subscriberId: subscriberId,
-                categoryName: categoryName,
-                categoryId: categoryId,
-                sportGroupIdList: sportGroupIdList,
-                comment: comment
+                ctsCustId: ctsCustId
             },
             beforeSend: function () {
                 common.showLoading();
             },
             success: function (response) {
-                divMarkCategory.html(response);
-                BindingMarkCategoryForUpdate(custId, ctsCustId, subscriberId, categoryId);
+                divRemoveCategory.html(response);
+
+                $('#btnCancelRemoveCategory').on('click', function () {
+                    divRemoveCategory.dialog('close');
+                });
+
+                $('#btnSaveRemoveCategory').on('click', function (e) {
+                    RemoveCategory(custId, ctsCustId);
+                });
+
+                $("#ddlRemoveCategory").select2(); 
             },
             complete: function () {
-                divMarkCategory.dialog({
+                divRemoveCategory.dialog({
                     modal: true,
                     width: '600px',
-                    title: 'UPDATE CUSTOMER CATEGORY',
+                    title: 'REMOVE CUSTOMER CATEGORY',
                     resizable: true,
                     draggable: true,
                     close: function () { $(this).dialog('close'); }
@@ -217,7 +148,43 @@
         });
     }
 
-    function RenderGrid(custId, ctsCustId, username, subscriberId) {
+    function RemoveCategory(custId, ctsCustId) {
+        var url = common.modifyRelativeUrl('Account/RemoveCustomerCategory');
+        var params = {};
+        params.custId = custId;
+        params.ctsCustId = ctsCustId;
+        params.categoryId = $('#ddlRemoveCategory').val();
+        params.isVVip = true;
+
+        $.ajax(url, {
+            type: 'POST',
+            data: params,
+            success: function (response) {
+                if (response.errorCode === 0) {
+                    common.showSuccess('Remove the category successful!', 2000);
+                    divRemoveCategory.dialog('close');
+
+                    tblcustomercategory.DataTable().ajax.reload();
+                    GetCustomerCategory(custId);
+                }
+                else {
+                    common.showError(response.errorMessage);
+                }
+            },
+            beforeSend: function () {
+                common.showLoading();
+            },
+            complete: function () {
+                common.closeLoading();
+            },
+            error: function (error) {
+                console.log(error);
+                common.closeLoading();
+            }
+        });
+    }
+    
+    function RenderGrid(custId) {
          tblcustomercategory.DataTable({
             dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
             pagingType: "full_numbers",
@@ -239,7 +206,7 @@
             lengthMenu: [20, 50, 100, 200],
             pageLength: 50,
             ajax: {
-                url: common.modifyRelativeUrl('/Account/GetCustomerClassification'),
+                url: common.modifyRelativeUrl('Account/GetCustomerClassification'),
                 data: {
                     custId: custId
                 },
@@ -250,11 +217,12 @@
 
                         inputPinCategory.prop('checked', json.isPinCategory);
                         btnMarkCategory.prop('disabled', json.isVVip);
+                        btnRemoveCategory.prop('disabled', !json.isVVip);
 
-                        let isProblemAccount = RenderExternalProblemAccount(json.categoryList);
+                        let isProblemAccount = RenderProblemAccount(json.categoryList);
 
                         if (!isProblemAccount) {
-                            RenderExternalCategorySummary(json.categoryList);
+                            RenderCategorySummary(json.categoryList);
                         }
                     }
                     return response;
@@ -279,23 +247,7 @@
                 { data: obj => obj.CategoryName },
                 { data: obj => obj.CustomerClass },
                 { data: obj => obj.Reason },
-                { data: obj => obj.CreatedBy }                
-                //{
-                //    data: obj => () => {
-                //        var html = '';                        
-                //        html += '<span class="icon-delete' + (!isHostPermission ? ' disabled"' : '') + '" title="Remove Category"></span>';
-
-                //        return obj.IsEnabledDelete ? html : '';
-                //    }, createdCell: (cell, _, row) => {
-                //        if (isHostPermission) {
-                //            $('.icon-delete', cell).click(() => {
-                //                common.showConfirmation("Do you want to remove category <b>" + row.CategoryName + "</b> for <b>" + username + "</b> ?", function () {
-                //                    RemoveCustomerClassification(custId, ctsCustId, row.CategoryId);
-                //                });
-                //            });
-                //        }
-                //    }
-                //}
+                { data: obj => obj.CreatedBy }                                
             ]
         });
     }
@@ -311,11 +263,12 @@
 
                     inputPinCategory.prop('checked', json.isPinCategory);
                     btnMarkCategory.prop('disabled', json.isVVip);
+                    btnRemoveCategory.prop('disabled', !json.isVVip);
                     
-                    let isProblemAccount = RenderExternalProblemAccount(json.categoryList);
+                    let isProblemAccount = RenderProblemAccount(json.categoryList);
 
                     if (!isProblemAccount) {
-                        RenderExternalCategorySummary(json.categoryList);
+                        RenderCategorySummary(json.categoryList);
                     }
                 }
                 return response;
@@ -332,7 +285,7 @@
         });
     }    
 
-    function RenderExternalProblemAccount(data) {
+    function RenderProblemAccount(data) {
         var isExistProblemAccount = false;
         let html = "";
 
@@ -340,7 +293,7 @@
             if (x.IsProblemAccount) {
                 let classIconColor = "circle bg-red";
                 
-                html = BuildExternalCategoryToHtmlDiv(html, classIconColor, x.CategoryName);
+                html = BuildCategoryToHtmlDiv(html, classIconColor, x.CategoryName);
 
                 isExistProblemAccount = true;
             }
@@ -364,9 +317,9 @@
         return isExistProblemAccount;
     }    
 
-    function RenderExternalCategorySummary(data) {
+    function RenderCategorySummary(data) {
         let html = "";
-        let defaultNormalCategoryList = GetExternalNormalCategoryList();
+        let defaultNormalCategoryList = GetNormalCategoryList();
         let indexColorProfile = 1;
 
         for (let i = 0; i < defaultNormalCategoryList.length; i++) {
@@ -375,7 +328,7 @@
                 if (isEquals) {
                     let classIconColor = defaultNormalCategoryList[i].cssClass;
                     
-                    html = BuildExternalCategoryToHtmlDiv(html, classIconColor, x.CategoryName);
+                    html = BuildCategoryToHtmlDiv(html, classIconColor, x.CategoryName);
 
                     indexColorProfile = indexColorProfile < defaultNormalCategoryList[i].indexColor
                         ? defaultNormalCategoryList[i].indexColor
@@ -414,7 +367,7 @@
         $('#divHeaderInfo').css('visibility', 'visible');
     }
 
-    function BuildExternalCategoryToHtmlDiv(html, classIconColor, categoryName) {
+    function BuildCategoryToHtmlDiv(html, classIconColor, categoryName) {
         html += "<div class='info-status'>";
         html += "<div class='status-left'>";
         html += "<span class='" + classIconColor + "'></span>";
@@ -425,7 +378,7 @@
         return html;
     }    
 
-    function GetExternalNormalCategoryList() {
+    function GetNormalCategoryList() {
         var list = [];
 
         list.push({ 'name': 'High Risk Punter', 'cssClass': 'circle bg-yellow', 'indexColor': 2 });
@@ -494,7 +447,8 @@
 
         if (!isHostPermission) {
             inputPinCategory.prop('disabled', true);
-            btnMarkCategory.prop('disabled', true);            
+            btnMarkCategory.prop('disabled', true);
+            btnRemoveCategory.prop('disabled', true);
         }
     }
 
@@ -504,10 +458,12 @@
         if (isHostPermission) {
             inputPinCategory.click(function () { PinCategory(custId, ctsCustId, subscriberId); });
 
-            btnMarkCategory.click(function () { InitialMarkCategory(custId, ctsCustId, subscriberId); });   
+            btnMarkCategory.click(function () { DisplayMarkCategory(custId, ctsCustId, subscriberId); });
+
+            btnRemoveCategory.click(function () { DisplayRemoveCategory(custId, ctsCustId, subscriberId); });
         }
 
-        RenderGrid(custId, ctsCustId, username, subscriberId);
+        RenderGrid(custId);
     };
 
     this.ReloadTab = function (custId) {

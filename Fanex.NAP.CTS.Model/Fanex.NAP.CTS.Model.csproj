@@ -141,6 +141,7 @@
     <Compile Include="Account\BettingStatistic\PerformanceBySportModel.cs" />
     <Compile Include="Account\CustomerAssociationByCTSCustIdModel.cs" />
     <Compile Include="Account\CustomerByGraphDB.cs" />
+    <Compile Include="Account\CustomerCategory\AddCustomerCategoryModel.cs" />
     <Compile Include="Account\CustomerCategory\CustomerClassificationGeneralInfoModel.cs" />
     <Compile Include="Account\CustomerCategory\CustomerClassificationHistoryModel.cs" />
     <Compile Include="Account\CustomerCategory\CustomerClassificationModel.cs" />

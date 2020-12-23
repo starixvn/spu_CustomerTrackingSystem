@@ -11,6 +11,7 @@
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;    
     using Fanex.NAP.CTS.Model.Association;
+    using Fanex.NAP.CTS.Model.CustomerClassify;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Model.Transaction;
@@ -996,39 +997,7 @@
 
         public ActionResult CustomerCategory()
         {
-
             return PartialView("CustomerCategory/CustomerCategory");
-        }
-
-        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult MarkCatergory(long ctsCustId)
-        {
-            var customerCategoryList = _accountService.GetCustomerCategoryByCTSCustId(ctsCustId).ToList();
-            
-            var model = new MarkCategoryViewModel
-            {
-                //SportGroupList = _accountService.GetAllSportGroup().ToList(),
-                CustomerCategoryList = customerCategoryList.Where(x=>x.CategoryName.Equals("VVIP") || x.ParentId == 0).ToList()
-            };
-
-            return PartialView("CustomerCategory/MarkCatergory", model);
-        }
-
-        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult EditMarkCatergory(long ctsCustId, int subscriberId, string categoryName, int categoryId, string sportGroupIdList, string comment)
-        {
-            var model = new MarkCategoryViewModel
-            {
-                SportGroupList = _accountService.GetAllSportGroup().ToList(),
-                CategoryId = categoryId,
-                CategoryName = categoryName,
-                SportGroupIdList = sportGroupIdList,
-                CTSCustId = ctsCustId,
-                SubscriberId = subscriberId,
-                Comment = comment
-            };
-
-            return PartialView("CustomerCategory/EditMarkCatergory", model);
         }
 
         public ActionResult GetCustomerClassification(long custId)
@@ -1043,20 +1012,13 @@
             if (classification != null && classification.Any())
             {
                 categoryList = classification
-                    .Select(x => new CustomerCategoryViewModel {
-                        ParentCategoryId = x.ParentCategoryID,
-                        CategoryId = x.CategoryID,
-                        CategoryName = x.CategoryName,
+                    .Select(x => new CustomerCategoryViewModel
+                    {
                         CategoryType = x.CategoryType,
-                        LastModifiedBy = x.LastModifiedBy,
-                        LastModifiedDate = x.LastModifiedDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                        Remark = x.Remark,
-                        SportGroupIdList = x.SportGroupIDList,
-                        SportGroupNameList = x.SportGroupNameList,
-                        NextScanDatePeriod = x.NextScanDatePeriod,
-                        IsProblemAccount = x.CategoryType == 2,
-                        IsEnabledDelete = x.IsEnabledDelete
+                        CategoryName = x.CategoryName != null ? x.CategoryName : string.Empty,
                     }).ToList();
+
+                isVVip = categoryList.Where(x => x.CategoryName.Equals("VVIP")).Count() > 0;
             }
 
             var classificationHistory = _accountService.GetCustomerClassificationHistory(custId);
@@ -1067,7 +1029,7 @@
                 {
                     CreatedTimeString = x.CreatedTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                     SourceTypeName = x.SourceTypeName,
-                    CategoryName = x.CategoryName,
+                    CategoryName = x.CategoryName != null ? x.CategoryName : string.Empty,
                     CustomerClass = x.CustomerClass,
                     Reason = GetReason(x),
                     TurnOver = x.TurnOver,
@@ -1079,8 +1041,6 @@
                     ProbationPeriodWinloss = x.ProbationPeriodWinloss,
                     CreatedBy = x.CreatedBy
                 }).ToList();
-
-                isVVip = classificationHistoryList.Where(x => x.CategoryName.Equals("VVIP")).Count() > 0;
             }
 
             return Json(new
@@ -1094,18 +1054,18 @@
 
         private string GetReason(CustomerClassificationHistoryModel cc)
         {
-            var reason = string.Empty;
-           
+            var reason = cc.SourceTypeName + " \n ";
+
             switch (cc.CategoryID)
             {
                 case (int)ClassificationSourceType.NormalAccount:
-                    reason = "Margin: " + Math.Round(cc.Margin, 2) 
+                    reason = "Margin: " + Math.Round(cc.Margin, 2)
                         + " - Bet Count" + cc.BetCount;
                     break;
                 case (int)ClassificationSourceType.VIP:
-                    reason = "Margin: " + Math.Round(cc.Margin, 2) 
-                        + " - Turn Over: " + cc.TurnOver 
-                        + " - Active Date: " + cc.ActiveDays 
+                    reason = "Margin: " + Math.Round(cc.Margin, 2)
+                        + " - Turn Over: " + cc.TurnOver
+                        + " - Active Date: " + cc.ActiveDays
                         + " - Bet Count: " + cc.BetCount;
                     break;
                 case (int)ClassificationSourceType.Probation:
@@ -1113,10 +1073,10 @@
                     break;
                 case (int)ClassificationSourceType.SmartPunter:
                 case (int)ClassificationSourceType.HighRiskPunter:
-                    reason = "Margin: " + Math.Round(cc.Margin, 2) 
-                        + " - Win Loss: " + cc.Winloss 
-                        + " - Bet Count: " + cc.BetCount 
-                        + " - Last 7 day's Margin: " + Math.Round(cc.LastXDaysMargin) 
+                    reason = "Margin: " + Math.Round(cc.Margin, 2)
+                        + " - Win Loss: " + cc.Winloss
+                        + " - Bet Count: " + cc.BetCount
+                        + " - Last 7 day's Margin: " + Math.Round(cc.LastXDaysMargin)
                         + " - Total WinLoss(20 days): " + cc.ProbationPeriodWinloss;
                     break;
                 default:
@@ -1124,41 +1084,69 @@
             }
 
             return reason;
-        }       
+        }
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult AddCustomerClassification(long custId, long ctsCustId, int subscriberId, int categoryId, string remark, bool isVVip)
+        public ActionResult MarkCatergory(long ctsCustId)
+        {
+            var customerCategoryList = _accountService.GetCustomerCategoryByCTSCustId(ctsCustId).ToList();
+            
+            var model = new MarkCategoryViewModel
+            {
+                CustomerCategoryList = customerCategoryList.Where(x=>x.CategoryName.Equals("VVIP") || x.ParentId == 0).ToList()
+            };
+
+            return PartialView("CustomerCategory/MarkCatergory", model);
+        }
+
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        public ActionResult RemoveCatergory(long ctsCustId)
+        {
+            var customerCategoryList = _accountService.GetCustomerCategoryByCTSCustId(ctsCustId).ToList();
+
+            var model = new MarkCategoryViewModel
+            {
+                CustomerCategoryList = new List<Model.DTO.CustomerCategory> { new Model.DTO.CustomerCategory { CategoryId = 213, CategoryName = "VVIP", ParentId = 200 } }
+            };
+
+            return PartialView("CustomerCategory/RemoveCategory", model);
+        }               
+
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        public ActionResult AddCustomerCategory(AddCustomerCategoryModel addCategoryModel)
         {
             var errorCode = 0;
             var errorMessage = string.Empty;
+            var latestClassifications = Enumerable.Empty<LatestClassificationModel>();
 
-            if (ctsCustId <= 0 || subscriberId <= 0 || categoryId <= 0)
+            var resultToCTS = _accountService.AddCustomerCategory(addCategoryModel, CurrentSession.UserId, out latestClassifications);
+
+            if (resultToCTS.ErrorCode == 0 && latestClassifications != null)
             {
-                return Json(new
-                {
-                    errorCode = -100,
-                    errorMessage = "Invalid parameter"
-                }, JsonRequestBehavior.AllowGet);
-            }
-
-            var resultToCTS = _accountService.AddCustomerClassification(custId, ctsCustId, subscriberId, categoryId, remark, CurrentSession.UserId);
-
-            if (resultToCTS.ErrorCode == 0)
-            {
-                if (isVVip)
+                if (addCategoryModel.IsVVip)
                 {
                     var custIdInt = 0;
-                    int.TryParse(custId.ToString(), out custIdInt);
+                    int.TryParse(addCategoryModel.CustId.ToString(), out custIdInt);
 
                     if (custIdInt != 0)
                     {
-                        var custToMainDbList = new List<CustomerClassForMainDb>();
-                        custToMainDbList.Add(new CustomerClassForMainDb {
-                            CustID = custIdInt,
-                            CustomerClass = 100
-                        });               
-                        
-                        _syncToMainDbService.SyncCustomerClassToMainDb(custToMainDbList, "Insert Customer Classification");
+                        latestClassifications = latestClassifications.Where(c => c.CustId != 0);
+
+                        if (latestClassifications.Any())
+                        {
+                            // Update CC in table custinfo to MainDB
+                            var isSuccessToMain = _pushDataToExternalService.PushCustomerClassificationToMain(latestClassifications, 2);
+
+                            if (isSuccessToMain)
+                            {
+                                var updateApplyCCs = latestClassifications.Select(x => new { x.CustId, x.ScannedTime });
+
+                                var jsonUpdateApplyCCs = JsonConvert.SerializeObject(updateApplyCCs);
+
+                                // Update IsAppliedCC = 1 in CTS
+                                _customerClassifyService.UpdateAppliedCustomerClassification(jsonUpdateApplyCCs);
+                            }
+                        }
                     }
                 }
             }
@@ -1173,54 +1161,31 @@
                 errorCode,
                 errorMessage
             }, JsonRequestBehavior.AllowGet);
-        }
+        }     
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult UpdateCustomerClassification(long custId, long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark)
-        {
-            if (ctsCustId <= 0 || subscriberId <= 0 || categoryId <= 0)
-            {
-                return Json(new
-                {
-                    errorCode = -100,
-                    errorMessage = "Invalid parameter"
-                }, JsonRequestBehavior.AllowGet);
-            }
-
-            var result = _accountService.UpdateCustomerClassification(custId, ctsCustId, subscriberId, categoryId, sportGroupIds, remark, CurrentSession.UserId);
-
-            return Json(new
-            {
-                errorCode = result.ErrorCode,
-                errorMessage = result.ErrorMsg
-            }, JsonRequestBehavior.AllowGet);
-        }
-
-        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult RemoveCustomerClassification(long custId, long ctsCustId, int categoryId)
+        public ActionResult RemoveCustomerCategory(long custId, long ctsCustId, int categoryId, bool isVVip)
         {
             var errorCode = 0;
             var errorMessage = string.Empty;
-
-            if (custId <= 0 || categoryId <= 0)
-            {
-                return Json(new
-                {
-                    errorCode = -100,
-                    errorMessage = "Invalid parameter"
-                }, JsonRequestBehavior.AllowGet);
-            }
             
-            var resultToCTS = _accountService.RemoveCustomerClassification(custId, ctsCustId, categoryId, CurrentSession.UserId);
+            var resultToCTS = _accountService.RemoveCustomerCategory(custId, ctsCustId, categoryId, CurrentSession.UserId);
 
             if (string.IsNullOrEmpty(resultToCTS.OpErrorMessage))
             {
-                if (resultToCTS.CustomerClassList != null && resultToCTS.CustomerClassList.Any())
+                if (isVVip)
                 {
-                    var customerClassListToMainDb = resultToCTS.CustomerClassList.Where(c => c.CustID != 0);
-                    
-                    _syncToMainDbService.SyncCustomerClassToMainDb(customerClassListToMainDb, "Remove Customer Classification");
-                }
+                    var custIdInt = 0;
+                    int.TryParse(custId.ToString(), out custIdInt);
+
+                    if (custIdInt != 0)
+                    {
+                        var custIds = new List<int>() { custIdInt };
+
+                        // Rescan Problem Account & Normal Account
+                        _customerClassifyService.RescanCustomerClassify(custIds);
+                    }                    
+                }                
             }
             else
             {

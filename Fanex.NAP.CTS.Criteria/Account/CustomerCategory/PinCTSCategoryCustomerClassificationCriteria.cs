@@ -24,7 +24,7 @@
         public string ErrorMessage { get; set; }
 
         public override string GetSettingKey()
-            => "CTS_DC_AssociatedAccountMonitor_VerifyPin";
+            => "CTS_DC_AssociatedAccountMonitor_UpdatePin";
 
         public override bool IsValid()
             => true;

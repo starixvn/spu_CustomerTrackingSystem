@@ -88,7 +88,7 @@
     <Setting Key="CTS_DC_AssociatedAccountMonitor_Insert" SpName="CTS_DC_AssociatedAccountMonitor_Insert_xtest" DbName="MySQL.CTS_DataCenter.Admin"/>
     <Setting Key="CTS_DC_AssociatedAccountMonitor_Get" SpName="CTS_DC_AssociatedAccountMonitor_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter"/>
     <Setting Key="CTS_DC_AssociatedAccountMonitor_Remove" SpName="CTS_DC_AssociatedAccountMonitor_Remove_xtest" DbName="MySQL.CTS_DataCenter.Admin"/>
-    <Setting Key="CTS_DC_AssociatedAccountMonitor_VerifyPin" SpName="CTS_DC_AssociatedAccountMonitor_VerifyPin_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
+    <Setting Key="CTS_DC_AssociatedAccountMonitor_UpdatePin" SpName="CTS_DC_AssociatedAccountMonitor_UpdatePin_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
   </Function>
 
   <Function name="SpecialCustomerClass">

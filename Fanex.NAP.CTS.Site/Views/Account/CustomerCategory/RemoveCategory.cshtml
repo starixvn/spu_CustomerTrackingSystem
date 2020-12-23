@@ -1,0 +1,16 @@
+﻿@model Fanex.NAP.CTS.ViewModel.Account.CustomerCategory.MarkCategoryViewModel
+
+<div class="form-control">
+    <div class="label">Category</div>
+    <select id="ddlRemoveCategory">
+        @foreach (var category in Model.CustomerCategoryList)
+        {
+            <option value="@category.CategoryId">@category.CategoryName</option>
+        }
+    </select>
+</div>
+
+<div class="modal-footer margin-top-10">
+    <button id="btnCancelRemoveCategory" class="button btn-cancel-outline" title="Cancel">Cancel</button>
+    <button id="btnSaveRemoveCategory" class="button -add" title="Remove Category">Submit</button>
+</div>

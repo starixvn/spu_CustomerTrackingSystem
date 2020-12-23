@@ -980,6 +980,7 @@
     <Content Include="Views\NotificationSetting\Index.cshtml" />
     <Content Include="Views\AssociationReport\Index.cshtml" />
     <Content Include="Views\AssociationReport\Detail.cshtml" />
+    <Content Include="Views\Account\CustomerCategory\RemoveCategory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CoreBetList.css" />

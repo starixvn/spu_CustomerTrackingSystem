@@ -21,6 +21,7 @@
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;        
     using Fanex.NAP.CTS.Model.Association;
+    using Fanex.NAP.CTS.Model.CustomerClassify;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.Home;
@@ -987,76 +988,33 @@
             }
         }
 
-        public DBResult AddCustomerClassification(long custId, long ctsCustId, int subscriberId, int categoryId, string remark, int createdBy)
+        public DBResult AddCustomerCategory(AddCustomerCategoryModel addCategoryModel, int createdBy, out IEnumerable<LatestClassificationModel> latestClassifications)
         {
             var criteria = new AddCTSCustomerClassificationCriteria
             {
-                CustId = custId,
-                CTSCustId = ctsCustId,
-                SubscriberId = subscriberId,
-                CategoryId = categoryId,            
+                CustId = addCategoryModel.CustId,
+                CTSCustId = addCategoryModel.CTSCustId,
+                SubscriberId = addCategoryModel.SubscriberId,
+                CategoryId = addCategoryModel.CategoryId,            
                 CreatedBy = createdBy,
-                Remark = remark,
-                ErrorMessage = string.Empty
+                Remark = addCategoryModel.Remark
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                db.ExecuteNonQuery(criteria);
+            var repository = new DynamicRepository();
 
-                if (string.IsNullOrWhiteSpace(criteria.ErrorMessage))
-                {
-                    return new DBResult
-                    {
-                        ErrorCode = 0,
-                        ErrorMsg = criteria.ErrorMessage
-                    };
-                }
+            latestClassifications = repository.Fetch<LatestClassificationModel>(criteria);
+
+            if (!string.IsNullOrEmpty(criteria.ErrorMessage))
+            {
+                LogService.Error("CTS - AccountService AddCustomerCategory failed: " + criteria.ErrorMessage);
+
+                return new DBResult { ErrorCode = -1, ErrorMsg = criteria.ErrorMessage };
             }
 
-            return new DBResult
-            {
-                ErrorCode = -1,
-                ErrorMsg = criteria.ErrorMessage
-            };
+            return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
         }
-
-        public DBResult UpdateCustomerClassification(long custId, long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark, int createdBy)
-        {
-            var criteria = new UpdateCTSCustomerClassificationCriteria
-            {
-                CustId = custId,
-                CTSCustId = ctsCustId,
-                SubscriberId = subscriberId,
-                CategoryId = categoryId,
-                SportGroupIds = sportGroupIds,
-                CreatedBy = createdBy,
-                Remark = remark,
-                ErrorMessage = string.Empty
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                db.ExecuteNonQuery(criteria);
-
-                if (string.IsNullOrWhiteSpace(criteria.ErrorMessage))
-                {
-                    return new DBResult
-                    {
-                        ErrorCode = 0,
-                        ErrorMsg = criteria.ErrorMessage
-                    };
-                }
-            }
-
-            return new DBResult
-            {
-                ErrorCode = -1,
-                ErrorMsg = criteria.ErrorMessage
-            };
-        }
-
-        public ResultInsertRemoveCustomerClassificationModel RemoveCustomerClassification(long custId, long ctsCustId, int categoryId, int createdBy)
+        
+        public ResultInsertRemoveCustomerClassificationModel RemoveCustomerCategory(long custId, long ctsCustId, int categoryId, int createdBy)
         {
             var insertCTSResult = new ResultInsertRemoveCustomerClassificationModel();
             var criteria = new RemoveCTSCustomerClassificationCriteria
@@ -1119,8 +1077,7 @@
             };
         }
 
-        public
-        IEnumerable<CustomerClassificationGeneralInfoModel> GetCustomerClassificationByCategory(string categoryIdList)
+        public IEnumerable<CustomerClassificationGeneralInfoModel> GetCustomerClassificationByCategory(string categoryIdList)
         {
             var criteria = new GetCustomerCategoryByCategoryIdsCriteria
             {

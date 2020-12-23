@@ -11,6 +11,7 @@
     using System;
     using System.Collections.Generic;
     using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
+    using Fanex.NAP.CTS.Model.CustomerClassify;
 
     public interface IAccountService
     {        
@@ -98,11 +99,9 @@
 
         IEnumerable<CustomerClassificationHistoryModel> GetCustomerClassificationHistory(long custId);
 
-        DBResult AddCustomerClassification(long custId, long ctsCustId, int subscriberId, int categoryId, string remark, int createdBy);
-        
-        DBResult UpdateCustomerClassification(long custId, long ctsCustId, int subscriberId, int categoryId, string sportGroupIds, string remark, int createdBy);
-
-        ResultInsertRemoveCustomerClassificationModel RemoveCustomerClassification(long custId, long ctsCustId, int categoryId, int createdBy);        
+        DBResult AddCustomerCategory(AddCustomerCategoryModel addCategoryModel, int createdBy, out IEnumerable<LatestClassificationModel> latestClassifications);
+               
+        ResultInsertRemoveCustomerClassificationModel RemoveCustomerCategory(long custId, long ctsCustId, int categoryId, int createdBy);        
 
         DBResult PinCategoryCustomerClassification(int custId, long ctsCustId, int subscriberId, bool isPinCategory, int createdBy);
 

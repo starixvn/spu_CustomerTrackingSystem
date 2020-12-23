@@ -1,11 +1,11 @@
-﻿using Fanex.Data;
-using Fanex.Data.Repository;
-
-namespace Fanex.NAP.CTS.Criteria.Account.CustomerCategory
+﻿namespace Fanex.NAP.CTS.Criteria.Account.CustomerCategory
 {
+    using Fanex.Data;
+    using Fanex.Data.Repository;
+
     public class RemoveCTSCustomerClassificationCriteria : NonQueryCommand
     {
-        [SpParam(SqlParamName = "ip_CustId")]
+        [SpParam(SqlParamName = "ip_CustID")]
         public long CustId { get; set; }
 
         [SpParam(SqlParamName = "ip_CTSCustID")]
