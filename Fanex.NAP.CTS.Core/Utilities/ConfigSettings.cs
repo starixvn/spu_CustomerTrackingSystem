@@ -189,5 +189,18 @@
                 return size == 0 ? 150 : size;
             }
         }
+
+        public static int UpdateInternalChunkSize
+        {
+            get
+            {
+                var size = 500;
+                var configSize = GetConfigStringByName("Internal-ChunkSize");
+
+                int.TryParse(configSize, out size);
+
+                return size == 0 ? 500 : size;
+            }
+        }
     }
 }
