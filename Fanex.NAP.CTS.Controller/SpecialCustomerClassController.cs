@@ -4,12 +4,10 @@
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Web.Attribute;
-    using Fanex.NAP.CTS.Model.SpecialCustomerClass;
-    using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
+    using Fanex.NAP.CTS.Core.Extentions;
+    using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Resource.Consts;    
     using Fanex.NAP.CTS.Service;
-    using Fanex.NAP.CTS.Service.Implement;
-    using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.SpecialCustomerClass;
     using Newtonsoft.Json;
     using System;
@@ -88,22 +86,24 @@
             {
                 if (resultInsertToCTS.CustomerClassList != null && resultInsertToCTS.CustomerClassList.Any())
                 {
-                    var latestClassifications = resultInsertToCTS.CustomerClassList.Where(c => c.CustId != 0);                    
+                    var custIdsChunk = resultInsertToCTS.CustomerClassList.Chunk(ConfigSettings.PushCCToExternalChunkSize);
 
-                    if (latestClassifications != null && latestClassifications.Any())
+                    foreach (var custs in custIdsChunk)
                     {
                         // Update CC in table custinfo to MainDB
-                        var isSuccessToMain = _pushDataToExternalService.PushCustomerClassificationToMain(latestClassifications, 2);
+                        var isSuccessToMain = _pushDataToExternalService.PushCustomerClassificationToMain(custs, 2);
 
                         if (isSuccessToMain)
                         {
-                            var updateApplyCCs = latestClassifications.Select(x => new { x.CustId, x.ScannedTime });
+                            var updateApplyCCs = custs.Select(x => new { x.CustId, x.ScannedTime });
 
                             var jsonUpdateApplyCCs = JsonConvert.SerializeObject(updateApplyCCs);
 
                             // Update IsAppliedCC = 1 in CTS
                             _customerClassifyService.UpdateAppliedCustomerClassification(jsonUpdateApplyCCs);
                         }
+
+                        _pushDataToExternalService.PushCustomerClassificationToSoon88(custs);
                     }
                 }
             }

@@ -188,7 +188,7 @@
 
                 if (!string.IsNullOrEmpty(criteria.ErrorMessage))
                 {
-                    LogService.Error($"RescanCustomerClassifyService UpdateAppliedCustomerClassification failed {criteria.ErrorMessage} with data: {jsonData}");
+                    LogService.Error($"CTS Web - Update Applied CustomerClassification failed {criteria.ErrorMessage} with data: {jsonData}");
                 }
             }
         }
