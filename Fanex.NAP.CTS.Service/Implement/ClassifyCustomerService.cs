@@ -2,7 +2,7 @@
 {
     using Fanex.Data.Repository;
     using Fanex.Logging;
-    using Fanex.NAP.CTS.Criteria.CustomerClassification;
+    using Fanex.NAP.CTS.Criteria.CustomerClassify;
     using Fanex.NAP.CTS.Resource;
     using Fanex.NAP.CTS.Service.Interface;
     using System;
