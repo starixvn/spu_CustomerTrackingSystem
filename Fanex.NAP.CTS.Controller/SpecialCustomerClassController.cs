@@ -42,12 +42,12 @@
             
             return View(isHostPermission);
         }
-
+        
         [HttpGet]
-        public ActionResult GetCustomerClass()
+        public ActionResult GetCustomerClass(string username)
         {
             var viewModel = Enumerable.Empty<CustomerClassViewModel>();
-            var specialCustomers = _customerClassService.GetAllCustomerClass();
+            var specialCustomers = _customerClassService.GetAllCustomerClass(username);
 
             if (specialCustomers != null && specialCustomers.Any())
             {

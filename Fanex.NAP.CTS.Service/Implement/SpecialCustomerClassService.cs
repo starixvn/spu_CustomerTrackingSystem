@@ -14,11 +14,12 @@
 
     public class SpecialCustomerClassService : ISpecialCustomerClassService
     {
-        public IEnumerable<CustomerClassModel> GetAllCustomerClass()
+        public IEnumerable<CustomerClassModel> GetAllCustomerClass(string username)
         {
             var criteria = new GetAllSpecialCustomerClassCriteria()
             {
-                IsGetAllInfo = true
+                IsGetAllInfo = true,
+                Username  = username
             };
 
             return DataService.GetData<CustomerClassModel>(criteria);

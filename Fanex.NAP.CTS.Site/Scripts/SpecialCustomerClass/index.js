@@ -4,23 +4,25 @@
     let domElements = {       
         specialCustomerClassTable: $('#tblSpecialCustomerClass'),      
         divCustomerClass: $('#divAddCustomerClass'),
-        btnAddCustomerClass : $('#btnAdd'),
+        btnAddCustomerClass: $('#btnAdd'),
+        btnGenerate: $('#btnGenerate'),
         btnSave: $('#btnSave'),
         btnCancel: $('#btnCancel'),       
         btnIsAffectToAssociation: $('#isAffectedToAssociation'),
         txtUsername: $('#txtUsername'),
         txtCustomerClass: $('#txtCustomerClass'),
+        txtSearchUsername: $('#txtSearchUsername'),
         hdIsHostPermission: $('#hdIsHostPermission')
     };
 
     let isHostPermission = domElements.hdIsHostPermission.attr('IsHostPermission') === "True";
-
+    
     function GenerateGrid() {
-        
+        debugger;
         return domElements.specialCustomerClassTable.DataTable({
             serverSide: false,
             ajax: {
-                url: common.modifyRelativeUrl('/SpecialCustomerClass/GetCustomerClass'),                
+                url: common.modifyRelativeUrl('/SpecialCustomerClass/GetCustomerClass?username=' + domElements.txtSearchUsername.val()),                
                 type: "GET",
                 beforeSend: function () {
                     domElements.specialCustomerClassTable.find('tbody').addClass('loading');
@@ -213,6 +215,10 @@
                         $(this).dialog('close');
                     }
                 });
+            });
+
+            domElements.btnGenerate.on('click', function () {
+                GenerateGrid
             });
 
             domElements.btnSave.on('click', function () {

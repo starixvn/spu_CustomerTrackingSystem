@@ -6,7 +6,7 @@
 
     public interface ISpecialCustomerClassService
     {
-        IEnumerable<CustomerClassModel> GetAllCustomerClass();
+        IEnumerable<CustomerClassModel> GetAllCustomerClass(string username);
 
         ResultInsertCustomerClass InsertCustomerClass(string username, int custClass, bool isAffectToAssociation, int createdBy);
 
