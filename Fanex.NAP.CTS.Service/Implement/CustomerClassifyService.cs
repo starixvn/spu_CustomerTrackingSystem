@@ -27,15 +27,17 @@
         public void RescanCustomerClassify(List<int> custIds)
         {
             // Check and rescan problem account
-            var existedEvidences = CheckExistedEvidenceToRescanPA(string.Join(",", custIds)).ToList();
-            var problemAccounts = CheckToRescanPAFromNapCM(string.Join(",", custIds)).ToList();
+            var existedCustEvidences = GetExistedCustomerEvidences(string.Join(",", custIds)).ToList();
+            var existedProblemAccounts = GetExistedProblemAccounts(string.Join(",", custIds)).ToList();
 
-            if ((problemAccounts != null && problemAccounts.Any()) || (existedEvidences != null && existedEvidences.Any()))
+            var isRescanPA = (existedCustEvidences != null && existedCustEvidences.Any()) || (existedProblemAccounts != null && existedProblemAccounts.Any());
+
+            if (isRescanPA)
             {
-                RescanProblemAccount(problemAccounts, existedEvidences);
+                RescanProblemAccount(existedProblemAccounts, existedCustEvidences);
 
-                custIds.RemoveAll(item => problemAccounts.Select(c => c.CustID).Contains(item));
-                custIds.RemoveAll(item => existedEvidences.Select(c => c.CustId).Contains(item));
+                custIds.RemoveAll(item => existedProblemAccounts.Select(c => c.CustID).Contains(item));
+                custIds.RemoveAll(item => existedCustEvidences.Select(c => c.CustId).Contains(item));
             }
 
             // Check and rescan normal account
@@ -45,7 +47,7 @@
             }
         }
 
-        private IEnumerable<CustEvidenceModel> CheckExistedEvidenceToRescanPA(string custIds)
+        private IEnumerable<CustEvidenceModel> GetExistedCustomerEvidences(string custIds)
         {
             var existedEvidences = new List<CustEvidenceModel>();
 
@@ -54,12 +56,20 @@
                 return existedEvidences;
             }
 
-            existedEvidences = GetExistedEvidences(custIds).ToList();
+            var criteria = new GetExistedEvidencesCriteria
+            {
+                CustIds = custIds
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                existedEvidences = db.Query<CustEvidenceModel>(criteria).ToList();
+            }
 
             return existedEvidences ?? new List<CustEvidenceModel>();
         }
 
-        private IEnumerable<MultipleProblemAccountsModel> CheckToRescanPAFromNapCM(string custIds)
+        private IEnumerable<MultipleProblemAccountsModel> GetExistedProblemAccounts(string custIds)
         {
             var problemAccounts = new List<MultipleProblemAccountsModel>();
 
@@ -112,39 +122,24 @@
             }
         }
 
-        public IEnumerable<CustEvidenceModel> GetExistedEvidences(string custIDs)
-        {
-            var criteria = new GetExistedEvidencesCriteria
-            {
-                CustIds = custIDs
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<CustEvidenceModel>(criteria).ToList();
-            }
-        }
-
         private void RescanProblemAccount(List<MultipleProblemAccountsModel> problemAccounts, List<CustEvidenceModel> existedEvidences)
         {
-            var result1 = InsertCustEvidenceToCategory(existedEvidences);
-
-            var result2 = InsertProblemAccountToCTS(problemAccounts);
-
             var custIdsToSyncCC = new List<int>();
 
-            if (result1.CustIds != null && result1.CustIds.Any())
+            // Re-Sync Customer Evidence to category in CTS
+            var result = SyncCustomerEvidenceToCategory(existedEvidences);
+
+            if (string.IsNullOrEmpty(result.ErrorMessage) && result.CustIds != null && result.CustIds.Any())
             {
-                custIdsToSyncCC.AddRange(result1.CustIds);
-            }
-            else if (result2.CustIds != null && result2.CustIds.Any())
-            {
-                custIdsToSyncCC.AddRange(result2.CustIds);
+                custIdsToSyncCC.AddRange(result.CustIds);
             }
 
-            if (custIdsToSyncCC == null || !custIdsToSyncCC.Any())
+            // Re-Insert Problem Account in CTS
+            result = InsertProblemAccountToCTS(problemAccounts);
+
+            if (string.IsNullOrEmpty(result.ErrorMessage) && result.CustIds != null && result.CustIds.Any())
             {
-                return;
+                custIdsToSyncCC.AddRange(result.CustIds);
             }
 
             var custIdsChunk = custIdsToSyncCC.Distinct().Chunk(ConfigSettings.PushCCToExternalChunkSize);
@@ -167,32 +162,60 @@
             }
         }
 
-        private InsertCategoryResultModel InsertCustEvidenceToCategory(List<CustEvidenceModel> existedEvidences)
+        private InsertCategoryResultModel SyncCustomerEvidenceToCategory(List<CustEvidenceModel> custEvidences)
         {
             try
             {
-                if(existedEvidences == null || !existedEvidences.Any())
+                if (custEvidences == null || !custEvidences.Any())
                 {
                     return new InsertCategoryResultModel() { ErrorMessage = string.Empty, CustIds = null };
                 }
 
-                var evidencesChunk = existedEvidences.Chunk(ConfigSettings.UpdateInternalChunkSize);
+                var evidencesChunk = custEvidences.Chunk(ConfigSettings.UpdateInternalChunkSize);
 
                 var custIds = new List<int>();
 
                 foreach (var evidences in evidencesChunk)
                 {
-                    custIds.AddRange(DataAccess4InsertCategory(JsonConvert.SerializeObject(evidences)));
+                    custIds.AddRange(SyncCustomerEvidenceToCategory(JsonConvert.SerializeObject(evidences)));
                 }
 
                 return new InsertCategoryResultModel { ErrorMessage = string.Empty, CustIds = custIds };
             }
             catch (Exception ex)
             {
-                LogService.Error($"Web - Rescan PA - SyncCustomerEvidenceToCategory exception: {ex.Message} - Data: {JsonConvert.SerializeObject(existedEvidences)}", ex);
+                LogService.Error($"Web - CustomerClassifyService - SyncCustomerEvidenceToCategory exception: {ex.Message} - Data: {JsonConvert.SerializeObject(custEvidences)}", ex);
 
                 return new InsertCategoryResultModel { ErrorMessage = ex.Message, CustIds = null };
             }
+        }
+
+        private List<int> SyncCustomerEvidenceToCategory(string custEvidencesJson)
+        {
+            var custIds = new List<int>();
+            var repository = new DynamicRepository();
+
+            if (string.IsNullOrEmpty(custEvidencesJson))
+            {
+                return custIds;
+            }
+
+            var criteria = new CustEvidenceSyncToCategoryCriteria
+            {
+                CustEvidencesJson = custEvidencesJson
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                custIds = repository.Fetch<int>(criteria).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(criteria.ErrorMessage))
+            {
+                LogService.Error($"Web - CustomerClassifyService - SyncCustomerEvidenceToCategory failed: {criteria.ErrorMessage} - Data: {custEvidencesJson}");
+            }
+
+            return (custIds != null) ? custIds : new List<int>();
         }
 
         private InsertCategoryResultModel InsertProblemAccountToCTS(List<MultipleProblemAccountsModel> problemAccounts)
@@ -212,25 +235,53 @@
                 {
                     var result = problemAccs.Select(x => new { CustId = x.CustID, CategoryId = x.ReasonID });
 
-                    custIds.AddRange(DataAccess4InsertPA(JsonConvert.SerializeObject(result)));
+                    custIds.AddRange(InsertProblemAccount(JsonConvert.SerializeObject(result)));
                 }
 
                 return new InsertCategoryResultModel() { ErrorMessage = string.Empty, CustIds = custIds };
             }
             catch (Exception ex)
             {
-                LogService.Error($"Web - Rescan PA - Insert Problem Acocunts exception: {ex.Message} - Data: { JsonConvert.SerializeObject(problemAccounts)}", ex);
+                LogService.Error($"Web - CustomerClassifyService - InsertProblemAccountToCTS exception: {ex.Message} - Data: { JsonConvert.SerializeObject(problemAccounts)}", ex);
 
                 return new InsertCategoryResultModel { ErrorMessage = ex.Message, CustIds = null };
             }
         }
 
+        private List<int> InsertProblemAccount(string problemAccountJson)
+        {
+            var repository = new DynamicRepository();
+            var custIds = new List<int>();
+
+            if (string.IsNullOrEmpty(problemAccountJson))
+            {
+                return custIds;
+            }
+
+            var criteria = new InsertProblemAccountCriteria
+            {
+                ProblemAccountJson = problemAccountJson
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                custIds = repository.Fetch<int>(criteria).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(criteria.ErrorMessage))
+            {
+                LogService.Error($"Web - CustomerClassifyService - InsertProblemAccount failed: {criteria.ErrorMessage} - Data: {problemAccountJson}");
+            }
+
+            return (custIds != null) ? custIds : new List<int>();
+        }
+
         public IEnumerable<LatestClassificationModel> GetLatestClassification(string custIds)
         {
-            if(string.IsNullOrEmpty (custIds))
+            if (string.IsNullOrEmpty(custIds))
             {
                 return new List<LatestClassificationModel>();
-            }    
+            }
 
             var criteria = new GetLastestClassificationCriteria
             {
@@ -258,7 +309,7 @@
 
                 if (!string.IsNullOrEmpty(criteria.ErrorMessage))
                 {
-                    LogService.Error($"CTS Web - Update Applied CustomerClassification failed {criteria.ErrorMessage} with data: {jsonData}");
+                    LogService.Error($"Web - CustomerClassifyService - UpdateAppliedCustomerClassification failed {criteria.ErrorMessage} with data: {jsonData}");
                 }
             }
         }
@@ -293,60 +344,5 @@
             repository.Execute(criteria);
         }
 
-        private List<int> DataAccess4InsertCategory(string jsonData)
-        {
-            var custIds = new List<int>();
-            var repository = new DynamicRepository();
-
-            if (string.IsNullOrEmpty(jsonData))
-            {
-                return custIds;
-            }
-
-            var criteria = new CustEvidenceSyncToCategoryCriteria
-            {
-                CustEvidencesJson = jsonData
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                custIds = repository.Fetch<int>(criteria).ToList();
-            }
-
-            if (!string.IsNullOrEmpty(criteria.ErrorMessage))
-            {
-                LogService.Error($"Web - Rescan PA - SyncCustomerEvidenceToCategory exception: {criteria.ErrorMessage} - Data: {jsonData}");
-            }
-
-            return (custIds != null) ? custIds : new List<int>();
-        }
-
-        private List<int> DataAccess4InsertPA(string jsonData)
-        {
-            var repository = new DynamicRepository();
-            var custIds = new List<int>();
-
-            if (string.IsNullOrEmpty(jsonData))
-            {
-                return custIds;
-            }
-
-            var criteria = new InsertProblemAccountCriteria
-            {
-                ProblemAccountJson = jsonData
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                custIds = repository.Fetch<int>(criteria).ToList();
-            }
-
-            if (!string.IsNullOrEmpty(criteria.ErrorMessage))
-            {
-                LogService.Error($"Web - Rescan PA - Insert Problem Acocunts exception: {criteria.ErrorMessage} - Data: {jsonData}");
-            }
-            
-            return (custIds != null) ? custIds : new List<int>();
-        }
     }
 }
