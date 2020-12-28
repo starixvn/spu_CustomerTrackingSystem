@@ -181,9 +181,11 @@
                 domElements.specialCustomerClassTable.DataTable().clear().rows.add(response.data).draw();
             },
             beforeSend: function () {
+                domElements.btnGenerate.prop('disabled', true);
                 domElements.specialCustomerClassTable.find('tbody').addClass('loading');
             },
             complete: function () {
+                domElements.btnGenerate.prop('disabled', false);
                 domElements.specialCustomerClassTable.find('tbody').removeClass('loading');
             },
             error: function (err) {
