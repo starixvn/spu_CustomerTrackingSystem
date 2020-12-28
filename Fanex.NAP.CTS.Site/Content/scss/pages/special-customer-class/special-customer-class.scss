@@ -2,7 +2,7 @@
     margin-top: 6rem;
 
     .special-customer-class {
-        padding: 0 1.6rem 1.6rem;
+        //padding: 0 1.6rem 1.6rem;
 
         .group {
             padding-right: 0;
@@ -27,7 +27,18 @@
         }
     }
 }
-
+button#btnGenerate {
+    outline: none;
+    border: 0;
+    background: #396EF8;
+    cursor: pointer;
+    color: #fff;
+    font-family: "Lato", Arial, Tahoma, sans-serif !important;
+    line-height: 1.7rem;
+    border-radius: .2rem;
+    padding: .7rem 2rem .6rem 2rem;
+    height: auto;
+}
 .top-header {
     .button-primary-outline {
         font-size: 1.3rem !important;
@@ -120,6 +131,13 @@
         cursor: not-allowed;
     }
 }
+
+.special-customer {
+    margin: 1.2rem 1.2rem 2rem 1.6rem;
+    box-sizing: border-box;
+    font-family: "Lato", Arial, Tahoma, sans-serif;
+}
+
 
 @media screen and (min-width: 1440px) {
     .special-customer-class {
