@@ -17,23 +17,9 @@
 
     let isHostPermission = domElements.hdIsHostPermission.attr('IsHostPermission') === "True";
     
-    function GenerateGrid() {
-        debugger;
+    function InitGrid() {        
         return domElements.specialCustomerClassTable.DataTable({
             serverSide: false,
-            ajax: {
-                url: common.modifyRelativeUrl('/SpecialCustomerClass/GetCustomerClass?username=' + domElements.txtSearchUsername.val()),                
-                type: "GET",
-                beforeSend: function () {
-                    domElements.specialCustomerClassTable.find('tbody').addClass('loading');
-                },
-                complete: function () {
-                    domElements.specialCustomerClassTable.find('tbody').removeClass('loading');
-                },
-                error: function (error) {                    
-                    console.log(error);
-                }
-            },
             dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
             pagingType: "full_numbers",
             language: {
@@ -107,7 +93,7 @@
             success: function (response) {
                 if (response.ErrorCode === 0) {
                     common.showSuccess('Remove the Customer Class successful');
-                    domElements.specialCustomerClassTable.DataTable().ajax.reload();
+                    LoadGrid("");
                 }
                 else {
                     common.showError('Failed! ' + response.ErrorMessage);
@@ -166,7 +152,7 @@
                         if (response.ErrorCode === 0) {
                             common.showSuccess("Add the Customer Class successful");
                             domElements.divCustomerClass.dialog('close');
-                            domElements.specialCustomerClassTable.DataTable().ajax.reload();
+                            LoadGrid("");
                         } else {
                             common.showError("Failed! " + response.ErrorMessage);
                         }
@@ -186,18 +172,30 @@
         }        
     }
 
-    function LoadGrid() {
-        $(this).prop('disabled', true);
+    function LoadGrid(username) {
+        var url = common.modifyRelativeUrl('/SpecialCustomerClass/GetCustomerClass?username=' + username);
 
-        dataTable
-            ? dataTable.ajax.reload(null, true)
-            : dataTable = GenerateGrid();
+        $.ajax(url, {
+            type: 'GET',            
+            success: function (response) {
+                domElements.specialCustomerClassTable.DataTable().clear().rows.add(response.data).draw();
+            },
+            beforeSend: function () {
+                domElements.specialCustomerClassTable.find('tbody').addClass('loading');
+            },
+            complete: function () {
+                domElements.specialCustomerClassTable.find('tbody').removeClass('loading');
+            },
+            error: function (err) {
+                console.log(err);
+                domElements.specialCustomerClassTable.find('tbody').removeClass('loading');                
+            }
+        });        
     }
 
     function Initial() {
         domElements.btnAddCustomerClass.prop('disabled', !isHostPermission);
-
-        LoadGrid();
+        InitGrid();
 
         if (isHostPermission) {
             domElements.btnAddCustomerClass.on('click', function () {
@@ -218,8 +216,14 @@
             });
 
             domElements.btnGenerate.on('click', function () {
-                GenerateGrid
+                LoadGrid(domElements.txtSearchUsername.val());
             });
+
+            domElements.txtSearchUsername.keypress(function (event) {
+                if (event.keyCode === 13) {
+                    LoadGrid(domElements.txtSearchUsername.val());
+                }
+            }); 
 
             domElements.btnSave.on('click', function () {
                 AddCustomerClass();
