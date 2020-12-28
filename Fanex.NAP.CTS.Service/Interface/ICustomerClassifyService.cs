@@ -5,7 +5,7 @@
 
     public interface ICustomerClassifyService
     {
-        bool RescanCustomerClassify(List<int> custIds);
+        void RescanCustomerClassify(List<int> custIds);
 
         IEnumerable<LatestClassificationModel> GetLatestClassification(string custIds);
 

@@ -24,10 +24,8 @@
             _pushDataToExternalService = new PushDataToExternalService();
         }
 
-        public bool RescanCustomerClassify(List<int> custIds)
+        public void RescanCustomerClassify(List<int> custIds)
         {
-            var isSuccess = true;
-
             // Check and rescan problem account
             var existedEvidences = CheckExistedEvidenceToRescanPA(string.Join(",", custIds)).ToList();
             var problemAccounts = CheckToRescanPAFromNapCM(string.Join(",", custIds)).ToList();
@@ -45,8 +43,6 @@
             {
                 RescanNormalAccount(custIds);
             }
-
-            return isSuccess;
         }
 
         private IEnumerable<CustEvidenceModel> CheckExistedEvidenceToRescanPA(string custIds)
@@ -135,36 +131,38 @@
 
             var result2 = InsertProblemAccountToCTS(problemAccounts);
 
-            if (string.IsNullOrEmpty(result1.ErrorMessage) || string.IsNullOrEmpty(result2.ErrorMessage))
+            var custIdsToSyncCC = new List<int>();
+
+            if (result1.CustIds != null && result1.CustIds.Any())
             {
-                var custIdsToSyncCC = new List<int>();
+                custIdsToSyncCC.AddRange(result1.CustIds);
+            }
+            else if (result2.CustIds != null && result2.CustIds.Any())
+            {
+                custIdsToSyncCC.AddRange(result2.CustIds);
+            }
 
-                if (result1.CustIds != null && result1.CustIds.Any())
+            if (custIdsToSyncCC == null || !custIdsToSyncCC.Any())
+            {
+                return;
+            }
+
+            var custIdsChunk = custIdsToSyncCC.Distinct().Chunk(ConfigSettings.PushCCToExternalChunkSize);
+
+            foreach (var custids in custIdsChunk)
+            {
+                var lastestClassifications = GetLatestClassification(string.Join(",", custids));
+
+                if (lastestClassifications != null && lastestClassifications.Any())
                 {
-                    custIdsToSyncCC.AddRange(result1.CustIds);
-                }
-                else if (result2.CustIds != null && result2.CustIds.Any())
-                {
-                    custIdsToSyncCC.AddRange(result2.CustIds);
-                }
+                    bool isSyncMainSuccessfully = _pushDataToExternalService.PushCustomerClassificationToMain(lastestClassifications, 3);
 
-                var custIdsChunk = custIdsToSyncCC.Distinct().Chunk(ConfigSettings.PushCCToExternalChunkSize);
-
-                foreach (var custids in custIdsChunk)
-                {
-                    var lastestClassifications = GetLatestClassification(string.Join(",", custids));
-
-                    if (lastestClassifications != null && lastestClassifications.Any())
+                    if (isSyncMainSuccessfully)
                     {
-                        bool isSyncMainSuccessfully = _pushDataToExternalService.PushCustomerClassificationToMain(lastestClassifications, 3);
-
-                        if (isSyncMainSuccessfully)
-                        {
-                            UpdateAppliedCustomerClassification(JsonConvert.SerializeObject(lastestClassifications));
-                        }
-
-                        _pushDataToExternalService.PushCustomerClassificationToSoon88(lastestClassifications);
+                        UpdateAppliedCustomerClassification(JsonConvert.SerializeObject(lastestClassifications));
                     }
+
+                    _pushDataToExternalService.PushCustomerClassificationToSoon88(lastestClassifications);
                 }
             }
         }
@@ -207,6 +205,7 @@
                 }
 
                 var probalemAccountsChunk = problemAccounts.Chunk(ConfigSettings.UpdateInternalChunkSize);
+
                 var custIds = new List<int>();
 
                 foreach (var problemAccs in probalemAccountsChunk)
@@ -228,6 +227,11 @@
 
         public IEnumerable<LatestClassificationModel> GetLatestClassification(string custIds)
         {
+            if(string.IsNullOrEmpty (custIds))
+            {
+                return new List<LatestClassificationModel>();
+            }    
+
             var criteria = new GetLastestClassificationCriteria
             {
                 CustIds = custIds
@@ -259,21 +263,21 @@
             }
         }
 
-        private bool RescanNormalAccount(List<int> customers)
+        private void RescanNormalAccount(List<int> customers)
         {
-            if (customers != null || customers.Any())
+            if (customers == null || !customers.Any())
             {
-                var custIdsChunk = customers.Chunk(ConfigSettings.PushCCToExternalChunkSize).ToList();
-
-                foreach (var custIds in custIdsChunk)
-                {
-                    var custIdsToBeRescaned = string.Join(",", custIds);
-
-                    ClassifyCustomerGeneralCategoryDaily(custIdsToBeRescaned, false);
-                }
+                return;
             }
 
-            return true;
+            var custIdsChunk = customers.Chunk(ConfigSettings.PushCCToExternalChunkSize).ToList();
+
+            foreach (var custIds in custIdsChunk)
+            {
+                var custIdsToBeRescaned = string.Join(",", custIds);
+
+                ClassifyCustomerGeneralCategoryDaily(custIdsToBeRescaned, false);
+            }
         }
 
         private void ClassifyCustomerGeneralCategoryDaily(string customers, bool isCheckLast14Days)
