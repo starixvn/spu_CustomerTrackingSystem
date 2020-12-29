@@ -5,6 +5,8 @@
         public int CategoryType { get; set; }        
 
         public string CategoryName { get; set; }
+
+        public bool IsProblemAccount { get; set; }
       
     }  
 }

@@ -1016,6 +1016,7 @@
                     {
                         CategoryType = x.CategoryType,
                         CategoryName = x.CategoryName != null ? x.CategoryName : string.Empty,
+                        IsProblemAccount = x.CategoryType == 2
                     }).ToList();
 
                 isVVip = categoryList.Where(x => x.CategoryName.Equals("VVIP")).Count() > 0;
