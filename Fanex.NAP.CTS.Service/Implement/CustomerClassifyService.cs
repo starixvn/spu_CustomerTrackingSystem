@@ -26,9 +26,16 @@
 
         public void RescanCustomerClassify(List<int> custIds)
         {
+            LogService.Info($"CustomerClassifyService - RescanCustomerClassify custIds {custIds}");
+
             // Check and rescan problem account
             var existedCustEvidences = GetExistedCustomerEvidences(string.Join(",", custIds)).ToList();
+
+            LogService.Info($"CustomerClassifyService - GetExistedCustomerEvidences existedCustEvidences:  {JsonConvert.SerializeObject(existedCustEvidences)}");
+
             var existedProblemAccounts = GetExistedProblemAccounts(string.Join(",", custIds)).ToList();
+
+            LogService.Info($"CustomerClassifyService - GetExistedProblemAccounts existedProblemAccounts:  {JsonConvert.SerializeObject(existedProblemAccounts)}");
 
             var isRescanPA = (existedCustEvidences != null && existedCustEvidences.Any()) || (existedProblemAccounts != null && existedProblemAccounts.Any());
 
@@ -148,9 +155,13 @@
             {
                 var lastestClassifications = GetLatestClassification(string.Join(",", custids));
 
+                LogService.Info($"CustomerClassifyService - GetLatestClassification lastestClassifications:  {JsonConvert.SerializeObject(lastestClassifications)}");
+
                 if (lastestClassifications != null && lastestClassifications.Any())
                 {
                     bool isSyncMainSuccessfully = _pushDataToExternalService.PushCustomerClassificationToMain(lastestClassifications, 3);
+
+                    LogService.Info($"CustomerClassifyService - GetLatestClassification isSyncMainSuccessfully:  {isSyncMainSuccessfully}");
 
                     if (isSyncMainSuccessfully)
                     {
@@ -215,6 +226,8 @@
                 LogService.Error($"Web - CustomerClassifyService - SyncCustomerEvidenceToCategory failed: {criteria.ErrorMessage} - Data: {custEvidencesJson}");
             }
 
+            LogService.Info($"CustomerClassifyService - SyncCustomerEvidenceToCategory custEvidencesJson:  {custEvidencesJson}");
+
             return (custIds != null) ? custIds : new List<int>();
         }
 
@@ -272,6 +285,8 @@
             {
                 LogService.Error($"Web - CustomerClassifyService - InsertProblemAccount failed: {criteria.ErrorMessage} - Data: {problemAccountJson}");
             }
+
+            LogService.Info($"CustomerClassifyService - InsertProblemAccount problemAccountJson:  {problemAccountJson}");
 
             return (custIds != null) ? custIds : new List<int>();
         }

@@ -447,6 +447,8 @@
         {
             try
             {
+                LogService.Info($"CTS Portal API - Called Remove Problem Account API - Start {custIds}");
+
                 var output = _problemAccountMonitorService.UpdateRemovedProblemAccountToCTS(custIds);
 
                 if (string.IsNullOrEmpty(output.ErrorMessage) && output.CustIds != null && output.CustIds.Any())
@@ -455,9 +457,11 @@
                 }
                 else if (!string.IsNullOrEmpty(output.ErrorMessage))
                 {
-                    LogService.Error($"CTS Portal API - Remove Problem Account API - Rescan Problem Account Exception: {output.ErrorMessage} - List custIds: {custIds}.");
+                    LogService.Error($"CTS Portal API - Remove Problem Account API - Rescan Problem Account failed: {output.ErrorMessage} - List custIds: {custIds}.");
                     return new ApiResultModel { ErrorMessage = string.Empty, StatusMessage = "fail" };
                 }
+
+                LogService.Info($"CTS Portal API - Called Remove Problem Account API - End");
 
                 return new ApiResultModel {
                     ErrorMessage = string.Empty,
