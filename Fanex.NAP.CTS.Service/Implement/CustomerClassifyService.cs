@@ -98,7 +98,7 @@
                 problemAccounts.AddRange(problemAccountsCN88);
             }
 
-            return problemAccounts;
+            return problemAccounts.Distinct();
         }
 
         private IEnumerable<MultipleProblemAccountsModel> GetProblemAccounts(string custIDs, DateTime? dateTime)
