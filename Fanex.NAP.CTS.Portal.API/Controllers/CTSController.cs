@@ -22,6 +22,7 @@
     using System.Configuration;
     using System.Linq;
     using System.Net;
+    using System.Threading;
     using System.Web.Http;
     using System.Web.Http.Results;
 
@@ -453,6 +454,8 @@
 
                 if (string.IsNullOrEmpty(output.ErrorMessage) && output.CustIds != null && output.CustIds.Any())
                 {
+                    Thread.Sleep(2000);
+
                     _customerClassifyService.RescanCustomerClassify(output.CustIds.ToList());
                 }
                 else if (!string.IsNullOrEmpty(output.ErrorMessage))

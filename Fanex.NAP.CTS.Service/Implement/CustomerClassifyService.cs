@@ -26,7 +26,7 @@
 
         public void RescanCustomerClassify(List<int> custIds)
         {
-            LogService.Info($"CustomerClassifyService - RescanCustomerClassify custIds {custIds}");
+            LogService.Info($"CustomerClassifyService - RescanCustomerClassify custIds {JsonConvert.SerializeObject(custIds)}");
 
             // Check and rescan problem account
             var existedCustEvidences = GetExistedCustomerEvidences(string.Join(",", custIds)).ToList();
