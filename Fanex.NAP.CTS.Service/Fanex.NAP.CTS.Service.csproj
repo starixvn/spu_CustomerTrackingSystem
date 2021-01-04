@@ -65,7 +65,6 @@
     <Compile Include="Implement\AssociationReportService.cs" />
     <Compile Include="Implement\CheckBetReportService.cs" />
     <Compile Include="Implement\CategoryService.cs" />
-    <Compile Include="Implement\ClassifyCustomerService.cs" />
     <Compile Include="Implement\FeedDataToSoon88Service.cs" />
     <Compile Include="Implement\ProbationManagementService.cs" />
     <Compile Include="Implement\ManageSubscriberService.cs" />
@@ -92,14 +91,12 @@
     <Compile Include="Implement\SubscriberAssignmentService.cs" />
     <Compile Include="Implement\SuspiciousCustomerReportDetailsService.cs" />
     <Compile Include="Implement\SuspiciousCustomerReportService.cs" />
-    <Compile Include="Implement\SyncCustomerToMainDbService.cs" />
     <Compile Include="Implement\TransactionService.cs" />
     <Compile Include="Implement\CTSUserService.cs" />
     <Compile Include="Interface\IAccountService.cs" />
     <Compile Include="Interface\IAssociatedAccountService.cs" />
     <Compile Include="Interface\IAssociationReportService.cs" />
     <Compile Include="Interface\ICheckBetReportService.cs" />
-    <Compile Include="Interface\IClassifyCustomerService.cs" />
     <Compile Include="Interface\ICategoryService.cs" />
     <Compile Include="Interface\ICustomerMonitorService.cs" />
     <Compile Include="Interface\IDailyDataCaptureService.cs" />
@@ -126,7 +123,6 @@
     <Compile Include="Interface\ISubscriberAssignmentService.cs" />
     <Compile Include="Interface\ISuspiciousCustomerReportDetailsService.cs" />
     <Compile Include="Interface\ISuspiciousCustomerReportService.cs" />
-    <Compile Include="Interface\ISyncCustomerToMainDbService.cs" />
     <Compile Include="Interface\ITransactionService.cs" />
     <Compile Include="Interface\ICTSUserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

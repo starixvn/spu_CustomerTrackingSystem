@@ -1,7 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {    
     using Fanex.NAP.CTS.Model.ImportEvidences;
-    using System.Collections;
     using System.Collections.Generic;
     using System.IO;
 
@@ -14,8 +13,6 @@
         byte[] DownloadTemplateExcel(string template);
 
         IEnumerable<ResultCheckAccountEvidenceModel> CheckRuleAddAccountEvidence(bool isOverride);
-
-        void InsertAccountEvidence(IEnumerable<ResultCheckAccountEvidenceModel> resultCheckAccountEvidenceList, string fileName, int userId, string fileErrorTemplate, bool isOverride);
 
         IEnumerable<RawAccountEvidenceModel> GetRawAccountEvidences();
 

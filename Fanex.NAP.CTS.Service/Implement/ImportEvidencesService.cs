@@ -25,13 +25,11 @@
         private readonly List<CheckAccountEvidenceModel> _checkAccountEvidenceList;
         private readonly List<RawAccountEvidenceModel> _rawAccountEvidenceList;
         private string _fileErrorTemplate = string.Empty;
-        private readonly ISyncCustomerToMainDbService _syncToMainDbService;
 
         public ImportEvidencesService()
         {
             _checkAccountEvidenceList = new List<CheckAccountEvidenceModel>();
             _rawAccountEvidenceList = new List<RawAccountEvidenceModel>();
-            _syncToMainDbService = new SyncCustomerToMainDbService();
         }
 
         public string ParseFileXls(Stream fileContent, string fileName)
@@ -207,153 +205,6 @@
                 return resultException;
             }
         }
-        
-        public void InsertAccountEvidence(IEnumerable<ResultCheckAccountEvidenceModel> resultCheckAccountEvidenceList, string fileName, int userId, string fileErrorTemplate, bool isOverride)
-        {
-            var sessionId = long.Parse(DateTime.Now.ToString("yyyyMMddHHmmss"));
-
-            _fileErrorTemplate = fileErrorTemplate;
-
-            var addAccountEvidenceList = resultCheckAccountEvidenceList
-                .Join(_rawAccountEvidenceList, x => x.RowId, y => y.RowId,
-                    (x, y) => new AddAccountEvidenceModel
-                    {
-                        CTSCustID = x.CTSCustID,
-                        EvidenceID = x.EvidenceID,
-                        Comment = y.Comment
-                    });
-
-            var loopAddAccountEvidenceList = addAccountEvidenceList.Chunk(ConfigSettings.ImportEvidenceChunkSize);
-
-            var hasOverrideSelection = isOverride ? RemoveOldEvidence(addAccountEvidenceList, sessionId, false, false) : null;
-
-            if (hasOverrideSelection == null || hasOverrideSelection.ErrorCode == 0)
-            {
-                foreach (var accountEvidence in loopAddAccountEvidenceList)
-                {
-                    try
-                    {
-                        var evidencePara = new InsertEvidenceParametersModel
-                        {
-                            CheckAccountEvidenceList = resultCheckAccountEvidenceList,
-                            AccountEvidences = accountEvidence,
-                            FileName = fileName,
-                            UserId = userId,
-                            IsOverride = isOverride
-                        };
-
-                        var result = InsertAccountEvicence(evidencePara);
-
-                        if (result.ErrorCode != 0)
-                        {
-                            throw new Exception(result.ErrorMsg);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        string rollBackStatus = "";
-
-                        if (isOverride)
-                        {
-                            rollBackStatus = IsRollBackInsertMultiEvidenceSuccess(addAccountEvidenceList, sessionId) ? "Override import type (rollback successfully) - " : "Override import type (rollback fail) - ";
-                        }
-
-                        //SendMail(resultCheckAccountEvidenceList, accountEvidence, userId, ex.Message);
-                        LogError(fileName, userId, "at " + DateTime.Now + " " + ex.Message, JsonConvert.SerializeObject(addAccountEvidenceList), rollBackStatus, ex);
-                        return;
-                    }
-                }
-
-                if (isOverride)
-                {
-                    RemoveOldEvidence(addAccountEvidenceList, sessionId, false, true);
-                }
-
-                _syncToMainDbService.SyncCustomerClassToMainDb(string.Join(",", resultCheckAccountEvidenceList?.Select(c => c.CTSCustID).Distinct().ToList()), false, false);
-            }
-            else
-            {
-                //SendMail(resultCheckAccountEvidenceList, addAccountEvidenceList, userId, hasOverrideSelection.ErrorMsg);
-                LogError(fileName, userId, "at " + DateTime.Now + " " + hasOverrideSelection.ErrorMsg, JsonConvert.SerializeObject(addAccountEvidenceList), string.Empty);
-            } 
-        }
-
-        private bool IsRollBackInsertMultiEvidenceSuccess(IEnumerable<AddAccountEvidenceModel> addAccountEvidenceList, long sessionId)
-        {
-            try
-            {
-                var result = RemoveOldEvidence(addAccountEvidenceList, sessionId, true, false);
-
-                if (result.ErrorCode != 0)
-                {
-                    return false;
-                }
-
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        public DBResult InsertAccountEvicence(InsertEvidenceParametersModel evidenceParas)
-        {
-            var jsonData = JsonConvert.SerializeObject(evidenceParas.AccountEvidences);
-
-            var criteria = new InsertAccountEvidenceCriteria
-            {
-                NewAccountEvidences = jsonData,
-                UserId = evidenceParas.UserId,
-                IsOverride = evidenceParas.IsOverride,
-                ErrorMessage = string.Empty
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                db.ExecuteNonQuery(criteria);
-
-                if (string.IsNullOrEmpty(criteria.ErrorMessage))
-                {
-                    return new DBResult { ErrorCode = 0, ErrorMsg = criteria.ErrorMessage };
-                }
-
-                return new DBResult { ErrorCode = -1, ErrorMsg = criteria.ErrorMessage };
-            }
-        }
-
-        public DBResult RemoveOldEvidence(IEnumerable<AddAccountEvidenceModel> accountEvidences, long sessionId, bool isRollBack, bool isClearLog)
-        {
-            var jsonData = JsonConvert.SerializeObject(accountEvidences.Select(c => new {c.CTSCustID}).Distinct());
-
-            var criteria = new RemoveOldEvidencesCriteria
-            {
-                NewAccountEvidences = jsonData,
-                SessionId = sessionId,
-                IsRollBack = isRollBack, 
-                IsClearLog = isClearLog
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                db.ExecuteNonQuery(criteria);
-
-                if (string.IsNullOrEmpty(criteria.ErrorMessage))
-                {
-                    return new DBResult
-                    {
-                        ErrorCode = 0,
-                        ErrorMsg = criteria.ErrorMessage
-                    };
-                }
-            }
-
-            return new DBResult
-            {
-                ErrorCode = -1,
-                ErrorMsg = criteria.ErrorMessage
-            };
-        }
 
         public void InsertCustEvidenceFromFile(IEnumerable<ResultCheckAccountEvidenceModel> resultCheckCustEvidenceList, string fileName, int userId, string fileErrorTemplate, bool isOverwrite)
         {
@@ -405,16 +256,6 @@
 
                 SendMail(resultCheckCustEvidenceList, customerEvidences, userId, ex.Message);                
             }
-        }
-
-        private void LogError(string fileName, int userId, string error, string jsonData, string rollBackStatus, Exception ex = null)
-        {
-            var errorMessage = string.Format("CTS - Import file name: {0} - userId: {1} - import error: {2} - {4} Content: {3}"
-                                                       , fileName, userId, error, jsonData, rollBackStatus);
-            if (ex == null)
-                LogService.Error(errorMessage);
-            else
-                LogService.Error(errorMessage, ex);
         }
 
         private void SendMail(IEnumerable<ResultCheckAccountEvidenceModel> accountEvidenceCheckedList

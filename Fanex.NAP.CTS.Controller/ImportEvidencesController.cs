@@ -164,15 +164,6 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private void InsertAccountEvidence(string fileName, int userId, IEnumerable<ResultCheckAccountEvidenceModel> resultCheckAccountEvidenceList, bool isOverride)
-        {
-            Task.Run(() =>
-            {
-                var template = Server.MapPath(ImportTemplate);
-                _importEvidencesService.InsertAccountEvidence(resultCheckAccountEvidenceList, fileName, userId, template, isOverride);
-            });
-        }
-
         private void InsertCustomerEvidence(string fileName, int userId, IEnumerable<ResultCheckAccountEvidenceModel> resultCheckAccountEvidenceList, bool isOverride)
         {
             Task.Run(() =>

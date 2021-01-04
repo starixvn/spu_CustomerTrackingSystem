@@ -32,9 +32,7 @@
         private readonly IEvidenceService _evidenceService;
         private readonly ICustomerEvidenceService _custEvidenceService;
         private readonly IAssociatedAccountService _associationService;
-        private readonly ISyncCustomerToMainDbService _syncToMainDbService;
         private readonly IProblemAccountMonitorService _problemAccountMonitorService;
-        private readonly IClassifyCustomerService _classifyCustomerService;
         private readonly ICategoryService _categoryService;
         private readonly ICustomerClassifyService _customerClassifyService;
         private readonly IPushDataToExternalService _pushDataToExternalService;
@@ -48,9 +46,7 @@
             _evidenceService = new EvidenceService();
             _associationService = new AssociatedAccountService();
             _custEvidenceService = new CustomerEvidenceService();
-            _syncToMainDbService = new SyncCustomerToMainDbService();
             _problemAccountMonitorService = new ProblemAccountMonitorService();
-            _classifyCustomerService = new ClassifyCustomerService();
             _categoryService = new CategoryService();
             _customerClassifyService = new CustomerClassifyService();
             _pushDataToExternalService = new PushDataToExternalService();
@@ -508,17 +504,6 @@
             {
                 LogService.Error("Get Customer Class's Categories exception: " + ex.Message);
                 return Json(new List<CategoryCustomerClassModel>());
-            }
-        }
-
-        private void ClassifyCustomerGeneral(string custIds)
-        {
-            var custWithoutEvidence = _syncToMainDbService.GetLatestEvidenceCategory(custIds, true, true)
-                .Where(c => c.CategoryIdMapping == -1);
-
-            if (custWithoutEvidence.Any())
-            {
-                _classifyCustomerService.ClassifyCustomerGeneralCategoryDaily(string.Join(",", custWithoutEvidence.Select(cust => cust.CustID)));
             }
         }
     }

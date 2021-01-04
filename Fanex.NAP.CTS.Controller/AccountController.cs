@@ -42,7 +42,6 @@
         private readonly ITransactionService _transService;
         private readonly ISubscriberAssignmentService _subscriberAssignmentService;
         private readonly ICustomerEvidenceService _customerEvidenceService;    
-        private readonly ISyncCustomerToMainDbService _syncToMainDbService;
         private readonly ICustomerClassifyService _customerClassifyService;
         private readonly IPushDataToExternalService _pushDataToExternalService;
 
@@ -55,7 +54,6 @@
             _subscriberAssignmentService = new SubscriberAssignmentService();
             _transService = new TransactionService();
             _customerEvidenceService = new CustomerEvidenceService();
-            _syncToMainDbService = new SyncCustomerToMainDbService();
             _customerClassifyService = new CustomerClassifyService();
             _pushDataToExternalService = new PushDataToExternalService();
         }
