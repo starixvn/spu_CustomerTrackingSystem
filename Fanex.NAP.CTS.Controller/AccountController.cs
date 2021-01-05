@@ -804,7 +804,7 @@
                 if (syncResult.ErrorCode == 0)
                 {
                     // Rescan Problem Account & Normal Account
-                    _customerClassifyService.RescanCustomerClassify(syncCustIds.ToList());                   
+                    _customerClassifyService.RescanCustomerClassify(syncCustIds.ToList(), true, true);
                 }
 
                 var associatedAccountList = _customerEvidenceService.GetRemoveEvidenceAssociatedAccounts(
@@ -1212,8 +1212,8 @@
                         var custIds = new List<int>() { custIdInt };
 
                         // Rescan Problem Account & Normal Account
-                        _customerClassifyService.RescanCustomerClassify(custIds);
-                    }                    
+                        _customerClassifyService.RescanCustomerClassify(custIds, true, true);
+                    }
                 }                
             }
             else

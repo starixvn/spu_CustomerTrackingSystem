@@ -444,15 +444,19 @@
         {
             try
             {
-                LogService.Info($"CTS Portal API - Called Remove Problem Account API - Start {custIds}");
+                var isWriteLogInfo = ConfigSettings.IsWriteLogInfo;
+
+                if (isWriteLogInfo)
+                    LogService.Info($"CTS Portal API - RemoveProblemAccounts endpoint - start {custIds}");
 
                 var output = _problemAccountMonitorService.UpdateRemovedProblemAccountToCTS(custIds);
 
                 if (string.IsNullOrEmpty(output.ErrorMessage) && output.CustIds != null && output.CustIds.Any())
                 {
-                    Thread.Sleep(2000);
+                    if (isWriteLogInfo)
+                        LogService.Info($"CTS Portal API - UpdateRemovedProblemAccountToCTS successful custIds:  {JsonConvert.SerializeObject(output.CustIds)}");
 
-                    _customerClassifyService.RescanCustomerClassify(output.CustIds.ToList());
+                    _customerClassifyService.RescanCustomerClassify(output.CustIds.ToList(), false, true);
                 }
                 else if (!string.IsNullOrEmpty(output.ErrorMessage))
                 {
@@ -460,7 +464,8 @@
                     return new ApiResultModel { ErrorMessage = string.Empty, StatusMessage = "fail" };
                 }
 
-                LogService.Info($"CTS Portal API - Called Remove Problem Account API - End");
+                if (isWriteLogInfo)
+                    LogService.Info($"CTS Portal API - RemoveProblemAccounts endpoint - end");
 
                 return new ApiResultModel {
                     ErrorMessage = string.Empty,
@@ -469,7 +474,7 @@
             }
             catch (Exception ex)
             {
-                LogService.Error($"CTS Portal API - Remove Problem Account API - Exception: {ex.Message} - List custIds: {custIds}.", ex);
+                LogService.Error($"CTS Portal API - RemoveProblemAccounts endpoint - Exception: {ex.Message} - List custIds: {custIds}.", ex);
 
                 return new ApiResultModel
                 {

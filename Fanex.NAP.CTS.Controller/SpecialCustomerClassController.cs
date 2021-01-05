@@ -102,8 +102,6 @@
                             // Update IsAppliedCC = 1 in CTS
                             _customerClassifyService.UpdateAppliedCustomerClassification(jsonUpdateApplyCCs);
                         }
-
-                        _pushDataToExternalService.PushCustomerClassificationToSoon88(custs);
                     }
                 }
             }
@@ -126,7 +124,7 @@
             {
                 var custIdList = new List<int> { custID };
 
-                _customerClassifyService.RescanCustomerClassify(custIdList);
+                _customerClassifyService.RescanCustomerClassify(custIdList, true, true);
             }
 
             return Json(resultRemoveToCTS, JsonRequestBehavior.AllowGet);
