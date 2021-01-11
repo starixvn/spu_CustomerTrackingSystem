@@ -218,7 +218,8 @@
 
             var criteria = new InsertProblemAccountCriteria
             {
-                ProblemAccountJson = JsonConvert.SerializeObject(removedProblemAccounts)
+                ProblemAccountJson = JsonConvert.SerializeObject(removedProblemAccounts),
+                IsRescan = false
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))

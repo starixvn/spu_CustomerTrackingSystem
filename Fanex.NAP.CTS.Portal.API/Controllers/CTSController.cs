@@ -93,7 +93,7 @@
                 {
                     var syncCustIds = Enumerable.Empty<int>();
 
-                    var syncResult = _accountService.SyncCustEvidenceToCategory(JsonConvert.SerializeObject(result.Eivdences), out syncCustIds);
+                    var syncResult = _accountService.SyncCustEvidenceToCategory(JsonConvert.SerializeObject(result.Eivdences), false, out syncCustIds);
 
                     if (syncResult.ErrorCode == 0 && syncCustIds != null && syncCustIds.Any())
                     {
@@ -202,7 +202,7 @@
                 {
                     var syncCustIds = Enumerable.Empty<int>();
 
-                    var syncResult = _accountService.SyncCustEvidenceToCategory(JsonConvert.SerializeObject(result.Eivdences), out syncCustIds);
+                    var syncResult = _accountService.SyncCustEvidenceToCategory(JsonConvert.SerializeObject(result.Eivdences), false, out syncCustIds);
 
                     if (syncResult.ErrorCode == 0 && syncCustIds != null && syncCustIds.Any())
                     {

@@ -747,7 +747,7 @@
                 var syncCustIds = Enumerable.Empty<int>();
                 var custEvidenceJson = JsonConvert.SerializeObject(objects);
                 // Sync Evidence to Category
-                var syncResult =_accountService.SyncCustEvidenceToCategory(custEvidenceJson, out syncCustIds);
+                var syncResult =_accountService.SyncCustEvidenceToCategory(custEvidenceJson, false, out syncCustIds);
 
                 if (syncResult.ErrorCode == 0)
                 {
@@ -799,7 +799,7 @@
                 var custEvidenceJson = JsonConvert.SerializeObject(objects);
 
                 // Sync Evidence to Category
-                var syncResult = _accountService.SyncCustEvidenceToCategory(custEvidenceJson, out syncCustIds);
+                var syncResult = _accountService.SyncCustEvidenceToCategory(custEvidenceJson, false, out syncCustIds);
 
                 if (syncResult.ErrorCode == 0)
                 {

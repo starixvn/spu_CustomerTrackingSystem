@@ -734,13 +734,14 @@
             }
         }
 
-        public DBResult SyncCustEvidenceToCategory(string custEvidencesJson, out IEnumerable<int> custIds)
+        public DBResult SyncCustEvidenceToCategory(string custEvidencesJson, bool isRescan, out IEnumerable<int> custIds)
         {
             custIds = new List<int>();
 
             var criteria = new CustEvidenceSyncToCategoryCriteria
             {
-                CustEvidencesJson = custEvidencesJson
+                CustEvidencesJson = custEvidencesJson,
+                IsRescan = isRescan
             };
 
             try

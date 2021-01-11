@@ -109,7 +109,7 @@
 
                 foreach (var evidences in evidencesChunk)
                 {
-                    custIds.AddRange(SyncCustomerEvidenceToCategory(JsonConvert.SerializeObject(evidences)));
+                    custIds.AddRange(SyncCustomerEvidenceToCategory(JsonConvert.SerializeObject(evidences), true));
                 }
 
                 return new InsertCategoryResultModel { ErrorMessage = string.Empty, CustIds = custIds };
@@ -122,7 +122,7 @@
             }
         }
 
-        private List<int> SyncCustomerEvidenceToCategory(string custEvidencesJson)
+        private List<int> SyncCustomerEvidenceToCategory(string custEvidencesJson, bool isRescan)
         {
             var custIds = new List<int>();
             var repository = new DynamicRepository();
@@ -134,7 +134,8 @@
 
             var criteria = new CustEvidenceSyncToCategoryCriteria
             {
-                CustEvidencesJson = custEvidencesJson
+                CustEvidencesJson = custEvidencesJson,
+                IsRescan = isRescan
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -242,7 +243,7 @@
                 {
                     var objPA = problemAccs.Select(x => new { CustId = x.CustID, CategoryId = x.ReasonID });
 
-                    var result = InsertProblemAccount(JsonConvert.SerializeObject(objPA));
+                    var result = InsertProblemAccount(JsonConvert.SerializeObject(objPA), true);
 
                     custIds.AddRange(result);
                 }
@@ -257,7 +258,7 @@
             }
         }
 
-        private List<int> InsertProblemAccount(string problemAccountJson)
+        private List<int> InsertProblemAccount(string problemAccountJson, bool isRescan)
         {
             var repository = new DynamicRepository();
             var custIds = new List<int>();
@@ -269,7 +270,8 @@
 
             var criteria = new InsertProblemAccountCriteria
             {
-                ProblemAccountJson = problemAccountJson
+                ProblemAccountJson = problemAccountJson,
+                IsRescan = isRescan
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
