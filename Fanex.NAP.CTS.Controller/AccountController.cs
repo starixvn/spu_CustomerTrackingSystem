@@ -1017,7 +1017,7 @@
                         IsProblemAccount = x.CategoryType == 2
                     }).ToList();
 
-                isVVip = categoryList.Where(x => x.CategoryName.Equals("VVIP")).Count() > 0;
+                isVVip = categoryList.Where(x => x.CategoryName.Equals("VVIP")).Any();
             }
 
             var classificationHistory = _accountService.GetCustomerClassificationHistory(custId);
@@ -1053,58 +1053,36 @@
 
         private string GetReason(CustomerClassificationHistoryModel cc)
         {
-            var reason = "<div>";
-            reason += "<span>" + cc.SourceTypeName + "</span><br>";
+            var reason = $"<div><span> { cc.SourceTypeName } </span><br>";            
+
+            var margin = Math.Round(cc.Margin, 3);
+            var winlost = Math.Round(cc.Winloss, 3);
+            var turnOver = Math.Round(cc.Margin, 3);
+            var betCount = cc.BetCount;
+            var activeDays = cc.ActiveDays;
+            var last7DayMargin = Math.Round(cc.LastXDaysMargin, 3);
+            var winlost20Days = Math.Round(cc.ProbationPeriodWinloss, 3);
 
             switch (cc.CategoryID)
             {
-                case (int)ClassificationSourceType.NormalAccount:
-                    reason += "Margin: " + Math.Round(cc.Margin, 3)
-                        + " - Bet Count" + cc.BetCount;
+                case (int)ClassificationSourceType.NormalAccount:                  
+                    reason += $"Margin: {margin} - Bet Count: {betCount}";
                     break;
-                case (int)ClassificationSourceType.VIP:
-                    reason += "Margin: " + Math.Round(cc.Margin, 3)
-                        + " - Turn Over: " + Math.Round(cc.TurnOver, 3)
-                        + " - Active Date: " + cc.ActiveDays
-                        + " - Bet Count: " + cc.BetCount;
+                case (int)ClassificationSourceType.VIP:                    
+                    reason += $"Margin: {margin} - Turn Over: {turnOver} - Active Days: {activeDays} - Bet Count: {betCount}";
                     break;
                 case (int)ClassificationSourceType.Probation:
                     if (cc.ItemID == 5)
-                    {
-                        reason += "Margin: " + Math.Round(cc.Margin, 3)
-                           + " - Win Loss: " + Math.Round(cc.Winloss, 3)
-                           + " - Bet Count: " + cc.BetCount
-                           + " - Last 7 day's Margin: " + Math.Round(cc.LastXDaysMargin, 3)
-                           + " - Total WinLoss(20 days): " + Math.Round(cc.ProbationPeriodWinloss, 3);
-                    }
+                        reason += $"Margin: {margin} - Win Lost: {winlost} - Bet Count: {betCount} - Last 7 day's Margin: {last7DayMargin} - WinLost(20 days): {winlost20Days}";
                     else
-                    {
-                        reason += "Margin: " + Math.Round(cc.Margin, 3);
-                    }                   
+                        reason += $"Margin: {margin}";
                     break;
                 case (int)ClassificationSourceType.SmartPunter:
-                    if (cc.ItemID == 4)
-                    {
-                        reason += "Margin: " + Math.Round(cc.Margin, 3)
-                           + " - Win Loss: " + Math.Round(cc.Winloss, 3)
-                           + " - Bet Count: " + cc.BetCount
-                           + " - Last 7 day's Margin: " + Math.Round(cc.LastXDaysMargin, 3)
-                           + " - Total WinLoss(20 days): " + Math.Round(cc.ProbationPeriodWinloss, 3);
-                    }
-                    else
-                    {
-                        reason += "Margin: " + Math.Round(cc.Margin, 3)
-                            + " - Turn Over: " + cc.TurnOver
-                            + " - Active Date: " + cc.ActiveDays
-                            + " - Bet Count: " + cc.BetCount;
-                    }
-                    break;
                 case (int)ClassificationSourceType.HighRiskPunter:
-                    reason += "Margin: " + Math.Round(cc.Margin, 3)
-                        + " - Win Loss: " + Math.Round(cc.Winloss, 3)
-                        + " - Bet Count: " + cc.BetCount
-                        + " - Last 7 day's Margin: " + Math.Round(cc.LastXDaysMargin, 3)
-                        + " - Total WinLoss(20 days): " + Math.Round(cc.ProbationPeriodWinloss, 3);
+                    if (cc.ItemID == 4)
+                        reason += $"Margin: {margin} - Win Lost: {winlost} - Bet Count: {betCount} - Last 7 day's Margin: {last7DayMargin} - WinLost(20 days): {winlost20Days}";
+                    else
+                        reason += $"Margin: {margin} - Win Lost: {winlost} - Bet Count: {betCount}";
                     break;
                 default:
                     break;
