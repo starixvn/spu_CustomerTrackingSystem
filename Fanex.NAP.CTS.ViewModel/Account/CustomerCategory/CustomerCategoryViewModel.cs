@@ -2,6 +2,8 @@
 {    
     public class CustomerCategoryViewModel
     {
+        public int CategoryId { get; set; }
+
         public int CategoryType { get; set; }        
 
         public string CategoryName { get; set; }

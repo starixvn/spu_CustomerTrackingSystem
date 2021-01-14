@@ -326,7 +326,7 @@
 
         for (let i = 0; i < defaultNormalCategoryList.length; i++) {
             data.map(function (x) {
-                let isEquals = x.CategoryName === defaultNormalCategoryList[i].name;
+                let isEquals = x.CategoryId === defaultNormalCategoryList[i].id;
                 if (isEquals) {
                     let classIconColor = defaultNormalCategoryList[i].cssClass;
                     
@@ -383,13 +383,13 @@
     function GetNormalCategoryList() {
         var list = [];
 
-        list.push({ 'name': 'High Risk Punter', 'cssClass': 'circle bg-yellow', 'indexColor': 2 });
-        list.push({ 'name': 'Smart Punter', 'cssClass': 'circle bg-yellow', 'indexColor': 2 });
-        list.push({ 'name': 'Probation', 'cssClass': 'circle bg-yellow', 'indexColor': 2 });
-        list.push({ 'name': 'Normal Account', 'cssClass': 'circle bg-green', 'indexColor': 1 });
-        list.push({ 'name': 'VVIP', 'cssClass': 'circle bg-green', 'indexColor': 1 });
-        list.push({ 'name': 'VIP', 'cssClass': 'circle bg-green', 'indexColor': 1 });
-        list.push({ 'name': 'New Member', 'cssClass': 'circle bg-green', 'indexColor': 1 });
+        list.push({ 'id': 204, 'name': 'High Risk Punter', 'cssClass': 'circle bg-yellow', 'indexColor': 2 });
+        list.push({ 'id': 203, 'name': 'Smart Punter', 'cssClass': 'circle bg-yellow', 'indexColor': 2 });
+        list.push({ 'id': 206, 'name': 'Probation', 'cssClass': 'circle bg-yellow', 'indexColor': 2 });
+        list.push({ 'id': 202, 'name': 'Normal Account', 'cssClass': 'circle bg-green', 'indexColor': 1 });
+        list.push({ 'id': 213, 'name': 'VVIP', 'cssClass': 'circle bg-green', 'indexColor': 1 });
+        list.push({ 'id': 205, 'name': 'VIP', 'cssClass': 'circle bg-green', 'indexColor': 1 });
+        list.push({ 'id': 201, 'name': 'New Member', 'cssClass': 'circle bg-green', 'indexColor': 1 });
 
         return list;
     }   

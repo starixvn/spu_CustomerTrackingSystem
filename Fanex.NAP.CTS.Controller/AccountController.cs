@@ -1012,6 +1012,7 @@
                 categoryList = classification
                     .Select(x => new CustomerCategoryViewModel
                     {
+                        CategoryId = x.CategoryId,
                         CategoryType = x.CategoryType,
                         CategoryName = x.CategoryName != null ? x.CategoryName : string.Empty,
                         IsProblemAccount = x.CategoryType == 2
