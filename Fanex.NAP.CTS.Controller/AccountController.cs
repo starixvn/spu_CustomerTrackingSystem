@@ -1058,7 +1058,7 @@
 
             var margin = Math.Round(cc.Margin, 3);
             var winlost = Math.Round(cc.Winloss, 3);
-            var turnOver = Math.Round(cc.Margin, 3);
+            var turnOver = Math.Round(cc.TurnOver, 3);
             var betCount = cc.BetCount;
             var activeDays = cc.ActiveDays;
             var last7DayMargin = Math.Round(cc.LastXDaysMargin, 3);
