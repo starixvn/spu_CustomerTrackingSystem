@@ -5,4 +5,4 @@ MATCH (c)-[r:HAS_EVIDENCE]->(e:Evidence)
 WHERE ($EvidenceList[0] = -1 OR e.EvidenceID IN $EvidenceList)
 WITH DISTINCT c,r,e,level
 RETURN c.CustID AS Level0CustId, c.CustID AS CustId, e.EvidenceCode AS EvidenceCode, e.EvidenceName AS EvidenceName, level AS AssociatedLevel,r.CreatedDate AS CreatedDateInTicks
-LIMIT 5000
+LIMIT 500
