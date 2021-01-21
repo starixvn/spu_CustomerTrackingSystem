@@ -1039,14 +1039,14 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             z-index: 10;
         }
 
-        tbody tr:first-child {
-            td {
-                position: sticky;
-                position: -webkit-sticky;
-                top: 17.9rem;
-                z-index: 10;
-            }
-        }
+        //tbody tr:first-child {
+            //td {
+                //position: sticky;
+               // position: -webkit-sticky;
+                //top: 17.9rem;
+                //z-index: 10;
+           // }
+        //}
     }
 }
 

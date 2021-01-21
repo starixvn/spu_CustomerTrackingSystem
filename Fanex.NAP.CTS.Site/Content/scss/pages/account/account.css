@@ -1381,11 +1381,6 @@
     position: -webkit-sticky;
     top: 14.8rem;
     z-index: 10; }
-  #customer-category #customer-category-table tbody tr:first-child td {
-    position: sticky;
-    position: -webkit-sticky;
-    top: 17.9rem;
-    z-index: 10; }
 
 #trans_history {
   padding-top: 0; }
