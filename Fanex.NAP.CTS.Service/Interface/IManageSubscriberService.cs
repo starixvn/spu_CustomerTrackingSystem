@@ -12,6 +12,8 @@
 
         DBResult RemoveSubscriber(int subscriberID, long userId);
 
-        DBResult UpdateSubscriber(SubscriberUpdateModel subscriberInsertModel, long userId);
+        UpdateSubsciberResultModel UpdateSubscriber(SubscriberUpdateModel subscriberInsertModel, long userId);
+
+        void ReUpdateSubriberIDBySiteID(List<ReUpdateSubscribeBySiteIDModel> subSite);
     }
 }

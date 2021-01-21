@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
+    using Fanex.Logging;
     using Fanex.NAP.Core.Configuration;
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Service.Interface;
@@ -8,8 +9,12 @@
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.ManageSubscriber;
+    using Newtonsoft.Json;
+    using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
     using System.Web.Mvc;
 
     [NapSuperAuth]
@@ -71,10 +76,27 @@
 
             var result = _manageSubscriberService.UpdateSubscriber(subscriberInsertModel, CurrentSession.UserId);
 
+            Task.Run(() =>
+            {
+                try
+                {
+                    //Update all SubID for SiteID which having sub null
+                    if (result.Subscribers != null && result.Subscribers.Any())
+                    {
+                        _manageSubscriberService.ReUpdateSubriberIDBySiteID(result.Subscribers);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogService.Error($"Update Subscriber - Update SubId for Site having sub null exception {ex.Message} with Data: {JsonConvert.SerializeObject(result.Subscribers)}", ex);
+                }
+
+            });
+
             return Json(new
             {
-                result.ErrorCode,
-                result.ErrorMsg
+                result.Result.ErrorCode,
+                result.Result.ErrorMsg
             }, JsonRequestBehavior.AllowGet);
         }
 

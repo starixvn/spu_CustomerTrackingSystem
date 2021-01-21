@@ -36,8 +36,14 @@
             }
         }
 
-        public DBResult UpdateSubscriber(SubscriberUpdateModel subscriberInsertModel, long userId)
+        public UpdateSubsciberResultModel UpdateSubscriber(SubscriberUpdateModel subscriberInsertModel, long userId)
         {
+            var rs = new UpdateSubsciberResultModel
+            {
+                Subscribers = new List<ReUpdateSubscribeBySiteIDModel>(),
+                Result = new DBResult { ErrorCode = 0, ErrorMsg = string.Empty }
+            };
+
             var criteria = new SubscriberUpdateCriteria
             {
                 SubscriberName = subscriberInsertModel.SubscriberName,
@@ -54,33 +60,20 @@
             {
                 try
                 {
-                    db.ExecuteNonQuery(criteria);
+                    rs.Subscribers = db.Query<ReUpdateSubscribeBySiteIDModel>(criteria).ToList();
 
                     if (!string.IsNullOrEmpty(criteria.ErrorMessage))
                     {
-                        return new DBResult
-                        {
-                            ErrorCode = -1,
-                            ErrorMsg = criteria.ErrorMessage
-                        };
+                        rs.Result = new DBResult { ErrorCode = -1, ErrorMsg = criteria.ErrorMessage };
                     }
-                    else {
-                        return new DBResult
-                        {
-                            ErrorCode = 0,
-                            ErrorMsg = string.Empty
-                        };
-                    }
+
+                    return rs;
                 }
                 catch (Exception ex)
                 {
                     LogService.Error("CTS - Update Manage Subscriber throws exception: " + ex.Message, ex);
 
-                    return new DBResult
-                    {
-                        ErrorCode = -1,
-                        ErrorMsg = ex.Message
-                    };
+                    return rs;
                 }
             }
         }
@@ -126,6 +119,19 @@
                         ErrorMsg = ex.Message
                     };
                 }
+            }
+        }
+
+        public void ReUpdateSubriberIDBySiteID(List<ReUpdateSubscribeBySiteIDModel> subSite)
+        {
+            var criteria = new ReUpdateSubriberIdBySiteIdCriteira
+            {
+                SubsSiteJson = JsonConvert.SerializeObject(subSite)
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                db.ExecuteNonQuery(criteria);
             }
         }
     }

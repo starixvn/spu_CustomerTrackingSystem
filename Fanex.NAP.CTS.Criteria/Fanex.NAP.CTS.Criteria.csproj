@@ -70,6 +70,7 @@
     <Compile Include="CustomerClassify\UpdateAppliedCustomerClassificationCriteria.cs" />
     <Compile Include="ImportEvidences\InsertCustEvidenceFromFileCriteria.cs" />
     <Compile Include="AssociationReport\AssociationReportGetCategoriesCriteria.cs" />
+    <Compile Include="ManageSubscriber\ReUpdateSubriberIdBySiteIdCriteira.cs" />
     <Compile Include="ProbationManagement\GetAccountStaticStatusCriteria.cs" />
     <Compile Include="ProbationManagement\GetSubscriberCriteria.cs" />
     <Compile Include="ProbationManagement\UpdateProbationCategoryCriteria.cs" />
