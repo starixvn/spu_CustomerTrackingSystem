@@ -284,6 +284,12 @@
 
             statusList.Add(new AccountStaticStatusModel
             {
+                Ids = "1,11,2,3,4,12,13,14",
+                Name = "All"
+            });
+
+            statusList.Add(new AccountStaticStatusModel
+            {
                 Ids = "1,11", // 1:Open, 11:Active
                 Name = "Open"
             });
