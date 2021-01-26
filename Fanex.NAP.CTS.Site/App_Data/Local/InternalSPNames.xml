@@ -110,7 +110,7 @@
     <Setting Key="CTS_DC_Subscriber_GetDetails" SpName="CTS_DC_Subscriber_GetDetails" DbName="MySQL.CTS_DataCenter.Reporter"/>
     <Setting Key="CTS_DC_Subscriber_Remove" SpName="CTS_DC_Subscriber_Remove" DbName="MySQL.CTS_DataCenter.Admin"/>
     <Setting Key="CTS_DC_Subscriber_Update" SpName="CTS_DC_Subscriber_Update" DbName="MySQL.CTS_DataCenter.Admin"/>
-	<Setting Key="CTS_DC_CTSCustomer_UpdateSubsciberIDBySiteID" SpName="CTS_DC_CTSCustomer_UpdateSubsciberIDBySiteID" DbName="MySQL.CTS_DataCenter.Admin"/>
+	<Setting Key="CTS_DC_CTSCustomer_UpdateSubscriberIDBySiteID" SpName="CTS_DC_CTSCustomer_UpdateSubscriberIDBySiteID" DbName="MySQL.CTS_DataCenter.Admin"/>
   </Function>
 
   <Function name="Report">

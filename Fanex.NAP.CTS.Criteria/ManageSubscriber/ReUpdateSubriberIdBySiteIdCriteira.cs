@@ -9,7 +9,7 @@
         public string SubsSiteJson { get; set; }
 
         public override string GetSettingKey()
-            => "CTS_DC_CTSCustomer_UpdateSubsciberIDBySiteID";
+            => "CTS_DC_CTSCustomer_UpdateSubscriberIDBySiteID";
 
         public override bool IsValid()
             => true;
