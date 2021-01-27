@@ -88,7 +88,7 @@
                 }
                 catch (Exception ex)
                 {
-                    LogService.Error($"Update Subscriber - Update SubId for Site having sub null exception {ex.Message} with Data: {JsonConvert.SerializeObject(result.Subscribers)}", ex);
+                    LogService.Error($"Update Subscriber - Update SubId for Site exception {ex.Message} with Data: {JsonConvert.SerializeObject(result.Subscribers)}", ex);
                 }
 
             });
