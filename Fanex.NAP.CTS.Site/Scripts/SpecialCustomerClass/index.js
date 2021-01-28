@@ -93,7 +93,7 @@
             success: function (response) {
                 if (response.ErrorCode === 0) {
                     common.showSuccess('Remove the Customer Class successful');
-                    LoadGrid("");
+                    LoadGrid(domElements.txtSearchUsername.val());
                 }
                 else {
                     common.showError('Failed! ' + response.ErrorMsg);
@@ -152,7 +152,6 @@
                         if (response.ErrorCode === 0) {
                             common.showSuccess("Add the Customer Class successful");
                             domElements.divCustomerClass.dialog('close');
-                            LoadGrid("");
                         } else {
                             common.showError("Failed! " + response.ErrorMessage);
                         }
