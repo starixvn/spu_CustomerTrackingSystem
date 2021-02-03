@@ -1,9 +1,11 @@
 ﻿function ImportEvidences() {
     let dataTable;
     let isOverwriteEvidence = false;
+    let maxTags = 200;
     let domElements = {
         hdIsHostPermission: $('#hdIsHostPermission'),
         hdIsOverwritePermission: $('#hdIsOverwritePermission'),
+        tabs: $("#tabsDetail"),        
         spanFileName: $('#spanFileName'),
         inputFileUpload: $('#inputFileUpload'),
         btnBrowse: $('#btnBrowse'),
@@ -17,7 +19,11 @@
         btnImport: $('#btnImport'),
         btnResultValidationClose: $('#btnResultValidationClose'),
         overwriteCheckBox: $('#overwriteCheckbox'),
-        containerCheckBox: $('#containerCheckbox')
+        containerCheckBox: $('#containerCheckbox'),
+        spanAddUserName : $('#spanAddUserName'),
+        spanAddUserNameMaxTag : $('#spanAddUserNameMaxTag'),
+        spanAddChangeHidden : $('#spanAddChangeHidden'),
+        inputTagUsername : $('#inputTagUsername')
     };
 
     let isHostPermission = domElements.hdIsHostPermission.attr('IsHostPermission') === "True";
@@ -181,6 +187,140 @@
             isOverwriteEvidence = false;
     }
 
+    function InitInputTagUsername() {
+        domElements.spanAddUserNameMaxTag.text(maxTags);
+        domElements.spanAddChangeHidden.text("0");
+
+        function AddBorderTags() {
+            domElements.spanAddUserName.find('tags').addClass('ctrlA');
+            let allTags = domElements.spanAddUserName.find('tags tag.tagify__tag');
+            allTags.each(function (_, tag) {
+                $(tag).css('border', '1px solid #6187E7');
+            });
+        }
+
+        function ResetMaxTag() {
+            let currentTagsLength = domElements.spanAddUserName.find('tags tag').length;
+            if (currentTagsLength < maxTags)
+                domElements.spanAddUserNameMaxTag.text(maxTags - currentTagsLength + 1);
+        }
+
+        function EnableButtonAdd() {
+            let validTags = domElements.spanAddUserName.find('tags tag.valid');
+            let invalidDuplicatedTags = domElements.spanAddUserName.find('tags tag.invalid-duplicated');
+            let invalidUsernameTags = domElements.spanAddUserName.find('tags tag.invalid-username');
+            let notInvalid = invalidDuplicatedTags.length + invalidUsernameTags.length;
+            //if (notInvalid <= 1 && validTags.length > 1)
+                //btnSaveAssociation.prop('disabled', false);
+            //else
+                //btnSaveAssociation.prop('disabled', true);
+        }
+
+        function IsTextUnicode(text) {
+            var pattern = /^[\x20-\x7E]*$/;
+            return pattern.test(text);
+        }
+
+        function OnChangeTags(tagName, cssClass) {
+            let maxCountTags = parseInt(domElements.spanAddUserNameMaxTag.text());
+            let isTextUnicode = IsTextUnicode($(tagName.tag).text());
+
+            if (!isTextUnicode) {
+                domElements.inputTagUsername.tagify().data('tagify').removeTags(tagName.tag);
+            }
+            else if (maxCountTags > 0) {
+                let $tag = $(tagName.tag);
+                let textReplaced = $tag.text();
+                textReplaced = textReplaced.replace(new RegExp("'", 'g'), "").replace(new RegExp("\"", 'g'), "");
+                if (textReplaced.length > 50)
+                    textReplaced = textReplaced.substr(0, 50);
+                $tag.val(textReplaced);
+                $tag.attr('data-user-name', textReplaced);
+                $tag.prop('title', textReplaced);
+                $tag.find('span.tagify__tag-text').text(textReplaced);
+                $tag.addClass(cssClass);
+                let btnRemove = $tag.find('x');
+
+                btnRemove.on('click', function (e) {
+                    let currentTag = $(e.target).parent();
+
+                    ResetMaxTag();
+                    //ValidateManualAssociationMultiple(fromCTSCustid, currentTag.text().trim());
+                    EnableButtonAdd();
+                });
+
+                domElements.spanAddUserNameMaxTag.text(maxCountTags - 1);
+            } else {
+                domElements.inputTagUsername.tagify().data('tagify').removeTags(tagName.tag);
+            }
+            //btnSaveAssociation.prop('disabled', true);
+        }
+
+        domElements.inputTagUsername.tagify({
+            pattern: null,
+            delimiters: /\r?\n|\r| |,/,
+            keepInvalidTags: true,
+            skipInvalid: false,
+            callbacks: {},
+            addTagOnBlur: true,
+            duplicates: true,
+            editTags: 0,
+            whitelist: [],
+            blacklist: [],
+            maxTags: maxTags,
+            enforceWhitelist: false,
+            dropdown: {
+                position: "input",
+                enabled: 0
+            }
+        })
+            .off('add').on('add', function (_, tagName) {
+                OnChangeTags(tagName, 'valid');
+                domElements.spanAddChangeHidden.text("1");
+            })
+            .off('invalid').on('invalid', function (_, tagName) {
+                OnChangeTags(tagName, 'invalid-duplicated');
+                domElements.spanAddChangeHidden.text("1");
+            });
+
+        domElements.inputTagUsername.off('keydown').on('keydown', function () {
+            let keyCode = event.keyCode;
+
+            if (keyCode === 46) {
+                if (spanAddUserName.find('tags').hasClass('ctrlA')) {
+                    domElements.inputTagUsername.tagify().data('tagify').removeAllTags();
+                    domElements.spanAddUserNameMaxTag.text(maxTags);
+                    domElements.spanAddUserName.find('tags').removeClass('ctrlA');
+                }
+            }
+
+            if (event.ctrlKey) {
+                if (keyCode === 65 || keyCode === 97) {
+                    return AddBorderTags();
+                }
+            }
+
+        });
+
+        $(document).on('mouseup', function (e) {
+            let isOutSiteInput = !domElements.spanAddUserName.is(e.target) && domElements.spanAddUserName.has(e.target).length === 0;
+            let isTagsFocus = domElements.spanAddUserName.find('tags.tagify--focus').length > 0;
+            let isChange = domElements.spanAddChangeHidden.text();
+            if (isOutSiteInput && isTagsFocus || isChange === "1") {
+                domElements.spanAddUserName.addClass("loading-value");
+                setTimeout(() => {
+                    //ValidateManualAssociationMultiple("");
+                    domElements.spanAddUserName.removeClass("loading-value");
+                    domElements.spanAddChangeHidden.text("0");
+                }, 500);
+            }
+        });
+
+        domElements.inputTagUsername.tagify().data('tagify').removeAllTags();
+        domElements.spanAddUserName.find('tags').attr('tabindex', "1");
+        //btnSaveAssociation.prop('disabled', true);
+    }
+
     function Initial() {
         domElements.divNote.prop('hidden', false);
         domElements.divResultParseFile.prop('hidden', true);
@@ -214,6 +354,10 @@
         else {
             domElements.containerCheckBox.addClass('none-pointer');
         }
+
+        domElements.tabs.tabs();
+
+        InitInputTagUsername();
     }
 
     $(document).ready(function () {
