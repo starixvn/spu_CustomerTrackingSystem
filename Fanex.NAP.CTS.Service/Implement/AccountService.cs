@@ -100,15 +100,22 @@
             }
         }
 
-        public CustomerAssociationByCTSCustIdModel GetCustomerTotalAssociationByCTSCustId(long ctsCustId, string apiUrl)
+        public CustomerAssociationByCTSCustIdModel GetCustomerTotalAssociationByCTSCustId(long ctsCustId, string apiUrl, bool fromMySQL = false)
         {
-            var apiPath = string.Format(apiUrl, ctsCustId);
+            if(fromMySQL)
+            {
+                return new CustomerAssociationByCTSCustIdModel();
+            }
+            else
+            {
+                var apiPath = string.Format(apiUrl, ctsCustId);
 
-            var data = ApiHelper.Get<CustomerAssociationByCTSCustIdModel>(apiPath);
+                var data = ApiHelper.Get<CustomerAssociationByCTSCustIdModel>(apiPath);
 
-            Task.WhenAll(data);
+                Task.WhenAll(data);
 
-            return data.Result;
+                return data.Result;
+            }            
         }
 
         public List<CustomerEvidenceByCTSCustIdModel> GetCustomerEvidenceByCTSCustId(long ctsCustId)
@@ -250,25 +257,33 @@
             }
         }
 
-        public GraphAssociationPaging GetCustomerAssociationByGraph(string apiURL, long ctsCustId, int associationStatus, string accountStatusIds, string siteIds, int skipNumber, int takeNumber)
+        public GraphAssociationPaging GetCustomerAssociationByGraph(string apiURL, long ctsCustId, int associationStatus, string accountStatusIds, string siteIds, int skipNumber, int takeNumber, bool fromMySQL = false)
         {
             try
             {
-                var param = new
+                if(fromMySQL)
                 {
-                    ctsCustId,
-                    assStatus = associationStatus,
-                    siteIDs = siteIds,
-                    accountStatuses = accountStatusIds,
-                    takeRow = takeNumber,
-                    skipRow = skipNumber
-                };
+                    return new GraphAssociationPaging();
+                }
+                else
+                {
+                    var param = new
+                    {
+                        ctsCustId,
+                        assStatus = associationStatus,
+                        siteIDs = siteIds,
+                        accountStatuses = accountStatusIds,
+                        takeRow = takeNumber,
+                        skipRow = skipNumber
+                    };
 
-                var data = ApiHelper.Post<GraphAssociationPaging>(apiURL, param);
+                    var data = ApiHelper.Post<GraphAssociationPaging>(apiURL, param);
 
-                Task.WhenAll(data);
+                    Task.WhenAll(data);
 
-                return data.Result ?? new GraphAssociationPaging();
+                    return data.Result ?? new GraphAssociationPaging();
+                }
+                
             }
             catch (Exception ex)
             {

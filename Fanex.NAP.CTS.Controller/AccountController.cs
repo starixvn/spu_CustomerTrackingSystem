@@ -5,7 +5,8 @@
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Web.Attribute;
-    using Fanex.NAP.CTS.Core.Extentions;    
+    using Fanex.NAP.CTS.Core.Extentions;
+    using Fanex.NAP.CTS.Core.Helpers;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria.Account;
     using Fanex.NAP.CTS.Model;
@@ -177,10 +178,10 @@
         [HttpPost]
         public ActionResult GetCustomerTotalAssociationByCTSCustId(long ctsCustId)
         {
-            // LogService.Info("GetCustomerTotalAssociationByCTSCustId - Before: " + DateTime.Now.ToString());
-            var result = _accountService.GetCustomerTotalAssociationByCTSCustId(ctsCustId, ConfigSettings.GetStatisticAssociation);
-            // LogService.Info("GetCustomerTotalAssociationByCTSCustId - After: " + DateTime.Now.ToString());
+            var getAssociationFromMySQL = AppSettings.Get("GetAssociationFromMySQL") == "1";
 
+            var result = _accountService.GetCustomerTotalAssociationByCTSCustId(ctsCustId, ConfigSettings.GetStatisticAssociation, getAssociationFromMySQL);
+            
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -309,6 +310,7 @@
             var take = model.length;
             var skip = model.start;
             var totalItem = 0;
+            model.IsDirect = true;
 
             var result = new List<CustomerAssociationByAccountDetailViewModel>();
 
@@ -319,8 +321,10 @@
 
             var directAssociationUrl = GetDirectAssociationUrl(model.AssociationType);
 
+            var getAssociationFromMySql = AppSettings.Get("GetAssociationFromMySQL") == "1";
+
             var graphAssociationPage = model.IsDirect
-                ? _accountService.GetCustomerAssociationByGraph(directAssociationUrl, model.CTSCustId, model.AssociationStatus, model.AccountStatusIds, model.SiteIds, skip, take)
+                ? _accountService.GetCustomerAssociationByGraph(directAssociationUrl, model.CTSCustId, model.AssociationStatus, model.AccountStatusIds, model.SiteIds, skip, take, getAssociationFromMySql)
                 : new GraphAssociationPaging();
 
             if (graphAssociationPage != null && graphAssociationPage.AssociationList != null && graphAssociationPage.AssociationList.Any())
@@ -328,13 +332,7 @@
                 totalItem = graphAssociationPage.TotalItems;
                 var getAllSubscribers = _subscriberAssignmentService.GetSubscribers(0);
 
-                var customerAssociation = graphAssociationPage.AssociationList;
-
-                var custIds = string.Join(",", customerAssociation.Select(x => x.CustId));
-
-                //var getStatusByCustIds = _accountService.GetCustomerGeneralStatus(custIds);
-
-                //customerAssociation = _accountService.FilterCustomerAssociationByStatus(string.Empty, customerAssociation, getStatusByCustIds);
+                var customerAssociation = graphAssociationPage.AssociationList;                
 
                 customerAssociation = _accountService.FilterCustomerAssociationByAssociationType(model.AssociationType, customerAssociation);
 
