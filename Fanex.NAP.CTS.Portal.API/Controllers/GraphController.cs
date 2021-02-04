@@ -173,6 +173,39 @@
             }
         }
 
+        [System.Web.Http.AcceptVerbs("GetDirectAssociationByAI")]
+        [HttpPost]
+        public GraphAssociationPaging GetDirectAssociationByAI([FromBody] DirectAssociationParameterModel paras)
+        {
+            try
+            {
+                var result = DbSessionFactory.Execute<GraphAssociationPaging>("GetAssociationOneLevelByCustIdByAI", new
+                {
+                    CTSCustID = paras.ctsCustId,
+                    AssStatus = paras.assStatus,
+                    IsAssReport = 0,
+                    AssCreatedFrom = DateTime.MinValue,
+                    AssCreatedTo = DateTime.MinValue,
+                    AccountStatuses = paras.accountStatuses.Split(',').Select(int.Parse),
+                    SiteIDs = paras.siteIDs.Split(',').Select(int.Parse),
+                    Skip = paras.skipRow,
+                    Pagesize = paras.takeRow
+                }).Data.FirstOrDefault();
+
+                if (result == null)
+                {
+                    return new GraphAssociationPaging() { AssociationList = null, TotalItems = 0 };
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("GetDirectAssociationByAI failed: " + ex.Message + ex.StackTrace);
+                throw;
+            }
+        }
+
         [System.Web.Http.AcceptVerbs("GetDirectAssociationMultiCust")]
         [HttpPost]
         public IEnumerable<GraphDirectAssociationModel> GetDirectAssociationMultiCust([FromBody] List<long> ctsCustIds)
