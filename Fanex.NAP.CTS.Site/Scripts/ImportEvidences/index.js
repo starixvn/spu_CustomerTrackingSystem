@@ -20,10 +20,12 @@
         btnResultValidationClose: $('#btnResultValidationClose'),
         overwriteCheckBox: $('#overwriteCheckbox'),
         containerCheckBox: $('#containerCheckbox'),
+        divAddUserName: $('#divAddUserName'),
         spanAddUserName : $('#spanAddUserName'),
         spanAddUserNameMaxTag : $('#spanAddUserNameMaxTag'),
         spanAddChangeHidden : $('#spanAddChangeHidden'),
-        inputTagUsername : $('#inputTagUsername')
+        inputTagUsername: $('#inputTagUsername'),
+        btnRemoveEvidence: $('#btnRemoveEvidence')
     };
 
     let isHostPermission = domElements.hdIsHostPermission.attr('IsHostPermission') === "True";
@@ -187,6 +189,111 @@
             isOverwriteEvidence = false;
     }
 
+    function ValidateAcountsForRemoveEvidence(textTagRemove) {
+        let userNameList = GetInputUserName(textTagRemove);
+
+        if (userNameList !== '') {
+            let params = {};
+            params.userNameList = userNameList;
+
+            $.ajax(common.modifyRelativeUrl('ImportEvidences/ValidateAccountsForRemoveEvidences'), {
+                type: 'POST',
+                data: params,
+                beforeSend: function () {
+                    domElements.spanAddUserName.addClass('loading-value');
+                },
+                success: function (response) {
+                    if (response.IsException)
+                        BindExceptionValidatedAccount();
+                    else
+                        BindResultValidatedAccounts(response);
+                },
+                complete: function () {
+                    domElements.spanAddUserName.removeClass("loading-value");
+                },
+                error: function (errMsg) {
+                    console.log(errMsg);
+                }
+            });
+        }
+    }
+
+    function GetInputUserName(textTagRemove) {
+        let userNameList = [];
+        let tags = domElements.spanAddUserName.find('tags tag');
+
+        tags.map(function (_, ele) {
+            let text = $(ele).text().trim();
+            if (textTagRemove !== "" && text === textTagRemove) {
+                textTagRemove = "";
+                return;
+            }
+            userNameList.push(text);
+        });
+
+        return userNameList.join();
+    }
+
+    function BindExceptionValidatedAccount() {
+        spanAddUserName.find('tags tag').each(function (_, tag) {
+            $(tag).removeClass('valid').addClass('invalid-username');
+        });
+    }
+
+    function BindResultValidatedAccounts(data) {
+        domElements.spanAddUserName.find('tags tag').each(function (_, tag) {
+            $(tag).removeClass('invalid-username').removeClass('invalid-duplicated').addClass('valid');
+        });
+
+        data.UserNameInvalidList.map(function (x) {
+            let usernameEqual = $("tag[data-user-name='" + x + "']");
+            if (usernameEqual !== undefined) {
+                usernameEqual.removeClass('valid').addClass('invalid-username');
+            }
+        });
+
+        data.UserNameDuplicatedList.map(function (x) {
+            let usernameEqual = $("tag[data-user-name='" + x + "']");
+            if (usernameEqual !== undefined) {
+                usernameEqual.removeClass('valid').addClass('invalid-duplicated');
+            }
+        });
+
+        let isEnableAdd = data.UserNameInvalidList.length === 0 && data.UserNameDuplicatedList.length === 0;
+
+        domElements.btnRemoveEvidence.prop('disabled', !isEnableAdd);
+    }    
+
+    function InsertAccountsForRemoveEvidences() {
+        let userNameList = GetInputUserName();
+
+        if (userNameList !== '') {
+            let params = {};
+            params.userNameList = userNameList;
+
+            $.ajax(common.modifyRelativeUrl('ImportEvidences/InsertAccountsForRemoveEvidences'), {
+                type: 'POST',
+                data: params,
+                beforeSend: function () {
+                    domElements.divAddUserName.addClass("loading-block");
+                },
+                success: function (response) {
+                    if (response.ErrorCode === 0) {
+                        common.showSuccess("Add association successful");
+                    } else {
+                        BindResultValidatedAccounts(response.ValidatedResult);
+                    }
+                },
+                complete: function () {
+                    domElements.divAddUserName.removeClass("loading-block");
+                },
+                error: function (errMsg) {
+                    console.log(errMsg);
+                }
+            });
+        }
+    }
+
     function InitInputTagUsername() {
         domElements.spanAddUserNameMaxTag.text(maxTags);
         domElements.spanAddChangeHidden.text("0");
@@ -210,10 +317,9 @@
             let invalidDuplicatedTags = domElements.spanAddUserName.find('tags tag.invalid-duplicated');
             let invalidUsernameTags = domElements.spanAddUserName.find('tags tag.invalid-username');
             let notInvalid = invalidDuplicatedTags.length + invalidUsernameTags.length;
-            //if (notInvalid <= 1 && validTags.length > 1)
-                //btnSaveAssociation.prop('disabled', false);
-            //else
-                //btnSaveAssociation.prop('disabled', true);
+            let disabled = notInvalid <= 1 && validTags.length > 1;
+
+            domElements.btnRemoveEvidence.prop('disabled', !disabled);
         }
 
         function IsTextUnicode(text) {
@@ -245,7 +351,9 @@
                     let currentTag = $(e.target).parent();
 
                     ResetMaxTag();
-                    //ValidateManualAssociationMultiple(fromCTSCustid, currentTag.text().trim());
+
+                    ValidateAcountsForRemoveEvidence(currentTag.text().trim());
+
                     EnableButtonAdd();
                 });
 
@@ -253,7 +361,8 @@
             } else {
                 domElements.inputTagUsername.tagify().data('tagify').removeTags(tagName.tag);
             }
-            //btnSaveAssociation.prop('disabled', true);
+
+            domElements.btnRemoveEvidence.prop('disabled', true);
         }
 
         domElements.inputTagUsername.tagify({
@@ -287,7 +396,7 @@
             let keyCode = event.keyCode;
 
             if (keyCode === 46) {
-                if (spanAddUserName.find('tags').hasClass('ctrlA')) {
+                if (domElements.spanAddUserName.find('tags').hasClass('ctrlA')) {
                     domElements.inputTagUsername.tagify().data('tagify').removeAllTags();
                     domElements.spanAddUserNameMaxTag.text(maxTags);
                     domElements.spanAddUserName.find('tags').removeClass('ctrlA');
@@ -309,7 +418,7 @@
             if (isOutSiteInput && isTagsFocus || isChange === "1") {
                 domElements.spanAddUserName.addClass("loading-value");
                 setTimeout(() => {
-                    //ValidateManualAssociationMultiple("");
+                    ValidateAcountsForRemoveEvidence("");
                     domElements.spanAddUserName.removeClass("loading-value");
                     domElements.spanAddChangeHidden.text("0");
                 }, 500);
@@ -318,7 +427,7 @@
 
         domElements.inputTagUsername.tagify().data('tagify').removeAllTags();
         domElements.spanAddUserName.find('tags').attr('tabindex', "1");
-        //btnSaveAssociation.prop('disabled', true);
+        domElements.btnRemoveEvidence.prop('disabled', true);
     }
 
     function Initial() {
@@ -328,7 +437,6 @@
         domElements.divValidation.prop('hidden', true);        
         domElements.btnImport.prop('disabled', !isHostPermission);
         domElements.overwriteCheckBox.prop('disabled', !isEnableOverwriteButton);
-
 
         domElements.btnDownloadTemplate.on('click', function () {
             common.downloadFile(common.modifyRelativeUrl('ImportEvidences/DownloadTemplateExcel'), '0');
@@ -358,6 +466,14 @@
         domElements.tabs.tabs();
 
         InitInputTagUsername();
+
+        domElements.btnRemoveEvidence.on('click', function () {
+            let msgConfirm = "<div class='popup - content'>Are you sure about this? For confirm this action, all evidences from account in the list will be <strong style='color: red'> REMOVED </strong></div>";
+
+            common.showConfirmation(msgConfirm,
+                () => InsertAccountsForRemoveEvidences());
+            }
+        );
     }
 
     $(document).ready(function () {

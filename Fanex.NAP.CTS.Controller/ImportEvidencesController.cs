@@ -172,5 +172,33 @@
                 _importEvidencesService.InsertCustEvidenceFromFile(resultCheckAccountEvidenceList, fileName, userId, template, isOverride);
             });
         }
+
+        [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        public ActionResult ValidateAccountsForRemoveEvidences(string userNameList)
+        {
+            var viewModel = new ValidatedAccountsForRemoveEvidenceViewModel
+            {
+                IsException = false,
+                UserNameInvalidList = new List<string>(),
+                UserNameDuplicatedList = new List<string>()
+            };
+
+            return Json(viewModel, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        public ActionResult InsertAccountsForRemoveEvidences(string userNameList)
+        {
+            var insertResult = new InsertAccountsForRemoveEvidenceViewModel
+            {
+                ErrorCode = -1,
+                ErrorMessage = string.Empty
+            };
+
+            return Json(insertResult, JsonRequestBehavior.AllowGet);
+
+        }
     }
 }

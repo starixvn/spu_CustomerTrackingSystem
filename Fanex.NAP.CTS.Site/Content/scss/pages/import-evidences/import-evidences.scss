@@ -1,5 +1,7 @@
 ﻿@import "../../abstracts/variables";
+@import "../../abstracts/mixins";
 @import "../../components/popup";
+@import "../../components/loading";
 
 .content {
     margin-top: 6rem;
