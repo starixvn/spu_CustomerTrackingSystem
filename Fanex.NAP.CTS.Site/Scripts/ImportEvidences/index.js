@@ -190,11 +190,11 @@
     }
 
     function ValidateAcountsForRemoveEvidence(textTagRemove) {
-        let userNameList = GetInputUserName(textTagRemove);
+        let userNames = GetInputUserName(textTagRemove);
 
-        if (userNameList !== '') {
+        if (userNames !== '') {
             let params = {};
-            params.userNameList = userNameList;
+            params.userNames = userNames;
 
             $.ajax(common.modifyRelativeUrl('ImportEvidences/ValidateAccountsForRemoveEvidences'), {
                 type: 'POST',
@@ -265,11 +265,11 @@
     }    
 
     function InsertAccountsForRemoveEvidences() {
-        let userNameList = GetInputUserName();
+        let userNames = GetInputUserName();
 
-        if (userNameList !== '') {
+        if (userNames !== '') {
             let params = {};
-            params.userNameList = userNameList;
+            params.userNames = userNames;
 
             $.ajax(common.modifyRelativeUrl('ImportEvidences/InsertAccountsForRemoveEvidences'), {
                 type: 'POST',
@@ -279,7 +279,10 @@
                 },
                 success: function (response) {
                     if (response.ErrorCode === 0) {
-                        common.showSuccess("Add association successful");
+                        common.showSuccess("Remove Evidence successful");
+                        domElements.inputTagUsername.tagify().data('tagify').removeAllTags();
+                        domElements.spanAddUserNameMaxTag.text(maxTags);
+                        domElements.spanAddChangeHidden.text("0");
                     } else {
                         BindResultValidatedAccounts(response.ValidatedResult);
                     }
@@ -468,7 +471,7 @@
         InitInputTagUsername();
 
         domElements.btnRemoveEvidence.on('click', function () {
-            let msgConfirm = "<div class='popup - content'>Are you sure about this? For confirm this action, all evidences from account in the list will be <strong style='color: red'> REMOVED </strong></div>";
+            let msgConfirm = "<div class='popup - content'>Are you sure about this? <br/>For confirm this action, all evidences from account in the list will be <strong style='color: red'> REMOVED </strong></div>";
 
             common.showConfirmation(msgConfirm,
                 () => InsertAccountsForRemoveEvidences());

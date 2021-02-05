@@ -17,6 +17,9 @@
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Criteria.Account;
     using Fanex.NAP.CTS.Core.Helpers.Xml;
+    using Fanex.NAP.CTS.ViewModel.Common;
+    using Newtonsoft.Json;
+    using Fanex.NAP.CTS.Model.Common;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.ImportEvidences, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -175,30 +178,75 @@
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult ValidateAccountsForRemoveEvidences(string userNameList)
+        public ActionResult ValidateAccountsForRemoveEvidences(string userNames)
         {
-            var viewModel = new ValidatedAccountsForRemoveEvidenceViewModel
+            var isException = false;
+            var viewModel = new ValidatedAccountsViewModel { IsException = false };
+
+            if (!string.IsNullOrEmpty(userNames))
             {
-                IsException = false,
-                UserNameInvalidList = new List<string>(),
-                UserNameDuplicatedList = new List<string>()
-            };
+                var validatedList = _importEvidencesService.ValidateUsernames(userNames, out isException);
+
+                viewModel = GenerateValidatedViewModel(userNames, validatedList, isException);
+            } 
 
             return Json(viewModel, JsonRequestBehavior.AllowGet);
         }
 
+        private ValidatedAccountsViewModel GenerateValidatedViewModel(string userNames, IEnumerable<ValidateUserNameModel> validatedList, bool isException)
+        {
+            var userNameList = userNames.Split(',');
+            var invalidList = Enumerable.Empty<string>();
+
+            if (!isException)
+            {
+                var userNameValidatedList = validatedList.Select(x => x.UserName);
+
+                invalidList = userNameList.Where(x => !userNameValidatedList.Contains(x));
+            }
+            else
+                invalidList = userNameList;
+
+            return new ValidatedAccountsViewModel
+            {
+                IsException = isException,
+                UserNameInvalidList = invalidList
+            };
+        }
+
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult InsertAccountsForRemoveEvidences(string userNameList)
+        public ActionResult InsertAccountsForRemoveEvidences(string userNames)
         {
-            var insertResult = new InsertAccountsForRemoveEvidenceViewModel
+            var insertResult = new InsertAccountsForRemoveEvidenceViewModel { ErrorCode = 0 };
+
+            var isException = false;
+
+            if (!string.IsNullOrEmpty(userNames))
             {
-                ErrorCode = -1,
-                ErrorMessage = string.Empty
-            };
+                var validatedList = _importEvidencesService.ValidateUsernames(userNames, out isException);
+
+                insertResult.ValidatedResult = GenerateValidatedViewModel(userNames, validatedList, isException);
+
+                if (!insertResult.ValidatedResult.UserNameInvalidList.Any())
+                {
+                    var custEvidenceList = validatedList.Select(x => new InsertAccountEvidenceQueueModel
+                    {
+                        CTSCustID = x.CTSCustID,
+                        CustID = x.CustID
+                    });
+
+                    var custEvidencesJson = JsonConvert.SerializeObject(custEvidenceList);
+
+                    var dbResult = _importEvidencesService.InsertAccountEvidencesQueue(custEvidencesJson, CurrentSession.UserId);
+
+                    insertResult.ErrorCode = dbResult.ErrorCode;
+                    insertResult.ErrorMessage = dbResult.ErrorMsg;
+                }
+            }            
 
             return Json(insertResult, JsonRequestBehavior.AllowGet);
-
         }
+
     }
 }

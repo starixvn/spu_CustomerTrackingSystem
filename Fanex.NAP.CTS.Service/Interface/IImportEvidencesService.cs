@@ -1,6 +1,8 @@
 ﻿namespace Fanex.NAP.CTS.Service
-{    
-    using Fanex.NAP.CTS.Model.ImportEvidences;
+{
+    using Fanex.NAP.CTS.Core;
+    using Fanex.NAP.CTS.Model.Common;
+    using Fanex.NAP.CTS.Model.ImportEvidences;    
     using System.Collections.Generic;
     using System.IO;
 
@@ -18,5 +20,8 @@
 
         void InsertCustEvidenceFromFile(IEnumerable<ResultCheckAccountEvidenceModel> resultCheckAccountEvidenceList, string fileName, int userId, string fileErrorTemplate, bool isOverride);
 
+        IEnumerable<ValidateUserNameModel> ValidateUsernames(string userNames, out bool isException);
+
+        DBResult InsertAccountEvidencesQueue(string custEvidencesJson, int userId);
     }
 }
