@@ -402,7 +402,7 @@
                 default:
                     return ConfigSettings.GetDirectAssociation;
             }
-        }
+        }               
 
         [HttpPost]
         public ActionResult GetDirectAssociationGraph(Int64 ctsCustid, string displayName, int associationStatus, string accountStatusIds, string siteIds, int start, int length)

@@ -104,7 +104,17 @@
         {
             if(fromMySQL)
             {
-                return new CustomerAssociationByCTSCustIdModel();
+                var criteria = new GetAssociationProfileStatictisCriteria
+                {
+                    CTSCustId = ctsCustId
+                };
+
+                using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+                {
+                    var result = db.QueryEntity<CustomerAssociationByCTSCustIdModel>(criteria);
+
+                    return result;
+                }
             }
             else
             {
@@ -263,7 +273,28 @@
             {
                 if(fromMySQL)
                 {
-                    return new GraphAssociationPaging();
+                    var criteria = new GetAssociationProfileCriteria
+                    {
+                        CTSCustId = ctsCustId,
+                        AssociationStatus = associationStatus,
+                        AccountStatusIds = accountStatusIds,
+                        AssociationType = GetAssociationTypeFromUrl(apiURL),
+                        SiteIds = siteIds,
+                        Skip = skipNumber,
+                        Take = takeNumber,
+                        TotalItems = 0
+                    };
+
+                    using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+                    {
+                        var result = db.Query<GraphAssociationModel>(criteria);
+
+                        return new GraphAssociationPaging
+                        {
+                            AssociationList = result.ToList(),
+                            TotalItems = criteria.TotalItems
+                        };
+                    }
                 }
                 else
                 {
@@ -1167,6 +1198,26 @@
             };
 
             return repository.Fetch<CTSCustomer>(criteria);
+        }
+
+        private int GetAssociationTypeFromUrl(string associationUrl)
+        {
+            if(associationUrl == ConfigSettings.GetDirectAssociationByDevice)
+            {
+                return 1;
+            }
+            else if(associationUrl == ConfigSettings.GetDirectAssociationByIP)
+            {
+                return 2;
+            }
+                else if (associationUrl == ConfigSettings.GetDirectAssociationByManual)
+            {
+                return 3;
+            }
+            else
+            {
+                return 0;
+            }           
         }
     }
 }
