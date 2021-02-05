@@ -6,6 +6,7 @@
     <GraphSetting Key="GetAssociationOneLevelByCustIdByDevice" SpName="GetAssociationOneLevelByCustIdByDevice" DbName="GraphDB" />
     <GraphSetting Key="GetAssociationOneLevelByCustIdByIP" SpName="GetAssociationOneLevelByCustIdByIP" DbName="GraphDB" />
     <GraphSetting Key="GetAssociationOneLevelByCustIdByManual" SpName="GetAssociationOneLevelByCustIdByManual" DbName="GraphDB" />
+	<GraphSetting Key="GetAssociationOneLevelByCustIdByAI" SpName="GetAssociationOneLevelByCustIdByAI" DbName="GraphDB" />
     <GraphSetting Key="GetAssociationOneLevelByCustIds" SpName="GetAssociationOneLevelByCustIds" DbName="GraphDB" />
     <GraphSetting Key="GetAssociationNLevelByCustId" SpName="GetAssociationNLevelByCustId" DbName="GraphDB" />
     <GraphSetting Key="GetShortestPath" SpName="GetShortestPath" DbName="GraphDB" />

@@ -394,9 +394,11 @@
                 case 1:
                     return ConfigSettings.GetDirectAssociationByDevice;
                 case 2:
-                    return ConfigSettings.GetDirectAssociationByIP;
+                    return ConfigSettings.GetDirectAssociationByAI;
                 case 3:
                     return ConfigSettings.GetDirectAssociationByManual;
+                case 4:
+                    return  ConfigSettings.GetDirectAssociationByIP;
                 default:
                     return ConfigSettings.GetDirectAssociation;
             }

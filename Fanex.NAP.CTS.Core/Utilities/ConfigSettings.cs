@@ -68,6 +68,8 @@
 
         public static string GetDirectAssociationByManual => GetConfigStringByName("Graph_GetDirectAssociationByManual");
 
+        public static string GetDirectAssociationByAI => GetConfigStringByName("Graph_GetDirectAssociationByAI");
+
         public static string GetInDirectAssociation => GetConfigStringByName("Graph_GetInDirectAssociation");
 
         public static string GetShortestAssociation => GetConfigStringByName("Graph_GetShortestPath");
