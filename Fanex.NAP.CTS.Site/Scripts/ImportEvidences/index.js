@@ -235,7 +235,7 @@
     }
 
     function BindExceptionValidatedAccount() {
-        spanAddUserName.find('tags tag').each(function (_, tag) {
+        domElements.spanAddUserName.find('tags tag').each(function (_, tag) {
             $(tag).removeClass('valid').addClass('invalid-username');
         });
     }

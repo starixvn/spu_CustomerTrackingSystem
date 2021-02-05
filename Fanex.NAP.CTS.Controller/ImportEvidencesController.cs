@@ -183,9 +183,19 @@
 
             if (!string.IsNullOrEmpty(userNames))
             {
-                var validatedList = _importEvidencesService.ValidateUsernames(userNames, out isException);
+                var userNameList = userNames.Split(',');
+
+                var duplicateList = userNameList.GroupBy(x => x)
+                       .Where(g => g.Count() > 1)
+                       .Select(x => x.Last());
+
+                var noDuplicateList = userNameList.Distinct();
+                var noDuplicateUserName = string.Join(",", noDuplicateList);
+
+                var validatedList = _importEvidencesService.ValidateUsernames(noDuplicateUserName, out isException);
 
                 viewModel = GenerateValidatedViewModel(userNames, validatedList, isException);
+                viewModel.UserNameDuplicatedList = duplicateList;
             } 
 
             return Json(viewModel, JsonRequestBehavior.AllowGet);
@@ -222,16 +232,27 @@
 
             if (!string.IsNullOrEmpty(userNames))
             {
-                var validatedList = _importEvidencesService.ValidateUsernames(userNames, out isException);
+                var userNameList = userNames.Split(',');
+
+                var duplicateList = userNameList.GroupBy(x => x)
+                       .Where(g => g.Count() > 1)
+                       .Select(x => x.Last());
+
+                var newUserNames = string.Join(",", userNameList.Distinct());
+
+                var validatedList = _importEvidencesService.ValidateUsernames(newUserNames, out isException); ;
 
                 insertResult.ValidatedResult = GenerateValidatedViewModel(userNames, validatedList, isException);
+                insertResult.ValidatedResult.UserNameDuplicatedList = duplicateList;
+                var isAllowInsert = !insertResult.ValidatedResult.UserNameInvalidList.Any() && !insertResult.ValidatedResult.UserNameDuplicatedList.Any();
 
-                if (!insertResult.ValidatedResult.UserNameInvalidList.Any())
+                if (isAllowInsert)
                 {
                     var custEvidenceList = validatedList.Select(x => new InsertAccountEvidenceQueueModel
                     {
                         CTSCustID = x.CTSCustID,
-                        CustID = x.CustID
+                        CustID = x.CustID,
+                        Remark = string.Empty
                     });
 
                     var custEvidencesJson = JsonConvert.SerializeObject(custEvidenceList);
