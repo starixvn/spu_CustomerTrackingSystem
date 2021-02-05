@@ -15,22 +15,30 @@ RETURN c1.CTSCustID as CTSCustID, c1.CustID AS CustId, c1.UserName AS Username, 
 	   , s.SiteID as SiteID, s.Site as SiteName, st.ItemID as StatusId, st.ItemName as StatusName
 UNION
 
-MATCH (c:CTSCustomer)-[r2:USED_IP]->(i:IP)<-[r3:USED_IP]-(c2:CTSCustomer)
-WHERE c.CTSCustID = $ip_CTSCustId AND c2.CustID IS NOT NULL AND
+
+MATCH (c:CTSCustomer)
+WHERE c.CTSCustID = $ip_CTSCustId 
+WITH c
+OPTIONAL MATCH (m:CTSMemberAI {CustID:c.CustID})-[r:USE_AI]-(m2:CTSMemberAI)
+WHERE r IS NOT NULL AND m2.CustID IS NOT NULL
+WITH c, m2, r
+OPTIONAL MATCH (c2:CTSCustomer {CustID: m2.CustID, CustSubID:0})
+WITH DISTINCT c,c2,r
+WHERE 
 	(($ip_assStatus = 0) 
 	OR ($ip_assStatus = 1 AND not exists((c)-[:HAS_EXCEPTION]-(c2)))
     OR ($ip_assStatus = 2 AND exists((c)-[:HAS_EXCEPTION]-(c2))))
-UNWIND [r2.CreatedTime,r3.CreatedTime]  as val
-WITH c,c2,i,Max(val) as AssDate
+WITH distinct c,c2,r  
 OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c2)
 OPTIONAL MATCH (c2)-[:BELONG_TO_SITE]->(s:Site)
 OPTIONAL MATCH (c2)-[:HAS_STATUS]->(st:StaticList)
-WITH c,c2,i,st,e,s, AssDate
-WHERE   st.ItemID IS NOT NULL AND st.ItemID IN $ip_AccountStatuses AND st.ListID = 1 AND s.SiteID IS NOT NULL AND s.SiteID IN $ip_SiteIDs 
-RETURN c2.CTSCustID as CTSCustID, c2.CustID AS CustId, c2.UserName AS Username, c2.UserName2 AS Username2, 2 as AssociationType, -1 AS SharedDevices, -1 AS SharedIPs, CASE c2.SubscriberID WHEN null THEN -1 ELSE c2.SubscriberID END AS SubscriberId, Min(AssDate) AS AssociationDateGMT0, CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
-		, s.SiteID as SiteID, s.Site as SiteName, st.ItemID as StatusId, st.ItemName as StatusName
-
+WITH c,c2,r,st,e,s
+WHERE st.ItemID IS NOT NULL AND st.ItemID IN $ip_AccountStatuses AND st.ListID = 1 AND s.SiteID IS NOT NULL AND s.SiteID IN $ip_SiteIDs
+RETURN c2.CTSCustID as CTSCustID, c2.CustID AS CustId, c2.UserName AS Username, c2.UserName2 AS Username2, 3 as AssociationType, -1 AS SharedDevices, -1 AS SharedIPs, CASE c2.SubscriberID WHEN null THEN -1 ELSE c2.SubscriberID END AS SubscriberId, apoc.date.format(r.CreatedDate,"ms","yyyy-MM-dd HH:mm:ss") as AssociationDateGMT0, CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus,
+		s.SiteID as SiteID, s.Site as SiteName, st.ItemID as StatusId, st.ItemName as StatusName
 UNION 
+
+
 MATCH (c:CTSCustomer)-[r:ADD_MANUALLY]-(c3:CTSCustomer)
 WHERE c.CTSCustID = $ip_CTSCustId AND c3.CustID IS NOT NULL AND
 	(($ip_assStatus = 0) 
