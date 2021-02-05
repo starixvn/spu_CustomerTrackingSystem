@@ -30,7 +30,15 @@
         {
             try
             {
-                var result = DbSessionFactory.ExecuteSingle<CustomerAssociationByCTSCustIdModel>("GetStatisticForCustomer", new { CTSCustID = ctsCustId }).Data;
+                var queryResult = DbSessionFactory.Execute<CustomerAssociationByCTSCustIdModel>("GetStatisticForCustomer", new { CTSCustID = ctsCustId });
+
+                var result = queryResult.Data.ToList().FirstOrDefault();
+
+                if (result == null)
+                {
+                    return new CustomerAssociationByCTSCustIdModel();
+                }
+
                 return result;
             }
             catch (Exception ex)
