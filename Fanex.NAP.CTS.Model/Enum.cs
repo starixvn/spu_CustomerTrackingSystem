@@ -17,8 +17,9 @@
     public enum AssociationType
     {
         Device = 1,
-        IP = 2,
+        BettingPattern = 2,
         Manual = 3,
+        IP = 4,
         All = 0
     }
 

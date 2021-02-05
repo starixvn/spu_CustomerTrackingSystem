@@ -34,7 +34,7 @@ OPTIONAL MATCH (c2)-[:BELONG_TO_SITE]->(s:Site)
 OPTIONAL MATCH (c2)-[:HAS_STATUS]->(st:StaticList)
 WITH c,c2,r,st,e,s
 WHERE st.ItemID IS NOT NULL AND st.ItemID IN $ip_AccountStatuses AND st.ListID = 1 AND s.SiteID IS NOT NULL AND s.SiteID IN $ip_SiteIDs
-RETURN c2.CTSCustID as CTSCustID, c2.CustID AS CustId, c2.UserName AS Username, c2.UserName2 AS Username2, 3 as AssociationType, -1 AS SharedDevices, -1 AS SharedIPs, CASE c2.SubscriberID WHEN null THEN -1 ELSE c2.SubscriberID END AS SubscriberId, apoc.date.format(r.CreatedDate,"ms","yyyy-MM-dd HH:mm:ss") as AssociationDateGMT0, CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus,
+RETURN c2.CTSCustID as CTSCustID, c2.CustID AS CustId, c2.UserName AS Username, c2.UserName2 AS Username2, 2 as AssociationType, -1 AS SharedDevices, -1 AS SharedIPs, CASE c2.SubscriberID WHEN null THEN -1 ELSE c2.SubscriberID END AS SubscriberId, apoc.date.format(r.CreatedDate,"ms","yyyy-MM-dd HH:mm:ss") as AssociationDateGMT0, CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus,
 		s.SiteID as SiteID, s.Site as SiteName, st.ItemID as StatusId, st.ItemName as StatusName
 UNION 
 

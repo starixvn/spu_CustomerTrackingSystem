@@ -51,7 +51,14 @@ namespace Fanex.NAP.CTS.Model.GraphDB
 
         public string GetAssociationTypeName(int associationType)
         {
-            return Enum.GetName(typeof(AssociationType), associationType);
+            string x = Enum.GetName(typeof(AssociationType), associationType);
+
+            if (!string.IsNullOrEmpty(x) && x.Equals("BettingPattern"))
+            {
+                return "Betting Pattern";
+            }
+
+            return x;
         }
 
         public int? SiteID { get; set; }
