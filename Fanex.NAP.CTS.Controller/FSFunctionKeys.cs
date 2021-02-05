@@ -75,7 +75,7 @@ public static class FSFunctionKeys
 
     public const string ProblemAccountMonitor = "ProblemAccountMonitor";
 
-    public const string ImportEvidences = "ImportEvidences";
+    public const string EvidenceManagement = "EvidenceManagement";
 
     public const string AssociatedAccountMonitor = "AssociatedAccountMonitor";
 

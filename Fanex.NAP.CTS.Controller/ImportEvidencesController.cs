@@ -15,14 +15,12 @@
     using Fanex.NAP.CTS.Model.ImportEvidences;
     using System.Threading.Tasks;
     using Fanex.NAP.CTS.Service.Implement;
-    using Fanex.NAP.CTS.Criteria.Account;
-    using Fanex.NAP.CTS.Core.Helpers.Xml;
     using Fanex.NAP.CTS.ViewModel.Common;
     using Newtonsoft.Json;
     using Fanex.NAP.CTS.Model.Common;
 
     [NapSuperAuth]
-    [NapAuth(FunctionKey = FSFunctionKeys.ImportEvidences, Policy = NAP.Core.Business.Constant.Policy.Read)]
+    [NapAuth(FunctionKey = FSFunctionKeys.EvidenceManagement, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class ImportEvidencesController : BaseController
     {
         private const string ImportTemplate = "~/App_Data/Excel Template/ImportEvidences/template.xlsx";
@@ -45,7 +43,7 @@
 
             var isHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
                             NapSettings.Settings.SiteId,
-                            FSFunctionKeys.ImportEvidences,
+                            FSFunctionKeys.EvidenceManagement,
                             NAP.Core.Business.Constant.Policy.Host);
 
             var isOverwritePermission = userService.IsHavingPermission(CurrentSession.UserId,
@@ -69,7 +67,7 @@
             return ExcelFile(file, "Template");
         }
 
-        [NapAuth(FunctionKey = FSFunctionKeys.ImportEvidences, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [NapAuth(FunctionKey = FSFunctionKeys.EvidenceManagement, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [HttpPost]
         public ActionResult ImportFromExcel(bool isOverwrite)
         {
