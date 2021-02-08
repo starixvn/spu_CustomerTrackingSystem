@@ -265,36 +265,41 @@
     }    
 
     function InsertAccountsForRemoveEvidences() {
-        let userNames = GetInputUserName();
+        let msgConfirm = "<div style='text-align:center'>Are you sure about this? </div>";
+        msgConfirm += "<br/>For confirm this action, all evidences from account in the list will be <strong style='color: red'> REMOVED </strong>";
 
-        if (userNames !== '') {
-            let params = {};
-            params.userNames = userNames;
+        common.showFormConfirmation(msgConfirm, 'Confirmation', function () {
+            let userNames = GetInputUserName();
 
-            $.ajax(common.modifyRelativeUrl('ImportEvidences/InsertAccountsForRemoveEvidences'), {
-                type: 'POST',
-                data: params,
-                beforeSend: function () {
-                    domElements.divAddUserName.addClass("loading-block");
-                },
-                success: function (response) {
-                    if (response.ErrorCode === 0) {
-                        common.showSuccess("Remove Evidence successful");
-                        domElements.inputTagUsername.tagify().data('tagify').removeAllTags();
-                        domElements.spanAddUserNameMaxTag.text(maxTags);
-                        domElements.spanAddChangeHidden.text("0");
-                    } else {
-                        BindResultValidatedAccounts(response.ValidatedResult);
+            if (userNames !== '') {
+                let params = {};
+                params.userNames = userNames;
+
+                $.ajax(common.modifyRelativeUrl('ImportEvidences/InsertAccountsForRemoveEvidences'), {
+                    type: 'POST',
+                    data: params,
+                    beforeSend: function () {
+                        domElements.divAddUserName.addClass("loading-block");
+                    },
+                    success: function (response) {
+                        if (response.ErrorCode === 0) {
+                            common.showSuccess("Remove Evidence successful");
+                            domElements.inputTagUsername.tagify().data('tagify').removeAllTags();
+                            domElements.spanAddUserNameMaxTag.text(maxTags);
+                            domElements.spanAddChangeHidden.text("0");
+                        } else {
+                            BindResultValidatedAccounts(response.ValidatedResult);
+                        }
+                    },
+                    complete: function () {
+                        domElements.divAddUserName.removeClass("loading-block");
+                    },
+                    error: function (errMsg) {
+                        console.log(errMsg);
                     }
-                },
-                complete: function () {
-                    domElements.divAddUserName.removeClass("loading-block");
-                },
-                error: function (errMsg) {
-                    console.log(errMsg);
-                }
-            });
-        }
+                });
+            }
+        });        
     }
 
     function InitInputTagUsername() {
@@ -470,13 +475,7 @@
 
         InitInputTagUsername();
 
-        domElements.btnRemoveEvidence.on('click', function () {
-            let msgConfirm = "<div class='popup - content'>Are you sure about this? <br/>For confirm this action, all evidences from account in the list will be <strong style='color: red'> REMOVED </strong></div>";
-
-            common.showConfirmation(msgConfirm,
-                () => InsertAccountsForRemoveEvidences());
-            }
-        );
+        domElements.btnRemoveEvidence.on('click', () => InsertAccountsForRemoveEvidences());
     }
 
     $(document).ready(function () {

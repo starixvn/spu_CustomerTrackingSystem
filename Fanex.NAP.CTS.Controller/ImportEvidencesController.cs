@@ -240,7 +240,7 @@
 
                 var newUserNames = string.Join(",", userNameList.Distinct());
 
-                var validatedList = _importEvidencesService.ValidateUsernames(newUserNames, out isException); ;
+                var validatedList = _importEvidencesService.ValidateUsernames(newUserNames, out isException);
 
                 insertResult.ValidatedResult = GenerateValidatedViewModel(userNames, validatedList, isException);
                 insertResult.ValidatedResult.UserNameDuplicatedList = duplicateList;
