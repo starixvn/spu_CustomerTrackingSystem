@@ -376,6 +376,8 @@
                 .ThenByDescending(a => a.Status)
                 .ThenByDescending(a => a.AssociationDate)
                 .ToList();
+
+                totalItem = (result.Count() == graphAssociationPage.TotalItems) ? totalItem : result.Count();
             }
 
             return Json(new
