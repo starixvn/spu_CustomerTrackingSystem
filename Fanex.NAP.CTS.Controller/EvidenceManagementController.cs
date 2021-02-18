@@ -190,33 +190,42 @@
             if (!string.IsNullOrEmpty(userNames))
             {
                 var userNameList = userNames.Split(',');
+                var userNameToUpperList = userNameList.Select(x => x.ToUpper());
 
-                var duplicateList = userNameList.GroupBy(x => x)
+                var duplicateToUpperList = userNameToUpperList.GroupBy(x => x)
                        .Where(g => g.Count() > 1)
                        .Select(x => x.Last());
 
-                var noDuplicateList = userNameList.Distinct();
-                var noDuplicateUserName = string.Join(",", noDuplicateList);
+                var noDuplicateToUpperList = userNameToUpperList.Distinct();
+                var noDuplicateToUpperUserName = string.Join(",", noDuplicateToUpperList);
 
-                var validatedList = _importEvidencesService.ValidateUsernames(noDuplicateUserName, out isException);
+                var validatedList = _importEvidencesService.ValidateUsernames(noDuplicateToUpperUserName, out isException);
+                var validatedToUpperList = validatedList.Select(x => new ValidateUserNameModel
+                {
+                    CTSCustID = x.CTSCustID,
+                    CustID = x.CustID,
+                    UserName = x.UserName.ToUpper()
+                });
 
-                viewModel = GenerateValidatedViewModel(userNames, validatedList, isException);
-                viewModel.UserNameDuplicatedList = duplicateList;
-            } 
+                viewModel = GenerateValidatedViewModel(userNames, validatedToUpperList, isException);
+
+                viewModel.UserNameDuplicatedList = userNameList.Where(x=> duplicateToUpperList.Contains(x.ToUpper()));
+            }
 
             return Json(viewModel, JsonRequestBehavior.AllowGet);
         }
 
-        private ValidatedAccountsViewModel GenerateValidatedViewModel(string userNames, IEnumerable<ValidateUserNameModel> validatedList, bool isException)
+        private ValidatedAccountsViewModel GenerateValidatedViewModel(string userNames, IEnumerable<ValidateUserNameModel> validatedToUpperList, bool isException)
         {
             var userNameList = userNames.Split(',');
+            var userNameToUpperList = userNameList.Select(x => x.ToUpper());
             var invalidList = Enumerable.Empty<string>();
 
             if (!isException)
             {
-                var userNameValidatedList = validatedList.Select(x => x.UserName);
+                var userNameToUpperValidatedList = validatedToUpperList.Select(x => x.UserName.ToUpper());
 
-                invalidList = userNameList.Where(x => !userNameValidatedList.Contains(x));
+                invalidList = userNameList.Where(x => !userNameToUpperValidatedList.Contains(x.ToUpper()));
             }
             else
                 invalidList = userNameList;
