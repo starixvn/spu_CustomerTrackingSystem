@@ -283,7 +283,7 @@
                     },
                     success: function (response) {
                         if (response.ErrorCode === 0) {
-                            common.showSuccess("Remove Evidence successful");
+                            common.showSuccess("Remove Evidence List has been successful uploaded. Removing Process will take a while to finish.");
                             domElements.inputTagUsername.tagify().data('tagify').removeAllTags();
                             domElements.spanAddUserNameMaxTag.text(maxTags);
                             domElements.spanAddChangeHidden.text("0");

@@ -51,6 +51,12 @@
                           FSFunctionKeys.OverwriteEvidences,
                           NAP.Core.Business.Constant.Policy.Read);
 
+            if(!isHostPermission)
+            {
+                return Redirect("Errors/403");
+            }
+
+
             return View(new EvidencePermissionViewModel
             {
                 IsHostPermission = isHostPermission,
