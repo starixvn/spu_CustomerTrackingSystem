@@ -8,7 +8,6 @@
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Helpers;
     using Fanex.NAP.CTS.Core.Helpers.Api;
-    using Fanex.NAP.CTS.Core.Helpers.Xml;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria.Account;
     using Fanex.NAP.CTS.Criteria.Account.Associated;
@@ -17,9 +16,8 @@
     using Fanex.NAP.CTS.Criteria.Account.CustomerCategory;
     using Fanex.NAP.CTS.Criteria.Home;
     using Fanex.NAP.CTS.Criteria.ProblemAccountMonitor;
-    using Fanex.NAP.CTS.Criteria.SpecialCustomerClass;
     using Fanex.NAP.CTS.Model;
-    using Fanex.NAP.CTS.Model.Account;        
+    using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.CustomerClassify;
     using Fanex.NAP.CTS.Model.DTO;
@@ -28,7 +26,7 @@
     using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Service.Implement;
-    using Fanex.NAP.CTS.ViewModel.Account;    
+    using Fanex.NAP.CTS.ViewModel.Account;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -102,7 +100,7 @@
 
         public CustomerAssociationByCTSCustIdModel GetCustomerTotalAssociationByCTSCustId(long ctsCustId, string apiUrl, bool fromMySQL = false)
         {
-            if(fromMySQL)
+            if (fromMySQL)
             {
                 var criteria = new GetAssociationProfileStatictisCriteria
                 {
@@ -125,7 +123,7 @@
                 Task.WhenAll(data);
 
                 return data.Result;
-            }            
+            }
         }
 
         public List<CustomerEvidenceByCTSCustIdModel> GetCustomerEvidenceByCTSCustId(long ctsCustId)
@@ -158,7 +156,7 @@
                 return result.ToList();
             }
         }
-        
+
         public CustomerProfileFraudInfoModel GetCustomerProfileFraudInfo(long custId)
         {
             var criteria = new CustomerProfileFraudInfoCriteria
@@ -271,7 +269,7 @@
         {
             try
             {
-                if(fromMySQL)
+                if (fromMySQL)
                 {
                     var criteria = new GetAssociationProfileCriteria
                     {
@@ -314,11 +312,11 @@
 
                     return data.Result ?? new GraphAssociationPaging();
                 }
-                
+
             }
             catch (Exception ex)
             {
-                LogService.Error("CTS - AccountService GetCustomerAssociationByGraph - Exception: " + ex.Message, ex);                
+                LogService.Error("CTS - AccountService GetCustomerAssociationByGraph - Exception: " + ex.Message, ex);
             }
 
             return new GraphAssociationPaging();
@@ -816,7 +814,7 @@
                 LogService.Error("CTS - AccountService SyncCustEvidenceToCategory exception: " + ex.Message, ex);
 
                 return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
-            }           
+            }
         }
 
         public List<AccountExceptionsModel> GetAccountExceptions(Int64 ctsCustId)
@@ -1026,7 +1024,7 @@
             {
                 return db.Query<CustomerClassificationModel>(criteria);
             }
-        }        
+        }
 
         public IEnumerable<Model.API.CustomerClassModel> GetCustomerClassByCustId(string custIdList)
         {
@@ -1048,7 +1046,7 @@
                 CustId = addCategoryModel.CustId,
                 CTSCustId = addCategoryModel.CTSCustId,
                 SubscriberId = addCategoryModel.SubscriberId,
-                CategoryId = addCategoryModel.CategoryId,            
+                CategoryId = addCategoryModel.CategoryId,
                 CreatedBy = createdBy,
                 Remark = addCategoryModel.Remark
             };
@@ -1066,7 +1064,7 @@
 
             return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
         }
-        
+
         public ResultInsertRemoveCustomerClassificationModel RemoveCustomerCategory(long custId, long ctsCustId, int categoryId, int createdBy)
         {
             var insertCTSResult = new ResultInsertRemoveCustomerClassificationModel();
@@ -1075,15 +1073,15 @@
                 CustId = custId,
                 CTSCustId = ctsCustId,
                 CategoryId = categoryId,
-                CreatedBy = createdBy                
+                CreatedBy = createdBy
             };
-            
+
             var repository = new DynamicRepository();
             insertCTSResult.CustomerClassList = repository.Fetch<CustomerClassForMainDb>(criteria);
             insertCTSResult.OpErrorMessage = criteria.ErrorMessage;
 
             return insertCTSResult;
-        }        
+        }
 
         public DBResult PinCategoryCustomerClassification(int custId, long ctsCustId, int subscriberId, bool isPinCategory, int createdBy)
         {
@@ -1121,7 +1119,7 @@
                     ErrorCode = -1,
                     ErrorMsg = ex.Message
                 };
-            }            
+            }
 
             return new DBResult
             {
@@ -1202,22 +1200,22 @@
 
         private int GetAssociationTypeFromUrl(string associationUrl)
         {
-            if(associationUrl == ConfigSettings.GetDirectAssociationByDevice)
+            if (associationUrl == ConfigSettings.GetDirectAssociationByDevice)
             {
                 return 1;
             }
-            else if(associationUrl == ConfigSettings.GetDirectAssociationByIP)
+            else if (associationUrl == ConfigSettings.GetDirectAssociationByAI)
             {
                 return 2;
             }
-                else if (associationUrl == ConfigSettings.GetDirectAssociationByManual)
+            else if (associationUrl == ConfigSettings.GetDirectAssociationByManual)
             {
                 return 3;
             }
             else
             {
                 return 0;
-            }           
+            }
         }
     }
 }
