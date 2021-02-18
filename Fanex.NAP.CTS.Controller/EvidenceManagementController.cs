@@ -21,7 +21,7 @@
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.EvidenceManagement, Policy = NAP.Core.Business.Constant.Policy.Read)]
-    public class ImportEvidencesController : BaseController
+    public class EvidenceManagementController : BaseController
     {
         private const string ImportTemplate = "~/App_Data/Excel Template/ImportEvidences/template.xlsx";
 
@@ -31,7 +31,7 @@
 
         public override string BaseControllerName { get => Consts.MenuItemController; }
 
-        public ImportEvidencesController()
+        public EvidenceManagementController()
         {
             _importEvidencesService = new ImportEvidencesService();
             _customerEvidenceService = new CustomerEvidenceService();

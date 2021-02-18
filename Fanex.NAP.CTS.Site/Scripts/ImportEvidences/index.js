@@ -43,7 +43,7 @@
             formdata.append(files[0].name, files[0]);
             formdata.append("isOverwrite", isOverwriteEvidence);
 
-            $.ajax(common.modifyRelativeUrl('ImportEvidences/ImportFromExcel'), {
+            $.ajax(common.modifyRelativeUrl('EvidenceManagement/ImportFromExcel'), {
                 type: 'POST',
                 data: formdata,
                 contentType: false,
@@ -196,7 +196,7 @@
             let params = {};
             params.userNames = userNames;
 
-            $.ajax(common.modifyRelativeUrl('ImportEvidences/ValidateAccountsForRemoveEvidences'), {
+            $.ajax(common.modifyRelativeUrl('EvidenceManagement/ValidateAccountsForRemoveEvidences'), {
                 type: 'POST',
                 data: params,
                 beforeSend: function () {
@@ -275,7 +275,7 @@
                 let params = {};
                 params.userNames = userNames;
 
-                $.ajax(common.modifyRelativeUrl('ImportEvidences/InsertAccountsForRemoveEvidences'), {
+                $.ajax(common.modifyRelativeUrl('EvidenceManagement/InsertAccountsForRemoveEvidences'), {
                     type: 'POST',
                     data: params,
                     beforeSend: function () {
@@ -447,7 +447,7 @@
         domElements.overwriteCheckBox.prop('disabled', !isEnableOverwriteButton);
 
         domElements.btnDownloadTemplate.on('click', function () {
-            common.downloadFile(common.modifyRelativeUrl('ImportEvidences/DownloadTemplateExcel'), '0');
+            common.downloadFile(common.modifyRelativeUrl('EvidenceManagement/DownloadTemplateExcel'), '0');
         });
 
         domElements.inputFileUpload.on('change', function () {

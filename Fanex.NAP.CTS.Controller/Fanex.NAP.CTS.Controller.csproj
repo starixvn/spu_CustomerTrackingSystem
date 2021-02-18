@@ -190,7 +190,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="HomeController.cs" />
-    <Compile Include="ImportEvidencesController.cs" />
+    <Compile Include="EvidenceManagementController.cs" />
     <Compile Include="ManageSubscriberController.cs" />
     <Compile Include="MatchMonitorController.cs" />
     <Compile Include="NotificationSettingController.cs" />
