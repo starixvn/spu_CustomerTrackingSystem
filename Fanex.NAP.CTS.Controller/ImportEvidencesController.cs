@@ -175,7 +175,7 @@
         }
 
         [HttpPost]
-        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [NapAuth(FunctionKey = FSFunctionKeys.EvidenceManagement, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult ValidateAccountsForRemoveEvidences(string userNames)
         {
             var isException = false;
@@ -223,7 +223,7 @@
         }
 
         [HttpPost]
-        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [NapAuth(FunctionKey = FSFunctionKeys.EvidenceManagement, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult InsertAccountsForRemoveEvidences(string userNames)
         {
             var insertResult = new InsertAccountsForRemoveEvidenceViewModel { ErrorCode = 0 };
