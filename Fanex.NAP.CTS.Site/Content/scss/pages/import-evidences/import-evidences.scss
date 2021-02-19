@@ -1,5 +1,64 @@
-﻿.content {
+﻿@import "../../abstracts/variables";
+@import "../../abstracts/mixins";
+@import "../../components/popup";
+@import "../../components/loading";
+
+.content {
     margin-top: 6rem;
+
+    .box-content {
+        margin: 0 1.2rem 0 1.6rem;
+        box-sizing: border-box;
+        font-family: $font-family;
+
+        .tabs-detail {
+            padding: 0;
+            box-shadow: none !important;
+
+            ul.fixed-tabs {
+                border: 0;
+                padding: 0;
+                border-bottom: 1px solid #ddd;
+                background: $page-bg;
+                border-radius: 0;
+
+                li {
+                    background: $page-bg;
+                    margin: 0;
+                    border: 0;
+                    border-top: 0 !important;
+                    border-right: 0 !important;
+                    border-left: 0 !important;
+                    position: relative;
+                    top: 1px;
+
+                    a {
+                        padding: 1rem 1.8rem;
+                        padding-bottom: .5rem;
+                        font-size: 1.4rem;
+                        line-height: 1.8rem;
+                        color: #474747;
+                        font-family: $font-family !important;
+                    }
+                }
+
+                li.ui-state-active {
+                    border-bottom: 2px solid #e15f00;
+                    border-radius: 0;
+                    background: $page-bg;
+
+                    a {
+                        font-weight: bold;
+                        color: #e15f00 !important;
+                    }
+                }
+            }
+
+            .box-username {
+                max-width: 1280px;
+            }
+        }
+    }
 
     .import-evidences {
         padding: 1.6rem 1.4rem;

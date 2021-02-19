@@ -15,6 +15,7 @@
     <Setting Key="CTS_DC_Common_GetAllSubscriberGroups" SpName="CTS_DC_Common_GetAllSubscriberGroups" DbName="MySQL.CTS_DataCenter.Reporter" />
     <Setting Key="CTS_DC_Common_GetCustomerGroup" SpName="CTS_DC_Common_GetCustomerGroup" DbName="MySQL.CTS_DataCenter.Reporter" />
     <Setting Key="DCS_DC_Transaction_GetHistory" SpName="DCS_DC_Transaction_GetHistory" DbName="MySQL.DCS_DataCenter.Reporter" />
+	  <Setting Key="CTS_DC_Common_ValidateUsername" SpName="CTS_DC_Common_ValidateUsername" DbName="MySQL.CTS_DataCenter.Reporter" />
   </Function>
 
   <Function name="CustInfo">
@@ -54,6 +55,7 @@
     <Setting Key="CTS_DC_CustEvidence_GetFlaggedStatus" SpName="CTS_DC_CustEvidence_GetFlaggedStatus" DbName="MySQL.CTS_DataCenter.Reporter" />
     <Setting Key="CTS_DC_CustEvidenceFromFile_Insert" SpName="CTS_DC_CustEvidenceFromFile_Insert" DbName="MySQL.CTS_DataCenter.Admin" />
     <Setting Key="CTS_DC_CustEvidence_SyncToCategory" SpName="CTS_DC_CustEvidence_SyncToCategory" DbName="MySQL.CTS_DataCenter.Admin" />
+	  <Setting Key="CTS_DC_CustEvidenceQueue_Insert" SpName="CTS_DC_CustEvidenceQueue_Insert" DbName="MySQL.CTS_DataCenter.Admin" />	  
   </Function>
 
   <Function Name="Association">

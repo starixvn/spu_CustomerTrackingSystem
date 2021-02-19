@@ -66,4 +66,10 @@
         Probation = 206
     }
 
+    public enum EvidenceQueueActionID
+    {
+        Insert = 1,
+        Overrride = 2,
+        Clear = 3
+    }
 }

@@ -62,6 +62,7 @@
     <Compile Include="Account\CustomerCategory\GetCTSCustomerClassificationHistoryCriteria.cs" />
     <Compile Include="Account\GetAssociationWithCategoryCriteria.cs" />
     <Compile Include="Category\GetCategoryCustomerClassCriteria.cs" />
+    <Compile Include="Common\ValidateUsernameCriteria.cs" />
     <Compile Include="CustomerClassify\GetLastestClassificationCriteria.cs" />
     <Compile Include="CustomerClassify\GetExistedEvidencesCriteria.cs" />
     <Compile Include="CustomerClassify\GetProblemAccountsCN88Criteria.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="CustomerClassify\UpdateAppliedCustomerClassificationCriteria.cs" />
     <Compile Include="ImportEvidences\InsertCustEvidenceFromFileCriteria.cs" />
     <Compile Include="AssociationReport\AssociationReportGetCategoriesCriteria.cs" />
+    <Compile Include="ImportEvidences\InsertCustEvidenceQueueCriteria.cs" />
     <Compile Include="ManageSubscriber\ReUpdateSubriberIdBySiteIdCriteira.cs" />
     <Compile Include="ProbationManagement\GetAccountStaticStatusCriteria.cs" />
     <Compile Include="ProbationManagement\GetSubscriberCriteria.cs" />

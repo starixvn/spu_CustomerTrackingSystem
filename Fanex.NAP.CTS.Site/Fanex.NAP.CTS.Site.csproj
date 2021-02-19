@@ -968,7 +968,7 @@
     <Content Include="Scripts\tagify\jquery.tagify.min.js" />
     <Content Include="Scripts\tagify\tagify.min.js" />
     <Content Include="Views\ProblemAccountMonitor\Detail.cshtml" />
-    <Content Include="Views\ImportEvidences\Index.cshtml" />
+    <Content Include="Views\EvidenceManagement\Index.cshtml" />
     <Content Include="Views\AssociatedAccountMonitor\Index.cshtml" />
     <Content Include="Views\Account\BettingStatistic\TurnoverByBetType.cshtml" />
     <Content Include="Views\Account\BettingStatistic\TurnoverBySport.cshtml" />

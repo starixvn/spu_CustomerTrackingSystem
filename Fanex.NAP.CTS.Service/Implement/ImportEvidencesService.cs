@@ -17,8 +17,10 @@
     using System;
     using Fanex.Logging;
     using Fanex.NAP.CTS.Core.Utilities;
-    using Fanex.NAP.CTS.Service.Interface;
-    using Fanex.NAP.CTS.Service.Implement;
+    using Fanex.NAP.CTS.Criteria.Common;
+    using Fanex.NAP.CTS.ViewModel.Common;
+    using Fanex.NAP.CTS.Model.Common;
+    using Fanex.NAP.CTS.Model;
 
     public class ImportEvidencesService : IImportEvidencesService
     {
@@ -254,7 +256,7 @@
 
                 LogService.Error(errorMessage, ex);
 
-                SendMail(resultCheckCustEvidenceList, customerEvidences, userId, ex.Message);                
+                SendMail(resultCheckCustEvidenceList, customerEvidences, userId, ex.Message);
             }
         }
 
@@ -324,5 +326,73 @@
             return workbook.ToBytes();
         }
 
+        public IEnumerable<ValidateUserNameModel> ValidateUsernames(string userNames, out bool isException)
+        {
+            isException = false;
+
+            var criteria = new ValidateUsernameCriteria
+            {
+                userNames = userNames
+            };
+
+            try
+            {
+                using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+                {
+                    return db.Query<ValidateUserNameModel>(criteria);
+                }
+            }
+            catch (Exception ex)
+            {
+                isException = true;
+                LogService.Error(ex.Message, ex);
+
+                return Enumerable.Empty<ValidateUserNameModel>();
+            }
+        }
+    
+        public DBResult InsertAccountEvidencesQueue(string jsonCustEvidences, int userId)
+        {
+            var fileKey = long.Parse(DateTime.Now.ToString("yyyyMMddHHmmssffff"));
+
+            var criteria = new InsertCustEvidenceQueueCriteria
+            {
+                CustomerEvidences = jsonCustEvidences,
+                CreatedBy = userId,
+                FileKey = fileKey.ToString(),
+                ActionID = (int)EvidenceQueueActionID.Clear
+            };
+
+            try
+            {
+                using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+                {
+                    db.ExecuteNonQuery(criteria);
+
+                    if (!string.IsNullOrEmpty(criteria.ErrorMessage))
+                    {                        
+                        var errorMessage = string.Format("CTS - InsertAccountEvidencesQueue: remove evidence failed userId: {0}, Message: {1}, Content: {2}"
+                                                      , userId, criteria.ErrorMessage, jsonCustEvidences);
+                        LogService.Error(errorMessage);
+
+                        return new DBResult
+                        {
+                            ErrorCode = -1, ErrorMsg = criteria.ErrorMessage
+                        };
+                    }
+                }
+            }
+            catch (Exception ex)
+            {               
+                LogService.Error(ex.Message, ex);
+
+                return new DBResult
+                {
+                    ErrorCode = -1, ErrorMsg = ex.Message
+                };
+            }
+
+            return new DBResult { ErrorCode = 0 };
+        }
     }
 }
