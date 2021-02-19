@@ -375,13 +375,13 @@
                 .ThenByDescending(a => a.AssociationDate)
                 .ToList();
 
-                totalItem = (result.Count() == graphAssociationPage.TotalItems) ? totalItem : result.Count();
+                //totalItem = (result.Count() == graphAssociationPage.TotalItems) ? totalItem : result.Count();
             }
 
             return Json(new
             {
                 draw = model.draw,
-                recordsTotal = totalItem,
+                recordsTotal = graphAssociationPage.TotalItems,
                 recordsFiltered = totalItem,
                 data = result
             }, JsonRequestBehavior.AllowGet);
