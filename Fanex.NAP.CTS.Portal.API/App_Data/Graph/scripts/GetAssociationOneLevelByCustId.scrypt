@@ -62,7 +62,7 @@ WITH collect({CTSCustID: CTSCustID, CustId: CustId, Username: Username, Username
 	as ListAss, count(CTSCustID) as TotalItems
 UNWIND ListAss as ass
 WITH distinct ass, TotalItems 
-ORDER BY ass.Site, ass.AssociationDateGMT0 DESC
+ORDER BY ass.Site, ass.AssociationStatus, ass.StatusName, ass.AssociationDateGMT0 DESC
 SKIP $Skip
 LIMIT $Pagesize
 RETURN COLLECT(ass) AS AssociationList, TotalItems

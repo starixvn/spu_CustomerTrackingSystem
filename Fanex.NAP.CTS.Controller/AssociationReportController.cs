@@ -127,7 +127,7 @@
                     AssociatedDate = x.AssociationDate,
                     AssociatedDateString = x.AssociationDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                     IsLinked = x.AssociationStatus == 1,
-                    AssociationTypeName = GetAssociationTypeName(associationTypes, x.AssociationType),
+                    AssociationTypeName = GetAssociationTypeName(associationTypes, x.AssociationType.FirstOrDefault()),
                     TotalAssociationAccount = groupForSite.FirstOrDefault(y=>y.SiteId == x.SiteID).TotalAccounts
                 }).OrderBy(x=>x.SiteId);
             }

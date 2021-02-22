@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Model.AssociationReport
 {
     using System;
+    using System.Collections.Generic;
 
     public class AssociationDetailModel
     {
@@ -22,6 +23,6 @@
 
         public int AssociationStatus { get; set; }
 
-        public int AssociationType { get; set; }
+        public List<int> AssociationType { get; set; }
     }
 }
