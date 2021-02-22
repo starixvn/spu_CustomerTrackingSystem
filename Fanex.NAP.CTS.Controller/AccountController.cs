@@ -368,11 +368,7 @@
                     }
 
                     return newX;
-                }).OrderBy(a => a.SiteId)
-                .ThenBy(a => !a.IsLinked)
-                .ThenByDescending(a => a.Status)
-                .ThenByDescending(a => a.AssociationDate)
-                .ToList();
+                }).ToList();
             }
 
             return Json(new
