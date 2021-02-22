@@ -421,53 +421,38 @@
 
         }
 
-        public List<GraphAssociationModel> FilterCustomerAssociationByAssociationType(int associationType, List<GraphAssociationModel> customerAssociation)
+        public string MappingAssociationType(GraphAssociationModel data)
         {
-            if (customerAssociation != null && customerAssociation.Any())
+            if (data.AssociationType != null)
             {
-                if (associationType == 0)
-                {
-                    var groupData = customerAssociation.GroupBy(x => x.CTSCustID)
-                        .Select(g => new GraphAssociationModel
-                        {
-                            CustId = g.FirstOrDefault().CustId,
-                            AssociationType = g.Count() > 1 ? 0 : g.FirstOrDefault().AssociationType,
-                            AssociationTypeName = CalculateAssociationType(g),
-                            Username = g.FirstOrDefault().Username,
-                            Username2 = g.FirstOrDefault().Username2,
-                            AssociationDateGMT0 = GetMinDate(g),
-                            SharedDevices = g.FirstOrDefault().SharedDevices,
-                            SharedIPs = g.FirstOrDefault().SharedIPs,
-                            StatusName = g.FirstOrDefault().StatusName,
-                            StatusId = g.FirstOrDefault().StatusId,
-                            SiteID = g.FirstOrDefault().SiteID,
-                            SiteName = g.FirstOrDefault().SiteName,
-                            SubscriberId = g.FirstOrDefault().SubscriberId,
-                            CTSCustID = g.FirstOrDefault().CTSCustID,
-                            AssociationStatus = g.FirstOrDefault().AssociationStatus
-                        }).ToList();
-
-                    return groupData;
-                }
-
-                return customerAssociation.Select(x =>
-                {
-                    x.AssociationTypeName = x.GetAssociationTypeName(x.AssociationType);
-                    return x;
-                }).ToList();
+                return GetAssociationTypeName(data.AssociationType).Select(x => x).Join(", ");
             }
 
-            return customerAssociation;
+            return string.Empty;
         }
 
-        private string CalculateAssociationType(IGrouping<long, GraphAssociationModel> groupData)
+        public List<string> GetAssociationTypeName(List<int> associationType)
         {
-            if (groupData.Count() > 1)
+            var assTypeName = new List<string>();
+
+            foreach (var i in associationType)
             {
-                return groupData.Select(x => x.GetAssociationTypeName(x.AssociationType)).Join(", ");
+                assTypeName.Add(GetAssociationTypeName(i));
             }
 
-            return groupData.FirstOrDefault().GetAssociationTypeName(groupData.FirstOrDefault().AssociationType);
+            return assTypeName;
+        }
+
+        public string GetAssociationTypeName(int associationType)
+        {
+            string x = Enum.GetName(typeof(AssociationType), associationType);
+
+            if (!string.IsNullOrEmpty(x) && x.Equals("BettingPattern"))
+            {
+                return "Betting Pattern";
+            }
+
+            return x;
         }
 
         private DateTime GetMinDate(IGrouping<long, GraphAssociationModel> groupData)

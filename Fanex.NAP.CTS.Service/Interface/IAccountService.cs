@@ -53,7 +53,7 @@
 
         List<GraphAssociationModel> FilterCustomerAssociationByStatus(string statusIds, List<GraphAssociationModel>  customerAssociation, List<CustomerGeneralStatusModel> statusByCustIds);
 
-        List<GraphAssociationModel> FilterCustomerAssociationByAssociationType(int associationType, List<GraphAssociationModel> customerAssociation);
+        string MappingAssociationType(GraphAssociationModel data);
 
         IEnumerable<EvidenceModel> GetEvidenceList();
 

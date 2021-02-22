@@ -53,7 +53,13 @@ WHERE   st.ItemID IS NOT NULL AND st.ItemID IN $ip_AccountStatuses AND st.ListID
 RETURN  c3.CTSCustID as CTSCustID, c3.CustID AS CustId, c3.UserName AS Username, c3.UserName2 AS Username2, 3 as AssociationType, -1 AS SharedDevices, -1 AS SharedIPs, CASE c3.SubscriberID WHEN null THEN -1 ELSE c3.SubscriberID END AS SubscriberId, apoc.date.format(r.CreatedDate,"ms","yyyy-MM-dd HH:mm:ss") as AssociationDateGMT0, CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
 		, s.SiteID as SiteID, s.Site as SiteName, st.ItemID as StatusId, st.ItemName as StatusName
 ',{ip_CTSCustId: $CTSCustID, ip_assStatus: $AssStatus, ip_SiteIDs: $SiteIDs, ip_AccountStatuses: $AccountStatuses}) YIELD value 
-WITH collect(value) as ListAss, count(value) as TotalItems
+
+WITH value 
+WITH value.CTSCustID as CTSCustID, value.CustId AS CustId, value.Username AS Username, value.Username2 AS Username2, collect (value.AssociationType) as AssociationType, value.SharedDevices AS SharedDevices, value.SharedIPs AS SharedIPs, value.SubscriberId AS SubscriberId, collect (value.AssociationDateGMT0) as AssociationDateGMT0 , value.AssociationStatus AS AssociationStatus, value.SiteID as SiteID, value.SiteName as SiteName, value.StatusId as StatusId, value.StatusName as StatusName
+UNWIND(AssociationDateGMT0) as associationDateGMT0
+WITH CTSCustID, CustId, Username, Username2, AssociationType, SharedDevices, SharedIPs, SubscriberId, Min(associationDateGMT0) as AssociationDateGMT0 , AssociationStatus, SiteID, SiteName, StatusId, StatusName
+WITH collect({CTSCustID: CTSCustID, CustId: CustId, Username: Username, Username2: Username2, AssociationType:AssociationType, SharedDevices:SharedDevices, SharedIPs:SharedIPs, SubscriberId:SubscriberId, AssociationDateGMT0:AssociationDateGMT0 , AssociationStatus: AssociationStatus, SiteID:SiteID, SiteName:SiteName, StatusId:StatusId, StatusName:StatusName }) 
+	as ListAss, count(CTSCustID) as TotalItems
 UNWIND ListAss as ass
 WITH distinct ass, TotalItems 
 ORDER BY ass.Site, ass.AssociationDateGMT0 DESC

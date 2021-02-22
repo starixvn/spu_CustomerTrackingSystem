@@ -1,5 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.Account.Associated
 {
+    using System.Collections.Generic;
+
     public class CustomerAssociationByAccountDetailViewModel
     {       
         public long CTSCustId { get; set; }
@@ -26,7 +28,7 @@
 
         public string Subscriber { get; set; }
 
-        public int AssociationType { get; set; }
+        public List<int> AssociationType { get; set; }
 
         public string AssociationTypeName { get; set; }
 

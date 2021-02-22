@@ -334,8 +334,6 @@
 
                 var customerAssociation = graphAssociationPage.AssociationList;                
 
-                customerAssociation = _accountService.FilterCustomerAssociationByAssociationType(model.AssociationType, customerAssociation);
-
                 var ctsCustIdList = customerAssociation.Select(x => new { CTSCustId = x.CTSCustID, x.SubscriberId });
                 var flaggedAffectedTagList = _accountService.GetDirectAssociatedAccountTagFlagged(JsonConvert.SerializeObject(ctsCustIdList));
 
@@ -346,9 +344,10 @@
                         CustId = x.CustId.HasValue ? x.CustId.Value : 0,
                         Username = !string.IsNullOrWhiteSpace(x.Username) ? x.Username : x.Username2,
                         LoginId = !string.IsNullOrWhiteSpace(x.Username2) ? x.Username2 : x.Username,
-                        AssociationDate = x.AssociationDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+                        AssociationDate = getAssociationFromMySql == true ? x.AssociationDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss):
+                                                                            x.AssociationDateFromGraphDB.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                         AssociationType = x.AssociationType,
-                        AssociationTypeName = x.AssociationTypeName,
+                        AssociationTypeName = getAssociationFromMySql == true ? x.AssociationTypeName : _accountService.MappingAssociationType(x),
                         Status = x.StatusName == "NA" ? "N/A" : x.StatusName,
                         StatusId = x.StatusId.HasValue ? x.StatusId.Value : 0,
                         SiteId = x.SiteID.HasValue ? x.SiteID.Value : 0,
@@ -374,8 +373,6 @@
                 .ThenByDescending(a => a.Status)
                 .ThenByDescending(a => a.AssociationDate)
                 .ToList();
-
-                //totalItem = (result.Count() == graphAssociationPage.TotalItems) ? totalItem : result.Count();
             }
 
             return Json(new
