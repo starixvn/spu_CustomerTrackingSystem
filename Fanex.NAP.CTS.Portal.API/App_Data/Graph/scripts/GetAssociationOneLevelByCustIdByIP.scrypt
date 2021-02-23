@@ -16,12 +16,12 @@ WITH c,c2,st,e,s, Min(AssDate) as firstAssDate
 WHERE (($ip_IsAssReport = 0)
      OR ($ip_IsAssReport = 1 AND firstAssDate >= $ip_AssCreatedFrom AND firstAssDate <= $ip_AssCreatedTo)
 RETURN c2.CTSCustID as CTSCustID, c2.CustID AS CustId, c2.UserName AS Username, c2.UserName2 AS Username2, collect(4) as AssociationType, -1 AS SharedDevices, -1 AS SharedIPs, CASE c2.SubscriberID WHEN null THEN -1 ELSE c2.SubscriberID END AS SubscriberId, firstAssDate as AssociationDateGMT0, CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus, 
-		s.SiteID as SiteID, s.Site as SiteName, st.ItemID as StatusId, st.ItemName as StatusName
+		s.SiteID as SiteID, s.Site as SiteName, st.ItemID as StatusId, st.ItemName as StatusName, CASE WHEN st.ItemID in [1,11] THEN 1 ELSE 2 END AS PriorityStatusOrder
 ',{ip_CTSCustId: $CTSCustID, ip_assStatus: $AssStatus, ip_IsAssReport: $IsAssReport, ip_AssCreatedFrom: $AssCreatedFrom, ip_AssCreatedTo: $AssCreatedTo, ip_SiteIDs: $SiteIDs, ip_AccountStatuses: $AccountStatuses}) YIELD value 
 WITH collect(value) as ListAss, count(value) as TotalItems
 UNWIND ListAss as ass
 WITH ass, TotalItems 
-ORDER BY ass.SiteName, ass.AssociationStatus, ass.StatusName, ass.AssociationDateGMT0 DESC
+ORDER BY ass.SiteName, ass.AssociationStatus, ass.PriorityStatusOrder, ass.AssociationDateGMT0 DESC
 SKIP $Skip
 LIMIT $Pagesize
 RETURN COLLECT(ass) AS AssociationList, TotalItems
