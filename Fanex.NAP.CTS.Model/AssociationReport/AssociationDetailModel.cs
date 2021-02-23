@@ -17,7 +17,7 @@
 
         public string StatusName { get; set; }
 
-        public DateTime AssociationDate { get; set; }
+        public DateTime AssociationDateFromGraphDB { get; set; }
 
         public string AssociationDateString { get; set; }
 

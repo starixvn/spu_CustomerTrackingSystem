@@ -55,14 +55,15 @@ RETURN  c3.CTSCustID as CTSCustID, c3.CustID AS CustId, c3.UserName AS Username,
 ',{ip_CTSCustId: $CTSCustID, ip_assStatus: $AssStatus, ip_SiteIDs: $SiteIDs, ip_AccountStatuses: $AccountStatuses}) YIELD value 
 
 WITH value 
-WITH value.CTSCustID as CTSCustID, value.CustId AS CustId, value.Username AS Username, value.Username2 AS Username2, collect (value.AssociationType) as AssociationType, value.SharedDevices AS SharedDevices, value.SharedIPs AS SharedIPs, value.SubscriberId AS SubscriberId, collect (value.AssociationDateGMT0) as AssociationDateGMT0 , value.AssociationStatus AS AssociationStatus, value.SiteID as SiteID, value.SiteName as SiteName, value.StatusId as StatusId, value.StatusName as StatusName
+WITH distinct value.CTSCustID as CTSCustID, value.CustId AS CustId, value.Username AS Username, value.Username2 AS Username2, collect (value.AssociationType) as AssociationType, value.SharedDevices AS SharedDevices, value.SharedIPs AS SharedIPs, value.SubscriberId AS SubscriberId, collect (value.AssociationDateGMT0) as AssociationDateGMT0 , value.AssociationStatus AS AssociationStatus, value.SiteID as SiteID, value.SiteName as SiteName, value.StatusId as StatusId, value.StatusName as StatusName
 UNWIND(AssociationDateGMT0) as associationDateGMT0
 WITH CTSCustID, CustId, Username, Username2, AssociationType, SharedDevices, SharedIPs, SubscriberId, Min(associationDateGMT0) as AssociationDateGMT0 , AssociationStatus, SiteID, SiteName, StatusId, StatusName
+
 WITH collect({CTSCustID: CTSCustID, CustId: CustId, Username: Username, Username2: Username2, AssociationType:AssociationType, SharedDevices:SharedDevices, SharedIPs:SharedIPs, SubscriberId:SubscriberId, AssociationDateGMT0:AssociationDateGMT0 , AssociationStatus: AssociationStatus, SiteID:SiteID, SiteName:SiteName, StatusId:StatusId, StatusName:StatusName }) 
 	as ListAss, count(CTSCustID) as TotalItems
 UNWIND ListAss as ass
 WITH distinct ass, TotalItems 
-ORDER BY ass.Site, ass.AssociationStatus, ass.StatusName, ass.AssociationDateGMT0 DESC
+ORDER BY ass.SiteName, ass.AssociationStatus, ass.StatusName, ass.AssociationDateGMT0 DESC
 SKIP $Skip
 LIMIT $Pagesize
 RETURN COLLECT(ass) AS AssociationList, TotalItems

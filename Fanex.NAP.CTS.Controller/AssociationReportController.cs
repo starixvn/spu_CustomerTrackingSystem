@@ -124,8 +124,8 @@
                     SiteId = x.SiteID.HasValue ? x.SiteID.Value : 0,
                     SiteName = !string.IsNullOrEmpty(x.SiteName) ? x.SiteName : "-",
                     AccountStatus = x.StatusName,
-                    AssociatedDate = x.AssociationDate,
-                    AssociatedDateString = x.AssociationDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+                    AssociatedDate = x.AssociationDateFromGraphDB,
+                    AssociatedDateString = x.AssociationDateFromGraphDB.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                     IsLinked = x.AssociationStatus == 1,
                     AssociationTypeName = GetAssociationTypeName(associationTypes, x.AssociationType.FirstOrDefault()),
                     TotalAssociationAccount = groupForSite.FirstOrDefault(y=>y.SiteId == x.SiteID).TotalAccounts

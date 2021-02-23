@@ -22,7 +22,7 @@ RETURN c2.CTSCustID as CTSCustID, c2.CustID AS CustId, c2.UserName AS Username, 
 WITH collect(value) as ListAss, count(value) as TotalItems
 UNWIND ListAss as ass
 WITH ass, TotalItems 
-ORDER BY ass.Site, ass.AssociationStatus, ass.StatusName, ass.AssociationDateGMT0 DESC
+ORDER BY ass.SiteName, ass.StatusName, ass.AssociationDateGMT0 DESC
 SKIP $Skip
 LIMIT $Pagesize
 RETURN COLLECT(ass) AS AssociationList, TotalItems
