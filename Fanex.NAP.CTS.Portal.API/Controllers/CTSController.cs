@@ -82,6 +82,11 @@
         [HttpPost]
         public bool PlaceEvidenceMultipleByCustId(string custIds, int evidenceId)
         {
+            if (string.IsNullOrEmpty(custIds))
+            {
+                LogService.Info("custIds is null");
+            }
+            
             bool returnedResult = false;
             if (!string.IsNullOrEmpty(custIds))
             {
