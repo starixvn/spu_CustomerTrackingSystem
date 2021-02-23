@@ -82,56 +82,59 @@
         [HttpPost]
         public bool PlaceEvidenceMultipleByCustId(string custIds, int evidenceId)
         {
-            try
+            bool returnedResult = false;
+            if (!string.IsNullOrEmpty(custIds))
             {
-                int userId = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);
-                int retryTime = Convert.ToInt32(ConfigurationManager.AppSettings["RetryTime"]);
-
-                var result = _custEvidenceService.AddCustEvidenceMultipleByCustId(custIds, evidenceId, userId);
-
-                if (string.IsNullOrEmpty(result.ErrorMessage) && result.Eivdences != null && result.Eivdences.Any())
+                try
                 {
-                    var syncCustIds = Enumerable.Empty<int>();
+                    int userId = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);
+                    int retryTime = Convert.ToInt32(ConfigurationManager.AppSettings["RetryTime"]);
 
-                    var syncResult = _accountService.SyncCustEvidenceToCategory(JsonConvert.SerializeObject(result.Eivdences), false, out syncCustIds);
+                    var result = _custEvidenceService.AddCustEvidenceMultipleByCustId(custIds, evidenceId, userId);
 
-                    if (syncResult.ErrorCode == 0 && syncCustIds != null && syncCustIds.Any())
+                    if (string.IsNullOrEmpty(result.ErrorMessage) && result.Eivdences != null && result.Eivdences.Any())
                     {
-                        var latestCustIdsChunk = syncCustIds.Chunk(ConfigSettings.PushCCToExternalChunkSize);
+                        var syncCustIds = Enumerable.Empty<int>();
 
-                        foreach (var custids in latestCustIdsChunk)
+                        var syncResult = _accountService.SyncCustEvidenceToCategory(JsonConvert.SerializeObject(result.Eivdences), false, out syncCustIds);
+
+                        if (syncResult.ErrorCode == 0 && syncCustIds != null && syncCustIds.Any())
                         {
-                            var lastestClassification = _customerClassifyService.GetLatestClassification(string.Join(",", custids));
-                            bool isSyncMainSuccessfully = _pushDataToExternalService.PushCustomerClassificationToMain(lastestClassification, retryTime);
+                            var latestCustIdsChunk = syncCustIds.Chunk(ConfigSettings.PushCCToExternalChunkSize);
 
-                            if (isSyncMainSuccessfully)
+                            foreach (var custids in latestCustIdsChunk)
                             {
-                                _customerClassifyService.UpdateAppliedCustomerClassification(JsonConvert.SerializeObject(lastestClassification));
-                            }
+                                var lastestClassification = _customerClassifyService.GetLatestClassification(string.Join(",", custids));
+                                bool isSyncMainSuccessfully = _pushDataToExternalService.PushCustomerClassificationToMain(lastestClassification, retryTime);
 
-                            _pushDataToExternalService.PushCustomerClassificationToSoon88(lastestClassification);
+                                if (isSyncMainSuccessfully)
+                                {
+                                    _customerClassifyService.UpdateAppliedCustomerClassification(JsonConvert.SerializeObject(lastestClassification));
+                                }
+
+                                _pushDataToExternalService.PushCustomerClassificationToSoon88(lastestClassification);
+                            }
                         }
                     }
-                }
 
-                if (!string.IsNullOrEmpty(result.ErrorMessage))
+                    if (!string.IsNullOrEmpty(result.ErrorMessage))
+                    {
+                        LogService.Error($"CTS Portal API - Add Customers Evidences exception: {result.ErrorMessage} - List custIds: {custIds} - EvidenceId: {evidenceId}");
+                    }
+
+                    returnedResult = true;
+                }
+                catch (Exception ex)
                 {
-                    LogService.Error($"CTS Portal API - Add Customers Evidences exception: {result.ErrorMessage} - List custIds: {custIds} - EvidenceId: {evidenceId}");
-                    return false;
+                    var logMessage = new LogMessage(ex.Message)
+                            .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                            .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                    LogService.Error($"CTS Portal API - PlaceEvidence exception: {logMessage} - CustIds: {custIds} - EvidenceId: {evidenceId}");
                 }
-
-                return true;
             }
-            catch (Exception ex)
-            {
-                var logMessage = new LogMessage(ex.Message)
-                        .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                        .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
 
-                LogService.Error($"CTS Portal API - PlaceEvidence exception: {logMessage} - CustIds: {custIds} - EvidenceId: {evidenceId}");
-
-                return false;
-            }
+            return returnedResult;
         }
 
         /// <summary>   
