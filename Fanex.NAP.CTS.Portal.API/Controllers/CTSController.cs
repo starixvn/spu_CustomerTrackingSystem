@@ -86,6 +86,10 @@
             {
                 LogService.Info("custIds is null");
             }
+            else
+            {
+                LogService.Info("custIds is not null: " + custIds.ToString());
+            }
             
             bool returnedResult = false;
             if (!string.IsNullOrEmpty(custIds))
