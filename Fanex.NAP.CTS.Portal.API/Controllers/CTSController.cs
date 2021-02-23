@@ -81,16 +81,7 @@
         /// <returns>true: success; false: failed</returns>
         [HttpPost]
         public bool PlaceEvidenceMultipleByCustId(string custIds, int evidenceId)
-        {
-            if (string.IsNullOrEmpty(custIds))
-            {
-                LogService.Info("custIds is null");
-            }
-            else
-            {
-                LogService.Info("custIds is not null: " + custIds.ToString());
-            }
-            
+        {            
             bool returnedResult = false;
             if (!string.IsNullOrEmpty(custIds))
             {
