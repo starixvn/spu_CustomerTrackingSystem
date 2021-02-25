@@ -274,7 +274,7 @@
                         {
                             CustId = a.CustId == null ? 0 : a.CustId.Value,
                             CustSubId = a.CustSubId,
-                            AssociationDate = a.AssociationDate.ToString()
+                            AssociationDate = a.AssociationDateFromGraphDB.ToString()
                         });
 
                         xmlString = XmlHelper.ToXmlString(associationList);
