@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using Fanex.Data;
+    using Fanex.Data.Repository;
     using Fanex.Logging;
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.Helpers.Api;
@@ -176,6 +177,35 @@
                     ErrorCode = string.IsNullOrWhiteSpace(criteria.ErrorMessage) ? 0 : -1,
                     ErrorMsg = criteria.ErrorMessage
                 };
+            }
+        }
+
+        public IEnumerable<MySqlAssociationModel> GetMySqlAssociations(AssociationFilterViewModel filter, out int totalItems)
+        {
+            totalItems = 0;
+
+            var criteria = new AssociationReportGetCriteria
+            {
+                FromAssDate = filter.FromDate,
+                ToAssDate = filter.ToDate,
+                AccountStatusIDs = filter.AccountStatusIds,
+                SubscriberIDs = filter.SubscriberIDs,
+                AssociationStatus = filter.AssociationStatus.ToString(),
+                EvidenceID = filter.EvidenceID,
+                AssociationType = filter.AssociationType,
+                TakeRow = filter.length,
+                SkipRow = filter.start
+            };
+
+            var repository = new DynamicRepository();           
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                var data = repository.Fetch<MySqlAssociationModel>(criteria);
+
+                totalItems = criteria.TotalItems;
+
+                return data;
             }
         }
 

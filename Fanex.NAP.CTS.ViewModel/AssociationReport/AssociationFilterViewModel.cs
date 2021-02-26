@@ -18,7 +18,11 @@
 
         public string SiteName { get; set; }
 
+        public string SubscriberIDs { get; set; }
+
         public int AssociationStatus { get; set; }
+
+        public int EvidenceID { get; set; }
 
         public string EvidenceCode { get; set; }
 
