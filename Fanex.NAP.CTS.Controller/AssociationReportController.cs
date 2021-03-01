@@ -31,7 +31,7 @@
         public ActionResult Index()
         {         
             ViewBag.AccountStatus = _associationService.GetAccountStaticStatuses();
-            ViewBag.Subscribers = _associationService.GetAllSubscriberGroups();
+            ViewBag.Subscribers = GetSubscriberGroups();
             ViewBag.Evidences = _associationService.GetEvidenceList();
             ViewBag.AssociationStatus = _associationService.GetCustomerStaticStatus(3, true);
             ViewBag.AssociationTypes = _associationService.GetCustomerStaticStatus(2, true);
@@ -39,10 +39,38 @@
             return View();
         }
 
+        private IEnumerable<SubscriberGroupViewModel> GetSubscriberGroups()
+        {
+            var subscriberGroups = Enumerable.Empty<SubscriberGroupViewModel>();
+            var data = _associationService.GetAllSubscriberGroups();
+
+            if (data != null)
+            {
+                subscriberGroups = data
+                    .GroupBy(g => new { g.SubscriberGroupID, g.SubscriberGroupName })
+                    .Select(x => new { Group = x.Key, SubscriberList = x.ToList() })
+                    .Select(x => new SubscriberGroupViewModel
+                    {
+                        SubscriberGroupID = x.Group.SubscriberGroupID,
+                        SubscriberGroupName = x.Group.SubscriberGroupName,
+                        SubscriberList = x.SubscriberList.Select(y => new SubscriberViewModel
+                        {
+                            SubscriberID = y.SubscriberID,
+                            SubscriberName = y.SubscriberName
+                        })
+                    });
+            }
+
+            return subscriberGroups;
+        }
+
         [HttpPost]
         public ActionResult GetAssociations(AssociationFilterViewModel filter)
         {
             var associationList = Enumerable.Empty<AssociationViewModel>();
+            int totalItems = 0;
+            var associations = _associationService.GetAssociationFromMySql(filter, out totalItems);
+
             var graphAssociations = _associationService.GetAssociations(ConfigSettings.GetAssociations, filter);
             var total = 0;
 

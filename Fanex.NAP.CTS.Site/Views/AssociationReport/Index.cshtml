@@ -46,26 +46,20 @@
                         </select>
                     </div>
                     <div class="group width-180">
-                        <label class="text">Site</label>
+                        <label class="text">Subscriber</label>
                         <div style="width:200px">
-                            <select class="control width-select" id="cbbSite">
-                                @{
-                                    optionSelect = true;
-                                }
-                                @foreach (var item in ViewBag.Subscribers)
+                            <select class="control width-select" id="cbbSubscriber" multiple="multiple">
+                                @foreach (var group in ViewBag.Subscribers)
                                 {
-                                    if (optionSelect)
-                                    {
-                                        optionSelect = false;
-                                        <option value=@item.SiteID selected>@item.SiteName</option>
-                                    }
-                                    else
-                                    {
-                                        <option value=@item.SiteID>@item.SiteName</option>
-                                    }
-                                }
+                                    <optgroup label="@group.SubscriberGroupName">
+                                        @foreach (var item in group.SubscriberList)
+                                        {
+                                            <option selected value=@item.SubscriberID>@item.SubscriberName</option>
+                                        }
+                                    </optgroup>
+                                 }
                             </select>
-                        </div>                        
+                        </div>
                     </div>
                     <div class="group width-180">
                         <label class="text">Association Status</label>

@@ -123,8 +123,9 @@
     <Setting Key="CTS_DC_Report_GetAssociatedAccount " SpName="CTS_DC_Report_GetAssociatedAccount_xtest" DbName="MySQL.CTS_DataCenter.Reporter"/>
   </Function>
 
-  <Function name="AssociationReport">
-    <Setting Key="CTS_DC_Report_GetAssociatedAccount " SpName="CTS_DC_Report_GetAssociatedAccount_xtest" DbName="MySQL.CTS_DataCenter.Reporter"/>
-	<Setting Key="CTS_DC_AssociationReport_Get " SpName="CTS_DC_AssociationReport_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter"/>
+  <Function name="AssociationReport">    
+	  <Setting Key="CTS_DC_Report_GetAssociatedAccount " SpName="CTS_DC_Report_GetAssociatedAccount_xtest" DbName="MySQL.CTS_DataCenter.Reporter"/>
+	  <Setting Key="CTS_DC_Subscriber_GetByGroup " SpName="CTS_DC_Subscriber_GetByGroup_xtest" DbName="MySQL.CTS_DataCenter.Reporter"/>	
+	  <Setting Key="CTS_DC_RPT_AssociatedAccount " SpName="CTS_DC_RPT_AssociatedAccount_xtest" DbName="MySQL.CTS_DataCenter.Reporter"/>
   </Function>
 </Functions>

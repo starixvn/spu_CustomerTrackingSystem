@@ -4,7 +4,7 @@
         dpkFromDate: $('#dpkFromDate'),
         dpkToDate: $('#dpkToDate'),
         cbbAccountStatus: $('#cbbAccountStatus'),
-        cbbSite: $('#cbbSite'),
+        cbbSubscriber: $('#cbbSubscriber'),
         cbbAssociationStatus: $('#cbbAssociationStatus'),
         cbbEvidence: $('#cbbEvidence'),
         cbbAssociationType: $('#cbbAssociationType'),
@@ -45,7 +45,7 @@
                     AccountStatusIds: function () { return domElements.cbbAccountStatus.val(); },
                     SiteName: function () {
                         var selectedSites = [];
-                        domElements.cbbSite.find('option:selected').each(function () { selectedSites.push($(this).text()); });
+                        domElements.cbbSubscriber.find('option:selected').each(function () { selectedSites.push($(this).text()); });
 
                         return selectedSites.length !== 0 ? selectedSites.join(',') : "";
                     },
@@ -180,7 +180,22 @@
             .change(SetRestrictFromDate);
 
         domElements.cbbEvidence.select2();
-        domElements.cbbSite.select2();
+        
+        domElements.cbbSubscriber.multiselect({
+            menuWidth: 320,
+            menuHeight: 320,
+            selectedText: "# of # selected",
+            noneSelectedText: "Select Site",
+            enableClickableOptGroups: true,
+            includeSelectAllOption: true,
+            groupsCollapsable: true,
+            optGroupChecked: true
+        }).multiselectfilter({
+            width: 217,
+            placeholder: '',
+            label: ''
+        });
+
         domElements.cbbAssociationStatus.multiselect({
             menuWidth: 250,
             menuHeight: 250,

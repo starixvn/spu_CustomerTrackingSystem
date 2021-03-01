@@ -11,11 +11,9 @@
     using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Criteria.Account;
     using Fanex.NAP.CTS.Criteria.Account.Associated;
-    using Fanex.NAP.CTS.Criteria.AssociationReport;
-    using Fanex.NAP.CTS.Criteria.ProblemAccountMonitor;
+    using Fanex.NAP.CTS.Criteria.AssociationReport;    
     using Fanex.NAP.CTS.Model.Account;
-    using Fanex.NAP.CTS.Model.AssociationReport;
-    using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
+    using Fanex.NAP.CTS.Model.AssociationReport;    
     using Fanex.NAP.CTS.ViewModel.AssociationReport;
 
     public class AssociationReportService : IAssociationReportService
@@ -67,7 +65,7 @@
 
         public IEnumerable<SubscriberGroupModel> GetAllSubscriberGroups()
         {
-            var criteria = new GetAllSubscriberGroupsCriteria();
+            var criteria = new GetSubscriberGroupCriteria();
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
@@ -180,7 +178,7 @@
             }
         }
 
-        public IEnumerable<MySqlAssociationModel> GetMySqlAssociations(AssociationFilterViewModel filter, out int totalItems)
+        public IEnumerable<AssociationFromMySqlModel> GetAssociationFromMySql(AssociationFilterViewModel filter, out int totalItems)
         {
             totalItems = 0;
 
@@ -197,11 +195,11 @@
                 SkipRow = filter.start
             };
 
-            var repository = new DynamicRepository();           
+            var repository = new DynamicRepository();
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                var data = repository.Fetch<MySqlAssociationModel>(criteria);
+                var data = repository.Fetch<AssociationFromMySqlModel>(criteria);
 
                 totalItems = criteria.TotalItems;
 

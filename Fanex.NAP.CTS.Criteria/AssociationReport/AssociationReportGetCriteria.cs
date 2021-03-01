@@ -37,7 +37,7 @@
         public int TotalItems { get; set; }
 
         public override string GetSettingKey()
-           => "CTS_DC_AssociationReport_Get";
+           => "CTS_DC_RPT_AssociatedAccount";
 
         public override bool IsValid()
             => true;

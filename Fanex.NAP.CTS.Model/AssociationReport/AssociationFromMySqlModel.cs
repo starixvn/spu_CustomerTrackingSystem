@@ -1,6 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Model.AssociationReport
 {
-    public class MySqlAssociationModel
+    public class AssociationFromMySqlModel
     {
         public int CTSCustId { get; set; }
 

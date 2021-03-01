@@ -2,8 +2,7 @@
 {
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Model.Account;
-    using Fanex.NAP.CTS.Model.AssociationReport;
-    using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
+    using Fanex.NAP.CTS.Model.AssociationReport;    
     using Fanex.NAP.CTS.ViewModel.AssociationReport;
     using System.Collections.Generic;
 
@@ -25,6 +24,6 @@
 
         DBResult ActiveRemoveAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, int createdBy, bool isRemoveAction);
 
-        IEnumerable<MySqlAssociationModel> GetMySqlAssociations(AssociationFilterViewModel filter, out int totalItems);
+        IEnumerable<AssociationFromMySqlModel> GetAssociationFromMySql(AssociationFilterViewModel filter, out int totalItems);
     }
 }

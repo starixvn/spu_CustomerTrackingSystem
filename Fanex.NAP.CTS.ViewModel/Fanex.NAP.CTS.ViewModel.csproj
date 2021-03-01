@@ -86,6 +86,8 @@
     <Compile Include="AssociationReport\AssociationDetailViewModel.cs" />
     <Compile Include="AssociationReport\AssociationFilterViewModel.cs" />
     <Compile Include="AssociationReport\AssociationViewModel.cs" />
+    <Compile Include="AssociationReport\SubscriberGroupViewModel.cs" />
+    <Compile Include="AssociationReport\SubscriberViewModel.cs" />
     <Compile Include="CheckBetReport\CheckBetTicket.cs" />
     <Compile Include="CustomerMonitor\CustomerDetails\CustomerDetailsInfo.cs" />
     <Compile Include="CustomerMonitor\CustomerDetails\TicketDetails.cs" />

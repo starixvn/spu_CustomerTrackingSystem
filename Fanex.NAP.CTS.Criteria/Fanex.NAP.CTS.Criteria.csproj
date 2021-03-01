@@ -69,6 +69,7 @@
     <Compile Include="Account\GetAssociationWithCategoryCriteria.cs" />
 	<Compile Include="AssociationReport\AssociationReportGetCriteria.cs" /
     <Compile Include="Api\GetFlaggedEvidenceByLevel2AssociationCriteria.cs" />
+    <Compile Include="AssociationReport\GetSubscriberGroupCriteria.cs" />
     <Compile Include="Category\GetCategoryCustomerClassCriteria.cs" />
     <Compile Include="Common\ValidateUsernameCriteria.cs" />
     <Compile Include="CustomerClassify\GetLastestClassificationCriteria.cs" />
