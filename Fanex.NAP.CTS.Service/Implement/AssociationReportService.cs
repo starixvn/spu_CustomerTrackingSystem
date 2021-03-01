@@ -207,5 +207,31 @@
             }
         }
 
+        public IEnumerable<AssociationDetailFromMySqlModel> GetAssociationDetailFromMySql(AssociationDetailFilterViewModel filter, out int totalItems)
+        {
+            totalItems = 0;
+
+            var criteria = new AssociationDetailReportGetCriteria
+            {
+                CTSCustID = filter.CTSCustId,
+                FromAssDate = filter.FromDate,
+                ToAssDate = filter.ToDate,
+                AssociationType = filter.AssociationType,
+                TakeRow = filter.length,
+                SkipRow = filter.start
+            };
+
+            var repository = new DynamicRepository();
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                var data = repository.Fetch<AssociationDetailFromMySqlModel>(criteria);
+
+                totalItems = criteria.TotalItems;
+
+                return data;
+            }
+        }
+
     }
 }

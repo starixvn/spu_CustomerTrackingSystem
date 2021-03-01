@@ -43,11 +43,8 @@
                     FromDate: function () { return domElements.dpkFromDate.val(); },
                     ToDate: function () { return domElements.dpkToDate.val(); },
                     AccountStatusIds: function () { return domElements.cbbAccountStatus.val(); },
-                    SiteName: function () {
-                        var selectedSites = [];
-                        domElements.cbbSubscriber.find('option:selected').each(function () { selectedSites.push($(this).text()); });
-
-                        return selectedSites.length !== 0 ? selectedSites.join(',') : "";
+                    SubscriberIDs: function () {
+                        return domElements.cbbSubscriber.val().join()
                     },
                     AssociationStatus: function () {
                         let options = domElements.cbbAssociationStatus.find('option');
@@ -57,7 +54,7 @@
                             ? domElements.cbbAssociationStatus.val()
                             : 0;
                     },
-                    EvidenceCode: function () { return domElements.cbbEvidence.val(); },
+                    EvidenceID: function () { return domElements.cbbEvidence.val(); },
                     AssociationType: function () { return domElements.cbbAssociationType.val(); }                    
                 },
                 type: "POST",
