@@ -189,6 +189,30 @@
         }
 
         /// <summary>
+        /// Get flagged customer for level 0 and 1 for Customers
+        /// </summary>
+        /// <param name="custIdList"></param>
+        /// <returns></returns>
+
+        [HttpGet]        
+        public JsonResult<List<CustomerEvidence>> GetFlaggedEvidenceForLevel01(string custIdList)
+        {
+            if(string.IsNullOrWhiteSpace(custIdList))
+            {
+                LogService.Error($"Cust Id list is empty.");
+
+                return null;
+            }
+            else
+            {
+                var result =  _associationService.GetFlaggedEvidenceByCustIds(custIdList).ToList();
+
+                return Json(result);
+            }
+        }
+
+
+        /// <summary>
         /// Add evidences to customers
         /// </summary>
         /// <param name="customerEvidenceList"></param>

@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Fanex.NAP.SPU.Graph.Core;
+using Fanex.NAP.CTS.Criteria.Api;
 
 namespace Fanex.NAP.CTS.Service.Implement
 {
@@ -147,5 +148,17 @@ namespace Fanex.NAP.CTS.Service.Implement
             return associationList;
         }
 
+        public IEnumerable<CustomerEvidence> GetFlaggedEvidenceByCustIds(string custIdList)
+        {
+            var criteria = new GetAllEvidenceByCustIdsCriteria()
+            {
+                CustIds = custIdList
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<CustomerEvidence>(criteria);
+            }
+        }
     }
 }

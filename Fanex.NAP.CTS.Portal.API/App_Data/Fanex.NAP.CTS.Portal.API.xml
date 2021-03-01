@@ -518,6 +518,13 @@
             <param name="eviIdList"> Evidence in string format (saparate by comma) (</param>
             <returns>A list of customer evidence in JSON format</returns>
         </member>
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetFlaggedEvidenceForLevel01(System.String)">
+            <summary>
+            Get flagged customer for level 0 and 1 for Customers
+            </summary>
+            <param name="custIdList"></param>
+            <returns></returns>
+        </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.AddCustomersEvidences(Fanex.NAP.CTS.Model.DTO.CustomerEvidenceList)">
             <summary>
             Add evidences to customers

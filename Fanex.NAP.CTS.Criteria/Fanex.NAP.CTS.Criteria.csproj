@@ -76,6 +76,7 @@
     <Compile Include="AssociationReport\AssociationReportGetCategoriesCriteria.cs" />
     <Compile Include="ImportEvidences\InsertCustEvidenceQueueCriteria.cs" />
     <Compile Include="ManageSubscriber\ReUpdateSubriberIdBySiteIdCriteira.cs" />
+    <Compile Include="Api\GetAllEvidenceByCustIdsCriteria.cs" />
     <Compile Include="ProbationManagement\GetAccountStaticStatusCriteria.cs" />
     <Compile Include="ProbationManagement\GetSubscriberCriteria.cs" />
     <Compile Include="ProbationManagement\UpdateProbationCategoryCriteria.cs" />

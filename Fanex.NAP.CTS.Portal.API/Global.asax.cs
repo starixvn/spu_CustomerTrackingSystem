@@ -9,6 +9,7 @@
     using Fanex.NAP.SPU.Graph.Core.Neo4j;
     using Newtonsoft.Json.Serialization;
     using SharpRaven;
+    using Swashbuckle.Application;
     using System.Collections.Generic;
     using System.Configuration;
     using System.Web.Http;
@@ -22,6 +23,7 @@
         {
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
+           
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
