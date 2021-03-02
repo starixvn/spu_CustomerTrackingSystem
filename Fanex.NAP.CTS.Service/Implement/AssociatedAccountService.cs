@@ -148,9 +148,22 @@ namespace Fanex.NAP.CTS.Service.Implement
             return associationList;
         }
 
-        public IEnumerable<CustomerEvidence> GetFlaggedEvidenceByCustIds(string custIdList)
+        public IEnumerable<CustomerEvidence> GetFlaggedEvidenceByDirectAssociation(string custIdList)
         {
-            var criteria = new GetAllEvidenceByCustIdsCriteria()
+            var criteria = new GetFlaggedEvidenceByDirectAssociationCriteria()
+            {
+                CustIds = custIdList
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<CustomerEvidence>(criteria);
+            }
+        }
+
+        public IEnumerable<CustomerEvidence> GetFlaggedEvidenceByLevel2Association(string custIdList)
+        {
+            var criteria = new GetFlaggedEvidenceByLevel2AssociationCriteria()
             {
                 CustIds = custIdList
             };

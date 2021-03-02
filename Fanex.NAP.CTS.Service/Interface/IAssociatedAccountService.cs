@@ -18,6 +18,8 @@ namespace Fanex.NAP.CTS.Service.Interface
 
         List<CustomerEvidence> GetFlaggedCustomerByLevel(IEnumerable<int> custIds, int associatedLevel, IEnumerable<int> eviIdList);
 
-        IEnumerable<CustomerEvidence> GetFlaggedEvidenceByCustIds(string custIdList);
+        IEnumerable<CustomerEvidence> GetFlaggedEvidenceByDirectAssociation(string custIdList);
+
+        IEnumerable<CustomerEvidence> GetFlaggedEvidenceByLevel2Association(string custIdList);
     }
 }

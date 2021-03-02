@@ -6,8 +6,8 @@
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Core.Helpers.Xml;
-    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Core.Utilities;
+    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.API;
     using Fanex.NAP.CTS.Model.DTO;
@@ -22,7 +22,6 @@
     using System.Configuration;
     using System.Linq;
     using System.Net;
-    using System.Threading;
     using System.Web.Http;
     using System.Web.Http.Results;
 
@@ -194,7 +193,7 @@
         /// <param name="custIdList"></param>
         /// <returns></returns>
 
-        [HttpGet]        
+        [HttpGet]
         public JsonResult<List<CustomerEvidence>> GetFlaggedEvidenceForLevel01(string custIdList)
         {
             if(string.IsNullOrWhiteSpace(custIdList))
@@ -205,7 +204,30 @@
             }
             else
             {
-                var result =  _associationService.GetFlaggedEvidenceByCustIds(custIdList).ToList();
+                var result =  _associationService.GetFlaggedEvidenceByDirectAssociation(custIdList).ToList();
+
+                return Json(result);
+            }
+        }
+
+        /// <summary>
+        /// Get flagged customer for level 2 for Customers
+        /// </summary>
+        /// <param name="custIdList"></param>
+        /// <returns></returns>
+
+        [HttpGet]
+        public JsonResult<List<CustomerEvidence>> GetFlaggedEvidenceForLevel2(string custIdList)
+        {
+            if (string.IsNullOrWhiteSpace(custIdList))
+            {
+                LogService.Error($"Cust Id list is empty.");
+
+                return null;
+            }
+            else
+            {
+                var result = _associationService.GetFlaggedEvidenceByLevel2Association(custIdList).ToList();
 
                 return Json(result);
             }
