@@ -5,9 +5,7 @@
     let divMarkCategory = $('#divMarkCategory');
     let divRemoveCategory = $('#divRemoveCategory');
     let tblcustomercategory = $('#customer-category-table');
-    let isHostPermission;
-    let inputPinCategory = $('#inputPinCategory');
-    let inputExcludedTagAssPA = $('#inputExcludedTagAssPA');
+    let isHostPermission; 
     let spanClass =  $('#spanClass');
 
     function BindingMarkCategoryForAddNew(custId, ctsCustId, subscriberId) {
@@ -217,8 +215,8 @@
                     if (response !== undefined) {
                         let json = jQuery.parseJSON(response);
 
-                        inputPinCategory.prop('checked', json.isPinCategory);
-                        inputPinCategory.prop('disabled', json.isVVip);
+                        //inputPinCategory.prop('checked', json.isPinCategory);
+                        //inputPinCategory.prop('disabled', json.isVVip);
                         btnMarkCategory.prop('disabled', json.isVVip);
                         btnRemoveCategory.prop('disabled', !json.isVVip);
 
@@ -264,8 +262,8 @@
                 if (response !== undefined) {
                     let json = jQuery.parseJSON(response);                  
 
-                    inputPinCategory.prop('checked', json.isPinCategory);
-                    inputPinCategory.prop('disabled', json.isVVip);
+                    //inputPinCategory.prop('checked', json.isPinCategory);
+                    //inputPinCategory.prop('disabled', json.isVVip);
                     btnMarkCategory.prop('disabled', json.isVVip);
                     btnRemoveCategory.prop('disabled', !json.isVVip);
                     
@@ -396,10 +394,18 @@
         return list;
     }   
 
-    function PinCategory(custId, ctsCustId, subscriberId) {
+    function ChangeCategorySetting(event, ui) {
+        if (ui.value == "PinCategory")
+            PinCategory();
+        else
+            ExcludedTagAssPA();
+    } 
+
+    function PinCategory(isChecked, custId, ctsCustId, subscriberId) {
         let html = "<div style='text-align:center'>Are you sure about this action? </div>";
 
-        let isPinCategory = inputPinCategory.is(":checked");
+        //let isPinCategory = inputPinCategory.is(":checked");
+        let isPinCategory = false;
 
         if (isPinCategory) {
             html += "By enabling pin option, this account will not be classified automatically by our service in future";
@@ -428,7 +434,7 @@
                     }
                     else {
                         common.showError('Failed! ' + response.errorMessage);
-                        inputPinCategory.prop('checked', !isPinCategory);
+                        //inputPinCategory.prop('checked', !isPinCategory);
                     }
                 },
                 beforeSend: function () {
@@ -440,22 +446,60 @@
                 error: function (error) {
                     common.closeLoading();
                     console.log(error);
-                    inputPinCategory.prop('checked', !isPinCategory);
+                    //inputPinCategory.prop('checked', !isPinCategory);
                 }
             });
         });
     }
 
-    function ExcludedTagAssPA(custId, ctsCustId, subscriberId) {
+    function ExcludedTagAssPA(isChecked, custId, ctsCustId, subscriberId) {
+        let html = "<div style='text-align:center'>Are you sure about this action? </div>";
 
+        console.showFormConfirmation(html, 'Confirmation', function () {
+            var url = common.modifyRelativeUrl('/Account/ChangeExcludedTagAssPA');
+            var params = {};
+            params.custId = custId;
+            params.ctsCustId = ctsCustId;
+            params.subscriberId = subscriberId;
+            params.isExcludedTagAssPA = isChecked;
+
+            $.ajax(url, {
+                type: 'POST',
+                data: params,
+                success: function (response) {
+                    if (response.errorCode === 0) {
+                        let message = isPinCategory
+                            ? "mark category successfully!"
+                            : "unmark category successfully!";
+
+                        common.showSuccess(message);
+                    }
+                    else {
+                        common.showError('Failed! ' + response.errorMessage);
+                        //inputPinCategory.prop('checked', !isPinCategory);
+                    }
+                },
+                beforeSend: function () {
+                    common.showLoading();
+                },
+                complete: function () {
+                    common.closeLoading();
+                },
+                error: function (error) {
+                    common.closeLoading();
+                    console.log(error);
+                    //inputPinCategory.prop('checked', !isPinCategory);
+                }
+            });
+        });
     }
 
     function DisableButton(hostPermission) {
         isHostPermission = hostPermission === "True";
 
         if (!isHostPermission) {
-            inputPinCategory.prop('disabled', true);
-            inputExcludedTagAssPA.prop('disabled', true);
+            //inputPinCategory.prop('disabled', true);
+            //inputExcludedTagAssPA.prop('disabled', true);
             btnMarkCategory.prop('disabled', true);
             btnRemoveCategory.prop('disabled', true);
         }
@@ -468,14 +512,20 @@
             menuWidth: 155,
             menuHeight: 155,
             header: false,
+            click: function (_, ui) {
+                if (ui.value == "PinCategory")
+                    PinCategory(ui.checked, custId, ctsCustId, subscriberId);
+                else
+                    ExcludedTagAssPA(ui.checked, custId, ctsCustId, subscriberId);
+            },
             selectedText: "Category Setting",
             noneSelectedText: "Category Setting"
         });
 
         if (isHostPermission) {
-            inputPinCategory.click(function () { PinCategory(custId, ctsCustId, subscriberId); });
+            //inputPinCategory.click(function () { PinCategory(custId, ctsCustId, subscriberId); });
 
-            inputExcludedTagAssPA.click(function () { ExcludedTagAssPA(custId, ctsCustId, subscriberId); });
+            //inputExcludedTagAssPA.click(function () { ExcludedTagAssPA(custId, ctsCustId, subscriberId); });            
 
             btnMarkCategory.click(function () { DisplayMarkCategory(custId, ctsCustId, subscriberId); });
 

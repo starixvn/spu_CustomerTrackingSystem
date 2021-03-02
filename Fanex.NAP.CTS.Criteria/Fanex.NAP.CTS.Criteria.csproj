@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Account\Associated\ActiveRemoveAssociationCriteria.cs" />
+    <Compile Include="Account\Associated\ChangeUpdateTaggingAssWithPACriteria.cs" />
     <Compile Include="Account\Associated\GetAssociationProfileCriteria.cs" />
     <Compile Include="Account\Associated\GetAssociationProfileStatictisCriteria.cs" />
     <Compile Include="Account\Associated\InsertManualAssociationMultipleCriteria.cs" />

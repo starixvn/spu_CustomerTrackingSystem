@@ -1218,6 +1218,19 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [HttpPost]
+        public ActionResult ChangeExcludedTagAssPA(int custId, long ctsCustId, int subscriberId, bool isExcludedTagAssPA)
+        {
+            var result = _accountService.ChangeExcludedTagAssPA(custId, ctsCustId, subscriberId, isExcludedTagAssPA, CurrentSession.UserId);
+
+            return Json(new
+            {
+                errorCode = result.ErrorCode,
+                errorMessage = result.ErrorMsg
+            }, JsonRequestBehavior.AllowGet);
+        }
+
         #endregion
 
         #region Betting Statistic

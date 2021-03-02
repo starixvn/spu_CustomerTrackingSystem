@@ -105,6 +105,8 @@
 
         DBResult PinCategoryCustomerClassification(int custId, long ctsCustId, int subscriberId, bool isPinCategory, int createdBy);
 
+        DBResult ChangeExcludedTagAssPA(int custId, long ctsCustId, int subscriberId, bool isPinCategory, int createdBy);
+
         IEnumerable<PerformanceBySportModel> GetPerformanceBySport(long custId, int getTop);
 
         IEnumerable<PerformanceByBettypeModel> GetPerformanceByBettype(long custId, int getTop);

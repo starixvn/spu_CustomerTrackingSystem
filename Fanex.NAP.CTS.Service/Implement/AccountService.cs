@@ -1120,6 +1120,30 @@
             };
         }
 
+        public DBResult ChangeExcludedTagAssPA(int custId, long ctsCustId, int subscriberId, bool isExcludedTagAssPA, int createdBy)
+        {
+            var criteria = new ChangeUpdateTaggingAssWithPACriteria
+            {
+                CustId = custId,
+                CTSCustId = ctsCustId,
+                SubscriberId = subscriberId,
+                IsExcludedTagAssPA = isExcludedTagAssPA,
+                CreatedBy = createdBy
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                db.ExecuteNonQuery(criteria);
+
+                if (string.IsNullOrWhiteSpace(criteria.ErrorMessage))
+                {
+                    return new DBResult { ErrorCode = 0, ErrorMsg = criteria.ErrorMessage };
+                }
+            }
+
+            return new DBResult { ErrorCode = -1, ErrorMsg = criteria.ErrorMessage };
+        }
+
         public IEnumerable<CustomerClassificationGeneralInfoModel> GetCustomerClassificationByCategory(string categoryIdList)
         {
             var criteria = new GetCustomerCategoryByCategoryIdsCriteria
