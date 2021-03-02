@@ -20,6 +20,8 @@
 
         public bool IsLinked { get; set; }
 
+        public string CategoryName { get; set; }
+
         public string AssociationTypeName { get; set; }
 
         public int TotalAssociationAccount { get; set; }

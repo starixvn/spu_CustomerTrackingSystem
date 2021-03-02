@@ -79,12 +79,11 @@
                     {
                         CTSCustId = x.CTSCustId,
                         SubscriberId = x.SubscriberId,
-                        SiteId = x.SiteId,
-                        SiteName = filter.SiteName,
+                        SubscriberName = x.SubscriberName,
                         UserName = x.UserName,
                         EvidenceCode = x.EvidenceCode,
                         AccountStatus = x.AccountStatus,
-                        CategoryNames = x.CategoryName
+                        CategoryName = x.CategoryName
                     };
                 });
             }
@@ -140,8 +139,9 @@
                     SubscriberId = x.SubscriberID,
                     SubscriberName = x.SubscriberName,
                     AssociatedDate = x.AssociationDate,
+                    AccountStatus = x.AccountStatus,
                     AssociatedDateString = x.AssociationDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                    IsLinked = x.AssociationStatus,
+                    IsLinked = x.AssociationStatus,                    
                     AssociationTypeName = GetAssociationTypeName(associationTypes, x.AssociationType.FirstOrDefault()),
                     TotalAssociationAccount = groupForSite.FirstOrDefault(y=>y.SubscriberID == x.SubscriberID).TotalAccounts
                 }).OrderBy(x=>x.SubscriberId);

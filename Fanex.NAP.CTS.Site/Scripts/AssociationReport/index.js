@@ -23,10 +23,10 @@
     function ValidateRangeDate() {        
         let toDateValue = domElements.dpkToDate.datepicker("getDate");
         let toDateValueAllow = domElements.dpkFromDate.datepicker("getDate");
-        toDateValueAllow.setDate(toDateValueAllow.getDate() + 2);        
+        toDateValueAllow.setDate(toDateValueAllow.getDate() + 29);        
 
         if (toDateValue > toDateValueAllow) {
-            common.showError("Invalid date range, please select not more than 3 days");
+            common.showError("Invalid date range, please select not more than 30 days");
 
             return false;
         }
@@ -111,10 +111,10 @@
                         return html = `<a class='click-view-name' href=${url}> ${obj.UserName} </a>`;
                     }
                 },
-                { data: obj => obj.SiteName },
+                { data: obj => obj.SubscriberName },
                 { data: obj => obj.AccountStatus },
                 { data: obj => obj.EvidenceCode },
-                { data: obj => obj.CategoryNames },
+                { data: obj => obj.CategoryName },
                 {
                     data: obj => () => {
                         let paramTemplate = "SubscriberId={0}&CTSCustId={1}&UserName={2}&FromDate={3}&ToDate={4}&AssociationStatus={5}&AssociationType={6}&AssociationTypeName={7}";
