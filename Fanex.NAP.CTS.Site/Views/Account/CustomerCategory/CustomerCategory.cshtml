@@ -10,17 +10,19 @@
             <div class="fixed-header">
                 <div class="graph-heading">
                     <div class="free-size"></div>                  
-                    <div class="graph-info">
-                        <select class="control width-select" id="cbbCategorySetting" multiple="multiple">
-                            <option value=1>Pin Category</option>
-                            <option value=2>Normal Category</option>
-                        </select>                    
-                        <label class="checkbox">
-                            <input type="checkbox" id="inputPinCategory" />
-                            <span>Pin Category</span>
-                        </label>
-                        <button id="btnmarkcategory" class="button button-primary-outline" title="Mark Category">Mark Category</button>
-                        <button id="btnremovecategory" class="button button-primary-outline" title="Remove Category">Remove Category</button>
+                    <div class="graph-info">                        
+                        <div style="width:170px">
+                            <select id="cbbCategorySetting" multiple="multiple">
+                                <option id="inputPinCategory" value=1>Pin Category</option>
+                                <option id="inputExcludedTagAssPA" value=2>Normal Category</option>
+                            </select>
+                        </div>                       
+                        <div>
+                            <button id="btnmarkcategory" class="button button-primary-outline" title="Mark Category">Mark Category</button>
+                        </div>
+                        <div>
+                            <button id="btnremovecategory" class="button button-primary-outline" title="Remove Category">Remove Category</button>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -7,6 +7,7 @@
     let tblcustomercategory = $('#customer-category-table');
     let isHostPermission;
     let inputPinCategory = $('#inputPinCategory');
+    let inputExcludedTagAssPA = $('#inputExcludedTagAssPA');
     let spanClass =  $('#spanClass');
 
     function BindingMarkCategoryForAddNew(custId, ctsCustId, subscriberId) {
@@ -445,11 +446,16 @@
         });
     }
 
+    function ExcludedTagAssPA(custId, ctsCustId, subscriberId) {
+
+    }
+
     function DisableButton(hostPermission) {
         isHostPermission = hostPermission === "True";
 
         if (!isHostPermission) {
             inputPinCategory.prop('disabled', true);
+            inputExcludedTagAssPA.prop('disabled', true);
             btnMarkCategory.prop('disabled', true);
             btnRemoveCategory.prop('disabled', true);
         }
@@ -458,8 +464,18 @@
     this.Initial = function (custId, ctsCustId, subscriberId, username, hostPermission) {
         DisableButton(hostPermission);
 
+        cbbCategorySetting.multiselect({
+            menuWidth: 155,
+            menuHeight: 155,
+            header: false,
+            selectedText: "Category Setting",
+            noneSelectedText: "Category Setting"
+        });
+
         if (isHostPermission) {
             inputPinCategory.click(function () { PinCategory(custId, ctsCustId, subscriberId); });
+
+            inputExcludedTagAssPA.click(function () { ExcludedTagAssPA(custId, ctsCustId, subscriberId); });
 
             btnMarkCategory.click(function () { DisplayMarkCategory(custId, ctsCustId, subscriberId); });
 
@@ -467,13 +483,7 @@
         }
 
         RenderGrid(custId);
-        
-        cbbCategorySetting.multiselect({
-            menuWidth: 100,
-            menuHeight: 100,
-            selectedText: "Category Setting",
-            noneSelectedText: "Category Setting"
-        });
+               
     };
 
     this.ReloadTab = function (custId) {

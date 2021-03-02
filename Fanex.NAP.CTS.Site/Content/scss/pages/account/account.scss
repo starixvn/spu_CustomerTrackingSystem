@@ -141,6 +141,11 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             text-align: right;
             float: right;
             color: #333;
+            display: flex;
+
+            div {
+                padding: 6px;
+            }
 
             .checkbox {
                 margin-right: 16px;
@@ -152,7 +157,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
                         top: 1px;
                     }
 
-                    &::after{
+                    &::after {
                         top: 4px;
                     }
                 }
