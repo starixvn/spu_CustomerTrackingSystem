@@ -6,7 +6,12 @@
     let divRemoveCategory = $('#divRemoveCategory');
     let tblcustomercategory = $('#customer-category-table');
     let isHostPermission; 
-    let spanClass =  $('#spanClass');
+    let spanClass = $('#spanClass');
+    let cacheData = {
+        isPinCategory: false,
+        isExcludedTagAssPA: false,
+        isProblemAccount: false
+    };
 
     function BindingMarkCategoryForAddNew(custId, ctsCustId, subscriberId) {
         $('#btncancelcategory').on('click', function () {
@@ -217,6 +222,12 @@
 
                         //inputPinCategory.prop('checked', json.isPinCategory);
                         //inputPinCategory.prop('disabled', json.isVVip);
+                        cacheData.isProblemAccount = json.isProblemAccount;
+                        cacheData.isPinCategory = json.isPinCategory;
+                        cacheData.isExcludedTagAssPA = json.isExcludedTagAssPA;
+
+                        ResetCategorySetting(json.isVVip);                       
+                        
                         btnMarkCategory.prop('disabled', json.isVVip);
                         btnRemoveCategory.prop('disabled', !json.isVVip);
 
@@ -266,7 +277,13 @@
                     //inputPinCategory.prop('disabled', json.isVVip);
                     btnMarkCategory.prop('disabled', json.isVVip);
                     btnRemoveCategory.prop('disabled', !json.isVVip);
-                    
+
+                    cacheData.isProblemAccount = json.isProblemAccount;
+                    cacheData.isPinCategory = json.isPinCategory;
+                    cacheData.isExcludedTagAssPA = json.isExcludedTagAssPA;
+
+                    ResetCategorySetting(json.isVVip);                                      
+
                     let isProblemAccount = RenderProblemAccount(json.categoryList);
 
                     if (!isProblemAccount) {
@@ -387,27 +404,17 @@
         list.push({ 'id': 203, 'name': 'Smart Punter', 'cssClass': 'circle bg-yellow', 'indexColor': 2 });
         list.push({ 'id': 206, 'name': 'Probation', 'cssClass': 'circle bg-yellow', 'indexColor': 2 });
         list.push({ 'id': 202, 'name': 'Normal Account', 'cssClass': 'circle bg-green', 'indexColor': 1 });
-        list.push({ 'id': 213, 'name': 'VVIP', 'cssClass': 'circle bg-green', 'indexColor': 1 });
+        list.push({ 'id': 210, 'name': 'VVIP', 'cssClass': 'circle bg-green', 'indexColor': 1 });
         list.push({ 'id': 205, 'name': 'VIP', 'cssClass': 'circle bg-green', 'indexColor': 1 });
         list.push({ 'id': 201, 'name': 'New Member', 'cssClass': 'circle bg-green', 'indexColor': 1 });
 
         return list;
-    }   
-
-    function ChangeCategorySetting(event, ui) {
-        if (ui.value == "PinCategory")
-            PinCategory();
-        else
-            ExcludedTagAssPA();
-    } 
+    }      
 
     function PinCategory(isChecked, custId, ctsCustId, subscriberId) {
-        let html = "<div style='text-align:center'>Are you sure about this action? </div>";
-
-        //let isPinCategory = inputPinCategory.is(":checked");
-        let isPinCategory = false;
-
-        if (isPinCategory) {
+        let html = "<div style='text-align:center'>Are you sure about this action? </div>";  
+        
+        if (isChecked) {
             html += "By enabling pin option, this account will not be classified automatically by our service in future";
         } else {
             html += "By unpin option, this account will be classified automatically by our service in future";
@@ -419,14 +426,14 @@
             params.custId = custId;
             params.ctsCustId = ctsCustId;
             params.subscriberId = subscriberId;
-            params.isPinCategory = isPinCategory;
+            params.isPinCategory = isChecked;
 
             $.ajax(url, {
                 type: 'POST',
                 data: params,
                 success: function (response) {
                     if (response.errorCode === 0) {
-                        let message = isPinCategory
+                        let message = isChecked
                             ? "Pinned category successfully!"
                             : "Unpinned category successfully!";
 
@@ -434,7 +441,7 @@
                     }
                     else {
                         common.showError('Failed! ' + response.errorMessage);
-                        //inputPinCategory.prop('checked', !isPinCategory);
+                        ResetCategorySetting();
                     }
                 },
                 beforeSend: function () {
@@ -446,22 +453,43 @@
                 error: function (error) {
                     common.closeLoading();
                     console.log(error);
-                    //inputPinCategory.prop('checked', !isPinCategory);
+                    ResetCategorySetting();                    
                 }
             });
         });
     }
 
     function ExcludedTagAssPA(isChecked, custId, ctsCustId, subscriberId) {
-        let html = "<div style='text-align:center'>Are you sure about this action? </div>";
+        let html = "";
+        let isPinCategory = false;
+       
+        $("option", cbbCategorySetting).each(function () {
+            if ($(this).val() === "PinCategory") {
+                isPinCategory = $(this).is(":checked");
+            }
+        });
 
-        console.showFormConfirmation(html, 'Confirmation', function () {
+        if (isChecked && isPinCategory) {
+            html = "<div style='text-align:center'>You are not allow to turn on this setting because Pin Category setting is on.</div>";
+            html += "<div style='text-align:center'>Please Turn Off Pin Category Setting before this action</div>";
+
+            common.showError(html, 2000);
+            ResetCategorySetting();
+            
+            return;
+
+        } else {
+            html = "<div style='text-align:center'>Are you sure about this action? </div>";
+        }
+
+        common.showFormConfirmation(html, 'Confirmation', function () {
             var url = common.modifyRelativeUrl('/Account/ChangeExcludedTagAssPA');
             var params = {};
             params.custId = custId;
             params.ctsCustId = ctsCustId;
             params.subscriberId = subscriberId;
             params.isExcludedTagAssPA = isChecked;
+            params.isProblemAccount = cacheData.isProblemAccount;
 
             $.ajax(url, {
                 type: 'POST',
@@ -473,10 +501,11 @@
                             : "unmark category successfully!";
 
                         common.showSuccess(message);
+                        tblcustomercategory.DataTable().ajax.reload();
                     }
                     else {
                         common.showError('Failed! ' + response.errorMessage);
-                        //inputPinCategory.prop('checked', !isPinCategory);
+                        ResetCategorySetting();
                     }
                 },
                 beforeSend: function () {
@@ -488,18 +517,27 @@
                 error: function (error) {
                     common.closeLoading();
                     console.log(error);
-                    //inputPinCategory.prop('checked', !isPinCategory);
+                    ResetCategorySetting();                  
                 }
             });
         });
+    }  
+
+    function ResetCategorySetting(isVVip) {
+        let cbbCategorySettingSelector = cbbCategorySetting.empty();
+
+        cbbCategorySettingSelector.append("<option " + (cacheData.isPinCategory ? "selected" : "") + (isVVip ? " disabled" : "") + " value='PinCategory'>Pin Category</option>");
+
+        cbbCategorySettingSelector.append("<option " + (cacheData.isExcludedTagAssPA ? "selected" : "") + " value='ExcludedTagAssPA'>Normal Category</option>");       
+
+        cbbCategorySetting.multiselect("refresh");
     }
 
     function DisableButton(hostPermission) {
         isHostPermission = hostPermission === "True";
 
         if (!isHostPermission) {
-            //inputPinCategory.prop('disabled', true);
-            //inputExcludedTagAssPA.prop('disabled', true);
+            cbbCategorySetting.prop('disabled', true);
             btnMarkCategory.prop('disabled', true);
             btnRemoveCategory.prop('disabled', true);
         }
@@ -509,8 +547,8 @@
         DisableButton(hostPermission);
 
         cbbCategorySetting.multiselect({
-            menuWidth: 155,
-            menuHeight: 155,
+            menuWidth: 160,
+            menuHeight: 60,
             header: false,
             click: function (_, ui) {
                 if (ui.value == "PinCategory")
@@ -523,9 +561,6 @@
         });
 
         if (isHostPermission) {
-            //inputPinCategory.click(function () { PinCategory(custId, ctsCustId, subscriberId); });
-
-            //inputExcludedTagAssPA.click(function () { ExcludedTagAssPA(custId, ctsCustId, subscriberId); });            
 
             btnMarkCategory.click(function () { DisplayMarkCategory(custId, ctsCustId, subscriberId); });
 

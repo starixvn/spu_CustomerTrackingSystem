@@ -999,6 +999,7 @@
             var isPinCategory = false;
             var isExcludedTagAssPA = false;
             var isVVip = false;
+            var isProblemAccount = false;
             var categoryList = new List<CustomerCategoryViewModel>();
             var classificationHistoryList = new List<CustomerClassificationHistoryViewModel>();
 
@@ -1009,13 +1010,15 @@
                 categoryList = classification
                     .Select(x => new CustomerCategoryViewModel
                     {
-                        CategoryId = x.CategoryId,
+                        CategoryId = x.CategoryID,
                         CategoryType = x.CategoryType,
                         CategoryName = x.CategoryName != null ? x.CategoryName : string.Empty,
                         IsProblemAccount = x.CategoryType == 2
                     }).ToList();
 
                 isVVip = categoryList.Where(x => x.CategoryName.Equals("VVIP")).Any();
+
+                isProblemAccount = categoryList.Where(x => x.IsProblemAccount).Any();
             }
 
             var classificationHistory = _accountService.GetCustomerClassificationHistory(custId);
@@ -1046,6 +1049,7 @@
                 isPinCategory,
                 isExcludedTagAssPA,
                 isVVip,
+                isProblemAccount,
                 categoryList,
                 data = classificationHistoryList,
             }, JsonRequestBehavior.AllowGet);
@@ -1053,7 +1057,14 @@
 
         private string GetReason(CustomerClassificationHistoryModel cc)
         {
-            var reason = $"<div><span> { cc.SourceTypeName } </span><br>";            
+            var reason = $"<div><span> { cc.SourceTypeName } </span>";
+
+            if (!string.IsNullOrEmpty(cc.TaggingType))
+            {
+                reason += $"<span> | Normal Category Status: { cc.TaggingType }</span>";
+            }
+            
+            reason += "<br />";
 
             var margin = Math.Round(cc.Margin, 3);
             var winlost = Math.Round(cc.Winloss, 3);
@@ -1220,9 +1231,16 @@
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [HttpPost]
-        public ActionResult ChangeExcludedTagAssPA(int custId, long ctsCustId, int subscriberId, bool isExcludedTagAssPA)
+        public ActionResult ChangeExcludedTagAssPA(int custId, long ctsCustId, int subscriberId, bool isExcludedTagAssPA, bool isProblemAccount)
         {
             var result = _accountService.ChangeExcludedTagAssPA(custId, ctsCustId, subscriberId, isExcludedTagAssPA, CurrentSession.UserId);
+
+            if (result.ErrorCode == 0 && !isProblemAccount)
+            {
+                var custIdList = new List<int> { custId };
+
+                _customerClassifyService.RescanCustomerClassify(custIdList, true, true);
+            }
 
             return Json(new
             {
