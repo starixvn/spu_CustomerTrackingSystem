@@ -949,9 +949,10 @@
             }
         }
 
-        public IEnumerable<CustomerClassificationModel> GetCustomerClassification(long custId, out bool isPinCategory)
+        public IEnumerable<CustomerClassificationModel> GetCustomerClassification(long custId, out bool isPinCategory, out bool isExcludedTagAssPA)
         {
             isPinCategory = false;
+            isExcludedTagAssPA = false;
 
             var criteria = new GetCTSCustomerClassificationCriteria
             {
@@ -963,11 +964,17 @@
                 using (var result = db.QueryMultiple(criteria))
                 {
                     var pinCategories = result.Read<bool>();
+                    var excludedTagAssPA = result.Read<bool>();
                     var categories = result.Read<CustomerClassificationModel>();
 
                     if (pinCategories != null && pinCategories.Any())
                     {
                         isPinCategory = pinCategories.ToList()[0];
+                    }
+
+                    if (excludedTagAssPA != null && excludedTagAssPA.Any())
+                    {
+                        isExcludedTagAssPA = excludedTagAssPA.ToList()[0];
                     }
 
                     return categories;

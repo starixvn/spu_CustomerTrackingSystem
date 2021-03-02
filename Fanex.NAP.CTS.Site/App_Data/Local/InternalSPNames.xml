@@ -71,6 +71,7 @@
     <Setting Key="CTS_DC_Association_GetWithCategory" SpName="CTS_DC_Association_GetWithCategory" DbName="MySQL.CTS_DataCenter.Reporter"/>
 	  <Setting Key="CTS_DC_Association_Profile_GetStat" SpName="CTS_DC_Association_Profile_GetStat" DbName="MySQL.CTS_DataCenter.Reporter"/>
 	  <Setting Key="CTS_DC_Association_Profile_Get" SpName="CTS_DC_Association_Profile_Get" DbName="MySQL.CTS_DataCenter.Reporter"/>
+	  <Setting Key="CTS_DC_AssociatedAccountMonitor_UpdateTaggingAssWithPA" SpName="CTS_DC_AssociatedAccountMonitor_UpdateTaggingAssWithPA" DbName="MySQL.CTS_DataCenter.Admin" />
   </Function>
 
   <Function Name="CustomerClassification">
@@ -86,7 +87,7 @@
     <Setting Key="CTS_DC_CustClassification_UpdateIsAppliedCC" SpName="CTS_DC_CustClassification_UpdateIsAppliedCC" DbName="MySQL.CTS_DataCenter.Admin" />
     <Setting Key="CTS_DC_Association_GetWithCategory" SpName="CTS_DC_Association_GetWithCategory" DbName="MySQL.CTS_DataCenter.Reporter" />
     <Setting Key="CTS_DC_CustEvidence_GetExistedEvidencesToSync" SpName="CTS_DC_CustEvidence_GetExistedEvidencesToSync" DbName="MySQL.CTS_DataCenter.Reporter" />
-    <Setting Key="CTS_DC_CustEvidence_SyncToCategory" SpName="CTS_DC_CustEvidence_SyncToCategory" DbName="MySQL.CTS_DataCenter.Admin" />
+    <Setting Key="CTS_DC_CustEvidence_SyncToCategory" SpName="CTS_DC_CustEvidence_SyncToCategory" DbName="MySQL.CTS_DataCenter.Admin" />	  
   </Function>
 
   <Function name="AssociatedAccountMonitor">

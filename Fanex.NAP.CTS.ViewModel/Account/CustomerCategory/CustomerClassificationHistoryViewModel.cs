@@ -30,5 +30,6 @@
 
         public string CreatedBy { get; set; }
 
+        public bool TaggingType { get; set; }
     }
 }

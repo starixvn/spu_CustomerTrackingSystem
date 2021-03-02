@@ -1,4 +1,5 @@
 ﻿function customer_category() {
+    let cbbCategorySetting = $('#cbbCategorySetting');
     let btnMarkCategory = $('#btnmarkcategory');
     let btnRemoveCategory = $('#btnremovecategory');
     let divMarkCategory = $('#divMarkCategory');
@@ -466,6 +467,13 @@
         }
 
         RenderGrid(custId);
+        
+        cbbCategorySetting.multiselect({
+            menuWidth: 100,
+            menuHeight: 100,
+            selectedText: "Category Setting",
+            noneSelectedText: "Category Setting"
+        });
     };
 
     this.ReloadTab = function (custId) {

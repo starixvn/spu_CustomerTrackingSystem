@@ -997,11 +997,12 @@
         public ActionResult GetCustomerClassification(long custId)
         {
             var isPinCategory = false;
+            var isExcludedTagAssPA = false;
             var isVVip = false;
             var categoryList = new List<CustomerCategoryViewModel>();
             var classificationHistoryList = new List<CustomerClassificationHistoryViewModel>();
 
-            var classification = _accountService.GetCustomerClassification(custId, out isPinCategory);
+            var classification = _accountService.GetCustomerClassification(custId, out isPinCategory, out isExcludedTagAssPA);
 
             if (classification != null && classification.Any())
             {
@@ -1035,13 +1036,15 @@
                     ActiveDays = x.ActiveDays,
                     LastXDaysMargin = x.LastXDaysMargin,
                     ProbationPeriodWinloss = x.ProbationPeriodWinloss,
-                    CreatedBy = x.CreatedBy
+                    CreatedBy = x.CreatedBy,
+                    TaggingType = x.TaggingType
                 }).ToList();
             }
 
             return Json(new
             {
                 isPinCategory,
+                isExcludedTagAssPA,
                 isVVip,
                 categoryList,
                 data = classificationHistoryList,
@@ -1106,11 +1109,9 @@
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult RemoveCatergory(long ctsCustId)
         {
-            var customerCategoryList = _accountService.GetCustomerCategoryByCTSCustId(ctsCustId).ToList();
-
             var model = new MarkCategoryViewModel
             {
-                CustomerCategoryList = new List<Model.DTO.CustomerCategory> { new Model.DTO.CustomerCategory { CategoryId = 213, CategoryName = "VVIP", ParentId = 200 } }
+                CustomerCategoryList = new List<Model.DTO.CustomerCategory> { new Model.DTO.CustomerCategory { CategoryId = 210, CategoryName = "VVIP", ParentId = 200 } }
             };
 
             return PartialView("CustomerCategory/RemoveCategory", model);
