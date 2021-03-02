@@ -18,6 +18,6 @@
 
         public bool AssociationStatus { get; set; }
 
-        public string AssociationType { get; set; }        
+        public int AssociationType { get; set; }        
     }
 }

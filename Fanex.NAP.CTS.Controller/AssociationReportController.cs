@@ -80,9 +80,9 @@
                         SubscriberId = g.FirstOrDefault().SubscriberId,
                         SubscriberName = g.FirstOrDefault().SubscriberName,
                         UserName = g.FirstOrDefault().UserName,
-                        EvidenceCodes = string.Join(", ", g.Select(x => x.EvidenceCode).OrderBy(x => x)),
+                        EvidenceCodes = string.Join(", ", g.Select(x => x.EvidenceCode).Distinct().OrderBy(x => x)),
                         AccountStatus = g.FirstOrDefault().AccountStatus,
-                        CategoryName = g.FirstOrDefault().CategoryName
+                        CategoryName = string.Join(", ", g.Select(x=>x.CategoryName).Distinct())
                     });
             }
 
@@ -140,7 +140,7 @@
                     AccountStatus = x.AccountStatus,
                     AssociatedDateString = x.AssociationDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                     IsLinked = x.AssociationStatus,                    
-                    AssociationTypeName = GetAssociationTypeName(associationTypes, x.AssociationType.FirstOrDefault()),
+                    AssociationTypeName = GetAssociationTypeName(associationTypes, x.AssociationType),
                     TotalAssociationAccount = groupForSite.FirstOrDefault(y=>y.SubscriberID == x.SubscriberID).TotalAccounts
                 }).OrderBy(x=>x.SubscriberId);
             }
