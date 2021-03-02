@@ -75,21 +75,10 @@
                     <div class="group">
                         <label class="text">Evidence</label> 
                         <div style="width:260px">
-                            <select class="control width-select" id="cbbEvidence">
-                                @{
-                                    optionSelect = true;
-                                }
+                            <select class="control width-select" id="cbbEvidence" multiple="multiple">                              
                                 @foreach (var item in ViewBag.Evidences)
                                 {
-                                    if (optionSelect)
-                                    {
-                                        optionSelect = false;
-                                        <option value=@item.EvidenceID selected>@item.EvidenceCode @item.EvidenceName</option>
-                                    }
-                                    else
-                                    {
-                                        <option value=@item.EvidenceID>@item.EvidenceCode @item.EvidenceName</option>
-                                    }
+                                    <option value=@item.EvidenceID selected>@item.EvidenceCode @item.EvidenceName</option>
                                 }
                             </select>
                         </div>

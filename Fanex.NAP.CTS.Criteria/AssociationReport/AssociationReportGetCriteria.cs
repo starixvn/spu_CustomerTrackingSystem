@@ -21,8 +21,8 @@
         [SpParam(SqlParamName = "ip_ToAssDate")]
         public DateTime ToAssDate { get; set; }
 
-        [SpParam(SqlParamName = "ip_EvidenceID")]
-        public int EvidenceID { get; set; }
+        [SpParam(SqlParamName = "ip_EvidenceIDs")]
+        public string EvidenceIDs { get; set; }
 
         [SpParam(SqlParamName = "ip_AssociationType")]
         public int AssociationType { get; set; }

@@ -189,7 +189,7 @@
                 AccountStatusIDs = filter.AccountStatusIds,
                 SubscriberIDs = filter.SubscriberIDs,
                 AssociationStatus = filter.AssociationStatus.ToString(),
-                EvidenceID = filter.EvidenceID,
+                EvidenceIDs = filter.EvidenceIDs,
                 AssociationType = filter.AssociationType,
                 TakeRow = filter.length,
                 SkipRow = filter.start

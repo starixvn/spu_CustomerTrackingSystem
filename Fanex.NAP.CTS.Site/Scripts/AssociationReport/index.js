@@ -44,7 +44,7 @@
                     ToDate: function () { return domElements.dpkToDate.val(); },
                     AccountStatusIds: function () { return domElements.cbbAccountStatus.val(); },
                     SubscriberIDs: function () {
-                        return domElements.cbbSubscriber.val().join()
+                        return domElements.cbbSubscriber.val().join();
                     },
                     AssociationStatus: function () {
                         let options = domElements.cbbAssociationStatus.find('option');
@@ -54,7 +54,7 @@
                             ? domElements.cbbAssociationStatus.val()
                             : 0;
                     },
-                    EvidenceID: function () { return domElements.cbbEvidence.val(); },
+                    EvidenceIDs: function () { return domElements.cbbEvidence.val().join(); },
                     AssociationType: function () { return domElements.cbbAssociationType.val(); }                    
                 },
                 type: "POST",
@@ -113,7 +113,7 @@
                 },
                 { data: obj => obj.SubscriberName },
                 { data: obj => obj.AccountStatus },
-                { data: obj => obj.EvidenceCode },
+                { data: obj => obj.EvidenceCodes },
                 { data: obj => obj.CategoryName },
                 {
                     data: obj => () => {
@@ -176,7 +176,12 @@
             .datepicker("setDate", new Date())
             .change(SetRestrictFromDate);
 
-        domElements.cbbEvidence.select2();
+        domElements.cbbEvidence.multiselect({
+            menuWidth: 260,
+            menuHeight: 260,
+            selectedText: "# of # selected",
+            noneSelectedText: "Select Evidence"
+        });
         
         domElements.cbbSubscriber.multiselect({
             menuWidth: 320,
@@ -194,8 +199,8 @@
         });
 
         domElements.cbbAssociationStatus.multiselect({
-            menuWidth: 250,
-            menuHeight: 250,
+            menuWidth: 200,
+            menuHeight: 200,
             selectedText: "# of # selected",
             noneSelectedText: "Select Association Status"
         });

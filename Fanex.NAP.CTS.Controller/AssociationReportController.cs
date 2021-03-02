@@ -73,19 +73,17 @@
 
             if (associations != null && associations.Any())
             {
-                associationList = associations.Select(x =>
-                {
-                    return new AssociationViewModel
+                associationList = associations.GroupBy(x => x.UserName)
+                    .Select(g => new AssociationViewModel
                     {
-                        CTSCustId = x.CTSCustId,
-                        SubscriberId = x.SubscriberId,
-                        SubscriberName = x.SubscriberName,
-                        UserName = x.UserName,
-                        EvidenceCode = x.EvidenceCode,
-                        AccountStatus = x.AccountStatus,
-                        CategoryName = x.CategoryName
-                    };
-                });
+                        CTSCustId = g.FirstOrDefault().CTSCustId,
+                        SubscriberId = g.FirstOrDefault().SubscriberId,
+                        SubscriberName = g.FirstOrDefault().SubscriberName,
+                        UserName = g.FirstOrDefault().UserName,
+                        EvidenceCodes = string.Join(", ", g.Select(x => x.EvidenceCode).OrderBy(x => x)),
+                        AccountStatus = g.FirstOrDefault().AccountStatus,
+                        CategoryName = g.FirstOrDefault().CategoryName
+                    });
             }
 
             return Json( new

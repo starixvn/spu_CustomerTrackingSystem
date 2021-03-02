@@ -22,7 +22,7 @@
 
         public int AssociationStatus { get; set; }
 
-        public int EvidenceID { get; set; }
+        public string EvidenceIDs { get; set; }
 
         public string EvidenceCode { get; set; }
 
