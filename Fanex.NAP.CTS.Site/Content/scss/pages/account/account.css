@@ -1612,7 +1612,7 @@
       background: rgba(32, 83, 217, 0.2); }
 
 .ui-multiselect-checkboxes {
-  height: 130px !important;
+  min-height: 50px !important;
   overflow: auto !important;
   padding: .4rem 0 .4rem; }
 

@@ -1371,10 +1371,8 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     }
 }
 
-
-
 .ui-multiselect-checkboxes {
-    height: 130px !important;
+    min-height: 50px !important;
     overflow: auto !important;
     padding: .4rem 0 .4rem;
 }
