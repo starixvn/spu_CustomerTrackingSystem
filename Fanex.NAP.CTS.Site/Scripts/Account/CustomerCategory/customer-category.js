@@ -8,6 +8,7 @@
     let isHostPermission; 
     let spanClass = $('#spanClass');
     let cacheData = {
+        isVVip: false,
         isPinCategory: false,
         isExcludedTagAssPA: false,
         isProblemAccount: false
@@ -219,14 +220,13 @@
                 dataFilter: function (response) {
                     if (response !== undefined) {
                         let json = jQuery.parseJSON(response);
-
-                        //inputPinCategory.prop('checked', json.isPinCategory);
-                        //inputPinCategory.prop('disabled', json.isVVip);
+                     
                         cacheData.isProblemAccount = json.isProblemAccount;
                         cacheData.isPinCategory = json.isPinCategory;
                         cacheData.isExcludedTagAssPA = json.isExcludedTagAssPA;
+                        cacheData.isVVip = json.isVVip;
 
-                        ResetCategorySetting(json.isVVip);                       
+                        ResetCategorySetting();                       
                         
                         btnMarkCategory.prop('disabled', json.isVVip);
                         btnRemoveCategory.prop('disabled', !json.isVVip);
@@ -272,17 +272,16 @@
             dataFilter: function (response) {
                 if (response !== undefined) {
                     let json = jQuery.parseJSON(response);                  
-
-                    //inputPinCategory.prop('checked', json.isPinCategory);
-                    //inputPinCategory.prop('disabled', json.isVVip);
+                 
                     btnMarkCategory.prop('disabled', json.isVVip);
                     btnRemoveCategory.prop('disabled', !json.isVVip);
 
                     cacheData.isProblemAccount = json.isProblemAccount;
                     cacheData.isPinCategory = json.isPinCategory;
                     cacheData.isExcludedTagAssPA = json.isExcludedTagAssPA;
+                    cacheData.isVVip = json.isVVip;
 
-                    ResetCategorySetting(json.isVVip);                                      
+                    ResetCategorySetting();                                      
 
                     let isProblemAccount = RenderProblemAccount(json.categoryList);
 
@@ -420,43 +419,49 @@
             html += "By unpin option, this account will be classified automatically by our service in future";
         }
 
-        common.showFormConfirmation(html, 'Confirmation', function () {
-            var url = common.modifyRelativeUrl('/Account/PinCategoryCustomerClassification');
-            var params = {};     
-            params.custId = custId;
-            params.ctsCustId = ctsCustId;
-            params.subscriberId = subscriberId;
-            params.isPinCategory = isChecked;
+        common.showFormConfirmation(html, 'Confirmation',
+            function () {
+                var url = common.modifyRelativeUrl('/Account/PinCategoryCustomerClassification');
+                var params = {};     
+                params.custId = custId;
+                params.ctsCustId = ctsCustId;
+                params.subscriberId = subscriberId;
+                params.isPinCategory = isChecked;
 
-            $.ajax(url, {
-                type: 'POST',
-                data: params,
-                success: function (response) {
-                    if (response.errorCode === 0) {
-                        let message = isChecked
-                            ? "Pinned category successfully!"
-                            : "Unpinned category successfully!";
+                $.ajax(url, {
+                    type: 'POST',
+                    data: params,
+                    success: function (response) {
+                        if (response.errorCode === 0) {
+                            let message = isChecked
+                                ? "Pinned category successfully!"
+                                : "Unpinned category successfully!";
 
-                        common.showSuccess(message);
+                            common.showSuccess(message);
+                            tblcustomercategory.DataTable().ajax.reload();
+                        }
+                        else {
+                            common.showError('Failed! ' + response.errorMessage);
+                            ResetCategorySetting();
+                        }
+                    },
+                    beforeSend: function () {
+                        common.showLoading();
+                    },
+                    complete: function () {
+                        common.closeLoading();
+                    },
+                    error: function (error) {
+                        common.closeLoading();
+                        console.log(error);
+                        ResetCategorySetting();                    
                     }
-                    else {
-                        common.showError('Failed! ' + response.errorMessage);
-                        ResetCategorySetting();
-                    }
-                },
-                beforeSend: function () {
-                    common.showLoading();
-                },
-                complete: function () {
-                    common.closeLoading();
-                },
-                error: function (error) {
-                    common.closeLoading();
-                    console.log(error);
-                    ResetCategorySetting();                    
-                }
-            });
-        });
+                });
+            },
+            function () {
+                ResetCategorySetting();
+            }
+        );
     }
 
     function ExcludedTagAssPA(isChecked, custId, ctsCustId, subscriberId) {
@@ -471,62 +476,73 @@
 
         if (isChecked && isPinCategory) {
             html = "<div style='text-align:center'>You are not allow to turn on this setting because Pin Category setting is on.</div>";
-            html += "<div style='text-align:center'>Please Turn Off Pin Category Setting before this action</div>";
+            html += "<div>Please Turn Off Pin Category Setting before this action</div>";
 
             common.showError(html, 2000);
             ResetCategorySetting();
             
             return;
 
+        } else if (isChecked) {
+            html = "<div style='text-align:center'>Are you sure about this action? </div>";
+            html += "<div>By selecting this option, this account will not be classified with PA</div>";
+            html += "<div>Associated Category by our service in future</div>";
         } else {
             html = "<div style='text-align:center'>Are you sure about this action? </div>";
+            html += "<div>By unselecting this option, this account can be classified with PA</div>";
+            html += "<div>Associated Category by our service in future</div>";
         }
 
-        common.showFormConfirmation(html, 'Confirmation', function () {
-            var url = common.modifyRelativeUrl('/Account/ChangeExcludedTagAssPA');
-            var params = {};
-            params.custId = custId;
-            params.ctsCustId = ctsCustId;
-            params.subscriberId = subscriberId;
-            params.isExcludedTagAssPA = isChecked;
-            params.isProblemAccount = cacheData.isProblemAccount;
+        common.showFormConfirmation(html, 'Confirmation',
+            function () {
+                var url = common.modifyRelativeUrl('/Account/ChangeExcludedTagAssPA');
+                var params = {};
+                params.custId = custId;
+                params.ctsCustId = ctsCustId;
+                params.subscriberId = subscriberId;
+                params.isExcludedTagAssPA = isChecked;
+                params.isProblemAccount = cacheData.isProblemAccount;
 
-            $.ajax(url, {
-                type: 'POST',
-                data: params,
-                success: function (response) {
-                    if (response.errorCode === 0) {
-                        let message = isPinCategory
-                            ? "mark category successfully!"
-                            : "unmark category successfully!";
+                $.ajax(url, {
+                    type: 'POST',
+                    data: params,
+                    success: function (response) {
+                        if (response.errorCode === 0) {
+                            let message = isChecked
+                                ? "Mark category successfully!"
+                                : "Unmark category successfully!";
 
-                        common.showSuccess(message);
-                        tblcustomercategory.DataTable().ajax.reload();
-                    }
-                    else {
-                        common.showError('Failed! ' + response.errorMessage);
+                            common.showSuccess(message);
+                            tblcustomercategory.DataTable().ajax.reload();
+                        }
+                        else {
+                            common.showError('Failed! ' + response.errorMessage);
+                            ResetCategorySetting();
+                        }
+                    },
+                    beforeSend: function () {
+                        common.showLoading();
+                    },
+                    complete: function () {
+                        common.closeLoading();
+                    },
+                    error: function (error) {
+                        common.closeLoading();
+                        console.log(error);
                         ResetCategorySetting();
                     }
-                },
-                beforeSend: function () {
-                    common.showLoading();
-                },
-                complete: function () {
-                    common.closeLoading();
-                },
-                error: function (error) {
-                    common.closeLoading();
-                    console.log(error);
-                    ResetCategorySetting();                  
-                }
-            });
-        });
+                });
+            },
+            function () {
+                ResetCategorySetting();
+            }
+        );
     }  
 
-    function ResetCategorySetting(isVVip) {
+    function ResetCategorySetting() {
         let cbbCategorySettingSelector = cbbCategorySetting.empty();
 
-        cbbCategorySettingSelector.append("<option " + (cacheData.isPinCategory ? "selected" : "") + (isVVip ? " disabled" : "") + " value='PinCategory'>Pin Category</option>");
+        cbbCategorySettingSelector.append("<option " + (cacheData.isPinCategory ? "selected" : "") + (cacheData.isVVip ? " disabled" : "") + " value='PinCategory'>Pin Category</option>");
 
         cbbCategorySettingSelector.append("<option " + (cacheData.isExcludedTagAssPA ? "selected" : "") + " value='ExcludedTagAssPA'>Normal Category</option>");       
 
