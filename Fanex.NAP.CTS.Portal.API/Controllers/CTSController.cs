@@ -199,15 +199,22 @@
             if(string.IsNullOrWhiteSpace(custIdList))
             {
                 LogService.Error($"Cust Id list is empty.");
-
-                return null;
             }
             else
             {
-                var result =  _associationService.GetFlaggedEvidenceByDirectAssociation(custIdList).ToList();
+                try
+                {
+                    var result = _associationService.GetFlaggedEvidenceByDirectAssociation(custIdList).ToList();
 
-                return Json(result);
+                    return Json(result);
+                }
+                catch (Exception ex)
+                {
+                    LogService.Error(ex.Message);                    
+                }                
             }
+
+            return Json(new List<CustomerEvidence>());
         }
 
         /// <summary>
