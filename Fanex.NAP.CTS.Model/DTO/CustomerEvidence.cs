@@ -21,14 +21,7 @@
             set { createdDateInTicks = value; }
         }
 
-        public DateTime CreatedDate
-        {
-            get
-            {
-                var converter = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-                return converter.AddMilliseconds(createdDateInTicks);
-            }
-        }
+        public DateTime CreatedDate { get; set; }
 
         public int AssociatedLevel { get; set; }
     }
