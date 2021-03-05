@@ -19,7 +19,7 @@
     let maxTags = 50;
     let divMatchBettingPattern = $('#divMatchBettingPattern');
     let tableMatchBettingPattern = $('#tblMatchBettingPattern');
-    let dataTableMatchBettingPattern;
+    let dataTableMatchBettingPattern = null;
 
     function RenderTag(obj) {
         let html = "";
@@ -148,8 +148,7 @@
                 }
             ],
             createdRow: function (row, obj) {
-                $(row).attr('data-site-id', obj.SiteId);      
-                $(row).addClass('hide');
+                $(row).attr('data-site-id', obj.SiteId);
             },
             drawCallback: function () {
                 let api = this.api();
@@ -161,7 +160,7 @@
                     if (last !== group) {
                         let html = '<tr class="group group-site">';
                         html += '<td colspan="7">';
-                        html += '<span class="column-group-site" data-site-id=' + data[i].SiteId + '><i class="icon icon-chevron-right icon-open"></i> ' + group + ' </span>';
+                        html += '<span class="column-group-site" data-site-id=' + data[i].SiteId + '><i class="icon icon-chevron-down icon-open"></i> ' + group + ' </span>';
                         html += '</td></tr>';
 
                         $(rows).eq(i).before(html);
@@ -536,24 +535,57 @@
                 paging: false,
                 searching: false,
                 scrollX: false,
-                scrollCollapse: false,
+                scrollCollapse: false,               
                 columnDefs: [
                     { targets: "_all", defaultContent: "-" },
-                    { targets: [0], width: "30%", className: "text-left" },
-                    { targets: [1], width: "20%", className: "text-center" },
-                    { targets: [2], width: "20%", className: "text-left" },
-                    { targets: [3], width: "20%", className: "text-center" }
-                ],
+                    { targets: [0], width: "15%", className: "text-left" },
+                    { targets: [1], width: "15%", className: "text-center" },
+                    { targets: [2], width: "15%", className: "text-left" },
+                    { targets: [3], width: "15%", className: "text-left" },
+                    { targets: [4], width: "15%", className: "text-left" },
+                    { targets: [5], width: "15%", className: "text-left" },
+                    { targets: [6], width: "10%", className: "text-left" },
+                    { targets: [7], width: "10%", className: "text-left" }                    
+                ],               
                 columns: [
-                    { data: obj => obj.EvidenceDisplay },
-                    { data: obj => obj.FlaggedDate },
-                    { data: obj => obj.Comment },
-                    { data: obj => obj.Creator }
+                    { data: obj => obj.Username },
+                    { data: obj => obj.TransDate },
+                    { data: obj => obj.TransId },
+                    { data: obj => obj.BetType },
+                    { data: obj => obj.BetTeam },
+                    { data: obj => obj.Stake },
+                    { data: obj => obj.Odds },
+                    { data: obj => obj.Livescore }
                 ],
                 createdRow: function (row, obj) {
                 }
             });
+
+            $('.ui-dialog').css('top', '150px !important');
         }
+        let data = GenerateDataTest();
+        tableMatchBettingPattern.DataTable().clear().rows.add(data).draw();
+    }
+
+    function GenerateDataTest() {
+        let data = [];
+
+        for (var i = 0; i < 4; i++) {
+            data.push({
+                "MatchId": 107,
+                "MatchInfo": "Manchester United vs Manchester City - Mar 21, 2021 - English Premier League",
+                "Username": "SUPPERTEST30102006",
+                "TransDate": "Mar 21, 2021 22:10:19",
+                "TransId": 31231231,
+                "BetType": "FT.Over/Under",
+                "BetTeam": "a",
+                "Stake": 100,
+                "Odds": 2,
+                "Livescore": "2-1"
+            })
+        }
+
+        return data;       
     }
 
     function DisableButton(hostPermission) {
