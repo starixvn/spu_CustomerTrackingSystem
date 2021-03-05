@@ -28,6 +28,7 @@
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.ViewModel.Account;
+    using Fanex.NAP.CTS.ViewModel.Account.Associated;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -593,6 +594,56 @@
             Task.WhenAll(data);
 
             return data.Result ?? new List<long>();
+        }
+
+        public MatchesAssociationByAIModel GetMatchesAssociationInfo(long custID1, long custID2)
+        {
+            var result = new MatchesAssociationByAIModel();
+            
+            var criteria = new GetMatchesAssociationByAICriteria
+            {
+                CustID1 = custID1,
+                CustID2 = custID2,
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                result.MatchesInfo = db.Query<MatchesInfoModel>(criteria).ToList();
+            }
+
+            result.ErrorMessage = criteria.ErrorMessage;
+            result.TotalMatchCount = (int) criteria.TotalMatchCount;
+
+            return result;
+        }
+
+        public IEnumerable<MatchesInfoModel> GetMatchesInfo(string matchIDs)
+        {
+            var criteria = new GetMatchesInfoCriteria
+            {
+                MatchIds = matchIDs
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<MatchesInfoModel>(criteria);
+            }
+        }
+
+        public IEnumerable<MatchesDetailInfoModel> GetMatchesDetailInfo(MatchesAssociationDetailViewModel macthInfo)
+        {
+            var criteria = new GetMatchesDetailInfoCriteria
+            {
+                EventDate = macthInfo.EventDate,
+                Bettypes = macthInfo.Bettypes,
+                CustIds = macthInfo.CustIds,
+                MatchId = macthInfo.MatchId
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<MatchesDetailInfoModel>(criteria);
+            }
         }
 
         #endregion

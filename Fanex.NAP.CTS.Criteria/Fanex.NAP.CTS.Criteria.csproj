@@ -47,6 +47,9 @@
     <Compile Include="Account\Associated\ChangeUpdateTaggingAssWithPACriteria.cs" />
     <Compile Include="Account\Associated\GetAssociationProfileCriteria.cs" />
     <Compile Include="Account\Associated\GetAssociationProfileStatictisCriteria.cs" />
+    <Compile Include="Account\Associated\GetMatchesDetailInfoCriteria.cs" />
+    <Compile Include="Account\Associated\GetMatchesInfoCriteria.cs" />
+    <Compile Include="Account\Associated\GetMatchesAssociationByAICriteria.cs" />
     <Compile Include="Account\Associated\InsertManualAssociationMultipleCriteria.cs" />
     <Compile Include="Account\Associated\ValidateManualAssociationMultipleCriteria.cs" />
     <Compile Include="Account\Associated\GetCustomerByUsernameCriteria.cs" />

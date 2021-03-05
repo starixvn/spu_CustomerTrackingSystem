@@ -137,4 +137,9 @@
     <Setting Key="TicketVoiding_CTS_ProblemAccountSelect" SpName="TicketVoiding_CTS_ProblemAccountSelect" DbName="DBCTS.bodb02.bodbSPUNet"/>
     <Setting Key="TicketVoiding_CTS_ProblemAccountSelect_CN88" SpName="TicketVoiding_CTS_ProblemAccountSelect_CN88" DbName="DBCTS.bodb02.bodbSPUNet"/>
   </Function>
+
+  <Function Name="FraudSensor">
+	  <Setting Key="CTS_Rpt_BettingPattern_MatchInfo" SpName="CTS_Rpt_BettingPattern_MatchInfo_xtest" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
+	  <Setting Key="CTS_Rpt_BettingPattern_TicketDetails" SpName="CTS_Rpt_BettingPattern_TicketDetails_xtest" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
+  </Function>
 </Functions>

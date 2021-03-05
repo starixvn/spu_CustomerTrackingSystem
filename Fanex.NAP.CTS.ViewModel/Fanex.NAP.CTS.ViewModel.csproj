@@ -43,6 +43,7 @@
     <Compile Include="Account\AccountDetail.cs" />
     <Compile Include="Account\AccountProfileViewModel.cs" />
     <Compile Include="Account\Associated\AssociatedByAccountViewModel.cs" />
+    <Compile Include="Account\Associated\MatchesAssociationDetailViewModel.cs" />
     <Compile Include="Account\Associated\AssociatedDeviceByAccountFilter.cs" />
     <Compile Include="Account\Associated\CustomerAssociationByAccountDetailViewModel.cs" />
     <Compile Include="Account\Associated\GraphCustomerItemViewModel.cs" />

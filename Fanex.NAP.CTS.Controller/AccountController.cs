@@ -554,6 +554,54 @@
                 errorMessage = dbResult.ErrorMsg
             }, JsonRequestBehavior.AllowGet);
         }
+
+
+        [HttpPost]
+        public ActionResult GetMatchesAssociationByAI(long custID1, long custID2)
+        {
+            var para1 = (custID1 <= custID2) ? custID1 : custID2;
+            var para2 = (custID1 > custID2) ? custID1 : custID2;
+
+            var matchesAssociationInfo = _accountService.GetMatchesAssociationInfo(para1, para2);
+
+            if(string.IsNullOrEmpty(matchesAssociationInfo.ErrorMessage) && matchesAssociationInfo.MatchesInfo != null && matchesAssociationInfo.MatchesInfo.Any())
+            {
+                var matchesInfo = _accountService.GetMatchesInfo(string.Join(",", matchesAssociationInfo.MatchesInfo.Select(c => c.MatchID).Distinct()));
+
+                matchesAssociationInfo.MatchesInfo = matchesAssociationInfo.MatchesInfo
+                    .Join(matchesInfo, c1 => c1.MatchID,
+                                       c2 => c2.MatchID,
+                                       (c1, c2) => new MatchesInfoModel
+                                       {
+                                           MatchID = c1.MatchID,
+                                           BettypeList = c1.BettypeList,
+                                           EventDate = c2.EventDate,
+                                           HomeId = c2.HomeId,
+                                           AwayId = c2.AwayId,
+                                           LeagueId = c2.LeagueId,
+                                           HomeName = c2.HomeName,
+                                           AwayName = c2.AwayName,
+                                           LeagueName = c2.LeagueName
+                                       }).ToList();
+            }
+
+            return Json(matchesAssociationInfo, JsonRequestBehavior.AllowGet);
+        }
+
+
+        [HttpPost]
+        public ActionResult GetMatchesAssociationDetailByAI(MatchesAssociationDetailViewModel para)
+        {
+            var result = new List<MatchesDetailInfoModel>();
+
+            if (para != null)
+            {
+                result = _accountService.GetMatchesDetailInfo(para).ToList();
+            }       
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
         #endregion
 
         #region Chain To Evidence

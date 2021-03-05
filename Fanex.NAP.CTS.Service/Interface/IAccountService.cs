@@ -12,6 +12,7 @@
     using System.Collections.Generic;
     using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
     using Fanex.NAP.CTS.Model.CustomerClassify;
+    using Fanex.NAP.CTS.ViewModel.Account.Associated;
 
     public interface IAccountService
     {        
@@ -124,5 +125,11 @@
         DBResult ProcessPlaceEvidenceByCustId(UpdatePlaceEvidenceModel model);
 
         IEnumerable<CTSCustomer> CheckCustomerNotExisted(string custIds, DateTime fromDate, DateTime toDate);
+
+        MatchesAssociationByAIModel GetMatchesAssociationInfo(long custID1, long custID2);
+
+        IEnumerable<MatchesInfoModel> GetMatchesInfo(string matchIDs); 
+
+        IEnumerable<MatchesDetailInfoModel> GetMatchesDetailInfo(MatchesAssociationDetailViewModel matchInfo);
     }
 }
