@@ -60,11 +60,26 @@
     public enum ClassificationSourceType
     {
         NewMember = 201,
-        NormalAccount = 202,
+        NormalAccount = 202, 
+        NormalAccount121 = 221,
+        NormalAccount122 = 222,
+        NormalAccount123 = 223,
         SmartPunter = 203,
-        HighRiskPunter = 204,        
+        SmartPunter61 = 261,
+        SmartPunter62 = 262,
+        SmartPunter63 = 263,
+        HighRiskPunter = 204,
+        HighRiskPunter71 = 271,
+        HighRiskPunter72 = 272,
+        HighRiskPunter73 = 273,
         VIP = 205,
-        Probation = 206
+        VIP111 = 211,
+        VIP112 = 212,
+        VIP113 = 213,
+        Probation = 206,
+        Probation51 = 251,
+        Probation52 = 252,
+        Probation53 = 253
     }
 
     public enum EvidenceQueueActionID

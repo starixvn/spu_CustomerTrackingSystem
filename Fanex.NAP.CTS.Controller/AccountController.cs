@@ -1076,20 +1076,35 @@
 
             switch (cc.CategoryID)
             {
-                case (int)ClassificationSourceType.NormalAccount:                  
+                case (int)ClassificationSourceType.NormalAccount:
+                case (int)ClassificationSourceType.NormalAccount121:
+                case (int)ClassificationSourceType.NormalAccount122:
+                case (int)ClassificationSourceType.NormalAccount123:
                     reason += $"Margin: {margin} - Bet Count: {betCount}";
                     break;
-                case (int)ClassificationSourceType.VIP:                    
+                case (int)ClassificationSourceType.VIP:
+                case (int)ClassificationSourceType.VIP111:
+                case (int)ClassificationSourceType.VIP112:
+                case (int)ClassificationSourceType.VIP113:
                     reason += $"Margin: {margin} - Turn Over: {turnOver} - Active Days: {activeDays} - Bet Count: {betCount}";
                     break;
                 case (int)ClassificationSourceType.Probation:
+                case (int)ClassificationSourceType.Probation51:
+                case (int)ClassificationSourceType.Probation52:
+                case (int)ClassificationSourceType.Probation53:
                     if (cc.ItemID == 5)
                         reason += $"Margin: {margin} - Win Lost: {winlost} - Bet Count: {betCount} - Last 7 day's Margin: {last7DayMargin} - WinLost(20 days): {winlost20Days}";
                     else
                         reason += $"Margin: {margin}";
                     break;
                 case (int)ClassificationSourceType.SmartPunter:
+                case (int)ClassificationSourceType.SmartPunter61:
+                case (int)ClassificationSourceType.SmartPunter62:
+                case (int)ClassificationSourceType.SmartPunter63:
                 case (int)ClassificationSourceType.HighRiskPunter:
+                case (int)ClassificationSourceType.HighRiskPunter71:
+                case (int)ClassificationSourceType.HighRiskPunter72:
+                case (int)ClassificationSourceType.HighRiskPunter73:
                     if (cc.ItemID == 4)
                         reason += $"Margin: {margin} - Win Lost: {winlost} - Bet Count: {betCount} - Last 7 day's Margin: {last7DayMargin} - WinLost(20 days): {winlost20Days}";
                     else
