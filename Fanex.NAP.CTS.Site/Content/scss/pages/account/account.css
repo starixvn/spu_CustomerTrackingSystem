@@ -1349,6 +1349,10 @@
   .table-report .icon-delete.disabled:hover,
   .table-report .icon-edit.disabled:hover {
     cursor: not-allowed; }
+  .table-report .association-type-name {
+    cursor: pointer;
+    color: #2053D9;
+    text-decoration: underline; }
 
 #account-by-account .wrapper-info-table {
   top: 20.9rem; }

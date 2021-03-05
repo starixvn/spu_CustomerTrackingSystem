@@ -56,5 +56,6 @@
         public const int REMOVE_PROBLEMACCOUNT_CATEGORYID = -1;
 
         public const string SALT = "!%HGDwweHqw#";
+        public const string AssociationTypeName_BettingPattern = "Betting Pattern";
     }
 }

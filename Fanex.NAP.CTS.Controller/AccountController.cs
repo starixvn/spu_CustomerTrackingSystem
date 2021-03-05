@@ -347,7 +347,9 @@
                         AssociationDate = getAssociationFromMySql == true ? x.AssociationDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss):
                                                                             x.AssociationDateFromGraphDB.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                         AssociationType = x.AssociationType,
-                        AssociationTypeName = getAssociationFromMySql == true ? x.AssociationTypeName : _accountService.MappingAssociationType(x),
+                        AssociationTypeName = StandardizeAssociationTypeName(getAssociationFromMySql == true 
+                                        ? x.AssociationTypeName 
+                                        : _accountService.MappingAssociationType(x)),
                         Status = x.StatusName == "NA" ? "N/A" : x.StatusName,
                         StatusId = x.StatusId.HasValue ? x.StatusId.Value : 0,
                         SiteId = x.SiteID.HasValue ? x.SiteID.Value : 0,
@@ -378,6 +380,18 @@
                 recordsFiltered = totalItem,
                 data = result
             }, JsonRequestBehavior.AllowGet);
+        }
+
+        private string StandardizeAssociationTypeName(string name)
+        {
+            if (!string.IsNullOrEmpty(name))
+            {
+                var span = $"<span class='association-type-name'>{Consts.AssociationTypeName_BettingPattern}</span>";
+
+                return name.Replace(Consts.AssociationTypeName_BettingPattern, span);
+            }
+
+            return string.Empty;
         }
 
         private string GetDirectAssociationUrl(int associationType)

@@ -17,6 +17,9 @@
     let spanAddAssociationChangeHidden = $('#spanAddAssociationChangeHidden');
     let inputTagUsername = $('#inputTagUsername'); 
     let maxTags = 50;
+    let divMatchBettingPattern = $('#divMatchBettingPattern');
+    let tableMatchBettingPattern = $('#tblMatchBettingPattern');
+    let dataTableMatchBettingPattern;
 
     function RenderTag(obj) {
         let html = "";
@@ -123,7 +126,12 @@
                 { data: obj => obj.LoginId },
                 { data: obj => obj.Status },
                 { data: obj => obj.SiteName },
-                { data: obj => obj.AssociationTypeName },
+                {
+                    data: obj => obj.AssociationTypeName,
+                    createdCell: (cell, _, row) => {
+                        $('.association-type-name', cell).click(() => ShowMatchBettingPattern())
+                    }
+                },
                 {
                     data: obj => AssociationStatus(obj.IsLinked), createdCell: (cell, _, row) => {
                         if (isHostPermission) {
@@ -140,7 +148,8 @@
                 }
             ],
             createdRow: function (row, obj) {
-                $(row).attr('data-site-id', obj.SiteId);                
+                $(row).attr('data-site-id', obj.SiteId);      
+                $(row).addClass('hide');
             },
             drawCallback: function () {
                 let api = this.api();
@@ -503,6 +512,48 @@
         inputTagUsername.tagify().data('tagify').removeAllTags();
         spanAddAssociationUserName.find('tags').attr('tabindex', "1");
         btnSaveAssociation.prop('disabled', true);
+    }
+
+    function ShowMatchBettingPattern() {        
+        divMatchBettingPattern.dialog({
+            modal: true,
+            width: '1200px',
+            title: 'MATCH DETAILS',
+            resizable: true,
+            draggable: true,
+            close: function () {
+                $(this).dialog('close');
+            }
+        });
+
+        if (dataTableMatchBettingPattern === null) {
+            dataTableMatchBettingPattern = tableMatchBettingPattern.DataTable({
+                language: {
+                    zeroRecords: "There's no data"
+                },
+                info: false,
+                ordering: false,
+                paging: false,
+                searching: false,
+                scrollX: false,
+                scrollCollapse: false,
+                columnDefs: [
+                    { targets: "_all", defaultContent: "-" },
+                    { targets: [0], width: "30%", className: "text-left" },
+                    { targets: [1], width: "20%", className: "text-center" },
+                    { targets: [2], width: "20%", className: "text-left" },
+                    { targets: [3], width: "20%", className: "text-center" }
+                ],
+                columns: [
+                    { data: obj => obj.EvidenceDisplay },
+                    { data: obj => obj.FlaggedDate },
+                    { data: obj => obj.Comment },
+                    { data: obj => obj.Creator }
+                ],
+                createdRow: function (row, obj) {
+                }
+            });
+        }
     }
 
     function DisableButton(hostPermission) {

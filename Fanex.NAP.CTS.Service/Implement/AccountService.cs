@@ -25,6 +25,7 @@
     using Fanex.NAP.CTS.Model.Home;
     using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
+    using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.ViewModel.Account;
     using System;
@@ -449,7 +450,7 @@
 
             if (!string.IsNullOrEmpty(x) && x.Equals("BettingPattern"))
             {
-                return "Betting Pattern";
+                return Consts.AssociationTypeName_BettingPattern;
             }
 
             return x;
