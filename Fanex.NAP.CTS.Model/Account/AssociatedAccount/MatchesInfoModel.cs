@@ -10,11 +10,11 @@
 
         public DateTime EventDate { get; set; }
 
-        public int HomeId { get; set; }
+        public int HomeID { get; set; }
 
-        public int AwayId { get; set; }
+        public int AwayID { get; set; }
 
-        public int LeagueId { get; set; }
+        public int LeagueID { get; set; }
 
         public string HomeName { get; set; }
 

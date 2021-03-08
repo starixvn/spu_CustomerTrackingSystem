@@ -576,9 +576,9 @@
                                            MatchID = c1.MatchID,
                                            BettypeList = c1.BettypeList,
                                            EventDate = c2.EventDate,
-                                           HomeId = c2.HomeId,
-                                           AwayId = c2.AwayId,
-                                           LeagueId = c2.LeagueId,
+                                           HomeID = c2.HomeID,
+                                           AwayID = c2.AwayID,
+                                           LeagueID = c2.LeagueID,
                                            HomeName = c2.HomeName,
                                            AwayName = c2.AwayName,
                                            LeagueName = c2.LeagueName
