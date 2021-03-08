@@ -129,7 +129,7 @@
                 {
                     data: obj => obj.AssociationTypeName,
                     createdCell: (cell, _, row) => {
-                        $('.association-type-name', cell).click(() => ShowMatchBettingPattern())
+                        $('.association-type-name', cell).click(() => ShowMatchBettingPattern(row.CustId))
                     }
                 },
                 {
@@ -513,7 +513,7 @@
         btnSaveAssociation.prop('disabled', true);
     }
 
-    function ShowMatchBettingPattern() {        
+    function ShowMatchBettingPattern(custId) {        
         divMatchBettingPattern.dialog({
             modal: true,
             width: '1200px',
@@ -538,33 +538,79 @@
                 scrollCollapse: false,               
                 columnDefs: [
                     { targets: "_all", defaultContent: "-" },
-                    { targets: [0], width: "15%", className: "text-left" },
-                    { targets: [1], width: "15%", className: "text-center" },
+                    { targets: [0], width: "15%", className: "text-center" },
+                    { targets: [1], width: "10%", className: "text-center" },
                     { targets: [2], width: "15%", className: "text-left" },
                     { targets: [3], width: "15%", className: "text-left" },
-                    { targets: [4], width: "15%", className: "text-left" },
-                    { targets: [5], width: "15%", className: "text-left" },
+                    { targets: [4], width: "10%", className: "text-left" },
+                    { targets: [5], width: "10%", className: "text-left" },
                     { targets: [6], width: "10%", className: "text-left" },
-                    { targets: [7], width: "10%", className: "text-left" }                    
+                    { targets: [7], width: "10%", className: "text-left" },
+                    { targets: [8], width: "10%", className: "text-left" }
                 ],               
                 columns: [
-                    { data: obj => obj.Username },
-                    { data: obj => obj.TransDate },
-                    { data: obj => obj.TransId },
-                    { data: obj => obj.BetType },
-                    { data: obj => obj.BetTeam },
-                    { data: obj => obj.Stake },
-                    { data: obj => obj.Odds },
-                    { data: obj => obj.Livescore }
+                    { data: obj => obj.MatchID },
+                    { data: ''},
+                    { data: '' },
+                    { data: '' },
+                    { data: '' },
+                    { data: '' },
+                    { data: '' },
+                    { data: '' },
+                    { data: '' }
                 ],
                 createdRow: function (row, obj) {
-                }
+                },
+                //drawCallback: function () {
+                //    let api = this.api();
+                //    let rows = api.rows({ page: 'current' }).nodes();
+                //    var data = api.rows({ page: 'current' }).data();
+                //    let last = null;
+
+                //    api.column(0, { page: 'current' }).data().each(function (group, i) {
+                //        if (last !== group) {
+                //            let html = '<tr class="group group-site">';
+                //            html += '<td colspan="7">';
+                //            html += '<span class="column-group-site" data-match-id=' + data[i].MatchID + '><i class="icon icon-chevron-down icon-open"></i> ' + group + ' </span>';
+                //            html += '</td></tr>';
+
+                //            $(rows).eq(i).before(html);
+                //            last = group;
+                //        }
+                //    });
+                //}
             });
 
             $('.ui-dialog').css('top', '150px !important');
-        }
-        let data = GenerateDataTest();
-        tableMatchBettingPattern.DataTable().clear().rows.add(data).draw();
+        }        
+
+        GetMatchBettingPattern($('#hdCustId').val(), custId);
+    }
+
+    function GetMatchBettingPattern(custId1, custId2) {
+        var url = common.modifyRelativeUrl('/Account/GetMatchesAssociationByAI');
+
+        $.ajax(url, {
+            type: 'POST',
+            beforeSend: function () {
+                tableMatchBettingPattern.find('tbody').addClass('loading');
+            },
+            data: {
+                //custID1: custId1,
+                //custID2: custId2
+                custID1: 1,
+                custID2: 1111
+            },
+            success: function (response) {
+                tableMatchBettingPattern.DataTable().clear().rows.add(response.data).draw();
+            },
+            complete: function () {
+                tableMatchBettingPattern.find('tbody').removeClass('loading');
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+            }
+        });
     }
 
     function GenerateDataTest() {
