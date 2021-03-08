@@ -590,6 +590,21 @@
                                                CustIDs = para1.ToString() + "," + para2.ToString()
                                            }).ToList()
                 };
+
+                for (int i = 0; i < 20; i++)
+                {
+                    data.MatchesInfo.AddRange(matchesAssociationInfo.MatchesInfo.Select(x => new MatchesInfoViewModel
+                    {
+                        MatchDesc = x.MatchID
+                                                      + " - " + x.HomeName + " vs " + x.AwayName
+                                                      + " - " + x.EventDate.ToString(Consts.FormatDateToString_MMMddyyyy)
+                                                      + " - " + x.LeagueName,
+                        MatchID = x.MatchID,
+                        EventDateString = x.EventDate.ToString(Consts.FormatDateToString_yyyyMMddHHmmss),
+                        Bettypes = "1",
+                        CustIDs = para1.ToString() + "," + para2.ToString()
+                    }));
+                }               
             }
             return Json(data, JsonRequestBehavior.AllowGet);
         }
@@ -597,7 +612,7 @@
         [HttpPost]
         public ActionResult GetMatchesAssociationDetailByAI(MatchesAssociationDetailViewModel para)
         {
-            var result = new List<MatchesDetailInfoModel>();
+            var data = new List<MatchesDetailInfoViewModel>();
 
             if (para != null)
             {
@@ -613,11 +628,26 @@
 
                     para.EventDate = eventDate;
                 }
-              
-                result = _accountService.GetMatchesDetailInfo(para).ToList();
-            }       
+               
+                var result = _accountService.GetMatchesDetailInfo(para);
 
-            return Json(result, JsonRequestBehavior.AllowGet);
+                if (result != null && result.Any())
+                {
+                    data = result.Select(x => new MatchesDetailInfoViewModel
+                    {
+                        UserName = x.UserName,
+                        TransDateString = x.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+                        TransId = x.TransId,
+                        BetType = x.TypeName,
+                        BetTeam = x.BetTeam,
+                        Stake = x.Stake,
+                        Odds = x.Odds,
+                        LiveScore = x.LiveHomeScore + "-" + x.LiveAwayScore
+                    }).ToList();
+                }
+            }
+
+            return Json(data, JsonRequestBehavior.AllowGet);
         }
 
         #endregion

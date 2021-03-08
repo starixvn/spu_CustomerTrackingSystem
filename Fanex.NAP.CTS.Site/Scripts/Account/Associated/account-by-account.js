@@ -20,6 +20,7 @@
     let divMatchBettingPattern = $('#divMatchBettingPattern');
     let tableMatchBettingPattern = $('#tblMatchBettingPattern');
     let dataTableMatchBettingPattern = null;
+    let spanBettingPatternTotalMatch = $('#spanBettingPatternTotalMatch');
 
     function RenderTag(obj) {
         let html = "";
@@ -513,19 +514,17 @@
         btnSaveAssociation.prop('disabled', true);
     }
 
-    function ShowMatchBettingPattern(custId) {
+    function ShowMatchBettingPattern(custId) {          
         divMatchBettingPattern.dialog({
             modal: true,
             width: '1200px',
             title: 'MATCH DETAILS',
-            resizable: true,
+            resizable: false,
             draggable: true,
             close: function () {
                 $(this).dialog('close');
             }
         });
-
-        $('.ui-dialog').css('top', '150px !important');
 
         if (dataTableMatchBettingPattern === null) {
             dataTableMatchBettingPattern = tableMatchBettingPattern.DataTable({
@@ -537,19 +536,20 @@
                 paging: false,
                 searching: false,
                 scrollX: false,
-                scrollCollapse: false,               
+                scrollY: "41vh",
+                scrollCollapse: true,
                 columnDefs: [
                     { targets: "_all", defaultContent: "-" },
-                    { targets: [0], width: "10%", visible: false },
-                    { targets: [1], width: "10%", className: "text-center" },
-                    { targets: [2], width: "10%", className: "text-left" },
+                    { targets: [0], visible: false },
+                    { targets: [1], width: "20%", className: "text-center" },
+                    { targets: [2], width: "20%", className: "text-left" },
                     { targets: [3], width: "10%", className: "text-left" },
                     { targets: [4], width: "10%", className: "text-left" },
                     { targets: [5], width: "10%", className: "text-left" },
                     { targets: [6], width: "10%", className: "text-left" },
                     { targets: [7], width: "10%", className: "text-left" },
                     { targets: [8], width: "10%", className: "text-left" }
-                ],               
+                ],
                 columns: [
                     { data: obj => obj.MatchDesc },
                     { data: ''},
@@ -562,7 +562,9 @@
                     { data: '' }
                 ],
                 createdRow: function (row, obj) {
-                    $(row).addClass('hide');
+                    if (!$(row).hasClass('detail')) {
+                        $(row).addClass('hide');
+                    }
                 },
                 drawCallback: function () {
                     let api = this.api();
@@ -572,7 +574,7 @@
 
                     api.column(0, { page: 'current' }).data().each(function (group, i) {
                         if (last !== group) {
-                            let html = '<tr class="group"><td colspan="9"><span class="column-group-match"';
+                            let html = '<tr class="group group-site"><td colspan="9"><span class="column-group-match"';
                             html += ' data-match-id=' + data[i].MatchID;
                             html += ' data-event-date-string=' + data[i].EventDateString;                            
                             html += ' data-bet-types=' + data[i].Bettypes;
@@ -593,9 +595,7 @@
                 if (colGroupMatch !== undefined) {
                     let iGroup = $('i.icon', trGroup);
 
-                    if (iGroup.hasClass('icon-chevron-right')) {
-                        iGroup.removeClass('icon-chevron-right').addClass('icon-chevron-down');
-                        // Get detail info
+                    if (!iGroup.hasClass('has-detail')) {                        
                         let params = {
                             MatchId: colGroupMatch.attr('data-match-id'),
                             EventDateString: colGroupMatch.attr('data-event-date-string'),
@@ -603,28 +603,34 @@
                             CustIds: colGroupMatch.attr('data-cust-ids'),
                         }
 
-                        GetMatchBettingPatternDetail(params);
+                        GetMatchBettingPatternDetail(params, trGroup);
 
-                    } else {
-                        iGroup.removeClass('icon-chevron-down').addClass('icon-chevron-right');
-
-                        //$('tr[data-match-id="' + matchId + '"]', tableMatchBettingPattern).each(function () {
-                        //    let trCurrent = $(this);
-                        //    if (trCurrent.hasClass('hide')) {
-                        //        trCurrent.removeClass('hide');
-                        //    } else {
-                        //        trCurrent.addClass('hide');
-                        //    }
-                        //});
+                        iGroup.removeClass('icon-chevron-right').addClass('icon-chevron-down').addClass('has-detail');
+                    } else {                        
+                        if (iGroup.hasClass('icon-chevron-right'))
+                            iGroup.removeClass('icon-chevron-right').addClass('icon-chevron-down');
+                        else
+                            iGroup.removeClass('icon-chevron-down').addClass('icon-chevron-right');
+                        
+                        $('tr[data-match-id="' + colGroupMatch.attr('data-match-id') + '"]', tableMatchBettingPattern).each(function () {
+                            let trCurrent = $(this);
+                            if (trCurrent.hasClass('hide'))
+                                trCurrent.removeClass('hide');
+                            else
+                                trCurrent.addClass('hide');
+                        });
                     }
                 }
             });
         }
 
-        GetMatchBettingPattern($('#hdCustId').val(), custId);
+        GetMatchBettingPattern($('#hdCustId').val(), custId);        
     }
 
     function GetMatchBettingPattern(custId1, custId2) {
+        spanBettingPatternTotalMatch.text("");
+        tableMatchBettingPattern.DataTable().clear().columns.adjust();        
+
         var url = common.modifyRelativeUrl('Account/GetMatchesAssociationByAI');
 
         $.ajax(url, {
@@ -633,13 +639,20 @@
                 tableMatchBettingPattern.find('tbody').addClass('loading');
             },
             data: {
-                //custID1: custId1,
-                //custID2: custId2
-                custID1: 1,
-                custID2: 1111
+                custID1: custId1,
+                custID2: custId2
             },
             success: function (response) {
-                tableMatchBettingPattern.DataTable().clear().rows.add(response.MatchesInfo).draw();
+                if (response !== undefined) {
+                    if (response.ErrorMessage === null || response.ErrorMessage === '' && response.MatchesInfo.length > 0) {
+                        tableMatchBettingPattern.DataTable().clear().rows.add(response.MatchesInfo).draw();
+                        tableMatchBettingPattern.DataTable().columns.adjust();
+                        spanBettingPatternTotalMatch.text(response.TotalMatchCount);
+                    } else {
+                        console.log(response.ErrorMessage);
+                        common.showError(response.ErrorMessage);
+                    }                    
+                } 
             },
             complete: function () {
                 tableMatchBettingPattern.find('tbody').removeClass('loading');
@@ -650,7 +663,7 @@
         });
     }
 
-    function GetMatchBettingPatternDetail(params) {
+    function GetMatchBettingPatternDetail(params, target) {
         var url = common.modifyRelativeUrl('Account/GetMatchesAssociationDetailByAI');
         
         $.ajax(url, {
@@ -660,8 +673,23 @@
             },
             data: params,
             success: function (response) {
-                console.log(response)
-                //tableMatchBettingPattern.DataTable().clear().rows.add(response.MatchesInfo).draw();
+                if (response !== undefined) {
+                    
+                    for (var i = 0; i < response.length; i++) {
+                        let newRow = $('<tr class="detail" data-match-id=' + params.MatchId + '>')
+                            .append('<td>' + response[i]["UserName"] + '</td>')
+                            .append('<td>' + response[i]["TransDateString"] + '</td>')
+                            .append('<td>' + response[i]["TransId"] + '</td>')
+                            .append('<td>' + response[i]["BetType"] + '</td>')
+                            .append('<td>' + response[i]["BetTeam"] + '</td>')
+                            .append('<td>' + response[i]["Stake"] + '</td>')
+                            .append('<td>' + response[i]["Odds"] + '</td>')
+                            .append('<td>' + response[i]["LiveScore"] + '</td>')
+                            .append('</tr>');
+
+                        target.last().after(newRow);
+                    }
+                }
             },
             complete: function () {
                 tableMatchBettingPattern.find('tbody').removeClass('loading');
