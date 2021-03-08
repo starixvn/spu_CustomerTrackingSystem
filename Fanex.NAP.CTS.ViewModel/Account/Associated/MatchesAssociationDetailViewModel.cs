@@ -4,6 +4,8 @@
 
     public class MatchesAssociationDetailViewModel
     {
+        public string EventDateString { get; set; }
+
         public DateTime EventDate { get; set; }
 
         public string CustIds { get; set; }

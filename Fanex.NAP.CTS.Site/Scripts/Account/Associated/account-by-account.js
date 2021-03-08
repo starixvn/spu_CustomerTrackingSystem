@@ -513,7 +513,7 @@
         btnSaveAssociation.prop('disabled', true);
     }
 
-    function ShowMatchBettingPattern(custId) {        
+    function ShowMatchBettingPattern(custId) {
         divMatchBettingPattern.dialog({
             modal: true,
             width: '1200px',
@@ -524,6 +524,8 @@
                 $(this).dialog('close');
             }
         });
+
+        $('.ui-dialog').css('top', '150px !important');
 
         if (dataTableMatchBettingPattern === null) {
             dataTableMatchBettingPattern = tableMatchBettingPattern.DataTable({
@@ -538,10 +540,10 @@
                 scrollCollapse: false,               
                 columnDefs: [
                     { targets: "_all", defaultContent: "-" },
-                    { targets: [0], width: "15%", className: "text-center" },
+                    { targets: [0], width: "10%", visible: false },
                     { targets: [1], width: "10%", className: "text-center" },
-                    { targets: [2], width: "15%", className: "text-left" },
-                    { targets: [3], width: "15%", className: "text-left" },
+                    { targets: [2], width: "10%", className: "text-left" },
+                    { targets: [3], width: "10%", className: "text-left" },
                     { targets: [4], width: "10%", className: "text-left" },
                     { targets: [5], width: "10%", className: "text-left" },
                     { targets: [6], width: "10%", className: "text-left" },
@@ -549,7 +551,7 @@
                     { targets: [8], width: "10%", className: "text-left" }
                 ],               
                 columns: [
-                    { data: obj => obj.MatchID },
+                    { data: obj => obj.MatchDesc },
                     { data: ''},
                     { data: '' },
                     { data: '' },
@@ -560,35 +562,70 @@
                     { data: '' }
                 ],
                 createdRow: function (row, obj) {
+                    $(row).addClass('hide');
                 },
-                //drawCallback: function () {
-                //    let api = this.api();
-                //    let rows = api.rows({ page: 'current' }).nodes();
-                //    var data = api.rows({ page: 'current' }).data();
-                //    let last = null;
+                drawCallback: function () {
+                    let api = this.api();
+                    let rows = api.rows({ page: 'current' }).nodes();
+                    var data = api.rows({ page: 'current' }).data();
+                    let last = null;
 
-                //    api.column(0, { page: 'current' }).data().each(function (group, i) {
-                //        if (last !== group) {
-                //            let html = '<tr class="group group-site">';
-                //            html += '<td colspan="7">';
-                //            html += '<span class="column-group-site" data-match-id=' + data[i].MatchID + '><i class="icon icon-chevron-down icon-open"></i> ' + group + ' </span>';
-                //            html += '</td></tr>';
+                    api.column(0, { page: 'current' }).data().each(function (group, i) {
+                        if (last !== group) {
+                            let html = '<tr class="group"><td colspan="9"><span class="column-group-match"';
+                            html += ' data-match-id=' + data[i].MatchID;
+                            html += ' data-event-date-string=' + data[i].EventDateString;                            
+                            html += ' data-bet-types=' + data[i].Bettypes;
+                            html += ' data-cust-ids=' + data[i].CustIDs + '>';
+                            html += '<i class="icon icon-chevron-right icon-open"></i> ' + group;
+                            html += '</span></td></tr>';
 
-                //            $(rows).eq(i).before(html);
-                //            last = group;
-                //        }
-                //    });
-                //}
+                            $(rows).eq(i).before(html);
+                            last = group;
+                        }
+                    });
+                }
+            }); 
+
+            $('tbody', tableMatchBettingPattern).on('click', 'tr.group', function () {
+                let trGroup = $(this);
+                let colGroupMatch = trGroup.find('.column-group-match');
+                if (colGroupMatch !== undefined) {
+                    let iGroup = $('i.icon', trGroup);
+
+                    if (iGroup.hasClass('icon-chevron-right')) {
+                        iGroup.removeClass('icon-chevron-right').addClass('icon-chevron-down');
+                        // Get detail info
+                        let params = {
+                            MatchId: colGroupMatch.attr('data-match-id'),
+                            EventDateString: colGroupMatch.attr('data-event-date-string'),
+                            Bettypes: colGroupMatch.attr('data-bet-types'),
+                            CustIds: colGroupMatch.attr('data-cust-ids'),
+                        }
+
+                        GetMatchBettingPatternDetail(params);
+
+                    } else {
+                        iGroup.removeClass('icon-chevron-down').addClass('icon-chevron-right');
+
+                        //$('tr[data-match-id="' + matchId + '"]', tableMatchBettingPattern).each(function () {
+                        //    let trCurrent = $(this);
+                        //    if (trCurrent.hasClass('hide')) {
+                        //        trCurrent.removeClass('hide');
+                        //    } else {
+                        //        trCurrent.addClass('hide');
+                        //    }
+                        //});
+                    }
+                }
             });
-
-            $('.ui-dialog').css('top', '150px !important');
-        }        
+        }
 
         GetMatchBettingPattern($('#hdCustId').val(), custId);
     }
 
     function GetMatchBettingPattern(custId1, custId2) {
-        var url = common.modifyRelativeUrl('/Account/GetMatchesAssociationByAI');
+        var url = common.modifyRelativeUrl('Account/GetMatchesAssociationByAI');
 
         $.ajax(url, {
             type: 'POST',
@@ -602,7 +639,7 @@
                 custID2: 1111
             },
             success: function (response) {
-                tableMatchBettingPattern.DataTable().clear().rows.add(response.data).draw();
+                tableMatchBettingPattern.DataTable().clear().rows.add(response.MatchesInfo).draw();
             },
             complete: function () {
                 tableMatchBettingPattern.find('tbody').removeClass('loading');
@@ -613,25 +650,26 @@
         });
     }
 
-    function GenerateDataTest() {
-        let data = [];
-
-        for (var i = 0; i < 4; i++) {
-            data.push({
-                "MatchId": 107,
-                "MatchInfo": "Manchester United vs Manchester City - Mar 21, 2021 - English Premier League",
-                "Username": "SUPPERTEST30102006",
-                "TransDate": "Mar 21, 2021 22:10:19",
-                "TransId": 31231231,
-                "BetType": "FT.Over/Under",
-                "BetTeam": "a",
-                "Stake": 100,
-                "Odds": 2,
-                "Livescore": "2-1"
-            })
-        }
-
-        return data;       
+    function GetMatchBettingPatternDetail(params) {
+        var url = common.modifyRelativeUrl('Account/GetMatchesAssociationDetailByAI');
+        
+        $.ajax(url, {
+            type: 'POST',
+            beforeSend: function () {
+                tableMatchBettingPattern.find('tbody').addClass('loading');
+            },
+            data: params,
+            success: function (response) {
+                console.log(response)
+                //tableMatchBettingPattern.DataTable().clear().rows.add(response.MatchesInfo).draw();
+            },
+            complete: function () {
+                tableMatchBettingPattern.find('tbody').removeClass('loading');
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+            }
+        });
     }
 
     function DisableButton(hostPermission) {

@@ -30,6 +30,7 @@
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Threading.Tasks;
     using System.Web.Mvc;
@@ -562,32 +563,36 @@
             var para1 = (custID1 <= custID2) ? custID1 : custID2;
             var para2 = (custID1 > custID2) ? custID1 : custID2;
 
+            var data = new MatchesAssociationByAIViewModel();
+
             var matchesAssociationInfo = _accountService.GetMatchesAssociationInfo(para1, para2);
 
             if(string.IsNullOrEmpty(matchesAssociationInfo.ErrorMessage) && matchesAssociationInfo.MatchesInfo != null && matchesAssociationInfo.MatchesInfo.Any())
             {
                 var matchesInfo = _accountService.GetMatchesInfo(string.Join(",", matchesAssociationInfo.MatchesInfo.Select(c => c.MatchID).Distinct()));
 
-                matchesAssociationInfo.MatchesInfo = matchesAssociationInfo.MatchesInfo
-                    .Join(matchesInfo, c1 => c1.MatchID,
-                                       c2 => c2.MatchID,
-                                       (c1, c2) => new MatchesInfoModel
-                                       {
-                                           MatchID = c1.MatchID,
-                                           BettypeList = c1.BettypeList,
-                                           EventDate = c2.EventDate,
-                                           HomeID = c2.HomeID,
-                                           AwayID = c2.AwayID,
-                                           LeagueID = c2.LeagueID,
-                                           HomeName = c2.HomeName,
-                                           AwayName = c2.AwayName,
-                                           LeagueName = c2.LeagueName
-                                       }).ToList();
+                data = new MatchesAssociationByAIViewModel
+                {
+                    TotalMatchCount = matchesAssociationInfo.TotalMatchCount,
+                    ErrorMessage = matchesAssociationInfo.ErrorMessage,
+                    MatchesInfo = matchesAssociationInfo.MatchesInfo
+                        .Join(matchesInfo, c1 => c1.MatchID,
+                                           c2 => c2.MatchID,
+                                           (c1, c2) => new MatchesInfoViewModel
+                                           {
+                                               MatchDesc = c2.MatchID 
+                                                    + " - " + c2.HomeName + " vs " + c2.AwayName
+                                                    + " - " + c2.EventDate.ToString(Consts.FormatDateToString_MMMddyyyy)
+                                                    + " - " + c2.LeagueName,
+                                               MatchID = c1.MatchID,
+                                               EventDateString = c2.EventDate.ToString(Consts.FormatDateToString_yyyyMMddHHmmss),
+                                               Bettypes = c1.BettypeList,
+                                               CustIDs = para1.ToString() + "," + para2.ToString()
+                                           }).ToList()
+                };
             }
-
-            return Json(matchesAssociationInfo, JsonRequestBehavior.AllowGet);
+            return Json(data, JsonRequestBehavior.AllowGet);
         }
-
 
         [HttpPost]
         public ActionResult GetMatchesAssociationDetailByAI(MatchesAssociationDetailViewModel para)
@@ -596,6 +601,19 @@
 
             if (para != null)
             {
+                if (!string.IsNullOrEmpty(para.EventDateString))
+                {
+                    var eventDate = DateTime.MinValue;
+                    
+                    DateTime.TryParseExact(para.EventDateString,
+                       Consts.FormatDateToString_yyyyMMddHHmmss,
+                       CultureInfo.InvariantCulture,
+                       DateTimeStyles.None,
+                       out eventDate);
+
+                    para.EventDate = eventDate;
+                }
+              
                 result = _accountService.GetMatchesDetailInfo(para).ToList();
             }       
 
