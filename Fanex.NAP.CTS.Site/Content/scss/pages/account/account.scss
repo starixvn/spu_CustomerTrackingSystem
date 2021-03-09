@@ -1009,6 +1009,25 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
         }
     }
 }
+
+#divMatchBettingPattern {    
+    .graph-heading {
+        position: sticky;
+        position: -webkit-sticky;
+        top: 0rem;
+        z-index: 10;
+    }
+
+    #tblMatchBettingPattern {
+        thead th {
+            position: sticky;
+            position: -webkit-sticky;
+            top: 4rem;
+            z-index: 9;
+        }
+    }
+}
+
 // chains_evidence
 #chains_evidence.report-cont {
     padding-top: 0;

@@ -1363,6 +1363,18 @@
   top: 20.8rem;
   z-index: 10; }
 
+#divMatchBettingPattern .graph-heading {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0rem;
+  z-index: 10; }
+
+#divMatchBettingPattern #tblMatchBettingPattern thead th {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 4rem;
+  z-index: 9; }
+
 #chains_evidence.report-cont {
   padding-top: 0; }
   #chains_evidence.report-cont .filter {

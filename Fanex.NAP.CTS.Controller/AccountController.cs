@@ -580,32 +580,18 @@
                                            c2 => c2.MatchID,
                                            (c1, c2) => new MatchesInfoViewModel
                                            {
-                                               MatchDesc = c2.MatchID 
+                                               MatchDesc = c2.MatchID
                                                     + " - " + c2.HomeName + " vs " + c2.AwayName
                                                     + " - " + c2.EventDate.ToString(Consts.FormatDateToString_MMMddyyyy)
                                                     + " - " + c2.LeagueName,
                                                MatchID = c1.MatchID,
                                                EventDateString = c2.EventDate.ToString(Consts.FormatDateToString_yyyyMMddHHmmss),
                                                Bettypes = c1.BettypeList,
-                                               CustIDs = para1.ToString() + "," + para2.ToString()
-                                           }).ToList()
+                                               CustIDs = para1.ToString() + "," + para2.ToString()                                                
+                                           }).OrderByDescending(x=>x.EventDateString).ToList()
                 };
-
-                for (int i = 0; i < 20; i++)
-                {
-                    data.MatchesInfo.AddRange(matchesAssociationInfo.MatchesInfo.Select(x => new MatchesInfoViewModel
-                    {
-                        MatchDesc = x.MatchID
-                                                      + " - " + x.HomeName + " vs " + x.AwayName
-                                                      + " - " + x.EventDate.ToString(Consts.FormatDateToString_MMMddyyyy)
-                                                      + " - " + x.LeagueName,
-                        MatchID = x.MatchID,
-                        EventDateString = x.EventDate.ToString(Consts.FormatDateToString_yyyyMMddHHmmss),
-                        Bettypes = "1",
-                        CustIDs = para1.ToString() + "," + para2.ToString()
-                    }));
-                }               
             }
+
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
@@ -633,7 +619,7 @@
 
                 if (result != null && result.Any())
                 {
-                    data = result.Select(x => new MatchesDetailInfoViewModel
+                    data = result.OrderBy(x=>x.TransDate).Select(x => new MatchesDetailInfoViewModel
                     {
                         UserName = x.UserName,
                         TransDateString = x.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
@@ -643,7 +629,7 @@
                         Stake = x.Stake,
                         Odds = x.Odds,
                         LiveScore = x.LiveHomeScore + "-" + x.LiveAwayScore
-                    }).ToList();
+                    }).ToList();                   
                 }
             }
 
