@@ -636,7 +636,8 @@
             {
                 EventDate = macthInfo.EventDate,
                 Bettypes = macthInfo.Bettypes,
-                CustIds = macthInfo.CustIds,
+                CustId1 = macthInfo.CustId1,
+                CustId2 = macthInfo.CustId2,
                 MatchId = macthInfo.MatchId
             };
 
