@@ -577,7 +577,8 @@
                             html += ' data-match-id=' + data[i].MatchID;
                             html += ' data-event-date-string=' + data[i].EventDateString;                            
                             html += ' data-bet-types=' + data[i].Bettypes;
-                            html += ' data-cust-ids=' + data[i].CustIDs + '>';
+                            html += ' data-cust-id1=' + data[i].CustID1;
+                            html += ' data-cust-id2=' + data[i].CustID2 + '>';
                             html += '<i class="icon icon-chevron-right icon-open"></i> ' + group;
                             html += '</span></td></tr>';
 
@@ -599,7 +600,8 @@
                             MatchId: colGroupMatch.attr('data-match-id'),
                             EventDateString: colGroupMatch.attr('data-event-date-string'),
                             Bettypes: colGroupMatch.attr('data-bet-types'),
-                            CustIds: colGroupMatch.attr('data-cust-ids'),
+                            CustId1: colGroupMatch.attr('data-cust-id1'),
+                            CustId2: colGroupMatch.attr('data-cust-id2')
                         }
 
                         GetMatchBettingPatternDetail(params, trGroup);

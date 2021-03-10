@@ -587,7 +587,8 @@
                                                MatchID = c1.MatchID,
                                                EventDateString = c2.EventDate.ToString(Consts.FormatDateToString_yyyyMMddHHmmss),
                                                Bettypes = c1.BettypeList,
-                                               CustIDs = para1.ToString() + "," + para2.ToString()                                                
+                                               CustID1 = para1,
+                                               CustID2 = para2
                                            }).OrderByDescending(x=>x.EventDateString).ToList()
                 };
             }
