@@ -14,6 +14,7 @@
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Model.Account;
     using System.Collections.Generic;
+    using System;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.AssociationReport, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -69,20 +70,26 @@
         {
             var associationList = Enumerable.Empty<AssociationViewModel>();
             int totalItems = 0;
+
+            if (filter.ToDate != DateTime.MinValue)
+            {
+                filter.ToDate = new DateTime(filter.ToDate.Year, filter.ToDate.Month, filter.ToDate.Day, 23, 59, 59);
+            }
+
             var associations = _associationService.GetAssociationFromMySql(filter, out totalItems);
 
             if (associations != null && associations.Any())
             {
-                associationList = associations.GroupBy(x => x.UserName)
-                    .Select(g => new AssociationViewModel
+                associationList = associations
+                    .Select(x => new AssociationViewModel
                     {
-                        CTSCustId = g.FirstOrDefault().CTSCustId,
-                        SubscriberId = g.FirstOrDefault().SubscriberId,
-                        SubscriberName = g.FirstOrDefault().SubscriberName,
-                        UserName = g.FirstOrDefault().UserName,
-                        EvidenceCodes = string.Join(", ", g.Select(x => x.EvidenceCode).Distinct().OrderBy(x => x)),
-                        AccountStatus = g.FirstOrDefault().AccountStatus,
-                        CategoryName = string.Join(", ", g.Select(x=>x.CategoryName).Distinct())
+                        CTSCustId = x.CTSCustId,
+                        SubscriberId = x.SubscriberId,
+                        SubscriberName = x.SubscriberName,
+                        UserName = x.UserName,
+                        EvidenceCodes = x.EvidenceCode,
+                        AccountStatus = x.AccountStatus,
+                        CategoryName = x.CategoryName
                     });
             }
 
