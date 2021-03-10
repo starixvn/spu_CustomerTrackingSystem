@@ -80,7 +80,7 @@
         /// <returns>true: success; false: failed</returns>
         [HttpPost]
         public bool PlaceEvidenceMultipleByCustId(string custIds, int evidenceId)
-        {            
+        {
             bool returnedResult = false;
             if (!string.IsNullOrEmpty(custIds))
             {
@@ -196,7 +196,7 @@
         [HttpGet]
         public JsonResult<List<CustomerEvidence>> GetFlaggedEvidenceForLevel01(string custIdList)
         {
-            if(string.IsNullOrWhiteSpace(custIdList))
+            if (string.IsNullOrWhiteSpace(custIdList))
             {
                 LogService.Error($"Cust Id list is empty.");
             }
@@ -210,8 +210,8 @@
                 }
                 catch (Exception ex)
                 {
-                    LogService.Error(ex.Message);                    
-                }                
+                    LogService.Error(ex.Message);
+                }
             }
 
             return Json(new List<CustomerEvidence>());
@@ -229,15 +229,23 @@
             if (string.IsNullOrWhiteSpace(custIdList))
             {
                 LogService.Error($"Cust Id list is empty.");
-
-                return null;
             }
             else
             {
-                var result = _associationService.GetFlaggedEvidenceByLevel2Association(custIdList).ToList();
+                try
+                {
+                    var result = _associationService.GetFlaggedEvidenceByLevel2Association(custIdList).ToList();
 
-                return Json(result);
+                    return Json(result);
+                }
+                catch (Exception ex)
+                {
+
+                    LogService.Error(ex.Message);
+                }                
             }
+
+            return Json(new List<CustomerEvidence>());
         }
 
 
@@ -460,11 +468,11 @@
         /// <returns>Customer class in XML format</returns>
         [HttpPost]
         public IEnumerable<CTSCustomer> CheckCustomerNotExisted(string custIdList, DateTime fromDate, DateTime toDate)
-        {            
+        {
             try
             {
                 return _accountService.CheckCustomerNotExisted(custIdList, fromDate, toDate);
-                
+
             }
             catch (Exception ex)
             {
@@ -523,9 +531,10 @@
                 if (isWriteLogInfo)
                     LogService.Info($"CTS Portal API - RemoveProblemAccounts endpoint - end");
 
-                return new ApiResultModel {
+                return new ApiResultModel
+                {
                     ErrorMessage = string.Empty,
-                    StatusMessage= "success"
+                    StatusMessage = "success"
                 };
             }
             catch (Exception ex)
@@ -534,7 +543,7 @@
 
                 return new ApiResultModel
                 {
-                    ErrorMessage =  ex.Message,
+                    ErrorMessage = ex.Message,
                     StatusMessage = "fail"
                 };
             }

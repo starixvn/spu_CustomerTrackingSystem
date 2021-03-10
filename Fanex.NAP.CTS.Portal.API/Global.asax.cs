@@ -40,7 +40,7 @@
                 .StartNewSession()
                 .WithMySql()
                 .WithSqlServer()
-                .UseDefaultDbSettingProvider(resourcePath: "~/App_Data/SQL")
+                .UseDefaultDbSettingProvider(resourcePath: "~/App_Data/SQL/SPNames.xml")
                 .UseDefaultConnectionStringProvider()
                 .Run();
 
