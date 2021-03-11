@@ -169,7 +169,7 @@
       <Version>1.0.8</Version>
     </PackageReference>
     <PackageReference Include="Fanex.NAP.Core.Client">
-      <Version>1.2.1.8</Version>
+      <Version>1.2.1.12</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
