@@ -190,8 +190,8 @@
         /// <summary>
         /// Get flagged customer for level 0 and 1 for Customers
         /// </summary>
-        /// <param name="custIdList"></param>
-        /// <returns></returns>
+        /// <param name="custIdList">CustId list in string format(saparted by comma. Ex: 47539408,47787246)</param>
+        /// <returns>List of Flagged Customer in Json formated</returns>
 
         [HttpGet]
         public JsonResult<List<CustomerEvidence>> GetFlaggedEvidenceForLevel01(string custIdList)
@@ -220,8 +220,8 @@
         /// <summary>
         /// Get flagged customer for level 2 for Customers
         /// </summary>
-        /// <param name="custIdList"></param>
-        /// <returns></returns>
+        /// <param name="custIdList">CustId list in string format(saparted by comma. Ex: 47539408,47787246)</param>
+        /// <returns>List of Flagged Customer in Json formated</returns>
 
         [HttpGet]
         public JsonResult<List<CustomerEvidence>> GetFlaggedEvidenceForLevel2(string custIdList)
