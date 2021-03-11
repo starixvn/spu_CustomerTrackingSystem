@@ -6,8 +6,8 @@
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Core.Helpers.Xml;
-    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Core.Utilities;
+    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.API;
     using Fanex.NAP.CTS.Model.DTO;
@@ -22,7 +22,6 @@
     using System.Configuration;
     using System.Linq;
     using System.Net;
-    using System.Threading;
     using System.Web.Http;
     using System.Web.Http.Results;
 
@@ -81,7 +80,7 @@
         /// <returns>true: success; false: failed</returns>
         [HttpPost]
         public bool PlaceEvidenceMultipleByCustId(string custIds, int evidenceId)
-        {            
+        {
             bool returnedResult = false;
             if (!string.IsNullOrEmpty(custIds))
             {
@@ -187,6 +186,68 @@
                 return Json(new List<CustomerEvidence>());
             }
         }
+
+        /// <summary>
+        /// Get flagged customer for level 0 and 1 for Customers
+        /// </summary>
+        /// <param name="custIdList">CustId list in string format(saparted by comma. Ex: 47539408,47787246)</param>
+        /// <returns>List of Flagged Customer in Json formated</returns>
+
+        [HttpGet]
+        public JsonResult<List<CustomerEvidence>> GetFlaggedEvidenceForLevel01(string custIdList)
+        {
+            if (string.IsNullOrWhiteSpace(custIdList))
+            {
+                LogService.Error($"Cust Id list is empty.");
+            }
+            else
+            {
+                try
+                {
+                    var result = _associationService.GetFlaggedEvidenceByDirectAssociation(custIdList).ToList();
+
+                    return Json(result);
+                }
+                catch (Exception ex)
+                {
+                    LogService.Error(ex.Message);
+                }
+            }
+
+            return Json(new List<CustomerEvidence>());
+        }
+
+        /// <summary>
+        /// Get flagged customer for level 2 for Customers
+        /// </summary>
+        /// <param name="custIdList">CustId list in string format(saparted by comma. Ex: 47539408,47787246)</param>
+        /// <returns>List of Flagged Customer in Json formated</returns>
+
+        [HttpGet]
+        public JsonResult<List<CustomerEvidence>> GetFlaggedEvidenceForLevel2(string custIdList)
+        {
+            if (string.IsNullOrWhiteSpace(custIdList))
+            {
+                LogService.Error($"Cust Id list is empty.");
+            }
+            else
+            {
+                try
+                {
+                    var result = _associationService.GetFlaggedEvidenceByLevel2Association(custIdList).ToList();
+
+                    return Json(result);
+                }
+                catch (Exception ex)
+                {
+
+                    LogService.Error(ex.Message);
+                }                
+            }
+
+            return Json(new List<CustomerEvidence>());
+        }
+
 
         /// <summary>
         /// Add evidences to customers
@@ -407,11 +468,11 @@
         /// <returns>Customer class in XML format</returns>
         [HttpPost]
         public IEnumerable<CTSCustomer> CheckCustomerNotExisted(string custIdList, DateTime fromDate, DateTime toDate)
-        {            
+        {
             try
             {
                 return _accountService.CheckCustomerNotExisted(custIdList, fromDate, toDate);
-                
+
             }
             catch (Exception ex)
             {
@@ -470,9 +531,10 @@
                 if (isWriteLogInfo)
                     LogService.Info($"CTS Portal API - RemoveProblemAccounts endpoint - end");
 
-                return new ApiResultModel {
+                return new ApiResultModel
+                {
                     ErrorMessage = string.Empty,
-                    StatusMessage= "success"
+                    StatusMessage = "success"
                 };
             }
             catch (Exception ex)
@@ -481,7 +543,7 @@
 
                 return new ApiResultModel
                 {
-                    ErrorMessage =  ex.Message,
+                    ErrorMessage = ex.Message,
                     StatusMessage = "fail"
                 };
             }

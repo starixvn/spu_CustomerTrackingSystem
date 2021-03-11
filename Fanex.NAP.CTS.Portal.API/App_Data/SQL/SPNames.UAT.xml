@@ -4,6 +4,9 @@
     <Setting Key="CTS_DC_CustEvidence_InsertSingle" SpName="CTS_DC_CustEvidence_InsertSingle_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
     <Setting Key="CTS_DC_CustEvidence_InsertMultilpleEvidencesForCustomers" SpName="CTS_DC_CustEvidence_InsertMultilpleEvidencesForCustomers_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
     <Setting Key="CTS_DC_CustEvidence_InsertMultiple_ByCustId" SpName="CTS_DC_CustEvidence_InsertMultiple_ByCustId_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
+
+	<Setting Key="CTS_DC_CustEvidence_GetEvidencesByDirectAssociation" SpName="CTS_DC_CustEvidence_GetEvidencesByDirectAssociation_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+	<Setting Key="CTS_DC_CustEvidence_GetEvidencesByLevel2Association" SpName="CTS_DC_CustEvidence_GetEvidencesByLevel2Association_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
   </Function>
 
   <Function Name="CustomerClassification">
