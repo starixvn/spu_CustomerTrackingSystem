@@ -127,7 +127,14 @@
         public ActionResult GetAssociationDetail(AssociationDetailFilterViewModel filter)
         {
             var associationList = Enumerable.Empty<AssociationDetailViewModel>();
+
             var totalItems = 0;
+
+            if (filter.ToDate != DateTime.MinValue)
+            {
+                filter.ToDate = new DateTime(filter.ToDate.Year, filter.ToDate.Month, filter.ToDate.Day, 23, 59, 59);
+            }
+
             var associations = _associationService.GetAssociationDetailFromMySql(filter, out totalItems);            
 
             if (associations != null && associations.Any())

@@ -119,10 +119,6 @@
 	<Setting Key="CTS_DC_CTSCustomer_UpdateSubscriberIDBySiteID" SpName="CTS_DC_CTSCustomer_UpdateSubscriberIDBySiteID" DbName="MySQL.CTS_DataCenter.Admin"/>
   </Function>
 
-  <Function name="Report">
-    <Setting Key="CTS_DC_Report_GetAssociatedAccount " SpName="CTS_DC_Report_GetAssociatedAccount" DbName="MySQL.CTS_DataCenter.Reporter"/>
-  </Function>
-
   <Function name="AssociationReport">    
 	  <Setting Key="CTS_DC_Report_GetAssociatedAccount " SpName="CTS_DC_Report_GetAssociatedAccount" DbName="MySQL.CTS_DataCenter.Reporter"/>
 	  <Setting Key="CTS_DC_Subscriber_GetByGroup " SpName="CTS_DC_Subscriber_GetByGroup" DbName="MySQL.CTS_DataCenter.Reporter"/>
