@@ -4,7 +4,7 @@
         dpkFromDate: $('#dpkFromDate'),
         dpkToDate: $('#dpkToDate'),
         cbbAccountStatus: $('#cbbAccountStatus'),
-        cbbSite: $('#cbbSite'),
+        cbbSubscriber: $('#cbbSubscriber'),
         cbbAssociationStatus: $('#cbbAssociationStatus'),
         cbbEvidence: $('#cbbEvidence'),
         cbbAssociationType: $('#cbbAssociationType'),
@@ -23,10 +23,10 @@
     function ValidateRangeDate() {        
         let toDateValue = domElements.dpkToDate.datepicker("getDate");
         let toDateValueAllow = domElements.dpkFromDate.datepicker("getDate");
-        toDateValueAllow.setDate(toDateValueAllow.getDate() + 2);        
+        toDateValueAllow.setDate(toDateValueAllow.getDate() + 29);        
 
         if (toDateValue > toDateValueAllow) {
-            common.showError("Invalid date range, please select not more than 3 days");
+            common.showError("Invalid date range, please select not more than 30 days");
 
             return false;
         }
@@ -43,11 +43,8 @@
                     FromDate: function () { return domElements.dpkFromDate.val(); },
                     ToDate: function () { return domElements.dpkToDate.val(); },
                     AccountStatusIds: function () { return domElements.cbbAccountStatus.val(); },
-                    SiteName: function () {
-                        var selectedSites = [];
-                        domElements.cbbSite.find('option:selected').each(function () { selectedSites.push($(this).text()); });
-
-                        return selectedSites.length !== 0 ? selectedSites.join(',') : "";
+                    SubscriberIDs: function () {
+                        return domElements.cbbSubscriber.val().join();
                     },
                     AssociationStatus: function () {
                         let options = domElements.cbbAssociationStatus.find('option');
@@ -57,7 +54,7 @@
                             ? domElements.cbbAssociationStatus.val()
                             : 0;
                     },
-                    EvidenceCode: function () { return domElements.cbbEvidence.val(); },
+                    EvidenceIDs: function () { return domElements.cbbEvidence.val().join(); },
                     AssociationType: function () { return domElements.cbbAssociationType.val(); }                    
                 },
                 type: "POST",
@@ -114,10 +111,10 @@
                         return html = `<a class='click-view-name' href=${url}> ${obj.UserName} </a>`;
                     }
                 },
-                { data: obj => obj.SiteName },
+                { data: obj => obj.SubscriberName },
                 { data: obj => obj.AccountStatus },
-                { data: obj => obj.EvidenceCode },
-                { data: obj => obj.CategoryNames },
+                { data: obj => obj.EvidenceCodes },
+                { data: obj => obj.CategoryName },
                 {
                     data: obj => () => {
                         let paramTemplate = "SubscriberId={0}&CTSCustId={1}&UserName={2}&FromDate={3}&ToDate={4}&AssociationStatus={5}&AssociationType={6}&AssociationTypeName={7}";
@@ -179,11 +176,31 @@
             .datepicker("setDate", new Date())
             .change(SetRestrictFromDate);
 
-        domElements.cbbEvidence.select2();
-        domElements.cbbSite.select2();
+        domElements.cbbEvidence.multiselect({
+            menuWidth: 260,
+            menuHeight: 260,
+            selectedText: "# of # selected",
+            noneSelectedText: "Select Evidence"
+        });
+        
+        domElements.cbbSubscriber.multiselect({
+            menuWidth: 320,
+            menuHeight: 320,
+            selectedText: "# of # selected",
+            noneSelectedText: "Select Site",
+            enableClickableOptGroups: true,
+            includeSelectAllOption: true,
+            groupsCollapsable: true,
+            optGroupChecked: true
+        }).multiselectfilter({
+            width: 217,
+            placeholder: '',
+            label: ''
+        });
+
         domElements.cbbAssociationStatus.multiselect({
-            menuWidth: 250,
-            menuHeight: 250,
+            menuWidth: 200,
+            menuHeight: 200,
             selectedText: "# of # selected",
             noneSelectedText: "Select Association Status"
         });

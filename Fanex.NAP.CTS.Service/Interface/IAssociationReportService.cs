@@ -2,8 +2,7 @@
 {
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Model.Account;
-    using Fanex.NAP.CTS.Model.AssociationReport;
-    using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
+    using Fanex.NAP.CTS.Model.AssociationReport;    
     using Fanex.NAP.CTS.ViewModel.AssociationReport;
     using System.Collections.Generic;
 
@@ -17,12 +16,16 @@
 
         IEnumerable<SubscriberGroupModel> GetAllSubscriberGroups();
 
-        GraphAssociationModel GetAssociations(string apiEndPoint, AssociationFilterViewModel filter);
+        GraphAssociationModel GetAssociations(string apiEndPoint, AssociationFilterViewModel filter);        
 
         IEnumerable<CategoriesModel> GetCategories(string ctsCustIdList);
 
         GraphAssociationDetailModel GetAssociationDetail(string apiEndPoint, AssociationDetailFilterViewModel filter);
 
         DBResult ActiveRemoveAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, int createdBy, bool isRemoveAction);
+
+        IEnumerable<AssociationFromMySqlModel> GetAssociationFromMySql(AssociationFilterViewModel filter, out int totalItems);
+
+        IEnumerable<AssociationDetailFromMySqlModel> GetAssociationDetailFromMySql(AssociationDetailFilterViewModel filter, out int totalItems);
     }
 }

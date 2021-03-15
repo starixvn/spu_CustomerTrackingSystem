@@ -5,16 +5,15 @@
     using System.Linq;
     using System.Threading.Tasks;
     using Fanex.Data;
+    using Fanex.Data.Repository;
     using Fanex.Logging;
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Criteria.Account;
     using Fanex.NAP.CTS.Criteria.Account.Associated;
-    using Fanex.NAP.CTS.Criteria.AssociationReport;
-    using Fanex.NAP.CTS.Criteria.ProblemAccountMonitor;
+    using Fanex.NAP.CTS.Criteria.AssociationReport;    
     using Fanex.NAP.CTS.Model.Account;
-    using Fanex.NAP.CTS.Model.AssociationReport;
-    using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
+    using Fanex.NAP.CTS.Model.AssociationReport;    
     using Fanex.NAP.CTS.ViewModel.AssociationReport;
 
     public class AssociationReportService : IAssociationReportService
@@ -66,7 +65,7 @@
 
         public IEnumerable<SubscriberGroupModel> GetAllSubscriberGroups()
         {
-            var criteria = new GetAllSubscriberGroupsCriteria();
+            var criteria = new GetSubscriberGroupCriteria();
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
@@ -176,6 +175,61 @@
                     ErrorCode = string.IsNullOrWhiteSpace(criteria.ErrorMessage) ? 0 : -1,
                     ErrorMsg = criteria.ErrorMessage
                 };
+            }
+        }
+
+        public IEnumerable<AssociationFromMySqlModel> GetAssociationFromMySql(AssociationFilterViewModel filter, out int totalItems)
+        {
+            totalItems = 0;
+
+            var criteria = new AssociationReportGetCriteria
+            {
+                FromAssDate = filter.FromDate,
+                ToAssDate = filter.ToDate,
+                AccountStatusIDs = filter.AccountStatusIds,
+                SubscriberIDs = filter.SubscriberIDs,
+                AssociationStatus = filter.AssociationStatus.ToString(),
+                EvidenceIDs = filter.EvidenceIDs,
+                AssociationType = filter.AssociationType,
+                TakeRow = filter.length,
+                SkipRow = filter.start
+            };
+
+            var repository = new DynamicRepository();
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                var data = repository.Fetch<AssociationFromMySqlModel>(criteria);
+
+                totalItems = criteria.TotalItems;
+
+                return data;
+            }
+        }
+
+        public IEnumerable<AssociationDetailFromMySqlModel> GetAssociationDetailFromMySql(AssociationDetailFilterViewModel filter, out int totalItems)
+        {
+            totalItems = 0;
+
+            var criteria = new AssociationDetailReportGetCriteria
+            {
+                CTSCustID = filter.CTSCustId,
+                FromAssDate = filter.FromDate,
+                ToAssDate = filter.ToDate,
+                AssociationType = filter.AssociationType,
+                TakeRow = filter.length,
+                SkipRow = filter.start
+            };
+
+            var repository = new DynamicRepository();
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                var data = repository.Fetch<AssociationDetailFromMySqlModel>(criteria);
+
+                totalItems = criteria.TotalItems;
+
+                return data;
             }
         }
 

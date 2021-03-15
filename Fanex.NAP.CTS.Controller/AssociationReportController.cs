@@ -14,6 +14,7 @@
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Model.Account;
     using System.Collections.Generic;
+    using System;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.AssociationReport, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -31,7 +32,7 @@
         public ActionResult Index()
         {         
             ViewBag.AccountStatus = _associationService.GetAccountStaticStatuses();
-            ViewBag.Subscribers = _associationService.GetAllSubscriberGroups();
+            ViewBag.Subscribers = GetSubscriberGroups();
             ViewBag.Evidences = _associationService.GetEvidenceList();
             ViewBag.AssociationStatus = _associationService.GetCustomerStaticStatus(3, true);
             ViewBag.AssociationTypes = _associationService.GetCustomerStaticStatus(2, true);
@@ -39,43 +40,64 @@
             return View();
         }
 
+        private IEnumerable<SubscriberGroupViewModel> GetSubscriberGroups()
+        {
+            var subscriberGroups = Enumerable.Empty<SubscriberGroupViewModel>();
+            var data = _associationService.GetAllSubscriberGroups();
+
+            if (data != null)
+            {
+                subscriberGroups = data
+                    .GroupBy(g => new { g.SubscriberGroupID, g.SubscriberGroupName })
+                    .Select(x => new { Group = x.Key, SubscriberList = x.ToList() })
+                    .Select(x => new SubscriberGroupViewModel
+                    {
+                        SubscriberGroupID = x.Group.SubscriberGroupID,
+                        SubscriberGroupName = x.Group.SubscriberGroupName,
+                        SubscriberList = x.SubscriberList.Select(y => new SubscriberViewModel
+                        {
+                            SubscriberID = y.SubscriberID,
+                            SubscriberName = y.SubscriberName
+                        })
+                    });
+            }
+
+            return subscriberGroups;
+        }
+
         [HttpPost]
         public ActionResult GetAssociations(AssociationFilterViewModel filter)
         {
             var associationList = Enumerable.Empty<AssociationViewModel>();
-            var graphAssociations = _associationService.GetAssociations(ConfigSettings.GetAssociations, filter);
-            var total = 0;
+            int totalItems = 0;
 
-            if (graphAssociations != null && graphAssociations.AssociationList != null && graphAssociations.AssociationList.Any())
+            if (filter.ToDate != DateTime.MinValue)
             {
-                total = graphAssociations.TotalItems;
-                var ctsCustIdList = string.Join(",", graphAssociations.AssociationList.Select(x => x.CTSCustId).Distinct());
+                filter.ToDate = new DateTime(filter.ToDate.Year, filter.ToDate.Month, filter.ToDate.Day, 23, 59, 59);
+            }
 
-                var categories = _associationService.GetCategories(ctsCustIdList);
+            var associations = _associationService.GetAssociationFromMySql(filter, out totalItems);
 
-                associationList = graphAssociations.AssociationList.Select(x =>
-                {
-                    var category = categories.FirstOrDefault(y=>y.CTSCustID == x.CTSCustId);
-
-                    return new AssociationViewModel
+            if (associations != null && associations.Any())
+            {
+                associationList = associations
+                    .Select(x => new AssociationViewModel
                     {
                         CTSCustId = x.CTSCustId,
                         SubscriberId = x.SubscriberId,
-                        SiteId = x.SiteId,
-                        SiteName = filter.SiteName,
+                        SubscriberName = x.SubscriberName,
                         UserName = x.UserName,
-                        EvidenceCode = x.EvidenceCode,
+                        EvidenceCodes = x.EvidenceCode,
                         AccountStatus = x.AccountStatus,
-                        CategoryNames = category != null ? category.CategoryList : string.Empty
-                    };
-                });
+                        CategoryName = x.CategoryName
+                    });
             }
 
             return Json( new
             {
                 draw = filter.draw,
-                recordsTotal = total,
-                recordsFiltered = total,
+                recordsTotal = totalItems,
+                recordsFiltered = totalItems,
                 data = associationList
             }, JsonRequestBehavior.AllowGet);
         }
@@ -105,38 +127,43 @@
         public ActionResult GetAssociationDetail(AssociationDetailFilterViewModel filter)
         {
             var associationList = Enumerable.Empty<AssociationDetailViewModel>();
-            var graphAssociations = _associationService.GetAssociationDetail(ConfigSettings.GetAssociationDetail, filter);
-            var total = 0;
 
-            if (graphAssociations != null && graphAssociations.AssociationList != null && graphAssociations.AssociationList.Any())
+            var totalItems = 0;
+
+            if (filter.ToDate != DateTime.MinValue)
             {
-                total = graphAssociations.TotalItems;
+                filter.ToDate = new DateTime(filter.ToDate.Year, filter.ToDate.Month, filter.ToDate.Day, 23, 59, 59);
+            }
+
+            var associations = _associationService.GetAssociationDetailFromMySql(filter, out totalItems);            
+
+            if (associations != null && associations.Any())
+            {
                 var associationTypes = _associationService.GetCustomerStaticStatus(2, true);
 
-                var groupForSite = graphAssociations.AssociationList.GroupBy(x => x.SiteID)
-                    .Select(g => new { SiteId = g.Key, TotalAccounts = g.Count() });
+                var groupForSite = associations.GroupBy(x => x.SubscriberID)
+                    .Select(g => new { SubscriberID = g.Key, TotalAccounts = g.Count() });
 
-                associationList = graphAssociations.AssociationList.Select(x => new AssociationDetailViewModel
+                associationList = associations.Select(x => new AssociationDetailViewModel
                 {
-                    CTSCustId = x.CTSCustId,
+                    CTSCustId = x.CTSCustID,
                     UserName = x.UserName,
-                    SubscriberId = x.SubscriberId,
-                    SiteId = x.SiteID.HasValue ? x.SiteID.Value : 0,
-                    SiteName = !string.IsNullOrEmpty(x.SiteName) ? x.SiteName : "-",
-                    AccountStatus = x.StatusName,
-                    AssociatedDate = x.AssociationDateFromGraphDB,
-                    AssociatedDateString = x.AssociationDateFromGraphDB.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                    IsLinked = x.AssociationStatus == 1,
-                    AssociationTypeName = GetAssociationTypeName(associationTypes, x.AssociationType.FirstOrDefault()),
-                    TotalAssociationAccount = groupForSite.FirstOrDefault(y=>y.SiteId == x.SiteID).TotalAccounts
-                }).OrderBy(x=>x.SiteId);
+                    SubscriberId = x.SubscriberID,
+                    SubscriberName = x.SubscriberName,
+                    AssociatedDate = x.AssociationDate,
+                    AccountStatus = x.AccountStatus,
+                    AssociatedDateString = x.AssociationDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+                    IsLinked = x.AssociationStatus,                    
+                    AssociationTypeName = GetAssociationTypeName(associationTypes, x.AssociationType),
+                    TotalAssociationAccount = groupForSite.FirstOrDefault(y=>y.SubscriberID == x.SubscriberID).TotalAccounts
+                }).OrderBy(x=>x.SubscriberId);
             }
 
             return Json(new
             {
                 draw = filter.draw,
-                recordsTotal = total,
-                recordsFiltered = total,
+                recordsTotal = totalItems,
+                recordsFiltered = totalItems,
                 data = associationList,
             }, JsonRequestBehavior.AllowGet);
         }

@@ -8,17 +8,15 @@
 
         public string UserName { get; set; }
 
-        public int SubscriberId { get; set; }
+        public int SubscriberId { get; set; }        
 
-        public int SiteId { get; set; }
-
-        public string SiteName { get; set; }
+        public string SubscriberName { get; set; }
 
         public string AccountStatus { get; set; }
 
-        public string EvidenceCode { get; set; }
+        public string EvidenceCodes { get; set; }
 
-        public string CategoryNames { get; set; }
+        public string CategoryName { get; set; }
 
         public string AssociationType { get; set; }
         

@@ -24,10 +24,10 @@
 
         $('tbody', domElements.tblAssociationDetail).on('click', 'tr.group', function () {
             let trGroup = $(this);
-            let siteId = trGroup.find('.column-group-site').attr('data-site-id');
+            let subscriberId = trGroup.find('.column-group-site').attr('data-subscriber-id');
 
-            if (siteId !== undefined) {
-                $('tr[data-site-id="' + siteId + '"]', domElements.tblAssociationDetail).each(function () {
+            if (subscriberId !== undefined) {
+                $('tr[data-subscriber-id="' + subscriberId + '"]', domElements.tblAssociationDetail).each(function () {
                     let trCurrent = $(this);
                     if (trCurrent.hasClass('hide')) {
                         trCurrent.removeClass('hide');
@@ -48,6 +48,7 @@
                 url: common.modifyRelativeUrl('AssociationReport/GetAssociationDetail'),
                 data: {
                     CTSCustId: domElements.hdCTSCustId.val(),
+                    SubscriberId: domElements.hdSubscriberId.val(),
                     UserName: domElements.hdUserName.val(),
                     FromDate: domElements.hdFromDate.val(),
                     ToDate: domElements.hdToDate.val(),
@@ -100,7 +101,7 @@
                 { targets: [5], width: "15%" }                
             ],
             columns: [
-                { data: obj => obj.SiteName },
+                { data: obj => obj.SubscriberName },
                 {
                     data: obj => () => {
                         let url = common.modifyRelativeUrl('Account/Index/' + obj.CTSCustId);
@@ -123,7 +124,7 @@
                 { data: obj => obj.AssociationTypeName }
             ],
             createdRow: function (row, obj) {
-                $(row).attr('data-site-id', obj.SiteId);
+                $(row).attr('data-subscriber-id', obj.SubscriberId);
             },
             drawCallback: function () {
                 let api = this.api();
@@ -135,7 +136,7 @@
                     if (last !== group) {
                         let html = '<tr class="group group-site">';
                         html += '<td colspan="4">';
-                        html += '<span class="column-group-site" data-site-id=' + data[i].SiteId + '><i class="icon icon-chevron-down icon-open"></i>' + group + '</span>';
+                        html += '<span class="column-group-site" data-subscriber-id=' + data[i].SubscriberId + '><i class="icon icon-chevron-down icon-open"></i>' + group + '</span>';
                         html += '</td>';
                         html += '<td class="text-left">';
                         html += '<span class="name-group total-accounts">Total: ' + data[i].TotalAssociationAccount +' Association Accounts </span>';
@@ -189,8 +190,8 @@
                     common.showSuccess('Updated association successful!', 2000);
 
                     setTimeout(() => {
-                        GetAssociationDetailReport();
-                    }, 2000);                    
+                        dataTable.ajax.reload(null, true);
+                    }, 1000);                    
                 }
                 else if (response.errorCode === -1) {
                     common.showError('This association is already unlinked!');

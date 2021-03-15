@@ -118,12 +118,11 @@
     <Setting Key="CTS_DC_Subscriber_Update" SpName="CTS_DC_Subscriber_Update_xtest" DbName="MySQL.CTS_DataCenter.Admin"/>
     <Setting Key="CTS_DC_CTSCustomer_UpdateSubscriberIDBySiteID" SpName="CTS_DC_CTSCustomer_UpdateSubscriberIDBySiteID" DbName="MySQL.CTS_DataCenter.Admin"/>
   </Function>
-
-  <Function name="Report">
-    <Setting Key="CTS_DC_Report_GetAssociatedAccount " SpName="CTS_DC_Report_GetAssociatedAccount_xtest" DbName="MySQL.CTS_DataCenter.Reporter"/>
-  </Function>
-
-  <Function name="AssociationReport">
-    <Setting Key="CTS_DC_Report_GetAssociatedAccount " SpName="CTS_DC_Report_GetAssociatedAccount_xtest" DbName="MySQL.CTS_DataCenter.Reporter"/>   
+	
+  <Function name="AssociationReport">    
+	  <Setting Key="CTS_DC_Report_GetAssociatedAccount " SpName="CTS_DC_Report_GetAssociatedAccount_xtest" DbName="MySQL.CTS_DataCenter.Reporter"/>
+	  <Setting Key="CTS_DC_Subscriber_GetByGroup " SpName="CTS_DC_Subscriber_GetByGroup_xtest" DbName="MySQL.CTS_DataCenter.Reporter"/>	
+	  <Setting Key="CTS_DC_RPT_AssociatedAccount " SpName="CTS_DC_RPT_AssociatedAccount_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter"/>
+	  <Setting Key="CTS_DC_RPT_AssociatedAccount_Detail " SpName="CTS_DC_RPT_AssociatedAccount_Detail_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter"/>
   </Function>
 </Functions>
