@@ -18,6 +18,8 @@
 
         public string AccountStatusIds { get; set; }
 
+        public string CategoryIds { get; set; }
+
         public string SiteIds { get; set; }
     }
 }

@@ -310,8 +310,6 @@
         [HttpPost]
         public ActionResult GetAssociatedByAccount(AssociatedFilterModel model)
         {
-            var take = model.length;
-            var skip = model.start;
             var totalItem = 0;
             model.IsDirect = true;
 
@@ -327,7 +325,7 @@
             var getAssociationFromMySql = AppSettings.Get("GetAssociationFromMySQL") == "1";
 
             var graphAssociationPage = model.IsDirect
-                ? _accountService.GetCustomerAssociationByGraph(directAssociationUrl, model.CTSCustId, model.AssociationStatus, model.AccountStatusIds, model.SiteIds, skip, take, getAssociationFromMySql)
+                ? _accountService.GetCustomerAssociationByGraph(directAssociationUrl, model, getAssociationFromMySql)
                 : new GraphAssociationPaging();
 
             if (graphAssociationPage != null && graphAssociationPage.AssociationList != null && graphAssociationPage.AssociationList.Any())
@@ -443,11 +441,20 @@
         }               
 
         [HttpPost]
-        public ActionResult GetDirectAssociationGraph(Int64 ctsCustid, string displayName, int associationStatus, string accountStatusIds, string siteIds, int start, int length)
+        public ActionResult GetDirectAssociationGraph(long ctsCustid, string displayName, int associationStatus, string accountStatusIds, string siteIds, int start, int length)
         {
-            var graphCustomer = new GraphCustomerItemViewModel();
+            var graphCustomer = new GraphCustomerItemViewModel();            
 
-            var graphAssociationPaging = _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetDirectAssociation, ctsCustid, associationStatus, accountStatusIds, siteIds, start, length);
+            var filterModel = new AssociatedFilterModel {
+                CTSCustId = ctsCustid,
+                AssociationStatus = associationStatus,
+                AccountStatusIds = accountStatusIds,
+                SiteIds = siteIds,
+                start = start,
+                length = length
+            };
+
+            var graphAssociationPaging = _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetDirectAssociation, filterModel);
             if (graphAssociationPaging != null && graphAssociationPaging.AssociationList != null && graphAssociationPaging.AssociationList.Any())
             {
                 var now = DateTime.Now.Ticks.ToString();

@@ -266,8 +266,8 @@
                 return result;
             }
         }
-
-        public GraphAssociationPaging GetCustomerAssociationByGraph(string apiURL, long ctsCustId, int associationStatus, string accountStatusIds, string siteIds, int skipNumber, int takeNumber, bool fromMySQL = false)
+        
+        public GraphAssociationPaging GetCustomerAssociationByGraph(string apiURL, AssociatedFilterModel filterModel, bool fromMySQL = false)
         {
             try
             {
@@ -275,14 +275,14 @@
                 {
                     var criteria = new GetAssociationProfileCriteria
                     {
-                        CTSCustId = ctsCustId,
-                        AssociationStatus = associationStatus,
-                        AccountStatusIds = accountStatusIds,
+                        CTSCustId = filterModel.CTSCustId,
+                        AssociationStatus = filterModel.AssociationStatus,
+                        AccountStatusIds = filterModel.AccountStatusIds,
                         AssociationType = GetAssociationTypeFromUrl(apiURL),
                         CategoryIDs = "0,56,156,76,60,80, 201,206",
-                        SiteIds = siteIds,
-                        Skip = skipNumber,
-                        Take = takeNumber,
+                        SiteIds = filterModel.SiteIds,
+                        Skip = filterModel.start,
+                        Take = filterModel.length,
                         TotalItems = 0
                     };
 
@@ -301,12 +301,12 @@
                 {
                     var param = new
                     {
-                        ctsCustId,
-                        assStatus = associationStatus,
-                        siteIDs = siteIds,
-                        accountStatuses = accountStatusIds,
-                        takeRow = takeNumber,
-                        skipRow = skipNumber
+                        ctsCustId = filterModel.CTSCustId,
+                        assStatus = filterModel.AssociationStatus,
+                        siteIDs = filterModel.SiteIds,
+                        accountStatuses = filterModel.AccountStatusIds,
+                        takeRow = filterModel.length,
+                        skipRow = filterModel.start
                     };
 
                     var data = ApiHelper.Post<GraphAssociationPaging>(apiURL, param);

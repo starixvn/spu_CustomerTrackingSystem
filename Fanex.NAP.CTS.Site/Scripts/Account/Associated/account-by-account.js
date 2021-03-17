@@ -72,6 +72,7 @@
                     AccountStatusIds: function () {
                         return cbbAssociationAccountStatus.val();
                     },
+                    CategoryIds: function () { cbbAssociationCategory.val() },
                     SiteIds: function () {
                         var selectedSites = [];
                         cbbAssociationSite.find('option:selected').each(function () { selectedSites.push($(this).val()); });
