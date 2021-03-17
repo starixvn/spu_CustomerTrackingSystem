@@ -738,10 +738,14 @@
         });
 
         cbbAssociationCategory.multiselect({
-            menuWidth: 256,
+            menuWidth: 276,
             menuHeight: 330,
             selectedText: "# of # selected",
-            noneSelectedText: "Select Category"
+            noneSelectedText: "Select Category",
+            enableClickableOptGroups: true,
+            includeSelectAllOption: true,
+            groupsCollapsable: true,
+            optGroupChecked: true
         }).multiselectfilter({
             width: 150,
             placeholder: '',

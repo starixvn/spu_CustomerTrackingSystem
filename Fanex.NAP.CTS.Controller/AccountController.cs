@@ -292,7 +292,7 @@
 
             var accountStatus = _accountService.GetAccountStaticStatuses();
             var subscribers = _accountService.GetAllSubscriberGroups();
-            var categories = _accountService.GetAllCategory();
+            var categories = GetAllCategories();
 
             var associatedByAccountViewModel = new AssociatedByAccountViewModel
             {
@@ -386,6 +386,31 @@
                 recordsFiltered = totalItem,
                 data = result
             }, JsonRequestBehavior.AllowGet);
+        }
+
+        private IEnumerable<CategoryGroupViewModel> GetAllCategories()
+        {
+            var categoryList = Enumerable.Empty<CategoryGroupViewModel>();
+
+            var data = _accountService.GetAllCategory();
+
+            if (data != null && data.Any())
+            {
+                categoryList = data
+                       .GroupBy(g => new { g.CategoryGroup })
+                       .Select(x => new { Group = x.Key, CategoryList = x.ToList() })
+                       .Select(x => new CategoryGroupViewModel
+                       {
+                           CategoryGroupName = x.Group.CategoryGroup,
+                           CategoryList = x.CategoryList.Select(y => new CategoryViewModel
+                           {
+                               CategoryIDs = y.CategoryIDs,
+                               CategoryName = y.CategoryName
+                           })
+                       });
+            }
+
+            return categoryList;
         }
 
         private string StandardizeAssociationTypeName(string name)
@@ -1028,7 +1053,12 @@
 
         private void GetCustomerRobotUserStatus(long custId, ref AccountProfileViewModel profile)
         {
-            profile.RobotUserStatus = _accountService.GetCustomerRobotUserStatus(custId);
+            // Temp comment
+            //profile.RobotUserStatus = _accountService.GetCustomerRobotUserStatus(custId);
+
+            // hardcode for test 20210317
+            profile.RobotUserStatus = new CustomerRobotUserStatusModel { CustId = int.Parse(custId.ToString()), IsRobotUser = true };
+            // hardcode for test 20210317
         }
 
         private void GetCustomerFlagInfo(long ctsCustId, ref AccountProfileViewModel profile)
