@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'Fraud-Sensor';
-  src:  url('fonts/Fraud-Sensor.eot?g5ia8i');
-  src:  url('fonts/Fraud-Sensor.eot?g5ia8i#iefix') format('embedded-opentype'),
-    url('fonts/Fraud-Sensor.ttf?g5ia8i') format('truetype'),
-    url('fonts/Fraud-Sensor.woff?g5ia8i') format('woff'),
-    url('fonts/Fraud-Sensor.svg?g5ia8i#Fraud-Sensor') format('svg');
+  src:  url('fonts/Fraud-Sensor.eot?g7lqbz');
+  src:  url('fonts/Fraud-Sensor.eot?g7lqbz#iefix') format('embedded-opentype'),
+    url('fonts/Fraud-Sensor.ttf?g7lqbz') format('truetype'),
+    url('fonts/Fraud-Sensor.woff?g7lqbz') format('woff'),
+    url('fonts/Fraud-Sensor.svg?g7lqbz#Fraud-Sensor') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,54 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-Avarta .path1:before {
+  content: "\e954";
+  color: rgb(255, 255, 255);
+}
+.icon-Avarta .path2:before {
+  content: "\e955";
+  margin-left: -0.63671875em;
+  color: rgb(43, 43, 43);
+}
+.icon-Avarta .path3:before {
+  content: "\e956";
+  margin-left: -0.63671875em;
+  color: rgb(43, 43, 43);
+}
+.icon-Avarta .path4:before {
+  content: "\e957";
+  margin-left: -0.63671875em;
+  color: rgb(255, 255, 255);
+}
+.icon-Avarta .path5:before {
+  content: "\e958";
+  margin-left: -0.63671875em;
+  color: rgb(255, 255, 255);
+}
+.icon-Avarta .path6:before {
+  content: "\e965";
+  margin-left: -0.63671875em;
+  color: rgb(255, 255, 255);
+}
+.icon-Avarta .path7:before {
+  content: "\e966";
+  margin-left: -0.63671875em;
+  color: rgb(255, 255, 255);
+}
+.icon-Avarta .path8:before {
+  content: "\e967";
+  margin-left: -0.63671875em;
+  color: rgb(255, 255, 255);
+}
+.icon-error_full .path1:before {
+  content: "\e952";
+  color: rgb(255, 0, 0);
+}
+.icon-error_full .path2:before {
+  content: "\e953";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
 .icon-account_detail:before {
   content: "\e964";
 }
@@ -48,40 +96,6 @@
   content: "\e962";
   margin-left: -1em;
   color: rgb(255, 0, 0);
-}
-.icon-Avarta .path1:before {
-  content: "\e952";
-  color: rgb(255, 255, 255);
-}
-.icon-Avarta .path2:before {
-  content: "\e953";
-  margin-left: -0.63671875em;
-  color: rgb(84, 89, 110);
-}
-.icon-Avarta .path3:before {
-  content: "\e954";
-  margin-left: -0.63671875em;
-  color: rgb(255, 255, 255);
-}
-.icon-Avarta .path4:before {
-  content: "\e955";
-  margin-left: -0.63671875em;
-  color: rgb(255, 255, 255);
-}
-.icon-Avarta .path5:before {
-  content: "\e956";
-  margin-left: -0.63671875em;
-  color: rgb(255, 255, 255);
-}
-.icon-Avarta .path6:before {
-  content: "\e957";
-  margin-left: -0.63671875em;
-  color: rgb(255, 255, 255);
-}
-.icon-Avarta .path7:before {
-  content: "\e958";
-  margin-left: -0.63671875em;
-  color: rgb(255, 255, 255);
 }
 .icon-Delinquency:before {
   content: "\e959";
