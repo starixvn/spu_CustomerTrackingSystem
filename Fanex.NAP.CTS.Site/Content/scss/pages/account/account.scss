@@ -225,6 +225,32 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     }
 }
 
+
+
+.yellow-line {
+    background-color: $account-high;
+    background-size: 5px 5px;
+    background-image: linear-gradient( -45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent);
+
+    &:after {
+        background-color: $account-high;
+        background-size: 5px 5px;
+        background-image: linear-gradient( -45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent);
+    }
+}
+
+.green-line {
+    background-color: $account-limited;
+    background-size: 5px 5px;
+    background-image: linear-gradient( -45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent);
+
+    &:after {
+        background-color: $account-limited;
+        background-size: 5px 5px;
+        background-image: linear-gradient( -45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent);
+    }
+}
+
 .content-info {
     padding: 1.2rem 1.6rem;
     position: relative;
@@ -303,7 +329,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
                 content: " ";
                 position: absolute;
                 height: 100%;
-                width: 48px;
+                width: 100%;
                 top: 0;
                 right: -2.3rem;
                 border-top-right-radius: 3px;
@@ -321,6 +347,8 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             .icon-Avarta, .icon-error, .icon-flag {
                 margin-right: .7rem;
                 vertical-align: middle;
+                position: inherit;
+                z-index: 9999;
 
                 span:before {
                     font-size: 2.2rem;
@@ -637,7 +665,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 
                 span {
                     display: block;
-                    height : 2.4rem;
+                    height: 2.4rem;
                 }
             }
 
@@ -1010,7 +1038,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     }
 }
 
-#divMatchBettingPattern {    
+#divMatchBettingPattern {
     .graph-heading {
         position: sticky;
         position: -webkit-sticky;
@@ -1999,6 +2027,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
         grid-row-gap: 10px;
     }
 }
+
 .column-group-site {
     font-family: $font-family !important;
     font-size: 1.6rem;

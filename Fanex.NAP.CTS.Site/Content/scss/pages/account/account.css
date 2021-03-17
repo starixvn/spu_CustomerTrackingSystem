@@ -855,6 +855,24 @@
   -webkit-transform: scale(1);
   transform: scale(1); }
 
+.yellow-line {
+  background-color: #FDB703;
+  background-size: 5px 5px;
+  background-image: linear-gradient(-45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent); }
+  .yellow-line:after {
+    background-color: #FDB703;
+    background-size: 5px 5px;
+    background-image: linear-gradient(-45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent); }
+
+.green-line {
+  background-color: #2BC769;
+  background-size: 5px 5px;
+  background-image: linear-gradient(-45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent); }
+  .green-line:after {
+    background-color: #2BC769;
+    background-size: 5px 5px;
+    background-image: linear-gradient(-45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent); }
+
 .content-info {
   padding: 1.2rem 1.6rem;
   position: relative; }
@@ -907,7 +925,7 @@
         content: " ";
         position: absolute;
         height: 100%;
-        width: 48px;
+        width: 100%;
         top: 0;
         right: -2.3rem;
         border-top-right-radius: 3px;
@@ -920,7 +938,9 @@
         justify-items: left; }
       .content-info .header-info .header-username .icon-Avarta, .content-info .header-info .header-username .icon-error, .content-info .header-info .header-username .icon-flag {
         margin-right: .7rem;
-        vertical-align: middle; }
+        vertical-align: middle;
+        position: inherit;
+        z-index: 9999; }
         .content-info .header-info .header-username .icon-Avarta span:before, .content-info .header-info .header-username .icon-error span:before, .content-info .header-info .header-username .icon-flag span:before {
           font-size: 2.2rem; }
       .content-info .header-info .header-username .icon-Avarta span:before {
