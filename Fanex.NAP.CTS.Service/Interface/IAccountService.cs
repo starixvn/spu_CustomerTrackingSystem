@@ -131,5 +131,7 @@
         IEnumerable<MatchesInfoModel> GetMatchesInfo(string matchIDs); 
 
         IEnumerable<MatchesDetailInfoModel> GetMatchesDetailInfo(MatchesAssociationDetailViewModel matchInfo);
+
+        IEnumerable<CategoryInfoModel> GetAllCategory();
     }
 }

@@ -390,6 +390,9 @@
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="App_Data\Dev\ExternalSPNames.xml" />
+    <Content Include="App_Data\Dev\InternalSPNames.xml" />
+    <Content Include="App_Data\Dev\NAPFrameworkSpNames.xml" />
     <Content Include="App_Data\Local\InternalSPNames.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

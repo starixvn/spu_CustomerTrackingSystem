@@ -35,6 +35,7 @@
                     }
                 </select>
             </div>
+
             <div class="form-control dropdown">
                 <div class="control-label">Account Status</div>
                 <select class="control" id="cbbAssociationAccountStatus">
@@ -52,6 +53,17 @@
                     }
                 </select>
             </div>
+
+            <div class="form-control dropdown" style="width: 258px;">
+                <div class="control-label">Category</div>
+                <select class="control" id="cbbAssociationCategory" multiple="multiple">
+                    @foreach (var item in Model.CategoryList)
+                    {
+                        <option value="@item.CategoryIDs" selected>@item.CategoryName</option>
+                    }                   
+                </select>
+            </div>
+
             <div class="form-control dropdown" style="width: 258px;">
                 <div class="control-label">Site</div>
                 <select class="control" id="cbbAssociationSite" multiple="multiple">                    
@@ -91,6 +103,8 @@
                     <th>Status</th>
                     <th>Subscriber</th>
                     <th>Association Type</th>
+                    <th>Customer Category</th>
+                    <th>Customer Classification</th>
                     <th>Association Status</th>
                     <th>Association Date</th>
                 </tr>

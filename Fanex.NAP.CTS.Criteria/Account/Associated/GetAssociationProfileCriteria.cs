@@ -1,13 +1,13 @@
-﻿using Fanex.Data;
-using Fanex.Data.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Fanex.NAP.CTS.Criteria.Account.Associated
+﻿namespace Fanex.NAP.CTS.Criteria.Account.Associated
 {
+    using Fanex.Data;
+    using Fanex.Data.Repository;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+
     public class GetAssociationProfileCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_CTSCustID")]
@@ -24,6 +24,9 @@ namespace Fanex.NAP.CTS.Criteria.Account.Associated
 
         [SpParam(SqlParamName = "ip_SiteIDs")]
         public string SiteIds { get; set; }
+
+        [SpParam(SqlParamName = "ip_CategoryIDs")]
+        public string CategoryIDs { get; set; }
 
         [SpParam(SqlParamName = "ip_Skip")]
         public int Skip { get; set; }

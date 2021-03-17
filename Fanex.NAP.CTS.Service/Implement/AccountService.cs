@@ -279,6 +279,7 @@
                         AssociationStatus = associationStatus,
                         AccountStatusIds = accountStatusIds,
                         AssociationType = GetAssociationTypeFromUrl(apiURL),
+                        CategoryIDs = "0,56,156,76,60,80, 201,206",
                         SiteIds = siteIds,
                         Skip = skipNumber,
                         Take = takeNumber,
@@ -644,6 +645,16 @@
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 return db.Query<MatchesDetailInfoModel>(criteria);
+            }
+        }
+
+        public IEnumerable<CategoryInfoModel> GetAllCategory()
+        {
+            var criteria = new GetCategoryInfoCriteria();            
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<CategoryInfoModel>(criteria);
             }
         }
 

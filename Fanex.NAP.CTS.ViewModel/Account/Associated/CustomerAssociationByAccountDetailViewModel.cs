@@ -32,9 +32,11 @@
 
         public string AssociationTypeName { get; set; }
 
-        public int SharedDevices { get; set; }
+        public string CategoryIds { get; set; }
 
-        public int SharedIps { get; set; }
+        public string CategoryNames { get; set; }
+
+        public string ClassificationIds { get; set; }
 
         public string AssociationDate { get; set; }
 

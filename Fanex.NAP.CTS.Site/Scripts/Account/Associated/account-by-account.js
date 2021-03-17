@@ -21,6 +21,7 @@
     let tableMatchBettingPattern = $('#tblMatchBettingPattern');
     let dataTableMatchBettingPattern = null;
     let spanBettingPatternTotalMatch = $('#spanBettingPatternTotalMatch');
+    let cbbAssociationCategory = $('#cbbAssociationCategory');
 
     function RenderTag(obj) {
         let html = "";
@@ -113,13 +114,15 @@
                 { targets: [-2, -1], className: "text-center" },
                 { targets: [0, 1, 2, 3, 4, 5], className: "text-center" },
                 { targets: [0], width: "5%" },
-                { targets: [1], width: "20%" },
-                { targets: [2], width: "20%" },
+                { targets: [1], width: "10%" },
+                { targets: [2], width: "10%" },
                 { targets: [3], width: "10%" },
                 { targets: [4], width: "10%", visible: false },
-                { targets: [5], width: "10%" },
-                { targets: [6], width: "10%" },
-                { targets: [7], width: "15%" }
+                { targets: [5], width: "10%", className: "text-center" },
+                { targets: [6], width: "10%", className: "text-center" },
+                { targets: [7], width: "10%", className: "text-center" },
+                { targets: [8], width: "10%", className: "text-center" },
+                { targets: [9], width: "10%", className: "text-center" }
             ],
             columns: [
                 { data: obj => RenderTag(obj) },
@@ -133,6 +136,8 @@
                         $('.association-type-name', cell).click(() => ShowMatchBettingPattern(row.CustId))
                     }
                 },
+                { data: obj => obj.CategoryNames },
+                { data: obj => obj.ClassificationIds },
                 {
                     data: obj => AssociationStatus(obj.IsLinked), createdCell: (cell, _, row) => {
                         if (isHostPermission) {
@@ -722,12 +727,23 @@
         $("#account-by-account-cbb-status").multiselect();
 
         cbbAssociationSite.multiselect({
-            menuWidth: 330,
+            menuWidth: 256,
             menuHeight: 330,
             selectedText: "# of # selected",
             noneSelectedText: "Select Sites"
         }).multiselectfilter({
-            width: 217,
+            width: 150,
+            placeholder: '',
+            label: ''
+        });
+
+        cbbAssociationCategory.multiselect({
+            menuWidth: 256,
+            menuHeight: 330,
+            selectedText: "# of # selected",
+            noneSelectedText: "Select Category"
+        }).multiselectfilter({
+            width: 150,
             placeholder: '',
             label: ''
         });

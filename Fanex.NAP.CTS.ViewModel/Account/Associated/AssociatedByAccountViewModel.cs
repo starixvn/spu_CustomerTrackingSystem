@@ -14,7 +14,8 @@
 
         public List<SubscriberGroupModel> SubscribersList { get; set; }
 
-        public string Username { get; set; }
+        public List<CategoryInfoModel> CategoryList { get; set; }
 
+        public string Username { get; set; }
     }
 }

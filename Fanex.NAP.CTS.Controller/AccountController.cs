@@ -292,6 +292,7 @@
 
             var accountStatus = _accountService.GetAccountStaticStatuses();
             var subscribers = _accountService.GetAllSubscriberGroups();
+            var categories = _accountService.GetAllCategory();
 
             var associatedByAccountViewModel = new AssociatedByAccountViewModel
             {
@@ -299,6 +300,7 @@
                 AssociationTypeList = getCustomerStaticAssType,
                 AccountStatusList = accountStatus,
                 SubscribersList = subscribers.ToList(),
+                CategoryList = categories.ToList(),
                 Username = username
             };
 
@@ -360,7 +362,10 @@
                                         ? getAllSubscribers.FirstOrDefault(a => a.SubscriberId == x.SubscriberId).SubscriberName
                                         : "-",
                         CTSCustId = x.CTSCustID,
-                        IsLinked = x.AssociationStatus == 1
+                        IsLinked = x.AssociationStatus == 1,
+                        CategoryIds = "50",
+                        CategoryNames = "High Risk Punter",
+                        ClassificationIds = "7"
                     };
 
                     var flaggedAffected = flaggedAffectedTagList.FirstOrDefault(y => y.SubscriberID.Equals(newX.SubscriberId) && y.CTSCustID.Equals(newX.CTSCustId));
