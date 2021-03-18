@@ -43,19 +43,10 @@
         });
     };
 
-    $this.GenerateFullPath = function (ctsCustId, username, associationStatus, accountStatusIds, siteIds, start, length) {
-        var paramsFilter = {};
-        paramsFilter.ctsCustid = ctsCustId;
-        paramsFilter.displayName = username;
-        paramsFilter.associationStatus = associationStatus;
-        paramsFilter.accountStatusIds = accountStatusIds;
-        paramsFilter.siteIds = siteIds;
-        paramsFilter.start = start;
-        paramsFilter.length = length;
-
+    $this.GenerateFullPath = function (params) {
         $.ajax(urls.GetDirectAssociationGraph, {
             type: 'POST',
-            data: paramsFilter,
+            data: params,
             success: function (response) {
                 generateGraph(response);
             },
@@ -71,13 +62,7 @@
         var force = d3.layout.force()
             .size([width + margin.left + margin.right, height + margin.top + margin.bottom])
             .on("tick", tick);
-
-        var zoom = d3.behavior.zoom()
-            .scaleExtent([1, 2])
-            .on("zoom", () => {
-                svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-            });
-
+     
         d3.behavior.drag()
             .origin(function (d) { return d; })
             .on("dragstart", () => {
@@ -96,8 +81,7 @@
         var svg = d3.select("#container-graph").append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
-            .attr("transform", "translate(" + margin.left + "," + margin.right + ")")
-            .call(zoom);
+            .attr("transform", "translate(" + margin.left + "," + margin.right + ")");
 
         var link = svg.selectAll(".link");
         var node = svg.selectAll(".node");        
@@ -109,6 +93,7 @@
         if (collapse_level == 1) {
             if (root.children) { root.children.forEach(toggleAll); }
         }  
+
         update(root);
 
         function parseLevel(node, level) {
@@ -187,36 +172,7 @@
 
             node.select("circle")
                 .style("fill", color);
-
-            node.on("mouseover", function (d) {
-                node.classed("node-active", function (o) {
-                    thisOpacity = isConnected(d, o) ? true : false;
-                    this.setAttribute('fill-opacity', thisOpacity);
-                    return thisOpacity;
-                });
-
-                link.classed("link-active", function (o) {
-                    return o.source === d || o.target === d ? true : false;
-                });
-
-                d3.select(this).classed("node-active", true);
-                d3.select(this).select("circle").transition();
-                    //.duration(600)
-                    //.attr("r", d.weight * 1.1);
-            })
-                .on("mouseout", function (d) {
-                    node.classed("node-active", false);
-                    link.classed("link-active", false);
-
-                    d3.select(this).select("circle").transition();
-                        //.duration(600)
-                        //.attr("r", d.weight * 1.1);
-                });
-        }
-
-        function isConnected(a, b) {
-            return linkedByIndex[a.index + "," + b.index] || linkedByIndex[b.index + "," + a.index];
-        }
+        }     
         
         function color(d) {
             return d._children ? "#3182bd" // collapsed package
@@ -248,16 +204,20 @@
                     d.children = null;
                     update();
                 } else {
-                    var paramsFilter = {};
-                    paramsFilter.ctsCustid = d.CTSCustId;
-                    paramsFilter.displayName = d.Username;
-                    paramsFilter.start = d.Start;
-                    paramsFilter.length = d.Length;
-                    paramsFilter.associationStatus = d.AssociationStatus;
+                    let params = {};
+                    params.CTSCustId = d.CTSCustId;
+                    params.displayName = d.Username;
+                    params.AssociationStatus = d.AssociationStatus;
+                    params.AssociationType = d.AssociationType;
+                    params.AccountStatusIds = d.AccountStatusIds;
+                    params.CategoryIds = d.CategoryIds;
+                    params.SiteIds = d.SiteIds;
+                    params.start = d.Start;
+                    params.length = d.Length;                    
 
                     $.ajax(urls.GetDirectAssociationGraph, {
                         type: 'POST',
-                        data: paramsFilter,
+                        data: params,
                         success: function (response) {
                             d.children = response.children;
                             d._children = null;

@@ -27,34 +27,34 @@
     function GetCategoryColorList() {
         var list = [];
 
-        list.push({ 'id': '205', 'name': 'VIP', 'cssClass': 'green', 'indexColor': 1 });
-        list.push({ 'id': '210', 'name': 'VVIP', 'cssClass': 'green', 'indexColor': 1 });
-        list.push({ 'id': '201', 'name': 'New Member', 'cssClass': 'green', 'indexColor': 1 });
-        list.push({ 'id': '202', 'name': 'Normal Account', 'cssClass': 'green', 'indexColor': 1 });
+        list.push({ 'id': '205', 'indexColor': 1, 'name': 'VIP' });
+        list.push({ 'id': '210', 'indexColor': 1, 'name': 'VVIP' });
+        list.push({ 'id': '201', 'indexColor': 1, 'name': 'New Member' });
+        list.push({ 'id': '202', 'indexColor': 1, 'name': 'Normal Account' });
 
-        list.push({ 'id': '206', 'name': 'Probation', 'cssClass': 'yellow', 'indexColor': 2 });
-        list.push({ 'id': '203', 'name': 'Smart Punter', 'cssClass': 'yellow', 'indexColor': 2 });
-        list.push({ 'id': '204', 'name': 'High Risk Punter', 'cssClass': 'yellow', 'indexColor': 2 });
+        list.push({ 'id': '206', 'indexColor': 2, 'name': 'Probation' });
+        list.push({ 'id': '203', 'indexColor': 2, 'name': 'Smart Punter' });
+        list.push({ 'id': '204', 'indexColor': 2, 'name': 'High Risk Punter' });
 
-        list.push({ 'id': '211', 'name': 'VIP (111)', 'cssClass': 'green-line', 'indexColor': 3 });
-        list.push({ 'id': '212', 'name': 'VIP (112)', 'cssClass': 'green-line', 'indexColor': 3 });
-        list.push({ 'id': '213', 'name': 'VIP (113)', 'cssClass': 'green-line', 'indexColor': 3 });
-        list.push({ 'id': '221', 'name': 'Normal Account (121)', 'cssClass': 'green-line', 'indexColor': 3 });
-        list.push({ 'id': '222', 'name': 'Normal Account (122)', 'cssClass': 'green-line', 'indexColor': 3 });
-        list.push({ 'id': '223', 'name': 'Normal Account (123)', 'cssClass': 'green-line', 'indexColor': 3 });
-        list.push({ 'id': '231', 'name': 'New Member (31)', 'cssClass': 'green-line', 'indexColor': 3 });
-        list.push({ 'id': '232', 'name': 'New Member (32)', 'cssClass': 'green-line', 'indexColor': 3 });
-        list.push({ 'id': '233', 'name': 'New Member (33)', 'cssClass': 'green-line', 'indexColor': 3 });
+        list.push({ 'id': '211', 'indexColor': 3, 'name': 'VIP (111)' });
+        list.push({ 'id': '212', 'indexColor': 3, 'name': 'VIP (112)' });
+        list.push({ 'id': '213', 'indexColor': 3, 'name': 'VIP (113)' });
+        list.push({ 'id': '221', 'indexColor': 3, 'name': 'Normal Account (121)' });
+        list.push({ 'id': '222', 'indexColor': 3, 'name': 'Normal Account (122)' });
+        list.push({ 'id': '223', 'indexColor': 3, 'name': 'Normal Account (123)' });
+        list.push({ 'id': '231', 'indexColor': 3, 'name': 'New Member (31)' });
+        list.push({ 'id': '232', 'indexColor': 3, 'name': 'New Member (32)' });
+        list.push({ 'id': '233', 'indexColor': 3, 'name': 'New Member (33)' });
 
-        list.push({ 'id': '251', 'name': 'Probation (51)', 'cssClass': 'yellow-line', 'indexColor': 4 });
-        list.push({ 'id': '252', 'name': 'Probation (52)', 'cssClass': 'yellow-line', 'indexColor': 4 });
-        list.push({ 'id': '253', 'name': 'Probation (53)', 'cssClass': 'yellow-line', 'indexColor': 4 });
-        list.push({ 'id': '261', 'name': 'Smart Punter (61)', 'cssClass': 'yellow-line', 'indexColor': 4 });
-        list.push({ 'id': '262', 'name': 'Smart Punter (62)', 'cssClass': 'yellow-line', 'indexColor': 4 });
-        list.push({ 'id': '263', 'name': 'Smart Punter (63)', 'cssClass': 'yellow-line', 'indexColor': 4 });
-        list.push({ 'id': '271', 'name': 'High Risk Punter (71)', 'cssClass': 'yellow-line', 'indexColor': 4 });
-        list.push({ 'id': '272', 'name': 'High Risk Punter (72)', 'cssClass': 'yellow-line', 'indexColor': 4 });
-        list.push({ 'id': '273', 'name': 'High Risk Punter (73)', 'cssClass': 'yellow-line', 'indexColor': 4 });
+        list.push({ 'id': '251', 'indexColor': 4, 'name': 'Probation (51)' });
+        list.push({ 'id': '252', 'indexColor': 4, 'name': 'Probation (52)' });
+        list.push({ 'id': '253', 'indexColor': 4, 'name': 'Probation (53)' });
+        list.push({ 'id': '261', 'indexColor': 4, 'name': 'Smart Punter (61)' });
+        list.push({ 'id': '262', 'indexColor': 4, 'name': 'Smart Punter (62)' });
+        list.push({ 'id': '263', 'indexColor': 4, 'name': 'Smart Punter (63)' });
+        list.push({ 'id': '271', 'indexColor': 4, 'name': 'High Risk Punter (71)' });
+        list.push({ 'id': '272', 'indexColor': 4, 'name': 'High Risk Punter (72)' });
+        list.push({ 'id': '273', 'indexColor': 4, 'name': 'High Risk Punter (73)' });
 
         return list;
     }
@@ -79,7 +79,21 @@
         }
 
         return null;
-    }      
+    } 
+
+    function RenderCategoryNames(categoryNames) {
+        let html = '';
+        let categoryList = categoryNames != undefined
+            ? categoryNames.split(',')
+            : [];
+
+        if (categoryList.length > 2)
+            html = "<span>" + categoryList[0] + ", " + categoryList[1] + ",... </span>";
+        else
+            html = "<span>" + categoryNames + "</span>";
+
+        return html;
+    }
 
     function RenderCellCategory(cell, row) {
         let indexColorForDiv = 0;
@@ -105,10 +119,10 @@
 
         switch (indexColorForDiv) {
             case 1:
-                $(cell).addClass('green');
+                $(cell).addClass('td-bg-green');
                 break;
             case 2:
-                $(cell).addClass('yellow');
+                $(cell).addClass('td-bg-yellow');
                 break;
             case 3:
                 $(cell).addClass('green-line');
@@ -117,11 +131,13 @@
                 $(cell).addClass('yellow-line');
                 break;
             case 5:
-                $(cell).addClass('red');
+                $(cell).addClass('td-bg-red');
                 break;
             default:
                 break;
         }
+
+        $(cell).prop('title', row.CategoryNames);
     }
 
     function RenderGrid() {
@@ -219,7 +235,7 @@
                     }
                 },
                 {
-                    data: obj => obj.CategoryNames, createdCell: (cell, _, row) => {
+                    data: obj => RenderCategoryNames(obj.CategoryNames), createdCell: (cell, _, row) => {
                         RenderCellCategory(cell, row);
                     }
                 },
@@ -848,18 +864,34 @@
         });
 
         btnViewOnGraph.on('click', function () {
-            var info = dataTable.page.info();
-            var accountStatusIds = cbbAssociationAccountStatus.val();
-          
-            var selectedSites = [];
+            let info = dataTable.page.info();
+            let selectedSites = [];
             cbbAssociationSite.find('option:selected').each(function () { selectedSites.push($(this).val()); });
             if (selectedSites.length === 0) {
                 cbbAssociationSite.find('option').not(':selected').each(function () { selectedSites.push($(this).val()); });
             }
-            var siteIds = selectedSites.join(',');
+            let siteIds = selectedSites.join(',');
 
-            var formGraph = new graph();
-            formGraph.GenerateFullPath(ctsCustid, username, $('#association-cbb-status').val(), accountStatusIds, siteIds, info.start, info.length);
+            let selectedCategories = [];
+            cbbAssociationCategory.find('option:selected').each(function () { selectedCategories.push($(this).val()); });
+            if (selectedCategories.length === 0) {
+                cbbAssociationCategory.find('option').not(':selected').each(function () { selectedCategories.push($(this).val()); });
+            }
+            let categoryIds = selectedCategories.join(',');
+
+            let params = {};
+            params.CTSCustId = ctsCustid;
+            params.displayName = username;
+            params.AssociationStatus = $('#association-cbb-status').val();
+            params.AssociationType = $("#account-by-account-cbb-association-type").val();
+            params.AccountStatusIds = cbbAssociationAccountStatus.val();
+            params.CategoryIds = categoryIds;
+            params.SiteIds = siteIds;
+            params.start = info.start;
+            params.length = info.length;
+
+            let formGraph = new graph();
+            formGraph.GenerateFullPath(params);
             formGraph.OpenModal();
         });
 

@@ -820,7 +820,7 @@
 
                 // toggle inputs
                 self._toggleChecked(
-                    $inputs.filter(':checked').length !== $inputs.length,
+                    !($inputs.is(':checked')),
                     $inputs
                 );
 
@@ -960,6 +960,17 @@
                     var textFxn = self.htmlAllowedFor('options') ? 'html' : 'text';
                     var optionText = $input.parent().find("span")[textFxn]();
                     var maxSelected = options.maxSelected;
+                    var isOptGroupChecked = $input.parents().eq(3).find('a').find("input.optgroup-input").is(':checked');
+                    var optGroup = $input.parents().eq(3).find('a').find("input.optgroup-input");
+
+                    if ((typeof optGroup.val() !== 'undefined') && self.options.optGroupChecked) {
+                        var isOptGroupShouldChecked = self._checkOptGroup(optGroup);
+
+                        if (isOptGroupChecked != isOptGroupShouldChecked) {
+                            optGroup.prop('checked', isOptGroupShouldChecked);
+                            optGroup.prop('aria-selected', isOptGroupShouldChecked);
+                        }
+                    }
 
                     // bail if this input is disabled or the event is cancelled
                     if (input.disabled || self._trigger('click', e, { value: val, text: optionText, checked: checked }) === false) {
@@ -1004,6 +1015,24 @@
                     // http://bugs.jquery.com/ticket/3827
                     setTimeout($.proxy(self.update, self), 10);
                 });
+        },
+
+        /**
+         * Check option group base on its child option
+         * Called by _bindCheckboxEvents
+         */
+        _checkOptGroup: function (optGroup) {
+            var optInputs = optGroup.parent().next('ul').children(':not(.ui-multiselect-excluded)').find('input').not(':disabled');
+            var flag = false;
+
+            optInputs.each(function (_, optInput) {
+                if ($(optInput).is(':checked')) {
+                    flag = true;
+                    return false;
+                }
+            });
+
+            return flag;
         },
 
         /**
@@ -1593,7 +1622,7 @@
             if (typeof groupID === 'undefined') {  // groupID could be 0
                 this._toggleChecked(true);
 
-                if (this.options.optGroupChecked) 
+                if (this.options.optGroupChecked)
                     this.toggleOptGroup(true);
             }
             else {
@@ -1666,11 +1695,11 @@
             this._trigger('beforeCollapseAll');
 
             var $optgroups = (typeof groupID === 'undefined')  // groupID could be 0
-                                    ? this.$checkboxes.find('.ui-multiselect-optgroup')
-                                    : this._multiselectOptgroupFilter(groupID);
+                ? this.$checkboxes.find('.ui-multiselect-optgroup')
+                : this._multiselectOptgroupFilter(groupID);
 
             $optgroups.addClass('ui-multiselect-collapsed')
-                           .children('.ui-multiselect-collapser').attr('title', this.linkInfo.expand.title).html(this.linkInfo.expand.icon);
+                .children('.ui-multiselect-collapser').attr('title', this.linkInfo.expand.title).html(this.linkInfo.expand.icon);
 
             this._trigger('collapseAll');
         },
@@ -1683,11 +1712,11 @@
             this._trigger('beforeExpandAll');
 
             var $optgroups = (typeof groupID === 'undefined')  // groupID could be 0
-                                    ? this.$checkboxes.find('.ui-multiselect-optgroup')
-                                    : this._multiselectOptgroupFilter(groupID);
+                ? this.$checkboxes.find('.ui-multiselect-optgroup')
+                : this._multiselectOptgroupFilter(groupID);
 
             $optgroups.removeClass('ui-multiselect-collapsed')
-                           .children('.ui-multiselect-collapser').attr('title', this.linkInfo.collapse.title).html(this.linkInfo.collapse.icon);
+                .children('.ui-multiselect-collapser').attr('title', this.linkInfo.collapse.title).html(this.linkInfo.collapse.icon);
 
             this._trigger('expandAll');
         },
@@ -1882,7 +1911,7 @@
          */
         _setOption: function (key, value) {
             var $header = this.$header,
-                  $menu = this.$menu;
+                $menu = this.$menu;
 
             switch (key) {
                 case 'header':

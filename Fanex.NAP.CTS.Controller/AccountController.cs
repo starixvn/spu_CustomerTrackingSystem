@@ -331,11 +331,13 @@
             if (graphAssociationPage != null && graphAssociationPage.AssociationList != null && graphAssociationPage.AssociationList.Any())
             {
                 totalItem = graphAssociationPage.TotalItems;
-                var getAllSubscribers = _subscriberAssignmentService.GetSubscribers(0);
+
+                var subscribers = _subscriberAssignmentService.GetSubscribers(0);
 
                 var customerAssociation = graphAssociationPage.AssociationList;                
 
                 var ctsCustIdList = customerAssociation.Select(x => new { CTSCustId = x.CTSCustID, x.SubscriberId });
+
                 var flaggedAffectedTagList = _accountService.GetDirectAssociatedAccountTagFlagged(JsonConvert.SerializeObject(ctsCustIdList));
 
                 result = customerAssociation.Select(x =>
@@ -356,14 +358,14 @@
                         SiteId = x.SiteID.HasValue ? x.SiteID.Value : 0,
                         SiteName = !string.IsNullOrEmpty(x.SiteName) ? x.SiteName : "-",
                         SubscriberId = x.SubscriberId,
-                        Subscriber = getAllSubscribers.Any(aa => x.SubscriberId != -1 && aa.SubscriberId == x.SubscriberId)
-                                        ? getAllSubscribers.FirstOrDefault(a => a.SubscriberId == x.SubscriberId).SubscriberName
+                        Subscriber = subscribers.Any(aa => x.SubscriberId != -1 && aa.SubscriberId == x.SubscriberId)
+                                        ? subscribers.FirstOrDefault(a => a.SubscriberId == x.SubscriberId).SubscriberName
                                         : "-",
                         CTSCustId = x.CTSCustID,
                         IsLinked = x.AssociationStatus == 1,
-                        IsProblemAccount = x.ParentIDs != null ? x.ParentIDs.Contains("50") : false,
+                        IsProblemAccount = x.ParentIDs != null ? x.ParentIDs.Split(',').Any(y => y == "50") : false,
                         CategoryIds = x.CategoryIDs,
-                        CategoryNames = x.CategoryNames,
+                        CategoryNames = !string.IsNullOrEmpty(x.CategoryNames) ? x.CategoryNames : "-",
                         CustomerClasses = x.CustomerClasses
                     };
 
@@ -386,10 +388,10 @@
                 data = result
             }, JsonRequestBehavior.AllowGet);
         }
-
+       
         private IEnumerable<CategoryGroupViewModel> GetAllCategories()
         {
-            var categoryList = Enumerable.Empty<CategoryGroupViewModel>();
+            var categoryList = new List<CategoryGroupViewModel>();
 
             var data = _accountService.GetAllCategory();
 
@@ -405,8 +407,17 @@
                            {
                                CategoryIDs = y.CategoryIDs,
                                CategoryName = y.CategoryName
-                           })
-                       });
+                           }).OrderBy(y => y.CategoryName)
+                       }).ToList();
+
+                categoryList.Add(new CategoryGroupViewModel
+                {
+                    CategoryGroupName = "No Category",
+                    CategoryList = new List<CategoryViewModel>() { new CategoryViewModel {
+                        CategoryIDs = "0",
+                        CategoryName = "No Category"
+                    } }
+                });
             }
 
             return categoryList;
@@ -442,42 +453,43 @@
         }               
 
         [HttpPost]
-        public ActionResult GetDirectAssociationGraph(long ctsCustid, string displayName, int associationStatus, string accountStatusIds, string siteIds, int start, int length)
+        public ActionResult GetDirectAssociationGraph(AssociatedFilterModel model, string displayName)
         {
-            var graphCustomer = new GraphCustomerItemViewModel();            
+            var graphCustomer = new GraphCustomerItemViewModel();
 
-            var filterModel = new AssociatedFilterModel {
-                CTSCustId = ctsCustid,
-                AssociationStatus = associationStatus,
-                AccountStatusIds = accountStatusIds,
-                SiteIds = siteIds,
-                start = start,
-                length = length
-            };
+            var getAssociationFromMySql = AppSettings.Get("GetAssociationFromMySQL") == "1";
 
-            var graphAssociationPaging = _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetDirectAssociation, filterModel);
+            var graphAssociationPaging = _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetDirectAssociation, model, getAssociationFromMySql);
+
             if (graphAssociationPaging != null && graphAssociationPaging.AssociationList != null && graphAssociationPaging.AssociationList.Any())
             {
-                var now = DateTime.Now.Ticks.ToString();
                 var graphCustomerList = graphAssociationPaging.AssociationList
                     .Select(x => new GraphCustomerItemViewModel
                     {
                         CTSCustId = x.CTSCustID,
-                        ItemCode = x.CTSCustID.ToString() + "_" + now,
+                        ItemCode = x.CTSCustID.ToString() + "_" + DateTime.Now.Ticks.ToString(),
                         DisplayName = !string.IsNullOrWhiteSpace(x.Username) ? x.Username : x.Username2,
-                        AssociationStatus = associationStatus,
-                        Start = start,
-                        Length = length
+                        AssociationStatus = model.AssociationStatus,
+                        AssociationType = model.AssociationType,
+                        AccountStatusIds = model.AccountStatusIds,
+                        CategoryIds = model.CategoryIds,
+                        SiteIds = model.SiteIds,
+                        Start = model.start,
+                        Length = model.length
                     }).ToList();
 
                 graphCustomer.children = graphCustomerList.ToArray();
             }
 
-            graphCustomer.CTSCustId = ctsCustid;
+            graphCustomer.CTSCustId = model.CTSCustId;
             graphCustomer.DisplayName = displayName;
-            graphCustomer.AssociationStatus = associationStatus;
-            graphCustomer.Start = start;
-            graphCustomer.Length = length;
+            graphCustomer.AssociationStatus = model.AssociationStatus;
+            graphCustomer.AssociationType = model.AssociationType;
+            graphCustomer.AccountStatusIds = model.AccountStatusIds;
+            graphCustomer.CategoryIds = model.CategoryIds;
+            graphCustomer.SiteIds = model.SiteIds;
+            graphCustomer.Start = model.start;
+            graphCustomer.Length = model.length;
 
             return Json(graphCustomer, JsonRequestBehavior.AllowGet);
         }
@@ -1061,12 +1073,7 @@
 
         private void GetCustomerRobotUserStatus(long custId, ref AccountProfileViewModel profile)
         {
-            // Temp comment
-            //profile.RobotUserStatus = _accountService.GetCustomerRobotUserStatus(custId);
-
-            // hardcode for test 20210317
-            profile.RobotUserStatus = new CustomerRobotUserStatusModel { CustId = int.Parse(custId.ToString()), IsRobotUser = true };
-            // hardcode for test 20210317
+            profile.RobotUserStatus = _accountService.GetCustomerRobotUserStatus(custId);
         }
 
         private void GetCustomerFlagInfo(long ctsCustId, ref AccountProfileViewModel profile)

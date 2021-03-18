@@ -103,10 +103,10 @@
 .ui-multiselect-grouplabel {
 	border-bottom: 1px solid;
 	display: block;
-	font-weight: bold;
-	margin: 1px 0;
+	font-weight: bold;	
 	padding: 3px;
-	text-align: center;
+	margin-left: 28px;
+	text-align: left;
 	text-decoration: none;
 }
 

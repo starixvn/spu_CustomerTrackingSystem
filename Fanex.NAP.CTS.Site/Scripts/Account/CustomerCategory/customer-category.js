@@ -7,12 +7,48 @@
     let tblcustomercategory = $('#customer-category-table');
     let isHostPermission; 
     let spanClass = $('#spanClass');
+    let cacheCategoryColors = [];
     let cacheData = {
         isVVip: false,
         isPinCategory: false,
         isExcludedTagAssPA: false,
         isProblemAccount: false
     };
+        
+    function GetNormalCategoryList() {
+        var list = [];
+
+        list.push({ 'id': 205, 'indexColor': 1, 'cssClass': 'circle bg-green', 'name': 'VIP' });
+        list.push({ 'id': 210, 'indexColor': 1, 'cssClass': 'circle bg-green', 'name': 'VVIP' });
+        list.push({ 'id': 201, 'indexColor': 1, 'cssClass': 'circle bg-green', 'name': 'New Member' });
+        list.push({ 'id': 202, 'indexColor': 1, 'cssClass': 'circle bg-green', 'name': 'Normal Account' });
+
+        list.push({ 'id': 206, 'indexColor': 2, 'cssClass': 'circle bg-yellow', 'name': 'Probation' });
+        list.push({ 'id': 203, 'indexColor': 2, 'cssClass': 'circle bg-yellow', 'name': 'Smart Punter' });
+        list.push({ 'id': 204, 'indexColor': 2, 'cssClass': 'circle bg-yellow', 'name': 'High Risk Punter' });
+        
+        list.push({ 'id': 211, 'indexColor': 3, 'cssClass': 'circle green-line', 'name': 'VIP (111)' });
+        list.push({ 'id': 212, 'indexColor': 3, 'cssClass': 'circle green-line', 'name': 'VIP (112)' });
+        list.push({ 'id': 213, 'indexColor': 3, 'cssClass': 'circle green-line', 'name': 'VIP (113)' });
+        list.push({ 'id': 221, 'indexColor': 3, 'cssClass': 'circle green-line', 'name': 'Normal Account (121)' });
+        list.push({ 'id': 222, 'indexColor': 3, 'cssClass': 'circle green-line', 'name': 'Normal Account (122)' });
+        list.push({ 'id': 223, 'indexColor': 3, 'cssClass': 'circle green-line', 'name': 'Normal Account (123)' });
+        list.push({ 'id': 231, 'indexColor': 3, 'cssClass': 'circle green-line', 'name': 'New Member (31)' });
+        list.push({ 'id': 232, 'indexColor': 3, 'cssClass': 'circle green-line', 'name': 'New Member (32)' });
+        list.push({ 'id': 233, 'indexColor': 3, 'cssClass': 'circle green-line', 'name': 'New Member (33)' });
+
+        list.push({ 'id': 251, 'indexColor': 4, 'cssClass': 'circle yellow-line', 'name': 'Probation (51)' });
+        list.push({ 'id': 252, 'indexColor': 4, 'cssClass': 'circle yellow-line', 'name': 'Probation (52)' });
+        list.push({ 'id': 253, 'indexColor': 4, 'cssClass': 'circle yellow-line', 'name': 'Probation (53)' });
+        list.push({ 'id': 261, 'indexColor': 4, 'cssClass': 'circle yellow-line', 'name': 'Smart Punter (61)' });
+        list.push({ 'id': 262, 'indexColor': 4, 'cssClass': 'circle yellow-line', 'name': 'Smart Punter (62)' });
+        list.push({ 'id': 263, 'indexColor': 4, 'cssClass': 'circle yellow-line', 'name': 'Smart Punter (63)' });
+        list.push({ 'id': 271, 'indexColor': 4, 'cssClass': 'circle yellow-line', 'name': 'High Risk Punter (71)' });
+        list.push({ 'id': 272, 'indexColor': 4, 'cssClass': 'circle yellow-line', 'name': 'High Risk Punter (72)' });
+        list.push({ 'id': 273, 'indexColor': 4, 'cssClass': 'circle yellow-line', 'name': 'High Risk Punter (73)' });
+
+        return list;
+    }
 
     function BindingMarkCategoryForAddNew(custId, ctsCustId, subscriberId) {
         $('#btncancelcategory').on('click', function () {
@@ -319,12 +355,11 @@
 
         if (isExistProblemAccount) {
             $('#divHeaderUsername')
-                .removeClass('bg-yellow')
-                .removeClass('bg-green')
+                .removeClass('bg-yellow').removeClass('bg-green')
+                .removeClass('green-line').removeClass('yellow-line')
                 .addClass('bg-red');
             $('#divHeaderInfo')
-                .removeClass('border-yellow')
-                .removeClass('border-green')
+                .removeClass('border-yellow').removeClass('border-green')
                 .addClass('border-red');
 
             $('#divCustomerCategorySummary').html(html);
@@ -337,19 +372,18 @@
 
     function RenderCategorySummary(data) {
         let html = "";
-        let defaultNormalCategoryList = GetNormalCategoryList();
         let indexColorProfile = 1;
 
-        for (let i = 0; i < defaultNormalCategoryList.length; i++) {
+        for (let i = 0; i < cacheCategoryColors.length; i++) {
             data.map(function (x) {
-                let isEquals = x.CategoryId === defaultNormalCategoryList[i].id;
+                let isEquals = x.CategoryId === cacheCategoryColors[i].id;
                 if (isEquals) {
-                    let classIconColor = defaultNormalCategoryList[i].cssClass;
+                    let classIconColor = cacheCategoryColors[i].cssClass;
                     
                     html = BuildCategoryToHtmlDiv(html, classIconColor, x.CategoryName);
 
-                    indexColorProfile = indexColorProfile < defaultNormalCategoryList[i].indexColor
-                        ? defaultNormalCategoryList[i].indexColor
+                    indexColorProfile = indexColorProfile < cacheCategoryColors[i].indexColor
+                        ? cacheCategoryColors[i].indexColor
                         : indexColorProfile;
                 }
             });
@@ -358,22 +392,38 @@
         switch (indexColorProfile) {
             case 1:
                 $('#divHeaderUsername')
-                    .removeClass('bg-red')
-                    .removeClass('bg-yellow')
+                    .removeClass('bg-red').removeClass('bg-yellow')
+                    .removeClass('green-line').removeClass('yellow-line')
                     .addClass('bg-green');
                 $('#divHeaderInfo')
-                    .removeClass('border-red')
-                    .removeClass('border-yellow')
+                    .removeClass('border-red').removeClass('border-yellow')                      
                     .addClass('border-green');
                 break;
             case 2:
                 $('#divHeaderUsername')
-                    .removeClass('bg-red')
-                    .removeClass('bg-green')
+                    .removeClass('bg-red').removeClass('bg-green')
+                    .removeClass('green-line').removeClass('yellow-line')
                     .addClass('bg-yellow');
                 $('#divHeaderInfo')
-                    .removeClass('border-red')
-                    .removeClass('border-green')
+                    .removeClass('border-red').removeClass('border-green')
+                    .addClass('border-yellow');
+                break;
+            case 3:
+                $('#divHeaderUsername')
+                    .removeClass('bg-red').removeClass('bg-yellow')
+                    .removeClass('bg-green').removeClass('yellow-line')
+                    .addClass('green-line')
+                $('#divHeaderInfo')
+                    .removeClass('border-red').removeClass('border-yellow')
+                    .addClass('border-green');
+                break;
+            case 4:
+                $('#divHeaderUsername')
+                    .removeClass('bg-red').removeClass('bg-yellow')
+                    .removeClass('bg-green').removeClass('green-line')
+                    .addClass('yellow-line')
+                $('#divHeaderInfo')
+                    .removeClass('border-red').removeClass('border-yellow')
                     .addClass('border-yellow');
                 break;
             default:
@@ -394,21 +444,7 @@
         html += "</div>";
 
         return html;
-    }    
-
-    function GetNormalCategoryList() {
-        var list = [];
-
-        list.push({ 'id': 204, 'name': 'High Risk Punter', 'cssClass': 'circle bg-yellow', 'indexColor': 2 });
-        list.push({ 'id': 203, 'name': 'Smart Punter', 'cssClass': 'circle bg-yellow', 'indexColor': 2 });
-        list.push({ 'id': 206, 'name': 'Probation', 'cssClass': 'circle bg-yellow', 'indexColor': 2 });
-        list.push({ 'id': 202, 'name': 'Normal Account', 'cssClass': 'circle bg-green', 'indexColor': 1 });
-        list.push({ 'id': 210, 'name': 'VVIP', 'cssClass': 'circle bg-green', 'indexColor': 1 });
-        list.push({ 'id': 205, 'name': 'VIP', 'cssClass': 'circle bg-green', 'indexColor': 1 });
-        list.push({ 'id': 201, 'name': 'New Member', 'cssClass': 'circle bg-green', 'indexColor': 1 });
-
-        return list;
-    }      
+    }        
 
     function PinCategory(isChecked, custId, ctsCustId, subscriberId) {
         let html = "<div style='text-align:center'>Are you sure about this action? </div>";  
@@ -583,8 +619,9 @@
             btnRemoveCategory.click(function () { DisplayRemoveCategory(custId, ctsCustId, subscriberId); });
         }
 
+        cacheCategoryColors = GetNormalCategoryList();
+
         RenderGrid(custId);
-               
     };
 
     this.ReloadTab = function (custId) {
