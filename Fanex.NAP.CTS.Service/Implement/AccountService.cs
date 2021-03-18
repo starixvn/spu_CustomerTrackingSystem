@@ -279,7 +279,7 @@
                         AssociationStatus = filterModel.AssociationStatus,
                         AccountStatusIds = filterModel.AccountStatusIds,
                         AssociationType = GetAssociationTypeFromUrl(apiURL),
-                        CategoryIDs = "0,56,156,76,60,80, 201,206",
+                        CategoryIDs = filterModel.CategoryIds,
                         SiteIds = filterModel.SiteIds,
                         Skip = filterModel.start,
                         Take = filterModel.length,

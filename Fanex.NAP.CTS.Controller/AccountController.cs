@@ -361,9 +361,10 @@
                                         : "-",
                         CTSCustId = x.CTSCustID,
                         IsLinked = x.AssociationStatus == 1,
-                        CategoryIds = "50",
-                        CategoryNames = "High Risk Punter",
-                        ClassificationIds = "7"
+                        IsProblemAccount = x.ParentIDs != null ? x.ParentIDs.Contains("50") : false,
+                        CategoryIds = x.CategoryIDs,
+                        CategoryNames = x.CategoryNames,
+                        CustomerClasses = x.CustomerClasses
                     };
 
                     var flaggedAffected = flaggedAffectedTagList.FirstOrDefault(y => y.SubscriberID.Equals(newX.SubscriberId) && y.CTSCustID.Equals(newX.CTSCustId));

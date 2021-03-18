@@ -32,11 +32,13 @@
 
         public string AssociationTypeName { get; set; }
 
+        public bool IsProblemAccount { get; set; }
+
         public string CategoryIds { get; set; }
 
         public string CategoryNames { get; set; }
 
-        public string ClassificationIds { get; set; }
+        public string CustomerClasses { get; set; }
 
         public string AssociationDate { get; set; }
 

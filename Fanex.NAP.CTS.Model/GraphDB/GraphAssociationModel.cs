@@ -43,5 +43,13 @@
         public int? SiteID { get; set; }
 
         public string SiteName { get; set; }
+
+        public string ParentIDs { get; set; }
+
+        public string CategoryIDs { get; set; }
+
+        public string CategoryNames { get; set; }
+
+        public string CustomerClasses { get; set; }
     }
 }

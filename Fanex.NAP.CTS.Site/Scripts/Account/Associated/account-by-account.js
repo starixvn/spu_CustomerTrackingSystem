@@ -22,6 +22,42 @@
     let dataTableMatchBettingPattern = null;
     let spanBettingPatternTotalMatch = $('#spanBettingPatternTotalMatch');
     let cbbAssociationCategory = $('#cbbAssociationCategory');
+    let cacheCategoryColors = [];
+    
+    function GetCategoryColorList() {
+        var list = [];
+
+        list.push({ 'id': '205', 'name': 'VIP', 'cssClass': 'green', 'indexColor': 1 });
+        list.push({ 'id': '210', 'name': 'VVIP', 'cssClass': 'green', 'indexColor': 1 });
+        list.push({ 'id': '201', 'name': 'New Member', 'cssClass': 'green', 'indexColor': 1 });
+        list.push({ 'id': '202', 'name': 'Normal Account', 'cssClass': 'green', 'indexColor': 1 });
+
+        list.push({ 'id': '206', 'name': 'Probation', 'cssClass': 'yellow', 'indexColor': 2 });
+        list.push({ 'id': '203', 'name': 'Smart Punter', 'cssClass': 'yellow', 'indexColor': 2 });
+        list.push({ 'id': '204', 'name': 'High Risk Punter', 'cssClass': 'yellow', 'indexColor': 2 });
+
+        list.push({ 'id': '211', 'name': 'VIP (111)', 'cssClass': 'green-line', 'indexColor': 3 });
+        list.push({ 'id': '212', 'name': 'VIP (112)', 'cssClass': 'green-line', 'indexColor': 3 });
+        list.push({ 'id': '213', 'name': 'VIP (113)', 'cssClass': 'green-line', 'indexColor': 3 });
+        list.push({ 'id': '221', 'name': 'Normal Account (121)', 'cssClass': 'green-line', 'indexColor': 3 });
+        list.push({ 'id': '222', 'name': 'Normal Account (122)', 'cssClass': 'green-line', 'indexColor': 3 });
+        list.push({ 'id': '223', 'name': 'Normal Account (123)', 'cssClass': 'green-line', 'indexColor': 3 });
+        list.push({ 'id': '231', 'name': 'New Member (31)', 'cssClass': 'green-line', 'indexColor': 3 });
+        list.push({ 'id': '232', 'name': 'New Member (32)', 'cssClass': 'green-line', 'indexColor': 3 });
+        list.push({ 'id': '233', 'name': 'New Member (33)', 'cssClass': 'green-line', 'indexColor': 3 });
+
+        list.push({ 'id': '251', 'name': 'Probation (51)', 'cssClass': 'yellow-line', 'indexColor': 4 });
+        list.push({ 'id': '252', 'name': 'Probation (52)', 'cssClass': 'yellow-line', 'indexColor': 4 });
+        list.push({ 'id': '253', 'name': 'Probation (53)', 'cssClass': 'yellow-line', 'indexColor': 4 });
+        list.push({ 'id': '261', 'name': 'Smart Punter (61)', 'cssClass': 'yellow-line', 'indexColor': 4 });
+        list.push({ 'id': '262', 'name': 'Smart Punter (62)', 'cssClass': 'yellow-line', 'indexColor': 4 });
+        list.push({ 'id': '263', 'name': 'Smart Punter (63)', 'cssClass': 'yellow-line', 'indexColor': 4 });
+        list.push({ 'id': '271', 'name': 'High Risk Punter (71)', 'cssClass': 'yellow-line', 'indexColor': 4 });
+        list.push({ 'id': '272', 'name': 'High Risk Punter (72)', 'cssClass': 'yellow-line', 'indexColor': 4 });
+        list.push({ 'id': '273', 'name': 'High Risk Punter (73)', 'cssClass': 'yellow-line', 'indexColor': 4 });
+
+        return list;
+    }
 
     function RenderTag(obj) {
         let html = "";
@@ -43,7 +79,50 @@
         }
 
         return null;
-    }   
+    }      
+
+    function RenderCellCategory(cell, row) {
+        let indexColorForDiv = 0;
+
+        if (row.IsProblemAccount) {
+            indexColorForDiv = 5;
+        } else {
+            let categoryList = row.CategoryIds != undefined
+                ? row.CategoryIds.split(',')
+                : [];
+
+            for (let i = 0; i < cacheCategoryColors.length; i++) {
+                categoryList.map(function (x) {
+                    let isEquals = x === cacheCategoryColors[i].id;
+                    if (isEquals) {
+                        indexColorForDiv = indexColorForDiv < cacheCategoryColors[i].indexColor
+                            ? cacheCategoryColors[i].indexColor
+                            : indexColorForDiv;
+                    }
+                })
+            }
+        }
+
+        switch (indexColorForDiv) {
+            case 1:
+                $(cell).addClass('green');
+                break;
+            case 2:
+                $(cell).addClass('yellow');
+                break;
+            case 3:
+                $(cell).addClass('green-line');
+                break;
+            case 4:
+                $(cell).addClass('yellow-line');
+                break;
+            case 5:
+                $(cell).addClass('red');
+                break;
+            default:
+                break;
+        }
+    }
 
     function RenderGrid() {
         let url = common.modifyRelativeUrl('Account/GetAssociatedByAccount');
@@ -72,7 +151,9 @@
                     AccountStatusIds: function () {
                         return cbbAssociationAccountStatus.val();
                     },
-                    CategoryIds: function () { cbbAssociationCategory.val() },
+                    CategoryIds: function () {
+                        return cbbAssociationCategory.val();
+                    },
                     SiteIds: function () {
                         var selectedSites = [];
                         cbbAssociationSite.find('option:selected').each(function () { selectedSites.push($(this).val()); });
@@ -115,12 +196,12 @@
                 { targets: [-2, -1], className: "text-center" },
                 { targets: [0, 1, 2, 3, 4, 5], className: "text-center" },
                 { targets: [0], width: "5%" },
-                { targets: [1], width: "10%" },
-                { targets: [2], width: "10%" },
+                { targets: [1], width: "15%" },
+                { targets: [2], width: "15%" },
                 { targets: [3], width: "10%" },
-                { targets: [4], width: "10%", visible: false },
+                { targets: [4], visible: false },
                 { targets: [5], width: "10%", className: "text-center" },
-                { targets: [6], width: "10%", className: "text-center" },
+                { targets: [6], width: "15%", className: "text-center" },
                 { targets: [7], width: "10%", className: "text-center" },
                 { targets: [8], width: "10%", className: "text-center" },
                 { targets: [9], width: "10%", className: "text-center" }
@@ -137,8 +218,12 @@
                         $('.association-type-name', cell).click(() => ShowMatchBettingPattern(row.CustId))
                     }
                 },
-                { data: obj => obj.CategoryNames },
-                { data: obj => obj.ClassificationIds },
+                {
+                    data: obj => obj.CategoryNames, createdCell: (cell, _, row) => {
+                        RenderCellCategory(cell, row);
+                    }
+                },
+                { data: obj => obj.CustomerClasses },
                 {
                     data: obj => AssociationStatus(obj.IsLinked), createdCell: (cell, _, row) => {
                         if (isHostPermission) {
@@ -166,7 +251,7 @@
                 api.column(4, { page: 'current' }).data().each(function (group, i) {
                     if (last !== group) {
                         let html = '<tr class="group group-site">';
-                        html += '<td colspan="7">';
+                        html += '<td colspan="9">';
                         html += '<span class="column-group-site" data-site-id=' + data[i].SiteId + '><i class="icon icon-chevron-down icon-open"></i> ' + group + ' </span>';
                         html += '</td></tr>';
 
@@ -196,7 +281,7 @@
         });
         
         return table;
-    }
+    }  
 
     function AssociationStatus(isLinked) {
         var html = '<div class="toggle ' + (isLinked ? 'toggle-on' : '') + '" id="switch">';
@@ -801,6 +886,8 @@
         btnSaveAssociation.on('click', () => InsertManualAssociationMultiple(subscriberId, ctsCustid));
         btnCancelAssociation.on('click', () => {
             divAddAssociation.dialog('close');
-        });        
+        });    
+
+        cacheCategoryColors = GetCategoryColorList();
     };
 }
