@@ -89,6 +89,8 @@
 
         if (categoryList.length > 2)
             html = "<span>" + categoryList[0] + ", " + categoryList[1] + ",... </span>";
+        else if (categoryList.length === 2)
+            html = "<span>" + categoryList[0] + ", " + categoryList[1] + "</span>";
         else
             html = "<span>" + categoryNames + "</span>";
 
@@ -217,7 +219,7 @@
                 { targets: [3], width: "10%" },
                 { targets: [4], visible: false },
                 { targets: [5], width: "10%", className: "text-center" },
-                { targets: [6], width: "15%", className: "text-center" },
+                { targets: [6], width: "10%", className: "text-center" },
                 { targets: [7], width: "10%", className: "text-center" },
                 { targets: [8], width: "10%", className: "text-center" },
                 { targets: [9], width: "10%", className: "text-center" }
