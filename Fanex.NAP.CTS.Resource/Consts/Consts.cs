@@ -58,5 +58,7 @@
 
         public const string SALT = "!%HGDwweHqw#";
         public const string AssociationTypeName_BettingPattern = "Betting Pattern";
+        public const string AssociationTypeName_IP = "IP";
+        public const string AssociationTypeName_IPAssociation = "IP Association";
     }
 }

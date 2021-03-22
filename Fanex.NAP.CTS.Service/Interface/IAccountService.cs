@@ -135,5 +135,7 @@
         IEnumerable<MatchesDetailInfoModel> GetMatchesDetailInfo(MatchesAssociationDetailViewModel matchInfo);
 
         IEnumerable<CategoryInfoModel> GetAllCategory();
+	
+		IEnumerable<AssociationByIPInfoModel> GetAssociationByIPInfo(long custId1, long custId2, out int totalMatchCount, out int totalIPCount);
     }
 }

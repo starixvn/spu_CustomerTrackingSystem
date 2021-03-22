@@ -427,12 +427,14 @@
         {
             if (!string.IsNullOrEmpty(name))
             {
-                var span = $"<span class='association-type-name'>{Consts.AssociationTypeName_BettingPattern}</span>";
+                var spanBettingPattern = $"<span class='association-type-name betting-pattern'>{Consts.AssociationTypeName_BettingPattern}</span>";
+                var spanIPAssociation = $"<span class='association-type-name ip-association'>{Consts.AssociationTypeName_IPAssociation}</span>";
 
-                return name.Replace(Consts.AssociationTypeName_BettingPattern, span);
+                name = name.Replace(Consts.AssociationTypeName_BettingPattern, spanBettingPattern);
+                name = name.Replace(Consts.AssociationTypeName_IP, spanIPAssociation);
             }
 
-            return string.Empty;
+            return name;
         }
 
         private string GetDirectAssociationUrl(int associationType)
@@ -606,7 +608,6 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-
         [HttpPost]
         public ActionResult GetMatchesAssociationByAI(long custID1, long custID2)
         {
@@ -682,6 +683,27 @@
                         LiveScore = x.LiveHomeScore + "-" + x.LiveAwayScore
                     }).ToList();                   
                 }
+            }
+
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult GetIPAssociation(long custId1, long custId2)
+        {
+            var data = new AssociationByIPInfoViewModel();
+            var totalMatchCount = 0;
+            var totalIPCount = 0;
+
+            var infos = _accountService.GetAssociationByIPInfo(custId1, custId2, out totalMatchCount, out totalIPCount);
+
+            if (infos != null && infos.Any())
+            {
+                data.TotalMatchCount = totalMatchCount;
+                data.TotalIPSharingCount = totalIPCount;
+                data.ItemList = infos.Select(x => new AssociationByIPItemViewModel
+                {
+                }).ToList();
             }
 
             return Json(data, JsonRequestBehavior.AllowGet);

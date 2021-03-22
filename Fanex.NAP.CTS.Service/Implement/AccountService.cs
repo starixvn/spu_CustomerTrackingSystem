@@ -658,6 +658,40 @@
             }
         }
 
+		public IEnumerable<AssociationByIPInfoModel> GetAssociationByIPInfo(long custId1, long custId2, out int totalMatchCount, out int totalIPCount)
+        {
+            totalMatchCount = 0;
+            totalIPCount = 0;
+
+            var criteria = new GetAssociationByIPInfoCriteria
+            {
+                CustId1 = custId1,
+                CustId2 = custId2
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                using (var result = db.QueryMultiple(criteria))
+                {
+                    var infos = result.Read<AssociationByIPInfoModel>();
+                    var totalMatches = result.Read<int>();
+                    var totalIPSharing = result.Read<int>();                    
+
+                    if (totalMatches != null && totalMatches.Any())
+                    {
+                        totalMatchCount = totalMatches.ToList()[0];
+                    }
+
+                    if (totalIPSharing != null && totalIPSharing.Any())
+                    {
+                        totalIPCount = totalIPSharing.ToList()[0];
+                    }
+
+                    return infos;
+                }
+            }            
+        }
+
         #endregion
 
         #region Chain To Evidence

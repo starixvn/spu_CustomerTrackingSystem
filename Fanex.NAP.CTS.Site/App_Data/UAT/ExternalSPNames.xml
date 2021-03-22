@@ -142,4 +142,9 @@
 	  <Setting Key="CTS_Rpt_BettingPattern_MatchInfo" SpName="CTS_Rpt_BettingPattern_MatchInfo_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
 	  <Setting Key="CTS_Rpt_BettingPattern_TicketDetails" SpName="CTS_Rpt_BettingPattern_TicketDetails_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
   </Function>
+
+	<Function Name="Association">
+		<Setting Key="SPU_AIML_GetAssociationInfo" SpName="SPU_AIML_GetAssociationInfo_xtest" DbName="MySQL.SPU_AIML.Reporter"/>
+		<Setting Key="SPU_AIML_GetAssociationByIPInfo" SpName="SPU_AIML_GetAssociationByIPInfo_xtest" DbName="MySQL.SPU_AIML.Reporter" />
+	</Function>
 </Functions>

@@ -1,13 +1,8 @@
-﻿using Fanex.Data;
-using Fanex.Data.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Fanex.NAP.CTS.Criteria.Account.Associated
+﻿namespace Fanex.NAP.CTS.Criteria.Account.Associated
 {
+    using Fanex.Data;
+    using Fanex.Data.Repository;
+
     public class GetAssociationProfileStatictisCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_CTSCustID")]

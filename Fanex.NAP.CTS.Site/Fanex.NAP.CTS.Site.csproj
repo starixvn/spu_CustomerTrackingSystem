@@ -985,6 +985,7 @@
     <Content Include="Views\AssociationReport\Detail.cshtml" />
     <Content Include="Views\Account\CustomerCategory\RemoveCategory.cshtml" />
     <Content Include="Views\Account\Associated\MatchBettingPattern.cshtml" />
+    <Content Include="Views\Account\Associated\IPAssociation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CoreBetList.css" />

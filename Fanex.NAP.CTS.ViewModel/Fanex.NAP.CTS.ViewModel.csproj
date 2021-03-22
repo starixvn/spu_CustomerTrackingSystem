@@ -45,6 +45,8 @@
     <Compile Include="Account\Associated\AssociatedByAccountViewModel.cs" />
     <Compile Include="Account\Associated\CategoryGroupViewModel.cs" />
     <Compile Include="Account\Associated\CategoryViewModel.cs" />
+	<Compile Include="Account\Associated\AssociationByIPInfoViewModel.cs" />
+    <Compile Include="Account\Associated\AssociationByIPItemViewModel.cs" />
     <Compile Include="Account\Associated\MatchesAssociationDetailViewModel.cs" />
     <Compile Include="Account\Associated\AssociatedDeviceByAccountFilter.cs" />
     <Compile Include="Account\Associated\CustomerAssociationByAccountDetailViewModel.cs" />

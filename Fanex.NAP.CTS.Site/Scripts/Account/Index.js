@@ -115,7 +115,7 @@
             },
             success: function (response) {
                 totalAssAccount = response.TotalAccounts;
-                domElements.spanTotalAssociated.html(response.TotalAccounts + " / " + response.TotalDevices);               
+                domElements.spanTotalAssociated.html(response.TotalAccounts + " / " + response.TotalDevices + " / " + response.TotalIps);
             },
             complete: function () {
                 GetCustomerEvidences();

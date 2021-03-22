@@ -21,7 +21,11 @@
     let tableMatchBettingPattern = $('#tblMatchBettingPattern');
     let dataTableMatchBettingPattern = null;
     let spanBettingPatternTotalMatch = $('#spanBettingPatternTotalMatch');
-    let cbbAssociationCategory = $('#cbbAssociationCategory');
+	let divIPAssociation = $('#divIPAssociation');
+    let tblIPAssociation = $('#tblIPAssociation');
+    let dataTableIPAssociation = null;
+    let spanIPAssociationTotalMatches = $('#spanIPAssociationTotalMatches');
+    let spanIPAssociationTotalIPSharing = $('#spanIPAssociationTotalIPSharing');    let cbbAssociationCategory = $('#cbbAssociationCategory');
     let cacheCategoryColors = [];
     
     function GetCategoryColorList() {
@@ -233,7 +237,13 @@
                 {
                     data: obj => obj.AssociationTypeName,
                     createdCell: (cell, _, row) => {
-                        $('.association-type-name', cell).click(() => ShowMatchBettingPattern(row.CustId))
+                        $('.betting-pattern', cell).click(() =>
+                            ShowMatchBettingPattern(row.CustId)
+                        );
+
+                        $('.ip-association', cell).click(() =>
+                            ShowIPAssociation(row.CustId)
+                        );
                     }
                 },
                 {
@@ -327,9 +337,7 @@
             },
             success: function (response) {
                 totalAssAccount = response.TotalAccounts;
-
-                $('#totalAssAccount').html(response.TotalAccounts);
-                $('#totalAssDevice').html(response.TotalDevices);
+                $('#spanTotalAssociated').html(response.TotalAccounts + " / " + response.TotalDevices + " / " + response.TotalIps);
             },
             error: function (errMsg) {
                 console.log(errMsg);
@@ -623,7 +631,8 @@
         btnSaveAssociation.prop('disabled', true);
     }
 
-    function ShowMatchBettingPattern(custId) {          
+    function ShowMatchBettingPattern(custId) {        
+
         divMatchBettingPattern.dialog({
             modal: true,
             width: '1200px',
@@ -809,6 +818,85 @@
             },
             complete: function () {
                 tableMatchBettingPattern.find('tbody').removeClass('loading');
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+            }
+        });
+    }
+
+    function ShowIPAssociation(custId) {
+        divIPAssociation.dialog({
+            modal: true,
+            width: '1200px',
+            title: 'ASSOCIATION DETAILS',
+            resizable: false,
+            draggable: true,
+            close: function () {
+                $(this).dialog('close');
+            }
+        });
+
+        if (dataTableIPAssociation == null) {
+            dataTableIPAssociation = tblIPAssociation.DataTable({
+                language: {
+                    zeroRecords: "There's no data"
+                },
+                info: false,
+                ordering: false,
+                searching: false,
+                scrollX: false,
+                paging: false,
+                columnDefs: [
+                    { targets: "_all", defaultContent: "-" },
+                    { targets: [0], width: "15%", className: "text-center" },
+                    { targets: [1], width: "15%", className: "text-left" },
+                    { targets: [2], width: "15%", className: "text-left" },
+                    { targets: [3], width: "15%", className: "text-left" },
+                    { targets: [4], width: "20%", className: "text-center" },
+                    { targets: [5], width: "20%", className: "text-center" }
+                ],
+                columns: [
+                    { data: obj => obj.MatchID },
+                    { data: obj => obj.EventName },
+                    { data: obj => obj.League },
+                    { data: obj => obj.EventDateString },
+                    { data: obj => obj.IP },
+                    { data: obj => obj.BetTypes }
+                ]
+            });
+        }
+
+        GetIPAssociation(custId);        
+
+        $('.ui-dialog .ui-dialog-content').css('padding', '0');
+    }
+
+    function GetIPAssociation(custId) {
+        spanIPAssociationTotalMatches.text("");
+        spanIPAssociationTotalIPSharing.text("");
+
+        var url = common.modifyRelativeUrl('Account/GetIPAssociation');
+
+        $.ajax(url, {
+            type: 'POST',
+            beforeSend: function () {
+                tblIPAssociation.find('tbody').addClass('loading');
+            },
+            data: {
+                custId: custId
+            },
+            success: function (response) {
+                if (response !== undefined) {
+                    tblIPAssociation.DataTable().clear().rows.add(response.ItemList).draw();
+                    tblIPAssociation.DataTable().columns.adjust();
+
+                    spanIPAssociationTotalMatches.text(response.TotalMatches);
+                    spanIPAssociationTotalIPSharing.text(response.TotalIPSharing);
+                }
+            },
+            complete: function () {
+                tblIPAssociation.find('tbody').removeClass('loading');
             },
             error: function (errMsg) {
                 console.log(errMsg);
