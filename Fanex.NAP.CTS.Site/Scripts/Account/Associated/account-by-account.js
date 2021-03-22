@@ -859,7 +859,7 @@
                 columns: [
                     { data: obj => obj.MatchID },
                     { data: obj => obj.EventName },
-                    { data: obj => obj.League },
+                    { data: obj => obj.LeagueName },
                     { data: obj => obj.EventDateString },
                     { data: obj => obj.IP },
                     { data: obj => obj.BetTypes }

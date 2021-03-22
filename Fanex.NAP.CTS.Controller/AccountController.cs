@@ -5,6 +5,7 @@
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Web.Attribute;
+    using Fanex.NAP.CTS.Core.BaseClasses;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Helpers;
     using Fanex.NAP.CTS.Core.Utilities;
@@ -694,15 +695,47 @@
             var data = new AssociationByIPInfoViewModel();
             var totalMatchCount = 0;
             var totalIPCount = 0;
+            var para1 = custId1;
+            var para2 = custId2;
 
-            var infos = _accountService.GetAssociationByIPInfo(custId1, custId2, out totalMatchCount, out totalIPCount);
+            if (custId1 > custId2)
+            {
+                para1 = custId2;
+                para2 = custId1;
+            }
+
+            var infos = _accountService.GetAssociationByIPInfo(para1, para2, out totalMatchCount, out totalIPCount);
 
             if (infos != null && infos.Any())
             {
                 data.TotalMatchCount = totalMatchCount;
                 data.TotalIPSharingCount = totalIPCount;
-                data.ItemList = infos.Select(x => new AssociationByIPItemViewModel
+                data.ItemList = infos.Select(x =>
                 {
+                    var betTypeList = new List<string>();
+
+                    if (x.BettypeList != null)
+                    {
+                        var arrBetType = x.BettypeList.Split(',');
+
+                        foreach (var item in arrBetType)
+                        {
+                            var betTypeId = 0;
+                            
+                            int.TryParse(item, out betTypeId);
+
+                            betTypeList.Add(CachedRef.GetBettypeName(betTypeId));
+                        }
+                    }
+
+                    return new AssociationByIPItemViewModel {
+                        MatchID = x.MatchID,
+                        EventName = CachedRef.GetTeamName(x.HomeID) + " vs " + CachedRef.GetTeamName(x.AwayID),
+                        LeagueName = CachedRef.GetLeagueName(x.LeagueID),
+                        EventDateString = "",
+                        BetTypes = string.Join(", ", betTypeList),
+                        IP = x.IPList
+                    };
                 }).ToList();
             }
 
