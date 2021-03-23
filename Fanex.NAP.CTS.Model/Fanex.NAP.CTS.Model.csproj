@@ -139,6 +139,7 @@
     <Compile Include="Account\AffectedRetractEvidenceModel.cs" />
     <Compile Include="Account\AssociatedAccount\CategoryInfoModel.cs" />
 	<Compile Include="Account\AssociatedAccount\AssociationByIPInfoModel.cs" />
+    <Compile Include="Account\AssociatedAccount\AssociationByIPItemModel.cs" />
     <Compile Include="Account\AssociatedAccount\MatchesDetailInfoModel.cs" />
     <Compile Include="Account\AssociatedAccount\MatchesAssociationByAIModel.cs" />
     <Compile Include="Account\AssociatedAccount\MatchesInfoModel.cs" />

@@ -168,7 +168,7 @@
                         return $("#account-by-account-cbb-association-type").val();
                     },
                     IsDirect: function () {
-                        return $("#radio03-01").is(':checked');
+                        return true;
                     },
                     AccountStatusIds: function () {
                         return cbbAssociationAccountStatus.val();
@@ -828,7 +828,7 @@
     function ShowIPAssociation(custId) {
         divIPAssociation.dialog({
             modal: true,
-            width: '1200px',
+            width: '1400px',
             title: 'ASSOCIATION DETAILS',
             resizable: false,
             draggable: true,
@@ -846,15 +846,15 @@
                 ordering: false,
                 searching: false,
                 scrollX: false,
-                paging: false,
+                paging: false,                
                 columnDefs: [
                     { targets: "_all", defaultContent: "-" },
                     { targets: [0], width: "15%", className: "text-center" },
-                    { targets: [1], width: "15%", className: "text-left" },
-                    { targets: [2], width: "15%", className: "text-left" },
-                    { targets: [3], width: "15%", className: "text-left" },
-                    { targets: [4], width: "20%", className: "text-center" },
-                    { targets: [5], width: "20%", className: "text-center" }
+                    { targets: [1], width: "15%", className: "text-center" },
+                    { targets: [2], className: "text-center caption" },
+                    { targets: [3], width: "15%", className: "text-center" },
+                    { targets: [4], width: "15%", className: "text-center" },
+                    { targets: [5], width: "15%", className: "text-center" }
                 ],
                 columns: [
                     { data: obj => obj.MatchID },
@@ -867,12 +867,12 @@
             });
         }
 
-        GetIPAssociation(custId);        
+        GetIPAssociation($('#hdCustId').val(), custId);        
 
         $('.ui-dialog .ui-dialog-content').css('padding', '0');
     }
 
-    function GetIPAssociation(custId) {
+    function GetIPAssociation(custId1, custId2) {
         spanIPAssociationTotalMatches.text("");
         spanIPAssociationTotalIPSharing.text("");
 
@@ -884,15 +884,21 @@
                 tblIPAssociation.find('tbody').addClass('loading');
             },
             data: {
-                custId: custId
+                custId1: custId1,
+                custId2: custId2
             },
             success: function (response) {
                 if (response !== undefined) {
-                    tblIPAssociation.DataTable().clear().rows.add(response.ItemList).draw();
-                    tblIPAssociation.DataTable().columns.adjust();
+                    if (response.ErrorCode == 0) {
+                        tblIPAssociation.DataTable().clear().rows.add(response.ItemList);
+                        tblIPAssociation.DataTable().columns.adjust().draw();
 
-                    spanIPAssociationTotalMatches.text(response.TotalMatches);
-                    spanIPAssociationTotalIPSharing.text(response.TotalIPSharing);
+                        spanIPAssociationTotalMatches.text(response.TotalMatchCount);
+                        spanIPAssociationTotalIPSharing.text(response.TotalIPSharingCount);
+                    } else {
+                        console.log(response.ErrorMessage);
+                        common.showError(response.ErrorMessage);
+                    }
                 }
             },
             complete: function () {

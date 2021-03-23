@@ -269,60 +269,50 @@
         
         public GraphAssociationPaging GetCustomerAssociationByGraph(string apiURL, AssociatedFilterModel filterModel, bool fromMySQL = false)
         {
-            try
+            if (fromMySQL)
             {
-                if (fromMySQL)
+                var criteria = new GetAssociationProfileCriteria
                 {
-                    var criteria = new GetAssociationProfileCriteria
-                    {
-                        CTSCustId = filterModel.CTSCustId,
-                        AssociationStatus = filterModel.AssociationStatus,
-                        AccountStatusIds = filterModel.AccountStatusIds,
-                        AssociationType = GetAssociationTypeFromUrl(apiURL),
-                        CategoryIDs = filterModel.CategoryIds,
-                        SiteIds = filterModel.SiteIds,
-                        Skip = filterModel.start,
-                        Take = filterModel.length,
-                        TotalItems = 0
-                    };
+                    CTSCustId = filterModel.CTSCustId,
+                    AssociationStatus = filterModel.AssociationStatus,
+                    AccountStatusIds = filterModel.AccountStatusIds,
+                    AssociationType = filterModel.AssociationType,
+                    CategoryIDs = filterModel.CategoryIds,
+                    SiteIds = filterModel.SiteIds,
+                    Skip = filterModel.start,
+                    Take = filterModel.length,
+                    TotalItems = 0
+                };
 
-                    using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-                    {
-                        var result = db.Query<GraphAssociationModel>(criteria);
-
-                        return new GraphAssociationPaging
-                        {
-                            AssociationList = result.ToList(),
-                            TotalItems = criteria.TotalItems
-                        };
-                    }
-                }
-                else
+                using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
                 {
-                    var param = new
+                    var result = db.Query<GraphAssociationModel>(criteria);
+
+                    return new GraphAssociationPaging
                     {
-                        ctsCustId = filterModel.CTSCustId,
-                        assStatus = filterModel.AssociationStatus,
-                        siteIDs = filterModel.SiteIds,
-                        accountStatuses = filterModel.AccountStatusIds,
-                        takeRow = filterModel.length,
-                        skipRow = filterModel.start
+                        AssociationList = result.ToList(),
+                        TotalItems = criteria.TotalItems
                     };
-
-                    var data = ApiHelper.Post<GraphAssociationPaging>(apiURL, param);
-
-                    Task.WhenAll(data);
-
-                    return data.Result ?? new GraphAssociationPaging();
                 }
-
             }
-            catch (Exception ex)
+            else
             {
-                LogService.Error("CTS - AccountService GetCustomerAssociationByGraph - Exception: " + ex.Message, ex);
-            }
+                var param = new
+                {
+                    ctsCustId = filterModel.CTSCustId,
+                    assStatus = filterModel.AssociationStatus,
+                    siteIDs = filterModel.SiteIds,
+                    accountStatuses = filterModel.AccountStatusIds,
+                    takeRow = filterModel.length,
+                    skipRow = filterModel.start
+                };
 
-            return new GraphAssociationPaging();
+                var data = ApiHelper.Post<GraphAssociationPaging>(apiURL, param);
+
+                Task.WhenAll(data);
+
+                return data.Result ?? new GraphAssociationPaging();
+            }
         }
 
         public List<AccountStaticStatusModel> GetAccountStaticStatuses()
@@ -648,6 +638,7 @@
             }
         }
 
+        
         public IEnumerable<CategoryInfoModel> GetAllCategory()
         {
             var criteria = new GetCategoryInfoCriteria();            
@@ -658,11 +649,8 @@
             }
         }
 
-		public IEnumerable<AssociationByIPInfoModel> GetAssociationByIPInfo(long custId1, long custId2, out int totalMatchCount, out int totalIPCount)
+		public AssociationByIPInfoModel GetAssociationByIPInfo(long custId1, long custId2)
         {
-            totalMatchCount = 0;
-            totalIPCount = 0;
-
             var criteria = new GetAssociationByIPInfoCriteria
             {
                 CustId1 = custId1,
@@ -671,26 +659,15 @@
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                using (var result = db.QueryMultiple(criteria))
+                return new AssociationByIPInfoModel
                 {
-                    var infos = result.Read<AssociationByIPInfoModel>();
-                    var totalMatches = result.Read<int>();
-                    var totalIPSharing = result.Read<int>();                    
-
-                    if (totalMatches != null && totalMatches.Any())
-                    {
-                        totalMatchCount = totalMatches.ToList()[0];
-                    }
-
-                    if (totalIPSharing != null && totalIPSharing.Any())
-                    {
-                        totalIPCount = totalIPSharing.ToList()[0];
-                    }
-
-                    return infos;
-                }
-            }            
-        }
+                    ItemList = db.Query<AssociationByIPItemModel>(criteria),
+                    ErrorMessage = criteria.ErrorMessage,
+                    TotalIPCount = criteria.TotalIPCount,
+                    TotalMatchCount = criteria.TotalMatchCount
+                };
+            }
+        }		
 
         #endregion
 

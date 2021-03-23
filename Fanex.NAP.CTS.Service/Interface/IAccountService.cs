@@ -133,9 +133,9 @@
         IEnumerable<MatchesInfoModel> GetMatchesInfo(string matchIDs); 
 
         IEnumerable<MatchesDetailInfoModel> GetMatchesDetailInfo(MatchesAssociationDetailViewModel matchInfo);
+        
+        IEnumerable<CategoryInfoModel> GetAllCategory();		
 
-        IEnumerable<CategoryInfoModel> GetAllCategory();
-	
-		IEnumerable<AssociationByIPInfoModel> GetAssociationByIPInfo(long custId1, long custId2, out int totalMatchCount, out int totalIPCount);
+		AssociationByIPInfoModel GetAssociationByIPInfo(long custId1, long custId2);
     }
 }

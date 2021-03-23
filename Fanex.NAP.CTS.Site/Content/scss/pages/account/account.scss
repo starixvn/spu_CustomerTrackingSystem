@@ -689,7 +689,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             .association {
                 .info-block {
                     display: grid;
-                    grid-template-columns: 134px repeat(1, 1fr);
+                    grid-template-columns: 155px repeat(1, 1fr);
                 }
 
                 .right {
@@ -1065,6 +1065,30 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             position: -webkit-sticky;
             top: 4rem;
             z-index: 9;
+        }
+    }
+}
+
+#divIPAssociation {
+    .graph-heading {
+        position: sticky;
+        position: -webkit-sticky;
+        top: 0rem;
+        z-index: 10;
+    }
+
+    #tblIPAssociation {
+        thead th {
+            position: sticky;
+            position: -webkit-sticky;
+            top: 4rem;
+            z-index: 9;
+        }
+
+        .caption {
+            width: 380px;
+            max-width: 380px;
+            word-wrap: break-word;
         }
     }
 }

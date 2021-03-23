@@ -312,7 +312,6 @@
         public ActionResult GetAssociatedByAccount(AssociatedFilterModel model)
         {
             var totalItem = 0;
-            model.IsDirect = true;
 
             var result = new List<CustomerAssociationByAccountDetailViewModel>();
 
@@ -325,9 +324,7 @@
 
             var getAssociationFromMySql = AppSettings.Get("GetAssociationFromMySQL") == "1";
 
-            var graphAssociationPage = model.IsDirect
-                ? _accountService.GetCustomerAssociationByGraph(directAssociationUrl, model, getAssociationFromMySql)
-                : new GraphAssociationPaging();
+            var graphAssociationPage = _accountService.GetCustomerAssociationByGraph(directAssociationUrl, model, getAssociationFromMySql);
 
             if (graphAssociationPage != null && graphAssociationPage.AssociationList != null && graphAssociationPage.AssociationList.Any())
             {
@@ -692,9 +689,7 @@
         [HttpPost]
         public ActionResult GetIPAssociation(long custId1, long custId2)
         {
-            var data = new AssociationByIPInfoViewModel();
-            var totalMatchCount = 0;
-            var totalIPCount = 0;
+            var data = new AssociationByIPInfoViewModel();            
             var para1 = custId1;
             var para2 = custId2;
 
@@ -704,39 +699,46 @@
                 para2 = custId1;
             }
 
-            var infos = _accountService.GetAssociationByIPInfo(para1, para2, out totalMatchCount, out totalIPCount);
+            var info = _accountService.GetAssociationByIPInfo(para1, para2);
 
-            if (infos != null && infos.Any())
+            if (info.ItemList != null && info.ItemList.Any())
             {
-                data.TotalMatchCount = totalMatchCount;
-                data.TotalIPSharingCount = totalIPCount;
-                data.ItemList = infos.Select(x =>
+                data = new AssociationByIPInfoViewModel
                 {
-                    var betTypeList = new List<string>();
-
-                    if (x.BettypeList != null)
+                    TotalMatchCount = info.TotalMatchCount,
+                    TotalIPSharingCount = info.TotalIPCount,
+                    ErrorMessage = info.ErrorMessage,
+                    ItemList = info.ItemList.Select(x =>
                     {
-                        var arrBetType = x.BettypeList.Split(',');
+                        var betTypeList = new List<string>();
 
-                        foreach (var item in arrBetType)
+                        if (x.BettypeList != null)
                         {
-                            var betTypeId = 0;
-                            
-                            int.TryParse(item, out betTypeId);
+                            var arrBetType = x.BettypeList.Split(',');
 
-                            betTypeList.Add(CachedRef.GetBettypeName(betTypeId));
+                            foreach (var item in arrBetType)
+                            {
+                                var betTypeId = 0;
+
+                                int.TryParse(item, out betTypeId);
+
+                                betTypeList.Add(CachedRef.GetBettypeName(betTypeId));
+                            }
                         }
-                    }
 
-                    return new AssociationByIPItemViewModel {
-                        MatchID = x.MatchID,
-                        EventName = CachedRef.GetTeamName(x.HomeID) + " vs " + CachedRef.GetTeamName(x.AwayID),
-                        LeagueName = CachedRef.GetLeagueName(x.LeagueID),
-                        EventDateString = "",
-                        BetTypes = string.Join(", ", betTypeList),
-                        IP = x.IPList
-                    };
-                }).ToList();
+                        return new AssociationByIPItemViewModel
+                        {
+                            MatchID = x.MatchID,
+                            EventName = CachedRef.GetTeamName(x.HomeID) + " - vs - " + CachedRef.GetTeamName(x.AwayID),
+                            LeagueName = CachedRef.GetLeagueName(x.LeagueID),
+                            EventDateString = x.EventDate != DateTime.MinValue
+                                ? x.EventDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmm)
+                                : string.Empty,
+                            BetTypes = string.Join(", ", betTypeList),
+                            IP = x.IP
+                        };
+                    }).ToList()
+                };
             }
 
             return Json(data, JsonRequestBehavior.AllowGet);

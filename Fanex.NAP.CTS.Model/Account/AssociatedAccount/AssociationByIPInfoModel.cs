@@ -1,17 +1,16 @@
 ﻿namespace Fanex.NAP.CTS.Model.Account
 {
+    using System;
+    using System.Collections.Generic;    
+
     public class AssociationByIPInfoModel
     {
-        public int MatchID { get; set; }
+        public UInt32 TotalMatchCount { get; set; }
 
-        public int HomeID { get; set; }
+        public UInt32 TotalIPCount { get; set; }
 
-        public int AwayID { get; set; }
+        public string ErrorMessage { get; set; }
 
-        public int LeagueID { get; set; }
-
-        public string BettypeList { get; set; }
-
-        public string IPList { get; set; }
+        public IEnumerable<AssociationByIPItemModel> ItemList { get; set; }
     }
 }

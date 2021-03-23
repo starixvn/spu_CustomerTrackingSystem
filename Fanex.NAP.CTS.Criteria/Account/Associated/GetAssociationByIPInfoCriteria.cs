@@ -1,7 +1,8 @@
 ﻿namespace Fanex.NAP.CTS.Criteria.Account.Associated
 {
     using Fanex.Data;
-    using Fanex.Data.Repository;    
+    using Fanex.Data.Repository;
+    using System;
 
     public class GetAssociationByIPInfoCriteria : CriteriaBase
     {
@@ -12,10 +13,10 @@
         public long CustId2 { get; set; }
 
         [SpParam(SqlParamName = "op_TotalMatchCount")]
-        public int TotalMatchCount { get; set; }
+        public UInt32 TotalMatchCount { get; set; }
 
         [SpParam(SqlParamName = "op_TotalIPCount")]
-        public int TotalIPCount { get; set; }
+        public UInt32 TotalIPCount { get; set; }
 
         [SpParam(SqlParamName = "op_ErrorMessage")]
         public string ErrorMessage { get; set; }
