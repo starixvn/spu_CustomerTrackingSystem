@@ -337,7 +337,7 @@
             },
             success: function (response) {
                 totalAssAccount = response.TotalAccounts;
-                $('#spanTotalAssociated').html(response.TotalAccounts + " / " + response.TotalDevices + " / " + response.TotalIps);
+                $('#spanTotalAssociated').html(response.TotalAccounts + " / " + response.TotalDevices);
             },
             error: function (errMsg) {
                 console.log(errMsg);

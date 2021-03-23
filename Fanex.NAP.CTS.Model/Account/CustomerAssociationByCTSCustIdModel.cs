@@ -4,8 +4,6 @@
     {
         public int TotalAccounts { get; set; }
 
-        public int TotalDevices { get; set; }
-
-        public int TotalIps { get; set; }
+        public int TotalDevices { get; set; }        
     }
 }

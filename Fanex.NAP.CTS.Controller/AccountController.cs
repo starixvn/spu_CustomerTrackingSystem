@@ -707,9 +707,12 @@
                 {
                     TotalMatchCount = info.TotalMatchCount,
                     TotalIPSharingCount = info.TotalIPCount,
-                    ErrorMessage = info.ErrorMessage,
+                    ErrorMessage = info.ErrorMessage,                    
                     ItemList = info.ItemList.Select(x =>
                     {
+                        var homeName = CachedRef.GetTeamName(x.HomeID);
+                        var awayName = CachedRef.GetTeamName(x.AwayID);
+                        var leagueName = CachedRef.GetLeagueName(x.LeagueID);
                         var betTypeList = new List<string>();
 
                         if (x.BettypeList != null)
@@ -729,11 +732,11 @@
                         return new AssociationByIPItemViewModel
                         {
                             MatchID = x.MatchID,
-                            EventName = CachedRef.GetTeamName(x.HomeID) + " - vs - " + CachedRef.GetTeamName(x.AwayID),
-                            LeagueName = CachedRef.GetLeagueName(x.LeagueID),
+                            EventName = homeName != string.Empty ? (homeName + " - vs - " + awayName) : "-",
+                            LeagueName = leagueName != string.Empty ? leagueName : "-",
                             EventDateString = x.EventDate != DateTime.MinValue
                                 ? x.EventDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmm)
-                                : string.Empty,
+                                : "-",
                             BetTypes = string.Join(", ", betTypeList),
                             IP = x.IP
                         };
