@@ -69,7 +69,7 @@
     <Setting Key="CTS_DC_Association_GetByCustList" SpName="CTS_DC_Association_GetByCustList_xtest" DbName="MySQL.CTS_DataCenter.Reporter"/>
     <Setting Key="CTS_DC_Association_GetCleanAssociatedCustExceptAEvidence" SpName="CTS_DC_Association_GetCleanAssociatedCustExceptAEvidence_xtest" DbName="MySQL.CTS_DataCenter.Reporter"/>
     <Setting Key="CTS_DC_Association_GetWithCategory" SpName="CTS_DC_Association_GetWithCategory_xtest" DbName="MySQL.CTS_DataCenter.Reporter"/>
-	  <Setting Key="CTS_DC_Association_Profile_GetStat" SpName="CTS_DC_Association_Profile_GetStat_xtest" DbName="MySQL.CTS_DataCenter.Reporter"/>
+	  <Setting Key="CTS_DC_Association_Profile_GetStats" SpName="CTS_DC_Association_Profile_GetStats_xtest" DbName="MySQL.CTS_DataCenter.Reporter"/>
 	  <Setting Key="CTS_DC_Association_Profile_Get" SpName="CTS_DC_Association_Profile_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter"/>  	
 	  <Setting Key="CTS_DC_AssociatedAccountMonitor_UpdateTaggingAssWithPA" SpName="CTS_DC_AssociatedAccountMonitor_UpdateTaggingAssWithPA_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
 	  <Setting Key="CTS_DC_Category_Get" SpName="CTS_DC_Category_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter"/>

@@ -108,7 +108,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 .fixed-header {
     position: sticky;
     position: -webkit-sticky;
-    top: 9.7rem;
+    top: 10rem;
     background: #fff;
     z-index: 9;
     padding-top: 0.6rem;
@@ -1085,9 +1085,15 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             z-index: 9;
         }
 
-        .caption {
+        .col-league {
             width: 380px;
             max-width: 380px;
+            word-wrap: break-word;
+        }
+
+        .col-ip {
+            width: 220px;
+            max-width: 220px;
             word-wrap: break-word;
         }
     }

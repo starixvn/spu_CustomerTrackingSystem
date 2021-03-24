@@ -426,7 +426,7 @@
             if (!string.IsNullOrEmpty(name))
             {
                 var spanBettingPattern = $"<span class='association-type-name betting-pattern'>{Consts.AssociationTypeName_BettingPattern}</span>";
-                var spanIPAssociation = $"<span class='association-type-name ip-association'>{Consts.AssociationTypeName_IPAssociation}</span>";
+                var spanIPAssociation = $"<span class='association-type-name ip-association'>{Consts.AssociationTypeName_IP}</span>";
 
                 name = name.Replace(Consts.AssociationTypeName_BettingPattern, spanBettingPattern);
                 name = name.Replace(Consts.AssociationTypeName_IP, spanIPAssociation);
@@ -714,6 +714,7 @@
                         var awayName = CachedRef.GetTeamName(x.AwayID);
                         var leagueName = CachedRef.GetLeagueName(x.LeagueID);
                         var betTypeList = new List<string>();
+                        var ip = x.IP;
 
                         if (x.BettypeList != null)
                         {
@@ -729,16 +730,21 @@
                             }
                         }
 
+                        if (ip != null)
+                        {
+                            ip = ip.Replace(",", ", ");
+                        }
+
                         return new AssociationByIPItemViewModel
                         {
                             MatchID = x.MatchID,
                             EventName = homeName != string.Empty ? (homeName + " - vs - " + awayName) : "-",
                             LeagueName = leagueName != string.Empty ? leagueName : "-",
                             EventDateString = x.EventDate != DateTime.MinValue
-                                ? x.EventDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmm)
+                                ? x.EventDate.ToString(Consts.FormatDateToString_MMMddyyyy)
                                 : "-",
                             BetTypes = string.Join(", ", betTypeList),
-                            IP = x.IP
+                            IP = ip
                         };
                     }).ToList()
                 };

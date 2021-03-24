@@ -10,7 +10,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_Association_Profile_GetStat";
+            return "CTS_DC_Association_Profile_GetStats";
         }
 
         public override bool IsValid()

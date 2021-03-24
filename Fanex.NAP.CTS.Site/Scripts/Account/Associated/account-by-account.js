@@ -851,9 +851,9 @@
                     { targets: "_all", defaultContent: "-" },
                     { targets: [0], width: "15%", className: "text-center" },
                     { targets: [1], width: "15%", className: "text-center" },
-                    { targets: [2], className: "text-center caption" },
+                    { targets: [2], className: "text-center col-league" },
                     { targets: [3], width: "15%", className: "text-center" },
-                    { targets: [4], width: "15%", className: "text-center" },
+                    { targets: [4], width: "15%", className: "text-center col-ip" },
                     { targets: [5], width: "15%", className: "text-center" }
                 ],
                 columns: [

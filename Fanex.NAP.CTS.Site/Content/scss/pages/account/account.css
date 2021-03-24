@@ -774,7 +774,7 @@
 .fixed-header {
   position: sticky;
   position: -webkit-sticky;
-  top: 9.7rem;
+  top: 10rem;
   background: #fff;
   z-index: 9;
   padding-top: 0.6rem; }
@@ -1421,9 +1421,14 @@
   top: 4rem;
   z-index: 9; }
 
-#divIPAssociation #tblIPAssociation .caption {
+#divIPAssociation #tblIPAssociation .col-league {
   width: 380px;
   max-width: 380px;
+  word-wrap: break-word; }
+
+#divIPAssociation #tblIPAssociation .col-ip {
+  width: 220px;
+  max-width: 220px;
   word-wrap: break-word; }
 
 #chains_evidence.report-cont {
