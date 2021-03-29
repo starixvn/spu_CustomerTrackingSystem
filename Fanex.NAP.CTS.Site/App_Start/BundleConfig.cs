@@ -76,7 +76,10 @@
             RegisterManagerSubscriberBundles(bundles);
 
             RegisterAssociationReport(bundles);
+
             RegisterAssociationDetailReport(bundles);
+
+            RegisterLatestTransaction(bundles);
         }
 
         private static void RegisterFSCoreBundles(BundleCollection bundles)
@@ -191,10 +194,7 @@
                 "~/Scripts/Account/BettingStatistic/sport-statistic-scripts.js",
                 "~/Scripts/Account/BettingStatistic/turnover-by-bettype.js",
                 "~/Scripts/Account/BettingStatistic/winlost-statistic-scripts.js"
-                ));
-
-            //bundles.Add(new StyleBundle("~/betting-statistic-styles").Include(
-            //          "~/Content/scss/vendors/highcharts/highcharts.css"));
+                ));           
         }
 
         private static void RegisterAccountDetailBundles(BundleCollection bundles)
@@ -216,12 +216,7 @@
                       "~/Content/scss/vendors/jquery-ui/base/tagify.css",
                       "~/Content/scss/pages/account/account.css"));
         }
-
-        private static void RegisterEvidenceBundles(BundleCollection bundles)
-        {
-            bundles.Add(new ScriptBundle("~/evidence-scripts").Include("~/Scripts/Evidence/*.js"));
-        }
-
+        
         private static void RegisterTransactionHistoryBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/account/transaction-history-scripts").Include("~/Scripts/Account/TransactionHistory/*.js"));
@@ -348,6 +343,17 @@
 
             bundles.Add(new StyleBundle("~/association-detail-report-styles").Include(
                     "~/Content/scss/pages/association-report/association-report.css"));
+        }
+
+        private static void RegisterLatestTransaction(BundleCollection bundles)
+        {
+            bundles.Add(new ScriptBundle("~/latest-transaction-scripts").Include(
+                "~/Scripts/select2.min.js",
+              "~/Scripts/LatestTransaction/index.js"));
+
+            bundles.Add(new StyleBundle("~/latest-transaction-styles").Include(
+                "~/Content/scss/vendors/select2.min.css",
+                    "~/Content/scss/pages/latest-transaction/latest-transaction.css"));
         }
 
     }

@@ -86,5 +86,9 @@
   {
     "outputFile": "Content/scss/pages/association-report/association-report.css",
     "inputFile": "Content/scss/pages/association-report/association-report.scss"
+  },
+  {
+    "outputFile": "Content/scss/pages/latest-transaction/latest-transaction.css",
+    "inputFile": "Content/scss/pages/latest-transaction/latest-transaction.scss"
   }
 ]

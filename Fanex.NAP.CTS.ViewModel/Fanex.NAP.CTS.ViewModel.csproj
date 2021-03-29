@@ -117,6 +117,7 @@
     <Compile Include="ImportEvidences\ResultImportViewModel.cs" />
     <Compile Include="ImportEvidences\ResultCheckAccountEvidenceViewModel.cs" />
     <Compile Include="Common\ValidatedAccountsViewModel.cs" />
+    <Compile Include="LatestTransaction\LatestTransactionViewModel.cs" />
     <Compile Include="ManageSubscriber\ManageSubscriberGetViewModel.cs" />
     <Compile Include="ManageSubscriber\ManageSubscriberViewModel.cs" />
     <Compile Include="MatchMonitor\Event.cs" />

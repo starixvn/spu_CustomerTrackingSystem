@@ -1,0 +1,79 @@
+﻿@import "../../abstracts/variables";
+@import "../../abstracts/mixins";
+
+body {
+    font-family: $font-family;
+}
+
+.latest-transaction-content {
+    margin: 1rem 1.6rem 1rem 1.6rem;
+
+    .group-control {
+        position: sticky;
+        top: 6rem;
+        z-index: 99;
+        background: $page-bg;
+        padding: 1rem 0 0 0;
+
+        .title {
+            margin-bottom: -1.3rem;
+        }
+
+        .form-filter {
+            .group {
+                .width-select {
+                    width: 15.5rem;
+                }
+            }
+
+            .button-generate {
+                background-color: #396ef8;
+                border-radius: 2px;
+                color: $page-bg;
+                height: auto !important;
+                padding: .7rem 2rem;
+            }
+        }
+    }
+
+    .table-report {
+        font-family: $font-family;
+
+        .table-latest-transaction {
+            width: 100% !important;
+
+            .loading {
+                position: relative;
+
+                &:after {
+                    content: '';
+                    position: absolute;
+                    left: 50%;
+                    top: 75%;
+                    border-radius: 50%;
+                    width: 2.4rem;
+                    height: 2.4rem;
+                    border: 0.25rem solid rgba(57, 110, 248, 0.2);
+                    border-top-color: rgba(57, 110, 248, 1);
+                    -webkit-animation: spin 1s infinite linear;
+                    animation: spin 1s infinite linear;
+                }
+
+                tr {
+                    opacity: .3;
+                }
+            }
+
+            thead {
+                tr {
+
+                    th {
+                        position: sticky;
+                        top: 17.2rem;
+                        font-weight: 300;
+                    }
+                }
+            }
+        }
+    }
+}

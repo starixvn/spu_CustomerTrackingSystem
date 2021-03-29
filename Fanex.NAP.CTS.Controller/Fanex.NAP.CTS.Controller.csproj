@@ -203,6 +203,7 @@
     <Compile Include="SubscriberAssignmentController.cs" />
     <Compile Include="SuspiciousCustomerController.cs" />
     <Compile Include="SuspiciousCustomerDetailsController.cs" />
+    <Compile Include="LatestTransactionController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

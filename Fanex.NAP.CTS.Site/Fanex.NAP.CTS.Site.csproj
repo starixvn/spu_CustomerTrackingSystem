@@ -497,6 +497,13 @@
     <Content Include="Content\scss\pages\associated-account-monitor\associated-account-monitor.scss" />
     <Content Include="Content\scss\pages\common\maintenance.scss" />
     <Content Include="Content\scss\components\_toggle-switch.scss" />
+    <None Include="Content\scss\pages\latest-transaction\latest-transaction.scss" />
+    <Content Include="Content\scss\pages\latest-transaction\latest-transaction.css">
+      <DependentUpon>latest-transaction.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\scss\pages\latest-transaction\latest-transaction.min.css">
+      <DependentUpon>latest-transaction.css</DependentUpon>
+    </Content>
     <Content Include="Content\scss\pages\notification-setting\notification-setting.css">
       <DependentUpon>notification-setting.scss</DependentUpon>
     </Content>
@@ -949,6 +956,7 @@
     <Content Include="Scripts\highcharts\highcharts.js" />
     <Content Include="Scripts\Home\SearchPage.js" />
     <Content Include="Scripts\ImportEvidences\index.js" />
+    <Content Include="Scripts\LatestTransaction\index.js" />
     <Content Include="Scripts\ManageSubscriber\index.js" />
     <Content Include="Scripts\NotificationSetting\notification-setting.js" />
     <Content Include="Scripts\popoto\d3.min.js" />
@@ -986,6 +994,7 @@
     <Content Include="Views\Account\CustomerCategory\RemoveCategory.cshtml" />
     <Content Include="Views\Account\Associated\MatchBettingPattern.cshtml" />
     <Content Include="Views\Account\Associated\IPAssociation.cshtml" />
+    <Content Include="Views\LatestTransaction\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CoreBetList.css" />

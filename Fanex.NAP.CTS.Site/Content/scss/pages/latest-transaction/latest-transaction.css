@@ -1,0 +1,45 @@
+﻿body {
+  font-family: "Lato", Arial, Tahoma, sans-serif; }
+
+.latest-transaction-content {
+  margin: 1rem 1.6rem 1rem 1.6rem; }
+  .latest-transaction-content .group-control {
+    position: sticky;
+    top: 6rem;
+    z-index: 99;
+    background: #fff;
+    padding: 1rem 0 0 0; }
+    .latest-transaction-content .group-control .title {
+      margin-bottom: -1.3rem; }
+    .latest-transaction-content .group-control .form-filter .group .width-select {
+      width: 15.5rem; }
+    .latest-transaction-content .group-control .form-filter .button-generate {
+      background-color: #396ef8;
+      border-radius: 2px;
+      color: #fff;
+      height: auto !important;
+      padding: .7rem 2rem; }
+  .latest-transaction-content .table-report {
+    font-family: "Lato", Arial, Tahoma, sans-serif; }
+    .latest-transaction-content .table-report .table-latest-transaction {
+      width: 100% !important; }
+      .latest-transaction-content .table-report .table-latest-transaction .loading {
+        position: relative; }
+        .latest-transaction-content .table-report .table-latest-transaction .loading:after {
+          content: '';
+          position: absolute;
+          left: 50%;
+          top: 75%;
+          border-radius: 50%;
+          width: 2.4rem;
+          height: 2.4rem;
+          border: 0.25rem solid rgba(57, 110, 248, 0.2);
+          border-top-color: #396ef8;
+          -webkit-animation: spin 1s infinite linear;
+          animation: spin 1s infinite linear; }
+        .latest-transaction-content .table-report .table-latest-transaction .loading tr {
+          opacity: .3; }
+      .latest-transaction-content .table-report .table-latest-transaction thead tr th {
+        position: sticky;
+        top: 17.2rem;
+        font-weight: 300; }

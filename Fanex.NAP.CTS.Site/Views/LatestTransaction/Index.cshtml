@@ -1,0 +1,83 @@
+﻿@{
+    ViewBag.Title = "Association Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section styles{
+    @Styles.Render("~/latest-transaction-styles")
+}
+
+<section class="latest-transaction-report">
+    <div class="content">
+        <h2 class="page-title">Latest Transaction</h2>
+    </div>
+    <div class="latest-transaction-content">
+        <div>
+            <div class="group-control">
+                <div class="form-filter">
+                    <div class="group width-180">
+                        <label class="text">Subscriber</label>
+                        <div style="width:200px">
+                            <select class="control width-select" id="cbbSubscriber">
+                                @{
+                                    var optionSelect = 0;
+                                }
+                                @foreach (var item in ViewBag.Subscribers)
+                                {
+                                    if (optionSelect == 1)
+                                    {                                       
+                                        <option value=@item.SubscriberID selected>@item.SubscriberName</option>
+                                    }
+                                    else
+                                    {
+                                        <option value=@item.SubscriberID>@item.SubscriberName</option>
+                                    }
+
+                                    optionSelect += 1;
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="group width-180">
+                        <label class="text">Show the last</label>
+                        <select class="control width-select" id="cbbShowTheLast">
+                            <option value=100 selected>100</option>
+                            <option value=200>200</option>
+                            <option value=500>500</option>
+                            <option value=1000>1000</option>
+                        </select>
+                    </div>
+
+                    <button class="button button-generate" id="btnGenerate">Generate</button>
+                </div>
+            </div>
+
+            <div class="report-cont">
+                <div class="table-report">
+                    <table id="tblLatestTransaction" class="table table-striped table-latest-transaction">
+                        <thead>
+                            <tr>
+                                <th>Transaction Date/Time</th>
+                                <th>Username</th>
+                                <th>Login ID</th>
+                                <th>Device</th>
+                                <th>IP Address</th>
+                                <th>Robot Tracking</th>
+                                <th>Action</th>
+                                <th>Action Result</th>
+                                <th>Device Type</th>
+                                <th>Browser</th>
+                                <th>Domain</th>                                
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section scripts{
+    @Scripts.Render("~/latest-transaction-scripts")
+}

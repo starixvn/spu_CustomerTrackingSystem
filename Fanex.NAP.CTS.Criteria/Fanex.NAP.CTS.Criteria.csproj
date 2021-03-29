@@ -85,6 +85,7 @@
     <Compile Include="ImportEvidences\InsertCustEvidenceFromFileCriteria.cs" />
     <Compile Include="AssociationReport\AssociationReportGetCategoriesCriteria.cs" />
     <Compile Include="ImportEvidences\InsertCustEvidenceQueueCriteria.cs" />
+    <Compile Include="LatestTransaction\GetLatestTransactionCriteria.cs" />
     <Compile Include="ManageSubscriber\ReUpdateSubriberIdBySiteIdCriteira.cs" />
     <Compile Include="Api\GetFlaggedEvidenceByDirectAssociationCriteria.cs" />
     <Compile Include="ProbationManagement\GetAccountStaticStatusCriteria.cs" />

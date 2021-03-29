@@ -94,4 +94,6 @@ public static class FSFunctionKeys
     public const string ViewIP = "ViewIP";
 
     public const string AssociationReport = "AssociationReport";
+
+    public const string LatestTransaction = "LatestTransaction";
 }

@@ -3,28 +3,17 @@
     using System.Collections.Generic;
     using Fanex.NAP.CTS.Model.Transaction;
     using Fanex.NAP.CTS.Core.BaseClasses;
-    using Fanex.NAP.CTS.ViewModel.Account.TransactionHistory;
-    using System.Linq;
     using Fanex.NAP.CTS.Model.IP;
     using System.Net;
     using System;
     using System.Numerics;
     using Fanex.NAP.CTS.Criteria.Account.TransactionHistory;
+    using Fanex.NAP.CTS.Model.LatestTransaction;
+    using Fanex.NAP.CTS.Criteria.LatestTransaction;
+    using Fanex.Data;
 
     public class TransactionService : ITransactionService
-    {
-        //public IEnumerable<HistoryTransactionModel> GetTransactionHistory(TransactionHistoryFilter filter)
-        //{
-        //    var criteria = new TransactionHistoryGetByCustIdCriteria
-        //    {
-        //        ip_accountId = filter.AccountId,
-        //        ip_historyRange = (int)filter.ReportLength
-        //    };
-
-        //    return DataService.GetData<Transaction>(criteria);
-        //}
-
-
+    {      
         private IpModel Ip2Long(string ipAddress)
         {
             var ipAd = IPAddress.Parse(ipAddress);
@@ -83,6 +72,20 @@
             totalItem = criteria.TotalItem;
 
             return result;
+        }
+
+        public IEnumerable<LatestTransactionModel> GetLatestTransaction(int subscriberId, int length)
+        {
+            var criteria = new GetLatestTransactionCriteria
+            {
+                SubscriberId = subscriberId,
+                Length = length
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<LatestTransactionModel>(criteria);
+            }
         }
     }
 }
