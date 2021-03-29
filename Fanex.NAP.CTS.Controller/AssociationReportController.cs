@@ -20,49 +20,26 @@
     [NapAuth(FunctionKey = FSFunctionKeys.AssociationReport, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class AssociationReportController : BaseController
     {
-        private readonly IAssociationReportService _associationService;        
+        private readonly IAssociationReportService _associationService;
+        private readonly ICommonService _commonService;
 
         public override string BaseControllerName { get => Consts.MenuItemReport; }        
 
         public AssociationReportController()
         {
             _associationService = new AssociationReportService();
+            _commonService = new CommonService();
         }
 
         public ActionResult Index()
         {         
             ViewBag.AccountStatus = _associationService.GetAccountStaticStatuses();
-            ViewBag.Subscribers = GetSubscriberGroups();
+            ViewBag.Subscribers = _commonService.GetSubscriberGroups();
             ViewBag.Evidences = _associationService.GetEvidenceList();
             ViewBag.AssociationStatus = _associationService.GetCustomerStaticStatus(3, true);
             ViewBag.AssociationTypes = _associationService.GetCustomerStaticStatus(2, true);
 
             return View();
-        }
-
-        private IEnumerable<SubscriberGroupViewModel> GetSubscriberGroups()
-        {
-            var subscriberGroups = Enumerable.Empty<SubscriberGroupViewModel>();
-            var data = _associationService.GetAllSubscriberGroups();
-
-            if (data != null)
-            {
-                subscriberGroups = data
-                    .GroupBy(g => new { g.SubscriberGroupID, g.SubscriberGroupName })
-                    .Select(x => new { Group = x.Key, SubscriberList = x.ToList() })
-                    .Select(x => new SubscriberGroupViewModel
-                    {
-                        SubscriberGroupID = x.Group.SubscriberGroupID,
-                        SubscriberGroupName = x.Group.SubscriberGroupName,
-                        SubscriberList = x.SubscriberList.Select(y => new SubscriberViewModel
-                        {
-                            SubscriberID = y.SubscriberID,
-                            SubscriberName = y.SubscriberName
-                        })
-                    });
-            }
-
-            return subscriberGroups;
         }
 
         [HttpPost]

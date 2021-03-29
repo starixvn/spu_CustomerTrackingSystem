@@ -1,7 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.Account.Associated
 {
-    using Fanex.NAP.CTS.Model.Account;    
-    using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
+    using Fanex.NAP.CTS.Model.Account;
+    using Fanex.NAP.CTS.ViewModel.Common;
     using System.Collections.Generic;
 
     public class AssociatedByAccountViewModel
@@ -12,7 +12,7 @@
 
         public List<AccountStaticStatusModel> AccountStatusList { get; set; }
 
-        public List<SubscriberGroupModel> SubscribersList { get; set; }
+        public List<SubscriberGroupViewModel> SubscribersList { get; set; }
 
         public List<CategoryGroupViewModel> CategoryList { get; set; }
 

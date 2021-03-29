@@ -11,13 +11,10 @@
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria.Account;
     using Fanex.NAP.CTS.Model;
-    using Fanex.NAP.CTS.Model.Account;    
+    using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.CustomerClassify;
-    using Fanex.NAP.CTS.Model.GraphDB;
-    using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Model.Transaction;
-    using Fanex.NAP.CTS.Resource;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.Service.Implement;
@@ -47,7 +44,7 @@
         private readonly ICustomerEvidenceService _customerEvidenceService;    
         private readonly ICustomerClassifyService _customerClassifyService;
         private readonly IPushDataToExternalService _pushDataToExternalService;
-
+        private readonly ICommonService _commonService;
         public override string BaseControllerName { get => string.Empty; }
 
         public AccountController()
@@ -59,6 +56,7 @@
             _customerEvidenceService = new CustomerEvidenceService();
             _customerClassifyService = new CustomerClassifyService();
             _pushDataToExternalService = new PushDataToExternalService();
+            _commonService = new CommonService();
         }
 
         public ActionResult Index(long Id)
@@ -292,7 +290,7 @@
             getCustomerStaticAssType.Insert(0, new CustomerStaticStatusModel { ItemId = 0, ItemNameDisplay = "All" });
 
             var accountStatus = _accountService.GetAccountStaticStatuses();
-            var subscribers = _accountService.GetAllSubscriberGroups();
+            var subscribers = _commonService.GetSubscriberGroups();
             var categories = GetAllCategories();
 
             var associatedByAccountViewModel = new AssociatedByAccountViewModel

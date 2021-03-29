@@ -187,7 +187,7 @@
             menuWidth: 320,
             menuHeight: 320,
             selectedText: "# of # selected",
-            noneSelectedText: "Select Site",
+            noneSelectedText: "Select Subscriber",
             enableClickableOptGroups: true,
             includeSelectAllOption: true,
             groupsCollapsable: true,

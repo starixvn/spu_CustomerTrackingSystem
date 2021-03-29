@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.ViewModel.AssociationReport
+﻿namespace Fanex.NAP.CTS.ViewModel.Common
 {
     public class SubscriberViewModel
     {

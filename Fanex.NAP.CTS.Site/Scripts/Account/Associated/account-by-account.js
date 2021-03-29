@@ -925,12 +925,16 @@
         $("#account-by-account-cbb-status").multiselect();
 
         cbbAssociationSite.multiselect({
-            menuWidth: 256,
-            menuHeight: 330,
+            menuWidth: 320,
+            menuHeight: 320,
             selectedText: "# of # selected",
-            noneSelectedText: "Select Sites"
+            noneSelectedText: "Select Subscriber",
+            enableClickableOptGroups: true,
+            includeSelectAllOption: true,
+            groupsCollapsable: true,
+            optGroupChecked: true
         }).multiselectfilter({
-            width: 150,
+            width: 217,
             placeholder: '',
             label: ''
         });

@@ -45,7 +45,7 @@
     <Compile Include="Account\Associated\AssociatedByAccountViewModel.cs" />
     <Compile Include="Account\Associated\CategoryGroupViewModel.cs" />
     <Compile Include="Account\Associated\CategoryViewModel.cs" />
-	<Compile Include="Account\Associated\AssociationByIPInfoViewModel.cs" />
+    <Compile Include="Account\Associated\AssociationByIPInfoViewModel.cs" />
     <Compile Include="Account\Associated\AssociationByIPItemViewModel.cs" />
     <Compile Include="Account\Associated\MatchesAssociationDetailViewModel.cs" />
     <Compile Include="Account\Associated\AssociatedDeviceByAccountFilter.cs" />
@@ -90,8 +90,8 @@
     <Compile Include="AssociationReport\AssociationDetailViewModel.cs" />
     <Compile Include="AssociationReport\AssociationFilterViewModel.cs" />
     <Compile Include="AssociationReport\AssociationViewModel.cs" />
-    <Compile Include="AssociationReport\SubscriberGroupViewModel.cs" />
-    <Compile Include="AssociationReport\SubscriberViewModel.cs" />
+    <Compile Include="Common\SubscriberGroupViewModel.cs" />
+    <Compile Include="Common\SubscriberViewModel.cs" />
     <Compile Include="CheckBetReport\CheckBetTicket.cs" />
     <Compile Include="CustomerMonitor\CustomerDetails\CustomerDetailsInfo.cs" />
     <Compile Include="CustomerMonitor\CustomerDetails\TicketDetails.cs" />

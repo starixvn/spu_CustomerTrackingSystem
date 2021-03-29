@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Model.AssociationReport
+﻿namespace Fanex.NAP.CTS.Model.Common
 {
     public class SubscriberGroupModel
     {
@@ -9,6 +9,5 @@
         public int SubscriberGroupID { get; set; }
 
         public string SubscriberGroupName { get; set; }
-
     }
 }

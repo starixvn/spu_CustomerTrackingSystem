@@ -71,11 +71,16 @@
             </div>
 
             <div class="form-control dropdown" style="width: 258px;">
-                <div class="control-label">Site</div>
-                <select class="control" id="cbbAssociationSite" multiple="multiple">                    
-                    @foreach (var item in Model.SubscribersList)
+                <div class="control-label">Subscriber</div>
+                <select class="control" id="cbbAssociationSite" multiple="multiple">
+                    @foreach (var group in Model.SubscribersList)
                     {
-                        <option value="@item.SiteID" selected>@item.SiteName</option>
+                        <optgroup label="@group.SubscriberGroupName">
+                            @foreach (var item in group.SubscriberList)
+                            {
+                                <option selected value=@item.SubscriberID>@item.SubscriberName</option>
+                            }
+                        </optgroup>
                     }
                 </select>
             </div>

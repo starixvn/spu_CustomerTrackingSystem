@@ -1,18 +1,17 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
     using Fanex.NAP.CTS.Core;
+    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.API;
-    using Fanex.NAP.CTS.Model;   
     using Fanex.NAP.CTS.Model.Association;
+    using Fanex.NAP.CTS.Model.CustomerClassify;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
-    using Fanex.NAP.CTS.Model.Home;    
+    using Fanex.NAP.CTS.Model.Home;
+    using Fanex.NAP.CTS.ViewModel.Account.Associated;
     using System;
     using System.Collections.Generic;
-    using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
-    using Fanex.NAP.CTS.Model.CustomerClassify;
-    using Fanex.NAP.CTS.ViewModel.Account.Associated;
 
     public interface IAccountService
     {        
@@ -47,8 +46,6 @@
         GraphAssociationPaging GetCustomerAssociationByGraph(string apiURL, AssociatedFilterModel filterModel, bool fromMySQL = false);
 
         List<AccountStaticStatusModel> GetAccountStaticStatuses();
-
-        IEnumerable<SubscriberGroupModel> GetAllSubscriberGroups();
 
         List<GraphDirectAssociationModel> GetDirectAssocationByGraph(string apiURL, List<long> ctsCustIds);
 

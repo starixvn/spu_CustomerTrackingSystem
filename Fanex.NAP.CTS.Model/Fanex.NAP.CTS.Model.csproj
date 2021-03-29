@@ -138,7 +138,7 @@
     <Compile Include="Account\AffectedEvidenListBetweenCustsModel.cs" />
     <Compile Include="Account\AffectedRetractEvidenceModel.cs" />
     <Compile Include="Account\AssociatedAccount\CategoryInfoModel.cs" />
-	<Compile Include="Account\AssociatedAccount\AssociationByIPInfoModel.cs" />
+    <Compile Include="Account\AssociatedAccount\AssociationByIPInfoModel.cs" />
     <Compile Include="Account\AssociatedAccount\AssociationByIPItemModel.cs" />
     <Compile Include="Account\AssociatedAccount\MatchesDetailInfoModel.cs" />
     <Compile Include="Account\AssociatedAccount\MatchesAssociationByAIModel.cs" />
@@ -161,7 +161,7 @@
     <Compile Include="API\CustomerClassification.cs" />
     <Compile Include="AssociationReport\AssociationDetailFromMySqlModel.cs" />
     <Compile Include="AssociationReport\AssociationFromMySqlModel.cs" />
-    <Compile Include="AssociationReport\SubscriberGroupModel.cs" />
+    <Compile Include="Common\SubscriberGroupModel.cs" />
     <Compile Include="Association\AssociationWithCategory.cs" />
     <Compile Include="AssociationReport\AssociationDetailModel.cs" />
     <Compile Include="AssociationReport\AssociationModel.cs" />
