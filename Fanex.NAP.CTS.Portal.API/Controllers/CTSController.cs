@@ -306,40 +306,30 @@
             }
         }
 
+        /// <summary>
+        /// Get Association data from MySQL
+        /// </summary>
+        /// <param name="custId"></param>
+        /// <returns></returns>
         [AcceptVerbs("GetAssociationForExtAcc")]
         [HttpGet]
         public string GetAssociationForExtAcc(int custId)
         {
-            var xmlString = string.Empty;
+            string xmlString = string.Empty;
             try
             {
-                var cust = DbSessionFactory.Execute<GraphCustomer>("GetCustomerByCustId", new
+                var result = _associationService.GetAssociationForExtAcc(custId);
+
+                if (result != null)
                 {
-                    CustID = custId,
-                    CustSubID = 0
-                }).Data.FirstOrDefault();
-
-                if (cust != null)
-                {
-                    var result = DbSessionFactory.Execute<GraphAssociationPaging>("GetAssociationOneLevelForExtAcc", new
+                    var associationList = result.Select(a => new AssociationForExtAcc
                     {
-                        CTSCustID = cust.CTSCustId,
-                        AssStatus = 1,
-                        Skip = 0,
-                        Pagesize = 100000
-                    }).Data.FirstOrDefault();
+                        CustId = a.CustId == null ? 0 : a.CustId.Value,
+                        CustSubId = a.CustSubId,
+                        AssociationDate = a.AssociationDate.ToString()
+                    });
 
-                    if (result != null)
-                    {
-                        var associationList = result.AssociationList.Select(a => new AssociationForExtAcc
-                        {
-                            CustId = a.CustId == null ? 0 : a.CustId.Value,
-                            CustSubId = a.CustSubId,
-                            AssociationDate = a.AssociationDateFromGraphDB.ToString()
-                        });
-
-                        xmlString = XmlHelper.ToXmlString(associationList);
-                    }
+                    xmlString = XmlHelper.ToXmlString(associationList);
                 }
 
                 return xmlString;
@@ -350,6 +340,53 @@
                 throw;
             }
         }
+
+        ///This code for GraphDB - Neo4j
+
+        //[AcceptVerbs("GetAssociationForExtAcc")]
+        //[HttpGet]
+        //public string GetAssociationForExtAcc(int custId)
+        //{
+        //    var xmlString = string.Empty;
+        //    try
+        //    {
+        //        var cust = DbSessionFactory.Execute<GraphCustomer>("GetCustomerByCustId", new
+        //        {
+        //            CustID = custId,
+        //            CustSubID = 0
+        //        }).Data.FirstOrDefault();
+
+        //        if (cust != null)
+        //        {
+        //            var result = DbSessionFactory.Execute<GraphAssociationPaging>("GetAssociationOneLevelForExtAcc", new
+        //            {
+        //                CTSCustID = cust.CTSCustId,
+        //                AssStatus = 1,
+        //                Skip = 0,
+        //                Pagesize = 100000
+        //            }).Data.FirstOrDefault();
+
+        //            if (result != null)
+        //            {
+        //                var associationList = result.AssociationList.Select(a => new AssociationForExtAcc
+        //                {
+        //                    CustId = a.CustId == null ? 0 : a.CustId.Value,
+        //                    CustSubId = a.CustSubId,
+        //                    AssociationDate = a.AssociationDateFromGraphDB.ToString()
+        //                });
+
+        //                xmlString = XmlHelper.ToXmlString(associationList);
+        //            }
+        //        }
+
+        //        return xmlString;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        LogService.Error("GetDirectAssociationByDevice failed: " + ex.Message + ex.StackTrace);
+        //        throw;
+        //    }
+        //}
 
         /// <summary>
         /// Get association by custId and level

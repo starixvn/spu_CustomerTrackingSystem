@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Fanex.NAP.SPU.Graph.Core;
 using Fanex.NAP.CTS.Criteria.Api;
+using Fanex.NAP.CTS.Model.GraphDB;
 
 namespace Fanex.NAP.CTS.Service.Implement
 {
@@ -47,7 +48,7 @@ namespace Fanex.NAP.CTS.Service.Implement
             var errorList = new List<ValidateAssociatedAccountModel>();
             var userNameList = toUserNameList?.Split(',').AsEnumerable();
 
-            if(userNameList != null)
+            if (userNameList != null)
             {
                 errorList.AddRange(userNameList.Select(x => new ValidateAssociatedAccountModel
                 {
@@ -171,6 +172,21 @@ namespace Fanex.NAP.CTS.Service.Implement
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 return db.Query<CustomerEvidence>(criteria);
+            }
+        }
+
+        public IEnumerable<GraphAssociationModel> GetAssociationForExtAcc(int custId)
+        {
+            var criteria = new GetAssociationForExtAccCriteria()
+            {
+                CustId = custId,
+                AssStatus = 1,
+                AssType = 1
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<GraphAssociationModel>(criteria);
             }
         }
     }

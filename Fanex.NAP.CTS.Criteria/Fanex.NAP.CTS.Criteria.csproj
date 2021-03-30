@@ -69,6 +69,7 @@
     <Compile Include="Account\ChainToEvidence\GetAllEvidenceCriteria.cs" />
     <Compile Include="Account\CustomerCategory\GetCTSCustomerClassificationHistoryCriteria.cs" />
     <Compile Include="Account\GetAssociationWithCategoryCriteria.cs" />
+    <Compile Include="Api\GetAssociationForExtAccCriteria.cs" />
     <Compile Include="AssociationReport\AssociationDetailReportGetCriteria.cs" />
     <Compile Include="AssociationReport\AssociationReportGetCriteria.cs" />
     <Compile Include="Api\GetFlaggedEvidenceByLevel2AssociationCriteria.cs" />

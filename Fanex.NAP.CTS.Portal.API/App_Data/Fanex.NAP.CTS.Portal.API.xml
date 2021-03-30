@@ -539,6 +539,13 @@
             <param name="customerEvidenceList"></param>
             <returns></returns>
         </member>
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetAssociationForExtAcc(System.Int32)">
+            <summary>
+            Get Association data from MySQL
+            </summary>
+            <param name="custId"></param>
+            <returns></returns>
+        </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetAssociationByCustId(System.Int32,System.Int32)">
             <summary>
             Get association by custId and level
