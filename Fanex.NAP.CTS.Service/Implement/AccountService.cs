@@ -276,7 +276,7 @@
                     AccountStatusIds = filterModel.AccountStatusIds,
                     AssociationType = filterModel.AssociationType,
                     CategoryIDs = filterModel.CategoryIds,
-                    SiteIds = filterModel.SiteIds,
+                    SubscriberIDs = filterModel.SubscriberIds,
                     Skip = filterModel.start,
                     Take = filterModel.length,
                     TotalItems = 0
@@ -299,7 +299,7 @@
                 {
                     ctsCustId = filterModel.CTSCustId,
                     assStatus = filterModel.AssociationStatus,
-                    siteIDs = filterModel.SiteIds,
+                    siteIDs = filterModel.SubscriberIds,
                     accountStatuses = filterModel.AccountStatusIds,
                     takeRow = filterModel.length,
                     skipRow = filterModel.start

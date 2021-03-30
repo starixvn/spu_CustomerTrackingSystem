@@ -211,7 +211,7 @@
                     params.AssociationType = d.AssociationType;
                     params.AccountStatusIds = d.AccountStatusIds;
                     params.CategoryIds = d.CategoryIds;
-                    params.SiteIds = d.SiteIds;
+                    params.SubscriberIds = d.SubscriberIds;
                     params.start = d.Start;
                     params.length = d.Length;                    
 

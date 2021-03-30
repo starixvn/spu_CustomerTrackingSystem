@@ -12,7 +12,9 @@
         public int CustSubId { get; set; }
 
         public int SubscriberId { get; set; }
-        
+
+        public string SubscriberName { get; set; }
+
         public string Username { get; set; }
         
         public string Username2 { get; set; }

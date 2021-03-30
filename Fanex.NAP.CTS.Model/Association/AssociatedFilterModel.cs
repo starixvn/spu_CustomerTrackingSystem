@@ -20,6 +20,6 @@
 
         public string CategoryIds { get; set; }
 
-        public string SiteIds { get; set; }
+        public string SubscriberIds { get; set; }
     }
 }

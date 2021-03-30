@@ -176,13 +176,13 @@
                     CategoryIds: function () {
                         return cbbAssociationCategory.val();
                     },
-                    SiteIds: function () {
-                        var selectedSites = [];
-                        cbbAssociationSite.find('option:selected').each(function () { selectedSites.push($(this).val()); });
-                        if (selectedSites.length === 0) {
-                            cbbAssociationSite.find('option').not(':selected').each(function () { selectedSites.push($(this).val()); });
+                    SubscriberIds: function () {
+                        var selectedSubscribers = [];
+                        cbbAssociationSite.find('option:selected').each(function () { selectedSubscribers.push($(this).val()); });
+                        if (selectedSubscribers.length === 0) {
+                            cbbAssociationSite.find('option').not(':selected').each(function () { selectedSubscribers.push($(this).val()); });
                         }
-                        return selectedSites.join(',');
+                        return selectedSubscribers.join(',');
                     }
                 },
                 type: "POST",
@@ -233,7 +233,7 @@
                 { data: obj => RenderUsername(obj, ctsCustId) },
                 { data: obj => obj.LoginId },
                 { data: obj => obj.Status },
-                { data: obj => obj.SiteName },
+                { data: obj => obj.SubscriberName },
                 {
                     data: obj => obj.AssociationTypeName,
                     createdCell: (cell, _, row) => {
@@ -268,7 +268,7 @@
                 }
             ],
             createdRow: function (row, obj) {
-                $(row).attr('data-site-id', obj.SiteId);
+                $(row).attr('data-site-id', obj.SubscriberId);
             },
             drawCallback: function () {
                 let api = this.api();
@@ -280,7 +280,7 @@
                     if (last !== group) {
                         let html = '<tr class="group group-site">';
                         html += '<td colspan="9">';
-                        html += '<span class="column-group-site" data-site-id=' + data[i].SiteId + '><i class="icon icon-chevron-down icon-open"></i> ' + group + ' </span>';
+                        html += '<span class="column-group-site" data-site-id=' + data[i].SubscriberId + '><i class="icon icon-chevron-down icon-open"></i> ' + group + ' </span>';
                         html += '</td></tr>';
 
                         $(rows).eq(i).before(html);
@@ -292,10 +292,10 @@
 
         $('tbody', associatedByAccountTable).on('click', 'tr.group', function () {
             let trGroup = $(this);
-            let siteId = trGroup.find('.column-group-site').attr('data-site-id');
+            let subscriberId = trGroup.find('.column-group-site').attr('data-site-id');
 
-            if (siteId !== undefined) {
-                $('tr[data-site-id="' + siteId + '"]', associatedByAccountTable).each(function () {
+            if (subscriberId !== undefined) {
+                $('tr[data-site-id="' + subscriberId + '"]', associatedByAccountTable).each(function () {
                     let trCurrent = $(this);
                     if (trCurrent.hasClass('hide')) {
                         trCurrent.removeClass('hide');
@@ -965,12 +965,12 @@
 
         btnViewOnGraph.on('click', function () {
             let info = dataTable.page.info();
-            let selectedSites = [];
-            cbbAssociationSite.find('option:selected').each(function () { selectedSites.push($(this).val()); });
-            if (selectedSites.length === 0) {
-                cbbAssociationSite.find('option').not(':selected').each(function () { selectedSites.push($(this).val()); });
+            let selectedSubscribers = [];
+            cbbAssociationSite.find('option:selected').each(function () { selectedSubscribers.push($(this).val()); });
+            if (selectedSubscribers.length === 0) {
+                cbbAssociationSite.find('option').not(':selected').each(function () { selectedSubscribers.push($(this).val()); });
             }
-            let siteIds = selectedSites.join(',');
+            let subscriberIds = selectedSubscribers.join(',');
 
             let selectedCategories = [];
             cbbAssociationCategory.find('option:selected').each(function () { selectedCategories.push($(this).val()); });
@@ -986,7 +986,7 @@
             params.AssociationType = $("#account-by-account-cbb-association-type").val();
             params.AccountStatusIds = cbbAssociationAccountStatus.val();
             params.CategoryIds = categoryIds;
-            params.SiteIds = siteIds;
+            params.SubscriberIds = subscriberIds;
             params.start = info.start;
             params.length = info.length;
 

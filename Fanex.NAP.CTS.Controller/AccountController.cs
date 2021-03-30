@@ -290,7 +290,9 @@
             getCustomerStaticAssType.Insert(0, new CustomerStaticStatusModel { ItemId = 0, ItemNameDisplay = "All" });
 
             var accountStatus = _accountService.GetAccountStaticStatuses();
+
             var subscribers = _commonService.GetSubscriberGroups();
+            
             var categories = GetAllCategories();
 
             var associatedByAccountViewModel = new AssociatedByAccountViewModel
@@ -328,8 +330,6 @@
             {
                 totalItem = graphAssociationPage.TotalItems;
 
-                var subscribers = _subscriberAssignmentService.GetSubscribers(0);
-
                 var customerAssociation = graphAssociationPage.AssociationList;                
 
                 var ctsCustIdList = customerAssociation.Select(x => new { CTSCustId = x.CTSCustID, x.SubscriberId });
@@ -354,9 +354,7 @@
                         SiteId = x.SiteID.HasValue ? x.SiteID.Value : 0,
                         SiteName = !string.IsNullOrEmpty(x.SiteName) ? x.SiteName : "-",
                         SubscriberId = x.SubscriberId,
-                        Subscriber = subscribers.Any(aa => x.SubscriberId != -1 && aa.SubscriberId == x.SubscriberId)
-                                        ? subscribers.FirstOrDefault(a => a.SubscriberId == x.SubscriberId).SubscriberName
-                                        : "-",
+                        SubscriberName = !string.IsNullOrEmpty(x.SubscriberName) ? x.SubscriberName  : "-",
                         CTSCustId = x.CTSCustID,
                         IsLinked = x.AssociationStatus == 1,
                         IsProblemAccount = x.ParentIDs != null ? x.ParentIDs.Split(',').Any(y => y == "50") : false,
@@ -471,7 +469,7 @@
                         AssociationType = model.AssociationType,
                         AccountStatusIds = model.AccountStatusIds,
                         CategoryIds = model.CategoryIds,
-                        SiteIds = model.SiteIds,
+                        SubscriberIds = model.SubscriberIds,
                         Start = model.start,
                         Length = model.length
                     }).ToList();
@@ -485,7 +483,7 @@
             graphCustomer.AssociationType = model.AssociationType;
             graphCustomer.AccountStatusIds = model.AccountStatusIds;
             graphCustomer.CategoryIds = model.CategoryIds;
-            graphCustomer.SiteIds = model.SiteIds;
+            graphCustomer.SubscriberIds = model.SubscriberIds;
             graphCustomer.Start = model.start;
             graphCustomer.Length = model.length;
 

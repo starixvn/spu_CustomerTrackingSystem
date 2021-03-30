@@ -2,11 +2,6 @@
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     public class GetAssociationProfileCriteria : CriteriaBase
     {
@@ -22,8 +17,8 @@
         [SpParam(SqlParamName = "ip_AccountStatusIDs")]
         public string AccountStatusIds { get; set; }
 
-        [SpParam(SqlParamName = "ip_SiteIDs")]
-        public string SiteIds { get; set; }
+        [SpParam(SqlParamName = "ip_SubscriberIDs")]
+        public string SubscriberIDs { get; set; }
 
         [SpParam(SqlParamName = "ip_CategoryIDs")]
         public string CategoryIDs { get; set; }

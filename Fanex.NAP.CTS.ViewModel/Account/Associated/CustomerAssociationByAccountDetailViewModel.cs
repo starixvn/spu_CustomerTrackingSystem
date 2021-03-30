@@ -26,7 +26,7 @@
 
         public string SiteName { get; set; }
 
-        public string Subscriber { get; set; }
+        public string SubscriberName { get; set; }
 
         public List<int> AssociationType { get; set; }
 
