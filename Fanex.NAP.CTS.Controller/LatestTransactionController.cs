@@ -44,19 +44,20 @@
 
             if (data != null && data.Any())
             {
-                result = data.Select(x => new LatestTransactionViewModel
+                result = data.OrderByDescending(x=>x.TransTime).Select(x => new LatestTransactionViewModel
                 {
-                    TransactionDateString = x.TransactionDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                    Username = x.Username,
+                    UserName = x.UserName,
                     LoginID = x.LoginID,
-                    Device = x.Device,
+                    CTSCustID = x.CTSCustID,
+                    TransTimeString = x.TransTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+                    Device = x.FirstDeviceCode,
                     IP = x.IP,
-                    RobotTracking = x.RobotTracking,
+                    RobotTracking = x.Flagged,
                     Action = x.Action,
                     ActionResult = x.ActionResult,
-                    DeviceType = x.DeviceType,
+                    DeviceType = x.OS,
                     Browser = x.Browser,
-                    Domain = x.Domain
+                    Domain = x.URLDetails
                 });
             }
 

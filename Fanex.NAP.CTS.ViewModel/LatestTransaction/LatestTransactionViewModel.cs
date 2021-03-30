@@ -1,12 +1,14 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.LatestTransaction
 {
     public class LatestTransactionViewModel
-    {
-        public string TransactionDateString { get; set; }
-
-        public string Username { get; set; }
+    {        
+        public string UserName { get; set; }
 
         public string LoginID { get; set; }
+
+        public long CTSCustID { get; set; }
+
+        public string TransTimeString { get; set; }
 
         public string Device { get; set; }
 

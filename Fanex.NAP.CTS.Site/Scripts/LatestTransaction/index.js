@@ -59,16 +59,21 @@
                 { targets: [2], width: "10%" },
                 { targets: [3], width: "10%" },
                 { targets: [4], width: "10%" },
-                { targets: [5], width: "5%" },
+                { targets: [5], width: "10%" },
                 { targets: [6], width: "5%" },
                 { targets: [7], width: "10%" },
-                { targets: [8], width: "10%" },
+                { targets: [8], width: "5%" },
                 { targets: [9], width: "10%" },
                 { targets: [10], width: "10%" }
             ],
             columns: [               
-                { data: obj => obj.TransactionDateString },
-                { data: obj => obj.Username },
+                { data: obj => obj.TransTimeString },
+                {
+                    data: obj => () => {
+                        let url = common.modifyRelativeUrl('Account/Index/' + obj.CTSCustID);                        
+                        return html = `<a class='click-view-name' href=${url}> ${obj.UserName} </a>`;
+                    }
+                },
                 { data: obj => obj.LoginID },
                 { data: obj => obj.Device },
                 { data: obj => obj.IP },
