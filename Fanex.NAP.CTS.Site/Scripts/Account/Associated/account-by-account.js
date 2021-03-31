@@ -320,9 +320,9 @@
 
         return html;
     }
-
+   
     function ActiveRemove(obj, fromCTSCustId, fromSubscriberId) {
-        common.showConfirmation('Do you want to update Association Status between <b>' + _username + '</b> and <b>' + obj.Username + '</b> ?',
+        common.showConfirmation("<div class='popup-content'><div class='popup-title'>Do you want to update Association Status between <b>" + _username + "</b> and <b>" + obj.Username + "</b> ?</div></div>",
             function () {
                 RemoveAssociation(fromSubscriberId, fromCTSCustId, obj.SubscriberId, obj.CTSCustId, !obj.IsLinked);
             });
@@ -641,6 +641,9 @@
             draggable: true,
             close: function () {
                 $(this).dialog('close');
+                $('.ui-dialog .ui-dialog-content').css('padding-bottom', '16px');
+                $('.ui-dialog .ui-dialog-content').css('padding-top', '27px');
+                $('.ui-dialog .ui-dialog-content').css('padding-left', '12px');
             }
         });
 
@@ -834,6 +837,9 @@
             draggable: true,
             close: function () {
                 $(this).dialog('close');
+                $('.ui-dialog .ui-dialog-content').css('padding-bottom', '16px');
+                $('.ui-dialog .ui-dialog-content').css('padding-top', '27px');
+                $('.ui-dialog .ui-dialog-content').css('padding-left', '12px');
             }
         });
 
