@@ -1,7 +1,9 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.LatestTransaction
 {
     public class LatestTransactionViewModel
-    {        
+    {
+        public long TransID { get; set; }
+
         public string UserName { get; set; }
 
         public string LoginID { get; set; }
@@ -25,5 +27,7 @@
         public string Browser { get; set; }
 
         public string Domain { get; set; }
+
+        public string SubscriberName { get; set; }
     }
 }

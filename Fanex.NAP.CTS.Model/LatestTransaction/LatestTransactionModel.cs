@@ -28,5 +28,11 @@
 
         public string URLDetails { get; set; }
 
+        public long AccountID { get; set; }
+
+        public long TransID { get; set; }
+
+        public string SubscriberName { get; set; }
+
     }
 }

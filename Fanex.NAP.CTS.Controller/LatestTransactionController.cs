@@ -2,8 +2,11 @@
 {
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Model.AssociationReport;
+    using Fanex.NAP.CTS.Model.Common;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
+    using Fanex.NAP.CTS.Service.Implement;
+    using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.LatestTransaction;
     using System;
     using System.Collections.Generic;
@@ -15,19 +18,20 @@
     public class LatestTransactionController : BaseController
     {
         private readonly ITransactionService _transService;
-        private readonly IAssociationReportService _associationService;
+        private readonly ICommonService _commonService;
 
         public override string BaseControllerName { get => Consts.MenuItemReport; }
 
         public LatestTransactionController()
         {
             _transService = new TransactionService();
-            _associationService = new AssociationReportService();
+            _commonService = new CommonService();
         }
 
         public ActionResult Index()
         {
-            var subscribers = _associationService.GetAllSubscriberGroups().ToList();
+            var subscribers = _commonService.GetSubscribers().OrderBy(x => x.SubscriberName).ToList();
+
             subscribers.Insert(0, new SubscriberGroupModel {  SubscriberID = -1, SubscriberName = "All" });
 
             ViewBag.Subscribers = subscribers;
@@ -44,21 +48,24 @@
 
             if (data != null && data.Any())
             {
-                result = data.OrderByDescending(x=>x.TransTime).Select(x => new LatestTransactionViewModel
-                {
-                    UserName = x.UserName,
-                    LoginID = x.LoginID,
-                    CTSCustID = x.CTSCustID,
-                    TransTimeString = x.TransTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                    Device = x.FirstDeviceCode,
-                    IP = x.IP,
-                    RobotTracking = x.Flagged,
-                    Action = x.Action,
-                    ActionResult = x.ActionResult,
-                    DeviceType = x.OS,
-                    Browser = x.Browser,
-                    Domain = x.URLDetails
-                });
+                result = data.OrderByDescending(x=>x.TransTime)
+                    .ThenByDescending(x=>x.TransID)
+                    .Select(x => new LatestTransactionViewModel
+                    {
+                        UserName = x.UserName,
+                        LoginID = x.LoginID,
+                        CTSCustID = x.CTSCustID,
+                        TransTimeString = x.TransTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+                        Device = x.FirstDeviceCode,
+                        IP = x.IP,
+                        RobotTracking = x.Flagged,
+                        Action = x.Action,
+                        ActionResult = x.ActionResult,
+                        DeviceType = x.OS,
+                        Browser = x.Browser,
+                        Domain = x.URLDetails,                        
+                        SubscriberName = x.SubscriberName
+                    });
             }
 
             return Json(new

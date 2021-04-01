@@ -50,21 +50,24 @@
             ordering: false,
             searching: false,
             scrollX: false,
+            scrollCollapse: true,          
             paging: false,
+            searching: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], className: "text-center" },
+                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], className: "text-center" },
                 { targets: [0], width: "10%" },
-                { targets: [1], width: "10%" },
-                { targets: [2], width: "10%" },
-                { targets: [3], width: "10%" },
+                { targets: [1], width: "8%" },
+                { targets: [2], width: "8%" },
+                { targets: [3], width: "8%" },
                 { targets: [4], width: "10%" },
                 { targets: [5], width: "10%" },
-                { targets: [6], width: "5%" },
-                { targets: [7], width: "10%" },
-                { targets: [8], width: "5%" },
-                { targets: [9], width: "10%" },
-                { targets: [10], width: "10%" }
+                { targets: [6], width: "10%" },
+                { targets: [7], width: "6%" },
+                { targets: [8], width: "6%" },
+                { targets: [9], width: "7%" },
+                { targets: [10], width: "7%" },
+                { targets: [11] }
             ],
             columns: [               
                 { data: obj => obj.TransTimeString },
@@ -75,6 +78,7 @@
                     }
                 },
                 { data: obj => obj.LoginID },
+                { data: obj => obj.SubscriberName },
                 { data: obj => obj.Device },
                 { data: obj => obj.IP },
                 { data: obj => obj.RobotTracking },
@@ -85,7 +89,7 @@
                 { data: obj => obj.Domain }
             ]
         });
-    }
+    }    
 
     function Initial() {
         domElements.cbbSubscriber.select2();

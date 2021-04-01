@@ -1,31 +1,40 @@
 ﻿body {
   font-family: "Lato", Arial, Tahoma, sans-serif; }
 
-.latest-transaction-content {
+.page-title {
+  position: fixed;
+  z-index: 99;
+  top: 6rem;
+  width: 100%; }
+
+.latest-transaction-report .latest-transaction-content {
   margin: 1rem 1.6rem 1rem 1.6rem; }
-  .latest-transaction-content .group-control {
-    position: sticky;
-    top: 6rem;
+  .latest-transaction-report .latest-transaction-content .group-control {
+    position: fixed;
+    top: 9rem;
+    left: 0;
     z-index: 99;
+    width: 100%;
     background: #fff;
-    padding: 1rem 0 0 0; }
-    .latest-transaction-content .group-control .title {
+    padding: 1rem 1.6rem 0 1.6rem; }
+    .latest-transaction-report .latest-transaction-content .group-control .title {
       margin-bottom: -1.3rem; }
-    .latest-transaction-content .group-control .form-filter .group .width-select {
+    .latest-transaction-report .latest-transaction-content .group-control .form-filter .group .width-select {
       width: 15.5rem; }
-    .latest-transaction-content .group-control .form-filter .button-generate {
+    .latest-transaction-report .latest-transaction-content .group-control .form-filter .button-generate {
       background-color: #396ef8;
       border-radius: 2px;
       color: #fff;
       height: auto !important;
       padding: .7rem 2rem; }
-  .latest-transaction-content .table-report {
+  .latest-transaction-report .latest-transaction-content .table-report {
     font-family: "Lato", Arial, Tahoma, sans-serif; }
-    .latest-transaction-content .table-report .table-latest-transaction {
-      width: 100% !important; }
-      .latest-transaction-content .table-report .table-latest-transaction .loading {
+    .latest-transaction-report .latest-transaction-content .table-report .table-latest-transaction {
+      width: 100% !important;
+      margin-top: 160px; }
+      .latest-transaction-report .latest-transaction-content .table-report .table-latest-transaction .loading {
         position: relative; }
-        .latest-transaction-content .table-report .table-latest-transaction .loading:after {
+        .latest-transaction-report .latest-transaction-content .table-report .table-latest-transaction .loading:after {
           content: '';
           position: absolute;
           left: 50%;
@@ -37,9 +46,10 @@
           border-top-color: #396ef8;
           -webkit-animation: spin 1s infinite linear;
           animation: spin 1s infinite linear; }
-        .latest-transaction-content .table-report .table-latest-transaction .loading tr {
+        .latest-transaction-report .latest-transaction-content .table-report .table-latest-transaction .loading tr {
           opacity: .3; }
-      .latest-transaction-content .table-report .table-latest-transaction thead tr th {
+      .latest-transaction-report .latest-transaction-content .table-report .table-latest-transaction thead tr:first-child th {
         position: sticky;
-        top: 13rem;
+        position: -webkit-sticky;
+        top: 16rem;
         font-weight: 300; }
