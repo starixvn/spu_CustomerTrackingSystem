@@ -86,10 +86,19 @@
                 { data: obj => obj.ActionResult },
                 { data: obj => obj.DeviceType },
                 { data: obj => obj.Browser },
-                { data: obj => obj.Domain }
+                { data: obj => GetHostName(obj.Domain) }
             ]
         });
-    }    
+    }
+
+    function GetHostName(url) {
+        if (url != null) {
+            var m = url.match(/^http:\/\/[^/]+/);
+            return m ? m[0] : null;
+        }
+
+        return null;        
+    }
 
     function Initial() {
         domElements.cbbSubscriber.select2();
