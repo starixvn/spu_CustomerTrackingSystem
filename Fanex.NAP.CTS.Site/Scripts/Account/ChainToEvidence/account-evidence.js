@@ -15,7 +15,8 @@
         tblChainToEvidenceAffectedRetract: $('#tblChainToEvidenceAffected'),
         cbbChainToEvidenceListEvidence: $('#cbbChainToEvidenceListEvidence'),
         btnQuickComment: $('.button-quick-comment'),
-        spanClass: $('#spanClass')
+        spanClass: $('#spanClass'),
+        hdCustSubId: $("#hdCustSubId")
     };
 
     function InitialFlaggedGrid(ctsCustId, username, custId, subscriberId) {
@@ -517,8 +518,8 @@
     function DisableButton(hostPermission) {
         isHostPermission = hostPermission === "True";
 
-        if (!isHostPermission)
-            domElements.btnChainToEvidenceFlagged.prop('disabled', true);
+        if (!isHostPermission || domElements.hdCustSubId.val() !== 0)
+            domElements.btnChainToEvidenceFlagged.prop('disabled', true);       
     }
 
     function GetCustomerClassification(custId) {
