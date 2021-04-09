@@ -8,11 +8,14 @@
     using Fanex.Logging;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Utilities;
+    using Fanex.NAP.CTS.Criteria;
     using Fanex.NAP.CTS.Criteria.Account.ChainToEvidence;
     using Fanex.NAP.CTS.Criteria.CustomerClassify;
     using Fanex.NAP.CTS.Criteria.ProblemAccountMonitor;
+    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.CustomerClassify;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
+    using Fanex.NAP.CTS.Resource.Consts;
     using Newtonsoft.Json;
 
     public class CustomerClassifyService : ICustomerClassifyService
@@ -29,6 +32,10 @@
         public void RescanCustomerClassify(List<int> custIds, bool isRescanPA, bool isPushCCToSoon88)
         {
             var custIdList = new List<int>();
+
+            //Get SMA CustId to sync CC
+            var roleCusomters = GetAgentCusts(custIds);
+            custIdList.AddRange(roleCusomters);
 
             // Re-Sync Customer Evidence to category in CTS
             var custIdCCs = SyncCustomerEvidenceToCategory(custIds);
@@ -385,5 +392,41 @@
             repository.Execute(criteria);
         }
 
+        private List<int> GetAgentCusts(List<int> custIds)
+        {
+            var agentIds = new List<int>();
+
+            if (custIds != null && custIds.Any())
+            {
+                var data = GetRoleCustomer(string.Join(",", custIds)).ToList();
+
+                if (data != null && data.Any())
+                {
+                    agentIds = data.Where(c => c.RoleID == (int)Consts.ROLE_CUSTOMER.AGENT
+                                            || c.RoleID == (int)Consts.ROLE_CUSTOMER.MASTER
+                                            || c.RoleID == (int)Consts.ROLE_CUSTOMER.SUPER)
+                               .Select(c => c.CustID).ToList();
+                }
+            }
+
+            return agentIds;
+        }
+
+        private IEnumerable<RoleCustomerModel> GetRoleCustomer(string custIds)
+        {
+            var roleCus = new List<RoleCustomerModel>();
+
+            var criteria = new GetRoleCustomerCriteria
+            {
+                CustIds = custIds
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                roleCus = db.Query<RoleCustomerModel>(criteria).ToList();
+            }
+
+            return roleCus;
+        }
     }
 }
