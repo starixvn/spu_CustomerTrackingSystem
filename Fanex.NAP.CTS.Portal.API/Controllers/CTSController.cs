@@ -12,6 +12,7 @@
     using Fanex.NAP.CTS.Model.API;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
+    using Fanex.NAP.CTS.Model.Subscriber;
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
@@ -35,6 +36,7 @@
         private readonly ICategoryService _categoryService;
         private readonly ICustomerClassifyService _customerClassifyService;
         private readonly IPushDataToExternalService _pushDataToExternalService;
+        private readonly ISubscriberService _subscriberService;
 
         /// <summary>
         /// Using for external site (TW, ExtAcc site...)
@@ -49,6 +51,7 @@
             _categoryService = new CategoryService();
             _customerClassifyService = new CustomerClassifyService();
             _pushDataToExternalService = new PushDataToExternalService();
+            _subscriberService = new SubscriberService();
         }
 
         /// <summary>
@@ -611,6 +614,32 @@
             {
                 LogService.Error("Get Customer Class's Categories exception: " + ex.Message);
                 return Json(new List<CategoryCustomerClassModel>());
+            }
+        }
+
+        /// <summary>
+        /// Get Subscriber info By Subscriber name
+        /// </summary>
+        /// <param name="subscriberName"></param>
+        /// <returns>Subscriber Info</returns>
+        [HttpGet]
+        public JsonResult<SubscriberInfo> GetSubscriberInfo(string subscriberName)
+        {
+            try
+            {
+                var subscriber = _subscriberService.GetSubscriberBySubscriberName(subscriberName);
+
+                if(subscriber.DCSStatus)
+                {
+                    return Json(subscriber);
+                }
+
+                return Json(new SubscriberInfo());
+            }
+            catch(Exception ex)
+            {
+                LogService.Error("Get Subscriber info exception: " + ex.Message);
+                return Json(new SubscriberInfo());
             }
         }
     }
