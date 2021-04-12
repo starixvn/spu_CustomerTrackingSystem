@@ -518,8 +518,8 @@
     function DisableButton(hostPermission) {
         isHostPermission = hostPermission === "True";
 
-        if (!isHostPermission || domElements.hdCustSubId.val() !== 0)
-            domElements.btnChainToEvidenceFlagged.prop('disabled', true);       
+        if (!isHostPermission || domElements.hdCustSubId.val() !== "0")
+            domElements.btnChainToEvidenceFlagged.prop('disabled', true);
     }
 
     function GetCustomerClassification(custId) {
