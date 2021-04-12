@@ -602,6 +602,13 @@
             </summary>
             <returns>A list of customer class's categories in JSON format</returns>
         </member>
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetSubscriberInfo(System.String)">
+            <summary>
+            Get Subscriber info By Subscriber name
+            </summary>
+            <param name="subscriberName"></param>
+            <returns>Subscriber Info</returns>
+        </member>
         <member name="T:Fanex.NAP.CTS.Portal.API.Controllers.GraphController">
             <summary>
             Graph Controller - Using for CTS site

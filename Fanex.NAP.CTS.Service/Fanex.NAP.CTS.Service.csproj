@@ -90,6 +90,7 @@
     <Compile Include="Implement\ProblemAccountMonitorService.cs" />
     <Compile Include="Implement\ScannedOfficeIpReportService.cs" />
     <Compile Include="Implement\SubscriberAssignmentService.cs" />
+    <Compile Include="Implement\SubscriberService.cs" />
     <Compile Include="Implement\SuspiciousCustomerReportDetailsService.cs" />
     <Compile Include="Implement\SuspiciousCustomerReportService.cs" />
     <Compile Include="Implement\TransactionService.cs" />
@@ -123,6 +124,7 @@
     <Compile Include="Interface\IScannedOfficeIpReportService.cs" />
     <Compile Include="Interface\ISpecialCustomerClassService.cs" />
     <Compile Include="Interface\ISubscriberAssignmentService.cs" />
+    <Compile Include="Interface\ISubscriberService.cs" />
     <Compile Include="Interface\ISuspiciousCustomerReportDetailsService.cs" />
     <Compile Include="Interface\ISuspiciousCustomerReportService.cs" />
     <Compile Include="Interface\ITransactionService.cs" />
