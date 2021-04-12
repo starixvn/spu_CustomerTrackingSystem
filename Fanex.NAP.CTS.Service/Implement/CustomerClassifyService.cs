@@ -37,9 +37,15 @@
             var roleCusomters = GetAgentCusts(custIds);
             custIdList.AddRange(roleCusomters);
 
+            if (_isWriteLogInfo)
+                LogService.Info($"PA Rescan - GetAgentCusts - with data: {JsonConvert.SerializeObject(roleCusomters)}");
+
             // Re-Sync Customer Evidence to category in CTS
             var custIdCCs = SyncCustomerEvidenceToCategory(custIds);
             custIdList.AddRange(custIdCCs);
+
+            if (_isWriteLogInfo)
+                LogService.Info($"PA Rescan - Get Evidence Custs - with data: {JsonConvert.SerializeObject(custIdCCs)}");
 
             if (isRescanPA)
             {
@@ -51,13 +57,24 @@
             var custIdsToSyncCC = custIdList.Distinct().ToList();
 
             // Push Customer class to MainDB, Soon88, ...
-            SyncCustomerClassToExternal(custIdsToSyncCC, isPushCCToSoon88);
-          
+            if (custIdsToSyncCC != null && custIdsToSyncCC.Any())
+            {
+                SyncCustomerClassToExternal(custIdsToSyncCC, isPushCCToSoon88);
+
+                if (_isWriteLogInfo)
+                    LogService.Info($"PA Rescan - Cust to syncCC - with data: {JsonConvert.SerializeObject(custIdsToSyncCC)}");
+            }
+
             custIds.RemoveAll(x => custIdsToSyncCC.Contains(x));
+
+            if (_isWriteLogInfo)
+                LogService.Info($"Normal Rescan - with data: {JsonConvert.SerializeObject(custIds)}");
 
             // Check and rescan normal account
             if (custIds != null && custIds.Any())
+            {
                 RescanNormalAccount(custIds);
+            }
         }
 
         private List<int> SyncCustomerEvidenceToCategory(List<int> custIds)
