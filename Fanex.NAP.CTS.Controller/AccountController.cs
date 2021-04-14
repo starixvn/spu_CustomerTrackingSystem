@@ -12,8 +12,10 @@
     using Fanex.NAP.CTS.Criteria.Account;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
+    using Fanex.NAP.CTS.Model.API;
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.CustomerClassify;
+    using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.Transaction;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
@@ -181,7 +183,7 @@
             var getAssociationFromMySQL = AppSettings.Get("GetAssociationFromMySQL") == "1";
 
             var result = _accountService.GetCustomerTotalAssociationByCTSCustId(ctsCustId, ConfigSettings.GetStatisticAssociation, getAssociationFromMySQL);
-            
+
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -292,7 +294,7 @@
             var accountStatus = _accountService.GetAccountStaticStatuses();
 
             var subscribers = _commonService.GetSubscriberGroups();
-            
+
             var categories = GetAllCategories();
 
             var associatedByAccountViewModel = new AssociatedByAccountViewModel
@@ -334,6 +336,8 @@
 
                 var ctsCustIdList = customerAssociation.Select(x => new { CTSCustId = x.CTSCustID, x.SubscriberId });
 
+                customerAssociation = GetCustClassification(string.Join("," , customerAssociation.Select(c=>c.CustId)), customerAssociation);
+
                 var flaggedAffectedTagList = _accountService.GetDirectAssociatedAccountTagFlagged(JsonConvert.SerializeObject(ctsCustIdList));
 
                 result = customerAssociation.Select(x =>
@@ -354,7 +358,7 @@
                         SiteId = x.SiteID.HasValue ? x.SiteID.Value : 0,
                         SiteName = !string.IsNullOrEmpty(x.SiteName) ? x.SiteName : "-",
                         SubscriberId = x.SubscriberId,
-                        SubscriberName = !string.IsNullOrEmpty(x.SubscriberName) ? x.SubscriberName  : "-",
+                        SubscriberName = !string.IsNullOrEmpty(x.SubscriberName) ? x.SubscriberName : "-",
                         CTSCustId = x.CTSCustID,
                         IsLinked = x.AssociationStatus == 1,
                         IsProblemAccount = x.ParentIDs != null ? x.ParentIDs.Split(',').Any(y => y == "50") : false,
@@ -430,6 +434,44 @@
 
             return name;
         }
+
+        private List<GraphAssociationModel> GetCustClassification(string custIds, List<GraphAssociationModel> assModel)
+        {
+            var custClassification = _accountService.GetCustomerClassByCustId(custIds);
+
+            var result = assModel.GroupJoin(custClassification,
+                                 a => a.CustId,
+                                 b => b.CustId,
+                                 (a, b) => new { a, b })
+                                 .SelectMany(
+                                      group => group.b.DefaultIfEmpty(),
+                                      (group, temp) => new GraphAssociationModel
+                                      {
+                                          CTSCustID = group.a.CTSCustID,
+                                          CustId = group.a.CustId,
+                                          CustSubId = group.a.CustSubId,
+                                          SubscriberId = group.a.SubscriberId,
+                                          SubscriberName = group.a.SubscriberName,
+                                          Username = group.a.Username,
+                                          Username2 = group.a.Username2,
+                                          AssociationType = group.a.AssociationType,
+                                          AssociationTypeName = group.a.AssociationTypeName,
+                                          AssociationDateGMT0 = group.a.AssociationDateGMT0,
+                                          AssociationDate = group.a.AssociationDate,
+                                          SharedDevices = group.a.SharedDevices,
+                                          SharedIPs = group.a.SharedIPs,
+                                          StatusName = group.a.StatusName,
+                                          StatusId = group.a.StatusId,
+                                          AssociationStatus = group.a.AssociationStatus,
+                                          SiteID = group.a.SiteID,
+                                          SiteName = group.a.SiteName,
+                                          ParentIDs = group.a.ParentIDs,
+                                          CategoryIDs = group.a.CategoryIDs,
+                                          CategoryNames = group.a.CategoryNames,
+                                          CustomerClasses = (temp != null && temp.CustomerClass != null) ? temp.CustomerClass.ToString() : "-",
+                                      }).ToList();
+            return result;
+        } 
 
         private string GetDirectAssociationUrl(int associationType)
         {
