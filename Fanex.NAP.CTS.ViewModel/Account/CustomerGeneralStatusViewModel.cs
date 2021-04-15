@@ -92,9 +92,7 @@ namespace Fanex.NAP.CTS.ViewModel.Account
 
         public List<FraudCaseModel> FraudCases { get; set; }
 
-        public CustomerGeneralStatusViewModel BindingGeneralDataFromMainDB(
-            CustomerLastTicketDateModel customerLastTicketDateModel
-           )
+        public CustomerGeneralStatusViewModel BindingGeneralDataFromMainDB(CustomerLastTicketDateModel customerLastTicketDateModel)
         {            
 
             if (customerLastTicketDateModel != null)
@@ -105,8 +103,7 @@ namespace Fanex.NAP.CTS.ViewModel.Account
             return this;
         }
 
-        public CustomerGeneralStatusViewModel BindingGeneralDataFromCTS(
-            CustomerInfoByCTSCustIdModel customerInfoByCTSCustIdModel            )
+        public CustomerGeneralStatusViewModel BindingGeneralDataFromCTS(CustomerInfoByCTSCustIdModel customerInfoByCTSCustIdModel)
         {
             if (customerInfoByCTSCustIdModel != null)
             {
