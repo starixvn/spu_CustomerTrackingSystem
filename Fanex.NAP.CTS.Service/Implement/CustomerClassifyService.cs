@@ -41,22 +41,26 @@
                 LogService.Info($"PA Rescan - GetAgentCusts - with data: {JsonConvert.SerializeObject(roleCusomters)}");
 
             // Re-Sync Customer Evidence to category in CTS
-            var custIdCCs = SyncCustomerEvidenceToCategory(custIds);
-            custIdList.AddRange(custIdCCs);
+            var problemAccountsFromEvi = SyncCustomerEvidenceToCategory(custIds);
+            custIdList.AddRange(problemAccountsFromEvi);
 
             if (_isWriteLogInfo)
-                LogService.Info($"PA Rescan - Get Evidence Custs - with data: {JsonConvert.SerializeObject(custIdCCs)}");
+                LogService.Info($"PA Rescan - Get Evidence Custs - with data: {JsonConvert.SerializeObject(problemAccountsFromEvi)}");
+
+            // Re-Sync RobotUser to category in CTS
+            var robotUsers = SyncRobotUserToUpdateCategory(custIds);
+            custIdList.AddRange(robotUsers);
 
             if (isRescanPA)
             {
                 // Re-Insert Problem Account in CTS
-                custIdCCs = InsertProblemAccount(custIds);
-                custIdList.AddRange(custIdCCs);
+                var problemAccountsFromNAPPA = InsertProblemAccount(custIds);
+                custIdList.AddRange(problemAccountsFromNAPPA);
             }
 
+            // Push Customer class to MainDB, Soon88, ...
             var custIdsToSyncCC = custIdList.Distinct().ToList();
 
-            // Push Customer class to MainDB, Soon88, ...
             if (custIdsToSyncCC != null && custIdsToSyncCC.Any())
             {
                 SyncCustomerClassToExternal(custIdsToSyncCC, isPushCCToSoon88);
@@ -444,6 +448,54 @@
             }
 
             return roleCus;
+        }
+
+        private List<int> SyncRobotUserToUpdateCategory(List<int> custIds)
+        {
+            var robotUser = new List<int>();
+
+            var custs = GetCustByRobotSiteRule(string.Join(",", custIds)).ToList();
+
+            var getRobotUser = GetExistedRobotUser(string.Join(",", custs));
+
+            if (!string.IsNullOrEmpty(getRobotUser))
+            {
+                robotUser = getRobotUser.Split(',').Select(int.Parse).ToList();
+            }
+
+            return robotUser;
+        }
+
+        private IEnumerable<int> GetCustByRobotSiteRule(string custIds)
+        {
+            var roleCus = new List<int>();
+
+            var criteria = new GetCustByRobotSiteRuleCriteria
+            {
+                CustIds = custIds
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                roleCus = db.Query<int>(criteria).ToList();
+            }
+
+            return roleCus;
+        }
+
+        private string GetExistedRobotUser(string custIds)
+        {
+            var criteria = new GetExistedRobotUserCriteria
+            {
+                CustIds = custIds
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                db.ExecuteNonQuery(criteria);
+            }
+
+            return criteria.RobotList;
         }
     }
 }
