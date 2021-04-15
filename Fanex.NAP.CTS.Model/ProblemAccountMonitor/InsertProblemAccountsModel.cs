@@ -2,8 +2,8 @@
 {
     public class InsertProblemAccountsModel
     {
-        public long CustId { get; set; }
+        public long CustID { get; set; }
 
-        public int CategoryId { get; set; }
+        public int ReasonID { get; set; }
     }
 }

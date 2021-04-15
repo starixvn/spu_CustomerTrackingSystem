@@ -297,9 +297,7 @@
 
                 foreach (var problemAccs in probalemAccountsChunk)
                 {
-                    var objPA = problemAccs.Select(x => new { CustId = x.CustID, CategoryId = x.ReasonID });
-
-                    var result = InsertProblemAccount(JsonConvert.SerializeObject(objPA), true);
+                    var result = InsertProblemAccount(JsonConvert.SerializeObject(problemAccs), true);
 
                     custIds.AddRange(result);
                 }

@@ -212,8 +212,8 @@
 
             var removedProblemAccounts = custid.Split(',').Select(a => new InsertProblemAccountsModel()
             {
-                CustId = Convert.ToInt32(a),
-                CategoryId = Consts.REMOVE_PROBLEMACCOUNT_CATEGORYID
+                CustID = Convert.ToInt32(a),
+                ReasonID = Consts.REMOVE_PROBLEMACCOUNT_CATEGORYID
             });
 
             var criteria = new InsertProblemAccountCriteria
