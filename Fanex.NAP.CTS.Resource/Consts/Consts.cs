@@ -68,5 +68,17 @@
             MASTER = 3,
             SUPER = 4
         }
+
+        public enum CATEGORY : int
+        {
+            NEWMEMBER = 201,
+            NORMALMEMBER = 202,
+            SMARTPUNTER = 203,
+            HIGHRISKPUNTER = 204,
+            VIP = 205,
+            PROBATION = 206,
+            VVIP = 213,
+            ROBOT = 61
+        };
     }
 }

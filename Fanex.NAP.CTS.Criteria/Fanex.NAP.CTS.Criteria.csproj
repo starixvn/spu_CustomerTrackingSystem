@@ -77,6 +77,8 @@
     <Compile Include="Common\GetSubscriberGroupCriteria.cs" />
     <Compile Include="Category\GetCategoryCustomerClassCriteria.cs" />
     <Compile Include="Common\ValidateUsernameCriteria.cs" />
+    <Compile Include="CustomerClassify\GetCustByRobotSiteRuleCriteria.cs" />
+    <Compile Include="CustomerClassify\GetExistedRobotUserCriteria.cs" />
     <Compile Include="CustomerClassify\GetRoleCustomerCriteria.cs" />
     <Compile Include="CustomerClassify\GetLastestClassificationCriteria.cs" />
     <Compile Include="CustomerClassify\GetExistedEvidencesCriteria.cs" />

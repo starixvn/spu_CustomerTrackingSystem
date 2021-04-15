@@ -5,7 +5,7 @@
 
     public interface ICustomerClassifyService
     {
-        void RescanCustomerClassify(List<int> custIds, bool isRescanPA, bool isPushCCToSoon88);
+        void RescanCustomerClassify(List<int> custIds, bool isCheckPAFromNAP, bool isPushCCToSoon88);
 
         IEnumerable<LatestClassificationModel> GetLatestClassification(string custIds);
 

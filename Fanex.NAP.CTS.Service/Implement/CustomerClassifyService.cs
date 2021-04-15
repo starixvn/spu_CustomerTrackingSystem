@@ -17,6 +17,7 @@
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Resource.Consts;
     using Newtonsoft.Json;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public class CustomerClassifyService : ICustomerClassifyService
     {
@@ -29,52 +30,40 @@
             _isWriteLogInfo = ConfigSettings.IsWriteLogInfo;
         }
 
-        public void RescanCustomerClassify(List<int> custIds, bool isRescanPA, bool isPushCCToSoon88)
+        public void RescanCustomerClassify(List<int> custIds, bool isCheckPAFromNAP, bool isPushCCToSoon88)
         {
             var custIdList = new List<int>();
 
-            //Get SMA CustId to sync CC
+            //Rescan PA - Get SMA CustId
             var roleCusomters = GetAgentCusts(custIds);
             custIdList.AddRange(roleCusomters);
 
-            if (_isWriteLogInfo)
-                LogService.Info($"PA Rescan - GetAgentCusts - with data: {JsonConvert.SerializeObject(roleCusomters)}");
-
-            // Re-Sync Customer Evidence to category in CTS
+            // Rescan PA - Get PA From Evidence in CTS
             var problemAccountsFromEvi = SyncCustomerEvidenceToCategory(custIds);
             custIdList.AddRange(problemAccountsFromEvi);
 
-            if (_isWriteLogInfo)
-                LogService.Info($"PA Rescan - Get Evidence Custs - with data: {JsonConvert.SerializeObject(problemAccountsFromEvi)}");
+            // Rescan PA - Get PA From RobotUser & NAP PA
+            var problemAccounts = GetProblemAccounts(custIds, isCheckPAFromNAP);
 
-            // Re-Sync RobotUser to category in CTS
-            var robotUsers = SyncRobotUserToUpdateCategory(custIds);
-            custIdList.AddRange(robotUsers);
-
-            if (isRescanPA)
+            if (problemAccounts != null && problemAccounts.Any())
             {
-                // Re-Insert Problem Account in CTS
-                var problemAccountsFromNAPPA = InsertProblemAccount(custIds);
-                custIdList.AddRange(problemAccountsFromNAPPA);
+                custIdList.AddRange(InsertProblemAccount(problemAccounts));
             }
 
-            // Push Customer class to MainDB, Soon88, ...
+            //Rescan PA - Push CC & CN88
             var custIdsToSyncCC = custIdList.Distinct().ToList();
 
             if (custIdsToSyncCC != null && custIdsToSyncCC.Any())
             {
                 SyncCustomerClassToExternal(custIdsToSyncCC, isPushCCToSoon88);
-
-                if (_isWriteLogInfo)
-                    LogService.Info($"PA Rescan - Cust to syncCC - with data: {JsonConvert.SerializeObject(custIdsToSyncCC)}");
             }
 
+            // Rescan Normal 
             custIds.RemoveAll(x => custIdsToSyncCC.Contains(x));
 
             if (_isWriteLogInfo)
-                LogService.Info($"Normal Rescan - with data: {JsonConvert.SerializeObject(custIds)}");
+                LogService.Info($"Web - Normal Rescan - with data: {JsonConvert.SerializeObject(custIds)}");
 
-            // Check and rescan normal account
             if (custIds != null && custIds.Any())
             {
                 RescanNormalAccount(custIds);
@@ -87,15 +76,15 @@
 
             var existedCustEvidences = GetExistedCustomerEvidences(string.Join(",", custIds)).ToList();
 
-            if (_isWriteLogInfo)
-                LogService.Info($"Web - CustomerClassifyService - SyncCustomerEvidenceToCategory existedCustEvidences:  {JsonConvert.SerializeObject(existedCustEvidences)}");
-
             var result = SyncCustomerEvidenceToCategory(existedCustEvidences);
 
             if (string.IsNullOrEmpty(result.ErrorMessage) && result.CustIds != null && result.CustIds.Any())
             {
                 custIdsToSyncCC.AddRange(result.CustIds);
             }
+
+            if (_isWriteLogInfo)
+                LogService.Info($"Web - RescanPA - Get Evidence Custs - with data:  {JsonConvert.SerializeObject(existedCustEvidences)}");
 
             return custIdsToSyncCC;
         }
@@ -182,26 +171,65 @@
             return (custIds != null) ? custIds : new List<int>();
         }
 
-        private List<int> InsertProblemAccount(List<int> custIds)
+        private List<MultipleProblemAccountsModel> GetProblemAccounts(List<int> custIds, bool isCheckPAFromNAP)
+        {
+            var problemAccounts = new List<MultipleProblemAccountsModel>();
+
+            if (custIds != null && custIds.Any())
+            {
+                //PA - RobotUser
+                var robotUsers = SyncRobotUserToUpdateCategory(custIds);
+
+                if (robotUsers != null && robotUsers.Any())
+                {
+                    robotUsers.ForEach(c =>
+                    {
+                        problemAccounts.Add(new MultipleProblemAccountsModel()
+                        {
+                            CustID = c,
+                            ReasonID = (int)CATEGORY.ROBOT
+                        });
+                    });
+                }
+
+                if (_isWriteLogInfo)
+                    LogService.Info($"PA Rescan - Get RobotUsers - with data: {JsonConvert.SerializeObject(problemAccounts)}");
+
+                //PA - NAP PA
+                if (isCheckPAFromNAP)
+                {
+                    var existedProblemAccounts = GetExistedProblemAccountsFromNAPPA(string.Join(",", custIds)).ToList();
+                    problemAccounts.AddRange(existedProblemAccounts);
+
+                    if (_isWriteLogInfo)
+                        LogService.Info($"PA Rescan - Get PA Custs - with data: {JsonConvert.SerializeObject(existedProblemAccounts)}");
+                }
+            }
+
+            return problemAccounts;
+        }
+
+        private List<int> InsertProblemAccount(List<MultipleProblemAccountsModel> problemAccounts)
         {
             var custIdsToSyncCC = new List<int>();
 
-            var existedProblemAccounts = GetExistedProblemAccounts(string.Join(",", custIds)).ToList();
+            if (problemAccounts != null && problemAccounts.Any())
+            {
+                var result = InsertProblemAccountToCTS(problemAccounts);
+
+                if(string.IsNullOrEmpty(result.ErrorMessage) && result.CustIds != null)
+                {
+                    custIdsToSyncCC = result.CustIds.ToList();
+                }
+            }
 
             if (_isWriteLogInfo)
-                LogService.Info($"Web - CustomerClassifyService - InsertProblemAccount existedProblemAccounts:  {JsonConvert.SerializeObject(existedProblemAccounts)}");
-
-            var result = InsertProblemAccountToCTS(existedProblemAccounts);
-
-            if (string.IsNullOrEmpty(result.ErrorMessage) && result.CustIds != null && result.CustIds.Any())
-            {
-                custIdsToSyncCC.AddRange(result.CustIds);
-            }
+                LogService.Info($"PA Rescan - Get PA Custs (Robot & NAPPA) - with data: {JsonConvert.SerializeObject(custIdsToSyncCC)}");
 
             return custIdsToSyncCC;
         }
 
-        private IEnumerable<MultipleProblemAccountsModel> GetExistedProblemAccounts(string custIds)
+        private IEnumerable<MultipleProblemAccountsModel> GetExistedProblemAccountsFromNAPPA(string custIds)
         {
             var problemAccounts = new List<MultipleProblemAccountsModel>();
 
@@ -210,8 +238,8 @@
                 return problemAccounts;
             }
 
-            var problemAccountsNAPCM = GetProblemAccounts(custIds, null).ToList();
-            var problemAccountsCN88 = GetProblemAccounts_CN88(custIds, null).ToList();
+            var problemAccountsNAPCM = GetProblemAccountsFromNAP(custIds, null).ToList();
+            var problemAccountsCN88 = GetProblemAccountsFromNAP_CN88(custIds, null).ToList();
 
             if (problemAccountsNAPCM != null && problemAccountsNAPCM.Any())
             {
@@ -226,7 +254,7 @@
             return problemAccounts.Distinct();
         }
 
-        private IEnumerable<MultipleProblemAccountsModel> GetProblemAccounts(string custIDs, DateTime? dateTime)
+        private IEnumerable<MultipleProblemAccountsModel> GetProblemAccountsFromNAP(string custIDs, DateTime? dateTime)
         {
             var criteria = new GetProblemAccountsCriteria
             {
@@ -240,7 +268,7 @@
             }
         }
 
-        private IEnumerable<MultipleProblemAccountsModel> GetProblemAccounts_CN88(string custIDs, DateTime? dateTime)
+        private IEnumerable<MultipleProblemAccountsModel> GetProblemAccountsFromNAP_CN88(string custIDs, DateTime? dateTime)
         {
             var criteria = new GetProblemAccountsCN88Criteria
             {
@@ -280,7 +308,7 @@
             }
             catch (Exception ex)
             {
-                LogService.Error($"Web - CustomerClassifyService - InsertProblemAccountToCTS exception: {ex.Message} - Data: { JsonConvert.SerializeObject(problemAccounts)}", ex);
+                LogService.Error($"Web - Rescan PA - InsertProblemAccountToCTS exception: {ex.Message} - Data: { JsonConvert.SerializeObject(problemAccounts)}", ex);
 
                 return new InsertCategoryResultModel { ErrorMessage = ex.Message, CustIds = null };
             }
@@ -322,19 +350,16 @@
         {
             var custIdsChunk = custIdsToSyncCC.Chunk(ConfigSettings.PushCCToExternalChunkSize);
 
+            if (_isWriteLogInfo)
+                LogService.Info($"PA Rescan - Cust to syncCC - with data: {JsonConvert.SerializeObject(custIdsToSyncCC)}");
+
             foreach (var custids in custIdsChunk)
             {
                 var lastestClassifications = GetLatestClassification(string.Join(",", custids));
 
-                if (_isWriteLogInfo)
-                    LogService.Info($"Web - CustomerClassifyService - SyncCustomerClassToExternal lastestClassifications:  {JsonConvert.SerializeObject(lastestClassifications)}");
-
                 if (lastestClassifications != null && lastestClassifications.Any())
                 {
                     bool isSyncMainSuccessfully = _pushDataToExternalService.PushCustomerClassificationToMain(lastestClassifications, 3);
-
-                    if (_isWriteLogInfo)
-                        LogService.Info($"Web - CustomerClassifyService - SyncCustomerClassToExternal isSyncMainSuccessfully:  {isSyncMainSuccessfully}");
 
                     if (isSyncMainSuccessfully)
                         UpdateAppliedCustomerClassification(JsonConvert.SerializeObject(lastestClassifications));
@@ -430,6 +455,9 @@
                 }
             }
 
+            if (_isWriteLogInfo)
+                LogService.Info($"WEB - PA Rescan - GetAgentCusts - with data: {JsonConvert.SerializeObject(agentIds)}");
+
             return agentIds;
         }
 
@@ -446,6 +474,9 @@
             {
                 roleCus = db.Query<RoleCustomerModel>(criteria).ToList();
             }
+
+            if (_isWriteLogInfo)
+                LogService.Info($"PA Rescan - GetAgentCusts - with data: {JsonConvert.SerializeObject(roleCus)}");
 
             return roleCus;
         }
