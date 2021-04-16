@@ -60,5 +60,13 @@
         public const string AssociationTypeName_BettingPattern = "Betting Pattern";
         public const string AssociationTypeName_IP = "IP";
         public const string AssociationTypeName_IPAssociation = "IP Association";
+
+        public enum ROLE_CUSTOMER : int
+        {
+            MEMBER = 1,
+            AGENT = 2,
+            MASTER = 3,
+            SUPER = 4
+        }
     }
 }

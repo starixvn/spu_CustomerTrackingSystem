@@ -8,11 +8,14 @@
     using Fanex.Logging;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Utilities;
+    using Fanex.NAP.CTS.Criteria;
     using Fanex.NAP.CTS.Criteria.Account.ChainToEvidence;
     using Fanex.NAP.CTS.Criteria.CustomerClassify;
     using Fanex.NAP.CTS.Criteria.ProblemAccountMonitor;
+    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.CustomerClassify;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
+    using Fanex.NAP.CTS.Resource.Consts;
     using Newtonsoft.Json;
 
     public class CustomerClassifyService : ICustomerClassifyService
@@ -30,9 +33,19 @@
         {
             var custIdList = new List<int>();
 
+            //Get SMA CustId to sync CC
+            var roleCusomters = GetAgentCusts(custIds);
+            custIdList.AddRange(roleCusomters);
+
+            if (_isWriteLogInfo)
+                LogService.Info($"PA Rescan - GetAgentCusts - with data: {JsonConvert.SerializeObject(roleCusomters)}");
+
             // Re-Sync Customer Evidence to category in CTS
             var custIdCCs = SyncCustomerEvidenceToCategory(custIds);
             custIdList.AddRange(custIdCCs);
+
+            if (_isWriteLogInfo)
+                LogService.Info($"PA Rescan - Get Evidence Custs - with data: {JsonConvert.SerializeObject(custIdCCs)}");
 
             if (isRescanPA)
             {
@@ -44,13 +57,24 @@
             var custIdsToSyncCC = custIdList.Distinct().ToList();
 
             // Push Customer class to MainDB, Soon88, ...
-            SyncCustomerClassToExternal(custIdsToSyncCC, isPushCCToSoon88);
-          
+            if (custIdsToSyncCC != null && custIdsToSyncCC.Any())
+            {
+                SyncCustomerClassToExternal(custIdsToSyncCC, isPushCCToSoon88);
+
+                if (_isWriteLogInfo)
+                    LogService.Info($"PA Rescan - Cust to syncCC - with data: {JsonConvert.SerializeObject(custIdsToSyncCC)}");
+            }
+
             custIds.RemoveAll(x => custIdsToSyncCC.Contains(x));
+
+            if (_isWriteLogInfo)
+                LogService.Info($"Normal Rescan - with data: {JsonConvert.SerializeObject(custIds)}");
 
             // Check and rescan normal account
             if (custIds != null && custIds.Any())
+            {
                 RescanNormalAccount(custIds);
+            }
         }
 
         private List<int> SyncCustomerEvidenceToCategory(List<int> custIds)
@@ -385,5 +409,41 @@
             repository.Execute(criteria);
         }
 
+        private List<int> GetAgentCusts(List<int> custIds)
+        {
+            var agentIds = new List<int>();
+
+            if (custIds != null && custIds.Any())
+            {
+                var data = GetRoleCustomer(string.Join(",", custIds)).ToList();
+
+                if (data != null && data.Any())
+                {
+                    agentIds = data.Where(c => c.RoleID == (int)Consts.ROLE_CUSTOMER.AGENT
+                                            || c.RoleID == (int)Consts.ROLE_CUSTOMER.MASTER
+                                            || c.RoleID == (int)Consts.ROLE_CUSTOMER.SUPER)
+                               .Select(c => c.CustID).ToList();
+                }
+            }
+
+            return agentIds;
+        }
+
+        private IEnumerable<RoleCustomerModel> GetRoleCustomer(string custIds)
+        {
+            var roleCus = new List<RoleCustomerModel>();
+
+            var criteria = new GetRoleCustomerCriteria
+            {
+                CustIds = custIds
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                roleCus = db.Query<RoleCustomerModel>(criteria).ToList();
+            }
+
+            return roleCus;
+        }
     }
 }

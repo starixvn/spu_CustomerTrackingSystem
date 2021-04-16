@@ -44,4 +44,8 @@
 	<Function Name="Subscriber">
 		<Setting Key="CTS_AD_Subscriber_GetInfoBySubscriberName" SpName="CTS_AD_Subscriber_GetInfoBySubscriberName" DbName="MySQL.CTS_Admin.Admin"/>
 	</Function>
+  
+   <Function name="CustInfo">
+		<Setting Key="CTS_DC_CustInfo_GetCustomerRoles" SpName="CTS_DC_CustInfo_GetCustomerRoles" DbName="MySQL.CTS_DataCenter.Reporter" />
+  </Function>
 </Functions>
