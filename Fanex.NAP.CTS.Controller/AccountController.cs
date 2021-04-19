@@ -437,7 +437,12 @@
 
         private List<GraphAssociationModel> GetCustClassification(string custIds, List<GraphAssociationModel> assModel)
         {
-            var custClassification = _accountService.GetCustomerClassByCustId(custIds);
+            var custClassification = new List<CustomerClassModel>();
+
+            if(!string.IsNullOrEmpty(custIds))
+            {
+                custClassification = _accountService.GetCustomerClassByCustId(custIds).ToList();
+            }
 
             var result = assModel.GroupJoin(custClassification,
                                  a => a.CustId,
