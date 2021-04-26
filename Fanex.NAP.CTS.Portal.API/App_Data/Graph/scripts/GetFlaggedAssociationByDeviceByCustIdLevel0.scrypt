@@ -1,5 +1,5 @@
 ﻿WITH $AssociatedLevel AS level
-MATCH (c:CTSCustomer)
+MATCH (c:FlaggedCustomer)
 WHERE c.CustID IN $CustIdList
 MATCH (c)-[r:HAS_EVIDENCE]->(e:Evidence)
 WHERE ($EvidenceList[0] = -1 OR e.EvidenceID IN $EvidenceList)
