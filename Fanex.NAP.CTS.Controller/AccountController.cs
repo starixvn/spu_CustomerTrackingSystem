@@ -1338,10 +1338,10 @@
                 case (int)ClassificationSourceType.NormalAccount123:
                     reason += $"Margin: {margin} - Bet Count: {betCount}";
                     break;
-                case (int)ClassificationSourceType.VIP:
-                case (int)ClassificationSourceType.VIP111:
-                case (int)ClassificationSourceType.VIP112:
-                case (int)ClassificationSourceType.VIP113:
+                case (int)ClassificationSourceType.GoodMember:
+                case (int)ClassificationSourceType.GoodMember111:
+                case (int)ClassificationSourceType.GoodMember112:
+                case (int)ClassificationSourceType.GoodMember113:
                     reason += $"Margin: {margin} - Turn Over: {turnOver} - Active Days: {activeDays} - Bet Count: {betCount}";
                     break;
                 case (int)ClassificationSourceType.Probation:

@@ -31,7 +31,7 @@
     function GetCategoryColorList() {
         var list = [];
 
-        list.push({ 'id': '205', 'indexColor': 1, 'name': 'VIP' });
+        list.push({ 'id': '205', 'indexColor': 1, 'name': 'Good Member' });
         list.push({ 'id': '210', 'indexColor': 1, 'name': 'VVIP' });
         list.push({ 'id': '201', 'indexColor': 1, 'name': 'New Member' });
         list.push({ 'id': '202', 'indexColor': 1, 'name': 'Normal Account' });
@@ -40,9 +40,9 @@
         list.push({ 'id': '203', 'indexColor': 2, 'name': 'Smart Punter' });
         list.push({ 'id': '204', 'indexColor': 2, 'name': 'High Risk Punter' });
 
-        list.push({ 'id': '211', 'indexColor': 3, 'name': 'VIP (111)' });
-        list.push({ 'id': '212', 'indexColor': 3, 'name': 'VIP (112)' });
-        list.push({ 'id': '213', 'indexColor': 3, 'name': 'VIP (113)' });
+        list.push({ 'id': '211', 'indexColor': 3, 'name': 'Good Member (111)' });
+        list.push({ 'id': '212', 'indexColor': 3, 'name': 'Good Member (112)' });
+        list.push({ 'id': '213', 'indexColor': 3, 'name': 'Good Member (113)' });
         list.push({ 'id': '221', 'indexColor': 3, 'name': 'Normal Account (121)' });
         list.push({ 'id': '222', 'indexColor': 3, 'name': 'Normal Account (122)' });
         list.push({ 'id': '223', 'indexColor': 3, 'name': 'Normal Account (123)' });
