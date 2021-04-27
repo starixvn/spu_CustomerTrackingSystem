@@ -21,12 +21,15 @@ CALL {
         AND (($ip_AssStatus = 0) 
          	 OR ($ip_AssStatus = 1 AND NOT EXISTS ((c0)-[:HAS_EXCEPTION]-(c1)))
          	 OR ($ip_AssStatus = 2 AND EXISTS ((c0)-[:HAS_EXCEPTION]-(c1)))) 
-    RETURN DISTINCT c0,s0,st
+    WITH DISTINCT c0, min(CASE WHEN r0.CreatedDate > r1.CreatedDate THEN r0.CreatedDate ELSE r1.CreatedDate END) as assDate 
+    ORDER BY assDate desc
+    RETURN c0
     SKIP $ip_SkipRows LIMIT $ip_TakeRows
 }
-WITH c0,s0,st
+WITH c0
 MATCH (c0)-[:HAS_EVIDENCE]->(e:Evidence), (c0)-[:HAS_CATEGORY]->(cate:CustomerCategory)
+    ,(c0)-[:BELONG_TO_SUB]->(s0:Subscriber),(c0)-[:HAS_STATUS]->(st:StaticList)
 RETURN s0.SubscriberName,c0.Username,st.ItemNameDisplay AS status
-,collect(distinct e.EvidenceCode) AS codes
-,collect(distinct cate.CategoryName) AS categories
-,c0.CustID AS CustID
+    ,collect(distinct e.EvidenceCode) AS codes
+    ,collect(distinct cate.CategoryName) AS categories
+    ,c0.CustID
