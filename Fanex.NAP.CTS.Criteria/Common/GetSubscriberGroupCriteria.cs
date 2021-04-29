@@ -5,9 +5,6 @@
 
     public class GetSubscriberGroupCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_IsTest")]
-        public bool IsTest { get; set; }
-
         public override string GetSettingKey()
             => "CTS_DC_Subscriber_GetByGroup";
 

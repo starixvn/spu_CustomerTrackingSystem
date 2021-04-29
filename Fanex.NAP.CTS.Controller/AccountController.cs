@@ -283,7 +283,7 @@
 
         public ActionResult AssociatedByAccount(string username)
         {
-            var getAssociationStatus = _accountService.GetCustomerStaticStatus(3, true);
+           var getAssociationStatus = _accountService.GetCustomerStaticStatus(3, true);
 
             getAssociationStatus.Insert(0, new CustomerStaticStatusModel { ItemId = 0, ItemNameDisplay = "All" });
 
@@ -291,7 +291,7 @@
 
             getCustomerStaticAssType.Insert(0, new CustomerStaticStatusModel { ItemId = 0, ItemNameDisplay = "All" });
 
-            var accountStatus = _accountService.GetAccountStaticStatuses();
+            var accountStatus = _accountService.GetAccountStaticStatuses(1, true);
 
             var subscribers = _commonService.GetSubscriberGroups();
 
@@ -334,7 +334,7 @@
 
                 var customerAssociation = graphAssociationPage.AssociationList;                
 
-                var ctsCustIdList = customerAssociation.Select(x => new { CTSCustId = x.CTSCustID, x.SubscriberId });
+                var ctsCustIdList = customerAssociation.Select(x => new { CTSCustId = x.CTSCustID, SubscriberId = x.SubscriberID });
 
                 customerAssociation = GetCustClassification(string.Join("," , customerAssociation.Select(c=>c.CustId)), customerAssociation);
 
@@ -357,7 +357,7 @@
                         StatusId = x.StatusId.HasValue ? x.StatusId.Value : 0,
                         SiteId = x.SiteID.HasValue ? x.SiteID.Value : 0,
                         SiteName = !string.IsNullOrEmpty(x.SiteName) ? x.SiteName : "-",
-                        SubscriberId = x.SubscriberId,
+                        SubscriberId = x.SubscriberID,
                         SubscriberName = !string.IsNullOrEmpty(x.SubscriberName) ? x.SubscriberName : "-",
                         CTSCustId = x.CTSCustID,
                         IsLinked = x.AssociationStatus == 1,
@@ -455,7 +455,7 @@
                                           CTSCustID = group.a.CTSCustID,
                                           CustId = group.a.CustId,
                                           CustSubId = group.a.CustSubId,
-                                          SubscriberId = group.a.SubscriberId,
+                                          SubscriberID = group.a.SubscriberID,
                                           SubscriberName = group.a.SubscriberName,
                                           Username = group.a.Username,
                                           Username2 = group.a.Username2,

@@ -45,7 +45,7 @@
 
         GraphAssociationPaging GetCustomerAssociationByGraph(string apiURL, AssociatedFilterModel filterModel, bool fromMySQL = false);
 
-        List<AccountStaticStatusModel> GetAccountStaticStatuses();
+        List<AccountStaticStatusModel> GetAccountStaticStatuses(int listId, bool status);
 
         List<GraphDirectAssociationModel> GetDirectAssocationByGraph(string apiURL, List<long> ctsCustIds);
 

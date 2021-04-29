@@ -80,5 +80,13 @@
             VVIP = 213,
             ROBOT = 61
         };
+
+        public enum ACCOUNT_STATUS : int
+        {
+            All = 0,
+            Open = 1,
+            Closed = 2,
+            Other = 3
+        }
     }
 }
