@@ -318,7 +318,7 @@
         {
             var groupStatuses = new List<AccountStaticStatusModel>();
 
-            var accountStatuses = GetCustomerStaticStatus(listId, status);
+            var accountStatuses = GetCustomerStaticStatus(listId, status)?.OrderBy(o=>o.PriorityOrder);
 
             if (accountStatuses != null && accountStatuses.Any())
             {
