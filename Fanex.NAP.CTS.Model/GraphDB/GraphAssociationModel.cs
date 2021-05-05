@@ -11,7 +11,7 @@
 
         public int CustSubId { get; set; }
 
-        public int SubscriberId { get; set; }
+        public int SubscriberID { get; set; }
 
         public string SubscriberName { get; set; }
 

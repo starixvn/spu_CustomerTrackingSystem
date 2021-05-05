@@ -31,6 +31,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public class AccountService : IAccountService
     {
@@ -313,29 +314,31 @@
             }
         }
 
-        public List<AccountStaticStatusModel> GetAccountStaticStatuses()
+        public List<AccountStaticStatusModel> GetAccountStaticStatuses(int listId, bool status)
         {
-            var statusList = new List<AccountStaticStatusModel>();
+            var groupStatuses = new List<AccountStaticStatusModel>();
 
-            statusList.Add(new AccountStaticStatusModel
+            var accountStatuses = GetCustomerStaticStatus(listId, status)?.OrderBy(o=>o.PriorityOrder);
+
+            if (accountStatuses != null && accountStatuses.Any())
             {
-                Ids = "1,11,2,3,4,12,13,14",
-                Name = "All"
-            });
+                groupStatuses.Add(new AccountStaticStatusModel
+                {
+                    Ids = string.Join(",", accountStatuses.Select(s => s.ItemId).ToList()),
+                    Name = Enum.GetName(typeof(ACCOUNT_STATUS), ACCOUNT_STATUS.All)
+                });
 
-            statusList.Add(new AccountStaticStatusModel
-            {
-                Ids = "1,11", // 1:Open, 11:Active
-                Name = "Open"
-            });
+                accountStatuses.GroupBy(g => g.PriorityOrder).ToList().ForEach(c =>
+                {
+                    groupStatuses.Add(new AccountStaticStatusModel
+                    {
+                        Ids = string.Join(",", c.Select(s => s.ItemId).ToList()),
+                        Name = Enum.GetName(typeof(ACCOUNT_STATUS), c.Key)
+                    });
+                });
+            }
 
-            statusList.Add(new AccountStaticStatusModel
-            {
-                Ids = "2,3,4,12,13,14", // 2:Disabled, 3:Closed, 4:Suspended, 12:Inactive, 13:View Only, 14:Suspended
-                Name = "Closed"
-            });
-
-            return statusList;
+            return groupStatuses;
         }
 
         public List<GraphDirectAssociationModel> GetDirectAssocationByGraph(string apiURL, List<long> ctsCustIds)

@@ -4,7 +4,6 @@
     {
         public string Ids { get; set; }
 
-
         public string Name { get; set; }
     }
 }
