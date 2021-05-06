@@ -336,7 +336,7 @@
 
                 var ctsCustIdList = customerAssociation.Select(x => new { CTSCustId = x.CTSCustID, SubscriberId = x.SubscriberID });
 
-                customerAssociation = GetCustClassification(string.Join("," , customerAssociation.Select(c=>c.CustId)), customerAssociation);
+                customerAssociation = GetCustClassification(string.Join("," , customerAssociation.Select(c=>c.CustId).Distinct()), customerAssociation);
 
                 var flaggedAffectedTagList = _accountService.GetDirectAssociatedAccountTagFlagged(JsonConvert.SerializeObject(ctsCustIdList));
 
@@ -473,8 +473,9 @@
                                           ParentIDs = group.a.ParentIDs,
                                           CategoryIDs = group.a.CategoryIDs,
                                           CategoryNames = group.a.CategoryNames,
-                                          CustomerClasses = (temp != null && temp.CustomerClass != null) ? temp.CustomerClass.ToString() : "-",
+                                          CustomerClasses = (temp != null && temp.CustomerClass != null && group.a.CustSubId == 0) ? temp.CustomerClass.ToString() : "-",
                                       }).ToList();
+
             return result;
         } 
 
