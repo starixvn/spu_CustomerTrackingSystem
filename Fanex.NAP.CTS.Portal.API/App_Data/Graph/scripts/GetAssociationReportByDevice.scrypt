@@ -7,29 +7,17 @@
 //				- ip_AssStatus: 0:All; 1:Link; 2: Unlink  (multi-selection)
 //				- ip_EvidenceCode
 //				- ip_AssType:  1: Device; 2:Manual; 3:IP  (single-selction)
-CALL {
-    MATCH (c0:FlaggedCustomer)-[:BELONG_TO_SUB]->(s0:Subscriber)
-    WHERE s0.SubscriberID in $ip_SubscriberList
-    MATCH (c0:FlaggedCustomer)-[:HAS_STATUS]->(st:StaticList),(c0)-[:HAS_EVIDENCE]->(e:Evidence)
-    WHERE st.ItemID IN $ip_AccountStatus AND st.ListID = 1
-        AND e.EvidenceID IN $ip_EvidenceCode
-    WITH c0,s0,st
-    MATCH (c0)-[r0:USED_DEVICE]->(d:Device)<-[r1:USED_DEVICE]-(c1:CTSCustomer)
-    WHERE c0.CustID <> c1.CustID
-        AND CASE WHEN r0.CreatedDate > r1.CreatedDate THEN r0.CreatedDate ELSE r1.CreatedDate END >= $ip_AssCreatedFrom     //datetime("2021-04-01")
-        AND CASE WHEN r0.CreatedDate > r1.CreatedDate THEN r0.CreatedDate ELSE r1.CreatedDate END <= $ip_AssCreatedTo       //datetime("2021-04-21")
-        AND (($ip_AssStatus = 0) 
-         	 OR ($ip_AssStatus = 1 AND NOT EXISTS ((c0)-[:HAS_EXCEPTION]-(c1)))
-         	 OR ($ip_AssStatus = 2 AND EXISTS ((c0)-[:HAS_EXCEPTION]-(c1)))) 
-    WITH DISTINCT c0, min(CASE WHEN r0.CreatedDate > r1.CreatedDate THEN r0.CreatedDate ELSE r1.CreatedDate END) as assDate 
-    ORDER BY assDate desc
-    RETURN c0
-    SKIP $ip_SkipRows LIMIT $ip_TakeRows
-}
-WITH c0
-MATCH (c0)-[:HAS_EVIDENCE]->(e:Evidence), (c0)-[:HAS_CATEGORY]->(cate:CustomerCategory)
-    ,(c0)-[:BELONG_TO_SUB]->(s0:Subscriber),(c0)-[:HAS_STATUS]->(st:StaticList)
-RETURN s0.SubscriberName,c0.Username,st.ItemNameDisplay AS status
-    ,collect(distinct e.EvidenceCode) AS codes
-    ,collect(distinct cate.CategoryName) AS categories
-    ,c0.CustID
+MATCH (sub:Subscriber)<-[:BELONG_TO_SUB]-(c:FlaggedCustomer)-[:HAS_STATUS]->(st:StaticList),(c1:CTSCustomer)-[r:SEEN_ACCOUNT]-(c)-[:HAS_EVIDENCE]->(e:Evidence), (c)-[:HAS_CATEGORY]->(cate:CustomerCategory)
+WHERE sub.SubscriberID IN $ip_SubscriberList
+    AND st.ItemID IN ip_AccountStatus AND st.ListID = 1
+    AND e.EvidenceID IN $ip_EvidenceID
+    AND r.FirstSeenDate >= $ip_AssCreatedFrom AND r.FirstSeenDate  < $ip_AssCreatedTo
+    //AND (($ip_AssStatus = 0) 
+    //     	 OR ($ip_AssStatus = 1 AND NOT EXISTS ((c)-[:HAS_EXCEPTION]-(c1)))
+    //     	 OR ($ip_AssStatus = 2 AND EXISTS ((c)-[:HAS_EXCEPTION]-(c1)))) 
+RETURN DISTINCT c.CTSCustID AS CTSCustID
+    , sub.SubscriberName AS SubscriberName
+    , st.ItemNameDisplay AS Status
+    , collect(distinct e.EvidenceCode) AS Evicodes
+    , collect(distinct cate.CategoryName) AS Categories
+SKIP $ip_SkipRows LIMIT $ip_TakeRows
