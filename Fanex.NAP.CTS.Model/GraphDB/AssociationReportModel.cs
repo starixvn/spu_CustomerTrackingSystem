@@ -13,6 +13,8 @@
 
         public List<string> EvidenceCodes { get; set; }
 
-        public int SubscriberId { get; set; }
+        public List<string> Categories { get; set; }
+
+        public string SubscriberName { get; set; }
     }
 }

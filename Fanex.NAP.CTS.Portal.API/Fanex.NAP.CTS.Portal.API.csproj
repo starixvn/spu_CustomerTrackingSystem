@@ -74,7 +74,7 @@
       <HintPath>..\packages\Fanex.Logging.Sentry.RavenClient.1.0.1\lib\net461\Fanex.Logging.Sentry.RavenClient.dll</HintPath>
     </Reference>
     <Reference Include="Fanex.NAP.SPU.Graph.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Fanex.NAP.SPU.Graph.Core.4.0.0\lib\Fanex.NAP.SPU.Graph.Core.dll</HintPath>
+      <HintPath>..\packages\Fanex.NAP.SPU.Graph.Core.4.0.1\lib\Fanex.NAP.SPU.Graph.Core.dll</HintPath>
     </Reference>
     <Reference Include="FromHeaderAttribute, Version=2.0.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FromHeaderAttribute.2.0.4\lib\net45\FromHeaderAttribute.dll</HintPath>
@@ -464,6 +464,7 @@
     <Content Include="App_Data\Graph\scripts\GetAssociationOneLevelForExtAcc.scrypt" />
     <Content Include="App_Data\Graph\scripts\GetProbationWithAssociatedPA.scrypt" />
     <Content Include="App_Data\Graph\scripts\GetAssociationOneLevelByCustIdByAI.scrypt" />
+    <Content Include="App_Data\Graph\scripts\GetAssociationReportByDevice_CountTotal.scrypt" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
