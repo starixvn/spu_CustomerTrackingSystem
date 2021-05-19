@@ -125,7 +125,7 @@
   <Function name="AssociationReport">    
 	  <Setting Key="CTS_DC_Report_GetAssociatedAccount " SpName="CTS_DC_Report_GetAssociatedAccount" DbName="MySQL.CTS_DataCenter.Reporter"/>
 	  <Setting Key="CTS_DC_Subscriber_GetByGroup " SpName="CTS_DC_Subscriber_GetByGroup" DbName="MySQL.CTS_DataCenter.Reporter"/>	
-	  <Setting Key="CTS_DC_RPT_AssociatedAccount " SpName="CTS_DC_RPT_AssociatedAccount" DbName="MySQL.CTS_DataCenter.Reporter"/>
+	  <Setting Key="CTS_DC_RPT_AssociatedAccount " SpName="CTS_DC_RPT_AssociatedAccount" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter"/>
 	  <Setting Key="CTS_DC_RPT_AssociatedAccount_Detail " SpName="CTS_DC_RPT_AssociatedAccount_Detail" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter"/>
   </Function>
 
