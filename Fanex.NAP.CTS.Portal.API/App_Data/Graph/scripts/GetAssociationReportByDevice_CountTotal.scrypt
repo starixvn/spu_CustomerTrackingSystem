@@ -12,7 +12,7 @@ MATCH (sub:Subscriber)<-[:BELONG_TO_SUB]-(c:FlaggedCustomer)-[:HAS_STATUS]->(st:
 WHERE sub.SubscriberID IN $ip_SubscriberList
     AND st.ItemID IN $ip_AccountStatus AND st.ListID = 1
     AND e.EvidenceID IN $ip_EvidenceID
-    //AND r.FirstSeenDate >= $ip_AssCreatedFrom AND r.FirstSeenDate  < $ip_AssCreatedTo
+    AND r.FirstSeenDate >= datetime($ip_AssCreatedFrom) AND r.FirstSeenDate  < datetime($ip_AssCreatedTo)
     AND (($ip_AssStatus = 0) 
          	 OR ($ip_AssStatus = 1 AND NOT EXISTS ((c)-[:HAS_EXCEPTION]-(c1)))
          	 OR ($ip_AssStatus = 2 AND EXISTS ((c)-[:HAS_EXCEPTION]-(c1)))) 

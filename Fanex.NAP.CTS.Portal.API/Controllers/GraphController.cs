@@ -368,6 +368,9 @@
                     result.TotalItems = DbSessionFactory.Execute<int>("GetAssociationReportByDevice_CountTotal", paramForGraph).Data.FirstOrDefault();
                     result.AssociationList = DbSessionFactory.Execute<AssociationReportModel>(scriptName, paramForGraph).Data;
 
+                    LogService.Info("result.TotalItems: " + result.TotalItems.ToString());
+                    LogService.Info("result.AssociationList: " + result.AssociationList.Count().ToString());
+
                     return result;
                 }
             }
