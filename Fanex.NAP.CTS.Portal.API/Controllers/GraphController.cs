@@ -365,7 +365,7 @@
                         ip_SkipRows = paras.SkipRow
                     };
 
-                    result.TotalItems = DbSessionFactory.Execute<int>("GetAssociationReportByDevice_CountTotal", paramForGraph).Data.FirstOrDefault();
+                    //result.TotalItems = DbSessionFactory.Execute<int>("GetAssociationReportByDevice_CountTotal", paramForGraph).Data.FirstOrDefault();
                     result.AssociationList = DbSessionFactory.Execute<AssociationReportModel>(scriptName, paramForGraph).Data;
 
                     LogService.Info("result.TotalItems: " + result.TotalItems.ToString());
