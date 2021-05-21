@@ -376,7 +376,7 @@
             }
             catch (Exception ex)
             {
-                LogService.Error("GetAssociationReport failed: " + ex.Message + ex.StackTrace);
+                LogService.Error("GetAssociationReport failed: " + ex.Message + ex.StackTrace + ex.InnerException.Message);
             }
 
             return result;
