@@ -629,9 +629,13 @@
             {
                 var subscriber = _subscriberService.GetSubscriberBySubscriberName(subscriberName);
 
-                if(subscriber.DCSStatus)
+                if (subscriber != null && subscriber.DCSStatus)
                 {
                     return Json(subscriber);
+                }
+                else
+                {
+                    LogService.Error($"{subscriberName} is not integrated on CTS.");
                 }
 
                 return Json(new SubscriberInfo());
