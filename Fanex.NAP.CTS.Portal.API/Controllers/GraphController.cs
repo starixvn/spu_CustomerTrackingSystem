@@ -376,7 +376,12 @@
             }
             catch (Exception ex)
             {
-                LogService.Error("GetAssociationReport failed: " + ex.Message + ex.StackTrace + ex.InnerException.Message);
+                LogService.Error("GetAssociationReport failed: " + ex.Message + ex.StackTrace + "\n"
+                        + ex.InnerException.Message + ex.InnerException.Source + ((Neo4j.Driver.Neo4jException)ex.InnerException).Code
+                        + ex.InnerException.StackTrace + "\n"
+                        + "Inner exception 2: " + ex.InnerException.InnerException.Message + "\n"
+                        + "Inner exception 3: " + ex.InnerException.InnerException.InnerException.Message + "\n"
+                        + "Inner exception 4: " + ex.InnerException.InnerException.InnerException.InnerException.Message);
             }
 
             return result;
