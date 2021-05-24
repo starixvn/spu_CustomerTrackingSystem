@@ -49,6 +49,8 @@
             var associationList = Enumerable.Empty<AssociationViewModel>();
             int totalItems = 0;
             var getAssociationFromMySql = AppSettings.Get("GetAssociationFromMySQL") == "1";
+            var apiURI = AppSettings.Get("Graph_GetAssociations");
+            
 
             if (filter.ToDate != DateTime.MinValue)
             {
@@ -76,9 +78,7 @@
             }
             else
             {
-                //var associationsFromGraph = _associationService.GetAssociations("http://ha.nexdev.net:7723/api/Graph/GetAssociationReport", filter);
-                //var associationsFromGraph = _associationService.GetAssociations("", filter);
-                var associationsFromGraph = _associationService.GetAssociations("http://localhost:60143/api/Graph/GetAssociationReport", filter);
+                var associationsFromGraph = _associationService.GetAssociations(apiURI, filter);
                 if (associationsFromGraph.AssociationList != null && associationsFromGraph.AssociationList.Any())
                 {
                     associationList = associationsFromGraph.AssociationList
