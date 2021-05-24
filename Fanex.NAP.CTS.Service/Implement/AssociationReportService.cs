@@ -74,9 +74,9 @@
                     AssociatedDateFrom = filter.FromDate,
                     AssociatedDateTo = filter.ToDate,
                     AccountStatuses = filter.AccountStatusIds,
-                    filter.SiteName,
+                    filter.SubscriberIDs,
                     filter.AssociationStatus,
-                    filter.EvidenceCode,
+                    filter.EvidenceIDs,
                     filter.AssociationType,
                     TakeRow = filter.length,
                     SkipRow = filter.start

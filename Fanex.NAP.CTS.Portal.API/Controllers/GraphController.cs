@@ -356,7 +356,7 @@
                     var paramForGraph = new
                     {
                         ip_AssCreatedFrom = paras.AssociatedDateFrom.AddHours(4),
-                        ip_AssCreatedTo = paras.AssociatedDateTo.AddHours(4).AddDays(1),
+                        ip_AssCreatedTo = paras.AssociatedDateTo.AddHours(4),
                         ip_SubscriberList = paras.SubscriberIDs.Split(',').Select(int.Parse),
                         ip_AccountStatus = paras.AccountStatuses.Split(',').Select(int.Parse),
                         ip_EvidenceID = paras.EvidenceIDs?.Trim().Split(',').Select(int.Parse),
