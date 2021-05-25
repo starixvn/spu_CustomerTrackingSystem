@@ -1,0 +1,54 @@
+﻿@import "../../abstracts/variables";
+@import "../../abstracts/mixins";
+.match-monitor {
+    .monitor-container {
+        margin: 1rem 1.6rem 1rem 1.6rem;
+
+        .monitor-table {
+            .group-control {
+                position: sticky;
+                top: 6rem;
+                z-index: 99;
+                background: $page-bg;
+                padding: 1rem 0 0 0;
+
+                .title-association {
+                    margin-bottom: -1.3rem;
+                }
+
+                .form-filter {
+                    .calendar {
+                        display: flex;
+                        align-items: center;
+                        width: auto;
+
+                        .icon-calendar-text {
+                            right: 2.2rem;
+                            bottom: 1.7rem;
+                        }
+
+
+                        .text {
+                            margin-right: .7rem;
+                            margin-bottom: 0;
+                        }
+                    }
+
+                    .group {
+                        .width-select {
+                            width: 15.5rem;
+                        }
+                    }
+
+                    .button-generate {
+                        background-color: #396ef8;
+                        border-radius: 2px;
+                        color: $page-bg;
+                        height: auto !important;
+                        padding: .7rem 2rem;
+                    }
+                }
+            }
+        }
+    }
+}

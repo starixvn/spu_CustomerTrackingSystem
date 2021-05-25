@@ -8,10 +8,35 @@
     @Styles.Render("~/match-monitor-styles")
 }
 
-   Hello
+<section class="match-monitor">
+    <div class="content">
+        <h2 class="page-title">MATCH MONITOR</h2>
+    </div>
+        
+    <div class="monitor-container">
+        <div class="monitor-table">
+            <div class="group-control">
+                <div class="title-association"><div class="label">First Associated date </div></div>
+                <div class="form-filter">
+                    <div class="group calendar width-180">
+                        <label class="text">From</label>
+                        <input type="text" id="dpkFromDate" class="control" readonly>
+                        <span class="icon-calendar-text"></span>
+                    </div>
+                    <div class="group calendar width-180">
+                        <label class="text">To</label>
+                        <input type="text" id="dpkToDate" class="control" readonly>
+                        <span class="icon-calendar-text"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
 
 
 
-@section scripts{
-    @Scripts.Render("~/match-monitor-scripts")
-}
+    @section scripts{
+        @Scripts.Render("~/match-monitor-scripts")
+    }

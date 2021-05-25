@@ -504,6 +504,12 @@
     <Content Include="Content\scss\pages\latest-transaction\latest-transaction.min.css">
       <DependentUpon>latest-transaction.css</DependentUpon>
     </Content>
+    <Content Include="Content\scss\pages\match-monitor\match-monitor.css">
+      <DependentUpon>match-monitor.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\scss\pages\match-monitor\match-monitor.min.css">
+      <DependentUpon>match-monitor.css</DependentUpon>
+    </Content>
     <Content Include="Content\scss\pages\notification-setting\notification-setting.css">
       <DependentUpon>notification-setting.scss</DependentUpon>
     </Content>
@@ -526,6 +532,7 @@
     <Content Include="Content\scss\pages\manage-subscriber\manage-subscriber.scss" />
     <Content Include="Content\scss\pages\notification-setting\notification-setting.scss" />
     <Content Include="Content\scss\pages\association-report\association-report.scss" />
+    <Content Include="Content\scss\pages\match-monitor\match-monitor.scss" />
     <None Include="Content\scss\pages\problem-account-monitor\problem-account-monitor.scss" />
     <None Include="Content\scss\pages\import-evidences\import-evidences.scss" />
     <Content Include="Content\scss\pages\import-evidences\import-evidences.css">
@@ -1825,7 +1832,6 @@
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\SonarAnalyzer.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Content\scss\pages\match-monitor\" />
     <Folder Include="Views\UM\" />
   </ItemGroup>
   <ItemGroup>
