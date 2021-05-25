@@ -958,6 +958,7 @@
     <Content Include="Scripts\ImportEvidences\index.js" />
     <Content Include="Scripts\LatestTransaction\index.js" />
     <Content Include="Scripts\ManageSubscriber\index.js" />
+    <Content Include="Scripts\MatchMonitor\detail.js" />
     <Content Include="Scripts\NotificationSetting\notification-setting.js" />
     <Content Include="Scripts\popoto\d3.min.js" />
     <Content Include="Scripts\popoto\d3.v3.min.js" />
@@ -995,6 +996,7 @@
     <Content Include="Views\Account\Associated\MatchBettingPattern.cshtml" />
     <Content Include="Views\Account\Associated\IPAssociation.cshtml" />
     <Content Include="Views\LatestTransaction\Index.cshtml" />
+    <Content Include="Views\MatchMonitor\Detail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CoreBetList.css" />
@@ -1635,8 +1637,7 @@
     <Content Include="Scripts\JQuery\jquery.validate.min.js" />
     <Content Include="Scripts\JQuery\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\JQuery\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Scripts\MatchMonitor\FraudCaseDetails\fraud-case-details.js" />
-    <Content Include="Scripts\MatchMonitor\match-monitor.js" />
+    <Content Include="Scripts\MatchMonitor\index.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\Moment\moment-with-locales.js" />
     <Content Include="Scripts\Moment\moment-with-locales.min.js" />
@@ -1728,7 +1729,6 @@
     </Content>
     <Content Include="Views\Shared\_Menu.cshtml" />
     <Content Include="Views\FraudCase\DelayedGoal\Dialog.cshtml" />
-    <Content Include="Views\MatchMonitor\MatchNote.cshtml" />
     <Content Include="WebConfigs\Web.AppSettings.PRO.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1755,15 +1755,9 @@
     <Content Include="WebConfigs\Web.UAT.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Views\MatchMonitor\FraudCaseDetails\Index.cshtml" />
-    <Content Include="Views\MatchMonitor\FraudCaseDetails\TicketDetails.cshtml" />
-    <Content Include="Views\MatchMonitor\FraudCaseDetails\CustomerDetails.cshtml" />
     <Content Include="Views\SuspiciousCustomer\Index.cshtml" />
     <Content Include="Views\SuspiciousCustomerDetails\Index.cshtml" />
     <Content Include="Views\SuspiciousCustomer\Note.cshtml" />
-    <Content Include="Views\MatchMonitor\FraudCaseDetails\AssociatedAccounts.cshtml" />
-    <Content Include="Views\MatchMonitor\FraudCaseDetails\TicketLast7Days.cshtml" />
-    <Content Include="Views\MatchMonitor\FraudCaseDetails\TicketByIP.cshtml" />
     <Content Include="Views\FraudCase\ScannedOfficeIP\Dialog.cshtml" />
     <Content Include="Views\ScannedOfficeIpReport\Index.cshtml" />
     <Content Include="Views\FraudCase\DailyDataCapture\Dialog.cshtml" />
@@ -1831,6 +1825,7 @@
     <Analyzer Include="..\packages\SonarAnalyzer.CSharp.7.14.0.8411\analyzers\SonarAnalyzer.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Content\scss\pages\match-monitor\" />
     <Folder Include="Views\UM\" />
   </ItemGroup>
   <ItemGroup>
