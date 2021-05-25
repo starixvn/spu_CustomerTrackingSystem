@@ -365,7 +365,6 @@
                         ip_SkipRows = paras.SkipRow
                     };
 
-                    LogService.Info("GetAssociationReport start");
                     result.AssociationList = DbSessionFactory.Execute<AssociationReportModel>(scriptName, paramForGraph).Data;
                     //result.TotalItems = DbSessionFactory.Execute<int>("GetAssociationReportByDevice_CountTotal", paramForGraph).Data.FirstOrDefault();
 
