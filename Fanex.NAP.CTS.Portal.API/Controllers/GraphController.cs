@@ -366,7 +366,7 @@
                     };
 
                     result.AssociationList = DbSessionFactory.Execute<AssociationReportModel>(scriptName, paramForGraph).Data;
-                    //result.TotalItems = DbSessionFactory.Execute<int>("GetAssociationReportByDevice_CountTotal", paramForGraph).Data.FirstOrDefault();
+                    result.TotalItems = DbSessionFactory.Execute<int>("GetAssociationReportByDevice_CountTotal", paramForGraph).Data.FirstOrDefault();
 
                     LogService.Info("result.TotalItems: " + result.TotalItems.ToString());
                     LogService.Info("result.AssociationList: " + result.AssociationList.Count().ToString());
@@ -378,10 +378,7 @@
             {
                 LogService.Error("GetAssociationReport failed: " + ex.Message + ex.StackTrace + "\n"
                         + ex.InnerException.Message + ex.InnerException.Source + ((Neo4j.Driver.Neo4jException)ex.InnerException).Code
-                        + ex.InnerException.StackTrace + "\n"
-                        + "Inner exception 2: " + ex.InnerException.InnerException.Message + "\n"
-                        + "Inner exception 3: " + ex.InnerException.InnerException.InnerException.Message + "\n"
-                        + "Inner exception 4: " + ex.InnerException.InnerException.InnerException.InnerException.Message);
+                        + ex.InnerException.StackTrace);
             }
 
             return result;
