@@ -113,7 +113,7 @@
         position: sticky;
         top: 17rem;
         font-weight: 300;
-        z-index: 99; }
+        z-index: 9; }
       .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor tbody .odd, .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail tbody .odd {
         background-color: #3773CC; }
         .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor tbody .odd:hover, .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail tbody .odd:hover {
