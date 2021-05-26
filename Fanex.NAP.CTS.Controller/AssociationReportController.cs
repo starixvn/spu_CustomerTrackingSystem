@@ -23,6 +23,7 @@
     {
         private readonly IAssociationReportService _associationService;
         private readonly ICommonService _commonService;
+        private readonly bool getDataFromMySql;
 
         public override string BaseControllerName { get => Consts.MenuItemReport; }
 
@@ -30,6 +31,8 @@
         {
             _associationService = new AssociationReportService();
             _commonService = new CommonService();
+
+            getDataFromMySql = AppSettings.Get("GetAssociationReportFromMySQL") == "1";
         }
 
         public ActionResult Index()
@@ -48,7 +51,6 @@
         {
             var associationList = Enumerable.Empty<AssociationViewModel>();
             int totalItems = 0;
-            var getAssociationFromMySql = AppSettings.Get("GetAssociationFromMySQL") == "1";
             var apiURI = AppSettings.Get("Graph_GetAssociations");
             
 
@@ -57,7 +59,7 @@
                 filter.ToDate = new DateTime(filter.ToDate.Year, filter.ToDate.Month, filter.ToDate.Day, 23, 59, 59);
             }
 
-            if (getAssociationFromMySql)
+            if (getDataFromMySql)
             {
                 var associations = _associationService.GetAssociationFromMySql(filter, out totalItems);
 
@@ -129,37 +131,65 @@
         public ActionResult GetAssociationDetail(AssociationDetailFilterViewModel filter)
         {
             var associationList = Enumerable.Empty<AssociationDetailViewModel>();
-
-            var totalItems = 0;
+            var apiURI = AppSettings.Get("Graph_GetAssociationDetail");
+            int totalItems = 0;
 
             if (filter.ToDate != DateTime.MinValue)
             {
                 filter.ToDate = new DateTime(filter.ToDate.Year, filter.ToDate.Month, filter.ToDate.Day, 23, 59, 59);
             }
 
-            var associations = _associationService.GetAssociationDetailFromMySql(filter, out totalItems);
+            var associationTypes = _associationService.GetCustomerStaticStatus(2, true);
+            //if (getDataFromMySql)
+            //{
+                var associations = _associationService.GetAssociationDetailFromMySql(filter, out totalItems);
 
-            if (associations != null && associations.Any())
-            {
-                var associationTypes = _associationService.GetCustomerStaticStatus(2, true);
-
-                var groupForSite = associations.GroupBy(x => x.SubscriberID)
-                    .Select(g => new { SubscriberID = g.Key, TotalAccounts = g.Count() });
-
-                associationList = associations.Select(x => new AssociationDetailViewModel
+                if (associations != null && associations.Any())
                 {
-                    CTSCustId = x.CTSCustID,
-                    UserName = x.UserName,
-                    SubscriberId = x.SubscriberID,
-                    SubscriberName = x.SubscriberName,
-                    AssociatedDate = x.AssociationDate,
-                    AccountStatus = x.AccountStatus,
-                    AssociatedDateString = x.AssociationDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                    IsLinked = x.AssociationStatus,
-                    AssociationTypeName = GetAssociationTypeName(associationTypes, x.AssociationType),
-                    TotalAssociationAccount = groupForSite.FirstOrDefault(y => y.SubscriberID == x.SubscriberID).TotalAccounts
-                }).OrderBy(x => x.SubscriberId);
-            }
+                    var groupForSite = associations.GroupBy(x => x.SubscriberID)
+                        .Select(g => new { SubscriberID = g.Key, TotalAccounts = g.Count() });
+
+                    associationList = associations.Select(x => new AssociationDetailViewModel
+                    {
+                        CTSCustId = x.CTSCustID,
+                        UserName = x.UserName,
+                        SubscriberId = x.SubscriberID,
+                        SubscriberName = x.SubscriberName,
+                        AssociatedDate = x.AssociationDate,
+                        AccountStatus = x.AccountStatus,
+                        AssociatedDateString = x.AssociationDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+                        IsLinked = x.AssociationStatus,
+                        AssociationTypeName = GetAssociationTypeName(associationTypes, x.AssociationType),
+                        TotalAssociationAccount = groupForSite.FirstOrDefault(y => y.SubscriberID == x.SubscriberID).TotalAccounts
+                    }).OrderBy(x => x.SubscriberId);
+                }
+            //}
+            //else
+            //{
+            //    var associations = _associationService.GetAssociationDetail(apiURI, filter);
+            //    var assList = associations.AssociationList;
+
+            //    if (assList != null && assList.Any())
+            //    {
+            //        var groupForSite = assList.GroupBy(x => x.SubscriberId)
+            //            .Select(g => new { SubscriberID = g.Key, TotalAccounts = g.Count() });
+
+            //        associationList = assList.Select(x => new AssociationDetailViewModel
+            //        {
+            //            CTSCustId = x.CTSCustId,
+            //            UserName = x.UserName,
+            //            SubscriberId = x.SubscriberId,
+            //            SubscriberName = x.SubscriberName,
+            //            AssociatedDate = x.AssociationDateFromGraphDB,
+            //            AccountStatus = x.AccountStatus,
+            //            AssociatedDateString = x.AssociationDateFromGraphDB.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+            //            IsLinked = x.AssociationStatus == 1 ? true : false,
+            //            AssociationTypeName = GetAssociationTypeName(associationTypes, x.AssociationType),
+            //            TotalAssociationAccount = groupForSite.FirstOrDefault(y => y.SubscriberID == x.SubscriberId).TotalAccounts
+            //        }).OrderBy(x => x.SubscriberId);
+            //    }
+            //}
+            
 
             return Json(new
             {
