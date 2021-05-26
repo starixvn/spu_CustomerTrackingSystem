@@ -201,26 +201,59 @@
 
                                     .container-checkbox {
                                         .checkmark {
-                                            top: -.7rem;
-                                            left: 3rem;
+                                            top: 50%;
+                                            left: 30%;
                                             z-index: 1;
+                                            transform: translate(50%,-50%);
                                         }
                                     }
                                 }
                             }
                         }
                     }
+
+                    .table-monitor-detail {
+                        .click-view-details {
+                            color: $page-bg;
+                        }
+
+                        .odd {
+                            background-color: #3773CC;
+
+                            &:hover {
+                                background-color: #3773CC !important;
+                            }
+
+                            td {
+                                color: $page-bg
+                            }
+                        }
+
+                        .even {
+                            background-color: #FF4343;
+
+                            &:hover {
+                                background-color: #FF4343 !important;
+                            }
+
+                            td {
+                                color: $page-bg
+                            }
+                        }
+                    }
                 }
             }
-             #first-monitor-datatable{
-                 padding-right : 2rem;
-             }
-            #first-monitor-datatable, #second-monitor-datatable{
-                width : 100%
+
+            #first-monitor-datatable {
+                padding-right: 2rem;
+            }
+
+            #first-monitor-datatable, #second-monitor-datatable {
+                width: 100%
             }
         }
     }
 }
-.wrapper {
+.detailpage {
     width: 450rem;
 }
