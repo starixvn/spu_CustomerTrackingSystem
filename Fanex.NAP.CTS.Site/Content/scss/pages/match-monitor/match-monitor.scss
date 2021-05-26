@@ -36,7 +36,16 @@
 
                     .group {
                         .width-select {
-                            width: 15.5rem;
+                            width: 18.5rem;
+                        }
+
+                        .text-box {
+                            height: 2.8rem;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            width: auto;
+                            padding: 0 1rem;
                         }
                     }
 
@@ -107,7 +116,11 @@
                 }
             }
 
-            #monitor-datatable, #first-monitor-datatable {
+            .group-table {
+                display: flex;
+            }
+
+            #monitor-datatable, #first-monitor-datatable, #second-monitor-datatable {
                 .table-report {
                     font-family: $font-family;
 
@@ -118,7 +131,7 @@
                         background-color: #e3e9f6;
                         position: -webkit-sticky;
                         position: sticky;
-                        top: 13rem;
+                        top: 12.9rem;
                         z-index: 11;
 
                         .dataTables_length {
@@ -171,7 +184,7 @@
 
                                 th {
                                     position: sticky;
-                                    top: 17rem;
+                                    top: 16.9rem;
                                     font-weight: 300;
                                     z-index: 9
                                 }
@@ -199,6 +212,15 @@
                     }
                 }
             }
+             #first-monitor-datatable{
+                 padding-right : 2rem;
+             }
+            #first-monitor-datatable, #second-monitor-datatable{
+                width : 100%
+            }
         }
     }
+}
+.wrapper {
+    width: 450rem;
 }
