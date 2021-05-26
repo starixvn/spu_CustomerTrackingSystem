@@ -1,5 +1,6 @@
 ﻿@import "../../abstracts/variables";
 @import "../../abstracts/mixins";
+
 .match-monitor, .detailpage {
     .monitor-container {
         margin: 1rem 1.6rem 1rem 1.6rem;
@@ -214,30 +215,22 @@
 
                     .table-monitor-detail {
                         .click-view-details {
-                            color: $page-bg;
+                            color: #474747;
                         }
 
                         .odd {
-                            background-color: #3773CC;
+                            background-color: #FF8989;
 
                             &:hover {
-                                background-color: #3773CC !important;
-                            }
-
-                            td {
-                                color: $page-bg
+                                background-color: #FF8989 !important;
                             }
                         }
 
                         .even {
-                            background-color: #FF4343;
+                            background-color: #A3C4F5;
 
                             &:hover {
-                                background-color: #FF4343 !important;
-                            }
-
-                            td {
-                                color: $page-bg
+                                background-color: #A3C4F5 !important;
                             }
                         }
                     }
@@ -254,6 +247,7 @@
         }
     }
 }
+
 .detailpage {
     width: 450rem;
 }
