@@ -26,6 +26,19 @@
       color: #fff;
       height: auto !important;
       padding: .7rem 2rem; }
+    .match-monitor .monitor-container .monitor-table .group-control .form-filter .btn-refresh {
+      position: relative;
+      width: 12rem; }
+      .match-monitor .monitor-container .monitor-table .group-control .form-filter .btn-refresh:after {
+        content: '';
+        display: block;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 5px solid #fff;
+        position: absolute;
+        position: absolute;
+        top: 1.2rem;
+        right: 1rem; }
     .match-monitor .monitor-container .monitor-table .group-control .form-filter .group-droup-down {
       position: relative; }
       .match-monitor .monitor-container .monitor-table .group-control .form-filter .group-droup-down .refresh-list {
@@ -38,7 +51,9 @@
         position: absolute;
         width: 100%;
         top: 3rem;
-        display: none; }
+        display: none;
+        background: #fff;
+        z-index: 9999; }
         .match-monitor .monitor-container .monitor-table .group-control .form-filter .group-droup-down .refresh-list li {
           margin-bottom: .5rem;
           border-bottom: 1px solid #E5E5E5;
@@ -50,6 +65,8 @@
             padding-bottom: 0; }
           .match-monitor .monitor-container .monitor-table .group-control .form-filter .group-droup-down .refresh-list li a {
             color: #474747; }
+      .match-monitor .monitor-container .monitor-table .group-control .form-filter .group-droup-down .block-box {
+        display: block; }
   .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report {
     font-family: "Lato", Arial, Tahoma, sans-serif; }
     .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .wrapper-info-table {
@@ -59,7 +76,7 @@
       background-color: #e3e9f6;
       position: -webkit-sticky;
       position: sticky;
-      top: 13.2rem;
+      top: 13rem;
       z-index: 11; }
       .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .wrapper-info-table .dataTables_length {
         position: absolute;
@@ -94,10 +111,30 @@
           opacity: .3; }
       .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor thead tr th, .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail thead tr th {
         position: sticky;
-        top: 17.2rem;
-        font-weight: 300; }
+        top: 17rem;
+        font-weight: 300;
+        z-index: 99; }
+      .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor tbody .odd, .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail tbody .odd {
+        background-color: #3773CC; }
+        .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor tbody .odd:hover, .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail tbody .odd:hover {
+          background-color: #3773CC !important; }
+        .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor tbody .odd td, .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail tbody .odd td {
+          color: #fff; }
+      .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor tbody .even, .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail tbody .even {
+        background-color: #FF4343; }
+        .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor tbody .even:hover, .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail tbody .even:hover {
+          background-color: #FF4343 !important; }
+        .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor tbody .even td, .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail tbody .even td {
+          color: #fff; }
       .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor tbody tr td .click-view-details, .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor tbody tr td .click-view-name, .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail tbody tr td .click-view-details, .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail tbody tr td .click-view-name {
-        cursor: pointer; }
+        cursor: pointer;
+        color: #fff; }
+      .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor tbody tr td .container-checkbox .checkmark, .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail tbody tr td .container-checkbox .checkmark {
+        top: -.7rem;
+        left: 3rem;
+        z-index: 1; }
+        .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor tbody tr td .container-checkbox .checkmark:before, .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail tbody tr td .container-checkbox .checkmark:before {
+          border: none; }
       .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor tbody tr td .toggle, .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail tbody tr td .toggle {
         width: 8.6rem;
         height: 2rem;

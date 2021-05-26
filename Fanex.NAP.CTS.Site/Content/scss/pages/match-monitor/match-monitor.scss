@@ -48,6 +48,23 @@
                         padding: .7rem 2rem;
                     }
 
+                    .btn-refresh {
+                        position: relative;
+                        width: 12rem;
+
+                        &:after {
+                            content: '';
+                            display: block;
+                            border-left: 5px solid transparent;
+                            border-right: 5px solid transparent;
+                            border-top: 5px solid $page-bg;
+                            position: absolute;
+                            position: absolute;
+                            top: 1.2rem;
+                            right: 1rem;
+                        }
+                    }
+
                     .group-droup-down {
                         position: relative;
 
@@ -62,6 +79,8 @@
                             width: 100%;
                             top: 3rem;
                             display: none;
+                            background: $page-bg;
+                            z-index: 9999;
 
                             li {
                                 margin-bottom: .5rem;
@@ -80,6 +99,10 @@
                                 }
                             }
                         }
+
+                        .block-box {
+                            display: block;
+                        }
                     }
                 }
             }
@@ -95,7 +118,7 @@
                         background-color: #e3e9f6;
                         position: -webkit-sticky;
                         position: sticky;
-                        top: 13.2rem;
+                        top: 13rem;
                         z-index: 11;
 
                         .dataTables_length {
@@ -148,17 +171,53 @@
 
                                 th {
                                     position: sticky;
-                                    top: 17.2rem;
+                                    top: 17rem;
                                     font-weight: 300;
+                                    z-index : 99
                                 }
                             }
                         }
 
                         tbody {
+                            .odd {
+                                background-color: #3773CC;
+
+                                &:hover {
+                                    background-color: #3773CC !important;
+                                }
+
+                                td {
+                                    color: $page-bg
+                                }
+                            }
+
+                            .even {
+                                background-color: #FF4343;
+
+                                &:hover {
+                                    background-color: #FF4343 !important;
+                                }
+
+                                td {
+                                    color: $page-bg
+                                }
+                            }
+
                             tr {
                                 td {
                                     .click-view-details, .click-view-name {
                                         cursor: pointer;
+                                        color: $page-bg;
+                                    }
+                                    .container-checkbox {
+                                        .checkmark {
+                                            top: -.7rem;
+                                            left: 3rem;
+                                            z-index : 1;
+                                            &:before {
+                                                border : none;
+                                            }
+                                        }
                                     }
 
                                     .toggle {
