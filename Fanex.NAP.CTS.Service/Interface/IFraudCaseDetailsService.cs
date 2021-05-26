@@ -12,8 +12,6 @@
 
         IEnumerable<CustomerDetails> GetCustomerDetails(int matchId, int fraudCaseId, DateTime eventDate, bool isShowSpecialCurrencies);
 
-        byte[] ExportExcel(int matchId, int fraudCaseId, DateTime eventDate, string templatePath, bool isShowSpecialCurrencies);
-
         MatchFraudCaseInfo GetInfo(int matchId, int fraudCaseId, DateTime eventDate);
 
         IEnumerable<TicketDetails> GetLast7DaysDetails(int custId, bool isShowSpecialCurrencies);
@@ -44,17 +42,9 @@
 
         string ReplaceEvidences(string evidences);
 
-        byte[] ExportToExcelIpTickets(string ip, string template, bool isShowSpecialCurrencies);
-
-        byte[] ExportExcelArbitrageTickets(GetArbitrageTicketCriteria criteria, string[] array, string templatePath, bool isSummary);
-      
-        byte[] ExportExcelArbitrageCustomers(GetArbitrageCustomerCriteria criteria, string[] array, string templatePath);
-
         IEnumerable<FlaggedAccountTicket> GetFlaggedAccountTickets(FlaggedAccountCriteria criteria);
 
         IEnumerable<CustomerDetails> GetFlaggedAccountCustomers(FlaggedAccountCriteria criteria);
-
-        byte[] ExportFlaggedAccounts(FlaggedAccountCriteria criteria, string templatePath);
 
         IEnumerable<BetTypes> GetBetTypes();
     }

@@ -11,7 +11,6 @@
     using Fanex.NAP.CTS.Criteria.MatchMonitor;
     using Fanex.NAP.CTS.Criteria.MatchMonitor.FraudCaseDetails;
     using Fanex.NAP.CTS.Model.DTO;
-    using Fanex.NAP.CTS.Service.ExcelConfig.MatchMonitor;
     using Fanex.NAP.CTS.Model.MatchMonitor;    
     using Fanex.NAP.CTS.ViewModel.MatchMonitor.FraudCaseDetails;
     using Fanex.NAP.CTS.Model.MatchMonitor.FraudCaseDetails;
@@ -146,21 +145,6 @@
             Task.WaitAll(tsk);
 
             return tsk.Where(t => t.Result != null).SelectMany(t => t.Result);
-        }
-
-
-        public byte[] ExportExcel(int matchId, int fraudCaseId, DateTime eventDate, string templatePath, bool isShowSpecialCurrencies)
-        {
-            var legend = GetInfo(matchId, fraudCaseId, eventDate);
-            var tickets = GetTicketDetails(matchId, fraudCaseId, eventDate, isShowSpecialCurrencies, true);
-            var customers = GetCustomerDetails(matchId, fraudCaseId, eventDate, isShowSpecialCurrencies);
-
-            var wb =
-                ExcelUtilities.GetWorkbook(templatePath)
-                    .RenderSheet(new TicketDetailConfig(tickets.Count()), legend, tickets, null)
-                    .RenderSheet(new CustomerDetailConfig(customers.Count()), legend, customers, null);
-
-            return wb.ToBytes();
         }
 
         public MatchFraudCaseInfo GetInfo(int matchId, int fraudCaseId, DateTime eventDate)
@@ -357,21 +341,6 @@
                 });
         }
 
-        public byte[] ExportToExcelIpTickets(string ip, string template, bool isShowSpecialCurrencies)
-        {
-            var data =
-                DataService.GetData<TicketInfo>(new GetTicketByIPCriteria { IP = ip, IsShowSpecialCurrencies = isShowSpecialCurrencies })
-                .OrderBy(t => t.UserName)
-                .ThenBy(t => t.TransDate);
-
-            var buDate = DataService.GetSingle<BalanceUpDate>(new BalanceUpDateGetCriteria());
-            var config = new TicketByIpConfig(ip, buDate.BalanceUpDay);
-            var wb = ExcelUtilities.GetWorkbook(template);
-
-            config.RenderExcel(wb, null, data, null);
-
-            return wb.ToBytes();
-        }
         #endregion Other Fraud Cases
 
         #region Flagged Accounts
@@ -672,23 +641,6 @@
             Logger.Log.Info("FS: call [FPS_WEBAPI_GET_CUSTOMER_EVIDENCE] - end");
 
             return tsk.Where(t => t.Result != null).SelectMany(t => t.Result);
-        }
-
-        public byte[] ExportFlaggedAccounts(FlaggedAccountCriteria criteria, string templatePath)
-        {
-            var legend = GetInfo(criteria.MatchId, 6, criteria.EventDate);
-            legend.Filter = GenerateFilterInfo(criteria);
-            var tickets = GetFlaggedAccountTickets(criteria);
-
-            GetFlaggedAccountCustomerCriteria cusCriteria = ObjectHelper.ConvertObject<GetFlaggedAccountCustomerCriteria>(criteria);
-            var customers = GetFlaggedAccountCustomers(cusCriteria);
-
-            var wb =
-                ExcelUtilities.GetWorkbook(templatePath)
-                    .RenderSheet(new FlaggedAccountTicketConfig(tickets.Count()), legend, tickets, null)
-                    .RenderSheet(new CustomerDetailConfig(customers.Count()), legend, customers, null);
-            
-            return wb.ToBytes();
         }
 
         private string[] GenerateFilterInfo(ICriteria criteria)
@@ -1091,31 +1043,6 @@
             lstSites.RemoveAll(c => siteRemoves.Contains(c.SiteName));
 
             return lstSites;
-        }
-    
-        public byte[] ExportExcelArbitrageTickets(GetArbitrageTicketCriteria criteria, string[] array, string templatePath, bool isSummary)
-        {
-            var legend = GetInfo(criteria.MatchId, (int)Model.FraudCaseId.Arbitrage, criteria.EventDate);
-            legend.Filter = array;
-
-            var groupsTicket = GetArbitrageTickets(criteria, isSummary);
-            int totalTicket = groupsTicket.Sum(g => g.Home.Count() + g.Away.Count());
-            var wb = ExcelUtilities.GetWorkbook(templatePath)
-                                    .RenderSheet(new ArbitrageConfig(totalTicket, true), legend, groupsTicket, null);
-
-            return wb.ToBytes();
-        }
-
-        public byte[] ExportExcelArbitrageCustomers(GetArbitrageCustomerCriteria criteria, string[] array, string templatePath)
-        {
-            var legend = GetInfo(criteria.MatchId, (int)Model.FraudCaseId.Arbitrage, criteria.EventDate);
-            legend.Filter = array;
-
-            var customers = GetArbitrageCustomerDetails(criteria);
-            var wb = ExcelUtilities.GetWorkbook(templatePath)
-                                    .RenderSheet(new CustomerDetailConfig(customers.Count(), true), legend, customers, null);
-
-            return wb.ToBytes();
         }
         #endregion Arbitrage
     }

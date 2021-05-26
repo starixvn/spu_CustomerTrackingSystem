@@ -289,19 +289,19 @@
     <Compile Include="ImportEvidences\RawAccountEvidenceModel.cs" />
     <Compile Include="ImportEvidences\ResultCheckAccountEvidenceModel.cs" />
     <Compile Include="IP\IpModel.cs" />
-    <Compile Include="MatchMonitor\BalanceUpDate.cs" />
-    <Compile Include="MatchMonitor\FraudCase.cs" />
-    <Compile Include="MatchMonitor\FraudCaseDetails\BetTypes.cs" />
-    <Compile Include="MatchMonitor\FraudCaseDetails\Currency.cs" />
-    <Compile Include="MatchMonitor\FraudCaseDetails\CustEvidence.cs" />
-    <Compile Include="MatchMonitor\FraudCaseDetails\CustInfo.cs" />
-    <Compile Include="MatchMonitor\FraudCaseDetails\Evidence.cs" />
-    <Compile Include="MatchMonitor\FraudCaseDetails\MatchInfo.cs" />
-    <Compile Include="MatchMonitor\FraudCaseDetails\ScoreHDP.cs" />
-    <Compile Include="MatchMonitor\FraudCaseDetails\Site.cs" />
-    <Compile Include="MatchMonitor\FraudCaseDetails\TicketInfo.cs" />
-    <Compile Include="MatchMonitor\League.cs" />
-    <Compile Include="MatchMonitor\Match.cs" />
+    <Compile Include="FraudCaseDetails\BalanceUpDate.cs" />
+    <Compile Include="FraudCaseDetails\FraudCase.cs" />
+    <Compile Include="FraudCaseDetails\BetTypes.cs" />
+    <Compile Include="FraudCaseDetails\Currency.cs" />
+    <Compile Include="FraudCaseDetails\CustEvidence.cs" />
+    <Compile Include="FraudCaseDetails\CustInfo.cs" />
+    <Compile Include="FraudCaseDetails\Evidence.cs" />
+    <Compile Include="FraudCaseDetails\MatchInfo.cs" />
+    <Compile Include="FraudCaseDetails\ScoreHDP.cs" />
+    <Compile Include="FraudCaseDetails\Site.cs" />
+    <Compile Include="FraudCaseDetails\TicketInfo.cs" />
+    <Compile Include="FraudCaseDetails\League.cs" />
+    <Compile Include="FraudCaseDetails\Match.cs" />
     <Compile Include="ProblemAccountMonitor\DetailAssociatedGroupModel.cs" />
     <Compile Include="ProblemAccountMonitor\DetailCustomerGroupsModel.cs" />
     <Compile Include="ProblemAccountMonitor\DetailTicketVoidingInRequestModel.cs" />
@@ -359,6 +359,8 @@
       <Name>Fanex.NAP.CTS.Resource</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="MatchMonitor\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

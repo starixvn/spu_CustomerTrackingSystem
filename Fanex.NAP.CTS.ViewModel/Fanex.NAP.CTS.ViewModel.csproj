@@ -120,22 +120,22 @@
     <Compile Include="LatestTransaction\LatestTransactionViewModel.cs" />
     <Compile Include="ManageSubscriber\ManageSubscriberGetViewModel.cs" />
     <Compile Include="ManageSubscriber\ManageSubscriberViewModel.cs" />
-    <Compile Include="MatchMonitor\Event.cs" />
-    <Compile Include="MatchMonitor\FraudCase.cs" />
-    <Compile Include="MatchMonitor\FraudCaseDetails\ArbitrageGroupTicketList.cs" />
-    <Compile Include="MatchMonitor\FraudCaseDetails\ArbitrageStake.cs" />
-    <Compile Include="MatchMonitor\FraudCaseDetails\ArbitrageTicket.cs" />
-    <Compile Include="MatchMonitor\FraudCaseDetails\ArbitrageTicketList.cs" />
-    <Compile Include="MatchMonitor\FraudCaseDetails\AssociatedCustomer.cs" />
-    <Compile Include="MatchMonitor\FraudCaseDetails\BettypeOrder.cs" />
-    <Compile Include="MatchMonitor\FraudCaseDetails\CustomerDetails.cs" />
-    <Compile Include="MatchMonitor\FraudCaseDetails\FlaggedAccountTicket.cs" />
-    <Compile Include="MatchMonitor\FraudCaseDetails\MatchFraudCaseInfo.cs" />
-    <Compile Include="MatchMonitor\FraudCaseDetails\OddsDetails.cs" />
-    <Compile Include="MatchMonitor\FraudCaseDetails\Result.cs" />
-    <Compile Include="MatchMonitor\FraudCaseDetails\TicketDetails.cs" />
-    <Compile Include="MatchMonitor\Match.cs" />
-    <Compile Include="MatchMonitor\MatchList.cs" />
+    <Compile Include="FraudCaseDetails\Event.cs" />
+    <Compile Include="FraudCaseDetails\FraudCase.cs" />
+    <Compile Include="FraudCaseDetails\ArbitrageGroupTicketList.cs" />
+    <Compile Include="FraudCaseDetails\ArbitrageStake.cs" />
+    <Compile Include="FraudCaseDetails\ArbitrageTicket.cs" />
+    <Compile Include="FraudCaseDetails\ArbitrageTicketList.cs" />
+    <Compile Include="FraudCaseDetails\AssociatedCustomer.cs" />
+    <Compile Include="FraudCaseDetails\BettypeOrder.cs" />
+    <Compile Include="FraudCaseDetails\CustomerDetails.cs" />
+    <Compile Include="FraudCaseDetails\FlaggedAccountTicket.cs" />
+    <Compile Include="FraudCaseDetails\MatchFraudCaseInfo.cs" />
+    <Compile Include="FraudCaseDetails\OddsDetails.cs" />
+    <Compile Include="FraudCaseDetails\Result.cs" />
+    <Compile Include="FraudCaseDetails\TicketDetails.cs" />
+    <Compile Include="FraudCaseDetails\Match.cs" />
+    <Compile Include="FraudCaseDetails\MatchList.cs" />
     <Compile Include="Notification\NotificationMessagesViewModel.cs" />
     <Compile Include="Notification\NotificationSettingStatusViewModel.cs" />
     <Compile Include="Notification\NotificationSettingViewModel.cs" />
@@ -189,6 +189,8 @@
       <Version>2.3.0</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="MatchMonitor\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
