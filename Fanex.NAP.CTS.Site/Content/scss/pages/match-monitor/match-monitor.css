@@ -149,5 +149,8 @@
 .group.width-280 {
   width: 27.5rem; }
 
+.ui-datepicker.ui-widget-content {
+  z-index: 9999999 !important; }
+
 .detailpage {
   width: 450rem; }
