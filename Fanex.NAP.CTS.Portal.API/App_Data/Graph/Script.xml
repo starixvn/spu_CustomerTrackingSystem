@@ -24,7 +24,7 @@
     <GraphSetting Key="GetAssociatedDevicesByCustId" SpName="GetAssociatedDevicesByCustId" DbName="GraphDB" />
     <GraphSetting Key="GetDevicesIdByCustId" SpName="GetDevicesIdByCustId" DbName="GraphDB" />
     <GraphSetting Key="GetAssociationReport" SpName="GetAssociationReport" DbName="GraphDB" />
-    <GraphSetting Key="GetAssociationReportByDevice" SpName="GetAssociationReportByDevice" DbName="GraphDB" />
+    <GraphSetting Key="GetAssociationReportByDevice" SpName="GetAssociationReportByDevice" DbName="GraphDB" TimeOut="300"/>
     <GraphSetting Key="GetAssociationReportByManual" SpName="GetAssociationReportByManual" DbName="GraphDB" />
     <GraphSetting Key="GetAssociationReportByIP" SpName="GetAssociationReportByIP" DbName="GraphDB" />
     <GraphSetting Key="GetAssociationOneLevelForExtAcc" SpName="GetAssociationOneLevelForExtAcc" DbName="GraphDB" />
