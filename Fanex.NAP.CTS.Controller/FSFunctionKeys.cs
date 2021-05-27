@@ -45,7 +45,7 @@ public static class FSFunctionKeys
 
     public const string ManageUser = "ManageUser";
 
-    public const string MatchMonitoring = "MatchMonitoring";
+    public const string MatchMonitor = "MatchMonitor";
 
     public const string Notification = "Notification";
 

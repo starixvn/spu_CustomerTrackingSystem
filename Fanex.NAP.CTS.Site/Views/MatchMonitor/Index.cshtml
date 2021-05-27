@@ -12,7 +12,7 @@
     <div class="content">
         <h2 class="page-title">MATCH MONITOR</h2>
     </div>
-        
+
     <div class="monitor-container">
         <div class="monitor-table">
             <div class="group-control">
@@ -30,28 +30,36 @@
                     </div>
                     <div class="group width-180">
                         <label class="text">Verified</label>
-                        <select class="control width-select" id="cbbAccountStatus">
-                            <option>Yes</option>
-                            <option>Yes</option>
-                            <option>Yes</option>
+                        <select class="control width-select" id="cbbIsVerified">
+                            <option value="">All</option>
+                            <option value="1">Yes</option>
+                            <option value="0" selected>No</option>
                         </select>
                     </div>
-                    <div class="group width-180">
+                    <div class="group width-280">
                         <label class="text">Bet Type</label>
-                        <select class="control width-select" id="cbbAccountStatus">
-                            <option>4 of 4 selected</option>
-                            <option>3 of 3 selected</option>
-                            <option>2 of 2 selected</option>
+                        <select class="control width-select" id="cbbBetType" multiple="multiple">
+                            <option value="1" selected>HDP</option>
+                            <option value="3" selected>O/U</option>
+                            <option value="7" selected>1st HDP</option>
+                            <option value="8" selected>1st O/U</option>
                         </select>
                     </div>
+
                     <button class="button button-generate" id="btnGenerate">Generate</button>
                     <div class="group-droup-down">
-                        <button class="button button-generate btn-refresh" id="btnGenerateMonitor">Refesh(8)</button>
-                        <ul class="refresh-list">
-                            <li><a href="#">Refesh(8)</a></li>
-                            <li><a href="#">Refesh(9)</a></li>
-                            <li><a href="#">Refesh(10)</a></li>
+                        <button class="button button-generate btn-refresh" id="btnRefresh">Refesh(30)</button>
+                        <ul class="refresh-list" id="refreshList">
+                            <li><a id="refresh" value="15">Refesh(15)</a></li>
+                            <li><a id="refresh" value="30">Refesh(30)</a></li>
+                            <li><a id="refresh" value="60">Refesh(60)</a></li>
                         </ul>
+
+                        @*<select class="btn-refresh" id="cbbRefresh">
+                            <option value="15">Refresh(15)</option>
+                            <option value="30" selected>Refresh(30)</option>
+                            <option value="60">Refresh(60)</option>
+                        </select>*@
                     </div>
                 </div>
             </div>
@@ -76,10 +84,14 @@
         </div>
     </div>
 
+    <div class="hide">
+        <input id="hdIsHostPermission" type="hidden" IsHostPermission="@Model.IsHostPermission.ToString()" />
+        <input id="hdCTSCustId" type="hidden" value="@Model.CustId" />
+    </div>
 </section>
 
 
 
-    @section scripts{
-        @Scripts.Render("~/match-monitor-scripts")
-    }
+@section scripts{
+    @Scripts.Render("~/match-monitor-scripts")
+}

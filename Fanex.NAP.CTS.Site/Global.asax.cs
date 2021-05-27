@@ -44,7 +44,7 @@
 
             RefDataTypeContainer
                 .ConnectTo(new Uri(ConfigurationManager.AppSettings["Fanex.RemotingRef.Service.Url"]))
-                .FromApplication("SPU - Fraud Sensor");
+                .FromApplication("SPU - Customer Tracking System");
 
             BetListManager.RegisterRemotingRef(new CacheRef());
 

@@ -136,6 +136,8 @@
     <Compile Include="FraudCaseDetails\TicketDetails.cs" />
     <Compile Include="FraudCaseDetails\Match.cs" />
     <Compile Include="FraudCaseDetails\MatchList.cs" />
+    <Compile Include="MatchMonitor\MatchMonitorFilterViewModel.cs" />
+    <Compile Include="MatchMonitor\ManageSubscriberViewModel.cs" />
     <Compile Include="Notification\NotificationMessagesViewModel.cs" />
     <Compile Include="Notification\NotificationSettingStatusViewModel.cs" />
     <Compile Include="Notification\NotificationSettingViewModel.cs" />
@@ -189,8 +191,6 @@
       <Version>2.3.0</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="MatchMonitor\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

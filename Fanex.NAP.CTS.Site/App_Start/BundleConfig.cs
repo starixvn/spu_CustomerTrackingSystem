@@ -353,14 +353,14 @@
         private static void RegisterMatchMonitorBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/match-monitor-scripts").Include(
-               ////"~/Scripts/select2.min.js",
-               ////"~/Scripts/MultipleSelect/jquery.multiselect.filter.js",
+               "~/Scripts/select2.min.js",
+               "~/Scripts/MultipleSelect/jquery.multiselect.filter.js",
                "~/Scripts/MatchMonitor/index.js"));
 
             bundles.Add(new StyleBundle("~/match-monitor-styles").Include(
-                //"~/Content/scss/vendors/select2.min.css",
-                // "~/Content/scss/MultipleSelect/jquery.multiselect.filter.css",
-                //"~/Content/scss/MultipleSelect/jquery.multiselect.css",
+                "~/Content/scss/vendors/select2.min.css",
+                 "~/Content/scss/MultipleSelect/jquery.multiselect.filter.css",
+                "~/Content/scss/MultipleSelect/jquery.multiselect.css",
                 "~/Content/scss/pages/match-monitor/match-monitor.css"));
         }
 
