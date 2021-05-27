@@ -16,5 +16,7 @@
         public List<string> Categories { get; set; }
 
         public string SubscriberName { get; set; }
+
+        public int SubscriberID { get; set; }
     }
 }
