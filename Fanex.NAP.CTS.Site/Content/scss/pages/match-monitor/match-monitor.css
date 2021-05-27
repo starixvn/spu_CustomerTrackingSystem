@@ -146,5 +146,8 @@
   .match-monitor .monitor-container .monitor-table #first-monitor-datatable, .match-monitor .monitor-container .monitor-table #second-monitor-datatable, .detailpage .monitor-container .monitor-table #first-monitor-datatable, .detailpage .monitor-container .monitor-table #second-monitor-datatable {
     width: 100%; }
 
+.group.width-280 {
+  width: 27.5rem; }
+
 .detailpage {
   width: 450rem; }
