@@ -9,7 +9,7 @@
         dpkToDate: $('#dpkToDate'),
         cbbIsVerified: $('#cbbIsVerified'),
         cbbBetType: $('#cbbBetType'),
-        refreshBtn: $('#btnRefresh'),
+        groupDropDown: $('.group-drop-down'),
         refreshList: $('#refreshList'),
         refresh: $('#refresh'),
         cbbRefresh: $('#cbbRefresh'),
@@ -298,10 +298,9 @@
             noneSelectedText: "Select Bet Type"
         });
 
-        domElements.refreshBtn
-            .mouseover(function () {
-                domElements.refreshList.toggleClass('block-box');
-            })
+        domElements.groupDropDown.hover(function () {
+            domElements.refreshList.toggleClass('block-box');
+        })
 
         //////.mouseout(function () {
         //    if (!domElements.refreshList.is(event.target) && domElements.refreshList.has(event.target).length === 0)

@@ -75,7 +75,7 @@
                         }
                     }
 
-                    .group-droup-down {
+                    .group-drop-down {
                         position: relative;
 
                         .refresh-list {
@@ -105,7 +105,8 @@
                                 }
 
                                 a {
-                                    color: #474747
+                                    color: #474747;
+                                    cursor : pointer;
                                 }
                             }
                         }
