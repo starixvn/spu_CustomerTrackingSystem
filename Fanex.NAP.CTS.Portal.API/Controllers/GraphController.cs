@@ -298,11 +298,11 @@
 
             try
             {
-               result = DbSessionFactory.Execute<DirectAssociationDeviceModel>("GetDevicesIdByCustId", new { ip_CustID = custId }).Data.SingleOrDefault();
-               result.DirectAssociation = DbSessionFactory.Execute<DirectAssociationModel>("GetAssociatedDevicesByCustId", new { ip_CustID = custId }).Data.ToList();
-               result.TotalDirectAssociation = result.DirectAssociation.Count();
+                result = DbSessionFactory.Execute<DirectAssociationDeviceModel>("GetDevicesIdByCustId", new { ip_CustID = custId }).Data.SingleOrDefault();
+                result.DirectAssociation = DbSessionFactory.Execute<DirectAssociationModel>("GetAssociatedDevicesByCustId", new { ip_CustID = custId }).Data.ToList();
+                result.TotalDirectAssociation = result.DirectAssociation.Count();
 
-               return result;
+                return result;
             }
             catch (Exception ex)
             {
@@ -328,49 +328,57 @@
             {
                 if (paras != null)
                 {
-                    string script = string.Empty;
+                    string scriptName = string.Empty;
                     switch (paras.AssociationType)
                     {
                         case 1:
                             {
-                                script = "GetAssociationReportByDevice";
+                                scriptName = "GetAssociationReportByDevice";
                                 break;
                             }
                         case 2:
                             {
-                                script = "GetAssociationReportByIP";
+                                scriptName = "GetAssociationReportByIP";
                                 break;
                             }
                         case 3:
                             {
-                                script = "GetAssociationReportByManual";
+                                scriptName = "GetAssociationReportByManual";
                                 break;
                             }
                     }
 
-                    if(string.IsNullOrEmpty(script))
+                    if (string.IsNullOrEmpty(scriptName))
                     {
                         return result;
                     }
 
-                    var queryResult = DbSessionFactory.Execute<GraphAssociationReportPaging>(script, new
+                    var paramForGraph = new
                     {
-                        ip_AssCreatedFrom = paras.AssociatedDateFrom.AddHours(4).ToString(Consts.FormatDateTimeToString_YYYYmmddThhddmm),
-                        ip_AssCreatedTo = paras.AssociatedDateTo.AddHours(4).AddDays(1).ToString(Consts.FormatDateTimeToString_YYYYmmddThhddmm),
+                        ip_AssCreatedFrom = paras.AssociatedDateFrom.AddHours(4),
+                        ip_AssCreatedTo = paras.AssociatedDateTo.AddHours(4),
+                        ip_SubscriberList = paras.SubscriberIDs.Split(',').Select(int.Parse),
                         ip_AccountStatus = paras.AccountStatuses.Split(',').Select(int.Parse),
-                        ip_EvidenceCode = paras.EvidenceCode?.Trim(),
-                        ip_SiteName = paras.SiteName?.Trim(),
+                        ip_EvidenceID = paras.EvidenceIDs?.Trim().Split(',').Select(int.Parse),
                         ip_AssStatus = paras.AssociationStatus,
                         ip_TakeRows = paras.TakeRow,
                         ip_SkipRows = paras.SkipRow
-                    }).Data.FirstOrDefault();
+                    };
 
-                    return queryResult;
+                    result.AssociationList = DbSessionFactory.Execute<AssociationReportModel>(scriptName, paramForGraph).Data;
+                    result.TotalItems = DbSessionFactory.Execute<int>("GetAssociationReportByDevice_CountTotal", paramForGraph).Data.FirstOrDefault();
+
+                    LogService.Info("result.TotalItems: " + result.TotalItems.ToString());
+                    LogService.Info("result.AssociationList: " + result.AssociationList.Count().ToString());
+
+                    return result;
                 }
             }
             catch (Exception ex)
             {
-                LogService.Error("GetAssociationReport failed: " + ex.Message + ex.StackTrace);
+                LogService.Error("GetAssociationReport failed: " + ex.Message + ex.StackTrace + "\n"
+                        + ex.InnerException.Message + ex.InnerException.Source + ((Neo4j.Driver.Neo4jException)ex.InnerException).Code
+                        + ex.InnerException.StackTrace);
             }
 
             return result;
@@ -385,7 +393,7 @@
         [HttpPost]
         public GraphAssociationPaging GetDetailAssociationReport([FromBody] AssociationDetailReportParameterModel paras)
         {
-            var result = new GraphAssociationPaging() { AssociationList = null, TotalItems = 0};
+            var result = new GraphAssociationPaging() { AssociationList = null, TotalItems = 0 };
 
             try
             {

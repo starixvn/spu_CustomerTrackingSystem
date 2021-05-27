@@ -4,7 +4,7 @@
 
     public class GraphAssociationReportPaging
     {
-        public List<AssociationReportModel> AssociationList { get; set; }
+        public IEnumerable<AssociationReportModel> AssociationList { get; set; }
 
         public int TotalItems { get; set; }
     }

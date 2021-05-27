@@ -1,36 +1,26 @@
-﻿//      Created:	jonas.huynh
-//		Task:		Association Report [Redmine ID: #131499]       
+﻿//      Created:	Harvey.Nguyen
+//		Task:		Association Report [Redmine ID: #]       
 //		Param's Explanation (filtered by):
 //				- ip_AssCreatedFrom, ip_AssCreatedTo
 //				- ip_AccountStatus : (single selection) Disabled ; Open includes Active; Closed includes Suspended, View Only, Disabled, Inactive
-//				- ip_SiteName 
+//				- ip_SubscriberList 
 //				- ip_AssStatus: 0:All; 1:Link; 2: Unlink  (multi-selection)
-//				- ip_EvidenceCode
+//				- ip_EvidenceID
 //				- ip_AssType:  1: Device; 2:Manual; 3:IP  (single-selction)
-
-CALL apoc.cypher.run('
-MATCH (site:Site) <-[:BELONG_TO_SITE]-(c:CTSCustomer)-[:HAS_STATUS]->(s:StaticList)
-WHERE s.ItemID IN $ip_AccountStatus AND s.ListID = 1 AND site.Site = $ip_SiteName AND s.ItemID IS NOT NULL
-WITH c,s
-MATCH (e:Evidence)<-[re1:HAS_EVIDENCE]-(c)-[r1:USED_DEVICE]->(d:Device)<-[r2:USED_DEVICE]-(c1:CTSCustomer)
-WHERE   e.EvidenceCode = $ip_EvidenceCode
-		AND 
-        	    (($ip_AssStatus = 0) 
+USE ctsgraphdb
+MATCH (sub:Subscriber)<-[:BELONG_TO_SUB]-(c:FlaggedCustomer)-[:HAS_STATUS]->(st:StaticList),(c1:CTSCustomer)-[r:SEEN_ACCOUNT]-(c)-[:HAS_EVIDENCE]->(e:Evidence), (c)-[:HAS_CATEGORY]->(cate:CustomerCategory)
+WHERE sub.SubscriberID IN $ip_SubscriberList
+    AND st.ItemID IN $ip_AccountStatus AND st.ListID = 1
+    AND e.EvidenceID IN $ip_EvidenceID
+    AND r.FirstSeenDate >= datetime($ip_AssCreatedFrom) AND r.FirstSeenDate  < datetime($ip_AssCreatedTo)
+    AND (($ip_AssStatus = 0) 
          	 OR ($ip_AssStatus = 1 AND NOT EXISTS ((c)-[:HAS_EXCEPTION]-(c1)))
          	 OR ($ip_AssStatus = 2 AND EXISTS ((c)-[:HAS_EXCEPTION]-(c1)))) 
-UNWIND [r1.CreatedTime,r2.CreatedTime]  as val
-WITH c,c1,e,d, Max(val) as AssDate, s
-WITH c,c1,e, Min(AssDate) as firstAssDate, s
-WHERE  firstAssDate >= $ip_AssCreatedFrom AND firstAssDate <= $ip_AssCreatedTo
-WITH DISTINCT c,s
-OPTIONAL MATCH (c)-[HAS_EVIDENCE]->(e1:Evidence)
-with c, s, collect(Distinct e1.EvidenceCode) as listEvidenceCode
-RETURN Distinct c.CTSCustID as CTSCustID, c.UserName AS Username, s.ItemName as AccountStatus, listEvidenceCode as EvidenceCodes, CASE c.SubscriberID WHEN null THEN -1 ELSE c.SubscriberID END AS SubscriberId
-',{ip_AssCreatedFrom: $ip_AssCreatedFrom, ip_AssCreatedTo: $ip_AssCreatedTo, ip_AccountStatus: $ip_AccountStatus, ip_SiteName:$ip_SiteName, ip_AssStatus: $ip_AssStatus,ip_EvidenceCode: $ip_EvidenceCode}) YIELD value
-WITH collect(value) as ListAss, count(value) as TotalItems
-UNWIND ListAss as ass
-WITH ass, TotalItems 
-ORDER BY ass.AccountStatus DESC
-SKIP $ip_SkipRows
-LIMIT $ip_TakeRows
-RETURN COLLECT(ass) AS AssociationList, TotalItems
+RETURN DISTINCT c.CTSCustID AS CTSCustID
+    , c.Username AS Username
+    , sub.SubscriberName AS SubscriberName
+    , sub.SubscriberID AS SubscriberID
+    , st.ItemNameDisplay AS AccountStatus
+    , collect(distinct e.EvidenceCode) AS EvidenceCodes
+    , collect(distinct cate.CategoryName) AS Categories
+SKIP $ip_SkipRows LIMIT $ip_TakeRows
