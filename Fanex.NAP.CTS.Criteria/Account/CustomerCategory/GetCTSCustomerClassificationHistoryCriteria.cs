@@ -5,8 +5,8 @@
 
     public class GetCTSCustomerClassificationHistoryCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_CustID")]
-        public long CustId { get; set; }
+        [SpParam(SqlParamName = "ip_CTSCustID")]
+        public long CTSCustID { get; set; }
       
         public override string GetSettingKey()
         {

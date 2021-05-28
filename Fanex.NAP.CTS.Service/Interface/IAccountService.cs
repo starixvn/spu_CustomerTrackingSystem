@@ -95,17 +95,17 @@
 
         IEnumerable<long> GetAssociationException(string apiURL, long ctsCustId);
 
-        IEnumerable<CustomerClassificationModel> GetCustomerClassification(long custId, out bool isPinCategory, out bool isExcludedTagAssPA);
+        IEnumerable<CustomerClassificationModel> GetCustomerClassification(long ctsCustId, out bool isPinCategory, out bool isExcludedTagAssPA);
 
-        IEnumerable<CustomerClassificationHistoryModel> GetCustomerClassificationHistory(long custId);
+        IEnumerable<CustomerClassificationHistoryModel> GetCustomerClassificationHistory(long ctsCustId);
 
         DBResult AddCustomerCategory(AddCustomerCategoryModel addCategoryModel, int createdBy, out IEnumerable<LatestClassificationModel> latestClassifications);
                
         ResultInsertRemoveCustomerClassificationModel RemoveCustomerCategory(long custId, long ctsCustId, int categoryId, int createdBy);        
 
-        DBResult PinCategoryCustomerClassification(int custId, long ctsCustId, int subscriberId, bool isPinCategory, int createdBy);
+        DBResult PinCategoryCustomerClassification(long ctsCustId, int subscriberId, bool isPinCategory, int createdBy);
 
-        DBResult ChangeExcludedTagAssPA(int custId, long ctsCustId, int subscriberId, bool isPinCategory, int createdBy);
+        DBResult ChangeExcludedTagAssPA(long ctsCustId, int subscriberId, bool isPinCategory, int createdBy);
 
         IEnumerable<PerformanceBySportModel> GetPerformanceBySport(long custId, int getTop);
 

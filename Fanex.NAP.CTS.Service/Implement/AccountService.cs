@@ -1015,14 +1015,14 @@
             }
         }
 
-        public IEnumerable<CustomerClassificationModel> GetCustomerClassification(long custId, out bool isPinCategory, out bool isExcludedTagAssPA)
+        public IEnumerable<CustomerClassificationModel> GetCustomerClassification(long ctsCustId, out bool isPinCategory, out bool isExcludedTagAssPA)
         {
             isPinCategory = false;
             isExcludedTagAssPA = false;
 
             var criteria = new GetCTSCustomerClassificationCriteria
             {
-                CustId = custId
+                CTSCustID = ctsCustId
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -1048,11 +1048,11 @@
             }
         }
 
-        public IEnumerable<CustomerClassificationHistoryModel> GetCustomerClassificationHistory(long custId)
+        public IEnumerable<CustomerClassificationHistoryModel> GetCustomerClassificationHistory(long ctsCustId)
         {
             var criteria = new GetCTSCustomerClassificationHistoryCriteria
             {
-                CustId = custId
+                CTSCustID = ctsCustId
             };
 
             try
@@ -1141,11 +1141,10 @@
             return insertCTSResult;
         }
 
-        public DBResult PinCategoryCustomerClassification(int custId, long ctsCustId, int subscriberId, bool isPinCategory, int createdBy)
+        public DBResult PinCategoryCustomerClassification(long ctsCustId, int subscriberId, bool isPinCategory, int createdBy)
         {
             var criteria = new PinCTSCategoryCustomerClassificationCriteria
             {
-                CustId = custId,
                 CTSCustId = ctsCustId,
                 SubscriberId = subscriberId,
                 IsPinCategory = isPinCategory,
@@ -1186,11 +1185,10 @@
             };
         }
 
-        public DBResult ChangeExcludedTagAssPA(int custId, long ctsCustId, int subscriberId, bool isExcludedTagAssPA, int createdBy)
+        public DBResult ChangeExcludedTagAssPA(long ctsCustId, int subscriberId, bool isExcludedTagAssPA, int createdBy)
         {
             var criteria = new ChangeUpdateTaggingAssWithPACriteria
             {
-                CustId = custId,
                 CTSCustId = ctsCustId,
                 SubscriberId = subscriberId,
                 IsExcludedTagAssPA = isExcludedTagAssPA,
