@@ -140,8 +140,8 @@
             }
 
             var associationTypes = _associationService.GetCustomerStaticStatus(2, true);
-            //if (getDataFromMySql)
-            //{
+            if (getDataFromMySql)
+            {
                 var associations = _associationService.GetAssociationDetailFromMySql(filter, out totalItems);
 
                 if (associations != null && associations.Any())
@@ -163,33 +163,33 @@
                         TotalAssociationAccount = groupForSite.FirstOrDefault(y => y.SubscriberID == x.SubscriberID).TotalAccounts
                     }).OrderBy(x => x.SubscriberId);
                 }
-            //}
-            //else
-            //{
-            //    var associations = _associationService.GetAssociationDetail(apiURI, filter);
-            //    var assList = associations.AssociationList;
+            }
+            else
+            {
+                //var associations = _associationService.GetAssociationDetail(apiURI, filter);
+                //var assList = associations.AssociationList;
 
-            //    if (assList != null && assList.Any())
-            //    {
-            //        var groupForSite = assList.GroupBy(x => x.SubscriberId)
-            //            .Select(g => new { SubscriberID = g.Key, TotalAccounts = g.Count() });
+                //if (assList != null && assList.Any())
+                //{
+                //    var groupForSite = assList.GroupBy(x => x.SubscriberId)
+                //        .Select(g => new { SubscriberID = g.Key, TotalAccounts = g.Count() });
 
-            //        associationList = assList.Select(x => new AssociationDetailViewModel
-            //        {
-            //            CTSCustId = x.CTSCustId,
-            //            UserName = x.UserName,
-            //            SubscriberId = x.SubscriberId,
-            //            SubscriberName = x.SubscriberName,
-            //            AssociatedDate = x.AssociationDateFromGraphDB,
-            //            AccountStatus = x.AccountStatus,
-            //            AssociatedDateString = x.AssociationDateFromGraphDB.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-            //            IsLinked = x.AssociationStatus == 1 ? true : false,
-            //            AssociationTypeName = GetAssociationTypeName(associationTypes, x.AssociationType),
-            //            TotalAssociationAccount = groupForSite.FirstOrDefault(y => y.SubscriberID == x.SubscriberId).TotalAccounts
-            //        }).OrderBy(x => x.SubscriberId);
-            //    }
-            //}
-            
+                //    associationList = assList.Select(x => new AssociationDetailViewModel
+                //    {
+                //        CTSCustId = x.CTSCustId,
+                //        UserName = x.UserName,
+                //        SubscriberId = x.SubscriberId,
+                //        SubscriberName = x.SubscriberName,
+                //        AssociatedDate = x.AssociationDateFromGraphDB,
+                //        AccountStatus = x.AccountStatus,
+                //        AssociatedDateString = x.AssociationDateFromGraphDB.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+                //        IsLinked = x.AssociationStatus == 1 ? true : false,
+                //        AssociationTypeName = GetAssociationTypeName(associationTypes, x.AssociationType),
+                //        TotalAssociationAccount = groupForSite.FirstOrDefault(y => y.SubscriberID == x.SubscriberId).TotalAccounts
+                //    }).OrderBy(x => x.SubscriberId);
+                //}
+            }
+
 
             return Json(new
             {

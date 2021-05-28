@@ -429,7 +429,7 @@
                             AssCreatedFrom = paras.AssociatedDateFrom.AddHours(4).ToString(Consts.FormatDateTimeToString_YYYYmmddThhddmm),
                             AssCreatedTo = paras.AssociatedDateTo.AddHours(4).AddDays(1).ToString(Consts.FormatDateTimeToString_YYYYmmddThhddmm),
                             AccountStatuses = new List<int>(),
-                            SiteIDs = new List<int>(),
+                            SubscriberIDs = new List<int>(),
                             Skip = paras.SkipRow,
                             Pagesize = paras.TakeRow
                         }).Data.FirstOrDefault();

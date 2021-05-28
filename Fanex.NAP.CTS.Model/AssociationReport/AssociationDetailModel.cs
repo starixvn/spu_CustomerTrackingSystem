@@ -11,9 +11,7 @@
 
         public int SubscriberId { get; set; }
 
-        public int? SiteID { get; set; }
-
-        public string SiteName { get; set; }
+        public string SubscriberName { get; set; }
 
         public string StatusName { get; set; }
 
