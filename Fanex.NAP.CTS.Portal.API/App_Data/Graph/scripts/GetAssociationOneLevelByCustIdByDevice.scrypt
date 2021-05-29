@@ -1,27 +1,27 @@
-﻿//USE ctsgraphdb
-USE ctslocal
+﻿USE ctsgraphdb
+//USE ctslocal
 CALL apoc.cypher.run('
 MATCH (c:CTSCustomer)-[r:USED_DEVICE]->(d:Device)<-[r1:USED_DEVICE]-(c1:CTSCustomer)
 WHERE c.CTSCustID = $ip_CTSCustId AND c1.CustID IS NOT NULL AND
 		(($ip_assStatus = 0) 
 		OR ($ip_assStatus = 1 AND not exists((c)-[:HAS_EXCEPTION]-(c1)))
 		OR ($ip_assStatus = 2 AND exists((c)-[:HAS_EXCEPTION]-(c1))))
-UNWIND [r.CreatedTime,r1.CreatedTime]  as val
+UNWIND [r.CreatedDate,r1.CreatedDate]  as val
 WITH c,c1,d, Max(val) as AssDate
 OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c1)
 OPTIONAL MATCH (c1)-[:BELONG_TO_SUB]->(s:Subscriber)
 OPTIONAL MATCH (c1)-[:HAS_STATUS]->(st:StaticList)
 WITH c,c1,d,st,e,s, AssDate
-WHERE      (($ip_IsAssReport = 1 AND st.ItemID IS NOT NULL AND st.ItemName IS NOT NULL)
-		OR ($ip_IsAssReport = 0 AND st.ItemID IS NOT NULL AND st.ListID = 1 AND st.ItemID IN $ip_AccountStatuses AND s.SubscriberID IN $ip_SubscriberIDs))  
+WHERE ($ip_IsAssReport = 1 
+        OR ($ip_IsAssReport = 0 AND st.ItemID IS NOT NULL AND st.ListID = 1 AND st.ItemID IN $ip_AccountStatuses AND s.SubscriberID IN $ip_SubscriberIDs)) 
 WITH c,c1,st,e,s, Min(AssDate) as firstAssDate
 WHERE      (($ip_IsAssReport = 0)
 		OR ($ip_IsAssReport = 1 AND firstAssDate >= datetime($ip_AssCreatedFrom) AND firstAssDate <= datetime($ip_AssCreatedTo)))
 RETURN 
         c1.CTSCustID as CTSCustID, c1.CustID AS CustId
     , c1.CustSubID AS CustSubId
-    , c1.UserName AS Username
-    , c1.UserName2 AS Username2
+    , c1.Username AS Username
+    , c1.Username2 AS Username2
     , collect(1) AS AssociationType, -1 AS SharedDevices
     , -1 AS SharedIPs
     , s.SubscriberID AS SubscriberId
@@ -29,7 +29,7 @@ RETURN
     , CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
     , s.SubscriberName as SubscriberName
     , st.ItemID as StatusId
-    , st.ItemName as StatusName
+    , st.ItemNameDisplay as StatusName
     , CASE WHEN st.ItemID in [1,11] THEN 1 ELSE 2 END AS PriorityStatusOrder
 ',{ip_CTSCustId: $CTSCustID, ip_assStatus: $AssStatus, ip_IsAssReport: $IsAssReport, ip_AssCreatedFrom: $AssCreatedFrom, ip_AssCreatedTo: $AssCreatedTo, ip_SubscriberIDs: $SubscriberIDs, ip_AccountStatuses: $AccountStatuses}) YIELD value 
 WITH collect(value) as ListAss, count(value) as TotalItems

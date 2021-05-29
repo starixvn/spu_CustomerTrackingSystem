@@ -420,14 +420,14 @@
                     }
 
                     if (!string.IsNullOrEmpty(script))
-                    {
+                    {                        
                         var queryResult = DbSessionFactory.Execute<GraphAssociationPaging>(script, new
                         {
                             CTSCustID = paras.CTSCustId,
                             AssStatus = paras.AssociationStatus,
                             IsAssReport = 1,
-                            AssCreatedFrom = paras.AssociatedDateFrom.AddHours(4).ToString(Consts.FormatDateTimeToString_YYYYmmddThhddmm),
-                            AssCreatedTo = paras.AssociatedDateTo.AddHours(4).AddDays(1).ToString(Consts.FormatDateTimeToString_YYYYmmddThhddmm),
+                            AssCreatedFrom = paras.AssociatedDateFrom,
+                            AssCreatedTo = paras.AssociatedDateTo,
                             AccountStatuses = new List<int>(),
                             SubscriberIDs = new List<int>(),
                             Skip = paras.SkipRow,
@@ -440,7 +440,9 @@
             }
             catch (Exception ex)
             {
-                LogService.Error("GetDetailAssociationReport failed: " + ex.Message + ex.StackTrace);
+                LogService.Error("GetDetailAssociationReport failed: " + ex.Message + ex.StackTrace + "\n"
+                        + ex.InnerException.Message + ex.InnerException.Source + ((Neo4j.Driver.Neo4jException)ex.InnerException).Code
+                        + ex.InnerException.StackTrace);
             }
 
             return result;
