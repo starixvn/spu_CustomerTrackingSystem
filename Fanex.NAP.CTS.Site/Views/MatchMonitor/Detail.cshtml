@@ -19,29 +19,56 @@
                 <div class="form-filter">
                     <div class="group width-180">
                         <label class="text">Match Event</label>
-                        <div class="control width-select text-box">Manchester City vs Chelsea</div>
+                        <div class="control width-select text-box">@ViewBag.MatchName</div>
                     </div>
                     <div class="group width-180">
                         <label class="text">Live/Non-live</label>
-                        <select class="control width-select" id="cbbAccountStatus">
-                            <option selected>Non-live</option>
-                            <option>Live</option>
+                        <select class="control width-select" id="cbbLiveIndicator">
+                            <option value="0" selected>Non-live</option>
+                            <option value="1" >Live</option>
                         </select>
                     </div>
                     <div class="group width-180">
                         <label class="text">Score</label>
-                        <select class="control width-select" id="cbbAccountStatus">
-                            <option>4 of 4 selected</option>
-                            <option>3 of 3 selected</option>
-                            <option>2 of 2 selected</option>
+                        <select class="control width-select" id="cbbMatchScore" multiple="multiple">
+                            @if (ViewBag.MatchScore != null)
+                            {
+                                foreach (var item in ViewBag.MatchScore)
+                                {
+                                    <option value="@item.TotalScore" @(item.TotalScore == 0 ? "selected" : "")>@item.LiveHomeScore - @item.LiveAwayScore </option>
+                                }
+                            }
                         </select>
                     </div>
                     <div class="group width-180">
                         <label class="text">Reason Group</label>
-                        <select class="control width-select" id="cbbAccountStatus">
-                            <option>30 of 30 selected</option>
-                            <option>3 of 3 selected</option>
-                            <option>2 of 2 selected</option>
+                        <select class="control width-select" id="cbbReasonGroup" multiple="multiple">
+                            @*@{
+                                int preIncrement1 = 0;
+                                int preIncrement2 = 0;
+                            }
+                            @if (ViewBag.ReasonGroup != null)
+                            {
+                                foreach (var item in ViewBag.ReasonGroup)
+                                {
+                                    if (@item.IsHedging)
+                                    {
+                                        <option value="@item.GroupID"> Hedging @(preIncrement1++) </option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.GroupID"> Group Betting @(preIncrement2++) </option>
+                                    }
+                                }
+                            }*@
+
+                            @if (ViewBag.ReasonGroup != null)
+                            {
+                                foreach (var item in ViewBag.ReasonGroup)
+                                {
+                                    <option value="@item.GroupID"> @item.ReasonGroupName </option>
+                                }
+                            }
                         </select>
                     </div>
                     <button class="button button-generate" id="btnGenerate-detail">Generate</button>
@@ -98,10 +125,15 @@
             </div>
         </div>
     </div>
-
+    <div class="hide">
+        <input id="hdEventDataToString" type="hidden" value="@ViewBag.EventDateToString" />
+        <input id="hdMatchID" type="hidden" value="@ViewBag.MatchID" />
+        <input id="hdBetTypeID" type="hidden" value="@ViewBag.BetTypeID" />
+        <input id="hdIsHostPermission" type="hidden" IsHostPermission="@ViewBag.IsHostPermission.ToString()" />
+    </div>
 </section>  
 
 
 @section scripts{
-    @Scripts.Render("~/match-monitor-scripts")
+    @Scripts.Render("~/match-monitor-detail-scripts")
 }

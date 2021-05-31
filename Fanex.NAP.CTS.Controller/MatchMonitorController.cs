@@ -4,15 +4,19 @@
     using Fanex.NAP.Core.Configuration;
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Service.Interface;
-    using Fanex.NAP.CTS.Model.ManageSubscriber;
+    using Fanex.NAP.Core.Web.Attribute;
+    using Fanex.NAP.CTS.Core;
+    using Fanex.NAP.CTS.Model.MatchMonitor;
+    using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor;
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Web.Mvc;
 
     //[NapSuperAuth]
-    //[NapAuth(FunctionKey = FSFunctionKeys.MatchMonitoring, Policy = NAP.Core.Business.Constant.Policy.Read)]
+    //[NapAuth(FunctionKey = FSFunctionKeys.MatchMonitor, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class MatchMonitorController : BaseController
     {
         private readonly IMatchMonitorService _matchMonitorService;
@@ -44,14 +48,17 @@
         public ActionResult GetMatchMonitor(MatchMonitorFilterViewModel matchMonitorFilterViewModel)
         {
             var matchMonitors = new List<MatchMonitorModel>();
-                
+
             try
             {
-                matchMonitors = _matchMonitorService.GetMatchMonitor(matchMonitorFilterViewModel);
+                if (matchMonitorFilterViewModel != null)
+                {
+                    matchMonitors = _matchMonitorService.GetMatchMonitor(matchMonitorFilterViewModel);
+                }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                LogService.Error("Match Monitor Error", e); 
+                LogService.Error("Match Monitor Error", e);
             }
 
             return Json(new
@@ -60,18 +67,175 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Detail()
+        [HttpPost]
+        public ActionResult UpdateVerification(Int64 matchID)
+        {
+            var result = new DBResult();
+
+            try
+            {
+                result = _matchMonitorService.UpdateVerificaton(matchID, CurrentSession.UserId);
+            }
+            catch (Exception e)
+            {
+                LogService.Error("Match Monitor Error", e);
+                result.ErrorCode = -1;
+                result.ErrorMsg = e.Message;
+            }
+
+            return Json(new
+            {
+                data = result
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult Detail(MatchMonitorDetailViewModel para)
         {
             IUserService userService = new UserService();
+            var matchReasonGroup = new List<MatchReasonGroupModel>();
+            var matchScore = new List<MatchScoreModel>();
 
-            //var isHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
-            //                NapSettings.Settings.SiteId,
-            //                FSFunctionKeys.ManageSubscriber,
-            //                NAP.Core.Business.Constant.Policy.Host);
+            try
+            {
+                if (para != null)
+                {
+                    matchReasonGroup = _matchMonitorService.GetMatchReasonGroup(para.EventDate, para.MatchID, para.BetTypeID)?.OrderBy(c => c.IsHedging).ToList();
+                    matchScore = _matchMonitorService.GetMatchScore(para.EventDate, para.MatchID, para.BetTypeID);
+                    MappingReasonGroupName(ref matchReasonGroup);
 
-            //var userId = CurrentSession.UserId;
+                    ViewBag.EventDateToString = para.EventDateToString;
+                    ViewBag.MatchID = para.MatchID;
+                    ViewBag.BetTypeID = para.BetTypeID;
+                    ViewBag.MatchName = para.MatchName;
+                    ViewBag.ReasonGroup = matchReasonGroup;
+                    ViewBag.MatchScore = matchScore;
+                    ViewBag.IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
+                                    NapSettings.Settings.SiteId,
+                                    FSFunctionKeys.MatchMonitor,
+                                    NAP.Core.Business.Constant.Policy.Host);
+                }
 
-            return View("Detail");
+            }
+            catch (Exception e)
+            {
+                LogService.Error("Match Monitor Error", e);
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult GetMatchMonitorDetail(MatchMonitorDetailFilterViewModel para)
+        {
+            var matchDetailResult = new List<MatchMonitorDetailResultViewModel>();
+
+            try
+            {
+                if (para != null)
+                {
+                    var matchDetail = _matchMonitorService.GetMatchMonitorDetail(para);
+                    var matchReasonGroup = _matchMonitorService.GetMatchReasonGroup(para.EventDate, para.MatchID, para.BetTypeID)?.OrderBy(c => c.IsHedging).ToList();
+                    MappingReasonGroupName(ref matchReasonGroup);
+
+                    if (matchDetail != null && matchDetail.Any())
+                    {
+                        var custInfo = _matchMonitorService.GetCustInfoByCustID(string.Join(", ", matchDetail.Select(c => c.ListCustID)));
+                        var listCustReasonGroup = GetCustReasonGroup(matchReasonGroup, para.ListReasonGroup);
+
+                        var ticketDetail = _matchMonitorService.GetTicketDetail(para.EventDate, string.Join(", ", matchDetail.Select(c => c.ListTransID)));
+
+                        matchDetailResult = MergeMatchMonitorDetail(custInfo, listCustReasonGroup, ticketDetail);
+
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                LogService.Error("Match Monitor Error", e);
+            }
+
+            return Json(new
+            {
+                homeTableData = matchDetailResult?.Where(c => c.IsHomeSide),
+                awayTableData = matchDetailResult?.Where(c => !c.IsHomeSide)
+            }, JsonRequestBehavior.AllowGet) ;
+        }
+
+        private List<MatchMonitorDetailResultViewModel> MergeMatchMonitorDetail(List<CustInfoModel> custInfo, List<CustReasonGroupModel> listCustReasonGroup, List<TicketDetailModel> ticketDetail)
+        {
+            var matchDetailResult = new List<MatchMonitorDetailResultViewModel>();
+
+            if ( custInfo == null || listCustReasonGroup == null || ticketDetail == null)
+            {
+                return matchDetailResult;
+            }
+
+            matchDetailResult = custInfo.Join(ticketDetail, cust => cust.CustID,
+                                                            ticket => ticket.CustId,
+                                                            (cust, ticket) => new { cust, ticket })
+                                                            .Select(c => new MatchMonitorDetailResultViewModel
+                                                            {
+                                                                CTSCustID = c.cust.CTSCustID,
+                                                                CustID = c.cust.CustID,
+                                                                SubscriberType = c.cust.SubscriberType,
+                                                                Username = c.cust.UserName,
+                                                                Danger1 = c.cust.Danger1,
+                                                                Danger2 = c.cust.Danger2,
+                                                                Danger3 = c.cust.Danger3,
+                                                                Odds = c.ticket.Odds,
+                                                                BetID = c.ticket.TransId,
+                                                                BetTeam = c.ticket.BetTeam,
+                                                                Currency = c.cust.Currency,
+                                                                LiveIndicator = c.ticket.LiveIndicator,
+                                                                Amount = c.ticket.Stake,
+                                                                HDP = c.ticket.Hdp1 - c.ticket.Hdp2,
+                                                                Score =  c.ticket.LiveAwayScore + " - " + c.ticket.LiveHomeScore ,
+                                                                TransTime = c.ticket.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+                                                                ReasonGroup = listCustReasonGroup.Where(i => i.CustID == c.cust.CustID).SingleOrDefault().ReasonGroupName
+                                                            }).ToList();
+
+            return matchDetailResult;
+        }
+
+        private void MappingReasonGroupName(ref List<MatchReasonGroupModel> matchReasonGroup)
+        {
+            int preIncrement1 = 0;
+            int preIncrement2 = 0;
+
+            if (matchReasonGroup != null && matchReasonGroup.Any())
+            {
+                foreach (var item in matchReasonGroup)
+                {
+                    item.ReasonGroupName = item.IsHedging ? ("Hedging " + ++preIncrement1) : ("Group Betting " + ++preIncrement2);
+                }
+            }
+        }
+
+        public List<CustReasonGroupModel> GetCustReasonGroup(List<MatchReasonGroupModel> matchReasonGroup, string listReasonGroup)
+        {
+            var custReasonGroup = new List<CustReasonGroupModel>();
+
+            if (matchReasonGroup != null && !string.IsNullOrEmpty(listReasonGroup))
+            {
+                var reasonGroupFilter = listReasonGroup.Split(',').Select(Int64.Parse).ToList();
+                reasonGroupFilter.Join(matchReasonGroup,
+                    filter => filter,
+                    reasonGroup => reasonGroup.GroupID, (filter, reasonGroup) => reasonGroup).Select(e => e).ToList().ForEach(e =>
+                    {
+                        foreach (var i in e.ListCustID.Split(',').Select(Int64.Parse))
+                        {
+                            custReasonGroup.Add(new CustReasonGroupModel
+                            {
+                                GroupID = e.GroupID,
+                                CustID = i,
+                                ReasonGroupName = e.ReasonGroupName
+                            });
+                        }
+                    });
+            }
+
+            return custReasonGroup;
         }
     }
 }

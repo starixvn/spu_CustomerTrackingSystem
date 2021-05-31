@@ -34,7 +34,7 @@
 
             bundles.Add(new StyleBundle("~/Content/styles/dashboard").Include(
                       "~/Content/scss/pages/dashboard/dashboard.min.css"));
-             
+
             RegisterFSCoreBundles(bundles);
             RegisterSearchBoxBundles(bundles);
 
@@ -108,7 +108,7 @@
             bundles.Add(new ScriptBundle("~/scripts/searchbox").Include("~/scripts/Home/SearchPage.js"));
         }
 
-          private static void RegisterFraudCaseBundles(BundleCollection bundles)
+        private static void RegisterFraudCaseBundles(BundleCollection bundles)
         {
             bundles.Add(new StyleBundle("~/fraud-case-styles").Include("~/content/scss/pages/configurations/fraud-case.css"));
 
@@ -188,7 +188,7 @@
                 "~/Scripts/Account/BettingStatistic/sport-statistic-scripts.js",
                 "~/Scripts/Account/BettingStatistic/turnover-by-bettype.js",
                 "~/Scripts/Account/BettingStatistic/winlost-statistic-scripts.js"
-                ));           
+                ));
         }
 
         private static void RegisterAccountDetailBundles(BundleCollection bundles)
@@ -210,7 +210,7 @@
                       "~/Content/scss/vendors/jquery-ui/base/tagify.css",
                       "~/Content/scss/pages/account/account.css"));
         }
-        
+
         private static void RegisterTransactionHistoryBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/account/transaction-history-scripts").Include("~/Scripts/Account/TransactionHistory/*.js"));
@@ -245,7 +245,7 @@
 
         private static void RegisterProblemAccountMonitorDetailBundles(BundleCollection bundles)
         {
-            bundles.Add(new ScriptBundle("~/problem-account-monitor-detail-scripts").Include(                
+            bundles.Add(new ScriptBundle("~/problem-account-monitor-detail-scripts").Include(
                 "~/Scripts/MultipleSelect/jquery.multiselect.filter.js",
                 "~/Scripts/ProblemAccountMonitor/detail.js"));
 
@@ -286,7 +286,7 @@
 
         private static void RegisterSpecialCustomerClassBundles(BundleCollection bundles)
         {
-            bundles.Add(new ScriptBundle("~/special-customer-class-scripts").Include(                        
+            bundles.Add(new ScriptBundle("~/special-customer-class-scripts").Include(
                 "~/Scripts/SpecialCustomerClass/index.js"));
 
             bundles.Add(new StyleBundle("~/special-customer-class-styles").Include(
@@ -367,11 +367,15 @@
         private static void RegisterMatchMonitorDetailBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/match-monitor-detail-scripts").Include(
+               "~/Scripts/select2.min.js",
+               "~/Scripts/MultipleSelect/jquery.multiselect.filter.js",
                "~/Scripts/MatchMonitor/detail.js"));
 
             bundles.Add(new StyleBundle("~/match-monitor-detail-styles").Include(
+                "~/Content/scss/vendors/select2.min.css",
+                 "~/Content/scss/MultipleSelect/jquery.multiselect.filter.css",
+                "~/Content/scss/MultipleSelect/jquery.multiselect.css",
                 "~/Content/scss/pages/match-monitor/match-monitor-detail.css"));
         }
-
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Model.ManageSubscriber
+﻿namespace Fanex.NAP.CTS.Model.MatchMonitor
 {
     using Fanex.NAP.CTS.Core.BaseClasses;
     using Fanex.NAP.CTS.Resource.Consts;

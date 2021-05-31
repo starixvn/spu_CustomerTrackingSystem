@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Criteria.ManageSubscriber
+﻿namespace Fanex.NAP.CTS.Criteria.MatchMonitor
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
@@ -7,16 +7,16 @@
     public class MatchMonitorGetCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_FromDate")]
-        public DateTime ip_FromDate { get; set; }
+        public DateTime FromDate { get; set; }
 
         [SpParam(SqlParamName = "ip_ToDate")]
-        public DateTime ip_ToDate { get; set; }
+        public DateTime ToDate { get; set; }
 
         [SpParam(SqlParamName = "ip_Bettypes")]
-        public string ip_BetType { get; set; }
+        public string BetType { get; set; }
 
         [SpParam(SqlParamName = "ip_IsVerified")]
-        public int? ip_IsVerified { get; set; }
+        public int? IsVerified { get; set; }
 
         public override string GetSettingKey()
             => "CTS_DC_MatchMonitor_Get";

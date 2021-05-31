@@ -1,9 +1,15 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.MatchMonitor
 {
-    public class MatchMonitorViewModel
-    {
-        public bool IsHostPermission { get; set; }
+    using System;
 
-        public long CustId { get; set; }
+    public class MatchMonitorFilterViewModel
+    {
+        public DateTime FromDate { get; set; }
+
+        public DateTime ToDate { get; set; }
+
+        public string BetTypes { get; set; }
+
+        public int? IsVerified { get; set; }
     }
 }

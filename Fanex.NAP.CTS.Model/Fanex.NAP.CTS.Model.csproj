@@ -214,6 +214,12 @@
     <Compile Include="ManageSubscriber\ReUpdateSubscribeBySiteIDModel.cs" />
     <Compile Include="ManageSubscriber\DetailedSiteModel.cs" />
     <Compile Include="ManageSubscriber\UpdateSubsciberResultModel.cs" />
+    <Compile Include="MatchMonitor\CustInfoModel.cs" />
+    <Compile Include="MatchMonitor\MatchMonitorDetailModel.cs" />
+    <Compile Include="MatchMonitor\CustReasonGroupModel.cs" />
+    <Compile Include="MatchMonitor\TicketDetailModel.cs" />
+    <Compile Include="MatchMonitor\MatchScoreModel.cs" />
+    <Compile Include="MatchMonitor\MatchReasonGroupModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorModel.cs" />
     <Compile Include="Notification\UpdateNotifiedSettingStatusModel.cs" />
     <Compile Include="Notification\NotifiedSettingStatusModel.cs" />

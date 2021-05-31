@@ -61,6 +61,8 @@
         public const string AssociationTypeName_IP = "IP";
         public const string AssociationTypeName_IPAssociation = "IP Association";
 
+        public const int MatchMonitor_ReportQueryType = 2;
+
         public enum ROLE_CUSTOMER : int
         {
             MEMBER = 1,
