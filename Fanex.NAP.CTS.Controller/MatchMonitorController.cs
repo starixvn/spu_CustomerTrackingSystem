@@ -191,6 +191,7 @@
                                                                 Amount = c.ticket.Stake,
                                                                 HDP = c.ticket.Hdp1 - c.ticket.Hdp2,
                                                                 Score =  c.ticket.LiveAwayScore + " - " + c.ticket.LiveHomeScore ,
+                                                                TicketStatus = c.ticket.TicketStatus,
                                                                 TransTime = c.ticket.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                                                                 ReasonGroup = listCustReasonGroup.Where(i => i.CustID == c.cust.CustID).SingleOrDefault().ReasonGroupName
                                                             }).ToList();

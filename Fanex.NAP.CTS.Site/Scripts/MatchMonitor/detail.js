@@ -90,7 +90,7 @@
                 {
                     data: obj => () => {
                         let url = common.modifyRelativeUrl('Account/Index/' + obj.CTSCustID);
-                        return html = `<a class='click-view-name' href=${url}> ${obj.Username} </a>`;
+                        return html = `<a class='click-view-name ` + (obj.TicketStatus ? "void-ticket" : "rejected-ticket") + `' href=${url}> ${obj.Username} </a>`;
                     }
                 },
                 { data: obj => obj.DangerToString },

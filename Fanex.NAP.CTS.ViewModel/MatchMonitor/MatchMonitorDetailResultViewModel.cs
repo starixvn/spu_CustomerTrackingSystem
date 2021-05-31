@@ -38,6 +38,8 @@
 
         public string BetTeam { get; set; }
 
+        public bool TicketStatus { get; set; }
+
         public bool IsHomeSide
         {
             get
