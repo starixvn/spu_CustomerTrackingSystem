@@ -15,8 +15,8 @@
     using System.Linq;
     using System.Web.Mvc;
 
-    //[NapSuperAuth]
-    //[NapAuth(FunctionKey = FSFunctionKeys.MatchMonitor, Policy = NAP.Core.Business.Constant.Policy.Read)]
+    [NapSuperAuth]
+    [NapAuth(FunctionKey = FSFunctionKeys.MatchMonitor, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class MatchMonitorController : BaseController
     {
         private readonly IMatchMonitorService _matchMonitorService;

@@ -90,7 +90,7 @@
                 {
                     data: obj => () => {
                         let url = common.modifyRelativeUrl('Account/Index/' + obj.CTSCustID);
-                        return html = `<a class='click-view-name ` + (obj.TicketStatus ? "void-ticket" : "rejected-ticket") + `' href=${url}> ${obj.Username} </a>`;
+                        return html = `<a class='click-view-name ' href=${url}> ${obj.Username} </a>`;
                     }
                 },
                 { data: obj => obj.DangerToString },
@@ -103,7 +103,13 @@
                 { data: obj => obj.Score },
                 { data: obj => obj.TransTime },
                 { data: obj => obj.ReasonGroup }
-            ]
+            ],
+            createdRow: function (row, data, index) {
+                if (data.TicketStatus)
+                    $(row.cells).addClass('void-ticket');
+                else
+                    $(row.cells).addClass('rejected-ticket');
+            }
         });
     }
 
@@ -152,7 +158,7 @@
                 {
                     data: obj => () => {
                         let url = common.modifyRelativeUrl('Account/Index/' + obj.CTSCustID);
-                        return html = `<a class='click-view-name' href=${url}> ${obj.UserName} </a>`;
+                        return html = `<a class='click-view-name' href=${url}> ${obj.Username} </a>`;
                     }
                 },
                 { data: obj => obj.DangerToString },
@@ -165,7 +171,13 @@
                 { data: obj => obj.Score },
                 { data: obj => obj.TransTime },
                 { data: obj => obj.ReasonGroup }
-            ]
+            ],
+            createdRow: function (row, data, index) {
+                if (data.TicketStatus)
+                    $(row.cells).addClass('void-ticket');
+                else
+                    $(row.cells).addClass('rejected-ticket');
+            }
         });
     }
 
