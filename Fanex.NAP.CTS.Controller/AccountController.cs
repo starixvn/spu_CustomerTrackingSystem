@@ -1251,7 +1251,7 @@
             return PartialView("CustomerCategory/CustomerCategory");
         }
 
-        public ActionResult GetCustomerClassification(long custId)
+        public ActionResult GetCustomerClassification(long ctsCustId)
         {
             var isPinCategory = false;
             var isExcludedTagAssPA = false;
@@ -1260,7 +1260,7 @@
             var categoryList = new List<CustomerCategoryViewModel>();
             var classificationHistoryList = new List<CustomerClassificationHistoryViewModel>();
 
-            var classification = _accountService.GetCustomerClassification(custId, out isPinCategory, out isExcludedTagAssPA);
+            var classification = _accountService.GetCustomerClassification(ctsCustId, out isPinCategory, out isExcludedTagAssPA);
 
             if (classification != null && classification.Any())
             {
@@ -1278,7 +1278,7 @@
                 isProblemAccount = categoryList.Where(x => x.IsProblemAccount).Any();
             }
 
-            var classificationHistory = _accountService.GetCustomerClassificationHistory(custId);
+            var classificationHistory = _accountService.GetCustomerClassificationHistory(ctsCustId);
 
             if (classificationHistory != null && classificationHistory.Any())
             {
@@ -1490,9 +1490,9 @@
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [HttpPost]
-        public ActionResult PinCategoryCustomerClassification(int custId, long ctsCustId, int subscriberId, bool isPinCategory)
+        public ActionResult PinCategoryCustomerClassification(long ctsCustId, int subscriberId, bool isPinCategory)
         {
-            var result = _accountService.PinCategoryCustomerClassification(custId, ctsCustId, subscriberId, isPinCategory, CurrentSession.UserId);
+            var result = _accountService.PinCategoryCustomerClassification(ctsCustId, subscriberId, isPinCategory, CurrentSession.UserId);
 
             return Json(new
             {
@@ -1503,11 +1503,13 @@
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [HttpPost]
-        public ActionResult ChangeExcludedTagAssPA(int custId, long ctsCustId, int subscriberId, bool isExcludedTagAssPA, bool isProblemAccount)
+        public ActionResult ChangeExcludedTagAssPA(int custId, long ctsCustId, int subscriberId, bool isExcludedTagAssPA, bool isProblemAccount, int custSubId)
         {
-            var result = _accountService.ChangeExcludedTagAssPA(custId, ctsCustId, subscriberId, isExcludedTagAssPA, CurrentSession.UserId);
+            var result = _accountService.ChangeExcludedTagAssPA(ctsCustId, subscriberId, isExcludedTagAssPA, CurrentSession.UserId);
 
-            if (result.ErrorCode == 0 && !isProblemAccount)
+            if (result.ErrorCode == 0
+                && !isProblemAccount
+                && custSubId == 0)
             {
                 var custIdList = new List<int> { custId };
 

@@ -5,9 +5,6 @@
 
     public class ChangeUpdateTaggingAssWithPACriteria : NonQueryCommand
     {
-        [SpParam(SqlParamName = "ip_CustID")]
-        public int CustId { get; set; }
-
         [SpParam(SqlParamName = "ip_CTSCustID")]
         public long CTSCustId { get; set; }
 

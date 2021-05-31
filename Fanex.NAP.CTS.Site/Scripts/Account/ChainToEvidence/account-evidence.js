@@ -195,7 +195,7 @@
             success: function (response) {
                 common.showSuccess();
                 var customerCategory = new customer_category();
-                customerCategory.ReloadTab(custId);
+                customerCategory.ReloadTab(ctsCustId);
                 GetCustomerClassification(custId);
             },
             complete: function () {
@@ -490,7 +490,7 @@
                 common.showSuccess('Add the evidence successful!');
                 domElements.divPlaceEvidence.dialog('close');
                 var customerCategory = new customer_category();
-                customerCategory.ReloadTab(custId);
+                customerCategory.ReloadTab(ctsCustId);
                 GetCustomerClassification(custId);
             },
             complete: function () {

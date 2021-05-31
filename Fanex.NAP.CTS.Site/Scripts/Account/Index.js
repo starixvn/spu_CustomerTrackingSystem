@@ -8,6 +8,7 @@
     var isBettingStatisticPermission = $("#hdIsBettingStatisticPermission").attr("IsBettingStatisticPermission");  
     var isViewIPTransactionPermission = $("#hdIsViewIPTransactionPermission").attr("IsViewIPTransactionPermission");
     var currentUserId = $("#hdCurrentUserId").val();
+    var custSubId = $("#hdCustSubId").val();
     var isPreviousStatisticOpen = false;
 
     let domElements = {        
@@ -81,7 +82,7 @@
             },
             complete: function () {
                 var customerCategory = new customer_category();
-                customerCategory.Initial(custId, ctsCustId, subscriberId, username, isHostPermission);
+                customerCategory.Initial(custId, ctsCustId, subscriberId, username, isHostPermission, custSubId);
             },
             error: function (errMsg) {
                 console.log(errMsg);

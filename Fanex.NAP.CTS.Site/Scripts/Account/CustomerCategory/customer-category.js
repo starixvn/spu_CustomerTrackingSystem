@@ -226,7 +226,7 @@
         });
     }
     
-    function RenderGrid(custId) {
+    function RenderGrid(ctsCustId) {
          tblcustomercategory.DataTable({
             dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
             pagingType: "full_numbers",
@@ -250,7 +250,7 @@
             ajax: {
                 url: common.modifyRelativeUrl('Account/GetCustomerClassification'),
                 data: {
-                    custId: custId
+                    ctsCustId: ctsCustId
                 },
                 type: 'POST',
                 dataFilter: function (response) {
@@ -300,11 +300,11 @@
         });
     }
 
-    function ReloadGrid(custId)
+    function ReloadGrid(ctsCustId)
     {
         $.ajax(common.modifyRelativeUrl('/Account/GetCustomerClassification'), {
             type: 'POST',
-            data: { custId: custId },
+            data: { ctsCustId: ctsCustId },
             dataFilter: function (response) {
                 if (response !== undefined) {
                     let json = jQuery.parseJSON(response);                  
@@ -446,7 +446,7 @@
         return html;
     }        
 
-    function PinCategory(isChecked, custId, ctsCustId, subscriberId) {
+    function PinCategory(isChecked, ctsCustId, subscriberId) {
         let html = "<div style='text-align:center'>Are you sure about this action? </div>";  
         
         if (isChecked) {
@@ -459,7 +459,6 @@
             function () {
                 var url = common.modifyRelativeUrl('/Account/PinCategoryCustomerClassification');
                 var params = {};     
-                params.custId = custId;
                 params.ctsCustId = ctsCustId;
                 params.subscriberId = subscriberId;
                 params.isPinCategory = isChecked;
@@ -500,7 +499,7 @@
         );
     }
 
-    function ExcludedTagAssPA(isChecked, custId, ctsCustId, subscriberId) {
+    function ExcludedTagAssPA(isChecked, custId, ctsCustId, subscriberId, custSubId) {
         let html = "";
         let isPinCategory = false;
        
@@ -538,6 +537,7 @@
                 params.subscriberId = subscriberId;
                 params.isExcludedTagAssPA = isChecked;
                 params.isProblemAccount = cacheData.isProblemAccount;
+                params.custSubId = custSubId;
 
                 $.ajax(url, {
                     type: 'POST',
@@ -595,7 +595,7 @@
         }
     }
 
-    this.Initial = function (custId, ctsCustId, subscriberId, username, hostPermission) {
+    this.Initial = function (custId, ctsCustId, subscriberId, username, hostPermission, custSubId) {
         DisableButton(hostPermission);
 
         cbbCategorySetting.multiselect({
@@ -604,9 +604,9 @@
             header: false,
             click: function (_, ui) {
                 if (ui.value == "PinCategory")
-                    PinCategory(ui.checked, custId, ctsCustId, subscriberId);
+                    PinCategory(ui.checked, ctsCustId, subscriberId);
                 else
-                    ExcludedTagAssPA(ui.checked, custId, ctsCustId, subscriberId);
+                    ExcludedTagAssPA(ui.checked, custId, ctsCustId, subscriberId, custSubId);
             },
             selectedText: "Category Setting",
             noneSelectedText: "Category Setting"
@@ -621,10 +621,10 @@
 
         cacheCategoryColors = GetNormalCategoryList();
 
-        RenderGrid(custId);
+        RenderGrid(ctsCustId);
     };
 
-    this.ReloadTab = function (custId) {
-        ReloadGrid(custId);
+    this.ReloadTab = function (ctsCustId) {
+        ReloadGrid(ctsCustId);
     };
 }
