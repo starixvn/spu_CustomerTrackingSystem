@@ -106,7 +106,7 @@
 
                                 a {
                                     color: #474747;
-                                    cursor : pointer;
+                                    cursor: pointer;
                                 }
                             }
                         }
@@ -219,7 +219,7 @@
                             color: #474747;
                         }
 
-                        .odd {
+                        .rejected-ticket {
                             background-color: #FF8989;
 
                             &:hover {
@@ -227,7 +227,7 @@
                             }
                         }
 
-                        .even {
+                        .void-ticket {
                             background-color: #A3C4F5;
 
                             &:hover {
