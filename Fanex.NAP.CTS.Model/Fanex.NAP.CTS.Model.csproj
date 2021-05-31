@@ -214,6 +214,7 @@
     <Compile Include="ManageSubscriber\ReUpdateSubscribeBySiteIDModel.cs" />
     <Compile Include="ManageSubscriber\DetailedSiteModel.cs" />
     <Compile Include="ManageSubscriber\UpdateSubsciberResultModel.cs" />
+    <Compile Include="MatchMonitor\TransGroupBettingModel.cs" />
     <Compile Include="MatchMonitor\CustInfoModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorDetailModel.cs" />
     <Compile Include="MatchMonitor\CustReasonGroupModel.cs" />

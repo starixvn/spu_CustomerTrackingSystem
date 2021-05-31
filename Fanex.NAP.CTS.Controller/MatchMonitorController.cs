@@ -138,14 +138,18 @@
                     var matchReasonGroup = _matchMonitorService.GetMatchReasonGroup(para.EventDate, para.MatchID, para.BetTypeID)?.OrderBy(c => c.IsHedging).ToList();
                     MappingReasonGroupName(ref matchReasonGroup);
 
+
                     if (matchDetail != null && matchDetail.Any())
                     {
-                        var custInfo = _matchMonitorService.GetCustInfoByCustID(string.Join(", ", matchDetail.Select(c => c.ListCustID)));
+                        var transGroupBetting = GetTransGroupBetting(matchDetail);
                         var listCustReasonGroup = GetCustReasonGroup(matchReasonGroup, para.ListReasonGroup);
+
+
+                        var custInfo = _matchMonitorService.GetCustInfoByCustID(string.Join(",", string.Join(",", matchDetail.Select(c => c.ListCustID)).Split(',').Distinct()));
 
                         var ticketDetail = _matchMonitorService.GetTicketDetail(para.EventDate, string.Join(", ", matchDetail.Select(c => c.ListTransID)));
 
-                        matchDetailResult = MergeMatchMonitorDetail(custInfo, listCustReasonGroup, ticketDetail);
+                        matchDetailResult = MergeMatchMonitorDetail(custInfo, listCustReasonGroup, ticketDetail, transGroupBetting);
 
                     }
                 }
@@ -162,7 +166,7 @@
             }, JsonRequestBehavior.AllowGet) ;
         }
 
-        private List<MatchMonitorDetailResultViewModel> MergeMatchMonitorDetail(List<CustInfoModel> custInfo, List<CustReasonGroupModel> listCustReasonGroup, List<TicketDetailModel> ticketDetail)
+        private List<MatchMonitorDetailResultViewModel> MergeMatchMonitorDetail(List<CustInfoModel> custInfo, List<CustReasonGroupModel> listCustReasonGroup, List<TicketDetailModel> ticketDetail, List<TransGroupBettingModel> transGroupBetting)
         {
             var matchDetailResult = new List<MatchMonitorDetailResultViewModel>();
 
@@ -193,7 +197,7 @@
                                                                 Score =  c.ticket.LiveAwayScore + " - " + c.ticket.LiveHomeScore ,
                                                                 TicketStatus = c.ticket.TicketStatus,
                                                                 TransTime = c.ticket.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                                                                ReasonGroup = listCustReasonGroup.Where(i => i.CustID == c.cust.CustID).SingleOrDefault().ReasonGroupName
+                                                                ReasonGroup = GetReasonGroup(transGroupBetting, listCustReasonGroup, c.ticket)
                                                             }).ToList();
 
             return matchDetailResult;
@@ -213,7 +217,7 @@
             }
         }
 
-        public List<CustReasonGroupModel> GetCustReasonGroup(List<MatchReasonGroupModel> matchReasonGroup, string listReasonGroup)
+        private List<CustReasonGroupModel> GetCustReasonGroup(List<MatchReasonGroupModel> matchReasonGroup, string listReasonGroup)
         {
             var custReasonGroup = new List<CustReasonGroupModel>();
 
@@ -237,6 +241,39 @@
             }
 
             return custReasonGroup;
+        }
+
+        private List<TransGroupBettingModel> GetTransGroupBetting (List<MatchMonitorDetailModel> matchDetail)
+        {
+            var transGroupBetting = new List<TransGroupBettingModel>();
+
+            matchDetail.ForEach(i =>
+            {
+                i.ListTransID.Split(',').Select(Int64.Parse).ToList().ForEach(j =>
+                {
+                    transGroupBetting.Add(new TransGroupBettingModel
+                    {
+                        TransId = j,
+                        GroupID = i.GroupID
+                    });
+                });
+            });
+
+            return transGroupBetting;
+        }
+
+        private string GetReasonGroup(List<TransGroupBettingModel> transGroupBetting, List<CustReasonGroupModel> custReasonGroup, TicketDetailModel ticketDetail)
+        {
+            string reasonGroup = "-";
+
+            if(transGroupBetting!= null && transGroupBetting.Any() && custReasonGroup != null && custReasonGroup.Any())
+            {
+                var reasonGroupForTicket = transGroupBetting.SingleOrDefault(c => c.TransId == ticketDetail.TransId);
+                
+                reasonGroup = custReasonGroup?.SingleOrDefault(c => c.CustID == ticketDetail.CustId && c.GroupID == reasonGroupForTicket.GroupID).ReasonGroupName;
+            }
+
+            return reasonGroup;
         }
     }
 }
