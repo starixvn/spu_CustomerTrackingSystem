@@ -13,6 +13,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using System.Web.Mvc;
 
     [NapSuperAuth]
@@ -141,16 +142,31 @@
 
                     if (matchDetail != null && matchDetail.Any())
                     {
-                        var transGroupBetting = GetTransGroupBetting(matchDetail);
-                        var listCustReasonGroup = GetCustReasonGroup(matchReasonGroup, para.ListReasonGroup);
+                        var custInfo = new List<CustInfoModel>();
+                        var transGroupBetting = new List<TransGroupBettingModel>();
+                        var listCustReasonGroup = new List<CustReasonGroupModel>();
+                        var ticketDetail = new List<TicketDetailModel>();
 
+                        var tasks = new List<Task>
+                        {
+                            Task.Run(() =>
+                            {
+                                transGroupBetting = GetTransGroupBetting(matchDetail);
+                                listCustReasonGroup = GetCustReasonGroup(matchReasonGroup, para.ListReasonGroup);
+                            }),
+                            Task.Run(() =>
+                            {
+                                custInfo = _matchMonitorService.GetCustInfoByCustID(string.Join(",", string.Join(",", matchDetail.Select(c => c.ListCustID)).Split(',').Distinct()));
+                            }),
+                            Task.Run(() =>
+                            {
+                                ticketDetail = _matchMonitorService.GetTicketDetail(para.EventDate, string.Join(", ", matchDetail.Select(c => c.ListTransID)));
+                            })
+                        };
 
-                        var custInfo = _matchMonitorService.GetCustInfoByCustID(string.Join(",", string.Join(",", matchDetail.Select(c => c.ListCustID)).Split(',').Distinct()));
-
-                        var ticketDetail = _matchMonitorService.GetTicketDetail(para.EventDate, string.Join(", ", matchDetail.Select(c => c.ListTransID)));
+                        Task.WhenAll(tasks.ToArray()).Wait();
 
                         matchDetailResult = MergeMatchMonitorDetail(custInfo, listCustReasonGroup, ticketDetail, transGroupBetting);
-
                     }
                 }
             }
@@ -163,14 +179,14 @@
             {
                 homeTableData = matchDetailResult?.Where(c => c.IsHomeSide),
                 awayTableData = matchDetailResult?.Where(c => !c.IsHomeSide)
-            }, JsonRequestBehavior.AllowGet) ;
+            }, JsonRequestBehavior.AllowGet);
         }
 
         private List<MatchMonitorDetailResultViewModel> MergeMatchMonitorDetail(List<CustInfoModel> custInfo, List<CustReasonGroupModel> listCustReasonGroup, List<TicketDetailModel> ticketDetail, List<TransGroupBettingModel> transGroupBetting)
         {
             var matchDetailResult = new List<MatchMonitorDetailResultViewModel>();
 
-            if ( custInfo == null || listCustReasonGroup == null || ticketDetail == null)
+            if (custInfo == null || listCustReasonGroup == null || ticketDetail == null)
             {
                 return matchDetailResult;
             }
@@ -194,7 +210,7 @@
                                                                 LiveIndicator = c.ticket.LiveIndicator,
                                                                 Amount = c.ticket.Stake,
                                                                 HDP = c.ticket.Hdp1 - c.ticket.Hdp2,
-                                                                Score =  c.ticket.LiveAwayScore + " - " + c.ticket.LiveHomeScore ,
+                                                                Score = c.ticket.LiveAwayScore + " - " + c.ticket.LiveHomeScore,
                                                                 TicketStatus = c.ticket.TicketStatus,
                                                                 TransTime = c.ticket.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                                                                 ReasonGroup = GetReasonGroup(transGroupBetting, listCustReasonGroup, c.ticket)
@@ -243,7 +259,7 @@
             return custReasonGroup;
         }
 
-        private List<TransGroupBettingModel> GetTransGroupBetting (List<MatchMonitorDetailModel> matchDetail)
+        private List<TransGroupBettingModel> GetTransGroupBetting(List<MatchMonitorDetailModel> matchDetail)
         {
             var transGroupBetting = new List<TransGroupBettingModel>();
 
@@ -266,10 +282,10 @@
         {
             string reasonGroup = "-";
 
-            if(transGroupBetting!= null && transGroupBetting.Any() && custReasonGroup != null && custReasonGroup.Any())
+            if (transGroupBetting != null && transGroupBetting.Any() && custReasonGroup != null && custReasonGroup.Any())
             {
                 var reasonGroupForTicket = transGroupBetting.SingleOrDefault(c => c.TransId == ticketDetail.TransId);
-                
+
                 reasonGroup = custReasonGroup?.SingleOrDefault(c => c.CustID == ticketDetail.CustId && c.GroupID == reasonGroupForTicket.GroupID).ReasonGroupName;
             }
 
