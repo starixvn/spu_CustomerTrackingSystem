@@ -32,6 +32,6 @@
 
         public bool LiveIndicator { get; set; }
 
-        public bool TicketStatus { get; set; }
+        public int TicketStatus { get; set; }
     }
 }
