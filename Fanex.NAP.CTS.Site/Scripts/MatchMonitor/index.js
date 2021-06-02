@@ -110,7 +110,9 @@
                 {
                     data: obj => RenderVerifiedUI(obj.IsVerified), createdCell: (cell, _, row) => {
                         $('#isVerifiedCheckbox', cell).click(() => {
-                            UpdateVerification(row, cell);
+                            common.showConfirmation("<div class='popup-content'><div class='popup-title'>Are you sure about this?</div>For confirm this action, Verify status will change to Verified and cannot change. </div>", function () {
+                                UpdateVerification(row, cell);
+                            });
                         });
                     }
                 },
@@ -130,6 +132,7 @@
                 domElements.tblMonitor.addClass('loading-value');
             },
             success: function (response) {
+                GetMatchMonitor(); 
             },
             complete: function () {
                 domElements.tblMonitor.removeClass("loading-value");

@@ -35,7 +35,7 @@
                             {
                                 foreach (var item in ViewBag.MatchScore)
                                 {
-                                    <option value="@item.TotalScore" @(item.TotalScore == 0 ? "selected" : "")>@item.LiveHomeScore - @item.LiveAwayScore </option>
+                                    <option value="@item.TotalScore" selected>@item.LiveHomeScore - @item.LiveAwayScore </option>
                                 }
                             }
                         </select>
@@ -66,7 +66,7 @@
                             {
                                 foreach (var item in ViewBag.ReasonGroup)
                                 {
-                                    <option value="@item.GroupID"> @item.ReasonGroupName </option>
+                                    <option value="@item.GroupID" selected> @item.ReasonGroupName </option>
                                 }
                             }
                         </select>
