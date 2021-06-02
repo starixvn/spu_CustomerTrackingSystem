@@ -52,7 +52,7 @@
 
             try
             {
-                if (matchMonitorFilterViewModel != null)
+                if (matchMonitorFilterViewModel != null && !string.IsNullOrEmpty(matchMonitorFilterViewModel.BetTypes))
                 {
                     matchMonitors = _matchMonitorService.GetMatchMonitor(matchMonitorFilterViewModel);
                 }
@@ -133,7 +133,7 @@
 
             try
             {
-                if (para != null)
+                if (para != null && !string.IsNullOrEmpty(para.ListReasonGroup) && !string.IsNullOrEmpty(para.ListScore))
                 {
                     var matchDetail = _matchMonitorService.GetMatchMonitorDetail(para);
                     var matchReasonGroup = _matchMonitorService.GetMatchReasonGroup(para.EventDate, para.MatchID, para.BetTypeID)?.OrderBy(c => c.IsHedging).ToList();
