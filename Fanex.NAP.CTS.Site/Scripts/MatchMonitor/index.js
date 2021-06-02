@@ -110,7 +110,7 @@
                 {
                     data: obj => RenderVerifiedUI(obj.IsVerified), createdCell: (cell, _, row) => {
                         $('#isVerifiedCheckbox', cell).click(() => {
-                            common.showConfirmation("<div class='popup-content'><div class='popup-title'>Are you sure about this?</div>For confirm this action, Verify status will change to Verified and cannot change. </div>", function () {
+                            common.showConfirmation("<div class='match-monitor-popup'><div class='popup-title'>Are you sure about this?</div>For confirm this action, Verify status will change to Verified and cannot change. </div>", function () {
                                 UpdateVerification(row, cell);
                             });
                         });

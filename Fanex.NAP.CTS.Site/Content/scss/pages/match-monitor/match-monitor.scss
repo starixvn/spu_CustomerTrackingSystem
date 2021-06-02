@@ -255,6 +255,20 @@
     z-index: 9999999 !important;
 }
 
+.match-monitor-popup {
+    text-align: center;
+    line-height: 20px;
+    font-weight: 700;
+}
+.match-monitor-page {
+    .ui-dialog-buttonset {
+        width: 100%;
+        float: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+    }
+}
 .detailpage {
     width: 450rem;
 }
