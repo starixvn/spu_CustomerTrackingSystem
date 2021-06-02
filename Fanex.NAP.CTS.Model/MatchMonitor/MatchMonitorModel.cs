@@ -62,7 +62,7 @@
                 var HomeName = CachedRef.GetTeamName(HomeID);
                 var AwayName = CachedRef.GetTeamName(AwayID);
 
-                if(!string.IsNullOrEmpty(HomeName) || !string.IsNullOrEmpty(AwayName))
+                if (!string.IsNullOrEmpty(HomeName) || !string.IsNullOrEmpty(AwayName))
                 {
                     rs = HomeName + " vs " + AwayName;
                 }
@@ -76,6 +76,27 @@
             get
             {
                 return CachedRef.GetLeagueName(LeagueID);
+            }
+        }
+
+
+        public string ReasonGroup
+        {
+            get
+            {
+                switch(BettypeID)
+                {
+                    case (int)Consts.MATCHMONITOR_BETTYPE.HDP:
+                        return Reason + " - HDP";
+                    case (int)Consts.MATCHMONITOR_BETTYPE.OU:
+                        return Reason + " - O/U";
+                    case (int)Consts.MATCHMONITOR_BETTYPE.FirstHDP:
+                        return Reason + " - 1st HDP";
+                    case (int)Consts.MATCHMONITOR_BETTYPE.FirsttOU:
+                        return Reason + " - 1st O/U";
+                }
+
+                return Reason;
             }
         }
     }

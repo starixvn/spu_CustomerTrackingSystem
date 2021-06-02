@@ -104,7 +104,7 @@
                 },
                 { data: obj => obj.EventDateToString },
                 { data: obj => obj.LeagueName },
-                { data: obj => obj.Reason },
+                { data: obj => obj.ReasonGroup },
                 { data: obj => obj.VerifiedBy }, //PIC
                 { data: obj => obj.VerifiedDateToString },
                 {
@@ -164,14 +164,19 @@
     }
 
     function StartCountingDown($target, originalVal, val) {
-        domElements.btnRefresh.text("Refresh(" + val + ")");
-
-        if (val !== 0) {
-            timeoutHolder = setTimeout(() => StartCountingDown($target, originalVal, val - 1), 1000);
+        if (isNaN(originalVal)|| originalVal == -1) {
+            domElements.btnRefresh.text("None");
         }
         else {
-            domElements.btnGenerate.click();
-            StartCountingDown($target, originalVal, originalVal);
+            domElements.btnRefresh.text("Refresh(" + val + ")");
+
+            if (val !== 0) {
+                timeoutHolder = setTimeout(() => StartCountingDown($target, originalVal, val - 1), 1000);
+            }
+            else {
+                domElements.btnGenerate.click();
+                StartCountingDown($target, originalVal, originalVal);
+            }
         }
     }
 

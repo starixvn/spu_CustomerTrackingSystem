@@ -14,6 +14,12 @@
 
         public int BetType { get; set; }
 
+        public Int64 HomeId { get; set; }
+
+        public Int64 AwayId { get; set; }
+
+        public Int64 LeagueId { get; set; }
+
         public Int64 CustId { get; set; }
 
         public string BetTeam { get; set; }

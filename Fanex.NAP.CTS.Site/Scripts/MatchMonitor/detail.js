@@ -165,7 +165,7 @@
                 { data: obj => obj.Odds },
                 { data: obj => obj.BetID },
                 { data: obj => obj.Currency },
-                { data: obj => obj.LiveIndicator == true ? "Live" : "None-Live" },
+                { data: obj => obj.LiveIndicator == true ? "Live" : "-" },
                 { data: obj => obj.Amount },
                 { data: obj => obj.HDP > 0 ? "+" + obj.HDP : obj.HDP },
                 { data: obj => obj.Score },

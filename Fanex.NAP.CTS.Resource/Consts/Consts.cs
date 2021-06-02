@@ -90,5 +90,13 @@
             Closed = 2,
             Other = 3
         }
+
+        public enum MATCHMONITOR_BETTYPE : int
+        {
+            HDP = 1,
+            OU = 3,
+            FirstHDP = 7,
+            FirsttOU = 8
+        }
     }
 }
