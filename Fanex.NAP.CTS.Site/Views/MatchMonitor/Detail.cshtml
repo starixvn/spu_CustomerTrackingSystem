@@ -24,8 +24,11 @@
                     <div class="group width-180">
                         <label class="text">Live/Non-live</label>
                         <select class="control width-select" id="cbbLiveIndicator">
-                            <option value="false" selected>Non-live</option>
-                            <option value="true" >Live</option>
+                            @if (ViewBag.IsLiveDefault != null)
+                            {
+                                <option value="false" @(ViewBag.IsLiveDefault ? "" : "selected")>Non-live</option>
+                                <option value="true" @(ViewBag.IsLiveDefault ? "selected" : "")>Live</option>
+                            }
                         </select>
                     </div>
                     <div class="group width-180">

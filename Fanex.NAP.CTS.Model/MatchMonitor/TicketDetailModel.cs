@@ -10,15 +10,19 @@
 
         public Int64 MatchId { get; set; }
 
-        public DateTime EventDate { get; set; }
-
-        public int BetType { get; set; }
-
         public Int64 HomeId { get; set; }
 
         public Int64 AwayId { get; set; }
 
         public Int64 LeagueId { get; set; }
+
+        public DateTime EventDate { get; set; }
+
+        public string EventStatus { get; set; }
+
+        public DateTime KickOffTime { get; set; }
+
+        public int BetType { get; set; }
 
         public Int64 CustId { get; set; }
 

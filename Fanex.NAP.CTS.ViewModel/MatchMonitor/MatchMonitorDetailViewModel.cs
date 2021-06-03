@@ -15,6 +15,8 @@
 
         public int BetTypeID { get; set; }
 
+        public int EventGroup { get; set; }
+
         public DateTime EventDate
         {
             get

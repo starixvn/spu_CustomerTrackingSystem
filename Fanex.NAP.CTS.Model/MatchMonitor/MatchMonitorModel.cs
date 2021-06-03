@@ -1,7 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Model.MatchMonitor
 {
     using Fanex.NAP.CTS.Core.BaseClasses;
-    using Fanex.NAP.CTS.Resource.Consts;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
     using System;
 
     public class MatchMonitorModel
@@ -28,6 +28,8 @@
 
         public string VerifiedBy { get; set; }
 
+        public int EventGroup { get; set; }
+
         public string EventDateToString
         {
             get
@@ -37,7 +39,7 @@
                     return "-";
                 }
 
-                return EventDate.ToString(Consts.FormatDateToString_MMMddyyyy);
+                return EventDate.ToString(FormatDateToString_MMMddyyyy);
             }
         }
 
@@ -50,7 +52,7 @@
                     return "-";
                 }
 
-                return VerifiedDate.ToString(Consts.FormatDateToString_MMMddyyyy);
+                return VerifiedDate.ToString(FormatDateToString_MMMddyyyy);
             }
         }
 
@@ -86,17 +88,37 @@
             {
                 switch(BettypeID)
                 {
-                    case (int)Consts.MATCHMONITOR_BETTYPE.HDP:
+                    case (int)MATCHMONITOR_BETTYPE.HDP:
                         return Reason + " - HDP";
-                    case (int)Consts.MATCHMONITOR_BETTYPE.OU:
+                    case (int)MATCHMONITOR_BETTYPE.OU:
                         return Reason + " - O/U";
-                    case (int)Consts.MATCHMONITOR_BETTYPE.FirstHDP:
+                    case (int)MATCHMONITOR_BETTYPE.FirstHDP:
                         return Reason + " - 1st HDP";
-                    case (int)Consts.MATCHMONITOR_BETTYPE.FirsttOU:
+                    case (int)MATCHMONITOR_BETTYPE.FirsttOU:
                         return Reason + " - 1st O/U";
                 }
 
                 return Reason;
+            }
+        }
+
+        public string EventGroupName
+        {
+            get
+            {
+                switch (EventGroup)
+                {
+                    case (int)MATCHMONITOR_EVENTGROUP.Early:
+                        return Enum.GetName(typeof(MATCHMONITOR_EVENTGROUP), MATCHMONITOR_EVENTGROUP.Early);
+                    case (int)MATCHMONITOR_EVENTGROUP.Live:
+                        return Enum.GetName(typeof(MATCHMONITOR_EVENTGROUP), MATCHMONITOR_EVENTGROUP.Live);
+                    case (int)MATCHMONITOR_EVENTGROUP.Today:
+                        return Enum.GetName(typeof(MATCHMONITOR_EVENTGROUP), MATCHMONITOR_EVENTGROUP.Today);
+                    case (int)MATCHMONITOR_EVENTGROUP.Closed:
+                        return Enum.GetName(typeof(MATCHMONITOR_EVENTGROUP), MATCHMONITOR_EVENTGROUP.Closed);
+                }
+
+                return "";
             }
         }
     }

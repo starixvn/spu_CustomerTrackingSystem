@@ -98,5 +98,13 @@
             FirstHDP = 7,
             FirsttOU = 8
         }
+
+        public enum MATCHMONITOR_EVENTGROUP : int
+        {
+            Early = 1,
+            Live = 2,
+            Today = 3,
+            Closed = 4
+        }
     }
 }

@@ -54,7 +54,7 @@
             {
                 if (matchMonitorFilterViewModel != null && !string.IsNullOrEmpty(matchMonitorFilterViewModel.BetTypes))
                 {
-                    matchMonitors = _matchMonitorService.GetMatchMonitor(matchMonitorFilterViewModel);
+                    matchMonitors = _matchMonitorService.GetMatchMonitor(matchMonitorFilterViewModel)?.OrderBy(c => c.EventGroup).ToList();
                 }
             }
             catch (Exception e)
@@ -109,6 +109,7 @@
                     ViewBag.MatchID = para.MatchID;
                     ViewBag.BetTypeID = para.BetTypeID;
                     ViewBag.MatchName = para.MatchName;
+                    ViewBag.IsLiveDefault = (para.EventGroup == 2 || para.EventGroup == 4) ? true : false;
                     ViewBag.ReasonGroup = matchReasonGroup;
                     ViewBag.MatchScore = matchScore;
                     ViewBag.IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
@@ -210,7 +211,7 @@
                                                                 LiveIndicator = c.ticket.LiveIndicator,
                                                                 Amount = c.ticket.Stake,
                                                                 HDP = c.ticket.Hdp1 - c.ticket.Hdp2,
-                                                                Score = c.ticket.LiveAwayScore + " - " + c.ticket.LiveHomeScore,
+                                                                Score = c.ticket.LiveIndicator ? (c.ticket.LiveAwayScore + " - " + c.ticket.LiveHomeScore) : "-",
                                                                 TicketStatus = c.ticket.TicketStatus,
                                                                 TransTime = c.ticket.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                                                                 ReasonGroup = GetReasonGroup(transGroupBetting, listCustReasonGroup, c.ticket)
