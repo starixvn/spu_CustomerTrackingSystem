@@ -161,7 +161,7 @@
                             }),
                             Task.Run(() =>
                             {
-                                ticketDetail = _matchMonitorService.GetTicketDetail(para.EventDate, string.Join(", ", matchDetail.Select(c => c.ListTransID)));
+                                ticketDetail = _matchMonitorService.GetTicketDetail(para.EventDate, string.Join(",", string.Join(", ", matchDetail.Select(c => c.ListTransID)).Split(',').Distinct()));
                             })
                         };
 
@@ -245,7 +245,7 @@
                     filter => filter,
                     reasonGroup => reasonGroup.GroupID, (filter, reasonGroup) => reasonGroup).Select(e => e).ToList().ForEach(e =>
                     {
-                        foreach (var i in e.ListCustID.Split(',').Select(Int64.Parse))
+                        foreach (var i in e.ListCustID.Split(',').Select(Int64.Parse).Distinct())
                         {
                             custReasonGroup.Add(new CustReasonGroupModel
                             {
