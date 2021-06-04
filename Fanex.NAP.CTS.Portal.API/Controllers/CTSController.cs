@@ -245,7 +245,7 @@
                 {
 
                     LogService.Error(ex.Message);
-                }                
+                }
             }
 
             return Json(new List<CustomerEvidence>());
@@ -640,11 +640,92 @@
 
                 return Json(new SubscriberInfo());
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 LogService.Error("Get Subscriber info exception: " + ex.Message);
                 return Json(new SubscriberInfo());
             }
+        }
+
+        /// <summary>
+        /// Get Association by CustId
+        /// </summary>
+        /// <param name="custId"></param>
+        /// <param name="associationType">1-Device, 2-Manual</param>
+        /// <returns></returns>
+        [HttpGet]
+        public string GetAssociationPerType(long custId, int associationType)
+        {
+            var result = string.Empty;
+            var script = string.Empty;
+
+            switch (associationType)
+            {
+                case 1:
+                    script = "GetAssociationOneLevelByCustIdByDevice";
+                    break;
+                case 2:
+                    script = "GetAssociationOneLevelByCustIdByManual";
+                    break;
+                default:
+                    script = "GetAssociationOneLevelByCustIdByDevice";
+                    break;
+            }
+
+            try
+            {
+                var cust = DbSessionFactory.Execute<GraphCustomer>("GetCustomerByCustId", new
+                {
+                    CustID = custId,
+                    CustSubID = 0
+                }).Data.First();
+
+                if (cust != null)
+                {
+                    var a = DbSessionFactory.Execute<GraphAssociationPaging>(script, new
+                    {
+                        CTSCustID = cust.CTSCustId,
+                        AssStatus = 0,
+                        IsAssReport = 1,
+                        AssCreatedFrom = DateTime.Now.AddMonths(-1),
+                        AssCreatedTo = DateTime.Now,
+                        AccountStatuses = new List<int>(),
+                        SubscriberIDs = new List<int>(),
+                        Skip = 0,
+                        Pagesize = 1000
+                    }).Data;
+
+                    var queryResult = DbSessionFactory.Execute<GraphAssociationPaging>(script, new
+                    {
+                        CTSCustID = cust.CTSCustId,
+                        AssStatus = 0,
+                        IsAssReport = 1,
+                        AssCreatedFrom = DateTime.Now.AddMonths(-1),
+                        AssCreatedTo = DateTime.Now,
+                        AccountStatuses = new List<int>(),
+                        SubscriberIDs = new List<int>(),
+                        Skip = 0,
+                        Pagesize = 1000
+                    }).Data.FirstOrDefault();
+
+                    var listAss = queryResult.AssociationList.Select(ass => new
+                    {
+                        ass.Username,
+                        AssDate = ass.AssociationDateGMT0
+                    });
+
+                    result = JsonConvert.SerializeObject(listAss);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("GetAssociationByCustID failed: " + ex.Message + ex.StackTrace + "\n"
+                        + ex.InnerException.Message + ex.InnerException.Source + ((Neo4j.Driver.Neo4jException)ex.InnerException).Code
+                        + ex.InnerException.StackTrace);
+            }
+
+            return result;
         }
     }
 }

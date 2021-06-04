@@ -6,7 +6,7 @@
 
         public int assStatus { get; set; }
 
-        public string siteIDs { get; set; }
+        public string subIDs { get; set; }
 
         public string accountStatuses { get; set; }
 

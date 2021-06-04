@@ -17,17 +17,18 @@ WHERE ($ip_IsAssReport = 1
 WITH c,c1,st,e,s, Min(AssDate) as firstAssDate
 WHERE      (($ip_IsAssReport = 0)
 		OR ($ip_IsAssReport = 1 AND firstAssDate >= datetime($ip_AssCreatedFrom) AND firstAssDate <= datetime($ip_AssCreatedTo)))
-RETURN 
-        c1.CTSCustID as CTSCustID, c1.CustID AS CustId
+RETURN c1.CTSCustID as CTSCustID
+    , c1.CustID AS CustId
     , c1.CustSubID AS CustSubId
     , c1.Username AS Username
     , c1.Username2 AS Username2
-    , collect(1) AS AssociationType, -1 AS SharedDevices
+    , collect(1) AS AssociationType
+    , -1 AS SharedDevices
     , -1 AS SharedIPs
     , s.SubscriberID AS SubscriberId
+    , s.SubscriberName as SubscriberName
     , firstAssDate as AssociationDateGMT0
     , CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
-    , s.SubscriberName as SubscriberName
     , st.ItemID as StatusId
     , st.ItemNameDisplay as StatusName
     , CASE WHEN st.ItemID in [1,11] THEN 1 ELSE 2 END AS PriorityStatusOrder

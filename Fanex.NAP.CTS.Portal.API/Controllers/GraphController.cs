@@ -67,7 +67,7 @@
                     CTSCustID = paras.ctsCustId,
                     AssStatus = paras.assStatus,
                     AccountStatuses = paras.accountStatuses.Split(',').Select(int.Parse),
-                    SiteIDs = paras.siteIDs.Split(',').Select(int.Parse),
+                    SiteIDs = paras.subIDs.Split(',').Select(int.Parse),
                     Skip = paras.skipRow,
                     Pagesize = paras.takeRow
                 }).Data.FirstOrDefault();
@@ -101,7 +101,7 @@
                     AssCreatedFrom = DateTime.MinValue,
                     AssCreatedTo = DateTime.MinValue,
                     AccountStatuses = paras.accountStatuses.Split(',').Select(int.Parse),
-                    SiteIDs = paras.siteIDs.Split(',').Select(int.Parse),
+                    SiteIDs = paras.subIDs.Split(',').Select(int.Parse),
                     Skip = paras.skipRow,
                     Pagesize = paras.takeRow
                 }).Data.FirstOrDefault();
@@ -129,7 +129,7 @@
                     AssCreatedFrom = DateTime.MinValue,
                     AssCreatedTo = DateTime.MinValue,
                     AccountStatuses = paras.accountStatuses.Split(',').Select(int.Parse),
-                    SiteIDs = paras.siteIDs.Split(',').Select(int.Parse),
+                    SubscriberIDs = paras.subIDs.Split(',').Select(int.Parse),
                     Skip = paras.skipRow,
                     Pagesize = paras.takeRow
                 }).Data.FirstOrDefault();
@@ -162,7 +162,7 @@
                     AssCreatedFrom = DateTime.MinValue,
                     AssCreatedTo = DateTime.MinValue,
                     AccountStatuses = paras.accountStatuses.Split(',').Select(int.Parse),
-                    SiteIDs = paras.siteIDs.Split(',').Select(int.Parse),
+                    SiteIDs = paras.subIDs.Split(',').Select(int.Parse),
                     Skip = paras.skipRow,
                     Pagesize = paras.takeRow
                 }).Data.FirstOrDefault();
@@ -195,7 +195,7 @@
                     AssCreatedFrom = DateTime.MinValue,
                     AssCreatedTo = DateTime.MinValue,
                     AccountStatuses = paras.accountStatuses.Split(',').Select(int.Parse),
-                    SiteIDs = paras.siteIDs.Split(',').Select(int.Parse),
+                    SiteIDs = paras.subIDs.Split(',').Select(int.Parse),
                     Skip = paras.skipRow,
                     Pagesize = paras.takeRow
                 }).Data.FirstOrDefault();
@@ -420,7 +420,7 @@
                     }
 
                     if (!string.IsNullOrEmpty(script))
-                    {                        
+                    {
                         var queryResult = DbSessionFactory.Execute<GraphAssociationPaging>(script, new
                         {
                             CTSCustID = paras.CTSCustId,

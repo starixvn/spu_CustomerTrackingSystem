@@ -609,6 +609,14 @@
             <param name="subscriberName"></param>
             <returns>Subscriber Info</returns>
         </member>
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetAssociationPerType(System.Int64,System.Int32)">
+            <summary>
+            Get Association by CustId
+            </summary>
+            <param name="custId"></param>
+            <param name="associationType">1-Device, 2-Manual</param>
+            <returns></returns>
+        </member>
         <member name="T:Fanex.NAP.CTS.Portal.API.Controllers.GraphController">
             <summary>
             Graph Controller - Using for CTS site
