@@ -448,7 +448,6 @@
     <Content Include="Content\images\maintenance.webp" />
     <Content Include="App_Data\Excel Template\ProbationManagement\ExportTemplate.xlsx" />
     <None Include="Content\scss\components\_notification.scss" />
-    <Content Include="Content\scss\fonts\Fraud-Sensor\fonts\CTS.svg" />
     <Content Include="Content\scss\images\chevron-down.png" />
     <Content Include="Content\scss\images\loading.svg" />
     <Content Include="Content\scss\images\login-CTS.png" />
@@ -1506,9 +1505,6 @@
     <Content Include="Content\scss\vendors\popoto\font\popoto\popoto.ttf" />
     <Content Include="Content\scss\vendors\popoto\font\popoto\popoto.woff" />
     <Content Include="Content\scss\pages\account\account-fps.scss" />
-    <Content Include="Content\scss\fonts\Fraud-Sensor\fonts\CTS.eot" />
-    <Content Include="Content\scss\fonts\Fraud-Sensor\fonts\CTS.ttf" />
-    <Content Include="Content\scss\fonts\Fraud-Sensor\fonts\CTS.woff" />
     <Content Include="Content\scss\vendors\highcharts\highcharts.scss" />
     <Content Include="Content\scss\pages\special-customer-class\special-customer-class.scss" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
