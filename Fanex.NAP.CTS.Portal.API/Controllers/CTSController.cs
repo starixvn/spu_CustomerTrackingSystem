@@ -682,19 +682,6 @@
 
                 if (cust != null)
                 {
-                    var a = DbSessionFactory.Execute<GraphAssociationPaging>(script, new
-                    {
-                        CTSCustID = cust.CTSCustId,
-                        AssStatus = 0,
-                        IsAssReport = 1,
-                        AssCreatedFrom = DateTime.Now.AddMonths(-1),
-                        AssCreatedTo = DateTime.Now,
-                        AccountStatuses = new List<int>(),
-                        SubscriberIDs = new List<int>(),
-                        Skip = 0,
-                        Pagesize = 1000
-                    }).Data;
-
                     var queryResult = DbSessionFactory.Execute<GraphAssociationPaging>(script, new
                     {
                         CTSCustID = cust.CTSCustId,
@@ -708,13 +695,16 @@
                         Pagesize = 1000
                     }).Data.FirstOrDefault();
 
-                    var listAss = queryResult.AssociationList.Select(ass => new
+                    if (queryResult != null)
                     {
-                        ass.Username,
-                        AssDate = ass.AssociationDateGMT0
-                    });
+                        var listAss = queryResult.AssociationList.Select(ass => new
+                        {
+                            ass.Username,
+                            //AssDate = ass.AssociationDateGMT0
+                        });
 
-                    result = JsonConvert.SerializeObject(listAss);
+                        result = JsonConvert.SerializeObject(listAss);
+                    }
                 }
 
             }

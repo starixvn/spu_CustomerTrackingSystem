@@ -1,5 +1,5 @@
-﻿USE ctsgraphdb
-//USE ctslocal
+﻿//USE ctsgraphdb
+USE ctslocal
 CALL apoc.cypher.run('
 MATCH (c:CTSCustomer)-[r:ADD_MANUALLY]-(c2:CTSCustomer)
 WHERE c.CTSCustID = $ip_CTSCustId AND c2.CustID IS NOT NULL AND
@@ -19,12 +19,13 @@ WHERE   (($ip_IsAssReport = 1)
 
 RETURN c2.CTSCustID as CTSCustID
 	, c2.CustID AS CustId
-	, c2.UserName AS Username
-	, c2.UserName2 AS Username2
+	, c2.Username AS Username
+	, c2.Username2 AS Username2
 	, collect(3) as AssociationType
 	, -1 AS SharedDevices
 	, -1 AS SharedIPs
 	, s.SubscriberID AS SubscriberId
+	, s.SubscriberName as SubscriberName
 	, r.CreatedDate as AssociationDateGMT0
 	, CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
 	, st.ItemID as StatusId
