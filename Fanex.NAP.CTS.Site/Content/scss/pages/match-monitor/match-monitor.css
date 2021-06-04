@@ -168,6 +168,8 @@
   background: #70809e !important; }
   .group-site td {
     color: #ffffff !important; }
+    .group-site td:hover {
+      background: #70809e !important; }
 
 .detailpage {
   width: 450rem; }

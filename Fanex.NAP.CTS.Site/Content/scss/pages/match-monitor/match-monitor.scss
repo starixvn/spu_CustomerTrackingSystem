@@ -272,8 +272,13 @@
 
 .group-site {
     background: #70809e !important;
+
     td {
         color: #ffffff !important;
+
+        &:hover {
+            background: #70809e !important;
+        }
     }
 }
 
