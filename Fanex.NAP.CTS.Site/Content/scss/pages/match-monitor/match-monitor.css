@@ -164,5 +164,10 @@
   align-items: center;
   justify-content: space-around; }
 
+.group-site {
+  background: #70809e !important; }
+  .group-site td {
+    color: #ffffff !important; }
+
 .detailpage {
   width: 450rem; }
