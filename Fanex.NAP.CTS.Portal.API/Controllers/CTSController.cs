@@ -672,47 +672,62 @@
                     break;
             }
 
-            try
+            if (associationType == 3)
             {
-                var cust = DbSessionFactory.Execute<GraphCustomer>("GetCustomerByCustId", new
+                var listCustIds = new List<long>() { custId };
+                var associations = _associationService.GetAssociationByIP(listCustIds.Join(a => a, ","));
+                if (associations.Any())
                 {
-                    CustID = custId,
-                    CustSubID = 0
-                }).Data.First();
-
-                if (cust != null)
-                {
-                    var queryResult = DbSessionFactory.Execute<GraphAssociationPaging>(script, new
+                    return result = JsonConvert.SerializeObject(associations.Select(c => new
                     {
-                        CTSCustID = cust.CTSCustId,
-                        AssStatus = 0,
-                        IsAssReport = 1,
-                        AssCreatedFrom = DateTime.Now.AddMonths(-1),
-                        AssCreatedTo = DateTime.Now,
-                        AccountStatuses = new List<int>(),
-                        SubscriberIDs = new List<int>(),
-                        Skip = 0,
-                        Pagesize = 1000
-                    }).Data.FirstOrDefault();
-
-                    if (queryResult != null)
-                    {
-                        var listAss = queryResult.AssociationList.Select(ass => new
-                        {
-                            ass.Username,
-                            //AssDate = ass.AssociationDateGMT0
-                        });
-
-                        result = JsonConvert.SerializeObject(listAss);
-                    }
+                        c.CustID
+                    }));
                 }
-
             }
-            catch (Exception ex)
+            else
             {
-                LogService.Error("GetAssociationByCustID failed: " + ex.Message + ex.StackTrace + "\n"
-                        + ex.InnerException.Message + ex.InnerException.Source + ((Neo4j.Driver.Neo4jException)ex.InnerException).Code
-                        + ex.InnerException.StackTrace);
+                try
+                {
+                    var cust = DbSessionFactory.Execute<GraphCustomer>("GetCustomerByCustId", new
+                    {
+                        CustID = custId,
+                        CustSubID = 0
+                    }).Data.First();
+
+                    if (cust != null)
+                    {
+                        var queryResult = DbSessionFactory.Execute<GraphAssociationPaging>(script, new
+                        {
+                            CTSCustID = cust.CTSCustId,
+                            AssStatus = 0,
+                            IsAssReport = 1,
+                            AssCreatedFrom = DateTime.Now.AddMonths(-1),
+                            AssCreatedTo = DateTime.Now,
+                            AccountStatuses = new List<int>(),
+                            SubscriberIDs = new List<int>(),
+                            Skip = 0,
+                            Pagesize = 1000
+                        }).Data.FirstOrDefault();
+
+                        if (queryResult != null)
+                        {
+                            var listAss = queryResult.AssociationList.Select(ass => new
+                            {
+                                ass.Username,
+                                //AssDate = ass.AssociationDateGMT0
+                            });
+
+                            result = JsonConvert.SerializeObject(listAss);
+                        }
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    LogService.Error("GetAssociationByCustID failed: " + ex.Message + ex.StackTrace + "\n"
+                            + ex.InnerException.Message + ex.InnerException.Source + ((Neo4j.Driver.Neo4jException)ex.InnerException).Code
+                            + ex.InnerException.StackTrace);
+                }
             }
 
             return result;
