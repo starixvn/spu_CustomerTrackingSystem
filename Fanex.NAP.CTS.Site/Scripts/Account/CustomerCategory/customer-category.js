@@ -22,10 +22,12 @@
         list.push({ 'id': 210, 'indexColor': 1, 'cssClass': 'circle bg-green', 'name': 'VVIP' });
         list.push({ 'id': 201, 'indexColor': 1, 'cssClass': 'circle bg-green', 'name': 'New Member' });
         list.push({ 'id': 202, 'indexColor': 1, 'cssClass': 'circle bg-green', 'name': 'Normal Account' });
+        list.push({ 'id': 1001, 'indexColor': 1, 'cssClass': 'circle bg-green', 'name': 'Normal Member Inactive' });
 
         list.push({ 'id': 206, 'indexColor': 2, 'cssClass': 'circle bg-yellow', 'name': 'Probation' });
         list.push({ 'id': 203, 'indexColor': 2, 'cssClass': 'circle bg-yellow', 'name': 'Smart Punter' });
         list.push({ 'id': 204, 'indexColor': 2, 'cssClass': 'circle bg-yellow', 'name': 'High Risk Punter' });
+        list.push({ 'id': 1002, 'indexColor': 2, 'cssClass': 'circle bg-yellow', 'name': 'Pro Punter Inactive' });
         
         list.push({ 'id': 211, 'indexColor': 3, 'cssClass': 'circle green-line', 'name': 'Good Member (111)' });
         list.push({ 'id': 212, 'indexColor': 3, 'cssClass': 'circle green-line', 'name': 'Good Member (112)' });
