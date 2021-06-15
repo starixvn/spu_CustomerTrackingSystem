@@ -67,16 +67,6 @@
         text-align: center; }
       .problem-cases-content .problem-cases-table .problem-cases-datatable .wrapper-info-table .dataTables_info {
         top: 0; }
-      .problem-cases-content .problem-cases-table .problem-cases-datatable .wrapper-info-table .btnExcel {
-        border: 0 solid red;
-        cursor: pointer;
-        font-size: 11px;
-        height: 17px;
-        margin: 0 2px;
-        overflow: visible;
-        padding-left: 6px;
-        padding-right: 6px;
-        width: 18px; }
       .problem-cases-content .problem-cases-table .problem-cases-datatable .wrapper-info-table .table-problem-cases {
         width: 100% !important; }
         .problem-cases-content .problem-cases-table .problem-cases-datatable .wrapper-info-table .table-problem-cases .loading {
@@ -163,3 +153,12 @@
             color: transparent; }
           .problem-cases-content .problem-cases-table .problem-cases-datatable .wrapper-info-table .table-problem-cases tbody tr td .toggle-on .toggle-button {
             right: .2rem; }
+
+.btnExcel {
+  font-size: 3rem;
+  margin: 0 .2rem;
+  overflow: visible;
+  padding: .5rem .6rem;
+  background: transparent !important; }
+  .btnExcel .icon-excel {
+    font-size: 3rem; }

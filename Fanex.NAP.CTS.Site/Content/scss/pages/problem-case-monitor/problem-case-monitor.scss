@@ -107,17 +107,7 @@ body {
                     top: 0
                 }
 
-                .btnExcel {
-                    border: 0 solid red;
-                    cursor: pointer;
-                    font-size: 11px;
-                    height: 17px;
-                    margin: 0 2px;
-                    overflow: visible;
-                    padding-left: 6px;
-                    padding-right: 6px;
-                    width: 18px;
-                }
+               
 
                 .table-problem-cases {
                     width: 100% !important;
@@ -244,5 +234,16 @@ body {
                 }
             }
         }
+    }
+}
+
+.btnExcel {
+    font-size: 3rem;
+    margin: 0 .2rem;
+    overflow: visible;
+    padding: .5rem .6rem;
+    background: transparent !important;
+    .icon-excel{
+        font-size : 3rem;
     }
 }
