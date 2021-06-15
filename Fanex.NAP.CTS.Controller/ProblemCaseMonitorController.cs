@@ -1,15 +1,22 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
+    using Fanex.Logging;
+    using Fanex.Logging.Extensions;
+    using Fanex.Logging.Extensions.Database;
     using Fanex.NAP.Core.Configuration;
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Web.Attribute;
-    using System.Web.Mvc;
-    using Fanex.NAP.CTS.Service.Interface;
+    using Fanex.NAP.CTS.Core.Utilities;
+    using Fanex.NAP.CTS.Model.ProblemCaseMonitor;
     using Fanex.NAP.CTS.Service.Implement;
-    using static Fanex.NAP.CTS.Resource.Consts.Consts;
+    using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.ProblemCaseMonitor;
+    using System;
+    using System.Collections.Generic;
     using System.Linq;
+    using System.Web.Mvc;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.ProblemCaseMonitor, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -47,13 +54,27 @@
         }
 
         [HttpPost]
-        public ActionResult GetProblemCasesReport()
+        public ActionResult GetProblemCasesMonitor(ProblemCasesMonitorFilterModel filter)
         {
-            //var subscribers = _manageSubscriberService.GetSubscribers().OrderByDescending(c => c.IsActive).ThenByDescending(c => c.CreatedDate).ThenByDescending(c=>c.TerminatedDate);
+            var result = new List<ProblemCasesMonitorModel>();
+
+            try
+            {
+                result = _problemCaseMonitorService.GetProblemCaseMonitor(ConfigSettings.GetProblemCaseMonitor, filter).ToList();
+            }
+            catch (Exception ex)
+            {
+                var logMessage = new LogMessage(ex.Message)
+                    .AddMessage("CTS - Problem Case Monitor Page")
+                    .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                    .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error(logMessage);
+            }
 
             return Json(new
             {
-               data = string.Empty
+                data = result
             }, JsonRequestBehavior.AllowGet);
         }
     }

@@ -40,7 +40,7 @@
         private readonly ICustomerClassifyService _customerClassifyService;
         private readonly IPushDataToExternalService _pushDataToExternalService;
         private readonly ISubscriberService _subscriberService;
-        private readonly IProblemCaseMonitorService _problemCaseMonitorService;
+        private readonly Service.Interface.Api.IProblemCaseMonitorService _problemCaseMonitorService;
 
         /// <summary>
         /// Using for external site (TW, ExtAcc site...)
@@ -56,7 +56,7 @@
             _customerClassifyService = new CustomerClassifyService();
             _pushDataToExternalService = new PushDataToExternalService();
             _subscriberService = new SubscriberService();
-            _problemCaseMonitorService = new ProblemCaseMonitorService();
+            _problemCaseMonitorService = new Service.Implement.Api.ProblemCaseMonitorService();
         }
 
         /// <summary>

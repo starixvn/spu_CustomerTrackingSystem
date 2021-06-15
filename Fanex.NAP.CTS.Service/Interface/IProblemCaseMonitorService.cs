@@ -6,5 +6,7 @@
     public interface IProblemCaseMonitorService
     {
         IEnumerable<ProblemCasesFilterModel> GetProblemCasesFilter(int listId, bool status);
+
+        IEnumerable<ProblemCasesMonitorModel> GetProblemCaseMonitor(string apiUrl, ProblemCasesMonitorFilterModel para);
     }
 }

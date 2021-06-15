@@ -90,6 +90,8 @@
 
         public static string AddNewEvidence => GetConfigStringByName("FPS_AddNewEvidence");
 
+        public static string GetProblemCaseMonitor => GetConfigStringByName("CTS_GetProblemCaseMonitor");
+
         public static int ImportEvidenceChunkSize
         {
             get
