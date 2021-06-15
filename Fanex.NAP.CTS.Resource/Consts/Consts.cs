@@ -106,5 +106,10 @@
             Today = 3,
             Closed = 4
         }
+        
+        public enum STATIC_LIST : int
+        {
+           PROBLEMCASE = 12
+        }
     }
 }

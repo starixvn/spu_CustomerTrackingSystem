@@ -55,6 +55,7 @@
     <Compile Include="Implement\MatchMonitorService.cs" />
     <Compile Include="Implement\ProbationManagementService.cs" />
     <Compile Include="Implement\ManageSubscriberService.cs" />
+    <Compile Include="Implement\ProblemCaseMonitorService.cs" />
     <Compile Include="Implement\PushDataToExternalService.cs" />
     <Compile Include="Implement\CustomerClassifyService.cs" />
     <Compile Include="Implement\SpecialCustomerClassService.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="Interface\INotificationService.cs" />
     <Compile Include="Interface\IProbationManagementService.cs" />
     <Compile Include="Interface\IProblemAccountMonitorService.cs" />
+    <Compile Include="Interface\IProblemCaseMonitorService.cs" />
     <Compile Include="Interface\IPushDataToExternalService.cs" />
     <Compile Include="Interface\ICustomerClassifyService.cs" />
     <Compile Include="Interface\ISpecialCustomerClassService.cs" />

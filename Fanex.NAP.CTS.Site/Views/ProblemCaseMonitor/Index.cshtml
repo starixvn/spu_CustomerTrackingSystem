@@ -32,28 +32,32 @@
 
                     <div class="group width-180">
                         <label class="text">Subscriber</label>
-                        <select class="control width-select" id="cbbSubscriber">
-                            <option value="">All</option>
-                            <option value="1">Yes</option>
-                            <option value="0" selected>No</option>
-                            @*foreach (var group in ViewBag.Subscribers)
+                        <select class="control width-select" id="cbbSubscriber" multiple="multiple">
+                            @if (Model.Subscriber != null)
                             {
-                                <optgroup label="group.SubscriberGroupName">
-                                    foreach (var item in group.SubscriberList)
-                                    {
-                                        <option selected value=item.SubscriberID>item.SubscriberName</option>
-                                    }
-                                </optgroup>
-                            }*@
-                        </select>
+                                foreach (var group in Model.Subscriber)
+                                {
+                                    <optgroup label="@group.SubscriberGroupName">
+                                        @foreach (var item in group.SubscriberList)
+                                        {
+                                            <option selected value=@item.SubscriberID>@item.SubscriberName</option>
+                                        }
+                                    </optgroup>
+                                }
+                            }
+                            </select>
                     </div>
 
                     <div class="group width-180">
                         <label class="text">Problem Cases</label>
-                        <select class="control width-select" id="cbbProblemCases">
-                            <option value="">All</option>
-                            <option value="1">Yes</option>
-                            <option value="0" selected>No</option>
+                        <select class="control width-select" id="cbbProblemCases" multiple="multiple">
+                            @if (Model.ProblemCases != null)
+                            {
+                                foreach (var item in Model.ProblemCases)
+                                {
+                                    <option value=@item.ItemId selected>@item.ItemNameDisplay</option>
+                                }
+                            }
                         </select>
                     </div>
                     <button class="button button-generate" id="btnGenerate">Generate</button>
@@ -64,9 +68,9 @@
                 <div class="fixed-header">
                     <div class="top-header">
                         <div class="export-excel">
-                            <button class="button btnExcel" id="btnExportExcel" title="Export to Excel" >
+                            <button class="button btnExcel" id="btnExportExcel" title="Export to Excel">
                                 <i class="icon icon-excel"></i>
-                            </button>  
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -85,20 +89,13 @@
                 </table>
             </div>
         </div>
+    </div>
+
+    <div class="hide">
+        <input id="hdIsHostPermission" type="hidden" IsHostPermission="@Model.IsHostPermission.ToString()" />
+        <input id="hdCTSCustId" type="hidden" value="@Model.CustId" />
+    </div>
 </section>
-
-
-
-@*<div>
-        @using (Html.BeginForm("Detail", "ProblemAccountMonitor", FormMethod.Post, new { id = "formViewDetail", target = "_blank" }))
-        {
-            @Html.Hidden("matchId", "", new { id = "matchId" });
-            @Html.Hidden("matchStatus", "", new { id = "matchStatus" });
-            @Html.Hidden("fraudCaseId", "", new { id = "fraudCaseId" });
-            @Html.Hidden("siteIds", "", new { id = "siteIds" });
-        }
-    </div>*@
-
 @section scripts{
     @Scripts.Render("~/problem-case-monitor-scripts")
 }
