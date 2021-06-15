@@ -2,13 +2,12 @@
 {
     using Fanex.NAP.CTS.Model.API.ProblemCaseMonitor;
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
+    using System.Collections.Generic;   
 
     public interface IProblemCaseMonitorService
     {
-        IEnumerable<ProlemCaseModel> GetProlemCase(int listId, bool status);
+        IEnumerable<ProblemCaseModel> GetProlemCase(int listId, bool status);
+
+        IEnumerable<ProblemCaseMonitorModel> GetProblemCaseMonitor(ProblemCaseMonitorParamsModel paras);
     }
 }

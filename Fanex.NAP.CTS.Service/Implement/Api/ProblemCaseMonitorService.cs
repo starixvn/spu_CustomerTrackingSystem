@@ -4,13 +4,13 @@
     using Fanex.NAP.CTS.Criteria.Api.ProblemCaseMonitor;
     using Fanex.NAP.CTS.Model.API.ProblemCaseMonitor;
     using Fanex.NAP.CTS.Service.Interface.Api;
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
-
     public class ProblemCaseMonitorService : IProblemCaseMonitorService
     {
-        public IEnumerable<ProlemCaseModel> GetProlemCase(int listId, bool status)
+        public IEnumerable<ProblemCaseModel> GetProlemCase(int listId, bool status)
         {
             var criteria = new ProblemCaseCriteria
             {
@@ -20,7 +20,30 @@
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                var result = db.Query<ProlemCaseModel>(criteria);
+                var result = db.Query<ProblemCaseModel>(criteria);
+
+                return result.ToList();
+            }
+        }
+
+        public IEnumerable<ProblemCaseMonitorModel> GetProblemCaseMonitor(ProblemCaseMonitorParamsModel paras)
+        {
+            if (paras == null)
+            {
+                return Enumerable.Empty<ProblemCaseMonitorModel>();
+            }
+
+            var criteria = new ProblemCaseMonitorCriteria
+            {
+                FromDate = paras.FromDate,
+                ToDate = paras.ToDate,
+                SubscriberIDList = string.IsNullOrEmpty(paras.SubscriberIDList) ? "0" : paras.SubscriberIDList,
+                ProblemCaseIDList = string.IsNullOrEmpty(paras.ProblemCaseIDList) ? "0" : paras.ProblemCaseIDList
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                var result = db.Query<ProblemCaseMonitorModel>(criteria);
 
                 return result.ToList();
             }

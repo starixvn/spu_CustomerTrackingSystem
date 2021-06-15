@@ -2,7 +2,7 @@
 {
     using System;    
 
-    public class ProlemCaseModel
+    public class ProblemCaseModel
     {
         public int ListId { get; set; }
 

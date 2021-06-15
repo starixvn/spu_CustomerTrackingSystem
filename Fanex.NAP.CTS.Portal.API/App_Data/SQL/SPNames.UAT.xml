@@ -56,5 +56,6 @@
 
 	<Function name="MemberCheckList">
 		<Setting Key="CTS_DC_Common_GetStaticList" SpName="CTS_DC_Common_GetStaticList_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_RPT_ProblemCaseMonitor" SpName="CTS_DC_RPT_ProblemCaseMonitor_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
 </Functions>

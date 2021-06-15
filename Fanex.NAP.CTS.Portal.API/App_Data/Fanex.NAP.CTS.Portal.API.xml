@@ -618,8 +618,15 @@
         </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetProblemCase">
             <summary>
-            Get list problem case
+            Get list Problem Case
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetProblemCaseMonitor(Fanex.NAP.CTS.Model.API.ProblemCaseMonitor.ProblemCaseMonitorParamsModel)">
+            <summary>
+            Get list Problem Case Monitor 
+            </summary>
+            <param name="paras"></param>
             <returns></returns>
         </member>
         <member name="T:Fanex.NAP.CTS.Portal.API.Controllers.GraphController">

@@ -73,6 +73,7 @@
     <Compile Include="Api\GetAssociationForExtAccCriteria.cs" />
     <Compile Include="Api\GetSubscriberInfoBySubscriberName.cs" />
     <Compile Include="Api\ProblemCaseMonitor\ProblemCaseCriteria.cs" />
+    <Compile Include="Api\ProblemCaseMonitor\ProblemCaseMonitorCriteria.cs" />
     <Compile Include="AssociationReport\AssociationDetailReportGetCriteria.cs" />
     <Compile Include="AssociationReport\AssociationReportGetCriteria.cs" />
     <Compile Include="Api\GetFlaggedEvidenceByLevel2AssociationCriteria.cs" />

@@ -740,15 +740,56 @@
             return result;
         }
         
-        /// Get list problem case
+        
+        /// Get list Problem Case
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public JsonResult<List<ProlemCaseModel>> GetProblemCase()
+        public JsonResult<List<ProblemCaseModel>> GetProblemCase()
         {
-            var problemCases = _problemCaseMonitorService.GetProlemCase(12, true);
+            try
+            {
+                var problemCases = _problemCaseMonitorService.GetProlemCase(12, true);
 
-            return Json(problemCases.ToList());
+                return Json(problemCases.ToList());
+            }
+            catch (Exception ex)
+            {
+                var logMessage = new LogMessage(ex.Message)
+                    .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                    .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error(logMessage);
+
+                return Json(new List<ProblemCaseModel>());
+            }            
         }
+
+        /// <summary>
+        /// Get list Problem Case Monitor 
+        /// </summary>
+        /// <param name="paras"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public JsonResult<List<ProblemCaseMonitorModel>> GetProblemCaseMonitor([FromBody]ProblemCaseMonitorParamsModel paras)
+        {
+            try
+            {
+                var problemCases = _problemCaseMonitorService.GetProblemCaseMonitor(paras);
+
+                return Json(problemCases.ToList());
+            }
+            catch (Exception ex)
+            {
+                var logMessage = new LogMessage(ex.Message)
+                    .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                    .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error(logMessage);
+
+                return Json(new List<ProblemCaseMonitorModel>());
+            }
+        }
+
     }
 }
