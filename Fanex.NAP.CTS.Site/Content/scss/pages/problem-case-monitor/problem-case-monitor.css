@@ -68,7 +68,6 @@
       .problem-cases-content .problem-cases-table .problem-cases-datatable .wrapper-info-table .dataTables_info {
         top: 0; }
       .problem-cases-content .problem-cases-table .problem-cases-datatable .wrapper-info-table .btnExcel {
-        background: url("Content/scss/images/icon-export-excel.png") 0px -26px no-repeat;
         border: 0 solid red;
         cursor: pointer;
         font-size: 11px;

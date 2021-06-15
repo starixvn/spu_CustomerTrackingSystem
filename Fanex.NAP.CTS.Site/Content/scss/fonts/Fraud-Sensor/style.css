@@ -25,6 +25,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-excel:before {
+  content: "\e901";
+  color: #207245;
+}
 .icon-monitor:before {
   content: "\e900";
   color: #98a1b2;
