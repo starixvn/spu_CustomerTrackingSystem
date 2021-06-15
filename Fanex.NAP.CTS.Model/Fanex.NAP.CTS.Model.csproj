@@ -159,6 +159,7 @@
     <Compile Include="API\CategoryCustomerClassModel.cs" />
     <Compile Include="API\CustomerClassModel.cs" />
     <Compile Include="API\CustomerClassification.cs" />
+    <Compile Include="API\ProblemCaseMonitor\ProlemCaseModel.cs" />
     <Compile Include="AssociationReport\AssociationDetailFromMySqlModel.cs" />
     <Compile Include="AssociationReport\AssociationFromMySqlModel.cs" />
     <Compile Include="Common\SubscriberGroupModel.cs" />

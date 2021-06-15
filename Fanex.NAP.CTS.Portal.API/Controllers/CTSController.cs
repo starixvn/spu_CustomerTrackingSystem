@@ -10,12 +10,15 @@
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.API;
+    using Fanex.NAP.CTS.Model.API.ProblemCaseMonitor;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.Subscriber;
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.Service.Implement;
+    using Fanex.NAP.CTS.Service.Implement.Api;
     using Fanex.NAP.CTS.Service.Interface;
+    using Fanex.NAP.CTS.Service.Interface.Api;
     using Fanex.NAP.SPU.Graph.Core;
     using Newtonsoft.Json;
     using System;
@@ -37,6 +40,7 @@
         private readonly ICustomerClassifyService _customerClassifyService;
         private readonly IPushDataToExternalService _pushDataToExternalService;
         private readonly ISubscriberService _subscriberService;
+        private readonly IProblemCaseMonitorService _problemCaseMonitorService;
 
         /// <summary>
         /// Using for external site (TW, ExtAcc site...)
@@ -52,6 +56,7 @@
             _customerClassifyService = new CustomerClassifyService();
             _pushDataToExternalService = new PushDataToExternalService();
             _subscriberService = new SubscriberService();
+            _problemCaseMonitorService = new ProblemCaseMonitorService();
         }
 
         /// <summary>
@@ -733,6 +738,17 @@
             }
 
             return result;
+        }
+        
+        /// Get list problem case
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public JsonResult<List<ProlemCaseModel>> GetProblemCase()
+        {
+            var problemCases = _problemCaseMonitorService.GetProlemCase(12, true);
+
+            return Json(problemCases.ToList());
         }
     }
 }

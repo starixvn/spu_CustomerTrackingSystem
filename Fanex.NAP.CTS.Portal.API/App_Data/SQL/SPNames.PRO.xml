@@ -54,4 +54,8 @@
 	<Function name ="RobotUser">
 		<Setting Key="CTS_Customer_RobotCheckExist" SpName="CTS_Customer_RobotCheckExist" DbName="DBONUSER.ON_USER.bodbSPUNet"/>
 	</Function>
+
+	<Function name="MemberCheckList">
+		<Setting Key="CTS_DC_Common_GetStaticList" SpName="CTS_DC_Common_GetStaticList" DbName="MySQL.CTS_DataCenter.Reporter" />
+	</Function>
 </Functions>

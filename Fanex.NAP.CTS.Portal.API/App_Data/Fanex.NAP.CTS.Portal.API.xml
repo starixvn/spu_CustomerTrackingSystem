@@ -615,6 +615,11 @@
             </summary>
             <param name="custId"></param>
             <param name="associationType">1-Device, 2-Manual</param>
+        </member>
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetProblemCase">
+            <summary>
+            Get list problem case
+            </summary>
             <returns></returns>
         </member>
         <member name="T:Fanex.NAP.CTS.Portal.API.Controllers.GraphController">
