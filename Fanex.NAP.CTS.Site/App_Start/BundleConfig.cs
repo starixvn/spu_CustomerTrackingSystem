@@ -72,6 +72,8 @@
             RegisterAssociationDetailReport(bundles);
 
             RegisterLatestTransaction(bundles);
+
+            RegisterProblemCaseMonitor(bundles);
         }
 
         private static void RegisterCTSCoreBundles(BundleCollection bundles)
@@ -302,6 +304,20 @@
                  "~/Content/scss/MultipleSelect/jquery.multiselect.filter.css",
                 "~/Content/scss/MultipleSelect/jquery.multiselect.css",
                 "~/Content/scss/pages/match-monitor/match-monitor-detail.css"));
+        }
+        
+        private static void RegisterProblemCaseMonitor(BundleCollection bundles)
+        {
+            bundles.Add(new ScriptBundle("~/problem-case-monitor-scripts").Include(
+                  "~/Scripts/select2.min.js",
+                  "~/Scripts/MultipleSelect/jquery.multiselect.filter.js",
+                  "~/Scripts/ProblemCaseMonitor/index.js"));
+
+            bundles.Add(new StyleBundle("~/problem-case-monitor-styles").Include(
+                "~/Content/scss/vendors/select2.min.css",
+                 "~/Content/scss/MultipleSelect/jquery.multiselect.filter.css",
+                "~/Content/scss/MultipleSelect/jquery.multiselect.css",
+                "~/Content/scss/pages/problem-case-monitor/problem-case-monitor.css"));
         }
     }
 }

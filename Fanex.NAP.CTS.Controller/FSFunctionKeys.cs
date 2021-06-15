@@ -96,4 +96,6 @@ public static class FSFunctionKeys
     public const string AssociationReport = "AssociationReport";
 
     public const string LatestTransaction = "LatestTransaction";
+
+    public const string ProblemCaseMonitor = "ProblemCaseMonitor";
 }

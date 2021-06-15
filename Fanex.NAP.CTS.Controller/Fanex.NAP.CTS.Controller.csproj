@@ -186,6 +186,7 @@
     </Compile>
     <Compile Include="HomeController.cs" />
     <Compile Include="EvidenceManagementController.cs" />
+    <Compile Include="ProblemCaseMonitorController.cs" />
     <Compile Include="ManageSubscriberController.cs" />
     <Compile Include="MatchMonitorController.cs" />
     <Compile Include="NotificationSettingController.cs" />
