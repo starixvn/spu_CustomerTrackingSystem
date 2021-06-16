@@ -60,6 +60,11 @@ body {
         .problem-cases-datatable {
             font-family: $font-family;
 
+            .group {
+                padding-right: 0;
+                margin-right: .6rem;
+            }
+
             .fixed-header {
                 padding-top: 1.6rem;
                 position: sticky;
@@ -79,35 +84,12 @@ body {
             }
 
             .wrapper-info-table {
-                height: 4rem;
                 border: 1px solid #c4c4c4;
-                padding: 0 1rem;
                 background-color: #e3e9f6;
                 position: -webkit-sticky;
                 position: sticky;
                 top: 13.2rem;
                 z-index: 11;
-
-                .dataTables_length {
-                    position: absolute;
-                    top: .5rem;
-                    left: 0;
-                }
-
-                .dataTables_paginate {
-                    position: absolute !important;
-                    padding-top: 0 !important;
-                    top: 1.6rem !important;
-                    right: 50%;
-                    transform: translate(50%,-50%);
-                    text-align: center;
-                }
-
-                .dataTables_info {
-                    top: 0
-                }
-
-               
 
                 .table-problem-cases {
                     width: 100% !important;
@@ -150,8 +132,6 @@ body {
                                 .click-view-details, .click-view-name {
                                     cursor: pointer;
                                 }
-
-                                
                             }
                         }
                     }

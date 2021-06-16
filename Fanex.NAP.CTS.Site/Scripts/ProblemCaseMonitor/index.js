@@ -6,7 +6,8 @@
         cbbProblemCases: $('#cbbProblemCases'),
         cbbSubscriber: $('#cbbSubscriber'),
         btnGenerate: $('#btnGenerate'),
-        tblProblemCasesReport: $('#tblProblemCasesReport')
+        tblProblemCasesReport: $('#tblProblemCasesReport'),
+        btnExportExcel: $('#btnExportExcel')
     };
 
     function GetProblemCaseMonitor() {
@@ -32,7 +33,7 @@
 
     function GenerateGrid() {
         return domElements.tblProblemCasesReport.DataTable({
-            serverSide: true,
+            serverSide: false,
             ajax: {
                 url: common.modifyRelativeUrl('ProblemCaseMonitor/GetProblemCasesMonitor'),
                 data: {
@@ -46,7 +47,7 @@
                     domElements.tblProblemCasesReport.find('tbody').addClass('loading');
                     domElements.btnGenerate.prop('disabled', true);
                 },
-                success: function (response) {
+                dataFilter: function (response) {
                     return response;
                 },
                 complete: function () {
@@ -99,6 +100,27 @@
                 { data: obj => obj.SuspiciousAssociation == true ? "Yes" : "" },
                 { data: obj => obj.ProPunter == true ? "Yes" : ""}
             ]
+        });
+    }
+
+    function ExportExcel(SubscriberID) {
+        var url = common.modifyRelativeUrl('ProblemCaseMonitor/ExportProblemCases');
+        var params = {};
+        params.subscriberID = SubscriberID;
+
+        $.ajax(url, {
+            type: 'POST',
+            data: params,
+            success: function (response) {
+                if (response.ErrorCode !== 0) {
+                    common.showError('Export Excel Fail! - ' + response.ErrorMsg);
+                }
+            },
+            complete: function () {
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+            }
         });
     }
 
@@ -158,6 +180,8 @@
         });
 
         domElements.btnGenerate.on('click', function () { GetProblemCaseMonitor(); });
+
+        domElements.btnExportExcel.on('click', function () { ExportExcel(); });
     }
 
     $(document).ready(function () {
