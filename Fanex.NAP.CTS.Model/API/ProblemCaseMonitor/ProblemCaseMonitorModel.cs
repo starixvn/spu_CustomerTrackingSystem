@@ -2,6 +2,8 @@
 {
     public class ProblemCaseMonitorModel
     {
+        public long CTSCustID { get; set; }
+
         public string UserName { get; set; }
 
         public string SubscriberName { get; set; }

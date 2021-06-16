@@ -783,6 +783,7 @@
                 {
                     problemCases = data.Select(x => new ProblemCaseMonitorViewModel
                     {
+                        CTSCustId = x.CTSCustID,
                         UserName = x.UserName,
                         SubscriberName = x.SubscriberName,
                         IsRobot = x.Robot,
