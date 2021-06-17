@@ -688,14 +688,15 @@
             {
                 try
                 {
-                    var cust = DbSessionFactory.Execute<GraphCustomer>("GetCustomerByCustId", new
+                    var custfromQuery = DbSessionFactory.Execute<GraphCustomer>("GetCustomerByCustId", new
                     {
                         CustID = custId,
                         CustSubID = 0
-                    }).Data.First();
+                    });
 
-                    if (cust != null)
+                    if (custfromQuery.Data.Any())
                     {
+                        var cust = custfromQuery.Data.First();
                         var queryResult = DbSessionFactory.Execute<GraphAssociationPaging>(script, new
                         {
                             CTSCustID = cust.CTSCustId,
