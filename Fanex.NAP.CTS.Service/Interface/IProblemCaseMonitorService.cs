@@ -8,5 +8,7 @@
         IEnumerable<ProblemCasesFilterModel> GetProblemCasesFilter(int listId, bool status);
 
         IEnumerable<ProblemCasesMonitorModel> GetProblemCaseMonitor(string apiUrl, ProblemCasesMonitorFilterModel para);
+
+        byte[] ExportProblemCaseMonitor(List<ProblemCasesMonitorModel> data, string fileName, string templatePath, string sheetName);
     }
 }

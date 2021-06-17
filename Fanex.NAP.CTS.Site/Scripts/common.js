@@ -50,19 +50,19 @@
     }
 
     var language =
-        {
-            lengthMenu: "Page size _MENU_",
-            paginate: {
-                previous: "Back"
-            },
-            info: "Displaying _START_ to _END_ of _TOTAL_ item(s)",
-            infoEmpty: "",
-            zeroRecords: "There's no data"
-        }
+    {
+        lengthMenu: "Page size _MENU_",
+        paginate: {
+            previous: "Back"
+        },
+        info: "Displaying _START_ to _END_ of _TOTAL_ item(s)",
+        infoEmpty: "",
+        zeroRecords: "There's no data"
+    }
 
     var $this = this;
 
-   // $(document).ajaxError(() => this.showError());
+    // $(document).ajaxError(() => this.showError());
 
     this.showLoading = function () {
         loading.show();
@@ -89,6 +89,17 @@
         }
     };
 
+    this.downloadFilePostMethod = function (url, parameters) {
+        if (url && parameters) {
+            $('body').append('<form action="' + url + '" method="post" target="output_frame" id="postToIframe"></form>');
+            $.each(parameters, function (n, v) {
+                $('#postToIframe').append('<input type="hidden" name="' + n + '" value="' + v + '" />');
+            });
+            $('body').append('<iframe  name="output_frame" width="0" height="0" class="display-none"></iframe>');
+            $('#postToIframe').submit().remove();
+        }
+    };
+
     this.hasSpecialCharacter = function (str = "") {
         if (str == null) {
             return false;
@@ -108,30 +119,30 @@
         formconfirmation.empty().html(html).dialog("open");
 
         var yesBtn =
-            {
-                'class': 'button -add',
-                text: "Confirm",
-                click: function () {
-                    formconfirmation.dialog("close");
+        {
+            'class': 'button -add',
+            text: "Confirm",
+            click: function () {
+                formconfirmation.dialog("close");
 
-                    if (yesCallback != null) {
-                        yesCallback(this)
-                    }
-                }
-            };
-
-        var noBtn =
-            {
-                'class': 'button btn-cancel-outline',
-                text: "Cancel",
-                click: function () {
-                    formconfirmation.dialog("close");
-
-                    if (noCallback != null) {
-                        noCallback()
-                    }
+                if (yesCallback != null) {
+                    yesCallback(this)
                 }
             }
+        };
+
+        var noBtn =
+        {
+            'class': 'button btn-cancel-outline',
+            text: "Cancel",
+            click: function () {
+                formconfirmation.dialog("close");
+
+                if (noCallback != null) {
+                    noCallback()
+                }
+            }
+        }
 
         formconfirmation.dialog("option", {
             dialogClass: "dialog-confirmation",
@@ -146,30 +157,30 @@
         confirmation.empty().html(html).dialog("open");
 
         var yesBtn =
-            {
+        {
             'class': 'button -add',
-                text: "Yes",
-                click: function () {
-                    confirmation.dialog("close");
+            text: "Yes",
+            click: function () {
+                confirmation.dialog("close");
 
-                    if (yesCallback != null) {
-                        yesCallback(this)
-                    }
-                }
-            };
-
-        var noBtn =
-            {
-            'class': 'button btn-cancel-outline',
-                text: "No",
-                click: function () {
-                    confirmation.dialog("close");
-
-                    if (noCallback != null) {
-                        noCallback()
-                    }
+                if (yesCallback != null) {
+                    yesCallback(this)
                 }
             }
+        };
+
+        var noBtn =
+        {
+            'class': 'button btn-cancel-outline',
+            text: "No",
+            click: function () {
+                confirmation.dialog("close");
+
+                if (noCallback != null) {
+                    noCallback()
+                }
+            }
+        }
 
         confirmation.dialog("option", {
             dialogClass: "dialog-confirmation",
@@ -244,7 +255,7 @@
         next_element.click(() => $input.focus());
 
         $input.addClass("control").datepicker(options);
-    }       
+    }
 
     this.makeWrapString = function (str = "", maxLength = 0) {
         if (str == null) return str;
@@ -295,6 +306,7 @@
     }
 
     this.language = () => Object.assign({}, language);
+
 }
 
 var common = new UICommon();

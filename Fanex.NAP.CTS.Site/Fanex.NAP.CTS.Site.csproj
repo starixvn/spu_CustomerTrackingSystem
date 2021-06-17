@@ -1008,6 +1008,7 @@
     <Content Include="Views\MatchMonitor\Detail.cshtml" />
     <Content Include="Views\MatchMonitor\Index.cshtml" />
     <Content Include="Views\ProblemCaseMonitor\Index.cshtml" />
+    <Content Include="Template\ProblemCaseTemplate.xlsx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CoreBetList.css" />

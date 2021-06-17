@@ -10,8 +10,20 @@
         btnExportExcel: $('#btnExportExcel')
     };
 
+    let exportPara = {
+        FromDate: null,
+        ToDate: null,
+        ProblemCaseIds: null,
+        SubscriberIds: null
+    };
+
     function GetProblemCaseMonitor() {
         if (ValidateRangeDate()) {
+            exportPara.FromDate = domElements.dpkFromDate.val();
+            exportPara.ToDate = domElements.dpkToDate.val();
+            exportPara.ProblemCaseIds = domElements.cbbProblemCases.val().join(",");
+            exportPara.SubscriberIds = domElements.cbbSubscriber.val().join(",");
+
             dataTable
                 ? dataTable.ajax.reload(null, true)
                 : dataTable = GenerateGrid();
@@ -48,7 +60,7 @@
                     domElements.btnGenerate.prop('disabled', true);
                 },
                 dataFilter: function (response) {
-                    return response;
+                      return response;
                 },
                 complete: function () {
                     domElements.tblProblemCasesReport.find('tbody').removeClass('loading');
@@ -95,34 +107,17 @@
                         return html = `<a class='click-view-name' href=${url}> ${obj.UserName} </a>`;
                     }
                 },
-                { data: obj => obj.Subscriber },
-                { data: obj => obj.Robot == true ? "Yes" : "" },
-                { data: obj => obj.SuspiciousAssociation == true ? "Yes" : "" },
-                { data: obj => obj.ProPunter == true ? "Yes" : ""}
+                { data: obj => obj.SubscriberName },
+                { data: obj => obj.RobotToString },
+                { data: obj => obj.SuspiciousAssociationToString },
+                { data: obj => obj.ProPunterToString}
             ]
         });
     }
 
-    function ExportExcel(SubscriberID) {
-        var url = common.modifyRelativeUrl('ProblemCaseMonitor/ExportProblemCases');
-        var params = {};
-        params.subscriberID = SubscriberID;
-
-        $.ajax(url, {
-            type: 'POST',
-            data: params,
-            success: function (response) {
-                if (response.ErrorCode !== 0) {
-                    common.showError('Export Excel Fail! - ' + response.ErrorMsg);
-                }
-            },
-            complete: function () {
-            },
-            error: function (errMsg) {
-                console.log(errMsg);
-            }
-        });
-    }
+    var ExportExcel = function () {
+          common.downloadFilePostMethod(common.modifyRelativeUrl("ProblemCaseMonitor/ExportProblemCases"), exportPara);
+    };
 
     function SetRestrictFromDate() {
         let toDateValue = domElements.dpkToDate.datepicker("getDate");

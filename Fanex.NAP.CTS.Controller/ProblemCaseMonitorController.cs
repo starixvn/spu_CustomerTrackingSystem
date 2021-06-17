@@ -22,6 +22,7 @@
     [NapAuth(FunctionKey = FSFunctionKeys.ProblemCaseMonitor, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class ProblemCaseMonitorController : BaseController
     {
+        private const string ProblemCaseTemplate = @"~\Template\ProblemCaseTemplate.xlsx";
         private readonly IProblemCaseMonitorService _problemCaseMonitorService;
         private readonly ICommonService _commonService;
 
@@ -57,7 +58,7 @@
         public ActionResult GetProblemCasesMonitor(ProblemCasesMonitorFilterModel filter)
         {
             var result = new List<ProblemCasesMonitorModel>();
-
+        
             try
             {
                 result = _problemCaseMonitorService.GetProblemCaseMonitor(ConfigSettings.GetProblemCaseMonitor, filter).ToList();
@@ -76,6 +77,33 @@
             {
                 data = result
             }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult ExportProblemCases(ProblemCasesMonitorFilterModel filter)
+        {
+            try
+            {
+                var templatePath = Server.MapPath(ProblemCaseTemplate);
+                var fileName = string.Concat("ProblemCasesMonitor");
+                var sheetName = "Problem Cases Monitor";
+
+                var result = _problemCaseMonitorService.GetProblemCaseMonitor(ConfigSettings.GetProblemCaseMonitor, filter).ToList();
+                
+                var excelFile = _problemCaseMonitorService.ExportProblemCaseMonitor(result, fileName, templatePath, sheetName);
+
+                return File(excelFile, "application/vnd.ms-excel");
+            }
+            catch (Exception ex)
+            {
+                var logMessage = new LogMessage(ex.Message)
+                    .AddMessage("CTS - Problem Case Monitor Page")
+                    .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                    .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error(logMessage);
+            }
+
+            return new EmptyResult();
         }
     }
 }
