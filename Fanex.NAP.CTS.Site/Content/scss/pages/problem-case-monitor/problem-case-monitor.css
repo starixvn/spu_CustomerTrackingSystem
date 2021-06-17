@@ -55,6 +55,15 @@
       position: sticky;
       top: 13.2rem;
       z-index: 11; }
+      .problem-cases-content .problem-cases-table .problem-cases-datatable .wrapper-info-table .dataTables_length {
+        position: absolute;
+        left: 0; }
+      .problem-cases-content .problem-cases-table .problem-cases-datatable .wrapper-info-table .dataTables_paginate {
+        position: absolute !important;
+        padding-top: 4rem !important;
+        right: 50%;
+        transform: translate(50%, -50%);
+        text-align: center; }
       .problem-cases-content .problem-cases-table .problem-cases-datatable .wrapper-info-table .table-problem-cases {
         width: 100% !important; }
         .problem-cases-content .problem-cases-table .problem-cases-datatable .wrapper-info-table .table-problem-cases .loading {
