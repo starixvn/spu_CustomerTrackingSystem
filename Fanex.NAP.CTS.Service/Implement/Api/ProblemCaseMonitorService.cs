@@ -37,15 +37,17 @@
             {
                 FromDate = paras.FromDate,
                 ToDate = paras.ToDate,
-                SubscriberIDList = string.IsNullOrEmpty(paras.SubscriberIDList) ? "0" : paras.SubscriberIDList,
-                ProblemCaseIDList = string.IsNullOrEmpty(paras.ProblemCaseIDList) ? "0" : paras.ProblemCaseIDList
+                SubscriberIDList = paras.SubscriberIDList,
+                ProblemCaseIDList = paras.ProblemCaseIDList
             };
 
+            var problemCaseList = new List<int>();
+           
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                var result = db.Query<ProblemCaseMonitorModel>(criteria);
+                var data = db.Query<ProblemCaseMonitorModel>(criteria);
 
-                return result.ToList();
+                return data.ToList();
             }
         }
     }

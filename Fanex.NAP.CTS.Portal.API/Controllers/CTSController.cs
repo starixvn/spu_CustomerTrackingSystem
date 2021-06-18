@@ -527,8 +527,6 @@
             return null;
         }
 
-
-
         /// <summary>
         /// This controller is only for testing
         /// </summary>
@@ -777,18 +775,23 @@
             {
                 var problemCases = new List<ProblemCaseMonitorViewModel>();
 
-                var data = _problemCaseMonitorService.GetProblemCaseMonitor(paras);
+                var problemCaseData = _problemCaseMonitorService.GetProblemCaseMonitor(paras);
 
-                if (data != null && data.Any())
+                if (problemCaseData != null && problemCaseData.Any())
                 {
-                    problemCases = data.Select(x => new ProblemCaseMonitorViewModel
+                    var problemCaseDataGroup = problemCaseData.GroupBy(x => new { x.CTSCustID, x.UserName }, (key, g) => new
                     {
-                        CTSCustId = x.CTSCustID,
-                        UserName = x.UserName,
-                        SubscriberName = x.SubscriberName,
-                        IsRobot = x.Robot,
-                        IsSuspiciousAssociation = x.SuspiciousAssociation,
-                        IsProPunter = x.ProPunter
+                        Items = g.Aggregate<ProblemCaseMonitorModel, ProblemCaseMonitorModel>(null, (acc, s) => acc + s)
+                    });
+
+                    problemCases = problemCaseDataGroup.Select(x => new ProblemCaseMonitorViewModel
+                    {
+                        CTSCustId = x.Items.CTSCustID,
+                        UserName = x.Items.UserName,
+                        SubscriberName = x.Items.SubscriberName,
+                        IsRobot = x.Items.IsRobot,
+                        IsSuspiciousAssociation = x.Items.IsSuspiciousAssociation,
+                        IsProPunter = x.Items.IsProPunter
                     }).ToList();
                 }
 

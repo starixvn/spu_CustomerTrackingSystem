@@ -62,6 +62,10 @@
         public const string AssociationTypeName_IPAssociation = "IP Association";
 
         public const int MatchMonitor_ReportQueryType = 2;
+        
+        public const int ProblemCase_ItemID_Robot = 1;
+        public const int ProblemCase_ItemID_SuspiciousAssociation = 4;
+        public const int ProblemCase_ItemID_ProPunter = 9;
 
         public enum ROLE_CUSTOMER : int
         {
