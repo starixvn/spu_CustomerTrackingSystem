@@ -11,5 +11,9 @@
         public string ProblemCaseIds { get; set; }
 
         public string SubscriberIds { get; set; }
+
+        public string ProblemCases { get; set; }
+
+        public string SubscriberName { get; set; }
     }
 }

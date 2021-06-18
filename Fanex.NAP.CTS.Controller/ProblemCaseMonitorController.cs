@@ -9,7 +9,6 @@
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model.ProblemCaseMonitor;
-    using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.ProblemCaseMonitor;
@@ -59,7 +58,7 @@
         public ActionResult GetProblemCasesMonitor(ProblemCasesMonitorFilterModel filter)
         {
             var result = new List<ProblemCasesMonitorModel>();
-        
+
             try
             {
                 result = _problemCaseMonitorService.GetProblemCaseMonitor(ConfigSettings.GetProblemCaseMonitor, filter).ToList();
@@ -85,14 +84,19 @@
             try
             {
                 var templatePath = Server.MapPath(ProblemCaseTemplate);
-                var fileName = $"Problem Cases Monitor_{filter.FromDate.ToString(Consts.FormatDateTimeToString_YYYYmmdd)}_{filter.ToDate.ToString(Consts.FormatDateTimeToString_YYYYmmdd)}";
+
+                var fileName = string.Format(
+                                "ProblemCasesMonitor_{0}_{1}.xlsx",
+                                filter.FromDate.ToString(FormatDateTimeToString_YYYYmmdd),
+                                filter.ToDate.ToString(FormatDateTimeToString_YYYYmmdd));
+
                 var sheetName = "Problem Cases Monitor";
 
                 var result = _problemCaseMonitorService.GetProblemCaseMonitor(ConfigSettings.GetProblemCaseMonitor, filter).ToList();
-                
+
                 var excelFile = _problemCaseMonitorService.ExportProblemCaseMonitor(result, fileName, templatePath, sheetName, filter);
 
-                return File(excelFile, "application/vnd.ms-excel");
+                return File(excelFile, "application/vnd.ms-excel", fileName);
             }
             catch (Exception ex)
             {

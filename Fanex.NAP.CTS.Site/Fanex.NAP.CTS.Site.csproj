@@ -1008,9 +1008,9 @@
     <Content Include="Views\MatchMonitor\Detail.cshtml" />
     <Content Include="Views\MatchMonitor\Index.cshtml" />
     <Content Include="Views\ProblemCaseMonitor\Index.cshtml" />
-    <None Include="Template\ProblemCaseTemplate.xls">
+    <Content Include="Template\ProblemCaseTemplate.xls">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CoreBetList.css" />

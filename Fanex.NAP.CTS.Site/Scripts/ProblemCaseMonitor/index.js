@@ -14,7 +14,9 @@
         FromDate: null,
         ToDate: null,
         ProblemCaseIds: null,
-        SubscriberIds: null
+        SubscriberIds: null,
+        ProblemCases: null,
+        SubscriberName: null
     };
 
     function GetProblemCaseMonitor() {
@@ -23,6 +25,8 @@
             exportPara.ToDate = domElements.dpkToDate.val();
             exportPara.ProblemCaseIds = domElements.cbbProblemCases.val().join(",");
             exportPara.SubscriberIds = domElements.cbbSubscriber.val().join(",");
+            exportPara.ProblemCases = jQuery('#cbbProblemCases option:selected').toArray().map(item => item.text).join(', ');
+            exportPara.SubscriberName = jQuery('#cbbSubscriber option:selected').toArray().map(item => item.text).join(', ');
 
             dataTable
                 ? dataTable.ajax.reload(null, true)
@@ -60,7 +64,7 @@
                     domElements.btnGenerate.prop('disabled', true);
                 },
                 dataFilter: function (response) {
-                      return response;
+                    return response;
                 },
                 complete: function () {
                     domElements.tblProblemCasesReport.find('tbody').removeClass('loading');
@@ -110,13 +114,13 @@
                 { data: obj => obj.SubscriberName },
                 { data: obj => obj.RobotToString },
                 { data: obj => obj.SuspiciousAssociationToString },
-                { data: obj => obj.ProPunterToString}
+                { data: obj => obj.ProPunterToString }
             ]
         });
     }
 
     var ExportExcel = function () {
-          common.downloadFilePostMethod(common.modifyRelativeUrl("ProblemCaseMonitor/ExportProblemCases"), exportPara);
+        common.downloadFilePostMethod(common.modifyRelativeUrl("ProblemCaseMonitor/ExportProblemCases"), exportPara);
     };
 
     function SetRestrictFromDate() {
@@ -131,7 +135,7 @@
         domElements.dpkToDate
             .datepicker("option", "minDate", fromDateValue)
             .datepicker("option", "maxDate", moment(fromDateValue).add(1, "year").toDate());
-    }  
+    }
 
     function Initial() {
         domElements.dpkFromDate
@@ -180,7 +184,7 @@
     }
 
     $(document).ready(function () {
-        Initial();        
+        Initial();
     });
 }
 

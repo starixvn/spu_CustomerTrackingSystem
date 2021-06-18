@@ -1,7 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement
 {
     using Fanex.Data;
-    using Fanex.NAP.CTS.Core.ExportExcel;
     using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Criteria.ProblemCaseMonitor;
     using Fanex.NAP.CTS.Model.ProblemCaseMonitor;
@@ -13,6 +12,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public class ProblemCaseMonitorService : IProblemCaseMonitorService
     {
@@ -52,8 +52,9 @@
             var writer = new ExcelTemplateWriter(templatePath, fileName, sheetName);
             writer.CopyRows(0, 1);
             FilterBlock(data, ref writer, filter);
-            //FillRowData(data, ref writer);
-            writer.SyncColumnsWidth(6);
+            FillHeader(ref writer);
+            FillRowData(data, ref writer);
+            writer.SyncColumnsWidth((int)PROBLEM_CASES_MONITOR.EXPORT_NUMBER_COLUMN);
             writer.ToBytes();
 
             return writer.ToBytes();
@@ -66,21 +67,18 @@
             IFont normalFont = writer.GetFont(11, 0);
             int lineCount = 0;
 
-            AppendBlockContent(ref contentRender, ref lineCount, "Subscriber", boldFont, filter.SubscriberIds, normalFont, "\n");
-            AppendBlockContent(ref contentRender, ref lineCount, "Problem Case", boldFont, filter.ProblemCaseIds, normalFont, "\n");
+            AppendBlockContent(ref contentRender, ref lineCount, "Problem Case", boldFont, filter.ProblemCases, normalFont, "\n");
+            AppendBlockContent(ref contentRender, ref lineCount, "Subscriber", boldFont, filter.SubscriberName, normalFont, "\n");
 
             IRichTextString contentRichTextString = contentRender.Render();
             IRichTextString[] contentRichTextArray = new IRichTextString[1];
             contentRichTextArray[0] = contentRichTextString;
-            writer.WriteRow(6, contentRichTextArray);
-            writer.SetRowHeight(1, 225 * lineCount); //PointInPixel
+            writer.WriteRow(1, contentRichTextArray);
+            writer.SetRowHeight(1, (int)PROBLEM_CASES_MONITOR.EXPORT_POINT_PIXEL * lineCount);
         }
 
         private void FillRowData(List<ProblemCasesMonitorModel> data, ref ExcelTemplateWriter writer)
         {
-            int index = 1;
-            var cellStyle = writer.GetCellStyle(0, 1);
-
             foreach (var item in data)
             {
                 var record = new object[]
@@ -92,8 +90,7 @@
                        item.ProPunterToString
                 };
 
-                var row = writer.CreateRow(index++, record, 5);
-                writer.SetCellStyle(row, cellStyle, 0, 5);
+                writer.WriteRow(3, record);
             }
         }
 
@@ -104,11 +101,9 @@
                 return;
             }
 
-            // Name
             TextBlock nameBlock = new TextBlock(name + ":  ", nameFont);
             content = content.AddText(nameBlock);
 
-            // Value
             TextBlock valueBlock = new TextBlock(value, valueFont);
             content = content.AddText(valueBlock);
 
@@ -122,8 +117,13 @@
 
         private int CountLine(string line)
         {
-            int charPerLine = 216; // Number char per line in filter block - use to calculate number of line
+            int charPerLine = (int)PROBLEM_CASES_MONITOR.EXPORT_NUMBER_CHAR_PER_LINE;
             return Convert.ToInt32(Math.Ceiling((float)line.Length / charPerLine));
+        }
+
+        private void FillHeader(ref ExcelTemplateWriter writer)
+        {
+            writer.CopyRows(2, 1);
         }
     }
 }

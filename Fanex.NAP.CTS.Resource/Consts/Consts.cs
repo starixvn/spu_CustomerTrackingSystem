@@ -30,7 +30,7 @@
         public const string FormatDecimalToString_2Places = "0.00";
         public const string FormatDecimalToString_Thousands2Places = "#,##0.00";
 
-        public const string CurrentSubscriberAssignmentsKey = "CurrentSubscriberAssignmentsKey";        
+        public const string CurrentSubscriberAssignmentsKey = "CurrentSubscriberAssignmentsKey";
         public const string IsMasterSubscriberAssignmentKey = "IsMasterSubscriberAssignmentKey";
         public const string IsPermissionCN88Key = "IsPermissionCN88Key";
         public const string SubscriberNameCN88 = "CN88";
@@ -114,7 +114,14 @@
         
         public enum STATIC_LIST : int
         {
-           PROBLEMCASE = 12
+            PROBLEMCASE = 12
+        }
+
+        public enum PROBLEM_CASES_MONITOR : int
+        {
+            EXPORT_NUMBER_COLUMN = 6,
+            EXPORT_NUMBER_CHAR_PER_LINE = 180,
+            EXPORT_POINT_PIXEL = 225
         }
     }
 }
