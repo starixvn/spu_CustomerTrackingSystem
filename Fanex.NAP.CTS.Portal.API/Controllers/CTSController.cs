@@ -792,7 +792,7 @@
                         IsRobot = x.Items.IsRobot,
                         IsSuspiciousAssociation = x.Items.IsSuspiciousAssociation,
                         IsProPunter = x.Items.IsProPunter
-                    }).ToList();
+                    }).OrderBy(x=>x.UserName).ToList();
                 }
 
                 return Json(problemCases);
