@@ -9,6 +9,6 @@
 
         IEnumerable<ProblemCasesMonitorModel> GetProblemCaseMonitor(string apiUrl, ProblemCasesMonitorFilterModel para);
 
-        byte[] ExportProblemCaseMonitor(List<ProblemCasesMonitorModel> data, string fileName, string templatePath, string sheetName);
+        byte[] ExportProblemCaseMonitor(List<ProblemCasesMonitorModel> data, string fileName, string templatePath, string sheetName, ProblemCasesMonitorFilterModel filter);
     }
 }

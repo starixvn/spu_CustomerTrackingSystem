@@ -247,6 +247,8 @@
     <Compile Include="ExportExcel\ExcelUtility\NPOIExtensions\RowExtensions.cs" />
     <Compile Include="ExportExcel\ExcelUtility\NPOIExtensions\SheetExtensions.cs" />
     <Compile Include="ExportExcel\ExcelUtility\NPOIExtensions\WorkbookExtensions.cs" />
+    <Compile Include="ExportExcel\ExcelUtility\RichTextExtensions\RichTextRender.cs" />
+    <Compile Include="ExportExcel\ExcelUtility\RichTextExtensions\TextBlock.cs" />
     <Compile Include="ExportExcel\FSExcelConfig.cs" />
     <Compile Include="Extentions\EnumExtensions.cs" />
     <Compile Include="Extentions\IEnumerableExtention.cs" />
