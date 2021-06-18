@@ -14,6 +14,7 @@
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.Subscriber;
+    using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.Service.Implement;    
     using Fanex.NAP.CTS.Service.Interface;
@@ -779,19 +780,22 @@
 
                 if (problemCaseData != null && problemCaseData.Any())
                 {
-                    var problemCaseDataGroup = problemCaseData.GroupBy(x => new { x.CTSCustID, x.UserName }, (key, g) => new
+                    var problemCaseDataGroup = problemCaseData.GroupBy(x => new { x.CTSCustID, x.UserName, x.SubscriberName }, (key, g) => new
                     {
-                        Items = g.Aggregate<ProblemCaseMonitorModel, ProblemCaseMonitorModel>(null, (acc, s) => acc + s)
+                        CTSCustID = key.CTSCustID,
+                        UserName = key.UserName,
+                        SubscriberName = key.SubscriberName,
+                        Items = g
                     });
 
                     problemCases = problemCaseDataGroup.Select(x => new ProblemCaseMonitorViewModel
                     {
-                        CTSCustId = x.Items.CTSCustID,
-                        UserName = x.Items.UserName,
-                        SubscriberName = x.Items.SubscriberName,
-                        IsRobot = x.Items.IsRobot,
-                        IsSuspiciousAssociation = x.Items.IsSuspiciousAssociation,
-                        IsProPunter = x.Items.IsProPunter
+                        CTSCustId = x.CTSCustID,
+                        UserName = x.UserName,
+                        SubscriberName = x.SubscriberName,
+                        IsRobot = x.Items.Any(y=>y.ProblemCaseID == Consts.ProblemCase_ItemID_Robot),
+                        IsSuspiciousAssociation = x.Items.Any(y => y.ProblemCaseID == Consts.ProblemCase_ItemID_SuspiciousAssociation),
+                        IsProPunter = x.Items.Any(y => y.ProblemCaseID == Consts.ProblemCase_ItemID_ProPunter)
                     }).OrderBy(x=>x.UserName).ToList();
                 }
 
