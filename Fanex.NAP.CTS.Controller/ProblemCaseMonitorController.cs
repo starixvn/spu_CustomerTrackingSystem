@@ -23,7 +23,7 @@
     [NapAuth(FunctionKey = FSFunctionKeys.ProblemCaseMonitor, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class ProblemCaseMonitorController : BaseController
     {
-        private const string ProblemCaseTemplate = @"~\Template\ProblemCaseTemplate.xlsx";
+        private const string ProblemCaseTemplate = @"~\Template\ProblemCaseTemplate.xls";
         private readonly IProblemCaseMonitorService _problemCaseMonitorService;
         private readonly ICommonService _commonService;
 

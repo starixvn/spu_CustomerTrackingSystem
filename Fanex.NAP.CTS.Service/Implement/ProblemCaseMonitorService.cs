@@ -72,7 +72,7 @@
             IRichTextString contentRichTextString = contentRender.Render();
             IRichTextString[] contentRichTextArray = new IRichTextString[1];
             contentRichTextArray[0] = contentRichTextString;
-            writer.WriteRow(3, contentRichTextArray);
+            writer.WriteRow(6, contentRichTextArray);
             writer.SetRowHeight(1, 225 * lineCount); //PointInPixel
         }
 
