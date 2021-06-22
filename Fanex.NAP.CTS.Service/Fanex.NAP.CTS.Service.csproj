@@ -44,8 +44,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExcelConfig\CustomerMonitor\CustomerMonitorConfig.cs" />
-    <Compile Include="ExcelConfig\CustomerMonitor\CustomerMonitorTicketDetailConfig.cs" />
     <Compile Include="ExcelConfig\Utilities.cs" />
     <Compile Include="Implement\AccountService.cs" />
     <Compile Include="Implement\AssociatedAccountService.cs" />
@@ -59,14 +57,10 @@
     <Compile Include="Implement\CustomerClassifyService.cs" />
     <Compile Include="Implement\SpecialCustomerClassService.cs" />
     <Compile Include="Implement\CustomerEvidenceService.cs" />
-    <Compile Include="Implement\CustomerMonitorService.cs" />
     <Compile Include="Implement\EvidenceService.cs" />
     <Compile Include="Implement\FlaggedAccountService.cs" />
-    <Compile Include="Implement\FraudCaseDetailsService.cs" />
-    <Compile Include="Implement\FraudSensorTaskService.cs" />
     <Compile Include="Implement\GraphService.cs" />
     <Compile Include="Implement\ImportEvidencesService.cs" />
-    <Compile Include="Implement\MatchMonitorService.cs" />
     <Compile Include="Implement\NotificationRecipientService.cs" />
     <Compile Include="Implement\NotificationService.cs" />
     <Compile Include="Implement\ProblemAccountMonitorService.cs" />
@@ -78,17 +72,12 @@
     <Compile Include="Interface\IAssociationReportService.cs" />
     <Compile Include="Interface\ICategoryService.cs" />
     <Compile Include="Interface\ICommonService.cs" />
-    <Compile Include="Interface\ICustomerMonitorService.cs" />
     <Compile Include="Interface\IEvidenceService.cs" />
     <Compile Include="Interface\IFlaggedAccountService.cs" />
-    <Compile Include="Interface\IFraudCaseDetailsService.cs" />
-    <Compile Include="Interface\IFraudCaseService.cs" />
-    <Compile Include="Interface\IFraudSensorTaskService.cs" />
     <Compile Include="Interface\IGraphService.cs" />
     <Compile Include="Interface\ICustomerEvidenceService.cs" />
     <Compile Include="Interface\IImportEvidencesService.cs" />
     <Compile Include="Interface\IManageSubscriberService.cs" />
-    <Compile Include="Interface\IMatchMonitorService.cs" />
     <Compile Include="Interface\INotificationRecipientService.cs" />
     <Compile Include="Interface\INotificationService.cs" />
     <Compile Include="Interface\IProbationManagementService.cs" />

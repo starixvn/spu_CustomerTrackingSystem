@@ -48,8 +48,7 @@
 
             BetListManager.RegisterRemotingRef(new CacheRef());
 
-            AreaRegistration.RegisterAllAreas();
-            //WebApiConfig.Register(GlobalConfiguration.Configuration);
+            AreaRegistration.RegisterAllAreas();            
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);

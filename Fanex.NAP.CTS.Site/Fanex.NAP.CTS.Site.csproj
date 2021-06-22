@@ -556,9 +556,6 @@
     <Content Include="Content\scss\pages\special-customer-class\special-customer-class.min.css">
       <DependentUpon>special-customer-class.css</DependentUpon>
     </Content>
-    <Content Include="Content\scss\pages\subscriber-assignment\subscriber-assignment.min.css">
-      <DependentUpon>subscriber-assignment.css</DependentUpon>
-    </Content>
     <Content Include="Content\scss\vendors\highcharts\highcharts.css">
       <DependentUpon>highcharts.scss</DependentUpon>
     </Content>
@@ -589,11 +586,6 @@
     <Content Include="Content\scss\vendors\popoto\vis\vis-network.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="images\chevron-down.png" />
-    <Content Include="images\graphrender\account.svg" />
-    <Content Include="images\graphrender\device_android.svg" />
-    <Content Include="images\graphrender\device_ios.svg" />
-    <Content Include="images\graphrender\device_pc.svg" />
-    <Content Include="images\graphrender\group.svg" />
     <Content Include="Scripts\Account\Associated\account-by-account.js" />
     <Content Include="Scripts\Account\Associated\graph.js" />
     <Content Include="Scripts\Account\BettingStatistic\turnover-by-bettype.js" />
@@ -978,9 +970,7 @@
     <Content Include="Scripts\ProblemAccountMonitor\detail.js" />
     <Content Include="Scripts\ProblemAccountMonitor\index.js" />
     <Content Include="Scripts\search.js" />
-    <Content Include="Scripts\Search\Account\search-account.js" />
     <Content Include="Scripts\SpecialCustomerClass\index.js" />
-    <Content Include="Scripts\SubscriberAssignment\subscriber.js" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -1067,10 +1057,6 @@
     <Content Include="Content\scss\pages\configurations\fraud-case.min.css">
       <DependentUpon>fraud-case.css</DependentUpon>
     </Content>
-    <Content Include="Content\scss\pages\customer-monitor\customer-monitor.css" />
-    <Content Include="Content\scss\pages\customer-monitor\customer-monitor.min.css">
-      <DependentUpon>customer-monitor.css</DependentUpon>
-    </Content>
     <Content Include="Content\scss\pages\dashboard\dashboard.css">
       <DependentUpon>dashboard.scss</DependentUpon>
     </Content>
@@ -1088,11 +1074,6 @@
     <Content Include="Content\scss\pages\login\login.css" />
     <Content Include="Content\scss\pages\login\login.min.css">
       <DependentUpon>login.css</DependentUpon>
-    </Content>
-    <Content Include="Content\scss\pages\subscriber-assignment\subscriber-assignment.css" />
-    <Content Include="Content\scss\pages\suspicious-customer\suspicious-customer.css" />
-    <Content Include="Content\scss\pages\suspicious-customer\suspicious-customer.min.css">
-      <DependentUpon>suspicious-customer.css</DependentUpon>
     </Content>
     <Content Include="Content\scss\pages\um\um.css" />
     <Content Include="Content\scss\vendors\bootstrap-theme.css" />
@@ -1340,12 +1321,8 @@
     <Content Include="Scripts\auto-grid.js" />
     <Content Include="Scripts\Bootstrap\bootstrap.js" />
     <Content Include="Scripts\Bootstrap\bootstrap.min.js" />
-    <Content Include="Scripts\CheckBetReport\check-bet-report.js" />
     <Content Include="Scripts\common.js" />
     <Content Include="Scripts\CryptoJS.js" />
-    <Content Include="Scripts\CustomerMonitor\CustomerDetails\customer-details.js" />
-    <Content Include="Scripts\CustomerMonitor\customer-monitor.js" />
-    <Content Include="Scripts\DailyDataCapture\daily-data-capture.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.min.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap4.js" />
@@ -1433,8 +1410,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="App_Data\Excel Template\MatchMonitor\template.xlsx" />
-    <Content Include="App_Data\Excel Template\FraudCase\DelayedGoal\template.xlsx" />
     <Content Include="Content\scss\abstracts\_mixins.scss" />
     <Content Include="Content\scss\abstracts\_variables.scss" />
     <Content Include="Content\scss\base\_scaffolding.scss" />
@@ -1461,18 +1436,6 @@
     <Content Include="Content\scss\vendors\DataTables\css\semanticui.scss" />
     <Content Include="Content\package-lock.json" />
     <Content Include="Content\package.json" />
-    <Content Include="App_Data\Excel Template\MatchMonitor\FraudCaseDetail\template.xlsx" />
-    <Content Include="App_Data\Excel Template\SuspiciousCustomer\template.xlsx" />
-    <Content Include="App_Data\Excel Template\MatchMonitor\FraudCaseDetail\ticket by ip.xlsx" />
-    <Content Include="App_Data\Excel Template\FraudCase\ScannedOfficeIP\template.xlsx" />
-    <Content Include="App_Data\Excel Template\Scanned Office IP\template.xlsx" />
-    <Content Include="App_Data\Excel Template\DailyDataCapture\template.xlsx" />
-    <Content Include="App_Data\Excel Template\Check Bet Report\template.xlsx" />
-    <Content Include="App_Data\Excel Template\CustomerMonitor\template.xlsx" />
-    <Content Include="App_Data\Excel Template\MatchMonitor\FraudCaseDetail\arbitrage.xlsx" />
-    <Content Include="App_Data\Excel Template\CustomerMonitor\CustomerDetails\template.xlsx" />
-    <Content Include="App_Data\Excel Template\FraudCase\ScannedOfficeIP\InternalAccountTemplate.xlsx" />
-    <Content Include="App_Data\Excel Template\MatchMonitor\FraudCaseDetail\flagged account.xlsx" />
     <Content Include="Areas\UserLogin\Views\Common\AccessDenied.cshtml" />
     <Content Include="Areas\UserLogin\Views\Common\Error.cshtml" />
     <Content Include="Areas\UserLogin\Views\Common\Offline.cshtml" />
@@ -1486,7 +1449,6 @@
     <Content Include="fonts\Fraud-Sensor.ttf" />
     <Content Include="fonts\Fraud-Sensor.woff" />
     <Content Include="Content\scss\components\_customize-select2.scss" />
-    <Content Include="Content\scss\pages\suspicious-customer\suspicious-customer.scss" />
     <Content Include="Content\scss\components\_customize-datepicker.scss" />
     <Content Include="Content\scss\components\_customize-toast.scss" />
     <Content Include="Content\scss\components\_loading.scss" />
@@ -1494,7 +1456,6 @@
     <Content Include="Content\scss\components\_accordion.scss" />
     <Content Include="Content\scss\pages\um\um.scss" />
     <Content Include="Content\scss\pages\errors\errors.scss" />
-    <Content Include="Content\scss\pages\customer-monitor\customer-monitor.scss" />
     <Content Include="Content\scss\MultipleSelect\jquery.multiselect.css" />
     <Content Include="Fanex.NAP.CTS.Site.ruleset" />
     <Content Include="Content\scss\pages\dashboard\dashboard.scss" />
@@ -1502,7 +1463,6 @@
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
-    <Content Include="Content\scss\pages\subscriber-assignment\subscriber-assignment.scss" />
     <Content Include="Content\scss\pages\evidence\evidence.scss" />
     <Content Include="Content\scss\vendors\popoto\popoto.min.css" />
     <Content Include="Content\scss\vendors\popoto\font\popoto\popoto.eot" />
@@ -1523,11 +1483,6 @@
     <None Include="Scripts\JQuery\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\JQuery\jquery-3.0.0-vsdoc.js" />
     <Content Include="Scripts\finalize.js" />
-    <Content Include="Scripts\FraudCase\daily-data-capture.js" />
-    <Content Include="Scripts\FraudCase\delayed-goal.js" />
-    <Content Include="Scripts\FraudCase\fraud-case.js" />
-    <Content Include="Scripts\FraudCase\scanned-office-account.js" />
-    <Content Include="Scripts\FraudCase\scanned-office-ip.js" />
     <Content Include="Scripts\i18n\af.js" />
     <Content Include="Scripts\i18n\ar.js" />
     <Content Include="Scripts\i18n\az.js" />
@@ -1661,12 +1616,8 @@
     <Content Include="Scripts\Popper\popper.min.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Scripts\ScannedOfficeIP\scanned-office-ip.js" />
     <Content Include="Scripts\select2.js" />
     <Content Include="Scripts\select2.min.js" />
-    <Content Include="Scripts\SubscriberAssignment\subscriber-assignment.js" />
-    <Content Include="Scripts\SuspiciousCustomerDetails\suspicious-customer-details.js" />
-    <Content Include="Scripts\SuspiciousCustomer\suspicious-customer.js" />
     <Content Include="Scripts\toast\jquery.toast.js" />
     <Content Include="Scripts\toogle.js" />
     <Content Include="Scripts\Account\TransactionHistory\form-ip-information.js" />
@@ -1676,11 +1627,6 @@
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Views\DailyDataCapture\Index.cshtml" />
-    <Content Include="Views\CheckBetReport\Index.cshtml" />
-    <Content Include="Views\CustomerMonitor\Index.cshtml" />
-    <Content Include="Views\CustomerMonitor\MatchNote.cshtml" />
-    <Content Include="Views\CustomerMonitor\CustomerDetails\Index.cshtml" />
     <Content Include="Scripts\MultipleSelect\jquery.multiselect.js" />
     <Content Include="Views\Evidence\FormException.cshtml" />
     <Content Include="Views\Account\Associated\AccountByAccount.cshtml" />
@@ -1715,7 +1661,6 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\MatchMonitor\Index.cshtml" />
     <Content Include="Scripts\umd\popper.min.js.map" />
     <Content Include="Scripts\umd\popper.js.map" />
     <Content Include="Scripts\umd\popper-utils.min.js.map" />
@@ -1735,7 +1680,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Views\Shared\_Menu.cshtml" />
-    <Content Include="Views\FraudCase\DelayedGoal\Dialog.cshtml" />
     <Content Include="WebConfigs\Web.AppSettings.PRO.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1762,17 +1706,6 @@
     <Content Include="WebConfigs\Web.UAT.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Views\SuspiciousCustomer\Index.cshtml" />
-    <Content Include="Views\SuspiciousCustomerDetails\Index.cshtml" />
-    <Content Include="Views\SuspiciousCustomer\Note.cshtml" />
-    <Content Include="Views\FraudCase\ScannedOfficeIP\Dialog.cshtml" />
-    <Content Include="Views\ScannedOfficeIpReport\Index.cshtml" />
-    <Content Include="Views\FraudCase\DailyDataCapture\Dialog.cshtml" />
-    <Content Include="Views\FraudCase\Index.cshtml" />
-    <Content Include="Views\FraudCase\ScannedOfficeIP\InternalAccountDialog.cshtml" />
-    <Content Include="Views\SubscriberAssignment\Index.cshtml" />
-    <Content Include="Views\SearchAccount\Index.cshtml" />
-    <Content Include="Views\SearchDevice\Index.cshtml" />
     <Content Include="Views\Evidence\FormInformationEvidence.cshtml" />
     <Content Include="Views\Evidence\FormRetractEvidence.cshtml" />
     <Content Include="Views\Home\Search.cshtml" />
@@ -1804,10 +1737,6 @@
     <ProjectReference Include="..\Fanex.NAP.CTS.Model\Fanex.NAP.CTS.Model.csproj">
       <Project>{5ce0ba40-0a37-4c89-a33b-d61c7944be08}</Project>
       <Name>Fanex.NAP.CTS.Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Fanex.NAP.CTS.Queue\Fanex.NAP.CTS.Queue.csproj">
-      <Project>{feffed8a-7e97-4b9a-baed-06ef734fc456}</Project>
-      <Name>Fanex.NAP.CTS.Queue</Name>
     </ProjectReference>
     <ProjectReference Include="..\Fanex.NAP.CTS.Resource\Fanex.NAP.CTS.Resource.csproj">
       <Project>{ae6c4b2a-8cd3-433a-8f42-d8272390cf61}</Project>

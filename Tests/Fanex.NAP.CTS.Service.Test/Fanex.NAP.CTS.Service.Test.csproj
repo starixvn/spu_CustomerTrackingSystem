@@ -223,7 +223,6 @@
     <Compile Include="DbSetting\DbSettingProviderCollection.cs" />
     <Compile Include="DbSetting\DbSettingProviderFixture.cs" />
     <Compile Include="Implement\AccountServiceTest.cs" />
-    <Compile Include="Implement\CustomerMonitorServiceTest.cs" />
     <Compile Include="Implement\NotificationRecipientServiceTest.cs" />
     <Compile Include="Implement\TransactionServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
