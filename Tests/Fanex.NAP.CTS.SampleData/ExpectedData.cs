@@ -5,7 +5,7 @@
     public static class ExpectedData
     {        
         private static AccountDetail expectedAccountDetail;        
-
+        private static CustomerDetailsInfo expectedCustomerDetailsInfo;
 
         public static AccountDetail ExpectedAccountDetail
         {

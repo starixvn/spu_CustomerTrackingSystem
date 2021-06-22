@@ -36,9 +36,8 @@
                       "~/Content/scss/pages/dashboard/dashboard.min.css"));
 
             RegisterCTSCoreBundles(bundles);
-            RegisterSearchBoxBundles(bundles);
-
-            RegisterNotificationBundles(bundles);
+            RegisterSearchBoxBundles(bundles);           
+            RegisterNotificationBundles(bundles);            
 
             RegisterMatchMonitorBundles(bundles);
             RegisterMatchMonitorDetailBundles(bundles);            
