@@ -233,25 +233,7 @@
     <Compile Include="ProblemAccountMonitor\ProblemAccountMonitorGetCriteria.cs" />
     <Compile Include="ProblemAccountMonitor\SportListGetCriteria.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ScannedOfficeIP\TicketFromOfficeIpGetCriteria.cs" />
     <Compile Include="SubscriberAssignment\GetAllSubscriberCriteria.cs" />
-    <Compile Include="SubscriberAssignment\SubscribersUpdateCriteria.cs" />
-    <Compile Include="SuspiciousCustomerDetails\SuspiciousCustomerDetailsGeneralCriteria.cs" />
-    <Compile Include="SuspiciousCustomerDetails\SuspiciousCustomerDetailsStatisticsGetCriteria.cs" />
-    <Compile Include="SuspiciousCustomerDetails\SuspiciousCustomerDetailsViolatedTicketGetCriteria.cs" />
-    <Compile Include="SuspiciousCustomer\DataTableAjaxPostCriteria.cs" />
-    <Compile Include="SuspiciousCustomer\SuspiciousCustomerAssigneeGetCriteria.cs" />
-    <Compile Include="SuspiciousCustomer\SuspiciousCustomerAssigneeUpdateCriteria.cs" />
-    <Compile Include="SuspiciousCustomer\SuspiciousCustomerGetCriteria.cs" />
-    <Compile Include="SuspiciousCustomer\SuspiciousCustomerLogNoteGetCriteria.cs" />
-    <Compile Include="SuspiciousCustomer\SuspiciousCustomerNoteDeleteCriteria.cs" />
-    <Compile Include="SuspiciousCustomer\SuspiciousCustomerNoteGetCriteria.cs" />
-    <Compile Include="SuspiciousCustomer\SuspiciousCustomerNoteInsertCriteria.cs" />
-    <Compile Include="SuspiciousCustomer\SuspiciousCustomerReportGetCriteria.cs" />
-    <Compile Include="SuspiciousCustomer\SuspiciousCustomerUpdateCriteria.cs" />
-    <Compile Include="SuspiciousInfo\SuspiciousInfoGetCriteria.cs" />
-    <Compile Include="SuspiciousInfo\SuspiciousInfoUpdateCriteria.cs" />
-    <Compile Include="SuspiciousInfo\SuspicousCustomerCurrencyGetCriteria.cs" />
     <Compile Include="SyncCustomerToMainDb\SyncCustomerClassToMainDbCriteria.cs" />
   </ItemGroup>
   <ItemGroup>

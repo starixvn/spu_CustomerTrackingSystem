@@ -6,7 +6,6 @@
     using Fanex.NAP.CTS.Criteria.CustomerMonitor.CustomerDetails;
     using Fanex.NAP.CTS.Criteria.DailyDataCapture;
     using Fanex.NAP.CTS.Criteria.FraudCase.DelayedGoal;
-    using Fanex.NAP.CTS.Criteria.SuspiciousCustomer;
 
     public static class ExpectedCriteria
     {
@@ -14,9 +13,7 @@
         private static UpdateNoteCriteria expectedUpdateNoteCriteria;
         private static GetCustomerTicketsCriteria expectedGetCustomerTicketsCriteria;
         private static CheckBetReportGetCriteria expectedCheckBetReportGetCriteria;
-        private static CheckBetReportUpdateNoteCriteria expectedCheckBetReportUpdateNoteCriteria;
-        private static SuspiciousCustomerReportGetCriteria expectedSuspiciousCustomerReportGetCriteria;
-        private static DataTableAjaxPostCriteria expectedDataTableAjaxPostCriteria;
+        private static CheckBetReportUpdateNoteCriteria expectedCheckBetReportUpdateNoteCriteria;       
         private static DailyDataGetCriteria expectedDailyDataGetCriteria;
         private static DelayGoalAssociationAccountInsertCriteria expectedDelayGoalAssociationAccountInsertCriteria;
 
@@ -68,27 +65,7 @@
 
                 return expectedCheckBetReportUpdateNoteCriteria;
             }
-        }
-
-        public static SuspiciousCustomerReportGetCriteria ExpectedSuspiciousCustomerReportGetCriteria
-        {
-            get
-            {
-                expectedSuspiciousCustomerReportGetCriteria = expectedSuspiciousCustomerReportGetCriteria ?? GenerateSampleSuspiciousCustomerReportGetCriteria();
-
-                return expectedSuspiciousCustomerReportGetCriteria;
-            }
-        }
-
-        public static DataTableAjaxPostCriteria ExpectedDataTableAjaxPostCriteria
-        {
-            get
-            {
-                expectedDataTableAjaxPostCriteria = expectedDataTableAjaxPostCriteria ?? GenerateSampleDataTableAjaxPostCriteria();
-
-                return expectedDataTableAjaxPostCriteria;
-            }
-        }
+        }       
 
         public static DailyDataGetCriteria ExpectedDailyDataGetCriteria
         {
@@ -151,43 +128,7 @@
                 Note = "note",
                 TransId = 106484632547,
                 UserId = 8
-            };
-
-        private static SuspiciousCustomerReportGetCriteria GenerateSampleSuspiciousCustomerReportGetCriteria()
-            => new SuspiciousCustomerReportGetCriteria
-            {
-                AssigneeId = null,
-                Classification = 0,
-                FraudCaseId = 0,
-                FromDate = new DateTime(2019, 11, 1),
-                ToDate = new DateTime(2019, 11, 22),
-                IsVerified = null,
-                IsExportExcel = false,
-                IsShowSpecialCurrencies = false,
-                PageIndex = 1,
-                PageSize = 50,
-                TotalItems = 0,
-                Username = null
-            };       
-
-        private static DataTableAjaxPostCriteria GenerateSampleDataTableAjaxPostCriteria()
-            => new DataTableAjaxPostCriteria
-            {
-                AssigneeId = null,
-                Classification = 0,
-                FraudCaseId = 0,
-                FromDate = new DateTime(2019, 11, 1),
-                ToDate = new DateTime(2019, 11, 22),
-                IsVerified = null,
-                IsExportExcel = false,
-                IsShowSpecialCurrencies = false,
-                PageIndex = 1,
-                PageSize = 50,
-                TotalItems = 0,
-                Username = null,
-                length = 50,
-                start = 1
-            };
+            };        
 
         private static DailyDataGetCriteria GenerateSampleDailyDataGetCriteria()
             => new DailyDataGetCriteria

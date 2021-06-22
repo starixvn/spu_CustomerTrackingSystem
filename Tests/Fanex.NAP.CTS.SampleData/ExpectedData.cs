@@ -1,27 +1,15 @@
 ﻿namespace Fanex.NAP.CTS.SampleData
 {
-    using Fanex.NAP.CTS.Model.Subscriber;
     using Fanex.NAP.CTS.ViewModel.Account;
     using Fanex.NAP.CTS.ViewModel.CustomerMonitor.CustomerDetails;
     using System;
     using System.Collections.Generic;
 
     public static class ExpectedData
-    {
-        private static List<SubscriberAssignment> expectedSubscriberAssignments;
+    {        
         private static AccountDetail expectedAccountDetail;
         private static CustomerDetailsInfo expectedCustomerDetailsInfo;
-
-        //public static List<SubscriberAssignment> ExpectedSubscriberAssignments
-        //{
-        //    get
-        //    {
-        //        expectedSubscriberAssignments = expectedSubscriberAssignments ?? GenerateSampleSubscriberAssignments();
-
-        //        return expectedSubscriberAssignments;
-        //    }
-        //}
-
+    
         public static AccountDetail ExpectedAccountDetail
         {
             get

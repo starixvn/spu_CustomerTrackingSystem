@@ -242,21 +242,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountControllerTest.cs" />
-    <Compile Include="CheckBetReportControllerTest.cs" />
     <Compile Include="CustomerMonitorControllerTest.cs" />
-    <Compile Include="DailyDataCaptureControllerTest.cs" />
     <Compile Include="DbSetting\DbSettingProviderCollection.cs" />
     <Compile Include="DbSetting\DbSettingProviderFixture.cs" />
     <Compile Include="Fake\FakeSession.cs" />
     <Compile Include="Fake\FakeControllerContext.cs" />
     <Compile Include="Fake\FakeHttpContext.cs" />
-    <Compile Include="FraudCaseControllerTest.cs" />
     <Compile Include="HomeControllerTest.cs" />
-    <Compile Include="ScannedOfficeIpReportControllerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SubscriberAssignmentControllerTest.cs" />
-    <Compile Include="SuspiciousCustomerControllerTest.cs" />
-    <Compile Include="SuspiciousCustomerDetailsControllerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

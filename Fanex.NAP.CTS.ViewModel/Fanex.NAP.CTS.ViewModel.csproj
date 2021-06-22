@@ -92,10 +92,8 @@
     <Compile Include="AssociationReport\AssociationViewModel.cs" />
     <Compile Include="Common\SubscriberGroupViewModel.cs" />
     <Compile Include="Common\SubscriberViewModel.cs" />
-    <Compile Include="CheckBetReport\CheckBetTicket.cs" />
     <Compile Include="CustomerMonitor\CustomerDetails\CustomerDetailsInfo.cs" />
     <Compile Include="CustomerMonitor\CustomerDetails\TicketDetails.cs" />
-    <Compile Include="DailyDataMonitor\CapturedMatch.cs" />
     <Compile Include="Evidence\Evidence.cs" />
     <Compile Include="Evidence\GeneralInformationPlaceEvidenceByAccount.cs" />
     <Compile Include="Evidence\InformationEvidenceByAccount.cs" />
@@ -167,9 +165,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpecialCustomerClass\CustomerClassViewModel.cs" />
     <Compile Include="SpecialCustomerClass\ResultInsertRemoveViewModel.cs" />
-    <Compile Include="SuspiciousCustomerDetails\CustomerDetailsViewModel.cs" />
-    <Compile Include="SuspiciousCustomerDetails\TicketDetails.cs" />
-    <Compile Include="SuspiciousCustomer\SuspiciousCustomerNoteView.cs" />
     <Compile Include="Account\TransactionHistory\IPInformation.cs" />
     <Compile Include="AssociatedAccountMonitor\ValidatedAcssociatedAccountViewModel.cs" />
   </ItemGroup>
