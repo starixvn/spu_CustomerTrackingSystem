@@ -702,7 +702,7 @@
                             CTSCustID = cust.CTSCustId,
                             AssStatus = 0,
                             IsAssReport = 1,
-                            AssCreatedFrom = DateTime.Now.AddMonths(-1),
+                            AssCreatedFrom = DateTime.Now.AddMonths(-6),
                             AssCreatedTo = DateTime.Now,
                             AccountStatuses = new List<int>(),
                             SubscriberIDs = new List<int>(),
