@@ -702,7 +702,7 @@
                             CTSCustID = cust.CTSCustId,
                             AssStatus = 0,
                             IsAssReport = 1,
-                            AssCreatedFrom = DateTime.Now.AddMonths(-6),
+                            AssCreatedFrom = DateTime.Now.AddYears(-1),
                             AssCreatedTo = DateTime.Now,
                             AccountStatuses = new List<int>(),
                             SubscriberIDs = new List<int>(),
@@ -725,8 +725,9 @@
                 }
                 catch (Exception ex)
                 {
-                    LogService.Error("GetAssociationByCustID failed: " + ex.Message + ex.StackTrace + "\n"
-                            + ex.InnerException.Message + ex.InnerException.Source + ((Neo4j.Driver.Neo4jException)ex.InnerException).Code
+                    LogService.Error("GetAssociationPerType failed: " + ex.Message + ex.StackTrace + "\n"
+                            + ex.InnerException.Message + "\n" 
+                            + ex.InnerException.Source + ((Neo4j.Driver.Neo4jException)ex.InnerException).Code
                             + ex.InnerException.StackTrace);
                 }
             }
