@@ -13,5 +13,7 @@ namespace Fanex.NAP.CTS.Model.MatchMonitor
         public string ListCustID { get; set; }
 
         public string ReasonGroupName { get; set; }
+
+        public int TotalScore { get; set; }
     }
 }

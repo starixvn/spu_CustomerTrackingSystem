@@ -101,7 +101,7 @@
             {
                 if (para != null)
                 {
-                    matchReasonGroup = _matchMonitorService.GetMatchReasonGroup(para.EventDate, para.MatchID, para.BetTypeID)?.OrderBy(c => c.IsHedging).ToList();
+                    matchReasonGroup = _matchMonitorService.GetMatchReasonGroup(para.EventDate, para.MatchID, para.BetTypeID)?.OrderBy(c => c.IsHedging).ThenBy(c=>c.TotalScore).ToList();
                     matchScore = _matchMonitorService.GetMatchScore(para.EventDate, para.MatchID, para.BetTypeID);
                     MappingReasonGroupName(ref matchReasonGroup);
 
@@ -109,7 +109,7 @@
                     ViewBag.MatchID = para.MatchID;
                     ViewBag.BetTypeID = para.BetTypeID;
                     ViewBag.MatchName = para.MatchName;
-                    ViewBag.IsLiveDefault = (para.EventGroup == 2 || para.EventGroup == 4) ? true : false;
+                    ViewBag.IsLiveDefault = (para.EventGroup == 2 || para.EventGroup == 4);
                     ViewBag.ReasonGroup = matchReasonGroup;
                     ViewBag.MatchScore = matchScore;
                     ViewBag.IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
