@@ -273,8 +273,8 @@
                 return custReasonGroup;
             }
 
-            var reasonGroupFilter = reasonGroupKeysFilter.Join(matchReasonGroups, filter => filter.GroupID & filter.TotalScore,
-                                                                             reasonGroup => reasonGroup.GroupID & reasonGroup.TotalScore, (filter, reasonGroup) => reasonGroup);
+            var reasonGroupFilter = reasonGroupKeysFilter.Join(matchReasonGroups, filter => (filter.GroupID, filter.TotalScore),
+                                                                             reasonGroup => (reasonGroup.GroupID, reasonGroup.TotalScore), (filter, reasonGroup) => reasonGroup);
 
             if (reasonGroupFilter != null && reasonGroupFilter.Any())
             {
@@ -332,7 +332,8 @@
             {
                 var transGroup = mappingTransGroupReason.Where(c => c.TransId == ticketDetail.TransId);
                 var custGroupReason = mappingCustGroupReason.Where(c => c.CustID == ticketDetail.CustId);
-                var reasonGroupName = custGroupReason.Join(transGroup, c => c.GroupID & c.TotalScore, t => t.GroupID & t.TotalScore, (c, t) => c).FirstOrDefault().ReasonGroupName;
+                var reasonGroupName = custGroupReason.Join(transGroup, c => (c.GroupID, c.TotalScore), 
+                                                                       t => (t.GroupID, t.TotalScore), (c, t) => c).FirstOrDefault().ReasonGroupName;
 
                 return string.IsNullOrEmpty(reasonGroupName) ? reasonGroup : reasonGroupName;
             }
