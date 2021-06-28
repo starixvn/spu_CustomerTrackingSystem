@@ -9,5 +9,7 @@
         public int GroupID { get; set; }
 
         public string ReasonGroupName { get; set; }
+
+        public int TotalScore { get; set; }
     }
 }

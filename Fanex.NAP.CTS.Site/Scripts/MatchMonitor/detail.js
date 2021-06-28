@@ -23,7 +23,7 @@
                 BetTypeID: function () { return domElements.betTypeID; },
                 LiveIndicator: function () { return domElements.cbbLiveIndicator.val(); },
                 ListScore: function () { return domElements.cbbMatchScore.val().join(); },
-                ListReasonGroup: function () { return domElements.cbbReasonGroup.val().join(); }
+                ListReasonGroup: function () { return "[" + domElements.cbbReasonGroup.val().join() + "]"; }
             },
             beforeSend: function () {
                 domElements.firsttblMonitor.find('tbody').addClass('loading');

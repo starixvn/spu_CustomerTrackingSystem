@@ -11,5 +11,7 @@ namespace Fanex.NAP.CTS.Model.MatchMonitor
         public Int64 GroupID { get; set; }
 
         public bool IsHedging { get; set; }
+
+        public int TotalScore { get; set; }
     }
 }

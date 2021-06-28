@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Newtonsoft.Json;
 
 namespace Fanex.NAP.CTS.Model.MatchMonitor
 {
@@ -15,5 +13,14 @@ namespace Fanex.NAP.CTS.Model.MatchMonitor
         public string ReasonGroupName { get; set; }
 
         public int TotalScore { get; set; }
+
+        public string Key {
+
+            get => JsonConvert.SerializeObject(new MatchReasonGroupKeyModel  
+            {
+                GroupID =  GroupID, 
+                TotalScore = TotalScore 
+            });
+        }
     }
 }
