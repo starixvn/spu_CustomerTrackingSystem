@@ -114,6 +114,7 @@
     }
 
     function InitialSecondDetailGird() {
+
         return domElements.secondtblMonitor.DataTable({
             serverSide: false,
             dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
@@ -183,20 +184,20 @@
 
 
     function matchHeightTable() {
-        var i = 0;
-        var items = document.querySelectorAll(".table");
-        var itemsHeight = [];
-        for (i = 0; i < items.length; i++) {
-            itemsHeight.push(items[i].offsetHeight);
-        }
-        var maxHeight = Math.max(...itemsHeight);
-        for (i = 0; i < items.length; i++) {
+        setTimeout(function () {
+            var i = 0;
+            var items = document.querySelectorAll(".table");
+            var itemsHeight = [];
+            for (i = 0; i < items.length; i++) {
+                itemsHeight.push(items[i].offsetHeight);
+            }
+            var maxHeight = Math.max(...itemsHeight);
+            for (i = 0; i < items.length; i++) {
 
-            items[i].style.height = maxHeight + "px";
-        }
+                items[i].style.height = maxHeight + "px";
+            }
+        }, 250);
     }
-
-
 
     function Initial() {
         domElements.cbbMatchScore.multiselect({
@@ -220,8 +221,9 @@
         InitialSecondDetailGird();
 
         domElements.btnGenerateDetail.on('click', function () {
-            matchHeightTable();
+  
             GetMatchMonitorDetail();
+            matchHeightTable();
         })
     }
 
