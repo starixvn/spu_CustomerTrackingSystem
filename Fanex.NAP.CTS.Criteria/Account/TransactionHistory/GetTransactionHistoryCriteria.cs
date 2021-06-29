@@ -15,11 +15,11 @@
         [SpParam(SqlParamName = "ip_CTSCustId")]
         public long CTSCustId { get; set; }
 
-        [SpParam(SqlParamName = "ip_PageSize")]
-        public int PageSize { get; set; }
+        [SpParam(SqlParamName = "ip_Take")]
+        public int Take { get; set; }
 
-        [SpParam(SqlParamName = "ip_PageNumber")]
-        public int PageNumber { get; set; }
+        [SpParam(SqlParamName = "ip_Skip")]
+        public int Skip { get; set; }
 
         [SpParam(SqlParamName = "op_TotalItem")]
         public int TotalItem { get; set; }

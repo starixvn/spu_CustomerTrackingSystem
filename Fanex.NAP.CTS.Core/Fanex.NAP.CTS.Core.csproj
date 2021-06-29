@@ -242,6 +242,7 @@
     <Compile Include="ExportExcel\ExcelStream.cs" />
     <Compile Include="ExportExcel\ExcelUtilities.cs" />
     <Compile Include="ExportExcel\FSExcelConfig.cs" />
+    <Compile Include="Extentions\EnumExtensions.cs" />
     <Compile Include="Extentions\IEnumerableExtention.cs" />
     <Compile Include="Helpers\Api\ApiHelper.cs" />
     <Compile Include="Helpers\AppSettings.cs" />
@@ -254,6 +255,7 @@
     <Compile Include="Service\IMailStationService.cs" />
     <Compile Include="Service\MailStationService.cs" />
     <Compile Include="Utilities\AppSession.cs" />
+    <Compile Include="Utilities\Flagged.cs" />
     <Compile Include="Utilities\PermissionService.cs" />
     <Compile Include="Utilities\SessionManager.cs" />
     <Compile Include="Utilities\ConfigSettings.cs" />

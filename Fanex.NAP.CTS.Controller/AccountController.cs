@@ -1224,7 +1224,7 @@
                 ActionResult = x.ActionResult,
                 BrowserName = x.BrowserName,
                 DeviceId = x.DeviceId,
-                Flagged = x.Flagged,
+                Flagged = ((Flagged)x.Flagged).GetStringSlow(),
                 Ip = isViewIPPermission ? x.Ip : string.Empty,
                 IpId = 0,
                 OSName = x.OSName,
