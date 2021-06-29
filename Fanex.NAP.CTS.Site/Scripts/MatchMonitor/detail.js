@@ -181,6 +181,30 @@
         });
     }
 
+
+    function matchHeightTable() {
+        var i = 0;
+        var items = document.querySelectorAll(".table");
+        var itemsHeight = [];
+
+        console.log(items);
+        console.log(itemsHeight);
+
+        for (i = 0; i < items.length; i++) {
+
+            itemsHeight.push(items[i].offsetHeight);
+        }
+
+        var maxHeight = Math.max(...itemsHeight);
+
+        for (i = 0; i < items.length; i++) {
+
+            items[i].style.height = maxHeight + "px";
+        }
+    }
+
+
+
     function Initial() {
         domElements.cbbMatchScore.multiselect({
             menuWidth: 260,
@@ -197,10 +221,13 @@
 
         });
 
+       
+
         InitialFirstDetailGird();
         InitialSecondDetailGird();
 
         domElements.btnGenerateDetail.on('click', function () {
+            matchHeightTable();
             GetMatchMonitorDetail();
         })
     }
