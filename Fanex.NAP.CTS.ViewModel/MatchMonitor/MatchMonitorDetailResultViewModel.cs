@@ -46,7 +46,7 @@
             {
                 if (!string.IsNullOrEmpty(BetTeam))
                 {
-                    return string.Equals(BetTeam, "a", StringComparison.OrdinalIgnoreCase) ? true : false;
+                    return string.Equals(BetTeam, "h", StringComparison.OrdinalIgnoreCase);
                 }
 
                 return true;
