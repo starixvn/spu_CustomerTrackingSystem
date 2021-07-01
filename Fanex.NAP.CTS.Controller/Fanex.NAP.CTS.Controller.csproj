@@ -175,6 +175,7 @@
   <ItemGroup>
     <Compile Include="AccountController.cs" />
     <Compile Include="AssociatedAccountMonitorController.cs" />
+    <Compile Include="AssociationDetectionController.cs" />
     <Compile Include="AssociationReportController.cs" />
     <Compile Include="BaseController.cs" />
     <Compile Include="ConfigurationsController.cs" />

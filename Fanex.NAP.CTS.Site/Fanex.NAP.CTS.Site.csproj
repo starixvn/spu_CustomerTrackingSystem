@@ -475,6 +475,12 @@
     <Content Include="Content\scss\pages\associated-account-monitor\associated-account-monitor.min.css">
       <DependentUpon>associated-account-monitor.css</DependentUpon>
     </Content>
+    <Content Include="Content\scss\pages\association-detection\association-detection.css">
+      <DependentUpon>association-detection.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\scss\pages\association-detection\association-detection.min.css">
+      <DependentUpon>association-detection.css</DependentUpon>
+    </Content>
     <Content Include="Content\scss\pages\association-report\association-report.css">
       <DependentUpon>association-report.scss</DependentUpon>
     </Content>
@@ -498,7 +504,7 @@
     <Content Include="Content\scss\pages\associated-account-monitor\associated-account-monitor.scss" />
     <Content Include="Content\scss\pages\common\maintenance.scss" />
     <Content Include="Content\scss\components\_toggle-switch.scss" />
-    <Content Include="Content\scss\fonts\Fraud-Sensor\fonts\CTS.eot" />
+    <Content Include="Content\scss\pages\association-detection\association-detection.scss" />
     <Content Include="Content\scss\fonts\Fraud-Sensor\fonts\CTS.woff" />
     <Content Include="Content\scss\fonts\Fraud-Sensor\fonts\CTS.ttf" />
     <None Include="Content\scss\pages\latest-transaction\latest-transaction.scss" />
@@ -604,6 +610,7 @@
     <Content Include="Scripts\Account\BettingStatistic\sport-statistic-scripts.js" />
     <Content Include="Scripts\Account\BettingStatistic\winlost-statistic-scripts.js" />
     <Content Include="Scripts\AssociatedAccountMonitor\index.js" />
+    <Content Include="Scripts\AssociationDetection\index.js" />
     <Content Include="Scripts\AssociationReport\detail.js" />
     <Content Include="Scripts\AssociationReport\index.js" />
     <Content Include="Scripts\DataTables_New\AutoFill-2.3.4\css\autoFill.bootstrap.css" />
@@ -1005,7 +1012,7 @@
     <Content Include="Views\Account\Associated\MatchBettingPattern.cshtml" />
     <Content Include="Views\Account\Associated\IPAssociation.cshtml" />
     <Content Include="Views\LatestTransaction\Index.cshtml" />
-    <Content Include="Views\MatchMonitor\Detail.cshtml" />
+    <Content Include="Views\AssociationDetection\Index.cshtml" />
     <Content Include="Views\MatchMonitor\Index.cshtml" />
     <Content Include="Views\ProblemCaseMonitor\Index.cshtml" />
     <Content Include="Template\ProblemCaseTemplate.xls">

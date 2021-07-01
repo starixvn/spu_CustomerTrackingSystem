@@ -18,6 +18,7 @@
     using Fanex.NAP.CTS.ViewModel.Common;
     using Newtonsoft.Json;
     using Fanex.NAP.CTS.Model.Common;
+    using Fanex.NAP.CTS.Service.Interface;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.EvidenceManagement, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -27,6 +28,8 @@
 
         private readonly IImportEvidencesService _importEvidencesService;
 
+        private readonly ICommonService _commonService;
+
         private readonly ICustomerEvidenceService _customerEvidenceService;
 
         public override string BaseControllerName { get => Consts.MenuItemController; }
@@ -35,6 +38,7 @@
         {
             _importEvidencesService = new ImportEvidencesService();
             _customerEvidenceService = new CustomerEvidenceService();
+            _commonService = new CommonService();
         }
 
         public ActionResult Index()
@@ -199,7 +203,7 @@
                 var noDuplicateToUpperList = userNameToUpperList.Distinct();
                 var noDuplicateToUpperUserName = string.Join(",", noDuplicateToUpperList);
 
-                var validatedList = _importEvidencesService.ValidateUsernames(noDuplicateToUpperUserName, out isException);
+                var validatedList = _commonService.ValidateUsernames(noDuplicateToUpperUserName, out isException);
                 var validatedToUpperList = validatedList.Select(x => new ValidateUserNameModel
                 {
                     CTSCustID = x.CTSCustID,
@@ -255,7 +259,7 @@
 
                 var newUserNames = string.Join(",", userNameList.Distinct());
 
-                var validatedList = _importEvidencesService.ValidateUsernames(newUserNames, out isException);
+                var validatedList = _commonService.ValidateUsernames(newUserNames, out isException);
 
                 insertResult.ValidatedResult = GenerateValidatedViewModel(userNames, validatedList, isException);
                 insertResult.ValidatedResult.UserNameDuplicatedList = duplicateList;

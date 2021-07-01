@@ -1,0 +1,85 @@
+﻿@import "../../abstracts/variables";
+@import "../../abstracts/mixins";
+@import "../../components/popup";
+@import "../../components/loading";
+
+body {
+    font-family: $font-family;
+}
+
+.page-title {
+    position: fixed;
+    z-index: 99;
+    top: 6rem;
+    width: 100%;
+}
+
+.association-detection-report {
+
+    .association-detection-content {
+        margin: 1rem 1.6rem 1rem 1.6rem;
+
+        .group-control {
+            position: fixed;
+            top: 9rem;
+            left: 0;
+            z-index: 99;
+            width: 100%;
+            background: #fff;
+            padding: 1rem 1.6rem 0 1.6rem;
+
+            .title {
+                margin-bottom: -1.3rem;
+            }
+
+            .form-filter {
+                .box-username {
+                    max-width: 1280px;
+                    width: 1280px;
+                }
+            }
+        }
+
+        .table-report {
+            font-family: $font-family;
+
+            .table-association-detection {
+                width: 100% !important;
+                margin-top: 310px;
+
+                .loading {
+                    position: relative;
+
+                    &:after {
+                        content: '';
+                        position: absolute;
+                        left: 50%;
+                        top: 75%;
+                        border-radius: 50%;
+                        width: 2.4rem;
+                        height: 2.4rem;
+                        border: 0.25rem solid rgba(57, 110, 248, 0.2);
+                        border-top-color: rgba(57, 110, 248, 1);
+                        -webkit-animation: spin 1s infinite linear;
+                        animation: spin 1s infinite linear;
+                    }
+
+                    tr {
+                        opacity: .3;
+                    }
+                }
+
+                thead {
+                    tr:first-child {
+                        th {
+                            position: sticky;
+                            position: -webkit-sticky;
+                            top: 16rem;
+                            font-weight: 300;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

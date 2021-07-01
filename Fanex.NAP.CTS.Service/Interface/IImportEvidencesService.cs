@@ -19,9 +19,7 @@
         IEnumerable<RawAccountEvidenceModel> GetRawAccountEvidences();
 
         void InsertCustEvidenceFromFile(IEnumerable<ResultCheckAccountEvidenceModel> resultCheckAccountEvidenceList, string fileName, int userId, string fileErrorTemplate, bool isOverride);
-
-        IEnumerable<ValidateUserNameModel> ValidateUsernames(string userNames, out bool isException);
-
+                
         DBResult InsertAccountEvidencesQueue(string custEvidencesJson, int userId);
     }
 }
