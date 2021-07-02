@@ -6,11 +6,13 @@
 body {
     font-family: $font-family;
 }
+
 .page-title {
     position: sticky;
     top: 6rem;
-    z-index: 9999;
+    z-index: 9;
 }
+
 .association-detection-report {
 
     .association-detection-content {
@@ -30,8 +32,15 @@ body {
                     max-width: 1280px;
                     width: 100%;
                     padding: 0 !important;
-                    .btn-detect{
-                        margin : 0;
+
+                    .btn-detect {
+                        margin: 0;
+                        background-color: #396EF8;
+                        color: #fff;
+
+                        &:disabled {
+                            background-color: #cccccc;
+                        }
                     }
                 }
             }
@@ -76,7 +85,21 @@ body {
                         }
                     }
                 }
+
+                tbody {
+                    .group {
+                        background: #70809E !important;
+                        cursor : pointer;
+                        td {
+                            color: #fff;
+                        }
+                    }
+                }
             }
         }
     }
+}
+.active-icon {
+    transition : all .2s ease-in-out;
+    transform: rotate( -90deg );
 }
