@@ -452,31 +452,29 @@ body {
   font-family: "Lato", Arial, Tahoma, sans-serif; }
 
 .page-title {
-  position: fixed;
-  z-index: 99;
+  position: sticky;
   top: 6rem;
-  width: 100%; }
+  z-index: 9999; }
 
 .association-detection-report .association-detection-content {
   margin: 1rem 1.6rem 1rem 1.6rem; }
-  .association-detection-report .association-detection-content .group-control {
-    position: fixed;
-    top: 9rem;
-    left: 0;
-    z-index: 99;
+  .association-detection-report .association-detection-content .control-table {
     width: 100%;
     background: #fff;
-    padding: 1rem 1.6rem 0 1.6rem; }
-    .association-detection-report .association-detection-content .group-control .title {
+    margin-top: 20px; }
+    .association-detection-report .association-detection-content .control-table .title {
       margin-bottom: -1.3rem; }
-    .association-detection-report .association-detection-content .group-control .form-filter .box-username {
+    .association-detection-report .association-detection-content .control-table .form-filter .box-username {
       max-width: 1280px;
-      width: 1280px; }
+      width: 100%;
+      padding: 0 !important; }
+      .association-detection-report .association-detection-content .control-table .form-filter .box-username .btn-detect {
+        margin: 0; }
   .association-detection-report .association-detection-content .table-report {
     font-family: "Lato", Arial, Tahoma, sans-serif; }
     .association-detection-report .association-detection-content .table-report .table-association-detection {
       width: 100% !important;
-      margin-top: 310px; }
+      margin-top: 20px; }
       .association-detection-report .association-detection-content .table-report .table-association-detection .loading {
         position: relative; }
         .association-detection-report .association-detection-content .table-report .table-association-detection .loading:after {
@@ -496,5 +494,5 @@ body {
       .association-detection-report .association-detection-content .table-report .table-association-detection thead tr:first-child th {
         position: sticky;
         position: -webkit-sticky;
-        top: 16rem;
+        top: 9.4rem;
         font-weight: 300; }

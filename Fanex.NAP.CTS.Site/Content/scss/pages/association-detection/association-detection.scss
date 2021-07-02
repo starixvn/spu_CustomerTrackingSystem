@@ -6,27 +6,20 @@
 body {
     font-family: $font-family;
 }
-
 .page-title {
-    position: fixed;
-    z-index: 99;
+    position: sticky;
     top: 6rem;
-    width: 100%;
+    z-index: 9999;
 }
-
 .association-detection-report {
 
     .association-detection-content {
         margin: 1rem 1.6rem 1rem 1.6rem;
 
-        .group-control {
-            position: fixed;
-            top: 9rem;
-            left: 0;
-            z-index: 99;
+        .control-table {
             width: 100%;
             background: #fff;
-            padding: 1rem 1.6rem 0 1.6rem;
+            margin-top: 20px;
 
             .title {
                 margin-bottom: -1.3rem;
@@ -35,7 +28,11 @@ body {
             .form-filter {
                 .box-username {
                     max-width: 1280px;
-                    width: 1280px;
+                    width: 100%;
+                    padding: 0 !important;
+                    .btn-detect{
+                        margin : 0;
+                    }
                 }
             }
         }
@@ -45,7 +42,7 @@ body {
 
             .table-association-detection {
                 width: 100% !important;
-                margin-top: 310px;
+                margin-top: 20px;
 
                 .loading {
                     position: relative;
@@ -74,7 +71,7 @@ body {
                         th {
                             position: sticky;
                             position: -webkit-sticky;
-                            top: 16rem;
+                            top: 9.4rem;
                             font-weight: 300;
                         }
                     }
