@@ -153,7 +153,7 @@
             }
         });
 
-        let isEnableAdd = data.UserNameInvalidList.length === 0 && data.UserNameDuplicatedList.length === 0;
+        let isEnableAdd = data.UserNameInvalidList.length === 0 && data.UserNameDuplicatedList.length === 0 && domElements.spanAddUserName.find('tags tag').length >= 2;
 
         domElements.btnDetect.prop('disabled', !isEnableAdd);
     }    
