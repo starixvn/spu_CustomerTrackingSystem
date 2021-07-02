@@ -125,6 +125,7 @@ namespace Fanex.NAP.CTS.Controller
                 viewModel = GenerateValidatedViewModel(userNames, validatedToUpperList, isException);
 
                 viewModel.UserNameDuplicatedList = userNameList.Where(x => duplicateToUpperList.Contains(x.ToUpper()));
+                viewModel.UserNameValidList = validatedList.Select(x => x.UserName);
             }
 
             return viewModel;

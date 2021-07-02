@@ -67,7 +67,7 @@
                 api.column(groupColumn, { page: 'current' }).data().each(function (group, i) {
                     if (last !== group) {
                         $(rows).eq(i).before(
-                            '<tr class="group "><td colspan="5"><i class="icon-chevron-down"></i>' + 'Group ' + group + '</td></tr>'
+                            '<tr class="group"><td colspan="5">' + 'Group ' + group + '</td></tr>'
                         );
 
                         last = group;
@@ -153,7 +153,7 @@
             }
         });
 
-        let isEnableAdd = data.UserNameInvalidList.length === 0 && data.UserNameDuplicatedList.length === 0 && domElements.spanAddUserName.find('tags tag').length >= 2;
+        let isEnableAdd = data.UserNameInvalidList.length === 0 && data.UserNameDuplicatedList.length === 0 && data.UserNameValidList.length >= 2;
 
         domElements.btnDetect.prop('disabled', !isEnableAdd);
     }    
@@ -208,7 +208,7 @@
             let invalidDuplicatedTags = domElements.spanAddUserName.find('tags tag.invalid-duplicated');
             let invalidUsernameTags = domElements.spanAddUserName.find('tags tag.invalid-username');
             let notInvalid = invalidDuplicatedTags.length + invalidUsernameTags.length;
-            let disabled = notInvalid <= 1 && validTags.length > 1;
+            let disabled = notInvalid <= 1 && validTags.length > 3;
 
             domElements.btnDetect.prop('disabled', !disabled);
         }
@@ -245,7 +245,7 @@
 
                     ValidateUsernames(currentTag.text().trim());
 
-                    EnableButtonAdd();
+                    //EnableButtonAdd();
                 });
 
                 domElements.spanAddUserNameMaxTag.text(maxCountTags - 1);
