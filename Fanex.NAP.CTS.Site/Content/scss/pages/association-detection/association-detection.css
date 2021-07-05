@@ -502,3 +502,9 @@ body {
         position: -webkit-sticky;
         top: 9.4rem;
         font-weight: 300; }
+      .association-detection-report .association-detection-content .table-report .table-association-detection .group {
+        background: #70809E !important; }
+        .association-detection-report .association-detection-content .table-report .table-association-detection .group:hover {
+          background: #70809E !important; }
+        .association-detection-report .association-detection-content .table-report .table-association-detection .group td {
+          color: #fff !important; }

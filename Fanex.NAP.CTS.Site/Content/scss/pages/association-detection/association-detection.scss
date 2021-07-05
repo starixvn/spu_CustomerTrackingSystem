@@ -85,6 +85,18 @@ body {
                         }
                     }
                 }
+
+                .group {
+                    background: #70809E !important;
+
+                    &:hover {
+                        background: #70809E !important;
+                    }
+
+                    td {
+                        color: #fff !important
+                    }
+                }
             }
         }
     }
