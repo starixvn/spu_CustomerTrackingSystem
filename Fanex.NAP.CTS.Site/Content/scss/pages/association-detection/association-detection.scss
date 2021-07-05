@@ -88,6 +88,7 @@ body {
 
                 .group {
                     background: #70809E !important;
+                    cursor: pointer;
 
                     &:hover {
                         background: #70809E !important;
@@ -97,7 +98,25 @@ body {
                         color: #fff !important
                     }
                 }
+
+                tr {
+                    .td-bg-yellow {
+                        background-color: $account-high;
+                        font-weight: bold;
+                    }
+
+                    .td-bg-green {
+                        background-color: $account-limited;
+                        font-weight: bold;
+                    }
+
+                    .td-bg-red {
+                        background-color: $account-formular;
+                        font-weight: bold;
+                    }
+                }
             }
         }
     }
 }
+
