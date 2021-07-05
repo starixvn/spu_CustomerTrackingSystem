@@ -59,7 +59,7 @@ namespace Fanex.NAP.CTS.Controller
 
                 var ctsCustIds = string.Join(",", validatedList.Select(x => x.CTSCustID));
 
-                var groupLevel2ByUsername = _associationDetectionService.GetGroupLevel2ByUserName(ctsCustIds);
+                var groupLevel2ByUsername = _associationDetectionService.GetAssociationDetection(ctsCustIds);
 
                 var custIds = string.Join(",", validatedList.Select(x => x.CustID));
 
@@ -87,9 +87,11 @@ namespace Fanex.NAP.CTS.Controller
                         GroupId = x.GroupId,
                         UserName = x.UserName,
                         CustomerCategory = x.CustomerCategory,
+                        CategoryIds = x.CategoryIds,
                         Evidence = x.Evidence,
                         Status = x.Status,
-                        CustomerClass = customerClass > 0 ? customerClass.ToString() : null
+                        CustomerClass = customerClass > 0 ? customerClass.ToString() : null,
+                        IsProblemAccount = x.ParentIds != null && x.ParentIds.Split(',').Any(y => y == "50"),
                     };
                 });
             }

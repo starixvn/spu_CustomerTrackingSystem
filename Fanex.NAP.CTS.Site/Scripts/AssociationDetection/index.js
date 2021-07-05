@@ -15,10 +15,6 @@
         tableResult: $('#tblAssociationDetection')
     };
 
-    let isHostPermission = domElements.hdIsHostPermission.attr('IsHostPermission') === "True";
-    let isOverwritePermission = domElements.hdIsOverwritePermission.attr('IsOverwritePermission') === "True";
-    let isEnableOverwriteButton = (isHostPermission && isOverwritePermission);
-
     function GenerateGrid(data) {
 
         if ($.fn.DataTable.isDataTable("#tblAssociationDetection")) {
@@ -56,7 +52,11 @@
                 { data: obj => obj.UserName },
                 { data: obj => obj.Status },
                 { data: obj => obj.Evidence },
-                { data: obj => obj.CustomerCategory },
+                {
+                    data: obj => common.renderCategoryName(obj.CustomerCategory), createdCell: (cell, _, row) => {
+                        common.renderCategoryColor(cell, row);
+                    }
+                },
                 { data: obj => obj.CustomerClass }
             ],
             "drawCallback": function (settings) {
@@ -75,12 +75,6 @@
                 });
             }
         }).rows.add(data).draw();
-    }
-
-    function SubString(text) {
-        return text !== '' && text.length > 50
-            ? text.substring(0, 47) + '...'
-            : text;
     }
 
     function ValidateUsernames(textTagRemove) {

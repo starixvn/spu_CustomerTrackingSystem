@@ -18,10 +18,14 @@ namespace Fanex.NAP.CTS.Model.AssociationDetection
 
         public string CustomerCategory { get; set; }
 
+        public string CategoryIds { get; set; }
+
         public long CTSCustId { get; set; }
 
         public long CustId { get; set; }
 
         public int CustSubId { get; set; }
+
+        public string ParentIds { get; set; }
     }
 }

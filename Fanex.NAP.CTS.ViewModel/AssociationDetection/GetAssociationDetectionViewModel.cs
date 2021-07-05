@@ -12,6 +12,10 @@
 
         public string CustomerCategory { get; set; }
 
+        public string CategoryIds { get; set; }
+
         public string CustomerClass { get; set; }
+
+        public bool IsProblemAccount { get; set; }
     }
 }

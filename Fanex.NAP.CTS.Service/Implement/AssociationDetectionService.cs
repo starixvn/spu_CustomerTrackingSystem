@@ -11,12 +11,12 @@ namespace Fanex.NAP.CTS.Service.Implement
 {
     public interface IAssociationDetectionService
     {
-        IEnumerable<GetAssociationDetectionModel> GetGroupLevel2ByUserName(string ctsCustIds);
+        IEnumerable<GetAssociationDetectionModel> GetAssociationDetection(string ctsCustIds);
 
     }
     public class AssociationDetectionService : IAssociationDetectionService
     {
-        public IEnumerable<GetAssociationDetectionModel> GetGroupLevel2ByUserName(string ctsCustIds)
+        public IEnumerable<GetAssociationDetectionModel> GetAssociationDetection(string ctsCustIds)
         {
             var criteria = new GetAssociationDetectionCriteria
             {
