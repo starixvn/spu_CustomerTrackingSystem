@@ -159,7 +159,7 @@
             let params = {};
             params.userNames = userNames;
 
-            $.ajax(common.modifyRelativeUrl('AssociationDetection/GetGroupLevel2ByUserName'), {
+            $.ajax(common.modifyRelativeUrl('AssociationDetection/GetAssociationDetection'), {
                 type: 'POST',
                 data: params,
                 beforeSend: function () {
@@ -170,6 +170,7 @@
                 },
                 complete: function () {
                     domElements.divAddUserName.removeClass("loading-block");
+                    InitInputTagUsername();
                 },
                 error: function (errMsg) {
                     console.log(errMsg);

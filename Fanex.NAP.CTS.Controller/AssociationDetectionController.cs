@@ -45,7 +45,7 @@ namespace Fanex.NAP.CTS.Controller
         }
 
         [HttpPost]
-        public ActionResult GetGroupLevel2ByUserName(string userNames)
+        public ActionResult GetAssociationDetection(string userNames)
         {
             var isException = false;
 
