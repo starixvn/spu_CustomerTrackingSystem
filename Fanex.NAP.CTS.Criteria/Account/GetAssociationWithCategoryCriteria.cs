@@ -13,7 +13,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_Association_GetWithCategory";
+            return "CTS_DC_CustClassification_GetForSoon88";
         }
 
         public override bool IsValid()
