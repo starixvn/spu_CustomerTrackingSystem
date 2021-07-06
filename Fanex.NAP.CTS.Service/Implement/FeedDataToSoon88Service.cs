@@ -115,12 +115,12 @@
             }
         }
 
-        private IEnumerable<AssociationWithCategory> GetAssociationWithCategory(IEnumerable<CustomerClassForMainDb> custClasses, bool isDelete)
+        private IEnumerable<AssociationWithCategory> GetAssociationWithCategory(IEnumerable<CustomerClassForMainDb> custClasses, bool IsGetAssociation)
         {
             var criteria = new GetAssociationWithCategoryCriteria()
             {
                 CustIds = string.Join(",", custClasses.Select(c => c.CustID)),
-                IsDelete = isDelete
+                IsGetAssociation = IsGetAssociation
             };
 
             var result = repository.Fetch<AssociationWithCategory>(criteria);
