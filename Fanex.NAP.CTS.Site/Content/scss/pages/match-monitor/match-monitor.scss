@@ -1,5 +1,6 @@
 ﻿@import "../../abstracts/variables";
 @import "../../abstracts/mixins";
+@import "../../components/popup";
 
 .match-monitor, .detailpage {
     .monitor-container {
@@ -260,6 +261,7 @@
     line-height: 20px;
     font-weight: 700;
 }
+
 .match-monitor-page {
     .ui-dialog-buttonset {
         width: 100%;
