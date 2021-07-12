@@ -395,6 +395,9 @@
   <ItemGroup>
     <Content Include="App_Data\Fanex.NAP.CTS.Portal.API.xml" />
     <Content Include="App_Data\Graph\Script.xml" />
+    <Content Include="App_Data\SQL\SPNames.AWS.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="App_Data\SQL\SPNames.UAT.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -482,15 +485,12 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Web.LOCAL.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Web.PRO.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Web.UAT.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Web.ConnectionString.config">
@@ -498,16 +498,19 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Web.ConnectionString.LOCAL.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <DependentUpon>Web.ConnectionString.config</DependentUpon>
     </Content>
     <Content Include="Web.ConnectionString.PRO.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <DependentUpon>Web.ConnectionString.config</DependentUpon>
     </Content>
     <Content Include="Web.ConnectionString.UAT.config">
       <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <DependentUpon>Web.ConnectionString.config</DependentUpon>
+    </Content>
+    <Content Include="Web.AWS.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.ConnectionString.AWS.config">
       <DependentUpon>Web.ConnectionString.config</DependentUpon>
     </Content>
   </ItemGroup>
