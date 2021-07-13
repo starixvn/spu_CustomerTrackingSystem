@@ -1,0 +1,24 @@
+﻿namespace Fanex.NAP.CTS.Criteria.MatchMonitor
+{
+    using Fanex.Data;
+    using Fanex.Data.Repository;
+    using System;
+
+    public class MatchReasonGroupGetCriteria : CriteriaBase
+    {
+        [SpParam(SqlParamName = "ip_EventDate")]
+        public DateTime EventDate { get; set; }
+
+        [SpParam(SqlParamName = "ip_MatchID")]
+        public Int64 MatchID { get; set; }
+
+        [SpParam(SqlParamName = "ip_BettypeID")]
+        public int BettypeID { get; set; }
+
+        public override string GetSettingKey()
+            => "CTS_DC_MatchMonitor_Details_GetReasonGroup";
+
+        public override bool IsValid()
+            => true;
+    }
+}

@@ -61,6 +61,8 @@
         public const string AssociationTypeName_IP = "IP";
         public const string AssociationTypeName_IPAssociation = "IP Association";
 
+        public const int MatchMonitor_ReportQueryType = 2;
+
         public enum ROLE_CUSTOMER : int
         {
             MEMBER = 1,
@@ -87,6 +89,22 @@
             Open = 1,
             Closed = 2,
             Other = 3
+        }
+
+        public enum MATCHMONITOR_BETTYPE : int
+        {
+            HDP = 1,
+            OU = 3,
+            FirstHDP = 7,
+            FirsttOU = 8
+        }
+
+        public enum MATCHMONITOR_EVENTGROUP : int
+        {
+            Early = 1,
+            Live = 2,
+            Today = 3,
+            Closed = 4
         }
     }
 }

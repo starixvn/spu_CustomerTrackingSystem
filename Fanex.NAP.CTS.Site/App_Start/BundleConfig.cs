@@ -34,11 +34,13 @@
 
             bundles.Add(new StyleBundle("~/Content/styles/dashboard").Include(
                       "~/Content/scss/pages/dashboard/dashboard.min.css"));
-             
+
             RegisterFSCoreBundles(bundles);
             RegisterSearchBoxBundles(bundles);
 
-            //RegisterMatchMonitorBundles(bundles);
+            RegisterMatchMonitorBundles(bundles);
+            RegisterMatchMonitorDetailBundles(bundles);
+
             //RegisterFraudCaseBundles(bundles);
             //RegisterSuspiciousCustomerBundles(bundles);
             //RegisterSuspiciousCustomerDetailsBundles(bundles);
@@ -106,15 +108,6 @@
             bundles.Add(new ScriptBundle("~/scripts/searchbox").Include("~/scripts/Home/SearchPage.js"));
         }
 
-        private static void RegisterMatchMonitorBundles(BundleCollection bundles)
-        {
-            bundles.Add(new ScriptBundle("~/scripts/match-monitor").Include("~/scripts/MatchMonitor/*.js"));
-
-            bundles.Add(new ScriptBundle("~/scripts/match-monitor/fraud-case-details").Include("~/scripts/matchmonitor/fraudcasedetails/*.js"));
-
-            bundles.Add(new StyleBundle("~/Contents/CoreBetList").Include("~/Content/CoreBetList.css"));
-        }
-
         private static void RegisterFraudCaseBundles(BundleCollection bundles)
         {
             bundles.Add(new StyleBundle("~/fraud-case-styles").Include("~/content/scss/pages/configurations/fraud-case.css"));
@@ -153,15 +146,6 @@
             bundles.Add(new ScriptBundle("~/daily-data-capture-scripts").Include("~/scripts/dailydatacapture/daily-data-capture.js"));
         }
 
-        private static void RegisterNotificationBundles(BundleCollection bundles)
-        {
-            bundles.Add(new ScriptBundle("~/notification").Include("~/scripts/Notification/*.js"));
-
-            bundles.Add(new StyleBundle("~/notification-setting-styles").Include("~/Content/scss/pages/notification-setting/notification-setting.css"));
-
-            bundles.Add(new ScriptBundle("~/notification-setting-scripts").Include("~/Scripts/NotificationSetting/notification-setting.js"));
-        }
-
         private static void RegisterCheckBetReportBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/check-bet-report-scripts").Include("~/scripts/CheckBetReport/check-bet-report.js"));
@@ -181,6 +165,16 @@
             bundles.Add(new ScriptBundle("~/scripts/subscriber-assignment").Include("~/Scripts/SubscriberAssignment/*.js"));
         }
 
+
+        private static void RegisterNotificationBundles(BundleCollection bundles)
+        {
+            bundles.Add(new ScriptBundle("~/notification").Include("~/scripts/Notification/*.js"));
+
+            bundles.Add(new StyleBundle("~/notification-setting-styles").Include("~/Content/scss/pages/notification-setting/notification-setting.css"));
+
+            bundles.Add(new ScriptBundle("~/notification-setting-scripts").Include("~/Scripts/NotificationSetting/notification-setting.js"));
+        }
+
         private static void RegisterSearchBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/search-account-scripts").Include("~/Scripts/Search/Account/*.js"));
@@ -194,7 +188,7 @@
                 "~/Scripts/Account/BettingStatistic/sport-statistic-scripts.js",
                 "~/Scripts/Account/BettingStatistic/turnover-by-bettype.js",
                 "~/Scripts/Account/BettingStatistic/winlost-statistic-scripts.js"
-                ));           
+                ));
         }
 
         private static void RegisterAccountDetailBundles(BundleCollection bundles)
@@ -216,7 +210,7 @@
                       "~/Content/scss/vendors/jquery-ui/base/tagify.css",
                       "~/Content/scss/pages/account/account.css"));
         }
-        
+
         private static void RegisterTransactionHistoryBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/account/transaction-history-scripts").Include("~/Scripts/Account/TransactionHistory/*.js"));
@@ -251,7 +245,7 @@
 
         private static void RegisterProblemAccountMonitorDetailBundles(BundleCollection bundles)
         {
-            bundles.Add(new ScriptBundle("~/problem-account-monitor-detail-scripts").Include(                
+            bundles.Add(new ScriptBundle("~/problem-account-monitor-detail-scripts").Include(
                 "~/Scripts/MultipleSelect/jquery.multiselect.filter.js",
                 "~/Scripts/ProblemAccountMonitor/detail.js"));
 
@@ -292,7 +286,7 @@
 
         private static void RegisterSpecialCustomerClassBundles(BundleCollection bundles)
         {
-            bundles.Add(new ScriptBundle("~/special-customer-class-scripts").Include(                        
+            bundles.Add(new ScriptBundle("~/special-customer-class-scripts").Include(
                 "~/Scripts/SpecialCustomerClass/index.js"));
 
             bundles.Add(new StyleBundle("~/special-customer-class-styles").Include(
@@ -356,5 +350,32 @@
                     "~/Content/scss/pages/latest-transaction/latest-transaction.css"));
         }
 
+        private static void RegisterMatchMonitorBundles(BundleCollection bundles)
+        {
+            bundles.Add(new ScriptBundle("~/match-monitor-scripts").Include(
+               "~/Scripts/select2.min.js",
+               "~/Scripts/MultipleSelect/jquery.multiselect.filter.js",
+               "~/Scripts/MatchMonitor/index.js"));
+
+            bundles.Add(new StyleBundle("~/match-monitor-styles").Include(
+                "~/Content/scss/vendors/select2.min.css",
+                 "~/Content/scss/MultipleSelect/jquery.multiselect.filter.css",
+                "~/Content/scss/MultipleSelect/jquery.multiselect.css",
+                "~/Content/scss/pages/match-monitor/match-monitor.css"));
+        }
+
+        private static void RegisterMatchMonitorDetailBundles(BundleCollection bundles)
+        {
+            bundles.Add(new ScriptBundle("~/match-monitor-detail-scripts").Include(
+               "~/Scripts/select2.min.js",
+               "~/Scripts/MultipleSelect/jquery.multiselect.filter.js",
+               "~/Scripts/MatchMonitor/detail.js"));
+
+            bundles.Add(new StyleBundle("~/match-monitor-detail-styles").Include(
+                "~/Content/scss/vendors/select2.min.css",
+                 "~/Content/scss/MultipleSelect/jquery.multiselect.filter.css",
+                "~/Content/scss/MultipleSelect/jquery.multiselect.css",
+                "~/Content/scss/pages/match-monitor/match-monitor-detail.css"));
+        }
     }
 }

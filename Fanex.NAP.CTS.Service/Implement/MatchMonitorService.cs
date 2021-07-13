@@ -1,103 +1,123 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
-    using Fanex.Data;   
-    using Fanex.NAP.CTS.Core.ExportExcel;
+    using Fanex.Data;
+    using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Criteria.MatchMonitor;
-    using Fanex.NAP.CTS.Service.ExcelConfig.MatchMonitor;    
+    using Fanex.NAP.CTS.Model.MatchMonitor;
+    using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor;
-    using Fanex.NAP.CTS.Core.BaseClasses;    
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Fanex.NAP.CTS.Core;
 
     public class MatchMonitorService : IMatchMonitorService
     {
-        public MatchList GetMatches(MatchGetAllCriteria criteria)
+        public List<MatchMonitorModel> GetMatchMonitor(MatchMonitorFilterViewModel filter)
         {
+            var criteria = new MatchMonitorGetCriteria()
+            {
+                FromDate = filter.FromDate,
+                ToDate = filter.ToDate,
+                BetType = filter.BetTypes,
+                IsVerified = filter.IsVerified
+            };
+
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                using (var query = db.QueryMultiple(criteria))
-                {
-                    var fraudCases = query.Read<Model.MatchMonitor.FraudCase>();
-                    var matches = query.Read<Model.MatchMonitor.Match>();
-
-                    foreach(var item in fraudCases)
-                    {
-                        item.SuspiciousTicketsCount = item.SuspiciousTicketsCount == null ? 0 : item.SuspiciousTicketsCount;
-                    }
-
-                    return new MatchList
-                    {
-                        Matches =
-                            matches
-                            .GroupJoin(fraudCases, m => m.MatchId, f => f.MatchId, GetMatch)
-                            .OrderBy(m => m.Status == "Running" ? 0 : 1)
-                            .ThenByDescending(m => m.FraudCases.Sum(f => f.Value.Violations.Value))
-                            .ThenBy(m => m.MatchId),
-                        FraudCases = fraudCases.GroupBy(f => f.FraudCaseName).Select(g => g.Key)
-                    };
-                }
+                return db.Query<MatchMonitorModel>(criteria).ToList();
             }
         }
 
-        public IEnumerable<Model.MatchMonitor.League> GetLeagues(LeagueGetCriteria criteria)
+        public DBResult UpdateVerificaton(Int64 matchID, Int64 userID)
         {
-            return DataService.GetData<Model.MatchMonitor.League>(criteria);
-        }
-
-        public object VerifyMatch(VerifyMatchCriteria criteria)
-        {
-            DataService.UpdateData(criteria, "MatchMonitor");
-
-            return new object();
-        }
-
-        public Model.MatchMonitor.BalanceUpDate GetBalanceUpDate()
-        {
-            return DataService.GetData<Model.MatchMonitor.BalanceUpDate>(new BalanceUpDateGetCriteria()).First();
-        }
-
-        public byte[] ExportExcel(MatchGetAllCriteria criteria, string template)
-        {
-            var data = GetMatches(criteria);
-            var wb = ExcelUtilities.GetWorkbook(template);
-            new MatchMonitorExcelConfig().RenderExcel(wb, criteria, data.Matches, null);
-
-            return wb.ToBytes();
-        }
-
-        public DBResult UpdateMatchNote(MatchNoteUpdateCriteria criteria)
-        {           
-            return DataService.UpdateData(criteria, "MatchMonitor");
-        }
-
-        public Match GetMatch(Model.MatchMonitor.Match match, IEnumerable<Model.MatchMonitor.FraudCase> fraudCases)
-        {
-            
-            var homeName = CachedRef.GetTeamName(match.HomeId);
-            var awayName = CachedRef.GetTeamName(match.AwayId);
-
-            return new Match
+            var criteria = new MatchMonitorVerificationUpdateCriteria()
             {
-                Event = new Event
-                {
-                    HomeName = homeName ?? "-",
-                    AwayName = awayName ?? "-",
-                    LeagueName = match.LeagueName
-                },
-                FraudCases =
-                    fraudCases
-                    .GroupBy(f => Tuple.Create(f.FraudCaseId, f.FraudCaseName))
-                    .Select(g => new FraudCase(g.Key.Item1, g.Key.Item2, g))
-                    .ToDictionary(f => f.FraudCaseId.ToString()),
-                MatchId = match.MatchId,
-                Verified = match.IsVerified,
-                VerifiedBy = string.Empty,
-                Status = (char)(match.EventStatus[0] - 32) + match.EventStatus.Remove(0, 1),
-                Score = string.Format("{0} - {1}", match.LiveHomeScore, match.LiveAwayScore),
-                Notes = string.IsNullOrEmpty(match.Notes) ? "-" : match.Notes
+                ip_ID = matchID,
+                ip_UserID = userID
             };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                db.Query<DBResult>(criteria).ToList();
+            }
+
+            return new DBResult { ErrorCode = string.IsNullOrEmpty(criteria.ErrorMessage) ? -1 : 0, ErrorMsg = criteria.ErrorMessage };
+        }
+
+        public List<MatchReasonGroupModel> GetMatchReasonGroup(DateTime eventDate, Int64 matchID, int betTypeID)
+        {
+            var criteria = new MatchReasonGroupGetCriteria()
+            {
+                EventDate = eventDate,
+                BettypeID = betTypeID,
+                MatchID = matchID
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<MatchReasonGroupModel>(criteria).ToList();
+            }
+        }
+
+        public List<MatchScoreModel> GetMatchScore(DateTime eventDate, Int64 matchID, int betTypeID)
+        {
+            var criteria = new MatchScoreGetCriteria()
+            {
+                EventDate = eventDate,
+                BettypeID = betTypeID,
+                MatchID = matchID
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<MatchScoreModel>(criteria).ToList();
+            }
+        }
+
+        public List<MatchMonitorDetailModel> GetMatchMonitorDetail(MatchMonitorDetailFilterViewModel filter)
+        {
+            var criteria = new MatchDetailMonitorGetCriteria()
+            {
+                EventDate = filter.EventDate,
+                BettypeID = filter.BetTypeID,
+                ListReasonGroup = filter.ListReasonGroup,
+                ListScore = filter.ListScore,
+                LiveIndicator = filter.LiveIndicator,
+                MatchID = filter.MatchID
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<MatchMonitorDetailModel>(criteria).ToList();
+            }
+        }
+
+        public List<CustInfoModel> GetCustInfoByCustID(string custIDs)
+        {
+            var criteria = new CustInfoByCustIdGetCriteria()
+            {
+                CustIDs = custIDs
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<CustInfoModel>(criteria).ToList();
+            }
+        }
+
+        public List<TicketDetailModel> GetTicketDetail(DateTime eventDate, string transIds)
+        {
+            var criteria = new TicketDetailGetCriteria()
+            {
+                QueryType = Consts.MatchMonitor_ReportQueryType,
+                EventDate = eventDate,
+                ListTransId = transIds
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<TicketDetailModel>(criteria).ToList();
+            }
         }
     }
 }

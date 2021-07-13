@@ -131,4 +131,13 @@
 	<Function name="LatestTransaction">
 		<Setting Key="DCS_DC_Transaction_GetLatest" SpName="DCS_DC_Transaction_GetLatest_xtest" DbName="MySQL.DCS_DataCenter.Reporter"/>
 	</Function>
+
+	<Function name="MatchMonitor">
+		<Setting Key="CTS_DC_MatchMonitor_Get" SpName="CTS_DC_MatchMonitor_Get" DbName="MySQL.CTS_DataCenter.Reporter"/>
+		<Setting Key="CTS_DC_MatchMonitor_UpdateVerify" SpName="CTS_DC_MatchMonitor_UpdateVerify" DbName="MySQL.CTS_DataCenter.Admin"/>
+		<Setting Key="CTS_DC_MatchMonitor_Details_GetReasonGroup" SpName="CTS_DC_MatchMonitor_Details_GetReasonGroup" DbName="MySQL.CTS_DataCenter.Reporter"/>
+		<Setting Key="CTS_DC_MatchMonitor_Details_GetScore" SpName="CTS_DC_MatchMonitor_Details_GetScore" DbName="MySQL.CTS_DataCenter.Reporter"/>
+		<Setting Key="CTS_DC_MatchMonitor_Details_Get" SpName="CTS_DC_MatchMonitor_Details_Get" DbName="MySQL.CTS_DataCenter.Reporter"/>
+		<Setting Key="CTS_DC_CustInfo_GetByCustID" SpName="CTS_DC_CustInfo_GetByCustID" DbName="MySQL.CTS_DataCenter.Reporter"/>
+	</Function>
 </Functions>

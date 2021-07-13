@@ -1,24 +1,25 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
     using Fanex.NAP.CTS.Core;
-    using Fanex.NAP.CTS.Criteria.MatchMonitor;   
+    using Fanex.NAP.CTS.Model.MatchMonitor;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor;
+    using System;
     using System.Collections.Generic;
 
     public interface IMatchMonitorService
     {
-        MatchList GetMatches(MatchGetAllCriteria criteria);
+        List<MatchMonitorModel> GetMatchMonitor(MatchMonitorFilterViewModel filter);
 
-        IEnumerable<Model.MatchMonitor.League> GetLeagues(LeagueGetCriteria criteria);
+        List<MatchReasonGroupModel> GetMatchReasonGroup(DateTime eventDate, Int64 matchID, int betTypeID);
 
-        object VerifyMatch(VerifyMatchCriteria criteria);
+        List<MatchScoreModel> GetMatchScore(DateTime eventDate, Int64 matchID, int betTypeID);
 
-        Model.MatchMonitor.BalanceUpDate GetBalanceUpDate();
+        DBResult UpdateVerificaton(Int64 matchID, Int64 userID);
 
-        byte[] ExportExcel(MatchGetAllCriteria criteria, string template);
+        List<MatchMonitorDetailModel> GetMatchMonitorDetail(MatchMonitorDetailFilterViewModel filter);
 
-        DBResult UpdateMatchNote(MatchNoteUpdateCriteria criteria);
+        List<CustInfoModel> GetCustInfoByCustID(string custIDs);
 
-        Match GetMatch(Model.MatchMonitor.Match match, IEnumerable<Model.MatchMonitor.FraudCase> fraudCases);
+        List<TicketDetailModel> GetTicketDetail(DateTime eventDate, string transIds);
     }
 }

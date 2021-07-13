@@ -1,338 +1,344 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
+    using Fanex.Logging;
+    using Fanex.NAP.Core.Configuration;
     using Fanex.NAP.Core.Service.Impl;
+    using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Web.Attribute;
+    using Fanex.NAP.CTS.Core;
+    using Fanex.NAP.CTS.Model.MatchMonitor;
     using Fanex.NAP.CTS.Resource.Consts;
-    using Fanex.NAP.CTS.Criteria.MatchMonitor;
-    using Core.Helpers;
-    using Criteria.MatchMonitor.FraudCaseDetails;    
-    using Service;
-    using System;    
-    using System.Configuration;
+    using Fanex.NAP.CTS.Service;
+    using Fanex.NAP.CTS.ViewModel.MatchMonitor;
+    using Newtonsoft.Json;
+    using System;
+    using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using System.Web.Mvc;
 
     [NapSuperAuth]
-    [NapAuth(FunctionKey = FSFunctionKeys.MatchMonitoring, Policy = NAP.Core.Business.Constant.Policy.Read)]
-    public class MatchMonitorController : ReportsController
+    [NapAuth(FunctionKey = FSFunctionKeys.MatchMonitor, Policy = NAP.Core.Business.Constant.Policy.Read)]
+    public class MatchMonitorController : BaseController
     {
-        private readonly IFraudCaseDetailsService _fraudCaseDetailService;
-
         private readonly IMatchMonitorService _matchMonitorService;
-
-        private bool IsShowSpecialCurrencies;
 
         public MatchMonitorController()
         {
-            _fraudCaseDetailService = new FraudCaseDetailsService(int.Parse(ConfigurationManager.AppSettings["Environment"]), int.Parse(ConfigurationManager.AppSettings["MailGroupId"]));
             _matchMonitorService = new MatchMonitorService();
-            var permission = new UserService().GetPermission(CurrentSession.UserId, SiteId, FSFunctionKeys.SpecialCurrencies);
-            IsShowSpecialCurrencies = permission > 0;
         }
-
-        public override string BaseControllerName { get => Consts.MenuItemSuspiciousBets; }
 
         public ActionResult Index()
         {
-            ViewBag.Username = this.User.Identity.Name;
-            ViewBag.Environment = int.Parse(ConfigurationManager.AppSettings["Environment"]);
+            IUserService userService = new UserService();
 
-            return View(_matchMonitorService.GetBalanceUpDate());
-        }
+            var isHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
+                            NapSettings.Settings.SiteId,
+                            FSFunctionKeys.MatchMonitor,
+                            NAP.Core.Business.Constant.Policy.Host);
 
-        #region Common
-        [HttpPost]
-        public ActionResult GetMatches(MatchGetAllCriteria criteria)
-        {
-            criteria.IsShowSpecialCurrencies = IsShowSpecialCurrencies;
-            var matchList = _matchMonitorService.GetMatches(criteria);
+            var userId = CurrentSession.UserId;
 
-            return Json(new { data = matchList.Matches }, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        public ActionResult GetLeagues(LeagueGetCriteria criteria)
-        {
-            return Json(_matchMonitorService.GetLeagues(criteria));
-        }
-
-        [HttpPost]
-        [NapAuth(FunctionKey = FSFunctionKeys.MatchMonitoring, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult VerifyMatch(VerifyMatchCriteria criteria)
-        {
-            criteria.UserId = CurrentSession.UserId;
-
-            return Json(_matchMonitorService.VerifyMatch(criteria));
-        }
-     
-        [HttpPost]        
-        public ActionResult GenerateExcel(MatchGetAllCriteria criteria)
-        {
-            criteria.IsShowSpecialCurrencies = IsShowSpecialCurrencies;
-            var templatePath = Server.MapPath("~/App_Data/Excel Template/MatchMonitor/template.xlsx");
-
-            var fileName = "MatchMonitor_" + DateTime.Now.ToString("yyyyMMdd") + ".xlsx";
-
-            var content = _matchMonitorService.ExportExcel(criteria, templatePath);
-
-            string fileId = Guid.NewGuid().ToString();
-
-            TempData[fileId] = content;
-
-            return new JsonResult { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { FileId = fileId, FileName = fileName } };
-        }
-        
-        public ActionResult DownloadExcel(string fileId, string fileName)
-        {
-            if (TempData[fileId] != null)
+            return View(new MatchMonitorViewModel
             {
-                byte[] content = TempData[fileId] as byte[];
+                IsHostPermission = isHostPermission,
+                CustId = userId
+            });
+        }
 
-                TempData[fileId] = null;
+        [HttpPost]
+        public ActionResult GetMatchMonitor(MatchMonitorFilterViewModel matchMonitorFilterViewModel)
+        {
+            var matchMonitors = new List<MatchMonitorModel>();
 
-                return File(content, "application/vnd.ms-excel", fileName);
+            try
+            {
+                if (matchMonitorFilterViewModel != null && !string.IsNullOrEmpty(matchMonitorFilterViewModel.BetTypes))
+                {
+                    matchMonitors = _matchMonitorService.GetMatchMonitor(matchMonitorFilterViewModel)?.OrderBy(c => c.EventGroup).ToList();
+                }
+            }
+            catch (Exception e)
+            {
+                LogService.Error("Match Monitor Error", e);
             }
 
-            return new EmptyResult();
+            return Json(new
+            {
+                data = matchMonitors
+            }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        public ActionResult UpdateMatchNote(MatchNoteUpdateCriteria criteria)
+        public ActionResult UpdateVerification(Int64 matchID)
         {
-            criteria.UserId = CurrentSession.UserId;
-            criteria.Notes = criteria.Notes ?? string.Empty;
-            criteria.ErrCode = 0;
+            var result = new DBResult();
 
-            var result = _matchMonitorService.UpdateMatchNote(criteria);
-
-            return Json(result);
-        }
-
-        public ActionResult GetLast7DaysTicket(int custId)
-        {
-            return Json(_fraudCaseDetailService.GetLast7DaysDetails(custId, IsShowSpecialCurrencies));
-        }
-
-        public ActionResult GetAssociation(int custId)
-        {
-            return Json(_fraudCaseDetailService.GetAssociatedAccounts(custId));
-        }
-
-        public ActionResult GetTicketFromIP(string ip)
-        {
-            return Json(_fraudCaseDetailService.GetTicketFromIP(ip, IsShowSpecialCurrencies));
-        }
-
-        public ActionResult GetExcelTicketFromIP(string ip)
-        {
-            var template = Server.MapPath("~/App_Data/Excel Template/MatchMonitor/FraudCaseDetail/ticket by ip.xlsx");
-
-            var fileName = string.Format("TicketsofIP_{0}_{1}", ip, DateTime.Today.ToString("yyyyMMdd"));
-
-            return ExcelFile(_fraudCaseDetailService.ExportToExcelIpTickets(ip, template, IsShowSpecialCurrencies), fileName);
-        }
-
-        #endregion Common
-
-        #region Other Fraud Cases
-        public ActionResult GetFraudCaseDetails(int fraudCaseId, int matchId, DateTime eventDate, int violations)
-        {
-            var model = _fraudCaseDetailService.GetInfo(matchId, fraudCaseId, eventDate);
-
-            ViewBag.BUDate = _matchMonitorService.GetBalanceUpDate().BalanceUpDay;
-
-            if (fraudCaseId == (int)Model.FraudCaseId.Arbitrage
-                || fraudCaseId == (int)Model.FraudCaseId.FlaggedAccount)
+            try
             {
-                ViewBag.SiteList = _fraudCaseDetailService.GetSites();
-                ViewBag.CurrencyList = _fraudCaseDetailService.GetAllCurrency(IsShowSpecialCurrencies);
-                ViewBag.EvidenceList = _fraudCaseDetailService.GetListEvidences();                
+                result = _matchMonitorService.UpdateVerificaton(matchID, CurrentSession.UserId);
             }
-                      
-            return View("FraudCaseDetails/Index", model);
-        }
-
-        public ActionResult GetFraudCaseTicketDetails(int fraudCaseId, int matchId, DateTime eventDate)
-        {
-            var data =
-                _fraudCaseDetailService.GetTicketDetails(matchId, fraudCaseId, eventDate, IsShowSpecialCurrencies)
-                .GroupBy(t => t.Bettype)
-                .Select(g => new { key = g.Key, data = g.AsEnumerable() });
-
-            return Json(data, JsonRequestBehavior.AllowGet);
-        }
-
-        public ActionResult GetFraudCaseCustomerDetails(int fraudCaseId, int matchId, DateTime eventDate)
-        {
-            var data = _fraudCaseDetailService.GetCustomerDetails(matchId, fraudCaseId, eventDate, IsShowSpecialCurrencies);
-
-            return Json(data, JsonRequestBehavior.AllowGet);
-        }
-
-        public ActionResult ExportExcelForDetail(int fraudCaseId, int matchId, DateTime eventDate)
-        {
-            var template = Server.MapPath("~/App_Data/Excel Template/MatchMonitor/FraudCaseDetail/template.xlsx");
-
-            var fileName = string.Format("FraudCaseDetails_{0}.xlsx", DateTime.Today.ToString("yyyyMMdd"));
-            return File(_fraudCaseDetailService.ExportExcel(matchId, fraudCaseId, eventDate, template, IsShowSpecialCurrencies), "application/vnd.ms-excel", fileName);
-        }
-
-        #endregion Other Fraud Cases
-
-        #region Flagged Accounts
-
-        [HttpPost]
-        public ActionResult GetFlaggedAccountTickets(GetFlaggedAccountTicketCriteria criteria)
-        {
-            criteria.IsShowSpecialCurrencies = IsShowSpecialCurrencies;
-
-            var data =
-               _fraudCaseDetailService.GetFlaggedAccountTickets(criteria)
-               .GroupBy(t => t.Bettype)
-               .Select(g => new { key = g.Key, data = g.AsEnumerable() });
-
-            return Json(data, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        public ActionResult GetFlaggedAccountCustomers(GetFlaggedAccountCustomerCriteria criteria)
-        {
-            criteria.IsShowSpecialCurrencies = IsShowSpecialCurrencies;
-
-            var data = _fraudCaseDetailService.GetFlaggedAccountCustomers(criteria);
-
-            return Json(data, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        public ActionResult SaveFileFlaggedAccounts(GetFlaggedAccountTicketCriteria criteria)
-        {
-            var template = Server.MapPath("~/App_Data/Excel Template/MatchMonitor/FraudCaseDetail/flagged account.xlsx");
-            var fileName = string.Format("FraudCaseDetails_{0}.xlsx", DateTime.Today.ToString("yyyyMMdd"));
-
-            criteria.SaveChoice = true;
-            criteria.IsShowSpecialCurrencies = IsShowSpecialCurrencies;
-            var content = _fraudCaseDetailService.ExportFlaggedAccounts(criteria, template);
-
-            string fileId = Guid.NewGuid().ToString();
-            TempData[fileId] = content;
-
-            return new JsonResult { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { FileId = fileId, FileName = fileName } };
-        }
-
-        public ActionResult GetBetType()
-        {
-            var data = _fraudCaseDetailService.GetBetTypes();
-
-            return Json(data, JsonRequestBehavior.AllowGet);
-        }
-       
-        #endregion
-
-        #region Arbitrage        
-        [HttpPost]
-        public ActionResult GetArbitrageTicketsGroupSummary(GetArbitrageTicketCriteria criteria)
-        {
-            criteria.IsShowSpecialCurrencies = IsShowSpecialCurrencies;
-            var data = _fraudCaseDetailService.GetArbitrageTickets(criteria, true);
-            return new JsonResult { Data = new { Content = data }, MaxJsonLength = Int32.MaxValue };
-        }
-
-        [HttpPost]
-        public ActionResult GetArbitrageTickets(GetArbitrageTicketCriteria criteria)
-        {
-            criteria.IsShowSpecialCurrencies = IsShowSpecialCurrencies;
-            var data = _fraudCaseDetailService.GetArbitrageTickets(criteria, false);
-           
-            return Json(data, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        public JsonResult GetFraudCaseArbitrageCustomerDetails(GetArbitrageCustomerCriteria criteria)
-        {
-            criteria.IsShowSpecialCurrencies = IsShowSpecialCurrencies;
-            var data = _fraudCaseDetailService.GetArbitrageCustomerDetails(criteria);
-
-            return Json(data, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        public ActionResult SaveFileArbitrageTickets(GetArbitrageTicketCriteria criteria)
-        {
-            var templatePath = Server.MapPath("~/App_Data/Excel Template/MatchMonitor/FraudCaseDetail/arbitrage.xlsx");
-            var fileName = string.Format("FraudCaseDetails_{0}", DateTime.Today.ToString("yyyyMMdd")) + ".xlsx";
-            string[] filterInfo = GenerateFilterInfo(criteria);
-
-            bool isSummary = criteria.GroupId == 0;
-            criteria.IsShowSpecialCurrencies = IsShowSpecialCurrencies;
-            var content = _fraudCaseDetailService.ExportExcelArbitrageTickets(criteria, filterInfo, templatePath, isSummary);
-
-            string fileId = Guid.NewGuid().ToString();
-
-            TempData[fileId] = content;
-
-            return new JsonResult { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { FileId = fileId, FileName = fileName } };
-        }
-
-        [HttpPost]
-        public ActionResult SaveFileArbitrageCustomers(GetArbitrageCustomerCriteria criteria)
-        {
-            var templatePath = Server.MapPath("~/App_Data/Excel Template/MatchMonitor/FraudCaseDetail/arbitrage.xlsx");
-
-            var fileName = string.Format("FraudCaseDetails_{0}", DateTime.Today.ToString("yyyyMMdd")) + ".xlsx";
-
-            criteria.IsShowSpecialCurrencies = IsShowSpecialCurrencies;
-            string[] filterInfo = GenerateFilterInfo(criteria);
-            var content = _fraudCaseDetailService.ExportExcelArbitrageCustomers(criteria, filterInfo, templatePath);
-            string fileId = Guid.NewGuid().ToString();
-
-            TempData[fileId] = content;
-
-            return new JsonResult { JsonRequestBehavior = JsonRequestBehavior.AllowGet, Data = new { FileId = fileId, FileName = fileName } };
-        }
-        
-        private string[] GenerateFilterInfo(ArbitrageDetailsCriteria criteria)
-        {
-            string[] filterInfo = new string[7];
-
-            // get Market
-            filterInfo[0] = criteria.LiveStatus == -1 ? "All" : (criteria.LiveStatus == 0 ? "Non-Live" : "Live");
-
-            // get Currency
-            filterInfo[1] = criteria.CurrencyNames;
-
-            // get Evidence name
-            string strCode = string.Empty;
-            var otherEvidenceCode = AppSettings.Get("FPS_GET_OTHER_EVIDENCES");
-            if (otherEvidenceCode != null && criteria.EvidenceCodeList != null)
+            catch (Exception e)
             {
-                strCode = criteria.EvidenceCodeList;
-                strCode = strCode.Replace(otherEvidenceCode, "Others");
-                strCode = strCode.Replace(',', '/');
+                LogService.Error("Match Monitor Error", e);
+                result.ErrorCode = -1;
+                result.ErrorMsg = e.Message;
             }
 
-            filterInfo[2] = _fraudCaseDetailService.ReplaceEvidences(strCode);
-
-            // From date, to date
-            filterInfo[3] = criteria.TransDateFromString != null ? criteria.TransDateFromString.Replace(',', '-') : string.Empty;
-            filterInfo[4] = criteria.TransDateToString != null ? criteria.TransDateToString.Replace(',', '-') : string.Empty;
-
-            // get Score/HDP
-            filterInfo[5] = criteria.KeyName;
-
-            // Sites
-            filterInfo[6] = criteria.Sites;
-
-            return filterInfo;
+            return Json(new
+            {
+                data = result
+            }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetScoreHDP(int matchId, DateTime eventDate)
+        [HttpGet]
+        public ActionResult Detail(MatchMonitorDetailViewModel para)
         {
-            var data = _fraudCaseDetailService.GetScoreHDP(matchId, IsShowSpecialCurrencies);
+            IUserService userService = new UserService();
+            var matchReasonGroup = new List<MatchReasonGroupModel>();
+            var matchScore = new List<MatchScoreModel>();
 
-            return Json(data, JsonRequestBehavior.AllowGet);
+            try
+            {
+                if (para != null)
+                {
+                    matchReasonGroup = _matchMonitorService.GetMatchReasonGroup(para.EventDate, para.MatchID, para.BetTypeID)?.OrderBy(c => c.IsHedging)?.ThenBy(c => c.GroupID)?.ToList();
+
+                    matchScore = _matchMonitorService.GetMatchScore(para.EventDate, para.MatchID, para.BetTypeID);
+                    MappingReasonGroupName(ref matchReasonGroup);
+
+                    ViewBag.EventDateToString = para.EventDateToString;
+                    ViewBag.MatchID = para.MatchID;
+                    ViewBag.BetTypeID = para.BetTypeID;
+                    ViewBag.MatchName = para.MatchName;
+                    ViewBag.IsLiveDefault = (para.EventGroup == 2 || para.EventGroup == 4);
+                    ViewBag.ReasonGroup = matchReasonGroup;
+                    ViewBag.MatchScore = matchScore;
+                    ViewBag.IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
+                                    NapSettings.Settings.SiteId,
+                                    FSFunctionKeys.MatchMonitor,
+                                    NAP.Core.Business.Constant.Policy.Host);
+                }
+            }
+            catch (Exception e)
+            {
+                LogService.Error("Match Monitor Error", e);
+            }
+
+            return View();
         }
-        #endregion Arbitrage       
 
+        [HttpPost]
+        public ActionResult GetMatchMonitorDetail(MatchMonitorDetailFilterViewModel para)
+        {
+            var matchDetailResult = new List<MatchMonitorDetailResultViewModel>();
+
+            try
+            {
+                if (para != null && !string.IsNullOrEmpty(para.ListReasonGroup) && !string.IsNullOrEmpty(para.ListScore))
+                {
+                    var reasonGroupKeysFilter = JsonConvert.DeserializeObject<List<MatchReasonGroupKeyModel>>(para.ListReasonGroup);
+
+                    var matchReasonGroups = _matchMonitorService.GetMatchReasonGroup(para.EventDate, para.MatchID, para.BetTypeID)?.OrderBy(c => c.IsHedging)?.ThenBy(c => c.GroupID)?.ToList();
+
+                    MappingReasonGroupName(ref matchReasonGroups);
+
+                    var matchDetail = GetMatchMonitorDetail(para, reasonGroupKeysFilter);
+
+                    if (matchDetail != null && matchDetail.Any())
+                    {
+                        var custInfo = new List<CustInfoModel>();
+                        var mappingTransGroupReason = new List<TransGroupBettingModel>();
+                        var mappingCustGroupReason = new List<CustReasonGroupModel>();
+                        var ticketDetail = new List<TicketDetailModel>();
+
+                        var tasks = new List<Task>
+                        {
+                            Task.Run(() =>
+                            {
+                                mappingTransGroupReason = MappingTransGroupReason(matchDetail);
+                                mappingCustGroupReason = MappingCustGroupReason(matchReasonGroups, reasonGroupKeysFilter);
+                            }),
+                            Task.Run(() =>
+                            {
+                                var custIdsOfEachMatch =  matchDetail.Select(c => c.ListCustID).Distinct();
+                                var custIdsOfTotalMatch = string.Join(",",custIdsOfEachMatch).Split(',').Distinct();
+                                custInfo = _matchMonitorService.GetCustInfoByCustID(string.Join(",", custIdsOfTotalMatch));
+                            }),
+                            Task.Run(() =>
+                            {
+                                var tranIdsOfEachMatch =  matchDetail.Select(c => c.ListTransID).Distinct();
+                                var tranIdsOfTotalMatch = string.Join(",",tranIdsOfEachMatch).Split(',').Distinct();
+                                ticketDetail = _matchMonitorService.GetTicketDetail(para.EventDate, string.Join(",",tranIdsOfTotalMatch));
+                            })
+                        };
+
+                        Task.WhenAll(tasks.ToArray()).Wait();
+
+                        matchDetailResult = MergeMatchMonitorDetail(mappingTransGroupReason, mappingCustGroupReason, custInfo, ticketDetail);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                LogService.Error("Match Monitor Error", e);
+            }
+
+            return Json(new
+            {
+                homeTableData = matchDetailResult?.Where(c => c.IsHomeSide),
+                awayTableData = matchDetailResult?.Where(c => !c.IsHomeSide)
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        private List<MatchMonitorDetailResultViewModel> MergeMatchMonitorDetail(List<TransGroupBettingModel> mappingTransGroupReason, List<CustReasonGroupModel> mappingCustGroupReason, List<CustInfoModel> custInfo, List<TicketDetailModel> ticketDetail)
+        {
+            var matchDetailResult = new List<MatchMonitorDetailResultViewModel>();
+
+            if (custInfo == null || mappingCustGroupReason == null || ticketDetail == null)
+            {
+                return matchDetailResult;
+            }
+
+            matchDetailResult = ticketDetail.Join(custInfo, ticket => ticket.CustId,
+                                                            cust => cust.CustID,
+                                                            (ticket, cust) => new { ticket, cust })
+                                                            .Select(c => new MatchMonitorDetailResultViewModel
+                                                            {
+                                                                CTSCustID = c.cust.CTSCustID,
+                                                                CustID = c.cust.CustID,
+                                                                SubscriberType = c.cust.SubscriberType,
+                                                                Username = c.cust.UserName,
+                                                                Danger1 = c.cust.Danger1,
+                                                                Danger2 = c.cust.Danger2,
+                                                                Danger3 = c.cust.Danger3,
+                                                                Odds = c.ticket.Odds,
+                                                                BetID = c.ticket.TransId,
+                                                                BetTeam = c.ticket.BetTeam,
+                                                                Currency = c.cust.Currency,
+                                                                LiveIndicator = c.ticket.LiveIndicator,
+                                                                Amount = c.ticket.Stake,
+                                                                HDP = c.ticket.Hdp1 - c.ticket.Hdp2,
+                                                                Score = c.ticket.LiveIndicator ? (c.ticket.LiveAwayScore + " - " + c.ticket.LiveHomeScore) : "-",
+                                                                TicketStatus = c.ticket.TicketStatus,
+                                                                TransTime = c.ticket.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+                                                                ReasonGroup = GetReasonGroup(mappingTransGroupReason, mappingCustGroupReason, c.ticket)
+                                                            })?.OrderBy(c => c.Username)?.ThenBy(c => c.ReasonGroup)?.Distinct()?.ToList();
+
+            return matchDetailResult;
+        }
+
+        private void MappingReasonGroupName(ref List<MatchReasonGroupModel> matchReasonGroup)
+        {
+            int preIncrement1 = 0;
+            int preIncrement2 = 0;
+
+            if (matchReasonGroup != null && matchReasonGroup.Any())
+            {
+                foreach (var item in matchReasonGroup)
+                {
+                    item.ReasonGroupName = item.IsHedging ? ("Hedging " + ++preIncrement1) : ("Group Betting " + ++preIncrement2);
+                }
+            }
+        }
+
+        private List<MatchMonitorDetailModel> GetMatchMonitorDetail(MatchMonitorDetailFilterViewModel filter, List<MatchReasonGroupKeyModel> reasonGroupKeys)
+        {
+            if (reasonGroupKeys != null && reasonGroupKeys.Any())
+            {
+                var para = filter;
+                para.ListReasonGroup = string.Join(",", reasonGroupKeys.Select(c => c.GroupID)?.Distinct());
+
+                var matchDetails = _matchMonitorService.GetMatchMonitorDetail(para);
+
+                if (matchDetails != null && matchDetails.Any())
+                {
+                    var matchs = matchDetails.Join(reasonGroupKeys, m => (m.GroupID, m.TotalScore)
+                                                                  , r => (r.GroupID, r.TotalScore)
+                                                                  , (m, r) => m);
+
+                    return matchs.ToList() ?? new List<MatchMonitorDetailModel>();
+                }
+            }
+
+            return new List<MatchMonitorDetailModel>();
+        }
+
+        private List<CustReasonGroupModel> MappingCustGroupReason(List<MatchReasonGroupModel> matchReasonGroups, List<MatchReasonGroupKeyModel> reasonGroupKeysFilter)
+        {
+            var custReasonGroup = new List<CustReasonGroupModel>();
+
+            if (matchReasonGroups == null && reasonGroupKeysFilter == null)
+            {
+                return custReasonGroup;
+            }
+
+            var reasonGroupFilter = reasonGroupKeysFilter.Join(matchReasonGroups, filter => (filter.GroupID, filter.TotalScore),
+                                                                             reasonGroup => (reasonGroup.GroupID, reasonGroup.TotalScore), (filter, reasonGroup) => reasonGroup);
+
+            if (reasonGroupFilter != null && reasonGroupFilter.Any())
+            {
+                reasonGroupFilter.ToList().ForEach(i =>
+                 {
+                     var custIds = i.ListCustID.Split(',').Select(Int64.Parse)?.Distinct();
+
+                     if (custIds != null)
+                     {
+                         foreach (var j in i.ListCustID.Split(',').Select(Int64.Parse).Distinct())
+                         {
+                             custReasonGroup.Add(new CustReasonGroupModel
+                             {
+                                 GroupID = i.GroupID,
+                                 CustID = j,
+                                 ReasonGroupName = i.ReasonGroupName,
+                                 TotalScore = i.TotalScore
+                             });
+                         }
+                     }
+                 });
+            }
+
+            return custReasonGroup;
+        }
+
+        private List<TransGroupBettingModel> MappingTransGroupReason(List<MatchMonitorDetailModel> matchDetail)
+        {
+            var transGroupBetting = new List<TransGroupBettingModel>();
+
+            if (matchDetail != null && matchDetail.Any())
+            {
+                matchDetail.ForEach(i =>
+                {
+                    i.ListTransID.Split(',').Select(Int64.Parse)?.ToList()?.ForEach(j =>
+                    {
+                        transGroupBetting.Add(new TransGroupBettingModel
+                        {
+                            TransId = j,
+                            GroupID = i.GroupID,
+                            TotalScore = i.TotalScore
+                        });
+                    });
+                });
+            }
+
+            return transGroupBetting;
+        }
+
+        private string GetReasonGroup(List<TransGroupBettingModel> mappingTransGroupReason, List<CustReasonGroupModel> mappingCustGroupReason, TicketDetailModel ticketDetail)
+        {
+            string reasonGroup = "-";
+
+            if (mappingTransGroupReason != null && mappingTransGroupReason.Any() && mappingCustGroupReason != null && mappingCustGroupReason.Any())
+            {
+                var transGroup = mappingTransGroupReason.Where(c => c.TransId == ticketDetail.TransId);
+                var custGroupReason = mappingCustGroupReason.Where(c => c.CustID == ticketDetail.CustId);
+                var reasonGroupName = custGroupReason.Join(transGroup, c => (c.GroupID, c.TotalScore), 
+                                                                       t => (t.GroupID, t.TotalScore), (c, t) => c).FirstOrDefault().ReasonGroupName;
+
+                return string.IsNullOrEmpty(reasonGroupName) ? reasonGroup : reasonGroupName;
+            }
+
+            return reasonGroup;
+        }
     }
 }

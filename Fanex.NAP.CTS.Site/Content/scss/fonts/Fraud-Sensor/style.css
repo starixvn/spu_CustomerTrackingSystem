@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'Fraud-Sensor';
-  src:  url('fonts/Fraud-Sensor.eot?g7lqbz');
-  src:  url('fonts/Fraud-Sensor.eot?g7lqbz#iefix') format('embedded-opentype'),
-    url('fonts/Fraud-Sensor.ttf?g7lqbz') format('truetype'),
-    url('fonts/Fraud-Sensor.woff?g7lqbz') format('woff'),
-    url('fonts/Fraud-Sensor.svg?g7lqbz#Fraud-Sensor') format('svg');
+  src:  url('fonts/Fraud-Sensor.eot?ak2abh');
+  src:  url('fonts/Fraud-Sensor.eot?ak2abh#iefix') format('embedded-opentype'),
+    url('fonts/Fraud-Sensor.ttf?ak2abh') format('truetype'),
+    url('fonts/Fraud-Sensor.woff?ak2abh') format('woff'),
+    url('fonts/Fraud-Sensor.svg?ak2abh#Fraud-Sensor') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,391 +25,395 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-monitor:before {
+  content: "\e900";
+  color: #98a1b2;
+}
 .icon-Avarta .path1:before {
-  content: "\e954";
+  content: "\e968";
   color: rgb(255, 255, 255);
 }
 .icon-Avarta .path2:before {
-  content: "\e955";
+  content: "\e9c0";
   margin-left: -0.63671875em;
   color: rgb(43, 43, 43);
 }
 .icon-Avarta .path3:before {
-  content: "\e956";
+  content: "\e9c1";
   margin-left: -0.63671875em;
   color: rgb(43, 43, 43);
 }
 .icon-Avarta .path4:before {
-  content: "\e957";
+  content: "\e9c2";
   margin-left: -0.63671875em;
   color: rgb(255, 255, 255);
 }
 .icon-Avarta .path5:before {
-  content: "\e958";
+  content: "\e9c3";
   margin-left: -0.63671875em;
   color: rgb(255, 255, 255);
 }
 .icon-Avarta .path6:before {
-  content: "\e965";
+  content: "\e9c4";
   margin-left: -0.63671875em;
   color: rgb(255, 255, 255);
 }
 .icon-Avarta .path7:before {
-  content: "\e966";
+  content: "\e9c5";
   margin-left: -0.63671875em;
   color: rgb(255, 255, 255);
 }
 .icon-Avarta .path8:before {
-  content: "\e967";
+  content: "\e9c6";
   margin-left: -0.63671875em;
   color: rgb(255, 255, 255);
 }
 .icon-error_full .path1:before {
-  content: "\e952";
+  content: "\e969";
   color: rgb(255, 0, 0);
 }
 .icon-error_full .path2:before {
-  content: "\e953";
+  content: "\e9c7";
   margin-left: -1em;
   color: rgb(255, 255, 255);
 }
 .icon-account_detail:before {
-  content: "\e964";
+  content: "\e96a";
 }
 .icon-zoom:before {
-  content: "\e963";
+  content: "\e96b";
 }
 .icon-error .path1:before {
-  content: "\e95f";
+  content: "\e96c";
   color: rgb(255, 255, 255);
 }
 .icon-error .path2:before {
-  content: "\e960";
+  content: "\e9c8";
   margin-left: -1em;
   color: rgb(255, 0, 0);
 }
 .icon-flag .path1:before {
-  content: "\e961";
+  content: "\e96d";
   color: rgb(255, 255, 255);
 }
 .icon-flag .path2:before {
-  content: "\e962";
+  content: "\e9c9";
   margin-left: -1em;
   color: rgb(255, 0, 0);
 }
 .icon-Delinquency:before {
-  content: "\e959";
+  content: "\e96e";
   color: #e7363c;
 }
 .icon-Dirty-Account:before {
-  content: "\e95a";
+  content: "\e96f";
   color: #e67148;
 }
 .icon-Hedge-Account:before {
-  content: "\e95b";
+  content: "\e970";
   color: #475162;
 }
 .icon-Controller:before {
-  content: "\e951";
+  content: "\e971";
   color: #fff;
 }
 .icon-edit:before {
-  content: "\e950";
+  content: "\e972";
 }
 .icon-delete-retract:before {
-  content: "\e94f";
+  content: "\e973";
   color: #fff;
 }
 .icon-Bet-Restrict-Account:before {
-  content: "\e94e";
+  content: "\e974";
 }
 .icon-Bet-Restricted-SiteandCurrency:before {
-  content: "\e943";
+  content: "\e975";
   color: #f00;
 }
 .icon-Smart-Punter-Account:before {
-  content: "\e948";
+  content: "\e976";
   color: #984807;
 }
 .icon-P-without-Bet-Limit:before {
-  content: "\e947";
+  content: "\e9b5";
   color: #f00;
 }
 .icon-P-with-Bet-Limit:before {
-  content: "\e944";
+  content: "\e9b6";
 }
 .icon-Robot-User:before {
-  content: "\e941";
+  content: "\e977";
 }
 .icon-Affected:before {
-  content: "\e942";
+  content: "\e978";
   color: #c1272d;
 }
 .icon-Bet-Restricted-Currency:before {
-  content: "\e945";
+  content: "\e979";
 }
 .icon-Bet-Restricted-Site:before {
-  content: "\e946";
+  content: "\e97a";
   color: #f00;
 }
 .icon-Delinquency1:before {
-  content: "\e949";
+  content: "\e97b";
   color: #e7363c;
 }
 .icon-Dirty-Account1:before {
-  content: "\e94a";
+  content: "\e97c";
   color: #e67148;
 }
 .icon-Flagged:before {
-  content: "\e94b";
+  content: "\e97d";
   color: #f00;
 }
 .icon-Flagged-With-Evidence:before {
-  content: "\e94c";
+  content: "\e97e";
 }
 .icon-Hedge-Account1:before {
-  content: "\e94d";
+  content: "\e97f";
   color: #475162;
 }
 .icon-double-arrow:before {
-  content: "\e940";
+  content: "\e980";
   color: #fff;
 }
 .icon-path:before {
-  content: "\e93f";
+  content: "\e981";
   color: #396ef8;
 }
 .icon-home:before {
-  content: "\e93e";
+  content: "\e982";
   color: #98a1b2;
 }
 .icon-reports:before {
-  content: "\e93d";
+  content: "\e983";
   color: #9aa2b5;
 }
 .icon-device-clean:before {
-  content: "\e93c";
+  content: "\e984";
   color: #396ef8;
 }
 .icon-connect-aa:before {
-  content: "\e939";
+  content: "\e985";
 }
 .icon-disconnect:before {
-  content: "\e93a";
+  content: "\e9b7";
 }
 .icon-device-fraud:before {
-  content: "\e93b";
+  content: "\e986";
   color: #c1272d;
 }
 .icon-clean:before {
-  content: "\e935";
+  content: "\e987";
   color: #396ef8;
 }
 .icon-fraud-flag:before {
-  content: "\e936";
+  content: "\e988";
   color: #c1272d;
 }
 .icon-fraud:before {
-  content: "\e937";
+  content: "\e989";
   color: #c1272d;
 }
 .icon-expand:before {
-  content: "\e938";
+  content: "\e98a";
 }
 .icon-collapse:before {
-  content: "\e933";
+  content: "\e98b";
 }
 .icon-connect:before {
-  content: "\e934";
+  content: "\e98c";
 }
 .icon-account-device:before {
-  content: "\e92e";
+  content: "\e98d";
   color: #346bfc;
 }
 .icon-warning:before {
-  content: "\e92f";
+  content: "\e98e";
   color: #346bfc;
 }
 .icon-sub-menu:before {
-  content: "\e92d";
+  content: "\e98f";
 }
 .icon-chevron-up:before {
-  content: "\e92c";
+  content: "\e990";
 }
 .icon-help-circle:before {
-  content: "\e92b";
+  content: "\e991";
 }
 .icon-checkbox-marked-circle-outline:before {
-  content: "\e929";
+  content: "\e992";
 }
 .icon-close-circle-outline:before {
-  content: "\e92a";
+  content: "\e993";
 }
 .icon-delinquency:before {
-  content: "\e908";
+  content: "\e994";
 }
 .icon-dirty:before {
-  content: "\e90d";
+  content: "\e9b8";
 }
 .icon-hedge:before {
-  content: "\e91f";
+  content: "\e9b9";
 }
 .icon-approval:before {
-  content: "\e927";
+  content: "\e995";
 }
 .icon-neutral:before {
-  content: "\e928";
+  content: "\e996";
 }
 .icon-delete:before {
-  content: "\e926";
+  content: "\e997";
 }
 .icon-chevron-left:before {
-  content: "\e924";
+  content: "\e998";
 }
 .icon-chevron-right:before {
-  content: "\e925";
+  content: "\e999";
 }
 .icon-account-outline:before {
-  content: "\e922";
+  content: "\e99a";
 }
 .icon-onepassword:before {
-  content: "\e923";
+  content: "\e99b";
 }
 .icon-logout:before {
-  content: "\e921";
+  content: "\e99c";
 }
 .icon-close:before {
-  content: "\e920";
+  content: "\e99d";
 }
 .icon-alert:before {
-  content: "\e900";
+  content: "\e99e";
 }
 .icon-alert-box:before {
-  content: "\e901";
+  content: "\e99f";
 }
 .icon-alert-circle:before {
-  content: "\e902";
+  content: "\e9a0";
 }
 .icon-autorenew:before {
-  content: "\e903";
+  content: "\e9a1";
 }
 .icon-bell:before {
-  content: "\e904";
+  content: "\e9a2";
 }
 .icon-buffer:before {
-  content: "\e905";
+  content: "\e9a3";
 }
 .icon-calendar-text:before {
-  content: "\e906";
+  content: "\e9a4";
 }
 .icon-chart-scatterplot-hexbin .path1:before {
-  content: "\e907";
+  content: "\e9bb";
   color: rgb(154, 162, 181);
 }
 .icon-chart-scatterplot-hexbin .path2:before {
-  content: "\e930";
+  content: "\e9ca";
   margin-left: -1em;
   color: rgb(154, 162, 181);
 }
 .icon-chart-scatterplot-hexbin .path3:before {
-  content: "\e931";
+  content: "\e9cb";
   margin-left: -1em;
   color: rgb(154, 162, 181);
   opacity: 0.6;
 }
 .icon-chart-scatterplot-hexbin .path4:before {
-  content: "\e932";
+  content: "\e9cc";
   margin-left: -1em;
   color: rgb(154, 162, 181);
   opacity: 0.8;
 }
 .icon-checkbox-blank-outline:before {
-  content: "\e909";
+  content: "\e9ba";
 }
 .icon-checkbox-marked-circle:before {
-  content: "\e90a";
+  content: "\e9a5";
 }
 .icon-checkbox-marked-outline:before {
-  content: "\e90b";
+  content: "\e9a6";
 }
 .icon-chevron-down:before {
-  content: "\e90c";
+  content: "\e9a7";
 }
 .icon-email:before {
-  content: "\e90e";
+  content: "\e9a8";
 }
 .icon-export-excel:before {
-  content: "\e90f";
+  content: "\e9a9";
 }
 .icon-file-excel-box:before {
-  content: "\e910";
+  content: "\e9aa";
 }
-.icon-if_safety__tube__lifesaver__protection_2537342 .path1:before {
-  content: "\e911";
+.icon-if_safety__tube__lifesaver__protection_253734 .path1:before {
+  content: "\e9ab";
   color: rgb(0, 0, 0);
 }
-.icon-if_safety__tube__lifesaver__protection_2537342 .path2:before {
-  content: "\e912";
+.icon-if_safety__tube__lifesaver__protection_253734 .path2:before {
+  content: "\e9cd";
   margin-left: -1em;
   color: rgb(58, 146, 204);
 }
-.icon-if_safety__tube__lifesaver__protection_2537342 .path3:before {
-  content: "\e913";
+.icon-if_safety__tube__lifesaver__protection_253734 .path3:before {
+  content: "\e9ce";
   margin-left: -1em;
   color: rgb(58, 146, 204);
 }
-.icon-if_safety__tube__lifesaver__protection_2537342 .path4:before {
-  content: "\e914";
+.icon-if_safety__tube__lifesaver__protection_253734 .path4:before {
+  content: "\e9cf";
   margin-left: -1em;
   color: rgb(58, 146, 204);
 }
-.icon-if_safety__tube__lifesaver__protection_2537342 .path5:before {
-  content: "\e915";
+.icon-if_safety__tube__lifesaver__protection_253734 .path5:before {
+  content: "\e9d0";
   margin-left: -1em;
   color: rgb(0, 0, 0);
 }
-.icon-if_safety__tube__lifesaver__protection_2537342 .path6:before {
-  content: "\e916";
+.icon-if_safety__tube__lifesaver__protection_253734 .path6:before {
+  content: "\e9d1";
   margin-left: -1em;
   color: rgb(0, 0, 0);
 }
-.icon-if_safety__tube__lifesaver__protection_2537342 .path7:before {
-  content: "\e917";
+.icon-if_safety__tube__lifesaver__protection_253734 .path7:before {
+  content: "\e9d2";
   margin-left: -1em;
   color: rgb(0, 0, 0);
 }
-.icon-if_safety__tube__lifesaver__protection_2537342 .path8:before {
-  content: "\e918";
+.icon-if_safety__tube__lifesaver__protection_253734 .path8:before {
+  content: "\e9d3";
   margin-left: -1em;
   color: rgb(58, 146, 204);
 }
 .icon-magnify:before {
-  content: "\e919";
+  content: "\e9ac";
 }
 .icon-menu:before {
-  content: "\e91a";
+  content: "\e9ad";
 }
 .icon-notebook:before {
-  content: "\e91b";
+  content: "\e9ae";
 }
 .icon-note-text:before {
-  content: "\e91c";
+  content: "\e9af";
 }
 .icon-notification-clear-all:before {
-  content: "\e91d";
+  content: "\e9b0";
 }
 .icon-settings:before {
-  content: "\e91e";
+  content: "\e9b1";
 }
 .icon-cross-blue:before {
-  content: "\e95c";
+  content: "\e9b2";
   color: #396ef8;
 }
-.icon-cross-brown:before {
-  content: "\e95d";
+.icon-cross-brow:before {
+  content: "\e9b3";
   color: #849bbe;
 }
 .icon-cross-red:before {
-  content: "\e95e";
+  content: "\e9b4";
   color: #ff5757;
 }

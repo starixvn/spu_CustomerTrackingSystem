@@ -149,4 +149,8 @@
 		<Setting Key="SPU_AIML_GetAssociationInfo" SpName="SPU_AIML_GetAssociationInfo" DbName="MySQL.SPU_AIML.Reporter"/>
 		<Setting Key="SPU_AIML_GetAssociationByIPInfo" SpName="SPU_AIML_GetAssociationByIPInfo" DbName="MySQL.SPU_AIML.Reporter" />
 	</Function>
+
+	<Function name="MatchMonitor">
+		<Setting Key="CTS_Rpt_MatchMonitor_TicketDetails" SpName="CTS_Rpt_MatchMonitor_TicketDetails" DbName="DBCTS.bodb02.bodbSPUNet"/>
+	</Function>
 </Functions>
