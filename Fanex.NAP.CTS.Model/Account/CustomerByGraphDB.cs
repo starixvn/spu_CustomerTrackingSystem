@@ -2,7 +2,7 @@
 {
     public class CustomerByGraphDB
     {
-        public int CustId { get; set; }
+        public int CustID { get; set; }
 
         public string Username { get; set; }
 

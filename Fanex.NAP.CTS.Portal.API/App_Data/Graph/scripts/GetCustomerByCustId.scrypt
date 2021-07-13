@@ -1,3 +1,5 @@
-﻿MATCH (c:CTSCustomer)
+﻿USE ctsgraphdb
+//USE ctslocal
+MATCH (c:CTSCustomer)
 WHERE c.CustID = $CustID AND c.CustSubID = $CustSubID
-RETURN c.CTSCustID AS CTSCustId, c.UserName AS Username, c.UserName2 AS Username2
+RETURN c.CTSCustID AS CTSCustId, c.Username AS Username, c.Username2 AS Username2

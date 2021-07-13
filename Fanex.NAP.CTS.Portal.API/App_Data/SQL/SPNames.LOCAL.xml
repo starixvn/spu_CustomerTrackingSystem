@@ -40,6 +40,7 @@
 
   <Function Name="Association">
     <Setting Key="CTS_DC_Association_GetForExtAcc" SpName="CTS_DC_Association_GetForExtAcc" DbName="MySQL.CTS_DataCenter.Reporter" />
+    <Setting Key="CTS_DC_Association_IP_GetByCustId" SpName="CTS_DC_Association_IP_GetByCustId" DbName="MySQL.CTS_DataCenter.Reporter" />
   </Function>
 
 	<Function Name="Subscriber">

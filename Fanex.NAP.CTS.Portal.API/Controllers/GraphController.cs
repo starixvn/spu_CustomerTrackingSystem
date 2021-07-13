@@ -67,7 +67,7 @@
                     CTSCustID = paras.ctsCustId,
                     AssStatus = paras.assStatus,
                     AccountStatuses = paras.accountStatuses.Split(',').Select(int.Parse),
-                    SiteIDs = paras.siteIDs.Split(',').Select(int.Parse),
+                    SiteIDs = paras.subIDs.Split(',').Select(int.Parse),
                     Skip = paras.skipRow,
                     Pagesize = paras.takeRow
                 }).Data.FirstOrDefault();
@@ -101,7 +101,7 @@
                     AssCreatedFrom = DateTime.MinValue,
                     AssCreatedTo = DateTime.MinValue,
                     AccountStatuses = paras.accountStatuses.Split(',').Select(int.Parse),
-                    SiteIDs = paras.siteIDs.Split(',').Select(int.Parse),
+                    SiteIDs = paras.subIDs.Split(',').Select(int.Parse),
                     Skip = paras.skipRow,
                     Pagesize = paras.takeRow
                 }).Data.FirstOrDefault();
@@ -129,7 +129,7 @@
                     AssCreatedFrom = DateTime.MinValue,
                     AssCreatedTo = DateTime.MinValue,
                     AccountStatuses = paras.accountStatuses.Split(',').Select(int.Parse),
-                    SiteIDs = paras.siteIDs.Split(',').Select(int.Parse),
+                    SubscriberIDs = paras.subIDs.Split(',').Select(int.Parse),
                     Skip = paras.skipRow,
                     Pagesize = paras.takeRow
                 }).Data.FirstOrDefault();
@@ -162,7 +162,7 @@
                     AssCreatedFrom = DateTime.MinValue,
                     AssCreatedTo = DateTime.MinValue,
                     AccountStatuses = paras.accountStatuses.Split(',').Select(int.Parse),
-                    SiteIDs = paras.siteIDs.Split(',').Select(int.Parse),
+                    SiteIDs = paras.subIDs.Split(',').Select(int.Parse),
                     Skip = paras.skipRow,
                     Pagesize = paras.takeRow
                 }).Data.FirstOrDefault();
@@ -195,7 +195,7 @@
                     AssCreatedFrom = DateTime.MinValue,
                     AssCreatedTo = DateTime.MinValue,
                     AccountStatuses = paras.accountStatuses.Split(',').Select(int.Parse),
-                    SiteIDs = paras.siteIDs.Split(',').Select(int.Parse),
+                    SiteIDs = paras.subIDs.Split(',').Select(int.Parse),
                     Skip = paras.skipRow,
                     Pagesize = paras.takeRow
                 }).Data.FirstOrDefault();
@@ -426,10 +426,10 @@
                             CTSCustID = paras.CTSCustId,
                             AssStatus = paras.AssociationStatus,
                             IsAssReport = 1,
-                            AssCreatedFrom = paras.AssociatedDateFrom.AddHours(4).ToString(Consts.FormatDateTimeToString_YYYYmmddThhddmm),
-                            AssCreatedTo = paras.AssociatedDateTo.AddHours(4).AddDays(1).ToString(Consts.FormatDateTimeToString_YYYYmmddThhddmm),
+                            AssCreatedFrom = paras.AssociatedDateFrom,
+                            AssCreatedTo = paras.AssociatedDateTo,
                             AccountStatuses = new List<int>(),
-                            SiteIDs = new List<int>(),
+                            SubscriberIDs = new List<int>(),
                             Skip = paras.SkipRow,
                             Pagesize = paras.TakeRow
                         }).Data.FirstOrDefault();
@@ -440,7 +440,9 @@
             }
             catch (Exception ex)
             {
-                LogService.Error("GetDetailAssociationReport failed: " + ex.Message + ex.StackTrace);
+                LogService.Error("GetDetailAssociationReport failed: " + ex.Message + ex.StackTrace + "\n"
+                        + ex.InnerException.Message + ex.InnerException.Source + ((Neo4j.Driver.Neo4jException)ex.InnerException).Code
+                        + ex.InnerException.StackTrace);
             }
 
             return result;
