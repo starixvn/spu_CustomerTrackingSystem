@@ -51,6 +51,7 @@
     <Compile Include="Implement\CategoryService.cs" />
     <Compile Include="Implement\CommonService.cs" />
     <Compile Include="Implement\FeedDataToSoon88Service.cs" />
+    <Compile Include="Implement\MatchMonitorService.cs" />
     <Compile Include="Implement\ProbationManagementService.cs" />
     <Compile Include="Implement\ManageSubscriberService.cs" />
     <Compile Include="Implement\PushDataToExternalService.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="Interface\ICustomerEvidenceService.cs" />
     <Compile Include="Interface\IImportEvidencesService.cs" />
     <Compile Include="Interface\IManageSubscriberService.cs" />
+    <Compile Include="Interface\IMatchMonitorService.cs" />
     <Compile Include="Interface\INotificationRecipientService.cs" />
     <Compile Include="Interface\INotificationService.cs" />
     <Compile Include="Interface\IProbationManagementService.cs" />

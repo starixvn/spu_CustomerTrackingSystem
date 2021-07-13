@@ -114,6 +114,11 @@
     <Compile Include="LatestTransaction\LatestTransactionViewModel.cs" />
     <Compile Include="ManageSubscriber\ManageSubscriberGetViewModel.cs" />
     <Compile Include="ManageSubscriber\ManageSubscriberViewModel.cs" />
+    <Compile Include="MatchMonitor\MatchMonitorDetailFilterViewModel.cs" />
+    <Compile Include="MatchMonitor\MatchMonitorDetailResultViewModel.cs" />
+    <Compile Include="MatchMonitor\MatchMonitorDetailViewModel.cs" />
+    <Compile Include="MatchMonitor\MatchMonitorFilterViewModel.cs" />
+    <Compile Include="MatchMonitor\MatchMonitorViewModel.cs" />
     <Compile Include="Notification\NotificationMessagesViewModel.cs" />
     <Compile Include="Notification\NotificationSettingStatusViewModel.cs" />
     <Compile Include="Notification\NotificationSettingViewModel.cs" />

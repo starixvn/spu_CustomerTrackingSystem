@@ -35,6 +35,11 @@
             bundles.Add(new StyleBundle("~/Content/styles/dashboard").Include(
                       "~/Content/scss/pages/dashboard/dashboard.min.css"));
 
+            RegisterCTSCoreBundles(bundles);
+            RegisterSearchBoxBundles(bundles);
+
+            RegisterNotificationBundles(bundles);
+
             RegisterMatchMonitorBundles(bundles);
             RegisterMatchMonitorDetailBundles(bundles);            
 

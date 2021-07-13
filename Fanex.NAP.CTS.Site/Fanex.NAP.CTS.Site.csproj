@@ -997,6 +997,7 @@
     <Content Include="Views\Account\Associated\IPAssociation.cshtml" />
     <Content Include="Views\LatestTransaction\Index.cshtml" />
     <Content Include="Views\MatchMonitor\Detail.cshtml" />
+    <Content Include="Views\MatchMonitor\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CoreBetList.css" />
