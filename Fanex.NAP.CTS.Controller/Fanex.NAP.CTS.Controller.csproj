@@ -174,16 +174,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountController.cs" />
-    <Compile Include="Api\ApiFPSController.cs" />
     <Compile Include="AssociatedAccountMonitorController.cs" />
     <Compile Include="AssociationReportController.cs" />
     <Compile Include="BaseController.cs" />
-    <Compile Include="CheckBetReportController.cs" />
     <Compile Include="ConfigurationsController.cs" />
-    <Compile Include="CustomerMonitorController.cs" />
-    <Compile Include="DailyDataCaptureController.cs" />
     <Compile Include="ErrorsController.cs" />
-    <Compile Include="FraudCaseController.cs" />
     <Compile Include="FSFunctionKeys.cs">
       <DependentUpon>FSFunctionKeys.tt</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -199,10 +194,6 @@
     <Compile Include="ProblemAccountMonitorController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReportsController.cs" />
-    <Compile Include="ScannedOfficeIpReportController.cs" />
-    <Compile Include="SubscriberAssignmentController.cs" />
-    <Compile Include="SuspiciousCustomerController.cs" />
-    <Compile Include="SuspiciousCustomerDetailsController.cs" />
     <Compile Include="LatestTransactionController.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -221,10 +212,6 @@
     <ProjectReference Include="..\Fanex.NAP.CTS.Model\Fanex.NAP.CTS.Model.csproj">
       <Project>{5ce0ba40-0a37-4c89-a33b-d61c7944be08}</Project>
       <Name>Fanex.NAP.CTS.Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Fanex.NAP.CTS.Queue\Fanex.NAP.CTS.Queue.csproj">
-      <Project>{feffed8a-7e97-4b9a-baed-06ef734fc456}</Project>
-      <Name>Fanex.NAP.CTS.Queue</Name>
     </ProjectReference>
     <ProjectReference Include="..\Fanex.NAP.CTS.Resource\Fanex.NAP.CTS.Resource.csproj">
       <Project>{ae6c4b2a-8cd3-433a-8f42-d8272390cf61}</Project>

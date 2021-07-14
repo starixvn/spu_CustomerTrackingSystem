@@ -35,28 +35,18 @@
             bundles.Add(new StyleBundle("~/Content/styles/dashboard").Include(
                       "~/Content/scss/pages/dashboard/dashboard.min.css"));
 
-            RegisterFSCoreBundles(bundles);
+            RegisterCTSCoreBundles(bundles);
             RegisterSearchBoxBundles(bundles);
-
-            RegisterMatchMonitorBundles(bundles);
-            RegisterMatchMonitorDetailBundles(bundles);
-
-            //RegisterFraudCaseBundles(bundles);
-            //RegisterSuspiciousCustomerBundles(bundles);
-            //RegisterSuspiciousCustomerDetailsBundles(bundles);
-            //RegisterScannedOfficeIpBundles(bundles);
 
             RegisterNotificationBundles(bundles);
 
-            //RegisterDailyDataCaptureBundles(bundles);
-            //RegisterCheckBetReportBundles(bundles);
-            //RegisterCustomerMonitorBundles(bundles);
-            //RegisterSubscriberAssignment(bundles);
-            RegisterSearchBundles(bundles);
+            RegisterMatchMonitorBundles(bundles);
+            RegisterMatchMonitorDetailBundles(bundles);            
 
             RegisterBettingStatistic(bundles);
 
             RegisterAccountDetailBundles(bundles);
+
             RegisterChainToEvidenceBundles(bundles);
 
             RegisterTransactionHistoryBundles(bundles);
@@ -84,7 +74,7 @@
             RegisterLatestTransaction(bundles);
         }
 
-        private static void RegisterFSCoreBundles(BundleCollection bundles)
+        private static void RegisterCTSCoreBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/core").Include(
                 "~/Scripts/Moment/moment.min.js",
@@ -95,7 +85,6 @@
                 "~/Scripts/DataTables_New/datatables.min.js",
                 "~/Scripts/toast/jquery.toast.js",
                 "~/Scripts/numeral/numeral.min.js",
-                //"~/scripts/multiple-select.js",
                 "~/scripts/MultipleSelect/jquery.multiselect.js",
                 "~/Scripts/search.js",
                 "~/Scripts/toogle.js"));
@@ -108,64 +97,6 @@
             bundles.Add(new ScriptBundle("~/scripts/searchbox").Include("~/scripts/Home/SearchPage.js"));
         }
 
-        private static void RegisterFraudCaseBundles(BundleCollection bundles)
-        {
-            bundles.Add(new StyleBundle("~/fraud-case-styles").Include("~/content/scss/pages/configurations/fraud-case.css"));
-
-            bundles.Add(new ScriptBundle("~/fraud-case-scripts").Include("~/scripts/fraudcase/fraud-case.js"));
-
-            bundles.Add(new ScriptBundle("~/fraud-case-scripts/delayed-goal").Include("~/scripts/fraudcase/delayed-goal.js"));
-
-            bundles.Add(new ScriptBundle("~/fraud-case-scripts/scanned-office-ip").Include("~/scripts/fraudcase/scanned-office-ip.js"));
-
-            bundles.Add(new ScriptBundle("~/fraud-case-scripts/scanned-office-account").Include("~/scripts/fraudcase/scanned-office-account.js"));
-
-            bundles.Add(new ScriptBundle("~/fraud-case-scripts/daily-data-capture").Include("~/scripts/fraudcase/daily-data-capture.js"));
-        }
-
-        private static void RegisterSuspiciousCustomerBundles(BundleCollection bundles)
-        {
-            bundles.Add(new StyleBundle("~/suspicious-customer-styles").Include("~/content/scss/pages/suspicious-customer/suspicious-customer.css"));
-
-            bundles.Add(new StyleBundle("~/scripts/suspicious-customer").Include("~/scripts/suspiciouscustomer/suspicious-customer.js"));
-        }
-
-        private static void RegisterSuspiciousCustomerDetailsBundles(BundleCollection bundles)
-        {
-            bundles.Add(new ScriptBundle("~/suspicious-customer-scripts").Include(
-                "~/scripts/suspiciouscustomerdetails/*.js"));
-        }
-
-        private static void RegisterScannedOfficeIpBundles(BundleCollection bundles)
-        {
-            bundles.Add(new ScriptBundle("~/ScannedOfficeIp-scripts/main").Include("~/scripts/ScannedOfficeIp/scanned-office-ip.js"));
-        }
-
-        private static void RegisterDailyDataCaptureBundles(BundleCollection bundles)
-        {
-            bundles.Add(new ScriptBundle("~/daily-data-capture-scripts").Include("~/scripts/dailydatacapture/daily-data-capture.js"));
-        }
-
-        private static void RegisterCheckBetReportBundles(BundleCollection bundles)
-        {
-            bundles.Add(new ScriptBundle("~/check-bet-report-scripts").Include("~/scripts/CheckBetReport/check-bet-report.js"));
-        }
-
-        private static void RegisterCustomerMonitorBundles(BundleCollection bundles)
-        {
-            bundles.Add(new StyleBundle("~/customer-monitor-styles").Include("~/content/scss/pages/customer-monitor/customer-monitor.css"));
-
-            bundles.Add(new ScriptBundle("~/scripts/customer-monitor").Include("~/scripts/customermonitor/*.js"));
-
-            bundles.Add(new ScriptBundle("~/scripts/customer-monitor/customer-details").Include("~/scripts/customermonitor/customerdetails/*.js"));
-        }
-
-        private static void RegisterSubscriberAssignment(BundleCollection bundles)
-        {
-            bundles.Add(new ScriptBundle("~/scripts/subscriber-assignment").Include("~/Scripts/SubscriberAssignment/*.js"));
-        }
-
-
         private static void RegisterNotificationBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/notification").Include("~/scripts/Notification/*.js"));
@@ -174,12 +105,7 @@
 
             bundles.Add(new ScriptBundle("~/notification-setting-scripts").Include("~/Scripts/NotificationSetting/notification-setting.js"));
         }
-
-        private static void RegisterSearchBundles(BundleCollection bundles)
-        {
-            bundles.Add(new ScriptBundle("~/search-account-scripts").Include("~/Scripts/Search/Account/*.js"));
-        }
-
+                 
         private static void RegisterBettingStatistic(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/statistic-scripts")

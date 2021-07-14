@@ -2,7 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Linq;
+    using System.Reflection;
 
     public static class Extentions
     {
@@ -23,11 +25,11 @@
             foreach (var item in source)
             {
                 // check if q is full
-                if(q.Count == chunksize)
+                if (q.Count == chunksize)
                 {
                     var ret = q;
                     q = new Queue<T>();
-                    
+
                     yield return ret;
                 }
 
@@ -36,6 +38,6 @@
             }
 
             yield return q;
-        }
+        }        
     }
 }

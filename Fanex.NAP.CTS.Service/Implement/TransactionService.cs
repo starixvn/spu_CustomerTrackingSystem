@@ -62,8 +62,8 @@
                 CTSCustId = ctsCustId,
                 SubscriberId = subscriberId,
                 DateRange = dateRange,
-                PageSize = pageSize,
-                PageNumber = pageNumber,
+                Take = pageSize,
+                Skip = pageNumber,
                 TotalItem = 0
             };
 

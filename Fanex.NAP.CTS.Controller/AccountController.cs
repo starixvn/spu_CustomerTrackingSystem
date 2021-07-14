@@ -41,8 +41,7 @@
     {
         private readonly IAccountService _accountService;
         private readonly IGraphService _graphService;
-        private readonly ITransactionService _transService;
-        private readonly ISubscriberAssignmentService _subscriberAssignmentService;
+        private readonly ITransactionService _transService;        
         private readonly ICustomerEvidenceService _customerEvidenceService;    
         private readonly ICustomerClassifyService _customerClassifyService;
         private readonly IPushDataToExternalService _pushDataToExternalService;
@@ -52,8 +51,7 @@
         public AccountController()
         {
             _accountService = new AccountService();
-            _graphService = new GraphService();
-            _subscriberAssignmentService = new SubscriberAssignmentService();
+            _graphService = new GraphService();            
             _transService = new TransactionService();
             _customerEvidenceService = new CustomerEvidenceService();
             _customerClassifyService = new CustomerClassifyService();
@@ -1226,7 +1224,7 @@
                 ActionResult = x.ActionResult,
                 BrowserName = x.BrowserName,
                 DeviceId = x.DeviceId,
-                Flagged = x.Flagged,
+                Flagged = ((Flagged)x.Flagged).GetStringSlow(),
                 Ip = isViewIPPermission ? x.Ip : string.Empty,
                 IpId = 0,
                 OSName = x.OSName,

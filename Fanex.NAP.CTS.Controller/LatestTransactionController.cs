@@ -1,6 +1,8 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
     using Fanex.NAP.Core.Web.Attribute;
+    using Fanex.NAP.CTS.Core.Extentions;
+    using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model.AssociationReport;
     using Fanex.NAP.CTS.Model.Common;
     using Fanex.NAP.CTS.Resource.Consts;
@@ -45,7 +47,7 @@
             var result = Enumerable.Empty<LatestTransactionViewModel>();
 
             var data = _transService.GetLatestTransaction(subscriberId, length);
-
+            
             if (data != null && data.Any())
             {
                 result = data.OrderByDescending(x=>x.TransTime)
@@ -58,7 +60,7 @@
                         TransTimeString = x.TransTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                         Device = x.FirstDeviceCode,
                         IP = x.IP,
-                        RobotTracking = x.Flagged,
+                        RobotTracking = ((Flagged)x.Flagged).GetStringSlow(),
                         Action = x.Action,
                         ActionResult = x.ActionResult,
                         DeviceType = x.OS,

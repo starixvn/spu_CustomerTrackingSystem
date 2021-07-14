@@ -3,7 +3,7 @@
     using System;
 
     public class LatestTransactionModel
-    {
+    {        
         public string UserName { get; set; }
 
         public string LoginID { get; set; }
@@ -16,7 +16,7 @@
 
         public string IP { get; set; }
 
-        public string Flagged { get; set; }
+        public int Flagged { get; set; }
 
         public string Action { get; set; }
 

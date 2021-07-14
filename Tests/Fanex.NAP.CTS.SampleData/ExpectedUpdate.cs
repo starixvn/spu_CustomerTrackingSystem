@@ -1,28 +1,16 @@
 ﻿namespace Fanex.NAP.CTS.SampleData
 {
     using Fanex.NAP.CTS.Model.Account;
-    using Fanex.NAP.CTS.Model.Subscriber;
     using Fanex.NAP.CTS.ViewModel.Account.Evidence.Exception;
 
     public static class ExpectedUpdate
     {
-        private static SubscriberAssignmentUpdate expectedSubscriberAssignmentUpdate;
         private static ExceptionEvidenceAdd expectedExceptionEvidenceAdd;
         private static UpdateAccountExceptionModel expectedUpdateAccountExceptionModel;
         private static UpdatePlaceEvidenceModel expectedUpdatePlaceEvidenceModel;
         private static RemoveEvidenceModel expectedRemoveFlaggedEvidenceModel;
         private static RemoveEvidenceModel expectedRetractAffectedEvidenceModel;
         private static RemoveEvidenceModel expectedRestoreAffectedEvidenceModel;
-
-        public static SubscriberAssignmentUpdate ExpectedSubscriberAssignmentUpdate
-        {
-            get
-            {
-                expectedSubscriberAssignmentUpdate = expectedSubscriberAssignmentUpdate ?? GenerateSampleSubscriberAssignmentUpdate();
-
-                return expectedSubscriberAssignmentUpdate;
-            }
-        }
 
         public static ExceptionEvidenceAdd ExpectedExceptionEvidenceAdd
         {
@@ -78,10 +66,7 @@
                 return expectedRestoreAffectedEvidenceModel;
             }
         }
-
-        private static SubscriberAssignmentUpdate GenerateSampleSubscriberAssignmentUpdate()
-            => new SubscriberAssignmentUpdate { };
-
+     
         private static ExceptionEvidenceAdd GenerateSampleExceptionEvidenceAdd()
             => new ExceptionEvidenceAdd
             {
