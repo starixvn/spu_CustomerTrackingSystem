@@ -25,7 +25,7 @@
   height: 28px;
   position: relative; }
   .top-header .search-username:before {
-    content: "\e919";
+    content: "\e9ac";
     font-family: 'Fraud-Sensor' !important;
     position: absolute;
     top: .5rem;
