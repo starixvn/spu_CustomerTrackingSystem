@@ -396,7 +396,7 @@ table.dataTable tbody tr.selected td {
         padding-left: 0 !important;
         padding-right: 0 !important;
         font-size: 1.3rem;
-        margin-left: 0!important;
+        margin-left: 0 !important;
 
         &.previous {
             margin-right: 0px;
@@ -435,11 +435,11 @@ table.dataTable tbody tr.selected td {
     }
 
     .paginate_button.previous:before {
-        content: "\e924";
+        content: "\e998" !important;
     }
 
     .paginate_button.next:after {
-        content: "\e925";
+        content: "\e999" !important;
     }
 }
 

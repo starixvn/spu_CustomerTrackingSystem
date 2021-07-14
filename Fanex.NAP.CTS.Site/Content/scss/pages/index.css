@@ -354,7 +354,7 @@ input[type="checkbox"]:disabled + span {
       line-height: 1;
       -webkit-font-smoothing: antialiased; }
       .select2-container--default .select2-selection--single .select2-selection__arrow b:before {
-        content: "\e90c";
+        content: "\e9a7" !important;
         font-size: 20px; }
 
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
@@ -1066,10 +1066,10 @@ table.dataTable tbody tr.selected td {
   -webkit-font-smoothing: antialiased; }
 
 .dataTables_paginate .paginate_button.previous:before {
-  content: "\e924"; }
+  content: "\e998" !important; }
 
 .dataTables_paginate .paginate_button.next:after {
-  content: "\e925"; }
+  content: "\e999" !important; }
 
 .dataTables_info {
   font-size: 1.3rem;
@@ -1848,7 +1848,7 @@ body {
     position: relative;
     margin-right: 17px; }
     .header-info .search-header:before {
-      content: "\e919";
+      content: "\e9ac";
       font-family: 'Fraud-Sensor' !important;
       position: absolute;
       top: 0;
