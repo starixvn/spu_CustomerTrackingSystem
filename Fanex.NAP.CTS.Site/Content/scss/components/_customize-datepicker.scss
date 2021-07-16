@@ -81,7 +81,7 @@
         margin-left: -18px;
 
         &:before {
-            content: "\e924";
+            content: "\e998";
         }
     }
 
@@ -89,13 +89,13 @@
         margin-left: 0;
 
         &:before {
-            content: "\e925";
+            content: "\e999";
         }
     }
 
     .ui-datepicker-prev-hover,
     .ui-datepicker-next-hover {
-	    top: 2px;
+        top: 2px;
         border: none;
         background: none;
 
@@ -105,10 +105,10 @@
     }
 
     .ui-datepicker-prev-hover {
-	    left: 2px;
+        left: 2px;
     }
 
     .ui-datepicker-next-hover {
-	    right: 2px;
+        right: 2px;
     }
 }
