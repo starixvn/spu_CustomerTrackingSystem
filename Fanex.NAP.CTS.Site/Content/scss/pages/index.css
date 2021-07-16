@@ -431,11 +431,11 @@ input[type="checkbox"]:disabled + span {
   .ui-datepicker .ui-datepicker-header .ui-datepicker-prev span {
     margin-left: -18px; }
     .ui-datepicker .ui-datepicker-header .ui-datepicker-prev span:before {
-      content: "\e924"; }
+      content: "\e998"; }
   .ui-datepicker .ui-datepicker-header .ui-datepicker-next span {
     margin-left: 0; }
     .ui-datepicker .ui-datepicker-header .ui-datepicker-next span:before {
-      content: "\e925"; }
+      content: "\e999"; }
   .ui-datepicker .ui-datepicker-header .ui-datepicker-prev-hover,
   .ui-datepicker .ui-datepicker-header .ui-datepicker-next-hover {
     top: 2px;
@@ -486,7 +486,7 @@ input[type="checkbox"]:disabled + span {
     .jq-toast-wrap .close-jq-toast-single:before {
       display: inline-block;
       font-family: "Fraud-Sensor";
-      content: "\e920";
+      content: "\e99d";
       font-size: 18px;
       text-indent: 0; }
   .jq-toast-wrap .toast-content {
@@ -502,7 +502,7 @@ input[type="checkbox"]:disabled + span {
     background-color: #fff1f1;
     color: #fe2f41; }
     .jq-icon-error .jq-toast-heading:before {
-      content: "\e92a"; }
+      content: "\e993"; }
   .jq-icon-error .close-jq-toast-single:before {
     color: #e3b6bb; }
 
@@ -513,7 +513,7 @@ input[type="checkbox"]:disabled + span {
     background-color: #f4f7ee;
     color: #4b9300; }
     .jq-icon-success .jq-toast-heading:before {
-      content: "\e929"; }
+      content: "\e992"; }
   .jq-icon-success .close-jq-toast-single:before {
     color: #739d47; }
 
@@ -1382,10 +1382,10 @@ table.dataTable tbody tr.selected td {
         left: 0;
         box-shadow: none !important; }
       .popup-add .wrapper-value .tagify__tag:hover .tagify__tag__removeBtn::after {
-        content: "\e95c" !important;
+        content: "\e9b3" !important;
         color: #396ef8; }
       .popup-add .wrapper-value .tagify__tag .tagify__tag__removeBtn::after {
-        content: "\e95d" !important;
+        content: "\e9b3" !important;
         color: #849bbe; }
       .popup-add .wrapper-value .tagify__tag .tagify__tag__removeBtn {
         font-family: 'Fraud-Sensor' !important;
@@ -1399,17 +1399,17 @@ table.dataTable tbody tr.selected td {
       .popup-add .wrapper-value .tagify__tag.valid {
         background-color: #EAF0FF; }
         .popup-add .wrapper-value .tagify__tag.valid .tagify__tag__removeBtn::after {
-          content: "\e95d" !important;
+          content: "\e9b3" !important;
           color: #849bbe; }
         .popup-add .wrapper-value .tagify__tag.valid:hover > div::before {
           border: 1px solid #6187E7; }
         .popup-add .wrapper-value .tagify__tag.valid:hover .tagify__tag__removeBtn::after {
-          content: "\e95c" !important;
+          content: "\e9b3" !important;
           color: #396ef8; }
       .popup-add .wrapper-value .tagify__tag.invalid-duplicated, .popup-add .wrapper-value .tagify__tag.tagify--notAllowed {
         background-color: #FFEDC0; }
         .popup-add .wrapper-value .tagify__tag.invalid-duplicated .tagify__tag__removeBtn::after, .popup-add .wrapper-value .tagify__tag.tagify--notAllowed .tagify__tag__removeBtn::after {
-          content: "\e95e" !important;
+          content: "\e9b3" !important;
           color: #ff5757; }
         .popup-add .wrapper-value .tagify__tag.invalid-duplicated > div::before, .popup-add .wrapper-value .tagify__tag.tagify--notAllowed > div::before {
           background-color: #FFEDC0; }
@@ -1418,7 +1418,7 @@ table.dataTable tbody tr.selected td {
       .popup-add .wrapper-value .tagify__tag.invalid-username {
         background-color: #FFE0E0; }
         .popup-add .wrapper-value .tagify__tag.invalid-username .tagify__tag__removeBtn::after {
-          content: "\e95e" !important;
+          content: "\e9b3" !important;
           color: #ff5757; }
         .popup-add .wrapper-value .tagify__tag.invalid-username:hover > div::before {
           border: 1px solid #FF3131 !important; }

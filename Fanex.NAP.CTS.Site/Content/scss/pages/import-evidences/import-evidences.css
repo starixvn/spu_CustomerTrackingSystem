@@ -257,10 +257,10 @@
         left: 0;
         box-shadow: none !important; }
       .popup-add .wrapper-value .tagify__tag:hover .tagify__tag__removeBtn::after {
-        content: "\e95c" !important;
+        content: "\e9b3" !important;
         color: #396ef8; }
       .popup-add .wrapper-value .tagify__tag .tagify__tag__removeBtn::after {
-        content: "\e95d" !important;
+        content: "\e9b3" !important;
         color: #849bbe; }
       .popup-add .wrapper-value .tagify__tag .tagify__tag__removeBtn {
         font-family: 'Fraud-Sensor' !important;
@@ -274,17 +274,17 @@
       .popup-add .wrapper-value .tagify__tag.valid {
         background-color: #EAF0FF; }
         .popup-add .wrapper-value .tagify__tag.valid .tagify__tag__removeBtn::after {
-          content: "\e95d" !important;
+          content: "\e9b3" !important;
           color: #849bbe; }
         .popup-add .wrapper-value .tagify__tag.valid:hover > div::before {
           border: 1px solid #6187E7; }
         .popup-add .wrapper-value .tagify__tag.valid:hover .tagify__tag__removeBtn::after {
-          content: "\e95c" !important;
+          content: "\e9b3" !important;
           color: #396ef8; }
       .popup-add .wrapper-value .tagify__tag.invalid-duplicated, .popup-add .wrapper-value .tagify__tag.tagify--notAllowed {
         background-color: #FFEDC0; }
         .popup-add .wrapper-value .tagify__tag.invalid-duplicated .tagify__tag__removeBtn::after, .popup-add .wrapper-value .tagify__tag.tagify--notAllowed .tagify__tag__removeBtn::after {
-          content: "\e95e" !important;
+          content: "\e9b3" !important;
           color: #ff5757; }
         .popup-add .wrapper-value .tagify__tag.invalid-duplicated > div::before, .popup-add .wrapper-value .tagify__tag.tagify--notAllowed > div::before {
           background-color: #FFEDC0; }
@@ -293,7 +293,7 @@
       .popup-add .wrapper-value .tagify__tag.invalid-username {
         background-color: #FFE0E0; }
         .popup-add .wrapper-value .tagify__tag.invalid-username .tagify__tag__removeBtn::after {
-          content: "\e95e" !important;
+          content: "\e9b3" !important;
           color: #ff5757; }
         .popup-add .wrapper-value .tagify__tag.invalid-username:hover > div::before {
           border: 1px solid #FF3131 !important; }
