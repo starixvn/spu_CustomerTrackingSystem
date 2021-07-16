@@ -28,7 +28,9 @@
 
         public IEnumerable<ProblemCaseMonitorModel> GetProblemCaseMonitor(ProblemCaseMonitorParamsModel paras)
         {
-            if (paras == null)
+            if (paras == null
+                || string.IsNullOrEmpty(paras.ProblemCaseIDList)
+                || string.IsNullOrEmpty(paras.SubscriberIDList))
             {
                 return Enumerable.Empty<ProblemCaseMonitorModel>();
             }
