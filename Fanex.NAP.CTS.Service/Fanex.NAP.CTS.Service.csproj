@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="ExcelConfig\Utilities.cs" />
     <Compile Include="Implement\AccountService.cs" />
+    <Compile Include="Implement\Api\ProblemCaseMonitorService.cs" />
     <Compile Include="Implement\AssociatedAccountService.cs" />
     <Compile Include="Implement\AssociationReportService.cs" />
     <Compile Include="Implement\CategoryService.cs" />
@@ -54,6 +55,7 @@
     <Compile Include="Implement\MatchMonitorService.cs" />
     <Compile Include="Implement\ProbationManagementService.cs" />
     <Compile Include="Implement\ManageSubscriberService.cs" />
+    <Compile Include="Implement\ProblemCaseMonitorService.cs" />
     <Compile Include="Implement\PushDataToExternalService.cs" />
     <Compile Include="Implement\CustomerClassifyService.cs" />
     <Compile Include="Implement\SpecialCustomerClassService.cs" />
@@ -68,6 +70,7 @@
     <Compile Include="Implement\SubscriberService.cs" />
     <Compile Include="Implement\TransactionService.cs" />
     <Compile Include="Implement\CTSUserService.cs" />
+    <Compile Include="Interface\Api\IProblemCaseMonitorService.cs" />
     <Compile Include="Interface\IAccountService.cs" />
     <Compile Include="Interface\IAssociatedAccountService.cs" />
     <Compile Include="Interface\IAssociationReportService.cs" />
@@ -84,6 +87,7 @@
     <Compile Include="Interface\INotificationService.cs" />
     <Compile Include="Interface\IProbationManagementService.cs" />
     <Compile Include="Interface\IProblemAccountMonitorService.cs" />
+    <Compile Include="Interface\IProblemCaseMonitorService.cs" />
     <Compile Include="Interface\IPushDataToExternalService.cs" />
     <Compile Include="Interface\ICustomerClassifyService.cs" />
     <Compile Include="Interface\ISpecialCustomerClassService.cs" />

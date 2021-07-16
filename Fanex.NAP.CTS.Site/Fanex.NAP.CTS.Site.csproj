@@ -450,6 +450,7 @@
     <None Include="Content\scss\components\_notification.scss" />
     <Content Include="Content\scss\fonts\Fraud-Sensor\fonts\CTS.svg" />
     <Content Include="Content\scss\images\chevron-down.png" />
+    <Content Include="Content\scss\images\icon-export-excel.png" />
     <Content Include="Content\scss\images\loading.svg" />
     <Content Include="Content\scss\images\login-CTS.png" />
     <Content Include="Content\scss\images\logo-CTS.png" />
@@ -549,6 +550,13 @@
     </Content>
     <Content Include="Content\scss\pages\problem-account-monitor\problem-account-monitor.min.css">
       <DependentUpon>problem-account-monitor.css</DependentUpon>
+    </Content>
+    <None Include="Content\scss\pages\problem-case-monitor\problem-case-monitor.scss" />
+    <Content Include="Content\scss\pages\problem-case-monitor\problem-case-monitor.css">
+      <DependentUpon>problem-case-monitor.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\scss\pages\problem-case-monitor\problem-case-monitor.min.css">
+      <DependentUpon>problem-case-monitor.css</DependentUpon>
     </Content>
     <Content Include="Content\scss\pages\special-customer-class\special-customer-class.css">
       <DependentUpon>special-customer-class.scss</DependentUpon>
@@ -969,6 +977,7 @@
     <Content Include="Scripts\ProbationManagement\index.js" />
     <Content Include="Scripts\ProblemAccountMonitor\detail.js" />
     <Content Include="Scripts\ProblemAccountMonitor\index.js" />
+    <Content Include="Scripts\ProblemCaseMonitor\index.js" />
     <Content Include="Scripts\search.js" />
     <Content Include="Scripts\SpecialCustomerClass\index.js" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -998,6 +1007,10 @@
     <Content Include="Views\LatestTransaction\Index.cshtml" />
     <Content Include="Views\MatchMonitor\Detail.cshtml" />
     <Content Include="Views\MatchMonitor\Index.cshtml" />
+    <Content Include="Views\ProblemCaseMonitor\Index.cshtml" />
+    <Content Include="Template\ProblemCaseTemplate.xls">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CoreBetList.css" />

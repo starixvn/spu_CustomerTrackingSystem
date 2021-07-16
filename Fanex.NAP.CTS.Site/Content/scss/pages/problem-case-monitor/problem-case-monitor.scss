@@ -1,0 +1,166 @@
+﻿@import "../../abstracts/variables";
+@import "../../abstracts/mixins";
+
+body {
+    font-family: $font-family;
+
+    #ui-datepicker-div {
+        z-index: 999999999999999 !important;
+    }
+}
+
+.problem-cases-content {
+    margin: 1rem 1.6rem 1rem 1.6rem;
+
+    .problem-cases-table {
+        .group-control {
+            position: sticky;
+            top: 6rem;
+            z-index: 99;
+            background: $page-bg;
+            padding: 1rem 0 0 0;
+
+            .title-problem-cases {
+                margin-bottom: -1.3rem;
+            }
+
+            .form-filter {
+                .calendar {
+                    display: flex;
+                    align-items: center;
+                    width: auto;
+
+                    .icon-calendar-text {
+                        right: 2.2rem;
+                        bottom: 1.7rem;
+                    }
+
+                    .text {
+                        margin-right: .7rem;
+                        margin-bottom: 0;
+                    }
+                }
+
+                .group {
+                    .width-select {
+                        width: 15.5rem;
+                    }
+                }
+
+                .button-generate {
+                    background-color: #396ef8;
+                    border-radius: 2px;
+                    color: $page-bg;
+                    height: auto !important;
+                    padding: .7rem 2rem;
+                }
+            }
+        }
+
+        .problem-cases-datatable {
+            font-family: $font-family;
+
+            .group {
+                padding-right: 0;
+                margin-right: .6rem;
+            }
+
+            .fixed-header {
+                padding-top: 1.6rem;
+                position: sticky;
+                position: -webkit-sticky;
+                top: 6rem;
+                background: #fff;
+                z-index: 9;
+            }
+
+            .top-header {
+                .button-primary-outline {
+                    font-size: 1.3rem !important;
+                    line-height: 1.230769;
+                    padding: 0 1rem;
+                    text-transform: none;
+                }
+            }
+
+            .wrapper-info-table {
+                border: 1px solid #c4c4c4;
+                background-color: #e3e9f6;
+                position: -webkit-sticky;
+                position: sticky;
+                top: 13.2rem;
+                z-index: 11;
+
+                .dataTables_length {
+                    position: absolute;
+                    left: 0;
+                }
+
+                .dataTables_paginate {
+                    position: absolute !important;
+                    padding-top: 4rem !important;
+                    right: 50%;
+                    transform: translate(50%,-50%);
+                    text-align: center;
+                }
+
+                .table-problem-cases {
+                    width: 100% !important;
+
+                    .loading {
+                        position: relative;
+
+                        &:after {
+                            content: '';
+                            position: absolute;
+                            left: 50%;
+                            top: 75%;
+                            border-radius: 50%;
+                            width: 2.4rem;
+                            height: 2.4rem;
+                            border: 0.25rem solid rgba(57, 110, 248, 0.2);
+                            border-top-color: rgba(57, 110, 248, 1);
+                            -webkit-animation: spin 1s infinite linear;
+                            animation: spin 1s infinite linear;
+                        }
+
+                        tr {
+                            opacity: .3;
+                        }
+                    }
+
+                    thead {
+                        tr {
+                            th {
+                                position: sticky;
+                                top: 17.2rem;
+                                font-weight: 300;
+                            }
+                        }
+                    }
+
+                    tbody {
+                        tr {
+                            td {
+                                .click-view-details, .click-view-name {
+                                    cursor: pointer;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.btnExcel {
+    font-size: 3rem;
+    margin: 0 .2rem;
+    overflow: visible;
+    padding: .5rem .6rem;
+    background: transparent !important;
+    .icon-excel{
+        font-size : 3rem;
+    }
+}

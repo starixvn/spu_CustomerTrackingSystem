@@ -26,10 +26,11 @@
         public const string FormatDateToString_MMMddyyyyhhmm = "MMM dd, yyyy HH:mm";
         public const string FormatDateToString_yyyyMMddHHmmss = "yyyyMMddHHmmss";
         public const string FormatDateTimeToString_YYYYmmddThhddmm = "yyyy-MM-dd'T'HH:mm:ss.fffffff'Z'";
+        public const string FormatDateTimeToString_YYYYmmdd = "yyyyMMdd";
         public const string FormatDecimalToString_2Places = "0.00";
         public const string FormatDecimalToString_Thousands2Places = "#,##0.00";
 
-        public const string CurrentSubscriberAssignmentsKey = "CurrentSubscriberAssignmentsKey";        
+        public const string CurrentSubscriberAssignmentsKey = "CurrentSubscriberAssignmentsKey";
         public const string IsMasterSubscriberAssignmentKey = "IsMasterSubscriberAssignmentKey";
         public const string IsPermissionCN88Key = "IsPermissionCN88Key";
         public const string SubscriberNameCN88 = "CN88";
@@ -62,6 +63,10 @@
         public const string AssociationTypeName_IPAssociation = "IP Association";
 
         public const int MatchMonitor_ReportQueryType = 2;
+        
+        public const int ProblemCase_ItemID_Robot = 1;
+        public const int ProblemCase_ItemID_SuspiciousAssociation = 4;
+        public const int ProblemCase_ItemID_ProPunter = 9;
 
         public enum ROLE_CUSTOMER : int
         {
@@ -105,6 +110,18 @@
             Live = 2,
             Today = 3,
             Closed = 4
+        }
+        
+        public enum STATIC_LIST : int
+        {
+            PROBLEMCASE = 12
+        }
+
+        public enum PROBLEM_CASES_MONITOR : int
+        {
+            EXPORT_NUMBER_COLUMN = 6,
+            EXPORT_NUMBER_CHAR_PER_LINE = 180,
+            EXPORT_POINT_PIXEL = 225
         }
     }
 }

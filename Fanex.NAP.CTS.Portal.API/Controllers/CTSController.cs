@@ -10,12 +10,15 @@
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.API;
+    using Fanex.NAP.CTS.Model.API.ProblemCaseMonitor;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.Subscriber;
+    using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
-    using Fanex.NAP.CTS.Service.Implement;
+    using Fanex.NAP.CTS.Service.Implement;    
     using Fanex.NAP.CTS.Service.Interface;
+    using Fanex.NAP.CTS.ViewModel.API.ProblemCaseMonitor;
     using Fanex.NAP.SPU.Graph.Core;
     using Newtonsoft.Json;
     using System;
@@ -25,6 +28,7 @@
     using System.Net;
     using System.Web.Http;
     using System.Web.Http.Results;
+    using IProblemCaseMonitorService = Service.Interface.Api.IProblemCaseMonitorService;
 
     public class CtsController : ApiController
     {
@@ -37,6 +41,7 @@
         private readonly ICustomerClassifyService _customerClassifyService;
         private readonly IPushDataToExternalService _pushDataToExternalService;
         private readonly ISubscriberService _subscriberService;
+        private readonly IProblemCaseMonitorService _problemCaseMonitorService;
 
         /// <summary>
         /// Using for external site (TW, ExtAcc site...)
@@ -52,6 +57,7 @@
             _customerClassifyService = new CustomerClassifyService();
             _pushDataToExternalService = new PushDataToExternalService();
             _subscriberService = new SubscriberService();
+            _problemCaseMonitorService = new Service.Implement.Api.ProblemCaseMonitorService();
         }
 
         /// <summary>
@@ -522,8 +528,6 @@
             return null;
         }
 
-
-
         /// <summary>
         /// This controller is only for testing
         /// </summary>
@@ -734,5 +738,80 @@
 
             return result;
         }
+        
+        
+        /// Get list Problem Case
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public JsonResult<List<ProblemCaseModel>> GetProblemCase()
+        {
+            try
+            {
+                var problemCases = _problemCaseMonitorService.GetProlemCase(12, true);
+
+                return Json(problemCases.ToList());
+            }
+            catch (Exception ex)
+            {
+                var logMessage = new LogMessage(ex.Message)
+                    .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                    .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error(logMessage);
+
+                return Json(new List<ProblemCaseModel>());
+            }            
+        }
+
+        /// <summary>
+        /// Get list Problem Case Monitor 
+        /// </summary>
+        /// <param name="paras"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public JsonResult<List<ProblemCaseMonitorViewModel>> GetProblemCaseMonitor([FromBody]ProblemCaseMonitorParamsModel paras)
+        {
+            try
+            {
+                var problemCases = new List<ProblemCaseMonitorViewModel>();
+
+                var problemCaseData = _problemCaseMonitorService.GetProblemCaseMonitor(paras);
+
+                if (problemCaseData != null && problemCaseData.Any())
+                {
+                    var problemCaseDataGroup = problemCaseData.GroupBy(x => new { x.CTSCustID, x.UserName, x.SubscriberName }, (key, g) => new
+                    {
+                        CTSCustID = key.CTSCustID,
+                        UserName = key.UserName,
+                        SubscriberName = key.SubscriberName,
+                        Items = g
+                    });
+
+                    problemCases = problemCaseDataGroup.Select(x => new ProblemCaseMonitorViewModel
+                    {
+                        CTSCustId = x.CTSCustID,
+                        UserName = x.UserName,
+                        SubscriberName = x.SubscriberName,
+                        IsRobot = x.Items.Any(y=>y.ProblemCaseID == Consts.ProblemCase_ItemID_Robot),
+                        IsSuspiciousAssociation = x.Items.Any(y => y.ProblemCaseID == Consts.ProblemCase_ItemID_SuspiciousAssociation),
+                        IsProPunter = x.Items.Any(y => y.ProblemCaseID == Consts.ProblemCase_ItemID_ProPunter)
+                    }).OrderBy(x=>x.UserName).ToList();
+                }
+
+                return Json(problemCases);
+            }
+            catch (Exception ex)
+            {
+                var logMessage = new LogMessage(ex.Message)
+                    .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                    .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error(logMessage);
+
+                return Json(new List<ProblemCaseMonitorViewModel>());
+            }
+        }
+
     }
 }

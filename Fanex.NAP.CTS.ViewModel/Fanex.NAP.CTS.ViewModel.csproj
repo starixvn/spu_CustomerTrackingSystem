@@ -84,6 +84,7 @@
     <Compile Include="Account\Search\SearchAccountFilter.cs" />
     <Compile Include="Account\Search\SubscriberAccount.cs" />
     <Compile Include="Account\TransactionHistory\TransactionHistoryViewModel.cs" />
+    <Compile Include="API\ProblemCaseMonitor\ProblemCaseMonitorViewModel.cs" />
     <Compile Include="AssociatedAccountMonitor\AssociatedAccountMonitorDetailViewModel.cs" />
     <Compile Include="AssociatedAccountMonitor\InsertManualAssociatedAccountViewModel.cs" />
     <Compile Include="AssociationReport\AssociationDetailFilterViewModel.cs" />
@@ -142,6 +143,7 @@
     <Compile Include="ProblemAccountMonitor\SiteViewModel.cs" />
     <Compile Include="ProblemAccountMonitor\SportViewModel.cs" />
     <Compile Include="ProblemAccountMonitor\SubscriberGroupViewModel.cs" />
+    <Compile Include="ProblemCaseMonitor\ProblemCaseViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpecialCustomerClass\CustomerClassViewModel.cs" />
     <Compile Include="SpecialCustomerClass\ResultInsertRemoveViewModel.cs" />

@@ -72,6 +72,8 @@
     <Compile Include="Account\GetAssociationWithCategoryCriteria.cs" />
     <Compile Include="Api\GetAssociationForExtAccCriteria.cs" />
     <Compile Include="Api\GetSubscriberInfoBySubscriberName.cs" />
+    <Compile Include="Api\ProblemCaseMonitor\ProblemCaseCriteria.cs" />
+    <Compile Include="Api\ProblemCaseMonitor\ProblemCaseMonitorCriteria.cs" />
     <Compile Include="AssociationReport\AssociationDetailReportGetCriteria.cs" />
     <Compile Include="AssociationReport\AssociationReportGetCriteria.cs" />
     <Compile Include="Api\GetFlaggedEvidenceByLevel2AssociationCriteria.cs" />
@@ -104,6 +106,7 @@
     <Compile Include="ProbationManagement\GetSubscriberCriteria.cs" />
     <Compile Include="ProbationManagement\UpdateProbationCategoryCriteria.cs" />
     <Compile Include="ProblemAccountMonitor\InsertProblemAccountCriteria.cs" />
+    <Compile Include="ProblemCaseMonitor\ProblemCaseFilterGetCriteria.cs" />
     <Compile Include="SyncCustomerToMainDb\GetLastestEvidenceCategoryCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\PlaceEvidenceCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\RemoveFlaggedEvidenceCriteria.cs" />

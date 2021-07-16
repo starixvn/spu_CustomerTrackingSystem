@@ -531,6 +531,10 @@
       <Project>{3ed1d03f-97f1-4826-8cdd-258485a07546}</Project>
       <Name>Fanex.NAP.CTS.Service</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Fanex.NAP.CTS.ViewModel\Fanex.NAP.CTS.ViewModel.csproj">
+      <Project>{4940bbbb-2943-476d-a778-ffe0ed748f12}</Project>
+      <Name>Fanex.NAP.CTS.ViewModel</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

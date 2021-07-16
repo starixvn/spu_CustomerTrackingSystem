@@ -159,6 +159,9 @@
     <Compile Include="API\CategoryCustomerClassModel.cs" />
     <Compile Include="API\CustomerClassModel.cs" />
     <Compile Include="API\CustomerClassification.cs" />
+    <Compile Include="API\ProblemCaseMonitor\ProblemCaseMonitorModel.cs" />
+    <Compile Include="API\ProblemCaseMonitor\ProblemCaseModel.cs" />
+    <Compile Include="API\ProblemCaseMonitor\ProblemCaseMonitorParamsModel.cs" />
     <Compile Include="AssociationReport\AssociationDetailFromMySqlModel.cs" />
     <Compile Include="AssociationReport\AssociationFromMySqlModel.cs" />
     <Compile Include="Common\SubscriberGroupModel.cs" />
@@ -239,6 +242,9 @@
     <Compile Include="ManageSubscriber\SubscriberUpdateModel.cs" />
     <Compile Include="ManageSubscriber\SubscriberModel.cs" />
     <Compile Include="ProblemAccountMonitor\InsertProblemAccountsModel.cs" />
+    <Compile Include="ProblemCaseMonitor\ProblemCasesMonitorModel.cs" />
+    <Compile Include="ProblemCaseMonitor\ProblemCasesMonitorFilterModel.cs" />
+    <Compile Include="ProblemCaseMonitor\ProblemCasesFilterModel.cs" />
     <Compile Include="SpecialCustomerClass\CustomerClassModel.cs" />
     <Compile Include="SpecialCustomerClass\ResultInsertCustomerClass.cs" />
     <Compile Include="DTO\CustomerCategory.cs" />
