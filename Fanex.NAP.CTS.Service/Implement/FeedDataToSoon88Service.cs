@@ -44,7 +44,7 @@
 
         private void UpdateDataToSoon88(IEnumerable<CustomerClassForMainDb> updateList, string url)
         {
-            var result = GetAssociationWithCategory(updateList, false);
+            var result = GetAssociationWithCategory(updateList, true);
 
             var dataGroupByAccount = result.GroupBy(a => a.RegisterName);
             foreach (var groupAcc in dataGroupByAccount)
@@ -85,7 +85,7 @@
 
         private void DeleteDataInSoon88(IEnumerable<CustomerClassForMainDb> deleteList, string url)
         {
-            var result = GetAssociationWithCategory(deleteList, true);
+            var result = GetAssociationWithCategory(deleteList, false);
 
             foreach (var item in result)
             {
