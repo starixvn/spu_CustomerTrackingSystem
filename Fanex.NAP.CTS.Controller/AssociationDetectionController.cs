@@ -80,7 +80,7 @@ namespace Fanex.NAP.CTS.Controller
                 return groupLevel2ByUsername.Select(x =>
                 {
 
-                    var customerClass = x.CustSubId == 0 && x.CustomerCategory != null ? latestCustomerClassification.FirstOrDefault(a => a.CustId == x.CustId).CustomerClass : 0;
+                    var customerClass = x.CustSubId == 0 && x.CustomerCategory != null ? latestCustomerClassification.FirstOrDefault(a => a.CustId == x.CustId)?.CustomerClass : 0;
 
                     return new GetAssociationDetectionViewModel
                     {
