@@ -4,8 +4,7 @@
 
     public static class ExpectedData
     {        
-        private static AccountDetail expectedAccountDetail;        
-        private static CustomerDetailsInfo expectedCustomerDetailsInfo;
+        private static AccountDetail expectedAccountDetail;                
 
         public static AccountDetail ExpectedAccountDetail
         {

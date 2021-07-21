@@ -83,6 +83,7 @@
     <Compile Include="Interface\ICustomerEvidenceService.cs" />
     <Compile Include="Interface\IImportEvidencesService.cs" />
     <Compile Include="Interface\IManageSubscriberService.cs" />
+    <Compile Include="Interface\IMatchMonitorService.cs" />
     <Compile Include="Interface\INotificationRecipientService.cs" />
     <Compile Include="Interface\INotificationService.cs" />
     <Compile Include="Interface\IProbationManagementService.cs" />
