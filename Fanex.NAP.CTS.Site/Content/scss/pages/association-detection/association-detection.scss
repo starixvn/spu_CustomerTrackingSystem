@@ -12,7 +12,9 @@ body {
     z-index: 9;
 }
 .association-detection-report {
-
+    .tagify__tag__removeBtn:hover{
+        background : #fff;
+    }
     .association-detection-content {
         margin: 1rem 1.6rem 1rem 1.6rem;
 
