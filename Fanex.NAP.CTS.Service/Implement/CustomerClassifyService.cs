@@ -30,7 +30,7 @@
             _isWriteLogInfo = ConfigSettings.IsWriteLogInfo;
         }
 
-        public void RescanCustomerClassify(List<int> custIds, bool isCheckPAFromNAP, bool isPushCCToSoon88)
+        public void RescanCustomerClassify(List<int> custIds, bool isCheckPAFromNAP, bool isPushCCToSoon88, FunctionId funcId)
         {
             var custIdList = new List<int>();
 
@@ -66,7 +66,7 @@
 
             if (custIds != null && custIds.Any())
             {
-                RescanNormalAccount(custIds);
+                RescanNormalAccount(custIds, funcId);
             }
         }
 
@@ -406,7 +406,7 @@
             }
         }
 
-        private void RescanNormalAccount(List<int> customers)
+        private void RescanNormalAccount(List<int> customers, FunctionId funcId)
         {
             if (customers == null || !customers.Any())
             {
@@ -419,18 +419,19 @@
             {
                 var custIdsToBeRescaned = string.Join(",", custIds);
 
-                ClassifyCustomerGeneralCategoryDaily(custIdsToBeRescaned, false);
+                ClassifyCustomerGeneralCategoryDaily(custIdsToBeRescaned, funcId, false);
             }
         }
 
-        private void ClassifyCustomerGeneralCategoryDaily(string customers, bool isCheckLast14Days)
+        private void ClassifyCustomerGeneralCategoryDaily(string customers, FunctionId funcId, bool isCheckLast14Days)
         {
             var repository = new DynamicRepository();
 
             var criteria = new NormalAccountsClassificationGeneralCategorizeDailyCriteria
             {
                 ListCustIds = customers,
-                IsCheckLast14Days = isCheckLast14Days
+                IsCheckLast14Days = isCheckLast14Days,
+                FunctionId = (int)funcId
             };
 
             repository.Execute(criteria);

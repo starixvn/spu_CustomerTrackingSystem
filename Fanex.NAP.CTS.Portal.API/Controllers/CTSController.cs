@@ -28,6 +28,7 @@
     using System.Net;
     using System.Web.Http;
     using System.Web.Http.Results;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
     using IProblemCaseMonitorService = Service.Interface.Api.IProblemCaseMonitorService;
 
     public class CtsController : ApiController
@@ -565,7 +566,7 @@
                     if (isWriteLogInfo)
                         LogService.Info($"CTS Portal API - UpdateRemovedProblemAccountToCTS successful custIds:  {JsonConvert.SerializeObject(output.CustIds)}");
 
-                    _customerClassifyService.RescanCustomerClassify(output.CustIds.ToList(), false, true);
+                    _customerClassifyService.RescanCustomerClassify(output.CustIds.ToList(), false, true, FunctionId.RemovePA);
                 }
                 else if (!string.IsNullOrEmpty(output.ErrorMessage))
                 {

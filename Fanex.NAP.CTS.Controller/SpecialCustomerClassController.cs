@@ -14,6 +14,7 @@
     using System.Collections.Generic;
     using System.Linq;    
     using System.Web.Mvc;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.SpecialCustomerClass, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -124,7 +125,7 @@
             {
                 var custIdList = new List<int> { custID };
 
-                _customerClassifyService.RescanCustomerClassify(custIdList, true, true);
+                _customerClassifyService.RescanCustomerClassify(custIdList, true, true, FunctionId.RemoveSpecialCC);
             }
 
             return Json(resultRemoveToCTS, JsonRequestBehavior.AllowGet);

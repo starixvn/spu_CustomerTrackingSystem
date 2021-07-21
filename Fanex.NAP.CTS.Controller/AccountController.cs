@@ -34,6 +34,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using System.Web.Mvc;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -1046,7 +1047,7 @@
                 if (syncResult.ErrorCode == 0)
                 {
                     // Rescan Problem Account & Normal Account
-                    _customerClassifyService.RescanCustomerClassify(syncCustIds.ToList(), true, true);
+                    _customerClassifyService.RescanCustomerClassify(syncCustIds.ToList(), true, true, FunctionId.RemoveFlaggedEvidence);
                 }
 
                 var associatedAccountList = _customerEvidenceService.GetRemoveEvidenceAssociatedAccounts(
@@ -1460,7 +1461,7 @@
                         var custIds = new List<int>() { custIdInt };
 
                         // Rescan Problem Account & Normal Account
-                        _customerClassifyService.RescanCustomerClassify(custIds, true, true);
+                        _customerClassifyService.RescanCustomerClassify(custIds, true, true, FunctionId.RemoveVIP);
                     }
                 }                
             }
@@ -1502,7 +1503,7 @@
             {
                 var custIdList = new List<int> { custId };
 
-                _customerClassifyService.RescanCustomerClassify(custIdList, true, true);
+                _customerClassifyService.RescanCustomerClassify(custIdList, true, true, FunctionId.ExcludeTaggingAssPA);
             }
 
             return Json(new
