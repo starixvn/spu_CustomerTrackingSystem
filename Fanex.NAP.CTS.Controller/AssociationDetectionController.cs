@@ -89,7 +89,7 @@ namespace Fanex.NAP.CTS.Controller
                         CustomerCategory = x.CustomerCategory,
                         CategoryIds = x.CategoryIds,
                         Evidence = x.Evidence,
-                        Status = x.Status,
+                        Status = x.CustStatus,
                         CustomerClass = customerClass > 0 ? customerClass.ToString() : null,
                         IsProblemAccount = x.ParentIds != null && x.ParentIds.Split(',').Any(y => y == "50"),
                     };

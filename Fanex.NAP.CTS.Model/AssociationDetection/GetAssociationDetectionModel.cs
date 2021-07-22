@@ -12,7 +12,7 @@ namespace Fanex.NAP.CTS.Model.AssociationDetection
 
         public string UserName { get; set; }
 
-        public string Status { get; set; }
+        public string CustStatus { get; set; }
 
         public string Evidence { get; set; }
 
