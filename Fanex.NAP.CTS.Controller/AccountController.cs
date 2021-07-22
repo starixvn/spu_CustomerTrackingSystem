@@ -266,12 +266,12 @@
         [HttpPost]
         public ActionResult GetLastestCustomerClassification(long custId)
         {
-            var result = _accountService.GetCustomerClassByCustId(custId.ToString());
+            var result = _accountService.GetCustomerClassFromCTSByCustId(custId.ToString());
             var customerClassification = string.Empty;
 
             if (result != null && result.Any())
             {
-                customerClassification = result.First().CustomerClass.ToString();
+                customerClassification = result.First().CustClass.ToString();
             }
 
             return Json(new { customerClassification = customerClassification }, JsonRequestBehavior.AllowGet);
@@ -426,11 +426,11 @@
 
         private List<GraphAssociationModel> GetCustClassification(string custIds, List<GraphAssociationModel> assModel)
         {
-            var custClassification = new List<CustomerClassModel>();
+            var custClassification = new List<LatestClassification4ReportModel>();
 
             if(!string.IsNullOrEmpty(custIds))
             {
-                custClassification = _accountService.GetCustomerClassByCustId(custIds).ToList();
+                custClassification = _accountService.GetCustomerClassFromCTSByCustId(custIds)?.ToList();
             }
 
             var result = assModel.GroupJoin(custClassification,
@@ -462,7 +462,7 @@
                                           ParentIDs = group.a.ParentIDs,
                                           CategoryIDs = group.a.CategoryIDs,
                                           CategoryNames = group.a.CategoryNames,
-                                          CustomerClasses = (temp != null && temp.CustomerClass != null && group.a.CustSubId == 0) ? temp.CustomerClass.ToString() : "-",
+                                          CustomerClasses = (temp != null && temp.CustClass != null && group.a.CustSubId == 0) ? temp.CustClass.ToString() : "-",
                                       }).ToList();
 
             return result;
@@ -1162,11 +1162,11 @@
         {
             profile.PoliciesInfo = _accountService.GetCustomerProfilePoliciesInfo(custId);
           
-            var customerClass = _accountService.GetCustomerClassByCustId(custId.ToString());
+            var customerClass = _accountService.GetCustomerClassFromCTSByCustId(custId.ToString());
 
             if(customerClass != null && customerClass.Any())
             {
-                profile.PoliciesInfo.CustomerClass = customerClass.First().CustomerClass;
+                profile.PoliciesInfo.CustomerClass = customerClass.First().CustClass;
             }
         }
 
