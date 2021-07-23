@@ -5,9 +5,10 @@
     public class LogInputDataModel
     {
         [JsonProperty("CustID")]
-        public int? CustId { get; set; }
+        public long? CustId { get; set; }
 
         [JsonProperty("InputValue")]
         public object InputValue { get; set; }
     }
 }
+

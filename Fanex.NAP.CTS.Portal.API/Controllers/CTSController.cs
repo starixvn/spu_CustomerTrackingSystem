@@ -97,11 +97,14 @@
             {
                 try
                 {
-                    _customerClassifyService.LogInputData(new LogInputDataModel
+                    _customerClassifyService.LogInputData(new LogInputViewModel
                     {
-                        CustId = null,
-                        InputValue = new { custIds, evidenceId }
-                    }, FunctionId.API_PlaceEvidenceForMultiCust);
+                        PlaceEvidences = new PlaceEvidencesViewModel()
+                        {
+                            CustIds = custIds,
+                            EvidenceId =evidenceId
+                        }
+                    }, FunctionId.PlaceEvidenceForMultiCustAPI);
 
                     int userId = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);
                     int retryTime = Convert.ToInt32(ConfigurationManager.AppSettings["RetryTime"]);
@@ -272,7 +275,7 @@
         /// <param name="customerEvidenceList"></param>
         /// <returns></returns>
         [HttpPost]
-        public bool AddCustomersEvidences(CustomerEvidenceList customerEvidenceList)
+        public bool AddCustomersEvidences(PlaceMultiCustomerEvidence customerEvidenceList)
         {
             try
             {
@@ -281,11 +284,7 @@
 
                 if (string.IsNullOrEmpty(result.ErrorMessage) && result.Eivdences != null && result.Eivdences.Any())
                 {
-                    _customerClassifyService.LogInputData(new LogInputDataModel
-                    {
-                        CustId = null,
-                        InputValue = new { customerEvidenceList }
-                    }, FunctionId.API_PlaceMultiEvidencesForMultiCust);
+                    _customerClassifyService.LogInputData(new LogInputViewModel { PlaceMultiEvidences = customerEvidenceList }, FunctionId.PlaceMultiEvidencesForMultiCustAPI);
 
                     var syncCustIds = Enumerable.Empty<int>();
 
@@ -579,7 +578,7 @@
                     if (isWriteLogInfo)
                         LogService.Info($"CTS Portal API - UpdateRemovedProblemAccountToCTS successful custIds:  {JsonConvert.SerializeObject(output.CustIds)}");
 
-                    _customerClassifyService.RescanCustomerClassify(output.CustIds.ToList(), false, true, FunctionId.API_RemovePA);
+                    _customerClassifyService.RescanCustomerClassify(output.CustIds.ToList(), false, true, FunctionId.RemovePAAPI);
                 }
                 else if (!string.IsNullOrEmpty(output.ErrorMessage))
                 {

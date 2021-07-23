@@ -85,7 +85,7 @@
 
         #region Retracted And Exception Evidence
 
-        public AddEvidenceResultModel AddCustomersEvidences(CustomerEvidenceList customerEvidenceList)
+        public AddEvidenceResultModel AddCustomersEvidences(PlaceMultiCustomerEvidence customerEvidenceList)
         {
             var result = new List<AddMultiEvidenceResultModel>();
 

@@ -13,6 +13,6 @@
 
         void UpdateAppliedCustomerClassification(string jsonData);
 
-        void LogInputData(LogInputDataModel content, FunctionId funcId);
+        void LogInputData(LogInputViewModel content, FunctionId funcId);
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Model.DTO
 {
-    public class CustomerEvidenceList
+    public class PlaceMultiCustomerEvidence
     {
         public string CustIdList { get; set; }
 

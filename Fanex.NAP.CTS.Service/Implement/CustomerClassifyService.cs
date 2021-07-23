@@ -192,11 +192,7 @@
                         });
                     });
 
-                    LogInputData(new LogInputDataModel
-                    {
-                        CustId = null,
-                        InputValue = new { robotUsers }
-                    }, FunctionId.Rescan_RobotUser);
+                    LogInputData(new LogInputViewModel { ProblemAccounts = problemAccounts }, FunctionId.RescanRobotUser);
                 }
 
                 if (_isWriteLogInfo)
@@ -208,14 +204,7 @@
                     var existedProblemAccounts = GetExistedProblemAccountsFromNAPPA(string.Join(",", custIds)).ToList();
                     problemAccounts.AddRange(existedProblemAccounts);
 
-                    if(existedProblemAccounts!=null && existedProblemAccounts.Any())
-                    {
-                        LogInputData(new LogInputDataModel
-                        {
-                            CustId = null,
-                            InputValue = new { existedProblemAccounts }
-                        }, FunctionId.Rescan_PAFromNAPPA);
-                    }
+                    LogInputData(new LogInputViewModel { ProblemAccounts = existedProblemAccounts }, FunctionId.RescanPAFromNAPPA);
 
                     if (_isWriteLogInfo)
                         LogService.Info($"PA Rescan - Get PA Custs - with data: {JsonConvert.SerializeObject(existedProblemAccounts)}");
@@ -422,13 +411,20 @@
             }
         }
 
-        public void LogInputData(LogInputDataModel content, FunctionId funcId)
+        public void LogInputData(LogInputViewModel content, FunctionId funcId)
         {
             try
             {
-                if (content != null)
+                if (content == null)
                 {
-                    var result = LogInputDataAccessLayer(content, funcId);
+                    return;
+                }
+
+                var inputData = MappingLogInputData(content);
+
+                if (inputData != null && inputData.Any())
+                {
+                    var result = LogInputDataAccessLayer(inputData, funcId);
 
                     if (!string.IsNullOrEmpty(result.ErrorMsg))
                     {
@@ -440,6 +436,47 @@
             {
                 LogService.Error($"LogInputData failed - FuncId: {funcId}, inputData {content} - Exception {ex}- Datetime: {DateTime.Now}");
             }
+        }
+
+        private IEnumerable<LogInputDataModel> MappingLogInputData(LogInputViewModel content)
+        {
+            var logInputData = new List<LogInputDataModel>();
+
+            if (content?.PlaceEvidences != null && !string.IsNullOrEmpty(content.PlaceEvidences.CustIds))
+            {
+                var custIds = content.PlaceEvidences.CustIds.Split(',').Select(long.Parse);
+
+                custIds?.ToList().ForEach(c =>
+                {
+                    logInputData.Add(new LogInputDataModel
+                    {
+                        CustId = c,
+                        InputValue = content.PlaceEvidences.EvidenceId
+                    });
+                });
+            }
+
+            if (content?.PlaceMultiEvidences != null &&
+                !string.IsNullOrEmpty(content.PlaceMultiEvidences.CustIdList) &&
+                !string.IsNullOrEmpty(content.PlaceMultiEvidences.EvidenceCodeList))
+            {
+                var custIds = content.PlaceMultiEvidences.CustIdList.Split(',').Select(long.Parse);
+                var evidences = content.PlaceMultiEvidences.EvidenceCodeList.Split(',').Select(int.Parse);
+
+                custIds?.ToList().ForEach(c =>
+                {
+                    evidences?.ToList().ForEach(e =>
+                    {
+                        logInputData.Add(new LogInputDataModel
+                        {
+                            CustId = c,
+                            InputValue = e
+                        });
+                    });
+                });
+            }
+
+            return logInputData;
         }
 
         private void RescanNormalAccount(List<int> customers, FunctionId funcId)
@@ -564,18 +601,18 @@
             return criteria.RobotList;
         }
         
-        private DBResult LogInputDataAccessLayer(LogInputDataModel content, FunctionId funcId)
+
+        public DBResult LogInputDataAccessLayer(IEnumerable<LogInputDataModel> content, FunctionId funcId)
         {
+            var repository = new DynamicRepository();
+
             var criteria = new LogInputDataCriteria
             {
                 InputData = JsonConvert.SerializeObject(content),
-                FunctionID = (int) funcId
+                FunctionID = (int)funcId
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                db.ExecuteNonQuery(criteria);
-            }
+            repository.Execute(criteria);
 
             return new DBResult
             {
@@ -583,5 +620,6 @@
                 ErrorMsg = criteria.ErrorMessage
             };
         }
+
     }
 }
