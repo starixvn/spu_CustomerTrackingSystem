@@ -426,7 +426,8 @@
       .match-monitor .monitor-container .monitor-table .group-control .form-filter .group-drop-down .block-box, .detailpage .monitor-container .monitor-table .group-control .form-filter .group-drop-down .block-box {
         display: block; }
   .match-monitor .monitor-container .monitor-table .group-table, .detailpage .monitor-container .monitor-table .group-table {
-    display: flex; }
+    display: flex;
+    width: 320rem; }
   .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report, .match-monitor .monitor-container .monitor-table #first-monitor-datatable .table-report, .match-monitor .monitor-container .monitor-table #second-monitor-datatable .table-report, .detailpage .monitor-container .monitor-table #monitor-datatable .table-report, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report {
     font-family: "Lato", Arial, Tahoma, sans-serif; }
     .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .wrapper-info-table, .match-monitor .monitor-container .monitor-table #first-monitor-datatable .table-report .wrapper-info-table, .match-monitor .monitor-container .monitor-table #second-monitor-datatable .table-report .wrapper-info-table, .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .wrapper-info-table, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .wrapper-info-table, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .wrapper-info-table {
