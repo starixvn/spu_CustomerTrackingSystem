@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
+    using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Model.CustomerClassify;
     using System.Collections.Generic;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
@@ -11,5 +12,7 @@
         IEnumerable<LatestClassificationModel> GetLatestClassification(string custIds);
 
         void UpdateAppliedCustomerClassification(string jsonData);
+
+        void LogInputData(LogInputDataModel content, FunctionId funcId);
     }
 }

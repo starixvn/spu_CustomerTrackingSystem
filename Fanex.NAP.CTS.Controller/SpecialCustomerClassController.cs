@@ -125,7 +125,7 @@
             {
                 var custIdList = new List<int> { custID };
 
-                _customerClassifyService.RescanCustomerClassify(custIdList, true, true, FunctionId.RemoveSpecialCC);
+                _customerClassifyService.RescanCustomerClassify(custIdList, true, true, FunctionId.WEB_RemoveSpecialCC);
             }
 
             return Json(resultRemoveToCTS, JsonRequestBehavior.AllowGet);

@@ -6,6 +6,7 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.Logging;
+    using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria;
@@ -190,6 +191,12 @@
                             ReasonID = (int)CATEGORY.ROBOT
                         });
                     });
+
+                    LogInputData(new LogInputDataModel
+                    {
+                        CustId = null,
+                        InputValue = new { robotUsers }
+                    }, FunctionId.Rescan_RobotUser);
                 }
 
                 if (_isWriteLogInfo)
@@ -200,6 +207,15 @@
                 {
                     var existedProblemAccounts = GetExistedProblemAccountsFromNAPPA(string.Join(",", custIds)).ToList();
                     problemAccounts.AddRange(existedProblemAccounts);
+
+                    if(existedProblemAccounts!=null && existedProblemAccounts.Any())
+                    {
+                        LogInputData(new LogInputDataModel
+                        {
+                            CustId = null,
+                            InputValue = new { existedProblemAccounts }
+                        }, FunctionId.Rescan_PAFromNAPPA);
+                    }
 
                     if (_isWriteLogInfo)
                         LogService.Info($"PA Rescan - Get PA Custs - with data: {JsonConvert.SerializeObject(existedProblemAccounts)}");
@@ -406,6 +422,26 @@
             }
         }
 
+        public void LogInputData(LogInputDataModel content, FunctionId funcId)
+        {
+            try
+            {
+                if (content != null)
+                {
+                    var result = LogInputDataAccessLayer(content, funcId);
+
+                    if (!string.IsNullOrEmpty(result.ErrorMsg))
+                    {
+                        LogService.Error($"LogInputData failed - FuncId: {funcId}, inputData {content} - Datetime: {DateTime.Now}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Error($"LogInputData failed - FuncId: {funcId}, inputData {content} - Exception {ex}- Datetime: {DateTime.Now}");
+            }
+        }
+
         private void RescanNormalAccount(List<int> customers, FunctionId funcId)
         {
             if (customers == null || !customers.Any())
@@ -526,6 +562,26 @@
             }
 
             return criteria.RobotList;
+        }
+        
+        private DBResult LogInputDataAccessLayer(LogInputDataModel content, FunctionId funcId)
+        {
+            var criteria = new LogInputDataCriteria
+            {
+                InputData = JsonConvert.SerializeObject(content),
+                FunctionID = (int) funcId
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                db.ExecuteNonQuery(criteria);
+            }
+
+            return new DBResult
+            {
+                ErrorCode = string.IsNullOrEmpty(criteria.ErrorMessage) ? 0 : 1,
+                ErrorMsg = criteria.ErrorMessage
+            };
         }
     }
 }

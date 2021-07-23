@@ -11,6 +11,7 @@
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.API;
     using Fanex.NAP.CTS.Model.API.ProblemCaseMonitor;
+    using Fanex.NAP.CTS.Model.CustomerClassify;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.Subscriber;
@@ -96,6 +97,12 @@
             {
                 try
                 {
+                    _customerClassifyService.LogInputData(new LogInputDataModel
+                    {
+                        CustId = null,
+                        InputValue = new { custIds, evidenceId }
+                    }, FunctionId.API_PlaceEvidenceForMultiCust);
+
                     int userId = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);
                     int retryTime = Convert.ToInt32(ConfigurationManager.AppSettings["RetryTime"]);
 
@@ -274,6 +281,12 @@
 
                 if (string.IsNullOrEmpty(result.ErrorMessage) && result.Eivdences != null && result.Eivdences.Any())
                 {
+                    _customerClassifyService.LogInputData(new LogInputDataModel
+                    {
+                        CustId = null,
+                        InputValue = new { customerEvidenceList }
+                    }, FunctionId.API_PlaceMultiEvidencesForMultiCust);
+
                     var syncCustIds = Enumerable.Empty<int>();
 
                     var syncResult = _accountService.SyncCustEvidenceToCategory(JsonConvert.SerializeObject(result.Eivdences), false, out syncCustIds);
@@ -566,7 +579,7 @@
                     if (isWriteLogInfo)
                         LogService.Info($"CTS Portal API - UpdateRemovedProblemAccountToCTS successful custIds:  {JsonConvert.SerializeObject(output.CustIds)}");
 
-                    _customerClassifyService.RescanCustomerClassify(output.CustIds.ToList(), false, true, FunctionId.RemovePA);
+                    _customerClassifyService.RescanCustomerClassify(output.CustIds.ToList(), false, true, FunctionId.API_RemovePA);
                 }
                 else if (!string.IsNullOrEmpty(output.ErrorMessage))
                 {

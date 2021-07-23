@@ -1047,7 +1047,7 @@
                 if (syncResult.ErrorCode == 0)
                 {
                     // Rescan Problem Account & Normal Account
-                    _customerClassifyService.RescanCustomerClassify(syncCustIds.ToList(), true, true, FunctionId.RemoveFlaggedEvidence);
+                    _customerClassifyService.RescanCustomerClassify(syncCustIds.ToList(), true, true, FunctionId.WEB_RemoveFlaggedEvidence);
                 }
 
                 var associatedAccountList = _customerEvidenceService.GetRemoveEvidenceAssociatedAccounts(
@@ -1461,7 +1461,7 @@
                         var custIds = new List<int>() { custIdInt };
 
                         // Rescan Problem Account & Normal Account
-                        _customerClassifyService.RescanCustomerClassify(custIds, true, true, FunctionId.RemoveVIP);
+                        _customerClassifyService.RescanCustomerClassify(custIds, true, true, FunctionId.WEB_RemoveVIP);
                     }
                 }                
             }
@@ -1503,7 +1503,7 @@
             {
                 var custIdList = new List<int> { custId };
 
-                _customerClassifyService.RescanCustomerClassify(custIdList, true, true, FunctionId.ExcludeTaggingAssPA);
+                _customerClassifyService.RescanCustomerClassify(custIdList, true, true, FunctionId.WEB_ExcludeTaggingAssPA);
             }
 
             return Json(new
