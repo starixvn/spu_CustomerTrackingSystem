@@ -66,12 +66,12 @@
                
                 if (Danger2 != 0)
                 {
-                    danger += string.IsNullOrEmpty(danger) ? "ABI" : " - ABI" + Danger2;
+                    danger += string.IsNullOrEmpty(danger) ? "ABI" + Danger2 : " - ABI" + Danger2;
                 }
                 
                 if (Danger3 != 0)
                 {
-                    danger += string.IsNullOrEmpty(danger) ? "OS" : " - OS"  + Danger3;
+                    danger += string.IsNullOrEmpty(danger) ? "OS" + Danger3 : " - OS"  + Danger3;
                 }
 
                 return (danger == string.Empty) ? "-" : danger;
