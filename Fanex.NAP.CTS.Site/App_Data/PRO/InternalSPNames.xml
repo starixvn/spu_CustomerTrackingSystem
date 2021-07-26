@@ -72,8 +72,8 @@
     <Setting Key="CTS_DC_Association_GetByCustList" SpName="CTS_DC_Association_GetByCustList" DbName="MySQL.CTS_DataCenter.Reporter"/>
     <Setting Key="CTS_DC_Association_GetCleanAssociatedCustExceptAEvidence" SpName="CTS_DC_Association_GetCleanAssociatedCustExceptAEvidence" DbName="MySQL.CTS_DataCenter.Reporter"/>
     <Setting Key="CTS_DC_Association_GetWithCategory" SpName="CTS_DC_Association_GetWithCategory" DbName="MySQL.CTS_DataCenter.Reporter"/>
-	  <Setting Key="CTS_DC_Association_Profile_GetStats" SpName="CTS_DC_Association_Profile_GetStats" DbName="MySQL.CTS_DataCenter.Reporter"/>
-	  <Setting Key="CTS_DC_Association_Profile_Get" SpName="CTS_DC_Association_Profile_Get" DbName="MySQL.CTS_DataCenter.Reporter"/>	
+	  <Setting Key="CTS_DC_Association_Profile_GetStats" SpName="CTS_DC_Association_Profile_GetStats" DbName="MySQL.CTS_DataCenter.Reporter" Timeout="1200"/>
+	  <Setting Key="CTS_DC_Association_Profile_Get" SpName="CTS_DC_Association_Profile_Get" DbName="MySQL.CTS_DataCenter.Reporter" Timeout="1200"/>	
 	  <Setting Key="CTS_DC_AssociatedAccountMonitor_UpdateTaggingAssWithPA" SpName="CTS_DC_AssociatedAccountMonitor_UpdateTaggingAssWithPA" DbName="MySQL.CTS_DataCenter.Admin" />
 	  <Setting Key="CTS_DC_Category_Get" SpName="CTS_DC_Category_Get" DbName="MySQL.CTS_DataCenter.Reporter"/>
   </Function>
