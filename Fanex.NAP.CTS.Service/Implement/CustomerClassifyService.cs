@@ -428,13 +428,13 @@
 
                     if (!string.IsNullOrEmpty(result.ErrorMsg))
                     {
-                        LogService.Error($"LogInputData failed - FuncId: {funcId}, inputData {content} - Datetime: {DateTime.Now}");
+                        LogService.Error($"LogInputData failed - FuncId: {funcId}, inputData {JsonConvert.SerializeObject (content)} - Exception {result.ErrorMsg} - Datetime: {DateTime.Now}");
                     }
                 }
             }
             catch (Exception ex)
             {
-                LogService.Error($"LogInputData failed - FuncId: {funcId}, inputData {content} - Exception {ex}- Datetime: {DateTime.Now}");
+                LogService.Error($"LogInputData failed - FuncId: {funcId}, inputData {JsonConvert.SerializeObject(content)} - Exception {ex}- Datetime: {DateTime.Now}");
             }
         }
 
