@@ -6,6 +6,7 @@
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Utilities;
+    using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Resource.Consts;    
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.ViewModel.SpecialCustomerClass;
@@ -123,9 +124,13 @@
 
             if (resultRemoveToCTS.ErrorCode == 0)
             {
-                var custIdList = new List<int> { custID };
-
-                _customerClassifyService.RescanCustomerClassify(custIdList, true, true, FunctionId.RemoveSpecialCCWeb);
+                _customerClassifyService.RescanCustomerClassify(new RescanCustClassificationModel
+                {
+                    CustIds = new List<long> { custID },
+                    IsCheckPAFromNAP = true,
+                    IsPushCCToSoon88 = true,
+                    FunctionId = FunctionId.RemoveSpecialCCWeb
+                });
             }
 
             return Json(resultRemoveToCTS, JsonRequestBehavior.AllowGet);

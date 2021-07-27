@@ -207,7 +207,7 @@
 
         public InsertCategoryResultModel UpdateRemovedProblemAccountToCTS(string custid)
         {
-            var custIds = new List<int>();
+            var custIds = new List<long>();
             var repository = new DynamicRepository();
 
             var removedProblemAccounts = custid.Split(',').Select(a => new InsertProblemAccountsModel()
@@ -224,7 +224,7 @@
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                custIds = repository.Fetch<int>(criteria).ToList();
+                custIds = repository.Fetch<long>(criteria).ToList();
             }
 
             return new InsertCategoryResultModel() { ErrorMessage = criteria.ErrorMessage, CustIds = custIds };

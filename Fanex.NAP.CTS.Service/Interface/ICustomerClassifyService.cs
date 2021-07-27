@@ -2,12 +2,13 @@
 {
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Model.CustomerClassify;
+    using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using System.Collections.Generic;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public interface ICustomerClassifyService
     {
-        void RescanCustomerClassify(List<int> custIds, bool isCheckPAFromNAP, bool isPushCCToSoon88, FunctionId funcId);
+        void RescanCustomerClassify(RescanCustClassificationModel para);
 
         IEnumerable<LatestClassificationModel> GetLatestClassification(string custIds);
 

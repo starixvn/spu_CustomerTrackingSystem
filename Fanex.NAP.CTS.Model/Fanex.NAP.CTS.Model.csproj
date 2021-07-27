@@ -200,6 +200,7 @@
     <Compile Include="AssociatedAccountMonitor\CustProfilerModel.cs" />
     <Compile Include="AssociatedAccountMonitor\ValidateAssociatedAccountModel.cs" />
     <Compile Include="CustomerClassify\LatestClassification4ReportModel.cs" />
+    <Compile Include="CustomerClassify\RescanCustClassificationModel.cs" />
     <Compile Include="CustomerClassify\LogInputViewModel.cs" />
     <Compile Include="CustomerClassify\LogInputDataModel.cs" />
     <Compile Include="CustomerClassify\RoleCustomerModel.cs" />
