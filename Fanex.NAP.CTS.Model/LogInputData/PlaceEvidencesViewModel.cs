@@ -1,7 +1,5 @@
-﻿namespace Fanex.NAP.CTS.Model.CustomerClassify
+﻿namespace Fanex.NAP.CTS.Model.LogInputData
 {
-    using System.Collections.Generic;
-
     public class PlaceEvidencesViewModel
     {
         public string CustIds { get; set; }

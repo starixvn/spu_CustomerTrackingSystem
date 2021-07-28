@@ -8,17 +8,16 @@
     using Fanex.NAP.CTS.Core.Helpers.Xml;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model;
-    using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.API;
     using Fanex.NAP.CTS.Model.API.ProblemCaseMonitor;
-    using Fanex.NAP.CTS.Model.CustomerClassify;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
+    using Fanex.NAP.CTS.Model.LogInputData;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Model.Subscriber;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
-    using Fanex.NAP.CTS.Service.Implement;    
+    using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.API.ProblemCaseMonitor;
     using Fanex.NAP.SPU.Graph.Core;
@@ -45,6 +44,7 @@
         private readonly IPushDataToExternalService _pushDataToExternalService;
         private readonly ISubscriberService _subscriberService;
         private readonly IProblemCaseMonitorService _problemCaseMonitorService;
+        private readonly ILogInputDataService logInputDataService;
 
         /// <summary>
         /// Using for external site (TW, ExtAcc site...)
@@ -61,6 +61,7 @@
             _pushDataToExternalService = new PushDataToExternalService();
             _subscriberService = new SubscriberService();
             _problemCaseMonitorService = new Service.Implement.Api.ProblemCaseMonitorService();
+            logInputDataService = new LogInputDataService();
         }
 
         ///// <summary>
@@ -98,12 +99,12 @@
             {
                 try
                 {
-                    _customerClassifyService.LogInputData(new LogInputViewModel
+                    logInputDataService.LogInputData(new LogInputViewModel
                     {
                         PlaceEvidences = new PlaceEvidencesViewModel()
                         {
                             CustIds = custIds,
-                            EvidenceId =evidenceId
+                            EvidenceId = evidenceId
                         }
                     }, FunctionId.PlaceEvidenceForMultiCustAPI);
 
@@ -157,7 +158,7 @@
             return returnedResult;
         }
 
-        /// <summary>   
+        /// <summary>
         /// Get flagged customers by level
         /// </summary>
         /// <param name="CustIdList">CustId in string format (saparate by comma) </param>
@@ -168,7 +169,7 @@
         {
             try
             {
-                int[] eviList = { -1 }; // set default for getting all 
+                int[] eviList = { -1 }; // set default for getting all
                 var convertedCustIdList = CustIdList.Split(',').Select(a => Convert.ToInt32(a));
                 var associationList = _associationService.GetFlaggedCustomerByLevel(convertedCustIdList, AssociatedLevel, eviList);
                 var result = associationList.Distinct(new CustomerEvidenceComparer());
@@ -182,7 +183,7 @@
             }
         }
 
-        /// <summary>   
+        /// <summary>
         /// Get flagged customers by level and evidence
         /// </summary>
         /// <param name="custIdList">CustId in string format (saparate by comma) </param>
@@ -261,14 +262,12 @@
                 }
                 catch (Exception ex)
                 {
-
                     LogService.Error(ex.Message);
                 }
             }
 
             return Json(new List<CustomerEvidence>());
         }
-
 
         /// <summary>
         /// Add evidences to customers
@@ -285,7 +284,7 @@
 
                 if (string.IsNullOrEmpty(result.ErrorMessage) && result.Eivdences != null && result.Eivdences.Any())
                 {
-                    _customerClassifyService.LogInputData(new LogInputViewModel { PlaceMultiEvidences = customerEvidenceList }, FunctionId.PlaceMultiEvidencesForMultiCustAPI);
+                    logInputDataService.LogInputData(new LogInputViewModel { PlaceMultiEvidences = customerEvidenceList }, FunctionId.PlaceMultiEvidencesForMultiCustAPI);
 
                     var syncCustIds = Enumerable.Empty<long>();
 
@@ -533,7 +532,6 @@
             try
             {
                 return _accountService.CheckCustomerNotExisted(custIdList, fromDate, toDate);
-
             }
             catch (Exception ex)
             {
@@ -614,7 +612,7 @@
             }
         }
 
-        /// <summary>   
+        /// <summary>
         /// Get customer class's categories
         /// </summary>
         /// <returns>A list of customer class's categories in JSON format</returns>
@@ -689,9 +687,11 @@
                 case 1:
                     script = "GetAssociationOneLevelByCustIdByDevice";
                     break;
+
                 case 2:
                     script = "GetAssociationOneLevelByCustIdByManual";
                     break;
+
                 default:
                     script = "GetAssociationOneLevelByCustIdByDevice";
                     break;
@@ -746,12 +746,11 @@
                             result = JsonConvert.SerializeObject(listAss);
                         }
                     }
-
                 }
                 catch (Exception ex)
                 {
                     LogService.Error("GetAssociationPerType failed: " + ex.Message + ex.StackTrace + "\n"
-                            + ex.InnerException.Message + "\n" 
+                            + ex.InnerException.Message + "\n"
                             + ex.InnerException.Source + ((Neo4j.Driver.Neo4jException)ex.InnerException).Code
                             + ex.InnerException.StackTrace);
                 }
@@ -759,8 +758,7 @@
 
             return result;
         }
-        
-        
+
         /// Get list Problem Case
         /// </summary>
         /// <returns></returns>
@@ -782,16 +780,16 @@
                 LogService.Error(logMessage);
 
                 return Json(new List<ProblemCaseModel>());
-            }            
+            }
         }
 
         /// <summary>
-        /// Get list Problem Case Monitor 
+        /// Get list Problem Case Monitor
         /// </summary>
         /// <param name="paras"></param>
         /// <returns></returns>
         [HttpPost]
-        public JsonResult<List<ProblemCaseMonitorViewModel>> GetProblemCaseMonitor([FromBody]ProblemCaseMonitorParamsModel paras)
+        public JsonResult<List<ProblemCaseMonitorViewModel>> GetProblemCaseMonitor([FromBody] ProblemCaseMonitorParamsModel paras)
         {
             try
             {
@@ -814,10 +812,10 @@
                         CTSCustId = x.CTSCustID,
                         UserName = x.UserName,
                         SubscriberName = x.SubscriberName,
-                        IsRobot = x.Items.Any(y=>y.ProblemCaseID == Consts.ProblemCase_ItemID_Robot),
+                        IsRobot = x.Items.Any(y => y.ProblemCaseID == Consts.ProblemCase_ItemID_Robot),
                         IsSuspiciousAssociation = x.Items.Any(y => y.ProblemCaseID == Consts.ProblemCase_ItemID_SuspiciousAssociation),
                         IsProPunter = x.Items.Any(y => y.ProblemCaseID == Consts.ProblemCase_ItemID_ProPunter)
-                    }).OrderBy(x=>x.UserName).ToList();
+                    }).OrderBy(x => x.UserName).ToList();
                 }
 
                 return Json(problemCases);
@@ -833,6 +831,5 @@
                 return Json(new List<ProblemCaseMonitorViewModel>());
             }
         }
-
     }
 }

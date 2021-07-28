@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Criteria.CustomerClassify
+﻿namespace Fanex.NAP.CTS.Criteria.LogInputData
 {
     using Fanex.Data;
     using Fanex.Data.Repository;

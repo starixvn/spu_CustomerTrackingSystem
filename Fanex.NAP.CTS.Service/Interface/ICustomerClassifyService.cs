@@ -13,7 +13,5 @@
         IEnumerable<LatestClassificationModel> GetLatestClassification(string custIds);
 
         void UpdateAppliedCustomerClassification(string jsonData);
-
-        void LogInputData(LogInputViewModel content, FunctionId funcId);
     }
 }
