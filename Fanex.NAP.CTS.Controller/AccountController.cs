@@ -405,15 +405,6 @@
                                CategoryName = y.CategoryName
                            }).OrderBy(y => y.CategoryName)
                        }).ToList();
-
-                categoryList.Add(new CategoryGroupViewModel
-                {
-                    CategoryGroupName = "No Category",
-                    CategoryList = new List<CategoryViewModel>() { new CategoryViewModel {
-                        CategoryIDs = "0",
-                        CategoryName = "No Category"
-                    } }
-                });
             }
 
             return categoryList;
