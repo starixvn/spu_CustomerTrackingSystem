@@ -6,7 +6,7 @@
     {
         public DateTime CreatedTime { get; set; }
 
-        public int ItemID { get; set; }
+        public int SourceTypeID { get; set; }
 
         public string SourceTypeName { get; set; }
 
@@ -33,5 +33,13 @@
         public string CreatedBy { get; set; }
 
         public string TaggingType { get; set; }
+
+        public long TWBetCount { get; set; }
+
+        public decimal TWGroupBettingRate { get; set; }
+
+        public decimal TWTicketRejectRate { get; set; }
+
+        public decimal TWDesktopTicketRate { get; set; }
     }
 }

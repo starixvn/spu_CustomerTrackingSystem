@@ -1266,13 +1266,13 @@
                     {
                         CategoryId = x.CategoryID,
                         CategoryType = x.CategoryType,
-                        CategoryName = x.CategoryName != null ? x.CategoryName : string.Empty,
+                        CategoryName = x.CategoryName ?? string.Empty,
                         IsProblemAccount = x.CategoryType == 2
                     }).ToList();
 
-                isVVip = categoryList.Where(x => x.CategoryName.Equals("VVIP")).Any();
+                isVVip = categoryList.Any(x => x.CategoryName.Equals("VVIP"));
 
-                isProblemAccount = categoryList.Where(x => x.IsProblemAccount).Any();
+                isProblemAccount = categoryList.Any(x => x.IsProblemAccount);
             }
 
             var classificationHistory = _accountService.GetCustomerClassificationHistory(ctsCustId);
@@ -1327,6 +1327,10 @@
             var activeDays = cc.ActiveDays;
             var last7DayMargin = Math.Round(cc.LastXDaysMargin, 3);
             var winlost20Days = Math.Round(cc.ProbationPeriodWinloss, 3);
+            var twBetCount = cc.TWBetCount;
+            var twGroupBettingRate = cc.TWGroupBettingRate;
+            var twTicketRejectRate = cc.TWTicketRejectRate;
+            var twDesktopTicket = cc.TWDesktopTicketRate;
 
             switch (cc.CategoryID)
             {
@@ -1346,7 +1350,7 @@
                 case (int)ClassificationSourceType.Probation51:
                 case (int)ClassificationSourceType.Probation52:
                 case (int)ClassificationSourceType.Probation53:
-                    if (cc.ItemID == 5)
+                    if (cc.SourceTypeID == 5)
                         reason += $"Margin: {margin} - Win Lost: {winlost} - Bet Count: {betCount} - Last 7 day's Margin: {last7DayMargin} - WinLost(20 days): {winlost20Days}";
                     else
                         reason += $"Margin: {margin}";
@@ -1359,10 +1363,20 @@
                 case (int)ClassificationSourceType.HighRiskPunter71:
                 case (int)ClassificationSourceType.HighRiskPunter72:
                 case (int)ClassificationSourceType.HighRiskPunter73:
-                    if (cc.ItemID == 4)
+                    if (cc.SourceTypeID == 4)
                         reason += $"Margin: {margin} - Win Lost: {winlost} - Bet Count: {betCount} - Last 7 day's Margin: {last7DayMargin} - WinLost(20 days): {winlost20Days}";
                     else
                         reason += $"Margin: {margin} - Win Lost: {winlost} - Bet Count: {betCount}";
+                    break;
+                case (int)ClassificationSourceType.Probation57:
+                case (int)ClassificationSourceType.SmartPunter67:
+                case (int)ClassificationSourceType.HighRiskPunter77:
+                    reason += $"Account has total {twBetCount} tickets | Group betting percent is {twGroupBettingRate}%";
+                    break;
+                case (int)ClassificationSourceType.Probation58:
+                case (int)ClassificationSourceType.SmartPunter68:
+                case (int)ClassificationSourceType.HighRiskPunter78:
+                    reason += $"Account has {twDesktopTicket}% tickets from Desktop | Reject percent is {twTicketRejectRate}%";
                     break;
                 default:
                     break;

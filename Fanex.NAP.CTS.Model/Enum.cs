@@ -68,10 +68,14 @@
         SmartPunter61 = 261,
         SmartPunter62 = 262,
         SmartPunter63 = 263,
+        SmartPunter67 = 267,
+        SmartPunter68 = 268,
         HighRiskPunter = 204,
         HighRiskPunter71 = 271,
         HighRiskPunter72 = 272,
         HighRiskPunter73 = 273,
+        HighRiskPunter77 = 277,
+        HighRiskPunter78 = 278,
         GoodMember = 205,
         GoodMember111 = 211,
         GoodMember112 = 212,
@@ -79,7 +83,9 @@
         Probation = 206,
         Probation51 = 251,
         Probation52 = 252,
-        Probation53 = 253
+        Probation53 = 253,
+        Probation57 = 257,
+        Probation58 = 258
     }
 
     public enum EvidenceQueueActionID
