@@ -106,9 +106,9 @@
 
         public enum MATCHMONITOR_EVENTGROUP : int
         {
-            Early = 1,
-            Live = 2,
-            Today = 3,
+            Live = 1,
+            Today = 2,
+            Early = 3,
             Closed = 4
         }
         
