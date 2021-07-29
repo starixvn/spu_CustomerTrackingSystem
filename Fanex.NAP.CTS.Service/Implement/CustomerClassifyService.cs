@@ -127,7 +127,7 @@
 
             var custs = GetCustByRobotSiteRule(string.Join(",", custIds)).ToList();
 
-            var getRobotUser = GetExistedRobotUser(string.Join(",", custs));
+            var getRobotUser = GetExistedRobotUserDbAccess(string.Join(",", custs));
 
             if (!string.IsNullOrEmpty(getRobotUser))
             {
@@ -171,7 +171,7 @@
 
                 foreach (var evidences in evidencesChunk)
                 {
-                    custIds.AddRange(SyncCustomerEvidenceToCategory(JsonConvert.SerializeObject(evidences), true));
+                    custIds.AddRange(SyncCustEvidenceToCategoryDbAccess(JsonConvert.SerializeObject(evidences), true));
                 }
 
                 return new InsertCategoryResultModel { ErrorMessage = string.Empty, CustIds = custIds };
@@ -190,25 +190,10 @@
 
             if (para.CustIds != null && para.CustIds.Any())
             {
-                //PA - RobotUser
-                var robotUsers = SyncRobotUserToUpdateCategory(para.CustIds);
+                var existedRobotUsers = GetExistedRobotUser(para.CustIds);
+                problemAccounts.AddRange(existedRobotUsers);
 
-                if (robotUsers != null && robotUsers.Any())
-                {
-                    robotUsers.ForEach(c =>
-                    {
-                        problemAccounts.Add(new MultipleProblemAccountsModel()
-                        {
-                            CustID = c,
-                            ReasonID = (int)CATEGORY.ROBOT
-                        });
-                    });
-
-                    logInputDataService.LogInputData(new LogInputViewModel { ProblemAccounts = problemAccounts }, para.FuncId_CheckRobotUser);
-                }
-
-                if (_isWriteLogInfo)
-                    LogService.Info($"PA Rescan - Get RobotUsers - with data: {JsonConvert.SerializeObject(problemAccounts)}");
+                logInputDataService.LogInputData(new LogInputViewModel { ProblemAccounts = existedRobotUsers?.ToList() }, para.FuncId_CheckRobotUser);
 
                 //PA - NAP PA
                 if (para.IsCheckPAFromNAP)
@@ -217,9 +202,6 @@
                     problemAccounts.AddRange(existedProblemAccounts);
 
                     logInputDataService.LogInputData(new LogInputViewModel { ProblemAccounts = existedProblemAccounts }, para.FuncId_CheckPA);
-
-                    if (_isWriteLogInfo)
-                        LogService.Info($"PA Rescan - Get PA Custs - with data: {JsonConvert.SerializeObject(existedProblemAccounts)}");
                 }
             }
 
@@ -248,27 +230,55 @@
 
         private IEnumerable<MultipleProblemAccountsModel> GetExistedProblemAccountsFromNAPPA(string custIds)
         {
-            var problemAccounts = new List<MultipleProblemAccountsModel>();
+            var probAccFromNap = new List<MultipleProblemAccountsModel>();
 
-            if (string.IsNullOrEmpty(custIds))
+            if (!string.IsNullOrEmpty(custIds))
             {
-                return problemAccounts;
+                var problemAccountsNAPCM = GetProblemAccountsFromNAP(custIds, null).ToList();
+                var problemAccountsCN88 = GetProblemAccountsFromNAP_CN88(custIds, null).ToList();
+
+                if (problemAccountsNAPCM != null && problemAccountsNAPCM.Any())
+                {
+                    probAccFromNap.AddRange(problemAccountsNAPCM);
+                }
+
+                if (problemAccountsCN88 != null && problemAccountsCN88.Any())
+                {
+                    probAccFromNap.AddRange(problemAccountsCN88);
+                }
             }
 
-            var problemAccountsNAPCM = GetProblemAccountsFromNAP(custIds, null).ToList();
-            var problemAccountsCN88 = GetProblemAccountsFromNAP_CN88(custIds, null).ToList();
+            if (_isWriteLogInfo)
+                LogService.Info($"PA Rescan - Get PA Custs - with data: {JsonConvert.SerializeObject(probAccFromNap)}");
 
-            if (problemAccountsNAPCM != null && problemAccountsNAPCM.Any())
+            return probAccFromNap.Distinct();
+        }
+
+        private IEnumerable<MultipleProblemAccountsModel> GetExistedRobotUser(IEnumerable<long> custIds)
+        {
+            var existedRobots = new List<MultipleProblemAccountsModel>();
+
+            if (custIds != null && custIds.Any())
             {
-                problemAccounts.AddRange(problemAccountsNAPCM);
+                var robotUsers = SyncRobotUserToUpdateCategory(custIds);
+
+                if (robotUsers != null && robotUsers.Any())
+                {
+                    robotUsers.ForEach(c =>
+                    {
+                        existedRobots.Add(new MultipleProblemAccountsModel()
+                        {
+                            CustID = c,
+                            ReasonID = (int)CATEGORY.ROBOT
+                        });
+                    });
+                }
             }
 
-            if (problemAccountsCN88 != null && problemAccountsCN88.Any())
-            {
-                problemAccounts.AddRange(problemAccountsCN88);
-            }
+            if (_isWriteLogInfo)
+                LogService.Info($"PA Rescan - Get RobotUsers - with data: {JsonConvert.SerializeObject(existedRobots)}");
 
-            return problemAccounts.Distinct();
+            return existedRobots;
         }
 
         private InsertCategoryResultModel InsertProblemAccountToCTS(List<MultipleProblemAccountsModel> problemAccounts)
@@ -286,7 +296,7 @@
 
                 foreach (var problemAccs in probalemAccountsChunk)
                 {
-                    var result = InsertProblemAccount(JsonConvert.SerializeObject(problemAccs), true);
+                    var result = InsertProblemAccountDbAccess(JsonConvert.SerializeObject(problemAccs), true);
 
                     custIds.AddRange(result);
                 }
@@ -365,7 +375,7 @@
             return existedEvidences ?? new List<CustEvidenceModel>();
         }
 
-        private List<long> SyncCustomerEvidenceToCategory(string custEvidencesJson, bool isRescan)
+        private List<long> SyncCustEvidenceToCategoryDbAccess(string custEvidencesJson, bool isRescan)
         {
             var custIds = new List<long>();
             var repository = new DynamicRepository();
@@ -425,7 +435,7 @@
             }
         }
 
-        private List<long> InsertProblemAccount(string problemAccountJson, bool isRescan)
+        private List<long> InsertProblemAccountDbAccess(string problemAccountJson, bool isRescan)
         {
             var repository = new DynamicRepository();
             var custIds = new List<long>();
@@ -532,7 +542,7 @@
             return roleCus;
         }
 
-        private string GetExistedRobotUser(string custIds)
+        private string GetExistedRobotUserDbAccess(string custIds)
         {
             var criteria = new GetExistedRobotUserCriteria
             {
