@@ -35,10 +35,12 @@
         list.push({ 'id': '210', 'indexColor': 1, 'name': 'VVIP' });
         list.push({ 'id': '201', 'indexColor': 1, 'name': 'New Member' });
         list.push({ 'id': '202', 'indexColor': 1, 'name': 'Normal Account' });
+        list.push({ 'id': '1001', 'indexColor': 1, 'name': 'Normal Member InActive' });
 
         list.push({ 'id': '206', 'indexColor': 2, 'name': 'Probation' });
         list.push({ 'id': '203', 'indexColor': 2, 'name': 'Smart Punter' });
         list.push({ 'id': '204', 'indexColor': 2, 'name': 'High Risk Punter' });
+        list.push({ 'id': '1002', 'indexColor': 2, 'name': 'Pro Punter InActive' });
 
         list.push({ 'id': '211', 'indexColor': 3, 'name': 'Good Member (111)' });
         list.push({ 'id': '212', 'indexColor': 3, 'name': 'Good Member (112)' });
