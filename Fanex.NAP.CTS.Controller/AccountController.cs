@@ -1330,7 +1330,7 @@
             var twBetCount = cc.TWBetCount;
             var twGroupBettingRate = cc.TWGroupBettingRate;
             var twTicketRejectRate = cc.TWTicketRejectRate;
-            var twDesktopTicket = cc.TWDesktopTicketRate;
+            var twDesktopTicket = cc.TWDesktopUsageRate;
 
             switch (cc.CategoryID)
             {
