@@ -76,6 +76,8 @@
 	  <Setting Key="CTS_DC_Association_Profile_Get" SpName="CTS_DC_Association_Profile_Get" DbName="MySQL.CTS_DataCenter.Reporter" Timeout="1200"/>	
 	  <Setting Key="CTS_DC_AssociatedAccountMonitor_UpdateTaggingAssWithPA" SpName="CTS_DC_AssociatedAccountMonitor_UpdateTaggingAssWithPA" DbName="MySQL.CTS_DataCenter.Admin" />
 	  <Setting Key="CTS_DC_Category_Get" SpName="CTS_DC_Category_Get" DbName="MySQL.CTS_DataCenter.Reporter"/>
+
+	  <Setting Key="CTS_DC_RPT_AssociationDetection" SpName="CTS_DC_RPT_AssociationDetection" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter"/>
   </Function>
 
   <Function Name="CustomerClassification">

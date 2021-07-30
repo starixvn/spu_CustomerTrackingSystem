@@ -1,10 +1,12 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement
 {
     using Fanex.Data;
+    using Fanex.Logging;
     using Fanex.NAP.CTS.Criteria.Common;
     using Fanex.NAP.CTS.Model.Common;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.Common;
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -42,6 +44,31 @@
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 return db.Query<SubscriberGroupModel>(criteria);
+            }
+        }
+
+        public IEnumerable<ValidateUserNameModel> ValidateUsernames(string userNames, out bool isException)
+        {
+            isException = false;
+
+            var criteria = new ValidateUsernameCriteria
+            {
+                userNames = userNames
+            };
+
+            try
+            {
+                using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+                {
+                    return db.Query<ValidateUserNameModel>(criteria);
+                }
+            }
+            catch (Exception ex)
+            {
+                isException = true;
+                LogService.Error(ex.Message, ex);
+
+                return Enumerable.Empty<ValidateUserNameModel>();
             }
         }
     }

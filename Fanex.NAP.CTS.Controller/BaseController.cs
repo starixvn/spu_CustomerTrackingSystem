@@ -10,6 +10,7 @@
     using Fanex.NAP.Core.Web.Context;
     using Fanex.NAP.Core.Web.Session;
     using Fanex.NAP.CTS.Core.ExportExcel;
+    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Resource.Consts;
     using NPOI.SS.UserModel;
     using Sentry;
@@ -21,6 +22,7 @@
 
     public class BaseController : Controller
     {
+        
         public BaseController()
         {
             CurrentContext = new CurrentContext();
@@ -30,7 +32,7 @@
             {
                 CurrentSession = new CurrentSession();
                 ViewBag.Session = CurrentSession;
-            }         
+            }           
         }
 
         public virtual string BaseControllerName { get => Consts.BaseController; }

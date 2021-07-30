@@ -324,32 +324,7 @@
             }
 
             return workbook.ToBytes();
-        }
-
-        public IEnumerable<ValidateUserNameModel> ValidateUsernames(string userNames, out bool isException)
-        {
-            isException = false;
-
-            var criteria = new ValidateUsernameCriteria
-            {
-                userNames = userNames
-            };
-
-            try
-            {
-                using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-                {
-                    return db.Query<ValidateUserNameModel>(criteria);
-                }
-            }
-            catch (Exception ex)
-            {
-                isException = true;
-                LogService.Error(ex.Message, ex);
-
-                return Enumerable.Empty<ValidateUserNameModel>();
-            }
-        }
+        }               
     
         public DBResult InsertAccountEvidencesQueue(string jsonCustEvidences, int userId)
         {

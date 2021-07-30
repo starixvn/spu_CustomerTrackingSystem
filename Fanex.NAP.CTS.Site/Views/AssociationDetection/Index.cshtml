@@ -1,0 +1,66 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="page-title">Association Detection</h2>
+@section styles{
+    @Styles.Render("~/association-detection-styles")
+}
+<section class="association-detection-report">
+    <div class="association-detection-content">
+        <div class="association-detection-table">
+            <div class="control-table">
+                <div class="form-filter">
+                    <div id="divAddUserName" class="popup-add box-username">
+                        <div class="group-title">
+                            <div class="label">Username</div>
+                            <div class="wrapper-title">
+                                <div class="wrapper-rule wrapper-rule-left">
+                                    <span class="text bg-red">Red</span>
+                                    <span class="text">Invalid username</span>
+                                </div>
+                                <div class="wrapper-rule wrapper-rule-right">
+                                    <span class="text bg-yellow">Yellow</span>
+                                    <span class="text">Duplicated username</span>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="wrapper-value" id="spanAddUserName">
+                            <input id="inputTagUsername" type="text" name='tags-outside' class="input-field full-width tagify--outside" placeholder="Type username (Separate by comma, tab, space and enter)" />
+                            <span class="limit-username">
+                                Max: <span id="spanAddUserNameMaxTag">200</span> usernames
+                            </span>
+                            <span id="spanAddChangeHidden" hidden></span>
+                        </span>
+                        <div class="modal-footer margin-top-10">
+                            <button id="btnAssociationDetection" class="button btn btn-detect" title="Association Detection">Detect</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="report-cont">
+                <div class="table-report">
+                    <table id="tblAssociationDetection" class="table table-striped table-association-detection" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Group</th>
+                                <th>Username</th>
+                                <th>Status</th>
+                                <th>Evidence</th>
+                                <th>Customer Category</th>
+                                <th>Customer Class</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section scripts{
+    @Scripts.Render("~/association-detection-scripts")
+}

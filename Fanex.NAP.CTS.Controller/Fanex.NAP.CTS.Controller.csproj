@@ -175,6 +175,7 @@
   <ItemGroup>
     <Compile Include="AccountController.cs" />
     <Compile Include="AssociatedAccountMonitorController.cs" />
+    <Compile Include="AssociationDetectionController.cs" />
     <Compile Include="AssociationReportController.cs" />
     <Compile Include="BaseController.cs" />
     <Compile Include="ConfigurationsController.cs" />
@@ -188,7 +189,6 @@
     <Compile Include="EvidenceManagementController.cs" />
     <Compile Include="ProblemCaseMonitorController.cs" />
     <Compile Include="ManageSubscriberController.cs" />
-    <Compile Include="MatchMonitorController.cs" />
     <Compile Include="NotificationSettingController.cs" />
     <Compile Include="ProbationManagementController.cs" />
     <Compile Include="SpecialCustomerClassController.cs" />

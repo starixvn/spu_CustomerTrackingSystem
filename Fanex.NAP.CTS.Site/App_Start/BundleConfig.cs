@@ -36,9 +36,8 @@
                       "~/Content/scss/pages/dashboard/dashboard.min.css"));
 
             RegisterCTSCoreBundles(bundles);
-            RegisterSearchBoxBundles(bundles);
-
-            RegisterNotificationBundles(bundles);
+            RegisterSearchBoxBundles(bundles);           
+            RegisterNotificationBundles(bundles);            
 
             RegisterMatchMonitorBundles(bundles);
             RegisterMatchMonitorDetailBundles(bundles);            
@@ -74,6 +73,7 @@
             RegisterLatestTransaction(bundles);
 
             RegisterProblemCaseMonitor(bundles);
+            RegisterAssociationDetectionBundles(bundles);
         }
 
         private static void RegisterCTSCoreBundles(BundleCollection bundles)
@@ -192,6 +192,18 @@
 
             bundles.Add(new StyleBundle("~/import-evidences-styles").Include(
                     "~/Content/scss/pages/import-evidences/import-evidences.css",
+                    "~/Content/scss/vendors/jquery-ui/base/tagify.css"));
+        }
+
+        private static void RegisterAssociationDetectionBundles(BundleCollection bundles)
+        {
+            bundles.Add(new ScriptBundle("~/association-detection-scripts").Include(
+               "~/Scripts/AssociationDetection/index.js",
+                "~/Scripts/tagify/jquery.tagify.min.js",
+                "~/Scripts/tagify/tagify.min.js"));
+
+            bundles.Add(new StyleBundle("~/association-detection-styles").Include(
+                    "~/Content/scss/pages/association-detection/association-detection.css",
                     "~/Content/scss/vendors/jquery-ui/base/tagify.css"));
         }
 

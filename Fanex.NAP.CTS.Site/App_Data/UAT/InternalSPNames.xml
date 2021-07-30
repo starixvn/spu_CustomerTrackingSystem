@@ -75,6 +75,8 @@
 	  <Setting Key="CTS_DC_Association_Profile_Get" SpName="CTS_DC_Association_Profile_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter"/>  	
 	  <Setting Key="CTS_DC_AssociatedAccountMonitor_UpdateTaggingAssWithPA" SpName="CTS_DC_AssociatedAccountMonitor_UpdateTaggingAssWithPA_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
 	  <Setting Key="CTS_DC_Category_Get" SpName="CTS_DC_Category_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter"/>
+
+	  <Setting Key="CTS_DC_RPT_AssociationDetection" SpName="CTS_DC_RPT_AssociationDetection_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter"/>
   </Function>
 
   <Function Name="CustomerClassification">

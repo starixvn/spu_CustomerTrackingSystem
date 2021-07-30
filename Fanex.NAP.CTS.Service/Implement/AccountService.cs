@@ -14,6 +14,7 @@
     using Fanex.NAP.CTS.Criteria.Account.BettingStatistic;
     using Fanex.NAP.CTS.Criteria.Account.ChainToEvidence;
     using Fanex.NAP.CTS.Criteria.Account.CustomerCategory;
+    using Fanex.NAP.CTS.Criteria.CustomerClassify;
     using Fanex.NAP.CTS.Criteria.Home;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
@@ -1094,6 +1095,19 @@
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 return db.Query<Model.API.CustomerClassModel>(criteria);
+            }
+        }
+
+        public IEnumerable<LatestClassification4ReportModel> GetCustomerClassFromCTSByCustId(string custIdList)
+        {
+            var criteria = new GetLastestClassificationCriteria
+            {
+                CustIds = custIdList
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<LatestClassification4ReportModel>(criteria);
             }
         }
 

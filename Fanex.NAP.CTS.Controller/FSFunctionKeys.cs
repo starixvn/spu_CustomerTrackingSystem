@@ -77,6 +77,8 @@ public static class FSFunctionKeys
 
     public const string EvidenceManagement = "EvidenceManagement";
 
+    public const string AssociationDetection = "AssociationDetection";
+
     public const string AssociatedAccountMonitor = "AssociatedAccountMonitor";
 
     public const string NotificationSettings = "NotificationSettings";

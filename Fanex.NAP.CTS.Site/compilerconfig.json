@@ -92,8 +92,8 @@
     "inputFile": "Content/scss/pages/latest-transaction/latest-transaction.scss"
   },
   {
-    "outputFile": "Content/scss/pages/match-monitor/match-monitor.css",
-    "inputFile": "Content/scss/pages/match-monitor/match-monitor.scss"
+    "outputFile": "Content/scss/pages/association-detection/association-detection.css",
+    "inputFile": "Content/scss/pages/association-detection/association-detection.scss"
   },
   {
     "outputFile": "Content/scss/pages/problem-cases-report/problem-cases-report.css",

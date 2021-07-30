@@ -9,6 +9,8 @@
         {
             UserNameInvalidList = Enumerable.Empty<string>();
             UserNameDuplicatedList = Enumerable.Empty<string>();
+            UserNameValidList = Enumerable.Empty<string>();
+
         }
 
         public bool IsException { get; set; }
@@ -16,5 +18,7 @@
         public IEnumerable<string> UserNameInvalidList { get; set; }
 
         public IEnumerable<string> UserNameDuplicatedList { get; set; }
+
+        public IEnumerable<string> UserNameValidList { get; set; }
     }
 }

@@ -115,6 +115,8 @@
 
         IEnumerable<CustomerClassModel> GetCustomerClassByCustId(string custIdList);
 
+        IEnumerable<LatestClassification4ReportModel> GetCustomerClassFromCTSByCustId(string custIdList);
+
         IEnumerable<CustomerClassificationModel> GetCustomerClassificationForAPI(string custIdList, string parentCateIdList);
 
         IEnumerable<CustomerClassificationGeneralInfoModel> GetCustomerClassificationByCategory(string categoryIdList);

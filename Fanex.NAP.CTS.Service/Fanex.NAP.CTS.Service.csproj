@@ -48,6 +48,7 @@
     <Compile Include="Implement\AccountService.cs" />
     <Compile Include="Implement\Api\ProblemCaseMonitorService.cs" />
     <Compile Include="Implement\AssociatedAccountService.cs" />
+    <Compile Include="Implement\AssociationDetectionService.cs" />
     <Compile Include="Implement\AssociationReportService.cs" />
     <Compile Include="Implement\CategoryService.cs" />
     <Compile Include="Implement\CommonService.cs" />
