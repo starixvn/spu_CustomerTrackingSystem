@@ -1018,6 +1018,7 @@
     <Content Include="Template\ProblemCaseTemplate.xls">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Views\MatchMonitor\Detail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CoreBetList.css" />
