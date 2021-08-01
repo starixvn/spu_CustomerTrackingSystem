@@ -444,7 +444,8 @@
             }
             catch (Exception ex)
             {
-                LogService.Error("GetCustomerClassification failed: " + ex.Message + ex.StackTrace);
+                LogService.Error("GetCustomerClassification failed - Data: " + custIdList
+                    + "\nException" + ex.Message + ex.StackTrace);
             }
 
             return result;
