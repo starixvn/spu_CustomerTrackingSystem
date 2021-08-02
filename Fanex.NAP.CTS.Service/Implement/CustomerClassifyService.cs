@@ -38,7 +38,7 @@
         {
             var custIdsPushCC = RescanProblemAccont(para);
 
-            RescanNormalAccount(para.CustIds, custIdsPushCC, para.FunctionId);
+            RescanNormalAccount(para.CustIds?.ToList(), custIdsPushCC, para.FunctionId);
         }
 
         private void SyncCustomerClassToExternal(List<long> custIdsToSyncCC, bool isPushCCToSoon88)
@@ -315,11 +315,11 @@
 
         #region Rescan Normal
 
-        private void RescanNormalAccount(IEnumerable<long> custIds, IEnumerable<long> custRescanPA, FunctionId funcId)
+        private void RescanNormalAccount(List<long> custIds, IEnumerable<long> custRescanPA, FunctionId funcId)
         {
             if (custIds != null && custIds.Any())
             {
-                custIds.ToList().RemoveAll(x => custRescanPA.Contains(x));
+                custIds.RemoveAll(x => custRescanPA.Contains(x));
 
                 if (_isWriteLogInfo)
                     LogService.Info($"PA Rescan - Cust to syncCC - with data: {JsonConvert.SerializeObject(custIds)}");
