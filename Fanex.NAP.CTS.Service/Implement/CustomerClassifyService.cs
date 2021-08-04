@@ -324,14 +324,17 @@
                 if (_isWriteLogInfo)
                     LogService.Info($"PA Rescan - Cust to syncCC - with data: {JsonConvert.SerializeObject(custIds)}");
 
-                var custIdsChunk = custIds.Chunk(ConfigSettings.PushCCToExternalChunkSize).ToList();
-
-                foreach (var custRescanNormal in custIdsChunk)
+                if(custIds.Any())
                 {
-                    var custToString = string.Join(",", custRescanNormal);
+                    var custIdsChunk = custIds.Chunk(ConfigSettings.PushCCToExternalChunkSize).ToList();
 
-                    ClassifyCustomerGeneralCategoryDaily(custToString, funcId, false);
-                }
+                    foreach (var custRescanNormal in custIdsChunk)
+                    {
+                        var custToString = string.Join(",", custRescanNormal);
+
+                        ClassifyCustomerGeneralCategoryDaily(custToString, funcId, false);
+                    }
+                }    
             }
         }
 
