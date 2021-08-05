@@ -1,55 +1,55 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Functions>
-  <Function Name="Evidence">
-    <Setting Key="CTS_DC_CustEvidence_InsertSingle" SpName="CTS_DC_CustEvidence_InsertSingle" DbName="MySQL.CTS_DataCenter.Admin" />
-    <Setting Key="CTS_DC_CustEvidence_InsertMultilpleEvidencesForCustomers" SpName="CTS_DC_CustEvidence_InsertMultilpleEvidencesForCustomers" DbName="MySQL.CTS_DataCenter.Admin" />
-    <Setting Key="CTS_DC_CustEvidence_InsertMultiple_ByCustId" SpName="CTS_DC_CustEvidence_InsertMultiple_ByCustId" DbName="MySQL.CTS_DataCenter.Admin" />
+	<Function Name="Evidence">
+		<Setting Key="CTS_DC_CustEvidence_InsertSingle" SpName="CTS_DC_CustEvidence_InsertSingle" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_CustEvidence_InsertMultilpleEvidencesForCustomers" SpName="CTS_DC_CustEvidence_InsertMultilpleEvidencesForCustomers" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_CustEvidence_InsertMultiple_ByCustId" SpName="CTS_DC_CustEvidence_InsertMultiple_ByCustId" DbName="MySQL.CTS_DataCenter.Admin" />
 
-	<Setting Key="CTS_DC_CustEvidence_GetEvidencesByDirectAssociation" SpName="CTS_DC_CustEvidence_GetEvidencesByDirectAssociation" DbName="MySQL.CTS_DataCenter.Reporter" />
-	<Setting Key="CTS_DC_CustEvidence_GetEvidencesByLevel2Association" SpName="CTS_DC_CustEvidence_GetEvidencesByLevel2Association" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
-  </Function>
+		<Setting Key="CTS_DC_CustEvidence_GetEvidencesByDirectAssociation" SpName="CTS_DC_CustEvidence_GetEvidencesByDirectAssociation" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_CustEvidence_GetEvidencesByLevel2Association" SpName="CTS_DC_CustEvidence_GetEvidencesByLevel2Association" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
+	</Function>
 
-  <Function Name="CustomerClassification">
-    <Setting Key="CTS_DC_CustClassification_Get4API" SpName="CTS_DC_CustClassification_Get4API" DbName="MySQL.CTS_DataCenter.Reporter" />
-    <Setting Key="CTS_DC_CustClassification_GetAllByCategory" SpName="CTS_DC_CustClassification_GetAllByCategory" DbName="MySQL.CTS_DataCenter.Reporter" />
-    <Setting Key="CTS_DC_CustClassification_GetLatestCategory" SpName="CTS_DC_CustClassification_GetLatestCategory" DbName="MySQL.CTS_DataCenter.Reporter" />
-    <Setting Key="CTS_DC_InsertCategorizedProblemAccounts" SpName="CTS_DC_InsertCategorizedProblemAccounts" DbName="MySQL.CTS_DataCenter.Admin"/>
-    <Setting Key="Acc_CustomerUpdateCustomerClass" SpName="Acc_CustomerUpdateCustomerClass" DbName="DBCust.CustDB.bodbAdminNet" TimeOut="300" />
-    <Setting Key="CTS_NormalAccountsClassification_GeneralCategorize_Daily" SpName="CTS_NormalAccountsClassification_GeneralCategorize_Daily" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" TimeOut="1200"/>
-  </Function>
+	<Function Name="CustomerClassification">
+		<Setting Key="CTS_DC_CustClassification_Get4API" SpName="CTS_DC_CustClassification_Get4API" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_CustClassification_GetAllByCategory" SpName="CTS_DC_CustClassification_GetAllByCategory" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_CustClassification_InsertProblemAccount" SpName="CTS_DC_CustClassification_InsertProblemAccount" DbName="MySQL.CTS_DataCenter.Admin"/>
+		<Setting Key="Acc_CustomerUpdateCustomerClass" SpName="Acc_CustomerUpdateCustomerClass" DbName="DBCust.CustDB.bodbAdminNet" TimeOut="300" />
+		<Setting Key="CTS_NormalAccountsClassification_GeneralCategorize_Daily" SpName="CTS_NormalAccountsClassification_GeneralCategorize_Daily" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" TimeOut="1200"/>
+	</Function>
 
-  <Function Name="CustomerClass">
-    <Setting Key="CTS_CustomerClass_GetByCustId" SpName="CTS_CustomerClass_GetByCustId" DbName="DBCTS.bodb02.bodbSPUNet" />
-    <Setting Key="CTS_DC_Association_GetWithCategory" SpName="CTS_DC_Association_GetWithCategory" DbName="MySQL.CTS_DataCenter.Reporter"/>
-    <Setting Key="TicketVoiding_CTS_ProblemAccountSelect" SpName="TicketVoiding_CTS_ProblemAccountSelect" DbName="DBCTS.bodb02.bodbSPUNet"/>
-    <Setting Key="TicketVoiding_CTS_ProblemAccountSelect_CN88" SpName="TicketVoiding_CTS_ProblemAccountSelect_CN88" DbName="DBCTS.bodb02.bodbSPUNet"/>
-    <Setting Key="CTS_DC_CustClassification_GetLatestClassification" SpName="CTS_DC_CustClassification_GetLatestClassification" DbName="MySQL.CTS_DataCenter.Reporter" />
-    <Setting Key="CTS_DC_CustClassification_UpdateIsAppliedCC" SpName="CTS_DC_CustClassification_UpdateIsAppliedCC" DbName="MySQL.CTS_DataCenter.Admin" />
-    <Setting Key="CTS_DC_CustEvidence_GetExistedEvidencesToSync" SpName="CTS_DC_CustEvidence_GetExistedEvidencesToSync" DbName="MySQL.CTS_DataCenter.Reporter" />
-    <Setting Key="CTS_DC_CustEvidence_SyncToCategory" SpName="CTS_DC_CustEvidence_SyncToCategory" DbName="MySQL.CTS_DataCenter.Admin" />
-  </Function>
+	<Function Name="CustomerClass">
+		<Setting Key="CTS_CustomerClass_GetByCustId" SpName="CTS_CustomerClass_GetByCustId" DbName="DBCTS.bodb02.bodbSPUNet" />
+		<Setting Key="CTS_DC_CustClassification_GetForSoon88" SpName="CTS_DC_CustClassification_GetForSoon88" DbName="MySQL.CTS_DataCenter.Reporter"/>
+		<Setting Key="TicketVoiding_CTS_ProblemAccountSelect" SpName="TicketVoiding_CTS_ProblemAccountSelect" DbName="DBCTS.bodb02.bodbSPUNet"/>
+		<Setting Key="TicketVoiding_CTS_ProblemAccountSelect_CN88" SpName="TicketVoiding_CTS_ProblemAccountSelect_CN88" DbName="DBCTS.bodb02.bodbSPUNet"/>
+		<Setting Key="CTS_DC_CustClassification_GetLatestClassification" SpName="CTS_DC_CustClassification_GetLatestClassification" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_CustClassification_UpdateIsAppliedCC" SpName="CTS_DC_CustClassification_UpdateIsAppliedCC" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_CustEvidence_GetByCustIDs" SpName="CTS_DC_CustEvidence_GetByCustIDs" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_CustEvidence_SyncToCategory" SpName="CTS_DC_CustEvidence_SyncToCategory" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_CustClassification_LogInputData" SpName="CTS_DC_CustClassification_LogInputData" DbName="MySQL.CTS_DataCenter.Admin" />
+	</Function>
 
-  <Function Name="Customer">
-    <Setting Key="CTS_DC_CustInfo_CheckCustNotExistedByCustIds" SpName="CTS_DC_CustInfo_CheckCustNotExistedByCustIds" DbName="MySQL.CTS_DataCenter.Reporter" />
-	<Setting Key="CTS_DC_CustInfo_RobotUser_CheckSiteByCustIds" SpName="CTS_DC_CustInfo_RobotUser_CheckSiteByCustIds" DbName="MySQL.CTS_DataCenter.Reporter" />
-  </Function>
+	<Function Name="Customer">
+		<Setting Key="CTS_DC_CustInfo_CheckCustNotExistedByCustIds" SpName="CTS_DC_CustInfo_CheckCustNotExistedByCustIds" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_CustInfo_FilterCustIDsBySite" SpName="CTS_DC_CustInfo_FilterCustIDsBySite" DbName="MySQL.CTS_DataCenter.Reporter" />
+	</Function>
 
-  <Function Name="Category">
-    <Setting Key="CTS_DC_Category_Get4CustomerClass" SpName="CTS_DC_Category_Get4CustomerClass" DbName="MySQL.CTS_DataCenter.Reporter" />
-  </Function>
-	
-  <Function Name="Association">
-    <Setting Key="CTS_DC_Association_GetForExtAcc" SpName="CTS_DC_Association_GetForExtAcc" DbName="MySQL.CTS_DataCenter.Reporter" />
-    <Setting Key="CTS_DC_Association_IP_GetByCustId" SpName="CTS_DC_Association_IP_GetByCustId" DbName="MySQL.CTS_DataCenter.Reporter" />
-  </Function>
-	
+	<Function Name="Category">
+		<Setting Key="CTS_DC_Category_Get4CustomerClass" SpName="CTS_DC_Category_Get4CustomerClass" DbName="MySQL.CTS_DataCenter.Reporter" />
+	</Function>
+
+	<Function Name="Association">
+		<Setting Key="CTS_DC_Association_GetForExtAcc" SpName="CTS_DC_Association_GetForExtAcc" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_Association_IP_GetByCustId" SpName="CTS_DC_Association_IP_GetByCustId" DbName="MySQL.CTS_DataCenter.Reporter" />
+	</Function>
+
 	<Function Name="Subscriber">
 		<Setting Key="CTS_AD_Subscriber_GetInfoBySubscriberName" SpName="CTS_AD_Subscriber_GetInfoBySubscriberName" DbName="MySQL.CTS_Admin.Admin"/>
 	</Function>
-  
-  <Function name="CustInfo">
-	<Setting Key="CTS_DC_CustInfo_GetCustomerRoles" SpName="CTS_DC_CustInfo_GetCustomerRoles" DbName="MySQL.CTS_DataCenter.Reporter" />
-  </Function>
+
+	<Function name="CustInfo">
+		<Setting Key="CTS_DC_CustInfo_GetCustIDsRole" SpName="CTS_DC_CustInfo_GetCustIDsRole" DbName="MySQL.CTS_DataCenter.Reporter" />
+	</Function>
 
 	<Function name ="RobotUser">
 		<Setting Key="CTS_Customer_RobotCheckExist" SpName="CTS_Customer_RobotCheckExist" DbName="DBONUSER.ON_USER.bodbSPUNet"/>

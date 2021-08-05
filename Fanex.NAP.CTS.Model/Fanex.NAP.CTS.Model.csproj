@@ -200,6 +200,9 @@
     <Compile Include="AssociatedAccountMonitor\CustProfilerModel.cs" />
     <Compile Include="AssociatedAccountMonitor\ValidateAssociatedAccountModel.cs" />
     <Compile Include="CustomerClassify\LatestClassification4ReportModel.cs" />
+    <Compile Include="CustomerClassify\RescanCustClassificationModel.cs" />
+    <Compile Include="LogInputData\LogInputViewModel.cs" />
+    <Compile Include="CustomerClassify\LogInputDataModel.cs" />
     <Compile Include="CustomerClassify\RoleCustomerModel.cs" />
     <Compile Include="CustomerClassify\CustEvidenceModel.cs" />
     <Compile Include="CustomerClassify\LatestClassificationModel.cs" />
@@ -265,7 +268,7 @@
     <Compile Include="Association\AssociatedByAccountModel.cs" />
     <Compile Include="DTO\Currency.cs" />
     <Compile Include="DTO\CustomerEvidence.cs" />
-    <Compile Include="DTO\CustomerEvidenceList.cs" />
+    <Compile Include="DTO\PlaceMultiCustomerEvidence.cs" />
     <Compile Include="DTO\CustomerList.cs" />
     <Compile Include="DTO\CustomerSubcriber.cs" />
     <Compile Include="DTO\CustomerTotalAssociation.cs" />
@@ -313,6 +316,7 @@
     <Compile Include="SyncCustomerToMainDb\EvidenceCategoryToCustomerClassForMainDb.cs" />
     <Compile Include="SyncCustomerToMainDb\InsertCategoryResultModel.cs" />
     <Compile Include="Transaction\DataTableAjaxPostModel.cs" />
+    <Compile Include="LogInputData\PlaceEvidencesViewModel.cs" />
     <Compile Include="Transaction\Transaction.cs" />
     <Compile Include="Transaction\HistoryTransactionModel.cs" />
   </ItemGroup>

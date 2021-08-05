@@ -22,6 +22,6 @@
 
         DBResult RetractEvidenceByAccount(InformationEvidenceByAccountRetractEvidence evidenceRetract);
 
-        AddEvidenceResultModel AddCustomersEvidences(CustomerEvidenceList customerEvidenceList);
+        AddEvidenceResultModel AddCustomersEvidences(PlaceMultiCustomerEvidence customerEvidenceList);
     }
 }

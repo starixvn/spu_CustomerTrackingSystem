@@ -6,6 +6,6 @@
     {
         public string ErrorMessage { get; set; }
 
-        public IEnumerable<int> CustIds { get; set; }
+        public IEnumerable<long> CustIds { get; set; }
     }
 }

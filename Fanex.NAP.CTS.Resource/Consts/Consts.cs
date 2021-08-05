@@ -68,7 +68,7 @@
         public const int ProblemCase_ItemID_SuspiciousAssociation = 4;
         public const int ProblemCase_ItemID_ProPunter = 9;
 
-        public enum ROLE_CUSTOMER : int
+        public enum ROLE_CUSTOMER
         {
             MEMBER = 1,
             AGENT = 2,
@@ -76,7 +76,7 @@
             SUPER = 4
         }
 
-        public enum CATEGORY : int
+        public enum CATEGORY
         {
             NEWMEMBER = 201,
             NORMALMEMBER = 202,
@@ -88,7 +88,7 @@
             ROBOT = 61
         };
 
-        public enum ACCOUNT_STATUS : int
+        public enum ACCOUNT_STATUS
         {
             All = 0,
             Open = 1,
@@ -96,7 +96,7 @@
             Other = 3
         }
 
-        public enum MATCHMONITOR_BETTYPE : int
+        public enum MATCHMONITOR_BETTYPE
         {
             HDP = 1,
             OU = 3,
@@ -104,7 +104,7 @@
             FirsttOU = 8
         }
 
-        public enum MATCHMONITOR_EVENTGROUP : int
+        public enum MATCHMONITOR_EVENTGROUP
         {
             Live = 1,
             Today = 2,
@@ -112,16 +112,48 @@
             Closed = 4
         }
         
-        public enum STATIC_LIST : int
+        public enum STATIC_LIST
         {
             PROBLEMCASE = 12
         }
 
-        public enum PROBLEM_CASES_MONITOR : int
+        public enum PROBLEM_CASES_MONITOR
         {
             EXPORT_NUMBER_COLUMN = 6,
             EXPORT_NUMBER_CHAR_PER_LINE = 180,
             EXPORT_POINT_PIXEL = 225
         }
+
+        public enum FunctionId
+        {
+            RealtimeJob = 1,
+            ProbationJob = 2,
+            DailyJob = 3,
+            InsertNewCustJob = 4,
+            RemoveVIPWeb = 5,
+            RemoveSpecialCCWeb = 6,
+            RemovePAAPI = 7,
+            RemoveFlaggedEvidenceWeb = 8,
+            RemoveMultiEvidencesWeb = 9,
+            ExcludeTaggingAssPAWeb = 10,
+            PlaceEvidenceForMultiCustAPI = 21,
+            PlaceMultiEvidencesForMultiCustAPI = 22,
+            RobotUserJob = 23,
+            InsertNewCus_CheckPA = 24,
+            RemoveVVIP_CheckPA = 25,
+            RemoveSpecial_CheckPA = 26,
+            RemovePA_CheckPA = 27,
+            RemoveFlaggedEvidence_CheckPA = 28,
+            RemoveMultiEvidences_CheckPA = 29,
+            ExcludeTaggingByAss_CheckPA = 30,
+            InsertNewCus_CheckRobotUser = 34,
+            RemoveVVIP_CheckRobotUser = 35,
+            RemoveSpecial_CheckRobotUser = 36,
+            RemovePA_CheckRobotUser = 37,
+            RemoveFlaggedEvi_CheckRobotUser = 38,
+            RemoveMultiEvi_CheckRobotUser = 39,
+            ExcludeTaggingAss_CheckRobotUser = 40,
+            InsertPAJob = 41
+        };
     }
 }

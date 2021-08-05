@@ -52,6 +52,7 @@
     <Compile Include="Implement\AssociationReportService.cs" />
     <Compile Include="Implement\CategoryService.cs" />
     <Compile Include="Implement\CommonService.cs" />
+    <Compile Include="Implement\LogInputDataService.cs" />
     <Compile Include="Implement\FeedDataToSoon88Service.cs" />
     <Compile Include="Implement\MatchMonitorService.cs" />
     <Compile Include="Implement\ProbationManagementService.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="Interface\IAssociationReportService.cs" />
     <Compile Include="Interface\ICategoryService.cs" />
     <Compile Include="Interface\ICommonService.cs" />
+    <Compile Include="Interface\ILogInputDataService.cs" />
     <Compile Include="Interface\IEvidenceService.cs" />
     <Compile Include="Interface\IFlaggedAccountService.cs" />
     <Compile Include="Interface\IGraphService.cs" />

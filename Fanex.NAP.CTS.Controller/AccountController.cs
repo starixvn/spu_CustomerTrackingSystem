@@ -16,6 +16,7 @@
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.CustomerClassify;
     using Fanex.NAP.CTS.Model.GraphDB;
+    using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Model.Transaction;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
@@ -34,6 +35,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using System.Web.Mvc;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -986,7 +988,7 @@
                     model.EvidenceId,
                     ActionType = 0
                 } };
-                var syncCustIds = Enumerable.Empty<int>();
+                var syncCustIds = Enumerable.Empty<long>();
                 var custEvidenceJson = JsonConvert.SerializeObject(objects);
                 // Sync Evidence to Category
                 var syncResult =_accountService.SyncCustEvidenceToCategory(custEvidenceJson, false, out syncCustIds);
@@ -1037,7 +1039,7 @@
                     ActionType = 2
                 } };
 
-                var syncCustIds = Enumerable.Empty<int>();
+                var syncCustIds = Enumerable.Empty<long>();
                 var custEvidenceJson = JsonConvert.SerializeObject(objects);
 
                 // Sync Evidence to Category
@@ -1046,7 +1048,13 @@
                 if (syncResult.ErrorCode == 0)
                 {
                     // Rescan Problem Account & Normal Account
-                    _customerClassifyService.RescanCustomerClassify(syncCustIds.ToList(), true, true);
+                    _customerClassifyService.RescanCustomerClassify(new RescanCustClassificationModel
+                    {
+                        CustIds = syncCustIds,
+                        IsCheckPAFromNAP = true,
+                        IsPushCCToSoon88 = true,
+                        FunctionId = FunctionId.RemoveFlaggedEvidenceWeb
+                    });
                 }
 
                 var associatedAccountList = _customerEvidenceService.GetRemoveEvidenceAssociatedAccounts(
@@ -1457,10 +1465,14 @@
 
                     if (custIdInt != 0)
                     {
-                        var custIds = new List<int>() { custIdInt };
-
                         // Rescan Problem Account & Normal Account
-                        _customerClassifyService.RescanCustomerClassify(custIds, true, true);
+                        _customerClassifyService.RescanCustomerClassify(new RescanCustClassificationModel
+                        {
+                            CustIds = new List<long> { custIdInt },
+                            IsCheckPAFromNAP = true,
+                            IsPushCCToSoon88 = true,
+                            FunctionId = FunctionId.RemoveVIPWeb
+                        });
                     }
                 }                
             }
@@ -1500,9 +1512,13 @@
                 && !isProblemAccount
                 && custSubId == 0)
             {
-                var custIdList = new List<int> { custId };
-
-                _customerClassifyService.RescanCustomerClassify(custIdList, true, true);
+                _customerClassifyService.RescanCustomerClassify(new RescanCustClassificationModel
+                {
+                    CustIds = new List<long> { custId },
+                    IsCheckPAFromNAP = true,
+                    IsPushCCToSoon88 = true,
+                    FunctionId = FunctionId.ExcludeTaggingAssPAWeb
+                });
             }
 
             return Json(new

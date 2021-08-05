@@ -836,9 +836,9 @@
             }
         }
 
-        public DBResult SyncCustEvidenceToCategory(string custEvidencesJson, bool isRescan, out IEnumerable<int> custIds)
+        public DBResult SyncCustEvidenceToCategory(string custEvidencesJson, bool isRescan, out IEnumerable<long> custIds)
         {
-            custIds = new List<int>();
+            custIds = new List<long>();
 
             var criteria = new CustEvidenceSyncToCategoryCriteria
             {
@@ -850,7 +850,7 @@
             {
                 var repository = new DynamicRepository();
 
-                custIds = repository.Fetch<int>(criteria);
+                custIds = repository.Fetch<long>(criteria);
 
                 if (!string.IsNullOrEmpty(criteria.ErrorMessage))
                 {

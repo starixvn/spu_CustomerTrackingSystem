@@ -5,6 +5,5 @@
         public long CustID { get; set; }
 
         public int ReasonID { get; set; }
-
     }
 }

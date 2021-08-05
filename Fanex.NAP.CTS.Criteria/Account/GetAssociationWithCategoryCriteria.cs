@@ -8,12 +8,12 @@
         [SpParam(SqlParamName = "ip_CustIDList")]
         public string CustIds { get; set; }
 
-        [SpParam(SqlParamName = "ip_IsDelete")]
-        public bool IsDelete { get; set; }
+        [SpParam(SqlParamName = "ip_IsGetAssociation")]
+        public bool IsGetAssociation { get; set; }
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_Association_GetWithCategory";
+            return "CTS_DC_CustClassification_GetForSoon88";
         }
 
         public override bool IsValid()

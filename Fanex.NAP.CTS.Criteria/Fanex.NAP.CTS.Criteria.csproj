@@ -81,6 +81,7 @@
     <Compile Include="Common\GetSubscriberGroupCriteria.cs" />
     <Compile Include="Category\GetCategoryCustomerClassCriteria.cs" />
     <Compile Include="Common\ValidateUsernameCriteria.cs" />
+    <Compile Include="LogInputData\LogInputDataCriteria.cs" />
     <Compile Include="CustomerClassify\GetCustByRobotSiteRuleCriteria.cs" />
     <Compile Include="CustomerClassify\GetExistedRobotUserCriteria.cs" />
     <Compile Include="CustomerClassify\GetRoleCustomerCriteria.cs" />
@@ -108,7 +109,6 @@
     <Compile Include="ProbationManagement\UpdateProbationCategoryCriteria.cs" />
     <Compile Include="ProblemAccountMonitor\InsertProblemAccountCriteria.cs" />
     <Compile Include="ProblemCaseMonitor\ProblemCaseFilterGetCriteria.cs" />
-    <Compile Include="SyncCustomerToMainDb\GetLastestEvidenceCategoryCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\PlaceEvidenceCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\RemoveFlaggedEvidenceCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\RemoveAccountExceptionCriteria.cs" />
