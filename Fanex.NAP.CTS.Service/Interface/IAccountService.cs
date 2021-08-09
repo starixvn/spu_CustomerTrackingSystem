@@ -17,7 +17,7 @@
     {        
         List<SearchResultModel> SearchAccounts(string username);
 
-        List<CustomerGeneralStatusModel> GetCustomerGeneralStatus(string custIds);
+        List<CustomerGeneralInfoModel> GetCustomerGeneralInfo(string custIds);
 
         CustomerInfoByCTSCustIdModel GetCustomerInfoByCTSCustId(long ctsCustId);
 
@@ -51,8 +51,6 @@
 
         ShortestPathOfAccount GetShortestPathAssociationByGraph(string apiURL, int custIdFrom, int custIdTo);        
 
-        List<GraphAssociationModel> FilterCustomerAssociationByStatus(string statusIds, List<GraphAssociationModel>  customerAssociation, List<CustomerGeneralStatusModel> statusByCustIds);
-
         string MappingAssociationType(GraphAssociationModel data);
 
         IEnumerable<EvidenceModel> GetEvidenceList();
@@ -82,8 +80,6 @@
         IEnumerable<AffectedEvidenceListBetweenCustsModel> GetAffectedEvidenceListBetweenCusts(Int64 fromCTSCustID, Int64 toCTSCustID);
 
         IEnumerable<SportGroup> GetAllSportGroup();
-
-        List<AssociationCustomerModel> SearchAssociatedCustomer(string username);        
 
         IEnumerable<ValidateManualAssociationMultipleModel> ValidateManualAssociationMultiple(long fromCTSCustId, string toUserNameList, out bool isException);
 

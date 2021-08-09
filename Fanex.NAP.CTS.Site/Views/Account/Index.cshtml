@@ -35,7 +35,7 @@
             </div>
             <div class="wrapper-tag-info">
                 <span class="tag-text-left">Account Status: </span>
-                <span id="spanAccountStatus" class="tag-text-right"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+                <span class="tag-text-right">@Model.StatusName</span>
             </div>
             <div class="wrapper-tag-info">
                 <span class="tag-text-left">Subscriber: </span>
@@ -97,9 +97,9 @@
                         </span>
                     </div>
                     <div class="info-text right">
-                        <span id="dangerousOriginal"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
-                        <span id="dangerouseABI"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
-                        <span id="dangerouseOtherSports"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+                        <span id="dangerousOriginal">@Model.DangerousOriginal</span>
+                        <span id="dangerouseABI">@Model.DangerouseABI</span>
+                        <span id="dangerouseOtherSports">@Model.DangerouseOtherSports</span>
                     </div>
                 </div>
             </div>

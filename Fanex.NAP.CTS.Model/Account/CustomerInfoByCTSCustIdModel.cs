@@ -4,23 +4,32 @@
 
     public class CustomerInfoByCTSCustIdModel
     {
-        public DateTime LastLoginTime { get; set; }
+        public int CustID { get; set; }
 
-        public string Username { get; set; }
-
-        public string Username2 { get; set; }
-
-        public int CustId { get; set; }
-
-        public DateTime CreatedDate { get; set; }
-
-        public int SubscriberId { get; set; }
+        public int SubscriberID { get; set; }
 
         public string SubscriberName { get; set; }
 
-        public int RoleId { get; set; }
+        public int CustSubID { get; set; }
 
-        public int CustSubId { get; set; }
+        public DateTime LastLoginTime { get; set; }
 
+        public string UserName { get; set; }
+
+        public string UserName2 { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+
+        public int RoleID { get; set; }
+
+        public int? CustStatusID { get; set; }
+
+        public string CustStatusName { get; set; }
+
+        public int Danger1 { get; set; }
+
+        public int Danger2 { get; set; }
+
+        public int Danger3 { get; set; }
     }
 }

@@ -1,11 +1,9 @@
-﻿using Fanex.NAP.CTS.Model;
-using Fanex.NAP.CTS.Model.Account;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Fanex.NAP.CTS.ViewModel.Account
+﻿namespace Fanex.NAP.CTS.ViewModel.Account
 {
+    using Fanex.NAP.CTS.Model.Account;
+    using System;
+    using System.Collections.Generic;
+
     public class CustomerGeneralStatusViewModel
     {
         public Model.DTO.Role Role { get; set; }
@@ -20,7 +18,9 @@ namespace Fanex.NAP.CTS.ViewModel.Account
 
         public string UserName2 { get; set; }
 
-        public string AcountStatus { get; set; }
+        public int? CustStatusID { get; set; }
+
+        public string StatusName { get; set; }
 
         public bool RobotUser { get; set; }
 
@@ -50,11 +50,11 @@ namespace Fanex.NAP.CTS.ViewModel.Account
 
         public bool HedgeAccount { get; set; }
 
-        public int DangerousOriginal { get; set; }
+        public string DangerousOriginal { get; set; }
 
-        public int DangerouseABI { get; set; }
+        public string DangerouseABI { get; set; }
 
-        public int DangerouseOtherSports { get; set; }
+        public string DangerouseOtherSports { get; set; }
 
         public int Abnormal { get; set; }
 
@@ -93,12 +93,12 @@ namespace Fanex.NAP.CTS.ViewModel.Account
         public List<FraudCaseModel> FraudCases { get; set; }
 
         public CustomerGeneralStatusViewModel BindingGeneralDataFromMainDB(CustomerLastTicketDateModel customerLastTicketDateModel)
-        {            
+        {
 
             if (customerLastTicketDateModel != null)
             {
                 this.LastTicketDate = customerLastTicketDateModel.TransDate;
-            }            
+            }
 
             return this;
         }
@@ -108,90 +108,22 @@ namespace Fanex.NAP.CTS.ViewModel.Account
             if (customerInfoByCTSCustIdModel != null)
             {
                 this.LastLoginDate = customerInfoByCTSCustIdModel.LastLoginTime;
-                this.UserName2 = string.IsNullOrEmpty(customerInfoByCTSCustIdModel.Username2) ? customerInfoByCTSCustIdModel.Username : customerInfoByCTSCustIdModel.Username2;
-                this.UserName = string.IsNullOrEmpty(customerInfoByCTSCustIdModel.Username) ? customerInfoByCTSCustIdModel.Username2 : customerInfoByCTSCustIdModel.Username;
+                this.UserName2 = string.IsNullOrEmpty(customerInfoByCTSCustIdModel.UserName2) ? customerInfoByCTSCustIdModel.UserName : customerInfoByCTSCustIdModel.UserName2;
+                this.UserName = string.IsNullOrEmpty(customerInfoByCTSCustIdModel.UserName) ? customerInfoByCTSCustIdModel.UserName2 : customerInfoByCTSCustIdModel.UserName;
                 this.CreatedDate = customerInfoByCTSCustIdModel.CreatedDate;
-                this.Role = new Model.DTO.Role { Id = customerInfoByCTSCustIdModel.RoleId };
-                this.CustSubId = customerInfoByCTSCustIdModel.CustSubId;
-                this.CustId = customerInfoByCTSCustIdModel.CustId;
-                this.Subscriber = customerInfoByCTSCustIdModel.SubscriberName;
-                this.SubscriberId = customerInfoByCTSCustIdModel.SubscriberId;
+                this.Role = new Model.DTO.Role { Id = customerInfoByCTSCustIdModel.RoleID };
+                this.CustSubId = customerInfoByCTSCustIdModel.CustSubID;
+                this.CustId = customerInfoByCTSCustIdModel.CustID;
+                this.Subscriber = string.IsNullOrEmpty(customerInfoByCTSCustIdModel.SubscriberName) ? "N/A" : customerInfoByCTSCustIdModel.SubscriberName;
+                this.SubscriberId = customerInfoByCTSCustIdModel.SubscriberID;
+                this.CustStatusID = customerInfoByCTSCustIdModel.CustStatusID;
+                this.StatusName =  string.IsNullOrEmpty(customerInfoByCTSCustIdModel.CustStatusName) ? "N/A" : customerInfoByCTSCustIdModel.CustStatusName;
+                this.DangerousOriginal = (customerInfoByCTSCustIdModel.Danger1 == 0) ? "None" : customerInfoByCTSCustIdModel.Danger1.ToString();
+                this.DangerouseABI = (customerInfoByCTSCustIdModel.Danger2 == 0) ? "None" : customerInfoByCTSCustIdModel.Danger2.ToString();
+                this.DangerouseOtherSports = (customerInfoByCTSCustIdModel.Danger3 == 0) ? "None" : customerInfoByCTSCustIdModel.Danger3.ToString();
             }
-           
+
             return this;
         }
-      
-        public AccountStatus GetAccountStatus(CustomerGeneralStatusModel model)
-        {
-            if (model.CN88Status == -1)
-            {
-                if (model.IsLicensee == 1) // 12bet
-                {
-                    if (this.Role != null && this.Role.Id == 1) // for member
-                    {
-                        return AccountStatus.NA;
-                    }
-                    else
-                    {
-                        return GetAccountStatusForMBC(model);
-                    }
-                }
-
-                // mbc
-                return GetAccountStatusForMBC(model);
-            }
-
-            //cn88
-            return GetAccountStatusForCN88(model);
-
-        }
-
-        public int GetAccountStatusId(string name)
-        {
-            return (int)Enum.Parse(typeof(AccountStatus), name);
-        }
-
-        public string GetAccountStatusName(AccountStatus accountStatus)
-        {
-            return Enum.GetName(typeof(AccountStatus), accountStatus);
-        }                
-
-        private AccountStatus GetAccountStatusForMBC(CustomerGeneralStatusModel model)
-        {            
-            if(model.Enabled)
-            {
-                if(!model.Closed && !model.Reject)
-                {
-                    return AccountStatus.Open;
-                }
-
-                if(!model.Closed && model.Reject)
-                {
-                    return AccountStatus.Suspended;
-                }
-
-                if(model.Closed)
-                {
-                    return AccountStatus.Closed;
-                }
-            }
-
-            return AccountStatus.Disable;
-        }
-
-        private AccountStatus GetAccountStatusForCN88(CustomerGeneralStatusModel model)
-        {                       
-            switch (model.CN88Status)
-            {
-                case 1:
-                    return AccountStatus.Inactive;
-                case 2:
-                    return AccountStatus.Suspended;
-                case 3:
-                    return AccountStatus.ViewOnly;
-                default:
-                    return AccountStatus.Active;
-            }
-        }        
     }
 }

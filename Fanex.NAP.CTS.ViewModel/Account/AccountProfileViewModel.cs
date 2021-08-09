@@ -5,9 +5,7 @@
 
     public class AccountProfileViewModel
     {
-        public CustomerGeneralStatusModel GeneralStatusInfo { get; set; }
-
-        public string StatusLabel { get; set; }
+        public CustomerGeneralInfoModel GeneralInfo { get; set; }
 
         public CustomerPoliciesModel PoliciesInfo { get; set; }
 
