@@ -38,8 +38,14 @@
         list.push({ 'id': '1001', 'indexColor': 1, 'name': 'Normal Member InActive' });
 
         list.push({ 'id': '206', 'indexColor': 2, 'name': 'Probation' });
+        list.push({ 'id': '257', 'indexColor': 2, 'name': 'Probation (57)' });
+        list.push({ 'id': '258', 'indexColor': 2, 'name': 'Probation (58)' });
         list.push({ 'id': '203', 'indexColor': 2, 'name': 'Smart Punter' });
+        list.push({ 'id': '267', 'indexColor': 2, 'name': 'Smart Punter (67)' });
+        list.push({ 'id': '268', 'indexColor': 2, 'name': 'Smart Punter (68)' });
         list.push({ 'id': '204', 'indexColor': 2, 'name': 'High Risk Punter' });
+        list.push({ 'id': '277', 'indexColor': 2, 'name': 'High Risk Punter (77)' });
+        list.push({ 'id': '278', 'indexColor': 2, 'name': 'High Risk Punter (78)' });
         list.push({ 'id': '1002', 'indexColor': 2, 'name': 'Pro Punter InActive' });
 
         list.push({ 'id': '211', 'indexColor': 3, 'name': 'Good Member (111)' });

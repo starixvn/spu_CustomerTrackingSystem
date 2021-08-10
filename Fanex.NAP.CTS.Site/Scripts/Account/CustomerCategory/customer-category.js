@@ -25,8 +25,14 @@
         list.push({ 'id': 1001, 'indexColor': 1, 'cssClass': 'circle bg-green', 'name': 'Normal Member Inactive' });
 
         list.push({ 'id': 206, 'indexColor': 2, 'cssClass': 'circle bg-yellow', 'name': 'Probation' });
+        list.push({ 'id': 257, 'indexColor': 2, 'cssClass': 'circle bg-yellow', 'name': 'Probation (57)' });
+        list.push({ 'id': 258, 'indexColor': 2, 'cssClass': 'circle bg-yellow', 'name': 'Probation (58)' });
         list.push({ 'id': 203, 'indexColor': 2, 'cssClass': 'circle bg-yellow', 'name': 'Smart Punter' });
+        list.push({ 'id': 267, 'indexColor': 2, 'cssClass': 'circle bg-yellow', 'name': 'Smart Punter (67)' });
+        list.push({ 'id': 268, 'indexColor': 2, 'cssClass': 'circle bg-yellow', 'name': 'Smart Punter (68)' });
         list.push({ 'id': 204, 'indexColor': 2, 'cssClass': 'circle bg-yellow', 'name': 'High Risk Punter' });
+        list.push({ 'id': 277, 'indexColor': 2, 'cssClass': 'circle bg-yellow', 'name': 'High Risk Punter (77)' });
+        list.push({ 'id': 278, 'indexColor': 2, 'cssClass': 'circle bg-yellow', 'name': 'High Risk Punter (78)' });
         list.push({ 'id': 1002, 'indexColor': 2, 'cssClass': 'circle bg-yellow', 'name': 'Pro Punter Inactive' });
         
         list.push({ 'id': 211, 'indexColor': 3, 'cssClass': 'circle green-line', 'name': 'Good Member (111)' });
