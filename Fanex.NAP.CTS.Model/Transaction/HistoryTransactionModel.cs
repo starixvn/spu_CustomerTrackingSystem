@@ -8,7 +8,7 @@
 
         public DateTime TransTime { get; set; }
                 
-        public string DeviceId { get; set; }
+        public string FirstDeviceCode { get; set; }
 
         public string Ip { get; set; }        
 
@@ -18,10 +18,10 @@
 
         public string ActionResult { get; set; }
 
-        public string OSName { get; set; }
+        public string OS { get; set; }
 
-        public string BrowserName { get; set; }
+        public string Browser { get; set; }
 
-        public string Url { get; set; }
+        public string UrlDetails { get; set; }
     }
 }

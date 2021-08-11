@@ -1221,14 +1221,14 @@
                 TransId = x.TransId,
                 Action = x.Action,
                 ActionResult = x.ActionResult,
-                BrowserName = x.BrowserName,
-                DeviceId = x.DeviceId,
+                BrowserName = x.Browser,
+                DeviceId = x.FirstDeviceCode,
                 Flagged = ((Flagged)x.Flagged).GetStringSlow(),
                 Ip = isViewIPPermission ? x.Ip : string.Empty,
                 IpId = 0,
-                OSName = x.OSName,
+                OSName = x.OS,
                 TransTime = x.TransTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                Url = x.Url
+                Url = x.UrlDetails
             });
 
             return Json(new
