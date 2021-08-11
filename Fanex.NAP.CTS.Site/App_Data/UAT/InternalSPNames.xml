@@ -84,7 +84,7 @@
 		<Setting Key="CTS_DC_CustClassification_Update" SpName="CTS_DC_CustClassification_Update_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustClassification_Remove" SpName="CTS_DC_CustClassification_Remove_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustClassification_Get" SpName="CTS_DC_CustClassification_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustClassification_ViewHistory" SpName="CTS_DC_CustClassification_ViewHistory" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_CustClassification_ViewHistory" SpName="CTS_DC_CustClassification_ViewHistory" DbName="MySQL.CTS_DataCenter.Reporter" Timeout="600"/>
 		<Setting Key="CTS_DC_CustClassification_InsertProblemAccount" SpName="CTS_DC_CustClassification_InsertProblemAccount_xtest" DbName="MySQL.CTS_DataCenter.Admin"/>
 		<Setting Key="CTS_DC_CustClassification_GetLatestClassification" SpName="CTS_DC_CustClassification_GetLatestClassification_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustClassification_UpdateIsAppliedCC" SpName="CTS_DC_CustClassification_UpdateIsAppliedCC_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
@@ -125,8 +125,8 @@
 	<Function name="AssociationReport">
 		<Setting Key="CTS_DC_Report_GetAssociatedAccount " SpName="CTS_DC_Report_GetAssociatedAccount_xtest" DbName="MySQL.CTS_DataCenter.Reporter"/>
 		<Setting Key="CTS_DC_Subscriber_GetByGroup " SpName="CTS_DC_Subscriber_GetByGroup_xtest" DbName="MySQL.CTS_DataCenter.Reporter"/>
-		<Setting Key="CTS_DC_RPT_AssociatedAccount " SpName="CTS_DC_RPT_AssociatedAccount_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter"/>
-		<Setting Key="CTS_DC_RPT_AssociatedAccount_Detail " SpName="CTS_DC_RPT_AssociatedAccount_Detail_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter"/>
+		<Setting Key="CTS_DC_RPT_AssociatedAccount " SpName="CTS_DC_RPT_AssociatedAccount_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" Timeout="600"/>
+		<Setting Key="CTS_DC_RPT_AssociatedAccount_Detail " SpName="CTS_DC_RPT_AssociatedAccount_Detail_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" Timeout="600"/>
 	</Function>
 
 	<Function name="LatestTransaction">
