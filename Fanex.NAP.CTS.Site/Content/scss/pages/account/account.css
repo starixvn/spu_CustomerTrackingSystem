@@ -959,7 +959,7 @@
         content: " ";
         position: absolute;
         height: 100%;
-        width: 100%;
+        width: 90%;
         top: 0;
         right: -2.3rem;
         border-top-right-radius: 3px;
@@ -968,7 +968,7 @@
       .content-info .header-info .header-username .block-icon {
         min-width: 207px;
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         justify-items: left; }
       .content-info .header-info .header-username .icon-Avarta, .content-info .header-info .header-username .icon-error, .content-info .header-info .header-username .icon-flag {
         margin-right: .7rem;
@@ -2148,3 +2148,8 @@
   font-size: 1.6rem;
   display: flex;
   align-items: center; }
+
+.icon-Robot {
+  margin-right: 1rem; }
+  .icon-Robot span:before {
+    font-size: 2rem; }
