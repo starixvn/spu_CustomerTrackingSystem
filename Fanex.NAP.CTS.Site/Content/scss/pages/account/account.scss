@@ -9,6 +9,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 @import "../../abstracts/variables";
 @import "../../components/charts";
 @import "../../abstracts/mixins";
+@import '../../components/bg-pattern';
 
 @mixin badge-label($color) {
     width: 62px;

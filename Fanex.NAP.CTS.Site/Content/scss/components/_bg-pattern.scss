@@ -1,0 +1,31 @@
+﻿@import '../abstracts/variables';
+.yellow-dots-bg {
+    background-color: $account-high;
+    background-image: -webkit-repeating-radial-gradient(center center, #F4E0AA, #F4E0AA 1px, transparent 1px, transparent 100%);
+    background-image: -moz-repeating-radial-gradient(center center, rgba(0,0,0,.2), rgba(0,0,0,.2) 1px, transparent 1px, transparent 100%);
+    background-image: -ms-repeating-radial-gradient(center center, rgba(0,0,0,.2), rgba(0,0,0,.2) 1px, transparent 1px, transparent 100%);
+    background-image: repeating-radial-gradient(center center, rgba(0,0,0,.2), rgba(0,0,0,.2) 1px, transparent 1px, transparent 100%);
+    -webkit-background-size: 3px 3px;
+    -moz-background-size: 3px 3px;
+    background-size: 4px 4px;
+    &:after {
+        @extend .yellow-dots-bg;
+    }
+}
+
+
+
+.green-dots-bg {
+    background-color: $account-limited;
+    background-image: -webkit-repeating-radial-gradient(center center, #49F28C, #49F28C 1px, transparent 1px, transparent 100%);
+    background-image: -moz-repeating-radial-gradient(center center, rgba(0,0,0,.2), rgba(0,0,0,.2) 1px, transparent 1px, transparent 100%);
+    background-image: -ms-repeating-radial-gradient(center center, rgba(0,0,0,.2), rgba(0,0,0,.2) 1px, transparent 1px, transparent 100%);
+    background-image: repeating-radial-gradient(center center, rgba(0,0,0,.2), rgba(0,0,0,.2) 1px, transparent 1px, transparent 100%);
+    -webkit-background-size: 3px 3px;
+    -moz-background-size: 3px 3px;
+    background-size: 4px 4px;
+
+    &:after {
+        @extend .green-dots-bg;
+    }
+}
