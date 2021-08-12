@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'Fraud-Sensor';
-  src:  url('fonts/Fraud-Sensor.eot?g762f8');
-  src:  url('fonts/Fraud-Sensor.eot?g762f8#iefix') format('embedded-opentype'),
-    url('fonts/Fraud-Sensor.ttf?g762f8') format('truetype'),
-    url('fonts/Fraud-Sensor.woff?g762f8') format('woff'),
-    url('fonts/Fraud-Sensor.svg?g762f8#Fraud-Sensor') format('svg');
+  src:  url('fonts/Fraud-Sensor.eot?a2gfhh');
+  src:  url('fonts/Fraud-Sensor.eot?a2gfhh#iefix') format('embedded-opentype'),
+    url('fonts/Fraud-Sensor.ttf?a2gfhh') format('truetype'),
+    url('fonts/Fraud-Sensor.woff?a2gfhh') format('woff'),
+    url('fonts/Fraud-Sensor.svg?a2gfhh#Fraud-Sensor') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,70 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-bad-robot .path1:before {
+  content: "\e904";
+  color: rgb(255, 77, 77);
+}
+.icon-bad-robot .path2:before {
+  content: "\e905";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-bad-robot .path3:before {
+  content: "\e906";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-base-robot .path1:before {
+  content: "\e907";
+  color: rgb(255, 255, 255);
+}
+.icon-base-robot .path2:before {
+  content: "\e908";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-base-robot .path3:before {
+  content: "\e909";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-good-robot .path1:before {
+  content: "\e90a";
+  color: rgb(49, 190, 0);
+}
+.icon-good-robot .path2:before {
+  content: "\e90b";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-good-robot .path3:before {
+  content: "\e90c";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-ob-robot .path1:before {
+  content: "\e90d";
+  color: rgb(105, 147, 255);
+}
+.icon-ob-robot .path2:before {
+  content: "\e90e";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-ob-robot .path3:before {
+  content: "\e90f";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-account-device-search:before {
+  content: "\e902";
+  color: #fff;
+}
+.icon-suspicious:before {
+  content: "\e903";
+  color: #98a1b2;
+}
 .icon-excel:before {
   content: "\e901";
   color: #207245;
