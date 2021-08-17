@@ -1,8 +1,8 @@
-﻿using Fanex.Data.Repository;
-
-namespace Fanex.NAP.CTS.Criteria.Account
+﻿namespace Fanex.NAP.CTS.Criteria.Account
 {
-    public class CustomerGeneralStatusCriteria : CriteriaBase
+    using Fanex.Data.Repository;
+
+    public class CustomerGeneralInfoCriteria : CriteriaBase
     {
         public string CustIds { get; set; }
 

@@ -75,12 +75,12 @@
                     {
                         CTSCustId = Id,
                         IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.AccountDetail, NAP.Core.Business.Constant.Policy.Host),
-                        IsBettingStatisticPermission = CheckBettingStatisticPermission(userService, customerInfoFromCTS.RoleId),
+                        IsBettingStatisticPermission = CheckBettingStatisticPermission(userService, customerInfoFromCTS.RoleID),
                         IsViewIPTransactionPermission = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.ViewIP, NAP.Core.Business.Constant.Policy.Read),
                         CurrentUserId = CurrentSession.UserId
                     };
 
-                    var customerLastTicketDate = _accountService.GetCustomerLastTicketDate(customerInfoFromCTS.CustId);
+                    var customerLastTicketDate = _accountService.GetCustomerLastTicketDate(customerInfoFromCTS.CustID);
 
                     customerGeneralStatusViewModel
                         .BindingGeneralDataFromCTS(customerInfoFromCTS)
@@ -96,7 +96,6 @@
         [HttpPost]
         public ActionResult GetAccountProfile(long custId, long ctsCustId, int subscriberId)
         {
-            // LogService.Info("GetAccountProfile - Before: " + DateTime.Now.ToString());
             var profile = new AccountProfileViewModel();
             var tasks = new List<Task>();
 
@@ -104,7 +103,7 @@
             {
                 try
                 {
-                    GetCustomerGeneralStatus(custId, ref profile);
+                    GetCustomerGeneralInfo(custId, ref profile);
                 }
                 catch (Exception ex)
                 {
@@ -172,8 +171,6 @@
 
             Task.WhenAll(tasks.ToArray()).Wait();
 
-            //LogService.Info("GetAccountProfile - After: " + DateTime.Now.ToString());
-
             return Json(profile, JsonRequestBehavior.AllowGet);
         }
 
@@ -210,28 +207,6 @@
             var result = _accountService.GetCustomerFlagInfo(ctsCustId);
 
             return Json(result, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        public ActionResult GetCustomerGeneralStatus(long custId)
-        {
-            var model = new CustomerGeneralStatusViewModel();
-
-            var result = _accountService.GetCustomerGeneralStatus(custId.ToString()).FirstOrDefault();
-            var accountStatusName = string.Empty;
-
-            if (result != null)
-            {
-                accountStatusName = model.GetAccountStatusName(model.GetAccountStatus(result));
-            }
-            else
-            {
-                accountStatusName = model.GetAccountStatusName(AccountStatus.NA);
-
-                result = new CustomerGeneralStatusModel();
-            }
-
-            return Json(new { customerStatus = result, accountStatus = accountStatusName }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -1141,29 +1116,14 @@
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
-        
+
         #endregion
 
-        private void GetCustomerGeneralStatus(long custId, ref AccountProfileViewModel profile)
+        private void GetCustomerGeneralInfo(long custId, ref AccountProfileViewModel profile)
         {
-            var model = new CustomerGeneralStatusViewModel();
+            var custGeneralInfo = _accountService.GetCustomerGeneralInfo(custId.ToString()).FirstOrDefault();
 
-            var result = _accountService.GetCustomerGeneralStatus(custId.ToString()).FirstOrDefault();
-            var accountStatusName = string.Empty;
-
-            if (result != null)
-            {
-                accountStatusName = model.GetAccountStatusName(model.GetAccountStatus(result));
-            }
-            else
-            {
-                accountStatusName = model.GetAccountStatusName(AccountStatus.NA);
-
-                result = new CustomerGeneralStatusModel();
-            }
-
-            profile.GeneralStatusInfo = result;
-            profile.StatusLabel = accountStatusName;
+            profile.GeneralInfo = (custGeneralInfo != null) ? custGeneralInfo : new CustomerGeneralInfoModel();
         }
 
         private void GetCustomerProfilePoliciesInfo(long custId, ref AccountProfileViewModel profile)

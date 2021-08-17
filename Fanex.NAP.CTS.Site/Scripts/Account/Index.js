@@ -18,13 +18,9 @@
         tabTransactionHistory: $("#trans_history"),        
         spanTotalAssociated: $('#spanTotalAssociated'),
         spanTotalEvidences: $('#spanTotalEvidences'),
-        spanDangerousOriginal: $("#dangerousOriginal"),
-        spanDangerouseABI: $("#dangerouseABI"),
-        spanDangerouseOtherSports: $("#dangerouseOtherSports"),
         spanClass: $('#spanClass'),
         spanBetLimit: $('#spanBetLimit'),
         spanLicVIP: $('#spanLicVIP'),
-        spanAccountStatus: $('#spanAccountStatus'),        
         spanAutoSuspendSoccer: $('#autoSuspendSoccer'),
         spanAutoSuspendOtherSport: $('#autoSuspendOtherSport'),
         spanAutoSuspendESport: $('#autoSuspendESport'),
@@ -152,23 +148,6 @@
         });
     }
 
-    function DangerouseIcon(response) {
-        if (response.GeneralStatusInfo.Danger === 0)
-            domElements.spanDangerousOriginal.html("None");
-        else
-            domElements.spanDangerousOriginal.html(response.GeneralStatusInfo.Danger);
-
-        if (response.GeneralStatusInfo.Danger2 === 0)
-            domElements.spanDangerouseABI.html("None");
-        else
-            domElements.spanDangerouseABI.html(response.GeneralStatusInfo.Danger2);
-
-        if (response.GeneralStatusInfo.Danger3 === 0)
-            domElements.spanDangerouseOtherSports.html("None");
-        else
-            domElements.spanDangerouseOtherSports.html(response.GeneralStatusInfo.Danger3);
-    }
-
     function HandlePolicies(response) {
         domElements.spanClass.html(response.PoliciesInfo.CustomerClassToString + "  ");
 
@@ -235,10 +214,8 @@
 
     function HandleCustomerStatus(data) {       
         if (data !== null) {
-            DangerouseIcon(data);
-            domElements.spanAccountStatus.html(data.StatusLabel);
-            domElements.spanAutoSuspendSoccer.html(data.GeneralStatusInfo.Autosuspend ? 'Yes' : 'No');
-            domElements.spanAutoSuspendOtherSport.html(data.GeneralStatusInfo.Autosuspend2 ? 'Yes' : 'No');
+            domElements.spanAutoSuspendSoccer.html(data.GeneralInfo.Autosuspend ? 'Yes' : 'No');
+            domElements.spanAutoSuspendOtherSport.html(data.GeneralInfo.Autosuspend2 ? 'Yes' : 'No');
         }
     }
 

@@ -1,13 +1,8 @@
-﻿using Fanex.Data;
-using Fanex.Data.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Fanex.NAP.CTS.Criteria.Home
+﻿namespace Fanex.NAP.CTS.Criteria.Home
 {
+    using Fanex.Data;
+    using Fanex.Data.Repository;
+
     public class SearchResultCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_username")]

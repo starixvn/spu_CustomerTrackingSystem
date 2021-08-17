@@ -1,13 +1,9 @@
-﻿using Fanex.Data;
-using Fanex.Data.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Fanex.NAP.CTS.Criteria.Account
+﻿namespace Fanex.NAP.CTS.Criteria.Account
 {
+    using Fanex.Data;
+    using Fanex.Data.Repository;
+    using System;
+
     public class CustomerInfoByCTSCustIdCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_CTSCustID")]

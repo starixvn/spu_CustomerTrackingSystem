@@ -70,16 +70,16 @@
             }
         }
 
-        public List<CustomerGeneralStatusModel> GetCustomerGeneralStatus(string custIds)
+        public List<CustomerGeneralInfoModel> GetCustomerGeneralInfo(string custIds)
         {
-            var criteria = new CustomerGeneralStatusCriteria
+            var criteria = new CustomerGeneralInfoCriteria
             {
                 CustIds = custIds
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                var result = db.Query<CustomerGeneralStatusModel>(criteria);
+                var result = db.Query<CustomerGeneralInfoModel>(criteria);
 
                 return result.ToList();
             }
@@ -361,51 +361,6 @@
             return data.Result ?? new ShortestPathOfAccount();
         }
 
-        public List<GraphAssociationModel> FilterCustomerAssociationByStatus(string statusIds,
-            List<GraphAssociationModel> customerAssociation,
-            List<CustomerGeneralStatusModel> statusByCustIds)
-        {
-            var accountStatusViewModel = new CustomerGeneralStatusViewModel();
-            var notAvailable = accountStatusViewModel.GetAccountStatusName(Model.AccountStatus.NA);
-            var notAvailableId = accountStatusViewModel.GetAccountStatusId(notAvailable);
-
-            customerAssociation = customerAssociation.Select(x =>
-            {
-                if (x.CustId == null || x.CustId == 0)
-                {
-                    x.CustId = 0;
-                    x.StatusId = notAvailableId;
-                    x.StatusName = notAvailable;
-                }
-                else
-                {
-                    var customerStatus = statusByCustIds.FirstOrDefault(a => a.CustId == x.CustId);
-
-                    if (customerStatus != null)
-                    {
-                        var accountStatus = accountStatusViewModel.GetAccountStatus(customerStatus);
-                        var statusName = accountStatusViewModel.GetAccountStatusName(accountStatus);
-
-                        x.StatusId = accountStatusViewModel.GetAccountStatusId(statusName);
-                        x.StatusName = statusName;
-                    }
-                    //else
-                    //{
-                    //    LogService.Error($"AccountService - FilterCustomerAssociationByStatus - Account status is NULL on custid: { x.CustId }");
-                    //}
-                }
-
-                return x;
-            }).ToList();
-
-            //var statusIdList = statusIds.Split(',').Select(Int32.Parse).ToList();
-
-            //var result = customerAssociation.Where(x => statusIdList.Contains(x.StatusId)).ToList();
-
-            return customerAssociation;
-
-        }
-
         public string MappingAssociationType(GraphAssociationModel data)
         {
             if (data.AssociationType != null)
@@ -451,21 +406,6 @@
             }
 
             return minDate;
-        }
-
-        public List<AssociationCustomerModel> SearchAssociatedCustomer(string username)
-        {
-            var criteria = new GetCustomerByUsernameCriteria
-            {
-                Username = username
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                var result = db.Query<AssociationCustomerModel>(criteria);
-
-                return result.ToList();
-            }
         }
 
         public IEnumerable<ValidateManualAssociationMultipleModel> ValidateManualAssociationMultiple(long fromCTSCustId, string toUserNameList, out bool isException)

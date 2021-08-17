@@ -55,7 +55,6 @@
     <Compile Include="Account\Associated\GetMatchesAssociationByAICriteria.cs" />
     <Compile Include="Account\Associated\InsertManualAssociationMultipleCriteria.cs" />
     <Compile Include="Account\Associated\ValidateManualAssociationMultipleCriteria.cs" />
-    <Compile Include="Account\Associated\GetCustomerByUsernameCriteria.cs" />
     <Compile Include="Account\Associated\CustomerStaticAccountStatusCriteria.cs" />
     <Compile Include="Account\Associated\GetDirectAssociatedAccountTagFlaggedCriteria.cs" />
     <Compile Include="Account\Associated\GetDirectAssociationByAccountCriteria.cs" />
@@ -134,7 +133,7 @@
     <Compile Include="Account\CustomerEvidence\GetRemoveEvidenceAssociatedAccountCriteria.cs" />
     <Compile Include="Account\CustomerEvidence\GetAssociatedAccountByCTSCustIdsCriteria.cs" />
     <Compile Include="Account\CustomerFlagInfoByCTSCustIdCriteria.cs" />
-    <Compile Include="Account\CustomerGeneralStatusCriteria.cs" />
+    <Compile Include="Account\CustomerGeneralInfoCriteria.cs" />
     <Compile Include="Account\CustomerLastTicketDateCriteria.cs" />
     <Compile Include="Account\CustomerProfileFraudInfoCriteria.cs" />
     <Compile Include="Account\CustomerProfilePoliciesInfoCriteria.cs" />

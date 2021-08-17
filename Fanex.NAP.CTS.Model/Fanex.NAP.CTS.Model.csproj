@@ -176,7 +176,7 @@
     <Compile Include="Customer.cs" />
     <Compile Include="CustomerAssociationModel.cs" />
     <Compile Include="Account\CustomerFlagInfoModel.cs" />
-    <Compile Include="Account\CustomerGeneralStatusModel.cs" />
+    <Compile Include="Account\CustomerGeneralInfoModel.cs" />
     <Compile Include="Account\CustomerInfoByCTSCustIdModel.cs" />
     <Compile Include="Account\CustomerAssociationByAccountDetailModel.cs" />
     <Compile Include="Account\CustomerLastTicketDateModel.cs" />
