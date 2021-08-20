@@ -26,7 +26,6 @@
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service.Implement;
-    using Fanex.NAP.CTS.ViewModel.Account;
     using Fanex.NAP.CTS.ViewModel.Account.Associated;
     using System;
     using System.Collections.Generic;
@@ -266,7 +265,7 @@
                 return result;
             }
         }
-        
+
         public GraphAssociationPaging GetCustomerAssociationByGraph(string apiURL, AssociatedFilterModel filterModel, bool fromMySQL = false)
         {
             if (fromMySQL)
@@ -319,7 +318,7 @@
         {
             var groupStatuses = new List<AccountStaticStatusModel>();
 
-            var accountStatuses = GetCustomerStaticStatus(listId, status)?.OrderBy(o=>o.PriorityOrder);
+            var accountStatuses = GetCustomerStaticStatus(listId, status)?.OrderBy(o => o.PriorityOrder);
 
             if (accountStatuses != null && accountStatuses.Any())
             {
@@ -522,7 +521,7 @@
         public MatchesAssociationByAIModel GetMatchesAssociationInfo(long custID1, long custID2)
         {
             var result = new MatchesAssociationByAIModel();
-            
+
             var criteria = new GetMatchesAssociationByAICriteria
             {
                 CustID1 = custID1,
@@ -535,7 +534,7 @@
             }
 
             result.ErrorMessage = criteria.ErrorMessage;
-            result.TotalMatchCount = (int) criteria.TotalMatchCount;
+            result.TotalMatchCount = (int)criteria.TotalMatchCount;
 
             return result;
         }
@@ -570,10 +569,10 @@
             }
         }
 
-        
+
         public IEnumerable<CategoryInfoModel> GetAllCategory()
         {
-            var criteria = new GetCategoryInfoCriteria();            
+            var criteria = new GetCategoryInfoCriteria();
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
@@ -581,7 +580,7 @@
             }
         }
 
-		public AssociationByIPInfoModel GetAssociationByIPInfo(long custId1, long custId2)
+        public AssociationByIPInfoModel GetAssociationByIPInfo(long custId1, long custId2)
         {
             var criteria = new GetAssociationByIPInfoCriteria
             {
@@ -599,7 +598,7 @@
                     TotalMatchCount = criteria.TotalMatchCount
                 };
             }
-        }		
+        }
 
         #endregion
 

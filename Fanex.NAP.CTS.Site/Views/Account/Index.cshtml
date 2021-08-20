@@ -187,6 +187,7 @@
                 <li><a href="#tabs-2" id="evidence-tab">Chains to Evidence and Exceptions</a></li>
                 <li><a href="#tabs-3">Customer Classification</a></li>
                 <li><a href="#tabs-4">Transaction History</a></li>
+                <li><a href="#tabs-5">Robot Classification</a></li>
             </ul>
             <div id="tabs-1">
                 <div id="associated_account" class="report-cont">
@@ -205,6 +206,11 @@
             </div> 
             <div id="tabs-4">
                 <div id="trans_history" class="report-cont">
+                    <img src="@Url.Content("~/Content/images/ajax-loader.gif")" alt="Loading ..." />
+                </div>
+            </div>
+            <div id="tabs-5">
+                <div id="robot_classification" class="report-cont">
                     <img src="@Url.Content("~/Content/images/ajax-loader.gif")" alt="Loading ..." />
                 </div>
             </div>
@@ -229,5 +235,6 @@
     , "~/account-detail-scripts"
     , "~/chain-to-evidence-scripts"
     , "~/account/transaction-history-scripts"
-    , "~/account/customer-category-scripts")
+    , "~/account/customer-category-scripts"
+    , "~/account/robot-classification-scripts")
 }

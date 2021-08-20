@@ -16,6 +16,7 @@
         tabChainEvidence: $("#chains_evidence"),
         tabCustomerCategory: $("#customer_category"),
         tabTransactionHistory: $("#trans_history"),        
+        tabRobotClassification: $("#robot_classification"),
         spanTotalAssociated: $('#spanTotalAssociated'),
         spanTotalEvidences: $('#spanTotalEvidences'),
         spanClass: $('#spanClass'),
@@ -79,6 +80,23 @@
             complete: function () {
                 var customerCategory = new customer_category();
                 customerCategory.Initial(custId, ctsCustId, subscriberId, username, isHostPermission, custSubId);
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+            }
+        });
+    }
+
+    function LoadLastestRobotClassification() {
+        $.ajax(common.modifyRelativeUrl('Account/RobotClassification'), {
+            type: 'POST',
+            success: function (response) {
+                domElements.tabRobotClassification.html(response);
+            },
+            complete: function () {
+                var robotClassification = new robot_classification();
+                //custId
+                robotClassification.Initial(46411863);
             },
             error: function (errMsg) {
                 console.log(errMsg);
@@ -258,6 +276,7 @@
         GetCustomerTotalAssociation();
         LoadTransactionHistory();
         LoadCustomerCategory();
+        LoadLastestRobotClassification();
 
         domElements.spanTotalAssociated.on('click', function () {
             domElements.associatedAccountTab.trigger("click");

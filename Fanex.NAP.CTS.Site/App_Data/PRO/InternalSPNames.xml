@@ -143,4 +143,10 @@
 		<Setting Key="CTS_DC_MatchMonitor_Details_Get" SpName="CTS_DC_MatchMonitor_Details_Get" DbName="MySQL.CTS_DataCenter.Reporter"/>
 		<Setting Key="CTS_DC_CustInfo_GetByCustID" SpName="CTS_DC_CustInfo_GetByCustID" DbName="MySQL.CTS_DataCenter.Reporter"/>
 	</Function>
+  
+  <Function name="RobotClassification">
+    <Setting Key="CTS_DC_RobotClassification_GetHistory" SpName="CTS_DC_RobotClassification_GetHistory" DbName="MySQL.CTS_DataCenter.Reporter"/>
+    <Setting Key="CTS_DC_RobotClassification_GetLastest" SpName="CTS_DC_RobotClassification_GetLastest" DbName="MySQL.CTS_DataCenter.Reporter"/>
+    <Setting Key="CTS_DC_RobotClassification_GetRobotStatus" SpName="CTS_DC_RobotClassification_GetRobotStatus" DbName="MySQL.CTS_DataCenter.Reporter"/>
+  </Function>
 </Functions>

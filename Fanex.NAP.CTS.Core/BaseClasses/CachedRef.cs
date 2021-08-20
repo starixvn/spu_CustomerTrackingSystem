@@ -1,13 +1,14 @@
 ﻿namespace Fanex.NAP.CTS.Core.BaseClasses
 {
-    using System;
     using Fanex.RemotingRef;
 
     public static class CachedRef
     {
-        private static RemotingRefService refService = new RemotingRefService();
+        private static readonly RemotingRefService refService = new RemotingRefService();
 
         public static string GetTeamName(int teamId, string lang = "en") => refService.GetTeamName(teamId.ToString(), lang);
+
+        public static string GetSportTypeName(int sportId, string lang = "en") => refService.GetSportName(sportId.ToString(), lang);
 
         public static string GetBettypeName(int bettypeId, string lang = "en") => refService.GetBetTypeName(bettypeId.ToString(), lang);
 

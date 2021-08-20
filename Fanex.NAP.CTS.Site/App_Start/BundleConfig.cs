@@ -50,6 +50,8 @@
 
             RegisterTransactionHistoryBundles(bundles);
 
+            RobotClassificationBundles(bundles);
+
             RegisterCustomerCategoryBundles(bundles);
 
             RegisterProblemAccountMonitorBundles(bundles);
@@ -142,6 +144,11 @@
         private static void RegisterTransactionHistoryBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/account/transaction-history-scripts").Include("~/Scripts/Account/TransactionHistory/*.js"));
+        }
+        
+        private static void RobotClassificationBundles(BundleCollection bundles)
+        {
+            bundles.Add(new ScriptBundle("~/account/robot-classification-scripts").Include("~/Scripts/Account/RobotClassification/*.js"));
         }
 
         private static void RegisterChainToEvidenceBundles(BundleCollection bundles)

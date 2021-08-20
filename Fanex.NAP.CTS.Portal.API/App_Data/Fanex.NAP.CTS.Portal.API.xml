@@ -486,13 +486,6 @@
             Using for external site (TW, ExtAcc site...)
             </summary>
         </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.PlaceEvidence(Fanex.NAP.CTS.Model.Account.UpdatePlaceEvidenceModel)">
-            <summary>
-            Place Evidence on CTS
-            </summary>
-            <param name="evidence"></param>
-            <returns></returns>
-        </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.PlaceEvidenceMultipleByCustId(System.String,System.Int32)">
             <summary>
             Place evidence for multiple customer
@@ -502,7 +495,7 @@
             <returns>true: success; false: failed</returns>
         </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetFlaggedCustomersByLevel(System.String,System.Int32)">
-            <summary>   
+            <summary>
             Get flagged customers by level
             </summary>
             <param name="CustIdList">CustId in string format (saparate by comma) </param>
@@ -510,7 +503,7 @@
             <returns>A list of customer evidence in JSON format</returns>
         </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetFlaggedCustByLvlNEvi(System.String,System.Int32,System.String)">
-            <summary>   
+            <summary>
             Get flagged customers by level and evidence
             </summary>
             <param name="custIdList">CustId in string format (saparate by comma) </param>
@@ -532,7 +525,7 @@
             <param name="custIdList">CustId list in string format(saparted by comma. Ex: 47539408,47787246)</param>
             <returns>List of Flagged Customer in Json formated</returns>
         </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.AddCustomersEvidences(Fanex.NAP.CTS.Model.DTO.CustomerEvidenceList)">
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.AddCustomersEvidences(Fanex.NAP.CTS.Model.DTO.PlaceMultiCustomerEvidence)">
             <summary>
             Add evidences to customers
             </summary>
@@ -597,7 +590,7 @@
             <returns>true: success; false: failed</returns>
         </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetCustomerClassCategory">
-            <summary>   
+            <summary>
             Get customer class's categories
             </summary>
             <returns>A list of customer class's categories in JSON format</returns>
@@ -620,7 +613,7 @@
         <!-- Badly formed XML comment ignored for member "M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetProblemCase" -->
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetProblemCaseMonitor(Fanex.NAP.CTS.Model.API.ProblemCaseMonitor.ProblemCaseMonitorParamsModel)">
             <summary>
-            Get list Problem Case Monitor 
+            Get list Problem Case Monitor
             </summary>
             <param name="paras"></param>
             <returns></returns>

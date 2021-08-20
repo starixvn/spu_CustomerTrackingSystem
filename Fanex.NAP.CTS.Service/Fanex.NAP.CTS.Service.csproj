@@ -60,6 +60,7 @@
     <Compile Include="Implement\ProblemCaseMonitorService.cs" />
     <Compile Include="Implement\PushDataToExternalService.cs" />
     <Compile Include="Implement\CustomerClassifyService.cs" />
+    <Compile Include="Implement\RobotClassificationService.cs" />
     <Compile Include="Implement\SpecialCustomerClassService.cs" />
     <Compile Include="Implement\CustomerEvidenceService.cs" />
     <Compile Include="Implement\EvidenceService.cs" />
@@ -93,6 +94,7 @@
     <Compile Include="Interface\IProblemCaseMonitorService.cs" />
     <Compile Include="Interface\IPushDataToExternalService.cs" />
     <Compile Include="Interface\ICustomerClassifyService.cs" />
+    <Compile Include="Interface\IRobotClassificationService.cs" />
     <Compile Include="Interface\ISpecialCustomerClassService.cs" />
     <Compile Include="Interface\ISubscriberService.cs" />
     <Compile Include="Interface\ITransactionService.cs" />

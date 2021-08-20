@@ -69,6 +69,9 @@
     <Compile Include="Account\ChainToEvidence\GetAllEvidenceCriteria.cs" />
     <Compile Include="Account\CustomerCategory\GetCTSCustomerClassificationHistoryCriteria.cs" />
     <Compile Include="Account\GetAssociationWithCategoryCriteria.cs" />
+    <Compile Include="Account\RobotClassification\GetHistoryRobotClassificationCriteria.cs" />
+    <Compile Include="Account\RobotClassification\GetStatusRobotClassificationCriteria.cs" />
+    <Compile Include="Account\RobotClassification\GetLastestRobotClassificationCriteria.cs" />
     <Compile Include="Api\GetAssociationForExtAccCriteria.cs" />
     <Compile Include="Api\GetSubscriberInfoBySubscriberName.cs" />
     <Compile Include="AssociationDetection\GetAssociationDetectionCriteria.cs" />

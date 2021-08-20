@@ -48,6 +48,8 @@
         private readonly ICustomerClassifyService _customerClassifyService;
         private readonly IPushDataToExternalService _pushDataToExternalService;
         private readonly ICommonService _commonService;
+        private readonly IRobotClassificationService _robotClassificationService;
+
         public override string BaseControllerName { get => string.Empty; }
 
         public AccountController()
@@ -59,6 +61,7 @@
             _customerClassifyService = new CustomerClassifyService();
             _pushDataToExternalService = new PushDataToExternalService();
             _commonService = new CommonService();
+            _robotClassificationService = new RobotClassificationService();
         }
 
         public ActionResult Index(long Id)
@@ -1504,6 +1507,22 @@
 
         #endregion
 
+        #region Robot Classification
+        public ActionResult RobotClassification()
+        {
+            return PartialView("RobotClassfication/LastestRobotClassification");
+        }
+
+        [HttpPost]
+        public ActionResult GetLastestRobotClassification(long custId)
+        {
+            var lastestRobotData = _robotClassificationService.GetLastestRobotClassification(custId);
+            var data = lastestRobotData.Select(d => new RobotClassificationViewModel(d));
+            
+            return Json(new { data });
+        }
+        #endregion
+
         #region Betting Statistic
         [NapAuth(FunctionKey = FSFunctionKeys.BettingStatistics, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetPerformanceBySport(long custId, int getTop)
@@ -1621,7 +1640,6 @@
                 days
             }, JsonRequestBehavior.AllowGet);
         }
-
 
         private void CalculatePieChartTurnOverPercentage(IEnumerable<PerformanceBySportModel> result, List<SportStatisticPieChartViewModel> pieChartSportStatisticSessions)
         {
