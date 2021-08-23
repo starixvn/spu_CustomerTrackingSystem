@@ -1521,6 +1521,18 @@
             
             return Json(new { data });
         }
+
+        [HttpPost]
+        public ActionResult GetRobotClassificationHistory(long custId, DateTime fromDate, DateTime toDate)
+        {
+            custId = 16905114;
+            fromDate = new DateTime(2021,05,30);
+            toDate = new DateTime(2021,06,30);
+            var lastestRobotData = _robotClassificationService.GetHistoryRobotClassification(custId, fromDate, toDate);
+            var data = lastestRobotData.Select(d => new RobotClassificationViewModel(d));
+
+            return Json(new { data });
+        }
         #endregion
 
         #region Betting Statistic

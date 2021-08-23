@@ -1021,7 +1021,6 @@
     </Content>
     <Content Include="Views\MatchMonitor\Detail.cshtml" />
     <Content Include="Views\Account\RobotClassfication\LastestRobotClassification.cshtml" />
-    <Content Include="Views\Account\RobotClassfication\RobotClassificationHistory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CoreBetList.css" />

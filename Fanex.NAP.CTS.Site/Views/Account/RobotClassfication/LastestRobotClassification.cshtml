@@ -33,4 +33,32 @@
 </div>
 
 <div id="divRobotClassificationHistory" style="display:none;">
+    <div class="group-control">
+        <div class="form-filter">
+            <div class="group calendar width-180">
+                <label class="text">From</label>
+                <input type="text" id="dpkFromDate" class="control" readonly>
+                <span class="icon-calendar-text"></span>
+            </div>
+            <div class="group calendar width-180">
+                <label class="text">To</label>
+                <input type="text" id="dpkToDate" class="control" readonly>
+                <span class="icon-calendar-text"></span>
+            </div>
+
+            <button class="button btn-search" id="btnSearch">Search</button>
+        </div>
+    </div>
+    <table id="robot-classification-history-table" class="table table-striped" style="width: 100%">
+        <thead>
+            <tr>
+                <th>Sport</th>
+                <th>Bet Type</th>
+                <th>Is Live</th>
+                <th>Robot Type</th>
+                <th>Scanned Date</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
 </div>
