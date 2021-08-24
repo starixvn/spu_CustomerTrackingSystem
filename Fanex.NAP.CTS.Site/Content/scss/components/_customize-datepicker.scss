@@ -4,7 +4,7 @@
     border: 1px solid #d0d0d0;
     box-shadow: 0 0 4px rgba(0,0,0, .3);
     font-family: $font-family;
-    z-index: 10!important;
+    z-index: 999!important;
 
     th {
         text-transform: uppercase;
