@@ -43,8 +43,8 @@
     {
         private readonly IAccountService _accountService;
         private readonly IGraphService _graphService;
-        private readonly ITransactionService _transService;        
-        private readonly ICustomerEvidenceService _customerEvidenceService;    
+        private readonly ITransactionService _transService;
+        private readonly ICustomerEvidenceService _customerEvidenceService;
         private readonly ICustomerClassifyService _customerClassifyService;
         private readonly IPushDataToExternalService _pushDataToExternalService;
         private readonly ICommonService _commonService;
@@ -55,7 +55,7 @@
         public AccountController()
         {
             _accountService = new AccountService();
-            _graphService = new GraphService();            
+            _graphService = new GraphService();
             _transService = new TransactionService();
             _customerEvidenceService = new CustomerEvidenceService();
             _customerClassifyService = new CustomerClassifyService();
@@ -120,7 +120,7 @@
             {
                 try
                 {
-                   GetCustomerProfilePoliciesInfo(custId, ref profile);
+                    GetCustomerProfilePoliciesInfo(custId, ref profile);
                 }
                 catch (Exception ex)
                 {
@@ -261,7 +261,7 @@
 
         public ActionResult AssociatedByAccount(string username)
         {
-           var getAssociationStatus = _accountService.GetCustomerStaticStatus(3, true);
+            var getAssociationStatus = _accountService.GetCustomerStaticStatus(3, true);
 
             getAssociationStatus.Insert(0, new CustomerStaticStatusModel { ItemId = 0, ItemNameDisplay = "All" });
 
@@ -310,11 +310,11 @@
             {
                 totalItem = graphAssociationPage.TotalItems;
 
-                var customerAssociation = graphAssociationPage.AssociationList;                
+                var customerAssociation = graphAssociationPage.AssociationList;
 
                 var ctsCustIdList = customerAssociation.Select(x => new { CTSCustId = x.CTSCustID, SubscriberId = x.SubscriberID });
 
-                customerAssociation = GetCustClassification(string.Join("," , customerAssociation.Select(c=>c.CustId).Distinct()), customerAssociation);
+                customerAssociation = GetCustClassification(string.Join(",", customerAssociation.Select(c => c.CustId).Distinct()), customerAssociation);
 
                 var flaggedAffectedTagList = _accountService.GetDirectAssociatedAccountTagFlagged(JsonConvert.SerializeObject(ctsCustIdList));
 
@@ -325,11 +325,11 @@
                         CustId = x.CustId.HasValue ? x.CustId.Value : 0,
                         Username = !string.IsNullOrWhiteSpace(x.Username) ? x.Username : x.Username2,
                         LoginId = !string.IsNullOrWhiteSpace(x.Username2) ? x.Username2 : x.Username,
-                        AssociationDate = getAssociationFromMySql == true ? x.AssociationDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss):
+                        AssociationDate = getAssociationFromMySql == true ? x.AssociationDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss) :
                                                                             x.AssociationDateFromGraphDB.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                         AssociationType = x.AssociationType,
-                        AssociationTypeName = StandardizeAssociationTypeName(getAssociationFromMySql == true 
-                                        ? x.AssociationTypeName 
+                        AssociationTypeName = StandardizeAssociationTypeName(getAssociationFromMySql == true
+                                        ? x.AssociationTypeName
                                         : _accountService.MappingAssociationType(x)),
                         Status = x.StatusName == "NA" ? "N/A" : x.StatusName,
                         StatusId = x.StatusId.HasValue ? x.StatusId.Value : 0,
@@ -364,7 +364,7 @@
                 data = result
             }, JsonRequestBehavior.AllowGet);
         }
-       
+
         private IEnumerable<CategoryGroupViewModel> GetAllCategories()
         {
             var categoryList = new List<CategoryGroupViewModel>();
@@ -408,7 +408,7 @@
         {
             var custClassification = new List<LatestClassification4ReportModel>();
 
-            if(!string.IsNullOrEmpty(custIds))
+            if (!string.IsNullOrEmpty(custIds))
             {
                 custClassification = _accountService.GetCustomerClassFromCTSByCustId(custIds)?.ToList();
             }
@@ -446,7 +446,7 @@
                                       }).ToList();
 
             return result;
-        } 
+        }
 
         private string GetDirectAssociationUrl(int associationType)
         {
@@ -459,11 +459,11 @@
                 case 3:
                     return ConfigSettings.GetDirectAssociationByManual;
                 case 4:
-                    return  ConfigSettings.GetDirectAssociationByIP;
+                    return ConfigSettings.GetDirectAssociationByIP;
                 default:
                     return ConfigSettings.GetDirectAssociation;
             }
-        }               
+        }
 
         [HttpPost]
         public ActionResult GetDirectAssociationGraph(AssociatedFilterModel model, string displayName)
@@ -629,7 +629,7 @@
 
             var matchesAssociationInfo = _accountService.GetMatchesAssociationInfo(para1, para2);
 
-            if(string.IsNullOrEmpty(matchesAssociationInfo.ErrorMessage) && matchesAssociationInfo.MatchesInfo != null && matchesAssociationInfo.MatchesInfo.Any())
+            if (string.IsNullOrEmpty(matchesAssociationInfo.ErrorMessage) && matchesAssociationInfo.MatchesInfo != null && matchesAssociationInfo.MatchesInfo.Any())
             {
                 var matchesInfo = _accountService.GetMatchesInfo(string.Join(",", matchesAssociationInfo.MatchesInfo.Select(c => c.MatchID).Distinct()));
 
@@ -651,7 +651,7 @@
                                                Bettypes = c1.BettypeList,
                                                CustID1 = para1,
                                                CustID2 = para2
-                                           }).OrderByDescending(x=>x.EventDateString).ToList()
+                                           }).OrderByDescending(x => x.EventDateString).ToList()
                 };
             }
 
@@ -668,7 +668,7 @@
                 if (!string.IsNullOrEmpty(para.EventDateString))
                 {
                     var eventDate = DateTime.MinValue;
-                    
+
                     DateTime.TryParseExact(para.EventDateString,
                        Consts.FormatDateToString_yyyyMMddHHmmss,
                        CultureInfo.InvariantCulture,
@@ -677,12 +677,12 @@
 
                     para.EventDate = eventDate;
                 }
-               
+
                 var result = _accountService.GetMatchesDetailInfo(para);
 
                 if (result != null && result.Any())
                 {
-                    data = result.OrderBy(x=>x.TransDate).Select(x => new MatchesDetailInfoViewModel
+                    data = result.OrderBy(x => x.TransDate).Select(x => new MatchesDetailInfoViewModel
                     {
                         UserName = x.UserName,
                         TransDateString = x.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
@@ -692,7 +692,7 @@
                         Stake = x.Stake,
                         Odds = x.Odds,
                         LiveScore = x.LiveHomeScore + "-" + x.LiveAwayScore
-                    }).ToList();                   
+                    }).ToList();
                 }
             }
 
@@ -702,7 +702,7 @@
         [HttpPost]
         public ActionResult GetIPAssociation(long custId1, long custId2)
         {
-            var data = new AssociationByIPInfoViewModel();            
+            var data = new AssociationByIPInfoViewModel();
             var para1 = custId1;
             var para2 = custId2;
 
@@ -720,7 +720,7 @@
                 {
                     TotalMatchCount = info.TotalMatchCount,
                     TotalIPSharingCount = info.TotalIPCount,
-                    ErrorMessage = info.ErrorMessage,                    
+                    ErrorMessage = info.ErrorMessage,
                     ItemList = info.ItemList.Select(x =>
                     {
                         var homeName = CachedRef.GetTeamName(x.HomeID);
@@ -956,12 +956,12 @@
         {
             model.UserId = model.UserId == 0 ? CurrentSession.UserId : model.UserId;
             var result = _accountService.ProcessPlaceEvidence(model);
-            
+
             if (result.ErrorCode == 0)
             {
                 var objects = new[] { new {
                     model.CTSCustId,
-                    model.CustId,                    
+                    model.CustId,
                     model.SubscriberId,
                     model.EvidenceId,
                     ActionType = 0
@@ -969,7 +969,7 @@
                 var syncCustIds = Enumerable.Empty<long>();
                 var custEvidenceJson = JsonConvert.SerializeObject(objects);
                 // Sync Evidence to Category
-                var syncResult =_accountService.SyncCustEvidenceToCategory(custEvidenceJson, false, out syncCustIds);
+                var syncResult = _accountService.SyncCustEvidenceToCategory(custEvidenceJson, false, out syncCustIds);
 
                 if (syncResult.ErrorCode == 0)
                 {
@@ -992,7 +992,7 @@
 
                         // Push CC to Soon88
                         _pushDataToExternalService.PushCustomerClassificationToSoon88(lastestClassifications);
-                    }                   
+                    }
                 }
             }
 
@@ -1011,7 +1011,7 @@
             {
                 var objects = new[] { new {
                     model.CTSCustId,
-                    model.CustId,                    
+                    model.CustId,
                     model.SubscriberId,
                     model.EvidenceId,
                     ActionType = 2
@@ -1132,10 +1132,10 @@
         private void GetCustomerProfilePoliciesInfo(long custId, ref AccountProfileViewModel profile)
         {
             profile.PoliciesInfo = _accountService.GetCustomerProfilePoliciesInfo(custId);
-          
+
             var customerClass = _accountService.GetCustomerClassFromCTSByCustId(custId.ToString());
 
-            if(customerClass != null && customerClass.Any())
+            if (customerClass != null && customerClass.Any())
             {
                 profile.PoliciesInfo.CustomerClass = customerClass.First().CustClass;
             }
@@ -1144,6 +1144,14 @@
         private void GetCustomerRobotUserStatus(long custId, ref AccountProfileViewModel profile)
         {
             profile.RobotUserStatus = _accountService.GetCustomerRobotUserStatus(custId);
+            if (profile.RobotUserStatus.IsRobotUser)
+            {
+                var robotClassification = _robotClassificationService.GetStatusRobotClassification(custId);
+                if (robotClassification != null)
+                {
+                    profile.RobotUserStatus.RobotType = robotClassification.RobotType;
+                }
+            }
         }
 
         private void GetCustomerFlagInfo(long ctsCustId, ref AccountProfileViewModel profile)
@@ -1280,7 +1288,7 @@
             {
                 reason += $"<span> | Normal Category Status: { cc.TaggingType }</span>";
             }
-            
+
             reason += "<br />";
 
             var margin = Math.Round(cc.Margin, 3);
@@ -1354,10 +1362,10 @@
         public ActionResult MarkCatergory(long ctsCustId)
         {
             var customerCategoryList = _accountService.GetCustomerCategoryByCTSCustId(ctsCustId).ToList();
-            
+
             var model = new MarkCategoryViewModel
             {
-                CustomerCategoryList = customerCategoryList.Where(x=>x.CategoryName.Equals("VVIP") || x.ParentId == 0).ToList()
+                CustomerCategoryList = customerCategoryList.Where(x => x.CategoryName.Equals("VVIP") || x.ParentId == 0).ToList()
             };
 
             return PartialView("CustomerCategory/MarkCatergory", model);
@@ -1372,7 +1380,7 @@
             };
 
             return PartialView("CustomerCategory/RemoveCategory", model);
-        }               
+        }
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult AddCustomerCategory(AddCustomerCategoryModel addCategoryModel)
@@ -1423,14 +1431,14 @@
                 errorCode,
                 errorMessage
             }, JsonRequestBehavior.AllowGet);
-        }     
+        }
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult RemoveCustomerCategory(long custId, long ctsCustId, int categoryId, bool isVVip)
         {
             var errorCode = 0;
             var errorMessage = string.Empty;
-            
+
             var resultToCTS = _accountService.RemoveCustomerCategory(custId, ctsCustId, categoryId, CurrentSession.UserId);
 
             if (string.IsNullOrEmpty(resultToCTS.OpErrorMessage))
@@ -1451,7 +1459,7 @@
                             FunctionId = FunctionId.RemoveVIPWeb
                         });
                     }
-                }                
+                }
             }
             else
             {
@@ -1518,7 +1526,7 @@
         {
             var lastestRobotData = _robotClassificationService.GetLastestRobotClassification(custId);
             var data = lastestRobotData.Select(d => new RobotClassificationViewModel(d));
-            
+
             return Json(new { data });
         }
 
@@ -1526,8 +1534,8 @@
         public ActionResult GetRobotClassificationHistory(long custId, DateTime fromDate, DateTime toDate)
         {
             custId = 16905114;
-            fromDate = new DateTime(2021,05,30);
-            toDate = new DateTime(2021,06,30);
+            fromDate = new DateTime(2021, 05, 30);
+            toDate = new DateTime(2021, 06, 30);
             var lastestRobotData = _robotClassificationService.GetHistoryRobotClassification(custId, fromDate, toDate);
             var data = lastestRobotData.Select(d => new RobotClassificationViewModel(d));
 
@@ -1725,6 +1733,6 @@
             return temp = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.BettingStatistics, NAP.Core.Business.Constant.Policy.Read);
         }
         #endregion
-        
+
     }
 }

@@ -50,18 +50,24 @@
         });
     }
 
-    function RenderHistoryGrid(custId, fromDate, toDate) {
+    function RenderHistoryGrid(custId) {
         let url = common.modifyRelativeUrl('Account/GetRobotClassificationHistory');
 
         return robotClassificationHistoryTable.DataTable({
-            dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
+            dom: '<"wrapper-info-table"<"wrapper-info"lp>>t',
             serverSide: true,
             ajax: {
                 url: url,
                 data: {
-                    custId,
-                    fromDate,
-                    toDate
+                    custId: function () {
+                        return custId;
+                    },
+                    fromDate: function () {
+                        return dpkFromDate.val();
+                    },
+                    toDate: function () {
+                        return dpkToDate.val();
+                    }
                 },
                 type: "POST",
                 beforeSend: function () {
@@ -84,10 +90,11 @@
                 zeroRecords: "There's no data"
             },
             pagingType: "full_numbers",
+            paging: true,
             ordering: false,
             searching: false,
             lengthMenu: [50, 100, 200, 500],
-            pageLength: 100,
+            pageLength: 50,
             scrollX: false,
             scrollCollapse: false,       
             columnDefs: [
@@ -120,7 +127,7 @@
 
         btnViewHistory.click(function () {
             if (historyDataTable == undefined) {
-                historyDataTable = RenderHistoryGrid(custId, dpkFromDate.val(), dpkToDate.val());
+                historyDataTable = RenderHistoryGrid(custId);
             }
 
             divRobotClassHistory.dialog({

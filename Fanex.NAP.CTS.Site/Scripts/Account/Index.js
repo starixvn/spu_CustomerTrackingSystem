@@ -3,19 +3,19 @@
     var custId = $("#hdCustId").val();
     var ctsCustId = $("#hdCTSCustId").val();
     var subscriberId = $("#hdSubscriberId").val();
-    var subscriber = $("#hdSubscriber").val();   
+    var subscriber = $("#hdSubscriber").val();
     var isHostPermission = $("#hdIsHostPermission").attr("IsHostPermission");
-    var isBettingStatisticPermission = $("#hdIsBettingStatisticPermission").attr("IsBettingStatisticPermission");  
+    var isBettingStatisticPermission = $("#hdIsBettingStatisticPermission").attr("IsBettingStatisticPermission");
     var isViewIPTransactionPermission = $("#hdIsViewIPTransactionPermission").attr("IsViewIPTransactionPermission");
     var currentUserId = $("#hdCurrentUserId").val();
     var custSubId = $("#hdCustSubId").val();
     var isPreviousStatisticOpen = false;
 
-    let domElements = {        
+    let domElements = {
         tabAssociatedAccount: $("#associated_account"),
         tabChainEvidence: $("#chains_evidence"),
         tabCustomerCategory: $("#customer_category"),
-        tabTransactionHistory: $("#trans_history"),        
+        tabTransactionHistory: $("#trans_history"),
         tabRobotClassification: $("#robot_classification"),
         spanTotalAssociated: $('#spanTotalAssociated'),
         spanTotalEvidences: $('#spanTotalEvidences'),
@@ -120,7 +120,7 @@
                 console.log(errMsg);
             }
         });
-    }  
+    }
 
     function GetCustomerTotalAssociation() {
         $.ajax(common.modifyRelativeUrl('Account/GetCustomerTotalAssociationByCTSCustId'), {
@@ -190,8 +190,6 @@
                 HandleFlagedAffectedEvidence(response.FlagedAffectedEvidence);
                 HandleEsportAutoSuspendedStatus(response.EsportAutoSuspendStatus);
             },
-            complete: function () {
-            },
             error: function (errMsg) {
                 console.log(errMsg);
             }
@@ -230,7 +228,7 @@
         });
     }
 
-    function HandleCustomerStatus(data) {       
+    function HandleCustomerStatus(data) {
         if (data !== null) {
             domElements.spanAutoSuspendSoccer.html(data.GeneralInfo.Autosuspend ? 'Yes' : 'No');
             domElements.spanAutoSuspendOtherSport.html(data.GeneralInfo.Autosuspend2 ? 'Yes' : 'No');
@@ -238,8 +236,22 @@
     }
 
     function HandleRobotUserStatus(data) {
-        if (data !== null && data.IsRobotUser) 
+        if (data !== null && data.IsRobotUser) {
+            switch (data.RobotType) {
+                case 0:
+                    $('span.icon-Robot').removeClass('icon-base-robot').addClass('icon-ob-robot');
+                    break;
+                case 1:
+                    $('span.icon-Robot').removeClass('icon-base-robot').addClass('icon-good-robot');
+                    break;
+                case 2:
+                    $('span.icon-Robot').removeClass('icon-base-robot').addClass('icon-bad-robot');
+                    break;
+                default:
+            }
+
             $('span.icon-Robot').removeClass('hide');
+        }
     }
 
     function HandleFlagedAffectedEvidence(data) {
@@ -257,14 +269,14 @@
         }
     }
 
-    function getStorageStatisticUserBehavior (key) {
+    function getStorageStatisticUserBehavior(key) {
         if (typeof Storage !== "undefined") {
             return localStorage.getItem(key);
         }
         return '';
     };
 
-    function setStorageStatisticUserBehavior (key, value) {
+    function setStorageStatisticUserBehavior(key, value) {
         if (typeof Storage !== "undefined") {
             localStorage.setItem(key, value);
         }
@@ -296,7 +308,7 @@
 
         var userBehavior = getStorageStatisticUserBehavior(currentUserId);
 
-        domElements.wrapperStatistic.removeClass('hide');  
+        domElements.wrapperStatistic.removeClass('hide');
 
         if (userBehavior === null) {
             isPreviousStatisticOpen = true;
@@ -304,7 +316,7 @@
         else {
             isPreviousStatisticOpen = (userBehavior === 'isStatisticOpen=true') ? true : false;
         }
-     
+
         if (isPreviousStatisticOpen === true) {
             domElements.statisticDetail.removeClass("hide");
             domElements.statisticIcon.addClass("icon-open");
@@ -313,14 +325,13 @@
                 domElements.statisticTitle.addClass("expanded");
             }
         }
-        else 
-        {
+        else {
             domElements.statisticDetail.addClass("hide");
             domElements.statisticIcon.removeClass("icon-open");
         }
 
         GetBettingStatistic();
-           
+
     }
 
     $(document).ready(function () {
