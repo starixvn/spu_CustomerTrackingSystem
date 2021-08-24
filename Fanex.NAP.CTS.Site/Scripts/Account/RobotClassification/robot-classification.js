@@ -1,10 +1,12 @@
 ﻿function robot_classification() {
     let btnViewHistory = $('#btnViewHistory');
+    let btnSearchRobotClassHistory = $('#btnSearchRobotClassHistory');
     let robotClassificationTable = $('#lastest-robot-classification-table');
     let robotClassificationHistoryTable = $('#robot-classification-history-table');
     let divRobotClassHistory = $('#divRobotClassificationHistory');
     let dpkFromDate = $('#dpkFromDate');
     let dpkToDate = $('#dpkToDate');
+    let historyDataTable;
 
     function RenderGrid(custId) {
         let url = common.modifyRelativeUrl('Account/GetLastestRobotClassification');
@@ -48,10 +50,10 @@
         });
     }
 
-    function DisplayViewHistory(custId, fromDate, toDate) {
+    function RenderHistoryGrid(custId, fromDate, toDate) {
         let url = common.modifyRelativeUrl('Account/GetRobotClassificationHistory');
 
-        robotClassificationHistoryTable.DataTable({
+        return robotClassificationHistoryTable.DataTable({
             dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
             serverSide: true,
             ajax: {
@@ -70,15 +72,24 @@
                 }
             },
             language: {
+                lengthMenu: "Page size _MENU_",
+                paginate: {
+                    first: "<span class=\"icon-chevron-left\"></span><span class=\"icon-chevron-left\"></span>",
+                    last: "<span class=\"icon-chevron-right\"></span><span class=\"icon-chevron-right\"></span>",
+                    next: "",
+                    previous: ""
+                },
+                info: "Displaying _START_ to _END_ of _TOTAL_ item(s)",
                 infoEmpty: "",
                 zeroRecords: "There's no data"
             },
-            info: false,
+            pagingType: "full_numbers",
             ordering: false,
-            paging: true,
             searching: false,
+            lengthMenu: [50, 100, 200, 500],
+            pageLength: 100,
             scrollX: false,
-            scrollCollapse: false,
+            scrollCollapse: false,       
             columnDefs: [
                 { targets: "_all", defaultContent: "-", className: "text-center" },
             ],
@@ -90,8 +101,6 @@
                 { data: obj => obj.ScannedDate }
             ]
         });
-
-        
     }
 
     this.Initial = function (custId) {
@@ -110,6 +119,10 @@
         }).datepicker("setDate", new Date());
 
         btnViewHistory.click(function () {
+            if (historyDataTable == undefined) {
+                historyDataTable = RenderHistoryGrid(custId, dpkFromDate.val(), dpkToDate.val());
+            }
+
             divRobotClassHistory.dialog({
                 modal: true,
                 width: '700PX',
@@ -119,7 +132,11 @@
                 close: function () { $(this).dialog('close'); }
             });
 
-            DisplayViewHistory(custId, dpkFromDate.val(), dpkToDate.val());
+            btnSearchRobotClassHistory.click(function () {
+                if (historyDataTable) {
+                    historyDataTable.ajax.reload(null, true);
+                }
+            });
         });
     }
 }
