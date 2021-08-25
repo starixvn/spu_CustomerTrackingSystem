@@ -113,13 +113,13 @@
     }
 
     function ToggleNote() {
-        debugger;
-        let classChevronDown = btnNoteToggle.hasClass('icon-chevron-down');
+        let iconRule = $('.note-icon');
+        let classChevronDown = iconRule.hasClass('icon-chevron-down');
         if (classChevronDown) {
-            btnNoteToggle.removeClass('icon-chevron-down').addClass('icon-chevron-up');
+            iconRule.removeClass('icon-chevron-down').addClass('icon-chevron-up');
             divNote.prop('hidden', false);
         } else {
-            btnNoteToggle.removeClass('icon-chevron-up').addClass('icon-chevron-down');
+            iconRule.removeClass('icon-chevron-up').addClass('icon-chevron-down');
             divNote.prop('hidden', true);
         }
     }
@@ -131,7 +131,7 @@
             dateFormat: "M dd, yy",
             changeMonth: true,
             changeYear: true
-        }).datepicker("setDate", new Date());
+        }).datepicker("setDate", "-15d");
 
         dpkToDate.datepicker({
             dateFormat: "M dd, yy",
