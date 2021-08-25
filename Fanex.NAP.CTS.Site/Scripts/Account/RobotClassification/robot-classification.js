@@ -148,8 +148,9 @@
 
             divRobotClassHistory.dialog({
                 modal: true,
-                width: '700PX',
+                width: 800,
                 title: 'SCAN HISTORY',
+                maxHeight: 500,
                 resizable: true,
                 draggable: true,
                 close: function () { $(this).dialog('close'); }
