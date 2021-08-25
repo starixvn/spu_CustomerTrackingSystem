@@ -2087,3 +2087,27 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
         }
     }
 }
+
+#robot_classification {
+    .note {
+        padding: 1rem 0 .5rem 0;
+
+        .group-icon {
+            cursor: pointer;
+            width: 100%;
+            max-width: 200px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        #divNote {
+            margin-top: .5rem;
+            line-height: 1.5;
+        }
+    }
+
+    .graph-heading {
+        justify-content: flex-start;
+    }
+}
