@@ -95,8 +95,7 @@
             },
             complete: function () {
                 var robotClassification = new robot_classification();
-                //custId
-                robotClassification.Initial(46411863);
+                robotClassification.Initial(custId);
             },
             error: function (errMsg) {
                 console.log(errMsg);

@@ -54,8 +54,8 @@
         let url = common.modifyRelativeUrl('Account/GetRobotClassificationHistory');
 
         return robotClassificationHistoryTable.DataTable({
-            dom: '<"wrapper-info-table"<"wrapper-info"lp>>t',
-            serverSide: true,
+            dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
+            serverSide: false,
             ajax: {
                 url: url,
                 data: {
