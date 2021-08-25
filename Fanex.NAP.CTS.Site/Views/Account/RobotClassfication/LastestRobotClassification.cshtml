@@ -5,6 +5,21 @@
 }
 
 <div id="lastest-robot-classification">
+    <div class="note">
+        <div class="group-icon">
+            <span class="note-title">Combination rule:</span>
+            <i id="btnNoteToggle" class="note-icon icon-chevron-down"></i>
+        </div>
+
+        <div id="divNote" hidden="hidden">
+            <div class="wrapper-info">
+                <div>- Bad robot: at least 1 bad robot in group</div>
+                <div>- Observed robot: no bad robot & at least 1 observed robot</div>
+                <div>- Good robot: no bad robot & no observed robot</div>
+                <div>** Bad robot > Observed robot > Good robot</div>
+            </div>
+        </div>
+    </div>
     <div class="fixed-header">
         <div class="graph-heading">
             <div class="free-size"></div>

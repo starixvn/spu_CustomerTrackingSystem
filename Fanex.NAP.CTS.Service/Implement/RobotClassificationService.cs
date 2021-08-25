@@ -25,7 +25,7 @@
         
         public RobotClassification GetStatusRobotClassification(long custID)
         {
-            var criteria = new GetLastestRobotClassificationCriteria() { CustId = custID };
+            var criteria = new GetStatusRobotClassificationCriteria() { CustId = custID };
             return repository.Fetch<RobotClassification>(criteria).FirstOrDefault();
         }
 

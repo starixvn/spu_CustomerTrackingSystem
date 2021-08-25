@@ -4,6 +4,8 @@
     let robotClassificationTable = $('#lastest-robot-classification-table');
     let robotClassificationHistoryTable = $('#robot-classification-history-table');
     let divRobotClassHistory = $('#divRobotClassificationHistory');
+    let divNote = $('#divNote');
+    let btnNoteToggle = $('#btnNoteToggle');
     let dpkFromDate = $('#dpkFromDate');
     let dpkToDate = $('#dpkToDate');
     let historyDataTable;
@@ -110,6 +112,18 @@
         });
     }
 
+    function ToggleNote() {
+        debugger;
+        let classChevronDown = btnNoteToggle.hasClass('icon-chevron-down');
+        if (classChevronDown) {
+            btnNoteToggle.removeClass('icon-chevron-down').addClass('icon-chevron-up');
+            divNote.prop('hidden', false);
+        } else {
+            btnNoteToggle.removeClass('icon-chevron-up').addClass('icon-chevron-down');
+            divNote.prop('hidden', true);
+        }
+    }
+
     this.Initial = function (custId) {
         RenderGrid(custId);
 
@@ -145,5 +159,7 @@
                 }
             });
         });
+
+        btnNoteToggle.on('click', () => ToggleNote());
     }
 }
