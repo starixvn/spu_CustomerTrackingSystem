@@ -130,13 +130,15 @@
         dpkFromDate.datepicker({
             dateFormat: "M dd, yy",
             changeMonth: true,
-            changeYear: true
+            changeYear: true,
+            minDate: "-90d"
         }).datepicker("setDate", "-15d");
 
         dpkToDate.datepicker({
             dateFormat: "M dd, yy",
             changeMonth: true,
-            changeYear: true
+            changeYear: true,
+            minDate: "-90d"
         }).datepicker("setDate", new Date());
 
         btnViewHistory.click(function () {
