@@ -1144,6 +1144,7 @@
         private void GetCustomerRobotUserStatus(long custId, ref AccountProfileViewModel profile)
         {
             profile.RobotUserStatus = _accountService.GetCustomerRobotUserStatus(custId);
+            LogService.Info("GetCustomerRobotUserStatus - IsRobotUser" + profile.RobotUserStatus.IsRobotUser.ToString());
             if (profile.RobotUserStatus.IsRobotUser)
             {
                 var robotClassification = _robotClassificationService.GetStatusRobotClassification(custId);
