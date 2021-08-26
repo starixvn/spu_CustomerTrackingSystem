@@ -150,7 +150,7 @@
                 modal: true,
                 width: 800,
                 title: 'SCAN HISTORY',
-                maxHeight: 500,
+                maxHeight: 700,
                 resizable: true,
                 draggable: true,
                 close: function () { $(this).dialog('close'); }

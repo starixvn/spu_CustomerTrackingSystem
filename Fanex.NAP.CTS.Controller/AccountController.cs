@@ -1525,7 +1525,7 @@
         public ActionResult GetLastestRobotClassification(long custId)
         {
             var lastestRobotData = _robotClassificationService.GetLastestRobotClassification(custId);
-            var data = lastestRobotData.Select(d => new RobotClassificationViewModel(d));
+            var data = lastestRobotData.OrderByDescending(d => d.ScannedDate).Select(d => new RobotClassificationViewModel(d));
 
             return Json(new { data });
         }
