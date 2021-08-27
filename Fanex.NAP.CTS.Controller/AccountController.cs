@@ -1144,7 +1144,6 @@
         private void GetCustomerRobotUserStatus(long custId, ref AccountProfileViewModel profile)
         {
             profile.RobotUserStatus = _accountService.GetCustomerRobotUserStatus(custId);
-            LogService.Info("GetCustomerRobotUserStatus - IsRobotUser" + profile.RobotUserStatus.IsRobotUser.ToString());
             if (profile.RobotUserStatus.IsRobotUser)
             {
                 var robotClassification = _robotClassificationService.GetStatusRobotClassification(custId);
@@ -1525,8 +1524,14 @@
         [HttpPost]
         public ActionResult GetLastestRobotClassification(long custId)
         {
-            var lastestRobotData = _robotClassificationService.GetLastestRobotClassification(custId);
-            var data = lastestRobotData.OrderByDescending(d => d.ScannedDate).Select(d => new RobotClassificationViewModel(d));
+            var data = new List<RobotClassificationViewModel>();
+
+            var robotUser = _accountService.GetCustomerRobotUserStatus(custId);
+            if (robotUser.IsRobotUser)
+            {
+                var lastestRobotData = _robotClassificationService.GetLastestRobotClassification(custId);
+                data = lastestRobotData.OrderByDescending(d => d.ScannedDate).Select(d => new RobotClassificationViewModel(d)).ToList();
+            }
 
             return Json(new { data });
         }

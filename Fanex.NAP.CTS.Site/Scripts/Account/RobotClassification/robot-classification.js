@@ -22,6 +22,11 @@
                     custId: custId
                 },
                 type: "POST",
+                success: function (data) {
+                    if (data.data.length == 0) {
+                        btnViewHistory.prop('disabled', true);
+                    }
+                },
                 beforeSend: function () {
                     robotClassificationTable.find('tbody').addClass('loading');
                 },
