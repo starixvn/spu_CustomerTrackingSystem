@@ -20,7 +20,9 @@
 
         public int BettypeID { get; set; }
 
-        public string Reason { get; set; }
+        public int Market { get; set; }
+
+        public bool IsHedging { get; set; }
 
         public bool IsVerified { get; set; }
 
@@ -29,6 +31,22 @@
         public string VerifiedBy { get; set; }
 
         public int EventGroup { get; set; }
+
+        public string Reason
+        {
+            get
+            {
+                return this.IsHedging ? "Hedging" : "Group Betting";
+            }
+        }
+
+        public string MarketName
+        {
+            get
+            {
+                return this.Market == 1 ? "Live" : "Non Live";
+            }
+        }
 
         public string EventDateToString
         {
@@ -86,7 +104,7 @@
         {
             get
             {
-                switch(BettypeID)
+                switch (BettypeID)
                 {
                     case (int)MATCHMONITOR_BETTYPE.HDP:
                         return Reason + " - HDP";

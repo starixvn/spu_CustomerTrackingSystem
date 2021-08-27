@@ -44,13 +44,15 @@
             return new DBResult { ErrorCode = string.IsNullOrEmpty(criteria.ErrorMessage) ? -1 : 0, ErrorMsg = criteria.ErrorMessage };
         }
 
-        public List<MatchReasonGroupModel> GetMatchReasonGroup(DateTime eventDate, Int64 matchID, int betTypeID)
+        public List<MatchReasonGroupModel> GetMatchReasonGroup(DateTime eventDate, Int64 matchID, int betTypeID, bool liveIndicator, bool isHedging)
         {
             var criteria = new MatchReasonGroupGetCriteria()
             {
                 EventDate = eventDate,
                 BettypeID = betTypeID,
-                MatchID = matchID
+                MatchID = matchID,
+                LiveIndicator = liveIndicator,
+                IsHedging = isHedging
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -59,13 +61,15 @@
             }
         }
 
-        public List<MatchScoreModel> GetMatchScore(DateTime eventDate, Int64 matchID, int betTypeID)
+        public List<MatchScoreModel> GetMatchScore(DateTime eventDate, Int64 matchID, int betTypeID, bool liveIndicator, bool isHedging)
         {
             var criteria = new MatchScoreGetCriteria()
             {
                 EventDate = eventDate,
                 BettypeID = betTypeID,
-                MatchID = matchID
+                MatchID = matchID,
+                LiveIndicator = liveIndicator,
+                IsHedging = isHedging
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -81,9 +85,10 @@
                 EventDate = filter.EventDate,
                 BettypeID = filter.BetTypeID,
                 ListReasonGroup = filter.ListReasonGroup,
-                ListScore = filter.ListScore,
+                ListScore = filter.ListScore,                
+                MatchID = filter.MatchID,
                 LiveIndicator = filter.LiveIndicator,
-                MatchID = filter.MatchID
+                IsHedging = filter.IsHedging
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))

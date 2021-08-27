@@ -12,6 +12,6 @@ namespace Fanex.NAP.CTS.Model.MatchMonitor
 
         public bool IsHedging { get; set; }
 
-        public int TotalScore { get; set; }
+        public int TotalScore { get; set; }                
     }
 }

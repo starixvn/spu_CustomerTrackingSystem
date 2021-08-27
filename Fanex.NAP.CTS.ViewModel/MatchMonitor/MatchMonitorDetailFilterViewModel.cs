@@ -10,7 +10,11 @@
 
         public int BetTypeID { get; set; }
 
+        public string Sites { get; set; }
+
         public bool LiveIndicator { get; set; }
+
+        public bool IsHedging { get; set; }
 
         public string ListScore { get; set; }
 

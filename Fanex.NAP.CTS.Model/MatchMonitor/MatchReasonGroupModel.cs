@@ -19,7 +19,8 @@ namespace Fanex.NAP.CTS.Model.MatchMonitor
             get => JsonConvert.SerializeObject(new MatchReasonGroupKeyModel  
             {
                 GroupID =  GroupID, 
-                TotalScore = TotalScore 
+                TotalScore = TotalScore,
+                ReasonGroupName = ReasonGroupName
             });
         }
     }
