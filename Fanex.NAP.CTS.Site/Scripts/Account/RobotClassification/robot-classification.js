@@ -22,11 +22,6 @@
                     custId: custId
                 },
                 type: "POST",
-                success: function (data) {
-                    if (data.data.length == 0) {
-                        btnViewHistory.prop('disabled', true);
-                    }
-                },
                 beforeSend: function () {
                     robotClassificationTable.find('tbody').addClass('loading');
                 },
@@ -53,8 +48,13 @@
                 { data: obj => obj.LiveIndicator },
                 { data: obj => obj.RobotType },
                 { data: obj => obj.ScannedDate }
-            ]
-        });
+            ],
+            initComplete: function myfunction(settings, returnedData) {
+                if (returnedData.data.length == 0) {
+                    btnViewHistory.prop('disabled', true);
+                }
+            }
+        });        
     }
 
     function RenderHistoryGrid(custId) {
@@ -103,7 +103,7 @@
             lengthMenu: [50, 100, 200, 500],
             pageLength: 50,
             scrollX: false,
-            scrollCollapse: false,       
+            scrollCollapse: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-", className: "text-center" },
             ],
