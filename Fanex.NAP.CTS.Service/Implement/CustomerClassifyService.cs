@@ -125,9 +125,7 @@
         {
             var robotUser = new List<int>();
 
-            var custs = GetCustByRobotSiteRule(string.Join(",", custIds)).ToList();
-
-            var getRobotUser = GetExistedRobotUserDbAccess(string.Join(",", custs));
+            var getRobotUser = GetExistedRobotUserDbAccess(string.Join(",", custIds));
 
             if (!string.IsNullOrEmpty(getRobotUser))
             {
@@ -524,23 +522,6 @@
 
             if (_isWriteLogInfo)
                 LogService.Info($"PA Rescan - GetAgentCusts - with data: {JsonConvert.SerializeObject(roleCus)}");
-
-            return roleCus;
-        }
-
-        private IEnumerable<int> GetCustByRobotSiteRule(string custIds)
-        {
-            var roleCus = new List<int>();
-
-            var criteria = new GetCustByRobotSiteRuleCriteria
-            {
-                CustIds = custIds
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                roleCus = db.Query<int>(criteria).ToList();
-            }
 
             return roleCus;
         }

@@ -23,10 +23,16 @@
             return repository.Fetch<RobotClassification>(criteria);
         }
         
-        public RobotClassification GetStatusRobotClassification(long custID)
+        public CustomerRobotUserStatusModel GetStatusRobotClassification(long custID)
         {
-            var criteria = new GetStatusRobotClassificationCriteria() { CustId = custID };
-            return repository.Fetch<RobotClassification>(criteria).FirstOrDefault();
+            var criteria = new GetStatusRobotClassificationCriteria() 
+            { 
+                CustId = custID 
+            };
+
+            var robotStatus = repository.Fetch<CustomerRobotUserStatusModel>(criteria);
+                
+            return robotStatus?.FirstOrDefault() ?? new CustomerRobotUserStatusModel { CustId= null, RobotType = null };
         }
 
         public IEnumerable<RobotClassification> GetHistoryRobotClassification(long custID, DateTime fromDate, DateTime toDate)

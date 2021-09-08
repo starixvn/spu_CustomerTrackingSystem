@@ -84,7 +84,6 @@
     <Compile Include="Category\GetCategoryCustomerClassCriteria.cs" />
     <Compile Include="Common\ValidateUsernameCriteria.cs" />
     <Compile Include="LogInputData\LogInputDataCriteria.cs" />
-    <Compile Include="CustomerClassify\GetCustByRobotSiteRuleCriteria.cs" />
     <Compile Include="CustomerClassify\GetExistedRobotUserCriteria.cs" />
     <Compile Include="CustomerClassify\GetRoleCustomerCriteria.cs" />
     <Compile Include="CustomerClassify\GetLastestClassificationCriteria.cs" />

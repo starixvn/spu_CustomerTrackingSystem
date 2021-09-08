@@ -2,15 +2,16 @@
 {
     public class CustomerRobotUserStatusModel
     {
-        public CustomerRobotUserStatusModel() 
+        public long? CustId { get; set; }
+
+        public int? RobotType { get; set; }
+
+        public bool IsRobotUser
         {
-            RobotType = -1;
+            get
+            {
+                return (CustId != null && RobotType != null);
+            }
         }
-
-        public int CustId { get; set; }
-
-        public bool IsRobotUser { get; set; }
-
-        public int RobotType { get; set; }
     }
 }
