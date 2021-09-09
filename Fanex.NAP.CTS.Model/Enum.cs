@@ -85,7 +85,10 @@
         Probation52 = 252,
         Probation53 = 253,
         Probation57 = 257,
-        Probation58 = 258
+        Probation58 = 258,
+        Robot61 = 61,
+        Robot81 = 81,
+        Robot161 = 161
     }
 
     public enum EvidenceQueueActionID

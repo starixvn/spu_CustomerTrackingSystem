@@ -1285,6 +1285,7 @@
             var twGroupBettingRate = cc.TWGroupBettingRate;
             var twTicketRejectRate = cc.TWTicketRejectRate;
             var twDesktopTicket = cc.TWDesktopUsageRate;
+            var robotCounter = cc.RobotCounter;
 
             switch (cc.CategoryID)
             {
@@ -1331,6 +1332,11 @@
                 case (int)ClassificationSourceType.SmartPunter68:
                 case (int)ClassificationSourceType.HighRiskPunter78:
                     reason += $"Account has {twDesktopTicket}% tickets from Desktop | Reject percent is {twTicketRejectRate}%";
+                    break;
+                case (int)ClassificationSourceType.Robot61:
+                case (int)ClassificationSourceType.Robot81:
+                case (int)ClassificationSourceType.Robot161:
+                    reason += $"Counter: {robotCounter}";
                     break;
                 default:
                     break;
