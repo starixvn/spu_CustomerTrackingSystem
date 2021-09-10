@@ -121,20 +121,6 @@
             return agentIds;
         }
 
-        private List<int> SyncRobotUserToUpdateCategory(IEnumerable<long> custIds)
-        {
-            var robotUser = new List<int>();
-
-            var getRobotUser = GetExistedRobotUserDbAccess(string.Join(",", custIds));
-
-            if (!string.IsNullOrEmpty(getRobotUser))
-            {
-                robotUser = getRobotUser.Split(',').Select(int.Parse).ToList();
-            }
-
-            return robotUser;
-        }
-
         private List<long> SyncCustomerEvidenceToCategory(IEnumerable<long> custIds)
         {
             var custIdsToSyncCC = new List<long>();
@@ -258,15 +244,16 @@
 
             if (custIds != null && custIds.Any())
             {
-                var robotUsers = SyncRobotUserToUpdateCategory(custIds);
+                var robotUsers = GetExistedRobotUserDbAccess(string.Join(",", custIds));
 
                 if (robotUsers != null && robotUsers.Any())
                 {
-                    robotUsers.ForEach(c =>
+                    robotUsers.ToList().ForEach(c =>
                     {
                         existedRobots.Add(new MultipleProblemAccountsModel()
                         {
-                            CustID = c,
+                            CustID = c.CustId,
+                            RobotCounter = c.Counter,
                             ReasonID = (int)CATEGORY.ROBOT
                         });
                     });
@@ -526,19 +513,16 @@
             return roleCus;
         }
 
-        private string GetExistedRobotUserDbAccess(string custIds)
+        private IEnumerable<RobotUserModel> GetExistedRobotUserDbAccess(string custIds)
         {
+            var repository = new DynamicRepository();
+
             var criteria = new GetExistedRobotUserCriteria
             {
                 CustIds = custIds
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                db.ExecuteNonQuery(criteria);
-            }
-
-            return criteria.RobotList;
+            return repository.Fetch<RobotUserModel>(criteria);
         }
 
         #endregion DataAccess Layer
