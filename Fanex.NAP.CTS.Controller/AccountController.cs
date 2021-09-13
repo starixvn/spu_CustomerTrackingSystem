@@ -12,7 +12,6 @@
     using Fanex.NAP.CTS.Criteria.Account;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
-    using Fanex.NAP.CTS.Model.API;
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.CustomerClassify;
     using Fanex.NAP.CTS.Model.GraphDB;
@@ -208,14 +207,6 @@
         public ActionResult GetCustomerFlagInfo(long ctsCustId)
         {
             var result = _accountService.GetCustomerFlagInfo(ctsCustId);
-
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        public ActionResult GetCustomerRobotUserStatus(long custId)
-        {
-            var result = _accountService.GetCustomerRobotUserStatus(custId);
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -1143,15 +1134,7 @@
 
         private void GetCustomerRobotUserStatus(long custId, ref AccountProfileViewModel profile)
         {
-            profile.RobotUserStatus = _accountService.GetCustomerRobotUserStatus(custId);
-            if (profile.RobotUserStatus.IsRobotUser)
-            {
-                var robotClassification = _robotClassificationService.GetStatusRobotClassification(custId);
-                if (robotClassification != null)
-                {
-                    profile.RobotUserStatus.RobotType = robotClassification.RobotType;
-                }
-            }
+            profile.RobotUserStatus = _robotClassificationService.GetStatusRobotClassification(custId);
         }
 
         private void GetCustomerFlagInfo(long ctsCustId, ref AccountProfileViewModel profile)
@@ -1302,6 +1285,7 @@
             var twGroupBettingRate = cc.TWGroupBettingRate;
             var twTicketRejectRate = cc.TWTicketRejectRate;
             var twDesktopTicket = cc.TWDesktopUsageRate;
+            var robotCounter = cc.RobotCounter;
 
             switch (cc.CategoryID)
             {
@@ -1348,6 +1332,11 @@
                 case (int)ClassificationSourceType.SmartPunter68:
                 case (int)ClassificationSourceType.HighRiskPunter78:
                     reason += $"Account has {twDesktopTicket}% tickets from Desktop | Reject percent is {twTicketRejectRate}%";
+                    break;
+                case (int)ClassificationSourceType.Robot61:
+                case (int)ClassificationSourceType.Robot81:
+                case (int)ClassificationSourceType.Robot161:
+                    reason += $"Counter: {robotCounter}";
                     break;
                 default:
                     break;
@@ -1526,8 +1515,9 @@
         {
             var data = new List<RobotClassificationViewModel>();
 
-            var robotUser = _accountService.GetCustomerRobotUserStatus(custId);
-            if (robotUser.IsRobotUser)
+            var robotStatus = _robotClassificationService.GetStatusRobotClassification(custId);
+
+            if (robotStatus.IsRobotUser)
             {
                 var lastestRobotData = _robotClassificationService.GetLastestRobotClassification(custId);
                 data = lastestRobotData.OrderByDescending(d => d.ScannedDate).Select(d => new RobotClassificationViewModel(d)).ToList();

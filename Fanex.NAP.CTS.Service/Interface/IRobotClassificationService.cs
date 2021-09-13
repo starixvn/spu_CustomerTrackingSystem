@@ -10,7 +10,6 @@
 
         IEnumerable<RobotClassification> GetHistoryRobotClassification(long custID, DateTime fromDate, DateTime toDate);
 
-        RobotClassification GetStatusRobotClassification(long custID);
-
+        CustomerRobotUserStatusModel GetStatusRobotClassification(long custID);
     }
 }

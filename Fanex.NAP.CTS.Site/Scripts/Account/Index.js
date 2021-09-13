@@ -235,7 +235,8 @@
     }
 
     function HandleRobotUserStatus(data) {
-        if (data !== null && data.IsRobotUser) {
+        if (data !== null && data.IsRobotUser)
+        {
             switch (data.RobotType) {
                 case 0:
                     $('span.icon-Robot').removeClass('icon-base-robot').addClass('icon-ob-robot');

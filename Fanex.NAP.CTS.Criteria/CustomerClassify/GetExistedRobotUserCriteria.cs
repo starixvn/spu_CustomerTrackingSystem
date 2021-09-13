@@ -3,13 +3,10 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
 
-    public class GetExistedRobotUserCriteria : NonQueryCommand
+    public class GetExistedRobotUserCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "custids")]
         public string CustIds { get; set; }
-
-        [SpParam(SqlParamName = "RobotList")]
-        public string RobotList { get; set; }
 
         public override string GetSettingKey()
         {

@@ -43,7 +43,7 @@
     <Setting Key="CTS_CustomerProfile_FraudInfo_Get" SpName="CTS_CustomerProfile_FraudInfo_Get" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
     <Setting Key="CTS_RobotUserStatus_Get" SpName="CTS_RobotUserStatus_Get" DbName="DBONUSER.ON_USER.bodbSPUNet" />
     <Setting Key="BLC_SettingSelect_ByCust" SpName="BLC_SettingSelect_ByCust" DbName="DBCust.CustDB.bodbAdminNet"/>
-	<Setting Key="CTS_Customer_RobotCheckExist" SpName="CTS_Customer_RobotCheckExist" DbName="DBONUSER.ON_USER.bodbSPUNet"/>
+	<Setting Key="CTS_Customer_RobotCheckExist" SpName="CTS_Customer_RobotCheckExist_xtest" DbName="DBONUSER.ON_USER.bodbSPUNet"/>
   </Function>
 
   <Function name="ProbationManagement">
