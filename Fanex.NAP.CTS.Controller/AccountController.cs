@@ -888,25 +888,26 @@
 
             var result = _accountService.AddAccountException(model);
 
-            if (result == 0)
+            if (result.ErrorCode == 0)
             {
-                var associatedAccountList = _customerEvidenceService.GetCleanAccounts(
-                      new GetCleanAccountByCTSCustIdsCriteria
-                      {
-                          CTSCustIdList = model.FromCTSCustId.ToString() + "," + model.ToCTSCustId.ToString()
-                      });
+                string ctsCustIdsToString = model.FromCTSCustId.ToString();
 
-                if (associatedAccountList.Any())
+                var toCTSCustId = (int)result.OutParam["toCTSCustId"];
+
+                if (toCTSCustId != 0)
                 {
-                    _customerEvidenceService.UpdateBetLimitOfUnflaggedCustomer(
-                        new UpdateBetLimitByEvidenceRemovingCriteria
-                        {
-                            CustIDList = string.Join(",", associatedAccountList)
-                        });
+                    ctsCustIdsToString += "," + model.ToCTSCustId.ToString();
+                }
+
+                var custIdsFlaggedEvidences = _customerEvidenceService.CheckCleanCustFlaggedEvidence(ctsCustIdsToString);
+
+                if (custIdsFlaggedEvidences != null && custIdsFlaggedEvidences.Any())
+                {
+                    _customerEvidenceService.UpdateBetLimitOfUnflaggedCustomer(string.Join(",", custIdsFlaggedEvidences));
                 }
             }
 
-            return Json(new { errorCode = result }, JsonRequestBehavior.AllowGet);
+            return Json(new { errorCode = result.ErrorCode }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -919,19 +920,13 @@
 
             if (result == 0)
             {
-                var associatedAccountList = _customerEvidenceService.GetAssociatedAccounts(
-                          new GetAssociatedAccountByCTSCustIdsCriteria
-                          {
-                              CTSCustIdList = model.FromCTSCustId.ToString() + "," + model.ToCTSCustId.ToString()
-                          });
+                string ctsCustIdsToString = model.FromCTSCustId.ToString() + "," + model.ToCTSCustId.ToString();
 
-                if (associatedAccountList.Any())
+                var custIdsFlaggedEvidences = _customerEvidenceService.CheckCleanCustFlaggedEvidence(ctsCustIdsToString);
+
+                if (custIdsFlaggedEvidences != null && custIdsFlaggedEvidences.Any())
                 {
-                    _customerEvidenceService.UpdateBetLimitOfFlaggedCustomer(
-                        new UpdateBetLimitByEvidenceAddingCriteria
-                        {
-                            CustIDList = string.Join(",", associatedAccountList)
-                        });
+                    _customerEvidenceService.UpdateBetLimitOfFlaggedCustomer(string.Join(",", custIdsFlaggedEvidences));
                 }
             }
 
@@ -1026,20 +1021,11 @@
                     });
                 }
 
-                var associatedAccountList = _customerEvidenceService.GetRemoveEvidenceAssociatedAccounts(
-                    new GetRemoveEvidenceAssociatedAccountCriteria
-                    {
-                        CTSCustIdList = model.CTSCustId.ToString(),
-                        EvidenceID = model.EvidenceId
-                    });
+                var custIdsFlaggedEvidences = _customerEvidenceService.CheckCleanCustFlaggedEvidence(model.CTSCustId.ToString());
 
-                if (associatedAccountList.Any())
+                if (custIdsFlaggedEvidences != null && custIdsFlaggedEvidences.Any())
                 {
-                    _customerEvidenceService.UpdateBetLimitOfUnflaggedCustomer(
-                        new UpdateBetLimitByEvidenceRemovingCriteria
-                        {
-                            CustIDList = string.Join(",", associatedAccountList)
-                        });
+                    _customerEvidenceService.UpdateBetLimitOfUnflaggedCustomer(string.Join(",", custIdsFlaggedEvidences));
                 }
             }
 
@@ -1056,19 +1042,11 @@
 
             if (result == 0)
             {
-                var associatedAccountList = _customerEvidenceService.GetCleanAccounts(
-                      new GetCleanAccountByCTSCustIdsCriteria
-                      {
-                          CTSCustIdList = model.CTSCustId.ToString()
-                      });
+                var custIdsFlaggedEvidences = _customerEvidenceService.CheckCleanCustFlaggedEvidence(model.CTSCustId.ToString());
 
-                if (associatedAccountList.Any())
+                if (custIdsFlaggedEvidences != null && custIdsFlaggedEvidences.Any())
                 {
-                    _customerEvidenceService.UpdateBetLimitOfUnflaggedCustomer(
-                        new UpdateBetLimitByEvidenceRemovingCriteria
-                        {
-                            CustIDList = string.Join(",", associatedAccountList)
-                        });
+                    _customerEvidenceService.UpdateBetLimitOfUnflaggedCustomer(string.Join(",", custIdsFlaggedEvidences));
                 }
             }
 
@@ -1085,11 +1063,12 @@
 
             if (result == 0)
             {
-                _customerEvidenceService.UpdateBetLimitOfFlaggedCustomer(
-                          new UpdateBetLimitByEvidenceAddingCriteria
-                          {
-                              CustIDList = model.CTSCustId.ToString()
-                          });
+                var custIdsFlaggedEvidences = _customerEvidenceService.CheckCleanCustFlaggedEvidence(model.CTSCustId.ToString());
+
+                if (custIdsFlaggedEvidences != null && custIdsFlaggedEvidences.Any())
+                {
+                    _customerEvidenceService.UpdateBetLimitOfFlaggedCustomer(string.Join(",", custIdsFlaggedEvidences));
+                }
             }
 
             return Json(result, JsonRequestBehavior.AllowGet);

@@ -2,7 +2,7 @@
 {
     using Fanex.Data.Repository;
 
-    public class UpdateBetLimitByEvidenceAddingCriteria : CriteriaBase
+    public class UpdateBetLimitByEvidenceAddingCriteria : NonQueryCommand
     {
         public string CustIDList { get; set; }
        

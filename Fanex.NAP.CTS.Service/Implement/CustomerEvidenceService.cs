@@ -1,47 +1,42 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement
 {
-    using Fanex.NAP.CTS.Core.BaseClasses;
-    using System.Collections.Generic;
+    using Fanex.Data;
+    using Fanex.Data.Repository;
     using Fanex.NAP.CTS.Criteria.Account;
-    using Fanex.NAP.CTS.Model.Account;
+    using Fanex.NAP.CTS.Criteria.ImportEvidences;
     using Fanex.NAP.CTS.Model.ImportEvidences;
     using Newtonsoft.Json;
-    using Fanex.NAP.CTS.Criteria.ImportEvidences;
-    using Fanex.Data.Repository;
-    using System.Linq;
     using System;
-    using Fanex.Data;
+    using System.Collections.Generic;
+    using System.Linq;
 
     public class CustomerEvidenceService : ICustomerEvidenceService
     {
-        private IDynamicRepository _repository;
+        private readonly IDynamicRepository repository;
+
         public CustomerEvidenceService()
         {
-            _repository = new DynamicRepository();
-        }
-        public IEnumerable<int> GetAssociatedAccounts(GetAssociatedAccountByCTSCustIdsCriteria criteria)
-        {
-            return DataService.GetData<int>(criteria);
+            repository = new DynamicRepository();
         }
 
-        public IEnumerable<int> GetRemoveEvidenceAssociatedAccounts(GetRemoveEvidenceAssociatedAccountCriteria criteria)
+        public void UpdateBetLimitOfFlaggedCustomer(string custIds)
         {
-            return DataService.GetData<int>(criteria);
+            var criteria = new UpdateBetLimitByEvidenceAddingCriteria
+            {
+                CustIDList = custIds
+            };
+
+            repository.Execute(criteria);
         }
 
-        public IEnumerable<int> GetCleanAccounts(GetCleanAccountByCTSCustIdsCriteria criteria)
+        public void UpdateBetLimitOfUnflaggedCustomer(string custIds)
         {
-            return DataService.GetData<int>(criteria);
-        }
+            var criteria = new UpdateBetLimitByEvidenceRemovingCriteria
+            {
+                CustIDList = custIds
+            };
 
-        public void UpdateBetLimitOfFlaggedCustomer(UpdateBetLimitByEvidenceAddingCriteria criteria)
-        {
-            DataService.Execute(criteria);
-        }
-
-        public void UpdateBetLimitOfUnflaggedCustomer(UpdateBetLimitByEvidenceRemovingCriteria criteria)
-        {
-            DataService.Execute(criteria);
+            repository.Execute(criteria);
         }
 
         public AddEvidenceResultModel AddCustEvidenceMultipleByCustId(string custIds, int evidenceId, int userId)
@@ -68,7 +63,17 @@
                 result = db.Query<AddMultiEvidenceResultModel>(criteria).ToList();
             }
 
-            return new AddEvidenceResultModel { ErrorMessage = criteria.ErrorMessage, Eivdences = result };   
+            return new AddEvidenceResultModel { ErrorMessage = criteria.ErrorMessage, Eivdences = result };
+        }
+
+        public IEnumerable<int> CheckCleanCustFlaggedEvidence(string ctsCustIds)
+        {
+            var criteria = new CheckCleanCustFlaggedEvidenceCriteria
+            {
+                CTSCustIds = ctsCustIds
+            };
+
+            return repository.Fetch<int>(criteria);
         }
     }
 }

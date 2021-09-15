@@ -83,6 +83,7 @@
     <Compile Include="Common\GetSubscriberGroupCriteria.cs" />
     <Compile Include="Category\GetCategoryCustomerClassCriteria.cs" />
     <Compile Include="Common\ValidateUsernameCriteria.cs" />
+    <Compile Include="ImportEvidences\CheckCleanCustFlaggedEvidenceCriteria.cs" />
     <Compile Include="LogInputData\LogInputDataCriteria.cs" />
     <Compile Include="CustomerClassify\GetExistedRobotUserCriteria.cs" />
     <Compile Include="CustomerClassify\GetRoleCustomerCriteria.cs" />
@@ -129,11 +130,8 @@
     <Compile Include="Account\CustomerEsportAutoSuspendStatusCriteria.cs" />
     <Compile Include="Account\CustomerEvidenceByCTSCustIdCriteria.cs" />
     <Compile Include="Account\CustomerAssociationByCTSCustIdCriteria.cs" />
-    <Compile Include="Account\CustomerEvidence\GetCleanAccountByCTSCustIdsCriteria.cs" />
     <Compile Include="Account\CustomerEvidence\UpdateBetLimitByEvidenceRemovingCriteria.cs" />
     <Compile Include="Account\CustomerEvidence\UpdateBetLimitByEvidenceAddingCriteria.cs" />
-    <Compile Include="Account\CustomerEvidence\GetRemoveEvidenceAssociatedAccountCriteria.cs" />
-    <Compile Include="Account\CustomerEvidence\GetAssociatedAccountByCTSCustIdsCriteria.cs" />
     <Compile Include="Account\CustomerFlagInfoByCTSCustIdCriteria.cs" />
     <Compile Include="Account\CustomerGeneralInfoCriteria.cs" />
     <Compile Include="Account\CustomerLastTicketDateCriteria.cs" />

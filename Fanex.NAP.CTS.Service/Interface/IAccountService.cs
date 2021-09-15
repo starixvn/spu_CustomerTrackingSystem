@@ -69,7 +69,7 @@
 
         List<AccountExceptionsModel> GetAccountExceptions(long ctsCustId);
 
-        int AddAccountException(UpdateAccountExceptionModel model);
+        DBResult AddAccountException(UpdateAccountExceptionModel model);
 
         int RemoveAccountException(UpdateAccountExceptionModel model);
 
@@ -118,8 +118,6 @@
         IEnumerable<CustomerClassificationGeneralInfoModel> GetCustomerClassificationByCategory(string categoryIdList);
 
         DBResult ProcessPlaceEvidence(UpdatePlaceEvidenceModel model);
-
-        DBResult ProcessPlaceEvidenceByCustId(UpdatePlaceEvidenceModel model);
 
         IEnumerable<CTSCustomer> CheckCustomerNotExisted(string custIds, DateTime fromDate, DateTime toDate);
 
