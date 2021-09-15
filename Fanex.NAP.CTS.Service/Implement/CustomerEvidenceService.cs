@@ -66,14 +66,14 @@
             return new AddEvidenceResultModel { ErrorMessage = criteria.ErrorMessage, Eivdences = result };
         }
 
-        public IEnumerable<int> CheckCleanCustFlaggedEvidence(string ctsCustIds)
+        public IEnumerable<long> CheckCleanCustFlaggedEvidence(string ctsCustIds)
         {
             var criteria = new CheckCleanCustFlaggedEvidenceCriteria
             {
                 CTSCustIds = ctsCustIds
             };
 
-            return repository.Fetch<int>(criteria);
+            return repository.Fetch<long>(criteria);
         }
     }
 }

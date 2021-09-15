@@ -93,7 +93,7 @@
                     foreach (var custs in custIdsChunk)
                     {
                         // Update CC in table custinfo to MainDB
-                        var isSuccessToMain = _pushDataToExternalService.PushCustomerClassificationToMain(custs, 2);
+                        var isSuccessToMain = _pushDataToExternalService.RetryPushCCToMainDB(custs, 2);
 
                         if (isSuccessToMain)
                         {

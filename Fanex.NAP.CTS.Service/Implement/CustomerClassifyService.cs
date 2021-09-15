@@ -54,7 +54,7 @@
 
                 if (lastestClassifications != null && lastestClassifications.Any())
                 {
-                    bool isSyncMainSuccessfully = _pushDataToExternalService.PushCustomerClassificationToMain(lastestClassifications, 3);
+                    bool isSyncMainSuccessfully = _pushDataToExternalService.RetryPushCCToMainDB(lastestClassifications, 3);
 
                     if (isSyncMainSuccessfully)
                         UpdateAppliedCustomerClassification(JsonConvert.SerializeObject(lastestClassifications));

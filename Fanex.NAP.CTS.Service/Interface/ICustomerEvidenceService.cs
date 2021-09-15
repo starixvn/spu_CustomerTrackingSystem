@@ -5,7 +5,7 @@
 
     public interface ICustomerEvidenceService
     { 
-        IEnumerable<int> CheckCleanCustFlaggedEvidence(string ctsCustIds);
+        IEnumerable<long> CheckCleanCustFlaggedEvidence(string ctsCustIds);
 
         void UpdateBetLimitOfFlaggedCustomer(string custIds);
 
