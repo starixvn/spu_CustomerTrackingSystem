@@ -42,8 +42,8 @@
         private readonly IAssociatedAccountService _associationService;
         private readonly IProblemAccountMonitorService _problemAccountMonitorService;
         private readonly ICategoryService _categoryService;
-        private readonly ICustomerClassifyService _customerClassifyService;
-        private readonly IPushDataToExternalService _pushDataToExternalService;
+        private readonly IRescanCustomerClassificationService _customerClassifyService;
+        private readonly ICustomerClassificationService _custClassificationService;
         private readonly ISubscriberService _subscriberService;
         private readonly IProblemCaseMonitorService _problemCaseMonitorService;
         private readonly ILogInputDataService logInputDataService;
@@ -59,8 +59,8 @@
             _custEvidenceService = new CustomerEvidenceService();
             _problemAccountMonitorService = new ProblemAccountMonitorService();
             _categoryService = new CategoryService();
-            _customerClassifyService = new CustomerClassifyService();
-            _pushDataToExternalService = new PushDataToExternalService();
+            _customerClassifyService = new RescanCustomerClassificationService();
+            _custClassificationService = new CustomerClassificationService();
             _subscriberService = new SubscriberService();
             _problemCaseMonitorService = new Service.Implement.Api.ProblemCaseMonitorService();
             logInputDataService = new LogInputDataService();
@@ -128,7 +128,7 @@
 
                             if (syncResult.ErrorCode == 0 && syncCustIds != null && syncCustIds.Any())
                             {
-                                _pushDataToExternalService.PushDataToExternal(syncCustIds, new PushDataToExternalModel
+                                _custClassificationService.PushDataToExternal(syncCustIds, new PushDataToExternalModel
                                 {
                                     ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
                                     IsPushCCToSoon88 = true,
@@ -296,7 +296,7 @@
 
                         if (syncResult.ErrorCode == 0 && syncCustIds != null && syncCustIds.Any())
                         {
-                            _pushDataToExternalService.PushDataToExternal(syncCustIds, new PushDataToExternalModel
+                            _custClassificationService.PushDataToExternal(syncCustIds, new PushDataToExternalModel
                             {
                                 ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
                                 IsPushCCToSoon88 = true,

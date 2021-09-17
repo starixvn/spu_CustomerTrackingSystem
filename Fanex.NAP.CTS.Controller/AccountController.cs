@@ -44,8 +44,8 @@
         private readonly IGraphService _graphService;
         private readonly ITransactionService _transService;
         private readonly ICustomerEvidenceService _customerEvidenceService;
-        private readonly ICustomerClassifyService _customerClassifyService;
-        private readonly IPushDataToExternalService _pushDataToExternalService;
+        private readonly IRescanCustomerClassificationService _customerClassifyService;
+        private readonly ICustomerClassificationService _customerClassificationService;
         private readonly ICommonService _commonService;
         private readonly IRobotClassificationService _robotClassificationService;
 
@@ -57,8 +57,8 @@
             _graphService = new GraphService();
             _transService = new TransactionService();
             _customerEvidenceService = new CustomerEvidenceService();
-            _customerClassifyService = new CustomerClassifyService();
-            _pushDataToExternalService = new PushDataToExternalService();
+            _customerClassifyService = new RescanCustomerClassificationService();
+            _customerClassificationService = new CustomerClassificationService();
             _commonService = new CommonService();
             _robotClassificationService = new RobotClassificationService();
         }
@@ -966,7 +966,7 @@
 
                 if (syncResult.ErrorCode == 0)
                 {
-                    _pushDataToExternalService.PushDataToExternal(syncCustIds, new PushDataToExternalModel
+                    _customerClassificationService.PushDataToExternal(syncCustIds, new PushDataToExternalModel
                     {
                         ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
                         IsPushCCToSoon88 = true,
@@ -1374,7 +1374,7 @@
                         if (latestClassifications.Any())
                         {
                             // Update CC in table custinfo to MainDB
-                            var isSuccessToMain = _pushDataToExternalService.RetryPushCCToMainDB(latestClassifications, 2);
+                            var isSuccessToMain = _customerClassificationService.RetryPushCCToMainDB(latestClassifications, 2);
 
                             if (isSuccessToMain)
                             {
@@ -1383,7 +1383,7 @@
                                 var jsonUpdateApplyCCs = JsonConvert.SerializeObject(updateApplyCCs);
 
                                 // Update IsAppliedCC = 1 in CTS
-                                _customerClassifyService.UpdateAppliedCustomerClassification(jsonUpdateApplyCCs);
+                                _customerClassificationService.UpdateAppliedCustomerClassification(jsonUpdateApplyCCs);
                             }
                         }
                     }

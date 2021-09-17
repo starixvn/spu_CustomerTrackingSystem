@@ -7,45 +7,42 @@
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Helpers.Xml;
+    using Fanex.NAP.CTS.Criteria.CustomerClassify;
     using Fanex.NAP.CTS.Criteria.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Model.CustomerClassify;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
+    using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service.Implement;
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
-    using System.Configuration;
     using System.Linq;
 
-    public class PushDataToExternalService : IPushDataToExternalService
+    public class CustomerClassificationService : ICustomerClassificationService
     {
-        private readonly ICustomerClassifyService customerClassifyService;
         private readonly IDynamicRepository repository;
 
-        public PushDataToExternalService()
+        public CustomerClassificationService()
         {
-            customerClassifyService = new CustomerClassifyService();
             repository = new DynamicRepository();
         }
 
-        public bool PushDataToExternal(IEnumerable<long> custIds, PushDataToExternalModel paras)
+        public bool PushDataToExternal(IEnumerable<long> custIdsToSyncCC, PushDataToExternalModel paras)
         {
-            if (custIds == null || !custIds.Any())
+            if (custIdsToSyncCC == null || !custIdsToSyncCC.Any())
             {
                 return true;
             }
 
-            var custIdsChunk = custIds.Distinct().Chunk(paras.ExternalBatchSize);
+            var custIdsChunk = custIdsToSyncCC.Distinct().Chunk(paras.ExternalBatchSize);
 
-            int retryTime = Convert.ToInt32(ConfigurationManager.AppSettings["RetryTime"]);
-
-            foreach (var custids in custIdsChunk)
+            foreach (var custIds in custIdsChunk)
             {
-                var lastestClassifications = customerClassifyService.GetLatestClassification(string.Join(",", custids));
+                var lastestClassifications = GetLatestClassification(string.Join(",", custIds));
 
                 if (lastestClassifications != null && lastestClassifications.Any())
                 {
-                    PushCCToMainDB(lastestClassifications, retryTime);
+                    PushCCToMainDB(lastestClassifications, Consts.Retry);
 
                     if (paras.IsPushCCToSoon88)
                     {
@@ -67,7 +64,7 @@
 
                 if (isSuccess)
                 {
-                    customerClassifyService.UpdateAppliedCustomerClassification(JsonConvert.SerializeObject(lastestClassifications));
+                    UpdateAppliedCustomerClassification(JsonConvert.SerializeObject(lastestClassifications));
                 }
             }
 
@@ -85,7 +82,7 @@
             {
                 try
                 {
-                    var result = SyncCustomerClassToMain(customerClassifications);
+                    var result = UpdateCCToMainDB(customerClassifications);
 
                     if (result.ErrorCode != 0 && retryTime == 0)
                     {
@@ -150,7 +147,10 @@
             }
         }
 
-        private DBResult SyncCustomerClassToMain(IEnumerable<LatestClassificationModel> customerClassList)
+
+        #region DataAccess Layer
+
+        public DBResult UpdateCCToMainDB(IEnumerable<LatestClassificationModel> customerClassList)
         {
             var criteria = new SyncCustomerClassToMainDbCriteria
             {
@@ -161,5 +161,39 @@
 
             return new DBResult { ErrorCode = criteria.ErrorCode, ErrorMsg = criteria.ErrorMessage };
         }
+
+        public IEnumerable<LatestClassificationModel> GetLatestClassification(string custIds)
+        {
+            if (!string.IsNullOrEmpty(custIds))
+            {
+                var criteria = new GetLastestClassificationCriteria
+                {
+                    CustIds = custIds
+                };
+
+                var result = repository.Fetch<LatestClassificationModel>(criteria);
+
+                return result ?? new List<LatestClassificationModel>();
+            }
+
+            return new List<LatestClassificationModel>();
+        }
+
+        public void UpdateAppliedCustomerClassification(string jsonData)
+        {
+            var criteria = new UpdateAppliedCustomerClassificationCriteria
+            {
+                ProblemCustomerJson = jsonData
+            };
+
+            repository.Execute(criteria);
+
+            if (!string.IsNullOrEmpty(criteria.ErrorMessage))
+            {
+                LogService.Error($"Web - UpdateAppliedCustomerClassification failed {criteria.ErrorMessage} with data: {jsonData}");
+            }
+        }
+        #endregion
+
     }
 }

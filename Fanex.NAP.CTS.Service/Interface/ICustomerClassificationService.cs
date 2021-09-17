@@ -4,12 +4,16 @@
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using System.Collections.Generic;
 
-    public interface IPushDataToExternalService
+    public interface ICustomerClassificationService
     {
         bool RetryPushCCToMainDB(IEnumerable<LatestClassificationModel> customerClassifications, int retryTime);
 
         void PushCustomerClassificationToSoon88(IEnumerable<LatestClassificationModel> customerClassifications);
 
-        bool PushDataToExternal(IEnumerable<long> custIds, PushDataToExternalModel paras);
+        bool PushDataToExternal(IEnumerable<long> custIdsToSyncCC, PushDataToExternalModel paras);
+
+        IEnumerable<LatestClassificationModel> GetLatestClassification(string custIds);
+
+        void UpdateAppliedCustomerClassification(string jsonData);
     }
 }
