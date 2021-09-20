@@ -2,6 +2,7 @@
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
+    using System;
 
     public class AddAccountExceptionCriteria : NonQueryCommand
     {
@@ -21,7 +22,7 @@
         public int ErrorCode { get; set; }
 
         [SpParam(SqlParamName = "op_ToCTSCustID")]
-        public int ToCTSCustId { get; set; }
+        public UInt64 ToCTSCustId { get; set; }
 
         public override string GetSettingKey()
         {

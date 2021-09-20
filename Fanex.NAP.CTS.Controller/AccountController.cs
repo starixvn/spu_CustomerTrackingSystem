@@ -897,11 +897,11 @@
             {
                 string ctsCustIdsToString = model.FromCTSCustId.ToString();
 
-                var toCTSCustId = (int)result.OutParam["toCTSCustId"];
+                var toCTSCustId = (UInt64)result.OutParam["toCTSCustId"];
 
                 if (toCTSCustId != 0)
                 {
-                    ctsCustIdsToString += "," + model.ToCTSCustId.ToString();
+                    ctsCustIdsToString += "," + toCTSCustId.ToString();
                 }
 
                 var custIdsFlaggedEvidences = _customerEvidenceService.CheckCleanCustFlaggedEvidence(ctsCustIdsToString);
