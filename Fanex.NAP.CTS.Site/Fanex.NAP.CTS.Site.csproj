@@ -570,6 +570,13 @@
     <Content Include="Content\scss\pages\special-customer-class\special-customer-class.min.css">
       <DependentUpon>special-customer-class.css</DependentUpon>
     </Content>
+    <None Include="Content\scss\pages\transaction-report\transaction-report.scss" />
+    <Content Include="Content\scss\pages\transaction-report\transaction-report.css">
+      <DependentUpon>transaction-report.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\scss\pages\transaction-report\transaction-report.min.css">
+      <DependentUpon>transaction-report.css</DependentUpon>
+    </Content>
     <Content Include="Content\scss\vendors\highcharts\highcharts.css">
       <DependentUpon>highcharts.scss</DependentUpon>
     </Content>
@@ -996,6 +1003,7 @@
     <Compile Include="Startup.cs" />
     <Content Include="Scripts\tagify\jquery.tagify.min.js" />
     <Content Include="Scripts\tagify\tagify.min.js" />
+    <Content Include="Scripts\TransactionReport\index.js" />
     <Content Include="Views\ProblemAccountMonitor\Detail.cshtml" />
     <Content Include="Views\EvidenceManagement\Index.cshtml" />
     <Content Include="Views\AssociatedAccountMonitor\Index.cshtml" />
@@ -1021,6 +1029,7 @@
     </Content>
     <Content Include="Views\MatchMonitor\Detail.cshtml" />
     <Content Include="Views\Account\RobotClassfication\LastestRobotClassification.cshtml" />
+    <Content Include="Views\TransactionReport\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CoreBetList.css" />

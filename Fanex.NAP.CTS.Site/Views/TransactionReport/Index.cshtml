@@ -1,0 +1,73 @@
+﻿@{
+    ViewBag.Title = "TRANSACTION REPORT";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section styles{
+    @Styles.Render("~/transaction-report-styles")
+}
+
+<section class="transaction-report">
+    <div class="content">
+        <h2 class="page-title">TRANSACTION REPORT</h2>
+    </div>
+    <div class="transaction-content">
+        <div class="transaction-table">
+            <div class="group-control">
+                <div class="title-transaction"><div class="label">Date Range</div></div>
+                <div class="form-filter">
+                    <div class="group calendar width-180">
+                        <label class="text">From</label>
+                        <input type="text" id="dpkFromDate" class="control" readonly>
+                        <span class="icon-calendar-text"></span>
+                    </div>
+                    <div class="group calendar width-180">
+                        <label class="text">To</label>
+                        <input type="text" id="dpkToDate" class="control" readonly>
+                        <span class="icon-calendar-text"></span>
+                    </div>
+
+                    <div class="group width-180">
+                        <label class="text">Subscriber</label>
+                        <div style="width:200px">
+                            <select class="control width-select" id="cbbSubscriber" multiple="multiple">
+                                @foreach (var group in ViewBag.Subscribers)
+                                {
+                                    <optgroup label="@group.SubscriberGroupName">
+                                        @foreach (var item in group.SubscriberList)
+                                        {
+                                            <option selected value=@item.SubscriberID>@item.SubscriberName</option>
+                                        }
+                                    </optgroup>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <button class="button button-generate" id="btnGenerate">Generate</button>
+                </div>
+            </div>
+            <div id="transaction-datatable" class="report-cont">
+                <div class="table-report" style="width : 100%">
+                    <table id="tblTransaction" class="table table-striped table-transaction">
+                        <thead>
+                            <tr>
+                                <th>Subscriber</th>
+                                <th>Total Trans</th>
+                                <th>Valid Trans</th>
+                                <th>Invalid Trans</th>
+                                <th>Browserless Valid Trans</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@section scripts{
+    @Scripts.Render("~/transaction-report-scripts")
+}
+

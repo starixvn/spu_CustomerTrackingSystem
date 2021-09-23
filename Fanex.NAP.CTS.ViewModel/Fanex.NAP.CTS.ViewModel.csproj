@@ -154,6 +154,8 @@
     <Compile Include="SpecialCustomerClass\ResultInsertRemoveViewModel.cs" />
     <Compile Include="Account\TransactionHistory\IPInformation.cs" />
     <Compile Include="AssociatedAccountMonitor\ValidatedAcssociatedAccountViewModel.cs" />
+    <Compile Include="TransactionReport\TransactionFilterViewModel.cs" />
+    <Compile Include="TransactionReport\TransactionViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fanex.NAP.CTS.Core\Fanex.NAP.CTS.Core.csproj">

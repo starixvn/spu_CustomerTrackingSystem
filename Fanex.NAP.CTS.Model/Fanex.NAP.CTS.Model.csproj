@@ -317,6 +317,7 @@
     <Compile Include="PushDataToExternal\CustomerClassForMainDb.cs" />
     <Compile Include="PushDataToExternal\InsertCategoryResultModel.cs" />
     <Compile Include="PushDataToExternal\PushDataToExternalModel.cs" />
+    <Compile Include="TransactionReport\TransactionModel.cs" />
     <Compile Include="Transaction\DataTableAjaxPostModel.cs" />
     <Compile Include="LogInputData\PlaceEvidencesViewModel.cs" />
     <Compile Include="Transaction\Transaction.cs" />
