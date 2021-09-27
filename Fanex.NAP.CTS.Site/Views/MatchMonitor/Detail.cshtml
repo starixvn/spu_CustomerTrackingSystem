@@ -1,8 +1,6 @@
 ﻿
-@{
-    ViewBag.Title = "MATCH MONITOR DETAIL";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
+@{ ViewBag.Title = "MATCH MONITOR DETAIL";
+                Layout = "~/Views/Shared/_Layout.cshtml"; }
 
 @section styles{
     @Styles.Render("~/match-monitor-styles")
@@ -22,13 +20,11 @@
                         <div class="control width-select text-box">@ViewBag.MatchName</div>
                     </div>
                     <div class="group width-180">
-                        <label class="text">Live/Non-live</label>
-                        <select class="control width-select" id="cbbLiveIndicator">
-                            @if (ViewBag.IsLiveDefault != null)
-                            {
-                                <option value="false" @(ViewBag.IsLiveDefault ? "" : "selected")>Non-live</option>
-                                <option value="true" @(ViewBag.IsLiveDefault ? "selected" : "")>Live</option>
-                            }
+                        <label class="text">Sites</label>
+                        <select class="control width-select" id="cbbSites">
+                            <option value="A">All</option>
+                            <option value="C">Credit</option>
+                            <option value="L">Licensee</option>
                         </select>
                     </div>
                     <div class="group width-180">
@@ -38,33 +34,13 @@
                             {
                                 foreach (var item in ViewBag.MatchScore)
                                 {
-                                    <option value="@item.TotalScore" selected>@item.LiveHomeScore - @item.LiveAwayScore </option>
-                                }
+                <option value="@item.TotalScore" selected>@item.LiveHomeScore - @item.LiveAwayScore </option>}
                             }
                         </select>
                     </div>
                     <div class="group width-180">
                         <label class="text">Reason Group</label>
                         <select class="control width-select" id="cbbReasonGroup" multiple="multiple">
-                            @*@{
-                                int preIncrement1 = 0;
-                                int preIncrement2 = 0;
-                            }
-                            @if (ViewBag.ReasonGroup != null)
-                            {
-                                foreach (var item in ViewBag.ReasonGroup)
-                                {
-                                    if (@item.IsHedging)
-                                    {
-                                        <option value="@item.GroupID"> Hedging @(preIncrement1++) </option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@item.GroupID"> Group Betting @(preIncrement2++) </option>
-                                    }
-                                }
-                            }*@
-
                             @if (ViewBag.ReasonGroup != null)
                             {
                                 foreach (var item in ViewBag.ReasonGroup)
@@ -89,7 +65,7 @@
                                     <th>ODDS</th>
                                     <th>BetID</th>
                                     <th>CUR</th>
-                                    <th>Live/Non-Live</th>
+                                    <th>Market</th>
                                     <th>AMOUNT</th>
                                     <th>HDP</th>
                                     <th>Score</th>
@@ -113,7 +89,7 @@
                                     <th>ODDS</th>
                                     <th>BetID</th>
                                     <th>CUR</th>
-                                    <th>Live/Non-Live</th>
+                                    <th>Market</th>
                                     <th>AMOUNT</th>
                                     <th>HDP</th>
                                     <th>Score</th>
@@ -132,9 +108,11 @@
         <input id="hdEventDataToString" type="hidden" value="@ViewBag.EventDateToString" />
         <input id="hdMatchID" type="hidden" value="@ViewBag.MatchID" />
         <input id="hdBetTypeID" type="hidden" value="@ViewBag.BetTypeID" />
+        <input id="hdLiveIndicator" type="hidden" value="@ViewBag.LiveIndicator.ToString()" />
+        <input id="hdIsHedging" type="hidden" value="@ViewBag.IsHedging.ToString()" />
         <input id="hdIsHostPermission" type="hidden" IsHostPermission="@ViewBag.IsHostPermission.ToString()" />
     </div>
-</section>  
+</section>
 @section scripts{
     @Scripts.Render("~/match-monitor-detail-scripts")
 }

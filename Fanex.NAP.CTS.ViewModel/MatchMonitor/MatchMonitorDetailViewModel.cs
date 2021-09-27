@@ -17,6 +17,10 @@
 
         public int EventGroup { get; set; }
 
+        public bool LiveIndicator { get; set; }
+
+        public bool IsHedging { get; set; }
+
         public DateTime EventDate
         {
             get

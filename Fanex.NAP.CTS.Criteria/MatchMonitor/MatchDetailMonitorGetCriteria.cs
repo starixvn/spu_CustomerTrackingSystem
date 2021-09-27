@@ -13,15 +13,18 @@
         public Int64 MatchID { get; set; }
 
         [SpParam(SqlParamName = "ip_BettypeID")]
-        public int BettypeID { get; set; }
+        public int BettypeID { get; set; }                
+
+        [SpParam(SqlParamName = "ip_ScoreList")]
+        public string ListScore { get; set; }
 
         [SpParam(SqlParamName = "ip_LiveIndicator")]
         public bool LiveIndicator { get; set; }
 
-        [SpParam(SqlParamName = "ip_ListScore")]
-        public string ListScore { get; set; }
+        [SpParam(SqlParamName = "ip_IsHedging")]
+        public bool IsHedging { get; set; }
 
-        [SpParam(SqlParamName = "ip_ListReasonGroup")]
+        [SpParam(SqlParamName = "ip_GroupIdList")]
         public string ListReasonGroup { get; set; }
 
         public override string GetSettingKey()

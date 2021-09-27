@@ -10,9 +10,9 @@
     {
         List<MatchMonitorModel> GetMatchMonitor(MatchMonitorFilterViewModel filter);
 
-        List<MatchReasonGroupModel> GetMatchReasonGroup(DateTime eventDate, Int64 matchID, int betTypeID);
+        List<MatchReasonGroupModel> GetMatchReasonGroup(DateTime eventDate, Int64 matchID, int betTypeID, bool liveIndicator, bool isHedging);
 
-        List<MatchScoreModel> GetMatchScore(DateTime eventDate, Int64 matchID, int betTypeID);
+        List<MatchScoreModel> GetMatchScore(DateTime eventDate, Int64 matchID, int betTypeID, bool liveIndicator, bool isHedging);
 
         DBResult UpdateVerificaton(Int64 matchID, Int64 userID);
 
