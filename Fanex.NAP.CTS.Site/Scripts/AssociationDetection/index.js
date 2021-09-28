@@ -16,18 +16,13 @@
     };
 
     function GenerateGrid(data) {
-
-        if ($.fn.DataTable.isDataTable("#tblAssociationDetection")) {
-            domElements.tableResult.DataTable().clear().destroy();
-        }
-
-        var groupColumn = 0;        
         return domElements.tableResult.DataTable({
             language: {
                 lengthMenu: "",
                 info: "",
                 infoEmpty: "",
-                zeroRecords: ""
+                zeroRecords: "",
+                emptyTable: "No Group from input list"
             },
             info: false,
             ordering: false,
@@ -37,7 +32,7 @@
             paging: false,
             searching: false,
             columnDefs: [
-                { "visible": false, "targets": groupColumn },
+                { "visible": false, "targets": 0 },
                 { targets: "_all", defaultContent: "-" },
                 { targets: [0, 1, 2, 3, 4 , 5], className: "text-center" },
                 { targets: [0], width: "5%" },
@@ -64,7 +59,7 @@
                 var rows = api.rows({ page: 'current' }).nodes();
                 var last = null;
 
-                api.column(groupColumn, { page: 'current' }).data().each(function (group, i) {
+                api.column(0, { page: 'current' }).data().each(function (group, i) {
                     if (last !== group) {
                         $(rows).eq(i).before(
                             '<tr class="group"><td colspan="5"> <i class="icon-chevron-down"></i>' + 'Group ' + group + '</td></tr>'
@@ -147,9 +142,9 @@
             }
         });
 
-        let isEnableAdd = data.UserNameInvalidList.length === 0 && data.UserNameDuplicatedList.length === 0 && data.UserNameValidList.length >= 2;
+        let isEnableDetect = data.UserNameInvalidList.length === 0 && data.UserNameDuplicatedList.length === 0 && data.UserNameValidList.length >= 2;
 
-        domElements.btnDetect.prop('disabled', !isEnableAdd);
+        domElements.btnDetect.prop('disabled', !isEnableDetect);
     }    
 
     function DetectUserName() {
@@ -166,11 +161,24 @@
                     domElements.divAddUserName.addClass("loading-block");
                 },
                 success: function (response) {
-                    GenerateGrid(response);
+                    if (response.ErrorCode == 0) {
+                        dataTable
+                            ? domElements.tableResult.DataTable().clear().rows.add(response.ItemList).draw()
+                            : dataTable = GenerateGrid(response.ItemList);
+
+                        domElements.inputTagUsername.tagify().data('tagify').removeAllTags();
+                        domElements.spanAddUserNameMaxTag.text(maxTags);
+                        domElements.spanAddChangeHidden.text("0");
+                    } else {
+                        common.showError(response.ErrorMessage);
+
+                        dataTable
+                            ? domElements.tableResult.DataTable().clear().draw()
+                            : dataTable = GenerateGrid([]);
+                    }
                 },
                 complete: function () {
-                    domElements.divAddUserName.removeClass("loading-block");
-                    InitInputTagUsername();
+                    domElements.divAddUserName.removeClass("loading-block");                    
                 },
                 error: function (errMsg) {
                     console.log(errMsg);
@@ -178,7 +186,6 @@
             });
         }
     }
-
 
     function InitInputTagUsername() {
         domElements.spanAddUserNameMaxTag.text(maxTags);
@@ -196,17 +203,7 @@
             let currentTagsLength = domElements.spanAddUserName.find('tags tag').length;
             if (currentTagsLength < maxTags)
                 domElements.spanAddUserNameMaxTag.text(maxTags - currentTagsLength + 1);
-        }
-
-        function EnableButtonAdd() {
-            let validTags = domElements.spanAddUserName.find('tags tag.valid');
-            let invalidDuplicatedTags = domElements.spanAddUserName.find('tags tag.invalid-duplicated');
-            let invalidUsernameTags = domElements.spanAddUserName.find('tags tag.invalid-username');
-            let notInvalid = invalidDuplicatedTags.length + invalidUsernameTags.length;
-            let disabled = notInvalid <= 1 && validTags.length > 3;
-
-            domElements.btnDetect.prop('disabled', !disabled);
-        }
+        }        
 
         function IsTextUnicode(text) {
             var pattern = /^[\x20-\x7E]*$/;
@@ -238,9 +235,7 @@
 
                     ResetMaxTag();
 
-                    ValidateUsernames(currentTag.text().trim());
-
-                    //EnableButtonAdd();
+                    ValidateUsernames(currentTag.text().trim());                    
                 });
 
                 domElements.spanAddUserNameMaxTag.text(maxCountTags - 1);
@@ -294,7 +289,6 @@
                     return AddBorderTags();
                 }
             }
-
         });
 
         $(document).on('mouseup', function (e) {
@@ -317,10 +311,11 @@
     }
 
     function Initial() {        
-        domElements.divValidation.prop('hidden', true);                
+        domElements.divValidation.prop('hidden', true);        
+        
         InitInputTagUsername();
-        domElements.btnDetect.on('click', () => DetectUserName());
 
+        domElements.btnDetect.on('click', () => DetectUserName());
     }
 
     $(document).ready(function () {
