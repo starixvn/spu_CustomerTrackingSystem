@@ -929,7 +929,7 @@
 
                 var custIdsFlaggedEvidences = _customerEvidenceService.CheckCleanCustFlaggedEvidence(ctsCustIdsToString);
 
-                if (custIdsFlaggedEvidences != null && custIdsFlaggedEvidences.Any())
+                if (custIdsFlaggedEvidences != null && !custIdsFlaggedEvidences.Any())
                 {
                     _customerEvidenceService.UpdateBetLimitOfFlaggedCustomer(string.Join(",", custIdsFlaggedEvidences));
                 }
@@ -1057,7 +1057,7 @@
             {
                 var custIdsFlaggedEvidences = _customerEvidenceService.CheckCleanCustFlaggedEvidence(model.CTSCustId.ToString());
 
-                if (custIdsFlaggedEvidences != null && custIdsFlaggedEvidences.Any())
+                if (custIdsFlaggedEvidences != null && !custIdsFlaggedEvidences.Any())
                 {
                     _customerEvidenceService.UpdateBetLimitOfFlaggedCustomer(string.Join(",", custIdsFlaggedEvidences));
                 }
