@@ -931,7 +931,7 @@
 
                 if (custIdsFlaggedEvidences != null && !custIdsFlaggedEvidences.Any())
                 {
-                    _customerEvidenceService.UpdateBetLimitOfFlaggedCustomer(string.Join(",", custIdsFlaggedEvidences));
+                    _customerEvidenceService.UpdateBetLimitOfFlaggedCustomer(ctsCustIdsToString);
                 }
             }
 
@@ -1059,7 +1059,7 @@
 
                 if (custIdsFlaggedEvidences != null && !custIdsFlaggedEvidences.Any())
                 {
-                    _customerEvidenceService.UpdateBetLimitOfFlaggedCustomer(string.Join(",", custIdsFlaggedEvidences));
+                    _customerEvidenceService.UpdateBetLimitOfFlaggedCustomer(model.CTSCustId.ToString());
                 }
             }
 
