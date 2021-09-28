@@ -201,9 +201,7 @@
             selectedText: "# of # selected",
             noneSelectedText: "Select Reason Group"
 
-        });
-
-       
+        });      
 
         InitialFirstDetailGird();
         InitialSecondDetailGird();
@@ -215,6 +213,7 @@
 
     $(document).ready(function () {
         Initial();
+        GetMatchMonitorDetail();
     });
 }
 
