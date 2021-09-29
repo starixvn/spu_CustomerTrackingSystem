@@ -1,11 +1,12 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
     using Fanex.NAP.CTS.Model.ImportEvidences;
+    using Fanex.NAP.CTS.ViewModel.Account.Evidence;
     using System.Collections.Generic;
 
     public interface ICustomerEvidenceService
     { 
-        IEnumerable<long> CheckCleanCustFlaggedEvidence(string ctsCustIds);
+        IEnumerable<CTSCustomerEvidenceViewModel> CheckCleanCustFlaggedEvidence(string ctsCustIds);
 
         void UpdateBetLimitOfFlaggedCustomer(string custIds);
 

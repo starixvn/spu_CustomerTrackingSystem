@@ -5,6 +5,7 @@
     using Fanex.NAP.CTS.Criteria.Account;
     using Fanex.NAP.CTS.Criteria.ImportEvidences;
     using Fanex.NAP.CTS.Model.ImportEvidences;
+    using Fanex.NAP.CTS.ViewModel.Account.Evidence;
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
@@ -66,14 +67,14 @@
             return new AddEvidenceResultModel { ErrorMessage = criteria.ErrorMessage, Eivdences = result };
         }
 
-        public IEnumerable<long> CheckCleanCustFlaggedEvidence(string ctsCustIds)
+        public IEnumerable<CTSCustomerEvidenceViewModel> CheckCleanCustFlaggedEvidence(string ctsCustIds)
         {
             var criteria = new CheckCleanCustFlaggedEvidenceCriteria
             {
                 CTSCustIds = ctsCustIds
             };
 
-            return repository.Fetch<long>(criteria);
+            return repository.Fetch<CTSCustomerEvidenceViewModel>(criteria);
         }
     }
 }

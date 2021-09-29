@@ -26,6 +26,7 @@
     using Fanex.NAP.CTS.ViewModel.Account.BettingStatistic;
     using Fanex.NAP.CTS.ViewModel.Account.ChainToEvidence;
     using Fanex.NAP.CTS.ViewModel.Account.CustomerCategory;
+    using Fanex.NAP.CTS.ViewModel.Account.Evidence;
     using Fanex.NAP.CTS.ViewModel.Account.TransactionHistory;
     using Newtonsoft.Json;
     using System;
@@ -908,7 +909,7 @@
 
                 if (custIdsFlaggedEvidences != null && custIdsFlaggedEvidences.Any())
                 {
-                    _customerEvidenceService.UpdateBetLimitOfUnflaggedCustomer(string.Join(",", custIdsFlaggedEvidences));
+                    _customerEvidenceService.UpdateBetLimitOfUnflaggedCustomer(string.Join(",", custIdsFlaggedEvidences.Select(c=>c.CustID)));
                 }
             }
 
@@ -925,13 +926,33 @@
 
             if (result == 0)
             {
-                string ctsCustIdsToString = model.FromCTSCustId.ToString() + "," + model.ToCTSCustId.ToString();
+                var custExistEvidence = new List<CTSCustomerEvidenceViewModel>();
+                var custNotExistEvidence = new List<CTSCustomerEvidenceViewModel>();
 
-                var custIdsFlaggedEvidences = _customerEvidenceService.CheckCleanCustFlaggedEvidence(ctsCustIdsToString);
-
-                if (custIdsFlaggedEvidences != null && !custIdsFlaggedEvidences.Any())
+                var tasks = new List<Task>
                 {
-                    _customerEvidenceService.UpdateBetLimitOfFlaggedCustomer(ctsCustIdsToString);
+                    Task.Run(() =>
+                    {
+                        custExistEvidence.Add(new CTSCustomerEvidenceViewModel { CTSCustID = model.FromCTSCustId, CustID = _accountService.GetCustomerInfoByCTSCustId(model.FromCTSCustId).CustID });
+                        custExistEvidence.Add(new CTSCustomerEvidenceViewModel { CTSCustID = model.ToCTSCustId, CustID = _accountService.GetCustomerInfoByCTSCustId(model.ToCTSCustId).CustID });
+                    }),
+                    Task.Run(() =>
+                    {
+                         string ctsCustIdsToString = model.FromCTSCustId.ToString() + "," + model.ToCTSCustId.ToString();
+                    custNotExistEvidence = _customerEvidenceService.CheckCleanCustFlaggedEvidence(ctsCustIdsToString)?.ToList();
+                    })
+                };
+
+                Task.WhenAll(tasks.ToArray()).Wait();
+
+                if (custNotExistEvidence != null && custNotExistEvidence.Any())
+                {
+                    custExistEvidence.RemoveAll(x => custNotExistEvidence.Contains(x, new CustomerInfoEqualityComparer()));
+                }
+      
+                if(custExistEvidence.Any())
+                {
+                    _customerEvidenceService.UpdateBetLimitOfFlaggedCustomer(string.Join(",",custExistEvidence.Select(c=>c.CustID)));
                 }
             }
 
@@ -1017,7 +1038,7 @@
 
                 if (custIdsFlaggedEvidences != null && custIdsFlaggedEvidences.Any())
                 {
-                    _customerEvidenceService.UpdateBetLimitOfUnflaggedCustomer(string.Join(",", custIdsFlaggedEvidences));
+                    _customerEvidenceService.UpdateBetLimitOfUnflaggedCustomer(string.Join(",", custIdsFlaggedEvidences.Select(c => c.CustID)));
                 }
             }
 
@@ -1038,7 +1059,7 @@
 
                 if (custIdsFlaggedEvidences != null && custIdsFlaggedEvidences.Any())
                 {
-                    _customerEvidenceService.UpdateBetLimitOfUnflaggedCustomer(string.Join(",", custIdsFlaggedEvidences));
+                    _customerEvidenceService.UpdateBetLimitOfUnflaggedCustomer(string.Join(",", custIdsFlaggedEvidences.Select(c => c.CustID)));
                 }
             }
 
@@ -1055,11 +1076,13 @@
 
             if (result == 0)
             {
-                var custIdsFlaggedEvidences = _customerEvidenceService.CheckCleanCustFlaggedEvidence(model.CTSCustId.ToString());
+                var custNotExistFlaggedEvidences = _customerEvidenceService.CheckCleanCustFlaggedEvidence(model.CTSCustId.ToString());
 
-                if (custIdsFlaggedEvidences != null && !custIdsFlaggedEvidences.Any())
+                if (custNotExistFlaggedEvidences != null && !custNotExistFlaggedEvidences.Any())
                 {
-                    _customerEvidenceService.UpdateBetLimitOfFlaggedCustomer(model.CTSCustId.ToString());
+                    var custId = _accountService.GetCustomerInfoByCTSCustId(model.CTSCustId).CustID;
+
+                    _customerEvidenceService.UpdateBetLimitOfFlaggedCustomer(custId.ToString());
                 }
             }
 
