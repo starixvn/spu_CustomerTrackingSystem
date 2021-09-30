@@ -1,3 +1,4 @@
-﻿MATCH (c:CTSCustomer)-[r:USED_DEVICE]->(d:Device)<-[r2:USED_DEVICE]-(c2:CTSCustomer)
+﻿USE ctsgraphdb
+MATCH (c:CTSCustomer)-[r:USED_DEVICE]->(d:Device)<-[r2:USED_DEVICE]-(c2:CTSCustomer)
 WHERE c.CustID = $ip_CustID
 RETURN Distinct c2.CustID as CustId, c2.UserName as UserName, collect(Distinct d.DeviceId) as DeviceIds
