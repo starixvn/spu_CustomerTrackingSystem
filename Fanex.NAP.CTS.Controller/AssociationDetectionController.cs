@@ -1,4 +1,7 @@
-﻿using Fanex.NAP.Core.Web.Attribute;
+﻿using Fanex.Logging;
+using Fanex.Logging.Extensions;
+using Fanex.Logging.Extensions.Database;
+using Fanex.NAP.Core.Web.Attribute;
 using Fanex.NAP.CTS.Model.AssociationDetection;
 using Fanex.NAP.CTS.Model.Common;
 using Fanex.NAP.CTS.Model.CustomerClassify;
@@ -47,6 +50,9 @@ namespace Fanex.NAP.CTS.Controller
         [HttpPost]
         public ActionResult GetAssociationDetection(string userNames)
         {
+            var result = new GetAssociationDetectionViewModel();
+            var groupLevel2ByUsername = Enumerable.Empty<GetAssociationDetectionModel>();
+            var latestCustomerClassification = Enumerable.Empty<LatestClassificationModel>();
             var isException = false;
 
             if (!string.IsNullOrWhiteSpace(userNames))
@@ -54,35 +60,50 @@ namespace Fanex.NAP.CTS.Controller
                 var userNameList = userNames.Split(',');
 
                 var newUserNames = string.Join(",", userNameList.Distinct());
-
+                
                 var validatedList = _commonService.ValidateUsernames(newUserNames, out isException);
-
-                var ctsCustIds = string.Join(",", validatedList.Select(x => x.CTSCustID));
-
-                var groupLevel2ByUsername = _associationDetectionService.GetAssociationDetection(ctsCustIds);
 
                 var custIds = string.Join(",", validatedList.Select(x => x.CustID));
 
-                var latestCustomerClassification = _customerClassifyService.GetLatestClassification(custIds);
+                var ctsCustIds = string.Join(",", validatedList.Select(x => x.CTSCustID));
 
-                var result = TransformLatestCustomerClassification(groupLevel2ByUsername, latestCustomerClassification);
+                try
+                {
+                    groupLevel2ByUsername = _associationDetectionService.GetAssociationDetection(ctsCustIds);
+
+                    latestCustomerClassification = _customerClassifyService.GetLatestClassification(custIds);
+
+                    result.ItemList = TransformLatestCustomerClassification(groupLevel2ByUsername, latestCustomerClassification);
+                }
+                catch (Exception ex)
+                {
+                    result.ErrorCode = 1;
+                    result.ErrorMessage = "Timeout Issue.Please try again";
+
+                    var logMessage = new LogMessage(ex.Message)
+                       .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                       .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                    LogService.Error($"GetAssociationDetection exeption message:  {logMessage}");
+                }
 
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
 
-            return Json(new List<GetAssociationDetectionModel>(), JsonRequestBehavior.AllowGet);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        private IEnumerable<GetAssociationDetectionViewModel> TransformLatestCustomerClassification(IEnumerable<GetAssociationDetectionModel> groupLevel2ByUsername, IEnumerable<LatestClassificationModel> latestCustomerClassification)
+        private IEnumerable<AssociationDetectionItemViewModel> TransformLatestCustomerClassification(IEnumerable<GetAssociationDetectionModel> groupLevel2ByUsername, IEnumerable<LatestClassificationModel> latestCustomerClassification)
         {
             if (groupLevel2ByUsername != null && groupLevel2ByUsername.Any())
             {
                 return groupLevel2ByUsername.Select(x =>
                 {
+                    var customerClass = x.CustSubId == 0 && x.CustomerCategory != null 
+                    ? latestCustomerClassification.FirstOrDefault(a => a.CustId == x.CustId)?.CustomerClass 
+                    : 0;
 
-                    var customerClass = x.CustSubId == 0 && x.CustomerCategory != null ? latestCustomerClassification.FirstOrDefault(a => a.CustId == x.CustId)?.CustomerClass : 0;
-
-                    return new GetAssociationDetectionViewModel
+                    return new AssociationDetectionItemViewModel
                     {
                         GroupId = x.GroupId,
                         UserName = x.UserName,
@@ -96,7 +117,7 @@ namespace Fanex.NAP.CTS.Controller
                 });
             }
 
-            return new List<GetAssociationDetectionViewModel>();
+            return new List<AssociationDetectionItemViewModel>();
         }
 
         private ValidatedAccountsViewModel ValidatedAccount(string userNames)

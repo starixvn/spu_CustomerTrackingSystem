@@ -1,21 +1,20 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.AssociationDetection
 {
+    using System.Collections.Generic;
+
     public class GetAssociationDetectionViewModel
     {
-        public int GroupId { get; set; }
+        public GetAssociationDetectionViewModel()
+        {
+            ItemList = new List<AssociationDetectionItemViewModel>();
+            ErrorCode = 0;
+            ErrorMessage = string.Empty;
+        }
 
-        public string UserName { get; set; }
+        public IEnumerable<AssociationDetectionItemViewModel> ItemList { get; set; }
 
-        public string Status { get; set; }
+        public int ErrorCode { get; set; }
 
-        public string Evidence { get; set; }
-
-        public string CustomerCategory { get; set; }
-
-        public string CategoryIds { get; set; }
-
-        public string CustomerClass { get; set; }
-
-        public bool IsProblemAccount { get; set; }
+        public string ErrorMessage { get; set; }
     }
 }
