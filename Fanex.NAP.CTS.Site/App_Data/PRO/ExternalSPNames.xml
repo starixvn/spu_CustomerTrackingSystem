@@ -29,8 +29,8 @@
     <Setting Key="FS_Rpt_CTSMatchMonitor_Get" SpName="FS_Rpt_CTSMatchMonitor_Get" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
     <Setting Key="FS_Rpt_CTSMatchMonitor_Details_GetMatchInfo" SpName="FS_Rpt_CTSMatchMonitor_Details_GetMatchInfo" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
     <Setting Key="FS_Rpt_CTSMatchMonitor_Details_GetTickets" SpName="FS_Rpt_CTSMatchMonitor_Details_GetTickets" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
-    <Setting Key="NAP_BLControl_EvidenceFlagged" SpName="NAP_BLControl_EvidenceFlagged" DbName="DBCust.CustDB.bodbAdminNet"/>
-    <Setting Key="NAP_BLControl_EvidenceUnflagged" SpName="NAP_BLControl_EvidenceUnflagged" DbName="DBCust.CustDB.bodbAdminNet"/>
+    <Setting Key="NAP_BLControl_EvidenceFlagged" SpName="NAP_BLControl_EvidenceFlagged" DbName="DBCust.CustDB.bodbAdminNet" TimeOut="300"/>
+    <Setting Key="NAP_BLControl_EvidenceUnflagged" SpName="NAP_BLControl_EvidenceUnflagged" DbName="DBCust.CustDB.bodbAdminNet" TimeOut="300"/>
     <Setting Key="TicketVoiding_TicketsInRequest_Select" SpName="TicketVoiding_TicketsInRequest_Select" DbName="DBCTS.bodb02.bodbSPUNet" />
     <Setting Key="CTS_CustomerProfile_FraudInfo_Get" SpName="CTS_CustomerProfile_FraudInfo_Get" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
     <Setting Key="CTS_RobotUserStatus_Get" SpName="CTS_RobotUserStatus_Get" DbName="DBONUSER.ON_USER.bodbSPUNet" />

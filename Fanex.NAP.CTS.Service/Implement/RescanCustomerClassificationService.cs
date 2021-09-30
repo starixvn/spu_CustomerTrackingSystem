@@ -21,15 +21,15 @@
     using System.Linq;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
-    public class CustomerClassifyService : ICustomerClassifyService
+    public class RescanCustomerClassificationService : IRescanCustomerClassificationService
     {
-        private readonly IPushDataToExternalService _pushDataToExternalService;
+        private readonly ICustomerClassificationService custClassificationService;
         private readonly ILogInputDataService logInputDataService;
         private readonly bool _isWriteLogInfo;
 
-        public CustomerClassifyService()
+        public RescanCustomerClassificationService()
         {
-            _pushDataToExternalService = new PushDataToExternalService();
+            custClassificationService = new CustomerClassificationService();
             _isWriteLogInfo = ConfigSettings.IsWriteLogInfo;
             logInputDataService = new LogInputDataService();
         }
@@ -41,30 +41,6 @@
             RescanNormalAccount(para.CustIds?.ToList(), custIdsPushCC, para.FunctionId);
         }
 
-        private void SyncCustomerClassToExternal(List<long> custIdsToSyncCC, bool isPushCCToSoon88)
-        {
-            var custIdsChunk = custIdsToSyncCC.Chunk(ConfigSettings.PushCCToExternalChunkSize);
-
-            if (_isWriteLogInfo)
-                LogService.Info($"PA Rescan - Cust to syncCC - with data: {JsonConvert.SerializeObject(custIdsToSyncCC)}");
-
-            foreach (var custids in custIdsChunk)
-            {
-                var lastestClassifications = GetLatestClassification(string.Join(",", custids));
-
-                if (lastestClassifications != null && lastestClassifications.Any())
-                {
-                    bool isSyncMainSuccessfully = _pushDataToExternalService.PushCustomerClassificationToMain(lastestClassifications, 3);
-
-                    if (isSyncMainSuccessfully)
-                        UpdateAppliedCustomerClassification(JsonConvert.SerializeObject(lastestClassifications));
-
-                    if (isPushCCToSoon88)
-                        _pushDataToExternalService.PushCustomerClassificationToSoon88(lastestClassifications);
-                }
-            }
-        }
-
         #region Rescan PA
 
         private IEnumerable<long> RescanProblemAccont(RescanCustClassificationModel para)
@@ -72,12 +48,10 @@
             var custIdsCheckPA = new List<long>();
 
             //Rescan PA - Get SMA CustId
-            var roleCusomters = GetAgentCusts(para.CustIds);
-            custIdsCheckPA.AddRange(roleCusomters);
+            custIdsCheckPA.AddRange(GetAgentCusts(para.CustIds));
 
             // Rescan PA - Get PA From Evidence in CTS
-            var problemAccountsFromEvi = SyncCustomerEvidenceToCategory(para.CustIds);
-            custIdsCheckPA.AddRange(problemAccountsFromEvi);
+            custIdsCheckPA.AddRange(GetExistedEvidences(para.CustIds));
 
             // Rescan PA - Get PA From RobotUser & NAP PA
             var problemAccounts = GetProblemAccounts(para);
@@ -92,7 +66,7 @@
 
             if (custIdsPushCC != null && custIdsPushCC.Any())
             {
-                SyncCustomerClassToExternal(custIdsPushCC, para.IsPushCCToSoon88);
+                PushCCToExternal(custIdsPushCC, para.IsPushCCToSoon88);
             }
 
             return custIdsPushCC;
@@ -121,7 +95,7 @@
             return agentIds;
         }
 
-        private List<long> SyncCustomerEvidenceToCategory(IEnumerable<long> custIds)
+        private List<long> GetExistedEvidences(IEnumerable<long> custIds)
         {
             var custIdsToSyncCC = new List<long>();
 
@@ -296,6 +270,18 @@
             }
         }
 
+        private void PushCCToExternal(List<long> custIdsToSyncCC, bool isPushCCToSoon88)
+        {
+            custClassificationService.PushDataToExternal(custIdsToSyncCC, new PushDataToExternalModel
+            {
+                ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
+                IsPushCCToSoon88 = isPushCCToSoon88,
+            });
+
+            if (_isWriteLogInfo)
+                LogService.Info($"PA Rescan - Cust to syncCC - with data: {JsonConvert.SerializeObject(custIdsToSyncCC)}");
+        }
+
         #endregion Rescan PA
 
         #region Rescan Normal
@@ -323,6 +309,10 @@
             }
         }
 
+        #endregion Rescan Normal
+
+        #region DataAccess Layer
+
         private void ClassifyCustomerGeneralCategoryDaily(string customers, FunctionId funcId, bool isCheckLast14Days)
         {
             var repository = new DynamicRepository();
@@ -336,10 +326,6 @@
 
             repository.Execute(criteria);
         }
-
-        #endregion Rescan Normal
-
-        #region DataAccess Layer
 
         private IEnumerable<CustEvidenceModel> GetExistedCustomerEvidences(string custIds)
         {
@@ -453,44 +439,6 @@
                 LogService.Info($"Web - CustomerClassifyService - InsertProblemAccount problemAccountJson:  {problemAccountJson}");
 
             return (custIds != null) ? custIds : new List<long>();
-        }
-
-        public IEnumerable<LatestClassificationModel> GetLatestClassification(string custIds)
-        {
-            if (string.IsNullOrEmpty(custIds))
-            {
-                return new List<LatestClassificationModel>();
-            }
-
-            var criteria = new GetLastestClassificationCriteria
-            {
-                CustIds = custIds
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<LatestClassificationModel>(criteria);
-            }
-        }
-
-        public void UpdateAppliedCustomerClassification(string jsonData)
-        {
-            var repository = new DynamicRepository();
-
-            var criteria = new UpdateAppliedCustomerClassificationCriteria
-            {
-                ProblemCustomerJson = jsonData
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                repository.Fetch<string>(criteria);
-
-                if (!string.IsNullOrEmpty(criteria.ErrorMessage))
-                {
-                    LogService.Error($"Web - CustomerClassifyService - UpdateAppliedCustomerClassification failed {criteria.ErrorMessage} with data: {jsonData}");
-                }
-            }
         }
 
         private IEnumerable<RoleCustomerModel> GetRoleCustomer(string custIds)

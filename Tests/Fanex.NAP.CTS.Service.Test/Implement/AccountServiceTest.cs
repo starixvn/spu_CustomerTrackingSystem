@@ -186,7 +186,7 @@
             var actualResult = _runner.AddAccountException(ExpectedUpdate.ExpectedUpdateAccountExceptionModel);
 
             // Assert
-            Assert.True(actualResult == 0);
+            Assert.True(actualResult.ErrorCode == 0);
         }
 
         #endregion

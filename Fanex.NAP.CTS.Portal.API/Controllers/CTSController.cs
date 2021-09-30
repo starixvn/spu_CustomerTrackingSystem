@@ -15,6 +15,7 @@
     using Fanex.NAP.CTS.Model.LogInputData;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Model.Subscriber;
+    using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.Service.Implement;
@@ -27,6 +28,7 @@
     using System.Configuration;
     using System.Linq;
     using System.Net;
+    using System.Threading.Tasks;
     using System.Web.Http;
     using System.Web.Http.Results;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
@@ -40,8 +42,8 @@
         private readonly IAssociatedAccountService _associationService;
         private readonly IProblemAccountMonitorService _problemAccountMonitorService;
         private readonly ICategoryService _categoryService;
-        private readonly ICustomerClassifyService _customerClassifyService;
-        private readonly IPushDataToExternalService _pushDataToExternalService;
+        private readonly IRescanCustomerClassificationService _customerClassifyService;
+        private readonly ICustomerClassificationService _custClassificationService;
         private readonly ISubscriberService _subscriberService;
         private readonly IProblemCaseMonitorService _problemCaseMonitorService;
         private readonly ILogInputDataService logInputDataService;
@@ -57,8 +59,8 @@
             _custEvidenceService = new CustomerEvidenceService();
             _problemAccountMonitorService = new ProblemAccountMonitorService();
             _categoryService = new CategoryService();
-            _customerClassifyService = new CustomerClassifyService();
-            _pushDataToExternalService = new PushDataToExternalService();
+            _customerClassifyService = new RescanCustomerClassificationService();
+            _custClassificationService = new CustomerClassificationService();
             _subscriberService = new SubscriberService();
             _problemCaseMonitorService = new Service.Implement.Api.ProblemCaseMonitorService();
             logInputDataService = new LogInputDataService();
@@ -109,7 +111,6 @@
                     }, FunctionId.PlaceEvidenceForMultiCustAPI);
 
                     int userId = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);
-                    int retryTime = Convert.ToInt32(ConfigurationManager.AppSettings["RetryTime"]);
 
                     var result = _custEvidenceService.AddCustEvidenceMultipleByCustId(custIds, evidenceId, userId);
 
@@ -117,25 +118,23 @@
                     {
                         var syncCustIds = Enumerable.Empty<long>();
 
-                        var syncResult = _accountService.SyncCustEvidenceToCategory(JsonConvert.SerializeObject(result.Eivdences), false, out syncCustIds);
-
-                        if (syncResult.ErrorCode == 0 && syncCustIds != null && syncCustIds.Any())
+                        Parallel.Invoke(() =>
                         {
-                            var latestCustIdsChunk = syncCustIds.Chunk(ConfigSettings.PushCCToExternalChunkSize);
+                            _custEvidenceService.UpdateBetLimitOfFlaggedCustomer(custIds);
+                        },
+                        () =>
+                        {
+                            var syncResult = _accountService.SyncCustEvidenceToCategory(JsonConvert.SerializeObject(result.Eivdences), false, out syncCustIds);
 
-                            foreach (var custids in latestCustIdsChunk)
+                            if (syncResult.ErrorCode == 0 && syncCustIds != null && syncCustIds.Any())
                             {
-                                var lastestClassification = _customerClassifyService.GetLatestClassification(string.Join(",", custids));
-                                bool isSyncMainSuccessfully = _pushDataToExternalService.PushCustomerClassificationToMain(lastestClassification, retryTime);
-
-                                if (isSyncMainSuccessfully)
+                                _custClassificationService.PushDataToExternal(syncCustIds, new PushDataToExternalModel
                                 {
-                                    _customerClassifyService.UpdateAppliedCustomerClassification(JsonConvert.SerializeObject(lastestClassification));
-                                }
-
-                                _pushDataToExternalService.PushCustomerClassificationToSoon88(lastestClassification);
+                                    ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
+                                    IsPushCCToSoon88 = true,
+                                });
                             }
-                        }
+                        });
                     }
 
                     if (!string.IsNullOrEmpty(result.ErrorMessage))
@@ -279,34 +278,31 @@
         {
             try
             {
-                int retryTime = Convert.ToInt32(ConfigurationManager.AppSettings["RetryTime"]);
+                logInputDataService.LogInputData(new LogInputViewModel { PlaceMultiEvidences = customerEvidenceList }, FunctionId.PlaceMultiEvidencesForMultiCustAPI);
+
                 var result = _evidenceService.AddCustomersEvidences(customerEvidenceList);
 
                 if (string.IsNullOrEmpty(result.ErrorMessage) && result.Eivdences != null && result.Eivdences.Any())
                 {
-                    logInputDataService.LogInputData(new LogInputViewModel { PlaceMultiEvidences = customerEvidenceList }, FunctionId.PlaceMultiEvidencesForMultiCustAPI);
-
-                    var syncCustIds = Enumerable.Empty<long>();
-
-                    var syncResult = _accountService.SyncCustEvidenceToCategory(JsonConvert.SerializeObject(result.Eivdences), false, out syncCustIds);
-
-                    if (syncResult.ErrorCode == 0 && syncCustIds != null && syncCustIds.Any())
+                    Parallel.Invoke(() =>
                     {
-                        var latestCustIdsChunk = syncCustIds.Chunk(ConfigSettings.PushCCToExternalChunkSize);
+                        _custEvidenceService.UpdateBetLimitOfFlaggedCustomer(customerEvidenceList.CustIdList);
+                    },
+                    () =>
+                    {
+                        var syncCustIds = Enumerable.Empty<long>();
 
-                        foreach (var custids in latestCustIdsChunk)
+                        var syncResult = _accountService.SyncCustEvidenceToCategory(JsonConvert.SerializeObject(result.Eivdences), false, out syncCustIds);
+
+                        if (syncResult.ErrorCode == 0 && syncCustIds != null && syncCustIds.Any())
                         {
-                            var lastestClassification = _customerClassifyService.GetLatestClassification(string.Join(",", custids));
-                            bool isSyncMainSuccessfully = _pushDataToExternalService.PushCustomerClassificationToMain(lastestClassification, retryTime);
-
-                            if (isSyncMainSuccessfully)
+                            _custClassificationService.PushDataToExternal(syncCustIds, new PushDataToExternalModel
                             {
-                                _customerClassifyService.UpdateAppliedCustomerClassification(JsonConvert.SerializeObject(lastestClassification));
-                            }
-
-                            _pushDataToExternalService.PushCustomerClassificationToSoon88(lastestClassification);
+                                ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
+                                IsPushCCToSoon88 = true,
+                            });
                         }
-                    }
+                    });
                 }
 
                 if (!string.IsNullOrEmpty(result.ErrorMessage))

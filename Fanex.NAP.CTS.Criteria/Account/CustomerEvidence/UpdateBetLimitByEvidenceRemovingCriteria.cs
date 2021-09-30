@@ -1,9 +1,8 @@
 ﻿namespace Fanex.NAP.CTS.Criteria.Account
 {
-    using Fanex.Data;
     using Fanex.Data.Repository;
 
-    public class UpdateBetLimitByEvidenceRemovingCriteria : CriteriaBase
+    public class UpdateBetLimitByEvidenceRemovingCriteria : NonQueryCommand
     {
         public string CustIDList { get; set; }
        

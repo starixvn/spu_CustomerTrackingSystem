@@ -9,13 +9,13 @@
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Helpers;
     using Fanex.NAP.CTS.Core.Utilities;
-    using Fanex.NAP.CTS.Criteria.Account;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.CustomerClassify;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
+    using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Model.Transaction;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
@@ -26,6 +26,7 @@
     using Fanex.NAP.CTS.ViewModel.Account.BettingStatistic;
     using Fanex.NAP.CTS.ViewModel.Account.ChainToEvidence;
     using Fanex.NAP.CTS.ViewModel.Account.CustomerCategory;
+    using Fanex.NAP.CTS.ViewModel.Account.Evidence;
     using Fanex.NAP.CTS.ViewModel.Account.TransactionHistory;
     using Newtonsoft.Json;
     using System;
@@ -44,8 +45,8 @@
         private readonly IGraphService _graphService;
         private readonly ITransactionService _transService;
         private readonly ICustomerEvidenceService _customerEvidenceService;
-        private readonly ICustomerClassifyService _customerClassifyService;
-        private readonly IPushDataToExternalService _pushDataToExternalService;
+        private readonly IRescanCustomerClassificationService _customerClassifyService;
+        private readonly ICustomerClassificationService _customerClassificationService;
         private readonly ICommonService _commonService;
         private readonly IRobotClassificationService _robotClassificationService;
 
@@ -57,8 +58,8 @@
             _graphService = new GraphService();
             _transService = new TransactionService();
             _customerEvidenceService = new CustomerEvidenceService();
-            _customerClassifyService = new CustomerClassifyService();
-            _pushDataToExternalService = new PushDataToExternalService();
+            _customerClassifyService = new RescanCustomerClassificationService();
+            _customerClassificationService = new CustomerClassificationService();
             _commonService = new CommonService();
             _robotClassificationService = new RobotClassificationService();
         }
@@ -445,12 +446,16 @@
             {
                 case 1:
                     return ConfigSettings.GetDirectAssociationByDevice;
+
                 case 2:
                     return ConfigSettings.GetDirectAssociationByAI;
+
                 case 3:
                     return ConfigSettings.GetDirectAssociationByManual;
+
                 case 4:
                     return ConfigSettings.GetDirectAssociationByIP;
+
                 default:
                     return ConfigSettings.GetDirectAssociation;
             }
@@ -757,9 +762,10 @@
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        #endregion
+        #endregion Associated By Account
 
         #region Chain To Evidence
+
         public ActionResult ChainToEvidence()
         {
             ViewBag.EvidenceList = _accountService.GetEvidenceList();
@@ -888,25 +894,26 @@
 
             var result = _accountService.AddAccountException(model);
 
-            if (result == 0)
+            if (result.ErrorCode == 0)
             {
-                var associatedAccountList = _customerEvidenceService.GetCleanAccounts(
-                      new GetCleanAccountByCTSCustIdsCriteria
-                      {
-                          CTSCustIdList = model.FromCTSCustId.ToString() + "," + model.ToCTSCustId.ToString()
-                      });
+                string ctsCustIdsToString = model.FromCTSCustId.ToString();
 
-                if (associatedAccountList.Any())
+                var toCTSCustId = (UInt64)result.OutParam["toCTSCustId"];
+
+                if (toCTSCustId != 0)
                 {
-                    _customerEvidenceService.UpdateBetLimitOfUnflaggedCustomer(
-                        new UpdateBetLimitByEvidenceRemovingCriteria
-                        {
-                            CustIDList = string.Join(",", associatedAccountList)
-                        });
+                    ctsCustIdsToString += "," + toCTSCustId.ToString();
+                }
+
+                var custIdsFlaggedEvidences = _customerEvidenceService.CheckCleanCustFlaggedEvidence(ctsCustIdsToString);
+
+                if (custIdsFlaggedEvidences != null && custIdsFlaggedEvidences.Any())
+                {
+                    _customerEvidenceService.UpdateBetLimitOfUnflaggedCustomer(string.Join(",", custIdsFlaggedEvidences.Select(c=>c.CustID)));
                 }
             }
 
-            return Json(new { errorCode = result }, JsonRequestBehavior.AllowGet);
+            return Json(new { errorCode = result.ErrorCode }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -919,19 +926,33 @@
 
             if (result == 0)
             {
-                var associatedAccountList = _customerEvidenceService.GetAssociatedAccounts(
-                          new GetAssociatedAccountByCTSCustIdsCriteria
-                          {
-                              CTSCustIdList = model.FromCTSCustId.ToString() + "," + model.ToCTSCustId.ToString()
-                          });
+                var custExistEvidence = new List<CTSCustomerEvidenceViewModel>();
+                var custNotExistEvidence = new List<CTSCustomerEvidenceViewModel>();
 
-                if (associatedAccountList.Any())
+                var tasks = new List<Task>
                 {
-                    _customerEvidenceService.UpdateBetLimitOfFlaggedCustomer(
-                        new UpdateBetLimitByEvidenceAddingCriteria
-                        {
-                            CustIDList = string.Join(",", associatedAccountList)
-                        });
+                    Task.Run(() =>
+                    {
+                        custExistEvidence.Add(new CTSCustomerEvidenceViewModel { CTSCustID = model.FromCTSCustId, CustID = _accountService.GetCustomerInfoByCTSCustId(model.FromCTSCustId).CustID });
+                        custExistEvidence.Add(new CTSCustomerEvidenceViewModel { CTSCustID = model.ToCTSCustId, CustID = _accountService.GetCustomerInfoByCTSCustId(model.ToCTSCustId).CustID });
+                    }),
+                    Task.Run(() =>
+                    {
+                         string ctsCustIdsToString = model.FromCTSCustId.ToString() + "," + model.ToCTSCustId.ToString();
+                    custNotExistEvidence = _customerEvidenceService.CheckCleanCustFlaggedEvidence(ctsCustIdsToString)?.ToList();
+                    })
+                };
+
+                Task.WhenAll(tasks.ToArray()).Wait();
+
+                if (custNotExistEvidence != null && custNotExistEvidence.Any())
+                {
+                    custExistEvidence.RemoveAll(x => custNotExistEvidence.Contains(x, new CustomerInfoEqualityComparer()));
+                }
+      
+                if(custExistEvidence.Any())
+                {
+                    _customerEvidenceService.UpdateBetLimitOfFlaggedCustomer(string.Join(",",custExistEvidence.Select(c=>c.CustID)));
                 }
             }
 
@@ -957,33 +978,20 @@
                     model.EvidenceId,
                     ActionType = 0
                 } };
+
                 var syncCustIds = Enumerable.Empty<long>();
+
                 var custEvidenceJson = JsonConvert.SerializeObject(objects);
-                // Sync Evidence to Category
+
                 var syncResult = _accountService.SyncCustEvidenceToCategory(custEvidenceJson, false, out syncCustIds);
 
                 if (syncResult.ErrorCode == 0)
                 {
-                    var lastestClassifications = _customerClassifyService.GetLatestClassification(string.Join(",", syncCustIds));
-
-                    if (lastestClassifications != null && lastestClassifications.Any())
+                    _customerClassificationService.PushDataToExternal(syncCustIds, new PushDataToExternalModel
                     {
-                        // Update CC in table custinfo to MainDB
-                        var isSuccessToMain = _pushDataToExternalService.PushCustomerClassificationToMain(lastestClassifications, 2);
-
-                        if (isSuccessToMain)
-                        {
-                            var updateApplyCCs = lastestClassifications.Select(x => new { x.CustId, x.ScannedTime });
-
-                            var jsonUpdateApplyCCs = JsonConvert.SerializeObject(updateApplyCCs);
-
-                            // Update IsAppliedCC = 1 in CTS
-                            _customerClassifyService.UpdateAppliedCustomerClassification(jsonUpdateApplyCCs);
-                        }
-
-                        // Push CC to Soon88
-                        _pushDataToExternalService.PushCustomerClassificationToSoon88(lastestClassifications);
-                    }
+                        ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
+                        IsPushCCToSoon88 = true,
+                    });
                 }
             }
 
@@ -1026,20 +1034,11 @@
                     });
                 }
 
-                var associatedAccountList = _customerEvidenceService.GetRemoveEvidenceAssociatedAccounts(
-                    new GetRemoveEvidenceAssociatedAccountCriteria
-                    {
-                        CTSCustIdList = model.CTSCustId.ToString(),
-                        EvidenceID = model.EvidenceId
-                    });
+                var custIdsFlaggedEvidences = _customerEvidenceService.CheckCleanCustFlaggedEvidence(model.CTSCustId.ToString());
 
-                if (associatedAccountList.Any())
+                if (custIdsFlaggedEvidences != null && custIdsFlaggedEvidences.Any())
                 {
-                    _customerEvidenceService.UpdateBetLimitOfUnflaggedCustomer(
-                        new UpdateBetLimitByEvidenceRemovingCriteria
-                        {
-                            CustIDList = string.Join(",", associatedAccountList)
-                        });
+                    _customerEvidenceService.UpdateBetLimitOfUnflaggedCustomer(string.Join(",", custIdsFlaggedEvidences.Select(c => c.CustID)));
                 }
             }
 
@@ -1056,19 +1055,11 @@
 
             if (result == 0)
             {
-                var associatedAccountList = _customerEvidenceService.GetCleanAccounts(
-                      new GetCleanAccountByCTSCustIdsCriteria
-                      {
-                          CTSCustIdList = model.CTSCustId.ToString()
-                      });
+                var custIdsFlaggedEvidences = _customerEvidenceService.CheckCleanCustFlaggedEvidence(model.CTSCustId.ToString());
 
-                if (associatedAccountList.Any())
+                if (custIdsFlaggedEvidences != null && custIdsFlaggedEvidences.Any())
                 {
-                    _customerEvidenceService.UpdateBetLimitOfUnflaggedCustomer(
-                        new UpdateBetLimitByEvidenceRemovingCriteria
-                        {
-                            CustIDList = string.Join(",", associatedAccountList)
-                        });
+                    _customerEvidenceService.UpdateBetLimitOfUnflaggedCustomer(string.Join(",", custIdsFlaggedEvidences.Select(c => c.CustID)));
                 }
             }
 
@@ -1085,11 +1076,14 @@
 
             if (result == 0)
             {
-                _customerEvidenceService.UpdateBetLimitOfFlaggedCustomer(
-                          new UpdateBetLimitByEvidenceAddingCriteria
-                          {
-                              CustIDList = model.CTSCustId.ToString()
-                          });
+                var custNotExistFlaggedEvidences = _customerEvidenceService.CheckCleanCustFlaggedEvidence(model.CTSCustId.ToString());
+
+                if (custNotExistFlaggedEvidences != null && !custNotExistFlaggedEvidences.Any())
+                {
+                    var custId = _accountService.GetCustomerInfoByCTSCustId(model.CTSCustId).CustID;
+
+                    _customerEvidenceService.UpdateBetLimitOfFlaggedCustomer(custId.ToString());
+                }
             }
 
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -1111,7 +1105,7 @@
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        #endregion
+        #endregion Chain To Evidence
 
         private void GetCustomerGeneralInfo(long custId, ref AccountProfileViewModel profile)
         {
@@ -1148,6 +1142,7 @@
         }
 
         #region Transaciton History
+
         public ActionResult TransactionHistory()
         {
             return PartialView("TransactionHistory/TransactionHistory");
@@ -1193,7 +1188,8 @@
                 data = result
             }, JsonRequestBehavior.AllowGet);
         }
-        #endregion
+
+        #endregion Transaciton History
 
         #region Customer Category
 
@@ -1295,12 +1291,14 @@
                 case (int)ClassificationSourceType.NormalAccount123:
                     reason += $"Margin: {margin} - Bet Count: {betCount}";
                     break;
+
                 case (int)ClassificationSourceType.GoodMember:
                 case (int)ClassificationSourceType.GoodMember111:
                 case (int)ClassificationSourceType.GoodMember112:
                 case (int)ClassificationSourceType.GoodMember113:
                     reason += $"Margin: {margin} - Turn Over: {turnOver} - Active Days: {activeDays} - Bet Count: {betCount}";
                     break;
+
                 case (int)ClassificationSourceType.Probation:
                 case (int)ClassificationSourceType.Probation51:
                 case (int)ClassificationSourceType.Probation52:
@@ -1310,6 +1308,7 @@
                     else
                         reason += $"Margin: {margin}";
                     break;
+
                 case (int)ClassificationSourceType.SmartPunter:
                 case (int)ClassificationSourceType.SmartPunter61:
                 case (int)ClassificationSourceType.SmartPunter62:
@@ -1323,21 +1322,25 @@
                     else
                         reason += $"Margin: {margin} - Win Lost: {winlost} - Bet Count: {betCount}";
                     break;
+
                 case (int)ClassificationSourceType.Probation57:
                 case (int)ClassificationSourceType.SmartPunter67:
                 case (int)ClassificationSourceType.HighRiskPunter77:
                     reason += $"Account has total {twBetCount} tickets | Group betting percent is {twGroupBettingRate}%";
                     break;
+
                 case (int)ClassificationSourceType.Probation58:
                 case (int)ClassificationSourceType.SmartPunter68:
                 case (int)ClassificationSourceType.HighRiskPunter78:
                     reason += $"Account has {twDesktopTicket}% tickets from Desktop | Reject percent is {twTicketRejectRate}%";
                     break;
+
                 case (int)ClassificationSourceType.Robot61:
                 case (int)ClassificationSourceType.Robot81:
                 case (int)ClassificationSourceType.Robot161:
                     reason += $"Counter: {robotCounter}";
                     break;
+
                 default:
                     break;
             }
@@ -1394,7 +1397,7 @@
                         if (latestClassifications.Any())
                         {
                             // Update CC in table custinfo to MainDB
-                            var isSuccessToMain = _pushDataToExternalService.PushCustomerClassificationToMain(latestClassifications, 2);
+                            var isSuccessToMain = _customerClassificationService.RetryPushCCToMainDB(latestClassifications, 2);
 
                             if (isSuccessToMain)
                             {
@@ -1403,7 +1406,7 @@
                                 var jsonUpdateApplyCCs = JsonConvert.SerializeObject(updateApplyCCs);
 
                                 // Update IsAppliedCC = 1 in CTS
-                                _customerClassifyService.UpdateAppliedCustomerClassification(jsonUpdateApplyCCs);
+                                _customerClassificationService.UpdateAppliedCustomerClassification(jsonUpdateApplyCCs);
                             }
                         }
                     }
@@ -1502,9 +1505,10 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        #endregion
+        #endregion Customer Category
 
         #region Robot Classification
+
         public ActionResult RobotClassification()
         {
             return PartialView("RobotClassfication/LastestRobotClassification");
@@ -1534,9 +1538,11 @@
 
             return Json(new { data });
         }
-        #endregion
+
+        #endregion Robot Classification
 
         #region Betting Statistic
+
         [NapAuth(FunctionKey = FSFunctionKeys.BettingStatistics, Policy = NAP.Core.Business.Constant.Policy.Read)]
         public ActionResult GetPerformanceBySport(long custId, int getTop)
         {
@@ -1686,7 +1692,6 @@
             liveIndicatorList.Add(new LiveIndicatorViewModel { name = "Live", data = new List<decimal>() });
             liveIndicatorList.Add(new LiveIndicatorViewModel { name = "Non-Live", data = new List<decimal>() });
 
-
             result.GroupBy(c => c.Ranking).ToList().ForEach(c =>
             {
                 decimal live = (c.FirstOrDefault(x => x.LiveIndicator == true)?.Turnover).GetValueOrDefault();
@@ -1725,7 +1730,7 @@
 
             return temp = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.BettingStatistics, NAP.Core.Business.Constant.Policy.Read);
         }
-        #endregion
 
+        #endregion Betting Statistic
     }
 }

@@ -314,9 +314,9 @@
     <Compile Include="Subscriber\SubscriberAssignment.cs" />
     <Compile Include="Subscriber\SubscriberAssignmentUpdate.cs" />
     <Compile Include="Subscriber\SubscriberInfo.cs" />
-    <Compile Include="SyncCustomerToMainDb\CustomerClassForMainDb.cs" />
-    <Compile Include="SyncCustomerToMainDb\EvidenceCategoryToCustomerClassForMainDb.cs" />
-    <Compile Include="SyncCustomerToMainDb\InsertCategoryResultModel.cs" />
+    <Compile Include="PushDataToExternal\CustomerClassForMainDb.cs" />
+    <Compile Include="PushDataToExternal\InsertCategoryResultModel.cs" />
+    <Compile Include="PushDataToExternal\PushDataToExternalModel.cs" />
     <Compile Include="Transaction\DataTableAjaxPostModel.cs" />
     <Compile Include="LogInputData\PlaceEvidencesViewModel.cs" />
     <Compile Include="Transaction\Transaction.cs" />

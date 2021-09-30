@@ -7,6 +7,8 @@
 
 		<Setting Key="CTS_DC_CustEvidence_GetEvidencesByDirectAssociation" SpName="CTS_DC_CustEvidence_GetEvidencesByDirectAssociation_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustEvidence_GetEvidencesByLevel2Association" SpName="CTS_DC_CustEvidence_GetEvidencesByLevel2Association_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="NAP_BLControl_EvidenceFlagged" SpName="NAP_BLControl_EvidenceFlagged_UAT1" DbName="DBCust.CustDB.bodbAdminNet" TimeOut="300"/>
+		<Setting Key="NAP_BLControl_EvidenceUnflagged" SpName="NAP_BLControl_EvidenceUnflagged_UAT1" DbName="DBCust.CustDB.bodbAdminNet" TimeOut="300"/>
 	</Function>
 
 	<Function Name="CustomerClassification">

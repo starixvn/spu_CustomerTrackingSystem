@@ -1,14 +1,11 @@
-﻿using Fanex.Data;
-using Fanex.Data.Repository;
-using System;
-
-namespace Fanex.NAP.CTS.Criteria.Account.ChainToEvidence
+﻿namespace Fanex.NAP.CTS.Criteria.Account.ChainToEvidence
 {
+    using Fanex.Data;
+    using Fanex.Data.Repository;
+    using System;
+
     public class AddAccountExceptionCriteria : NonQueryCommand
     {
-        [SpParam(SqlParamName = "op_Error")]
-        public int ErrorCode { get; set; }
-
         [SpParam(SqlParamName = "ip_UserID")]
         public int UserId { get; set; }
 
@@ -20,6 +17,12 @@ namespace Fanex.NAP.CTS.Criteria.Account.ChainToEvidence
 
         [SpParam(SqlParamName = "ip_Comment")]
         public string Comment { get; set; }
+
+        [SpParam(SqlParamName = "op_Error")]
+        public int ErrorCode { get; set; }
+
+        [SpParam(SqlParamName = "op_ToCTSCustID")]
+        public UInt64 ToCTSCustId { get; set; }
 
         public override string GetSettingKey()
         {

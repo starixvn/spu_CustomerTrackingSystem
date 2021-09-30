@@ -74,6 +74,8 @@
     <Compile Include="Account\Evidence\ChainNode.cs" />
     <Compile Include="Account\Evidence\ChainsToEvidence.cs" />
     <Compile Include="Account\Evidence\ChainsToEvidenceFilter.cs" />
+    <Compile Include="Account\Evidence\CTSCustomerEvidenceViewModel.cs" />
+    <Compile Include="Account\Evidence\CustomerInfoEqualityComparer.cs" />
     <Compile Include="Account\Evidence\Exception\ExceptionEvidenceAdd.cs" />
     <Compile Include="Account\Evidence\RetractedAndExceptionCollected.cs" />
     <Compile Include="Account\Evidence\RetractedAndExceptionEvidence.cs" />

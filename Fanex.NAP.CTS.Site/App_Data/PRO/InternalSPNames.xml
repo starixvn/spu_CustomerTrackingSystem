@@ -52,32 +52,29 @@
 		<Setting Key="CTS_DC_CustEvidence_InsertMultiple" SpName="CTS_DC_CustEvidence_InsertMultiple" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustEvidence_RemoveAllEvidenceByCTSCustIDs" SpName="CTS_DC_CustEvidence_RemoveAllEvidenceByCTSCustIDs" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustEvidence_Get" SpName="CTS_DC_CustEvidence_Get" DbName="MySQL.CTS_DataCenter.Reporter"/>
-		<Setting Key="CTS_DC_CustEvidence_GetCleanCustFromList" SpName="CTS_DC_CustEvidence_GetCleanCustFromList" DbName="MySQL.CTS_DataCenter.Reporter"/>
 		<Setting Key="CTS_DC_CustEvidence_GetFlaggedStatus" SpName="CTS_DC_CustEvidence_GetFlaggedStatus" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustEvidenceFromFile_Insert" SpName="CTS_DC_CustEvidenceFromFile_Insert" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustEvidence_SyncToCategory" SpName="CTS_DC_CustEvidence_SyncToCategory" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustEvidenceQueue_Insert" SpName="CTS_DC_CustEvidenceQueue_Insert" DbName="MySQL.CTS_DataCenter.Admin" />
-
+		<Setting Key="CTS_DC_CustEvidence_CheckCleanCust" SpName="CTS_DC_CustEvidence_CheckCleanCust" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
 
-  <Function Name="Association">
-    <Setting Key="CTS_DC_Association_InsertException" SpName="CTS_DC_Association_InsertException" DbName="MySQL.CTS_DataCenter.Admin" />
-    <Setting Key="CTS_DC_Association_RemoveException" SpName="CTS_DC_Association_RemoveException" DbName="MySQL.CTS_DataCenter.Admin" />
-    <Setting Key="CTS_DC_Association_GetException" SpName="CTS_DC_Association_GetException" DbName="MySQL.CTS_DataCenter.Reporter" />
-    <Setting Key="CTS_DC_Association_Get" SpName="CTS_DC_Association_Get" DbName="MySQL.CTS_DataCenter.Reporter"/>
-    <Setting Key="CTS_DC_Association_ValidateManualMultipleInput" SpName="CTS_DC_Association_ValidateManualMultipleInput" DbName="MySQL.CTS_DataCenter.Admin" />
-    <Setting Key="CTS_DC_Association_InsertManualMultiple" SpName="CTS_DC_Association_InsertManualMultiple" DbName="MySQL.CTS_DataCenter.Admin" />
-    <Setting Key="CTS_DC_Association_UpdateAssociationRemove" SpName="CTS_DC_Association_UpdateAssociationRemove" DbName="MySQL.CTS_DataCenter.Admin" />
-    <Setting Key="CTS_DC_Association_GetByCTSCustIDs" SpName="CTS_DC_Association_GetByCTSCustIDs" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter"/>
-    <Setting Key="CTS_DC_Association_GetCleanAssociatedCustExceptAEvidence" SpName="CTS_DC_Association_GetCleanAssociatedCustExceptAEvidence" DbName="MySQL.CTS_DataCenter.Reporter"/>
-    <Setting Key="CTS_DC_CustClassification_GetForSoon88" SpName="CTS_DC_CustClassification_GetForSoon88" DbName="MySQL.CTS_DataCenter.Reporter"/>
-	  <Setting Key="CTS_DC_Association_Profile_GetStats" SpName="CTS_DC_Association_Profile_GetStats" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" Timeout="1200"/>
-	  <Setting Key="CTS_DC_Association_Profile_Get" SpName="CTS_DC_Association_Profile_Get" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" Timeout="1200"/>	
-	  <Setting Key="CTS_DC_AssociatedAccountMonitor_UpdateTaggingAssWithPA" SpName="CTS_DC_AssociatedAccountMonitor_UpdateTaggingAssWithPA" DbName="MySQL.CTS_DataCenter.Admin" />
-	  <Setting Key="CTS_DC_Category_Get" SpName="CTS_DC_Category_Get" DbName="MySQL.CTS_DataCenter.Reporter"/>
+	<Function Name="Association">
+		<Setting Key="CTS_DC_Association_InsertException" SpName="CTS_DC_Association_InsertException" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_Association_RemoveException" SpName="CTS_DC_Association_RemoveException" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_Association_GetException" SpName="CTS_DC_Association_GetException" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_Association_Get" SpName="CTS_DC_Association_Get" DbName="MySQL.CTS_DataCenter.Reporter"/>
+		<Setting Key="CTS_DC_Association_ValidateManualMultipleInput" SpName="CTS_DC_Association_ValidateManualMultipleInput" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_Association_InsertManualMultiple" SpName="CTS_DC_Association_InsertManualMultiple" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_Association_UpdateAssociationRemove" SpName="CTS_DC_Association_UpdateAssociationRemove" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_CustClassification_GetForSoon88" SpName="CTS_DC_CustClassification_GetForSoon88" DbName="MySQL.CTS_DataCenter.Reporter"/>
+		<Setting Key="CTS_DC_Association_Profile_GetStats" SpName="CTS_DC_Association_Profile_GetStats" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" Timeout="1200"/>
+		<Setting Key="CTS_DC_Association_Profile_Get" SpName="CTS_DC_Association_Profile_Get" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" Timeout="1200"/>
+		<Setting Key="CTS_DC_AssociatedAccountMonitor_UpdateTaggingAssWithPA" SpName="CTS_DC_AssociatedAccountMonitor_UpdateTaggingAssWithPA" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_Category_Get" SpName="CTS_DC_Category_Get" DbName="MySQL.CTS_DataCenter.Reporter"/>
 
-	  <Setting Key="CTS_DC_RPT_AssociationDetection" SpName="CTS_DC_RPT_AssociationDetection" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" Timeout="600"/>
-  </Function>
+		<Setting Key="CTS_DC_RPT_AssociationDetection" SpName="CTS_DC_RPT_AssociationDetection" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" Timeout="600" />
+	</Function>
 
 	<Function Name="CustomerClassification">
 		<Setting Key="CTS_DC_CustClassification_GetCategory" SpName="CTS_DC_CustClassification_GetCategory" DbName="MySQL.CTS_DataCenter.Reporter" />
@@ -86,7 +83,7 @@
 		<Setting Key="CTS_DC_CustClassification_Remove" SpName="CTS_DC_CustClassification_Remove" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustClassification_Get" SpName="CTS_DC_CustClassification_Get" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustClassification_ViewHistory" SpName="CTS_DC_CustClassification_ViewHistory" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" Timeout="600"/>
-		<Setting Key="CTS_DC_CustClassification_InsertProblemAccount" SpName="CTS_DC_CustClassification_InsertProblemAccount" DbName="MySQL.CTS_DataCenter.Admin"/>
+		<Setting Key="CTS_DC_CustClassification_InsertProblemAccount" SpName="CTS_DC_CustClassification_InsertProblemAccount" DbName="MySQL.CTS_DataCenter.Admin" Timeout="600"/>
 		<Setting Key="CTS_DC_CustClassification_GetLatestClassification" SpName="CTS_DC_CustClassification_GetLatestClassification" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustClassification_UpdateIsAppliedCC" SpName="CTS_DC_CustClassification_UpdateIsAppliedCC" DbName="MySQL.CTS_DataCenter.Admin" Timeout="600"/>
 		<Setting Key="CTS_DC_CustClassification_GetForSoon88" SpName="CTS_DC_CustClassification_GetForSoon88" DbName="MySQL.CTS_DataCenter.Reporter" />
@@ -142,10 +139,10 @@
 		<Setting Key="CTS_DC_MatchMonitor_Details_Get" SpName="CTS_DC_MatchMonitor_Details_Get" DbName="MySQL.CTS_DataCenter.Reporter"/>
 		<Setting Key="CTS_DC_CustInfo_GetByCustID" SpName="CTS_DC_CustInfo_GetByCustID" DbName="MySQL.CTS_DataCenter.Reporter"/>
 	</Function>
-  
-  <Function name="RobotClassification">
-    <Setting Key="CTS_DC_RobotClassification_GetHistory" SpName="CTS_DC_RobotClassification_GetHistory" DbName="MySQL.CTS_DataCenter.Reporter"/>
-    <Setting Key="CTS_DC_RobotClassification_GetLastest" SpName="CTS_DC_RobotClassification_GetLastest" DbName="MySQL.CTS_DataCenter.Reporter"/>
-    <Setting Key="CTS_DC_RobotClassification_GetRobotStatus" SpName="CTS_DC_RobotClassification_GetRobotStatus" DbName="MySQL.CTS_DataCenter.Reporter"/>
-  </Function>
+
+	<Function name="RobotClassification">
+		<Setting Key="CTS_DC_RobotClassification_GetHistory" SpName="CTS_DC_RobotClassification_GetHistory" DbName="MySQL.CTS_DataCenter.Reporter"/>
+		<Setting Key="CTS_DC_RobotClassification_GetLastest" SpName="CTS_DC_RobotClassification_GetLastest" DbName="MySQL.CTS_DataCenter.Reporter"/>
+		<Setting Key="CTS_DC_RobotClassification_GetRobotStatus" SpName="CTS_DC_RobotClassification_GetRobotStatus" DbName="MySQL.CTS_DataCenter.Reporter"/>
+	</Function>
 </Functions>

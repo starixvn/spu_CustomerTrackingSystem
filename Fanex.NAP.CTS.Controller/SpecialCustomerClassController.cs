@@ -22,16 +22,16 @@
     public class SpecialCustomerClassController : BaseController
     {
         private readonly ISpecialCustomerClassService _customerClassService;
-        private readonly ICustomerClassifyService _customerClassifyService;
-        private readonly IPushDataToExternalService _pushDataToExternalService;        
+        private readonly IRescanCustomerClassificationService _customerClassifyService;
+        private readonly ICustomerClassificationService _custClassificationService;        
 
         public override string BaseControllerName { get => Consts.MenuItemController; }
 
         public SpecialCustomerClassController()
         {
             _customerClassService = new SpecialCustomerClassService();
-            _pushDataToExternalService = new PushDataToExternalService();
-            _customerClassifyService = new CustomerClassifyService();
+            _custClassificationService = new CustomerClassificationService();
+            _customerClassifyService = new RescanCustomerClassificationService();
         }
 
         public ActionResult Index()
@@ -93,7 +93,7 @@
                     foreach (var custs in custIdsChunk)
                     {
                         // Update CC in table custinfo to MainDB
-                        var isSuccessToMain = _pushDataToExternalService.PushCustomerClassificationToMain(custs, 2);
+                        var isSuccessToMain = _custClassificationService.RetryPushCCToMainDB(custs, 2);
 
                         if (isSuccessToMain)
                         {
@@ -102,7 +102,7 @@
                             var jsonUpdateApplyCCs = JsonConvert.SerializeObject(updateApplyCCs);
 
                             // Update IsAppliedCC = 1 in CTS
-                            _customerClassifyService.UpdateAppliedCustomerClassification(jsonUpdateApplyCCs);
+                            _custClassificationService.UpdateAppliedCustomerClassification(jsonUpdateApplyCCs);
                         }
                     }
                 }

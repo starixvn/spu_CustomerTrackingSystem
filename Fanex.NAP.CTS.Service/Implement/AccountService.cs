@@ -28,6 +28,7 @@
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.ViewModel.Account.Associated;
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -667,50 +668,7 @@
 
             if (result.ErrorCode == 0)
             {
-                var associatedAccountList = customerEvidenceService.GetAssociatedAccounts(new GetAssociatedAccountByCTSCustIdsCriteria { CTSCustIdList = model.CTSCustId.ToString() });
-
-                if (associatedAccountList.Any())
-                {
-                    customerEvidenceService.UpdateBetLimitOfFlaggedCustomer(
-                        new UpdateBetLimitByEvidenceAddingCriteria
-                        {
-                            CustIDList = string.Join(",", associatedAccountList)
-                        });
-                }
-
-                Task.Run(() =>
-                {
-
-                    try
-                    {
-                        FPSAddNewEvidence(ConfigSettings.AddNewEvidence, model);
-                    }
-                    catch (Exception ex)
-                    {
-                        LogService.Error(ex.Message);
-                    }
-                });
-            }
-
-            return result;
-        }
-
-        public DBResult ProcessPlaceEvidenceByCustId(UpdatePlaceEvidenceModel model)
-        {
-            var result = PlaceEvidence(model);
-
-            if (result.ErrorCode == 0)
-            {
-                var associatedAccountList = customerEvidenceService.GetAssociatedAccounts(new GetAssociatedAccountByCTSCustIdsCriteria { CTSCustIdList = model.CTSCustId.ToString() });
-
-                if (associatedAccountList.Any())
-                {
-                    customerEvidenceService.UpdateBetLimitOfFlaggedCustomer(
-                        new UpdateBetLimitByEvidenceAddingCriteria
-                        {
-                            CustIDList = string.Join(",", associatedAccountList)
-                        });
-                }
+                customerEvidenceService.UpdateBetLimitOfFlaggedCustomer(model.CustId.ToString());
 
                 Task.Run(() =>
                 {
@@ -821,7 +779,7 @@
             }
         }
 
-        public int AddAccountException(UpdateAccountExceptionModel model)
+        public DBResult AddAccountException(UpdateAccountExceptionModel model)
         {
             var criteria = new AddAccountExceptionCriteria
             {
@@ -832,20 +790,23 @@
                 ErrorCode = 0
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            try
             {
-                try
-                {
-                    db.ExecuteNonQuery(criteria);
-                }
-                catch (Exception ex)
-                {
-                    if (ex.Message != string.Empty && ex.Message.ToLower().Contains("duplicate"))
-                        return 1062;
-                }
-
-                return criteria.ErrorCode;
+                repository.Execute(criteria);
             }
+            catch (Exception ex)
+            {
+                if (ex.Message != string.Empty && ex.Message.ToLower().Contains("duplicate"))
+                {
+                    return new DBResult { ErrorCode = 1062 };
+                }
+            }
+
+            return new DBResult
+            {
+                ErrorCode = criteria.ErrorCode,
+                OutParam = new Hashtable { { "toCTSCustId", criteria.ToCTSCustId } }
+            };
         }
 
         public int RemoveAccountException(UpdateAccountExceptionModel model)

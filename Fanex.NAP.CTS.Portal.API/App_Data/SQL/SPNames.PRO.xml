@@ -7,12 +7,14 @@
 
 		<Setting Key="CTS_DC_CustEvidence_GetEvidencesByDirectAssociation" SpName="CTS_DC_CustEvidence_GetEvidencesByDirectAssociation" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" TimeOut="300"/>
 		<Setting Key="CTS_DC_CustEvidence_GetEvidencesByLevel2Association" SpName="CTS_DC_CustEvidence_GetEvidencesByLevel2Association" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" TimeOut="600"/>
+		<Setting Key="NAP_BLControl_EvidenceFlagged" SpName="NAP_BLControl_EvidenceFlagged" DbName="DBCust.CustDB.bodbAdminNet" TimeOut="300"/>
+		<Setting Key="NAP_BLControl_EvidenceUnflagged" SpName="NAP_BLControl_EvidenceUnflagged" DbName="DBCust.CustDB.bodbAdminNet" TimeOut="300"/>
 	</Function>
 
 	<Function Name="CustomerClassification">
 		<Setting Key="CTS_DC_CustClassification_Get4API" SpName="CTS_DC_CustClassification_Get4API" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustClassification_GetAllByCategory" SpName="CTS_DC_CustClassification_GetAllByCategory" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustClassification_InsertProblemAccount" SpName="CTS_DC_CustClassification_InsertProblemAccount" DbName="MySQL.CTS_DataCenter.Admin"/>
+		<Setting Key="CTS_DC_CustClassification_InsertProblemAccount" SpName="CTS_DC_CustClassification_InsertProblemAccount" DbName="MySQL.CTS_DataCenter.Admin" TimeOut="600"/>
 		<Setting Key="Acc_CustomerUpdateCustomerClass" SpName="Acc_CustomerUpdateCustomerClass" DbName="DBCust.CustDB.bodbAdminNet" TimeOut="300" />
 		<Setting Key="CTS_NormalAccountsClassification_GeneralCategorize_Daily" SpName="CTS_NormalAccountsClassification_GeneralCategorize_Daily" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" TimeOut="1200"/>
 	</Function>

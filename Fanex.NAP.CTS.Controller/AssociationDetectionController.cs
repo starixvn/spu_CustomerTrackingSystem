@@ -13,8 +13,6 @@ using Fanex.NAP.CTS.ViewModel.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace Fanex.NAP.CTS.Controller
@@ -25,14 +23,14 @@ namespace Fanex.NAP.CTS.Controller
     {
         private readonly ICommonService _commonService;
         private readonly IAssociationDetectionService _associationDetectionService;
-        private readonly ICustomerClassifyService _customerClassifyService;
+        private readonly ICustomerClassificationService _custClassificationService;
 
         public AssociationDetectionController()
         {
             _commonService = new CommonService();
 
             _associationDetectionService = new AssociationDetectionService();
-            _customerClassifyService = new CustomerClassifyService();
+            _custClassificationService = new CustomerClassificationService();
         }
 
         public ActionResult Index()
@@ -71,7 +69,7 @@ namespace Fanex.NAP.CTS.Controller
                 {
                     groupLevel2ByUsername = _associationDetectionService.GetAssociationDetection(ctsCustIds);
 
-                    latestCustomerClassification = _customerClassifyService.GetLatestClassification(custIds);
+                    latestCustomerClassification = _custClassificationService.GetLatestClassification(custIds);
 
                     result.ItemList = TransformLatestCustomerClassification(groupLevel2ByUsername, latestCustomerClassification);
                 }
