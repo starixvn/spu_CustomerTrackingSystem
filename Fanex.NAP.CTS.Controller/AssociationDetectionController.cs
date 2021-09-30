@@ -10,6 +10,7 @@ using Fanex.NAP.CTS.Service.Implement;
 using Fanex.NAP.CTS.Service.Interface;
 using Fanex.NAP.CTS.ViewModel.AssociationDetection;
 using Fanex.NAP.CTS.ViewModel.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -68,7 +69,7 @@ namespace Fanex.NAP.CTS.Controller
                 {
                     groupLevel2ByUsername = _associationDetectionService.GetAssociationDetection(ctsCustIds);
 
-                    var latestCustomerClassification = _custClassificationService.GetLatestClassification(custIds);
+                    latestCustomerClassification = _custClassificationService.GetLatestClassification(custIds);
 
                     result.ItemList = TransformLatestCustomerClassification(groupLevel2ByUsername, latestCustomerClassification);
                 }
