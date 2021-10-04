@@ -65,7 +65,7 @@
             }
         }
 
-        public GraphAssociationModel GetAssociations(string apiEndPoint, AssociationFilterViewModel filter)
+        public GraphAssociationModel GetAssociationReportFromGraphDB(string apiEndPoint, AssociationFilterViewModel filter)
         {
             try
             {
@@ -90,7 +90,7 @@
             }
             catch (Exception ex)
             {
-                LogService.Error("CTS - AssociationReportService GetAssociations - Exception: " + ex.Message, ex);
+                LogService.Error("CTS - Association Report - Exception: " + ex.Message, ex);
             }
 
             return new GraphAssociationModel();
@@ -170,7 +170,7 @@
             }
         }
 
-        public IEnumerable<AssociationFromMySqlModel> GetAssociationFromMySql(AssociationFilterViewModel filter, out int totalItems)
+        public IEnumerable<AssociationFromMySqlModel> GetAssociationReportFromMySql(AssociationFilterViewModel filter, out int totalItems)
         {
             totalItems = 0;
 

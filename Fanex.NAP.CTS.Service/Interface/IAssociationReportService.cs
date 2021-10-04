@@ -15,7 +15,7 @@
 
         IEnumerable<EvidenceModel> GetEvidenceList();
 
-        GraphAssociationModel GetAssociations(string apiEndPoint, AssociationFilterViewModel filter);        
+        GraphAssociationModel GetAssociationReportFromGraphDB(string apiEndPoint, AssociationFilterViewModel filter);        
 
         IEnumerable<CategoriesModel> GetCategories(string ctsCustIdList);
 
@@ -23,7 +23,7 @@
 
         DBResult ActiveRemoveAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, int createdBy, bool isRemoveAction);
 
-        IEnumerable<AssociationFromMySqlModel> GetAssociationFromMySql(AssociationFilterViewModel filter, out int totalItems);
+        IEnumerable<AssociationFromMySqlModel> GetAssociationReportFromMySql(AssociationFilterViewModel filter, out int totalItems);
 
         IEnumerable<AssociationDetailFromMySqlModel> GetAssociationDetailFromMySql(AssociationDetailFilterViewModel filter, out int totalItems);
     }

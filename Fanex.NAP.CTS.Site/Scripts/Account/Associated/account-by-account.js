@@ -8,7 +8,7 @@
     var btnSaveAssociation = $('#btnsaveassociation');
     var btnCancelAssociation = $('#btncancelassociation');
     var cbbAssociationAccountStatus = $('#cbbAssociationAccountStatus');
-    var cbbAssociationSite = $('#cbbAssociationSite');
+    var cbbAssociationSubscriber = $('#cbbAssociationSite');
     var _username;
     var dataTable;
     let isHostPermission;
@@ -186,9 +186,9 @@
                     },
                     SubscriberIds: function () {
                         var selectedSubscribers = [];
-                        cbbAssociationSite.find('option:selected').each(function () { selectedSubscribers.push($(this).val()); });
+                        cbbAssociationSubscriber.find('option:selected').each(function () { selectedSubscribers.push($(this).val()); });
                         if (selectedSubscribers.length === 0) {
-                            cbbAssociationSite.find('option').not(':selected').each(function () { selectedSubscribers.push($(this).val()); });
+                            cbbAssociationSubscriber.find('option').not(':selected').each(function () { selectedSubscribers.push($(this).val()); });
                         }
                         return selectedSubscribers.join(',');
                     }
@@ -938,7 +938,7 @@
 
         $("#account-by-account-cbb-status").multiselect();
 
-        cbbAssociationSite.multiselect({
+        cbbAssociationSubscriber.multiselect({
             menuWidth: 320,
             menuHeight: 320,
             selectedText: "# of # selected",
@@ -980,9 +980,9 @@
         btnViewOnGraph.on('click', function () {
             let info = dataTable.page.info();
             let selectedSubscribers = [];
-            cbbAssociationSite.find('option:selected').each(function () { selectedSubscribers.push($(this).val()); });
+            cbbAssociationSubscriber.find('option:selected').each(function () { selectedSubscribers.push($(this).val()); });
             if (selectedSubscribers.length === 0) {
-                cbbAssociationSite.find('option').not(':selected').each(function () { selectedSubscribers.push($(this).val()); });
+                cbbAssociationSubscriber.find('option').not(':selected').each(function () { selectedSubscribers.push($(this).val()); });
             }
             let subscriberIds = selectedSubscribers.join(',');
 

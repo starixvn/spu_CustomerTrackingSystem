@@ -42,10 +42,6 @@
                 
         public int AssociationStatus { get; set; }
 
-        public int? SiteID { get; set; }
-
-        public string SiteName { get; set; }
-
         public string ParentIDs { get; set; }
 
         public string CategoryIDs { get; set; }

@@ -180,7 +180,7 @@
         [HttpPost]
         public ActionResult GetCustomerTotalAssociationByCTSCustId(long ctsCustId)
         {
-            var getAssociationFromMySQL = AppSettings.Get("GetAssociationFromMySQL") == "1";
+            var getAssociationFromMySQL = AppSettings.Get("GetAssociationProfileFromMySQL") == "1";
 
             var result = _accountService.GetCustomerTotalAssociationByCTSCustId(ctsCustId, ConfigSettings.GetStatisticAssociation, getAssociationFromMySQL);
 
@@ -294,7 +294,7 @@
 
             var directAssociationUrl = GetDirectAssociationUrl(model.AssociationType);
 
-            var getAssociationFromMySql = AppSettings.Get("GetAssociationFromMySQL") == "1";
+            var getAssociationFromMySql = AppSettings.Get("GetAssociationProfileFromMySQL") == "1";
 
             var graphAssociationPage = _accountService.GetCustomerAssociationByGraph(directAssociationUrl, model, getAssociationFromMySql);
 
@@ -325,8 +325,6 @@
                                         : _accountService.MappingAssociationType(x)),
                         Status = x.StatusName == "NA" ? "N/A" : x.StatusName,
                         StatusId = x.StatusId.HasValue ? x.StatusId.Value : 0,
-                        SiteId = x.SiteID.HasValue ? x.SiteID.Value : 0,
-                        SiteName = !string.IsNullOrEmpty(x.SiteName) ? x.SiteName : "-",
                         SubscriberId = x.SubscriberID,
                         SubscriberName = !string.IsNullOrEmpty(x.SubscriberName) ? x.SubscriberName : "-",
                         CTSCustId = x.CTSCustID,
@@ -429,8 +427,6 @@
                                           StatusName = group.a.StatusName,
                                           StatusId = group.a.StatusId,
                                           AssociationStatus = group.a.AssociationStatus,
-                                          SiteID = group.a.SiteID,
-                                          SiteName = group.a.SiteName,
                                           ParentIDs = group.a.ParentIDs,
                                           CategoryIDs = group.a.CategoryIDs,
                                           CategoryNames = group.a.CategoryNames,
@@ -466,7 +462,7 @@
         {
             var graphCustomer = new GraphCustomerItemViewModel();
 
-            var getAssociationFromMySql = AppSettings.Get("GetAssociationFromMySQL") == "1";
+            var getAssociationFromMySql = AppSettings.Get("GetAssociationProfileFromMySQL") == "1";
 
             var graphAssociationPaging = _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetDirectAssociation, model, getAssociationFromMySql);
 
