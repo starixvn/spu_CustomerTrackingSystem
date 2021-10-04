@@ -267,7 +267,7 @@
             }
         }
 
-        public GraphAssociationPaging GetCustomerAssociationByGraph(string apiURL, AssociatedFilterModel filterModel, bool fromMySQL = false)
+        public GraphAssociationPaging GetCustomerAssociationByGraph(AssociatedFilterModel filterModel, bool fromMySQL = false)
         {
             if (fromMySQL)
             {
@@ -297,17 +297,19 @@
             }
             else
             {
-                var param = new
+                var param = new AssociationProfileParameterModel
                 {
-                    ctsCustId = filterModel.CTSCustId,
-                    assStatus = filterModel.AssociationStatus,
-                    siteIDs = filterModel.SubscriberIds,
-                    accountStatuses = filterModel.AccountStatusIds,
-                    takeRow = filterModel.length,
-                    skipRow = filterModel.start
+                    CTSCustId = filterModel.CTSCustId,
+                    AssociationStatus = filterModel.AssociationStatus,
+                    AccountStatusIds = filterModel.AccountStatusIds,
+                    AssociationType = filterModel.AssociationType,
+                    CategoryIDs = filterModel.CategoryIds,
+                    SubscriberIDs = filterModel.SubscriberIds,
+                    Skip = filterModel.start,
+                    Take = filterModel.length,
                 };
 
-                var data = ApiHelper.Post<GraphAssociationPaging>(apiURL, param);
+                var data = ApiHelper.Post<GraphAssociationPaging>(ConfigSettings.GetDirectAssociationProfile, param);
 
                 Task.WhenAll(data);
 
@@ -1190,26 +1192,6 @@
             };
 
             return repository.Fetch<CTSCustomer>(criteria);
-        }
-
-        private int GetAssociationTypeFromUrl(string associationUrl)
-        {
-            if (associationUrl == ConfigSettings.GetDirectAssociationByDevice)
-            {
-                return 1;
-            }
-            else if (associationUrl == ConfigSettings.GetDirectAssociationByAI)
-            {
-                return 2;
-            }
-            else if (associationUrl == ConfigSettings.GetDirectAssociationByManual)
-            {
-                return 3;
-            }
-            else
-            {
-                return 0;
-            }
         }
     }
 }

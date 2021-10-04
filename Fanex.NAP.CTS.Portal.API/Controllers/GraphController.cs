@@ -4,10 +4,8 @@
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.ProbationManagement;
-    using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.ViewModel.ProbationManagement;
     using Fanex.NAP.SPU.Graph.Core;
-    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -19,6 +17,71 @@
     /// </summary>
     public class GraphController : ApiController
     {
+        #region Profile Page - Association
+
+        /// <summary>
+        /// Get Direct All Association for Profile Page
+        /// </summary>
+        /// <param name="paras"></param>
+        /// <returns></returns>
+        [AcceptVerbs("GetDirectAssociationProfile")]
+        [HttpPost]
+        public GraphAssociationPaging GetDirectAssociationProfile([FromBody] AssociationProfileParameterModel paras)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(paras.SubscriberIDs) || !string.IsNullOrEmpty(paras.CategoryIDs))
+                {
+                    string queryScript = GetQueryScriptForAssProfile(paras.AssociationType);
+
+                    var result = DbSessionFactory.Execute<GraphAssociationPaging>(queryScript, new
+                    {
+                        CTSCustID = paras.CTSCustId,
+                        AssociationStatus = paras.AssociationStatus,
+                        AccountStatuses = paras.AccountStatusIds.Split(',').Select(int.Parse),
+                        SubscriberIDs = paras.SubscriberIDs.Split(',').Select(int.Parse),
+                        CategoryIDs = paras.CategoryIDs.Split(',').Select(int.Parse),
+                        Skip = paras.Skip,
+                        Pagesize = paras.Take
+                    }).Data.FirstOrDefault();
+
+                    return result ?? new GraphAssociationPaging() { AssociationList = null, TotalItems = 0 };
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("WEB - GetDirectAssociationProfile failed: " + ex.Message + ex.StackTrace);
+                throw;
+            }
+
+            return new GraphAssociationPaging() { AssociationList = null, TotalItems = 0 };
+        }
+
+        private string GetQueryScriptForAssProfile(int associationType)
+        {
+            switch (associationType)
+            {
+                case 1:
+                    return "GetDirectAssociationProfileByDevice";
+
+                case 2:
+                    return "GetDirectAssociationProfileByAI";
+
+                case 3:
+                    return "GetDirectAssociationProfileByManual";
+
+                case 4:
+                    return "GetDirectAssociationProfileByIP";
+
+                default:
+                    return "GetDirectAssociationProfile";
+            }
+        }
+
+        #endregion Profile Page - Association
+
+        #region API (Need to remove without in use)
+
         /// <summary>
         /// Get association statistic
         /// </summary>
@@ -85,7 +148,6 @@
                 throw;
             }
         }
-
 
         [System.Web.Http.AcceptVerbs("GetDirectAssociationByManual")]
         [HttpPost]
@@ -249,7 +311,6 @@
                 LogService.Error("GetInDirectAssociation failed: " + ex.Message + ex.StackTrace);
                 throw;
             }
-
         }
 
         /// <summary>
@@ -307,7 +368,6 @@
             catch (Exception ex)
             {
                 LogService.Error("GetDirectAssociationDevices failed: " + ex.Message + ex.StackTrace);
-
             }
 
             return result;
@@ -385,7 +445,7 @@
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="paras"></param>
         /// <returns></returns>
@@ -448,7 +508,6 @@
             return result;
         }
 
-
         /// <summary>
         /// Get association report
         /// </summary>
@@ -477,5 +536,7 @@
 
             return result;
         }
+
+        #endregion API (Need to remove without in use)
     }
 }

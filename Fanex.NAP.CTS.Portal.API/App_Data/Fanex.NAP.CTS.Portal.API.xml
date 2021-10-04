@@ -623,6 +623,13 @@
             Graph Controller - Using for CTS site
             </summary>
         </member>
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetDirectAssociationProfile(Fanex.NAP.CTS.Model.GraphDB.AssociationProfileParameterModel)">
+            <summary>
+            Get Direct All Association for Profile Page
+            </summary>
+            <param name="paras"></param>
+            <returns></returns>
+        </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetStatisticAssociation(System.Int32)">
             <summary>
             Get association statistic
@@ -670,11 +677,11 @@
             <returns></returns>
         </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetDetailAssociationReport(Fanex.NAP.CTS.Model.GraphDB.AssociationDetailReportParameterModel)">
-            <summary>
+             <summary>
             
-            </summary>
-            <param name="paras"></param>
-            <returns></returns>
+             </summary>
+             <param name="paras"></param>
+             <returns></returns>
         </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetProbationReport(Fanex.NAP.CTS.ViewModel.ProbationManagement.ProbationParameterModel)">
             <summary>

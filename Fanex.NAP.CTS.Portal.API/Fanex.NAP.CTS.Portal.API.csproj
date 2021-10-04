@@ -468,6 +468,11 @@
     <Content Include="App_Data\Graph\scripts\GetProbationWithAssociatedPA.scrypt" />
     <Content Include="App_Data\Graph\scripts\GetAssociationOneLevelByCustIdByAI.scrypt" />
     <Content Include="App_Data\Graph\scripts\GetAssociationReportByDevice_CountTotal.scrypt" />
+    <Content Include="App_Data\Graph\AssociationQueryScripts\AssociationProfilePage\GetDirectAssociationProfileByAI.scrypt" />
+    <Content Include="App_Data\Graph\AssociationQueryScripts\AssociationProfilePage\GetDirectAssociationProfileByDevice.scrypt" />
+    <Content Include="App_Data\Graph\AssociationQueryScripts\AssociationProfilePage\GetDirectAssociationProfileByIP.scrypt" />
+    <Content Include="App_Data\Graph\AssociationQueryScripts\AssociationProfilePage\GetDirectAssociationProfileByManual.scrypt" />
+    <Content Include="App_Data\Graph\AssociationQueryScripts\AssociationProfilePage\GetDirectAssociationProfile.scrypt" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -565,9 +570,7 @@
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\Graph\AssociationQueryScripts\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

@@ -292,11 +292,9 @@
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
 
-            var directAssociationUrl = GetDirectAssociationUrl(model.AssociationType);
-
             var getAssociationFromMySql = AppSettings.Get("GetAssociationProfileFromMySQL") == "1";
 
-            var graphAssociationPage = _accountService.GetCustomerAssociationByGraph(directAssociationUrl, model, getAssociationFromMySql);
+            var graphAssociationPage = _accountService.GetCustomerAssociationByGraph(model, getAssociationFromMySql);
 
             if (graphAssociationPage != null && graphAssociationPage.AssociationList != null && graphAssociationPage.AssociationList.Any())
             {
@@ -436,27 +434,6 @@
             return result;
         }
 
-        private string GetDirectAssociationUrl(int associationType)
-        {
-            switch (associationType)
-            {
-                case 1:
-                    return ConfigSettings.GetDirectAssociationByDevice;
-
-                case 2:
-                    return ConfigSettings.GetDirectAssociationByAI;
-
-                case 3:
-                    return ConfigSettings.GetDirectAssociationByManual;
-
-                case 4:
-                    return ConfigSettings.GetDirectAssociationByIP;
-
-                default:
-                    return ConfigSettings.GetDirectAssociation;
-            }
-        }
-
         [HttpPost]
         public ActionResult GetDirectAssociationGraph(AssociatedFilterModel model, string displayName)
         {
@@ -464,7 +441,7 @@
 
             var getAssociationFromMySql = AppSettings.Get("GetAssociationProfileFromMySQL") == "1";
 
-            var graphAssociationPaging = _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetDirectAssociation, model, getAssociationFromMySql);
+            var graphAssociationPaging = _accountService.GetCustomerAssociationByGraph(model, getAssociationFromMySql);
 
             if (graphAssociationPaging != null && graphAssociationPaging.AssociationList != null && graphAssociationPaging.AssociationList.Any())
             {

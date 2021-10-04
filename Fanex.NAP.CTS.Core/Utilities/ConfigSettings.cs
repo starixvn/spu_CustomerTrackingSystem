@@ -58,17 +58,9 @@
             return ConfigurationManager.AppSettings["RabbitMQ-Exchange"];
         }
 
-        public static string GetDirectAssociation => GetConfigStringByName("Graph_GetDirectAssociation");
+        public static string GetDirectAssociationProfile => GetConfigStringByName("Graph_GetDirectAssociationProfile");
 
         public static string GetAssociationException => GetConfigStringByName("Graph_GetAssociationException");
-
-        public static string GetDirectAssociationByDevice => GetConfigStringByName("Graph_GetDirectAssociationByDevice");
-
-        public static string GetDirectAssociationByIP => GetConfigStringByName("Graph_GetDirectAssociationByIP");
-
-        public static string GetDirectAssociationByManual => GetConfigStringByName("Graph_GetDirectAssociationByManual");
-
-        public static string GetDirectAssociationByAI => GetConfigStringByName("Graph_GetDirectAssociationByAI");
 
         public static string GetInDirectAssociation => GetConfigStringByName("Graph_GetInDirectAssociation");
 
