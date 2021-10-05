@@ -6,6 +6,6 @@
 
     public interface ITransactionReportService
     {
-        IEnumerable<TransactionModel> GetTransactions(TransactionFilterViewModel filterModel);
+        IEnumerable<TransactionModel> GetTransactions(TransactionFilterViewModel filterModel, out int totalItem);
     }
 }

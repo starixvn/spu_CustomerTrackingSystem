@@ -77,3 +77,12 @@
         position: sticky;
         top: 17.2rem;
         font-weight: 300; }
+      .transaction-content .transaction-table .table-report .table-transaction tfoot tr th {
+        background-color: #70809e;
+        color: #fff;
+        text-align: center;
+        border-top: 0 !important;
+        font-weight: 300;
+        line-height: 24px; }
+      .transaction-content .transaction-table .table-report .table-transaction .hide {
+        display: none; }

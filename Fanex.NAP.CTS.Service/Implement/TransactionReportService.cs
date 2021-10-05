@@ -1,39 +1,35 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement
 {
+    using Fanex.Data;
+    using Fanex.NAP.CTS.Core.BaseClasses;
+    using Fanex.NAP.CTS.Criteria.TransactionReport;
     using Fanex.NAP.CTS.Model.TransactionReport;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.TransactionReport;
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
+    using System.Text;    
 
     public class TransactionReportService : ITransactionReportService
     {
-        public IEnumerable<TransactionModel> GetTransactions(TransactionFilterViewModel filterModel)
+        public IEnumerable<TransactionModel> GetTransactions(TransactionFilterViewModel filterModel, out int totalItem)
         {
-            return GetTransactions_DataTest();
-        }
-
-        private IEnumerable<TransactionModel> GetTransactions_DataTest()
-        {
-            var transactionList = new List<TransactionModel>();
-
-            for (int i = 0; i < 10; i++)
+            var criteria = new TransactionReportCriteria
             {
-                transactionList.Add(new TransactionModel
-                {
-                    SubscriberId = 1,
-                    SubscriberName = "12Bet",
-                    ValidTrans = i + 1000000,
-                    InvalidTrans = i + 2000000,
-                    BrowserlessValidTrans = i + 3000000,
-                    TotalTrans = i + 6000000
-                });
-            }
+                SubscriberIDList = filterModel.SubscriberIDs,
+                FromDate = filterModel.FromDate,
+                ToDate = filterModel.ToDate,
+                Take = filterModel.length,
+                Skip = filterModel.start,
+                TotalItem = 0
+            };
 
-            return transactionList;
-        }
+            var result = DataService.GetData<TransactionModel>(criteria);
+
+            totalItem = criteria.TotalItem;
+
+            return result;
+        }        
     }
 }

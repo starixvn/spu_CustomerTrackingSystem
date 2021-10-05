@@ -6,18 +6,27 @@
 
     public class TransactionReportCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_SubscriberIDs")]
-        public string SubscriberIDs { get; set; }
+        [SpParam(SqlParamName = "ip_SubscriberList")]
+        public string SubscriberIDList { get; set; }
 
-        [SpParam(SqlParamName = "ip_FromAssDate")]
-        public DateTime FromAssDate { get; set; }
+        [SpParam(SqlParamName = "ip_FromDate")]
+        public DateTime FromDate { get; set; }
 
-        [SpParam(SqlParamName = "ip_ToAssDate")]
-        public DateTime ToAssDate { get; set; }
+        [SpParam(SqlParamName = "ip_ToDate")]
+        public DateTime ToDate { get; set; }
+
+        [SpParam(SqlParamName = "ip_Take")]
+        public int Take { get; set; }
+
+        [SpParam(SqlParamName = "ip_Skip")]
+        public int Skip { get; set; }
+
+        [SpParam(SqlParamName = "op_TotalRow")]
+        public int TotalItem { get; set; }
 
         public override string GetSettingKey()
         {
-            return "";
+            return "DCS_DC_RPT_Transaction";
         }
 
         public override bool IsValid()

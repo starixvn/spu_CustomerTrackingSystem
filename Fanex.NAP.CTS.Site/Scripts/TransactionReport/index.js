@@ -2,17 +2,18 @@
     let dataTable;
     let domElements = {
         dpkFromDate: $('#dpkFromDate'),
-        dpkToDate: $('#dpkToDate'),       
-        cbbSubscriber: $('#cbbSubscriber'),       
+        dpkToDate: $('#dpkToDate'),
+        cbbSubscriber: $('#cbbSubscriber'),
         btnGenerate: $('#btnGenerate'),
-        tblTransaction: $('#tblTransaction')
+        tblTransaction: $('#tblTransaction'),
+        footerTransaction: $('#footerTransaction')
     };
 
     function GetTransactionReport() {
         if (ValidateRangeDate()) {
             dataTable
                 ? dataTable.ajax.reload(null, true)
-                : dataTable = GenerateGrid();
+                : dataTable = GenerateGrid();                  
         }
     }
 
@@ -31,7 +32,20 @@
     }
 
     function GenerateGrid() {
-        return domElements.tblTransaction.DataTable({
+        jQuery.fn.dataTable.Api.register('sum()', function () {
+            return this.flatten().reduce(function (a, b) {
+                if (typeof a === 'string') {
+                    a = a.replace(/[^\d.-]/g, '') * 1;
+                }
+                if (typeof b === 'string') {
+                    b = b.replace(/[^\d.-]/g, '') * 1;
+                }
+
+                return a + b;
+            }, 0);
+        });
+
+        let table = domElements.tblTransaction.DataTable({
             serverSide: true,
             ajax: {
                 url: common.modifyRelativeUrl('TransactionReport/GetTransactions'),
@@ -47,7 +61,7 @@
                     domElements.tblTransaction.find('tbody').addClass('loading');
                     domElements.btnGenerate.prop('disabled', true);
                 },
-                dataFilter: function (response) {
+                dataFilter: function (response) {                    
                     return response;
                 },
                 complete: function () {
@@ -81,21 +95,47 @@
             scrollCollapse: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 3, 4], className: "text-center" },
+                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8], className: "text-center" },
                 { targets: [0], width: "20%" },
-                { targets: [1], width: "20%" },
-                { targets: [2], width: "20%" },
-                { targets: [3], width: "20%" },
-                { targets: [4], width: "20%" }
+                { targets: [1], width: "10%" },
+                { targets: [2], width: "10%" },
+                { targets: [3], width: "10%" },
+                { targets: [4], width: "10%" },
+                { targets: [5], width: "10%" },
+                { targets: [6], width: "10%" },
+                { targets: [7], width: "10%" },
+                { targets: [8], width: "10%" }
             ],
             columns: [
-                { data: obj => obj.SubscriberName },
-                { data: obj => obj.TotalTrans, render: $.fn.dataTable.render.number(',', '.', 0, '') },
-                { data: obj => obj.ValidTrans, render: $.fn.dataTable.render.number(',', '.', 0, '') },
-                { data: obj => obj.InvalidTrans, render: $.fn.dataTable.render.number(',', '.', 0, '') },
-                { data: obj => obj.BrowserlessValidTrans, render: $.fn.dataTable.render.number(',', '.', 0, '') }
-            ]
-        });
+                { data: obj => obj.Subscriber },
+                { data: obj => obj.TotalTrans.toLocaleString() },
+                { data: obj => obj.TotalValidTrans.toLocaleString() },
+                { data: obj => obj.ValidTransNewDevice.toLocaleString() },
+                { data: obj => obj.ValidTransOldDevice.toLocaleString() },
+                { data: obj => obj.ValidTransRecoverDevice.toLocaleString() },
+                { data: obj => obj.ValidTransNoDevice.toLocaleString() },
+                { data: obj => obj.InvalidTrans.toLocaleString() },
+                { data: obj => obj.Browserless.toLocaleString() }                
+            ],
+            footerCallback: function () {
+                var api = this.api();
+                var columns = [1, 2, 3, 4, 5, 6, 7, 8];       
+                
+                for (var i = 0; i < columns.length; i++) {
+
+                    var number = api.column(columns[i], { filter: 'applied', page: 'current' }).data().sum();
+
+                    $('tfoot th').eq(columns[i]).empty().append(number.toLocaleString());
+                }
+
+                if (api.data().length == 0)
+                    domElements.footerTransaction.addClass('hide');
+                else
+                    domElements.footerTransaction.removeClass('hide');
+            }
+        });              
+
+        return table;
     }
 
     function SetRestrictFromDate() {

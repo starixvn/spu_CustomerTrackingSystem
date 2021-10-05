@@ -37,32 +37,33 @@
         [HttpPost]
         public ActionResult GetTransactions(TransactionFilterViewModel filter)
         {
-            int totalItems = 0;
+            int totalItem = 0;
 
             var transactionList = Enumerable.Empty<TransactionViewModel>();
 
-            var data = _transactionReportService.GetTransactions(filter);
+            var data = _transactionReportService.GetTransactions(filter, out totalItem);
 
             if (data != null && data.Any())
             {
                 transactionList = data.Select(x => new TransactionViewModel
                 {
-                    SubscriberId = x.SubscriberId,
-                    SubscriberName = x.SubscriberName,
+                    Subscriber = x.Subscriber,
                     TotalTrans = x.TotalTrans,
-                    ValidTrans = x.ValidTrans,
+                    TotalValidTrans = x.TotalValidTrans,
+                    ValidTransNewDevice = x.ValidTransNewDevice,
+                    ValidTransOldDevice = x.ValidTransOldDevice,
+                    ValidTransRecoverDevice = x.ValidTransRecoverDevice,
+                    ValidTransNoDevice = x.ValidTransNoDevice,
                     InvalidTrans = x.InvalidTrans,
-                    BrowserlessValidTrans = x.BrowserlessValidTrans
+                    Browserless = x.ValidBrowserless
                 });
-
-                totalItems = data.Count();
             }
 
             return Json(new
             {
                 draw = filter.draw,
-                recordsTotal = totalItems,
-                recordsFiltered = totalItems,
+                recordsTotal = totalItem,
+                recordsFiltered = totalItem,
                 data = transactionList
             }, JsonRequestBehavior.AllowGet);
         }
