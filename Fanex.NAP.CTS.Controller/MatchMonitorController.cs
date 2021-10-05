@@ -226,7 +226,7 @@
                                                                 TicketStatus = c.ticket.TicketStatus,
                                                                 TransTime = c.ticket.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                                                                 ReasonGroup = GetReasonGroup(mappingTransGroupReason, c.ticket)
-                                                            })?.OrderBy(c => c.Username)?.ThenBy(c => c.ReasonGroup)?.Distinct()?.ToList();
+                                                            })?.OrderByDescending(c => c.TransTime)?.ThenBy(c => c.ReasonGroup)?.Distinct()?.ToList();
 
             return matchDetailResult;
         }
