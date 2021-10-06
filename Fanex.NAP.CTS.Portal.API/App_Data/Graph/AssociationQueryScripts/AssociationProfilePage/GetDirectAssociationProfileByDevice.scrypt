@@ -9,34 +9,35 @@ WHERE c.CTSCustID = $ip_CTSCustID AND c1.CTSCustID IS NOT NULL AND
 UNWIND [r.CreatedDate,r1.CreatedDate]  as val
 WITH c,c1,d, Max(val) as AssDate
 OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c1)
-OPTIONAL MATCH (c1)-[:BELONG_TO_SUB]->(s:Subscriber)
-OPTIONAL MATCH (c1)-[:HAS_STATUS]->(st:StaticList)
-WITH c,c1,d,st,e,s, AssDate
-WHERE ($ip_IsAssReport = 1 
-        OR ($ip_IsAssReport = 0 AND st.ItemID IS NOT NULL AND st.ListID = 1 AND st.ItemID IN $ip_AccountStatuses AND s.SubscriberID IN $ip_SubscriberIDs)) 
-WITH c,c1,st,e,s, Min(AssDate) as firstAssDate
-WHERE      (($ip_IsAssReport = 0)
-		OR ($ip_IsAssReport = 1 AND firstAssDate >= datetime($ip_AssCreatedFrom) AND firstAssDate <= datetime($ip_AssCreatedTo)))
-RETURN c1.CTSCustID as CTSCustID
-    , c1.CustID AS CustId
-    , c1.CustSubID AS CustSubId
-    , c1.Username AS Username
-    , c1.Username2 AS Username2
-    , collect(1) AS AssociationType
-    , -1 AS SharedDevices
-    , -1 AS SharedIPs
-    , s.SubscriberID AS SubscriberId
-    , s.SubscriberName as SubscriberName
-    , firstAssDate as AssociationDateGMT0
+OPTIONAL MATCH (c1)-[:BELONG_TO_SUB]->(s:Subscriber{SubscriberID in $ip_SubscriberIDs})
+OPTIONAL MATCH (c1)-[:HAS_STATUS]->(st:StaticList {ListID:1, ItemID in $ip_AccountStatuses})
+OPTIONAL MATCH (st2:StaticList {ItemID:2, ListID:$ip_AssociationType})
+OPTIONAL MATCH (c1)-[:HAS_CATEGORY]->(ct:CustomerCategory {CategoryID in $ip_CategoryIDs})
+WITH c,c1,d,st,e,s,AssDate,ct,st2
+WHERE  s IS NOT NULL and st IS NOT NULL and ct IS NOT NULL)
+WITH c,c1,st,e,s, st2.ItemNameDisplay as AssTypeName, collect(toString(ct.CategoryID)) as CategoryIDs, collect(ct.CategoryName) as CategoryNames, distinct ct.ParentID as ParentID, Min(AssDate) as firstAssDate
+RETURN 
+     c1.CTSCustID           AS CTSCustID
+    , c1.CustID             AS CustId
+    , c1.CustSubID          AS CustSubId
+    , s.SubscriberID        AS SubscriberID
+    , s.SubscriberName      AS SubscriberName
+    , c1.Username           AS UserName
+    , c1.Username2          AS UserName2  
+    , st.PriorityOrder      AS StatusGroup    
+    , st.ItemID             AS StatusID
+    , st.ItemNameDisplay    AS StatusName
+    , AssTypeName           AS AssociationTypeName  
     , CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
-    , st.ItemID as StatusId
-    , st.ItemNameDisplay as StatusName
-    , CASE WHEN st.ItemID in [1,11] THEN 1 ELSE 2 END AS PriorityStatusOrder
-',{ip_CTSCustID: $CTSCustID, ip_AssociationStatus: $AssociationStatus, ip_AccountStatuses: $AccountStatuses, ip_SubscriberIDs: $SubscriberIDs, ip_CategoryIDs : $CategoryIDs }) YIELD value 
+    , CASE ($ip_AssociationStatus = 2) THEN e.CreatedDate ELSE firstAssDate END AS AssociationDate
+    , ParentID              AS ParentIDs
+    , CategoryIDs           AS CategoryIDs
+    , CategoryNames         AS CategoryNames
+',{ip_CTSCustID: $CTSCustID, ip_AssociationStatus: $AssociationStatus, ip_AssociationType:$AssociationType, ip_AccountStatuses: $AccountStatuses, ip_SubscriberIDs: $SubscriberIDs, ip_CategoryIDs : $CategoryIDs}) YIELD value 
 WITH collect(value) as ListAss, count(value) as TotalItems
 UNWIND ListAss as ass
 WITH ass, TotalItems 
-ORDER BY ass.SubscriberName, ass.AssociationStatus, ass.PriorityStatusOrder, ass.AssociationDateGMT0 DESC
+ORDER BY ass.SubscriberName ASC, ass.AssociationStatus ASC, ass.StatusGroup ASC, ass.StatusID ASC, ass.AssociationDate ASC, ass.CTSCustID ASC
 SKIP $Skip
 LIMIT $Pagesize
 RETURN COLLECT(ass) AS AssociationList, TotalItems

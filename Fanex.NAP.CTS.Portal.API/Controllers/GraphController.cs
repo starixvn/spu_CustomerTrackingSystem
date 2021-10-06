@@ -38,6 +38,7 @@
                     {
                         CTSCustID = paras.CTSCustId,
                         AssociationStatus = paras.AssociationStatus,
+                        AssociationType = paras.AssociationType,
                         AccountStatuses = paras.AccountStatusIds.Split(',').Select(int.Parse),
                         SubscriberIDs = paras.SubscriberIDs.Split(',').Select(int.Parse),
                         CategoryIDs = paras.CategoryIDs.Split(',').Select(int.Parse),

@@ -18,29 +18,22 @@
         public string Username { get; set; }
         
         public string Username2 { get; set; }
-        
-        public List<int> AssociationType { get; set; }
-        
-        public string AssociationTypeName { get; set; }
+
+        public int? StatusId { get; set; }
+
+        public string StatusName { get; set; }
+
+        public int AssociationStatus { get; set; }
 
         public DateTime AssociationDateGMT0 { get; set; }
 
         public DateTime AssociationDate { get; set; }
-               
+
         //GTM-4 for GraphDB
-        public DateTime AssociationDateFromGraphDB {
+        public DateTime AssociationDateFromGraphDB
+        {
             get => AssociationDateGMT0.AddHours(-4);
         }
-
-        public int SharedDevices { get; set; }
-                
-        public int SharedIPs { get; set; }
-                
-        public string StatusName { get; set; }
-                
-        public int? StatusId { get; set; }
-                
-        public int AssociationStatus { get; set; }
 
         public string ParentIDs { get; set; }
 
@@ -48,6 +41,14 @@
 
         public string CategoryNames { get; set; }
 
+        public List<int> AssociationType { get; set; }
+        
+        public string AssociationTypeName { get; set; }
+
+        public int SharedDevices { get; set; }
+                
+        public int SharedIPs { get; set; }
+  
         public string CustomerClasses { get; set; }
     }
 }
