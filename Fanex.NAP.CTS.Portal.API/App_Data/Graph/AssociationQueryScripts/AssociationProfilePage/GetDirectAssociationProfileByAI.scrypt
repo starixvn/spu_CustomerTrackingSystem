@@ -2,19 +2,20 @@
 //USE ctslocal
 CALL apoc.cypher.run('
 MATCH (c:CTSCustomer)-[r:ASS_BY_AI]-(c1:CTSCustomer)
+MATCH (c1)-[:BELONG_TO_SUB]->(s:Subscriber)
+MATCH (c1)-[:HAS_STATUS]->(st:StaticList)
+MATCH (c1)-[:HAS_CATEGORY]->(ct:CustomerCategory)
 WHERE c.CTSCustID = $ip_CTSCustID AND c1.CTSCustID IS NOT NULL AND c1.CustSubID = 0
-		(($ip_AssociationStatus = 0) 
-		OR ($ip_AssociationStatus = 1 AND not exists((c)-[:HAS_EXCEPTION]-(c1)))
-		OR ($ip_AssociationStatus = 2 AND exists((c)-[:HAS_EXCEPTION]-(c1))))
-WITH distinct c,c1, r.CreatedDate as AssDate
+		AND (($ip_AssociationStatus = 0) 
+		    OR ($ip_AssociationStatus = 1 AND not exists((c)-[:HAS_EXCEPTION]-(c1)))
+		    OR ($ip_AssociationStatus = 2 AND exists((c)-[:HAS_EXCEPTION]-(c1)))) 
+        AND s.SubscriberID in $ip_SubscriberIDs
+        AND st.ListID = 1 AND st.ItemID in $ip_AccountStatuses
+        AND ct.CategoryID in $ip_CategoryIDs
+WITH distinct c,c1,s,st,ct,r.CreatedDate as AssDate
 OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c1)
-OPTIONAL MATCH (c1)-[:BELONG_TO_SUB]->(s:Subscriber {SubscriberID in $ip_SubscriberIDs})
-OPTIONAL MATCH (c1)-[:HAS_STATUS]->(st:StaticList {ListID:1, ItemID in $ip_AccountStatuses})
 OPTIONAL MATCH (st2:StaticList {ItemID:2, ListID:$ip_AssociationType})
-OPTIONAL MATCH (c1)-[:HAS_CATEGORY]->(ct:CustomerCategory {CategoryID in $ip_CategoryIDs})
-WITH c,c1,AssDate,e,s,st,st2,ct
-WHERE  s IS NOT NULL and st IS NOT NULL and ct IS NOT NULL)
-WITH c,c1,st,e,s,collect(toString(ct.CategoryID)) as CategoryIDs, collect(ct.CategoryName) as CategoryNames,distinct ct.ParentID as ParentID,st2.ItemNameDisplay as AssTypeName, Min(AssDate) as firstAssDate
+WITH c,c1,s,st,e,collect(toString(ct.CategoryID)) as CategoryIDs, collect(ct.CategoryName) as CategoryNames,distinct ct.ParentID as ParentID,st2.ItemNameDisplay as AssTypeName, Min(AssDate) as firstAssDate
 RETURN 
       c1.CTSCustID          AS CTSCustID
     , c1.CustID             AS CustId
