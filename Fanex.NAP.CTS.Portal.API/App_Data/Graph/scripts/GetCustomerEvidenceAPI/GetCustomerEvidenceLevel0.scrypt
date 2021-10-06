@@ -1,5 +1,5 @@
-﻿//USE ctsgraphdb
-USE ctslocal
+﻿USE ctsgraphdb
+//USE ctslocal
 MATCH (c:FlaggedCustomer)-[:HAS_EVIDENCE]->(e:Evidence)
 WHERE c.CustID IN $CustID AND c.CustSubID = 0
-RETURN c.CustID AS Level0CustId, e.EvidenceCode AS EvidenceCode, 0 AS AssociatedLevel
+RETURN DISTINCT c.CustID AS Level0CustId, e.EvidenceCode AS EvidenceCode, 0 AS AssociatedLevel
