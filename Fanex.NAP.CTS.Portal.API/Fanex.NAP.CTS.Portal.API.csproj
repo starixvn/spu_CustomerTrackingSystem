@@ -473,6 +473,9 @@
     <Content Include="App_Data\Graph\AssociationQueryScripts\AssociationProfilePage\GetDirectAssociationProfileByIP.scrypt" />
     <Content Include="App_Data\Graph\AssociationQueryScripts\AssociationProfilePage\GetDirectAssociationProfileByManual.scrypt" />
     <Content Include="App_Data\Graph\AssociationQueryScripts\AssociationProfilePage\GetDirectAssociationProfile.scrypt" />
+    <Content Include="App_Data\Graph\scripts\GetCustomerEvidenceAPI\GetCustomerEvidenceLevel2.scrypt" />
+    <Content Include="App_Data\Graph\scripts\GetCustomerEvidenceAPI\GetCustomerEvidenceLevel1.scrypt" />
+    <Content Include="App_Data\Graph\scripts\GetCustomerEvidenceAPI\GetCustomerEvidenceLevel0.scrypt" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />

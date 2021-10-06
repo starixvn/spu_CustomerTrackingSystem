@@ -31,4 +31,10 @@
     <GraphSetting Key="GetAssociationOneLevelForExtAcc" SpName="GetAssociationOneLevelForExtAcc" DbName="GraphDB" />
     <GraphSetting Key="GetProbationWithAssociatedPA" SpName="GetProbationWithAssociatedPA" DbName="GraphDB" />
   </Function>
+  
+  <Function Name="NewAPI">
+    <GraphSetting Key="GetCustomerEvidenceLevel0" SpName="GetCustomerEvidenceLevel0" DbName="GraphDB" />
+    <GraphSetting Key="GetCustomerEvidenceLevel1" SpName="GetCustomerEvidenceLevel1" DbName="GraphDB" />
+    <GraphSetting Key="GetCustomerEvidenceLevel2" SpName="GetCustomerEvidenceLevel2" DbName="GraphDB" />
+  </Function>
 </Functions>

@@ -2,6 +2,7 @@
 {
     using Fanex.Logging;
     using Fanex.NAP.CTS.Model.Account;
+    using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.ProbationManagement;
     using Fanex.NAP.CTS.ViewModel.ProbationManagement;
@@ -9,6 +10,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using System.Web.Http;
     using System.Web.Http.Results;
 
@@ -76,6 +78,49 @@
 
                 default:
                     return "GetDirectAssociationProfile";
+            }
+        }
+
+        [HttpPost]
+        public JsonResult<List<CustomerEvidenceForTW>> GetFlaggedEvidenceForLevel01(string custIdList)
+        {
+            var result = new List<CustomerEvidenceForTW>();
+            try
+            {
+                var custIds = custIdList.Split(',').Select(a => Convert.ToInt32(a));
+                Parallel.Invoke(()=> 
+                {
+                    var ceLv0 = DbSessionFactory.Execute<CustomerEvidenceForTW>("GetCustomerEvidenceLevel0", new { CustID = custIds }).Data;
+                    result.AddRange(ceLv0);
+                },
+                ()=> 
+                {
+                    var ceLv1 = DbSessionFactory.Execute<CustomerEvidenceForTW>("GetCustomerEvidenceLevel1", new { CustID = custIds }).Data;
+                    result.AddRange(ceLv1);
+                });
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("WEB - GetFlaggedEvidenceForLevel01 failed: " + ex.Message + ex.StackTrace);
+                throw;
+            }
+        }
+        
+        [HttpPost]
+        public JsonResult<List<CustomerEvidenceForTW>> GetFlaggedEvidenceForLevel2(string custIdList)
+        {
+            try
+            {
+                var custIds = custIdList.Split(',').Select(a => Convert.ToInt32(a));
+                var result = DbSessionFactory.Execute<CustomerEvidenceForTW>("GetCustomerEvidenceLevel2", new { CustID = custIds }).Data.ToList();
+
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("WEB - GetFlaggedEvidenceForLevel2 failed: " + ex.Message + ex.StackTrace);
+                throw;
             }
         }
 
