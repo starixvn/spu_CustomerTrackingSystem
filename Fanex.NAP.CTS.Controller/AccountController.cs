@@ -180,9 +180,9 @@
         [HttpPost]
         public ActionResult GetCustomerTotalAssociationByCTSCustId(long ctsCustId)
         {
-            var getAssociationFromMySQL = AppSettings.Get("GetAssociationProfileFromMySQL") == "1";
+            //var getAssociationFromMySQL = AppSettings.Get("GetAssociationProfileFromMySQL") == "1";
 
-            var result = _accountService.GetCustomerTotalAssociationByCTSCustId(ctsCustId, ConfigSettings.GetStatisticAssociation, getAssociationFromMySQL);
+            var result = _accountService.GetCustomerTotalAssociationByCTSCustId(ctsCustId, ConfigSettings.GetStatisticAssociation, true);
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
