@@ -625,7 +625,7 @@
         </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetDirectAssociationProfile(Fanex.NAP.CTS.Model.GraphDB.AssociationProfileParameterModel)">
             <summary>
-            Get Direct All Association for Profile Page
+            Get Direct All Association for WEB Profile Page
             </summary>
             <param name="paras"></param>
             <returns></returns>

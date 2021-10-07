@@ -25,15 +25,7 @@
 
         public int AssociationStatus { get; set; }
 
-        public DateTime AssociationDateGMT0 { get; set; }
-
         public DateTime AssociationDate { get; set; }
-
-        //GTM-4 for GraphDB
-        public DateTime AssociationDateFromGraphDB
-        {
-            get => AssociationDateGMT0.AddHours(-4);
-        }
 
         public string ParentIDs { get; set; }
 

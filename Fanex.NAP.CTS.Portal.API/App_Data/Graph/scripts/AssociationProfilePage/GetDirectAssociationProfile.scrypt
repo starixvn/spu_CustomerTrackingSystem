@@ -1,5 +1,5 @@
-﻿USE ctsgraphdb
-//USE ctslocal
+﻿//USE ctsgraphdb
+USE ctslocal
 CALL apoc.cypher.run('
 MATCH (c:CTSCustomer)-[r:USED_DEVICE]->(d:Device)<-[r1:USED_DEVICE]-(c1:CTSCustomer)
 MATCH (c1)-[:BELONG_TO_SUB]->(s:Subscriber)
@@ -40,7 +40,7 @@ UNION
 MATCH (c:CTSCustomer)-[r:ASS_BY_AI]-(c1:CTSCustomer)
 MATCH (c1)-[:BELONG_TO_SUB]->(s:Subscriber)
 MATCH (c1)-[:HAS_STATUS]->(st:StaticList)
-WHERE c.CTSCustID = $ip_CTSCustID AND c1.CTSCustID IS NOT NULL AND c1.CustSubID = 0
+WHERE c.CTSCustID = $ip_CTSCustID AND c1.CTSCustID IS NOT NULL
     AND (($ip_AssociationStatus = 0) 
         OR ($ip_AssociationStatus = 1 AND not exists((c)-[:HAS_EXCEPTION]-(c1)))
         OR ($ip_AssociationStatus = 2 AND exists((c)-[:HAS_EXCEPTION]-(c1)))) 
@@ -75,7 +75,7 @@ UNION
 MATCH (c:CTSCustomer)-[r:ADD_MANUALLY]-(c1:CTSCustomer)
 MATCH (c1)-[:BELONG_TO_SUB]->(s:Subscriber)
 MATCH (c1)-[:HAS_STATUS]->(st:StaticList)
-WHERE c.CTSCustID = $ip_CTSCustID AND c1.CTSCustID IS NOT NULL AND c1.CustSubID = 0
+WHERE c.CTSCustID = $ip_CTSCustID AND c.CustSubID = 0 AND c1.CTSCustID IS NOT NULL
     AND (($ip_AssociationStatus = 0) 
         OR ($ip_AssociationStatus = 1 AND not exists((c)-[:HAS_EXCEPTION]-(c1)))
         OR ($ip_AssociationStatus = 2 AND exists((c)-[:HAS_EXCEPTION]-(c1))))
@@ -110,7 +110,7 @@ UNION
 MATCH (c:CTSCustomer)-[r:ASS_BY_IP]-(c1:CTSCustomer)
 MATCH (c1)-[:BELONG_TO_SUB]->(s:Subscriber)
 MATCH (c1)-[:HAS_STATUS]->(st:StaticList)
-WHERE c.CTSCustID = $ip_CTSCustID AND c1.CTSCustID IS NOT NULL AND c1.CustSubID = 0
+WHERE c.CTSCustID = $ip_CTSCustID AND c.CustSubID = 0 AND c1.CTSCustID IS NOT NULL
     AND (($ip_AssociationStatus = 0) 
         OR ($ip_AssociationStatus = 1 AND not exists((c)-[:HAS_EXCEPTION]-(c1)))
         OR ($ip_AssociationStatus = 2 AND exists((c)-[:HAS_EXCEPTION]-(c1))))
@@ -153,12 +153,12 @@ WITH Distinct
     , value.StatusGroup                            AS StatusGroup
     , value.StatusID                               AS StatusID
     , value.StatusName                             AS StatusName
-    , collect(DISTINCT value.AssociationTypeName)  AS AssociationTypeName 
+    , collect(Distinct value.AssociationTypeName)  AS AssociationTypeName 
     , value.AssociationStatus                      AS AssociationStatus
-    , collect(DISTINCT value.AssociationDate)      AS AssociationDate
+    , collect(Distinct value.AssociationDate)      AS AssociationDate
     , value.ParentIDs                              AS ParentIDs
-    , collect(DISTINCT value.CategoryIDs)          AS CategoryIDs
-    , collect(DISTINCT value.CategoryNames)        AS CategoryNames
+    , collect(Distinct toString(value.CategoryIDs))AS CategoryIDs
+    , collect(Distinct value.CategoryNames)        AS CategoryNames
 UNWIND(AssociationDate) as associationDate
 WITH CTSCustID,CustId,CustSubId,SubscriberID,SubscriberName,UserName,UserName2,StatusGroup,StatusID,StatusName,AssociationTypeName,AssociationStatus, Min(associationDate) as AssociationDate,ParentIDs,CategoryIDs,CategoryNames
 WITH collect({
@@ -170,14 +170,14 @@ WITH collect({
     , UserName           : UserName
     , UserName2          : UserName2
     , StatusGroup        : StatusGroup
-    , StatusID           :StatusID
-    , StatusName         :StatusName
-    , AssociationTypeName:AssociationTypeName
-    , AssociationStatus  :AssociationStatus
-    , AssociationDate    :AssociationDate
-    , ParentIDs          :ParentIDs
-    , CategoryIDs        :CategoryIDs
-    , CategoryNames      :CategoryNames
+    , StatusID           : StatusID
+    , StatusName         : StatusName
+    , AssociationTypeName: apoc.text.join(AssociationTypeName,",")
+    , AssociationStatus  : AssociationStatus
+    , AssociationDate    : AssociationDate
+    , ParentIDs          : ParentIDs
+    , CategoryIDs        : apoc.text.join(CategoryIDs,",")
+    , CategoryNames      : apoc.text.join(CategoryNames,",")
 }) AS ListAss, COUNT(CTSCustID) AS TotalItems
 UNWIND ListAss AS ass
 WITH ass, TotalItems 

@@ -397,19 +397,6 @@
             return x;
         }
 
-        private DateTime GetMinDate(IGrouping<long, GraphAssociationModel> groupData)
-        {
-            var minDate = DateTime.MaxValue;
-
-            foreach (var item in groupData)
-            {
-                if (item.AssociationDateGMT0 < minDate)
-                    minDate = item.AssociationDateGMT0;
-            }
-
-            return minDate;
-        }
-
         public IEnumerable<ValidateManualAssociationMultipleModel> ValidateManualAssociationMultiple(long fromCTSCustId, string toUserNameList, out bool isException)
         {
             isException = false;

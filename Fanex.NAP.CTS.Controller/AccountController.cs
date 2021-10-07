@@ -315,12 +315,9 @@
                         CustId = x.CustId.HasValue ? x.CustId.Value : 0,
                         Username = !string.IsNullOrWhiteSpace(x.Username) ? x.Username : x.Username2,
                         LoginId = !string.IsNullOrWhiteSpace(x.Username2) ? x.Username2 : x.Username,
-                        AssociationDate = getAssociationFromMySql == true ? x.AssociationDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss) :
-                                                                            x.AssociationDateFromGraphDB.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+                        AssociationDate = x.AssociationDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                         AssociationType = x.AssociationType,
-                        AssociationTypeName = StandardizeAssociationTypeName(getAssociationFromMySql == true
-                                        ? x.AssociationTypeName
-                                        : _accountService.MappingAssociationType(x)),
+                        AssociationTypeName = StandardizeAssociationTypeName(x.AssociationTypeName),
                         Status = x.StatusName == "NA" ? "N/A" : x.StatusName,
                         StatusId = x.StatusId.HasValue ? x.StatusId.Value : 0,
                         SubscriberId = x.SubscriberID,
@@ -347,7 +344,7 @@
             return Json(new
             {
                 draw = model.draw,
-                recordsTotal = graphAssociationPage.TotalItems,
+                recordsTotal = graphAssociationPage?.TotalItems ?? 0,
                 recordsFiltered = totalItem,
                 data = result
             }, JsonRequestBehavior.AllowGet);
@@ -418,7 +415,6 @@
                                           Username2 = group.a.Username2,
                                           AssociationType = group.a.AssociationType,
                                           AssociationTypeName = group.a.AssociationTypeName,
-                                          AssociationDateGMT0 = group.a.AssociationDateGMT0,
                                           AssociationDate = group.a.AssociationDate,
                                           SharedDevices = group.a.SharedDevices,
                                           SharedIPs = group.a.SharedIPs,

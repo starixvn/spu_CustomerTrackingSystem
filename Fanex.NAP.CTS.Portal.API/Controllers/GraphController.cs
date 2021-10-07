@@ -22,11 +22,11 @@
         #region Profile Page - Association
 
         /// <summary>
-        /// Get Direct All Association for Profile Page
+        /// Get Direct All Association for WEB Profile Page
         /// </summary>
         /// <param name="paras"></param>
         /// <returns></returns>
-        [AcceptVerbs("GetDirectAssociationProfile")]
+        [System.Web.Http.AcceptVerbs("GetDirectAssociationProfile")]
         [HttpPost]
         public GraphAssociationPaging GetDirectAssociationProfile([FromBody] AssociationProfileParameterModel paras)
         {
@@ -48,16 +48,15 @@
                         Pagesize = paras.Take
                     }).Data.FirstOrDefault();
 
-                    return result ?? new GraphAssociationPaging() { AssociationList = null, TotalItems = 0 };
+                    return result ?? new GraphAssociationPaging() { AssociationList = new List<GraphAssociationModel>(), TotalItems = 0 };
                 }
             }
             catch (Exception ex)
             {
                 LogService.Error("WEB - GetDirectAssociationProfile failed: " + ex.Message + ex.StackTrace);
-                throw;
             }
 
-            return new GraphAssociationPaging() { AssociationList = null, TotalItems = 0 };
+            return new GraphAssociationPaging() { AssociationList = new List<GraphAssociationModel>(), TotalItems = 0 }; ;
         }
 
         private string GetQueryScriptForAssProfile(int associationType)
@@ -80,6 +79,10 @@
                     return "GetDirectAssociationProfile";
             }
         }
+
+        #endregion Profile Page - Association
+
+        #region Flagged Evidence Level API
 
         [HttpPost]
         public JsonResult<List<CustomerEvidenceForTW>> GetFlaggedEvidenceForLevel01(string custIdList)
@@ -124,7 +127,7 @@
             }
         }
 
-        #endregion Profile Page - Association
+        #endregion
 
         #region API (Need to remove without in use)
 
