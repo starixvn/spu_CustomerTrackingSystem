@@ -476,6 +476,8 @@
     <Content Include="App_Data\Graph\scripts\GetCustomerEvidenceAPI\GetCustomerEvidenceLevel2.scrypt" />
     <Content Include="App_Data\Graph\scripts\GetCustomerEvidenceAPI\GetCustomerEvidenceLevel1.scrypt" />
     <Content Include="App_Data\Graph\scripts\GetCustomerEvidenceAPI\GetCustomerEvidenceLevel0.scrypt" />
+    <Content Include="App_Data\Graph\scripts\AssociationReport\GetAssReportByDevice.scrypt" />
+    <Content Include="App_Data\Graph\scripts\AssociationReport\GetAssReportByManual.scrypt" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />

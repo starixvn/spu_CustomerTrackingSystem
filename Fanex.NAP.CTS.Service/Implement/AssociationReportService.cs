@@ -65,35 +65,35 @@
             }
         }
 
-        public GraphAssociationModel GetAssociationReportFromGraphDB(string apiEndPoint, AssociationFilterViewModel filter)
+        public AssociationReportViewModel GetAssociationReportFromGraphDB(string apiEndPoint, AssociationFilterViewModel filter)
         {
             try
             {
                 var param = new
                 {
-                    AssociatedDateFrom = filter.FromDate,
-                    AssociatedDateTo = filter.ToDate,
-                    AccountStatuses = filter.AccountStatusIds,
-                    filter.SubscriberIDs,
-                    filter.AssociationStatus,
-                    filter.EvidenceIDs,
-                    filter.AssociationType,
+                    FromAssDate = filter.FromDate,
+                    ToAssDate = filter.ToDate,
+                    AccountStatusIDs = filter.AccountStatusIds.Split(',').Select(int.Parse),
+                    SubscriberIDs = filter.SubscriberIDs.Split(',').Select(int.Parse),
+                    AssociationStatus = filter.AssociationStatus,
+                    EvidenceIDs = filter.EvidenceIDs.Split(',').Select(int.Parse),
+                    AssociationType = filter.AssociationType,
                     TakeRow = filter.length,
                     SkipRow = filter.start
                 };
 
-                var data = ApiHelper.Post<GraphAssociationModel> (apiEndPoint, param);
+                var data = ApiHelper.Post<AssociationReportViewModel> (apiEndPoint, param);
 
                 Task.WhenAll(data);
 
-                return data.Result ?? new GraphAssociationModel();
+                return data.Result ?? new AssociationReportViewModel() { AssociationList = new List<AssociationViewModel>(), TotalItems = 0 };
             }
             catch (Exception ex)
             {
-                LogService.Error("CTS - Association Report - Exception: " + ex.Message, ex);
+                LogService.Error("Web - Association Report - Exception: " + ex.Message, ex);
             }
 
-            return new GraphAssociationModel();
+            return new AssociationReportViewModel() { AssociationList = new List<AssociationViewModel>(), TotalItems = 0 };
         }
 
         public IEnumerable<CategoriesModel> GetCategories(string ctsCustIdList)

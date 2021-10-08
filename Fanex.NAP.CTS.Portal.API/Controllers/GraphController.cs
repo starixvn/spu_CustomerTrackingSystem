@@ -5,6 +5,7 @@
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.ProbationManagement;
+    using Fanex.NAP.CTS.ViewModel.AssociationReport;
     using Fanex.NAP.CTS.ViewModel.ProbationManagement;
     using Fanex.NAP.SPU.Graph.Core;
     using System;
@@ -19,7 +20,7 @@
     /// </summary>
     public class GraphController : ApiController
     {
-        #region Profile Page - Association
+        #region WEB - Association Profile Page
 
         /// <summary>
         /// Get Direct All Association for WEB Profile Page
@@ -58,7 +59,7 @@
                        + ex.InnerException.StackTrace);
             }
 
-            return new GraphAssociationPaging() { AssociationList = new List<GraphAssociationModel>(), TotalItems = 0 }; ;
+            return new GraphAssociationPaging() { AssociationList = new List<GraphAssociationModel>(), TotalItems = 0 };
         }
 
         private string GetQueryScriptForAssProfile(int associationType)
@@ -84,7 +85,7 @@
 
         #endregion Profile Page - Association
 
-        #region Flagged Evidence Level API
+        #region API - Flagged Evidence Level
 
         [HttpPost]
         public JsonResult<List<CustomerEvidenceForTW>> GetFlaggedEvidenceForLevel01(string custIdList)
@@ -126,6 +127,73 @@
             {
                 LogService.Error("WEB - GetFlaggedEvidenceForLevel2 failed: " + ex.Message + ex.StackTrace);
                 throw;
+            }
+        }
+
+        #endregion
+
+        #region WEB - Association Report
+
+        /// <summary>
+        /// Get association report
+        /// </summary>
+        /// <param name="paras"></param>
+        /// <returns></returns>
+        [System.Web.Http.AcceptVerbs("GetAssociationReport")]
+        [HttpPost]
+        public AssociationReportViewModel GetAssociationReport([FromBody] AssociationReportParameterModel paras)
+        {
+            try
+            {
+                if (paras != null && paras.SubscriberIDs.Any() && paras.EvidenceIDs.Any() && paras.AssociationStatus != -1)
+                {
+                    string queryScript = GetQueryScriptForAssReport(paras.AssociationType);
+
+                    if(!string.IsNullOrEmpty(queryScript))
+                    {
+                        var paramForGraph = new
+                        {
+                            FromAssDate = paras.FromAssDate,
+                            ToAssDate = paras.ToAssDate,
+                            AccountStatusIDs = paras.AccountStatusIDs,
+                            SubscriberIDs = paras.SubscriberIDs,
+                            AssociationStatus = paras.AssociationStatus,
+                            EvidenceIDs = paras.EvidenceIDs,
+                            AssociationType = paras.AssociationType,
+                            TakeRow = paras.TakeRow,
+                            SkipRow = paras.SkipRow
+                        };
+
+                        var result = DbSessionFactory.Execute<AssociationReportViewModel>(queryScript, paramForGraph).Data.FirstOrDefault();
+
+                        return result ?? new AssociationReportViewModel() { AssociationList = new List<AssociationViewModel>(), TotalItems = 0 };
+                    }     
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("WEB - GetAssociationReport failed: " + ex.Message + ex.StackTrace + "\n"
+                        + ex.InnerException.Message + ex.InnerException.Source + ((Neo4j.Driver.Neo4jException)ex.InnerException).Code
+                        + ex.InnerException.StackTrace);
+            }
+
+            return new AssociationReportViewModel() { AssociationList = new List<AssociationViewModel>(), TotalItems = 0 };
+        }
+
+        private string GetQueryScriptForAssReport(int associationType)
+        {
+            switch (associationType)
+            {
+                case 1:
+                    {
+                        return "GetAssociationReportByDevice";
+                    }
+                case 3:
+                    {
+                       return "GetAssociationReportByManual";
+                    }
+                default:
+                    return string.Empty;
             }
         }
 
@@ -419,77 +487,6 @@
             catch (Exception ex)
             {
                 LogService.Error("GetDirectAssociationDevices failed: " + ex.Message + ex.StackTrace);
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Get association report
-        /// </summary>
-        /// <param name="paras"></param>
-        /// <returns></returns>
-        [System.Web.Http.AcceptVerbs("GetAssociationReport")]
-        [HttpPost]
-        public GraphAssociationReportPaging GetAssociationReport([FromBody] AssociationReportParameterModel paras)
-        {
-            var result = new GraphAssociationReportPaging() { AssociationList = null, TotalItems = 0 };
-
-            try
-            {
-                if (paras != null)
-                {
-                    string scriptName = string.Empty;
-                    switch (paras.AssociationType)
-                    {
-                        case 1:
-                            {
-                                scriptName = "GetAssociationReportByDevice";
-                                break;
-                            }
-                        case 2:
-                            {
-                                scriptName = "GetAssociationReportByIP";
-                                break;
-                            }
-                        case 3:
-                            {
-                                scriptName = "GetAssociationReportByManual";
-                                break;
-                            }
-                    }
-
-                    if (string.IsNullOrEmpty(scriptName))
-                    {
-                        return result;
-                    }
-
-                    var paramForGraph = new
-                    {
-                        ip_AssCreatedFrom = paras.AssociatedDateFrom.AddHours(4),
-                        ip_AssCreatedTo = paras.AssociatedDateTo.AddHours(4),
-                        ip_SubscriberList = paras.SubscriberIDs.Split(',').Select(int.Parse),
-                        ip_AccountStatus = paras.AccountStatuses.Split(',').Select(int.Parse),
-                        ip_EvidenceID = paras.EvidenceIDs?.Trim().Split(',').Select(int.Parse),
-                        ip_AssStatus = paras.AssociationStatus,
-                        ip_TakeRows = paras.TakeRow,
-                        ip_SkipRows = paras.SkipRow
-                    };
-
-                    result.AssociationList = DbSessionFactory.Execute<AssociationReportModel>(scriptName, paramForGraph).Data;
-                    result.TotalItems = DbSessionFactory.Execute<int>("GetAssociationReportByDevice_CountTotal", paramForGraph).Data.FirstOrDefault();
-
-                    LogService.Info("result.TotalItems: " + result.TotalItems.ToString());
-                    LogService.Info("result.AssociationList: " + result.AssociationList.Count().ToString());
-
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                LogService.Error("GetAssociationReport failed: " + ex.Message + ex.StackTrace + "\n"
-                        + ex.InnerException.Message + ex.InnerException.Source + ((Neo4j.Driver.Neo4jException)ex.InnerException).Code
-                        + ex.InnerException.StackTrace);
             }
 
             return result;

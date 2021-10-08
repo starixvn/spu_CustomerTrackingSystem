@@ -95,6 +95,7 @@
     <Compile Include="AssociationReport\AssociationDetailFilterViewModel.cs" />
     <Compile Include="AssociationReport\AssociationDetailViewModel.cs" />
     <Compile Include="AssociationReport\AssociationFilterViewModel.cs" />
+    <Compile Include="AssociationReport\AssociationReportViewModel.cs" />
     <Compile Include="AssociationReport\AssociationViewModel.cs" />
     <Compile Include="Common\SubscriberGroupViewModel.cs" />
     <Compile Include="Common\SubscriberViewModel.cs" />

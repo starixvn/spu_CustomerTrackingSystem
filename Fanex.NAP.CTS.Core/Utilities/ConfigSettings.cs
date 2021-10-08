@@ -60,6 +60,8 @@
 
         public static string GetDirectAssociationProfile => GetConfigStringByName("Graph_GetDirectAssociationProfile");
 
+        public static string GetAssociationReport => GetConfigStringByName("Graph_GetAssociationReport");
+
         public static string GetAssociationException => GetConfigStringByName("Graph_GetAssociationException");
 
         public static string GetInDirectAssociation => GetConfigStringByName("Graph_GetInDirectAssociation");
@@ -69,8 +71,6 @@
         public static string GetDirectAssociationMultiCust => GetConfigStringByName("Graph_GetDirectAssociationMultiCust");
 
         public static string GetStatisticAssociation => GetConfigStringByName("Graph_GetStatisticAssociation");
-
-        public static string GetAssociations => GetConfigStringByName("Graph_GetAssociations");
 
         public static string GetAssociationDetail => GetConfigStringByName("Graph_GetAssociationDetail");
 

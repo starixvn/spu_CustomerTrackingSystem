@@ -630,6 +630,13 @@
             <param name="paras"></param>
             <returns></returns>
         </member>
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetAssociationReport(Fanex.NAP.CTS.Model.GraphDB.AssociationReportParameterModel)">
+            <summary>
+            Get association report
+            </summary>
+            <param name="paras"></param>
+            <returns></returns>
+        </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetStatisticAssociation(System.Int32)">
             <summary>
             Get association statistic
@@ -667,13 +674,6 @@
             Grouping customer
             </summary>
             <param name="custIds">List custId</param>
-            <returns></returns>
-        </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetAssociationReport(Fanex.NAP.CTS.Model.GraphDB.AssociationReportParameterModel)">
-            <summary>
-            Get association report
-            </summary>
-            <param name="paras"></param>
             <returns></returns>
         </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetDetailAssociationReport(Fanex.NAP.CTS.Model.GraphDB.AssociationDetailReportParameterModel)">

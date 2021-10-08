@@ -15,7 +15,7 @@
 
         IEnumerable<EvidenceModel> GetEvidenceList();
 
-        GraphAssociationModel GetAssociationReportFromGraphDB(string apiEndPoint, AssociationFilterViewModel filter);        
+        AssociationReportViewModel GetAssociationReportFromGraphDB(string apiEndPoint, AssociationFilterViewModel filter);        
 
         IEnumerable<CategoriesModel> GetCategories(string ctsCustIdList);
 

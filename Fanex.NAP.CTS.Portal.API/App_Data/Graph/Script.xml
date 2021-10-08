@@ -24,8 +24,8 @@
 		<GraphSetting Key="GetAssociatedDevicesByCustId" SpName="GetAssociatedDevicesByCustId" DbName="GraphDB" />
 		<GraphSetting Key="GetDevicesIdByCustId" SpName="GetDevicesIdByCustId" DbName="GraphDB" />
 		<GraphSetting Key="GetAssociationReport" SpName="GetAssociationReport" DbName="GraphDB" />
-		<GraphSetting Key="GetAssociationReportByDevice" SpName="GetAssociationReportByDevice" DbName="GraphDB" TimeOut="600"/>
-		<GraphSetting Key="GetAssociationReportByDevice_CountTotal" SpName="GetAssociationReportByDevice_CountTotal" DbName="GraphDB" TimeOut="600"/>
+		<GraphSetting Key="GetAssociationReportByDevice" SpName="GetAssociationReportByDevice" DbName="GraphDB" TimeOut="600" />
+		<GraphSetting Key="GetAssociationReportByDevice_CountTotal" SpName="GetAssociationReportByDevice_CountTotal" DbName="GraphDB" TimeOut="600" />
 		<GraphSetting Key="GetAssociationReportByManual" SpName="GetAssociationReportByManual" DbName="GraphDB" />
 		<GraphSetting Key="GetAssociationReportByIP" SpName="GetAssociationReportByIP" DbName="GraphDB" />
 		<GraphSetting Key="GetAssociationOneLevelForExtAcc" SpName="GetAssociationOneLevelForExtAcc" DbName="GraphDB" />
@@ -44,5 +44,10 @@
 		<GraphSetting Key="GetDirectAssociationProfileByDevice" SpName="GetDirectAssociationProfileByDevice" DbName="GraphDB" />
 		<GraphSetting Key="GetDirectAssociationProfileByIP" SpName="GetDirectAssociationProfileByIP" DbName="GraphDB" />
 		<GraphSetting Key="GetDirectAssociationProfileByManual" SpName="GetDirectAssociationProfileByManual" DbName="GraphDB" />
+	</Function>
+
+	<Function Name="Association Report">
+		<GraphSetting Key="GetAssReportByDevice" SpName="GetAssReportByDevice" DbName="GraphDB" />
+		<GraphSetting Key="GetAssReportByManual" SpName="GetAssReportByManual" DbName="GraphDB" />
 	</Function>
 </Functions>

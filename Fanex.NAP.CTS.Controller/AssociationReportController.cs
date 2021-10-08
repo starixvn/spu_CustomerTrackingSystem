@@ -51,8 +51,6 @@
         {
             var associations = Enumerable.Empty<AssociationViewModel>();
             int totalItems = 0;
-            var apiURI = AppSettings.Get("Graph_GetAssociations");
-            
 
             if (filter.ToDate != DateTime.MinValue)
             {
@@ -80,21 +78,11 @@
             }
             else
             {
-                var assFromGraph = _associationService.GetAssociationReportFromGraphDB(apiURI, filter);
+                var assFromGraph = _associationService.GetAssociationReportFromGraphDB(ConfigSettings.GetAssociationReport, filter);
 
                 if (assFromGraph.AssociationList != null && assFromGraph.AssociationList.Any())
                 {
-                    associations = assFromGraph.AssociationList
-                        .Select(x => new AssociationViewModel
-                        {
-                            CTSCustId = x.CTSCustId,
-                            UserName = x.UserName,
-                            AccountStatus = x.AccountStatus,
-                            SubscriberId = x.SubscriberId,
-                            SubscriberName = x.SubscriberName,
-                            EvidenceCodes = x.EvidenceCode,
-                            CategoryName = x.CategoryNames
-                        });
+                    associations = assFromGraph.AssociationList;
 
                     totalItems = assFromGraph.TotalItems;
                 }
