@@ -46,14 +46,16 @@
                         CategoryIDs = paras.CategoryIDs.Split(',').Select(int.Parse),
                         Skip = paras.Skip,
                         Pagesize = paras.Take
-                    }).Data.FirstOrDefault();
+                    })?.Data.FirstOrDefault();
 
                     return result ?? new GraphAssociationPaging() { AssociationList = new List<GraphAssociationModel>(), TotalItems = 0 };
                 }
             }
             catch (Exception ex)
             {
-                LogService.Error("WEB - GetDirectAssociationProfile failed: " + ex.Message + ex.StackTrace);
+                LogService.Error("WEB - GetDirectAssociationProfile failed: " + ex.Message + ex.StackTrace + "\n"
+                       + ex.InnerException.Message + ex.InnerException.Source + ((Neo4j.Driver.Neo4jException)ex.InnerException).Code
+                       + ex.InnerException.StackTrace);
             }
 
             return new GraphAssociationPaging() { AssociationList = new List<GraphAssociationModel>(), TotalItems = 0 }; ;
