@@ -115,7 +115,7 @@
                     ViewBag.IsHedging = para.IsHedging;
                     ViewBag.IsLiveDefault = (para.EventGroup == 2 || para.EventGroup == 4);
                     ViewBag.ReasonGroup = matchReasonGroup;
-                    ViewBag.MatchScore = matchScore;
+                    ViewBag.MatchScore = matchScore.OrderBy(c => c.TotalScore).ThenBy(c => c.LiveHomeScore).ThenBy(c => c.LiveAwayScore);
                     ViewBag.IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
                                     NapSettings.Settings.SiteId,
                                     FSFunctionKeys.MatchMonitor,
@@ -222,7 +222,7 @@
                                                                 LiveIndicator = c.ticket.LiveIndicator,
                                                                 Amount = c.ticket.Stake,
                                                                 HDP = c.ticket.Hdp1 - c.ticket.Hdp2,
-                                                                Score = c.ticket.LiveIndicator ? (c.ticket.LiveAwayScore + " - " + c.ticket.LiveHomeScore) : "-",
+                                                                Score = c.ticket.LiveIndicator ? (c.ticket.LiveHomeScore + " - " + c.ticket.LiveAwayScore) : "-",
                                                                 TicketStatus = c.ticket.TicketStatus,
                                                                 TransTime = c.ticket.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                                                                 ReasonGroup = GetReasonGroup(mappingTransGroupReason, c.ticket)
