@@ -16,6 +16,7 @@
     using System.Web.Http.Results;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Diagnostics;
 
 
     /// <summary>
@@ -161,9 +162,11 @@
                             EvidenceIDs = paras.EvidenceIDs,
                         };
 
+                        Stopwatch stopWatch = new Stopwatch();
+                        stopWatch.Start();
                         var custInfo = DbSessionFactory.Execute<AssociationReportViewModel>("GetAssReportCustInfo", paraForCustInfo).Data.FirstOrDefault();
-
-                        LogService.Debug("WEB - UAT - Association Report - Get custInfo done");
+                        stopWatch.Stop();
+                        LogService.Debug("WEB - UAT - Association Report - Get custInfo done - " + stopWatch.ElapsedMilliseconds);
 
                         if (custInfo != null && custInfo.AssociationList != null && custInfo.AssociationList.Any())
                         {
@@ -177,9 +180,11 @@
                                 AssociationStatus = paras.AssociationStatus,
                             };
 
+                            stopWatch.Reset();
+                            stopWatch.Start();
                             var custAssociation = DbSessionFactory.Execute<AssociationReportViewModel>(queryScript, paramater).Data.FirstOrDefault();
-
-                            LogService.Debug("WEB - UAT - Association Report - Get custAssociation done");
+                            stopWatch.Stop();
+                            LogService.Debug("WEB - UAT - Association Report - Get custAssociation done - " + stopWatch.ElapsedMilliseconds);
 
                             if (custAssociation != null && custAssociation.TotalItems > 0)
                             {
@@ -218,6 +223,8 @@
 
         private AssociationReportViewModel MergeAssociationReport(AssociationReportViewModel custInfo, AssociationReportViewModel custAss, AssociationReportParameterModel para)
         {
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
             var result = new List<AssociationViewModel>();
 
             if (custInfo.AssociationList.Any() && custAss.AssociationList.Any())
@@ -239,7 +246,8 @@
                                         CategoryName = group.a.CategoryName
                                     }).OrderBy(c => c.SubscriberName).Skip(para.SkipRow).Take(para.TakeRow).ToList();
 
-                LogService.Debug("WEB - UAT - Association Report - Merge done");
+                LogService.Debug("WEB - UAT - Association Report - Merge done - " + stopWatch.ElapsedMilliseconds);
+                stopWatch.Stop();
             }
 
             return new AssociationReportViewModel() 

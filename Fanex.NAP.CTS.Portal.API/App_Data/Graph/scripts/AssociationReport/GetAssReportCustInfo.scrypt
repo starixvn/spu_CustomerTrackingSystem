@@ -1,5 +1,5 @@
-﻿USE ctsgraphdb
-//USE ctslocal
+﻿//USE ctsgraphdb
+USE ctslocal
 CALL apoc.cypher.run('
 MATCH (c:FlaggedCustomer)-[r:HAS_EVIDENCE]->(e:Evidence)
 WHERE e.EvidenceID IN  $ip_EvidenceIDs
