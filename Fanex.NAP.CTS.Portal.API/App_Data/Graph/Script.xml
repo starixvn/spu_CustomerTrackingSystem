@@ -49,5 +49,6 @@
 	<Function Name="Association Report">
 		<GraphSetting Key="GetAssReportByDevice" SpName="GetAssReportByDevice" DbName="GraphDB" />
 		<GraphSetting Key="GetAssReportByManual" SpName="GetAssReportByManual" DbName="GraphDB" />
+		<GraphSetting Key="GetAssReportCustInfo" SpName="GetAssReportCustInfo" DbName="GraphDB" />
 	</Function>
 </Functions>

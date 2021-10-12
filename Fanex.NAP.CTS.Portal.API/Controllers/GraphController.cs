@@ -14,6 +14,9 @@
     using System.Threading.Tasks;
     using System.Web.Http;
     using System.Web.Http.Results;
+    using System.Collections.Generic;
+    using System.Linq;
+
 
     /// <summary>
     /// Graph Controller - Using for CTS site
@@ -83,7 +86,7 @@
             }
         }
 
-        #endregion Profile Page - Association
+        #endregion WEB - Association Profile Page
 
         #region API - Flagged Evidence Level
 
@@ -149,24 +152,36 @@
                 {
                     string queryScript = GetQueryScriptForAssReport(paras.AssociationType);
 
-                    if(!string.IsNullOrEmpty(queryScript))
+                    if (!string.IsNullOrEmpty(queryScript))
                     {
-                        var paramForGraph = new
+                        var paraForCustInfo = new
                         {
-                            FromAssDate = paras.FromAssDate,
-                            ToAssDate = paras.ToAssDate,
                             AccountStatusIDs = paras.AccountStatusIDs,
                             SubscriberIDs = paras.SubscriberIDs,
-                            AssociationStatus = paras.AssociationStatus,
                             EvidenceIDs = paras.EvidenceIDs,
-                            AssociationType = paras.AssociationType,
-                            TakeRow = paras.TakeRow,
-                            SkipRow = paras.SkipRow
                         };
 
-                        var result = DbSessionFactory.Execute<AssociationReportViewModel>(queryScript, paramForGraph).Data.FirstOrDefault();
+                        var custInfo = DbSessionFactory.Execute<AssociationReportViewModel>("GetAssReportCustInfo", paraForCustInfo).Data.FirstOrDefault();
 
-                        return result ?? new AssociationReportViewModel() { AssociationList = new List<AssociationViewModel>(), TotalItems = 0 };
+                        if (custInfo != null && custInfo.AssociationList != null && custInfo.AssociationList.Any())
+                        {
+                            List<int> ctsCustIds = custInfo.AssociationList.Select(c => c.CTSCustId).Distinct().ToList();
+
+                            var paramater = new
+                            {
+                                CTSCustIDs = ctsCustIds,
+                                FromAssDate = paras.FromAssDate,
+                                ToAssDate = paras.ToAssDate,
+                                AssociationStatus = paras.AssociationStatus,
+                            };
+
+                            var custAssociation = DbSessionFactory.Execute<AssociationReportViewModel>(queryScript, paramater).Data.FirstOrDefault();
+
+                            if (custAssociation != null && custAssociation.TotalItems > 0)
+                            {
+                                return MergeAssociationReport(custInfo, custAssociation, paras);
+                            }
+                        }
                     }     
                 }
             }
@@ -186,18 +201,49 @@
             {
                 case 1:
                     {
-                        return "GetAssociationReportByDevice";
+                        return "GetAssReportByDevice";
                     }
                 case 3:
                     {
-                       return "GetAssociationReportByManual";
+                       return "GetAssReportByManual";
                     }
                 default:
                     return string.Empty;
             }
         }
 
-        #endregion
+        private AssociationReportViewModel MergeAssociationReport(AssociationReportViewModel custInfo, AssociationReportViewModel custAss, AssociationReportParameterModel para)
+        {
+            var result = new List<AssociationViewModel>();
+
+            if (custInfo.AssociationList.Any() && custAss.AssociationList.Any())
+            {
+                result = custAss.AssociationList.GroupJoin(custInfo.AssociationList,
+                                a => a.CTSCustId,
+                                i => i.CTSCustId,
+                                (a, i) => new { a, i })
+                                .SelectMany(
+                                    group =>group.i.DefaultIfEmpty(),
+                                    (group, temp) => new AssociationViewModel
+                                    {
+                                        CTSCustId = group.a.CTSCustId,
+                                        UserName = (temp != null) ? temp.UserName : string.Empty,
+                                        AccountStatus = (temp != null) ? temp.AccountStatus : string.Empty,
+                                        SubscriberId = (temp != null) ? temp.SubscriberId : 0,
+                                        SubscriberName = (temp != null) ? temp.SubscriberName : string.Empty,
+                                        EvidenceCodes = (temp != null) ? temp.EvidenceCodes : string.Empty,
+                                        CategoryName = group.a.CategoryName
+                                    }).OrderBy(c => c.SubscriberName).Skip(para.SkipRow).Take(para.TakeRow).ToList();
+            }
+
+            return new AssociationReportViewModel() 
+            {
+                AssociationList = result ?? new List<AssociationViewModel>(),
+                TotalItems = custAss.TotalItems 
+            };
+        }
+
+        #endregion WEB - Association Report
 
         #region API (Need to remove without in use)
 

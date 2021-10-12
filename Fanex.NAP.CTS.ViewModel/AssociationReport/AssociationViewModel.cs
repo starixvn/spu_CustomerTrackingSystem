@@ -4,8 +4,6 @@
     {
         public int CTSCustId { get; set; }
 
-        public int CustId { get; set; }
-
         public string UserName { get; set; }
 
         public int SubscriberId { get; set; }        
@@ -16,9 +14,6 @@
 
         public string EvidenceCodes { get; set; }
 
-        public string CategoryName { get; set; }
-
-        public string AssociationType { get; set; }
-        
+        public string CategoryName { get; set; }        
     }
 }

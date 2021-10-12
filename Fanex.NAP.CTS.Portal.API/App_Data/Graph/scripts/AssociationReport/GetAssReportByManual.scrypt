@@ -1,37 +1,17 @@
 ﻿//USE ctsgraphdb
 USE ctslocal
 CALL apoc.cypher.run('
-MATCH (c:FlaggedCustomer)-[r:HAS_EVIDENCE]->(e:Evidence)
-WHERE e.EvidenceID IN $ip_EvidenceIDs
-WITH  c, collect(DISTINCT e.EvidenceCode) as EvidenceCodes
-MATCH (c)-[:HAS_STATUS]->(st:StaticList)
-WHERE st.ListID = 1 AND st.ItemID IN $ip_AccountStatusIDs
-WITH c, EvidenceCodes, st.ItemNameDisplay as AccountStatus
-MATCH (c)-[:BELONG_TO_SUB]->(s:Subscriber)
-WHERE s.SubscriberID in $ip_SubscriberIDs
-WITH c, EvidenceCodes, AccountStatus, s.SubscriberID as SubscriberID, s.SubscriberName as SubscriberName
-MATCH (c)-[r:ADD_MANUALLY]->(c2:CTSCustomer)
-WHERE r.CreatedDate >= $ip_FromAssDate AND r.CreatedDate <= $ip_ToAssDate
-WITH DISTINCT c.CTSCustID as CTSCustID, c.Username as UserName, EvidenceCodes, AccountStatus, SubscriberID, SubscriberName, c2.CTSCustID as CTS2CustID
-WHERE (($ip_AccountStatusIDs = 0) 
-            OR ($ip_AccountStatusIDs = 1 AND NOT EXISTS ((:CTSCustomer {CTSCustID:CTSCustID})-[:HAS_EXCEPTION]-(:CTSCustomer {CTSCustID:CTSCustID2})))
-            OR ($ip_AccountStatusIDs = 2 AND EXISTS ((:CTSCustomer {CTSCustID:CTSCustID})-[:HAS_EXCEPTION]-(:CTSCustomer {CTSCustID:CTSCustID2})))) 
-            WITH DISTINCT CTSCustID, UserName, EvidenceCodes, AccountStatus, SubscriberID, SubscriberName
-WITH DISTINCT CTSCustID, UserName, EvidenceCodes, AccountStatus, SubscriberID, SubscriberName
+MATCH (c)-[r:ADD_MANUALLY]->(c1:CTSCustomer)
+WHERE c.CTSCustID in $ip_CTSCustIDs 
+    AND $ip_FromAssDate <= r.CreatedDate <= $ip_ToAssDate
+    AND (($ip_AssociationStatus = 0) 
+		OR ($ip_AssociationStatus = 1 AND not exists((c)-[:HAS_EXCEPTION]-(c1)))
+		OR ($ip_AssociationStatus = 2 AND exists((c)-[:HAS_EXCEPTION]-(c1))))
+WITH DISTINCT c.CTSCustID as CTSCustID
 OPTIONAL MATCH (:CTSCustomer {CTSCustID:CTSCustID})-[:HAS_CATEGORY]->(ct:CustomerCategory)
 RETURN 
       CTSCustID           AS CTSCustID
-    , UserName            AS UserName
-    , SubscriberID        AS SubscriberID
-    , SubscriberName      AS SubscriberName
-    , AccountStatus       AS AccountStatus
-    , apoc.text.join(EvidenceCodes,",")             AS EvidenceCodes
     , apoc.text.join(collect(ct.CategoryName),",")  AS CategoryName
-',{ip_FromAssDate: $FromAssDate, ip_ToAssDate: $ToAssDate, ip_AccountStatusIDs: $AccountStatusIDs, ip_SubscriberIDs: $SubscriberIDs, ip_AssociationStatus: $AssociationStatus, ip_EvidenceIDs: $EvidenceIDs, ip_AssociationType : $AssociationType}) YIELD value 
+',{ ip_CTSCustIDs : $CTSCustIDs, ip_FromAssDate: datetime($FromAssDate), ip_ToAssDate: datetime($ToAssDate), ip_AssociationStatus: $AssociationStatus}) YIELD value 
 WITH collect(value) as ListAss, count(value) as TotalItems
-UNWIND ListAss as ass
-WITH ass, TotalItems 
-ORDER BY ass.AccountStatus DESC, ass.SubscriberName DESC
-SKIP $Skip
-LIMIT $Pagesize
-RETURN COLLECT(ass) AS AssociationList, TotalItems
+RETURN ListAss AS AssociationList, TotalItems
