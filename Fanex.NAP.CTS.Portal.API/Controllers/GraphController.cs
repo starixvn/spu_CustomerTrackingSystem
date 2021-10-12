@@ -163,6 +163,8 @@
 
                         var custInfo = DbSessionFactory.Execute<AssociationReportViewModel>("GetAssReportCustInfo", paraForCustInfo).Data.FirstOrDefault();
 
+                        LogService.Debug("WEB - UAT - Association Report - Get custInfo done");
+
                         if (custInfo != null && custInfo.AssociationList != null && custInfo.AssociationList.Any())
                         {
                             List<int> ctsCustIds = custInfo.AssociationList.Select(c => c.CTSCustId).Distinct().ToList();
@@ -176,6 +178,8 @@
                             };
 
                             var custAssociation = DbSessionFactory.Execute<AssociationReportViewModel>(queryScript, paramater).Data.FirstOrDefault();
+
+                            LogService.Debug("WEB - UAT - Association Report - Get custAssociation done");
 
                             if (custAssociation != null && custAssociation.TotalItems > 0)
                             {
@@ -234,6 +238,8 @@
                                         EvidenceCodes = (temp != null) ? temp.EvidenceCodes : string.Empty,
                                         CategoryName = group.a.CategoryName
                                     }).OrderBy(c => c.SubscriberName).Skip(para.SkipRow).Take(para.TakeRow).ToList();
+
+                LogService.Debug("WEB - UAT - Association Report - Merge done");
             }
 
             return new AssociationReportViewModel() 

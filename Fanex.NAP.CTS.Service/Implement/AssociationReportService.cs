@@ -90,7 +90,9 @@
             }
             catch (Exception ex)
             {
-                LogService.Error("Web - Association Report - Exception: " + ex.Message, ex);
+                LogService.Info("Web - Association Report - Exception: " + ex.Message + ex.StackTrace + "\n"
+                       + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
+                       + ex.InnerException.StackTrace);
             }
 
             return new AssociationReportViewModel() { AssociationList = new List<AssociationViewModel>(), TotalItems = 0 };
