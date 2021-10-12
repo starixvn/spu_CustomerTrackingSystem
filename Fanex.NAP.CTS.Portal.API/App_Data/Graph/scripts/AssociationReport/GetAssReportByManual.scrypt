@@ -1,5 +1,5 @@
-﻿//USE ctsgraphdb
-USE ctslocal
+﻿USE ctsgraphdb
+//USE ctslocal
 CALL apoc.cypher.run('
 MATCH (c)-[r:ADD_MANUALLY]->(c1:CTSCustomer)
 WHERE c.CTSCustID in $ip_CTSCustIDs 
