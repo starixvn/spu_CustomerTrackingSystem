@@ -100,4 +100,6 @@ public static class FSFunctionKeys
     public const string LatestTransaction = "LatestTransaction";
 
     public const string ProblemCaseMonitor = "ProblemCaseMonitor";
+
+    public const string TransactionReport = "TransactionReport";
 }

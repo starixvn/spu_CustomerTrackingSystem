@@ -197,6 +197,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReportsController.cs" />
     <Compile Include="LatestTransactionController.cs" />
+    <Compile Include="TransactionReportController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
