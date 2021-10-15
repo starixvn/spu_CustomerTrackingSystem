@@ -1,7 +1,6 @@
 ﻿USE ctsgraphdb
 //USE ctslocal
-CALL
-{
+CALL apoc.cypher.run('
     MATCH p=((c:CTSCustomer)-[:USED_DEVICE*2]-(c1:CTSCustomer))
     WHERE c.CTSCustID = $ip_CTSCustID AND c <> c1 AND c1.CTSCustID IS NOT NULL 
     WITH DISTINCT c, c1, collect(relationships(p)) AS r 
@@ -123,11 +122,21 @@ CALL
         , AssTypeName           AS AssociationTypeName  
         , CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
         , CASE WHEN $ip_AssociationStatus in [0,2] and e IS NOT NULL THEN e.CreatedDate ELSE firstAssDate END AS AssociationDate
-}
-WITH      CTSCustID, CustId, CustSubId, SubscriberID, SubscriberName, UserName, UserName2, StatusGroup, StatusID, StatusName, AssociationStatus       
-        , COLLECT(DISTINCT AssociationTypeName)  AS AssociationTypeName  
-        , COLLECT(DISTINCT AssociationDate)      AS AssociationDate
-UNWIND(AssociationDate) as associationDate
+',{ip_CTSCustID: $ip_CTSCustID, ip_AssociationStatus: $ip_AssociationStatus, ip_AssociationType: $ip_AssociationType, ip_AccountStatuses: $ip_AccountStatuses, ip_SubscriberIDs: $ip_SubscriberIDs}) YIELD value 
+WITH     value.CTSCustID        AS CTSCustID
+        , value.CustId          AS CustId
+        , value.CustSubId       AS CustSubId
+        , value.SubscriberID    AS SubscriberID
+        , value.SubscriberName  AS SubscriberName
+        , value.UserName        AS UserName
+        , value.UserName2       AS UserName2
+        , value.StatusGroup     AS StatusGroup
+        , value.StatusID        AS StatusID
+        , value.StatusName      AS StatusName
+        , value.AssociationStatus                      AS AssociationStatus    
+        , COLLECT(DISTINCT value.AssociationTypeName)  AS AssociationTypeName  
+        , COLLECT(DISTINCT value.AssociationDate)      AS AssociationDate
+UNWIND(AssociationDate) AS associationDate       
 WITH CTSCustID, CustId, CustSubId, SubscriberID, SubscriberName, UserName, UserName2, StatusGroup, StatusID, StatusName, AssociationStatus, AssociationTypeName, Min(associationDate) as AssociationDate
 OPTIONAL MATCH (c1:CTSCustomer)-[:HAS_CATEGORY]->(ct:CustomerCategory)
 WHERE ct.CategoryID in $ip_CategoryIDs AND c1.CTSCustID in CTSCustID 
@@ -143,7 +152,7 @@ WITH
     , StatusID           AS StatusID
     , StatusName         AS StatusName
     , AssociationStatus  AS AssociationStatus
-    , apoc.text.join(AssociationTypeName,",") AS AssociationTypeName
+    , apoc.text.join(AssociationTypeName,",")                     AS AssociationTypeName
     , AssociationDate    AS AssociationDate
     , ct.ParentIDs       AS ParentIDs
     , apoc.text.join(collect(distinct ct.CategoryIDs),",")        AS CategoryIDs
