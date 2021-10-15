@@ -2,6 +2,7 @@
 {
     using Fanex.Logging;
     using Fanex.NAP.CTS.Core.Extentions;
+    using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
@@ -12,6 +13,7 @@
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
+    using System.Configuration;
     using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
@@ -41,7 +43,7 @@
                 {
                     string queryScript = GetQueryScriptForAssProfile(paras.AssociationType);
 
-                    var result = DbSessionFactory.Execute<GraphAssociationModel>(queryScript, new
+                    var result = DbSessionFactory.Execute<GraphAssociationPaging>(queryScript, new
                     {
                         ip_CTSCustID = paras.CTSCustId,
                         ip_AssociationStatus = paras.AssociationStatus,
@@ -51,19 +53,15 @@
                         ip_CategoryIDs = paras.CategoryIDs.Split(',').Select(int.Parse),
                         ip_Skip = paras.Skip,
                         ip_PageSize = paras.Take
-                    })?.Data;
+                    })?.Data.FirstOrDefault();
 
-                    return new GraphAssociationPaging() 
-                    { 
-                        AssociationList = result ?? new List<GraphAssociationModel>(),
-                        TotalItems = result != null ? result.Count() : 0
-                    };
+                    return result ?? new GraphAssociationPaging() { AssociationList = new List<GraphAssociationModel>(), TotalItems = 0 };
                 }
             }
             catch (Exception ex)
             {
-                LogService.Error("WEB - GetDirectAssociationProfile failed: " + ex.Message + ex.StackTrace + "\n"
-                       + ex.InnerException.Message + ex.InnerException.Source + ((Neo4j.Driver.Neo4jException)ex.InnerException).Code
+                LogService.Error($"WEB - {ConfigSettings.EnvironmentName} - Get Association Tab Profile failed: " + ex.Message + ex.StackTrace + "\n"
+                       + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
                        + ex.InnerException.StackTrace);
             }
 

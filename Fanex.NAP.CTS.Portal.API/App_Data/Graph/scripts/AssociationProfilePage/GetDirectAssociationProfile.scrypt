@@ -139,9 +139,8 @@ WITH     value.CTSCustID        AS CTSCustID
 UNWIND(AssociationDate) AS associationDate       
 WITH CTSCustID, CustId, CustSubId, SubscriberID, SubscriberName, UserName, UserName2, StatusGroup, StatusID, StatusName, AssociationStatus, AssociationTypeName, Min(associationDate) as AssociationDate
 OPTIONAL MATCH (c1:CTSCustomer)-[:HAS_CATEGORY]->(ct:CustomerCategory)
-WHERE ct.CategoryID in $ip_CategoryIDs AND c1.CTSCustID in CTSCustID 
-WITH 
-      CTSCustID          AS CTSCustID
+WHERE ct.CategoryID in $ip_CategoryIDs AND c1.CTSCustID = CTSCustID 
+WITH  CTSCustID          AS CTSCustID
     , CustId             AS CustId
     , CustSubId          AS CustSubId
     , SubscriberID       AS SubscriberID
@@ -154,11 +153,14 @@ WITH
     , AssociationStatus  AS AssociationStatus
     , apoc.text.join(AssociationTypeName,",")                     AS AssociationTypeName
     , AssociationDate    AS AssociationDate
-    , ct.ParentIDs       AS ParentIDs
-    , apoc.text.join(collect(distinct ct.CategoryIDs),",")        AS CategoryIDs
-    , apoc.text.join(collect(distinct ct.CategoryNames),",")      AS CategoryNames
+    , ct.ParentID        AS ParentIDs
+    , apoc.text.join(COLLECT(DISTINCT toString(ct.CategoryID)),",") AS CategoryIDs
+    , apoc.text.join(COLLECT(DISTINCT ct.CategoryName),",")         AS CategoryNames
     
 ORDER BY SubscriberName ASC, AssociationStatus ASC, StatusGroup ASC, StatusID ASC, AssociationDate DESC, CTSCustID ASC
+WITH COLLECT({CTSCustID:CTSCustID, CustId:CustId, CustSubId:CustSubId, SubscriberID:SubscriberID, SubscriberName:SubscriberName, UserName:UserName, UserName2:UserName2, StatusGroup:StatusGroup, StatusID:StatusID, StatusName:StatusName, AssociationTypeName:AssociationTypeName, AssociationStatus:AssociationStatus, AssociationDate:AssociationDate, ParentIDs:ParentIDs, CategoryIDs:CategoryIDs, CategoryNames:CategoryNames} ) as AssociationList, count(CTSCustID) as TotalItems
+UNWIND AssociationList as associationList
+WITH associationList, TotalItems
 SKIP $ip_Skip
 LIMIT $ip_PageSize
-RETURN CTSCustID, CustId, CustSubId, SubscriberID, SubscriberName, UserName, UserName2, StatusGroup, StatusID, StatusName, AssociationTypeName, AssociationStatus, AssociationDate, ParentIDs, CategoryIDs, CategoryNames
+RETURN COLLECT(associationList) as AssociationList, TotalItems
