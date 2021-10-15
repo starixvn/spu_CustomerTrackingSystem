@@ -1,0 +1,46 @@
+﻿USE ctsgraphdb
+//USE ctslocal
+CALL apoc.cypher.run('
+MATCH p=((c:CTSCustomer)-[:USED_DEVICE*2]-(c1:CTSCustomer))
+WHERE c.CTSCustID = $ip_CTSCustID AND c <> c1
+WITH DISTINCT c, c1, collect(relationships(p)) AS r 
+MATCH (c1)-[:BELONG_TO_SUB]->(s:Subscriber)
+MATCH (c1)-[:HAS_STATUS]->(st:StaticList)
+WHERE  st.ListID = 1 AND st.ItemID in $ip_AccountStatuses
+    AND s.SubscriberID in $ip_SubscriberIDs
+    AND      (($ip_AssociationStatus = 0) 
+		    OR ($ip_AssociationStatus = 1 AND not exists((c)-[:HAS_EXCEPTION]-(c1)))
+		    OR ($ip_AssociationStatus = 2 AND exists((c)-[:HAS_EXCEPTION]-(c1))))
+WITH c, c1, r, st.PriorityOrder as StatusGroup, st.ItemID as ItemID, st.ItemNameDisplay as StatusName, s.SubscriberID as SubscriberID, s.SubscriberName as SubscriberName
+UNWIND r as val
+UNWIND (CASE WHEN val[0].CreatedDate > val[1].CreatedDate THEN val[0].CreatedDate ELSE val[1].CreatedDate END) AS firstASS
+WITH c, c1, SubscriberID, SubscriberName, StatusGroup, ItemID, StatusName, Min(firstASS) as fisrtAss
+OPTIONAL MATCH (c )-[e:HAS_EXCEPTION]-(c1)
+OPTIONAL MATCH (st2:StaticList {ListID:2, ItemID: $ip_AssociationStatus})
+OPTIONAL MATCH (c1)-[:HAS_CATEGORY]->(ct:CustomerCategory)
+WHERE ct.CategoryID in $ip_CategoryIDs
+RETURN 
+      c1.CTSCustID          AS CTSCustID
+    , c1.CustID             AS CustId
+    , c1.CustSubID          AS CustSubId
+    , SubscriberID          AS SubscriberID
+    , SubscriberName        AS SubscriberName
+    , c1.Username           AS UserName
+    , c1.Username2          AS UserName2  
+    , StatusGroup           AS StatusGroup    
+    , ItemID                AS StatusID
+    , StatusName            AS StatusName
+    , st2.ItemNameDisplay   AS AssociationTypeName  
+    , CASE e WHEN NULL THEN 1 ELSE 2 END AS AssociationStatus
+    , CASE WHEN $ip_AssociationStatus in [0,2] and e IS NOT NULL THEN e.CreatedDate ELSE fisrtAss END AS AssociationDate
+    , ct.ParentID           AS ParentIDs
+    , apoc.text.join(collect(distinct toString(ct.CategoryID)),",") AS CategoryIDs
+    , apoc.text.join(collect(distinct ct.CategoryName),",")         AS CategoryNames
+',{ip_CTSCustID: $CTSCustID, ip_AssociationStatus: $AssociationStatus, ip_AssociationType:$AssociationType, ip_AccountStatuses: $AccountStatuses, ip_SubscriberIDs: $SubscriberIDs, ip_CategoryIDs : $CategoryIDs}) YIELD value 
+WITH collect(value) as ListAss, count(value) as TotalItems
+UNWIND ListAss as ass
+WITH ass, TotalItems 
+ORDER BY ass.SubscriberName ASC, ass.AssociationStatus ASC, ass.StatusGroup ASC, ass.StatusID ASC, ass.AssociationDate DESC, ass.CTSCustID ASC
+SKIP $Skip
+LIMIT $Pagesize
+RETURN COLLECT(ass) AS AssociationList, TotalItems

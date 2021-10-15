@@ -1,6 +1,5 @@
 ﻿USE ctsgraphdb
 //USE ctslocal
-CALL apoc.cypher.run('
 MATCH (c:CTSCustomer)-[r:ASS_BY_IP]-(c1:CTSCustomer)
 MATCH (c1)-[:BELONG_TO_SUB]->(s:Subscriber)
 MATCH (c1)-[:HAS_STATUS]->(st:StaticList)
@@ -16,7 +15,7 @@ OPTIONAL MATCH (st2:StaticList {ListID:2, ItemID:$ip_AssociationType})
 OPTIONAL MATCH (c1)-[:HAS_CATEGORY]->(ct:CustomerCategory)
 WHERE ct.CategoryID in $ip_CategoryIDs
 WITH c,c1,s,st,ct,e,st2.ItemNameDisplay as AssTypeName, Min(AssDate) as firstAssDate
-RETURN 
+WITH 
       c1.CTSCustID           AS CTSCustID
     , c1.CustID             AS CustId
     , c1.CustSubID          AS CustSubId
@@ -33,11 +32,8 @@ RETURN
     , ct.ParentID            AS ParentIDs
     , apoc.text.join(collect(distinct toString(ct.CategoryID)),",") AS CategoryIDs
     , apoc.text.join(collect(distinct ct.CategoryName),",")         AS CategoryNames
-',{ip_CTSCustID: $CTSCustID, ip_AssociationStatus: $AssociationStatus, ip_AssociationType:$AssociationType, ip_AccountStatuses: $AccountStatuses, ip_SubscriberIDs: $SubscriberIDs, ip_CategoryIDs : $CategoryIDs}) YIELD value 
-WITH collect(value) as ListAss, count(value) as TotalItems
-UNWIND ListAss as ass
-WITH ass, TotalItems 
-ORDER BY ass.SubscriberName ASC, ass.AssociationStatus ASC, ass.StatusGroup ASC, ass.StatusID ASC, ass.AssociationDate DESC, ass.CTSCustID ASC
-SKIP $Skip
-LIMIT $Pagesize
-RETURN COLLECT(ass) AS AssociationList, TotalItems
+
+ORDER BY SubscriberName ASC, AssociationStatus ASC, StatusGroup ASC, StatusID ASC, AssociationDate DESC, CTSCustID ASC
+SKIP $ip_Skip
+LIMIT $ip_PageSize
+RETURN CTSCustID, CustId, CustSubId, SubscriberID, SubscriberName, UserName, UserName2, StatusGroup, StatusID, StatusName, AssociationTypeName, AssociationStatus, AssociationDate, ParentIDs, CategoryIDs, CategoryNames

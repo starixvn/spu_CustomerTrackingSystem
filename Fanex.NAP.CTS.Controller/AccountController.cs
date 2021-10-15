@@ -304,7 +304,7 @@
 
                 var ctsCustIdList = customerAssociation.Select(x => new { CTSCustId = x.CTSCustID, SubscriberId = x.SubscriberID });
 
-                customerAssociation = GetCustClassification(string.Join(",", customerAssociation.Select(c => c.CustId).Distinct()), customerAssociation);
+                customerAssociation = GetCustClassification(string.Join(",", customerAssociation.Select(c => c.CustId).Distinct()), customerAssociation.ToList());
 
                 var flaggedAffectedTagList = _accountService.GetDirectAssociatedAccountTagFlagged(JsonConvert.SerializeObject(ctsCustIdList));
 

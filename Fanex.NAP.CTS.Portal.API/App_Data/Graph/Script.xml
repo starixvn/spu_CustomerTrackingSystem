@@ -39,11 +39,11 @@
 	</Function>
 
 	<Function Name="Association Tab Profile Page">
-		<GraphSetting Key="GetDirectAssociationProfile" SpName="GetDirectAssociationProfile" DbName="GraphDB" />
-		<GraphSetting Key="GetDirectAssociationProfileByAI" SpName="GetDirectAssociationProfileByAI" DbName="GraphDB" />
-		<GraphSetting Key="GetDirectAssociationProfileByDevice" SpName="GetDirectAssociationProfileByDevice" DbName="GraphDB" />
-		<GraphSetting Key="GetDirectAssociationProfileByIP" SpName="GetDirectAssociationProfileByIP" DbName="GraphDB" />
-		<GraphSetting Key="GetDirectAssociationProfileByManual" SpName="GetDirectAssociationProfileByManual" DbName="GraphDB" />
+		<GraphSetting Key="GetDirectAssociationProfile" SpName="GetDirectAssociationProfile" DbName="GraphDB" TimeOut="300"/>
+		<GraphSetting Key="GetDirectAssociationProfileByAI" SpName="GetDirectAssociationProfileByAI" DbName="GraphDB" TimeOut="300"/>
+		<GraphSetting Key="GetDirectAssociationProfileByDevice" SpName="GetDirectAssociationProfileByDevice" DbName="GraphDB" TimeOut="300"/>
+		<GraphSetting Key="GetDirectAssociationProfileByIP" SpName="GetDirectAssociationProfileByIP" DbName="GraphDB" TimeOut="300"/>
+		<GraphSetting Key="GetDirectAssociationProfileByManual" SpName="GetDirectAssociationProfileByManual" DbName="GraphDB" TimeOut="300"/>
 	</Function>
 
 	<Function Name="Association Report">

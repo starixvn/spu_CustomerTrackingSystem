@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Portal.API.Controllers
 {
     using Fanex.Logging;
+    using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
@@ -9,14 +10,13 @@
     using Fanex.NAP.CTS.ViewModel.ProbationManagement;
     using Fanex.NAP.SPU.Graph.Core;
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
     using System.Web.Http;
     using System.Web.Http.Results;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Diagnostics;
 
 
     /// <summary>
@@ -41,19 +41,23 @@
                 {
                     string queryScript = GetQueryScriptForAssProfile(paras.AssociationType);
 
-                    var result = DbSessionFactory.Execute<GraphAssociationPaging>(queryScript, new
+                    var result = DbSessionFactory.Execute<GraphAssociationModel>(queryScript, new
                     {
-                        CTSCustID = paras.CTSCustId,
-                        AssociationStatus = paras.AssociationStatus,
-                        AssociationType = paras.AssociationType,
-                        AccountStatuses = paras.AccountStatusIds.Split(',').Select(int.Parse),
-                        SubscriberIDs = paras.SubscriberIDs.Split(',').Select(int.Parse),
-                        CategoryIDs = paras.CategoryIDs.Split(',').Select(int.Parse),
-                        Skip = paras.Skip,
-                        Pagesize = paras.Take
-                    })?.Data.FirstOrDefault();
+                        ip_CTSCustID = paras.CTSCustId,
+                        ip_AssociationStatus = paras.AssociationStatus,
+                        ip_AssociationType = paras.AssociationType,
+                        ip_AccountStatuses = paras.AccountStatusIds.Split(',').Select(int.Parse),
+                        ip_SubscriberIDs = paras.SubscriberIDs.Split(',').Select(int.Parse),
+                        ip_CategoryIDs = paras.CategoryIDs.Split(',').Select(int.Parse),
+                        ip_Skip = paras.Skip,
+                        ip_PageSize = paras.Take
+                    })?.Data;
 
-                    return result ?? new GraphAssociationPaging() { AssociationList = new List<GraphAssociationModel>(), TotalItems = 0 };
+                    return new GraphAssociationPaging() 
+                    { 
+                        AssociationList = result ?? new List<GraphAssociationModel>(),
+                        TotalItems = result != null ? result.Count() : 0
+                    };
                 }
             }
             catch (Exception ex)
