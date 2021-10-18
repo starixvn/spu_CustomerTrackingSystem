@@ -297,24 +297,35 @@
             }
             else
             {
-                var param = new AssociationProfileParameterModel
+                try
                 {
-                    CTSCustId = filterModel.CTSCustId,
-                    AssociationStatus = filterModel.AssociationStatus,
-                    AccountStatusIds = filterModel.AccountStatusIds,
-                    AssociationType = filterModel.AssociationType,
-                    CategoryIDs = filterModel.CategoryIds,
-                    SubscriberIDs = filterModel.SubscriberIds,
-                    Skip = filterModel.start,
-                    Take = filterModel.length,
-                };
+                    var param = new AssociationProfileParameterModel
+                    {
+                        CTSCustId = filterModel.CTSCustId,
+                        AssociationStatus = filterModel.AssociationStatus,
+                        AccountStatusIds = filterModel.AccountStatusIds,
+                        AssociationType = filterModel.AssociationType,
+                        CategoryIDs = filterModel.CategoryIds,
+                        SubscriberIDs = filterModel.SubscriberIds,
+                        Skip = filterModel.start,
+                        Take = filterModel.length,
+                    };
 
-                var data = ApiHelper.Post<GraphAssociationPaging>(ConfigSettings.GetDirectAssociationProfile, param);
+                    var data = ApiHelper.Post<GraphAssociationPaging>(ConfigSettings.GetDirectAssociationProfile, param);
 
-                Task.WhenAll(data);
+                    Task.WhenAll(data);
 
-                return data.Result ?? new GraphAssociationPaging();
+                    return data.Result ?? new GraphAssociationPaging();
+                }
+                catch (Exception ex)
+                {
+                    LogService.Info("Web - Association Tab Profile - Exception: " + ex.Message + ex.StackTrace + "\n"
+                        + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
+                        + ex.InnerException.StackTrace);
+                }
             }
+
+            return new GraphAssociationPaging();
         }
 
         public List<AccountStaticStatusModel> GetAccountStaticStatuses(int listId, bool status)
