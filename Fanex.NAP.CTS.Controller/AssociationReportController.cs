@@ -16,6 +16,7 @@
     using System.Collections.Generic;
     using System;
     using Fanex.NAP.CTS.Core.Helpers;
+    using Fanex.Logging;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.AssociationReport, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -78,13 +79,22 @@
             }
             else
             {
-                var assFromGraph = _associationService.GetAssociationReportFromGraphDB(ConfigSettings.GetAssociationReport, filter);
-
-                if (assFromGraph.AssociationList != null && assFromGraph.AssociationList.Any())
+                try
                 {
-                    associations = assFromGraph.AssociationList;
+                    var assFromGraph = _associationService.GetAssociationReportFromGraphDB(ConfigSettings.GetAssociationReport, filter);
 
-                    totalItems = assFromGraph.TotalItems;
+                    if (assFromGraph.AssociationList != null && assFromGraph.AssociationList.Any())
+                    {
+                        associations = assFromGraph.AssociationList;
+
+                        totalItems = assFromGraph.TotalItems;
+                    }
+                }
+                catch(Exception ex)
+                {
+                    LogService.Info("Web - Association Tab Profile - Exception: " + ex.Message + ex.StackTrace + "\n"
+                        + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
+                        + ex.InnerException.StackTrace);
                 }
             }
 
