@@ -311,7 +311,7 @@
                         Take = filterModel.length,
                     };
 
-                    var data = ApiHelper.Post<GraphAssociationPaging>(ConfigSettings.GetDirectAssociationProfile, param);
+                    var data = ApiHelper.Post<GraphAssociationPaging>(ConfigSettings.GetDirectAssociationProfile, param, 180);
 
                     Task.WhenAll(data);
 
@@ -357,7 +357,7 @@
 
         public List<GraphDirectAssociationModel> GetDirectAssocationByGraph(string apiURL, List<long> ctsCustIds)
         {
-            var data = ApiHelper.Post<List<GraphDirectAssociationModel>>(apiURL, ctsCustIds);
+            var data = ApiHelper.Post<List<GraphDirectAssociationModel>>(apiURL, ctsCustIds, 180);
 
             Task.WhenAll(data);
 
