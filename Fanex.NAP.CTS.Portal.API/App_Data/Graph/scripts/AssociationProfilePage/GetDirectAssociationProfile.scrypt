@@ -15,7 +15,6 @@ CALL apoc.cypher.run('
     UNWIND r as val
     UNWIND (CASE WHEN val[0].CreatedDate > val[1].CreatedDate THEN val[0].CreatedDate ELSE val[1].CreatedDate END) AS association
     WITH c, c1, SubscriberID, SubscriberName, StatusGroup, ItemID, StatusName, Min(association) as firstAss
-    OPTIONAL MATCH (st2:StaticList {ListID:2, ItemID:1})
     OPTIONAL MATCH (c:CTSCustomer)-[e:HAS_EXCEPTION]-(c1:CTSCustomer)
     RETURN 
         c1.CTSCustID            AS CTSCustID
@@ -28,7 +27,7 @@ CALL apoc.cypher.run('
         , StatusGroup           AS StatusGroup    
         , ItemID                AS StatusID
         , StatusName            AS StatusName
-        , st2.ItemNameDisplay   AS AssociationTypeName  
+        , "Device"              AS AssociationTypeName  
         , CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
         , CASE WHEN $ip_AssociationStatus in [0,2] and e IS NOT NULL THEN e.CreatedDate ELSE firstAss END AS AssociationDate
 
@@ -44,9 +43,8 @@ CALL apoc.cypher.run('
         AND s.SubscriberID in $ip_SubscriberIDs
         AND st.ListID = 1 AND st.ItemID in $ip_AccountStatuses
     WITH distinct c,c1,s,st,r.CreatedDate as AssDate
-    OPTIONAL MATCH (st2:StaticList {ListID:2, ItemID:$ip_AssociationType})
     OPTIONAL MATCH (c:CTSCustomer)-[e:HAS_EXCEPTION]-(c1:CTSCustomer)
-    WITH c,c1,s,e,st,st2.ItemNameDisplay as AssTypeName, Min(AssDate) as firstAssDate
+    WITH c,c1,s,e,st, Min(AssDate) as firstAssDate
     RETURN 
         c1.CTSCustID            AS CTSCustID
         , c1.CustID             AS CustId
@@ -58,7 +56,7 @@ CALL apoc.cypher.run('
         , st.PriorityOrder      AS StatusGroup    
         , st.ItemID             AS StatusID
         , st.ItemNameDisplay    AS StatusName
-        , AssTypeName           AS AssociationTypeName  
+        , "Manual"              AS AssociationTypeName  
         , CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
         , CASE WHEN $ip_AssociationStatus in [0,2] and e IS NOT NULL THEN e.CreatedDate ELSE firstAssDate END AS AssociationDate
 
@@ -74,9 +72,8 @@ CALL apoc.cypher.run('
         AND s.SubscriberID in $ip_SubscriberIDs
         AND st.ListID = 1 AND st.ItemID in $ip_AccountStatuses
     WITH distinct c,c1,s,st,r.CreatedDate as AssDate
-    OPTIONAL MATCH (st2:StaticList {ListID:2, ItemID:$ip_AssociationType})
     OPTIONAL MATCH (c:CTSCustomer)-[e:HAS_EXCEPTION]-(c1:CTSCustomer)
-    WITH c,c1,s,e,st,st2.ItemNameDisplay as AssTypeName, Min(AssDate) as firstAssDate
+    WITH c,c1,s,e,st, Min(AssDate) as firstAssDate
     RETURN 
         c1.CTSCustID            AS CTSCustID
         , c1.CustID             AS CustId
@@ -88,7 +85,7 @@ CALL apoc.cypher.run('
         , st.PriorityOrder      AS StatusGroup    
         , st.ItemID             AS StatusID
         , st.ItemNameDisplay    AS StatusName
-        , AssTypeName           AS AssociationTypeName  
+        , "IP"                    AS AssociationTypeName  
         , CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
         , CASE WHEN $ip_AssociationStatus in [0,2] and e IS NOT NULL THEN e.CreatedDate ELSE firstAssDate END AS AssociationDate
 
@@ -104,10 +101,9 @@ CALL apoc.cypher.run('
         AND s.SubscriberID in $ip_SubscriberIDs
         AND st.ListID = 1 AND st.ItemID in $ip_AccountStatuses
     WITH distinct c,c1,s,st,r.CreatedDate as AssDate
-    OPTIONAL MATCH (st2:StaticList {ListID:2, ItemID:$ip_AssociationType})
     OPTIONAL MATCH (c:CTSCustomer)-[e:HAS_EXCEPTION]-(c1:CTSCustomer)
 
-    WITH c,c1,s,e,st,st2.ItemNameDisplay as AssTypeName, Min(AssDate) as firstAssDate
+    WITH c,c1,s,e,st, Min(AssDate) as firstAssDate
     RETURN 
           c1.CTSCustID          AS CTSCustID
         , c1.CustID             AS CustId
@@ -119,7 +115,7 @@ CALL apoc.cypher.run('
         , st.PriorityOrder      AS StatusGroup    
         , st.ItemID             AS StatusID
         , st.ItemNameDisplay    AS StatusName
-        , AssTypeName           AS AssociationTypeName  
+        , "Betting Pattern"     AS AssociationTypeName  
         , CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
         , CASE WHEN $ip_AssociationStatus in [0,2] and e IS NOT NULL THEN e.CreatedDate ELSE firstAssDate END AS AssociationDate
 ',{ip_CTSCustID: $ip_CTSCustID, ip_AssociationStatus: $ip_AssociationStatus, ip_AssociationType: $ip_AssociationType, ip_AccountStatuses: $ip_AccountStatuses, ip_SubscriberIDs: $ip_SubscriberIDs}) YIELD value 

@@ -11,10 +11,9 @@ WHERE c.CTSCustID = $ip_CTSCustID AND c1.CTSCustID IS NOT NULL
         AND st.ListID = 1 AND st.ItemID in $ip_AccountStatuses
 WITH distinct c,c1,s,st,r.CreatedDate as AssDate
 OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c1)
-OPTIONAL MATCH (st2:StaticList {ListID:2, ItemID:$ip_AssociationType})
 OPTIONAL MATCH (c1)-[:HAS_CATEGORY]->(ct:CustomerCategory)
 WHERE ct.CategoryID in $ip_CategoryIDs
-WITH c,c1,s,st,ct,e,st2.ItemNameDisplay as AssTypeName, Min(AssDate) as firstAssDate
+WITH c,c1,s,st,ct,e, Min(AssDate) as firstAssDate
 WITH 
       c1.CTSCustID           AS CTSCustID
     , c1.CustID             AS CustId
@@ -26,7 +25,7 @@ WITH
     , st.PriorityOrder      AS StatusGroup    
     , st.ItemID             AS StatusID
     , st.ItemNameDisplay    AS StatusName
-    , AssTypeName           AS AssociationTypeName  
+    , "Manual"              AS AssociationTypeName  
     , CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
     , CASE WHEN $ip_AssociationStatus in [0,2] and e IS NOT NULL THEN e.CreatedDate ELSE firstAssDate END AS AssociationDate
     , ct.ParentID            AS ParentIDs
