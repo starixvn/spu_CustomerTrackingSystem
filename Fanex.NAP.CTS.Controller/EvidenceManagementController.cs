@@ -108,24 +108,7 @@
 
                 if (!accountEvidenceErrorList.Any())
                 {
-                    InsertCustomerEvidence(fileName, CurrentSession.UserId, resultCheckAccountEvidenceList, isOverwrite);
-
-                    //InsertAccountEvidence(fileName, CurrentSession.UserId, resultCheckAccountEvidenceList, isOverwrite);
-                    
-                    //var associatedAccountList = _customerEvidenceService.GetAssociatedAccounts(
-                    //    new GetAssociatedAccountByCTSCustIdsCriteria
-                    //    {
-                    //        CTSCustIdList = string.Join(",", resultCheckAccountEvidenceList.Select(c => c.CTSCustID).Distinct().ToList())
-                    //    });
-
-                    //if (associatedAccountList.Any())
-                    //{
-                    //    _customerEvidenceService.UpdateBetLimitOfFlaggedCustomer(
-                    //        new UpdateBetLimitByEvidenceAddingCriteria
-                    //        {
-                    //            CustIDList = string.Join(",", associatedAccountList)
-                    //        });
-                    //}
+                    InsertCustomerEvidence(fileName, CurrentSession.UserId, resultCheckAccountEvidenceList, isOverwrite);                   
                 }
 
                 return ReturnResultCheckAccountEvidence(fileName, accountEvidenceErrorList);
