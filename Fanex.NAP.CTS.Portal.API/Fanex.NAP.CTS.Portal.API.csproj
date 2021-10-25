@@ -481,7 +481,7 @@
     <Content Include="App_Data\Graph\scripts\AssociationProfilePage\GetDirectAssociationProfileByDevice.scrypt" />
     <Content Include="App_Data\Graph\scripts\AssociationDetectionReport\GetAssociationDetectionReport.scrypt" />
     <Content Include="App_Data\Graph\scripts\AssociationDetectionReport\GetCustInformation.scrypt" />
-    <Content Include="App_Data\Graph\adhoc\ScanCTSCustomer.scrypt" />
+    <Content Include="App_Data\Graph\scripts\adhoc\ScanCTSCustomer.scrypt" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />

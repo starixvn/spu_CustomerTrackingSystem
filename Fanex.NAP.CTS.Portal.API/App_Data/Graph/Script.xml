@@ -56,5 +56,9 @@
 		<GraphSetting Key="GetAssociationDetectionReport" SpName="GetAssociationDetectionReport" DbName="GraphDB" TimeOut="600"/>
 		<GraphSetting Key="GetCustInformation" SpName="GetCustInformation" DbName="GraphDB" TimeOut="600"/>
 	</Function>
+
+  <Function Name="Adhoc">
+    <GraphSetting Key="ScanCTSCustomer" SpName="ScanCTSCustomer" DbName="GraphDB" TimeOut="600"/>
+  </Function>
 	
 </Functions>
