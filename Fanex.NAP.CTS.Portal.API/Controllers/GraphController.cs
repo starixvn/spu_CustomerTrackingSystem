@@ -310,10 +310,12 @@
 
             if (association.Associations.Any())
             {
+                int rootGroupId = temp.SingleOrDefault(c => c.CTSCustId == association.CTSCustIdLv0).GroupId;
+
                 association.Associations.ForEach(eachAss => {
                     if (!temp.Any(x => x.CTSCustId.Equals(eachAss)))
                     {
-                        temp.Add(new GetAssociationDetectionModel { GroupId = maxGroupId + 1, CTSCustId = eachAss });
+                        temp.Add(new GetAssociationDetectionModel { GroupId = rootGroupId, CTSCustId = eachAss });
                     }
                 });
             }
