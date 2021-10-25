@@ -1,0 +1,81 @@
+﻿USE ctsgraphdb
+//USE ctslocal
+MATCH (c:CTSCustomer)-[:BELONG_TO_SUB]->(s:Subscriber)
+WHERE c.CTSCustID in $ip_CTSCustIDs AND NOT (s.SubscriberID IN [4521, 1270, 4408])
+WITH DISTINCT c
+
+CALL 
+{
+    WITH c
+    MATCH (c)-[:USED_DEVICE*2]-(c1:CTSCustomer)
+    WHERE c <> c1
+    WITH DISTINCT c, c1
+    WHERE NOT EXISTS((c)-[:HAS_EXCEPTION]-(c1))
+    WITH c.CTSCustID as lv0, COLLECT(DISTINCT c1.CTSCustID) as lv1
+    MATCH (c1:CTSCustomer)-[:BELONG_TO_SUB]->(s:Subscriber)
+    WHERE c1.CTSCustID IN lv1 AND NOT (s.SubscriberID IN [4521, 1270, 4408])
+    WITH lv0, lv1, COLLECT(DISTINCT c1.CTSCustID) as findLv2
+    OPTIONAL MATCH (c1:CTSCustomer)-[:USED_DEVICE*2]-(c2:CTSCustomer)
+    WHERE c1.CTSCustID IN findLv2 AND c2.CTSCustID <> lv0 AND NOT c2.CTSCustID IN lv1 
+        AND NOT EXISTS((:CTSCustomer {CTSCustID:lv0})-[:HAS_EXCEPTION]-(c2))
+        AND NOT EXISTS((c1)-[:HAS_EXCEPTION]-(c2))
+    RETURN DISTINCT lv0, lv1 + COLLECT(DISTINCT c2.CTSCustID) as association
+
+    UNION
+    WITH c
+    MATCH (c)-[r:ASS_BY_AI]-(c1:CTSCustomer)
+    WHERE c <> c1
+    WITH DISTINCT c, c1
+    WHERE NOT EXISTS((c)-[:HAS_EXCEPTION]-(c1))
+    WITH c.CTSCustID as lv0, COLLECT(DISTINCT c1.CTSCustID) as lv1
+    MATCH (c1:CTSCustomer)-[:BELONG_TO_SUB]->(s:Subscriber)
+    WHERE c1.CTSCustID IN lv1 AND NOT (s.SubscriberID IN [4521, 1270, 4408])
+    WITH lv0, lv1, COLLECT(DISTINCT c1.CTSCustID) as findLv2
+    OPTIONAL MATCH (c1:CTSCustomer)-[:ASS_BY_AI]-(c2:CTSCustomer)
+    WHERE c1.CTSCustID IN findLv2 AND c2.CTSCustID <> lv0 AND NOT c2.CTSCustID IN lv1
+        AND NOT EXISTS((:CTSCustomer {CTSCustID:lv0})-[:HAS_EXCEPTION]-(c2))
+        AND NOT EXISTS((c1)-[:HAS_EXCEPTION]-(c2))
+    RETURN DISTINCT lv0, lv1 +  COLLECT(DISTINCT c2.CTSCustID) as association
+
+    UNION
+    WITH c
+    MATCH (c)-[r:ASS_BY_IP]-(c1:CTSCustomer)
+    WHERE c <> c1
+    WITH DISTINCT c, c1
+    WHERE NOT EXISTS((c)-[:HAS_EXCEPTION]-(c1))
+    WITH c.CTSCustID as lv0, COLLECT(DISTINCT c1.CTSCustID) as lv1
+    MATCH (c1:CTSCustomer)-[:BELONG_TO_SUB]->(s:Subscriber)
+    WHERE c1.CTSCustID IN lv1 AND NOT (s.SubscriberID IN [4521, 1270, 4408])
+    WITH lv0, lv1, COLLECT(DISTINCT c1.CTSCustID) as findLv2
+    OPTIONAL MATCH (c1:CTSCustomer)-[:ASS_BY_IP]-(c2:CTSCustomer)
+    WHERE c1.CTSCustID IN findLv2 AND c2.CTSCustID <> lv0 AND NOT c2.CTSCustID IN lv1
+        AND NOT EXISTS((:CTSCustomer {CTSCustID:lv0})-[:HAS_EXCEPTION]-(c2))
+        AND NOT EXISTS((c1)-[:HAS_EXCEPTION]-(c2))
+    RETURN DISTINCT lv0, lv1 + COLLECT(DISTINCT c2.CTSCustID) as association
+
+    UNION
+    WITH c
+    MATCH (c)-[r:ADD_MANUALLY]-(c1:CTSCustomer)
+    WHERE c <> c1
+    WITH DISTINCT c, c1
+    WHERE NOT EXISTS((c)-[:HAS_EXCEPTION]-(c1))
+    WITH c.CTSCustID as lv0, COLLECT(DISTINCT c1.CTSCustID) as lv1
+    MATCH (c1:CTSCustomer)-[:BELONG_TO_SUB]->(s:Subscriber)
+    WHERE c1.CTSCustID IN lv1 AND NOT (s.SubscriberID IN [4521, 1270, 4408])
+    WITH lv0, lv1, COLLECT(DISTINCT c1.CTSCustID) as findLv2
+    OPTIONAL MATCH (c1:CTSCustomer)-[:ADD_MANUALLY]-(c2:CTSCustomer)
+    WHERE c1.CTSCustID IN findLv2 AND c2.CTSCustID <> lv0 AND NOT c2.CTSCustID IN lv1
+        AND NOT EXISTS((:CTSCustomer {CTSCustID:lv0})-[:HAS_EXCEPTION]-(c2))
+        AND NOT EXISTS((c1)-[:HAS_EXCEPTION]-(c2))
+    RETURN DISTINCT lv0, lv1 + COLLECT(DISTINCT c2.CTSCustID) as association
+}
+WITH DISTINCT lv0, association
+UNWIND association as eachAssRow
+WITH DISTINCT collect(lv0) AS lv0, Count(lv0) as numberAss, eachAssRow
+WHERE numberAss >= 2 OR eachAssRow in $ip_CTSCustIDs
+WITH lv0, CASE WHEN numberAss >= 2 AND NOT eachAssRow in $ip_CTSCustIDs THEN lv0 ELSE eachAssRow END AS rows
+UNWIND lv0 AS root
+UNWIND rows AS assRow
+WITH DISTINCT root, assRow
+WHERE root <> assRow
+RETURN root AS CTSCustIdLv0, collect(DISTINCT assRow) AS Associations

@@ -90,6 +90,7 @@
     <Compile Include="API\ProblemCaseMonitor\ProblemCaseMonitorViewModel.cs" />
     <Compile Include="AssociatedAccountMonitor\AssociatedAccountMonitorDetailViewModel.cs" />
     <Compile Include="AssociatedAccountMonitor\InsertManualAssociatedAccountViewModel.cs" />
+    <Compile Include="AssociationDetection\AssociationLevelGraphDbViewModel.cs" />
     <Compile Include="AssociationDetection\AssociationDetectionItemViewModel.cs" />
     <Compile Include="AssociationDetection\GetAssociationDetectionViewModel.cs" />
     <Compile Include="AssociationReport\AssociationDetailFilterViewModel.cs" />

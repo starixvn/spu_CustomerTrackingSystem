@@ -4,17 +4,16 @@
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model.Account;
+    using Fanex.NAP.CTS.Model.AssociationDetection;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.ProbationManagement;
+    using Fanex.NAP.CTS.ViewModel.AssociationDetection;
     using Fanex.NAP.CTS.ViewModel.AssociationReport;
     using Fanex.NAP.CTS.ViewModel.ProbationManagement;
     using Fanex.NAP.SPU.Graph.Core;
     using System;
-    using System.Collections.Concurrent;
     using System.Collections.Generic;
-    using System.Configuration;
-    using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
     using System.Web.Http;
@@ -185,7 +184,7 @@
                                 return MergeAssociationReport(custInfo, custAssociation, paras);
                             }
                         }
-                    }     
+                    }
                 }
             }
             catch (Exception ex)
@@ -208,7 +207,7 @@
                     }
                 case 3:
                     {
-                       return "GetAssReportByManual";
+                        return "GetAssReportByManual";
                     }
                 default:
                     return string.Empty;
@@ -226,7 +225,7 @@
                                 i => i.CTSCustId,
                                 (a, i) => new { a, i })
                                 .SelectMany(
-                                    group =>group.i.DefaultIfEmpty(),
+                                    group => group.i.DefaultIfEmpty(),
                                     (group, temp) => new AssociationViewModel
                                     {
                                         CTSCustId = group.a.CTSCustId,
@@ -240,14 +239,132 @@
 
             }
 
-            return new AssociationReportViewModel() 
+            return new AssociationReportViewModel()
             {
                 AssociationList = result ?? new List<AssociationViewModel>(),
-                TotalItems = custAss.TotalItems 
+                TotalItems = custAss.TotalItems
             };
         }
 
         #endregion WEB - Association Report
+
+        #region WEB - Association Detection Report
+
+        /// <summary>
+        /// Get association report
+        /// </summary>
+        /// <param name="ctsCustIDs"></param>
+        /// <returns></returns>
+        [System.Web.Http.AcceptVerbs("GetAssociationDetectionReport")]
+        [HttpPost]
+        public IEnumerable<GetAssociationDetectionModel> GetAssociationDetectionReport([FromBody] string ctsCustIDs)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(ctsCustIDs))
+                {
+                    var ip_CTSCustIDs = ctsCustIDs.Split(',').Select(int.Parse);
+
+                    var custAssociations = DbSessionFactory.Execute<AssociationLevelGraphDbViewModel>("GetAssociationDetectionReport", new { ip_CTSCustIDs = ip_CTSCustIDs }).Data;
+
+                    if (custAssociations != null && custAssociations.Any())
+                    {
+                        var assDetection = new List<GetAssociationDetectionModel>();
+
+                        custAssociations.ToList().ForEach(i =>
+                        {
+                            if (i.Associations != null && i.Associations.Any())
+                            {
+                                assDetection = ClassifyGroupAssociation(i, assDetection);
+                            }
+                        });
+
+                        return GetCustInfoAssDetectionReport(assDetection);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Error($"WEB - {ConfigSettings.EnvironmentName} - GetAssociationDetectionReport failed: " + ex.Message + ex.StackTrace + "\n"
+                        + ex.InnerException.Message + ex.InnerException.Source + ((Neo4j.Driver.Neo4jException)ex.InnerException).Code
+                        + ex.InnerException.StackTrace);
+            }
+
+            return new List<GetAssociationDetectionModel>();
+        }
+
+        private List<GetAssociationDetectionModel> ClassifyGroupAssociation(AssociationLevelGraphDbViewModel association, List<GetAssociationDetectionModel> assDetection)
+        {
+            var temp = assDetection;
+
+            int maxGroupId = temp.Any() ? temp.Max(c => c.GroupId) : 0;
+
+            if (!temp.Any(x => x.CTSCustId.Equals(association.CTSCustIdLv0)))
+            {
+                temp.Add(new GetAssociationDetectionModel { GroupId = maxGroupId + 1, CTSCustId = association.CTSCustIdLv0 });
+            }
+
+            if (association.Associations.Any())
+            {
+                association.Associations.ForEach(eachAss => {
+                    if (!temp.Any(x => x.CTSCustId.Equals(eachAss)))
+                    {
+                        temp.Add(new GetAssociationDetectionModel { GroupId = maxGroupId + 1, CTSCustId = eachAss });
+                    }
+                });
+            }
+
+            return temp;
+        }
+
+        private IEnumerable<GetAssociationDetectionModel> GetCustInformation(List<GetAssociationDetectionModel> assDetection)
+        {
+            if (assDetection != null && assDetection.Any())
+            {
+                var ip_CTSCustIDs = assDetection.Select(c => c.CTSCustId);
+
+                var result = DbSessionFactory.Execute<GetAssociationDetectionModel>("GetCustInformation", new { ip_CTSCustIDs = ip_CTSCustIDs }).Data;
+
+                return result ?? new List<GetAssociationDetectionModel>();
+            }
+
+            return new List<GetAssociationDetectionModel>();
+        }
+
+        private IEnumerable<GetAssociationDetectionModel> GetCustInfoAssDetectionReport(List<GetAssociationDetectionModel> assDetection)
+        {
+            if (assDetection != null && assDetection.Any())
+            {
+                var custInfo = GetCustInformation(assDetection);
+
+                if (custInfo.Any())
+                {
+                    var result = custInfo.Join(
+                                    assDetection,
+                                    x => x.CTSCustId,
+                                    y => y.CTSCustId,
+                                    (x, y) => new GetAssociationDetectionModel
+                                    {
+                                        CTSCustId = x.CTSCustId,
+                                        GroupId = y.GroupId,
+                                        CategoryIds = x.CategoryIds,
+                                        CustId = x.CustId,
+                                        CustomerCategory = x.CustomerCategory,
+                                        CustStatus = x.CustStatus,
+                                        CustSubId = x.CustSubId,
+                                        Evidence = x.Evidence,
+                                        ParentIds = x.ParentIds,
+                                        UserName = x.UserName
+                                    });
+
+                    return result ?? new List<GetAssociationDetectionModel>();
+                }
+            }
+
+            return new List<GetAssociationDetectionModel>();
+        }
+
+        #endregion WEB - Association Detection Report
 
         #region API (Need to remove without in use)
 

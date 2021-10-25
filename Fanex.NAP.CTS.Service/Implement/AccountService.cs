@@ -311,7 +311,7 @@
                         Take = filterModel.length,
                     };
 
-                    var data = ApiHelper.Post<GraphAssociationPaging>(ConfigSettings.GetDirectAssociationProfile, param, 240);
+                    var data = ApiHelper.Post<GraphAssociationPaging>(ConfigSettings.GetDirectAssociationProfile, param, 300);
 
                     Task.WhenAll(data);
 
@@ -319,7 +319,7 @@
                 }
                 catch (Exception ex)
                 {
-                    LogService.Info("Web - Association Tab Profile - Exception: " + ex.Message + ex.StackTrace + "\n"
+                    LogService.Error($"{ConfigSettings.EnvironmentName} - Web - Association Tab Profile - Exception: " + ex.Message + ex.StackTrace + "\n"
                         + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
                         + ex.InnerException.StackTrace);
                 }

@@ -51,4 +51,10 @@
 		<GraphSetting Key="GetAssReportByManual" SpName="GetAssReportByManual" DbName="GraphDB" />
 		<GraphSetting Key="GetAssReportCustInfo" SpName="GetAssReportCustInfo" DbName="GraphDB" />
 	</Function>
+
+	<Function Name="Association Detection Report">
+		<GraphSetting Key="GetAssociationDetectionReport" SpName="GetAssociationDetectionReport" DbName="GraphDB" TimeOut="600"/>
+		<GraphSetting Key="GetCustInformation" SpName="GetCustInformation" DbName="GraphDB" TimeOut="600"/>
+	</Function>
+	
 </Functions>

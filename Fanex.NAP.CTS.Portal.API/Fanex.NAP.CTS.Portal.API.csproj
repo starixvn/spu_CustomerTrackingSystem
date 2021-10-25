@@ -479,6 +479,8 @@
     <Content Include="App_Data\Graph\scripts\AssociationReport\GetAssReportCustInfo.scrypt" />
     <Content Include="App_Data\Graph\scripts\AssociationReport\GetAssReportByDevice.scrypt" />
     <Content Include="App_Data\Graph\scripts\AssociationProfilePage\GetDirectAssociationProfileByDevice.scrypt" />
+    <Content Include="App_Data\Graph\scripts\AssociationDetectionReport\GetAssociationDetectionReport.scrypt" />
+    <Content Include="App_Data\Graph\scripts\AssociationDetectionReport\GetCustInformation.scrypt" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
