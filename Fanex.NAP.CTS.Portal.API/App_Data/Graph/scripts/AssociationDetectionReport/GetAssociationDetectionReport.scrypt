@@ -1,7 +1,7 @@
 ﻿USE ctsgraphdb
 //USE ctslocal
 MATCH (c:CTSCustomer)-[:BELONG_TO_SUB]->(s:Subscriber)
-WHERE c.CTSCustID in $ip_CTSCustIDs AND NOT (s.SubscriberID IN [4521, 1270, 4408])
+WHERE c.CTSCustID in $ip_CTSCustIDs AND NOT (s.SubscriberID IN $ip_ExcludeSubscriberIDs)
 WITH DISTINCT c
 
 CALL 
@@ -11,15 +11,11 @@ CALL
     WHERE c <> c1
     WITH DISTINCT c, c1
     WHERE NOT EXISTS((c)-[:HAS_EXCEPTION]-(c1))
-    WITH c.CTSCustID as lv0, COLLECT(DISTINCT c1.CTSCustID) as lv1
+    WITH DISTINCT c.CTSCustID as lv0, COLLECT(DISTINCT c1.CTSCustID) as lv1
     MATCH (c1:CTSCustomer)-[:BELONG_TO_SUB]->(s:Subscriber)
-    WHERE c1.CTSCustID IN lv1 AND NOT (s.SubscriberID IN [4521, 1270, 4408])
-    WITH lv0, lv1, COLLECT(DISTINCT c1.CTSCustID) as findLv2
-    OPTIONAL MATCH (c1:CTSCustomer)-[:USED_DEVICE*2]-(c2:CTSCustomer)
-    WHERE c1.CTSCustID IN findLv2 AND c2.CTSCustID <> lv0 AND NOT c2.CTSCustID IN lv1 
-        AND NOT EXISTS((:CTSCustomer {CTSCustID:lv0})-[:HAS_EXCEPTION]-(c2))
-        AND NOT EXISTS((c1)-[:HAS_EXCEPTION]-(c2))
-    RETURN DISTINCT lv0, lv1 + COLLECT(DISTINCT c2.CTSCustID) as association
+    WHERE c1.CTSCustID IN lv1 AND NOT (s.SubscriberID IN $ip_ExcludeSubscriberIDs)
+    WITH lv0, lv1
+    RETURN DISTINCT lv0, lv1 AS association
 
     UNION
     WITH c
@@ -27,15 +23,11 @@ CALL
     WHERE c <> c1
     WITH DISTINCT c, c1
     WHERE NOT EXISTS((c)-[:HAS_EXCEPTION]-(c1))
-    WITH c.CTSCustID as lv0, COLLECT(DISTINCT c1.CTSCustID) as lv1
+    WITH DISTINCT c.CTSCustID as lv0, COLLECT(DISTINCT c1.CTSCustID) as lv1
     MATCH (c1:CTSCustomer)-[:BELONG_TO_SUB]->(s:Subscriber)
-    WHERE c1.CTSCustID IN lv1 AND NOT (s.SubscriberID IN [4521, 1270, 4408])
-    WITH lv0, lv1, COLLECT(DISTINCT c1.CTSCustID) as findLv2
-    OPTIONAL MATCH (c1:CTSCustomer)-[:ASS_BY_AI]-(c2:CTSCustomer)
-    WHERE c1.CTSCustID IN findLv2 AND c2.CTSCustID <> lv0 AND NOT c2.CTSCustID IN lv1
-        AND NOT EXISTS((:CTSCustomer {CTSCustID:lv0})-[:HAS_EXCEPTION]-(c2))
-        AND NOT EXISTS((c1)-[:HAS_EXCEPTION]-(c2))
-    RETURN DISTINCT lv0, lv1 +  COLLECT(DISTINCT c2.CTSCustID) as association
+    WHERE c1.CTSCustID IN lv1 AND NOT (s.SubscriberID IN $ip_ExcludeSubscriberIDs)
+    WITH lv0, lv1
+    RETURN DISTINCT lv0, lv1 AS association
 
     UNION
     WITH c
@@ -43,15 +35,11 @@ CALL
     WHERE c <> c1
     WITH DISTINCT c, c1
     WHERE NOT EXISTS((c)-[:HAS_EXCEPTION]-(c1))
-    WITH c.CTSCustID as lv0, COLLECT(DISTINCT c1.CTSCustID) as lv1
+    WITH DISTINCT c.CTSCustID as lv0, COLLECT(DISTINCT c1.CTSCustID) as lv1
     MATCH (c1:CTSCustomer)-[:BELONG_TO_SUB]->(s:Subscriber)
-    WHERE c1.CTSCustID IN lv1 AND NOT (s.SubscriberID IN [4521, 1270, 4408])
-    WITH lv0, lv1, COLLECT(DISTINCT c1.CTSCustID) as findLv2
-    OPTIONAL MATCH (c1:CTSCustomer)-[:ASS_BY_IP]-(c2:CTSCustomer)
-    WHERE c1.CTSCustID IN findLv2 AND c2.CTSCustID <> lv0 AND NOT c2.CTSCustID IN lv1
-        AND NOT EXISTS((:CTSCustomer {CTSCustID:lv0})-[:HAS_EXCEPTION]-(c2))
-        AND NOT EXISTS((c1)-[:HAS_EXCEPTION]-(c2))
-    RETURN DISTINCT lv0, lv1 + COLLECT(DISTINCT c2.CTSCustID) as association
+    WHERE c1.CTSCustID IN lv1 AND NOT (s.SubscriberID IN $ip_ExcludeSubscriberIDs)
+    WITH lv0, lv1
+    RETURN DISTINCT lv0, lv1 AS association
 
     UNION
     WITH c
@@ -59,15 +47,11 @@ CALL
     WHERE c <> c1
     WITH DISTINCT c, c1
     WHERE NOT EXISTS((c)-[:HAS_EXCEPTION]-(c1))
-    WITH c.CTSCustID as lv0, COLLECT(DISTINCT c1.CTSCustID) as lv1
+    WITH DISTINCT c.CTSCustID as lv0, COLLECT(DISTINCT c1.CTSCustID) as lv1
     MATCH (c1:CTSCustomer)-[:BELONG_TO_SUB]->(s:Subscriber)
-    WHERE c1.CTSCustID IN lv1 AND NOT (s.SubscriberID IN [4521, 1270, 4408])
-    WITH lv0, lv1, COLLECT(DISTINCT c1.CTSCustID) as findLv2
-    OPTIONAL MATCH (c1:CTSCustomer)-[:ADD_MANUALLY]-(c2:CTSCustomer)
-    WHERE c1.CTSCustID IN findLv2 AND c2.CTSCustID <> lv0 AND NOT c2.CTSCustID IN lv1
-        AND NOT EXISTS((:CTSCustomer {CTSCustID:lv0})-[:HAS_EXCEPTION]-(c2))
-        AND NOT EXISTS((c1)-[:HAS_EXCEPTION]-(c2))
-    RETURN DISTINCT lv0, lv1 + COLLECT(DISTINCT c2.CTSCustID) as association
+    WHERE c1.CTSCustID IN lv1 AND NOT (s.SubscriberID IN $ip_ExcludeSubscriberIDs)
+    WITH lv0, lv1
+    RETURN DISTINCT lv0, lv1 AS association
 }
 WITH DISTINCT lv0, association
 UNWIND association as eachAssRow

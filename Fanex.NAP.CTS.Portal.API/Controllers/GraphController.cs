@@ -265,7 +265,11 @@
                 {
                     var ip_CTSCustIDs = ctsCustIDs.Split(',').Select(int.Parse);
 
-                    var custAssociations = DbSessionFactory.Execute<AssociationLevelGraphDbViewModel>("GetAssociationDetectionReport", new { ip_CTSCustIDs = ip_CTSCustIDs }).Data;
+                    var custAssociations = DbSessionFactory.Execute<AssociationLevelGraphDbViewModel>("GetAssociationDetectionReport", new
+                    {
+                        ip_CTSCustIDs = ip_CTSCustIDs,
+                        ip_ExcludeSubscriberIDs = new List<int>() { 4521, 1270, 4408 }
+                    }).Data;
 
                     if (custAssociations != null && custAssociations.Any())
                     {
