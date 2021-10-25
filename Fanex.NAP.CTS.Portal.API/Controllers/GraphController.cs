@@ -756,6 +756,21 @@
             return result;
         }
 
+        [HttpGet]
+        public void ScanCTSCustomer()
+        {
+            try
+            {
+                 DbSessionFactory.Execute("ScanCTSCustomer");
+
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("ScanCTSCustomer failed: " + ex.Message + ex.StackTrace);
+            }
+
+        }
+
         #endregion API (Need to remove without in use)
     }
 }
