@@ -3,17 +3,41 @@
 MATCH (c:CTSCustomer)
 WHERE c.CTSCustID in $ip_CTSCustIDs
 WITH DISTINCT c
+call{
+    WITH c
+    OPTIONAL MATCH (c)-[:HAS_EVIDENCE]->(e:Evidence)
+    RETURN  e.EvidenceCode as EvidenceCodes
+
+    UNION
+    WITH c
+    OPTIONAL MATCH (c)-[:USED_DEVICE*2]-(c1:FlaggedCustomer)-[:HAS_EVIDENCE]->(e:Evidence)
+    RETURN e.EvidenceCode as EvidenceCodes
+
+    UNION
+    WITH c
+    OPTIONAL MATCH (c)-[:ASS_BY_AI]-(c1:FlaggedCustomer)-[:HAS_EVIDENCE]->(e:Evidence)
+    RETURN  e.EvidenceCode as EvidenceCodes
+
+    UNION
+    WITH c
+    OPTIONAL MATCH (c)-[:ASS_BY_IP]-(c1:FlaggedCustomer)-[:HAS_EVIDENCE]->(e:Evidence)
+    RETURN  e.EvidenceCode as EvidenceCodes
+
+    UNION
+    WITH c
+    OPTIONAL MATCH (c)-[:ADD_MANUALLY]-(c1:FlaggedCustomer)-[:HAS_EVIDENCE]->(e:Evidence)
+    RETURN e.EvidenceCode as EvidenceCodes
+}
+WITH c, collect(DISTINCT EvidenceCodes) as EvidenceCodes
 OPTIONAL MATCH (c)-[r:HAS_STATUS]->(st:StaticList)
-WITH c, st.ItemNameDisplay AS CustStatus
-OPTIONAL MATCH (c)-[r:HAS_EVIDENCE]->(e:Evidence)
-WITH c, CustStatus, e.EvidenceName as EvidenceName
+WITH c, EvidenceCodes, st.ItemNameDisplay AS CustStatus
 OPTIONAL MATCH (c)-[r:HAS_CATEGORY]->(ct:CustomerCategory)
-RETURN  c.CTSCustID                 AS  CTSCustId
+RETURN    c.CTSCustID               AS  CTSCustId
         , c.CustID                  AS  CustId
         , c.Username                AS  UserName
         , c.CustSubID               AS  CustSubID
         , CustStatus                AS  CustStatus
-        , apoc.text.join(COLLECT(DISTINCT EvidenceName),",")            AS Evidence
+        , apoc.text.join(EvidenceCodes,",")            AS Evidence
         , apoc.text.join(COLLECT(DISTINCT ct.CategoryName),",")         AS CustomerCategory
         , apoc.text.join(COLLECT(DISTINCT toString(ct.CategoryID)),",") AS CategoryIds
         , apoc.text.join(COLLECT(DISTINCT toString(ct.ParentID)),",")   AS ParentIds
