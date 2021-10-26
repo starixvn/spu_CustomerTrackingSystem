@@ -355,10 +355,10 @@
                                         GroupId = y.GroupId,
                                         CategoryIds = x.CategoryIds,
                                         CustId = x.CustId,
-                                        CustomerCategory = x.CustomerCategory,
+                                        CustomerCategory = string.IsNullOrEmpty(x.CustomerCategory) ? "-" : x.CustomerCategory,
                                         CustStatus = x.CustStatus,
                                         CustSubId = x.CustSubId,
-                                        Evidence = x.Evidence,
+                                        Evidence = string.IsNullOrEmpty(x.Evidence) ? "-" : x.Evidence,
                                         ParentIds = x.ParentIds,
                                         UserName = x.UserName
                                     });
