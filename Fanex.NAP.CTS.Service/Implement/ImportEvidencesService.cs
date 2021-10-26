@@ -110,7 +110,7 @@
             if (cellValue == null)
                 return string.Empty;
 
-            return cellValue.ToString();
+            return cellValue.ToString().Trim();
         }
 
         public IEnumerable<RawAccountEvidenceModel> GetRawAccountEvidences()
