@@ -263,7 +263,7 @@
             {
                 if (!string.IsNullOrEmpty(ctsCustIDs))
                 {
-                    var ip_CTSCustIDs = ctsCustIDs.Split(',').Select(int.Parse);
+                    var ip_CTSCustIDs = ctsCustIDs.Split(',').Select(long.Parse);
 
                     var custAssociations = DbSessionFactory.Execute<AssociationLevelGraphDbViewModel>("GetAssociationDetectionReport", new
                     {
@@ -273,17 +273,9 @@
 
                     if (custAssociations != null && custAssociations.Any())
                     {
-                        var assDetection = new List<GetAssociationDetectionModel>();
+                        var groupAss = ClassifyGroupAssociation(custAssociations, ip_CTSCustIDs);
 
-                        custAssociations.ToList().ForEach(i =>
-                        {
-                            if (i.Associations != null && i.Associations.Any())
-                            {
-                                assDetection = ClassifyGroupAssociation(i, assDetection);
-                            }
-                        });
-
-                        return GetCustInfoAssDetectionReport(assDetection);
+                        return GetCustInfoAssDetectionReport(groupAss);
                     }
                 }
             }
@@ -297,30 +289,72 @@
             return new List<GetAssociationDetectionModel>();
         }
 
-        private List<GetAssociationDetectionModel> ClassifyGroupAssociation(AssociationLevelGraphDbViewModel association, List<GetAssociationDetectionModel> assDetection)
+        private List<GroupClassificationGraphDbViewModel> GroupClassification(IEnumerable<AssociationLevelGraphDbViewModel> association)
         {
-            var temp = assDetection;
+            var groupClassification = new List<GroupClassificationGraphDbViewModel>();
 
-            int maxGroupId = temp.Any() ? temp.Max(c => c.GroupId) : 0;
-
-            if (!temp.Any(x => x.CTSCustId.Equals(association.CTSCustIdLv0)))
+            if (association != null && association.Any())
             {
-                temp.Add(new GetAssociationDetectionModel { GroupId = maxGroupId + 1, CTSCustId = association.CTSCustIdLv0 });
-            }
+                association.ToList().ForEach(i =>
+                {
+                    bool isNewGroup = true;
 
-            if (association.Associations.Any())
-            {
-                int rootGroupId = temp.SingleOrDefault(c => c.CTSCustId == association.CTSCustIdLv0).GroupId;
-
-                association.Associations.ForEach(eachAss => {
-                    if (!temp.Any(x => x.CTSCustId.Equals(eachAss)))
+                    foreach (var j in groupClassification)
                     {
-                        temp.Add(new GetAssociationDetectionModel { GroupId = rootGroupId, CTSCustId = eachAss });
+                        if (j.CTSCustIDs.Contains(i.CTSCustIdLv0))
+                        {
+                            j.CTSCustIDs.AddRange(i.Associations.Except(j.CTSCustIDs));
+                            isNewGroup = false;
+                            break;
+                        }
+
+                        if (i.Associations.Intersect(j.CTSCustIDs).Any())
+                        {
+                            j.CTSCustIDs.Add(i.CTSCustIdLv0);
+                            j.CTSCustIDs.AddRange(i.Associations.Except(j.CTSCustIDs));
+                            isNewGroup = false;
+                            break;
+                        }
+                    }
+
+                    if (isNewGroup)
+                    {
+                        groupClassification.Add(new GroupClassificationGraphDbViewModel
+                        {
+                            GroupID = groupClassification.Count > 0 ? groupClassification.Max(c => c.GroupID) + 1 : 1,
+                            CTSCustIDs = new List<long> { i.CTSCustIdLv0 }.Concat(i.Associations).ToList()
+                        });
                     }
                 });
             }
 
-            return temp;
+            return groupClassification;
+        }
+
+        private List<GetAssociationDetectionModel> ClassifyGroupAssociation(IEnumerable<AssociationLevelGraphDbViewModel> association, IEnumerable<long> ip_CTSCustIDs)
+        {
+            var assDetection = new List<GetAssociationDetectionModel>();
+
+            var groupAssociation = GroupClassification(association);
+
+            if (groupAssociation != null && groupAssociation.Any())
+            {
+                groupAssociation.ToList().ForEach(i =>
+                {
+                    var rootCTSCustIds = i.CTSCustIDs.Where(ctsCustId => ip_CTSCustIDs.Contains(ctsCustId)).Distinct();
+
+                    foreach (var rootCTSCustId in rootCTSCustIds)
+                    {
+                        assDetection.Add(new GetAssociationDetectionModel
+                        {
+                            GroupId = i.GroupID,
+                            CTSCustId = rootCTSCustId
+                        });
+                    }
+                });
+            }
+
+            return assDetection;
         }
 
         private IEnumerable<GetAssociationDetectionModel> GetCustInformation(List<GetAssociationDetectionModel> assDetection)
