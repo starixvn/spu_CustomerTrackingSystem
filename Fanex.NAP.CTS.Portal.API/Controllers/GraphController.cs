@@ -8,6 +8,8 @@
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.ProbationManagement;
+    using Fanex.NAP.CTS.Service.Implement;
+    using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.AssociationDetection;
     using Fanex.NAP.CTS.ViewModel.AssociationReport;
     using Fanex.NAP.CTS.ViewModel.ProbationManagement;
@@ -19,12 +21,21 @@
     using System.Web.Http;
     using System.Web.Http.Results;
 
-
     /// <summary>
     /// Graph Controller - Using for CTS site
     /// </summary>
     public class GraphController : ApiController
     {
+        private readonly IAssociatedAccountService _associationService;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public GraphController()
+        {
+            _associationService = new AssociatedAccountService();
+        }
+
         #region WEB - Association Profile Page
 
         /// <summary>
@@ -92,50 +103,84 @@
 
         #region API - Flagged Evidence Level
 
+        /// <summary>
+        /// API Get GetFlaggedEvidenceForLevel01 For Taiwan
+        /// </summary>
+        /// <param name="custIdList"></param>
+        /// <returns></returns>
         [HttpPost]
         public JsonResult<List<CustomerEvidenceForTW>> GetFlaggedEvidenceForLevel01(string custIdList)
         {
             var result = new List<CustomerEvidenceForTW>();
+
             try
             {
-                var custIds = custIdList.Split(',').Select(a => Convert.ToInt32(a));
-                Parallel.Invoke(()=> 
+                if (!string.IsNullOrEmpty(custIdList))
                 {
-                    var ceLv0 = DbSessionFactory.Execute<CustomerEvidenceForTW>("GetCustomerEvidenceLevel0", new { CustID = custIds }).Data;
-                    result.AddRange(ceLv0);
-                },
-                ()=> 
-                {
-                    var ceLv1 = DbSessionFactory.Execute<CustomerEvidenceForTW>("GetCustomerEvidenceLevel1", new { CustID = custIds }).Data;
-                    result.AddRange(ceLv1);
-                });
-                return Json(result);
+                    if (ConfigSettings.GetFlaggedEviByAssFromMySQL)
+                    {
+                        result = _associationService.GetFlaggedEvidenceByDirectAssForAPI(custIdList)?.ToList();
+                    }
+                    else
+                    {
+                        var custIds = custIdList.Split(',').Select(a => Convert.ToInt32(a));
+
+                        Parallel.Invoke(() =>
+                        {
+                            var ceLv0 = DbSessionFactory.Execute<CustomerEvidenceForTW>("GetCustomerEvidenceLevel0", new { CustID = custIds }).Data;
+                            result.AddRange(ceLv0);
+                        },
+                        () =>
+                        {
+                            var ceLv1 = DbSessionFactory.Execute<CustomerEvidenceForTW>("GetCustomerEvidenceLevel1", new { CustID = custIds }).Data;
+                            result.AddRange(ceLv1);
+                        });
+                    }
+                }
             }
             catch (Exception ex)
             {
-                LogService.Error("WEB - GetFlaggedEvidenceForLevel01 failed: " + ex.Message + ex.StackTrace);
-                throw;
+                LogService.Error($"WEB - GetFlaggedEvidenceForLevel01 - Data input: {custIdList} - failed: " + ex.Message + ex.StackTrace);
             }
+
+            return Json(result ?? new List<CustomerEvidenceForTW>());
         }
-        
+
+        /// <summary>
+        /// API Get GetFlaggedEvidenceForLevel2 For Taiwan
+        /// </summary>
+        /// <param name="custIdList"></param>
+        /// <returns></returns>
         [HttpPost]
         public JsonResult<List<CustomerEvidenceForTW>> GetFlaggedEvidenceForLevel2(string custIdList)
         {
+            var result = new List<CustomerEvidenceForTW>();
+
             try
             {
-                var custIds = custIdList.Split(',').Select(a => Convert.ToInt32(a));
-                var result = DbSessionFactory.Execute<CustomerEvidenceForTW>("GetCustomerEvidenceLevel2", new { CustID = custIds }).Data.ToList();
+                if (!string.IsNullOrEmpty(custIdList))
+                {
+                    if (ConfigSettings.GetFlaggedEviByAssFromMySQL)
+                    {
+                        result = _associationService.GetFlaggedEvidenceByLevel2AssForAPI(custIdList)?.ToList();
+                    }
+                    else
+                    {
+                        var custIds = custIdList.Split(',').Select(a => Convert.ToInt32(a));
 
-                return Json(result);
+                        result = DbSessionFactory.Execute<CustomerEvidenceForTW>("GetCustomerEvidenceLevel2", new { CustID = custIds }).Data.ToList();
+                    }
+                }
             }
             catch (Exception ex)
             {
-                LogService.Error("WEB - GetFlaggedEvidenceForLevel2 failed: " + ex.Message + ex.StackTrace);
-                throw;
+                LogService.Error($"WEB - GetFlaggedEvidenceForLevel2 - Data input: {custIdList} - failed: " + ex.Message + ex.StackTrace);
             }
+
+            return Json(result ?? new List<CustomerEvidenceForTW>());
         }
 
-        #endregion
+        #endregion API - Flagged Evidence Level
 
         #region WEB - Association Report
 
@@ -236,7 +281,6 @@
                                         EvidenceCodes = (temp != null) ? temp.EvidenceCodes : string.Empty,
                                         CategoryName = group.a.CategoryName
                                     }).OrderBy(c => c.SubscriberName).Skip(para.SkipRow).Take(para.TakeRow).ToList();
-
             }
 
             return new AssociationReportViewModel()
@@ -797,14 +841,12 @@
         {
             try
             {
-                 DbSessionFactory.Execute("ScanCTSCustomer");
-
+                DbSessionFactory.Execute("ScanCTSCustomer");
             }
             catch (Exception ex)
             {
                 LogService.Error("ScanCTSCustomer failed: " + ex.Message + ex.StackTrace);
             }
-
         }
 
         #endregion API (Need to remove without in use)

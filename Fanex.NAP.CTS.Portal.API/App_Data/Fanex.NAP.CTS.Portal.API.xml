@@ -511,20 +511,6 @@
             <param name="eviIdList"> Evidence in string format (saparate by comma) (</param>
             <returns>A list of customer evidence in JSON format</returns>
         </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetFlaggedEvidenceForLevel01(System.String)">
-            <summary>
-            Get flagged customer for level 0 and 1 for Customers
-            </summary>
-            <param name="custIdList">CustId list in string format(saparted by comma. Ex: 47539408,47787246)</param>
-            <returns>List of Flagged Customer in Json formated</returns>
-        </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetFlaggedEvidenceForLevel2(System.String)">
-            <summary>
-            Get flagged customer for level 2 for Customers
-            </summary>
-            <param name="custIdList">CustId list in string format(saparted by comma. Ex: 47539408,47787246)</param>
-            <returns>List of Flagged Customer in Json formated</returns>
-        </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.AddCustomersEvidences(Fanex.NAP.CTS.Model.DTO.PlaceMultiCustomerEvidence)">
             <summary>
             Add evidences to customers
@@ -623,11 +609,30 @@
             Graph Controller - Using for CTS site
             </summary>
         </member>
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetDirectAssociationProfile(Fanex.NAP.CTS.Model.GraphDB.AssociationProfileParameterModel)">
             <summary>
             Get Direct All Association for WEB Profile Page
             </summary>
             <param name="paras"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetFlaggedEvidenceForLevel01(System.String)">
+            <summary>
+            API Get GetFlaggedEvidenceForLevel01 For Taiwan
+            </summary>
+            <param name="custIdList"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetFlaggedEvidenceForLevel2(System.String)">
+            <summary>
+            API Get GetFlaggedEvidenceForLevel2 For Taiwan
+            </summary>
+            <param name="custIdList"></param>
             <returns></returns>
         </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetAssociationReport(Fanex.NAP.CTS.Model.GraphDB.AssociationReportParameterModel)">
