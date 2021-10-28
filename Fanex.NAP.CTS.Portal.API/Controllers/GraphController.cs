@@ -26,14 +26,16 @@
     /// </summary>
     public class GraphController : ApiController
     {
-        private readonly IAssociatedAccountService _associationService;
+        private readonly IAssociatedAccountService associationService;
+        private readonly IAssociationDetectionService associationDetectionService;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public GraphController()
         {
-            _associationService = new AssociatedAccountService();
+            associationService = new AssociatedAccountService();
+            associationDetectionService = new AssociationDetectionService();
         }
 
         #region WEB - Association Profile Page
@@ -119,7 +121,7 @@
                 {
                     if (ConfigSettings.GetFlaggedEviByAssFromMySQL)
                     {
-                        result = _associationService.GetFlaggedEvidenceByDirectAssForAPI(custIdList)?.ToList();
+                        result = associationService.GetFlaggedEvidenceByDirectAssForAPI(custIdList)?.ToList();
                     }
                     else
                     {
@@ -162,7 +164,7 @@
                 {
                     if (ConfigSettings.GetFlaggedEviByAssFromMySQL)
                     {
-                        result = _associationService.GetFlaggedEvidenceByLevel2AssForAPI(custIdList)?.ToList();
+                        result = associationService.GetFlaggedEvidenceByLevel2AssForAPI(custIdList)?.ToList();
                     }
                     else
                     {
@@ -317,9 +319,9 @@
 
                     if (custAssociations != null && custAssociations.Any())
                     {
-                        var groupAss = ClassifyGroupAssociation(custAssociations, ip_CTSCustIDs);
+                        var groupAss = associationDetectionService.ClassifyGroupAssociation(custAssociations, ip_CTSCustIDs);
 
-                        return GetCustInfoAssDetectionReport(groupAss);
+                        return associationDetectionService.GetCustInfoAssDetectionReport(groupAss);
                     }
                 }
             }
@@ -328,121 +330,6 @@
                 LogService.Error($"WEB - {ConfigSettings.EnvironmentName} - GetAssociationDetectionReport failed: " + ex.Message + ex.StackTrace + "\n"
                         + ex.InnerException.Message + ex.InnerException.Source + ((Neo4j.Driver.Neo4jException)ex.InnerException).Code
                         + ex.InnerException.StackTrace);
-            }
-
-            return new List<GetAssociationDetectionModel>();
-        }
-
-        private List<GroupClassificationGraphDbViewModel> GroupClassification(IEnumerable<AssociationLevelGraphDbViewModel> association)
-        {
-            var groupClassification = new List<GroupClassificationGraphDbViewModel>();
-
-            if (association != null && association.Any())
-            {
-                association.ToList().ForEach(i =>
-                {
-                    bool isNewGroup = true;
-
-                    foreach (var j in groupClassification)
-                    {
-                        if (j.CTSCustIDs.Contains(i.CTSCustIdLv0))
-                        {
-                            j.CTSCustIDs.AddRange(i.Associations.Except(j.CTSCustIDs));
-                            isNewGroup = false;
-                            break;
-                        }
-
-                        if (i.Associations.Intersect(j.CTSCustIDs).Any())
-                        {
-                            j.CTSCustIDs.Add(i.CTSCustIdLv0);
-                            j.CTSCustIDs.AddRange(i.Associations.Except(j.CTSCustIDs));
-                            isNewGroup = false;
-                            break;
-                        }
-                    }
-
-                    if (isNewGroup)
-                    {
-                        groupClassification.Add(new GroupClassificationGraphDbViewModel
-                        {
-                            GroupID = groupClassification.Count > 0 ? groupClassification.Max(c => c.GroupID) + 1 : 1,
-                            CTSCustIDs = new List<long> { i.CTSCustIdLv0 }.Concat(i.Associations).ToList()
-                        });
-                    }
-                });
-            }
-
-            return groupClassification;
-        }
-
-        private List<GetAssociationDetectionModel> ClassifyGroupAssociation(IEnumerable<AssociationLevelGraphDbViewModel> association, IEnumerable<long> ip_CTSCustIDs)
-        {
-            var assDetection = new List<GetAssociationDetectionModel>();
-
-            var groupAssociation = GroupClassification(association);
-
-            if (groupAssociation != null && groupAssociation.Any())
-            {
-                groupAssociation.ToList().ForEach(i =>
-                {
-                    var rootCTSCustIds = i.CTSCustIDs.Where(ctsCustId => ip_CTSCustIDs.Contains(ctsCustId)).Distinct();
-
-                    foreach (var rootCTSCustId in rootCTSCustIds)
-                    {
-                        assDetection.Add(new GetAssociationDetectionModel
-                        {
-                            GroupId = i.GroupID,
-                            CTSCustId = rootCTSCustId
-                        });
-                    }
-                });
-            }
-
-            return assDetection;
-        }
-
-        private IEnumerable<GetAssociationDetectionModel> GetCustInformation(List<GetAssociationDetectionModel> assDetection)
-        {
-            if (assDetection != null && assDetection.Any())
-            {
-                var ip_CTSCustIDs = assDetection.Select(c => c.CTSCustId);
-
-                var result = DbSessionFactory.Execute<GetAssociationDetectionModel>("GetCustInformation", new { ip_CTSCustIDs = ip_CTSCustIDs }).Data;
-
-                return result ?? new List<GetAssociationDetectionModel>();
-            }
-
-            return new List<GetAssociationDetectionModel>();
-        }
-
-        private IEnumerable<GetAssociationDetectionModel> GetCustInfoAssDetectionReport(List<GetAssociationDetectionModel> assDetection)
-        {
-            if (assDetection != null && assDetection.Any())
-            {
-                var custInfo = GetCustInformation(assDetection);
-
-                if (custInfo.Any())
-                {
-                    var result = custInfo.Join(
-                                    assDetection,
-                                    x => x.CTSCustId,
-                                    y => y.CTSCustId,
-                                    (x, y) => new GetAssociationDetectionModel
-                                    {
-                                        CTSCustId = x.CTSCustId,
-                                        GroupId = y.GroupId,
-                                        CategoryIds = x.CategoryIds,
-                                        CustId = x.CustId,
-                                        CustomerCategory = string.IsNullOrEmpty(x.CustomerCategory) ? "-" : x.CustomerCategory,
-                                        CustStatus = x.CustStatus,
-                                        CustSubId = x.CustSubId,
-                                        Evidence = string.IsNullOrEmpty(x.Evidence) ? "-" : x.Evidence,
-                                        ParentIds = x.ParentIds,
-                                        UserName = x.UserName
-                                    });
-
-                    return result ?? new List<GetAssociationDetectionModel>();
-                }
             }
 
             return new List<GetAssociationDetectionModel>();

@@ -1,9 +1,5 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.Logging;
@@ -12,14 +8,18 @@
     using Fanex.NAP.CTS.Criteria.Account;
     using Fanex.NAP.CTS.Criteria.Account.Associated;
     using Fanex.NAP.CTS.Criteria.AssociationReport;
-    using Fanex.NAP.CTS.Criteria.Common;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.AssociationReport;
-    using Fanex.NAP.CTS.Model.Common;
     using Fanex.NAP.CTS.ViewModel.AssociationReport;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
 
     public class AssociationReportService : IAssociationReportService
     {
+        #region Query From MySQL
+
         public List<CustomerStaticStatusModel> GetCustomerStaticStatus(int listId, bool status)
         {
             var criteria = new CustomerStaticAccountStatusCriteria
@@ -63,39 +63,6 @@
             {
                 return db.Query<EvidenceModel>(criteria);
             }
-        }
-
-        public AssociationReportViewModel GetAssociationReportFromGraphDB(string apiEndPoint, AssociationFilterViewModel filter)
-        {
-            try
-            {
-                var param = new
-                {
-                    FromAssDate = filter.FromDate,
-                    ToAssDate = filter.ToDate,
-                    AccountStatusIDs = filter.AccountStatusIds.Split(',').Select(int.Parse),
-                    SubscriberIDs = filter.SubscriberIDs.Split(',').Select(int.Parse),
-                    AssociationStatus = filter.AssociationStatus,
-                    EvidenceIDs = filter.EvidenceIDs.Split(',').Select(int.Parse),
-                    AssociationType = filter.AssociationType,
-                    TakeRow = filter.length,
-                    SkipRow = filter.start
-                };
-
-                var data = ApiHelper.Post<AssociationReportViewModel> (apiEndPoint, param);
-
-                Task.WhenAll(data);
-
-                return data.Result ?? new AssociationReportViewModel() { AssociationList = new List<AssociationViewModel>(), TotalItems = 0 };
-            }
-            catch (Exception ex)
-            {
-                LogService.Info("Web - Association Report - Exception: " + ex.Message + ex.StackTrace + "\n"
-                       + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
-                       + ex.InnerException.StackTrace);
-            }
-
-            return new AssociationReportViewModel() { AssociationList = new List<AssociationViewModel>(), TotalItems = 0 };
         }
 
         public IEnumerable<CategoriesModel> GetCategories(string ctsCustIdList)
@@ -146,7 +113,7 @@
             }
 
             return new GraphAssociationDetailModel();
-        }       
+        }
 
         public DBResult ActiveRemoveAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, int createdBy, bool isRemoveAction)
         {
@@ -227,5 +194,43 @@
             }
         }
 
+        #endregion
+
+        #region Query From GraphDB
+
+        public AssociationReportViewModel GetAssociationReportFromGraphDB(string apiEndPoint, AssociationFilterViewModel filter)
+        {
+            try
+            {
+                var param = new
+                {
+                    FromAssDate = filter.FromDate,
+                    ToAssDate = filter.ToDate,
+                    AccountStatusIDs = filter.AccountStatusIds.Split(',').Select(int.Parse),
+                    SubscriberIDs = filter.SubscriberIDs.Split(',').Select(int.Parse),
+                    AssociationStatus = filter.AssociationStatus,
+                    EvidenceIDs = filter.EvidenceIDs.Split(',').Select(int.Parse),
+                    AssociationType = filter.AssociationType,
+                    TakeRow = filter.length,
+                    SkipRow = filter.start
+                };
+
+                var data = ApiHelper.Post<AssociationReportViewModel>(apiEndPoint, param);
+
+                Task.WhenAll(data);
+
+                return data.Result ?? new AssociationReportViewModel() { AssociationList = new List<AssociationViewModel>(), TotalItems = 0 };
+            }
+            catch (Exception ex)
+            {
+                LogService.Info("Web - Association Report - Exception: " + ex.Message + ex.StackTrace + "\n"
+                       + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
+                       + ex.InnerException.StackTrace);
+            }
+
+            return new AssociationReportViewModel() { AssociationList = new List<AssociationViewModel>(), TotalItems = 0 };
+        }
+
+        #endregion
     }
 }
