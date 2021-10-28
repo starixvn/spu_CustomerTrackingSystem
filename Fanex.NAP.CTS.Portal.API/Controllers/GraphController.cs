@@ -8,6 +8,7 @@
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.ProbationManagement;
+    using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.AssociationDetection;
@@ -28,6 +29,7 @@
     {
         private readonly IAssociatedAccountService associationService;
         private readonly IAssociationDetectionService associationDetectionService;
+        private readonly IAssociationReportService associationReportService;
 
         /// <summary>
         /// Constructor
@@ -36,6 +38,7 @@
         {
             associationService = new AssociatedAccountService();
             associationDetectionService = new AssociationDetectionService();
+            associationReportService = new AssociationReportService();
         }
 
         #region WEB - Association Profile Page
@@ -228,7 +231,7 @@
 
                             if (custAssociation != null && custAssociation.TotalItems > 0)
                             {
-                                return MergeAssociationReport(custInfo, custAssociation, paras);
+                                return associationReportService.MergeAssociationReport(custInfo, custAssociation, paras);
                             }
                         }
                     }
@@ -259,37 +262,6 @@
                 default:
                     return string.Empty;
             }
-        }
-
-        private AssociationReportViewModel MergeAssociationReport(AssociationReportViewModel custInfo, AssociationReportViewModel custAss, AssociationReportParameterModel para)
-        {
-            var result = new List<AssociationViewModel>();
-
-            if (custInfo.AssociationList.Any() && custAss.AssociationList.Any())
-            {
-                result = custAss.AssociationList.GroupJoin(custInfo.AssociationList,
-                                a => a.CTSCustId,
-                                i => i.CTSCustId,
-                                (a, i) => new { a, i })
-                                .SelectMany(
-                                    group => group.i.DefaultIfEmpty(),
-                                    (group, temp) => new AssociationViewModel
-                                    {
-                                        CTSCustId = group.a.CTSCustId,
-                                        UserName = (temp != null) ? temp.UserName : string.Empty,
-                                        AccountStatus = (temp != null) ? temp.AccountStatus : string.Empty,
-                                        SubscriberId = (temp != null) ? temp.SubscriberId : 0,
-                                        SubscriberName = (temp != null) ? temp.SubscriberName : string.Empty,
-                                        EvidenceCodes = (temp != null) ? temp.EvidenceCodes : string.Empty,
-                                        CategoryName = group.a.CategoryName
-                                    }).OrderBy(c => c.SubscriberName).Skip(para.SkipRow).Take(para.TakeRow).ToList();
-            }
-
-            return new AssociationReportViewModel()
-            {
-                AssociationList = result ?? new List<AssociationViewModel>(),
-                TotalItems = custAss.TotalItems
-            };
         }
 
         #endregion WEB - Association Report

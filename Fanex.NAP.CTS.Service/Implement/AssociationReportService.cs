@@ -10,6 +10,7 @@
     using Fanex.NAP.CTS.Criteria.AssociationReport;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.AssociationReport;
+    using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.ViewModel.AssociationReport;
     using System;
     using System.Collections.Generic;
@@ -229,6 +230,37 @@
             }
 
             return new AssociationReportViewModel() { AssociationList = new List<AssociationViewModel>(), TotalItems = 0 };
+        }
+
+        public AssociationReportViewModel MergeAssociationReport(AssociationReportViewModel custInfo, AssociationReportViewModel custAss, AssociationReportParameterModel para)
+        {
+            var result = new List<AssociationViewModel>();
+
+            if (custInfo.AssociationList.Any() && custAss.AssociationList.Any())
+            {
+                result = custAss.AssociationList.GroupJoin(custInfo.AssociationList,
+                                a => a.CTSCustId,
+                                i => i.CTSCustId,
+                                (a, i) => new { a, i })
+                                .SelectMany(
+                                    group => group.i.DefaultIfEmpty(),
+                                    (group, temp) => new AssociationViewModel
+                                    {
+                                        CTSCustId = group.a.CTSCustId,
+                                        UserName = (temp != null) ? temp.UserName : string.Empty,
+                                        AccountStatus = (temp != null) ? temp.AccountStatus : string.Empty,
+                                        SubscriberId = (temp != null) ? temp.SubscriberId : 0,
+                                        SubscriberName = (temp != null) ? temp.SubscriberName : string.Empty,
+                                        EvidenceCodes = (temp != null) ? temp.EvidenceCodes : string.Empty,
+                                        CategoryName = group.a.CategoryName
+                                    }).OrderBy(c => c.SubscriberName).Skip(para.SkipRow).Take(para.TakeRow).ToList();
+            }
+
+            return new AssociationReportViewModel()
+            {
+                AssociationList = result ?? new List<AssociationViewModel>(),
+                TotalItems = custAss.TotalItems
+            };
         }
 
         #endregion
