@@ -15,7 +15,7 @@ CALL apoc.cypher.run('
     UNWIND r as val
     UNWIND (CASE WHEN val[0].CreatedDate > val[1].CreatedDate THEN val[0].CreatedDate ELSE val[1].CreatedDate END) AS association
     WITH c, c1, SubscriberID, SubscriberName, StatusGroup, ItemID, StatusName, Min(association) as firstAss
-    OPTIONAL MATCH (c:CTSCustomer)-[e:HAS_EXCEPTION]-(c1:CTSCustomer)
+    OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c1)
     RETURN 
         c1.CTSCustID            AS CTSCustID
         , c1.CustID             AS CustId
@@ -43,7 +43,7 @@ CALL apoc.cypher.run('
         AND s.SubscriberID in $ip_SubscriberIDs
         AND st.ListID = 1 AND st.ItemID in $ip_AccountStatuses
     WITH distinct c,c1,s,st,r.CreatedDate as AssDate
-    OPTIONAL MATCH (c:CTSCustomer)-[e:HAS_EXCEPTION]-(c1:CTSCustomer)
+    OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c1)
     WITH c,c1,s,e,st, Min(AssDate) as firstAssDate
     RETURN 
         c1.CTSCustID            AS CTSCustID
@@ -72,7 +72,7 @@ CALL apoc.cypher.run('
         AND s.SubscriberID in $ip_SubscriberIDs
         AND st.ListID = 1 AND st.ItemID in $ip_AccountStatuses
     WITH distinct c,c1,s,st,r.CreatedDate as AssDate
-    OPTIONAL MATCH (c:CTSCustomer)-[e:HAS_EXCEPTION]-(c1:CTSCustomer)
+    OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c1)
     WITH c,c1,s,e,st, Min(AssDate) as firstAssDate
     RETURN 
         c1.CTSCustID            AS CTSCustID
@@ -101,7 +101,7 @@ CALL apoc.cypher.run('
         AND s.SubscriberID in $ip_SubscriberIDs
         AND st.ListID = 1 AND st.ItemID in $ip_AccountStatuses
     WITH distinct c,c1,s,st,r.CreatedDate as AssDate
-    OPTIONAL MATCH (c:CTSCustomer)-[e:HAS_EXCEPTION]-(c1:CTSCustomer)
+    OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c1)
 
     WITH c,c1,s,e,st, Min(AssDate) as firstAssDate
     RETURN 
