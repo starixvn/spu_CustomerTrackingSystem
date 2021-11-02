@@ -267,7 +267,7 @@
             }
         }
 
-        public GraphAssociationPaging GetCustomerAssociationByGraph(string apiURL, AssociatedFilterModel filterModel, bool fromMySQL = false)
+        public GraphAssociationPaging GetCustomerAssociationByGraph(AssociatedFilterModel filterModel, bool fromMySQL = false)
         {
             if (fromMySQL)
             {
@@ -297,22 +297,35 @@
             }
             else
             {
-                var param = new
+                try
                 {
-                    ctsCustId = filterModel.CTSCustId,
-                    assStatus = filterModel.AssociationStatus,
-                    siteIDs = filterModel.SubscriberIds,
-                    accountStatuses = filterModel.AccountStatusIds,
-                    takeRow = filterModel.length,
-                    skipRow = filterModel.start
-                };
+                    var param = new AssociationProfileParameterModel
+                    {
+                        CTSCustId = filterModel.CTSCustId,
+                        AssociationStatus = filterModel.AssociationStatus,
+                        AccountStatusIds = filterModel.AccountStatusIds,
+                        AssociationType = filterModel.AssociationType,
+                        CategoryIDs = filterModel.CategoryIds,
+                        SubscriberIDs = filterModel.SubscriberIds,
+                        Skip = filterModel.start,
+                        Take = filterModel.length,
+                    };
 
-                var data = ApiHelper.Post<GraphAssociationPaging>(apiURL, param);
+                    var data = ApiHelper.Post<GraphAssociationPaging>(ConfigSettings.GetDirectAssociationProfile, param, 300);
 
-                Task.WhenAll(data);
+                    Task.WhenAll(data);
 
-                return data.Result ?? new GraphAssociationPaging();
+                    return data.Result ?? new GraphAssociationPaging();
+                }
+                catch (Exception ex)
+                {
+                    LogService.Error($"{ConfigSettings.EnvironmentName} - Web - Association Tab Profile - Exception: " + ex.Message + ex.StackTrace + "\n"
+                        + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
+                        + ex.InnerException.StackTrace);
+                }
             }
+
+            return new GraphAssociationPaging();
         }
 
         public List<AccountStaticStatusModel> GetAccountStaticStatuses(int listId, bool status)
@@ -344,7 +357,7 @@
 
         public List<GraphDirectAssociationModel> GetDirectAssocationByGraph(string apiURL, List<long> ctsCustIds)
         {
-            var data = ApiHelper.Post<List<GraphDirectAssociationModel>>(apiURL, ctsCustIds);
+            var data = ApiHelper.Post<List<GraphDirectAssociationModel>>(apiURL, ctsCustIds, 300);
 
             Task.WhenAll(data);
 
@@ -393,19 +406,6 @@
             }
 
             return x;
-        }
-
-        private DateTime GetMinDate(IGrouping<long, GraphAssociationModel> groupData)
-        {
-            var minDate = DateTime.MaxValue;
-
-            foreach (var item in groupData)
-            {
-                if (item.AssociationDateGMT0 < minDate)
-                    minDate = item.AssociationDateGMT0;
-            }
-
-            return minDate;
         }
 
         public IEnumerable<ValidateManualAssociationMultipleModel> ValidateManualAssociationMultiple(long fromCTSCustId, string toUserNameList, out bool isException)
@@ -1190,26 +1190,6 @@
             };
 
             return repository.Fetch<CTSCustomer>(criteria);
-        }
-
-        private int GetAssociationTypeFromUrl(string associationUrl)
-        {
-            if (associationUrl == ConfigSettings.GetDirectAssociationByDevice)
-            {
-                return 1;
-            }
-            else if (associationUrl == ConfigSettings.GetDirectAssociationByAI)
-            {
-                return 2;
-            }
-            else if (associationUrl == ConfigSettings.GetDirectAssociationByManual)
-            {
-                return 3;
-            }
-            else
-            {
-                return 0;
-            }
         }
     }
 }

@@ -1,0 +1,41 @@
+﻿USE ctsgraphdb
+//USE ctslocal
+MATCH (c:CTSCustomer)-[r:ASS_BY_IP]-(c1:CTSCustomer)
+MATCH (c1)-[:BELONG_TO_SUB]->(s:Subscriber)
+MATCH (c1)-[:HAS_STATUS]->(st:StaticList)
+WHERE c.CTSCustID = $ip_CTSCustID  AND c.CustSubID = 0 AND c1.CTSCustID IS NOT NULL
+        AND (($ip_AssociationStatus = 0) 
+            OR ($ip_AssociationStatus = 1 AND not exists((c)-[:HAS_EXCEPTION]-(c1)))
+            OR ($ip_AssociationStatus = 2 AND exists((c)-[:HAS_EXCEPTION]-(c1))))
+        AND s.SubscriberID in $ip_SubscriberIDs
+        AND st.ListID = 1 AND st.ItemID in $ip_AccountStatuses
+WITH distinct c,c1,s,st,r.CreatedDate as AssDate
+OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c1)
+OPTIONAL MATCH (c1)-[:HAS_CATEGORY]->(ct:CustomerCategory)
+WHERE ct.CategoryID in $ip_CategoryIDs
+WITH c,c1,s,st,ct,e, Min(AssDate) as firstAssDate
+WITH 
+      c1.CTSCustID           AS CTSCustID
+    , c1.CustID             AS CustId
+    , c1.CustSubID          AS CustSubId
+    , s.SubscriberID        AS SubscriberID
+    , s.SubscriberName      AS SubscriberName
+    , c1.Username           AS UserName
+    , c1.Username2          AS UserName2  
+    , st.PriorityOrder      AS StatusGroup    
+    , st.ItemID             AS StatusID
+    , st.ItemNameDisplay    AS StatusName
+    , "IP"                  AS AssociationTypeName  
+    , CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
+    , CASE WHEN $ip_AssociationStatus in [0,2] and e IS NOT NULL THEN e.CreatedDate ELSE firstAssDate END AS AssociationDate
+    , ct.ParentID            AS ParentIDs
+    , apoc.text.join(COLLECT(DISTINCT toString(ct.CategoryID)),",") AS CategoryIDs
+    , apoc.text.join(COLLECT(DISTINCT ct.CategoryName),",")         AS CategoryNames
+
+ORDER BY SubscriberName ASC, AssociationStatus ASC, StatusGroup ASC, StatusID ASC, AssociationDate DESC, CTSCustID ASC
+WITH COLLECT({CTSCustID:CTSCustID, CustId:CustId, CustSubId:CustSubId, SubscriberID:SubscriberID, SubscriberName:SubscriberName, UserName:UserName, UserName2:UserName2, StatusGroup:StatusGroup, StatusID:StatusID, StatusName:StatusName, AssociationTypeName:AssociationTypeName, AssociationStatus:AssociationStatus, AssociationDate:AssociationDate, ParentIDs:ParentIDs, CategoryIDs:CategoryIDs, CategoryNames:CategoryNames} ) as AssociationList, count(CTSCustID) as TotalItems
+UNWIND AssociationList as associationList
+WITH associationList, TotalItems
+SKIP $ip_Skip
+LIMIT $ip_PageSize
+RETURN COLLECT(associationList) as AssociationList, TotalItems

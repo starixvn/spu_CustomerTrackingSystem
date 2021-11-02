@@ -1,16 +1,24 @@
 ﻿namespace Fanex.NAP.CTS.Portal.API.Controllers
 {
     using Fanex.Logging;
+    using Fanex.NAP.CTS.Core.Extentions;
+    using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model.Account;
+    using Fanex.NAP.CTS.Model.AssociationDetection;
+    using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.ProbationManagement;
-    using Fanex.NAP.CTS.Resource.Consts;
+    using Fanex.NAP.CTS.Service;
+    using Fanex.NAP.CTS.Service.Implement;
+    using Fanex.NAP.CTS.Service.Interface;
+    using Fanex.NAP.CTS.ViewModel.AssociationDetection;
+    using Fanex.NAP.CTS.ViewModel.AssociationReport;
     using Fanex.NAP.CTS.ViewModel.ProbationManagement;
     using Fanex.NAP.SPU.Graph.Core;
-    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using System.Web.Http;
     using System.Web.Http.Results;
 
@@ -19,6 +27,290 @@
     /// </summary>
     public class GraphController : ApiController
     {
+        private readonly IAssociatedAccountService associationService;
+        private readonly IAssociationDetectionService associationDetectionService;
+        private readonly IAssociationReportService associationReportService;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public GraphController()
+        {
+            associationService = new AssociatedAccountService();
+            associationDetectionService = new AssociationDetectionService();
+            associationReportService = new AssociationReportService();
+        }
+
+        #region WEB - Association Profile Page
+
+        /// <summary>
+        /// Get Direct All Association for WEB Profile Page
+        /// </summary>
+        /// <param name="paras"></param>
+        /// <returns></returns>
+        [System.Web.Http.AcceptVerbs("GetDirectAssociationProfile")]
+        [HttpPost]
+        public GraphAssociationPaging GetDirectAssociationProfile([FromBody] AssociationProfileParameterModel paras)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(paras.SubscriberIDs) || !string.IsNullOrEmpty(paras.CategoryIDs))
+                {
+                    string queryScript = GetQueryScriptForAssProfile(paras.AssociationType);
+
+                    var result = DbSessionFactory.Execute<GraphAssociationPaging>(queryScript, new
+                    {
+                        ip_CTSCustID = paras.CTSCustId,
+                        ip_AssociationStatus = paras.AssociationStatus,
+                        ip_AssociationType = paras.AssociationType,
+                        ip_AccountStatuses = paras.AccountStatusIds.Split(',').Select(int.Parse),
+                        ip_SubscriberIDs = paras.SubscriberIDs.Split(',').Select(int.Parse),
+                        ip_CategoryIDs = paras.CategoryIDs.Split(',').Select(int.Parse),
+                        ip_Skip = paras.Skip,
+                        ip_PageSize = paras.Take
+                    })?.Data.FirstOrDefault();
+
+                    return result ?? new GraphAssociationPaging() { AssociationList = new List<GraphAssociationModel>(), TotalItems = 0 };
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Error($"WEB - {ConfigSettings.EnvironmentName} - Get Association Tab Profile failed: " + ex.Message + ex.StackTrace + "\n"
+                       + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
+                       + ex.InnerException.StackTrace);
+            }
+
+            return new GraphAssociationPaging() { AssociationList = new List<GraphAssociationModel>(), TotalItems = 0 };
+        }
+
+        private string GetQueryScriptForAssProfile(int associationType)
+        {
+            switch (associationType)
+            {
+                case 1:
+                    return "GetDirectAssociationProfileByDevice";
+
+                case 2:
+                    return "GetDirectAssociationProfileByAI";
+
+                case 3:
+                    return "GetDirectAssociationProfileByManual";
+
+                case 4:
+                    return "GetDirectAssociationProfileByIP";
+
+                default:
+                    return "GetDirectAssociationProfile";
+            }
+        }
+
+        #endregion WEB - Association Profile Page
+
+        #region API - Flagged Evidence Level
+
+        /// <summary>
+        /// API Get GetFlaggedEvidenceForLevel01 For Taiwan
+        /// </summary>
+        /// <param name="custIdList"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public JsonResult<List<CustomerEvidenceForTW>> GetFlaggedEvidenceForLevel01(string custIdList)
+        {
+            var result = new List<CustomerEvidenceForTW>();
+
+            try
+            {
+                if (!string.IsNullOrEmpty(custIdList))
+                {
+                    if (ConfigSettings.GetFlaggedEviByAssFromMySQL)
+                    {
+                        result = associationService.GetFlaggedEvidenceByDirectAssForAPI(custIdList)?.ToList();
+                    }
+                    else
+                    {
+                        var custIds = custIdList.Split(',').Select(a => Convert.ToInt32(a));
+
+                        Parallel.Invoke(() =>
+                        {
+                            var ceLv0 = DbSessionFactory.Execute<CustomerEvidenceForTW>("GetCustomerEvidenceLevel0", new { CustID = custIds }).Data;
+                            result.AddRange(ceLv0);
+                        },
+                        () =>
+                        {
+                            var ceLv1 = DbSessionFactory.Execute<CustomerEvidenceForTW>("GetCustomerEvidenceLevel1", new { CustID = custIds }).Data;
+                            result.AddRange(ceLv1);
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Error($"WEB - GetFlaggedEvidenceForLevel01 - Data input: {custIdList} - failed: " + ex.Message + ex.StackTrace);
+            }
+
+            return Json(result ?? new List<CustomerEvidenceForTW>());
+        }
+
+        /// <summary>
+        /// API Get GetFlaggedEvidenceForLevel2 For Taiwan
+        /// </summary>
+        /// <param name="custIdList"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public JsonResult<List<CustomerEvidenceForTW>> GetFlaggedEvidenceForLevel2(string custIdList)
+        {
+            var result = new List<CustomerEvidenceForTW>();
+
+            try
+            {
+                if (!string.IsNullOrEmpty(custIdList))
+                {
+                    if (ConfigSettings.GetFlaggedEviByAssFromMySQL)
+                    {
+                        result = associationService.GetFlaggedEvidenceByLevel2AssForAPI(custIdList)?.ToList();
+                    }
+                    else
+                    {
+                        var custIds = custIdList.Split(',').Select(a => Convert.ToInt32(a));
+
+                        result = DbSessionFactory.Execute<CustomerEvidenceForTW>("GetCustomerEvidenceLevel2", new { CustID = custIds }).Data.ToList();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Error($"WEB - GetFlaggedEvidenceForLevel2 - Data input: {custIdList} - failed: " + ex.Message + ex.StackTrace);
+            }
+
+            return Json(result ?? new List<CustomerEvidenceForTW>());
+        }
+
+        #endregion API - Flagged Evidence Level
+
+        #region WEB - Association Report
+
+        /// <summary>
+        /// Get association report
+        /// </summary>
+        /// <param name="paras"></param>
+        /// <returns></returns>
+        [System.Web.Http.AcceptVerbs("GetAssociationReport")]
+        [HttpPost]
+        public AssociationReportViewModel GetAssociationReport([FromBody] AssociationReportParameterModel paras)
+        {
+            try
+            {
+                if (paras != null && paras.SubscriberIDs.Any() && paras.EvidenceIDs.Any() && paras.AssociationStatus != -1)
+                {
+                    string queryScript = GetQueryScriptForAssReport(paras.AssociationType);
+
+                    if (!string.IsNullOrEmpty(queryScript))
+                    {
+                        var paraForCustInfo = new
+                        {
+                            AccountStatusIDs = paras.AccountStatusIDs,
+                            SubscriberIDs = paras.SubscriberIDs,
+                            EvidenceIDs = paras.EvidenceIDs,
+                        };
+
+                        var custInfo = DbSessionFactory.Execute<AssociationReportViewModel>("GetAssReportCustInfo", paraForCustInfo).Data.FirstOrDefault();
+
+                        if (custInfo != null && custInfo.AssociationList != null && custInfo.AssociationList.Any())
+                        {
+                            List<int> ctsCustIds = custInfo.AssociationList.Select(c => c.CTSCustId).Distinct().ToList();
+
+                            var paramater = new
+                            {
+                                CTSCustIDs = ctsCustIds,
+                                FromAssDate = paras.FromAssDate,
+                                ToAssDate = paras.ToAssDate,
+                                AssociationStatus = paras.AssociationStatus,
+                            };
+
+                            var custAssociation = DbSessionFactory.Execute<AssociationReportViewModel>(queryScript, paramater).Data.FirstOrDefault();
+
+                            if (custAssociation != null && custAssociation.TotalItems > 0)
+                            {
+                                return associationReportService.MergeAssociationReport(custInfo, custAssociation, paras);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("WEB - GetAssociationReport failed: " + ex.Message + ex.StackTrace + "\n"
+                        + ex.InnerException.Message + ex.InnerException.Source + ((Neo4j.Driver.Neo4jException)ex.InnerException).Code
+                        + ex.InnerException.StackTrace);
+            }
+
+            return new AssociationReportViewModel() { AssociationList = new List<AssociationViewModel>(), TotalItems = 0 };
+        }
+
+        private string GetQueryScriptForAssReport(int associationType)
+        {
+            switch (associationType)
+            {
+                case 1:
+                    {
+                        return "GetAssReportByDevice";
+                    }
+                case 3:
+                    {
+                        return "GetAssReportByManual";
+                    }
+                default:
+                    return string.Empty;
+            }
+        }
+
+        #endregion WEB - Association Report
+
+        #region WEB - Association Detection Report
+
+        /// <summary>
+        /// Get association report
+        /// </summary>
+        /// <param name="ctsCustIDs"></param>
+        /// <returns></returns>
+        [System.Web.Http.AcceptVerbs("GetAssociationDetectionReport")]
+        [HttpPost]
+        public IEnumerable<GetAssociationDetectionModel> GetAssociationDetectionReport([FromBody] string ctsCustIDs)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(ctsCustIDs))
+                {
+                    var ip_CTSCustIDs = ctsCustIDs.Split(',').Select(long.Parse);
+
+                    var custAssociations = DbSessionFactory.Execute<AssociationLevelGraphDbViewModel>("GetAssociationDetectionReport", new
+                    {
+                        ip_CTSCustIDs = ip_CTSCustIDs,
+                        ip_ExcludeSubscriberIDs = new List<int>() { 4521, 1270, 4408 }
+                    }).Data;
+
+                    if (custAssociations != null && custAssociations.Any())
+                    {
+                        var groupAss = associationDetectionService.ClassifyGroupAssociation(custAssociations, ip_CTSCustIDs);
+
+                        return associationDetectionService.GetCustInfoAssDetectionReport(groupAss);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Error($"WEB - {ConfigSettings.EnvironmentName} - GetAssociationDetectionReport failed: " + ex.Message + ex.StackTrace + "\n"
+                        + ex.InnerException.Message + ex.InnerException.Source + ((Neo4j.Driver.Neo4jException)ex.InnerException).Code
+                        + ex.InnerException.StackTrace);
+            }
+
+            return new List<GetAssociationDetectionModel>();
+        }
+
+        #endregion WEB - Association Detection Report
+
+        #region API (Need to remove without in use)
+
         /// <summary>
         /// Get association statistic
         /// </summary>
@@ -85,7 +377,6 @@
                 throw;
             }
         }
-
 
         [System.Web.Http.AcceptVerbs("GetDirectAssociationByManual")]
         [HttpPost]
@@ -249,7 +540,6 @@
                 LogService.Error("GetInDirectAssociation failed: " + ex.Message + ex.StackTrace);
                 throw;
             }
-
         }
 
         /// <summary>
@@ -299,7 +589,7 @@
             try
             {
                 result = DbSessionFactory.Execute<DirectAssociationDeviceModel>("GetDevicesIdByCustId", new { ip_CustID = custId }).Data.SingleOrDefault();
-                result.DirectAssociation = DbSessionFactory.Execute<DirectAssociationModel>("GetAssociatedDevicesByCustId", new { ip_CustID = custId }).Data.ToList();
+                result.DirectAssociation = DbSessionFactory.Execute<DirectAssociationModel>("GetAssociatedDevicesByCustId", new { ip_CustID = custId }).Data;
                 result.TotalDirectAssociation = result.DirectAssociation.Count();
 
                 return result;
@@ -307,85 +597,13 @@
             catch (Exception ex)
             {
                 LogService.Error("GetDirectAssociationDevices failed: " + ex.Message + ex.StackTrace);
-
             }
 
             return result;
         }
 
         /// <summary>
-        /// Get association report
-        /// </summary>
-        /// <param name="paras"></param>
-        /// <returns></returns>
-        [System.Web.Http.AcceptVerbs("GetAssociationReport")]
-        [HttpPost]
-        public GraphAssociationReportPaging GetAssociationReport([FromBody] AssociationReportParameterModel paras)
-        {
-            var result = new GraphAssociationReportPaging() { AssociationList = null, TotalItems = 0 };
-
-            try
-            {
-                if (paras != null)
-                {
-                    string scriptName = string.Empty;
-                    switch (paras.AssociationType)
-                    {
-                        case 1:
-                            {
-                                scriptName = "GetAssociationReportByDevice";
-                                break;
-                            }
-                        case 2:
-                            {
-                                scriptName = "GetAssociationReportByIP";
-                                break;
-                            }
-                        case 3:
-                            {
-                                scriptName = "GetAssociationReportByManual";
-                                break;
-                            }
-                    }
-
-                    if (string.IsNullOrEmpty(scriptName))
-                    {
-                        return result;
-                    }
-
-                    var paramForGraph = new
-                    {
-                        ip_AssCreatedFrom = paras.AssociatedDateFrom.AddHours(4),
-                        ip_AssCreatedTo = paras.AssociatedDateTo.AddHours(4),
-                        ip_SubscriberList = paras.SubscriberIDs.Split(',').Select(int.Parse),
-                        ip_AccountStatus = paras.AccountStatuses.Split(',').Select(int.Parse),
-                        ip_EvidenceID = paras.EvidenceIDs?.Trim().Split(',').Select(int.Parse),
-                        ip_AssStatus = paras.AssociationStatus,
-                        ip_TakeRows = paras.TakeRow,
-                        ip_SkipRows = paras.SkipRow
-                    };
-
-                    result.AssociationList = DbSessionFactory.Execute<AssociationReportModel>(scriptName, paramForGraph).Data;
-                    result.TotalItems = DbSessionFactory.Execute<int>("GetAssociationReportByDevice_CountTotal", paramForGraph).Data.FirstOrDefault();
-
-                    LogService.Info("result.TotalItems: " + result.TotalItems.ToString());
-                    LogService.Info("result.AssociationList: " + result.AssociationList.Count().ToString());
-
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                LogService.Error("GetAssociationReport failed: " + ex.Message + ex.StackTrace + "\n"
-                        + ex.InnerException.Message + ex.InnerException.Source + ((Neo4j.Driver.Neo4jException)ex.InnerException).Code
-                        + ex.InnerException.StackTrace);
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="paras"></param>
         /// <returns></returns>
@@ -448,7 +666,6 @@
             return result;
         }
 
-
         /// <summary>
         /// Get association report
         /// </summary>
@@ -477,5 +694,20 @@
 
             return result;
         }
+
+        [HttpGet]
+        public void ScanCTSCustomer()
+        {
+            try
+            {
+                DbSessionFactory.Execute("ScanCTSCustomer");
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("ScanCTSCustomer failed: " + ex.Message + ex.StackTrace);
+            }
+        }
+
+        #endregion API (Need to remove without in use)
     }
 }

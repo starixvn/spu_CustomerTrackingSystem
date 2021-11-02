@@ -1,20 +1,21 @@
 ﻿namespace Fanex.NAP.CTS.Model.GraphDB
 {
     using System;
+    using System.Collections.Generic;
 
     public class AssociationReportParameterModel
     {
-        public DateTime AssociatedDateFrom { get; set; }
+        public DateTime FromAssDate { get; set; }
 
-        public DateTime AssociatedDateTo { get; set; }
+        public DateTime ToAssDate { get; set; }
 
-        public string AccountStatuses { get; set; }
+        public IEnumerable<int> AccountStatusIDs { get; set; }
 
-        public string SubscriberIDs { get; set; }
+        public IEnumerable<int> SubscriberIDs { get; set; }
 
         public int AssociationStatus { get; set; }
 
-        public string EvidenceIDs { get; set; }
+        public IEnumerable<int> EvidenceIDs { get; set; }
 
         public int AssociationType { get; set; }
 

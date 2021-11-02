@@ -1,0 +1,21 @@
+﻿//USE ctsgraphdb
+USE ctslocal
+CALL apoc.cypher.run('
+MATCH (c:FlaggedCustomer)-[r:HAS_EVIDENCE]->(e:Evidence)
+WHERE e.EvidenceID IN  $ip_EvidenceIDs
+WITH  c, collect(DISTINCT e.EvidenceCode) as EvidenceCodes
+MATCH (c)-[:HAS_STATUS]->(st:StaticList)
+WHERE st.ListID = 1 AND st.ItemID IN $ip_AccountStatusIDs
+WITH c, EvidenceCodes, st.ItemNameDisplay as AccountStatus
+MATCH (c)-[:BELONG_TO_SUB]->(s:Subscriber)
+WHERE s.SubscriberID in $ip_SubscriberIDs
+RETURN 
+      c.CTSCustID                         AS CTSCustId
+    , c.Username                          AS UserName
+    , s.SubscriberID                      AS SubscriberId
+    , s.SubscriberName                    AS SubscriberName
+    , AccountStatus                       AS AccountStatus
+    , apoc.text.join(EvidenceCodes,",")   AS EvidenceCodes
+',{ip_AccountStatusIDs: $AccountStatusIDs, ip_SubscriberIDs: $SubscriberIDs, ip_EvidenceIDs: $EvidenceIDs}) YIELD value 
+WITH collect(value) as ListAss
+RETURN ListAss AS AssociationList

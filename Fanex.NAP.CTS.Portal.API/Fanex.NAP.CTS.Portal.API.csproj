@@ -468,6 +468,20 @@
     <Content Include="App_Data\Graph\scripts\GetProbationWithAssociatedPA.scrypt" />
     <Content Include="App_Data\Graph\scripts\GetAssociationOneLevelByCustIdByAI.scrypt" />
     <Content Include="App_Data\Graph\scripts\GetAssociationReportByDevice_CountTotal.scrypt" />
+    <Content Include="App_Data\Graph\scripts\AssociationProfilePage\GetDirectAssociationProfileByAI.scrypt" />
+    <Content Include="App_Data\Graph\scripts\AssociationProfilePage\GetDirectAssociationProfileByIP.scrypt" />
+    <Content Include="App_Data\Graph\scripts\AssociationProfilePage\GetDirectAssociationProfileByManual.scrypt" />
+    <Content Include="App_Data\Graph\scripts\AssociationProfilePage\GetDirectAssociationProfile.scrypt" />
+    <Content Include="App_Data\Graph\scripts\GetCustomerEvidenceAPI\GetCustomerEvidenceLevel2.scrypt" />
+    <Content Include="App_Data\Graph\scripts\GetCustomerEvidenceAPI\GetCustomerEvidenceLevel1.scrypt" />
+    <Content Include="App_Data\Graph\scripts\GetCustomerEvidenceAPI\GetCustomerEvidenceLevel0.scrypt" />
+    <Content Include="App_Data\Graph\scripts\AssociationReport\GetAssReportByManual.scrypt" />
+    <Content Include="App_Data\Graph\scripts\AssociationReport\GetAssReportCustInfo.scrypt" />
+    <Content Include="App_Data\Graph\scripts\AssociationReport\GetAssReportByDevice.scrypt" />
+    <Content Include="App_Data\Graph\scripts\AssociationProfilePage\GetDirectAssociationProfileByDevice.scrypt" />
+    <Content Include="App_Data\Graph\scripts\AssociationDetectionReport\GetAssociationDetectionReport.scrypt" />
+    <Content Include="App_Data\Graph\scripts\AssociationDetectionReport\GetCustInformation.scrypt" />
+    <Content Include="App_Data\Graph\scripts\adhoc\ScanCTSCustomer.scrypt" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -565,6 +579,7 @@
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

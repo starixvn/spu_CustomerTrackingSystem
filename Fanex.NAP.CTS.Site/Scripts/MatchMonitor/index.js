@@ -126,7 +126,7 @@
                 var data = api.rows({ page: 'current' }).data();
                 var last = null;
 
-                api.column(7, { page: 'current' }).data().each(function (group, i) {
+                api.column(8, { page: 'current' }).data().each(function (group, i) {
                     if (last !== group) {
                         $(rows).eq(i).before(
                             '<tr class="group group group-site"><td colspan="8">' + data[i].EventGroupName + '</td></tr>'

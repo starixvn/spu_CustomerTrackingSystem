@@ -8,6 +8,6 @@
 
         public int TotalDirectAssociation { get; set; }
 
-        public List<DirectAssociationModel> DirectAssociation { get; set; }
+        public IEnumerable<DirectAssociationModel> DirectAssociation { get; set; }
     }
 }

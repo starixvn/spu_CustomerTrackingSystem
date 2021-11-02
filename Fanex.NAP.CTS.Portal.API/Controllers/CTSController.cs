@@ -209,66 +209,6 @@
         }
 
         /// <summary>
-        /// Get flagged customer for level 0 and 1 for Customers
-        /// </summary>
-        /// <param name="custIdList">CustId list in string format(saparted by comma. Ex: 47539408,47787246)</param>
-        /// <returns>List of Flagged Customer in Json formated</returns>
-
-        [HttpGet]
-        public JsonResult<List<CustomerEvidence>> GetFlaggedEvidenceForLevel01(string custIdList)
-        {
-            if (string.IsNullOrWhiteSpace(custIdList))
-            {
-                LogService.Error($"Cust Id list is empty.");
-            }
-            else
-            {
-                try
-                {
-                    var result = _associationService.GetFlaggedEvidenceByDirectAssociation(custIdList).ToList();
-
-                    return Json(result);
-                }
-                catch (Exception ex)
-                {
-                    LogService.Error(ex.Message);
-                }
-            }
-
-            return Json(new List<CustomerEvidence>());
-        }
-
-        /// <summary>
-        /// Get flagged customer for level 2 for Customers
-        /// </summary>
-        /// <param name="custIdList">CustId list in string format(saparted by comma. Ex: 47539408,47787246)</param>
-        /// <returns>List of Flagged Customer in Json formated</returns>
-
-        [HttpGet]
-        public JsonResult<List<CustomerEvidence>> GetFlaggedEvidenceForLevel2(string custIdList)
-        {
-            if (string.IsNullOrWhiteSpace(custIdList))
-            {
-                LogService.Error($"Cust Id list is empty.");
-            }
-            else
-            {
-                try
-                {
-                    var result = _associationService.GetFlaggedEvidenceByLevel2Association(custIdList).ToList();
-
-                    return Json(result);
-                }
-                catch (Exception ex)
-                {
-                    LogService.Error(ex.Message);
-                }
-            }
-
-            return Json(new List<CustomerEvidence>());
-        }
-
-        /// <summary>
         /// Add evidences to customers
         /// </summary>
         /// <param name="customerEvidenceList"></param>

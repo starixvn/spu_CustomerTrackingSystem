@@ -180,9 +180,9 @@
         [HttpPost]
         public ActionResult GetCustomerTotalAssociationByCTSCustId(long ctsCustId)
         {
-            var getAssociationFromMySQL = AppSettings.Get("GetAssociationFromMySQL") == "1";
+            //var getAssociationFromMySQL = AppSettings.Get("GetAssociationProfileFromMySQL") == "1";
 
-            var result = _accountService.GetCustomerTotalAssociationByCTSCustId(ctsCustId, ConfigSettings.GetStatisticAssociation, getAssociationFromMySQL);
+            var result = _accountService.GetCustomerTotalAssociationByCTSCustId(ctsCustId, ConfigSettings.GetStatisticAssociation, true);
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -292,11 +292,9 @@
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
 
-            var directAssociationUrl = GetDirectAssociationUrl(model.AssociationType);
+            var getAssociationFromMySql = AppSettings.Get("GetAssociationProfileFromMySQL") == "1";
 
-            var getAssociationFromMySql = AppSettings.Get("GetAssociationFromMySQL") == "1";
-
-            var graphAssociationPage = _accountService.GetCustomerAssociationByGraph(directAssociationUrl, model, getAssociationFromMySql);
+            var graphAssociationPage = _accountService.GetCustomerAssociationByGraph(model, getAssociationFromMySql);
 
             if (graphAssociationPage != null && graphAssociationPage.AssociationList != null && graphAssociationPage.AssociationList.Any())
             {
@@ -306,7 +304,7 @@
 
                 var ctsCustIdList = customerAssociation.Select(x => new { CTSCustId = x.CTSCustID, SubscriberId = x.SubscriberID });
 
-                customerAssociation = GetCustClassification(string.Join(",", customerAssociation.Select(c => c.CustId).Distinct()), customerAssociation);
+                customerAssociation = GetCustClassification(string.Join(",", customerAssociation.Select(c => c.CustId).Distinct()), customerAssociation.ToList());
 
                 var flaggedAffectedTagList = _accountService.GetDirectAssociatedAccountTagFlagged(JsonConvert.SerializeObject(ctsCustIdList));
 
@@ -317,16 +315,11 @@
                         CustId = x.CustId.HasValue ? x.CustId.Value : 0,
                         Username = !string.IsNullOrWhiteSpace(x.Username) ? x.Username : x.Username2,
                         LoginId = !string.IsNullOrWhiteSpace(x.Username2) ? x.Username2 : x.Username,
-                        AssociationDate = getAssociationFromMySql == true ? x.AssociationDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss) :
-                                                                            x.AssociationDateFromGraphDB.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+                        AssociationDate = x.AssociationDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                         AssociationType = x.AssociationType,
-                        AssociationTypeName = StandardizeAssociationTypeName(getAssociationFromMySql == true
-                                        ? x.AssociationTypeName
-                                        : _accountService.MappingAssociationType(x)),
+                        AssociationTypeName = StandardizeAssociationTypeName(x.AssociationTypeName),
                         Status = x.StatusName == "NA" ? "N/A" : x.StatusName,
                         StatusId = x.StatusId.HasValue ? x.StatusId.Value : 0,
-                        SiteId = x.SiteID.HasValue ? x.SiteID.Value : 0,
-                        SiteName = !string.IsNullOrEmpty(x.SiteName) ? x.SiteName : "-",
                         SubscriberId = x.SubscriberID,
                         SubscriberName = !string.IsNullOrEmpty(x.SubscriberName) ? x.SubscriberName : "-",
                         CTSCustId = x.CTSCustID,
@@ -351,7 +344,7 @@
             return Json(new
             {
                 draw = model.draw,
-                recordsTotal = graphAssociationPage.TotalItems,
+                recordsTotal = graphAssociationPage?.TotalItems ?? 0,
                 recordsFiltered = totalItem,
                 data = result
             }, JsonRequestBehavior.AllowGet);
@@ -422,15 +415,12 @@
                                           Username2 = group.a.Username2,
                                           AssociationType = group.a.AssociationType,
                                           AssociationTypeName = group.a.AssociationTypeName,
-                                          AssociationDateGMT0 = group.a.AssociationDateGMT0,
                                           AssociationDate = group.a.AssociationDate,
                                           SharedDevices = group.a.SharedDevices,
                                           SharedIPs = group.a.SharedIPs,
                                           StatusName = group.a.StatusName,
                                           StatusId = group.a.StatusId,
                                           AssociationStatus = group.a.AssociationStatus,
-                                          SiteID = group.a.SiteID,
-                                          SiteName = group.a.SiteName,
                                           ParentIDs = group.a.ParentIDs,
                                           CategoryIDs = group.a.CategoryIDs,
                                           CategoryNames = group.a.CategoryNames,
@@ -440,35 +430,14 @@
             return result;
         }
 
-        private string GetDirectAssociationUrl(int associationType)
-        {
-            switch (associationType)
-            {
-                case 1:
-                    return ConfigSettings.GetDirectAssociationByDevice;
-
-                case 2:
-                    return ConfigSettings.GetDirectAssociationByAI;
-
-                case 3:
-                    return ConfigSettings.GetDirectAssociationByManual;
-
-                case 4:
-                    return ConfigSettings.GetDirectAssociationByIP;
-
-                default:
-                    return ConfigSettings.GetDirectAssociation;
-            }
-        }
-
         [HttpPost]
         public ActionResult GetDirectAssociationGraph(AssociatedFilterModel model, string displayName)
         {
             var graphCustomer = new GraphCustomerItemViewModel();
 
-            var getAssociationFromMySql = AppSettings.Get("GetAssociationFromMySQL") == "1";
+            var getAssociationFromMySql = AppSettings.Get("GetAssociationProfileFromMySQL") == "1";
 
-            var graphAssociationPaging = _accountService.GetCustomerAssociationByGraph(ConfigSettings.GetDirectAssociation, model, getAssociationFromMySql);
+            var graphAssociationPaging = _accountService.GetCustomerAssociationByGraph(model, getAssociationFromMySql);
 
             if (graphAssociationPaging != null && graphAssociationPaging.AssociationList != null && graphAssociationPaging.AssociationList.Any())
             {

@@ -1,9 +1,5 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.Logging;
@@ -12,14 +8,19 @@
     using Fanex.NAP.CTS.Criteria.Account;
     using Fanex.NAP.CTS.Criteria.Account.Associated;
     using Fanex.NAP.CTS.Criteria.AssociationReport;
-    using Fanex.NAP.CTS.Criteria.Common;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.AssociationReport;
-    using Fanex.NAP.CTS.Model.Common;
+    using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.ViewModel.AssociationReport;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
 
     public class AssociationReportService : IAssociationReportService
     {
+        #region Query From MySQL
+
         public List<CustomerStaticStatusModel> GetCustomerStaticStatus(int listId, bool status)
         {
             var criteria = new CustomerStaticAccountStatusCriteria
@@ -63,37 +64,6 @@
             {
                 return db.Query<EvidenceModel>(criteria);
             }
-        }
-
-        public GraphAssociationModel GetAssociations(string apiEndPoint, AssociationFilterViewModel filter)
-        {
-            try
-            {
-                var param = new
-                {
-                    AssociatedDateFrom = filter.FromDate,
-                    AssociatedDateTo = filter.ToDate,
-                    AccountStatuses = filter.AccountStatusIds,
-                    filter.SubscriberIDs,
-                    filter.AssociationStatus,
-                    filter.EvidenceIDs,
-                    filter.AssociationType,
-                    TakeRow = filter.length,
-                    SkipRow = filter.start
-                };
-
-                var data = ApiHelper.Post<GraphAssociationModel> (apiEndPoint, param);
-
-                Task.WhenAll(data);
-
-                return data.Result ?? new GraphAssociationModel();
-            }
-            catch (Exception ex)
-            {
-                LogService.Error("CTS - AssociationReportService GetAssociations - Exception: " + ex.Message, ex);
-            }
-
-            return new GraphAssociationModel();
         }
 
         public IEnumerable<CategoriesModel> GetCategories(string ctsCustIdList)
@@ -144,7 +114,7 @@
             }
 
             return new GraphAssociationDetailModel();
-        }       
+        }
 
         public DBResult ActiveRemoveAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, int createdBy, bool isRemoveAction)
         {
@@ -170,7 +140,7 @@
             }
         }
 
-        public IEnumerable<AssociationFromMySqlModel> GetAssociationFromMySql(AssociationFilterViewModel filter, out int totalItems)
+        public IEnumerable<AssociationFromMySqlModel> GetAssociationReportFromMySql(AssociationFilterViewModel filter, out int totalItems)
         {
             totalItems = 0;
 
@@ -225,5 +195,74 @@
             }
         }
 
+        #endregion
+
+        #region Query From GraphDB
+
+        public AssociationReportViewModel GetAssociationReportFromGraphDB(string apiEndPoint, AssociationFilterViewModel filter)
+        {
+            try
+            {
+                var param = new
+                {
+                    FromAssDate = filter.FromDate,
+                    ToAssDate = filter.ToDate,
+                    AccountStatusIDs = filter.AccountStatusIds.Split(',').Select(int.Parse),
+                    SubscriberIDs = filter.SubscriberIDs.Split(',').Select(int.Parse),
+                    AssociationStatus = filter.AssociationStatus,
+                    EvidenceIDs = filter.EvidenceIDs.Split(',').Select(int.Parse),
+                    AssociationType = filter.AssociationType,
+                    TakeRow = filter.length,
+                    SkipRow = filter.start
+                };
+
+                var data = ApiHelper.Post<AssociationReportViewModel>(apiEndPoint, param);
+
+                Task.WhenAll(data);
+
+                return data.Result ?? new AssociationReportViewModel() { AssociationList = new List<AssociationViewModel>(), TotalItems = 0 };
+            }
+            catch (Exception ex)
+            {
+                LogService.Info("Web - Association Report - Exception: " + ex.Message + ex.StackTrace + "\n"
+                       + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
+                       + ex.InnerException.StackTrace);
+            }
+
+            return new AssociationReportViewModel() { AssociationList = new List<AssociationViewModel>(), TotalItems = 0 };
+        }
+
+        public AssociationReportViewModel MergeAssociationReport(AssociationReportViewModel custInfo, AssociationReportViewModel custAss, AssociationReportParameterModel para)
+        {
+            var result = new List<AssociationViewModel>();
+
+            if (custInfo.AssociationList.Any() && custAss.AssociationList.Any())
+            {
+                result = custAss.AssociationList.GroupJoin(custInfo.AssociationList,
+                                a => a.CTSCustId,
+                                i => i.CTSCustId,
+                                (a, i) => new { a, i })
+                                .SelectMany(
+                                    group => group.i.DefaultIfEmpty(),
+                                    (group, temp) => new AssociationViewModel
+                                    {
+                                        CTSCustId = group.a.CTSCustId,
+                                        UserName = (temp != null) ? temp.UserName : string.Empty,
+                                        AccountStatus = (temp != null) ? temp.AccountStatus : string.Empty,
+                                        SubscriberId = (temp != null) ? temp.SubscriberId : 0,
+                                        SubscriberName = (temp != null) ? temp.SubscriberName : string.Empty,
+                                        EvidenceCodes = (temp != null) ? temp.EvidenceCodes : string.Empty,
+                                        CategoryName = group.a.CategoryName
+                                    }).OrderBy(c => c.SubscriberName).Skip(para.SkipRow).Take(para.TakeRow).ToList();
+            }
+
+            return new AssociationReportViewModel()
+            {
+                AssociationList = result ?? new List<AssociationViewModel>(),
+                TotalItems = custAss.TotalItems
+            };
+        }
+
+        #endregion
     }
 }

@@ -2,6 +2,7 @@
 using Fanex.Logging.Extensions;
 using Fanex.Logging.Extensions.Database;
 using Fanex.NAP.Core.Web.Attribute;
+using Fanex.NAP.CTS.Core.Helpers;
 using Fanex.NAP.CTS.Model.AssociationDetection;
 using Fanex.NAP.CTS.Model.Common;
 using Fanex.NAP.CTS.Model.CustomerClassify;
@@ -67,7 +68,9 @@ namespace Fanex.NAP.CTS.Controller
 
                 try
                 {
-                    groupLevel2ByUsername = _associationDetectionService.GetAssociationDetection(ctsCustIds);
+                    var getAssDetectionFromMySQL = AppSettings.Get("GetAssDetectionFromMySQL") == "1";
+
+                    groupLevel2ByUsername = _associationDetectionService.GetAssociationDetection(ctsCustIds, getAssDetectionFromMySQL);
 
                     latestCustomerClassification = _custClassificationService.GetLatestClassification(custIds);
 

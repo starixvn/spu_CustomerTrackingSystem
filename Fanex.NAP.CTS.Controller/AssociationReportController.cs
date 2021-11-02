@@ -49,10 +49,8 @@
         [HttpPost]
         public ActionResult GetAssociations(AssociationFilterViewModel filter)
         {
-            var associationList = Enumerable.Empty<AssociationViewModel>();
+            var associations = Enumerable.Empty<AssociationViewModel>();
             int totalItems = 0;
-            var apiURI = AppSettings.Get("Graph_GetAssociations");
-            
 
             if (filter.ToDate != DateTime.MinValue)
             {
@@ -61,11 +59,11 @@
 
             if (getDataFromMySql)
             {
-                var associations = _associationService.GetAssociationFromMySql(filter, out totalItems);
+                var assFromMysql = _associationService.GetAssociationReportFromMySql(filter, out totalItems);
 
-                if (associations != null && associations.Any())
+                if (assFromMysql != null && assFromMysql.Any())
                 {
-                    associationList = associations
+                    associations = assFromMysql
                         .Select(x => new AssociationViewModel
                         {
                             CTSCustId = x.CTSCustId,
@@ -80,20 +78,13 @@
             }
             else
             {
-                var associationsFromGraph = _associationService.GetAssociations(apiURI, filter);
-                if (associationsFromGraph.AssociationList != null && associationsFromGraph.AssociationList.Any())
+                var assFromGraph = _associationService.GetAssociationReportFromGraphDB(ConfigSettings.GetAssociationReport, filter);
+
+                if (assFromGraph.AssociationList != null && assFromGraph.AssociationList.Any())
                 {
-                    associationList = associationsFromGraph.AssociationList
-                        .Select(x => new AssociationViewModel
-                        {
-                            CTSCustId = x.CTSCustId,
-                            UserName = x.UserName,
-                            AccountStatus = x.AccountStatus,
-                            SubscriberId = x.SubscriberId,
-                            SubscriberName = x.SubscriberName,
-                            EvidenceCodes = x.EvidenceCode,
-                            CategoryName = x.CategoryNames
-                        });
+                    associations = assFromGraph.AssociationList;
+
+                    totalItems = assFromGraph.TotalItems;
                 }
             }
 
@@ -102,7 +93,7 @@
                 draw = filter.draw,
                 recordsTotal = totalItems,
                 recordsFiltered = totalItems,
-                data = associationList
+                data = associations
             }, JsonRequestBehavior.AllowGet);
         }
 

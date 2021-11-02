@@ -1,0 +1,17 @@
+﻿//USE ctsgraphdb
+USE ctslocal
+CALL apoc.cypher.run('
+MATCH (c)-[r:ADD_MANUALLY]->(c1:CTSCustomer)
+WHERE c.CTSCustID in $ip_CTSCustIDs 
+    AND $ip_FromAssDate <= r.CreatedDate <= $ip_ToAssDate
+    AND (($ip_AssociationStatus = 0) 
+		OR ($ip_AssociationStatus = 1 AND not exists((c)-[:HAS_EXCEPTION]-(c1)))
+		OR ($ip_AssociationStatus = 2 AND exists((c)-[:HAS_EXCEPTION]-(c1))))
+WITH DISTINCT c.CTSCustID as CTSCustID
+OPTIONAL MATCH (:CTSCustomer {CTSCustID:CTSCustID})-[:HAS_CATEGORY]->(ct:CustomerCategory)
+RETURN 
+      CTSCustID           AS CTSCustID
+    , apoc.text.join(collect(ct.CategoryName),",")  AS CategoryName
+',{ ip_CTSCustIDs : $CTSCustIDs, ip_FromAssDate: datetime($FromAssDate), ip_ToAssDate: datetime($ToAssDate), ip_AssociationStatus: $AssociationStatus}) YIELD value 
+WITH collect(value) as ListAss, count(value) as TotalItems
+RETURN ListAss AS AssociationList, TotalItems

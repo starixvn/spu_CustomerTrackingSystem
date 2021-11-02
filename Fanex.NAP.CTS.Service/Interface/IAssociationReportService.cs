@@ -3,19 +3,19 @@
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.AssociationReport;
-    using Fanex.NAP.CTS.Model.Common;
+    using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.ViewModel.AssociationReport;
     using System.Collections.Generic;
 
     public interface IAssociationReportService
     {
+        #region Query From MySQL
+
         List<CustomerStaticStatusModel> GetCustomerStaticStatus(int listId, bool status);
 
         IEnumerable<AccountStaticStatusModel> GetAccountStaticStatuses();
 
         IEnumerable<EvidenceModel> GetEvidenceList();
-
-        GraphAssociationModel GetAssociations(string apiEndPoint, AssociationFilterViewModel filter);        
 
         IEnumerable<CategoriesModel> GetCategories(string ctsCustIdList);
 
@@ -23,8 +23,18 @@
 
         DBResult ActiveRemoveAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, int createdBy, bool isRemoveAction);
 
-        IEnumerable<AssociationFromMySqlModel> GetAssociationFromMySql(AssociationFilterViewModel filter, out int totalItems);
+        IEnumerable<AssociationFromMySqlModel> GetAssociationReportFromMySql(AssociationFilterViewModel filter, out int totalItems);
 
         IEnumerable<AssociationDetailFromMySqlModel> GetAssociationDetailFromMySql(AssociationDetailFilterViewModel filter, out int totalItems);
+
+        #endregion Query From MySQL
+
+        #region Query From GraphDB
+
+        AssociationReportViewModel GetAssociationReportFromGraphDB(string apiEndPoint, AssociationFilterViewModel filter);
+
+        AssociationReportViewModel MergeAssociationReport(AssociationReportViewModel custInfo, AssociationReportViewModel custAss, AssociationReportParameterModel para);
+
+        #endregion Query From GraphDB
     }
 }

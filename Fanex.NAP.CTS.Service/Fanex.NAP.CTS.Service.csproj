@@ -71,6 +71,7 @@
     <Compile Include="Implement\NotificationService.cs" />
     <Compile Include="Implement\ProblemAccountMonitorService.cs" />
     <Compile Include="Implement\SubscriberService.cs" />
+    <Compile Include="Implement\TransactionReportService.cs" />
     <Compile Include="Implement\TransactionService.cs" />
     <Compile Include="Implement\CTSUserService.cs" />
     <Compile Include="Interface\Api\IProblemCaseMonitorService.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="Interface\IRobotClassificationService.cs" />
     <Compile Include="Interface\ISpecialCustomerClassService.cs" />
     <Compile Include="Interface\ISubscriberService.cs" />
+    <Compile Include="Interface\ITransactionReportService.cs" />
     <Compile Include="Interface\ITransactionService.cs" />
     <Compile Include="Interface\ICTSUserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

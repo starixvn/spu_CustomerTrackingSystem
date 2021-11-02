@@ -203,6 +203,9 @@
     <Compile Include="CustomerClassify\LatestClassification4ReportModel.cs" />
     <Compile Include="CustomerClassify\RescanCustClassificationModel.cs" />
     <Compile Include="CustomerClassify\RobotUserModel.cs" />
+    <Compile Include="DTO\CustomerEvidence.cs" />
+    <Compile Include="DTO\CustomerEvidenceForTW.cs" />
+    <Compile Include="GraphDB\AssociationProfileParameterModel.cs" />
     <Compile Include="LogInputData\LogInputViewModel.cs" />
     <Compile Include="CustomerClassify\LogInputDataModel.cs" />
     <Compile Include="CustomerClassify\RoleCustomerModel.cs" />
@@ -269,7 +272,6 @@
     <Compile Include="Action.cs" />
     <Compile Include="Association\AssociatedByAccountModel.cs" />
     <Compile Include="DTO\Currency.cs" />
-    <Compile Include="DTO\CustomerEvidence.cs" />
     <Compile Include="DTO\PlaceMultiCustomerEvidence.cs" />
     <Compile Include="DTO\CustomerList.cs" />
     <Compile Include="DTO\CustomerSubcriber.cs" />
@@ -317,6 +319,7 @@
     <Compile Include="PushDataToExternal\CustomerClassForMainDb.cs" />
     <Compile Include="PushDataToExternal\InsertCategoryResultModel.cs" />
     <Compile Include="PushDataToExternal\PushDataToExternalModel.cs" />
+    <Compile Include="TransactionReport\TransactionModel.cs" />
     <Compile Include="Transaction\DataTableAjaxPostModel.cs" />
     <Compile Include="LogInputData\PlaceEvidencesViewModel.cs" />
     <Compile Include="Transaction\Transaction.cs" />

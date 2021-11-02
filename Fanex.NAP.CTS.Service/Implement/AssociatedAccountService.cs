@@ -151,7 +151,7 @@ namespace Fanex.NAP.CTS.Service.Implement
             return associationList;
         }
 
-        public IEnumerable<CustomerEvidence> GetFlaggedEvidenceByDirectAssociation(string custIdList)
+        public IEnumerable<CustomerEvidenceForTW> GetFlaggedEvidenceByDirectAssForAPI(string custIdList)
         {
             var criteria = new GetFlaggedEvidenceByDirectAssociationCriteria()
             {
@@ -160,11 +160,11 @@ namespace Fanex.NAP.CTS.Service.Implement
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<CustomerEvidence>(criteria);
+                return db.Query<CustomerEvidenceForTW>(criteria);
             }
         }
 
-        public IEnumerable<CustomerEvidence> GetFlaggedEvidenceByLevel2Association(string custIdList)
+        public IEnumerable<CustomerEvidenceForTW> GetFlaggedEvidenceByLevel2AssForAPI(string custIdList)
         {
             var criteria = new GetFlaggedEvidenceByLevel2AssociationCriteria()
             {
@@ -173,7 +173,7 @@ namespace Fanex.NAP.CTS.Service.Implement
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<CustomerEvidence>(criteria);
+                return db.Query<CustomerEvidenceForTW>(criteria);
             }
         }
 

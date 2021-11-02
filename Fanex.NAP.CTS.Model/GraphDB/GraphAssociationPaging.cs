@@ -9,7 +9,7 @@
             AssociationList = new List<GraphAssociationModel>();
         }
 
-        public List<GraphAssociationModel> AssociationList { get; set; }
+        public IEnumerable<GraphAssociationModel> AssociationList { get; set; }
 
         public int TotalItems { get; set; }
     }
