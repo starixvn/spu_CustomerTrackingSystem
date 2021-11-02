@@ -357,7 +357,7 @@
 
         public List<GraphDirectAssociationModel> GetDirectAssocationByGraph(string apiURL, List<long> ctsCustIds)
         {
-            var data = ApiHelper.Post<List<GraphDirectAssociationModel>>(apiURL, ctsCustIds, 240);
+            var data = ApiHelper.Post<List<GraphDirectAssociationModel>>(apiURL, ctsCustIds, 300);
 
             Task.WhenAll(data);
 

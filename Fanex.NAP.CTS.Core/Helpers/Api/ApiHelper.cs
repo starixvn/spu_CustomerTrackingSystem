@@ -44,7 +44,7 @@
             }
         }
 
-        public static async Task<TResult> Post<TResult>(string url, object param, double timeOutbySeconds = 100)
+        public static async Task<TResult> Post<TResult>(string url, object param, double timeOutbySeconds = 120)
         {
             using (var web = new HttpClient())
             {
@@ -56,7 +56,7 @@
 
                 byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-                web.Timeout = TimeSpan.FromSeconds(100);
+                web.Timeout = TimeSpan.FromSeconds(timeOutbySeconds);
 
                 var response = await web.PostAsync(url, byteContent).ConfigureAwait(false);
 
