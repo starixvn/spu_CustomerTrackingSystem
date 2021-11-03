@@ -9,6 +9,7 @@
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.Home;
+    using Fanex.NAP.CTS.Model.ImportEvidences;
     using Fanex.NAP.CTS.ViewModel.Account.Associated;
     using System;
     using System.Collections.Generic;
@@ -79,6 +80,8 @@
 
         IEnumerable<AffectedEvidenceListBetweenCustsModel> GetAffectedEvidenceListBetweenCusts(Int64 fromCTSCustID, Int64 toCTSCustID);
 
+        int CheckNewPAAssociationCustomerForRollback(IEnumerable<NewPAAssociationCustomerForRollbackModel> assCustForRollbacks);
+
         IEnumerable<SportGroup> GetAllSportGroup();
 
         IEnumerable<ValidateManualAssociationMultipleModel> ValidateManualAssociationMultiple(long fromCTSCustId, string toUserNameList, out bool isException);
@@ -130,5 +133,6 @@
         IEnumerable<CategoryInfoModel> GetAllCategory();		
 
 		AssociationByIPInfoModel GetAssociationByIPInfo(long custId1, long custId2);
+        
     }
 }
