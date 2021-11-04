@@ -761,6 +761,9 @@
                     return new DBResult { ErrorCode = -1, ErrorMsg = criteria.ErrorMessage };
                 }
 
+                if (custInfos != null && custInfos.Any())
+                    custIds = custInfos.Select(x => (long)x.CustID);
+
                 return new DBResult
                 {
                     ErrorCode = 0,
