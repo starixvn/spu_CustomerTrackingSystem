@@ -32,8 +32,12 @@ WITH
     , CASE e WHEN NULL THEN 1 ELSE 2 END AS AssociationStatus
     , CASE WHEN $ip_AssociationStatus in [0,2] and e IS NOT NULL THEN e.CreatedDate ELSE firstAss END AS AssociationDate
     , ct.ParentID           AS ParentIDs
-    , apoc.text.join(COLLECT(DISTINCT toString(ct.CategoryID)),",") AS CategoryIDs
-    , apoc.text.join(COLLECT(DISTINCT ct.CategoryName),",")         AS CategoryNames
+    , ct.CategoryID          AS CategoryID
+    , ct.CategoryName        AS CategoryName
+WHERE ( 0 IN $ip_CategoryIDs) OR (NOT 0 IN $ip_CategoryIDs AND CategoryID IS NOT NULL)
+WITH CTSCustID, CustId, CustSubId, SubscriberID, SubscriberName, UserName, UserName2, StatusGroup, StatusID, StatusName, AssociationStatus, AssociationTypeName, AssociationDate, ParentIDs
+    , apoc.text.join(COLLECT(DISTINCT toString(CategoryID)),",") AS CategoryIDs
+    , apoc.text.join(COLLECT(DISTINCT CategoryName),",")      AS CategoryNames
 
 ORDER BY SubscriberName ASC, AssociationStatus ASC, StatusGroup ASC, StatusID ASC, AssociationDate DESC, CTSCustID ASC
 WITH COLLECT({CTSCustID:CTSCustID, CustId:CustId, CustSubId:CustSubId, SubscriberID:SubscriberID, SubscriberName:SubscriberName, UserName:UserName, UserName2:UserName2, StatusGroup:StatusGroup, StatusID:StatusID, StatusName:StatusName, AssociationTypeName:AssociationTypeName, AssociationStatus:AssociationStatus, AssociationDate:AssociationDate, ParentIDs:ParentIDs, CategoryIDs:CategoryIDs, CategoryNames:CategoryNames} ) as AssociationList, count(CTSCustID) as TotalItems
