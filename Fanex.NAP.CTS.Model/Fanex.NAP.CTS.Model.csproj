@@ -155,6 +155,8 @@
     <Compile Include="Account\CustomerEsportAutoSuspendStatusModel.cs" />
     <Compile Include="Account\CustomerEvidenceByCTSCustIdModel.cs" />
     <Compile Include="Account\CustomerPoliciesModel.cs" />
+    <Compile Include="Account\RobotBetting\RobotUserDetailModel.cs" />
+    <Compile Include="Account\RobotBetting\RobotBettingModel.cs" />
     <Compile Include="Account\RobotClassification.cs" />
     <Compile Include="API\ApiIResultModel.cs" />
     <Compile Include="API\CategoryCustomerClassModel.cs" />

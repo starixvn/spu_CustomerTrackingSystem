@@ -52,6 +52,8 @@
 
             RobotClassificationBundles(bundles);
 
+            RobotBettingBundles(bundles);
+
             RegisterCustomerCategoryBundles(bundles);
 
             RegisterProblemAccountMonitorBundles(bundles);
@@ -152,6 +154,11 @@
         private static void RobotClassificationBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/account/robot-classification-scripts").Include("~/Scripts/Account/RobotClassification/*.js"));
+        }
+
+        private static void RobotBettingBundles(BundleCollection bundles)
+        {
+            bundles.Add(new ScriptBundle("~/account/robot-betting-scripts").Include("~/Scripts/Account/RobotBetting/*.js"));
         }
 
         private static void RegisterChainToEvidenceBundles(BundleCollection bundles)

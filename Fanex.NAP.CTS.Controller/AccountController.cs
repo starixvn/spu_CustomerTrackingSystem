@@ -11,6 +11,7 @@
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
+    using Fanex.NAP.CTS.Model.Account.RobotBetting;
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.CustomerClassify;
     using Fanex.NAP.CTS.Model.GraphDB;
@@ -28,6 +29,7 @@
     using Fanex.NAP.CTS.ViewModel.Account.ChainToEvidence;
     using Fanex.NAP.CTS.ViewModel.Account.CustomerCategory;
     using Fanex.NAP.CTS.ViewModel.Account.Evidence;
+    using Fanex.NAP.CTS.ViewModel.Account.RobotBetting;
     using Fanex.NAP.CTS.ViewModel.Account.TransactionHistory;
     using Newtonsoft.Json;
     using System;
@@ -50,6 +52,7 @@
         private readonly ICustomerClassificationService _customerClassificationService;
         private readonly ICommonService _commonService;
         private readonly IRobotClassificationService _robotClassificationService;
+        private readonly IRobotBettingService _robotBettingService;
 
         public override string BaseControllerName { get => string.Empty; }
 
@@ -63,6 +66,7 @@
             _customerClassificationService = new CustomerClassificationService();
             _commonService = new CommonService();
             _robotClassificationService = new RobotClassificationService();
+            _robotBettingService = new RobotBettingService();
         }
 
         public ActionResult Index(long Id)
@@ -1519,6 +1523,41 @@
         }
 
         #endregion Robot Classification
+        public ActionResult RobotBetting()
+        {
+            return PartialView("RobotBetting/RobotBetting");
+        }
+
+        [HttpPost]
+        public ActionResult GetRobotBetting(long custID)
+        {
+            var firstRobotDate = new DateTime(2021, 10, 22).ToString();
+            var lastRobotDate = new DateTime(2021, 10, 25).ToString();
+            var robotBettingList = Enumerable.Empty<RobotBettingViewModel>();
+
+            var robotBettings = _robotBettingService.GetRobotBetting(custID);
+
+            if (robotBettings != null && robotBettings.Any())
+            {
+                robotBettingList = robotBettings.Select(x => new RobotBettingViewModel
+                {
+                    CustID = x.CustID,
+                    PeriodRangeType = x.PeriodRangeType,
+                    PeriodRangeName = x.PeriodRangeName
+                });
+            }
+            
+            return Json(new
+            {
+                firstRobotDate,
+                lastRobotDate,
+                data = robotBettingList,
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        #region Robot Betting
+
+        #endregion
 
         #region Betting Statistic
 

@@ -616,6 +616,7 @@
     <Content Include="Scripts\Account\index.js" />
     <Content Include="Scripts\Account\BettingStatistic\sport-statistic-scripts.js" />
     <Content Include="Scripts\Account\BettingStatistic\winlost-statistic-scripts.js" />
+    <Content Include="Scripts\Account\RobotBetting\robot-betting.js" />
     <Content Include="Scripts\Account\RobotClassification\robot-classification.js" />
     <Content Include="Scripts\AssociatedAccountMonitor\index.js" />
     <Content Include="Scripts\AssociationDetection\index.js" />
@@ -1030,6 +1031,7 @@
     <Content Include="Views\MatchMonitor\Detail.cshtml" />
     <Content Include="Views\Account\RobotClassfication\LastestRobotClassification.cshtml" />
     <Content Include="Views\TransactionReport\Index.cshtml" />
+    <Content Include="Views\Account\RobotBetting\RobotBetting.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CoreBetList.css" />
