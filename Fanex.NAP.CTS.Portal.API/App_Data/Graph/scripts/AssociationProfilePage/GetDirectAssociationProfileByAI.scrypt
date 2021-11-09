@@ -27,7 +27,7 @@ WITH
     , st.ItemNameDisplay    AS StatusName
     , "Betting Pattern"     AS AssociationTypeName  
     , CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
-    , CASE WHEN $ip_AssociationStatus in [0,2] and e IS NOT NULL THEN e.CreatedDate ELSE firstAssDate END AS AssociationDate
+    , CASE WHEN $ip_AssociationStatus in [0,2] and e.CreatedDate IS NOT NULL THEN e.CreatedDate ELSE firstAssDate END AS AssociationDate
     , ct.ParentID            AS ParentIDs
     , ct.CategoryID          AS CategoryID
     , ct.CategoryName        AS CategoryName

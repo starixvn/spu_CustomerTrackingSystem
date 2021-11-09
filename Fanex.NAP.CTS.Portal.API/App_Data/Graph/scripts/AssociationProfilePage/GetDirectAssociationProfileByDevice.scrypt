@@ -30,7 +30,7 @@ WITH
     , StatusName            AS StatusName
     , "Device"              AS AssociationTypeName  
     , CASE e WHEN NULL THEN 1 ELSE 2 END AS AssociationStatus
-    , CASE WHEN $ip_AssociationStatus in [0,2] and e IS NOT NULL THEN e.CreatedDate ELSE firstAss END AS AssociationDate
+    , CASE WHEN $ip_AssociationStatus in [0,2] and e.CreatedDate IS NOT NULL THEN e.CreatedDate ELSE firstAss END AS AssociationDate
     , ct.ParentID           AS ParentIDs
     , ct.CategoryID          AS CategoryID
     , ct.CategoryName        AS CategoryName

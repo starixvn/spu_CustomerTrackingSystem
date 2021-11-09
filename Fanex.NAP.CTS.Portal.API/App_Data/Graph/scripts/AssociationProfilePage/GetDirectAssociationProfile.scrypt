@@ -29,7 +29,7 @@ CALL apoc.cypher.run('
         , StatusName            AS StatusName
         , "Device"              AS AssociationTypeName  
         , CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
-        , CASE WHEN $ip_AssociationStatus in [0,2] and e IS NOT NULL THEN e.CreatedDate ELSE firstAss END AS AssociationDate
+        , CASE WHEN $ip_AssociationStatus in [0,2] and e.CreatedDate IS NOT NULL THEN e.CreatedDate ELSE firstAss END AS AssociationDate
 
     UNION
 
@@ -58,7 +58,7 @@ CALL apoc.cypher.run('
         , st.ItemNameDisplay    AS StatusName
         , "Manual"              AS AssociationTypeName  
         , CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
-        , CASE WHEN $ip_AssociationStatus in [0,2] and e IS NOT NULL THEN e.CreatedDate ELSE firstAssDate END AS AssociationDate
+        , CASE WHEN $ip_AssociationStatus in [0,2] and e.CreatedDate IS NOT NULL THEN e.CreatedDate ELSE firstAssDate END AS AssociationDate
 
     UNION
 
@@ -87,7 +87,7 @@ CALL apoc.cypher.run('
         , st.ItemNameDisplay    AS StatusName
         , "IP"                    AS AssociationTypeName  
         , CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
-        , CASE WHEN $ip_AssociationStatus in [0,2] and e IS NOT NULL THEN e.CreatedDate ELSE firstAssDate END AS AssociationDate
+        , CASE WHEN $ip_AssociationStatus in [0,2] and e.CreatedDate IS NOT NULL THEN e.CreatedDate ELSE firstAssDate END AS AssociationDate
 
     UNION
 
@@ -117,7 +117,7 @@ CALL apoc.cypher.run('
         , st.ItemNameDisplay    AS StatusName
         , "Betting Pattern"     AS AssociationTypeName  
         , CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
-        , CASE WHEN $ip_AssociationStatus in [0,2] and e IS NOT NULL THEN e.CreatedDate ELSE firstAssDate END AS AssociationDate
+        , CASE WHEN $ip_AssociationStatus in [0,2] and e.CreatedDate IS NOT NULL THEN e.CreatedDate ELSE firstAssDate END AS AssociationDate
 ',{ip_CTSCustID: $ip_CTSCustID, ip_AssociationStatus: $ip_AssociationStatus, ip_AssociationType: $ip_AssociationType, ip_AccountStatuses: $ip_AccountStatuses, ip_SubscriberIDs: $ip_SubscriberIDs}) YIELD value 
 WITH     value.CTSCustID        AS CTSCustID
         , value.CustId          AS CustId
