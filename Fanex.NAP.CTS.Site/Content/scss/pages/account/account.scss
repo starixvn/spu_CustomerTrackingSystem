@@ -1200,6 +1200,21 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
         color: #070F1F;
         font-weight: 600;
     }
+
+    .robot-betting {
+        background: #A1AFCD;
+
+        span {
+            color: #fff;
+            font-weight: 600;
+
+            .title-robot {
+                font-family: "Lato", Arial, Tahoma, sans-serif !important;
+                font-style: normal;
+                font-weight: 500;
+            }
+        }
+    }
 }
 
 .table tbody .group-start td {

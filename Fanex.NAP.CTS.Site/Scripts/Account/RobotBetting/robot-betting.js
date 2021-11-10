@@ -57,7 +57,7 @@
             ],
             createdRow: function (row, obj) {
                 if (obj.Detail.length == 0) {
-                    let td = `<td class="robot-betting" colspan="8"><span class="icon-chevron-right">${obj.PeriodRangeName}</span></td>`;
+                    let td = `<td class="robot-betting" colspan="8"><span class="icon-chevron-right"><i class="title-robot">${obj.PeriodRangeName}</span></td>`;
                     
                     $(row).empty().html(td);
                 }

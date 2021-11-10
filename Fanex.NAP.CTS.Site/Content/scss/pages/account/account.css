@@ -1511,6 +1511,15 @@
     background: #A1AFCD;
     color: #070F1F;
     font-weight: 600; }
+  .dataTable .robot-betting {
+    background: #A1AFCD; }
+    .dataTable .robot-betting span {
+      color: #fff;
+      font-weight: 600; }
+      .dataTable .robot-betting span .title-robot {
+        font-family: "Lato", Arial, Tahoma, sans-serif !important;
+        font-style: normal;
+        font-weight: 500; }
 
 .table tbody .group-start td {
   font-weight: bold;
