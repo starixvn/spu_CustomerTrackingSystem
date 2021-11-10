@@ -1558,6 +1558,44 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        public ActionResult GetRobotBettingDetail(long custID, int periodRangeType)
+        {
+            var result = _robotBettingService.GetRobotUserDetails(custID, periodRangeType);
+
+            if (result != null && result.Any())
+            {
+
+            }
+            else
+            {
+                var datatest = GetRobotBettingDetailDataTest(custID, periodRangeType);
+
+                return Json(datatest, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        private RobotBettingViewModel GetRobotBettingDetailDataTest(long custID, int periodRangeType)
+        {
+            var result = new RobotBettingViewModel
+            {
+                CustID = custID,
+                PeriodRangeType = periodRangeType
+            };
+           
+            result.Detail.Add(new RobotBettingDetailViewModel
+            {
+                TransDate = new DateTime(2021, 11, 10),
+                TransID = 123456,
+                BetTeam = "0",
+                BetType = "O/U"
+            });            
+
+            return result;
+        }
+
         #region Robot Betting
 
         #endregion

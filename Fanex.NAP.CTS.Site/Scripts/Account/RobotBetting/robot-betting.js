@@ -45,7 +45,7 @@
             columnDefs: [
                 { targets: "_all", defaultContent: "-", className: "text-center" },
             ],
-            columns: [
+            columns: [                            
                 { data: obj => obj.TransDate },
                 { data: obj => obj.Match },
                 { data: obj => obj.TransID },
@@ -61,6 +61,56 @@
                     
                     $(row).empty().html(td);
                 }
+            }
+        });
+
+        $('tbody', robotBettingTable).on('click', 'tr', function () {
+            var tr = $(this);
+            var row = robotBettingTable.DataTable().row(tr);
+           
+            if (row.child.isShown()) {
+                row.child.hide();
+                tr.removeClass('shown');
+            }
+            else {
+                let childRow = $(NewChildRow());
+
+                row.child(childRow).show();
+                tr.addClass('shown');
+            }
+        });
+    }
+
+    function NewChildRow() {
+        let htmlTr = '<tr>';
+        htmlTr += '<td>1</td>';
+        htmlTr += '<td>2</td>';
+        htmlTr += '<td>3</td>';
+        htmlTr += '<td>4</td>';
+        htmlTr += '<td>5</td>';
+        htmlTr += '<td>6</td>';
+        htmlTr += '<td>7</td>';
+        htmlTr += '<td>8</td>';
+        htmlTr += '</tr>';
+
+        return htmlTr;
+    }
+
+    function LoadDetail(row) {
+        $.ajax(common.modifyRelativeUrl('Account/GetRobotBettingDetail'), {
+            type: 'POST',
+            data: {
+                custID: 1773789,
+                periodRangeType: 5
+            },
+            success: function (response) {
+                console.log(response);
+            },
+            complete: function () {
+               
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
             }
         });
     }
