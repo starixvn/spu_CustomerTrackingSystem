@@ -6,7 +6,7 @@
 
     public interface IRobotBettingService
     {
-        IEnumerable<RobotBettingModel> GetRobotBetting(long custID);
+        IEnumerable<RobotBettingModel> GetRobotBetting(long custID, out RobotDateModel robotDate);
 
         IEnumerable<RobotUserDetailModel> GetRobotUserDetails(long custID, int periodRangeType);
     }

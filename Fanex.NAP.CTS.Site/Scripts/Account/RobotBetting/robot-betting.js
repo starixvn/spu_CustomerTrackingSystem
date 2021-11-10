@@ -19,8 +19,8 @@
                 dataFilter: function (response) {
                     var json = jQuery.parseJSON(response);
 
-                    firstRobotDate.val(json.firstRobotDate);
-                    lastRobotDate.val(json.lastRobotDate);
+                    firstRobotDate.text("First Robot Date: " + json.firstRobotDate);
+                    lastRobotDate.text("Last Robot Date: " + json.lastRobotDate);
 
                     return response;
                 },
@@ -46,19 +46,21 @@
                 { targets: "_all", defaultContent: "-", className: "text-center" },
             ],
             columns: [
-                { data: obj => obj.PeriodRangeName }
+                { data: obj => obj.TransDate },
+                { data: obj => obj.Match },
+                { data: obj => obj.TransID },
+                { data: obj => obj.BetType },
+                { data: obj => obj.BetTeam },
+                { data: obj => obj.Stake },
+                { data: obj => obj.Odds },
+                { data: obj => obj.LiveScore }
             ],
-            drawCallback: function () {
-                var api = this.api();
-                var rows = api.rows({ page: 'current' }).nodes();
-                var data = api.rows({ page: 'current' }).data();
-                var last = null;
-
-                api.column(0, { page: 'current' }).data().each(function (group, i) {
-                    $(rows).eq(i).before(
-                        '<tr class=""><td colspan="8">' + data[i].PeriodRangeName + '</td></tr>'
-                    );
-                });
+            createdRow: function (row, obj) {
+                if (obj.Detail.length == 0) {
+                    let td = `<td class="robot-betting" colspan="8"><span class="icon-chevron-right">${obj.PeriodRangeName}</span></td>`;
+                    
+                    $(row).empty().html(td);
+                }
             }
         });
     }

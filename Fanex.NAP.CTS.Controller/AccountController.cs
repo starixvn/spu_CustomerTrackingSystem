@@ -1531,11 +1531,11 @@
         [HttpPost]
         public ActionResult GetRobotBetting(long custID)
         {
-            var firstRobotDate = new DateTime(2021, 10, 22).ToString();
-            var lastRobotDate = new DateTime(2021, 10, 25).ToString();
+            var firstRobotDate = string.Empty;
+            var lastRobotDate = string.Empty;
             var robotBettingList = Enumerable.Empty<RobotBettingViewModel>();
 
-            var robotBettings = _robotBettingService.GetRobotBetting(custID);
+            var robotBettings = _robotBettingService.GetRobotBetting(custID, out RobotDateModel robotDate);
 
             if (robotBettings != null && robotBettings.Any())
             {
@@ -1545,12 +1545,15 @@
                     PeriodRangeType = x.PeriodRangeType,
                     PeriodRangeName = x.PeriodRangeName
                 });
+
+                firstRobotDate = robotDate.FirstRobotDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmss);
+                lastRobotDate = robotDate.LastRobotDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmss);
             }
             
             return Json(new
             {
-                firstRobotDate,
-                lastRobotDate,
+                firstRobotDate = firstRobotDate,
+                lastRobotDate = lastRobotDate,
                 data = robotBettingList,
             }, JsonRequestBehavior.AllowGet);
         }
