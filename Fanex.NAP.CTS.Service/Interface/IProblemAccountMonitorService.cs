@@ -33,5 +33,12 @@
         string GetHtmlChoice(DetailTicketsModel ticket);
 
         InsertCategoryResultModel UpdateRemovedProblemAccountToCTS(string custids);
+
+        IEnumerable<TWProblemAccountModel> GetCustClassBySite(string usernameList);
+
+        IEnumerable<TWProblemAccountModel> GetCustomerPerformance(string custIdList);
+
+        int InsertSystemFormulaCust(string custIdList);
+        int InsertProblemAccToNAP(string usernameList);
     }
 }

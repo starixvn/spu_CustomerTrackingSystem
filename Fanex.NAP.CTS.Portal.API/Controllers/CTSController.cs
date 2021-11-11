@@ -16,6 +16,7 @@
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.ImportEvidences;
     using Fanex.NAP.CTS.Model.LogInputData;
+    using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Model.Subscriber;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
@@ -327,6 +328,29 @@
                 LogService.Error("GetDirectAssociationByDevice failed: " + ex.Message + ex.StackTrace);
                 throw;
             }
+        }
+
+        [HttpPost]
+        public void AddSystemFormulaBetAccount(string usernameList)
+        {
+            int[] custClass = { 1, 111, 112, 113, 2, 121, 122, 123, 3, 31, 32, 33 };
+            var orgCustomerList = usernameList.Split(',').Select(u => new TWProblemAccountModel { Username = u });
+            var customers = _problemAccountMonitorService.GetCustClassBySite(usernameList);
+            var perfCust = _problemAccountMonitorService.GetCustomerPerformance(string.Join(",", customers.Select(c => c.CustID)));
+            var fullData = (from oCust in orgCustomerList
+                        join cust in customers on oCust.Username equals cust.Username into temp from cust in temp.DefaultIfEmpty()
+                        join pCust in perfCust on cust.CustID equals pCust.CustID into temp2 from pCust in temp2.DefaultIfEmpty()
+                        select new TWProblemAccountModel 
+                        {
+                            CustID = oCust.CustID,
+                            Username = oCust.Username,
+                            CustomerClass = cust == null ? -1 : cust.CustomerClass,
+                            Winloss = pCust.Winloss
+                        }).ToList();
+            var monitorList = fullData.Where(c => c.Winloss < 0 || (c.Winloss >= 0 && custClass.Contains(c.CustomerClass)));
+            var markPAList = fullData.Except(monitorList);
+            _problemAccountMonitorService.InsertSystemFormulaCust(string.Join(",", monitorList.Select(c => c.CustID)));
+            _problemAccountMonitorService.InsertProblemAccToNAP(string.Join(",", monitorList.Select(c => c.Username)));
         }
 
         ///This code for GraphDB - Neo4j

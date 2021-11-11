@@ -20,6 +20,13 @@
 
     public class ProblemAccountMonitorService : IProblemAccountMonitorService
     {
+        private readonly IDynamicRepository repository;
+
+        public ProblemAccountMonitorService()
+        {
+            repository = new DynamicRepository();
+        }
+
         public DateTime GetMoveBetBalanceUpDate()
         {
             var criteria = new MoveBetBalanceUpDateGetCriteria()
@@ -228,6 +235,53 @@
             }
 
             return new InsertCategoryResultModel() { ErrorMessage = criteria.ErrorMessage, CustIds = custIds };
+        }
+
+        public IEnumerable<TWProblemAccountModel> GetCustClassBySite(string usernameList)
+        {
+            var criteria = new GetCustClassificationBySiteCriteria() 
+            {
+                UsernameList = usernameList,
+                SiteIdList  = ""
+            };
+            
+            return repository.Fetch<TWProblemAccountModel>(criteria);
+        }
+        
+        public IEnumerable<TWProblemAccountModel> GetCustomerPerformance(string custIdList)
+        {
+            var criteria = new GetCustomerPerformanceCriteria() 
+            {
+               CustIdList = custIdList
+            };
+            
+            return repository.Fetch<TWProblemAccountModel>(criteria);
+        }
+        
+        public int InsertSystemFormulaCust(string custIdList)
+        {
+            var criteria = new InsertSystemFormulaBetCriteria() 
+            {
+                CustIdList = custIdList
+            };
+            
+            return repository.Execute(criteria);
+        }
+        
+        public int InsertProblemAccToNAP(string usernameList)
+        {
+            var criteria = new NapProblemAccInsertCriteria() 
+            {
+                CustomerList = usernameList,
+                RoleId = 1,
+                ReasonId = 1,
+                PreventActionId = 1,
+                Comment = "",
+                VoidTime = "At Settlement",
+                LimitAmount = 0 //unlimited
+            };
+            
+            return repository.Execute(criteria);
         }
     }
 }

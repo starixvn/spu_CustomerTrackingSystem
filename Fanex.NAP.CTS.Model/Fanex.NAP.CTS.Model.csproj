@@ -261,6 +261,7 @@
     <Compile Include="ManageSubscriber\SubscriberUpdateModel.cs" />
     <Compile Include="ManageSubscriber\SubscriberModel.cs" />
     <Compile Include="ProblemAccountMonitor\InsertProblemAccountsModel.cs" />
+    <Compile Include="ProblemAccountMonitor\TWProblemAccountModel.cs" />
     <Compile Include="ProblemCaseMonitor\ProblemCasesMonitorModel.cs" />
     <Compile Include="ProblemCaseMonitor\ProblemCasesMonitorFilterModel.cs" />
     <Compile Include="ProblemCaseMonitor\ProblemCasesFilterModel.cs" />
