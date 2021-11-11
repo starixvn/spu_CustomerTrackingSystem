@@ -350,7 +350,8 @@
             var monitorList = fullData.Where(c => c.Winloss < 0 || (c.Winloss >= 0 && custClass.Contains(c.CustomerClass)));
             var markPAList = fullData.Except(monitorList);
             _problemAccountMonitorService.InsertSystemFormulaCust(string.Join(",", monitorList.Select(c => c.CustID)));
-            _problemAccountMonitorService.InsertProblemAccToNAP(string.Join(",", monitorList.Select(c => c.Username)));
+            _problemAccountMonitorService.InsertProblemAccToNAP(string.Join(",", markPAList.Select(c => c.Username)));
+            _problemAccountMonitorService.RemoveSystemFormulaBetCustomer(string.Join(",", markPAList.Select(c => c.Username)));
         }
 
         ///This code for GraphDB - Neo4j

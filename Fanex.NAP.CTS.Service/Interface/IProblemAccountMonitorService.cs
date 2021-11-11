@@ -40,5 +40,6 @@
 
         int InsertSystemFormulaCust(string custIdList);
         int InsertProblemAccToNAP(string usernameList);
+        void RemoveSystemFormulaBetCustomer(string custIdList);
     }
 }

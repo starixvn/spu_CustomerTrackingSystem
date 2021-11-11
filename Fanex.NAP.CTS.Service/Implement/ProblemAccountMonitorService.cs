@@ -8,6 +8,7 @@
     using Fanex.Logging;
     using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Criteria.ProblemAccountMonitor;
+    using Fanex.NAP.CTS.Criteria.TWProblemAccountDetection;
     using Fanex.NAP.CTS.Model.CustomerClassify;
     using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
@@ -267,7 +268,17 @@
             
             return repository.Execute(criteria);
         }
-        
+
+        public void RemoveSystemFormulaBetCustomer(string custIdList)
+        {
+            var criteria = new RemoveSystemFormulaBetCustomerCriteria
+            {
+                CustIdList = custIdList
+            };
+
+            repository.Execute(criteria);
+        }
+
         public int InsertProblemAccToNAP(string usernameList)
         {
             var criteria = new NapProblemAccInsertCriteria() 

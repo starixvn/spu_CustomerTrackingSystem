@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Criteria.ProblemAccountMonitor
+﻿namespace Fanex.NAP.CTS.Criteria.TWProblemAccountDetection
 {
     using Fanex.Data;
     using Fanex.Data.Repository;

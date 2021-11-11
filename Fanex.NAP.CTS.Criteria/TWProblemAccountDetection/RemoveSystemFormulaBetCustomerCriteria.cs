@@ -1,17 +1,17 @@
-﻿namespace Fanex.NAP.CTS.Criteria.ProblemAccountMonitor
+﻿namespace Fanex.NAP.CTS.Criteria.TWProblemAccountDetection
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
 
-    public class InsertSystemFormulaBetCriteria : NonQueryCommand
-    {        
+    public class RemoveSystemFormulaBetCustomerCriteria : NonQueryCommand
+    {
         [SpParam(SqlParamName = "ip_CustIDList")]
         public string CustIdList { get; set; }
 
         public override string GetSettingKey()
-            => "CTS_DC_SystemFormulaBetMonitor_Insert";
+            => "CTS_DC_SystemFormulaBetMonitor_Remove";
 
         public override bool IsValid()
-            => !string.IsNullOrEmpty(CustIdList);
+            => true;
     }
 }
