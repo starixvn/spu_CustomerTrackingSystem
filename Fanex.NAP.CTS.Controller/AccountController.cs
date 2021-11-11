@@ -1597,7 +1597,7 @@
                 {
                     result = ticketDetail.Select(x => new RobotBettingDetailViewModel
                     {                        
-                        TransDate = x.TransDate,
+                        TransDate = x.TransDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmss),
                         HomeID = x.HomeId,
                         AwayID = x.AwayId,
                         TransID = x.TransId,
@@ -1606,11 +1606,55 @@
                         Stake = x.Stake,
                         Odds = x.Odds,
                         LiveScore = x.LiveIndicator ? (x.LiveHomeScore + " - " + x.LiveAwayScore) : "-",
+                        MatchName = GetMatchName(x)
                     });
+                }
+                else
+                {
+                    result = GetRobotBettingTicketDetailDataTest();
                 }
             }           
 
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public string GetMatchName(RobotBettingTicketDetailModel ticket)
+        {
+            var rs = "-";
+
+            var HomeName = CachedRef.GetTeamName(ticket.HomeId);
+            var AwayName = CachedRef.GetTeamName(ticket.AwayId);
+
+            if (!string.IsNullOrEmpty(HomeName) || !string.IsNullOrEmpty(AwayName))
+            {
+                rs = HomeName + " vs " + AwayName;
+            }
+
+            return rs;
+        }
+
+        private IEnumerable<RobotBettingDetailViewModel> GetRobotBettingTicketDetailDataTest()
+        {
+            var result = new List<RobotBettingDetailViewModel>();
+
+            for (int i = 0; i < 5; i++)
+            {
+                result.Add(new RobotBettingDetailViewModel
+                {
+                    TransDate = DateTime.Now.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmss),
+                    HomeID = 1,
+                    AwayID = 2,
+                    TransID = 113343343,
+                    BetType = 1,
+                    BetTeam = "OU",
+                    Stake = new decimal(4654),
+                    Odds = new decimal(444),
+                    LiveScore = "1-0",
+                    MatchName = "name"
+                });
+            }            
+
+            return result;
         }
 
         #region Robot Betting

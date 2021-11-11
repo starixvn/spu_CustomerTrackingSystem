@@ -22,6 +22,8 @@
                     firstRobotDate.text("First Robot Date: " + json.firstRobotDate);
                     lastRobotDate.text("Last Robot Date: " + json.lastRobotDate);
 
+                    HandleRobotDetection(json.data.length);                    
+
                     return response;
                 },
                 complete: function () {
@@ -68,10 +70,22 @@
             var tr = $(this);
             var row = robotBettingTable.DataTable().row(tr);
 
-            LoadDetail(tr, row);            
+            let td = $('.robot-betting', tr);
+
+            if (td.length > 0) {
+                LoadDetail(tr, row);  
+            }
         });
     }   
 
+    function HandleRobotDetection(dataLength) {
+        if (dataLength > 0) {
+            $('span.icon-big-robot').removeClass('hide');
+        } else {
+            $('span.icon-big-robot').addClass('hide');
+        }       
+    }
+    
     function LoadDetail(tr, row) {
         let span = $('span', tr);
 
@@ -84,34 +98,40 @@
         }
         else {
             span.removeClass('icon-chevron-right')
-                .addClass('icon-chevron-down');
+                .addClass('icon-chevron-down');           
 
-            let td = $('.robot-betting', tr);
-            let custID = td.attr('data-custid');
-            let periodRangeType = td.attr('data-periodrangetype');
+            if (tr.hasClass('detail-loaded')) {               
+                row.child.show();                
+            } else {
+                let td = $('.robot-betting', tr);
+                let custID = td.attr('data-custid');
+                let periodRangeType = td.attr('data-periodrangetype');
 
-            $.ajax(common.modifyRelativeUrl('Account/GetRobotBettingDetail'), {
-                type: 'POST',
-                data: {
-                    custID: custID,
-                    periodRangeType: periodRangeType
-                },
-                success: function (response) {                    
-                    let childRow = $(NewChildRows(response));
+                $.ajax(common.modifyRelativeUrl('Account/GetRobotBettingDetail'), {
+                    type: 'POST',
+                    data: {
+                        custID: custID,
+                        periodRangeType: periodRangeType
+                    },
+                    success: function (response) {
+                        let childRow = $(NewChildRows(response));
 
-                    row.child(childRow).show();                    
-                },
-                beforeSend: function () {
-                    tr.prop('disabled', true);
-                },
-                complete: function () {
-                    tr.prop('disabled', false);
-                },
-                error: function (errMsg) {
-                    console.log(errMsg);
-                    tr.prop('disabled', false);
-                }
-            });            
+                        row.child(childRow).show();      
+
+                        tr.addClass('detail-loaded');
+                    },
+                    beforeSend: function () {
+                        td.prop('disabled', true);
+                    },
+                    complete: function () {
+                        td.prop('disabled', false);
+                    },
+                    error: function (errMsg) {
+                        console.log(errMsg);
+                        td.prop('disabled', false);
+                    }
+                });          
+            }              
         }        
     }
 
@@ -122,14 +142,14 @@
             let item = data[i];
 
             html += `<tr>`;
-            html += `<td>${item.TransDate}</td>`;
-            html += `<td>${item.Match}</td>`;
-            html += `<td>${item.TransID}</td>`;
-            html += `<td>${item.BetType}</td>`;
-            html += `<td>${item.BetTeam}</td>`;
-            html += `<td>${item.Stake}</td>`;
-            html += `<td>${item.Odds}</td>`;
-            html += `<td>${item.LiveScore}</td>`;
+            html += `<td class="text-center">${item.TransDate}</td>`;
+            html += `<td class="text-center">${item.MatchName}</td>`;
+            html += `<td class="text-center">${item.TransID}</td>`;
+            html += `<td class="text-center">${item.BetType}</td>`;
+            html += `<td class="text-center">${item.BetTeam}</td>`;
+            html += `<td class="text-center">${item.Stake}</td>`;
+            html += `<td class="text-center">${item.Odds}</td>`;
+            html += `<td class="text-center">${item.LiveScore}</td>`;
             html += `</tr>`;
         }
 
