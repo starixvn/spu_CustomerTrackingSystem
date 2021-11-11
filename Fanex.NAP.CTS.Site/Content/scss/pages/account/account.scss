@@ -1203,6 +1203,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 
     .robot-betting {
         background: #A1AFCD;
+        cursor: pointer;
 
         span {
             color: #fff;
@@ -1214,7 +1215,12 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
                 font-weight: 500;
             }
         }
+
+        &[disabled] {
+            cursor: not-allowed;
+        }
     }
+
 }
 
 .table tbody .group-start td {

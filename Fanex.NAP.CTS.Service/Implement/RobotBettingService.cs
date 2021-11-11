@@ -3,6 +3,7 @@
     using Fanex.Data.Repository;
     using Fanex.NAP.CTS.Criteria.Account.RobotSetting;
     using Fanex.NAP.CTS.Model.Account.RobotBetting;
+    using Fanex.NAP.CTS.Model.MatchMonitor;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -45,6 +46,23 @@
             };
 
             return repository.Fetch<RobotUserDetailModel>(criteria);
+        }
+
+        public IEnumerable<RobotBettingTicketDetailModel> GetRobotBettingTicketDetails(string tranIdList)
+        {
+            if (!string.IsNullOrEmpty(tranIdList))
+            {
+                var criteria = new GetRobotDetectionTicketDetailsCriteria
+                {
+                    ListTransId = tranIdList
+                };
+
+                return repository.Fetch<RobotBettingTicketDetailModel>(criteria);
+            }
+            else
+            {
+                return Enumerable.Empty<RobotBettingTicketDetailModel>();
+            }
         }
 
     }

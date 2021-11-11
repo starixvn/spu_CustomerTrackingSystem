@@ -74,6 +74,7 @@
     <Compile Include="Account\RobotClassification\GetStatusRobotClassificationCriteria.cs" />
     <Compile Include="Account\RobotClassification\GetLastestRobotClassificationCriteria.cs" />
     <Compile Include="Account\RobotSetting\GetRobotDetectionCriteria.cs" />
+    <Compile Include="Account\RobotSetting\GetRobotDetectionTicketDetailsCriteria.cs" />
     <Compile Include="Account\RobotSetting\GetRobotUsersDetailsCriteria.cs" />
     <Compile Include="Api\GetAssociationForExtAccCriteria.cs" />
     <Compile Include="Api\GetSubscriberInfoBySubscriberName.cs" />

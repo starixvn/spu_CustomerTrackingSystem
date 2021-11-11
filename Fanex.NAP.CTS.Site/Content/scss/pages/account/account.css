@@ -1512,7 +1512,8 @@
     color: #070F1F;
     font-weight: 600; }
   .dataTable .robot-betting {
-    background: #A1AFCD; }
+    background: #A1AFCD;
+    cursor: pointer; }
     .dataTable .robot-betting span {
       color: #fff;
       font-weight: 600; }
@@ -1520,6 +1521,8 @@
         font-family: "Lato", Arial, Tahoma, sans-serif !important;
         font-style: normal;
         font-weight: 500; }
+    .dataTable .robot-betting[disabled] {
+      cursor: not-allowed; }
 
 .table tbody .group-start td {
   font-weight: bold;

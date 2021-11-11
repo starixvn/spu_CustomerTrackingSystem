@@ -6,7 +6,7 @@
     function RenderGrid(custID) {
         robotBettingTable.DataTable({
             dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
-            serverSide: true,
+            serverSide: false,
             ajax: {
                 url: common.modifyRelativeUrl('Account/GetRobotBetting'),
                 data: {
@@ -57,7 +57,7 @@
             ],
             createdRow: function (row, obj) {
                 if (obj.Detail.length == 0) {
-                    let td = `<td class="robot-betting" colspan="8"><span class="icon-chevron-right"><i class="title-robot">${obj.PeriodRangeName}</span></td>`;
+                    let td = `<td class="robot-betting" colspan="8" data-custid=${obj.CustID} data-periodrangetype=${obj.PeriodRangeType}><span class="icon-chevron-right"><i class="title-robot">${obj.PeriodRangeName}</span></td>`;
                     
                     $(row).empty().html(td);
                 }
@@ -67,52 +67,73 @@
         $('tbody', robotBettingTable).on('click', 'tr', function () {
             var tr = $(this);
             var row = robotBettingTable.DataTable().row(tr);
-           
-            if (row.child.isShown()) {
-                row.child.hide();
-                tr.removeClass('shown');
-            }
-            else {
-                let childRow = $(NewChildRow());
 
-                row.child(childRow).show();
-                tr.addClass('shown');
-            }
+            LoadDetail(tr, row);            
         });
+    }   
+
+    function LoadDetail(tr, row) {
+        let span = $('span', tr);
+
+        if (row.child.isShown()) {
+            row.child.hide();
+            tr.removeClass('shown');
+            
+            span.removeClass('icon-chevron-down')
+                .addClass('icon-chevron-right');
+        }
+        else {
+            span.removeClass('icon-chevron-right')
+                .addClass('icon-chevron-down');
+
+            let td = $('.robot-betting', tr);
+            let custID = td.attr('data-custid');
+            let periodRangeType = td.attr('data-periodrangetype');
+
+            $.ajax(common.modifyRelativeUrl('Account/GetRobotBettingDetail'), {
+                type: 'POST',
+                data: {
+                    custID: custID,
+                    periodRangeType: periodRangeType
+                },
+                success: function (response) {                    
+                    let childRow = $(NewChildRows(response));
+
+                    row.child(childRow).show();                    
+                },
+                beforeSend: function () {
+                    tr.prop('disabled', true);
+                },
+                complete: function () {
+                    tr.prop('disabled', false);
+                },
+                error: function (errMsg) {
+                    console.log(errMsg);
+                    tr.prop('disabled', false);
+                }
+            });            
+        }        
     }
 
-    function NewChildRow() {
-        let htmlTr = '<tr>';
-        htmlTr += '<td>1</td>';
-        htmlTr += '<td>2</td>';
-        htmlTr += '<td>3</td>';
-        htmlTr += '<td>4</td>';
-        htmlTr += '<td>5</td>';
-        htmlTr += '<td>6</td>';
-        htmlTr += '<td>7</td>';
-        htmlTr += '<td>8</td>';
-        htmlTr += '</tr>';
+    function NewChildRows(data) {
+        let html = '';
 
-        return htmlTr;
-    }
+        for (let i = 0; i < data.length; i++) {
+            let item = data[i];
 
-    function LoadDetail(row) {
-        $.ajax(common.modifyRelativeUrl('Account/GetRobotBettingDetail'), {
-            type: 'POST',
-            data: {
-                custID: 1773789,
-                periodRangeType: 5
-            },
-            success: function (response) {
-                console.log(response);
-            },
-            complete: function () {
-               
-            },
-            error: function (errMsg) {
-                console.log(errMsg);
-            }
-        });
+            html += `<tr>`;
+            html += `<td>${item.TransDate}</td>`;
+            html += `<td>${item.Match}</td>`;
+            html += `<td>${item.TransID}</td>`;
+            html += `<td>${item.BetType}</td>`;
+            html += `<td>${item.BetTeam}</td>`;
+            html += `<td>${item.Stake}</td>`;
+            html += `<td>${item.Odds}</td>`;
+            html += `<td>${item.LiveScore}</td>`;
+            html += `</tr>`;
+        }
+
+        return html;
     }
 
     this.Initial = function (custID) {

@@ -1561,39 +1561,56 @@
         [HttpPost]
         public ActionResult GetRobotBettingDetail(long custID, int periodRangeType)
         {
-            var result = _robotBettingService.GetRobotUserDetails(custID, periodRangeType);
+            var result = Enumerable.Empty<RobotBettingDetailViewModel>();
 
-            if (result != null && result.Any())
+            var robotUserDetails = _robotBettingService.GetRobotUserDetails(custID, periodRangeType);
+
+            if (robotUserDetails != null && robotUserDetails.Any())
             {
+                var suspiciousTransList = robotUserDetails.Select(x => x.SuspiciousTransList);
+                var tranIds = new List<string>();
 
-            }
-            else
-            {
-                var datatest = GetRobotBettingDetailDataTest(custID, periodRangeType);
+                foreach (var level1 in suspiciousTransList)
+                {
+                    var susTranIdsLevel1 = level1.Split(',');
 
-                return Json(datatest, JsonRequestBehavior.AllowGet);
-            }
+                    foreach (var level2 in susTranIdsLevel1)
+                    {
+                        var susTranIdsLevel2 = level2.Split('#');
+
+                        if (susTranIdsLevel2.Length > 1)
+                        {
+                            tranIds.AddRange(susTranIdsLevel2);
+                        }
+                        else
+                        {
+                            tranIds.Add(level2);
+                        }                        
+                    }                    
+                }
+
+                var tranIdList = string.Join(",", tranIds.Distinct());
+
+                var ticketDetail = _robotBettingService.GetRobotBettingTicketDetails(tranIdList);
+
+                if (ticketDetail != null && ticketDetail.Any())
+                {
+                    result = ticketDetail.Select(x => new RobotBettingDetailViewModel
+                    {                        
+                        TransDate = x.TransDate,
+                        HomeID = x.HomeId,
+                        AwayID = x.AwayId,
+                        TransID = x.TransId,
+                        BetType = x.BetType,
+                        BetTeam = x.BetTeam,
+                        Stake = x.Stake,
+                        Odds = x.Odds,
+                        LiveScore = x.LiveIndicator ? (x.LiveHomeScore + " - " + x.LiveAwayScore) : "-",
+                    });
+                }
+            }           
 
             return Json(result, JsonRequestBehavior.AllowGet);
-        }
-
-        private RobotBettingViewModel GetRobotBettingDetailDataTest(long custID, int periodRangeType)
-        {
-            var result = new RobotBettingViewModel
-            {
-                CustID = custID,
-                PeriodRangeType = periodRangeType
-            };
-           
-            result.Detail.Add(new RobotBettingDetailViewModel
-            {
-                TransDate = new DateTime(2021, 11, 10),
-                TransID = 123456,
-                BetTeam = "0",
-                BetType = "O/U"
-            });            
-
-            return result;
         }
 
         #region Robot Betting

@@ -155,5 +155,6 @@
 	<Function name="RobotBetting">
 		<Setting Key="CTS_DC_RobotDetection_Get" SpName="CTS_DC_RobotDetection_Get" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="SPU_AIML_RD_GetRobotUsersDetails" SpName="SPU_AIML_RD_GetRobotUsersDetails" DbName="MySQL.SPU_AIML.Reporter" />
+		<Setting Key="CTS_Rpt_RobotDetection_TicketDetails" SpName="CTS_Rpt_RobotDetection_TicketDetails" DbName="MySQL.SPU_AIML.Reporter" />
 	</Function>
 </Functions>
