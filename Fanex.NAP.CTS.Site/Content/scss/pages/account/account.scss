@@ -2109,6 +2109,15 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     }
 }
 
+.icon-big-Robot {
+    margin-right: 1rem;
+    span {
+        &:before {
+            font-size: 2rem;
+        }
+    }
+}
+
 #robot_classification {
     .note {
         padding: 1rem 0 .5rem 0;

@@ -2166,6 +2166,11 @@
   .icon-Robot span:before {
     font-size: 2rem; }
 
+.icon-big-Robot {
+  margin-right: 1rem; }
+  .icon-big-Robot span:before {
+    font-size: 2rem; }
+
 #robot_classification .note {
   padding: 1rem 0 .5rem 0; }
   #robot_classification .note .group-icon {
