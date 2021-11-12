@@ -110,9 +110,9 @@
                 { data: obj => obj.ReasonGroup }
             ],
             createdRow: function (row, data, index) {
-                if (data.TicketStatus == 101)
+                if (data.TicketStatus == 102)
                     $(row.cells).addClass('void-ticket');
-                else if (data.TicketStatus == 102)
+                else if (data.TicketStatus == 101)
                     $(row.cells).addClass('rejected-ticket');
             }
         });
@@ -179,9 +179,9 @@
                 { data: obj => obj.ReasonGroup }
             ],
             createdRow: function (row, data, index) {
-                if (data.TicketStatus == 101)
+                if (data.TicketStatus == 102)
                     $(row.cells).addClass('void-ticket');
-                else if (data.TicketStatus == 102)
+                else if (data.TicketStatus == 101)
                     $(row.cells).addClass('rejected-ticket');
             }
         });
