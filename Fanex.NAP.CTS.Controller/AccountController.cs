@@ -14,6 +14,7 @@
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.CustomerClassify;
     using Fanex.NAP.CTS.Model.GraphDB;
+    using Fanex.NAP.CTS.Model.ImportEvidences;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Model.Transaction;
@@ -961,6 +962,15 @@
                         ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
                         IsPushCCToSoon88 = true,
                     });
+
+                    var hashCustInfos = syncResult.OutParam["custInfos"];
+
+                    if (hashCustInfos != null)
+                    {
+                        var custInfos = (IEnumerable<NewPAAssociationCustomerForRollbackModel>)hashCustInfos;
+
+                        _accountService.CheckNewPAAssociationCustomerForRollback(custInfos);
+                    }
                 }
             }
 

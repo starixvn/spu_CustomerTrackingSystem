@@ -206,6 +206,7 @@
     <Compile Include="DTO\CustomerEvidence.cs" />
     <Compile Include="DTO\CustomerEvidenceForTW.cs" />
     <Compile Include="GraphDB\AssociationProfileParameterModel.cs" />
+    <Compile Include="ImportEvidences\NewPAAssociationCustomerForRollbackModel.cs" />
     <Compile Include="LogInputData\LogInputViewModel.cs" />
     <Compile Include="CustomerClassify\LogInputDataModel.cs" />
     <Compile Include="CustomerClassify\RoleCustomerModel.cs" />

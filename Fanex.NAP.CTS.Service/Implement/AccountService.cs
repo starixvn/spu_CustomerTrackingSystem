@@ -3,6 +3,8 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.Logging;
+    using Fanex.Logging.Extensions;
+    using Fanex.Logging.Extensions.Database;
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.BaseClasses;
     using Fanex.NAP.CTS.Core.Extentions;
@@ -23,10 +25,12 @@
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.Home;
+    using Fanex.NAP.CTS.Model.ImportEvidences;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.ViewModel.Account.Associated;
+    using Newtonsoft.Json;
     using System;
     using System.Collections;
     using System.Collections.Generic;
@@ -735,8 +739,9 @@
 
         public DBResult SyncCustEvidenceToCategory(string custEvidencesJson, bool isRescan, out IEnumerable<long> custIds)
         {
+            var custInfos = Enumerable.Empty<NewPAAssociationCustomerForRollbackModel>();
             custIds = new List<long>();
-
+            
             var criteria = new CustEvidenceSyncToCategoryCriteria
             {
                 CustEvidencesJson = custEvidencesJson,
@@ -747,7 +752,7 @@
             {
                 var repository = new DynamicRepository();
 
-                custIds = repository.Fetch<long>(criteria);
+                custInfos = repository.Fetch<NewPAAssociationCustomerForRollbackModel>(criteria);
 
                 if (!string.IsNullOrEmpty(criteria.ErrorMessage))
                 {
@@ -756,13 +761,23 @@
                     return new DBResult { ErrorCode = -1, ErrorMsg = criteria.ErrorMessage };
                 }
 
-                return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
+                if (custInfos != null && custInfos.Any())
+                    custIds = custInfos.Select(x => (long)x.CustID);
+
+                return new DBResult
+                {
+                    ErrorCode = 0,
+                    ErrorMsg = string.Empty,
+                    OutParam = new Hashtable {
+                        { "custInfos", custInfos }
+                    }
+                };
             }
             catch (Exception ex)
             {
                 LogService.Error("CTS - AccountService SyncCustEvidenceToCategory exception: " + ex.Message, ex);
 
-                return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
+                return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message, OutParam = new Hashtable() };
             }
         }
 
@@ -888,6 +903,38 @@
             {
                 return db.Query<AffectedEvidenceListBetweenCustsModel>(criteria);
             }
+        }
+
+        public int CheckNewPAAssociationCustomerForRollback(IEnumerable<NewPAAssociationCustomerForRollbackModel> assCustForRollbacks)
+        {
+            var result = 0;
+
+            try
+            {
+                if (assCustForRollbacks != null && assCustForRollbacks.Any())
+                {
+                    var custInfoJson = JsonConvert.SerializeObject(assCustForRollbacks);
+
+                    var criteria = new CheckNewPAAssociationCustomerForRollbackCriteria
+                    {
+                        CustInfoJson = custInfoJson
+                    };
+
+                    result = repository.Execute(criteria);
+                }                
+            }
+            catch (Exception ex)
+            {
+                var logMessage = new LogMessage(ex.Message)
+                   .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                   .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error(logMessage);
+
+                result = - 1;
+            }
+
+            return result;
         }
 
         #endregion
@@ -1191,5 +1238,6 @@
 
             return repository.Fetch<CTSCustomer>(criteria);
         }
+        
     }
 }

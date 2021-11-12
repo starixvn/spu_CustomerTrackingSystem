@@ -3,6 +3,8 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.Logging;
+    using Fanex.Logging.Extensions;
+    using Fanex.Logging.Extensions.Database;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria;
@@ -11,6 +13,7 @@
     using Fanex.NAP.CTS.Criteria.ProblemAccountMonitor;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.CustomerClassify;
+    using Fanex.NAP.CTS.Model.ImportEvidences;
     using Fanex.NAP.CTS.Model.LogInputData;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
@@ -26,12 +29,14 @@
         private readonly ICustomerClassificationService custClassificationService;
         private readonly ILogInputDataService logInputDataService;
         private readonly bool _isWriteLogInfo;
+        private readonly IDynamicRepository repository;
 
         public RescanCustomerClassificationService()
         {
             custClassificationService = new CustomerClassificationService();
             _isWriteLogInfo = ConfigSettings.IsWriteLogInfo;
             logInputDataService = new LogInputDataService();
+            repository = new DynamicRepository();
         }
 
         public void RescanCustomerClassify(RescanCustClassificationModel para)
@@ -125,14 +130,20 @@
 
                 var evidencesChunk = custEvidences.Chunk(ConfigSettings.UpdateInternalChunkSize);
 
-                var custIds = new List<long>();
+                var custIdList = new List<long>();
 
                 foreach (var evidences in evidencesChunk)
                 {
-                    custIds.AddRange(SyncCustEvidenceToCategoryDbAccess(JsonConvert.SerializeObject(evidences), true));
+                    var assCustForRollbacks = Enumerable.Empty<NewPAAssociationCustomerForRollbackModel>();
+
+                    var custIds = SyncCustEvidenceToCategoryDbAccess(JsonConvert.SerializeObject(evidences), true, out assCustForRollbacks);
+
+                    custIdList.AddRange(custIds);
+
+                    CheckNewPAAssociationCustomerForRollback(assCustForRollbacks);
                 }
 
-                return new InsertCategoryResultModel { ErrorMessage = string.Empty, CustIds = custIds };
+                return new InsertCategoryResultModel { ErrorMessage = string.Empty, CustIds = custIdList };
             }
             catch (Exception ex)
             {
@@ -282,6 +293,38 @@
                 LogService.Info($"PA Rescan - Cust to syncCC - with data: {JsonConvert.SerializeObject(custIdsToSyncCC)}");
         }
 
+        public int CheckNewPAAssociationCustomerForRollback(IEnumerable<NewPAAssociationCustomerForRollbackModel> assCustForRollbacks)
+        {
+            var result = 0;
+
+            try
+            {
+                if (assCustForRollbacks != null && assCustForRollbacks.Any())
+                {
+                    var custInfoJson = JsonConvert.SerializeObject(assCustForRollbacks);
+
+                    var criteria = new CheckNewPAAssociationCustomerForRollbackCriteria
+                    {
+                        CustInfoJson = custInfoJson
+                    };
+
+                    result = repository.Execute(criteria);
+                }
+            }
+            catch (Exception ex)
+            {
+                var logMessage = new LogMessage(ex.Message)
+                   .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                   .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error(logMessage);
+
+                result = -1;
+            }
+
+            return result;
+        }
+
         #endregion Rescan PA
 
         #region Rescan Normal
@@ -349,9 +392,12 @@
             return existedEvidences ?? new List<CustEvidenceModel>();
         }
 
-        private List<long> SyncCustEvidenceToCategoryDbAccess(string custEvidencesJson, bool isRescan)
+        private List<long> SyncCustEvidenceToCategoryDbAccess(string custEvidencesJson
+            , bool isRescan
+            , out IEnumerable<NewPAAssociationCustomerForRollbackModel> assCustForRollbacks)
         {
             var custIds = new List<long>();
+            assCustForRollbacks = new List<NewPAAssociationCustomerForRollbackModel>();
             var repository = new DynamicRepository();
 
             if (string.IsNullOrEmpty(custEvidencesJson))
@@ -367,7 +413,12 @@
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                custIds = repository.Fetch<long>(criteria).ToList();
+                assCustForRollbacks = repository.Fetch<NewPAAssociationCustomerForRollbackModel>(criteria);
+
+                if (assCustForRollbacks != null && assCustForRollbacks.Any())
+                {
+                    custIds = assCustForRollbacks.Select(x => (long)x.CustID).ToList();
+                }
             }
 
             if (!string.IsNullOrEmpty(criteria.ErrorMessage))
