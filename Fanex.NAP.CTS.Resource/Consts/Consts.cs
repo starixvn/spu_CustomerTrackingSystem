@@ -27,7 +27,7 @@
         public const string FormatDateToString_yyyyMMddHHmmss = "yyyyMMddHHmmss";
         public const string FormatDateTimeToString_YYYYmmddThhddmm = "yyyy-MM-dd'T'HH:mm:ss.fffffff'Z'";
         public const string FormatDateTimeToString_YYYYmmdd = "yyyyMMdd";
-        public const string FormatDatetimeToString_ddMMMyyyyHHmmss = "dd MMM yyyy HH:mm:ss";
+        public const string FormatDatetimeToString_ddMMMyyyyHHmmssfff = "dd MMM, yyyy HH:mm:ss.fff";
         public const string FormatDecimalToString_2Places = "0.00";
         public const string FormatDecimalToString_Thousands2Places = "#,##0.00";
 

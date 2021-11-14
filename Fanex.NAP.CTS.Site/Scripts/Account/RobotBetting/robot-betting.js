@@ -145,9 +145,9 @@
             html += `<td class="text-center">${item.TransDate}</td>`;
             html += `<td class="text-center">${item.MatchName}</td>`;
             html += `<td class="text-center">${item.TransID}</td>`;
-            html += `<td class="text-center">${item.BetType}</td>`;
+            html += `<td class="text-center">${item.BetTypeName}</td>`;
             html += `<td class="text-center">${item.BetTeam}</td>`;
-            html += `<td class="text-center">${item.Stake}</td>`;
+            html += `<td class="text-center">${item.Stake.toLocaleString('en-US', { maximumFractionDigits: 2 })}</td>`;
             html += `<td class="text-center">${item.Odds}</td>`;
             html += `<td class="text-center">${item.LiveScore}</td>`;
             html += `</tr>`;

@@ -1523,6 +1523,8 @@
         }
 
         #endregion Robot Classification
+
+        #region Robot Betting
         public ActionResult RobotBetting()
         {
             return PartialView("RobotBetting/RobotBetting");
@@ -1535,7 +1537,7 @@
             var lastRobotDate = string.Empty;
             var robotBettingList = Enumerable.Empty<RobotBettingViewModel>();
 
-            var robotBettings = _robotBettingService.GetRobotBetting(custID, out RobotDateModel robotDate);
+            var robotBettings = _robotBettingService.GetRobotBetting(custID, out RobotDateModel robotDate);            
 
             if (robotBettings != null && robotBettings.Any())
             {
@@ -1546,16 +1548,16 @@
                     PeriodRangeName = x.PeriodRangeName
                 });
 
-                firstRobotDate = robotDate.FirstRobotDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmss);
-                lastRobotDate = robotDate.LastRobotDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmss);
+                firstRobotDate = robotDate.FirstRobotDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff);
+                lastRobotDate = robotDate.LastRobotDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff);
             }
-            
+
             return Json(new
             {
                 firstRobotDate = firstRobotDate,
-                lastRobotDate = lastRobotDate,
+                lastRobotDate = lastRobotDate,                
                 data = robotBettingList,
-            }, JsonRequestBehavior.AllowGet);
+            }, JsonRequestBehavior.AllowGet);            
         }
 
         [HttpPost]
@@ -1567,56 +1569,59 @@
 
             if (robotUserDetails != null && robotUserDetails.Any())
             {
-                var suspiciousTransList = robotUserDetails.Select(x => x.SuspiciousTransList);
-                var tranIds = new List<string>();
+                var suspiciousTransList = robotUserDetails.Select(x => x.SuspiciousTransList);               
 
-                foreach (var level1 in suspiciousTransList)
-                {
-                    var susTranIdsLevel1 = level1.Split(',');
-
-                    foreach (var level2 in susTranIdsLevel1)
-                    {
-                        var susTranIdsLevel2 = level2.Split('#');
-
-                        if (susTranIdsLevel2.Length > 1)
-                        {
-                            tranIds.AddRange(susTranIdsLevel2);
-                        }
-                        else
-                        {
-                            tranIds.Add(level2);
-                        }                        
-                    }                    
-                }
-
-                var tranIdList = string.Join(",", tranIds.Distinct());
+                var tranIdList = GetTranIdList(suspiciousTransList);
 
                 var ticketDetail = _robotBettingService.GetRobotBettingTicketDetails(tranIdList);
 
                 if (ticketDetail != null && ticketDetail.Any())
                 {
                     result = ticketDetail.Select(x => new RobotBettingDetailViewModel
-                    {                        
-                        TransDate = x.TransDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmss),
-                        HomeID = x.HomeId,
-                        AwayID = x.AwayId,
-                        TransID = x.TransId,
-                        BetType = x.BetType,
-                        BetTeam = x.BetTeam,
-                        Stake = x.Stake,
-                        Odds = x.Odds,
-                        LiveScore = x.LiveIndicator ? (x.LiveHomeScore + " - " + x.LiveAwayScore) : "-",
-                        MatchName = GetMatchName(x)
-                    });
+                        {
+                            TransDate = x.TransDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff),
+                            HomeID = x.HomeId,
+                            AwayID = x.AwayId,
+                            TransID = x.TransId,
+                            BetType = x.BetType,
+                            BetTypeName = CachedRef.GetBettypeName(x.BetType),
+                            BetTeam = x.BetTeam,
+                            Stake = x.Stake,
+                            Odds = x.Odds,
+                            LiveScore = x.LiveIndicator ? (x.LiveHomeScore + " - " + x.LiveAwayScore) : "-",
+                            MatchName = GetMatchName(x)
+                        }).OrderByDescending(x => x.TransDate);
                 }
-                else
-                {
-                    result = GetRobotBettingTicketDetailDataTest();
-                }
-            }           
+            }
 
             return Json(result, JsonRequestBehavior.AllowGet);
-        }
+        } 
+
+        private string GetTranIdList(IEnumerable<string> suspiciousTransList)
+        {
+            var tranIds = new List<string>();
+
+            foreach (var level1 in suspiciousTransList)
+            {
+                var susTranIdsLevel1 = level1.Split(',');
+
+                foreach (var level2 in susTranIdsLevel1)
+                {
+                    var susTranIdsLevel2 = level2.Split('#');
+
+                    if (susTranIdsLevel2.Length > 1)
+                    {
+                        tranIds.AddRange(susTranIdsLevel2);
+                    }
+                    else
+                    {
+                        tranIds.Add(level2);
+                    }
+                }
+            }
+
+            return string.Join(",", tranIds.Distinct());
+        }     
 
         public string GetMatchName(RobotBettingTicketDetailModel ticket)
         {
@@ -1631,33 +1636,7 @@
             }
 
             return rs;
-        }
-
-        private IEnumerable<RobotBettingDetailViewModel> GetRobotBettingTicketDetailDataTest()
-        {
-            var result = new List<RobotBettingDetailViewModel>();
-
-            for (int i = 0; i < 5; i++)
-            {
-                result.Add(new RobotBettingDetailViewModel
-                {
-                    TransDate = DateTime.Now.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmss),
-                    HomeID = 1,
-                    AwayID = 2,
-                    TransID = 113343343,
-                    BetType = 1,
-                    BetTeam = "OU",
-                    Stake = new decimal(4654),
-                    Odds = new decimal(444),
-                    LiveScore = "1-0",
-                    MatchName = "name"
-                });
-            }            
-
-            return result;
-        }
-
-        #region Robot Betting
+        }      
 
         #endregion
 
