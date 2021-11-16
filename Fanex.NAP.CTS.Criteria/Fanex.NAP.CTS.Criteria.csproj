@@ -78,6 +78,7 @@
     <Compile Include="Account\RobotSetting\GetRobotUsersDetailsCriteria.cs" />
     <Compile Include="Api\GetAssociationForExtAccCriteria.cs" />
     <Compile Include="Api\GetSubscriberInfoBySubscriberName.cs" />
+    <Compile Include="Api\UpdateCategoryWhenPAUpdated\UpdateCategoryToCTSWhenPAUpdatedCriteria.cs" />
     <Compile Include="AssociationDetection\GetAssociationDetectionCriteria.cs" />
     <Compile Include="Api\ProblemCaseMonitor\ProblemCaseCriteria.cs" />
     <Compile Include="Api\ProblemCaseMonitor\ProblemCaseMonitorCriteria.cs" />

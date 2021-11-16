@@ -156,7 +156,8 @@
             RemoveFlaggedEvi_CheckRobotUser = 38,
             RemoveMultiEvi_CheckRobotUser = 39,
             ExcludeTaggingAss_CheckRobotUser = 40,
-            InsertPAJob = 41
+            InsertPAJob = 41,
+            UpdateCategory = 42
         };
 
         public enum DangerLevel

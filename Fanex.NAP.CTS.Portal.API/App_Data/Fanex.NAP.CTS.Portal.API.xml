@@ -575,6 +575,13 @@
             <param name="custIds">List custId in string format, separated by comma</param>
             <returns>true: success; false: failed</returns>
         </member>
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.UpdateCategoryToCTSWhenPAUpdated(Fanex.NAP.CTS.Model.API.ProblemCaseMonitor.UpdateCategoryParamsModel)">
+            <summary>
+            Update Category To CTS When PA Updated
+            </summary>
+            <param name="paras"></param>
+            <returns></returns>
+        </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetCustomerClassCategory">
             <summary>
             Get customer class's categories

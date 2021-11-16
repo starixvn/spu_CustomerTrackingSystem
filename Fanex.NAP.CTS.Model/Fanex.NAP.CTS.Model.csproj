@@ -165,6 +165,10 @@
     <Compile Include="API\CustomerClassModel.cs" />
     <Compile Include="API\CustomerClassification.cs" />
     <Compile Include="API\ProblemCaseMonitor\ProblemCaseMonitorModel.cs" />
+    <Compile Include="API\ProblemCaseMonitor\UpdateCategoryParamsModel.cs" />
+    <Compile Include="API\UpdateCategoryWhenPAUpdated\CustInfoModel.cs" />
+    <Compile Include="API\UpdateCategoryWhenPAUpdated\UpdateCategoryModel.cs" />
+    <Compile Include="API\UpdateCategoryWhenPAUpdated\UpdateCategoryResultModel.cs" />
     <Compile Include="AssociationDetection\GetAssociationDetectionModel.cs" />
     <Compile Include="API\ProblemCaseMonitor\ProblemCaseModel.cs" />
     <Compile Include="API\ProblemCaseMonitor\ProblemCaseMonitorParamsModel.cs" />
