@@ -7,17 +7,11 @@
 
         public string Username { get; set; }
 
-        public int RoleID { get; set; }
-
-        public int CustomerClass { get; set; }
-
         public decimal? Winloss { get; set; }
 
-        public decimal Turnover { get; set; }
+        public bool IsMonitorCategoryGroup { get; set; }
 
-        public int BetCount { get; set; }
-
-        public int ActiveDays { get; set; }
+        public bool IsMonitorSite { get; set; }
 
 
     }

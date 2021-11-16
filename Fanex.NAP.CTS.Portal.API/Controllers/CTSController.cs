@@ -7,6 +7,7 @@
     using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Core.Helpers.Xml;
     using Fanex.NAP.CTS.Core.Utilities;
+    using Fanex.NAP.CTS.Criteria.TWProblemAccountDetection;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.API;
     using Fanex.NAP.CTS.Model.API.ProblemCaseMonitor;
@@ -331,27 +332,44 @@
         }
 
         [HttpPost]
-        public void AddSystemFormulaBetAccount(string usernameList)
+        public void AddSystemFormulaBetAccount(NapProblemAccInsertCriteria dataParam)
         {
-            int[] custClass = { 1, 111, 112, 113, 2, 121, 122, 123, 3, 31, 32, 33 };
-            var orgCustomerList = usernameList.Split(',').Select(u => new TWProblemAccountModel { Username = u });
-            var customers = _problemAccountMonitorService.GetCustClassBySite(usernameList);
-            var perfCust = _problemAccountMonitorService.GetCustomerPerformance(string.Join(",", customers.Select(c => c.CustID)));
+            var orgCustomerList = dataParam.CustomerList.Split(',').Select(u => new TWProblemAccountModel { Username = u });
+            var customers = _problemAccountMonitorService.GetCustClassBySite(dataParam.CustomerList);
+            var perfCust = _problemAccountMonitorService.GetCustomerPerformance(string.Join(",", customers.Where(c => c.IsMonitorSite).Select(c => c.CustID)));
             var fullData = (from oCust in orgCustomerList
                         join cust in customers on oCust.Username equals cust.Username into temp from cust in temp.DefaultIfEmpty()
                         join pCust in perfCust on cust.CustID equals pCust.CustID into temp2 from pCust in temp2.DefaultIfEmpty()
                         select new TWProblemAccountModel 
                         {
-                            CustID = oCust.CustID,
+                            CustID = cust.CustID,
                             Username = oCust.Username,
-                            CustomerClass = cust == null ? -1 : cust.CustomerClass,
-                            Winloss = pCust.Winloss
+                            IsMonitorCategoryGroup = cust.IsMonitorCategoryGroup,
+                            IsMonitorSite = cust.IsMonitorSite,
+                            Winloss = pCust == null ? 0 : pCust.Winloss
                         }).ToList();
-            var monitorList = fullData.Where(c => c.Winloss < 0 || (c.Winloss >= 0 && custClass.Contains(c.CustomerClass)));
+            var monitorList = fullData.Where(c => (c.Winloss < 0 && c.IsMonitorSite) || (c.Winloss >= 0 && c.IsMonitorSite && c.IsMonitorCategoryGroup));
+            var monitorListMoreData = monitorList.Select(c => new
+            {
+                CustID = c.CustID,
+                UserName = c.Username,
+                RoleID = dataParam.RoleId,
+                ReasonID = dataParam.ReasonId,
+                PreventActionID = dataParam.PreventActionId,
+                Comment = dataParam.PreventActionId,
+                VoidTime = dataParam.VoidTime,
+                LimitAcount = dataParam.LimitAmount,
+                UserID = dataParam.UserId,
+                IP = dataParam.IP
+            });
+
             var markPAList = fullData.Except(monitorList);
-            _problemAccountMonitorService.InsertSystemFormulaCust(string.Join(",", monitorList.Select(c => c.CustID)));
-            _problemAccountMonitorService.InsertProblemAccToNAP(string.Join(",", markPAList.Select(c => c.Username)));
-            _problemAccountMonitorService.RemoveSystemFormulaBetCustomer(string.Join(",", markPAList.Select(c => c.Username)));
+
+            var monitorListMoreDataJson = JsonConvert.SerializeObject(monitorListMoreData);
+            _problemAccountMonitorService.InsertSystemFormulaCust(monitorListMoreDataJson);
+
+            _problemAccountMonitorService.InsertProblemAccToNAP(string.Join(",", markPAList.Select(c => c.Username)), dataParam);
+            _problemAccountMonitorService.RemoveSystemFormulaBetCustomer(string.Join(",", markPAList.Select(c => c.CustID)));
         }
 
         ///This code for GraphDB - Neo4j

@@ -9,7 +9,7 @@
         public string CustIdList { get; set; }
 
         public override string GetSettingKey()
-            => "CTS_DC_SystemFormulaBetMonitor_Remove";
+            => "CTS_DC_TWProblemDetectionMonitor_Remove";
 
         public override bool IsValid()
             => true;

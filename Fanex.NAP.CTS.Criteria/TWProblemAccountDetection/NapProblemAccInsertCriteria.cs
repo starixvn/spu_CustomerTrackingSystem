@@ -19,6 +19,10 @@
 
         public decimal LimitAmount { get; set; }
 
+        public int UserId { get; set; }
+
+        public string IP { get; set; }
+
 
         public override string GetSettingKey()
             => "Nap_ProblemAccount_AddCustomer";

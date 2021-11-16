@@ -243,7 +243,6 @@
             var criteria = new GetCustClassificationBySiteCriteria() 
             {
                 UsernameList = usernameList,
-                SiteIdList  = ""
             };
             
             return repository.Fetch<TWProblemAccountModel>(criteria);
@@ -259,11 +258,11 @@
             return repository.Fetch<TWProblemAccountModel>(criteria);
         }
         
-        public int InsertSystemFormulaCust(string custIdList)
+        public int InsertSystemFormulaCust(string customerJson)
         {
             var criteria = new InsertSystemFormulaBetCriteria() 
             {
-                CustIdList = custIdList
+                CustDetectInfo = customerJson
             };
             
             return repository.Execute(criteria);
@@ -279,17 +278,19 @@
             repository.Execute(criteria);
         }
 
-        public int InsertProblemAccToNAP(string usernameList)
+        public int InsertProblemAccToNAP(string usernameList, NapProblemAccInsertCriteria paramFromTW)
         {
             var criteria = new NapProblemAccInsertCriteria() 
             {
                 CustomerList = usernameList,
-                RoleId = 1,
-                ReasonId = 1,
-                PreventActionId = 1,
-                Comment = "",
-                VoidTime = "At Settlement",
-                LimitAmount = 0 //unlimited
+                RoleId = paramFromTW.RoleId,
+                ReasonId = paramFromTW.ReasonId,
+                PreventActionId = paramFromTW.PreventActionId,
+                Comment = paramFromTW.Comment,
+                VoidTime = paramFromTW.VoidTime,
+                LimitAmount = paramFromTW.LimitAmount,
+                UserId = paramFromTW.UserId,
+                IP = paramFromTW.IP
             };
             
             return repository.Execute(criteria);

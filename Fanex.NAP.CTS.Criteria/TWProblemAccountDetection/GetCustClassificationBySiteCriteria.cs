@@ -12,7 +12,7 @@
         public string UsernameList { get; set; }
 
         public override string GetSettingKey()
-            => "CTS_DC_GetCustClassificationBySite";
+            => "CTS_DC_TWProblemDetectionMonitor_Get";
 
         public override bool IsValid()
             => true;

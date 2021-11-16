@@ -5,13 +5,13 @@
 
     public class InsertSystemFormulaBetCriteria : NonQueryCommand
     {        
-        [SpParam(SqlParamName = "ip_CustIDList")]
-        public string CustIdList { get; set; }
+        [SpParam(SqlParamName = "ip_CustDetectInfo")]
+        public string CustDetectInfo { get; set; }
 
         public override string GetSettingKey()
-            => "CTS_DC_SystemFormulaBetMonitor_Insert";
+            => "CTS_DC_TWProblemDetectionMonitor_Insert";
 
         public override bool IsValid()
-            => !string.IsNullOrEmpty(CustIdList);
+            => !string.IsNullOrEmpty(CustDetectInfo);
     }
 }
