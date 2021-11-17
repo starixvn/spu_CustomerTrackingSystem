@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Model.API.ProblemCaseMonitor
+﻿namespace Fanex.NAP.CTS.Model.API.UpdateCategoryWhenPAUpdated
 {
     using Fanex.NAP.CTS.Model.API.UpdateCategoryWhenPAUpdated;
     using System.Collections.Generic;

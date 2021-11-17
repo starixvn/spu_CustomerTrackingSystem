@@ -10,6 +10,7 @@
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.API;
     using Fanex.NAP.CTS.Model.API.ProblemCaseMonitor;
+    using Fanex.NAP.CTS.Model.API.UpdateCategoryWhenPAUpdated;
     using Fanex.NAP.CTS.Model.CustomerClassify;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
@@ -38,6 +39,9 @@
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
     using IProblemCaseMonitorService = Service.Interface.Api.IProblemCaseMonitorService;
 
+    /// <summary>
+    /// CtsController
+    /// </summary>
     public class CtsController : ApiController
     {
         private readonly IAccountService _accountService;
@@ -597,7 +601,23 @@
                 if (paras != null && paras.CustInfos != null && paras.CustInfos.Any())
                 {                    
                     var updateCategoryResult = _updateCategoryService.UpdateCategoryToCTSWhenPAUpdated(paras);
-                    
+
+                    if (updateCategoryResult != null && updateCategoryResult.Any())
+                    {
+                        var assCustForRollbacks = updateCategoryResult.Select(x => new NewPAAssociationCustomerForRollbackModel
+                        {
+                            CTSCustID = x.CTSCustID,
+                            CustID = x.CustID
+                        });
+
+                        var listCustIdToSyncCC = assCustForRollbacks.Select(x => (long)x.CustID);
+
+                        var options = new PushDataToExternalModel { ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize, IsPushCCToSoon88 = true };
+
+                        _customerClassifyService.CheckNewPAAssociationCustomerForRollback(assCustForRollbacks);
+
+                        _custClassificationService.PushDataToExternal(listCustIdToSyncCC, options);
+                    }
                 }
             }
             catch (Exception ex)

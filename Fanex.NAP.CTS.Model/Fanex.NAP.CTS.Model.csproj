@@ -165,7 +165,7 @@
     <Compile Include="API\CustomerClassModel.cs" />
     <Compile Include="API\CustomerClassification.cs" />
     <Compile Include="API\ProblemCaseMonitor\ProblemCaseMonitorModel.cs" />
-    <Compile Include="API\ProblemCaseMonitor\UpdateCategoryParamsModel.cs" />
+    <Compile Include="API\UpdateCategoryWhenPAUpdated\UpdateCategoryParamsModel.cs" />
     <Compile Include="API\UpdateCategoryWhenPAUpdated\CustInfoModel.cs" />
     <Compile Include="API\UpdateCategoryWhenPAUpdated\UpdateCategoryModel.cs" />
     <Compile Include="API\UpdateCategoryWhenPAUpdated\UpdateCategoryResultModel.cs" />
