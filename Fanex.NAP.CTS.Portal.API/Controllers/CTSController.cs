@@ -366,10 +366,12 @@
             var markPAList = fullData.Except(monitorList);
 
             var monitorListMoreDataJson = JsonConvert.SerializeObject(monitorListMoreData);
+            LogService.Info(monitorListMoreDataJson);
             _problemAccountMonitorService.InsertSystemFormulaCust(monitorListMoreDataJson);
 
             _problemAccountMonitorService.InsertProblemAccToNAP(string.Join(",", markPAList.Select(c => c.Username)), dataParam);
             _problemAccountMonitorService.RemoveSystemFormulaBetCustomer(string.Join(",", markPAList.Select(c => c.CustID)));
+            LogService.Info(string.Join(",", markPAList.Select(c => c.CustID)));
         }
 
         ///This code for GraphDB - Neo4j
