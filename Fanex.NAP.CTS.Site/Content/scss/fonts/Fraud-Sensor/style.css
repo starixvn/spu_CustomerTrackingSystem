@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'Fraud-Sensor';
-  src:  url('fonts/Fraud-Sensor.eot?kkuw88');
-  src:  url('fonts/Fraud-Sensor.eot?kkuw88#iefix') format('embedded-opentype'),
-    url('fonts/Fraud-Sensor.ttf?kkuw88') format('truetype'),
-    url('fonts/Fraud-Sensor.woff?kkuw88') format('woff'),
-    url('fonts/Fraud-Sensor.svg?kkuw88#Fraud-Sensor') format('svg');
+  src:  url('fonts/Fraud-Sensor.eot?2kt4c1');
+  src:  url('fonts/Fraud-Sensor.eot?2kt4c1#iefix') format('embedded-opentype'),
+    url('fonts/Fraud-Sensor.ttf?2kt4c1') format('truetype'),
+    url('fonts/Fraud-Sensor.woff?2kt4c1') format('woff'),
+    url('fonts/Fraud-Sensor.svg?2kt4c1#Fraud-Sensor') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,35 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-big-robot .path1:before {
+  content: "\e91c";
+  color: rgb(255, 255, 255);
+}
+.icon-big-robot .path2:before {
+  content: "\e91d";
+  margin-left: -1em;
+  color: rgb(2, 2, 2);
+}
+.icon-big-robot .path3:before {
+  content: "\e91e";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-big-robot .path4:before {
+  content: "\e91f";
+  margin-left: -1em;
+  color: rgb(2, 2, 2);
+}
+.icon-big-robot .path5:before {
+  content: "\e920";
+  margin-left: -1em;
+  color: rgb(2, 2, 2);
+}
+.icon-big-robot .path6:before {
+  content: "\e921";
+  margin-left: -1em;
+  color: rgb(2, 2, 2);
+}
 .icon-bad-robot .path1:before {
   content: "\e904";
   color: rgb(255, 255, 255);

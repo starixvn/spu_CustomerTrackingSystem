@@ -11,6 +11,7 @@
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
+    using Fanex.NAP.CTS.Model.Account.RobotBetting;
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.CustomerClassify;
     using Fanex.NAP.CTS.Model.GraphDB;
@@ -28,6 +29,7 @@
     using Fanex.NAP.CTS.ViewModel.Account.ChainToEvidence;
     using Fanex.NAP.CTS.ViewModel.Account.CustomerCategory;
     using Fanex.NAP.CTS.ViewModel.Account.Evidence;
+    using Fanex.NAP.CTS.ViewModel.Account.RobotBetting;
     using Fanex.NAP.CTS.ViewModel.Account.TransactionHistory;
     using Newtonsoft.Json;
     using System;
@@ -50,6 +52,7 @@
         private readonly ICustomerClassificationService _customerClassificationService;
         private readonly ICommonService _commonService;
         private readonly IRobotClassificationService _robotClassificationService;
+        private readonly IRobotBettingService _robotBettingService;
 
         public override string BaseControllerName { get => string.Empty; }
 
@@ -63,6 +66,7 @@
             _customerClassificationService = new CustomerClassificationService();
             _commonService = new CommonService();
             _robotClassificationService = new RobotClassificationService();
+            _robotBettingService = new RobotBettingService();
         }
 
         public ActionResult Index(long Id)
@@ -1519,6 +1523,122 @@
         }
 
         #endregion Robot Classification
+
+        #region Robot Betting
+        public ActionResult RobotBetting()
+        {
+            return PartialView("RobotBetting/RobotBetting");
+        }
+
+        [HttpPost]
+        public ActionResult GetRobotBetting(long custID)
+        {
+            var firstRobotDate = string.Empty;
+            var lastRobotDate = string.Empty;
+            var robotBettingList = Enumerable.Empty<RobotBettingViewModel>();
+
+            var robotBettings = _robotBettingService.GetRobotBetting(custID, out RobotDateModel robotDate);            
+
+            if (robotBettings != null && robotBettings.Any())
+            {
+                robotBettingList = robotBettings.Select(x => new RobotBettingViewModel
+                {
+                    CustID = x.CustID,
+                    PeriodRangeType = x.PeriodRangeType,
+                    PeriodRangeName = x.PeriodRangeName
+                });
+
+                firstRobotDate = robotDate.FirstRobotDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff);
+                lastRobotDate = robotDate.LastRobotDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff);
+            }
+
+            return Json(new
+            {
+                firstRobotDate = firstRobotDate,
+                lastRobotDate = lastRobotDate,                
+                data = robotBettingList,
+            }, JsonRequestBehavior.AllowGet);            
+        }
+
+        [HttpPost]
+        public ActionResult GetRobotBettingDetail(long custID, int periodRangeType)
+        {
+            var result = Enumerable.Empty<RobotBettingDetailViewModel>();
+
+            var robotUserDetails = _robotBettingService.GetRobotUserDetails(custID, periodRangeType);
+
+            if (robotUserDetails != null && robotUserDetails.Any())
+            {
+                var suspiciousTransList = robotUserDetails.Select(x => x.SuspiciousTransList);               
+
+                var tranIdList = GetTranIdList(suspiciousTransList);
+
+                var ticketDetail = _robotBettingService.GetRobotBettingTicketDetails(tranIdList);
+
+                if (ticketDetail != null && ticketDetail.Any())
+                {
+                    result = ticketDetail.Select(x => new RobotBettingDetailViewModel
+                        {
+                            TransDate = x.TransDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff),
+                            HomeID = x.HomeId,
+                            AwayID = x.AwayId,
+                            TransID = x.TransId,
+                            BetType = x.BetType,
+                            BetTypeName = CachedRef.GetBettypeName(x.BetType),
+                            BetTeam = x.BetTeam,
+                            Stake = x.Stake,
+                            Odds = x.Odds,
+                            LiveScore = x.LiveIndicator ? (x.LiveHomeScore + " - " + x.LiveAwayScore) : "-",
+                            MatchName = GetMatchName(x)
+                        }).OrderByDescending(x => x.TransDate);
+                }
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        } 
+
+        private string GetTranIdList(IEnumerable<string> suspiciousTransList)
+        {
+            var tranIds = new List<string>();
+
+            foreach (var level1 in suspiciousTransList)
+            {
+                var susTranIdsLevel1 = level1.Split(',');
+
+                foreach (var level2 in susTranIdsLevel1)
+                {
+                    var susTranIdsLevel2 = level2.Split('#');
+
+                    if (susTranIdsLevel2.Length > 1)
+                    {
+                        tranIds.AddRange(susTranIdsLevel2);
+                    }
+                    else
+                    {
+                        tranIds.Add(level2);
+                    }
+                }
+            }
+
+            return string.Join(",", tranIds.Distinct());
+        }     
+
+        public string GetMatchName(RobotBettingTicketDetailModel ticket)
+        {
+            var rs = "-";
+
+            var HomeName = CachedRef.GetTeamName(ticket.HomeId);
+            var AwayName = CachedRef.GetTeamName(ticket.AwayId);
+
+            if (!string.IsNullOrEmpty(HomeName) || !string.IsNullOrEmpty(AwayName))
+            {
+                rs = HomeName + " vs " + AwayName;
+            }
+
+            return rs;
+        }      
+
+        #endregion
 
         #region Betting Statistic
 

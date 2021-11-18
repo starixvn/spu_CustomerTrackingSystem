@@ -343,7 +343,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
                 content: " ";
                 position: absolute;
                 height: 103%;
-                width: 90%;
+                width: 50%;
                 top: 0;
                 right: -2.3rem;
                 border-top-right-radius: 3px;
@@ -1200,6 +1200,27 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
         color: #070F1F;
         font-weight: 600;
     }
+
+    .robot-betting {
+        background: #A1AFCD;
+        cursor: pointer;
+
+        span {
+            color: #fff;
+            font-weight: 600;
+
+            .title-robot {
+                font-family: "Lato", Arial, Tahoma, sans-serif !important;
+                font-style: normal;
+                font-weight: 500;
+            }
+        }
+
+        &[disabled] {
+            cursor: not-allowed;
+        }
+    }
+
 }
 
 .table tbody .group-start td {
@@ -2084,6 +2105,15 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     span{
         &:before{
             font-size : 2rem;
+        }
+    }
+}
+
+.icon-big-Robot {
+    margin-right: 1rem;
+    span {
+        &:before {
+            font-size: 2rem;
         }
     }
 }

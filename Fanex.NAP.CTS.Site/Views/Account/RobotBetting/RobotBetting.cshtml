@@ -1,0 +1,36 @@
+﻿@using Fanex.NAP.CTS.Model;
+
+@{
+    ViewBag.Title = "RobotBetting";
+}
+
+<div>
+    <div style="padding-top: 0.6rem">
+        <div class="filter">
+            <div class="form-control">
+                <span id="spanFirstRobotDate"></span>
+            </div>
+            <div class="form-control">
+                <span id="spanLastRobotDate"></span>
+            </div>
+        </div>
+    </div>         
+    
+    <div id="divRobotBetting" class="table-report">
+        <table id="tableRobotBetting" class="table table-striped" style="width: 100%">
+            <thead>
+                <tr>
+                    <th>Trans Date</th>                    
+                    <th>Match</th>
+                    <th>Trans ID</th>
+                    <th>Bet Type</th>
+                    <th>Bet Team</th>
+                    <th>Stake</th>
+                    <th>Odds</th>
+                    <th>Live Score</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>

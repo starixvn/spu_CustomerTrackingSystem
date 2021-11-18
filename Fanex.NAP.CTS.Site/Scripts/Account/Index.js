@@ -17,6 +17,7 @@
         tabCustomerCategory: $("#customer_category"),
         tabTransactionHistory: $("#trans_history"),
         tabRobotClassification: $("#robot_classification"),
+        tabRobotBetting: $('#robot_betting'),
         spanTotalAssociated: $('#spanTotalAssociated'),
         spanTotalEvidences: $('#spanTotalEvidences'),
         spanClass: $('#spanClass'),
@@ -114,6 +115,22 @@
             complete: function () {
                 var transHistory = new transaction_history();
                 transHistory.Initial(ctsCustId, subscriberId, isViewIP);
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+            }
+        });
+    }
+
+    function LoadRobotBetting() {
+        $.ajax(common.modifyRelativeUrl('Account/RobotBetting'), {
+            type: 'POST',
+            success: function (response) {
+                domElements.tabRobotBetting.html(response);
+            },
+            complete: function () {
+                var robotBetting = new robot_betting();
+                robotBetting.Initial(custId);
             },
             error: function (errMsg) {
                 console.log(errMsg);
@@ -289,6 +306,7 @@
         LoadTransactionHistory();
         LoadCustomerCategory();
         LoadLastestRobotClassification();
+        LoadRobotBetting();
 
         domElements.spanTotalAssociated.on('click', function () {
             domElements.associatedAccountTab.trigger("click");
