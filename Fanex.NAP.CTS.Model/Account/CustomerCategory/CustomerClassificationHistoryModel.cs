@@ -43,5 +43,7 @@
         public decimal TWDesktopUsageRate { get; set; }
 
         public int RobotCounter { get; set; }
+
+        public int LastModifiedBy { get; set; }
     }
 }
