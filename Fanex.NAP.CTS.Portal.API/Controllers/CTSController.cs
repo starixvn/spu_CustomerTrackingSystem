@@ -332,49 +332,68 @@
         }
 
         [HttpPost]
-        public void AddSystemFormulaBetAccount(NapProblemAccInsertCriteria dataParam)
+        public string AddSystemFormulaBetAccount(NapProblemAccInsertCriteria dataParam)
         {
+            var result = "Add Successfully";
             var orgCustomerList = dataParam.CustomerList.Split(',').Select(u => new TWProblemAccountModel { Username = u });
-            var customers = _problemAccountMonitorService.GetCustClassBySite(dataParam.CustomerList);
-            var perfCust = _problemAccountMonitorService.GetCustomerPerformance(string.Join(",", customers.Where(c => c.IsMonitorSite).Select(c => c.CustID)));
-            var fullData = (from oCust in orgCustomerList
-                        join cust in customers on oCust.Username equals cust.Username into temp from cust in temp.DefaultIfEmpty()
-                        join pCust in perfCust on cust.CustID equals pCust.CustID into temp2 from pCust in temp2.DefaultIfEmpty()
-                        select new TWProblemAccountModel 
-                        {
-                            CustID = cust.CustID,
-                            Username = oCust.Username,
-                            IsMonitorCategoryGroup = cust.IsMonitorCategoryGroup,
-                            IsMonitorSite = cust.IsMonitorSite,
-                            Winloss = pCust == null ? 0 : pCust.Winloss
-                        }).ToList();
-            var monitorList = fullData.Where(c => (c.Winloss < 0 && c.IsMonitorSite) || (c.Winloss >= 0 && c.IsMonitorSite && c.IsMonitorCategoryGroup));
-            var monitorListMoreData = monitorList.Select(c => new
+            if (orgCustomerList.Count() > 100)
             {
-                CustID = c.CustID,
-                UserName = c.Username,
-                RoleID = dataParam.RoleId,
-                ReasonID = dataParam.ReasonId,
-                PreventActionID = dataParam.PreventActionId,
-                Comment = dataParam.Comment,
-                VoidTime = dataParam.VoidTime,
-                LimitAcount = dataParam.LimitAmount,
-                UserID = dataParam.UserId,
-                IP = dataParam.IP
-            });
-
-            var markPAList = fullData.Except(monitorList);
-
-            var monitorListMoreDataJson = JsonConvert.SerializeObject(monitorListMoreData);
-            LogService.Info(monitorListMoreDataJson);
-            _problemAccountMonitorService.InsertSystemFormulaCust(monitorListMoreDataJson);
-
-            if (markPAList.Any())
-            {
-                _problemAccountMonitorService.InsertProblemAccToNAP(string.Join(",", markPAList.Select(c => c.Username)), dataParam);
-                _problemAccountMonitorService.RemoveSystemFormulaBetCustomer(string.Join(",", markPAList.Select(c => c.CustID)));
-                LogService.Info(string.Join(",", markPAList.Select(c => c.CustID)));
+                result = "The maximum customer is 100. Please try again!";
             }
+            else
+            {
+                try
+                {
+                    var customers = _problemAccountMonitorService.GetCustClassBySite(dataParam.CustomerList);
+                    var perfCust = _problemAccountMonitorService.GetCustomerPerformance(string.Join(",", customers.Where(c => c.IsMonitorSite).Select(c => c.CustID)));
+                    var fullData = (from oCust in orgCustomerList
+                                    join cust in customers on oCust.Username equals cust.Username into temp
+                                    from cust in temp.DefaultIfEmpty()
+                                    join pCust in perfCust on cust.CustID equals pCust.CustID into temp2
+                                    from pCust in temp2.DefaultIfEmpty()
+                                    select new TWProblemAccountModel
+                                    {
+                                        CustID = cust.CustID,
+                                        Username = oCust.Username,
+                                        IsMonitorCategoryGroup = cust.IsMonitorCategoryGroup,
+                                        IsMonitorSite = cust.IsMonitorSite,
+                                        Winloss = pCust == null ? 0 : pCust.Winloss
+                                    }).ToList();
+                    var monitorList = fullData.Where(c => (c.Winloss < 0 && c.IsMonitorSite) || (c.Winloss >= 0 && c.IsMonitorSite && c.IsMonitorCategoryGroup));
+                    var monitorListMoreData = monitorList.Select(c => new
+                    {
+                        CustID = c.CustID,
+                        UserName = c.Username,
+                        RoleID = dataParam.RoleId,
+                        ReasonID = dataParam.ReasonId,
+                        PreventActionID = dataParam.PreventActionId,
+                        Comment = dataParam.Comment,
+                        VoidTime = dataParam.VoidTime,
+                        LimitAmount = dataParam.LimitAmount,
+                        UserID = dataParam.UserId,
+                        IP = dataParam.IP
+                    });
+
+                    var markPAList = fullData.Except(monitorList);
+
+                    var monitorListMoreDataJson = JsonConvert.SerializeObject(monitorListMoreData);
+                    LogService.Info(monitorListMoreDataJson);
+                    _problemAccountMonitorService.InsertSystemFormulaCust(monitorListMoreDataJson);
+
+                    if (markPAList.Any())
+                    {
+                        _problemAccountMonitorService.InsertProblemAccToNAP(string.Join(",", markPAList.Select(c => c.Username)), dataParam);
+                        _problemAccountMonitorService.RemoveSystemFormulaBetCustomer(string.Join(",", markPAList.Select(c => c.CustID)));
+                        LogService.Info(string.Join(",", markPAList.Select(c => c.CustID)));
+                    }
+                }
+                catch (Exception)
+                {
+                    result = "Add Failed. There is an error in when process. Please try again.";
+                }
+            }
+
+            return result;
         }
 
         ///This code for GraphDB - Neo4j
