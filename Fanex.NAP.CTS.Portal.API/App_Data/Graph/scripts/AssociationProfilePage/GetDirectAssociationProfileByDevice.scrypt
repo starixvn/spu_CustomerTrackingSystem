@@ -17,7 +17,9 @@ WITH c, c1, SubscriberID, SubscriberName, StatusGroup, ItemID, StatusName, Min(a
 OPTIONAL MATCH (c )-[e:HAS_EXCEPTION]-(c1)
 OPTIONAL MATCH (c1)-[:HAS_CATEGORY]->(ct:CustomerCategory)
 WHERE ct.CategoryID in $ip_CategoryIDs
-WITH 
+WITH c, c1, SubscriberID, SubscriberName, StatusGroup, ItemID, StatusName, firstAss, e, ct
+WHERE ( 0 IN $ip_CategoryIDs) OR (NOT 0 IN $ip_CategoryIDs AND ct.CategoryID IS NOT NULL)
+WITH
       c1.CTSCustID          AS CTSCustID
     , c1.CustID             AS CustId
     , c1.CustSubID          AS CustSubId
@@ -30,7 +32,7 @@ WITH
     , StatusName            AS StatusName
     , "Device"              AS AssociationTypeName  
     , CASE e WHEN NULL THEN 1 ELSE 2 END AS AssociationStatus
-    , CASE WHEN $ip_AssociationStatus in [0,2] and e IS NOT NULL THEN e.CreatedDate ELSE firstAss END AS AssociationDate
+    , CASE WHEN $ip_AssociationStatus in [0,2] and e.CreatedDate IS NOT NULL THEN e.CreatedDate ELSE firstAss END AS AssociationDate
     , ct.ParentID           AS ParentIDs
     , apoc.text.join(COLLECT(DISTINCT toString(ct.CategoryID)),",") AS CategoryIDs
     , apoc.text.join(COLLECT(DISTINCT ct.CategoryName),",")         AS CategoryNames

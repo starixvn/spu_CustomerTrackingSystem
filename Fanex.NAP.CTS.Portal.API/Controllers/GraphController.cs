@@ -54,7 +54,7 @@
         {
             try
             {
-                if (!string.IsNullOrEmpty(paras.SubscriberIDs) || !string.IsNullOrEmpty(paras.CategoryIDs))
+                if (!string.IsNullOrEmpty(paras.SubscriberIDs) && !string.IsNullOrEmpty(paras.CategoryIDs))
                 {
                     string queryScript = GetQueryScriptForAssProfile(paras.AssociationType);
 
