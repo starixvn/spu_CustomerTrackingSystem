@@ -39,12 +39,10 @@
 
             foreach (var cust in model.CustInfos)
             {
-                var custObj = JsonConvert.SerializeObject(cust);
-
                 data.Add(new LogInputDataModel
                 {
                     CustId = cust.CustID,
-                    InputValue = custObj
+                    InputValue = "FromReason: " + cust.FromReasonID + ", ToReason: " + cust.ToReasonID
                 });
             }
 
