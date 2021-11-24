@@ -133,6 +133,7 @@
                                 {
                                     ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
                                     IsPushCCToSoon88 = true,
+                                    IsUpdateDangerToMainDB = false
                                 });
 
                                 var hashCustInfos = syncResult.OutParam["custInfos"];
@@ -250,6 +251,7 @@
                             {
                                 ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
                                 IsPushCCToSoon88 = true,
+                                IsUpdateDangerToMainDB = false
                             });
 
                             var hashCustInfos = syncResult.OutParam["custInfos"];
@@ -537,7 +539,9 @@
                         CustIds = output.CustIds,
                         IsCheckPAFromNAP = false,
                         IsPushCCToSoon88 = true,
-                        FunctionId = FunctionId.RemovePAAPI
+                        FunctionId = FunctionId.RemovePAAPI,
+                        IsUpdateDangerToMainDB = true,
+                        DangerLevelType = DangerLevel.ABI
                     });
                 }
                 else if (!string.IsNullOrEmpty(output.ErrorMessage))

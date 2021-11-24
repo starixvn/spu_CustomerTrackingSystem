@@ -13,6 +13,10 @@
 
         public FunctionId FunctionId { get; set; }
 
+        public bool IsUpdateDangerToMainDB { get; set; }
+
+        public DangerLevel DangerLevelType { get; set; }
+
         public FunctionId FuncId_CheckPA
         {
             get

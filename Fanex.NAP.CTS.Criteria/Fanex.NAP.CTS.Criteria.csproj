@@ -87,6 +87,9 @@
     <Compile Include="Common\GetSubscriberGroupCriteria.cs" />
     <Compile Include="Category\GetCategoryCustomerClassCriteria.cs" />
     <Compile Include="Common\ValidateUsernameCriteria.cs" />
+    <Compile Include="CustomerClassify\AppliedDangerLevelUpdateCriteria.cs" />
+    <Compile Include="CustomerClassify\DangerLevelGetCriteria.cs" />
+    <Compile Include="CustomerClassify\DangerLevelUpdateCriteria.cs" />
     <Compile Include="ImportEvidences\CheckCleanCustFlaggedEvidenceCriteria.cs" />
     <Compile Include="LogInputData\LogInputDataCriteria.cs" />
     <Compile Include="CustomerClassify\GetExistedRobotUserCriteria.cs" />

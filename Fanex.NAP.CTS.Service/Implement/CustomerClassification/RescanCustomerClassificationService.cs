@@ -71,7 +71,7 @@
 
             if (custIdsPushCC != null && custIdsPushCC.Any())
             {
-                PushCCToExternal(custIdsPushCC, para.IsPushCCToSoon88);
+                PushCCToExternal(custIdsPushCC, para.IsPushCCToSoon88, para.IsUpdateDangerToMainDB, para.DangerLevelType);
             }
 
             return custIdsPushCC;
@@ -281,12 +281,14 @@
             }
         }
 
-        private void PushCCToExternal(List<long> custIdsToSyncCC, bool isPushCCToSoon88)
+        private void PushCCToExternal(List<long> custIdsToSyncCC, bool isPushCCToSoon88, bool isUpdateDanger, DangerLevel dangerLevelType)
         {
             custClassificationService.PushDataToExternal(custIdsToSyncCC, new PushDataToExternalModel
             {
                 ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
                 IsPushCCToSoon88 = isPushCCToSoon88,
+                IsUpdateDangerToMainDB = isUpdateDanger,
+                DangerLevelType = dangerLevelType
             });
 
             if (_isWriteLogInfo)
