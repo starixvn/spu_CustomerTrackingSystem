@@ -387,9 +387,11 @@
                         LogService.Info(string.Join(",", markPAList.Select(c => c.CustID)));
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     result = "Add Failed. There is an error in when process. Please try again.";
+                    LogService.Error("AddSystemFormulaBetAccount failed: "
+                                        + "\nException" + ex.Message + ex.StackTrace);
                 }
             }
 

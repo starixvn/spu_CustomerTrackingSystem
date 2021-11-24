@@ -25,7 +25,7 @@
 
 
         public override string GetSettingKey()
-            => "Nap_ProblemAccount_AddCustomer";
+            => "Nap_ProblemAccount_AutoInsertCustomer";
 
         public override bool IsValid()
             => !string.IsNullOrEmpty(CustomerList);
