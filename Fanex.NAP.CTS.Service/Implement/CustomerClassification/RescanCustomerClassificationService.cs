@@ -203,24 +203,13 @@
 
             if (!string.IsNullOrEmpty(custIds))
             {
-                var problemAccountsNAPCM = GetProblemAccountsFromNAP(custIds, null).ToList();
-                var problemAccountsCN88 = GetProblemAccountsFromNAP_CN88(custIds, null).ToList();
-
-                if (problemAccountsNAPCM != null && problemAccountsNAPCM.Any())
-                {
-                    probAccFromNap.AddRange(problemAccountsNAPCM);
-                }
-
-                if (problemAccountsCN88 != null && problemAccountsCN88.Any())
-                {
-                    probAccFromNap.AddRange(problemAccountsCN88);
-                }
+                return GetProblemAccountsFromNAP(custIds, null)?.Distinct() ?? new List<MultipleProblemAccountsModel>();
             }
 
             if (_isWriteLogInfo)
                 LogService.Info($"PA Rescan - Get PA Custs - with data: {JsonConvert.SerializeObject(probAccFromNap)}");
 
-            return probAccFromNap.Distinct();
+            return new List<MultipleProblemAccountsModel>();
         }
 
         private IEnumerable<MultipleProblemAccountsModel> GetExistedRobotUser(IEnumerable<long> custIds)
@@ -437,20 +426,6 @@
         private IEnumerable<MultipleProblemAccountsModel> GetProblemAccountsFromNAP(string custIDs, DateTime? dateTime)
         {
             var criteria = new GetProblemAccountsCriteria
-            {
-                CustIds = custIDs,
-                Datetime = dateTime
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<MultipleProblemAccountsModel>(criteria).ToList();
-            }
-        }
-
-        private IEnumerable<MultipleProblemAccountsModel> GetProblemAccountsFromNAP_CN88(string custIDs, DateTime? dateTime)
-        {
-            var criteria = new GetProblemAccountsCN88Criteria
             {
                 CustIds = custIDs,
                 Datetime = dateTime

@@ -24,7 +24,7 @@
 		<Setting Key="CTS_CustomerClass_GetByCustId" SpName="CTS_CustomerClass_GetByCustId_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
 		<Setting Key="CTS_DC_CustClassification_GetForSoon88" SpName="CTS_DC_CustClassification_GetForSoon88_xtest" DbName="MySQL.CTS_DataCenter.Reporter"/>
 		<Setting Key="TicketVoiding_CTS_ProblemAccountSelect" SpName="TicketVoiding_CTS_ProblemAccountSelect_xtest" DbName="DBCTS.bodb02.bodbSPUNet"/>
-		<Setting Key="TicketVoiding_CTS_ProblemAccountSelect_CN88" SpName="TicketVoiding_CTS_ProblemAccountSelect_CN88_xtest" DbName="DBCTS.bodb02.bodbSPUNet"/>
+		<!--<Setting Key="TicketVoiding_CTS_ProblemAccountSelect_CN88" SpName="TicketVoiding_CTS_ProblemAccountSelect_CN88_xtest" DbName="DBCTS.bodb02.bodbSPUNet"/>-->
 		<Setting Key="CTS_DC_CustClassification_GetLatestClassification" SpName="CTS_DC_CustClassification_GetLatestClassification_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustClassification_UpdateIsAppliedCC" SpName="CTS_DC_CustClassification_UpdateIsAppliedCC_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustEvidence_GetByCustIDs" SpName="CTS_DC_CustEvidence_GetByCustIDs_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
