@@ -5,16 +5,14 @@
     using Fanex.BetList.Core.TicketHelper;
     using Fanex.Data;
     using Fanex.Data.Repository;
-    using Fanex.Logging;
     using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Criteria.ProblemAccountMonitor;
     using Fanex.NAP.CTS.Criteria.TWProblemAccountDetection;
-    using Fanex.NAP.CTS.Model.CustomerClassify;
     using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Resource.Consts;
     using Newtonsoft.Json;
-    using System;    
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -278,7 +276,7 @@
             repository.Execute(criteria);
         }
 
-        public int InsertProblemAccToNAP(string usernameList, NapProblemAccInsertCriteria paramFromTW)
+        public string InsertProblemAccToNAP(string usernameList, TWProblemAccountParams paramFromTW)
         {
             var criteria = new NapProblemAccInsertCriteria() 
             {
@@ -290,10 +288,12 @@
                 VoidTime = paramFromTW.VoidTime,
                 LimitAmount = paramFromTW.LimitAmount,
                 UserId = paramFromTW.UserId,
-                IP = paramFromTW.IP
+                IP = paramFromTW.IP,
+                SuccessList = string.Empty
             };
             
-            return repository.Execute(criteria);
+            repository.Execute(criteria);
+            return criteria.SuccessList;
         }
     }
 }

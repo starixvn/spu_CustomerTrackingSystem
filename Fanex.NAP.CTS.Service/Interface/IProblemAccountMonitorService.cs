@@ -39,7 +39,7 @@
         IEnumerable<TWProblemAccountModel> GetCustomerPerformance(string custIdList);
 
         int InsertSystemFormulaCust(string custIdList);
-        int InsertProblemAccToNAP(string usernameList, NapProblemAccInsertCriteria paramFromTW);
+        string InsertProblemAccToNAP(string usernameList, TWProblemAccountParams paramFromTW);
         void RemoveSystemFormulaBetCustomer(string custIdList);
     }
 }

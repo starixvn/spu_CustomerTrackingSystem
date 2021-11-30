@@ -23,6 +23,8 @@
 
         public string IP { get; set; }
 
+        public string SuccessList { get; set; }
+
 
         public override string GetSettingKey()
             => "Nap_ProblemAccount_AutoInsertCustomer";

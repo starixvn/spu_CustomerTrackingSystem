@@ -197,6 +197,7 @@
     <Compile Include="TWProblemAccountDetection\InsertSystemFormulaBetCriteria.cs" />
     <Compile Include="TWProblemAccountDetection\GetCustClassificationBySiteCriteria.cs" />
     <Compile Include="TWProblemAccountDetection\RemoveSystemFormulaBetCustomerCriteria.cs" />
+    <Compile Include="TWProblemAccountDetection\TWProblemAccountParams.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fanex.NAP.CTS.Core\Fanex.NAP.CTS.Core.csproj">

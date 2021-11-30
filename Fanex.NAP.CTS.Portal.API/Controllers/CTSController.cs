@@ -18,6 +18,7 @@
     using Fanex.NAP.CTS.Model.ImportEvidences;
     using Fanex.NAP.CTS.Model.LogInputData;
     using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
+    using Fanex.NAP.CTS.Model.ProblemAccountMonitor.TWProblemAccount;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Model.Subscriber;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
@@ -332,15 +333,12 @@
         }
 
         [HttpPost]
-        public string AddSystemFormulaBetAccount(NapProblemAccInsertCriteria dataParam)
+        public JsonResult<InsertNAPProblemAccountResult> AddSystemFormulaBetAccount(TWProblemAccountParams dataParam)
         {
-            var result = "Add Successfully";
+            string successListFromNAP = string.Empty;
+            var result = string.Empty;
             var orgCustomerList = dataParam.CustomerList.Split(',').Select(u => new TWProblemAccountModel { Username = u });
-            if (orgCustomerList.Count() > 100)
-            {
-                result = "The maximum customer is 100. Please try again!";
-            }
-            else
+            if (orgCustomerList.Count() <= 100)
             {
                 try
                 {
@@ -382,20 +380,25 @@
 
                     if (markPAList.Any())
                     {
-                        _problemAccountMonitorService.InsertProblemAccToNAP(string.Join(",", markPAList.Select(c => c.Username)), dataParam);
-                        _problemAccountMonitorService.RemoveSystemFormulaBetCustomer(string.Join(",", markPAList.Select(c => c.CustID)));
+                        successListFromNAP = _problemAccountMonitorService.InsertProblemAccToNAP(string.Join(",", markPAList.Select(c => c.Username)), dataParam);
+                        if (string.IsNullOrEmpty(successListFromNAP))
+                        {
+                            _problemAccountMonitorService.RemoveSystemFormulaBetCustomer(string.Join(",", markPAList.Select(c => c.CustID)));
+                        }
+
                         LogService.Info(string.Join(",", markPAList.Select(c => c.CustID)));
                     }
+
+                    result = string.Join(",", monitorListMoreData.Select(c => c.UserName)) + successListFromNAP;
                 }
                 catch (Exception ex)
                 {
-                    result = "Add Failed. There is an error in when process. Please try again.";
                     LogService.Error("AddSystemFormulaBetAccount failed: "
                                         + "\nException" + ex.Message + ex.StackTrace);
                 }
             }
 
-            return result;
+            return Json(new InsertNAPProblemAccountResult { SuccessList = result });
         }
 
         ///This code for GraphDB - Neo4j
