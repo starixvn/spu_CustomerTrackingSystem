@@ -129,7 +129,9 @@
                     CustIds = new List<long> { custID },
                     IsCheckPAFromNAP = true,
                     IsPushCCToSoon88 = true,
-                    FunctionId = FunctionId.RemoveSpecialCCWeb
+                    FunctionId = FunctionId.RemoveSpecialCCWeb,
+                    IsUpdateDangerToMainDB = true,
+                    DangerLevelType = DangerLevel.ABI
                 });
             }
 

@@ -58,8 +58,8 @@
     <Compile Include="Implement\ProbationManagementService.cs" />
     <Compile Include="Implement\ManageSubscriberService.cs" />
     <Compile Include="Implement\ProblemCaseMonitorService.cs" />
-    <Compile Include="Implement\CustomerClassificationService.cs" />
-    <Compile Include="Implement\RescanCustomerClassificationService.cs" />
+    <Compile Include="Implement\CustomerClassification\CustomerClassificationService.cs" />
+    <Compile Include="Implement\CustomerClassification\RescanCustomerClassificationService.cs" />
     <Compile Include="Implement\RobotBettingService.cs" />
     <Compile Include="Implement\RobotClassificationService.cs" />
     <Compile Include="Implement\SpecialCustomerClassService.cs" />

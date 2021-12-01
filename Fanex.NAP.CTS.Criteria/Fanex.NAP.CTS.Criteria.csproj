@@ -87,13 +87,15 @@
     <Compile Include="Common\GetSubscriberGroupCriteria.cs" />
     <Compile Include="Category\GetCategoryCustomerClassCriteria.cs" />
     <Compile Include="Common\ValidateUsernameCriteria.cs" />
+    <Compile Include="CustomerClassify\AppliedDangerLevelUpdateCriteria.cs" />
+    <Compile Include="CustomerClassify\DangerLevelGetCriteria.cs" />
+    <Compile Include="CustomerClassify\DangerLevelUpdateCriteria.cs" />
     <Compile Include="ImportEvidences\CheckCleanCustFlaggedEvidenceCriteria.cs" />
     <Compile Include="LogInputData\LogInputDataCriteria.cs" />
     <Compile Include="CustomerClassify\GetExistedRobotUserCriteria.cs" />
     <Compile Include="CustomerClassify\GetRoleCustomerCriteria.cs" />
     <Compile Include="CustomerClassify\GetLastestClassificationCriteria.cs" />
     <Compile Include="CustomerClassify\GetExistedEvidencesCriteria.cs" />
-    <Compile Include="CustomerClassify\GetProblemAccountsCN88Criteria.cs" />
     <Compile Include="CustomerClassify\GetProblemAccountsCriteria.cs" />
     <Compile Include="CustomerClassify\NormalAccountsClassificationGeneralCategorizeDailyCriteria.cs" />
     <Compile Include="CustomerClassify\UpdateAppliedCustomerClassificationCriteria.cs" />

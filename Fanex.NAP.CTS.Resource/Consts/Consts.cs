@@ -158,5 +158,12 @@
             ExcludeTaggingAss_CheckRobotUser = 40,
             InsertPAJob = 41
         };
+
+        public enum DangerLevel
+        {
+            Original = 1,
+            ABI = 2,
+            Other = 3
+        }
     }
 }
