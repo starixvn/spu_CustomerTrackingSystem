@@ -25,6 +25,10 @@
 
         public string SuccessList { get; set; }
 
+        public int ErrCode { get; set; }
+
+        public string FailList { get; set; }
+
 
         public override string GetSettingKey()
             => "Nap_ProblemAccount_AutoInsertCustomer";

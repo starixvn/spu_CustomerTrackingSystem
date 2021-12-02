@@ -289,7 +289,9 @@
                 LimitAmount = paramFromTW.LimitAmount,
                 UserId = paramFromTW.UserId,
                 IP = paramFromTW.IP,
-                SuccessList = string.Empty
+                SuccessList = string.Empty,
+                FailList = string.Empty,
+                ErrCode = 0
             };
             
             repository.Execute(criteria);
