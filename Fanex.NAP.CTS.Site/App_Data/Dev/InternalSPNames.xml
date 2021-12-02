@@ -166,4 +166,8 @@
 		<Setting Key="CTS_DC_CustInfo_Profile_GetLoginStats" SpName="CTS_DC_CustInfo_Profile_GetLoginStats" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustInfo_Profile_GetDate" SpName="CTS_DC_CustInfo_Profile_GetDate" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
 	</Function>
+
+	<Function name="AntiFraudCase">
+		<Setting Key="CTS_DC_CustClassification_ProblemAccount_FilterByB2C" SpName="CTS_DC_CustClassification_ProblemAccount_FilterByB2C" DbName="MySQL.CTS_DataCenter.Reporter" />
+	</Function>
 </Functions>

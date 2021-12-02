@@ -22,12 +22,14 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public class RescanCustomerClassificationService : IRescanCustomerClassificationService
     {
         private readonly ICustomerClassificationService custClassificationService;
         private readonly ILogInputDataService logInputDataService;
+        private readonly IAntiFraudCenterService antiFraudCenterService;
         private readonly bool _isWriteLogInfo;
         private readonly IDynamicRepository repository;
 
@@ -37,6 +39,7 @@
             _isWriteLogInfo = ConfigSettings.IsWriteLogInfo;
             logInputDataService = new LogInputDataService();
             repository = new DynamicRepository();
+            antiFraudCenterService = new AntiFraudCenterService();
         }
 
         public void RescanCustomerClassify(RescanCustClassificationModel para)
@@ -71,7 +74,14 @@
 
             if (custIdsPushCC != null && custIdsPushCC.Any())
             {
-                PushCCToExternal(custIdsPushCC, para.IsPushCCToSoon88, para.IsUpdateDangerToMainDB, para.DangerLevelType);
+                Parallel.Invoke(() =>
+                {
+                    PushCCToExternal(custIdsPushCC, para.IsPushCCToSoon88, para.IsUpdateDangerToMainDB, para.DangerLevelType);
+                },
+                () =>
+                {
+                    antiFraudCenterService.InsertAFCAccounts(custIdsPushCC);
+                });
             }
 
             return custIdsPushCC;
@@ -331,14 +341,21 @@
 
                 if(custIds.Any())
                 {
-                    var custIdsChunk = custIds.Chunk(ConfigSettings.PushCCToExternalChunkSize).ToList();
-
-                    foreach (var custRescanNormal in custIdsChunk)
+                    Parallel.Invoke(() =>
                     {
-                        var custToString = string.Join(",", custRescanNormal);
+                        var custIdsChunk = custIds.Chunk(ConfigSettings.PushCCToExternalChunkSize).ToList();
 
-                        ClassifyCustomerGeneralCategoryDaily(custToString, funcId, false);
-                    }
+                        foreach (var custRescanNormal in custIdsChunk)
+                        {
+                            var custToString = string.Join(",", custRescanNormal);
+
+                            ClassifyCustomerGeneralCategoryDaily(custToString, funcId, false);
+                        }
+                    },
+                    () =>
+                    {
+                        antiFraudCenterService.DeleteAFCAccounts(custIds);
+                    });
                 }    
             }
         }

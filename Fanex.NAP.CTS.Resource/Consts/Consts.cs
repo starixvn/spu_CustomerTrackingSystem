@@ -63,6 +63,8 @@
         public const string AssociationTypeName_BettingPattern = "Betting Pattern";
         public const string AssociationTypeName_IP = "IP";
         public const string AssociationTypeName_IPAssociation = "IP Association";
+        
+        public const string AFCInternalKey = "xxx";
 
         public const int MatchMonitor_ReportQueryType = 2;
         

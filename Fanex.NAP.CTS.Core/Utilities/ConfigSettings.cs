@@ -86,6 +86,10 @@
 
         public static string GetProblemCaseMonitor => GetConfigStringByName("CTS_GetProblemCaseMonitor");
 
+        public static string InsertAntiFraudAccounts => GetConfigStringByName("AFC_InsertAccounts");
+
+        public static string DeleteAntiFraudAccounts => GetConfigStringByName("AFC_DeleteAccounts");
+
         public static int ImportEvidenceChunkSize
         {
             get

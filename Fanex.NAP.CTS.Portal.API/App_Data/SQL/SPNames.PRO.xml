@@ -65,6 +65,7 @@
 		<Setting Key="CTS_DC_Common_GetStaticList" SpName="CTS_DC_Common_GetStaticList" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_RPT_ProblemCaseMonitor" SpName="CTS_DC_RPT_ProblemCaseMonitor" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
+	
   <Function name="TWProblemAccountDetection">
     <Setting Key="CTS_DC_TWProblemDetectionMonitor_Remove" SpName="CTS_DC_TWProblemDetectionMonitor_Remove" DbName="MySQL.CTS_DataCenter.Admin" />
     <Setting Key="CTS_DC_TWProblemDetectionMonitor_Insert" SpName="CTS_DC_TWProblemDetectionMonitor_Insert" DbName="MySQL.CTS_DataCenter.Admin" />
@@ -72,4 +73,10 @@
     <Setting Key="CTS_CustomerClassification_GetPerformance" SpName="CTS_CustomerClassification_GetPerformance" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
     <Setting Key="Nap_ProblemAccount_AutoInsertCustomer" SpName="Nap_ProblemAccount_AutoInsertCustomer" DbName="DBCust.CustDB.bodbAdminNet" />
   </Function>
+
+	<Function name="AntiFraudCase">
+		<Setting Key="CTS_DC_CustClassification_ProblemAccount_FilterByB2C" SpName="CTS_DC_CustClassification_ProblemAccount_FilterByB2C" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="API_CustomerExtraInfo_Get" SpName="API_CustomerExtraInfo_Get" DbName="MySQL.LicenseDB.Siebog" />
+		<Setting Key="AFC_Get_B2CCustId" SpName="AFC_Get_B2CCustId_xtest" DbName="DBAGE.bodb02.bodbAdminNet" />
+	</Function>
 </Functions>

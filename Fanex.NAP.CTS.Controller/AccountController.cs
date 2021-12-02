@@ -56,6 +56,7 @@
         private readonly ICommonService _commonService;
         private readonly IRobotClassificationService _robotClassificationService;
         private readonly IRobotBettingService _robotBettingService;
+        private readonly IAntiFraudCenterService _antiFraudCenterService;
 
         public override string BaseControllerName { get => string.Empty; }
 
@@ -70,6 +71,7 @@
             _commonService = new CommonService();
             _robotClassificationService = new RobotClassificationService();
             _robotBettingService = new RobotBettingService();
+            _antiFraudCenterService = new AntiFraudCenterService();
         }
 
         public ActionResult Index(long Id)
@@ -1088,14 +1090,26 @@
                         DangerLevelType = DangerLevel.ABI
                     });
 
-                    var hashCustInfos = syncResult.OutParam["custInfos"];
-
-                    if (hashCustInfos != null)
+                    var tasks = new List<Task>
                     {
-                        var custInfos = (IEnumerable<NewPAAssociationCustomerForRollbackModel>)hashCustInfos;
+                        Task.Run(() =>
+                        {
+                            var hashCustInfos = syncResult.OutParam["custInfos"];
 
-                        _accountService.CheckNewPAAssociationCustomerForRollback(custInfos);
-                    }
+                            if (hashCustInfos != null)
+                            {
+                                var custInfos = (IEnumerable<NewPAAssociationCustomerForRollbackModel>)hashCustInfos;
+
+                                _accountService.CheckNewPAAssociationCustomerForRollback(custInfos);
+                            }
+                        }),
+                        Task.Run(() =>
+                        {
+                            _antiFraudCenterService.InsertAFCAccounts(syncCustIds);
+                        })
+                    };
+
+                    Task.WhenAll(tasks.ToArray());
                 }
             }
 
