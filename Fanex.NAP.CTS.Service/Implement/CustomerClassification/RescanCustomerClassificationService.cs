@@ -341,21 +341,14 @@
 
                 if(custIds.Any())
                 {
-                    Parallel.Invoke(() =>
-                    {
-                        var custIdsChunk = custIds.Chunk(ConfigSettings.PushCCToExternalChunkSize).ToList();
+                    var custIdsChunk = custIds.Chunk(ConfigSettings.PushCCToExternalChunkSize).ToList();
 
-                        foreach (var custRescanNormal in custIdsChunk)
-                        {
-                            var custToString = string.Join(",", custRescanNormal);
-
-                            ClassifyCustomerGeneralCategoryDaily(custToString, funcId, false);
-                        }
-                    },
-                    () =>
+                    foreach (var custRescanNormal in custIdsChunk)
                     {
-                        antiFraudCenterService.DeleteAFCAccounts(custIds);
-                    });
+                        var custToString = string.Join(",", custRescanNormal);
+
+                        ClassifyCustomerGeneralCategoryDaily(custToString, funcId, false);
+                    }
                 }    
             }
         }
