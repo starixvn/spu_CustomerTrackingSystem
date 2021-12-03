@@ -64,7 +64,7 @@
         public const string AssociationTypeName_IP = "IP";
         public const string AssociationTypeName_IPAssociation = "IP Association";
         
-        public const string AFCInternalKey = "xxx";
+        public const string AFCInternalKey = "4824D237091879E4F2E0C02E61362D8F";
 
         public const int MatchMonitor_ReportQueryType = 2;
         
