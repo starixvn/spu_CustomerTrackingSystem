@@ -10,6 +10,8 @@
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.API;
     using Fanex.NAP.CTS.Model.API.ProblemCaseMonitor;
+    using Fanex.NAP.CTS.Model.API.UpdateCategoryWhenPAUpdated;
+    using Fanex.NAP.CTS.Model.CustomerClassify;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.ImportEvidences;
@@ -20,7 +22,9 @@
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.Service.Implement;
+    using Fanex.NAP.CTS.Service.Implement.Api;
     using Fanex.NAP.CTS.Service.Interface;
+    using Fanex.NAP.CTS.Service.Interface.Api;
     using Fanex.NAP.CTS.ViewModel.API.ProblemCaseMonitor;
     using Fanex.NAP.SPU.Graph.Core;
     using Newtonsoft.Json;
@@ -35,6 +39,9 @@
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
     using IProblemCaseMonitorService = Service.Interface.Api.IProblemCaseMonitorService;
 
+    /// <summary>
+    /// CtsController
+    /// </summary>
     public class CtsController : ApiController
     {
         private readonly IAccountService _accountService;
@@ -48,6 +55,7 @@
         private readonly ISubscriberService _subscriberService;
         private readonly IProblemCaseMonitorService _problemCaseMonitorService;
         private readonly ILogInputDataService logInputDataService;
+        private readonly IUpdateCategoryService _updateCategoryService;
 
         /// <summary>
         /// Using for external site (TW, ExtAcc site...)
@@ -65,6 +73,7 @@
             _subscriberService = new SubscriberService();
             _problemCaseMonitorService = new Service.Implement.Api.ProblemCaseMonitorService();
             logInputDataService = new LogInputDataService();
+            _updateCategoryService = new UpdateCategoryService();
         }
 
         ///// <summary>
@@ -512,6 +521,8 @@
             var a = ApiHelper.Get<string>("http://ha.nexdev.net:7723/api/cts/GetAssociationForExtAcc?CustId=43913195").Result;
         }
 
+        #region Problem Account
+
         /// <summary>
         ///  Update Removed Problem Account into CTS
         /// </summary>
@@ -570,6 +581,58 @@
                 };
             }
         }
+
+        /// <summary>
+        /// Update Category To CTS When PA Updated
+        /// </summary>
+        /// <param name="paras"></param>
+        /// <returns></returns>
+        [HttpPost]        
+        public ApiResultModel UpdateCategoryToCTSWhenPAUpdated([FromBody]UpdateCategoryParamsModel paras)
+        {
+            var result = new ApiResultModel
+            {
+                ErrorMessage = string.Empty,
+                StatusMessage = "success"
+            };            
+
+            try
+            {
+                if (paras != null && paras.CustInfos != null && paras.CustInfos.Any())
+                {                    
+                    var updateCategoryResult = _updateCategoryService.UpdateCategoryToCTSWhenPAUpdated(paras);
+
+                    if (updateCategoryResult != null && updateCategoryResult.Any())
+                    {
+                        var assCustForRollbacks = updateCategoryResult.Select(x => new NewPAAssociationCustomerForRollbackModel
+                        {
+                            CTSCustID = x.CTSCustID,
+                            CustID = x.CustID
+                        });
+
+                        var listCustIdToSyncCC = assCustForRollbacks.Select(x => (long)x.CustID);
+
+                        var options = new PushDataToExternalModel { ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize, IsPushCCToSoon88 = true };
+
+                        _customerClassifyService.CheckNewPAAssociationCustomerForRollback(assCustForRollbacks);
+
+                        _custClassificationService.PushDataToExternal(listCustIdToSyncCC, options);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                result = new ApiResultModel
+                {
+                    ErrorMessage = ex.Message,
+                    StatusMessage = "fail"
+                };
+            }
+
+            return result;
+        }
+
+        #endregion
 
         /// <summary>
         /// Get customer class's categories

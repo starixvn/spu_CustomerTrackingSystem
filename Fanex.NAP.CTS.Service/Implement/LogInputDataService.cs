@@ -113,6 +113,26 @@
             return logInputData;
         }
 
+        public void LogInputData(IEnumerable<LogInputDataModel> data, FunctionId funcId)
+        {
+            try
+            {
+                if (data != null && data.Any())
+                {
+                    var result = LogInputDataAccessLayer(data, funcId);
+
+                    if (!string.IsNullOrEmpty(result.ErrorMsg))
+                    {
+                        LogService.Error($"LogInputData failed - FuncId: {(int)funcId}, inputData {JsonConvert.SerializeObject(data)} - Exception {result.ErrorMsg} - Datetime: {DateTime.Now}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Error($"LogInputData failed - FuncId: {(int)funcId}, inputData {JsonConvert.SerializeObject(data)} - Exception {ex}- Datetime: {DateTime.Now}");
+            }
+        }
+
         #region DataAccess Layer
 
         public DBResult LogInputDataAccessLayer(IEnumerable<LogInputDataModel> content, FunctionId funcId)
