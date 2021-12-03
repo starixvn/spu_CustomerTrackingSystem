@@ -1473,7 +1473,7 @@
             {
                 if (addCategoryModel.IsVVip)
                 {
-                    var custIdInt = 0;
+                    int custIdInt = 0;
                     int.TryParse(addCategoryModel.CustId.ToString(), out custIdInt);
 
                     if (custIdInt != 0)
@@ -1495,6 +1495,11 @@
                                 _customerClassificationService.UpdateAppliedCustomerClassification(jsonUpdateApplyCCs);
                             }
                         }
+
+                        Task.WhenAll(Task.Run(() =>
+                        {
+                            _antiFraudCenterService.InsertAFCAccounts(new List<long> { custIdInt });
+                        }));
                     }
                 }
             }
