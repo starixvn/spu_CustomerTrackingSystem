@@ -5,21 +5,27 @@
     using Fanex.BetList.Core.TicketHelper;
     using Fanex.Data;
     using Fanex.Data.Repository;
-    using Fanex.Logging;
     using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Criteria.ProblemAccountMonitor;
-    using Fanex.NAP.CTS.Model.CustomerClassify;
+    using Fanex.NAP.CTS.Criteria.TWProblemAccountDetection;
     using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Resource.Consts;
     using Newtonsoft.Json;
-    using System;    
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
     public class ProblemAccountMonitorService : IProblemAccountMonitorService
     {
+        private readonly IDynamicRepository repository;
+
+        public ProblemAccountMonitorService()
+        {
+            repository = new DynamicRepository();
+        }
+
         public DateTime GetMoveBetBalanceUpDate()
         {
             var criteria = new MoveBetBalanceUpDateGetCriteria()
@@ -228,6 +234,68 @@
             }
 
             return new InsertCategoryResultModel() { ErrorMessage = criteria.ErrorMessage, CustIds = custIds };
+        }
+
+        public IEnumerable<TWProblemAccountModel> GetCustClassBySite(string usernameList)
+        {
+            var criteria = new GetCustClassificationBySiteCriteria() 
+            {
+                UsernameList = usernameList,
+            };
+            
+            return repository.Fetch<TWProblemAccountModel>(criteria);
+        }
+        
+        public IEnumerable<TWProblemAccountModel> GetCustomerPerformance(string custIdList)
+        {
+            var criteria = new GetCustomerPerformanceCriteria() 
+            {
+               CustIdList = custIdList
+            };
+            
+            return repository.Fetch<TWProblemAccountModel>(criteria);
+        }
+        
+        public int InsertSystemFormulaCust(string customerJson)
+        {
+            var criteria = new InsertSystemFormulaBetCriteria() 
+            {
+                CustDetectInfo = customerJson
+            };
+            
+            return repository.Execute(criteria);
+        }
+
+        public void RemoveSystemFormulaBetCustomer(string custIdList)
+        {
+            var criteria = new RemoveSystemFormulaBetCustomerCriteria
+            {
+                CustIdList = custIdList
+            };
+
+            repository.Execute(criteria);
+        }
+
+        public string InsertProblemAccToNAP(string usernameList, TWProblemAccountParams paramFromTW)
+        {
+            var criteria = new NapProblemAccInsertCriteria() 
+            {
+                CustomerList = usernameList,
+                RoleId = paramFromTW.RoleId,
+                ReasonId = paramFromTW.ReasonId,
+                PreventActionId = paramFromTW.PreventActionId,
+                Comment = paramFromTW.Comment,
+                VoidTime = paramFromTW.VoidTime,
+                LimitAmount = paramFromTW.LimitAmount,
+                UserId = paramFromTW.UserId,
+                IP = paramFromTW.IP,
+                SuccessList = string.Empty,
+                FailList = string.Empty,
+                ErrCode = 0
+            };
+            
+            repository.Execute(criteria);
+            return criteria.SuccessList;
         }
     }
 }

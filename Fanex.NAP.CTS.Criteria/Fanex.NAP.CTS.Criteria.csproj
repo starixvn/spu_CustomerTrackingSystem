@@ -192,6 +192,12 @@
     <Compile Include="SubscriberAssignment\GetAllSubscriberCriteria.cs" />
     <Compile Include="SyncCustomerToMainDb\SyncCustomerClassToMainDbCriteria.cs" />
     <Compile Include="TransactionReport\TransactionReportCriteria.cs" />
+    <Compile Include="TWProblemAccountDetection\GetCustomerPerformanceCriteria.cs" />
+    <Compile Include="TWProblemAccountDetection\NapProblemAccInsertCriteria.cs" />
+    <Compile Include="TWProblemAccountDetection\InsertSystemFormulaBetCriteria.cs" />
+    <Compile Include="TWProblemAccountDetection\GetCustClassificationBySiteCriteria.cs" />
+    <Compile Include="TWProblemAccountDetection\RemoveSystemFormulaBetCustomerCriteria.cs" />
+    <Compile Include="TWProblemAccountDetection\TWProblemAccountParams.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fanex.NAP.CTS.Core\Fanex.NAP.CTS.Core.csproj">

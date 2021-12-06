@@ -1,9 +1,9 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
-    using Fanex.NAP.CTS.Model.CustomerClassify;
+    using Fanex.NAP.CTS.Criteria.TWProblemAccountDetection;
     using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
-    using System;    
+    using System;
     using System.Collections.Generic;
 
     public interface IProblemAccountMonitorService
@@ -33,5 +33,13 @@
         string GetHtmlChoice(DetailTicketsModel ticket);
 
         InsertCategoryResultModel UpdateRemovedProblemAccountToCTS(string custids);
+
+        IEnumerable<TWProblemAccountModel> GetCustClassBySite(string usernameList);
+
+        IEnumerable<TWProblemAccountModel> GetCustomerPerformance(string custIdList);
+
+        int InsertSystemFormulaCust(string custIdList);
+        string InsertProblemAccToNAP(string usernameList, TWProblemAccountParams paramFromTW);
+        void RemoveSystemFormulaBetCustomer(string custIdList);
     }
 }

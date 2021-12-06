@@ -7,6 +7,7 @@
     using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Core.Helpers.Xml;
     using Fanex.NAP.CTS.Core.Utilities;
+    using Fanex.NAP.CTS.Criteria.TWProblemAccountDetection;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.API;
     using Fanex.NAP.CTS.Model.API.ProblemCaseMonitor;
@@ -16,6 +17,8 @@
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.ImportEvidences;
     using Fanex.NAP.CTS.Model.LogInputData;
+    using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
+    using Fanex.NAP.CTS.Model.ProblemAccountMonitor.TWProblemAccount;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Model.Subscriber;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
@@ -327,6 +330,75 @@
                 LogService.Error("GetDirectAssociationByDevice failed: " + ex.Message + ex.StackTrace);
                 throw;
             }
+        }
+
+        [HttpPost]
+        public JsonResult<InsertNAPProblemAccountResult> AddSystemFormulaBetAccount(TWProblemAccountParams dataParam)
+        {
+            string successListFromNAP = string.Empty;
+            var result = string.Empty;
+            var orgCustomerList = dataParam.CustomerList.Split(',').Select(u => new TWProblemAccountModel { Username = u });
+            if (orgCustomerList.Count() <= 100)
+            {
+                try
+                {
+                    var customers = _problemAccountMonitorService.GetCustClassBySite(dataParam.CustomerList);
+                    var perfCust = _problemAccountMonitorService.GetCustomerPerformance(string.Join(",", customers.Where(c => c.IsMonitorSite).Select(c => c.CustID)));
+                    var fullData = (from oCust in orgCustomerList
+                                    join cust in customers on oCust.Username equals cust.Username into temp
+                                    from cust in temp.DefaultIfEmpty()
+                                    join pCust in perfCust on cust.CustID equals pCust.CustID into temp2
+                                    from pCust in temp2.DefaultIfEmpty()
+                                    select new TWProblemAccountModel
+                                    {
+                                        CustID = cust.CustID,
+                                        Username = oCust.Username,
+                                        IsMonitorCategoryGroup = cust.IsMonitorCategoryGroup,
+                                        IsMonitorSite = cust.IsMonitorSite,
+                                        Winloss = pCust == null ? 0 : pCust.Winloss
+                                    }).ToList();
+                    var monitorList = fullData.Where(c => (c.Winloss < 0 && c.IsMonitorSite) || (c.Winloss >= 0 && c.IsMonitorSite && c.IsMonitorCategoryGroup));
+                    var monitorListMoreData = monitorList.Select(c => new
+                    {
+                        CustID = c.CustID,
+                        UserName = c.Username,
+                        RoleID = dataParam.RoleId,
+                        ReasonID = dataParam.ReasonId,
+                        PreventActionID = dataParam.PreventActionId,
+                        Comment = dataParam.Comment,
+                        VoidTime = dataParam.VoidTime,
+                        LimitAmount = dataParam.LimitAmount,
+                        UserID = dataParam.UserId,
+                        IP = dataParam.IP
+                    });
+
+                    var markPAList = fullData.Except(monitorList);
+
+                    var monitorListMoreDataJson = JsonConvert.SerializeObject(monitorListMoreData);
+                    LogService.Info(monitorListMoreDataJson);
+                    _problemAccountMonitorService.InsertSystemFormulaCust(monitorListMoreDataJson);
+
+                    if (markPAList.Any())
+                    {
+                        successListFromNAP = _problemAccountMonitorService.InsertProblemAccToNAP(string.Join(",", markPAList.Select(c => c.Username)), dataParam);
+                        if (string.IsNullOrEmpty(successListFromNAP))
+                        {
+                            _problemAccountMonitorService.RemoveSystemFormulaBetCustomer(string.Join(",", markPAList.Select(c => c.CustID)));
+                        }
+
+                        LogService.Info(string.Join(",", markPAList.Select(c => c.CustID)));
+                    }
+
+                    result = string.Join(",", monitorListMoreData.Select(c => c.UserName)) + successListFromNAP;
+                }
+                catch (Exception ex)
+                {
+                    LogService.Error("AddSystemFormulaBetAccount failed: "
+                                        + "\nException" + ex.Message + ex.StackTrace);
+                }
+            }
+
+            return Json(new InsertNAPProblemAccountResult { SuccessList = result });
         }
 
         ///This code for GraphDB - Neo4j
