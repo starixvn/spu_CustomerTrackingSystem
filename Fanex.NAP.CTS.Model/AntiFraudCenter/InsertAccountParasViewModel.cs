@@ -6,6 +6,6 @@
     {
         public string Key { get; set; }
 
-        public IEnumerable<InsertAccountParasModel> Data { get; set; }
+        public IEnumerable<GetAccountViewModel> Data { get; set; }
     }
 }

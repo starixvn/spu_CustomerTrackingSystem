@@ -1,7 +1,10 @@
 ﻿namespace Fanex.NAP.CTS.Model.API
 {
+    using System.Collections.Generic;
+
     public class GetAFCAccountModel
     {
+        //B2CustId
         public string CustId { get; set; }
 
         public string CountryCode { get; set; }
@@ -13,5 +16,7 @@
         public string AccountNum { get; set; }
 
         public string AccountName { get; set; }
+
+        public IEnumerable<int> FraudID { get; set; }
     }
 }

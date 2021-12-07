@@ -88,6 +88,8 @@
 
         public static string InsertAntiFraudAccounts => GetConfigStringByName("AFC_InsertAccounts");
 
+        public static string UpdateAntiFraudAccounts => GetConfigStringByName("AFC_UpdateAccounts");
+
         public static string DeleteAntiFraudAccounts => GetConfigStringByName("AFC_DeleteAccounts");
 
         public static int ImportEvidenceChunkSize

@@ -3,7 +3,7 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
 
-    public class FilterB2CLicenseeGetCriteria : CriteriaBase
+    public class LicenseeCustFilterCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_CustIDs")]
         public string CustIDs { get; set; }

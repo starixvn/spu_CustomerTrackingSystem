@@ -117,6 +117,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
@@ -166,12 +167,14 @@
     <Compile Include="Account\RobotBetting\RobotUserDetailModel.cs" />
     <Compile Include="Account\RobotBetting\RobotBettingModel.cs" />
     <Compile Include="Account\RobotClassification.cs" />
-    <Compile Include="AntiFraudCenter\GetB2CModel.cs" />
+    <Compile Include="AntiFraudCenter\CheckAccountExistModel.cs" />
+    <Compile Include="AntiFraudCenter\FilterCustToSyncAFCKModel.cs" />
+    <Compile Include="AntiFraudCenter\GetAccountViewModel.cs" />
+    <Compile Include="AntiFraudCenter\GetB2CustIDModel.cs" />
     <Compile Include="AntiFraudCenter\GetAFCAccountModel.cs" />
-    <Compile Include="AntiFraudCenter\DeleteAccountParasModel.cs" />
-    <Compile Include="AntiFraudCenter\InsertAccountParasModel.cs" />
     <Compile Include="AntiFraudCenter\DeleteAccountParasViewModel.cs" />
     <Compile Include="AntiFraudCenter\InsertAccountParasViewModel.cs" />
+    <Compile Include="AntiFraudCenter\ParticipantModel.cs" />
     <Compile Include="API\ApiIResultModel.cs" />
     <Compile Include="API\CategoryCustomerClassModel.cs" />
     <Compile Include="API\CustomerClassModel.cs" />

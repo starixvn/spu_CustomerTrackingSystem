@@ -6,6 +6,6 @@
     {
         public string Key { get; set; }
 
-        public IEnumerable<DeleteAccountParasModel> Data { get; set; }
+        public IEnumerable<GetB2CustIDModel> Data { get; set; }
     }
 }
