@@ -34,29 +34,7 @@
                     {
                         var notExistedB2CustIDs = CheckAccountExist(accountInfo);
 
-                        var tasks = new List<Task>();
-
-                        if (notExistedB2CustIDs.Any())
-                        {
-                            var accToInsert = accountInfo.Where(c => notExistedB2CustIDs.Contains(c.B2CustId));
-
-                            accountInfo.ToList().RemoveAll(x => accToInsert.Contains(x));
-
-                            tasks.Add(Task.Run(() =>
-                            {
-                                SyncAccountToAFCDB(accToInsert, true);
-                            }));
-                        }
-
-                        if (accountInfo.Any())
-                        {
-                            tasks.Add(Task.Run(() =>
-                            {
-                                SyncAccountToAFCDB(accountInfo, false);
-                            }));
-                        }
-
-                        Task.WaitAll(tasks.ToArray());
+                        SyncAccountToAFCDBAsync(accountInfo, notExistedB2CustIDs);
                     }
                 }
             }
@@ -65,10 +43,10 @@
                 LogService.Error($"{ConfigSettings.EnvironmentName} - Web - Insert Accounts to AFC DB - Exception: "
                     + ex.Message
                     + ex.StackTrace + "\n"
-                    + ex.InnerException.Message + "\n"
+                    + ex?.InnerException?.Message + "\n"
                     + $"DataInput: {JsonConvert.SerializeObject(custIds) + "\n"}"
-                    + ex.InnerException.Source
-                    + ex.InnerException.StackTrace);
+                    + ex?.InnerException?.Source
+                    + ex?.InnerException?.StackTrace);
             }
         }
 
@@ -96,13 +74,13 @@
             }
             catch (Exception ex)
             {
-                LogService.Error($"{ConfigSettings.EnvironmentName} - Web - Insert Accounts to AFC DB - Exception: "
+                LogService.Error($"{ConfigSettings.EnvironmentName} - Web - Delete Accounts to AFC DB - Exception: "
                     + ex.Message
                     + ex.StackTrace + "\n"
-                    + ex.InnerException.Message + "\n"
+                    + ex?.InnerException.Message + "\n"
                     + $"DataInput: {JsonConvert.SerializeObject(custIds) + "\n"}"
-                    + ex.InnerException.Source
-                    + ex.InnerException.StackTrace);
+                    + ex?.InnerException.Source
+                    + ex?.InnerException.StackTrace);
             }
         }
 
@@ -116,7 +94,7 @@
 
                 if (filterB2CLicensee != null && filterB2CLicensee.Any())
                 {
-                    var b2cCustIds = GetB2CCustIdsDAL(string.Join(",", filterB2CLicensee));
+                    var b2cCustIds = GetB2CCustIdsDAL(string.Join(",", filterB2CLicensee.Select(c=>c.CustID).Distinct()));
 
                     if (b2cCustIds != null && b2cCustIds.Any())
                     {
@@ -182,7 +160,7 @@
 
         private IEnumerable<string> CheckAccountExist (IEnumerable<GetAccountViewModel> accInfo)
         {
-            if(accInfo != null && accInfo.Any())
+            if (accInfo != null && accInfo.Any())
             {
                 var participants = GetParticipant();
 
@@ -190,13 +168,16 @@
                 {
                     var internalInfo = participants.SingleOrDefault(c => string.Equals(c.SecretKey, Consts.AFCInternalKey));
 
-                    var result = CheckAccountValidationDAL(internalInfo.ParticipantID, accInfo.Select(c=> new CheckAccountExistModel { AccountID = c.B2CustId }));
-
-                    if(result != null && result.Any())
+                    if (internalInfo != null)
                     {
-                        var notExistedAcc = result.Where(c => string.Equals(c.Status, "Not Exist")).Select(c => c.AccountID);
+                        var result = CheckAccountValidationDAL(internalInfo.ParticipantID, accInfo.Select(c => new CheckAccountExistModel { AccountID = c.B2CustId }));
 
-                        return notExistedAcc ?? new List<string>();
+                        if (result != null && result.Any())
+                        {
+                            var notExistedAcc = result.Where(c => string.Equals(c.Status, "Not Exist")).Select(c => c.AccountID);
+
+                            return notExistedAcc ?? new List<string>();
+                        }
                     }
                 }
             }
@@ -204,14 +185,59 @@
             return new List<string>();
         }
 
+        private void SyncAccountToAFCDBAsync(IEnumerable<GetAccountViewModel> accountInfo, IEnumerable<string> notExistedAccount)
+        {
+            if (accountInfo != null && accountInfo.Any())
+            {
+                var accToInsert = notExistedAccount.Any() ? accountInfo.Where(c => notExistedAccount.Contains(c.B2CustId)) : null;
+                var accToUpdate = notExistedAccount.Any() ? accountInfo.Where(c => !notExistedAccount.Contains(c.B2CustId)) : accountInfo;
+                
+                var tasks = new List<Task>
+                {
+                    Task.Run(async () =>
+                    {
+                        try
+                        {
+                            await SyncAFCData(accToInsert, ConfigSettings.InsertAntiFraudAccounts);
+                        }
+                        catch (Exception ex)
+                        {
+                            LogService.Error($"{ConfigSettings.EnvironmentName} - Web - Insert Accounts to AFC DB - Exception: "
+                                + ex.Message
+                                + ex.StackTrace + "\n"
+                                + $"DataInput: {JsonConvert.SerializeObject(accToInsert) + "\n"}");
+                        }
+
+                    }),
+
+                    Task.Run(async () =>
+                    {
+                        try
+                        {
+                            await SyncAFCData(accToUpdate, ConfigSettings.UpdateAntiFraudAccounts);
+                        }
+                        catch (Exception ex)
+                        {
+                            LogService.Error($"{ConfigSettings.EnvironmentName} - Web - Update Accounts to AFC DB - Exception: "
+                                + ex.Message
+                                + ex.StackTrace + "\n"
+                                + $"DataInput: {JsonConvert.SerializeObject(accToUpdate) + "\n"}");
+                        }
+                    })
+                };
+
+                Task.WhenAll(tasks.ToArray());
+            }
+        }
+
         /// <summary>
         /// Insert or Update AFC account
         /// </summary>
         /// <param name="accInfo"></param>
         /// <param name="isInsertAction"></param>
-        private void SyncAccountToAFCDB(IEnumerable<GetAccountViewModel> accInfo, bool isInsertAction)
+        private async Task SyncAFCData(IEnumerable<GetAccountViewModel> accInfo, string url)
         {
-            if(accInfo !=null && accInfo.Any())
+            if (accInfo != null && accInfo.Any())
             {
                 var para = new InsertAccountParasViewModel
                 {
@@ -219,14 +245,7 @@
                     Data = accInfo
                 };
 
-                if (isInsertAction)
-                {
-                    ApiHelper.Post<bool>(ConfigSettings.InsertAntiFraudAccounts, para, 300);
-                }
-                else
-                {
-                    ApiHelper.Post<bool>(ConfigSettings.UpdateAntiFraudAccounts, para, 300);
-                }
+                await ApiHelper.Post<bool>(url, para, 300);
             }
         }
 

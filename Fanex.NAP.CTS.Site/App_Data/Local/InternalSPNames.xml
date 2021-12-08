@@ -166,7 +166,7 @@
 
 	<Function name="AntiFraudCase">
 		<Setting Key="CTS_DC_CustClassification_ProblemAccount_FilterByB2C" SpName="CTS_DC_CustClassification_ProblemAccount_FilterByB2C" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="AFC_DC_Participant_Insert" SpName="AFC_DC_Participant_Insert" DbName="MySQL.AFC_DataCenter.afcAPIAdmin" />
+		<Setting Key="AFC_DC_Participant_Get" SpName="AFC_DC_Participant_Get" DbName="MySQL.AFC_DataCenter.afcAPIAdmin" />
 		<Setting Key="AFC_DC_Account_CheckExist" SpName="AFC_DC_Account_CheckExist" DbName="MySQL.AFC_DataCenter.afcAPI" />
 	</Function>
 </Functions>

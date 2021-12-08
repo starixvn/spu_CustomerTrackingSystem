@@ -77,10 +77,14 @@
                 Parallel.Invoke(() =>
                 {
                     PushCCToExternal(custIdsPushCC, para.IsPushCCToSoon88, para.IsUpdateDangerToMainDB, para.DangerLevelType);
+
                 },
                 () =>
                 {
-                    antiFraudCenterService.InsertAFCAccounts(custIdsPushCC);
+                    Task.Run(() =>
+                    {
+                        antiFraudCenterService.InsertAFCAccounts(custIdsPushCC);
+                    });
                 });
             }
 

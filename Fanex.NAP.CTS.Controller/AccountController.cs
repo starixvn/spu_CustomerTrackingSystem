@@ -1496,10 +1496,10 @@
                             }
                         }
 
-                        Task.WhenAll(Task.Run(() =>
+                        Task.Run(() =>
                         {
-                            _antiFraudCenterService.InsertAFCAccounts(new List<long> { custIdInt });
-                        }));
+                            _antiFraudCenterService.DeleteAFCAccounts(new List<long> { custIdInt });
+                        });
                     }
                 }
             }
