@@ -23,11 +23,11 @@
             repository = new DynamicRepository();
         }
 
-        public void InsertAFCAccounts(IEnumerable<long> custIds)
+        public void InsertAFCAccounts(IEnumerable<long> custIds, bool isSyncAFCData)
         {
             try
             {
-                if (custIds != null && custIds.Any())
+                if (custIds != null && custIds.Any() && isSyncAFCData)
                 {
                     var accountInfo = GetAccountInfo(string.Join(",", custIds));
 
@@ -51,11 +51,11 @@
             }
         }
 
-        public void DeleteAFCAccounts(IEnumerable<long> custIds)
+        public void DeleteAFCAccounts(IEnumerable<long> custIds, bool isSyncAFCData)
         {
             try
             {
-                if (custIds != null && custIds.Any())
+                if (custIds != null && custIds.Any() && isSyncAFCData)
                 {
                     var b2cCustIds = GetB2CCustIdsDAL(string.Join(",", custIds));
 

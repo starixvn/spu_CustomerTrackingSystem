@@ -165,7 +165,7 @@
                         {
                             if (syncResult.ErrorCode == 0 && syncCustIds != null && syncCustIds.Any())
                             {
-                                _antiFraudCenterService.InsertAFCAccounts(syncCustIds);
+                                _antiFraudCenterService.InsertAFCAccounts(syncCustIds, ConfigSettings.IsSyncAFCData);
                             }
                         });
                     }
@@ -291,7 +291,7 @@
                     {
                         if (syncResult.ErrorCode == 0 && syncCustIds != null && syncCustIds.Any())
                         {
-                            _antiFraudCenterService.InsertAFCAccounts(syncCustIds);
+                            _antiFraudCenterService.InsertAFCAccounts(syncCustIds, ConfigSettings.IsSyncAFCData);
                         }
                     });
                 }

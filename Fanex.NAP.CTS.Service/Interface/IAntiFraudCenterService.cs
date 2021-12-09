@@ -4,8 +4,8 @@ namespace Fanex.NAP.CTS.Service
 {
     public interface IAntiFraudCenterService
     {
-        void InsertAFCAccounts(IEnumerable<long> custIds);
+        void InsertAFCAccounts(IEnumerable<long> custIds, bool isSyncAFCData);
 
-        void DeleteAFCAccounts(IEnumerable<long> custIds);
+        void DeleteAFCAccounts(IEnumerable<long> custIds, bool isSyncAFCData);
     }
 }

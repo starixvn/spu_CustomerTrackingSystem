@@ -230,5 +230,15 @@
                 return isFromMySQL == "1";
             }
         }
+
+        public static bool IsSyncAFCData
+        {
+            get
+            {
+                var rs = ConfigurationManager.AppSettings["IsSyncAntiFraudCenterData"];
+
+                return rs == "1";
+            }
+        }
     }
 }

@@ -1105,7 +1105,7 @@
                         }),
                         Task.Run(() =>
                         {
-                            _antiFraudCenterService.InsertAFCAccounts(syncCustIds);
+                            _antiFraudCenterService.InsertAFCAccounts(syncCustIds, ConfigSettings.IsSyncAFCData);
                         })
                     };
 
@@ -1498,7 +1498,7 @@
 
                         Task.Run(() =>
                         {
-                            _antiFraudCenterService.DeleteAFCAccounts(new List<long> { custIdInt });
+                            _antiFraudCenterService.DeleteAFCAccounts(new List<long> { custIdInt }, ConfigSettings.IsSyncAFCData);
                         });
                     }
                 }
