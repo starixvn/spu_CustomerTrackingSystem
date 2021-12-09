@@ -10,6 +10,7 @@
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -144,7 +145,7 @@
                                    {
                                        CustId = group.a.CustId,
                                        B2CustId = group.a.B2CustId,
-                                       CountryCode = group.a.CountryCode,
+                                       CountryCode = new RegionInfo(group.a.CountryCode)?.ThreeLetterISORegionName ?? string.Empty,
                                        PhoneNo = group.a.PhoneNo,
                                        AccountName = group.a.AccountName,
                                        AccountNum = group.a.AccountNum,
@@ -168,16 +169,18 @@
                 {
                     var internalInfo = participants.SingleOrDefault(c => string.Equals(c.SecretKey, Consts.AFCInternalKey));
 
-                    if (internalInfo != null)
+                    if (internalInfo == null)
                     {
-                        var result = CheckAccountValidationDAL(internalInfo.ParticipantID, accInfo.Select(c => new CheckAccountExistModel { AccountID = c.B2CustId }));
+                        throw new Exception("AFC - Internal Key is Invalid");
+                    }
 
-                        if (result != null && result.Any())
-                        {
-                            var notExistedAcc = result.Where(c => string.Equals(c.Status, "Not Exist")).Select(c => c.AccountID);
+                    var result = CheckAccountValidationDAL(internalInfo.ParticipantID, accInfo.Select(c => new CheckAccountExistModel { AccountID = c.B2CustId }));
 
-                            return notExistedAcc ?? new List<string>();
-                        }
+                    if (result != null && result.Any())
+                    {
+                        var notExistedAcc = result.Where(c => string.Equals(c.Status, "Not Exist")).Select(c => c.AccountID);
+
+                        return notExistedAcc ?? new List<string>();
                     }
                 }
             }
