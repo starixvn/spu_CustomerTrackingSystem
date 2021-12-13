@@ -335,6 +335,8 @@
         [HttpPost]
         public JsonResult<InsertNAPProblemAccountResult> AddSystemFormulaBetAccount(TWProblemAccountParams dataParam)
         {
+            var isWriteLogInfo = ConfigSettings.IsWriteLogInfo;
+
             string successListFromNAP = string.Empty;
             var result = string.Empty;
             var orgCustomerList = dataParam.CustomerList.Split(',').Select(u => new TWProblemAccountModel { Username = u });
@@ -375,7 +377,11 @@
                     var markPAList = fullData.Except(monitorList);
 
                     var monitorListMoreDataJson = JsonConvert.SerializeObject(monitorListMoreData);
-                    LogService.Info(monitorListMoreDataJson);
+                    if (isWriteLogInfo)
+                    {
+                        LogService.Info(monitorListMoreDataJson);
+                    }
+
                     _problemAccountMonitorService.InsertSystemFormulaCust(monitorListMoreDataJson);
 
                     if (markPAList.Any())
@@ -386,7 +392,10 @@
                             _problemAccountMonitorService.RemoveSystemFormulaBetCustomer(string.Join(",", markPAList.Select(c => c.CustID)));
                         }
 
-                        LogService.Info(string.Join(",", markPAList.Select(c => c.CustID)));
+                        if (isWriteLogInfo)
+                        {
+                            LogService.Info(string.Join(",", markPAList.Select(c => c.CustID)));
+                        }
                     }
 
                     result = string.Join(",", monitorListMoreData.Select(c => c.UserName)) + successListFromNAP;
@@ -659,19 +668,19 @@
         /// </summary>
         /// <param name="paras"></param>
         /// <returns></returns>
-        [HttpPost]        
-        public ApiResultModel UpdateCategoryToCTSWhenPAUpdated([FromBody]UpdateCategoryParamsModel paras)
+        [HttpPost]
+        public ApiResultModel UpdateCategoryToCTSWhenPAUpdated([FromBody] UpdateCategoryParamsModel paras)
         {
             var result = new ApiResultModel
             {
                 ErrorMessage = string.Empty,
                 StatusMessage = "success"
-            };            
+            };
 
             try
             {
                 if (paras != null && paras.CustInfos != null && paras.CustInfos.Any())
-                {                    
+                {
                     var updateCategoryResult = _updateCategoryService.UpdateCategoryToCTSWhenPAUpdated(paras);
 
                     if (updateCategoryResult != null && updateCategoryResult.Any())
