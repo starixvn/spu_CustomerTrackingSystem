@@ -12,25 +12,23 @@
 
         public DateTime EventDate { get; set; }
 
+        public int Market { get; set; }
+
         public int HomeID { get; set; }
 
         public int AwayID { get; set; }
 
         public int LeagueID { get; set; }
 
-        public int BettypeID { get; set; }
+        public string LeagueName { get; set; }
 
-        public int Market { get; set; }
+        public int BettypeID { get; set; }
 
         public bool IsHedging { get; set; }
 
         public bool IsVerified { get; set; }
 
-        public DateTime VerifiedDate { get; set; }
-
-        public string VerifiedBy { get; set; }
-
-        public int EventGroup { get; set; }
+        public int MatchSection { get; set; }
 
         public string Reason
         {
@@ -61,19 +59,6 @@
             }
         }
 
-        public string VerifiedDateToString
-        {
-            get
-            {
-                if (VerifiedDate == DateTime.MinValue)
-                {
-                    return "-";
-                }
-
-                return VerifiedDate.ToString(FormatDateToString_MMMddyyyy);
-            }
-        }
-
         public string MatchName
         {
             get
@@ -90,15 +75,6 @@
                 return rs;
             }
         }
-
-        public string LeagueName
-        {
-            get
-            {
-                return CachedRef.GetLeagueName(LeagueID);
-            }
-        }
-
 
         public string ReasonGroup
         {
@@ -120,11 +96,11 @@
             }
         }
 
-        public string EventGroupName
+        public string MatchSectionName
         {
             get
             {
-                switch (EventGroup)
+                switch (MatchSection)
                 {
                     case (int)MATCHMONITOR_EVENTGROUP.Early:
                         return Enum.GetName(typeof(MATCHMONITOR_EVENTGROUP), MATCHMONITOR_EVENTGROUP.Early);

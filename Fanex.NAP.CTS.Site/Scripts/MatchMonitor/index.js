@@ -13,7 +13,10 @@
         btnRefresh: $('#btnRefresh'),
         tblMonitor: $('#tblMonitor'),
         btnGenerate: $('#btnGenerate'),
-        eventTarget: $('#selectedRefresh')[0]
+        eventTarget: $('#selectedRefresh')[0],
+        txtLeague: $('#txtLeague'),
+        cbbMarket: $('#cbbMarket'),
+        cbbMatchSection: $('#cbbMatchSection')
     };
 
     function GetMatchMonitor() {
@@ -45,7 +48,10 @@
                     FromDate: function () { return domElements.dpkFromDate.val(); },
                     ToDate: function () { return domElements.dpkToDate.val(); },
                     BetTypes: function () { return domElements.cbbBetType.val().join(); },
-                    IsVerified: function () { return domElements.cbbIsVerified.val(); }
+                    IsVerified: function () { return domElements.cbbIsVerified.val(); },
+                    LeagueName: function () { return domElements.txtLeague.val(); },
+                    Market: function () { return domElements.cbbMarket.val(); },
+                    MatchSection: function () { return domElements.cbbMatchSection.val().join(); },
                 },
                 type: "POST",
                 beforeSend: function () {
@@ -82,21 +88,19 @@
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
                 { targets: [0, 1, 2, 3, 4, 5, 6], className: "text-center" },
-                { targets: [0], width: "20%" },
-                { targets: [1], width: "10%" },
+                { targets: [0], width: "25%" },
+                { targets: [1], width: "15%" },
                 { targets: [2], width: "15%" },
-                { targets: [3], width: "15%" },
-                { targets: [4], width: "15%" },
-                { targets: [5], width: "10%" },
-                { targets: [6], width: "10%" },                 
-                { targets: [7], width: "5%" },
-                { targets: [8], visible: false },
+                { targets: [3], width: "20%" },
+                { targets: [4], width: "20%" },                
+                { targets: [5], width: "5%" },
+                { targets: [6], visible: false },
             ],
             columns: [
                 {
                     data: obj => () => {
-                        let paramTemplate = "EventDateToString={0}&MatchID={1}&HomeID={2}&AwayID={3}&BetTypeID={4}&EventGroup={5}&LiveIndicator={6}&IsHedging={7}";
-                        let para = paramTemplate.format(obj.EventDateToString, obj.MatchID, obj.HomeID, obj.AwayID, obj.BettypeID, obj.EventGroup, obj.Market == 1, obj.IsHedging);
+                        let paramTemplate = "EventDateToString={0}&MatchID={1}&HomeID={2}&AwayID={3}&BetTypeID={4}&MatchSection={5}&LiveIndicator={6}&IsHedging={7}";
+                        let para = paramTemplate.format(obj.EventDateToString, obj.MatchID, obj.HomeID, obj.AwayID, obj.BettypeID, obj.MatchSection, obj.Market == 1, obj.IsHedging);
                         return '<a class="click-view-details" href="MatchMonitor/Detail?' + para + '" target="_blank">' + obj.MatchName + '</a>';
 
                         //let url = common.modifyRelativeUrl(`MatchMonitor/Detail?eventDataJson=${obj.EventDateToString}&matchID=${obj.MatchID}&matchNameJson=JSON.stringify(${obj.MatchName})&betTypeID=${obj.BettypeID}`);
@@ -107,18 +111,17 @@
                 { data: obj => obj.MarketName },
                 { data: obj => obj.LeagueName },
                 { data: obj => obj.ReasonGroup },
-                { data: obj => obj.VerifiedBy }, //PIC
-                { data: obj => obj.VerifiedDateToString },
-                {
-                    data: obj => RenderVerifiedUI(obj.IsVerified), createdCell: (cell, _, row) => {
-                        $('#isVerifiedCheckbox', cell).click(() => {
-                            common.showConfirmation('<div class="popup - content">Are you sure about this?<br>Once confirmed, match review status will be updated to "Verified".</div>', function () {
-                                UpdateVerification(row, cell);
-                            });
-                        });
-                    }
+                { data: obj => RenderVerifiedUI(obj.IsVerified)
+
+                    //data: obj => RenderVerifiedUI(obj.IsVerified), createdCell: (cell, _, row) => {
+                    //    $('#isVerifiedCheckbox', cell).click(() => {
+                    //        common.showConfirmation('<div class="popup - content">Are you sure about this?<br>Once confirmed, match review status will be updated to "Verified".</div>', function () {
+                    //            UpdateVerification(row, cell);
+                    //        });
+                    //    });
+                    //}
                 },
-                { data: obj => obj.EventGroupName },
+                { data: obj => obj.MatchSectionName },
             ],
             drawCallback: function () {
                 var api = this.api();
@@ -129,7 +132,7 @@
                 api.column(8, { page: 'current' }).data().each(function (group, i) {
                     if (last !== group) {
                         $(rows).eq(i).before(
-                            '<tr class="group group group-site"><td colspan="8">' + data[i].EventGroupName + '</td></tr>'
+                            '<tr class="group group group-site"><td colspan="8">' + data[i].MatchSectionName + '</td></tr>'
                         );
 
                         last = group;
@@ -140,27 +143,28 @@
     }
 
     function RenderVerifiedUI(isVerified) {
-        return html = '<label class="container-checkbox" id="containerCheckbox"><input id="isVerifiedCheckbox" type="checkbox"' + (isVerified ? ' checked disabled' : '') + '><span class="checkmark"></span></label>';                         
+        return html = '<label class="container-checkbox" id="containerCheckbox"><input id="isVerifiedCheckbox" type="checkbox" disabled' + (isVerified ? ' checked' : '') + '><span class="checkmark"></span></label>';
+        //return html = '<label class="container-checkbox" id="containerCheckbox"><input id="isVerifiedCheckbox" type="checkbox"' + (isVerified ? ' checked disabled' : '') + '><span class="checkmark"></span></label>';                         
     }
 
-    function UpdateVerification(row, cell) {
-        $.ajax(common.modifyRelativeUrl('MatchMonitor/UpdateVerification'), {
-            type: 'POST',
-            data: { matchID: row.ID },          beforeSend: function () {
-                domElements.tblMonitor.addClass('loading-value');
-            },
-            success: function (response) {
-                GetMatchMonitor(); 
-            },
-            complete: function () {
-                domElements.tblMonitor.removeClass("loading-value");
-            },
-            error: function (errMsg) {
-                console.log(errMsg);
-                domElements.tblMonitor.removeClass("loading-value");
-            }
-        });
-    }
+    //function UpdateVerification(row, cell) {
+    //    $.ajax(common.modifyRelativeUrl('MatchMonitor/UpdateVerification'), {
+    //        type: 'POST',
+    //        data: { matchID: row.ID },          beforeSend: function () {
+    //            domElements.tblMonitor.addClass('loading-value');
+    //        },
+    //        success: function (response) {
+    //            GetMatchMonitor(); 
+    //        },
+    //        complete: function () {
+    //            domElements.tblMonitor.removeClass("loading-value");
+    //        },
+    //        error: function (errMsg) {
+    //            console.log(errMsg);
+    //            domElements.tblMonitor.removeClass("loading-value");
+    //        }
+    //    });
+    //}
 
     function SetRestrictFromDate() {
         let toDateValue = domElements.dpkToDate.datepicker("getDate");
@@ -225,6 +229,13 @@
             menuHeight: 260,
             selectedText: "# of # selected",
             noneSelectedText: "Select Bet Type"
+        });
+
+        domElements.cbbMatchSection.multiselect({
+            menuWidth: 260,
+            menuHeight: 260,
+            selectedText: "# of # selected",
+            noneSelectedText: "Select Match Section"
         });
 
         domElements.groupDropDown.hover(function () {

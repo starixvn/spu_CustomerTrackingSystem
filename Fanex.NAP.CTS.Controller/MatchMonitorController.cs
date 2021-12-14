@@ -55,7 +55,7 @@
             {
                 if (matchMonitorFilterViewModel != null && !string.IsNullOrEmpty(matchMonitorFilterViewModel.BetTypes))
                 {
-                    matchMonitors = _matchMonitorService.GetMatchMonitor(matchMonitorFilterViewModel)?.OrderBy(c => c.EventGroup).ToList();
+                    matchMonitors = _matchMonitorService.GetMatchMonitor(matchMonitorFilterViewModel)?.OrderBy(c => c.MatchSection).ToList();
                 }
             }
             catch (Exception e)
@@ -113,7 +113,7 @@
                     ViewBag.MatchName = para.MatchName;
                     ViewBag.LiveIndicator = para.LiveIndicator;
                     ViewBag.IsHedging = para.IsHedging;
-                    ViewBag.IsLiveDefault = (para.EventGroup == 2 || para.EventGroup == 4);
+                    ViewBag.IsLiveDefault = (para.MatchSection == 2 || para.MatchSection == 4);
                     ViewBag.ReasonGroup = matchReasonGroup;
                     ViewBag.MatchScore = matchScore.OrderBy(c => c.TotalScore).ThenBy(c => c.LiveHomeScore).ThenBy(c => c.LiveAwayScore);
                     ViewBag.IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId,

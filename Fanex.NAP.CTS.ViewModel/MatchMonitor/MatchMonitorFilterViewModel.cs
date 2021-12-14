@@ -11,5 +11,11 @@
         public string BetTypes { get; set; }
 
         public int? IsVerified { get; set; }
+
+        public string LeagueName { get; set; }
+
+        public int? Market { get; set; }
+
+        public string MatchSection { get; set; }
     }
 }

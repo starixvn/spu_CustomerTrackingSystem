@@ -18,8 +18,11 @@
             {
                 FromDate = filter.FromDate,
                 ToDate = filter.ToDate,
+                LeagueName = string.IsNullOrWhiteSpace(filter.LeagueName) ? null : filter.LeagueName,
+                Market = filter.Market,
+                MatchSection = filter.MatchSection,
                 BetType = filter.BetTypes,
-                IsVerified = filter.IsVerified
+                IsVerified = filter.IsVerified,
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
