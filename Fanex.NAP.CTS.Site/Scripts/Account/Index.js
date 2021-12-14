@@ -17,15 +17,24 @@
         tabCustomerCategory: $("#customer_category"),
         tabTransactionHistory: $("#trans_history"),
         tabRobotClassification: $("#robot_classification"),
-        tabRobotBetting: $('#robot_betting'),
-        spanTotalAssociated: $('#spanTotalAssociated'),
-        spanTotalEvidences: $('#spanTotalEvidences'),
+        tabRobotBetting: $('#robot_betting'),     
+        spanAssAccByBettingPattern: $('#spanAssAccByBettingPattern'),
+        spanAssAccByManually: $('#spanAssAccByManually'),
+        spanAssAccByDevice: $('#spanAssAccByDevice'),
+        spanAssAccByIP: $('#spanAssAccByIP'),
         spanClass: $('#spanClass'),
-        spanBetLimit: $('#spanBetLimit'),
-        spanLicVIP: $('#spanLicVIP'),
-        spanAutoSuspendSoccer: $('#autoSuspendSoccer'),
-        spanAutoSuspendOtherSport: $('#autoSuspendOtherSport'),
-        spanAutoSuspendESport: $('#autoSuspendESport'),
+        spanFlagEvidence: $('#spanFlagEvidence'),
+        spanAffectedEvidence: $('#spanAffectedEvidence'),
+        spanLicVIP: $('#spanLicVIP'),       
+        spanDesktopUsage: $('#spanDesktopUsage'),
+        spanMobileUsage: $('#spanMobileUsage'),
+        spanOthersUsage: $('#spanOthersUsage'),
+        spanLoginCount: $('#spanLoginCount'),
+        spanIPDeviceCount: $('#spanIPDeviceCount'),
+        spanNextCategoryScanDate: $('#spanNextCategoryScanDate'),
+        spanLastTicketDate: $('#spanLastTicketDate'),
+        spanLastLoginDate: $('#spanLastLoginDate'),
+        spanCreatedDate: $('#spanCreatedDate'),
         associatedAccountTab: $("#associated_account-tab"),
         evidenceTab: $("#evidence-tab"),
         statisticTitle: $("#statistic-title"),
@@ -37,6 +46,8 @@
     function LoadAssociationByAccount() {
         $.ajax(common.modifyRelativeUrl('Account/AssociatedByAccount'), {
             type: 'POST',
+            traditional: true,
+            async: true,
             data: {
                 username: username
             },
@@ -46,6 +57,11 @@
             complete: function () {
                 var associationByAccount = new account_by_account();
                 associationByAccount.Initial(ctsCustId, username, subscriberId, subscriber, isHostPermission);
+
+                LoadChainToEvidence();                
+                LoadTransactionHistory();
+                LoadLastestRobotClassification();
+                LoadRobotBetting();
             },
             error: function (errMsg) {
                 console.log(errMsg);
@@ -75,6 +91,8 @@
     function LoadCustomerCategory() {
         $.ajax(common.modifyRelativeUrl('Account/CustomerCategory'), {
             type: 'POST',
+            traditional: true,
+            async: true,
             success: function (response) {
                 domElements.tabCustomerCategory.html(response);
             },
@@ -136,45 +154,49 @@
                 console.log(errMsg);
             }
         });
-    }
+    } 
 
-    function GetCustomerTotalAssociation() {
-        $.ajax(common.modifyRelativeUrl('Account/GetCustomerTotalAssociationByCTSCustId'), {
+    //function GetCustomerProfile() {
+    //    $.ajax(common.modifyRelativeUrl('Account/GetCustomerProfile'), {
+    //        type: 'POST',
+    //        data: {
+    //            custId: custId,
+    //            ctsCustId: ctsCustId,
+    //            subscriberId: subscriberId
+    //        },
+    //        success: function (response) {
+    //            $('div.classification').html("<span>None</span>");
+    //            HandleCustomerStatus(response);
+    //            HandlePolicies(response);
+    //            HandleRobotUserStatus(response.RobotUserStatus);
+    //            HandleFlagedAffectedEvidence(response.FlagedAffectedEvidence);
+    //            HandleEsportAutoSuspendedStatus(response.EsportAutoSuspendStatus);
+    //        },
+    //        error: function (errMsg) {
+    //            console.log(errMsg);
+    //        }
+    //    });
+    //}
+
+    function GetCustProfile() {
+        $.ajax(common.modifyRelativeUrl('Account/GetCustProfile'), {
             type: 'POST',
+            traditional: true,
+            async: true,
             data: {
+                custId: custId,
                 ctsCustId: ctsCustId
             },
             success: function (response) {
-                totalAssAccount = response.TotalAccounts;
-                domElements.spanTotalAssociated.html(response.TotalAccounts + " / " + response.TotalDevices);
-            },
-            complete: function () {
-                GetCustomerEvidences();
-            },
-            error: function (errMsg) {
-                console.log(errMsg);
-            }
-        });
-    }
-
-    function GetCustomerEvidences() {
-        $.ajax(common.modifyRelativeUrl('Account/GetCustomerEvidenceByCTSCustId'), {
-            type: 'POST',
-            data: {
-                ctsCustId: ctsCustId
-            },
-            success: function (response) {
-                domElements.spanTotalEvidences.html(response.evidences);
-
-                totalEvidence = response.numberOfItems;
-
-                if (response.numberOfItems === 0) {
-                    domElements.spanTotalEvidences.contents().unwrap();
+                if (response !== null) {
+                    RenderRobotUserStatus(response);
+                    RenderFlagedAffectedEvidence(response);
                 }
             },
             complete: function () {
-                LoadAssociationByAccount();
-                LoadChainToEvidence();
+                LoadCustomerCategory();
+
+                LoadAssociationByAccount();  
             },
             error: function (errMsg) {
                 console.log(errMsg);
@@ -182,29 +204,116 @@
         });
     }
 
-    function HandlePolicies(response) {
-        domElements.spanClass.html(response.PoliciesInfo.CustomerClassToString + "  ");
+    function RenderRobotUserStatus(data) {
+        if (data !== null && data.IsRobotUser) {
+            switch (data.RobotType) {
+                case 0:
+                    $('span.icon-Robot').removeClass('icon-base-robot').addClass('icon-ob-robot');
+                    break;
+                case 1:
+                    $('span.icon-Robot').removeClass('icon-base-robot').addClass('icon-good-robot');
+                    break;
+                case 2:
+                    $('span.icon-Robot').removeClass('icon-base-robot').addClass('icon-bad-robot');
+                    break;
+                default:
+            }
 
-        domElements.spanBetLimit.html(response.PoliciesInfo.BetLimitToString);
-
-        domElements.spanLicVIP.html(response.PoliciesInfo.LicVip);
+            $('span.icon-Robot').removeClass('hide');
+        }
     }
 
-    function GetAccountProfile() {
-        $.ajax(common.modifyRelativeUrl('Account/GetAccountProfile'), {
+    function RenderFlagedAffectedEvidence(data) {
+        $('span.loading').remove();
+
+        if (data.Flagged)
+            $('span.icon-flag').removeClass('hide');
+        if (data.Affected)
+            $('span.icon-error').removeClass('hide');
+    }
+
+    function GetCustProfileAssociationAccount() {
+        $.ajax(common.modifyRelativeUrl('Account/GetCustProfileAssociationAccount'), {
             type: 'POST',
+            traditional: true,
+            async: true,
             data: {
-                custId: custId,
-                ctsCustId: ctsCustId,
-                subscriberId: subscriberId
+                ctsCustId: ctsCustId                 
             },
             success: function (response) {
-                $('div.classification').html("<span>None</span>");
-                HandleCustomerStatus(response);
-                HandlePolicies(response);
-                HandleRobotUserStatus(response.RobotUserStatus);
-                HandleFlagedAffectedEvidence(response.FlagedAffectedEvidence);
-                HandleEsportAutoSuspendedStatus(response.EsportAutoSuspendStatus);
+                if (response !== null) {
+                    domElements.spanAssAccByBettingPattern.html(response.AI);
+                    domElements.spanAssAccByManually.html(response.Manual);
+                    domElements.spanAssAccByDevice.html(response.Device);
+                    domElements.spanAssAccByIP.html(response.IP);
+                }
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+            }
+        });
+    }
+
+    function GetCustProfileClassification() {
+        $.ajax(common.modifyRelativeUrl('Account/GetCustProfileClassification'), {
+            type: 'POST',  
+            async: true,
+            data: {
+                ctsCustId: ctsCustId,
+                custId: custId
+            },
+            success: function (response) {
+                if (response !== null) {
+                    domElements.spanClass.html(response.Class);
+                    domElements.spanFlagEvidence.html(response.FlagEvidenceCodes);
+                    domElements.spanAffectedEvidence.html(response.AffectedEvidenceCodes);
+                    domElements.spanLicVIP.html(response.LicVIP);
+                }
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+            }
+        });
+    }    
+
+    function GetCustProfileLoginInfo() {
+        $.ajax(common.modifyRelativeUrl('Account/GetCustProfileLoginInfo'), {
+            type: 'POST',
+            traditional: true,
+            async: true,
+            data: {
+                ctsCustId: ctsCustId
+            },
+            success: function (response) {
+                if (response !== null) {
+                    domElements.spanDesktopUsage.html(response.DesktopUsage + " (" + response.DesktopUsagePercent +")");
+                    domElements.spanMobileUsage.html(response.MobileUsage + " (" + response.MobileUsagePercent + ")");
+                    domElements.spanOthersUsage.html(response.OthersUsage + " (" + response.OthersUsagePercent + ")");
+                    domElements.spanLoginCount.html(response.LoginCount);
+                    domElements.spanIPDeviceCount.html(response.IPCount + " / " + response.DeviceCount);
+                }
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+            }
+        });
+    }
+
+    function GetCustProfileDates() {
+        $.ajax(common.modifyRelativeUrl('Account/GetCustProfileDates'), {
+            type: 'POST',
+            traditional: true,
+            async: true,
+            data: {
+                ctsCustId: ctsCustId
+            },
+            success: function (response) {
+                if (response !== null) {
+                    domElements.spanNextCategoryScanDate.html(response.NextCategoryScanString);
+                    domElements.spanLastTicketDate.html(response.LastTicketString);
+                    domElements.spanLastLoginDate.html(response.LastLoginString);
+                    domElements.spanCreatedDate.html(response.CreatedString);
+                }
             },
             error: function (errMsg) {
                 console.log(errMsg);
@@ -242,49 +351,7 @@
                 setStorageStatisticUserBehavior(currentUserId, 'isStatisticOpen=true');
             }
         });
-    }
-
-    function HandleCustomerStatus(data) {
-        if (data !== null) {
-            domElements.spanAutoSuspendSoccer.html(data.GeneralInfo.Autosuspend ? 'Yes' : 'No');
-            domElements.spanAutoSuspendOtherSport.html(data.GeneralInfo.Autosuspend2 ? 'Yes' : 'No');
-        }
-    }
-
-    function HandleRobotUserStatus(data) {
-        if (data !== null && data.IsRobotUser)
-        {
-            switch (data.RobotType) {
-                case 0:
-                    $('span.icon-Robot').removeClass('icon-base-robot').addClass('icon-ob-robot');
-                    break;
-                case 1:
-                    $('span.icon-Robot').removeClass('icon-base-robot').addClass('icon-good-robot');
-                    break;
-                case 2:
-                    $('span.icon-Robot').removeClass('icon-base-robot').addClass('icon-bad-robot');
-                    break;
-                default:
-            }
-
-            $('span.icon-Robot').removeClass('hide');
-        }
-    }
-
-    function HandleFlagedAffectedEvidence(data) {
-        $('span.loading').remove();
-
-        if (data.Flagged)
-            $('span.icon-flag').removeClass('hide');
-        if (data.Affected)
-            $('span.icon-error').removeClass('hide');
-    }
-
-    function HandleEsportAutoSuspendedStatus(data) {
-        if (data !== null) {
-            domElements.spanAutoSuspendESport.html(data.EsportAutoSuspendStatus ? 'Yes' : 'No');
-        }
-    }
+    }      
 
     function getStorageStatisticUserBehavior(key) {
         if (typeof Storage !== "undefined") {
@@ -297,24 +364,21 @@
         if (typeof Storage !== "undefined") {
             localStorage.setItem(key, value);
         }
-    };
+    };    
 
     function Initial() {
         CollapseExpandStatistic();
-        GetAccountProfile();
-        GetCustomerTotalAssociation();
-        LoadTransactionHistory();
-        LoadCustomerCategory();
-        LoadLastestRobotClassification();
-        LoadRobotBetting();
+        //GetCustomerProfile();        
 
-        domElements.spanTotalAssociated.on('click', function () {
-            domElements.associatedAccountTab.trigger("click");
-        });
+        GetCustProfile();     
 
-        domElements.spanTotalEvidences.on('click', function () {
-            domElements.evidenceTab.trigger("click");
-        });
+        GetCustProfileAssociationAccount(); 
+
+        GetCustProfileClassification();
+
+        GetCustProfileLoginInfo();
+
+        GetCustProfileDates();              
 
         $("#tabs-account-detail").tabs();
     }

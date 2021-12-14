@@ -66,4 +66,8 @@
 	<Function name="RobotBetting">
 		<Setting Key="CTS_Rpt_RobotDetection_TicketDetails" SpName="CTS_Rpt_RobotDetection_TicketDetails" DbName="DBCTS.bodb02.bodbSPUNet" />
 	</Function>
+
+	<Function name="CustomerProfile">
+		<Setting Key="CTS_Customer_GetInfoByCustIdList" SpName="CTS_Customer_GetInfoByCustIdList" DbName="DBCTS.bodb02.bodbSPUNet" />
+	</Function>
 </Functions>

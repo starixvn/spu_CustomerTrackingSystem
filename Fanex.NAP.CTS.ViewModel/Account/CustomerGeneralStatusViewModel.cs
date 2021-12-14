@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.Account
 {
     using Fanex.NAP.CTS.Model.Account;
+    using Fanex.NAP.CTS.Model.Account.CustomerInfo;
     using System;
     using System.Collections.Generic;
 
@@ -52,17 +53,23 @@
 
         public string DangerousOriginal { get; set; }
 
-        public string DangerouseABI { get; set; }
+        public string DangerousABI { get; set; }
 
-        public string DangerouseOtherSports { get; set; }
+        public string DangerousBasketball { get; set; }
+
+        public string DangerousESports { get; set; }
+
+        public string DangerousOtherSports { get; set; }
 
         public int Abnormal { get; set; }
 
-        public DateTime CreatedDate { get; set; }
+        public DateTime NextCategoryScanDate { get; set; }
 
         public DateTime LastLoginDate { get; set; }
 
         public DateTime LastTicketDate { get; set; }
+
+        public DateTime CreatedDate { get; set; }
 
         public bool AutoSuspendSoccer { get; set; }
 
@@ -92,12 +99,34 @@
 
         public List<FraudCaseModel> FraudCases { get; set; }
 
-        public CustomerGeneralStatusViewModel BindingGeneralDataFromMainDB(CustomerLastTicketDateModel customerLastTicketDateModel)
+        public CustomerGeneralStatusViewModel BindingGeneralDataFromMainDB(CustomerLastTicketDateModel customerLastTicketDateModel, CustomerInfoByCustIdsModel custDangerousModel)
         {
-
             if (customerLastTicketDateModel != null)
             {
                 this.LastTicketDate = customerLastTicketDateModel.TransDate;
+            }
+
+            if (custDangerousModel != null)
+            {
+                this.DangerousOriginal = (custDangerousModel.Danger1 == 0) ? "None" : custDangerousModel.Danger1.ToString();
+                this.DangerousABI = (custDangerousModel.Danger2 == 0) ? "None" : custDangerousModel.Danger2.ToString();
+                this.DangerousBasketball = (custDangerousModel.Danger3 == 0) ? "None" : custDangerousModel.Danger3.ToString();
+                this.DangerousESports = (custDangerousModel.Danger4 == 0) ? "None" : custDangerousModel.Danger4.ToString();
+                this.DangerousOtherSports = (custDangerousModel.Danger5 == 0) ? "None" : custDangerousModel.Danger5.ToString();                
+            }
+           
+            return this;
+        }
+
+        public CustomerGeneralStatusViewModel BindingDangerous(CustomerInfoByCustIdsModel custDangerousModel)
+        {
+            if (custDangerousModel != null)
+            {
+                this.DangerousOriginal = (custDangerousModel.Danger1 == 0) ? "None" : custDangerousModel.Danger1.ToString();
+                this.DangerousABI = (custDangerousModel.Danger2 == 0) ? "None" : custDangerousModel.Danger2.ToString();
+                this.DangerousBasketball = (custDangerousModel.Danger3 == 0) ? "None" : custDangerousModel.Danger3.ToString();
+                this.DangerousESports = (custDangerousModel.Danger4 == 0) ? "None" : custDangerousModel.Danger4.ToString();
+                this.DangerousOtherSports = (custDangerousModel.Danger5 == 0) ? "None" : custDangerousModel.Danger5.ToString();
             }
 
             return this;
@@ -117,10 +146,7 @@
                 this.Subscriber = string.IsNullOrEmpty(customerInfoByCTSCustIdModel.SubscriberName) ? "N/A" : customerInfoByCTSCustIdModel.SubscriberName;
                 this.SubscriberId = customerInfoByCTSCustIdModel.SubscriberID;
                 this.CustStatusID = customerInfoByCTSCustIdModel.CustStatusID;
-                this.StatusName =  string.IsNullOrEmpty(customerInfoByCTSCustIdModel.CustStatusName) ? "N/A" : customerInfoByCTSCustIdModel.CustStatusName;
-                this.DangerousOriginal = (customerInfoByCTSCustIdModel.Danger1 == 0) ? "None" : customerInfoByCTSCustIdModel.Danger1.ToString();
-                this.DangerouseABI = (customerInfoByCTSCustIdModel.Danger2 == 0) ? "None" : customerInfoByCTSCustIdModel.Danger2.ToString();
-                this.DangerouseOtherSports = (customerInfoByCTSCustIdModel.Danger3 == 0) ? "None" : customerInfoByCTSCustIdModel.Danger3.ToString();
+                this.StatusName =  string.IsNullOrEmpty(customerInfoByCTSCustIdModel.CustStatusName) ? "N/A" : customerInfoByCTSCustIdModel.CustStatusName;                
             }
 
             return this;

@@ -25,11 +25,6 @@
         public int? CustStatusID { get; set; }
 
         public string CustStatusName { get; set; }
-
-        public int Danger1 { get; set; }
-
-        public int Danger2 { get; set; }
-
-        public int Danger3 { get; set; }
+    
     }
 }

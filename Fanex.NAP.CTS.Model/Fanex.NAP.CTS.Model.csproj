@@ -154,6 +154,13 @@
     <Compile Include="Account\CustomerCategory\ResultInsertRemoveCustomerClassificationModel.cs" />
     <Compile Include="Account\CustomerEsportAutoSuspendStatusModel.cs" />
     <Compile Include="Account\CustomerEvidenceByCTSCustIdModel.cs" />
+    <Compile Include="Account\CustomerInfo\CustomerInfoAssociationAccountModel.cs" />
+    <Compile Include="Account\CustomerInfo\CustomerInfoByCustIdsModel.cs" />
+    <Compile Include="Account\CustomerInfo\CustomerInfoClassModel.cs" />
+    <Compile Include="Account\CustomerInfo\CustomerInfoDateModel.cs" />
+    <Compile Include="Account\CustomerInfo\CustomerInfoEvidenceModel.cs" />
+    <Compile Include="Account\CustomerInfo\CustomerInfoLoginStatsModel.cs" />
+    <Compile Include="Account\CustomerInfo\CustomerInfoPoliciesModel.cs" />
     <Compile Include="Account\CustomerPoliciesModel.cs" />
     <Compile Include="Account\RobotBetting\RobotBettingTicketDetailModel.cs" />
     <Compile Include="Account\RobotBetting\RobotDateModel.cs" />
