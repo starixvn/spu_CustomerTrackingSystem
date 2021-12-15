@@ -6,9 +6,6 @@
 
     public class MatchDetailMonitorGetCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_EventDate")]
-        public DateTime EventDate { get; set; }
-
         [SpParam(SqlParamName = "ip_MatchID")]
         public Int64 MatchID { get; set; }
 

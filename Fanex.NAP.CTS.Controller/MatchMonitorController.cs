@@ -16,6 +16,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using System.Web.Mvc;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.MatchMonitor, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -102,30 +103,32 @@
             {
                 if (para != null)
                 {
-                    matchReasonGroup = _matchMonitorService.GetMatchReasonGroup(para.EventDate, para.MatchID, para.BetTypeID, para.LiveIndicator, para.IsHedging)?.ToList();
+                    matchReasonGroup = _matchMonitorService.GetMatchReasonGroup(para.MatchID, para.BetTypeID, para.LiveIndicator, para.IsHedging)?.ToList() ?? new List<MatchReasonGroupModel>();
 
-                    matchScore = _matchMonitorService.GetMatchScore(para.EventDate, para.MatchID, para.BetTypeID, para.LiveIndicator, para.IsHedging);
+                    matchScore = _matchMonitorService.GetMatchScore(para.MatchID, para.BetTypeID, para.LiveIndicator, para.IsHedging) ?? new List<MatchScoreModel>();
                     MappingReasonGroupName(ref matchReasonGroup, para.IsHedging);
-
-                    ViewBag.EventDateToString = para.EventDateToString;
-                    ViewBag.MatchID = para.MatchID;
-                    ViewBag.BetTypeID = para.BetTypeID;
-                    ViewBag.MatchName = para.MatchName;
-                    ViewBag.LiveIndicator = para.LiveIndicator;
-                    ViewBag.IsHedging = para.IsHedging;
-                    ViewBag.IsLiveDefault = (para.MatchSection == 2 || para.MatchSection == 4);
-                    ViewBag.ReasonGroup = matchReasonGroup;
-                    ViewBag.MatchScore = matchScore.OrderBy(c => c.TotalScore).ThenBy(c => c.LiveHomeScore).ThenBy(c => c.LiveAwayScore);
-                    ViewBag.IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
-                                    NapSettings.Settings.SiteId,
-                                    FSFunctionKeys.MatchMonitor,
-                                    NAP.Core.Business.Constant.Policy.Host);
                 }
             }
             catch (Exception e)
             {
                 LogService.Error("Match Monitor Error", e);
             }
+
+            ViewBag.EventDateToString = para?.EventDateToString;
+            ViewBag.MatchID = para?.MatchID;
+            ViewBag.BetTypeID = para?.BetTypeID;
+            ViewBag.MatchName = para?.MatchName ?? string.Empty;
+            ViewBag.LiveIndicator = para?.LiveIndicator ?? true;
+            ViewBag.IsHedging = para?.IsHedging ?? true;
+            ViewBag.ReasonGroup = matchReasonGroup;
+            ViewBag.MatchScore =  matchScore?.OrderBy(c => c.TotalScore).ThenBy(c => c.LiveHomeScore).ThenBy(c => c.LiveAwayScore);
+            ViewBag.LeagueName = para?.LeagueName ?? string.Empty;
+            ViewBag.ReasonName = para?.ReasonName ?? string.Empty;
+            ViewBag.MarketName = para?.MarketName ?? string.Empty;
+            ViewBag.IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
+                                                                        NapSettings.Settings.SiteId,
+                                                                        FSFunctionKeys.MatchMonitor,
+                                                                        NAP.Core.Business.Constant.Policy.Host);
 
             return View();
         }
@@ -159,8 +162,7 @@
                             {
                                 var custIdsOfEachMatch =  matchDetail.Select(c => c.ListCustID).Distinct();
                                 var custIdsOfTotalMatch = string.Join(",",custIdsOfEachMatch).Split(',').Distinct();
-                                custInfo = _matchMonitorService
-                                                    .GetCustInfoByCustID(string.Join(",", custIdsOfTotalMatch));
+                                custInfo = _matchMonitorService.GetCustInfoByCustID(string.Join(",", custIdsOfTotalMatch));
 
                             }),
                             Task.Run(() =>

@@ -99,8 +99,8 @@
             columns: [
                 {
                     data: obj => () => {
-                        let paramTemplate = "EventDateToString={0}&MatchID={1}&HomeID={2}&AwayID={3}&BetTypeID={4}&MatchSection={5}&LiveIndicator={6}&IsHedging={7}";
-                        let para = paramTemplate.format(obj.EventDateToString, obj.MatchID, obj.HomeID, obj.AwayID, obj.BettypeID, obj.MatchSection, obj.Market == 1, obj.IsHedging);
+                        let paramTemplate = "EventDateToString={0}&MatchID={1}&HomeID={2}&AwayID={3}&BetTypeID={4}&MatchSection={5}&Market={6}&IsHedging={7}&LeagueID={8}";
+                        let para = paramTemplate.format(obj.EventDateToString, obj.MatchID, obj.HomeID, obj.AwayID, obj.BettypeID, obj.MatchSection, obj.Market, obj.IsHedging, obj.LeagueID);
                         return '<a class="click-view-details" href="MatchMonitor/Detail?' + para + '" target="_blank">' + obj.MatchName + '</a>';
 
                         //let url = common.modifyRelativeUrl(`MatchMonitor/Detail?eventDataJson=${obj.EventDateToString}&matchID=${obj.MatchID}&matchNameJson=JSON.stringify(${obj.MatchName})&betTypeID=${obj.BettypeID}`);
@@ -129,7 +129,7 @@
                 var data = api.rows({ page: 'current' }).data();
                 var last = null;
 
-                api.column(8, { page: 'current' }).data().each(function (group, i) {
+                api.column(6, { page: 'current' }).data().each(function (group, i) {
                     if (last !== group) {
                         $(rows).eq(i).before(
                             '<tr class="group group group-site"><td colspan="8">' + data[i].MatchSectionName + '</td></tr>'

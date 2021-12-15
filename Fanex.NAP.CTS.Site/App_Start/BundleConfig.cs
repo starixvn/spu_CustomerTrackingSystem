@@ -332,7 +332,8 @@
                 "~/Content/scss/vendors/select2.min.css",
                  "~/Content/scss/MultipleSelect/jquery.multiselect.filter.css",
                 "~/Content/scss/MultipleSelect/jquery.multiselect.css",
-                "~/Content/scss/pages/match-monitor/match-monitor-detail.css"));
+                "~/Content/scss/pages/match-monitor/match-monitor-detail.css",
+                "~/Content/scss/vendors/jquery-ui/base/tagify.css"));
         }
         
         private static void RegisterProblemCaseMonitor(BundleCollection bundles)

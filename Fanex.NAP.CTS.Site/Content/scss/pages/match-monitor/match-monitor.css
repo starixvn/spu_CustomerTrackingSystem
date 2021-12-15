@@ -426,7 +426,8 @@
       .match-monitor .monitor-container .monitor-table .group-control .form-filter .group-drop-down .block-box, .detailpage .monitor-container .monitor-table .group-control .form-filter .group-drop-down .block-box {
         display: block; }
   .match-monitor .monitor-container .monitor-table .group-table, .detailpage .monitor-container .monitor-table .group-table {
-    display: flex; }
+    display: flex;
+    padding-bottom: 1rem; }
   .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report, .match-monitor .monitor-container .monitor-table #first-monitor-datatable .table-report, .match-monitor .monitor-container .monitor-table #second-monitor-datatable .table-report, .detailpage .monitor-container .monitor-table #monitor-datatable .table-report, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report {
     font-family: "Lato", Arial, Tahoma, sans-serif; }
     .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .wrapper-info-table, .match-monitor .monitor-container .monitor-table #first-monitor-datatable .table-report .wrapper-info-table, .match-monitor .monitor-container .monitor-table #second-monitor-datatable .table-report .wrapper-info-table, .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .wrapper-info-table, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .wrapper-info-table, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .wrapper-info-table {
@@ -495,6 +496,20 @@
     padding-right: 2rem; }
   .match-monitor .monitor-container .monitor-table #first-monitor-datatable, .match-monitor .monitor-container .monitor-table #second-monitor-datatable, .detailpage .monitor-container .monitor-table #first-monitor-datatable, .detailpage .monitor-container .monitor-table #second-monitor-datatable {
     width: 100%; }
+  .match-monitor .monitor-container .monitor-table .second-group-table-border, .detailpage .monitor-container .monitor-table .second-group-table-border {
+    border: 1px solid #E5E5E5;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    padding: 10px;
+    margin-top: 10px; }
+  .match-monitor .monitor-container .monitor-table .third-group-table-border, .detailpage .monitor-container .monitor-table .third-group-table-border {
+    border-bottom: 1px solid #E5E5E5;
+    border-left: 1px solid #E5E5E5;
+    border-right: 1px solid #E5E5E5;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+    padding: 10px;
+    box-shadow: 0px 1px #e5e5e5; }
 
 .group.width-280 {
   width: 27.5rem; }
@@ -523,3 +538,28 @@
 
 .detailpage {
   width: 255rem; }
+
+.detail-area {
+  position: absolute;
+  right: 0;
+  padding: 0.5rem;
+  border: 1px solid #E5E5E5;
+  border-radius: 5px; }
+  .detail-area span {
+    width: 100%;
+    color: #2b2b2b;
+    font-weight: 600;
+    font-size: 13px;
+    line-height: 20px; }
+  .detail-area .league-highlight {
+    color: #516792; }
+  .detail-area .market-highlight {
+    color: #ff2020; }
+
+.button-verification {
+  border-radius: 2px;
+  color: #396ef8;
+  background-color: white;
+  border: 1px solid #396ef8;
+  height: auto !important;
+  padding: .7rem 2rem; }

@@ -47,11 +47,10 @@
             return new DBResult { ErrorCode = string.IsNullOrEmpty(criteria.ErrorMessage) ? -1 : 0, ErrorMsg = criteria.ErrorMessage };
         }
 
-        public List<MatchReasonGroupModel> GetMatchReasonGroup(DateTime eventDate, Int64 matchID, int betTypeID, bool liveIndicator, bool isHedging)
+        public List<MatchReasonGroupModel> GetMatchReasonGroup(Int64 matchID, int betTypeID, bool liveIndicator, bool isHedging)
         {
             var criteria = new MatchReasonGroupGetCriteria()
             {
-                EventDate = eventDate,
                 BettypeID = betTypeID,
                 MatchID = matchID,
                 LiveIndicator = liveIndicator,
@@ -64,11 +63,10 @@
             }
         }
 
-        public List<MatchScoreModel> GetMatchScore(DateTime eventDate, Int64 matchID, int betTypeID, bool liveIndicator, bool isHedging)
+        public List<MatchScoreModel> GetMatchScore(Int64 matchID, int betTypeID, bool liveIndicator, bool isHedging)
         {
             var criteria = new MatchScoreGetCriteria()
             {
-                EventDate = eventDate,
                 BettypeID = betTypeID,
                 MatchID = matchID,
                 LiveIndicator = liveIndicator,
@@ -85,7 +83,6 @@
         {
             var criteria = new MatchDetailMonitorGetCriteria()
             {
-                EventDate = filter.EventDate,
                 BettypeID = filter.BetTypeID,
                 ListReasonGroup = filter.ListReasonGroup,
                 ListScore = filter.ListScore,                

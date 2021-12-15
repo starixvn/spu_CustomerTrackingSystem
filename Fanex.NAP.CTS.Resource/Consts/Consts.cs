@@ -107,7 +107,7 @@
             FirsttOU = 8
         }
 
-        public enum MATCHMONITOR_EVENTGROUP
+        public enum MATCHMONITOR_SECTION
         {
             Live = 1,
             Today = 2,

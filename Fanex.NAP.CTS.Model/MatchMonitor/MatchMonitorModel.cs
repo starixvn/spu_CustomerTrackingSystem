@@ -102,14 +102,14 @@
             {
                 switch (MatchSection)
                 {
-                    case (int)MATCHMONITOR_EVENTGROUP.Early:
-                        return Enum.GetName(typeof(MATCHMONITOR_EVENTGROUP), MATCHMONITOR_EVENTGROUP.Early);
-                    case (int)MATCHMONITOR_EVENTGROUP.Live:
-                        return Enum.GetName(typeof(MATCHMONITOR_EVENTGROUP), MATCHMONITOR_EVENTGROUP.Live);
-                    case (int)MATCHMONITOR_EVENTGROUP.Today:
-                        return Enum.GetName(typeof(MATCHMONITOR_EVENTGROUP), MATCHMONITOR_EVENTGROUP.Today);
-                    case (int)MATCHMONITOR_EVENTGROUP.Closed:
-                        return Enum.GetName(typeof(MATCHMONITOR_EVENTGROUP), MATCHMONITOR_EVENTGROUP.Closed);
+                    case (int)MATCHMONITOR_SECTION.Early:
+                        return Enum.GetName(typeof(MATCHMONITOR_SECTION), MATCHMONITOR_SECTION.Early);
+                    case (int)MATCHMONITOR_SECTION.Live:
+                        return Enum.GetName(typeof(MATCHMONITOR_SECTION), MATCHMONITOR_SECTION.Live);
+                    case (int)MATCHMONITOR_SECTION.Today:
+                        return Enum.GetName(typeof(MATCHMONITOR_SECTION), MATCHMONITOR_SECTION.Today);
+                    case (int)MATCHMONITOR_SECTION.Closed:
+                        return Enum.GetName(typeof(MATCHMONITOR_SECTION), MATCHMONITOR_SECTION.Closed);
                 }
 
                 return "";
