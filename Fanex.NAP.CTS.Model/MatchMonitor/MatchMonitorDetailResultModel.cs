@@ -6,6 +6,6 @@
     {
         public IEnumerable<MatchMonitorDetailModel> MatchDetails { get; set; }
 
-        public IEnumerable<MatchMonitorVerifiedTransDetailModel> VerifiedTrans { get; set; }      
+        public IEnumerable<MatchMonitorDetailVerifyTransResultModel> VerifiedTrans { get; set; }      
     }
 }

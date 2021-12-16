@@ -70,34 +70,12 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpPost]
-        public ActionResult UpdateVerification(Int64 matchID)
-        {
-            var result = new DBResult();
-
-            try
-            {
-                result = _matchMonitorService.UpdateVerificaton(matchID, CurrentSession.UserId);
-            }
-            catch (Exception e)
-            {
-                LogService.Error("Match Monitor Error", e);
-                result.ErrorCode = -1;
-                result.ErrorMsg = e.Message;
-            }
-
-            return Json(new
-            {
-                data = result
-            }, JsonRequestBehavior.AllowGet);
-        }
-
         [HttpGet]
         public ActionResult Detail(MatchMonitorDetailViewModel para)
         {
             IUserService userService = new UserService();
-            var matchGroup = new List<MatchGroupModel>();
-            var matchScore = new List<MatchScoreModel>();
+            var matchGroup = Enumerable.Empty<MatchGroupModel>();
+            var matchScore = Enumerable.Empty<MatchScoreModel>();
 
             try
             {
@@ -122,7 +100,7 @@
             ViewBag.LiveIndicator = para?.LiveIndicator ?? true;
             ViewBag.IsHedging = para?.IsHedging ?? true;
             ViewBag.Group = matchGroup;
-            ViewBag.MatchScore =  matchScore?.OrderBy(c => c.TotalScore).ThenBy(c => c.LiveHomeScore).ThenBy(c => c.LiveAwayScore);
+            ViewBag.MatchScore = matchScore?.OrderBy(c => c.TotalScore).ThenBy(c => c.LiveHomeScore).ThenBy(c => c.LiveAwayScore);
             ViewBag.LeagueName = para?.LeagueName ?? string.Empty;
             ViewBag.ReasonName = para?.ReasonName ?? string.Empty;
             ViewBag.MarketName = para?.MarketName ?? string.Empty;
@@ -149,9 +127,9 @@
 
                     if (matchDetailInfo != null && matchDetailInfo.MatchDetails.Any())
                     {
-                        var custInfo = new List<CustInfoModel>();
-                        var mappingTransInfo = new List<TransGroupModel>();
-                        var ticketDetail = new List<TicketDetailModel>();
+                        var custInfo = Enumerable.Empty<CustInfoModel>();
+                        var mappingTransInfo = Enumerable.Empty<TransGroupModel>();
+                        var ticketDetail = Enumerable.Empty<TicketDetailModel>();
 
                         var tasks = new List<Task>
                         {
@@ -164,7 +142,6 @@
                                 var custIdsOfEachMatch =  matchDetailInfo.MatchDetails.Select(c => c.ListCustID).Distinct();
                                 var custIdsOfTotalMatch = string.Join(",",custIdsOfEachMatch).Split(',').Distinct();
                                 custInfo = _matchMonitorService.GetCustInfoByCustID(string.Join(",", custIdsOfTotalMatch));
-
                             }),
                             Task.Run(() =>
                             {
@@ -178,7 +155,7 @@
 
                         matchDetailResult = MergeMatchMonitorDetail(mappingTransInfo, custInfo, ticketDetail);
 
-                        if(para.Sites != "A")
+                        if (para.Sites != "A")
                         {
                             matchDetailResult = matchDetailResult.Where(x => x.SubscriberType == para.Sites).ToList();
                         }
@@ -192,12 +169,39 @@
 
             return Json(new
             {
-                homeTableData = matchDetailResult?.Where(c => c.IsHomeSide),
-                awayTableData = matchDetailResult?.Where(c => !c.IsHomeSide)
+                homeTableData = matchDetailResult?.Where(c => c.IsHomeSide) ?? new List<MatchMonitorDetailResultViewModel>(),
+                awayTableData = matchDetailResult?.Where(c => !c.IsHomeSide) ?? new List<MatchMonitorDetailResultViewModel>()
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private List<MatchMonitorDetailResultViewModel> MergeMatchMonitorDetail(List<TransGroupModel> mappingTransInfo, List<CustInfoModel> custInfo, List<TicketDetailModel> ticketDetail)
+        [HttpPost]
+        public ActionResult VerifyTransMMDetail(MatchMonitorDetailVerifyTransParaModel para)
+        {
+            var result = new DBResult();
+
+            try
+            {
+                if (para != null && !string.IsNullOrEmpty(para.TranIds))
+                {
+                    para.VerifiedBy = CurrentSession.UserId;
+
+                    _matchMonitorService.VerifyTransMatchMonitorDetail(para);
+                }
+            }
+            catch (Exception e)
+            {
+                LogService.Error("Match Monitor Error", e);
+                result.ErrorCode = -1;
+                result.ErrorMsg = e.Message;
+            }
+
+            return Json(new
+            {
+                data = result
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        private List<MatchMonitorDetailResultViewModel> MergeMatchMonitorDetail(IEnumerable<TransGroupModel> mappingTransInfo, IEnumerable<CustInfoModel> custInfo, IEnumerable<TicketDetailModel> ticketDetail)
         {
             var matchDetailResult = new List<MatchMonitorDetailResultViewModel>();
 
@@ -215,12 +219,12 @@
                                                                 CustID = c.cust.CustID,
                                                                 SubscriberType = c.cust.SubscriberType,
                                                                 Username = c.cust.UserName,
-                                                                IsRobotUser = c.cust.IsRobotUser,
-                                                                RobotBetting = c.cust.RobotBetting,
+                                                                RobotUser = c.cust.RobotUser,
+                                                                IsRobotBetting = c.cust.IsRobotBetting,
                                                                 PICVerified = GetVerifiedTrans(mappingTransInfo, c.ticket),
                                                                 Danger1 = c.ticket.Danger1,
                                                                 Danger2 = c.ticket.Danger2,
-                                                                Danger3 = c.ticket.Danger3,     
+                                                                Danger3 = c.ticket.Danger3,
                                                                 Danger4 = c.ticket.Danger4,
                                                                 Danger5 = c.ticket.Danger5,
                                                                 Odds = c.ticket.Odds,
@@ -229,11 +233,12 @@
                                                                 Currency = c.cust.Currency,
                                                                 Amount = c.ticket.Stake,
                                                                 HDP1 = c.ticket.Hdp1,
-                                                                HDP2 =  c.ticket.Hdp2,
+                                                                HDP2 = c.ticket.Hdp2,
                                                                 Score = c.ticket.LiveIndicator ? (c.ticket.LiveHomeScore + " - " + c.ticket.LiveAwayScore) : "-",
                                                                 TicketStatus = c.ticket.TicketStatus,
                                                                 TransTime = c.ticket.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                                                                Group = GetGroup(mappingTransInfo, c.ticket)
+                                                                Group = GetGroup(mappingTransInfo, c.ticket),
+                                                                TransId = c.ticket.TransId
                                                             })?.OrderByDescending(c => c.TransTime)?.ThenBy(c => c.Group)?.Distinct()?.ToList();
 
             return matchDetailResult;
@@ -258,12 +263,12 @@
                     return new MatchMonitorDetailResultModel
                     {
                         MatchDetails = matchs ?? new List<MatchMonitorDetailModel>(),
-                        VerifiedTrans = matchDetails.VerifiedTrans ?? new List<MatchMonitorVerifiedTransDetailModel>()
+                        VerifiedTrans = matchDetails.VerifiedTrans ?? new List<MatchMonitorDetailVerifyTransResultModel>()
                     };
                 }
             }
 
-            return new MatchMonitorDetailResultModel { MatchDetails = new List<MatchMonitorDetailModel>(), VerifiedTrans = new List<MatchMonitorVerifiedTransDetailModel>() };
+            return new MatchMonitorDetailResultModel { MatchDetails = new List<MatchMonitorDetailModel>(), VerifiedTrans = new List<MatchMonitorDetailVerifyTransResultModel>() };
         }
 
         private List<TransGroupModel> MappingTransInfo(MatchMonitorDetailResultModel matchDetail, List<MatchGroupKeyModel> groupKey)
@@ -292,7 +297,7 @@
             return transGroupBetting;
         }
 
-        private string GetGroup(List<TransGroupModel> mappingTransInfo, TicketDetailModel ticketDetail)
+        private string GetGroup(IEnumerable<TransGroupModel> mappingTransInfo, TicketDetailModel ticketDetail)
         {
             string reasonGroup = "-";
 
@@ -308,7 +313,7 @@
             return reasonGroup;
         }
 
-        private string GetVerifiedTrans(List<TransGroupModel> mappingTransInfo, TicketDetailModel ticketDetail)
+        private string GetVerifiedTrans(IEnumerable<TransGroupModel> mappingTransInfo, TicketDetailModel ticketDetail)
         {
             string verifiedTran = "-";
 
@@ -320,13 +325,13 @@
 
                 var verifiedDate = transGroup?.FirstOrDefault()?.VerifiedDate;
 
-                return string.IsNullOrEmpty(verifiedBy) && string.IsNullOrEmpty(verifiedDate) ? verifiedTran : string.Concat( verifiedBy, " ", verifiedDate);
+                return string.IsNullOrEmpty(verifiedBy) && string.IsNullOrEmpty(verifiedDate) ? verifiedTran : string.Concat(verifiedBy, " ", verifiedDate);
             }
 
             return verifiedTran;
         }
 
-        private void MappingReasonGroupName(ref List<MatchGroupModel> matchReasonGroup)
+        private void MappingReasonGroupName(ref IEnumerable<MatchGroupModel> matchReasonGroup)
         {
             int preIncrement = 0;
 

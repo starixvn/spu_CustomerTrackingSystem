@@ -20,8 +20,8 @@
 
         public string SubscriberType { get; set; }
 
-        public bool IsRobotUser { get; set; }
+        public int RobotUser { get; set; }
 
-        public int RobotBetting { get; set; }
+        public bool IsRobotBetting { get; set; }
     }
 }

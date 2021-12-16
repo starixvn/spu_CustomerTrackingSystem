@@ -8,18 +8,18 @@
 
     public interface IMatchMonitorService
     {
-        List<MatchMonitorModel> GetMatchMonitor(MatchMonitorFilterViewModel filter);
+        IEnumerable<MatchMonitorModel> GetMatchMonitor(MatchMonitorFilterViewModel filter);
 
-        List<MatchGroupModel> GetMatchGroup(Int64 matchID, int betTypeID, bool liveIndicator, bool isHedging);
+        IEnumerable<MatchGroupModel> GetMatchGroup(Int64 matchID, int betTypeID, bool liveIndicator, bool isHedging);
 
-        List<MatchScoreModel> GetMatchScore(Int64 matchID, int betTypeID, bool liveIndicator, bool isHedging);
+        IEnumerable<MatchScoreModel> GetMatchScore(Int64 matchID, int betTypeID, bool liveIndicator, bool isHedging);
 
-        DBResult UpdateVerificaton(Int64 matchID, Int64 userID);
+        DBResult VerifyTransMatchMonitorDetail(MatchMonitorDetailVerifyTransParaModel para);
 
         MatchMonitorDetailResultModel GetMatchMonitorDetail(MatchMonitorDetailFilterViewModel filter);
 
-        List<CustInfoModel> GetCustInfoByCustID(string custIDs);
+        IEnumerable<CustInfoModel> GetCustInfoByCustID(string custIDs);
 
-        List<TicketDetailModel> GetTicketDetail(DateTime eventDate, string transIds);
+        IEnumerable<TicketDetailModel> GetTicketDetail(DateTime eventDate, string transIds);
     }
 }

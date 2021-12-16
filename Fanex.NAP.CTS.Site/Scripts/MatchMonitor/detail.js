@@ -1,5 +1,4 @@
 ﻿function MatchMonitorDetail() {
-
     let domElements = {
         isHostPermission: $("#hdIsHostPermission").attr("IsHostPermission"),
         eventDataToString: $("#hdEventDataToString").val(),
@@ -8,9 +7,10 @@
         isHedging: $("#hdIsHedging").val(),
         liveIndicator: $("#hdLiveIndicator").val(),
         cbbMatchScore: $('#cbbMatchScore'),
-        cbbGroup: $('#cbbGroup'), 
+        cbbGroup: $('#cbbGroup'),
         cbbSites: $('#cbbSites'),
         btnGenerateDetail: $('#btnGenerate-detail'),
+        btnVerify: $('#btnVerify'),
         firsttblMonitor: $('#first-tblMonitor'),
         secondtblMonitor: $('#second-tblMonitor')
     };
@@ -46,7 +46,7 @@
                 domElements.secondtblMonitor.find('tbody').removeClass('loading');
                 console.log(error);
             }
-        });  
+        });
     }
 
     function InitialFirstDetailGird() {
@@ -74,7 +74,7 @@
             scrollCollapse: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], className: "text-center" },
+                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13], className: "text-center" },
                 { targets: [0] },
                 { targets: [1] },
                 { targets: [2] },
@@ -88,6 +88,7 @@
                 { targets: [10] },
                 { targets: [11] },
                 { targets: [12] },
+                { targets: [13], visible: false }
             ],
             columns: [
                 { data: obj => obj.SubscriberType },
@@ -97,7 +98,7 @@
                         return `<a class='click-view-name ' href=${url}> ${obj.Username} </a>`;
                     }
                 },
-                { data: obj => RenderBotIcon(obj.IsRobotUser, obj.RobotBetting) },
+                { data: obj => RenderBotIcon(obj.RobotUser, obj.IsRobotBetting) },
                 { data: obj => obj.DangerToString },
                 { data: obj => obj.Odds },
                 { data: obj => obj.BetID },
@@ -107,10 +108,10 @@
                 { data: obj => obj.Score },
                 { data: obj => obj.TransTime },
                 { data: obj => obj.Group },
-                { data: obj => obj.PICVerified }
+                { data: obj => obj.PICVerified },
+                { data: obj => obj.TransId }
             ],
-            createdRow: function (row, data, index)
-            {
+            createdRow: function (row, data, index) {
                 if (data.TicketStatus == 102)
                     $(row.cells).addClass('void-ticket');
                 else if (data.TicketStatus == 101)
@@ -123,7 +124,6 @@
     }
 
     function InitialSecondDetailGird() {
-
         return domElements.secondtblMonitor.DataTable({
             serverSide: false,
             dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
@@ -162,7 +162,7 @@
                 { targets: [10], width: "6%" },
                 { targets: [11], width: "6%" },
                 { targets: [12], width: "6%" },
-
+                { targets: [13], visible: false }
             ],
             columns: [
                 { data: obj => obj.SubscriberType },
@@ -172,7 +172,7 @@
                         return `<a class='click-view-name' href=${url}> ${obj.Username} </a>`;
                     }
                 },
-                { data: obj => RenderBotIcon(obj.IsRobotUser, obj.RobotBetting) },
+                { data: obj => RenderBotIcon(obj.RobotUser, obj.IsRobotBetting) },
                 { data: obj => obj.DangerToString },
                 { data: obj => obj.Odds },
                 { data: obj => obj.BetID },
@@ -182,27 +182,25 @@
                 { data: obj => obj.Score },
                 { data: obj => obj.TransTime },
                 { data: obj => obj.Group },
-                { data: obj => obj.PICVerified }
-
+                { data: obj => obj.PICVerified },
+                { data: obj => obj.TransId }
             ],
-            createdRow: function (row, data, index)
-            {
+            createdRow: function (row, data, index) {
                 if (data.TicketStatus == 102)
                     $(row.cells).addClass('void-ticket');
                 else if (data.TicketStatus == 101)
                     $(row.cells).addClass('rejected-ticket');
                 else if (data.SubscriberType === "L") {
-                        $(row.cells[1]).addClass('username-hightlight');
-                    }
+                    $(row.cells[1]).addClass('username-hightlight');
+                }
             }
         });
     }
 
-    function RenderBotIcon(isRobotUser, robotBetting) {
-
+    function RenderBotIcon(robotUser, isRobotBetting) {
         let html = "";
 
-        switch (robotBetting) {
+        switch (robotUser) {
             case 0:
                 html += "<span class='icon-ob-robot'><span class='path1'></span><span class='path2'></span><span class='path3'></span><span class='path4'></span><span class='path5'></span><span class='path6'></span></span>";
                 break;
@@ -216,11 +214,56 @@
                 break;
         }
 
-        if (isRobotUser) {
+        if (isRobotBetting) {
             html += "<span class='icon-big-robot'><span class='path1'></span><span class='path2'></span><span class='path3'></span><span class='path4'></span><span class='path5'></span><span class='path6'></span></span>";
         }
 
         return html === "" ? "-" : html;
+    }
+
+    function VerifyTransMatchMonitorDetail() {
+        $.ajax(common.modifyRelativeUrl('MatchMonitor/VerifyTransMMDetail'), {
+            type: 'POST',
+            data:
+            {
+                MatchId: domElements.matchID,
+                LiveIndicator: domElements.liveIndicator == "True",
+                BettypeID: domElements.betTypeID,
+                TranIds: GetTranIds().join()
+            },
+            beforeSend: function () {
+                domElements.firsttblMonitor.addClass('loading-value');
+                domElements.secondtblMonitor.addClass('loading-value');
+            },
+            success: function () {
+                close();
+            },
+            complete: function () {
+                domElements.firsttblMonitor.removeClass("loading-value");
+                domElements.secondtblMonitor.removeClass("loading-value");
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+                domElements.firsttblMonitor.removeClass("loading-value");
+                domElements.secondtblMonitor.removeClass("loading-value");
+            }
+        });
+    }
+
+    function GetTranIds() {
+        var firstTableInfo = domElements.firsttblMonitor.DataTable().data().toArray();
+        var secondTableInfo = domElements.secondtblMonitor.DataTable().data().toArray();
+        var tranIds = new Array();
+
+        firstTableInfo.forEach(element => {
+            tranIds.push(element.TransId);
+        });
+
+        secondTableInfo.forEach(element => {
+            tranIds.push(element.TransId);
+        });
+
+        return tranIds;
     }
 
     function Initial() {
@@ -236,14 +279,19 @@
             menuHeight: 260,
             selectedText: "# of # selected",
             noneSelectedText: "Select Group "
-
-        });      
+        });
 
         InitialFirstDetailGird();
         InitialSecondDetailGird();
 
         domElements.btnGenerateDetail.on('click', function () {
             GetMatchMonitorDetail();
+        })
+
+        domElements.btnVerify.on('click', function () {
+            common.showConfirmation('<div class="popup - content">Are you sure about this?<br>Once confirmed, all tickets\' review status will be updated to "Verified".</div>', function () {
+               VerifyTransMatchMonitorDetail();
+            });
         })
     }
 

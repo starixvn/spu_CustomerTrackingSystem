@@ -102,25 +102,13 @@
                         let paramTemplate = "EventDateToString={0}&MatchID={1}&HomeID={2}&AwayID={3}&BetTypeID={4}&MatchSection={5}&Market={6}&IsHedging={7}&LeagueID={8}";
                         let para = paramTemplate.format(obj.EventDateToString, obj.MatchID, obj.HomeID, obj.AwayID, obj.BettypeID, obj.MatchSection, obj.Market, obj.IsHedging, obj.LeagueID);
                         return '<a class="click-view-details" href="MatchMonitor/Detail?' + para + '" target="_blank">' + obj.MatchName + '</a>';
-
-                        //let url = common.modifyRelativeUrl(`MatchMonitor/Detail?eventDataJson=${obj.EventDateToString}&matchID=${obj.MatchID}&matchNameJson=JSON.stringify(${obj.MatchName})&betTypeID=${obj.BettypeID}`);
-                        //return html = `<a class="click-view-details" href=${url} target="_blank">${obj.MatchName} </a>`; 
                     }
                 },
                 { data: obj => obj.EventDateToString },                
                 { data: obj => obj.MarketName },
                 { data: obj => obj.LeagueName },
                 { data: obj => obj.ReasonGroup },
-                { data: obj => RenderVerifiedUI(obj.IsVerified)
-
-                    //data: obj => RenderVerifiedUI(obj.IsVerified), createdCell: (cell, _, row) => {
-                    //    $('#isVerifiedCheckbox', cell).click(() => {
-                    //        common.showConfirmation('<div class="popup - content">Are you sure about this?<br>Once confirmed, match review status will be updated to "Verified".</div>', function () {
-                    //            UpdateVerification(row, cell);
-                    //        });
-                    //    });
-                    //}
-                },
+                { data: obj => RenderVerifiedUI(obj.IsVerified) },
                 { data: obj => obj.MatchSectionName },
             ],
             drawCallback: function () {
@@ -143,28 +131,8 @@
     }
 
     function RenderVerifiedUI(isVerified) {
-        return html = '<label class="container-checkbox" id="containerCheckbox"><input id="isVerifiedCheckbox" type="checkbox" disabled' + (isVerified ? ' checked' : '') + '><span class="checkmark"></span></label>';
-        //return html = '<label class="container-checkbox" id="containerCheckbox"><input id="isVerifiedCheckbox" type="checkbox"' + (isVerified ? ' checked disabled' : '') + '><span class="checkmark"></span></label>';                         
+        return '<label class="container-checkbox" id="containerCheckbox"><input id="isVerifiedCheckbox" type="checkbox" disabled' + (isVerified ? ' checked' : '') + '><span class="checkmark"></span></label>';
     }
-
-    //function UpdateVerification(row, cell) {
-    //    $.ajax(common.modifyRelativeUrl('MatchMonitor/UpdateVerification'), {
-    //        type: 'POST',
-    //        data: { matchID: row.ID },          beforeSend: function () {
-    //            domElements.tblMonitor.addClass('loading-value');
-    //        },
-    //        success: function (response) {
-    //            GetMatchMonitor(); 
-    //        },
-    //        complete: function () {
-    //            domElements.tblMonitor.removeClass("loading-value");
-    //        },
-    //        error: function (errMsg) {
-    //            console.log(errMsg);
-    //            domElements.tblMonitor.removeClass("loading-value");
-    //        }
-    //    });
-    //}
 
     function SetRestrictFromDate() {
         let toDateValue = domElements.dpkToDate.datepicker("getDate");

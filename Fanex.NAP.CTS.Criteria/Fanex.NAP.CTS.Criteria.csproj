@@ -111,7 +111,7 @@
     <Compile Include="MatchMonitor\TicketDetailGetCriteria.cs" />
     <Compile Include="MatchMonitor\MatchScoreGetCriteria.cs" />
     <Compile Include="MatchMonitor\MatchGroupGetCriteria.cs" />
-    <Compile Include="MatchMonitor\MatchMonitorVerificationUpdateCriteria.cs" />
+    <Compile Include="MatchMonitor\MatchMonitorDetailVerifyCriteria.cs" />
     <Compile Include="MatchMonitor\MatchMonitorGetCriteria.cs" />
     <Compile Include="ProbationManagement\GetAccountStaticStatusCriteria.cs" />
     <Compile Include="ProbationManagement\GetSubscriberCriteria.cs" />

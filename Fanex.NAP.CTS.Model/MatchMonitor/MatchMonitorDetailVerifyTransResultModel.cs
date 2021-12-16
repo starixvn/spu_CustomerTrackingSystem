@@ -2,7 +2,7 @@
 
 namespace Fanex.NAP.CTS.Model.MatchMonitor
 {
-    public class MatchMonitorVerifiedTransDetailModel
+    public class MatchMonitorDetailVerifyTransResultModel
     {
         public Int64 TransID { get; set; }
 

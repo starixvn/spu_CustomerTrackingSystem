@@ -46,10 +46,11 @@
 
         public string PICVerified { get; set; }
 
-        public bool IsRobotUser { get; set; }
+        public int RobotUser { get; set; }
 
-        //TODO
-        public int RobotBetting { get; set; }
+        public bool IsRobotBetting { get; set; }
+
+        public Int64 TransId { get; set; }
 
         public bool IsHomeSide
         {

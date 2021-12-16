@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
     using Fanex.Data;
+    using Fanex.Data.Repository;
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Criteria.MatchMonitor;
     using Fanex.NAP.CTS.Model.MatchMonitor;
@@ -8,11 +9,17 @@
     using Fanex.NAP.CTS.ViewModel.MatchMonitor;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
 
     public class MatchMonitorService : IMatchMonitorService
     {
-        public List<MatchMonitorModel> GetMatchMonitor(MatchMonitorFilterViewModel filter)
+        private readonly IDynamicRepository repository;
+
+        public MatchMonitorService()
+        {
+            repository = new DynamicRepository();
+        }
+
+        public IEnumerable<MatchMonitorModel> GetMatchMonitor(MatchMonitorFilterViewModel filter)
         {
             var criteria = new MatchMonitorGetCriteria()
             {
@@ -25,29 +32,26 @@
                 IsVerified = filter.IsVerified,
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<MatchMonitorModel>(criteria).ToList();
-            }
+            return repository.Fetch<MatchMonitorModel>(criteria);
         }
 
-        public DBResult UpdateVerificaton(Int64 matchID, Int64 userID)
+        public DBResult VerifyTransMatchMonitorDetail(MatchMonitorDetailVerifyTransParaModel para)
         {
-            var criteria = new MatchMonitorVerificationUpdateCriteria()
+            var criteria = new MatchMonitorDetailVerifyCriteria()
             {
-                ip_ID = matchID,
-                ip_UserID = userID
+                MatchID = para.MatchId,
+                LiveIndicator = para.LiveIndicator,
+                BettypeID = para.BettypeID,
+                TranIds = para.TranIds,
+                VerifiedBy = para.VerifiedBy
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                db.Query<DBResult>(criteria).ToList();
-            }
+            repository.Fetch<DBResult>(criteria);
 
-            return new DBResult { ErrorCode = string.IsNullOrEmpty(criteria.ErrorMessage) ? -1 : 0, ErrorMsg = criteria.ErrorMessage };
+            return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
         }
 
-        public List<MatchGroupModel> GetMatchGroup(Int64 matchID, int betTypeID, bool liveIndicator, bool isHedging)
+        public IEnumerable<MatchGroupModel> GetMatchGroup(Int64 matchID, int betTypeID, bool liveIndicator, bool isHedging)
         {
             var criteria = new MatchGroupGetCriteria()
             {
@@ -57,13 +61,10 @@
                 IsHedging = isHedging
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<MatchGroupModel>(criteria).ToList();
-            }
+            return repository.Fetch<MatchGroupModel>(criteria);
         }
 
-        public List<MatchScoreModel> GetMatchScore(Int64 matchID, int betTypeID, bool liveIndicator, bool isHedging)
+        public IEnumerable<MatchScoreModel> GetMatchScore(Int64 matchID, int betTypeID, bool liveIndicator, bool isHedging)
         {
             var criteria = new MatchScoreGetCriteria()
             {
@@ -73,10 +74,7 @@
                 IsHedging = isHedging
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<MatchScoreModel>(criteria).ToList();
-            }
+            return repository.Fetch<MatchScoreModel>(criteria);
         }
 
         public MatchMonitorDetailResultModel GetMatchMonitorDetail(MatchMonitorDetailFilterViewModel filter)
@@ -85,7 +83,7 @@
             {
                 BettypeID = filter.BetTypeID,
                 ListGroup = filter.ListGroup,
-                ListScore = filter.ListScore,                
+                ListScore = filter.ListScore,
                 MatchID = filter.MatchID,
                 LiveIndicator = filter.LiveIndicator,
                 IsHedging = filter.IsHedging
@@ -98,25 +96,22 @@
                 return new MatchMonitorDetailResultModel
                 {
                     MatchDetails = result?.Read<MatchMonitorDetailModel>() ?? new List<MatchMonitorDetailModel>(),
-                    VerifiedTrans = result?.Read<MatchMonitorVerifiedTransDetailModel>() ?? new List<MatchMonitorVerifiedTransDetailModel>()
+                    VerifiedTrans = result?.Read<MatchMonitorDetailVerifyTransResultModel>() ?? new List<MatchMonitorDetailVerifyTransResultModel>()
                 };
             }
         }
 
-        public List<CustInfoModel> GetCustInfoByCustID(string custIDs)
+        public IEnumerable<CustInfoModel> GetCustInfoByCustID(string custIDs)
         {
             var criteria = new CustInfoByCustIdGetCriteria()
             {
                 CustIDs = custIDs
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<CustInfoModel>(criteria).ToList();
-            }
+            return repository.Fetch<CustInfoModel>(criteria);
         }
 
-        public List<TicketDetailModel> GetTicketDetail(DateTime eventDate, string transIds)
+        public IEnumerable<TicketDetailModel> GetTicketDetail(DateTime eventDate, string transIds)
         {
             var criteria = new TicketDetailGetCriteria()
             {
@@ -125,10 +120,7 @@
                 ListTransId = transIds
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<TicketDetailModel>(criteria).ToList();
-            }
+            return repository.Fetch<TicketDetailModel>(criteria);
         }
     }
 }
