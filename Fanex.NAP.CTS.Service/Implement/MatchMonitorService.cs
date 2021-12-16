@@ -47,9 +47,9 @@
             return new DBResult { ErrorCode = string.IsNullOrEmpty(criteria.ErrorMessage) ? -1 : 0, ErrorMsg = criteria.ErrorMessage };
         }
 
-        public List<MatchReasonGroupModel> GetMatchReasonGroup(Int64 matchID, int betTypeID, bool liveIndicator, bool isHedging)
+        public List<MatchGroupModel> GetMatchGroup(Int64 matchID, int betTypeID, bool liveIndicator, bool isHedging)
         {
-            var criteria = new MatchReasonGroupGetCriteria()
+            var criteria = new MatchGroupGetCriteria()
             {
                 BettypeID = betTypeID,
                 MatchID = matchID,
@@ -59,7 +59,7 @@
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<MatchReasonGroupModel>(criteria).ToList();
+                return db.Query<MatchGroupModel>(criteria).ToList();
             }
         }
 
@@ -84,7 +84,7 @@
             var criteria = new MatchDetailMonitorGetCriteria()
             {
                 BettypeID = filter.BetTypeID,
-                ListReasonGroup = filter.ListReasonGroup,
+                ListGroup = filter.ListGroup,
                 ListScore = filter.ListScore,                
                 MatchID = filter.MatchID,
                 LiveIndicator = filter.LiveIndicator,

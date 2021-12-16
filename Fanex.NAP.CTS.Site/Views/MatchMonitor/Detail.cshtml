@@ -36,13 +36,13 @@
                             </select>
                         </div>
                         <div class="group width-180">
-                            <label class="text">Reason Group</label>
-                            <select class="control width-select" id="cbbReasonGroup" multiple="multiple">
-                                @if (ViewBag.ReasonGroup != null)
+                            <label class="text">Group</label>
+                            <select class="control width-select" id="cbbGroup" multiple="multiple">
+                                @if (ViewBag.Group != null)
                                 {
-                                    foreach (var item in ViewBag.ReasonGroup)
+                                    foreach (var item in ViewBag.Group)
                                     {
-                                        <option value="@item.Key" selected> @item.ReasonGroupName </option>
+                                        <option value="@item.Key" selected> @item.GroupID </option>
                                     }
                                 }
                             </select>
@@ -66,6 +66,7 @@
                                     <tr>
                                         <th>Site</th>
                                         <th>Username</th>
+                                        <th>Bot</th>
                                         <th>Dgr</th>
                                         <th>ODDS</th>
                                         <th>BetID</th>
@@ -75,7 +76,8 @@
                                         <th>HDP</th>
                                         <th>Score</th>
                                         <th>TRANSTIME</th>
-                                        <th>Reason Group</th>
+                                        <th>Group</th>
+                                        <th>PIC & Last Verified</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -90,6 +92,7 @@
                                     <tr>
                                         <th>Site</th>
                                         <th>Username</th>
+                                        @*<th>Bot</th>*@
                                         <th>Dgr</th>
                                         <th>ODDS</th>
                                         <th>BetID</th>
@@ -99,7 +102,8 @@
                                         <th>HDP</th>
                                         <th>Score</th>
                                         <th>TRANSTIME</th>
-                                        <th>Reason Group</th>
+                                        <th>Group</th>
+                                       @* <th>PIC & Last Verified</th>*@
                                     </tr>
                                 </thead>
                                 <tbody></tbody>

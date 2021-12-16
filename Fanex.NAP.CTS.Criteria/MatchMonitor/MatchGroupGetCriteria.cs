@@ -4,7 +4,7 @@
     using Fanex.Data.Repository;
     using System;
 
-    public class MatchReasonGroupGetCriteria : CriteriaBase
+    public class MatchGroupGetCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_MatchID")]
         public Int64 MatchID { get; set; }

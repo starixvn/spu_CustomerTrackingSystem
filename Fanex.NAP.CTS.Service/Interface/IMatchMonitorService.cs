@@ -10,7 +10,7 @@
     {
         List<MatchMonitorModel> GetMatchMonitor(MatchMonitorFilterViewModel filter);
 
-        List<MatchReasonGroupModel> GetMatchReasonGroup(Int64 matchID, int betTypeID, bool liveIndicator, bool isHedging);
+        List<MatchGroupModel> GetMatchGroup(Int64 matchID, int betTypeID, bool liveIndicator, bool isHedging);
 
         List<MatchScoreModel> GetMatchScore(Int64 matchID, int betTypeID, bool liveIndicator, bool isHedging);
 

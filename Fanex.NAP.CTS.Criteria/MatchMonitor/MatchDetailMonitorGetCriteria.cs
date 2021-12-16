@@ -22,7 +22,7 @@
         public bool IsHedging { get; set; }
 
         [SpParam(SqlParamName = "ip_GroupIdList")]
-        public string ListReasonGroup { get; set; }
+        public string ListGroup { get; set; }
 
         public override string GetSettingKey()
             => "CTS_DC_MatchMonitor_Details_Get";

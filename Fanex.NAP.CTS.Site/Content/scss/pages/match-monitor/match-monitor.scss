@@ -29,7 +29,6 @@
                             bottom: 1.7rem;
                         }
 
-
                         .text {
                             margin-right: .7rem;
                             margin-bottom: 0;
@@ -121,6 +120,7 @@
 
             .group-table {
                 display: flex;
+                padding-bottom: 1rem;
             }
 
             #monitor-datatable, #first-monitor-datatable, #second-monitor-datatable {
@@ -184,7 +184,6 @@
 
                         thead {
                             tr {
-
                                 th {
                                     position: sticky;
                                     top: 16.9rem;
@@ -195,7 +194,6 @@
                         }
 
                         tbody {
-
                             tr {
                                 td {
                                     .click-view-details, .click-view-name {
@@ -235,6 +233,10 @@
                                 background-color: #A3C4F5 !important;
                             }
                         }
+
+                        .username-hightlight {
+                            background-color: #ffeeb8;
+                        }
                     }
                 }
             }
@@ -246,12 +248,32 @@
             #first-monitor-datatable, #second-monitor-datatable {
                 width: 100%
             }
+
+            .second-group-table-border {
+                border: 1px solid #E5E5E5;
+                border-top-left-radius: 2px;
+                border-top-right-radius: 2px;
+                padding: 10px;
+                margin-top: 10px;
+            }
+
+            .third-group-table-border {
+                border-bottom: 1px solid #E5E5E5;
+                border-left: 1px solid #E5E5E5;
+                border-right: 1px solid #E5E5E5;
+                border-bottom-left-radius: 2px;
+                border-bottom-right-radius: 2px;
+                padding: 10px;
+                box-shadow: 0px 1px #e5e5e5;
+            }
         }
     }
 }
+
 .group.width-280 {
     width: 27.5rem;
 }
+
 .ui-datepicker.ui-widget-content {
     z-index: 9999999 !important;
 }
@@ -283,6 +305,49 @@
         }
     }
 }
+
 .detailpage {
     width: 255rem;
+}
+
+.detail-area {
+    position: absolute;
+    right: 0;
+    padding: 0.5rem;
+    border: 1px solid #E5E5E5;
+    border-radius: 5px;
+
+    span {
+        width: 100%;
+        color: #2b2b2b;
+        font-weight: 600;
+        font-size: 13px;
+        line-height: 20px;
+    }
+
+    .league-highlight {
+        color: #516792;
+    }
+
+    .market-highlight {
+        color: #ff2020;
+    }
+}
+
+.button-verification {
+    border-radius: 2px;
+    color: #396ef8;
+    background-color: white;
+    border: 1px solid #396ef8;
+    height: auto !important;
+    padding: .7rem 2rem;
+}
+
+.icon-base-robot, .icon-ob-robot, .icon-good-robot, .icon-bad-robot {
+    margin-right: .7rem;
+    position: inherit;
+
+    span:before {
+        font-size: 2.2rem;
+    }
 }

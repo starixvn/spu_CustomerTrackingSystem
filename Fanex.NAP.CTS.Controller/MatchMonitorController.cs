@@ -96,17 +96,16 @@
         public ActionResult Detail(MatchMonitorDetailViewModel para)
         {
             IUserService userService = new UserService();
-            var matchReasonGroup = new List<MatchReasonGroupModel>();
+            var matchGroup = new List<MatchGroupModel>();
             var matchScore = new List<MatchScoreModel>();
 
             try
             {
                 if (para != null)
                 {
-                    matchReasonGroup = _matchMonitorService.GetMatchReasonGroup(para.MatchID, para.BetTypeID, para.LiveIndicator, para.IsHedging)?.ToList() ?? new List<MatchReasonGroupModel>();
+                    matchGroup = _matchMonitorService.GetMatchGroup(para.MatchID, para.BetTypeID, para.LiveIndicator, para.IsHedging)?.ToList() ?? new List<MatchGroupModel>();
 
-                    matchScore = _matchMonitorService.GetMatchScore(para.MatchID, para.BetTypeID, para.LiveIndicator, para.IsHedging) ?? new List<MatchScoreModel>();
-                    MappingReasonGroupName(ref matchReasonGroup, para.IsHedging);
+                    matchScore = _matchMonitorService.GetMatchScore(para.MatchID, para.BetTypeID, para.LiveIndicator, para.IsHedging) ?? new List<MatchScoreModel>();                
                 }
             }
             catch (Exception e)
@@ -120,7 +119,7 @@
             ViewBag.MatchName = para?.MatchName ?? string.Empty;
             ViewBag.LiveIndicator = para?.LiveIndicator ?? true;
             ViewBag.IsHedging = para?.IsHedging ?? true;
-            ViewBag.ReasonGroup = matchReasonGroup;
+            ViewBag.Group = matchGroup;
             ViewBag.MatchScore =  matchScore?.OrderBy(c => c.TotalScore).ThenBy(c => c.LiveHomeScore).ThenBy(c => c.LiveAwayScore);
             ViewBag.LeagueName = para?.LeagueName ?? string.Empty;
             ViewBag.ReasonName = para?.ReasonName ?? string.Empty;
@@ -140,23 +139,23 @@
 
             try
             {
-                if (para != null && !string.IsNullOrEmpty(para.ListReasonGroup) && !string.IsNullOrEmpty(para.ListScore))
+                if (para != null && !string.IsNullOrEmpty(para.ListGroup) && !string.IsNullOrEmpty(para.ListScore))
                 {
-                    var reasonGroupKeysFilter = JsonConvert.DeserializeObject<List<MatchReasonGroupKeyModel>>(para.ListReasonGroup);
+                    var groupKeysFilter = JsonConvert.DeserializeObject<List<MatchGroupKeyModel>>(para.ListGroup);
 
-                    var matchDetail = GetMatchMonitorDetail(para, reasonGroupKeysFilter);
+                    var matchDetail = GetMatchMonitorDetail(para, groupKeysFilter);
 
                     if (matchDetail != null && matchDetail.Any())
                     {
                         var custInfo = new List<CustInfoModel>();
-                        var mappingTransGroupReason = new List<TransGroupBettingModel>();
+                        var mappingTransGroup = new List<TransGroupModel>();
                         var ticketDetail = new List<TicketDetailModel>();
 
                         var tasks = new List<Task>
                         {
                             Task.Run(() =>
                             {
-                                mappingTransGroupReason = MappingTransGroupReason(matchDetail, reasonGroupKeysFilter);
+                                mappingTransGroup = MappingTransGroup(matchDetail);
                             }),
                             Task.Run(() =>
                             {
@@ -175,7 +174,7 @@
 
                         Task.WhenAll(tasks.ToArray()).Wait();
 
-                        matchDetailResult = MergeMatchMonitorDetail(mappingTransGroupReason, custInfo, ticketDetail);
+                        matchDetailResult = MergeMatchMonitorDetail(mappingTransGroup, custInfo, ticketDetail);
 
                         if(para.Sites != "A")
                         {
@@ -196,7 +195,7 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private List<MatchMonitorDetailResultViewModel> MergeMatchMonitorDetail(List<TransGroupBettingModel> mappingTransGroupReason, List<CustInfoModel> custInfo, List<TicketDetailModel> ticketDetail)
+        private List<MatchMonitorDetailResultViewModel> MergeMatchMonitorDetail(List<TransGroupModel> mappingTransGroup, List<CustInfoModel> custInfo, List<TicketDetailModel> ticketDetail)
         {
             var matchDetailResult = new List<MatchMonitorDetailResultViewModel>();
 
@@ -227,40 +226,26 @@
                                                                 Score = c.ticket.LiveIndicator ? (c.ticket.LiveHomeScore + " - " + c.ticket.LiveAwayScore) : "-",
                                                                 TicketStatus = c.ticket.TicketStatus,
                                                                 TransTime = c.ticket.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                                                                ReasonGroup = GetReasonGroup(mappingTransGroupReason, c.ticket)
-                                                            })?.OrderByDescending(c => c.TransTime)?.ThenBy(c => c.ReasonGroup)?.Distinct()?.ToList();
+                                                                Group = GetGroup(mappingTransGroup, c.ticket)
+                                                            })?.OrderByDescending(c => c.TransTime)?.ThenBy(c => c.Group)?.Distinct()?.ToList();
 
             return matchDetailResult;
         }
 
-        private void MappingReasonGroupName(ref List<MatchReasonGroupModel> matchReasonGroup, bool isHedging)
+        private List<MatchMonitorDetailModel> GetMatchMonitorDetail(MatchMonitorDetailFilterViewModel filter, List<MatchGroupKeyModel> groupKeys)
         {
-            int preIncrement1 = 0;
-            int preIncrement2 = 0;
-
-            if (matchReasonGroup != null && matchReasonGroup.Any())
-            {
-                foreach (var item in matchReasonGroup)
-                {
-                    item.ReasonGroupName = isHedging ? ("Hedging " + ++preIncrement1) : ("Group Betting " + ++preIncrement2);
-                }
-            }
-        }
-
-        private List<MatchMonitorDetailModel> GetMatchMonitorDetail(MatchMonitorDetailFilterViewModel filter, List<MatchReasonGroupKeyModel> reasonGroupKeys)
-        {
-            if (reasonGroupKeys != null && reasonGroupKeys.Any())
+            if (groupKeys != null && groupKeys.Any())
             {
                 var para = filter;
-                para.ListReasonGroup = string.Join(",", reasonGroupKeys.Select(c => c.GroupID)?.Distinct());
+                para.ListGroup = string.Join(",", groupKeys.Select(c => c.GroupID)?.Distinct());
 
                 var matchDetails = _matchMonitorService.GetMatchMonitorDetail(para);
 
                 if (matchDetails != null && matchDetails.Any())
                 {
-                    var matchs = matchDetails.Join(reasonGroupKeys, m => (m.GroupID, m.TotalScore)
-                                                                  , r => (r.GroupID, r.TotalScore)
-                                                                  , (m, r) => m);
+                    var matchs = matchDetails.Join(groupKeys, m => (m.GroupID, m.TotalScore)
+                                                            , r => (r.GroupID, r.TotalScore)
+                                                            , (m, r) => m);
 
                     return matchs.ToList() ?? new List<MatchMonitorDetailModel>();
                 }
@@ -269,9 +254,9 @@
             return new List<MatchMonitorDetailModel>();
         }
 
-        private List<TransGroupBettingModel> MappingTransGroupReason(List<MatchMonitorDetailModel> matchDetail, List<MatchReasonGroupKeyModel> reasonGroup)
+        private List<TransGroupModel> MappingTransGroup(List<MatchMonitorDetailModel> matchDetail)
         {
-            var transGroupBetting = new List<TransGroupBettingModel>();
+            var transGroupBetting = new List<TransGroupModel>();
 
             if (matchDetail != null && matchDetail.Any())
             {
@@ -279,14 +264,12 @@
                 {
                     i.ListTransID.Split(',').Select(Int64.Parse)?.ToList()?.ForEach(j =>
                     {
-                        transGroupBetting.Add(new TransGroupBettingModel
+                        transGroupBetting.Add(new TransGroupModel
                         {
                             TransId = j,
                             GroupID = i.GroupID,
                             TotalScore = i.TotalScore,
-                            ReasonGroupName = reasonGroup.FirstOrDefault(x=>x.GroupID == i.GroupID && x.TotalScore == i.TotalScore).ReasonGroupName
-
-                        });
+                         });
                     });
                 });
             }
@@ -294,16 +277,17 @@
             return transGroupBetting;
         }
 
-        private string GetReasonGroup(List<TransGroupBettingModel> mappingTransGroupReason, TicketDetailModel ticketDetail)
+        private string GetGroup(List<TransGroupModel> mappingTransGroup, TicketDetailModel ticketDetail)
         {
             string reasonGroup = "-";
 
-            if (mappingTransGroupReason != null && mappingTransGroupReason.Any())
+            if (mappingTransGroup != null && mappingTransGroup.Any())
             {
-                var transGroup = mappingTransGroupReason.Where(c => c.TransId == ticketDetail.TransId);
-                var reasonGroupName = transGroup.FirstOrDefault().ReasonGroupName;
+                var transGroup = mappingTransGroup.Where(c => c.TransId == ticketDetail.TransId);
 
-                return string.IsNullOrEmpty(reasonGroupName) ? reasonGroup : reasonGroupName;
+                var groupName = transGroup?.FirstOrDefault()?.GroupID.ToString();
+
+                return string.IsNullOrEmpty(groupName) ? reasonGroup : groupName;
             }
 
             return reasonGroup;

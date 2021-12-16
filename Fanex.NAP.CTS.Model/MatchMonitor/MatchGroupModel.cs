@@ -2,7 +2,7 @@
 
 namespace Fanex.NAP.CTS.Model.MatchMonitor
 {
-    public class MatchReasonGroupModel
+    public class MatchGroupModel
     {
         public int GroupID { get; set; }
 
@@ -16,11 +16,10 @@ namespace Fanex.NAP.CTS.Model.MatchMonitor
 
         public string Key {
 
-            get => JsonConvert.SerializeObject(new MatchReasonGroupKeyModel  
+            get => JsonConvert.SerializeObject(new MatchGroupKeyModel  
             {
                 GroupID =  GroupID, 
-                TotalScore = TotalScore,
-                ReasonGroupName = ReasonGroupName
+                TotalScore = TotalScore
             });
         }
     }

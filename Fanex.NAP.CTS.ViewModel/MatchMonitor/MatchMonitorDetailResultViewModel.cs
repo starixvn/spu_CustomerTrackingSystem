@@ -34,11 +34,20 @@
 
         public string TransTime { get; set; }
 
-        public string ReasonGroup { get; set; }
+        public string Group { get; set; }
 
         public string BetTeam { get; set; }
 
         public int TicketStatus { get; set; }
+
+        //TODO
+        public string PICVerified { get; set; }
+
+        //TODO
+        public bool IsRobotUser { get; set; }
+
+        //TODO
+        public int RobotBetting { get; set; }
 
         public bool IsHomeSide
         {
