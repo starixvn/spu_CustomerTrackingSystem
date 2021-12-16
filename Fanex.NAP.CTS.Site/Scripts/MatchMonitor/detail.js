@@ -97,7 +97,7 @@
                         return `<a class='click-view-name ' href=${url}> ${obj.Username} </a>`;
                     }
                 },
-                { data: obj => RenderBotIcon(obj.IsRobotUser, obj.RobotBetting) }, //TODO
+                { data: obj => RenderBotIcon(obj.IsRobotUser, obj.RobotBetting) },
                 { data: obj => obj.DangerToString },
                 { data: obj => obj.Odds },
                 { data: obj => obj.BetID },
@@ -172,7 +172,7 @@
                         return `<a class='click-view-name' href=${url}> ${obj.Username} </a>`;
                     }
                 },
-                { data: obj => RenderBotIcon(obj.IsRobotUser, obj.RobotBetting) }, //TODO
+                { data: obj => RenderBotIcon(obj.IsRobotUser, obj.RobotBetting) },
                 { data: obj => obj.DangerToString },
                 { data: obj => obj.Odds },
                 { data: obj => obj.BetID },
@@ -198,22 +198,18 @@
         });
     }
 
-    //TODO
     function RenderBotIcon(isRobotUser, robotBetting) {
 
         let html = "";
 
         switch (robotBetting) {
-            case 1:
-                html += "<span class='icon-base-robot'><span class='path1'></span><span class='path2'></span><span class='path3'></span><span class='path4'></span><span class='path5'></span><span class='path6'></span></span>";
-                break;
-            case 2:
-                html += "<span class='icon-good-robot'><span class='path1'></span><span class='path2'></span><span class='path3'></span><span class='path4'></span><span class='path5'></span><span class='path6'></span></span>";
-                break;
-            case 3:
+            case 0:
                 html += "<span class='icon-ob-robot'><span class='path1'></span><span class='path2'></span><span class='path3'></span><span class='path4'></span><span class='path5'></span><span class='path6'></span></span>";
                 break;
-            case 4:
+            case 1:
+                html += "<span class='icon-good-robot'><span class='path1'></span><span class='path2'></span><span class='path3'></span><span class='path4'></span><span class='path5'></span><span class='path6'></span></span>";
+                break;
+            case 2:
                 html += "<span class='icon-bad-robot'><span class='path1'></span><span class='path2'></span><span class='path3'></span><span class='path4'></span><span class='path5'></span><span class='path6'></span></span>";
                 break;
             default:

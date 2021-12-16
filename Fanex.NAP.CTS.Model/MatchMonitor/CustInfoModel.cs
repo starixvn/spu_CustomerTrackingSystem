@@ -22,7 +22,6 @@
 
         public bool IsRobotUser { get; set; }
 
-        ///TODO
         public int RobotBetting { get; set; }
     }
 }

@@ -44,10 +44,8 @@
 
         public int TicketStatus { get; set; }
 
-        //TODO
         public string PICVerified { get; set; }
 
-        //TODO
         public bool IsRobotUser { get; set; }
 
         //TODO
