@@ -227,7 +227,6 @@
                                                                 BetID = c.ticket.TransId,
                                                                 BetTeam = c.ticket.BetTeam,
                                                                 Currency = c.cust.Currency,
-                                                                LiveIndicator = c.ticket.LiveIndicator,
                                                                 Amount = c.ticket.Stake,
                                                                 HDP1 = c.ticket.Hdp1,
                                                                 HDP2 =  c.ticket.Hdp2,

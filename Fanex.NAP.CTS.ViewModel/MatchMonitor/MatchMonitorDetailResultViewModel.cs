@@ -28,8 +28,6 @@
 
         public string Currency { get; set; }
 
-        public bool LiveIndicator { get; set; }
-
         public decimal Amount { get; set; }
 
         public decimal HDP1 { get; set; }

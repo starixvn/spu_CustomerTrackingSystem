@@ -74,7 +74,7 @@
             scrollCollapse: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], className: "text-center" },
+                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], className: "text-center" },
                 { targets: [0] },
                 { targets: [1] },
                 { targets: [2] },
@@ -88,7 +88,6 @@
                 { targets: [10] },
                 { targets: [11] },
                 { targets: [12] },
-                { targets: [13] },
             ],
             columns: [
                 { data: obj => obj.SubscriberType },
@@ -103,7 +102,6 @@
                 { data: obj => obj.Odds },
                 { data: obj => obj.BetID },
                 { data: obj => obj.Currency },
-                { data: obj => obj.LiveIndicator ? "Live" : "None-Live" },
                 { data: obj => obj.Amount },
                 { data: obj => obj.HDP },
                 { data: obj => obj.Score },
@@ -111,7 +109,8 @@
                 { data: obj => obj.Group },
                 { data: obj => obj.PICVerified }
             ],
-            createdRow: function (row, data, index) {
+            createdRow: function (row, data, index)
+            {
                 if (data.TicketStatus == 102)
                     $(row.cells).addClass('void-ticket');
                 else if (data.TicketStatus == 101)
@@ -149,7 +148,7 @@
             scrollCollapse: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], className: "text-center" },
+                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], className: "text-center" },
                 { targets: [0], width: "1%" },
                 { targets: [1], width: "6%" },
                 { targets: [2], width: "5%" },
@@ -162,6 +161,7 @@
                 { targets: [9], width: "1%" },
                 { targets: [10], width: "6%" },
                 { targets: [11], width: "6%" },
+                { targets: [12], width: "6%" },
 
             ],
             columns: [
@@ -169,31 +169,37 @@
                 {
                     data: obj => () => {
                         let url = common.modifyRelativeUrl('Account/Index/' + obj.CTSCustID);
-                        return html = `<a class='click-view-name' href=${url}> ${obj.Username} </a>`;
+                        return `<a class='click-view-name' href=${url}> ${obj.Username} </a>`;
                     }
                 },
+                { data: obj => RenderBotIcon(obj.IsRobotUser, obj.RobotBetting) }, //TODO
                 { data: obj => obj.DangerToString },
                 { data: obj => obj.Odds },
                 { data: obj => obj.BetID },
                 { data: obj => obj.Currency },
-                { data: obj => obj.LiveIndicator == true ? "Live" : "None-Live" },
                 { data: obj => obj.Amount },
                 { data: obj => obj.HDP },
                 { data: obj => obj.Score },
                 { data: obj => obj.TransTime },
-                { data: obj => obj.Group }
+                { data: obj => obj.Group },
+                { data: obj => obj.PICVerified }
+
             ],
-            createdRow: function (row, data, index) {
+            createdRow: function (row, data, index)
+            {
                 if (data.TicketStatus == 102)
                     $(row.cells).addClass('void-ticket');
                 else if (data.TicketStatus == 101)
                     $(row.cells).addClass('rejected-ticket');
+                else if (data.SubscriberType === "L") {
+                        $(row.cells[1]).addClass('username-hightlight');
+                    }
             }
         });
     }
 
     //TODO
-    function RenderBotIcon(IsRobotUser, robotBetting) {
+    function RenderBotIcon(isRobotUser, robotBetting) {
 
         let html = "";
 
@@ -214,7 +220,7 @@
                 break;
         }
 
-        if (IsRobotUser) {
+        if (isRobotUser) {
             html += "<span class='icon-big-robot'><span class='path1'></span><span class='path2'></span><span class='path3'></span><span class='path4'></span><span class='path5'></span><span class='path6'></span></span>";
         }
 
