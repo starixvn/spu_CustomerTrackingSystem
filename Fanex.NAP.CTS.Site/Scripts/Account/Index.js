@@ -45,8 +45,7 @@
 
     function LoadAssociationByAccount() {
         $.ajax(common.modifyRelativeUrl('Account/AssociatedByAccount'), {
-            type: 'POST',
-            traditional: true,
+            type: 'POST',            
             async: true,
             data: {
                 username: username
@@ -90,8 +89,7 @@
 
     function LoadCustomerCategory() {
         $.ajax(common.modifyRelativeUrl('Account/CustomerCategory'), {
-            type: 'POST',
-            traditional: true,
+            type: 'POST',            
             async: true,
             success: function (response) {
                 domElements.tabCustomerCategory.html(response);
@@ -154,87 +152,11 @@
                 console.log(errMsg);
             }
         });
-    } 
-
-    //function GetCustomerProfile() {
-    //    $.ajax(common.modifyRelativeUrl('Account/GetCustomerProfile'), {
-    //        type: 'POST',
-    //        data: {
-    //            custId: custId,
-    //            ctsCustId: ctsCustId,
-    //            subscriberId: subscriberId
-    //        },
-    //        success: function (response) {
-    //            $('div.classification').html("<span>None</span>");
-    //            HandleCustomerStatus(response);
-    //            HandlePolicies(response);
-    //            HandleRobotUserStatus(response.RobotUserStatus);
-    //            HandleFlagedAffectedEvidence(response.FlagedAffectedEvidence);
-    //            HandleEsportAutoSuspendedStatus(response.EsportAutoSuspendStatus);
-    //        },
-    //        error: function (errMsg) {
-    //            console.log(errMsg);
-    //        }
-    //    });
-    //}
-
-    function GetCustProfile() {
-        $.ajax(common.modifyRelativeUrl('Account/GetCustProfile'), {
-            type: 'POST',
-            traditional: true,
-            async: true,
-            data: {
-                custId: custId,
-                ctsCustId: ctsCustId
-            },
-            success: function (response) {
-                if (response !== null) {
-                    RenderRobotUserStatus(response);
-                    RenderFlagedAffectedEvidence(response);
-                }
-            },
-            complete: function () {
-                LoadCustomerCategory();
-
-                LoadAssociationByAccount();  
-            },
-            error: function (errMsg) {
-                console.log(errMsg);
-            }
-        });
-    }
-
-    function RenderRobotUserStatus(data) {
-        if (data !== null && data.IsRobotUser) {
-            switch (data.RobotType) {
-                case 0:
-                    $('span.icon-Robot').removeClass('icon-base-robot').addClass('icon-ob-robot');
-                    break;
-                case 1:
-                    $('span.icon-Robot').removeClass('icon-base-robot').addClass('icon-good-robot');
-                    break;
-                case 2:
-                    $('span.icon-Robot').removeClass('icon-base-robot').addClass('icon-bad-robot');
-                    break;
-                default:
-            }
-
-            $('span.icon-Robot').removeClass('hide');
-        }
-    }
-
-    function RenderFlagedAffectedEvidence(data) {
-        $('span.loading').remove();
-
-        if (data.Flagged)
-            $('span.icon-flag').removeClass('hide');
-        if (data.Affected)
-            $('span.icon-error').removeClass('hide');
-    }
+    }    
 
     function GetCustProfileAssociationAccount() {
         $.ajax(common.modifyRelativeUrl('Account/GetCustProfileAssociationAccount'), {
-            type: 'POST',
+            type: 'POST', 
             traditional: true,
             async: true,
             data: {
@@ -247,7 +169,7 @@
                     domElements.spanAssAccByDevice.html(response.Device);
                     domElements.spanAssAccByIP.html(response.IP);
                 }
-            },
+            },           
             error: function (errMsg) {
                 console.log(errMsg);
             }
@@ -257,6 +179,7 @@
     function GetCustProfileClassification() {
         $.ajax(common.modifyRelativeUrl('Account/GetCustProfileClassification'), {
             type: 'POST',  
+            traditional: true,
             async: true,
             data: {
                 ctsCustId: ctsCustId,
@@ -265,9 +188,16 @@
             success: function (response) {
                 if (response !== null) {
                     domElements.spanClass.html(response.Class);
+                    domElements.spanLicVIP.html(response.LicVIP);
                     domElements.spanFlagEvidence.html(response.FlagEvidenceCodes);
                     domElements.spanAffectedEvidence.html(response.AffectedEvidenceCodes);
-                    domElements.spanLicVIP.html(response.LicVIP);
+
+                    if (response.FlagEvidenceCodes == 'None') {
+                        domElements.spanFlagEvidence.contents.unwrap();
+                    }
+                    if (response.spanAffectedEvidence == 'None') {
+                        domElements.spanAffectedEvidence.contents.unwrap();
+                    }
                 }
             },
             error: function (errMsg) {
@@ -278,7 +208,7 @@
 
     function GetCustProfileLoginInfo() {
         $.ajax(common.modifyRelativeUrl('Account/GetCustProfileLoginInfo'), {
-            type: 'POST',
+            type: 'POST', 
             traditional: true,
             async: true,
             data: {
@@ -286,9 +216,9 @@
             },
             success: function (response) {
                 if (response !== null) {
-                    domElements.spanDesktopUsage.html(response.DesktopUsage + " (" + response.DesktopUsagePercent +")");
-                    domElements.spanMobileUsage.html(response.MobileUsage + " (" + response.MobileUsagePercent + ")");
-                    domElements.spanOthersUsage.html(response.OthersUsage + " (" + response.OthersUsagePercent + ")");
+                    domElements.spanDesktopUsage.html(response.DesktopUsage + " (" + response.DesktopUsagePercent +"%)");
+                    domElements.spanMobileUsage.html(response.MobileUsage + " (" + response.MobileUsagePercent + "%)");
+                    domElements.spanOthersUsage.html(response.OthersUsage + " (" + response.OthersUsagePercent + "%)");
                     domElements.spanLoginCount.html(response.LoginCount);
                     domElements.spanIPDeviceCount.html(response.IPCount + " / " + response.DeviceCount);
                 }
@@ -301,9 +231,9 @@
 
     function GetCustProfileDates() {
         $.ajax(common.modifyRelativeUrl('Account/GetCustProfileDates'), {
-            type: 'POST',
+            type: 'POST',  
             traditional: true,
-            async: true,
+            async: true,            
             data: {
                 ctsCustId: ctsCustId
             },
@@ -314,6 +244,11 @@
                     domElements.spanLastLoginDate.html(response.LastLoginString);
                     domElements.spanCreatedDate.html(response.CreatedString);
                 }
+            },     
+            complete: function () {
+                LoadCustomerCategory();
+
+                LoadAssociationByAccount();
             },
             error: function (errMsg) {
                 console.log(errMsg);
@@ -367,19 +302,15 @@
     };    
 
     function Initial() {
-        CollapseExpandStatistic();
-        //GetCustomerProfile();        
 
-        GetCustProfile();     
-
-        GetCustProfileAssociationAccount(); 
-
-        GetCustProfileClassification();
+        GetCustProfileDates();   
 
         GetCustProfileLoginInfo();
 
-        GetCustProfileDates();              
+        GetCustProfileClassification();     
 
+        GetCustProfileAssociationAccount();         
+                                  
         $("#tabs-account-detail").tabs();
     }
 
@@ -413,12 +344,14 @@
         }
 
         GetBettingStatistic();
-
+        CollapseExpandStatistic();
     }
 
-    $(document).ready(function () {
-        DisplayStatistic();
-        Initial();
+    $(document).ready(function () {                        
+        DisplayStatistic();          
+
+        Initial();    
     });
 }
+
 $(AccountDetail);

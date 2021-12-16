@@ -161,7 +161,6 @@
     <Compile Include="Account\CustomerInfo\CustomerInfoEvidenceModel.cs" />
     <Compile Include="Account\CustomerInfo\CustomerInfoLoginStatsModel.cs" />
     <Compile Include="Account\CustomerInfo\CustomerInfoPoliciesModel.cs" />
-    <Compile Include="Account\CustomerPoliciesModel.cs" />
     <Compile Include="Account\RobotBetting\RobotBettingTicketDetailModel.cs" />
     <Compile Include="Account\RobotBetting\RobotDateModel.cs" />
     <Compile Include="Account\RobotBetting\RobotUserDetailModel.cs" />
@@ -192,7 +191,6 @@
     <Compile Include="Customer.cs" />
     <Compile Include="CustomerAssociationModel.cs" />
     <Compile Include="Account\CustomerFlagInfoModel.cs" />
-    <Compile Include="Account\CustomerGeneralInfoModel.cs" />
     <Compile Include="Account\CustomerInfoByCTSCustIdModel.cs" />
     <Compile Include="Account\CustomerAssociationByAccountDetailModel.cs" />
     <Compile Include="Account\CustomerLastTicketDateModel.cs" />

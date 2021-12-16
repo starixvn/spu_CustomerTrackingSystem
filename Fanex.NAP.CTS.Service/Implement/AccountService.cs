@@ -188,22 +188,7 @@
 
                 return result;
             }
-        }
-
-        public List<CustomerGeneralInfoModel> GetCustomerGeneralInfo(string custIds)
-        {
-            var criteria = new CustomerGeneralInfoCriteria
-            {
-                CustIds = custIds
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                var result = db.Query<CustomerGeneralInfoModel>(criteria);
-
-                return result.ToList();
-            }
-        }      
+        }    
 
         public CustomerAssociationByCTSCustIdModel GetCustomerTotalAssociationByCTSCustId(long ctsCustId, string apiUrl, bool fromMySQL = false)
         {
@@ -280,22 +265,7 @@
                     FraudCaseList = fraudCaseList
                 };
             }
-        }
-
-        public CustomerPoliciesModel GetCustomerProfilePoliciesInfo(long custId)
-        {
-            var criteria = new CustomerProfilePoliciesInfoCriteria
-            {
-                CustID = custId
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                var result = db.QueryEntity<CustomerPoliciesModel>(criteria);
-
-                return result;
-            }
-        }
+        }     
 
         public List<TagModel> GetDirectAssociatedAccountTagFlagged(string custIdsAssInfo)
         {
@@ -326,22 +296,7 @@
                 return result;
             }
         }
-
-        public CustomerEsportAutoSuspendStatusModel GetCustomerEsportAutoSuspendedStatus(long custId)
-        {
-            var criteria = new CustomerEsportAutoSuspendStatusCriteria
-            {
-                CustId = custId
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                var result = db.QueryEntity<CustomerEsportAutoSuspendStatusModel>(criteria);
-
-                return result;
-            }
-        }
-
+        
         public CustomerRobotUserStatusModel GetCustomerRobotUserStatus(long custId)
         {
             var criteria = new CustomerRobotUserStatusCriteria

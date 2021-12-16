@@ -19,8 +19,6 @@
     {        
         List<SearchResultModel> SearchAccounts(string username);
 
-        List<CustomerGeneralInfoModel> GetCustomerGeneralInfo(string custIds);
-
         #region Customer Profile
         CustomerInfoByCTSCustIdModel GetCustomerInfoByCTSCustId(long ctsCustId);
 
@@ -46,15 +44,11 @@
 
         List<CustomerStaticStatusModel> GetCustomerStaticStatus(int listId, bool status);
 
-        CustomerProfileFraudInfoModel GetCustomerProfileFraudInfo(long custId);    
-
-        CustomerPoliciesModel GetCustomerProfilePoliciesInfo(long custId);        
+        CustomerProfileFraudInfoModel GetCustomerProfileFraudInfo(long custId);        
 
         List<TagModel> GetDirectAssociatedAccountTagFlagged(string custIdsAssInfo);
 
-        CustomerLastTicketDateModel GetCustomerLastTicketDate(long custId);
-
-        CustomerEsportAutoSuspendStatusModel GetCustomerEsportAutoSuspendedStatus(long custId);
+        CustomerLastTicketDateModel GetCustomerLastTicketDate(long custId);        
 
         CustomerRobotUserStatusModel GetCustomerRobotUserStatus(long custId);
 
