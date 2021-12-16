@@ -16,14 +16,13 @@
 
         public string Site { get; set; }
 
-        public int Danger1 { get; set; }
-
-        public int Danger2 { get; set; }
-
-        public int Danger3 { get; set; }
-
         public string Currency { get; set; }
 
         public string SubscriberType { get; set; }
+
+        public bool IsRobotUser { get; set; }
+
+        ///TODO
+        public int RobotBetting { get; set; }
     }
 }

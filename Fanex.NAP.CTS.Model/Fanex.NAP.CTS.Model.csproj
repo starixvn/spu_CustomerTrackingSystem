@@ -238,6 +238,8 @@
     <Compile Include="ManageSubscriber\DetailedSiteModel.cs" />
     <Compile Include="ManageSubscriber\UpdateSubsciberResultModel.cs" />
     <Compile Include="MatchMonitor\MatchGroupKeyModel.cs" />
+    <Compile Include="MatchMonitor\MatchMonitorDetailResultModel.cs" />
+    <Compile Include="MatchMonitor\MatchMonitorVerifiedTransDetailModel.cs" />
     <Compile Include="MatchMonitor\TransGroupModel.cs" />
     <Compile Include="MatchMonitor\CustInfoModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorDetailModel.cs" />

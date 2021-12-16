@@ -6,8 +6,13 @@
     {
         public Int64 TransId { get; set; }
 
-        public Int64 GroupID { get; set; }
+        public int GroupName { get; set; }
 
-        public int TotalScore { get; set; }
+        public string VerifiedDate { get; set; }
+
+        /// <summary>
+        /// TODO
+        /// </summary>
+        public string VerifiedBy { get; set; }
     }
 }

@@ -10,7 +10,7 @@ namespace Fanex.NAP.CTS.Model.MatchMonitor
 
         public string ListCustID { get; set; }
 
-        public string ReasonGroupName { get; set; }
+        public int GroupName { get; set; }
 
         public int TotalScore { get; set; }
 
@@ -19,7 +19,8 @@ namespace Fanex.NAP.CTS.Model.MatchMonitor
             get => JsonConvert.SerializeObject(new MatchGroupKeyModel  
             {
                 GroupID =  GroupID, 
-                TotalScore = TotalScore
+                TotalScore = TotalScore,
+                GroupName = GroupName
             });
         }
     }

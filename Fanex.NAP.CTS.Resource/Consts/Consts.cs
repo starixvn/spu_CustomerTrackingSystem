@@ -30,6 +30,7 @@
         public const string FormatDatetimeToString_ddMMMyyyyHHmmssfff = "dd MMM, yyyy HH:mm:ss.fff";
         public const string FormatDecimalToString_2Places = "0.00";
         public const string FormatDecimalToString_Thousands2Places = "#,##0.00";
+        public const string FormatDateToString_MMMddhhmmss = "MMM dd HH:mm:ss";
 
         public const string CurrentSubscriberAssignmentsKey = "CurrentSubscriberAssignmentsKey";
         public const string IsMasterSubscriberAssignmentKey = "IsMasterSubscriberAssignmentKey";

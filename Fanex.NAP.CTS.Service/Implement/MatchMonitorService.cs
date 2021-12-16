@@ -79,7 +79,7 @@
             }
         }
 
-        public List<MatchMonitorDetailModel> GetMatchMonitorDetail(MatchMonitorDetailFilterViewModel filter)
+        public MatchMonitorDetailResultModel GetMatchMonitorDetail(MatchMonitorDetailFilterViewModel filter)
         {
             var criteria = new MatchDetailMonitorGetCriteria()
             {
@@ -93,7 +93,13 @@
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<MatchMonitorDetailModel>(criteria).ToList();
+                var result = db.QueryMultiple(criteria);
+
+                return new MatchMonitorDetailResultModel
+                {
+                    MatchDetails = result?.Read<MatchMonitorDetailModel>() ?? new List<MatchMonitorDetailModel>(),
+                    VerifiedTrans = result?.Read<MatchMonitorVerifiedTransDetailModel>() ?? new List<MatchMonitorVerifiedTransDetailModel>()
+                };
             }
         }
 

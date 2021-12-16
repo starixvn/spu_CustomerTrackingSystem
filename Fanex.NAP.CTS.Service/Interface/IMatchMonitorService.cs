@@ -16,7 +16,7 @@
 
         DBResult UpdateVerificaton(Int64 matchID, Int64 userID);
 
-        List<MatchMonitorDetailModel> GetMatchMonitorDetail(MatchMonitorDetailFilterViewModel filter);
+        MatchMonitorDetailResultModel GetMatchMonitorDetail(MatchMonitorDetailFilterViewModel filter);
 
         List<CustInfoModel> GetCustInfoByCustID(string custIDs);
 
