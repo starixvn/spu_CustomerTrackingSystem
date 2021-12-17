@@ -98,7 +98,7 @@
                         return `<a class='click-view-name ' href=${url}> ${obj.Username} </a>`;
                     }
                 },
-                { data: obj => RenderBotIcon(obj.RobotUser, obj.IsRobotBetting) },
+                { data: obj => RenderBotIcon(obj.RobotType, obj.IsRobot) },
                 { data: obj => obj.DangerToString },
                 { data: obj => obj.Odds },
                 { data: obj => obj.BetID },
@@ -106,7 +106,7 @@
                 { data: obj => obj.Amount },
                 { data: obj => obj.HDP },
                 { data: obj => obj.Score },
-                { data: obj => obj.TransTime },
+                { data: obj => obj.TransTimeToString },
                 { data: obj => obj.Group },
                 { data: obj => obj.PICVerified },
                 { data: obj => obj.TransId }
@@ -172,7 +172,7 @@
                         return `<a class='click-view-name' href=${url}> ${obj.Username} </a>`;
                     }
                 },
-                { data: obj => RenderBotIcon(obj.RobotUser, obj.IsRobotBetting) },
+                { data: obj => RenderBotIcon(obj.RobotType, obj.IsRobot) },
                 { data: obj => obj.DangerToString },
                 { data: obj => obj.Odds },
                 { data: obj => obj.BetID },
@@ -180,7 +180,7 @@
                 { data: obj => obj.Amount },
                 { data: obj => obj.HDP },
                 { data: obj => obj.Score },
-                { data: obj => obj.TransTime },
+                { data: obj => obj.TransTimeToString },
                 { data: obj => obj.Group },
                 { data: obj => obj.PICVerified },
                 { data: obj => obj.TransId }
@@ -197,10 +197,13 @@
         });
     }
 
-    function RenderBotIcon(robotUser, isRobotBetting) {
+    function RenderBotIcon(robotType, isRobot) {
         let html = "";
 
-        switch (robotUser) {
+        switch (robotType) {
+            case -1:
+                html += "<span class='icon-base-robot'><span class='path1'></span><span class='path2'></span><span class='path3'></span><span class='path4'></span><span class='path5'></span><span class='path6'></span></span>";
+                break;
             case 0:
                 html += "<span class='icon-ob-robot'><span class='path1'></span><span class='path2'></span><span class='path3'></span><span class='path4'></span><span class='path5'></span><span class='path6'></span></span>";
                 break;
@@ -214,7 +217,7 @@
                 break;
         }
 
-        if (isRobotBetting) {
+        if (isRobot) {
             html += "<span class='icon-big-robot'><span class='path1'></span><span class='path2'></span><span class='path3'></span><span class='path4'></span><span class='path5'></span><span class='path6'></span></span>";
         }
 

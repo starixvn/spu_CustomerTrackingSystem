@@ -19,9 +19,5 @@
         public string Currency { get; set; }
 
         public string SubscriberType { get; set; }
-
-        public int RobotUser { get; set; }
-
-        public bool IsRobotBetting { get; set; }
     }
 }

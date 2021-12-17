@@ -115,7 +115,7 @@
         [HttpPost]
         public ActionResult GetMatchMonitorDetail(MatchMonitorDetailFilterViewModel para)
         {
-            var matchDetailResult = new List<MatchMonitorDetailResultViewModel>();
+            var matchDetailResult = Enumerable.Empty<MatchMonitorDetailResultViewModel>();
 
             try
             {
@@ -153,11 +153,13 @@
 
                         Task.WhenAll(tasks.ToArray()).Wait();
 
-                        matchDetailResult = MergeMatchMonitorDetail(mappingTransInfo, custInfo, ticketDetail);
+                        var mergeInfo = MergeMatchMonitorDetail(mappingTransInfo, custInfo, ticketDetail);
+
+                        matchDetailResult = GetRobotStatus(mergeInfo);
 
                         if (para.Sites != "A")
                         {
-                            matchDetailResult = matchDetailResult.Where(x => x.SubscriberType == para.Sites).ToList();
+                            matchDetailResult = matchDetailResult?.Where(x => x.SubscriberType == para.Sites);
                         }
                     }
                 }
@@ -201,7 +203,7 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private List<MatchMonitorDetailResultViewModel> MergeMatchMonitorDetail(IEnumerable<TransGroupModel> mappingTransInfo, IEnumerable<CustInfoModel> custInfo, IEnumerable<TicketDetailModel> ticketDetail)
+        private IEnumerable<MatchMonitorDetailResultViewModel> MergeMatchMonitorDetail(IEnumerable<TransGroupModel> mappingTransInfo, IEnumerable<CustInfoModel> custInfo, IEnumerable<TicketDetailModel> ticketDetail)
         {
             var matchDetailResult = new List<MatchMonitorDetailResultViewModel>();
 
@@ -219,8 +221,6 @@
                                                                 CustID = c.cust.CustID,
                                                                 SubscriberType = c.cust.SubscriberType,
                                                                 Username = c.cust.UserName,
-                                                                RobotUser = c.cust.RobotUser,
-                                                                IsRobotBetting = c.cust.IsRobotBetting,
                                                                 PICVerified = GetVerifiedTrans(mappingTransInfo, c.ticket),
                                                                 Danger1 = c.ticket.Danger1,
                                                                 Danger2 = c.ticket.Danger2,
@@ -236,9 +236,12 @@
                                                                 HDP2 = c.ticket.Hdp2,
                                                                 Score = c.ticket.LiveIndicator ? (c.ticket.LiveHomeScore + " - " + c.ticket.LiveAwayScore) : "-",
                                                                 TicketStatus = c.ticket.TicketStatus,
-                                                                TransTime = c.ticket.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+                                                                TransTime = c.ticket.TransDate,
+                                                                TransTimeToString = c.ticket.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                                                                 Group = GetGroup(mappingTransInfo, c.ticket),
-                                                                TransId = c.ticket.TransId
+                                                                TransId = c.ticket.TransId,
+                                                                RobotType = null,
+                                                                IsRobot = false
                                                             })?.OrderByDescending(c => c.TransTime)?.ThenBy(c => c.Group)?.Distinct()?.ToList();
 
             return matchDetailResult;
@@ -271,7 +274,7 @@
             return new MatchMonitorDetailResultModel { MatchDetails = new List<MatchMonitorDetailModel>(), VerifiedTrans = new List<MatchMonitorDetailVerifyTransResultModel>() };
         }
 
-        private List<TransGroupModel> MappingTransInfo(MatchMonitorDetailResultModel matchDetail, List<MatchGroupKeyModel> groupKey)
+        private IEnumerable<TransGroupModel> MappingTransInfo(MatchMonitorDetailResultModel matchDetail, List<MatchGroupKeyModel> groupKey)
         {
             var transGroupBetting = new List<TransGroupModel>();
 
@@ -342,6 +345,58 @@
                     item.GroupName = preIncrement++;
                 }
             }
+        }
+
+        private IEnumerable<MatchMonitorDetailResultViewModel> GetRobotStatus(IEnumerable<MatchMonitorDetailResultViewModel> matchDetailInfo)
+        {
+            if (matchDetailInfo != null && matchDetailInfo.Any())
+            {
+                var para = matchDetailInfo.Select(c => new { TransID = c.TransId, TransDate = c.TransTime, CustID = c.CustID });
+
+                var robotStatus = _matchMonitorService.GetRobotStatus(JsonConvert.SerializeObject(para));
+
+                if (robotStatus != null && robotStatus.Any())
+                {
+                    var result = matchDetailInfo.GroupJoin(robotStatus,
+                               m => m.TransId,
+                               r => r.TransID,
+                               (m, r) => new { m, r })
+                               .SelectMany(
+                                    group => group.r.DefaultIfEmpty(),
+                                    (group, temp) => new MatchMonitorDetailResultViewModel
+                                    {
+                                        CTSCustID = group.m.CTSCustID,
+                                        CustID = group.m.CustID,
+                                        SubscriberType = group.m.SubscriberType,
+                                        Username = group.m.Username,
+                                        PICVerified = group.m.PICVerified,
+                                        Danger1 = group.m.Danger1,
+                                        Danger2 = group.m.Danger2,
+                                        Danger3 = group.m.Danger3,
+                                        Danger4 = group.m.Danger4,
+                                        Danger5 = group.m.Danger5,
+                                        Odds = group.m.Odds,
+                                        BetID = group.m.TransId,
+                                        BetTeam = group.m.BetTeam,
+                                        Currency = group.m.Currency,
+                                        Amount = group.m.Amount,
+                                        HDP1 = group.m.HDP1,
+                                        HDP2 = group.m.HDP2,
+                                        Score = group.m.Score,
+                                        TicketStatus = group.m.TicketStatus,
+                                        TransTime = group.m.TransTime,
+                                        TransTimeToString = group.m.TransTimeToString,
+                                        Group = group.m.Group,
+                                        TransId = group.m.TransId,
+                                        RobotType = (temp != null) ? temp?.RobotType : null,
+                                        IsRobot = (temp != null) && temp.IsRobot,
+                                    })?.OrderByDescending(c => c.TransTime)?.ThenBy(c => c.Group)?.Distinct()?.ToList();
+
+                    return result;
+                }
+            }
+
+            return matchDetailInfo;
         }
     }
 }

@@ -241,6 +241,7 @@
     <Compile Include="MatchMonitor\MatchMonitorDetailResultModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorDetailVerifyTransResultModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorDetailVerifyTransParaModel.cs" />
+    <Compile Include="MatchMonitor\RobotStatusModel.cs" />
     <Compile Include="MatchMonitor\TransGroupModel.cs" />
     <Compile Include="MatchMonitor\CustInfoModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorDetailModel.cs" />

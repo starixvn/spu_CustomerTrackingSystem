@@ -21,5 +21,7 @@
         IEnumerable<CustInfoModel> GetCustInfoByCustID(string custIDs);
 
         IEnumerable<TicketDetailModel> GetTicketDetail(DateTime eventDate, string transIds);
+
+        IEnumerable<RobotStatusModel> GetRobotStatus(string transJson);
     }
 }

@@ -106,6 +106,7 @@
     <Compile Include="LatestTransaction\GetLatestTransactionCriteria.cs" />
     <Compile Include="ManageSubscriber\ReUpdateSubriberIdBySiteIdCriteira.cs" />
     <Compile Include="Api\GetFlaggedEvidenceByDirectAssociationCriteria.cs" />
+    <Compile Include="MatchMonitor\RobotStatusByTransGetCriteria.cs" />
     <Compile Include="MatchMonitor\CustInfoByCustIdGetCriteria.cs" />
     <Compile Include="MatchMonitor\MatchDetailMonitorGetCriteria.cs" />
     <Compile Include="MatchMonitor\TicketDetailGetCriteria.cs" />

@@ -122,5 +122,15 @@
 
             return repository.Fetch<TicketDetailModel>(criteria);
         }
+
+        public IEnumerable<RobotStatusModel> GetRobotStatus(string transJson)
+        {
+            var criteria = new RobotStatusByTransGetCriteria()
+            {
+                TransJson = transJson
+            };
+
+            return repository.Fetch<RobotStatusModel>(criteria);
+        }
     }
 }

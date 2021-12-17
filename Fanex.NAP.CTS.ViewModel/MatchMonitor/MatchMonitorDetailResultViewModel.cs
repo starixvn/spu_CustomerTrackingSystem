@@ -36,7 +36,9 @@
 
         public string Score { get; set; }
 
-        public string TransTime { get; set; }
+        public string TransTimeToString { get; set; }
+
+        public DateTime TransTime { get; set; }
 
         public string Group { get; set; }
 
@@ -46,9 +48,9 @@
 
         public string PICVerified { get; set; }
 
-        public int RobotUser { get; set; }
+        public int? RobotType { get; set; }
 
-        public bool IsRobotBetting { get; set; }
+        public bool IsRobot { get; set; }
 
         public Int64 TransId { get; set; }
 
