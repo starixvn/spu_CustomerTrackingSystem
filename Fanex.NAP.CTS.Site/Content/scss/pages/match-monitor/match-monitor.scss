@@ -188,7 +188,9 @@
                                     position: sticky;
                                     top: 16.9rem;
                                     font-weight: 300;
-                                    z-index: 9
+                                    z-index: 9;
+                                    padding-left: 0;
+                                    padding-right: 0;
                                 }
                             }
                         }
@@ -196,6 +198,9 @@
                         tbody {
                             tr {
                                 td {
+                                    padding-left: 0;
+                                    padding-right: 0;
+
                                     .click-view-details, .click-view-name {
                                         cursor: pointer;
                                     }
@@ -246,6 +251,7 @@
             }
 
             #first-monitor-datatable, #second-monitor-datatable {
+                /*width: fit-content;*/
                 width: 100%
             }
 
@@ -307,7 +313,7 @@
 }
 
 .detailpage {
-    width: 255rem;
+    width: 100% !important;
 }
 
 .detail-area {

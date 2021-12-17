@@ -72,9 +72,10 @@
             pageLength: 50,
             scrollX: false,
             scrollCollapse: false,
+            autoWidth: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13], className: "text-center" },
+                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], className: "text-center" },
                 { targets: [0] },
                 { targets: [1] },
                 { targets: [2] },
@@ -146,22 +147,23 @@
             pageLength: 50,
             scrollX: false,
             scrollCollapse: false,
+            autoWidth: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], className: "text-center" },
-                { targets: [0], width: "1%" },
-                { targets: [1], width: "6%" },
-                { targets: [2], width: "5%" },
-                { targets: [3], width: "2%" },
-                { targets: [4], width: "2%" },
-                { targets: [5], width: "1%" },
-                { targets: [6], width: "2%" },
-                { targets: [7], width: "1%" },
-                { targets: [8], width: "1%" },
-                { targets: [9], width: "1%" },
-                { targets: [10], width: "6%" },
-                { targets: [11], width: "6%" },
-                { targets: [12], width: "6%" },
+                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], className: "text-center" },
+                { targets: [0] },
+                { targets: [1] },
+                { targets: [2] },
+                { targets: [3] },
+                { targets: [4] },
+                { targets: [5] },
+                { targets: [6] },
+                { targets: [7] },
+                { targets: [8] },
+                { targets: [9] },
+                { targets: [10] },
+                { targets: [11] },
+                { targets: [12] },
                 { targets: [13], visible: false }
             ],
             columns: [
@@ -293,7 +295,7 @@
 
         domElements.btnVerify.on('click', function () {
             common.showConfirmation('<div class="popup - content">Are you sure about this?<br>Once confirmed, all tickets\' review status will be updated to "Verified".</div>', function () {
-               VerifyTransMatchMonitorDetail();
+                VerifyTransMatchMonitorDetail();
             });
         })
     }
