@@ -573,7 +573,6 @@
   padding: .7rem 2rem; }
 
 .icon-base-robot, .icon-ob-robot, .icon-good-robot, .icon-bad-robot {
-  margin-right: .7rem;
   position: inherit; }
   .icon-base-robot span:before, .icon-ob-robot span:before, .icon-good-robot span:before, .icon-bad-robot span:before {
     font-size: 2.2rem; }
