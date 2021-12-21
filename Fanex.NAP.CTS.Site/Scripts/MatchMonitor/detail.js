@@ -260,12 +260,20 @@
         var secondTableInfo = domElements.secondtblMonitor.DataTable().data().toArray();
         var tranIds = new Array();
 
-        firstTableInfo.forEach(element => {
-            tranIds.push(element.TransId);
+        firstTableInfo.forEach(element =>
+        {
+            if (element.PICVerified == "-")
+            {
+                tranIds.push(element.TransId);
+            }
         });
 
-        secondTableInfo.forEach(element => {
-            tranIds.push(element.TransId);
+        secondTableInfo.forEach(element =>
+        {
+            if (element.PICVerified == "-")
+            {
+                tranIds.push(element.TransId);
+            }
         });
 
         return tranIds;
