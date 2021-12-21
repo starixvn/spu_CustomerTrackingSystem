@@ -11,7 +11,7 @@
                         "~/Scripts/JQuery/jquery-{version}.js",
                         "~/Scripts/JQuery/jquery-ui-1.12.1.min.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
+            bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(                        
                         "~/Scripts/JQuery/jquery.validate*"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
@@ -119,7 +119,7 @@
         {
             bundles.Add(new ScriptBundle("~/statistic-scripts")
                 .Include("~/Scripts/highcharts/highcharts.js",
-                "~/Scripts/highcharts/full-screen.js",
+                "~/Scripts/highcharts/full-screen.js",                
                 "~/Scripts/Account/BettingStatistic/sport-statistic-scripts.js",
                 "~/Scripts/Account/BettingStatistic/turnover-by-bettype.js",
                 "~/Scripts/Account/BettingStatistic/winlost-statistic-scripts.js"

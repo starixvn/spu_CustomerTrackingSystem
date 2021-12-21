@@ -62,9 +62,9 @@
             {
                 this.DangerousOriginal = (custDangerousModel.Danger1 == 0) ? "None" : custDangerousModel.Danger1.ToString();
                 this.DangerousABI = (custDangerousModel.Danger2 == 0) ? "None" : custDangerousModel.Danger2.ToString();
-                this.DangerousBasketball = (custDangerousModel.Danger3 == 0) ? "None" : custDangerousModel.Danger3.ToString();
-                this.DangerousESports = (custDangerousModel.Danger4 == 0) ? "None" : custDangerousModel.Danger4.ToString();
-                this.DangerousOtherSports = (custDangerousModel.Danger5 == 0) ? "None" : custDangerousModel.Danger5.ToString();
+                this.DangerousBasketball = (custDangerousModel.Danger4 == 0) ? "None" : custDangerousModel.Danger4.ToString();
+                this.DangerousESports = (custDangerousModel.Danger5 == 0) ? "None" : custDangerousModel.Danger5.ToString();
+                this.DangerousOtherSports = (custDangerousModel.Danger3 == 0) ? "None" : custDangerousModel.Danger3.ToString();
             }
 
             return this;

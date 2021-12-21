@@ -6,6 +6,6 @@
 
         public string EvidenceCode { get; set; }
 
-        public bool IsPlag { get; set; }
+        public bool IsFlag { get; set; }
     }
 }

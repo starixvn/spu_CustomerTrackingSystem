@@ -4,15 +4,15 @@
     {
         public int DesktopUsage { get; set; }
 
-        public int DesktopUsagePercent { get; set; }
+        public string DesktopUsagePercent { get; set; }
 
         public int MobileUsage { get; set; }
 
-        public int MobileUsagePercent { get; set; }
+        public string MobileUsagePercent { get; set; }
 
         public int OthersUsage { get; set; }
 
-        public int OthersUsagePercent { get; set; }
+        public string OthersUsagePercent { get; set; }
 
         public int LoginCount { get; set; }
 

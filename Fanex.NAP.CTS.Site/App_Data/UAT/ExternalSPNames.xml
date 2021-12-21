@@ -30,9 +30,8 @@
 		<Setting Key="NAP_BLControl_EvidenceFlagged" SpName="NAP_BLControl_EvidenceFlagged_UAT1" DbName="DBCust.CustDB.bodbAdminNet" />
 		<Setting Key="NAP_BLControl_EvidenceUnflagged" SpName="NAP_BLControl_EvidenceUnflagged_UAT1" DbName="DBCust.CustDB.bodbAdminNet" />
 		<Setting Key="TicketVoiding_TicketsInRequest_Select" SpName="TicketVoiding_TicketsInRequest_Select_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
-		<Setting Key="CTS_CustomerProfile_FraudInfo_Get" SpName="CTS_CustomerProfile_FraudInfo_Get_xtest" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
-		<!--<Setting Key="CTS_RobotUserStatus_Get" SpName="CTS_RobotUserStatus_Get" DbName="DBONUSER.ON_USER.bodbSPUNet" />-->
-		<!--<Setting Key="BLC_SettingSelect_ByCust" SpName="BLC_SettingSelect_ByCust" DbName="DBCust.CustDB.bodbAdminNet" />-->
+		<Setting Key="CTS_CustomerProfile_FraudInfo_Get" SpName="CTS_CustomerProfile_FraudInfo_Get_xtest" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />		
+		<Setting Key="BLC_SettingSelect_ByCust" SpName="BLC_SettingSelect_ByCust_xtest" DbName="DBCust.CustDB.bodbAdminNet" />
 		<Setting Key="CTS_Customer_RobotCheckExist" SpName="CTS_Customer_RobotCheckExist_xtest" DbName="DBONUSER.ON_USER.bodbSPUNet" />
 	</Function>
 

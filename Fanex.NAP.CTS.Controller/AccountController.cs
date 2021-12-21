@@ -255,14 +255,11 @@
 
                     if (evidences != null && evidences.Any())
                     {
-                        var flagEvidenceCodes = evidences.Where(x => x.IsPlag).Select(x => x.EvidenceCode);
-                        var affectedEvidenceCodes = evidences.Where(x => !x.IsPlag).Select(x => x.EvidenceCode);
+                        var flagEvidenceCodes = evidences.Where(x => x.IsFlag).Select(x => x.EvidenceCode);
+                        var affectedEvidenceCodes = evidences.Where(x => !x.IsFlag).Select(x => x.EvidenceCode);
 
-                        //custProfileEvidence.FlagEvidenceCodes = flagEvidenceCodes.Any() ? string.Join(", ", evidences.Where(x => x.IsPlag).Select(x => x.EvidenceCode)) : "None";
-                        //custProfileEvidence.AffectedEvidenceCodes = affectedEvidenceCodes.Any() ? string.Join(", ", evidences.Where(x => !x.IsPlag).Select(x => x.EvidenceCode)) : "None";
-
-                        custProfileEvidence.FlagEvidenceCodes = "6.1, 6.2, 6.3, 6.1, 6.2, 6.3, 6.5, 6.2, 6.9, 6.10";
-                        custProfileEvidence.AffectedEvidenceCodes = "6.1, 6.2, 6.3, 6.1, 6.2, 6.3, 6.5, 6.2, 6.9, 6.10";
+                        custProfileEvidence.FlagEvidenceCodes = flagEvidenceCodes.Any() ? string.Join(", ", flagEvidenceCodes) : "None";
+                        custProfileEvidence.AffectedEvidenceCodes = affectedEvidenceCodes.Any() ? string.Join(", ", affectedEvidenceCodes) : "None";
                     }
                 }
                 catch (Exception ex)
@@ -332,11 +329,11 @@
                 var custProfileLoginStats = new CustomerInfoLoginStatsViewModel
                 {
                     DesktopUsage = data.DesktopUsage,
-                    DesktopUsagePercent = data.DesktopUsagePercent,
+                    DesktopUsagePercent = data.DesktopUsagePercent.ToString("0.00"),
                     MobileUsage = data.MobileUsage,
-                    MobileUsagePercent = data.MobileUsagePercent,
+                    MobileUsagePercent = data.MobileUsagePercent.ToString("0.00"),
                     OthersUsage = data.OthersUsage,
-                    OthersUsagePercent = data.OthersUsagePercent,
+                    OthersUsagePercent = data.OthersUsagePercent.ToString("0.00"),
                     LoginCount = data.Logins,
                     IPCount = data.IPs,
                     DeviceCount = data.Devices
@@ -357,14 +354,10 @@
             {
                 var custProfileDates = new CustomerInfoDateViewModel
                 {
-                    //NextCategoryScan = data.NextCategoryScan,
-                    //LastTicket = data.LastTicket,
-                    //LastLogin = data.LastLogin,
-                    //Created = data.Created
-                    NextCategoryScan = DateTime.Now,
-                    LastTicket = DateTime.Now,
-                    LastLogin = DateTime.Now,
-                    Created = DateTime.Now,
+                    NextCategoryScan = data.NextCategoryScan,
+                    LastTicket = data.LastTicket,
+                    LastLogin = data.LastLogin,
+                    Created = data.Created
                 };
 
                 return Json(custProfileDates, JsonRequestBehavior.AllowGet);

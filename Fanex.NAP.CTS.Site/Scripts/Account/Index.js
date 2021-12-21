@@ -23,17 +23,23 @@
         spanAssAccByDevice: $('#spanAssAccByDevice'),
         spanAssAccByIP: $('#spanAssAccByIP'),
         spanClass: $('#spanClass'),
+        spanLblFlagEvidence: $('#spanLblFlagEvidence'),
         spanFlagEvidence: $('#spanFlagEvidence'),
-        spanAffectedEvidence: $('#spanAffectedEvidence'),
+        spanLblAffectedEvidence: $('#spanLblAffectedEvidence'),
+        spanAffectedEvidence: $('#spanAffectedEvidence'),        
         spanLicVIP: $('#spanLicVIP'),       
         spanDesktopUsage: $('#spanDesktopUsage'),
         spanMobileUsage: $('#spanMobileUsage'),
         spanOthersUsage: $('#spanOthersUsage'),
         spanLoginCount: $('#spanLoginCount'),
         spanIPDeviceCount: $('#spanIPDeviceCount'),
+        spanLblNextCategoryScanDate: $('#spanLblNextCategoryScanDate'),
         spanNextCategoryScanDate: $('#spanNextCategoryScanDate'),
+        spanLblLastTicketDate: $('#spanLblLastTicketDate'),
         spanLastTicketDate: $('#spanLastTicketDate'),
+        spanLblLastLoginDate: $('#spanLblLastLoginDate'),
         spanLastLoginDate: $('#spanLastLoginDate'),
+        spanLblCreatedDate: $('#spanLblCreatedDate'),
         spanCreatedDate: $('#spanCreatedDate'),
         associatedAccountTab: $("#associated_account-tab"),
         evidenceTab: $("#evidence-tab"),
@@ -190,14 +196,10 @@
                     domElements.spanClass.html(response.Class);
                     domElements.spanLicVIP.html(response.LicVIP);
                     domElements.spanFlagEvidence.html(response.FlagEvidenceCodes);
-                    domElements.spanAffectedEvidence.html(response.AffectedEvidenceCodes);
+                    domElements.spanAffectedEvidence.html(response.AffectedEvidenceCodes); 
 
-                    if (response.FlagEvidenceCodes == 'None') {
-                        domElements.spanFlagEvidence.contents.unwrap();
-                    }
-                    if (response.spanAffectedEvidence == 'None') {
-                        domElements.spanAffectedEvidence.contents.unwrap();
-                    }
+                    domElements.spanLblFlagEvidence.css("height", domElements.spanFlagEvidence.css("height"));
+                    domElements.spanLblAffectedEvidence.css("height", domElements.spanAffectedEvidence.css("height"));
                 }
             },
             error: function (errMsg) {
@@ -243,6 +245,11 @@
                     domElements.spanLastTicketDate.html(response.LastTicketString);
                     domElements.spanLastLoginDate.html(response.LastLoginString);
                     domElements.spanCreatedDate.html(response.CreatedString);
+
+                    domElements.spanLblNextCategoryScanDate.css("height", domElements.spanNextCategoryScanDate.css("height"));
+                    domElements.spanLblLastTicketDate.css("height", domElements.spanLastTicketDate.css("height"));
+                    domElements.spanLblLastLoginDate.css("height", domElements.spanLastLoginDate.css("height"));
+                    domElements.spanLblCreatedDate.css("height", domElements.spanCreatedDate.css("height"));
                 }
             },     
             complete: function () {
@@ -311,7 +318,7 @@
 
         GetCustProfileAssociationAccount();         
                                   
-        $("#tabs-account-detail").tabs();
+        $("#tabs-account-detail").tabs();       
     }
 
     function DisplayStatistic() {
