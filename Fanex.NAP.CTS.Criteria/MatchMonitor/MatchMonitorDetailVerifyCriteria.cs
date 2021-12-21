@@ -15,7 +15,7 @@
         [SpParam(SqlParamName = "ip_BettypeID")]
         public int BettypeID { get; set; }
 
-        [SpParam(SqlParamName = "ip_TransList")]
+        [SpParam(SqlParamName = "ip_ListTransID")]
         public string TranIds { get; set; }
 
         [SpParam(SqlParamName = "ip_VerifiedBy")]
