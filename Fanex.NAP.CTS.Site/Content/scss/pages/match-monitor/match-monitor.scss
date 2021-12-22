@@ -212,6 +212,8 @@
                                             z-index: 1;
                                             transform: translate(50%,-50%);
                                         }
+
+                                        pointer-events: none;
                                     }
                                 }
                             }
@@ -359,6 +361,6 @@
 
 @media only screen and (max-width: 1424px) {
     .detailpage {
-        width: max-content !important;
+        width: fit-content !important;
     }
 }
