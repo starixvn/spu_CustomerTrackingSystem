@@ -336,7 +336,7 @@
 
         private void MappingReasonGroupName(ref IEnumerable<MatchGroupModel> matchReasonGroup)
         {
-            int preIncrement = 0;
+            int preIncrement = 1;
 
             if (matchReasonGroup != null && matchReasonGroup.Any())
             {
