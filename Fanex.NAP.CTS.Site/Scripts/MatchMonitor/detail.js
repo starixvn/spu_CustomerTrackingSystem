@@ -1,5 +1,7 @@
 ﻿function MatchMonitorDetail() {
     let domElements = {
+        detailpage: $('#detailpage'),
+        groupTable: $('#groupTable'),
         isHostPermission: $("#hdIsHostPermission").attr("IsHostPermission"),
         eventDataToString: $("#hdEventDataToString").val(),
         matchID: $("#hdMatchID").val(),
@@ -40,6 +42,7 @@
             complete: function (response) {
                 domElements.firsttblMonitor.find('tbody').removeClass('loading');
                 domElements.secondtblMonitor.find('tbody').removeClass('loading');
+                resizeDataTable();
             },
             error: function (error) {
                 domElements.firsttblMonitor.find('tbody').removeClass('loading');
@@ -76,19 +79,19 @@
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
                 { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], className: "text-center" },
-                { targets: [0], width: "30px" },
+                { targets: [0] },
                 { targets: [1] },
-                { targets: [2], width: "30px" },
-                { targets: [3]},
-                { targets: [4]},
-                { targets: [5]},
-                { targets: [6]},
-                { targets: [7]},
-                { targets: [8]},
-                { targets: [9]},
-                { targets: [10], width: "155px"},
-                { targets: [11]},
-                { targets: [12], width: "125px"},
+                { targets: [2] },
+                { targets: [3] },
+                { targets: [4] },
+                { targets: [5] },
+                { targets: [6] },
+                { targets: [7] },
+                { targets: [8] },
+                { targets: [9] },
+                { targets: [10] },
+                { targets: [11] },
+                { targets: [12] },
                 { targets: [13], visible: false }
             ],
             columns: [
@@ -120,6 +123,10 @@
                 else if (data.SubscriberType === "L") {
                     $(row.cells[1]).addClass('username-hightlight');
                 }
+
+
+                //$('td:eq(10)', row).css('min-width', '81');
+                //$('td:eq(12)', row).css('min-width', '119px');
             }
         });
     }
@@ -151,9 +158,9 @@
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
                 { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], className: "text-center" },
-                { targets: [0], width: "30px" },
+                { targets: [0] },
                 { targets: [1] },
-                { targets: [2], width: "30px" },
+                { targets: [2] },
                 { targets: [3] },
                 { targets: [4] },
                 { targets: [5] },
@@ -161,9 +168,9 @@
                 { targets: [7] },
                 { targets: [8] },
                 { targets: [9] },
-                { targets: [10], width: "155px" },
+                { targets: [10] },
                 { targets: [11] },
-                { targets: [12], width: "125px" },
+                { targets: [12] },
                 { targets: [13], visible: false }
             ],
             columns: [
@@ -195,6 +202,9 @@
                 else if (data.SubscriberType === "L") {
                     $(row.cells[1]).addClass('username-hightlight');
                 }
+
+                //$('td:eq(10)', row).css('min-width', '81');
+                //$('td:eq(12)', row).css('min-width', '119px');
             }
         });
     }
@@ -279,6 +289,21 @@
         return tranIds;
     }
 
+    function resizeDataTable() {
+        var widthTables = domElements.firsttblMonitor[0].offsetWidth + domElements.secondtblMonitor[0].offsetWidth + 41;
+
+        if (domElements.groupTable[0].offsetWidth - widthTables > 0 && widthTables < $(window).width()) {
+            domElements.detailpage.removeClass('page-content-monitor');
+            domElements.firsttblMonitor.removeClass('table-maxcontent');
+            domElements.secondtblMonitor.removeClass('table-maxcontent');
+        }
+        else{
+            domElements.detailpage.addClass('page-content-monitor');
+            domElements.firsttblMonitor.addClass('table-maxcontent');
+            domElements.secondtblMonitor.addClass('table-maxcontent');
+        }
+    }
+
     function Initial() {
         domElements.cbbMatchScore.multiselect({
             menuWidth: 260,
@@ -310,7 +335,12 @@
 
     $(document).ready(function () {
         Initial();
+
         GetMatchMonitorDetail();
+
+        $(window).resize(function () {
+            resizeDataTable();
+        })
     });
 }
 
