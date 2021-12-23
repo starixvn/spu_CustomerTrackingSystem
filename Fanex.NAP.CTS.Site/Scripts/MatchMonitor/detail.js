@@ -123,10 +123,6 @@
                 else if (data.SubscriberType === "L") {
                     $(row.cells[1]).addClass('username-hightlight');
                 }
-
-
-                //$('td:eq(10)', row).css('min-width', '81');
-                //$('td:eq(12)', row).css('min-width', '119px');
             }
         });
     }
@@ -202,9 +198,6 @@
                 else if (data.SubscriberType === "L") {
                     $(row.cells[1]).addClass('username-hightlight');
                 }
-
-                //$('td:eq(10)', row).css('min-width', '81');
-                //$('td:eq(12)', row).css('min-width', '119px');
             }
         });
     }
