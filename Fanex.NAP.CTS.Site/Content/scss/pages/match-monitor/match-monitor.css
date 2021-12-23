@@ -519,7 +519,8 @@
     border-bottom-left-radius: 2px;
     border-bottom-right-radius: 2px;
     padding: 10px;
-    box-shadow: 0px 1px #e5e5e5; }
+    box-shadow: 0px 1px #e5e5e5;
+    width: 100%; }
 
 .group.width-280 {
   width: 27.5rem; }
