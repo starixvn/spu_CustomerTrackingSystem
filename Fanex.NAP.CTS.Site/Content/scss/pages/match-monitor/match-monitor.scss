@@ -252,7 +252,7 @@
                 padding-right: 2rem;
             }
 
-            #first-monitor-datatable, #second-monitor-datatable {
+            .report-cont {
                 /*width: fit-content;*/
                 width: 100%
             }
@@ -273,7 +273,7 @@
                 border-bottom-right-radius: 2px;
                 padding: 10px;
                 box-shadow: 0px 1px #e5e5e5;
-                width : 100%;
+                width: 100%;
             }
         }
     }
@@ -315,9 +315,6 @@
     }
 }
 
-.detailpage {
-    width: 100% !important;
-}
 
 .detail-area {
     position: absolute;
@@ -360,8 +357,13 @@
     }
 }
 
-@media only screen and (max-width: 1424px) {
-    .detailpage {
-        width: fit-content !important;
-    }
+.detailpage {
+    width: 100%;
+}
+
+.page-content-monitor{
+    width : max-content;
+}
+.table-maxcontent{
+    width : auto !important;
 }
