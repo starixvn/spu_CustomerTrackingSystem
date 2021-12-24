@@ -101,22 +101,22 @@
                
                 if (Danger2 != 0)
                 {
-                    danger += string.IsNullOrEmpty(danger) ? "ABI" + Danger2 : " - ABI" + Danger2;
+                    danger += string.IsNullOrEmpty(danger) ? "ABI" + Danger2 : "-ABI" + Danger2;
                 }
                 
                 if (Danger3 != 0)
                 {
-                    danger += string.IsNullOrEmpty(danger) ? "OS" + Danger3 : " - OS"  + Danger3;
+                    danger += string.IsNullOrEmpty(danger) ? "OS" + Danger3 : "-OS"  + Danger3;
                 }
 
                 if (Danger4 != 0)
                 {
-                    danger += string.IsNullOrEmpty(danger) ? "BkB" + Danger4 : " - BkB" + Danger4;
+                    danger += string.IsNullOrEmpty(danger) ? "BkB" + Danger4 : "-BkB" + Danger4;
                 }
 
                 if (Danger5 != 0)
                 {
-                    danger += string.IsNullOrEmpty(danger) ? "ES" + Danger5 : " - ES" + Danger5;
+                    danger += string.IsNullOrEmpty(danger) ? "ES" + Danger5 : "-ES" + Danger5;
                 }
 
                 return (danger == string.Empty) ? "-" : danger;

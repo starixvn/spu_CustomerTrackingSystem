@@ -328,7 +328,7 @@
 
                 var verifiedDate = transGroup?.FirstOrDefault()?.VerifiedDate;
 
-                return string.IsNullOrEmpty(verifiedBy) && string.IsNullOrEmpty(verifiedDate) ? verifiedTran : string.Concat(verifiedBy, " ", verifiedDate);
+                return string.IsNullOrEmpty(verifiedBy) && string.IsNullOrEmpty(verifiedDate) ? verifiedTran : string.Concat(verifiedBy, ", ", verifiedDate);
             }
 
             return verifiedTran;
