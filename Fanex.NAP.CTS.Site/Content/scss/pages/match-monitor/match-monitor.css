@@ -437,7 +437,7 @@
       background-color: #e3e9f6;
       position: -webkit-sticky;
       position: sticky;
-      top: 12.9rem;
+      top: 5.9rem;
       z-index: 11; }
       .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .wrapper-info-table .dataTables_length, .match-monitor .monitor-container .monitor-table #first-monitor-datatable .table-report .wrapper-info-table .dataTables_length, .match-monitor .monitor-container .monitor-table #second-monitor-datatable .table-report .wrapper-info-table .dataTables_length, .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .wrapper-info-table .dataTables_length, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .wrapper-info-table .dataTables_length, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .wrapper-info-table .dataTables_length {
         position: absolute;
@@ -472,7 +472,7 @@
           opacity: .3; }
       .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor thead tr th, .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail thead tr th, .match-monitor .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor thead tr th, .match-monitor .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor-detail thead tr th, .match-monitor .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor thead tr th, .match-monitor .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor-detail thead tr th, .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor thead tr th, .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail thead tr th, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor thead tr th, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor-detail thead tr th, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor thead tr th, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor-detail thead tr th {
         position: sticky;
-        top: 16.9rem;
+        top: 9.9rem;
         font-weight: 300;
         z-index: 9;
         padding-left: 0;
