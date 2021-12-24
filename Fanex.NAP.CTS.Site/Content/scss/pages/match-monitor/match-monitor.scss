@@ -2,9 +2,17 @@
 @import "../../abstracts/mixins";
 @import "../../components/popup";
 
+
 .match-monitor, .detailpage {
+    .content {
+        width: 100%;
+        position: sticky;
+        top: 6rem;
+        z-index: 999999;
+    }
+
     .monitor-container {
-        margin: 1rem 1.6rem 1rem 1.6rem;
+        margin: 0 1.6rem 1rem 1.6rem;
 
         .monitor-table {
             .group-control {
@@ -120,7 +128,12 @@
 
             .group-table {
                 display: flex;
-                padding-bottom: 1rem;
+                padding: 1rem 0;
+                position: sticky;
+                top: 9rem;
+                background: #fff;
+                width: 100%;
+                z-index: 99999;
             }
 
             #monitor-datatable, #first-monitor-datatable, #second-monitor-datatable {
@@ -134,7 +147,7 @@
                         background-color: #e3e9f6;
                         position: -webkit-sticky;
                         position: sticky;
-                        top: 5.9rem;
+                        top: 22.4rem;
                         z-index: 11;
 
                         .dataTables_length {
@@ -186,7 +199,7 @@
                             tr {
                                 th {
                                     position: sticky;
-                                    top: 9.9rem;
+                                    top: 26.4rem;
                                     font-weight: 300;
                                     z-index: 9;
                                     padding-left: 0;
@@ -258,6 +271,9 @@
                 border-top-right-radius: 2px;
                 padding: 10px;
                 margin-top: 10px;
+                z-index: 999999;
+                position: sticky;
+                top: 17rem;
             }
 
             .third-group-table-border {
@@ -269,6 +285,7 @@
                 padding: 10px;
                 box-shadow: 0px 1px #e5e5e5;
                 width: 100%;
+                z-index: 9;
             }
         }
     }
