@@ -358,7 +358,7 @@
   margin: 0 1.6rem 1rem 1.6rem; }
   .match-monitor .monitor-container .monitor-table .group-control {
     position: sticky;
-    top: 6rem;
+    top: 9.5rem;
     z-index: 99;
     background: #fff;
     padding: 1rem 0 0 0; }
@@ -448,7 +448,7 @@
       background-color: #e3e9f6;
       position: -webkit-sticky;
       position: sticky;
-      top: 22.4rem;
+      top: 20.9rem;
       z-index: 11; }
       .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .wrapper-info-table .dataTables_length, .match-monitor .monitor-container .monitor-table #first-monitor-datatable .table-report .wrapper-info-table .dataTables_length, .match-monitor .monitor-container .monitor-table #second-monitor-datatable .table-report .wrapper-info-table .dataTables_length {
         position: absolute;
@@ -483,7 +483,7 @@
           opacity: .3; }
       .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor thead tr th, .match-monitor .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail thead tr th, .match-monitor .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor thead tr th, .match-monitor .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor-detail thead tr th, .match-monitor .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor thead tr th, .match-monitor .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor-detail thead tr th {
         position: sticky;
-        top: 26.4rem;
+        top: 24.9rem;
         font-weight: 300;
         z-index: 9;
         padding-left: 0;
