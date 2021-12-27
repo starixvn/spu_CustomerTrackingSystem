@@ -17,7 +17,7 @@
         .monitor-table {
             .group-control {
                 position: sticky;
-                top: 9.5rem;
+                top: 9rem;
                 z-index: 99;
                 background: $page-bg;
                 padding: 1rem 0 0 0;
@@ -147,8 +147,17 @@
                         background-color: #e3e9f6;
                         position: -webkit-sticky;
                         position: sticky;
-                        top: 20.9rem;
+                        top: 16.2rem;
                         z-index: 11;
+
+                        @media screen and (max-width: 1626px) {
+                            top: 20.4rem;
+                        }
+
+                        @media screen and (max-width: 1360px) {
+                            top: 22.3rem;
+                        }
+
 
                         .dataTables_length {
                             position: absolute;
@@ -199,11 +208,19 @@
                             tr {
                                 th {
                                     position: sticky;
-                                    top: 24.9rem;
+                                    top: 20rem;
                                     font-weight: 300;
                                     z-index: 9;
                                     padding-left: 0;
                                     padding-right: 0;
+
+                                    @media screen and (max-width: 1626px) {
+                                        top: 24.3rem;
+                                    }
+
+                                    @media screen and (max-width: 1360px) {
+                                        top: 26.3rem;
+                                    }
                                 }
                             }
                         }
@@ -292,7 +309,7 @@
 }
 
 .group.width-280 {
-    width: 27.5rem;
+    width: 15rem !important;
 }
 
 .ui-datepicker.ui-widget-content {
@@ -326,3 +343,5 @@
         }
     }
 }
+
+
