@@ -3,7 +3,7 @@
 @import "../../components/popup";
 
 
-.match-monitor, .detailpage {
+.match-monitor {
     .content {
         width: 100%;
         position: sticky;
@@ -325,57 +325,4 @@
             background: #70809e !important;
         }
     }
-}
-
-
-.detail-area {
-    position: absolute;
-    right: 0;
-    padding: 0.5rem;
-    border: 1px solid #E5E5E5;
-    border-radius: 5px;
-
-    span {
-        width: 100%;
-        color: #2b2b2b;
-        font-weight: 600;
-        font-size: 13px;
-        line-height: 20px;
-    }
-
-    .league-highlight {
-        color: #516792;
-    }
-
-    .market-highlight {
-        color: #ff2020;
-    }
-}
-
-.button-verification {
-    border-radius: 2px;
-    color: #396ef8;
-    background-color: white;
-    border: 1px solid #396ef8;
-    height: auto !important;
-    padding: .7rem 2rem;
-}
-
-.icon-base-robot, .icon-ob-robot, .icon-good-robot, .icon-bad-robot {
-    position: inherit;
-
-    span:before {
-        font-size: 2.2rem;
-    }
-}
-
-.detailpage {
-    width: 100%;
-}
-
-.page-content-monitor{
-    width : max-content;
-}
-.table-maxcontent{
-    width : auto !important;
 }

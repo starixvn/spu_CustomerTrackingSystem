@@ -514,6 +514,12 @@
     <Content Include="Content\scss\pages\latest-transaction\latest-transaction.min.css">
       <DependentUpon>latest-transaction.css</DependentUpon>
     </Content>
+    <Content Include="Content\scss\pages\match-monitor\match-monitor-detail.css">
+      <DependentUpon>match-monitor-detail.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\scss\pages\match-monitor\match-monitor-detail.min.css">
+      <DependentUpon>match-monitor-detail.css</DependentUpon>
+    </Content>
     <Content Include="Content\scss\pages\match-monitor\match-monitor.css">
       <DependentUpon>match-monitor.scss</DependentUpon>
     </Content>
@@ -543,6 +549,7 @@
     <Content Include="Content\scss\pages\notification-setting\notification-setting.scss" />
     <Content Include="Content\scss\pages\association-report\association-report.scss" />
     <Content Include="Content\scss\pages\match-monitor\match-monitor.scss" />
+    <Content Include="Content\scss\pages\match-monitor\match-monitor-detail.scss" />
     <None Include="Content\scss\pages\problem-account-monitor\problem-account-monitor.scss" />
     <None Include="Content\scss\pages\import-evidences\import-evidences.scss" />
     <Content Include="Content\scss\pages\import-evidences\import-evidences.css">
