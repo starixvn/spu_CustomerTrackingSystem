@@ -6,9 +6,6 @@
 
     public class MatchDetailMonitorGetCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_EventDate")]
-        public DateTime EventDate { get; set; }
-
         [SpParam(SqlParamName = "ip_MatchID")]
         public Int64 MatchID { get; set; }
 
@@ -25,7 +22,7 @@
         public bool IsHedging { get; set; }
 
         [SpParam(SqlParamName = "ip_GroupIdList")]
-        public string ListReasonGroup { get; set; }
+        public string ListGroup { get; set; }
 
         public override string GetSettingKey()
             => "CTS_DC_MatchMonitor_Details_Get";

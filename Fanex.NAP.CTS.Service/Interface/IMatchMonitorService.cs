@@ -8,18 +8,20 @@
 
     public interface IMatchMonitorService
     {
-        List<MatchMonitorModel> GetMatchMonitor(MatchMonitorFilterViewModel filter);
+        IEnumerable<MatchMonitorModel> GetMatchMonitor(MatchMonitorFilterViewModel filter);
 
-        List<MatchReasonGroupModel> GetMatchReasonGroup(DateTime eventDate, Int64 matchID, int betTypeID, bool liveIndicator, bool isHedging);
+        IEnumerable<MatchGroupModel> GetMatchGroup(Int64 matchID, int betTypeID, bool liveIndicator, bool isHedging);
 
-        List<MatchScoreModel> GetMatchScore(DateTime eventDate, Int64 matchID, int betTypeID, bool liveIndicator, bool isHedging);
+        IEnumerable<MatchScoreModel> GetMatchScore(Int64 matchID, int betTypeID, bool liveIndicator, bool isHedging);
 
-        DBResult UpdateVerificaton(Int64 matchID, Int64 userID);
+        DBResult VerifyTransMatchMonitorDetail(MatchMonitorDetailVerifyTransParaModel para);
 
-        List<MatchMonitorDetailModel> GetMatchMonitorDetail(MatchMonitorDetailFilterViewModel filter);
+        MatchMonitorDetailResultModel GetMatchMonitorDetail(MatchMonitorDetailFilterViewModel filter);
 
-        List<CustInfoModel> GetCustInfoByCustID(string custIDs);
+        IEnumerable<CustInfoModel> GetCustInfoByCustID(string custIDs);
 
-        List<TicketDetailModel> GetTicketDetail(DateTime eventDate, string transIds);
+        IEnumerable<TicketDetailModel> GetTicketDetail(DateTime eventDate, string transIds);
+
+        IEnumerable<RobotStatusModel> GetRobotStatus(string transJson);
     }
 }

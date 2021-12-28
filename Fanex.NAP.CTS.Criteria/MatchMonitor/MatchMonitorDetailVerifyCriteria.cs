@@ -4,25 +4,25 @@
     using Fanex.Data.Repository;
     using System;
 
-    public class MatchReasonGroupGetCriteria : CriteriaBase
+    public class MatchMonitorDetailVerifyCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_EventDate")]
-        public DateTime EventDate { get; set; }
-
         [SpParam(SqlParamName = "ip_MatchID")]
         public Int64 MatchID { get; set; }
-
-        [SpParam(SqlParamName = "ip_BettypeID")]
-        public int BettypeID { get; set; }
 
         [SpParam(SqlParamName = "ip_LiveIndicator")]
         public bool LiveIndicator { get; set; }
 
-        [SpParam(SqlParamName = "ip_IsHedging")]
-        public bool IsHedging { get; set; }
+        [SpParam(SqlParamName = "ip_BettypeID")]
+        public int BettypeID { get; set; }
+
+        [SpParam(SqlParamName = "ip_ListTransID")]
+        public string TranIds { get; set; }
+
+        [SpParam(SqlParamName = "ip_VerifiedBy")]
+        public int VerifiedBy { get; set; }
 
         public override string GetSettingKey()
-            => "CTS_DC_MatchMonitor_Details_GetReasonGroup";
+            => "CTS_DC_MatchMonitor_Details_Verify";
 
         public override bool IsValid()
             => true;

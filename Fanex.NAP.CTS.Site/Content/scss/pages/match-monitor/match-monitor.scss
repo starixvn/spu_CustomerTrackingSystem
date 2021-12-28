@@ -2,14 +2,22 @@
 @import "../../abstracts/mixins";
 @import "../../components/popup";
 
-.match-monitor, .detailpage {
+
+.match-monitor {
+    .content {
+        width: 100%;
+        position: sticky;
+        top: 6rem;
+        z-index: 999999;
+    }
+
     .monitor-container {
-        margin: 1rem 1.6rem 1rem 1.6rem;
+        margin: 0 1.6rem 1rem 1.6rem;
 
         .monitor-table {
             .group-control {
                 position: sticky;
-                top: 6rem;
+                top: 9rem;
                 z-index: 99;
                 background: $page-bg;
                 padding: 1rem 0 0 0;
@@ -28,7 +36,6 @@
                             right: 2.2rem;
                             bottom: 1.7rem;
                         }
-
 
                         .text {
                             margin-right: .7rem;
@@ -121,6 +128,12 @@
 
             .group-table {
                 display: flex;
+                padding: 1rem 0;
+                position: sticky;
+                top: 9rem;
+                background: #fff;
+                width: 100%;
+                z-index: 99999;
             }
 
             #monitor-datatable, #first-monitor-datatable, #second-monitor-datatable {
@@ -134,8 +147,17 @@
                         background-color: #e3e9f6;
                         position: -webkit-sticky;
                         position: sticky;
-                        top: 12.9rem;
+                        top: 16.2rem;
                         z-index: 11;
+
+                        @media screen and (max-width: 1626px) {
+                            top: 20.4rem;
+                        }
+
+                        @media screen and (max-width: 1360px) {
+                            top: 22.3rem;
+                        }
+
 
                         .dataTables_length {
                             position: absolute;
@@ -184,20 +206,31 @@
 
                         thead {
                             tr {
-
                                 th {
                                     position: sticky;
-                                    top: 16.9rem;
+                                    top: 20rem;
                                     font-weight: 300;
-                                    z-index: 9
+                                    z-index: 9;
+                                    padding-left: 0;
+                                    padding-right: 0;
+
+                                    @media screen and (max-width: 1626px) {
+                                        top: 24.3rem;
+                                    }
+
+                                    @media screen and (max-width: 1360px) {
+                                        top: 26.3rem;
+                                    }
                                 }
                             }
                         }
 
                         tbody {
-
                             tr {
                                 td {
+                                    padding-left: 0;
+                                    padding-right: 0;
+
                                     .click-view-details, .click-view-name {
                                         cursor: pointer;
                                     }
@@ -209,6 +242,8 @@
                                             z-index: 1;
                                             transform: translate(50%,-50%);
                                         }
+
+                                        pointer-events: none;
                                     }
                                 }
                             }
@@ -235,6 +270,10 @@
                                 background-color: #A3C4F5 !important;
                             }
                         }
+
+                        .username-hightlight {
+                            background-color: #ffeeb8;
+                        }
                     }
                 }
             }
@@ -243,15 +282,36 @@
                 padding-right: 2rem;
             }
 
-            #first-monitor-datatable, #second-monitor-datatable {
-                width: 100%
+            .second-group-table-border {
+                border: 1px solid #E5E5E5;
+                border-top-left-radius: 2px;
+                border-top-right-radius: 2px;
+                padding: 10px;
+                margin-top: 10px;
+                z-index: 999999;
+                position: sticky;
+                top: 17rem;
+            }
+
+            .third-group-table-border {
+                border-bottom: 1px solid #E5E5E5;
+                border-left: 1px solid #E5E5E5;
+                border-right: 1px solid #E5E5E5;
+                border-bottom-left-radius: 2px;
+                border-bottom-right-radius: 2px;
+                padding: 10px;
+                box-shadow: 0px 1px #e5e5e5;
+                width: 100%;
+                z-index: 9;
             }
         }
     }
 }
+
 .group.width-280 {
-    width: 27.5rem;
+    width: 15rem !important;
 }
+
 .ui-datepicker.ui-widget-content {
     z-index: 9999999 !important;
 }
@@ -283,6 +343,5 @@
         }
     }
 }
-.detailpage {
-    width: 255rem;
-}
+
+

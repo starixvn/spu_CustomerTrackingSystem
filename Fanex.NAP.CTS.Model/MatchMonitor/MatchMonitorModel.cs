@@ -12,25 +12,23 @@
 
         public DateTime EventDate { get; set; }
 
+        public int Market { get; set; }
+
         public int HomeID { get; set; }
 
         public int AwayID { get; set; }
 
         public int LeagueID { get; set; }
 
-        public int BettypeID { get; set; }
+        public string LeagueName { get; set; }
 
-        public int Market { get; set; }
+        public int BettypeID { get; set; }
 
         public bool IsHedging { get; set; }
 
         public bool IsVerified { get; set; }
 
-        public DateTime VerifiedDate { get; set; }
-
-        public string VerifiedBy { get; set; }
-
-        public int EventGroup { get; set; }
+        public int MatchSection { get; set; }
 
         public string Reason
         {
@@ -61,19 +59,6 @@
             }
         }
 
-        public string VerifiedDateToString
-        {
-            get
-            {
-                if (VerifiedDate == DateTime.MinValue)
-                {
-                    return "-";
-                }
-
-                return VerifiedDate.ToString(FormatDateToString_MMMddyyyy);
-            }
-        }
-
         public string MatchName
         {
             get
@@ -90,15 +75,6 @@
                 return rs;
             }
         }
-
-        public string LeagueName
-        {
-            get
-            {
-                return CachedRef.GetLeagueName(LeagueID);
-            }
-        }
-
 
         public string ReasonGroup
         {
@@ -120,20 +96,20 @@
             }
         }
 
-        public string EventGroupName
+        public string MatchSectionName
         {
             get
             {
-                switch (EventGroup)
+                switch (MatchSection)
                 {
-                    case (int)MATCHMONITOR_EVENTGROUP.Early:
-                        return Enum.GetName(typeof(MATCHMONITOR_EVENTGROUP), MATCHMONITOR_EVENTGROUP.Early);
-                    case (int)MATCHMONITOR_EVENTGROUP.Live:
-                        return Enum.GetName(typeof(MATCHMONITOR_EVENTGROUP), MATCHMONITOR_EVENTGROUP.Live);
-                    case (int)MATCHMONITOR_EVENTGROUP.Today:
-                        return Enum.GetName(typeof(MATCHMONITOR_EVENTGROUP), MATCHMONITOR_EVENTGROUP.Today);
-                    case (int)MATCHMONITOR_EVENTGROUP.Closed:
-                        return Enum.GetName(typeof(MATCHMONITOR_EVENTGROUP), MATCHMONITOR_EVENTGROUP.Closed);
+                    case (int)MATCHMONITOR_SECTION.Early:
+                        return Enum.GetName(typeof(MATCHMONITOR_SECTION), MATCHMONITOR_SECTION.Early);
+                    case (int)MATCHMONITOR_SECTION.Live:
+                        return Enum.GetName(typeof(MATCHMONITOR_SECTION), MATCHMONITOR_SECTION.Live);
+                    case (int)MATCHMONITOR_SECTION.Today:
+                        return Enum.GetName(typeof(MATCHMONITOR_SECTION), MATCHMONITOR_SECTION.Today);
+                    case (int)MATCHMONITOR_SECTION.Closed:
+                        return Enum.GetName(typeof(MATCHMONITOR_SECTION), MATCHMONITOR_SECTION.Closed);
                 }
 
                 return "";

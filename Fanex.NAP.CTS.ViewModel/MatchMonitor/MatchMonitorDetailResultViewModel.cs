@@ -16,7 +16,11 @@
 
         public int Danger2 { get; set; }
 
-        public int Danger3 { get; set; }
+        public int Danger3 { get; set; } 
+        
+        public int Danger4 { get; set; }
+
+        public int Danger5 { get; set; }
 
         public decimal Odds { get; set; }
 
@@ -24,21 +28,31 @@
 
         public string Currency { get; set; }
 
-        public bool LiveIndicator { get; set; }
-
         public decimal Amount { get; set; }
 
-        public decimal HDP { get; set; }
+        public decimal HDP1 { get; set; }
+
+        public decimal HDP2 { get; set; }
 
         public string Score { get; set; }
 
-        public string TransTime { get; set; }
+        public string TransTimeToString { get; set; }
 
-        public string ReasonGroup { get; set; }
+        public DateTime TransTime { get; set; }
+
+        public string Group { get; set; }
 
         public string BetTeam { get; set; }
 
         public int TicketStatus { get; set; }
+
+        public string PICVerified { get; set; }
+
+        public int? RobotType { get; set; }
+
+        public bool IsRobot { get; set; }
+
+        public Int64 TransId { get; set; }
 
         public bool IsHomeSide
         {
@@ -50,6 +64,27 @@
                 }
 
                 return true;
+            }
+        }
+
+        public decimal HDP
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(BetTeam))
+                {
+                    if(string.Equals(BetTeam, "h", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return HDP2 - HDP1;
+                    }
+                    else
+                    {
+                        return HDP1 - HDP2;
+                    }
+
+                }
+
+                return 0;
             }
         }
 
@@ -66,12 +101,22 @@
                
                 if (Danger2 != 0)
                 {
-                    danger += string.IsNullOrEmpty(danger) ? "ABI" + Danger2 : " - ABI" + Danger2;
+                    danger += string.IsNullOrEmpty(danger) ? "ABI" + Danger2 : "-ABI" + Danger2;
                 }
                 
                 if (Danger3 != 0)
                 {
-                    danger += string.IsNullOrEmpty(danger) ? "OS" + Danger3 : " - OS"  + Danger3;
+                    danger += string.IsNullOrEmpty(danger) ? "OS" + Danger3 : "-OS"  + Danger3;
+                }
+
+                if (Danger4 != 0)
+                {
+                    danger += string.IsNullOrEmpty(danger) ? "BkB" + Danger4 : "-BkB" + Danger4;
+                }
+
+                if (Danger5 != 0)
+                {
+                    danger += string.IsNullOrEmpty(danger) ? "ES" + Danger5 : "-ES" + Danger5;
                 }
 
                 return (danger == string.Empty) ? "-" : danger;

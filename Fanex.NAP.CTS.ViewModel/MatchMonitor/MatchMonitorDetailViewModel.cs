@@ -2,6 +2,7 @@
 {
     using Fanex.NAP.CTS.Core.BaseClasses;
     using System;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public class MatchMonitorDetailViewModel
     {
@@ -15,24 +16,19 @@
 
         public int BetTypeID { get; set; }
 
-        public int EventGroup { get; set; }
+        public int MatchSection { get; set; }
 
-        public bool LiveIndicator { get; set; }
+        public int Market { get; set; }
 
         public bool IsHedging { get; set; }
 
-        public DateTime EventDate
+        public int LeagueID { get; set; }
+
+        public bool LiveIndicator
         {
             get
             {
-                var eventDate = DateTime.MinValue;
-
-                if (!string.IsNullOrEmpty(EventDateToString))
-                {
-                    return DateTime.TryParse(EventDateToString, out eventDate) ? eventDate : DateTime.MinValue;
-                }
-
-                return eventDate;
+                return Market == 1;
             }
         }
 
@@ -50,6 +46,50 @@
                 }
 
                 return rs;
+            }
+        }
+
+        public string LeagueName
+        {
+            get
+            {
+                return CachedRef.GetLeagueName(LeagueID);
+            }
+        }
+
+        public string MarketName
+        {
+            get
+            {
+                return Market == 1 ? "Live" : "Non Live";
+            }
+        }
+
+        public string Reason
+        {
+            get
+            {
+                return this.IsHedging ? "Hedging" : "Group Betting";
+            }
+        }
+
+        public string ReasonName
+        {
+            get
+            {
+                switch (BetTypeID)
+                {
+                    case (int)MATCHMONITOR_BETTYPE.HDP:
+                        return Reason + " - HDP";
+                    case (int)MATCHMONITOR_BETTYPE.OU:
+                        return Reason + " - O/U";
+                    case (int)MATCHMONITOR_BETTYPE.FirstHDP:
+                        return Reason + " - 1st HDP";
+                    case (int)MATCHMONITOR_BETTYPE.FirsttOU:
+                        return Reason + " - 1st O/U";
+                }
+
+                return Reason;
             }
         }
     }

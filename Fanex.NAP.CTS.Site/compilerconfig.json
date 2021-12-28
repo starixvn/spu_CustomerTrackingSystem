@@ -114,5 +114,13 @@
   {
     "outputFile": "Content/scss/pages/transaction-report/transaction-report.css",
     "inputFile": "Content/scss/pages/transaction-report/transaction-report.scss"
+  },
+  {
+    "outputFile": "Content/scss/pages/match-monitor/match-monitor.css",
+    "inputFile": "Content/scss/pages/match-monitor/match-monitor.scss"
+  },
+  {
+    "outputFile": "Content/scss/pages/match-monitor/match-monitor-detail.css",
+    "inputFile": "Content/scss/pages/match-monitor/match-monitor-detail.scss"
   }
 ]

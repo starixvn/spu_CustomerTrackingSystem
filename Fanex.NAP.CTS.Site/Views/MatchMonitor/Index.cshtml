@@ -29,6 +29,27 @@
                             <input type="text" id="dpkToDate" class="control" readonly>
                             <span class="icon-calendar-text"></span>
                         </div>
+                        <div class="group width-280">
+                            <label class="text">League</label>
+                            <input class="control" type="text" id="txtLeague" value="" />
+                        </div>
+                        <div class="group width-180">
+                            <label class="text">Market</label>
+                            <select class="control width-select" id="cbbMarket">
+                                <option value="" selected>All</option>
+                                <option value="1">Live</option>
+                                <option value="0">Non-Live</option>
+                            </select>
+                        </div>
+                        <div class="group width-280">
+                            <label class="text">Match Section</label>
+                            <select class="control width-select" id="cbbMatchSection" multiple="multiple">
+                                <option value="1" selected>Live</option>
+                                <option value="2" selected>Today</option>
+                                <option value="3" selected>Early</option>
+                                <option value="4" selected>Closed</option>
+                            </select>
+                        </div>
                         <div class="group width-180">
                             <label class="text">Verified</label>
                             <select class="control width-select" id="cbbIsVerified">
@@ -69,8 +90,6 @@
                                     <th>Market</th>
                                     <th>League</th>
                                     <th>Reason</th>
-                                    <th>PIC</th>
-                                    <th>Last Verified</th>
                                     <th>Verified</th>
                                 </tr>
                             </thead>

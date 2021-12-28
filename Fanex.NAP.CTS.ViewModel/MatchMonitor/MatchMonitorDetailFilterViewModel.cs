@@ -18,7 +18,7 @@
 
         public string ListScore { get; set; }
 
-        public string ListReasonGroup { get; set; }
+        public string ListGroup { get; set; }
 
         public DateTime EventDate
         {
