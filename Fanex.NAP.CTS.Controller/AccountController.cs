@@ -96,7 +96,7 @@
 
                     return View(customerGeneralStatusViewModel);
                 }
-            }
+            }                        
 
             return RedirectToAction("Index", "Home");
         }
@@ -1606,7 +1606,7 @@
 
         private string GetTranIdList(IEnumerable<string> suspiciousTransList)
         {
-            var tranIds = new List<string>();
+            var tranIdList = new List<string>();
 
             foreach (var level1 in suspiciousTransList)
             {
@@ -1618,17 +1618,19 @@
 
                     if (susTranIdsLevel2.Length > 1)
                     {
-                        tranIds.AddRange(susTranIdsLevel2);
+                        tranIdList.AddRange(susTranIdsLevel2);
                     }
                     else
                     {
-                        tranIds.Add(level2);
+                        tranIdList.Add(level2);
                     }
                 }
             }
 
-            return string.Join(",", tranIds.Distinct());
-        }     
+            var tranIds = string.Join(",", tranIdList.Distinct());
+
+            return tranIds.Replace(@".0", "");            
+        }
 
         public string GetMatchName(RobotBettingTicketDetailModel ticket)
         {
