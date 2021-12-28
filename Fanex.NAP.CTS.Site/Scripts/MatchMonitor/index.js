@@ -88,12 +88,12 @@
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
                 { targets: [0, 1, 2, 3, 4, 5, 6], className: "text-center" },
-                { targets: [0], width: "25%" },
-                { targets: [1], width: "15%" },
-                { targets: [2], width: "15%" },
-                { targets: [3], width: "20%" },
-                { targets: [4], width: "20%" },                
-                { targets: [5], width: "5%" },
+                { targets: [0], width: "32%" },
+                { targets: [1], width: "9%" },
+                { targets: [2], width: "7%" },
+                { targets: [3], width: "28%" },
+                { targets: [4], width: "15%" },                
+                { targets: [5], width: "4%" },
                 { targets: [6], visible: false },
             ],
             columns: [
