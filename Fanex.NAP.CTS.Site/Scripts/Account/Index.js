@@ -103,6 +103,14 @@
             complete: function () {
                 var customerCategory = new customer_category();
                 customerCategory.Initial(custId, ctsCustId, subscriberId, username, isHostPermission, custSubId);
+
+                GetCustProfileDates();
+
+                GetCustProfileLoginInfo();
+
+                GetCustProfileClassification();
+
+                GetCustProfileAssociationAccount();
             },
             error: function (errMsg) {
                 console.log(errMsg);
@@ -158,7 +166,7 @@
                 console.log(errMsg);
             }
         });
-    }    
+    }  
 
     function GetCustProfileAssociationAccount() {
         $.ajax(common.modifyRelativeUrl('Account/GetCustProfileAssociationAccount'), {
@@ -253,8 +261,6 @@
                 }
             },     
             complete: function () {
-                LoadCustomerCategory();
-
                 LoadAssociationByAccount();
             },
             error: function (errMsg) {
@@ -310,13 +316,7 @@
 
     function Initial() {
 
-        GetCustProfileDates();   
-
-        GetCustProfileLoginInfo();
-
-        GetCustProfileClassification();     
-
-        GetCustProfileAssociationAccount();         
+        LoadCustomerCategory();                 
                                   
         $("#tabs-account-detail").tabs();       
     }
