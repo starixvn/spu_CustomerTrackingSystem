@@ -678,7 +678,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
                 }
 
                 span {
-                    display: block;
+                    display: table;
                     height: 2.4rem;
                 }
             }
@@ -710,7 +710,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
                 }
             }
 
-            .auto-suspend {
+            .login-information {
                 .info-block {
                     display: grid;
                     grid-template-columns: 134px repeat(1, 1fr);
@@ -721,10 +721,10 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
                 }
             }
 
-            .committed-fraud-case, .policies {
+            .committed-fraud-case, .classify {
                 .info-block {
                     display: grid;
-                    grid-template-columns: 105px repeat(1, 1fr);
+                    grid-template-columns: 125px repeat(1, 1fr);
                 }
 
                 .right {
@@ -748,7 +748,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             .dates {
                 .info-block {
                     display: grid;
-                    grid-template-columns: 84px repeat(1, 1fr);
+                    grid-template-columns: 130px repeat(1, 1fr);
                 }
 
                 .right {

@@ -41,7 +41,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Account\AccountDetail.cs" />
-    <Compile Include="Account\AccountProfileViewModel.cs" />
     <Compile Include="Account\Associated\AssociatedByAccountViewModel.cs" />
     <Compile Include="Account\Associated\CategoryGroupViewModel.cs" />
     <Compile Include="Account\Associated\CategoryViewModel.cs" />
@@ -71,6 +70,10 @@
     <Compile Include="Account\CustomerCategory\MarkCategoryViewModel.cs" />
     <Compile Include="Account\CustomerFraud.cs" />
     <Compile Include="Account\CustomerGeneralStatusViewModel.cs" />
+    <Compile Include="Account\CustomerInfo\CustomerInfoAssociationAccountViewModel.cs" />
+    <Compile Include="Account\CustomerInfo\CustomerInfoClassificationViewModel.cs" />
+    <Compile Include="Account\CustomerInfo\CustomerInfoDateViewModel.cs" />
+    <Compile Include="Account\CustomerInfo\CustomerInfoLoginStatsViewModel.cs" />
     <Compile Include="Account\Evidence\ChainNode.cs" />
     <Compile Include="Account\Evidence\ChainsToEvidence.cs" />
     <Compile Include="Account\Evidence\ChainsToEvidenceFilter.cs" />

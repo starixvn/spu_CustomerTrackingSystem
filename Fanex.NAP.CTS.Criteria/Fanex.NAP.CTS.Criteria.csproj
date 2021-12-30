@@ -69,7 +69,12 @@
     <Compile Include="Account\ChainToEvidence\GetAffectedEvidenceCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\GetAllEvidenceCriteria.cs" />
     <Compile Include="Account\CustomerCategory\GetCTSCustomerClassificationHistoryCriteria.cs" />
+    <Compile Include="Account\CustomerInfo\GetCustomerInfoAssociatedAccountCriteria.cs" />
+    <Compile Include="Account\CustomerInfo\GetCustomerInfoDateCriteria.cs" />
+    <Compile Include="Account\CustomerInfo\GetCustomerInfoEvidenceCriteria.cs" />
+    <Compile Include="Account\CustomerInfo\GetCustomerInfoLoginStatsCriteria.cs" />
     <Compile Include="Account\GetAssociationWithCategoryCriteria.cs" />
+    <Compile Include="Account\CustomerInfo\GetCustomerInfoByCustIdsCriteria.cs" />
     <Compile Include="Account\RobotClassification\GetHistoryRobotClassificationCriteria.cs" />
     <Compile Include="Account\RobotClassification\GetStatusRobotClassificationCriteria.cs" />
     <Compile Include="Account\RobotClassification\GetLastestRobotClassificationCriteria.cs" />
@@ -135,13 +140,11 @@
     <Compile Include="Account\CustomerCategory\PinCTSCategoryCustomerClassificationCriteria.cs" />
     <Compile Include="Account\CustomerCategory\RemoveCTSCustomerClassificationCriteria.cs" />
     <Compile Include="Account\CustomerCategory\UpdateCTSCustomerClassificationCriteria.cs" />
-    <Compile Include="Account\CustomerEsportAutoSuspendStatusCriteria.cs" />
     <Compile Include="Account\CustomerEvidenceByCTSCustIdCriteria.cs" />
     <Compile Include="Account\CustomerAssociationByCTSCustIdCriteria.cs" />
     <Compile Include="Account\CustomerEvidence\UpdateBetLimitByEvidenceRemovingCriteria.cs" />
     <Compile Include="Account\CustomerEvidence\UpdateBetLimitByEvidenceAddingCriteria.cs" />
     <Compile Include="Account\CustomerFlagInfoByCTSCustIdCriteria.cs" />
-    <Compile Include="Account\CustomerGeneralInfoCriteria.cs" />
     <Compile Include="Account\CustomerLastTicketDateCriteria.cs" />
     <Compile Include="Account\CustomerProfileFraudInfoCriteria.cs" />
     <Compile Include="Account\CustomerProfilePoliciesInfoCriteria.cs" />

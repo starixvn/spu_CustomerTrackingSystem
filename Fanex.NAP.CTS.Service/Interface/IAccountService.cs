@@ -3,6 +3,7 @@
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
+    using Fanex.NAP.CTS.Model.Account.CustomerInfo;
     using Fanex.NAP.CTS.Model.API;
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.CustomerClassify;
@@ -18,9 +19,24 @@
     {        
         List<SearchResultModel> SearchAccounts(string username);
 
-        List<CustomerGeneralInfoModel> GetCustomerGeneralInfo(string custIds);
-
+        #region Customer Profile
         CustomerInfoByCTSCustIdModel GetCustomerInfoByCTSCustId(long ctsCustId);
+
+        CustomerInfoByCustIdsModel GetCustomerInfoByCustIds(long custId, int sourceType);
+
+        CustomerInfoAssociationAccountModel GetCustomerInfoAssociationAccount(long ctsCustId);
+
+        IEnumerable<CustomerInfoEvidenceModel> GetCustomerInfoEvidence(long ctsCustId);
+
+        CustomerInfoClassModel GetCustomerInfoClass(string custIdList);
+
+        CustomerInfoPoliciesModel GetCustomerInfoPolicies(long custId);
+
+        CustomerInfoLoginStatsModel GetCustomerInfoLoginStats(long ctsCustId, DateTime fromDate, DateTime toDate);
+
+        CustomerInfoDateModel GetCustProfileDates(long ctsCustId);
+
+        #endregion
 
         CustomerAssociationByCTSCustIdModel GetCustomerTotalAssociationByCTSCustId(long ctsCustId, string apiUrl, bool fromMySQL = false);
 
@@ -28,15 +44,11 @@
 
         List<CustomerStaticStatusModel> GetCustomerStaticStatus(int listId, bool status);
 
-        CustomerProfileFraudInfoModel GetCustomerProfileFraudInfo(long custId);    
-
-        CustomerPoliciesModel GetCustomerProfilePoliciesInfo(long custId);        
+        CustomerProfileFraudInfoModel GetCustomerProfileFraudInfo(long custId);        
 
         List<TagModel> GetDirectAssociatedAccountTagFlagged(string custIdsAssInfo);
 
-        CustomerLastTicketDateModel GetCustomerLastTicketDate(long custId);
-
-        CustomerEsportAutoSuspendStatusModel GetCustomerEsportAutoSuspendedStatus(long custId);
+        CustomerLastTicketDateModel GetCustomerLastTicketDate(long custId);        
 
         CustomerRobotUserStatusModel GetCustomerRobotUserStatus(long custId);
 

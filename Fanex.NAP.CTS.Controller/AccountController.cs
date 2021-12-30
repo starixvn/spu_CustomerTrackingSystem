@@ -1,6 +1,8 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
     using Fanex.Logging;
+    using Fanex.Logging.Extensions;
+    using Fanex.Logging.Extensions.Database;
     using Fanex.NAP.Core.Configuration;
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Service.Interface;
@@ -28,6 +30,7 @@
     using Fanex.NAP.CTS.ViewModel.Account.BettingStatistic;
     using Fanex.NAP.CTS.ViewModel.Account.ChainToEvidence;
     using Fanex.NAP.CTS.ViewModel.Account.CustomerCategory;
+    using Fanex.NAP.CTS.ViewModel.Account.CustomerInfo;
     using Fanex.NAP.CTS.ViewModel.Account.Evidence;
     using Fanex.NAP.CTS.ViewModel.Account.RobotBetting;
     using Fanex.NAP.CTS.ViewModel.Account.TransactionHistory;
@@ -88,99 +91,70 @@
                         CurrentUserId = CurrentSession.UserId
                     };
 
-                    var customerLastTicketDate = _accountService.GetCustomerLastTicketDate(customerInfoFromCTS.CustID);
+                    customerGeneralStatusViewModel.BindingGeneralDataFromCTS(customerInfoFromCTS);
 
-                    customerGeneralStatusViewModel
-                        .BindingGeneralDataFromCTS(customerInfoFromCTS)
-                        .BindingGeneralDataFromMainDB(customerLastTicketDate);
+                    Parallel.Invoke(() =>
+                    {
+                        try
+                        {
+                            var custDangerous = _accountService.GetCustomerInfoByCustIds(customerInfoFromCTS.CustID, 2);
+
+                            customerGeneralStatusViewModel.BindingDangerous(custDangerous);
+                        }
+                        catch (Exception ex)
+                        {
+                            var logMessage = new LogMessage(ex.Message)
+                                  .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                                  .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                            LogService.Error(logMessage);
+
+                            throw;
+                        }
+                    },
+                    () => {
+                        try
+                        {
+                            var robotUser = _robotClassificationService.GetStatusRobotClassification(customerInfoFromCTS.CustID);
+
+                            customerGeneralStatusViewModel.BindingRobotUser(robotUser);
+                        }
+                        catch (Exception ex)
+                        {
+                            var logMessage = new LogMessage(ex.Message)
+                                  .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                                  .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                            LogService.Error(logMessage);
+
+                            throw;
+                        }
+                    },
+                    () => {
+                        try
+                        {
+                            var evidences = _accountService.GetCustomerFlagInfo(Id);
+
+                            customerGeneralStatusViewModel.BindingEvidences(evidences);
+                        }
+                        catch (Exception ex)
+                        {
+                            var logMessage = new LogMessage(ex.Message)
+                                  .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                                  .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                            LogService.Error(logMessage);
+
+                            throw;
+                        }
+                    });
 
                     return View(customerGeneralStatusViewModel);
                 }
-            }                        
+            }
 
             return RedirectToAction("Index", "Home");
-        }
-
-        [HttpPost]
-        public ActionResult GetAccountProfile(long custId, long ctsCustId, int subscriberId)
-        {
-            var profile = new AccountProfileViewModel();
-            var tasks = new List<Task>();
-
-            tasks.Add(Task.Run(() =>
-            {
-                try
-                {
-                    GetCustomerGeneralInfo(custId, ref profile);
-                }
-                catch (Exception ex)
-                {
-                    LogService.Info(ex.Message);
-
-                    throw;
-                }
-            }));
-
-            tasks.Add(Task.Run(() =>
-            {
-                try
-                {
-                    GetCustomerProfilePoliciesInfo(custId, ref profile);
-                }
-                catch (Exception ex)
-                {
-                    LogService.Info(ex.Message);
-
-                    throw;
-                }
-            }));
-
-            tasks.Add(Task.Run(() =>
-            {
-                try
-                {
-                    GetCustomerRobotUserStatus(custId, ref profile);
-                }
-                catch (Exception ex)
-                {
-                    LogService.Info(ex.Message);
-
-                    throw;
-                }
-            }));
-
-            tasks.Add(Task.Run(() =>
-            {
-                try
-                {
-                    GetCustomerFlagInfo(ctsCustId, ref profile);
-                }
-                catch (Exception ex)
-                {
-                    LogService.Info(ex.Message);
-
-                    throw;
-                }
-            }));
-
-            tasks.Add(Task.Run(() =>
-            {
-                try
-                {
-                    GetCustomerEsportAutoSuspendedStatus(custId, ref profile);
-                }
-                catch (Exception ex)
-                {
-                    LogService.Info(ex.Message);
-
-                    throw;
-                }
-            }));
-
-            Task.WhenAll(tasks.ToArray()).Wait();
-
-            return Json(profile, JsonRequestBehavior.AllowGet);
-        }
+        }     
 
         [HttpPost]
         public ActionResult GetCustomerTotalAssociationByCTSCustId(long ctsCustId)
@@ -216,15 +190,7 @@
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
-
-        [HttpPost]
-        public ActionResult GetCustomerEsportAutoSuspendedStatus(long custId)
-        {
-            var result = _accountService.GetCustomerEsportAutoSuspendedStatus(custId);
-
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
-
+      
         [HttpPost]
         public ActionResult GetCustomerProfileFraudInfo(long custId)
         {
@@ -253,6 +219,154 @@
 
             return Json(new { customerClassification = customerClassification }, JsonRequestBehavior.AllowGet);
         }
+
+        #region Customer Profile
+        [HttpPost]
+        public ActionResult GetCustProfileAssociationAccount(long ctsCustId)
+        {
+            var data = _accountService.GetCustomerInfoAssociationAccount(ctsCustId);
+
+            if (data != null)
+            {
+                var custProfileAssAccount = new CustomerInfoAssociationAccountViewModel
+                {
+                    AI = data.AI,
+                    Manual = data.Manual,
+                    Device = data.Device,
+                    IP = data.IP
+                };
+
+                return Json(custProfileAssAccount, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new CustomerInfoAssociationAccountViewModel(), JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult GetCustProfileClassification(long ctsCustId, long custId)
+        {
+            var custProfileEvidence = new CustomerInfoClassificationViewModel();        
+          
+            Parallel.Invoke(() =>
+            {
+                try
+                {
+                    var evidences = _accountService.GetCustomerInfoEvidence(ctsCustId);
+
+                    if (evidences != null && evidences.Any())
+                    {
+                        var flagEvidenceCodes = evidences.Where(x => x.IsFlag).Select(x => x.EvidenceCode);
+                        var affectedEvidenceCodes = evidences.Where(x => !x.IsFlag).Select(x => x.EvidenceCode);
+
+                        custProfileEvidence.FlagEvidenceCodes = flagEvidenceCodes.Any() ? string.Join(", ", flagEvidenceCodes) : "None";
+                        custProfileEvidence.AffectedEvidenceCodes = affectedEvidenceCodes.Any() ? string.Join(", ", affectedEvidenceCodes) : "None";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var logMessage = new LogMessage(ex.Message)
+                          .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                          .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                    LogService.Error(logMessage);
+
+                    throw;
+                }
+            },
+            () =>
+            {
+                try
+                {
+                    var customerClass = _accountService.GetCustomerInfoClass(custId.ToString());
+
+                    if (customerClass != null)
+                        custProfileEvidence.Class = customerClass.CustomerClass != -1 ? customerClass.CustomerClass.ToString() : "";
+                }
+                catch (Exception ex)
+                {
+                    var logMessage = new LogMessage(ex.Message)
+                          .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                          .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                    LogService.Error(logMessage);
+
+                    throw;
+                }
+            },
+            () => {
+                try
+                {
+                    var custPolicies = _accountService.GetCustomerInfoPolicies(custId);
+
+                    if (custPolicies != null)
+                        custProfileEvidence.LicVIP = custPolicies.IsVIP ? "Yes" : "No";
+                }
+                catch (Exception ex)
+                {
+                    var logMessage = new LogMessage(ex.Message)
+                          .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                          .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                    LogService.Error(logMessage);
+
+                    throw;
+                }
+            });
+
+            return Json(custProfileEvidence, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult GetCustProfileLoginInfo(long ctsCustId)
+        {
+            var fromDate = DateTime.Now.AddDays(-90);
+            var toDate = DateTime.Now;
+
+            var data = _accountService.GetCustomerInfoLoginStats(ctsCustId, fromDate, toDate);
+
+            if (data != null)
+            {
+                var custProfileLoginStats = new CustomerInfoLoginStatsViewModel
+                {
+                    DesktopUsage = data.DesktopUsage,
+                    DesktopUsagePercent = data.DesktopUsagePercent.ToString("0.00"),
+                    MobileUsage = data.MobileUsage,
+                    MobileUsagePercent = data.MobileUsagePercent.ToString("0.00"),
+                    OthersUsage = data.OthersUsage,
+                    OthersUsagePercent = data.OthersUsagePercent.ToString("0.00"),
+                    LoginCount = data.Logins,
+                    IPCount = data.IPs,
+                    DeviceCount = data.Devices
+                };
+
+                return Json(custProfileLoginStats, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new CustomerInfoLoginStatsViewModel(), JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult GetCustProfileDates(long ctsCustId)
+        {
+            var data = _accountService.GetCustProfileDates(ctsCustId);
+
+            if (data != null)
+            {
+                var custProfileDates = new CustomerInfoDateViewModel
+                {
+                    NextCategoryScan = data.NextCategoryScan,
+                    LastTicket = data.LastTicket,
+                    LastLogin = data.LastLogin,
+                    Created = data.Created
+                };
+
+                return Json(custProfileDates, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new CustomerInfoDateViewModel(), JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion
 
         #region Associated By Account
 
@@ -1091,41 +1205,7 @@
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        #endregion Chain To Evidence
-
-        private void GetCustomerGeneralInfo(long custId, ref AccountProfileViewModel profile)
-        {
-            var custGeneralInfo = _accountService.GetCustomerGeneralInfo(custId.ToString()).FirstOrDefault();
-
-            profile.GeneralInfo = (custGeneralInfo != null) ? custGeneralInfo : new CustomerGeneralInfoModel();
-        }
-
-        private void GetCustomerProfilePoliciesInfo(long custId, ref AccountProfileViewModel profile)
-        {
-            profile.PoliciesInfo = _accountService.GetCustomerProfilePoliciesInfo(custId);
-
-            var customerClass = _accountService.GetCustomerClassFromCTSByCustId(custId.ToString());
-
-            if (customerClass != null && customerClass.Any())
-            {
-                profile.PoliciesInfo.CustomerClass = customerClass.First().CustClass;
-            }
-        }
-
-        private void GetCustomerRobotUserStatus(long custId, ref AccountProfileViewModel profile)
-        {
-            profile.RobotUserStatus = _robotClassificationService.GetStatusRobotClassification(custId);
-        }
-
-        private void GetCustomerFlagInfo(long ctsCustId, ref AccountProfileViewModel profile)
-        {
-            profile.FlagedAffectedEvidence = _accountService.GetCustomerFlagInfo(ctsCustId);
-        }
-
-        private void GetCustomerEsportAutoSuspendedStatus(long custId, ref AccountProfileViewModel profile)
-        {
-            profile.EsportAutoSuspendStatus = _accountService.GetCustomerEsportAutoSuspendedStatus(custId);
-        }
+        #endregion Chain To Evidence      
 
         #region Transaciton History
 

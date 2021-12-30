@@ -1195,7 +1195,7 @@
         .content-info .wrapper-content .account-info .info-text.left {
           color: #2B2B2B; }
         .content-info .wrapper-content .account-info .info-text span {
-          display: block;
+          display: table;
           height: 2.4rem; }
       .content-info .wrapper-content .account-info .info-block {
         margin-top: 1rem; }
@@ -1209,26 +1209,26 @@
         grid-template-columns: 96px repeat(1, 1fr); }
       .content-info .wrapper-content .account-info .dangerous .right {
         color: #000000; }
-      .content-info .wrapper-content .account-info .auto-suspend .info-block {
+      .content-info .wrapper-content .account-info .login-information .info-block {
         display: grid;
         grid-template-columns: 134px repeat(1, 1fr); }
-      .content-info .wrapper-content .account-info .auto-suspend .right {
+      .content-info .wrapper-content .account-info .login-information .right {
         color: #3270D0; }
-      .content-info .wrapper-content .account-info .committed-fraud-case .info-block, .content-info .wrapper-content .account-info .policies .info-block {
+      .content-info .wrapper-content .account-info .committed-fraud-case .info-block, .content-info .wrapper-content .account-info .classify .info-block {
         display: grid;
-        grid-template-columns: 105px repeat(1, 1fr); }
-      .content-info .wrapper-content .account-info .committed-fraud-case .right, .content-info .wrapper-content .account-info .policies .right {
+        grid-template-columns: 125px repeat(1, 1fr); }
+      .content-info .wrapper-content .account-info .committed-fraud-case .right, .content-info .wrapper-content .account-info .classify .right {
         color: #3270D0; }
-        .content-info .wrapper-content .account-info .committed-fraud-case .right i, .content-info .wrapper-content .account-info .policies .right i {
+        .content-info .wrapper-content .account-info .committed-fraud-case .right i, .content-info .wrapper-content .account-info .classify .right i {
           margin-right: .2rem; }
-          .content-info .wrapper-content .account-info .committed-fraud-case .right i:before, .content-info .wrapper-content .account-info .policies .right i:before {
+          .content-info .wrapper-content .account-info .committed-fraud-case .right i:before, .content-info .wrapper-content .account-info .classify .right i:before {
             font-size: 1.6rem; }
-        .content-info .wrapper-content .account-info .committed-fraud-case .right span:first-child, .content-info .wrapper-content .account-info .policies .right span:first-child {
+        .content-info .wrapper-content .account-info .committed-fraud-case .right span:first-child, .content-info .wrapper-content .account-info .classify .right span:first-child {
           margin-top: -0.2rem;
           margin-bottom: .2rem; }
       .content-info .wrapper-content .account-info .dates .info-block {
         display: grid;
-        grid-template-columns: 84px repeat(1, 1fr); }
+        grid-template-columns: 130px repeat(1, 1fr); }
       .content-info .wrapper-content .account-info .dates .right {
         color: #404040; }
 

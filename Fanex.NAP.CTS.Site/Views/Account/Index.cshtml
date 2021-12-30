@@ -12,12 +12,49 @@
     <div class="header-info border-green" id="divHeaderInfo" style="visibility:hidden">
         <div class="header-username bg-green" id="divHeaderUsername">
             <div class="block-icon">
-                <span class="icon-Robot icon-base-robot hide">
-                    <span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span>
-                </span>
+                @if (Model.IsRobotUser)
+                {
+                    switch (Model.RobotType)
+                    {
+                        case 0:
+                            <span class="icon-Robot icon-ob-robot">
+                                <span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span>
+                            </span>
+                            break;
+                        case 1:
+                            <span class="icon-Robot icon-good-robot">
+                                <span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span>
+                            </span>
+                            break;
+                        case 2:
+                            <span class="icon-Robot icon-bad-robot">
+                                <span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span>
+                            </span>
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
                 <span class="icon-big-Robot icon-big-robot hide"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span></span>
-                <span class="icon-error hide"><span class="path1"></span><span class="path2"></span></span>
-                <span class="icon-flag hide"><span class="path1"></span><span class="path2"></span></span>
+                @if (Model.AffectedEvidence)
+                {
+                    <span class="icon-error"><span class="path1"></span><span class="path2"></span></span>
+                }
+                else
+                {
+                    <span class="icon-error hide"><span class="path1"></span><span class="path2"></span></span>
+                }
+
+                @if (Model.FlaggedEvidence)
+                {
+                    <span class="icon-flag"><span class="path1"></span><span class="path2"></span></span>
+                }
+                else
+                {
+                    <span class="icon-flag hide"><span class="path1"></span><span class="path2"></span></span>
+                }
+
                 <span class="username">@(Model.UserName != null ? Model.UserName : Model.UserName2)</span>
             </div>
         </div>
@@ -52,78 +89,80 @@
         <div class="account-info">
             <!-- Association & Evidence -->
             <div class="info-item association">
-                <div class="info-title">Association & Evidence</div>
+                <div class="info-title">Associated Accounts</div>
                 <div class="info-block">
                     <div class="info-text left">
-                        <span>Accounts / Devices</span>
-                        <span>Evidence</span>
+                        <span>By Betting Pattern:</span>
+                        <span>By Manually:</span>
+                        <span>By Device:</span>
+                        <span>By IP:</span>
                     </div>
                     <div class="info-text right">
-                        <span id="spanTotalAssociated" style="cursor:pointer"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
-                        <span id="spanTotalEvidences" style="cursor:pointer"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+                        <span id="spanAssAccByBettingPattern"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+                        <span id="spanAssAccByManually"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+                        <span id="spanAssAccByDevice"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+                        <span id="spanAssAccByIP"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
                     </div>
                 </div>
             </div>
-            <!-- policies Fraud Case -->
-            <div class="info-item policies">
-                <div class="info-title">Policies</div>
+
+            <!-- Classification -->
+            <div class="info-item classify">
+                <div class="info-title">Classification</div>
                 <div class="info-block">
                     <div class="info-text left">
                         <span>Class:</span>
-                        <span>Bet Limit:</span>
                         <span>Lic VIP:</span>
+                        <span id="spanLblFlagEvidence">Flag Evidence:</span>
+                        <span id="spanLblAffectedEvidence">Affected Evidence:</span>
                     </div>
                     <div class="info-text right">
                         <span id="spanClass"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
-                        <span id="spanBetLimit"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
                         <span id="spanLicVIP"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+                        <span id="spanFlagEvidence"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+                        <span id="spanAffectedEvidence"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
                     </div>
                 </div>
             </div>
 
-
-            <!-- Dangerous -->
+            <!-- Dangerous Setting -->
             <div class="info-item dangerous">
-                <div class="info-title">Dangerous</div>
+                <div class="info-title">Dangerous Setting</div>
                 <div class="info-block">
                     <div class="info-text left">
-                        <span>
-                            Orignal:
-                        </span>
-                        <span>
-                            ABI:
-                        </span>
-                        <span>
-                            Other Sports:
-                        </span>
+                        <span>Orignal:</span>
+                        <span>ABI:</span>
+                        <span>Basketball:</span>
+                        <span>E-Sports:</span>
+                        <span>Other Sports:</span>
                     </div>
                     <div class="info-text right">
-                        <span id="dangerousOriginal">@Model.DangerousOriginal</span>
-                        <span id="dangerouseABI">@Model.DangerouseABI</span>
-                        <span id="dangerouseOtherSports">@Model.DangerouseOtherSports</span>
+                        <span id="spanDangerousOriginal">@Model.DangerousOriginal</span>
+                        <span id="spanDangerousABI">@Model.DangerousABI</span>
+                        <span id="spanDangerousBasketball">@Model.DangerousBasketball</span>
+                        <span id="spanDangerousESports">@Model.DangerousESports</span>
+                        <span id="spanDangerouseOtherSports">@Model.DangerousOtherSports</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Auto suspend -->
-            <div class="info-item auto-suspend">
-                <div class="info-title">Auto suspend</div>
+            <!-- Login Information (Last 90 days) -->
+            <div class="info-item login-information">
+                <div class="info-title">Login Information (Last 90 days)</div>
                 <div class="info-block">
                     <div class="info-text left">
-                        <span>
-                            Soccer:
-                        </span>
-                        <span>
-                            Other Sports:
-                        </span>
-                        <span>
-                            E-Sports:
-                        </span>
+                        <span>Desktop Usage:</span>
+                        <span>Mobile Usage:</span>
+                        <span>Others Usage:</span>
+                        <span>Logins Count:</span>
+                        <span>IPs / Devices Count:</span>
                     </div>
                     <div class="info-text right">
-                        <span id="autoSuspendSoccer"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
-                        <span id="autoSuspendOtherSport"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
-                        <span id="autoSuspendESport"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+                        <span id="spanDesktopUsage"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+                        <span id="spanMobileUsage"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+                        <span id="spanOthersUsage"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+                        <span id="spanLoginCount"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+                        <span id="spanIPDeviceCount"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
                     </div>
                 </div>
             </div>
@@ -135,14 +174,16 @@
                 <div class="info-title">Dates</div>
                 <div class="info-block">
                     <div class="info-text left">
-                        <span>Created</span>
-                        <span>Last Login</span>
-                        <span>Last Ticket</span>
+                        <span id="spanLblNextCategoryScanDate">Next Category Scan:</span>
+                        <span id="spanLblLastTicketDate">Last Ticket:</span>
+                        <span id="spanLblLastLoginDate">Last Login:</span>
+                        <span id="spanLblCreatedDate">Created:</span>
                     </div>
-                    <div class="info-text right">
-                        <span>@(Model.CreatedDate.Year == 0001 ? "None" : Model.CreatedDate.ToString("MMM dd, yyyy HH:mm"))</span>
-                        <span>@(Model.LastLoginDate.Year == 0001 ? "None" : Model.LastLoginDate.ToString("MMM dd, yyyy HH:mm"))</span>
-                        <span>@(Model.LastTicketDate.Year == 0001 ? "None" : Model.LastTicketDate.ToString("MMM dd, yyyy HH:mm"))</span>
+                    <div class="info-text right">                     
+                        <span id="spanNextCategoryScanDate"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+                        <span id="spanLastTicketDate"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+                        <span id="spanLastLoginDate"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+                        <span id="spanCreatedDate"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
                     </div>
                 </div>
             </div>

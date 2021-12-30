@@ -15,11 +15,9 @@
 		<Setting Key="FS_Recipients_Delete" SpName="FS_Recipients_Delete" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
 	</Function>
 
-	<Function name="Common">
-		<Setting Key="CTS_CustomerGeneralStatus_Get" SpName="CTS_CustomerGeneralStatus_Get_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
+	<Function name="Common">		
 		<Setting Key="CTS_CustomerClass_GetByCustId" SpName="CTS_CustomerClass_GetByCustId_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
-		<Setting Key="CTS_CustomerLastTicketDate_Get" SpName="CTS_CustomerLastTicketDate_Get" DbName="DBCTS.bodb02.bodbSPUNet" />
-		<Setting Key="CTS_CustomerEsportAutoSuspendStatus_Get" SpName="CTS_CustomerEsportAutoSuspendStatus_Get" DbName="DBCTS.bodb02.bodbSPUNet" />
+		<Setting Key="CTS_CustomerLastTicketDate_Get" SpName="CTS_CustomerLastTicketDate_Get" DbName="DBCTS.bodb02.bodbSPUNet" />		
 		<Setting Key="CTS_CustomerStatistics_GetPerformance_ByBettype" SpName="CTS_CustomerStatistics_GetPerformance_ByBettype_xtest" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
 		<Setting Key="CTS_CustomerStatistics_GetPerformanceDaily" SpName="CTS_CustomerStatistics_GetPerformanceDaily_xtest" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
 		<Setting Key="CTS_CustomerStatistics_GetPerformance_BySport" SpName="CTS_CustomerStatistics_GetPerformance_BySport_xtest" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
@@ -32,9 +30,8 @@
 		<Setting Key="NAP_BLControl_EvidenceFlagged" SpName="NAP_BLControl_EvidenceFlagged_UAT1" DbName="DBCust.CustDB.bodbAdminNet" />
 		<Setting Key="NAP_BLControl_EvidenceUnflagged" SpName="NAP_BLControl_EvidenceUnflagged_UAT1" DbName="DBCust.CustDB.bodbAdminNet" />
 		<Setting Key="TicketVoiding_TicketsInRequest_Select" SpName="TicketVoiding_TicketsInRequest_Select_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
-		<Setting Key="CTS_CustomerProfile_FraudInfo_Get" SpName="CTS_CustomerProfile_FraudInfo_Get_xtest" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
-		<!--<Setting Key="CTS_RobotUserStatus_Get" SpName="CTS_RobotUserStatus_Get" DbName="DBONUSER.ON_USER.bodbSPUNet" />-->
-		<!--<Setting Key="BLC_SettingSelect_ByCust" SpName="BLC_SettingSelect_ByCust" DbName="DBCust.CustDB.bodbAdminNet" />-->
+		<Setting Key="CTS_CustomerProfile_FraudInfo_Get" SpName="CTS_CustomerProfile_FraudInfo_Get_xtest" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />		
+		<Setting Key="BLC_SettingSelect_ByCust" SpName="BLC_SettingSelect_ByCust_xtest" DbName="DBCust.CustDB.bodbAdminNet" />
 		<Setting Key="CTS_Customer_RobotCheckExist" SpName="CTS_Customer_RobotCheckExist_xtest" DbName="DBONUSER.ON_USER.bodbSPUNet" />
 	</Function>
 
@@ -66,5 +63,9 @@
 
 	<Function name="RobotBetting">
 		<Setting Key="CTS_Rpt_RobotDetection_TicketDetails" SpName="CTS_Rpt_RobotDetection_TicketDetails_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
+	</Function>
+
+	<Function name="CustomerProfile">
+		<Setting Key="CTS_Customer_GetInfoByCustIdList" SpName="CTS_Customer_GetInfoByCustIdList_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
 	</Function>
 </Functions>

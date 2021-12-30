@@ -16,10 +16,12 @@
     using Fanex.NAP.CTS.Criteria.Account.BettingStatistic;
     using Fanex.NAP.CTS.Criteria.Account.ChainToEvidence;
     using Fanex.NAP.CTS.Criteria.Account.CustomerCategory;
+    using Fanex.NAP.CTS.Criteria.Account.CustomerInfo;
     using Fanex.NAP.CTS.Criteria.CustomerClassify;
     using Fanex.NAP.CTS.Criteria.Home;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
+    using Fanex.NAP.CTS.Model.Account.CustomerInfo;
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.CustomerClassify;
     using Fanex.NAP.CTS.Model.DTO;
@@ -49,6 +51,120 @@
             repository = new DynamicRepository();
         }
 
+        #region Customer Profile
+        public CustomerInfoByCTSCustIdModel GetCustomerInfoByCTSCustId(Int64 ctsCustId)
+        {
+            var criteria = new CustomerInfoByCTSCustIdCriteria
+            {
+                CTSCustId = ctsCustId
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                var result = db.QueryEntity<CustomerInfoByCTSCustIdModel>(criteria);
+
+                return result;
+            }
+        }
+
+        public CustomerInfoByCustIdsModel GetCustomerInfoByCustIds(long custId, int sourceType)
+        {
+            var criteria = new GetCustomerInfoByCustIdsCriteria
+            {
+                CustIdList = custId.ToString(),
+                SourceType = sourceType
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                var result = db.QueryEntity<CustomerInfoByCustIdsModel>(criteria);
+
+                return result;
+            }
+        }
+
+        public CustomerInfoAssociationAccountModel GetCustomerInfoAssociationAccount(long ctsCustId)
+        {
+            var criteria = new GetCustomerInfoAssociatedAccountCriteria
+            {
+                CTSCustId = ctsCustId
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.QueryEntity<CustomerInfoAssociationAccountModel>(criteria);
+            }
+        }
+
+        public IEnumerable<CustomerInfoEvidenceModel> GetCustomerInfoEvidence(long ctsCustId)
+        {
+            var criteria = new GetCustomerInfoEvidenceCriteria
+            {
+                CTSCustId = ctsCustId
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<CustomerInfoEvidenceModel>(criteria);
+            }
+        }
+
+        public CustomerInfoClassModel GetCustomerInfoClass(string custIdList)
+        {
+            var criteria = new GetLastestClassificationCriteria
+            {
+                CustIds = custIdList
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.QueryEntity<CustomerInfoClassModel>(criteria);
+            }
+        }
+
+        public CustomerInfoPoliciesModel GetCustomerInfoPolicies(long custId)
+        {
+            var criteria = new CustomerProfilePoliciesInfoCriteria
+            {
+                CustID = custId
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.QueryEntity<CustomerInfoPoliciesModel>(criteria);
+            }
+        }
+
+        public CustomerInfoLoginStatsModel GetCustomerInfoLoginStats(long ctsCustId, DateTime fromDate, DateTime toDate)
+        {
+            var criteria = new GetCustomerInfoLoginStatsCriteria
+            {
+                 CTSCustID = ctsCustId,
+                 FromDate = fromDate,
+                 ToDate = toDate
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.QueryEntity<CustomerInfoLoginStatsModel>(criteria);
+            }
+        }
+
+        public CustomerInfoDateModel GetCustProfileDates(long ctsCustId)
+        {
+            var criteria = new GetCustomerInfoDateCriteria
+            {
+                CTSCustID = ctsCustId
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.QueryEntity<CustomerInfoDateModel>(criteria);
+            }
+        }
+
+        #endregion
+
         #region Associated account by account
         public List<SearchResultModel> SearchAccounts(string username)
         {
@@ -72,37 +188,7 @@
 
                 return result;
             }
-        }
-
-        public List<CustomerGeneralInfoModel> GetCustomerGeneralInfo(string custIds)
-        {
-            var criteria = new CustomerGeneralInfoCriteria
-            {
-                CustIds = custIds
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                var result = db.Query<CustomerGeneralInfoModel>(criteria);
-
-                return result.ToList();
-            }
-        }
-
-        public CustomerInfoByCTSCustIdModel GetCustomerInfoByCTSCustId(Int64 ctsCustId)
-        {
-            var criteria = new CustomerInfoByCTSCustIdCriteria
-            {
-                CTSCustId = ctsCustId
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                var result = db.QueryEntity<CustomerInfoByCTSCustIdModel>(criteria);
-
-                return result;
-            }
-        }
+        }    
 
         public CustomerAssociationByCTSCustIdModel GetCustomerTotalAssociationByCTSCustId(long ctsCustId, string apiUrl, bool fromMySQL = false)
         {
@@ -179,22 +265,7 @@
                     FraudCaseList = fraudCaseList
                 };
             }
-        }
-
-        public CustomerPoliciesModel GetCustomerProfilePoliciesInfo(long custId)
-        {
-            var criteria = new CustomerProfilePoliciesInfoCriteria
-            {
-                CustID = custId
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                var result = db.QueryEntity<CustomerPoliciesModel>(criteria);
-
-                return result;
-            }
-        }
+        }     
 
         public List<TagModel> GetDirectAssociatedAccountTagFlagged(string custIdsAssInfo)
         {
@@ -225,22 +296,7 @@
                 return result;
             }
         }
-
-        public CustomerEsportAutoSuspendStatusModel GetCustomerEsportAutoSuspendedStatus(long custId)
-        {
-            var criteria = new CustomerEsportAutoSuspendStatusCriteria
-            {
-                CustId = custId
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                var result = db.QueryEntity<CustomerEsportAutoSuspendStatusModel>(criteria);
-
-                return result;
-            }
-        }
-
+        
         public CustomerRobotUserStatusModel GetCustomerRobotUserStatus(long custId)
         {
             var criteria = new CustomerRobotUserStatusCriteria
