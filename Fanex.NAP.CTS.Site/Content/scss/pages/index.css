@@ -1123,6 +1123,16 @@ table.dataTable tbody tr.selected td {
     text-align: center;
     padding: 3px 6px 3px 6px; }
 
+@-moz-document url-prefix() {
+  .table {
+    border-collapse: unset !important;
+    border-bottom: none !important;
+    border-spacing: 0; }
+    .table.dataTable {
+      border-collapse: unset !important; }
+  table {
+    border-bottom: none !important; } }
+
 .ui-widget-overlay {
   background: rgba(0, 0, 0, 0.4);
   opacity: 1; }

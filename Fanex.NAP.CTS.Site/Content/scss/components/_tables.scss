@@ -514,3 +514,19 @@ table.dataTable tbody tr.selected td {
         padding: 3px 6px 3px 6px;
     }
 }
+
+@-moz-document url-prefix() {
+    .table {
+        border-collapse: unset !important;
+        border-bottom: none !important;
+        border-spacing: 0;
+
+        &.dataTable {
+            border-collapse: unset !important;
+        }
+    }
+
+    table {
+        border-bottom: none !important;
+    }
+}
