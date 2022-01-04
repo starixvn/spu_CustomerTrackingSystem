@@ -69,7 +69,7 @@
                         {
                             var para = new DeleteAccountParasViewModel
                             {
-                                Key = Consts.AFCInternalKey,
+                                Key = GetKey(),
                                 Data = b2cCustIds
                             };
 
@@ -176,7 +176,7 @@
 
                 if (participants != null && participants.Any())
                 {
-                    var internalInfo = participants.SingleOrDefault(c => string.Equals(c.SecretKey, Consts.AFCInternalKey));
+                    var internalInfo = participants.SingleOrDefault(c => string.Equals(c.SecretKey, GetKey()));
 
                     if (internalInfo == null)
                     {
@@ -253,12 +253,17 @@
             {
                 var para = new InsertAccountParasViewModel
                 {
-                    Key = Consts.AFCInternalKey,
+                    Key = GetKey(),
                     Data = accInfo
                 };
 
                 await ApiHelper.Post<bool>(url, para, 300);
             }
+        }
+
+        private string GetKey()
+        {
+            return ConfigSettings.EnvironmentName == "PRO" ? Consts.AFCInternal_ProKey : Consts.AFCInternal_LocalKey;
         }
 
         #endregion
