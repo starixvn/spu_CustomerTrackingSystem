@@ -1221,3 +1221,7 @@ body {
         transform: scaleY(0);
     }
 }
+
+.jq-toast-wrap{
+    z-index : 999999999999999 !important;
+}
