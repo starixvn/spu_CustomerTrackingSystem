@@ -57,19 +57,26 @@
             {
                 if (custIds != null && custIds.Any() && isSyncAFCData)
                 {
-                    var b2cCustIds = GetB2CCustIdsDAL(string.Join(",", custIds));
+                    var filterB2CLicensee = FilterLicenseeCustDAL(string.Join(",", custIds));
 
-                    if (b2cCustIds != null && b2cCustIds.Any())
-                    { 
-                        var para = new DeleteAccountParasViewModel
+                    if (filterB2CLicensee != null && filterB2CLicensee.Any())
+                    {
+                        var custIdsToDelete = filterB2CLicensee.Select(c => c.CustID).Distinct();
+
+                        var b2cCustIds = GetB2CCustIdsDAL(string.Join(",", custIdsToDelete));
+
+                        if (b2cCustIds != null && b2cCustIds.Any())
                         {
-                            Key = Consts.AFCInternalKey,
-                            Data = b2cCustIds
-                        };
+                            var para = new DeleteAccountParasViewModel
+                            {
+                                Key = Consts.AFCInternalKey,
+                                Data = b2cCustIds
+                            };
 
-                        var result = ApiHelper.Post<bool>(ConfigSettings.DeleteAntiFraudAccounts, para, 300);
+                            var result = ApiHelper.Post<bool>(ConfigSettings.DeleteAntiFraudAccounts, para, 300);
 
-                        Task.WaitAll(result);
+                            Task.WaitAll(result);
+                        }
                     }
                 }
             }
