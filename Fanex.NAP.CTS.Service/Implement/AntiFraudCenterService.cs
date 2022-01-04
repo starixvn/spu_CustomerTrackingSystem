@@ -95,7 +95,9 @@
 
                 if (filterB2CLicensee != null && filterB2CLicensee.Any())
                 {
-                    var b2cCustIds = GetB2CCustIdsDAL(string.Join(",", filterB2CLicensee.Select(c=>c.CustID).Distinct()));
+                    var probAccouts = filterB2CLicensee.Where(c => c.FraudIDList != null && c.FraudIDList.Any()).Select(c => c.CustID).Distinct();
+
+                    var b2cCustIds = GetB2CCustIdsDAL(string.Join(",", probAccouts));
 
                     if (b2cCustIds != null && b2cCustIds.Any())
                     {
