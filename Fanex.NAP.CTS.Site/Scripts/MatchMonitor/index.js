@@ -193,14 +193,14 @@
             .change(SetRestrictFromDate);
 
         domElements.cbbBetType.multiselect({
-            menuWidth: 260,
+            menuWidth: 360,
             menuHeight: 260,
             selectedText: "# of # selected",
             noneSelectedText: "Select Bet Type"
         });
 
         domElements.cbbMatchSection.multiselect({
-            menuWidth: 260,
+            menuWidth: 360,
             menuHeight: 260,
             selectedText: "# of # selected",
             noneSelectedText: "Select Match Section"

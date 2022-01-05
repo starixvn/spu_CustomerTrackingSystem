@@ -54,7 +54,8 @@
 
             try
             {
-                if (matchMonitorFilterViewModel != null && !string.IsNullOrEmpty(matchMonitorFilterViewModel.BetTypes))
+                if (matchMonitorFilterViewModel != null && !string.IsNullOrEmpty(matchMonitorFilterViewModel.BetTypes)
+                    && !string.IsNullOrEmpty(matchMonitorFilterViewModel.MatchSection))
                 {
                     matchMonitors = _matchMonitorService.GetMatchMonitor(matchMonitorFilterViewModel)?.OrderBy(c => c.MatchSection).ToList();
                 }

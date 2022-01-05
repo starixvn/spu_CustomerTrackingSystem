@@ -352,7 +352,7 @@
   width: 100%;
   position: sticky;
   top: 6rem;
-  z-index: 999999; }
+  z-index: 999; }
 
 .match-monitor .monitor-container {
   margin: 0 1.6rem 1rem 1.6rem; }
