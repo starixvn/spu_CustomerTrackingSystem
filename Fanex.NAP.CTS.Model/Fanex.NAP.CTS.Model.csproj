@@ -167,6 +167,7 @@
     <Compile Include="Account\RobotBetting\RobotUserDetailModel.cs" />
     <Compile Include="Account\RobotBetting\RobotBettingModel.cs" />
     <Compile Include="Account\RobotClassification.cs" />
+    <Compile Include="AntiFraudCenter\AccountDBResult.cs" />
     <Compile Include="AntiFraudCenter\CheckAccountExistModel.cs" />
     <Compile Include="AntiFraudCenter\FilterCustToSyncAFCKModel.cs" />
     <Compile Include="AntiFraudCenter\GetAccountViewModel.cs" />

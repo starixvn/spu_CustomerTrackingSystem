@@ -75,7 +75,7 @@
                                     Data = b2cCustIds
                                 };
 
-                                var result = ApiHelper.Post<bool>(ConfigSettings.DeleteAntiFraudAccounts, para, 300);
+                                var result = ApiHelper.Post<AccountDBResult>(ConfigSettings.DeleteAntiFraudAccounts, para, 300);
 
                                 Task.WaitAll(result);
                             }
@@ -145,7 +145,8 @@
                                         PhoneNo = group.a.PhoneNo,
                                         AccountName = group.a.AccountName,
                                         AccountNum = group.a.AccountNum,
-                                        Email = group.a.Email
+                                        Email = group.a.Email,
+                                        FullName = group.a.FullName
                                     })
                                 .GroupJoin(fraudIDs,
                                     a => a.CustId,
@@ -162,7 +163,9 @@
                                        AccountName = group.a.AccountName,
                                        AccountNum = group.a.AccountNum,
                                        Email = group.a.Email,
+                                       FullName = group.a.FullName,
                                        FraudID = temp?.FraudIDList
+                                  
                                    });
 
                 return accInfo ?? new List<GetAccountViewModel>();
@@ -260,7 +263,7 @@
                     Data = accInfo
                 };
 
-                await ApiHelper.Post<bool>(url, para, 300);
+                await ApiHelper.Post<AccountDBResult>(url, para, 300);
             }
         }
 
