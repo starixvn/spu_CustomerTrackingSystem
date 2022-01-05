@@ -261,6 +261,11 @@
                         custProfileEvidence.FlagEvidenceCodes = flagEvidenceCodes.Any() ? string.Join(", ", flagEvidenceCodes) : "None";
                         custProfileEvidence.AffectedEvidenceCodes = affectedEvidenceCodes.Any() ? string.Join(", ", affectedEvidenceCodes) : "None";
                     }
+                    else
+                    {
+                        custProfileEvidence.FlagEvidenceCodes = "None";
+                        custProfileEvidence.AffectedEvidenceCodes = "None";
+                    }
                 }
                 catch (Exception ex)
                 {
