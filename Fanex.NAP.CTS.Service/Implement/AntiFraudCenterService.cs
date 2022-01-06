@@ -29,7 +29,7 @@
             {
                 if (custIds != null && custIds.Any() && isSyncAFCData)
                 {
-                    var accountInfo = GetAccountInfo(string.Join(",", custIds));
+                    var accountInfo = GetAccountForInsert(string.Join(",", custIds));
 
                     if (accountInfo != null && accountInfo.Any())
                     {
@@ -57,29 +57,19 @@
             {
                 if (custIds != null && custIds.Any() && isSyncAFCData)
                 {
-                    var filterB2CLicensee = FilterLicenseeCustDAL(string.Join(",", custIds));
+                    var b2cCustIds = GetAccountForDelete(string.Join(",", custIds));
 
-                    if (filterB2CLicensee != null && filterB2CLicensee.Any())
+                    if (b2cCustIds != null && b2cCustIds.Any())
                     {
-                        var custIdsToDelete = filterB2CLicensee.Where(c => c.FraudIDList == null || !c.FraudIDList.Any())?.Select(c => c.CustID)?.Distinct();
-
-                        if (custIdsToDelete != null && custIdsToDelete.Any())
+                        var para = new DeleteAccountParasViewModel
                         {
-                            var b2cCustIds = GetB2CCustIdsDAL(string.Join(",", custIdsToDelete));
+                            Key = GetKey(),
+                            Data = b2cCustIds
+                        };
 
-                            if (b2cCustIds != null && b2cCustIds.Any())
-                            {
-                                var para = new DeleteAccountParasViewModel
-                                {
-                                    Key = GetKey(),
-                                    Data = b2cCustIds
-                                };
+                        var result = ApiHelper.Post<AccountDBResult>(ConfigSettings.DeleteAntiFraudAccounts, para, 300);
 
-                                var result = ApiHelper.Post<AccountDBResult>(ConfigSettings.DeleteAntiFraudAccounts, para, 300);
-
-                                Task.WaitAll(result);
-                            }
-                        }
+                        Task.WaitAll(result);
                     }
                 }
             }
@@ -97,7 +87,24 @@
 
         #region Private methods
 
-        private IEnumerable<GetAccountViewModel> GetAccountInfo(string custIds)
+        private IEnumerable<GetB2CustIDModel> GetAccountForDelete(string custIds)
+        {
+            var filterB2CLicensee = FilterLicenseeCustDAL(custIds);
+
+            if (filterB2CLicensee != null && filterB2CLicensee.Any())
+            {
+                var custIdsToDelete = filterB2CLicensee.Where(c => c.FraudIDList == null || !c.FraudIDList.Any())?.Select(c => c.CustID)?.Distinct();
+
+                if (custIdsToDelete != null && custIdsToDelete.Any())
+                {
+                    return GetB2CCustIdsDAL(string.Join(",", custIdsToDelete));
+                }
+            }
+
+            return Enumerable.Empty<GetB2CustIDModel>();
+        }
+
+        private IEnumerable<GetAccountViewModel> GetAccountForInsert(string custIds)
         {
             if (!string.IsNullOrEmpty(custIds))
             {
@@ -113,23 +120,19 @@
                     {
                         var b2cCustJson = JsonConvert.SerializeObject(b2cCustIds.Select(c => c.B2CCustId));
 
-                        var accountInfo = GetAccountInfoDAL(b2cCustJson);
+                        var accountInfo = GetB2CInfoDAL(b2cCustJson);
 
                         return MappingFrauIDs(accountInfo, filterB2CLicensee, b2cCustIds);
                     }
                 }
             }
 
-                return new List<GetAccountViewModel>();
+            return Enumerable.Empty<GetAccountViewModel>();
         }
 
-
-        private IEnumerable<GetAccountViewModel> MappingFrauIDs(IEnumerable<GetAFCAccountModel> accountInfo
-                                                              , IEnumerable<FilterCustToSyncAFCKModel> fraudIDs
-                                                              , IEnumerable<GetB2CustIDModel> b2cCustIDs)
+        private IEnumerable<GetAccountViewModel> MappingFrauIDs(IEnumerable<GetAFCAccountModel> accountInfo, IEnumerable<FilterCustToSyncAFCKModel> fraudIDs, IEnumerable<GetB2CustIDModel> b2cCustIDs)
         {
-            if (accountInfo != null && fraudIDs != null && b2cCustIDs != null &&
-                accountInfo.Any() && fraudIDs.Any() && b2cCustIDs.Any())
+            if (IsValid(accountInfo, fraudIDs, b2cCustIDs))
             {
                 var accInfo = accountInfo.GroupJoin(b2cCustIDs,
                                    a => a.CustId,
@@ -165,16 +168,15 @@
                                        Email = group.a.Email,
                                        FullName = group.a.FullName,
                                        FraudID = temp?.FraudIDList
-                                  
                                    });
 
-                return accInfo ?? new List<GetAccountViewModel>();
+                return accInfo ?? Enumerable.Empty<GetAccountViewModel>();
             }
 
-            return new List<GetAccountViewModel>();
+            return Enumerable.Empty<GetAccountViewModel>();
         }
 
-        private IEnumerable<string> CheckAccountExist (IEnumerable<GetAccountViewModel> accInfo)
+        private IEnumerable<string> CheckAccountExist(IEnumerable<GetAccountViewModel> accInfo)
         {
             if (accInfo != null && accInfo.Any())
             {
@@ -195,12 +197,12 @@
                     {
                         var notExistedAcc = result.Where(c => string.Equals(c.Status, "Not Exist")).Select(c => c.AccountID);
 
-                        return notExistedAcc ?? new List<string>();
+                        return notExistedAcc ?? Enumerable.Empty<string>();
                     }
                 }
             }
 
-            return new List<string>();
+            return Enumerable.Empty<string>();
         }
 
         private void SyncAccountToAFCDBAsync(IEnumerable<GetAccountViewModel> accountInfo, IEnumerable<string> notExistedAccount)
@@ -209,7 +211,7 @@
             {
                 var accToInsert = notExistedAccount.Any() ? accountInfo.Where(c => notExistedAccount.Contains(c.B2CustId)) : null;
                 var accToUpdate = notExistedAccount.Any() ? accountInfo.Where(c => !notExistedAccount.Contains(c.B2CustId)) : accountInfo;
-                
+
                 var tasks = new List<Task>
                 {
                     Task.Run(async () =>
@@ -225,7 +227,6 @@
                                 + ex.StackTrace + "\n"
                                 + $"DataInput: {JsonConvert.SerializeObject(accToInsert) + "\n"}");
                         }
-
                     }),
 
                     Task.Run(async () =>
@@ -272,11 +273,21 @@
             return ConfigSettings.EnvironmentName == "PRO" ? Consts.AFCInternal_ProKey : Consts.AFCInternal_LocalKey;
         }
 
-        #endregion
+        private static bool IsValid(IEnumerable<GetAFCAccountModel> accountInfo, IEnumerable<FilterCustToSyncAFCKModel> fraudIDs, IEnumerable<GetB2CustIDModel> b2cCustIDs)
+        {
+            if (accountInfo != null && fraudIDs != null && b2cCustIDs != null)
+            {
+                return accountInfo.Any() && fraudIDs.Any() && b2cCustIDs.Any();
+            }
+
+            return false;
+        }
+
+        #endregion Private methods
 
         #region DataAccess Layer
 
-        public IEnumerable<GetAFCAccountModel> GetAccountInfoDAL(string custIdJson)
+        public IEnumerable<GetAFCAccountModel> GetB2CInfoDAL(string custIdJson)
         {
             var criteria = new GetAFCAccountInfoCriteria
             {
