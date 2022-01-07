@@ -13,6 +13,7 @@
     using System.Globalization;
     using System.Linq;
     using System.Threading.Tasks;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public class AntiFraudCenterService : IAntiFraudCenterService
     {
@@ -70,6 +71,11 @@
                         var result = ApiHelper.Post<AccountDBResult>(ConfigSettings.DeleteAntiFraudAccounts, para, 300);
 
                         Task.WaitAll(result);
+
+                        if (result.Result.StatusCode != (int)HttpStatus.OK)
+                        {
+                            LogService.Error($"{ConfigSettings.EnvironmentName} - Web - Delete Accounts to AFC DB - Exception: " + result.Result.ErrorMessage + $"\nDataInput: {JsonConvert.SerializeObject(custIds) + "\n"}");
+                        }
                     }
                 }
             }
@@ -218,7 +224,12 @@
                     {
                         try
                         {
-                            await SyncAFCData(accToInsert, ConfigSettings.InsertAntiFraudAccounts);
+                           var result = await SyncAFCData(accToInsert, ConfigSettings.InsertAntiFraudAccounts);
+
+                            if (result.StatusCode != (int)HttpStatus.OK)
+                            {
+                                 LogService.Error($"{ConfigSettings.EnvironmentName} - Web - Insert Accounts to AFC DB - Exception: "+ result.ErrorMessage + $"\nDataInput: {JsonConvert.SerializeObject(accToInsert) + "\n"}");
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -233,7 +244,12 @@
                     {
                         try
                         {
-                            await SyncAFCData(accToUpdate, ConfigSettings.UpdateAntiFraudAccounts);
+                            var result = await SyncAFCData(accToUpdate, ConfigSettings.UpdateAntiFraudAccounts);
+
+                            if (result.StatusCode != (int)HttpStatus.OK)
+                            {
+                                 LogService.Error($"{ConfigSettings.EnvironmentName} - Web - Update Accounts to AFC DB - Exception: "+ result.ErrorMessage + $"\nDataInput: {JsonConvert.SerializeObject(accToUpdate) + "\n"}");
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -254,7 +270,7 @@
         /// </summary>
         /// <param name="accInfo"></param>
         /// <param name="isInsertAction"></param>
-        private async Task SyncAFCData(IEnumerable<GetAccountViewModel> accInfo, string url)
+        private async Task<AccountDBResult> SyncAFCData(IEnumerable<GetAccountViewModel> accInfo, string url)
         {
             if (accInfo != null && accInfo.Any())
             {
@@ -264,8 +280,10 @@
                     Data = accInfo
                 };
 
-                await ApiHelper.Post<AccountDBResult>(url, para, 300);
+                return await ApiHelper.Post<AccountDBResult>(url, para, 300);
             }
+
+            return new AccountDBResult { StatusCode = (int)HttpStatus.OK, ErrorMessage = string.Empty };
         }
 
         private string GetKey()
