@@ -226,10 +226,12 @@
                         {
                            var result = await SyncAFCData(accToInsert, ConfigSettings.InsertAntiFraudAccounts);
 
-                            if (result.StatusCode != (int)HttpStatus.OK)
-                            {
-                                 LogService.Error($"{ConfigSettings.EnvironmentName} - Web - Insert Accounts to AFC DB - Exception: "+ result.ErrorMessage + $"\nDataInput: {JsonConvert.SerializeObject(accToInsert) + "\n"}");
-                            }
+                           if (result.StatusCode == (int)HttpStatus.OK || result.StatusCode == (int)HttpStatus.Created)
+                           {
+                               return;
+                           }
+
+                           LogService.Error($"{ConfigSettings.EnvironmentName} - Web - Insert Accounts to AFC DB - Exception: "+ result.ErrorMessage + $"\nDataInput: {JsonConvert.SerializeObject(accToInsert) + "\n"}");
                         }
                         catch (Exception ex)
                         {
