@@ -49,6 +49,8 @@
                     + $"DataInput: {JsonConvert.SerializeObject(custIds) + "\n"}"
                     + ex?.InnerException?.Source
                     + ex?.InnerException?.StackTrace);
+
+                InsertErrorLog(null, ex.Message, JsonConvert.SerializeObject(custIds));
             }
         }
 
@@ -75,6 +77,7 @@
                         if (result.Result.StatusCode != (int)HttpStatus.OK)
                         {
                             LogService.Error($"{ConfigSettings.EnvironmentName} - Web - Delete Accounts to AFC DB - Exception: " + result.Result.ErrorMessage + $"\nDataInput: {JsonConvert.SerializeObject(custIds) + "\n"}");
+                            InsertErrorLog(null, result.Result.ErrorMessage, JsonConvert.SerializeObject(custIds));
                         }
                     }
                 }
@@ -88,6 +91,8 @@
                     + $"DataInput: {JsonConvert.SerializeObject(custIds) + "\n"}"
                     + ex?.InnerException.Source
                     + ex?.InnerException.StackTrace);
+
+                InsertErrorLog(null, ex.Message, JsonConvert.SerializeObject(custIds));
             }
         }
 
@@ -232,6 +237,7 @@
                            }
 
                            LogService.Error($"{ConfigSettings.EnvironmentName} - Web - Insert Accounts to AFC DB - Exception: "+ result.ErrorMessage + $"\nDataInput: {JsonConvert.SerializeObject(accToInsert) + "\n"}");
+                           InsertErrorLog(null, result.ErrorMessage, JsonConvert.SerializeObject(accToInsert));
                         }
                         catch (Exception ex)
                         {
@@ -239,6 +245,9 @@
                                 + ex.Message
                                 + ex.StackTrace + "\n"
                                 + $"DataInput: {JsonConvert.SerializeObject(accToInsert) + "\n"}");
+
+                             InsertErrorLog(null, ex.Message, JsonConvert.SerializeObject(accToInsert));
+
                         }
                     }),
 
@@ -251,6 +260,7 @@
                             if (result.StatusCode != (int)HttpStatus.OK)
                             {
                                  LogService.Error($"{ConfigSettings.EnvironmentName} - Web - Update Accounts to AFC DB - Exception: "+ result.ErrorMessage + $"\nDataInput: {JsonConvert.SerializeObject(accToUpdate) + "\n"}");
+                                 InsertErrorLog(null, result.ErrorMessage, JsonConvert.SerializeObject(accToUpdate));
                             }
                         }
                         catch (Exception ex)
@@ -259,6 +269,8 @@
                                 + ex.Message
                                 + ex.StackTrace + "\n"
                                 + $"DataInput: {JsonConvert.SerializeObject(accToUpdate) + "\n"}");
+
+                             InsertErrorLog(null, ex.Message, JsonConvert.SerializeObject(accToUpdate));
                         }
                     })
                 };
@@ -353,6 +365,18 @@
             var criteria = new ParticipantGetCriteria();
 
             return repository.Fetch<ParticipantModel>(criteria);
+        }
+
+        public void InsertErrorLog(int? participantID, string errorMessage, string dataJson)
+        {
+            var criteria = new ErrorLogInsertCriteria
+            {
+                ErrorMessage = errorMessage,
+                DataJson = dataJson,
+                ParticipantID = participantID
+            };
+
+            repository.Execute(criteria);
         }
 
         #endregion DataAccess Layer
