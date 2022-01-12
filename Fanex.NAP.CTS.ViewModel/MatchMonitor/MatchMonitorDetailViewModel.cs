@@ -79,13 +79,13 @@
             {
                 switch (BetTypeID)
                 {
-                    case (int)MATCHMONITOR_BETTYPE.HDP:
+                    case (int)MatchMonitorBetType.HDP:
                         return Reason + " - HDP";
-                    case (int)MATCHMONITOR_BETTYPE.OU:
+                    case (int)MatchMonitorBetType.OU:
                         return Reason + " - O/U";
-                    case (int)MATCHMONITOR_BETTYPE.FirstHDP:
+                    case (int)MatchMonitorBetType.FirstHDP:
                         return Reason + " - 1st HDP";
-                    case (int)MATCHMONITOR_BETTYPE.FirsttOU:
+                    case (int)MatchMonitorBetType.FirsttOU:
                         return Reason + " - 1st O/U";
                 }
 
