@@ -80,5 +80,6 @@
 		<Setting Key="AFC_Get_B2CCustId" SpName="AFC_Get_B2CCustId" DbName="DBAGE.bodb02.bodbAdminNet" />
 		<Setting Key="AFC_DC_Participant_Get" SpName="AFC_DC_Participant_Get" DbName="MySQL.AFC_DataCenter.afcWeb" />
 		<Setting Key="AFC_DC_Account_CheckExist" SpName="AFC_DC_Account_CheckExist" DbName="MySQL.AFC_DataCenter.afcWeb" />
+		<Setting Key="AFC_DC_ErrorLog_Insert" SpName="AFC_DC_ErrorLog_Insert" DbName="MySQL.AFC_DataCenter.afcWebAdmin" />
 	</Function>
 </Functions>
