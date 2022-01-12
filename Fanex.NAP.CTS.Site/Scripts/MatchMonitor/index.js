@@ -184,23 +184,23 @@
 
         if (sportTypes != null) {
             if (sportTypes.length == 2) {
-                var options = [{ text: 'HDP', value: '{ "BettypeID":1, "BetID": null}' },
-                { text: 'O/U', value: '{ "BettypeID": 3, "BetID": null }' },
-                { text: '1st HDP', value: '{ "BettypeID": 7, "BetID": null }' },
-                { text: '1st O/U', value: '{ "BettypeID": 8, "BetID": null }' },
-                { text: 'Moneyline', value: '{ "BettypeID": 20, "BetID": null }' },
-                { text: 'Quarter 1 HDP', value: '{ "BettypeID": 609, "BetID": 801 }' },
-                { text: 'Quarter 2 HDP', value: '{ "BettypeID": 609, "BetID": 802 }' },
-                { text: 'Quarter 3 HDP', value: '{ "BettypeID": 609, "BetID": 803 }' },
-                { text: 'Quarter 4 HDP', value: '{ "BettypeID": 609, "BetID": 804 }' },
-                { text: 'Quarter 1 O/U', value: '{ "BettypeID": 610, "BetID": 801 }' },
-                { text: 'Quarter 2 O/U', value: '{ "BettypeID": 610, "BetID": 802 }' },
-                { text: 'Quarter 3 O/U', value: '{ "BettypeID": 610, "BetID": 803 }' },
-                { text: 'Quarter 4 O/U', value: '{ "BettypeID": 610, "BetID": 804 }' },
-                { text: 'Quarter 1 Moneyline', value: '{ "BettypeID": 612, "BetID": 801 }' },
-                { text: 'Quarter 2 Moneyline', value: '{ "BettypeID": 612, "BetID": 802 }' },
-                { text: 'Quarter 3 Moneyline', value: '{ "BettypeID": 612, "BetID": 803 }' },
-                { text: 'Quarter 4 Moneyline', value: '{ "BettypeID": 612, "BetID": 804 }' }
+                var options = [{ text: 'HDP', value: RenderBetTypeHTML(1, null) },
+                    { text: 'O/U', value: RenderBetTypeHTML(3, null) },
+                    { text: '1st HDP', value: RenderBetTypeHTML(7, null) },
+                    { text: '1st O/U', value: RenderBetTypeHTML(8, null) },
+                    { text: 'Moneyline', value: RenderBetTypeHTML(20, null) },
+                    { text: 'Quarter 1 HDP', value: RenderBetTypeHTML(609, 801) },
+                    { text: 'Quarter 2 HDP', value: RenderBetTypeHTML(609, 802) },
+                    { text: 'Quarter 3 HDP', value: RenderBetTypeHTML(609, 803) },
+                    { text: 'Quarter 4 HDP', value: RenderBetTypeHTML(609, 804) },
+                    { text: 'Quarter 1 O/U', value: RenderBetTypeHTML(610, 801) },
+                    { text: 'Quarter 2 O/U', value: RenderBetTypeHTML(610, 802) },
+                    { text: 'Quarter 3 O/U', value: RenderBetTypeHTML(610, 803) },
+                    { text: 'Quarter 4 O/U', value: RenderBetTypeHTML(610, 804) },
+                    { text: 'Quarter 1 Moneyline', value: RenderBetTypeHTML(612, 801)  },
+                    { text: 'Quarter 2 Moneyline', value: RenderBetTypeHTML(612, 802)  },
+                    { text: 'Quarter 3 Moneyline', value: RenderBetTypeHTML(612, 803)  },
+                    { text: 'Quarter 4 Moneyline', value: RenderBetTypeHTML(612, 804)  }
                 ];
 
                 options.forEach(i => {
@@ -210,10 +210,10 @@
             else {
                 sportTypes.forEach(c => {
                     if (c == 1) {
-                        var options1 = [{ text: 'HDP', value: '{ "BettypeID": 1, "BetID": null }' },
-                        { text: 'O/U', value: '{ "BettypeID": 3, "BetID": null }' },
-                        { text: '1st HDP', value: '{ "BettypeID": 7, "BetID": null }' },
-                        { text: '1st O/U', value: '{ "BettypeID": 8, "BetID": null }' }
+                        var options1 = [{ text: 'HDP', value: RenderBetTypeHTML(1, null) },
+                            { text: 'O/U', value: RenderBetTypeHTML(3, null) },
+                            { text: '1st HDP', value: RenderBetTypeHTML(7, null)  },
+                            { text: '1st O/U', value: RenderBetTypeHTML(8, null) }
                         ];
 
                         options1.forEach(i => {
@@ -222,23 +222,23 @@
                     }
 
                     if (c == 2) {
-                        var options2 = [{ text: 'HDP', value: '{ "BettypeID": 1, "BetID": null }' },
-                        { text: 'O/U', value: '{ "BettypeID": 3, "BetID": null }' },
-                        { text: '1st HDP', value: '{ "BettypeID": 7, "BetID": null }' },
-                        { text: '1st O/U', value: '{ "BettypeID": 8, "BetID": null }' },
-                        { text: 'Moneyline', value: '{ "BettypeID": 20, "BetID": null }' },
-                        { text: 'Quarter 1 HDP', value: '{ "BettypeID": 609, "BetID": 801 }' },
-                        { text: 'Quarter 2 HDP', value: '{ "BettypeID": 609, "BetID": 802 }' },
-                        { text: 'Quarter 3 HDP', value: '{ "BettypeID": 609, "BetID": 803 }' },
-                        { text: 'Quarter 4 HDP', value: '{ "BettypeID": 609, "BetID": 804 }' },
-                        { text: 'Quarter 1 O/U', value: '{ "BettypeID": 610, "BetID": 801 }' },
-                        { text: 'Quarter 2 O/U', value: '{ "BettypeID": 610, "BetID": 802 }' },
-                        { text: 'Quarter 3 O/U', value: '{ "BettypeID": 610, "BetID": 803 }' },
-                        { text: 'Quarter 4 O/U', value: '{ "BettypeID": 610, "BetID": 804 }' },
-                        { text: 'Quarter 1 Moneyline', value: '{ "BettypeID": 612, "BetID": 801 }' },
-                        { text: 'Quarter 2 Moneyline', value: '{ "BettypeID": 612, "BetID": 802 }' },
-                        { text: 'Quarter 3 Moneyline', value: '{ "BettypeID": 612, "BetID": 803 }' },
-                        { text: 'Quarter 4 Moneyline', value: '{ "BettypeID": 612, "BetID": 804 }' }
+                        var options2 = [{ text: 'HDP', value: RenderBetTypeHTML(1, null) },
+                        { text: 'O/U', value: RenderBetTypeHTML(3, null) },
+                        { text: '1st HDP', value: RenderBetTypeHTML(7, null) },
+                        { text: '1st O/U', value: RenderBetTypeHTML(8, null) },
+                        { text: 'Moneyline', value: RenderBetTypeHTML(20, null) },
+                        { text: 'Quarter 1 HDP', value: RenderBetTypeHTML(609, 801) },
+                        { text: 'Quarter 2 HDP', value: RenderBetTypeHTML(609, 802) },
+                        { text: 'Quarter 3 HDP', value: RenderBetTypeHTML(609, 803) },
+                        { text: 'Quarter 4 HDP', value: RenderBetTypeHTML(609, 804) },
+                        { text: 'Quarter 1 O/U', value: RenderBetTypeHTML(610, 801) },
+                        { text: 'Quarter 2 O/U', value: RenderBetTypeHTML(610, 802) },
+                        { text: 'Quarter 3 O/U', value: RenderBetTypeHTML(610, 803) },
+                        { text: 'Quarter 4 O/U', value: RenderBetTypeHTML(610, 804) },
+                        { text: 'Quarter 1 Moneyline', value: RenderBetTypeHTML(612, 801) },
+                        { text: 'Quarter 2 Moneyline', value: RenderBetTypeHTML(612, 802) },
+                        { text: 'Quarter 3 Moneyline', value: RenderBetTypeHTML(612, 803) },
+                        { text: 'Quarter 4 Moneyline', value: RenderBetTypeHTML(612, 804) }
                         ];
 
                         options2.forEach(i => {
@@ -251,6 +251,10 @@
         }
 
         domElements.cbbBetType.multiselect('refresh');
+    }
+
+    function RenderBetTypeHTML(betTypeID, betId) {
+        return `{&quot;BettypeID&quot;:` + betTypeID + `, &quot;BetID&quot;:` + betId +`}`;
     }
 
     function Initial() {

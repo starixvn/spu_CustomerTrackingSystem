@@ -14,6 +14,9 @@
 
         [SpParam(SqlParamName = "ip_LeagueName")]
         public string LeagueName { get; set; }
+        
+        [SpParam(SqlParamName = "ip_SportType")]
+        public string SportType { get; set; }
 
         [SpParam(SqlParamName = "ip_Market")]
         public int? Market { get; set; }

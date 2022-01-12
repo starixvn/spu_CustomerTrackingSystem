@@ -48,16 +48,15 @@
         }
 
         [HttpPost]
-        public ActionResult GetMatchMonitor(MatchMonitorFilterViewModel matchMonitorFilterViewModel)
+        public ActionResult GetMatchMonitor(MatchMonitorFilterViewModel para)
         {
             var matchMonitors = new List<MatchMonitorModel>();
 
             try
             {
-                if (matchMonitorFilterViewModel != null && !string.IsNullOrEmpty(matchMonitorFilterViewModel.BetTypes)
-                    && !string.IsNullOrEmpty(matchMonitorFilterViewModel.MatchSection))
+                if (para != null && !string.IsNullOrEmpty(para.BetTypes) && !string.IsNullOrEmpty(para.MatchSection) && !string.IsNullOrEmpty(para.Sports))
                 {
-                    matchMonitors = _matchMonitorService.GetMatchMonitor(matchMonitorFilterViewModel)?.OrderBy(c => c.MatchSection).ToList();
+                    matchMonitors = _matchMonitorService.GetMatchMonitor(para)?.OrderBy(c => c.MatchSection).ToList();
                 }
             }
             catch (Exception e)

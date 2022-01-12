@@ -28,7 +28,7 @@
 
         public int Reason { get; set; }
 
-        public int Sportype { get; set; }
+        public int Sporttype { get; set; }
 
         public int MatchSection { get; set; }
 
@@ -203,9 +203,9 @@
         {
             get
             {
-                if (this.Sportype == 1 || this.Sportype == 2)
+                if (this.Sporttype == 1 || this.Sporttype == 2)
                 {
-                    return this.Sportype == 1 ? "Soccer" : "Basketball";
+                    return this.Sporttype == 1 ? "Soccer" : "Basketball";
                 }
 
                 return string.Empty;

@@ -26,6 +26,7 @@
                 FromDate = filter.FromDate,
                 ToDate = filter.ToDate,
                 LeagueName = string.IsNullOrWhiteSpace(filter.LeagueName) ? null : filter.LeagueName,
+                SportType = filter.Sports,
                 Market = filter.Market,
                 MatchSection = filter.MatchSection,
                 BetType = filter.BetTypes,
