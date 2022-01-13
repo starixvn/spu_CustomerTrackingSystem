@@ -130,19 +130,7 @@
             Moneyline = 20,
             QuarterXHDP = 609,
             QuarterXOU = 610,
-            QuarterXMoneyline = 612,
-            Quarter1stHDP = 609801,
-            Quarter2ndHDP = 609802,
-            Quarter3thHDP = 609803,
-            Quarter4thHDP = 609804,
-            Quarter1stOU = 610801,
-            Quarter2ndOU = 610802,
-            Quarter3thOU = 610803,
-            Quarter4thOU = 610804,          
-            Quarter1stMoneyline = 612801,
-            Quarter2ndMoneyline = 612802,
-            Quarter3thMoneyline = 612803,
-            Quarter4thMoneyline = 612804
+            QuarterXMoneyline = 612
         }
 
         public enum MatchMonitorBetId

@@ -9,6 +9,8 @@ namespace Fanex.NAP.CTS.Model.MatchMonitor
         public bool LiveIndicator { get; set; }
 
         public int BettypeID { get; set; }     
+
+        public int? BetID { get; set; }     
         
         public string TranIds { get; set; }      
         

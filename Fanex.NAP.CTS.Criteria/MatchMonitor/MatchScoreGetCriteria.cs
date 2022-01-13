@@ -12,11 +12,14 @@
         [SpParam(SqlParamName = "ip_BettypeID")]
         public int BettypeID { get; set; }
 
+        [SpParam(SqlParamName = "ip_BetID")]
+        public int? BetID { get; set; }
+
         [SpParam(SqlParamName = "ip_LiveIndicator")]
         public bool LiveIndicator { get; set; }
 
-        [SpParam(SqlParamName = "ip_IsHedging")]
-        public bool IsHedging { get; set; }
+        [SpParam(SqlParamName = "ip_Reason")]
+        public int Reason { get; set; }
 
         public override string GetSettingKey()
             => "CTS_DC_MatchMonitor_Details_GetScore";

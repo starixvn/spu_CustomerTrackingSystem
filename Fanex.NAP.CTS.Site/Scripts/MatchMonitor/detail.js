@@ -6,7 +6,8 @@
         eventDataToString: $("#hdEventDataToString").val(),
         matchID: $("#hdMatchID").val(),
         betTypeID: $("#hdBetTypeID").val(),
-        isHedging: $("#hdIsHedging").val(),
+        betID: $("#hdBetID").val(),
+        reason: $("#hdreason").val(),
         liveIndicator: $("#hdLiveIndicator").val(),
         cbbMatchScore: $('#cbbMatchScore'),
         cbbGroup: $('#cbbGroup'),
@@ -25,8 +26,9 @@
                 EventDateToString: function () { return domElements.eventDataToString; },
                 MatchID: function () { return domElements.matchID; },
                 BetTypeID: function () { return domElements.betTypeID; },
+                BetID: function () { return domElements.betID; },
                 Sites: function () { return domElements.cbbSites.val(); },
-                IsHedging: function () { return domElements.isHedging; },
+                Reason: function () { return domElements.reason; },
                 LiveIndicator: function () { return domElements.liveIndicator; },
                 ListScore: function () { return domElements.cbbMatchScore.val().join(); },
                 ListGroup: function () { return "[" + domElements.cbbGroup.val().join() + "]"; }
@@ -92,7 +94,8 @@
                 { targets: [10] },
                 { targets: [11] },
                 { targets: [12] },
-                { targets: [13], visible: false }
+                { targets: [13] },
+                { targets: [14], visible: false }
             ],
             columns: [
                 { data: obj => obj.SubscriberType },
@@ -109,6 +112,7 @@
                 { data: obj => obj.Currency },
                 { data: obj => obj.Amount },
                 { data: obj => obj.HDP },
+                { data: obj => obj.Betchoice },
                 { data: obj => obj.Score },
                 { data: obj => obj.TransTimeToString },
                 { data: obj => obj.Group },
@@ -237,6 +241,7 @@
                 MatchId: domElements.matchID,
                 LiveIndicator: domElements.liveIndicator == "True",
                 BettypeID: domElements.betTypeID,
+                BetID: domElements.betID,
                 TranIds: GetTranIds().join()
             },
             beforeSend: function () {

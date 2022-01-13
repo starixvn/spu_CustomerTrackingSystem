@@ -24,6 +24,19 @@
                             </select>
                         </div>
                         <div class="group width-180">
+                            <label class="text">Bet choice</label>
+                            <select class="control width-select" id="cbbBetChoice">
+                                @if (ViewBag.BetChoice != null)
+                                {
+                            
+                                    foreach (var item in ViewBag.BetChoice)
+                                    {
+                                        <option value="@item" selected>@item</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="group width-180">
                             <label class="text">Score</label>
                             <select class="control width-select" id="cbbMatchScore" multiple="multiple">
                                 @if (ViewBag.MatchScore != null)
@@ -52,7 +65,7 @@
                     <div class="detail-area">
                         <span>@ViewBag.MatchName <br /></span>
                         <span class="league-highlight">@ViewBag.LeagueName<br /></span>
-                        <span>@ViewBag.ReasonName - <span class="market-highlight">@ViewBag.MarketName</span><br /></span>
+                        <span>@ViewBag.ReasonGroup - <span class="market-highlight">@ViewBag.MarketName</span><br /></span>
                     </div>
                 </div>
                 <div class="group-table second-group-table-border">
@@ -73,6 +86,7 @@
                                         <th>CUR</th>
                                         <th>AMOUNT</th>
                                         <th>HDP</th>
+                                        <th>Betchoice</th>
                                         <th>Score</th>
                                         <th>TRANSTIME</th>
                                         <th>Group</th>
@@ -117,8 +131,9 @@
             <input id="hdEventDataToString" type="hidden" value="@ViewBag.EventDateToString" />
             <input id="hdMatchID" type="hidden" value="@ViewBag.MatchID" />
             <input id="hdBetTypeID" type="hidden" value="@ViewBag.BetTypeID" />
+            <input id="hdBetID" type="hidden" value="@ViewBag.BetID" />
             <input id="hdLiveIndicator" type="hidden" value="@ViewBag.LiveIndicator.ToString()" />
-            <input id="hdIsHedging" type="hidden" value="@ViewBag.IsHedging.ToString()" />
+            <input id="hdreason" type="hidden" value="@ViewBag.Reason" />
             <input id="hdIsHostPermission" type="hidden" IsHostPermission="@ViewBag.IsHostPermission.ToString()" />
         </div>
 </section>

@@ -81,9 +81,9 @@
             {
                 if (para != null)
                 {
-                    matchGroup = _matchMonitorService.GetMatchGroup(para.MatchID, para.BetTypeID, para.LiveIndicator, para.IsHedging)?.ToList() ?? new List<MatchGroupModel>();
+                    matchGroup = _matchMonitorService.GetMatchGroup(para.MatchID, para.BetTypeID, para.LiveIndicator, para.BetID, para.Reason)?.ToList() ?? new List<MatchGroupModel>();
 
-                    matchScore = _matchMonitorService.GetMatchScore(para.MatchID, para.BetTypeID, para.LiveIndicator, para.IsHedging) ?? new List<MatchScoreModel>();
+                    matchScore = _matchMonitorService.GetMatchScore(para.MatchID, para.BetTypeID, para.LiveIndicator, para.BetID, para.Reason) ?? new List<MatchScoreModel>();
 
                     MappingReasonGroupName(ref matchGroup);
                 }
@@ -96,14 +96,16 @@
             ViewBag.EventDateToString = para?.EventDateToString;
             ViewBag.MatchID = para?.MatchID;
             ViewBag.BetTypeID = para?.BetTypeID;
+            ViewBag.BetID = para?.BetID;
             ViewBag.MatchName = para?.MatchName ?? string.Empty;
             ViewBag.LiveIndicator = para?.LiveIndicator ?? true;
-            ViewBag.IsHedging = para?.IsHedging ?? true;
+            ViewBag.Reason = para?.Reason;
             ViewBag.Group = matchGroup;
             ViewBag.MatchScore = matchScore?.OrderBy(c => c.TotalScore).ThenBy(c => c.LiveHomeScore).ThenBy(c => c.LiveAwayScore);
             ViewBag.LeagueName = para?.LeagueName ?? string.Empty;
-            ViewBag.ReasonName = para?.ReasonName ?? string.Empty;
+            ViewBag.ReasonGroup = para?.ReasonGroup ?? string.Empty;
             ViewBag.MarketName = para?.MarketName ?? string.Empty;
+            ViewBag.BetChoice = para?.BetChoice;
             ViewBag.IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
                                                                         NapSettings.Settings.SiteId,
                                                                         FSFunctionKeys.MatchMonitor,
@@ -203,6 +205,8 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
+        #region Private Methods
+
         private IEnumerable<MatchMonitorDetailResultViewModel> MergeMatchMonitorDetail(IEnumerable<TransGroupModel> mappingTransInfo, IEnumerable<CustInfoModel> custInfo, IEnumerable<TicketDetailModel> ticketDetail)
         {
             var matchDetailResult = new List<MatchMonitorDetailResultViewModel>();
@@ -255,6 +259,7 @@
 
                 para.ListGroup = string.Join(",", groupKeys.Select(c => c.GroupID)?.Distinct());
 
+                ///TODO
                 var matchDetails = _matchMonitorService.GetMatchMonitorDetail(para);
 
                 if (matchDetails != null && matchDetails.MatchDetails.Any())
@@ -398,5 +403,8 @@
 
             return matchDetailInfo;
         }
+
+        #endregion
+
     }
 }

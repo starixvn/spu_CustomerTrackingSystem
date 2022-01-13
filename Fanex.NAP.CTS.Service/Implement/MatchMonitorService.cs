@@ -43,6 +43,7 @@
                 MatchID = para.MatchId,
                 LiveIndicator = para.LiveIndicator,
                 BettypeID = para.BettypeID,
+                BetID = para.BetID,
                 TranIds = para.TranIds,
                 VerifiedBy = para.VerifiedBy
             };
@@ -52,27 +53,29 @@
             return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
         }
 
-        public IEnumerable<MatchGroupModel> GetMatchGroup(Int64 matchID, int betTypeID, bool liveIndicator, bool isHedging)
+        public IEnumerable<MatchGroupModel> GetMatchGroup(Int64 matchID, int betTypeID, bool liveIndicator, int? betId, int reason)
         {
             var criteria = new MatchGroupGetCriteria()
             {
                 BettypeID = betTypeID,
+                BetID = betId,
                 MatchID = matchID,
                 LiveIndicator = liveIndicator,
-                IsHedging = isHedging
+                Reason = reason
             };
 
             return repository.Fetch<MatchGroupModel>(criteria);
         }
 
-        public IEnumerable<MatchScoreModel> GetMatchScore(Int64 matchID, int betTypeID, bool liveIndicator, bool isHedging)
+        public IEnumerable<MatchScoreModel> GetMatchScore(Int64 matchID, int betTypeID, bool liveIndicator, int? betId, int reason)
         {
             var criteria = new MatchScoreGetCriteria()
             {
                 BettypeID = betTypeID,
+                BetID = betId,
                 MatchID = matchID,
                 LiveIndicator = liveIndicator,
-                IsHedging = isHedging
+                Reason = reason
             };
 
             return repository.Fetch<MatchScoreModel>(criteria);
@@ -83,11 +86,13 @@
             var criteria = new MatchDetailMonitorGetCriteria()
             {
                 BettypeID = filter.BetTypeID,
+                BetID = filter.BetID,
                 ListGroup = filter.ListGroup,
                 ListScore = filter.ListScore,
                 MatchID = filter.MatchID,
                 LiveIndicator = filter.LiveIndicator,
-                IsHedging = filter.IsHedging
+                BetChoice = filter.BetChoice,
+                Reason = filter.Reason,
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))

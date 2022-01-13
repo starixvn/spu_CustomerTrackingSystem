@@ -24,7 +24,7 @@
 
         public int BettypeID { get; set; }
 
-        public int BetID { get; set; }
+        public int? BetID { get; set; }
 
         public int Reason { get; set; }
 
