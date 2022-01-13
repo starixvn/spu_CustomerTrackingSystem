@@ -73,18 +73,14 @@
                         var result = ApiHelper.Post<AccountDBResult>(ConfigSettings.DeleteAntiFraudAccounts, para, 300);
 
                         Task.WaitAll(result);
-
-                        if (result.Result.StatusCode != (int)HttpStatus.OK)
-                        {
-                            LogService.Error($"{ConfigSettings.EnvironmentName} - Web - Delete Accounts to AFC DB - Exception: " + result.Result.ErrorMessage + $"\nDataInput: {JsonConvert.SerializeObject(custIds) + "\n"}");
-                            InsertErrorLog(null, result.Result.ErrorMessage, JsonConvert.SerializeObject(custIds));
-                        }
                     }
                 }
             }
             catch (Exception ex)
             {
-                LogService.Error($"{ConfigSettings.EnvironmentName} - Web - Delete Accounts to AFC DB - Exception: "
+                if (IsLogError(ex.Message))
+                {
+                    LogService.Error($"{ConfigSettings.EnvironmentName} - Web - Delete Accounts to AFC DB - Exception: "
                     + ex.Message
                     + ex.StackTrace + "\n"
                     + ex?.InnerException.Message + "\n"
@@ -92,7 +88,8 @@
                     + ex?.InnerException.Source
                     + ex?.InnerException.StackTrace);
 
-                InsertErrorLog(null, ex.Message, JsonConvert.SerializeObject(custIds));
+                    InsertErrorLog(null, ex.Message, JsonConvert.SerializeObject(custIds));
+                }              
             }
         }
 
@@ -313,6 +310,16 @@
             }
 
             return false;
+        }
+
+        private static bool IsLogError(string errorMessage)
+        {
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                return !errorMessage.Contains("Not Exist");
+            }
+
+            return true;
         }
 
         #endregion Private methods
