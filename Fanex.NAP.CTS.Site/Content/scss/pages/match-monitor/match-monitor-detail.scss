@@ -202,8 +202,9 @@
                                     top: 26.4rem;
                                     font-weight: 300;
                                     z-index: 9;
-                                    padding-left: 0;
-                                    padding-right: 0;
+                                    padding-left: 1.5rem;
+                                    padding-right: 1.5rem;
+                                    border-right: none;
                                 }
                             }
                         }
@@ -211,8 +212,9 @@
                         tbody {
                             tr {
                                 td {
-                                    padding-left: 0;
-                                    padding-right: 0;
+                                    padding-left: 1.5rem;
+                                    padding-right: 1.5rem;
+                                    border-right: none;
 
                                     .click-view-details, .click-view-name {
                                         cursor: pointer;
@@ -229,6 +231,10 @@
                                         pointer-events: none;
                                     }
                                 }
+                            }
+
+                            tr td:last-child {
+                                border-right: 1px solid #C4C4C4 !important;
                             }
                         }
                     }

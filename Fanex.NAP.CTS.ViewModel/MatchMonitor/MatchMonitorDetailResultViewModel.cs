@@ -77,11 +77,14 @@
                     {
                         return HDP2 - HDP1;
                     }
-                    else
+                    else if (string.Equals(BetTeam, "a", StringComparison.OrdinalIgnoreCase))
                     {
                         return HDP1 - HDP2;
                     }
-
+                    else
+                    {
+                        return HDP1;
+                    }
                 }
 
                 return 0;
