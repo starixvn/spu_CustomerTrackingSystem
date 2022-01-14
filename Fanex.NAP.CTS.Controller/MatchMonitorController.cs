@@ -83,7 +83,10 @@
                 {
                     matchGroup = _matchMonitorService.GetMatchGroup(para.MatchID, para.BetTypeID, para.LiveIndicator, para.BetID, para.Reason)?.ToList() ?? new List<MatchGroupModel>();
 
-                    matchScore = _matchMonitorService.GetMatchScore(para.MatchID, para.BetTypeID, para.LiveIndicator, para.BetID, para.Reason) ?? new List<MatchScoreModel>();
+                    if (para.Sporttype != (int)MatchMonitorSportType.Basketball)
+                    {
+                        matchScore = _matchMonitorService.GetMatchScore(para.MatchID, para.BetTypeID, para.LiveIndicator, para.BetID, para.Reason) ?? new List<MatchScoreModel>();
+                    }
 
                     MappingReasonGroupName(ref matchGroup);
                 }
@@ -106,6 +109,7 @@
             ViewBag.ReasonGroup = para?.ReasonGroup ?? string.Empty;
             ViewBag.MarketName = para?.MarketName ?? string.Empty;
             ViewBag.BetChoice = para?.BetChoice;
+            ViewBag.IsDisableScoreFilter = para?.Sporttype != null && para.Sporttype == (int)MatchMonitorSportType.Basketball;
             ViewBag.IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
                                                                         NapSettings.Settings.SiteId,
                                                                         FSFunctionKeys.MatchMonitor,
@@ -121,7 +125,7 @@
 
             try
             {
-                if (para != null && !string.IsNullOrEmpty(para.ListGroup) && !string.IsNullOrEmpty(para.ListScore))
+                if (para != null && !string.IsNullOrEmpty(para.ListGroup))
                 {
                     var groupKeysFilter = JsonConvert.DeserializeObject<List<MatchGroupKeyModel>>(para.ListGroup);
 
@@ -150,6 +154,7 @@
                                 var tranIdsOfEachMatch =  matchDetailInfo.MatchDetails.Select(c => c.ListTransID).Distinct();
                                 var tranIdsOfTotalMatch = string.Join(",",tranIdsOfEachMatch).Split(',').Distinct();
                                 ticketDetail = _matchMonitorService.GetTicketDetail(para.EventDate, string.Join(",",tranIdsOfTotalMatch));
+                                ticketDetail = FilterBetChoice(ticketDetail, para.BetChoice);
                             })
                         };
 
@@ -158,11 +163,8 @@
                         var mergeInfo = MergeMatchMonitorDetail(mappingTransInfo, custInfo, ticketDetail);
 
                         matchDetailResult = GetRobotStatus(mergeInfo);
-
-                        if (para.Sites != "A")
-                        {
-                            matchDetailResult = matchDetailResult?.Where(x => x.SubscriberType == para.Sites);
-                        }
+                        
+                        matchDetailResult = FilterSite(matchDetailResult, para.Sites);
                     }
                 }
             }
@@ -171,11 +173,7 @@
                 LogService.Error("Match Monitor Error", e);
             }
 
-            return Json(new
-            {
-                homeTableData = matchDetailResult?.Where(c => c.IsHomeSide) ?? new List<MatchMonitorDetailResultViewModel>(),
-                awayTableData = matchDetailResult?.Where(c => !c.IsHomeSide) ?? new List<MatchMonitorDetailResultViewModel>()
-            }, JsonRequestBehavior.AllowGet);
+            return Json(matchDetailResult ?? new List<MatchMonitorDetailResultViewModel>(), JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -259,7 +257,6 @@
 
                 para.ListGroup = string.Join(",", groupKeys.Select(c => c.GroupID)?.Distinct());
 
-                ///TODO
                 var matchDetails = _matchMonitorService.GetMatchMonitorDetail(para);
 
                 if (matchDetails != null && matchDetails.MatchDetails.Any())
@@ -404,7 +401,44 @@
             return matchDetailInfo;
         }
 
-        #endregion
+        private IEnumerable<TicketDetailModel> FilterBetChoice(IEnumerable<TicketDetailModel> ticketDetails, string betChoice)
+        {
+            if (ticketDetails != null && ticketDetails.Any())
+            {
+                var result = Enumerable.Empty<TicketDetailModel>();
 
+                switch (betChoice)
+                {
+                    case nameof(MatchMonitorBetChoiceId.All):
+                        return ticketDetails;
+
+                    case nameof(MatchMonitorBetChoiceId.A):
+                        return ticketDetails.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.A), StringComparison.OrdinalIgnoreCase)) ?? result;
+
+                    case nameof(MatchMonitorBetChoiceId.H):
+                        return ticketDetails.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.H), StringComparison.OrdinalIgnoreCase)) ?? result;
+
+                    case nameof(MatchMonitorBetChoiceId.O):
+                        return ticketDetails.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.O), StringComparison.OrdinalIgnoreCase)) ?? result;
+
+                    case nameof(MatchMonitorBetChoiceId.U):
+                        return ticketDetails.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.U), StringComparison.OrdinalIgnoreCase)) ?? result;
+                }
+            }
+
+            return Enumerable.Empty<TicketDetailModel>();
+        }
+        
+        private IEnumerable<MatchMonitorDetailResultViewModel> FilterSite(IEnumerable<MatchMonitorDetailResultViewModel> matchDetails, string site)
+        {
+            if (matchDetails != null && matchDetails.Any() && site != "A")
+            {
+                return matchDetails.Where(x => x.SubscriberType == site);
+            }
+
+            return matchDetails;
+        }
+
+        #endregion Private Methods
     }
 }

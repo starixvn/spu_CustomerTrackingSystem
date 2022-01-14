@@ -28,17 +28,16 @@
                             <select class="control width-select" id="cbbBetChoice">
                                 @if (ViewBag.BetChoice != null)
                                 {
-                            
                                     foreach (var item in ViewBag.BetChoice)
                                     {
-                                        <option value="@item" selected>@item</option>
+                                        <option value="@item">@item</option>
                                     }
                                 }
                             </select>
                         </div>
                         <div class="group width-180">
                             <label class="text">Score</label>
-                            <select class="control width-select" id="cbbMatchScore" multiple="multiple">
+                            <select class="control width-select" id="cbbMatchScore" disabled=@ViewBag.IsDisableScoreFilter multiple="multiple">
                                 @if (ViewBag.MatchScore != null)
                                 {
                                     foreach (var item in ViewBag.MatchScore)
@@ -87,32 +86,6 @@
                                         <th>AMOUNT</th>
                                         <th>HDP</th>
                                         <th>Betchoice</th>
-                                        <th>Score</th>
-                                        <th>TRANSTIME</th>
-                                        <th>Group</th>
-                                        <th>PIC & Last Verified</th>
-                                        <th>TranID</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div id="second-monitor-datatable">
-                        <div class="table-report" style="width: max-content;">
-                            <table id="second-tblMonitor" class="table table-striped table-monitor-detail">
-                                <thead>
-                                    <tr>
-                                        <th>Site</th>
-                                        <th>Username</th>
-                                        <th>Bot</th>
-                                        <th>Dgr</th>
-                                        <th>ODDS</th>
-                                        <th>BetID</th>
-                                        <th>CUR</th>
-                                        <th>AMOUNT</th>
-                                        <th>HDP</th>
                                         <th>Score</th>
                                         <th>TRANSTIME</th>
                                         <th>Group</th>

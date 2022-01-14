@@ -148,7 +148,22 @@
             Early = 3,
             Closed = 4
         }
-        
+
+        public enum MatchMonitorBetChoiceId
+        {
+            All = 0,
+            H = 1,
+            A = 2,
+            O = 3,
+            U = 4
+        }
+
+        public enum MatchMonitorSportType
+        {
+            Soccer = 1,
+            Basketball = 2
+        }
+
         public enum STATIC_LIST
         {
             PROBLEMCASE = 12

@@ -26,9 +26,6 @@
 
         [SpParam(SqlParamName = "ip_GroupIDList")]
         public string ListGroup { get; set; }        
-        
-        [SpParam(SqlParamName = "ip_BetChoice)")]
-        public string BetChoice { get; set; }
 
         public override string GetSettingKey()
             => "CTS_DC_MatchMonitor_Details_Get";

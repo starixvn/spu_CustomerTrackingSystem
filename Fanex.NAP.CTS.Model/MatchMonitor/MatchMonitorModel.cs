@@ -203,9 +203,9 @@
         {
             get
             {
-                if (this.Sporttype == 1 || this.Sporttype == 2)
+                if (this.Sporttype == (int)MatchMonitorSportType.Soccer || this.Sporttype == (int)MatchMonitorSportType.Basketball)
                 {
-                    return this.Sporttype == 1 ? "Soccer" : "Basketball";
+                    return this.Sporttype == (int)MatchMonitorSportType.Soccer ? nameof(MatchMonitorSportType.Soccer) : nameof(MatchMonitorSportType.Basketball);
                 }
 
                 return string.Empty;

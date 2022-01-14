@@ -91,7 +91,6 @@
                 ListScore = filter.ListScore,
                 MatchID = filter.MatchID,
                 LiveIndicator = filter.LiveIndicator,
-                BetChoice = filter.BetChoice,
                 Reason = filter.Reason,
             };
 
