@@ -28,7 +28,7 @@
 
         public int Reason { get; set; }
 
-        public int Sporttype { get; set; }
+        public int SportType { get; set; }
 
         public int MatchSection { get; set; }
 
@@ -203,9 +203,14 @@
         {
             get
             {
-                if (this.Sporttype == (int)MatchMonitorSportType.Soccer || this.Sporttype == (int)MatchMonitorSportType.Basketball)
+                switch (this.SportType)
                 {
-                    return this.Sporttype == (int)MatchMonitorSportType.Soccer ? nameof(MatchMonitorSportType.Soccer) : nameof(MatchMonitorSportType.Basketball);
+                    case (int)MatchMonitorSportType.Soccer:
+                        return nameof(MatchMonitorSportType.Soccer);
+                    case (int)MatchMonitorSportType.Basketball:
+                        return nameof(MatchMonitorSportType.Basketball); 
+                    case (int)MatchMonitorSportType.ESport:
+                        return "E-Sport";
                 }
 
                 return string.Empty;

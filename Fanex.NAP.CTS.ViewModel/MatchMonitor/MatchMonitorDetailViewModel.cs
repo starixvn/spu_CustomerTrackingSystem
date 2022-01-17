@@ -28,7 +28,7 @@
 
         public int LeagueID { get; set; }
         
-        public int Sporttype { get; set; }
+        public int SportType { get; set; }
 
         public bool LiveIndicator
         {
@@ -186,6 +186,7 @@
                 switch (BetTypeID)
                 {
                     case (int)MatchMonitorBetType.HDP:
+                    case (int)MatchMonitorBetType.Moneyline:
                     case (int)MatchMonitorBetType.FirstHDP:
                         return betchoiceOption1;
 

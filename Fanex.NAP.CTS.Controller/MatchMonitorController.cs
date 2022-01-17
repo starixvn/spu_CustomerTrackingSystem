@@ -83,7 +83,7 @@
                 {
                     matchGroup = _matchMonitorService.GetMatchGroup(para.MatchID, para.BetTypeID, para.LiveIndicator, para.BetID, para.Reason)?.ToList() ?? new List<MatchGroupModel>();
 
-                    if (para.Sporttype != (int)MatchMonitorSportType.Basketball)
+                    if (para.SportType != (int)MatchMonitorSportType.Basketball)
                     {
                         matchScore = _matchMonitorService.GetMatchScore(para.MatchID, para.BetTypeID, para.LiveIndicator, para.BetID, para.Reason) ?? new List<MatchScoreModel>();
                     }
@@ -109,7 +109,7 @@
             ViewBag.ReasonGroup = para?.ReasonGroup ?? string.Empty;
             ViewBag.MarketName = para?.MarketName ?? string.Empty;
             ViewBag.BetChoice = para?.BetChoice;
-            ViewBag.IsDisableScoreFilter = para?.Sporttype != null && para.Sporttype == (int)MatchMonitorSportType.Basketball;
+            ViewBag.IsDisableScoreFilter = para?.SportType != null && para.SportType == (int)MatchMonitorSportType.Basketball;
             ViewBag.IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
                                                                         NapSettings.Settings.SiteId,
                                                                         FSFunctionKeys.MatchMonitor,
@@ -163,7 +163,7 @@
                         var mergeInfo = MergeMatchMonitorDetail(mappingTransInfo, custInfo, ticketDetail);
 
                         matchDetailResult = GetRobotStatus(mergeInfo);
-                        
+
                         matchDetailResult = FilterSite(matchDetailResult, para.Sites);
                     }
                 }

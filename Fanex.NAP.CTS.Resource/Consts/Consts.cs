@@ -161,7 +161,8 @@
         public enum MatchMonitorSportType
         {
             Soccer = 1,
-            Basketball = 2
+            Basketball = 2,
+            ESport = 3,
         }
 
         public enum STATIC_LIST

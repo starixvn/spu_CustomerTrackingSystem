@@ -102,8 +102,8 @@
             columns: [
                 {
                     data: obj => () => {
-                        let paramTemplate = "EventDateToString={0}&MatchID={1}&HomeID={2}&AwayID={3}&BetTypeID={4}&MatchSection={5}&Market={6}&Reason={7}&LeagueID={8}&BetID={9}&Sporttype={10}";
-                        let para = paramTemplate.format(obj.EventDateToString, obj.MatchID, obj.HomeID, obj.AwayID, obj.BettypeID, obj.MatchSection, obj.Market, obj.Reason, obj.LeagueID, obj.BetID, obj.Sporttype);
+                        let paramTemplate = "EventDateToString={0}&MatchID={1}&HomeID={2}&AwayID={3}&BetTypeID={4}&MatchSection={5}&Market={6}&Reason={7}&LeagueID={8}&BetID={9}&SportType={10}";
+                        let para = paramTemplate.format(obj.EventDateToString, obj.MatchID, obj.HomeID, obj.AwayID, obj.BettypeID, obj.MatchSection, obj.Market, obj.Reason, obj.LeagueID, obj.BetID, obj.SportType);
                         return '<a class="click-view-details" href="MatchMonitor/Detail?' + para + '" target="_blank">' + obj.MatchName + '</a>';
                     }
                 },
@@ -181,10 +181,26 @@
         domElements.cbbBetType.find('option').remove();
 
         let sportTypes = domElements.cbbSport.val();
+        let existedBetType = [];
 
         if (sportTypes != null) {
-            if (sportTypes.length == 2) {
-                var options = [{ text: 'HDP', value: RenderBetTypeHTML(1, null) },
+            sportTypes.forEach(c => {
+                if (c == 1) {
+                    var options1 = [{ text: 'HDP', value: RenderBetTypeHTML(1, null) },
+                    { text: 'O/U', value: RenderBetTypeHTML(3, null) },
+                    { text: '1st HDP', value: RenderBetTypeHTML(7, null) },
+                    { text: '1st O/U', value: RenderBetTypeHTML(8, null) }
+                    ];
+
+                    options1.forEach(i => {
+                        if (!existedBetType.includes(i.value)) {
+                            domElements.cbbBetType.append(`<option value="${i.value}">${i.text}</option>`);
+                            existedBetType.push(i.value);
+                        }
+                    })
+                }
+                else if (c == 2) {
+                    var options2 = [{ text: 'HDP', value: RenderBetTypeHTML(1, null) },
                     { text: 'O/U', value: RenderBetTypeHTML(3, null) },
                     { text: '1st HDP', value: RenderBetTypeHTML(7, null) },
                     { text: '1st O/U', value: RenderBetTypeHTML(8, null) },
@@ -197,57 +213,33 @@
                     { text: 'Quarter 2 O/U', value: RenderBetTypeHTML(610, 802) },
                     { text: 'Quarter 3 O/U', value: RenderBetTypeHTML(610, 803) },
                     { text: 'Quarter 4 O/U', value: RenderBetTypeHTML(610, 804) },
-                    { text: 'Quarter 1 Moneyline', value: RenderBetTypeHTML(612, 801)  },
-                    { text: 'Quarter 2 Moneyline', value: RenderBetTypeHTML(612, 802)  },
-                    { text: 'Quarter 3 Moneyline', value: RenderBetTypeHTML(612, 803)  },
-                    { text: 'Quarter 4 Moneyline', value: RenderBetTypeHTML(612, 804)  }
-                ];
+                    { text: 'Quarter 1 Moneyline', value: RenderBetTypeHTML(612, 801) },
+                    { text: 'Quarter 2 Moneyline', value: RenderBetTypeHTML(612, 802) },
+                    { text: 'Quarter 3 Moneyline', value: RenderBetTypeHTML(612, 803) },
+                    { text: 'Quarter 4 Moneyline', value: RenderBetTypeHTML(612, 804) }
+                    ];
 
-                options.forEach(i => {
-                    domElements.cbbBetType.append(`<option value="${i.value}">${i.text}</option>`);
-                })
-            }
-            else {
-                sportTypes.forEach(c => {
-                    if (c == 1) {
-                        var options1 = [{ text: 'HDP', value: RenderBetTypeHTML(1, null) },
-                            { text: 'O/U', value: RenderBetTypeHTML(3, null) },
-                            { text: '1st HDP', value: RenderBetTypeHTML(7, null)  },
-                            { text: '1st O/U', value: RenderBetTypeHTML(8, null) }
-                        ];
-
-                        options1.forEach(i => {
+                    options2.forEach(i => {
+                        if (!existedBetType.includes(i.value)) {
                             domElements.cbbBetType.append(`<option value="${i.value}">${i.text}</option>`);
-                        })
-                    }
+                            existedBetType.push(i.value);
+                        }
+                    })
+                }
+                else if (c == 3) {
+                    var options3 = [{ text: 'HDP', value: RenderBetTypeHTML(1, null) },
+                    { text: 'O/U', value: RenderBetTypeHTML(3, null) },
+                    { text: 'Moneyline', value: RenderBetTypeHTML(20, null) }
+                    ];
 
-                    if (c == 2) {
-                        var options2 = [{ text: 'HDP', value: RenderBetTypeHTML(1, null) },
-                        { text: 'O/U', value: RenderBetTypeHTML(3, null) },
-                        { text: '1st HDP', value: RenderBetTypeHTML(7, null) },
-                        { text: '1st O/U', value: RenderBetTypeHTML(8, null) },
-                        { text: 'Moneyline', value: RenderBetTypeHTML(20, null) },
-                        { text: 'Quarter 1 HDP', value: RenderBetTypeHTML(609, 801) },
-                        { text: 'Quarter 2 HDP', value: RenderBetTypeHTML(609, 802) },
-                        { text: 'Quarter 3 HDP', value: RenderBetTypeHTML(609, 803) },
-                        { text: 'Quarter 4 HDP', value: RenderBetTypeHTML(609, 804) },
-                        { text: 'Quarter 1 O/U', value: RenderBetTypeHTML(610, 801) },
-                        { text: 'Quarter 2 O/U', value: RenderBetTypeHTML(610, 802) },
-                        { text: 'Quarter 3 O/U', value: RenderBetTypeHTML(610, 803) },
-                        { text: 'Quarter 4 O/U', value: RenderBetTypeHTML(610, 804) },
-                        { text: 'Quarter 1 Moneyline', value: RenderBetTypeHTML(612, 801) },
-                        { text: 'Quarter 2 Moneyline', value: RenderBetTypeHTML(612, 802) },
-                        { text: 'Quarter 3 Moneyline', value: RenderBetTypeHTML(612, 803) },
-                        { text: 'Quarter 4 Moneyline', value: RenderBetTypeHTML(612, 804) }
-                        ];
-
-                        options2.forEach(i => {
+                    options3.forEach(i => {
+                        if (!existedBetType.includes(i.value)) {
                             domElements.cbbBetType.append(`<option value="${i.value}">${i.text}</option>`);
-                        })
-                    }
-                })
-            }
-     
+                            existedBetType.push(i.value);
+                        }
+                    })
+                }
+            })
         }
 
         domElements.cbbBetType.multiselect('refresh');
