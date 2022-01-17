@@ -105,6 +105,8 @@
                                 border-bottom: 1px solid #E5E5E5;
                                 width: 100%;
                                 padding-bottom: 1rem;
+                                color: #474747;
+                                cursor: pointer;
 
                                 &:last-child {
                                     border-bottom: none;
@@ -112,10 +114,10 @@
                                     padding-bottom: 0;
                                 }
 
-                                a {
+                           /*     a {
                                     color: #474747;
                                     cursor: pointer;
-                                }
+                                }*/
                             }
                         }
 

@@ -421,14 +421,17 @@
           margin-bottom: .5rem;
           border-bottom: 1px solid #E5E5E5;
           width: 100%;
-          padding-bottom: 1rem; }
+          padding-bottom: 1rem;
+          color: #474747;
+          cursor: pointer;
+          /*     a {
+                                    color: #474747;
+                                    cursor: pointer;
+                                }*/ }
           .match-monitor .monitor-container .monitor-table .group-control .form-filter .group-drop-down .refresh-list li:last-child {
             border-bottom: none;
             margin-bottom: 0;
             padding-bottom: 0; }
-          .match-monitor .monitor-container .monitor-table .group-control .form-filter .group-drop-down .refresh-list li a {
-            color: #474747;
-            cursor: pointer; }
       .match-monitor .monitor-container .monitor-table .group-control .form-filter .group-drop-down .block-box {
         display: block; }
   .match-monitor .monitor-container .monitor-table .group-table {
