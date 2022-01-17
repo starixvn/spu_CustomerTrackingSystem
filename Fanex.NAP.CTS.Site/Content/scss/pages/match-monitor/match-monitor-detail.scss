@@ -20,7 +20,6 @@
                 top: 6rem;
                 z-index: 99;
                 background: $page-bg;
-                padding: 1rem 0 0 0;
 
                 .title-association {
                     margin-bottom: -1.3rem;
@@ -128,12 +127,15 @@
 
             .group-table {
                 display: flex;
-                padding: 1rem 0;
+                padding: 2rem 0;
                 position: sticky;
                 top: 9rem;
                 background: #fff;
                 width: 100%;
-                z-index: 99999;
+            }
+
+            .filter-group {
+                z-index: 11;
             }
 
             #monitor-datatable, #first-monitor-datatable, #second-monitor-datatable {
@@ -141,25 +143,22 @@
                     font-family: $font-family;
 
                     .wrapper-info-table {
-                        height: 4rem;
-                        border: 1px solid #c4c4c4;
                         padding: 0 1rem;
-                        background-color: #e3e9f6;
-                        position: -webkit-sticky;
                         position: sticky;
-                        top: 22.4rem;
+                        position: -webkit-sticky;
+                        top: 22.7rem;
                         z-index: 11;
-
-                        .dataTables_length {
-                            position: absolute;
-                            top: .5rem;
+                        transition: top 0.01s linear;
+                        /*    .dataTables_length {
+                           position: absolute;
+                            top: .5rem;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
                             left: 0;
                         }
 
                         .dataTables_paginate {
                             position: absolute !important;
                             padding-top: 0 !important;
-                            top: 1.6rem !important;
+                            top: .6rem !important;
                             right: 50%;
                             transform: translate(50%,-50%);
                             text-align: center;
@@ -167,7 +166,7 @@
 
                         .dataTables_info {
                             top: 0
-                        }
+                        }*/
                     }
 
                     .table-monitor, .table-monitor-detail {
@@ -199,7 +198,7 @@
                             tr {
                                 th {
                                     position: sticky;
-                                    top: 26.4rem;
+                                    top: 22.4rem;
                                     font-weight: 300;
                                     z-index: 9;
                                     padding-left: 1.5rem;
@@ -264,34 +263,23 @@
                             background-color: #ffeeb8;
                         }
                     }
+
+                    .group {
+                        padding-right: 0;
+                        margin-right: .6rem;
+                    }
+
+                    .fixed-header {
+                        position: sticky;
+                        position: -webkit-sticky;
+                        top: 19rem;
+                        z-index: 9;
+                    }
                 }
             }
 
             #first-monitor-datatable {
                 padding-right: 2rem;
-            }
-
-            .second-group-table-border {
-                border: 1px solid #E5E5E5;
-                border-top-left-radius: 2px;
-                border-top-right-radius: 2px;
-                padding: 10px;
-                margin-top: 10px;
-                z-index: 999999;
-                position: sticky;
-                top: 17rem;
-            }
-
-            .third-group-table-border {
-                border-bottom: 1px solid #E5E5E5;
-                border-left: 1px solid #E5E5E5;
-                border-right: 1px solid #E5E5E5;
-                border-bottom-left-radius: 2px;
-                border-bottom-right-radius: 2px;
-                padding: 10px;
-                box-shadow: 0px 1px #e5e5e5;
-                width: 100%;
-                z-index: 9;
             }
         }
     }
@@ -372,6 +360,17 @@
 .page-content-monitor{
     width : max-content;
 }
-.table-maxcontent{
-    width : auto !important;
+
+.top-header {
+    .width-200 {
+        min-width: 200px;
+    }
+
+    .button-primary-outline {
+        font-size: 1.3rem !important;
+        font-weight: normal;
+        line-height: .230769;
+        padding: 0 1rem;
+        text-transform: none;
+    }
 }

@@ -13,9 +13,9 @@
     <div class="monitor-container">
         <div class="monitor-table">
             <div class="group-control">
-                <div class="group-table">
+                <div class="group-table filter-group">
                     <div class="form-filter">
-                        <div class="group width-180">
+                        <div class="group width-120">
                             <label class="text">Sites</label>
                             <select class="control width-select" id="cbbSites">
                                 <option value="A">All</option>
@@ -67,12 +67,18 @@
                         <span>@ViewBag.ReasonGroup - <span class="market-highlight">@ViewBag.MarketName</span><br /></span>
                     </div>
                 </div>
-                <div class="group-table second-group-table-border">
-                    <button class="button button-verification" id="btnVerify">Verify & Close</button>
-                </div>
-                <div class="group-table third-group-table-border" id="groupTable">
+                <div class="group-table " id="groupTable">
                     <div id="first-monitor-datatable">
                         <div class="table-report" style="width: max-content;">
+                            
+                            <div class="fixed-header">
+                                <div class="top-header">
+                                    <div class="">
+                                        <button class="button button-primary-outline" id="btnVerify">Verify & Close</button>
+                                    </div>
+                                </div>
+                            </div>
+
                             <table id="first-tblMonitor" class="table table-striped table-monitor-detail">
                                 <thead>
                                     <tr>
