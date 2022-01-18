@@ -168,37 +168,25 @@
             },
             beforeSend: function () {
                 domElements.firsttblMonitor.addClass('loading-value');
-                domElements.secondtblMonitor.addClass('loading-value');
             },
             success: function () {
                 close();
             },
             complete: function () {
                 domElements.firsttblMonitor.removeClass("loading-value");
-                domElements.secondtblMonitor.removeClass("loading-value");
             },
             error: function (errMsg) {
                 console.log(errMsg);
                 domElements.firsttblMonitor.removeClass("loading-value");
-                domElements.secondtblMonitor.removeClass("loading-value");
             }
         });
     }
 
     function GetTranIds() {
         var firstTableInfo = domElements.firsttblMonitor.DataTable().data().toArray();
-        var secondTableInfo = domElements.secondtblMonitor.DataTable().data().toArray();
         var tranIds = new Array();
 
         firstTableInfo.forEach(element =>
-        {
-            if (element.PICVerified == "-")
-            {
-                tranIds.push(element.TransId);
-            }
-        });
-
-        secondTableInfo.forEach(element =>
         {
             if (element.PICVerified == "-")
             {
