@@ -10,7 +10,7 @@
 
         public int BetTypeID { get; set; }
 
-        public int? BetID { get; set; }
+        public int BetID { get; set; }
 
         public string Sites { get; set; }
 

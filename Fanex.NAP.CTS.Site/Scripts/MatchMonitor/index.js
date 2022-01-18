@@ -186,10 +186,10 @@
         if (sportTypes != null) {
             sportTypes.forEach(c => {
                 if (c == 1) {
-                    var options1 = [{ text: 'HDP', value: RenderBetTypeHTML(1, null) },
-                    { text: 'O/U', value: RenderBetTypeHTML(3, null) },
-                    { text: '1st HDP', value: RenderBetTypeHTML(7, null) },
-                    { text: '1st O/U', value: RenderBetTypeHTML(8, null) }
+                    var options1 = [{ text: 'HDP', value: RenderBetTypeHTML(1, 0) },
+                    { text: 'O/U', value: RenderBetTypeHTML(3, 0) },
+                    { text: '1st HDP', value: RenderBetTypeHTML(7, 0) },
+                    { text: '1st O/U', value: RenderBetTypeHTML(8, 0) }
                     ];
 
                     options1.forEach(i => {
@@ -200,11 +200,11 @@
                     })
                 }
                 else if (c == 2) {
-                    var options2 = [{ text: 'HDP', value: RenderBetTypeHTML(1, null) },
-                    { text: 'O/U', value: RenderBetTypeHTML(3, null) },
-                    { text: '1st HDP', value: RenderBetTypeHTML(7, null) },
-                    { text: '1st O/U', value: RenderBetTypeHTML(8, null) },
-                    { text: 'Moneyline', value: RenderBetTypeHTML(20, null) },
+                    var options2 = [{ text: 'HDP', value: RenderBetTypeHTML(1, 0) },
+                    { text: 'O/U', value: RenderBetTypeHTML(3, 0) },
+                    { text: '1st HDP', value: RenderBetTypeHTML(7, 0) },
+                    { text: '1st O/U', value: RenderBetTypeHTML(8, 0) },
+                    { text: 'Moneyline', value: RenderBetTypeHTML(20, 0) },
                     { text: 'Quarter 1 HDP', value: RenderBetTypeHTML(609, 801) },
                     { text: 'Quarter 2 HDP', value: RenderBetTypeHTML(609, 802) },
                     { text: 'Quarter 3 HDP', value: RenderBetTypeHTML(609, 803) },
@@ -227,9 +227,9 @@
                     })
                 }
                 else if (c == 3) {
-                    var options3 = [{ text: 'HDP', value: RenderBetTypeHTML(1, null) },
-                    { text: 'O/U', value: RenderBetTypeHTML(3, null) },
-                    { text: 'Moneyline', value: RenderBetTypeHTML(20, null) }
+                    var options3 = [{ text: 'HDP', value: RenderBetTypeHTML(1, 0) },
+                    { text: 'O/U', value: RenderBetTypeHTML(3, 0) },
+                    { text: 'Moneyline', value: RenderBetTypeHTML(20, 0) }
                     ];
 
                     options3.forEach(i => {
