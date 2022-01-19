@@ -53,7 +53,7 @@
             return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
         }
 
-        public IEnumerable<MatchGroupModel> GetMatchGroup(Int64 matchID, int betTypeID, bool liveIndicator, int? betId, int reason)
+        public IEnumerable<MatchGroupModel> GetMatchGroup(Int64 matchID, int betTypeID, bool liveIndicator, Int64 betId, int reason)
         {
             var criteria = new MatchGroupGetCriteria()
             {
@@ -67,7 +67,7 @@
             return repository.Fetch<MatchGroupModel>(criteria);
         }
 
-        public IEnumerable<MatchScoreModel> GetMatchScore(Int64 matchID, int betTypeID, bool liveIndicator, int? betId, int reason)
+        public IEnumerable<MatchScoreModel> GetMatchScore(Int64 matchID, int betTypeID, bool liveIndicator, Int64 betId, int reason)
         {
             var criteria = new MatchScoreGetCriteria()
             {

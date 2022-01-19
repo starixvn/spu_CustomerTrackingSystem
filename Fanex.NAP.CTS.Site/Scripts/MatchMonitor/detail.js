@@ -198,10 +198,10 @@
     }
 
     function resizeDataTable() {
-        var widthTables = domElements.firsttblMonitor[0].offsetWidth + 15;
+        var widthTables = domElements.firsttblMonitor[0].offsetWidth + 37;
 
         //if (domElements.groupTable[0].offsetWidth - widthTables > 0 && widthTables < $(window).width()) {
-        if (domElements.groupTable[0].offsetWidth - widthTables > 0 && widthTables < $(window).width()) {
+        if (widthTables < $(window).width()) {
             domElements.detailpage.removeClass('page-content-monitor');
         }
         else{

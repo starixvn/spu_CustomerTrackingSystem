@@ -16,7 +16,7 @@
                 <div class="group-table filter-group">
                     <div class="form-filter">
                         <div class="group width-120">
-                            <label class="text">Sites</label>
+                            <label class="text">Site</label>
                             <select class="control width-select" id="cbbSites">
                                 <option value="A">All</option>
                                 <option value="C">Credit</option>
@@ -35,9 +35,9 @@
                                 }
                             </select>
                         </div>
-                        <div class="group width-180">
+                        <div class="group width-180" @(ViewBag.IsDisableScoreFilter ? "hidden" : "")   >
                             <label class="text">Score</label>
-                            <select class="control width-select" id="cbbMatchScore" disabled=@ViewBag.IsDisableScoreFilter multiple="multiple">
+                            <select class="control width-select" id="cbbMatchScore" multiple="multiple">
                                 @if (ViewBag.MatchScore != null)
                                 {
                                     foreach (var item in ViewBag.MatchScore)
@@ -64,7 +64,7 @@
                     <div class="detail-area">
                         <span>@ViewBag.MatchName <br /></span>
                         <span class="league-highlight">@ViewBag.LeagueName<br /></span>
-                        <span>@ViewBag.ReasonGroup - <span class="market-highlight">@ViewBag.MarketName</span><br /></span>
+                        <span>@ViewBag.SportName - @ViewBag.ReasonGroup - <span class="market-highlight">@ViewBag.MarketName</span><br /></span>
                     </div>
                 </div>
                 <div class="group-table " id="groupTable">
@@ -91,7 +91,7 @@
                                         <th>CUR</th>
                                         <th>AMOUNT</th>
                                         <th>HDP</th>
-                                        <th>Betchoice</th>
+                                        <th>Bet choice</th>
                                         <th>Score</th>
                                         <th>TRANSTIME</th>
                                         <th>Group</th>

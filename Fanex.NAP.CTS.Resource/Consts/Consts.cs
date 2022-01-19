@@ -162,7 +162,7 @@
         {
             Soccer = 1,
             Basketball = 2,
-            ESport = 3,
+            ESport = 43,
         }
 
         public enum STATIC_LIST

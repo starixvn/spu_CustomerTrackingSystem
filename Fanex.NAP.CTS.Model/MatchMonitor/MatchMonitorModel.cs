@@ -56,7 +56,7 @@
         {
             get
             {
-                return this.Market == 1 ? "Live" : "Non Live";
+                return this.Market == 1 ? "Live" : "Non-Live";
             }
         }
 

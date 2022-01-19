@@ -13,7 +13,7 @@
         public int BettypeID { get; set; }    
 
         [SpParam(SqlParamName = "ip_BetID")]
-        public int? BetID { get; set; }
+        public Int64 BetID { get; set; }
 
         [SpParam(SqlParamName = "ip_LiveIndicator")]
         public bool LiveIndicator { get; set; }       

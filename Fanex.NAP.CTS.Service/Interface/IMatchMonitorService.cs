@@ -10,9 +10,9 @@
     {
         IEnumerable<MatchMonitorModel> GetMatchMonitor(MatchMonitorFilterViewModel filter);
 
-        IEnumerable<MatchGroupModel> GetMatchGroup(Int64 matchID, int betTypeID, bool liveIndicator, int? betId, int reason);
+        IEnumerable<MatchGroupModel> GetMatchGroup(Int64 matchID, int betTypeID, bool liveIndicator, Int64 betId, int reason);
 
-        IEnumerable<MatchScoreModel> GetMatchScore(Int64 matchID, int betTypeID, bool liveIndicator, int? betId, int reason);
+        IEnumerable<MatchScoreModel> GetMatchScore(Int64 matchID, int betTypeID, bool liveIndicator, Int64 betId, int reason);
 
         DBResult VerifyTransMatchMonitorDetail(MatchMonitorDetailVerifyTransParaModel para);
 

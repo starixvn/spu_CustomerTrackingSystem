@@ -18,7 +18,7 @@
 
         public int BetTypeID { get; set; }
 
-        public int BetID { get; set; }
+        public Int64 BetID { get; set; }
 
         public int MatchSection { get; set; }
 
@@ -236,6 +236,26 @@
                 }
 
                 return new List<MatchMonitorBetChoiceId>();
+            }
+        }
+
+        public string SportName
+        {
+            get
+            {
+                switch (SportType)
+                {
+                    case (int)MatchMonitorSportType.Basketball:
+                        return nameof(MatchMonitorSportType.Basketball);
+
+                    case (int)MatchMonitorSportType.Soccer:
+                        return nameof(MatchMonitorSportType.Soccer);
+
+                    case (int)MatchMonitorSportType.ESport:
+                        return "E-Sport";
+                }
+
+                return string.Empty;
             }
         }
     }

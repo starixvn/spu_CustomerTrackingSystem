@@ -113,8 +113,7 @@
                                     margin-bottom: 0;
                                     padding-bottom: 0;
                                 }
-
-                           /*     a {
+                                /*     a {
                                     color: #474747;
                                     cursor: pointer;
                                 }*/
@@ -213,8 +212,9 @@
                                     top: 20rem;
                                     font-weight: 300;
                                     z-index: 9;
-                                    padding-left: 0;
-                                    padding-right: 0;
+                                    padding-left: 0.5rem;
+                                    padding-right: 0.5rem;
+                                    border-right: none;
 
                                     @media screen and (max-width: 1626px) {
                                         top: 24.3rem;
@@ -230,8 +230,8 @@
                         tbody {
                             tr {
                                 td {
-                                    padding-left: 0;
-                                    padding-right: 0;
+                                    border-right: none;
+                                    border-bottom: none;
 
                                     .click-view-details, .click-view-name {
                                         cursor: pointer;
@@ -248,6 +248,14 @@
                                         pointer-events: none;
                                     }
                                 }
+                            }
+
+                            tr td:last-child {
+                                border-right: 1px solid #C4C4C4 !important;
+                            }
+
+                            tr:last-child td {
+                                border-bottom: 1px solid #C4C4C4 !important;
                             }
                         }
                     }

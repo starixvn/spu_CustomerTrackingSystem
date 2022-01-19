@@ -90,9 +90,9 @@
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
                 { targets: [0, 1, 2, 3, 4, 5, 6], className: "text-center" },
-                { targets: [0], width: "32%" },
+                { targets: [0], width: "30%" },
                 { targets: [1], width: "9%" },
-                { targets: [2], width: "9%" },
+                { targets: [2], width: "7%" },
                 { targets: [3], width: "7%" },
                 { targets: [4], width: "28%" },
                 { targets: [5], width: "15%" },                
@@ -124,7 +124,7 @@
                 api.column(7, { page: 'current' }).data().each(function (group, i) {
                     if (last !== group) {
                         $(rows).eq(i).before(
-                            '<tr class="group group group-site"><td colspan="8">' + data[i].MatchSectionName + '</td></tr>'
+                            '<tr class="group group group-site"><td colspan="8"> ' + data[i].MatchSectionName + '</td></tr>'
                         );
 
                         last = group;
@@ -226,7 +226,7 @@
                         }
                     })
                 }
-                else if (c == 3) {
+                else if (c == 43) {
                     var options3 = [{ text: 'HDP', value: RenderBetTypeHTML(1, 0) },
                     { text: 'O/U', value: RenderBetTypeHTML(3, 0) },
                     { text: 'Moneyline', value: RenderBetTypeHTML(20, 0) }
