@@ -140,6 +140,7 @@
             #monitor-datatable, #first-monitor-datatable, #second-monitor-datatable {
                 .table-report {
                     font-family: $font-family;
+                    border-right: 1px solid #C4C4C4 !important;
 
                     .wrapper-info-table {
                         height: 4rem;
@@ -151,14 +152,21 @@
                         top: 16.2rem;
                         z-index: 11;
 
-                        @media screen and (max-width: 1626px) {
+                        @media screen and (max-width: 1770px) {
                             top: 20.4rem;
                         }
 
-                        @media screen and (max-width: 1360px) {
+                        @media screen and (max-width: 1508px) {
                             top: 22.3rem;
                         }
 
+                        @media screen and (max-width: 959px) {
+                            top: 26.4rem;
+                        }
+
+                        @media screen and (max-width: 860px) {
+                            top: 28.4rem;
+                        }
 
                         .dataTables_length {
                             position: absolute;
@@ -216,12 +224,20 @@
                                     padding-right: 0.5rem;
                                     border-right: none;
 
-                                    @media screen and (max-width: 1626px) {
+                                    @media screen and (max-width: 1770px) {
                                         top: 24.3rem;
                                     }
 
-                                    @media screen and (max-width: 1360px) {
+                                    @media screen and (max-width: 1509px) {
                                         top: 26.3rem;
+                                    }
+
+                                    @media screen and (max-width: 959px) {
+                                        top: 30rem;
+                                    }
+
+                                    @media screen and (max-width: 860px) {
+                                        top: 32rem;
                                     }
                                 }
                             }
@@ -251,7 +267,7 @@
                             }
 
                             tr td:last-child {
-                                border-right: 1px solid #C4C4C4 !important;
+                                //border-right: 1px solid #C4C4C4 !important;
                             }
 
                             tr:last-child td {
