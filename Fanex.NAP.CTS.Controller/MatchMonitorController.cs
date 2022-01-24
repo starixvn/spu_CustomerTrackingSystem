@@ -54,7 +54,8 @@
 
             try
             {
-                if (para != null && !string.IsNullOrEmpty(para.BetTypes) && !string.IsNullOrEmpty(para.MatchSection) && !string.IsNullOrEmpty(para.Sports))
+                if (para != null && !string.IsNullOrEmpty(para.BetTypes) && !string.IsNullOrEmpty(para.MatchSection) && 
+                    !string.IsNullOrEmpty(para.Sports) && IsValidDateRange(para.FromDate, para.ToDate))
                 {
                     matchMonitors = _matchMonitorService.GetMatchMonitor(para)?.OrderBy(c => c.MatchSection).ToList();
                 }
@@ -205,6 +206,17 @@
         }
 
         #region Private Methods
+
+        private bool IsValidDateRange(DateTime? fromDate, DateTime? toDate)
+        {
+            if (toDate != null && fromDate != null)
+            {
+                TimeSpan t = (toDate?.Date - fromDate?.Date) ?? TimeSpan.MaxValue;
+                return t.TotalDays <= 6;
+            }
+
+            return false;
+        }
 
         private IEnumerable<MatchMonitorDetailResultViewModel> MergeMatchMonitorDetail(IEnumerable<TransGroupModel> mappingTransInfo, IEnumerable<CustInfoModel> custInfo, IEnumerable<TicketDetailModel> ticketDetail)
         {
