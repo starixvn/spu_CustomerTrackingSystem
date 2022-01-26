@@ -6,6 +6,7 @@
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Utilities;
+    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Resource.Consts;    
     using Fanex.NAP.CTS.Service;
@@ -47,6 +48,7 @@
         }
         
         [HttpGet]
+        [LogActionFilterAttribute(systemId = SystemId.CTSWeb, functionId = MonitorCtsFunctionId.SpecialCustomerClassRpt)]
         public ActionResult GetCustomerClass(string username)
         {
             var viewModel = Enumerable.Empty<CustomerClassViewModel>();
@@ -74,6 +76,7 @@
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.SpecialCustomerClass, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [LogActionFilterAttribute(systemId = SystemId.CTSWeb, functionId = MonitorCtsFunctionId.SpecialCustomerClassAdd)]
         public ActionResult AddCustomerClass(string username, int custClass, bool isAffectToAss)
         {
             var resultInsert = new ResultInsertRemoveViewModel

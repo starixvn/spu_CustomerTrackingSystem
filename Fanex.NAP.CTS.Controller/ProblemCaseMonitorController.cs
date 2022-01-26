@@ -8,6 +8,7 @@
     using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Core.Utilities;
+    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.ProblemCaseMonitor;
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
@@ -55,6 +56,7 @@
         }
 
         [HttpPost]
+        [LogActionFilterAttribute(systemId = SystemId.CTSWeb, functionId = MonitorCtsFunctionId.ProblemCaseMonitor)]
         public ActionResult GetProblemCasesMonitor(ProblemCasesMonitorFilterModel filter)
         {
             var result = new List<ProblemCasesMonitorModel>();

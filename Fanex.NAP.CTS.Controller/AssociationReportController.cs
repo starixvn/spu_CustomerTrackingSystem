@@ -16,6 +16,8 @@
     using System.Collections.Generic;
     using System;
     using Fanex.NAP.CTS.Core.Helpers;
+    using Fanex.NAP.CTS.Model;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.AssociationReport, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -47,6 +49,7 @@
         }
 
         [HttpPost]
+        [LogActionFilterAttribute(systemId = SystemId.CTSWeb, functionId = MonitorCtsFunctionId.AssociationReport)]
         public ActionResult GetAssociations(AssociationFilterViewModel filter)
         {
             var associations = Enumerable.Empty<AssociationViewModel>();
@@ -119,6 +122,7 @@
         }
 
         [HttpPost]
+        [LogActionFilterAttribute(systemId = SystemId.CTSWeb, functionId = MonitorCtsFunctionId.AssociationReport)]
         public ActionResult GetAssociationDetail(AssociationDetailFilterViewModel filter)
         {
             var associationList = Enumerable.Empty<AssociationDetailViewModel>();

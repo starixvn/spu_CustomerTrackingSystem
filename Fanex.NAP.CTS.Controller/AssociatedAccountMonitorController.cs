@@ -14,6 +14,8 @@ namespace Fanex.NAP.CTS.Controller
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.ViewModel.AssociatedAccountMonitor;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
+    using Fanex.NAP.CTS.Model;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.AssociatedAccountMonitor, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -28,6 +30,7 @@ namespace Fanex.NAP.CTS.Controller
             _associatedAccountService = new AssociatedAccountService();
         }
 
+        [LogActionFilterAttribute(systemId = SystemId.CTSWeb, functionId = MonitorCtsFunctionId.AssociatedAccountMonitorRpt)]
         public ActionResult Index()
         {
             IUserService userService = new UserService();
@@ -42,6 +45,7 @@ namespace Fanex.NAP.CTS.Controller
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AssociatedAccountMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [LogActionFilterAttribute(systemId = SystemId.CTSWeb, functionId = MonitorCtsFunctionId.AssociatedAccountMonitorAdd)]
         public ActionResult InsertManualAssociatedAccount(string custIDList, string toUserNameList, string remark)
         {
             var resultInsert = new InsertManualAssociatedAccountViewModel { ErrorCode = -1 };

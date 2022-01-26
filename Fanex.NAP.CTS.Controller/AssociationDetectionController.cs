@@ -3,6 +3,7 @@ using Fanex.Logging.Extensions;
 using Fanex.Logging.Extensions.Database;
 using Fanex.NAP.Core.Web.Attribute;
 using Fanex.NAP.CTS.Core.Helpers;
+using Fanex.NAP.CTS.Model;
 using Fanex.NAP.CTS.Model.AssociationDetection;
 using Fanex.NAP.CTS.Model.Common;
 using Fanex.NAP.CTS.Model.CustomerClassify;
@@ -15,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
 namespace Fanex.NAP.CTS.Controller
 {
@@ -47,6 +49,7 @@ namespace Fanex.NAP.CTS.Controller
         }
 
         [HttpPost]
+        [LogActionFilterAttribute(systemId = SystemId.CTSWeb, functionId = MonitorCtsFunctionId.AssociationDetection)]
         public ActionResult GetAssociationDetection(string userNames)
         {
             var result = new GetAssociationDetectionViewModel();

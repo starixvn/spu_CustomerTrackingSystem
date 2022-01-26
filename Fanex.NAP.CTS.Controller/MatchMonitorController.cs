@@ -21,7 +21,6 @@
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.MatchMonitor, Policy = NAP.Core.Business.Constant.Policy.Read)]
-    [LogActionFilterAttribute(systemId = SystemId.CTSWeb, functionId = MonitorCtsFunctionId.MatchMonitor)]
     public class MatchMonitorController : BaseController
     {
         private readonly IMatchMonitorService _matchMonitorService;
@@ -50,6 +49,7 @@
         }
 
         [HttpPost]
+        [LogActionFilterAttribute(systemId = SystemId.CTSWeb, functionId = MonitorCtsFunctionId.MatchMonitor)]
         public ActionResult GetMatchMonitor(MatchMonitorFilterViewModel para)
         {
             var matchMonitors = new List<MatchMonitorModel>();
@@ -123,6 +123,7 @@
         }
 
         [HttpPost]
+        [LogActionFilterAttribute(systemId = SystemId.CTSWeb, functionId = MonitorCtsFunctionId.MatchMonitor)]
         public ActionResult GetMatchMonitorDetail(MatchMonitorDetailFilterViewModel para)
         {
             var matchDetailResult = Enumerable.Empty<MatchMonitorDetailResultViewModel>();

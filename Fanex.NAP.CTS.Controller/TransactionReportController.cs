@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
     using Fanex.NAP.Core.Web.Attribute;
+    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
@@ -11,6 +12,7 @@
     using System.Text;
     using System.Threading.Tasks;
     using System.Web.Mvc;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.TransactionReport, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -35,6 +37,7 @@
         }
 
         [HttpPost]
+        [LogActionFilterAttribute(systemId = SystemId.CTSWeb, functionId = MonitorCtsFunctionId.TransactionReport)]
         public ActionResult GetTransactions(TransactionFilterViewModel filter)
         {
             int totalItem = 0;
