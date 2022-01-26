@@ -65,7 +65,7 @@
         public const string AssociationTypeName_IPAssociation = "IP Association";
 
         public const int MatchMonitor_ReportQueryType = 2;
-        
+
         public const int ProblemCase_ItemID_Robot = 1;
         public const int ProblemCase_ItemID_SuspiciousAssociation = 4;
         public const int ProblemCase_ItemID_ProPunter = 9;
@@ -236,6 +236,32 @@
             CTSServices = 3,
             AFCSerivce = 4,
             ManualTrigger = 5
+        };
+        
+        public enum MonitorCtsFunctionId
+        {
+            AssociatedAccountMonitorRpt = 1,
+            AssociatedAccountMonitorAdd = 2,
+            EvidenceManagementImport = 3,
+            EvidenceManagementRemove = 4,
+            ProbationManagement = 5,
+            ManageSubscriber = 6,
+            SpecialCustomerClassRpt = 7,
+            SpecialCustomerClassAdd = 8,
+            AssociationDetection = 9,
+            AssociationReport = 10,
+            LatestTransaction = 11,
+            ProblemCaseMonitor = 12,
+            TransactionReport = 13,
+            MatchMonitor = 14
+        };
+
+        public enum SystemId
+        {
+            CTSWeb = 1,
+            CTSAPI = 2,
+            FS = 3,
+            TGRS = 4
         };
     }
 }
