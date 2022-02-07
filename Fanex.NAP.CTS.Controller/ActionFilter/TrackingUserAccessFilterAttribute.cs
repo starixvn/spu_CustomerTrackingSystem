@@ -5,7 +5,6 @@
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
     using System;
-    using System.Threading.Tasks;
     using System.Web.Mvc;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
@@ -32,17 +31,14 @@
 
         private void InsertStatsAccessment()
         {
-            Task.Run(() =>
+            try
             {
-                try
-                {
-                    _monitorService.StatsAccessmentInsert(systemId, functionId, currentSession.UserId);
-                }
-                catch (Exception ex)
-                {
-                    LogService.Info($"Tracking CTS's user access - Insert Stats Accessment fail - {ex.Message}");
-                }
-            });
+                _monitorService.StatsAccessmentInsert(systemId, functionId, currentSession.UserId);
+            }
+            catch (Exception ex)
+            {
+                LogService.Info($"Tracking CTS's user access - Insert Stats Accessment fail - {ex.Message}");
+            }
         }
     }
 }

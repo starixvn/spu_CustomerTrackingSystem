@@ -240,20 +240,28 @@
         
         public enum MonitorCtsFunctionId
         {
-            AssociatedAccountMonitorRpt = 1,
-            AssociatedAccountMonitorAdd = 2,
-            EvidenceManagementImport = 3,
-            EvidenceManagementRemove = 4,
-            ProbationManagement = 5,
-            ManageSubscriber = 6,
+            ProblemAccountMonitor = 1,
+            EvidenceManagementImport = 2,
+            EvidenceManagementRemove = 3,
+            AssociatedAccountMonitorRpt = 4,
+            AssociatedAccountMonitorAdd = 5,
+            AssociatedAccountMonitorRemove = 6,
             SpecialCustomerClassRpt = 7,
             SpecialCustomerClassAdd = 8,
-            AssociationDetection = 9,
-            AssociationReport = 10,
-            LatestTransaction = 11,
-            ProblemCaseMonitor = 12,
-            TransactionReport = 13,
-            MatchMonitor = 14
+            SpecialCustomerClassRemove = 9,
+            ProbationManagement = 10,
+            AssociationDetection = 11,
+            AssociationReport = 12,
+            AssociationDetailRpt = 13,
+            LatestTransaction = 14,
+            ProblemCaseMonitorRpt = 15,
+            ProblemCaseMonitorExport = 16,
+            TransactionRpt = 17,
+            MatchMonitorRpt = 18,
+            MatchMonitorDetailRpt = 19,
+            ManageSubscriberRpt = 20,
+            ManageSubscriberAdd = 21,
+            ManageSubscriberRemove = 22,
         };
 
         public enum SystemId

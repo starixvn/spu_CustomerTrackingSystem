@@ -5,6 +5,7 @@
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Web.Attribute;
+    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.ManageSubscriber;
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
@@ -16,6 +17,7 @@
     using System.Threading;
     using System.Threading.Tasks;
     using System.Web.Mvc;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.ManageSubscriber, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -48,6 +50,7 @@
         }
 
         [HttpPost]
+        [TrackingUserAccessFilterAttribute(systemId = SystemId.CTSWeb, functionId = MonitorCtsFunctionId.ManageSubscriberRpt)]
         public ActionResult GetSubscribers()
         {
             var subscribers = _manageSubscriberService.GetSubscribers().OrderByDescending(c => c.IsActive).ThenByDescending(c => c.CreatedDate).ThenByDescending(c=>c.TerminatedDate);
@@ -67,6 +70,7 @@
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.ManageSubscriber, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingUserAccessFilterAttribute(systemId = SystemId.CTSWeb, functionId = MonitorCtsFunctionId.ManageSubscriberAdd)]
         public ActionResult UpdateSubscriber(SubscriberUpdateModel subscriberInsertModel)
         {
             if (string.IsNullOrEmpty(subscriberInsertModel.IBCUserNamePrefix))
@@ -101,6 +105,7 @@
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.ManageSubscriber, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingUserAccessFilterAttribute(systemId = SystemId.CTSWeb, functionId = MonitorCtsFunctionId.ManageSubscriberRemove)]
         public ActionResult RemoveSubscriber(int subscriberID)
         {
             var result = _manageSubscriberService.RemoveSubscriber(subscriberID, CurrentSession.UserId);

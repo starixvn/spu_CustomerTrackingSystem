@@ -30,7 +30,6 @@ namespace Fanex.NAP.CTS.Controller
             _associatedAccountService = new AssociatedAccountService();
         }
 
-        [TrackingUserAccessFilterAttribute(systemId = SystemId.CTSWeb, functionId = MonitorCtsFunctionId.AssociatedAccountMonitorRpt)]
         public ActionResult Index()
         {
             IUserService userService = new UserService();
@@ -84,6 +83,7 @@ namespace Fanex.NAP.CTS.Controller
         }
 
         [HttpPost]
+        [TrackingUserAccessFilterAttribute(systemId = SystemId.CTSWeb, functionId = MonitorCtsFunctionId.AssociatedAccountMonitorRpt)]
         public ActionResult GetAssociatedAccountMonitor()
         {
             var result = new List<AssociatedAccountMonitorViewModel>();
@@ -107,6 +107,7 @@ namespace Fanex.NAP.CTS.Controller
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.AssociatedAccountMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingUserAccessFilterAttribute(systemId = SystemId.CTSWeb, functionId = MonitorCtsFunctionId.AssociatedAccountMonitorRemove)]
         public ActionResult RemoveAssociatedaccount(long ctsCustId)
         {
             if (ctsCustId <= 0)

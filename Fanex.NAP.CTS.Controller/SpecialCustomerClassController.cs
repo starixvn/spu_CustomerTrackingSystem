@@ -121,6 +121,7 @@
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.SpecialCustomerClass, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingUserAccessFilterAttribute(systemId = SystemId.CTSWeb, functionId = MonitorCtsFunctionId.SpecialCustomerClassRemove)]
         public ActionResult RemoveCustomerClass(int custID, long ctsCustID)
         {
             var resultRemoveToCTS = _customerClassService.RemoveCustomerClass(ctsCustID, CurrentSession.UserId);
