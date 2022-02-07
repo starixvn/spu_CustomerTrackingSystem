@@ -37,7 +37,7 @@
         }
 
         [HttpPost]
-        [LogActionFilterAttribute(systemId = SystemId.CTSWeb, functionId = MonitorCtsFunctionId.TransactionReport)]
+        [TrackingUserAccessFilterAttribute(systemId = SystemId.CTSWeb, functionId = MonitorCtsFunctionId.TransactionReport)]
         public ActionResult GetTransactions(TransactionFilterViewModel filter)
         {
             int totalItem = 0;

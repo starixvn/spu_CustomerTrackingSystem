@@ -56,7 +56,7 @@
         }
 
         [HttpPost]
-        [LogActionFilterAttribute(systemId = SystemId.CTSWeb, functionId = MonitorCtsFunctionId.ProblemCaseMonitor)]
+        [TrackingUserAccessFilterAttribute(systemId = SystemId.CTSWeb, functionId = MonitorCtsFunctionId.ProblemCaseMonitor)]
         public ActionResult GetProblemCasesMonitor(ProblemCasesMonitorFilterModel filter)
         {
             var result = new List<ProblemCasesMonitorModel>();

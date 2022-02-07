@@ -44,7 +44,7 @@
         }
 
         [HttpPost]
-        [LogActionFilterAttribute(systemId = SystemId.CTSWeb, functionId = MonitorCtsFunctionId.LatestTransaction)]
+        [TrackingUserAccessFilterAttribute(systemId = SystemId.CTSWeb, functionId = MonitorCtsFunctionId.LatestTransaction)]
         public ActionResult GetLatestTransaction(int subscriberId, int length)
         {
             var result = Enumerable.Empty<LatestTransactionViewModel>();

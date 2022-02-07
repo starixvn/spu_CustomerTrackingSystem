@@ -49,7 +49,7 @@
         }
 
         [HttpPost]
-        [LogActionFilterAttribute(systemId = SystemId.CTSWeb, functionId = MonitorCtsFunctionId.AssociationReport)]
+        [TrackingUserAccessFilterAttribute(systemId = SystemId.CTSWeb, functionId = MonitorCtsFunctionId.AssociationReport)]
         public ActionResult GetAssociations(AssociationFilterViewModel filter)
         {
             var associations = Enumerable.Empty<AssociationViewModel>();
@@ -122,7 +122,7 @@
         }
 
         [HttpPost]
-        [LogActionFilterAttribute(systemId = SystemId.CTSWeb, functionId = MonitorCtsFunctionId.AssociationReport)]
+        [TrackingUserAccessFilterAttribute(systemId = SystemId.CTSWeb, functionId = MonitorCtsFunctionId.AssociationReport)]
         public ActionResult GetAssociationDetail(AssociationDetailFilterViewModel filter)
         {
             var associationList = Enumerable.Empty<AssociationDetailViewModel>();
