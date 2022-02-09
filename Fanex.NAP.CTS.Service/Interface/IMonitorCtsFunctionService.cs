@@ -5,6 +5,6 @@
 
     public interface IMonitorCtsFunctionService
     {
-        DBResult StatsAccessmentInsert(SystemId systemId, MonitorCtsFunctionId funcId, int userId);
+        DBResult StatsAccessmentInsert(SystemId systemId, TrackingCtsFunctionId funcId, int userId);
     }
 }

@@ -15,7 +15,7 @@
             repository = new DynamicRepository();
         }
 
-        public DBResult StatsAccessmentInsert(SystemId systemId, MonitorCtsFunctionId funcId, int userId)
+        public DBResult StatsAccessmentInsert(SystemId systemId, TrackingCtsFunctionId funcId, int userId)
         {
             var criteria = new StatsAccessmentInsertCriteria()
             {

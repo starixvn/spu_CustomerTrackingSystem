@@ -8,9 +8,9 @@
     using System.Web.Mvc;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
-    public class TrackingUserAccessFilterAttribute : ActionFilterAttribute
+    public class TrackingFunctionUsageFilterAttribute : ActionFilterAttribute
     {
-        public MonitorCtsFunctionId functionId { get; set; }
+        public TrackingCtsFunctionId functionId { get; set; }
 
         public ICurrentSession currentSession { get; set; }
 
@@ -18,7 +18,7 @@
 
         private readonly IMonitorCtsFunctionService _monitorService;
 
-        public TrackingUserAccessFilterAttribute()
+        public TrackingFunctionUsageFilterAttribute()
         {
             _monitorService = new MonitorCtsFunctionService();
             currentSession = new CurrentSession();
@@ -37,7 +37,7 @@
             }
             catch (Exception ex)
             {
-                LogService.Info($"Tracking CTS's user access - Insert Stats Accessment fail - {ex.Message}");
+                LogService.Info($"Tracking function usage - Insert Stats Accessment fail - {ex.Message}");
             }
         }
     }

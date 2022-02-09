@@ -238,7 +238,7 @@
             ManualTrigger = 5
         };
         
-        public enum MonitorCtsFunctionId
+        public enum TrackingCtsFunctionId
         {
             ProblemAccountMonitor = 1,
             EvidenceManagementImport = 2,
