@@ -10,7 +10,7 @@
         {
             get
             {
-                return (CustId != null && RobotType != null);
+                return this.RobotType != -2;
             }
         }
     }

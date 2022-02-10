@@ -15,13 +15,7 @@
         public RobotClassificationService()
         {
             repository = new DynamicRepository();
-        }
-
-        public IEnumerable<RobotClassification> GetLastestRobotClassification(long custID)
-        {
-            var criteria = new GetLastestRobotClassificationCriteria() { CustId = custID };
-            return repository.Fetch<RobotClassification>(criteria);
-        }
+        }      
         
         public CustomerRobotUserStatusModel GetStatusRobotClassification(long custID)
         {
@@ -35,13 +29,11 @@
             return robotStatus?.FirstOrDefault() ?? new CustomerRobotUserStatusModel { CustId= null, RobotType = null };
         }
 
-        public IEnumerable<RobotClassification> GetHistoryRobotClassification(long custID, DateTime fromDate, DateTime toDate)
+        public IEnumerable<RobotClassification> GetHistoryRobotClassification(long custID)
         {
-            var criteria = new GetHistoryRobotClassificationCriteria()
+            var criteria = new GetHistoryRobotClassificationCriteria
             {
-                CustId = custID,
-                FromDate = fromDate,
-                ToDate = toDate
+                CustId = custID              
             };
 
             return repository.Fetch<RobotClassification>(criteria);

@@ -1,39 +1,20 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.Account
 {
-    using Fanex.NAP.CTS.Core.BaseClasses;
-    using Fanex.NAP.CTS.Model.Account;
-    using Fanex.NAP.CTS.Resource.Consts;
-
     public class RobotClassificationViewModel
     {
-        readonly RobotClassification model;
+        public string ScannedDate { get; set; }
+        
+        public string BettingStatistic { get; set; }
 
-        public RobotClassificationViewModel(RobotClassification model)
-        {
-            this.model = model;
-        }
+        public int RobotType { get; set; }
 
-        public string Sport
-        {
-            get { return CachedRef.GetSportTypeName(model.SportTypeID); }
-        }
-
-        public string Bettype
-        {
-            get { return CachedRef.GetBettypeName(model.BetTypeID); }
-        }
-
-        public string LiveIndicator
-        {
-            get { return model.LiveIndicator ? "Live" : "Non-Live"; }
-        }
-
-        public string RobotType
+        public string RobotTypeName
         {
             get
             {
                 var result = string.Empty;
-                switch (model.RobotType)
+
+                switch (this.RobotType)
                 {
                     case 0:
                         result = "Observed";
@@ -49,12 +30,8 @@
                 }
 
                 return result;
-            }
-        }
 
-        public string ScannedDate
-        {
-            get { return model.ScannedDate.ToString(Consts.FormatDateToString_MMMddyyyy); }
+            }
         }
     }
 }
