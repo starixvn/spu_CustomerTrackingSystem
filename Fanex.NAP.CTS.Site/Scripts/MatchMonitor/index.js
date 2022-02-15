@@ -245,6 +245,12 @@
         domElements.cbbBetType.multiselect('refresh');
     }
 
+    function InitBetTypeFilter() {
+        LoadBetTypes();
+        domElements.cbbBetType.find('option').prop('selected', true);
+        domElements.cbbBetType.multiselect("refresh");
+    }
+
     function RenderBetTypeHTML(betTypeID, betId) {
         return `{&quot;BettypeID&quot;:` + betTypeID + `, &quot;BetID&quot;:` + betId +`}`;
     }
@@ -304,6 +310,8 @@
         RefreshChange(domElements.eventTarget);
 
         domElements.cbbSport.on('change', function () { LoadBetTypes(); });
+
+        InitBetTypeFilter();
     }
 
     $(document).ready(function () {

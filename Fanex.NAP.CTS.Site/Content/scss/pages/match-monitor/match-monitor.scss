@@ -45,7 +45,7 @@
 
                     .group {
                         .width-select {
-                            width: 18.5rem;
+                            width: 11rem;
                         }
 
                         .text-box {
@@ -336,6 +336,10 @@
 
 .group.width-280 {
     width: 15rem !important;
+}
+
+.group.width-380 {
+    width: 30rem !important;
 }
 
 .ui-datepicker.ui-widget-content {

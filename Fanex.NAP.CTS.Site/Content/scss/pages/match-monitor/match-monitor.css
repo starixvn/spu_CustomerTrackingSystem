@@ -375,7 +375,7 @@
         margin-right: .7rem;
         margin-bottom: 0; }
     .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .width-select {
-      width: 18.5rem; }
+      width: 11rem; }
     .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .text-box {
       height: 2.8rem;
       display: flex;
@@ -567,6 +567,9 @@
 
 .group.width-280 {
   width: 15rem !important; }
+
+.group.width-380 {
+  width: 30rem !important; }
 
 .ui-datepicker.ui-widget-content {
   z-index: 9999999 !important; }
