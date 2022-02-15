@@ -54,16 +54,16 @@
 
         public Int64 TransId { get; set; }
 
-        public bool IsHomeSide
+        public string BetChoice
         {
             get
             {
                 if (!string.IsNullOrEmpty(BetTeam))
                 {
-                    return string.Equals(BetTeam, "h", StringComparison.OrdinalIgnoreCase);
+                    return BetTeam.ToUpper();
                 }
 
-                return true;
+                return BetTeam;
             }
         }
 
@@ -77,11 +77,14 @@
                     {
                         return HDP2 - HDP1;
                     }
-                    else
+                    else if (string.Equals(BetTeam, "a", StringComparison.OrdinalIgnoreCase))
                     {
                         return HDP1 - HDP2;
                     }
-
+                    else
+                    {
+                        return HDP1;
+                    }
                 }
 
                 return 0;

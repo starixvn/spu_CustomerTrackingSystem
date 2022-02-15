@@ -10,19 +10,22 @@
         public Int64 MatchID { get; set; }
 
         [SpParam(SqlParamName = "ip_BettypeID")]
-        public int BettypeID { get; set; }                
+        public int BettypeID { get; set; }    
+
+        [SpParam(SqlParamName = "ip_BetID")]
+        public Int64 BetID { get; set; }
+
+        [SpParam(SqlParamName = "ip_LiveIndicator")]
+        public bool LiveIndicator { get; set; }       
+        
+        [SpParam(SqlParamName = "ip_Reason")]
+        public int Reason { get; set; }
 
         [SpParam(SqlParamName = "ip_ScoreList")]
         public string ListScore { get; set; }
 
-        [SpParam(SqlParamName = "ip_LiveIndicator")]
-        public bool LiveIndicator { get; set; }
-
-        [SpParam(SqlParamName = "ip_IsHedging")]
-        public bool IsHedging { get; set; }
-
-        [SpParam(SqlParamName = "ip_GroupIdList")]
-        public string ListGroup { get; set; }
+        [SpParam(SqlParamName = "ip_GroupIDList")]
+        public string ListGroup { get; set; }        
 
         public override string GetSettingKey()
             => "CTS_DC_MatchMonitor_Details_Get";

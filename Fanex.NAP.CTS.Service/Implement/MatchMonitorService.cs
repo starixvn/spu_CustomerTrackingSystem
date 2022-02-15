@@ -23,9 +23,10 @@
         {
             var criteria = new MatchMonitorGetCriteria()
             {
-                FromDate = filter.FromDate,
-                ToDate = filter.ToDate,
-                LeagueName = string.IsNullOrWhiteSpace(filter.LeagueName) ? null : filter.LeagueName,
+                FromDate = filter?.FromDate ?? DateTime.Now,
+                ToDate = filter?.ToDate ?? DateTime.Now,
+                LeagueName = string.IsNullOrWhiteSpace(filter?.LeagueName) ? null : filter.LeagueName,
+                SportType = filter.Sports,
                 Market = filter.Market,
                 MatchSection = filter.MatchSection,
                 BetType = filter.BetTypes,
@@ -42,6 +43,7 @@
                 MatchID = para.MatchId,
                 LiveIndicator = para.LiveIndicator,
                 BettypeID = para.BettypeID,
+                BetID = para.BetID,
                 TranIds = para.TranIds,
                 VerifiedBy = para.VerifiedBy
             };
@@ -51,27 +53,29 @@
             return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
         }
 
-        public IEnumerable<MatchGroupModel> GetMatchGroup(Int64 matchID, int betTypeID, bool liveIndicator, bool isHedging)
+        public IEnumerable<MatchGroupModel> GetMatchGroup(Int64 matchID, int betTypeID, bool liveIndicator, Int64 betId, int reason)
         {
             var criteria = new MatchGroupGetCriteria()
             {
                 BettypeID = betTypeID,
+                BetID = betId,
                 MatchID = matchID,
                 LiveIndicator = liveIndicator,
-                IsHedging = isHedging
+                Reason = reason
             };
 
             return repository.Fetch<MatchGroupModel>(criteria);
         }
 
-        public IEnumerable<MatchScoreModel> GetMatchScore(Int64 matchID, int betTypeID, bool liveIndicator, bool isHedging)
+        public IEnumerable<MatchScoreModel> GetMatchScore(Int64 matchID, int betTypeID, bool liveIndicator, Int64 betId, int reason)
         {
             var criteria = new MatchScoreGetCriteria()
             {
                 BettypeID = betTypeID,
+                BetID = betId,
                 MatchID = matchID,
                 LiveIndicator = liveIndicator,
-                IsHedging = isHedging
+                Reason = reason
             };
 
             return repository.Fetch<MatchScoreModel>(criteria);
@@ -82,11 +86,12 @@
             var criteria = new MatchDetailMonitorGetCriteria()
             {
                 BettypeID = filter.BetTypeID,
+                BetID = filter.BetID,
                 ListGroup = filter.ListGroup,
                 ListScore = filter.ListScore,
                 MatchID = filter.MatchID,
                 LiveIndicator = filter.LiveIndicator,
-                IsHedging = filter.IsHedging
+                Reason = filter.Reason,
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))

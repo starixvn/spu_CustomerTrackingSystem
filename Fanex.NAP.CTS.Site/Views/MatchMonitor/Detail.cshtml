@@ -13,10 +13,10 @@
     <div class="monitor-container">
         <div class="monitor-table">
             <div class="group-control">
-                <div class="group-table">
+                <div class="group-table filter-group">
                     <div class="form-filter">
-                        <div class="group width-180">
-                            <label class="text">Sites</label>
+                        <div class="group width-120">
+                            <label class="text">Site</label>
                             <select class="control width-select" id="cbbSites">
                                 <option value="A">All</option>
                                 <option value="C">Credit</option>
@@ -24,6 +24,18 @@
                             </select>
                         </div>
                         <div class="group width-180">
+                            <label class="text">Bet choice</label>
+                            <select class="control width-select" id="cbbBetChoice">
+                                @if (ViewBag.BetChoice != null)
+                                {
+                                    foreach (var item in ViewBag.BetChoice)
+                                    {
+                                        <option value="@item">@item</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="group width-180" @(ViewBag.IsDisableScoreFilter ? "hidden" : "")   >
                             <label class="text">Score</label>
                             <select class="control width-select" id="cbbMatchScore" multiple="multiple">
                                 @if (ViewBag.MatchScore != null)
@@ -52,15 +64,21 @@
                     <div class="detail-area">
                         <span>@ViewBag.MatchName <br /></span>
                         <span class="league-highlight">@ViewBag.LeagueName<br /></span>
-                        <span>@ViewBag.ReasonName - <span class="market-highlight">@ViewBag.MarketName</span><br /></span>
+                        <span>@ViewBag.SportName - @ViewBag.ReasonGroup - <span class="market-highlight">@ViewBag.MarketName</span><br /></span>
                     </div>
                 </div>
-                <div class="group-table second-group-table-border">
-                    <button class="button button-verification" id="btnVerify">Verify & Close</button>
-                </div>
-                <div class="group-table third-group-table-border" id="groupTable">
+                <div class="group-table " id="groupTable">
                     <div id="first-monitor-datatable">
                         <div class="table-report" style="width: max-content;">
+                            
+                            <div class="fixed-header">
+                                <div class="top-header">
+                                    <div class="">
+                                        <button class="button button-primary-outline" id="btnVerify">Verify & Close</button>
+                                    </div>
+                                </div>
+                            </div>
+
                             <table id="first-tblMonitor" class="table table-striped table-monitor-detail">
                                 <thead>
                                     <tr>
@@ -73,32 +91,7 @@
                                         <th>CUR</th>
                                         <th>AMOUNT</th>
                                         <th>HDP</th>
-                                        <th>Score</th>
-                                        <th>TRANSTIME</th>
-                                        <th>Group</th>
-                                        <th>PIC & Last Verified</th>
-                                        <th>TranID</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div id="second-monitor-datatable">
-                        <div class="table-report" style="width: max-content;">
-                            <table id="second-tblMonitor" class="table table-striped table-monitor-detail">
-                                <thead>
-                                    <tr>
-                                        <th>Site</th>
-                                        <th>Username</th>
-                                        <th>Bot</th>
-                                        <th>Dgr</th>
-                                        <th>ODDS</th>
-                                        <th>BetID</th>
-                                        <th>CUR</th>
-                                        <th>AMOUNT</th>
-                                        <th>HDP</th>
+                                        <th>Bet choice</th>
                                         <th>Score</th>
                                         <th>TRANSTIME</th>
                                         <th>Group</th>
@@ -117,8 +110,9 @@
             <input id="hdEventDataToString" type="hidden" value="@ViewBag.EventDateToString" />
             <input id="hdMatchID" type="hidden" value="@ViewBag.MatchID" />
             <input id="hdBetTypeID" type="hidden" value="@ViewBag.BetTypeID" />
+            <input id="hdBetID" type="hidden" value="@ViewBag.BetID" />
             <input id="hdLiveIndicator" type="hidden" value="@ViewBag.LiveIndicator.ToString()" />
-            <input id="hdIsHedging" type="hidden" value="@ViewBag.IsHedging.ToString()" />
+            <input id="hdreason" type="hidden" value="@ViewBag.Reason" />
             <input id="hdIsHostPermission" type="hidden" IsHostPermission="@ViewBag.IsHostPermission.ToString()" />
         </div>
 </section>

@@ -45,7 +45,7 @@
 
                     .group {
                         .width-select {
-                            width: 18.5rem;
+                            width: 11rem;
                         }
 
                         .text-box {
@@ -105,17 +105,18 @@
                                 border-bottom: 1px solid #E5E5E5;
                                 width: 100%;
                                 padding-bottom: 1rem;
+                                color: #474747;
+                                cursor: pointer;
 
                                 &:last-child {
                                     border-bottom: none;
                                     margin-bottom: 0;
                                     padding-bottom: 0;
                                 }
-
-                                a {
+                                /*     a {
                                     color: #474747;
                                     cursor: pointer;
-                                }
+                                }*/
                             }
                         }
 
@@ -139,6 +140,7 @@
             #monitor-datatable, #first-monitor-datatable, #second-monitor-datatable {
                 .table-report {
                     font-family: $font-family;
+                    border-right: 1px solid #C4C4C4 !important;
 
                     .wrapper-info-table {
                         height: 4rem;
@@ -150,14 +152,21 @@
                         top: 16.2rem;
                         z-index: 11;
 
-                        @media screen and (max-width: 1626px) {
+                        @media screen and (max-width: 1770px) {
                             top: 20.4rem;
                         }
 
-                        @media screen and (max-width: 1360px) {
+                        @media screen and (max-width: 1508px) {
                             top: 22.3rem;
                         }
 
+                        @media screen and (max-width: 959px) {
+                            top: 26.4rem;
+                        }
+
+                        @media screen and (max-width: 860px) {
+                            top: 28.4rem;
+                        }
 
                         .dataTables_length {
                             position: absolute;
@@ -211,15 +220,24 @@
                                     top: 20rem;
                                     font-weight: 300;
                                     z-index: 9;
-                                    padding-left: 0;
-                                    padding-right: 0;
+                                    padding-left: 0.5rem;
+                                    padding-right: 0.5rem;
+                                    border-right: none;
 
-                                    @media screen and (max-width: 1626px) {
+                                    @media screen and (max-width: 1770px) {
                                         top: 24.3rem;
                                     }
 
-                                    @media screen and (max-width: 1360px) {
+                                    @media screen and (max-width: 1509px) {
                                         top: 26.3rem;
+                                    }
+
+                                    @media screen and (max-width: 959px) {
+                                        top: 30rem;
+                                    }
+
+                                    @media screen and (max-width: 860px) {
+                                        top: 32rem;
                                     }
                                 }
                             }
@@ -228,8 +246,8 @@
                         tbody {
                             tr {
                                 td {
-                                    padding-left: 0;
-                                    padding-right: 0;
+                                    border-right: none;
+                                    border-bottom: none;
 
                                     .click-view-details, .click-view-name {
                                         cursor: pointer;
@@ -246,6 +264,14 @@
                                         pointer-events: none;
                                     }
                                 }
+                            }
+
+                            tr td:last-child {
+                                //border-right: 1px solid #C4C4C4 !important;
+                            }
+
+                            tr:last-child td {
+                                border-bottom: 1px solid #C4C4C4 !important;
                             }
                         }
                     }
@@ -310,6 +336,10 @@
 
 .group.width-280 {
     width: 15rem !important;
+}
+
+.group.width-380 {
+    width: 30rem !important;
 }
 
 .ui-datepicker.ui-widget-content {

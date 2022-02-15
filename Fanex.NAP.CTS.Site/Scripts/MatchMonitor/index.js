@@ -8,6 +8,7 @@
         dpkToDate: $('#dpkToDate'),
         cbbIsVerified: $('#cbbIsVerified'),
         cbbBetType: $('#cbbBetType'),
+        cbbSport: $('#cbbSport'),
         groupDropDown: $('.group-drop-down'),
         refreshList: $('#refreshList'),
         btnRefresh: $('#btnRefresh'),
@@ -47,7 +48,8 @@
                 {
                     FromDate: function () { return domElements.dpkFromDate.val(); },
                     ToDate: function () { return domElements.dpkToDate.val(); },
-                    BetTypes: function () { return domElements.cbbBetType.val().join(); },
+                    Sports: function () { return domElements.cbbSport.val().join(); },
+                    BetTypes: function () { return "[" + domElements.cbbBetType.val().join() + "]" },
                     IsVerified: function () { return domElements.cbbIsVerified.val(); },
                     LeagueName: function () { return domElements.txtLeague.val(); },
                     Market: function () { return domElements.cbbMarket.val(); },
@@ -88,23 +90,25 @@
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
                 { targets: [0, 1, 2, 3, 4, 5, 6], className: "text-center" },
-                { targets: [0], width: "32%" },
+                { targets: [0], width: "30%" },
                 { targets: [1], width: "9%" },
                 { targets: [2], width: "7%" },
-                { targets: [3], width: "28%" },
-                { targets: [4], width: "15%" },                
-                { targets: [5], width: "4%" },
-                { targets: [6], visible: false },
+                { targets: [3], width: "7%" },
+                { targets: [4], width: "28%" },
+                { targets: [5], width: "15%" },                
+                { targets: [6], width: "4%" },
+                { targets: [7], visible: false },
             ],
             columns: [
                 {
                     data: obj => () => {
-                        let paramTemplate = "EventDateToString={0}&MatchID={1}&HomeID={2}&AwayID={3}&BetTypeID={4}&MatchSection={5}&Market={6}&IsHedging={7}&LeagueID={8}";
-                        let para = paramTemplate.format(obj.EventDateToString, obj.MatchID, obj.HomeID, obj.AwayID, obj.BettypeID, obj.MatchSection, obj.Market, obj.IsHedging, obj.LeagueID);
+                        let paramTemplate = "EventDateToString={0}&MatchID={1}&HomeID={2}&AwayID={3}&BetTypeID={4}&MatchSection={5}&Market={6}&Reason={7}&LeagueID={8}&BetID={9}&SportType={10}";
+                        let para = paramTemplate.format(obj.EventDateToString, obj.MatchID, obj.HomeID, obj.AwayID, obj.BettypeID, obj.MatchSection, obj.Market, obj.Reason, obj.LeagueID, obj.BetID, obj.SportType);
                         return '<a class="click-view-details" href="MatchMonitor/Detail?' + para + '" target="_blank">' + obj.MatchName + '</a>';
                     }
                 },
-                { data: obj => obj.EventDateToString },                
+                { data: obj => obj.EventDateToString },
+                { data: obj => obj.SportName },
                 { data: obj => obj.MarketName },
                 { data: obj => obj.LeagueName },
                 { data: obj => obj.ReasonGroup },
@@ -117,10 +121,10 @@
                 var data = api.rows({ page: 'current' }).data();
                 var last = null;
 
-                api.column(6, { page: 'current' }).data().each(function (group, i) {
+                api.column(7, { page: 'current' }).data().each(function (group, i) {
                     if (last !== group) {
                         $(rows).eq(i).before(
-                            '<tr class="group group group-site"><td colspan="8">' + data[i].MatchSectionName + '</td></tr>'
+                            '<tr class="group group group-site"><td colspan="8"> ' + data[i].MatchSectionName + '</td></tr>'
                         );
 
                         last = group;
@@ -173,6 +177,84 @@
         }
     }
 
+    function LoadBetTypes() {
+        domElements.cbbBetType.find('option').remove();
+
+        let sportTypes = domElements.cbbSport.val();
+        let existedBetType = [];
+
+        if (sportTypes != null) {
+            sportTypes.forEach(c => {
+                if (c == 1) {
+                    var options1 = [{ text: 'HDP', value: RenderBetTypeHTML(1, 0) },
+                    { text: 'O/U', value: RenderBetTypeHTML(3, 0) },
+                    { text: '1st HDP', value: RenderBetTypeHTML(7, 0) },
+                    { text: '1st O/U', value: RenderBetTypeHTML(8, 0) }
+                    ];
+
+                    options1.forEach(i => {
+                        if (!existedBetType.includes(i.value)) {
+                            domElements.cbbBetType.append(`<option value="${i.value}">${i.text}</option>`);
+                            existedBetType.push(i.value);
+                        }
+                    })
+                }
+                else if (c == 2) {
+                    var options2 = [{ text: 'HDP', value: RenderBetTypeHTML(1, 0) },
+                    { text: 'O/U', value: RenderBetTypeHTML(3, 0) },
+                    { text: '1st HDP', value: RenderBetTypeHTML(7, 0) },
+                    { text: '1st O/U', value: RenderBetTypeHTML(8, 0) },
+                    { text: 'Moneyline', value: RenderBetTypeHTML(20, 0) },
+                    { text: 'Quarter 1 HDP', value: RenderBetTypeHTML(609, 801) },
+                    { text: 'Quarter 2 HDP', value: RenderBetTypeHTML(609, 802) },
+                    { text: 'Quarter 3 HDP', value: RenderBetTypeHTML(609, 803) },
+                    { text: 'Quarter 4 HDP', value: RenderBetTypeHTML(609, 804) },
+                    { text: 'Quarter 1 O/U', value: RenderBetTypeHTML(610, 801) },
+                    { text: 'Quarter 2 O/U', value: RenderBetTypeHTML(610, 802) },
+                    { text: 'Quarter 3 O/U', value: RenderBetTypeHTML(610, 803) },
+                    { text: 'Quarter 4 O/U', value: RenderBetTypeHTML(610, 804) },
+                    { text: 'Quarter 1 Moneyline', value: RenderBetTypeHTML(612, 801) },
+                    { text: 'Quarter 2 Moneyline', value: RenderBetTypeHTML(612, 802) },
+                    { text: 'Quarter 3 Moneyline', value: RenderBetTypeHTML(612, 803) },
+                    { text: 'Quarter 4 Moneyline', value: RenderBetTypeHTML(612, 804) }
+                    ];
+
+                    options2.forEach(i => {
+                        if (!existedBetType.includes(i.value)) {
+                            domElements.cbbBetType.append(`<option value="${i.value}">${i.text}</option>`);
+                            existedBetType.push(i.value);
+                        }
+                    })
+                }
+                else if (c == 43) {
+                    var options3 = [{ text: 'HDP', value: RenderBetTypeHTML(1, 0) },
+                    { text: 'O/U', value: RenderBetTypeHTML(3, 0) },
+                    { text: 'Moneyline', value: RenderBetTypeHTML(20, 0) }
+                    ];
+
+                    options3.forEach(i => {
+                        if (!existedBetType.includes(i.value)) {
+                            domElements.cbbBetType.append(`<option value="${i.value}">${i.text}</option>`);
+                            existedBetType.push(i.value);
+                        }
+                    })
+                }
+            })
+        }
+
+        domElements.cbbBetType.multiselect('refresh');
+    }
+
+    function InitBetTypeFilter() {
+        LoadBetTypes();
+        domElements.cbbBetType.find('option').prop('selected', true);
+        domElements.cbbBetType.multiselect("refresh");
+    }
+
+    function RenderBetTypeHTML(betTypeID, betId) {
+        return `{&quot;BettypeID&quot;:` + betTypeID + `, &quot;BetID&quot;:` + betId +`}`;
+    }
+
     function Initial() {
         domElements.dpkFromDate
             .datepicker({
@@ -192,15 +274,22 @@
             .datepicker("setDate", new Date())
             .change(SetRestrictFromDate);
 
+        domElements.cbbSport.multiselect({
+            menuWidth: 260,
+            menuHeight: 260,
+            selectedText: "# of # selected",
+            noneSelectedText: "Select Sport"
+        });
+
         domElements.cbbBetType.multiselect({
-            menuWidth: 360,
+            menuWidth: 260,
             menuHeight: 260,
             selectedText: "# of # selected",
             noneSelectedText: "Select Bet Type"
         });
 
         domElements.cbbMatchSection.multiselect({
-            menuWidth: 360,
+            menuWidth: 260,
             menuHeight: 260,
             selectedText: "# of # selected",
             noneSelectedText: "Select Match Section"
@@ -219,6 +308,10 @@
         domElements.refreshList.find("li").on('click', function () { RefreshChange(event.target); })
 
         RefreshChange(domElements.eventTarget);
+
+        domElements.cbbSport.on('change', function () { LoadBetTypes(); });
+
+        InitBetTypeFilter();
     }
 
     $(document).ready(function () {

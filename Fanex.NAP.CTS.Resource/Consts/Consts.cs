@@ -72,6 +72,27 @@
 
         public const int Retry = 3;
 
+        public const string MatchMonitorBetType_HDP = "HDP";
+        public const string MatchMonitorBetType_OU = "O/U";
+        public const string MatchMonitorBetType_1stHDP = "1st HDP";
+        public const string MatchMonitorBetType_1stOU = "1st O/U";
+        public const string MatchMonitorBetType_Moneyline = "Moneyline";
+        public const string MatchMonitorBetType_QuarterXHDP = "Quarter X HDP";
+        public const string MatchMonitorBetType_QuarterXOU = "Quarter X O/U";
+        public const string MatchMonitorBetType_QuarterXMoneyline = "Quarter X Moneyline";
+        public const string MatchMonitorBetType_Quarter1HDP = "Quarter 1 HDP";
+        public const string MatchMonitorBetType_Quarter2HDP = "Quarter 2 HDP";
+        public const string MatchMonitorBetType_Quarter3HDP = "Quarter 3 HDP";
+        public const string MatchMonitorBetType_Quarter4HDP = "Quarter 4 HDP";
+        public const string MatchMonitorBetType_Quarter1OU = "Quarter 1 O/U";
+        public const string MatchMonitorBetType_Quarter2OU = "Quarter 2 O/U";
+        public const string MatchMonitorBetType_Quarter3OU = "Quarter 3 O/U";
+        public const string MatchMonitorBetType_Quarter4OU = "Quarter 4 O/U";
+        public const string MatchMonitorBetType_Quarter1Moneyline = "Quarter 1 Moneyline";
+        public const string MatchMonitorBetType_Quarter2Moneyline = "Quarter 2 Moneyline";
+        public const string MatchMonitorBetType_Quarter3Moneyline = "Quarter 3 Moneyline";
+        public const string MatchMonitorBetType_Quarter4Moneyline = "Quarter 4 Moneyline";
+
         public enum ROLE_CUSTOMER
         {
             MEMBER = 1,
@@ -100,12 +121,24 @@
             Other = 3
         }
 
-        public enum MATCHMONITOR_BETTYPE
+        public enum MatchMonitorBetType
         {
             HDP = 1,
             OU = 3,
             FirstHDP = 7,
-            FirsttOU = 8
+            FirsttOU = 8,
+            Moneyline = 20,
+            QuarterXHDP = 609,
+            QuarterXOU = 610,
+            QuarterXMoneyline = 612
+        }
+
+        public enum MatchMonitorBetId
+        {
+            first = 801,
+            second = 802,
+            third = 803,
+            fourth = 804
         }
 
         public enum MATCHMONITOR_SECTION
@@ -115,7 +148,23 @@
             Early = 3,
             Closed = 4
         }
-        
+
+        public enum MatchMonitorBetChoiceId
+        {
+            All = 0,
+            H = 1,
+            A = 2,
+            O = 3,
+            U = 4
+        }
+
+        public enum MatchMonitorSportType
+        {
+            Soccer = 1,
+            Basketball = 2,
+            ESport = 43,
+        }
+
         public enum STATIC_LIST
         {
             PROBLEMCASE = 12
