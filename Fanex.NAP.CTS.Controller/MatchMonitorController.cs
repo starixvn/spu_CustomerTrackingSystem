@@ -426,16 +426,12 @@
                         return ticketDetails;
 
                     case nameof(MatchMonitorBetChoiceId.A):
+                    case nameof(MatchMonitorBetChoiceId.U):
                         return ticketDetails.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.A), StringComparison.OrdinalIgnoreCase)) ?? result;
 
                     case nameof(MatchMonitorBetChoiceId.H):
-                        return ticketDetails.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.H), StringComparison.OrdinalIgnoreCase)) ?? result;
-
                     case nameof(MatchMonitorBetChoiceId.O):
-                        return ticketDetails.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.O), StringComparison.OrdinalIgnoreCase)) ?? result;
-
-                    case nameof(MatchMonitorBetChoiceId.U):
-                        return ticketDetails.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.U), StringComparison.OrdinalIgnoreCase)) ?? result;
+                        return ticketDetails.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.H), StringComparison.OrdinalIgnoreCase)) ?? result;
                 }
             }
 
