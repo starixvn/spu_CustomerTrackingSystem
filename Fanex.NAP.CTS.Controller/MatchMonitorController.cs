@@ -54,7 +54,7 @@
 
             try
             {
-                if (para != null && !string.IsNullOrEmpty(para.BetTypes) && !string.IsNullOrEmpty(para.MatchSection) && 
+                if (para != null && !string.IsNullOrEmpty(para.BetTypes) && !string.IsNullOrEmpty(para.MatchSection) &&
                     !string.IsNullOrEmpty(para.Sports) && IsValidDateRange(para.FromDate, para.ToDate))
                 {
                     matchMonitors = _matchMonitorService.GetMatchMonitor(para)?.OrderBy(c => c.MatchSection).ToList();
@@ -164,7 +164,7 @@
 
                         var mergeInfo = MergeMatchMonitorDetail(mappingTransInfo, custInfo, ticketDetail);
 
-                        matchDetailResult = GetRobotStatus(mergeInfo);
+                        matchDetailResult = GetRobotStatus(mergeInfo, para.BetTypeID);
 
                         matchDetailResult = FilterSite(matchDetailResult, para.Sites);
                     }
@@ -245,6 +245,7 @@
                                                                 Odds = c.ticket.Odds,
                                                                 BetID = c.ticket.TransId,
                                                                 BetTeam = c.ticket.BetTeam,
+
                                                                 Currency = c.cust.Currency,
                                                                 Amount = c.ticket.Stake,
                                                                 HDP1 = c.ticket.Hdp1,
@@ -362,7 +363,7 @@
             }
         }
 
-        private IEnumerable<MatchMonitorDetailResultViewModel> GetRobotStatus(IEnumerable<MatchMonitorDetailResultViewModel> matchDetailInfo)
+        private IEnumerable<MatchMonitorDetailResultViewModel> GetRobotStatus(IEnumerable<MatchMonitorDetailResultViewModel> matchDetailInfo, int betTypeID)
         {
             if (matchDetailInfo != null && matchDetailInfo.Any())
             {
@@ -393,6 +394,7 @@
                                         Odds = group.m.Odds,
                                         BetID = group.m.TransId,
                                         BetTeam = group.m.BetTeam,
+                                        BetTypeID = betTypeID,
                                         Currency = group.m.Currency,
                                         Amount = group.m.Amount,
                                         HDP1 = group.m.HDP1,
@@ -426,22 +428,18 @@
                         return ticketDetails;
 
                     case nameof(MatchMonitorBetChoiceId.A):
+                    case nameof(MatchMonitorBetChoiceId.U):
                         return ticketDetails.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.A), StringComparison.OrdinalIgnoreCase)) ?? result;
 
                     case nameof(MatchMonitorBetChoiceId.H):
-                        return ticketDetails.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.H), StringComparison.OrdinalIgnoreCase)) ?? result;
-
                     case nameof(MatchMonitorBetChoiceId.O):
-                        return ticketDetails.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.O), StringComparison.OrdinalIgnoreCase)) ?? result;
-
-                    case nameof(MatchMonitorBetChoiceId.U):
-                        return ticketDetails.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.U), StringComparison.OrdinalIgnoreCase)) ?? result;
+                        return ticketDetails.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.H), StringComparison.OrdinalIgnoreCase)) ?? result;
                 }
             }
 
             return Enumerable.Empty<TicketDetailModel>();
         }
-        
+
         private IEnumerable<MatchMonitorDetailResultViewModel> FilterSite(IEnumerable<MatchMonitorDetailResultViewModel> matchDetails, string site)
         {
             if (matchDetails != null && matchDetails.Any() && site != "A")

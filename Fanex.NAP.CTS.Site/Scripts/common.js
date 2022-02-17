@@ -232,6 +232,43 @@
         });
     }
 
+    this.showConfirmation2 = function (html, yesCallback, noCallback) {
+        confirmation.empty().html(html).dialog("open");
+
+        var noBtn =
+        {
+            'class': 'button -add',
+            text: "No",
+            click: function () {
+                confirmation.dialog("close");
+
+                if (noCallback != null) {
+                    noCallback()
+                }
+            }
+        };
+
+        var yesBtn =
+        {
+            'class': 'button btn-cancel-outline',
+            text: "Yes",
+            click: function () {
+                confirmation.dialog("close");
+
+                if (yesCallback != null) {
+                    yesCallback(this)
+                }
+            }
+        }
+
+        confirmation.dialog("option", {
+            dialogClass: "dialog-confirmation",
+            buttons: [noBtn, yesBtn],
+            width: 560,
+            close: noCallback
+        });
+    }
+
     this.showSuccess = function (str = "Success", timeout = 5000) {
         $.toast({
             text: `<div class='toast-content'>${str}</div>`, // Text that is to be shown in the toast

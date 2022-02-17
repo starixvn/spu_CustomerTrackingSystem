@@ -231,7 +231,7 @@
         })
 
         domElements.btnVerify.on('click', function () {
-            common.showConfirmation('<div class="popup - content">Are you sure about this?<br>Once confirmed, all tickets\' review status will be updated to "Verified".</div>', function () {
+            common.showConfirmation2('<div class="popup - content">Are you sure about this?<br>Once confirmed, all tickets\' review status will be updated to "Verified".</div>', function () {
                 VerifyTransMatchMonitorDetail();
             });
         })
