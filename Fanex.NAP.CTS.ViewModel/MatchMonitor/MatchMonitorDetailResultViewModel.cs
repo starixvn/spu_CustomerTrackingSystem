@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.MatchMonitor
 {
     using System;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public class MatchMonitorDetailResultViewModel
     {
@@ -16,8 +17,8 @@
 
         public int Danger2 { get; set; }
 
-        public int Danger3 { get; set; } 
-        
+        public int Danger3 { get; set; }
+
         public int Danger4 { get; set; }
 
         public int Danger5 { get; set; }
@@ -54,16 +55,30 @@
 
         public Int64 TransId { get; set; }
 
+        public int BetTypeID { get; set; }
+
         public string BetChoice
         {
             get
             {
-                if (!string.IsNullOrEmpty(BetTeam))
+                if (string.IsNullOrEmpty(BetTeam))
                 {
-                    return BetTeam.ToUpper();
+                    return BetTeam;
                 }
 
-                return BetTeam;
+                if (BetTypeID == (int)MatchMonitorBetType.FirsttOU || BetTypeID == (int)MatchMonitorBetType.OU || BetTypeID == (int)MatchMonitorBetType.QuarterXOU)
+                {
+                    if (string.Equals(BetTeam, "h", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return nameof(MatchMonitorBetChoiceId.O);
+                    }
+                    else if (string.Equals(BetTeam, "a", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return nameof(MatchMonitorBetChoiceId.U);
+                    }
+                }
+
+                return BetTeam.ToUpper();
             }
         }
 
@@ -73,7 +88,7 @@
             {
                 if (!string.IsNullOrEmpty(BetTeam))
                 {
-                    if(string.Equals(BetTeam, "h", StringComparison.OrdinalIgnoreCase))
+                    if (string.Equals(BetTeam, "h", StringComparison.OrdinalIgnoreCase))
                     {
                         return HDP2 - HDP1;
                     }
@@ -101,15 +116,15 @@
                 {
                     danger += "Ori" + Danger1;
                 }
-               
+
                 if (Danger2 != 0)
                 {
                     danger += string.IsNullOrEmpty(danger) ? "ABI" + Danger2 : "-ABI" + Danger2;
                 }
-                
+
                 if (Danger3 != 0)
                 {
-                    danger += string.IsNullOrEmpty(danger) ? "OS" + Danger3 : "-OS"  + Danger3;
+                    danger += string.IsNullOrEmpty(danger) ? "OS" + Danger3 : "-OS" + Danger3;
                 }
 
                 if (Danger4 != 0)
