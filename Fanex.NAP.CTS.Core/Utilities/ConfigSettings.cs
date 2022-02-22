@@ -86,11 +86,13 @@
 
         public static string GetProblemCaseMonitor => GetConfigStringByName("CTS_GetProblemCaseMonitor");
 
-        public static string InsertAntiFraudAccounts => GetConfigStringByName("AFC_InsertAccounts");
+        public static string InsertAFCAccountsURL => GetConfigStringByName("AFC_InsertAccountsURL");
 
-        public static string UpdateAntiFraudAccounts => GetConfigStringByName("AFC_UpdateAccounts");
+        public static string UpdateAFCAccountsURL => GetConfigStringByName("AFC_UpdateAccountsURL");
 
-        public static string DeleteAntiFraudAccounts => GetConfigStringByName("AFC_DeleteAccounts");
+        public static string DeleteAFCAccountsURL => GetConfigStringByName("AFC_DeleteAccountsURL");
+
+        public static string GetAFCAccountsURL => GetConfigStringByName("AFC_GetAFCAccountsURL");
 
         public static int ImportEvidenceChunkSize
         {

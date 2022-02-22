@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    public class GetAFCAccountModel
+    public class B2CAccountModel
     {
         //B2CustId
         public string CustId { get; set; }

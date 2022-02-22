@@ -5,6 +5,7 @@
     using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria.AssociationDetection;
+    using Fanex.NAP.CTS.Model.AntiFraudCenter;
     using Fanex.NAP.CTS.Model.API;
     using Fanex.NAP.CTS.Resource.Consts;
     using Newtonsoft.Json;
@@ -70,7 +71,7 @@
                             Data = b2cCustIds
                         };
 
-                        var result = ApiHelper.Post<AccountDBResult>(ConfigSettings.DeleteAntiFraudAccounts, para, 300);
+                        var result = ApiHelper.Post<AccountDBResult>(ConfigSettings.DeleteAFCAccountsURL, para, 300);
 
                         Task.WaitAll(result);
                     }
@@ -126,11 +127,9 @@
 
                     if (b2cCustIds != null && b2cCustIds.Any())
                     {
-                        var b2cCustJson = JsonConvert.SerializeObject(b2cCustIds.Select(c => c.B2CCustId));
+                        var accountInfo = GetB2CAccount(b2cCustIds.Select(c => c.B2CCustId), ConfigSettings.GetAFCAccountsURL);
 
-                        var accountInfo = GetB2CInfoDAL(b2cCustJson);
-
-                        return MappingFrauIDs(accountInfo, filterB2CLicensee, b2cCustIds);
+                        return MappingFrauIDs(accountInfo.Result, filterB2CLicensee, b2cCustIds);
                     }
                 }
             }
@@ -138,7 +137,7 @@
             return Enumerable.Empty<GetAccountViewModel>();
         }
 
-        private IEnumerable<GetAccountViewModel> MappingFrauIDs(IEnumerable<GetAFCAccountModel> accountInfo, IEnumerable<FilterCustToSyncAFCKModel> fraudIDs, IEnumerable<GetB2CustIDModel> b2cCustIDs)
+        private IEnumerable<GetAccountViewModel> MappingFrauIDs(IEnumerable<B2CAccountModel> accountInfo, IEnumerable<FilterCustToSyncAFCKModel> fraudIDs, IEnumerable<GetB2CustIDModel> b2cCustIDs)
         {
             if (IsValid(accountInfo, fraudIDs, b2cCustIDs))
             {
@@ -226,7 +225,7 @@
                     {
                         try
                         {
-                           var result = await SyncAFCData(accToInsert, ConfigSettings.InsertAntiFraudAccounts);
+                           var result = await SyncAFCData(accToInsert, ConfigSettings.InsertAFCAccountsURL);
 
                            if (result.StatusCode == (int)HttpStatus.OK || result.StatusCode == (int)HttpStatus.Created)
                            {
@@ -252,7 +251,7 @@
                     {
                         try
                         {
-                            var result = await SyncAFCData(accToUpdate, ConfigSettings.UpdateAntiFraudAccounts);
+                            var result = await SyncAFCData(accToUpdate, ConfigSettings.UpdateAFCAccountsURL);
 
                             if (result.StatusCode != (int)HttpStatus.OK)
                             {
@@ -297,12 +296,42 @@
             return new AccountDBResult { StatusCode = (int)HttpStatus.OK, ErrorMessage = string.Empty };
         }
 
+        private async Task<IEnumerable<B2CAccountModel>> GetB2CAccount(IEnumerable<string> b2cCustIds, string url)
+        {
+            try
+            {
+                if(b2cCustIds!=null && b2cCustIds.Any())
+                {
+                    var result = await ApiHelper.Post<B2CAccountResultModel>(url, b2cCustIds, 300);
+
+                    if (result.StatusCode == HttpStatus.OK)
+                    {
+                        return result.B2CAccounts;
+                    }
+
+                    LogService.Error($"{ConfigSettings.EnvironmentName} - CTSWeb - Get B2CAccounts from AFC.Nova88.API - Exception: " + result.ErrorMessage + $"\nDataInput: {JsonConvert.SerializeObject(b2cCustIds) + "\n"}");
+                    InsertErrorLog(null, result.ErrorMessage, JsonConvert.SerializeObject(b2cCustIds));
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Error($"{ConfigSettings.EnvironmentName} - CTSWeb - Get B2CAccounts from AFC.Nova88.API - Exception: "
+                    + ex.Message
+                    + ex.StackTrace + "\n"
+                    + $"DataInput: {JsonConvert.SerializeObject(b2cCustIds) + "\n"}");
+
+                InsertErrorLog(null, ex.Message, JsonConvert.SerializeObject(b2cCustIds));
+            }
+
+            return Enumerable.Empty<B2CAccountModel>();
+        }
+
         private string GetKey()
         {
             return ConfigSettings.EnvironmentName == "PRO" ? Consts.AFCInternal_ProKey : Consts.AFCInternal_LocalKey;
         }
 
-        private static bool IsValid(IEnumerable<GetAFCAccountModel> accountInfo, IEnumerable<FilterCustToSyncAFCKModel> fraudIDs, IEnumerable<GetB2CustIDModel> b2cCustIDs)
+        private static bool IsValid(IEnumerable<B2CAccountModel> accountInfo, IEnumerable<FilterCustToSyncAFCKModel> fraudIDs, IEnumerable<GetB2CustIDModel> b2cCustIDs)
         {
             if (accountInfo != null && fraudIDs != null && b2cCustIDs != null)
             {
@@ -325,16 +354,6 @@
         #endregion Private methods
 
         #region DataAccess Layer
-
-        public IEnumerable<GetAFCAccountModel> GetB2CInfoDAL(string custIdJson)
-        {
-            var criteria = new GetAFCAccountInfoCriteria
-            {
-                B2CCustIdJson = custIdJson
-            };
-
-            return repository.Fetch<GetAFCAccountModel>(criteria);
-        }
 
         public IEnumerable<GetB2CustIDModel> GetB2CCustIdsDAL(string custIds)
         {

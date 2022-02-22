@@ -168,11 +168,12 @@
     <Compile Include="Account\RobotBetting\RobotBettingModel.cs" />
     <Compile Include="Account\RobotClassification.cs" />
     <Compile Include="AntiFraudCenter\AccountDBResult.cs" />
+    <Compile Include="AntiFraudCenter\B2CAccountResultModel.cs" />
     <Compile Include="AntiFraudCenter\CheckAccountExistModel.cs" />
     <Compile Include="AntiFraudCenter\FilterCustToSyncAFCKModel.cs" />
     <Compile Include="AntiFraudCenter\GetAccountViewModel.cs" />
     <Compile Include="AntiFraudCenter\GetB2CustIDModel.cs" />
-    <Compile Include="AntiFraudCenter\GetAFCAccountModel.cs" />
+    <Compile Include="AntiFraudCenter\B2CAccountModel.cs" />
     <Compile Include="AntiFraudCenter\DeleteAccountParasViewModel.cs" />
     <Compile Include="AntiFraudCenter\InsertAccountParasViewModel.cs" />
     <Compile Include="AntiFraudCenter\ParticipantModel.cs" />
