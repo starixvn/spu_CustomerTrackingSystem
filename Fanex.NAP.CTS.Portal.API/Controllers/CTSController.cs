@@ -145,7 +145,8 @@
                                 {
                                     ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
                                     IsPushCCToSoon88 = true,
-                                    IsUpdateDangerToMainDB = false
+                                    IsUpdateDangerToMainDB = true,
+                                    DangerLevelType = DangerLevel.ABI
                                 });
 
                                 var hashCustInfos = syncResult.OutParam["custInfos"];
@@ -263,7 +264,8 @@
                             {
                                 ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
                                 IsPushCCToSoon88 = true,
-                                IsUpdateDangerToMainDB = false
+                                IsUpdateDangerToMainDB = true,
+                                DangerLevelType = DangerLevel.ABI
                             });
 
                             var hashCustInfos = syncResult.OutParam["custInfos"];
@@ -693,7 +695,13 @@
 
                         var listCustIdToSyncCC = assCustForRollbacks.Select(x => (long)x.CustID);
 
-                        var options = new PushDataToExternalModel { ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize, IsPushCCToSoon88 = true };
+                        var options = new PushDataToExternalModel 
+                        { 
+                            ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize, 
+                            IsPushCCToSoon88 = true,
+                            IsUpdateDangerToMainDB = true,
+                            DangerLevelType = DangerLevel.ABI
+                        };
 
                         _customerClassifyService.CheckNewPAAssociationCustomerForRollback(assCustForRollbacks);
 

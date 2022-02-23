@@ -1084,7 +1084,8 @@
                     {
                         ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
                         IsPushCCToSoon88 = true,
-                        IsUpdateDangerToMainDB = false
+                        IsUpdateDangerToMainDB = true,
+                        DangerLevelType = DangerLevel.ABI
                     });
 
                     var hashCustInfos = syncResult.OutParam["custInfos"];
