@@ -719,9 +719,18 @@
                             DangerLevelType = DangerLevel.ABI
                         };
 
-                        _customerClassifyService.CheckNewPAAssociationCustomerForRollback(assCustForRollbacks);
-
-                        _custClassificationService.PushDataToExternal(listCustIdToSyncCC, options);
+                        Parallel.Invoke(() =>
+                        {
+                            _customerClassifyService.CheckNewPAAssociationCustomerForRollback(assCustForRollbacks);
+                        },
+                        () =>
+                        {
+                            _custClassificationService.PushDataToExternal(listCustIdToSyncCC, options);
+                        },
+                        () =>
+                        {
+                            _antiFraudCenterService.InsertAFCAccounts(listCustIdToSyncCC, ConfigSettings.IsSyncAFCData);
+                        });
                     }
                 }
             }
