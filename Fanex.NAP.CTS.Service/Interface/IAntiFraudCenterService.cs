@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
-
-namespace Fanex.NAP.CTS.Service
+﻿namespace Fanex.NAP.CTS.Service
 {
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
+
     public interface IAntiFraudCenterService
     {
-        void InsertAFCAccounts(IEnumerable<long> custIds, bool isSyncAFCData);
+        Task InsertAFCAccounts(IEnumerable<long> custIds, FromFlow fromFlow);
 
-        void DeleteAFCAccounts(IEnumerable<long> custIds, bool isSyncAFCData);
+        Task DeleteAFCAccounts(IEnumerable<long> custIds, FromFlow fromFlow);
     }
 }

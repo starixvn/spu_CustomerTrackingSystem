@@ -68,8 +68,4 @@
 	<Function name="CustomerProfile">
 		<Setting Key="CTS_Customer_GetInfoByCustIdList" SpName="CTS_Customer_GetInfoByCustIdList" DbName="DBCTS.bodb02.bodbSPUNet" />
 	</Function>
-
-	<Function name="AntiFraudCase">
-		<Setting Key="AFC_Get_B2CCustId" SpName="AFC_Get_B2CCustId_xtest" DbName="DBAGE.bodb02.bodbAdminNet" />
-	</Function>
 </Functions>

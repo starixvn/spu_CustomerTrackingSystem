@@ -81,11 +81,6 @@
     <Compile Include="Account\RobotSetting\GetRobotDetectionCriteria.cs" />
     <Compile Include="Account\RobotSetting\GetRobotDetectionTicketDetailsCriteria.cs" />
     <Compile Include="Account\RobotSetting\GetRobotUsersDetailsCriteria.cs" />
-    <Compile Include="AntiFraudCenter\AccountCheckExistCriteria.cs" />
-    <Compile Include="AntiFraudCenter\ErrorLogInsertCriteria.cs" />
-    <Compile Include="AntiFraudCenter\LicenseeCustFilterCriteria.cs" />
-    <Compile Include="AntiFraudCenter\GetB2CCustIdsCriteria.cs" />
-    <Compile Include="AntiFraudCenter\ParticipantGetCriteria.cs" />
     <Compile Include="Api\GetAssociationForExtAccCriteria.cs" />
     <Compile Include="Api\GetSubscriberInfoBySubscriberName.cs" />
     <Compile Include="Api\UpdateCategoryWhenPAUpdated\UpdateCategoryToCTSWhenPAUpdatedCriteria.cs" />

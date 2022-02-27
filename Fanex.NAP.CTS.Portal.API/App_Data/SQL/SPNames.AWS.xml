@@ -61,12 +61,4 @@
 		<Setting Key="CTS_DC_Common_GetStaticList" SpName="CTS_DC_Common_GetStaticList" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_RPT_ProblemCaseMonitor" SpName="CTS_DC_RPT_ProblemCaseMonitor" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
-
-	<Function name="AntiFraudCase">
-		<Setting Key="CTS_DC_CustClassification_ProblemAccount_FilterByB2C" SpName="CTS_DC_CustClassification_ProblemAccount_FilterByB2C" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="AFC_Get_B2CCustId" SpName="AFC_Get_B2CCustId" DbName="DBAGE.bodb02.bodbAdminNet" />
-		<Setting Key="AFC_DC_Participant_Get" SpName="AFC_DC_Participant_Get" DbName="MySQL.AFC_DataCenter.afcAPI" />
-		<Setting Key="AFC_DC_Account_CheckExist" SpName="AFC_DC_Account_CheckExist" DbName="MySQL.AFC_DataCenter.afcAPI" />
-		<Setting Key="AFC_DC_ErrorLog_Insert" SpName="AFC_DC_ErrorLog_Insert" DbName="MySQL.AFC_DataCenter.afcAPIAdmin" />
-	</Function>
 </Functions>

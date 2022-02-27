@@ -88,11 +88,7 @@
 
         public static string InsertAFCAccountsURL => GetConfigStringByName("AFC_InsertAccountsURL");
 
-        public static string UpdateAFCAccountsURL => GetConfigStringByName("AFC_UpdateAccountsURL");
-
         public static string DeleteAFCAccountsURL => GetConfigStringByName("AFC_DeleteAccountsURL");
-
-        public static string GetAFCAccountsURL => GetConfigStringByName("AFC_GetAFCAccountsURL");
 
         public static int ImportEvidenceChunkSize
         {

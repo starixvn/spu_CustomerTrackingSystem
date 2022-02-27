@@ -83,7 +83,7 @@
                 {
                     Task.Run(() =>
                     {
-                        antiFraudCenterService.InsertAFCAccounts(custIdsPushCC, ConfigSettings.IsSyncAFCData);
+                        antiFraudCenterService.InsertAFCAccounts(custIdsPushCC, FromFlow.CTSWEB);
                     });
                 });
             }

@@ -63,9 +63,6 @@
         public const string AssociationTypeName_BettingPattern = "Betting Pattern";
         public const string AssociationTypeName_IP = "IP";
         public const string AssociationTypeName_IPAssociation = "IP Association";
-        
-        public const string AFCInternal_LocalKey = "27D0D9AFDECCD6194383C824910690F3";
-        public const string AFCInternal_ProKey = "4824D237091879E4F2E0C02E61362D8F";
 
         public const int MatchMonitor_ReportQueryType = 2;
         
@@ -230,6 +227,15 @@
             Created = 201,
             ServerUnavailable = 503,
             InternalServerError = 500
+        };
+
+        public enum FromFlow
+        {
+            CTSWEB = 1,
+            CTSAPI = 2,
+            CTSServices = 3,
+            AFCSerivce = 4,
+            ManualTrigger = 5
         };
     }
 }

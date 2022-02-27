@@ -165,7 +165,7 @@
                         {
                             if (syncResult.ErrorCode == 0 && syncCustIds != null && syncCustIds.Any())
                             {
-                                _antiFraudCenterService.InsertAFCAccounts(syncCustIds, ConfigSettings.IsSyncAFCData);
+                                _antiFraudCenterService.InsertAFCAccounts(syncCustIds, FromFlow.CTSAPI);
                             }
                         });
                     }
@@ -291,7 +291,7 @@
                     {
                         if (syncResult.ErrorCode == 0 && syncCustIds != null && syncCustIds.Any())
                         {
-                            _antiFraudCenterService.InsertAFCAccounts(syncCustIds, ConfigSettings.IsSyncAFCData);
+                            _antiFraudCenterService.InsertAFCAccounts(syncCustIds, FromFlow.CTSAPI);
                         }
                     });
                 }
@@ -729,7 +729,7 @@
                         },
                         () =>
                         {
-                            _antiFraudCenterService.InsertAFCAccounts(listCustIdToSyncCC, ConfigSettings.IsSyncAFCData);
+                            _antiFraudCenterService.InsertAFCAccounts(listCustIdToSyncCC, FromFlow.CTSAPI);
                         });
                     }
                 }
