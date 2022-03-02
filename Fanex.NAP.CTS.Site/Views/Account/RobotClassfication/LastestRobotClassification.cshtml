@@ -4,30 +4,10 @@
     ViewBag.Title = "RobotClassification";
 }
 
-<div id="lastest-robot-classification">
-    <div class="note">
-        <div class="group-icon" id="btnNoteToggle">
-            <span class="note-title">Combination Rule</span>
-            <i class="note-icon icon-chevron-down"></i>
-        </div>
-
-        <div id="divNote" hidden="hidden">
-            <div class="wrapper-info">
-                <div>- Bad robot: at least 1 Bad robot in group</div>
-                <div>- Observed robot: no Bad robot & at least 1 Observed robot</div>
-                <div>- Good robot: no Bad robot & no Observed robot</div>
-                <div>** Bad robot > Observed robot > Good robot</div>
-            </div>
-        </div>
-    </div>
+<div id="lastest-robot-classification">    
     <div class="fixed-header">
         <div class="graph-heading">
-            <div class="free-size"></div>
-            <div class="graph-info">
-                <div>
-                    <button id="btnViewHistory" class="button button-primary-outline" title="View History">View History</button>
-                </div>
-            </div>
+            <div class="free-size"></div>           
         </div>
     </div>
 
@@ -35,49 +15,12 @@
         <table id="lastest-robot-classification-table" class="table table-striped" style="width: 100%">
             <thead>
                 <tr>
-                    <th>Sport</th>
-                    <th>Bet Type</th>
-                    <th>Market</th>
-                    <th>Robot Type</th>
                     <th>Scanned Date</th>
+                    <th>Betting Statistic</th>
+                    <th>Robot Type</th>                   
                 </tr>
             </thead>
             <tbody></tbody>
         </table>
     </div>
-</div>
-
-<div id="divRobotClassificationHistory" style="display:none;">
-    <div class="group-control">
-        <div class="form-filter">
-            <div class="group calendar width-180">
-                <label class="text">From</label>
-                <input type="text" id="dpkFromDate" class="control" readonly>
-                <span class="icon-calendar-text"></span>
-            </div>
-            <div class="group calendar width-180">
-                <label class="text">To</label>
-                <input type="text" id="dpkToDate" class="control" readonly>
-                <span class="icon-calendar-text"></span>
-            </div>
-
-            <button class="button btn-search" id="btnSearchRobotClassHistory" autofocus>Search</button>
-        </div>
-
-        <div class="graph-heading">
-            <div class="free-size"></div>
-        </div>
-    </div>
-    <table id="robot-classification-history-table" class="table table-striped" style="width: 100%">
-        <thead>
-            <tr>
-                <th>Sport</th>
-                <th>Bet Type</th>
-                <th>Market</th>
-                <th>Robot Type</th>
-                <th>Scanned Date</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
 </div>

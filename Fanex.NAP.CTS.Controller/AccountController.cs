@@ -1415,7 +1415,7 @@
 
                 default:
                     break;
-            }
+            }           
 
             reason += "</div>";
 
@@ -1591,28 +1591,37 @@
         }
 
         [HttpPost]
-        public ActionResult GetLastestRobotClassification(long custId)
+        public ActionResult GetHistoryRobotClassification(long custId)
         {
-            var data = new List<RobotClassificationViewModel>();
+            var data = Enumerable.Empty<RobotClassificationViewModel>();
+            var bettingStatisticFormat = "Turnover: {0} | Win lost: {1} | Margin: {2}% | Bet count: {3} | Active days: {4}";
+          
+            var robotData = _robotClassificationService.GetHistoryRobotClassification(custId);
 
-            var robotStatus = _robotClassificationService.GetStatusRobotClassification(custId);
-
-            if (robotStatus.IsRobotUser)
+            if (robotData != null && robotData.Any())
             {
-                var lastestRobotData = _robotClassificationService.GetLastestRobotClassification(custId);
-                data = lastestRobotData.OrderByDescending(d => d.ScannedDate).Select(d => new RobotClassificationViewModel(d)).ToList();
-            }
+                data = robotData.OrderByDescending(d => d.FromDate).Select(x => {
+                    decimal margin = 0;
 
-            return Json(new { data });
-        }
+                    if (x.Turnover != 0)
+                    {
+                        margin = x.Winloss / x.Turnover * 100;
+                    }
 
-        [HttpPost]
-        public ActionResult GetRobotClassificationHistory(long custId, DateTime fromDate, DateTime toDate)
-        {
-            var lastestRobotData = _robotClassificationService.GetHistoryRobotClassification(custId, fromDate, toDate);
-            var data = lastestRobotData.Select(d => new RobotClassificationViewModel(d));
-
-            return Json(new { data });
+                    return new RobotClassificationViewModel
+                    {
+                        ScannedDate = x.FromDate.ToString(Consts.FormatDateToString_MMMddyyyy),
+                        BettingStatistic = string.Format(bettingStatisticFormat
+                                         , Math.Round(x.Turnover, 3).ToString("0.000").Replace(".000", string.Empty)
+                                         , Math.Round(x.Winloss, 3).ToString("0.000").Replace(".000", string.Empty)
+                                         , Math.Round(margin, 3).ToString("0.000").Replace(".000", string.Empty)
+                                         , x.BetCount, x.ActiveDays),
+                        RobotType = x.RobotType
+                    };
+                });
+            }            
+            
+            return Json(new { data }, JsonRequestBehavior.AllowGet);
         }
 
         #endregion Robot Classification

@@ -2,18 +2,11 @@
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
-    using System;
 
     public class GetHistoryRobotClassificationCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_CustID")]
         public long CustId { get; set; }
-
-        [SpParam(SqlParamName = "ip_FromDate")]
-        public DateTime FromDate { get; set; }
-
-        [SpParam(SqlParamName = "ip_ToDate")]
-        public DateTime ToDate { get; set; }
 
         public override string GetSettingKey()
         {

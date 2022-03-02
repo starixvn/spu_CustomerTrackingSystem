@@ -6,9 +6,7 @@
 
     public interface IRobotClassificationService
     {
-        IEnumerable<RobotClassification> GetLastestRobotClassification(long custID);
-
-        IEnumerable<RobotClassification> GetHistoryRobotClassification(long custID, DateTime fromDate, DateTime toDate);
+        IEnumerable<RobotClassification> GetHistoryRobotClassification(long custID);
 
         CustomerRobotUserStatusModel GetStatusRobotClassification(long custID);
     }
