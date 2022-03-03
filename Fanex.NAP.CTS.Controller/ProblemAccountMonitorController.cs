@@ -105,7 +105,7 @@
         }
 
         [HttpPost]
-        [TrackingFunctionUsageFilterAttribute(systemId = SystemId.CTSWeb, functionId = TrackingCtsFunctionId.ProblemAccountMonitor)]
+        [TrackingFunctionUsageFilter(systemId = SystemId.CTSWeb, functionId = TrackingCtsFunctionId.ProblemAccountMonitor)]
         public ActionResult GetProblemAccountMonitor(DateTime eventDate, string leagueIds, string matchStatus, string siteIds)
         {
             var viewModel = Enumerable.Empty<ProblemAccountMonitorViewModel>();

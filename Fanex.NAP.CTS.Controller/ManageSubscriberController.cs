@@ -50,7 +50,7 @@
         }
 
         [HttpPost]
-        [TrackingFunctionUsageFilterAttribute(systemId = SystemId.CTSWeb, functionId = TrackingCtsFunctionId.ManageSubscriberRpt)]
+        [TrackingFunctionUsageFilter(systemId = SystemId.CTSWeb, functionId = TrackingCtsFunctionId.ManageSubscriberRpt)]
         public ActionResult GetSubscribers()
         {
             var subscribers = _manageSubscriberService.GetSubscribers().OrderByDescending(c => c.IsActive).ThenByDescending(c => c.CreatedDate).ThenByDescending(c=>c.TerminatedDate);
@@ -70,7 +70,7 @@
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.ManageSubscriber, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        [TrackingFunctionUsageFilterAttribute(systemId = SystemId.CTSWeb, functionId = TrackingCtsFunctionId.ManageSubscriberAdd)]
+        [TrackingFunctionUsageFilter(systemId = SystemId.CTSWeb, functionId = TrackingCtsFunctionId.ManageSubscriberAdd)]
         public ActionResult UpdateSubscriber(SubscriberUpdateModel subscriberInsertModel)
         {
             if (string.IsNullOrEmpty(subscriberInsertModel.IBCUserNamePrefix))
@@ -105,7 +105,7 @@
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.ManageSubscriber, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        [TrackingFunctionUsageFilterAttribute(systemId = SystemId.CTSWeb, functionId = TrackingCtsFunctionId.ManageSubscriberRemove)]
+        [TrackingFunctionUsageFilter(systemId = SystemId.CTSWeb, functionId = TrackingCtsFunctionId.ManageSubscriberRemove)]
         public ActionResult RemoveSubscriber(int subscriberID)
         {
             var result = _manageSubscriberService.RemoveSubscriber(subscriberID, CurrentSession.UserId);

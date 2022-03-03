@@ -49,7 +49,7 @@
         }
 
         [HttpPost]
-        [TrackingFunctionUsageFilterAttribute(systemId = SystemId.CTSWeb, functionId = TrackingCtsFunctionId.MatchMonitorRpt)]
+        [TrackingFunctionUsageFilter(systemId = SystemId.CTSWeb, functionId = TrackingCtsFunctionId.MatchMonitorRpt)]
         public ActionResult GetMatchMonitor(MatchMonitorFilterViewModel para)
         {
             var matchMonitors = new List<MatchMonitorModel>();
@@ -123,7 +123,7 @@
         }
 
         [HttpPost]
-        [TrackingFunctionUsageFilterAttribute(systemId = SystemId.CTSWeb, functionId = TrackingCtsFunctionId.MatchMonitorDetailRpt)]
+        [TrackingFunctionUsageFilter(systemId = SystemId.CTSWeb, functionId = TrackingCtsFunctionId.MatchMonitorDetailRpt)]
         public ActionResult GetMatchMonitorDetail(MatchMonitorDetailFilterViewModel para)
         {
             var matchDetailResult = Enumerable.Empty<MatchMonitorDetailResultViewModel>();

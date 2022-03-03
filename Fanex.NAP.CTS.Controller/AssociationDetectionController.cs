@@ -49,7 +49,7 @@ namespace Fanex.NAP.CTS.Controller
         }
 
         [HttpPost]
-        [TrackingFunctionUsageFilterAttribute(systemId = SystemId.CTSWeb, functionId = TrackingCtsFunctionId.AssociationDetection)]
+        [TrackingFunctionUsageFilter(systemId = SystemId.CTSWeb, functionId = TrackingCtsFunctionId.AssociationDetection)]
         public ActionResult GetAssociationDetection(string userNames)
         {
             var result = new GetAssociationDetectionViewModel();
