@@ -81,6 +81,8 @@
             RegisterAssociationDetectionBundles(bundles);
 
             RegisterTransactionReport(bundles);
+
+            RegisterProblemAccountManagementBundles(bundles);
         }
 
         private static void RegisterCTSCoreBundles(BundleCollection bundles)
@@ -363,6 +365,18 @@
                  "~/Content/scss/MultipleSelect/jquery.multiselect.filter.css",
                 "~/Content/scss/MultipleSelect/jquery.multiselect.css",
                 "~/Content/scss/pages/transaction-report/transaction-report.css"));
+        }
+
+        private static void RegisterProblemAccountManagementBundles(BundleCollection bundles)
+        {
+            bundles.Add(new ScriptBundle("~/problem-account-management-scripts").Include(
+                "~/Scripts/MultipleSelect/jquery.multiselect.filter.js",
+                "~/Scripts/problem-account-management/index.js"));
+
+            bundles.Add(new StyleBundle("~/problem-account-management-styles").Include(
+                "~/Content/scss/MultipleSelect/jquery.multiselect.filter.css",
+                "~/Content/scss/MultipleSelect/jquery.multiselect.css",
+                "~/Content/scss/pages/problem-account-management/problem-account-management.css"));
         }
     }
 }

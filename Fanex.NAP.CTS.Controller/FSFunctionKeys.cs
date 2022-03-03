@@ -102,4 +102,7 @@ public static class FSFunctionKeys
     public const string ProblemCaseMonitor = "ProblemCaseMonitor";
 
     public const string TransactionReport = "TransactionReport";
+
+    public const string ProblemAccountManagement = "ProblemAccountManagement";
+         
 }
