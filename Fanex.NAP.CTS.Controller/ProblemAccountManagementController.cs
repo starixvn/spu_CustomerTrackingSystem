@@ -5,6 +5,7 @@
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
+    using Fanex.NAP.CTS.ViewModel.ProblemAccountManagement;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -34,6 +35,34 @@
             return View(subscriber);
         }
 
+        public ActionResult ValidateUsernames(string userNames)
+        {
+            var data = "";
+
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult GetProblemAccount(string userNames)
+        {
+            var data = new List<ProblemAccountViewModel>()
+            {
+                new ProblemAccountViewModel
+                {
+                     UserName = "A",
+                     Site = "Bet88",
+                     Currency = "USD",
+                     Category = "Group Betting",
+                     Comment = "Test",
+                     CreatedDateStr = "Feb 28, 2022"
+                }
+            };
+
+            return Json(new
+            {
+                data = data
+            }, JsonRequestBehavior.AllowGet);
+        }
 
     }
 }

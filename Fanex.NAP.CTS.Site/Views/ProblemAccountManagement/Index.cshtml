@@ -8,7 +8,7 @@
 
 }
 
-<section class="problem-account-container">
+<div class="problem-account-container">
     <div class="content">
         <h2 class="page-title">Problem Account Management</h2>
     </div>
@@ -31,8 +31,8 @@
                     </div>
 
                     <div class="group width-180">
-                        <label class="text">Subscriber</label>
-                        <select class="control width-select" id="cbbSubscriber" multiple="multiple">
+                        <label class="text">Site</label>
+                        <select class="control" id="cbbSite" multiple="multiple">
                             @if (Model != null)
                             {
                                 foreach (var group in Model)
@@ -44,21 +44,82 @@
                                         }
                                     </optgroup>
                                 }
-                            }
+                            }                           
                         </select>
                     </div>
+
                     <div class="group width-180">
                         <div class="label">Username:</div>
                         <input type="text" id="inputUserName" value="" placeholder="" maxlength="50" />
                     </div>
+
+                    <div class="group width-180">
+                        <label class="checkbox-container" id="ckbSearchDownlinesContainer">
+                            <input id="inputSearchDownlines" type="checkbox">
+                            <span class="checkmark"></span>
+                            Search downlines of this account
+                        </label>
+                    </div>
                     <button class="button button-generate" id="btnGenerate">Generate</button>
                 </div>
             </div>
+
+            <div id="gridProblemAccount">
+                <div class="fix-header">
+                    <div class="top-header">
+                        <div class="mark-new-problem-account">
+                            <button class="button mark-new-problem-account-button" id="btnMarkNewProblemAccount" title="Mark New Problem Account">
+                                <i class="icon icon-excel"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <table id="tblProblemAccount" class="table table-striped width-100per table-problem-account" style="width: 100%">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Site</th>
+                            <th>Currency</th>
+                            <th>Category</th>
+                            <th>Comment</th>
+                            <th>Created Date</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>                
+            </div>
+        </div>        
+    </div>
+</div>
+
+<div id="idAddProblemAccount" class="popup-add divAddProblemAccount" style="display:none;">
+    <div class="group-title">
+        <div class="label">Username</div>
+        <div class="wrapper-title">
+            <div class="wrapper-rule wrapper-rule-left">
+                <span class="text bg-red">Red</span>
+                <span class="text">Invalid username</span>
+            </div>
+            <div class="wrapper-rule wrapper-rule-right">
+                <span class="text bg-yellow">Yellow</span>
+                <span class="text">Duplicated username</span>
+            </div>
+        </div>
+        <span class="wrapper-value" id="spanAddProblemAccount">
+            <input id="inputTagUsername" type="text" name='tags-outside' class="input-field full-width tagify--outside" placeholder="Type username (Separate by comma, tab and enter)" />
+            <span class="limit-username">
+                Max: <span id="spanAddProblemAccountMaxTag">50</span> usernames
+            </span>
+            <span id="spanAddProblemAccountChangeHidden" hidden></span>
+        </span>
+
+        <div class="form-control wrapper-comment">
+            <div class="label">Comment</div>
+            <textarea id="txtasscomment" rows="3" class="comment-field full-width" maxlength="500"></textarea>
         </div>
     </div>
-</section>
+</div>
 
 @section scripts {
     @Scripts.Render("~/problem-account-management-scripts")
 }
-

@@ -371,7 +371,7 @@
         {
             bundles.Add(new ScriptBundle("~/problem-account-management-scripts").Include(
                 "~/Scripts/MultipleSelect/jquery.multiselect.filter.js",
-                "~/Scripts/problem-account-management/index.js"));
+                "~/Scripts/ProblemAccountManagement/index.js"));
 
             bundles.Add(new StyleBundle("~/problem-account-management-styles").Include(
                 "~/Content/scss/MultipleSelect/jquery.multiselect.filter.css",

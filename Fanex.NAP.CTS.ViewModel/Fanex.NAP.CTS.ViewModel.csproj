@@ -142,6 +142,7 @@
     <Compile Include="ProbationManagement\ExportProbationCategoryFilter.cs" />
     <Compile Include="ProbationManagement\ProbationCategoryViewModel.cs" />
     <Compile Include="ProbationManagement\RenderProbationViewModel.cs" />
+    <Compile Include="ProblemAccountManagement\ProblemAccountViewModel.cs" />
     <Compile Include="ProblemAccountMonitor\DetailBetType.cs" />
     <Compile Include="ProblemAccountMonitor\DetailCurrency.cs" />
     <Compile Include="ProblemAccountMonitor\DetailGroup.cs" />
