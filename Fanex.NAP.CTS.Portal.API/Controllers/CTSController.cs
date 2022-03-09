@@ -81,27 +81,6 @@
             _antiFraudCenterService = new AntiFraudCenterService();
         }
 
-        ///// <summary>
-        ///// Place Evidence on CTS
-        ///// </summary>
-        ///// <param name="evidence"></param>
-        ///// <returns></returns>
-        //[HttpPost]
-        //public bool PlaceEvidence(UpdatePlaceEvidenceModel evidence)
-        //{
-        //    try
-        //    {
-        //        _accountService.ProcessPlaceEvidenceByCustId(evidence);
-
-        //        return true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        LogService.Error("PlaceEvidence exception: " + ex.Message);
-        //        return false;
-        //    }
-        //}
-
         /// <summary>
         /// Place evidence for multiple customer
         /// </summary>
