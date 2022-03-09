@@ -1,6 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Model.ProblemAccountManagement
 {
-    public class CategoryModel
+    public class ProblemAccountCategoryModel
     {
         public int CategoryID { get; set; }
 

@@ -14,7 +14,7 @@
     .problem-account-content .problem-account-table .group-control .title-association {
       margin-bottom: -1.3rem; }
     .problem-account-content .problem-account-table .group-control .form-filter .calendar {
-      display: flex;
+      /*display: flex;*/
       align-items: center;
       width: auto; }
       .problem-account-content .problem-account-table .group-control .form-filter .calendar .icon-calendar-text {
@@ -25,6 +25,8 @@
         margin-bottom: 0; }
     .problem-account-content .problem-account-table .group-control .form-filter .group .width-select {
       width: 15.5rem; }
+    .problem-account-content .problem-account-table .group-control .form-filter .width-320 {
+      min-width: 320px; }
     .problem-account-content .problem-account-table .group-control .form-filter .button-generate {
       background-color: #396ef8;
       border-radius: 2px;

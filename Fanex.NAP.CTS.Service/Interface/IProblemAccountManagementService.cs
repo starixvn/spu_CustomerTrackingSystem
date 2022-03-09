@@ -1,14 +1,21 @@
 ﻿namespace Fanex.NAP.CTS.Service
-{
-    using Fanex.NAP.CTS.Model.ProbationManagement;
+{    
+    using Fanex.NAP.CTS.Model.ProblemAccountManagement;
+    using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
+    using Fanex.NAP.CTS.ViewModel.ProblemAccountManagement;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     public interface IProblemAccountManagementService
     {
-        IEnumerable<CategoryModel> GetProblemAccountCategory();
+        IEnumerable<SubscriberGroupModel> GetAllSites();
+
+        IEnumerable<ProblemAccountModel> GetProblemAccounts(ProblemAccountFilterViewModel filter);
+
+        IEnumerable<ProblemAccountCategoryModel> GetProblemAccountCategories();
+
+        IEnumerable<ProblemAccountValidatedModel> ValidateProblemAccounts();
+
+        IEnumerable<GetCustEvidenceByReasonIdModel> GetCustEvidenceByReasonIds();
     }
 }

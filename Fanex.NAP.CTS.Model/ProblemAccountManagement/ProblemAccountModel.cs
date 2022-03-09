@@ -1,17 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Fanex.NAP.CTS.Model.ProblemAccountManagement
+﻿namespace Fanex.NAP.CTS.Model.ProblemAccountManagement
 {
+    using System;
+
     public class ProblemAccountModel
     {
         public long CTSCustID { get; set; }
 
         public long CustID { get; set; }
 
+        public string UserName { get; set; }
+
+        public string UserName2 { get; set; }
+
+        public string Site { get; set; }
+
+        public int SiteID { get; set; }
+
+        public string Currency { get; set; }
+
+        public int CurrencyID { get; set; }
+
+        public string CategoryName { get; set; }
+
+        public int CategoryID { get; set; }
+
+        public DateTime CreatedDate { get; set; }
 
     }
 }

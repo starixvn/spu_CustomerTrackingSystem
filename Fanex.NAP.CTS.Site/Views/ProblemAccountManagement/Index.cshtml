@@ -14,12 +14,9 @@
     </div>
     <div class="problem-account-content">
         <div class="problem-account-table">
-            <div class="group-control">
-                <div>
-                    <div class="label"> Date </div>
-                </div>
-                <div class="form-filter">
-                    <div class="group calendar width-180">
+            <div class="group-control">                    
+                <div class="form-filter">                    
+                    <div class="group calendar width-180">                              
                         <label class="text">From</label>
                         <input type="text" id="dpkFromDate" class="control" readonly>
                         <span class="icon-calendar-text"></span>
@@ -30,27 +27,25 @@
                         <span class="icon-calendar-text"></span>
                     </div>
 
-                    <div class="group width-180">
+                    <div class="group width-320">
                         <label class="text">Site</label>
                         <select class="control" id="cbbSite" multiple="multiple">
                             @if (Model != null)
                             {
-                                foreach (var group in Model)
+                                foreach (var site in Model)
                                 {
-                                    <optgroup label="@group.SubscriberGroupName">
-                                        @foreach (var item in group.SubscriberList)
-                                        {
-                                            <option selected value=@item.SubscriberID>@item.SubscriberName</option>
-                                        }
-                                    </optgroup>
+                                    <option selected value=@site.SiteID>@site.SiteName</option>
                                 }
-                            }                           
+                            }
                         </select>
                     </div>
 
                     <div class="group width-180">
-                        <div class="label">Username:</div>
-                        <input type="text" id="inputUserName" value="" placeholder="" maxlength="50" />
+                        <label class="text">Username</label>
+                        <div>
+                            <input type="text" id="inputUserName" value="" placeholder="" maxlength="50" />
+                        </div>
+
                     </div>
 
                     <div class="group width-180">
@@ -67,10 +62,8 @@
             <div id="gridProblemAccount">
                 <div class="fix-header">
                     <div class="top-header">
-                        <div class="mark-new-problem-account">
-                            <button class="button mark-new-problem-account-button" id="btnMarkNewProblemAccount" title="Mark New Problem Account">
-                                <i class="icon icon-excel"></i>
-                            </button>
+                        <div class="add-username">
+                            <button class="button button-primary-outline" id="btnMarkNewProblemAccount">Mark New Problem Account</button>
                         </div>
                     </div>
                 </div>
@@ -92,9 +85,9 @@
     </div>
 </div>
 
-<div id="idAddProblemAccount" class="popup-add divAddProblemAccount" style="display:none;">
+<div id="divAddProblemAccount" class="popup-add divAddProblemAccount" style="display:none;">
     <div class="group-title">
-        <div class="label">Username</div>
+        <div class="label">Username*</div>
         <div class="wrapper-title">
             <div class="wrapper-rule wrapper-rule-left">
                 <span class="text bg-red">Red</span>
@@ -105,19 +98,33 @@
                 <span class="text">Duplicated username</span>
             </div>
         </div>
-        <span class="wrapper-value" id="spanAddProblemAccount">
-            <input id="inputTagUsername" type="text" name='tags-outside' class="input-field full-width tagify--outside" placeholder="Type username (Separate by comma, tab and enter)" />
-            <span class="limit-username">
-                Max: <span id="spanAddProblemAccountMaxTag">50</span> usernames
-            </span>
-            <span id="spanAddProblemAccountChangeHidden" hidden></span>
-        </span>
-
-        <div class="form-control wrapper-comment">
-            <div class="label">Comment</div>
-            <textarea id="txtasscomment" rows="3" class="comment-field full-width" maxlength="500"></textarea>
-        </div>
     </div>
+    <span class="wrapper-value" id="spanAddProblemAccountUserName">
+        <input id="inputTagUsername" type="text" name='tags-outside' class="input-field full-width tagify--outside" placeholder="Type username (Separate by comma, tab and enter)" />
+        <span class="limit-username">
+            Max: <span id="spanAddProblemAccountUserNameMaxTag">50</span> usernames
+        </span>
+        <span id="spanAddProblemAccountChangeHidden" hidden></span>
+    </span>
+
+    <div class="form-control">
+        <div class="label">Categories*</div>
+        <select class="control" id="cbbCategories" style="width:130px">
+            <option value="-1" selected>All</option>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+        </select>
+    </div>
+
+    <div class="form-control wrapper-comment">
+        <div class="label">Comment</div>
+        <textarea id="txtComment" rows="3" class="comment-field full-width" maxlength="500"></textarea>
+    </div>
+
+    <div class="modal-footer margin-top-10">
+        <button id="btnMarkCancel" class="button btn-cancel-outline" title="Cancel">Cancel</button>
+        <button id="btnMarkSave" class="button -add" title="Add Username">Save</button>
+    </div>  
 </div>
 
 @section scripts {

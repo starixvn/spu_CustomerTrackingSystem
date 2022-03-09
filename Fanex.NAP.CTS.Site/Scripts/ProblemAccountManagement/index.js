@@ -6,24 +6,31 @@
         dpkFromDate: $('#dpkFromDate'),
         dpkToDate: $('#dpkToDate'),
         cbbSite: $('#cbbSite'),
+        cbbProblemAccountCategories: $('#cbbProblemAccountCategories'),
+        inputUserName: $('#inputUserName'),
+        inputSearchDownlines: $('#inputSearchDownlines'),
         btnGenerate: $('#btnGenerate'),
         tblProblemAccount: $('#tblProblemAccount'),
-        //btnAddUsername: $('#btnAddUsername'),
-        //txtAsscomment: $('#txtasscomment'),
-        //inputTagUsername: $('#inputTagUsername'),
-        //btnsaveusername: $('#btnsaveusername'),
-        //btncancelusername: $('#btncancelusername'),
-        //btnIconDelete: $('.sub-icon.-delete'),
-        //divAddUsername: $('#divAddUsername'),
-        //spanAddAssociationUserName: $('#spanAddAssociationUserName'),
-        //spanAddAssociationUserNameMaxTag: $('#spanAddAssociationUserNameMaxTag'),
-        //spanAddAssociationChangeHidden: $('#spanAddAssociationChangeHidden'),
-        //searchInput: $('#username'),
+        btnMarkNewProblemAccount: $('#btnMarkNewProblemAccount'),
+        divAddProblemAccount: $('#divAddProblemAccount'),
+        txtComment: $('#txtComment'),
+        btnMarkCancel: $('#btnMarkCancel'),
+        btnMarkSave: $('#btnMarkSave'),
+        spanAddProblemAccountUserName: $('#spanAddProblemAccountUserName'),
+        spanAddProblemAccountUserNameMaxTag: $('#spanAddProblemAccountUserNameMaxTag'),
+        spanAddProblemAccountChangeHidden: $('#spanAddProblemAccountChangeHidden'),
+        inputTagUsername: $('#inputTagUsername'),
         maxTags: 50
     };
 
     function RenderGrid() {
-        var url = common.modifyRelativeUrl('ProblemAccountManagement/GetProblemAccount');
+        let url = common.modifyRelativeUrl('ProblemAccountManagement/GetProblemAccount');
+        let params = {};
+        params.FromDate = domElements.dpkFromDate.val();
+        params.ToDate = domElements.dpkToDate.val();
+        params.Sites = domElements.cbbSite.val().join();
+        params.UserName = domElements.inputUserName.val();
+        params.HasDownline = domElements.inputSearchDownlines.is(":checked");
 
         return domElements.tblProblemAccount.DataTable({
             serverSide: false,
@@ -31,22 +38,11 @@
             pagingType: "full_numbers",
             ajax: {
                 url: url,
-                data: {
-                    userNames : "member17"
-                },
+                data: params,
                 type: "POST",
                 beforeSend: function () {
                     domElements.tblProblemAccount.find('tbody').addClass('loading');
-                },
-                //dataFilter: function (response) {
-                //    var json = jQuery.parseJSON(response);
-                //    var newJson = {};
-                //    newJson.data = json.data;
-                //    newJson.recordsTotal = json.recordsTotal;
-                //    newJson.recordsFiltered = json.recordsFiltered;
-
-                //    return JSON.stringify(newJson);
-                //},
+                },              
                 complete: function () {
                     domElements.tblProblemAccount.find('tbody').removeClass('loading');
                 }
@@ -72,8 +68,8 @@
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
                 { targets: [0, 1, 2, 3, 4, 5], className: "text-center" },
-                { targets: [0], width: "20%" },
-                { targets: [1], width: "20%" },
+                { targets: [0], width: "15%" },
+                { targets: [1], width: "15%" },
                 { targets: [2], width: "15%" },
                 { targets: [3], width: "15%" },
                 { targets: [4], width: "25%" },
@@ -125,6 +121,151 @@
             .datepicker("option", "minDate", fromDateValue)
             .datepicker("option", "maxDate", moment(fromDateValue).add(1, "year").toDate());
     }    
+   
+    function InitInputTagUsername() {
+        domElements.spanAddProblemAccountUserNameMaxTag.text(domElements.maxTags);
+        domElements.spanAddProblemAccountChangeHidden.text("0");
+
+        function AddBorderTags() {
+            domElements.spanAddProblemAccountUserName.find('tags').addClass('ctrlA');
+            let allTags = domElements.spanAddProblemAccountUserName.find('tags tag.tagify__tag');
+            allTags.each(function (_, tag) {
+                $(tag).css('border', '1px solid #6187E7');
+            });
+        }
+
+        function ResetMaxTag() {
+            let currentTagsLength = domElements.spanAddProblemAccountUserName.find('tags tag').length;
+            if (currentTagsLength < domElements.maxTags)
+                domElements.spanAddProblemAccountUserNameMaxTag.text(domElements.maxTags - currentTagsLength + 1);
+        }
+
+        function EnableButtonAdd() {
+            let validTags = domElements.spanAddProblemAccountUserName.find('tags tag.valid');
+            let invalidDuplicatedTags = domElements.spanAddProblemAccountUserName.find('tags tag.invalid-duplicated');
+            let invalidUsernameTags = domElements.spanAddProblemAccountUserName.find('tags tag.invalid-username');
+            let notInvalid = invalidDuplicatedTags.length + invalidUsernameTags.length;
+            if (notInvalid <= 1 && validTags.length > 1)
+                domElements.btnMarkSave.prop('disabled', false);
+            else
+                domElements.btnMarkSave.prop('disabled', true);
+        }
+
+        function IsTextUnicode(text) {
+            var pattern = /^[\x20-\x7E]*$/;
+            return pattern.test(text);
+        }
+
+        function OnChangeTags(tagName, cssClass) {
+            let maxCountTags = parseInt(domElements.spanAddProblemAccountUserNameMaxTag.text());
+            let isTextUnicode = IsTextUnicode($(tagName.tag).text());
+
+            if (!isTextUnicode) {
+                domElements.inputTagUsername.tagify().data('tagify').removeTags(tagName.tag);
+            }
+            else if (maxCountTags > 0) {
+                let $tag = $(tagName.tag);
+                let textReplaced = $tag.text();
+                textReplaced = textReplaced.replace(new RegExp("'", 'g'), "").replace(new RegExp("\"", 'g'), "");
+                if (textReplaced.length > 50)
+                    textReplaced = textReplaced.substr(0, 50);
+                $tag.val(textReplaced);
+                $tag.attr('data-user-name', textReplaced);
+                $tag.prop('title', textReplaced);
+                $tag.find('span.tagify__tag-text').text(textReplaced);
+                $tag.addClass(cssClass);
+                let btnRemove = $tag.find('x');
+
+                btnRemove.on('click', function (e) {
+                    let currentTag = $(e.target).parent();
+
+                    ResetMaxTag();
+
+                    ValidateProblemAccountInput(currentTag.text().trim());
+
+                    EnableButtonAdd();
+                });
+
+                domElements.spanAddProblemAccountUserNameMaxTag.text(maxCountTags - 1);
+            } else {
+                inputTagUsername.tagify().data('tagify').removeTags(tagName.tag);
+            }
+            domElements.btnMarkSave.prop('disabled', true);
+        }
+
+        domElements.inputTagUsername.tagify({
+            pattern: null,
+            delimiters: /\r?\n|\r| |,/,
+            keepInvalidTags: true,
+            skipInvalid: false,
+            callbacks: {},
+            addTagOnBlur: true,
+            duplicates: true,
+            editTags: 0,
+            whitelist: [],
+            blacklist: [],
+            maxTags: domElements.maxTags,
+            enforceWhitelist: false,
+            dropdown: {
+                position: "input",
+                enabled: 0
+            }
+        })
+
+            .off('add').on('add', function (_, tagName) {
+                OnChangeTags(tagName, 'valid');
+                domElements.spanAddProblemAccountChangeHidden.text("1");
+            })
+            .off('invalid').on('invalid', function (_, tagName) {
+                OnChangeTags(tagName, 'invalid-duplicated');
+                domElements.spanAddProblemAccountChangeHidden.text("1");
+            });
+
+        domElements.inputTagUsername.off('keydown').on('keydown', function () {
+            let keyCode = event.keyCode;
+
+            if (keyCode === 46) {
+                if (domElements.spanAddProblemAccountUserName.find('tags').hasClass('ctrlA')) {
+                    domElements.inputTagUsername.tagify().data('tagify').removeAllTags();
+                    domElements.spanAddProblemAccountUserNameMaxTag.text(domElements.maxTags);
+                    domElements.spanAddProblemAccountUserName.find('tags').removeClass('ctrlA');
+                }
+            }
+
+            if (event.ctrlKey) {
+                if (keyCode === 65 || keyCode === 97) {
+                    return AddBorderTags();
+                }
+            }
+        });
+
+        $(document).on('mouseup', function (e) {
+            let isOutSiteInput = !domElements.spanAddProblemAccountUserName.is(e.target) && domElements.spanAddProblemAccountUserName.has(e.target).length === 0;
+            let isTagsFocus = domElements.spanAddProblemAccountUserName.find('tags.tagify--focus').length > 0;
+            let isChange = domElements.spanAddProblemAccountChangeHidden.text();
+            if (isOutSiteInput && isTagsFocus || isChange === "1") {
+                domElements.txtComment.focus();
+                domElements.spanAddProblemAccountUserName.addClass("loading-value");
+                setTimeout(() => {
+                    ValidateProblemAccountInput('');
+                    domElements.spanAddProblemAccountUserName.removeClass("loading-value");
+                    domElements.spanAddProblemAccountChangeHidden.text("0");
+                }, 500);
+            }
+        });
+
+        domElements.inputTagUsername.tagify().data('tagify').removeAllTags();
+        domElements.spanAddProblemAccountUserName.find('tags').attr('tabindex', "1");
+        domElements.btnMarkSave.prop('disabled', true);
+    }
+
+    function GetProblemAccountCategories() {
+
+    }
+
+    function MarkNewProblemAccount() {
+        
+    }
 
     function Initial() {
         domElements.dpkFromDate
@@ -161,6 +302,30 @@
         });
 
         domElements.btnGenerate.on('click', function () { GetProblemAccountReport(); });
+
+        domElements.btnMarkNewProblemAccount.on('click', function () {
+            domElements.txtComment.val('');
+
+            InitInputTagUsername();
+
+            domElements.divAddProblemAccount.dialog({
+                modal: true,
+                width: '800px',
+                title: 'MARK NEW PROBLEM ACCOUNT',
+                resizable: true,
+                draggable: true,
+                close: function () {
+                    $(this).dialog('close');
+                }
+            });
+        });        
+
+        domElements.btnMarkSave.on('click', () => MarkNewProblemAccount());
+
+        domElements.btnMarkCancel.on('click', () => {
+            domElements.divAddProblemAccount.dialog('close');
+        });
+
     }
 
     $(document).ready(function () {

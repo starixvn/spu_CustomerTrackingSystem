@@ -371,11 +371,14 @@
         {
             bundles.Add(new ScriptBundle("~/problem-account-management-scripts").Include(
                 "~/Scripts/MultipleSelect/jquery.multiselect.filter.js",
+                 "~/Scripts/tagify/jquery.tagify.min.js",
+                "~/Scripts/tagify/tagify.min.js",
                 "~/Scripts/ProblemAccountManagement/index.js"));
 
             bundles.Add(new StyleBundle("~/problem-account-management-styles").Include(
                 "~/Content/scss/MultipleSelect/jquery.multiselect.filter.css",
                 "~/Content/scss/MultipleSelect/jquery.multiselect.css",
+                  "~/Content/scss/vendors/jquery-ui/base/tagify.css",
                 "~/Content/scss/pages/problem-account-management/problem-account-management.css"));
         }
     }

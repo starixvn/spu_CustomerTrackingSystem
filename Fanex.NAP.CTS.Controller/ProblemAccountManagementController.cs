@@ -17,52 +17,61 @@
     [NapAuth(FunctionKey = FSFunctionKeys.ProblemAccountManagement, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class ProblemAccountManagementController : BaseController
     {
-        private readonly IProblemAccountManagementService _problemAccountManagementService;
-        private readonly ICommonService _commonService;
+        private readonly IProblemAccountManagementService _problemAccountManagementService;        
 
         public override string BaseControllerName { get => Consts.MenuItemController; }
 
         public ProblemAccountManagementController()
         {
-            _commonService = new CommonService();
             _problemAccountManagementService = new ProblemAccountManagementService();
         }
 
         public ActionResult Index()
         {
-            var subscriber = _commonService.GetSubscriberGroups().ToList();
+            var sites = _problemAccountManagementService.GetAllSites();
 
-            return View(subscriber);
+            return View(sites);
         }
 
-        public ActionResult ValidateUsernames(string userNames)
+        [HttpPost]
+        public ActionResult GetProblemAccount(ProblemAccountFilterViewModel filter)
+        {
+            var problemAccounts = Enumerable.Empty<ProblemAccountViewModel>();
+            var data = _problemAccountManagementService.GetProblemAccounts(filter);
+
+            if (data != null && data.Any())
+            {
+                problemAccounts = data.Select(x => new ProblemAccountViewModel
+                {
+                    UserName = x.UserName,
+                    Site = x.Site,
+                    Currency = x.Currency,
+                    Category = x.CategoryName,
+                    Comment = string.Empty,
+                    CreatedDateStr = x.CreatedDate.ToString(Consts.FormatDateToString_MMMddyyyy)
+                });
+            }
+
+            return Json(new
+            {
+                data = problemAccounts
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetProblemAccountAllCategories()
         {
             var data = "";
 
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpPost]
-        public ActionResult GetProblemAccount(string userNames)
+        public ActionResult ValidateUsernames(string userNames)
         {
-            var data = new List<ProblemAccountViewModel>()
-            {
-                new ProblemAccountViewModel
-                {
-                     UserName = "A",
-                     Site = "Bet88",
-                     Currency = "USD",
-                     Category = "Group Betting",
-                     Comment = "Test",
-                     CreatedDateStr = "Feb 28, 2022"
-                }
-            };
+            var data = _problemAccountManagementService.GetProblemAccountCategories();
 
-            return Json(new
-            {
-                data = data
-            }, JsonRequestBehavior.AllowGet);
+            return Json(data, JsonRequestBehavior.AllowGet);
         }
+
 
     }
 }
