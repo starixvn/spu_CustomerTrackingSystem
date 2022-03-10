@@ -36,7 +36,7 @@
 
         IEnumerable<TWProblemAccountModel> GetCustClassBySite(string usernameList);
 
-        IEnumerable<TWProblemAccountModel> GetCustomerPerformance(string custIdList);
+        IEnumerable<TWProblemAccountModel> GetCustomerPerformance(IEnumerable<int> custIdList);
 
         int InsertSystemFormulaCust(string custIdList);
         string InsertProblemAccToNAP(string usernameList, TWProblemAccountParams paramFromTW);

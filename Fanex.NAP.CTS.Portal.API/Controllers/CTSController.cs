@@ -347,7 +347,7 @@
                 try
                 {
                     var customers = _problemAccountMonitorService.GetCustClassBySite(dataParam.CustomerList);
-                    var perfCust = _problemAccountMonitorService.GetCustomerPerformance(string.Join(",", customers.Where(c => c.IsMonitorSite).Select(c => c.CustID)));
+                    var perfCust = _problemAccountMonitorService.GetCustomerPerformance(customers?.Where(c => c.IsMonitorSite).Select(c => c.CustID)?.Distinct());
                     var fullData = (from oCust in orgCustomerList
                                     join cust in customers on oCust.Username equals cust.Username into temp
                                     from cust in temp.DefaultIfEmpty()
