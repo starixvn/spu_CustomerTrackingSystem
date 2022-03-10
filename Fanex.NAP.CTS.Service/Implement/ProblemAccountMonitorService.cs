@@ -246,14 +246,20 @@
             return repository.Fetch<TWProblemAccountModel>(criteria);
         }
         
-        public IEnumerable<TWProblemAccountModel> GetCustomerPerformance(string custIdList)
+        public IEnumerable<TWProblemAccountModel> GetCustomerPerformance(IEnumerable<int> custIdList)
         {
-            var criteria = new GetCustomerPerformanceCriteria() 
+
+            if(custIdList != null && custIdList.Any())
             {
-               CustIdList = custIdList
-            };
-            
-            return repository.Fetch<TWProblemAccountModel>(criteria);
+                var criteria = new GetCustomerPerformanceCriteria()
+                {
+                    CustIdList = string.Join(",", custIdList)
+                };
+
+                return repository.Fetch<TWProblemAccountModel>(criteria);
+            }
+
+            return new List<TWProblemAccountModel>();
         }
         
         public int InsertSystemFormulaCust(string customerJson)
