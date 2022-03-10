@@ -143,7 +143,11 @@
     <Compile Include="ProbationManagement\ProbationCategoryViewModel.cs" />
     <Compile Include="ProbationManagement\RenderProbationViewModel.cs" />
     <Compile Include="ProblemAccountManagement\ProblemAccountFilterViewModel.cs" />
+    <Compile Include="ProblemAccountManagement\ProblemAccountValidatedViewModel.cs" />
     <Compile Include="ProblemAccountManagement\ProblemAccountViewModel.cs" />
+    <Compile Include="ProblemAccountManagement\ResultMarkProblemAccountViewModel.cs" />
+    <Compile Include="ProblemAccountManagement\ResultValidatedViewModel.cs" />
+    <Compile Include="ProblemAccountManagement\ValidateProblemAccountInputViewModel.cs" />
     <Compile Include="ProblemAccountMonitor\DetailBetType.cs" />
     <Compile Include="ProblemAccountMonitor\DetailCurrency.cs" />
     <Compile Include="ProblemAccountMonitor\DetailGroup.cs" />

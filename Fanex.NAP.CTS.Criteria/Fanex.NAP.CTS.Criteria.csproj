@@ -126,6 +126,9 @@
     <Compile Include="ProblemAccountManagement\GetCustEvidenceByReasonIdCriteria.cs" />
     <Compile Include="ProblemAccountManagement\GetProblemAccountCategoryCriteria.cs" />
     <Compile Include="ProblemAccountManagement\GetProblemAccountCriteria.cs" />
+    <Compile Include="ProblemAccountManagement\ProblemAccountAddCustomerCriteria.cs" />
+    <Compile Include="ProblemAccountManagement\ProblemAccountCustomerCommentSelCriteria.cs" />
+    <Compile Include="ProblemAccountManagement\ProblemAccountLicenseeAddCustomerCriteria.cs" />
     <Compile Include="ProblemAccountManagement\ValidateUserNamesInputCriteria.cs" />
     <Compile Include="ProblemAccountMonitor\InsertProblemAccountCriteria.cs" />
     <Compile Include="ProblemCaseMonitor\ProblemCaseFilterGetCriteria.cs" />

@@ -1,5 +1,6 @@
 ﻿function ProblemAccountManagement() {
     let dataTable;
+    let validCTSCustID;
 
     let domElements = {
         hdIsHostPermission: $('#hdIsHostPermission'),
@@ -25,20 +26,22 @@
 
     function RenderGrid() {
         let url = common.modifyRelativeUrl('ProblemAccountManagement/GetProblemAccount');
-        let params = {};
-        params.FromDate = domElements.dpkFromDate.val();
-        params.ToDate = domElements.dpkToDate.val();
-        params.Sites = domElements.cbbSite.val().join();
-        params.UserName = domElements.inputUserName.val();
-        params.HasDownline = domElements.inputSearchDownlines.is(":checked");
-
+        
         return domElements.tblProblemAccount.DataTable({
             serverSide: false,
             dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
             pagingType: "full_numbers",
             ajax: {
                 url: url,
-                data: params,
+                data: function () {
+                    let params = {};
+                    params.FromDate = domElements.dpkFromDate.val();
+                    params.ToDate = domElements.dpkToDate.val();
+                    params.Sites = domElements.cbbSite.val().join();
+                    params.UserName = domElements.inputUserName.val().trim();
+                    params.HasDownline = domElements.inputSearchDownlines.is(":checked");
+                    return params;
+                },
                 type: "POST",
                 beforeSend: function () {
                     domElements.tblProblemAccount.find('tbody').addClass('loading');
@@ -97,10 +100,10 @@
     function ValidateRangeDate() {
         let toDateValue = domElements.dpkToDate.datepicker("getDate");
         let toDateValueAllow = domElements.dpkFromDate.datepicker("getDate");
-        toDateValueAllow.setDate(toDateValueAllow.getDate() + 6);
+        toDateValueAllow.setDate(toDateValueAllow.getDate() + 59);
 
         if (toDateValue > toDateValueAllow) {
-            common.showError("Invalid date range, please select not more than 7 days");
+            common.showError("Invalid date range, please select not more than 60 days");
 
             return false;
         }
@@ -180,9 +183,7 @@
                     let currentTag = $(e.target).parent();
 
                     ResetMaxTag();
-
                     ValidateProblemAccountInput(currentTag.text().trim());
-
                     EnableButtonAdd();
                 });
 
@@ -239,7 +240,7 @@
             }
         });
 
-        $(document).on('mouseup', function (e) {
+        $(document).off('mouseup').on('mouseup', function (e) {
             let isOutSiteInput = !domElements.spanAddProblemAccountUserName.is(e.target) && domElements.spanAddProblemAccountUserName.has(e.target).length === 0;
             let isTagsFocus = domElements.spanAddProblemAccountUserName.find('tags.tagify--focus').length > 0;
             let isChange = domElements.spanAddProblemAccountChangeHidden.text();
@@ -259,12 +260,147 @@
         domElements.btnMarkSave.prop('disabled', true);
     }
 
-    function GetProblemAccountCategories() {
+    function ValidateProblemAccountInput(textTagRemove) {
+        domElements.btnMarkSave.prop('disabled', false);
+        let userNames = GetInputUserName(textTagRemove);
 
+        if (userNames !== '') {
+            let params = {};
+            params.UserNames = userNames;
+            params.CategoryID = domElements.cbbProblemAccountCategories.val();
+            params.Comment = domElements.txtComment.text().trim();
+
+            $.ajax(common.modifyRelativeUrl('ProblemAccountManagement/ValidateProblemAccountInput'), {
+                type: 'POST',
+                data: params,
+                beforeSend: function () {
+                    domElements.spanAddProblemAccountUserName.addClass("loading-value");
+                },
+                success: function (response) {
+                    if (response.IsException)
+                        BindExceptionValidateInputUserName();
+                    else
+                        BindResultValidatedInputUserName(response);                    
+                },
+                complete: function () {
+                    domElements.spanAddProblemAccountUserName.removeClass("loading-value");
+                },
+                error: function (errMsg) {
+                    console.log(errMsg);
+                }
+            });
+        }
+    }
+
+    function GetInputUserName(textTagRemove) {
+        let userNameList = [];
+        let tags = domElements.spanAddProblemAccountUserName.find('tags tag');
+
+        tags.map(function (_, ele) {
+            let text = $(ele).text().trim();
+            if (textTagRemove !== "" && text === textTagRemove) {
+                textTagRemove = "";
+                return;
+            }
+            userNameList.push(text);
+        });
+
+        return userNameList.join();
+    }
+
+    function BindExceptionValidateInputUserName() {
+        domElements.spanAddProblemAccountUserName.find('tags tag').each(function (_, tag) {
+            $(tag).removeClass('valid').addClass('invalid-username');
+            $(tag).prop('title', "Exception");
+        });
+    }
+
+    function BindResultValidatedInputUserName(data) {
+        domElements.spanAddProblemAccountUserName.find('tags tag').each(function (_, tag) {
+            $(tag).removeClass('invalid-username').removeClass('invalid-duplicated').addClass('valid');
+        });
+
+        data.ProblemAccountInvalidList.map(function (x) {
+            let usernameEqual = $("tag[data-user-name='" + x.UserName + "']");
+            if (usernameEqual !== undefined) {
+                usernameEqual.removeClass('valid').addClass('invalid-username');
+                usernameEqual.prop('title', x.ErrMsg);
+            }
+        });
+
+        data.ProblemAccountDuplicateList.map(function (x) {
+            let usernameEqual = $("tag[data-user-name='" + x + "']");
+            if (usernameEqual !== undefined) {
+                usernameEqual.removeClass('valid').addClass('invalid-duplicated');
+                usernameEqual.prop('title', x.ErrMsg);
+            }
+        });
+
+        let isEnableAdd = data.ProblemAccountInvalidList.length === 0 && data.ProblemAccountDuplicateList.length === 0;       
+
+        if (isEnableAdd) {
+            //validCTSCustID = data.ValideCTSCustId;
+            domElements.btnMarkSave.prop('disabled', false);
+        }
+        else
+            domElements.btnMarkSave.prop('disabled', true);
     }
 
     function MarkNewProblemAccount() {
-        
+        let userNames = GetInputUserName();
+
+        if (validCTSCustID !== '') {
+            let params = {};
+            params.UserNames = userNames;
+            params.CategoryID = domElements.cbbProblemAccountCategories.val();
+            params.Comment = domElements.txtComment.val().trim();
+
+            $.ajax(common.modifyRelativeUrl('ProblemAccountManagement/MarkProblemAccount'), {
+                type: 'POST',
+                data: params,
+                beforeSend: function () {
+                    domElements.spanAddProblemAccountUserName.addClass("loading-block");
+                },
+                success: function (response) {
+                    if (response.ErrorCode === 0) {
+                        common.showSuccess("Mark Problem Account successful. Please wait, Data Synchronization may take a few minutes!");
+                        domElements.divAddProblemAccount.dialog('close');
+                        setTimeout(() => {
+                            GetProblemAccountReport();
+                        }, 1000);
+                    } else {
+                        if (response.ErrorMessage != '') {
+                            common.showError(response.ErrorMessage, 2000);
+                        }
+                        BindResultValidatedInputUserName(response.ResultValidated);
+                    }
+                },
+                complete: function () {
+                    domElements.spanAddProblemAccountUserName.removeClass("loading-block");
+                },
+                error: function (errMsg) {
+                    console.log(errMsg);
+                }
+            });
+        }
+    }
+
+    function GetProblemAccountCategories() {
+        $.ajax(common.modifyRelativeUrl('ProblemAccountManagement/GetProblemAccountAllCategories'), {
+            type: 'GET',
+            success: function (response) {
+                response.map(function (x) {
+                    domElements.cbbProblemAccountCategories.append("<option value='" + x.CategoryID + "'>" + x.CategoryName + "</option>");
+                });
+
+                domElements.cbbProblemAccountCategories.prop('selectedIndex', 0);
+            },
+            complete: function () {
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+            }
+        });
     }
 
     function Initial() {
@@ -274,7 +410,7 @@
                 changeMonth: true,
                 changeYear: true
             })
-            .datepicker("setDate", new Date())
+            .datepicker("setDate", new Date(Date.now() - 12096e5))
             .change(SetRestrictToDate);
 
         domElements.dpkToDate
@@ -284,7 +420,7 @@
                 changeYear: true
             })
             .datepicker("setDate", new Date())
-            .change(SetRestrictFromDate);
+            .change(SetRestrictFromDate);        
 
         domElements.cbbSite.multiselect({
             menuWidth: 320,
@@ -304,7 +440,9 @@
         domElements.btnGenerate.on('click', function () { GetProblemAccountReport(); });
 
         domElements.btnMarkNewProblemAccount.on('click', function () {
-            domElements.txtComment.val('');
+            GetProblemAccountCategories();
+
+            domElements.txtComment.val('');            
 
             InitInputTagUsername();
 

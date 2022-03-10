@@ -23,7 +23,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_ProblemAccountManagement_Report_Get";
+            return "CTS_DC_ProblemAccountManagement_Get";
         }
 
         public override bool IsValid()

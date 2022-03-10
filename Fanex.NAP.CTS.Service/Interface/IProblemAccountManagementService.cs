@@ -2,8 +2,7 @@
 {    
     using Fanex.NAP.CTS.Model.ProblemAccountManagement;
     using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
-    using Fanex.NAP.CTS.ViewModel.ProblemAccountManagement;
-    using System;
+    using Fanex.NAP.CTS.ViewModel.ProblemAccountManagement;    
     using System.Collections.Generic;
 
     public interface IProblemAccountManagementService
@@ -12,10 +11,14 @@
 
         IEnumerable<ProblemAccountModel> GetProblemAccounts(ProblemAccountFilterViewModel filter);
 
+        IEnumerable<ProblemAccountCommentSelModel> GetProblemAccountCommentSel(string custIdList);
+
         IEnumerable<ProblemAccountCategoryModel> GetProblemAccountCategories();
 
-        IEnumerable<ProblemAccountValidatedModel> ValidateProblemAccounts();
+        IEnumerable<ProblemAccountValidatedModel> ValidateProblemAccounts(ValidateProblemAccountInputViewModel model);
 
         IEnumerable<GetCustEvidenceByReasonIdModel> GetCustEvidenceByReasonIds();
+
+        IEnumerable<ResultProblemAccountAddCustomerModel> MarkNewProblemAccount(IEnumerable<ProblemAccountValidatedModel> validatedModels);
     }
 }
