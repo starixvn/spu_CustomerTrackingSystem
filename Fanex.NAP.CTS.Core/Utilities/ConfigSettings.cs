@@ -86,6 +86,10 @@
 
         public static string GetProblemCaseMonitor => GetConfigStringByName("CTS_GetProblemCaseMonitor");
 
+        public static string InsertAFCAccountsURL => GetConfigStringByName("AFC_InsertAccountsURL");
+
+        public static string DeleteAFCAccountsURL => GetConfigStringByName("AFC_DeleteAccountsURL");
+
         public static int ImportEvidenceChunkSize
         {
             get
@@ -222,6 +226,16 @@
                 var isFromMySQL = ConfigurationManager.AppSettings["GetFlaggedEviByAssFromMySQL"];
 
                 return isFromMySQL == "1";
+            }
+        }
+
+        public static bool IsSyncAFCData
+        {
+            get
+            {
+                var rs = ConfigurationManager.AppSettings["IsSyncAntiFraudCenterData"];
+
+                return rs == "1";
             }
         }
     }

@@ -22,12 +22,14 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public class RescanCustomerClassificationService : IRescanCustomerClassificationService
     {
         private readonly ICustomerClassificationService custClassificationService;
         private readonly ILogInputDataService logInputDataService;
+        private readonly IAntiFraudCenterService antiFraudCenterService;
         private readonly bool _isWriteLogInfo;
         private readonly IDynamicRepository repository;
 
@@ -37,6 +39,7 @@
             _isWriteLogInfo = ConfigSettings.IsWriteLogInfo;
             logInputDataService = new LogInputDataService();
             repository = new DynamicRepository();
+            antiFraudCenterService = new AntiFraudCenterService();
         }
 
         public void RescanCustomerClassify(RescanCustClassificationModel para)
@@ -71,7 +74,18 @@
 
             if (custIdsPushCC != null && custIdsPushCC.Any())
             {
-                PushCCToExternal(custIdsPushCC, para.IsPushCCToSoon88, para.IsUpdateDangerToMainDB, para.DangerLevelType);
+                Parallel.Invoke(() =>
+                {
+                    PushCCToExternal(custIdsPushCC, para.IsPushCCToSoon88, para.IsUpdateDangerToMainDB, para.DangerLevelType);
+
+                },
+                () =>
+                {
+                    Task.Run(() =>
+                    {
+                        antiFraudCenterService.InsertAFCAccounts(custIdsPushCC, FromFlow.CTSWEB);
+                    });
+                });
             }
 
             return custIdsPushCC;

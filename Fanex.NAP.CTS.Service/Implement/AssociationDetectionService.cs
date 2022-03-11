@@ -56,7 +56,7 @@ namespace Fanex.NAP.CTS.Service.Implement
 
             Task.WhenAll(data);
 
-            return data.Result;
+            return data.Result ?? new List<GetAssociationDetectionModel>();
         }
 
         public List<GroupClassificationGraphDbViewModel> GroupClassification(IEnumerable<AssociationLevelGraphDbViewModel> association)

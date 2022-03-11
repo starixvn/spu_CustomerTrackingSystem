@@ -59,6 +59,7 @@
         private readonly IProblemCaseMonitorService _problemCaseMonitorService;
         private readonly ILogInputDataService logInputDataService;
         private readonly IUpdateCategoryService _updateCategoryService;
+        private readonly IAntiFraudCenterService _antiFraudCenterService;
 
         /// <summary>
         /// Using for external site (TW, ExtAcc site...)
@@ -77,28 +78,8 @@
             _problemCaseMonitorService = new Service.Implement.Api.ProblemCaseMonitorService();
             logInputDataService = new LogInputDataService();
             _updateCategoryService = new UpdateCategoryService();
+            _antiFraudCenterService = new AntiFraudCenterService();
         }
-
-        ///// <summary>
-        ///// Place Evidence on CTS
-        ///// </summary>
-        ///// <param name="evidence"></param>
-        ///// <returns></returns>
-        //[HttpPost]
-        //public bool PlaceEvidence(UpdatePlaceEvidenceModel evidence)
-        //{
-        //    try
-        //    {
-        //        _accountService.ProcessPlaceEvidenceByCustId(evidence);
-
-        //        return true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        LogService.Error("PlaceEvidence exception: " + ex.Message);
-        //        return false;
-        //    }
-        //}
 
         /// <summary>
         /// Place evidence for multiple customer
@@ -131,14 +112,14 @@
                     {
                         var syncCustIds = Enumerable.Empty<long>();
 
+                        var syncResult = _accountService.SyncCustEvidenceToCategory(JsonConvert.SerializeObject(result.Eivdences), false, out syncCustIds);
+
                         Parallel.Invoke(() =>
                         {
                             _custEvidenceService.UpdateBetLimitOfFlaggedCustomer(custIds);
                         },
                         () =>
                         {
-                            var syncResult = _accountService.SyncCustEvidenceToCategory(JsonConvert.SerializeObject(result.Eivdences), false, out syncCustIds);
-
                             if (syncResult.ErrorCode == 0 && syncCustIds != null && syncCustIds.Any())
                             {
                                 _custClassificationService.PushDataToExternal(syncCustIds, new PushDataToExternalModel
@@ -157,6 +138,13 @@
 
                                     _accountService.CheckNewPAAssociationCustomerForRollback(custInfos);
                                 }
+                            }
+                        },
+                        () =>
+                        {
+                            if (syncResult.ErrorCode == 0 && syncCustIds != null && syncCustIds.Any())
+                            {
+                                _antiFraudCenterService.InsertAFCAccounts(syncCustIds, FromFlow.CTSAPI);
                             }
                         });
                     }
@@ -248,16 +236,16 @@
 
                 if (string.IsNullOrEmpty(result.ErrorMessage) && result.Eivdences != null && result.Eivdences.Any())
                 {
+                    var syncCustIds = Enumerable.Empty<long>();
+
+                    var syncResult = _accountService.SyncCustEvidenceToCategory(JsonConvert.SerializeObject(result.Eivdences), false, out syncCustIds);
+
                     Parallel.Invoke(() =>
                     {
                         _custEvidenceService.UpdateBetLimitOfFlaggedCustomer(customerEvidenceList.CustIdList);
                     },
                     () =>
                     {
-                        var syncCustIds = Enumerable.Empty<long>();
-
-                        var syncResult = _accountService.SyncCustEvidenceToCategory(JsonConvert.SerializeObject(result.Eivdences), false, out syncCustIds);
-
                         if (syncResult.ErrorCode == 0 && syncCustIds != null && syncCustIds.Any())
                         {
                             _custClassificationService.PushDataToExternal(syncCustIds, new PushDataToExternalModel
@@ -276,6 +264,13 @@
 
                                 _accountService.CheckNewPAAssociationCustomerForRollback(custInfos);
                             }
+                        }
+                    },
+                    () =>
+                    {
+                        if (syncResult.ErrorCode == 0 && syncCustIds != null && syncCustIds.Any())
+                        {
+                            _antiFraudCenterService.InsertAFCAccounts(syncCustIds, FromFlow.CTSAPI);
                         }
                     });
                 }
@@ -703,9 +698,18 @@
                             DangerLevelType = DangerLevel.ABI
                         };
 
-                        _customerClassifyService.CheckNewPAAssociationCustomerForRollback(assCustForRollbacks);
-
-                        _custClassificationService.PushDataToExternal(listCustIdToSyncCC, options);
+                        Parallel.Invoke(() =>
+                        {
+                            _customerClassifyService.CheckNewPAAssociationCustomerForRollback(assCustForRollbacks);
+                        },
+                        () =>
+                        {
+                            _custClassificationService.PushDataToExternal(listCustIdToSyncCC, options);
+                        },
+                        () =>
+                        {
+                            _antiFraudCenterService.InsertAFCAccounts(listCustIdToSyncCC, FromFlow.CTSAPI);
+                        });
                     }
                 }
             }

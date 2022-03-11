@@ -56,6 +56,7 @@
         private readonly ICommonService _commonService;
         private readonly IRobotClassificationService _robotClassificationService;
         private readonly IRobotBettingService _robotBettingService;
+        private readonly IAntiFraudCenterService _antiFraudCenterService;
 
         public override string BaseControllerName { get => string.Empty; }
 
@@ -70,6 +71,7 @@
             _commonService = new CommonService();
             _robotClassificationService = new RobotClassificationService();
             _robotBettingService = new RobotBettingService();
+            _antiFraudCenterService = new AntiFraudCenterService();
         }
 
         public ActionResult Index(long Id)
@@ -1088,14 +1090,26 @@
                         DangerLevelType = DangerLevel.ABI
                     });
 
-                    var hashCustInfos = syncResult.OutParam["custInfos"];
-
-                    if (hashCustInfos != null)
+                    var tasks = new List<Task>
                     {
-                        var custInfos = (IEnumerable<NewPAAssociationCustomerForRollbackModel>)hashCustInfos;
+                        Task.Run(() =>
+                        {
+                            var hashCustInfos = syncResult.OutParam["custInfos"];
 
-                        _accountService.CheckNewPAAssociationCustomerForRollback(custInfos);
-                    }
+                            if (hashCustInfos != null)
+                            {
+                                var custInfos = (IEnumerable<NewPAAssociationCustomerForRollbackModel>)hashCustInfos;
+
+                                _accountService.CheckNewPAAssociationCustomerForRollback(custInfos);
+                            }
+                        }),
+                        Task.Run(() =>
+                        {
+                            _antiFraudCenterService.InsertAFCAccounts(syncCustIds, FromFlow.CTSWEB);
+                        })
+                    };
+
+                    Task.WhenAll(tasks.ToArray());
                 }
             }
 
@@ -1459,7 +1473,7 @@
             {
                 if (addCategoryModel.IsVVip)
                 {
-                    var custIdInt = 0;
+                    int custIdInt = 0;
                     int.TryParse(addCategoryModel.CustId.ToString(), out custIdInt);
 
                     if (custIdInt != 0)
@@ -1481,6 +1495,11 @@
                                 _customerClassificationService.UpdateAppliedCustomerClassification(jsonUpdateApplyCCs);
                             }
                         }
+
+                        Task.Run(() =>
+                        {
+                            _antiFraudCenterService.DeleteAFCAccounts(new List<long> { custIdInt }, FromFlow.CTSWEB);
+                        });
                     }
                 }
             }

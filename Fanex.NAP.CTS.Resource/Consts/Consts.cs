@@ -216,5 +216,26 @@
             ABI = 2,
             Other = 3
         }
+
+        public enum HttpStatus
+        {
+            Unauthorized = 401,
+            BadRequest = 400,
+            NotFound = 404,
+            MethodNotAllowed = 405,
+            OK = 200,
+            Created = 201,
+            ServerUnavailable = 503,
+            InternalServerError = 500
+        };
+
+        public enum FromFlow
+        {
+            CTSWEB = 1,
+            CTSAPI = 2,
+            CTSServices = 3,
+            AFCSerivce = 4,
+            ManualTrigger = 5
+        };
     }
 }
