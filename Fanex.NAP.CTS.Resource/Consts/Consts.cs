@@ -285,7 +285,8 @@
             AccountProfileRobotClassification = 41,
             AccountProfileRobotBetting = 42,
             Notification = 43,
-            NotificationSetting = 44
+            NotificationSettingAssAccountMonitor = 44,
+            NotificationSettingProbation = 45
         };
 
         public enum SystemId
