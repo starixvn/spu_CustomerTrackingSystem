@@ -2,6 +2,7 @@
     let dataTable;
     let timeoutHolder = null;
     let isInitLeague = true;
+    let isSkipTracking = false;
 
     let domElements = {
         dpkDate: $('#dpkDate'),
@@ -68,7 +69,7 @@
                 domElements.cbbLeague.select2();
 
                 if (isInitLeague) {
-                    LoadGrid();
+                    LoadGrid(false);
                     isInitLeague = false;
                 }
             },
@@ -146,6 +147,7 @@
                     paramsFilter.leagueIds = domElements.cbbLeague.val();
                     paramsFilter.matchStatus = domElements.cbbMatchStatus.val();                   
                     paramsFilter.siteIds = domElements.cbbSite.val().join();
+                    paramsFilter.isSkipTracking = isSkipTracking;
                     return paramsFilter;
                 },
                 type: "POST",
@@ -290,14 +292,16 @@
 
         if (val !== 0) timeoutHolder = setTimeout(() => StartCountingDown($target, originalVal, val - 1), 1000);
         else {
-            domElements.btnGenerate.click();
+            domElements.btnRefresh.click();
 
             StartCountingDown($target, originalVal, originalVal);
         }
     }
 
-    function LoadGrid() {
+    function LoadGrid(isSkip) {
         $(this).prop('disabled', true);
+
+        isSkipTracking = isSkip;
 
         dataTable 
             ? dataTable.ajax.reload(null, true)
@@ -347,8 +351,8 @@
 
         domElements.refreshInterval.val(60).change(e => RefreshChange($(e.target))).change();
         domElements.iconCalendarText.on('click', () => domElements.dpkDate.focus());
-        domElements.btnRefresh.on('click', () => LoadGrid());
-        domElements.btnGenerate.on('click', () => LoadGrid());
+        domElements.btnRefresh.on('click', () => LoadGrid(true));
+        domElements.btnGenerate.on('click', () => LoadGrid(false));
         domElements.cbbSport.on('change', () => GetLeagues());
 
         // handle freeze header

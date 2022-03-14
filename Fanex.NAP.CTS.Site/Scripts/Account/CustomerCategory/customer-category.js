@@ -14,6 +14,8 @@
         isExcludedTagAssPA: false,
         isProblemAccount: false
     };
+    let dataTable;
+    let isSkip = false;
         
     function GetNormalCategoryList() {
         var list = [];
@@ -138,7 +140,7 @@
                     common.showSuccess('Add the category successful!', 2000);
                     divMarkCategory.dialog('close');
 
-                    tblcustomercategory.DataTable().ajax.reload();
+                    LoadGrid(ctsCustId, true);
                     GetCustomerCategory(custId);
                 }
                 else {
@@ -214,7 +216,7 @@
                     common.showSuccess('Remove the category successful!', 2000);
                     divRemoveCategory.dialog('close');
 
-                    tblcustomercategory.DataTable().ajax.reload();
+                    LoadGrid(ctsCustId, true);
                     GetCustomerCategory(custId);
                 }
                 else {
@@ -233,9 +235,20 @@
             }
         });
     }
-    
-    function RenderGrid(ctsCustId) {
-         tblcustomercategory.DataTable({
+
+
+    function LoadGrid(ctsCustId, isSkipTracking) {
+        $(this).prop('disabled', true);
+
+        isSkip = isSkipTracking;
+
+        dataTable
+            ? dataTable.ajax.reload(null, true)
+            : dataTable = ReloadGrid(ctsCustId);
+    } 
+
+    function RenderGrid() {
+        tblcustomercategory.DataTable({
             dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
             pagingType: "full_numbers",
             language: {
@@ -255,41 +268,6 @@
             scrollCollapse: false,
             lengthMenu: [20, 50, 100, 200],
             pageLength: 50,
-            ajax: {
-                url: common.modifyRelativeUrl('Account/GetCustomerClassification'),
-                data: {
-                    ctsCustId: ctsCustId
-                },
-                type: 'POST',
-                dataFilter: function (response) {
-                    if (response !== undefined) {
-                        let json = jQuery.parseJSON(response);
-                     
-                        cacheData.isProblemAccount = json.isProblemAccount;
-                        cacheData.isPinCategory = json.isPinCategory;
-                        cacheData.isExcludedTagAssPA = json.isExcludedTagAssPA;
-                        cacheData.isVVip = json.isVVip;
-
-                        ResetCategorySetting();                       
-                        
-                        btnMarkCategory.prop('disabled', json.isVVip);
-                        btnRemoveCategory.prop('disabled', !json.isVVip);
-
-                        let isProblemAccount = RenderProblemAccount(json.categoryList);
-
-                        if (!isProblemAccount) {
-                            RenderCategorySummary(json.categoryList);
-                        }
-                    }
-                    return response;
-                },
-                beforeSend: function () {
-                    tblcustomercategory.find('tbody').addClass('loading');
-                },
-                complete: function () {
-                    tblcustomercategory.find('tbody').removeClass('loading');
-                }
-            },
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
                 { targets: [0], className: "text-center", defaultContent: "-" },
@@ -303,16 +281,91 @@
                 { data: obj => obj.CategoryName },
                 { data: obj => obj.CustomerClass },
                 { data: obj => obj.Reason },
-                { data: obj => obj.CreatedBy }                                
+                { data: obj => obj.CreatedBy }
             ]
         });
-    }
+    }  
+
+    //function RenderGrid(ctsCustId) {
+    //     tblcustomercategory.DataTable({
+    //        dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
+    //        pagingType: "full_numbers",
+    //        language: {
+    //            zeroRecords: "There's no data",
+    //            paginate: {
+    //                first: "<span class=\"icon-chevron-left\"></span><span class=\"icon-chevron-left\"></span>",
+    //                last: "<span class=\"icon-chevron-right\"></span><span class=\"icon-chevron-right\"></span>",
+    //                next: "",
+    //                previous: ""
+    //            }
+    //        },
+    //        info: false,
+    //        ordering: false,
+    //        paging: true,
+    //        searching: false,
+    //        scrollX: false,
+    //        scrollCollapse: false,
+    //        lengthMenu: [20, 50, 100, 200],
+    //        pageLength: 50,
+    //        ajax: {
+    //            url: common.modifyRelativeUrl('Account/GetCustomerClassification'),
+    //            data: {
+    //                ctsCustId: ctsCustId,
+    //                isSkipTracking: isSkip
+    //            },
+    //            type: 'POST',
+    //            dataFilter: function (response) {
+    //                if (response !== undefined) {
+    //                    let json = jQuery.parseJSON(response);
+                     
+    //                    cacheData.isProblemAccount = json.isProblemAccount;
+    //                    cacheData.isPinCategory = json.isPinCategory;
+    //                    cacheData.isExcludedTagAssPA = json.isExcludedTagAssPA;
+    //                    cacheData.isVVip = json.isVVip;
+
+    //                    ResetCategorySetting();                       
+                        
+    //                    btnMarkCategory.prop('disabled', json.isVVip);
+    //                    btnRemoveCategory.prop('disabled', !json.isVVip);
+
+    //                    let isProblemAccount = RenderProblemAccount(json.categoryList);
+
+    //                    if (!isProblemAccount) {
+    //                        RenderCategorySummary(json.categoryList);
+    //                    }
+    //                }
+    //                return response;
+    //            },
+    //            beforeSend: function () {
+    //                tblcustomercategory.find('tbody').addClass('loading');
+    //            },
+    //            complete: function () {
+    //                tblcustomercategory.find('tbody').removeClass('loading');
+    //            }
+    //        },
+    //        columnDefs: [
+    //            { targets: "_all", defaultContent: "-" },
+    //            { targets: [0], className: "text-center", defaultContent: "-" },
+    //            { targets: [1], className: "text-center", defaultContent: "-" },
+    //            { targets: [2], className: "text-center", defaultContent: "-" },
+    //            { targets: [3], className: "text-center", defaultContent: "-" },
+    //            { targets: [4], className: "text-center", defaultContent: "-" }
+    //        ],
+    //        columns: [
+    //            { data: obj => obj.CreatedTimeString },
+    //            { data: obj => obj.CategoryName },
+    //            { data: obj => obj.CustomerClass },
+    //            { data: obj => obj.Reason },
+    //            { data: obj => obj.CreatedBy }                                
+    //        ]
+    //    });
+    //}
 
     function ReloadGrid(ctsCustId)
     {
         $.ajax(common.modifyRelativeUrl('/Account/GetCustomerClassification'), {
             type: 'POST',
-            data: { ctsCustId: ctsCustId },
+            data: { ctsCustId: ctsCustId, isSkipTracking: isSkip },
             dataFilter: function (response) {
                 if (response !== undefined) {
                     let json = jQuery.parseJSON(response);                  
@@ -481,7 +534,8 @@
                                 : "Unpinned category successfully!";
 
                             common.showSuccess(message);
-                            tblcustomercategory.DataTable().ajax.reload();
+
+                            LoadGrid(ctsCustId, true);
                         }
                         else {
                             common.showError('Failed! ' + response.errorMessage);
@@ -557,7 +611,8 @@
                                 : "Unmark category successfully!";
 
                             common.showSuccess(message);
-                            tblcustomercategory.DataTable().ajax.reload();
+
+                            LoadGrid(ctsCustId, true);
                         }
                         else {
                             common.showError('Failed! ' + response.errorMessage);
@@ -629,7 +684,9 @@
 
         cacheCategoryColors = GetNormalCategoryList();
 
-        RenderGrid(ctsCustId);
+        dataTable = RenderGrid();
+
+        LoadGrid(ctsCustId, false);
     };
 
     this.ReloadTab = function (ctsCustId) {

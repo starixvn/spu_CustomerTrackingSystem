@@ -44,7 +44,7 @@ namespace Fanex.NAP.CTS.Controller
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AssociatedAccountMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        [TrackingFunctionUsageFilter(systemId = SystemId.CTSWeb, functionId = TrackingCtsFunctionId.AssociatedAccountMonitorAdd)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedAccountMonitorInsert)]
         public ActionResult InsertManualAssociatedAccount(string custIDList, string toUserNameList, string remark)
         {
             var resultInsert = new InsertManualAssociatedAccountViewModel { ErrorCode = -1 };
@@ -83,8 +83,8 @@ namespace Fanex.NAP.CTS.Controller
         }
 
         [HttpPost]
-        [TrackingFunctionUsageFilter(systemId = SystemId.CTSWeb, functionId = TrackingCtsFunctionId.AssociatedAccountMonitorRpt)]
-        public ActionResult GetAssociatedAccountMonitor()
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedAccountMonitorRpt, "isSkipTracking")]
+        public ActionResult GetAssociatedAccountMonitor(bool isSkipTracking)
         {
             var result = new List<AssociatedAccountMonitorViewModel>();
             var totalItem = 0;
@@ -107,7 +107,7 @@ namespace Fanex.NAP.CTS.Controller
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.AssociatedAccountMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        [TrackingFunctionUsageFilter(systemId = SystemId.CTSWeb, functionId = TrackingCtsFunctionId.AssociatedAccountMonitorRemove)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedAccountMonitorRemove)]
         public ActionResult RemoveAssociatedaccount(long ctsCustId)
         {
             if (ctsCustId <= 0)

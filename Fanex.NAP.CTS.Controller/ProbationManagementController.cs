@@ -60,7 +60,7 @@
         }      
 
         [HttpGet]
-        [TrackingFunctionUsageFilter(systemId = SystemId.CTSWeb, functionId = TrackingCtsFunctionId.ProbationManagement)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.ProbationManagement)]
         public ActionResult ExportProbationCategory(ExportProbationCategoryFilter filter)
         {
             var probationCategoryList = Enumerable.Empty<ProbationCategoryViewModel>();

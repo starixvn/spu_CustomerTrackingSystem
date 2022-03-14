@@ -44,7 +44,7 @@
         }
 
         [HttpPost]
-        [TrackingFunctionUsageFilter(systemId = SystemId.CTSWeb, functionId = TrackingCtsFunctionId.LatestTransaction)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.LatestTransaction)]
         public ActionResult GetLatestTransaction(int subscriberId, int length)
         {
             var result = Enumerable.Empty<LatestTransactionViewModel>();

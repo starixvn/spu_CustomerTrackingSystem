@@ -93,7 +93,7 @@
             success: function (response) {
                 if (response.ErrorCode === 0) {
                     common.showSuccess('Remove the Customer Class successful');
-                    LoadGrid(domElements.txtSearchUsername.val());
+                    LoadGrid(domElements.txtSearchUsername.val(), true);
                 }
                 else {
                     common.showError('Failed! ' + response.ErrorMsg);
@@ -171,8 +171,8 @@
         }        
     }
 
-    function LoadGrid(username) {
-        var url = common.modifyRelativeUrl('/SpecialCustomerClass/GetCustomerClass?username=' + username);
+    function LoadGrid(username, isSkip) {
+        var url = common.modifyRelativeUrl('/SpecialCustomerClass/GetCustomerClass?userName=' + username + '&isSkipTracking=' + isSkip);
 
         $.ajax(url, {
             type: 'GET',            
@@ -217,12 +217,12 @@
             });
 
             domElements.btnGenerate.on('click', function () {
-                LoadGrid(domElements.txtSearchUsername.val());
+                LoadGrid(domElements.txtSearchUsername.val(), false);
             });
 
             domElements.txtSearchUsername.keypress(function (event) {
                 if (event.keyCode === 13) {
-                    LoadGrid(domElements.txtSearchUsername.val());
+                    LoadGrid(domElements.txtSearchUsername.val(), false);
                 }
             }); 
 

@@ -56,7 +56,7 @@
         }
 
         [HttpPost]
-        [TrackingFunctionUsageFilter(systemId = SystemId.CTSWeb, functionId = TrackingCtsFunctionId.ProblemCaseMonitorRpt)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.ProblemCaseMonitorRpt)]
         public ActionResult GetProblemCasesMonitor(ProblemCasesMonitorFilterModel filter)
         {
             var result = new List<ProblemCasesMonitorModel>();
@@ -81,7 +81,7 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        [TrackingFunctionUsageFilter(systemId = SystemId.CTSWeb, functionId = TrackingCtsFunctionId.ProblemCaseMonitorExport)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.ProblemCaseMonitorExport)]
         public ActionResult ExportProblemCases(ProblemCasesMonitorFilterModel filter)
         {
             try

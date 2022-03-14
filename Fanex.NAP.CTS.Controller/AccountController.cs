@@ -74,6 +74,7 @@
             _antiFraudCenterService = new AntiFraudCenterService();
         }
 
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileRpt)]
         public ActionResult Index(long Id)
         {
             if (Id > 0)
@@ -407,7 +408,8 @@
         }
 
         [HttpPost]
-        public ActionResult GetAssociatedByAccount(AssociatedFilterModel model)
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountRpt, "isSkipTracking")]
+        public ActionResult GetAssociatedByAccount(AssociatedFilterModel model, bool isSkipTracking)
         {
             var totalItem = 0;
 
@@ -557,6 +559,7 @@
         }
 
         [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountViewOnGraph)]
         public ActionResult GetDirectAssociationGraph(AssociatedFilterModel model, string displayName)
         {
             var graphCustomer = new GraphCustomerItemViewModel();
@@ -634,6 +637,7 @@
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountInsert)]
         public ActionResult InsertManualAssociationMultiple(int fromSubscriberId, long fromCTSCustId, string toUserNameList, string remark)
         {
             var resultInsert = new InsertManualAssociationMultipleViewModel { ErrorCode = -1 };
@@ -690,6 +694,7 @@
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountLinkedUnlinked)]
         public ActionResult ActiveRemoveAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, string remark, bool isLinked)
         {
             if (fromSubscriberId <= 0 || fromCTSCustId <= 0 || toSubscriberId <= 0 || toCTSCustId <= 0)
@@ -711,6 +716,7 @@
         }
 
         [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountDetailRpt)]
         public ActionResult GetMatchesAssociationByAI(long custID1, long custID2)
         {
             var para1 = (custID1 <= custID2) ? custID1 : custID2;
@@ -791,6 +797,7 @@
         }
 
         [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountDetailRpt)]
         public ActionResult GetIPAssociation(long custId1, long custId2)
         {
             var data = new AssociationByIPInfoViewModel();
@@ -869,7 +876,8 @@
         }
 
         [HttpPost]
-        public ActionResult GetAccountEvidence(Int64 ctsCustId)
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileChainstoEvidencesRpt, "isSkipTracking")]
+        public ActionResult GetAccountEvidence(Int64 ctsCustId, bool isSkipTracking)
         {
             var result = new AccountEvidenceViewModel();
             var evidenceCodeList = _accountService.GetEvidenceList().Select(x => x.EvidenceCode);
@@ -983,6 +991,8 @@
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileChainstoEvidenceInsertExceptions)]
+
         public ActionResult AddException(UpdateAccountExceptionModel model)
         {
             model.UserId = CurrentSession.UserId;
@@ -1013,6 +1023,7 @@
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileChainstoEvidenceRemoveExceptions)]
         public ActionResult RemoveException(UpdateAccountExceptionModel model)
         {
             model.UserId = CurrentSession.UserId;
@@ -1059,6 +1070,7 @@
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileChainstoEvidenceInsertEvidence)]
         public ActionResult PlaceEvidence(UpdatePlaceEvidenceModel model)
         {
             model.UserId = model.UserId == 0 ? CurrentSession.UserId : model.UserId;
@@ -1118,6 +1130,7 @@
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileChainstoEvidenceRemoveEvidence)]
         public ActionResult RemoveFlaggedEvidence(RemoveEvidenceModel model)
         {
             model.UserId = CurrentSession.UserId;
@@ -1167,6 +1180,7 @@
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileChainstoEvidenceRemoveAffEvidence)]
         public ActionResult RetractAffectedEvidence(RemoveEvidenceModel model)
         {
             model.UserId = CurrentSession.UserId;
@@ -1234,6 +1248,7 @@
             return PartialView("TransactionHistory/TransactionHistory");
         }
 
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileTransactionHistory, "isSkipTracking")]
         public ActionResult GetTransactionHistory(DataTableAjaxPostModel model)
         {
             IUserService userService = new UserService();
@@ -1284,7 +1299,8 @@
             return PartialView("CustomerCategory/CustomerCategory");
         }
 
-        public ActionResult GetCustomerClassification(long ctsCustId)
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassification, "isSkipTracking")] //, "isSkipTracking"
+        public ActionResult GetCustomerClassification(long ctsCustId, bool isSkipTracking)
         {
             var isPinCategory = false;
             var isExcludedTagAssPA = false;
@@ -1461,6 +1477,7 @@
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationMarkCategory)]
         public ActionResult AddCustomerCategory(AddCustomerCategoryModel addCategoryModel)
         {
             var errorCode = 0;
@@ -1517,6 +1534,7 @@
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationRemoveCategory)]
         public ActionResult RemoveCustomerCategory(long custId, long ctsCustId, int categoryId, bool isVVip)
         {
             var errorCode = 0;
@@ -1560,6 +1578,7 @@
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationPinCategory)]
         [HttpPost]
         public ActionResult PinCategoryCustomerClassification(long ctsCustId, int subscriberId, bool isPinCategory)
         {
@@ -1573,6 +1592,7 @@
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationNormalCategory)]
         [HttpPost]
         public ActionResult ChangeExcludedTagAssPA(int custId, long ctsCustId, int subscriberId, bool isExcludedTagAssPA, bool isProblemAccount, int custSubId)
         {
@@ -1610,6 +1630,7 @@
         }
 
         [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileRobotClassification, "isSkipTracking")]
         public ActionResult GetHistoryRobotClassification(long custId)
         {
             var data = Enumerable.Empty<RobotClassificationViewModel>();
@@ -1652,6 +1673,7 @@
         }
 
         [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileRobotBetting, "isSkipTracking")]
         public ActionResult GetRobotBetting(long custID)
         {
             var firstRobotDate = string.Empty;

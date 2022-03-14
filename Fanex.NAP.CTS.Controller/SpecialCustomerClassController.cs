@@ -48,11 +48,11 @@
         }
         
         [HttpGet]
-        [TrackingFunctionUsageFilter(systemId = SystemId.CTSWeb, functionId = TrackingCtsFunctionId.SpecialCustomerClassRpt)]
-        public ActionResult GetCustomerClass(string username)
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.SpecialCustomerClassRpt,"isSkipTracking")]
+        public ActionResult GetCustomerClass(string userName, bool isSkipTracking)
         {
             var viewModel = Enumerable.Empty<CustomerClassViewModel>();
-            var specialCustomers = _customerClassService.GetAllCustomerClass(username);
+            var specialCustomers = _customerClassService.GetAllCustomerClass(userName);
 
             if (specialCustomers != null && specialCustomers.Any())
             {
@@ -76,7 +76,7 @@
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.SpecialCustomerClass, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        [TrackingFunctionUsageFilter(systemId = SystemId.CTSWeb, functionId = TrackingCtsFunctionId.SpecialCustomerClassAdd)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.SpecialCustomerClassInsert)]
         public ActionResult AddCustomerClass(string username, int custClass, bool isAffectToAss)
         {
             var resultInsert = new ResultInsertRemoveViewModel
@@ -121,7 +121,7 @@
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.SpecialCustomerClass, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        [TrackingFunctionUsageFilter(systemId = SystemId.CTSWeb, functionId = TrackingCtsFunctionId.SpecialCustomerClassRemove)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.SpecialCustomerClassRemove)]
         public ActionResult RemoveCustomerClass(int custID, long ctsCustID)
         {
             var resultRemoveToCTS = _customerClassService.RemoveCustomerClass(ctsCustID, CurrentSession.UserId);

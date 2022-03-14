@@ -80,7 +80,7 @@
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.EvidenceManagement, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        [TrackingFunctionUsageFilter(systemId = SystemId.CTSWeb, functionId = TrackingCtsFunctionId.EvidenceManagementImport)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.EvidenceManagementImport)]
         [HttpPost]
         public ActionResult ImportFromExcel(bool isOverwrite)
         {
@@ -229,7 +229,7 @@
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.EvidenceManagement, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        [TrackingFunctionUsageFilter(systemId = SystemId.CTSWeb, functionId = TrackingCtsFunctionId.EvidenceManagementRemove)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.EvidenceManagementRemove)]
         public ActionResult InsertAccountsForRemoveEvidences(string userNames)
         {
             var insertResult = new InsertAccountsForRemoveEvidenceViewModel { ErrorCode = 0 };

@@ -50,8 +50,8 @@
         }
 
         [HttpPost]
-        [TrackingFunctionUsageFilter(systemId = SystemId.CTSWeb, functionId = TrackingCtsFunctionId.ManageSubscriberRpt)]
-        public ActionResult GetSubscribers()
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.ManageSubscriberRpt, "isSkipTracking")]
+        public ActionResult GetSubscribers(bool isSkipTracking)
         {
             var subscribers = _manageSubscriberService.GetSubscribers().OrderByDescending(c => c.IsActive).ThenByDescending(c => c.CreatedDate).ThenByDescending(c=>c.TerminatedDate);
 
@@ -70,8 +70,36 @@
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.ManageSubscriber, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        [TrackingFunctionUsageFilter(systemId = SystemId.CTSWeb, functionId = TrackingCtsFunctionId.ManageSubscriberAdd)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.ManageSubscriberUpdate)]
         public ActionResult UpdateSubscriber(SubscriberUpdateModel subscriberInsertModel)
+        {
+            return ChangeSubscriber(subscriberInsertModel, true);
+        }
+
+        [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.ManageSubscriber, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.ManageSubscriberInsert)]
+        public ActionResult InsertSubscriber(SubscriberUpdateModel subscriberInsertModel)
+        {
+            return ChangeSubscriber(subscriberInsertModel, false);
+        }
+
+        [NapAuth(FunctionKey = FSFunctionKeys.ManageSubscriber, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.ManageSubscriberRemove)]
+        public ActionResult RemoveSubscriber(int subscriberID)
+        {
+            var result = _manageSubscriberService.RemoveSubscriber(subscriberID, CurrentSession.UserId);
+
+            return Json(new
+            {
+                result.ErrorCode,
+                result.ErrorMsg
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        #region Private methods
+        private ActionResult ChangeSubscriber(SubscriberUpdateModel subscriberInsertModel, bool isUpdateFlow)
         {
             if (string.IsNullOrEmpty(subscriberInsertModel.IBCUserNamePrefix))
             {
@@ -92,7 +120,9 @@
                 }
                 catch (Exception ex)
                 {
-                    LogService.Error($"Update Subscriber - Update SubId for Site exception {ex.Message} with Data: {JsonConvert.SerializeObject(result.Subscribers)}", ex);
+                    var flowName = isUpdateFlow ? "Update" : "Insert";
+
+                    LogService.Error($"{flowName} Subscriber - {flowName} SubId for Site exception {ex.Message} with Data: {JsonConvert.SerializeObject(result.Subscribers)}", ex);
                 }
 
             });
@@ -103,18 +133,6 @@
                 result.Result.ErrorMsg
             }, JsonRequestBehavior.AllowGet);
         }
-
-        [NapAuth(FunctionKey = FSFunctionKeys.ManageSubscriber, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        [TrackingFunctionUsageFilter(systemId = SystemId.CTSWeb, functionId = TrackingCtsFunctionId.ManageSubscriberRemove)]
-        public ActionResult RemoveSubscriber(int subscriberID)
-        {
-            var result = _manageSubscriberService.RemoveSubscriber(subscriberID, CurrentSession.UserId);
-
-            return Json(new
-            {
-                result.ErrorCode,
-                result.ErrorMsg
-            }, JsonRequestBehavior.AllowGet);
-        }
+        #endregion
     }
 }
