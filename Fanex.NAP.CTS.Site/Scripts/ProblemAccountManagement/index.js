@@ -1,6 +1,5 @@
 ﻿function ProblemAccountManagement() {
-    let dataTable;
-    let validCTSCustID;
+    let dataTable;    
 
     let domElements = {
         hdIsHostPermission: $('#hdIsHostPermission'),
@@ -74,8 +73,8 @@
                 { targets: [0], width: "15%" },
                 { targets: [1], width: "15%" },
                 { targets: [2], width: "15%" },
-                { targets: [3], width: "15%" },
-                { targets: [4], width: "25%" },
+                { targets: [3], width: "25%" },
+                { targets: [4], width: "15%" },
                 { targets: [5], width: "15%" }               
             ],
             columns: [                
@@ -100,7 +99,7 @@
     function ValidateRangeDate() {
         let toDateValue = domElements.dpkToDate.datepicker("getDate");
         let toDateValueAllow = domElements.dpkFromDate.datepicker("getDate");
-        toDateValueAllow.setDate(toDateValueAllow.getDate() + 59);
+        toDateValueAllow.setDate(toDateValueAllow.getDate() + 60);
 
         if (toDateValue > toDateValueAllow) {
             common.showError("Invalid date range, please select not more than 60 days");
@@ -329,7 +328,7 @@
         });
 
         data.ProblemAccountDuplicateList.map(function (x) {
-            let usernameEqual = $("tag[data-user-name='" + x + "']");
+            let usernameEqual = $("tag[data-user-name='" + x.UserName + "']");
             if (usernameEqual !== undefined) {
                 usernameEqual.removeClass('valid').addClass('invalid-duplicated');
                 usernameEqual.prop('title', x.ErrMsg);
@@ -338,8 +337,7 @@
 
         let isEnableAdd = data.ProblemAccountInvalidList.length === 0 && data.ProblemAccountDuplicateList.length === 0;       
 
-        if (isEnableAdd) {
-            //validCTSCustID = data.ValideCTSCustId;
+        if (isEnableAdd) {            
             domElements.btnMarkSave.prop('disabled', false);
         }
         else
@@ -349,40 +347,38 @@
     function MarkNewProblemAccount() {
         let userNames = GetInputUserName();
 
-        if (validCTSCustID !== '') {
-            let params = {};
-            params.UserNames = userNames;
-            params.CategoryID = domElements.cbbProblemAccountCategories.val();
-            params.Comment = domElements.txtComment.val().trim();
+        let params = {};
+        params.UserNames = userNames;
+        params.CategoryID = domElements.cbbProblemAccountCategories.val();
+        params.Comment = domElements.txtComment.val().trim();
 
-            $.ajax(common.modifyRelativeUrl('ProblemAccountManagement/MarkProblemAccount'), {
-                type: 'POST',
-                data: params,
-                beforeSend: function () {
-                    domElements.spanAddProblemAccountUserName.addClass("loading-block");
-                },
-                success: function (response) {
-                    if (response.ErrorCode === 0) {
-                        common.showSuccess("Mark Problem Account successful. Please wait, Data Synchronization may take a few minutes!");
-                        domElements.divAddProblemAccount.dialog('close');
-                        setTimeout(() => {
-                            GetProblemAccountReport();
-                        }, 1000);
-                    } else {
-                        if (response.ErrorMessage != '') {
-                            common.showError(response.ErrorMessage, 2000);
-                        }
-                        BindResultValidatedInputUserName(response.ResultValidated);
+        $.ajax(common.modifyRelativeUrl('ProblemAccountManagement/MarkProblemAccount'), {
+            type: 'POST',
+            data: params,
+            beforeSend: function () {
+                domElements.spanAddProblemAccountUserName.addClass("loading-block");
+            },
+            success: function (response) {
+                if (response.ErrorCode === 0) {
+                    common.showSuccess("Mark Problem Account successful. Please wait, Data Synchronization may take a few minutes!");
+                    domElements.divAddProblemAccount.dialog('close');
+                    setTimeout(() => {
+                        GetProblemAccountReport();
+                    }, 1000);
+                } else {
+                    if (response.ErrorMessage != '') {
+                        common.showError(response.ErrorMessage, 2000);
                     }
-                },
-                complete: function () {
-                    domElements.spanAddProblemAccountUserName.removeClass("loading-block");
-                },
-                error: function (errMsg) {
-                    console.log(errMsg);
+                    BindResultValidatedInputUserName(response.ResultValidated);
                 }
-            });
-        }
+            },
+            complete: function () {
+                domElements.spanAddProblemAccountUserName.removeClass("loading-block");
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+            }
+        });
     }
 
     function GetProblemAccountCategories() {
@@ -423,8 +419,8 @@
             .change(SetRestrictFromDate);        
 
         domElements.cbbSite.multiselect({
-            menuWidth: 320,
-            menuHeight: 320,
+            menuWidth: 225,
+            menuHeight: 280,
             selectedText: "# of # selected",
             noneSelectedText: "Select Site",
             enableClickableOptGroups: true,

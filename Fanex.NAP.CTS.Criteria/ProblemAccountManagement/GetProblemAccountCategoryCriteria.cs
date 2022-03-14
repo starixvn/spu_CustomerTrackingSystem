@@ -7,7 +7,7 @@
     {
         public override string GetSettingKey()
         {
-            return "CTS_DC_ProblemAccountManagement_GetCategoryFilter";
+            return "CTS_DC_ProblemAccountManagement_GetCategories";
         }
 
         public override bool IsValid()

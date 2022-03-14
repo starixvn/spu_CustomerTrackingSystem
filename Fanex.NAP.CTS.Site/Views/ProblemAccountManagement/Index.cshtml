@@ -14,9 +14,9 @@
     </div>
     <div class="problem-account-content">
         <div class="problem-account-table">
-            <div class="group-control">                    
-                <div class="form-filter">                    
-                    <div class="group calendar width-180">                              
+            <div class="group-control">
+                <div class="form-filter">
+                    <div class="group calendar width-180">
                         <label class="text">From</label>
                         <input type="text" id="dpkFromDate" class="control" readonly>
                         <span class="icon-calendar-text"></span>
@@ -27,7 +27,7 @@
                         <span class="icon-calendar-text"></span>
                     </div>
 
-                    <div class="group width-320">
+                    <div class="group width-240">
                         <label class="text">Site</label>
                         <select class="control" id="cbbSite" multiple="multiple">
                             @if (Model != null)
@@ -59,28 +59,26 @@
                 </div>
             </div>
 
-            <div id="gridProblemAccount">
-                <div class="fix-header">
-                    <div class="top-header">
-                        <div class="add-username">
-                            <button class="button button-primary-outline" id="btnMarkNewProblemAccount">Mark New Problem Account</button>
-                        </div>
+            <div class="fixed-header">
+                <div class="top-header">
+                    <div class="add-username">
+                        <button class="button button-primary-outline" id="btnMarkNewProblemAccount">Mark New Problem Account</button>
                     </div>
                 </div>
-                <table id="tblProblemAccount" class="table table-striped width-100per table-problem-account" style="width: 100%">
-                    <thead>
-                        <tr>
-                            <th>Username</th>
-                            <th>Site</th>
-                            <th>Currency</th>
-                            <th>Category</th>
-                            <th>Comment</th>
-                            <th>Created Date</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>                
             </div>
+            <table id="tblProblemAccount" class="table table-striped width-100per table-problem-account" style="width: 100%">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Site</th>
+                        <th>Currency</th>
+                        <th>Category</th>
+                        <th>Comment</th>
+                        <th>Created Date</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>        
     </div>
 </div>

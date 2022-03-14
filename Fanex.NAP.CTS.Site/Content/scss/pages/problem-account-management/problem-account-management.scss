@@ -13,9 +13,26 @@ body {
     margin: 1rem 1.6rem 1rem 1.6rem;
 
     .problem-account-table {
+        .fixed-header {
+            padding-top: 1.6rem;
+            position: sticky;
+            position: -webkit-sticky;
+            top: 11.5rem;
+            background: #fff;
+            z-index: 9;
+        }
+
+        .wrapper-info-table {
+            position: sticky;
+            position: -webkit-sticky;
+            z-index: 99;
+            top: 16.5rem;
+            transition: top 0.01s linear;
+        }
+
         .group-control {
             position: sticky;
-            top: 6rem;
+            top: 5.5rem;
             z-index: 99;
             background: $page-bg;
             padding: 1rem 0 0 0;
@@ -48,8 +65,8 @@ body {
                     }
                 }
 
-                .width-320 {
-                    min-width: 320px;
+                .width-240 {
+                    min-width: 240px;
                 }
 
                 .button-generate {
@@ -62,72 +79,39 @@ body {
             }
         }
 
-        .table-report {
-            font-family: $font-family;
+        .table-problem-account {
+            width: 100% !important;
 
-            .wrapper-info-table {
-                height: 4rem;
-                border: 1px solid #c4c4c4;
-                padding: 0 1rem;
-                background-color: #e3e9f6;
-                position: -webkit-sticky;
-                position: sticky;
-                top: 13.2rem;
-                z-index: 11;
+            .loading {
+                position: relative;
 
-                .dataTables_length {
+                &:after {
+                    content: '';
                     position: absolute;
-                    top: .5rem;
-                    left: 0;
+                    left: 50%;
+                    top: 75%;
+                    border-radius: 50%;
+                    width: 2.4rem;
+                    height: 2.4rem;
+                    border: 0.25rem solid rgba(57, 110, 248, 0.2);
+                    border-top-color: rgba(57, 110, 248, 1);
+                    -webkit-animation: spin 1s infinite linear;
+                    animation: spin 1s infinite linear;
                 }
 
-                .dataTables_paginate {
-                    position: absolute !important;
-                    padding-top: 0 !important;
-                    top: 1.6rem !important;
-                    right: 50%;
-                    transform: translate(50%,-50%);
-                    text-align: center;
-                }
-
-                .dataTables_info {
-                    top: 0
+                tr {
+                    opacity: .3;
                 }
             }
 
-            .table-problem-account {
-                width: 100% !important;
-
-                .loading {
-                    position: relative;
-
-                    &:after {
-                        content: '';
-                        position: absolute;
-                        left: 50%;
-                        top: 75%;
-                        border-radius: 50%;
-                        width: 2.4rem;
-                        height: 2.4rem;
-                        border: 0.25rem solid rgba(57, 110, 248, 0.2);
-                        border-top-color: rgba(57, 110, 248, 1);
-                        -webkit-animation: spin 1s infinite linear;
-                        animation: spin 1s infinite linear;
-                    }
-
-                    tr {
-                        opacity: .3;
-                    }
-                }
-
-                thead {
-                    tr {
-
-                        th {
-                            position: sticky;
-                            top: 17.2rem;
-                            font-weight: 300;
-                        }
+            thead {
+                tr:first-child {
+                    th {
+                        position: sticky;
+                        position: -webkit-sticky;
+                        z-index: 9;
+                        transition: top 0.01s linear;
+                        top: 16.5rem;
                     }
                 }
             }

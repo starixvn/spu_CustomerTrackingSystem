@@ -38,6 +38,12 @@
         public ActionResult GetProblemAccount(ProblemAccountFilterViewModel filter)
         {
             var problemAccounts = Enumerable.Empty<ProblemAccountViewModel>();
+
+            if (filter.ToDate != DateTime.MinValue)
+            {
+                filter.ToDate = new DateTime(filter.ToDate.Year, filter.ToDate.Month, filter.ToDate.Day, 23, 59, 59);
+            }
+
             var paModel = _problemAccountManagementService.GetProblemAccounts(filter);
             
             if (paModel != null && paModel.Any())
@@ -130,14 +136,14 @@
             {
                 IsException = false,
                 ProblemAccountDuplicateList = validatedModels
-                                                    .Where(x => x.ErrorMsg == Consts.ProblemAccountManagement_DuplicateUserName)
+                                                    .Where(x => x.ErrorMsg == Consts.ProblemAccountManagement_DuplicatedUserName)
                                                     .Select(x => new ProblemAccountValidatedViewModel
                                                     {
                                                         UserName = x.UserName,
                                                         ErrMsg = x.ErrorMsg
                                                     }),
                 ProblemAccountInvalidList = validatedModels
-                                                    .Where(x => !string.IsNullOrEmpty(x.ErrorMsg) && x.ErrorMsg != Consts.ProblemAccountManagement_DuplicateUserName)
+                                                    .Where(x => !string.IsNullOrEmpty(x.ErrorMsg) && x.ErrorMsg != Consts.ProblemAccountManagement_DuplicatedUserName)
                                                     .Select(x => new ProblemAccountValidatedViewModel
                                                     {
                                                         UserName = x.UserName,
