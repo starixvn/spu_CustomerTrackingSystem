@@ -5,6 +5,7 @@
     var formIPInformation = new form_ip_information();
     var _ctsCustId = 0;
     var _subscriberId = 0;
+    var isSkipTracking = true;
     var dataTable;
 
     function RenderGrid(isViewIP) {
@@ -24,7 +25,8 @@
                     },
                     dateRange: function () {
                         return dateRange.val();
-                    }
+                    },
+                    IsSkipTracking: function () { return isSkipTracking; }
                 },
                 type: "POST",
                 beforeSend: function () {
@@ -110,16 +112,24 @@
         formIPInformation.OpenModal(valueIP, targetIPAddress);
     }
 
+    function LoadGrid(isSkip) {
+        $(this).prop('disabled', true);
+
+        isSkipTracking = isSkip;
+
+         dataTable
+             ? dataTable.ajax.reload(null, true)
+             : dataTable = RenderGrid();
+    } 
+
     this.Initial = function (ctsCustId, subscriberId, isViewIP) {
         _ctsCustId = ctsCustId;
         _subscriberId = subscriberId;
-        var dataTable = RenderGrid(isViewIP); 
+        dataTable = RenderGrid(isViewIP); 
 
         btnSearch.on('click', function () {          
 
-            if (dataTable) {
-                dataTable.ajax.reload(null, true);
-            }
+            LoadGrid(false);
         });
 
 

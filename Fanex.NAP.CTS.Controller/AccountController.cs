@@ -875,9 +875,14 @@
             return PartialView("ChainToEvidence/ChainToEvidence");
         }
 
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileChainstoEvidencesRpt)]
+        public ActionResult TrackingEvidence()
+        {
+            return null;
+        }
+
         [HttpPost]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileChainstoEvidencesRpt, "isSkipTracking")]
-        public ActionResult GetAccountEvidence(Int64 ctsCustId, bool isSkipTracking)
+        public ActionResult GetAccountEvidence(Int64 ctsCustId)
         {
             var result = new AccountEvidenceViewModel();
             var evidenceCodeList = _accountService.GetEvidenceList().Select(x => x.EvidenceCode);
@@ -992,7 +997,6 @@
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileChainstoEvidenceInsertExceptions)]
-
         public ActionResult AddException(UpdateAccountExceptionModel model)
         {
             model.UserId = CurrentSession.UserId;
@@ -1248,8 +1252,14 @@
             return PartialView("TransactionHistory/TransactionHistory");
         }
 
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileTransactionHistory)]
+        public ActionResult TrackingTransactionHistory()
+        {
+            return null;
+        }
+
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileTransactionHistory, "isSkipTracking")]
-        public ActionResult GetTransactionHistory(DataTableAjaxPostModel model)
+        public ActionResult GetTransactionHistory(DataTableAjaxPostModel model, bool IsSkipTracking)
         {
             IUserService userService = new UserService();
             var isViewIPPermission = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.ViewIP, NAP.Core.Business.Constant.Policy.Read);
@@ -1296,11 +1306,18 @@
 
         public ActionResult CustomerCategory()
         {
+
             return PartialView("CustomerCategory/CustomerCategory");
         }
 
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassification, "isSkipTracking")] //, "isSkipTracking"
-        public ActionResult GetCustomerClassification(long ctsCustId, bool isSkipTracking)
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassification)]
+        public ActionResult TrackingCustomerCategory()
+        {
+            return null;
+        }
+
+
+        public ActionResult GetCustomerClassification(long ctsCustId)
         {
             var isPinCategory = false;
             var isExcludedTagAssPA = false;
@@ -1626,11 +1643,17 @@
 
         public ActionResult RobotClassification()
         {
-            return PartialView("RobotClassfication/LastestRobotClassification");
+                return PartialView("RobotClassfication/LastestRobotClassification");
+
+        }
+
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileRobotClassification)]
+        public ActionResult TrackingRobotClassification()
+        {
+            return null;
         }
 
         [HttpPost]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileRobotClassification, "isSkipTracking")]
         public ActionResult GetHistoryRobotClassification(long custId)
         {
             var data = Enumerable.Empty<RobotClassificationViewModel>();
@@ -1667,13 +1690,20 @@
         #endregion Robot Classification
 
         #region Robot Betting
+
         public ActionResult RobotBetting()
         {
-            return PartialView("RobotBetting/RobotBetting");
+
+                return PartialView("RobotBetting/RobotBetting");
+        }
+
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileRobotBetting)]
+        public ActionResult TrackingRobotBetting()
+        {
+            return null;
         }
 
         [HttpPost]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileRobotBetting, "isSkipTracking")]
         public ActionResult GetRobotBetting(long custID)
         {
             var firstRobotDate = string.Empty;

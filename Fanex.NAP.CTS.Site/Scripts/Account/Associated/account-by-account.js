@@ -27,7 +27,7 @@
     let spanIPAssociationTotalMatches = $('#spanIPAssociationTotalMatches');
     let spanIPAssociationTotalIPSharing = $('#spanIPAssociationTotalIPSharing');    let cbbAssociationCategory = $('#cbbAssociationCategory');
     let cacheCategoryColors = [];
-    let isSkipTracking = false;
+    let isSkipTracking = true;
 
     function GetCategoryColorList() {
         var list = [];

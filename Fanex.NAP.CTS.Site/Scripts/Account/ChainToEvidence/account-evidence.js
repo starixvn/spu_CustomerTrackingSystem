@@ -144,7 +144,7 @@
         return null;        
     }    
 
-    function GetAccountEvidence(ctsCustId, username, isSkip) {
+    function GetAccountEvidence(ctsCustId, username) {
         var url = common.modifyRelativeUrl('/Account/GetAccountEvidence');
 
         $.ajax(url, {
@@ -154,8 +154,7 @@
                 domElements.tblChainToEvidenceAffectedRetract.find('tbody').addClass('loading');
             },
             data: {
-                ctsCustId: ctsCustId,
-                isSkipTracking: isSkip
+                ctsCustId: ctsCustId
             },
             success: function (response) {
                 GenerateFlaggedEvidences(response.FlaggedEvidenceList);
@@ -201,7 +200,7 @@
             },
             complete: function () {
                 common.closeLoading();
-                GetAccountEvidence(ctsCustId, username, true);
+                GetAccountEvidence(ctsCustId, username);
             },
             error: function (errMsg) {
                 console.log(errMsg);                
@@ -280,7 +279,7 @@
                 },
                 complete: function () {
                     common.closeLoading();
-                    GetAccountEvidence(ctsCustId, username, true);
+                    GetAccountEvidence(ctsCustId, username);
                 },
                 error: function (errMsg) {
                     console.log(errMsg);
@@ -320,7 +319,7 @@
                 },
                 complete: function () {
                     common.closeLoading();
-                    GetAccountEvidence(ctsCustId, username, true);
+                    GetAccountEvidence(ctsCustId, username);
                 },
                 error: function (errMsg) {
                     console.log(errMsg);
@@ -495,7 +494,7 @@
                 GetCustomerClassification(custId);
             },
             complete: function () {
-                GetAccountEvidence(ctsCustId, username, true);
+                GetAccountEvidence(ctsCustId, username);
                 common.closeLoading();
                 domElements.btnPlaceEvidenceSubmit.prop('disabled', false);
             },
@@ -543,7 +542,7 @@
     }
 
     this.ReloadAccountEvidence = function (ctsCustId, username) {
-        GetAccountEvidence(ctsCustId, username, true);
+        GetAccountEvidence(ctsCustId, username);
     };
 
     this.Initial = function (ctsCustId, username, subscriberId, subscriber, custId, hostPermission) {
@@ -564,7 +563,7 @@
 
         InitialAffectedRetractGrid();
 
-        GetAccountEvidence(ctsCustId, username, false);
+        GetAccountEvidence(ctsCustId, username);
 
         InitialPlaceEvidenceForm(ctsCustId, username, subscriberId, subscriber, custId);
 
