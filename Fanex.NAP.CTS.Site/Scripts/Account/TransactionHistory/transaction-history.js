@@ -11,7 +11,7 @@
     function RenderGrid(isViewIP) {
         var url = common.modifyRelativeUrl('Account/GetTransactionHistory');
 
-        var table = transactionTable.DataTable({ 
+        var table = transactionTable.DataTable({
             dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
             serverSide: true,
             ajax: {
@@ -51,10 +51,10 @@
             pagingType: "full_numbers",
             ordering: false,
             searching: false,
-            lengthMenu: [50, 100, 200, 500],            
+            lengthMenu: [50, 100, 200, 500],
             pageLength: 100,
             scrollX: false,
-            scrollCollapse: false,           
+            scrollCollapse: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
                 { targets: [-2, -1], className: "text-center" },
@@ -78,12 +78,11 @@
                 { data: obj => obj.BrowserName },
                 { data: obj => GetHostName(obj.Url) }
             ]
-        });       
+        });
 
         transactionTable.on('click', '.ip-link', ShowFormIPInformation);
 
-        if (!isViewIP)
-        {
+        if (!isViewIP) {
             table.columns([2]).visible(false);
         }
 
@@ -97,7 +96,7 @@
         }
 
         return null;
-               // common.showError(errMsg);
+        // common.showError(errMsg);
     }
 
     function RenderIPInformation(obj) {
@@ -117,22 +116,18 @@
 
         isSkipTracking = isSkip;
 
-         dataTable
-             ? dataTable.ajax.reload(null, true)
-             : dataTable = RenderGrid();
-    } 
+        dataTable
+            ? dataTable.ajax.reload(null, true)
+            : dataTable = RenderGrid();
+    }
 
     this.Initial = function (ctsCustId, subscriberId, isViewIP) {
         _ctsCustId = ctsCustId;
         _subscriberId = subscriberId;
-        dataTable = RenderGrid(isViewIP); 
+        dataTable = RenderGrid(isViewIP);
 
-        btnSearch.on('click', function () {          
-
+        btnSearch.on('click', function () {
             LoadGrid(false);
         });
-
-
-        
     }
 }

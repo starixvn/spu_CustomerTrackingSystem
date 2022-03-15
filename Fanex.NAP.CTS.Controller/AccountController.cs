@@ -115,7 +115,8 @@
                             throw;
                         }
                     },
-                    () => {
+                    () =>
+                    {
                         try
                         {
                             var robotUser = _robotClassificationService.GetStatusRobotClassification(customerInfoFromCTS.CustID);
@@ -133,7 +134,8 @@
                             throw;
                         }
                     },
-                    () => {
+                    () =>
+                    {
                         try
                         {
                             var evidences = _accountService.GetCustomerFlagInfo(Id);
@@ -157,7 +159,7 @@
             }
 
             return RedirectToAction("Index", "Home");
-        }     
+        }
 
         [HttpPost]
         public ActionResult GetCustomerTotalAssociationByCTSCustId(long ctsCustId)
@@ -193,7 +195,7 @@
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
-      
+
         [HttpPost]
         public ActionResult GetCustomerProfileFraudInfo(long custId)
         {
@@ -224,6 +226,7 @@
         }
 
         #region Customer Profile
+
         [HttpPost]
         public ActionResult GetCustProfileAssociationAccount(long ctsCustId)
         {
@@ -248,8 +251,8 @@
         [HttpPost]
         public ActionResult GetCustProfileClassification(long ctsCustId, long custId)
         {
-            var custProfileEvidence = new CustomerInfoClassificationViewModel();        
-          
+            var custProfileEvidence = new CustomerInfoClassificationViewModel();
+
             Parallel.Invoke(() =>
             {
                 try
@@ -301,7 +304,8 @@
                     throw;
                 }
             },
-            () => {
+            () =>
+            {
                 try
                 {
                     var custPolicies = _accountService.GetCustomerInfoPolicies(custId);
@@ -374,7 +378,7 @@
             return Json(new CustomerInfoDateViewModel(), JsonRequestBehavior.AllowGet);
         }
 
-        #endregion
+        #endregion Customer Profile
 
         #region Associated By Account
 
@@ -1018,7 +1022,7 @@
 
                 if (custIdsFlaggedEvidences != null && custIdsFlaggedEvidences.Any())
                 {
-                    _customerEvidenceService.UpdateBetLimitOfUnflaggedCustomer(string.Join(",", custIdsFlaggedEvidences.Select(c=>c.CustID)));
+                    _customerEvidenceService.UpdateBetLimitOfUnflaggedCustomer(string.Join(",", custIdsFlaggedEvidences.Select(c => c.CustID)));
                 }
             }
 
@@ -1059,10 +1063,10 @@
                 {
                     custExistEvidence.RemoveAll(x => custNotExistEvidence.Contains(x, new CustomerInfoEqualityComparer()));
                 }
-      
-                if(custExistEvidence.Any())
+
+                if (custExistEvidence.Any())
                 {
-                    _customerEvidenceService.UpdateBetLimitOfFlaggedCustomer(string.Join(",",custExistEvidence.Select(c=>c.CustID)));
+                    _customerEvidenceService.UpdateBetLimitOfFlaggedCustomer(string.Join(",", custExistEvidence.Select(c => c.CustID)));
                 }
             }
 
@@ -1243,7 +1247,7 @@
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        #endregion Chain To Evidence      
+        #endregion Chain To Evidence
 
         #region Transaciton History
 
@@ -1306,7 +1310,6 @@
 
         public ActionResult CustomerCategory()
         {
-
             return PartialView("CustomerCategory/CustomerCategory");
         }
 
@@ -1315,7 +1318,6 @@
         {
             return null;
         }
-
 
         public ActionResult GetCustomerClassification(long ctsCustId)
         {
@@ -1363,7 +1365,7 @@
                     LastXDaysMargin = x.LastXDaysMargin,
                     ProbationPeriodWinloss = x.ProbationPeriodWinloss,
                     CreatedBy = string.IsNullOrEmpty(x.CreatedBy) ? x.LastModifiedBy.ToString() : x.CreatedBy,
-                    TaggingType = x.TaggingType                   
+                    TaggingType = x.TaggingType
                 }).ToList();
             }
 
@@ -1462,7 +1464,7 @@
 
                 default:
                     break;
-            }           
+            }
 
             reason += "</div>";
 
@@ -1643,8 +1645,7 @@
 
         public ActionResult RobotClassification()
         {
-                return PartialView("RobotClassfication/LastestRobotClassification");
-
+            return PartialView("RobotClassfication/LastestRobotClassification");
         }
 
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileRobotClassification)]
@@ -1658,12 +1659,13 @@
         {
             var data = Enumerable.Empty<RobotClassificationViewModel>();
             var bettingStatisticFormat = "Turnover: {0} | Win lost: {1} | Margin: {2}% | Bet count: {3} | Active days: {4}";
-          
+
             var robotData = _robotClassificationService.GetHistoryRobotClassification(custId);
 
             if (robotData != null && robotData.Any())
             {
-                data = robotData.OrderByDescending(d => d.FromDate).Select(x => {
+                data = robotData.OrderByDescending(d => d.FromDate).Select(x =>
+                {
                     decimal margin = 0;
 
                     if (x.Turnover != 0)
@@ -1682,8 +1684,8 @@
                         RobotType = x.RobotType
                     };
                 });
-            }            
-            
+            }
+
             return Json(new { data }, JsonRequestBehavior.AllowGet);
         }
 
@@ -1693,8 +1695,7 @@
 
         public ActionResult RobotBetting()
         {
-
-                return PartialView("RobotBetting/RobotBetting");
+            return PartialView("RobotBetting/RobotBetting");
         }
 
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileRobotBetting)]
@@ -1710,7 +1711,7 @@
             var lastRobotDate = string.Empty;
             var robotBettingList = Enumerable.Empty<RobotBettingViewModel>();
 
-            var robotBettings = _robotBettingService.GetRobotBetting(custID, out RobotDateModel robotDate);            
+            var robotBettings = _robotBettingService.GetRobotBetting(custID, out RobotDateModel robotDate);
 
             if (robotBettings != null && robotBettings.Any())
             {
@@ -1728,9 +1729,9 @@
             return Json(new
             {
                 firstRobotDate = firstRobotDate,
-                lastRobotDate = lastRobotDate,                
+                lastRobotDate = lastRobotDate,
                 data = robotBettingList,
-            }, JsonRequestBehavior.AllowGet);            
+            }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -1742,7 +1743,7 @@
 
             if (robotUserDetails != null && robotUserDetails.Any())
             {
-                var suspiciousTransList = robotUserDetails.Select(x => x.SuspiciousTransList);               
+                var suspiciousTransList = robotUserDetails.Select(x => x.SuspiciousTransList);
 
                 var tranIdList = GetTranIdList(suspiciousTransList);
 
@@ -1751,24 +1752,24 @@
                 if (ticketDetail != null && ticketDetail.Any())
                 {
                     result = ticketDetail.Select(x => new RobotBettingDetailViewModel
-                        {
-                            TransDate = x.TransDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff),
-                            HomeID = x.HomeId,
-                            AwayID = x.AwayId,
-                            TransID = x.TransId,
-                            BetType = x.BetType,
-                            BetTypeName = CachedRef.GetBettypeName(x.BetType),
-                            BetTeam = x.BetTeam,
-                            Stake = x.Stake,
-                            Odds = x.Odds,
-                            LiveScore = x.LiveIndicator ? (x.LiveHomeScore + " - " + x.LiveAwayScore) : "-",
-                            MatchName = GetMatchName(x)
-                        }).OrderByDescending(x => x.TransDate);
+                    {
+                        TransDate = x.TransDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff),
+                        HomeID = x.HomeId,
+                        AwayID = x.AwayId,
+                        TransID = x.TransId,
+                        BetType = x.BetType,
+                        BetTypeName = CachedRef.GetBettypeName(x.BetType),
+                        BetTeam = x.BetTeam,
+                        Stake = x.Stake,
+                        Odds = x.Odds,
+                        LiveScore = x.LiveIndicator ? (x.LiveHomeScore + " - " + x.LiveAwayScore) : "-",
+                        MatchName = GetMatchName(x)
+                    }).OrderByDescending(x => x.TransDate);
                 }
             }
 
             return Json(result, JsonRequestBehavior.AllowGet);
-        } 
+        }
 
         private string GetTranIdList(IEnumerable<string> suspiciousTransList)
         {
@@ -1795,7 +1796,7 @@
 
             var tranIds = string.Join(",", tranIdList.Distinct());
 
-            return tranIds.Replace(@".0", "");            
+            return tranIds.Replace(@".0", "");
         }
 
         public string GetMatchName(RobotBettingTicketDetailModel ticket)
@@ -1811,9 +1812,9 @@
             }
 
             return rs;
-        }      
+        }
 
-        #endregion
+        #endregion Robot Betting
 
         #region Betting Statistic
 
