@@ -436,7 +436,7 @@
     function InsertSubscriber() {
         let subscriberInsertModel = GetInputUser();
 
-        $.ajax(common.modifyRelativeUrl('ManageSubscriber/UpdateSubscriber'), {
+        $.ajax(common.modifyRelativeUrl('ManageSubscriber/InsertSubscriber'), {
             type: 'POST',
             data: subscriberInsertModel,
             beforeSend: function () {
