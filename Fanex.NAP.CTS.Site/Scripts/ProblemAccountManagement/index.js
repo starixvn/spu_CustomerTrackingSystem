@@ -99,10 +99,10 @@
     function ValidateRangeDate() {
         let toDateValue = domElements.dpkToDate.datepicker("getDate");
         let toDateValueAllow = domElements.dpkFromDate.datepicker("getDate");
-        toDateValueAllow.setDate(toDateValueAllow.getDate() + 60);
+        toDateValueAllow.setDate(toDateValueAllow.getDate() + 14);
 
         if (toDateValue > toDateValueAllow) {
-            common.showError("Invalid date range, please select not more than 60 days");
+            common.showError("Invalid date range, please select not more than 14 days");
 
             return false;
         }
@@ -382,6 +382,8 @@
     }
 
     function GetProblemAccountCategories() {
+        domElements.cbbProblemAccountCategories.empty();
+
         $.ajax(common.modifyRelativeUrl('ProblemAccountManagement/GetProblemAccountAllCategories'), {
             type: 'GET',
             success: function (response) {
@@ -419,7 +421,7 @@
             .change(SetRestrictFromDate);        
 
         domElements.cbbSite.multiselect({
-            menuWidth: 225,
+            menuWidth: 180,
             menuHeight: 280,
             selectedText: "# of # selected",
             noneSelectedText: "Select Site",

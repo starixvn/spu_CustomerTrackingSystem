@@ -70,8 +70,8 @@
 	</Function>
 
 	<Function name="ProblemAccountManagement">
-		<Setting Key="NAP_ProblemAccount_CustomerCommentSel" SpName="NAP_ProblemAccount_CustomerCommentSel_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
-		<Setting Key="Nap_ProblemAccount_AddCustomer" SpName="Nap_ProblemAccount_AddCustomer_xtest" DbName="DBCust.CustDB.bodbAdminNet" />
-		<Setting Key="NAP_ProblemAccount_LicenseeAddCustomer" SpName="NAP_ProblemAccount_LicenseeAddCustomer_xtest" DbName="DBCust.CustDB.bodbAdminNet" />
+		<Setting Key="NAP_ProblemAccount_CustomerCommentSel" SpName="NAP_ProblemAccount_CustomerCommentSel" DbName="DBACC.bodb02.bodbAdminNet" />
+		<Setting Key="Nap_ProblemAccount_AddCustomer" SpName="Nap_ProblemAccount_AddCustomer" DbName="DBCust.CustDB.bodbAdminNet" />
+		<Setting Key="NAP_ProblemAccount_LicenseeAddCustomer" SpName="NAP_ProblemAccount_LicenseeAddCustomer" DbName="DBCust.CustDB.bodbAdminNet" />
 	</Function>
 </Functions>

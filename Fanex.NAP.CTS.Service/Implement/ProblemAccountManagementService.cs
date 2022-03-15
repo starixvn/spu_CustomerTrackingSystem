@@ -220,14 +220,19 @@
 
         private ResultProblemAccountAddCustomerModel MarkProblemAccountSiteLicensee(ProblemAccountAddCustomerModel model)
         {
+            if (model == null)
+            {
+                return new ResultProblemAccountAddCustomerModel { ErrCode = -1, ErrMsg = string.Empty };
+            }
+
             var criteria = new ProblemAccountLicenseeAddCustomerCriteria
             {
                 CustomerList = model.CustomerList,
-                RoleId = model.RoleId,
                 ReasonId = model.ReasonId,
-                PreventActionId = model.PreventActionId,
+                ActionId = model.PreventActionId,
                 Comment = model.Comment,
-                UserID = model.UserID
+                UserID = model.UserID,
+                IP = string.Empty
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -239,9 +244,7 @@
                     return new ResultProblemAccountAddCustomerModel
                     {
                         ErrCode = criteria.ErrCode,
-                        ErrMsg = criteria.ErrMsg,
-                        SuccessList = criteria.SuccessList,
-                        FailList = criteria.FailList
+                        ErrMsg = criteria.ErrMsg
                     };
                 }
                 catch (Exception ex)

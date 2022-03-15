@@ -27,14 +27,20 @@
                         <span class="icon-calendar-text"></span>
                     </div>
 
-                    <div class="group width-240">
+                    <div class="group width-200">
                         <label class="text">Site</label>
                         <select class="control" id="cbbSite" multiple="multiple">
                             @if (Model != null)
                             {
-                                foreach (var site in Model)
+                                foreach (var group in Model)
                                 {
-                                    <option selected value=@site.SiteID>@site.SiteName</option>
+                                    <optgroup label="@group.SubscriberGroupName">
+
+                                        @foreach (var site in group.SiteList)
+                                        {
+                                            <option selected value=@site.SiteID>@site.SiteName</option>
+                                        }
+                                    </optgroup>
                                 }
                             }
                         </select>

@@ -6,16 +6,13 @@
     public class ProblemAccountLicenseeAddCustomerCriteria : NonQueryCommand
     {
         [SpParam(SqlParamName = "CustomerList")]
-        public string CustomerList { get; set; }
-
-        [SpParam(SqlParamName = "RoleId")]
-        public int RoleId { get; set; }
+        public string CustomerList { get; set; }       
 
         [SpParam(SqlParamName = "ReasonId")]
         public int ReasonId { get; set; }
 
-        [SpParam(SqlParamName = "PreventActionId")]
-        public int PreventActionId { get; set; }
+        [SpParam(SqlParamName = "ActionId")]
+        public int ActionId { get; set; }
 
         [SpParam(SqlParamName = "Comment")]
         public string Comment { get; set; }
@@ -37,13 +34,7 @@
 
         [SpParam(SqlParamName = "ErrMsg")]
         public string ErrMsg { get; set; }
-
-        [SpParam(SqlParamName = "SuccessList")]
-        public string SuccessList { get; set; }
-
-        [SpParam(SqlParamName = "FailList")]
-        public string FailList { get; set; }
-
+   
         public override string GetSettingKey()
         {
             return "NAP_ProblemAccount_LicenseeAddCustomer";

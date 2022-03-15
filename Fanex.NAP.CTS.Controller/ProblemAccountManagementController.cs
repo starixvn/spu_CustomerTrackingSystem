@@ -7,6 +7,7 @@
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.ProblemAccountManagement;
+    using Fanex.NAP.CTS.ViewModel.ProblemAccountMonitor;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -29,9 +30,28 @@
 
         public ActionResult Index()
         {
-            var sites = _problemAccountManagementService.GetAllSites();
+            var viewModel = Enumerable.Empty<SubscriberGroupViewModel>();
+            var model = _problemAccountManagementService.GetAllSites();
 
-            return View(sites);
+            if (model != null)
+            {
+                viewModel = model.Where(x => x.IsActive)
+                    .GroupBy(g => new { g.SubscriberGroupID, g.SubscriberGroupName })
+                    .Select(x => new { Group = x.Key, SiteList = x.ToList() })
+                    .Select(x => new SubscriberGroupViewModel
+                    {
+                        SubscriberGroupID = x.Group.SubscriberGroupID,
+                        SubscriberGroupName = x.Group.SubscriberGroupName,
+                        SiteList = x.SiteList.Select(y => new SiteViewModel
+                        {
+                            SiteID = y.SiteID,
+                            SiteName = y.SiteName,
+                            DisplayOrder = y.DisplayOrder
+                        })
+                    });
+            }
+
+            return View(viewModel);
         }
 
         [HttpPost]
