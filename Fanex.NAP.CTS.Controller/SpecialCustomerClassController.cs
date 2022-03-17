@@ -49,7 +49,7 @@
         
         [HttpGet]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.SpecialCustomerClassRpt,"isSkipTracking")]
-        public ActionResult GetCustomerClass(string userName, bool isSkipTracking)
+        public ActionResult GetCustomerClass(string userName, bool? isSkipTracking)
         {
             var viewModel = Enumerable.Empty<CustomerClassViewModel>();
             var specialCustomers = _customerClassService.GetAllCustomerClass(userName);

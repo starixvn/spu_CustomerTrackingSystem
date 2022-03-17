@@ -413,7 +413,7 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountRpt, "isSkipTracking")]
-        public ActionResult GetAssociatedByAccount(AssociatedFilterModel model, bool isSkipTracking)
+        public ActionResult GetAssociatedByAccount(AssociatedFilterModel model, bool? isSkipTracking)
         {
             var totalItem = 0;
 
@@ -1263,7 +1263,7 @@
         }
 
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileTransactionHistory, "isSkipTracking")]
-        public ActionResult GetTransactionHistory(DataTableAjaxPostModel model, bool IsSkipTracking)
+        public ActionResult GetTransactionHistory(DataTableAjaxPostModel model, bool? IsSkipTracking)
         {
             IUserService userService = new UserService();
             var isViewIPPermission = userService.IsHavingPermission(CurrentSession.UserId, NapSettings.Settings.SiteId, FSFunctionKeys.ViewIP, NAP.Core.Business.Constant.Policy.Read);

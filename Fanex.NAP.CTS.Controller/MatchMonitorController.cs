@@ -50,7 +50,7 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorRpt, "isSkipTracking")]
-        public ActionResult GetMatchMonitor(MatchMonitorFilterViewModel para, bool isSkipTracking)
+        public ActionResult GetMatchMonitor(MatchMonitorFilterViewModel para, bool? isSkipTracking)
         {
             var matchMonitors = new List<MatchMonitorModel>();
 

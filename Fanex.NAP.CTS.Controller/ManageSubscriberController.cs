@@ -51,7 +51,7 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.ManageSubscriberRpt, "isSkipTracking")]
-        public ActionResult GetSubscribers(bool isSkipTracking)
+        public ActionResult GetSubscribers(bool? isSkipTracking)
         {
             var subscribers = _manageSubscriberService.GetSubscribers().OrderByDescending(c => c.IsActive).ThenByDescending(c => c.CreatedDate).ThenByDescending(c=>c.TerminatedDate);
 

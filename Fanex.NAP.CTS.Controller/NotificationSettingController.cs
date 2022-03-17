@@ -54,7 +54,7 @@
         }
 
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.Notification, "isSkipTracking")]
-        public JsonResult GetAllMessages(long maxAssociationID, long maxProbationID, bool isSkipTracking)
+        public JsonResult GetAllMessages(long maxAssociationID, long maxProbationID, bool? isSkipTracking)
         {
             var isFirstNotification = CheckFirstNotification();
 

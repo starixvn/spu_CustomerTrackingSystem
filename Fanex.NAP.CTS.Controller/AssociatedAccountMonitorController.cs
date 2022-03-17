@@ -84,7 +84,7 @@ namespace Fanex.NAP.CTS.Controller
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedAccountMonitorRpt, "isSkipTracking")]
-        public ActionResult GetAssociatedAccountMonitor(bool isSkipTracking)
+        public ActionResult GetAssociatedAccountMonitor(bool? isSkipTracking)
         {
             var result = new List<AssociatedAccountMonitorViewModel>();
             var totalItem = 0;

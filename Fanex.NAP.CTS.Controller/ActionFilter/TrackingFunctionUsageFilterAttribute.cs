@@ -36,7 +36,7 @@
             {
                 if (IsSkipTrackingFuncAttr != null && filterContext.ActionParameters.ContainsKey(IsSkipTrackingFuncAttr))
                 {
-                    var isSkipTracking = filterContext.ActionParameters[IsSkipTrackingFuncAttr] as bool? ?? false;
+                    var isSkipTracking = filterContext.ActionParameters[IsSkipTrackingFuncAttr] as bool? ?? true;
 
                     if (isSkipTracking)
                     {

@@ -123,7 +123,7 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetailRpt, "isSkipTracking")]
-        public ActionResult GetAssociationDetail(AssociationDetailFilterViewModel filter, bool isSkipTracking)
+        public ActionResult GetAssociationDetail(AssociationDetailFilterViewModel filter, bool? isSkipTracking)
         {
             var associationList = Enumerable.Empty<AssociationDetailViewModel>();
             var apiURI = AppSettings.Get("Graph_GetAssociationDetail");

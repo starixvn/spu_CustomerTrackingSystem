@@ -106,7 +106,7 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.ProblemAccountMonitor, "isSkipTracking")]
-        public ActionResult GetProblemAccountMonitor(DateTime eventDate, string leagueIds, string matchStatus, string siteIds, bool isSkipTracking)
+        public ActionResult GetProblemAccountMonitor(DateTime eventDate, string leagueIds, string matchStatus, string siteIds, bool? isSkipTracking)
         {
             var viewModel = Enumerable.Empty<ProblemAccountMonitorViewModel>();
             var total = 0;
