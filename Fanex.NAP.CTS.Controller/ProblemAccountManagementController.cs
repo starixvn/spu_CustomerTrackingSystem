@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
     using Fanex.NAP.Core.Web.Attribute;
+    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.ProblemAccountManagement;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
@@ -14,6 +15,7 @@
     using System.Text;
     using System.Threading.Tasks;
     using System.Web.Mvc;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.ProblemAccountManagement, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -55,6 +57,7 @@
         }
 
         [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.ProblemAccountManagementRpt)]
         public ActionResult GetProblemAccount(ProblemAccountFilterViewModel filter)
         {
             var problemAccounts = Enumerable.Empty<ProblemAccountViewModel>();
@@ -115,6 +118,7 @@
         }
 
         [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.ProblemAccountManagementMarkNew)]
         public ActionResult MarkProblemAccount(ValidateProblemAccountInputViewModel model)
         {
             model.UserID = CurrentSession.UserId;

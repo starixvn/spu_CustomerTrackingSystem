@@ -289,7 +289,9 @@
             AccountProfileRobotBetting = 44,
             Notification = 45,
             NotificationSettingAssAccountMonitor = 46,
-            NotificationSettingProbation = 47
+            NotificationSettingProbation = 47,
+            ProblemAccountManagementRpt = 48,
+            ProblemAccountManagementMarkNew = 49
         };
 
         public enum SystemId
