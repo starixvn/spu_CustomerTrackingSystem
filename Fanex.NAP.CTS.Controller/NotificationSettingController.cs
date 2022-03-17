@@ -6,12 +6,14 @@
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.Utilities;
+    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Notification;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.ViewModel.Notification;
     using Service;
     using System.Linq;
     using System.Web.Mvc;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     [NapSuperAuth]
     public class NotificationSettingController : ConfigurationsController
@@ -51,7 +53,8 @@
             });
         }
 
-        public JsonResult GetAllMessages(long maxAssociationID, long maxProbationID)
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.Notification, "isSkipTracking")]
+        public JsonResult GetAllMessages(long maxAssociationID, long maxProbationID, bool? isSkipTracking)
         {
             var isFirstNotification = CheckFirstNotification();
 
@@ -83,7 +86,52 @@
         }
 
         [HttpPost]
-        public ActionResult UpdateNotificationSettingStatus(UpdateNotifiedSettingStatusModel notifiedSettingStatusModel)
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.NotificationSettingAssAccountMonitor)]
+        public ActionResult UpdateAssAccountMonitorSettingStatus(UpdateNotifiedSettingStatusModel notifiedSettingStatusModel)
+        {
+            return UpdateNotificationSettingStatus(notifiedSettingStatusModel);
+        }
+
+        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.NotificationSettingProbation)]
+        public ActionResult UpdateProbationSettingStatus(UpdateNotifiedSettingStatusModel notifiedSettingStatusModel)
+        {
+            return UpdateNotificationSettingStatus(notifiedSettingStatusModel);
+        }
+
+        public NotificationSettingStatusViewModel GetNotificationSettingStatus()
+        {
+            var notificationSettingStatus = _notificationSettingService.GetNotificationSettingStatus(CurrentSession.UserId);
+            bool isTurnOnAssociationStatus = false;
+            bool isTurnOnProbationStatus = false;
+
+            if (notificationSettingStatus != null && notificationSettingStatus.Any())
+            {
+                isTurnOnAssociationStatus = notificationSettingStatus.Where(x => x.FunctionID == 1).Select(c => c.IsTurnedOnNotification).SingleOrDefault();
+                isTurnOnProbationStatus = notificationSettingStatus.Where(x => x.FunctionID == 2).Select(c => c.IsTurnedOnNotification).SingleOrDefault();
+            }
+
+            return new NotificationSettingStatusViewModel
+            {
+                IsTurnOnAssociationStatus = isTurnOnAssociationStatus,
+                IsTurnOnProbationStatus = isTurnOnProbationStatus
+            };
+        }
+
+        #region Private Methods
+        private bool CheckFirstNotification()
+        {
+            var isFirst = AppSession.IsFirstGetDataNotification;
+
+            if (isFirst)
+            {
+                AppSession.IsFirstGetDataNotification = false;
+            }
+
+            return isFirst;
+        }
+
+        private ActionResult UpdateNotificationSettingStatus(UpdateNotifiedSettingStatusModel notifiedSettingStatusModel)
         {
             IUserService userService = new UserService();
 
@@ -106,7 +154,7 @@
                 }, JsonRequestBehavior.AllowGet);
             }
 
-            if((!isAssociationPermission && notifiedSettingStatusModel.FunctionId == 1)
+            if ((!isAssociationPermission && notifiedSettingStatusModel.FunctionId == 1)
                 || !isProbationPermission && notifiedSettingStatusModel.FunctionId == 2)
             {
                 return Json(new DBResult
@@ -124,36 +172,7 @@
                 result.ErrorMsg
             }, JsonRequestBehavior.AllowGet);
         }
+        #endregion
 
-        public NotificationSettingStatusViewModel GetNotificationSettingStatus()
-        {
-            var notificationSettingStatus = _notificationSettingService.GetNotificationSettingStatus(CurrentSession.UserId);
-            bool isTurnOnAssociationStatus = false;
-            bool isTurnOnProbationStatus = false;
-
-            if (notificationSettingStatus != null && notificationSettingStatus.Any())
-            {
-                isTurnOnAssociationStatus = notificationSettingStatus.Where(x => x.FunctionID == 1).Select(c => c.IsTurnedOnNotification).SingleOrDefault();
-                isTurnOnProbationStatus = notificationSettingStatus.Where(x => x.FunctionID == 2).Select(c => c.IsTurnedOnNotification).SingleOrDefault();
-            }
-
-            return new NotificationSettingStatusViewModel
-            {
-                IsTurnOnAssociationStatus = isTurnOnAssociationStatus,
-                IsTurnOnProbationStatus = isTurnOnProbationStatus
-            };
-        }
-
-        private bool CheckFirstNotification()
-        {
-            var isFirst = AppSession.IsFirstGetDataNotification;
-
-            if (isFirst)
-            {
-                AppSession.IsFirstGetDataNotification = false;
-            }
-
-            return isFirst;
-        }
     }
 }

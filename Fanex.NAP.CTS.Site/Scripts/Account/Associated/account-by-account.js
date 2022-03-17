@@ -27,7 +27,8 @@
     let spanIPAssociationTotalMatches = $('#spanIPAssociationTotalMatches');
     let spanIPAssociationTotalIPSharing = $('#spanIPAssociationTotalIPSharing');    let cbbAssociationCategory = $('#cbbAssociationCategory');
     let cacheCategoryColors = [];
-    
+    let isSkipTracking = true;
+
     function GetCategoryColorList() {
         var list = [];
 
@@ -191,7 +192,8 @@
                             cbbAssociationSubscriber.find('option').not(':selected').each(function () { selectedSubscribers.push($(this).val()); });
                         }
                         return selectedSubscribers.join(',');
-                    }
+                    },
+                    IsSkipTracking: function () { return isSkipTracking; }
                 },
                 type: "POST",
                 beforeSend: function () {
@@ -379,7 +381,7 @@
             },
             complete: function () {
                 setTimeout(() => {
-                    btnSearch.trigger("click");
+                    LoadGrid(true);
                 }, 2000);
             }
         });
@@ -471,7 +473,7 @@
                             divAddAssociation.dialog('close');
                             $('#association-cbb-status').val(0);
                             $("#account-by-account-cbb-association-type").val(3);
-                            btnSearch.trigger("click");
+                            LoadGrid(true);
                             GetTotalAssociation(fromCTSCustId);
                         }, 1000);                        
                     } else {
@@ -931,6 +933,16 @@
             btnAddAssociation.prop('disabled', true);
     }
 
+    function LoadGrid(isSkip) {
+        $(this).prop('disabled', true);
+
+        isSkipTracking = isSkip;
+
+        dataTable
+            ? dataTable.ajax.reload(null, true)
+            : dataTable = RenderGrid();
+    } 
+
     this.Initial = function (ctsCustid, username, subscriberId, subscriber, hostPermission) {
         _username = username;        
 
@@ -970,12 +982,7 @@
 
         dataTable = RenderGrid();
 
-        btnSearch.on('click', function () {
-            $(this).prop('disabled', true);
-            if (dataTable) {
-                dataTable.ajax.reload(null, true);
-            }
-        });
+        btnSearch.on('click', () => LoadGrid(false));
 
         btnViewOnGraph.on('click', function () {
             let info = dataTable.page.info();

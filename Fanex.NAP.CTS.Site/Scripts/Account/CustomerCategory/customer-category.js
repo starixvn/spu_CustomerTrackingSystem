@@ -5,7 +5,7 @@
     let divMarkCategory = $('#divMarkCategory');
     let divRemoveCategory = $('#divRemoveCategory');
     let tblcustomercategory = $('#customer-category-table');
-    let isHostPermission; 
+    let isHostPermission;
     let spanClass = $('#spanClass');
     let cacheCategoryColors = [];
     let cacheData = {
@@ -14,7 +14,8 @@
         isExcludedTagAssPA: false,
         isProblemAccount: false
     };
-        
+    let dataTable;
+
     function GetNormalCategoryList() {
         var list = [];
 
@@ -34,7 +35,7 @@
         list.push({ 'id': 277, 'indexColor': 2, 'cssClass': 'circle bg-yellow', 'name': 'High Risk Punter (77)' });
         list.push({ 'id': 278, 'indexColor': 2, 'cssClass': 'circle bg-yellow', 'name': 'High Risk Punter (78)' });
         list.push({ 'id': 1002, 'indexColor': 2, 'cssClass': 'circle bg-yellow', 'name': 'Pro Punter Inactive' });
-        
+
         list.push({ 'id': 211, 'indexColor': 3, 'cssClass': 'circle green-line', 'name': 'Good Member (111)' });
         list.push({ 'id': 212, 'indexColor': 3, 'cssClass': 'circle green-line', 'name': 'Good Member (112)' });
         list.push({ 'id': 213, 'indexColor': 3, 'cssClass': 'circle green-line', 'name': 'Good Member (113)' });
@@ -67,7 +68,7 @@
             AddCustomerCategory(custId, ctsCustId, subscriberId);
         });
 
-        $("#ddlcategory").select2();      
+        $("#ddlcategory").select2();
     }
 
     function GetCustomerCategory(custId) {
@@ -138,7 +139,7 @@
                     common.showSuccess('Add the category successful!', 2000);
                     divMarkCategory.dialog('close');
 
-                    tblcustomercategory.DataTable().ajax.reload();
+                    LoadGrid(ctsCustId, true);
                     GetCustomerCategory(custId);
                 }
                 else {
@@ -178,7 +179,7 @@
                     RemoveCategory(custId, ctsCustId);
                 });
 
-                $("#ddlRemoveCategory").select2(); 
+                $("#ddlRemoveCategory").select2();
             },
             complete: function () {
                 divRemoveCategory.dialog({
@@ -214,7 +215,7 @@
                     common.showSuccess('Remove the category successful!', 2000);
                     divRemoveCategory.dialog('close');
 
-                    tblcustomercategory.DataTable().ajax.reload();
+                    LoadGrid(ctsCustId, true);
                     GetCustomerCategory(custId);
                 }
                 else {
@@ -233,9 +234,17 @@
             }
         });
     }
-    
-    function RenderGrid(ctsCustId) {
-         tblcustomercategory.DataTable({
+
+    function LoadGrid(ctsCustId) {
+        $(this).prop('disabled', true);
+
+        dataTable
+            ? dataTable.ajax.reload(null, true)
+            : dataTable = ReloadGrid(ctsCustId);
+    }
+
+    function RenderGrid() {
+        tblcustomercategory.DataTable({
             dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
             pagingType: "full_numbers",
             language: {
@@ -255,41 +264,6 @@
             scrollCollapse: false,
             lengthMenu: [20, 50, 100, 200],
             pageLength: 50,
-            ajax: {
-                url: common.modifyRelativeUrl('Account/GetCustomerClassification'),
-                data: {
-                    ctsCustId: ctsCustId
-                },
-                type: 'POST',
-                dataFilter: function (response) {
-                    if (response !== undefined) {
-                        let json = jQuery.parseJSON(response);
-                     
-                        cacheData.isProblemAccount = json.isProblemAccount;
-                        cacheData.isPinCategory = json.isPinCategory;
-                        cacheData.isExcludedTagAssPA = json.isExcludedTagAssPA;
-                        cacheData.isVVip = json.isVVip;
-
-                        ResetCategorySetting();                       
-                        
-                        btnMarkCategory.prop('disabled', json.isVVip);
-                        btnRemoveCategory.prop('disabled', !json.isVVip);
-
-                        let isProblemAccount = RenderProblemAccount(json.categoryList);
-
-                        if (!isProblemAccount) {
-                            RenderCategorySummary(json.categoryList);
-                        }
-                    }
-                    return response;
-                },
-                beforeSend: function () {
-                    tblcustomercategory.find('tbody').addClass('loading');
-                },
-                complete: function () {
-                    tblcustomercategory.find('tbody').removeClass('loading');
-                }
-            },
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
                 { targets: [0], className: "text-center", defaultContent: "-" },
@@ -303,20 +277,19 @@
                 { data: obj => obj.CategoryName },
                 { data: obj => obj.CustomerClass },
                 { data: obj => obj.Reason },
-                { data: obj => obj.CreatedBy }                                
+                { data: obj => obj.CreatedBy }
             ]
         });
     }
 
-    function ReloadGrid(ctsCustId)
-    {
+    function ReloadGrid(ctsCustId) {
         $.ajax(common.modifyRelativeUrl('/Account/GetCustomerClassification'), {
             type: 'POST',
             data: { ctsCustId: ctsCustId },
             dataFilter: function (response) {
                 if (response !== undefined) {
-                    let json = jQuery.parseJSON(response);                  
-                 
+                    let json = jQuery.parseJSON(response);
+
                     btnMarkCategory.prop('disabled', json.isVVip);
                     btnRemoveCategory.prop('disabled', !json.isVVip);
 
@@ -325,7 +298,7 @@
                     cacheData.isExcludedTagAssPA = json.isExcludedTagAssPA;
                     cacheData.isVVip = json.isVVip;
 
-                    ResetCategorySetting();                                      
+                    ResetCategorySetting();
 
                     let isProblemAccount = RenderProblemAccount(json.categoryList);
 
@@ -345,7 +318,7 @@
                 tblcustomercategory.find('tbody').removeClass('loading');
             }
         });
-    }    
+    }
 
     function RenderProblemAccount(data) {
         var isExistProblemAccount = false;
@@ -354,7 +327,7 @@
         data.map(function (x) {
             if (x.IsProblemAccount) {
                 let classIconColor = "circle bg-red";
-                
+
                 html = BuildCategoryToHtmlDiv(html, classIconColor, x.CategoryName);
 
                 isExistProblemAccount = true;
@@ -376,7 +349,7 @@
         }
 
         return isExistProblemAccount;
-    }    
+    }
 
     function RenderCategorySummary(data) {
         let html = "";
@@ -387,7 +360,7 @@
                 let isEquals = x.CategoryId === cacheCategoryColors[i].id;
                 if (isEquals) {
                     let classIconColor = cacheCategoryColors[i].cssClass;
-                    
+
                     html = BuildCategoryToHtmlDiv(html, classIconColor, x.CategoryName);
 
                     indexColorProfile = indexColorProfile < cacheCategoryColors[i].indexColor
@@ -404,7 +377,7 @@
                     .removeClass('green-line').removeClass('yellow-line')
                     .addClass('bg-green');
                 $('#divHeaderInfo')
-                    .removeClass('border-red').removeClass('border-yellow')                      
+                    .removeClass('border-red').removeClass('border-yellow')
                     .addClass('border-green');
                 break;
             case 2:
@@ -452,11 +425,11 @@
         html += "</div>";
 
         return html;
-    }        
+    }
 
     function PinCategory(isChecked, ctsCustId, subscriberId) {
-        let html = "<div style='text-align:center'>Are you sure about this action? </div>";  
-        
+        let html = "<div style='text-align:center'>Are you sure about this action? </div>";
+
         if (isChecked) {
             html += "By enabling pin option, this account will not be classified automatically by our service in future";
         } else {
@@ -466,7 +439,7 @@
         common.showFormConfirmation(html, 'Confirmation',
             function () {
                 var url = common.modifyRelativeUrl('/Account/PinCategoryCustomerClassification');
-                var params = {};     
+                var params = {};
                 params.ctsCustId = ctsCustId;
                 params.subscriberId = subscriberId;
                 params.isPinCategory = isChecked;
@@ -481,7 +454,8 @@
                                 : "Unpinned category successfully!";
 
                             common.showSuccess(message);
-                            tblcustomercategory.DataTable().ajax.reload();
+
+                            LoadGrid(ctsCustId, true);
                         }
                         else {
                             common.showError('Failed! ' + response.errorMessage);
@@ -497,7 +471,7 @@
                     error: function (error) {
                         common.closeLoading();
                         console.log(error);
-                        ResetCategorySetting();                    
+                        ResetCategorySetting();
                     }
                 });
             },
@@ -510,7 +484,7 @@
     function ExcludedTagAssPA(isChecked, custId, ctsCustId, subscriberId, custSubId) {
         let html = "";
         let isPinCategory = false;
-       
+
         $("option", cbbCategorySetting).each(function () {
             if ($(this).val() === "PinCategory") {
                 isPinCategory = $(this).is(":checked");
@@ -523,9 +497,8 @@
 
             common.showError(html, 2000);
             ResetCategorySetting();
-            
-            return;
 
+            return;
         } else if (isChecked) {
             html = "<div style='text-align:center'>Are you sure about this action? </div>";
             html += "<div>By selecting this option, this account will not be classified with PA</div>";
@@ -557,7 +530,8 @@
                                 : "Unmark category successfully!";
 
                             common.showSuccess(message);
-                            tblcustomercategory.DataTable().ajax.reload();
+
+                            LoadGrid(ctsCustId, true);
                         }
                         else {
                             common.showError('Failed! ' + response.errorMessage);
@@ -581,14 +555,14 @@
                 ResetCategorySetting();
             }
         );
-    }  
+    }
 
     function ResetCategorySetting() {
         let cbbCategorySettingSelector = cbbCategorySetting.empty();
 
         cbbCategorySettingSelector.append("<option " + (cacheData.isPinCategory ? "selected" : "") + (cacheData.isVVip ? " disabled" : "") + " value='PinCategory'>Pin Category</option>");
 
-        cbbCategorySettingSelector.append("<option " + (cacheData.isExcludedTagAssPA ? "selected" : "") + " value='ExcludedTagAssPA'>Normal Category</option>");       
+        cbbCategorySettingSelector.append("<option " + (cacheData.isExcludedTagAssPA ? "selected" : "") + " value='ExcludedTagAssPA'>Normal Category</option>");
 
         cbbCategorySetting.multiselect("refresh");
     }
@@ -621,7 +595,6 @@
         });
 
         if (isHostPermission) {
-
             btnMarkCategory.click(function () { DisplayMarkCategory(custId, ctsCustId, subscriberId); });
 
             btnRemoveCategory.click(function () { DisplayRemoveCategory(custId, ctsCustId, subscriberId); });
@@ -629,7 +602,9 @@
 
         cacheCategoryColors = GetNormalCategoryList();
 
-        RenderGrid(ctsCustId);
+        dataTable = RenderGrid();
+
+        LoadGrid(ctsCustId);
     };
 
     this.ReloadTab = function (ctsCustId) {

@@ -65,7 +65,7 @@
         public const string AssociationTypeName_IPAssociation = "IP Association";
 
         public const int MatchMonitor_ReportQueryType = 2;
-        
+
         public const int ProblemCase_ItemID_Robot = 1;
         public const int ProblemCase_ItemID_SuspiciousAssociation = 4;
         public const int ProblemCase_ItemID_ProPunter = 9;
@@ -236,6 +236,65 @@
             CTSServices = 3,
             AFCSerivce = 4,
             ManualTrigger = 5
+        };
+        
+        public enum TrackingCtsFunctionId
+        {
+            ProblemAccountMonitor = 1,
+            EvidenceManagementImport = 2,
+            EvidenceManagementRemove = 3,
+            AssociatedAccountMonitorRpt = 4,
+            AssociatedAccountMonitorInsert = 5,
+            AssociatedAccountMonitorRemove = 6,
+            SpecialCustomerClassRpt = 7,
+            SpecialCustomerClassInsert = 8,
+            SpecialCustomerClassRemove = 9,
+            ProbationManagement = 10,
+            AssociationDetection = 11,
+            AssociationReport = 12,
+            AssociationDetailRpt = 13,
+            AssociationDetailRptLinkedUnlinked = 14,
+            LatestTransaction = 15,
+            ProblemCaseMonitorRpt = 16,
+            ProblemCaseMonitorExport = 17,
+            TransactionRpt = 18,
+            MatchMonitorRpt = 19,
+            MatchMonitorDetailRpt = 20,
+            ManageSubscriberRpt = 21,
+            ManageSubscriberInsert = 22,
+            ManageSubscriberRemove = 23,
+            ManageSubscriberUpdate = 24,
+            AccountProfileRpt = 25,
+            AccountProfileAssAccountRpt = 26,
+            AccountProfileAssAccountDetailRpt = 27,
+            AccountProfileAssAccountInsert = 28,
+            AccountProfileAssAccountViewOnGraph = 29,
+            AccountProfileAssAccountLinkedUnlinked = 30,
+            AccountProfileChainstoEvidencesRpt = 31,
+            AccountProfileChainstoEvidenceInsertEvidence = 32,
+            AccountProfileChainstoEvidenceRemoveEvidence = 33,
+            AccountProfileChainstoEvidenceRemoveAffEvidence = 34,
+            AccountProfileChainstoEvidenceInsertExceptions = 35,
+            AccountProfileChainstoEvidenceRemoveExceptions = 36,
+            AccountProfileCustomerClassification = 37,
+            AccountProfileCustomerClassificationPinCategory = 38,
+            AccountProfileCustomerClassificationNormalCategory = 39,
+            AccountProfileCustomerClassificationMarkCategory = 40,
+            AccountProfileCustomerClassificationRemoveCategory = 41,
+            AccountProfileTransactionHistory = 42,
+            AccountProfileRobotClassification = 43,
+            AccountProfileRobotBetting = 44,
+            Notification = 45,
+            NotificationSettingAssAccountMonitor = 46,
+            NotificationSettingProbation = 47
+        };
+
+        public enum SystemId
+        {
+            CTSWeb = 1,
+            CTSAPI = 2,
+            FS = 3,
+            TGRS = 4
         };
     }
 }

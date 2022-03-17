@@ -197,7 +197,7 @@ function notification() {
 
     function getUnreadMessageCount()
     {
-        GetNewNotification(0,0);   //Default GET to load para = 0
+        GetNewNotification(0,0, true);   //Default GET to load para = 0
     }
 
     domElements.notificationIcon.off("click");
@@ -208,19 +208,22 @@ function notification() {
 
     $(document).ready(function () {
         domElements.notificationIcon.on('click', function () {
-            GetNewNotification(associatedMessages.maxAssociationId, probationMessages.maxProbationID);        //Get to update
+            var isSkip = domElements.notificationList.is(":visible");
+
+            GetNewNotification(associatedMessages.maxAssociationId, probationMessages.maxProbationID, isSkip);        //Get to update
             domElements.notificationList.toggle();
         });        
     });
 
-    function GetNewNotification(maxAssociationID, maxProbationID) {
+    function GetNewNotification(maxAssociationID, maxProbationID, isSkip) {
         var url = common.modifyRelativeUrl("/NotificationSetting/GetAllMessages");
 
         $.ajax(url, {
             type: 'POST',
             data: {
                 maxAssociationID: maxAssociationID,
-                maxProbationID: maxProbationID
+                maxProbationID: maxProbationID,
+                isSkipTracking : isSkip
             },
             success: function (json) {
                 if (!CheckValid(json)) {
@@ -463,7 +466,7 @@ function notification() {
         {
             domElements.notificationBell.removeClass('bell-shake');
             domElements.circle.hide();
-            GetNewNotification(associatedMessages.maxAssociationId, probationMessages.maxProbationID);     
+            GetNewNotification(associatedMessages.maxAssociationId, probationMessages.maxProbationID, true);     
             domElements.notificationList.toggle();
         }
     });

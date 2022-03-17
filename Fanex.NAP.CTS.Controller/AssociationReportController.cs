@@ -16,6 +16,8 @@
     using System.Collections.Generic;
     using System;
     using Fanex.NAP.CTS.Core.Helpers;
+    using Fanex.NAP.CTS.Model;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.AssociationReport, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -47,6 +49,7 @@
         }
 
         [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationReport)]
         public ActionResult GetAssociations(AssociationFilterViewModel filter)
         {
             var associations = Enumerable.Empty<AssociationViewModel>();
@@ -119,7 +122,8 @@
         }
 
         [HttpPost]
-        public ActionResult GetAssociationDetail(AssociationDetailFilterViewModel filter)
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetailRpt, "isSkipTracking")]
+        public ActionResult GetAssociationDetail(AssociationDetailFilterViewModel filter, bool? isSkipTracking)
         {
             var associationList = Enumerable.Empty<AssociationDetailViewModel>();
             var apiURI = AppSettings.Get("Graph_GetAssociationDetail");
@@ -200,6 +204,7 @@
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AssociationReport, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetailRptLinkedUnlinked)]
         public ActionResult ActiveRemoveAssociation(int fromSubscriberId, long fromCTSCustId, int toSubscriberId, long toCTSCustId, bool isLinked)
         {
             if (fromSubscriberId <= 0 || fromCTSCustId <= 0 || toSubscriberId <= 0 || toCTSCustId <= 0)

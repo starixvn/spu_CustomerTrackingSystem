@@ -2448,7 +2448,7 @@ body {
           color: white; }
     .main-menu .menu-item:target .sub-menu {
       height: auto;
-      max-height: 15rem;
+      max-height: 20rem;
       visibility: visible;
       overflow: hidden;
       transition: max-height 0.7s; }

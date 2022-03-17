@@ -40,7 +40,9 @@
             IsTurningOnPermission: isTurnOnPermission
         };
 
-        $.ajax(common.modifyRelativeUrl('NotificationSetting/UpdateNotificationSettingStatus'), {
+        let method = (funcId === 1) ? "UpdateAssAccountMonitorSettingStatus" : "UpdateProbationSettingStatus";
+
+        $.ajax(common.modifyRelativeUrl('NotificationSetting/' + method), {
             type: 'POST',
             data: notifiedSettingStatusModel,
             success: function (response) {

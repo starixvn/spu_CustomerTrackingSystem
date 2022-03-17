@@ -2,6 +2,7 @@
     let dataTable;
     let IsHostPermission;  
     let validCTSCustID;
+    let isSkipTracking = false;
 
     let domElements = {
         hdIsHostPermission: $('#hdIsHostPermission'),
@@ -30,7 +31,10 @@
             pagingType: "full_numbers",
             ajax: {
                 url: url,
-                data: {
+                data: function () {
+                    let params = {};
+                    params.isSkipTracking = isSkipTracking;
+                    return params;
                 },
                 type: "POST",
                 beforeSend: function () {
@@ -122,7 +126,7 @@
             success: function (response) {
                 if (response.errorCode === 0) {
                     common.showSuccess('Remove the associated account successful!',1000);
-                    LoadGrid();
+                    LoadGrid(true);
                 }
                 else {
                     common.showError('Remove the associated account fail!');
@@ -154,8 +158,10 @@
         return html;
     }
 
-    function LoadGrid() {
+    function LoadGrid(isSkip) {
         $(this).prop('disabled', true);
+
+        isSkipTracking = isSkip;
 
         dataTable
             ? dataTable.ajax.reload(null, true)
@@ -264,7 +270,7 @@
                         common.showSuccess("Add associated account successful");
                         domElements.divAddUsername.dialog('close');
                         setTimeout(() => {
-                            LoadGrid();
+                            LoadGrid(true);
                         }, 1000);
                     } else {
                         BindResultValidatedManualAccountMultiple(response.ResultValidated);
@@ -426,7 +432,7 @@
 
     function Initial() {
         IsDisableButton();
-        LoadGrid(); 
+        LoadGrid(false); 
 
         domElements.btnAddUsername.on('click', function () {
             domElements.txtAsscomment.val('');

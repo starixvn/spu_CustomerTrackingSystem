@@ -3,6 +3,7 @@
     let isAddSub = 1;
     let detailedSiteCounter = 1;
     let backupEditInfo = null;
+    let isSkipTracking = false;
 
     let domElements = {
         isHostPermission: $("#hdIsHostPermission").attr("IsHostPermission"),
@@ -31,7 +32,11 @@
             serverSide: false,
             ajax: {
                 url: common.modifyRelativeUrl('ManageSubscriber/GetSubscribers'),
-                data: {},
+                data: function () {
+                    let params = {};
+                    params.isSkipTracking = isSkipTracking;
+                    return params;
+                },
                 type: "POST",
                 beforeSend: function () {
                     domElements.manageSubscriberTable.find('tbody').addClass('loading');
@@ -128,8 +133,11 @@
         });
     }
 
-    function LoadGrid() {
+    function LoadGrid(isSkip) {
         $(this).prop('disabled', true);
+
+        isSkipTracking = isSkip;
+
         dataTable
             ? dataTable.ajax.reload(null, true)
             : dataTable = RenderGrid();
@@ -164,7 +172,7 @@
             success: function (response) {
                 if (response.ErrorCode === 0) {
                     common.showSuccess('Remove subscriber successful!', 1000);
-                    LoadGrid();
+                    LoadGrid(true);
                 }
                 else {
                     common.showError('Remove subscriber fail! - ' + response.ErrorMsg);
@@ -428,7 +436,7 @@
     function InsertSubscriber() {
         let subscriberInsertModel = GetInputUser();
 
-        $.ajax(common.modifyRelativeUrl('ManageSubscriber/UpdateSubscriber'), {
+        $.ajax(common.modifyRelativeUrl('ManageSubscriber/InsertSubscriber'), {
             type: 'POST',
             data: subscriberInsertModel,
             beforeSend: function () {
@@ -440,7 +448,7 @@
                     RefreshInputData();
                     domElements.divAddSubscriber.dialog('close');
                     setTimeout(() => {
-                        LoadGrid();
+                        LoadGrid(true);
                     }, 1000);
                 } else {
                     common.showError("Add subscriber fail! - " + response.ErrorMsg);
@@ -470,7 +478,7 @@
                     RefreshInputData();
                     domElements.divAddSubscriber.dialog('close');
                     setTimeout(() => {
-                        LoadGrid();
+                        LoadGrid(true);
                     }, 1000);
                 } else {
                     common.showError("Edit subscriber fail! - " + response.ErrorMsg);
@@ -590,7 +598,7 @@
 
     //Region: Initialization
     function Initial() {
-        LoadGrid();
+        LoadGrid(false);
 
         InitDetailSiteTable();
 

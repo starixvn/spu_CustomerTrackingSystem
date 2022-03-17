@@ -1,6 +1,8 @@
 ﻿function MatchMonitor() {
     let dataTable;
     let timeoutHolder = null;
+    let isSkipTracking = false;
+
     let domElements = {
         isHostPermission: $("#hdIsHostPermission").attr("IsHostPermission"),
         userId: $("#hdCTSCustId").val(),
@@ -20,8 +22,10 @@
         cbbMatchSection: $('#cbbMatchSection')
     };
 
-    function GetMatchMonitor() {
+    function GetMatchMonitor(isSkip) {
         if (ValidateRangeDate()) {
+
+            isSkipTracking = isSkip;
             dataTable ? dataTable.ajax.reload(null, true) : dataTable = GenerateGrid();
         }
     }
@@ -54,6 +58,7 @@
                     LeagueName: function () { return domElements.txtLeague.val(); },
                     Market: function () { return domElements.cbbMarket.val(); },
                     MatchSection: function () { return domElements.cbbMatchSection.val().join(); },
+                    isSkipTracking: function () { return isSkipTracking; }
                 },
                 type: "POST",
                 beforeSend: function () {
@@ -171,7 +176,7 @@
                 timeoutHolder = setTimeout(() => StartCountingDown($target, originalVal, val - 1), 1000);
             }
             else {
-                domElements.btnGenerate.click();
+                domElements.btnRefresh.click();
                 StartCountingDown($target, originalVal, originalVal);
             }
         }
@@ -299,9 +304,9 @@
             domElements.refreshList.toggleClass('block-box');
         })
 
-        domElements.btnGenerate.on('click', function () { GetMatchMonitor(); });
+        domElements.btnGenerate.on('click', function () { GetMatchMonitor(false); });
         domElements.btnRefresh.on('click', function () {
-            GetMatchMonitor();
+            GetMatchMonitor(true);
             RefreshChange(domElements.eventTarget);
         });
 

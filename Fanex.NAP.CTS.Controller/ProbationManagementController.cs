@@ -21,6 +21,8 @@
     using Fanex.Logging;
     using Fanex.NAP.CTS.Core.Helpers.Xml;
     using System.Net;
+    using Fanex.NAP.CTS.Model;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.ProbationManagement, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -58,6 +60,7 @@
         }      
 
         [HttpGet]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.ProbationManagement)]
         public ActionResult ExportProbationCategory(ExportProbationCategoryFilter filter)
         {
             var probationCategoryList = Enumerable.Empty<ProbationCategoryViewModel>();

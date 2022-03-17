@@ -10,6 +10,7 @@
     var currentUserId = $("#hdCurrentUserId").val();
     var custSubId = $("#hdCustSubId").val();
     var isPreviousStatisticOpen = false;
+    var currentTabIndex = 1;
 
     let domElements = {
         tabAssociatedAccount: $("#associated_account"),
@@ -43,6 +44,10 @@
         spanCreatedDate: $('#spanCreatedDate'),
         associatedAccountTab: $("#associated_account-tab"),
         evidenceTab: $("#evidence-tab"),
+        customerClassTab: $("#customer-class-tab"),
+        tranHistoryTab: $("#transaction-history-tab"),
+        robotClassificationTab: $("#robot-classification-tab"),
+        robotBettingTab: $("#robot-betting-tab"),
         statisticTitle: $("#statistic-title"),
         statisticIcon: $("#statistic-title .icon"),
         statisticDetail: $("#statistic-detail"),
@@ -354,10 +359,94 @@
         CollapseExpandStatistic();
     }
 
+    function TrackingEvidenceFuction() {
+        if (currentTabIndex != 2 && domElements.evidenceTab.attr("aria-selected")) 
+        {
+            TrackingFunction(2);
+            currentTabIndex = 2;
+        }
+    }
+
+    function TrackingCustClassFuction() {
+        if (currentTabIndex != 3 && domElements.customerClassTab.attr("aria-selected")) {
+            TrackingFunction(3);
+            currentTabIndex = 3;
+        }
+    }
+
+    function TrackingTransFuction() {
+        if (currentTabIndex != 4 && domElements.tranHistoryTab.attr("aria-selected")) {
+            TrackingFunction(4);
+            currentTabIndex = 4;
+        }
+    }
+
+
+    function TrackingRobotClassFuction() {
+        if (currentTabIndex != 5 && domElements.robotClassificationTab.attr("aria-selected")) {
+            TrackingFunction(5);
+            currentTabIndex = 5;
+        }
+    }
+
+    function TrackingRobotBettingFuction() {
+        if (currentTabIndex != 6 && domElements.robotBettingTab.attr("aria-selected")) {
+            TrackingFunction(6);
+            currentTabIndex = 6;
+        }
+    }
+ 
+
+    function TrackingFunction(functionId) {
+
+        var functionName = null;
+
+        switch (functionId) {
+            case 2:
+                {
+                    functionName = "TrackingEvidence";
+                    break;
+                }
+            case 3:
+                {
+                    functionName = "TrackingCustomerCategory";
+                    break;
+                }
+            case 4:
+                {
+                    functionName = "TrackingTransactionHistory";
+                    break;
+                }
+            case 5:
+                {
+                    functionName = "TrackingRobotClassification";
+                    break;
+                }
+            case 6:
+                {
+                    functionName = "TrackingRobotBetting";
+                    break;
+                }
+
+        }
+
+        if (functionName != null) {
+            $.ajax(common.modifyRelativeUrl('Account/' + functionName), {
+                type: 'GET'
+            });
+        }
+    }
+
     $(document).ready(function () {                        
         DisplayStatistic();          
 
         Initial();    
+
+        domElements.evidenceTab.on('click', () => TrackingEvidenceFuction());
+        domElements.customerClassTab.on('click', () => TrackingCustClassFuction());
+        domElements.tranHistoryTab.on('click', () => TrackingTransFuction());
+        domElements.robotClassificationTab.on('click', () => TrackingRobotClassFuction());
+        domElements.robotBettingTab.on('click', () => TrackingRobotBettingFuction());
     });
 }
 

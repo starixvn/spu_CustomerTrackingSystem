@@ -1,12 +1,14 @@
 ﻿function AssociationReportDetail() {
-    let dataTable;    
+    let dataTable;
+    let isSkipTracking = false;
+
     let domElements = {
         hdSubscriberId: $('#hdSubscriberId'),
         hdCTSCustId: $('#hdCTSCustId'),
         hdUserName: $('#hdUserName'),
         hdFromDate: $('#hdFromDate'),
         hdToDate: $('#hdToDate'),
-        hdAssociationStatus: $('#hdAssociationStatus'),        
+        hdAssociationStatus: $('#hdAssociationStatus'),
         hdAssociationType: $('#hdAssociationType'),
         hdIsHostPermission: $('#hdIsHostPermission'),
         lblAccount: $('#lblAccount'),
@@ -18,9 +20,7 @@
     let isHostPermission = domElements.hdIsHostPermission.attr('IsHostPermission') === "True";
 
     function GetAssociationDetailReport() {
-        dataTable
-            ? dataTable.ajax.reload(null, true)
-            : dataTable = GenerateGrid();
+        ReloadDataGrid(false);
 
         $('tbody', domElements.tblAssociationDetail).on('click', 'tr.group', function () {
             let trGroup = $(this);
@@ -39,21 +39,31 @@
                 });
             }
         });
-    } 
+    }
+
+    function ReloadDataGrid(isSkip) {
+        isSkipTracking = isSkip;
+
+        dataTable
+            ? dataTable.ajax.reload(null, true)
+            : dataTable = GenerateGrid();
+    }
 
     function GenerateGrid() {
         return domElements.tblAssociationDetail.DataTable({
             serverSide: true,
             ajax: {
                 url: common.modifyRelativeUrl('AssociationReport/GetAssociationDetail'),
-                data: {
+                data:
+                {
                     CTSCustId: domElements.hdCTSCustId.val(),
                     SubscriberId: domElements.hdSubscriberId.val(),
                     UserName: domElements.hdUserName.val(),
                     FromDate: domElements.hdFromDate.val(),
                     ToDate: domElements.hdToDate.val(),
                     AssociationStatus: domElements.hdAssociationStatus.val(),
-                    AssociationType: domElements.hdAssociationType.val()
+                    AssociationType: domElements.hdAssociationType.val(),
+                    isSkipTracking: function () { return isSkipTracking }
                 },
                 type: "POST",
                 beforeSend: function () {
@@ -91,14 +101,14 @@
             scrollX: false,
             scrollCollapse: false,
             columnDefs: [
-                { targets: "_all", defaultContent: "-" },                
+                { targets: "_all", defaultContent: "-" },
                 { targets: [0, 1, 2, 3, 4, 5], className: "text-center" },
                 { targets: [0], width: "10%", visible: false },
                 { targets: [1], width: "10%" },
                 { targets: [2], width: "15%" },
                 { targets: [3], width: "15%" },
                 { targets: [4], width: "15%" },
-                { targets: [5], width: "15%" }                
+                { targets: [5], width: "15%" }
             ],
             columns: [
                 { data: obj => obj.SubscriberName },
@@ -144,7 +154,7 @@
 
                         $(rows).eq(i).before(html);
                         last = group;
-                    }       
+                    }
                 });
             }
         });
@@ -180,7 +190,7 @@
         params.fromCTSCustId = parseInt(fromCTSCustId);
         params.toSubscriberId = toSubscriberId;
         params.toCTSCustId = toCTSCustId;
-        params.isLinked = !isLinked;        
+        params.isLinked = !isLinked;
 
         $.ajax(url, {
             type: 'POST',
@@ -190,8 +200,8 @@
                     common.showSuccess('Updated association successful!', 2000);
 
                     setTimeout(() => {
-                        dataTable.ajax.reload(null, true);
-                    }, 1000);                    
+                        ReloadDataGrid(true);
+                    }, 1000);
                 }
                 else if (response.errorCode === -1) {
                     common.showError('This association is already unlinked!');
@@ -202,7 +212,7 @@
             },
             beforeSend: function () {
                 domElements.tblAssociationDetail.find('tbody').addClass('loading');
-            },          
+            },
             complete: function () {
                 domElements.tblAssociationDetail.find('tbody').removeClass('loading');
             },
@@ -213,7 +223,7 @@
         });
     }
 
-    function Initial() {        
+    function Initial() {
         GetAssociationDetailReport();
     }
 

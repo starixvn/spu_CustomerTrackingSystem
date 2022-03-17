@@ -3,6 +3,7 @@
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Utilities;
+    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.AssociationReport;
     using Fanex.NAP.CTS.Model.Common;
     using Fanex.NAP.CTS.Resource.Consts;
@@ -14,6 +15,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.LatestTransaction, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -42,6 +44,7 @@
         }
 
         [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.LatestTransaction)]
         public ActionResult GetLatestTransaction(int subscriberId, int length)
         {
             var result = Enumerable.Empty<LatestTransactionViewModel>();

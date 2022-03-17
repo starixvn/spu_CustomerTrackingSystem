@@ -19,6 +19,8 @@
     using Newtonsoft.Json;
     using Fanex.NAP.CTS.Model.Common;
     using Fanex.NAP.CTS.Service.Interface;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
+    using Fanex.NAP.CTS.Model;
 
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.EvidenceManagement, Policy = NAP.Core.Business.Constant.Policy.Read)]
@@ -78,6 +80,7 @@
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.EvidenceManagement, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.EvidenceManagementImport)]
         [HttpPost]
         public ActionResult ImportFromExcel(bool isOverwrite)
         {
@@ -226,6 +229,7 @@
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.EvidenceManagement, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.EvidenceManagementRemove)]
         public ActionResult InsertAccountsForRemoveEvidences(string userNames)
         {
             var insertResult = new InsertAccountsForRemoveEvidenceViewModel { ErrorCode = 0 };
