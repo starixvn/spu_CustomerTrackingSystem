@@ -1696,7 +1696,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-width: 190px;
+    min-width: 210px;
     transform-origin: 0 0;
     border: 1px solid #d0d0d0;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);

@@ -92,6 +92,9 @@
         public const string MatchMonitorBetType_Quarter2Moneyline = "Quarter 2 Moneyline";
         public const string MatchMonitorBetType_Quarter3Moneyline = "Quarter 3 Moneyline";
         public const string MatchMonitorBetType_Quarter4Moneyline = "Quarter 4 Moneyline";
+        public const string ProblemAccountManagement_DuplicatedUserName = "Duplicated Username";
+        public const string ProblemAccountManagement_SiteLicensee = "Licensee";
+        public const string ProblemAccountManagement_SiteCredit = "Credit";
 
         public enum ROLE_CUSTOMER
         {
@@ -286,7 +289,9 @@
             AccountProfileRobotBetting = 44,
             Notification = 45,
             NotificationSettingAssAccountMonitor = 46,
-            NotificationSettingProbation = 47
+            NotificationSettingProbation = 47,
+            ProblemAccountManagementRpt = 48,
+            ProblemAccountManagementMarkNew = 49
         };
 
         public enum SystemId

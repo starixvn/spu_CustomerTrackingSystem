@@ -550,6 +550,13 @@
     <Content Include="Content\scss\pages\association-report\association-report.scss" />
     <Content Include="Content\scss\pages\match-monitor\match-monitor.scss" />
     <Content Include="Content\scss\pages\match-monitor\match-monitor-detail.scss" />
+    <Content Include="Content\scss\pages\problem-account-management\problem-account-management.css">
+      <DependentUpon>problem-account-management.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\scss\pages\problem-account-management\problem-account-management.min.css">
+      <DependentUpon>problem-account-management.css</DependentUpon>
+    </Content>
+    <Content Include="Content\scss\pages\problem-account-management\problem-account-management.scss" />
     <None Include="Content\scss\pages\problem-account-monitor\problem-account-monitor.scss" />
     <None Include="Content\scss\pages\import-evidences\import-evidences.scss" />
     <Content Include="Content\scss\pages\import-evidences\import-evidences.css">
@@ -998,6 +1005,7 @@
     <Content Include="Scripts\popoto\popoto.min.js" />
     <Content Include="Scripts\popoto\vis\vis-network.min.js" />
     <Content Include="Scripts\ProbationManagement\index.js" />
+    <Content Include="Scripts\ProblemAccountManagement\index.js" />
     <Content Include="Scripts\ProblemAccountMonitor\detail.js" />
     <Content Include="Scripts\ProblemAccountMonitor\index.js" />
     <Content Include="Scripts\ProblemCaseMonitor\index.js" />
@@ -1039,6 +1047,7 @@
     <Content Include="Views\Account\RobotClassfication\LastestRobotClassification.cshtml" />
     <Content Include="Views\TransactionReport\Index.cshtml" />
     <Content Include="Views\Account\RobotBetting\RobotBetting.cshtml" />
+    <Content Include="Views\ProblemAccountManagement\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CoreBetList.css" />

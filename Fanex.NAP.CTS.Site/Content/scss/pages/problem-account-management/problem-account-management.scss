@@ -1,0 +1,120 @@
+﻿@import "../../abstracts/variables";
+@import "../../abstracts/mixins";
+
+body {
+    font-family: $font-family;
+
+    #ui-datepicker-div {
+        z-index: 999999999999999 !important;
+    }
+}
+
+.problem-account-content {
+    margin: 1rem 1.6rem 1rem 1.6rem;
+
+    .problem-account-table {
+        .fixed-header {
+            padding-top: 1.6rem;
+            position: sticky;
+            position: -webkit-sticky;
+            top: 11.5rem;
+            background: #fff;
+            z-index: 9;
+        }
+
+        .wrapper-info-table {
+            position: sticky;
+            position: -webkit-sticky;
+            z-index: 99;
+            top: 16.5rem;
+            transition: top 0.01s linear;
+        }
+
+        .group-control {
+            position: sticky;
+            top: 5.5rem;
+            z-index: 99;
+            background: $page-bg;
+            padding: 1rem 0 0 0;
+
+            .title-association {
+                margin-bottom: -1.3rem;
+            }
+
+            .form-filter {
+                .calendar {
+                    /*display: flex;*/
+                    align-items: center;
+                    width: auto;
+
+                    .icon-calendar-text {
+                        right: 2.2rem;
+                        bottom: 1.7rem;
+                    }
+
+
+                    .text {
+                        margin-right: .7rem;
+                        margin-bottom: 0;
+                    }
+                }
+
+                .group {
+                    .width-select {
+                        width: 15.5rem;
+                    }
+                }
+
+                .width-200 {
+                    min-width: 200px;
+                }
+
+                .button-generate {
+                    background-color: #396ef8;
+                    border-radius: 2px;
+                    color: $page-bg;
+                    height: auto !important;
+                    padding: .7rem 2rem;
+                }
+            }
+        }
+
+        .table-problem-account {
+            width: 100% !important;
+
+            .loading {
+                position: relative;
+
+                &:after {
+                    content: '';
+                    position: absolute;
+                    left: 50%;
+                    top: 75%;
+                    border-radius: 50%;
+                    width: 2.4rem;
+                    height: 2.4rem;
+                    border: 0.25rem solid rgba(57, 110, 248, 0.2);
+                    border-top-color: rgba(57, 110, 248, 1);
+                    -webkit-animation: spin 1s infinite linear;
+                    animation: spin 1s infinite linear;
+                }
+
+                tr {
+                    opacity: .3;
+                }
+            }
+
+            thead {
+                tr:first-child {
+                    th {
+                        position: sticky;
+                        position: -webkit-sticky;
+                        z-index: 9;
+                        transition: top 0.01s linear;
+                        top: 16.5rem;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,133 @@
+﻿@{
+    ViewBag.Title = "PROBLEM ACCOUNT MANAGEMENT";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles {
+    @Styles.Render("~/problem-account-management-styles")
+
+}
+
+<div class="problem-account-container">
+    <div class="content">
+        <h2 class="page-title">Problem Account Management</h2>
+    </div>
+    <div class="problem-account-content">
+        <div class="problem-account-table">
+            <div class="group-control">
+                <div class="form-filter">
+                    <div class="group calendar width-180">
+                        <label class="text">From</label>
+                        <input type="text" id="dpkFromDate" class="control" readonly>
+                        <span class="icon-calendar-text"></span>
+                    </div>
+                    <div class="group calendar width-180">
+                        <label class="text">To</label>
+                        <input type="text" id="dpkToDate" class="control" readonly>
+                        <span class="icon-calendar-text"></span>
+                    </div>
+
+                    <div class="group width-200">
+                        <label class="text">Site</label>
+                        <select class="control" id="cbbSite" multiple="multiple">
+                            @if (Model != null)
+                            {
+                                foreach (var group in Model)
+                                {
+                                    <optgroup label="@group.SubscriberGroupName">
+
+                                        @foreach (var site in group.SiteList)
+                                        {
+                                            <option selected value=@site.SiteID>@site.SiteName</option>
+                                        }
+                                    </optgroup>
+                                }
+                            }
+                        </select>
+                    </div>
+
+                    <div class="group width-180">
+                        <label class="text">Username</label>
+                        <div>
+                            <input type="text" id="inputUserName" value="" placeholder="" maxlength="50" />
+                        </div>
+
+                    </div>
+
+                    <div class="group width-180">
+                        <label class="checkbox-container" id="ckbSearchDownlinesContainer">
+                            <input id="inputSearchDownlines" type="checkbox">
+                            <span class="checkmark"></span>
+                            Search downlines of this account
+                        </label>
+                    </div>
+                    <button class="button button-generate" id="btnGenerate">Generate</button>
+                </div>
+            </div>
+
+            <div class="fixed-header">
+                <div class="top-header">
+                    <div class="add-username">
+                        <button class="button button-primary-outline" id="btnMarkNewProblemAccount">Mark New Problem Account</button>
+                    </div>
+                </div>
+            </div>
+            <table id="tblProblemAccount" class="table table-striped width-100per table-problem-account" style="width: 100%">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Site</th>
+                        <th>Currency</th>
+                        <th>Category</th>
+                        <th>Comment</th>
+                        <th>Created Date</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>        
+    </div>
+</div>
+
+<div id="divAddProblemAccount" class="popup-add divAddProblemAccount" style="display:none;">
+    <div class="group-title">
+        <div class="label">Username<label style="color:red">*</label></div>
+        <div class="wrapper-title">
+            <div class="wrapper-rule wrapper-rule-left">
+                <span class="text bg-red">Red</span>
+                <span class="text">Invalid username</span>
+            </div>
+            <div class="wrapper-rule wrapper-rule-right">
+                <span class="text bg-yellow">Yellow</span>
+                <span class="text">Duplicated username</span>
+            </div>
+        </div>
+    </div>
+    <span class="wrapper-value" id="spanAddProblemAccountUserName">
+        <input id="inputTagUsername" type="text" name='tags-outside' class="input-field full-width tagify--outside" placeholder="Type username (Separate by comma, tab and enter)" />
+        <span class="limit-username">
+            Max: <span id="spanAddProblemAccountUserNameMaxTag">50</span> usernames
+        </span>
+        <span id="spanAddProblemAccountChangeHidden" hidden></span>
+    </span>
+
+    <div class="form-control">
+        <div class="label">Categories<label style="color:red">*</label></div>
+        <select class="control" id="cbbProblemAccountCategories" style="width:180px">         
+        </select>
+    </div>
+
+    <div class="form-control wrapper-comment">
+        <div class="label">Comment</div>
+        <textarea id="txtComment" rows="3" class="comment-field full-width" maxlength="500"></textarea>
+    </div>
+
+    <div class="modal-footer margin-top-10">
+        <button id="btnMarkCancel" class="button btn-cancel-outline" title="Cancel">Cancel</button>
+        <button id="btnMarkSave" class="button -add" title="Add Username">Save</button>
+    </div>  
+</div>
+
+@section scripts {
+    @Scripts.Render("~/problem-account-management-scripts")
+}
