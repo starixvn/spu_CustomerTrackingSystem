@@ -29,6 +29,7 @@
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.Service.Interface.Api;
     using Fanex.NAP.CTS.ViewModel.API.ProblemCaseMonitor;
+    using Fanex.NAP.CTS.ViewModel.SpecialCustomerClass;
     using Fanex.NAP.SPU.Graph.Core;
     using Newtonsoft.Json;
     using System;
@@ -60,6 +61,7 @@
         private readonly ILogInputDataService logInputDataService;
         private readonly IUpdateCategoryService _updateCategoryService;
         private readonly IAntiFraudCenterService _antiFraudCenterService;
+        private readonly ISpecialCustomerClassService _customerClassService;
 
         /// <summary>
         /// Using for external site (TW, ExtAcc site...)
@@ -79,6 +81,7 @@
             logInputDataService = new LogInputDataService();
             _updateCategoryService = new UpdateCategoryService();
             _antiFraudCenterService = new AntiFraudCenterService();
+            _customerClassService = new SpecialCustomerClassService();
         }
 
         /// <summary>
@@ -945,6 +948,68 @@
 
                 return Json(new List<ProblemCaseMonitorViewModel>());
             }
+        }
+
+        /// <summary>
+        /// Insert special CC (build firstly for Haifa)
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="custClass">Customer class</param>
+        /// <param name="isAffectToAss">This function will affect on associated accounts </param>
+        /// <returns></returns>
+        [HttpPost]
+        public bool ForceSpecialCC(string username, int custClass, bool isAffectToAss = false)
+        {
+            var result = true;
+            try
+            {
+                var userId = Convert.ToInt32(ConfigurationManager.AppSettings["DefaultUserIDForForceCC"]);
+                var resultInsert = new ResultInsertRemoveViewModel
+                {
+                    ErrorCode = 0,
+                    ErrorMessage = string.Empty
+                };
+
+                var resultInsertToCTS = _customerClassService.InsertCustomerClass(username, custClass, isAffectToAss, userId);
+
+                if (string.IsNullOrEmpty(resultInsertToCTS.OpErrorMessage))
+                {
+                    if (resultInsertToCTS.CustomerClassList != null && resultInsertToCTS.CustomerClassList.Any())
+                    {
+                        var custIdsChunk = resultInsertToCTS.CustomerClassList.Chunk(ConfigSettings.PushCCToExternalChunkSize);
+
+                        foreach (var custs in custIdsChunk)
+                        {
+                            // Update CC in table custinfo to MainDB
+                            var isSuccessToMain = _custClassificationService.RetryPushCCToMainDB(custs, 2);
+
+                            if (isSuccessToMain)
+                            {
+                                var updateApplyCCs = custs.Select(x => new { x.CustId, x.ScannedTime });
+
+                                var jsonUpdateApplyCCs = JsonConvert.SerializeObject(updateApplyCCs);
+
+                                // Update IsAppliedCC = 1 in CTS
+                                _custClassificationService.UpdateAppliedCustomerClassification(jsonUpdateApplyCCs);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    resultInsert.ErrorCode = -1;
+                    resultInsert.ErrorMessage = resultInsertToCTS.OpErrorMessage;
+
+                    result = false;
+                    LogService.Error("ForceSpecialCC failed: " + resultInsert.ErrorMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("ForceSpecialCC exception: " + ex.Message);
+            }
+
+            return result;
         }
     }
 }

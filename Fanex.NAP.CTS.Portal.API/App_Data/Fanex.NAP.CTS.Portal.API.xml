@@ -616,6 +616,15 @@
             <param name="paras"></param>
             <returns></returns>
         </member>
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.ForceSpecialCC(System.String,System.Int32,System.Boolean)">
+            <summary>
+            Insert special CC (build firstly for Haifa)
+            </summary>
+            <param name="username"></param>
+            <param name="custClass">Customer class</param>
+            <param name="isAffectToAss">This function will affect on associated accounts </param>
+            <returns></returns>
+        </member>
         <member name="T:Fanex.NAP.CTS.Portal.API.Controllers.GraphController">
             <summary>
             Graph Controller - Using for CTS site
