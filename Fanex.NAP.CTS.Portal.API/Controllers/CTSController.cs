@@ -953,12 +953,10 @@
         /// <summary>
         /// Insert special CC (build firstly for Haifa)
         /// </summary>
-        /// <param name="username"></param>
-        /// <param name="customerclass">Customer class</param>
-        /// <param name="isAffectedToAssociation">This function will affect on associated accounts </param>
+        /// <param name="paras"></param>
         /// <returns></returns>
         [HttpPost]
-        public bool ForceSpecialCC(string Username, int CustomerClass, bool IsAffectedToAssociation = false)
+        public bool ForceSpecialCC([FromBody] ForceSpecialCustomerClassModel paras)
         {
             var result = true;
             try
@@ -970,7 +968,7 @@
                     ErrorMessage = string.Empty
                 };
 
-                var resultInsertToCTS = _customerClassService.InsertCustomerClass(Username, CustomerClass, IsAffectedToAssociation, userId);
+                var resultInsertToCTS = _customerClassService.InsertCustomerClass(paras.Username, paras.CustomerClass, paras.IsAffectedToAssociation, userId);
 
                 if (string.IsNullOrEmpty(resultInsertToCTS.OpErrorMessage))
                 {
