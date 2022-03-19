@@ -621,8 +621,8 @@
             Insert special CC (build firstly for Haifa)
             </summary>
             <param name="username"></param>
-            <param name="custClass">Customer class</param>
-            <param name="isAffectToAss">This function will affect on associated accounts </param>
+            <param name="customerclass">Customer class</param>
+            <param name="isAffectedToAssociation">This function will affect on associated accounts </param>
             <returns></returns>
         </member>
         <member name="T:Fanex.NAP.CTS.Portal.API.Controllers.GraphController">
