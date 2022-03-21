@@ -74,10 +74,14 @@
 		<Setting Key="Nap_ProblemAccount_AutoInsertCustomer" SpName="Nap_ProblemAccount_AutoInsertCustomer" DbName="DBCust.CustDB.bodbAdminNet" />
 	</Function>
 
-  <Function name="SpecialCustomerClass">
-    <Setting Key="CTS_DC_SpecialCustClass_Insert" SpName="CTS_DC_SpecialCustClass_Insert" DbName="MySQL.CTS_DataCenter.Admin" />
-  </Function>
-
+    <Function name="SpecialCustomerClass">
+        <Setting Key="CTS_DC_SpecialCustClass_Insert" SpName="CTS_DC_SpecialCustClass_Insert" DbName="MySQL.CTS_DataCenter.Admin" />
+    </Function>
+	
+	<Function name="ProblemAccountManagement">
+		<Setting Key="CTS_DC_ProblemAccountManagement_Evidence_Update" SpName="CTS_DC_ProblemAccountManagement_Evidence_Update" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_ProblemAccountManagement_Evidence_Remove" SpName="CTS_DC_ProblemAccountManagement_Evidence_Remove" DbName="MySQL.CTS_DataCenter.Admin" />
+	</Function>
 	<Function name="MonitorCTSFunction">
 		<Setting Key="SPU_Stats_Accessment_Insert" SpName="SPU_Stats_Accessment_Insert" DbName="MySQL.SPU_Stats.Admin" />
 	</Function>

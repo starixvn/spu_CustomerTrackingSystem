@@ -6,8 +6,10 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.NAP.CTS.Core.Helpers.Api;
+    using Fanex.NAP.CTS.Criteria.ProblemAccountManagement;
     using Fanex.NAP.CTS.Criteria.ProblemAccountMonitor;
     using Fanex.NAP.CTS.Criteria.TWProblemAccountDetection;
+    using Fanex.NAP.CTS.Model.API.UpdateCategoryWhenPAUpdated;
     using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Resource.Consts;
@@ -302,6 +304,31 @@
             
             repository.Execute(criteria);
             return criteria.SuccessList;
+        }
+
+        public int UpdateProblemAccountEvidence(UpdateCategoryParamsModel paras)
+        {
+            var custIdsJson = JsonConvert.SerializeObject(paras.CustInfos);
+
+            var criteria = new UpdateProblemAccountEvidenceCriteria
+            {
+                CustInfo = custIdsJson,
+                UserID = paras.UserId,
+                SourceType = 1
+            };
+
+            return repository.Execute(criteria);
+        }
+
+        public int RemoveProblemAccountEvidence(string custIds)
+        {
+            var criteria = new RemoveProblemAccountEvidenceCriteria
+            {
+                CustIDs = custIds,
+                SourceType = 1
+            };
+
+            return repository.Execute(criteria);
         }
     }
 }

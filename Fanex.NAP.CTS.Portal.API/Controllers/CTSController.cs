@@ -578,6 +578,8 @@
                     if (isWriteLogInfo)
                         LogService.Info($"CTS Portal API - UpdateRemovedProblemAccountToCTS successful custIds:  {JsonConvert.SerializeObject(output.CustIds)}");
 
+                    _problemAccountMonitorService.RemoveProblemAccountEvidence(custIds);
+
                     _customerClassifyService.RescanCustomerClassify(new RescanCustClassificationModel
                     {
                         CustIds = output.CustIds,
@@ -635,7 +637,7 @@
                 if (paras != null && paras.CustInfos != null && paras.CustInfos.Any())
                 {
                     var updateCategoryResult = _updateCategoryService.UpdateCategoryToCTSWhenPAUpdated(paras);
-
+                   
                     if (updateCategoryResult != null && updateCategoryResult.Any())
                     {
                         var assCustForRollbacks = updateCategoryResult.Select(x => new NewPAAssociationCustomerForRollbackModel
@@ -653,6 +655,8 @@
                             IsUpdateDangerToMainDB = true,
                             DangerLevelType = DangerLevel.ABI
                         };
+
+                        _problemAccountMonitorService.UpdateProblemAccountEvidence(paras);
 
                         Parallel.Invoke(() =>
                         {
@@ -679,6 +683,25 @@
             }
 
             return result;
+        }
+
+        private IEnumerable<UpdateCategoryModel> UpdateCategoryToCTSWhenPAUpdated_DataTest()
+        {
+            var data = new List<UpdateCategoryModel>();
+
+            data.Add(new UpdateCategoryModel
+            {
+                 CTSCustID = 45,
+                 CustID = 1403
+            });
+
+            data.Add(new UpdateCategoryModel
+            {
+                CTSCustID = 46,
+                CustID = 1404
+            });
+
+            return data;
         }
 
         #endregion

@@ -12,6 +12,8 @@
     top: 11.5rem;
     background: #fff;
     z-index: 9; }
+    .problem-account-content .problem-account-table .fixed-header .button-mark {
+      margin-left: 6px; }
   .problem-account-content .problem-account-table .wrapper-info-table {
     position: sticky;
     position: -webkit-sticky;

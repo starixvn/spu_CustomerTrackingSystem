@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
     using Fanex.NAP.CTS.Criteria.TWProblemAccountDetection;
+    using Fanex.NAP.CTS.Model.API.UpdateCategoryWhenPAUpdated;
     using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using System;
@@ -33,6 +34,10 @@
         string GetHtmlChoice(DetailTicketsModel ticket);
 
         InsertCategoryResultModel UpdateRemovedProblemAccountToCTS(string custids);
+
+        int UpdateProblemAccountEvidence(UpdateCategoryParamsModel paras);
+
+        int RemoveProblemAccountEvidence(string custIds);
 
         IEnumerable<TWProblemAccountModel> GetCustClassBySite(string usernameList);
 
