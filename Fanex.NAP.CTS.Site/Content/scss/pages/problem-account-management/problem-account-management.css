@@ -72,3 +72,14 @@
       z-index: 9;
       transition: top 0.01s linear;
       top: 16.5rem; }
+
+.hide {
+  display: none; }
+
+.group-checkbox-downline {
+  border: 1px solid #ddd;
+  margin: 6px 0px 6px 6px;
+  padding: 3px; }
+  .group-checkbox-downline .checkbox-downline {
+    margin: 4px;
+    padding: 2px; }

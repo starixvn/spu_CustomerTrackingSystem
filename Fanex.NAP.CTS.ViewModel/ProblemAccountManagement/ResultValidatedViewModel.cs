@@ -17,5 +17,10 @@
 
         public IEnumerable<ProblemAccountValidatedViewModel> ProblemAccountDuplicateList { get; set; }
 
+        public int CategoryID { get; set; }
+
+        public string Comment { get; set; }
+
+        public bool IsCreditSite { get; set; }
     }
 }

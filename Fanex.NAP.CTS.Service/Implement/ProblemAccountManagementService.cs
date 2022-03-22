@@ -71,8 +71,7 @@
             {
                 UserNames = model.UserNames,
                 CategoryID = model.CategoryID,
-                UserID = model.UserID,
-                Comment = model.Comment
+                IsInsertingPA = model.PAAction == Model.ProblemAccountAction.Mark ? true : false
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))

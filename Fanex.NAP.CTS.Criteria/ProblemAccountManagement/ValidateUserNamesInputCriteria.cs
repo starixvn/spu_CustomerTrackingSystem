@@ -11,11 +11,8 @@
         [SpParam(SqlParamName = "ip_CategoryID")]
         public int CategoryID { get; set; }
 
-        [SpParam(SqlParamName = "ip_Comment")]
-        public string Comment { get; set; }
-
-        [SpParam(SqlParamName = "ip_UserID")]
-        public int UserID { get; set; }
+        [SpParam(SqlParamName = "ip_IsInsertingPA")]
+        public bool IsInsertingPA { get; set; }
 
         public override string GetSettingKey()
         {
@@ -26,5 +23,6 @@
         {
             return true;
         }
+
     }
 }

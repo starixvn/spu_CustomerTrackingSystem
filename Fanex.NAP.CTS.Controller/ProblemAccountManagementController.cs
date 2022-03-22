@@ -5,15 +5,11 @@
     using Fanex.NAP.CTS.Model.ProblemAccountManagement;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
-    using Fanex.NAP.CTS.Service.Implement;
-    using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.ProblemAccountManagement;
     using Fanex.NAP.CTS.ViewModel.ProblemAccountMonitor;
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using System.Web.Mvc;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
@@ -154,6 +150,28 @@
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.ProblemAccountManagementMarkNew)]
+        public ActionResult UpdateProblemAccount(ValidateProblemAccountInputViewModel model)
+        {
+            model.UserID = CurrentSession.UserId;
+
+            var result = new ResultMarkProblemAccountViewModel();
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.ProblemAccountManagementMarkNew)]
+        public ActionResult UnmarkProblemAccount(ValidateProblemAccountInputViewModel model)
+        {
+            model.UserID = CurrentSession.UserId;
+
+            var result = new ResultMarkProblemAccountViewModel();
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
         private ResultValidatedViewModel GetResultValidated(IEnumerable<ProblemAccountValidatedModel> validatedModels)
         {
             var result = new ResultValidatedViewModel
@@ -172,7 +190,8 @@
                                                     {
                                                         UserName = x.UserName,
                                                         ErrMsg = x.ErrorMsg
-                                                    })
+                                                    }),
+                IsCreditSite = validatedModels.Where(x=>x.Site == Consts.ProblemAccountManagement_SiteCredit).Any()
             };
 
             return result;

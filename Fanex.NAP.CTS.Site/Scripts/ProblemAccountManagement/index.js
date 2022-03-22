@@ -12,13 +12,20 @@
         btnGenerate: $('#btnGenerate'),
         tblProblemAccount: $('#tblProblemAccount'),
         btnMarkNewProblemAccount: $('#btnMarkNewProblemAccount'),
+        btnUpdateProblemAccount: $('#btnUpdateProblemAccount'),
+        btnUnmarkProblemAccount: $('#btnUnmarkProblemAccount'),
         divAddProblemAccount: $('#divAddProblemAccount'),
+        grpCategories: $('#grpCategories'),
+        grpCkboxAffectedDownline: $('#grpCkboxAffectedDownline'),
+        ckbFlaggedAndAffectedOfDownline: $('#ckbFlaggedAndAffectedOfDownline'),
+        ckbOnlyAffectedOfDownline: $('#ckbOnlyAffectedOfDownline'),
         txtComment: $('#txtComment'),
-        btnMarkCancel: $('#btnMarkCancel'),
-        btnMarkSave: $('#btnMarkSave'),
+        btnCancel: $('#btnCancel'),
+        btnSave: $('#btnSave'),
         spanAddProblemAccountUserName: $('#spanAddProblemAccountUserName'),
         spanAddProblemAccountUserNameMaxTag: $('#spanAddProblemAccountUserNameMaxTag'),
         spanAddProblemAccountChangeHidden: $('#spanAddProblemAccountChangeHidden'),
+        spanProblemAccountActionHidden: $('#spanProblemAccountActionHidden'),
         inputTagUsername: $('#inputTagUsername'),
         maxTags: 50
     };
@@ -148,9 +155,9 @@
             let invalidUsernameTags = domElements.spanAddProblemAccountUserName.find('tags tag.invalid-username');
             let notInvalid = invalidDuplicatedTags.length + invalidUsernameTags.length;
             if (notInvalid <= 1 && validTags.length > 1)
-                domElements.btnMarkSave.prop('disabled', false);
+                domElements.btnSave.prop('disabled', false);
             else
-                domElements.btnMarkSave.prop('disabled', true);
+                domElements.btnSave.prop('disabled', true);
         }
 
         function IsTextUnicode(text) {
@@ -190,7 +197,7 @@
             } else {
                 inputTagUsername.tagify().data('tagify').removeTags(tagName.tag);
             }
-            domElements.btnMarkSave.prop('disabled', true);
+            domElements.btnSave.prop('disabled', true);
         }
 
         domElements.inputTagUsername.tagify({
@@ -256,18 +263,18 @@
 
         domElements.inputTagUsername.tagify().data('tagify').removeAllTags();
         domElements.spanAddProblemAccountUserName.find('tags').attr('tabindex', "1");
-        domElements.btnMarkSave.prop('disabled', true);
+        domElements.btnSave.prop('disabled', true);
     }
 
     function ValidateProblemAccountInput(textTagRemove) {
-        domElements.btnMarkSave.prop('disabled', false);
+        domElements.btnSave.prop('disabled', false);
         let userNames = GetInputUserName(textTagRemove);
 
         if (userNames !== '') {
             let params = {};
             params.UserNames = userNames;
             params.CategoryID = domElements.cbbProblemAccountCategories.val();
-            params.Comment = domElements.txtComment.text().trim();
+            params.PAAction = domElements.spanProblemAccountActionHidden.val();
 
             $.ajax(common.modifyRelativeUrl('ProblemAccountManagement/ValidateProblemAccountInput'), {
                 type: 'POST',
@@ -280,6 +287,16 @@
                         BindExceptionValidateInputUserName();
                     else
                         BindResultValidatedInputUserName(response);                    
+
+                    if (response.IsCreditSite == true) {
+                        domElements.grpCkboxAffectedDownline.removeClass('hide');
+                    } else {
+                        domElements.grpCkboxAffectedDownline.addClass('hide');
+                    }
+
+                    if (params.PAAction == 2 && params == 3) { // Update and Unmark
+                        domElements.txtComment.val(response.Comment);
+                    }
                 },
                 complete: function () {
                     domElements.spanAddProblemAccountUserName.removeClass("loading-value");
@@ -338,20 +355,34 @@
         let isEnableAdd = data.ProblemAccountInvalidList.length === 0 && data.ProblemAccountDuplicateList.length === 0;       
 
         if (isEnableAdd) {            
-            domElements.btnMarkSave.prop('disabled', false);
+            domElements.btnSave.prop('disabled', false);
         }
         else
-            domElements.btnMarkSave.prop('disabled', true);
+            domElements.btnSave.prop('disabled', true);
     }
 
-    function MarkNewProblemAccount() {
-        let userNames = GetInputUserName();
-
+    function SaveProblemAccount() {
         let params = {};
-        params.UserNames = userNames;
+        params.UserNames = GetInputUserName();
         params.CategoryID = domElements.cbbProblemAccountCategories.val();
         params.Comment = domElements.txtComment.val().trim();
+        params.PAAction = domElements.spanProblemAccountActionHidden.val();
+        params.FlaggedAndAffected = domElements.ckbFlaggedAndAffectedOfDownline.is(":checked");
+        params.OnlyAffected = domElements.ckbOnlyAffectedOfDownline.is(":checked");
 
+        if (params.PAAction == 1) {
+            MarkNewProblemAccount(params);
+
+        } else if (params.PAAction == 2) {
+            UpdateProblemAccount(params);
+
+        } else {
+            UnmarkProblemAccount(params);
+
+        }
+    }
+
+    function MarkNewProblemAccount(params) {
         $.ajax(common.modifyRelativeUrl('ProblemAccountManagement/MarkProblemAccount'), {
             type: 'POST',
             data: params,
@@ -381,6 +412,74 @@
         });
     }
 
+    function UpdateProblemAccount(params) {
+        common.showConfirmation("<div class='popup - content'>Are you sure to update this problem account?</div>",
+            () => {
+                $.ajax(common.modifyRelativeUrl('ProblemAccountManagement/UpdateProblemAccount'), {
+                    type: 'POST',
+                    data: params,
+                    beforeSend: function () {
+                        domElements.spanAddProblemAccountUserName.addClass("loading-block");
+                    },
+                    success: function (response) {
+                        if (response.ErrorCode === 0) {
+                            common.showSuccess("Update Problem Account successful. Please wait, Data Synchronization may take a few minutes!");
+                            domElements.divAddProblemAccount.dialog('close');
+                            setTimeout(() => {
+                                GetProblemAccountReport();
+                            }, 1000);
+                        } else {
+                            if (response.ErrorMessage != '') {
+                                common.showError(response.ErrorMessage, 2000);
+                            }
+                            BindResultValidatedInputUserName(response.ResultValidated);
+                        }
+                    },
+                    complete: function () {
+                        domElements.spanAddProblemAccountUserName.removeClass("loading-block");
+                    },
+                    error: function (errMsg) {
+                        console.log(errMsg);
+                    }
+                });
+            },
+            () => {});
+    }
+
+    function UnmarkProblemAccount(params) {
+        common.showConfirmation("<div class='popup - content'>Are you sure to unmark this problem account?</div>",
+            () => {
+                $.ajax(common.modifyRelativeUrl('ProblemAccountManagement/UnmarkProblemAccount'), {
+                    type: 'POST',
+                    data: params,
+                    beforeSend: function () {
+                        domElements.spanAddProblemAccountUserName.addClass("loading-block");
+                    },
+                    success: function (response) {
+                        if (response.ErrorCode === 0) {
+                            common.showSuccess("Unmark Problem Account successful. Please wait, Data Synchronization may take a few minutes!");
+                            domElements.divAddProblemAccount.dialog('close');
+                            setTimeout(() => {
+                                GetProblemAccountReport();
+                            }, 1000);
+                        } else {
+                            if (response.ErrorMessage != '') {
+                                common.showError(response.ErrorMessage, 2000);
+                            }
+                            BindResultValidatedInputUserName(response.ResultValidated);
+                        }
+                    },
+                    complete: function () {
+                        domElements.spanAddProblemAccountUserName.removeClass("loading-block");
+                    },
+                    error: function (errMsg) {
+                        console.log(errMsg);
+                    }
+                });
+            },
+            () => { });
+    }
+
     function GetProblemAccountCategories() {
         domElements.cbbProblemAccountCategories.empty();
 
@@ -399,7 +498,7 @@
                 console.log(errMsg);
             }
         });
-    }
+    }  
 
     function Initial() {
         domElements.dpkFromDate
@@ -438,10 +537,11 @@
         domElements.btnGenerate.on('click', function () { GetProblemAccountReport(); });
 
         domElements.btnMarkNewProblemAccount.on('click', function () {
+            domElements.grpCategories.removeClass('hide');
+            domElements.grpCkboxAffectedDownline.addClass('hide');
             GetProblemAccountCategories();
-
-            domElements.txtComment.val('');            
-
+            domElements.txtComment.val('');  
+            domElements.spanProblemAccountActionHidden.val('1'); // Mark
             InitInputTagUsername();
 
             domElements.divAddProblemAccount.dialog({
@@ -454,14 +554,66 @@
                     $(this).dialog('close');
                 }
             });
-        });        
-
-        domElements.btnMarkSave.on('click', () => MarkNewProblemAccount());
-
-        domElements.btnMarkCancel.on('click', () => {
-            domElements.divAddProblemAccount.dialog('close');
         });
 
+        domElements.btnUpdateProblemAccount.on('click', function () {
+            domElements.grpCategories.removeClass('hide');
+            domElements.grpCkboxAffectedDownline.addClass('hide');
+            GetProblemAccountCategories();
+            domElements.txtComment.val('');
+            domElements.spanProblemAccountActionHidden.val('2'); // Update
+            InitInputTagUsername();
+
+            domElements.divAddProblemAccount.dialog({
+                modal: true,
+                width: '800px',
+                title: 'UPDATE PROBLEM ACCOUNT',
+                resizable: true,
+                draggable: true,
+                close: function () {
+                    $(this).dialog('close');
+                }
+            });
+        });
+
+        domElements.btnUnmarkProblemAccount.on('click', function () {            
+            domElements.grpCategories.addClass('hide');
+            domElements.grpCkboxAffectedDownline.addClass('hide');
+            domElements.ckbFlaggedAndAffectedOfDownline.prop("checked", false);
+            domElements.ckbOnlyAffectedOfDownline.prop("checked", false);
+            domElements.txtComment.val('');
+            domElements.spanProblemAccountActionHidden.val('3'); // Unmark
+            InitInputTagUsername();
+
+            domElements.divAddProblemAccount.dialog({
+                modal: true,
+                width: '800px',
+                title: 'UNMARK PROBLEM ACCOUNT',
+                resizable: true,
+                draggable: true,
+                close: function () {
+                    $(this).dialog('close');
+                }
+            });
+        });
+
+        domElements.ckbFlaggedAndAffectedOfDownline.on('change', function () {
+            if (domElements.ckbFlaggedAndAffectedOfDownline.is(":checked")) {
+                domElements.ckbOnlyAffectedOfDownline.prop("checked", false);
+            }
+        });
+
+        domElements.ckbOnlyAffectedOfDownline.on('change', function () {
+            if (domElements.ckbOnlyAffectedOfDownline.is(":checked")) {
+                domElements.ckbFlaggedAndAffectedOfDownline.prop("checked", false);
+            } 
+        });
+
+        domElements.btnSave.on('click', () => SaveProblemAccount());
+
+        domElements.btnCancel.on('click', () => {
+            domElements.divAddProblemAccount.dialog('close');
+        });
     }
 
     $(document).ready(function () {

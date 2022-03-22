@@ -115,12 +115,31 @@
             Max: <span id="spanAddProblemAccountUserNameMaxTag">50</span> usernames
         </span>
         <span id="spanAddProblemAccountChangeHidden" hidden></span>
+        <span id="spanProblemAccountActionHidden" hidden></span>
     </span>
 
-    <div class="form-control">
+    <div class="form-control" id="grpCategories">
         <div class="label">Categories<label style="color:red">*</label></div>
         <select class="control" id="cbbProblemAccountCategories" style="width:180px">         
         </select>
+    </div>
+
+    <div class="form-control" id="grpCkboxAffectedDownline">
+        <div>Unmark</div>
+        <div class="group-checkbox-downline">
+            <div class="checkbox-downline">
+                <label class="checkbox-container">
+                    <input id="ckbFlaggedAndAffectedOfDownline" type="checkbox">
+                    <span class="checkmark"></span>All flagged and affected Problem Accounts of Downline
+                </label>
+            </div>
+            <div class="checkbox-downline">
+                <label class="checkbox-container">
+                    <input id="ckbOnlyAffectedOfDownline" type="checkbox">
+                    <span class="checkmark"></span>Only affected Problem Accounts of Downline
+                </label>
+            </div>
+        </div>
     </div>
 
     <div class="form-control wrapper-comment">
@@ -129,8 +148,8 @@
     </div>
 
     <div class="modal-footer margin-top-10">
-        <button id="btnMarkCancel" class="button btn-cancel-outline" title="Cancel">Cancel</button>
-        <button id="btnMarkSave" class="button -add" title="Add Username">Save</button>
+        <button id="btnCancel" class="button btn-cancel-outline" title="Cancel">Cancel</button>
+        <button id="btnSave" class="button -add" title="Add Username">Save</button>
     </div>  
 </div>
 
