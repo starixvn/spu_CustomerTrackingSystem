@@ -5,8 +5,23 @@
 
     public class ProblemAccountLicenseeRemoveCustomerCriteria : NonQueryCommand
     {
-        [SpParam(SqlParamName = "ip_CustIDs")]
-        public string CustIDs { get; set; }
+        [SpParam(SqlParamName = "CustomerList")]
+        public string CustomerList { get; set; }
+
+        [SpParam(SqlParamName = "UserID")]
+        public int UserID { get; set; }
+
+        [SpParam(SqlParamName = "IP")]
+        public string IP { get; set; }
+
+        [SpParam(SqlParamName = "SuccessAllDownlineList")]
+        public string SuccessAllDownlineList { get; set; }
+
+        [SpParam(SqlParamName = "ErrCode")]
+        public int ErrCode { get; set; }
+
+        [SpParam(SqlParamName = "ErrMsg")]
+        public string ErrMsg { get; set; }
 
         public override string GetSettingKey()
         {

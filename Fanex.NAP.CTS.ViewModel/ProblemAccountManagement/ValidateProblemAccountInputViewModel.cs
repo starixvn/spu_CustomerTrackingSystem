@@ -8,13 +8,13 @@
 
         public int CategoryID { get; set; }
 
+        public string Comment { get; set; }
+
         public ProblemAccountAction PAAction { get; set; }
 
-        public int UserID { get; set; }
+        public bool IsExceptDownlinesByTVS { get; set; }
 
-        public bool FlaggedAndAffected { get; set; }
-
-        public bool OnlyAffected { get; set; }
+        public bool IsExceptDownlinesByOPS { get; set; }
 
     }
 }

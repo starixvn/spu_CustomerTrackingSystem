@@ -7,6 +7,7 @@
     {
         public ResultValidatedViewModel()
         {
+            IsException = false;
             ProblemAccountInvalidList = Enumerable.Empty<ProblemAccountValidatedViewModel>();
             ProblemAccountDuplicateList = Enumerable.Empty<ProblemAccountValidatedViewModel>();
         }

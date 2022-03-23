@@ -685,25 +685,6 @@
             return result;
         }
 
-        private IEnumerable<UpdateCategoryModel> UpdateCategoryToCTSWhenPAUpdated_DataTest()
-        {
-            var data = new List<UpdateCategoryModel>();
-
-            data.Add(new UpdateCategoryModel
-            {
-                 CTSCustID = 45,
-                 CustID = 1403
-            });
-
-            data.Add(new UpdateCategoryModel
-            {
-                CTSCustID = 46,
-                CustID = 1404
-            });
-
-            return data;
-        }
-
         #endregion
 
         /// <summary>

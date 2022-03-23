@@ -86,6 +86,10 @@
 
         public static string GetProblemCaseMonitor => GetConfigStringByName("CTS_GetProblemCaseMonitor");
 
+        public static string UpdateCategories => GetConfigStringByName("CTS_UpdateCategories");
+
+        public static string RemoveProblemAccounts => GetConfigStringByName("CTS_RemoveProblemAccounts");
+
         public static string InsertAFCAccountsURL => GetConfigStringByName("AFC_InsertAccountsURL");
 
         public static string DeleteAFCAccountsURL => GetConfigStringByName("AFC_DeleteAccountsURL");

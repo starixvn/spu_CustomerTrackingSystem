@@ -17,8 +17,8 @@
         divAddProblemAccount: $('#divAddProblemAccount'),
         grpCategories: $('#grpCategories'),
         grpCkboxAffectedDownline: $('#grpCkboxAffectedDownline'),
-        ckbFlaggedAndAffectedOfDownline: $('#ckbFlaggedAndAffectedOfDownline'),
-        ckbOnlyAffectedOfDownline: $('#ckbOnlyAffectedOfDownline'),
+        ckbExceptDownlinesByTVS: $('#ckbExceptDownlinesByTVS'),
+        ckbExceptDownlinesByOPS: $('#ckbExceptDownlinesByOPS'),
         txtComment: $('#txtComment'),
         btnCancel: $('#btnCancel'),
         btnSave: $('#btnSave'),
@@ -288,7 +288,7 @@
                     else
                         BindResultValidatedInputUserName(response);                    
 
-                    if (response.IsCreditSite == true) {
+                    if (params.PAAction == 3 && response.IsCreditSite == true) {
                         domElements.grpCkboxAffectedDownline.removeClass('hide');
                     } else {
                         domElements.grpCkboxAffectedDownline.addClass('hide');
@@ -302,6 +302,7 @@
                     domElements.spanAddProblemAccountUserName.removeClass("loading-value");
                 },
                 error: function (errMsg) {
+                    domElements.spanAddProblemAccountUserName.removeClass("loading-value");
                     console.log(errMsg);
                 }
             });
@@ -367,8 +368,8 @@
         params.CategoryID = domElements.cbbProblemAccountCategories.val();
         params.Comment = domElements.txtComment.val().trim();
         params.PAAction = domElements.spanProblemAccountActionHidden.val();
-        params.FlaggedAndAffected = domElements.ckbFlaggedAndAffectedOfDownline.is(":checked");
-        params.OnlyAffected = domElements.ckbOnlyAffectedOfDownline.is(":checked");
+        params.IsExceptDownlinesByTVS = domElements.ckbExceptDownlinesByTVS.is(":checked");
+        params.IsExceptDownlinesByOPS = domElements.ckbExceptDownlinesByOPS.is(":checked");
 
         if (params.PAAction == 1) {
             MarkNewProblemAccount(params);
@@ -407,6 +408,7 @@
                 domElements.spanAddProblemAccountUserName.removeClass("loading-block");
             },
             error: function (errMsg) {
+                domElements.spanAddProblemAccountUserName.removeClass("loading-block");
                 console.log(errMsg);
             }
         });
@@ -439,6 +441,7 @@
                         domElements.spanAddProblemAccountUserName.removeClass("loading-block");
                     },
                     error: function (errMsg) {
+                        domElements.spanAddProblemAccountUserName.removeClass("loading-block");
                         console.log(errMsg);
                     }
                 });
@@ -473,6 +476,7 @@
                         domElements.spanAddProblemAccountUserName.removeClass("loading-block");
                     },
                     error: function (errMsg) {
+                        domElements.spanAddProblemAccountUserName.removeClass("loading-block");
                         console.log(errMsg);
                     }
                 });
@@ -579,8 +583,8 @@
         domElements.btnUnmarkProblemAccount.on('click', function () {            
             domElements.grpCategories.addClass('hide');
             domElements.grpCkboxAffectedDownline.addClass('hide');
-            domElements.ckbFlaggedAndAffectedOfDownline.prop("checked", false);
-            domElements.ckbOnlyAffectedOfDownline.prop("checked", false);
+            domElements.ckbExceptDownlinesByTVS.prop("checked", false);
+            domElements.ckbExceptDownlinesByOPS.prop("checked", false);
             domElements.txtComment.val('');
             domElements.spanProblemAccountActionHidden.val('3'); // Unmark
             InitInputTagUsername();
@@ -597,15 +601,15 @@
             });
         });
 
-        domElements.ckbFlaggedAndAffectedOfDownline.on('change', function () {
-            if (domElements.ckbFlaggedAndAffectedOfDownline.is(":checked")) {
-                domElements.ckbOnlyAffectedOfDownline.prop("checked", false);
+        domElements.ckbExceptDownlinesByTVS.on('change', function () {
+            if (domElements.ckbExceptDownlinesByTVS.is(":checked")) {
+                domElements.ckbExceptDownlinesByOPS.prop("checked", false);
             }
         });
 
-        domElements.ckbOnlyAffectedOfDownline.on('change', function () {
-            if (domElements.ckbOnlyAffectedOfDownline.is(":checked")) {
-                domElements.ckbFlaggedAndAffectedOfDownline.prop("checked", false);
+        domElements.ckbExceptDownlinesByOPS.on('change', function () {
+            if (domElements.ckbExceptDownlinesByTVS.is(":checked")) {
+                domElements.ckbExceptDownlinesByTVS.prop("checked", false);
             } 
         });
 

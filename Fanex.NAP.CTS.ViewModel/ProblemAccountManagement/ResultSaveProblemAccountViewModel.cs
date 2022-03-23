@@ -1,10 +1,12 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.ProblemAccountManagement
 {
-    public class ResultMarkProblemAccountViewModel
+    public class ResultSaveProblemAccountViewModel
     {
-        public ResultMarkProblemAccountViewModel()
+        public ResultSaveProblemAccountViewModel()
         {
             ResultValidated = new ResultValidatedViewModel();
+            ErrorCode = 0;
+            ErrorMessage = string.Empty;
         }
 
         public int ErrorCode { get; set; }

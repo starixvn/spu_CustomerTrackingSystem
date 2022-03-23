@@ -278,6 +278,7 @@
     <Compile Include="ProblemAccountManagement\ProblemAccountModel.cs" />
     <Compile Include="ProblemAccountManagement\ProblemAccountValidatedModel.cs" />
     <Compile Include="ProblemAccountManagement\ResultProblemAccountAddCustomerModel.cs" />
+    <Compile Include="ProblemAccountManagement\ResultProblemAccountUpdateModel.cs" />
     <Compile Include="ProblemAccountMonitor\InsertProblemAccountsModel.cs" />
     <Compile Include="ProblemAccountMonitor\TWProblemAccount\TWProblemAccountModel.cs" />
     <Compile Include="ProblemCaseMonitor\ProblemCasesMonitorModel.cs" />
