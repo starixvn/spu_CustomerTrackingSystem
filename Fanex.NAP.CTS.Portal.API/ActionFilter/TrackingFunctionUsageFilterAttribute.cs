@@ -36,7 +36,7 @@
             }
             catch (Exception ex)
             {
-                LogService.Info($"Tracking function APIs usage - Insert Stats Accessment fail - {ex.Message}");
+                LogService.Error($"Tracking function APIs usage - Insert Stats Accessment fail - {ex.Message}");
             }
         }
     }
