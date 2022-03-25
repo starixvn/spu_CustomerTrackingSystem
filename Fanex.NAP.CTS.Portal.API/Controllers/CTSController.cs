@@ -417,53 +417,6 @@
             return Json(new InsertNAPProblemAccountResult { SuccessList = result });
         }
 
-        ///This code for GraphDB - Neo4j
-
-        //[AcceptVerbs("GetAssociationForExtAcc")]
-        //[HttpGet]
-        //public string GetAssociationForExtAcc(int custId)
-        //{
-        //    var xmlString = string.Empty;
-        //    try
-        //    {
-        //        var cust = DbSessionFactory.Execute<GraphCustomer>("GetCustomerByCustId", new
-        //        {
-        //            CustID = custId,
-        //            CustSubID = 0
-        //        }).Data.FirstOrDefault();
-
-        //        if (cust != null)
-        //        {
-        //            var result = DbSessionFactory.Execute<GraphAssociationPaging>("GetAssociationOneLevelForExtAcc", new
-        //            {
-        //                CTSCustID = cust.CTSCustId,
-        //                AssStatus = 1,
-        //                Skip = 0,
-        //                Pagesize = 100000
-        //            }).Data.FirstOrDefault();
-
-        //            if (result != null)
-        //            {
-        //                var associationList = result.AssociationList.Select(a => new AssociationForExtAcc
-        //                {
-        //                    CustId = a.CustId == null ? 0 : a.CustId.Value,
-        //                    CustSubId = a.CustSubId,
-        //                    AssociationDate = a.AssociationDateFromGraphDB.ToString()
-        //                });
-
-        //                xmlString = XmlHelper.ToXmlString(associationList);
-        //            }
-        //        }
-
-        //        return xmlString;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        LogService.Error("GetDirectAssociationByDevice failed: " + ex.Message + ex.StackTrace);
-        //        throw;
-        //    }
-        //}
-
         /// <summary>
         /// Get association by custId and level
         /// </summary>
@@ -600,21 +553,7 @@
             return null;
         }
 
-        /// <summary>
-        /// This controller is only for testing
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public void Test()
-        {
-            var ctsClient = new WebClient();
-            ctsClient.QueryString.Add("CustId", "43913195");
-            var e = ctsClient.DownloadString("http://ha.nexdev.net:7723/api/cts/GetAssociationForExtAcc");
-
-            var a = ApiHelper.Get<string>("http://ha.nexdev.net:7723/api/cts/GetAssociationForExtAcc?CustId=43913195").Result;
-        }
-
-        #region Problem Account
+         #region Problem Account
 
         /// <summary>
         ///  Update Removed Problem Account into CTS
