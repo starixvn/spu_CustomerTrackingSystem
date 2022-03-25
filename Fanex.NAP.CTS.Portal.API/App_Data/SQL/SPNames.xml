@@ -78,4 +78,7 @@
     <Setting Key="CTS_DC_SpecialCustClass_Insert" SpName="CTS_DC_SpecialCustClass_Insert" DbName="MySQL.CTS_DataCenter.Admin" />
   </Function>
 
+	<Function name="MonitorCTSFunction">
+		<Setting Key="SPU_Stats_Accessment_Insert" SpName="SPU_Stats_Accessment_Insert" DbName="MySQL.SPU_Stats.Admin" />
+	</Function>
 </Functions>
