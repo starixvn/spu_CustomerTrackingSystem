@@ -572,12 +572,6 @@
             <param name="toDate"></param>
             <returns>Customer class in XML format</returns>
         </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.Test">
-            <summary>
-            This controller is only for testing
-            </summary>
-            <returns></returns>
-        </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.RemoveProblemAccounts(System.String)">
             <summary>
              Update Removed Problem Account into CTS
