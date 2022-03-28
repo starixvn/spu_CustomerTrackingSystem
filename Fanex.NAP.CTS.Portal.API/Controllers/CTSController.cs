@@ -22,6 +22,7 @@
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Model.Subscriber;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
+    using Fanex.NAP.CTS.Portal.API.ActionFilter;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.Service.Implement;
@@ -91,6 +92,7 @@
         /// <param name="evidenceId">Evidence Id in CTS system</param>
         /// <returns>true: success; false: failed</returns>
         [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.PlaceEvidenceForMultipleCustAPI)]
         public bool PlaceEvidenceMultipleByCustId(string custIds, int evidenceId)
         {
             bool returnedResult = false;
@@ -179,6 +181,7 @@
         /// <param name="AssociatedLevel"> Level 0, 1 or 2</param>
         /// <returns>A list of customer evidence in JSON format</returns>
         [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetFlaggedCustomersByLevelAPI)]
         public JsonResult<List<CustomerEvidence>> GetFlaggedCustomersByLevel(string CustIdList, int AssociatedLevel)
         {
             try
@@ -205,6 +208,7 @@
         /// <param name="eviIdList"> Evidence in string format (saparate by comma) (</param>
         /// <returns>A list of customer evidence in JSON format</returns>
         [HttpGet]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetFlaggedCustByLvAndEvidenceAPI)]
         public JsonResult<List<CustomerEvidence>> GetFlaggedCustByLvlNEvi(string custIdList, int associatedLevel, string eviIdList)
         {
             try
@@ -229,6 +233,7 @@
         /// <param name="customerEvidenceList"></param>
         /// <returns></returns>
         [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.AddCustomersEvidencesAPI)]
         public bool AddCustomersEvidences(PlaceMultiCustomerEvidence customerEvidenceList)
         {
             try
@@ -304,6 +309,7 @@
         /// <returns></returns>
         [AcceptVerbs("GetAssociationForExtAcc")]
         [HttpGet]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetAssociationForExtAccAPI)]
         public string GetAssociationForExtAcc(int custId)
         {
             string xmlString = string.Empty;
@@ -333,6 +339,7 @@
         }
 
         [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.AddSystemFormulaBetAccountAPI)]
         public JsonResult<InsertNAPProblemAccountResult> AddSystemFormulaBetAccount(TWProblemAccountParams dataParam)
         {
             var isWriteLogInfo = ConfigSettings.IsWriteLogInfo;
@@ -410,53 +417,6 @@
             return Json(new InsertNAPProblemAccountResult { SuccessList = result });
         }
 
-        ///This code for GraphDB - Neo4j
-
-        //[AcceptVerbs("GetAssociationForExtAcc")]
-        //[HttpGet]
-        //public string GetAssociationForExtAcc(int custId)
-        //{
-        //    var xmlString = string.Empty;
-        //    try
-        //    {
-        //        var cust = DbSessionFactory.Execute<GraphCustomer>("GetCustomerByCustId", new
-        //        {
-        //            CustID = custId,
-        //            CustSubID = 0
-        //        }).Data.FirstOrDefault();
-
-        //        if (cust != null)
-        //        {
-        //            var result = DbSessionFactory.Execute<GraphAssociationPaging>("GetAssociationOneLevelForExtAcc", new
-        //            {
-        //                CTSCustID = cust.CTSCustId,
-        //                AssStatus = 1,
-        //                Skip = 0,
-        //                Pagesize = 100000
-        //            }).Data.FirstOrDefault();
-
-        //            if (result != null)
-        //            {
-        //                var associationList = result.AssociationList.Select(a => new AssociationForExtAcc
-        //                {
-        //                    CustId = a.CustId == null ? 0 : a.CustId.Value,
-        //                    CustSubId = a.CustSubId,
-        //                    AssociationDate = a.AssociationDateFromGraphDB.ToString()
-        //                });
-
-        //                xmlString = XmlHelper.ToXmlString(associationList);
-        //            }
-        //        }
-
-        //        return xmlString;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        LogService.Error("GetDirectAssociationByDevice failed: " + ex.Message + ex.StackTrace);
-        //        throw;
-        //    }
-        //}
-
         /// <summary>
         /// Get association by custId and level
         /// </summary>
@@ -464,6 +424,7 @@
         /// <param name="level">Level 1 for direct, level 2 for indirect</param>
         /// <returns>Association list in XML format</returns>
         [HttpGet]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetAssociationByCustIdAPI)]
         public string GetAssociationByCustId(int custId, int level)
         {
             var result = string.Empty;
@@ -489,6 +450,7 @@
         /// <param name="custIdList"></param>
         /// <returns>Customer classification in XML format</returns>
         [HttpGet]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetCustomerClassificationAPI)]
         public string GetCustomerClassification(string custIdList)
         {
             var result = string.Empty;
@@ -517,6 +479,7 @@
         /// <param name="categoryIDList"></param>
         /// <returns>Customer classification in XML format</returns>
         [HttpGet]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetCustomerClassificationByCategoryIDsAPI)]
         public string GetCustomerClassificationByCategoryIDs(string categoryIDList)
         {
             try
@@ -544,6 +507,7 @@
         /// </summary>
         /// <returns>Customer classification in XML format</returns>
         [HttpGet]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetVVIPCustomerAPI)]
         public string GetVVIPCustomer()
         {
             try
@@ -574,6 +538,7 @@
         /// <param name="toDate"></param>
         /// <returns>Customer class in XML format</returns>
         [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.CheckCustomerNotExistedAPI)]
         public IEnumerable<CTSCustomer> CheckCustomerNotExisted(string custIdList, DateTime fromDate, DateTime toDate)
         {
             try
@@ -588,21 +553,7 @@
             return null;
         }
 
-        /// <summary>
-        /// This controller is only for testing
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public void Test()
-        {
-            var ctsClient = new WebClient();
-            ctsClient.QueryString.Add("CustId", "43913195");
-            var e = ctsClient.DownloadString("http://ha.nexdev.net:7723/api/cts/GetAssociationForExtAcc");
-
-            var a = ApiHelper.Get<string>("http://ha.nexdev.net:7723/api/cts/GetAssociationForExtAcc?CustId=43913195").Result;
-        }
-
-        #region Problem Account
+         #region Problem Account
 
         /// <summary>
         ///  Update Removed Problem Account into CTS
@@ -610,6 +561,7 @@
         /// <param name="custIds">List custId in string format, separated by comma</param>
         /// <returns>true: success; false: failed</returns>
         [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.RemoveProblemAccountsAPI)]
         public ApiResultModel RemoveProblemAccounts([FromBody] string custIds)
         {
             try
@@ -669,6 +621,7 @@
         /// <param name="paras"></param>
         /// <returns></returns>
         [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.UpdateCategoryToCTSWhenPAUpdatedAPI)]
         public ApiResultModel UpdateCategoryToCTSWhenPAUpdated([FromBody] UpdateCategoryParamsModel paras)
         {
             var result = new ApiResultModel
@@ -735,6 +688,7 @@
         /// </summary>
         /// <returns>A list of customer class's categories in JSON format</returns>
         [HttpGet]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetCustomerClassCategoryAPI)]
         public JsonResult<List<CategoryCustomerClassModel>> GetCustomerClassCategory()
         {
             try
@@ -764,6 +718,7 @@
         /// <param name="subscriberName"></param>
         /// <returns>Subscriber Info</returns>
         [HttpGet]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetSubscriberInfoAPI)]
         public JsonResult<SubscriberInfo> GetSubscriberInfo(string subscriberName)
         {
             try
@@ -795,6 +750,7 @@
         /// <param name="associationType">1-Device, 2-Manual</param>
         /// <returns></returns>
         [HttpGet]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetAssociationPerTypeAPI)]
         public string GetAssociationPerType(long custId, int associationType)
         {
             var result = string.Empty;
@@ -881,6 +837,7 @@
         /// </summary>
         /// <returns></returns>
         [HttpGet]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetProblemCaseAPI)]
         public JsonResult<List<ProblemCaseModel>> GetProblemCase()
         {
             try
@@ -907,6 +864,7 @@
         /// <param name="paras"></param>
         /// <returns></returns>
         [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetProblemCaseMonitorAPI)]
         public JsonResult<List<ProblemCaseMonitorViewModel>> GetProblemCaseMonitor([FromBody] ProblemCaseMonitorParamsModel paras)
         {
             try
@@ -956,6 +914,7 @@
         /// <param name="paras"></param>
         /// <returns></returns>
         [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.ForceSpecialCCAPI)]
         public bool ForceSpecialCC([FromBody] ForceSpecialCustomerClassModel paras)
         {
             var result = true;

@@ -8,6 +8,7 @@
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.ProbationManagement;
+    using Fanex.NAP.CTS.Portal.API.ActionFilter;
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
@@ -21,6 +22,7 @@
     using System.Threading.Tasks;
     using System.Web.Http;
     using System.Web.Http.Results;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     /// <summary>
     /// Graph Controller - Using for CTS site
@@ -50,6 +52,7 @@
         /// <returns></returns>
         [System.Web.Http.AcceptVerbs("GetDirectAssociationProfile")]
         [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetDirectAssociationProfileAPI)]
         public GraphAssociationPaging GetDirectAssociationProfile([FromBody] AssociationProfileParameterModel paras)
         {
             try
@@ -114,6 +117,7 @@
         /// <param name="custIdList"></param>
         /// <returns></returns>
         [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetFlaggedEvidenceForLevel01API)]
         public JsonResult<List<CustomerEvidenceForTW>> GetFlaggedEvidenceForLevel01(string custIdList)
         {
             var result = new List<CustomerEvidenceForTW>();
@@ -157,6 +161,7 @@
         /// <param name="custIdList"></param>
         /// <returns></returns>
         [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetFlaggedEvidenceForLevel2API)]
         public JsonResult<List<CustomerEvidenceForTW>> GetFlaggedEvidenceForLevel2(string custIdList)
         {
             var result = new List<CustomerEvidenceForTW>();
@@ -196,6 +201,7 @@
         /// <returns></returns>
         [System.Web.Http.AcceptVerbs("GetAssociationReport")]
         [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetAssociationReportAPI)]
         public AssociationReportViewModel GetAssociationReport([FromBody] AssociationReportParameterModel paras)
         {
             try
@@ -275,6 +281,7 @@
         /// <returns></returns>
         [System.Web.Http.AcceptVerbs("GetAssociationDetectionReport")]
         [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetAssociationDetectionReportAPI)]
         public IEnumerable<GetAssociationDetectionModel> GetAssociationDetectionReport([FromBody] string ctsCustIDs)
         {
             try
@@ -318,6 +325,7 @@
         /// <returns></returns>
         [System.Web.Http.AcceptVerbs("GetStatisticAssociation")]
         [HttpGet]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetStatisticAssociationAPI)]
         public CustomerAssociationByCTSCustIdModel GetStatisticAssociation(int ctsCustId)
         {
             try
@@ -350,6 +358,7 @@
         /// <returns></returns>
         [System.Web.Http.AcceptVerbs("GetDirectAssociation")]
         [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetDirectAssociationAPI)]
         public GraphAssociationPaging GetDirectAssociation([FromBody] DirectAssociationParameterModel paras)
         {
             try
@@ -380,6 +389,7 @@
 
         [System.Web.Http.AcceptVerbs("GetDirectAssociationByManual")]
         [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetDirectAssociationByManualAPI)]
         public GraphAssociationPaging GetDirectAssociationByManual([FromBody] DirectAssociationParameterModel paras)
         {
             try
@@ -408,6 +418,7 @@
 
         [System.Web.Http.AcceptVerbs("GetDirectAssociationByDevice")]
         [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetDirectAssociationByDeviceAPI)]
         public GraphAssociationPaging GetDirectAssociationByDevice([FromBody] DirectAssociationParameterModel paras)
         {
             try
@@ -441,6 +452,7 @@
 
         [System.Web.Http.AcceptVerbs("GetDirectAssociationByIP")]
         [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetDirectAssociationByIPAPI)]
         public GraphAssociationPaging GetDirectAssociationByIP([FromBody] DirectAssociationParameterModel paras)
         {
             try
@@ -474,6 +486,7 @@
 
         [System.Web.Http.AcceptVerbs("GetDirectAssociationByAI")]
         [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetDirectAssociationByAIAPI)]
         public GraphAssociationPaging GetDirectAssociationByAI([FromBody] DirectAssociationParameterModel paras)
         {
             try
@@ -507,6 +520,7 @@
 
         [System.Web.Http.AcceptVerbs("GetDirectAssociationMultiCust")]
         [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetDirectAssociationMultiCustAPI)]
         public IEnumerable<GraphDirectAssociationModel> GetDirectAssociationMultiCust([FromBody] List<long> ctsCustIds)
         {
             try
@@ -528,6 +542,7 @@
         /// <returns></returns>
         [System.Web.Http.AcceptVerbs("GetInDirectAssociation")]
         [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetInDirectAssociationAPI)]
         public IEnumerable<GraphAssociationModel> GetInDirectAssociation([FromBody] int ctsCustId)
         {
             try
@@ -550,6 +565,7 @@
         /// <returns>Json string</returns>
         [System.Web.Http.AcceptVerbs("GetShortestPath")]
         [HttpGet]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetShortestPathAPI)]
         public JsonResult<ShortestPathOfAccount> GetShortestPath(int ctsCustIdFrom, int ctsCustIdTo)
         {
             var result = DbSessionFactory.ExecuteSingle<ShortestPathOfAccount>("GetShortestPath", new { StartCustId = ctsCustIdFrom, EndCustId = ctsCustIdTo }).Data;
@@ -562,6 +578,7 @@
         /// <param name="custIds">List custId</param>
         /// <returns></returns>
         [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GroupingCustomerAPI)]
         public IEnumerable<CustomerGroup> GroupingCustomer([FromBody] IEnumerable<int> custIds)
         {
             IEnumerable<CustomerGroup> result = null;
@@ -582,6 +599,7 @@
 
         [System.Web.Http.AcceptVerbs("GetDirectAssociationDevices")]
         [HttpGet]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetDirectAssociationDevicesAPI)]
         public DirectAssociationDeviceModel GetDirectAssociationDevices(long custId)
         {
             var result = new DirectAssociationDeviceModel();
@@ -609,6 +627,7 @@
         /// <returns></returns>
         [System.Web.Http.AcceptVerbs("GetDetailAssociationReport")]
         [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetDetailAssociationReportAPI)]
         public GraphAssociationPaging GetDetailAssociationReport([FromBody] AssociationDetailReportParameterModel paras)
         {
             var result = new GraphAssociationPaging() { AssociationList = null, TotalItems = 0 };
@@ -673,6 +692,7 @@
         /// <returns></returns>
         [System.Web.Http.AcceptVerbs("GetProbationReport")]
         [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetProbationReportAPI)]
         public IEnumerable<AssociationWithPAModel> GetProbationReport([FromBody] ProbationParameterModel paras)
         {
             IEnumerable<AssociationWithPAModel> result = null;
@@ -696,6 +716,7 @@
         }
 
         [HttpGet]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.ScanCTSCustomerAPI)]
         public void ScanCTSCustomer()
         {
             try

@@ -4,6 +4,11 @@
         <name>Fanex.NAP.CTS.Portal.API</name>
     </assembly>
     <members>
+        <member name="T:Fanex.NAP.CTS.Portal.API.ActionFilter.TrackingFunctionUsageFilterAttribute">
+            <summary>
+            ActionFilter for tracking CTSFunction Usage
+            </summary>
+        </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Areas.HelpPage.ApiDescriptionExtensions.GetFriendlyId(System.Web.Http.Description.ApiDescription)">
             <summary>
             Generates an URI-friendly ID for the <see cref="T:System.Web.Http.Description.ApiDescription"/>. E.g. "Get-Values-id_name" instead of "GetValues/{id}?name={name}"
@@ -566,12 +571,6 @@
             <param name="fromDate"></param>
             <param name="toDate"></param>
             <returns>Customer class in XML format</returns>
-        </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.Test">
-            <summary>
-            This controller is only for testing
-            </summary>
-            <returns></returns>
         </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.RemoveProblemAccounts(System.String)">
             <summary>
