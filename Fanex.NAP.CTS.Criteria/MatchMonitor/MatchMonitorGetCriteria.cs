@@ -13,8 +13,8 @@
         public DateTime ToDate { get; set; }
 
         [SpParam(SqlParamName = "ip_LeagueName")]
-        public string LeagueName { get; set; }
-        
+        public string LeagueName { get; set; }       
+
         [SpParam(SqlParamName = "ip_SportType")]
         public string SportType { get; set; }
 
@@ -29,6 +29,9 @@
 
         [SpParam(SqlParamName = "ip_Bettypes")]
         public string BetType { get; set; }
+
+        [SpParam(SqlParamName = "ip_Reason")]
+        public string Reasons { get; set; }
 
         public override string GetSettingKey()
             => "CTS_DC_MatchMonitor_Get";
