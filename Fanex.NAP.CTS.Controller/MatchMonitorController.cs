@@ -56,15 +56,19 @@
 
             try
             {
-                if (para != null && !string.IsNullOrEmpty(para.BetTypes) && !string.IsNullOrEmpty(para.MatchSection) &&
-                    !string.IsNullOrEmpty(para.Sports) && IsValidDateRange(para.FromDate, para.ToDate))
+                if (para != null 
+                    && !string.IsNullOrEmpty(para.BetTypes) 
+                    && !string.IsNullOrEmpty(para.MatchSection) 
+                    && !string.IsNullOrEmpty(para.Sports)
+                    && !string.IsNullOrEmpty(para.Reasons)
+                    && IsValidDateRange(para.FromDate, para.ToDate))
                 {
                     matchMonitors = _matchMonitorService.GetMatchMonitor(para)?.OrderBy(c => c.MatchSection).ToList();
                 }
             }
             catch (Exception e)
             {
-                LogService.Error("Match Monitor Error", e);
+                LogService.Error("Get Match Monitor Error", e);
             }
 
             return Json(new
@@ -96,7 +100,7 @@
             }
             catch (Exception e)
             {
-                LogService.Error("Match Monitor Error", e);
+                LogService.Error("Match Monitor Detail Error", e);
             }
 
             ViewBag.EventDateToString = para?.EventDateToString;
@@ -175,7 +179,7 @@
             }
             catch (Exception e)
             {
-                LogService.Error("Match Monitor Error", e);
+                LogService.Error("Get Match Monitor Error", e);
             }
 
             return Json(matchDetailResult ?? new List<MatchMonitorDetailResultViewModel>(), JsonRequestBehavior.AllowGet);
@@ -197,7 +201,7 @@
             }
             catch (Exception e)
             {
-                LogService.Error("Match Monitor Error", e);
+                LogService.Error("Verify Trans MM Detail Error", e);
                 result.ErrorCode = -1;
                 result.ErrorMsg = e.Message;
             }

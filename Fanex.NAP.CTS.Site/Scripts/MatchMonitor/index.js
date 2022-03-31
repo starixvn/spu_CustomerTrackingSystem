@@ -19,7 +19,8 @@
         eventTarget: $('#selectedRefresh')[0],
         txtLeague: $('#txtLeague'),
         cbbMarket: $('#cbbMarket'),
-        cbbMatchSection: $('#cbbMatchSection')
+        cbbMatchSection: $('#cbbMatchSection'),
+        cbbReason: $('#cbbReason')
     };
 
     function GetMatchMonitor(isSkip) {
@@ -52,6 +53,7 @@
                 {
                     FromDate: function () { return domElements.dpkFromDate.val(); },
                     ToDate: function () { return domElements.dpkToDate.val(); },
+                    Reasons: function () { return domElements.cbbReason.val().join(); },
                     Sports: function () { return domElements.cbbSport.val().join(); },
                     BetTypes: function () { return "[" + domElements.cbbBetType.val().join() + "]" },
                     IsVerified: function () { return domElements.cbbIsVerified.val(); },
@@ -299,6 +301,13 @@
             selectedText: "# of # selected",
             noneSelectedText: "Select Match Section"
         });
+
+        domElements.cbbReason.multiselect({
+            menuWidth: 260,
+            menuHeight: 260,
+            selectedText: "# of # selected",
+            noneSelectedText: "Select Reason"
+        });        
 
         domElements.groupDropDown.hover(function () {
             domElements.refreshList.toggleClass('block-box');
