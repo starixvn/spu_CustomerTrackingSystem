@@ -907,6 +907,10 @@
   background-color: #FF7676;
   font-weight: bold; }
 
+.td-bg-lightred {
+  background-color: #F5A89A;
+  font-weight: bold; }
+
 .content-info {
   padding: 1.2rem 1.6rem;
   position: relative; }
@@ -926,6 +930,8 @@
       background-color: #2BC769; }
       .content-info .header-info .bg-green:after {
         background-color: #2BC769; }
+    .content-info .header-info.border-lightred {
+      border-bottom: 2px solid #F5A89A; }
     .content-info .header-info.border-red {
       border-bottom: 2px solid #FF7676; }
     .content-info .header-info.border-green {
@@ -944,6 +950,10 @@
         background-color: #FF7676; }
         .content-info .header-info .header-username.bg-red:after {
           background-color: #FF7676; }
+      .content-info .header-info .header-username.bg-lightred {
+        background-color: #F5A89A; }
+        .content-info .header-info .header-username.bg-lightred:after {
+          background-color: #F5A89A; }
       .content-info .header-info .header-username .username {
         position: relative;
         z-index: 2;
@@ -1020,6 +1030,9 @@
               .content-info .header-info .container-status .wrapper-status .info-status .status-left .circle.bg-red {
                 background-color: #EE4D4D;
                 border: 1px solid #D44545; }
+              .content-info .header-info .container-status .wrapper-status .info-status .status-left .circle.bg-lightred {
+                background-color: #EE9181;
+                border: 1px solid #EE9181; }
               .content-info .header-info .container-status .wrapper-status .info-status .status-left .circle.bg-yellow {
                 background-color: #FDB703;
                 border: 1px solid #D69A00; }

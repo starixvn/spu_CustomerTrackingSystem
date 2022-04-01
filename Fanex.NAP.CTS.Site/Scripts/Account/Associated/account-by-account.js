@@ -26,10 +26,10 @@
     let dataTableIPAssociation = null;
     let spanIPAssociationTotalMatches = $('#spanIPAssociationTotalMatches');
     let spanIPAssociationTotalIPSharing = $('#spanIPAssociationTotalIPSharing');    let cbbAssociationCategory = $('#cbbAssociationCategory');
-    let cacheCategoryColors = [];
+    let cacheNormalCategoryColors = [];
     let isSkipTracking = true;
 
-    function GetCategoryColorList() {
+    function GetNormalCategoryColorList() {
         var list = [];
 
         list.push({ 'id': '205', 'indexColor': 1, 'name': 'Good Member' });
@@ -112,20 +112,19 @@
 
     function RenderCellCategory(cell, row) {
         let indexColorForDiv = 0;
+        let categoryList = row.CategoryIds != undefined
+            ? row.CategoryIds.split(',')
+            : [];
 
         if (row.IsProblemAccount) {
-            indexColorForDiv = 5;
+            indexColorForDiv = row.IsPAProbation ? 6 : 5;
         } else {
-            let categoryList = row.CategoryIds != undefined
-                ? row.CategoryIds.split(',')
-                : [];
-
-            for (let i = 0; i < cacheCategoryColors.length; i++) {
+            for (let i = 0; i < cacheNormalCategoryColors.length; i++) {
                 categoryList.map(function (x) {
-                    let isEquals = x === cacheCategoryColors[i].id;
+                    let isEquals = x === cacheNormalCategoryColors[i].id;
                     if (isEquals) {
-                        indexColorForDiv = indexColorForDiv < cacheCategoryColors[i].indexColor
-                            ? cacheCategoryColors[i].indexColor
+                        indexColorForDiv = indexColorForDiv < cacheNormalCategoryColors[i].indexColor
+                            ? cacheNormalCategoryColors[i].indexColor
                             : indexColorForDiv;
                     }
                 })
@@ -147,6 +146,9 @@
                 break;
             case 5:
                 $(cell).addClass('td-bg-red');
+                break;
+            case 6:
+                $(cell).addClass('td-bg-lightred');
                 break;
             default:
                 break;
@@ -1041,6 +1043,6 @@
             divAddAssociation.dialog('close');
         });    
 
-        cacheCategoryColors = GetCategoryColorList();
+        cacheNormalCategoryColors = GetNormalCategoryColorList();
     };
 }

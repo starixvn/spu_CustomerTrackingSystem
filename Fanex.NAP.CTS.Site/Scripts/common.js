@@ -389,7 +389,7 @@
     this.renderCategoryColor = function (cell, row) {
         let indexColorForDiv = 0;
         if (row.IsProblemAccount) {
-            indexColorForDiv = 5;
+            indexColorForDiv = row.IsPAProbation ? 6 : 5;
         } else {
 
             let categoryColorCached = $this.categoryColor();
@@ -423,6 +423,9 @@
                 break;
             case 5:
                 $(cell).addClass('td-bg-red');
+                break;
+            case 6:
+                $(cell).addClass('td-bg-lightred');
                 break;
             default:
                 break;

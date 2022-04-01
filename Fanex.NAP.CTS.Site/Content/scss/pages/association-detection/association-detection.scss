@@ -12,9 +12,10 @@ body {
     z-index: 9;
 }
 .association-detection-report {
-    .tagify__tag__removeBtn:hover{
-        background : #fff;
+    .tagify__tag__removeBtn:hover {
+        background: #fff;
     }
+
     .association-detection-content {
         margin: 1rem 1.6rem 1rem 1.6rem;
 
@@ -116,6 +117,11 @@ body {
                         background-color: $account-formular;
                         font-weight: bold;
                     }
+
+                    .td-bg-lightred {
+                        background-color: $account-rosebud;
+                        font-weight: bold;
+                    }
                 }
             }
         }
@@ -157,5 +163,10 @@ body {
 
 .td-bg-red {
     background-color: $account-formular;
+    font-weight: bold;
+}
+
+.td-bg-lightred {
+    background-color: $account-rosebud;
     font-weight: bold;
 }
