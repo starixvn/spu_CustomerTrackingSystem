@@ -384,38 +384,38 @@
         switch (indexColorProfile) {
             case 1:
                 $('#divHeaderUsername')
-                    .removeClass('bg-red').removeClass('bg-yellow')
+                    .removeClass('bg-red').removeClass('bg-lightred').removeClass('bg-yellow')
                     .removeClass('green-line').removeClass('yellow-line')
                     .addClass('bg-green');
                 $('#divHeaderInfo')
-                    .removeClass('border-red').removeClass('border-yellow')
+                    .removeClass('border-red').removeClass('border-lightred').removeClass('border-yellow')
                     .addClass('border-green');
                 break;
             case 2:
                 $('#divHeaderUsername')
-                    .removeClass('bg-red').removeClass('bg-green')
+                    .removeClass('bg-red').removeClass('bg-lightred').removeClass('bg-green')
                     .removeClass('green-line').removeClass('yellow-line')
                     .addClass('bg-yellow');
                 $('#divHeaderInfo')
-                    .removeClass('border-red').removeClass('border-green')
+                    .removeClass('border-red').removeClass('border-lightred').removeClass('border-green')
                     .addClass('border-yellow');
                 break;
             case 3:
                 $('#divHeaderUsername')
-                    .removeClass('bg-red').removeClass('bg-yellow')
+                    .removeClass('bg-red').removeClass('bg-lightred').removeClass('bg-yellow')
                     .removeClass('bg-green').removeClass('yellow-line')
                     .addClass('green-line')
                 $('#divHeaderInfo')
-                    .removeClass('border-red').removeClass('border-yellow')
+                    .removeClass('border-red').removeClass('border-lightred').removeClass('border-yellow')
                     .addClass('border-green');
                 break;
             case 4:
                 $('#divHeaderUsername')
-                    .removeClass('bg-red').removeClass('bg-yellow')
+                    .removeClass('bg-red').removeClass('bg-lightred').removeClass('bg-yellow')
                     .removeClass('bg-green').removeClass('green-line')
                     .addClass('yellow-line')
                 $('#divHeaderInfo')
-                    .removeClass('border-red').removeClass('border-yellow')
+                    .removeClass('border-red').removeClass('border-lightred').removeClass('border-yellow')
                     .addClass('border-yellow');
                 break;
             default:
