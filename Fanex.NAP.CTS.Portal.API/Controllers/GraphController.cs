@@ -53,7 +53,7 @@
         [System.Web.Http.AcceptVerbs("GetDirectAssociationProfile")]
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetDirectAssociationProfileAPI)]
-        public GraphAssociationPaging GetDirectAssociationProfile([FromBody] AssociationProfileParameterModel paras)
+        public AssociatedAccountPagingModel GetDirectAssociationProfile([FromBody] AssociationProfileParameterModel paras)
         {
             try
             {
@@ -61,7 +61,7 @@
                 {
                     string queryScript = GetQueryScriptForAssProfile(paras.AssociationType);
 
-                    var result = DbSessionFactory.Execute<GraphAssociationPaging>(queryScript, new
+                    var result = DbSessionFactory.Execute<AssociatedAccountPagingModel>(queryScript, new
                     {
                         ip_CTSCustID = paras.CTSCustId,
                         ip_AssociationStatus = paras.AssociationStatus,
@@ -73,7 +73,7 @@
                         ip_PageSize = paras.Take
                     })?.Data.FirstOrDefault();
 
-                    return result ?? new GraphAssociationPaging() { AssociationList = new List<GraphAssociationModel>(), TotalItems = 0 };
+                    return result ?? new AssociatedAccountPagingModel() { AssociationList = new List<AssociatedAccountModel>(), TotalItems = 0 };
                 }
             }
             catch (Exception ex)
@@ -83,7 +83,7 @@
                        + ex.InnerException.StackTrace);
             }
 
-            return new GraphAssociationPaging() { AssociationList = new List<GraphAssociationModel>(), TotalItems = 0 };
+            return new AssociatedAccountPagingModel() { AssociationList = new List<AssociatedAccountModel>(), TotalItems = 0 };
         }
 
         private string GetQueryScriptForAssProfile(int associationType)
@@ -359,11 +359,11 @@
         [System.Web.Http.AcceptVerbs("GetDirectAssociation")]
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetDirectAssociationAPI)]
-        public GraphAssociationPaging GetDirectAssociation([FromBody] DirectAssociationParameterModel paras)
+        public AssociatedAccountPagingModel GetDirectAssociation([FromBody] DirectAssociationParameterModel paras)
         {
             try
             {
-                var result = DbSessionFactory.Execute<GraphAssociationPaging>("GetAssociationOneLevelByCustId", new
+                var result = DbSessionFactory.Execute<AssociatedAccountPagingModel>("GetAssociationOneLevelByCustId", new
                 {
                     CTSCustID = paras.ctsCustId,
                     AssStatus = paras.assStatus,
@@ -375,7 +375,7 @@
 
                 if (result == null)
                 {
-                    return new GraphAssociationPaging() { AssociationList = null, TotalItems = 0 };
+                    return new AssociatedAccountPagingModel() { AssociationList = null, TotalItems = 0 };
                 }
 
                 return result;
@@ -390,11 +390,11 @@
         [System.Web.Http.AcceptVerbs("GetDirectAssociationByManual")]
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetDirectAssociationByManualAPI)]
-        public GraphAssociationPaging GetDirectAssociationByManual([FromBody] DirectAssociationParameterModel paras)
+        public AssociatedAccountPagingModel GetDirectAssociationByManual([FromBody] DirectAssociationParameterModel paras)
         {
             try
             {
-                var result = DbSessionFactory.Execute<GraphAssociationPaging>("GetAssociationOneLevelByCustIdByManual", new
+                var result = DbSessionFactory.Execute<AssociatedAccountPagingModel>("GetAssociationOneLevelByCustIdByManual", new
                 {
                     CTSCustID = paras.ctsCustId,
                     AssStatus = paras.assStatus,
@@ -407,7 +407,7 @@
                     Pagesize = paras.takeRow
                 }).Data.FirstOrDefault();
 
-                return result ?? new GraphAssociationPaging() { AssociationList = null, TotalItems = 0 };
+                return result ?? new AssociatedAccountPagingModel() { AssociationList = null, TotalItems = 0 };
             }
             catch (Exception ex)
             {
@@ -419,11 +419,11 @@
         [System.Web.Http.AcceptVerbs("GetDirectAssociationByDevice")]
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetDirectAssociationByDeviceAPI)]
-        public GraphAssociationPaging GetDirectAssociationByDevice([FromBody] DirectAssociationParameterModel paras)
+        public AssociatedAccountPagingModel GetDirectAssociationByDevice([FromBody] DirectAssociationParameterModel paras)
         {
             try
             {
-                var result = DbSessionFactory.Execute<GraphAssociationPaging>("GetAssociationOneLevelByCustIdByDevice", new
+                var result = DbSessionFactory.Execute<AssociatedAccountPagingModel>("GetAssociationOneLevelByCustIdByDevice", new
                 {
                     CTSCustID = paras.ctsCustId,
                     AssStatus = paras.assStatus,
@@ -438,7 +438,7 @@
 
                 if (result == null)
                 {
-                    return new GraphAssociationPaging() { AssociationList = null, TotalItems = 0 };
+                    return new AssociatedAccountPagingModel() { AssociationList = null, TotalItems = 0 };
                 }
 
                 return result;
@@ -453,11 +453,11 @@
         [System.Web.Http.AcceptVerbs("GetDirectAssociationByIP")]
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetDirectAssociationByIPAPI)]
-        public GraphAssociationPaging GetDirectAssociationByIP([FromBody] DirectAssociationParameterModel paras)
+        public AssociatedAccountPagingModel GetDirectAssociationByIP([FromBody] DirectAssociationParameterModel paras)
         {
             try
             {
-                var result = DbSessionFactory.Execute<GraphAssociationPaging>("GetAssociationOneLevelByCustIdByIP", new
+                var result = DbSessionFactory.Execute<AssociatedAccountPagingModel>("GetAssociationOneLevelByCustIdByIP", new
                 {
                     CTSCustID = paras.ctsCustId,
                     AssStatus = paras.assStatus,
@@ -472,7 +472,7 @@
 
                 if (result == null)
                 {
-                    return new GraphAssociationPaging() { AssociationList = null, TotalItems = 0 };
+                    return new AssociatedAccountPagingModel() { AssociationList = null, TotalItems = 0 };
                 }
 
                 return result;
@@ -487,11 +487,11 @@
         [System.Web.Http.AcceptVerbs("GetDirectAssociationByAI")]
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetDirectAssociationByAIAPI)]
-        public GraphAssociationPaging GetDirectAssociationByAI([FromBody] DirectAssociationParameterModel paras)
+        public AssociatedAccountPagingModel GetDirectAssociationByAI([FromBody] DirectAssociationParameterModel paras)
         {
             try
             {
-                var result = DbSessionFactory.Execute<GraphAssociationPaging>("GetAssociationOneLevelByCustIdByAI", new
+                var result = DbSessionFactory.Execute<AssociatedAccountPagingModel>("GetAssociationOneLevelByCustIdByAI", new
                 {
                     CTSCustID = paras.ctsCustId,
                     AssStatus = paras.assStatus,
@@ -506,7 +506,7 @@
 
                 if (result == null)
                 {
-                    return new GraphAssociationPaging() { AssociationList = null, TotalItems = 0 };
+                    return new AssociatedAccountPagingModel() { AssociationList = null, TotalItems = 0 };
                 }
 
                 return result;
@@ -543,11 +543,11 @@
         [System.Web.Http.AcceptVerbs("GetInDirectAssociation")]
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetInDirectAssociationAPI)]
-        public IEnumerable<GraphAssociationModel> GetInDirectAssociation([FromBody] int ctsCustId)
+        public IEnumerable<AssociatedAccountModel> GetInDirectAssociation([FromBody] int ctsCustId)
         {
             try
             {
-                var result = DbSessionFactory.Execute<GraphAssociationModel>("GetAssociationNLevelByCustId", new { CTSCustID = ctsCustId }).Data;
+                var result = DbSessionFactory.Execute<AssociatedAccountModel>("GetAssociationNLevelByCustId", new { CTSCustID = ctsCustId }).Data;
                 return result;
             }
             catch (Exception ex)
@@ -628,9 +628,9 @@
         [System.Web.Http.AcceptVerbs("GetDetailAssociationReport")]
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetDetailAssociationReportAPI)]
-        public GraphAssociationPaging GetDetailAssociationReport([FromBody] AssociationDetailReportParameterModel paras)
+        public AssociatedAccountPagingModel GetDetailAssociationReport([FromBody] AssociationDetailReportParameterModel paras)
         {
-            var result = new GraphAssociationPaging() { AssociationList = null, TotalItems = 0 };
+            var result = new AssociatedAccountPagingModel() { AssociationList = null, TotalItems = 0 };
 
             try
             {
@@ -658,7 +658,7 @@
 
                     if (!string.IsNullOrEmpty(script))
                     {
-                        var queryResult = DbSessionFactory.Execute<GraphAssociationPaging>(script, new
+                        var queryResult = DbSessionFactory.Execute<AssociatedAccountPagingModel>(script, new
                         {
                             CTSCustID = paras.CTSCustId,
                             AssStatus = paras.AssociationStatus,

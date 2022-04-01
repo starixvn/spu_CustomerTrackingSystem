@@ -21,5 +21,7 @@
         public int CustSubId { get; set; }
 
         public string ParentIds { get; set; }
+
+        public bool IsProbation { get; set; }
     }
 }

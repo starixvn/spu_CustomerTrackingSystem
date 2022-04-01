@@ -43,5 +43,7 @@
         public string AssociationDate { get; set; }
 
         public bool IsLinked { get; set; }
+
+        public bool IsPAProbation { get; set; }
     }
 }

@@ -327,7 +327,7 @@
             }
         }
 
-        public GraphAssociationPaging GetCustomerAssociationByGraph(AssociatedFilterModel filterModel, bool fromMySQL = false)
+        public AssociatedAccountPagingModel GetAssociatedAccount(AssociatedFilterModel filterModel, bool fromMySQL = false)
         {
             if (fromMySQL)
             {
@@ -346,9 +346,9 @@
 
                 using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
                 {
-                    var result = db.Query<GraphAssociationModel>(criteria);
+                    var result = db.Query<AssociatedAccountModel>(criteria);
 
-                    return new GraphAssociationPaging
+                    return new AssociatedAccountPagingModel
                     {
                         AssociationList = result.ToList(),
                         TotalItems = criteria.TotalItems
@@ -371,11 +371,11 @@
                         Take = filterModel.length,
                     };
 
-                    var data = ApiHelper.Post<GraphAssociationPaging>(ConfigSettings.GetDirectAssociationProfile, param, 300);
+                    var data = ApiHelper.Post<AssociatedAccountPagingModel>(ConfigSettings.GetDirectAssociationProfile, param, 300);
 
                     Task.WhenAll(data);
 
-                    return data.Result ?? new GraphAssociationPaging();
+                    return data.Result ?? new AssociatedAccountPagingModel();
                 }
                 catch (Exception ex)
                 {
@@ -385,7 +385,7 @@
                 }
             }
 
-            return new GraphAssociationPaging();
+            return new AssociatedAccountPagingModel();
         }
 
         public List<AccountStaticStatusModel> GetAccountStaticStatuses(int listId, bool status)
@@ -434,7 +434,7 @@
             return data.Result ?? new ShortestPathOfAccount();
         }
 
-        public string MappingAssociationType(GraphAssociationModel data)
+        public string MappingAssociationType(AssociatedAccountModel data)
         {
             if (data.AssociationType != null)
             {

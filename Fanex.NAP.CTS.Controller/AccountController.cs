@@ -426,7 +426,7 @@
 
             var getAssociationFromMySql = AppSettings.Get("GetAssociationProfileFromMySQL") == "1";
 
-            var graphAssociationPage = _accountService.GetCustomerAssociationByGraph(model, getAssociationFromMySql);
+            var graphAssociationPage = _accountService.GetAssociatedAccount(model, getAssociationFromMySql);
 
             if (graphAssociationPage != null && graphAssociationPage.AssociationList != null && graphAssociationPage.AssociationList.Any())
             {
@@ -457,6 +457,7 @@
                         CTSCustId = x.CTSCustID,
                         IsLinked = x.AssociationStatus == 1,
                         IsProblemAccount = x.ParentIDs != null ? x.ParentIDs.Split(',').Any(y => y == "50") : false,
+                        IsPAProbation = x.IsProbation,
                         CategoryIds = x.CategoryIDs,
                         CategoryNames = !string.IsNullOrEmpty(x.CategoryNames) ? x.CategoryNames : "-",
                         CustomerClasses = x.CustomerClasses
@@ -521,7 +522,7 @@
             return name;
         }
 
-        private List<GraphAssociationModel> GetCustClassification(string custIds, List<GraphAssociationModel> assModel)
+        private List<AssociatedAccountModel> GetCustClassification(string custIds, List<AssociatedAccountModel> assModel)
         {
             var custClassification = new List<LatestClassification4ReportModel>();
 
@@ -536,7 +537,7 @@
                                  (a, b) => new { a, b })
                                  .SelectMany(
                                       group => group.b.DefaultIfEmpty(),
-                                      (group, temp) => new GraphAssociationModel
+                                      (group, temp) => new AssociatedAccountModel
                                       {
                                           CTSCustID = group.a.CTSCustID,
                                           CustId = group.a.CustId,
@@ -554,6 +555,7 @@
                                           StatusId = group.a.StatusId,
                                           AssociationStatus = group.a.AssociationStatus,
                                           ParentIDs = group.a.ParentIDs,
+                                          IsProbation = group.a.IsProbation,
                                           CategoryIDs = group.a.CategoryIDs,
                                           CategoryNames = group.a.CategoryNames,
                                           CustomerClasses = (temp != null && temp.CustClass != null && group.a.CustSubId == 0) ? temp.CustClass.ToString() : "-",
@@ -570,7 +572,7 @@
 
             var getAssociationFromMySql = AppSettings.Get("GetAssociationProfileFromMySQL") == "1";
 
-            var graphAssociationPaging = _accountService.GetCustomerAssociationByGraph(model, getAssociationFromMySql);
+            var graphAssociationPaging = _accountService.GetAssociatedAccount(model, getAssociationFromMySql);
 
             if (graphAssociationPaging != null && graphAssociationPaging.AssociationList != null && graphAssociationPaging.AssociationList.Any())
             {
@@ -1325,6 +1327,7 @@
             var isExcludedTagAssPA = false;
             var isVVip = false;
             var isProblemAccount = false;
+            var isPAProbation = false;
             var categoryList = new List<CustomerCategoryViewModel>();
             var classificationHistoryList = new List<CustomerClassificationHistoryViewModel>();
 
@@ -1344,6 +1347,8 @@
                 isVVip = categoryList.Any(x => x.CategoryName.Equals("VVIP"));
 
                 isProblemAccount = categoryList.Any(x => x.IsProblemAccount);
+
+                isPAProbation = isProblemAccount && classification.Any(x => x.IsProbation);
             }
 
             var classificationHistory = _accountService.GetCustomerClassificationHistory(ctsCustId);
@@ -1375,6 +1380,7 @@
                 isExcludedTagAssPA,
                 isVVip,
                 isProblemAccount,
+                isPAProbation,
                 categoryList,
                 data = classificationHistoryList,
             }, JsonRequestBehavior.AllowGet);

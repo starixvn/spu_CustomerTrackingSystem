@@ -4,15 +4,14 @@
     using Fanex.Logging.Extensions;
     using Fanex.Logging.Extensions.Database;
     using Fanex.NAP.CTS.Core.Extentions;
-    using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Core.Helpers.Xml;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria.TWProblemAccountDetection;
     using Fanex.NAP.CTS.Model;
+    using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.API;
     using Fanex.NAP.CTS.Model.API.ProblemCaseMonitor;
     using Fanex.NAP.CTS.Model.API.UpdateCategoryWhenPAUpdated;
-    using Fanex.NAP.CTS.Model.CustomerClassify;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.ImportEvidences;
@@ -37,7 +36,6 @@
     using System.Collections.Generic;
     using System.Configuration;
     using System.Linq;
-    using System.Net;
     using System.Threading.Tasks;
     using System.Web.Http;
     using System.Web.Http.Results;
@@ -816,7 +814,7 @@
                     if (custfromQuery.Data.Any())
                     {
                         var cust = custfromQuery.Data.First();
-                        var queryResult = DbSessionFactory.Execute<GraphAssociationPaging>(script, new
+                        var queryResult = DbSessionFactory.Execute<AssociatedAccountPagingModel>(script, new
                         {
                             CTSCustID = cust.CTSCustId,
                             AssStatus = 0,

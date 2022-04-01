@@ -56,7 +56,7 @@
 
         //GraphAssociationPaging GetCustomerAssociationByGraph(string apiURL, long ctsCustId, int associationStatus, string accountStatusIds, string siteIds, int skipNumber, int takeNumber, bool fromMySQL = false);
 
-        GraphAssociationPaging GetCustomerAssociationByGraph(AssociatedFilterModel filterModel, bool fromMySQL = false);
+        AssociatedAccountPagingModel GetAssociatedAccount(AssociatedFilterModel filterModel, bool fromMySQL = false);
 
         List<AccountStaticStatusModel> GetAccountStaticStatuses(int listId, bool status);
 
@@ -64,7 +64,7 @@
 
         ShortestPathOfAccount GetShortestPathAssociationByGraph(string apiURL, int custIdFrom, int custIdTo);        
 
-        string MappingAssociationType(GraphAssociationModel data);
+        string MappingAssociationType(AssociatedAccountModel data);
 
         IEnumerable<EvidenceModel> GetEvidenceList();
 

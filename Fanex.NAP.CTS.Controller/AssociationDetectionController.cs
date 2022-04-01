@@ -117,6 +117,7 @@ namespace Fanex.NAP.CTS.Controller
                         Status = x.CustStatus,
                         CustomerClass = customerClass > 0 ? customerClass.ToString() : null,
                         IsProblemAccount = x.ParentIds != null && x.ParentIds.Split(',').Any(y => y == "50"),
+                        IsPAProbation = x.IsProbation
                     };
                 });
             }

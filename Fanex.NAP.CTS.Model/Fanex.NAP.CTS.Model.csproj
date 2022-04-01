@@ -294,10 +294,10 @@
     <Compile Include="GraphDB\Association.cs" />
     <Compile Include="GraphDB\AssociationForExtAcc.cs" />
     <Compile Include="GraphDB\CustomerGroup.cs" />
-    <Compile Include="GraphDB\GraphAssociationPaging.cs" />
+    <Compile Include="Account\AssociatedAccount\AssociatedAccountPagingModel.cs" />
     <Compile Include="Association\AssociatedFilterModel.cs" />
     <Compile Include="GraphDB\GraphCustomer.cs" />
-    <Compile Include="GraphDB\GraphAssociationModel.cs" />
+    <Compile Include="Account\AssociatedAccount\AssociatedAccountModel.cs" />
     <Compile Include="Account\SuspiciousCustomerModel.cs" />
     <Compile Include="Action.cs" />
     <Compile Include="Association\AssociatedByAccountModel.cs" />
