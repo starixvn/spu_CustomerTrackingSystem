@@ -402,6 +402,16 @@
     <Content Include="App_Data\Local\ExternalSPNames.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="App_Data\AWS\ExternalSPNames.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\AWS\InternalSPNames.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\AWS\NAPFrameworkSpNames.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="App_Data\PRO\InternalSPNames.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1048,6 +1058,16 @@
     <Content Include="Views\TransactionReport\Index.cshtml" />
     <Content Include="Views\Account\RobotBetting\RobotBetting.cshtml" />
     <Content Include="Views\ProblemAccountManagement\Index.cshtml" />
+    <Content Include="WebConfigs\Web.AppSettings.AWS.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="WebConfigs\Web.ConnectionString.AWS.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="WebConfigs\Web.AWS.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CoreBetList.css" />
