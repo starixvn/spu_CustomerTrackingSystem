@@ -1469,7 +1469,15 @@
                     break;
 
                 default:
-                    break;
+                    {
+                        if (cc.SourceTypeID == 23)
+                        {
+                            reason += $"Margin: {margin} - Turn Over: {turnOver} - Active Days: {activeDays} - Bet Count: {betCount}";
+                        }    
+
+                        break;
+                    }
+
             }
 
             reason += "</div>";
