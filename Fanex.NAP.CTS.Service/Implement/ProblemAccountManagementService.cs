@@ -13,7 +13,10 @@
     using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.ViewModel.ProblemAccountManagement;
+    using Fanex.NAP.TGRS.Core.ExcelUtility;
+    using Fanex.NAP.TGRS.Core.ExcelUtility.RichTextExtensions;
     using Newtonsoft.Json;
+    using NPOI.SS.UserModel;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -47,7 +50,7 @@
                 return db.Query<ProblemAccountModel>(criteria).ToList();
             }
         }
-       
+
         public IEnumerable<ProblemAccountCommentSelModel> GetProblemAccountCommentSel(string custIdList)
         {
             var criteria = new ProblemAccountCustomerCommentSelCriteria
@@ -134,7 +137,7 @@
 
             return null;
         }
-        
+
         public IEnumerable<ResultProblemAccountAddCustomerModel> MarkProblemAccountSiteCredit(IEnumerable<ProblemAccountValidatedModel> models, int userID)
         {
             var paResultList = new List<ResultProblemAccountAddCustomerModel>();
@@ -196,7 +199,7 @@
         }
 
         private ResultProblemAccountAddCustomerModel MarkProblemAccountSiteCredit(ProblemAccountAddCustomerModel model, int userID)
-        {            
+        {
             var criteria = new ProblemAccountAddCustomerCriteria
             {
                 CustomerList = model.CustomerList,
@@ -238,7 +241,7 @@
         }
 
         private ResultProblemAccountAddCustomerModel MarkProblemAccountSiteLicensee(ProblemAccountAddCustomerModel model, int UserID)
-        {          
+        {
             var criteria = new ProblemAccountLicenseeAddCustomerCriteria
             {
                 CustomerList = model.CustomerList,
@@ -274,7 +277,7 @@
                     };
                 }
             }
-        }      
+        }
 
         public IEnumerable<ResultProblemAccountAddCustomerModel> UpdateProblemAccountSiteCredit(IEnumerable<ProblemAccountValidatedModel> models, int userID)
         {
@@ -309,7 +312,7 @@
         private ResultProblemAccountAddCustomerModel UpdateProblemAccountSiteCredit(ProblemAccountAddCustomerModel model, int userID)
         {
             var repository = new DynamicRepository();
-            
+
             var criteria = new ProblemAccountUpdateCustomerCriteria
             {
                 CustomerList = model.CustomerList,
@@ -416,7 +419,7 @@
                 };
             }
         }
-        
+
         public IEnumerable<ResultProblemAccountAddCustomerModel> UnmarkProblemAccountSiteCredit(IEnumerable<ProblemAccountValidatedModel> models, bool isExceptDownlinesByTVS, bool isExceptDownlinesByOPS, int userID)
         {
             var paResultList = new List<ResultProblemAccountAddCustomerModel>();
@@ -474,7 +477,7 @@
                     }
                     
                 }                    
-                
+
                 return new ResultProblemAccountAddCustomerModel
                 {
                     ErrCode = criteria.ErrCode,
@@ -593,7 +596,7 @@
             });
 
             try
-            {               
+            {
                 var paras = new UpdateCategoryParamsModel
                 {
                     CustInfos = custInfos,
@@ -624,12 +627,65 @@
                 Task.WhenAll(data);
             }
             catch (Exception ex)
-            {                
+            {
                 LogService.Error($"CTS - Remove Problem Account failed: { ex.Message } - custIds: {custIdList}" + ex.Message, ex);
             }
         }
 
-        public IEnumerable<long> UpdateProblemAccountEvidence(UpdateCategoryParamsModel paras)
+        public byte[] ExportProblemAccount(List<ProblemAccountViewModel> problemAccounts, string fileName, string templatePath, ProblemAccountFilterViewModel filter)
+        {
+            var writer = new ExcelTemplateWriter(templatePath, fileName, "PAM");            
+            writer.CopyRows(0, 1);
+
+            return writer.ToBytes();
+        }
+
+        private void FilterBlock(List<ProblemAccountViewModel> problemAccounts, ref ExcelTemplateWriter writer, ProblemAccountFilterViewModel filter)
+        {
+
+        }
+
+        private void FillRowData(List<ProblemAccountViewModel> problemAccounts, ref ExcelTemplateWriter writer)
+        {
+            foreach (var item in problemAccounts)
+            {
+                var record = new object[]
+                {
+
+                };
+
+                writer.WriteRow(3, record);
+            }
+        }
+
+        private void AppendBlockContent(ref RichTextRender content, ref int lineCount, string name, IFont nameFont, string value, IFont valueFont, string endString)
+        {
+            TextBlock nameBlock = new TextBlock(name + ":  ", nameFont);
+            content = content.AddText(nameBlock);
+
+            TextBlock valueBlock = new TextBlock(value, valueFont);
+            content = content.AddText(valueBlock);
+
+            if (!string.IsNullOrEmpty(endString))
+            {
+                content = content.AddText(endString);
+            }
+
+            lineCount += CountLine(name + value);
+        }
+
+        private int CountLine(string line)
+        {
+            var charPerLine = 180;
+            return Convert.ToInt32(Math.Ceiling((float)line.Length / charPerLine));
+        }
+
+        private void FillHeader(ref ExcelTemplateWriter writer)
+        {
+            writer.CopyRows(2, 1);
+        }
+
+		public IEnumerable<long> UpdateProblemAccountEvidence(UpdateCategoryParamsModel paras)
         {
             var custIdsJson = JsonConvert.SerializeObject(paras.CustInfos);
             var repository = new DynamicRepository();

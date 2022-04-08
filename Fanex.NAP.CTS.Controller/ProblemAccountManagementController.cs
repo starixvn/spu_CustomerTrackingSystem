@@ -17,7 +17,8 @@
     [NapAuth(FunctionKey = FSFunctionKeys.ProblemAccountManagement, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class ProblemAccountManagementController : BaseController
     {
-        private readonly IProblemAccountManagementService _problemAccountManagementService;        
+        private const string ProblemAccountTemplate = "~/App_Data/Excel Template/ProblemAccountManagement/ExportTemplate.xlsx";
+        private readonly IProblemAccountManagementService _problemAccountManagementService;
 
         public override string BaseControllerName { get => Consts.MenuItemController; }
 
@@ -56,6 +57,16 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.ProblemAccountManagementRpt)]
         public ActionResult GetProblemAccount(ProblemAccountFilterViewModel filter)
         {
+            var problemAccounts = GetProblemAccounts(filter);
+
+            return Json(new
+            {
+                data = problemAccounts
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        private IEnumerable<ProblemAccountViewModel> GetProblemAccounts(ProblemAccountFilterViewModel filter)
+        {
             var problemAccounts = Enumerable.Empty<ProblemAccountViewModel>();
 
             if (filter.ToDate != DateTime.MinValue)
@@ -64,28 +75,25 @@
             }
 
             var paModel = _problemAccountManagementService.GetProblemAccounts(filter);
-            
+
             if (paModel != null && paModel.Any())
             {
                 var custIdList = string.Join(",", paModel.Select(x => x.CustID).Distinct());
 
                 var paCommentSelModel = _problemAccountManagementService.GetProblemAccountCommentSel(custIdList);
 
-                problemAccounts = paModel.OrderByDescending(x=>x.CreatedDate).Select(x => new ProblemAccountViewModel
+                problemAccounts = paModel.OrderByDescending(x => x.CreatedDate).Select(x => new ProblemAccountViewModel
                 {
                     UserName = x.UserName,
                     Site = x.Site,
                     Currency = x.Currency,
                     Category = x.CategoryName,
-                    Comment = paCommentSelModel.Any(y=>y.Custid == x.CustID) ? paCommentSelModel.FirstOrDefault(y=>y.Custid == x.CustID).Comment : string.Empty,
+                    Comment = paCommentSelModel.Any(y => y.Custid == x.CustID) ? paCommentSelModel.FirstOrDefault(y => y.Custid == x.CustID).Comment : string.Empty,
                     CreatedDateStr = x.CreatedDate.ToString(Consts.FormatDateToString_MMMddyyyy)
                 });
             }
 
-            return Json(new
-            {
-                data = problemAccounts
-            }, JsonRequestBehavior.AllowGet);
+            return problemAccounts;
         }
 
         [HttpGet]
@@ -136,6 +144,22 @@
             var result = SaveProblemAccount(model);
 
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.ProblemAccountManagementMarkNew)]
+        public ActionResult ExportProblemAccount(ProblemAccountFilterViewModel filter)
+        {
+            var templatePath = Server.MapPath(ProblemAccountTemplate); // PAM_yyyymmdd_hhmmss
+            var date = DateTime.Now;
+            var hhmmss = date.Hour.ToString() + date.Minute.ToString() + date.Second.ToString();
+            var fileName = string.Format("PAM_{0}_{1}.xlsx", date.ToString(FormatDateTimeToString_YYYYmmdd), hhmmss);
+
+            var problemAccounts = GetProblemAccounts(filter);
+
+            var excelFile = _problemAccountManagementService.ExportProblemAccount(problemAccounts.ToList(), fileName, templatePath, filter);
+
+            return File(excelFile, "application/vnd.ms-excel", fileName);
         }
 
         private ResultSaveProblemAccountViewModel SaveProblemAccount(ValidateProblemAccountInputViewModel model)
