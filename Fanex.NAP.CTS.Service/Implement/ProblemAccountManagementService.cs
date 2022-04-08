@@ -445,10 +445,17 @@
 
             try
             {
-                var resultUpdated = repository.Fetch<string>(criteria);
+                var resultUpdated = repository.Execute(criteria);
 
                 if (string.IsNullOrEmpty(criteria.ErrMsg))
-                    RemoveProblemAccounts(resultUpdated, userID);
+                {
+                    if (!string.IsNullOrEmpty(criteria.SuccessAllDownlineList))
+                    {
+                        var custs = criteria.SuccessAllDownlineList.Split(',').AsEnumerable();
+                        RemoveProblemAccounts(custs, userID);
+                    }
+                    
+                }                    
                 
                 return new ResultProblemAccountAddCustomerModel
                 {
@@ -513,10 +520,17 @@
 
             try
             {
-                var resultUpdated = repository.Fetch<string>(criteria);
+                var resultUpdated = repository.Execute(criteria);
 
                 if (string.IsNullOrEmpty(criteria.ErrMsg))
-                    RemoveProblemAccounts(resultUpdated, userID);
+                {
+                    if (model.CustIds != null && model.CustIds.Any())
+                    {
+                        var custs = model.CustIds.Select(x => x.ToString());
+
+                        RemoveProblemAccounts(custs, userID);
+                    }
+                }
 
                 return new ResultProblemAccountAddCustomerModel
                 {
