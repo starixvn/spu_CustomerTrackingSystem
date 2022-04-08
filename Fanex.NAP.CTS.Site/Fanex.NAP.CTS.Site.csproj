@@ -457,6 +457,9 @@
     <Content Include="Content\images\logo.webp" />
     <Content Include="Content\images\maintenance.webp" />
     <Content Include="App_Data\Excel Template\ProbationManagement\ExportTemplate.xlsx" />
+    <Content Include="App_Data\Excel Template\ProblemAccountManagement\ExportTemplate.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Content\scss\components\_notification.scss" />
     <Content Include="Content\scss\fonts\Fraud-Sensor\fonts\CTS.svg" />
     <Content Include="Content\scss\images\chevron-down.png" />
