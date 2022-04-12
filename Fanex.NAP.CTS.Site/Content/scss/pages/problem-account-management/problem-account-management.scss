@@ -73,7 +73,7 @@ body {
                     min-width: 200px;
                 }
 
-                .button-generate {
+                .button-generate, .button-export {
                     background-color: #396ef8;
                     border-radius: 2px;
                     color: $page-bg;
@@ -120,7 +120,7 @@ body {
                 }
             }
         }
-    }    
+    }
 }
 
 .hide {

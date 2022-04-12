@@ -146,9 +146,9 @@
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpPost]
+        [HttpGet]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.ProblemAccountManagementMarkNew)]
-        public ActionResult ExportProblemAccount(ProblemAccountFilterViewModel filter)
+        public ActionResult ExportToExcel(ProblemAccountFilterViewModel filter)
         {
             var templatePath = Server.MapPath(ProblemAccountTemplate); // PAM_yyyymmdd_hhmmss
             var date = DateTime.Now;
@@ -158,6 +158,22 @@
             var problemAccounts = GetProblemAccounts(filter);
 
             var excelFile = _problemAccountManagementService.ExportProblemAccount(problemAccounts.ToList(), fileName, templatePath, filter);
+
+            return File(excelFile, "application/vnd.ms-excel", fileName);
+        }
+
+        [HttpGet]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.ProblemAccountManagementMarkNew)]
+        public ActionResult ExportToExcelTest(string name)
+        {
+            var templatePath = Server.MapPath(ProblemAccountTemplate); // PAM_yyyymmdd_hhmmss
+            var date = DateTime.Now;
+            var hhmmss = date.Hour.ToString() + date.Minute.ToString() + date.Second.ToString();
+            var fileName = string.Format("PAM_{0}_{1}.xlsx", date.ToString(FormatDateTimeToString_YYYYmmdd), hhmmss);
+
+            //var problemAccounts = GetProblemAccounts(filter);
+
+            var excelFile = new byte[2000];
 
             return File(excelFile, "application/vnd.ms-excel", fileName);
         }

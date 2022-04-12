@@ -10,6 +10,7 @@
         inputUserName: $('#inputUserName'),
         inputSearchDownlines: $('#inputSearchDownlines'),
         btnGenerate: $('#btnGenerate'),
+        btnExportToExcel: $('#btnExportToExcel'),
         tblProblemAccount: $('#tblProblemAccount'),
         btnMarkNewProblemAccount: $('#btnMarkNewProblemAccount'),
         btnUpdateProblemAccount: $('#btnUpdateProblemAccount'),
@@ -27,7 +28,7 @@
         spanAddProblemAccountChangeHidden: $('#spanAddProblemAccountChangeHidden'),
         spanProblemAccountActionHidden: $('#spanProblemAccountActionHidden'),
         inputTagUsername: $('#inputTagUsername'),
-        maxTags: 50
+        maxTags: 200
     };
 
     function RenderGrid() {
@@ -40,13 +41,7 @@
             ajax: {
                 url: url,
                 data: function () {
-                    let params = {};
-                    params.FromDate = domElements.dpkFromDate.val();
-                    params.ToDate = domElements.dpkToDate.val();
-                    params.Sites = domElements.cbbSite.val().join();
-                    params.UserName = domElements.inputUserName.val().trim();
-                    params.HasDownline = domElements.inputSearchDownlines.is(":checked");
-                    return params;
+                    return GetParams();
                 },
                 type: "POST",
                 beforeSend: function () {
@@ -93,6 +88,16 @@
                 { data: obj => obj.CreatedDateStr }               
             ]
         });
+    }
+
+    function GetParams() {
+        let params = {};
+        params.FromDate = domElements.dpkFromDate.val();
+        params.ToDate = domElements.dpkToDate.val();
+        params.Sites = domElements.cbbSite.val().join();
+        params.UserName = domElements.inputUserName.val().trim();
+        params.HasDownline = domElements.inputSearchDownlines.is(":checked");
+        return params;
     }
 
     function GetProblemAccountReport() {
@@ -504,6 +509,63 @@
         });
     }  
 
+    function ExportToExcel() {
+        let url = common.modifyRelativeUrl('ProblemAccountManagement/ExportToExcel');
+        let params = GetParams();
+        let downloadUrl = url + '?' + $.param(params);
+        let request = new XMLHttpRequest();
+        common.showLoading();
+
+        request.open('GET', downloadUrl, true);
+        request.setRequestHeader('Content-Type', 'application/vnd.ms-excel');
+        request.responseType = 'blob';
+        request.timeout = 200000;
+        request.addEventListener("timeout", function (e) {
+            common.closeLoading();
+            common.showError("Export failed (timeout)");
+        });
+        request.onload = function (e) {
+            if (this.status === 200) {
+                let extension = ".xlsx";
+                let date = GetFormattedDate();
+                let filenameFormat = "PAM_{1}{2}";
+                let filename = filenameFormat.format(date, extension);
+                let blob = this.response;
+
+                if (window.navigator.msSaveOrOpenBlob) {
+                    window.navigator.msSaveBlob(blob, filename);
+                } else {
+                    let downloadLink = window.document.createElement('a');
+                    let contentTypeHeader = request.getResponseHeader("Content-Type");
+                    downloadLink.href = window.URL.createObjectURL(new Blob([blob], { type: contentTypeHeader }));
+                    downloadLink.download = filename;
+                    document.body.appendChild(downloadLink);
+                    downloadLink.click();
+                    document.body.removeChild(downloadLink);
+                }
+            } else {
+                console.log(this);
+                common.showError("Export failed");
+            }
+
+            common.closeLoading();
+        };
+
+        request.send();
+    }
+
+    function GetFormattedDate() {
+        let date = new Date();
+        let stringDateFormat = date.getFullYear().toString()
+            + (date.getMonth() + 1).toString()
+            + date.getDate().toString()
+            + date.getHours().toString()
+            + date.getMinutes().toString()
+            + date.getSeconds().toString();
+
+        return stringDateFormat;
+    }
+
     function Initial() {
         domElements.dpkFromDate
             .datepicker({
@@ -539,6 +601,8 @@
         });
 
         domElements.btnGenerate.on('click', function () { GetProblemAccountReport(); });
+
+        domElements.btnExportToExcel.on('click', function () { ExportToExcel(); });
 
         domElements.btnMarkNewProblemAccount.on('click', function () {
             domElements.grpCategories.removeClass('hide');
