@@ -73,6 +73,7 @@
 
         public IEnumerable<ProblemAccountValidatedModel> ValidateProblemAccounts(ValidateProblemAccountInputViewModel model)
         {
+            var result = Enumerable.Empty<ProblemAccountValidatedModel>();
             var criteria = new ValidateUserNamesInputCriteria
             {
                 UserNames = model.UserNames,
@@ -82,8 +83,25 @@
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<ProblemAccountValidatedModel>(criteria).ToList();
-            }        
+                var data = db.Query<ProblemAccountValidatedModel>(criteria);
+
+                if (data != null && data.Any())
+                {
+                    result = data.Select(x => new ProblemAccountValidatedModel
+                    {
+                        UserName = x.UserName,
+                        ActionID = x.ActionID,
+                        Comment = model.Comment,
+                        CustID = x.CustID,
+                        ReasonID = x.ReasonID,
+                        RoleID = x.RoleID,
+                        Site = x.Site,                        
+                        ErrorMsg = x.ErrorMsg
+                    });
+                }
+            }
+
+            return result;
         }
 
         public IEnumerable<GetCustEvidenceByReasonIdModel> GetCustEvidenceByReasonIds()
