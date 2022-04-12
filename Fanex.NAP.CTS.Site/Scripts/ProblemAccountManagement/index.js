@@ -111,10 +111,24 @@
     function ValidateRangeDate() {
         let toDateValue = domElements.dpkToDate.datepicker("getDate");
         let toDateValueAllow = domElements.dpkFromDate.datepicker("getDate");
-        toDateValueAllow.setDate(toDateValueAllow.getDate() + 14);
+        toDateValueAllow.setDate(toDateValueAllow.getDate() + 30);
 
         if (toDateValue > toDateValueAllow) {
-            common.showError("Invalid date range, please select not more than 14 days");
+            common.showError('Due to size limitation, please press "Export to Excel" for more detail information');
+
+            return false;
+        }
+
+        return true;
+    }
+
+    function ValidateRangeDateExport() {
+        let toDateValue = domElements.dpkToDate.datepicker("getDate");
+        let toDateValueAllow = domElements.dpkFromDate.datepicker("getDate");
+        toDateValueAllow.setDate(toDateValueAllow.getDate() + 365);
+
+        if (toDateValue > toDateValueAllow) {
+            common.showError("Invalid date range, please select not more than 365 days");
 
             return false;
         }
@@ -510,58 +524,72 @@
     }  
 
     function ExportToExcel() {
-        let url = common.modifyRelativeUrl('ProblemAccountManagement/ExportToExcel');
-        let params = GetParams();
-        let downloadUrl = url + '?' + $.param(params);
-        let request = new XMLHttpRequest();
-        common.showLoading();
+        if (ValidateRangeDateExport()) {
+            common.showSuccess('Your filter export is being processed. Please wait, this may take some minutes.', 5000);            
 
-        request.open('GET', downloadUrl, true);
-        request.setRequestHeader('Content-Type', 'application/vnd.ms-excel');
-        request.responseType = 'blob';
-        request.timeout = 200000;
-        request.addEventListener("timeout", function (e) {
-            common.closeLoading();
-            common.showError("Export failed (timeout)");
-        });
-        request.onload = function (e) {
-            if (this.status === 200) {
-                let extension = ".xlsx";
-                let date = GetFormattedDate();
-                let filenameFormat = "PAM_{1}{2}";
-                let filename = filenameFormat.format(date, extension);
-                let blob = this.response;
+            common.showLoading();
 
-                if (window.navigator.msSaveOrOpenBlob) {
-                    window.navigator.msSaveBlob(blob, filename);
+            let request = new XMLHttpRequest();
+            request.open('POST', common.modifyRelativeUrl('ProblemAccountManagement/ExportToExcel'), true);
+            request.setRequestHeader('Content-type', 'application/json');
+            request.responseType = 'blob';
+            request.timeout = 240000;
+            request.addEventListener("timeout", function (e) {
+                common.closeLoading();
+                common.showError("Export failed (timeout)");
+            });
+            request.onload = function (e) {
+                if (this.status === 200) {
+                    let extension = ".xlsx";
+                    let date = GetFormattedDate();
+                    let filenameFormat = "PAM_{0}{1}";
+                    let filename = filenameFormat.format(date, extension);
+                    let blob = this.response;
+
+                    if (window.navigator.msSaveOrOpenBlob) {
+                        window.navigator.msSaveBlob(blob, filename);
+                    } else {
+                        let downloadLink = window.document.createElement('a');
+                        let contentTypeHeader = request.getResponseHeader("Content-Type");
+                        downloadLink.href = window.URL.createObjectURL(new Blob([blob], { type: contentTypeHeader }));
+                        
+                        var disposition = request.getResponseHeader('Content-Disposition');
+                        if (disposition && disposition.indexOf('filename') !== -1) {
+                            var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                            var matches = filenameRegex.exec(disposition);
+                            if (matches != null && matches[1]) {
+                                filename = matches[1].replace(/['"]/g, '');
+                            }                            
+                        }
+
+                        downloadLink.download = filename;
+                        document.body.appendChild(downloadLink);
+                        downloadLink.click();
+                        document.body.removeChild(downloadLink);
+                    }
                 } else {
-                    let downloadLink = window.document.createElement('a');
-                    let contentTypeHeader = request.getResponseHeader("Content-Type");
-                    downloadLink.href = window.URL.createObjectURL(new Blob([blob], { type: contentTypeHeader }));
-                    downloadLink.download = filename;
-                    document.body.appendChild(downloadLink);
-                    downloadLink.click();
-                    document.body.removeChild(downloadLink);
+                    console.log(this);
+                    common.showError("Export failed");
                 }
-            } else {
-                console.log(this);
-                common.showError("Export failed");
-            }
 
-            common.closeLoading();
-        };
+                common.closeLoading();
+            };
 
-        request.send();
+            let params = GetParams();
+            request.send(JSON.stringify(params));
+        }        
     }
 
     function GetFormattedDate() {
-        let date = new Date();
-        let stringDateFormat = date.getFullYear().toString()
-            + (date.getMonth() + 1).toString()
-            + date.getDate().toString()
-            + date.getHours().toString()
-            + date.getMinutes().toString()
-            + date.getSeconds().toString();
+        let date = new Date();        
+
+        let stringDateFormat = date.getUTCFullYear().toString()
+            + ('0' + (date.getUTCMonth() + 1)).slice(-2).toString()
+            + ('0' + date.getUTCDate()).slice(-2).toString()
+            + '_'
+            + ('0' + date.getUTCHours()).slice(-2).toString()
+            + ('0' + date.getUTCMinutes()).slice(-2).toString()
+            + ('0' + date.getUTCSeconds()).slice(-2).toString();
 
         return stringDateFormat;
     }

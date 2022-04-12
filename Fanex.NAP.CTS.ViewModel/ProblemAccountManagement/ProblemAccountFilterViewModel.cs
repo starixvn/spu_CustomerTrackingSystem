@@ -14,5 +14,6 @@
 
         public bool HasDownline { get; set; }
 
+        public DateTime DateTime { get; set; }
     }
 }

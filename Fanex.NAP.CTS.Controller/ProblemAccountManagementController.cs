@@ -89,6 +89,7 @@
                     Currency = x.Currency,
                     Category = x.CategoryName,
                     Comment = paCommentSelModel.Any(y => y.Custid == x.CustID) ? paCommentSelModel.FirstOrDefault(y => y.Custid == x.CustID).Comment : string.Empty,
+                    CreatedBy = x.CreatedBy,
                     CreatedDateStr = x.CreatedDate.ToString(Consts.FormatDateToString_MMMddyyyy)
                 });
             }
@@ -146,34 +147,20 @@
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpGet]
+        [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.ProblemAccountManagementMarkNew)]
         public ActionResult ExportToExcel(ProblemAccountFilterViewModel filter)
         {
-            var templatePath = Server.MapPath(ProblemAccountTemplate); // PAM_yyyymmdd_hhmmss
-            var date = DateTime.Now;
-            var hhmmss = date.Hour.ToString() + date.Minute.ToString() + date.Second.ToString();
-            var fileName = string.Format("PAM_{0}_{1}.xlsx", date.ToString(FormatDateTimeToString_YYYYmmdd), hhmmss);
+            var templatePath = Server.MapPath(ProblemAccountTemplate);            
+            filter.DateTime = DateTime.UtcNow.AddHours(-4);
+
+            var fileName = string.Format("PAM_{0}_{1}.xlsx"
+                , filter.DateTime.ToString(FormatDateTimeToString_YYYYmmdd)
+                , filter.DateTime.ToString(Consts.FormatTimeToString_hhmmss));
 
             var problemAccounts = GetProblemAccounts(filter);
 
             var excelFile = _problemAccountManagementService.ExportProblemAccount(problemAccounts.ToList(), fileName, templatePath, filter);
-
-            return File(excelFile, "application/vnd.ms-excel", fileName);
-        }
-
-        [HttpGet]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.ProblemAccountManagementMarkNew)]
-        public ActionResult ExportToExcelTest(string name)
-        {
-            var templatePath = Server.MapPath(ProblemAccountTemplate); // PAM_yyyymmdd_hhmmss
-            var date = DateTime.Now;
-            var hhmmss = date.Hour.ToString() + date.Minute.ToString() + date.Second.ToString();
-            var fileName = string.Format("PAM_{0}_{1}.xlsx", date.ToString(FormatDateTimeToString_YYYYmmdd), hhmmss);
-
-            //var problemAccounts = GetProblemAccounts(filter);
-
-            var excelFile = new byte[2000];
 
             return File(excelFile, "application/vnd.ms-excel", fileName);
         }

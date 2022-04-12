@@ -17,6 +17,7 @@
     using Fanex.NAP.TGRS.Core.ExcelUtility.RichTextExtensions;
     using Newtonsoft.Json;
     using NPOI.SS.UserModel;
+    using NPOI.XSSF.UserModel;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -632,17 +633,63 @@
             }
         }
 
-        public byte[] ExportProblemAccount(List<ProblemAccountViewModel> problemAccounts, string fileName, string templatePath, ProblemAccountFilterViewModel filter)
+        public byte[] ExportProblemAccount(List<ProblemAccountViewModel> data, string fileName, string templatePath, ProblemAccountFilterViewModel filter)
         {
             var writer = new ExcelTemplateWriter(templatePath, fileName, "PAM");            
             writer.CopyRows(0, 1);
 
+            FilterBlock(filter, data.Count, ref writer);
+            writer.CopyRows(2, 1); // Fill Header
+            FillRowData(data, ref writer);
+            writer.SyncColumnsWidth(6);
+
             return writer.ToBytes();
         }
 
-        private void FilterBlock(List<ProblemAccountViewModel> problemAccounts, ref ExcelTemplateWriter writer, ProblemAccountFilterViewModel filter)
+        private void FilterBlock(ProblemAccountFilterViewModel filter, int totalItems, ref ExcelTemplateWriter writer)
         {
+            var boldFont = writer.GetFont(10, 0);
+            var normalFont = writer.GetFont(11, 0);            
 
+            var contentRender = new RichTextRender().Clear();
+            AppendBlockContent(ref contentRender, "From", boldFont, filter.FromDate.ToString(Consts.FormatDateTimeToString_YYYYmmdd), normalFont, "\n");
+            WriteRickText(contentRender, ref writer, 4);
+
+            contentRender = new RichTextRender().Clear();
+            AppendBlockContent(ref contentRender, "To", boldFont, filter.ToDate.ToString(Consts.FormatDateTimeToString_YYYYmmdd), normalFont, "\n");
+            WriteRickText(contentRender, ref writer, 4);
+
+            contentRender = new RichTextRender().Clear();
+            AppendBlockContent(ref contentRender, "Site", boldFont, filter.Sites, normalFont, "\n");
+            WriteRickText(contentRender, ref writer, 4);
+
+            if (!string.IsNullOrEmpty(filter.UserName))
+            {
+                contentRender = new RichTextRender().Clear();
+                AppendBlockContent(ref contentRender, "Username", boldFont, filter.UserName, normalFont, "\n");
+                WriteRickText(contentRender, ref writer, 4);
+            }
+
+            contentRender = new RichTextRender().Clear();
+            AppendBlockContent(ref contentRender, "Search downlines of this account", boldFont, filter.HasDownline ? "true" : "false", normalFont, "\n");
+            WriteRickText(contentRender, ref writer, 4);
+
+            contentRender = new RichTextRender().Clear();
+            AppendBlockContent(ref contentRender, "Total Items", boldFont, totalItems.ToString(), normalFont, "\n");
+            WriteRickText(contentRender, ref writer, 4);
+
+            var dateTime = filter.DateTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss2);
+            contentRender = new RichTextRender().Clear();
+            AppendBlockContent(ref contentRender, "Export DateTime", boldFont, dateTime, normalFont, "\n");
+            WriteRickText(contentRender, ref writer, 4);
+        }
+
+        private void WriteRickText(RichTextRender contentRender, ref ExcelTemplateWriter writer, int idx)
+        {
+            var contentRichTextString = contentRender.XSSFRickRender();
+            XSSFRichTextString[] contentRichTextArray = new XSSFRichTextString[1];
+            contentRichTextArray[0] = contentRichTextString;
+            writer.WriteRow(idx, contentRichTextArray);
         }
 
         private void FillRowData(List<ProblemAccountViewModel> problemAccounts, ref ExcelTemplateWriter writer)
@@ -651,16 +698,21 @@
             {
                 var record = new object[]
                 {
-
+                     item.UserName,
+                     item.Site,
+                     item.Currency,
+                     item.Category,
+                     item.CreatedBy,
+                     item.CreatedDateStr
                 };
 
                 writer.WriteRow(3, record);
             }
         }
 
-        private void AppendBlockContent(ref RichTextRender content, ref int lineCount, string name, IFont nameFont, string value, IFont valueFont, string endString)
+        private void AppendBlockContent(ref RichTextRender content, string name, IFont nameFont, string value, IFont valueFont, string endString)
         {
-            TextBlock nameBlock = new TextBlock(name + ":  ", nameFont);
+            TextBlock nameBlock = new TextBlock(name + ": ", nameFont);
             content = content.AddText(nameBlock);
 
             TextBlock valueBlock = new TextBlock(value, valueFont);
@@ -669,22 +721,9 @@
             if (!string.IsNullOrEmpty(endString))
             {
                 content = content.AddText(endString);
-            }
-
-            lineCount += CountLine(name + value);
-        }
-
-        private int CountLine(string line)
-        {
-            var charPerLine = 180;
-            return Convert.ToInt32(Math.Ceiling((float)line.Length / charPerLine));
-        }
-
-        private void FillHeader(ref ExcelTemplateWriter writer)
-        {
-            writer.CopyRows(2, 1);
-        }
-
+            }            
+        }      
+       
 		public IEnumerable<long> UpdateProblemAccountEvidence(UpdateCategoryParamsModel paras)
         {
             var custIdsJson = JsonConvert.SerializeObject(paras.CustInfos);

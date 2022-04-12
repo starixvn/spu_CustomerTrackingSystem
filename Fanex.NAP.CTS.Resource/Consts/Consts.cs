@@ -22,12 +22,14 @@
         public const string FormatDateToString_MMMddyyyy = "MMM dd, yyyy";
         public const string FormatDateToString_MMMddyyyy2 = "MMM-dd-yyyy";
         public const string FormatDateToString_MMMddyyyyhhmmss = "MMM dd, yyyy HH:mm:ss";
+        public const string FormatDateToString_MMMddyyyyhhmmss2 = "MMM dd, yyyy - HH:mm:ss";
         public const string FormatDateToString_MMMddyyyyhhmmsstt = "MMM dd, yyyy HH:mm:ss tt";
         public const string FormatDateToString_MMMddyyyyhhmm = "MMM dd, yyyy HH:mm";
         public const string FormatDateToString_yyyyMMddHHmmss = "yyyyMMddHHmmss";
         public const string FormatDateTimeToString_YYYYmmddThhddmm = "yyyy-MM-dd'T'HH:mm:ss.fffffff'Z'";
         public const string FormatDateTimeToString_YYYYmmdd = "yyyyMMdd";        
         public const string FormatDatetimeToString_ddMMMyyyyHHmmssfff = "dd MMM, yyyy HH:mm:ss.fff";
+        public const string FormatTimeToString_hhmmss = "HHmmss";
         public const string FormatDecimalToString_2Places = "0.00";
         public const string FormatDecimalToString_Thousands2Places = "#,##0.00";
         public const string FormatDateToString_MMMddhhmmss = "MMM dd HH:mm:ss";
