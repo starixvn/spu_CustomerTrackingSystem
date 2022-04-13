@@ -334,7 +334,7 @@
                 LogService.Info($"PA Rescan - Cust to syncCC - with data: {JsonConvert.SerializeObject(custIdsToSyncCC)}");
         }
 
-        private IEnumerable<InsertProblemAccountModel> GetProblemAccountLosing(IEnumerable<MultipleProblemAccountsModel> problemAccounts, FunctionId functionId)
+        public IEnumerable<InsertProblemAccountModel> GetProblemAccountLosing(IEnumerable<MultipleProblemAccountsModel> problemAccounts, FunctionId functionId)
         {
             if (problemAccounts != null && problemAccounts.Any())
             {
@@ -364,7 +364,7 @@
             return Enumerable.Empty<InsertProblemAccountModel>();
         }
 
-        private IEnumerable<CustEvidenceInsertModel> GetProblemAccountLosing(IEnumerable<CustEvidenceModel> custEvidences, FunctionId functionId)
+        public IEnumerable<CustEvidenceInsertModel> GetProblemAccountLosing(IEnumerable<CustEvidenceModel> custEvidences, FunctionId functionId)
         {
             if (custEvidences != null && custEvidences.Any())
             {
@@ -524,7 +524,7 @@
             }
         }
 
-        private InsertCategoryResultModel InsertProblemAccountDbAccess(string problemAccountJson, bool isRescan)
+        private InsertProblemAccountResultModel InsertProblemAccountDbAccess(string problemAccountJson, bool isRescan)
         {
             var criteria = new InsertProblemAccountCriteria
             {
@@ -534,7 +534,7 @@
 
             var assCustForRollback = repository.Fetch<CheckPACustomerAssociationForRollbackModel>(criteria);
 
-            return new InsertCategoryResultModel
+            return new InsertProblemAccountResultModel
             {
                 ErrorMessage = criteria.ErrorMessage,
                 ErrorCode = string.IsNullOrEmpty(criteria.ErrorMessage) ? 0 : -1,

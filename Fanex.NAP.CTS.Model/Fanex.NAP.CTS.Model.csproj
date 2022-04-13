@@ -216,7 +216,8 @@
     <Compile Include="AssociatedAccountMonitor\CustProfilerModel.cs" />
     <Compile Include="AssociatedAccountMonitor\ValidateAssociatedAccountModel.cs" />
     <Compile Include="CustomerClassify\CustEvidenceInsertModel.cs" />
-    <Compile Include="CustomerClassify\InsertCategoryResultModel.cs" />
+    <Compile Include="CustomerClassify\SynctEvidenceCategoryResultModel.cs" />
+    <Compile Include="CustomerClassify\InsertProblemAccountResultModel.cs" />
     <Compile Include="CustomerClassify\InsertProblemAccountModel.cs" />
     <Compile Include="CustomerClassify\LatestClassification4ReportModel.cs" />
     <Compile Include="CustomerClassify\ProblemAccountLosingClassificationModel.cs" />
@@ -229,7 +230,7 @@
     <Compile Include="LogInputData\LogInputViewModel.cs" />
     <Compile Include="CustomerClassify\LogInputDataModel.cs" />
     <Compile Include="CustomerClassify\RoleCustomerModel.cs" />
-    <Compile Include="CustomerClassify\CustEvidenceModel.cs" />
+    <Compile Include="ImportEvidences\CustEvidenceModel.cs" />
     <Compile Include="CustomerClassify\LatestClassificationModel.cs" />
     <Compile Include="CustomerClassify\MultipleProblemAccountsModel.cs" />
     <Compile Include="FraudCase\NotificationRecipient.cs" />
@@ -242,7 +243,6 @@
     <Compile Include="GraphDB\DirectAssociationParameterModel.cs" />
     <Compile Include="GraphDB\GraphAssociationReportPaging.cs" />
     <Compile Include="ImportEvidences\AddEvidenceResultModel.cs" />
-    <Compile Include="ImportEvidences\AddMultiEvidenceResultModel.cs" />
     <Compile Include="ImportEvidences\InsertAccountEvidenceQueueModel.cs" />
     <Compile Include="LatestTransaction\LatestTransactionModel.cs" />
     <Compile Include="ManageSubscriber\ReUpdateSubscribeBySiteIDModel.cs" />

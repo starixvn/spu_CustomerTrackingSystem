@@ -793,47 +793,39 @@
             }
         }
 
-        public DBResult SyncCustEvidenceToCategory(string custEvidencesJson, bool isRescan, out IEnumerable<long> custIds)
+        public SynctEvidenceCategoryResultModel SyncCustEvidenceToCategory(string custEvidencesJson, bool isRescan, out IEnumerable<long> custIds)
         {
-            var custInfos = Enumerable.Empty<CheckPACustomerAssociationForRollbackModel>();
-            custIds = new List<long>();
-            
-            var criteria = new CustEvidenceSyncToCategoryCriteria
-            {
-                CustEvidencesJson = custEvidencesJson,
-                IsRescan = isRescan
-            };
+            custIds = Enumerable.Empty<long>();
 
             try
             {
-                var repository = new DynamicRepository();
+                var criteria = new CustEvidenceSyncToCategoryCriteria
+                {
+                    CustEvidencesJson = custEvidencesJson,
+                    IsRescan = isRescan
+                };
 
-                custInfos = repository.Fetch<CheckPACustomerAssociationForRollbackModel>(criteria);
+                var custInfos = repository.Fetch<CheckPACustomerAssociationForRollbackModel>(criteria);
 
                 if (!string.IsNullOrEmpty(criteria.ErrorMessage))
                 {
                     LogService.Error("CTS - AccountService SyncCustEvidenceToCategory failed: " + criteria.ErrorMessage);
-
-                    return new DBResult { ErrorCode = -1, ErrorMsg = criteria.ErrorMessage };
                 }
 
-                if (custInfos != null && custInfos.Any())
-                    custIds = custInfos.Select(x => (long)x.CustID);
+                custIds = custInfos?.Select(x => x.CustID) ?? Enumerable.Empty<long>();
 
-                return new DBResult
+                return new SynctEvidenceCategoryResultModel
                 {
-                    ErrorCode = 0,
-                    ErrorMsg = string.Empty,
-                    OutParam = new Hashtable {
-                        { "custInfos", custInfos }
-                    }
+                    ErrorCode = string.IsNullOrEmpty(criteria.ErrorMessage) ? 0 : -1,
+                    ErrorMsg = criteria.ErrorMessage,
+                    CustInfo = custInfos
                 };
             }
             catch (Exception ex)
             {
                 LogService.Error("CTS - AccountService SyncCustEvidenceToCategory exception: " + ex.Message, ex);
 
-                return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message, OutParam = new Hashtable() };
+                return new SynctEvidenceCategoryResultModel { ErrorCode = -1, ErrorMsg = ex.Message, CustInfo = Enumerable.Empty<CheckPACustomerAssociationForRollbackModel>() };
             }
         }
 

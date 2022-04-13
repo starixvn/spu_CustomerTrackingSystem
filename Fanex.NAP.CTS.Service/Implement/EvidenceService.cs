@@ -87,7 +87,7 @@
 
         public AddEvidenceResultModel AddCustomersEvidences(PlaceMultiCustomerEvidence customerEvidenceList)
         {
-            var result = new List<AddMultiEvidenceResultModel>();
+            var result = new List<CustEvidenceModel>();
 
             var criteria = new MultiCustomerEvidencesInsertCriteria
             {
@@ -97,7 +97,7 @@
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                result = db.Query<AddMultiEvidenceResultModel>(criteria).ToList();
+                result = db.Query<CustEvidenceModel>(criteria).ToList();
             }
 
             return new AddEvidenceResultModel { ErrorMessage = criteria.ErrorMessage, Eivdences = result };

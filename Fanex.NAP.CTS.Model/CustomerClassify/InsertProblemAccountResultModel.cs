@@ -3,7 +3,7 @@
     using Fanex.NAP.CTS.Model.ImportEvidences;
     using System.Collections.Generic;
 
-    public class InsertCategoryResultModel
+    public class InsertProblemAccountResultModel
     {
         public string ErrorMessage { get; set; }
 

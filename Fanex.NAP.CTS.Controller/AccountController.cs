@@ -51,7 +51,7 @@
         private readonly IGraphService _graphService;
         private readonly ITransactionService _transService;
         private readonly ICustomerEvidenceService _customerEvidenceService;
-        private readonly IRescanCustomerClassificationService _customerClassifyService;
+        private readonly IRescanCustomerClassificationService _rescanClassificationService;
         private readonly ICustomerClassificationService _customerClassificationService;
         private readonly ICommonService _commonService;
         private readonly IRobotClassificationService _robotClassificationService;
@@ -66,7 +66,7 @@
             _graphService = new GraphService();
             _transService = new TransactionService();
             _customerEvidenceService = new CustomerEvidenceService();
-            _customerClassifyService = new RescanCustomerClassificationService();
+            _rescanClassificationService = new RescanCustomerClassificationService();
             _customerClassificationService = new CustomerClassificationService();
             _commonService = new CommonService();
             _robotClassificationService = new RobotClassificationService();
@@ -1088,17 +1088,19 @@
 
             if (result.ErrorCode == 0)
             {
-                var objects = new[] { new {
-                    model.CTSCustId,
-                    model.CustId,
-                    model.SubscriberId,
-                    model.EvidenceId,
+                var objects = new[] { new CustEvidenceModel {
+                    CTSCustId = model.CTSCustId,
+                    CustId = model.CustId,
+                    SubscriberId = model.SubscriberId,
+                    EvidenceId = model.EvidenceId,
                     ActionType = 0
                 } };
 
-                var syncCustIds = Enumerable.Empty<long>();
+                var syncCustIds = Enumerable.Empty<long>();     
 
-                var custEvidenceJson = JsonConvert.SerializeObject(objects);
+                var paLosingClassification = _rescanClassificationService.GetProblemAccountLosing(objects, FunctionId.PlaceSingleEvidence);
+
+                var custEvidenceJson = JsonConvert.SerializeObject(paLosingClassification);
 
                 var syncResult = _accountService.SyncCustEvidenceToCategory(custEvidenceJson, false, out syncCustIds);
 
@@ -1116,14 +1118,7 @@
                     {
                         Task.Run(() =>
                         {
-                            var hashCustInfos = syncResult.OutParam["custInfos"];
-
-                            if (hashCustInfos != null)
-                            {
-                                var custInfos = (IEnumerable<CheckPACustomerAssociationForRollbackModel>)hashCustInfos;
-
-                                _accountService.CheckNewPAAssociationCustomerForRollback(custInfos);
-                            }
+                             _accountService.CheckNewPAAssociationCustomerForRollback(syncResult.CustInfo);
                         }),
                         Task.Run(() =>
                         {
@@ -1148,7 +1143,7 @@
             var result = _accountService.RemoveFlaggedEvidence(model);
 
             if (result.ErrorCode == 0)
-            {
+            {              
                 var objects = new[] { new {
                     model.CTSCustId,
                     model.CustId,
@@ -1166,7 +1161,7 @@
                 if (syncResult.ErrorCode == 0)
                 {
                     // Rescan Problem Account & Normal Account
-                    _customerClassifyService.RescanCustomerClassify(new RescanCustClassificationModel
+                    _rescanClassificationService.RescanCustomerClassify(new RescanCustClassificationModel
                     {
                         CustIds = syncCustIds,
                         IsCheckPAFromNAP = true,
@@ -1585,7 +1580,7 @@
                     if (custIdInt != 0)
                     {
                         // Rescan Problem Account & Normal Account
-                        _customerClassifyService.RescanCustomerClassify(new RescanCustClassificationModel
+                        _rescanClassificationService.RescanCustomerClassify(new RescanCustClassificationModel
                         {
                             CustIds = new List<long> { custIdInt },
                             IsCheckPAFromNAP = true,
@@ -1635,7 +1630,7 @@
                 && !isProblemAccount
                 && custSubId == 0)
             {
-                _customerClassifyService.RescanCustomerClassify(new RescanCustClassificationModel
+                _rescanClassificationService.RescanCustomerClassify(new RescanCustClassificationModel
                 {
                     CustIds = new List<long> { custId },
                     IsCheckPAFromNAP = true,

@@ -53,7 +53,7 @@
         private readonly IAssociatedAccountService _associationService;
         private readonly IProblemAccountMonitorService _problemAccountMonitorService;
         private readonly ICategoryService _categoryService;
-        private readonly IRescanCustomerClassificationService _customerClassifyService;
+        private readonly IRescanCustomerClassificationService _rescanClassificationService;
         private readonly ICustomerClassificationService _custClassificationService;
         private readonly ISubscriberService _subscriberService;
         private readonly IProblemCaseMonitorService _problemCaseMonitorService;
@@ -74,7 +74,7 @@
             _custEvidenceService = new CustomerEvidenceService();
             _problemAccountMonitorService = new ProblemAccountMonitorService();
             _categoryService = new CategoryService();
-            _customerClassifyService = new RescanCustomerClassificationService();
+            _rescanClassificationService = new RescanCustomerClassificationService();
             _custClassificationService = new CustomerClassificationService();
             _subscriberService = new SubscriberService();
             _problemCaseMonitorService = new Service.Implement.Api.ProblemCaseMonitorService();
@@ -117,7 +117,11 @@
                     {
                         var syncCustIds = Enumerable.Empty<long>();
 
-                        var syncResult = _accountService.SyncCustEvidenceToCategory(JsonConvert.SerializeObject(result.Eivdences), false, out syncCustIds);
+                        var paLosingClassification = _rescanClassificationService.GetProblemAccountLosing(result.Eivdences, FunctionId.PlaceSingleEvidence);
+
+                        var custEvidenceJson = JsonConvert.SerializeObject(paLosingClassification);
+
+                        var syncResult = _accountService.SyncCustEvidenceToCategory(custEvidenceJson, false, out syncCustIds);
 
                         Parallel.Invoke(() =>
                         {
@@ -135,14 +139,7 @@
                                     DangerLevelType = DangerLevel.ABI
                                 });
 
-                                var hashCustInfos = syncResult.OutParam["custInfos"];
-
-                                if (hashCustInfos != null)
-                                {
-                                    var custInfos = (IEnumerable<CheckPACustomerAssociationForRollbackModel>)hashCustInfos;
-
-                                    _accountService.CheckNewPAAssociationCustomerForRollback(custInfos);
-                                }
+                               _accountService.CheckNewPAAssociationCustomerForRollback(syncResult.CustInfo);
                             }
                         },
                         () =>
@@ -246,7 +243,11 @@
                 {
                     var syncCustIds = Enumerable.Empty<long>();
 
-                    var syncResult = _accountService.SyncCustEvidenceToCategory(JsonConvert.SerializeObject(result.Eivdences), false, out syncCustIds);
+                    var paLosingClassification = _rescanClassificationService.GetProblemAccountLosing(result.Eivdences, FunctionId.PlaceSingleEvidence);
+
+                    var custEvidenceJson = JsonConvert.SerializeObject(paLosingClassification);
+
+                    var syncResult = _accountService.SyncCustEvidenceToCategory(custEvidenceJson, false, out syncCustIds);
 
                     Parallel.Invoke(() =>
                     {
@@ -264,14 +265,7 @@
                                 DangerLevelType = DangerLevel.ABI
                             });
 
-                            var hashCustInfos = syncResult.OutParam["custInfos"];
-
-                            if (hashCustInfos != null)
-                            {
-                                var custInfos = (IEnumerable<CheckPACustomerAssociationForRollbackModel>)hashCustInfos;
-
-                                _accountService.CheckNewPAAssociationCustomerForRollback(custInfos);
-                            }
+                            _accountService.CheckNewPAAssociationCustomerForRollback(syncResult.CustInfo);
                         }
                     },
                     () =>
@@ -586,7 +580,7 @@
                         _custEvidenceService.UpdateBetLimitOfUnflaggedCustomer(custEviRemovedIds);
                     }
 
-                    _customerClassifyService.RescanCustomerClassify(new RescanCustClassificationModel
+                    _rescanClassificationService.RescanCustomerClassify(new RescanCustClassificationModel
                     {
                         CustIds = output.CustIds,
                         IsCheckPAFromNAP = false,
@@ -672,7 +666,7 @@
 
                         Parallel.Invoke(() =>
                         {
-                            _customerClassifyService.CheckNewPAAssociationCustomerForRollback(assCustForRollbacks);
+                            _rescanClassificationService.CheckNewPAAssociationCustomerForRollback(assCustForRollbacks);
                         },
                         () =>
                         {

@@ -42,7 +42,7 @@
 
         public AddEvidenceResultModel AddCustEvidenceMultipleByCustId(string custIds, int evidenceId, int userId)
         {
-            var result = new List<AddMultiEvidenceResultModel>();
+            var result = new List<CustEvidenceModel>();
 
             var custEvidenceList = custIds.Split(',').Select(ids => new AddAccountEvidenceModel()
             {
@@ -61,7 +61,7 @@
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                result = db.Query<AddMultiEvidenceResultModel>(criteria).ToList();
+                result = db.Query<CustEvidenceModel>(criteria).ToList();
             }
 
             return new AddEvidenceResultModel { ErrorMessage = criteria.ErrorMessage, Eivdences = result };

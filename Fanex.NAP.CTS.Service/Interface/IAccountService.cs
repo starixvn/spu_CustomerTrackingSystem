@@ -78,7 +78,7 @@
 
         DBResult RemoveFlaggedEvidence(RemoveEvidenceModel model);
 
-        DBResult SyncCustEvidenceToCategory(string custEvidencesJson, bool isRescan, out IEnumerable<long> custIds);
+        SynctEvidenceCategoryResultModel SyncCustEvidenceToCategory(string custEvidencesJson, bool isRescan, out IEnumerable<long> custIds);
 
         List<AccountExceptionsModel> GetAccountExceptions(long ctsCustId);
 
