@@ -795,7 +795,7 @@
 
         public DBResult SyncCustEvidenceToCategory(string custEvidencesJson, bool isRescan, out IEnumerable<long> custIds)
         {
-            var custInfos = Enumerable.Empty<NewPAAssociationCustomerForRollbackModel>();
+            var custInfos = Enumerable.Empty<CheckPACustomerAssociationForRollbackModel>();
             custIds = new List<long>();
             
             var criteria = new CustEvidenceSyncToCategoryCriteria
@@ -808,7 +808,7 @@
             {
                 var repository = new DynamicRepository();
 
-                custInfos = repository.Fetch<NewPAAssociationCustomerForRollbackModel>(criteria);
+                custInfos = repository.Fetch<CheckPACustomerAssociationForRollbackModel>(criteria);
 
                 if (!string.IsNullOrEmpty(criteria.ErrorMessage))
                 {
@@ -961,7 +961,7 @@
             }
         }
 
-        public int CheckNewPAAssociationCustomerForRollback(IEnumerable<NewPAAssociationCustomerForRollbackModel> assCustForRollbacks)
+        public int CheckNewPAAssociationCustomerForRollback(IEnumerable<CheckPACustomerAssociationForRollbackModel> assCustForRollbacks)
         {
             var result = 0;
 

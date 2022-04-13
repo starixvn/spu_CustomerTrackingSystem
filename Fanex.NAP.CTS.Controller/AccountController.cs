@@ -1120,7 +1120,7 @@
 
                             if (hashCustInfos != null)
                             {
-                                var custInfos = (IEnumerable<NewPAAssociationCustomerForRollbackModel>)hashCustInfos;
+                                var custInfos = (IEnumerable<CheckPACustomerAssociationForRollbackModel>)hashCustInfos;
 
                                 _accountService.CheckNewPAAssociationCustomerForRollback(custInfos);
                             }

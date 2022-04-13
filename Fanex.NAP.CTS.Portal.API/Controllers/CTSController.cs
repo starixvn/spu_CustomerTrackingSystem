@@ -139,7 +139,7 @@
 
                                 if (hashCustInfos != null)
                                 {
-                                    var custInfos = (IEnumerable<NewPAAssociationCustomerForRollbackModel>)hashCustInfos;
+                                    var custInfos = (IEnumerable<CheckPACustomerAssociationForRollbackModel>)hashCustInfos;
 
                                     _accountService.CheckNewPAAssociationCustomerForRollback(custInfos);
                                 }
@@ -268,7 +268,7 @@
 
                             if (hashCustInfos != null)
                             {
-                                var custInfos = (IEnumerable<NewPAAssociationCustomerForRollbackModel>)hashCustInfos;
+                                var custInfos = (IEnumerable<CheckPACustomerAssociationForRollbackModel>)hashCustInfos;
 
                                 _accountService.CheckNewPAAssociationCustomerForRollback(custInfos);
                             }
@@ -646,7 +646,7 @@
                    
                     if (updateCategoryResult != null && updateCategoryResult.Any())
                     {
-                        var assCustForRollbacks = updateCategoryResult.Select(x => new NewPAAssociationCustomerForRollbackModel
+                        var assCustForRollbacks = updateCategoryResult.Select(x => new CheckPACustomerAssociationForRollbackModel
                         {
                             CTSCustID = x.CTSCustID,
                             CustID = x.CustID

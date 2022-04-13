@@ -8,6 +8,6 @@
     {
         void RescanCustomerClassify(RescanCustClassificationModel para);
 
-        int CheckNewPAAssociationCustomerForRollback(IEnumerable<NewPAAssociationCustomerForRollbackModel> assCustForRollbacks);
+        void CheckNewPAAssociationCustomerForRollback(IEnumerable<CheckPACustomerAssociationForRollbackModel> assCustForRollbacks);
     }
 }

@@ -215,13 +215,17 @@
     <Compile Include="AssociatedAccountMonitor\AssociatedAccountMonitorModel.cs" />
     <Compile Include="AssociatedAccountMonitor\CustProfilerModel.cs" />
     <Compile Include="AssociatedAccountMonitor\ValidateAssociatedAccountModel.cs" />
+    <Compile Include="CustomerClassify\CustEvidenceInsertModel.cs" />
+    <Compile Include="CustomerClassify\InsertCategoryResultModel.cs" />
+    <Compile Include="CustomerClassify\InsertProblemAccountModel.cs" />
     <Compile Include="CustomerClassify\LatestClassification4ReportModel.cs" />
+    <Compile Include="CustomerClassify\ProblemAccountLosingClassificationModel.cs" />
     <Compile Include="CustomerClassify\RescanCustClassificationModel.cs" />
     <Compile Include="CustomerClassify\RobotUserModel.cs" />
     <Compile Include="DTO\CustomerEvidence.cs" />
     <Compile Include="DTO\CustomerEvidenceForTW.cs" />
     <Compile Include="GraphDB\AssociationProfileParameterModel.cs" />
-    <Compile Include="ImportEvidences\NewPAAssociationCustomerForRollbackModel.cs" />
+    <Compile Include="ImportEvidences\CheckPACustomerAssociationForRollbackModel.cs" />
     <Compile Include="LogInputData\LogInputViewModel.cs" />
     <Compile Include="CustomerClassify\LogInputDataModel.cs" />
     <Compile Include="CustomerClassify\RoleCustomerModel.cs" />
@@ -347,7 +351,7 @@
     <Compile Include="Subscriber\SubscriberAssignmentUpdate.cs" />
     <Compile Include="Subscriber\SubscriberInfo.cs" />
     <Compile Include="PushDataToExternal\CustomerClassForMainDb.cs" />
-    <Compile Include="PushDataToExternal\InsertCategoryResultModel.cs" />
+    <Compile Include="PushDataToExternal\InsertEvidenceCategoryResultModel.cs" />
     <Compile Include="PushDataToExternal\PushDataToExternalModel.cs" />
     <Compile Include="TransactionReport\TransactionModel.cs" />
     <Compile Include="Transaction\DataTableAjaxPostModel.cs" />

@@ -213,7 +213,7 @@
             return htmlBuilder.BuildChoice(coreTicket, ticketHelper, null, true);           
         }
 
-        public InsertCategoryResultModel UpdateRemovedProblemAccountToCTS(string custid)
+        public InsertEvidenceCategoryResultModel UpdateRemovedProblemAccountToCTS(string custid)
         {
             var custIds = new List<long>();
             var repository = new DynamicRepository();
@@ -235,7 +235,7 @@
                 custIds = repository.Fetch<long>(criteria).ToList();
             }
 
-            return new InsertCategoryResultModel() { ErrorMessage = criteria.ErrorMessage, CustIds = custIds };
+            return new InsertEvidenceCategoryResultModel() { ErrorMessage = criteria.ErrorMessage, CustIds = custIds };
         }
 
         public IEnumerable<TWProblemAccountModel> GetCustClassBySite(string usernameList)
