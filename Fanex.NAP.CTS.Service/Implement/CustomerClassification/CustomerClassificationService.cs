@@ -131,6 +131,12 @@
                     {
                         retryTime = -1;
                     }
+
+                    // write log for test
+                    if (result.ErrorCode == 0)
+                    {
+                        LogService.Info($"CTS - UpdateCCToMainDB successful with listCust: {JsonConvert.SerializeObject(customerClassifications)}");
+                    }
                 }
                 catch (Exception ex)
                 {

@@ -304,31 +304,6 @@
             
             repository.Execute(criteria);
             return criteria.SuccessList;
-        }
-
-        public int UpdateProblemAccountEvidence(UpdateCategoryParamsModel paras)
-        {
-            var custIdsJson = JsonConvert.SerializeObject(paras.CustInfos);
-
-            var criteria = new UpdateProblemAccountEvidenceCriteria
-            {
-                CustInfo = custIdsJson,
-                UserID = paras.UserId,
-                SourceType = 1
-            };
-
-            return repository.Execute(criteria);
-        }
-
-        public int RemoveProblemAccountEvidence(string custIds)
-        {
-            var criteria = new RemoveProblemAccountEvidenceCriteria
-            {
-                CustIDs = custIds,
-                SourceType = 1
-            };
-
-            return repository.Execute(criteria);
-        }
+        }        
     }
 }

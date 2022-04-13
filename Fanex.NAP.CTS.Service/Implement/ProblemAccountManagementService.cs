@@ -628,5 +628,34 @@
                 LogService.Error($"CTS - Remove Problem Account failed: { ex.Message } - custIds: {custIdList}" + ex.Message, ex);
             }
         }
+
+        public IEnumerable<long> UpdateProblemAccountEvidence(UpdateCategoryParamsModel paras)
+        {
+            var custIdsJson = JsonConvert.SerializeObject(paras.CustInfos);
+            var repository = new DynamicRepository();
+
+            var criteria = new UpdateProblemAccountEvidenceCriteria
+            {
+                CustInfo = custIdsJson,
+                UserID = paras.UserId,
+                SourceType = 1
+            };
+
+            LogService.Info($"CTS Portal API - UpdateProblemAccountEvidence custIdsJson:  {custIdsJson}");
+
+            return repository.Fetch<long>(criteria);
+        }
+
+        public IEnumerable<long> RemoveProblemAccountEvidence(string custIds)
+        {
+            var repository = new DynamicRepository();
+            var criteria = new RemoveProblemAccountEvidenceCriteria
+            {
+                CustIDs = custIds,
+                SourceType = 1
+            };
+
+            return repository.Fetch<long>(criteria);
+        }
     }
 }

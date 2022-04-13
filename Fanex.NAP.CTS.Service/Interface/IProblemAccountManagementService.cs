@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Service
-{    
+{
+    using Fanex.NAP.CTS.Model.API.UpdateCategoryWhenPAUpdated;
     using Fanex.NAP.CTS.Model.ProblemAccountManagement;
     using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
     using Fanex.NAP.CTS.ViewModel.ProblemAccountManagement;    
@@ -30,6 +31,10 @@
         IEnumerable<ResultProblemAccountAddCustomerModel> UnmarkProblemAccountSiteCredit(IEnumerable<ProblemAccountValidatedModel> models, bool isExceptDownlinesByTVS, bool isExceptDownlinesByOPS, int userID);
 
         IEnumerable<ResultProblemAccountAddCustomerModel> UnmarkProblemAccountSiteLicensee(IEnumerable<ProblemAccountValidatedModel> models, int userID);
+
+        IEnumerable<long> UpdateProblemAccountEvidence(UpdateCategoryParamsModel paras);
+
+        IEnumerable<long> RemoveProblemAccountEvidence(string custIds);
 
     }
 }
