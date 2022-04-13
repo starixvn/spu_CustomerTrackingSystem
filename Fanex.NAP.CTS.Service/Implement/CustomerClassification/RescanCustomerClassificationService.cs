@@ -3,8 +3,6 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.Logging;
-    using Fanex.Logging.Extensions;
-    using Fanex.Logging.Extensions.Database;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria;
@@ -17,7 +15,6 @@
     using Fanex.NAP.CTS.Model.LogInputData;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
-    using Fanex.NAP.CTS.Resource.Consts;
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
@@ -193,7 +190,7 @@
             {
                 var problemAccounts = GetExistedProblemAccountsFromNAPPA(string.Join(",", para.CustIds)).ToList();
 
-                if(problemAccounts!=null && problemAccounts.Any())
+                if (problemAccounts != null && problemAccounts.Any())
                 {
                     logInputDataService.LogInputData(new LogInputViewModel { ProblemAccounts = problemAccounts }, para.FuncId_CheckPA);
 
@@ -266,7 +263,6 @@
                         if (result.ErrorCode == -1)
                         {
                             LogService.Error($"Web - CustomerClassifyService - InsertProblemAccount failed: {result.ErrorMessage} - Data: {paLosing}");
-                           
                         }
                         else
                         {
@@ -283,7 +279,6 @@
 
                 return new InsertEvidenceCategoryResultModel { ErrorMessage = ex.Message, CustIds = null };
             }
-
 
             return new InsertEvidenceCategoryResultModel() { ErrorMessage = string.Empty, CustIds = custIds };
         }
@@ -322,7 +317,6 @@
                 return new InsertEvidenceCategoryResultModel { ErrorMessage = ex.Message, CustIds = null };
             }
 
-
             return new InsertEvidenceCategoryResultModel() { ErrorMessage = string.Empty, CustIds = custIds };
         }
 
@@ -339,7 +333,7 @@
             if (_isWriteLogInfo)
                 LogService.Info($"PA Rescan - Cust to syncCC - with data: {JsonConvert.SerializeObject(custIdsToSyncCC)}");
         }
-        
+
         private IEnumerable<InsertProblemAccountModel> GetProblemAccountLosing(IEnumerable<MultipleProblemAccountsModel> problemAccounts, FunctionId functionId)
         {
             if (problemAccounts != null && problemAccounts.Any())
@@ -427,7 +421,7 @@
             {
                 custIds.RemoveAll(x => custRescanPA.Contains(x));
 
-                if(custIds.Any())
+                if (custIds.Any())
                 {
                     var custIdsChunk = custIds.Chunk(ConfigSettings.PushCCToExternalChunkSize).ToList();
 
@@ -437,7 +431,7 @@
 
                         ClassifyCustomerGeneralCategoryDaily(custToString, funcId, false);
                     }
-                }    
+                }
             }
         }
 
@@ -589,7 +583,7 @@
 
             return repository.Fetch<ProblemAccountLosingClassificationModel>(criteria) ?? Enumerable.Empty<ProblemAccountLosingClassificationModel>();
         }
-        
+
         #endregion DataAccess Layer
     }
 }

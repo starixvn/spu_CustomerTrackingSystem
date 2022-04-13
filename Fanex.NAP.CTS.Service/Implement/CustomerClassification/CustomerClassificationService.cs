@@ -231,7 +231,6 @@
             return true;
         }
 
-
         #region DataAccess Layer
 
         public DBResult UpdateCCToMainDB(IEnumerable<LatestClassificationModel> customerClassList)
@@ -325,7 +324,7 @@
                 repository.Execute(criteria);
             }
         }
-        #endregion
 
+        #endregion DataAccess Layer
     }
 }
