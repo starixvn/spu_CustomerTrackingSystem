@@ -36,7 +36,7 @@
 		<Setting Key="FS_Rpt_CTSMatchMonitor_Details_GetTickets" SpName="FS_Rpt_CTSMatchMonitor_Details_GetTickets" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
 		<Setting Key="NAP_BLControl_EvidenceFlagged" SpName="NAP_BLControl_EvidenceFlagged_UAT1" DbName="DBCust.CustDB.bodbAdminNet" />
 		<Setting Key="NAP_BLControl_EvidenceUnflagged" SpName="NAP_BLControl_EvidenceUnflagged_UAT1" DbName="DBCust.CustDB.bodbAdminNet" />
-		<Setting Key="Acc_CustomerUpdateCustomerClass" SpName="Acc_CustomerUpdateCustomerClass_xtest" DbName="DBCust.CustDB.bodbAdminNet" TimeOut="300" />
+		<Setting Key="Acc_CustomerUpdateCustomerClass" SpName="Acc_CustomerUpdateCustomerClass_xpre" DbName="DBCust.CustDB.bodbAdminNet" TimeOut="300" />
 		<Setting Key="TicketVoiding_TicketsInRequest_Select" SpName="TicketVoiding_TicketsInRequest_Select" DbName="DBCTS.bodb02.bodbSPUNet" />
 		<Setting Key="CTS_CustomerProfile_FraudInfo_Get" SpName="CTS_CustomerProfile_FraudInfo_Get" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
 		<Setting Key="CTS_RobotUserStatus_Get" SpName="CTS_RobotUserStatus_Get" DbName="DBONUSER.ON_USER.bodbSPUNet" />
@@ -81,5 +81,9 @@
 		<Setting Key="NAP_ProblemAccount_CustomerCommentSel" SpName="NAP_ProblemAccount_CustomerCommentSel" DbName="DBCTS.bodb02.bodbSPUNet" />
 		<Setting Key="Nap_ProblemAccount_AddCustomer" SpName="Nap_ProblemAccount_AddCustomer" DbName="DBCust.CustDB.bodbAdminNet" />
 		<Setting Key="NAP_ProblemAccount_LicenseeAddCustomer" SpName="NAP_ProblemAccount_LicenseeAddCustomer" DbName="DBCust.CustDB.bodbAdminNet" />
+		<Setting Key="NAP_ProblemAccount_LicenseeAccountReasonUpd" SpName="NAP_ProblemAccount_LicenseeAccountReasonUpd" DbName="DBCust.CustDB.bodbAdminNet" />
+		<Setting Key="NAP_ProblemAccount_LicenseeRemoveCustomer" SpName="NAP_ProblemAccount_LicenseeRemoveCustomer" DbName="DBCust.CustDB.bodbAdminNet" />
+		<Setting Key="NAP_ProblemAccount_RemoveCustomer" SpName="NAP_ProblemAccount_RemoveCustomer" DbName="DBCust.CustDB.bodbAdminNet" />
+		<Setting Key="NAP_ProblemAccount_UpdateCustomer" SpName="NAP_ProblemAccount_UpdateCustomer" DbName="DBCust.CustDB.bodbAdminNet" />
 	</Function>
 </Functions>

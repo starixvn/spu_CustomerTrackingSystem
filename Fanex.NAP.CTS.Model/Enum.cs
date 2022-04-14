@@ -97,4 +97,12 @@
         Overrride = 2,
         Clear = 3
     }
+
+    public enum ProblemAccountAction
+    {
+        Mark = 1,
+        Update = 2,
+        Unmark = 3
+    }
+   
 }

@@ -20,6 +20,10 @@ body {
             top: 11.5rem;
             background: #fff;
             z-index: 9;
+
+            .button-mark {
+                margin-left: 6px;
+            }
         }
 
         .wrapper-info-table {
@@ -116,5 +120,20 @@ body {
                 }
             }
         }
+    }    
+}
+
+.hide {
+    display: none;
+}
+
+.group-checkbox-downline {
+    border: 1px solid #ddd;
+    margin: 6px 0px 6px 6px;
+    padding: 3px;
+
+    .checkbox-downline {
+        margin: 4px;  
+        padding: 2px;
     }
 }

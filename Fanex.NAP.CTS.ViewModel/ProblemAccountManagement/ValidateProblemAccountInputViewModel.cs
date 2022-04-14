@@ -1,5 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.ProblemAccountManagement
-{    
+{
+    using Fanex.NAP.CTS.Model;
+
     public class ValidateProblemAccountInputViewModel
     {
         public string UserNames { get; set; }
@@ -8,7 +10,11 @@
 
         public string Comment { get; set; }
 
-        public int UserID { get; set; }
+        public ProblemAccountAction PAAction { get; set; }
+
+        public bool IsExceptDownlinesByTVS { get; set; }
+
+        public bool IsExceptDownlinesByOPS { get; set; }
 
     }
 }

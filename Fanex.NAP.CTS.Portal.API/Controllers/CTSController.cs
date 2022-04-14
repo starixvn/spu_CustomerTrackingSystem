@@ -59,6 +59,7 @@
         private readonly ICustomerClassificationService _custClassificationService;
         private readonly ISubscriberService _subscriberService;
         private readonly IProblemCaseMonitorService _problemCaseMonitorService;
+        private readonly IProblemAccountManagementService _problemAccountManagementService;        
         private readonly ILogInputDataService logInputDataService;
         private readonly IUpdateCategoryService _updateCategoryService;
         private readonly IAntiFraudCenterService _antiFraudCenterService;
@@ -83,6 +84,7 @@
             _updateCategoryService = new UpdateCategoryService();
             _antiFraudCenterService = new AntiFraudCenterService();
             _customerClassService = new SpecialCustomerClassService();
+            _problemAccountManagementService = new ProblemAccountManagementService();
         }
 
         /// <summary>
@@ -578,6 +580,16 @@
                     if (isWriteLogInfo)
                         LogService.Info($"CTS Portal API - UpdateRemovedProblemAccountToCTS successful custIds:  {JsonConvert.SerializeObject(output.CustIds)}");
 
+                    var custEviRemoved = _problemAccountManagementService.RemoveProblemAccountEvidence(custIds);
+
+                    if (custEviRemoved != null && custEviRemoved.Any())
+                    {
+                        var custEviRemovedIds = string.Join(",", custEviRemoved);
+                        _custEvidenceService.UpdateBetLimitOfUnflaggedCustomer(custEviRemovedIds);
+
+                        LogService.Info($"CTS Portal API - UpdateBetLimitOfUnflaggedCustomer successful custIds:  {custEviRemovedIds}");
+                    }
+
                     _customerClassifyService.RescanCustomerClassify(new RescanCustClassificationModel
                     {
                         CustIds = output.CustIds,
@@ -635,7 +647,7 @@
                 if (paras != null && paras.CustInfos != null && paras.CustInfos.Any())
                 {
                     var updateCategoryResult = _updateCategoryService.UpdateCategoryToCTSWhenPAUpdated(paras);
-
+                   
                     if (updateCategoryResult != null && updateCategoryResult.Any())
                     {
                         var assCustForRollbacks = updateCategoryResult.Select(x => new NewPAAssociationCustomerForRollbackModel
@@ -654,12 +666,25 @@
                             DangerLevelType = DangerLevel.ABI
                         };
 
+                        var custEviUpdated = _problemAccountManagementService.UpdateProblemAccountEvidence(paras);
+
+                        if (custEviUpdated != null && custEviUpdated.Any())
+                        {
+                            var custEviUpdatedIds = string.Join(",", custEviUpdated);
+                            _custEvidenceService.UpdateBetLimitOfFlaggedCustomer(custEviUpdatedIds);
+
+                            LogService.Info($"CTS Portal API - UpdateBetLimitOfFlaggedCustomer successful custIds:  {custEviUpdatedIds}");
+                        }
+
                         Parallel.Invoke(() =>
                         {
                             _customerClassifyService.CheckNewPAAssociationCustomerForRollback(assCustForRollbacks);
                         },
                         () =>
                         {
+                            // write log for test
+                            LogService.Info($"CTS Portal API - PushDataToExternal successful listCustIdToSyncCC:  {JsonConvert.SerializeObject(listCustIdToSyncCC)}");
+
                             _custClassificationService.PushDataToExternal(listCustIdToSyncCC, options);
                         },
                         () =>
@@ -671,6 +696,8 @@
             }
             catch (Exception ex)
             {
+                LogService.Error($"CTS Portal API - UpdateCategoryToCTSWhenPAUpdated endpoint - Exception: {ex.Message} with params {JsonConvert.SerializeObject(paras)}", ex);
+
                 result = new ApiResultModel
                 {
                     ErrorMessage = ex.Message,
