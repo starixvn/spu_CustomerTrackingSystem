@@ -32,8 +32,7 @@
         IEnumerable<DetailTicketVoidingInRequestModel> GetTicketVoidingInRequest(int matchId, string tranIdList);
 
         string GetHtmlChoice(DetailTicketsModel ticket);
-
-        InsertCategoryResultModel UpdateRemovedProblemAccountToCTS(string custids);        
+  
         InsertEvidenceCategoryResultModel UpdateRemovedProblemAccountToCTS(string custids);
 
         IEnumerable<TWProblemAccountModel> GetCustClassBySite(string usernameList);
