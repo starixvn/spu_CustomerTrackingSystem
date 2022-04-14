@@ -2,7 +2,7 @@
 {
     public class CustInfoModel
     {
-        public int CustID { get; set; }
+        public long CustID { get; set; }
 
         public int? FromReasonID { get; set; }
 

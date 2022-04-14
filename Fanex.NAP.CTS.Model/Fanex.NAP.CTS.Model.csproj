@@ -173,8 +173,9 @@
     <Compile Include="API\CustomerClassification.cs" />
     <Compile Include="API\ForceSpecialCustomerClassModel.cs" />
     <Compile Include="API\ProblemCaseMonitor\ProblemCaseMonitorModel.cs" />
-    <Compile Include="API\UpdateCategoryWhenPAUpdated\UpdateCategoryParamsModel.cs" />
     <Compile Include="API\UpdateCategoryWhenPAUpdated\CustInfoModel.cs" />
+    <Compile Include="API\UpdateCategoryWhenPAUpdated\UpdateCategoryParamsModel.cs" />
+    <Compile Include="API\UpdateCategoryWhenPAUpdated\UpdatePALosingInfoModel.cs" />
     <Compile Include="API\UpdateCategoryWhenPAUpdated\UpdateCategoryModel.cs" />
     <Compile Include="API\UpdateCategoryWhenPAUpdated\UpdateCategoryResultModel.cs" />
     <Compile Include="AssociationDetection\GetAssociationDetectionModel.cs" />

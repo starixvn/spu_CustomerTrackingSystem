@@ -636,8 +636,12 @@
             {
                 if (paras != null && paras.CustInfos != null && paras.CustInfos.Any())
                 {
-                    var updateCategoryResult = _updateCategoryService.UpdateCategoryToCTSWhenPAUpdated(paras);
-                   
+                    var custIds = paras.CustInfos.Select(c => c.CustID)?.Distinct();
+
+                    var probAccountLosing = _rescanClassificationService.GetProblemAccountLosing(custIds, FunctionId.UpdateCategory);
+
+                    var updateCategoryResult = _updateCategoryService.UpdateCategoryToCTSWhenPAUpdated(paras, probAccountLosing);
+
                     if (updateCategoryResult != null && updateCategoryResult.Any())
                     {
                         var assCustForRollbacks = updateCategoryResult.Select(x => new CheckPACustomerAssociationForRollbackModel

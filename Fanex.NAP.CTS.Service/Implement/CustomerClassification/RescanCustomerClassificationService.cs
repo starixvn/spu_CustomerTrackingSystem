@@ -396,6 +396,18 @@
             return Enumerable.Empty<CustEvidenceInsertModel>();
         }
 
+        public IEnumerable<ProblemAccountLosingClassificationModel> GetProblemAccountLosing(IEnumerable<long> custIds, FunctionId functionId)
+        {
+            if (custIds != null && custIds.Any())
+            {
+                var custIdToString = string.Join(",", custIds.Distinct());
+
+                return GetProblemAccountLosingClassificationDbAccess(custIdToString, functionId) ?? Enumerable.Empty<ProblemAccountLosingClassificationModel>();
+            }
+
+            return Enumerable.Empty<ProblemAccountLosingClassificationModel>();
+        }
+
         public void CheckNewPAAssociationCustomerForRollback(IEnumerable<CheckPACustomerAssociationForRollbackModel> assCustForRollbacks)
         {
             if (assCustForRollbacks != null && assCustForRollbacks.Any())

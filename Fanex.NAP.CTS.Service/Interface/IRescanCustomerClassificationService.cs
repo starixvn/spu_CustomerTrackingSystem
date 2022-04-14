@@ -15,5 +15,7 @@
         IEnumerable<CustEvidenceInsertModel> GetProblemAccountLosing(IEnumerable<CustEvidenceModel> custEvidences, FunctionId functionId);
 
         IEnumerable<InsertProblemAccountModel> GetProblemAccountLosing(IEnumerable<MultipleProblemAccountsModel> problemAccounts, FunctionId functionId);
+
+        IEnumerable<ProblemAccountLosingClassificationModel> GetProblemAccountLosing(IEnumerable<long> custIds, FunctionId functionId);
     }
 }
