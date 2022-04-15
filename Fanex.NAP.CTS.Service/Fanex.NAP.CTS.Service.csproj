@@ -58,6 +58,7 @@
     <Compile Include="Implement\LogInputDataService.cs" />
     <Compile Include="Implement\FeedDataToSoon88Service.cs" />
     <Compile Include="Implement\MatchMonitorService.cs" />
+    <Compile Include="Implement\NotificationRecipientService.cs" />
     <Compile Include="Implement\ProbationManagementService.cs" />
     <Compile Include="Implement\ManageSubscriberService.cs" />
     <Compile Include="Implement\ProblemAccountManagementService.cs" />
@@ -72,7 +73,6 @@
     <Compile Include="Implement\FlaggedAccountService.cs" />
     <Compile Include="Implement\GraphService.cs" />
     <Compile Include="Implement\ImportEvidencesService.cs" />
-    <Compile Include="Implement\NotificationRecipientService.cs" />
     <Compile Include="Implement\NotificationService.cs" />
     <Compile Include="Implement\ProblemAccountMonitorService.cs" />
     <Compile Include="Implement\SubscriberService.cs" />
