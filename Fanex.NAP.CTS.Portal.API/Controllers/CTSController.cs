@@ -586,8 +586,6 @@
                     {
                         var custEviRemovedIds = string.Join(",", custEviRemoved);
                         _custEvidenceService.UpdateBetLimitOfUnflaggedCustomer(custEviRemovedIds);
-
-                        LogService.Info($"CTS Portal API - UpdateBetLimitOfUnflaggedCustomer successful custIds:  {custEviRemovedIds}");
                     }
 
                     _customerClassifyService.RescanCustomerClassify(new RescanCustClassificationModel
@@ -672,8 +670,6 @@
                         {
                             var custEviUpdatedIds = string.Join(",", custEviUpdated);
                             _custEvidenceService.UpdateBetLimitOfFlaggedCustomer(custEviUpdatedIds);
-
-                            LogService.Info($"CTS Portal API - UpdateBetLimitOfFlaggedCustomer successful custIds:  {custEviUpdatedIds}");
                         }
 
                         Parallel.Invoke(() =>
@@ -682,9 +678,6 @@
                         },
                         () =>
                         {
-                            // write log for test
-                            LogService.Info($"CTS Portal API - PushDataToExternal successful listCustIdToSyncCC:  {JsonConvert.SerializeObject(listCustIdToSyncCC)}");
-
                             _custClassificationService.PushDataToExternal(listCustIdToSyncCC, options);
                         },
                         () =>
