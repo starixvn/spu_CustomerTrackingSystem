@@ -218,6 +218,8 @@
                 {
                     db.ExecuteNonQuery(criteria);
 
+                    LogService.Info($"CTS - Mark Problem Account Site Credit: - customer list: { model.CustomerList }"); // write log for test
+
                     return new ResultProblemAccountAddCustomerModel
                     {
                         ErrCode = criteria.ErrCode,
@@ -258,6 +260,8 @@
                 try
                 {
                     db.ExecuteNonQuery(criteria);
+
+                    LogService.Info($"CTS - Mark Problem Account Site Licensee: - customer list: { model.CustomerList }"); // write log for test
 
                     return new ResultProblemAccountAddCustomerModel
                     {
