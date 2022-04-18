@@ -28,7 +28,7 @@
         spanAddProblemAccountChangeHidden: $('#spanAddProblemAccountChangeHidden'),
         spanProblemAccountActionHidden: $('#spanProblemAccountActionHidden'),
         inputTagUsername: $('#inputTagUsername'),
-        maxTags: 200
+        maxTags: 100
     };
 
     function RenderGrid() {
@@ -172,7 +172,9 @@
             let validTags = domElements.spanAddProblemAccountUserName.find('tags tag.valid');
             let invalidDuplicatedTags = domElements.spanAddProblemAccountUserName.find('tags tag.invalid-duplicated');
             let invalidUsernameTags = domElements.spanAddProblemAccountUserName.find('tags tag.invalid-username');
-            let notInvalid = invalidDuplicatedTags.length + invalidUsernameTags.length;
+            let numOfTagExceeded = domElements.spanAddProblemAccountUserName.find('tags tag.tagify--notAllowed');
+            
+            let notInvalid = invalidDuplicatedTags.length + invalidUsernameTags.length + numOfTagExceeded.length;
             if (notInvalid <= 1 && validTags.length > 1)
                 domElements.btnSave.prop('disabled', false);
             else
@@ -202,8 +204,8 @@
                 $tag.prop('title', textReplaced);
                 $tag.find('span.tagify__tag-text').text(textReplaced);
                 $tag.addClass(cssClass);
-                let btnRemove = $tag.find('x');
 
+                let btnRemove = $tag.find('x');
                 btnRemove.on('click', function (e) {
                     let currentTag = $(e.target).parent();
 
@@ -212,9 +214,18 @@
                     EnableButtonAdd();
                 });
 
-                domElements.spanAddProblemAccountUserNameMaxTag.text(maxCountTags - 1);
+                domElements.spanAddProblemAccountUserNameMaxTag.text(maxCountTags - 1);                
             } else {
-                inputTagUsername.tagify().data('tagify').removeTags(tagName.tag);
+                //domElements.inputTagUsername.tagify().data('tagify').removeTags(tagName.tag); 
+                let $tag = $(tagName.tag);
+                let btnRemove = $tag.find('x');
+                btnRemove.on('click', function (e) {                    
+                    let currentTag = $(e.target).parent();
+
+                    ResetMaxTag();
+                    ValidateProblemAccountInput(currentTag.text().trim());
+                    EnableButtonAdd();
+                });
             }
             domElements.btnSave.prop('disabled', true);
         }
@@ -286,6 +297,12 @@
     }
 
     function ValidateProblemAccountInput(textTagRemove) {
+        let numOfTagExceeded = domElements.spanAddProblemAccountUserName.find('tags tag.tagify--notAllowed');
+
+        if (numOfTagExceeded.length > 0) {
+            return;
+        }
+
         domElements.btnSave.prop('disabled', false);
         let userNames = GetInputUserName(textTagRemove);
 
@@ -533,7 +550,7 @@
             request.open('POST', common.modifyRelativeUrl('ProblemAccountManagement/ExportToExcel'), true);
             request.setRequestHeader('Content-type', 'application/json');
             request.responseType = 'blob';
-            request.timeout = 240000;
+            request.timeout = 480000;
             request.addEventListener("timeout", function (e) {
                 common.closeLoading();
                 common.showError("Export failed (timeout)");
