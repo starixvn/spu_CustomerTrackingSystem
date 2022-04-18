@@ -22,7 +22,7 @@
                     firstRobotDate.text("First Robot Date: " + json.firstRobotDate);
                     lastRobotDate.text("Last Robot Date: " + json.lastRobotDate);
 
-                    HandleRobotDetection(json.data.length);                    
+                    HandleRobotBettingDetection(json.robotTypeClassify);                    
 
                     return response;
                 },
@@ -78,12 +78,33 @@
         });
     }   
 
-    function HandleRobotDetection(dataLength) {
-        if (dataLength > 0) {
-            $('span.icon-big-robot').removeClass('hide');
-        } else {
-            //$('span.icon-big-robot').addClass('hide');
-        }       
+    function HandleRobotBettingDetection(robotTypeClassify) {
+        switch (robotTypeClassify) {
+            case -1:
+                $('span.icon-big-robot').removeClass('hide');
+                $('span.icon-big-observation-robot').addClass('hide');
+                $('span.icon-big-good-robot').addClass('hide');
+                $('span.icon-big-bad-robot').addClass('hide');
+                break;
+            case 0:
+                $('span.icon-big-robot').addClass('hide');
+                $('span.icon-big-observation-robot').removeClass('hide');
+                $('span.icon-big-good-robot').addClass('hide');
+                $('span.icon-big-bad-robot').addClass('hide');
+                break;
+            case 1:
+                $('span.icon-big-robot').addClass('hide');
+                $('span.icon-big-observation-robot').addClass('hide');
+                $('span.icon-big-good-robot').removeClass('hide');
+                $('span.icon-big-bad-robot').addClass('hide');
+                break;
+            case 2:
+                $('span.icon-big-robot').addClass('hide');
+                $('span.icon-big-observation-robot').addClass('hide');
+                $('span.icon-big-good-robot').addClass('hide');
+                $('span.icon-big-bad-robot').removeClass('hide');
+                break;
+        }
     }
     
     function LoadDetail(tr, row) {
@@ -122,13 +143,16 @@
                     },
                     beforeSend: function () {
                         td.prop('disabled', true);
+                        robotBettingTable.find('tbody').addClass('loading');
                     },
                     complete: function () {
                         td.prop('disabled', false);
+                        robotBettingTable.find('tbody').removeClass('loading');
                     },
                     error: function (errMsg) {
                         console.log(errMsg);
                         td.prop('disabled', false);
+                        robotBettingTable.find('tbody').removeClass('loading');
                     }
                 });          
             }              

@@ -1771,9 +1771,10 @@
         {
             var firstRobotDate = string.Empty;
             var lastRobotDate = string.Empty;
+            var robotTypeClassify = -2;
             var robotBettingList = Enumerable.Empty<RobotBettingViewModel>();
 
-            var robotBettings = _robotBettingService.GetRobotBetting(custID, out RobotDateModel robotDate);
+            var robotBettings = _robotBettingService.GetRobotBetting(custID, out RobotDateAndTypeModel robotDateAndType);
 
             if (robotBettings != null && robotBettings.Any())
             {
@@ -1784,14 +1785,16 @@
                     PeriodRangeName = x.PeriodRangeName
                 });
 
-                firstRobotDate = robotDate.FirstRobotDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff);
-                lastRobotDate = robotDate.LastRobotDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff);
+                firstRobotDate = robotDateAndType.FirstRobotDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff);
+                lastRobotDate = robotDateAndType.LastRobotDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff);
+                robotTypeClassify = robotDateAndType.RobotTypeClassify;
             }
 
             return Json(new
             {
                 firstRobotDate = firstRobotDate,
                 lastRobotDate = lastRobotDate,
+                robotTypeClassify = robotTypeClassify,
                 data = robotBettingList,
             }, JsonRequestBehavior.AllowGet);
         }
