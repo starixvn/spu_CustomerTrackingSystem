@@ -1813,7 +1813,7 @@
 
                 if (ticketDetail != null && ticketDetail.Any())
                 {
-                    result = ticketDetail.Select(x => new RobotBettingDetailViewModel
+                    result = ticketDetail.OrderByDescending(x => x.TransDate).Select(x => new RobotBettingDetailViewModel
                     {
                         TransDate = x.TransDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff),
                         HomeID = x.HomeId,
@@ -1826,7 +1826,7 @@
                         Odds = x.Odds,
                         LiveScore = x.LiveIndicator ? (x.LiveHomeScore + " - " + x.LiveAwayScore) : "-",
                         MatchName = GetMatchName(x)
-                    }).OrderByDescending(x => x.TransDate);
+                    });
                 }
             }
 

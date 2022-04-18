@@ -82,7 +82,7 @@
         if (dataLength > 0) {
             $('span.icon-big-robot').removeClass('hide');
         } else {
-            $('span.icon-big-robot').addClass('hide');
+            //$('span.icon-big-robot').addClass('hide');
         }       
     }
     
