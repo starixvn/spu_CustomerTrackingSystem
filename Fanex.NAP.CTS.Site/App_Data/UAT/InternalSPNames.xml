@@ -76,6 +76,11 @@
 		<Setting Key="CTS_DC_RPT_AssociationDetection" SpName="CTS_DC_RPT_AssociationDetection_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
 	</Function>
 
+	<Function Name="AssociationDetail">
+		<Setting Key="SPU_AIML_GB_GetAssociationInfo" SpName="SPU_AIML_GB_GetAssociationInfo_xtest" DbName="MySQL.SPU_AIML.Reporter" />
+		<Setting Key="SPU_AIML_GetAssociationByIPInfo" SpName="SPU_AIML_GetAssociationByIPInfo_xtest" DbName="MySQL.SPU_AIML.Reporter" />
+	</Function>
+	
 	<Function Name="CustomerClassification">
 		<Setting Key="CTS_DC_CustClassification_GetCategory" SpName="CTS_DC_CustClassification_GetCategory_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustClassification_Insert" SpName="CTS_DC_CustClassification_Insert_xtest" DbName="MySQL.CTS_DataCenter.Admin" />

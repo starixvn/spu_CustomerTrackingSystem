@@ -460,7 +460,9 @@
                         IsPAProbation = x.IsProbation,
                         CategoryIds = x.CategoryIDs,
                         CategoryNames = !string.IsNullOrEmpty(x.CategoryNames) ? x.CategoryNames : "-",
-                        CustomerClasses = x.CustomerClasses
+                        CustomerClasses = x.CustomerClasses,
+                        GroupIDs = x.GroupIDs,
+                        OriginGroupIDs = x.OriginGroupIDs
                     };
 
                     var flaggedAffected = flaggedAffectedTagList.FirstOrDefault(y => y.SubscriberID.Equals(newX.SubscriberId) && y.CTSCustID.Equals(newX.CTSCustId));
@@ -723,7 +725,7 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountDetailRpt)]
-        public ActionResult GetMatchesAssociationByAI(long custID1, long custID2)
+        public ActionResult GetMatchesAssociationByAI(long custID1, long custID2, string groupIDs, string originGroupIDs)
         {
             var data = new MatchesAssociationByAIViewModel();
 
@@ -732,33 +734,48 @@
                 var para1 = (custID1 <= custID2) ? custID1 : custID2;
                 var para2 = (custID1 > custID2) ? custID1 : custID2;
 
-                var matchesAssociationInfo = _accountService.GetMatchesAssociationInfo(para1, para2);
+                var groupBettingAssociation = _accountService.GetGBAssociationFromAI(para1, para2, originGroupIDs);
 
-                if (string.IsNullOrEmpty(matchesAssociationInfo.ErrorMessage) && matchesAssociationInfo.MatchesInfo != null && matchesAssociationInfo.MatchesInfo.Any())
-                {
-                    var matchesInfo = _accountService.GetMatchesInfo(string.Join(",", matchesAssociationInfo.MatchesInfo.Select(c => c.MatchID).Distinct()));
+            if (groupBettingAssociation.ErrorCode == 0 && groupBettingAssociation.MatchesInfo != null && groupBettingAssociation.MatchesInfo.Any())
+            {
+                var groupByMatch = groupBettingAssociation.MatchesInfo.GroupBy(c => c.MatchID)
+                                                                      .Select(g => new MatchesInfoViewModel
+                                                                      {
+                                                                          MatchID = g.Key,
+                                                                          GroupIDs = groupIDs,
+                                                                          IsHavingSGB = g.Any(c=>!c.IsGGB),
+                                                                          BettypeIDs = g.Where(c=>!c.IsGGB).Select(c=>c.AdditionalInfo).FirstOrDefault(),
+                                                                          IsHavingGGB = g.Any(c => c.IsGGB),
+                                                                          States = g.Where(c=>c.IsGGB).Select(c=>c.AdditionalInfo).FirstOrDefault()
+                                                                      });
 
-                    data = new MatchesAssociationByAIViewModel
-                    {
-                        TotalMatchCount = matchesAssociationInfo.TotalMatchCount,
-                        ErrorMessage = matchesAssociationInfo.ErrorMessage,
-                        MatchesInfo = matchesAssociationInfo.MatchesInfo
-                            .Join(matchesInfo, c1 => c1.MatchID,
-                                               c2 => c2.MatchID,
-                                               (c1, c2) => new MatchesInfoViewModel
-                                               {
-                                                   MatchDesc = c2.MatchID
-                                                        + " - " + c2.HomeName + " vs " + c2.AwayName
-                                                        + " - " + c2.EventDate.ToString(Consts.FormatDateToString_MMMddyyyy)
-                                                        + " - " + c2.LeagueName,
-                                                   MatchID = c1.MatchID,
-                                                   EventDateString = c2.EventDate.ToString(Consts.FormatDateToString_yyyyMMddHHmmss),
-                                                   Bettypes = c1.BettypeList,
-                                                   CustID1 = para1,
-                                                   CustID2 = para2
-                                               }).OrderByDescending(x => x.EventDateString).ToList()
-                    };
-                }
+                var matchIDs = groupBettingAssociation.MatchesInfo.Select(c => c.MatchID).Distinct();
+
+                var matchesInfo = _accountService.GetMatchesInfo(string.Join(",", matchIDs));
+                
+                data = new MatchesAssociationByAIViewModel
+                {                    
+                    ErrorMessage = groupBettingAssociation.ErrorMessage,
+                    MatchesInfo = groupByMatch.Join(matchesInfo,
+                                           c1=> c1.MatchID,
+                                           c2 => c2.MatchID,
+                                           (c1,c2) => new MatchesInfoViewModel
+                                           {
+                                               MatchDesc = c2.MatchID
+                                                    + " - " + c2.HomeName + " vs " + c2.AwayName
+                                                    + " - " + c2.EventDate.ToString(Consts.FormatDateToString_MMMddyyyy)
+                                                    + " - " + c2.LeagueName,
+                                               MatchID = c1.MatchID,
+                                               EventDateString = c2.EventDate.ToString(Consts.FormatDateToString_yyyyMMddHHmmss),
+                                               CustID1 = para1,
+                                               CustID2 = para2,
+                                               IsHavingSGB = c1.IsHavingSGB,
+                                               BettypeIDs = c1.BettypeIDs,
+                                               IsHavingGGB = c1.IsHavingGGB,
+                                               States = c1.States,
+                                               GroupIDs = c1.GroupIDs
+                                           }).OrderByDescending(x => x.EventDateString)
+                };
             }
             catch (Exception ex)
             {
@@ -779,34 +796,30 @@
 
             if (para != null)
             {
-                if (!string.IsNullOrEmpty(para.EventDateString))
+                if (para.IsHavingSGB)
                 {
-                    var eventDate = DateTime.MinValue;
+                    var custIds = para.CustID1 + "," + para.CustID2;
 
-                    DateTime.TryParseExact(para.EventDateString,
-                       Consts.FormatDateToString_yyyyMMddHHmmss,
-                       CultureInfo.InvariantCulture,
-                       DateTimeStyles.None,
-                       out eventDate);
-
-                    para.EventDate = eventDate;
+                    var sgbTicketDetails = _accountService.GetMatchesDetailInfo(para, custIds, false);
+             
+                    data.AddRange(_accountService.MergeCustGroupTicketInfo(null, sgbTicketDetails, false));
                 }
 
-                var result = _accountService.GetMatchesDetailInfo(para);
-
-                if (result != null && result.Any())
+                if (para.IsHavingGGB)
                 {
-                    data = result.OrderBy(x => x.TransDate).Select(x => new MatchesDetailInfoViewModel
+                    var custGroups = _accountService.GetCustGroupAssociation(para.GroupIDs);
+
+                    var custIds = string.Join(",", custGroups?.Select(c => c.CustID).Distinct());
+
+                    if (custGroups.Any())
                     {
-                        UserName = x.UserName,
-                        TransDateString = x.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                        TransId = x.TransId,
-                        BetType = x.TypeName,
-                        BetTeam = x.BetTeam,
-                        Stake = x.Stake,
-                        Odds = x.Odds,
-                        LiveScore = x.LiveHomeScore + "-" + x.LiveAwayScore
-                    }).ToList();
+                        var ticketDetails = _accountService.GetMatchesDetailInfo(para, custIds, true);
+
+                        if (ticketDetails != null && ticketDetails.Any())
+                        {
+                            data.AddRange(_accountService.MergeCustGroupTicketInfo(custGroups, ticketDetails, true));
+                        }
+                    }
                 }
             }
 

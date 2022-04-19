@@ -6,17 +6,22 @@
     {
         public string MatchDesc { get; set; }
 
-        public int MatchID { get; set; }        
-
-        public string CustIDs { get; set; }
-
-        public long CustID1 { get; set; }
-
-        public long CustID2 { get; set; }
-
-        public string Bettypes { get; set; }
+        public Int64 MatchID { get; set; }        
 
         public string EventDateString { get; set; }
 
+        public Int64 CustID1 { get; set; }
+
+        public Int64 CustID2 { get; set; }
+
+        public string GroupIDs { get; set; }
+
+        public bool IsHavingSGB { get; set; }
+
+        public string BettypeIDs { get; set; }
+
+        public bool IsHavingGGB { get; set; }
+
+        public string  States { get; set; }
     }
 }

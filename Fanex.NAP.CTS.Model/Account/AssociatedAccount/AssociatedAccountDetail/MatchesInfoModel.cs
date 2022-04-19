@@ -6,8 +6,6 @@
     {
         public int MatchID { get; set; }
 
-        public string BettypeList { get; set; }
-
         public DateTime EventDate { get; set; }
 
         public int HomeID { get; set; }

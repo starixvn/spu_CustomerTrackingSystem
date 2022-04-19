@@ -136,12 +136,16 @@
 
         IEnumerable<CTSCustomer> CheckCustomerNotExisted(string custIds, DateTime fromDate, DateTime toDate);
 
-        MatchesAssociationByAIModel GetMatchesAssociationInfo(long custID1, long custID2);
+        MatchesAssociationByAIModel GetGBAssociationFromAI(long custID1, long custID2, string groupList);
 
-        IEnumerable<MatchesInfoModel> GetMatchesInfo(string matchIDs); 
+        IEnumerable<MatchesInfoModel> GetMatchesInfo(string matchIDs);
 
-        IEnumerable<MatchesDetailInfoModel> GetMatchesDetailInfo(MatchesAssociationDetailViewModel matchInfo);
-        
+        IEnumerable<CustomerGroupModel> GetCustGroupAssociation(string originalGroupIDs);
+
+        IEnumerable<MatchesDetailInfoModel> GetMatchesDetailInfo(MatchesAssociationDetailViewModel matchInfo, string custIds, bool isGGB);
+
+        IEnumerable<MatchesDetailInfoViewModel> MergeCustGroupTicketInfo(IEnumerable<CustomerGroupModel> custGroups, IEnumerable<MatchesDetailInfoModel> ticketDetails, bool isGGB);
+
         IEnumerable<CategoryInfoModel> GetAllCategory();		
 
 		AssociationByIPInfoModel GetAssociationByIPInfo(long custId1, long custId2);

@@ -159,7 +159,7 @@
                     data: obj => obj.AssociationTypeName,
                     createdCell: (cell, _, row) => {
                         $('.betting-pattern', cell).click(() =>
-                            ShowMatchBettingPattern(row.CustId)
+                            ShowMatchBettingPattern(row.CustId, row.GroupIDs, row.OriginGroupIDs)
                         );
 
                         $('.ip-association', cell).click(() =>
@@ -552,7 +552,7 @@
         btnSaveAssociation.prop('disabled', true);
     }
 
-    function ShowMatchBettingPattern(custId) {        
+    function ShowMatchBettingPattern(custId, groupIDs, originGroupIDs) {        
 
         divMatchBettingPattern.dialog({
             modal: true,
@@ -574,25 +574,29 @@
                     zeroRecords: "There's no data"
                 },
                 info: false,
-                ordering: false,               
+                ordering: false,
                 searching: false,
                 scrollX: false,
                 paging: false,
                 columnDefs: [
                     { targets: "_all", defaultContent: "-" },
-                    { targets: [-1,-2], className: "text-center" },
+                    { targets: [-1, -2], className: "text-center" },
                     { targets: [0], visible: false },
-                    { targets: [1], className: "text-left" },
-                    { targets: [2], width: "15%", className: "text-center" },
+                    { targets: [1], width: "5%", className: "text-center" },
+                    { targets: [2], width: "15%", className: "text-left" },
                     { targets: [3], width: "15%", className: "text-left" },
-                    { targets: [4], width: "10%", className: "text-left" },
-                    { targets: [5], width: "10%", className: "text-left" },
-                    { targets: [6], width: "10%", className: "text-center" },
-                    { targets: [7], width: "10%", className: "text-center" },
-                    { targets: [8], width: "10%", className: "text-center" }
+                    { targets: [4], width: "15%", className: "text-center" },
+                    { targets: [5], width: "15%", className: "text-left" },
+                    { targets: [6], width: "10%", className: "text-left" },
+                    { targets: [7], width: "5%", className: "text-left" },
+                    { targets: [8], width: "10%", className: "text-center" },
+                    { targets: [9], width: "5%", className: "text-center" },
+                    { targets: [10], width: "5%", className: "text-center" }
                 ],
                 columns: [
                     { data: obj => obj.MatchDesc },
+                    { data: obj => obj.GroupID },
+                    { data: obj => obj.Description },
                     { data: obj => obj.UserName },
                     { data: obj => obj.TransDateString },
                     { data: obj => obj.TransId },
@@ -615,12 +619,16 @@
 
                     api.column(0, { page: 'current' }).data().each(function (group, i) {
                         if (last !== group) {
-                            let html = '<tr class="group group-site"><td colspan="8"><span class="column-group-match"';
+                            let html = '<tr class="group group-site"><td colspan="10"><span class="column-group-match"';
                             html += ' data-match-id=' + data[i].MatchID;
-                            html += ' data-event-date-string=' + data[i].EventDateString;                            
-                            html += ' data-bet-types=' + data[i].Bettypes;
-                            html += ' data-cust-id1=' + data[i].CustID1;
-                            html += ' data-cust-id2=' + data[i].CustID2 + '>';
+                            html += ' data-event-date-string=' + data[i].EventDateString;
+                            html += ' data-custID1=' + data[i].CustID1;
+                            html += ' data-custID2=' + data[i].CustID2;
+                            html += ' data-isHavingSGB=' + data[i].IsHavingSGB;
+                            html += ' data-bettypeIDs=' + data[i].BettypeIDs;
+                            html += ' data-isHavingGGB=' + data[i].IsHavingGGB;
+                            html += ' data-states=' + data[i].States;
+                            html += ' data-groupIds=' + data[i].GroupIDs+ '>';
                             html += '<i class="icon icon-chevron-right icon-open"></i> ' + group;
                             html += '</span></td></tr>';
 
@@ -641,9 +649,13 @@
                         let params = {
                             MatchId: colGroupMatch.attr('data-match-id'),
                             EventDateString: colGroupMatch.attr('data-event-date-string'),
-                            Bettypes: colGroupMatch.attr('data-bet-types'),
-                            CustId1: colGroupMatch.attr('data-cust-id1'),
-                            CustId2: colGroupMatch.attr('data-cust-id2')
+                            CustID1: colGroupMatch.attr('data-custID1'),
+                            CustID2: colGroupMatch.attr('data-custID2'),
+                            IsHavingSGB: colGroupMatch.attr('data-isHavingSGB'),
+                            BettypeIDs: colGroupMatch.attr('data-bettypeIDs'),
+                            IsHavingGGB: colGroupMatch.attr('data-isHavingGGB'),
+                            States: colGroupMatch.attr('data-states'),
+                            GroupIDs: colGroupMatch.attr('data-groupIds')
                         }
 
                         GetMatchBettingPatternDetail(params, trGroup);
@@ -667,12 +679,12 @@
             });
         }
 
-        GetMatchBettingPattern($('#hdCustId').val(), custId);    
+        GetMatchBettingPattern($('#hdCustId').val(), custId, groupIDs, originGroupIDs);    
 
         $('.ui-dialog .ui-dialog-content').css('padding', '0');
     }
 
-    function GetMatchBettingPattern(custId1, custId2) {
+    function GetMatchBettingPattern(custId1, custId2, groupIDs, originGroupIDs) {
         spanBettingPatternTotalMatch.text("");        
 
         var url = common.modifyRelativeUrl('Account/GetMatchesAssociationByAI');
@@ -684,7 +696,9 @@
             },
             data: {
                 custID1: custId1,
-                custID2: custId2
+                custID2: custId2,
+                groupIDs: groupIDs,
+                originGroupIDs: originGroupIDs
             },
             success: function (response) {
                 if (response !== undefined) {
@@ -721,6 +735,8 @@
                     for (var i = 0; i < response.length; i++) {
                         let newRow = $('<tr role="row" class="odd detail" data-match-id=' + params.MatchId + '>')
                             .append('<td class="hide">' + response[i]["MatchDesc"] + '</td>')
+                            .append('<td class="text-center">' + response[i]["GroupID"] + '</td>')
+                            .append('<td class="text-center">' + response[i]["Description"] + '</td>')
                             .append('<td class="text-center">' + response[i]["UserName"] + '</td>')
                             .append('<td class="text-center">' + response[i]["TransDateString"] + '</td>')
                             .append('<td class="text-center">' + response[i]["TransId"] + '</td>')
@@ -733,7 +749,7 @@
 
                         target.last().after(newRow);
                     }
-                    
+
                     tableMatchBettingPattern.DataTable().columns.adjust();
 
                     let iGroup = $('i.icon', target);
