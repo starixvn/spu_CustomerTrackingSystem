@@ -1,6 +1,6 @@
 ﻿USE ctsgraphdb
 //USE ctslocal
-MATCH (c:CTSCustomer)-[r:ASS_BY_AI]-(c1:CTSCustomer)
+MATCH (c:CTSCustomer)-[r:ASS_BY_AI|GROUP_BY_AI*1..2]-(c1:CTSCustomer)
 MATCH (c1)-[:BELONG_TO_SUB]->(s:Subscriber)
 MATCH (c1)-[:HAS_STATUS]->(st:StaticList)
 WHERE c.CTSCustID = $ip_CTSCustID AND c1.CTSCustID IS NOT NULL
@@ -15,6 +15,7 @@ OPTIONAL MATCH (c1)-[:HAS_CATEGORY]->(ct:CustomerCategory)
 WHERE ct.CategoryID in $ip_CategoryIDs
 WITH c,c1,s,st,ct,e,Min(AssDate) as firstAssDate
 WHERE ( 0 IN $ip_CategoryIDs) OR (NOT 0 IN $ip_CategoryIDs AND ct.CategoryID IS NOT NULL)
+MATCH (c)-[r:GROUP_BY_AI]->(g:AIGroup)<-[r1:GROUP_BY_AI]-(c1)
 WITH 
       c1.CTSCustID          AS CTSCustID
     , c1.CustID             AS CustId
@@ -29,12 +30,13 @@ WITH
     , "Betting Pattern"     AS AssociationTypeName  
     , CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
     , CASE WHEN $ip_AssociationStatus in [0,2] and e.CreatedDate IS NOT NULL THEN e.CreatedDate ELSE firstAssDate END AS AssociationDate
-    , ct.ParentID            AS ParentIDs
+    , ct.ParentID           AS ParentIDs
     , apoc.text.join(COLLECT(DISTINCT toString(ct.CategoryID )),",") AS CategoryIDs
     , apoc.text.join(COLLECT(DISTINCT ct.CategoryName),",")          AS CategoryNames
-
+    , apoc.text.join(COLLECT(DISTINCT g.GroupID),",")                AS GroupIDs
+    , apoc.text.join(COLLECT(DISTINCT r1.OriginGroupID),",")         AS OriginGroupIDs
 ORDER BY SubscriberName ASC, AssociationStatus ASC, StatusGroup ASC, StatusID ASC, AssociationDate DESC, CTSCustID ASC
-WITH COLLECT({CTSCustID:CTSCustID, CustId:CustId, CustSubId:CustSubId, SubscriberID:SubscriberID, SubscriberName:SubscriberName, UserName:UserName, UserName2:UserName2, StatusGroup:StatusGroup, StatusID:StatusID, StatusName:StatusName, AssociationTypeName:AssociationTypeName, AssociationStatus:AssociationStatus, AssociationDate:AssociationDate, ParentIDs:ParentIDs, CategoryIDs:CategoryIDs, CategoryNames:CategoryNames} ) as AssociationList, count(CTSCustID) as TotalItems
+WITH COLLECT({CTSCustID:CTSCustID, CustId:CustId, CustSubId:CustSubId, SubscriberID:SubscriberID, SubscriberName:SubscriberName, UserName:UserName, UserName2:UserName2, StatusGroup:StatusGroup, StatusID:StatusID, StatusName:StatusName, AssociationTypeName:AssociationTypeName, AssociationStatus:AssociationStatus, AssociationDate:AssociationDate, ParentIDs:ParentIDs, CategoryIDs:CategoryIDs, CategoryNames:CategoryNames, GroupIDs:GroupIDs, OriginGroupIDs:OriginGroupIDs} ) as AssociationList, count(CTSCustID) as TotalItems
 UNWIND AssociationList as associationList
 WITH associationList, TotalItems
 SKIP $ip_Skip
