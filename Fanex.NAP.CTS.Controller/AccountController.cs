@@ -1145,11 +1145,11 @@
             if (result.ErrorCode == 0)
             {              
                 var objects = new[] { new {
-                    model.CTSCustId,
-                    model.CustId,
-                    model.SubscriberId,
-                    model.EvidenceId,
-                    ActionType = 2
+                   CTSCustID = model.CTSCustId,
+                   CustID = model.CustId,
+                   SubscriberID = model.SubscriberId,
+                   EvidenceID = model.EvidenceId,
+                   ActionType = 2
                 } };
 
                 var syncCustIds = Enumerable.Empty<long>();
