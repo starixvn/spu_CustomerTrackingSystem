@@ -79,6 +79,6 @@
 		<Setting Key="NAP_ProblemAccount_UpdateCustomer" SpName="NAP_ProblemAccount_UpdateCustomer" DbName="DBCust.CustDB.bodbAdminNet" />
 	</Function>
 	<Function Name="DailyProblemClassification">
-		<Setting Key="CTS_ProblemAccountsClassification_Daily" SpName="CTS_ProblemAccountsClassification_Daily" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" TimeOut="1200" />
+		<Setting Key="CTS_ProblemAccountsClassification_Daily" SpName="CTS_ProblemAccountsClassification_Daily" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" TimeOut="300" />
 	</Function>
 </Functions>

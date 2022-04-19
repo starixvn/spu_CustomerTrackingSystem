@@ -85,4 +85,7 @@
 	<Function name="MonitorCTSFunction">
 		<Setting Key="SPU_Stats_Accessment_Insert" SpName="SPU_Stats_Accessment_Insert" DbName="MySQL.SPU_Stats.Admin" />
 	</Function>
+	<Function Name="DailyProblemClassification">
+		<Setting Key="CTS_ProblemAccountsClassification_Daily" SpName="CTS_ProblemAccountsClassification_Daily" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
+	</Function>
 </Functions>
