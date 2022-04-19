@@ -10,6 +10,8 @@
 
         public string Sites { get; set; }
 
+        public bool IsAllSites { get; set; }
+
         public string UserName { get; set; }
 
         public bool HasDownline { get; set; }

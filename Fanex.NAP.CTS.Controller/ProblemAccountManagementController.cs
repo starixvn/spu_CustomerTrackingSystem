@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
+    using Fanex.Logging;
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.ProblemAccountManagement;
@@ -57,7 +58,7 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.ProblemAccountManagementRpt)]
         public ActionResult GetProblemAccount(ProblemAccountFilterViewModel filter)
         {
-            var problemAccounts = GetProblemAccounts(filter);
+            var problemAccounts = GetProblemAccounts(filter, false);
 
             return Json(new
             {
@@ -65,7 +66,7 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private IEnumerable<ProblemAccountViewModel> GetProblemAccounts(ProblemAccountFilterViewModel filter)
+        private IEnumerable<ProblemAccountViewModel> GetProblemAccounts(ProblemAccountFilterViewModel filter, bool isExportExcel)
         {
             var problemAccounts = Enumerable.Empty<ProblemAccountViewModel>();
 
@@ -78,9 +79,13 @@
 
             if (paModel != null && paModel.Any())
             {
+                var paCommentSelModel = Enumerable.Empty<ProblemAccountCommentSelModel>();
                 var custIdList = string.Join(",", paModel.Select(x => x.CustID).Distinct());
 
-                var paCommentSelModel = _problemAccountManagementService.GetProblemAccountCommentSel(custIdList);
+                if (!isExportExcel)
+                {
+                    paCommentSelModel = _problemAccountManagementService.GetProblemAccountCommentSel(custIdList);
+                }                
 
                 problemAccounts = paModel.OrderByDescending(x => x.CreatedDate).Select(x => new ProblemAccountViewModel
                 {
@@ -88,7 +93,8 @@
                     Site = x.Site,
                     Currency = x.Currency,
                     Category = x.CategoryName,
-                    Comment = paCommentSelModel.Any(y => y.Custid == x.CustID) ? paCommentSelModel.FirstOrDefault(y => y.Custid == x.CustID).Comment : string.Empty,
+                    Comment = isExportExcel ? string.Empty 
+                                            : paCommentSelModel.Any(y => y.Custid == x.CustID) ? paCommentSelModel.FirstOrDefault(y => y.Custid == x.CustID).Comment : string.Empty,
                     CreatedBy = x.CreatedBy,
                     CreatedDateStr = x.CreatedDate.ToString(Consts.FormatDateToString_MMMddyyyy)
                 });
@@ -157,10 +163,9 @@
             var fileName = string.Format("PAM_{0}_{1}.xlsx"
                 , filter.DateTime.ToString(FormatDateTimeToString_YYYYmmdd)
                 , filter.DateTime.ToString(Consts.FormatTimeToString_hhmmss));
-
-            var problemAccounts = GetProblemAccounts(filter);
-
-            var excelFile = _problemAccountManagementService.ExportProblemAccount(problemAccounts.ToList(), fileName, templatePath, filter);
+          
+            var problemAccounts = GetProblemAccounts(filter, true);            
+            var excelFile = _problemAccountManagementService.ExportProblemAccount(problemAccounts, fileName, templatePath, filter);
 
             return File(excelFile, "application/vnd.ms-excel", fileName);
         }

@@ -95,6 +95,7 @@
         params.FromDate = domElements.dpkFromDate.val();
         params.ToDate = domElements.dpkToDate.val();
         params.Sites = domElements.cbbSite.val().join();
+        params.IsAllSites = domElements.cbbSite.find('option').not(':selected').length == 0;
         params.UserName = domElements.inputUserName.val().trim();
         params.HasDownline = domElements.inputSearchDownlines.is(":checked");
         return params;
@@ -113,7 +114,9 @@
         let toDateValueAllow = domElements.dpkFromDate.datepicker("getDate");
         toDateValueAllow.setDate(toDateValueAllow.getDate() + 30);
 
-        if (toDateValue > toDateValueAllow) {
+       let userName = domElements.inputUserName.val().trim();
+
+        if (toDateValue > toDateValueAllow && userName == '') {
             common.showError('Due to size limitation, please press "Export to Excel" for more detail information');
 
             return false;

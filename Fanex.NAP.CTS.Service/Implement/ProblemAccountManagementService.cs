@@ -633,13 +633,14 @@
             }
         }
 
-        public byte[] ExportProblemAccount(List<ProblemAccountViewModel> data, string fileName, string templatePath, ProblemAccountFilterViewModel filter)
+        public byte[] ExportProblemAccount(IEnumerable<ProblemAccountViewModel> data, string fileName, string templatePath, ProblemAccountFilterViewModel filter)
         {
-            var writer = new ExcelTemplateWriter(templatePath, fileName, "PAM");            
+            var writer = new ExcelTemplateWriter(templatePath, fileName, "PAM");
             writer.CopyRows(0, 1);
 
-            FilterBlock(filter, data.Count, ref writer);
+            FilterBlock(filter, data.Count(), ref writer);
             writer.CopyRows(2, 1); // Fill Header
+
             FillRowData(data, ref writer);
             writer.SyncColumnsWidth(6);
 
@@ -652,36 +653,33 @@
             var normalFont = writer.GetFont(11, 0);            
 
             var contentRender = new RichTextRender().Clear();
-            AppendBlockContent(ref contentRender, "From", boldFont, filter.FromDate.ToString(Consts.FormatDateTimeToString_YYYYmmdd), normalFont, "\n");
+            AppendBlockContent(ref contentRender, "From", boldFont, filter.FromDate.ToString(Consts.FormatDateToString_MMMddyyyy), normalFont, "\n");
             WriteRickText(contentRender, ref writer, 4);
 
             contentRender = new RichTextRender().Clear();
-            AppendBlockContent(ref contentRender, "To", boldFont, filter.ToDate.ToString(Consts.FormatDateTimeToString_YYYYmmdd), normalFont, "\n");
+            AppendBlockContent(ref contentRender, "To", boldFont, filter.ToDate.ToString(Consts.FormatDateToString_MMMddyyyy), normalFont, "\n");
             WriteRickText(contentRender, ref writer, 4);
 
             contentRender = new RichTextRender().Clear();
-            AppendBlockContent(ref contentRender, "Site", boldFont, filter.Sites, normalFont, "\n");
-            WriteRickText(contentRender, ref writer, 4);
-
-            if (!string.IsNullOrEmpty(filter.UserName))
-            {
-                contentRender = new RichTextRender().Clear();
-                AppendBlockContent(ref contentRender, "Username", boldFont, filter.UserName, normalFont, "\n");
-                WriteRickText(contentRender, ref writer, 4);
-            }
-
-            contentRender = new RichTextRender().Clear();
-            AppendBlockContent(ref contentRender, "Search downlines of this account", boldFont, filter.HasDownline ? "true" : "false", normalFont, "\n");
+            AppendBlockContent(ref contentRender, "Site", boldFont, filter.IsAllSites ? "All" : filter.Sites, normalFont, "\n");
             WriteRickText(contentRender, ref writer, 4);
 
             contentRender = new RichTextRender().Clear();
-            AppendBlockContent(ref contentRender, "Total Items", boldFont, totalItems.ToString(), normalFont, "\n");
+            AppendBlockContent(ref contentRender, "Username", boldFont, " ", normalFont, "\n");
+            WriteRickText(contentRender, ref writer, 4);
+
+            contentRender = new RichTextRender().Clear();
+            AppendBlockContent(ref contentRender, "Search downlines of this account", boldFont, filter.HasDownline ? "yes" : " ", normalFont, "\n");
+            WriteRickText(contentRender, ref writer, 4);
+
+            contentRender = new RichTextRender().Clear();
+            AppendBlockContent(ref contentRender, "Total items", boldFont, totalItems.ToString(), normalFont, "\n");
             WriteRickText(contentRender, ref writer, 4);
 
             var dateTime = filter.DateTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss2);
             contentRender = new RichTextRender().Clear();
-            AppendBlockContent(ref contentRender, "Export DateTime", boldFont, dateTime, normalFont, "\n");
-            WriteRickText(contentRender, ref writer, 4);
+            AppendBlockContent(ref contentRender, "Export date time", boldFont, dateTime, normalFont, "\n");             
+            WriteRickText(contentRender, ref writer, 4);          
         }
 
         private void WriteRickText(RichTextRender contentRender, ref ExcelTemplateWriter writer, int idx)
@@ -692,7 +690,7 @@
             writer.WriteRow(idx, contentRichTextArray);
         }
 
-        private void FillRowData(List<ProblemAccountViewModel> problemAccounts, ref ExcelTemplateWriter writer)
+        private void FillRowData(IEnumerable<ProblemAccountViewModel> problemAccounts, ref ExcelTemplateWriter writer)
         {
             foreach (var item in problemAccounts)
             {
