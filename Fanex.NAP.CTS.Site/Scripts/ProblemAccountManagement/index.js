@@ -550,7 +550,7 @@
             request.open('POST', common.modifyRelativeUrl('ProblemAccountManagement/ExportToExcel'), true);
             request.setRequestHeader('Content-type', 'application/json');
             request.responseType = 'blob';
-            request.timeout = 480000;
+            request.timeout = 600000;
             request.addEventListener("timeout", function (e) {
                 common.closeLoading();
                 common.showError("Export failed (timeout)");
