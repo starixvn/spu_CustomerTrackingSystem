@@ -13,6 +13,7 @@ namespace Fanex.NAP.TGRS.Core.ExcelUtility.RichTextExtensions
     using System.Text;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
+    using NPOI.XSSF.UserModel;
 
     /// <summary>
     /// Rendering rich text helper.
@@ -98,6 +99,34 @@ namespace Fanex.NAP.TGRS.Core.ExcelUtility.RichTextExtensions
             }
 
             result = new HSSFRichTextString(textBuilder.ToString());
+
+            foreach (TextBlock block in this._blocks)
+            {
+                currentFont = block.Font ?? _defaultFont;
+
+                if (currentFont != null)
+                {
+                    result.ApplyFont(textIndex, textIndex + block.Text.Length, currentFont);
+                }
+
+                textIndex += block.Text.Length;
+            }
+
+            return result;
+        }
+
+        public XSSFRichTextString XSSFRickRender()
+        {
+            var textBuilder = new StringBuilder();           
+            IFont currentFont = null;
+            int textIndex = 0;
+
+            foreach (TextBlock block in this._blocks)
+            {
+                textBuilder.Append(block.Text);
+            }
+
+            var result = new XSSFRichTextString(textBuilder.ToString());
 
             foreach (TextBlock block in this._blocks)
             {

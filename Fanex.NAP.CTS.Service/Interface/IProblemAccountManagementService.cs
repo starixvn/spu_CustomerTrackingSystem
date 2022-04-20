@@ -32,6 +32,8 @@
 
         IEnumerable<ResultProblemAccountAddCustomerModel> UnmarkProblemAccountSiteLicensee(IEnumerable<ProblemAccountValidatedModel> models, int userID);
 
+		byte[] ExportProblemAccount(IEnumerable<ProblemAccountViewModel> problemAccounts, string fileName, string templatePath, ProblemAccountFilterViewModel filter);
+
         IEnumerable<long> UpdateProblemAccountEvidence(UpdateCategoryParamsModel paras);
 
         IEnumerable<long> RemoveProblemAccountEvidence(string custIds);

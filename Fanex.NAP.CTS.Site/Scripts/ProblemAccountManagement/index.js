@@ -10,6 +10,7 @@
         inputUserName: $('#inputUserName'),
         inputSearchDownlines: $('#inputSearchDownlines'),
         btnGenerate: $('#btnGenerate'),
+        btnExportToExcel: $('#btnExportToExcel'),
         tblProblemAccount: $('#tblProblemAccount'),
         btnMarkNewProblemAccount: $('#btnMarkNewProblemAccount'),
         btnUpdateProblemAccount: $('#btnUpdateProblemAccount'),
@@ -27,7 +28,7 @@
         spanAddProblemAccountChangeHidden: $('#spanAddProblemAccountChangeHidden'),
         spanProblemAccountActionHidden: $('#spanProblemAccountActionHidden'),
         inputTagUsername: $('#inputTagUsername'),
-        maxTags: 50
+        maxTags: 100
     };
 
     function RenderGrid() {
@@ -40,13 +41,7 @@
             ajax: {
                 url: url,
                 data: function () {
-                    let params = {};
-                    params.FromDate = domElements.dpkFromDate.val();
-                    params.ToDate = domElements.dpkToDate.val();
-                    params.Sites = domElements.cbbSite.val().join();
-                    params.UserName = domElements.inputUserName.val().trim();
-                    params.HasDownline = domElements.inputSearchDownlines.is(":checked");
-                    return params;
+                    return GetParams();
                 },
                 type: "POST",
                 beforeSend: function () {
@@ -95,6 +90,17 @@
         });
     }
 
+    function GetParams() {
+        let params = {};
+        params.FromDate = domElements.dpkFromDate.val();
+        params.ToDate = domElements.dpkToDate.val();
+        params.Sites = domElements.cbbSite.val().join();
+        params.IsAllSites = domElements.cbbSite.find('option').not(':selected').length == 0;
+        params.UserName = domElements.inputUserName.val().trim();
+        params.HasDownline = domElements.inputSearchDownlines.is(":checked");
+        return params;
+    }
+
     function GetProblemAccountReport() {
         if (ValidateRangeDate()) {
             dataTable
@@ -106,10 +112,26 @@
     function ValidateRangeDate() {
         let toDateValue = domElements.dpkToDate.datepicker("getDate");
         let toDateValueAllow = domElements.dpkFromDate.datepicker("getDate");
-        toDateValueAllow.setDate(toDateValueAllow.getDate() + 14);
+        toDateValueAllow.setDate(toDateValueAllow.getDate() + 30);
+
+       let userName = domElements.inputUserName.val().trim();
+
+        if (toDateValue > toDateValueAllow && userName == '') {
+            common.showError('Due to size limitation, please press "Export to Excel" for more detail information');
+
+            return false;
+        }
+
+        return true;
+    }
+
+    function ValidateRangeDateExport() {
+        let toDateValue = domElements.dpkToDate.datepicker("getDate");
+        let toDateValueAllow = domElements.dpkFromDate.datepicker("getDate");
+        toDateValueAllow.setDate(toDateValueAllow.getDate() + 365);
 
         if (toDateValue > toDateValueAllow) {
-            common.showError("Invalid date range, please select not more than 14 days");
+            common.showError("Invalid date range, please select not more than 365 days");
 
             return false;
         }
@@ -153,7 +175,9 @@
             let validTags = domElements.spanAddProblemAccountUserName.find('tags tag.valid');
             let invalidDuplicatedTags = domElements.spanAddProblemAccountUserName.find('tags tag.invalid-duplicated');
             let invalidUsernameTags = domElements.spanAddProblemAccountUserName.find('tags tag.invalid-username');
-            let notInvalid = invalidDuplicatedTags.length + invalidUsernameTags.length;
+            let numOfTagExceeded = domElements.spanAddProblemAccountUserName.find('tags tag.tagify--notAllowed');
+            
+            let notInvalid = invalidDuplicatedTags.length + invalidUsernameTags.length + numOfTagExceeded.length;
             if (notInvalid <= 1 && validTags.length > 1)
                 domElements.btnSave.prop('disabled', false);
             else
@@ -183,8 +207,8 @@
                 $tag.prop('title', textReplaced);
                 $tag.find('span.tagify__tag-text').text(textReplaced);
                 $tag.addClass(cssClass);
-                let btnRemove = $tag.find('x');
 
+                let btnRemove = $tag.find('x');
                 btnRemove.on('click', function (e) {
                     let currentTag = $(e.target).parent();
 
@@ -193,9 +217,18 @@
                     EnableButtonAdd();
                 });
 
-                domElements.spanAddProblemAccountUserNameMaxTag.text(maxCountTags - 1);
+                domElements.spanAddProblemAccountUserNameMaxTag.text(maxCountTags - 1);                
             } else {
-                inputTagUsername.tagify().data('tagify').removeTags(tagName.tag);
+                //domElements.inputTagUsername.tagify().data('tagify').removeTags(tagName.tag); 
+                let $tag = $(tagName.tag);
+                let btnRemove = $tag.find('x');
+                btnRemove.on('click', function (e) {                    
+                    let currentTag = $(e.target).parent();
+
+                    ResetMaxTag();
+                    ValidateProblemAccountInput(currentTag.text().trim());
+                    EnableButtonAdd();
+                });
             }
             domElements.btnSave.prop('disabled', true);
         }
@@ -267,6 +300,12 @@
     }
 
     function ValidateProblemAccountInput(textTagRemove) {
+        let numOfTagExceeded = domElements.spanAddProblemAccountUserName.find('tags tag.tagify--notAllowed');
+
+        if (numOfTagExceeded.length > 0) {
+            return;
+        }
+
         domElements.btnSave.prop('disabled', false);
         let userNames = GetInputUserName(textTagRemove);
 
@@ -504,6 +543,77 @@
         });
     }  
 
+    function ExportToExcel() {
+        if (ValidateRangeDateExport()) {
+            common.showSuccess('Your filter export is being processed. Please wait, this may take some minutes.', 5000);            
+
+            common.showLoading();
+
+            let request = new XMLHttpRequest();
+            request.open('POST', common.modifyRelativeUrl('ProblemAccountManagement/ExportToExcel'), true);
+            request.setRequestHeader('Content-type', 'application/json');
+            request.responseType = 'blob';
+            request.timeout = 600000;
+            request.addEventListener("timeout", function (e) {
+                common.closeLoading();
+                common.showError("Export failed (timeout)");
+            });
+            request.onload = function (e) {
+                if (this.status === 200) {
+                    let extension = ".xlsx";
+                    let date = GetFormattedDate();
+                    let filenameFormat = "PAM_{0}{1}";
+                    let filename = filenameFormat.format(date, extension);
+                    let blob = this.response;
+
+                    if (window.navigator.msSaveOrOpenBlob) {
+                        window.navigator.msSaveBlob(blob, filename);
+                    } else {
+                        let downloadLink = window.document.createElement('a');
+                        let contentTypeHeader = request.getResponseHeader("Content-Type");
+                        downloadLink.href = window.URL.createObjectURL(new Blob([blob], { type: contentTypeHeader }));
+                        
+                        var disposition = request.getResponseHeader('Content-Disposition');
+                        if (disposition && disposition.indexOf('filename') !== -1) {
+                            var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                            var matches = filenameRegex.exec(disposition);
+                            if (matches != null && matches[1]) {
+                                filename = matches[1].replace(/['"]/g, '');
+                            }                            
+                        }
+
+                        downloadLink.download = filename;
+                        document.body.appendChild(downloadLink);
+                        downloadLink.click();
+                        document.body.removeChild(downloadLink);
+                    }
+                } else {
+                    console.log(this);
+                    common.showError("Export failed");
+                }
+
+                common.closeLoading();
+            };
+
+            let params = GetParams();
+            request.send(JSON.stringify(params));
+        }        
+    }
+
+    function GetFormattedDate() {
+        let date = new Date();        
+
+        let stringDateFormat = date.getUTCFullYear().toString()
+            + ('0' + (date.getUTCMonth() + 1)).slice(-2).toString()
+            + ('0' + date.getUTCDate()).slice(-2).toString()
+            + '_'
+            + ('0' + date.getUTCHours()).slice(-2).toString()
+            + ('0' + date.getUTCMinutes()).slice(-2).toString()
+            + ('0' + date.getUTCSeconds()).slice(-2).toString();
+
+        return stringDateFormat;
+    }
+
     function Initial() {
         domElements.dpkFromDate
             .datepicker({
@@ -539,6 +649,8 @@
         });
 
         domElements.btnGenerate.on('click', function () { GetProblemAccountReport(); });
+
+        domElements.btnExportToExcel.on('click', function () { ExportToExcel(); });
 
         domElements.btnMarkNewProblemAccount.on('click', function () {
             domElements.grpCategories.removeClass('hide');
