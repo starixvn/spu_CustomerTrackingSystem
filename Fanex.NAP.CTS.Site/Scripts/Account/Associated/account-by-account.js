@@ -731,23 +731,24 @@
             },
             data: params,
             success: function (response) {
-                if (response !== undefined) {                    
+                if (response !== undefined) {
                     for (var i = 0; i < response.length; i++) {
-                        let newRow = $('<tr role="row" class="odd detail" data-match-id=' + params.MatchId + '>')
-                            .append('<td class="hide">' + response[i]["MatchDesc"] + '</td>')
-                            .append('<td class="text-center">' + response[i]["GroupID"] + '</td>')
-                            .append('<td class="text-center">' + response[i]["Description"] + '</td>')
-                            .append('<td class="text-center">' + response[i]["UserName"] + '</td>')
-                            .append('<td class="text-center">' + response[i]["TransDateString"] + '</td>')
-                            .append('<td class="text-center">' + response[i]["TransId"] + '</td>')
-                            .append('<td class="text-center">' + response[i]["BetType"] + '</td>')
-                            .append('<td class="text-center">' + response[i]["BetTeam"] + '</td>')
-                            .append('<td class="text-center">' + response[i]["Stake"] + '</td>')
-                            .append('<td class="text-center"><span ' + (response[i]["Odds"] < 0 ? 'class="red"' : '') + '>' + response[i]["Odds"] + '</span></td>')
-                            .append('<td class="text-center">' + response[i]["LiveScore"] + '</td>')
-                            .append('</tr>');
+                        var groupMemberCounter = 1;
+                        let newGroupMemberRows = new Array();
 
-                        target.last().after(newRow);
+                        if (i + 1 < response.length) {
+                            for (var j = i + 1; j < response.length; j++) {
+                                if (response[i]["GroupID"] == response[j]["GroupID"]) {
+                                    groupMemberCounter++;
+                                    newGroupMemberRows.push(RenderBettingPatternDetailRowHTML(response, params.MatchId, j, true, 0));
+                                }
+                            }
+                        }
+
+                        newGroupMemberRows.forEach(newMemberRow => target.last().after(newMemberRow));
+                        target.last().after(RenderBettingPatternDetailRowHTML(response, params.MatchId, i, false, groupMemberCounter));
+
+                        i += --groupMemberCounter;
                     }
 
                     tableMatchBettingPattern.DataTable().columns.adjust();
@@ -763,6 +764,25 @@
                 console.log(errMsg);
             }
         });
+    }
+
+    function RenderBettingPatternDetailRowHTML(response, matchId, index, isRowMember, rowspanNumer)
+    {
+        let newRow = $('<tr role="row" class="odd detail" data-match-id=' + matchId + '>')
+                      .append('<td class="hide">' + response[index]["MatchDesc"] + '</td>')
+                      .append('<td class="text-center" ' + (isRowMember ? 'style="display: none;' : ('rowspan = "' + rowspanNumer)) + '" >' + response[index]["GroupID"] + '</td>')
+                      .append('<td class="text-center" ' + (isRowMember ? 'style="display: none;' : ('rowspan = "' + rowspanNumer)) + '" >'+ response[index]["Description"] + '</td>')
+                      .append('<td class="text-center">' + response[index]["UserName"] + '</td>')
+                      .append('<td class="text-center">' + response[index]["TransDateString"] + '</td>')
+                      .append('<td class="text-center">' + response[index]["TransId"] + '</td>')
+                      .append('<td class="text-center">' + response[index]["BetType"] + '</td>')
+                      .append('<td class="text-center">' + response[index]["BetTeam"] + '</td>')
+                      .append('<td class="text-center">' + response[index]["Stake"] + '</td>')
+                      .append('<td class="text-center"><span ' + (response[index]["Odds"] < 0 ? 'class="red"' : '') + '>' + response[index]["Odds"] + '</span></td>')
+                      .append('<td class="text-center">' + response[index]["LiveScore"] + '</td>')
+                      .append('</tr>');
+
+        return newRow;
     }
 
     function ShowIPAssociation(custId) {
