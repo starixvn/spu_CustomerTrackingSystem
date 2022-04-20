@@ -6,7 +6,8 @@
     {
         public Int64 MatchID { get; set; }
 
-        public bool IsGGB { get; set; }
+        //OriginGroup
+        public Int64 GroupID { get; set; }
 
         public string AdditionalInfo { get; set; }
     }

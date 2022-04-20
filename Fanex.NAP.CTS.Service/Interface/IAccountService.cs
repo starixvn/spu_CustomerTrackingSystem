@@ -142,9 +142,11 @@
 
         IEnumerable<CustomerGroupModel> GetCustGroupAssociation(string originalGroupIDs);
 
-        IEnumerable<MatchesDetailInfoModel> GetMatchesDetailInfo(MatchesAssociationDetailViewModel matchInfo, string custIds, bool isGGB);
+        IEnumerable<MatchesDetailInfoModel> GetTicketDetails(MatchesAssociationDetailViewModel macthInfo, string custIds, string betTypes);
 
-        IEnumerable<MatchesDetailInfoViewModel> MergeCustGroupTicketInfo(IEnumerable<CustomerGroupModel> custGroups, IEnumerable<MatchesDetailInfoModel> ticketDetails, bool isGGB);
+        IEnumerable<MatchesDetailInfoViewModel> MergeCustGroupTicketInfo(IEnumerable<MatchCustomerGGBViewModel> custGroups, IEnumerable<MatchesDetailInfoModel> ticketDetails, bool isGGB);
+
+        IEnumerable<MatchCustomerGGBViewModel> MergeCustMatchInfo(IEnumerable<GBAssociationAIModel> matchInfo, IEnumerable<CustomerGroupModel> groupInfo);
 
         IEnumerable<CategoryInfoModel> GetAllCategory();		
 

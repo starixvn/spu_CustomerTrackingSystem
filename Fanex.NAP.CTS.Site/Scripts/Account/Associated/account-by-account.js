@@ -624,11 +624,8 @@
                             html += ' data-event-date-string=' + data[i].EventDateString;
                             html += ' data-custID1=' + data[i].CustID1;
                             html += ' data-custID2=' + data[i].CustID2;
-                            html += ' data-isHavingSGB=' + data[i].IsHavingSGB;
-                            html += ' data-bettypeIDs=' + data[i].BettypeIDs;
-                            html += ' data-isHavingGGB=' + data[i].IsHavingGGB;
-                            html += ' data-states=' + data[i].States;
-                            html += ' data-groupIds=' + data[i].GroupIDs+ '>';
+                            html += ' data-groupIDs=' + data[i].GroupIDs;
+                            html += ' data-orgin-groupIDs=' + data[i].OrginGroupIDs+ '>';
                             html += '<i class="icon icon-chevron-right icon-open"></i> ' + group;
                             html += '</span></td></tr>';
 
@@ -651,11 +648,8 @@
                             EventDateString: colGroupMatch.attr('data-event-date-string'),
                             CustID1: colGroupMatch.attr('data-custID1'),
                             CustID2: colGroupMatch.attr('data-custID2'),
-                            IsHavingSGB: colGroupMatch.attr('data-isHavingSGB'),
-                            BettypeIDs: colGroupMatch.attr('data-bettypeIDs'),
-                            IsHavingGGB: colGroupMatch.attr('data-isHavingGGB'),
-                            States: colGroupMatch.attr('data-states'),
-                            GroupIDs: colGroupMatch.attr('data-groupIds')
+                            GroupIDs: colGroupMatch.attr('data-groupIDs'),
+                            OrginGroupIDs: colGroupMatch.attr('data-orgin-groupIDs')
                         }
 
                         GetMatchBettingPatternDetail(params, trGroup);

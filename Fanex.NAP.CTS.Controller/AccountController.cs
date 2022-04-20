@@ -738,17 +738,6 @@
 
             if (groupBettingAssociation.ErrorCode == 0 && groupBettingAssociation.MatchesInfo != null && groupBettingAssociation.MatchesInfo.Any())
             {
-                var groupByMatch = groupBettingAssociation.MatchesInfo.GroupBy(c => c.MatchID)
-                                                                      .Select(g => new MatchesInfoViewModel
-                                                                      {
-                                                                          MatchID = g.Key,
-                                                                          GroupIDs = groupIDs,
-                                                                          IsHavingSGB = g.Any(c=>!c.IsGGB),
-                                                                          BettypeIDs = g.Where(c=>!c.IsGGB).Select(c=>c.AdditionalInfo).FirstOrDefault(),
-                                                                          IsHavingGGB = g.Any(c => c.IsGGB),
-                                                                          States = g.Where(c=>c.IsGGB).Select(c=>c.AdditionalInfo).FirstOrDefault()
-                                                                      });
-
                 var matchIDs = groupBettingAssociation.MatchesInfo.Select(c => c.MatchID).Distinct();
 
                 var matchesInfo = _accountService.GetMatchesInfo(string.Join(",", matchIDs));
@@ -756,24 +745,18 @@
                 data = new MatchesAssociationByAIViewModel
                 {                    
                     ErrorMessage = groupBettingAssociation.ErrorMessage,
-                    MatchesInfo = groupByMatch.Join(matchesInfo,
-                                           c1=> c1.MatchID,
-                                           c2 => c2.MatchID,
-                                           (c1,c2) => new MatchesInfoViewModel
+                    MatchesInfo = matchesInfo.Select(c=> new MatchesInfoViewModel
                                            {
-                                               MatchDesc = c2.MatchID
-                                                    + " - " + c2.HomeName + " vs " + c2.AwayName
-                                                    + " - " + c2.EventDate.ToString(Consts.FormatDateToString_MMMddyyyy)
-                                                    + " - " + c2.LeagueName,
-                                               MatchID = c1.MatchID,
-                                               EventDateString = c2.EventDate.ToString(Consts.FormatDateToString_yyyyMMddHHmmss),
+                                               MatchDesc = c.MatchID
+                                                    + " - " + c.HomeName + " vs " + c.AwayName
+                                                    + " - " + c.EventDate.ToString(Consts.FormatDateToString_MMMddyyyy)
+                                                    + " - " + c.LeagueName,
+                                               MatchID = c.MatchID,
+                                               EventDateString = c.EventDate.ToString(Consts.FormatDateToString_yyyyMMddHHmmss),
                                                CustID1 = para1,
                                                CustID2 = para2,
-                                               IsHavingSGB = c1.IsHavingSGB,
-                                               BettypeIDs = c1.BettypeIDs,
-                                               IsHavingGGB = c1.IsHavingGGB,
-                                               States = c1.States,
-                                               GroupIDs = c1.GroupIDs
+                                               GroupIDs = groupIDs,
+                                               OrginGroupIDs = originGroupIDs
                                            }).OrderByDescending(x => x.EventDateString)
                 };
             }
@@ -794,33 +777,69 @@
         {
             var data = new List<MatchesDetailInfoViewModel>();
 
-            if (para != null)
+            try
             {
-                if (para.IsHavingSGB)
+                if (para == null)
                 {
-                    var custIds = para.CustID1 + "," + para.CustID2;
-
-                    var sgbTicketDetails = _accountService.GetMatchesDetailInfo(para, custIds, false);
-             
-                    data.AddRange(_accountService.MergeCustGroupTicketInfo(null, sgbTicketDetails, false));
+                    return Json(data, JsonRequestBehavior.AllowGet);
                 }
 
-                if (para.IsHavingGGB)
+                var groupBettingAssociation = _accountService.GetGBAssociationFromAI(para.CustID1, para.CustID2, para.OrginGroupIDs);
+
+                if (groupBettingAssociation.ErrorCode == 0 && groupBettingAssociation.MatchesInfo.Any())
                 {
-                    var custGroups = _accountService.GetCustGroupAssociation(para.GroupIDs);
+                    var originGroupByMatchID = groupBettingAssociation.MatchesInfo.Where(c => c.MatchID == para.MatchId);
 
-                    var custIds = string.Join(",", custGroups?.Select(c => c.CustID).Distinct());
-
-                    if (custGroups.Any())
+                    if (originGroupByMatchID != null && originGroupByMatchID.Any())
                     {
-                        var ticketDetails = _accountService.GetMatchesDetailInfo(para, custIds, true);
+                        var specialGBs = originGroupByMatchID.Where(c => c.GroupID == 0).FirstOrDefault();
+                        var generalGBs = originGroupByMatchID.Where(c => c.GroupID != 0);
+                        var sgbData = Enumerable.Empty<MatchesDetailInfoViewModel>();
+                        var ggbData = Enumerable.Empty<MatchesDetailInfoViewModel>();
 
-                        if (ticketDetails != null && ticketDetails.Any())
+                        Parallel.Invoke(() =>
                         {
-                            data.AddRange(_accountService.MergeCustGroupTicketInfo(custGroups, ticketDetails, true));
-                        }
+                            if (specialGBs != null)
+                            {
+                                var sgbTicketDetails = _accountService.GetTicketDetails(para, para.CustID1 + "," + para.CustID2, specialGBs.AdditionalInfo);
+
+                                sgbData = _accountService.MergeCustGroupTicketInfo(null, sgbTicketDetails, false);
+                            }
+                        },
+                        () =>
+                        {
+                            if (generalGBs != null)
+                            {
+                                var groupInfo = _accountService.GetCustGroupAssociation(para.GroupIDs);
+
+                                if (groupInfo.Any())
+                                {
+                                    var matchGroupInfo = _accountService.MergeCustMatchInfo(generalGBs, groupInfo);
+
+                                    var custIds = string.Join(",", matchGroupInfo.Select(c => c.CustID).Distinct());
+
+                                    var ggbTicketDetails = _accountService.GetTicketDetails(para, custIds, null);
+
+                                    if (ggbTicketDetails != null && ggbTicketDetails.Any())
+                                    {
+                                        ggbData = _accountService.MergeCustGroupTicketInfo(matchGroupInfo, ggbTicketDetails, true);
+                                    }
+                                }
+                            }
+                        });
+
+                        data.AddRange(sgbData);
+                        data.AddRange(ggbData);
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                var logMessage = new LogMessage(ex.Message)
+                         .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                         .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error(logMessage);
             }
 
             return Json(data, JsonRequestBehavior.AllowGet);

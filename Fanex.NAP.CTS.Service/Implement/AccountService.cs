@@ -631,20 +631,25 @@
         }
 
 
-        public IEnumerable<MatchesDetailInfoModel> GetMatchesDetailInfo(MatchesAssociationDetailViewModel macthInfo, string custIds, bool isGGB)
+        public IEnumerable<MatchesDetailInfoModel> GetTicketDetails(MatchesAssociationDetailViewModel macthInfo, string custIds, string betTypes)
         {
-            var criteria = new GetMatchesDetailInfoCriteria
+            if (!string.IsNullOrEmpty(custIds))
             {
-                EventDate = macthInfo.EventDate,
-                Bettypes = isGGB ? null : macthInfo.BettypeIDs,
-                CustIds = custIds,
-                MatchId = macthInfo.MatchId
-            };
+                var criteria = new GetMatchesDetailInfoCriteria
+                {
+                    EventDate = macthInfo.EventDate,
+                    Bettypes = betTypes,
+                    CustIds = custIds,
+                    MatchId = macthInfo.MatchId
+                };
 
-            return repository.Fetch<MatchesDetailInfoModel>(criteria) ?? Enumerable.Empty< MatchesDetailInfoModel>();
+                return repository.Fetch<MatchesDetailInfoModel>(criteria) ?? Enumerable.Empty<MatchesDetailInfoModel>();
+            }
+
+            return Enumerable.Empty<MatchesDetailInfoModel>();
         }
 
-        public IEnumerable<MatchesDetailInfoViewModel> MergeCustGroupTicketInfo(IEnumerable<CustomerGroupModel> custGroups, IEnumerable<MatchesDetailInfoModel> ticketDetails, bool isGGB)
+        public IEnumerable<MatchesDetailInfoViewModel> MergeCustGroupTicketInfo(IEnumerable<MatchCustomerGGBViewModel> custGroups, IEnumerable<MatchesDetailInfoModel> ticketDetails, bool isGGB)
         {
             var result = new List<MatchesDetailInfoViewModel>();
 
@@ -655,8 +660,8 @@
                                     t => t.CustID,
                                     (c, t) => new MatchesDetailInfoViewModel
                                     {
+                                        IsGGB = isGGB,
                                         GroupID = c.GroupID,
-                                        Description = null, ///TODO
                                         UserName = t.UserName,
                                         TransDateString = t.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                                         TransId = t.TransId,
@@ -673,8 +678,8 @@
                 {
                     result.Add(new MatchesDetailInfoViewModel
                     {
+                        IsGGB = isGGB,
                         GroupID = 0,
-                        Description = "The Time Interval is less than 10 seconds",
                         UserName = c.UserName,
                         TransDateString = c.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                         TransId = c.TransId,
@@ -693,6 +698,24 @@
             }
 
             return result ?? Enumerable.Empty<MatchesDetailInfoViewModel>();
+        }
+
+        public IEnumerable<MatchCustomerGGBViewModel> MergeCustMatchInfo(IEnumerable<GBAssociationAIModel> matchInfo, IEnumerable<CustomerGroupModel> groupInfo)
+        {
+            if (matchInfo != null && matchInfo.Any() && groupInfo != null && groupInfo.Any())
+            {
+                return matchInfo.Join(groupInfo,
+                                    m => m.GroupID,
+                                    g => g.OriginGroupID,
+                                    (m,g) => new MatchCustomerGGBViewModel
+                                    {
+                                        CustID = g.CustID,
+                                        GroupID = g.GroupID,
+                                        AdditionalInfo = m.AdditionalInfo
+                                    }) ?? Enumerable.Empty<MatchCustomerGGBViewModel>();
+            }
+
+            return Enumerable.Empty<MatchCustomerGGBViewModel>();
         }
 
         public IEnumerable<CategoryInfoModel> GetAllCategory()

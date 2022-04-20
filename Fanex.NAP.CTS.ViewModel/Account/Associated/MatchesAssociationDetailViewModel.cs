@@ -29,14 +29,8 @@
 
         public Int64 CustID2 { get; set; }
 
-        public bool IsHavingSGB { get; set; }
-
-        public string BettypeIDs { get; set; }
-
-        public bool IsHavingGGB { get; set; }
-
-        public string States { get; set; }
-
         public string GroupIDs { get; set; }
+
+        public string OrginGroupIDs { get; set; }
     }
 }
