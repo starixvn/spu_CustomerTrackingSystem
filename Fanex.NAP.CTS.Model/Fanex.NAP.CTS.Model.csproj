@@ -151,7 +151,6 @@
     <Compile Include="Account\AssociatedAccount\AccountStaticStatusModel.cs" />
     <Compile Include="Account\AssociatedAccount\AssociatedAccountDetail\MatchesInfoModel.cs" />
     <Compile Include="Account\BettingStatistic\PerformanceBySportModel.cs" />
-    <Compile Include="Account\CustomerAssociationByCTSCustIdModel.cs" />
     <Compile Include="Account\CustomerByGraphDB.cs" />
     <Compile Include="Account\CustomerCategory\AddCustomerCategoryModel.cs" />
     <Compile Include="Account\CustomerCategory\CustomerClassificationGeneralInfoModel.cs" />
