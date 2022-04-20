@@ -7,6 +7,7 @@
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Web.Attribute;
+    using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.BaseClasses;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Helpers;
@@ -1559,20 +1560,35 @@
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationMarkCategory)]
-        public ActionResult AddCustomerCategory(AddCustomerCategoryModel addCategoryModel)
+        public ActionResult AddCustomerCategory(AddCustomerCategoryModel categoryModel)
         {
-            var errorCode = 0;
-            var errorMessage = string.Empty;
-            var latestClassifications = Enumerable.Empty<LatestClassificationModel>();
+            categoryModel.CreatedBy = CurrentSession.UserId;
+                        
+            var result = AddDirectCustomerCategory(categoryModel);
 
-            var resultToCTS = _accountService.AddCustomerCategory(addCategoryModel, CurrentSession.UserId, out latestClassifications);
-
-            if (resultToCTS.ErrorCode == 0 && latestClassifications != null)
+            if (categoryModel.IsAffectToAllDownlines)
             {
-                if (addCategoryModel.IsVVip)
+                _accountService.AddQueueAffectDownlinesCustomerCategory(categoryModel);
+            }
+
+            return Json(new
+            {
+                errorCode = result.ErrorCode,
+                errorMessage = result.ErrorMsg
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        private DBResult AddDirectCustomerCategory(AddCustomerCategoryModel categoryModel)
+        {
+            var latestClassifications = Enumerable.Empty<LatestClassificationModel>();
+            var result = _accountService.AddCustomerCategory(categoryModel, out latestClassifications);
+
+            if (result.ErrorCode == 0 && latestClassifications != null)
+            {
+                if (categoryModel.IsVVip)
                 {
                     int custIdInt = 0;
-                    int.TryParse(addCategoryModel.CustId.ToString(), out custIdInt);
+                    int.TryParse(categoryModel.CustId.ToString(), out custIdInt);
 
                     if (custIdInt != 0)
                     {
@@ -1601,34 +1617,26 @@
                     }
                 }
             }
-            else
-            {
-                errorCode = resultToCTS.ErrorCode;
-                errorMessage = resultToCTS.ErrorMsg;
-            }
 
-            return Json(new
-            {
-                errorCode,
-                errorMessage
-            }, JsonRequestBehavior.AllowGet);
+            return result;
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationRemoveCategory)]
-        public ActionResult RemoveCustomerCategory(long custId, long ctsCustId, int categoryId, bool isVVip)
+        public ActionResult RemoveCustomerCategory(RemoveCustomerCategoryModel categoryModel)
         {
             var errorCode = 0;
             var errorMessage = string.Empty;
+            categoryModel.CreatedBy = CurrentSession.UserId;
 
-            var resultToCTS = _accountService.RemoveCustomerCategory(custId, ctsCustId, categoryId, CurrentSession.UserId);
+            var resultToCTS = _accountService.RemoveCustomerCategory(categoryModel);
 
             if (string.IsNullOrEmpty(resultToCTS.OpErrorMessage))
             {
-                if (isVVip)
+                if (categoryModel.IsVVip)
                 {
                     var custIdInt = 0;
-                    int.TryParse(custId.ToString(), out custIdInt);
+                    int.TryParse(categoryModel.CustId.ToString(), out custIdInt);
 
                     if (custIdInt != 0)
                     {

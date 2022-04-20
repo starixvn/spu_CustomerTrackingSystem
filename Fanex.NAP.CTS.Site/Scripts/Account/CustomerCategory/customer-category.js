@@ -84,6 +84,7 @@
         params.CTSCustId = ctsCustId;
         params.SubscriberId = subscriberId;
         params.CategoryId = $('#ddlcategory').val();
+        params.IsAffectToAllDownlines = $('#inputAffectToAllDownlines').is(":checked");
         params.Remark = $('#txtcategorycomment').val();
         params.isVVip = true;
 
@@ -161,6 +162,7 @@
         params.custId = custId;
         params.ctsCustId = ctsCustId;
         params.categoryId = $('#ddlRemoveCategory').val();
+        params.IsAffectToAllDownlines = $('#inputAffectToAllDownlines').is(":checked");
         params.isVVip = true;
 
         $.ajax(url, {

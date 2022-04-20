@@ -10,8 +10,12 @@
 
         public int CategoryId { get; set; }
 
+        public bool IsAffectToAllDownlines { get; set; }
+
         public string Remark { get; set; }
 
         public bool IsVVip { get; set; }
+
+        public int CreatedBy { get; set; }
     }
 }

@@ -21,6 +21,7 @@
     using Fanex.NAP.CTS.Criteria.Home;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
+    using Fanex.NAP.CTS.Model.Account.CustomerCategory;
     using Fanex.NAP.CTS.Model.Account.CustomerInfo;
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.CustomerClassify;
@@ -1176,16 +1177,26 @@
             }
         }
 
-        public DBResult AddCustomerCategory(AddCustomerCategoryModel addCategoryModel, int createdBy, out IEnumerable<LatestClassificationModel> latestClassifications)
+        public DBResult AddCustomerCategory(AddCustomerCategoryModel categoryModel, out IEnumerable<LatestClassificationModel> latestClassifications)
         {
-            var criteria = new AddCTSCustomerClassificationCriteria
+            var custList = new List<AddCustomerCategoryInfoModel>()
             {
-                CustId = addCategoryModel.CustId,
-                CTSCustId = addCategoryModel.CTSCustId,
-                SubscriberId = addCategoryModel.SubscriberId,
-                CategoryId = addCategoryModel.CategoryId,
-                CreatedBy = createdBy,
-                Remark = addCategoryModel.Remark
+                new AddCustomerCategoryInfoModel
+                {
+                    CustID = categoryModel.CustId,
+                    CTSCustID = categoryModel.CTSCustId,
+                    CategoryID = categoryModel.CategoryId,
+                    SubscriberID = categoryModel.SubscriberId,
+                    CreatedBy = categoryModel.CreatedBy,
+                    Remark = categoryModel.Remark
+                }
+            };
+
+            var criteria = new AddCustomerClassificationCriteria
+            {              
+                FromAction = (int)FromAction.WebSite,
+                AffectDownline = categoryModel.IsAffectToAllDownlines,
+                CustJson = JsonConvert.SerializeObject(custList)
             };
 
             var repository = new DynamicRepository();
@@ -1194,7 +1205,7 @@
 
             if (!string.IsNullOrEmpty(criteria.ErrorMessage))
             {
-                LogService.Error("CTS - AccountService AddCustomerCategory failed: " + criteria.ErrorMessage);
+                LogService.Error("CTS - AddCustomerCategory failed: " + criteria.ErrorMessage);
 
                 return new DBResult { ErrorCode = -1, ErrorMsg = criteria.ErrorMessage };
             }
@@ -1202,15 +1213,55 @@
             return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
         }
 
-        public ResultInsertRemoveCustomerClassificationModel RemoveCustomerCategory(long custId, long ctsCustId, int categoryId, int createdBy)
+        public DBResult AddQueueAffectDownlinesCustomerCategory(AddCustomerCategoryModel categoryModel)
+        {
+            var criteria = new InsertQueueCustClassificationForDownlineCriteria
+            {
+                CustId = categoryModel.CustId,
+                CTSCustId = categoryModel.CTSCustId,
+                SubscriberId = categoryModel.SubscriberId,
+                CategoryId = categoryModel.CategoryId,
+                CreatedBy = categoryModel.CreatedBy,
+                Remark = categoryModel.Remark,
+                ActionType = (int)ActionTypeQueueCustCategory.Insert
+            };
+
+            var repository = new DynamicRepository();
+
+            try
+            {
+                repository.Execute(criteria);
+            }
+            catch (Exception ex)
+            {
+                LogService.Error($"CTS - AddQueueCustomerCategory exception: { ex.Message }", ex);
+
+                return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
+            }
+
+            return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
+        }
+
+        public ResultInsertRemoveCustomerClassificationModel RemoveCustomerCategory(RemoveCustomerCategoryModel categoryModel)
         {
             var insertCTSResult = new ResultInsertRemoveCustomerClassificationModel();
-            var criteria = new RemoveCTSCustomerClassificationCriteria
+
+            var custList = new List<RemoveCustomerCategoryInfoModel>() 
             {
-                CustId = custId,
-                CTSCustId = ctsCustId,
-                CategoryId = categoryId,
-                CreatedBy = createdBy
+                new RemoveCustomerCategoryInfoModel
+                {
+                    CustID = categoryModel.CustId,
+                    CTSCustID = categoryModel.CtsCustId,
+                    CreatedBy = categoryModel.CreatedBy,
+                    CategoryID = categoryModel.CategoryId
+                }
+            };
+
+            var criteria = new RemoveCustomerClassificationCriteria
+            {
+                FromAction = (int)FromAction.WebSite,
+                AffectDownline = categoryModel.IsAffectToAllDownlines,
+                CustJson = JsonConvert.SerializeObject(custList)
             };
 
             var repository = new DynamicRepository();

@@ -108,9 +108,11 @@
 
         IEnumerable<CustomerClassificationHistoryModel> GetCustomerClassificationHistory(long ctsCustId);
 
-        DBResult AddCustomerCategory(AddCustomerCategoryModel addCategoryModel, int createdBy, out IEnumerable<LatestClassificationModel> latestClassifications);
-               
-        ResultInsertRemoveCustomerClassificationModel RemoveCustomerCategory(long custId, long ctsCustId, int categoryId, int createdBy);        
+        DBResult AddCustomerCategory(AddCustomerCategoryModel categoryModel, out IEnumerable<LatestClassificationModel> latestClassifications);
+
+        DBResult AddQueueAffectDownlinesCustomerCategory(AddCustomerCategoryModel categoryModel);
+
+        ResultInsertRemoveCustomerClassificationModel RemoveCustomerCategory(RemoveCustomerCategoryModel removeCategoryModel);        
 
         DBResult PinCategoryCustomerClassification(long ctsCustId, int subscriberId, bool isPinCategory, int createdBy);
 

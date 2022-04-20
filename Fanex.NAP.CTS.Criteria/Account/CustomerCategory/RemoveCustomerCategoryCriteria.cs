@@ -3,19 +3,16 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
 
-    public class RemoveCTSCustomerClassificationCriteria : NonQueryCommand
+    public class RemoveCustomerCategoryCriteria : NonQueryCommand
     {
-        [SpParam(SqlParamName = "ip_CustID")]
-        public long CustId { get; set; }
+        [SpParam(SqlParamName = "ip_FromAction")]
+        public int FromAction { get; set; }
 
-        [SpParam(SqlParamName = "ip_CTSCustID")]
-        public long CTSCustId { get; set; }
+        [SpParam(SqlParamName = "ip_AffectDownline")]
+        public bool AffectDownline { get; set; }
 
-        [SpParam(SqlParamName = "ip_CategoryID")]
-        public int CategoryId { get; set; }
-
-        [SpParam(SqlParamName = "ip_CreatedBy")]
-        public int CreatedBy { get; set; }
+        [SpParam(SqlParamName = "ip_CustJson")]
+        public string CustJson { get; set; }
 
         [SpParam(SqlParamName = "op_ErrorMessage")]
         public string ErrorMessage { get; set; }
