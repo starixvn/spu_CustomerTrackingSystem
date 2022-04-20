@@ -24,7 +24,7 @@
 
         CustomerInfoByCustIdsModel GetCustomerInfoByCustIds(long custId, int sourceType);
 
-        CustomerInfoAssociationAccountModel GetCustomerInfoAssociationAccount(long ctsCustId);
+        CustomerInfoAssociationAccountModel GetCustomerInfoAssociationAccount(long ctsCustId, bool getFromMySQL);
 
         IEnumerable<CustomerInfoEvidenceModel> GetCustomerInfoEvidence(long ctsCustId);
 
@@ -37,8 +37,6 @@
         CustomerInfoDateModel GetCustProfileDates(long ctsCustId);
 
         #endregion
-
-        CustomerAssociationByCTSCustIdModel GetCustomerTotalAssociationByCTSCustId(long ctsCustId, string apiUrl, bool fromMySQL = false);
 
         List<CustomerEvidenceByCTSCustIdModel> GetCustomerEvidenceByCTSCustId(long ctsCustId);
 

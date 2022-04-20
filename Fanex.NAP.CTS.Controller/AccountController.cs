@@ -162,16 +162,6 @@
         }
 
         [HttpPost]
-        public ActionResult GetCustomerTotalAssociationByCTSCustId(long ctsCustId)
-        {
-            //var getAssociationFromMySQL = AppSettings.Get("GetAssociationProfileFromMySQL") == "1";
-
-            var result = _accountService.GetCustomerTotalAssociationByCTSCustId(ctsCustId, ConfigSettings.GetStatisticAssociation, true);
-
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
         public ActionResult GetCustomerEvidenceByCTSCustId(long ctsCustId)
         {
             var evidences = _accountService.GetCustomerEvidenceByCTSCustId(ctsCustId);
@@ -230,7 +220,9 @@
         [HttpPost]
         public ActionResult GetCustProfileAssociationAccount(long ctsCustId)
         {
-            var data = _accountService.GetCustomerInfoAssociationAccount(ctsCustId);
+            var getAssociationFromMySQL = AppSettings.Get("GetAssociationProfileFromMySQL") == "1";
+
+            var data = _accountService.GetCustomerInfoAssociationAccount(ctsCustId, getAssociationFromMySQL);
 
             if (data != null)
             {

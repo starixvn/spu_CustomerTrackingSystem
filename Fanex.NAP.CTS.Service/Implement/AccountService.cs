@@ -83,16 +83,29 @@
             }
         }
 
-        public CustomerInfoAssociationAccountModel GetCustomerInfoAssociationAccount(long ctsCustId)
+        public CustomerInfoAssociationAccountModel GetCustomerInfoAssociationAccount(long ctsCustId, bool getFromMySQL)
         {
-            var criteria = new GetCustomerInfoAssociatedAccountCriteria
+            if (getFromMySQL)
             {
-                CTSCustId = ctsCustId
-            };
+                var criteria = new GetCustomerInfoAssociatedAccountCriteria
+                {
+                    CTSCustId = ctsCustId
+                };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+                using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+                {
+                    return db.QueryEntity<CustomerInfoAssociationAccountModel>(criteria);
+                }
+            }
+            else
             {
-                return db.QueryEntity<CustomerInfoAssociationAccountModel>(criteria);
+                var apiPath = string.Format(ConfigSettings.GetStatisticAssociation, ctsCustId);
+
+                var data = ApiHelper.Get<CustomerInfoAssociationAccountModel>(apiPath);
+
+                Task.WhenAll(data);
+
+                return data.Result;
             }
         }
 
@@ -189,34 +202,6 @@
                 return result;
             }
         }    
-
-        public CustomerAssociationByCTSCustIdModel GetCustomerTotalAssociationByCTSCustId(long ctsCustId, string apiUrl, bool fromMySQL = false)
-        {
-            if (fromMySQL)
-            {
-                var criteria = new GetAssociationProfileStatictisCriteria
-                {
-                    CTSCustId = ctsCustId
-                };
-
-                using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-                {
-                    var result = db.QueryEntity<CustomerAssociationByCTSCustIdModel>(criteria);
-
-                    return result;
-                }
-            }
-            else
-            {
-                var apiPath = string.Format(apiUrl, ctsCustId);
-
-                var data = ApiHelper.Get<CustomerAssociationByCTSCustIdModel>(apiPath);
-
-                Task.WhenAll(data);
-
-                return data.Result;
-            }
-        }
 
         public List<CustomerEvidenceByCTSCustIdModel> GetCustomerEvidenceByCTSCustId(long ctsCustId)
         {

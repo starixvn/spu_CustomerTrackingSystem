@@ -250,22 +250,6 @@
 
     }
 
-    function GetTotalAssociation(ctsCustId) {
-        $.ajax(common.modifyRelativeUrl('Account/GetCustomerTotalAssociationByCTSCustId'), {
-            type: 'POST',
-            data: {
-                ctsCustId: ctsCustId
-            },
-            success: function (response) {
-                totalAssAccount = response.TotalAccounts;
-                $('#spanTotalAssociated').html(response.TotalAccounts + " / " + response.TotalDevices);
-            },
-            error: function (errMsg) {
-                console.log(errMsg);
-            }
-        });
-    } 
-
     function RemoveAssociation(fromSubscriberId, fromCTSCustId, toSubscriberId, toCTSCustId, isLinked) {
         var url = common.modifyRelativeUrl('Account/ActiveRemoveAssociation');
         var params = {};

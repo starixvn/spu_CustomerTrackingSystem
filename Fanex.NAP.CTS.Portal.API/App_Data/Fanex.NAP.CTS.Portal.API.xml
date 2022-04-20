@@ -667,7 +667,7 @@
             <param name="ctsCustIDs"></param>
             <returns></returns>
         </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetStatisticAssociation(System.Int32)">
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetStatisticAssociation(System.Int64)">
             <summary>
             Get association statistic
             </summary>
