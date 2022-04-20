@@ -21,7 +21,7 @@
                     return eventDate;
                 }
 
-                return null;
+                return DateTime.MinValue;
             }
         }
 

@@ -655,7 +655,7 @@
                                         Stake = t.Stake,
                                         Odds = t.Odds,
                                         LiveScore = t.LiveHomeScore + "-" + t.LiveAwayScore
-                                    })?.ToList();
+                                    })?.OrderBy(c=>c.GroupID).ThenByDescending(c=>c.TransDateString).ToList();
             }
             else if (!isGGB && ticketDetails != null && ticketDetails.Any())
             {

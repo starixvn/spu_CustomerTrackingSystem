@@ -79,6 +79,7 @@
 	</Function>
 
 	<Function Name="AssociationDetail">
+		<Setting Key="CTS_DC_AssociationGroupByAI_GetCustomersByGroup" SpName="CTS_DC_AssociationGroupByAI_GetCustomersByGroup" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="SPU_AIML_GB_GetAssociationInfo" SpName="SPU_AIML_GB_GetAssociationInfo" DbName="MySQL.SPU_AIML.Reporter" />
 		<Setting Key="SPU_AIML_GetAssociationByIPInfo" SpName="SPU_AIML_GetAssociationByIPInfo" DbName="MySQL.SPU_AIML.Reporter" />
 	</Function>
