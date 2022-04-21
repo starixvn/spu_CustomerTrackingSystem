@@ -69,8 +69,10 @@
     <Compile Include="Account\ChainToEvidence\GetAffectedEvidenceBetweenCustsCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\GetAffectedEvidenceCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\GetAllEvidenceCriteria.cs" />
+    <Compile Include="Account\CustomerCategory\AddCustomerCategoryCriteria.cs" />
     <Compile Include="Account\CustomerCategory\GetCTSCustomerClassificationHistoryCriteria.cs" />
     <Compile Include="Account\CustomerCategory\InsertQueueCustClassificationForDownlineCriteria.cs" />
+    <Compile Include="Account\CustomerCategory\RemoveCustomerCategoryCriteria.cs" />
     <Compile Include="Account\CustomerInfo\GetCustomerInfoAssociatedAccountCriteria.cs" />
     <Compile Include="Account\CustomerInfo\GetCustomerInfoDateCriteria.cs" />
     <Compile Include="Account\CustomerInfo\GetCustomerInfoEvidenceCriteria.cs" />
@@ -147,7 +149,6 @@
     <Compile Include="Account\ChainToEvidence\RestoreAffectedEvidenceCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\RetractAffectedEvidenceCriteria.cs" />
     <Compile Include="Account\CheckCustNotExistedByCustIdsCriteria.cs" />
-    <Compile Include="Account\CustomerCategory\AddCustomerClassificationCriteria.cs" />
     <Compile Include="Account\CustomerCategory\GetAllSportGroupCriteria.cs" />
     <Compile Include="Account\CustomerCategory\GetCustomerCategoryByCategoryIdsCriteria.cs" />
     <Compile Include="Account\CustomerCategory\GetCTSCustomerClassificationForAPICriteria.cs" />
@@ -155,7 +156,6 @@
     <Compile Include="Account\CustomerCategory\GetCustomerCategoryByCTSCustId.cs" />
     <Compile Include="Account\CustomerCategory\GetCustomerClassByCustIdCriteria.cs" />
     <Compile Include="Account\CustomerCategory\PinCTSCategoryCustomerClassificationCriteria.cs" />
-    <Compile Include="Account\CustomerCategory\RemoveCustomerClassificationCriteria.cs" />
     <Compile Include="Account\CustomerCategory\UpdateCTSCustomerClassificationCriteria.cs" />
     <Compile Include="Account\CustomerEvidenceByCTSCustIdCriteria.cs" />
     <Compile Include="Account\CustomerAssociationByCTSCustIdCriteria.cs" />

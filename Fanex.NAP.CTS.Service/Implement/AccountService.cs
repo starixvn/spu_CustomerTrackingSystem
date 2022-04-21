@@ -1192,7 +1192,7 @@
                 }
             };
 
-            var criteria = new AddCustomerClassificationCriteria
+            var criteria = new AddCustomerCategoryCriteria
             {              
                 FromAction = (int)FromAction.WebSite,
                 AffectDownline = categoryModel.IsAffectToAllDownlines,
@@ -1257,7 +1257,7 @@
                 }
             };
 
-            var criteria = new RemoveCustomerClassificationCriteria
+            var criteria = new RemoveCustomerCategoryCriteria
             {
                 FromAction = (int)FromAction.WebSite,
                 AffectDownline = categoryModel.IsAffectToAllDownlines,
