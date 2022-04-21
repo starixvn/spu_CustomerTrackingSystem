@@ -31,7 +31,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_CustClassification_Queue_Insert";
+            return "CTS_DC_CustClassification_VVIPQueue_Insert";
         }
 
         public override bool IsValid()

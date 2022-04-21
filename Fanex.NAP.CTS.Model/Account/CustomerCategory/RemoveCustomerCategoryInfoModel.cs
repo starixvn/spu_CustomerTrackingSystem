@@ -6,8 +6,8 @@
 
         public long CTSCustID { get; set; }
 
-        public long CreatedBy { get; set; }
+        public int RoleID { get; set; }
 
-        public int CategoryID { get; set; }
+        public long CreatedBy { get; set; }        
     }
 }

@@ -1560,10 +1560,11 @@
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationMarkCategory)]
-        public ActionResult AddCustomerCategory(AddCustomerCategoryModel categoryModel)
+        public ActionResult AddCustomerCategory(CustomerCategoryModel categoryModel)
         {
             categoryModel.CreatedBy = CurrentSession.UserId;
-                        
+            categoryModel.ActionType = ActionTypeQueueCustCategory.Insert;
+
             var result = AddDirectCustomerCategory(categoryModel);
 
             if (categoryModel.IsAffectToAllDownlines)
@@ -1578,7 +1579,7 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private DBResult AddDirectCustomerCategory(AddCustomerCategoryModel categoryModel)
+        private DBResult AddDirectCustomerCategory(CustomerCategoryModel categoryModel)
         {
             var latestClassifications = Enumerable.Empty<LatestClassificationModel>();
             var result = _accountService.AddCustomerCategory(categoryModel, out latestClassifications);
@@ -1623,18 +1624,24 @@
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationRemoveCategory)]
-        public ActionResult RemoveCustomerCategory(RemoveCustomerCategoryModel categoryModel)
+        public ActionResult RemoveCustomerCategory(CustomerCategoryModel categoryModel)
         {
             var errorCode = 0;
             var errorMessage = string.Empty;
             categoryModel.CreatedBy = CurrentSession.UserId;
+            categoryModel.ActionType = ActionTypeQueueCustCategory.Remove;
 
-            var resultToCTS = _accountService.RemoveCustomerCategory(categoryModel);
+            var result = _accountService.RemoveCustomerCategory(categoryModel);
 
-            if (string.IsNullOrEmpty(resultToCTS.OpErrorMessage))
+            if (string.IsNullOrEmpty(result.OpErrorMessage))
             {
                 if (categoryModel.IsVVip)
                 {
+                    if (categoryModel.IsAffectToAllDownlines)
+                    {
+                        _accountService.AddQueueAffectDownlinesCustomerCategory(categoryModel);
+                    }
+
                     var custIdInt = 0;
                     int.TryParse(categoryModel.CustId.ToString(), out custIdInt);
 
@@ -1656,7 +1663,7 @@
             else
             {
                 errorCode = -1;
-                errorMessage = resultToCTS.OpErrorMessage;
+                errorMessage = result.OpErrorMessage;
             }
 
             return Json(new

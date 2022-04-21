@@ -11,6 +11,9 @@
         [SpParam(SqlParamName = "ip_QueueID")]
         public long QueueID { get; set; }
 
+        [SpParam(SqlParamName = "ip_UplineRoleID")]
+        public int UplineRoleID { get; set; }
+
         [SpParam(SqlParamName = "ip_AffectDownline")]
         public bool AffectDownline { get; set; }
 
@@ -22,7 +25,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_CustClassification_Insert";
+            return "CTS_DC_CustClassification_InsertVVIP";
         }
 
         public override bool IsValid()

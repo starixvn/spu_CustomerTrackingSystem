@@ -4,7 +4,7 @@
     {
         public long CustId { get; set; }
 
-        public long CtsCustId { get; set; }
+        public long CTSCustId { get; set; }
 
         public int CategoryId { get; set; }
 

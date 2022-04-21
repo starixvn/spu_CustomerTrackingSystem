@@ -84,6 +84,7 @@
         params.CTSCustId = ctsCustId;
         params.SubscriberId = subscriberId;
         params.CategoryId = $('#ddlcategory').val();
+        params.RoleId = $('#hdRoleID').val();
         params.IsAffectToAllDownlines = $('#inputAffectToAllDownlines').is(":checked");
         params.Remark = $('#txtcategorycomment').val();
         params.isVVip = true;
@@ -159,11 +160,12 @@
     function RemoveCategory(custId, ctsCustId) {
         var url = common.modifyRelativeUrl('Account/RemoveCustomerCategory');
         var params = {};
-        params.custId = custId;
-        params.ctsCustId = ctsCustId;
-        params.categoryId = $('#ddlRemoveCategory').val();
+        params.CustId = custId;
+        params.CTSCustId = ctsCustId;
+        params.CategoryId = $('#ddlRemoveCategory').val();
+        params.RoleId = $('#hdRoleID').val();
         params.IsAffectToAllDownlines = $('#inputAffectToAllDownlines').is(":checked");
-        params.isVVip = true;
+        params.IsVVip = true;
 
         $.ajax(url, {
             type: 'POST',

@@ -1177,7 +1177,7 @@
             }
         }
 
-        public DBResult AddCustomerCategory(AddCustomerCategoryModel categoryModel, out IEnumerable<LatestClassificationModel> latestClassifications)
+        public DBResult AddCustomerCategory(CustomerCategoryModel categoryModel, out IEnumerable<LatestClassificationModel> latestClassifications)
         {
             var custList = new List<AddCustomerCategoryInfoModel>()
             {
@@ -1185,7 +1185,7 @@
                 {
                     CustID = categoryModel.CustId,
                     CTSCustID = categoryModel.CTSCustId,
-                    CategoryID = categoryModel.CategoryId,
+                    RoleID = categoryModel.RoleId,
                     SubscriberID = categoryModel.SubscriberId,
                     CreatedBy = categoryModel.CreatedBy,
                     Remark = categoryModel.Remark
@@ -1213,7 +1213,7 @@
             return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
         }
 
-        public DBResult AddQueueAffectDownlinesCustomerCategory(AddCustomerCategoryModel categoryModel)
+        public DBResult AddQueueAffectDownlinesCustomerCategory(CustomerCategoryModel categoryModel)
         {
             var criteria = new InsertQueueCustClassificationForDownlineCriteria
             {
@@ -1221,9 +1221,10 @@
                 CTSCustId = categoryModel.CTSCustId,
                 SubscriberId = categoryModel.SubscriberId,
                 CategoryId = categoryModel.CategoryId,
+                RoleId = categoryModel.RoleId,
                 CreatedBy = categoryModel.CreatedBy,
                 Remark = categoryModel.Remark,
-                ActionType = (int)ActionTypeQueueCustCategory.Insert
+                ActionType = (int)categoryModel.ActionType
             };
 
             var repository = new DynamicRepository();
@@ -1242,7 +1243,7 @@
             return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
         }
 
-        public ResultInsertRemoveCustomerClassificationModel RemoveCustomerCategory(RemoveCustomerCategoryModel categoryModel)
+        public ResultInsertRemoveCustomerClassificationModel RemoveCustomerCategory(CustomerCategoryModel categoryModel)
         {
             var insertCTSResult = new ResultInsertRemoveCustomerClassificationModel();
 
@@ -1251,9 +1252,9 @@
                 new RemoveCustomerCategoryInfoModel
                 {
                     CustID = categoryModel.CustId,
-                    CTSCustID = categoryModel.CtsCustId,
-                    CreatedBy = categoryModel.CreatedBy,
-                    CategoryID = categoryModel.CategoryId
+                    CTSCustID = categoryModel.CTSCustId,
+                    RoleID = categoryModel.RoleId,
+                    CreatedBy = categoryModel.CreatedBy                    
                 }
             };
 
