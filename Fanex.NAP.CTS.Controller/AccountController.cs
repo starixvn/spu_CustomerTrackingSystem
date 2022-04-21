@@ -553,6 +553,8 @@
                                           CategoryIDs = group.a.CategoryIDs,
                                           CategoryNames = group.a.CategoryNames,
                                           CustomerClasses = (temp != null && temp.CustClass != null && group.a.CustSubId == 0) ? temp.CustClass.ToString() : "-",
+                                          GroupIDs = group.a.GroupIDs,
+                                          OriginGroupIDs = group.a.OriginGroupIDs
                                       }).ToList();
 
             return result;
