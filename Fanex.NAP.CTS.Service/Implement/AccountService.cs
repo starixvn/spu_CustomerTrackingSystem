@@ -647,6 +647,7 @@
                                     {
                                         IsGGB = isGGB,
                                         GroupID = c.GroupID,
+                                        AdditionalInfo = c.AdditionalInfo,
                                         UserName = t.UserName,
                                         TransDateString = t.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                                         TransId = t.TransId,
@@ -655,7 +656,7 @@
                                         Stake = t.Stake,
                                         Odds = t.Odds,
                                         LiveScore = t.LiveHomeScore + "-" + t.LiveAwayScore
-                                    })?.OrderBy(c=>c.GroupID).ThenByDescending(c=>c.TransDateString).ToList();
+                                    })?.OrderBy(c=>c.GroupID).ThenByDescending(c=>c.TransDate).ToList();
             }
             else if (!isGGB && ticketDetails != null && ticketDetails.Any())
             {

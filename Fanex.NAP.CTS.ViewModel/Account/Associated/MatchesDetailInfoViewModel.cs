@@ -26,10 +26,10 @@
                             {
                                 if (AdditionalInfo.Contains(","))
                                 {
-                                    return "The Time Intervals are " + AdditionalInfo + "seconds";
+                                    return "The Time Intervals are " + AdditionalInfo + " seconds";
                                 }
 
-                                return "The Time Interval is " + AdditionalInfo + "seconds";
+                                return "The Time Interval is " + AdditionalInfo + " seconds";
                             }
                     }
                 };
@@ -41,6 +41,8 @@
         public string UserName { get; set; }
 
         public string TransDateString { get; set; }
+
+        public DateTime TransDate { get; set; }
 
         public Int64 TransId { get; set; }
 
