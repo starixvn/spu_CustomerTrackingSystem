@@ -55,10 +55,13 @@
             //Rescan PA - Get SMA CustId
             custIdsCheckPA.AddRange(GetAgentCusts(para.CustIds));
 
-            custIdsCheckPA.AddRange(GetExistedEvidences(para.CustIds, para.FunctionId));
+            //Evidence & PACM
+            var existEvidences = GetExistedEvidences(para.CustIds);
+            var napProblemAccounts = GetExistedProblemAccountsFromNAPPA(para.CustIds, para.FuncId_CheckPA);
+            var paLosing = GetPALosing(existEvidences, napProblemAccounts, para.FunctionId);
 
-            custIdsCheckPA.AddRange(GetProblemAccountFromNAP(para));
-
+            custIdsCheckPA.AddRange(InsertProblemAccount(napProblemAccounts, paLosing, para.FunctionId));
+            custIdsCheckPA.AddRange(SyncCustomerEvidenceToCategory(existEvidences, paLosing, para.FunctionId));
             custIdsCheckPA.AddRange(GetRobotUsers(para));
 
             //Rescan PA - Push CC & CN88
@@ -89,7 +92,7 @@
 
             if (custIds != null && custIds.Any())
             {
-                var data = GetRoleCustomer(string.Join(",", custIds)).ToList();
+                var data = GetRoleCustomer(string.Join(",", custIds));
 
                 if (data != null && data.Any())
                 {
@@ -103,59 +106,124 @@
             return agentIds;
         }
 
-        private List<long> GetExistedEvidences(IEnumerable<long> custIds, FunctionId functionId)
+        private IEnumerable<CustEvidenceModel> GetExistedEvidences(IEnumerable<long> custIds)
         {
-            var custIdsToSyncCC = new List<long>();
-
-            var existedCustEvidences = GetExistedCustomerEvidences(string.Join(",", custIds)).ToList();
-
-            var result = SyncCustomerEvidenceToCategory(existedCustEvidences, functionId);
-
-            if (string.IsNullOrEmpty(result.ErrorMessage) && result.CustIds != null && result.CustIds.Any())
+            if (custIds != null && custIds.Any())
             {
-                custIdsToSyncCC.AddRange(result.CustIds);
+                return GetExistedCustomerEvidences(string.Join(",", custIds)) ?? Enumerable.Empty<CustEvidenceModel>();
             }
 
-            if (_isWriteLogInfo)
-                LogService.Info($"Web - RescanPA - Get Evidence Custs - with data:  {JsonConvert.SerializeObject(existedCustEvidences)}");
-
-            return custIdsToSyncCC;
+            return Enumerable.Empty<CustEvidenceModel>();
         }
 
-        private InsertEvidenceCategoryResultModel SyncCustomerEvidenceToCategory(List<CustEvidenceModel> custEvidences, FunctionId functionId)
+        private IEnumerable<long> SyncCustomerEvidenceToCategory(IEnumerable<CustEvidenceModel> custEvidences, IEnumerable<ProblemAccountLosingClassificationModel> paLosing, FunctionId functionId)
         {
             try
             {
-                if (custEvidences == null || !custEvidences.Any())
+                if (custEvidences != null && custEvidences.Any())
                 {
-                    return new InsertEvidenceCategoryResultModel() { ErrorMessage = string.Empty, CustIds = null };
+                    var evidencesChunk = custEvidences.Chunk(ConfigSettings.UpdateInternalChunkSize);
+
+                    var custIdList = new List<long>();
+
+                    foreach (var evidences in evidencesChunk)
+                    {
+                        var assCustForRollbacks = Enumerable.Empty<CheckPACustomerAssociationForRollbackModel>();
+
+                        var custSynCategory = MergePALosingClassification(evidences, paLosing);
+
+                        var custIds = SyncCustEvidenceToCategoryDbAccess(JsonConvert.SerializeObject(custSynCategory), true, out assCustForRollbacks);
+
+                        custIdList.AddRange(custIds);
+
+                        CheckNewPAAssociationCustomerForRollback(assCustForRollbacks);
+                    }
+
+                    return custIdList;
                 }
-
-                var evidencesChunk = custEvidences.Chunk(ConfigSettings.UpdateInternalChunkSize);
-
-                var custIdList = new List<long>();
-
-                foreach (var evidences in evidencesChunk)
-                {
-                    var assCustForRollbacks = Enumerable.Empty<CheckPACustomerAssociationForRollbackModel>();
-
-                    var probAccountClassification = GetProblemAccountLosing(evidences, functionId);
-
-                    var custIds = SyncCustEvidenceToCategoryDbAccess(JsonConvert.SerializeObject(probAccountClassification), true, out assCustForRollbacks);
-
-                    custIdList.AddRange(custIds);
-
-                    CheckNewPAAssociationCustomerForRollback(assCustForRollbacks);
-                }
-
-                return new InsertEvidenceCategoryResultModel { ErrorMessage = string.Empty, CustIds = custIdList };
             }
             catch (Exception ex)
             {
                 LogService.Error($"Web - CustomerClassifyService - SyncCustomerEvidenceToCategory exception: {ex.Message} - Data: {JsonConvert.SerializeObject(custEvidences)}", ex);
-
-                return new InsertEvidenceCategoryResultModel { ErrorMessage = ex.Message, CustIds = null };
             }
+
+            return Enumerable.Empty<long>();
+        }
+
+        private IEnumerable<MultipleProblemAccountsModel> GetExistedProblemAccountsFromNAPPA(IEnumerable<long> custIds, FunctionId functionId)
+        {
+            if (custIds != null && custIds.Any())
+            {
+                var problemAccounts = GetProblemAccountsFromNAP(string.Join(",", custIds), null)?.Distinct();
+                   
+                if(problemAccounts != null && problemAccounts.Any())
+                {
+                    logInputDataService.LogInputData(new LogInputViewModel { ProblemAccounts = problemAccounts.ToList() }, functionId);
+
+                    return problemAccounts;
+                }    
+            }
+
+            return Enumerable.Empty<MultipleProblemAccountsModel>();
+        }
+
+        private IEnumerable<long> InsertProblemAccount(IEnumerable<MultipleProblemAccountsModel> problemAccounts, IEnumerable<ProblemAccountLosingClassificationModel> paLosing, FunctionId functionId)
+        {
+            var custIds = new List<long>();
+
+            try
+            {
+                if (problemAccounts != null && problemAccounts.Any())
+                {
+                    var probalemAccountsChunk = problemAccounts.Chunk(ConfigSettings.UpdateInternalChunkSize);
+
+                    foreach (var paBatch in probalemAccountsChunk)
+                    {
+                        var probAccounts = MergePALosingClassification(paBatch, paLosing);
+
+                        var result = InsertProblemAccountDbAccess(JsonConvert.SerializeObject(probAccounts), true);
+
+                        if (result.ErrorCode == -1)
+                        {
+                            LogService.Error($"Web - CustomerClassifyService - InsertProblemAccount failed: {result.ErrorMessage} - Data: {paLosing}");
+                        }
+                        else
+                        {
+                            CheckNewPAAssociationCustomerForRollback(result.NewPAAssociationCustomerForRollback);
+
+                            custIds.AddRange(result.CustIds);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Error($"Web - Rescan PA - InsertProblemAccount exception: {ex.Message} - Data: { JsonConvert.SerializeObject(problemAccounts)}", ex);
+            }
+
+            return custIds ?? Enumerable.Empty<long>();
+        }
+
+        private IEnumerable<ProblemAccountLosingClassificationModel> GetPALosing(IEnumerable<CustEvidenceModel> custEvidence, IEnumerable<MultipleProblemAccountsModel> problemNap, FunctionId functionId)
+        {
+            var custIds = new List<long>();
+
+            if (custEvidence != null && custEvidence.Any())
+            {
+                custIds.AddRange(custEvidence.Select(c => c.CustId));
+            }
+
+            if (problemNap != null && problemNap.Any())
+            {
+                custIds.AddRange(problemNap.Select(c => c.CustID));
+            }
+
+            if (custIds.Any())
+            {
+                return GetProblemAccountLosingClassificationDbAccess(string.Join(",", custIds.Distinct()), functionId) ?? Enumerable.Empty<ProblemAccountLosingClassificationModel>();
+            }
+
+            return Enumerable.Empty<ProblemAccountLosingClassificationModel>();
         }
 
         private List<long> GetRobotUsers(RescanCustClassificationModel para)
@@ -180,107 +248,6 @@
             }
 
             return custIdsToSyncCC;
-        }
-
-        private List<long> GetProblemAccountFromNAP(RescanCustClassificationModel para)
-        {
-            var custIdsToSyncCC = new List<long>();
-
-            if (para.CustIds != null && para.CustIds.Any() && para.IsCheckPAFromNAP)
-            {
-                var problemAccounts = GetExistedProblemAccountsFromNAPPA(string.Join(",", para.CustIds)).ToList();
-
-                if (problemAccounts != null && problemAccounts.Any())
-                {
-                    logInputDataService.LogInputData(new LogInputViewModel { ProblemAccounts = problemAccounts }, para.FuncId_CheckPA);
-
-                    var result = InsertProblemAccount(problemAccounts, para.FunctionId);
-
-                    if (string.IsNullOrEmpty(result.ErrorMessage) && result.CustIds != null)
-                    {
-                        custIdsToSyncCC = result.CustIds.ToList();
-                    }
-                }
-            }
-
-            return custIdsToSyncCC;
-        }
-
-        private IEnumerable<MultipleProblemAccountsModel> GetExistedProblemAccountsFromNAPPA(string custIds)
-        {
-            if (!string.IsNullOrEmpty(custIds))
-            {
-                return GetProblemAccountsFromNAP(custIds, null)?.Distinct() ?? new List<MultipleProblemAccountsModel>();
-            }
-
-            return new List<MultipleProblemAccountsModel>();
-        }
-
-        private IEnumerable<MultipleProblemAccountsModel> GetExistedRobotUser(IEnumerable<long> custIds)
-        {
-            var existedRobots = new List<MultipleProblemAccountsModel>();
-
-            if (custIds != null && custIds.Any())
-            {
-                var robotUsers = GetExistedRobotUserDbAccess(string.Join(",", custIds));
-
-                if (robotUsers != null && robotUsers.Any())
-                {
-                    robotUsers.ToList().ForEach(c =>
-                    {
-                        existedRobots.Add(new MultipleProblemAccountsModel()
-                        {
-                            CustID = c.CustId,
-                            RobotCounter = c.Counter,
-                            ReasonID = (int)CATEGORY.ROBOT
-                        });
-                    });
-                }
-            }
-
-            if (_isWriteLogInfo)
-                LogService.Info($"PA Rescan - Get RobotUsers - with data: {JsonConvert.SerializeObject(existedRobots)}");
-
-            return existedRobots;
-        }
-
-        private InsertEvidenceCategoryResultModel InsertProblemAccount(IEnumerable<MultipleProblemAccountsModel> problemAccounts, FunctionId functionId)
-        {
-            var custIds = new List<long>();
-
-            try
-            {
-                if (problemAccounts != null && problemAccounts.Any())
-                {
-                    var probalemAccountsChunk = problemAccounts.Chunk(ConfigSettings.UpdateInternalChunkSize);
-
-                    foreach (var problemAccs in probalemAccountsChunk)
-                    {
-                        var paLosing = GetProblemAccountLosing(problemAccs, functionId);
-
-                        var result = InsertProblemAccountDbAccess(JsonConvert.SerializeObject(paLosing), true);
-
-                        if (result.ErrorCode == -1)
-                        {
-                            LogService.Error($"Web - CustomerClassifyService - InsertProblemAccount failed: {result.ErrorMessage} - Data: {paLosing}");
-                        }
-                        else
-                        {
-                            CheckNewPAAssociationCustomerForRollback(result.NewPAAssociationCustomerForRollback);
-
-                            custIds.AddRange(result.CustIds);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                LogService.Error($"Web - Rescan PA - InsertProblemAccount exception: {ex.Message} - Data: { JsonConvert.SerializeObject(problemAccounts)}", ex);
-
-                return new InsertEvidenceCategoryResultModel { ErrorMessage = ex.Message, CustIds = null };
-            }
-
-            return new InsertEvidenceCategoryResultModel() { ErrorMessage = string.Empty, CustIds = custIds };
         }
 
         private InsertEvidenceCategoryResultModel InsertRobot(IEnumerable<MultipleProblemAccountsModel> robotUsers)
@@ -320,6 +287,31 @@
             return new InsertEvidenceCategoryResultModel() { ErrorMessage = string.Empty, CustIds = custIds };
         }
 
+        private IEnumerable<MultipleProblemAccountsModel> GetExistedRobotUser(IEnumerable<long> custIds)
+        {
+            var existedRobots = new List<MultipleProblemAccountsModel>();
+
+            if (custIds != null && custIds.Any())
+            {
+                var robotUsers = GetExistedRobotUserDbAccess(string.Join(",", custIds));
+
+                if (robotUsers != null && robotUsers.Any())
+                {
+                    robotUsers.ToList().ForEach(c =>
+                    {
+                        existedRobots.Add(new MultipleProblemAccountsModel()
+                        {
+                            CustID = c.CustId,
+                            RobotCounter = c.Counter,
+                            ReasonID = (int)CATEGORY.ROBOT
+                        });
+                    });
+                }
+            }
+
+            return existedRobots;
+        }
+
         private void PushCCToExternal(List<long> custIdsToSyncCC, bool isPushCCToSoon88, bool isUpdateDanger, DangerLevel dangerLevelType)
         {
             custClassificationService.PushDataToExternal(custIdsToSyncCC, new PushDataToExternalModel
@@ -334,34 +326,58 @@
                 LogService.Info($"PA Rescan - Cust to syncCC - with data: {JsonConvert.SerializeObject(custIdsToSyncCC)}");
         }
 
-        public IEnumerable<InsertProblemAccountModel> GetProblemAccountLosing(IEnumerable<MultipleProblemAccountsModel> problemAccounts, FunctionId functionId)
+        public IEnumerable<InsertProblemAccountModel> MergePALosingClassification(IEnumerable<MultipleProblemAccountsModel> problemAccounts, IEnumerable<ProblemAccountLosingClassificationModel> paLosing)
         {
             if (problemAccounts != null && problemAccounts.Any())
             {
-                var custIds = string.Join(",", problemAccounts.Select(c => c.CustID).Distinct());
-
-                var probAccountLosing = GetProblemAccountLosingClassificationDbAccess(custIds, functionId);
-
-                return problemAccounts.GroupJoin(probAccountLosing,
-                                                            pa => pa.CustID,
-                                                            paLosing => paLosing.CustId,
-                                                            (pa, paLosing) => new { pa, paLosing })
-                                                            .SelectMany(
-                                                                 group => group.paLosing.DefaultIfEmpty(),
-                                                                 (group, temp) => new InsertProblemAccountModel
-                                                                 {
-                                                                     CustID = group.pa.CustID,
-                                                                     ReasonID = group.pa.ReasonID,
-                                                                     RobotCounter = group.pa.RobotCounter,
-                                                                     BetCount = temp?.BetCount,
-                                                                     ActiveDays = temp?.ActiveDays,
-                                                                     TurnoverRM = temp?.TurnoverRM,
-                                                                     WinlossRM = temp?.WinlossRM,
-                                                                     WinlossStatus = temp?.WinlossStatus
-                                                                 });
+                return problemAccounts.GroupJoin(paLosing ?? Enumerable.Empty< ProblemAccountLosingClassificationModel>(),
+                                                 pa => pa.CustID,
+                                                 pl => pl.CustId,
+                                                (pa, pl) => new { pa, paLosing })
+                                                .SelectMany(
+                                                        group => group.paLosing.DefaultIfEmpty(),
+                                                        (group, temp) => new InsertProblemAccountModel
+                                                        {
+                                                            CustID = group.pa.CustID,
+                                                            ReasonID = group.pa.ReasonID,
+                                                            RobotCounter = group.pa.RobotCounter,
+                                                            BetCount = temp?.BetCount,
+                                                            ActiveDays = temp?.ActiveDays,
+                                                            TurnoverRM = temp?.TurnoverRM,
+                                                            WinlossRM = temp?.WinlossRM,
+                                                            WinlossStatus = temp?.WinlossStatus
+                                                        });
             }
 
             return Enumerable.Empty<InsertProblemAccountModel>();
+        }
+
+        public IEnumerable<CustEvidenceInsertModel> MergePALosingClassification(IEnumerable<CustEvidenceModel> custEvidences, IEnumerable<ProblemAccountLosingClassificationModel> paLosing)
+        {
+            if (custEvidences != null && custEvidences.Any())
+            {
+                return custEvidences.GroupJoin(paLosing ?? Enumerable.Empty<ProblemAccountLosingClassificationModel>(),
+                                            pa => pa.CustId,
+                                            pl => pl.CustId,
+                                            (pa, pl) => new { pa, pl })
+                                            .SelectMany(
+                                                 group => group.pl.DefaultIfEmpty(),
+                                                 (group, temp) => new CustEvidenceInsertModel
+                                                 {
+                                                     CustID = group.pa.CustId,
+                                                     CTSCustID = group.pa.CTSCustId,
+                                                     EvidenceID = group.pa.EvidenceId,
+                                                     SubscriberID = group.pa.SubscriberId,
+                                                     ActionType = group.pa.ActionType,
+                                                     BetCount = temp?.BetCount,
+                                                     ActiveDays = temp?.ActiveDays,
+                                                     TurnoverRM = temp?.TurnoverRM,
+                                                     WinlossRM = temp?.WinlossRM,
+                                                     WinlossStatus = temp?.WinlossStatus
+                                                 });
+            }
+
+            return Enumerable.Empty<CustEvidenceInsertModel>();
         }
 
         public IEnumerable<CustEvidenceInsertModel> GetProblemAccountLosing(IEnumerable<CustEvidenceModel> custEvidences, FunctionId functionId)
@@ -465,35 +481,17 @@
 
         private IEnumerable<CustEvidenceModel> GetExistedCustomerEvidences(string custIds)
         {
-            var existedEvidences = new List<CustEvidenceModel>();
-
-            if (string.IsNullOrEmpty(custIds))
-            {
-                return existedEvidences;
-            }
-
             var criteria = new GetExistedEvidencesCriteria
             {
                 CustIds = custIds
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                existedEvidences = db.Query<CustEvidenceModel>(criteria).ToList();
-            }
-
-            return existedEvidences ?? new List<CustEvidenceModel>();
+            return repository.Fetch<CustEvidenceModel>(criteria) ?? Enumerable.Empty<CustEvidenceModel>();
         }
 
-        private List<long> SyncCustEvidenceToCategoryDbAccess(string custEvidencesJson, bool isRescan, out IEnumerable<CheckPACustomerAssociationForRollbackModel> assCustForRollbacks)
+        private IEnumerable<long> SyncCustEvidenceToCategoryDbAccess(string custEvidencesJson, bool isRescan, out IEnumerable<CheckPACustomerAssociationForRollbackModel> assCustForRollbacks)
         {
             var custIds = new List<long>();
-            assCustForRollbacks = new List<CheckPACustomerAssociationForRollbackModel>();
-
-            if (string.IsNullOrEmpty(custEvidencesJson))
-            {
-                return custIds;
-            }
 
             var criteria = new CustEvidenceSyncToCategoryCriteria
             {
@@ -501,14 +499,11 @@
                 IsRescan = isRescan
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                assCustForRollbacks = repository.Fetch<CheckPACustomerAssociationForRollbackModel>(criteria);
+            assCustForRollbacks = repository.Fetch<CheckPACustomerAssociationForRollbackModel>(criteria);
 
-                if (assCustForRollbacks != null && assCustForRollbacks.Any())
-                {
-                    custIds = assCustForRollbacks.Select(x => (long)x.CustID).ToList();
-                }
+            if (assCustForRollbacks != null && assCustForRollbacks.Any())
+            {
+                custIds = assCustForRollbacks.Select(x => x.CustID).ToList();
             }
 
             if (!string.IsNullOrEmpty(criteria.ErrorMessage))
@@ -516,10 +511,7 @@
                 LogService.Error($"Web - CustomerClassifyService - SyncCustomerEvidenceToCategory failed: {criteria.ErrorMessage} - Data: {custEvidencesJson}");
             }
 
-            if (_isWriteLogInfo)
-                LogService.Info($"Web - CustomerClassifyService - SyncCustomerEvidenceToCategory custEvidencesJson:  {custEvidencesJson}");
-
-            return (custIds != null) ? custIds : new List<long>();
+            return custIds ?? Enumerable.Empty<long>();
         }
 
         private IEnumerable<MultipleProblemAccountsModel> GetProblemAccountsFromNAP(string custIDs, DateTime? dateTime)
@@ -530,10 +522,7 @@
                 Datetime = dateTime
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<MultipleProblemAccountsModel>(criteria).ToList();
-            }
+             return repository.Fetch<MultipleProblemAccountsModel>(criteria);
         }
 
         private InsertProblemAccountResultModel InsertProblemAccountDbAccess(string problemAccountJson, bool isRescan)
@@ -557,22 +546,12 @@
 
         private IEnumerable<RoleCustomerModel> GetRoleCustomer(string custIds)
         {
-            var roleCus = new List<RoleCustomerModel>();
-
             var criteria = new GetRoleCustomerCriteria
             {
                 CustIds = custIds
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                roleCus = db.Query<RoleCustomerModel>(criteria).ToList();
-            }
-
-            if (_isWriteLogInfo)
-                LogService.Info($"PA Rescan - GetAgentCusts - with data: {JsonConvert.SerializeObject(roleCus)}");
-
-            return roleCus;
+            return repository.Fetch<RoleCustomerModel>(criteria);
         }
 
         private IEnumerable<RobotUserModel> GetExistedRobotUserDbAccess(string custIds)
