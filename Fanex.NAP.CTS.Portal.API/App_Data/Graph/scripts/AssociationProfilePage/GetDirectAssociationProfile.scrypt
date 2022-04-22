@@ -106,7 +106,7 @@ CALL apoc.cypher.run('
 		    OR ($ip_AssociationStatus = 2 AND exists((c)-[:HAS_EXCEPTION]-(c1)))) 
         AND s.SubscriberID in $ip_SubscriberIDs
         AND st.ListID = 1 AND st.ItemID in $ip_AccountStatuses
-    WITH distinct c,c1,s,st,r.CreatedDate as AssDate
+    WITH distinct c,c1,s,st,r[0].CreatedDate as AssDate
     OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c1)
 
     WITH c,c1,s,e,st, Min(AssDate) as firstAssDate
