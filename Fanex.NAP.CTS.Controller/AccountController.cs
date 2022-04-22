@@ -1055,7 +1055,7 @@
                     Task.Run(() =>
                     {
                          string ctsCustIdsToString = model.FromCTSCustId.ToString() + "," + model.ToCTSCustId.ToString();
-                    custNotExistEvidence = _customerEvidenceService.CheckCleanCustFlaggedEvidence(ctsCustIdsToString)?.ToList();
+                         custNotExistEvidence = _customerEvidenceService.CheckCleanCustFlaggedEvidence(ctsCustIdsToString)?.ToList();
                     })
                 };
 

@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
-    using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.Logging;
     using Fanex.NAP.CTS.Core.Extentions;
@@ -155,13 +154,13 @@
             if (custIds != null && custIds.Any())
             {
                 var problemAccounts = GetProblemAccountsFromNAP(string.Join(",", custIds), null)?.Distinct();
-                   
-                if(problemAccounts != null && problemAccounts.Any())
+
+                if (problemAccounts != null && problemAccounts.Any())
                 {
                     logInputDataService.LogInputData(new LogInputViewModel { ProblemAccounts = problemAccounts.ToList() }, functionId);
 
                     return problemAccounts;
-                }    
+                }
             }
 
             return Enumerable.Empty<MultipleProblemAccountsModel>();
@@ -330,7 +329,7 @@
         {
             if (problemAccounts != null && problemAccounts.Any())
             {
-                return problemAccounts.GroupJoin(paLosing ?? Enumerable.Empty< ProblemAccountLosingClassificationModel>(),
+                return problemAccounts.GroupJoin(paLosing ?? Enumerable.Empty<ProblemAccountLosingClassificationModel>(),
                                                  pa => pa.CustID,
                                                  pl => pl.CustId,
                                                 (pa, pl) => new { pa, paLosing })
@@ -522,7 +521,7 @@
                 Datetime = dateTime
             };
 
-             return repository.Fetch<MultipleProblemAccountsModel>(criteria);
+            return repository.Fetch<MultipleProblemAccountsModel>(criteria);
         }
 
         private InsertProblemAccountResultModel InsertProblemAccountDbAccess(string problemAccountJson, bool isRescan)
