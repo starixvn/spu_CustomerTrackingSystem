@@ -33,7 +33,7 @@
 
         string GetHtmlChoice(DetailTicketsModel ticket);
   
-        InsertEvidenceCategoryResultModel UpdateRemovedProblemAccountToCTS(string custids);
+        InsertEvidenceCategoryResultModel UpdateRemovedProblemAccountToCTS(string custids, Int64 userId);
 
         IEnumerable<TWProblemAccountModel> GetCustClassBySite(string usernameList);
 
