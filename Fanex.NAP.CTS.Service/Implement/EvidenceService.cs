@@ -85,14 +85,15 @@
 
         #region Retracted And Exception Evidence
 
-        public AddEvidenceResultModel AddCustomersEvidences(PlaceMultiCustomerEvidence customerEvidenceList)
+        public AddEvidenceResultModel AddCustomersEvidences(PlaceMultiCustomerEvidence customerEvidenceList, int userId)
         {
             var result = new List<CustEvidenceModel>();
 
             var criteria = new MultiCustomerEvidencesInsertCriteria
             {
                 ip_CustIds = customerEvidenceList.CustIdList,
-                ip_EvidenceCodes = customerEvidenceList.EvidenceCodeList
+                ip_EvidenceCodes = customerEvidenceList.EvidenceCodeList,
+                ip_CreatedBy = userId
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))

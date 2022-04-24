@@ -237,7 +237,9 @@
             {
                 logInputDataService.LogInputData(new LogInputViewModel { PlaceMultiEvidences = customerEvidenceList }, FunctionId.PlaceMultiEvidencesForMultiCustAPI);
 
-                var result = _evidenceService.AddCustomersEvidences(customerEvidenceList);
+                int userId = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);
+
+                var result = _evidenceService.AddCustomersEvidences(customerEvidenceList, userId);
 
                 if (string.IsNullOrEmpty(result.ErrorMessage) && result.Eivdences != null && result.Eivdences.Any())
                 {

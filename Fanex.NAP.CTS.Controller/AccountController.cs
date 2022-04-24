@@ -1152,7 +1152,8 @@
                     CustId = model.CustId,
                     SubscriberId = model.SubscriberId,
                     EvidenceId = model.EvidenceId,
-                    ActionType = 0
+                    CreatedBy = model.UserId,
+                    ActionType = 0 
                 } };
 
                 var syncCustIds = Enumerable.Empty<long>();
@@ -1208,6 +1209,7 @@
                    CustID = model.CustId,
                    SubscriberID = model.SubscriberId,
                    EvidenceID = model.EvidenceId,
+                   CreatedBy = model.UserId,
                    ActionType = 2
                 } };
 

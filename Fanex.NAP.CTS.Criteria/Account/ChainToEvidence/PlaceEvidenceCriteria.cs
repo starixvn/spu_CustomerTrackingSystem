@@ -17,7 +17,7 @@
         public string Remark { get; set; }
 
         [SpParam(SqlParamName = "ip_UserID")]
-        public int UserId { get; set; }
+        public Int64 UserId { get; set; }
 
         [SpParam(SqlParamName = "op_ErrorMessage")]
         public string ErrorMessage { get; set; }

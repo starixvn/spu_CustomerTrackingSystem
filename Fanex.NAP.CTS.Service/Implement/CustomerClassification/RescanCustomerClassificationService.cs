@@ -399,6 +399,7 @@
                                                      CTSCustID = group.pa.CTSCustId,
                                                      EvidenceID = group.pa.EvidenceId,
                                                      SubscriberID = group.pa.SubscriberId,
+                                                     CreatedBy = group.pa.CreatedBy,
                                                      ActionType = group.pa.ActionType,
                                                      BetCount = temp?.BetCount,
                                                      ActiveDays = temp?.ActiveDays,
