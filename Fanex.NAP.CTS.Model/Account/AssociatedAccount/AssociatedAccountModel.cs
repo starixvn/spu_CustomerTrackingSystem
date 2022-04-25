@@ -1,9 +1,9 @@
-﻿namespace Fanex.NAP.CTS.Model.GraphDB
+﻿namespace Fanex.NAP.CTS.Model.Account
 {
     using System;
     using System.Collections.Generic;
 
-    public class GraphAssociationModel
+    public class AssociatedAccountModel
     {        
         public long CTSCustID { get; set; }
 
@@ -42,5 +42,7 @@
         public int SharedIPs { get; set; }
   
         public string CustomerClasses { get; set; }
+
+        public bool IsProbation { get; set; }
     }
 }

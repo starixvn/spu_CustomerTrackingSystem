@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    public class InsertCategoryResultModel
+    public class InsertEvidenceCategoryResultModel
     {
         public string ErrorMessage { get; set; }
 

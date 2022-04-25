@@ -521,6 +521,9 @@ body {
       .association-detection-report .association-detection-content .table-report .table-association-detection tr .td-bg-red {
         background-color: #FF7676;
         font-weight: bold; }
+      .association-detection-report .association-detection-content .table-report .table-association-detection tr .td-bg-lightred {
+        background-color: #F5A89A;
+        font-weight: bold; }
 
 .yellow-line {
   background-color: #FDB703;
@@ -552,4 +555,8 @@ body {
 
 .td-bg-red {
   background-color: #FF7676;
+  font-weight: bold; }
+
+.td-bg-lightred {
+  background-color: #F5A89A;
   font-weight: bold; }

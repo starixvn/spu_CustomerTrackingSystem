@@ -121,6 +121,7 @@
                     if (result.ErrorCode != 0 && retryTime == 0)
                     {
                         LogService.Error($"CTS - PushDataToExternalService - exception from MainDB {result.ErrorMsg} with listCust: {JsonConvert.SerializeObject(customerClassifications)}");
+
                         return false;
                     }
                     else if (result.ErrorCode != 0)
@@ -130,12 +131,6 @@
                     else
                     {
                         retryTime = -1;
-                    }
-
-                    // write log for test
-                    if (result.ErrorCode == 0)
-                    {
-                        LogService.Info($"CTS - UpdateCCToMainDB successful with listCust: {JsonConvert.SerializeObject(customerClassifications)}");
                     }
                 }
                 catch (Exception ex)
@@ -231,7 +226,6 @@
             return true;
         }
 
-
         #region DataAccess Layer
 
         public DBResult UpdateCCToMainDB(IEnumerable<LatestClassificationModel> customerClassList)
@@ -325,7 +319,7 @@
                 repository.Execute(criteria);
             }
         }
-        #endregion
 
+        #endregion DataAccess Layer
     }
 }

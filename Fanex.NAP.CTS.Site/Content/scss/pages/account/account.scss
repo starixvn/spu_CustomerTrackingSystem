@@ -265,6 +265,11 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     font-weight: bold;
 }
 
+.td-bg-lightred {
+    background-color: $account-rosebud;
+    font-weight: bold;
+}
+
 .content-info {
     padding: 1.2rem 1.6rem;
     position: relative;
@@ -296,6 +301,10 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             }
         }
 
+        &.border-lightred {
+            border-bottom: 2px solid $account-rosebud;
+        }
+
         &.border-red {
             border-bottom: 2px solid $account-formular;
         }
@@ -323,6 +332,14 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 
                 &:after {
                     background-color: $account-formular;
+                }
+            }
+
+            &.bg-lightred {
+                background-color: $account-rosebud;
+
+                &:after {
+                    background-color: $account-rosebud;
                 }
             }
 
@@ -428,6 +445,11 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
                             &.bg-red {
                                 background-color: #EE4D4D;
                                 border: 1px solid #D44545;
+                            }
+
+                            &.bg-lightred {
+                                background-color: #EE9181;
+                                border: 1px solid #EE9181;
                             }
 
                             &.bg-yellow {

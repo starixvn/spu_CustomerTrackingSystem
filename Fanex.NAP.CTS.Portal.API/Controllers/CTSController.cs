@@ -4,15 +4,14 @@
     using Fanex.Logging.Extensions;
     using Fanex.Logging.Extensions.Database;
     using Fanex.NAP.CTS.Core.Extentions;
-    using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Core.Helpers.Xml;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria.TWProblemAccountDetection;
     using Fanex.NAP.CTS.Model;
+    using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.API;
     using Fanex.NAP.CTS.Model.API.ProblemCaseMonitor;
     using Fanex.NAP.CTS.Model.API.UpdateCategoryWhenPAUpdated;
-    using Fanex.NAP.CTS.Model.CustomerClassify;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.ImportEvidences;
@@ -37,7 +36,6 @@
     using System.Collections.Generic;
     using System.Configuration;
     using System.Linq;
-    using System.Net;
     using System.Threading.Tasks;
     using System.Web.Http;
     using System.Web.Http.Results;
@@ -55,7 +53,7 @@
         private readonly IAssociatedAccountService _associationService;
         private readonly IProblemAccountMonitorService _problemAccountMonitorService;
         private readonly ICategoryService _categoryService;
-        private readonly IRescanCustomerClassificationService _customerClassifyService;
+        private readonly IRescanCustomerClassificationService _rescanClassificationService;
         private readonly ICustomerClassificationService _custClassificationService;
         private readonly ISubscriberService _subscriberService;
         private readonly IProblemCaseMonitorService _problemCaseMonitorService;
@@ -76,7 +74,7 @@
             _custEvidenceService = new CustomerEvidenceService();
             _problemAccountMonitorService = new ProblemAccountMonitorService();
             _categoryService = new CategoryService();
-            _customerClassifyService = new RescanCustomerClassificationService();
+            _rescanClassificationService = new RescanCustomerClassificationService();
             _custClassificationService = new CustomerClassificationService();
             _subscriberService = new SubscriberService();
             _problemCaseMonitorService = new Service.Implement.Api.ProblemCaseMonitorService();
@@ -119,7 +117,11 @@
                     {
                         var syncCustIds = Enumerable.Empty<long>();
 
-                        var syncResult = _accountService.SyncCustEvidenceToCategory(JsonConvert.SerializeObject(result.Eivdences), false, out syncCustIds);
+                        var paLosingClassification = _rescanClassificationService.GetProblemAccountLosing(result.Eivdences, FunctionId.PlaceSingleEvidence);
+
+                        var custEvidenceJson = JsonConvert.SerializeObject(paLosingClassification);
+
+                        var syncResult = _accountService.SyncCustEvidenceToCategory(custEvidenceJson, false, out syncCustIds);
 
                         Parallel.Invoke(() =>
                         {
@@ -137,14 +139,7 @@
                                     DangerLevelType = DangerLevel.ABI
                                 });
 
-                                var hashCustInfos = syncResult.OutParam["custInfos"];
-
-                                if (hashCustInfos != null)
-                                {
-                                    var custInfos = (IEnumerable<NewPAAssociationCustomerForRollbackModel>)hashCustInfos;
-
-                                    _accountService.CheckNewPAAssociationCustomerForRollback(custInfos);
-                                }
+                               _accountService.CheckNewPAAssociationCustomerForRollback(syncResult.CustInfo);
                             }
                         },
                         () =>
@@ -248,7 +243,11 @@
                 {
                     var syncCustIds = Enumerable.Empty<long>();
 
-                    var syncResult = _accountService.SyncCustEvidenceToCategory(JsonConvert.SerializeObject(result.Eivdences), false, out syncCustIds);
+                    var paLosingClassification = _rescanClassificationService.GetProblemAccountLosing(result.Eivdences, FunctionId.PlaceSingleEvidence);
+
+                    var custEvidenceJson = JsonConvert.SerializeObject(paLosingClassification);
+
+                    var syncResult = _accountService.SyncCustEvidenceToCategory(custEvidenceJson, false, out syncCustIds);
 
                     Parallel.Invoke(() =>
                     {
@@ -266,14 +265,7 @@
                                 DangerLevelType = DangerLevel.ABI
                             });
 
-                            var hashCustInfos = syncResult.OutParam["custInfos"];
-
-                            if (hashCustInfos != null)
-                            {
-                                var custInfos = (IEnumerable<NewPAAssociationCustomerForRollbackModel>)hashCustInfos;
-
-                                _accountService.CheckNewPAAssociationCustomerForRollback(custInfos);
-                            }
+                            _accountService.CheckNewPAAssociationCustomerForRollback(syncResult.CustInfo);
                         }
                     },
                     () =>
@@ -588,7 +580,7 @@
                         _custEvidenceService.UpdateBetLimitOfUnflaggedCustomer(custEviRemovedIds);
                     }
 
-                    _customerClassifyService.RescanCustomerClassify(new RescanCustClassificationModel
+                    _rescanClassificationService.RescanCustomerClassify(new RescanCustClassificationModel
                     {
                         CustIds = output.CustIds,
                         IsCheckPAFromNAP = false,
@@ -644,11 +636,15 @@
             {
                 if (paras != null && paras.CustInfos != null && paras.CustInfos.Any())
                 {
-                    var updateCategoryResult = _updateCategoryService.UpdateCategoryToCTSWhenPAUpdated(paras);
-                   
+                    var custIds = paras.CustInfos.Select(c => c.CustID)?.Distinct();
+
+                    var probAccountLosing = _rescanClassificationService.GetProblemAccountLosing(custIds, FunctionId.UpdateCategory);
+
+                    var updateCategoryResult = _updateCategoryService.UpdateCategoryToCTSWhenPAUpdated(paras, probAccountLosing);
+
                     if (updateCategoryResult != null && updateCategoryResult.Any())
                     {
-                        var assCustForRollbacks = updateCategoryResult.Select(x => new NewPAAssociationCustomerForRollbackModel
+                        var assCustForRollbacks = updateCategoryResult.Select(x => new CheckPACustomerAssociationForRollbackModel
                         {
                             CTSCustID = x.CTSCustID,
                             CustID = x.CustID
@@ -674,7 +670,7 @@
 
                         Parallel.Invoke(() =>
                         {
-                            _customerClassifyService.CheckNewPAAssociationCustomerForRollback(assCustForRollbacks);
+                            _rescanClassificationService.CheckNewPAAssociationCustomerForRollback(assCustForRollbacks);
                         },
                         () =>
                         {
@@ -816,7 +812,7 @@
                     if (custfromQuery.Data.Any())
                     {
                         var cust = custfromQuery.Data.First();
-                        var queryResult = DbSessionFactory.Execute<GraphAssociationPaging>(script, new
+                        var queryResult = DbSessionFactory.Execute<AssociatedAccountPagingModel>(script, new
                         {
                             CTSCustID = cust.CTSCustId,
                             AssStatus = 0,

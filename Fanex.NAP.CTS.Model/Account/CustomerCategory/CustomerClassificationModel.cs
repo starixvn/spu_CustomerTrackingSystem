@@ -12,7 +12,9 @@
 
         public int CustID { get; set; }       
 
-        public string ParentCategoryName { get; set; } 
-        
+        public string ParentCategoryName { get; set; }
+
+        public bool IsProbation { get; set; }
+
     }
 }

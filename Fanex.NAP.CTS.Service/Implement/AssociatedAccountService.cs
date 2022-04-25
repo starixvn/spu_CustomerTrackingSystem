@@ -177,7 +177,7 @@ namespace Fanex.NAP.CTS.Service.Implement
             }
         }
 
-        public IEnumerable<GraphAssociationModel> GetAssociationForExtAcc(int custId)
+        public IEnumerable<AssociatedAccountModel> GetAssociationForExtAcc(int custId)
         {
             var criteria = new GetAssociationForExtAccCriteria()
             {
@@ -188,7 +188,7 @@ namespace Fanex.NAP.CTS.Service.Implement
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<GraphAssociationModel>(criteria);
+                return db.Query<AssociatedAccountModel>(criteria);
             }
         }
 

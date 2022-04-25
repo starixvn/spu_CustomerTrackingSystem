@@ -19,7 +19,7 @@
         [XmlIgnore]
         public DateTime ScannedTime { get; set; }
 
-        public int? CustClass 
+        public int? CustClass
         {
             get
             {

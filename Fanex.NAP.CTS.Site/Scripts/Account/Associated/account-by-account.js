@@ -26,51 +26,7 @@
     let dataTableIPAssociation = null;
     let spanIPAssociationTotalMatches = $('#spanIPAssociationTotalMatches');
     let spanIPAssociationTotalIPSharing = $('#spanIPAssociationTotalIPSharing');    let cbbAssociationCategory = $('#cbbAssociationCategory');
-    let cacheCategoryColors = [];
     let isSkipTracking = true;
-
-    function GetCategoryColorList() {
-        var list = [];
-
-        list.push({ 'id': '205', 'indexColor': 1, 'name': 'Good Member' });
-        list.push({ 'id': '210', 'indexColor': 1, 'name': 'VVIP' });
-        list.push({ 'id': '201', 'indexColor': 1, 'name': 'New Member' });
-        list.push({ 'id': '202', 'indexColor': 1, 'name': 'Normal Account' });
-        list.push({ 'id': '1001', 'indexColor': 1, 'name': 'Normal Member InActive' });
-
-        list.push({ 'id': '206', 'indexColor': 2, 'name': 'Probation' });
-        list.push({ 'id': '257', 'indexColor': 2, 'name': 'Probation (57)' });
-        list.push({ 'id': '258', 'indexColor': 2, 'name': 'Probation (58)' });
-        list.push({ 'id': '203', 'indexColor': 2, 'name': 'Smart Punter' });
-        list.push({ 'id': '267', 'indexColor': 2, 'name': 'Smart Punter (67)' });
-        list.push({ 'id': '268', 'indexColor': 2, 'name': 'Smart Punter (68)' });
-        list.push({ 'id': '204', 'indexColor': 2, 'name': 'High Risk Punter' });
-        list.push({ 'id': '277', 'indexColor': 2, 'name': 'High Risk Punter (77)' });
-        list.push({ 'id': '278', 'indexColor': 2, 'name': 'High Risk Punter (78)' });
-        list.push({ 'id': '1002', 'indexColor': 2, 'name': 'Pro Punter InActive' });
-
-        list.push({ 'id': '211', 'indexColor': 3, 'name': 'Good Member (111)' });
-        list.push({ 'id': '212', 'indexColor': 3, 'name': 'Good Member (112)' });
-        list.push({ 'id': '213', 'indexColor': 3, 'name': 'Good Member (113)' });
-        list.push({ 'id': '221', 'indexColor': 3, 'name': 'Normal Account (121)' });
-        list.push({ 'id': '222', 'indexColor': 3, 'name': 'Normal Account (122)' });
-        list.push({ 'id': '223', 'indexColor': 3, 'name': 'Normal Account (123)' });
-        list.push({ 'id': '231', 'indexColor': 3, 'name': 'New Member (31)' });
-        list.push({ 'id': '232', 'indexColor': 3, 'name': 'New Member (32)' });
-        list.push({ 'id': '233', 'indexColor': 3, 'name': 'New Member (33)' });
-
-        list.push({ 'id': '251', 'indexColor': 4, 'name': 'Probation (51)' });
-        list.push({ 'id': '252', 'indexColor': 4, 'name': 'Probation (52)' });
-        list.push({ 'id': '253', 'indexColor': 4, 'name': 'Probation (53)' });
-        list.push({ 'id': '261', 'indexColor': 4, 'name': 'Smart Punter (61)' });
-        list.push({ 'id': '262', 'indexColor': 4, 'name': 'Smart Punter (62)' });
-        list.push({ 'id': '263', 'indexColor': 4, 'name': 'Smart Punter (63)' });
-        list.push({ 'id': '271', 'indexColor': 4, 'name': 'High Risk Punter (71)' });
-        list.push({ 'id': '272', 'indexColor': 4, 'name': 'High Risk Punter (72)' });
-        list.push({ 'id': '273', 'indexColor': 4, 'name': 'High Risk Punter (73)' });
-
-        return list;
-    }
 
     function RenderTag(obj) {
         let html = "";
@@ -108,51 +64,6 @@
             html = "<span>" + categoryNames + "</span>";
 
         return html;
-    }
-
-    function RenderCellCategory(cell, row) {
-        let indexColorForDiv = 0;
-
-        if (row.IsProblemAccount) {
-            indexColorForDiv = 5;
-        } else {
-            let categoryList = row.CategoryIds != undefined
-                ? row.CategoryIds.split(',')
-                : [];
-
-            for (let i = 0; i < cacheCategoryColors.length; i++) {
-                categoryList.map(function (x) {
-                    let isEquals = x === cacheCategoryColors[i].id;
-                    if (isEquals) {
-                        indexColorForDiv = indexColorForDiv < cacheCategoryColors[i].indexColor
-                            ? cacheCategoryColors[i].indexColor
-                            : indexColorForDiv;
-                    }
-                })
-            }
-        }
-
-        switch (indexColorForDiv) {
-            case 1:
-                $(cell).addClass('td-bg-green');
-                break;
-            case 2:
-                $(cell).addClass('td-bg-yellow');
-                break;
-            case 3:
-                $(cell).addClass('green-line');
-                break;
-            case 4:
-                $(cell).addClass('yellow-line');
-                break;
-            case 5:
-                $(cell).addClass('td-bg-red');
-                break;
-            default:
-                break;
-        }
-
-        $(cell).prop('title', row.CategoryNames);
     }
 
     function RenderGrid() {
@@ -258,7 +169,7 @@
                 },
                 {
                     data: obj => RenderCategoryNames(obj.CategoryNames), createdCell: (cell, _, row) => {
-                        RenderCellCategory(cell, row);
+                        common.renderCategoryColor(cell, row);
                     }
                 },
                 { data: obj => obj.CustomerClasses },
@@ -1040,7 +951,5 @@
         btnCancelAssociation.on('click', () => {
             divAddAssociation.dialog('close');
         });    
-
-        cacheCategoryColors = GetCategoryColorList();
     };
 }

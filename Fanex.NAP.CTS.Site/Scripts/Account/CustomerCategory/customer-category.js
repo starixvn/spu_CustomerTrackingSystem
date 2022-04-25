@@ -300,10 +300,10 @@
 
                     ResetCategorySetting();
 
-                    let isProblemAccount = RenderProblemAccount(json.categoryList);
+                    let isProblemAccount = RenderProblemCategoryProfilePage(json.categoryList, json.isPAProbation);
 
                     if (!isProblemAccount) {
-                        RenderCategorySummary(json.categoryList);
+                        RenderNormalCategoryProfilePage(json.categoryList);
                     }
                 }
                 return response;
@@ -320,13 +320,14 @@
         });
     }
 
-    function RenderProblemAccount(data) {
+    function RenderProblemCategoryProfilePage(data, isPAProbation) {
         var isExistProblemAccount = false;
         let html = "";
 
         data.map(function (x) {
             if (x.IsProblemAccount) {
-                let classIconColor = "circle bg-red";
+
+                let classIconColor = isPAProbation ? "circle bg-lightred" : "circle bg-red";
 
                 html = BuildCategoryToHtmlDiv(html, classIconColor, x.CategoryName);
 
@@ -335,13 +336,23 @@
         });
 
         if (isExistProblemAccount) {
-            $('#divHeaderUsername')
-                .removeClass('bg-yellow').removeClass('bg-green')
-                .removeClass('green-line').removeClass('yellow-line')
-                .addClass('bg-red');
-            $('#divHeaderInfo')
-                .removeClass('border-yellow').removeClass('border-green')
-                .addClass('border-red');
+            if (isPAProbation) {
+                $('#divHeaderUsername')
+                    .removeClass('bg-yellow').removeClass('bg-green')
+                    .removeClass('green-line').removeClass('yellow-line')
+                    .addClass('bg-lightred');
+                $('#divHeaderInfo')
+                    .removeClass('border-yellow').removeClass('border-green')
+                    .addClass('border-lightred');
+            } else {
+                $('#divHeaderUsername')
+                    .removeClass('bg-yellow').removeClass('bg-green')
+                    .removeClass('green-line').removeClass('yellow-line')
+                    .addClass('bg-red');
+                $('#divHeaderInfo')
+                    .removeClass('border-yellow').removeClass('border-green')
+                    .addClass('border-red');
+            }
 
             $('#divCustomerCategorySummary').html(html);
             $('#spanContentInfoLoading').css('visibility', 'hidden');
@@ -351,7 +362,7 @@
         return isExistProblemAccount;
     }
 
-    function RenderCategorySummary(data) {
+    function RenderNormalCategoryProfilePage(data) {
         let html = "";
         let indexColorProfile = 1;
 
@@ -373,38 +384,38 @@
         switch (indexColorProfile) {
             case 1:
                 $('#divHeaderUsername')
-                    .removeClass('bg-red').removeClass('bg-yellow')
+                    .removeClass('bg-red').removeClass('bg-lightred').removeClass('bg-yellow')
                     .removeClass('green-line').removeClass('yellow-line')
                     .addClass('bg-green');
                 $('#divHeaderInfo')
-                    .removeClass('border-red').removeClass('border-yellow')
+                    .removeClass('border-red').removeClass('border-lightred').removeClass('border-yellow')
                     .addClass('border-green');
                 break;
             case 2:
                 $('#divHeaderUsername')
-                    .removeClass('bg-red').removeClass('bg-green')
+                    .removeClass('bg-red').removeClass('bg-lightred').removeClass('bg-green')
                     .removeClass('green-line').removeClass('yellow-line')
                     .addClass('bg-yellow');
                 $('#divHeaderInfo')
-                    .removeClass('border-red').removeClass('border-green')
+                    .removeClass('border-red').removeClass('border-lightred').removeClass('border-green')
                     .addClass('border-yellow');
                 break;
             case 3:
                 $('#divHeaderUsername')
-                    .removeClass('bg-red').removeClass('bg-yellow')
+                    .removeClass('bg-red').removeClass('bg-lightred').removeClass('bg-yellow')
                     .removeClass('bg-green').removeClass('yellow-line')
                     .addClass('green-line')
                 $('#divHeaderInfo')
-                    .removeClass('border-red').removeClass('border-yellow')
+                    .removeClass('border-red').removeClass('border-lightred').removeClass('border-yellow')
                     .addClass('border-green');
                 break;
             case 4:
                 $('#divHeaderUsername')
-                    .removeClass('bg-red').removeClass('bg-yellow')
+                    .removeClass('bg-red').removeClass('bg-lightred').removeClass('bg-yellow')
                     .removeClass('bg-green').removeClass('green-line')
                     .addClass('yellow-line')
                 $('#divHeaderInfo')
-                    .removeClass('border-red').removeClass('border-yellow')
+                    .removeClass('border-red').removeClass('border-lightred').removeClass('border-yellow')
                     .addClass('border-yellow');
                 break;
             default:

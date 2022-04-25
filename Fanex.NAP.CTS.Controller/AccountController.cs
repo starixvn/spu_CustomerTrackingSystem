@@ -51,7 +51,7 @@
         private readonly IGraphService _graphService;
         private readonly ITransactionService _transService;
         private readonly ICustomerEvidenceService _customerEvidenceService;
-        private readonly IRescanCustomerClassificationService _customerClassifyService;
+        private readonly IRescanCustomerClassificationService _rescanClassificationService;
         private readonly ICustomerClassificationService _customerClassificationService;
         private readonly ICommonService _commonService;
         private readonly IRobotClassificationService _robotClassificationService;
@@ -66,7 +66,7 @@
             _graphService = new GraphService();
             _transService = new TransactionService();
             _customerEvidenceService = new CustomerEvidenceService();
-            _customerClassifyService = new RescanCustomerClassificationService();
+            _rescanClassificationService = new RescanCustomerClassificationService();
             _customerClassificationService = new CustomerClassificationService();
             _commonService = new CommonService();
             _robotClassificationService = new RobotClassificationService();
@@ -426,7 +426,7 @@
 
             var getAssociationFromMySql = AppSettings.Get("GetAssociationProfileFromMySQL") == "1";
 
-            var graphAssociationPage = _accountService.GetCustomerAssociationByGraph(model, getAssociationFromMySql);
+            var graphAssociationPage = _accountService.GetAssociatedAccount(model, getAssociationFromMySql);
 
             if (graphAssociationPage != null && graphAssociationPage.AssociationList != null && graphAssociationPage.AssociationList.Any())
             {
@@ -457,6 +457,7 @@
                         CTSCustId = x.CTSCustID,
                         IsLinked = x.AssociationStatus == 1,
                         IsProblemAccount = x.ParentIDs != null ? x.ParentIDs.Split(',').Any(y => y == "50") : false,
+                        IsPAProbation = x.IsProbation,
                         CategoryIds = x.CategoryIDs,
                         CategoryNames = !string.IsNullOrEmpty(x.CategoryNames) ? x.CategoryNames : "-",
                         CustomerClasses = x.CustomerClasses
@@ -521,7 +522,7 @@
             return name;
         }
 
-        private List<GraphAssociationModel> GetCustClassification(string custIds, List<GraphAssociationModel> assModel)
+        private List<AssociatedAccountModel> GetCustClassification(string custIds, List<AssociatedAccountModel> assModel)
         {
             var custClassification = new List<LatestClassification4ReportModel>();
 
@@ -536,7 +537,7 @@
                                  (a, b) => new { a, b })
                                  .SelectMany(
                                       group => group.b.DefaultIfEmpty(),
-                                      (group, temp) => new GraphAssociationModel
+                                      (group, temp) => new AssociatedAccountModel
                                       {
                                           CTSCustID = group.a.CTSCustID,
                                           CustId = group.a.CustId,
@@ -554,6 +555,7 @@
                                           StatusId = group.a.StatusId,
                                           AssociationStatus = group.a.AssociationStatus,
                                           ParentIDs = group.a.ParentIDs,
+                                          IsProbation = group.a.IsProbation,
                                           CategoryIDs = group.a.CategoryIDs,
                                           CategoryNames = group.a.CategoryNames,
                                           CustomerClasses = (temp != null && temp.CustClass != null && group.a.CustSubId == 0) ? temp.CustClass.ToString() : "-",
@@ -570,7 +572,7 @@
 
             var getAssociationFromMySql = AppSettings.Get("GetAssociationProfileFromMySQL") == "1";
 
-            var graphAssociationPaging = _accountService.GetCustomerAssociationByGraph(model, getAssociationFromMySql);
+            var graphAssociationPaging = _accountService.GetAssociatedAccount(model, getAssociationFromMySql);
 
             if (graphAssociationPaging != null && graphAssociationPaging.AssociationList != null && graphAssociationPaging.AssociationList.Any())
             {
@@ -1053,7 +1055,7 @@
                     Task.Run(() =>
                     {
                          string ctsCustIdsToString = model.FromCTSCustId.ToString() + "," + model.ToCTSCustId.ToString();
-                    custNotExistEvidence = _customerEvidenceService.CheckCleanCustFlaggedEvidence(ctsCustIdsToString)?.ToList();
+                         custNotExistEvidence = _customerEvidenceService.CheckCleanCustFlaggedEvidence(ctsCustIdsToString)?.ToList();
                     })
                 };
 
@@ -1086,17 +1088,19 @@
 
             if (result.ErrorCode == 0)
             {
-                var objects = new[] { new {
-                    model.CTSCustId,
-                    model.CustId,
-                    model.SubscriberId,
-                    model.EvidenceId,
+                var objects = new[] { new CustEvidenceModel {
+                    CTSCustId = model.CTSCustId,
+                    CustId = model.CustId,
+                    SubscriberId = model.SubscriberId,
+                    EvidenceId = model.EvidenceId,
                     ActionType = 0
                 } };
 
-                var syncCustIds = Enumerable.Empty<long>();
+                var syncCustIds = Enumerable.Empty<long>();     
 
-                var custEvidenceJson = JsonConvert.SerializeObject(objects);
+                var paLosingClassification = _rescanClassificationService.GetProblemAccountLosing(objects, FunctionId.PlaceSingleEvidence);
+
+                var custEvidenceJson = JsonConvert.SerializeObject(paLosingClassification);
 
                 var syncResult = _accountService.SyncCustEvidenceToCategory(custEvidenceJson, false, out syncCustIds);
 
@@ -1114,14 +1118,7 @@
                     {
                         Task.Run(() =>
                         {
-                            var hashCustInfos = syncResult.OutParam["custInfos"];
-
-                            if (hashCustInfos != null)
-                            {
-                                var custInfos = (IEnumerable<NewPAAssociationCustomerForRollbackModel>)hashCustInfos;
-
-                                _accountService.CheckNewPAAssociationCustomerForRollback(custInfos);
-                            }
+                             _accountService.CheckNewPAAssociationCustomerForRollback(syncResult.CustInfo);
                         }),
                         Task.Run(() =>
                         {
@@ -1146,13 +1143,13 @@
             var result = _accountService.RemoveFlaggedEvidence(model);
 
             if (result.ErrorCode == 0)
-            {
+            {              
                 var objects = new[] { new {
-                    model.CTSCustId,
-                    model.CustId,
-                    model.SubscriberId,
-                    model.EvidenceId,
-                    ActionType = 2
+                   CTSCustID = model.CTSCustId,
+                   CustID = model.CustId,
+                   SubscriberID = model.SubscriberId,
+                   EvidenceID = model.EvidenceId,
+                   ActionType = 2
                 } };
 
                 var syncCustIds = Enumerable.Empty<long>();
@@ -1164,7 +1161,7 @@
                 if (syncResult.ErrorCode == 0)
                 {
                     // Rescan Problem Account & Normal Account
-                    _customerClassifyService.RescanCustomerClassify(new RescanCustClassificationModel
+                    _rescanClassificationService.RescanCustomerClassify(new RescanCustClassificationModel
                     {
                         CustIds = syncCustIds,
                         IsCheckPAFromNAP = true,
@@ -1325,6 +1322,7 @@
             var isExcludedTagAssPA = false;
             var isVVip = false;
             var isProblemAccount = false;
+            var isPAProbation = false;
             var categoryList = new List<CustomerCategoryViewModel>();
             var classificationHistoryList = new List<CustomerClassificationHistoryViewModel>();
 
@@ -1344,6 +1342,8 @@
                 isVVip = categoryList.Any(x => x.CategoryName.Equals("VVIP"));
 
                 isProblemAccount = categoryList.Any(x => x.IsProblemAccount);
+
+                isPAProbation = isProblemAccount && classification.Any(x => x.IsProbation);
             }
 
             var classificationHistory = _accountService.GetCustomerClassificationHistory(ctsCustId);
@@ -1375,6 +1375,7 @@
                 isExcludedTagAssPA,
                 isVVip,
                 isProblemAccount,
+                isPAProbation,
                 categoryList,
                 data = classificationHistoryList,
             }, JsonRequestBehavior.AllowGet);
@@ -1463,7 +1464,15 @@
                     break;
 
                 default:
-                    break;
+                    {
+                        if (cc.SourceTypeID == 23)
+                        {
+                            reason += $"Margin: {margin} - Turn Over: {turnOver} - Active Days: {activeDays} - Bet Count: {betCount}";
+                        }    
+
+                        break;
+                    }
+
             }
 
             reason += "</div>";
@@ -1571,7 +1580,7 @@
                     if (custIdInt != 0)
                     {
                         // Rescan Problem Account & Normal Account
-                        _customerClassifyService.RescanCustomerClassify(new RescanCustClassificationModel
+                        _rescanClassificationService.RescanCustomerClassify(new RescanCustClassificationModel
                         {
                             CustIds = new List<long> { custIdInt },
                             IsCheckPAFromNAP = true,
@@ -1621,7 +1630,7 @@
                 && !isProblemAccount
                 && custSubId == 0)
             {
-                _customerClassifyService.RescanCustomerClassify(new RescanCustClassificationModel
+                _rescanClassificationService.RescanCustomerClassify(new RescanCustClassificationModel
                 {
                     CustIds = new List<long> { custId },
                     IsCheckPAFromNAP = true,

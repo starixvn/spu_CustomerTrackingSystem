@@ -17,5 +17,7 @@
         public string CustomerClass { get; set; }
 
         public bool IsProblemAccount { get; set; }
+
+        public bool IsPAProbation { get; set; }
     }
 }

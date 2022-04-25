@@ -327,7 +327,7 @@
             }
         }
 
-        public GraphAssociationPaging GetCustomerAssociationByGraph(AssociatedFilterModel filterModel, bool fromMySQL = false)
+        public AssociatedAccountPagingModel GetAssociatedAccount(AssociatedFilterModel filterModel, bool fromMySQL = false)
         {
             if (fromMySQL)
             {
@@ -346,9 +346,9 @@
 
                 using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
                 {
-                    var result = db.Query<GraphAssociationModel>(criteria);
+                    var result = db.Query<AssociatedAccountModel>(criteria);
 
-                    return new GraphAssociationPaging
+                    return new AssociatedAccountPagingModel
                     {
                         AssociationList = result.ToList(),
                         TotalItems = criteria.TotalItems
@@ -371,11 +371,11 @@
                         Take = filterModel.length,
                     };
 
-                    var data = ApiHelper.Post<GraphAssociationPaging>(ConfigSettings.GetDirectAssociationProfile, param, 300);
+                    var data = ApiHelper.Post<AssociatedAccountPagingModel>(ConfigSettings.GetDirectAssociationProfile, param, 300);
 
                     Task.WhenAll(data);
 
-                    return data.Result ?? new GraphAssociationPaging();
+                    return data.Result ?? new AssociatedAccountPagingModel();
                 }
                 catch (Exception ex)
                 {
@@ -385,7 +385,7 @@
                 }
             }
 
-            return new GraphAssociationPaging();
+            return new AssociatedAccountPagingModel();
         }
 
         public List<AccountStaticStatusModel> GetAccountStaticStatuses(int listId, bool status)
@@ -434,7 +434,7 @@
             return data.Result ?? new ShortestPathOfAccount();
         }
 
-        public string MappingAssociationType(GraphAssociationModel data)
+        public string MappingAssociationType(AssociatedAccountModel data)
         {
             if (data.AssociationType != null)
             {
@@ -793,47 +793,39 @@
             }
         }
 
-        public DBResult SyncCustEvidenceToCategory(string custEvidencesJson, bool isRescan, out IEnumerable<long> custIds)
+        public SynctEvidenceCategoryResultModel SyncCustEvidenceToCategory(string custEvidencesJson, bool isRescan, out IEnumerable<long> custIds)
         {
-            var custInfos = Enumerable.Empty<NewPAAssociationCustomerForRollbackModel>();
-            custIds = new List<long>();
-            
-            var criteria = new CustEvidenceSyncToCategoryCriteria
-            {
-                CustEvidencesJson = custEvidencesJson,
-                IsRescan = isRescan
-            };
+            custIds = Enumerable.Empty<long>();
 
             try
             {
-                var repository = new DynamicRepository();
+                var criteria = new CustEvidenceSyncToCategoryCriteria
+                {
+                    CustEvidencesJson = custEvidencesJson,
+                    IsRescan = isRescan
+                };
 
-                custInfos = repository.Fetch<NewPAAssociationCustomerForRollbackModel>(criteria);
+                var custInfos = repository.Fetch<CheckPACustomerAssociationForRollbackModel>(criteria);
 
                 if (!string.IsNullOrEmpty(criteria.ErrorMessage))
                 {
                     LogService.Error("CTS - AccountService SyncCustEvidenceToCategory failed: " + criteria.ErrorMessage);
-
-                    return new DBResult { ErrorCode = -1, ErrorMsg = criteria.ErrorMessage };
                 }
 
-                if (custInfos != null && custInfos.Any())
-                    custIds = custInfos.Select(x => (long)x.CustID);
+                custIds = custInfos?.Select(x => x.CustID) ?? Enumerable.Empty<long>();
 
-                return new DBResult
+                return new SynctEvidenceCategoryResultModel
                 {
-                    ErrorCode = 0,
-                    ErrorMsg = string.Empty,
-                    OutParam = new Hashtable {
-                        { "custInfos", custInfos }
-                    }
+                    ErrorCode = string.IsNullOrEmpty(criteria.ErrorMessage) ? 0 : -1,
+                    ErrorMsg = criteria.ErrorMessage,
+                    CustInfo = custInfos
                 };
             }
             catch (Exception ex)
             {
                 LogService.Error("CTS - AccountService SyncCustEvidenceToCategory exception: " + ex.Message, ex);
 
-                return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message, OutParam = new Hashtable() };
+                return new SynctEvidenceCategoryResultModel { ErrorCode = -1, ErrorMsg = ex.Message, CustInfo = Enumerable.Empty<CheckPACustomerAssociationForRollbackModel>() };
             }
         }
 
@@ -961,7 +953,7 @@
             }
         }
 
-        public int CheckNewPAAssociationCustomerForRollback(IEnumerable<NewPAAssociationCustomerForRollbackModel> assCustForRollbacks)
+        public int CheckNewPAAssociationCustomerForRollback(IEnumerable<CheckPACustomerAssociationForRollbackModel> assCustForRollbacks)
         {
             var result = 0;
 

@@ -1,10 +1,10 @@
-﻿namespace Fanex.NAP.CTS.Model.CustomerClassify
+﻿namespace Fanex.NAP.CTS.Model.ImportEvidences
 {
     public class CustEvidenceModel
     {
-        public int CustId { get; set; }
+        public long CustId { get; set; }
 
-        public int CTSCustId { get; set; }
+        public long CTSCustId { get; set; }
 
         public int SubscriberId { get; set; }
 

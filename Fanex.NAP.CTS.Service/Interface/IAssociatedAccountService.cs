@@ -24,7 +24,7 @@ namespace Fanex.NAP.CTS.Service.Interface
 
         IEnumerable<CustomerEvidenceForTW> GetFlaggedEvidenceByLevel2AssForAPI(string custIdList);
 
-        IEnumerable<GraphAssociationModel> GetAssociationForExtAcc(int custId);
+        IEnumerable<AssociatedAccountModel> GetAssociationForExtAcc(int custId);
 
         IEnumerable<CustomerByGraphDB> GetAssociationByIP(string custIDs);
     }

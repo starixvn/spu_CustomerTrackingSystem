@@ -24,13 +24,40 @@
             _logInputDataService = new LogInputDataService();
         }
 
-        public IEnumerable<UpdateCategoryModel> UpdateCategoryToCTSWhenPAUpdated(UpdateCategoryParamsModel model)
-        {            
-            this.LogInputData(model, FunctionId.UpdateCategory);
+        public IEnumerable<UpdateCategoryModel> UpdateCategoryToCTSWhenPAUpdated(UpdateCategoryParamsModel model, IEnumerable<ProblemAccountLosingClassificationModel> problemAccountLosing)
+        {
+            if (model != null && model.CustInfos.Any())
+            {
+                this.LogInputData(model, FunctionId.UpdateCategory);
 
-            var custInfoJson = JsonConvert.SerializeObject(model.CustInfos);
+                var paClassification = model.CustInfos.GroupJoin(problemAccountLosing,
+                                                        pa => pa.CustID,
+                                                        paLosing => paLosing.CustId,
+                                                        (pa, paLosing) => new { pa, paLosing })
+                                                        .SelectMany(
+                                                             group => group.paLosing.DefaultIfEmpty(),
+                                                             (group, temp) => new UpdatePALosingInfoModel
+                                                             {
+                                                                 CustID = group.pa.CustID,
+                                                                 FromReasonID = group.pa.FromReasonID,
+                                                                 ToReasonID = group.pa.ToReasonID,
+                                                                 BetCount = temp?.BetCount,
+                                                                 ActiveDays = temp?.ActiveDays,
+                                                                 TurnoverRM = temp?.TurnoverRM,
+                                                                 WinlossRM = temp?.WinlossRM,
+                                                                 WinlossStatus = temp?.WinlossStatus
+                                                             });
 
-            return this.UpdateCategoryToCTSWhenPAUpdated(custInfoJson, model.UserId);
+                if (paClassification != null && paClassification.Any())
+                {
+                    var custInfoJson = JsonConvert.SerializeObject(paClassification);
+
+                    return this.UpdateCategoryToCTSWhenPAUpdated(custInfoJson, model.UserId);
+                }
+
+            }
+
+            return Enumerable.Empty<UpdateCategoryModel>();
         }
 
         public void LogInputData(UpdateCategoryParamsModel model, FunctionId funcId)
