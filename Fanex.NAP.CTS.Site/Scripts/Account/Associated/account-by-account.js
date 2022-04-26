@@ -710,23 +710,20 @@
             data: params,
             success: function (response) {
                 if (response !== undefined) {
-                    for (var i = 0; i < response.length; i++) {
-                        var groupMemberCounter = 1;
-                        let newGroupMemberRows = new Array();
-
-                        if (i + 1 < response.length) {
-                            for (var j = i + 1; j < response.length; j++) {
-                                if (response[i]["GroupID"] == response[j]["GroupID"]) {
-                                    groupMemberCounter++;
-                                    newGroupMemberRows.push(RenderBettingPatternDetailRowHTML(response, params.MatchId, j, true, 0));
-                                }
+                    var groupMemberCounter = 1;
+                    for (var i = response.length - 1; i > 0; i--) {
+                        if (i - 1 > 0) {
+                            if (response[i]["GroupID"] == response[i - 1]["GroupID"]) {
+                                target.last().after(RenderBettingPatternDetailRowHTML(response, params.MatchId, i, true, 0));
+                                groupMemberCounter++;
                             }
+                            else {
+                                target.last().after(RenderBettingPatternDetailRowHTML(response, params.MatchId, i, false, groupMemberCounter));
+                                groupMemberCounter = 1;
+                            }
+                        } else {
+                            target.last().after(RenderBettingPatternDetailRowHTML(response, params.MatchId, i, false, groupMemberCounter));
                         }
-
-                        newGroupMemberRows.forEach(newMemberRow => target.last().after(newMemberRow));
-                        target.last().after(RenderBettingPatternDetailRowHTML(response, params.MatchId, i, false, groupMemberCounter));
-
-                        i += --groupMemberCounter;
                     }
 
                     tableMatchBettingPattern.DataTable().columns.adjust();

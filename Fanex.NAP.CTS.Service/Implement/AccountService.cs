@@ -586,11 +586,12 @@
             return result;
         }
 
-        public IEnumerable<MatchesInfoModel> GetMatchesInfo(string matchIDs)
+        public IEnumerable<MatchesInfoModel> GetMatchesInfo(string matchIDs, string custIds)
         {
             var criteria = new GetMatchesInfoCriteria
             {
-                MatchIds = matchIDs
+                MatchIds = matchIDs,
+                CustIds = custIds
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -649,6 +650,7 @@
                                         GroupID = c.GroupID,
                                         AdditionalInfo = c.AdditionalInfo,
                                         UserName = t.UserName,
+                                        TransDate = t.TransDate,
                                         TransDateString = t.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                                         TransId = t.TransId,
                                         BetType = t.TypeName,
@@ -667,6 +669,7 @@
                         IsGGB = isGGB,
                         GroupID = 0,
                         UserName = c.UserName,
+                        TransDate = c.TransDate,
                         TransDateString = c.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                         TransId = c.TransId,
                         BetType = c.TypeName,
@@ -676,11 +679,8 @@
                         LiveScore = c.LiveHomeScore + "-" + c.LiveAwayScore
                     });
                 });
-            }
 
-            if (result.Any())
-            {
-                return result.OrderBy(x => x.TransDateString);
+                result?.OrderBy(x => x.TransDate);
             }
 
             return result ?? Enumerable.Empty<MatchesDetailInfoViewModel>();

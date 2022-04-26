@@ -136,7 +136,7 @@
 
         MatchesAssociationByAIModel GetGBAssociationFromAI(long custID1, long custID2, string groupList);
 
-        IEnumerable<MatchesInfoModel> GetMatchesInfo(string matchIDs);
+        IEnumerable<MatchesInfoModel> GetMatchesInfo(string matchIDs, string custIds);
 
         IEnumerable<CustomerGroupModel> GetCustGroupAssociation(string originalGroupIDs);
 

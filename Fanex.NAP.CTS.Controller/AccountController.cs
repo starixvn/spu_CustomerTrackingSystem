@@ -734,25 +734,30 @@
             {
                 var matchIDs = groupBettingAssociation.MatchesInfo.Select(c => c.MatchID).Distinct();
 
-                var matchesInfo = _accountService.GetMatchesInfo(string.Join(",", matchIDs));
-                
-                data = new MatchesAssociationByAIViewModel
-                {                    
-                    ErrorMessage = groupBettingAssociation.ErrorMessage,
-                    MatchesInfo = matchesInfo.Select(c=> new MatchesInfoViewModel
-                                           {
-                                               MatchDesc = c.MatchID
-                                                    + " - " + c.HomeName + " vs " + c.AwayName
-                                                    + " - " + c.EventDate.ToString(Consts.FormatDateToString_MMMddyyyy)
-                                                    + " - " + c.LeagueName,
-                                               MatchID = c.MatchID,
-                                               EventDateString = c.EventDate.ToString(Consts.FormatDateToString_yyyyMMddHHmmss),
-                                               CustID1 = para1,
-                                               CustID2 = para2,
-                                               GroupIDs = groupIDs,
-                                               OrginGroupIDs = originGroupIDs
-                                           }).OrderByDescending(x => x.EventDateString)
-                };
+                var matchesInfo = _accountService.GetMatchesInfo(string.Join(",", matchIDs), custID1 + "," + custID2);
+
+                if (matchesInfo != null && matchesInfo.Any())
+                {
+                    data = new MatchesAssociationByAIViewModel
+                    {
+                        ErrorMessage = groupBettingAssociation.ErrorMessage,
+                        MatchesInfo = matchesInfo.OrderByDescending(c => c.EventDate)
+                                                 .Take(50)
+                                                 .Select(c => new MatchesInfoViewModel
+                                                 {
+                                                     MatchDesc = c.MatchID
+                                                                + " - " + c.HomeName + " vs " + c.AwayName
+                                                                + " - " + c.EventDate.ToString(Consts.FormatDateToString_MMMddyyyy)
+                                                                + " - " + c.LeagueName,
+                                                     MatchID = c.MatchID,
+                                                     EventDateString = c.EventDate.ToString(Consts.FormatDateToString_yyyyMMddHHmmss),
+                                                     CustID1 = para1,
+                                                     CustID2 = para2,
+                                                     GroupIDs = groupIDs,
+                                                     OrginGroupIDs = originGroupIDs
+                                                 })
+                    };
+                }
             }
             catch (Exception ex)
             {
