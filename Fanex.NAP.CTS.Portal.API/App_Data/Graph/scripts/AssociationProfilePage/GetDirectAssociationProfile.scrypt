@@ -125,8 +125,8 @@ CALL apoc.cypher.run('
         , "Betting Pattern"     AS AssociationTypeName  
         , CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
         , CASE WHEN $ip_AssociationStatus in [0,2] and e.CreatedDate IS NOT NULL THEN e.CreatedDate ELSE firstAssDate END AS AssociationDate
-        , apoc.text.join(COLLECT(DISTINCT g.GroupID),",")                AS GroupIDs
-        , apoc.text.join(COLLECT(DISTINCT r1.OriginGroupID),",")         AS OriginGroupIDs
+        , apoc.text.join(COLLECT(DISTINCT toString(g.GroupID)),",")                AS GroupIDs
+        , apoc.text.join(COLLECT(DISTINCT toString(r1.OriginGroupID)),",")         AS OriginGroupIDs
 ',{ip_CTSCustID: $ip_CTSCustID, ip_AssociationStatus: $ip_AssociationStatus, ip_AssociationType: $ip_AssociationType, ip_AccountStatuses: $ip_AccountStatuses, ip_SubscriberIDs: $ip_SubscriberIDs}) YIELD value 
 WITH     value.CTSCustID        AS CTSCustID
         , value.CustId          AS CustId

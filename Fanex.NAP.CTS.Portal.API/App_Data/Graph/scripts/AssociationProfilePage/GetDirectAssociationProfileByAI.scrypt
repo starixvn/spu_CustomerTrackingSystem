@@ -9,7 +9,7 @@ WHERE c.CTSCustID = $ip_CTSCustID AND c1.CTSCustID IS NOT NULL
 		    OR ($ip_AssociationStatus = 2 AND exists((c)-[:HAS_EXCEPTION]-(c1)))) 
         AND s.SubscriberID in $ip_SubscriberIDs
         AND st.ListID = 1 AND st.ItemID in $ip_AccountStatuses
-WITH distinct c,c1,s,st,r.CreatedDate as AssDate
+WITH distinct c,c1,s,st,r[0].CreatedDate as AssDate
 OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c1)
 OPTIONAL MATCH (c1)-[:HAS_CATEGORY]->(ct:CustomerCategory)
 WHERE ct.CategoryID in $ip_CategoryIDs
@@ -33,8 +33,8 @@ WITH
     , ct.ParentID           AS ParentIDs
     , apoc.text.join(COLLECT(DISTINCT toString(ct.CategoryID )),",") AS CategoryIDs
     , apoc.text.join(COLLECT(DISTINCT ct.CategoryName),",")          AS CategoryNames
-    , apoc.text.join(COLLECT(DISTINCT g.GroupID),",")                AS GroupIDs
-    , apoc.text.join(COLLECT(DISTINCT r1.OriginGroupID),",")         AS OriginGroupIDs
+    , apoc.text.join(COLLECT(DISTINCT toString(g.GroupID)),",")                AS GroupIDs
+    , apoc.text.join(COLLECT(DISTINCT toString(r1.OriginGroupID)),",")         AS OriginGroupIDs
 ORDER BY SubscriberName ASC, AssociationStatus ASC, StatusGroup ASC, StatusID ASC, AssociationDate DESC, CTSCustID ASC
 WITH COLLECT({CTSCustID:CTSCustID, CustId:CustId, CustSubId:CustSubId, SubscriberID:SubscriberID, SubscriberName:SubscriberName, UserName:UserName, UserName2:UserName2, StatusGroup:StatusGroup, StatusID:StatusID, StatusName:StatusName, AssociationTypeName:AssociationTypeName, AssociationStatus:AssociationStatus, AssociationDate:AssociationDate, ParentIDs:ParentIDs, CategoryIDs:CategoryIDs, CategoryNames:CategoryNames, GroupIDs:GroupIDs, OriginGroupIDs:OriginGroupIDs} ) as AssociationList, count(CTSCustID) as TotalItems
 UNWIND AssociationList as associationList
