@@ -742,6 +742,7 @@
                     {
                         ErrorMessage = groupBettingAssociation.ErrorMessage,
                         MatchesInfo = matchesInfo.OrderByDescending(c => c.EventDate)
+                                                 .ThenByDescending(c=>c.MatchID)
                                                  .Take(50)
                                                  .Select(c => new MatchesInfoViewModel
                                                  {
