@@ -1,4 +1,5 @@
-﻿MATCH (c:CTSCustomer)
+﻿USE ctsgraphdb
+MATCH (c:CTSCustomer)
 WHERE c.CTSCustID = $CTSCustID
 WITH c
 OPTIONAL MATCH (c)-[:USED_DEVICE*2]-(c1:CTSCustomer)
