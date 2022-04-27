@@ -162,7 +162,6 @@
 
                                     if (AppSession.CurrentUserMenu != null &&
                                         AppSession.CurrentUserMenu.Any(m => string.IsNullOrEmpty(m.ParentName)))
-                                        //AppSession.CurrentUserMenu.Where(m => m.Parent == null).ToList().Count > 0)
                                     {
                                         // if the user login directly, not through NAP Hub
                                         if (IsSiteLogin)
@@ -280,17 +279,6 @@
                     return Json(new
                     {
                         IsKickedOut = "3"
-                    });
-                }
-
-                //var siteStatus = _siteService.IsActivated(SiteId);
-                var siteStatus = _siteService.GetMenuItemBySiteId(SiteId, Environment, true).Any();
-
-                if (!siteStatus)
-                {
-                    return Json(new
-                    {
-                        IsKickedOut = "2"
                     });
                 }
 
