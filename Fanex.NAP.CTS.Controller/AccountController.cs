@@ -725,37 +725,48 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountDetailRpt)]
         public ActionResult GetMatchesAssociationByAI(long custID1, long custID2)
         {
-            var para1 = (custID1 <= custID2) ? custID1 : custID2;
-            var para2 = (custID1 > custID2) ? custID1 : custID2;
-
             var data = new MatchesAssociationByAIViewModel();
 
-            var matchesAssociationInfo = _accountService.GetMatchesAssociationInfo(para1, para2);
-
-            if (string.IsNullOrEmpty(matchesAssociationInfo.ErrorMessage) && matchesAssociationInfo.MatchesInfo != null && matchesAssociationInfo.MatchesInfo.Any())
+            try
             {
-                var matchesInfo = _accountService.GetMatchesInfo(string.Join(",", matchesAssociationInfo.MatchesInfo.Select(c => c.MatchID).Distinct()));
+                var para1 = (custID1 <= custID2) ? custID1 : custID2;
+                var para2 = (custID1 > custID2) ? custID1 : custID2;
 
-                data = new MatchesAssociationByAIViewModel
+                var matchesAssociationInfo = _accountService.GetMatchesAssociationInfo(para1, para2);
+
+                if (string.IsNullOrEmpty(matchesAssociationInfo.ErrorMessage) && matchesAssociationInfo.MatchesInfo != null && matchesAssociationInfo.MatchesInfo.Any())
                 {
-                    TotalMatchCount = matchesAssociationInfo.TotalMatchCount,
-                    ErrorMessage = matchesAssociationInfo.ErrorMessage,
-                    MatchesInfo = matchesAssociationInfo.MatchesInfo
-                        .Join(matchesInfo, c1 => c1.MatchID,
-                                           c2 => c2.MatchID,
-                                           (c1, c2) => new MatchesInfoViewModel
-                                           {
-                                               MatchDesc = c2.MatchID
-                                                    + " - " + c2.HomeName + " vs " + c2.AwayName
-                                                    + " - " + c2.EventDate.ToString(Consts.FormatDateToString_MMMddyyyy)
-                                                    + " - " + c2.LeagueName,
-                                               MatchID = c1.MatchID,
-                                               EventDateString = c2.EventDate.ToString(Consts.FormatDateToString_yyyyMMddHHmmss),
-                                               Bettypes = c1.BettypeList,
-                                               CustID1 = para1,
-                                               CustID2 = para2
-                                           }).OrderByDescending(x => x.EventDateString).ToList()
-                };
+                    var matchesInfo = _accountService.GetMatchesInfo(string.Join(",", matchesAssociationInfo.MatchesInfo.Select(c => c.MatchID).Distinct()));
+
+                    data = new MatchesAssociationByAIViewModel
+                    {
+                        TotalMatchCount = matchesAssociationInfo.TotalMatchCount,
+                        ErrorMessage = matchesAssociationInfo.ErrorMessage,
+                        MatchesInfo = matchesAssociationInfo.MatchesInfo
+                            .Join(matchesInfo, c1 => c1.MatchID,
+                                               c2 => c2.MatchID,
+                                               (c1, c2) => new MatchesInfoViewModel
+                                               {
+                                                   MatchDesc = c2.MatchID
+                                                        + " - " + c2.HomeName + " vs " + c2.AwayName
+                                                        + " - " + c2.EventDate.ToString(Consts.FormatDateToString_MMMddyyyy)
+                                                        + " - " + c2.LeagueName,
+                                                   MatchID = c1.MatchID,
+                                                   EventDateString = c2.EventDate.ToString(Consts.FormatDateToString_yyyyMMddHHmmss),
+                                                   Bettypes = c1.BettypeList,
+                                                   CustID1 = para1,
+                                                   CustID2 = para2
+                                               }).OrderByDescending(x => x.EventDateString).ToList()
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                var logMessage = new LogMessage(ex.Message)
+                                 .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                                 .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error(logMessage);
             }
 
             return Json(data, JsonRequestBehavior.AllowGet);
