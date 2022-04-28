@@ -730,34 +730,35 @@
 
                 var groupBettingAssociation = _accountService.GetGBAssociationFromAI(para1, para2, originGroupIDs);
 
-            if (groupBettingAssociation.ErrorCode == 0 && groupBettingAssociation.MatchesInfo != null && groupBettingAssociation.MatchesInfo.Any())
-            {
-                var matchIDs = groupBettingAssociation.MatchesInfo.Select(c => c.MatchID).Distinct();
-
-                var matchesInfo = _accountService.GetMatchesInfo(string.Join(",", matchIDs), custID1 + "," + custID2);
-
-                if (matchesInfo != null && matchesInfo.Any())
+                if (groupBettingAssociation.ErrorCode == 0 && groupBettingAssociation.MatchesInfo != null && groupBettingAssociation.MatchesInfo.Any())
                 {
-                    data = new MatchesAssociationByAIViewModel
+                    var matchIDs = groupBettingAssociation.MatchesInfo.Select(c => c.MatchID).Distinct();
+
+                    var matchesInfo = _accountService.GetMatchesInfo(string.Join(",", matchIDs), custID1 + "," + custID2);
+
+                    if (matchesInfo != null && matchesInfo.Any())
                     {
-                        ErrorMessage = groupBettingAssociation.ErrorMessage,
-                        MatchesInfo = matchesInfo.OrderByDescending(c => c.EventDate)
-                                                 .ThenByDescending(c=>c.MatchID)
-                                                 .Take(50)
-                                                 .Select(c => new MatchesInfoViewModel
-                                                 {
-                                                     MatchDesc = c.MatchID
-                                                                + " - " + c.HomeName + " vs " + c.AwayName
-                                                                + " - " + c.EventDate.ToString(Consts.FormatDateToString_MMMddyyyy)
-                                                                + " - " + c.LeagueName,
-                                                     MatchID = c.MatchID,
-                                                     EventDateString = c.EventDate.ToString(Consts.FormatDateToString_yyyyMMddHHmmss),
-                                                     CustID1 = para1,
-                                                     CustID2 = para2,
-                                                     GroupIDs = groupIDs,
-                                                     OrginGroupIDs = originGroupIDs
-                                                 })
-                    };
+                        data = new MatchesAssociationByAIViewModel
+                        {
+                            ErrorMessage = groupBettingAssociation.ErrorMessage,
+                            MatchesInfo = matchesInfo.OrderByDescending(c => c.EventDate)
+                                                     .ThenByDescending(c => c.MatchID)
+                                                     .Take(50)
+                                                     .Select(c => new MatchesInfoViewModel
+                                                     {
+                                                         MatchDesc = c.MatchID
+                                                                    + " - " + c.HomeName + " vs " + c.AwayName
+                                                                    + " - " + c.EventDate.ToString(Consts.FormatDateToString_MMMddyyyy)
+                                                                    + " - " + c.LeagueName,
+                                                         MatchID = c.MatchID,
+                                                         EventDateString = c.EventDate.ToString(Consts.FormatDateToString_yyyyMMddHHmmss),
+                                                         CustID1 = para1,
+                                                         CustID2 = para2,
+                                                         GroupIDs = groupIDs,
+                                                         OrginGroupIDs = originGroupIDs
+                                                     })
+                        };
+                    }
                 }
             }
             catch (Exception ex)
