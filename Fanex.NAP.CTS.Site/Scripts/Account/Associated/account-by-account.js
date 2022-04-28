@@ -711,7 +711,7 @@
             success: function (response) {
                 if (response !== undefined) {
                     var groupMemberCounter = 1;
-                    for (var i = response.length - 1; i > 0; i--) {
+                    for (var i = response.length - 1; i >= 0; i--) {
                         if (i - 1 >= 0) {
                             if (response[i]["GroupID"] == response[i - 1]["GroupID"]) {
                                 target.last().after(RenderBettingPatternDetailRowHTML(response, params.MatchId, i, true, 0));
