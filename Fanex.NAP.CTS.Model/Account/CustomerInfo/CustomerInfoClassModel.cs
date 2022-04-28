@@ -8,6 +8,8 @@
 
         public int CustomerClass { get; set; }
 
+        public string CustomerClassName { get; set; }
+
         public int Category { get; set; }
 
         public DateTime ScannedTime { get; set; }

@@ -208,7 +208,9 @@
 
             if (result != null && result.Any())
             {
-                customerClassification = result.First().CustClass.ToString();
+                var cc = result.First();
+                customerClassification = cc.CustomerClassName + " (" + cc.CustomerClass.ToString() + ")";
+
             }
 
             return Json(new { customerClassification = customerClassification }, JsonRequestBehavior.AllowGet);
@@ -282,7 +284,9 @@
                     var customerClass = _accountService.GetCustomerInfoClass(custId.ToString());
 
                     if (customerClass != null)
-                        custProfileEvidence.Class = customerClass.CustomerClass != -1 ? customerClass.CustomerClass.ToString() : "";
+                        custProfileEvidence.Class = customerClass.CustomerClass != -1 
+                            ? customerClass.CustomerClassName + " (" + customerClass.CustomerClass.ToString() + ")"
+                            : "";
                 }
                 catch (Exception ex)
                 {
