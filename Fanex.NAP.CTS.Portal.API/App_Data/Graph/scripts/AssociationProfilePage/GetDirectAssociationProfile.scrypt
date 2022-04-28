@@ -141,8 +141,8 @@ WITH     value.CTSCustID        AS CTSCustID
         , value.AssociationStatus                      AS AssociationStatus    
         , COLLECT(DISTINCT value.AssociationTypeName)  AS AssociationTypeName  
         , COLLECT(DISTINCT value.AssociationDate)      AS AssociationDate
-        , value.GroupIDs        AS GroupIDs
-        , value.OriginGroupIDs  AS OriginGroupIDs
+        , COLLECT(DISTINCT value.GroupIDs)             AS GroupIDs
+        , COLLECT(DISTINCT value.OriginGroupIDs)       AS OriginGroupIDs
 UNWIND(AssociationDate) AS associationDate       
 WITH CTSCustID, CustId, CustSubId, SubscriberID, SubscriberName, UserName, UserName2, StatusGroup, StatusID, StatusName, AssociationStatus, AssociationTypeName, Min(associationDate) as AssociationDate, GroupIDs, OriginGroupIDs
 OPTIONAL MATCH (c1:CTSCustomer)-[:HAS_CATEGORY]->(ct:CustomerCategory)
@@ -164,9 +164,9 @@ WITH  CTSCustID          AS CTSCustID
     , AssociationDate    AS AssociationDate
     , ct.ParentID        AS ParentIDs
     , apoc.text.join(COLLECT(DISTINCT toString(ct.CategoryID)),",") AS CategoryIDs
-    , apoc.text.join(COLLECT(DISTINCT ct.CategoryName),",")      AS CategoryNames
-    , GroupIDs          AS GroupIDs
-    , OriginGroupIDs    AS OriginGroupIDs
+    , apoc.text.join(COLLECT(DISTINCT ct.CategoryName),",")         AS CategoryNames
+    , apoc.text.join(GroupIDs,",")                                  AS GroupIDs
+    , apoc.text.join(OriginGroupIDs,",")                            AS OriginGroupIDs
 
 ORDER BY SubscriberName ASC, AssociationStatus ASC, StatusGroup ASC, StatusID ASC, AssociationDate DESC, CTSCustID ASC
 WITH COLLECT({CTSCustID:CTSCustID, CustId:CustId, CustSubId:CustSubId, SubscriberID:SubscriberID, SubscriberName:SubscriberName, UserName:UserName, UserName2:UserName2, StatusGroup:StatusGroup, StatusID:StatusID, StatusName:StatusName, AssociationTypeName:AssociationTypeName, AssociationStatus:AssociationStatus, AssociationDate:AssociationDate, ParentIDs:ParentIDs, CategoryIDs:CategoryIDs, CategoryNames:CategoryNames, GroupIDs:GroupIDs, OriginGroupIDs:OriginGroupIDs} ) as AssociationList, count(CTSCustID) as TotalItems
