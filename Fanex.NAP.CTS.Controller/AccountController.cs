@@ -760,6 +760,11 @@
                         };
                     }
                 }
+
+                if(groupBettingAssociation.ErrorCode == 1)
+                {
+                    LogService.Error($"Association Detail throws exception - {groupBettingAssociation.ErrorMessage} - {JsonConvert.SerializeObject(new { para1, para2, originGroupIDs })}");
+                }    
             }
             catch (Exception ex)
             {
