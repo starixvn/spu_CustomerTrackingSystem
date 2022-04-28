@@ -761,7 +761,7 @@
                     }
                 }
 
-                if(groupBettingAssociation.ErrorCode == 1)
+                if(groupBettingAssociation.ErrorCode != 0)
                 {
                     LogService.Error($"Association Detail throws exception - {groupBettingAssociation.ErrorMessage} - {JsonConvert.SerializeObject(new { para1, para2, originGroupIDs })}");
                 }    
