@@ -1396,7 +1396,7 @@
                         CategoryType = x.CategoryType,
                         CategoryName = x.CategoryName ?? string.Empty,
                         IsProblemAccount = x.CategoryType == 2
-                    }).ToList();
+                    }).ToList();              
                 
                 isVVip = categoryList.Any(x => x.CategoryId == 210); // VVIP             
                 isProblemAccount = categoryList.Any(x => x.IsProblemAccount);
@@ -1543,7 +1543,7 @@
             var customerCategoryList = _accountService.GetCustomerCategoryByCTSCustId(ctsCustId).ToList();
 
             var model = new MarkCategoryViewModel
-            {        
+            {
                 CustomerCategoryList = customerCategoryList.Where(x => x.CategoryId == 210 || x.ParentId == 0).ToList() // CategoryId = 210 -> VVIP
             };
 
@@ -1562,14 +1562,12 @@
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationMarkCategory)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationMarkCategory)]        
         public ActionResult AddCustomerCategory(CustomerCategoryModel categoryModel)
         {
             categoryModel.CreatedBy = CurrentSession.UserId;
-            categoryModel.ActionType = ActionTypeQueueCustCategory.Insert;
-
+            categoryModel.ActionType = ActionTypeQueueCustCategory.Insert;            
             var result = AddDirectCustomerCategory(categoryModel);
-
             if (categoryModel.RoleId != 1 && categoryModel.IsAffectToAllDownlines)
             {
                 _accountService.AddQueueAffectDownlinesCustomerCategory(categoryModel);
@@ -1591,7 +1589,7 @@
             {
                 if (categoryModel.IsVVip)
                 {
-                    int custIdInt = 0;
+                    int custIdInt = 0;                    
                     int.TryParse(categoryModel.CustId.ToString(), out custIdInt);
 
                     if (custIdInt != 0)
@@ -1626,18 +1624,18 @@
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationRemoveCategory)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationRemoveCategory)]        
         public ActionResult RemoveCustomerCategory(CustomerCategoryModel categoryModel)
         {
             var errorCode = 0;
             var errorMessage = string.Empty;
             categoryModel.CreatedBy = CurrentSession.UserId;
             categoryModel.ActionType = ActionTypeQueueCustCategory.Remove;
-
+            
             var result = _accountService.RemoveCustomerCategory(categoryModel);
-
+            
             if (string.IsNullOrEmpty(result.OpErrorMessage))
-            {
+            {                
                 if (categoryModel.IsVVip)
                 {
                     if (categoryModel.RoleId != 1 && categoryModel.IsAffectToAllDownlines)
@@ -1645,7 +1643,7 @@
                         _accountService.AddQueueAffectDownlinesCustomerCategory(categoryModel);
                     }
 
-                    var custIdInt = 0;
+                    var custIdInt = 0;                   
                     int.TryParse(categoryModel.CustId.ToString(), out custIdInt);
 
                     if (custIdInt != 0)
@@ -1665,7 +1663,7 @@
             }
             else
             {
-                errorCode = -1;
+                errorCode = -1;                
                 errorMessage = result.OpErrorMessage;
             }
 

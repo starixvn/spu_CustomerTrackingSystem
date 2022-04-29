@@ -14,7 +14,7 @@
         public int CustomerClass { get; set; }
 
         [XName("n")]
-        public int CustomerClassName { get; set; }
+        public string CustomerClassName { get; set; }
 
         [XName("t")]
         public int Category { get; set; }

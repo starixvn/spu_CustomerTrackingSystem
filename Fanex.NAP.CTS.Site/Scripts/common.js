@@ -104,9 +104,6 @@
         list.push({ 'id': '262', 'indexColor': 4, 'cssClass': 'circle yellow-line', 'name': 'Smart Punter (62)' });
         list.push({ 'id': '263', 'indexColor': 4, 'cssClass': 'circle yellow-line', 'name': 'Smart Punter (63)' });
 
-        list.push({ 'id': '271', 'indexColor': 4, 'cssClass': 'circle yellow-line', 'name': 'High Risk Punter (71)' });
-        list.push({ 'id': '272', 'indexColor': 4, 'cssClass': 'circle yellow-line', 'name': 'High Risk Punter (72)' });
-        list.push({ 'id': '273', 'indexColor': 4, 'cssClass': 'circle yellow-line', 'name': 'High Risk Punter (73)' });          
         
         return list;
     };

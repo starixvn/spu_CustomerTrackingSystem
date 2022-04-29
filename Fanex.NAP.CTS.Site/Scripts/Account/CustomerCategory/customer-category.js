@@ -6,14 +6,13 @@
     let divRemoveCategory = $('#divRemoveCategory');
     let tblcustomercategory = $('#customer-category-table');
     let isHostPermission;
-    let spanClass = $('#spanClass');
-    let cacheData = {
+    let cacheCategoryColors = [];    let cacheData = {
         isVVip: false,
         isPinCategory: false,
         isExcludedTagAssPA: false,
         isProblemAccount: false
     };
-    let dataTable;
+    let dataTable;   
 
     function BindingMarkCategoryForAddNew(custId, ctsCustId, subscriberId) {
         $('#btncancelcategory').on('click', function () {
@@ -570,7 +569,7 @@
             btnMarkCategory.click(function () { DisplayMarkCategory(custId, ctsCustId, subscriberId); });
 
             btnRemoveCategory.click(function () { DisplayRemoveCategory(custId, ctsCustId, subscriberId); });
-        }
+        }       
 
         dataTable = RenderGrid();
 
