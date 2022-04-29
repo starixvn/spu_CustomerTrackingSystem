@@ -728,13 +728,18 @@
                 var para1 = (custID1 <= custID2) ? custID1 : custID2;
                 var para2 = (custID1 > custID2) ? custID1 : custID2;
 
+
+                LogService.Info(JsonConvert.SerializeObject(new { para1, para2, originGroupIDs }));
                 var groupBettingAssociation = _accountService.GetGBAssociationFromAI(para1, para2, originGroupIDs);
+                LogService.Info(JsonConvert.SerializeObject(groupBettingAssociation));
 
                 if (groupBettingAssociation.ErrorCode == 0 && groupBettingAssociation.MatchesInfo != null && groupBettingAssociation.MatchesInfo.Any())
                 {
                     var matchIDs = groupBettingAssociation.MatchesInfo.Select(c => c.MatchID).Distinct();
 
+                    LogService.Info(JsonConvert.SerializeObject(new { matchIDs = string.Join(",", matchIDs), custIds = custID1 + "," + custID2 }));
                     var matchesInfo = _accountService.GetMatchesInfo(string.Join(",", matchIDs), custID1 + "," + custID2);
+                    LogService.Info(JsonConvert.SerializeObject(matchesInfo));
 
                     if (matchesInfo != null && matchesInfo.Any())
                     {
