@@ -568,20 +568,17 @@
         {
             var result = new MatchesAssociationByAIModel();
 
-            if (!string.IsNullOrEmpty(groupList))
+            var criteria = new GetMatchesAssociationByAICriteria
             {
-                var criteria = new GetMatchesAssociationByAICriteria
-                {
-                    CustID1 = custID1,
-                    CustID2 = custID2,
-                    GroupList = groupList
-                };
+                CustID1 = custID1,
+                CustID2 = custID2,
+                GroupList = groupList
+            };
 
-                result.MatchesInfo = repository.Fetch<GBAssociationAIModel>(criteria) ?? Enumerable.Empty<GBAssociationAIModel>();
-                result.ErrorMessage = criteria.ErrorMessage;
-                result.ErrorCode = string.IsNullOrEmpty(criteria.ErrorMessage) ? 0 : -1;
-                result.TotalMatchCount = (int)criteria.TotalMatchCount;
-            }
+            result.MatchesInfo = repository.Fetch<GBAssociationAIModel>(criteria) ?? Enumerable.Empty<GBAssociationAIModel>();
+            result.ErrorMessage = criteria.ErrorMessage;
+            result.ErrorCode = string.IsNullOrEmpty(criteria.ErrorMessage) ? 0 : -1;
+            result.TotalMatchCount = (int)criteria.TotalMatchCount;
 
             return result;
         }

@@ -763,7 +763,7 @@
 
                 if(groupBettingAssociation.ErrorCode != 0)
                 {
-                    LogService.Error($"Association Detail throws exception - {groupBettingAssociation.ErrorMessage} - {JsonConvert.SerializeObject(new { para1, para2, originGroupIDs })}");
+                    LogService.Error($"Association Detail throws exception - SPU_AIML_GB_GetAssociationInfo: {groupBettingAssociation.ErrorMessage} - {JsonConvert.SerializeObject(new { para1, para2, originGroupIDs })}");
                 }    
             }
             catch (Exception ex)
