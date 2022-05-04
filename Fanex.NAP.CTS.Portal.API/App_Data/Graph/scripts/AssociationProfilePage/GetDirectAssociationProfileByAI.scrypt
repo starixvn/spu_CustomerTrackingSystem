@@ -1,6 +1,15 @@
 ﻿USE ctsgraphdb
-//USE ctslocal
-MATCH (c:CTSCustomer)-[r:ASS_BY_AI|GROUP_BY_AI*1..2]-(c1:CTSCustomer)
+MATCH (c:CTSCustomer)
+WHERE c.CTSCustID = $ip_CTSCustID
+OPTIONAL MATCH (c:CTSCustomer)-[r:ASS_BY_AI]-(c0:CTSCustomer)
+WHERE c0.CTSCustID IS NOT NULL
+WITH COLLECT(c0) AS ass, c
+OPTIONAL MATCH (c)-[r0:GROUP_BY_AI*2]-(c01:CTSCustomer)
+WHERE c01.CTSCustID IS NOT NULL
+WITH ass + COLLECT(c01) AS allAss, c
+UNWIND allAss as c1
+WITH c, c1
+MATCH (c)-[r:ASS_BY_AI|GROUP_BY_AI*1..2]-(c1)
 MATCH (c1)-[:BELONG_TO_SUB]->(s:Subscriber)
 MATCH (c1)-[:HAS_STATUS]->(st:StaticList)
 WHERE c.CTSCustID = $ip_CTSCustID AND c1.CTSCustID IS NOT NULL
@@ -15,7 +24,7 @@ OPTIONAL MATCH (c1)-[:HAS_CATEGORY]->(ct:CustomerCategory)
 WHERE ct.CategoryID in $ip_CategoryIDs
 WITH c,c1,s,st,ct,e,Min(AssDate) as firstAssDate
 WHERE ( 0 IN $ip_CategoryIDs) OR (NOT 0 IN $ip_CategoryIDs AND ct.CategoryID IS NOT NULL)
-MATCH (c)-[r:GROUP_BY_AI]->(g:AIGroup)<-[r1:GROUP_BY_AI]-(c1)
+OPTIONAL MATCH (c)-[r:GROUP_BY_AI]->(g:AIGroup)<-[r1:GROUP_BY_AI]-(c1)
 WITH 
       c1.CTSCustID          AS CTSCustID
     , c1.CustID             AS CustId
