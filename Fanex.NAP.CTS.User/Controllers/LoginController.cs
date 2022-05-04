@@ -143,7 +143,7 @@
 
                             if (password == hashPw)
                             {                                
-                                var group = user.Group == null ? null : _groupService.Get(user.Group.Id);
+                                var group = _groupService.Get(user.GroupId);
 
                                 // gets all sites of logging-in user
                                 var siteLevelList = _userService.GetSiteLevel(user.Id, Environment);
@@ -161,7 +161,7 @@
                                     AppSession.IsFirstGetDataNotification = true;
 
                                     if (AppSession.CurrentUserMenu != null &&
-                                        AppSession.CurrentUserMenu.Where(m => m.Parent == null).ToList().Count > 0)
+                                        AppSession.CurrentUserMenu.Any(m => string.IsNullOrEmpty(m.ParentName)))
                                     {
                                         // if the user login directly, not through NAP Hub
                                         if (IsSiteLogin)
@@ -279,16 +279,6 @@
                     return Json(new
                     {
                         IsKickedOut = "3"
-                    });
-                }
-
-                var siteStatus = _siteService.IsActivated(SiteId);
-
-                if (!siteStatus)
-                {
-                    return Json(new
-                    {
-                        IsKickedOut = "2"
                     });
                 }
 
@@ -424,7 +414,7 @@
 
             foreach (var siteLevel in siteLevelList)
             {
-                if (siteLevel.Site.Id == SiteId && siteLevel.IsActive)
+                if (siteLevel.SiteId == SiteId && siteLevel.IsActive)
                 {
                     userIsActiveOnThisSite = true;
                 }
@@ -446,18 +436,18 @@
                 return RedirectToAction("Site", "UserSite");
             }
 
-            var site = siteLevelList.First(s => s.IsActive).Site;
+            var siteId = siteLevelList.First(s => s.IsActive).SiteId;
 
-            var listSiteUrl =
-                _siteService.GetUrlById(site.Id, Environment).Where(u => u.IsActive).ToList();
+            //var listSiteUrl = _siteService.GetUrlById(siteId, Environment).Where(u => u.IsActive).ToList();
+            var siteUrlList = _siteService.GetMenuItemBySiteId(siteId, Environment, true);
 
             // user has acces to one site
-            if (listSiteUrl.Count > 1)
+            if (siteUrlList.Any())
             {
                 return RedirectToAction("Site", "UserSite");
             }
 
-            return RedirectToAction("Forward", "UserSite", new { id = listSiteUrl.First().SiteUrlId });
+            return RedirectToAction("Forward", "UserSite", new { id = siteUrlList.First().Url });
         }
 
         private void AddTokenToCookie(string loginToken)

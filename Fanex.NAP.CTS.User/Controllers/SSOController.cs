@@ -22,6 +22,7 @@
     using ONEbook.UM.Services;
     using ONEbook.UM.Services.Impl;
     using Fanex.NAP.CTS.User.Helper;
+    using Fanex.NAP.CTS.Service;
 
     /// <summary>
     /// SSO Controller.
@@ -32,7 +33,7 @@
         #region members
 
         private readonly ICurrentSession _currentSession;
-        private readonly int _timeExipration = 20;
+        private readonly int _timeExpiration = 20;
         private readonly IUserService _userService;
         private readonly ISecurityService _securityService;
         private readonly IMaintenanceService _maintenanceService;
@@ -81,40 +82,55 @@
                 userId = Cryptography.CfsDeCrypt(userId.Replace(" ", "+"));
                 onuserId = Cryptography.CfsDeCrypt(onuserId.Replace(" ", "+"));
                 time = Cryptography.CfsDeCrypt(time.Replace(" ", "+"));
+                
                 var currentTime = _securityService.GetTime();
 
                 var expiration = Convert.ToDateTime(currentTime) - Convert.ToDateTime(time);
 
-                if (expiration.TotalSeconds <= _timeExipration)
+                if (expiration.TotalSeconds <= _timeExpiration)
                 {
                     var criteria = SetUserCriteria(Convert.ToInt32(userId), Convert.ToInt32(onuserId));
                     var onUserId = _securityService.SSOLogin(criteria);
-
+                    
                     if (onUserId != 0)
                     {
                         var user = _userService.Get(criteria.UserId);
 
-                        _currentSession.UserId = user.Id;
-                        _currentSession.Username = user.Username;
-                        _currentSession.OnUserId = onUserId;
-                        _currentSession.SessionId = Session.SessionID;
-                        _currentSession.Level = _userService.GetUserLevel(user.Id, SiteId);
-
-                        var currentFunction = _userService.GetPermissions(user.Id, NapSettings.Settings.SiteId, null, NapSettings.Settings.Environment);
-                        AppSession.CurrentUser = user;
-                        AppSession.RoleAccess = PermissionService.GetRoleAccess(currentFunction);
-
-                        if (SiteId != 0)
+                        if (user != null)
                         {
-                            _currentSession.MenuItemList = _userService.GetMenuItem(user.Id, SiteId, Environment, true).ToList();
-                            AppSession.CurrentUserMenu = _currentSession.MenuItemList;
+                            var ctsUserService = new CTSUserService();
+                            ctsUserService.InsertCTSUser(user.Id, user.Username);
+
+                            _currentSession.UserId = user.Id;
+                            _currentSession.Username = user.Username;
+                            _currentSession.OnUserId = onUserId;
+                            _currentSession.SessionId = Session.SessionID;
+                            _currentSession.Level = _userService.GetUserLevel(user.Id, SiteId);
+
+                            var functionKey = redirectUrl.OriginalString;
+                            if (functionKey != null)
+                                functionKey = functionKey.Replace("~/", "");
+                            else
+                                functionKey = FSFunctionKeys.AccountDetail;
+
+                            var currentFunction = _userService.GetPermissions(user.Id, NapSettings.Settings.SiteId, functionKey, NapSettings.Settings.Environment);
+                            
+                            AppSession.RoleAccess = PermissionService.GetRoleAccess(currentFunction);
+                            AppSession.CurrentUser = user;
+                            AppSession.IsFirstGetDataNotification = true;
+
+                            if (SiteId != 0)
+                            {
+                                _currentSession.MenuItemList = _userService.GetMenuItem(user.Id, SiteId, Environment, true).ToList();
+                                AppSession.CurrentUserMenu = _currentSession.MenuItemList;
+                            }
+
+                            CreateAuthInfo(user);
+
+                            string forwardLink = redirectUrl == null ? FormsAuthentication.DefaultUrl : redirectUrl.ToString();
+
+                            return Redirect(forwardLink);
                         }
-
-                        CreateAuthInfo(user);
-
-                        string forwardLink = redirectUrl == null ? FormsAuthentication.DefaultUrl : redirectUrl.ToString();
-
-                        return Redirect(forwardLink);
                     }
                 }
 
