@@ -599,5 +599,6 @@
         domElements.btnQuickComment.on('click', function () {
             AddQuickComment($(this).text());
         });
+
     };
 }
