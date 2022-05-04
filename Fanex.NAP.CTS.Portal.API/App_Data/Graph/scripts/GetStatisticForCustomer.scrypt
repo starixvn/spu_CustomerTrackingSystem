@@ -4,9 +4,14 @@ WHERE c.CTSCustID = $CTSCustID
 WITH c
 OPTIONAL MATCH (c)-[:USED_DEVICE*2]-(c1:CTSCustomer)
 WITH c, COUNT(DISTINCT c1) AS Device
-OPTIONAL MATCH (c)-[:ASS_BY_AI|GROUP_BY_AI*1..2]-(c1:CTSCustomer)
-WITH c, Device, COUNT(DISTINCT c1) AS AI
 OPTIONAL MATCH (c)-[:ADD_MANUALLY]-(c1:CTSCustomer)
-WITH c, Device, AI, COUNT(DISTINCT c1) AS Manual
+WITH c, Device, COUNT(DISTINCT c1) AS Manual
 OPTIONAL MATCH (c)-[:ASS_BY_IP]-(c1:CTSCustomer)
-RETURN Device, AI, Manual, COUNT(DISTINCT c1) AS IP
+WITH c, Device, Manual, COUNT(DISTINCT c1) AS IP
+OPTIONAL MATCH (c)-[:ASS_BY_AI]-(c1:CTSCustomer)
+RETURN Device, Manual, IP, COUNT(DISTINCT c1) AS AI
+UNION
+USE ctsgraphdb
+MATCH (c:CTSCustomer)-[:GROUP_BY_AI*2]-(c1:CTSCustomer)
+WHERE c.CTSCustID = $CTSCustID
+RETURN null as Device, null as Manual, null as IP, COUNT(DISTINCT c1) AS AI
