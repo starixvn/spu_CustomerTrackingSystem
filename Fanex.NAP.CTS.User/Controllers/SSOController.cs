@@ -107,11 +107,12 @@
                             _currentSession.SessionId = Session.SessionID;
                             _currentSession.Level = _userService.GetUserLevel(user.Id, SiteId);
 
-                            var functionKey = redirectUrl.OriginalString;
-                            if (functionKey != null)
+                            var functionKey = FSFunctionKeys.Home;
+
+                            if (redirectUrl != null && !redirectUrl.OriginalString.Contains("Index"))
+                            {
                                 functionKey = functionKey.Replace("~/", "");
-                            else
-                                functionKey = FSFunctionKeys.AccountDetail;
+                            }
 
                             var currentFunction = _userService.GetPermissions(user.Id, NapSettings.Settings.SiteId, functionKey, NapSettings.Settings.Environment);
                             
@@ -127,7 +128,9 @@
 
                             CreateAuthInfo(user);
 
-                            string forwardLink = redirectUrl == null ? FormsAuthentication.DefaultUrl : redirectUrl.ToString();
+                            string forwardLink = redirectUrl == null || redirectUrl.OriginalString.Contains("Index")
+                                ? FormsAuthentication.DefaultUrl 
+                                : redirectUrl.ToString();
 
                             return Redirect(forwardLink);
                         }
