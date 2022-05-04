@@ -1394,8 +1394,7 @@
                         IsProblemAccount = x.CategoryType == 2
                     }).ToList();
                 
-                isVVip = categoryList.Any(x => x.CategoryId == 210); // VVIP
-
+                isVVip = categoryList.Any(x => x.CategoryId == 210); // VVIP             
                 isProblemAccount = categoryList.Any(x => x.IsProblemAccount);
 
                 isPAProbation = isProblemAccount && classification.Any(x => x.IsProbation);
@@ -1540,7 +1539,7 @@
             var customerCategoryList = _accountService.GetCustomerCategoryByCTSCustId(ctsCustId).ToList();
 
             var model = new MarkCategoryViewModel
-            {
+            {        
                 CustomerCategoryList = customerCategoryList.Where(x => x.CategoryId == 210 || x.ParentId == 0).ToList() // CategoryId = 210 -> VVIP
             };
 
