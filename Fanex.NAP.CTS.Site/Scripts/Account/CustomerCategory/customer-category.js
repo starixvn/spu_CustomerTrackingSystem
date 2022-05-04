@@ -164,7 +164,7 @@
         params.CTSCustId = ctsCustId;
         params.CategoryId = $('#ddlRemoveCategory').val();
         params.RoleId = $('#hdRoleID').val();
-        params.IsAffectToAllDownlines = $('#inputAffectToAllDownlines').is(":checked");
+        params.IsAffectToAllDownlines = $('#inputRemoveAffectToAllDownlines').is(":checked");
         params.IsVVip = true;
 
         $.ajax(url, {
