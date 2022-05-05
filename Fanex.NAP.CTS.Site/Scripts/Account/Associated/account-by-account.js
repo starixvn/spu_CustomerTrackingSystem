@@ -27,6 +27,7 @@
     let spanIPAssociationTotalMatches = $('#spanIPAssociationTotalMatches');
     let spanIPAssociationTotalIPSharing = $('#spanIPAssociationTotalIPSharing');    let cbbAssociationCategory = $('#cbbAssociationCategory');
     let isSkipTracking = true;
+    let isInProcessing = false;
 
     function RenderTag(obj) {
         let html = "";
@@ -636,7 +637,9 @@
                             OrginGroupIDs: colGroupMatch.attr('data-orgin-groupIDs')
                         }
 
-                        GetMatchBettingPatternDetail(params, trGroup);
+                        if (!isInProcessing) {
+                            GetMatchBettingPatternDetail(params, trGroup);
+                        }
 
                         iGroup.removeClass('icon-chevron-right').addClass('icon-chevron-down');
                     } else {                        
@@ -701,11 +704,12 @@
 
     function GetMatchBettingPatternDetail(params, target) {
         var url = common.modifyRelativeUrl('Account/GetMatchesAssociationDetailByAI');
-        
+
         $.ajax(url, {
             type: 'POST',
             beforeSend: function () {
                 tableMatchBettingPattern.find('tbody').addClass('loading');
+                isInProcessing = true;
             },
             data: params,
             success: function (response) {
@@ -734,9 +738,11 @@
             },
             complete: function () {
                 tableMatchBettingPattern.find('tbody').removeClass('loading');
+                isInProcessing = false;
             },
             error: function (errMsg) {
                 console.log(errMsg);
+                isInProcessing = false;
             }
         });
     }

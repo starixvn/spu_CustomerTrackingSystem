@@ -813,13 +813,13 @@
                             if (specialGBs != null)
                             {
                                 var sgbTicketDetails = _accountService.GetTicketDetails(para, para.CustID1 + "," + para.CustID2, specialGBs.AdditionalInfo);
-
+                               
                                 sgbData = _accountService.MergeCustGroupTicketInfo(null, sgbTicketDetails, false);
                             }
                         },
                         () =>
                         {
-                            if (generalGBs != null)
+                            if (generalGBs != null && generalGBs.Any())
                             {
                                 var groupInfo = _accountService.GetCustGroupAssociation(para.GroupIDs);
 
