@@ -1071,7 +1071,7 @@
 
         public IEnumerable<CustomerCategory> GetCustomerCategoryByCTSCustId(long ctsCustId)
         {
-            var criteria = new GetCustomerCategoryByCTSCustId
+            var criteria = new GetCustomerCategoryByCTSCustIdCriteria
             {
                 CTSCustId = ctsCustId
             };

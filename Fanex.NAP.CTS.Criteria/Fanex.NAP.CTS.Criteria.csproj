@@ -153,7 +153,7 @@
     <Compile Include="Account\CustomerCategory\GetCustomerCategoryByCategoryIdsCriteria.cs" />
     <Compile Include="Account\CustomerCategory\GetCTSCustomerClassificationForAPICriteria.cs" />
     <Compile Include="Account\CustomerCategory\GetCTSCustomerClassificationCriteria.cs" />
-    <Compile Include="Account\CustomerCategory\GetCustomerCategoryByCTSCustId.cs" />
+    <Compile Include="Account\CustomerCategory\GetCustomerCategoryByCTSCustIdCriteria.cs" />
     <Compile Include="Account\CustomerCategory\GetCustomerClassByCustIdCriteria.cs" />
     <Compile Include="Account\CustomerCategory\PinCTSCategoryCustomerClassificationCriteria.cs" />
     <Compile Include="Account\CustomerCategory\UpdateCTSCustomerClassificationCriteria.cs" />

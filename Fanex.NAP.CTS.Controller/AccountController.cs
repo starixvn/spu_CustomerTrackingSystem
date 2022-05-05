@@ -1552,7 +1552,7 @@
             var model = new MarkCategoryViewModel
             {
                 CustomerCategoryList = new List<Model.DTO.CustomerCategory> { new Model.DTO.CustomerCategory { CategoryId = 210, CategoryName = "VVIP", ParentId = 200 } }
-            };
+            };           
 
             return PartialView("CustomerCategory/RemoveCategory", model);
         }
@@ -1566,7 +1566,7 @@
 
             var result = AddDirectCustomerCategory(categoryModel);
 
-            if (categoryModel.IsAffectToAllDownlines)
+            if (categoryModel.RoleId != 1 && categoryModel.IsAffectToAllDownlines)
             {
                 _accountService.AddQueueAffectDownlinesCustomerCategory(categoryModel);
             }
@@ -1636,7 +1636,7 @@
             {
                 if (categoryModel.IsVVip)
                 {
-                    if (categoryModel.IsAffectToAllDownlines)
+                    if (categoryModel.RoleId != 1 && categoryModel.IsAffectToAllDownlines)
                     {
                         _accountService.AddQueueAffectDownlinesCustomerCategory(categoryModel);
                     }
