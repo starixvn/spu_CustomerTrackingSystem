@@ -332,9 +332,9 @@
                 return problemAccounts.GroupJoin(paLosing ?? Enumerable.Empty<ProblemAccountLosingClassificationModel>(),
                                                  pa => pa.CustID,
                                                  pl => pl.CustId,
-                                                (pa, pl) => new { pa, paLosing })
+                                                (pa, pl) => new { pa, pl })
                                                 .SelectMany(
-                                                        group => group.paLosing.DefaultIfEmpty(),
+                                                        group => group.pl.DefaultIfEmpty(),
                                                         (group, temp) => new InsertProblemAccountModel
                                                         {
                                                             CustID = group.pa.CustID,
