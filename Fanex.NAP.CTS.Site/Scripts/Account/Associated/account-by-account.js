@@ -27,6 +27,7 @@
     let spanIPAssociationTotalMatches = $('#spanIPAssociationTotalMatches');
     let spanIPAssociationTotalIPSharing = $('#spanIPAssociationTotalIPSharing');    let cbbAssociationCategory = $('#cbbAssociationCategory');
     let isSkipTracking = true;
+    let isInProcessing = false;
 
     function RenderTag(obj) {
         let html = "";
@@ -159,7 +160,7 @@
                     data: obj => obj.AssociationTypeName,
                     createdCell: (cell, _, row) => {
                         $('.betting-pattern', cell).click(() =>
-                            ShowMatchBettingPattern(row.CustId)
+                            ShowMatchBettingPattern(row.CustId, row.GroupIDs, row.OriginGroupIDs)
                         );
 
                         $('.ip-association', cell).click(() =>
@@ -249,22 +250,6 @@
             });
 
     }
-
-    function GetTotalAssociation(ctsCustId) {
-        $.ajax(common.modifyRelativeUrl('Account/GetCustomerTotalAssociationByCTSCustId'), {
-            type: 'POST',
-            data: {
-                ctsCustId: ctsCustId
-            },
-            success: function (response) {
-                totalAssAccount = response.TotalAccounts;
-                $('#spanTotalAssociated').html(response.TotalAccounts + " / " + response.TotalDevices);
-            },
-            error: function (errMsg) {
-                console.log(errMsg);
-            }
-        });
-    } 
 
     function RemoveAssociation(fromSubscriberId, fromCTSCustId, toSubscriberId, toCTSCustId, isLinked) {
         var url = common.modifyRelativeUrl('Account/ActiveRemoveAssociation');
@@ -552,7 +537,7 @@
         btnSaveAssociation.prop('disabled', true);
     }
 
-    function ShowMatchBettingPattern(custId) {        
+    function ShowMatchBettingPattern(custId, groupIDs, originGroupIDs) {        
 
         divMatchBettingPattern.dialog({
             modal: true,
@@ -574,25 +559,29 @@
                     zeroRecords: "There's no data"
                 },
                 info: false,
-                ordering: false,               
+                ordering: false,
                 searching: false,
                 scrollX: false,
                 paging: false,
                 columnDefs: [
                     { targets: "_all", defaultContent: "-" },
-                    { targets: [-1,-2], className: "text-center" },
+                    { targets: [-1, -2], className: "text-center" },
                     { targets: [0], visible: false },
-                    { targets: [1], className: "text-left" },
-                    { targets: [2], width: "15%", className: "text-center" },
+                    { targets: [1], width: "5%", className: "text-center" },
+                    { targets: [2], width: "15%", className: "text-left" },
                     { targets: [3], width: "15%", className: "text-left" },
-                    { targets: [4], width: "10%", className: "text-left" },
-                    { targets: [5], width: "10%", className: "text-left" },
-                    { targets: [6], width: "10%", className: "text-center" },
-                    { targets: [7], width: "10%", className: "text-center" },
-                    { targets: [8], width: "10%", className: "text-center" }
+                    { targets: [4], width: "15%", className: "text-center" },
+                    { targets: [5], width: "15%", className: "text-left" },
+                    { targets: [6], width: "10%", className: "text-left" },
+                    { targets: [7], width: "5%", className: "text-left" },
+                    { targets: [8], width: "10%", className: "text-center" },
+                    { targets: [9], width: "5%", className: "text-center" },
+                    { targets: [10], width: "5%", className: "text-center" }
                 ],
                 columns: [
                     { data: obj => obj.MatchDesc },
+                    { data: obj => obj.GroupID },
+                    { data: obj => obj.Description },
                     { data: obj => obj.UserName },
                     { data: obj => obj.TransDateString },
                     { data: obj => obj.TransId },
@@ -615,12 +604,13 @@
 
                     api.column(0, { page: 'current' }).data().each(function (group, i) {
                         if (last !== group) {
-                            let html = '<tr class="group group-site"><td colspan="8"><span class="column-group-match"';
+                            let html = '<tr class="group group-site"><td colspan="10"><span class="column-group-match"';
                             html += ' data-match-id=' + data[i].MatchID;
-                            html += ' data-event-date-string=' + data[i].EventDateString;                            
-                            html += ' data-bet-types=' + data[i].Bettypes;
-                            html += ' data-cust-id1=' + data[i].CustID1;
-                            html += ' data-cust-id2=' + data[i].CustID2 + '>';
+                            html += ' data-event-date-string=' + data[i].EventDateString;
+                            html += ' data-custID1=' + data[i].CustID1;
+                            html += ' data-custID2=' + data[i].CustID2;
+                            html += ' data-groupIDs=' + data[i].GroupIDs;
+                            html += ' data-orgin-groupIDs=' + data[i].OrginGroupIDs+ '>';
                             html += '<i class="icon icon-chevron-right icon-open"></i> ' + group;
                             html += '</span></td></tr>';
 
@@ -641,12 +631,15 @@
                         let params = {
                             MatchId: colGroupMatch.attr('data-match-id'),
                             EventDateString: colGroupMatch.attr('data-event-date-string'),
-                            Bettypes: colGroupMatch.attr('data-bet-types'),
-                            CustId1: colGroupMatch.attr('data-cust-id1'),
-                            CustId2: colGroupMatch.attr('data-cust-id2')
+                            CustID1: colGroupMatch.attr('data-custID1'),
+                            CustID2: colGroupMatch.attr('data-custID2'),
+                            GroupIDs: colGroupMatch.attr('data-groupIDs'),
+                            OrginGroupIDs: colGroupMatch.attr('data-orgin-groupIDs')
                         }
 
-                        GetMatchBettingPatternDetail(params, trGroup);
+                        if (!isInProcessing) {
+                            GetMatchBettingPatternDetail(params, trGroup);
+                        }
 
                         iGroup.removeClass('icon-chevron-right').addClass('icon-chevron-down');
                     } else {                        
@@ -667,12 +660,12 @@
             });
         }
 
-        GetMatchBettingPattern($('#hdCustId').val(), custId);    
+        GetMatchBettingPattern($('#hdCustId').val(), custId, groupIDs, originGroupIDs);    
 
         $('.ui-dialog .ui-dialog-content').css('padding', '0');
     }
 
-    function GetMatchBettingPattern(custId1, custId2) {
+    function GetMatchBettingPattern(custId1, custId2, groupIDs, originGroupIDs) {
         spanBettingPatternTotalMatch.text("");        
 
         var url = common.modifyRelativeUrl('Account/GetMatchesAssociationByAI');
@@ -684,7 +677,9 @@
             },
             data: {
                 custID1: custId1,
-                custID2: custId2
+                custID2: custId2,
+                groupIDs: groupIDs,
+                originGroupIDs: originGroupIDs
             },
             success: function (response) {
                 if (response !== undefined) {
@@ -709,31 +704,32 @@
 
     function GetMatchBettingPatternDetail(params, target) {
         var url = common.modifyRelativeUrl('Account/GetMatchesAssociationDetailByAI');
-        
+
         $.ajax(url, {
             type: 'POST',
             beforeSend: function () {
                 tableMatchBettingPattern.find('tbody').addClass('loading');
+                isInProcessing = true;
             },
             data: params,
             success: function (response) {
-                if (response !== undefined) {                    
-                    for (var i = 0; i < response.length; i++) {
-                        let newRow = $('<tr role="row" class="odd detail" data-match-id=' + params.MatchId + '>')
-                            .append('<td class="hide">' + response[i]["MatchDesc"] + '</td>')
-                            .append('<td class="text-center">' + response[i]["UserName"] + '</td>')
-                            .append('<td class="text-center">' + response[i]["TransDateString"] + '</td>')
-                            .append('<td class="text-center">' + response[i]["TransId"] + '</td>')
-                            .append('<td class="text-center">' + response[i]["BetType"] + '</td>')
-                            .append('<td class="text-center">' + response[i]["BetTeam"] + '</td>')
-                            .append('<td class="text-center">' + response[i]["Stake"] + '</td>')
-                            .append('<td class="text-center"><span ' + (response[i]["Odds"] < 0 ? 'class="red"' : '') + '>' + response[i]["Odds"] + '</span></td>')
-                            .append('<td class="text-center">' + response[i]["LiveScore"] + '</td>')
-                            .append('</tr>');
-
-                        target.last().after(newRow);
+                if (response !== undefined) {
+                    var groupMemberCounter = 1;
+                    for (var i = response.length - 1; i >= 0; i--) {
+                        if (i - 1 >= 0) {
+                            if (response[i]["GroupID"] == response[i - 1]["GroupID"]) {
+                                target.last().after(RenderBettingPatternDetailRowHTML(response, params.MatchId, i, true, 0));
+                                groupMemberCounter++;
+                            }
+                            else {
+                                target.last().after(RenderBettingPatternDetailRowHTML(response, params.MatchId, i, false, groupMemberCounter));
+                                groupMemberCounter = 1;
+                            }
+                        } else {
+                            target.last().after(RenderBettingPatternDetailRowHTML(response, params.MatchId, i, false, groupMemberCounter));
+                        }
                     }
-                    
+
                     tableMatchBettingPattern.DataTable().columns.adjust();
 
                     let iGroup = $('i.icon', target);
@@ -742,11 +738,32 @@
             },
             complete: function () {
                 tableMatchBettingPattern.find('tbody').removeClass('loading');
+                isInProcessing = false;
             },
             error: function (errMsg) {
                 console.log(errMsg);
+                isInProcessing = false;
             }
         });
+    }
+
+    function RenderBettingPatternDetailRowHTML(response, matchId, index, isRowMember, rowspanNumer)
+    {
+        let newRow = $('<tr role="row" class="odd detail" data-match-id=' + matchId + '>')
+                      .append('<td class="hide">' + response[index]["MatchDesc"] + '</td>')
+                      .append('<td class="text-center" ' + (isRowMember ? 'style="display: none;' : ('rowspan = "' + rowspanNumer)) + '" >' + response[index]["GroupID"] + '</td>')
+                      .append('<td class="text-center" ' + (isRowMember ? 'style="display: none;' : ('rowspan = "' + rowspanNumer)) + '" >'+ response[index]["Description"] + '</td>')
+                      .append('<td class="text-center">' + response[index]["UserName"] + '</td>')
+                      .append('<td class="text-center">' + response[index]["TransDateString"] + '</td>')
+                      .append('<td class="text-center">' + response[index]["TransId"] + '</td>')
+                      .append('<td class="text-center">' + response[index]["BetType"] + '</td>')
+                      .append('<td class="text-center">' + response[index]["BetTeam"] + '</td>')
+                      .append('<td class="text-center">' + response[index]["Stake"] + '</td>')
+                      .append('<td class="text-center"><span ' + (response[index]["Odds"] < 0 ? 'class="red"' : '') + '>' + response[index]["Odds"] + '</span></td>')
+                      .append('<td class="text-center">' + response[index]["LiveScore"] + '</td>')
+                      .append('</tr>');
+
+        return newRow;
     }
 
     function ShowIPAssociation(custId) {

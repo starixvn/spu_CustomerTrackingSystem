@@ -4,10 +4,12 @@
 
     public class MatchesAssociationByAIModel
     {
-        public List<MatchesInfoModel> MatchesInfo{ get; set; }
+        public IEnumerable<GBAssociationAIModel> MatchesInfo{ get; set; }
 
         public int TotalMatchCount { get; set; }
 
         public string ErrorMessage { get; set; }
+
+        public int ErrorCode { get; set; }
     }
 }

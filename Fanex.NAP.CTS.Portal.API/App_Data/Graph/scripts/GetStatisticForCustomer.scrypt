@@ -1,12 +1,14 @@
-﻿MATCH (c:CTSCustomer)
+﻿USE ctsgraphdb
+MATCH (c:CTSCustomer)
 WHERE c.CTSCustID = $CTSCustID
-OPTIONAL MATCH (c)-[:USED_DEVICE]->(d:Device)
-WITH c, COUNT(DISTINCT d) as TotalDevices
-OPTIONAL MATCH (c)-[:USED_IP]->(i:IP)
-WITH c,TotalDevices,COUNT(DISTINCT i) as TotalIps
-OPTIONAL MATCH (c)-[:ADD_MANUALLY]-(c3:CTSCustomer)
-OPTIONAL MATCH (c)-[:USED_DEVICE]->(:Device)<-[:USED_DEVICE]-(c1:CTSCustomer)
-OPTIONAL MATCH (c)-[:USED_IP]->(:IP)<-[:USED_IP]-(c2:CTSCustomer)
-OPTIONAL MATCH (:CTSMemberAI {CustID:c.CustID})-[r:USE_AI]-(c4:CTSMemberAI)
-UNWIND [c1.CustID,c2.CustID,c3.CustID,c4.CustID] as cus
-RETURN COUNT(DISTINCT cus) as TotalAccounts,TotalDevices,TotalIps
+WITH c
+OPTIONAL MATCH (c)-[:USED_DEVICE*2]-(c1:CTSCustomer)
+WITH c, COUNT(DISTINCT c1) AS Device
+OPTIONAL MATCH (c)-[:ADD_MANUALLY]-(c1:CTSCustomer)
+WITH c, Device, COUNT(DISTINCT c1) AS Manual
+OPTIONAL MATCH (c)-[:ASS_BY_IP]-(c1:CTSCustomer)
+WITH c, Device, Manual, COUNT(DISTINCT c1) AS IP
+OPTIONAL MATCH (c)-[:ASS_BY_AI]-(c1:CTSCustomer)
+WITH c, Device, Manual, IP, COUNT(DISTINCT c1) AS ai_Old
+OPTIONAL MATCH (c)-[:GROUP_BY_AI*2]-(c2:CTSCustomer)
+RETURN Device, Manual, IP, ai_Old + COUNT(DISTINCT c2) AS AI

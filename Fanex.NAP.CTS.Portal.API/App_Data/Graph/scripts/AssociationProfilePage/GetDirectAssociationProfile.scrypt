@@ -30,6 +30,8 @@ CALL apoc.cypher.run('
         , "Device"              AS AssociationTypeName  
         , CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
         , CASE WHEN $ip_AssociationStatus in [0,2] and e.CreatedDate IS NOT NULL THEN e.CreatedDate ELSE firstAss END AS AssociationDate
+        , null                  AS GroupIDs
+        , null                  AS OriginGroupIDs
 
     UNION
 
@@ -59,6 +61,8 @@ CALL apoc.cypher.run('
         , "Manual"              AS AssociationTypeName  
         , CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
         , CASE WHEN $ip_AssociationStatus in [0,2] and e.CreatedDate IS NOT NULL THEN e.CreatedDate ELSE firstAssDate END AS AssociationDate
+        , null                  AS GroupIDs
+        , null                  AS OriginGroupIDs
 
     UNION
 
@@ -85,13 +89,25 @@ CALL apoc.cypher.run('
         , st.PriorityOrder      AS StatusGroup    
         , st.ItemID             AS StatusID
         , st.ItemNameDisplay    AS StatusName
-        , "IP"                    AS AssociationTypeName  
+        , "IP"                  AS AssociationTypeName  
         , CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
         , CASE WHEN $ip_AssociationStatus in [0,2] and e.CreatedDate IS NOT NULL THEN e.CreatedDate ELSE firstAssDate END AS AssociationDate
+        , null                  AS GroupIDs
+        , null                  AS OriginGroupIDs
 
     UNION
 
-    MATCH (c:CTSCustomer)-[r:ASS_BY_AI]-(c1:CTSCustomer)
+    MATCH (c:CTSCustomer)
+    WHERE c.CTSCustID = $ip_CTSCustID
+    OPTIONAL MATCH (c:CTSCustomer)-[r:ASS_BY_AI]-(c0:CTSCustomer)
+    WHERE c0.CTSCustID IS NOT NULL
+    WITH COLLECT(c0) AS ass, c
+    OPTIONAL MATCH (c)-[r0:GROUP_BY_AI*2]-(c01:CTSCustomer)
+    WHERE c01.CTSCustID IS NOT NULL
+    WITH ass + COLLECT(c01) AS allAss, c
+    UNWIND allAss as c1
+    WITH c, c1
+    MATCH (c)-[r:ASS_BY_AI|GROUP_BY_AI*1..2]-(c1)
     MATCH (c1)-[:BELONG_TO_SUB]->(s:Subscriber)
     MATCH (c1)-[:HAS_STATUS]->(st:StaticList)
     WHERE c.CTSCustID = $ip_CTSCustID AND c1.CTSCustID IS NOT NULL
@@ -100,10 +116,11 @@ CALL apoc.cypher.run('
 		    OR ($ip_AssociationStatus = 2 AND exists((c)-[:HAS_EXCEPTION]-(c1)))) 
         AND s.SubscriberID in $ip_SubscriberIDs
         AND st.ListID = 1 AND st.ItemID in $ip_AccountStatuses
-    WITH distinct c,c1,s,st,r.CreatedDate as AssDate
+    WITH distinct c,c1,s,st,r[0].CreatedDate as AssDate
     OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c1)
 
     WITH c,c1,s,e,st, Min(AssDate) as firstAssDate
+    OPTIONAL MATCH (c)-[r:GROUP_BY_AI]->(g:AIGroup)<-[r1:GROUP_BY_AI]-(c1)
     RETURN 
           c1.CTSCustID          AS CTSCustID
         , c1.CustID             AS CustId
@@ -118,6 +135,8 @@ CALL apoc.cypher.run('
         , "Betting Pattern"     AS AssociationTypeName  
         , CASE e WHEN null THEN 1 ELSE 2 END AS AssociationStatus
         , CASE WHEN $ip_AssociationStatus in [0,2] and e.CreatedDate IS NOT NULL THEN e.CreatedDate ELSE firstAssDate END AS AssociationDate
+        , apoc.text.join(COLLECT(DISTINCT toString(g.GroupID)),",")                AS GroupIDs
+        , apoc.text.join(COLLECT(DISTINCT toString(r1.OriginGroupID)),",")         AS OriginGroupIDs
 ',{ip_CTSCustID: $ip_CTSCustID, ip_AssociationStatus: $ip_AssociationStatus, ip_AssociationType: $ip_AssociationType, ip_AccountStatuses: $ip_AccountStatuses, ip_SubscriberIDs: $ip_SubscriberIDs}) YIELD value 
 WITH     value.CTSCustID        AS CTSCustID
         , value.CustId          AS CustId
@@ -132,11 +151,13 @@ WITH     value.CTSCustID        AS CTSCustID
         , value.AssociationStatus                      AS AssociationStatus    
         , COLLECT(DISTINCT value.AssociationTypeName)  AS AssociationTypeName  
         , COLLECT(DISTINCT value.AssociationDate)      AS AssociationDate
+        , COLLECT(DISTINCT value.GroupIDs)             AS GroupIDs
+        , COLLECT(DISTINCT value.OriginGroupIDs)       AS OriginGroupIDs
 UNWIND(AssociationDate) AS associationDate       
-WITH CTSCustID, CustId, CustSubId, SubscriberID, SubscriberName, UserName, UserName2, StatusGroup, StatusID, StatusName, AssociationStatus, AssociationTypeName, Min(associationDate) as AssociationDate
+WITH CTSCustID, CustId, CustSubId, SubscriberID, SubscriberName, UserName, UserName2, StatusGroup, StatusID, StatusName, AssociationStatus, AssociationTypeName, Min(associationDate) as AssociationDate, GroupIDs, OriginGroupIDs
 OPTIONAL MATCH (c1:CTSCustomer)-[:HAS_CATEGORY]->(ct:CustomerCategory)
 WHERE ct.CategoryID in $ip_CategoryIDs AND c1.CTSCustID = CTSCustID 
-WITH ct, CTSCustID, CustId, CustSubId, SubscriberID, SubscriberName, UserName, UserName2, StatusGroup, StatusID, StatusName, AssociationStatus, AssociationTypeName, AssociationDate
+WITH ct, CTSCustID, CustId, CustSubId, SubscriberID, SubscriberName, UserName, UserName2, StatusGroup, StatusID, StatusName, AssociationStatus, AssociationTypeName, AssociationDate, GroupIDs, OriginGroupIDs
 WHERE ( 0 IN $ip_CategoryIDs) OR (NOT 0 IN $ip_CategoryIDs AND ct.CategoryID IS NOT NULL)
 WITH  CTSCustID          AS CTSCustID
     , CustId             AS CustId
@@ -153,10 +174,12 @@ WITH  CTSCustID          AS CTSCustID
     , AssociationDate    AS AssociationDate
     , ct.ParentID        AS ParentIDs
     , apoc.text.join(COLLECT(DISTINCT toString(ct.CategoryID)),",") AS CategoryIDs
-    , apoc.text.join(COLLECT(DISTINCT ct.CategoryName),",")      AS CategoryNames
+    , apoc.text.join(COLLECT(DISTINCT ct.CategoryName),",")         AS CategoryNames
+    , apoc.text.join(GroupIDs,",")                                  AS GroupIDs
+    , apoc.text.join(OriginGroupIDs,",")                            AS OriginGroupIDs
 
 ORDER BY SubscriberName ASC, AssociationStatus ASC, StatusGroup ASC, StatusID ASC, AssociationDate DESC, CTSCustID ASC
-WITH COLLECT({CTSCustID:CTSCustID, CustId:CustId, CustSubId:CustSubId, SubscriberID:SubscriberID, SubscriberName:SubscriberName, UserName:UserName, UserName2:UserName2, StatusGroup:StatusGroup, StatusID:StatusID, StatusName:StatusName, AssociationTypeName:AssociationTypeName, AssociationStatus:AssociationStatus, AssociationDate:AssociationDate, ParentIDs:ParentIDs, CategoryIDs:CategoryIDs, CategoryNames:CategoryNames} ) as AssociationList, count(CTSCustID) as TotalItems
+WITH COLLECT({CTSCustID:CTSCustID, CustId:CustId, CustSubId:CustSubId, SubscriberID:SubscriberID, SubscriberName:SubscriberName, UserName:UserName, UserName2:UserName2, StatusGroup:StatusGroup, StatusID:StatusID, StatusName:StatusName, AssociationTypeName:AssociationTypeName, AssociationStatus:AssociationStatus, AssociationDate:AssociationDate, ParentIDs:ParentIDs, CategoryIDs:CategoryIDs, CategoryNames:CategoryNames, GroupIDs:GroupIDs, OriginGroupIDs:OriginGroupIDs} ) as AssociationList, count(CTSCustID) as TotalItems
 UNWIND AssociationList as associationList
 WITH associationList, TotalItems
 SKIP $ip_Skip

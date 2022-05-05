@@ -4,6 +4,8 @@
 
     public class MatchesDetailInfoModel
     {
+        public Int64 CustID { get; set; }
+
         public string UserName { get; set; }
 
         public DateTime TransDate { get; set; }

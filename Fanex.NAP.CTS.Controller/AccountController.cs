@@ -16,7 +16,6 @@
     using Fanex.NAP.CTS.Model.Account.RobotBetting;
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.CustomerClassify;
-    using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.ImportEvidences;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
@@ -37,7 +36,6 @@
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
     using System.Threading.Tasks;
     using System.Web.Mvc;
@@ -162,16 +160,6 @@
         }
 
         [HttpPost]
-        public ActionResult GetCustomerTotalAssociationByCTSCustId(long ctsCustId)
-        {
-            //var getAssociationFromMySQL = AppSettings.Get("GetAssociationProfileFromMySQL") == "1";
-
-            var result = _accountService.GetCustomerTotalAssociationByCTSCustId(ctsCustId, ConfigSettings.GetStatisticAssociation, true);
-
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
         public ActionResult GetCustomerEvidenceByCTSCustId(long ctsCustId)
         {
             var evidences = _accountService.GetCustomerEvidenceByCTSCustId(ctsCustId);
@@ -230,7 +218,9 @@
         [HttpPost]
         public ActionResult GetCustProfileAssociationAccount(long ctsCustId)
         {
-            var data = _accountService.GetCustomerInfoAssociationAccount(ctsCustId);
+            var getAssociationFromMySQL = AppSettings.Get("GetAssociationProfileFromMySQL") == "1";
+
+            var data = _accountService.GetCustomerInfoAssociationAccount(ctsCustId, getAssociationFromMySQL);
 
             if (data != null)
             {
@@ -460,7 +450,9 @@
                         IsPAProbation = x.IsProbation,
                         CategoryIds = x.CategoryIDs,
                         CategoryNames = !string.IsNullOrEmpty(x.CategoryNames) ? x.CategoryNames : "-",
-                        CustomerClasses = x.CustomerClasses
+                        CustomerClasses = x.CustomerClasses,
+                        GroupIDs = x.GroupIDs,
+                        OriginGroupIDs = x.OriginGroupIDs
                     };
 
                     var flaggedAffected = flaggedAffectedTagList.FirstOrDefault(y => y.SubscriberID.Equals(newX.SubscriberId) && y.CTSCustID.Equals(newX.CTSCustId));
@@ -559,6 +551,8 @@
                                           CategoryIDs = group.a.CategoryIDs,
                                           CategoryNames = group.a.CategoryNames,
                                           CustomerClasses = (temp != null && temp.CustClass != null && group.a.CustSubId == 0) ? temp.CustClass.ToString() : "-",
+                                          GroupIDs = group.a.GroupIDs,
+                                          OriginGroupIDs = group.a.OriginGroupIDs
                                       }).ToList();
 
             return result;
@@ -723,7 +717,7 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountDetailRpt)]
-        public ActionResult GetMatchesAssociationByAI(long custID1, long custID2)
+        public ActionResult GetMatchesAssociationByAI(long custID1, long custID2, string groupIDs, string originGroupIDs)
         {
             var data = new MatchesAssociationByAIViewModel();
 
@@ -732,32 +726,42 @@
                 var para1 = (custID1 <= custID2) ? custID1 : custID2;
                 var para2 = (custID1 > custID2) ? custID1 : custID2;
 
-                var matchesAssociationInfo = _accountService.GetMatchesAssociationInfo(para1, para2);
+                var groupBettingAssociation = _accountService.GetGBAssociationFromAI(para1, para2, originGroupIDs);
 
-                if (string.IsNullOrEmpty(matchesAssociationInfo.ErrorMessage) && matchesAssociationInfo.MatchesInfo != null && matchesAssociationInfo.MatchesInfo.Any())
+                if (groupBettingAssociation.ErrorCode == 0 && groupBettingAssociation.MatchesInfo != null && groupBettingAssociation.MatchesInfo.Any())
                 {
-                    var matchesInfo = _accountService.GetMatchesInfo(string.Join(",", matchesAssociationInfo.MatchesInfo.Select(c => c.MatchID).Distinct()));
+                    var matchIDs = groupBettingAssociation.MatchesInfo.Select(c => c.MatchID).Distinct();
 
-                    data = new MatchesAssociationByAIViewModel
+                    var matchesInfo = _accountService.GetMatchesInfo(string.Join(",", matchIDs), custID1 + "," + custID2);
+
+                    if (matchesInfo != null && matchesInfo.Any())
                     {
-                        TotalMatchCount = matchesAssociationInfo.TotalMatchCount,
-                        ErrorMessage = matchesAssociationInfo.ErrorMessage,
-                        MatchesInfo = matchesAssociationInfo.MatchesInfo
-                            .Join(matchesInfo, c1 => c1.MatchID,
-                                               c2 => c2.MatchID,
-                                               (c1, c2) => new MatchesInfoViewModel
-                                               {
-                                                   MatchDesc = c2.MatchID
-                                                        + " - " + c2.HomeName + " vs " + c2.AwayName
-                                                        + " - " + c2.EventDate.ToString(Consts.FormatDateToString_MMMddyyyy)
-                                                        + " - " + c2.LeagueName,
-                                                   MatchID = c1.MatchID,
-                                                   EventDateString = c2.EventDate.ToString(Consts.FormatDateToString_yyyyMMddHHmmss),
-                                                   Bettypes = c1.BettypeList,
-                                                   CustID1 = para1,
-                                                   CustID2 = para2
-                                               }).OrderByDescending(x => x.EventDateString).ToList()
-                    };
+                        data = new MatchesAssociationByAIViewModel
+                        {
+                            ErrorMessage = groupBettingAssociation.ErrorMessage,
+                            MatchesInfo = matchesInfo.OrderByDescending(c => c.EventDate)
+                                                     .ThenByDescending(c => c.MatchID)
+                                                     .Take(50)
+                                                     .Select(c => new MatchesInfoViewModel
+                                                     {
+                                                         MatchDesc = c.MatchID
+                                                                    + " - " + c.HomeName + " vs " + c.AwayName
+                                                                    + " - " + c.EventDate.ToString(Consts.FormatDateToString_MMMddyyyy)
+                                                                    + " - " + c.LeagueName,
+                                                         MatchID = c.MatchID,
+                                                         EventDateString = c.EventDate.ToString(Consts.FormatDateToString_yyyyMMddHHmmss),
+                                                         CustID1 = para1,
+                                                         CustID2 = para2,
+                                                         GroupIDs = groupIDs,
+                                                         OrginGroupIDs = originGroupIDs
+                                                     })
+                        };
+                    }
+                }
+
+                if (groupBettingAssociation.ErrorCode != 0)
+                {
+                    LogService.Error($"Association Detail throws exception - SPU_AIML_GB_GetAssociationInfo: {groupBettingAssociation.ErrorMessage} - {JsonConvert.SerializeObject(new { para1, para2, originGroupIDs })}");
                 }
             }
             catch (Exception ex)
@@ -777,37 +781,69 @@
         {
             var data = new List<MatchesDetailInfoViewModel>();
 
-            if (para != null)
+            try
             {
-                if (!string.IsNullOrEmpty(para.EventDateString))
+                if (para == null)
                 {
-                    var eventDate = DateTime.MinValue;
-
-                    DateTime.TryParseExact(para.EventDateString,
-                       Consts.FormatDateToString_yyyyMMddHHmmss,
-                       CultureInfo.InvariantCulture,
-                       DateTimeStyles.None,
-                       out eventDate);
-
-                    para.EventDate = eventDate;
+                    return Json(data, JsonRequestBehavior.AllowGet);
                 }
 
-                var result = _accountService.GetMatchesDetailInfo(para);
+                var groupBettingAssociation = _accountService.GetGBAssociationFromAI(para.CustID1, para.CustID2, para.OrginGroupIDs);
 
-                if (result != null && result.Any())
+                if (groupBettingAssociation.ErrorCode == 0 && groupBettingAssociation.MatchesInfo.Any())
                 {
-                    data = result.OrderBy(x => x.TransDate).Select(x => new MatchesDetailInfoViewModel
+                    var originGroupByMatchID = groupBettingAssociation.MatchesInfo.Where(c => c.MatchID == para.MatchId);
+
+                    if (originGroupByMatchID != null && originGroupByMatchID.Any())
                     {
-                        UserName = x.UserName,
-                        TransDateString = x.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                        TransId = x.TransId,
-                        BetType = x.TypeName,
-                        BetTeam = x.BetTeam,
-                        Stake = x.Stake,
-                        Odds = x.Odds,
-                        LiveScore = x.LiveHomeScore + "-" + x.LiveAwayScore
-                    }).ToList();
+                        var specialGBs = originGroupByMatchID.Where(c => c.GroupID == 0).FirstOrDefault();
+                        var generalGBs = originGroupByMatchID.Where(c => c.GroupID != 0);
+                        var sgbData = Enumerable.Empty<MatchesDetailInfoViewModel>();
+                        var ggbData = Enumerable.Empty<MatchesDetailInfoViewModel>();
+
+                        Parallel.Invoke(() =>
+                        {
+                            if (specialGBs != null)
+                            {
+                                var sgbTicketDetails = _accountService.GetTicketDetails(para, para.CustID1 + "," + para.CustID2, specialGBs.AdditionalInfo);
+
+                                sgbData = _accountService.MergeCustGroupTicketInfo(null, sgbTicketDetails, false);
+                            }
+                        },
+                        () =>
+                        {
+                            if (generalGBs != null && generalGBs.Any())
+                            {
+                                var groupInfo = _accountService.GetCustGroupAssociation(para.GroupIDs);
+
+                                if (groupInfo.Any())
+                                {
+                                    var matchGroupInfo = _accountService.MergeCustMatchInfo(generalGBs, groupInfo);
+
+                                    var custIds = string.Join(",", matchGroupInfo.Select(c => c.CustID).Distinct());
+
+                                    var ggbTicketDetails = _accountService.GetTicketDetails(para, custIds, null);
+
+                                    if (ggbTicketDetails != null && ggbTicketDetails.Any())
+                                    {
+                                        ggbData = _accountService.MergeCustGroupTicketInfo(matchGroupInfo, ggbTicketDetails, true);
+                                    }
+                                }
+                            }
+                        });
+
+                        data.AddRange(sgbData);
+                        data.AddRange(ggbData);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                var logMessage = new LogMessage(ex.Message)
+                         .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                         .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error(logMessage);
             }
 
             return Json(data, JsonRequestBehavior.AllowGet);
@@ -1107,7 +1143,7 @@
                     ActionType = 0
                 } };
 
-                var syncCustIds = Enumerable.Empty<long>();     
+                var syncCustIds = Enumerable.Empty<long>();
 
                 var paLosingClassification = _rescanClassificationService.GetProblemAccountLosing(objects, FunctionId.PlaceSingleEvidence);
 
@@ -1154,7 +1190,7 @@
             var result = _accountService.RemoveFlaggedEvidence(model);
 
             if (result.ErrorCode == 0)
-            {              
+            {
                 var objects = new[] { new {
                    CTSCustID = model.CTSCustId,
                    CustID = model.CustId,
@@ -1479,11 +1515,10 @@
                         if (cc.SourceTypeID == 23)
                         {
                             reason += $"Margin: {margin} - Turn Over: {turnOver} - Active Days: {activeDays} - Bet Count: {betCount}";
-                        }    
+                        }
 
                         break;
                     }
-
             }
 
             reason += "</div>";

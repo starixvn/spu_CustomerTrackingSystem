@@ -83,16 +83,29 @@
             }
         }
 
-        public CustomerInfoAssociationAccountModel GetCustomerInfoAssociationAccount(long ctsCustId)
+        public CustomerInfoAssociationAccountModel GetCustomerInfoAssociationAccount(long ctsCustId, bool getFromMySQL)
         {
-            var criteria = new GetCustomerInfoAssociatedAccountCriteria
+            if (getFromMySQL)
             {
-                CTSCustId = ctsCustId
-            };
+                var criteria = new GetCustomerInfoAssociatedAccountCriteria
+                {
+                    CTSCustId = ctsCustId
+                };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+                using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+                {
+                    return db.QueryEntity<CustomerInfoAssociationAccountModel>(criteria);
+                }
+            }
+            else
             {
-                return db.QueryEntity<CustomerInfoAssociationAccountModel>(criteria);
+                var apiPath = string.Format(ConfigSettings.GetStatisticAssociation, ctsCustId);
+
+                var data = ApiHelper.Get<CustomerInfoAssociationAccountModel>(apiPath);
+
+                Task.WhenAll(data);
+
+                return data.Result;
             }
         }
 
@@ -189,34 +202,6 @@
                 return result;
             }
         }    
-
-        public CustomerAssociationByCTSCustIdModel GetCustomerTotalAssociationByCTSCustId(long ctsCustId, string apiUrl, bool fromMySQL = false)
-        {
-            if (fromMySQL)
-            {
-                var criteria = new GetAssociationProfileStatictisCriteria
-                {
-                    CTSCustId = ctsCustId
-                };
-
-                using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-                {
-                    var result = db.QueryEntity<CustomerAssociationByCTSCustIdModel>(criteria);
-
-                    return result;
-                }
-            }
-            else
-            {
-                var apiPath = string.Format(apiUrl, ctsCustId);
-
-                var data = ApiHelper.Get<CustomerAssociationByCTSCustIdModel>(apiPath);
-
-                Task.WhenAll(data);
-
-                return data.Result;
-            }
-        }
 
         public List<CustomerEvidenceByCTSCustIdModel> GetCustomerEvidenceByCTSCustId(long ctsCustId)
         {
@@ -579,7 +564,7 @@
             return data.Result ?? new List<long>();
         }
 
-        public MatchesAssociationByAIModel GetMatchesAssociationInfo(long custID1, long custID2)
+        public MatchesAssociationByAIModel GetGBAssociationFromAI(long custID1, long custID2, string groupList)
         {
             var result = new MatchesAssociationByAIModel();
 
@@ -587,24 +572,23 @@
             {
                 CustID1 = custID1,
                 CustID2 = custID2,
+                GroupList = groupList
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                result.MatchesInfo = db.Query<MatchesInfoModel>(criteria).ToList();
-            }
-
+            result.MatchesInfo = repository.Fetch<GBAssociationAIModel>(criteria) ?? Enumerable.Empty<GBAssociationAIModel>();
             result.ErrorMessage = criteria.ErrorMessage;
+            result.ErrorCode = string.IsNullOrEmpty(criteria.ErrorMessage) ? 0 : -1;
             result.TotalMatchCount = (int)criteria.TotalMatchCount;
 
             return result;
         }
 
-        public IEnumerable<MatchesInfoModel> GetMatchesInfo(string matchIDs)
+        public IEnumerable<MatchesInfoModel> GetMatchesInfo(string matchIDs, string custIds)
         {
             var criteria = new GetMatchesInfoCriteria
             {
-                MatchIds = matchIDs
+                MatchIds = matchIDs,
+                CustIds = custIds
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -613,23 +597,109 @@
             }
         }
 
-        public IEnumerable<MatchesDetailInfoModel> GetMatchesDetailInfo(MatchesAssociationDetailViewModel macthInfo)
-        {
-            var criteria = new GetMatchesDetailInfoCriteria
-            {
-                EventDate = macthInfo.EventDate,
-                Bettypes = macthInfo.Bettypes,
-                CustId1 = macthInfo.CustId1,
-                CustId2 = macthInfo.CustId2,
-                MatchId = macthInfo.MatchId
-            };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+        public IEnumerable<CustomerGroupModel> GetCustGroupAssociation(string originalGroupIDs)
+        {
+            if (!string.IsNullOrEmpty(originalGroupIDs))
             {
-                return db.Query<MatchesDetailInfoModel>(criteria);
+                var criteria = new GetCustomerGroupCriteria
+                {
+                    GroupList = originalGroupIDs
+                };
+
+                return repository.Fetch<CustomerGroupModel>(criteria) ?? Enumerable.Empty<CustomerGroupModel>();
             }
+
+            return Enumerable.Empty<CustomerGroupModel>();
         }
 
+
+        public IEnumerable<MatchesDetailInfoModel> GetTicketDetails(MatchesAssociationDetailViewModel macthInfo, string custIds, string betTypes)
+        {
+            if (!string.IsNullOrEmpty(custIds))
+            {
+                var criteria = new GetMatchesDetailInfoCriteria
+                {
+                    EventDate = macthInfo.EventDate,
+                    Bettypes = betTypes,
+                    CustIds = custIds,
+                    MatchId = macthInfo.MatchId
+                };
+
+                return repository.Fetch<MatchesDetailInfoModel>(criteria) ?? Enumerable.Empty<MatchesDetailInfoModel>();
+            }
+
+            return Enumerable.Empty<MatchesDetailInfoModel>();
+        }
+
+        public IEnumerable<MatchesDetailInfoViewModel> MergeCustGroupTicketInfo(IEnumerable<MatchCustomerGGBViewModel> custGroups, IEnumerable<MatchesDetailInfoModel> ticketDetails, bool isGGB)
+        {
+            var result = new List<MatchesDetailInfoViewModel>();
+
+            if (isGGB && custGroups != null && custGroups.Any() && ticketDetails != null && ticketDetails.Any())
+            {
+                result = custGroups.Join(ticketDetails,
+                                    c => c.CustID,
+                                    t => t.CustID,
+                                    (c, t) => new MatchesDetailInfoViewModel
+                                    {
+                                        IsGGB = isGGB,
+                                        GroupID = c.GroupID,
+                                        AdditionalInfo = c.AdditionalInfo,
+                                        UserName = t.UserName,
+                                        TransDate = t.TransDate,
+                                        TransDateString = t.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+                                        TransId = t.TransId,
+                                        BetType = t.TypeName,
+                                        BetTeam = t.BetTeam,
+                                        Stake = t.Stake,
+                                        Odds = t.Odds,
+                                        LiveScore = t.LiveHomeScore + "-" + t.LiveAwayScore
+                                    })?.OrderBy(c=>c.GroupID).ThenByDescending(c=>c.TransDate).ToList();
+            }
+            else if (!isGGB && ticketDetails != null && ticketDetails.Any())
+            {
+                ticketDetails.ToList().ForEach(c =>
+                {
+                    result.Add(new MatchesDetailInfoViewModel
+                    {
+                        IsGGB = isGGB,
+                        GroupID = 0,
+                        UserName = c.UserName,
+                        TransDate = c.TransDate,
+                        TransDateString = c.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+                        TransId = c.TransId,
+                        BetType = c.TypeName,
+                        BetTeam = c.BetTeam,
+                        Stake = c.Stake,
+                        Odds = c.Odds,
+                        LiveScore = c.LiveHomeScore + "-" + c.LiveAwayScore
+                    });
+                });
+
+                result?.OrderBy(x => x.TransDate);
+            }
+
+            return result ?? Enumerable.Empty<MatchesDetailInfoViewModel>();
+        }
+
+        public IEnumerable<MatchCustomerGGBViewModel> MergeCustMatchInfo(IEnumerable<GBAssociationAIModel> matchInfo, IEnumerable<CustomerGroupModel> groupInfo)
+        {
+            if (matchInfo != null && matchInfo.Any() && groupInfo != null && groupInfo.Any())
+            {
+                return matchInfo.Join(groupInfo,
+                                    m => m.GroupID,
+                                    g => g.OriginGroupID,
+                                    (m,g) => new MatchCustomerGGBViewModel
+                                    {
+                                        CustID = g.CustID,
+                                        GroupID = g.GroupID,
+                                        AdditionalInfo = m.AdditionalInfo
+                                    }) ?? Enumerable.Empty<MatchCustomerGGBViewModel>();
+            }
+
+            return Enumerable.Empty<MatchCustomerGGBViewModel>();
+        }
 
         public IEnumerable<CategoryInfoModel> GetAllCategory()
         {

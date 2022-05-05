@@ -45,5 +45,9 @@
         public bool IsLinked { get; set; }
 
         public bool IsPAProbation { get; set; }
+        
+        public string GroupIDs { get; set; }
+
+        public string OriginGroupIDs { get; set; }
     }
 }

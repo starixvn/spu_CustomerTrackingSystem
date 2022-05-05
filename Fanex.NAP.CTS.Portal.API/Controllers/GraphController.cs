@@ -4,6 +4,7 @@
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model.Account;
+    using Fanex.NAP.CTS.Model.Account.CustomerInfo;
     using Fanex.NAP.CTS.Model.AssociationDetection;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
@@ -326,17 +327,17 @@
         [System.Web.Http.AcceptVerbs("GetStatisticAssociation")]
         [HttpGet]
         [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetStatisticAssociationAPI)]
-        public CustomerAssociationByCTSCustIdModel GetStatisticAssociation(int ctsCustId)
+        public CustomerInfoAssociationAccountModel GetStatisticAssociation(long ctsCustId)
         {
             try
             {
-                var queryResult = DbSessionFactory.Execute<CustomerAssociationByCTSCustIdModel>("GetStatisticForCustomer", new { CTSCustID = ctsCustId });
+                var queryResult = DbSessionFactory.Execute<CustomerInfoAssociationAccountModel>("GetStatisticForCustomer", new { CTSCustID = ctsCustId });
 
-                var result = queryResult.Data.ToList().FirstOrDefault();
+                var result = queryResult.Data.FirstOrDefault();
 
                 if (result == null)
                 {
-                    return new CustomerAssociationByCTSCustIdModel();
+                    return new CustomerInfoAssociationAccountModel();
                 }
 
                 return result;

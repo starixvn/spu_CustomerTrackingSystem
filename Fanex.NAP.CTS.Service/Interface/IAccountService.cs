@@ -24,7 +24,7 @@
 
         CustomerInfoByCustIdsModel GetCustomerInfoByCustIds(long custId, int sourceType);
 
-        CustomerInfoAssociationAccountModel GetCustomerInfoAssociationAccount(long ctsCustId);
+        CustomerInfoAssociationAccountModel GetCustomerInfoAssociationAccount(long ctsCustId, bool getFromMySQL);
 
         IEnumerable<CustomerInfoEvidenceModel> GetCustomerInfoEvidence(long ctsCustId);
 
@@ -37,8 +37,6 @@
         CustomerInfoDateModel GetCustProfileDates(long ctsCustId);
 
         #endregion
-
-        CustomerAssociationByCTSCustIdModel GetCustomerTotalAssociationByCTSCustId(long ctsCustId, string apiUrl, bool fromMySQL = false);
 
         List<CustomerEvidenceByCTSCustIdModel> GetCustomerEvidenceByCTSCustId(long ctsCustId);
 
@@ -136,12 +134,18 @@
 
         IEnumerable<CTSCustomer> CheckCustomerNotExisted(string custIds, DateTime fromDate, DateTime toDate);
 
-        MatchesAssociationByAIModel GetMatchesAssociationInfo(long custID1, long custID2);
+        MatchesAssociationByAIModel GetGBAssociationFromAI(long custID1, long custID2, string groupList);
 
-        IEnumerable<MatchesInfoModel> GetMatchesInfo(string matchIDs); 
+        IEnumerable<MatchesInfoModel> GetMatchesInfo(string matchIDs, string custIds);
 
-        IEnumerable<MatchesDetailInfoModel> GetMatchesDetailInfo(MatchesAssociationDetailViewModel matchInfo);
-        
+        IEnumerable<CustomerGroupModel> GetCustGroupAssociation(string originalGroupIDs);
+
+        IEnumerable<MatchesDetailInfoModel> GetTicketDetails(MatchesAssociationDetailViewModel macthInfo, string custIds, string betTypes);
+
+        IEnumerable<MatchesDetailInfoViewModel> MergeCustGroupTicketInfo(IEnumerable<MatchCustomerGGBViewModel> custGroups, IEnumerable<MatchesDetailInfoModel> ticketDetails, bool isGGB);
+
+        IEnumerable<MatchCustomerGGBViewModel> MergeCustMatchInfo(IEnumerable<GBAssociationAIModel> matchInfo, IEnumerable<CustomerGroupModel> groupInfo);
+
         IEnumerable<CategoryInfoModel> GetAllCategory();		
 
 		AssociationByIPInfoModel GetAssociationByIPInfo(long custId1, long custId2);

@@ -76,6 +76,10 @@
 	  <Setting Key="CTS_DC_SpecialCustClass_Insert" SpName="CTS_DC_SpecialCustClass_Insert_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
   </Function>
 
+	<Function name="MonitorCTSFunction">
+		<Setting Key="SPU_Stats_Accessment_Insert" SpName="SPU_Stats_Accessment_Insert_xtest" DbName="MySQL.SPU_Stats.Admin" />
+	</Function>
+	
 	<Function name="ProblemAccountManagement">
 		<Setting Key="CTS_DC_ProblemAccountManagement_Evidence_Update" SpName="CTS_DC_ProblemAccountManagement_Evidence_Update_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_ProblemAccountManagement_Evidence_Remove" SpName="CTS_DC_ProblemAccountManagement_Evidence_Remove_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
