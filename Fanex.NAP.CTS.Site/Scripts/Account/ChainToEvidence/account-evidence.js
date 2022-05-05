@@ -398,6 +398,42 @@
         });
     }     
 
+    function GetEvidences() {
+        var flaggedEvidenceCodes = GetEvidenceInFlaggedEvidenceGrid();
+
+        $.ajax(common.modifyRelativeUrl('/Account/GetEvidenceList'), {
+            type: 'GET',
+            beforeSend: function () {
+                domElements.divPlaceEvidenceDescription.html('');
+            },
+            success: function (response) {
+                if (response != null) {
+                    $('option', domElements.ddlPlaceEvidenceListEvidence).filter(function () {
+                        return $(this).val() !== '';
+                    }).remove();
+
+                    response.map(function (x) {
+                        if ($.inArray(x.EvidenceCode, flaggedEvidenceCodes) == -1) {
+                            domElements.ddlPlaceEvidenceListEvidence.append(`<option value='${x.EvidenceID}' code='${x.EvidenceCode}' desc='${x.EvidenceDesc}'>${x.EvidenceCode} ${x.EvidenceName}</option>`);
+                        }                        
+                    });
+
+                    $('option:first-child', domElements.ddlPlaceEvidenceListEvidence).prop("selected", true);
+                    var desc = $('#ddlPlaceEvidenceListEvidence :selected').attr('desc');
+                    if (desc === undefined)
+                        desc = '';
+                    domElements.divPlaceEvidenceDescription.html(desc);
+                    domElements.ddlPlaceEvidenceListEvidence.multiselect("refresh");
+                }
+            },
+            complete: function () {                                          
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+            }
+        });
+    }
+
     function InitialPlaceEvidenceForm(ctsCustId, username, subscriberId, subscriber, custId) {        
         domElements.btnChainToEvidenceFlagged.on('click', function () {
             domElements.ddlPlaceEvidenceListEvidence.multiselect({
@@ -411,21 +447,14 @@
                 label: ''
             });
 
-            var flaggedEvidenceCodes = GetEvidenceInFlaggedEvidenceGrid();
+            GetEvidences();
 
-            $('option', domElements.ddlPlaceEvidenceListEvidence).filter(function () {
-                return $.inArray($(this).attr('code'), flaggedEvidenceCodes) !== -1
-            }).remove();
-
-            $('option:first-child', domElements.ddlPlaceEvidenceListEvidence).prop("selected", true);
-            domElements.ddlPlaceEvidenceListEvidence.multiselect('refresh');
-
-            domElements.ddlPlaceEvidenceListEvidence.bind('change', function (e) {
+            domElements.ddlPlaceEvidenceListEvidence.unbind('change').bind('change', function (e) {
                 var desc = $('#ddlPlaceEvidenceListEvidence :selected').attr('desc');
                 if (desc === undefined)
                     desc = '';
                 domElements.divPlaceEvidenceDescription.html(desc);
-            });
+            });      
 
             ResetPlaceEvidence(username, subscriber);
 

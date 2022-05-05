@@ -381,7 +381,6 @@
         }
     }
 
-
     function TrackingRobotClassFuction() {
         if (currentTabIndex != 5 && domElements.robotClassificationTab.attr("aria-selected")) {
             TrackingFunction(5);
@@ -396,7 +395,6 @@
         }
     }
  
-
     function TrackingFunction(functionId) {
 
         var functionName = null;

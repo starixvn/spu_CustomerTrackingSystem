@@ -923,9 +923,16 @@
 
         public ActionResult ChainToEvidence()
         {
-            ViewBag.EvidenceList = _accountService.GetEvidenceList();
-
             return PartialView("ChainToEvidence/ChainToEvidence");
+        }
+
+        [HttpGet]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        public ActionResult GetEvidenceList()
+        {
+            var result = _accountService.GetEvidenceList();
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileChainstoEvidencesRpt)]
@@ -1385,8 +1392,8 @@
                         CategoryName = x.CategoryName ?? string.Empty,
                         IsProblemAccount = x.CategoryType == 2
                     }).ToList();
-
-                isVVip = categoryList.Any(x => x.CategoryName.Equals("VVIP"));
+                
+                isVVip = categoryList.Any(x => x.CategoryId == 210); // VVIP
 
                 isProblemAccount = categoryList.Any(x => x.IsProblemAccount);
 
@@ -1533,7 +1540,7 @@
 
             var model = new MarkCategoryViewModel
             {
-                CustomerCategoryList = customerCategoryList.Where(x => x.CategoryName.Equals("VVIP") || x.ParentId == 0).ToList()
+                CustomerCategoryList = customerCategoryList.Where(x => x.CategoryId == 210 || x.ParentId == 0).ToList() // CategoryId = 210 -> VVIP
             };
 
             return PartialView("CustomerCategory/MarkCatergory", model);
