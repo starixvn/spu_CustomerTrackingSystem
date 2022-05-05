@@ -16,7 +16,6 @@
     using Fanex.NAP.CTS.Model.Account.RobotBetting;
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.CustomerClassify;
-    using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.ImportEvidences;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
@@ -37,7 +36,6 @@
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
     using System.Threading.Tasks;
     using System.Web.Mvc;
@@ -728,18 +726,13 @@
                 var para1 = (custID1 <= custID2) ? custID1 : custID2;
                 var para2 = (custID1 > custID2) ? custID1 : custID2;
 
-
-                LogService.Info(JsonConvert.SerializeObject(new { para1, para2, originGroupIDs }));
                 var groupBettingAssociation = _accountService.GetGBAssociationFromAI(para1, para2, originGroupIDs);
-                LogService.Info(JsonConvert.SerializeObject(groupBettingAssociation));
 
                 if (groupBettingAssociation.ErrorCode == 0 && groupBettingAssociation.MatchesInfo != null && groupBettingAssociation.MatchesInfo.Any())
                 {
                     var matchIDs = groupBettingAssociation.MatchesInfo.Select(c => c.MatchID).Distinct();
 
-                    LogService.Info(JsonConvert.SerializeObject(new { matchIDs = string.Join(",", matchIDs), custIds = custID1 + "," + custID2 }));
                     var matchesInfo = _accountService.GetMatchesInfo(string.Join(",", matchIDs), custID1 + "," + custID2);
-                    LogService.Info(JsonConvert.SerializeObject(matchesInfo));
 
                     if (matchesInfo != null && matchesInfo.Any())
                     {
@@ -766,10 +759,10 @@
                     }
                 }
 
-                if(groupBettingAssociation.ErrorCode != 0)
+                if (groupBettingAssociation.ErrorCode != 0)
                 {
                     LogService.Error($"Association Detail throws exception - SPU_AIML_GB_GetAssociationInfo: {groupBettingAssociation.ErrorMessage} - {JsonConvert.SerializeObject(new { para1, para2, originGroupIDs })}");
-                }    
+                }
             }
             catch (Exception ex)
             {
@@ -813,7 +806,7 @@
                             if (specialGBs != null)
                             {
                                 var sgbTicketDetails = _accountService.GetTicketDetails(para, para.CustID1 + "," + para.CustID2, specialGBs.AdditionalInfo);
-                               
+
                                 sgbData = _accountService.MergeCustGroupTicketInfo(null, sgbTicketDetails, false);
                             }
                         },
@@ -1150,7 +1143,7 @@
                     ActionType = 0
                 } };
 
-                var syncCustIds = Enumerable.Empty<long>();     
+                var syncCustIds = Enumerable.Empty<long>();
 
                 var paLosingClassification = _rescanClassificationService.GetProblemAccountLosing(objects, FunctionId.PlaceSingleEvidence);
 
@@ -1197,7 +1190,7 @@
             var result = _accountService.RemoveFlaggedEvidence(model);
 
             if (result.ErrorCode == 0)
-            {              
+            {
                 var objects = new[] { new {
                    CTSCustID = model.CTSCustId,
                    CustID = model.CustId,
@@ -1522,11 +1515,10 @@
                         if (cc.SourceTypeID == 23)
                         {
                             reason += $"Margin: {margin} - Turn Over: {turnOver} - Active Days: {activeDays} - Bet Count: {betCount}";
-                        }    
+                        }
 
                         break;
                     }
-
             }
 
             reason += "</div>";
