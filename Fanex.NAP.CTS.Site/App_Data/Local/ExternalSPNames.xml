@@ -65,12 +65,12 @@
 
 	<Function name="ProblemAccountManagement">
 		<Setting Key="NAP_ProblemAccount_CustomerCommentSel" SpName="NAP_ProblemAccount_CustomerCommentSel" DbName="DBCTS.bodb02.bodbSPUNet" />
-		<Setting Key="Nap_ProblemAccount_AddCustomer" SpName="Nap_ProblemAccount_AddCustomer" DbName="DBCust.CustDB.bodbAdminNet" />
-		<Setting Key="NAP_ProblemAccount_LicenseeAddCustomer" SpName="NAP_ProblemAccount_LicenseeAddCustomer" DbName="DBCust.CustDB.bodbAdminNet" />
+		<Setting Key="Nap_ProblemAccount_AddCustomer" SpName="Nap_ProblemAccount_AddCustomer_xtest" DbName="DBCust.CustDB.bodbAdminNet" />
+		<Setting Key="NAP_ProblemAccount_LicenseeAddCustomer" SpName="NAP_ProblemAccount_LicenseeAddCustomer_xtest" DbName="DBCust.CustDB.bodbAdminNet" />
 		<Setting Key="NAP_ProblemAccount_LicenseeAccountReasonUpd" SpName="NAP_ProblemAccount_LicenseeAccountReasonUpd" DbName="DBCust.CustDB.bodbAdminNet" />
 		<Setting Key="NAP_ProblemAccount_LicenseeRemoveCustomer" SpName="NAP_ProblemAccount_LicenseeRemoveCustomer" DbName="DBCust.CustDB.bodbAdminNet" />
-		<Setting Key="NAP_ProblemAccount_RemoveCustomer" SpName="NAP_ProblemAccount_RemoveCustomer" DbName="DBCust.CustDB.bodbAdminNet" />
-		<Setting Key="NAP_ProblemAccount_UpdateCustomer" SpName="NAP_ProblemAccount_UpdateCustomer" DbName="DBCust.CustDB.bodbAdminNet" />
+		<Setting Key="NAP_ProblemAccount_RemoveCustomer" SpName="NAP_ProblemAccount_RemoveCustomer_xtest" DbName="DBCust.CustDB.bodbAdminNet" />
+		<Setting Key="NAP_ProblemAccount_UpdateCustomer" SpName="NAP_ProblemAccount_UpdateCustomer_xtest" DbName="DBCust.CustDB.bodbAdminNet" />
 	</Function>
 	<Function Name="DailyProblemClassification">
 		<Setting Key="CTS_ProblemAccountsClassification_Daily" SpName="CTS_ProblemAccountsClassification_Daily" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" TimeOut="1200" />
