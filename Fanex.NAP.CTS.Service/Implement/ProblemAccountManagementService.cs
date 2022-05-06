@@ -621,15 +621,20 @@
             try
             {
                 var apiEndPoint = ConfigSettings.RemoveProblemAccounts;
-                var custIds = string.Join(",", custIdList);
 
-                var data = ApiHelper.Post<ApiResultModel>(apiEndPoint, custIds);
+                var paras = new RemovePANapParamsModel
+                {
+                    CustIds = string.Join(",", custIdList),
+                    UserId = userID
+                };
+
+                var data = ApiHelper.Post<ApiResultModel>(apiEndPoint, paras);
 
                 Task.WhenAll(data);
             }
             catch (Exception ex)
             {
-                LogService.Error($"CTS - Remove Problem Account failed: { ex.Message } - custIds: {custIdList}" + ex.Message, ex);
+                LogService.Error($"CTS - Remove Problem Account failed: { ex.Message } - custIds: {string.Join(",", custIdList)}" + ex.Message, ex);
             }
         }
 
