@@ -153,9 +153,12 @@
     <Compile Include="Account\BettingStatistic\PerformanceBySportModel.cs" />
     <Compile Include="Account\CustomerByGraphDB.cs" />
     <Compile Include="Account\CustomerCategory\AddCustomerCategoryModel.cs" />
+    <Compile Include="Account\CustomerCategory\AddCustomerCategoryInfoModel.cs" />
     <Compile Include="Account\CustomerCategory\CustomerClassificationGeneralInfoModel.cs" />
     <Compile Include="Account\CustomerCategory\CustomerClassificationHistoryModel.cs" />
     <Compile Include="Account\CustomerCategory\CustomerClassificationModel.cs" />
+    <Compile Include="Account\CustomerCategory\RemoveCustomerCategoryInfoModel.cs" />
+    <Compile Include="Account\CustomerCategory\RemoveCustomerCategoryModel.cs" />
     <Compile Include="Account\CustomerCategory\ResultInsertRemoveCustomerClassificationModel.cs" />
     <Compile Include="Account\CustomerEsportAutoSuspendStatusModel.cs" />
     <Compile Include="Account\CustomerEvidenceByCTSCustIdModel.cs" />

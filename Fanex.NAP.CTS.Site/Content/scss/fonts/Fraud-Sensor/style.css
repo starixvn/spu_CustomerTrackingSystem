@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'Fraud-Sensor';
-  src:  url('fonts/Fraud-Sensor.eot?2kt4c1');
-  src:  url('fonts/Fraud-Sensor.eot?2kt4c1#iefix') format('embedded-opentype'),
-    url('fonts/Fraud-Sensor.ttf?2kt4c1') format('truetype'),
-    url('fonts/Fraud-Sensor.woff?2kt4c1') format('woff'),
-    url('fonts/Fraud-Sensor.svg?2kt4c1#Fraud-Sensor') format('svg');
+  src:  url('fonts/Fraud-Sensor.eot?s3fuxr');
+  src:  url('fonts/Fraud-Sensor.eot?s3fuxr#iefix') format('embedded-opentype'),
+    url('fonts/Fraud-Sensor.ttf?s3fuxr') format('truetype'),
+    url('fonts/Fraud-Sensor.woff?s3fuxr') format('woff'),
+    url('fonts/Fraud-Sensor.svg?s3fuxr#Fraud-Sensor') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,108 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-big-good-robot .path1:before {
+  content: "\e922";
+  color: rgb(255, 255, 255);
+}
+.icon-big-good-robot .path2:before {
+  content: "\e923";
+  margin-left: -1em;
+  color: rgb(49, 190, 0);
+}
+.icon-big-good-robot .path3:before {
+  content: "\e924";
+  margin-left: -1em;
+  color: rgb(2, 2, 2);
+}
+.icon-big-good-robot .path4:before {
+  content: "\e925";
+  margin-left: -1em;
+  color: rgb(2, 2, 2);
+}
+.icon-big-good-robot .path5:before {
+  content: "\e926";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-big-good-robot .path6:before {
+  content: "\e927";
+  margin-left: -1em;
+  color: rgb(2, 2, 2);
+}
+.icon-big-good-robot .path7:before {
+  content: "\e928";
+  margin-left: -1em;
+  color: rgb(2, 2, 2);
+}
+.icon-big-observation-robot .path1:before {
+  content: "\e929";
+  color: rgb(255, 255, 255);
+}
+.icon-big-observation-robot .path2:before {
+  content: "\e92a";
+  margin-left: -1em;
+  color: rgb(105, 147, 255);
+}
+.icon-big-observation-robot .path3:before {
+  content: "\e92b";
+  margin-left: -1em;
+  color: rgb(2, 2, 2);
+}
+.icon-big-observation-robot .path4:before {
+  content: "\e92c";
+  margin-left: -1em;
+  color: rgb(2, 2, 2);
+}
+.icon-big-observation-robot .path5:before {
+  content: "\e92d";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-big-observation-robot .path6:before {
+  content: "\e92e";
+  margin-left: -1em;
+  color: rgb(2, 2, 2);
+}
+.icon-big-observation-robot .path7:before {
+  content: "\e92f";
+  margin-left: -1em;
+  color: rgb(2, 2, 2);
+}
+.icon-big-bad-robot .path1:before {
+  content: "\e930";
+  color: rgb(255, 255, 255);
+}
+.icon-big-bad-robot .path2:before {
+  content: "\e931";
+  margin-left: -1em;
+  color: rgb(255, 76, 76);
+}
+.icon-big-bad-robot .path3:before {
+  content: "\e932";
+  margin-left: -1em;
+  color: rgb(2, 2, 2);
+}
+.icon-big-bad-robot .path4:before {
+  content: "\e933";
+  margin-left: -1em;
+  color: rgb(2, 2, 2);
+}
+.icon-big-bad-robot .path5:before {
+  content: "\e934";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-big-bad-robot .path6:before {
+  content: "\e935";
+  margin-left: -1em;
+  color: rgb(2, 2, 2);
+}
+.icon-big-bad-robot .path7:before {
+  content: "\e936";
+  margin-left: -1em;
+  color: rgb(2, 2, 2);
+}
 .icon-big-robot .path1:before {
   content: "\e91c";
   color: rgb(255, 255, 255);

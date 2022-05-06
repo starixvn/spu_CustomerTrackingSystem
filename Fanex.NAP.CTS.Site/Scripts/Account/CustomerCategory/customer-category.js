@@ -7,7 +7,6 @@
     let tblcustomercategory = $('#customer-category-table');
     let isHostPermission;
     let spanClass = $('#spanClass');
-    let cacheCategoryColors = [];
     let cacheData = {
         isVVip: false,
         isPinCategory: false,
@@ -15,49 +14,6 @@
         isProblemAccount: false
     };
     let dataTable;
-
-    function GetNormalCategoryList() {
-        var list = [];
-
-        list.push({ 'id': 205, 'indexColor': 1, 'cssClass': 'circle bg-green', 'name': 'Good Member' });
-        list.push({ 'id': 210, 'indexColor': 1, 'cssClass': 'circle bg-green', 'name': 'VVIP' });
-        list.push({ 'id': 201, 'indexColor': 1, 'cssClass': 'circle bg-green', 'name': 'New Member' });
-        list.push({ 'id': 202, 'indexColor': 1, 'cssClass': 'circle bg-green', 'name': 'Normal Account' });
-        list.push({ 'id': 1001, 'indexColor': 1, 'cssClass': 'circle bg-green', 'name': 'Normal Member Inactive' });
-
-        list.push({ 'id': 206, 'indexColor': 2, 'cssClass': 'circle bg-yellow', 'name': 'Probation' });
-        list.push({ 'id': 257, 'indexColor': 2, 'cssClass': 'circle bg-yellow', 'name': 'Probation (57)' });
-        list.push({ 'id': 258, 'indexColor': 2, 'cssClass': 'circle bg-yellow', 'name': 'Probation (58)' });
-        list.push({ 'id': 203, 'indexColor': 2, 'cssClass': 'circle bg-yellow', 'name': 'Smart Punter' });
-        list.push({ 'id': 267, 'indexColor': 2, 'cssClass': 'circle bg-yellow', 'name': 'Smart Punter (67)' });
-        list.push({ 'id': 268, 'indexColor': 2, 'cssClass': 'circle bg-yellow', 'name': 'Smart Punter (68)' });
-        list.push({ 'id': 204, 'indexColor': 2, 'cssClass': 'circle bg-yellow', 'name': 'High Risk Punter' });
-        list.push({ 'id': 277, 'indexColor': 2, 'cssClass': 'circle bg-yellow', 'name': 'High Risk Punter (77)' });
-        list.push({ 'id': 278, 'indexColor': 2, 'cssClass': 'circle bg-yellow', 'name': 'High Risk Punter (78)' });
-        list.push({ 'id': 1002, 'indexColor': 2, 'cssClass': 'circle bg-yellow', 'name': 'Pro Punter Inactive' });
-
-        list.push({ 'id': 211, 'indexColor': 3, 'cssClass': 'circle green-line', 'name': 'Good Member (111)' });
-        list.push({ 'id': 212, 'indexColor': 3, 'cssClass': 'circle green-line', 'name': 'Good Member (112)' });
-        list.push({ 'id': 213, 'indexColor': 3, 'cssClass': 'circle green-line', 'name': 'Good Member (113)' });
-        list.push({ 'id': 221, 'indexColor': 3, 'cssClass': 'circle green-line', 'name': 'Normal Account (121)' });
-        list.push({ 'id': 222, 'indexColor': 3, 'cssClass': 'circle green-line', 'name': 'Normal Account (122)' });
-        list.push({ 'id': 223, 'indexColor': 3, 'cssClass': 'circle green-line', 'name': 'Normal Account (123)' });
-        list.push({ 'id': 231, 'indexColor': 3, 'cssClass': 'circle green-line', 'name': 'New Member (31)' });
-        list.push({ 'id': 232, 'indexColor': 3, 'cssClass': 'circle green-line', 'name': 'New Member (32)' });
-        list.push({ 'id': 233, 'indexColor': 3, 'cssClass': 'circle green-line', 'name': 'New Member (33)' });
-
-        list.push({ 'id': 251, 'indexColor': 4, 'cssClass': 'circle yellow-line', 'name': 'Probation (51)' });
-        list.push({ 'id': 252, 'indexColor': 4, 'cssClass': 'circle yellow-line', 'name': 'Probation (52)' });
-        list.push({ 'id': 253, 'indexColor': 4, 'cssClass': 'circle yellow-line', 'name': 'Probation (53)' });
-        list.push({ 'id': 261, 'indexColor': 4, 'cssClass': 'circle yellow-line', 'name': 'Smart Punter (61)' });
-        list.push({ 'id': 262, 'indexColor': 4, 'cssClass': 'circle yellow-line', 'name': 'Smart Punter (62)' });
-        list.push({ 'id': 263, 'indexColor': 4, 'cssClass': 'circle yellow-line', 'name': 'Smart Punter (63)' });
-        list.push({ 'id': 271, 'indexColor': 4, 'cssClass': 'circle yellow-line', 'name': 'High Risk Punter (71)' });
-        list.push({ 'id': 272, 'indexColor': 4, 'cssClass': 'circle yellow-line', 'name': 'High Risk Punter (72)' });
-        list.push({ 'id': 273, 'indexColor': 4, 'cssClass': 'circle yellow-line', 'name': 'High Risk Punter (73)' });
-
-        return list;
-    }
 
     function BindingMarkCategoryForAddNew(custId, ctsCustId, subscriberId) {
         $('#btncancelcategory').on('click', function () {
@@ -128,6 +84,8 @@
         params.CTSCustId = ctsCustId;
         params.SubscriberId = subscriberId;
         params.CategoryId = $('#ddlcategory').val();
+        params.RoleId = $('#hdRoleID').val();
+        params.IsAffectToAllDownlines = $('#inputAffectToAllDownlines').is(":checked");
         params.Remark = $('#txtcategorycomment').val();
         params.isVVip = true;
 
@@ -202,10 +160,12 @@
     function RemoveCategory(custId, ctsCustId) {
         var url = common.modifyRelativeUrl('Account/RemoveCustomerCategory');
         var params = {};
-        params.custId = custId;
-        params.ctsCustId = ctsCustId;
-        params.categoryId = $('#ddlRemoveCategory').val();
-        params.isVVip = true;
+        params.CustId = custId;
+        params.CTSCustId = ctsCustId;
+        params.CategoryId = $('#ddlRemoveCategory').val();
+        params.RoleId = $('#hdRoleID').val();
+        params.IsAffectToAllDownlines = $('#inputRemoveAffectToAllDownlines').is(":checked");
+        params.IsVVip = true;
 
         $.ajax(url, {
             type: 'POST',
@@ -365,10 +325,11 @@
     function RenderNormalCategoryProfilePage(data) {
         let html = "";
         let indexColorProfile = 1;
+        let cacheCategoryColors = common.categoryColor();
 
         for (let i = 0; i < cacheCategoryColors.length; i++) {
             data.map(function (x) {
-                let isEquals = x.CategoryId === cacheCategoryColors[i].id;
+                let isEquals = x.CategoryId.toString() === cacheCategoryColors[i].id;
                 if (isEquals) {
                     let classIconColor = cacheCategoryColors[i].cssClass;
 
@@ -610,8 +571,6 @@
 
             btnRemoveCategory.click(function () { DisplayRemoveCategory(custId, ctsCustId, subscriberId); });
         }
-
-        cacheCategoryColors = GetNormalCategoryList();
 
         dataTable = RenderGrid();
 

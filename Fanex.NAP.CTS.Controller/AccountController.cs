@@ -7,6 +7,7 @@
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Web.Attribute;
+    using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.BaseClasses;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Helpers;
@@ -923,9 +924,16 @@
 
         public ActionResult ChainToEvidence()
         {
-            ViewBag.EvidenceList = _accountService.GetEvidenceList();
-
             return PartialView("ChainToEvidence/ChainToEvidence");
+        }
+
+        [HttpGet]
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        public ActionResult GetEvidenceList()
+        {
+            var result = _accountService.GetEvidenceList();
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileChainstoEvidencesRpt)]
@@ -1385,9 +1393,8 @@
                         CategoryName = x.CategoryName ?? string.Empty,
                         IsProblemAccount = x.CategoryType == 2
                     }).ToList();
-
-                isVVip = categoryList.Any(x => x.CategoryName.Equals("VVIP"));
-
+                
+                isVVip = categoryList.Any(x => x.CategoryId == 210); // VVIP             
                 isProblemAccount = categoryList.Any(x => x.IsProblemAccount);
 
                 isPAProbation = isProblemAccount && classification.Any(x => x.IsProbation);
@@ -1532,8 +1539,8 @@
             var customerCategoryList = _accountService.GetCustomerCategoryByCTSCustId(ctsCustId).ToList();
 
             var model = new MarkCategoryViewModel
-            {
-                CustomerCategoryList = customerCategoryList.Where(x => x.CategoryName.Equals("VVIP") || x.ParentId == 0).ToList()
+            {        
+                CustomerCategoryList = customerCategoryList.Where(x => x.CategoryId == 210 || x.ParentId == 0).ToList() // CategoryId = 210 -> VVIP
             };
 
             return PartialView("CustomerCategory/MarkCatergory", model);
@@ -1545,27 +1552,43 @@
             var model = new MarkCategoryViewModel
             {
                 CustomerCategoryList = new List<Model.DTO.CustomerCategory> { new Model.DTO.CustomerCategory { CategoryId = 210, CategoryName = "VVIP", ParentId = 200 } }
-            };
+            };           
 
             return PartialView("CustomerCategory/RemoveCategory", model);
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationMarkCategory)]
-        public ActionResult AddCustomerCategory(AddCustomerCategoryModel addCategoryModel)
+        public ActionResult AddCustomerCategory(CustomerCategoryModel categoryModel)
         {
-            var errorCode = 0;
-            var errorMessage = string.Empty;
-            var latestClassifications = Enumerable.Empty<LatestClassificationModel>();
+            categoryModel.CreatedBy = CurrentSession.UserId;
+            categoryModel.ActionType = ActionTypeQueueCustCategory.Insert;
 
-            var resultToCTS = _accountService.AddCustomerCategory(addCategoryModel, CurrentSession.UserId, out latestClassifications);
+            var result = AddDirectCustomerCategory(categoryModel);
 
-            if (resultToCTS.ErrorCode == 0 && latestClassifications != null)
+            if (categoryModel.RoleId != 1 && categoryModel.IsAffectToAllDownlines)
             {
-                if (addCategoryModel.IsVVip)
+                _accountService.AddQueueAffectDownlinesCustomerCategory(categoryModel);
+            }
+
+            return Json(new
+            {
+                errorCode = result.ErrorCode,
+                errorMessage = result.ErrorMsg
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        private DBResult AddDirectCustomerCategory(CustomerCategoryModel categoryModel)
+        {
+            var latestClassifications = Enumerable.Empty<LatestClassificationModel>();
+            var result = _accountService.AddCustomerCategory(categoryModel, out latestClassifications);
+
+            if (result.ErrorCode == 0 && latestClassifications != null)
+            {
+                if (categoryModel.IsVVip)
                 {
                     int custIdInt = 0;
-                    int.TryParse(addCategoryModel.CustId.ToString(), out custIdInt);
+                    int.TryParse(categoryModel.CustId.ToString(), out custIdInt);
 
                     if (custIdInt != 0)
                     {
@@ -1594,34 +1617,32 @@
                     }
                 }
             }
-            else
-            {
-                errorCode = resultToCTS.ErrorCode;
-                errorMessage = resultToCTS.ErrorMsg;
-            }
 
-            return Json(new
-            {
-                errorCode,
-                errorMessage
-            }, JsonRequestBehavior.AllowGet);
+            return result;
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationRemoveCategory)]
-        public ActionResult RemoveCustomerCategory(long custId, long ctsCustId, int categoryId, bool isVVip)
+        public ActionResult RemoveCustomerCategory(CustomerCategoryModel categoryModel)
         {
             var errorCode = 0;
             var errorMessage = string.Empty;
+            categoryModel.CreatedBy = CurrentSession.UserId;
+            categoryModel.ActionType = ActionTypeQueueCustCategory.Remove;
 
-            var resultToCTS = _accountService.RemoveCustomerCategory(custId, ctsCustId, categoryId, CurrentSession.UserId);
+            var result = _accountService.RemoveCustomerCategory(categoryModel);
 
-            if (string.IsNullOrEmpty(resultToCTS.OpErrorMessage))
+            if (string.IsNullOrEmpty(result.OpErrorMessage))
             {
-                if (isVVip)
+                if (categoryModel.IsVVip)
                 {
+                    if (categoryModel.RoleId != 1 && categoryModel.IsAffectToAllDownlines)
+                    {
+                        _accountService.AddQueueAffectDownlinesCustomerCategory(categoryModel);
+                    }
+
                     var custIdInt = 0;
-                    int.TryParse(custId.ToString(), out custIdInt);
+                    int.TryParse(categoryModel.CustId.ToString(), out custIdInt);
 
                     if (custIdInt != 0)
                     {
@@ -1641,7 +1662,7 @@
             else
             {
                 errorCode = -1;
-                errorMessage = resultToCTS.OpErrorMessage;
+                errorMessage = result.OpErrorMessage;
             }
 
             return Json(new
@@ -1764,9 +1785,10 @@
         {
             var firstRobotDate = string.Empty;
             var lastRobotDate = string.Empty;
+            var robotTypeClassify = -2;
             var robotBettingList = Enumerable.Empty<RobotBettingViewModel>();
 
-            var robotBettings = _robotBettingService.GetRobotBetting(custID, out RobotDateModel robotDate);
+            var robotBettings = _robotBettingService.GetRobotBetting(custID, out RobotDateAndTypeModel robotDateAndType);
 
             if (robotBettings != null && robotBettings.Any())
             {
@@ -1777,14 +1799,16 @@
                     PeriodRangeName = x.PeriodRangeName
                 });
 
-                firstRobotDate = robotDate.FirstRobotDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff);
-                lastRobotDate = robotDate.LastRobotDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff);
+                firstRobotDate = robotDateAndType.FirstRobotDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff);
+                lastRobotDate = robotDateAndType.LastRobotDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff);
+                robotTypeClassify = robotDateAndType.RobotTypeClassify;
             }
 
             return Json(new
             {
                 firstRobotDate = firstRobotDate,
                 lastRobotDate = lastRobotDate,
+                robotTypeClassify = robotTypeClassify,
                 data = robotBettingList,
             }, JsonRequestBehavior.AllowGet);
         }
@@ -1806,7 +1830,7 @@
 
                 if (ticketDetail != null && ticketDetail.Any())
                 {
-                    result = ticketDetail.Select(x => new RobotBettingDetailViewModel
+                    result = ticketDetail.OrderByDescending(x => x.TransDate).Select(x => new RobotBettingDetailViewModel
                     {
                         TransDate = x.TransDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff),
                         HomeID = x.HomeId,
@@ -1819,7 +1843,7 @@
                         Odds = x.Odds,
                         LiveScore = x.LiveIndicator ? (x.LiveHomeScore + " - " + x.LiveAwayScore) : "-",
                         MatchName = GetMatchName(x)
-                    }).OrderByDescending(x => x.TransDate);
+                    });
                 }
             }
 

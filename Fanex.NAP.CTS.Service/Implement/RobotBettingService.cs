@@ -19,7 +19,7 @@
             repository = new DynamicRepository();
         }
 
-        public IEnumerable<RobotBettingModel> GetRobotBetting(long custID, out RobotDateModel robotDate)
+        public IEnumerable<RobotBettingModel> GetRobotBetting(long custID, out RobotDateAndTypeModel robotDateAndType)
         {          
             var criteria = new GetRobotDetectionCriteria()
             {
@@ -27,11 +27,12 @@
             };
 
             var result = repository.Fetch<RobotBettingModel>(criteria);
-            
-            robotDate = new RobotDateModel
+
+            robotDateAndType = new RobotDateAndTypeModel
             {
                 FirstRobotDate = criteria.FirstRobotDate,
-                LastRobotDate = criteria.LastRobotDate
+                LastRobotDate = criteria.LastRobotDate,
+                RobotTypeClassify = criteria.RobotTypeClassify
             };
 
             return result;

@@ -105,4 +105,15 @@
         Unmark = 3
     }
    
+    public enum ActionTypeQueueCustCategory
+    {
+        Insert = 1,
+        Remove = 2
+    }
+
+    public enum FromAction
+    {
+        WebSite = 1,
+        Service = 2
+    }
 }

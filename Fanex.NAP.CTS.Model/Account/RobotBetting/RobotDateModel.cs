@@ -2,11 +2,13 @@
 {
     using System;
 
-    public class RobotDateModel
+    public class RobotDateAndTypeModel
     {
         public DateTime FirstRobotDate { get; set; }
 
         public DateTime LastRobotDate { get; set; }
+
+        public int RobotTypeClassify { get; set; }
 
     }
 }

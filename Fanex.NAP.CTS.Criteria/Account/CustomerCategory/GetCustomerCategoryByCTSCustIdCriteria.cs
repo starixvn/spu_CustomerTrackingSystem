@@ -1,13 +1,13 @@
-﻿using Fanex.Data;
-using Fanex.Data.Repository;
-
-namespace Fanex.NAP.CTS.Criteria.Account.CustomerCategory
+﻿namespace Fanex.NAP.CTS.Criteria.Account.CustomerCategory
 {
-    public class GetCustomerCategoryByCTSCustId : CriteriaBase
+    using Fanex.Data;
+    using Fanex.Data.Repository;
+
+    public class GetCustomerCategoryByCTSCustIdCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_CTSCustID")]
         public long CTSCustId { get; set; }
-
+     
         public override string GetSettingKey()
         {
             return "CTS_DC_CustClassification_GetCategory";
