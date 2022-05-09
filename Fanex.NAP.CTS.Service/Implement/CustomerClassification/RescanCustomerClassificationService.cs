@@ -56,7 +56,7 @@
 
             //Evidence & PACM
             var existEvidences = GetExistedEvidences(para.CustIds);
-            var napProblemAccounts = GetExistedProblemAccountsFromNAPPA(para.CustIds, para.FuncId_CheckPA);
+            var napProblemAccounts = GetExistedProblemAccountsFromNAPPA(para.CustIds, para.FuncId_CheckPA, para.IsCheckPAFromNAP);
             var paLosing = GetPALosing(existEvidences, napProblemAccounts, para.FunctionId);
 
             custIdsCheckPA.AddRange(InsertProblemAccount(napProblemAccounts, paLosing, para.FunctionId));
@@ -149,9 +149,9 @@
             return Enumerable.Empty<long>();
         }
 
-        private IEnumerable<MultipleProblemAccountsModel> GetExistedProblemAccountsFromNAPPA(IEnumerable<long> custIds, FunctionId functionId)
+        private IEnumerable<MultipleProblemAccountsModel> GetExistedProblemAccountsFromNAPPA(IEnumerable<long> custIds, FunctionId functionId, bool isCheckPAFromNap)
         {
-            if (custIds != null && custIds.Any())
+            if (custIds != null && custIds.Any() && isCheckPAFromNap)
             {
                 var problemAccounts = GetProblemAccountsFromNAP(string.Join(",", custIds), null)?.Distinct();
 
