@@ -17,6 +17,7 @@
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
+    using System.Configuration;
     using System.Linq;
     using System.Threading.Tasks;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
@@ -302,7 +303,8 @@
                         {
                             CustID = c.CustId,
                             RobotCounter = c.Counter,
-                            ReasonID = (int)CATEGORY.ROBOT
+                            ReasonID = (int)CATEGORY.ROBOT,
+                            Creator = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"])
                         });
                     });
                 }

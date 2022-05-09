@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Model.CustomerClassify
 {
+    using Newtonsoft.Json;
     using System;
 
     public class MultipleProblemAccountsModel
@@ -11,6 +12,7 @@
         //Default value = 0, except Check/Get RobotUser
         public int RobotCounter { get; set; }
 
+        [JsonProperty("CreatedBy")]
         public Int64? Creator { get; set; }
     }
 }
