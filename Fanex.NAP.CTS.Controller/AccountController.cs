@@ -1424,7 +1424,7 @@
                     ActiveDays = x.ActiveDays,
                     LastXDaysMargin = x.LastXDaysMargin,
                     ProbationPeriodWinloss = x.ProbationPeriodWinloss,
-                    CreatedBy = string.IsNullOrEmpty(x.CreatedBy) ? x.LastModifiedBy.ToString() : x.CreatedBy,
+                    CreatedBy = x.CreatedBy,
                     TaggingType = x.TaggingType
                 }).ToList();
             }
