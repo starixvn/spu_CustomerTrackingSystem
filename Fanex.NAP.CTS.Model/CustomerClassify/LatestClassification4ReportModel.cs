@@ -13,6 +13,9 @@
         [XName("c")]
         public int CustomerClass { get; set; }
 
+        [XName("n")]
+        public string CustomerClassName { get; set; }
+
         [XName("t")]
         public int Category { get; set; }
 
