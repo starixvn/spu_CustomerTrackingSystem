@@ -213,7 +213,7 @@
             return htmlBuilder.BuildChoice(coreTicket, ticketHelper, null, true);           
         }
 
-        public InsertEvidenceCategoryResultModel UpdateRemovedProblemAccountToCTS(string custid)
+        public InsertEvidenceCategoryResultModel UpdateRemovedProblemAccountToCTS(string custid, Int64 userId)
         {
             var custIds = new List<long>();
             var repository = new DynamicRepository();
@@ -221,7 +221,8 @@
             var removedProblemAccounts = custid.Split(',').Select(a => new InsertProblemAccountsModel()
             {
                 CustID = Convert.ToInt32(a),
-                ReasonID = Consts.REMOVE_PROBLEMACCOUNT_CATEGORYID
+                ReasonID = Consts.REMOVE_PROBLEMACCOUNT_CATEGORYID,
+                CreatedBy = userId
             });
 
             var criteria = new InsertProblemAccountCriteria

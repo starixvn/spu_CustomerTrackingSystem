@@ -13,7 +13,7 @@
         btnExportToExcel: $('#btnExportToExcel'),
         tblProblemAccount: $('#tblProblemAccount'),
         btnMarkNewProblemAccount: $('#btnMarkNewProblemAccount'),
-        btnUpdateProblemAccount: $('#btnUpdateProblemAccount'),
+        btnUpdateProblemAccount: $('#btnUpdateProblemAccount'), 
         btnUnmarkProblemAccount: $('#btnUnmarkProblemAccount'),
         divAddProblemAccount: $('#divAddProblemAccount'),
         grpCategories: $('#grpCategories'),
@@ -71,13 +71,14 @@
             scrollCollapse: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 3, 4, 5], className: "text-center" },
-                { targets: [0], width: "15%" },
+                { targets: [0, 1, 2, 3, 4, 5, 6], className: "text-center" },
+                { targets: [0], width: "20%" },
                 { targets: [1], width: "15%" },
-                { targets: [2], width: "15%" },
-                { targets: [3], width: "25%" },
-                { targets: [4], width: "15%" },
-                { targets: [5], width: "15%" }               
+                { targets: [2], width: "10%" },
+                { targets: [3], width: "15%" },
+                { targets: [4], width: "25%" },
+                { targets: [5], width: "10%" },               
+                { targets: [6], width: "10%" }               
             ],
             columns: [                
                 { data: obj => obj.UserName },
@@ -85,7 +86,8 @@
                 { data: obj => obj.Currency },
                 { data: obj => obj.Category },
                 { data: obj => obj.Comment },
-                { data: obj => obj.CreatedDateStr }               
+                { data: obj => obj.CreatedDateStr },
+                { data: obj => obj.CreatedBy }
             ]
         });
     }

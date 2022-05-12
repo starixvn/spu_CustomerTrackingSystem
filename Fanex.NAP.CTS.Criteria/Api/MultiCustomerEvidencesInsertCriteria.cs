@@ -2,6 +2,7 @@
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
+    using System;
 
     public class MultiCustomerEvidencesInsertCriteria : CriteriaBase
     {
@@ -11,6 +12,9 @@
 
         [SpParam(SqlParamName = "op_ErrorMessage")]
         public string ErrorMessage { get; set; }
+
+        [SpParam(SqlParamName = "ip_CreatedBy")]
+        public Int64 ip_CreatedBy { get; set; }
 
         public override string GetSettingKey()
         {

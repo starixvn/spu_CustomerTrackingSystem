@@ -237,7 +237,9 @@
             {
                 logInputDataService.LogInputData(new LogInputViewModel { PlaceMultiEvidences = customerEvidenceList }, FunctionId.PlaceMultiEvidencesForMultiCustAPI);
 
-                var result = _evidenceService.AddCustomersEvidences(customerEvidenceList);
+                int userId = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);
+
+                var result = _evidenceService.AddCustomersEvidences(customerEvidenceList, userId);
 
                 if (string.IsNullOrEmpty(result.ErrorMessage) && result.Eivdences != null && result.Eivdences.Any())
                 {
@@ -547,32 +549,32 @@
             return null;
         }
 
-         #region Problem Account
+        #region Problem Account
 
         /// <summary>
         ///  Update Removed Problem Account into CTS
         /// </summary>
-        /// <param name="custIds">List custId in string format, separated by comma</param>
+        /// <param name="paras">List custId in string format, separated by comma</param>
         /// <returns>true: success; false: failed</returns>
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.RemoveProblemAccountsAPI)]
-        public ApiResultModel RemoveProblemAccounts([FromBody] string custIds)
+        public ApiResultModel RemoveProblemAccounts([FromBody] RemovePANapParamsModel paras)
         {
             try
             {
                 var isWriteLogInfo = ConfigSettings.IsWriteLogInfo;
 
                 if (isWriteLogInfo)
-                    LogService.Info($"CTS Portal API - RemoveProblemAccounts endpoint - start {custIds}");
+                    LogService.Info($"CTS Portal API - RemoveProblemAccounts endpoint - start {paras.CustIds}");
 
-                var output = _problemAccountMonitorService.UpdateRemovedProblemAccountToCTS(custIds);
+                var output = _problemAccountMonitorService.UpdateRemovedProblemAccountToCTS(paras.CustIds, paras.UserId);
 
                 if (string.IsNullOrEmpty(output.ErrorMessage) && output.CustIds != null && output.CustIds.Any())
                 {
                     if (isWriteLogInfo)
                         LogService.Info($"CTS Portal API - UpdateRemovedProblemAccountToCTS successful custIds:  {JsonConvert.SerializeObject(output.CustIds)}");
 
-                    var custEviRemoved = _problemAccountManagementService.RemoveProblemAccountEvidence(custIds);
+                    var custEviRemoved = _problemAccountManagementService.RemoveProblemAccountEvidence(paras.CustIds);
 
                     if (custEviRemoved != null && custEviRemoved.Any())
                     {
@@ -592,7 +594,7 @@
                 }
                 else if (!string.IsNullOrEmpty(output.ErrorMessage))
                 {
-                    LogService.Error($"CTS Portal API - Remove Problem Account API - Rescan Problem Account failed: {output.ErrorMessage} - List custIds: {custIds}.");
+                    LogService.Error($"CTS Portal API - Remove Problem Account API - Rescan Problem Account failed: {output.ErrorMessage} - List custIds: {paras.CustIds}.");
                     return new ApiResultModel { ErrorMessage = string.Empty, StatusMessage = "fail" };
                 }
 
@@ -607,7 +609,7 @@
             }
             catch (Exception ex)
             {
-                LogService.Error($"CTS Portal API - RemoveProblemAccounts endpoint - Exception: {ex.Message} - List custIds: {custIds}.", ex);
+                LogService.Error($"CTS Portal API - RemoveProblemAccounts endpoint - Exception: {ex.Message} - List custIds: {paras.CustIds}.", ex);
 
                 return new ApiResultModel
                 {

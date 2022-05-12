@@ -105,7 +105,7 @@
                     logInputData.Add(new LogInputDataModel
                     {
                         CustId = e.CustID,
-                        InputValue = e.ReasonID
+                        InputValue = new { e.ReasonID, CreatedBy = e.Creator }.ToString()
                     });
                 });
             }

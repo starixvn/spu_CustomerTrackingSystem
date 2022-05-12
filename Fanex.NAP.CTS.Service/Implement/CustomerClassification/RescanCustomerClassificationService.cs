@@ -17,6 +17,7 @@
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
+    using System.Configuration;
     using System.Linq;
     using System.Threading.Tasks;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
@@ -302,7 +303,8 @@
                         {
                             CustID = c.CustId,
                             RobotCounter = c.Counter,
-                            ReasonID = (int)CATEGORY.ROBOT
+                            ReasonID = (int)CATEGORY.ROBOT,
+                            Creator = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"])
                         });
                     });
                 }
@@ -340,6 +342,7 @@
                                                             CustID = group.pa.CustID,
                                                             ReasonID = group.pa.ReasonID,
                                                             RobotCounter = group.pa.RobotCounter,
+                                                            CreatedBy = group.pa.Creator,
                                                             BetCount = temp?.BetCount,
                                                             ActiveDays = temp?.ActiveDays,
                                                             TurnoverRM = temp?.TurnoverRM,
@@ -368,6 +371,7 @@
                                                      EvidenceID = group.pa.EvidenceId,
                                                      SubscriberID = group.pa.SubscriberId,
                                                      ActionType = group.pa.ActionType,
+                                                     CreatedBy = group.pa.CreatedBy,
                                                      BetCount = temp?.BetCount,
                                                      ActiveDays = temp?.ActiveDays,
                                                      TurnoverRM = temp?.TurnoverRM,
@@ -399,6 +403,7 @@
                                                      CTSCustID = group.pa.CTSCustId,
                                                      EvidenceID = group.pa.EvidenceId,
                                                      SubscriberID = group.pa.SubscriberId,
+                                                     CreatedBy = group.pa.CreatedBy,
                                                      ActionType = group.pa.ActionType,
                                                      BetCount = temp?.BetCount,
                                                      ActiveDays = temp?.ActiveDays,

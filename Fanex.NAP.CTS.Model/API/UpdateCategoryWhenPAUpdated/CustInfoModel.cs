@@ -7,6 +7,5 @@
         public int? FromReasonID { get; set; }
 
         public int? ToReasonID { get; set; }
-
     }
 }

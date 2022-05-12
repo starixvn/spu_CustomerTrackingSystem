@@ -181,6 +181,7 @@
     <Compile Include="API\ForceSpecialCustomerClassModel.cs" />
     <Compile Include="API\ProblemCaseMonitor\ProblemCaseMonitorModel.cs" />
     <Compile Include="API\UpdateCategoryWhenPAUpdated\CustInfoModel.cs" />
+    <Compile Include="API\RemovePANapParamsModel.cs" />
     <Compile Include="API\UpdateCategoryWhenPAUpdated\UpdateCategoryParamsModel.cs" />
     <Compile Include="API\UpdateCategoryWhenPAUpdated\UpdatePALosingInfoModel.cs" />
     <Compile Include="API\UpdateCategoryWhenPAUpdated\UpdateCategoryModel.cs" />
