@@ -229,74 +229,74 @@
         /// </summary>
         /// <param name="customerEvidenceList"></param>
         /// <returns></returns>
-        [HttpPost]
-        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.AddCustomersEvidencesAPI)]
-        public bool AddCustomersEvidences(PlaceMultiCustomerEvidence customerEvidenceList)
-        {
-            try
-            {
-                logInputDataService.LogInputData(new LogInputViewModel { PlaceMultiEvidences = customerEvidenceList }, FunctionId.PlaceMultiEvidencesForMultiCustAPI);
+        //[HttpPost]
+        //[TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.AddCustomersEvidencesAPI)]
+        //public bool AddCustomersEvidences(PlaceMultiCustomerEvidence customerEvidenceList)
+        //{
+        //    try
+        //    {
+        //        logInputDataService.LogInputData(new LogInputViewModel { PlaceMultiEvidences = customerEvidenceList }, FunctionId.PlaceMultiEvidencesForMultiCustAPI);
 
-                int userId = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);
+        //        int userId = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);
 
-                var result = _evidenceService.AddCustomersEvidences(customerEvidenceList, userId);
+        //        var result = _evidenceService.AddCustomersEvidences(customerEvidenceList, userId);
 
-                if (string.IsNullOrEmpty(result.ErrorMessage) && result.Eivdences != null && result.Eivdences.Any())
-                {
-                    var syncCustIds = Enumerable.Empty<long>();
+        //        if (string.IsNullOrEmpty(result.ErrorMessage) && result.Eivdences != null && result.Eivdences.Any())
+        //        {
+        //            var syncCustIds = Enumerable.Empty<long>();
 
-                    var paLosingClassification = _rescanClassificationService.GetProblemAccountLosing(result.Eivdences, FunctionId.PlaceSingleEvidence);
+        //            var paLosingClassification = _rescanClassificationService.GetProblemAccountLosing(result.Eivdences, FunctionId.PlaceSingleEvidence);
 
-                    var custEvidenceJson = JsonConvert.SerializeObject(paLosingClassification);
+        //            var custEvidenceJson = JsonConvert.SerializeObject(paLosingClassification);
 
-                    var syncResult = _accountService.SyncCustEvidenceToCategory(custEvidenceJson, false, out syncCustIds);
+        //            var syncResult = _accountService.SyncCustEvidenceToCategory(custEvidenceJson, false, out syncCustIds);
 
-                    Parallel.Invoke(() =>
-                    {
-                        _custEvidenceService.UpdateBetLimitOfFlaggedCustomer(customerEvidenceList.CustIdList);
-                    },
-                    () =>
-                    {
-                        if (syncResult.ErrorCode == 0 && syncCustIds != null && syncCustIds.Any())
-                        {
-                            _custClassificationService.PushDataToExternal(syncCustIds, new PushDataToExternalModel
-                            {
-                                ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
-                                IsPushCCToSoon88 = true,
-                                IsUpdateDangerToMainDB = true,
-                                DangerLevelType = DangerLevel.ABI
-                            });
+        //            Parallel.Invoke(() =>
+        //            {
+        //                _custEvidenceService.UpdateBetLimitOfFlaggedCustomer(customerEvidenceList.CustIdList);
+        //            },
+        //            () =>
+        //            {
+        //                if (syncResult.ErrorCode == 0 && syncCustIds != null && syncCustIds.Any())
+        //                {
+        //                    _custClassificationService.PushDataToExternal(syncCustIds, new PushDataToExternalModel
+        //                    {
+        //                        ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
+        //                        IsPushCCToSoon88 = true,
+        //                        IsUpdateDangerToMainDB = true,
+        //                        DangerLevelType = DangerLevel.ABI
+        //                    });
 
-                            _accountService.CheckNewPAAssociationCustomerForRollback(syncResult.CustInfo);
-                        }
-                    },
-                    () =>
-                    {
-                        if (syncResult.ErrorCode == 0 && syncCustIds != null && syncCustIds.Any())
-                        {
-                            _antiFraudCenterService.InsertAFCAccounts(syncCustIds, FromFlow.CTSAPI);
-                        }
-                    });
-                }
+        //                    _accountService.CheckNewPAAssociationCustomerForRollback(syncResult.CustInfo);
+        //                }
+        //            },
+        //            () =>
+        //            {
+        //                if (syncResult.ErrorCode == 0 && syncCustIds != null && syncCustIds.Any())
+        //                {
+        //                    _antiFraudCenterService.InsertAFCAccounts(syncCustIds, FromFlow.CTSAPI);
+        //                }
+        //            });
+        //        }
 
-                if (!string.IsNullOrEmpty(result.ErrorMessage))
-                {
-                    LogService.Error($"CTS Portal API - Add Customers Evidences exception: {result.ErrorMessage} - List custIds: {customerEvidenceList.CustIdList} - List EvidenceCode: {customerEvidenceList.EvidenceCodeList}");
-                    return false;
-                }
+        //        if (!string.IsNullOrEmpty(result.ErrorMessage))
+        //        {
+        //            LogService.Error($"CTS Portal API - Add Customers Evidences exception: {result.ErrorMessage} - List custIds: {customerEvidenceList.CustIdList} - List EvidenceCode: {customerEvidenceList.EvidenceCodeList}");
+        //            return false;
+        //        }
 
-                return true;
-            }
-            catch (Exception ex)
-            {
-                var logMessage = new LogMessage(ex.Message)
-                    .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                    .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+        //        return true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        var logMessage = new LogMessage(ex.Message)
+        //            .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+        //            .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
 
-                LogService.Error($"CTS Portal API - Add Customers Evidences exception: {logMessage} - Data: {JsonConvert.SerializeObject(customerEvidenceList)}");
-                return false;
-            }
-        }
+        //        LogService.Error($"CTS Portal API - Add Customers Evidences exception: {logMessage} - Data: {JsonConvert.SerializeObject(customerEvidenceList)}");
+        //        return false;
+        //    }
+        //}
 
         /// <summary>
         /// Get Association data from MySQL

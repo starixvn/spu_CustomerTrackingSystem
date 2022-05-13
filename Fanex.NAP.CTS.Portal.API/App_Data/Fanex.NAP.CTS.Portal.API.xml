@@ -521,13 +521,6 @@
             <param name="eviIdList"> Evidence in string format (saparate by comma) (</param>
             <returns>A list of customer evidence in JSON format</returns>
         </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.AddCustomersEvidences(Fanex.NAP.CTS.Model.DTO.PlaceMultiCustomerEvidence)">
-            <summary>
-            Add evidences to customers
-            </summary>
-            <param name="customerEvidenceList"></param>
-            <returns></returns>
-        </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetAssociationForExtAcc(System.Int32)">
             <summary>
             Get Association data from MySQL

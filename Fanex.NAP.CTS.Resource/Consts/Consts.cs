@@ -301,7 +301,7 @@
             PlaceEvidenceForMultipleCustAPI = 200,
             GetFlaggedCustomersByLevelAPI = 201,
             GetFlaggedCustByLvAndEvidenceAPI = 202,
-            AddCustomersEvidencesAPI = 203,
+            //AddCustomersEvidencesAPI = 203,
             GetAssociationForExtAccAPI = 204,
             AddSystemFormulaBetAccountAPI = 205,
             GetAssociationByCustIdAPI = 206,
