@@ -193,12 +193,7 @@
                         case ProblemAccountAction.Mark:
                             paResultSiteCredits = _problemAccountManagementService.MarkProblemAccountSiteCredit(paForSiteCredit, CurrentSession.UserId);
                             paResultSiteLicensees = _problemAccountManagementService.MarkProblemAccountSiteLicensee(paForSiteLicensee, CurrentSession.UserId);
-                            break;
-
-                        case ProblemAccountAction.Update:
-                            paResultSiteCredits = _problemAccountManagementService.UpdateProblemAccountSiteCredit(paForSiteCredit, CurrentSession.UserId);
-                            paResultSiteLicensees = _problemAccountManagementService.UpdateProblemAccountSiteLicensee(paForSiteLicensee, CurrentSession.UserId);                            
-                            break;
+                            break;                       
 
                         case ProblemAccountAction.Unmark:
                             paResultSiteCredits = _problemAccountManagementService.UnmarkProblemAccountSiteCredit(paForSiteCredit, model.IsExceptDownlinesByTVS, model.IsExceptDownlinesByOPS, CurrentSession.UserId);

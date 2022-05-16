@@ -12,8 +12,7 @@
         btnGenerate: $('#btnGenerate'),
         btnExportToExcel: $('#btnExportToExcel'),
         tblProblemAccount: $('#tblProblemAccount'),
-        btnMarkNewProblemAccount: $('#btnMarkNewProblemAccount'),
-        btnUpdateProblemAccount: $('#btnUpdateProblemAccount'), 
+        btnMarkNewProblemAccount: $('#btnMarkNewProblemAccount'),        
         btnUnmarkProblemAccount: $('#btnUnmarkProblemAccount'),
         divAddProblemAccount: $('#divAddProblemAccount'),
         grpCategories: $('#grpCategories'),
@@ -332,7 +331,7 @@
                     if (params.PAAction == 3 && response.IsCreditSite == true) {
                         domElements.grpCkboxAffectedDownline.removeClass('hide');
                     } else {
-                        domElements.grpCkboxAffectedDownline.addClass('hide');
+                        //domElements.grpCkboxAffectedDownline.addClass('hide');
                     }
 
                     if (params.PAAction == 2 && params == 3) { // Update and Unmark
@@ -453,42 +452,7 @@
                 console.log(errMsg);
             }
         });
-    }
-
-    function UpdateProblemAccount(params) {
-        common.showConfirmation("<div class='popup - content'>Are you sure to update this problem account?</div>",
-            () => {
-                $.ajax(common.modifyRelativeUrl('ProblemAccountManagement/UpdateProblemAccount'), {
-                    type: 'POST',
-                    data: params,
-                    beforeSend: function () {
-                        domElements.spanAddProblemAccountUserName.addClass("loading-block");
-                    },
-                    success: function (response) {
-                        if (response.ErrorCode === 0) {
-                            common.showSuccess("Update Problem Account successful. Please wait, Data Synchronization may take a few minutes!");
-                            domElements.divAddProblemAccount.dialog('close');
-                            setTimeout(() => {
-                                GetProblemAccountReport();
-                            }, 1000);
-                        } else {
-                            if (response.ErrorMessage != '') {
-                                common.showError(response.ErrorMessage, 2000);
-                            }
-                            BindResultValidatedInputUserName(response.ResultValidated);
-                        }
-                    },
-                    complete: function () {
-                        domElements.spanAddProblemAccountUserName.removeClass("loading-block");
-                    },
-                    error: function (errMsg) {
-                        domElements.spanAddProblemAccountUserName.removeClass("loading-block");
-                        console.log(errMsg);
-                    }
-                });
-            },
-            () => {});
-    }
+    }   
 
     function UnmarkProblemAccount(params) {
         common.showConfirmation("<div class='popup - content'>Are you sure to unmark this problem account?</div>",
@@ -674,29 +638,9 @@
             });
         });
 
-        domElements.btnUpdateProblemAccount.on('click', function () {
-            domElements.grpCategories.removeClass('hide');
-            domElements.grpCkboxAffectedDownline.addClass('hide');
-            GetProblemAccountCategories();
-            domElements.txtComment.val('');
-            domElements.spanProblemAccountActionHidden.val('2'); // Update
-            InitInputTagUsername();
-
-            domElements.divAddProblemAccount.dialog({
-                modal: true,
-                width: '800px',
-                title: 'UPDATE PROBLEM ACCOUNT',
-                resizable: true,
-                draggable: true,
-                close: function () {
-                    $(this).dialog('close');
-                }
-            });
-        });
-
         domElements.btnUnmarkProblemAccount.on('click', function () {            
             domElements.grpCategories.addClass('hide');
-            domElements.grpCkboxAffectedDownline.addClass('hide');
+            //domElements.grpCkboxAffectedDownline.addClass('hide');
             domElements.ckbExceptDownlinesByTVS.prop("checked", false);
             domElements.ckbExceptDownlinesByOPS.prop("checked", false);
             domElements.txtComment.val('');

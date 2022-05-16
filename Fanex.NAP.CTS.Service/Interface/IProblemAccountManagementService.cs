@@ -22,11 +22,7 @@
 
         IEnumerable<ResultProblemAccountAddCustomerModel> MarkProblemAccountSiteCredit(IEnumerable<ProblemAccountValidatedModel> models, int userID);
 
-        IEnumerable<ResultProblemAccountAddCustomerModel> MarkProblemAccountSiteLicensee(IEnumerable<ProblemAccountValidatedModel> models, int userID);
-
-        IEnumerable<ResultProblemAccountAddCustomerModel> UpdateProblemAccountSiteCredit(IEnumerable<ProblemAccountValidatedModel> models, int userID);
-
-        IEnumerable<ResultProblemAccountAddCustomerModel> UpdateProblemAccountSiteLicensee(IEnumerable<ProblemAccountValidatedModel> models, int userID);
+        IEnumerable<ResultProblemAccountAddCustomerModel> MarkProblemAccountSiteLicensee(IEnumerable<ProblemAccountValidatedModel> models, int userID);       
 
         IEnumerable<ResultProblemAccountAddCustomerModel> UnmarkProblemAccountSiteCredit(IEnumerable<ProblemAccountValidatedModel> models, bool isExceptDownlinesByTVS, bool isExceptDownlinesByOPS, int userID);
 
