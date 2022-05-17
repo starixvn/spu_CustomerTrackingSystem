@@ -91,85 +91,85 @@
         /// <param name="custIds">List custId in string format, separated by comma</param>
         /// <param name="evidenceId">Evidence Id in CTS system</param>
         /// <returns>true: success; false: failed</returns>
-        [HttpPost]
-        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.PlaceEvidenceForMultipleCustAPI)]
-        public bool PlaceEvidenceMultipleByCustId(string custIds, int evidenceId)
-        {
-            bool returnedResult = false;
-            if (!string.IsNullOrEmpty(custIds))
-            {
-                try
-                {
-                    logInputDataService.LogInputData(new LogInputViewModel
-                    {
-                        PlaceEvidences = new PlaceEvidencesViewModel()
-                        {
-                            CustIds = custIds,
-                            EvidenceId = evidenceId
-                        }
-                    }, FunctionId.PlaceEvidenceForMultiCustAPI);
+        //[HttpPost]
+        //[TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.PlaceEvidenceForMultipleCustAPI)]
+        //public bool PlaceEvidenceMultipleByCustId(string custIds, int evidenceId)
+        //{
+        //    bool returnedResult = false;
+        //    if (!string.IsNullOrEmpty(custIds))
+        //    {
+        //        try
+        //        {
+        //            logInputDataService.LogInputData(new LogInputViewModel
+        //            {
+        //                PlaceEvidences = new PlaceEvidencesViewModel()
+        //                {
+        //                    CustIds = custIds,
+        //                    EvidenceId = evidenceId
+        //                }
+        //            }, FunctionId.PlaceEvidenceForMultiCustAPI);
 
-                    int userId = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);
+        //            int userId = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);
 
-                    var result = _custEvidenceService.AddCustEvidenceMultipleByCustId(custIds, evidenceId, userId);
+        //            var result = _custEvidenceService.AddCustEvidenceMultipleByCustId(custIds, evidenceId, userId);
 
-                    if (string.IsNullOrEmpty(result.ErrorMessage) && result.Eivdences != null && result.Eivdences.Any())
-                    {
-                        var syncCustIds = Enumerable.Empty<long>();
+        //            if (string.IsNullOrEmpty(result.ErrorMessage) && result.Eivdences != null && result.Eivdences.Any())
+        //            {
+        //                var syncCustIds = Enumerable.Empty<long>();
 
-                        var paLosingClassification = _rescanClassificationService.GetProblemAccountLosing(result.Eivdences, FunctionId.PlaceSingleEvidence);
+        //                var paLosingClassification = _rescanClassificationService.GetProblemAccountLosing(result.Eivdences, FunctionId.PlaceSingleEvidence);
 
-                        var custEvidenceJson = JsonConvert.SerializeObject(paLosingClassification);
+        //                var custEvidenceJson = JsonConvert.SerializeObject(paLosingClassification);
 
-                        var syncResult = _accountService.SyncCustEvidenceToCategory(custEvidenceJson, false, out syncCustIds);
+        //                var syncResult = _accountService.SyncCustEvidenceToCategory(custEvidenceJson, false, out syncCustIds);
 
-                        Parallel.Invoke(() =>
-                        {
-                            _custEvidenceService.UpdateBetLimitOfFlaggedCustomer(custIds);
-                        },
-                        () =>
-                        {
-                            if (syncResult.ErrorCode == 0 && syncCustIds != null && syncCustIds.Any())
-                            {
-                                _custClassificationService.PushDataToExternal(syncCustIds, new PushDataToExternalModel
-                                {
-                                    ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
-                                    IsPushCCToSoon88 = true,
-                                    IsUpdateDangerToMainDB = true,
-                                    DangerLevelType = DangerLevel.ABI
-                                });
+        //                Parallel.Invoke(() =>
+        //                {
+        //                    _custEvidenceService.UpdateBetLimitOfFlaggedCustomer(custIds);
+        //                },
+        //                () =>
+        //                {
+        //                    if (syncResult.ErrorCode == 0 && syncCustIds != null && syncCustIds.Any())
+        //                    {
+        //                        _custClassificationService.PushDataToExternal(syncCustIds, new PushDataToExternalModel
+        //                        {
+        //                            ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
+        //                            IsPushCCToSoon88 = true,
+        //                            IsUpdateDangerToMainDB = true,
+        //                            DangerLevelType = DangerLevel.ABI
+        //                        });
 
-                               _accountService.CheckNewPAAssociationCustomerForRollback(syncResult.CustInfo);
-                            }
-                        },
-                        () =>
-                        {
-                            if (syncResult.ErrorCode == 0 && syncCustIds != null && syncCustIds.Any())
-                            {
-                                _antiFraudCenterService.InsertAFCAccounts(syncCustIds, FromFlow.CTSAPI);
-                            }
-                        });
-                    }
+        //                       _accountService.CheckNewPAAssociationCustomerForRollback(syncResult.CustInfo);
+        //                    }
+        //                },
+        //                () =>
+        //                {
+        //                    if (syncResult.ErrorCode == 0 && syncCustIds != null && syncCustIds.Any())
+        //                    {
+        //                        _antiFraudCenterService.InsertAFCAccounts(syncCustIds, FromFlow.CTSAPI);
+        //                    }
+        //                });
+        //            }
 
-                    if (!string.IsNullOrEmpty(result.ErrorMessage))
-                    {
-                        LogService.Error($"CTS Portal API - Add Customers Evidences exception: {result.ErrorMessage} - List custIds: {custIds} - EvidenceId: {evidenceId}");
-                    }
+        //            if (!string.IsNullOrEmpty(result.ErrorMessage))
+        //            {
+        //                LogService.Error($"CTS Portal API - Add Customers Evidences exception: {result.ErrorMessage} - List custIds: {custIds} - EvidenceId: {evidenceId}");
+        //            }
 
-                    returnedResult = true;
-                }
-                catch (Exception ex)
-                {
-                    var logMessage = new LogMessage(ex.Message)
-                            .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                            .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+        //            returnedResult = true;
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            var logMessage = new LogMessage(ex.Message)
+        //                    .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+        //                    .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
 
-                    LogService.Error($"CTS Portal API - PlaceEvidence exception: {logMessage} - CustIds: {custIds} - EvidenceId: {evidenceId}");
-                }
-            }
+        //            LogService.Error($"CTS Portal API - PlaceEvidence exception: {logMessage} - CustIds: {custIds} - EvidenceId: {evidenceId}");
+        //        }
+        //    }
 
-            return returnedResult;
-        }
+        //    return returnedResult;
+        //}
 
         /// <summary>
         /// Get flagged customers by level
