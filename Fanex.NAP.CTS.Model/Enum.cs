@@ -100,9 +100,8 @@
 
     public enum ProblemAccountAction
     {
-        Mark = 1,
-        Update = 2,
-        Unmark = 3
+        Mark = 1,      
+        Unmark = 2
     }
    
     public enum ActionTypeQueueCustCategory

@@ -17,8 +17,7 @@
         divAddProblemAccount: $('#divAddProblemAccount'),
         grpCategories: $('#grpCategories'),
         grpCkboxAffectedDownline: $('#grpCkboxAffectedDownline'),
-        ckbExceptDownlinesByTVS: $('#ckbExceptDownlinesByTVS'),
-        ckbExceptDownlinesByOPS: $('#ckbExceptDownlinesByOPS'),
+        ckbUnmarkDownlines: $('#ckbUnmarkDownlines'),
         txtComment: $('#txtComment'),
         btnCancel: $('#btnCancel'),
         btnSave: $('#btnSave'),
@@ -27,7 +26,7 @@
         spanAddProblemAccountChangeHidden: $('#spanAddProblemAccountChangeHidden'),
         spanProblemAccountActionHidden: $('#spanProblemAccountActionHidden'),
         inputTagUsername: $('#inputTagUsername'),
-        maxTags: 100
+        maxTags: 1001
     };
 
     function RenderGrid() {
@@ -328,13 +327,13 @@
                     else
                         BindResultValidatedInputUserName(response);                    
 
-                    if (params.PAAction == 3 && response.IsCreditSite == true) {
-                        domElements.grpCkboxAffectedDownline.removeClass('hide');
-                    } else {
-                        //domElements.grpCkboxAffectedDownline.addClass('hide');
-                    }
+                    //if (params.PAAction == 3 && response.IsCreditSite == true) {
+                    //    domElements.grpCkboxAffectedDownline.removeClass('hide');
+                    //} else {
+                    //    //domElements.grpCkboxAffectedDownline.addClass('hide');
+                    //}
 
-                    if (params.PAAction == 2 && params == 3) { // Update and Unmark
+                    if (params == 3) { // Unmark
                         domElements.txtComment.val(response.Comment);
                     }
                 },
@@ -408,16 +407,12 @@
         params.CategoryID = domElements.cbbProblemAccountCategories.val();
         params.Comment = domElements.txtComment.val().trim();
         params.PAAction = domElements.spanProblemAccountActionHidden.val();
-        params.IsExceptDownlinesByTVS = domElements.ckbExceptDownlinesByTVS.is(":checked");
-        params.IsExceptDownlinesByOPS = domElements.ckbExceptDownlinesByOPS.is(":checked");
+        params.IsUnmarkDownlines = domElements.ckbUnmarkDownlines.is(":checked");
 
         if (params.PAAction == 1) {
             MarkNewProblemAccount(params);
 
         } else if (params.PAAction == 2) {
-            UpdateProblemAccount(params);
-
-        } else {
             UnmarkProblemAccount(params);
 
         }
@@ -641,10 +636,9 @@
         domElements.btnUnmarkProblemAccount.on('click', function () {            
             domElements.grpCategories.addClass('hide');
             //domElements.grpCkboxAffectedDownline.addClass('hide');
-            domElements.ckbExceptDownlinesByTVS.prop("checked", false);
-            domElements.ckbExceptDownlinesByOPS.prop("checked", false);
+            domElements.ckbUnmarkDownlines.prop("checked", false);          
             domElements.txtComment.val('');
-            domElements.spanProblemAccountActionHidden.val('3'); // Unmark
+            domElements.spanProblemAccountActionHidden.val('2'); // Unmark
             InitInputTagUsername();
 
             domElements.divAddProblemAccount.dialog({
@@ -657,19 +651,7 @@
                     $(this).dialog('close');
                 }
             });
-        });
-
-        domElements.ckbExceptDownlinesByTVS.on('change', function () {
-            if (domElements.ckbExceptDownlinesByTVS.is(":checked")) {
-                domElements.ckbExceptDownlinesByOPS.prop("checked", false);
-            }
-        });
-
-        domElements.ckbExceptDownlinesByOPS.on('change', function () {
-            if (domElements.ckbExceptDownlinesByTVS.is(":checked")) {
-                domElements.ckbExceptDownlinesByTVS.prop("checked", false);
-            } 
-        });
+        });      
 
         domElements.btnSave.on('click', () => SaveProblemAccount());
 

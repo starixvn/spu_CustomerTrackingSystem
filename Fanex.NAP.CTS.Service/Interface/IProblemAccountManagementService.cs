@@ -24,9 +24,9 @@
 
         IEnumerable<ResultProblemAccountAddCustomerModel> MarkProblemAccountSiteLicensee(IEnumerable<ProblemAccountValidatedModel> models, int userID);       
 
-        IEnumerable<ResultProblemAccountAddCustomerModel> UnmarkProblemAccountSiteCredit(IEnumerable<ProblemAccountValidatedModel> models, bool isExceptDownlinesByTVS, bool isExceptDownlinesByOPS, int userID);
+        //IEnumerable<ResultProblemAccountAddCustomerModel> UnmarkProblemAccountSiteCredit(IEnumerable<ProblemAccountValidatedModel> models, bool isUnmarkDownlines, int userID);
 
-        IEnumerable<ResultProblemAccountAddCustomerModel> UnmarkProblemAccountSiteLicensee(IEnumerable<ProblemAccountValidatedModel> models, int userID);
+        //IEnumerable<ResultProblemAccountAddCustomerModel> UnmarkProblemAccountSiteLicensee(IEnumerable<ProblemAccountValidatedModel> models, int userID);
 
 		byte[] ExportProblemAccount(IEnumerable<ProblemAccountViewModel> problemAccounts, string fileName, string templatePath, ProblemAccountFilterViewModel filter);
 

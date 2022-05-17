@@ -12,9 +12,7 @@
 
         public ProblemAccountAction PAAction { get; set; }
 
-        public bool IsExceptDownlinesByTVS { get; set; }
-
-        public bool IsExceptDownlinesByOPS { get; set; }
-
+        public bool IsUnmarkDownlines { get; set; }
+       
     }
 }

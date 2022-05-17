@@ -99,6 +99,7 @@
 		<Setting Key="CTS_DC_CustClassification_GetDangerLevel" SpName="CTS_DC_CustClassification_GetDangerLevel_xtest" DbName="MySQL.CTS_DataCenter.Reporter" TimeOut="300" />
 		<Setting Key="CTS_DC_CustClassification_UpdateDangerLevel" SpName="CTS_DC_CustClassification_UpdateDangerLevel_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustClassification_VVIPQueue_Insert" SpName="CTS_DC_CustClassification_VVIPQueue_Insert_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_CustClassification_ProblemAccount_InsertByCategory" SpName="CTS_DC_CustClassification_ProblemAccount_InsertByCategory_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
 	</Function>
 
 	<Function name="AssociatedAccountMonitor">

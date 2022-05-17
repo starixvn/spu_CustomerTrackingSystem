@@ -225,6 +225,7 @@
     <Compile Include="AssociatedAccountMonitor\CustProfilerModel.cs" />
     <Compile Include="AssociatedAccountMonitor\ValidateAssociatedAccountModel.cs" />
     <Compile Include="CustomerClassify\CustEvidenceInsertModel.cs" />
+    <Compile Include="CustomerClassify\ProblemAccountInsertResultModel.cs" />
     <Compile Include="CustomerClassify\SynctEvidenceCategoryResultModel.cs" />
     <Compile Include="CustomerClassify\InsertProblemAccountResultModel.cs" />
     <Compile Include="CustomerClassify\InsertProblemAccountModel.cs" />

@@ -280,83 +280,83 @@
             }
         }
 
-        public IEnumerable<ResultProblemAccountAddCustomerModel> UnmarkProblemAccountSiteCredit(IEnumerable<ProblemAccountValidatedModel> models, bool isExceptDownlinesByTVS, bool isExceptDownlinesByOPS, int userID)
-        {
-            var paResultList = new List<ResultProblemAccountAddCustomerModel>();
+        //public IEnumerable<ResultProblemAccountAddCustomerModel> UnmarkProblemAccountSiteCredit(IEnumerable<ProblemAccountValidatedModel> models, bool isExceptDownlinesByTVS, bool isExceptDownlinesByOPS, int userID)
+        //{
+        //    var paResultList = new List<ResultProblemAccountAddCustomerModel>();
 
-            if (models.Any())
-            {
-                var paCustList = GetProblemAccount(models);
+        //    if (models.Any())
+        //    {
+        //        var paCustList = GetProblemAccount(models);
 
-                foreach (var cust in paCustList)
-                {
-                    if (cust == null)
-                        continue;
+        //        foreach (var cust in paCustList)
+        //        {
+        //            if (cust == null)
+        //                continue;
 
-                    var unmarkResult = UnmarkProblemAccountSiteCredit(cust, isExceptDownlinesByTVS, isExceptDownlinesByOPS, userID);
+        //            var unmarkResult = UnmarkProblemAccountSiteCredit(cust, isExceptDownlinesByTVS, isExceptDownlinesByOPS, userID);
 
-                    if (!string.IsNullOrEmpty(unmarkResult.ErrMsg))
-                    {
-                        paResultList.Add(unmarkResult);
+        //            if (!string.IsNullOrEmpty(unmarkResult.ErrMsg))
+        //            {
+        //                paResultList.Add(unmarkResult);
 
-                        var jsonCustResult = JsonConvert.SerializeObject(cust);
-                        var jsonMarkResult = JsonConvert.SerializeObject(unmarkResult);
+        //                var jsonCustResult = JsonConvert.SerializeObject(cust);
+        //                var jsonMarkResult = JsonConvert.SerializeObject(unmarkResult);
 
-                        LogService.Error($"CTS - Unmark Problem Account Site Credit failed Custs: { jsonCustResult } - ErrMsg: { jsonMarkResult }");
-                    }
-                }
-            }
+        //                LogService.Error($"CTS - Unmark Problem Account Site Credit failed Custs: { jsonCustResult } - ErrMsg: { jsonMarkResult }");
+        //            }
+        //        }
+        //    }
 
-            return paResultList;
-        }
+        //    return paResultList;
+        //}
 
-        private ResultProblemAccountAddCustomerModel UnmarkProblemAccountSiteCredit(ProblemAccountAddCustomerModel model, bool isExceptDownlinesByTVS, bool isExceptDownlinesByOPS, int userID)
-        {
-            var repository = new DynamicRepository();
+        //private ResultProblemAccountAddCustomerModel UnmarkProblemAccountSiteCredit(ProblemAccountAddCustomerModel model, bool isExceptDownlinesByTVS, bool isExceptDownlinesByOPS, int userID)
+        //{
+        //    var repository = new DynamicRepository();
 
-            var criteria = new ProblemAccountRemoveCustomerCriteria
-            {
-                CustomerList = model.CustomerList,
-                RoleID = model.RoleId,
-                ExcludeAbnormalMember = isExceptDownlinesByTVS,
-                ExcludeDirectMark = isExceptDownlinesByOPS,
-                UserID = userID,
-                IP = string.Empty
-            };
+        //    var criteria = new ProblemAccountRemoveCustomerCriteria
+        //    {
+        //        CustomerList = model.CustomerList,
+        //        RoleID = model.RoleId,
+        //        ExcludeAbnormalMember = isExceptDownlinesByTVS,
+        //        ExcludeDirectMark = isExceptDownlinesByOPS,
+        //        UserID = userID,
+        //        IP = string.Empty
+        //    };
 
-            try
-            {
-                var resultUpdated = repository.Execute(criteria);
+        //    try
+        //    {
+        //        var resultUpdated = repository.Execute(criteria);
 
-                if (string.IsNullOrEmpty(criteria.ErrMsg))
-                {
-                    if (!string.IsNullOrEmpty(criteria.SuccessAllDownlineList))
-                    {
-                        var custs = criteria.SuccessAllDownlineList.Split(',').AsEnumerable();
-                        RemoveProblemAccounts(custs, userID);
-                    }
+        //        if (string.IsNullOrEmpty(criteria.ErrMsg))
+        //        {
+        //            if (!string.IsNullOrEmpty(criteria.SuccessAllDownlineList))
+        //            {
+        //                var custs = criteria.SuccessAllDownlineList.Split(',').AsEnumerable();
+        //                RemoveProblemAccounts(custs, userID);
+        //            }
                     
-                }                    
+        //        }                    
 
-                return new ResultProblemAccountAddCustomerModel
-                {
-                    ErrCode = criteria.ErrCode,
-                    ErrMsg = criteria.ErrMsg
-                };
-            }
-            catch (Exception ex)
-            {
-                var jsonModel = JsonConvert.SerializeObject(model);
+        //        return new ResultProblemAccountAddCustomerModel
+        //        {
+        //            ErrCode = criteria.ErrCode,
+        //            ErrMsg = criteria.ErrMsg
+        //        };
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        var jsonModel = JsonConvert.SerializeObject(model);
 
-                LogService.Error($"CTS - Unmark Problem Account Site Credit: { ex.Message } - data: { jsonModel }", ex);
+        //        LogService.Error($"CTS - Unmark Problem Account Site Credit: { ex.Message } - data: { jsonModel }", ex);
 
-                return new ResultProblemAccountAddCustomerModel
-                {
-                    ErrCode = -1,
-                    ErrMsg = ex.Message
-                };
-            }
-        }
+        //        return new ResultProblemAccountAddCustomerModel
+        //        {
+        //            ErrCode = -1,
+        //            ErrMsg = ex.Message
+        //        };
+        //    }
+        //}
 
         public IEnumerable<ResultProblemAccountAddCustomerModel> UnmarkProblemAccountSiteLicensee(IEnumerable<ProblemAccountValidatedModel> models, int userID)
         {
