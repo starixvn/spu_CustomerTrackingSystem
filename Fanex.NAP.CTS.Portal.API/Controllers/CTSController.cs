@@ -389,7 +389,8 @@
 
                     if (markPAList.Any())
                     {
-                        successListFromNAP = _problemAccountMonitorService.InsertProblemAccToNAP(string.Join(",", markPAList.Select(c => c.Username)), dataParam);
+                        //successListFromNAP = _problemAccountMonitorService.InsertProblemAccToNAP(string.Join(",", markPAList.Select(c => c.Username)), dataParam);
+
                         if (string.IsNullOrEmpty(successListFromNAP))
                         {
                             _problemAccountMonitorService.RemoveSystemFormulaBetCustomer(string.Join(",", markPAList.Select(c => c.CustID)));

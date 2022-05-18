@@ -6,6 +6,8 @@
 
         public long CustID { get; set; }
 
+        public long CTSCustID { get; set; }
+
         public string Site { get; set; }
 
         public int RoleID { get; set; }

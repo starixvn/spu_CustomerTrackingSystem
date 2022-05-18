@@ -80,9 +80,7 @@
             var result = Enumerable.Empty<ProblemAccountValidatedModel>();
             var criteria = new ValidateUserNamesInputCriteria
             {
-                UserNames = model.UserNames,
-                CategoryID = model.CategoryID,
-                IsInsertingPA = model.PAAction == Model.ProblemAccountAction.Mark ? true : false
+                UserNames = model.UserNames             
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
