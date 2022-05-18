@@ -7,7 +7,7 @@
 
     public interface IProblemAccountClassificationService
     {
-        ProblemAccountInsertResultModel InsertProblemAccountByCategory(IEnumerable<ProblemAccountValidatedModel> models, int userID);
+        ProblemAccountInsertResultModel InsertProblemAccountByCategory(IEnumerable<InsertProblemAccountModel> problemAccounts, IEnumerable<ProblemAccountLosingClassificationModel> probAccountLosing, int userID);
 
     }
 }

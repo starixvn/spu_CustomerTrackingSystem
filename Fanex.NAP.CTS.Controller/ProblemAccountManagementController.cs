@@ -2,8 +2,11 @@
 {
     using Fanex.Logging;
     using Fanex.NAP.Core.Web.Attribute;
+    using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model;
+    using Fanex.NAP.CTS.Model.CustomerClassify;
     using Fanex.NAP.CTS.Model.ProblemAccountManagement;
+    using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.Service.Implement;
@@ -23,7 +26,10 @@
         private const string ProblemAccountTemplate = "~/App_Data/Excel Template/ProblemAccountManagement/ExportTemplate.xlsx";
         private readonly IProblemAccountManagementService _pamService;
         private readonly IProblemAccountClassificationService _paClassificationService;
+        private readonly ICustomerClassificationService _ccService;
+        private readonly ICustomerEvidenceService _evidenceService;
         private readonly IRescanCustomerClassificationService _rescanCCService;
+        private readonly IAntiFraudCenterService _antiFraudCenterService;
 
         public override string BaseControllerName { get => Consts.MenuItemController; }
 
@@ -31,7 +37,10 @@
         {
             _pamService = new ProblemAccountManagementService();
             _paClassificationService = new ProblemAccountClassificationService();
+            _ccService = new CustomerClassificationService();
+            _evidenceService = new CustomerEvidenceService();
             _rescanCCService = new RescanCustomerClassificationService();
+            _antiFraudCenterService = new AntiFraudCenterService();
         }
 
         public ActionResult Index()
@@ -231,16 +240,38 @@
                 if (!resultValidate.ProblemAccountDuplicateList.Any()
                     && !resultValidate.ProblemAccountInvalidList.Any())
                 {
-                    var custIds = validatedModels.Select(c => c.CustID)?.Distinct();
-
-                    var probAccountLosing = _rescanCCService.GetProblemAccountLosing(custIds, FunctionId.InsertPAM);
-
-                    var insertPACategoryResult = _paClassificationService.InsertProblemAccountByCategory(validatedModels, CurrentSession.UserId);
-
-                    if (result.ErrorCode == 0)
+                    var custIdList = validatedModels.Select(c => c.CustID)?.Distinct();
+                    var custIds = string.Format(",", custIdList);
+                   
+                    var pas = validatedModels.Select(x => new InsertProblemAccountModel
                     {
+                        CustID = x.CustID,
+                        ReasonID = x.ReasonID
+                    });
+
+                    var probAccountLosing = _rescanCCService.GetProblemAccountLosing(custIdList, FunctionId.InsertPAM);                    
+
+                    var insertPACategoryResult = _paClassificationService.InsertProblemAccountByCategory(pas, probAccountLosing, CurrentSession.UserId);
+
+                    var isSuccess = (insertPACategoryResult != null && insertPACategoryResult.ErrorCode == 0);
+
+                    if (isSuccess && insertPACategoryResult.CustIds != null && insertPACategoryResult.CustIds.Any())
+                    {                       
+                        _ccService.PushDataToExternal(custIdList, new PushDataToExternalModel
+                        {
+                            ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
+                            IsPushCCToSoon88 = true,
+                            IsUpdateDangerToMainDB = true,
+                            DangerLevelType = DangerLevel.ABI
+                        });
+                       
+                        _evidenceService.UpdateBetLimitOfFlaggedCustomer(custIds);
+
+                        _antiFraudCenterService.InsertAFCAccounts(custIdList, FromFlow.CTSServices);
+
                         _rescanCCService.CheckNewPAAssociationCustomerForRollback(insertPACategoryResult.NewPAAssociationCustomerForRollback);
                     }
+
                 }
             }
 
