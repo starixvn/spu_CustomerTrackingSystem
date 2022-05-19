@@ -1,4 +1,4 @@
-﻿USE ctsgraphdb
+﻿USE ctsgraphdb2022
 //USE ctslocal
 MATCH (c:CTSCustomer)
 WHERE c.CTSCustID in $ip_CTSCustIDs

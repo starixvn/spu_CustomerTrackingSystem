@@ -1,4 +1,4 @@
-﻿USE ctsgraphdb
+﻿USE ctsgraphdb2022
 //USE ctslocal
 MATCH p=((c:CTSCustomer)-[:USED_DEVICE*2]-(c1:CTSCustomer))
 WHERE c.CTSCustID = $ip_CTSCustID AND c <> c1 AND c1.CTSCustID IS NOT NULL 
