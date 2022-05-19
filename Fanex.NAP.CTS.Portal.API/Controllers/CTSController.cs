@@ -12,6 +12,7 @@
     using Fanex.NAP.CTS.Model.API;
     using Fanex.NAP.CTS.Model.API.ProblemCaseMonitor;
     using Fanex.NAP.CTS.Model.API.UpdateCategoryWhenPAUpdated;
+    using Fanex.NAP.CTS.Model.CustomerClassify;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.ImportEvidences;
@@ -62,6 +63,7 @@
         private readonly IUpdateCategoryService _updateCategoryService;
         private readonly IAntiFraudCenterService _antiFraudCenterService;
         private readonly ISpecialCustomerClassService _customerClassService;
+        private readonly IProblemAccountClassificationService _paClassificationService;
 
         /// <summary>
         /// Using for external site (TW, ExtAcc site...)
@@ -83,6 +85,7 @@
             _antiFraudCenterService = new AntiFraudCenterService();
             _customerClassService = new SpecialCustomerClassService();
             _problemAccountManagementService = new ProblemAccountManagementService();
+            _paClassificationService = new ProblemAccountClassificationService();
         }
 
         /// <summary>
@@ -362,7 +365,9 @@
                                         IsMonitorSite = cust.IsMonitorSite,
                                         Winloss = pCust == null ? 0 : pCust.Winloss
                                     }).ToList();
+
                     var monitorList = fullData.Where(c => (c.Winloss < 0 && c.IsMonitorSite) || (c.Winloss >= 0 && c.IsMonitorSite && c.IsMonitorCategoryGroup));
+
                     var monitorListMoreData = monitorList.Select(c => new
                     {
                         CustID = c.CustID,
@@ -390,8 +395,14 @@
                     if (markPAList.Any())
                     {
                         //successListFromNAP = _problemAccountMonitorService.InsertProblemAccToNAP(string.Join(",", markPAList.Select(c => c.Username)), dataParam);
+                        var pas = markPAList.Select(x => new InsertProblemAccountModel
+                        {
 
-                        if (string.IsNullOrEmpty(successListFromNAP))
+                        });
+                        
+                        var isInsertPAResult = _paClassificationService.InsertProblemAccount(pas); // TO DO, write method insert by reason
+
+                        if (isInsertPAResult)
                         {
                             _problemAccountMonitorService.RemoveSystemFormulaBetCustomer(string.Join(",", markPAList.Select(c => c.CustID)));
                         }

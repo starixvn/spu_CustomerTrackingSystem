@@ -25,11 +25,7 @@
     {
         private const string ProblemAccountTemplate = "~/App_Data/Excel Template/ProblemAccountManagement/ExportTemplate.xlsx";
         private readonly IProblemAccountManagementService _pamService;
-        private readonly IProblemAccountClassificationService _paClassificationService;
-        private readonly ICustomerClassificationService _ccService;
-        private readonly ICustomerEvidenceService _evidenceService;
-        private readonly IRescanCustomerClassificationService _rescanCCService;
-        private readonly IAntiFraudCenterService _antiFraudCenterService;
+        private readonly IProblemAccountClassificationService _paClassificationService;    
 
         public override string BaseControllerName { get => Consts.MenuItemController; }
 
@@ -37,10 +33,6 @@
         {
             _pamService = new ProblemAccountManagementService();
             _paClassificationService = new ProblemAccountClassificationService();
-            _ccService = new CustomerClassificationService();
-            _evidenceService = new CustomerEvidenceService();
-            _rescanCCService = new RescanCustomerClassificationService();
-            _antiFraudCenterService = new AntiFraudCenterService();
         }
 
         public ActionResult Index()
@@ -249,29 +241,7 @@
                         ReasonID = x.ReasonID
                     });
 
-                    var probAccountLosing = _rescanCCService.GetProblemAccountLosing(custIdList, FunctionId.InsertPAM);                    
-
-                    var insertPACategoryResult = _paClassificationService.InsertProblemAccountByCategory(pas, probAccountLosing, CurrentSession.UserId);
-
-                    var isSuccess = (insertPACategoryResult != null && insertPACategoryResult.ErrorCode == 0);
-
-                    if (isSuccess && insertPACategoryResult.CustIds != null && insertPACategoryResult.CustIds.Any())
-                    {                       
-                        _ccService.PushDataToExternal(custIdList, new PushDataToExternalModel
-                        {
-                            ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
-                            IsPushCCToSoon88 = true,
-                            IsUpdateDangerToMainDB = true,
-                            DangerLevelType = DangerLevel.ABI
-                        });
-                       
-                        _evidenceService.UpdateBetLimitOfFlaggedCustomer(custIds);
-
-                        _antiFraudCenterService.InsertAFCAccounts(custIdList, FromFlow.CTSServices);
-
-                        _rescanCCService.CheckNewPAAssociationCustomerForRollback(insertPACategoryResult.NewPAAssociationCustomerForRollback);
-                    }
-
+                    _paClassificationService.InsertProblemAccount(pas);
                 }
             }
 
