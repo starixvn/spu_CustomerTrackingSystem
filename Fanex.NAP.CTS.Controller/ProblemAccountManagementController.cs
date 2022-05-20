@@ -186,9 +186,15 @@
                     var pas = validatedModels.Select(x => new InsertProblemAccountModel
                     {
                         CustID = x.CustID,
+                        CTSCustID = x.CTSCustID,
+                        RoleID = x.RoleID,
+                        SubscriberID = x.SubscriberID,
+                        IsLicensee = x.IsLicensee,
                         CategoryID = models.CategoryID,
                         CategoryGroup = models.CategoryGroup,
-                        Remark = models.Comment
+                        Remark = models.Comment,
+                        IsDirectPA = true,
+                        CreatedBy = CurrentSession.UserId
                     });
 
                     _paClassificationService.InsertProblemAccount(pas, MappingCategoryByType.Category);

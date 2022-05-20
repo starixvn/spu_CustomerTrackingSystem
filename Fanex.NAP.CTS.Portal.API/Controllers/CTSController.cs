@@ -398,8 +398,7 @@
                         var pas = markPAList.Select(x => new InsertProblemAccountModel
                         {
                             CustID = x.CustID,
-                            ReasonID = dataParam.ReasonId,
-                            //CategoryGroup = ...,
+                            ReasonID = dataParam.ReasonId,                            
                             Remark = dataParam.Comment
                         });
                         

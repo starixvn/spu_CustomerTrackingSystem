@@ -126,6 +126,7 @@
                                                      CustID = group.pa.CustID,
                                                      CTSCustID = group.pa.CTSCustID,
                                                      RoleID = group.pa.RoleID,
+                                                     SubscriberID = group.pa.SubscriberID,
                                                      IsLicensee = group.pa.IsLicensee,
                                                      CategoryID = group.pa.CategoryID,
                                                      CategoryGroup = group.pa.CategoryGroup,

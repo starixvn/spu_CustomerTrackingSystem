@@ -11,9 +11,11 @@
 
         public int RoleID { get; set; }
 
+        public int SubscriberID { get; set; }
+
         public bool IsLicensee { get; set; }
 
-        public int CategoryID { get; set; }
+        public int? CategoryID { get; set; }
 
         public int CategoryGroup { get; set; }
 
@@ -23,7 +25,7 @@
 
         public Int64? CreatedBy { get; set; }
 
-        public int ReasonID { get; set; }
+        public int? ReasonID { get; set; }
 
         public int RobotCounter { get; set; }
 
