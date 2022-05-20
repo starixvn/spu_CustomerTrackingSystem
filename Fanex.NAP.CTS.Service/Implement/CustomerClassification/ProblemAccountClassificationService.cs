@@ -1,8 +1,12 @@
 ﻿namespace Fanex.NAP.CTS.Service.Implement
 {
     using Fanex.Data.Repository;
+    using Fanex.Logging;
+    using Fanex.Logging.Extensions;
+    using Fanex.Logging.Extensions.Database;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria.CustomerClassify;
+    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.CustomerClassify;
     using Fanex.NAP.CTS.Model.ImportEvidences;
     using Fanex.NAP.CTS.Model.ProblemAccountManagement;
@@ -33,7 +37,7 @@
             _antiFraudCenterService = new AntiFraudCenterService();
         }
 
-        public bool InsertProblemAccount(IEnumerable<InsertProblemAccountModel> problemAccounts)
+        public bool InsertProblemAccount(IEnumerable<InsertProblemAccountModel> problemAccounts, MappingCategoryByType mappingCategoryByType)
         {
             var custIdList = problemAccounts.Select(c => c.CustID)?.Distinct();
             var custIds = string.Format(",", custIdList);
@@ -41,7 +45,7 @@
             {
                 var probAccountLosing = _rescanCCService.GetProblemAccountLosing(custIdList, FunctionId.InsertPAM);
 
-                var insertPACategoryResult = this.InsertProblemAccountByCategory(problemAccounts, probAccountLosing);
+                var insertPACategoryResult = this.InsertProblemAccount(problemAccounts, probAccountLosing, mappingCategoryByType);
 
                 var isSuccess = (insertPACategoryResult != null && insertPACategoryResult.ErrorCode == 0);
 
@@ -64,18 +68,21 @@
             }
             catch (Exception ex)
             {
+                var logMessage = new LogMessage(ex.Message)
+                                  .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                                  .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error(logMessage);
+
                 return false;
             }
            
             return true;
         }
 
-        public void InsertProblemAccountByReason(IEnumerable<InsertProblemAccountModel> problemAccounts, IEnumerable<ProblemAccountLosingClassificationModel> probAccountLosing)
-        {
-
-        }
-
-        public ProblemAccountInsertResultModel InsertProblemAccountByCategory(IEnumerable<InsertProblemAccountModel> problemAccounts, IEnumerable<ProblemAccountLosingClassificationModel> probAccountLosing)
+        public ProblemAccountInsertResultModel InsertProblemAccount(IEnumerable<InsertProblemAccountModel> problemAccounts
+            , IEnumerable<ProblemAccountLosingClassificationModel> probAccountLosing
+            , MappingCategoryByType mappingCategoryByType)
         {
             var proAccountClassification = MergeProblemAccountClassification(problemAccounts, probAccountLosing);
 
@@ -83,9 +90,10 @@
             {
                 var problemAccountJson = JsonConvert.SerializeObject(proAccountClassification);
 
-                var criteria = new ProblemAccountInsertByCategoryCriteria
+                var criteria = new ProblemAccountInsertCriteria
                 {
-                    ProblemAccountJson = problemAccountJson
+                    ProblemAccountJson = problemAccountJson,
+                    ByType = Enum.GetName(typeof(MappingCategoryByType), mappingCategoryByType)
                 };
 
                 var assCustForRollback = _repository.Fetch<CheckPACustomerAssociationForRollbackModel>(criteria);
@@ -114,10 +122,20 @@
                                                  group => group.paLosing.DefaultIfEmpty(),
                                                  (group, temp) => new InsertProblemAccountModel
                                                  {
+                                                     /* Cust info */
                                                      CustID = group.pa.CustID,
+                                                     CTSCustID = group.pa.CTSCustID,
+                                                     RoleID = group.pa.RoleID,
+                                                     IsLicensee = group.pa.IsLicensee,
+                                                     CategoryID = group.pa.CategoryID,
+                                                     CategoryGroup = group.pa.CategoryGroup,
+                                                     Remark = group.pa.Remark,
+                                                     IsDirectPA = group.pa.IsDirectPA,
+                                                     CreatedBy = group.pa.CreatedBy,
                                                      ReasonID = group.pa.ReasonID,
                                                      RobotCounter = group.pa.RobotCounter,
-                                                     CreatedBy = group.pa.CreatedBy,
+
+                                                     /* Data warehouse, mainDB  info */
                                                      BetCount = temp?.BetCount,
                                                      ActiveDays = temp?.ActiveDays,
                                                      TurnoverRM = temp?.TurnoverRM,

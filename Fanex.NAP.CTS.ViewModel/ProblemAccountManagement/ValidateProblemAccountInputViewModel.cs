@@ -8,6 +8,8 @@
 
         public int CategoryID { get; set; }
 
+        public int CategoryGroup { get; set; }
+
         public string Comment { get; set; }
 
         public ProblemAccountAction PAAction { get; set; }

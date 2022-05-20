@@ -313,6 +313,7 @@
             let params = {};
             params.UserNames = userNames;
             params.CategoryID = domElements.cbbProblemAccountCategories.val();
+            params.CategoryGroup = domElements.cbbProblemAccountCategories.attr('data-categorygroup');
             params.PAAction = domElements.spanProblemAccountActionHidden.val();
 
             $.ajax(common.modifyRelativeUrl('ProblemAccountManagement/ValidateProblemAccountInput'), {
@@ -325,15 +326,9 @@
                     if (response.IsException)
                         BindExceptionValidateInputUserName();
                     else
-                        BindResultValidatedInputUserName(response);                    
+                        BindResultValidatedInputUserName(response);
 
-                    //if (params.PAAction == 3 && response.IsCreditSite == true) {
-                    //    domElements.grpCkboxAffectedDownline.removeClass('hide');
-                    //} else {
-                    //    //domElements.grpCkboxAffectedDownline.addClass('hide');
-                    //}
-
-                    if (params == 3) { // Unmark
+                    if (params.PAAction == 2) { // Unmark
                         domElements.txtComment.val(response.Comment);
                     }
                 },
@@ -384,17 +379,7 @@
             }
         });
 
-        data.ProblemAccountDuplicateList.map(function (x) {
-            let usernameEqual = $("tag[data-user-name='" + x.UserName + "']");
-            if (usernameEqual !== undefined) {
-                usernameEqual.removeClass('valid').addClass('invalid-duplicated');
-                usernameEqual.prop('title', x.ErrMsg);
-            }
-        });
-
-        let isEnableAdd = data.ProblemAccountInvalidList.length === 0 && data.ProblemAccountDuplicateList.length === 0;       
-
-        if (isEnableAdd) {            
+        if (data.ProblemAccountInvalidList.length === 0) {            
             domElements.btnSave.prop('disabled', false);
         }
         else
@@ -491,7 +476,7 @@
             type: 'GET',
             success: function (response) {
                 response.map(function (x) {
-                    domElements.cbbProblemAccountCategories.append("<option value='" + x.CategoryID + "'>" + x.CategoryName + "</option>");
+                    domElements.cbbProblemAccountCategories.append("<option value='" + x.CategoryID + "' data-categorygroup='" + x.CategoryGroup + "'>" + x.CategoryName + "</option>");
                 });
 
                 domElements.cbbProblemAccountCategories.prop('selectedIndex', 0);

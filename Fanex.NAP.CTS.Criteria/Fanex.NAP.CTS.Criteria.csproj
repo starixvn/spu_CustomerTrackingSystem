@@ -100,7 +100,7 @@
     <Compile Include="CustomerClassify\AppliedDangerLevelUpdateCriteria.cs" />
     <Compile Include="CustomerClassify\DangerLevelGetCriteria.cs" />
     <Compile Include="CustomerClassify\DangerLevelUpdateCriteria.cs" />
-    <Compile Include="CustomerClassify\ProblemAccountInsertByCategoryCriteria.cs" />
+    <Compile Include="CustomerClassify\ProblemAccountInsertCriteria.cs" />
     <Compile Include="CustomerClassify\ProblemAccountLosingClassificationGetCriteria.cs" />
     <Compile Include="ImportEvidences\CheckCleanCustFlaggedEvidenceCriteria.cs" />
     <Compile Include="LogInputData\LogInputDataCriteria.cs" />

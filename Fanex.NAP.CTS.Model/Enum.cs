@@ -115,4 +115,11 @@
         WebSite = 1,
         Service = 2
     }
+
+    public enum MappingCategoryByType
+    {
+        Category,
+        Reason,
+        Evidence
+    }
 }

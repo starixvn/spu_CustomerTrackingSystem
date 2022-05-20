@@ -91,13 +91,13 @@
                 {
                     result = data.Select(x => new ProblemAccountValidatedModel
                     {
-                        UserName = x.UserName,
-                        ActionID = x.ActionID,
-                        Comment = model.Comment,
-                        CustID = x.CustID,
-                        ReasonID = x.ReasonID,
+                        CTSCustID = x.CTSCustID,
+                        SubscriberID = x.SubscriberID,
                         RoleID = x.RoleID,
-                        Site = x.Site,                        
+                        CustID = x.CustID,                        
+                        UserName = x.UserName,
+                        IsLicensee = x.IsLicensee,
+                        ActionID = x.ActionID,
                         ErrorMsg = x.ErrorMsg
                     });
                 }
@@ -128,9 +128,9 @@
                     CustomerList = string.Join(",", custs.Select(x => x.UserName)),
                     CustIds = custs.Select(x => x.CustID),
                     RoleId = roleID,
-                    ReasonId = custFirst.ReasonID,
+                    //ReasonId = custFirst.ReasonID,
                     PreventActionId = custFirst.ActionID,
-                    Comment = custFirst.Comment
+                    //Comment = custFirst.Comment
                 };
             }
 

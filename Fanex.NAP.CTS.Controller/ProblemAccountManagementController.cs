@@ -137,8 +137,6 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.ProblemAccountManagementMarkNew)]
         public ActionResult MarkProblemAccount(ValidateProblemAccountInputViewModel model)
         {
-            //var result = SaveProblemAccount_Old(model);
-
             var result = SaveProblemAccount(model);
 
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -148,7 +146,7 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.ProblemAccountManagementMarkNew)]
         public ActionResult UnmarkProblemAccount(ValidateProblemAccountInputViewModel model)
         {
-            var result = SaveProblemAccount_Old(model);
+            var result = new ResultSaveProblemAccountViewModel();
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -170,55 +168,6 @@
             return File(excelFile, "application/vnd.ms-excel", fileName);
         }
 
-        private ResultSaveProblemAccountViewModel SaveProblemAccount_Old(ValidateProblemAccountInputViewModel model)
-        {
-            var result = new ResultSaveProblemAccountViewModel();
-            var paResultSiteCredits = Enumerable.Empty<ResultProblemAccountAddCustomerModel>();
-            var paResultSiteLicensees = Enumerable.Empty<ResultProblemAccountAddCustomerModel>();
-
-            var validatedModels = _pamService.ValidateProblemAccounts(model);
-
-            if (validatedModels != null && validatedModels.Any())
-            {
-                var resultValidate = GetResultValidated(validatedModels);
-
-                if (!resultValidate.ProblemAccountDuplicateList.Any()
-                    && !resultValidate.ProblemAccountInvalidList.Any())
-                {
-                    var paForSiteCredit = validatedModels.Where(x => x.Site == ProblemAccountManagement_SiteCredit);
-                    var paForSiteLicensee = validatedModels.Where(x => x.Site == ProblemAccountManagement_SiteLicensee);
-
-                    switch (model.PAAction)
-                    {
-                        case ProblemAccountAction.Mark:
-                            paResultSiteCredits = _pamService.MarkProblemAccountSiteCredit(paForSiteCredit, CurrentSession.UserId);
-                            paResultSiteLicensees = _pamService.MarkProblemAccountSiteLicensee(paForSiteLicensee, CurrentSession.UserId);
-                            break;                       
-
-                        case ProblemAccountAction.Unmark:
-                            //paResultSiteCredits = _pamService.UnmarkProblemAccountSiteCredit(paForSiteCredit, model.IsUnmarkDownlines, CurrentSession.UserId);
-                            //paResultSiteLicensees = _pamService.UnmarkProblemAccountSiteLicensee(paForSiteLicensee, CurrentSession.UserId);
-                            break;
-                    }
-                }
-                else
-                {
-                    return new ResultSaveProblemAccountViewModel { ErrorCode = -1, ResultValidated = resultValidate };
-                }
-
-                paResultSiteCredits = paResultSiteCredits.Union(paResultSiteLicensees);
-
-                if (paResultSiteCredits.Any())
-                {
-                    result.ErrorCode = paResultSiteCredits.ToList()[0].ErrCode;
-                    result.ErrorMessage = string.Join(",", paResultSiteCredits.Select(x => x.ErrMsg));
-                    result.ResultValidated = resultValidate;
-                }
-            }
-
-            return result;
-        }
-
         private ResultSaveProblemAccountViewModel SaveProblemAccount(ValidateProblemAccountInputViewModel models)
         {
             var result = new ResultSaveProblemAccountViewModel();
@@ -229,19 +178,20 @@
             {
                 var resultValidate = GetResultValidated(validatedModels);
 
-                if (!resultValidate.ProblemAccountDuplicateList.Any()
-                    && !resultValidate.ProblemAccountInvalidList.Any())
+                if (!resultValidate.ProblemAccountInvalidList.Any())
                 {
                     var custIdList = validatedModels.Select(c => c.CustID)?.Distinct();
                     var custIds = string.Format(",", custIdList);
-                   
+
                     var pas = validatedModels.Select(x => new InsertProblemAccountModel
                     {
                         CustID = x.CustID,
-                        ReasonID = x.ReasonID
+                        CategoryID = models.CategoryID,
+                        CategoryGroup = models.CategoryGroup,
+                        Remark = models.Comment
                     });
 
-                    _paClassificationService.InsertProblemAccount(pas);
+                    _paClassificationService.InsertProblemAccount(pas, MappingCategoryByType.Category);
                 }
             }
 
@@ -252,13 +202,6 @@
         {
             var result = new ResultValidatedViewModel
             {
-                ProblemAccountDuplicateList = validatedModels
-                                                    .Where(x => x.ErrorMsg == Consts.ProblemAccountManagement_DuplicatedUserName)
-                                                    .Select(x => new ProblemAccountValidatedViewModel
-                                                    {
-                                                        UserName = x.UserName,
-                                                        ErrMsg = x.ErrorMsg
-                                                    }),
                 ProblemAccountInvalidList = validatedModels
                                                     .Where(x => !string.IsNullOrEmpty(x.ErrorMsg) && x.ErrorMsg != Consts.ProblemAccountManagement_DuplicatedUserName)
                                                     .Select(x => new ProblemAccountValidatedViewModel

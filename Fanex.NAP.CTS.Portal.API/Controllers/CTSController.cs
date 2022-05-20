@@ -397,10 +397,13 @@
                         //successListFromNAP = _problemAccountMonitorService.InsertProblemAccToNAP(string.Join(",", markPAList.Select(c => c.Username)), dataParam);
                         var pas = markPAList.Select(x => new InsertProblemAccountModel
                         {
-
+                            CustID = x.CustID,
+                            ReasonID = dataParam.ReasonId,
+                            //CategoryGroup = ...,
+                            Remark = dataParam.Comment
                         });
                         
-                        var isInsertPAResult = _paClassificationService.InsertProblemAccount(pas); // TO DO, write method insert by reason
+                        var isInsertPAResult = _paClassificationService.InsertProblemAccount(pas, MappingCategoryByType.Reason);
 
                         if (isInsertPAResult)
                         {
