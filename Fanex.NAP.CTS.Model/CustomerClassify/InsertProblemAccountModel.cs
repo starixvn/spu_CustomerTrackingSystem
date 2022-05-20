@@ -15,19 +15,10 @@
 
         public bool IsLicensee { get; set; }
 
-        public int? CategoryID { get; set; }
-
-        public int CategoryGroup { get; set; }
-
         public string Remark { get; set; }
-
-        public bool IsDirectPA { get; set; }
 
         public Int64? CreatedBy { get; set; }
 
-        public int? ReasonID { get; set; }
-
-        public int RobotCounter { get; set; }
 
         /* Data warehouse, mainDB  info */
 
@@ -40,5 +31,26 @@
         public Int64? BetCount { get; set; }
 
         public int? ActiveDays { get; set; }
+
+        /* Get Mapping Value */
+
+        public int? CategoryID { get; set; }
+
+        public int CategoryGroup { get; set; }
+
+        public int? ReasonID { get; set; }
+
+        public bool IsDirectPA { get; set; }
+
+        public bool IsFromTVS { get; set; }
+
+        public bool IsFromTW { get; set; }
+
+        public bool IsFromPAM { get; set; }
+
+        public bool IsDataChanged { get; set; }
+
+        public int RobotCounter { get; set; }
+               
     }
 }

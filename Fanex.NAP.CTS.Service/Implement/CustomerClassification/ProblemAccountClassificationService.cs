@@ -127,16 +127,18 @@
                                                      CTSCustID = group.pa.CTSCustID,
                                                      RoleID = group.pa.RoleID,
                                                      SubscriberID = group.pa.SubscriberID,
-                                                     IsLicensee = group.pa.IsLicensee,
                                                      CategoryID = group.pa.CategoryID,
                                                      CategoryGroup = group.pa.CategoryGroup,
-                                                     Remark = group.pa.Remark,
-                                                     IsDirectPA = group.pa.IsDirectPA,
+                                                     IsLicensee = group.pa.IsLicensee,
                                                      CreatedBy = group.pa.CreatedBy,
+                                                     Remark = group.pa.Remark,
+
+                                                     IsDirectPA = group.pa.IsDirectPA,
+                                                     IsFromPAM = true,
                                                      ReasonID = group.pa.ReasonID,
                                                      RobotCounter = group.pa.RobotCounter,
 
-                                                     /* Data warehouse, mainDB  info */
+                                                     /* Get Mapping Value */
                                                      BetCount = temp?.BetCount,
                                                      ActiveDays = temp?.ActiveDays,
                                                      TurnoverRM = temp?.TurnoverRM,
