@@ -2,6 +2,7 @@
 {
     using Fanex.Logging;
     using Fanex.NAP.Core.Web.Attribute;
+    using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.CustomerClassify;
@@ -181,7 +182,7 @@
                 if (!resultValidate.ProblemAccountInvalidList.Any())
                 {
                     var custIdList = validatedModels.Select(c => c.CustID)?.Distinct();
-                    var custIds = string.Format(",", custIdList);
+                    var custIds = string.Join(",", custIdList);
 
                     var pas = validatedModels.Select(x => new InsertProblemAccountModel
                     {
@@ -197,7 +198,11 @@
                         CreatedBy = CurrentSession.UserId
                     });
 
-                    _paClassificationService.InsertProblemAccount(pas, MappingCategoryByType.Category);
+                    var insertResult = _paClassificationService.InsertProblemAccount(pas, MappingCategoryByType.Category);
+
+                    result.ErrorCode = insertResult.ErrorCode;
+                    result.ErrorMessage = insertResult.ErrorMsg;
+                    result.ResultValidated = resultValidate;
                 }
             }
 

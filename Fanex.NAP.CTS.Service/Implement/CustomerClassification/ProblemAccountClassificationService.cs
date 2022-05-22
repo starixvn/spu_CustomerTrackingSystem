@@ -4,6 +4,7 @@
     using Fanex.Logging;
     using Fanex.Logging.Extensions;
     using Fanex.Logging.Extensions.Database;
+    using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria.CustomerClassify;
     using Fanex.NAP.CTS.Model;
@@ -37,19 +38,19 @@
             _antiFraudCenterService = new AntiFraudCenterService();
         }
 
-        public bool InsertProblemAccount(IEnumerable<InsertProblemAccountModel> problemAccounts, MappingCategoryByType mappingCategoryByType)
+        public DBResult InsertProblemAccount(IEnumerable<InsertProblemAccountModel> problemAccounts, MappingCategoryByType mappingCategoryByType)
         {
             var custIdList = problemAccounts.Select(c => c.CustID)?.Distinct();
-            var custIds = string.Format(",", custIdList);
+            var custIds = string.Join(",", custIdList); 
             try
             {
                 var probAccountLosing = _rescanCCService.GetProblemAccountLosing(custIdList, FunctionId.InsertPAM);
 
                 var insertPACategoryResult = this.InsertProblemAccount(problemAccounts, probAccountLosing, mappingCategoryByType);
 
-                var isSuccess = (insertPACategoryResult != null && insertPACategoryResult.ErrorCode == 0);
+                var isSuccess = (insertPACategoryResult != null && insertPACategoryResult.ErrorCode == 0 && insertPACategoryResult.CustIds.Any());
 
-                if (isSuccess && insertPACategoryResult.CustIds != null && insertPACategoryResult.CustIds.Any())
+                if (isSuccess)
                 {
                     _ccService.PushDataToExternal(custIdList, new PushDataToExternalModel
                     {
@@ -74,10 +75,10 @@
 
                 LogService.Error(logMessage);
 
-                return false;
+                return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
             }
            
-            return true;
+            return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
         }
 
         public ProblemAccountInsertResultModel InsertProblemAccount(IEnumerable<InsertProblemAccountModel> problemAccounts
