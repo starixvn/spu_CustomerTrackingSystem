@@ -282,6 +282,8 @@
     function RenderProblemCategoryProfilePage(data, isPAProbation) {
         var isExistProblemAccount = false;
         let html = "";
+        
+        //html = BuildToogleMarkProblemAccount(html); // for test
 
         data.map(function (x) {
             if (x.IsProblemAccount) {
@@ -385,6 +387,12 @@
         $('#divCustomerCategorySummary').html(html);
         $('#spanContentInfoLoading').css('visibility', 'hidden');
         $('#divHeaderInfo').css('visibility', 'visible');
+    }
+
+    function BuildToogleMarkProblemAccount(html) {       
+        html += "<div class='btn-add-pa'></div>";        
+        
+        return html;
     }
 
     function BuildCategoryToHtmlDiv(html, classIconColor, categoryName) {

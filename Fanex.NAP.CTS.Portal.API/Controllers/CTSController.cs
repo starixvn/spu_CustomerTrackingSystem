@@ -394,17 +394,22 @@
 
                     if (markPAList.Any())
                     {
-                        //successListFromNAP = _problemAccountMonitorService.InsertProblemAccToNAP(string.Join(",", markPAList.Select(c => c.Username)), dataParam);
                         var pas = markPAList.Select(x => new InsertProblemAccountModel
                         {
                             CustID = x.CustID,
+                            //CTSCustID = x.CTSCustID,
+                            //RoleID = x.RoleID,
+                            //SubscriberID = x.SubscriberID,
+                            //IsLicensee = x.IsLicensee,
                             ReasonID = dataParam.ReasonId,                            
-                            Remark = dataParam.Comment
+                            Remark = dataParam.Comment,
+                            IsDirectPA = true,
+                            CreatedBy = dataParam.UserId
                         });
                         
-                        var isInsertPAResult = _paClassificationService.InsertProblemAccount(pas, MappingCategoryByType.Reason);
+                        var insertResult = _paClassificationService.InsertProblemAccount(pas, MappingCategoryByType.Reason);
 
-                        if (isInsertPAResult)
+                        if (insertResult.ErrorCode == 0)
                         {
                             _problemAccountMonitorService.RemoveSystemFormulaBetCustomer(string.Join(",", markPAList.Select(c => c.CustID)));
                         }

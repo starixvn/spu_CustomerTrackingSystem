@@ -313,7 +313,7 @@
             let params = {};
             params.UserNames = userNames;
             params.CategoryID = domElements.cbbProblemAccountCategories.val();
-            params.CategoryGroup = domElements.cbbProblemAccountCategories.attr('data-categorygroup');
+            params.CategoryGroup = $('option:selected', domElements.cbbProblemAccountCategories).attr('data-categorygroup');
             params.PAAction = domElements.spanProblemAccountActionHidden.val();
 
             $.ajax(common.modifyRelativeUrl('ProblemAccountManagement/ValidateProblemAccountInput'), {
@@ -392,7 +392,8 @@
         params.CategoryID = domElements.cbbProblemAccountCategories.val();
         params.Comment = domElements.txtComment.val().trim();
         params.PAAction = domElements.spanProblemAccountActionHidden.val();
-        params.IsUnmarkDownlines = domElements.ckbUnmarkDownlines.is(":checked");
+        params.IsUnmarkDownlines = domElements.ckbUnmarkDownlines.is(":checked");        
+        params.CategoryGroup = $('option:selected', domElements.cbbProblemAccountCategories).attr('data-categorygroup');
 
         if (params.PAAction == 1) {
             MarkNewProblemAccount(params);

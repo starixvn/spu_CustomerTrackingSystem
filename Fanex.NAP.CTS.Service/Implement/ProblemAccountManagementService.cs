@@ -137,146 +137,146 @@
             return null;
         }
 
-        public IEnumerable<ResultProblemAccountAddCustomerModel> MarkProblemAccountSiteCredit(IEnumerable<ProblemAccountValidatedModel> models, int userID)
-        {
-            var paResultList = new List<ResultProblemAccountAddCustomerModel>();
+        //public IEnumerable<ResultProblemAccountAddCustomerModel> MarkProblemAccountSiteCredit(IEnumerable<ProblemAccountValidatedModel> models, int userID)
+        //{
+        //    var paResultList = new List<ResultProblemAccountAddCustomerModel>();
 
-            if (models.Any())
-            {
-                var paCustList = GetProblemAccount(models);
+        //    if (models.Any())
+        //    {
+        //        var paCustList = GetProblemAccount(models);
 
-                foreach (var cust in paCustList)
-                {
-                    if (cust == null)
-                        continue;
+        //        foreach (var cust in paCustList)
+        //        {
+        //            if (cust == null)
+        //                continue;
 
-                    var markResult = MarkProblemAccountSiteCredit(cust, userID);
+        //            var markResult = MarkProblemAccountSiteCredit(cust, userID);
 
-                    if (!string.IsNullOrEmpty(markResult.ErrMsg))
-                    {
-                        paResultList.Add(markResult);
+        //            if (!string.IsNullOrEmpty(markResult.ErrMsg))
+        //            {
+        //                paResultList.Add(markResult);
 
-                        var jsonCustResult = JsonConvert.SerializeObject(cust);
-                        var jsonMarkResult = JsonConvert.SerializeObject(markResult);
+        //                var jsonCustResult = JsonConvert.SerializeObject(cust);
+        //                var jsonMarkResult = JsonConvert.SerializeObject(markResult);
 
-                        LogService.Error($"CTS - Mark Problem Account Site Credit failed Custs: { jsonCustResult } - ErrMsg: { jsonMarkResult }");
-                    }
-                }
-            }
+        //                LogService.Error($"CTS - Mark Problem Account Site Credit failed Custs: { jsonCustResult } - ErrMsg: { jsonMarkResult }");
+        //            }
+        //        }
+        //    }
 
-            return paResultList;
-        }
+        //    return paResultList;
+        //}
 
-        public IEnumerable<ResultProblemAccountAddCustomerModel> MarkProblemAccountSiteLicensee(IEnumerable<ProblemAccountValidatedModel> models, int userID)
-        {
-            var paResultList = new List<ResultProblemAccountAddCustomerModel>();
+        //public IEnumerable<ResultProblemAccountAddCustomerModel> MarkProblemAccountSiteLicensee(IEnumerable<ProblemAccountValidatedModel> models, int userID)
+        //{
+        //    var paResultList = new List<ResultProblemAccountAddCustomerModel>();
 
-            if (models.Any())
-            {
-                var paCustList = GetProblemAccount(models);
+        //    if (models.Any())
+        //    {
+        //        var paCustList = GetProblemAccount(models);
 
-                foreach (var cust in paCustList)
-                {
-                    if (cust == null)
-                        continue;
+        //        foreach (var cust in paCustList)
+        //        {
+        //            if (cust == null)
+        //                continue;
 
-                    var markResult = MarkProblemAccountSiteLicensee(cust, userID);
+        //            var markResult = MarkProblemAccountSiteLicensee(cust, userID);
 
-                    if (!string.IsNullOrEmpty(markResult.ErrMsg))
-                    {
-                        paResultList.Add(markResult);
+        //            if (!string.IsNullOrEmpty(markResult.ErrMsg))
+        //            {
+        //                paResultList.Add(markResult);
 
-                        var jsonCustResult = JsonConvert.SerializeObject(cust);
-                        var jsonMarkResult = JsonConvert.SerializeObject(markResult);
+        //                var jsonCustResult = JsonConvert.SerializeObject(cust);
+        //                var jsonMarkResult = JsonConvert.SerializeObject(markResult);
 
-                        LogService.Error($"CTS - Mark Problem Account Site Licensee failed Custs: { jsonCustResult } - ErrMsg: { jsonMarkResult }");
-                    }
-                }
-            }
+        //                LogService.Error($"CTS - Mark Problem Account Site Licensee failed Custs: { jsonCustResult } - ErrMsg: { jsonMarkResult }");
+        //            }
+        //        }
+        //    }
 
-            return paResultList;
-        }
+        //    return paResultList;
+        //}
 
-        private ResultProblemAccountAddCustomerModel MarkProblemAccountSiteCredit(ProblemAccountAddCustomerModel model, int userID)
-        {
-            var criteria = new ProblemAccountAddCustomerCriteria
-            {
-                CustomerList = model.CustomerList,
-                RoleId = model.RoleId,
-                ReasonId = model.ReasonId,
-                PreventActionId = model.PreventActionId,
-                Comment = model.Comment,
-                UserID = userID,
-                IP = string.Empty
-            };
+        //private ResultProblemAccountAddCustomerModel MarkProblemAccountSiteCredit(ProblemAccountAddCustomerModel model, int userID)
+        //{
+        //    var criteria = new ProblemAccountAddCustomerCriteria
+        //    {
+        //        CustomerList = model.CustomerList,
+        //        RoleId = model.RoleId,
+        //        ReasonId = model.ReasonId,
+        //        PreventActionId = model.PreventActionId,
+        //        Comment = model.Comment,
+        //        UserID = userID,
+        //        IP = string.Empty
+        //    };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                try
-                {
-                    db.ExecuteNonQuery(criteria);                    
+        //    using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+        //    {
+        //        try
+        //        {
+        //            db.ExecuteNonQuery(criteria);                    
 
-                    return new ResultProblemAccountAddCustomerModel
-                    {
-                        ErrCode = criteria.ErrCode,
-                        ErrMsg = criteria.ErrMsg,
-                        SuccessList = criteria.SuccessList,
-                        FailList = criteria.FailList
-                    };
-                }
-                catch (Exception ex)
-                {
-                    var jsonModel = JsonConvert.SerializeObject(model);
+        //            return new ResultProblemAccountAddCustomerModel
+        //            {
+        //                ErrCode = criteria.ErrCode,
+        //                ErrMsg = criteria.ErrMsg,
+        //                SuccessList = criteria.SuccessList,
+        //                FailList = criteria.FailList
+        //            };
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            var jsonModel = JsonConvert.SerializeObject(model);
 
-                    LogService.Error($"CTS - Mark Problem Account Site Credit: { ex.Message } - data: { jsonModel }", ex);
+        //            LogService.Error($"CTS - Mark Problem Account Site Credit: { ex.Message } - data: { jsonModel }", ex);
 
-                    return new ResultProblemAccountAddCustomerModel
-                    {
-                        ErrCode = -1,
-                        ErrMsg = ex.Message
-                    };
-                }
-            }
-        }
+        //            return new ResultProblemAccountAddCustomerModel
+        //            {
+        //                ErrCode = -1,
+        //                ErrMsg = ex.Message
+        //            };
+        //        }
+        //    }
+        //}
 
-        private ResultProblemAccountAddCustomerModel MarkProblemAccountSiteLicensee(ProblemAccountAddCustomerModel model, int UserID)
-        {
-            var criteria = new ProblemAccountLicenseeAddCustomerCriteria
-            {
-                CustomerList = model.CustomerList,
-                ReasonId = model.ReasonId,
-                ActionId = model.PreventActionId,
-                Comment = model.Comment,
-                UserID = UserID,
-                IP = string.Empty
-            };
+        //private ResultProblemAccountAddCustomerModel MarkProblemAccountSiteLicensee(ProblemAccountAddCustomerModel model, int UserID)
+        //{
+        //    var criteria = new ProblemAccountLicenseeAddCustomerCriteria
+        //    {
+        //        CustomerList = model.CustomerList,
+        //        ReasonId = model.ReasonId,
+        //        ActionId = model.PreventActionId,
+        //        Comment = model.Comment,
+        //        UserID = UserID,
+        //        IP = string.Empty
+        //    };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                try
-                {
-                    db.ExecuteNonQuery(criteria);
+        //    using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+        //    {
+        //        try
+        //        {
+        //            db.ExecuteNonQuery(criteria);
 
-                    return new ResultProblemAccountAddCustomerModel
-                    {
-                        ErrCode = criteria.ErrCode,
-                        ErrMsg = criteria.ErrMsg
-                    };
-                }
-                catch (Exception ex)
-                {
-                    var jsonModel = JsonConvert.SerializeObject(model);
+        //            return new ResultProblemAccountAddCustomerModel
+        //            {
+        //                ErrCode = criteria.ErrCode,
+        //                ErrMsg = criteria.ErrMsg
+        //            };
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            var jsonModel = JsonConvert.SerializeObject(model);
 
-                    LogService.Error($"CTS - Mark Problem Account Site Licensee: { ex.Message } - data: { jsonModel }", ex);
+        //            LogService.Error($"CTS - Mark Problem Account Site Licensee: { ex.Message } - data: { jsonModel }", ex);
 
-                    return new ResultProblemAccountAddCustomerModel
-                    {
-                        ErrCode = -1,
-                        ErrMsg = ex.Message
-                    };
-                }
-            }
-        }
+        //            return new ResultProblemAccountAddCustomerModel
+        //            {
+        //                ErrCode = -1,
+        //                ErrMsg = ex.Message
+        //            };
+        //        }
+        //    }
+        //}
 
         //public IEnumerable<ResultProblemAccountAddCustomerModel> UnmarkProblemAccountSiteCredit(IEnumerable<ProblemAccountValidatedModel> models, bool isExceptDownlinesByTVS, bool isExceptDownlinesByOPS, int userID)
         //{
@@ -356,80 +356,80 @@
         //    }
         //}
 
-        public IEnumerable<ResultProblemAccountAddCustomerModel> UnmarkProblemAccountSiteLicensee(IEnumerable<ProblemAccountValidatedModel> models, int userID)
-        {
-            var paResultList = new List<ResultProblemAccountAddCustomerModel>();
+        //public IEnumerable<ResultProblemAccountAddCustomerModel> UnmarkProblemAccountSiteLicensee(IEnumerable<ProblemAccountValidatedModel> models, int userID)
+        //{
+        //    var paResultList = new List<ResultProblemAccountAddCustomerModel>();
 
-            if (models.Any())
-            {
-                var paCustList = GetProblemAccount(models);
+        //    if (models.Any())
+        //    {
+        //        var paCustList = GetProblemAccount(models);
 
-                foreach (var cust in paCustList)
-                {
-                    if (cust == null)
-                        continue;
+        //        foreach (var cust in paCustList)
+        //        {
+        //            if (cust == null)
+        //                continue;
 
-                    var unmarkResult = UnmarkProblemAccountSiteLicensee(cust, userID);
+        //            var unmarkResult = UnmarkProblemAccountSiteLicensee(cust, userID);
 
-                    if (!string.IsNullOrEmpty(unmarkResult.ErrMsg))
-                    {
-                        paResultList.Add(unmarkResult);
+        //            if (!string.IsNullOrEmpty(unmarkResult.ErrMsg))
+        //            {
+        //                paResultList.Add(unmarkResult);
 
-                        var jsonCustResult = JsonConvert.SerializeObject(cust);
-                        var jsonMarkResult = JsonConvert.SerializeObject(unmarkResult);
+        //                var jsonCustResult = JsonConvert.SerializeObject(cust);
+        //                var jsonMarkResult = JsonConvert.SerializeObject(unmarkResult);
 
-                        LogService.Error($"CTS - Unmark Problem Account Site Licensee failed Custs: { jsonCustResult } - ErrMsg: { jsonMarkResult }");
-                    }
-                }
-            }
+        //                LogService.Error($"CTS - Unmark Problem Account Site Licensee failed Custs: { jsonCustResult } - ErrMsg: { jsonMarkResult }");
+        //            }
+        //        }
+        //    }
 
-            return paResultList;
-        }
+        //    return paResultList;
+        //}
 
-        private ResultProblemAccountAddCustomerModel UnmarkProblemAccountSiteLicensee(ProblemAccountAddCustomerModel model, int userID)
-        {
-            var repository = new DynamicRepository();
+        //private ResultProblemAccountAddCustomerModel UnmarkProblemAccountSiteLicensee(ProblemAccountAddCustomerModel model, int userID)
+        //{
+        //    var repository = new DynamicRepository();
 
-            var criteria = new ProblemAccountLicenseeRemoveCustomerCriteria
-            {
-                CustomerList = model.CustomerList,
-                UserID = userID,
-                IP = string.Empty
-            };
+        //    var criteria = new ProblemAccountLicenseeRemoveCustomerCriteria
+        //    {
+        //        CustomerList = model.CustomerList,
+        //        UserID = userID,
+        //        IP = string.Empty
+        //    };
 
-            try
-            {
-                var resultUpdated = repository.Execute(criteria);
+        //    try
+        //    {
+        //        var resultUpdated = repository.Execute(criteria);
 
-                if (string.IsNullOrEmpty(criteria.ErrMsg))
-                {
-                    if (model.CustIds != null && model.CustIds.Any())
-                    {
-                        var custs = model.CustIds.Select(x => x.ToString());
+        //        if (string.IsNullOrEmpty(criteria.ErrMsg))
+        //        {
+        //            if (model.CustIds != null && model.CustIds.Any())
+        //            {
+        //                var custs = model.CustIds.Select(x => x.ToString());
 
-                        RemoveProblemAccounts(custs, userID);
-                    }
-                }
+        //                RemoveProblemAccounts(custs, userID);
+        //            }
+        //        }
 
-                return new ResultProblemAccountAddCustomerModel
-                {
-                    ErrCode = criteria.ErrCode,
-                    ErrMsg = criteria.ErrMsg
-                };
-            }
-            catch (Exception ex)
-            {
-                var jsonModel = JsonConvert.SerializeObject(model);
+        //        return new ResultProblemAccountAddCustomerModel
+        //        {
+        //            ErrCode = criteria.ErrCode,
+        //            ErrMsg = criteria.ErrMsg
+        //        };
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        var jsonModel = JsonConvert.SerializeObject(model);
 
-                LogService.Error($"CTS - Unmark Problem Account Site Licensee: { ex.Message } - data: { jsonModel }", ex);
+        //        LogService.Error($"CTS - Unmark Problem Account Site Licensee: { ex.Message } - data: { jsonModel }", ex);
 
-                return new ResultProblemAccountAddCustomerModel
-                {
-                    ErrCode = -1,
-                    ErrMsg = ex.Message
-                };
-            }
-        }
+        //        return new ResultProblemAccountAddCustomerModel
+        //        {
+        //            ErrCode = -1,
+        //            ErrMsg = ex.Message
+        //        };
+        //    }
+        //}
 
         private List<ProblemAccountAddCustomerModel> GetProblemAccount(IEnumerable<ProblemAccountValidatedModel> models)
         {
@@ -442,58 +442,58 @@
             return paCustList;
         }
 
-        private void UpdateCategories(IEnumerable<ResultProblemAccountUpdateModel> paUpdateds, int toReasonID, int userID)
-        {
-            var apiEndPoint = ConfigSettings.UpdateCategories;
+        //private void UpdateCategories(IEnumerable<ResultProblemAccountUpdateModel> paUpdateds, int toReasonID, int userID)
+        //{
+        //    var apiEndPoint = ConfigSettings.UpdateCategories;
 
-            var custInfos = paUpdateds.Select(x => new CustInfoModel
-            {
-                CustID = x.custId,
-                FromReasonID = x.OldReasonId,
-                ToReasonID = toReasonID
-            });
+        //    var custInfos = paUpdateds.Select(x => new CustInfoModel
+        //    {
+        //        CustID = x.custId,
+        //        FromReasonID = x.OldReasonId,
+        //        ToReasonID = toReasonID
+        //    });
 
-            try
-            {
-                var paras = new UpdateCategoryParamsModel
-                {
-                    CustInfos = custInfos,
-                    UserId = userID
-                };
+        //    try
+        //    {
+        //        var paras = new UpdateCategoryParamsModel
+        //        {
+        //            CustInfos = custInfos,
+        //            UserId = userID
+        //        };
 
-                var data = ApiHelper.Post<ApiResultModel>(apiEndPoint, paras);
+        //        var data = ApiHelper.Post<ApiResultModel>(apiEndPoint, paras);
 
-                Task.WhenAll(data);
-            }
-            catch (Exception ex)
-            {
-                var jsonModel = JsonConvert.SerializeObject(custInfos);
+        //        Task.WhenAll(data);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        var jsonModel = JsonConvert.SerializeObject(custInfos);
 
-                LogService.Error($"CTS - Update Categories failed: { ex.Message } - data: {jsonModel}" + ex.Message, ex);
-            }
-        }
+        //        LogService.Error($"CTS - Update Categories failed: { ex.Message } - data: {jsonModel}" + ex.Message, ex);
+        //    }
+        //}
 
-        private void RemoveProblemAccounts(IEnumerable<string> custIdList, int userID)
-        {
-            try
-            {
-                var apiEndPoint = ConfigSettings.RemoveProblemAccounts;
+        //private void RemoveProblemAccounts(IEnumerable<string> custIdList, int userID)
+        //{
+        //    try
+        //    {
+        //        var apiEndPoint = ConfigSettings.RemoveProblemAccounts;
 
-                var paras = new RemovePANapParamsModel
-                {
-                    CustIds = string.Join(",", custIdList),
-                    UserId = userID
-                };
+        //        var paras = new RemovePANapParamsModel
+        //        {
+        //            CustIds = string.Join(",", custIdList),
+        //            UserId = userID
+        //        };
 
-                var data = ApiHelper.Post<ApiResultModel>(apiEndPoint, paras);
+        //        var data = ApiHelper.Post<ApiResultModel>(apiEndPoint, paras);
 
-                Task.WhenAll(data);
-            }
-            catch (Exception ex)
-            {
-                LogService.Error($"CTS - Remove Problem Account failed: { ex.Message } - custIds: {string.Join(",", custIdList)}" + ex.Message, ex);
-            }
-        }
+        //        Task.WhenAll(data);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        LogService.Error($"CTS - Remove Problem Account failed: { ex.Message } - custIds: {string.Join(",", custIdList)}" + ex.Message, ex);
+        //    }
+        //}
 
         public byte[] ExportProblemAccount(IEnumerable<ProblemAccountViewModel> data, string fileName, string templatePath, ProblemAccountFilterViewModel filter)
         {
