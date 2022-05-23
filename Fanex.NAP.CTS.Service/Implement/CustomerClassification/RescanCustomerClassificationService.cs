@@ -136,7 +136,7 @@
 
                         custIdList.AddRange(custIds);
 
-                        CheckNewPAAssociationCustomerForRollback(assCustForRollbacks);
+                        //CheckNewPAAssociationCustomerForRollback(assCustForRollbacks);
                     }
 
                     return custIdList;
@@ -220,7 +220,7 @@
 
             if (custIds.Any())
             {
-                return GetProblemAccountLosingClassificationDbAccess(string.Join(",", custIds.Distinct()), functionId) ?? Enumerable.Empty<ProblemAccountLosingClassificationModel>();
+               // return GetProblemAccountLosingClassificationDbAccess(string.Join(",", custIds.Distinct()), functionId) ?? Enumerable.Empty<ProblemAccountLosingClassificationModel>();
             }
 
             return Enumerable.Empty<ProblemAccountLosingClassificationModel>();
@@ -341,7 +341,6 @@
                                                         {
                                                             CustID = group.pa.CustID,
                                                             ReasonID = group.pa.ReasonID,
-                                                            RobotCounter = group.pa.RobotCounter,
                                                             CreatedBy = group.pa.Creator,
                                                             BetCount = temp?.BetCount,
                                                             ActiveDays = temp?.ActiveDays,
@@ -389,59 +388,34 @@
             {
                 var custIds = string.Join(",", custEvidences.Select(c => c.CustId).Distinct());
 
-                var probAccountLosing = GetProblemAccountLosingClassificationDbAccess(custIds, functionId);
+               // var probAccountLosing = GetProblemAccountLosingClassificationDbAccess(custIds, functionId);
 
-                return custEvidences.GroupJoin(probAccountLosing,
-                                            pa => pa.CustId,
-                                            paLosing => paLosing.CustId,
-                                            (pa, paLosing) => new { pa, paLosing })
-                                            .SelectMany(
-                                                 group => group.paLosing.DefaultIfEmpty(),
-                                                 (group, temp) => new CustEvidenceInsertModel
-                                                 {
-                                                     CustID = group.pa.CustId,
-                                                     CTSCustID = group.pa.CTSCustId,
-                                                     EvidenceID = group.pa.EvidenceId,
-                                                     SubscriberID = group.pa.SubscriberId,
-                                                     CreatedBy = group.pa.CreatedBy,
-                                                     ActionType = group.pa.ActionType,
-                                                     BetCount = temp?.BetCount,
-                                                     ActiveDays = temp?.ActiveDays,
-                                                     TurnoverRM = temp?.TurnoverRM,
-                                                     WinlossRM = temp?.WinlossRM,
-                                                     WinlossStatus = temp?.WinlossStatus
-                                                 });
+                //return custEvidences.GroupJoin(probAccountLosing,
+                //                            pa => pa.CustId,
+                //                            paLosing => paLosing.CustId,
+                //                            (pa, paLosing) => new { pa, paLosing })
+                //                            .SelectMany(
+                //                                 group => group.paLosing.DefaultIfEmpty(),
+                //                                 (group, temp) => new CustEvidenceInsertModel
+                //                                 {
+                //                                     CustID = group.pa.CustId,
+                //                                     CTSCustID = group.pa.CTSCustId,
+                //                                     EvidenceID = group.pa.EvidenceId,
+                //                                     SubscriberID = group.pa.SubscriberId,
+                //                                     CreatedBy = group.pa.CreatedBy,
+                //                                     ActionType = group.pa.ActionType,
+                //                                     BetCount = temp?.BetCount,
+                //                                     ActiveDays = temp?.ActiveDays,
+                //                                     TurnoverRM = temp?.TurnoverRM,
+                //                                     WinlossRM = temp?.WinlossRM,
+                //                                     WinlossStatus = temp?.WinlossStatus
+                //                                 });
             }
 
             return Enumerable.Empty<CustEvidenceInsertModel>();
         }
 
-        public IEnumerable<ProblemAccountLosingClassificationModel> GetProblemAccountLosing(IEnumerable<long> custIds, FunctionId functionId)
-        {
-            if (custIds != null && custIds.Any())
-            {
-                var custIdToString = string.Join(",", custIds.Distinct());
 
-                return GetProblemAccountLosingClassificationDbAccess(custIdToString, functionId) ?? Enumerable.Empty<ProblemAccountLosingClassificationModel>();
-            }
-
-            return Enumerable.Empty<ProblemAccountLosingClassificationModel>();
-        }
-
-        public void CheckNewPAAssociationCustomerForRollback(IEnumerable<CheckPACustomerAssociationForRollbackModel> assCustForRollbacks)
-        {
-            if (assCustForRollbacks != null && assCustForRollbacks.Any())
-            {
-                var custInfoJson = JsonConvert.SerializeObject(assCustForRollbacks);
-
-                var criteria = new CheckNewPAAssociationCustomerForRollbackCriteria
-                {
-                    CustInfoJson = custInfoJson
-                };
-
-                repository.Execute(criteria);
-            }
-        }
 
         #endregion Rescan PA
 
@@ -568,15 +542,14 @@
             return repository.Fetch<RobotUserModel>(criteria);
         }
 
-        public IEnumerable<ProblemAccountLosingClassificationModel> GetProblemAccountLosingClassificationDbAccess(string custIds, FunctionId funcId)
+        public void CheckNewPAAssociationCustomerForRollback(IEnumerable<CheckPACustomerAssociationForRollbackModel> assCustForRollbacks)
         {
-            var criteria = new ProblemAccountLosingClassificationGetCriteria()
-            {
-                ListCustIds = custIds,
-                FunctionId = (int)funcId
-            };
+            throw new NotImplementedException();
+        }
 
-            return repository.Fetch<ProblemAccountLosingClassificationModel>(criteria) ?? Enumerable.Empty<ProblemAccountLosingClassificationModel>();
+        public IEnumerable<ProblemAccountLosingClassificationModel> GetProblemAccountLosing(IEnumerable<long> custIds, FunctionId functionId)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion DataAccess Layer

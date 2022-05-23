@@ -116,10 +116,9 @@
         Service = 2
     }
 
-    public enum MappingCategoryByType
+    public enum InsertPA_ByType
     {
         Category,
-        Reason,
-        Evidence
+        Reason
     }
 }

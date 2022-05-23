@@ -63,7 +63,7 @@
     <Compile Include="Account\BettingStatistic\BettingStaisticByBetTypeGetCriteria.cs" />
     <Compile Include="Account\BettingStatistic\BettingStatictisDaily.cs" />
     <Compile Include="Account\ChainToEvidence\AddAccountExceptionCriteria.cs" />
-    <Compile Include="Account\ChainToEvidence\CheckNewPAAssociationCustomerForRollbackCriteria.cs" />
+    <Compile Include="CustomerClassify\ProblemAccount\CheckNewPAAssociationCustomerForRollbackCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\CustEvidenceSyncToCategoryCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\GetAccountExceptionsCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\GetAffectedEvidenceBetweenCustsCriteria.cs" />
@@ -101,7 +101,10 @@
     <Compile Include="CustomerClassify\DangerLevelGetCriteria.cs" />
     <Compile Include="CustomerClassify\DangerLevelUpdateCriteria.cs" />
     <Compile Include="CustomerClassify\ProblemAccountInsertCriteria.cs" />
-    <Compile Include="CustomerClassify\ProblemAccountLosingClassificationGetCriteria.cs" />
+    <Compile Include="CustomerClassify\ProblemAccount\ProblemAccountLosingClassificationGetCriteria.cs" />
+    <Compile Include="CustomerClassify\BetLimitByEvidenceUpdateCriteria.cs" />
+    <Compile Include="CustomerClassify\BetLimitByEvidenceRemoveCriteria.cs" />
+    <Compile Include="CustomerClassify\ProblemAccount\ProblemAccountGetCriteria.cs" />
     <Compile Include="ImportEvidences\CheckCleanCustFlaggedEvidenceCriteria.cs" />
     <Compile Include="LogInputData\LogInputDataCriteria.cs" />
     <Compile Include="CustomerClassify\GetExistedRobotUserCriteria.cs" />

@@ -53,6 +53,7 @@
     <Compile Include="Implement\AssociationReportService.cs" />
     <Compile Include="Implement\CategoryService.cs" />
     <Compile Include="Implement\CustomerClassification\ProblemAccountClassificationService.cs" />
+    <Compile Include="Implement\CustomerClassification\RescanCustomerClassificationService2.cs" />
     <Compile Include="Implement\MonitorCtsFunctionService.cs" />
     <Compile Include="Implement\CommonService.cs" />
     <Compile Include="Implement\AntiFraudCenterService.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="Interface\IProblemAccountMonitorService.cs" />
     <Compile Include="Interface\IProblemCaseMonitorService.cs" />
     <Compile Include="Interface\ICustomerClassificationService.cs" />
+    <Compile Include="Interface\IRescanCustomerClassificationService2.cs" />
     <Compile Include="Interface\IRescanCustomerClassificationService.cs" />
     <Compile Include="Interface\IRobotBettingService.cs" />
     <Compile Include="Interface\IRobotClassificationService.cs" />

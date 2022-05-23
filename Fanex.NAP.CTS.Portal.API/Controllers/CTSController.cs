@@ -402,7 +402,7 @@
                             Remark = dataParam.Comment
                         });
                         
-                        var isInsertPAResult = _paClassificationService.InsertProblemAccount(pas, MappingCategoryByType.Reason);
+                        var isInsertPAResult = _paClassificationService.InsertProblemAccountPackage(pas, InsertPA_ByType.Reason, "InsertPA From TW-API", FromFlow.CTSAPI);
 
                         if (isInsertPAResult)
                         {

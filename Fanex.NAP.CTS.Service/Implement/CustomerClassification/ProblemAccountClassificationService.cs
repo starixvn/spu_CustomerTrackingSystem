@@ -8,16 +8,13 @@
     using Fanex.NAP.CTS.Criteria.CustomerClassify;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.CustomerClassify;
-    using Fanex.NAP.CTS.Model.ImportEvidences;
-    using Fanex.NAP.CTS.Model.ProblemAccountManagement;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Service.Interface;
+    using Fanex.NAP.SPU.CTS.CC.Features.CustomerClassification.ProblemAccountInsert.Entities;
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public class ProblemAccountClassificationService : IProblemAccountClassificationService
@@ -27,7 +24,7 @@
         private readonly ICustomerEvidenceService _evidenceService;
         private readonly IRescanCustomerClassificationService _rescanCCService;
         private readonly IAntiFraudCenterService _antiFraudCenterService;
-
+       
         public ProblemAccountClassificationService()
         {
             _repository = new DynamicRepository();
@@ -37,33 +34,24 @@
             _antiFraudCenterService = new AntiFraudCenterService();
         }
 
-        public bool InsertProblemAccount(IEnumerable<InsertProblemAccountModel> problemAccounts, MappingCategoryByType mappingCategoryByType)
+        public bool InsertProblemAccountPackage(IEnumerable<InsertProblemAccountModel> problemAccounts, InsertPA_ByType mappingCategoryByType, string serviceName, FromFlow fromFlow)
         {
-            var custIdList = problemAccounts.Select(c => c.CustID)?.Distinct();
-            var custIds = string.Format(",", custIdList);
             try
             {
-                var probAccountLosing = _rescanCCService.GetProblemAccountLosing(custIdList, FunctionId.InsertPAM);
-
-                var insertPACategoryResult = this.InsertProblemAccount(problemAccounts, probAccountLosing, mappingCategoryByType);
-
-                var isSuccess = (insertPACategoryResult != null && insertPACategoryResult.ErrorCode == 0);
-
-                if (isSuccess && insertPACategoryResult.CustIds != null && insertPACategoryResult.CustIds.Any())
+                if (problemAccounts.Any())
                 {
-                    _ccService.PushDataToExternal(custIdList, new PushDataToExternalModel
+                    var custIds = problemAccounts.Select(c => c.CustID)?.Distinct();
+
+                    var probAccountLosing = GetProblemAccountLosingClassification(custIds, FunctionId.InsertPAM);
+
+                    var result = InsertProblemAccount(problemAccounts, probAccountLosing, mappingCategoryByType, serviceName);
+
+                    if (result.ErrorCode == 0)
                     {
-                        ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
-                        IsPushCCToSoon88 = true,
-                        IsUpdateDangerToMainDB = true,
-                        DangerLevelType = DangerLevel.ABI
-                    });
+                        InsertPALogics(result.CustomerInfo);
 
-                    _evidenceService.UpdateBetLimitOfFlaggedCustomer(custIds);
-
-                    _antiFraudCenterService.InsertAFCAccounts(custIdList, FromFlow.CTSServices);
-
-                    _rescanCCService.CheckNewPAAssociationCustomerForRollback(insertPACategoryResult.NewPAAssociationCustomerForRollback);
+                        PushDataToExternal(result.CustomerInfo, fromFlow);
+                    }
                 }
             }
             catch (Exception ex)
@@ -76,38 +64,109 @@
 
                 return false;
             }
-           
+
             return true;
         }
 
-        public ProblemAccountInsertResultModel InsertProblemAccount(IEnumerable<InsertProblemAccountModel> problemAccounts
-            , IEnumerable<ProblemAccountLosingClassificationModel> probAccountLosing
-            , MappingCategoryByType mappingCategoryByType)
+        public InsertPAResultModel InsertProblemAccountLogics(IEnumerable<InsertProblemAccountModel> problemAccounts, IEnumerable<ProblemAccountLosingClassificationModel> paLosing, InsertPA_ByType mappingCategoryByType, string serviceName)
         {
-            var proAccountClassification = MergeProblemAccountClassification(problemAccounts, probAccountLosing);
+            var result = new InsertPAResultModel();
 
-            if (proAccountClassification.Any())
+            if (problemAccounts.Any())
             {
-                var problemAccountJson = JsonConvert.SerializeObject(proAccountClassification);
+                result = InsertProblemAccount(problemAccounts, paLosing, mappingCategoryByType, serviceName);
 
-                var criteria = new ProblemAccountInsertCriteria
+                if (result.ErrorCode == 0)
                 {
-                    ProblemAccountJson = problemAccountJson,
-                    ByType = Enum.GetName(typeof(MappingCategoryByType), mappingCategoryByType)
-                };
-
-                var assCustForRollback = _repository.Fetch<CheckPACustomerAssociationForRollbackModel>(criteria);
-
-                return new ProblemAccountInsertResultModel
-                {
-                    ErrorMessage = criteria.ErrorMessage,
-                    ErrorCode = string.IsNullOrEmpty(criteria.ErrorMessage) ? 0 : -1,
-                    CustIds = assCustForRollback?.Select(x => x.CustID) ?? Enumerable.Empty<long>(),
-                    NewPAAssociationCustomerForRollback = assCustForRollback
-                };
+                    InsertPALogics(result.CustomerInfo);
+                }
             }
 
-            return new ProblemAccountInsertResultModel { CustIds = new List<long>(), ErrorCode = 0, ErrorMessage = string.Empty };
+            return result;
+        }
+
+        public IEnumerable<ExistedProblemAccountModel> GetExistedProblemAccounts(IEnumerable<long> custIds)
+        {
+            if(custIds != null && custIds.Any())
+            {
+                var criteria = new ProblemAccountGetCriteria()
+                {
+                    CustIds = string.Join(",", custIds.Distinct())
+                };
+
+                return _repository.Fetch<ExistedProblemAccountModel>(criteria) ?? Enumerable.Empty<ExistedProblemAccountModel>();
+            }
+
+            return Enumerable.Empty<ExistedProblemAccountModel>();
+        }
+
+        public IEnumerable<ProblemAccountLosingClassificationModel> GetProblemAccountLosingClassification(IEnumerable<long> custIds, FunctionId funcId)
+        {
+            if (custIds != null && custIds.Any())
+            {
+                var criteria = new ProblemAccountLosingClassificationGetCriteria()
+                {
+                    ListCustIds = string.Join(",", custIds.Distinct()),
+                    FunctionId = (int)funcId
+                };
+
+                return _repository.Fetch<ProblemAccountLosingClassificationModel>(criteria) ?? Enumerable.Empty<ProblemAccountLosingClassificationModel>();
+            }
+
+            return Enumerable.Empty<ProblemAccountLosingClassificationModel>();
+        }
+
+        #region Private Methods
+
+        private InsertPAResultModel InsertProblemAccount(IEnumerable<InsertProblemAccountModel> problemAccounts, IEnumerable<ProblemAccountLosingClassificationModel> paLosing, InsertPA_ByType insertByType, string serviceName)
+        {
+            var result = new InsertPAResultModel();
+
+            if (problemAccounts != null && problemAccounts.Any())
+            {
+                var paClassification = MergeProblemAccountClassification(problemAccounts, paLosing);
+
+                result = InsertProblemAccount(JsonConvert.SerializeObject(paClassification), insertByType);
+
+                if (result.ErrorCode != 0)
+                {
+                    var logMessage = new LogMessage(result.ErrorMessage).AddMessage(serviceName + "InsertProblemAccount").AddMessage("Data: " + JsonConvert.SerializeObject(paClassification)).ToString();
+                    LogService.Error(logMessage);
+                }
+            }
+
+            return result;
+        }
+
+
+        private void InsertPALogics(IEnumerable<CustInfoModel> customerInfo)
+        {
+            if (customerInfo != null && customerInfo.Any())
+            {
+                CheckNewPAAssociationCustomerForRollback(customerInfo);
+
+                var custIds = customerInfo.Select(x => x.CustID).Distinct();
+
+                UpdateBetLimitOfFlaggedCustomer(custIds);
+            }
+        }
+
+        private void PushDataToExternal(IEnumerable<CustInfoModel> customerInfo, FromFlow fromFlow)
+        {
+            if (customerInfo != null && customerInfo.Any())
+            {
+                var custIds = customerInfo.Select(x => x.CustID).Distinct();
+
+                _ccService.PushDataToExternal(custIds, new PushDataToExternalModel
+                {
+                    ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
+                    IsPushCCToSoon88 = true,
+                    IsUpdateDangerToMainDB = true,
+                    DangerLevelType = DangerLevel.ABI
+                });
+
+                _antiFraudCenterService.InsertAFCAccounts(custIds, fromFlow);
+            }
         }
 
         private IEnumerable<InsertProblemAccountModel> MergeProblemAccountClassification(IEnumerable<InsertProblemAccountModel> problemAccounts, IEnumerable<ProblemAccountLosingClassificationModel> probAccountLosing)
@@ -136,7 +195,6 @@
                                                      IsDirectPA = group.pa.IsDirectPA,
                                                      IsFromPAM = true,
                                                      ReasonID = group.pa.ReasonID,
-                                                     RobotCounter = group.pa.RobotCounter,
 
                                                      /* Get Mapping Value */
                                                      BetCount = temp?.BetCount,
@@ -149,5 +207,67 @@
 
             return Enumerable.Empty<InsertProblemAccountModel>();
         }
+
+        private InsertPAResultModel InsertProblemAccount(string problemAccountJson, InsertPA_ByType byType)
+        {
+            var criteria = new ProblemAccountInsertCriteria
+            {
+                ProblemAccountJson = problemAccountJson,
+                ByType = Enum.GetName(typeof(InsertPA_ByType), byType)
+            };
+
+            var result = _repository.Fetch<CustInfoModel>(criteria);
+
+            return new InsertPAResultModel
+            {
+                ErrorMessage = criteria.ErrorMessage,
+                ErrorCode = string.IsNullOrEmpty(criteria.ErrorMessage) ? 0 : -1,
+                CustomerInfo = result ?? Enumerable.Empty<CustInfoModel>()
+            };
+        }
+
+        private void UpdateBetLimitOfFlaggedCustomer(IEnumerable<long> custId)
+        {
+            if (custId != null && custId.Any())
+            {
+                var criteria = new BetLimitByEvidenceUpdateCriteria
+                {
+                    CustIDList = string.Join(",", custId)
+                };
+
+                _repository.Execute(criteria);
+            }
+        }
+
+        private void UpdateBetLimitOfUnflaggedCustomer(IEnumerable<long> custId)
+        {
+            if (custId != null && custId.Any())
+            {
+                var criteria = new BetLimitByEvidenceRemoveCriteria
+                {
+                    CustIDList = string.Join(",", custId)
+                };
+
+                _repository.Execute(criteria);
+            }
+        }
+
+        private void CheckNewPAAssociationCustomerForRollback(IEnumerable<CustInfoModel> customerInfo)
+        {
+            if (customerInfo != null && customerInfo.Any())
+            {
+                var custInfoJson = JsonConvert.SerializeObject(customerInfo);
+
+                var criteria = new CheckNewPAAssociationCustomerForRollbackCriteria
+                {
+                    CustInfoJson = custInfoJson
+                };
+
+                _repository.Execute(criteria);
+            }
+        }
+
+
+        #endregion
     }
 }

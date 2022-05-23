@@ -7,6 +7,8 @@
     {
         public IEnumerable<long> CustIds { get; set; }
 
+        public bool IsRescanPA { get; set; }
+
         public bool IsCheckPAFromNAP { get; set; }
 
         public bool IsPushCCToSoon88 { get; set; }
@@ -16,6 +18,8 @@
         public bool IsUpdateDangerToMainDB { get; set; }
 
         public DangerLevel DangerLevelType { get; set; }
+
+        public string ServiceName { get; set; }
 
         public FunctionId FuncId_CheckPA
         {

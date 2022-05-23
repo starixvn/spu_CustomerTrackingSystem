@@ -1,16 +1,13 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
-    using Fanex.Logging;
     using Fanex.NAP.Core.Web.Attribute;
-    using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.CustomerClassify;
     using Fanex.NAP.CTS.Model.ProblemAccountManagement;
-    using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.Service.Implement;
-    using Fanex.NAP.CTS.Service.Interface;    
+    using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.ProblemAccountManagement;
     using Fanex.NAP.CTS.ViewModel.ProblemAccountMonitor;
     using System;
@@ -197,7 +194,7 @@
                         CreatedBy = CurrentSession.UserId
                     });
 
-                    _paClassificationService.InsertProblemAccount(pas, MappingCategoryByType.Category);
+                    _paClassificationService.InsertProblemAccountPackage(pas, InsertPA_ByType.Category, "ProblemAccountManagement", FromFlow.CTSWEB);
                 }
             }
 

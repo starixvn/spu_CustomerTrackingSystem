@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Criteria.Account.ChainToEvidence
+﻿namespace Fanex.NAP.CTS.Criteria.CustomerClassify
 {
     using Fanex.Data;
     using Fanex.Data.Repository;

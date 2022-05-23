@@ -19,7 +19,6 @@
 
         public Int64? CreatedBy { get; set; }
 
-
         /* Data warehouse, mainDB  info */
 
         public int? WinlossStatus { get; set; } // LOSING  = 0, KEEPSTATE = 1, WINNING = 2
@@ -48,9 +47,6 @@
 
         public bool IsFromPAM { get; set; }
 
-        public bool IsDataChanged { get; set; }
-
-        public int RobotCounter { get; set; }
-               
+        public bool IsDataChanged { get; set; }              
     }
 }

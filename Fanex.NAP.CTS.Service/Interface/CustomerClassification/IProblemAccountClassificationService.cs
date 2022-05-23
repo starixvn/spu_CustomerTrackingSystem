@@ -2,13 +2,18 @@
 {
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.CustomerClassify;
+    using Fanex.NAP.SPU.CTS.CC.Features.CustomerClassification.ProblemAccountInsert.Entities;
     using System.Collections.Generic;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public interface IProblemAccountClassificationService
     {
-        bool InsertProblemAccount(IEnumerable<InsertProblemAccountModel> problemAccounts, MappingCategoryByType mappingCategoryByType);
+        bool InsertProblemAccountPackage(IEnumerable<InsertProblemAccountModel> problemAccounts, InsertPA_ByType mappingCategoryByType, string serviceName, FromFlow fromFlow);
 
-        ProblemAccountInsertResultModel InsertProblemAccount(IEnumerable<InsertProblemAccountModel> problemAccounts, IEnumerable<ProblemAccountLosingClassificationModel> probAccountLosing, MappingCategoryByType mappingCategoryByType);
-       
+        InsertPAResultModel InsertProblemAccountLogics(IEnumerable<InsertProblemAccountModel> problemAccounts, IEnumerable<ProblemAccountLosingClassificationModel> paLosing, InsertPA_ByType mappingCategoryByType, string serviceName);
+
+        IEnumerable<ExistedProblemAccountModel> GetExistedProblemAccounts(IEnumerable<long> custIds);
+
+        IEnumerable<ProblemAccountLosingClassificationModel> GetProblemAccountLosingClassification(IEnumerable<long> custIds, FunctionId funcId);
     }
 }
