@@ -1,6 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
-    using Fanex.NAP.CTS.Model.CustomerClassify;
+    using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.ImportEvidences;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using System.Collections.Generic;

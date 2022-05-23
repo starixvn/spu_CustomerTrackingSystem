@@ -6,9 +6,9 @@
     using Fanex.Logging.Extensions.Database;
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.Utilities;
-    using Fanex.NAP.CTS.Criteria.CustomerClassify;
+    using Fanex.NAP.CTS.Criteria.CustomerClassification;
     using Fanex.NAP.CTS.Model;
-    using Fanex.NAP.CTS.Model.CustomerClassify;
+    using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.SPU.CTS.CC.Features.CustomerClassification.ProblemAccountInsert.Criteria;

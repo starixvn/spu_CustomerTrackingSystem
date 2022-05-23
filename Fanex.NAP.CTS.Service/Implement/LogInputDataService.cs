@@ -4,7 +4,7 @@
     using Fanex.Logging;
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Criteria.LogInputData;
-    using Fanex.NAP.CTS.Model.CustomerClassify;
+    using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.LogInputData;
     using Newtonsoft.Json;
     using System;

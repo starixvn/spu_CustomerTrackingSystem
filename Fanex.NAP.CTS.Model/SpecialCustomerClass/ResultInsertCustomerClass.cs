@@ -1,6 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Model.SpecialCustomerClass
 {
-    using Fanex.NAP.CTS.Model.CustomerClassify;
+    using Fanex.NAP.CTS.Model.CustomerClassification;
     using System.Collections.Generic;
 
     public class ResultInsertCustomerClass

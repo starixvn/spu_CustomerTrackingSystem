@@ -17,14 +17,14 @@
     using Fanex.NAP.CTS.Criteria.Account.ChainToEvidence;
     using Fanex.NAP.CTS.Criteria.Account.CustomerCategory;
     using Fanex.NAP.CTS.Criteria.Account.CustomerInfo;
-    using Fanex.NAP.CTS.Criteria.CustomerClassify;
+    using Fanex.NAP.CTS.Criteria.CustomerClassification;
     using Fanex.NAP.CTS.Criteria.Home;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.Account.CustomerCategory;
     using Fanex.NAP.CTS.Model.Account.CustomerInfo;
     using Fanex.NAP.CTS.Model.Association;
-    using Fanex.NAP.CTS.Model.CustomerClassify;
+    using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.Home;

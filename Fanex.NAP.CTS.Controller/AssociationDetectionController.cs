@@ -6,7 +6,7 @@ using Fanex.NAP.CTS.Core.Helpers;
 using Fanex.NAP.CTS.Model;
 using Fanex.NAP.CTS.Model.AssociationDetection;
 using Fanex.NAP.CTS.Model.Common;
-using Fanex.NAP.CTS.Model.CustomerClassify;
+using Fanex.NAP.CTS.Model.CustomerClassification;
 using Fanex.NAP.CTS.Service;
 using Fanex.NAP.CTS.Service.Implement;
 using Fanex.NAP.CTS.Service.Interface;

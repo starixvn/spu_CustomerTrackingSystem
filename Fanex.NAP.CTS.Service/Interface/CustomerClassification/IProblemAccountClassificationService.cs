@@ -2,9 +2,9 @@
 {
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Model;
-    using Fanex.NAP.CTS.Model.CustomerClassify;
+    using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.SPU.CTS.CC.Features.CustomerClassification.ProblemAccountInsert.Entities;
-    using Fanex.NAP.CTS.Model.CustomerClassify;    
+    using Fanex.NAP.CTS.Model.CustomerClassification;    
     using System.Collections.Generic;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 

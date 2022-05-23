@@ -12,7 +12,7 @@
     using Fanex.NAP.CTS.Model.API;
     using Fanex.NAP.CTS.Model.API.ProblemCaseMonitor;
     using Fanex.NAP.CTS.Model.API.UpdateCategoryWhenPAUpdated;
-    using Fanex.NAP.CTS.Model.CustomerClassify;
+    using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.ImportEvidences;

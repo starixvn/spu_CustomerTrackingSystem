@@ -16,7 +16,7 @@
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.Account.RobotBetting;
     using Fanex.NAP.CTS.Model.Association;
-    using Fanex.NAP.CTS.Model.CustomerClassify;
+    using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.ImportEvidences;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;

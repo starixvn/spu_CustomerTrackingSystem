@@ -4,7 +4,7 @@
     using Fanex.NAP.CTS.Criteria.Api.UpdateCategoryWhenPAUpdated;
     using Fanex.NAP.CTS.Model.API.ProblemCaseMonitor;
     using Fanex.NAP.CTS.Model.API.UpdateCategoryWhenPAUpdated;
-    using Fanex.NAP.CTS.Model.CustomerClassify;
+    using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Service.Interface.Api;
     using Newtonsoft.Json;
     using System;

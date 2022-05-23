@@ -4,7 +4,7 @@
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model;
-    using Fanex.NAP.CTS.Model.CustomerClassify;
+    using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.ProblemAccountManagement;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;

@@ -6,10 +6,10 @@
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria;
     using Fanex.NAP.CTS.Criteria.Account.ChainToEvidence;
-    using Fanex.NAP.CTS.Criteria.CustomerClassify;
+    using Fanex.NAP.CTS.Criteria.CustomerClassification;
     using Fanex.NAP.CTS.Criteria.ProblemAccountMonitor;
     using Fanex.NAP.CTS.Model;
-    using Fanex.NAP.CTS.Model.CustomerClassify;
+    using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.ImportEvidences;
     using Fanex.NAP.CTS.Model.LogInputData;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
