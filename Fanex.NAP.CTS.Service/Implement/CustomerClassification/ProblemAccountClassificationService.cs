@@ -4,6 +4,7 @@
     using Fanex.Logging;
     using Fanex.Logging.Extensions;
     using Fanex.Logging.Extensions.Database;
+    using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria.CustomerClassify;
     using Fanex.NAP.CTS.Model;
@@ -34,7 +35,7 @@
             _antiFraudCenterService = new AntiFraudCenterService();
         }
 
-        public bool InsertProblemAccountPackage(IEnumerable<InsertProblemAccountModel> problemAccounts, InsertPA_ByType mappingCategoryByType, string serviceName, FromFlow fromFlow)
+        public DBResult InsertProblemAccountPackage(IEnumerable<InsertProblemAccountModel> problemAccounts, InsertPA_ByType mappingCategoryByType, string serviceName, FromFlow fromFlow)
         {
             try
             {
@@ -62,10 +63,10 @@
 
                 LogService.Error(logMessage);
 
-                return false;
+                return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
             }
-
-            return true;
+          
+            return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
         }
 
         public InsertPAResultModel InsertProblemAccountLogics(IEnumerable<InsertProblemAccountModel> problemAccounts, IEnumerable<ProblemAccountLosingClassificationModel> paLosing, InsertPA_ByType mappingCategoryByType, string serviceName)

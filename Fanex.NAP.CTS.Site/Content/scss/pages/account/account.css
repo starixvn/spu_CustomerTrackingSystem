@@ -1005,6 +1005,40 @@
         flex-wrap: wrap;
         padding-top: .9rem;
         padding-left: 1.7rem; }
+        .content-info .header-info .container-status .wrapper-status .btn-add-pa {
+          margin-bottom: .6rem;
+          margin-right: .6rem;
+          position: inherit;
+          width: 22px;
+          height: 22px;
+          background: #FFFFFF;
+          cursor: pointer;
+          border: 1px solid #C2CFEE; }
+          .content-info .header-info .container-status .wrapper-status .btn-add-pa:after {
+            content: '';
+            position: absolute;
+            transform: translate(-50%, -50%);
+            height: 2px;
+            width: 50%;
+            background: #000000;
+            top: 50%;
+            left: 50%; }
+          .content-info .header-info .container-status .wrapper-status .btn-add-pa:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #000000;
+            height: 50%;
+            width: 2px; }
+          .content-info .header-info .container-status .wrapper-status .btn-add-pa:hover {
+            background-color: #095776;
+            transition: 0.2s; }
+        .content-info .header-info .container-status .wrapper-status .btn-add-pa:hover:before,
+        .content-info .header-info .container-status .wrapper-status .btn-add-pa:hover:after {
+          background: #fff;
+          transition: 0.2s; }
         .content-info .header-info .container-status .wrapper-status .info-status {
           margin-bottom: .6rem;
           margin-right: .6rem;
