@@ -158,7 +158,7 @@
 
                 if (problemAccounts != null && problemAccounts.Any())
                 {
-                    logInputDataService.LogInputData(new LogInputViewModel { ProblemAccounts = problemAccounts.ToList() }, functionId);
+                   // logInputDataService.LogInputData(new LogInputViewModel { ProblemAccounts = problemAccounts.ToList() }, functionId);
 
                     return problemAccounts;
                 }
@@ -236,7 +236,7 @@
 
                 if (existedRobotUsers != null && existedRobotUsers.Any())
                 {
-                    logInputDataService.LogInputData(new LogInputViewModel { ProblemAccounts = existedRobotUsers?.ToList() }, para.FuncId_CheckRobotUser);
+                   // logInputDataService.LogInputData(new LogInputViewModel { ProblemAccounts = existedRobotUsers?.ToList() }, para.FuncId_CheckRobotUser);
 
                     var result = InsertRobot(existedRobotUsers);
 
@@ -534,7 +534,7 @@
 
         private IEnumerable<RobotUserModel> GetExistedRobotUserDbAccess(string custIds)
         {
-            var criteria = new GetExistedRobotUserCriteria
+            var criteria = new GetExistedTWRobotUserCriteria
             {
                 CustIds = custIds
             };

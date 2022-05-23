@@ -17,5 +17,9 @@
         IEnumerable<ExistedProblemAccountModel> GetExistedProblemAccounts(IEnumerable<long> custIds);
 
         IEnumerable<ProblemAccountLosingClassificationModel> GetProblemAccountLosingClassification(IEnumerable<long> custIds, FunctionId funcId);
+
+        IEnumerable<InsertRobotModel> GetExistedTWRobotUser(IEnumerable<long> custIds);
+
+        IEnumerable<CustInfoModel> InsertRobotAccount(IEnumerable<InsertRobotModel> robotAccounts);
     }
 }

@@ -10,6 +10,8 @@
 
         public PlaceMultiCustomerEvidence PlaceMultiEvidences { get; set; }
 
-        public List<MultipleProblemAccountsModel> ProblemAccounts { get; set; }
+        public List<InsertRobotModel> ProblemAccounts { get; set; }
+
+        public IEnumerable<InsertRobotModel> RobotUser { get; set; }
     }
 }

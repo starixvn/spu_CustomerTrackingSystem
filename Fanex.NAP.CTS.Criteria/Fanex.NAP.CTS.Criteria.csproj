@@ -105,9 +105,10 @@
     <Compile Include="CustomerClassify\BetLimitByEvidenceUpdateCriteria.cs" />
     <Compile Include="CustomerClassify\BetLimitByEvidenceRemoveCriteria.cs" />
     <Compile Include="CustomerClassify\ProblemAccount\ProblemAccountGetCriteria.cs" />
+    <Compile Include="CustomerClassify\Robot\RobotAccountInsertCriteria.cs" />
     <Compile Include="ImportEvidences\CheckCleanCustFlaggedEvidenceCriteria.cs" />
     <Compile Include="LogInputData\LogInputDataCriteria.cs" />
-    <Compile Include="CustomerClassify\GetExistedRobotUserCriteria.cs" />
+    <Compile Include="CustomerClassify\ProblemAccount\GetExistedTWRobotUserCriteria.cs" />
     <Compile Include="CustomerClassify\GetRoleCustomerCriteria.cs" />
     <Compile Include="CustomerClassify\GetLastestClassificationCriteria.cs" />
     <Compile Include="CustomerClassify\GetExistedEvidencesCriteria.cs" />

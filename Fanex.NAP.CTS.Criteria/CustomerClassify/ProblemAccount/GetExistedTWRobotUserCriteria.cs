@@ -3,7 +3,7 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
 
-    public class GetExistedRobotUserCriteria : CriteriaBase
+    public class GetExistedTWRobotUserCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "custids")]
         public string CustIds { get; set; }

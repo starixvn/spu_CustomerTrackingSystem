@@ -1,22 +1,18 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
     using Fanex.Data.Repository;
-    using Fanex.Logging;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria;
-    using Fanex.NAP.CTS.Criteria.Account.ChainToEvidence;
     using Fanex.NAP.CTS.Criteria.CustomerClassify;
-    using Fanex.NAP.CTS.Criteria.ProblemAccountMonitor;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.CustomerClassify;
-    using Fanex.NAP.CTS.Model.ImportEvidences;
     using Fanex.NAP.CTS.Model.LogInputData;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
-    using Newtonsoft.Json;
+    using Fanex.NAP.SPU.CTS.CC.Features.CustomerClassification.ProblemAccountInsert.Entities;
     using System;
     using System.Collections.Generic;
     using System.Configuration;
@@ -43,195 +39,178 @@
             antiFraudCenterService = new AntiFraudCenterService();
         }
 
-        //public void RescanCustomerClassification(RescanCustClassificationModel para)
-        //{
-        //    var custIdsPushCC = RescanProblemAccont(para);
+        public bool RescanCustomerClassification(RescanCustClassificationModel parameters)
+        {
+            var result = new RescanResultModel();
 
-        //    RescanNormalAccount(para.CustIds?.ToList(), custIdsPushCC, para.FunctionId);
-        //}
+            if (parameters.IsRescanPA)
+            {
+                result = RescanProblemAccount(parameters);
+            }
 
-        //public bool RescanCustomerClassification(RescanCustClassificationModel parameters)
-        //{
-        //    if (parameters.CustIds != null && parameters.CustIds.Any())
-        //    {
-        //        if (parameters.IsRescanPA)
-        //        {
-        //            GetExistedProblemAccounts(parameters.CustIds)
-        //           .GetProbAccountLosingClassification(parameters.FunctionId)
-        //           .InsertProblemAccountLogics(parameters.ServiceName)
-        //           .GetRobotUsers(parameters.CustIds).LogRescanPAData(robotUsers, parameters.FuncId_CheckRobotUser, parameters.ServiceName)
-        //           .InsertRobot(parameters)
-        //           .PushExternalData(parameters);
-        //        }
+            if(result.IsSuccess)
+            {
+                var smCustIds = GetAgentCusts(parameters.CustIds);
+                result.IsSuccess = RescanNormalAccount(parameters, result.CustIds, smCustIds);
+            }
 
-        //        GetAgentCusts(parameters.CustIds)
-        //       .RescanNormalAccount(parameters);
-        //    }
-
-        //    return isSuccess;
-        //}
+            return result.IsSuccess;
+        }
 
         #region Rescan PA
 
-        private IEnumerable<long> RescanProblemAccont(RescanCustClassificationModel parameters)
+        private RescanResultModel RescanProblemAccount(RescanCustClassificationModel parameters)
         {
-            var custIdsCheckPA = new List<long>();
+            var rescanResult = new RescanResultModel();
 
-            //Evidence & PACM
-            var existedProblemAccounts = problemAccountService.GetExistedProblemAccounts(parameters.CustIds);
-            var paLosing = problemAccountService.GetProblemAccountLosingClassification(parameters.CustIds, parameters.FunctionId);
-
-           // custIdsCheckPA.AddRange(problemAccountService.InsertProblemAccountLogics(existedProblemAccounts, paLosing, InsertPA_ByType.Category, parameters.ServiceName));
-           //custIdsCheckPA.AddRange(SyncCustomerEvidenceToCategory(existEvidences, paLosing, parameters.FunctionId));
-            custIdsCheckPA.AddRange(GetRobotUsers(parameters));
-
-            //Rescan PA - Push CC & CN88
-            var custIdsPushCC = custIdsCheckPA.Distinct().ToList();
-
-            if (custIdsPushCC != null && custIdsPushCC.Any())
+            if( parameters != null && parameters.CustIds != null && parameters.CustIds.Any())
             {
-                Parallel.Invoke(
-                () =>
+                var existedProbAccounts = GetExistedProblemAccounts(parameters.CustIds);
+                var paLosing = problemAccountService.GetProblemAccountLosingClassification(parameters.CustIds, parameters.FunctionId);
+
+                InsertProblemAccountLogics(existedProbAccounts.ProblemAccounts, paLosing, parameters.ServiceName, ref rescanResult);
+
+                if (rescanResult.IsSuccess)
                 {
-                    PushCCToExternal(custIdsPushCC, parameters.IsPushCCToSoon88, parameters.IsUpdateDangerToMainDB, parameters.DangerLevelType);
-                },
-                () =>
+                    var robotUsers = GetTWRobotUsers(parameters);
+
+                    InsertRobot(robotUsers, existedProbAccounts.RobotClassificationPerformance, ref rescanResult);
+                }
+
+                if (rescanResult.IsSuccess && rescanResult.CustIds.Any())
                 {
-                    Task.Run(() =>
-                    {
-                        antiFraudCenterService.InsertAFCAccounts(custIdsPushCC, FromFlow.CTSWEB);
-                    });
-                });
+                    rescanResult.IsSuccess = PushExternalData(rescanResult.CustIds, parameters);
+                }
             }
 
-            return custIdsPushCC;
+            return rescanResult;
         }
 
-        private List<long> GetAgentCusts(IEnumerable<long> custIds)
+        private bool RescanNormalAccount(RescanCustClassificationModel parameters, IEnumerable<long> custIdsToRescanPA, IEnumerable<long> smaCustIds)
         {
-            var agentIds = new List<long>();
+            if (parameters != null && parameters.CustIds != null && parameters.CustIds.Any())
+            {
+                var custToRescanNormal = parameters.CustIds.Distinct().ToList();
+                custToRescanNormal.RemoveAll(x => custIdsToRescanPA.Contains(x));
+                custToRescanNormal.RemoveAll(x => smaCustIds.Contains(x));
 
+                if (custToRescanNormal.Any())
+                {
+                    var custIdsChunk = custToRescanNormal.Chunk(ConfigSettings.PushCCToExternalChunkSize);
+
+                    foreach (var custIds in custIdsChunk)
+                    {
+                        var custToString = string.Join(",", custIds);
+                        ClassifyCustomerGeneralCategoryDaily(custToString, parameters.FunctionId, false);
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private IEnumerable<long> GetAgentCusts(IEnumerable<long> custIds)
+        {
             if (custIds != null && custIds.Any())
             {
-                var data = GetRoleCustomer(string.Join(",", custIds));
+                var criteria = new GetRoleCustomerCriteria
+                {
+                    CustIds = string.Join(",", custIds.Distinct())
+                };
+
+                var data = repository.Fetch<RoleCustomerModel>(criteria);
 
                 if (data != null && data.Any())
                 {
-                    agentIds = data.Where(c => c.RoleID == (int)ROLE_CUSTOMER.AGENT
-                                            || c.RoleID == (int)ROLE_CUSTOMER.MASTER
-                                            || c.RoleID == (int)ROLE_CUSTOMER.SUPER)
-                               .Select(c => c.CustID).ToList();
+                    return data.Where(c => c.RoleID == (int)ROLE_CUSTOMER.AGENT
+                                        || c.RoleID == (int)ROLE_CUSTOMER.MASTER
+                                        || c.RoleID == (int)ROLE_CUSTOMER.SUPER).Select(c => c.CustID);
                 }
             }
 
-            return agentIds;
+            return Enumerable.Empty<long>();
         }
 
-
-        private List<long> GetRobotUsers(RescanCustClassificationModel para)
+        public bool PushExternalData(IEnumerable<long> custIdsToSyncCC, RescanCustClassificationModel parameters)
         {
-            var custIdsToSyncCC = new List<long>();
+            bool isSuccess = true;
 
-            if (para.CustIds != null && para.CustIds.Any())
+            if (custIdsToSyncCC.Any())
             {
-                var existedRobotUsers = GetExistedRobotUser(para.CustIds);
-
-                if (existedRobotUsers != null && existedRobotUsers.Any())
+                Parallel.Invoke(() =>
                 {
-                    logInputDataService.LogInputData(new LogInputViewModel { ProblemAccounts = existedRobotUsers?.ToList() }, para.FuncId_CheckRobotUser);
-
-                    //var result = InsertRobot(existedRobotUsers);
-
-                    //if (string.IsNullOrEmpty(result.ErrorMessage) && result.CustIds != null)
-                    //{
-                    //    custIdsToSyncCC = result.CustIds.ToList();
-                    //}
-                }
+                    isSuccess = custClassificationService.PushDataToExternal(custIdsToSyncCC, new PushDataToExternalModel
+                    {
+                        ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
+                        IsPushCCToSoon88 = parameters.IsPushCCToSoon88,
+                        IsUpdateDangerToMainDB = parameters.IsUpdateDangerToMainDB,
+                        DangerLevelType = parameters.DangerLevelType
+                    });
+                },
+                () =>
+                {
+                    antiFraudCenterService.InsertAFCAccounts(custIdsToSyncCC, FromFlow.CTSWEB);
+                });
             }
 
-            return custIdsToSyncCC;
+            return isSuccess;
         }
- 
-        private IEnumerable<MultipleProblemAccountsModel> GetExistedRobotUser(IEnumerable<long> custIds)
+
+        private ExistedPAResultModel GetExistedProblemAccounts(IEnumerable<long> custIds)
         {
-            var existedRobots = new List<MultipleProblemAccountsModel>();
+            var existedPA = new ExistedPAResultModel();
 
             if (custIds != null && custIds.Any())
             {
-                var robotUsers = GetExistedRobotUserDbAccess(string.Join(",", custIds));
+                var result = problemAccountService.GetExistedProblemAccounts(custIds);
 
-                if (robotUsers != null && robotUsers.Any())
+                if (result.Any())
                 {
-                    robotUsers.ToList().ForEach(c =>
+                    existedPA.ProblemAccounts = result.Where(c => !c.IsRobot).Select(c => new InsertProblemAccountModel
                     {
-                        existedRobots.Add(new MultipleProblemAccountsModel()
-                        {
-                            CustID = c.CustId,
-                            RobotCounter = c.Counter,
-                            ReasonID = (int)CATEGORY.ROBOT,
-                            Creator = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"])
-                        });
+                        CustID = c.CustID,
+                        CTSCustID = c.CTSCustID,
+                        CategoryID = c.CategoryID,
+                        CategoryGroup = c.CategoryGroup,
+                        IsDirectPA = c.IsDirectPA,
+                        Remark = c.Remark,
+                        IsLicensee = c.IsLicensee,
+                        RoleID = c.RoleID,
+                        SubscriberID = c.SubscriberID,
+                        CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"])
+                    });
+
+                    existedPA.RobotClassificationPerformance = result.Where(c => c.IsRobot).Select(c => new InsertRobotModel
+                    {
+                        CustID = c.CustID,
+                        CategoryID = c.CategoryID,
+                        IsFromTW = false,
+                        ActiveDays = c.ActiveDays,
+                        TurnoverRM = c.Turnover,
+                        BetCount = c.BetCount,
+                        WinlossRM = c.Winloss,
+                        CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"])
                     });
                 }
             }
 
-            return existedRobots;
+            return existedPA;
         }
 
-        private void PushCCToExternal(List<long> custIdsToSyncCC, bool isPushCCToSoon88, bool isUpdateDanger, DangerLevel dangerLevelType)
+        private void InsertProblemAccountLogics(IEnumerable<InsertProblemAccountModel> problemAccounts, IEnumerable<ProblemAccountLosingClassificationModel> paLosing, string serviceName, ref RescanResultModel rescanResultModel)
         {
-            custClassificationService.PushDataToExternal(custIdsToSyncCC, new PushDataToExternalModel
+            if(problemAccounts.Any())
             {
-                ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
-                IsPushCCToSoon88 = isPushCCToSoon88,
-                IsUpdateDangerToMainDB = isUpdateDanger,
-                DangerLevelType = dangerLevelType
-            });
+                var result = problemAccountService.InsertProblemAccountLogics(problemAccounts, paLosing, InsertPA_ByType.Category, serviceName);
+                
+                rescanResultModel.IsSuccess = (result.ErrorCode == 0);
 
-            if (_isWriteLogInfo)
-                LogService.Info($"PA Rescan - Cust to syncCC - with data: {JsonConvert.SerializeObject(custIdsToSyncCC)}");
+                if (result.ErrorCode == 0 && result.CustomerInfo.Any())
+                {
+                    rescanResultModel.CustIds.AddRange(result.CustomerInfo.Select(c => c.CustID).Distinct());
+                }
+            }
         }
-
-        //public IRescanCustClassificationService GetExistedProblemAccounts(IEnumerable<long> custIds)
-        //{
-        //    if (custIds != null && custIds.Any())
-        //    {
-        //        var result = problemAccountService.GetExistedProblemAccounts(custIds);
-
-        //        if (result.Any())
-        //        {
-        //            problemAccounts = result.Where(c => !c.IsRobot).Select(c => new InsertProblemAccountEntity
-        //            {
-        //                CustID = c.CustID,
-        //                CTSCustID = c.CTSCustID,
-        //                CategoryID = c.CategoryID,
-        //                CategoryGroup = c.CategoryGroup,
-        //                IsDirectPA = c.IsDirectPA,
-        //                Remark = c.Remark,
-        //                IsLicensee = c.IsLicensee,
-        //                RoleID = c.RoleID,
-        //                SubscriberID = c.SubscriberID,
-        //                CreatedBy = StarixITId
-        //            });
-
-        //            robotClassificationPerformance = result.Where(c => c.IsRobot).Select(c => new InsertRobotEntity
-        //            {
-        //                CustID = c.CustID,
-        //                CategoryID = c.CategoryID,
-        //                IsFromTW = false,
-        //                ActiveDays = c.ActiveDays,
-        //                TurnoverRM = c.Turnover,
-        //                BetCount = c.BetCount,
-        //                WinlossRM = c.Winloss,
-        //                CreatedBy = StarixITId
-        //            });
-        //        }
-        //    }
-
-        //    return this;
-        //}
-
-
 
 
 
@@ -275,25 +254,47 @@
             repository.Execute(criteria);
         }
    
-        private IEnumerable<RoleCustomerModel> GetRoleCustomer(string custIds)
+        private IEnumerable<InsertRobotModel> GetTWRobotUsers(RescanCustClassificationModel para)
         {
-            var criteria = new GetRoleCustomerCriteria
+            if (para.CustIds != null && para.CustIds.Any())
             {
-                CustIds = custIds
-            };
+                var robotUsers = problemAccountService.GetExistedTWRobotUser(para.CustIds);
 
-            return repository.Fetch<RoleCustomerModel>(criteria);
+                if (robotUsers != null && robotUsers.Any())
+                {
+                    logInputDataService.LogInputData(new LogInputViewModel { RobotUser = robotUsers }, para.FuncId_CheckRobotUser);
+
+                    return robotUsers;
+                }
+            }
+
+            return Enumerable.Empty<InsertRobotModel>();
         }
 
-        private IEnumerable<RobotUserModel> GetExistedRobotUserDbAccess(string custIds)
+        public void InsertRobot(IEnumerable<InsertRobotModel> twRobotUsers, IEnumerable<InsertRobotModel> robotClassification, ref RescanResultModel rescanResultModel)
         {
-            var criteria = new GetExistedRobotUserCriteria
-            {
-                CustIds = custIds
-            };
+            var robotToInsert = new List<InsertRobotModel>();
 
-            return repository.Fetch<RobotUserModel>(criteria);
+            if (twRobotUsers.Any())
+            {
+                robotToInsert.AddRange(twRobotUsers);
+            }
+
+            if (robotClassification.Any())
+            {
+                robotToInsert.AddRange(robotClassification);
+            }
+
+            var customerInfo = problemAccountService.InsertRobotAccount(robotToInsert);
+
+            if (customerInfo.Any())
+            {
+                var custIds = customerInfo.Select(c => c.CustID).Distinct();
+
+                rescanResultModel.CustIds.AddRange(custIds);
+            }
         }
+
 
         #endregion DataAccess Layer
     }

@@ -11,10 +11,12 @@
     using Fanex.NAP.CTS.Model.CustomerClassify;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Service.Interface;
+    using Fanex.NAP.SPU.CTS.CC.Features.CustomerClassification.ProblemAccountInsert.Criteria;
     using Fanex.NAP.SPU.CTS.CC.Features.CustomerClassification.ProblemAccountInsert.Entities;
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
+    using System.Configuration;
     using System.Linq;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
@@ -115,6 +117,47 @@
             }
 
             return Enumerable.Empty<ProblemAccountLosingClassificationModel>();
+        }
+
+        public IEnumerable<InsertRobotModel> GetExistedTWRobotUser(IEnumerable<long> custIds)
+        {
+            if (custIds != null && custIds.Any())
+            {
+                var criteria = new GetExistedTWRobotUserCriteria
+                {
+                    CustIds = string.Join(",", custIds)
+                };
+
+                var robotUsers = _repository.Fetch<RobotUserModel>(criteria);
+
+                if (robotUsers != null && robotUsers.Any())
+                {
+                    return robotUsers.Select(c => new InsertRobotModel()
+                    {
+                        CustID = c.CustId,
+                        RobotCounter = c.Counter,
+                        CategoryID = (int)CATEGORY.ROBOT,
+                        IsFromTW = true,
+                        CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"])
+                    });
+                }
+            }
+
+            return Enumerable.Empty<InsertRobotModel>();
+        }
+
+        public IEnumerable<CustInfoModel> InsertRobotAccount(IEnumerable<InsertRobotModel> robotAccounts)
+        {
+            if (robotAccounts != null && robotAccounts.Any())
+            {
+                var customerInfo = InsertRobotAccount(JsonConvert.SerializeObject(robotAccounts));
+
+                CheckNewPAAssociationCustomerForRollback(customerInfo);
+
+                return customerInfo;
+            }
+
+            return Enumerable.Empty<CustInfoModel>();
         }
 
         #region Private Methods
@@ -268,6 +311,16 @@
             }
         }
 
+
+        private IEnumerable<CustInfoModel> InsertRobotAccount(string robotAccountJson)
+        {
+            var criteria = new RobotAccountInsertCriteria
+            {
+                CustInfo = robotAccountJson
+            };
+
+            return _repository.Fetch<CustInfoModel>(criteria) ?? Enumerable.Empty<CustInfoModel>();
+        }
 
         #endregion
     }

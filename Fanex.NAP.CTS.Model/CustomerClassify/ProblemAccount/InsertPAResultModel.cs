@@ -9,6 +9,5 @@
         public int ErrorCode { get; set; }
 
         public IEnumerable<CustInfoModel> CustomerInfo { get; set; }
-
     }
 }
