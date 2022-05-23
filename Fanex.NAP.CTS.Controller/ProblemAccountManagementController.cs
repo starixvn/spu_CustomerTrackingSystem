@@ -196,8 +196,7 @@
                         CreatedBy = CurrentSession.UserId
                     });
 
-                   
-                    var insertResult =  _paClassificationService.InsertProblemAccountPackage(pas, InsertPA_ByType.Category, "ProblemAccountManagement", FromFlow.CTSWEB);
+                    var insertResult = _paClassificationService.InsertProblemAccountPackage(pas, InsertPA_ByType.Category, "ProblemAccountManagement", FromFlow.CTSWEB);
 
                     result.ErrorCode = insertResult.ErrorCode;
                     result.ErrorMessage = insertResult.ErrorMsg;
