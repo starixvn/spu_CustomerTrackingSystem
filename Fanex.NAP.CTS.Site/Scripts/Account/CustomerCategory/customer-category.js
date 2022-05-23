@@ -414,6 +414,15 @@
             },
             success: function (response) {
                 divMarkCustomerCategory.html(response);
+
+                $('#btnCCCancel').on('click', function () {
+                    divMarkCustomerCategory.dialog('close');
+                });
+
+                $('#btnCCSave').on('click', function (e) {
+                    divMarkCustomerCategory.dialog('close');
+                    common.showSuccess('Save successful');
+                });
             },
             complete: function () {
                 divMarkCustomerCategory.dialog({
@@ -431,6 +440,10 @@
                 common.showError(errMsg);
             }
         });
+    }
+
+    function aaa() {
+
     }
 
     function BuildCategoryToHtmlDiv(html, classIconColor, categoryName) {

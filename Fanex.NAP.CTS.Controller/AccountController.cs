@@ -56,6 +56,8 @@
         private readonly IRobotClassificationService _robotClassificationService;
         private readonly IRobotBettingService _robotBettingService;
         private readonly IAntiFraudCenterService _antiFraudCenterService;
+        private readonly IProblemAccountManagementService _pamService;
+        private readonly IProblemAccountClassificationService _paClassificationService;
 
         public override string BaseControllerName { get => string.Empty; }
 
@@ -71,6 +73,8 @@
             _robotClassificationService = new RobotClassificationService();
             _robotBettingService = new RobotBettingService();
             _antiFraudCenterService = new AntiFraudCenterService();
+            _pamService = new ProblemAccountManagementService();
+            _paClassificationService = new ProblemAccountClassificationService();
         }
 
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileRpt)]
@@ -1537,7 +1541,7 @@
             reason += "</div>";
 
             return reason;
-        }
+        }        
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult MarkCatergory(long ctsCustId)
@@ -1550,15 +1554,7 @@
             };
 
             return PartialView("CustomerCategory/MarkCatergory", model);
-        }
-
-        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult MarkCustomerCategory(long ctsCustId)
-        {
-            var model = "";
-
-            return PartialView("CustomerCategory/MarkCustomerCategory", model);
-        }
+        }       
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult RemoveCatergory(long ctsCustId)
@@ -1726,6 +1722,17 @@
                 errorMessage = result.ErrorMsg
             }, JsonRequestBehavior.AllowGet);
         }
+
+        #region New Mark-Unmark Customer Category
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        public ActionResult MarkCustomerCategory(long ctsCustId)
+        {
+            var paCategories = _pamService.GetProblemAccountCategories();
+
+            return PartialView("CustomerCategory/MarkCustomerCategory", paCategories);
+        }
+
+        #endregion
 
         #endregion Customer Category
 
