@@ -3,20 +3,20 @@
 
     let domElements = {
         tblChainToEvidenceFlagged: $('#tblChainToEvidenceFlagged'),
-        btnChainToEvidenceFlagged: $('#btnChainToEvidenceFlagged'),
-        divPlaceEvidence: $('#divPlaceEvidence'),
-        lblPlaceEvidenceAccount: $('#lblPlaceEvidenceAccount'),
-        lblPlaceEvidenceSubscriber: $('#lblPlaceEvidenceSubscriber'),
-        ddlPlaceEvidenceListEvidence: $('#ddlPlaceEvidenceListEvidence'),
-        btnPlaceEvidenceCancel: $('#btnPlaceEvidenceCancel'),
-        btnPlaceEvidenceSubmit: $('#btnPlaceEvidenceSubmit'),
-        divPlaceEvidenceDescription: $('#divPlaceEvidenceDescription'),
-        txtPlaceEvidenceComment: $('#txtPlaceEvidenceComment'),
+        //btnChainToEvidenceFlagged: $('#btnChainToEvidenceFlagged'),
+        //divPlaceEvidence: $('#divPlaceEvidence'),
+        //lblPlaceEvidenceAccount: $('#lblPlaceEvidenceAccount'),
+        //lblPlaceEvidenceSubscriber: $('#lblPlaceEvidenceSubscriber'),
+        //ddlPlaceEvidenceListEvidence: $('#ddlPlaceEvidenceListEvidence'),
+        //btnPlaceEvidenceCancel: $('#btnPlaceEvidenceCancel'),
+        //btnPlaceEvidenceSubmit: $('#btnPlaceEvidenceSubmit'),
+        //divPlaceEvidenceDescription: $('#divPlaceEvidenceDescription'),
+        //txtPlaceEvidenceComment: $('#txtPlaceEvidenceComment'),
         tblChainToEvidenceAffectedRetract: $('#tblChainToEvidenceAffected'),
         cbbChainToEvidenceListEvidence: $('#cbbChainToEvidenceListEvidence'),
-        btnQuickComment: $('.button-quick-comment'),
+        //btnQuickComment: $('.button-quick-comment'),
         spanClass: $('#spanClass'),
-        hdCustSubId: $("#hdCustSubId")
+        //hdCustSubId: $("#hdCustSubId")
     };
 
     function InitialFlaggedGrid(ctsCustId, username, custId, subscriberId) {
@@ -33,28 +33,28 @@
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
                 { targets: [0], width: "30%", className: "text-left" },
-                { targets: [1], width: "20%", className: "text-center" },
-                { targets: [2], width: "20%", className: "text-left" },
+                { targets: [1], width: "10%", className: "text-center" },
+                { targets: [2], width: "40%", className: "text-left" },
                 { targets: [3], width: "20%", className: "text-center" },
-                { targets: [4], width: "20%", className: "text-center remove-action" }
+                //{ targets: [4], width: "20%", className: "text-center remove-action" }
             ],
             columns: [
                 { data: obj => obj.EvidenceDisplay },
                 { data: obj => obj.FlaggedDate },
                 { data: obj => obj.Comment },
-                { data: obj => obj.Creator },
-                {
-                    data: obj => '<span class="icon-delete' + (!isHostPermission ? ' disabled' : '') + '" title="Remove Evidence"></span>',
-                    createdCell: (cell, _, row) => {
-                        if (isHostPermission) {
-                            $('.icon-delete', cell).click(() =>
-                                common.showFormConfirmation(`<div class="popup-content">Do you want remove flagged evidence <br/> <strong style="color: red;">${row.EvidenceDisplay}</strong> from <strong style="color: red;">${username}</strong>?</div>`, 'Confirmation', function () {
-                                    RemoveFlaggedEvidence(row.EvidenceID, ctsCustId, username, custId, subscriberId);
-                                })
-                            );
-                        }
-                    }
-                }
+                { data: obj => obj.Creator }//,
+                //{
+                //    data: obj => '<span class="icon-delete' + (!isHostPermission ? ' disabled' : '') + '" title="Remove Evidence"></span>',
+                //    createdCell: (cell, _, row) => {
+                //        if (isHostPermission) {
+                //            $('.icon-delete', cell).click(() =>
+                //                common.showFormConfirmation(`<div class="popup-content">Do you want remove flagged evidence <br/> <strong style="color: red;">${row.EvidenceDisplay}</strong> from <strong style="color: red;">${username}</strong>?</div>`, 'Confirmation', function () {
+                //                    RemoveFlaggedEvidence(row.EvidenceID, ctsCustId, username, custId, subscriberId);
+                //                })
+                //            );
+                //        }
+                //    }
+                //}
             ],
             createdRow: function (row, obj) {
                 $(row).attr('evidence-code', obj.EvidenceCode);
@@ -178,35 +178,35 @@
         domElements.tblChainToEvidenceFlagged.DataTable().columns.adjust();
     }
 
-    function RemoveFlaggedEvidence(evidenceId, ctsCustId, username, custId, subscriberId) {
-        var url = common.modifyRelativeUrl('/Account/RemoveFlaggedEvidence');
+    //function RemoveFlaggedEvidence(evidenceId, ctsCustId, username, custId, subscriberId) {
+    //    var url = common.modifyRelativeUrl('/Account/RemoveFlaggedEvidence');
 
-        $.ajax(url, {
-            type: 'POST',
-            beforeSend: function () {
-                common.showLoading();
-            },
-            data: {
-                CustId: custId,
-                CTSCustId: ctsCustId,
-                SubscriberId: subscriberId,
-                EvidenceId: evidenceId
-            },
-            success: function (response) {
-                common.showSuccess();
-                var customerCategory = new customer_category();
-                customerCategory.ReloadTab(ctsCustId);
-                GetCustomerClassification(custId);
-            },
-            complete: function () {
-                common.closeLoading();
-                GetAccountEvidence(ctsCustId, username);
-            },
-            error: function (errMsg) {
-                console.log(errMsg);                
-            }
-        });
-    }
+    //    $.ajax(url, {
+    //        type: 'POST',
+    //        beforeSend: function () {
+    //            common.showLoading();
+    //        },
+    //        data: {
+    //            CustId: custId,
+    //            CTSCustId: ctsCustId,
+    //            SubscriberId: subscriberId,
+    //            EvidenceId: evidenceId
+    //        },
+    //        success: function (response) {
+    //            common.showSuccess();
+    //            var customerCategory = new customer_category();
+    //            customerCategory.ReloadTab(ctsCustId);
+    //            GetCustomerClassification(custId);
+    //        },
+    //        complete: function () {
+    //            common.closeLoading();
+    //            GetAccountEvidence(ctsCustId, username);
+    //        },
+    //        error: function (errMsg) {
+    //            console.log(errMsg);                
+    //        }
+    //    });
+    //}
 
     function GenerateAffectedRetractEvidences(data, ctsCustId, username) {
         domElements.tblChainToEvidenceAffectedRetract.DataTable().clear().rows.add(data).draw();
@@ -398,94 +398,94 @@
         });
     }     
 
-    function GetEvidences() {
-        var flaggedEvidenceCodes = GetEvidenceInFlaggedEvidenceGrid();
+    //function GetEvidences() {
+    //    var flaggedEvidenceCodes = GetEvidenceInFlaggedEvidenceGrid();
 
-        $.ajax(common.modifyRelativeUrl('/Account/GetEvidenceList'), {
-            type: 'GET',
-            beforeSend: function () {
-                domElements.divPlaceEvidenceDescription.html('');
-            },
-            success: function (response) {
-                if (response != null) {
-                    $('option', domElements.ddlPlaceEvidenceListEvidence).filter(function () {
-                        return $(this).val() !== '';
-                    }).remove();
+    //    $.ajax(common.modifyRelativeUrl('/Account/GetEvidenceList'), {
+    //        type: 'GET',
+    //        beforeSend: function () {
+    //            domElements.divPlaceEvidenceDescription.html('');
+    //        },
+    //        success: function (response) {
+    //            if (response != null) {
+    //                $('option', domElements.ddlPlaceEvidenceListEvidence).filter(function () {
+    //                    return $(this).val() !== '';
+    //                }).remove();
 
-                    response.map(function (x) {
-                        if ($.inArray(x.EvidenceCode, flaggedEvidenceCodes) == -1) {
-                            domElements.ddlPlaceEvidenceListEvidence.append(`<option value='${x.EvidenceID}' code='${x.EvidenceCode}' desc='${x.EvidenceDesc}'>${x.EvidenceCode} ${x.EvidenceName}</option>`);
-                        }                        
-                    });
+    //                response.map(function (x) {
+    //                    if ($.inArray(x.EvidenceCode, flaggedEvidenceCodes) == -1) {
+    //                        domElements.ddlPlaceEvidenceListEvidence.append(`<option value='${x.EvidenceID}' code='${x.EvidenceCode}' desc='${x.EvidenceDesc}'>${x.EvidenceCode} ${x.EvidenceName}</option>`);
+    //                    }                        
+    //                });
 
-                    $('option:first-child', domElements.ddlPlaceEvidenceListEvidence).prop("selected", true);
-                    var desc = $('#ddlPlaceEvidenceListEvidence :selected').attr('desc');
-                    if (desc === undefined)
-                        desc = '';
-                    domElements.divPlaceEvidenceDescription.html(desc);
-                    domElements.ddlPlaceEvidenceListEvidence.multiselect("refresh");
-                }
-            },
-            complete: function () {                                          
-            },
-            error: function (errMsg) {
-                console.log(errMsg);
-            }
-        });
-    }
+    //                $('option:first-child', domElements.ddlPlaceEvidenceListEvidence).prop("selected", true);
+    //                var desc = $('#ddlPlaceEvidenceListEvidence :selected').attr('desc');
+    //                if (desc === undefined)
+    //                    desc = '';
+    //                domElements.divPlaceEvidenceDescription.html(desc);
+    //                domElements.ddlPlaceEvidenceListEvidence.multiselect("refresh");
+    //            }
+    //        },
+    //        complete: function () {                                          
+    //        },
+    //        error: function (errMsg) {
+    //            console.log(errMsg);
+    //        }
+    //    });
+    //}
 
-    function InitialPlaceEvidenceForm(ctsCustId, username, subscriberId, subscriber, custId) {        
-        domElements.btnChainToEvidenceFlagged.on('click', function () {
-            domElements.ddlPlaceEvidenceListEvidence.multiselect({
-                multiple: false,
-                selectedList: 1,
-                menuWidth: 340,
-                menuHeight: 300
-            }).multiselectfilter({
-                width: 217,
-                placeholder: '',
-                label: ''
-            });
+    //function InitialPlaceEvidenceForm(ctsCustId, username, subscriberId, subscriber, custId) {        
+    //    domElements.btnChainToEvidenceFlagged.on('click', function () {
+    //        domElements.ddlPlaceEvidenceListEvidence.multiselect({
+    //            multiple: false,
+    //            selectedList: 1,
+    //            menuWidth: 340,
+    //            menuHeight: 300
+    //        }).multiselectfilter({
+    //            width: 217,
+    //            placeholder: '',
+    //            label: ''
+    //        });
 
-            GetEvidences();
+    //        GetEvidences();
 
-            domElements.ddlPlaceEvidenceListEvidence.unbind('change').bind('change', function (e) {
-                var desc = $('#ddlPlaceEvidenceListEvidence :selected').attr('desc');
-                if (desc === undefined)
-                    desc = '';
-                domElements.divPlaceEvidenceDescription.html(desc);
-            });      
+    //        domElements.ddlPlaceEvidenceListEvidence.unbind('change').bind('change', function (e) {
+    //            var desc = $('#ddlPlaceEvidenceListEvidence :selected').attr('desc');
+    //            if (desc === undefined)
+    //                desc = '';
+    //            domElements.divPlaceEvidenceDescription.html(desc);
+    //        });      
 
-            ResetPlaceEvidence(username, subscriber);
+    //        ResetPlaceEvidence(username, subscriber);
 
-            domElements.divPlaceEvidence.dialog({
-                modal: true,
-                width: '900px',
-                title: 'ADD EVIDENCE',
-                resizable: true,
-                draggable: true,
-                close: function () { $(this).dialog('close'); }
-            });
-        });
+    //        domElements.divPlaceEvidence.dialog({
+    //            modal: true,
+    //            width: '900px',
+    //            title: 'ADD EVIDENCE',
+    //            resizable: true,
+    //            draggable: true,
+    //            close: function () { $(this).dialog('close'); }
+    //        });
+    //    });
 
-        domElements.btnPlaceEvidenceCancel.on('click', function () {
-            domElements.divPlaceEvidence.dialog('close');
-        });
+    //    domElements.btnPlaceEvidenceCancel.on('click', function () {
+    //        domElements.divPlaceEvidence.dialog('close');
+    //    });
 
-        domElements.btnPlaceEvidenceSubmit.on('click', function () {
-            AddPlaceEvidence(ctsCustId, username, subscriberId, custId);
-        });
-    }
+    //    domElements.btnPlaceEvidenceSubmit.on('click', function () {
+    //        AddPlaceEvidence(ctsCustId, username, subscriberId, custId);
+    //    });
+    //}
 
-    function ResetPlaceEvidence(username, subscriber) {
-        domElements.lblPlaceEvidenceAccount.text(username);
-        domElements.lblPlaceEvidenceSubscriber.text(subscriber);
-        var desc = $('option:first-child', domElements.ddlPlaceEvidenceListEvidence).attr('desc');
-        if (desc === undefined)
-            desc = '';
-        domElements.divPlaceEvidenceDescription.text(desc);
-        domElements.txtPlaceEvidenceComment.val('');
-    }
+    //function ResetPlaceEvidence(username, subscriber) {
+    //    domElements.lblPlaceEvidenceAccount.text(username);
+    //    domElements.lblPlaceEvidenceSubscriber.text(subscriber);
+    //    var desc = $('option:first-child', domElements.ddlPlaceEvidenceListEvidence).attr('desc');
+    //    if (desc === undefined)
+    //        desc = '';
+    //    domElements.divPlaceEvidenceDescription.text(desc);
+    //    domElements.txtPlaceEvidenceComment.val('');
+    //}
 
     function GetEvidenceInFlaggedEvidenceGrid() {
         var evidenceCodes = [];
@@ -498,58 +498,58 @@
         return evidenceCodes;
     }
 
-    function AddPlaceEvidence(ctsCustId, username, subscriberId, custId) {
-        var url = common.modifyRelativeUrl('/Account/PlaceEvidence');
-        var params = {};
-        params.CTSCustId = ctsCustId;
-        params.CustId = custId;
-        params.SubscriberId = subscriberId;
-        params.EvidenceId = domElements.ddlPlaceEvidenceListEvidence.find('option:selected').val();
-        params.EvidenceCode = domElements.ddlPlaceEvidenceListEvidence.find('option:selected').attr("code");
-        params.Comment = domElements.txtPlaceEvidenceComment.val();
+    //function AddPlaceEvidence(ctsCustId, username, subscriberId, custId) {
+    //    var url = common.modifyRelativeUrl('/Account/PlaceEvidence');
+    //    var params = {};
+    //    params.CTSCustId = ctsCustId;
+    //    params.CustId = custId;
+    //    params.SubscriberId = subscriberId;
+    //    params.EvidenceId = domElements.ddlPlaceEvidenceListEvidence.find('option:selected').val();
+    //    params.EvidenceCode = domElements.ddlPlaceEvidenceListEvidence.find('option:selected').attr("code");
+    //    params.Comment = domElements.txtPlaceEvidenceComment.val();
 
-        $.ajax(url, {
-            type: 'POST',
-            data: params,
-            beforeSend: function () {
-                domElements.btnPlaceEvidenceSubmit.prop('disabled', true);
-                common.showLoading();
-            },
-            success: function (response) {
-                common.showSuccess('Add the evidence successful!');
-                domElements.divPlaceEvidence.dialog('close');
-                var customerCategory = new customer_category();
-                customerCategory.ReloadTab(ctsCustId);
-                GetCustomerClassification(custId);
-            },
-            complete: function () {
-                GetAccountEvidence(ctsCustId, username);
-                common.closeLoading();
-                domElements.btnPlaceEvidenceSubmit.prop('disabled', false);
-            },
-            error: function (errorMessage) {
-                console.log(errorMessage);
-                common.showError('Add the evidence fail!');
-                common.closeLoading();
-            }
-        });
-    }
+    //    $.ajax(url, {
+    //        type: 'POST',
+    //        data: params,
+    //        beforeSend: function () {
+    //            domElements.btnPlaceEvidenceSubmit.prop('disabled', true);
+    //            common.showLoading();
+    //        },
+    //        success: function (response) {
+    //            common.showSuccess('Add the evidence successful!');
+    //            domElements.divPlaceEvidence.dialog('close');
+    //            var customerCategory = new customer_category();
+    //            customerCategory.ReloadTab(ctsCustId);
+    //            GetCustomerClassification(custId);
+    //        },
+    //        complete: function () {
+    //            GetAccountEvidence(ctsCustId, username);
+    //            common.closeLoading();
+    //            domElements.btnPlaceEvidenceSubmit.prop('disabled', false);
+    //        },
+    //        error: function (errorMessage) {
+    //            console.log(errorMessage);
+    //            common.showError('Add the evidence fail!');
+    //            common.closeLoading();
+    //        }
+    //    });
+    //}
 
-    function AddQuickComment(text) {
-        let maxLength = domElements.txtPlaceEvidenceComment.attr('maxlength');
-        let currentText = domElements.txtPlaceEvidenceComment.val();        
-        currentText += " " + text;
+    //function AddQuickComment(text) {
+    //    let maxLength = domElements.txtPlaceEvidenceComment.attr('maxlength');
+    //    let currentText = domElements.txtPlaceEvidenceComment.val();        
+    //    currentText += " " + text;
 
-        if (currentText.length <= maxLength) 
-            domElements.txtPlaceEvidenceComment.val(currentText);
-    }
+    //    if (currentText.length <= maxLength) 
+    //        domElements.txtPlaceEvidenceComment.val(currentText);
+    //}
 
-    function DisableButton(hostPermission) {
-        isHostPermission = hostPermission === "True";
+    //function DisableButton(hostPermission) {
+    //    isHostPermission = hostPermission === "True";
 
-        if (!isHostPermission || domElements.hdCustSubId.val() !== "0")
-            domElements.btnChainToEvidenceFlagged.prop('disabled', true);
-    }
+    //    if (!isHostPermission || domElements.hdCustSubId.val() !== "0")
+    //        domElements.btnChainToEvidenceFlagged.prop('disabled', true);
+    //}
 
     function GetCustomerClassification(custId) {
         setTimeout(function () {
@@ -586,7 +586,7 @@
             label: ''
         });
 
-        DisableButton(hostPermission);
+        //DisableButton(hostPermission);
 
         InitialFlaggedGrid(ctsCustId, username, custId, subscriberId);
 
@@ -594,11 +594,11 @@
 
         GetAccountEvidence(ctsCustId, username);
 
-        InitialPlaceEvidenceForm(ctsCustId, username, subscriberId, subscriber, custId);
+        //InitialPlaceEvidenceForm(ctsCustId, username, subscriberId, subscriber, custId);
 
-        domElements.btnQuickComment.on('click', function () {
-            AddQuickComment($(this).text());
-        });
+        //domElements.btnQuickComment.on('click', function () {
+        //    AddQuickComment($(this).text());
+        //});
 
     };
 }
