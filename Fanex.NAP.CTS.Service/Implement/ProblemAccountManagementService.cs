@@ -52,18 +52,18 @@
             }
         }
 
-        public IEnumerable<ProblemAccountCommentSelModel> GetProblemAccountCommentSel(string custIdList)
-        {
-            var criteria = new ProblemAccountCustomerCommentSelCriteria
-            {
-                CustIdList = custIdList
-            };
+        //public IEnumerable<ProblemAccountCommentSelModel> GetProblemAccountCommentSel(string custIdList)
+        //{
+        //    var criteria = new ProblemAccountCustomerCommentSelCriteria
+        //    {
+        //        CustIdList = custIdList
+        //    };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<ProblemAccountCommentSelModel>(criteria).ToList();
-            }
-        }
+        //    using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+        //    {
+        //        return db.Query<ProblemAccountCommentSelModel>(criteria).ToList();
+        //    }
+        //}
 
         public IEnumerable<ProblemAccountCategoryModel> GetProblemAccountCategories()
         {

@@ -12,7 +12,7 @@
 
         IEnumerable<ProblemAccountModel> GetProblemAccounts(ProblemAccountFilterViewModel filter);
 
-        IEnumerable<ProblemAccountCommentSelModel> GetProblemAccountCommentSel(string custIdList);
+        //IEnumerable<ProblemAccountCommentSelModel> GetProblemAccountCommentSel(string custIdList);
 
         IEnumerable<ProblemAccountCategoryModel> GetProblemAccountCategories();
 

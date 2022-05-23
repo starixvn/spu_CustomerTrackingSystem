@@ -1729,6 +1729,31 @@
     border-bottom-left-radius: 3px;
     border-bottom-right-radius: 3px; }
 
+.float-container {
+  margin: 10px;
+  display: flex; }
+  .float-container .float-left {
+    float: left;
+    width: 55%;
+    padding: 6px; }
+  .float-container .float-right {
+    float: left;
+    width: 44%;
+    padding: 6px;
+    margin-left: 10px; }
+  .float-container fieldset {
+    border: 1px solid #000000;
+    display: block;
+    margin-left: 2px;
+    margin-right: 2px;
+    padding-top: 0.35em;
+    padding-bottom: 0.625em;
+    padding-left: 0.75em;
+    padding-right: 0.75em;
+    height: 100%; }
+    .float-container fieldset legend {
+      padding: 5px 10px; }
+
 .flex {
   display: flex; }
   .flex .flex-auto-width {

@@ -85,22 +85,13 @@
 
             if (paModel != null && paModel.Any())
             {
-                var paCommentSelModel = Enumerable.Empty<ProblemAccountCommentSelModel>();
-                var custIdList = string.Join(",", paModel.Select(x => x.CustID).Distinct());
-
-                if (!isExportExcel)
-                {
-                    paCommentSelModel = _pamService.GetProblemAccountCommentSel(custIdList);
-                }                
-
                 problemAccounts = paModel.OrderByDescending(x => x.CreatedDate).Select(x => new ProblemAccountViewModel
                 {
                     UserName = x.UserName,
                     Site = x.Site,
                     Currency = x.Currency,
                     Category = x.CategoryName,
-                    Comment = isExportExcel ? string.Empty 
-                                            : paCommentSelModel.Any(y => y.Custid == x.CustID) ? paCommentSelModel.FirstOrDefault(y => y.Custid == x.CustID).Comment : string.Empty,
+                    Comment = x.Remark,
                     CreatedBy = x.CreatedBy,
                     CreatedDateStr = x.CreatedDate.ToString(Consts.FormatDateToString_MMMddyyyy)
                 });

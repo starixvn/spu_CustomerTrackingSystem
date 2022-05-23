@@ -1553,6 +1553,14 @@
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        public ActionResult MarkCustomerCategory(long ctsCustId)
+        {
+            var model = "";
+
+            return PartialView("CustomerCategory/MarkCustomerCategory", model);
+        }
+
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult RemoveCatergory(long ctsCustId)
         {
             var model = new MarkCategoryViewModel

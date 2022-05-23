@@ -3,16 +3,17 @@
     let btnMarkCategory = $('#btnmarkcategory');
     let btnRemoveCategory = $('#btnremovecategory');
     let divMarkCategory = $('#divMarkCategory');
+    let divMarkCustomerCategory = $('#divMarkCustomerCategory');
     let divRemoveCategory = $('#divRemoveCategory');
     let tblcustomercategory = $('#customer-category-table');
     let isHostPermission;
-    let cacheCategoryColors = [];    let cacheData = {
+    let cacheData = {
         isVVip: false,
         isPinCategory: false,
         isExcludedTagAssPA: false,
         isProblemAccount: false
     };
-    let dataTable;   
+    let dataTable;
 
     function BindingMarkCategoryForAddNew(custId, ctsCustId, subscriberId) {
         $('#btncancelcategory').on('click', function () {
@@ -283,7 +284,7 @@
         var isExistProblemAccount = false;
         let html = "";
         
-        //html = BuildToogleMarkProblemAccount(html); // for test
+        html = BuildToogleInsertPA(html);
 
         data.map(function (x) {
             if (x.IsProblemAccount) {
@@ -320,12 +321,17 @@
             $('#divHeaderInfo').css('visibility', 'visible');
         }
 
+        $("#btnToogleInsertPA").click(function () { DisplayMarkCustomerCategory(0) });
+
         return isExistProblemAccount;
     }
 
     function RenderNormalCategoryProfilePage(data) {
-        let html = "";
         let indexColorProfile = 1;
+        let html = "";
+
+        html = BuildToogleInsertPA(html);
+
         let cacheCategoryColors = common.categoryColor();
 
         for (let i = 0; i < cacheCategoryColors.length; i++) {
@@ -387,12 +393,44 @@
         $('#divCustomerCategorySummary').html(html);
         $('#spanContentInfoLoading').css('visibility', 'hidden');
         $('#divHeaderInfo').css('visibility', 'visible');
+
+        $("#btnToogleInsertPA").click(function () { console.log('toogle insert PA clicked'); });
     }
 
-    function BuildToogleMarkProblemAccount(html) {       
-        html += "<div class='btn-add-pa'></div>";        
+    function BuildToogleInsertPA(html) {
+        html += "<div class='btn-add-pa' id='btnToogleInsertPA'></div>";
         
         return html;
+    }
+
+    function DisplayMarkCustomerCategory(ctsCustId) {
+        $.ajax(common.modifyRelativeUrl('Account/MarkCustomerCategory'), {
+            type: 'POST',
+            data: {
+                ctsCustId: ctsCustId
+            },
+            beforeSend: function () {
+                common.showLoading();
+            },
+            success: function (response) {
+                divMarkCustomerCategory.html(response);
+            },
+            complete: function () {
+                divMarkCustomerCategory.dialog({
+                    modal: true,
+                    width: '800px',
+                    title: 'MARK CUSTOMER CATEGORY',
+                    resizable: true,
+                    draggable: true,
+                    close: function () { $(this).dialog('close'); }
+                });
+
+                common.closeLoading();
+            },
+            error: function (errMsg) {
+                common.showError(errMsg);
+            }
+        });
     }
 
     function BuildCategoryToHtmlDiv(html, classIconColor, categoryName) {
