@@ -7,7 +7,6 @@
     {
         private static ExceptionEvidenceAdd expectedExceptionEvidenceAdd;
         private static UpdateAccountExceptionModel expectedUpdateAccountExceptionModel;
-        private static UpdatePlaceEvidenceModel expectedUpdatePlaceEvidenceModel;
         private static RemoveEvidenceModel expectedRemoveFlaggedEvidenceModel;
         private static RemoveEvidenceModel expectedRetractAffectedEvidenceModel;
         private static RemoveEvidenceModel expectedRestoreAffectedEvidenceModel;
@@ -28,15 +27,6 @@
             {
                 expectedUpdateAccountExceptionModel = expectedUpdateAccountExceptionModel ?? GenerateSampleUpdateAccountExceptionModel();
                 return expectedUpdateAccountExceptionModel;
-            }
-        }
-
-        public static UpdatePlaceEvidenceModel ExpectedUpdatePlaceEvidenceModel
-        {
-            get
-            {
-                expectedUpdatePlaceEvidenceModel = expectedUpdatePlaceEvidenceModel ?? GenerateSampleUpdatePlaceEvidenceModel();
-                return expectedUpdatePlaceEvidenceModel;
             }
         }
 
@@ -87,17 +77,7 @@
                 Comment = "by test"
             };
 
-        private static UpdatePlaceEvidenceModel GenerateSampleUpdatePlaceEvidenceModel()
-            => new UpdatePlaceEvidenceModel
-            {
-                CTSCustId = 213419,
-                SubscriberId = 2,
-                EvidenceId = 59,
-                Comment = "By Test",
-                UserId = 8
-            };
-
-        private static RemoveEvidenceModel GenerateSampleFlaggedEvidenceModel()
+         private static RemoveEvidenceModel GenerateSampleFlaggedEvidenceModel()
             => new RemoveEvidenceModel
             {
                 CTSCustId = 501755,

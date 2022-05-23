@@ -33,8 +33,6 @@
 
         string GetHtmlChoice(DetailTicketsModel ticket);
   
-        InsertEvidenceCategoryResultModel UpdateRemovedProblemAccountToCTS(string custids, Int64 userId);
-
         IEnumerable<TWProblemAccountModel> GetCustClassBySite(string usernameList);
 
         IEnumerable<TWProblemAccountModel> GetCustomerPerformance(IEnumerable<int> custIdList);

@@ -118,16 +118,6 @@
         }
 
         [Fact]
-        public void Can_PlaceEvidence()
-        {
-            // Act
-            var actualResult = _runner.PlaceEvidence(ExpectedUpdate.ExpectedUpdatePlaceEvidenceModel) as DBResult;
-
-            // Assert
-            Assert.True(actualResult.ErrorCode == 0);
-        }
-
-        [Fact]
         public void Can_RemoveFlaggedEvidence()
         {
             // Act

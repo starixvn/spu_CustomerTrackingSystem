@@ -4,7 +4,6 @@
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.SPU.CTS.CC.Features.CustomerClassification.ProblemAccountInsert.Entities;
-    using Fanex.NAP.CTS.Model.CustomerClassification;    
     using System.Collections.Generic;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
@@ -21,5 +20,9 @@
         IEnumerable<InsertRobotModel> GetExistedTWRobotUser(IEnumerable<long> custIds);
 
         IEnumerable<CustInfoModel> InsertRobotAccount(IEnumerable<InsertRobotModel> robotAccounts);
+
+        void UpdateBetLimitOfFlaggedCustomer(IEnumerable<long> custId);
+
+        void UpdateBetLimitOfUnflaggedCustomer(IEnumerable<long> custId);
     }
 }

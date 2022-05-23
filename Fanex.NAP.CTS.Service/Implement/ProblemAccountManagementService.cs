@@ -584,22 +584,22 @@
             }            
         }      
        
-		public IEnumerable<long> UpdateProblemAccountEvidence(UpdateCategoryParamsModel paras)
-        {
-            var custIdsJson = JsonConvert.SerializeObject(paras.CustInfos);
-            var repository = new DynamicRepository();
+		//public IEnumerable<long> UpdateProblemAccountEvidence(UpdateCategoryParamsModel paras)
+  //      {
+  //          var custIdsJson = JsonConvert.SerializeObject(paras.CustInfos);
+  //          var repository = new DynamicRepository();
 
-            var criteria = new UpdateProblemAccountEvidenceCriteria
-            {
-                CustInfo = custIdsJson,
-                UserID = paras.UserId,
-                SourceType = 1
-            };
+  //          var criteria = new UpdateProblemAccountEvidenceCriteria
+  //          {
+  //              CustInfo = custIdsJson,
+  //              UserID = paras.UserId,
+  //              SourceType = 1
+  //          };
 
-            LogService.Info($"CTS Portal API - UpdateProblemAccountEvidence custIdsJson:  {custIdsJson}");
+  //          LogService.Info($"CTS Portal API - UpdateProblemAccountEvidence custIdsJson:  {custIdsJson}");
 
-            return repository.Fetch<long>(criteria);
-        }
+  //          return repository.Fetch<long>(criteria);
+  //      }
 
         public IEnumerable<long> RemoveProblemAccountEvidence(string custIds)
         {

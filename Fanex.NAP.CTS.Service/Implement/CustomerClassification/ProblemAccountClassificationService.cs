@@ -24,16 +24,12 @@
     {
         private readonly IDynamicRepository _repository;
         private readonly ICustomerClassificationService _ccService;
-        private readonly ICustomerEvidenceService _evidenceService;
-        private readonly IRescanCustomerClassificationService _rescanCCService;
         private readonly IAntiFraudCenterService _antiFraudCenterService;
        
         public ProblemAccountClassificationService()
         {
             _repository = new DynamicRepository();
             _ccService = new CustomerClassificationService();
-            _evidenceService = new CustomerEvidenceService();
-            _rescanCCService = new RescanCustomerClassificationService();
             _antiFraudCenterService = new AntiFraudCenterService();
         }
 
@@ -270,7 +266,7 @@
             };
         }
 
-        private void UpdateBetLimitOfFlaggedCustomer(IEnumerable<long> custId)
+        public void UpdateBetLimitOfFlaggedCustomer(IEnumerable<long> custId)
         {
             if (custId != null && custId.Any())
             {
@@ -283,7 +279,7 @@
             }
         }
 
-        private void UpdateBetLimitOfUnflaggedCustomer(IEnumerable<long> custId)
+        public void UpdateBetLimitOfUnflaggedCustomer(IEnumerable<long> custId)
         {
             if (custId != null && custId.Any())
             {

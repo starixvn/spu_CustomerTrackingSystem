@@ -557,20 +557,6 @@
             <param name="toDate"></param>
             <returns>Customer class in XML format</returns>
         </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.RemoveProblemAccounts(Fanex.NAP.CTS.Model.API.RemovePANapParamsModel)">
-            <summary>
-             Update Removed Problem Account into CTS
-            </summary>
-            <param name="paras">List custId in string format, separated by comma</param>
-            <returns>true: success; false: failed</returns>
-        </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.UpdateCategoryToCTSWhenPAUpdated(Fanex.NAP.CTS.Model.API.UpdateCategoryWhenPAUpdated.UpdateCategoryParamsModel)">
-            <summary>
-            Update Category To CTS When PA Updated
-            </summary>
-            <param name="paras"></param>
-            <returns></returns>
-        </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetCustomerClassCategory">
             <summary>
             Get customer class's categories

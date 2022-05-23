@@ -7,11 +7,5 @@
     public interface ICustomerEvidenceService
     { 
         IEnumerable<CTSCustomerEvidenceViewModel> CheckCleanCustFlaggedEvidence(string ctsCustIds);
-
-        void UpdateBetLimitOfFlaggedCustomer(string custIds);
-
-        void UpdateBetLimitOfUnflaggedCustomer(string custIds);
-
-        AddEvidenceResultModel AddCustEvidenceMultipleByCustId(string custIds, int evidenceId, int userId);
     }
 }
