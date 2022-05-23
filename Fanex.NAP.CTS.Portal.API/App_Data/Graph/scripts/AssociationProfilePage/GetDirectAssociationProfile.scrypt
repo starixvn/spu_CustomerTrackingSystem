@@ -13,7 +13,7 @@ CALL apoc.cypher.run('
                 OR ($ip_AssociationStatus = 2 AND exists((c)-[:HAS_EXCEPTION]-(c1))))
     WITH c, c1, r, st.PriorityOrder as StatusGroup, st.ItemID as ItemID, st.ItemNameDisplay as StatusName, s.SubscriberID as SubscriberID, s.SubscriberName as SubscriberName
     UNWIND r as val
-    UNWIND (CASE WHEN val[0].CreatedDate > val[1].CreatedDate THEN val[0].CreatedDate ELSE val[1].CreatedDate END) AS association
+    UNWIND (CASE WHEN CASE val[0].CreatedDate WHEN null THEN val[0].CreatedTime ELSE val[0].CreatedDate END > CASE val[1].CreatedDate WHEN null THEN val[1].CreatedTime ELSE val[1].CreatedDate END THEN CASE val[0].CreatedDate WHEN null THEN val[0].CreatedTime ELSE val[0].CreatedDate END ELSE CASE val[1].CreatedDate WHEN null THEN val[1].CreatedTime ELSE val[1].CreatedDate END END) AS association
     WITH c, c1, SubscriberID, SubscriberName, StatusGroup, ItemID, StatusName, Min(association) as firstAss
     OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c1)
     RETURN 
