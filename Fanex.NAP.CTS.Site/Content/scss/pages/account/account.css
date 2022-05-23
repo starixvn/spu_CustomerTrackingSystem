@@ -1753,8 +1753,22 @@
     height: 100%; }
     .float-container fieldset legend {
       padding: 5px 10px; }
+    .float-container fieldset .comment-field {
+      border: 1px solid #E5E5E5;
+      border-radius: 2px;
+      font-size: 14px;
+      line-height: 17px;
+      color: #474747;
+      min-height: 380px;
+      width: 100%;
+      padding: 10px 16px;
+      letter-spacing: 0.1px; }
   .float-container .info-block {
-    border-bottom: 1px solid #000000; }
+    padding-bottom: 5px;
+    border-bottom: 1px solid #000000;
+    width: inherit; }
+  .float-container .info-item {
+    margin: 10px; }
 
 .flex {
   display: flex; }

@@ -2,9 +2,9 @@
 <div class="float-container">
     <div class="float-left">
         <fieldset>
-            <legend>Super Test01</legend>
-            <div><label class="info-block">VVIP Category</label></div>
-            <div>
+            <legend id="lblCCRoleName">Super Test01</legend>
+            <div class="info-block"><label>VVIP Category</label></div>
+            <div class="info-item">
                 <label>
                     <input id="inputCCVVIP" name="group1" type="radio">
                     <span class="checkmark"></span>
@@ -16,33 +16,21 @@
                     <span class="checkmark"></span>
                     Affect all Downlines
                 </label>
+                <br /><br />
             </div>
-            <div>
-                <div><label class="info-block">Problem Account Category</label></div>
+
+            <div class="info-block"><label>Problem Account Category</label></div>
+            <div class="info-item">
                 <div>
-                    <label>
-                        <input type="radio" value="value1" name="group2">
-                        <span class="checkmark"></span>
-                        Group Betting
-                    </label>
-                    <br />
-                    <label>
-                        <input type="radio" value="value2" name="group2">
-                        <span class="checkmark"></span>
-                        Hedging
-                    </label>
-                    <br />
-                    <label>
-                        <input type="radio" value="value3" name="group2">
-                        <span class="checkmark"></span>
-                        Arbitrage
-                    </label>
-                    <br />
-                    <label>
-                        <input type="radio" value="value4" name="group2">
-                        <span class="checkmark"></span>
-                        Fixed Game
-                    </label>
+                    @foreach (var paCategory in Model)
+                    {
+                        <label>
+                            <input type="radio" value="@paCategory.CategoryID" data-categorygroup="@paCategory.CategoryGroup" name="group2">
+                            <span class="checkmark"></span>
+                            @paCategory.CategoryName
+                        </label>
+                        <br /><br />
+                    }
                 </div>
             </div>
         </fieldset>
@@ -50,13 +38,13 @@
     <div class="float-right">
         <fieldset>
             <legend>Comment</legend>
-            <textarea id="txtcustomercategorycomment" rows="4" class="comment-field full-width" maxlength="300"></textarea>
+            <textarea id="txtCCComment" rows="4" class="comment-field full-width" maxlength="300"></textarea>
         </fieldset>
     </div>
 </div>
 
 <div class="modal-footer margin-top-10">
-    <button id="btncancelcustomercategory" class="button btn-cancel-outline" title="Cancel">Cancel</button>
-    <button id="btnsavecustomercategory" class="button -add" title="Add Customer Category">Submit</button>
+    <button id="btnCCCancel" class="button btn-cancel-outline" title="Cancel">Cancel</button>
+    <button id="btnCCSave" class="button -add" title="Add Customer Category">Submit</button>
 </div>
 

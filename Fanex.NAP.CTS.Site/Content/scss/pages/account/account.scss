@@ -1538,10 +1538,28 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
         legend {
             padding: 5px 10px;
         }
+
+        .comment-field {
+            border: 1px solid #E5E5E5;
+            border-radius: 2px;
+            font-size: 14px;
+            line-height: 17px;
+            color: #474747;
+            min-height: 380px;
+            width: 100%;
+            padding: 10px 16px;
+            letter-spacing: 0.1px;
+        }
     }
 
     .info-block {
+        padding-bottom: 5px;
         border-bottom: 1px solid #000000;
+        width: inherit;
+    }
+
+    .info-item {
+        margin: 10px;
     }
 }
 
