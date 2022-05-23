@@ -135,7 +135,6 @@
     <Compile Include="Account\AccountExceptionsModel.cs" />
     <Compile Include="Account\AccountGeneralInformation.cs" />
     <Compile Include="Account\AccountStatusModel.cs" />
-    <Compile Include="Account\AddNewEvidenceForFPSModel.cs" />
     <Compile Include="Account\AffectedEvidenceModel.cs" />
     <Compile Include="Account\AffectedEvidenListBetweenCustsModel.cs" />
     <Compile Include="Account\AffectedRetractEvidenceModel.cs" />
@@ -181,8 +180,6 @@
     <Compile Include="API\ForceSpecialCustomerClassModel.cs" />
     <Compile Include="API\ProblemCaseMonitor\ProblemCaseMonitorModel.cs" />
     <Compile Include="API\UpdateCategoryWhenPAUpdated\CustInfoModel.cs" />
-    <Compile Include="API\RemovePANapParamsModel.cs" />
-    <Compile Include="API\UpdateCategoryWhenPAUpdated\UpdateCategoryParamsModel.cs" />
     <Compile Include="API\UpdateCategoryWhenPAUpdated\UpdatePALosingInfoModel.cs" />
     <Compile Include="API\UpdateCategoryWhenPAUpdated\UpdateCategoryModel.cs" />
     <Compile Include="API\UpdateCategoryWhenPAUpdated\UpdateCategoryResultModel.cs" />
@@ -219,14 +216,11 @@
     <Compile Include="Account\TagModel.cs" />
     <Compile Include="Account\BettingStatistic\PerformanceDailyModel.cs" />
     <Compile Include="Account\UpdateAccountExceptionModel.cs" />
-    <Compile Include="Account\UpdatePlaceEvidenceModel.cs" />
     <Compile Include="Account\ValidateManualAssociationMultipleModel.cs" />
     <Compile Include="AssociatedAccountMonitor\AssociatedAccountMonitorModel.cs" />
     <Compile Include="AssociatedAccountMonitor\CustProfilerModel.cs" />
     <Compile Include="AssociatedAccountMonitor\ValidateAssociatedAccountModel.cs" />
-    <Compile Include="CustomerClassification\CustEvidenceInsertModel.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\ExistedPAResultModel.cs" />
-    <Compile Include="CustomerClassification\ProblemAccount\ProblemAccountInsertResultModel.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\CustInfoModel.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\ExistedProblemAccountModel.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\InsertPAResultModel.cs" />
@@ -236,21 +230,16 @@
     <Compile Include="CustomerClassification\Robot\RobotInsetViewEntity.cs" />
     <Compile Include="CustomerClassification\Robot\InsertRobotModel.cs" />
     <Compile Include="CustomerClassification\Robot\RobotUserModel.cs" />
-    <Compile Include="CustomerClassification\SynctEvidenceCategoryResultModel.cs" />
-    <Compile Include="CustomerClassification\InsertProblemAccountResultModel.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\InsertProblemAccountModel.cs" />
     <Compile Include="CustomerClassification\LatestClassification4ReportModel.cs" />
     <Compile Include="CustomerClassification\RescanCustClassificationModel.cs" />
     <Compile Include="DTO\CustomerEvidence.cs" />
     <Compile Include="DTO\CustomerEvidenceForTW.cs" />
     <Compile Include="GraphDB\AssociationProfileParameterModel.cs" />
-    <Compile Include="ImportEvidences\CheckPACustomerAssociationForRollbackModel.cs" />
     <Compile Include="LogInputData\LogInputViewModel.cs" />
     <Compile Include="CustomerClassification\LogInputDataModel.cs" />
     <Compile Include="CustomerClassification\RoleCustomerModel.cs" />
-    <Compile Include="ImportEvidences\CustEvidenceModel.cs" />
     <Compile Include="CustomerClassification\LatestClassificationModel.cs" />
-    <Compile Include="CustomerClassification\MultipleProblemAccountsModel.cs" />
     <Compile Include="FraudCase\NotificationRecipient.cs" />
     <Compile Include="GraphDB\DirectAssociationDeviceModel.cs" />
     <Compile Include="GraphDB\DirectAssociationModel.cs" />
@@ -260,7 +249,6 @@
     <Compile Include="GraphDB\AssociationReportParameterModel.cs" />
     <Compile Include="GraphDB\DirectAssociationParameterModel.cs" />
     <Compile Include="GraphDB\GraphAssociationReportPaging.cs" />
-    <Compile Include="ImportEvidences\AddEvidenceResultModel.cs" />
     <Compile Include="ImportEvidences\InsertAccountEvidenceQueueModel.cs" />
     <Compile Include="LatestTransaction\LatestTransactionModel.cs" />
     <Compile Include="ManageSubscriber\ReUpdateSubscribeBySiteIDModel.cs" />
@@ -301,7 +289,6 @@
     <Compile Include="ProblemAccountManagement\ProblemAccountValidatedModel.cs" />
     <Compile Include="ProblemAccountManagement\ResultProblemAccountAddCustomerModel.cs" />
     <Compile Include="ProblemAccountManagement\ResultProblemAccountUpdateModel.cs" />
-    <Compile Include="ProblemAccountMonitor\InsertProblemAccountsModel.cs" />
     <Compile Include="ProblemAccountMonitor\TWProblemAccount\TWProblemAccountModel.cs" />
     <Compile Include="ProblemCaseMonitor\ProblemCasesMonitorModel.cs" />
     <Compile Include="ProblemCaseMonitor\ProblemCasesMonitorFilterModel.cs" />
@@ -343,9 +330,7 @@
     <Compile Include="GraphDB\ShortestPath.cs" />
     <Compile Include="GraphDB\ShortestPathOfAccount.cs" />
     <Compile Include="Home\SearchResultModel.cs" />
-    <Compile Include="ImportEvidences\AddAccountEvidenceModel.cs" />
     <Compile Include="ImportEvidences\CheckAccountEvidenceModel.cs" />
-    <Compile Include="ImportEvidences\InsertEvidenceParametersModel.cs" />
     <Compile Include="ImportEvidences\RawAccountEvidenceModel.cs" />
     <Compile Include="ImportEvidences\ResultCheckAccountEvidenceModel.cs" />
     <Compile Include="IP\IpModel.cs" />
@@ -369,11 +354,9 @@
     <Compile Include="Subscriber\SubscriberAssignmentUpdate.cs" />
     <Compile Include="Subscriber\SubscriberInfo.cs" />
     <Compile Include="PushDataToExternal\CustomerClassForMainDb.cs" />
-    <Compile Include="PushDataToExternal\InsertEvidenceCategoryResultModel.cs" />
     <Compile Include="PushDataToExternal\PushDataToExternalModel.cs" />
     <Compile Include="TransactionReport\TransactionModel.cs" />
     <Compile Include="Transaction\DataTableAjaxPostModel.cs" />
-    <Compile Include="LogInputData\PlaceEvidencesViewModel.cs" />
     <Compile Include="Transaction\Transaction.cs" />
     <Compile Include="Transaction\HistoryTransactionModel.cs" />
   </ItemGroup>

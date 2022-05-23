@@ -30,7 +30,7 @@
 
 		byte[] ExportProblemAccount(IEnumerable<ProblemAccountViewModel> problemAccounts, string fileName, string templatePath, ProblemAccountFilterViewModel filter);
 
-        IEnumerable<long> UpdateProblemAccountEvidence(UpdateCategoryParamsModel paras);
+        //IEnumerable<long> UpdateProblemAccountEvidence(UpdateCategoryParamsModel paras);
 
         IEnumerable<long> RemoveProblemAccountEvidence(string custIds);
 

@@ -128,7 +128,7 @@
 
             if (resultRemoveToCTS.ErrorCode == 0)
             {
-                _customerClassifyService.RescanCustomerClassify(new RescanCustClassificationModel
+                _customerClassifyService.RescanCustomerClassification(new RescanCustClassificationModel
                 {
                     CustIds = new List<long> { custID },
                     IsCheckPAFromNAP = true,

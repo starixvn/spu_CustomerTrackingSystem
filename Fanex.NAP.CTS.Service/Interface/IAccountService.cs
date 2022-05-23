@@ -70,13 +70,7 @@
 
         AffectedRetractEvidenceModel GetAffectedRetractEvidences(long ctsCustId, string evidenceCodes);
 
-        DBResult PlaceEvidence(UpdatePlaceEvidenceModel model);
-
-        void FPSAddNewEvidence(string apiURL, UpdatePlaceEvidenceModel model);
-
         DBResult RemoveFlaggedEvidence(RemoveEvidenceModel model);
-
-        SynctEvidenceCategoryResultModel SyncCustEvidenceToCategory(string custEvidencesJson, bool isRescan, out IEnumerable<long> custIds);
 
         List<AccountExceptionsModel> GetAccountExceptions(long ctsCustId);
 
@@ -89,8 +83,6 @@
         int RestoreAffectedEvidence(RemoveEvidenceModel model);
 
         IEnumerable<AffectedEvidenceListBetweenCustsModel> GetAffectedEvidenceListBetweenCusts(Int64 fromCTSCustID, Int64 toCTSCustID);
-
-        int CheckNewPAAssociationCustomerForRollback(IEnumerable<CheckPACustomerAssociationForRollbackModel> assCustForRollbacks);
 
         IEnumerable<SportGroup> GetAllSportGroup();
 
@@ -131,8 +123,6 @@
         IEnumerable<CustomerClassificationModel> GetCustomerClassificationForAPI(string custIdList, string parentCateIdList);
 
         IEnumerable<CustomerClassificationGeneralInfoModel> GetCustomerClassificationByCategory(string categoryIdList);
-
-        DBResult ProcessPlaceEvidence(UpdatePlaceEvidenceModel model);
 
         IEnumerable<CTSCustomer> CheckCustomerNotExisted(string custIds, DateTime fromDate, DateTime toDate);
 

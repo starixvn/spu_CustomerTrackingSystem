@@ -213,32 +213,6 @@
             return htmlBuilder.BuildChoice(coreTicket, ticketHelper, null, true);           
         }
 
-        public InsertEvidenceCategoryResultModel UpdateRemovedProblemAccountToCTS(string custid, Int64 userId)
-        {
-            var custIds = new List<long>();
-            var repository = new DynamicRepository();
-
-            var removedProblemAccounts = custid.Split(',').Select(a => new InsertProblemAccountsModel()
-            {
-                CustID = Convert.ToInt32(a),
-                ReasonID = Consts.REMOVE_PROBLEMACCOUNT_CATEGORYID,
-                CreatedBy = userId
-            });
-
-            var criteria = new InsertProblemAccountCriteria
-            {
-                ProblemAccountJson = JsonConvert.SerializeObject(removedProblemAccounts),
-                IsRescan = false
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                custIds = repository.Fetch<long>(criteria).ToList();
-            }
-
-            return new InsertEvidenceCategoryResultModel() { ErrorMessage = criteria.ErrorMessage, CustIds = custIds };
-        }
-
         public IEnumerable<TWProblemAccountModel> GetCustClassBySite(string usernameList)
         {
             var criteria = new GetCustClassificationBySiteCriteria() 

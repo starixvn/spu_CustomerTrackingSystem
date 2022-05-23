@@ -101,7 +101,6 @@
     <Setting Key="CTS_DC_CustEvidence_GetFlaggedEvidences" SpName="CTS_DC_CustEvidence_GetFlaggedEvidences_xtest" DbName="MySQL.CTS_DataCenter" />
     <Setting Key="CTS_DC_CustEvidence_GetAffectedEvidences" SpName="CTS_DC_CustEvidence_GetAffectedEvidences_xtest" DbName="MySQL.CTS_DataCenter" />
     <Setting Key="CTS_DC_CustEvidence_RemoveFlagged" SpName="CTS_DC_CustEvidence_RemoveFlagged_xtest" DbName="MySQL.CTS_DataCenter" />    
-    <Setting Key="CTS_DC_CustEvidence_InsertSingle" SpName="CTS_DC_CustEvidence_InsertSingle_xtest" DbName="MySQL.CTS_DataCenter" />
     <Setting Key="CTS_DC_CustEvidence_RemoveAffected" SpName="CTS_DC_CustEvidence_RemoveAffected_xtest" DbName="MySQL.CTS_DataCenter" />
     <Setting Key="CTS_DC_CustEvidence_RestoreAffected" SpName="CTS_DC_CustEvidence_RestoreAffected_xtest" DbName="MySQL.CTS_DataCenter" />
     <Setting Key="CTS_DC_Evidences_GetAll" SpName="CTS_DC_Evidences_GetAll_xtest" DbName="MySQL.CTS_DataCenter" />

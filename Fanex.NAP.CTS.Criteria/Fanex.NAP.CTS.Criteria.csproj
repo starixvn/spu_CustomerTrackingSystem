@@ -64,7 +64,6 @@
     <Compile Include="Account\BettingStatistic\BettingStatictisDaily.cs" />
     <Compile Include="Account\ChainToEvidence\AddAccountExceptionCriteria.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\CheckNewPAAssociationCustomerForRollbackCriteria.cs" />
-    <Compile Include="Account\ChainToEvidence\CustEvidenceSyncToCategoryCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\GetAccountExceptionsCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\GetAffectedEvidenceBetweenCustsCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\GetAffectedEvidenceCriteria.cs" />
@@ -111,8 +110,6 @@
     <Compile Include="CustomerClassification\ProblemAccount\GetExistedTWRobotUserCriteria.cs" />
     <Compile Include="CustomerClassification\GetRoleCustomerCriteria.cs" />
     <Compile Include="CustomerClassification\GetLastestClassificationCriteria.cs" />
-    <Compile Include="CustomerClassification\GetExistedEvidencesCriteria.cs" />
-    <Compile Include="CustomerClassification\GetProblemAccountsCriteria.cs" />
     <Compile Include="CustomerClassification\NormalAccountsClassificationGeneralCategorizeDailyCriteria.cs" />
     <Compile Include="CustomerClassification\UpdateAppliedCustomerClassificationCriteria.cs" />
     <Compile Include="ImportEvidences\InsertCustEvidenceFromFileCriteria.cs" />
@@ -146,9 +143,7 @@
     <Compile Include="ProblemAccountManagement\RemoveProblemAccountEvidenceCriteria.cs" />
     <Compile Include="ProblemAccountManagement\UpdateProblemAccountEvidenceCriteria.cs" />
     <Compile Include="ProblemAccountManagement\ValidateUserNamesInputCriteria.cs" />
-    <Compile Include="ProblemAccountMonitor\InsertProblemAccountCriteria.cs" />
     <Compile Include="ProblemCaseMonitor\ProblemCaseFilterGetCriteria.cs" />
-    <Compile Include="Account\ChainToEvidence\PlaceEvidenceCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\RemoveFlaggedEvidenceCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\RemoveAccountExceptionCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\RestoreAffectedEvidenceCriteria.cs" />
@@ -182,7 +177,6 @@
     <Compile Include="AssociatedAccountMonitor\RemoveAssociatedAccountCriteria.cs" />
     <Compile Include="AssociatedAccountMonitor\ValidateAssociatedAccountCriteria.cs" />
     <Compile Include="CTSUser\InsertCTSUserCriteria.cs" />
-    <Compile Include="ImportEvidences\InsertMultipleCustEviByCustIdCriteria.cs" />
     <Compile Include="ManageSubscriber\SubscriberGetDetailedSiteCriteria.cs" />
     <Compile Include="Notification\NotificationSettingStatusUpdateCriteria.cs" />
     <Compile Include="Notification\NotificationSettingStatusGetCriteria.cs" />

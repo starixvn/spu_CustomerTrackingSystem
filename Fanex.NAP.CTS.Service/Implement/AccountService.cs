@@ -43,12 +43,10 @@
 
     public class AccountService : IAccountService
     {
-        private readonly ICustomerEvidenceService customerEvidenceService;
         private readonly IDynamicRepository repository;
 
         public AccountService()
         {
-            customerEvidenceService = new CustomerEvidenceService();
             repository = new DynamicRepository();
         }
 
@@ -759,78 +757,6 @@
             }
         }
 
-        public DBResult PlaceEvidence(UpdatePlaceEvidenceModel model)
-        {
-            var criteria = new PlaceEvidenceCriteria
-            {
-                CTSCustId = model.CTSCustId,
-                EvidenceId = model.EvidenceId,
-                Remark = model.Comment,
-                UserId = model.UserId
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                try
-                {
-                    db.ExecuteNonQuery(criteria);
-
-                    if (!string.IsNullOrEmpty(criteria.ErrorMessage))
-                    {
-                        return new DBResult { ErrorCode = -1, ErrorMsg = criteria.ErrorMessage };
-                    }
-                    else
-                    {
-                        return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
-                    }
-                }
-                catch (Exception ex)
-                {
-                    LogService.Error("CTS - Place Evidence Manual throws exception: " + ex.Message, ex);
-
-                    return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
-                }
-            }
-        }
-
-        public DBResult ProcessPlaceEvidence(UpdatePlaceEvidenceModel model)
-        {
-            var result = PlaceEvidence(model);
-
-            if (result.ErrorCode == 0)
-            {
-                customerEvidenceService.UpdateBetLimitOfFlaggedCustomer(model.CustId.ToString());
-
-                Task.Run(() =>
-                {
-
-                    try
-                    {
-                        FPSAddNewEvidence(ConfigSettings.AddNewEvidence, model);
-                    }
-                    catch (Exception ex)
-                    {
-                        LogService.Error(ex.Message);
-                    }
-                });
-            }
-
-            return result;
-        }
-
-        public void FPSAddNewEvidence(string apiURL, UpdatePlaceEvidenceModel model)
-        {
-            var data = ApiHelper.Post<AddNewEvidenceForFPSModel>(apiURL, new AddNewEvidenceForFPSModel
-            {
-                CustIds = model.CustId.ToString(),
-                EviCodes = model.EvidenceCode,
-                CreatedBy = model.UserId.ToString(),
-                Comment = model.Comment
-            });
-
-            Task.WhenAll(data);
-        }
-
         public DBResult RemoveFlaggedEvidence(RemoveEvidenceModel model)
         {
             var criteria = new RemoveFlaggedEvidenceCriteria
@@ -861,42 +787,6 @@
 
                     return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
                 }
-            }
-        }
-
-        public SynctEvidenceCategoryResultModel SyncCustEvidenceToCategory(string custEvidencesJson, bool isRescan, out IEnumerable<long> custIds)
-        {
-            custIds = Enumerable.Empty<long>();
-
-            try
-            {
-                var criteria = new CustEvidenceSyncToCategoryCriteria
-                {
-                    CustEvidencesJson = custEvidencesJson,
-                    IsRescan = isRescan
-                };
-
-                var custInfos = repository.Fetch<CheckPACustomerAssociationForRollbackModel>(criteria);
-
-                if (!string.IsNullOrEmpty(criteria.ErrorMessage))
-                {
-                    LogService.Error("CTS - AccountService SyncCustEvidenceToCategory failed: " + criteria.ErrorMessage);
-                }
-
-                custIds = custInfos?.Select(x => x.CustID) ?? Enumerable.Empty<long>();
-
-                return new SynctEvidenceCategoryResultModel
-                {
-                    ErrorCode = string.IsNullOrEmpty(criteria.ErrorMessage) ? 0 : -1,
-                    ErrorMsg = criteria.ErrorMessage,
-                    CustInfo = custInfos
-                };
-            }
-            catch (Exception ex)
-            {
-                LogService.Error("CTS - AccountService SyncCustEvidenceToCategory exception: " + ex.Message, ex);
-
-                return new SynctEvidenceCategoryResultModel { ErrorCode = -1, ErrorMsg = ex.Message, CustInfo = Enumerable.Empty<CheckPACustomerAssociationForRollbackModel>() };
             }
         }
 
@@ -1024,39 +914,7 @@
             }
         }
 
-        public int CheckNewPAAssociationCustomerForRollback(IEnumerable<CheckPACustomerAssociationForRollbackModel> assCustForRollbacks)
-        {
-            var result = 0;
-
-            try
-            {
-                if (assCustForRollbacks != null && assCustForRollbacks.Any())
-                {
-                    var custInfoJson = JsonConvert.SerializeObject(assCustForRollbacks);
-
-                    var criteria = new CheckNewPAAssociationCustomerForRollbackCriteria
-                    {
-                        CustInfoJson = custInfoJson
-                    };
-
-                    result = repository.Execute(criteria);
-                }                
-            }
-            catch (Exception ex)
-            {
-                var logMessage = new LogMessage(ex.Message)
-                   .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                   .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error(logMessage);
-
-                result = - 1;
-            }
-
-            return result;
-        }
-
-        #endregion
+         #endregion
 
         #region Customer Category
         public IEnumerable<SportGroup> GetAllSportGroup()

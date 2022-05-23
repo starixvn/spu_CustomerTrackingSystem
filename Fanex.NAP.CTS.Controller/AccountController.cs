@@ -56,6 +56,7 @@
         private readonly IRobotClassificationService _robotClassificationService;
         private readonly IRobotBettingService _robotBettingService;
         private readonly IAntiFraudCenterService _antiFraudCenterService;
+        private readonly IProblemAccountClassificationService _problemAccountClassificationService;
 
         public override string BaseControllerName { get => string.Empty; }
 
@@ -71,6 +72,7 @@
             _robotClassificationService = new RobotClassificationService();
             _robotBettingService = new RobotBettingService();
             _antiFraudCenterService = new AntiFraudCenterService();
+            _problemAccountClassificationService = new ProblemAccountClassificationService();
         }
 
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileRpt)]
@@ -1083,7 +1085,7 @@
 
                 if (custIdsFlaggedEvidences != null && custIdsFlaggedEvidences.Any())
                 {
-                    _customerEvidenceService.UpdateBetLimitOfUnflaggedCustomer(string.Join(",", custIdsFlaggedEvidences.Select(c => c.CustID)));
+                    _problemAccountClassificationService.UpdateBetLimitOfUnflaggedCustomer(custIdsFlaggedEvidences.Select(c => (long)c.CustID));
                 }
             }
 
@@ -1127,7 +1129,7 @@
 
                 if (custExistEvidence.Any())
                 {
-                    _customerEvidenceService.UpdateBetLimitOfFlaggedCustomer(string.Join(",", custExistEvidence.Select(c => c.CustID)));
+                    _problemAccountClassificationService.UpdateBetLimitOfFlaggedCustomer(custExistEvidence.Select(c => (long)c.CustID));
                 }
             }
 
@@ -1137,112 +1139,105 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpPost]
-        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileChainstoEvidenceInsertEvidence)]
-        public ActionResult PlaceEvidence(UpdatePlaceEvidenceModel model)
-        {
-            model.UserId = model.UserId == 0 ? CurrentSession.UserId : model.UserId;
-            var result = _accountService.ProcessPlaceEvidence(model);
+        //[HttpPost]
+        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        //[TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileChainstoEvidenceInsertEvidence)]
+        //public ActionResult PlaceEvidence(UpdatePlaceEvidenceModel model)
+        //{
+        //    model.UserId = model.UserId == 0 ? CurrentSession.UserId : model.UserId;
+        //    var result = _accountService.ProcessPlaceEvidence(model);
 
-            if (result.ErrorCode == 0)
-            {
-                var objects = new[] { new CustEvidenceModel {
-                    CTSCustId = model.CTSCustId,
-                    CustId = model.CustId,
-                    SubscriberId = model.SubscriberId,
-                    EvidenceId = model.EvidenceId,
-                    CreatedBy = model.UserId,
-                    ActionType = 0 
-                } };
+        //    if (result.ErrorCode == 0)
+        //    {
+         
 
-                var syncCustIds = Enumerable.Empty<long>();
+        //        var syncCustIds = Enumerable.Empty<long>();
 
-                var paLosingClassification = _rescanClassificationService.GetProblemAccountLosing(objects, FunctionId.PlaceSingleEvidence);
+        //        var paLosingClassification = _rescanClassificationService.GetProblemAccountLosing(objects, FunctionId.PlaceSingleEvidence);
 
-                var custEvidenceJson = JsonConvert.SerializeObject(paLosingClassification);
+        //        var custEvidenceJson = JsonConvert.SerializeObject(paLosingClassification);
 
-                var syncResult = _accountService.SyncCustEvidenceToCategory(custEvidenceJson, false, out syncCustIds);
+        //        var syncResult = _accountService.SyncCustEvidenceToCategory(custEvidenceJson, false, out syncCustIds);
 
-                if (syncResult.ErrorCode == 0)
-                {
-                    _customerClassificationService.PushDataToExternal(syncCustIds, new PushDataToExternalModel
-                    {
-                        ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
-                        IsPushCCToSoon88 = true,
-                        IsUpdateDangerToMainDB = true,
-                        DangerLevelType = DangerLevel.ABI
-                    });
+        //        if (syncResult.ErrorCode == 0)
+        //        {
+        //            _customerClassificationService.PushDataToExternal(syncCustIds, new PushDataToExternalModel
+        //            {
+        //                ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
+        //                IsPushCCToSoon88 = true,
+        //                IsUpdateDangerToMainDB = true,
+        //                DangerLevelType = DangerLevel.ABI
+        //            });
 
-                    var tasks = new List<Task>
-                    {
-                        Task.Run(() =>
-                        {
-                             _accountService.CheckNewPAAssociationCustomerForRollback(syncResult.CustInfo);
-                        }),
-                        Task.Run(() =>
-                        {
-                            _antiFraudCenterService.InsertAFCAccounts(syncCustIds, FromFlow.CTSWEB);
-                        })
-                    };
+        //            var tasks = new List<Task>
+        //            {
+        //                Task.Run(() =>
+        //                {
+        //                     _accountService.CheckNewPAAssociationCustomerForRollback(syncResult.CustInfo);
+        //                }),
+        //                Task.Run(() =>
+        //                {
+        //                    _antiFraudCenterService.InsertAFCAccounts(syncCustIds, FromFlow.CTSWEB);
+        //                })
+        //            };
 
-                    Task.WhenAll(tasks.ToArray());
-                }
-            }
+        //            Task.WhenAll(tasks.ToArray());
+        //        }
+        //    }
 
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
+        //    return Json(result, JsonRequestBehavior.AllowGet);
+        //}
 
-        [HttpPost]
-        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileChainstoEvidenceRemoveEvidence)]
-        public ActionResult RemoveFlaggedEvidence(RemoveEvidenceModel model)
-        {
-            model.UserId = CurrentSession.UserId;
+        //[HttpPost]
+        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        //[TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileChainstoEvidenceRemoveEvidence)]
+        //public ActionResult RemoveFlaggedEvidence(RemoveEvidenceModel model)
+        //{
+        //    model.UserId = CurrentSession.UserId;
 
-            var result = _accountService.RemoveFlaggedEvidence(model);
+        //    var result = _accountService.RemoveFlaggedEvidence(model);
 
-            if (result.ErrorCode == 0)
-            {
-                var objects = new[] { new {
-                   CTSCustID = model.CTSCustId,
-                   CustID = model.CustId,
-                   SubscriberID = model.SubscriberId,
-                   EvidenceID = model.EvidenceId,
-                   CreatedBy = model.UserId,
-                   ActionType = 2
-                } };
+        //    if (result.ErrorCode == 0)
+        //    {
+        //        var objects = new[] { new {
+        //           CTSCustID = model.CTSCustId,
+        //           CustID = model.CustId,
+        //           SubscriberID = model.SubscriberId,
+        //           EvidenceID = model.EvidenceId,
+        //           CreatedBy = model.UserId,
+        //           ActionType = 2
+        //        } };
 
-                var syncCustIds = Enumerable.Empty<long>();
-                var custEvidenceJson = JsonConvert.SerializeObject(objects);
+        //        var syncCustIds = Enumerable.Empty<long>();
+        //        var custEvidenceJson = JsonConvert.SerializeObject(objects);
 
-                // Sync Evidence to Category
-                var syncResult = _accountService.SyncCustEvidenceToCategory(custEvidenceJson, false, out syncCustIds);
+        //        // Sync Evidence to Category
+        //        var syncResult = _accountService.SyncCustEvidenceToCategory(custEvidenceJson, false, out syncCustIds);
 
-                if (syncResult.ErrorCode == 0)
-                {
-                    // Rescan Problem Account & Normal Account
-                    _rescanClassificationService.RescanCustomerClassify(new RescanCustClassificationModel
-                    {
-                        CustIds = syncCustIds,
-                        IsCheckPAFromNAP = true,
-                        IsPushCCToSoon88 = true,
-                        FunctionId = FunctionId.RemoveFlaggedEvidenceWeb,
-                        IsUpdateDangerToMainDB = true,
-                        DangerLevelType = DangerLevel.ABI
-                    });
-                }
+        //        if (syncResult.ErrorCode == 0)
+        //        {
+        //            // Rescan Problem Account & Normal Account
+        //            _rescanClassificationService.RescanCustomerClassify(new RescanCustClassificationModel
+        //            {
+        //                CustIds = syncCustIds,
+        //                IsCheckPAFromNAP = true,
+        //                IsPushCCToSoon88 = true,
+        //                FunctionId = FunctionId.RemoveFlaggedEvidenceWeb,
+        //                IsUpdateDangerToMainDB = true,
+        //                DangerLevelType = DangerLevel.ABI
+        //            });
+        //        }
 
-                var custIdsFlaggedEvidences = _customerEvidenceService.CheckCleanCustFlaggedEvidence(model.CTSCustId.ToString());
+        //        var custIdsFlaggedEvidences = _customerEvidenceService.CheckCleanCustFlaggedEvidence(model.CTSCustId.ToString());
 
-                if (custIdsFlaggedEvidences != null && custIdsFlaggedEvidences.Any())
-                {
-                    _customerEvidenceService.UpdateBetLimitOfUnflaggedCustomer(string.Join(",", custIdsFlaggedEvidences.Select(c => c.CustID)));
-                }
-            }
+        //        if (custIdsFlaggedEvidences != null && custIdsFlaggedEvidences.Any())
+        //        {
+        //            _customerEvidenceService.UpdateBetLimitOfUnflaggedCustomer(string.Join(",", custIdsFlaggedEvidences.Select(c => c.CustID)));
+        //        }
+        //    }
 
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
+        //    return Json(result, JsonRequestBehavior.AllowGet);
+        //}
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
@@ -1259,7 +1254,7 @@
 
                 if (custIdsFlaggedEvidences != null && custIdsFlaggedEvidences.Any())
                 {
-                    _customerEvidenceService.UpdateBetLimitOfUnflaggedCustomer(string.Join(",", custIdsFlaggedEvidences.Select(c => c.CustID)));
+                    _problemAccountClassificationService.UpdateBetLimitOfUnflaggedCustomer(custIdsFlaggedEvidences.Select(c => (long)c.CustID));
                 }
             }
 
@@ -1282,7 +1277,7 @@
                 {
                     var custId = _accountService.GetCustomerInfoByCTSCustId(model.CTSCustId).CustID;
 
-                    _customerEvidenceService.UpdateBetLimitOfFlaggedCustomer(custId.ToString());
+                    _problemAccountClassificationService.UpdateBetLimitOfFlaggedCustomer( new List<long> { custId });
                 }
             }
 
@@ -1659,7 +1654,7 @@
                     if (custIdInt != 0)
                     {
                         // Rescan Problem Account & Normal Account
-                        _rescanClassificationService.RescanCustomerClassify(new RescanCustClassificationModel
+                        _rescanClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
                         {
                             CustIds = new List<long> { custIdInt },
                             IsCheckPAFromNAP = true,
@@ -1709,7 +1704,7 @@
                 && !isProblemAccount
                 && custSubId == 0)
             {
-                _rescanClassificationService.RescanCustomerClassify(new RescanCustClassificationModel
+                _rescanClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
                 {
                     CustIds = new List<long> { custId },
                     IsCheckPAFromNAP = true,

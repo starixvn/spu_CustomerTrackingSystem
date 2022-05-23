@@ -197,7 +197,7 @@
             InactivateNewCustomer = 11,
             ProblemDailyJob = 12,
             InsertEvidenceJob = 13,
-            PlaceSingleEvidence = 14,
+            //PlaceSingleEvidence = 14,
             PlaceEvidenceForMultiCustAPI = 21,
             PlaceMultiEvidencesForMultiCustAPI = 22,
             RobotUserJob = 23,
@@ -216,7 +216,7 @@
             RemoveMultiEvi_CheckRobotUser = 39,
             ExcludeTaggingAss_CheckRobotUser = 40,
             InsertPAJob = 41,
-            UpdateCategory = 42,
+            //UpdateCategory = 42,?
             InsertPAM = 43
         };
 
@@ -281,7 +281,7 @@
             AccountProfileAssAccountViewOnGraph = 29,
             AccountProfileAssAccountLinkedUnlinked = 30,
             AccountProfileChainstoEvidencesRpt = 31,
-            AccountProfileChainstoEvidenceInsertEvidence = 32,
+            //AccountProfileChainstoEvidenceInsertEvidence = 32,
             AccountProfileChainstoEvidenceRemoveEvidence = 33,
             AccountProfileChainstoEvidenceRemoveAffEvidence = 34,
             AccountProfileChainstoEvidenceInsertExceptions = 35,
@@ -310,8 +310,8 @@
             GetCustomerClassificationByCategoryIDsAPI = 208,
             GetVVIPCustomerAPI = 209,
             CheckCustomerNotExistedAPI = 210,
-            RemoveProblemAccountsAPI = 211,
-            UpdateCategoryToCTSWhenPAUpdatedAPI = 212,
+            //RemoveProblemAccountsAPI = 211,
+            //UpdateCategoryToCTSWhenPAUpdatedAPI = 212,
             GetCustomerClassCategoryAPI = 213,
             GetSubscriberInfoAPI = 214,
             GetAssociationPerTypeAPI = 215,
