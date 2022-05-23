@@ -1521,7 +1521,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
         float: left;
         width: 44%;
         padding: 6px;
-        margin-left: 10px;      
+        margin-left: 10px;
     }
 
     fieldset {
@@ -1538,6 +1538,10 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
         legend {
             padding: 5px 10px;
         }
+    }
+
+    .info-block {
+        border-bottom: 1px solid #000000;
     }
 }
 
