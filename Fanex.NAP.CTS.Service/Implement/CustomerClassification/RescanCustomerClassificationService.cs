@@ -205,7 +205,7 @@
         {
             if (problemAccounts.Any())
             {
-                var result = problemAccountService.InsertProblemAccountLogics(problemAccounts, paLosing, InsertPA_ByType.Category, serviceName);
+                var result = problemAccountService.InsertProblemAccountLogics(problemAccounts, paLosing, InsertPA_ByType.Category, serviceName, false);
 
                 rescanResultModel.IsSuccess = (result.ErrorCode == 0);
 

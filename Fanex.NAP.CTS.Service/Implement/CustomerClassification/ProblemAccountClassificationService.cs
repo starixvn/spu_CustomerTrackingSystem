@@ -43,7 +43,7 @@
 
                     var probAccountLosing = GetProblemAccountLosingClassification(custIds, FunctionId.InsertPAM);
 
-                    var result = InsertProblemAccount(problemAccounts, probAccountLosing, mappingCategoryByType, serviceName);
+                    var result = InsertProblemAccount(problemAccounts, probAccountLosing, mappingCategoryByType, serviceName, false);
 
                     if (result.ErrorCode == 0)
                     {
@@ -67,13 +67,17 @@
             return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
         }
 
-        public InsertPAResultModel InsertProblemAccountLogics(IEnumerable<InsertProblemAccountModel> problemAccounts, IEnumerable<ProblemAccountLosingClassificationModel> paLosing, InsertPA_ByType mappingCategoryByType, string serviceName)
+        public InsertPAResultModel InsertProblemAccountLogics(IEnumerable<InsertProblemAccountModel> problemAccounts
+            , IEnumerable<ProblemAccountLosingClassificationModel> paLosing
+            , InsertPA_ByType mappingCategoryByType
+            , string serviceName
+            , bool isFromQueue)
         {
             var result = new InsertPAResultModel();
 
             if (problemAccounts.Any())
             {
-                result = InsertProblemAccount(problemAccounts, paLosing, mappingCategoryByType, serviceName);
+                result = InsertProblemAccount(problemAccounts, paLosing, mappingCategoryByType, serviceName, isFromQueue);
 
                 if (result.ErrorCode == 0)
                 {
@@ -158,7 +162,11 @@
 
         #region Private Methods
 
-        private InsertPAResultModel InsertProblemAccount(IEnumerable<InsertProblemAccountModel> problemAccounts, IEnumerable<ProblemAccountLosingClassificationModel> paLosing, InsertPA_ByType insertByType, string serviceName)
+        private InsertPAResultModel InsertProblemAccount(IEnumerable<InsertProblemAccountModel> problemAccounts
+            , IEnumerable<ProblemAccountLosingClassificationModel> paLosing
+            , InsertPA_ByType insertByType
+            , string serviceName
+            , bool isFromQueue)
         {
             var result = new InsertPAResultModel();
 
@@ -166,7 +174,7 @@
             {
                 var paClassification = MergeProblemAccountClassification(problemAccounts, paLosing);
 
-                result = InsertProblemAccount(JsonConvert.SerializeObject(paClassification), insertByType);
+                result = InsertProblemAccount(JsonConvert.SerializeObject(paClassification), insertByType, isFromQueue);
 
                 if (result.ErrorCode != 0)
                 {
@@ -248,11 +256,12 @@
             return Enumerable.Empty<InsertProblemAccountModel>();
         }
 
-        private InsertPAResultModel InsertProblemAccount(string problemAccountJson, InsertPA_ByType byType)
+        private InsertPAResultModel InsertProblemAccount(string problemAccountJson, InsertPA_ByType byType, bool isFromQueue)
         {
             var criteria = new ProblemAccountInsertCriteria
             {
                 ProblemAccountJson = problemAccountJson,
+                IsFromQueue = isFromQueue,
                 ByType = Enum.GetName(typeof(InsertPA_ByType), byType)
             };
 

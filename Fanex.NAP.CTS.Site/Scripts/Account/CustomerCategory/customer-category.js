@@ -6,6 +6,7 @@
     let divMarkCustomerCategory = $('#divMarkCustomerCategory');
     let divRemoveCategory = $('#divRemoveCategory');
     let tblcustomercategory = $('#customer-category-table');
+    let divProfileMarkCustomerCategory = $('#divProfileMarkCustomerCategory');
     let isHostPermission;
     let cacheData = {
         isVVip: false,
@@ -437,8 +438,7 @@
                     SaveMarkCustomerCategory();                    
                 });
 
-                $('#inputCCVVIP').on('click', function () {
-                    $('input[name="group2"]').val();
+                $('#inputCCVVIP').on('click', function () {                    
                 });
             },
             error: function (errMsg) {
@@ -447,28 +447,26 @@
         });
     }  
 
-    function SaveMarkCustomerCategory() {
-        
-        var url = common.modifyRelativeUrl('Account/AddCustomerCategory');
+    function SaveMarkCustomerCategory() {        
+        var url = common.modifyRelativeUrl('Account/SaveMarkCustomerCategory');
         var params = {};
-        params.CustId = $("#hdCustId").val();
-        params.CTSCustId = $("#hdCTSCustId").val();
-        params.SubscriberId = $("#hdSubscriberId").val();       
-        params.RoleId = $('#hdRoleID').val();
-
+        params.CustID = $("#hdCustId").val();
+        params.CTSCustID = $("#hdCTSCustId").val();
+        params.SubscriberID = $("#hdSubscriberId").val();       
+        params.RoleID = $('#hdRoleID').val();
+        params.CategoryID = 56;
+        params.CategoryGroup = 56;
         params.IsVVip = $('#inputCCVVIP').is(":checked");
         params.IsAffectAllDownlines = $('#inputCCAffectToAllDownlines').is(":checked");
-        params.Remark = $('#txtCCComment').val();        
-
-
+        params.Remark = $('#txtCCComment').val();
+     
         $.ajax(url, {
             type: 'POST',
             data: params,
             success: function (response) {
                 if (response.errorCode === 0) {
                     common.showSuccess('Add the category successful!', 2000);
-                    divMarkCategory.dialog('close');                   
-                    GetCustomerCategory(custId);
+                    divMarkCustomerCategory.dialog('close');
                 }
                 else {
                     common.showError(response.errorMessage);
@@ -478,10 +476,7 @@
                 common.showLoading();
             },
             complete: function () {
-                common.closeLoading();
-
-                divMarkCustomerCategory.dialog('close');
-                common.showSuccess('Save successful');
+                common.closeLoading();                              
             },
             error: function (error) {
                 console.log(error);

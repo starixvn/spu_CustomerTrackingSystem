@@ -1,6 +1,6 @@
 ﻿@using Fanex.NAP.CTS.ViewModel;
 @model Fanex.NAP.CTS.ViewModel.Account.CustomerCategory.MarkCustomerCategoryViewModel
-<div class="float-container">
+<div class="float-container" id="divProfileMarkCustomerCategory">
     <div class="float-left">
         <fieldset>
             <legend id="lblCCRoleName">@Model.UserName</legend>
@@ -28,7 +28,7 @@
             </div>
 
             <div class="info-block"><label>Problem Account Category</label></div>
-            <div class="info-item">
+            <div class="info-item" id="groupRadio">
                 <div>
                     @foreach (var paCategory in Model.ProblemAccountList)
                     {

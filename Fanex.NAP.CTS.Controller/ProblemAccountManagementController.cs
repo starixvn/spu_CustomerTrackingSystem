@@ -1,8 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
-    using Fanex.NAP.Core.Web.Attribute;
-    using Fanex.NAP.CTS.Core;
-    using Fanex.NAP.CTS.Core.Utilities;
+    using Fanex.NAP.Core.Web.Attribute;   
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.ProblemAccountManagement;

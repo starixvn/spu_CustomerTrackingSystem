@@ -1744,6 +1744,34 @@
         {
             var result = new DBResult();
 
+            if (model.IsVVip)
+            {
+
+            }
+            else
+            {
+                var pas = new List<InsertProblemAccountModel>();
+
+                var problemAccount = new InsertProblemAccountModel
+                {
+                    CustID = model.CustID,
+                    CTSCustID = model.CTSCustID,
+                    RoleID = model.RoleID,
+                    SubscriberID = model.SubscriberID,
+                    IsLicensee = model.IsLicensee,
+                    CategoryID = model.CategoryID,
+                    CategoryGroup = model.CategoryGroup,
+                    Remark = model.Remark,
+                    IsDirectPA = true,
+                    IsFromPAM = true,
+                    CreatedBy = CurrentSession.UserId
+                };
+
+                pas.Add(problemAccount);
+
+                result = _problemAccountClassificationService.InsertProblemAccountPackage(pas, InsertPA_ByType.Category, "ProfileAddProblemAccount", FromFlow.CTSWEB);
+            }
+
             return Json(new
             {
                 errorCode = result.ErrorCode,
