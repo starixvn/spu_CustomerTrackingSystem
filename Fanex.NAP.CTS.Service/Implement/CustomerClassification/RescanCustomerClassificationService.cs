@@ -79,7 +79,7 @@
 
                 if (rescanResult.IsSuccess && rescanResult.CustIds.Any())
                 {
-                    rescanResult.IsSuccess = PushExternalData(rescanResult.CustIds, parameters);
+                    rescanResult.IsSuccess = PushExternalData(rescanResult.CustIds.Distinct(), parameters);
                 }
             }
 
@@ -91,8 +91,8 @@
             if (parameters != null && parameters.CustIds != null && parameters.CustIds.Any())
             {
                 var custToRescanNormal = parameters.CustIds.Distinct().ToList();
-                custToRescanNormal.RemoveAll(x => custIdsToRescanPA.Contains(x));
-                custToRescanNormal.RemoveAll(x => smaCustIds.Contains(x));
+                custToRescanNormal.RemoveAll(x => custIdsToRescanPA.Distinct().Contains(x));
+                custToRescanNormal.RemoveAll(x => smaCustIds.Distinct().Contains(x));
 
                 if (custToRescanNormal.Any())
                 {
