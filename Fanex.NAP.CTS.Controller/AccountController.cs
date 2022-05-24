@@ -1718,11 +1718,38 @@
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult MarkCustomerCategory(long ctsCustId)
         {
-            var paCategories = _pamService.GetProblemAccountCategories();
+            var result = new MarkCustomerCategoryViewModel();
 
-            return PartialView("CustomerCategory/MarkCustomerCategory", paCategories);
+            result.ProblemAccountList = _pamService.GetProblemAccountCategories();
+
+            var classifications = _accountService.GetCustomerClassification(ctsCustId);
+
+            if (classifications != null && classifications.Any())
+            {
+                result.CategoryList = classifications
+                    .Select(x => new CustomerCategoryViewModel
+                    {
+                        CategoryId = x.CategoryID,
+                        CategoryName = x.CategoryName ?? string.Empty,
+                        CategoryGroup = x.CategoryGroup
+                    });
+
+                result.IsVVip = classifications.Any(x => x.CategoryID == 210); // VVIP
+            }
+
+            return PartialView("CustomerCategory/MarkCustomerCategory", result);
         }
 
+        public ActionResult SaveMarkCustomerCategory(SaveMarkCustomerCategoryViewModel model)
+        {
+            var result = new DBResult();
+
+            return Json(new
+            {
+                errorCode = result.ErrorCode,
+                errorMessage = result.ErrorMsg
+            }, JsonRequestBehavior.AllowGet);
+        }
         #endregion
 
         #endregion Customer Category

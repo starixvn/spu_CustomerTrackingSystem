@@ -68,6 +68,8 @@
     <Compile Include="Account\CustomerCategory\CustomerCategoryViewModel.cs" />
     <Compile Include="Account\CustomerCategory\CustomerClassificationHistoryViewModel.cs" />
     <Compile Include="Account\CustomerCategory\MarkCategoryViewModel.cs" />
+    <Compile Include="Account\CustomerCategory\MarkCustomerCategoryViewModel.cs" />
+    <Compile Include="Account\CustomerCategory\SaveMarkCustomerCategoryViewModel.cs" />
     <Compile Include="Account\CustomerFraud.cs" />
     <Compile Include="Account\CustomerGeneralStatusViewModel.cs" />
     <Compile Include="Account\CustomerInfo\CustomerInfoAssociationAccountViewModel.cs" />

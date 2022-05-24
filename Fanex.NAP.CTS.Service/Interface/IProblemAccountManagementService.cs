@@ -11,7 +11,6 @@
 
         IEnumerable<ProblemAccountModel> GetProblemAccounts(ProblemAccountFilterViewModel filter);
         
-
         IEnumerable<ProblemAccountCategoryModel> GetProblemAccountCategories();
 
         IEnumerable<ProblemAccountValidatedModel> ValidateProblemAccounts(ValidateProblemAccountInputViewModel model);

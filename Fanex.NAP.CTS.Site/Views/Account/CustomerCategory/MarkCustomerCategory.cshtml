@@ -1,12 +1,20 @@
-﻿
+﻿@using Fanex.NAP.CTS.ViewModel;
+@model Fanex.NAP.CTS.ViewModel.Account.CustomerCategory.MarkCustomerCategoryViewModel
 <div class="float-container">
     <div class="float-left">
         <fieldset>
-            <legend id="lblCCRoleName">Super Test01</legend>
+            <legend id="lblCCRoleName">@Model.UserName</legend>
             <div class="info-block"><label>VVIP Category</label></div>
             <div class="info-item">
                 <label>
-                    <input id="inputCCVVIP" name="group1" type="radio">
+                    @if (Model.IsVVip)
+                    {
+                        <input id="inputCCVVIP" name="group1" type="radio" checked="checked">
+                    }
+                    else
+                    {
+                        <input id="inputCCVVIP" name="group2" type="radio">
+                    }
                     <span class="checkmark"></span>
                     VVIP
                 </label>
@@ -22,10 +30,18 @@
             <div class="info-block"><label>Problem Account Category</label></div>
             <div class="info-item">
                 <div>
-                    @foreach (var paCategory in Model)
+                    @foreach (var paCategory in Model.ProblemAccountList)
                     {
                         <label>
-                            <input type="radio" value="@paCategory.CategoryID" data-categorygroup="@paCategory.CategoryGroup" name="group2">
+                            @if (Model.CategoryList.Any(x => x.CategoryId == paCategory.CategoryID))
+                            {
+                                <input type="radio" value="@paCategory.CategoryID" data-categorygroup="@paCategory.CategoryGroup" name="@paCategory.CategoryID" checked="checked" disabled="disabled">
+                            }
+                            else
+                            {
+                                <input type="radio" value="@paCategory.CategoryID" data-categorygroup="@paCategory.CategoryGroup" name="group2">
+                            }
+
                             <span class="checkmark"></span>
                             @paCategory.CategoryName
                         </label>
@@ -33,7 +49,7 @@
                     }
                 </div>
             </div>
-        </fieldset>
+        </fieldset>     
     </div>
     <div class="float-right">
         <fieldset>

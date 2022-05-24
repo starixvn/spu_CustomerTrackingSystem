@@ -284,7 +284,7 @@
         var isExistProblemAccount = false;
         let html = "";
         
-        html = BuildToogleInsertPA(html, data);
+        html = BuildButtonProfileInsertPA(html, data);
 
         data.map(function (x) {
             if (x.IsProblemAccount) {
@@ -321,7 +321,7 @@
             $('#divHeaderInfo').css('visibility', 'visible');
         }
 
-        $("#btnToogleInsertPA").click(function () { DisplayMarkCustomerCategory(0) });
+        $("#btnProfileInsertPA").click(function () { DisplayMarkCustomerCategory($("#hdCTSCustId").val(), $("#hdUsername").val()) });
 
         return isExistProblemAccount;
     }
@@ -330,7 +330,7 @@
         let indexColorProfile = 1;
         let html = "";
 
-        html = BuildToogleInsertPA(html);
+        html = BuildButtonProfileInsertPA(html);
 
         let cacheCategoryColors = common.categoryColor();
 
@@ -397,34 +397,25 @@
         $("#btnToogleInsertPA").click(function () { console.log('toogle insert PA clicked'); });
     }
 
-    function BuildToogleInsertPA(html) {       
+    function BuildButtonProfileInsertPA(html) {       
 
-        html += "<div class='btn-add-pa' id='btnToogleInsertPA'></div>";
+        html += "<div class='btn-add-pa' id='btnProfileInsertPA'></div>";
         
         return html;
     }
 
-    function DisplayMarkCustomerCategory(ctsCustId) {
+    function DisplayMarkCustomerCategory(ctsCustId, userName) {
         $.ajax(common.modifyRelativeUrl('Account/MarkCustomerCategory'), {
             type: 'POST',
             data: {
                 ctsCustId: ctsCustId,
-                isVVip: cacheData.isVVip
+                userName: userName
             },
             beforeSend: function () {
                 common.showLoading();
             },
             success: function (response) {
                 divMarkCustomerCategory.html(response);
-
-                $('#btnCCCancel').on('click', function () {
-                    divMarkCustomerCategory.dialog('close');
-                });
-
-                $('#btnCCSave').on('click', function (e) {
-                    divMarkCustomerCategory.dialog('close');
-                    common.showSuccess('Save successful');
-                });
             },
             complete: function () {
                 divMarkCustomerCategory.dialog({
@@ -437,15 +428,66 @@
                 });
 
                 common.closeLoading();
+
+                $('#btnCCCancel').on('click', function () {
+                    divMarkCustomerCategory.dialog('close');
+                });
+
+                $('#btnCCSave').on('click', function (e) {
+                    SaveMarkCustomerCategory();                    
+                });
+
+                $('#inputCCVVIP').on('click', function () {
+                    $('input[name="group2"]').val();
+                });
             },
             error: function (errMsg) {
                 common.showError(errMsg);
             }
         });
-    }
+    }  
 
-    function aaa() {
+    function SaveMarkCustomerCategory() {
+        
+        var url = common.modifyRelativeUrl('Account/AddCustomerCategory');
+        var params = {};
+        params.CustId = $("#hdCustId").val();
+        params.CTSCustId = $("#hdCTSCustId").val();
+        params.SubscriberId = $("#hdSubscriberId").val();       
+        params.RoleId = $('#hdRoleID').val();
 
+        params.IsVVip = $('#inputCCVVIP').is(":checked");
+        params.IsAffectAllDownlines = $('#inputCCAffectToAllDownlines').is(":checked");
+        params.Remark = $('#txtCCComment').val();        
+
+
+        $.ajax(url, {
+            type: 'POST',
+            data: params,
+            success: function (response) {
+                if (response.errorCode === 0) {
+                    common.showSuccess('Add the category successful!', 2000);
+                    divMarkCategory.dialog('close');                   
+                    GetCustomerCategory(custId);
+                }
+                else {
+                    common.showError(response.errorMessage);
+                }
+            },
+            beforeSend: function () {
+                common.showLoading();
+            },
+            complete: function () {
+                common.closeLoading();
+
+                divMarkCustomerCategory.dialog('close');
+                common.showSuccess('Save successful');
+            },
+            error: function (error) {
+                console.log(error);
+                common.closeLoading();
+            }
+        });
     }
 
     function BuildCategoryToHtmlDiv(html, classIconColor, categoryName) {
