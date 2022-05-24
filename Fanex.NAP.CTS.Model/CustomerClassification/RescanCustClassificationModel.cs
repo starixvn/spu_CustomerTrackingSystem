@@ -9,8 +9,6 @@
 
         public bool IsRescanPA { get; set; }
 
-        public bool IsCheckPAFromNAP { get; set; }
-
         public bool IsPushCCToSoon88 { get; set; }
 
         public FunctionId FunctionId { get; set; }

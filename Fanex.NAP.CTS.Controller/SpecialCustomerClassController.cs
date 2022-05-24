@@ -131,11 +131,12 @@
                 _customerClassifyService.RescanCustomerClassification(new RescanCustClassificationModel
                 {
                     CustIds = new List<long> { custID },
-                    IsCheckPAFromNAP = true,
+                    IsRescanPA = true,
                     IsPushCCToSoon88 = true,
                     FunctionId = FunctionId.RemoveSpecialCCWeb,
                     IsUpdateDangerToMainDB = true,
-                    DangerLevelType = DangerLevel.ABI
+                    DangerLevelType = DangerLevel.ABI,
+                    ServiceName = "RemoveSpecialCustomer"
                 });
             }
 

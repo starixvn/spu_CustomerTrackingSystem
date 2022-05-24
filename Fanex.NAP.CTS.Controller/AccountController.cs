@@ -1651,11 +1651,12 @@
                         _rescanClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
                         {
                             CustIds = new List<long> { custIdInt },
-                            IsCheckPAFromNAP = true,
+                            IsRescanPA = true,
                             IsPushCCToSoon88 = true,
                             FunctionId = FunctionId.RemoveVIPWeb,
                             IsUpdateDangerToMainDB = true,
-                            DangerLevelType = DangerLevel.ABI
+                            DangerLevelType = DangerLevel.ABI,
+                            ServiceName = "RemoveCustomerCategory"
                         });
                     }
                 }
@@ -1701,11 +1702,12 @@
                 _rescanClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
                 {
                     CustIds = new List<long> { custId },
-                    IsCheckPAFromNAP = true,
+                    IsRescanPA = false,
                     IsPushCCToSoon88 = true,
                     FunctionId = FunctionId.ExcludeTaggingAssPAWeb,
                     IsUpdateDangerToMainDB = true,
-                    DangerLevelType = DangerLevel.ABI
+                    DangerLevelType = DangerLevel.ABI,
+                    ServiceName = "ExcludeTaggingAssociationWithPA"
                 });
             }
 
