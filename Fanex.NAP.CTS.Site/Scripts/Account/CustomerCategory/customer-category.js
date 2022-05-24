@@ -284,7 +284,7 @@
         var isExistProblemAccount = false;
         let html = "";
         
-        html = BuildToogleInsertPA(html);
+        html = BuildToogleInsertPA(html, data);
 
         data.map(function (x) {
             if (x.IsProblemAccount) {
@@ -397,7 +397,8 @@
         $("#btnToogleInsertPA").click(function () { console.log('toogle insert PA clicked'); });
     }
 
-    function BuildToogleInsertPA(html) {
+    function BuildToogleInsertPA(html) {       
+
         html += "<div class='btn-add-pa' id='btnToogleInsertPA'></div>";
         
         return html;
@@ -407,7 +408,8 @@
         $.ajax(common.modifyRelativeUrl('Account/MarkCustomerCategory'), {
             type: 'POST',
             data: {
-                ctsCustId: ctsCustId
+                ctsCustId: ctsCustId,
+                isVVip: cacheData.isVVip
             },
             beforeSend: function () {
                 common.showLoading();

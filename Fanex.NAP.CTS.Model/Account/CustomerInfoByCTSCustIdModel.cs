@@ -25,6 +25,9 @@
         public int? CustStatusID { get; set; }
 
         public string CustStatusName { get; set; }
-    
+
+        public bool IsLicensee { get; set; }
+
+        public bool IsInternal { get; set; }
     }
 }

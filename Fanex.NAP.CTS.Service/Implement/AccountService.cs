@@ -3,8 +3,6 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.Logging;
-    using Fanex.Logging.Extensions;
-    using Fanex.Logging.Extensions.Database;
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.BaseClasses;
     using Fanex.NAP.CTS.Core.Extentions;
@@ -27,11 +25,9 @@
     using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
-    using Fanex.NAP.CTS.Model.Home;
-    using Fanex.NAP.CTS.Model.ImportEvidences;
+    using Fanex.NAP.CTS.Model.Home;    
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
-    using Fanex.NAP.CTS.Resource.Consts;
-    using Fanex.NAP.CTS.Service.Implement;
+    using Fanex.NAP.CTS.Resource.Consts;    
     using Fanex.NAP.CTS.ViewModel.Account.Associated;
     using Newtonsoft.Json;
     using System;
