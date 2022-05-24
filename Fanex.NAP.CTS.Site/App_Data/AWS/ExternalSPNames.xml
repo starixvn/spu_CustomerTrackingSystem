@@ -69,11 +69,6 @@
 		<Setting Key="CTS_Customer_GetInfoByCustIdList" SpName="CTS_Customer_GetInfoByCustIdList" DbName="DBCTS.bodb02.bodbSPUNet" />
 	</Function>
 
-	<Function name="ProblemAccountManagement">
-		<Setting Key="NAP_ProblemAccount_CustomerCommentSel" SpName="NAP_ProblemAccount_CustomerCommentSel" DbName="DBACC.bodb02.bodbAdminNet" />
-		<Setting Key="Nap_ProblemAccount_AddCustomer" SpName="Nap_ProblemAccount_AddCustomer" DbName="DBCust.CustDB.bodbAdminNet" />
-		<Setting Key="NAP_ProblemAccount_LicenseeAddCustomer" SpName="NAP_ProblemAccount_LicenseeAddCustomer" DbName="DBCust.CustDB.bodbAdminNet" />
-	</Function>
 	<Function Name="DailyProblemClassification">
 		<Setting Key="CTS_ProblemAccountsClassification_Daily" SpName="CTS_ProblemAccountsClassification_Daily" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" TimeOut="300" />
 	</Function>

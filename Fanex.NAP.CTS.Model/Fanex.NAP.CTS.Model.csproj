@@ -284,11 +284,8 @@
     <Compile Include="ProblemAccountManagement\GetCustEvidenceByReasonIdModel.cs" />
     <Compile Include="ProblemAccountManagement\ProblemAccountAddCustomerModel.cs" />
     <Compile Include="ProblemAccountManagement\ProblemAccountCategoryModel.cs" />
-    <Compile Include="ProblemAccountManagement\ProblemAccountCommentSelModel.cs" />
     <Compile Include="ProblemAccountManagement\ProblemAccountModel.cs" />
     <Compile Include="ProblemAccountManagement\ProblemAccountValidatedModel.cs" />
-    <Compile Include="ProblemAccountManagement\ResultProblemAccountAddCustomerModel.cs" />
-    <Compile Include="ProblemAccountManagement\ResultProblemAccountUpdateModel.cs" />
     <Compile Include="ProblemAccountMonitor\TWProblemAccount\TWProblemAccountModel.cs" />
     <Compile Include="ProblemCaseMonitor\ProblemCasesMonitorModel.cs" />
     <Compile Include="ProblemCaseMonitor\ProblemCasesMonitorFilterModel.cs" />

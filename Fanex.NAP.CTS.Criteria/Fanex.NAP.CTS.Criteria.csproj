@@ -134,14 +134,7 @@
     <Compile Include="ProblemAccountManagement\GetProblemAccountCategoryCriteria.cs" />
     <Compile Include="ProblemAccountManagement\GetProblemAccountCriteria.cs" />
     <Compile Include="ProblemAccountManagement\ProblemAccountAddCustomerCriteria.cs" />
-    <Compile Include="ProblemAccountManagement\ProblemAccountCustomerCommentSelCriteria.cs" />
-    <Compile Include="ProblemAccountManagement\ProblemAccountLicenseeAddCustomerCriteria.cs" />
-    <Compile Include="ProblemAccountManagement\ProblemAccountLicenseeRemoveCustomerCriteria.cs" />
-    <Compile Include="ProblemAccountManagement\ProblemAccountLicenseeUpdateCustomerCriteria.cs" />
-    <Compile Include="ProblemAccountManagement\ProblemAccountRemoveCustomerCriteria.cs" />
-    <Compile Include="ProblemAccountManagement\ProblemAccountUpdateCustomerCriteria.cs" />
     <Compile Include="ProblemAccountManagement\RemoveProblemAccountEvidenceCriteria.cs" />
-    <Compile Include="ProblemAccountManagement\UpdateProblemAccountEvidenceCriteria.cs" />
     <Compile Include="ProblemAccountManagement\ValidateUserNamesInputCriteria.cs" />
     <Compile Include="ProblemCaseMonitor\ProblemCaseFilterGetCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\RemoveFlaggedEvidenceCriteria.cs" />
