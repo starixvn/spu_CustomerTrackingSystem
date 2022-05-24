@@ -1,7 +1,7 @@
 ﻿function customer_category() {
     let cbbCategorySetting = $('#cbbCategorySetting');
     let btnMarkCategory = $('#btnmarkcategory');
-    let btnRemoveCategory = $('#btnremovecategory');
+    let btnUnmarkCategory = $('#btnunmarkcategory');
     let divMarkCategory = $('#divMarkCategory');
     let divMarkCustomerCategory = $('#divMarkCustomerCategory');
     let divRemoveCategory = $('#divRemoveCategory');
@@ -118,11 +118,13 @@
         });
     }
 
-    function DisplayRemoveCategory(custId, ctsCustId, subscriberId) {
-        $.ajax(common.modifyRelativeUrl('Account/RemoveCatergory'), {
+    function DisplayUnmarkCategory(custId, ctsCustId) {
+        $.ajax(common.modifyRelativeUrl('Account/UnmarkCustomerCategory'), {
             type: 'POST',
             data: {
-                ctsCustId: ctsCustId
+                roleID: $("#hdRoleID").val(),
+                userName: $("#hdUsername").val(),
+                isVVIP: cacheData.isVVip
             },
             beforeSend: function () {
                 common.showLoading();
@@ -252,7 +254,7 @@
                     let json = jQuery.parseJSON(response);
 
                     btnMarkCategory.prop('disabled', json.isVVip);
-                    btnRemoveCategory.prop('disabled', !json.isVVip);
+                    btnUnmarkCategory.prop('disabled', !json.isVVip);
 
                     cacheData.isProblemAccount = json.isProblemAccount;
                     cacheData.isPinCategory = json.isPinCategory;
@@ -642,7 +644,7 @@
         if (!isHostPermission) {
             cbbCategorySetting.prop('disabled', true);
             btnMarkCategory.prop('disabled', true);
-            btnRemoveCategory.prop('disabled', true);
+            btnUnmarkCategory.prop('disabled', true);
         }
     }
 
@@ -666,7 +668,7 @@
         if (isHostPermission) {
             btnMarkCategory.click(function () { DisplayMarkCategory(custId, ctsCustId, subscriberId); });
 
-            btnRemoveCategory.click(function () { DisplayRemoveCategory(custId, ctsCustId, subscriberId); });
+            btnUnmarkCategory.click(function () { DisplayUnmarkCategory(custId, ctsCustId); });
         }       
 
         dataTable = RenderGrid();

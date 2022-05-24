@@ -57,7 +57,7 @@
         private readonly IRobotBettingService _robotBettingService;
         private readonly IAntiFraudCenterService _antiFraudCenterService;
         private readonly IProblemAccountManagementService _pamService;
-	private readonly IProblemAccountClassificationService _problemAccountClassificationService;
+	    private readonly IProblemAccountClassificationService _problemAccountClassificationService;
 
         public override string BaseControllerName { get => string.Empty; }
 
@@ -73,7 +73,7 @@
             _robotClassificationService = new RobotClassificationService();
             _robotBettingService = new RobotBettingService();
             _antiFraudCenterService = new AntiFraudCenterService();
-             _pamService = new ProblemAccountManagementService();
+            _pamService = new ProblemAccountManagementService();
             _problemAccountClassificationService = new ProblemAccountClassificationService();
         }
 
@@ -1567,7 +1567,7 @@
             categoryModel.CreatedBy = CurrentSession.UserId;
             categoryModel.ActionType = ActionTypeQueueCustCategory.Insert;            
             var result = AddDirectCustomerCategory(categoryModel);
-            if (categoryModel.RoleId != 1 && categoryModel.IsAffectToAllDownlines)
+            if (result.ErrorCode == 0 && categoryModel.RoleId != 1 && categoryModel.IsAffectToAllDownlines)
             {
                 _accountService.AddQueueAffectDownlinesCustomerCategory(categoryModel);
             }
@@ -1740,13 +1740,33 @@
             return PartialView("CustomerCategory/MarkCustomerCategory", result);
         }
 
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         public ActionResult SaveMarkCustomerCategory(SaveMarkCustomerCategoryViewModel model)
         {
             var result = new DBResult();
 
             if (model.IsVVip)
             {
+                var categoryModel = new CustomerCategoryModel
+                {
+                    CustId = model.CustID, 
+                    CTSCustId = model.CTSCustID,
+                    SubscriberId = model.SubscriberID,
+                    CategoryId = model.CategoryID,
+                    RoleId = model.RoleID,
+                    IsAffectToAllDownlines = model.IsAffectAllDownlines,
+                    Remark = model.Remark,
+                    IsVVip = model.IsVVip,
+                    CreatedBy = CurrentSession.UserId,
+                    ActionType = ActionTypeQueueCustCategory.Insert
+                };
+                
+                var resultAddDirectCC = AddDirectCustomerCategory(categoryModel);
 
+                if (resultAddDirectCC.ErrorCode == 0 && categoryModel.RoleId != 1 && categoryModel.IsAffectToAllDownlines)
+                {
+                    _accountService.AddQueueAffectDownlinesCustomerCategory(categoryModel);
+                }
             }
             else
             {
@@ -1778,6 +1798,20 @@
                 errorMessage = result.ErrorMsg
             }, JsonRequestBehavior.AllowGet);
         }
+
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        public ActionResult UnmarkCustomerCategory(int roleID, string userName, bool isVVIP)
+        {
+            var model = new UnmarkCustomerCategoryViewModel
+            {
+                RoleID = roleID,
+                UserName = userName,
+                IsVVip = isVVIP
+            };
+
+            return PartialView("CustomerCategory/UnmarkCustomerCategory", model);
+        }
+
         #endregion
 
         #endregion Customer Category

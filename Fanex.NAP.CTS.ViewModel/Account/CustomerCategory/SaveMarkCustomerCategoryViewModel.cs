@@ -14,7 +14,7 @@
 
         public bool IsVVip { get; set; }
 
-        public int? CategoryID { get; set; }
+        public int CategoryID { get; set; }
 
         public int CategoryGroup { get; set; }
 
