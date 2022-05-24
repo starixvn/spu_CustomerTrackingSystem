@@ -25,7 +25,7 @@
         private readonly IDynamicRepository _repository;
         private readonly ICustomerClassificationService _ccService;
         private readonly IAntiFraudCenterService _antiFraudCenterService;
-       
+
         public ProblemAccountClassificationService()
         {
             _repository = new DynamicRepository();
@@ -63,7 +63,7 @@
 
                 return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
             }
-           
+
             return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
         }
 
@@ -86,7 +86,7 @@
 
         public IEnumerable<ExistedProblemAccountModel> GetExistedProblemAccounts(IEnumerable<long> custIds)
         {
-            if(custIds != null && custIds.Any())
+            if (custIds != null && custIds.Any())
             {
                 var criteria = new ProblemAccountGetCriteria()
                 {
@@ -178,7 +178,6 @@
             return result;
         }
 
-
         private void InsertPALogics(IEnumerable<CustInfoModel> customerInfo)
         {
             if (customerInfo != null && customerInfo.Any())
@@ -213,15 +212,14 @@
         {
             if (problemAccounts != null && problemAccounts.Any())
             {
-                return problemAccounts.GroupJoin(probAccountLosing,
+                return problemAccounts.GroupJoin(probAccountLosing ?? Enumerable.Empty<ProblemAccountLosingClassificationModel>(),
                                             pa => pa.CustID,
-                                            paLosing => paLosing.CustId,
-                                            (pa, paLosing) => new { pa, paLosing })
+                                            pl => pl.CustId,
+                                            (pa, pl) => new { pa, pl })
                                             .SelectMany(
-                                                 group => group.paLosing.DefaultIfEmpty(),
+                                                 group => group.pl.DefaultIfEmpty(),
                                                  (group, temp) => new InsertProblemAccountModel
                                                  {
-                                                     /* Cust info */
                                                      CustID = group.pa.CustID,
                                                      CTSCustID = group.pa.CTSCustID,
                                                      RoleID = group.pa.RoleID,
@@ -233,10 +231,12 @@
                                                      Remark = group.pa.Remark,
 
                                                      IsDirectPA = group.pa.IsDirectPA,
-                                                     IsFromPAM = true,
+                                                     IsFromPAM = group.pa.IsFromPAM,
+                                                     IsFromTVS = group.pa.IsFromTVS,
+                                                     IsFromTW = group.pa.IsFromTW,
+                                                     IsDataChanged = group.pa.IsDataChanged,
                                                      ReasonID = group.pa.ReasonID,
 
-                                                     /* Get Mapping Value */
                                                      BetCount = temp?.BetCount,
                                                      ActiveDays = temp?.ActiveDays,
                                                      TurnoverRM = temp?.TurnoverRM,
@@ -307,7 +307,6 @@
             }
         }
 
-
         private IEnumerable<CustInfoModel> InsertRobotAccount(string robotAccountJson)
         {
             var criteria = new RobotAccountInsertCriteria
@@ -318,6 +317,6 @@
             return _repository.Fetch<CustInfoModel>(criteria) ?? Enumerable.Empty<CustInfoModel>();
         }
 
-        #endregion
+        #endregion Private Methods
     }
 }

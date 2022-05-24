@@ -1642,15 +1642,11 @@
                         _accountService.AddQueueAffectDownlinesCustomerCategory(categoryModel);
                     }
 
-                    var custIdInt = 0;                   
-                    int.TryParse(categoryModel.CustId.ToString(), out custIdInt);
-
-                    if (custIdInt != 0)
+                    if (categoryModel.CustId != 0)
                     {
-                        // Rescan Problem Account & Normal Account
                         _rescanClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
                         {
-                            CustIds = new List<long> { custIdInt },
+                            CustIds = new List<long> { categoryModel.CustId },
                             IsRescanPA = true,
                             IsPushCCToSoon88 = true,
                             FunctionId = FunctionId.RemoveVIPWeb,

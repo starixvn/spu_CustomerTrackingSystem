@@ -184,6 +184,7 @@
                         CategoryGroup = models.CategoryGroup,
                         Remark = models.Comment,
                         IsDirectPA = true,
+                        IsFromPAM = true,
                         CreatedBy = CurrentSession.UserId
                     });
 

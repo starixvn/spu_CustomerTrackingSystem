@@ -1,7 +1,6 @@
 ﻿namespace Fanex.NAP.SPU.CTS.CC.Features.CustomerClassification.ProblemAccountInsert.Entities
 {
     using Fanex.NAP.CTS.Model.CustomerClassification;
-    using System;
     using System.Collections.Generic;
 
     public class ExistedPAResultModel

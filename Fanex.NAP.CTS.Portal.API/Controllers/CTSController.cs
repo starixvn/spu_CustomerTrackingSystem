@@ -400,6 +400,7 @@
                             ReasonID = dataParam.ReasonId,                            
                             Remark = dataParam.Comment,
                             IsDirectPA = true,
+                            IsFromTW = true,
                             CreatedBy = dataParam.UserId
                         });
                         

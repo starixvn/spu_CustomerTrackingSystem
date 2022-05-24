@@ -39,5 +39,21 @@
                 }
             }
         }
+
+        /// <summary>
+        /// True for removing specialCC
+        /// </summary>
+        public bool IsDataChanged
+        {
+            get
+            {
+                if (FunctionId == FunctionId.RemoveSpecialCCWeb)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+        }
     }
 }

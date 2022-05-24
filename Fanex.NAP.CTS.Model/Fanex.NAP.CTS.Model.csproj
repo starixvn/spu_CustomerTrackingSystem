@@ -232,7 +232,7 @@
     <Compile Include="CustomerClassification\Robot\RobotUserModel.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\InsertProblemAccountModel.cs" />
     <Compile Include="CustomerClassification\LatestClassification4ReportModel.cs" />
-    <Compile Include="CustomerClassification\RescanCustClassificationModel.cs" />
+    <Compile Include="CustomerClassification\RescanCustomerClassification\RescanCustClassificationModel.cs" />
     <Compile Include="DTO\CustomerEvidence.cs" />
     <Compile Include="DTO\CustomerEvidenceForTW.cs" />
     <Compile Include="GraphDB\AssociationProfileParameterModel.cs" />

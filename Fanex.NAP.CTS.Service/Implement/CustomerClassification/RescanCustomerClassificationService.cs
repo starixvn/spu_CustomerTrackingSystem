@@ -48,7 +48,7 @@
                 result = RescanProblemAccount(parameters);
             }
 
-            if(result.IsSuccess)
+            if (result.IsSuccess)
             {
                 var smCustIds = GetAgentCusts(parameters.CustIds);
                 result.IsSuccess = RescanNormalAccount(parameters, result.CustIds, smCustIds);
@@ -57,15 +57,15 @@
             return result.IsSuccess;
         }
 
-        #region Rescan PA
+        #region Private Methods
 
         private RescanResultModel RescanProblemAccount(RescanCustClassificationModel parameters)
         {
             var rescanResult = new RescanResultModel();
 
-            if( parameters != null && parameters.CustIds != null && parameters.CustIds.Any())
+            if (parameters != null && parameters.CustIds != null && parameters.CustIds.Any())
             {
-                var existedProbAccounts = GetExistedProblemAccounts(parameters.CustIds);
+                var existedProbAccounts = GetExistedProblemAccounts(parameters.CustIds, parameters.IsDataChanged);
                 var paLosing = problemAccountService.GetProblemAccountLosingClassification(parameters.CustIds, parameters.FunctionId);
 
                 InsertProblemAccountLogics(existedProbAccounts.ProblemAccounts, paLosing, parameters.ServiceName, ref rescanResult);
@@ -131,7 +131,7 @@
             return Enumerable.Empty<long>();
         }
 
-        public bool PushExternalData(IEnumerable<long> custIdsToSyncCC, RescanCustClassificationModel parameters)
+        private bool PushExternalData(IEnumerable<long> custIdsToSyncCC, RescanCustClassificationModel parameters)
         {
             bool isSuccess = true;
 
@@ -156,7 +156,7 @@
             return isSuccess;
         }
 
-        private ExistedPAResultModel GetExistedProblemAccounts(IEnumerable<long> custIds)
+        private ExistedPAResultModel GetExistedProblemAccounts(IEnumerable<long> custIds, bool isDataChanged)
         {
             var existedPA = new ExistedPAResultModel();
 
@@ -170,13 +170,17 @@
                     {
                         CustID = c.CustID,
                         CTSCustID = c.CTSCustID,
-                        CategoryID = c.CategoryID,
-                        CategoryGroup = c.CategoryGroup,
-                        IsDirectPA = c.IsDirectPA,
-                        Remark = c.Remark,
-                        IsLicensee = c.IsLicensee,
                         RoleID = c.RoleID,
                         SubscriberID = c.SubscriberID,
+                        CategoryID = c.CategoryID,
+                        CategoryGroup = c.CategoryGroup,
+                        IsLicensee = c.IsLicensee,
+                        Remark = c.Remark,
+                        IsDirectPA = c.IsDirect,
+                        IsFromPAM = c.IsFromPAM,
+                        IsFromTVS = c.IsFromTVS,
+                        IsFromTW = c.IsFromTW,
+                        IsDataChanged = isDataChanged,
                         CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"])
                     });
 
@@ -184,11 +188,11 @@
                     {
                         CustID = c.CustID,
                         CategoryID = c.CategoryID,
-                        IsFromTW = false,
-                        ActiveDays = c.ActiveDays,
                         TurnoverRM = c.Turnover,
-                        BetCount = c.BetCount,
                         WinlossRM = c.Winloss,
+                        BetCount = c.BetCount,
+                        ActiveDays = c.ActiveDays,
+                        IsFromTW = false,
                         CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"])
                     });
                 }
@@ -199,10 +203,10 @@
 
         private void InsertProblemAccountLogics(IEnumerable<InsertProblemAccountModel> problemAccounts, IEnumerable<ProblemAccountLosingClassificationModel> paLosing, string serviceName, ref RescanResultModel rescanResultModel)
         {
-            if(problemAccounts.Any())
+            if (problemAccounts.Any())
             {
                 var result = problemAccountService.InsertProblemAccountLogics(problemAccounts, paLosing, InsertPA_ByType.Category, serviceName);
-                
+
                 rescanResultModel.IsSuccess = (result.ErrorCode == 0);
 
                 if (result.ErrorCode == 0 && result.CustomerInfo.Any())
@@ -211,36 +215,6 @@
                 }
             }
         }
-
-
-
-        #endregion Rescan PA
-
-        #region Rescan Normal
-
-        private void RescanNormalAccount(List<long> custIds, IEnumerable<long> custRescanPA, FunctionId funcId)
-        {
-            if (custIds != null && custIds.Any())
-            {
-                custIds.RemoveAll(x => custRescanPA.Contains(x));
-
-                if (custIds.Any())
-                {
-                    var custIdsChunk = custIds.Chunk(ConfigSettings.PushCCToExternalChunkSize).ToList();
-
-                    foreach (var custRescanNormal in custIdsChunk)
-                    {
-                        var custToString = string.Join(",", custRescanNormal);
-
-                        ClassifyCustomerGeneralCategoryDaily(custToString, funcId, false);
-                    }
-                }
-            }
-        }
-
-        #endregion Rescan Normal
-
-        #region DataAccess Layer
 
         private void ClassifyCustomerGeneralCategoryDaily(string customers, FunctionId funcId, bool isCheckLast14Days)
         {
@@ -253,7 +227,7 @@
 
             repository.Execute(criteria);
         }
-   
+
         private IEnumerable<InsertRobotModel> GetTWRobotUsers(RescanCustClassificationModel para)
         {
             if (para.CustIds != null && para.CustIds.Any())
@@ -271,7 +245,7 @@
             return Enumerable.Empty<InsertRobotModel>();
         }
 
-        public void InsertRobot(IEnumerable<InsertRobotModel> twRobotUsers, IEnumerable<InsertRobotModel> robotClassification, ref RescanResultModel rescanResultModel)
+        private void InsertRobot(IEnumerable<InsertRobotModel> twRobotUsers, IEnumerable<InsertRobotModel> robotClassification, ref RescanResultModel rescanResultModel)
         {
             var robotToInsert = new List<InsertRobotModel>();
 
@@ -295,7 +269,6 @@
             }
         }
 
-
-        #endregion DataAccess Layer
+        #endregion Private Methods
     }
 }

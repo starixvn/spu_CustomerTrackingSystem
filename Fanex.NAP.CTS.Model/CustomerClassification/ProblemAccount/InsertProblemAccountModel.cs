@@ -4,6 +4,14 @@
 
     public class InsertProblemAccountModel
     {
+        public InsertProblemAccountModel()
+        {
+            IsFromTVS = false;
+            IsFromPAM = false;
+            IsFromTW = false;
+            IsDataChanged = false;
+        }
+
         /* Cust info */
         public long CustID { get; set; }
 
@@ -47,6 +55,7 @@
 
         public bool IsFromPAM { get; set; }
 
-        public bool IsDataChanged { get; set; }              
+        //True if only removing SpecialCC
+        public bool IsDataChanged { get; set; }
     }
 }

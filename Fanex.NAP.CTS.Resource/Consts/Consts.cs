@@ -217,7 +217,8 @@
             //ExcludeTaggingAss_CheckRobotUser = 40,
             InsertPAJob = 41,
             //UpdateCategory = 42,?
-            InsertPAM = 43
+            InsertPAM = 43,
+            TWProblemAccountInsert = 44
         };
 
         public enum DangerLevel
