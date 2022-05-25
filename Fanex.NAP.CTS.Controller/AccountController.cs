@@ -17,6 +17,7 @@
     using Fanex.NAP.CTS.Model.Account.RobotBetting;
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.CustomerClassification;
+    using Fanex.NAP.CTS.Model.CustomerClassification.ProblemAccount;
     using Fanex.NAP.CTS.Model.ImportEvidences;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
@@ -1536,139 +1537,96 @@
             return reason;
         }        
 
-        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult MarkCatergory(long ctsCustId)
-        {
-            var customerCategoryList = _accountService.GetCustomerCategoryByCTSCustId(ctsCustId).ToList();
+        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        //public ActionResult MarkCatergory(long ctsCustId)
+        //{
+        //    var customerCategoryList = _accountService.GetCustomerCategoryByCTSCustId(ctsCustId).ToList();
 
-            var model = new MarkCategoryViewModel
-            {
-                CustomerCategoryList = customerCategoryList.Where(x => x.CategoryId == 210 || x.ParentId == 0).ToList() // CategoryId = 210 -> VVIP
-            };
+        //    var model = new MarkCategoryViewModel
+        //    {
+        //        CustomerCategoryList = customerCategoryList.Where(x => x.CategoryId == 210 || x.ParentId == 0).ToList() // CategoryId = 210 -> VVIP
+        //    };
 
-            return PartialView("CustomerCategory/MarkCatergory", model);
-        }       
+        //    return PartialView("CustomerCategory/MarkCatergory", model);
+        //}       
 
-        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult RemoveCatergory(long ctsCustId)
-        {
-            var model = new MarkCategoryViewModel
-            {
-                CustomerCategoryList = new List<Model.DTO.CustomerCategory> { new Model.DTO.CustomerCategory { CategoryId = 210, CategoryName = "VVIP", ParentId = 200 } }
-            };           
+        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        //public ActionResult RemoveCatergory(long ctsCustId)
+        //{
+        //    var model = new MarkCategoryViewModel
+        //    {
+        //        CustomerCategoryList = new List<Model.DTO.CustomerCategory> { new Model.DTO.CustomerCategory { CategoryId = 210, CategoryName = "VVIP", ParentId = 200 } }
+        //    };           
 
-            return PartialView("CustomerCategory/RemoveCategory", model);
-        }
+        //    return PartialView("CustomerCategory/RemoveCategory", model);
+        //}
 
-        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationMarkCategory)]        
-        public ActionResult AddCustomerCategory(CustomerCategoryModel categoryModel)
-        {
-            categoryModel.CreatedBy = CurrentSession.UserId;
-            categoryModel.ActionType = ActionTypeQueueCustCategory.Insert;            
-            var result = AddDirectCustomerCategory(categoryModel);
-            if (result.ErrorCode == 0 && categoryModel.RoleId != 1 && categoryModel.IsAffectToAllDownlines)
-            {
-                _accountService.AddQueueAffectDownlinesCustomerCategory(categoryModel);
-            }
+        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        //[TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationMarkCategory)]        
+        //public ActionResult AddCustomerCategory(CustomerCategoryModel categoryModel)
+        //{
+        //    categoryModel.CreatedBy = CurrentSession.UserId;
+        //    categoryModel.ActionType = ActionTypeQueueCustCategory.Insert;            
+        //    var result = AddDirectCustomerCategory(categoryModel);
+        //    if (result.ErrorCode == 0 && categoryModel.RoleId != 1 && categoryModel.IsAffectToAllDownlines)
+        //    {
+        //        _accountService.AddQueueAffectDownlinesCustomerCategory(categoryModel);
+        //    }
 
-            return Json(new
-            {
-                errorCode = result.ErrorCode,
-                errorMessage = result.ErrorMsg
-            }, JsonRequestBehavior.AllowGet);
-        }
-
-        private DBResult AddDirectCustomerCategory(CustomerCategoryModel categoryModel)
-        {
-            var latestClassifications = Enumerable.Empty<LatestClassificationModel>();
-            var result = _accountService.AddCustomerCategory(categoryModel, out latestClassifications);
-
-            if (result.ErrorCode == 0 && latestClassifications != null)
-            {
-                if (categoryModel.IsVVip)
-                {
-                    int custIdInt = 0;                    
-                    int.TryParse(categoryModel.CustId.ToString(), out custIdInt);
-
-                    if (custIdInt != 0)
-                    {
-                        latestClassifications = latestClassifications.Where(c => c.CustId != 0);
-
-                        if (latestClassifications.Any())
-                        {
-                            // Update CC in table custinfo to MainDB
-                            var isSuccessToMain = _customerClassificationService.RetryPushCCToMainDB(latestClassifications, 2);
-
-                            if (isSuccessToMain)
-                            {
-                                var updateApplyCCs = latestClassifications.Select(x => new { x.CustId, x.ScannedTime });
-
-                                var jsonUpdateApplyCCs = JsonConvert.SerializeObject(updateApplyCCs);
-
-                                // Update IsAppliedCC = 1 in CTS
-                                _customerClassificationService.UpdateAppliedCustomerClassification(jsonUpdateApplyCCs);
-                            }
-                        }
-
-                        Task.Run(() =>
-                        {
-                            _antiFraudCenterService.DeleteAFCAccounts(new List<long> { custIdInt }, FromFlow.CTSWEB);
-                        });
-                    }
-                }
-            }
-
-            return result;
-        }
-
-        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationRemoveCategory)]        
-        public ActionResult RemoveCustomerCategory(CustomerCategoryModel categoryModel)
-        {
-            var errorCode = 0;
-            var errorMessage = string.Empty;
-            categoryModel.CreatedBy = CurrentSession.UserId;
-            categoryModel.ActionType = ActionTypeQueueCustCategory.Remove;
+        //    return Json(new
+        //    {
+        //        errorCode = result.ErrorCode,
+        //        errorMessage = result.ErrorMsg
+        //    }, JsonRequestBehavior.AllowGet);
+        //}
+        
+        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        //[TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationRemoveCategory)]        
+        //public ActionResult RemoveCustomerCategory(CustomerCategoryModel categoryModel)
+        //{
+        //    var errorCode = 0;
+        //    var errorMessage = string.Empty;
+        //    categoryModel.CreatedBy = CurrentSession.UserId;
+        //    categoryModel.ActionType = ActionTypeQueueCustCategory.Remove;
             
-            var result = _accountService.RemoveCustomerCategory(categoryModel);
+        //    var result = _accountService.RemoveCustomerCategory(categoryModel);
             
-            if (string.IsNullOrEmpty(result.OpErrorMessage))
-            {                
-                if (categoryModel.IsVVip)
-                {
-                    if (categoryModel.RoleId != 1 && categoryModel.IsAffectToAllDownlines)
-                    {
-                        _accountService.AddQueueAffectDownlinesCustomerCategory(categoryModel);
-                    }
+        //    if (string.IsNullOrEmpty(result.OpErrorMessage))
+        //    {                
+        //        if (categoryModel.IsVVip)
+        //        {
+        //            if (categoryModel.RoleId != 1 && categoryModel.IsAffectToAllDownlines)
+        //            {
+        //                _accountService.AddQueueAffectDownlinesCustomerCategory(categoryModel);
+        //            }
 
-                    if (categoryModel.CustId != 0)
-                    {
-                        _rescanClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
-                        {
-                            CustIds = new List<long> { categoryModel.CustId },
-                            IsRescanPA = true,
-                            IsPushCCToSoon88 = true,
-                            FunctionId = FunctionId.RemoveVIPWeb,
-                            IsUpdateDangerToMainDB = true,
-                            DangerLevelType = DangerLevel.ABI,
-                            ServiceName = "RemoveCustomerCategory"
-                        });
-                    }
-                }
-            }
-            else
-            {
-                errorCode = -1;                
-                errorMessage = result.OpErrorMessage;
-            }
+        //            if (categoryModel.CustId != 0)
+        //            {
+        //                _rescanClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
+        //                {
+        //                    CustIds = new List<long> { categoryModel.CustId },
+        //                    IsRescanPA = true,
+        //                    IsPushCCToSoon88 = true,
+        //                    FunctionId = FunctionId.RemoveVIPWeb,
+        //                    IsUpdateDangerToMainDB = true,
+        //                    DangerLevelType = DangerLevel.ABI,
+        //                    ServiceName = "RemoveCustomerCategory"
+        //                });
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        errorCode = -1;                
+        //        errorMessage = result.OpErrorMessage;
+        //    }
 
-            return Json(new
-            {
-                errorCode,
-                errorMessage
-            }, JsonRequestBehavior.AllowGet);
-        }
+        //    return Json(new
+        //    {
+        //        errorCode,
+        //        errorMessage
+        //    }, JsonRequestBehavior.AllowGet);
+        //}
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationPinCategory)]
@@ -1743,55 +1701,29 @@
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult SaveMarkCustomerCategory(SaveMarkCustomerCategoryViewModel model)
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationRemoveCategory)]
+        public ActionResult SaveMarkVVIP(SaveMarkCustomerCategoryViewModel model)
         {
             var result = new DBResult();
-
-            if (model.IsVVip)
+            var categoryModel = new CustomerCategoryModel
             {
-                var categoryModel = new CustomerCategoryModel
-                {
-                    CustId = model.CustID, 
-                    CTSCustId = model.CTSCustID,
-                    SubscriberId = model.SubscriberID,
-                    CategoryId = model.CategoryID,
-                    RoleId = model.RoleID,
-                    IsAffectToAllDownlines = model.IsAffectAllDownlines,
-                    Remark = model.Remark,
-                    IsVVip = model.IsVVip,
-                    CreatedBy = CurrentSession.UserId,
-                    ActionType = ActionTypeQueueCustCategory.Insert
-                };
-                
-                var resultAddDirectCC = AddDirectCustomerCategory(categoryModel);
+                CustId = model.CustID,
+                CTSCustId = model.CTSCustID,
+                SubscriberId = model.SubscriberID,
+                CategoryId = model.CategoryID,
+                RoleId = model.RoleID,
+                IsAffectToAllDownlines = model.IsAffectAllDownlines,
+                Remark = model.Remark,
+                IsVVip = model.IsVVip,
+                CreatedBy = CurrentSession.UserId,
+                ActionType = ActionTypeQueueCustCategory.Insert
+            };
 
-                if (resultAddDirectCC.ErrorCode == 0 && categoryModel.RoleId != 1 && categoryModel.IsAffectToAllDownlines)
-                {
-                    _accountService.AddQueueAffectDownlinesCustomerCategory(categoryModel);
-                }
-            }
-            else
+            var resultAddDirectCC = AddDirectVVIP(categoryModel);
+
+            if (resultAddDirectCC.ErrorCode == 0 && categoryModel.RoleId != 1 && categoryModel.IsAffectToAllDownlines)
             {
-                var pas = new List<InsertProblemAccountModel>();
-
-                var problemAccount = new InsertProblemAccountModel
-                {
-                    CustID = model.CustID,
-                    CTSCustID = model.CTSCustID,
-                    RoleID = model.RoleID,
-                    SubscriberID = model.SubscriberID,
-                    IsLicensee = model.IsLicensee,
-                    CategoryID = model.CategoryID,
-                    CategoryGroup = model.CategoryGroup,
-                    Remark = model.Remark,
-                    IsDirectPA = true,
-                    IsFromPAM = true,
-                    CreatedBy = CurrentSession.UserId
-                };
-
-                pas.Add(problemAccount);
-
-                result = _problemAccountClassificationService.InsertProblemAccountPackage(pas, InsertPA_ByType.Category, "ProfileAddProblemAccount", FromFlow.CTSWEB);
+                _accountService.AddQueueAffectDownlinesCustomerCategory(categoryModel);
             }
 
             return Json(new
@@ -1801,7 +1733,83 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
+        private DBResult AddDirectVVIP(CustomerCategoryModel categoryModel)
+        {
+            var latestClassifications = Enumerable.Empty<LatestClassificationModel>();
+            var result = _accountService.AddCustomerCategory(categoryModel, out latestClassifications);
+
+            if (result.ErrorCode == 0 && latestClassifications != null)
+            {
+                if (categoryModel.IsVVip)
+                {
+                    int custIdInt = 0;
+                    int.TryParse(categoryModel.CustId.ToString(), out custIdInt);
+
+                    if (custIdInt != 0)
+                    {
+                        latestClassifications = latestClassifications.Where(c => c.CustId != 0);
+
+                        if (latestClassifications.Any())
+                        {
+                            // Update CC in table custinfo to MainDB
+                            var isSuccessToMain = _customerClassificationService.RetryPushCCToMainDB(latestClassifications, 2);
+
+                            if (isSuccessToMain)
+                            {
+                                var updateApplyCCs = latestClassifications.Select(x => new { x.CustId, x.ScannedTime });
+
+                                var jsonUpdateApplyCCs = JsonConvert.SerializeObject(updateApplyCCs);
+
+                                // Update IsAppliedCC = 1 in CTS
+                                _customerClassificationService.UpdateAppliedCustomerClassification(jsonUpdateApplyCCs);
+                            }
+                        }
+
+                        Task.Run(() =>
+                        {
+                            _antiFraudCenterService.DeleteAFCAccounts(new List<long> { custIdInt }, FromFlow.CTSWEB);
+                        });
+                    }
+                }
+            }
+
+            return result;
+        }
+
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationRemoveCategory)]
+        public ActionResult SaveMarkCustomerCategory(SaveMarkCustomerCategoryViewModel model)
+        {
+            var pas = new List<InsertProblemAccountModel>();
+
+            var problemAccount = new InsertProblemAccountModel
+            {
+                CustID = model.CustID,
+                CTSCustID = model.CTSCustID,
+                RoleID = model.RoleID,
+                SubscriberID = model.SubscriberID,
+                IsLicensee = model.IsLicensee,
+                CategoryID = model.CategoryID,
+                CategoryGroup = model.CategoryGroup,
+                Remark = model.Remark,
+                IsDirectPA = true,
+                IsFromPAM = true,
+                CreatedBy = CurrentSession.UserId
+            };
+
+            pas.Add(problemAccount);
+
+            var result = _problemAccountClassificationService.InsertProblemAccountPackage(pas, InsertPA_ByType.Category, "ProfileAddProblemAccount", FromFlow.CTSWEB);
+
+            return Json(new
+            {
+                errorCode = result.ErrorCode,
+                errorMessage = result.ErrorMsg
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationRemoveCategory)]
         public ActionResult UnmarkCustomerCategory(int roleID, string userName, bool isVVIP)
         {
             var model = new UnmarkCustomerCategoryViewModel
@@ -1812,6 +1820,102 @@
             };
 
             return PartialView("CustomerCategory/UnmarkCustomerCategory", model);
+        }
+
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationRemoveCategory)]
+        public ActionResult SaveUnmarkVVIP(CustomerCategoryModel model)
+        {
+            var errorCode = 0;
+            var errorMessage = string.Empty;
+            model.CreatedBy = CurrentSession.UserId;
+            model.ActionType = ActionTypeQueueCustCategory.Remove;
+
+            var result = _accountService.RemoveCustomerCategory(model);
+
+            if (string.IsNullOrEmpty(result.OpErrorMessage))
+            {
+                if (model.RoleId != 1 && model.IsAffectToAllDownlines)
+                {
+                    _accountService.AddQueueAffectDownlinesCustomerCategory(model);
+                }
+
+                if (model.CustId != 0)
+                {
+                    _rescanClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
+                    {
+                        CustIds = new List<long> { model.CustId },
+                        IsRescanPA = true,
+                        IsPushCCToSoon88 = true,
+                        FunctionId = FunctionId.UnmarkCustomerCategory,
+                        IsUpdateDangerToMainDB = true,
+                        DangerLevelType = DangerLevel.ABI,
+                        ServiceName = "RemoveCustomerCategory"
+                    });
+                }
+            }
+            else
+            {
+                errorCode = -1;
+                errorMessage = result.OpErrorMessage;
+            }
+
+            return Json(new
+            {
+                errorCode,
+                errorMessage
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationRemoveCategory)]
+        public ActionResult SaveUnmarkCustomerCategory(SaveUnmarkCustomerCategoryViewModel model)
+        {
+            var paUnmark = new List<UnmarkProblemAccountModel>()
+                {
+                    new UnmarkProblemAccountModel()
+                    {
+                        CustID = model.CustID,
+                        CTSCustID = model.CTSCustID,                                    
+                        RoleID = model.RoleID,
+                        IsExceptDirectDownline = model.IsExceptDirectDownline,
+                        IsDirectPA = true,                        
+                        CreatedBy = CurrentSession.UserId
+                    }
+                };
+
+            var result = _problemAccountClassificationService.UnmarkProblemAccount(paUnmark, false, model.IsExceptDirectDownline);
+
+            if (result.ErrorCode == 0)
+            {
+                var custEviRemoved = _pamService.RemoveProblemAccountEvidence(model.CustID.ToString());
+
+                if (custEviRemoved != null && custEviRemoved.Any())
+                {
+                    _problemAccountClassificationService.UpdateBetLimitOfUnflaggedCustomer(custEviRemoved.Distinct());
+                }
+
+                var custIdList = new List<long> { model.CustID };
+
+                var paramRescan = new RescanCustClassificationModel
+                {
+                    CustIds = custIdList,
+                    IsPushCCToSoon88 = true,
+                    FunctionId = FunctionId.UnmarkCustomerCategory,
+                    IsUpdateDangerToMainDB = true,
+                    DangerLevelType = DangerLevel.ABI
+                };
+
+                var smCustIds = _rescanClassificationService.GetAgentCusts(custIdList);
+
+                _rescanClassificationService.RescanNormalAccount(paramRescan, custIdList, smCustIds);
+            }
+
+            return Json(new
+            {
+                errorCode = result.ErrorCode,
+                errorMessage = result.ErrorMsg
+            }, JsonRequestBehavior.AllowGet);
         }
 
         #endregion

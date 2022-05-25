@@ -1,0 +1,21 @@
+﻿namespace Fanex.NAP.CTS.Model.CustomerClassification.ProblemAccount
+{
+    using System;
+
+    public class UnmarkProblemAccountModel
+    {
+        public long CustID { get; set; }
+
+        public long CTSCustID { get; set; }
+
+        public int RoleID { get; set; }
+
+        public Int64? CreatedBy { get; set; }
+
+        public string Remark { get; set; }
+
+        public bool IsDirectPA { get; set; }
+
+        public bool IsExceptDirectDownline { get; set; }
+    }
+}

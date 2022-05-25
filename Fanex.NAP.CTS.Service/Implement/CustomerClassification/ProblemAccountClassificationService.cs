@@ -7,8 +7,10 @@
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria.CustomerClassification;
+    using Fanex.NAP.CTS.Criteria.CustomerClassification.ProblemAccount;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.CustomerClassification;
+    using Fanex.NAP.CTS.Model.CustomerClassification.ProblemAccount;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.SPU.CTS.CC.Features.CustomerClassification.ProblemAccountInsert.Criteria;
@@ -160,6 +162,24 @@
             return Enumerable.Empty<CustInfoModel>();
         }
 
+        public DBResult UnmarkProblemAccount(IEnumerable<UnmarkProblemAccountModel> paUnmark, bool isFromQueue, bool isExceptDirectDownline)
+        {
+            var criteria = new ProblemAccountUmmarkCriteria
+            {
+                ProblemAccountJson = JsonConvert.SerializeObject(paUnmark),
+                IsFromQueue = isFromQueue,
+                ExceptDirectDownline = isExceptDirectDownline
+            };
+
+            _repository.Execute(criteria);
+
+            return new DBResult
+            {
+                ErrorCode = string.IsNullOrEmpty(criteria.ErrorMessage) ? 0 : -1,
+                ErrorMsg = criteria.ErrorMessage
+            };
+        }
+
         #region Private Methods
 
         private InsertPAResultModel InsertProblemAccount(IEnumerable<InsertProblemAccountModel> problemAccounts
@@ -256,13 +276,13 @@
             return Enumerable.Empty<InsertProblemAccountModel>();
         }
 
-        private InsertPAResultModel InsertProblemAccount(string problemAccountJson, InsertPA_ByType byType, bool isFromQueue)
+        private InsertPAResultModel InsertProblemAccount(string problemAccountJson, InsertPA_ByType inputType, bool isFromQueue)
         {
-            var criteria = new ProblemAccountInsertCriteria
+            var criteria = new ProblemAccountMarkCriteria
             {
                 ProblemAccountJson = problemAccountJson,
                 IsFromQueue = isFromQueue,
-                ByType = Enum.GetName(typeof(InsertPA_ByType), byType)
+                InputType = Enum.GetName(typeof(InsertPA_ByType), inputType)
             };
 
             var result = _repository.Fetch<CustInfoModel>(criteria);

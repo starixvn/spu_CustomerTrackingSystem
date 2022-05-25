@@ -218,7 +218,8 @@
             InsertPAJob = 41,
             //UpdateCategory = 42,?
             InsertPAM = 43,
-            TWProblemAccountInsert = 44
+            TWProblemAccountInsert = 44,
+            UnmarkCustomerCategory = 45
         };
 
         public enum DangerLevel

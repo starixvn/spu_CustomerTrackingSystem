@@ -1,25 +1,25 @@
-﻿namespace Fanex.NAP.CTS.Criteria.CustomerClassification
+﻿namespace Fanex.NAP.CTS.Criteria.CustomerClassification.ProblemAccount
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
 
-    public class ProblemAccountInsertCriteria : NonQueryCommand
+    public class ProblemAccountUmmarkCriteria : NonQueryCommand
     {
-        [SpParam(SqlParamName = "ip_ByType")]
-        public string ByType { get; set; } // Category or Reason or Evidence
-
         [SpParam(SqlParamName = "ip_IsFromQueue")]
         public bool IsFromQueue { get; set; }
 
+        [SpParam(SqlParamName = "ip_ExceptDirectDownline")]
+        public bool ExceptDirectDownline { get; set; }      
+
         [SpParam(SqlParamName = "ip_ProblemAccounts")]
-        public string ProblemAccountJson { get; set; }       
+        public string ProblemAccountJson { get; set; }
 
         [SpParam(SqlParamName = "op_ErrorMessage")]
         public string ErrorMessage { get; set; }
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_CustClassification_PA_Insert";
+            return "CTS_DC_CustClassification_PA_Remove";
         }
 
         public override bool IsValid()

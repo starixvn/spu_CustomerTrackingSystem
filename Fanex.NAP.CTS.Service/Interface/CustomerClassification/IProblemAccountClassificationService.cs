@@ -3,6 +3,7 @@
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.CustomerClassification;
+    using Fanex.NAP.CTS.Model.CustomerClassification.ProblemAccount;
     using Fanex.NAP.SPU.CTS.CC.Features.CustomerClassification.ProblemAccountInsert.Entities;
     using System.Collections.Generic;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
@@ -24,5 +25,7 @@
         void UpdateBetLimitOfFlaggedCustomer(IEnumerable<long> custId);
 
         void UpdateBetLimitOfUnflaggedCustomer(IEnumerable<long> custId);
+
+        DBResult UnmarkProblemAccount(IEnumerable<UnmarkProblemAccountModel> paUnmark, bool isFromQueue, bool isExceptDirectDownline);        
     }
 }

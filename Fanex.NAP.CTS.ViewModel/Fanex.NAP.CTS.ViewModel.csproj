@@ -70,6 +70,7 @@
     <Compile Include="Account\CustomerCategory\MarkCategoryViewModel.cs" />
     <Compile Include="Account\CustomerCategory\MarkCustomerCategoryViewModel.cs" />
     <Compile Include="Account\CustomerCategory\SaveMarkCustomerCategoryViewModel.cs" />
+    <Compile Include="Account\CustomerCategory\SaveUnmarkCustomerCategoryViewModel.cs" />
     <Compile Include="Account\CustomerCategory\UnmarkCustomerCategoryViewModel.cs" />
     <Compile Include="Account\CustomerFraud.cs" />
     <Compile Include="Account\CustomerGeneralStatusViewModel.cs" />

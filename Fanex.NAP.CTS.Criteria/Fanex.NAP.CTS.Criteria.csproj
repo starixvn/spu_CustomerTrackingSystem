@@ -99,11 +99,12 @@
     <Compile Include="CustomerClassification\AppliedDangerLevelUpdateCriteria.cs" />
     <Compile Include="CustomerClassification\DangerLevelGetCriteria.cs" />
     <Compile Include="CustomerClassification\DangerLevelUpdateCriteria.cs" />
-    <Compile Include="CustomerClassification\ProblemAccountInsertCriteria.cs" />
+    <Compile Include="CustomerClassification\ProblemAccount\ProblemAccountMarkCriteria.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\ProblemAccountLosingClassificationGetCriteria.cs" />
     <Compile Include="CustomerClassification\BetLimitByEvidenceUpdateCriteria.cs" />
     <Compile Include="CustomerClassification\BetLimitByEvidenceRemoveCriteria.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\ProblemAccountGetCriteria.cs" />
+    <Compile Include="CustomerClassification\ProblemAccount\ProblemAccountUmmarkCriteria.cs" />
     <Compile Include="CustomerClassification\Robot\RobotAccountInsertCriteria.cs" />
     <Compile Include="ImportEvidences\CheckCleanCustFlaggedEvidenceCriteria.cs" />
     <Compile Include="LogInputData\LogInputDataCriteria.cs" />

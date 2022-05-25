@@ -1,35 +1,40 @@
 ﻿@model Fanex.NAP.CTS.ViewModel.Account.CustomerCategory.UnmarkCustomerCategoryViewModel
 
-<div>
-    <div class="form-control">
-        <div class="label">Are you sure you want to unmark VVIP - @Model.RoleName @Model.UserName</div>
-    </div>
+@if (Model.IsVVip)
+{
+    <div>
+        <div class="form-control">
+            <div class="label">Are you sure you want to unmark VVIP - @Model.RoleName <span style="color: #FF0000">@Model.UserName</span></div>
+        </div>
 
-    @if (Model.RoleID != 1)
-    {
+        @if (Model.RoleID != 1)
+        {
+            <div class="form-control">
+                <label class="checkbox-container" id="ckbAffectToAllDownlines">
+                    <input id="inputUnmarkAffectToAllDownlines" type="checkbox">
+                    <span class="checkmark"></span>
+                    Affect all Downlines
+                </label>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div>
+        <div class="form-control">
+            <div class="label">Are you sure you want to unmark Problem - @Model.RoleName <span style="color: #FF0000">@Model.UserName</span></div>
+        </div>
+
         <div class="form-control">
             <label class="checkbox-container" id="ckbAffectToAllDownlines">
-                <input id="inputRemoveAffectToAllDownlines" type="checkbox">
+                <input id="inputPAUnmarkAffectToAllDownlines" type="checkbox">
                 <span class="checkmark"></span>
-                Affect all Downlines
+                Unmark all SMA and Downlines, except for Downlines marked directly
             </label>
         </div>
-    }
-</div>
-
-<div hidden>
-    <div class="form-control">
-        <div class="label">Are you sure you want to unmark Problem - @Model.RoleName @Model.UserName</div>
     </div>
-
-    <div class="form-control">
-        <label class="checkbox-container" id="ckbAffectToAllDownlines">
-            <input id="inputPARemoveAffectToAllDownlines" type="checkbox">
-            <span class="checkmark"></span>
-            Unmark all SMA and Downlines, except for Downlines marked directly
-        </label>
-    </div>
-</div>
+}
 
 <div class="modal-footer margin-top-10">
     <button id="btnCCCancelUnmark" class="button btn-cancel-outline" title="Cancel">Cancel</button>

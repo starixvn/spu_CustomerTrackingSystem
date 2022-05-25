@@ -226,6 +226,7 @@
     <Compile Include="CustomerClassification\ProblemAccount\InsertPAResultModel.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\ProblemAccountCategoryModel.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\ProblemAccountLosingClassificationModel.cs" />
+    <Compile Include="CustomerClassification\ProblemAccount\UnmarkProblemAccountModel.cs" />
     <Compile Include="CustomerClassification\RescanCustomerClassification\RescanResultModel.cs" />
     <Compile Include="CustomerClassification\Robot\RobotInsetViewEntity.cs" />
     <Compile Include="CustomerClassification\Robot\InsertRobotModel.cs" />

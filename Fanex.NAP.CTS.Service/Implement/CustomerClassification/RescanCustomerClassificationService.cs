@@ -86,7 +86,7 @@
             return rescanResult;
         }
 
-        private bool RescanNormalAccount(RescanCustClassificationModel parameters, IEnumerable<long> custIdsToRescanPA, IEnumerable<long> smaCustIds)
+        public bool RescanNormalAccount(RescanCustClassificationModel parameters, IEnumerable<long> custIdsToRescanPA, IEnumerable<long> smaCustIds)
         {
             if (parameters != null && parameters.CustIds != null && parameters.CustIds.Any())
             {
@@ -109,7 +109,7 @@
             return true;
         }
 
-        private IEnumerable<long> GetAgentCusts(IEnumerable<long> custIds)
+        public IEnumerable<long> GetAgentCusts(IEnumerable<long> custIds)
         {
             if (custIds != null && custIds.Any())
             {
