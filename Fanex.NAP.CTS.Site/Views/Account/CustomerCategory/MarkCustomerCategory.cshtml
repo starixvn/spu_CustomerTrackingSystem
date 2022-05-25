@@ -1,6 +1,72 @@
 ﻿@using Fanex.NAP.CTS.ViewModel;
 @model Fanex.NAP.CTS.ViewModel.Account.CustomerCategory.MarkCustomerCategoryViewModel
-<div class="float-container" id="divProfileMarkCustomerCategory">
+
+<div class="float-container">
+    <div class="group-column">
+        <div class="column left-column">
+            <div class="heading-column"><p id="lblCCRoleName">Super <span class="red-fieldset">Test01</span></p></div>
+            <div class="body-column">
+                <div class="items">
+                    <div class="info-block">VVIP Category</div>
+                    <div class="info-item flex-item">
+                        <div class="form-control radio-button">
+                            <input type="radio" value="VVIP" id="radio03-01" name="group2" />
+                            <label for="radio03-01">
+                                VVIP
+                            </label>
+                        </div>
+                        <label class="checkbox-container" id="inputCCAffectToAllDownlines">
+                            <input id="inputCCAffectToAllDownlines" type="checkbox">
+                            <span class="checkmark"></span>
+                            Affect all Downlines
+                        </label>
+                    </div>
+                </div>
+                <div class="items">
+                    <div class="info-block">Problem Account Category</div>
+                    <div class="info-item">
+                        @foreach (var paCategory in Model.ProblemAccountList)
+                        {
+                            <div class="form-control radio-button">
+                                @if (Model.CategoryList.Any(x => x.CategoryId == paCategory.CategoryID))
+                                {
+
+                                    <label class="checkbox-container disabled" id="inputCCAffectToAllDownlines">
+                                        <input id="inputCCAffectToAllDownlines" type="checkbox" checked="checked" disabled>
+                                        <span class="checkmark"></span>
+                                        @paCategory.CategoryName
+                                    </label>
+                                }
+                                else
+                                {
+                                    <input type="radio" value="@paCategory.CategoryID" id="@paCategory.CategoryID" name="group2" />
+                                    <label for="@paCategory.CategoryID">
+                                        @paCategory.CategoryName
+                                    </label>
+
+                                }
+
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="column right-column">
+            <div class="heading-column">Comment</div>
+            <div class="body-column">
+                <textarea id="txtCCComment" class="comment-field full-width" maxlength="300"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button id="btnCCCancel" class="button btn-cancel-outline" title="Cancel">Cancel</button>
+        <button id="btnCCSave" class="button -add" title="Add Customer Category">Submit</button>
+    </div>
+</div>
+
+
+@*<div class="float-container" id="divProfileMarkCustomerCategory">
     <div class="float-left">
         <fieldset>
             <legend id="lblCCRoleName">@Model.UserName</legend>
@@ -62,5 +128,5 @@
 <div class="modal-footer margin-top-10">
     <button id="btnCCCancel" class="button btn-cancel-outline" title="Cancel">Cancel</button>
     <button id="btnCCSave" class="button -add" title="Add Customer Category">Submit</button>
-</div>
+</div>*@
 

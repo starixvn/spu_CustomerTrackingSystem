@@ -1507,59 +1507,194 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
     }
 }
 
+
 .float-container {
-    margin: 10px;
-    display: flex;
-
-    .float-left {
-        float: left;
-        width: 55%;
-        padding: 6px;
+    .red-fieldset {
+        color: #FF0000;
     }
 
-    .float-right {
-        float: left;
-        width: 44%;
-        padding: 6px;
-        margin-left: 10px;
+    .group-column {
+        display: flex;
     }
 
-    fieldset {
-        border: 1px solid #000000;
-        display: block;
-        margin-left: 2px;
-        margin-right: 2px;
-        padding-top: 0.35em;
-        padding-bottom: 0.625em;
-        padding-left: 0.75em;
-        padding-right: 0.75em;
-        height: 100%;
+    .column {
+        width: 50%;
+        background: $page-bg;
+        border: 1px solid #E5E5E5;
+        border-bottom: none;
+        border-left: none;
+        border-right: none;
+        border-radius: 2px;
 
-        legend {
-            padding: 5px 10px;
-        }
-
-        .comment-field {
-            border: 1px solid #E5E5E5;
-            border-radius: 2px;
+        .heading-column {
+            border-bottom: 1px solid #E5E5E5;
+            padding: 1rem;
+            font-weight: 700;
             font-size: 14px;
             line-height: 17px;
-            color: #474747;
-            min-height: 380px;
+            color: #545454;
+
+            p {
+                line-height: 1;
+            }
+        }
+
+        &.right-column {
+            .heading-column {
+                padding: 9px 0 !important;
+            }
+        }
+
+        .body-column {
+            height: 91%;
+            border: 1px solid #E5E5E5;
+            overflow: hidden;
+
+            .items {
+                padding: 1.2rem;
+
+                .info-item {
+                    padding-bottom: 1.8rem;
+                    border-bottom: 1px solid #DDDDDD;
+
+                    .form-control {
+                        margin-bottom: 5px;
+                    }
+
+                    .radio-button {
+                        label {
+                            padding: 1.2rem .3rem 0 2.5rem;
+
+                            &::before, &::after {
+                                top: 15px;
+                            }
+
+                            &:after {
+                                background: #686868;
+                            }
+
+                            &:before {
+                                border: 1px solid #686868;
+                            }
+                        }
+                    }
+                }
+
+                .flex-item {
+                    display: flex;
+                    align-items: center;
+
+                    .form-control {
+                        margin-right: 32px;
+                        margin-bottom: 0;
+                    }
+
+                    .checkbox-container {
+                        margin-top: 11px;
+
+                        span {
+                            &:before {
+                                top: 1px;
+                                height: 16px;
+                                width: 16px;
+                            }
+
+                            &:after {
+                                top: 5px;
+                                left: 3px;
+                            }
+                        }
+                    }
+                }
+
+                &:first-child {
+                    padding-bottom: 0;
+                }
+
+                &:last-child {
+                    .info-item {
+                        padding-bottom: 0;
+                        border-bottom: none;
+
+                        .disabled {
+                            padding-left: 0;
+                            cursor: no-drop;
+
+                            &:before, &:after {
+                                display: none;
+                            }
+
+                            span {
+                                &:before {
+                                    top: 1px;
+                                    height: 16px;
+                                    width: 16px;
+                                    background-color: #CBCBCB;
+                                    border-color: #CBCBCB;
+                                    border-radius: 50px;
+                                }
+
+                                &:after {
+                                    top: 5px;
+                                    left: 3px;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .info-block {
+                    color: #545454;
+                    font-weight: 700;
+                    font-size: 14px;
+                    line-height: 17px;
+                }
+            }
+        }
+
+        textarea {
             width: 100%;
-            padding: 10px 16px;
-            letter-spacing: 0.1px;
+            height: 100%;
+            display: block;
+            border: none;
+            padding: 1rem;
+            resize: none;
+
+            &:focus {
+                outline: none;
+                box-shadow: none;
+                border-color: #E5E5E5;
+            }
+        }
+
+        &.left-column {
+            margin-right: .6rem;
+
+            .heading-column {
+                border: 1px solid #E5E5E5;
+                border-top: none;
+            }
+
+            .body-column {
+                border-top: none;
+            }
+        }
+
+        &.right-column {
+            margin-left: .6rem;
+            border: none !important;
+
+            .heading-column {
+                padding: 1rem 0;
+                border-bottom: none;
+                border-right: none;
+                border-left: none;
+            }
         }
     }
 
-    .info-block {
-        padding-bottom: 5px;
-        border-bottom: 1px solid #000000;
-        width: inherit;
-    }
-
-    .info-item {
-        margin: 10px;
+    .modal-footer {
+        margin-top: 1.2rem;
     }
 }
 
