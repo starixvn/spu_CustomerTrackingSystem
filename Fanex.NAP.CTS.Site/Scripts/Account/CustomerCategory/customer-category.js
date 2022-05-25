@@ -5,6 +5,7 @@
     let divMarkCategory = $('#divMarkCategory');
     let divMarkCustomerCategory = $('#divMarkCustomerCategory');
     let divRemoveCategory = $('#divRemoveCategory');
+    let divUnmarkCustomerCategory = $('#divUnmarkCustomerCategory');
     let tblcustomercategory = $('#customer-category-table');
     let divProfileMarkCustomerCategory = $('#divProfileMarkCustomerCategory');
     let isHostPermission;
@@ -12,7 +13,8 @@
         isVVip: false,
         isPinCategory: false,
         isExcludedTagAssPA: false,
-        isProblemAccount: false
+        isProblemAccount: false,
+        isPAProbation: false
     };
     let dataTable;
 
@@ -47,21 +49,31 @@
         }, 10000);
     }
 
-    function DisplayMarkCategory(custId, ctsCustId, subscriberId) {
-        $.ajax(common.modifyRelativeUrl('Account/MarkCatergory'), {
+    function DisplayMarkCategory(ctsCustId) {
+        $.ajax(common.modifyRelativeUrl('Account/MarkCustomerCategory'), {
             type: 'POST',
             data: {
-                ctsCustId: ctsCustId
+                ctsCustID: ctsCustId,
+                roleID: $("#hdRoleID").val(),
+                userName: $("#hdUsername").val()
             },
             beforeSend: function () {
                 common.showLoading();
             },
             success: function (response) {
-                divMarkCategory.html(response);
-                BindingMarkCategoryForAddNew(custId, ctsCustId, subscriberId);
+                divMarkCustomerCategory.html(response);
+                //BindingMarkCategoryForAddNew(custId, ctsCustId, subscriberId);
+
+                $('#btnCCMarkCancel').on('click', function () {
+                    divMarkCustomerCategory.dialog('close');
+                });
+
+                $('#btnCCMarkSave').on('click', function (e) {
+                    //AddCustomerCategory(custId, ctsCustId, subscriberId);
+                });
             },
             complete: function () {
-                divMarkCategory.dialog({
+                divMarkCustomerCategory.dialog({
                     modal: true,
                     width: '600px',
                     title: 'MARK CUSTOMER CATEGORY',
@@ -130,20 +142,19 @@
                 common.showLoading();
             },
             success: function (response) {
-                divRemoveCategory.html(response);
+                divUnmarkCustomerCategory.html(response);
 
-                $('#btnCancelRemoveCategory').on('click', function () {
-                    divRemoveCategory.dialog('close');
+                $('#btnCCCancelUnmark').on('click', function () {
+                    divUnmarkCustomerCategory.dialog('close');
                 });
 
-                $('#btnSaveRemoveCategory').on('click', function (e) {
-                    RemoveCategory(custId, ctsCustId);
+                $('#btnCCSaveUnmark').on('click', function (e) {
+                    
                 });
-
-                $("#ddlRemoveCategory").select2();
+               
             },
             complete: function () {
-                divRemoveCategory.dialog({
+                divUnmarkCustomerCategory.dialog({
                     modal: true,
                     width: '600px',
                     title: 'REMOVE CUSTOMER CATEGORY',
@@ -253,13 +264,14 @@
                 if (response !== undefined) {
                     let json = jQuery.parseJSON(response);
 
-                    btnMarkCategory.prop('disabled', json.isVVip);
-                    btnUnmarkCategory.prop('disabled', !json.isVVip);
+                    //btnMarkCategory.prop('disabled', json.isVVip);
+                    //btnUnmarkCategory.prop('disabled', !json.isVVip);
 
                     cacheData.isProblemAccount = json.isProblemAccount;
                     cacheData.isPinCategory = json.isPinCategory;
                     cacheData.isExcludedTagAssPA = json.isExcludedTagAssPA;
                     cacheData.isVVip = json.isVVip;
+                    cacheData.isPAProbation = json.isPAProbation;
 
                     ResetCategorySetting();
 
@@ -432,11 +444,11 @@
 
                 common.closeLoading();
 
-                $('#btnCCCancel').on('click', function () {
+                $('#btnCCMarkCancel').on('click', function () {
                     divMarkCustomerCategory.dialog('close');
                 });
 
-                $('#btnCCSave').on('click', function (e) {
+                $('#btnCCMarkSave').on('click', function (e) {
                     SaveMarkCustomerCategory();                    
                 });
 
@@ -643,8 +655,8 @@
 
         if (!isHostPermission) {
             cbbCategorySetting.prop('disabled', true);
-            btnMarkCategory.prop('disabled', true);
-            btnUnmarkCategory.prop('disabled', true);
+            //btnMarkCategory.prop('disabled', true);
+            //btnUnmarkCategory.prop('disabled', true);
         }
     }
 
@@ -666,7 +678,7 @@
         });
 
         if (isHostPermission) {
-            btnMarkCategory.click(function () { DisplayMarkCategory(custId, ctsCustId, subscriberId); });
+            btnMarkCategory.click(function () { DisplayMarkCategory(ctsCustId); });
 
             btnUnmarkCategory.click(function () { DisplayUnmarkCategory(custId, ctsCustId); });
         }       
@@ -679,4 +691,5 @@
     this.ReloadTab = function (ctsCustId) {
         ReloadGrid(ctsCustId);
     };
+
 }

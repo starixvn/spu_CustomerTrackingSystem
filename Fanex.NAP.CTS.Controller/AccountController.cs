@@ -1716,18 +1716,20 @@
 
         #region New Mark-Unmark Customer Category
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult MarkCustomerCategory(long ctsCustId)
+        public ActionResult MarkCustomerCategory(long ctsCustID, int roleID, string userName)
         {
-            var result = new MarkCustomerCategoryViewModel();
+            var result = new MarkCustomerCategoryViewModel
+            {
+                RoleID = roleID,
+                UserName = userName,
+                ProblemAccountList = _pamService.GetProblemAccountCategories()
+            };
 
-            result.ProblemAccountList = _pamService.GetProblemAccountCategories();
-
-            var classifications = _accountService.GetCustomerClassification(ctsCustId);
+            var classifications = _accountService.GetCustomerClassification(ctsCustID);
 
             if (classifications != null && classifications.Any())
             {
-                result.CategoryList = classifications
-                    .Select(x => new CustomerCategoryViewModel
+                result.CategoryList = classifications.Select(x => new CustomerCategoryViewModel
                     {
                         CategoryId = x.CategoryID,
                         CategoryName = x.CategoryName ?? string.Empty,
