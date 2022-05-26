@@ -220,6 +220,7 @@
     <Compile Include="AssociatedAccountMonitor\AssociatedAccountMonitorModel.cs" />
     <Compile Include="AssociatedAccountMonitor\CustProfilerModel.cs" />
     <Compile Include="AssociatedAccountMonitor\ValidateAssociatedAccountModel.cs" />
+    <Compile Include="CustomerClassification\RescanCustomerClassification\LatestCCDangerLevelModel.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\ExistedPAResultModel.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\CustInfoModel.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\ExistedProblemAccountModel.cs" />

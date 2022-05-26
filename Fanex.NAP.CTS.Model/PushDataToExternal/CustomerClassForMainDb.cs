@@ -6,7 +6,7 @@
     public class CustomerClassForMainDb
     {
         [XName("id")]
-        public int CustID { get; set; }
+        public long CustID { get; set; }
 
         [XName("c")]
         public int CustomerClass { get; set; }

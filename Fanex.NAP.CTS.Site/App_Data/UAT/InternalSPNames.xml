@@ -88,11 +88,8 @@
 		<Setting Key="CTS_DC_CustClassification_ViewHistory" SpName="CTS_DC_CustClassification_ViewHistory" DbName="MySQL.CTS_DataCenter.Reporter" Timeout="600" />
 		
 		<Setting Key="CTS_DC_CustClassification_GetLatestClassification" SpName="CTS_DC_CustClassification_GetLatestClassification_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustClassification_UpdateIsAppliedCC" SpName="CTS_DC_CustClassification_UpdateIsAppliedCC_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustClassification_GetForSoon88" SpName="CTS_DC_CustClassification_GetForSoon88_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustClassification_LogInputData" SpName="CTS_DC_CustClassification_LogInputData" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_CustClassification_GetDangerLevel" SpName="CTS_DC_CustClassification_GetDangerLevel_xtest" DbName="MySQL.CTS_DataCenter.Reporter" TimeOut="300" />
-		<Setting Key="CTS_DC_CustClassification_UpdateDangerLevel" SpName="CTS_DC_CustClassification_UpdateDangerLevel_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustClassification_VVIPQueue_Insert" SpName="CTS_DC_CustClassification_VVIPQueue_Insert_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustClassification_ProblemAccount_InsertByCategory" SpName="CTS_DC_CustClassification_ProblemAccount_InsertByCategory_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
 	</Function>
@@ -183,5 +180,8 @@
 		<Setting Key="CTS_Arc_CustomerAssociation_RollBack_CheckByNewPA" SpName="CTS_Arc_CustomerAssociation_RollBack_CheckByNewPA_xtest" DbName="MySQL.CTS_Archive.Admin" />
 		<Setting Key="CTS_DC_CustClassification_PA_ReScan" SpName="CTS_DC_CustClassification_PA_ReScan_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustClassification_PA_InsertRobot" SpName="CTS_DC_CustClassification_PA_InsertRobot_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_CustClassification_PA_ClearOld" SpName="CTS_DC_CustClassification_PA_ClearOld_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
+
+		<Setting Key="CTS_DC_CustClassification_GetCCAndDangerLevel" SpName="CTS_DC_CustClassification_GetCCAndDangerLevel_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
 </Functions>

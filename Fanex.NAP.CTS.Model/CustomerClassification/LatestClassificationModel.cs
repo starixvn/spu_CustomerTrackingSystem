@@ -8,15 +8,12 @@
     public class LatestClassificationModel
     {
         [XName("id")]
-        public int CustId { get; set; }
+        public long CustId { get; set; }
 
         [XName("c")]
         public int CustomerClass { get; set; }
 
         [XName("t")]
         public int Category { get; set; }
-
-        [XmlIgnore]
-        public DateTime ScannedTime { get; set; }
     }
 }

@@ -1660,7 +1660,6 @@
                     IsPushCCToSoon88 = true,
                     FunctionId = FunctionId.ExcludeTaggingAssPAWeb,
                     IsUpdateDangerToMainDB = true,
-                    DangerLevelType = DangerLevel.ABI,
                     ServiceName = "ExcludeTaggingAssociationWithPA"
                 });
             }
@@ -1751,17 +1750,7 @@
                         if (latestClassifications.Any())
                         {
                             // Update CC in table custinfo to MainDB
-                            var isSuccessToMain = _customerClassificationService.RetryPushCCToMainDB(latestClassifications, 2);
-
-                            if (isSuccessToMain)
-                            {
-                                var updateApplyCCs = latestClassifications.Select(x => new { x.CustId, x.ScannedTime });
-
-                                var jsonUpdateApplyCCs = JsonConvert.SerializeObject(updateApplyCCs);
-
-                                // Update IsAppliedCC = 1 in CTS
-                                _customerClassificationService.UpdateAppliedCustomerClassification(jsonUpdateApplyCCs);
-                            }
+                            _customerClassificationService.RetryPushCCToMainDB(latestClassifications, 2);
                         }
 
                         Task.Run(() =>
@@ -1848,7 +1837,6 @@
                         IsPushCCToSoon88 = true,
                         FunctionId = FunctionId.UnmarkCustomerCategory,
                         IsUpdateDangerToMainDB = true,
-                        DangerLevelType = DangerLevel.ABI,
                         ServiceName = "RemoveCustomerCategory"
                     });
                 }
@@ -1902,8 +1890,7 @@
                     CustIds = custIdList,
                     IsPushCCToSoon88 = true,
                     FunctionId = FunctionId.UnmarkCustomerCategory,
-                    IsUpdateDangerToMainDB = true,
-                    DangerLevelType = DangerLevel.ABI
+                    IsUpdateDangerToMainDB = true
                 };
 
                 var smCustIds = _rescanClassificationService.GetAgentCusts(custIdList);

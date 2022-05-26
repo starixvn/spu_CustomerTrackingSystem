@@ -63,6 +63,7 @@
     <Compile Include="Account\BettingStatistic\BettingStaisticByBetTypeGetCriteria.cs" />
     <Compile Include="Account\BettingStatistic\BettingStatictisDaily.cs" />
     <Compile Include="Account\ChainToEvidence\AddAccountExceptionCriteria.cs" />
+    <Compile Include="CustomerClassification\GetLastestCCDangerLevelCriteria.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\CheckNewPAAssociationCustomerForRollbackCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\GetAccountExceptionsCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\GetAffectedEvidenceBetweenCustsCriteria.cs" />
@@ -96,9 +97,8 @@
     <Compile Include="Common\GetSubscriberGroupCriteria.cs" />
     <Compile Include="Category\GetCategoryCustomerClassCriteria.cs" />
     <Compile Include="Common\ValidateUsernameCriteria.cs" />
-    <Compile Include="CustomerClassification\AppliedDangerLevelUpdateCriteria.cs" />
-    <Compile Include="CustomerClassification\DangerLevelGetCriteria.cs" />
     <Compile Include="CustomerClassification\DangerLevelUpdateCriteria.cs" />
+    <Compile Include="CustomerClassification\ProblemAccount\OldProblemAccountRemoveCriteria.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\ProblemAccountMarkCriteria.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\ProblemAccountLosingClassificationGetCriteria.cs" />
     <Compile Include="CustomerClassification\BetLimitByEvidenceUpdateCriteria.cs" />
@@ -112,7 +112,6 @@
     <Compile Include="CustomerClassification\GetRoleCustomerCriteria.cs" />
     <Compile Include="CustomerClassification\GetLastestClassificationCriteria.cs" />
     <Compile Include="CustomerClassification\NormalAccountsClassificationGeneralCategorizeDailyCriteria.cs" />
-    <Compile Include="CustomerClassification\UpdateAppliedCustomerClassificationCriteria.cs" />
     <Compile Include="ImportEvidences\InsertCustEvidenceFromFileCriteria.cs" />
     <Compile Include="AssociationReport\AssociationReportGetCategoriesCriteria.cs" />
     <Compile Include="ImportEvidences\InsertCustEvidenceQueueCriteria.cs" />

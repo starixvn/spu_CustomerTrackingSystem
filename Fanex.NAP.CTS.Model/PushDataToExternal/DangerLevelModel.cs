@@ -1,8 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Model.SyncCustomerToMainDb
 {
     using Fanex.NAP.CTS.Core.Helpers.Xml;
-    using System;
-    using System.Xml.Serialization;
 
     [XName("r")]
     public class DangerLevelModel
@@ -12,8 +10,5 @@
 
         [XName("l")]
         public int DangerLevel { get; set; }
-
-        [XmlIgnore]
-        public DateTime ScannedTime { get; set; }
     }
 }

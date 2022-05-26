@@ -14,6 +14,8 @@
 
         InsertPAResultModel InsertProblemAccountLogics(IEnumerable<InsertProblemAccountModel> problemAccounts, IEnumerable<ProblemAccountLosingClassificationModel> paLosing, InsertPA_ByType mappingCategoryByType, string serviceName, bool isFromQueue);
 
+        void RemoveOldProblemAccount(IEnumerable<long> custIds);
+
         IEnumerable<ExistedProblemAccountModel> GetExistedProblemAccounts(IEnumerable<long> custIds);
 
         IEnumerable<ProblemAccountLosingClassificationModel> GetProblemAccountLosingClassification(IEnumerable<long> custIds, FunctionId funcId);

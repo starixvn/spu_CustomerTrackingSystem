@@ -14,6 +14,7 @@
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.SPU.CTS.CC.Features.CustomerClassification.ProblemAccountInsert.Entities;
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Configuration;
     using System.Linq;
@@ -66,9 +67,10 @@
             if (parameters != null && parameters.CustIds != null && parameters.CustIds.Any())
             {
                 var existedProbAccounts = GetExistedProblemAccounts(parameters.CustIds, parameters.IsDataChanged);
+
                 var paLosing = problemAccountService.GetProblemAccountLosingClassification(parameters.CustIds, parameters.FunctionId);
 
-                InsertProblemAccountLogics(existedProbAccounts.ProblemAccounts, paLosing, parameters.ServiceName, ref rescanResult);
+                var custTORemovedOldPA = InsertProblemAccountLogics(existedProbAccounts.ProblemAccounts, paLosing, parameters.ServiceName, ref rescanResult);
 
                 if (rescanResult.IsSuccess)
                 {
@@ -80,6 +82,11 @@
                 if (rescanResult.IsSuccess && rescanResult.CustIds.Any())
                 {
                     rescanResult.IsSuccess = PushExternalData(rescanResult.CustIds.Distinct(), parameters);
+                }
+
+                if (rescanResult.IsSuccess && custTORemovedOldPA.Any())
+                {
+                    problemAccountService.RemoveOldProblemAccount(custTORemovedOldPA);
                 }
             }
 
@@ -143,8 +150,7 @@
                     {
                         ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
                         IsPushCCToSoon88 = parameters.IsPushCCToSoon88,
-                        IsUpdateDangerToMainDB = parameters.IsUpdateDangerToMainDB,
-                        DangerLevelType = parameters.DangerLevelType
+                        IsUpdateDangerToMainDB = parameters.IsUpdateDangerToMainDB
                     });
                 },
                 () =>
@@ -201,9 +207,9 @@
             return existedPA;
         }
 
-        private void InsertProblemAccountLogics(IEnumerable<InsertProblemAccountModel> problemAccounts, IEnumerable<ProblemAccountLosingClassificationModel> paLosing, string serviceName, ref RescanResultModel rescanResultModel)
+        private IEnumerable<long> InsertProblemAccountLogics(IEnumerable<InsertProblemAccountModel> problemAccounts, IEnumerable<ProblemAccountLosingClassificationModel> paLosing, string serviceName, ref RescanResultModel rescanResultModel)
         {
-            if (problemAccounts.Any())
+            if (problemAccounts != null && problemAccounts.Any())
             {
                 var result = problemAccountService.InsertProblemAccountLogics(problemAccounts, paLosing, InsertPA_ByType.Category, serviceName, false);
 
@@ -211,9 +217,15 @@
 
                 if (result.ErrorCode == 0 && result.CustomerInfo.Any())
                 {
-                    rescanResultModel.CustIds.AddRange(result.CustomerInfo.Select(c => c.CustID).Distinct());
+                    var custIds = result.CustomerInfo.Select(c => c.CustID).Distinct();
+
+                    rescanResultModel.CustIds.AddRange(custIds);
+
+                    return custIds;
                 }
             }
+
+            return Enumerable.Empty<long>();
         }
 
         private void ClassifyCustomerGeneralCategoryDaily(string customers, FunctionId funcId, bool isCheckLast14Days)

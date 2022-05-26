@@ -222,13 +222,6 @@
             UnmarkCustomerCategory = 45
         };
 
-        public enum DangerLevel
-        {
-            Original = 1,
-            ABI = 2,
-            Other = 3
-        }
-
         public enum HttpStatus
         {
             Unauthorized = 401,

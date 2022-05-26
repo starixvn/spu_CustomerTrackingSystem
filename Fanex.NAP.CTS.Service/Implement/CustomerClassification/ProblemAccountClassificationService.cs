@@ -228,8 +228,7 @@
                 {
                     ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
                     IsPushCCToSoon88 = true,
-                    IsUpdateDangerToMainDB = true,
-                    DangerLevelType = DangerLevel.ABI
+                    IsUpdateDangerToMainDB = true
                 });
 
                 _antiFraudCenterService.InsertAFCAccounts(custIds, fromFlow);
@@ -293,6 +292,19 @@
                 ErrorCode = string.IsNullOrEmpty(criteria.ErrorMessage) ? 0 : -1,
                 CustomerInfo = result ?? Enumerable.Empty<CustInfoModel>()
             };
+        }
+
+        public void RemoveOldProblemAccount(IEnumerable<long> custIds)
+        {
+            if (custIds != null && custIds.Any())
+            {
+                var criteria = new OldProblemAccountRemoveCriteria
+                {
+                    CustId = string.Join(",", custIds)
+                };
+
+                _repository.Execute(criteria);
+            }
         }
 
         public void UpdateBetLimitOfFlaggedCustomer(IEnumerable<long> custId)

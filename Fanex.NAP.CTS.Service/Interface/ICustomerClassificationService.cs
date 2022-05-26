@@ -8,12 +8,10 @@
     {
         bool RetryPushCCToMainDB(IEnumerable<LatestClassificationModel> customerClassifications, int retryTime);
 
-        void PushCustomerClassificationToSoon88(IEnumerable<LatestClassificationModel> customerClassifications);
+        void PushCustomerClassificationToSoon88(IEnumerable<LatestCCDangerLevelModel> customerClassifications);
 
         bool PushDataToExternal(IEnumerable<long> custIdsToSyncCC, PushDataToExternalModel paras);
 
         IEnumerable<LatestClassificationModel> GetLatestClassification(string custIds);
-
-        void UpdateAppliedCustomerClassification(string jsonData);
     }
 }

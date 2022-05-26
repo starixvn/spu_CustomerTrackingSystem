@@ -15,8 +15,6 @@
 
         public bool IsUpdateDangerToMainDB { get; set; }
 
-        public DangerLevel DangerLevelType { get; set; }
-
         public string ServiceName { get; set; }
 
         public FunctionId FuncId_CheckRobotUser

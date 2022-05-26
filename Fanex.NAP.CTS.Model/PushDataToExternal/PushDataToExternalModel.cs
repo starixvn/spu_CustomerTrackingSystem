@@ -9,7 +9,5 @@
         public int ExternalBatchSize { get; set; }
 
         public bool IsUpdateDangerToMainDB { get; set; }
-
-        public DangerLevel DangerLevelType { get; set; }
     }
 }

@@ -19,11 +19,8 @@
 		<Setting Key="CTS_CustomerClass_GetByCustId" SpName="CTS_CustomerClass_GetByCustId" DbName="DBCTS.bodb02.bodbSPUNet" />
 		<Setting Key="CTS_DC_CustClassification_GetForSoon88" SpName="CTS_DC_CustClassification_GetForSoon88" DbName="MySQL.CTS_DataCenter.Reporter"/>
 		<Setting Key="CTS_DC_CustClassification_GetLatestClassification" SpName="CTS_DC_CustClassification_GetLatestClassification" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustClassification_UpdateIsAppliedCC" SpName="CTS_DC_CustClassification_UpdateIsAppliedCC" DbName="MySQL.CTS_DataCenter.Admin" TimeOut="600"/>
 		
 		<Setting Key="CTS_DC_CustClassification_LogInputData" SpName="CTS_DC_CustClassification_LogInputData" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_CustClassification_GetDangerLevel" SpName="CTS_DC_CustClassification_GetDangerLevel" DbName="MySQL.CTS_DataCenter.Reporter" TimeOut="300" />
-		<Setting Key="CTS_DC_CustClassification_UpdateDangerLevel" SpName="CTS_DC_CustClassification_UpdateDangerLevel" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_CustomerUpdDanger" SpName="CTS_CustomerUpdDanger" DbName="DBCust.CustDB.bodbAdminNet" TimeOut="300" />
 	</Function>
 
@@ -67,6 +64,9 @@
 		<Setting Key="CTS_ProblemAccountsClassification_Daily" SpName="CTS_ProblemAccountsClassification_Daily" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" TimeOut="300" />
 		<Setting Key="CTS_Arc_CustomerAssociation_RollBack_CheckByNewPA" SpName="CTS_Arc_CustomerAssociation_RollBack_CheckByNewPA" DbName="MySQL.CTS_Archive.Admin" />
 		<Setting Key="CTS_DC_CustClassification_PA_ReScan" SpName="CTS_DC_CustClassification_PA_ReScan" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustClassification_PA_InsertRobot" SpName="CTS_DC_CustClassification_PA_InsertRobot" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_CustClassification_PA_InsertRobot" SpName="CTS_DC_CustClassification_PA_InsertRobot" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_CustClassification_PA_ClearOld" SpName="CTS_DC_CustClassification_PA_ClearOld" DbName="MySQL.CTS_DataCenter.Admin" />
+
+		<Setting Key="CTS_DC_CustClassification_GetCCAndDangerLevel" SpName="CTS_DC_CustClassification_GetCCAndDangerLevel" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
 </Functions>

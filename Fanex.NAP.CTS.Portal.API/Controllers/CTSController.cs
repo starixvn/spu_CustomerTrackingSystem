@@ -972,17 +972,7 @@
                         foreach (var custs in custIdsChunk)
                         {
                             // Update CC in table custinfo to MainDB
-                            var isSuccessToMain = _custClassificationService.RetryPushCCToMainDB(custs, 2);
-
-                            if (isSuccessToMain)
-                            {
-                                var updateApplyCCs = custs.Select(x => new { x.CustId, x.ScannedTime });
-
-                                var jsonUpdateApplyCCs = JsonConvert.SerializeObject(updateApplyCCs);
-
-                                // Update IsAppliedCC = 1 in CTS
-                                _custClassificationService.UpdateAppliedCustomerClassification(jsonUpdateApplyCCs);
-                            }
+                            _custClassificationService.RetryPushCCToMainDB(custs, 2);
                         }
                     }
                 }
