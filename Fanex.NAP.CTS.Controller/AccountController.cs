@@ -1704,7 +1704,6 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationRemoveCategory)]
         public ActionResult SaveMarkVVIP(SaveMarkCustomerCategoryViewModel model)
         {
-            var result = new DBResult();
             var categoryModel = new CustomerCategoryModel
             {
                 CustId = model.CustID,
@@ -1719,7 +1718,7 @@
                 ActionType = ActionTypeQueueCustCategory.Insert
             };
 
-            var resultAddDirectCC = AddDirectVVIP(categoryModel);
+            var resultAddDirectCC = MarkDirectVVIP(categoryModel);
 
             if (resultAddDirectCC.ErrorCode == 0 && categoryModel.RoleId != 1 && categoryModel.IsAffectToAllDownlines)
             {
@@ -1728,12 +1727,12 @@
 
             return Json(new
             {
-                errorCode = result.ErrorCode,
-                errorMessage = result.ErrorMsg
+                errorCode = resultAddDirectCC.ErrorCode,
+                errorMessage = resultAddDirectCC.ErrorMsg
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private DBResult AddDirectVVIP(CustomerCategoryModel categoryModel)
+        private DBResult MarkDirectVVIP(CustomerCategoryModel categoryModel)
         {
             var latestClassifications = Enumerable.Empty<LatestClassificationModel>();
             var result = _accountService.AddCustomerCategory(categoryModel, out latestClassifications);
@@ -1876,11 +1875,12 @@
                     new UnmarkProblemAccountModel()
                     {
                         CustID = model.CustID,
-                        CTSCustID = model.CTSCustID,                                    
+                        CTSCustID = model.CTSCustID,
                         RoleID = model.RoleID,
+                        SubscriberID = model.SubscriberID,
+                        CreatedBy = CurrentSession.UserId,
+                        Remark = string.Empty,
                         IsExceptDirectDownline = model.IsExceptDirectDownline,
-                        IsDirectPA = true,                        
-                        CreatedBy = CurrentSession.UserId
                     }
                 };
 

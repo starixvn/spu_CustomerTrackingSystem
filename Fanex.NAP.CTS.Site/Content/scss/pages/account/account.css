@@ -1035,6 +1035,10 @@
           .content-info .header-info .container-status .wrapper-status .btn-add-pa:hover {
             background-color: #095776;
             transition: 0.2s; }
+          .content-info .header-info .container-status .wrapper-status .btn-add-pa.disabled {
+            background-color: #c9cdd1;
+            color: #fff;
+            cursor: not-allowed; }
         .content-info .header-info .container-status .wrapper-status .btn-add-pa:hover:before,
         .content-info .header-info .container-status .wrapper-status .btn-add-pa:hover:after {
           background: #fff;

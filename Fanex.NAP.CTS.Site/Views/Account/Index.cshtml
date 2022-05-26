@@ -290,6 +290,8 @@
     <input id="hdIsBettingStatisticPermission" type="hidden" IsBettingStatisticPermission="@Model.IsBettingStatisticPermission.ToString()" />
     <input id="hdIsViewIPTransactionPermission" type="hidden" IsViewIPTransactionPermission="@Model.IsViewIPTransactionPermission.ToString()" />
     <input id="hdRoleID" type="hidden" value="@Model.Role.Id" />
+    <input id="hdIsLicensee" type="hidden" value="@Model.IsLicensee.ToString().ToUpper()" />
+    <input id="hdIsInternal" type="hidden" value="@Model.IsInternal.ToString().ToUpper()" />
 </div>
 @section scripts{
     @Scripts.Render("~/statistic-scripts"

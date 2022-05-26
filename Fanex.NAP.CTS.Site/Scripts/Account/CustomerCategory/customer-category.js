@@ -23,7 +23,7 @@
                     custId: custId
                 },
                 success: function (response) {
-                    spanClass.html(response.customerClassification + "  ");
+                    $('#spanClass').html(response.customerClassification + "  ");
                 },
                 complete: function () {
                 },
@@ -85,6 +85,7 @@
         params.CustID = $("#hdCustId").val();
         params.CTSCustID = $("#hdCTSCustId").val();
         params.RoleID = $('#hdRoleID').val();
+        params.hdSubscriberID = $('#hdSubscriberId').val();
 
         $.ajax(common.modifyRelativeUrl('Account/SaveUnmarkCustomerCategory'), {
             type: 'POST',
@@ -220,10 +221,7 @@
 
                     if (!isProblemAccount) {
                         RenderNormalCategoryProfilePage(json.categoryList);
-                    }
-
-                    btnMarkCategory.prop('disabled', json.isVVip);
-                    btnUnmarkCategory.prop('disabled', !json.isVVip && !json.isProblemAccount && !json.isPAProbation);
+                    }                    
                 }
                 return response;
             },
@@ -235,11 +233,16 @@
             },
             complete: function () {
                 tblcustomercategory.find('tbody').removeClass('loading');
+                
+                let disabledUnmarkCategory = !cacheData.isVVip && !cacheData.isProblemAccount && !cacheData.isPAProbation;
+                let disabledMarkCategory = cacheData.isVVip || cacheData.isPinCategory || $("#hdIsLicensee").val() == 'TRUE' || $("#hdIsInternal").val() == 'TRUE';
+                
+                btnUnmarkCategory.prop('disabled', disabledUnmarkCategory);
+                btnMarkCategory.prop('disabled', disabledMarkCategory);
 
-                if (!cacheData.isPinCategory) {
-                    $("#btnProfileInsertPA").prop('disabled', false);
+                if (!disabledMarkCategory) {                    
                     $("#btnProfileInsertPA").off('click').click(function () { DisplayMarkCustomerCategory() });
-                }                
+                }
             }
         });
     }
@@ -355,13 +358,11 @@
         $('#divCustomerCategorySummary').html(html);
         $('#spanContentInfoLoading').css('visibility', 'hidden');
         $('#divHeaderInfo').css('visibility', 'visible');
-
-        $("#btnToogleInsertPA").click(function () { console.log('toogle insert PA clicked'); });
     }
 
     function BuildButtonProfileInsertPA(html) {       
 
-        html += "<div class='btn-add-pa' id='btnProfileInsertPA'></div>";
+        html += "<div class='btn-add-pa' id='btnProfileInsertPA' title='Mark Category'></div>";
         
         return html;
     }

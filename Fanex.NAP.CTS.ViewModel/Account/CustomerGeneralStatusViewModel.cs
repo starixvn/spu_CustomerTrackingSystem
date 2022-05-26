@@ -56,6 +56,10 @@
 
         public int CurrentUserId { get; set; }
 
+        public bool IsLicensee { get; set; }
+
+        public bool IsInternal { get; set; }
+
         public CustomerGeneralStatusViewModel BindingDangerous(CustomerInfoByCustIdsModel custDangerousModel)
         {
             if (custDangerousModel != null)
@@ -85,6 +89,8 @@
                 this.SubscriberId = customerInfoByCTSCustIdModel.SubscriberID;
                 this.CustStatusID = customerInfoByCTSCustIdModel.CustStatusID;
                 this.StatusName = string.IsNullOrEmpty(customerInfoByCTSCustIdModel.CustStatusName) ? "N/A" : customerInfoByCTSCustIdModel.CustStatusName;
+                this.IsLicensee = customerInfoByCTSCustIdModel.IsLicensee;
+                this.IsInternal = customerInfoByCTSCustIdModel.IsInternal;
             }
 
             return this;

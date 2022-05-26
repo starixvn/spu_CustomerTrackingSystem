@@ -10,11 +10,11 @@
 
         public int RoleID { get; set; }
 
+        public int SubscriberID { get; set; }
+
         public Int64? CreatedBy { get; set; }
 
-        public string Remark { get; set; }
-
-        public bool IsDirectPA { get; set; }
+        public string Remark { get; set; }        
 
         public bool IsExceptDirectDownline { get; set; }
     }
