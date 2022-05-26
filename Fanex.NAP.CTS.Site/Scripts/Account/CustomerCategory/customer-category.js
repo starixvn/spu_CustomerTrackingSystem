@@ -40,7 +40,8 @@
             data: {
                 roleID: $("#hdRoleID").val(),
                 userName: $("#hdUsername").val(),
-                isVVIP: cacheData.isVVip
+                isVVIP: cacheData.isVVip,
+                isLicensee: $("#hdIsLicensee").val()
             },
             beforeSend: function () {
                 common.showLoading();
@@ -100,8 +101,8 @@
                     common.showError(response.errorMessage);
                 }
 
-                LoadGrid(params.CTSCustId, true);
-                GetCustomerCategory(params.CustId);
+                LoadGrid(params.CTSCustID, true);
+                GetCustomerCategory(params.CustID);
             },
             beforeSend: function () {
                 common.showLoading();
@@ -236,14 +237,20 @@
                 tblcustomercategory.find('tbody').removeClass('loading');
                 
                 let disabledUnmarkCategory = !cacheData.isVVip && !cacheData.isProblemAccount && !cacheData.isPAProbation;
-                let disabledMarkCategory = cacheData.isVVip || cacheData.isPinCategory || $("#hdIsLicensee").val() == 'TRUE' || $("#hdIsInternal").val() == 'TRUE';
+                let disabledMarkCategory = cacheData.isVVip
+                    || cacheData.isPinCategory
+                    || ($("#hdIsLicensee").val() == 'TRUE' && $("#hdRoleID").val() > 1)
+                    || $("#hdIsInternal").val() == 'TRUE';
                 
                 btnUnmarkCategory.prop('disabled', disabledUnmarkCategory);
-                btnMarkCategory.prop('disabled', disabledMarkCategory);
+                btnMarkCategory.prop('disabled', disabledMarkCategory);                
 
                 if (!disabledMarkCategory) {                    
                     $("#btnProfileInsertPA").off('click').click(function () { DisplayMarkCustomerCategory() });
-                }
+                    $("#btnProfileInsertPA").removeClass('disabled');
+                } else {
+                    $("#btnProfileInsertPA").addClass('disabled');
+                }  
             }
         });
     }

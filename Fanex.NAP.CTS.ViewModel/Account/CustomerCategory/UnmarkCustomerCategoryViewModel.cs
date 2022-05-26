@@ -8,6 +8,8 @@ namespace Fanex.NAP.CTS.ViewModel.Account.CustomerCategory
 
         public bool IsVVip { get; set; }
 
+        public bool IsLicensee { get; set; }
+
         public string UserName { get; set; }
 
         public string RoleName

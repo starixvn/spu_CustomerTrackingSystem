@@ -1535,98 +1535,7 @@
             reason += "</div>";
 
             return reason;
-        }        
-
-        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        //public ActionResult MarkCatergory(long ctsCustId)
-        //{
-        //    var customerCategoryList = _accountService.GetCustomerCategoryByCTSCustId(ctsCustId).ToList();
-
-        //    var model = new MarkCategoryViewModel
-        //    {
-        //        CustomerCategoryList = customerCategoryList.Where(x => x.CategoryId == 210 || x.ParentId == 0).ToList() // CategoryId = 210 -> VVIP
-        //    };
-
-        //    return PartialView("CustomerCategory/MarkCatergory", model);
-        //}       
-
-        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        //public ActionResult RemoveCatergory(long ctsCustId)
-        //{
-        //    var model = new MarkCategoryViewModel
-        //    {
-        //        CustomerCategoryList = new List<Model.DTO.CustomerCategory> { new Model.DTO.CustomerCategory { CategoryId = 210, CategoryName = "VVIP", ParentId = 200 } }
-        //    };           
-
-        //    return PartialView("CustomerCategory/RemoveCategory", model);
-        //}
-
-        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        //[TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationMarkCategory)]        
-        //public ActionResult AddCustomerCategory(CustomerCategoryModel categoryModel)
-        //{
-        //    categoryModel.CreatedBy = CurrentSession.UserId;
-        //    categoryModel.ActionType = ActionTypeQueueCustCategory.Insert;            
-        //    var result = AddDirectCustomerCategory(categoryModel);
-        //    if (result.ErrorCode == 0 && categoryModel.RoleId != 1 && categoryModel.IsAffectToAllDownlines)
-        //    {
-        //        _accountService.AddQueueAffectDownlinesCustomerCategory(categoryModel);
-        //    }
-
-        //    return Json(new
-        //    {
-        //        errorCode = result.ErrorCode,
-        //        errorMessage = result.ErrorMsg
-        //    }, JsonRequestBehavior.AllowGet);
-        //}
-        
-        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        //[TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationRemoveCategory)]        
-        //public ActionResult RemoveCustomerCategory(CustomerCategoryModel categoryModel)
-        //{
-        //    var errorCode = 0;
-        //    var errorMessage = string.Empty;
-        //    categoryModel.CreatedBy = CurrentSession.UserId;
-        //    categoryModel.ActionType = ActionTypeQueueCustCategory.Remove;
-            
-        //    var result = _accountService.RemoveCustomerCategory(categoryModel);
-            
-        //    if (string.IsNullOrEmpty(result.OpErrorMessage))
-        //    {                
-        //        if (categoryModel.IsVVip)
-        //        {
-        //            if (categoryModel.RoleId != 1 && categoryModel.IsAffectToAllDownlines)
-        //            {
-        //                _accountService.AddQueueAffectDownlinesCustomerCategory(categoryModel);
-        //            }
-
-        //            if (categoryModel.CustId != 0)
-        //            {
-        //                _rescanClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
-        //                {
-        //                    CustIds = new List<long> { categoryModel.CustId },
-        //                    IsRescanPA = true,
-        //                    IsPushCCToSoon88 = true,
-        //                    FunctionId = FunctionId.RemoveVIPWeb,
-        //                    IsUpdateDangerToMainDB = true,
-        //                    DangerLevelType = DangerLevel.ABI,
-        //                    ServiceName = "RemoveCustomerCategory"
-        //                });
-        //            }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        errorCode = -1;                
-        //        errorMessage = result.OpErrorMessage;
-        //    }
-
-        //    return Json(new
-        //    {
-        //        errorCode,
-        //        errorMessage
-        //    }, JsonRequestBehavior.AllowGet);
-        //}
+        }                
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationPinCategory)]
@@ -1799,13 +1708,14 @@
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationRemoveCategory)]
-        public ActionResult UnmarkCustomerCategory(int roleID, string userName, bool isVVIP)
+        public ActionResult UnmarkCustomerCategory(int roleID, string userName, bool isVVIP, bool isLicensee)
         {
             var model = new UnmarkCustomerCategoryViewModel
             {
                 RoleID = roleID,
                 UserName = userName,
-                IsVVip = isVVIP
+                IsVVip = isVVIP,
+                IsLicensee = isLicensee
             };
 
             return PartialView("CustomerCategory/UnmarkCustomerCategory", model);
@@ -1891,7 +1801,7 @@
 
                 var smCustIds = _rescanClassificationService.GetAgentCusts(custIdList);
 
-                _rescanClassificationService.RescanNormalAccount(paramRescan, custIdList, smCustIds);
+                _rescanClassificationService.RescanNormalAccount(paramRescan, Enumerable.Empty<long>(), smCustIds);
             }
 
             return Json(new

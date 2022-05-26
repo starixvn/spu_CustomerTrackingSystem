@@ -14,9 +14,7 @@
 
         public bool IsLicensee { get; set; }
 
-        public int ActionID { get; set; }
-
-        public string Site { get; set; }
+        public int ActionID { get; set; }        
 
         public string ErrorMsg { get; set; }
     }

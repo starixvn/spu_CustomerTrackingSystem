@@ -392,11 +392,7 @@
                     {
                         var pas = markPAList.Select(x => new InsertProblemAccountModel
                         {
-                            CustID = x.CustID,
-                            //CTSCustID = x.CTSCustID,
-                            //RoleID = x.RoleID,
-                            //SubscriberID = x.SubscriberID,
-                            //IsLicensee = x.IsLicensee,
+                            CustID = x.CustID,                          
                             ReasonID = dataParam.ReasonId,                            
                             Remark = dataParam.Comment,
                             IsDirectPA = true,

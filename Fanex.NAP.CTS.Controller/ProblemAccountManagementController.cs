@@ -211,7 +211,7 @@
 
                         var smCustIds = _rescanClassificationService.GetAgentCusts(custIdList);
 
-                        _rescanClassificationService.RescanNormalAccount(paramRescan, custIdList, smCustIds);
+                        _rescanClassificationService.RescanNormalAccount(paramRescan, Enumerable.Empty<long>(), smCustIds);
                     }
                 }
             }
@@ -247,7 +247,7 @@
                                                         UserName = x.UserName,
                                                         ErrMsg = x.ErrorMsg
                                                     }),
-                IsCreditSite = validatedModels.Any(x => x.Site == Consts.ProblemAccountManagement_SiteCredit),
+                IsCreditSite = validatedModels.Any(x => !x.IsLicensee),
                 IsExistedSMA = validatedModels.Any(x => x.RoleID > 1)
             };
 

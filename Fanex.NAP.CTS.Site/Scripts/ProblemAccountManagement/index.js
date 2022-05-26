@@ -333,7 +333,7 @@
 
                     if (params.PAAction == 2) { // Unmark
                         domElements.txtComment.val(response.Comment);
-                        if (response.IsExistedSMA) {
+                        if (response.IsExistedSMA && response.IsCreditSite) {
                             domElements.grpCkboxAffectedDownline.removeClass('hide');                            
                         } else {
                             domElements.grpCkboxAffectedDownline.addClass('hide');
