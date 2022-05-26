@@ -162,7 +162,7 @@
             return Enumerable.Empty<CustInfoModel>();
         }
 
-        public DBResult UnmarkProblemAccount(IEnumerable<UnmarkProblemAccountModel> paUnmark, bool isFromQueue, bool isExceptDirectDownline)
+        public UnmarkPAResultModel UnmarkProblemAccount(IEnumerable<UnmarkProblemAccountModel> paUnmark, bool isFromQueue, bool isExceptDirectDownline)
         {
             var criteria = new ProblemAccountUmmarkCriteria
             {
@@ -171,12 +171,13 @@
                 ExceptDirectDownline = isExceptDirectDownline
             };
 
-            _repository.Execute(criteria);
+            var custInfos = _repository.Fetch<CustInfoModel>(criteria);
 
-            return new DBResult
+            return new UnmarkPAResultModel
             {
                 ErrorCode = string.IsNullOrEmpty(criteria.ErrorMessage) ? 0 : -1,
-                ErrorMsg = criteria.ErrorMessage
+                ErrorMessage = criteria.ErrorMessage,
+                CustomerInfo = custInfos
             };
         }
 

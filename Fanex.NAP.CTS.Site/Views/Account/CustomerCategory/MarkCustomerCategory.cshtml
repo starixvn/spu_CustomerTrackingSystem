@@ -14,7 +14,7 @@
                             <label for="inputCCVVIP">
                                 VVIP
                             </label>
-                        </div>
+                        </div>                        
                         <label class="checkbox-container" id="inputCCAffectToAllDownlines">
                             <input id="inputCCAffectToAllDownlines" type="checkbox">
                             <span class="checkmark"></span>
@@ -42,11 +42,22 @@
                                     <label for="@paCategory.CategoryID">
                                         @paCategory.CategoryName
                                     </label>
-
                                 }
 
                             </div>
                         }
+
+                        @if (Model.IsRobotUser)
+                        {
+                            <div class="form-control radio-button">
+                                <label class="checkbox-container disabled" id="inputCCAffectToAllDownlines">
+                                    <input id="-1" type="checkbox" checked="checked" disabled>
+                                    <span class="checkmark"></span>
+                                    Robot User
+                                </label>
+                            </div>
+                        }
+
                     </div>
                 </div>
             </div>
