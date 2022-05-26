@@ -292,6 +292,7 @@
     <input id="hdRoleID" type="hidden" value="@Model.Role.Id" />
     <input id="hdIsLicensee" type="hidden" value="@Model.IsLicensee.ToString().ToUpper()" />
     <input id="hdIsInternal" type="hidden" value="@Model.IsInternal.ToString().ToUpper()" />
+    <input id="hdIsRobotUser" type="hidden" value="@Model.IsRobotUser.ToString().ToUpper()" />
 </div>
 @section scripts{
     @Scripts.Render("~/statistic-scripts"

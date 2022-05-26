@@ -16,6 +16,8 @@
 
         public string UserName { get; set; }
 
+        public bool IsRobotUser { get; set; }
+
         public IEnumerable<ProblemAccountCategoryModel> ProblemAccountList { get; set; }
 
         public IEnumerable<CustomerCategoryViewModel> CategoryList { get; set; }

@@ -85,7 +85,8 @@
         params.CustID = $("#hdCustId").val();
         params.CTSCustID = $("#hdCTSCustId").val();
         params.RoleID = $('#hdRoleID').val();
-        params.hdSubscriberID = $('#hdSubscriberId').val();
+        params.SubscriberID = $('#hdSubscriberId').val();
+        params.IsExceptDirectDownline = $('#inputPAUnmarkAffectToAllDownlines').is(":checked");
 
         $.ajax(common.modifyRelativeUrl('Account/SaveUnmarkCustomerCategory'), {
             type: 'POST',
@@ -123,7 +124,7 @@
         params.SubscriberId = $('#hdSubscriberId').val();
         params.CategoryId = 210; // VVIP
         params.RoleId = $('#hdRoleID').val();
-        params.IsAffectToAllDownlines = $('#inputUnmarkAffectToAllDownlines').is(":checked");
+        params.IsAffectToAllDownlines = $('#inputVVIPUnmarkAffectToAllDownlines').is(":checked");
 
         $.ajax(common.modifyRelativeUrl('Account/SaveUnmarkVVIP'), {
             type: 'POST',
@@ -373,7 +374,8 @@
             data: {
                 ctsCustID: $("#hdCTSCustId").val(),
                 roleID: $("#hdRoleID").val(),
-                userName: $("#hdUsername").val()
+                userName: $("#hdUsername").val(),
+                isRobotUser: $("#hdIsRobotUser").val()
             },
             beforeSend: function () {
                 common.showLoading();
@@ -398,11 +400,18 @@
                 });
 
                 $('#btnCCMarkSave').on('click', function (e) {
-                    SaveMarkCustomerCategory();                    
+                    if ($('#inputCCVVIP').is(":checked")) {
+                        SaveMarkVVIP();
+                    } else {
+                        SaveMarkCustomerCategory();
+                    }                          
                 });
 
-                $('#inputCCVVIP').on('click', function () {                    
-                });
+                if ($("#hdIsLicensee").val() == "TRUE" || $("#hdRoleID").val() == 1) {
+                    $('#inputCCAffectToAllDownlines').addClass('hide');
+                } else {
+                    $('#inputCCAffectToAllDownlines').removeClass('hide');
+                }
             },
             error: function (errMsg) {
                 common.showError(errMsg);
@@ -410,28 +419,17 @@
         });
     }  
 
-    function SaveMarkCustomerCategory() {
+    function SaveMarkVVIP() {
         let params = {};
         params.CustID = $("#hdCustId").val();
         params.CTSCustID = $("#hdCTSCustId").val();
         params.SubscriberID = $("#hdSubscriberId").val();
         params.RoleID = $('#hdRoleID').val();
-        params.IsVVip = $('#inputCCVVIP').is(":checked");
+        params.IsVVip = true;
         params.IsAffectAllDownlines = $('#inputCCAffectToAllDownlines').is(":checked");
         params.Remark = $('#txtCCComment').val();
-
-        $('input[type=radio]:checked', '.radio-button').each(function () {
-            if (!$(this).attr('disabled')) {
-                params.CategoryID = $(this).val();
-                params.CategoryGroup = $(this).attr('data-categorygroup');
-            }
-        });
-
-        let url = params.IsVVip
-            ? common.modifyRelativeUrl('Account/SaveMarkVVIP') 
-            : common.modifyRelativeUrl('Account/SaveMarkCustomerCategory');
-
-        $.ajax(url, {
+      
+        $.ajax(common.modifyRelativeUrl('Account/SaveMarkVVIP') , {
             type: 'POST',
             data: params,
             success: function (response) {
@@ -444,7 +442,7 @@
                 }
 
                 LoadGrid(params.CTSCustID, true);
-                GetCustomerCategory(params.CustID );
+                GetCustomerCategory(params.CustID);
             },
             beforeSend: function () {
                 common.showLoading();
@@ -457,6 +455,52 @@
                 common.closeLoading();
             }
         });
+    }
+
+    function SaveMarkCustomerCategory() {
+        let params = {};
+        params.CustID = $("#hdCustId").val();
+        params.CTSCustID = $("#hdCTSCustId").val();
+        params.SubscriberID = $("#hdSubscriberId").val();
+        params.RoleID = $('#hdRoleID').val();
+        params.IsVVip = false;        
+        params.Remark = $('#txtCCComment').val();
+
+        $('input[type=radio]:checked', '.radio-button').each(function () {
+            if (!$(this).attr('disabled')) {
+                params.CategoryID = $(this).val();
+                params.CategoryGroup = $(this).attr('data-categorygroup');
+            }
+        });
+
+        if (params.CategoryID != 0) {
+            $.ajax(common.modifyRelativeUrl('Account/SaveMarkCustomerCategory'), {
+                type: 'POST',
+                data: params,
+                success: function (response) {
+                    if (response.errorCode === 0) {
+                        common.showSuccess('Mark Customer Category successful!', 2000);
+                        divMarkCustomerCategory.dialog('close');
+                    }
+                    else {
+                        common.showError(response.errorMessage);
+                    }
+
+                    LoadGrid(params.CTSCustID, true);
+                    GetCustomerCategory(params.CustID);
+                },
+                beforeSend: function () {
+                    common.showLoading();
+                },
+                complete: function () {
+                    common.closeLoading();
+                },
+                error: function (error) {
+                    console.log(error);
+                    common.closeLoading();
+                }
+            });
+        }
     }
    
     function BuildCategoryToHtmlDiv(html, classIconColor, categoryName) {
@@ -618,7 +662,7 @@
         }
         btnMarkCategory.prop('disabled', true);
         btnUnmarkCategory.prop('disabled', true);
-        $("#btnProfileInsertPA").prop('disabled', true);
+        $("#btnProfileInsertPA").prop('disabled', true);        
     }
 
     this.Initial = function (custId, ctsCustId, subscriberId, username, hostPermission, custSubId) {

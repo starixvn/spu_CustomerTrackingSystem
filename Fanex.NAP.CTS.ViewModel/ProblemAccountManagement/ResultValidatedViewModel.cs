@@ -8,6 +8,7 @@
         public ResultValidatedViewModel()
         {
             IsException = false;
+            IsExistedSMA = false;
             ProblemAccountInvalidList = Enumerable.Empty<ProblemAccountValidatedViewModel>();
         }
 
@@ -16,5 +17,7 @@
         public IEnumerable<ProblemAccountValidatedViewModel> ProblemAccountInvalidList { get; set; }
 
         public bool IsCreditSite { get; set; }
+
+        public bool IsExistedSMA { get; set; }
     }
 }

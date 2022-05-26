@@ -17,6 +17,7 @@
         divAddProblemAccount: $('#divAddProblemAccount'),
         grpCategories: $('#grpCategories'),
         grpCkboxAffectedDownline: $('#grpCkboxAffectedDownline'),
+        inputCCAffectToAllDownlines: $('#inputCCAffectToAllDownlines'),
         ckbUnmarkDownlines: $('#ckbUnmarkDownlines'),
         txtComment: $('#txtComment'),
         btnCancel: $('#btnCancel'),
@@ -92,12 +93,14 @@
 
     function GetParams() {
         let params = {};
+
         params.FromDate = domElements.dpkFromDate.val();
         params.ToDate = domElements.dpkToDate.val();
         params.Sites = domElements.cbbSite.val().join();
         params.IsAllSites = domElements.cbbSite.find('option').not(':selected').length == 0;
         params.UserName = domElements.inputUserName.val().trim();
         params.HasDownline = domElements.inputSearchDownlines.is(":checked");
+
         return params;
     }
 
@@ -330,6 +333,11 @@
 
                     if (params.PAAction == 2) { // Unmark
                         domElements.txtComment.val(response.Comment);
+                        if (response.IsExistedSMA) {
+                            domElements.grpCkboxAffectedDownline.removeClass('hide');                            
+                        } else {
+                            domElements.grpCkboxAffectedDownline.addClass('hide');
+                        }
                     }
                 },
                 complete: function () {
@@ -396,16 +404,16 @@
         params.CategoryGroup = $('option:selected', domElements.cbbProblemAccountCategories).attr('data-categorygroup');
 
         if (params.PAAction == 1) {
-            MarkNewProblemAccount(params);
+            SaveMarkProblemAccount(params);
 
         } else if (params.PAAction == 2) {
-            UnmarkProblemAccount(params);
+            SaveUnmarkProblemAccount(params);
 
         }
     }
 
-    function MarkNewProblemAccount(params) {
-        $.ajax(common.modifyRelativeUrl('ProblemAccountManagement/MarkProblemAccount'), {
+    function SaveMarkProblemAccount(params) {
+        $.ajax(common.modifyRelativeUrl('ProblemAccountManagement/SaveMarkProblemAccount'), {
             type: 'POST',
             data: params,
             beforeSend: function () {
@@ -435,10 +443,10 @@
         });
     }   
 
-    function UnmarkProblemAccount(params) {
+    function SaveUnmarkProblemAccount(params) {
         common.showConfirmation("<div class='popup - content'>Are you sure to unmark this problem account?</div>",
             () => {
-                $.ajax(common.modifyRelativeUrl('ProblemAccountManagement/UnmarkProblemAccount'), {
+                $.ajax(common.modifyRelativeUrl('ProblemAccountManagement/SaveUnmarkProblemAccount'), {
                     type: 'POST',
                     data: params,
                     beforeSend: function () {
@@ -605,6 +613,7 @@
             GetProblemAccountCategories();
             domElements.txtComment.val('');  
             domElements.spanProblemAccountActionHidden.val('1'); // Mark
+
             InitInputTagUsername();
 
             domElements.divAddProblemAccount.dialog({
@@ -621,10 +630,11 @@
 
         domElements.btnUnmarkProblemAccount.on('click', function () {            
             domElements.grpCategories.addClass('hide');
-            //domElements.grpCkboxAffectedDownline.addClass('hide');
+            domElements.grpCkboxAffectedDownline.addClass('hide');
             domElements.ckbUnmarkDownlines.prop("checked", false);          
             domElements.txtComment.val('');
             domElements.spanProblemAccountActionHidden.val('2'); // Unmark
+
             InitInputTagUsername();
 
             domElements.divAddProblemAccount.dialog({

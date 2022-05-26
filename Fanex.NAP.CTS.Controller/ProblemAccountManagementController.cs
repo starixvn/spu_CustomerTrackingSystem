@@ -3,7 +3,9 @@
     using Fanex.NAP.Core.Web.Attribute;   
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.CustomerClassification;
+    using Fanex.NAP.CTS.Model.CustomerClassification.ProblemAccount;
     using Fanex.NAP.CTS.Model.ProblemAccountManagement;
+    using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.Service.Implement;
@@ -22,14 +24,15 @@
     {
         private const string ProblemAccountTemplate = "~/App_Data/Excel Template/ProblemAccountManagement/ExportTemplate.xlsx";
         private readonly IProblemAccountManagementService _pamService;
-        private readonly IProblemAccountClassificationService _paClassificationService;    
-
+        private readonly IProblemAccountClassificationService _paClassificationService;
+        private readonly IRescanCustomerClassificationService _rescanClassificationService;
         public override string BaseControllerName { get => Consts.MenuItemController; }
 
         public ProblemAccountManagementController()
         {
             _pamService = new ProblemAccountManagementService();
             _paClassificationService = new ProblemAccountClassificationService();
+            _rescanClassificationService = new RescanCustomerClassificationService();
         }
 
         public ActionResult Index()
@@ -123,18 +126,95 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.ProblemAccountManagementMarkNew)]
-        public ActionResult MarkProblemAccount(ValidateProblemAccountInputViewModel model)
+        public ActionResult SaveMarkProblemAccount(ValidateProblemAccountInputViewModel model)
         {
-            var result = SaveProblemAccount(model);
+            var result = new ResultSaveProblemAccountViewModel();
+
+            var validatedModels = _pamService.ValidateProblemAccounts(model);
+
+            if (validatedModels != null && validatedModels.Any())
+            {
+                var resultValidate = GetResultValidated(validatedModels);
+
+                if (!resultValidate.ProblemAccountInvalidList.Any())
+                {
+                    var custIdList = validatedModels.Select(c => c.CustID)?.Distinct();
+                    var custIds = string.Join(",", custIdList);
+
+                    var pas = validatedModels.Select(x => new InsertProblemAccountModel
+                    {
+                        CustID = x.CustID,
+                        CTSCustID = x.CTSCustID,
+                        RoleID = x.RoleID,
+                        SubscriberID = x.SubscriberID,
+                        IsLicensee = x.IsLicensee,
+                        CategoryID = model.CategoryID,
+                        CategoryGroup = model.CategoryGroup,
+                        Remark = model.Comment,
+                        IsDirectPA = true,
+                        IsFromPAM = true,
+                        CreatedBy = CurrentSession.UserId
+                    });
+
+                    var insertResult = _paClassificationService.InsertProblemAccountPackage(pas, InsertPA_ByType.Category, "ProblemAccountManagement", FromFlow.CTSWEB);
+
+                    result.ErrorCode = insertResult.ErrorCode;
+                    result.ErrorMessage = insertResult.ErrorMsg;
+                    result.ResultValidated = resultValidate;
+                }
+            }           
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
        
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.ProblemAccountManagementMarkNew)]
-        public ActionResult UnmarkProblemAccount(ValidateProblemAccountInputViewModel model)
+        public ActionResult SaveUnmarkProblemAccount(ValidateProblemAccountInputViewModel model)
         {
             var result = new ResultSaveProblemAccountViewModel();
+
+            var validatedModels = _pamService.ValidateProblemAccounts(model);
+
+            if (validatedModels != null && validatedModels.Any())
+            {
+                var resultValidate = GetResultValidated(validatedModels);
+
+                if (!resultValidate.ProblemAccountInvalidList.Any())
+                {
+                    var paUnmark = validatedModels.Select(x => new UnmarkProblemAccountModel
+                    {
+                        CustID = x.CustID,
+                        CTSCustID = x.CTSCustID,
+                        RoleID = x.RoleID,
+                        SubscriberID = x.SubscriberID,
+                        CreatedBy = CurrentSession.UserId,
+                        Remark = model.Comment,
+                        IsExceptDirectDownline = model.IsUnmarkDownlines
+                    });
+
+                    var unmarkPAResult = _paClassificationService.UnmarkProblemAccount(paUnmark, false, model.IsUnmarkDownlines);
+
+                    if (unmarkPAResult.ErrorCode == 0 && unmarkPAResult.CustomerInfo.Any())
+                    {
+                        var custIdList = unmarkPAResult.CustomerInfo.Select(c => c.CustID)?.Distinct();
+                        var custIds = string.Join(",", custIdList);
+
+                        _paClassificationService.UpdateBetLimitOfUnflaggedCustomer(custIdList);
+
+                        var paramRescan = new RescanCustClassificationModel
+                        {
+                            CustIds = custIdList,
+                            IsPushCCToSoon88 = true,
+                            FunctionId = FunctionId.UnmarkCustomerCategory,
+                            IsUpdateDangerToMainDB = true
+                        };
+
+                        var smCustIds = _rescanClassificationService.GetAgentCusts(custIdList);
+
+                        _rescanClassificationService.RescanNormalAccount(paramRescan, custIdList, smCustIds);
+                    }
+                }
+            }
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -154,48 +234,7 @@
             var excelFile = _pamService.ExportProblemAccount(problemAccounts, fileName, templatePath, filter);
 
             return File(excelFile, "application/vnd.ms-excel", fileName);
-        }
-
-        private ResultSaveProblemAccountViewModel SaveProblemAccount(ValidateProblemAccountInputViewModel models)
-        {
-            var result = new ResultSaveProblemAccountViewModel();
-
-            var validatedModels = _pamService.ValidateProblemAccounts(models);
-
-            if (validatedModels != null && validatedModels.Any())
-            {
-                var resultValidate = GetResultValidated(validatedModels);
-
-                if (!resultValidate.ProblemAccountInvalidList.Any())
-                {
-                    var custIdList = validatedModels.Select(c => c.CustID)?.Distinct();
-                    var custIds = string.Join(",", custIdList);
-
-                    var pas = validatedModels.Select(x => new InsertProblemAccountModel
-                    {
-                        CustID = x.CustID,
-                        CTSCustID = x.CTSCustID,
-                        RoleID = x.RoleID,
-                        SubscriberID = x.SubscriberID,
-                        IsLicensee = x.IsLicensee,
-                        CategoryID = models.CategoryID,
-                        CategoryGroup = models.CategoryGroup,
-                        Remark = models.Comment,
-                        IsDirectPA = true,
-                        IsFromPAM = true,
-                        CreatedBy = CurrentSession.UserId
-                    });
-
-                    var insertResult = _paClassificationService.InsertProblemAccountPackage(pas, InsertPA_ByType.Category, "ProblemAccountManagement", FromFlow.CTSWEB);
-
-                    result.ErrorCode = insertResult.ErrorCode;
-                    result.ErrorMessage = insertResult.ErrorMsg;
-                    result.ResultValidated = resultValidate;
-                }
-            }
-
-            return result;
-        }
+        }       
 
         private ResultValidatedViewModel GetResultValidated(IEnumerable<ProblemAccountValidatedModel> validatedModels)
         {
@@ -208,7 +247,8 @@
                                                         UserName = x.UserName,
                                                         ErrMsg = x.ErrorMsg
                                                     }),
-                IsCreditSite = validatedModels.Where(x=>x.Site == Consts.ProblemAccountManagement_SiteCredit).Any()
+                IsCreditSite = validatedModels.Any(x => x.Site == Consts.ProblemAccountManagement_SiteCredit),
+                IsExistedSMA = validatedModels.Any(x => x.RoleID > 1)
             };
 
             return result;

@@ -1673,12 +1673,13 @@
 
         #region New Mark-Unmark Customer Category
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult MarkCustomerCategory(long ctsCustID, int roleID, string userName)
+        public ActionResult MarkCustomerCategory(long ctsCustID, int roleID, string userName, bool isRobotUser)
         {
             var result = new MarkCustomerCategoryViewModel
             {
                 RoleID = roleID,
                 UserName = userName,
+                IsRobotUser = isRobotUser,
                 ProblemAccountList = _pamService.GetProblemAccountCategories()
             };
 
@@ -1868,22 +1869,17 @@
                         SubscriberID = model.SubscriberID,
                         CreatedBy = CurrentSession.UserId,
                         Remark = string.Empty,
-                        IsExceptDirectDownline = model.IsExceptDirectDownline,
+                        IsExceptDirectDownline = model.IsExceptDirectDownline
                     }
                 };
 
-            var result = _problemAccountClassificationService.UnmarkProblemAccount(paUnmark, false, model.IsExceptDirectDownline);
+            var unmarkPAResult = _problemAccountClassificationService.UnmarkProblemAccount(paUnmark, false, model.IsExceptDirectDownline);
 
-            if (result.ErrorCode == 0)
+            if (unmarkPAResult.ErrorCode == 0 && unmarkPAResult.CustomerInfo.Any())
             {
-                var custEviRemoved = _pamService.RemoveProblemAccountEvidence(model.CustID.ToString());
+                var custIdList = unmarkPAResult.CustomerInfo.Select(x => x.CustID);
 
-                if (custEviRemoved != null && custEviRemoved.Any())
-                {
-                    _problemAccountClassificationService.UpdateBetLimitOfUnflaggedCustomer(custEviRemoved.Distinct());
-                }
-
-                var custIdList = new List<long> { model.CustID };
+                _problemAccountClassificationService.UpdateBetLimitOfUnflaggedCustomer(custIdList.Distinct());                
 
                 var paramRescan = new RescanCustClassificationModel
                 {
@@ -1900,8 +1896,8 @@
 
             return Json(new
             {
-                errorCode = result.ErrorCode,
-                errorMessage = result.ErrorMsg
+                errorCode = unmarkPAResult.ErrorCode,
+                errorMessage = unmarkPAResult.ErrorMessage
             }, JsonRequestBehavior.AllowGet);
         }
 

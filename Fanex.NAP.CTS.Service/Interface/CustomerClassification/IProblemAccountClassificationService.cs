@@ -28,6 +28,6 @@
 
         void UpdateBetLimitOfUnflaggedCustomer(IEnumerable<long> custId);
 
-        DBResult UnmarkProblemAccount(IEnumerable<UnmarkProblemAccountModel> paUnmark, bool isFromQueue, bool isExceptDirectDownline);        
+        UnmarkPAResultModel UnmarkProblemAccount(IEnumerable<UnmarkProblemAccountModel> paUnmark, bool isFromQueue, bool isExceptDirectDownline);        
     }
 }
