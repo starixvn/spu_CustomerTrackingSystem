@@ -238,7 +238,6 @@
                 
                 let disabledUnmarkCategory = !cacheData.isVVip && !cacheData.isProblemAccount && !cacheData.isPAProbation;
                 let disabledMarkCategory = cacheData.isVVip
-                    || cacheData.isPinCategory
                     || ($("#hdIsLicensee").val() == 'TRUE' && $("#hdRoleID").val() > 1)
                     || $("#hdIsInternal").val() == 'TRUE';
                 
@@ -382,7 +381,8 @@
                 ctsCustID: $("#hdCTSCustId").val(),
                 roleID: $("#hdRoleID").val(),
                 userName: $("#hdUsername").val(),
-                isRobotUser: $("#hdIsRobotUser").val()
+                isRobotUser: $("#hdIsRobotUser").val(),
+                isPinCategory: cacheData.isPinCategory
             },
             beforeSend: function () {
                 common.showLoading();

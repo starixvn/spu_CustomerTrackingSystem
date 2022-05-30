@@ -18,6 +18,8 @@
 
         public bool IsRobotUser { get; set; }
 
+        public bool IsPinCategory { get; set; }
+
         public IEnumerable<ProblemAccountCategoryModel> ProblemAccountList { get; set; }
 
         public IEnumerable<CustomerCategoryViewModel> CategoryList { get; set; }

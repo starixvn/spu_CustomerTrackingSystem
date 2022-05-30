@@ -1439,7 +1439,7 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private string GetReason(CustomerClassificationHistoryModel cc)
+        private string GetReason_OLD(CustomerClassificationHistoryModel cc)
         {
             var reason = $"<div><span> { cc.SourceTypeName } </span>";
 
@@ -1537,6 +1537,79 @@
             return reason;
         }                
 
+        private string GetReason(CustomerClassificationHistoryModel cc)
+        {
+            var reason = $"<div><span> { cc.SourceTypeName } </span>";
+            reason += "<br />";
+
+            var margin = Math.Round(cc.Margin, 3);
+            var winlost = Math.Round(cc.Winloss, 3);
+            var turnOver = Math.Round(cc.TurnOver, 3);
+            var betCount = cc.BetCount;
+            var activeDays = cc.ActiveDays;
+            var last7DayMargin = Math.Round(cc.LastXDaysMargin, 3);
+            var winlost20Days = Math.Round(cc.ProbationPeriodWinloss, 3);
+            var twBetCount = cc.TWBetCount;
+            var twGroupBettingRate = cc.TWGroupBettingRate;
+            var twTicketRejectRate = cc.TWTicketRejectRate;
+            var twDesktopTicket = cc.TWDesktopUsageRate;
+            var robotCounter = cc.RobotCounter;
+
+            switch (cc.CategoryID)
+            {
+                case (int)ClassificationSourceType.NewMember:
+                case (int)ClassificationSourceType.NewMember31:
+                case (int)ClassificationSourceType.NewMember32:
+                case (int)ClassificationSourceType.NewMember33:
+                case (int)ClassificationSourceType.NormalAccount:
+                case (int)ClassificationSourceType.NormalAccount121:
+                case (int)ClassificationSourceType.NormalAccount122:
+                case (int)ClassificationSourceType.NormalAccount123:
+                case (int)ClassificationSourceType.Probation:
+                case (int)ClassificationSourceType.Probation51:
+                case (int)ClassificationSourceType.Probation52:
+                case (int)ClassificationSourceType.Probation53:
+                case (int)ClassificationSourceType.SmartPunter:
+                case (int)ClassificationSourceType.SmartPunter61:
+                case (int)ClassificationSourceType.SmartPunter62:
+                case (int)ClassificationSourceType.SmartPunter63:
+                case (int)ClassificationSourceType.HighRiskPunter:
+                case (int)ClassificationSourceType.HighRiskPunter71:
+                case (int)ClassificationSourceType.HighRiskPunter72:
+                case (int)ClassificationSourceType.HighRiskPunter73:
+                    reason += $"Win lost: {winlost} - Margin: {margin} - Bet Count: {betCount}";                    
+                    break;
+                case (int)ClassificationSourceType.GoodMember:
+                case (int)ClassificationSourceType.GoodMember111:
+                case (int)ClassificationSourceType.GoodMember112:
+                case (int)ClassificationSourceType.GoodMember113:
+                    reason += $"Turnover: {turnOver} - Win lost: {winlost} - Margin: {margin} - Bet Count: {betCount} - Active Day: {activeDays}";
+                    break;
+                case (int)ClassificationSourceType.NormalAccountInactive:
+                case (int)ClassificationSourceType.ProPunterInactive:
+                    // reason ???
+                    break;
+                case (int)ClassificationSourceType.Probation57:
+                case (int)ClassificationSourceType.SmartPunter67:
+                case (int)ClassificationSourceType.HighRiskPunter77:
+                    reason += $"Win lost: {winlost} - Margin: {margin} - Bet Count: {betCount} - Group Betting Percent: {twGroupBettingRate}%";                    
+                    break;
+
+                case (int)ClassificationSourceType.Probation58:
+                case (int)ClassificationSourceType.SmartPunter68:
+                case (int)ClassificationSourceType.HighRiskPunter78:
+                    reason += $"Win lost: {winlost} - Margin: {margin} - Bet Count: {betCount} - Desktop Percent: {twDesktopTicket}% - Reject Percent: {twTicketRejectRate}";
+                    break;
+
+                default:
+                    break;
+            }
+
+            reason += "</div>";
+
+            return reason;
+        }
+
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationPinCategory)]
         [HttpPost]
@@ -1582,13 +1655,14 @@
 
         #region New Mark-Unmark Customer Category
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        public ActionResult MarkCustomerCategory(long ctsCustID, int roleID, string userName, bool isRobotUser)
+        public ActionResult MarkCustomerCategory(long ctsCustID, int roleID, string userName, bool isRobotUser, bool isPinCategory)
         {
             var result = new MarkCustomerCategoryViewModel
             {
                 RoleID = roleID,
                 UserName = userName,
                 IsRobotUser = isRobotUser,
+                IsPinCategory = isPinCategory,
                 ProblemAccountList = _pamService.GetProblemAccountCategories()
             };
 

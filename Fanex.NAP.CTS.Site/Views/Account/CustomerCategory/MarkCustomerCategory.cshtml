@@ -27,24 +27,32 @@
                     <div class="info-item">
                         @foreach (var paCategory in Model.ProblemAccountList)
                         {
-                            <div class="form-control radio-button">
-                                @if (Model.CategoryList.Any(x => x.CategoryId == paCategory.CategoryID))
+                        <div class="form-control radio-button">
+                            @if (Model.CategoryList.Any(x => x.CategoryId == paCategory.CategoryID))
+                            {
+                                <label class="checkbox-container disabled" id="inputCCAffectToAllDownlines">
+                                    <input id="inputCCAffectToAllDownlines" type="checkbox" checked="checked" disabled>
+                                    <span class="checkmark"></span>
+                                    @paCategory.CategoryName
+                                </label>
+                            }
+                            else
+                            {
+                                if (Model.IsPinCategory)
                                 {
-                                    <label class="checkbox-container disabled" id="inputCCAffectToAllDownlines">
-                                        <input id="inputCCAffectToAllDownlines" type="checkbox" checked="checked" disabled>
-                                        <span class="checkmark"></span>
-                                        @paCategory.CategoryName
-                                    </label>
+                                    <input type="radio" value="@paCategory.CategoryID" id="@paCategory.CategoryID" data-categorygroup="@paCategory.CategoryGroup" name="group2" disabled />
                                 }
                                 else
                                 {
                                     <input type="radio" value="@paCategory.CategoryID" id="@paCategory.CategoryID" data-categorygroup="@paCategory.CategoryGroup" name="group2" />
-                                    <label for="@paCategory.CategoryID">
-                                        @paCategory.CategoryName
-                                    </label>
                                 }
 
-                            </div>
+                                <label for="@paCategory.CategoryID">
+                                    @paCategory.CategoryName
+                                </label>
+                            }
+
+                        </div>
                         }
 
                         @if (Model.IsRobotUser)
