@@ -17,5 +17,7 @@
         public string Remark { get; set; }        
 
         public bool IsExceptDirectDownline { get; set; }
+
+        public bool IsDirectPA { get; set; }
     }
 }

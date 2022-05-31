@@ -40,16 +40,19 @@
                             {
                                 if (Model.IsPinCategory)
                                 {
-                                    <input type="radio" value="@paCategory.CategoryID" id="@paCategory.CategoryID" data-categorygroup="@paCategory.CategoryGroup" name="group2" disabled />
+                                    <label class="checkbox-container disabled">
+                                        <input type="checkbox" disabled>
+                                        <span class="checkmark"></span>
+                                        @paCategory.CategoryName
+                                    </label>
                                 }
                                 else
                                 {
                                     <input type="radio" value="@paCategory.CategoryID" id="@paCategory.CategoryID" data-categorygroup="@paCategory.CategoryGroup" name="group2" />
+                                    <label for="@paCategory.CategoryID">
+                                        @paCategory.CategoryName
+                                    </label>
                                 }
-
-                                <label for="@paCategory.CategoryID">
-                                    @paCategory.CategoryName
-                                </label>
                             }
 
                         </div>
@@ -61,7 +64,7 @@
                                 <label class="checkbox-container disabled" id="inputCCAffectToAllDownlines">
                                     <input id="-1" type="checkbox" checked="checked" disabled>
                                     <span class="checkmark"></span>
-                                    Robot Userd
+                                    Robot User
                                 </label>
                             </div>
                         }

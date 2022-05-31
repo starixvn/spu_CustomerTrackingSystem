@@ -189,7 +189,8 @@
                         SubscriberID = x.SubscriberID,
                         CreatedBy = CurrentSession.UserId,
                         Remark = model.Comment,
-                        IsExceptDirectDownline = model.IsUnmarkDownlines
+                        IsExceptDirectDownline = model.IsUnmarkDownlines,
+                        IsDirectPA = true
                     });
 
                     var unmarkPAResult = _paClassificationService.UnmarkProblemAccount(paUnmark, false, model.IsUnmarkDownlines);
