@@ -1050,7 +1050,7 @@
             }
         }
 
-        public DBResult MarkVVIPClategory(CustomerCategoryModel categoryModel, out IEnumerable<LatestClassificationModel> latestClassifications)
+        public DBResult MarkVVIPCategory(CustomerCategoryModel categoryModel, out IEnumerable<LatestClassificationModel> latestClassifications)
         {
             var custList = new List<AddCustomerCategoryInfoModel>()
             {

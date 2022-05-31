@@ -1718,7 +1718,7 @@
         private DBResult MarkDirectVVIP(CustomerCategoryModel categoryModel)
         {
             var latestClassifications = Enumerable.Empty<LatestClassificationModel>();
-            var result = _accountService.MarkVVIPClategory(categoryModel, out latestClassifications);
+            var result = _accountService.MarkVVIPCategory(categoryModel, out latestClassifications);
 
             if (result.ErrorCode == 0 && latestClassifications != null)
             {
