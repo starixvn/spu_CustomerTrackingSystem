@@ -22,7 +22,7 @@
 
         public bool IsFromTW { get; set; }
 
-        public bool IsFromPAM { get; set; }
+        public bool IsFromCTS { get; set; }
 
         public bool IsAffectAllDownlines { get; set; }
 

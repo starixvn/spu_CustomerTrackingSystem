@@ -183,7 +183,7 @@
                         IsLicensee = c.IsLicensee,
                         Remark = c.Remark,
                         IsDirectPA = c.IsDirect,
-                        IsFromPAM = c.IsFromPAM,
+                        IsFromCTS = c.IsFromCTS,
                         IsFromTVS = c.IsFromTVS,
                         IsFromTW = c.IsFromTW,
                         IsDataChanged = isDataChanged,

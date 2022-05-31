@@ -1414,7 +1414,7 @@
                     SourceTypeName = x.SourceTypeName,
                     CategoryName = x.CategoryName != null ? x.CategoryName : string.Empty,
                     CustomerClass = x.CustomerClass,
-                    Reason = GetReason(x),
+                    Reason = GetReason_OLD(x),
                     TurnOver = x.TurnOver,
                     Winloss = x.Winloss,
                     Margin = x.Margin,
@@ -1423,7 +1423,7 @@
                     LastXDaysMargin = x.LastXDaysMargin,
                     ProbationPeriodWinloss = x.ProbationPeriodWinloss,
                     CreatedBy = x.CreatedBy,
-                    TaggingType = x.TaggingType
+                    TaggingType = x.TaggingType                    
                 }).ToList();
             }
 
@@ -1531,7 +1531,7 @@
                         break;
                     }
             }
-
+            
             reason += "</div>";
 
             return reason;
@@ -1586,8 +1586,7 @@
                     reason += $"Turnover: {turnOver} - Win lost: {winlost} - Margin: {margin} - Bet Count: {betCount} - Active Day: {activeDays}";
                     break;
                 case (int)ClassificationSourceType.NormalAccountInactive:
-                case (int)ClassificationSourceType.ProPunterInactive:
-                    // reason ???
+                case (int)ClassificationSourceType.ProPunterInactive:                    
                     break;
                 case (int)ClassificationSourceType.Probation57:
                 case (int)ClassificationSourceType.SmartPunter67:
@@ -1600,7 +1599,12 @@
                 case (int)ClassificationSourceType.HighRiskPunter78:
                     reason += $"Win lost: {winlost} - Margin: {margin} - Bet Count: {betCount} - Desktop Percent: {twDesktopTicket}% - Reject Percent: {twTicketRejectRate}";
                     break;
+                default:
+                    break;
+            }
 
+            switch (cc.SourceTypeID)
+            {
                 default:
                     break;
             }
@@ -1759,7 +1763,7 @@
                 CategoryGroup = model.CategoryGroup,
                 Remark = model.Remark,
                 IsDirectPA = true,
-                IsFromPAM = true,
+                IsFromCTS = true,
                 CreatedBy = CurrentSession.UserId
             };
 

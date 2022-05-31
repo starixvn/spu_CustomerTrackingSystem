@@ -7,7 +7,7 @@
         public InsertProblemAccountModel()
         {
             IsFromTVS = false;
-            IsFromPAM = false;
+            IsFromCTS = false;
             IsFromTW = false;
             IsDataChanged = false;
         }
@@ -53,7 +53,7 @@
 
         public bool IsFromTW { get; set; }
 
-        public bool IsFromPAM { get; set; }
+        public bool IsFromCTS { get; set; }
 
         //True if only removing SpecialCC
         public bool IsDataChanged { get; set; }

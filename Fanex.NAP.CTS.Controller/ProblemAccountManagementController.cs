@@ -152,7 +152,7 @@
                         CategoryGroup = model.CategoryGroup,
                         Remark = model.Comment,
                         IsDirectPA = true,
-                        IsFromPAM = true,
+                        IsFromCTS = true,
                         CreatedBy = CurrentSession.UserId
                     });
 

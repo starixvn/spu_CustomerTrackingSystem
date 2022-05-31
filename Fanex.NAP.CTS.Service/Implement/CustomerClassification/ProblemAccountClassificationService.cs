@@ -259,7 +259,7 @@
                                                      Remark = group.pa.Remark,
 
                                                      IsDirectPA = group.pa.IsDirectPA,
-                                                     IsFromPAM = group.pa.IsFromPAM,
+                                                     IsFromCTS = group.pa.IsFromCTS,
                                                      IsFromTVS = group.pa.IsFromTVS,
                                                      IsFromTW = group.pa.IsFromTW,
                                                      IsDataChanged = group.pa.IsDataChanged,

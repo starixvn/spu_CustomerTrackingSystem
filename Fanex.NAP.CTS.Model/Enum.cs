@@ -96,6 +96,14 @@
         ProPunterInactive = 1002
     }
 
+    public enum SourceTypeID
+    {
+        Classification_PAMarkDirectly = 31,
+        Classification_PAAffectedByUplines = 32,
+        Classification_PAUnmarkDirectly = 33,
+        Classification_UnmarkingPAAffectedDirectly = 34
+    }
+
     public enum EvidenceQueueActionID
     {
         Insert = 1,

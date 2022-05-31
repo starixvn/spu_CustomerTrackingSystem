@@ -45,5 +45,7 @@
         public int RobotCounter { get; set; }
 
         public int LastModifiedBy { get; set; }
+
+        public string Remark { get; set; }
     }
 }
