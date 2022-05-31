@@ -293,7 +293,7 @@
     <Compile Include="ProblemCaseMonitor\ProblemCasesMonitorModel.cs" />
     <Compile Include="ProblemCaseMonitor\ProblemCasesMonitorFilterModel.cs" />
     <Compile Include="ProblemCaseMonitor\ProblemCasesFilterModel.cs" />
-    <Compile Include="PushDataToExternal\DangerLevelModel.cs" />
+    <Compile Include="CustomerClassification\PushDataToExternal\DangerLevelModel.cs" />
     <Compile Include="SpecialCustomerClass\CustomerClassModel.cs" />
     <Compile Include="SpecialCustomerClass\ResultInsertCustomerClass.cs" />
     <Compile Include="DTO\CustomerCategory.cs" />
@@ -353,8 +353,8 @@
     <Compile Include="Subscriber\SubscriberAssignment.cs" />
     <Compile Include="Subscriber\SubscriberAssignmentUpdate.cs" />
     <Compile Include="Subscriber\SubscriberInfo.cs" />
-    <Compile Include="PushDataToExternal\CustomerClassForMainDb.cs" />
-    <Compile Include="PushDataToExternal\PushDataToExternalModel.cs" />
+    <Compile Include="CustomerClassification\PushDataToExternal\CustomerClassForMainDb.cs" />
+    <Compile Include="CustomerClassification\PushDataToExternal\PushDataToExternalModel.cs" />
     <Compile Include="TransactionReport\TransactionModel.cs" />
     <Compile Include="Transaction\DataTableAjaxPostModel.cs" />
     <Compile Include="Transaction\Transaction.cs" />
