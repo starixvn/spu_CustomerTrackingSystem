@@ -1724,22 +1724,16 @@
             {
                 if (categoryModel.IsVVip)
                 {
-                    int custIdInt = 0;
-                    int.TryParse(categoryModel.CustId.ToString(), out custIdInt);
+                    latestClassifications = latestClassifications?.Where(c => c.CustId != 0);
 
-                    if (custIdInt != 0)
+                    if (latestClassifications != null && latestClassifications.Any())
                     {
-                        latestClassifications = latestClassifications.Where(c => c.CustId != 0);
-
-                        if (latestClassifications.Any())
-                        {
-                            // Update CC in table custinfo to MainDB
-                            _customerClassificationService.RetryPushCCToMainDB(latestClassifications, 2);
-                        }
+                        // Update CC in table custinfo to MainDB
+                        _customerClassificationService.RetryPushCCToMainDB(latestClassifications, 2);
 
                         Task.Run(() =>
                         {
-                            _antiFraudCenterService.DeleteAFCAccounts(new List<long> { custIdInt }, FromFlow.CTSWEB);
+                            _antiFraudCenterService.DeleteAFCAccounts(latestClassifications.Select(c => c.CustId), FromFlow.CTSWEB);
                         });
                     }
                 }
@@ -1804,7 +1798,7 @@
             model.CreatedBy = CurrentSession.UserId;
             model.ActionType = ActionTypeQueueCustCategory.Remove;
 
-            var result = _accountService.RemoveCustomerCategory(model);
+            var result = _accountService.RemoveVVIPCategory(model);
 
             if (string.IsNullOrEmpty(result.OpErrorMessage))
             {

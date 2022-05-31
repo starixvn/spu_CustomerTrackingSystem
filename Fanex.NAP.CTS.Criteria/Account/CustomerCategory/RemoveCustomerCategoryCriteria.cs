@@ -25,7 +25,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_CustClassification_RemoveVVIP";
+            return "CTS_DC_CustClassification_VVIP_Remove";
         }
 
         public override bool IsValid()

@@ -106,7 +106,7 @@
 
         DBResult AddQueueAffectDownlinesCustomerCategory(CustomerCategoryModel categoryModel);
 
-        ResultInsertRemoveCustomerClassificationModel RemoveCustomerCategory(CustomerCategoryModel removeCategoryModel);        
+        ResultInsertRemoveCustomerClassificationModel RemoveVVIPCategory(CustomerCategoryModel removeCategoryModel);        
 
         DBResult PinCategoryCustomerClassification(long ctsCustId, int subscriberId, bool isPinCategory, int createdBy);
 

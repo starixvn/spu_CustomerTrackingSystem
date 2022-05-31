@@ -1116,7 +1116,7 @@
             return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
         }
 
-        public ResultInsertRemoveCustomerClassificationModel RemoveCustomerCategory(CustomerCategoryModel categoryModel)
+        public ResultInsertRemoveCustomerClassificationModel RemoveVVIPCategory(CustomerCategoryModel categoryModel)
         {
             var insertCTSResult = new ResultInsertRemoveCustomerClassificationModel();
 
