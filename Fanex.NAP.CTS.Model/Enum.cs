@@ -90,10 +90,15 @@
         Probation53 = 253,
         Probation57 = 257,
         Probation58 = 258,
-        Robot61 = 61,
+        RobotUser61 = 61,
+        RobotUser163 = 163,
+        RobotUser164 = 164,
+        AIRobotBetting63 = 63,
+        AIRobotBetting165 = 165,
+        AIRobotBetting166 = 166,
         Robot81 = 81,
-        Robot161 = 161,
-        ProPunterInactive = 1002
+        Robot161 = 161,        
+        ProPunterInactive = 1002,
     }
 
     public enum SourceTypeID

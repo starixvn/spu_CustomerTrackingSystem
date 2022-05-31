@@ -1414,7 +1414,7 @@
                     SourceTypeName = x.SourceTypeName,
                     CategoryName = x.CategoryName != null ? x.CategoryName : string.Empty,
                     CustomerClass = x.CustomerClass,
-                    Reason = GetReason_OLD(x),
+                    Reason = GetReason(x),
                     TurnOver = x.TurnOver,
                     Winloss = x.Winloss,
                     Margin = x.Margin,
@@ -1515,7 +1515,7 @@
                     reason += $"Account has {twDesktopTicket}% tickets from Desktop | Reject percent is {twTicketRejectRate}%";
                     break;
 
-                case (int)ClassificationSourceType.Robot61:
+                case (int)ClassificationSourceType.RobotUser61:
                 case (int)ClassificationSourceType.Robot81:
                 case (int)ClassificationSourceType.Robot161:
                     reason += $"Counter: {robotCounter}";
@@ -1547,13 +1547,12 @@
             var turnOver = Math.Round(cc.TurnOver, 3);
             var betCount = cc.BetCount;
             var activeDays = cc.ActiveDays;
-            var last7DayMargin = Math.Round(cc.LastXDaysMargin, 3);
-            var winlost20Days = Math.Round(cc.ProbationPeriodWinloss, 3);
-            var twBetCount = cc.TWBetCount;
+            //var last7DayMargin = Math.Round(cc.LastXDaysMargin, 3);
+            //var winlost20Days = Math.Round(cc.ProbationPeriodWinloss, 3);
+            //var twBetCount = cc.TWBetCount;
             var twGroupBettingRate = cc.TWGroupBettingRate;
             var twTicketRejectRate = cc.TWTicketRejectRate;
-            var twDesktopTicket = cc.TWDesktopUsageRate;
-            var robotCounter = cc.RobotCounter;
+            var twDesktopTicket = cc.TWDesktopUsageRate;            
 
             switch (cc.CategoryID)
             {
@@ -1577,13 +1576,13 @@
                 case (int)ClassificationSourceType.HighRiskPunter71:
                 case (int)ClassificationSourceType.HighRiskPunter72:
                 case (int)ClassificationSourceType.HighRiskPunter73:
-                    reason += $"Win lost: {winlost} - Margin: {margin} - Bet Count: {betCount}";                    
+                    reason += $"Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount}";                    
                     break;
                 case (int)ClassificationSourceType.GoodMember:
                 case (int)ClassificationSourceType.GoodMember111:
                 case (int)ClassificationSourceType.GoodMember112:
                 case (int)ClassificationSourceType.GoodMember113:
-                    reason += $"Turnover: {turnOver} - Win lost: {winlost} - Margin: {margin} - Bet Count: {betCount} - Active Day: {activeDays}";
+                    reason += $"Turnover: {turnOver} | Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount} | Active Day: {activeDays}";
                     break;
                 case (int)ClassificationSourceType.NormalAccountInactive:
                 case (int)ClassificationSourceType.ProPunterInactive:                    
@@ -1591,23 +1590,45 @@
                 case (int)ClassificationSourceType.Probation57:
                 case (int)ClassificationSourceType.SmartPunter67:
                 case (int)ClassificationSourceType.HighRiskPunter77:
-                    reason += $"Win lost: {winlost} - Margin: {margin} - Bet Count: {betCount} - Group Betting Percent: {twGroupBettingRate}%";                    
+                    reason += $"Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount} | Group Betting Percent: {twGroupBettingRate}%";                    
                     break;
 
                 case (int)ClassificationSourceType.Probation58:
                 case (int)ClassificationSourceType.SmartPunter68:
                 case (int)ClassificationSourceType.HighRiskPunter78:
-                    reason += $"Win lost: {winlost} - Margin: {margin} - Bet Count: {betCount} - Desktop Percent: {twDesktopTicket}% - Reject Percent: {twTicketRejectRate}";
+                    reason += $"Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount} | Desktop Percent: {twDesktopTicket}% | Reject Percent: {twTicketRejectRate}";
+                    break;
+                case (int)ClassificationSourceType.RobotUser61:
+                case (int)ClassificationSourceType.RobotUser163:
+                case (int)ClassificationSourceType.RobotUser164:
+                case (int)ClassificationSourceType.AIRobotBetting63:
+                case (int)ClassificationSourceType.AIRobotBetting165:
+                case (int)ClassificationSourceType.AIRobotBetting166:
+                    if (cc.BetCount > 0)
+                    {
+                        reason += $"Turnover: {turnOver} | Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount} | Active Day: {activeDays}";
+                    }
+                    else
+                    {
+                        reason += $"Counter: {cc.RobotCounter}";
+                    }
                     break;
                 default:
                     break;
             }
 
-            switch (cc.SourceTypeID)
+            if (cc.SourceTypeID == (int)SourceTypeID.Classification_PAMarkDirectly
+                || cc.SourceTypeID == (int)SourceTypeID.Classification_PAAffectedByUplines
+                || cc.SourceTypeID == (int)SourceTypeID.Classification_PAUnmarkDirectly
+                || cc.SourceTypeID == (int)SourceTypeID.Classification_UnmarkingPAAffectedDirectly)
             {
-                default:
-                    break;
-            }
+                reason += $"Win lost: {winlost} {cc.Remark}";
+
+                if (!string.IsNullOrEmpty(cc.Remark))
+                {
+                    reason += $"| {cc.Remark}";
+                }
+            }            
 
             reason += "</div>";
 
