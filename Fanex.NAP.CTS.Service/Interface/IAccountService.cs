@@ -102,7 +102,7 @@
 
         IEnumerable<CustomerClassificationHistoryModel> GetCustomerClassificationHistory(long ctsCustId);
 
-        DBResult AddCustomerCategory(CustomerCategoryModel categoryModel, out IEnumerable<LatestClassificationModel> latestClassifications);
+        DBResult MarkVVIPClategory(CustomerCategoryModel categoryModel, out IEnumerable<LatestClassificationModel> latestClassifications);
 
         DBResult AddQueueAffectDownlinesCustomerCategory(CustomerCategoryModel categoryModel);
 

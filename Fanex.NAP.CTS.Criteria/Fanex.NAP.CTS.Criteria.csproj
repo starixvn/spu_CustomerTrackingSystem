@@ -69,7 +69,7 @@
     <Compile Include="Account\ChainToEvidence\GetAffectedEvidenceBetweenCustsCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\GetAffectedEvidenceCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\GetAllEvidenceCriteria.cs" />
-    <Compile Include="Account\CustomerCategory\AddCustomerCategoryCriteria.cs" />
+    <Compile Include="Account\CustomerCategory\MarkVVIPCategoryCriteria.cs" />
     <Compile Include="Account\CustomerCategory\GetCTSCustomerClassificationHistoryCriteria.cs" />
     <Compile Include="Account\CustomerCategory\InsertQueueCustClassificationForDownlineCriteria.cs" />
     <Compile Include="Account\CustomerCategory\RemoveCustomerCategoryCriteria.cs" />

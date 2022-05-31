@@ -1050,7 +1050,7 @@
             }
         }
 
-        public DBResult AddCustomerCategory(CustomerCategoryModel categoryModel, out IEnumerable<LatestClassificationModel> latestClassifications)
+        public DBResult MarkVVIPClategory(CustomerCategoryModel categoryModel, out IEnumerable<LatestClassificationModel> latestClassifications)
         {
             var custList = new List<AddCustomerCategoryInfoModel>()
             {
@@ -1065,7 +1065,7 @@
                 }
             };
 
-            var criteria = new AddCustomerCategoryCriteria
+            var criteria = new MarkVVIPCategoryCriteria
             {              
                 FromAction = (int)FromAction.WebSite,
                 AffectDownline = categoryModel.IsAffectToAllDownlines,

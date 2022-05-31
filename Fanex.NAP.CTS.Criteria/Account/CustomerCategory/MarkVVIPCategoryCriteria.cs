@@ -3,7 +3,7 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
 
-    public class AddCustomerCategoryCriteria : NonQueryCommand
+    public class MarkVVIPCategoryCriteria : NonQueryCommand
     {
         [SpParam(SqlParamName = "ip_FromAction")]
         public int FromAction { get; set; }
@@ -25,7 +25,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_CustClassification_InsertVVIP";
+            return "CTS_DC_CustClassification_VVIP_Insert";
         }
 
         public override bool IsValid()
