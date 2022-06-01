@@ -1441,8 +1441,9 @@
 
         private string GetReason(CustomerClassificationHistoryModel cc)
         {
-            var reason = $"<div><span> { cc.SourceTypeName } </span>";
-            reason += "<br />";
+            //var reason = $"<div><span> { cc.SourceTypeName } </span>";
+            //reason += "<br />";
+            var reason = $"<div>";            
 
             var margin = Math.Round(cc.Margin, 3);
             var winlost = Math.Round(cc.Winloss, 3);
@@ -1483,10 +1484,7 @@
                 case (int)ClassificationSourceType.GoodMember112:
                 case (int)ClassificationSourceType.GoodMember113:
                     reason += $"Turnover: {turnOver} | Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount} | Active Day: {activeDays}";
-                    break;
-                case (int)ClassificationSourceType.NormalAccountInactive:
-                case (int)ClassificationSourceType.ProPunterInactive:                    
-                    break;
+                    break;               
                 case (int)ClassificationSourceType.Probation57:
                 case (int)ClassificationSourceType.SmartPunter67:
                 case (int)ClassificationSourceType.HighRiskPunter77:
@@ -1497,6 +1495,10 @@
                 case (int)ClassificationSourceType.SmartPunter68:
                 case (int)ClassificationSourceType.HighRiskPunter78:
                     reason += $"Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount} | Desktop Percent: {twDesktopTicket}% | Reject Percent: {twTicketRejectRate}";
+                    break;
+                case (int)ClassificationSourceType.NormalAccountInactive:
+                case (int)ClassificationSourceType.ProPunterInactive:
+                    reason += $"<span> { cc.SourceTypeName } </span>";
                     break;
                 case (int)ClassificationSourceType.RobotUser61:
                 case (int)ClassificationSourceType.RobotUser163:
@@ -1514,6 +1516,7 @@
                     }
                     break;
                 default:
+                    reason += $"<span> { cc.SourceTypeName } </span>";
                     break;
             }
 
@@ -1521,6 +1524,7 @@
             {
                 case (int)SourceTypeID.Classification_PAMarkDirectly:
                 case (int)SourceTypeID.Classification_PAAffectedByUplines:
+                    reason += $"<span> { cc.SourceTypeName } </span>";
                     reason += $"Win lost: {winlost} ";
 
                     if (!string.IsNullOrEmpty(cc.Remark))
@@ -1530,6 +1534,7 @@
                     break;
                 case (int)SourceTypeID.Classification_PAUnmarkDirectly:
                 case (int)SourceTypeID.Classification_UnmarkingPAAffectedDirectly:
+                    reason += $"<span> { cc.SourceTypeName } </span>";
                     if (!string.IsNullOrEmpty(cc.Remark))
                     {
                         reason += $"| {cc.Remark}";
