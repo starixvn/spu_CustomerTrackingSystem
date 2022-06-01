@@ -248,7 +248,7 @@
                                                         UserName = x.UserName,
                                                         ErrMsg = x.ErrorMsg
                                                     }),
-                IsCreditSite = validatedModels.Any(x => !x.IsLicensee),
+                IsCreditSite = !(validatedModels.Any(x => x.IsLicensee.HasValue ? x.IsLicensee.Value : false)),
                 IsExistedSMA = validatedModels.Any(x => x.RoleID > 1)
             };
 

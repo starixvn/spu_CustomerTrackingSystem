@@ -1443,7 +1443,8 @@
         {
             //var reason = $"<div><span> { cc.SourceTypeName } </span>";
             //reason += "<br />";
-            var reason = $"<div>";            
+            var divReason = $"<div>";
+            var spanReason = string.Empty;            
 
             var margin = Math.Round(cc.Margin, 3);
             var winlost = Math.Round(cc.Winloss, 3);
@@ -1477,28 +1478,28 @@
                 case (int)ClassificationSourceType.HighRiskPunter71:
                 case (int)ClassificationSourceType.HighRiskPunter72:
                 case (int)ClassificationSourceType.HighRiskPunter73:
-                    reason += $"Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount}";                    
+                    spanReason += $"Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount}";                    
                     break;
                 case (int)ClassificationSourceType.GoodMember:
                 case (int)ClassificationSourceType.GoodMember111:
                 case (int)ClassificationSourceType.GoodMember112:
                 case (int)ClassificationSourceType.GoodMember113:
-                    reason += $"Turnover: {turnOver} | Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount} | Active Day: {activeDays}";
+                    spanReason += $"Turnover: {turnOver} | Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount} | Active Day: {activeDays}";
                     break;               
                 case (int)ClassificationSourceType.Probation57:
                 case (int)ClassificationSourceType.SmartPunter67:
                 case (int)ClassificationSourceType.HighRiskPunter77:
-                    reason += $"Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount} | Group Betting Percent: {twGroupBettingRate}%";                    
+                    spanReason += $"Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount} | Group Betting Percent: {twGroupBettingRate}%";                    
                     break;
 
                 case (int)ClassificationSourceType.Probation58:
                 case (int)ClassificationSourceType.SmartPunter68:
                 case (int)ClassificationSourceType.HighRiskPunter78:
-                    reason += $"Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount} | Desktop Percent: {twDesktopTicket}% | Reject Percent: {twTicketRejectRate}";
+                    spanReason += $"Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount} | Desktop Percent: {twDesktopTicket}% | Reject Percent: {twTicketRejectRate}";
                     break;
                 case (int)ClassificationSourceType.NormalAccountInactive:
                 case (int)ClassificationSourceType.ProPunterInactive:
-                    reason += $"<span> { cc.SourceTypeName } </span>";
+                    spanReason += $"<span> { cc.SourceTypeName } </span>";
                     break;
                 case (int)ClassificationSourceType.RobotUser61:
                 case (int)ClassificationSourceType.RobotUser163:
@@ -1508,15 +1509,14 @@
                 case (int)ClassificationSourceType.AIRobotBetting166:
                     if (cc.BetCount > 0)
                     {
-                        reason += $"Turnover: {turnOver} | Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount} | Active Day: {activeDays}";
+                        spanReason += $"Turnover: {turnOver} | Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount} | Active Day: {activeDays}";
                     }
                     else
                     {
-                        reason += $"Counter: {cc.RobotCounter}";
+                        spanReason += $"Counter: {cc.RobotCounter}";
                     }
                     break;
-                default:
-                    reason += $"<span> { cc.SourceTypeName } </span>";
+                default:                    
                     break;
             }
 
@@ -1524,29 +1524,36 @@
             {
                 case (int)SourceTypeID.Classification_PAMarkDirectly:
                 case (int)SourceTypeID.Classification_PAAffectedByUplines:
-                    reason += $"<span> { cc.SourceTypeName } </span>";
-                    reason += $"Win lost: {winlost} ";
+                    spanReason += $"<span> { cc.SourceTypeName } </span>";
+                    spanReason += $"Win lost: {winlost} ";
 
                     if (!string.IsNullOrEmpty(cc.Remark))
                     {
-                        reason += $"| {cc.Remark}";
+                        spanReason += $"| {cc.Remark}";
                     }
                     break;
                 case (int)SourceTypeID.Classification_PAUnmarkDirectly:
                 case (int)SourceTypeID.Classification_UnmarkingPAAffectedDirectly:
-                    reason += $"<span> { cc.SourceTypeName } </span>";
+                    spanReason += $"<span> { cc.SourceTypeName } </span>";
                     if (!string.IsNullOrEmpty(cc.Remark))
                     {
-                        reason += $"| {cc.Remark}";
+                        spanReason += $"| {cc.Remark}";
                     }
                     break;
                 default:
                     break;
             }
 
-            reason += "</div>";
+            if (!string.IsNullOrEmpty(spanReason))
+            {
+                divReason += $"<div>{spanReason}</div>";
+            }
+            else
+            {
+                divReason += $"<div>{cc.SourceTypeName}</div>";
+            }
 
-            return reason;
+            return divReason;
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]

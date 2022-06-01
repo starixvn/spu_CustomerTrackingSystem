@@ -12,7 +12,7 @@
 
         public string UserName { get; set; }
 
-        public bool IsLicensee { get; set; }
+        public bool? IsLicensee { get; set; }
 
         public int ActionID { get; set; }        
 
