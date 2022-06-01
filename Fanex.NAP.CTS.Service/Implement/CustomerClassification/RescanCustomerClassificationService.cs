@@ -181,6 +181,7 @@
                         CategoryID = c.CategoryID,
                         CategoryGroup = c.CategoryGroup,
                         IsLicensee = c.IsLicensee,
+                        LastModifiedDate = c.LastModifiedDate,
                         Remark = c.Remark,
                         IsDirectPA = c.IsDirect,
                         IsFromCTS = c.IsFromCTS,

@@ -256,6 +256,7 @@
                                                      CategoryGroup = group.pa.CategoryGroup,
                                                      IsLicensee = group.pa.IsLicensee,
                                                      CreatedBy = group.pa.CreatedBy,
+                                                     LastModifiedDate = group.pa.LastModifiedDate,
                                                      Remark = group.pa.Remark,
 
                                                      IsDirectPA = group.pa.IsDirectPA,
