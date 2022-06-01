@@ -1441,8 +1441,6 @@
 
         private string GetReason(CustomerClassificationHistoryModel cc)
         {
-            //var reason = $"<div><span> { cc.SourceTypeName } </span>";
-            //reason += "<br />";
             var divReason = $"<div>";
             var spanReason = string.Empty;            
 
@@ -1478,7 +1476,7 @@
                 case (int)ClassificationSourceType.HighRiskPunter71:
                 case (int)ClassificationSourceType.HighRiskPunter72:
                 case (int)ClassificationSourceType.HighRiskPunter73:
-                    spanReason += $"Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount}";                    
+                    spanReason += $"Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount}";
                     break;
                 case (int)ClassificationSourceType.GoodMember:
                 case (int)ClassificationSourceType.GoodMember111:
@@ -1489,13 +1487,13 @@
                 case (int)ClassificationSourceType.Probation57:
                 case (int)ClassificationSourceType.SmartPunter67:
                 case (int)ClassificationSourceType.HighRiskPunter77:
-                    spanReason += $"Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount} | Group Betting Percent: {twGroupBettingRate}%";                    
+                    spanReason += $"Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount} | Group Betting Percent: {twGroupBettingRate}";
                     break;
 
                 case (int)ClassificationSourceType.Probation58:
                 case (int)ClassificationSourceType.SmartPunter68:
                 case (int)ClassificationSourceType.HighRiskPunter78:
-                    spanReason += $"Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount} | Desktop Percent: {twDesktopTicket}% | Reject Percent: {twTicketRejectRate}";
+                    spanReason += $"Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount} | Desktop Percent: {twDesktopTicket} | Reject Percent: {twTicketRejectRate}";
                     break;
                 case (int)ClassificationSourceType.NormalAccountInactive:
                 case (int)ClassificationSourceType.ProPunterInactive:
