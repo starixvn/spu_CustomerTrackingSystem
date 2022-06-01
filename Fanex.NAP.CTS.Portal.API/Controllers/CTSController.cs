@@ -411,7 +411,12 @@
                         }
                     }
 
-                    result = string.Join(",", monitorListMoreData.Select(x => x.UserName)) + string.Join(",", markPAList.Select(x=>x.Username));
+                    result = string.Join(",", monitorListMoreData.Select(x => x.UserName));
+
+                    if (markPAList.Any())
+                    {
+                        result += "," + string.Join(",", markPAList.Select(x => x.Username));
+                    }
                 }
                 catch (Exception ex)
                 {
