@@ -1502,6 +1502,15 @@
                 case (int)ClassificationSourceType.RobotUser61:
                 case (int)ClassificationSourceType.RobotUser163:
                 case (int)ClassificationSourceType.RobotUser164:
+                     if (cc.BetCount > 0)
+                    {
+                        spanReason += $"Turnover: {turnOver} | Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount} | Active Day: {activeDays}";
+                    }
+                    else
+                    {
+                        spanReason += $"Counter: {cc.RobotCounter}";
+                    }
+                    break;
                 case (int)ClassificationSourceType.AIRobotBetting63:
                 case (int)ClassificationSourceType.AIRobotBetting165:
                 case (int)ClassificationSourceType.AIRobotBetting166:
@@ -1511,7 +1520,7 @@
                     }
                     else
                     {
-                        spanReason += $"Counter: {cc.RobotCounter}";
+                        spanReason += $"Robot Betting Detection";
                     }
                     break;
                 default:                    

@@ -337,9 +337,7 @@
         [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.AddSystemFormulaBetAccountAPI)]
         public JsonResult<InsertNAPProblemAccountResult> AddSystemFormulaBetAccount(TWProblemAccountParams dataParam)
         {
-            var isWriteLogInfo = ConfigSettings.IsWriteLogInfo;
-
-            string successListFromNAP = string.Empty;
+            var isWriteLogInfo = ConfigSettings.IsWriteLogInfo;            
             var result = string.Empty;
             var orgCustomerList = dataParam.CustomerList.Split(',').Select(u => new TWProblemAccountModel { Username = u });
             if (orgCustomerList.Count() <= 100)
@@ -413,7 +411,7 @@
                         }
                     }
 
-                    result = string.Join(",", monitorListMoreData.Select(c => c.UserName)) + successListFromNAP;
+                    result = string.Join(",", monitorListMoreData.Select(x => x.UserName)) + string.Join(",", markPAList.Select(x=>x.Username));
                 }
                 catch (Exception ex)
                 {
