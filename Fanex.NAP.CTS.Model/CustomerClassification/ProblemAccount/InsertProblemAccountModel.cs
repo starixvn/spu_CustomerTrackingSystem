@@ -23,7 +23,7 @@
 
         public bool? IsLicensee { get; set; }
 
-        public DateTime LastModifiedDate { get; set; }
+        public DateTime? LastModifiedDate { get; set; }
 
         public string Remark { get; set; }
 
