@@ -418,9 +418,9 @@
                 });
 
                 if ($("#hdIsLicensee").val() == "TRUE" || $("#hdRoleID").val() == 1) {
-                    $('#inputCCAffectToAllDownlines').addClass('hide');
+                    $('#lblCCAffectToAllDownlines').addClass('hide');
                 } else {
-                    $('#inputCCAffectToAllDownlines').removeClass('hide');
+                    $('#lblCCAffectToAllDownlines').removeClass('hide');
                 }
             },
             error: function (errMsg) {
@@ -469,6 +469,7 @@
 
     function SaveMarkCustomerCategory() {
         let params = {};
+        params.CategoryID = 0;
         params.CustID = $("#hdCustId").val();
         params.CTSCustID = $("#hdCTSCustId").val();
         params.SubscriberID = $("#hdSubscriberId").val();

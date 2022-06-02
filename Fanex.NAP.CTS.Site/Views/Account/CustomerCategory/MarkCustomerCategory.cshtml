@@ -15,7 +15,7 @@
                                 VVIP
                             </label>
                         </div>                        
-                        <label class="checkbox-container" id="inputCCAffectToAllDownlines">
+                        <label class="checkbox-container" id="lblCCAffectToAllDownlines">
                             <input id="inputCCAffectToAllDownlines" type="checkbox">
                             <span class="checkmark"></span>
                             Affect all Downlines
@@ -30,8 +30,8 @@
                         <div class="form-control radio-button">
                             @if (Model.CategoryList.Any(x => x.CategoryId == paCategory.CategoryID))
                             {
-                                <label class="checkbox-container disabled" id="inputCCAffectToAllDownlines">
-                                    <input id="inputCCAffectToAllDownlines" type="checkbox" checked="checked" disabled>
+                                <label class="checkbox-container disabled" id="Category">
+                                    <input id="Category" type="checkbox" checked="checked" disabled>
                                     <span class="checkmark"></span>
                                     @paCategory.CategoryName
                                 </label>
@@ -61,7 +61,7 @@
                         @if (Model.IsRobotUser)
                         {
                             <div class="form-control radio-button">
-                                <label class="checkbox-container disabled" id="inputCCAffectToAllDownlines">
+                                <label class="checkbox-container disabled" id="robotUser">
                                     <input id="-1" type="checkbox" checked="checked" disabled>
                                     <span class="checkmark"></span>
                                     Robot User
