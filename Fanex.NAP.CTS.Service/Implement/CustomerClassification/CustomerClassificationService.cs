@@ -7,6 +7,7 @@
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Helpers.Xml;
+    using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria.CustomerClassification;
     using Fanex.NAP.CTS.Criteria.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Model.CustomerClassification;
@@ -22,10 +23,28 @@
     public class CustomerClassificationService : ICustomerClassificationService
     {
         private readonly IDynamicRepository repository;
+        private readonly IAntiFraudCenterService _antiFraudCenterService;
 
         public CustomerClassificationService()
         {
             repository = new DynamicRepository();
+            _antiFraudCenterService = new AntiFraudCenterService();
+        }
+
+        public bool PushDataToExternalPackge(IEnumerable<long> custIds, PushDataToExternalModel paras, FromFlow fromFlow)
+        {
+            bool isSuccess = true;
+
+            if (custIds != null && custIds.Any())
+            {
+                custIds = custIds.Distinct();
+
+                isSuccess= PushDataToExternal(custIds, paras);
+
+                _antiFraudCenterService.InsertAFCAccounts(custIds, fromFlow);
+            }
+
+            return isSuccess;
         }
 
         public bool PushDataToExternal(IEnumerable<long> custIdsToSyncCC, PushDataToExternalModel paras)
