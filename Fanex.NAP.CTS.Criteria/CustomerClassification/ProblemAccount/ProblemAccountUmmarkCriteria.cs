@@ -8,9 +8,6 @@
         [SpParam(SqlParamName = "ip_IsFromQueue")]
         public bool IsFromQueue { get; set; }
 
-        [SpParam(SqlParamName = "ip_ExceptDirectDownline")]
-        public bool ExceptDirectDownline { get; set; }      
-
         [SpParam(SqlParamName = "ip_ProblemAccounts")]
         public string ProblemAccountJson { get; set; }
 

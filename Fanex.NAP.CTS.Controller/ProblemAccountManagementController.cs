@@ -193,7 +193,7 @@
                         IsDirectPA = true
                     });
 
-                    var unmarkPAResult = _paClassificationService.UnmarkProblemAccount(paUnmark, false, model.IsUnmarkDownlines);
+                    var unmarkPAResult = _paClassificationService.UnmarkProblemAccount(paUnmark, false);
 
                     if (unmarkPAResult.ErrorCode == 0 && unmarkPAResult.CustomerInfo.Any())
                     {

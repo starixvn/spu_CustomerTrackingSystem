@@ -1809,7 +1809,7 @@
                     }
                 };
 
-            var unmarkPAResult = _problemAccountClassificationService.UnmarkProblemAccount(paUnmark, false, model.IsExceptDirectDownline);
+            var unmarkPAResult = _problemAccountClassificationService.UnmarkProblemAccount(paUnmark, false);
 
             if (unmarkPAResult.ErrorCode == 0 && unmarkPAResult.CustomerInfo.Any())
             {

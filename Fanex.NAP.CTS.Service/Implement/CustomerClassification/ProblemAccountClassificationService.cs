@@ -166,13 +166,12 @@
             return Enumerable.Empty<CustInfoModel>();
         }
 
-        public UnmarkPAResultModel UnmarkProblemAccount(IEnumerable<UnmarkProblemAccountModel> paUnmark, bool isFromQueue, bool isExceptDirectDownline)
+        public UnmarkPAResultModel UnmarkProblemAccount(IEnumerable<UnmarkProblemAccountModel> paUnmark, bool isFromQueue)
         {
             var criteria = new ProblemAccountUmmarkCriteria
             {
                 ProblemAccountJson = JsonConvert.SerializeObject(paUnmark),
-                IsFromQueue = isFromQueue,
-                ExceptDirectDownline = isExceptDirectDownline
+                IsFromQueue = isFromQueue
             };
 
             var custInfos = _repository.Fetch<CustInfoModel>(criteria);
