@@ -81,7 +81,7 @@
 
                 if (rescanResult.IsSuccess && rescanResult.CustIds.Any())
                 {
-                    rescanResult.IsSuccess = PushExternalData(rescanResult.CustIds.Distinct(), parameters);
+                    rescanResult.IsSuccess = PushDataToExternalPackge(rescanResult.CustIds.Distinct(), parameters);
                 }
 
                 if (rescanResult.IsSuccess && custTORemovedOldPA.Any())
@@ -138,25 +138,18 @@
             return Enumerable.Empty<long>();
         }
 
-        private bool PushExternalData(IEnumerable<long> custIdsToSyncCC, RescanCustClassificationModel parameters)
+        private bool PushDataToExternalPackge(IEnumerable<long> custIdsToSyncCC, RescanCustClassificationModel parameters)
         {
             bool isSuccess = true;
 
             if (custIdsToSyncCC.Any())
             {
-                Parallel.Invoke(() =>
+                isSuccess = custClassificationService.PushDataToExternalPackge(custIdsToSyncCC.Distinct(), new PushDataToExternalModel
                 {
-                    isSuccess = custClassificationService.PushDataToExternal(custIdsToSyncCC, new PushDataToExternalModel
-                    {
-                        ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
-                        IsPushCCToSoon88 = parameters.IsPushCCToSoon88,
-                        IsUpdateDangerToMainDB = parameters.IsUpdateDangerToMainDB
-                    });
-                },
-                () =>
-                {
-                    antiFraudCenterService.InsertAFCAccounts(custIdsToSyncCC, FromFlow.CTSWEB);
-                });
+                    ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
+                    IsPushCCToSoon88 = parameters.IsPushCCToSoon88,
+                    IsUpdateDangerToMainDB = parameters.IsUpdateDangerToMainDB
+                }, FromFlow.CTSWEB);
             }
 
             return isSuccess;

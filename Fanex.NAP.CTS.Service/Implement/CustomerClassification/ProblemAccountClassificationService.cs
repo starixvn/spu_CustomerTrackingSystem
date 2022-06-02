@@ -26,13 +26,12 @@
     {
         private readonly IDynamicRepository _repository;
         private readonly ICustomerClassificationService _ccService;
-        private readonly IAntiFraudCenterService _antiFraudCenterService;
+ 
 
         public ProblemAccountClassificationService()
         {
             _repository = new DynamicRepository();
             _ccService = new CustomerClassificationService();
-            _antiFraudCenterService = new AntiFraudCenterService();
         }
 
         public DBResult InsertProblemAccountPackage(IEnumerable<InsertProblemAccountModel> problemAccounts, InsertPA_ByType mappingCategoryByType, string serviceName, FromFlow fromFlow)
@@ -47,11 +46,16 @@
 
                     var result = InsertProblemAccount(problemAccounts, probAccountLosing, mappingCategoryByType, serviceName, false);
 
-                    if (result.ErrorCode == 0)
+                    if (result.ErrorCode == 0 && result.CustomerInfo != null && result.CustomerInfo.Any())
                     {
                         InsertPALogics(result.CustomerInfo);
 
-                        PushDataToExternal(result.CustomerInfo, fromFlow);
+                        _ccService.PushDataToExternalPackge(result.CustomerInfo.Select(c => c.CustID).Distinct(), new PushDataToExternalModel
+                        {
+                            ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
+                            IsPushCCToSoon88 = true,
+                            IsUpdateDangerToMainDB = true
+                        }, fromFlow);
                     }
                 }
             }
@@ -216,23 +220,6 @@
                 var custIds = customerInfo.Select(x => x.CustID).Distinct();
 
                 UpdateBetLimitOfFlaggedCustomer(custIds);
-            }
-        }
-
-        private void PushDataToExternal(IEnumerable<CustInfoModel> customerInfo, FromFlow fromFlow)
-        {
-            if (customerInfo != null && customerInfo.Any())
-            {
-                var custIds = customerInfo.Select(x => x.CustID).Distinct();
-
-                _ccService.PushDataToExternal(custIds, new PushDataToExternalModel
-                {
-                    ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
-                    IsPushCCToSoon88 = true,
-                    IsUpdateDangerToMainDB = true
-                });
-
-                _antiFraudCenterService.InsertAFCAccounts(custIds, fromFlow);
             }
         }
 
