@@ -26,17 +26,21 @@ else
         <div class="label">Are you sure you want to unmark Problem - @Model.RoleName <span style="color: #FF0000">@Model.UserName</span></div>
     </div>
 
-        @if (Model.RoleID != 1 && !Model.IsLicensee)
-        {
-            <div class="form-control">
-                <label class="checkbox-container" id="ckbAffectToAllDownlines">
-                    <input id="inputPAUnmarkAffectToAllDownlines" type="checkbox">
-                    <span class="checkmark"></span>
-                    Unmark all SMA and Downlines, except for Downlines marked directly
-                </label>
-            </div>
-        }
+    @if (Model.RoleID != 1 && !Model.IsLicensee)
+    {
+        <div class="form-control">
+            <label class="checkbox-container" id="ckbAffectToAllDownlines">
+                <input id="inputPAUnmarkAffectToAllDownlines" type="checkbox">
+                <span class="checkmark"></span>
+                Unmark all SMA and Downlines, except for Downlines marked directly
+            </label>
+        </div>
+    }
 
+    <div class="form-control">
+        <div class="label">Comment</div>
+        <textarea id="txtCCPAUnmarkComment" rows="4" class="comment-field full-width" maxlength="200"></textarea>
+    </div>
 </div>
 }
 

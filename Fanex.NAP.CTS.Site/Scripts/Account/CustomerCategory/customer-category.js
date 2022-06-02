@@ -88,6 +88,7 @@
         params.RoleID = $('#hdRoleID').val();
         params.SubscriberID = $('#hdSubscriberId').val();
         params.IsExceptDirectDownline = $('#inputPAUnmarkAffectToAllDownlines').is(":checked");
+        params.Remark = $('#txtCCPAUnmarkComment').val().trim();
 
         $.ajax(common.modifyRelativeUrl('Account/SaveUnmarkCustomerCategory'), {
             type: 'POST',
