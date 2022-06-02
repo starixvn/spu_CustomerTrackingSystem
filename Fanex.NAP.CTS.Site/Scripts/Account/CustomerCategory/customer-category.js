@@ -469,6 +469,7 @@
 
     function SaveMarkCustomerCategory() {
         let params = {};
+        params.CategoryID = 0;
         params.CustID = $("#hdCustId").val();
         params.CTSCustID = $("#hdCTSCustId").val();
         params.SubscriberID = $("#hdSubscriberId").val();
