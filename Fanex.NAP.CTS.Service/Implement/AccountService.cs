@@ -1050,7 +1050,7 @@
             }
         }
 
-        public DBResult MarkVVIPCategory(CustomerCategoryModel categoryModel, out IEnumerable<LatestClassificationModel> latestClassifications)
+        public IEnumerable<LatestClassificationModel> MarkVVIPCategory(CustomerCategoryModel categoryModel)
         {
             var custList = new List<AddCustomerCategoryInfoModel>()
             {
@@ -1074,16 +1074,7 @@
 
             var repository = new DynamicRepository();
 
-            latestClassifications = repository.Fetch<LatestClassificationModel>(criteria);
-
-            if (!string.IsNullOrEmpty(criteria.ErrorMessage))
-            {
-                LogService.Error("CTS - AddCustomerCategory failed: " + criteria.ErrorMessage);
-
-                return new DBResult { ErrorCode = -1, ErrorMsg = criteria.ErrorMessage };
-            }
-
-            return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
+            return repository.Fetch<LatestClassificationModel>(criteria) ?? Enumerable.Empty<LatestClassificationModel>();            
         }
 
         public DBResult AddQueueAffectDownlinesCustomerCategory(CustomerCategoryModel categoryModel)
@@ -1116,10 +1107,8 @@
             return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
         }
 
-        public ResultInsertRemoveCustomerClassificationModel RemoveVVIPCategory(CustomerCategoryModel categoryModel)
+        public IEnumerable<CustomerClassForMainDb> RemoveVVIPCategory(CustomerCategoryModel categoryModel)
         {
-            var insertCTSResult = new ResultInsertRemoveCustomerClassificationModel();
-
             var custList = new List<RemoveCustomerCategoryInfoModel>() 
             {
                 new RemoveCustomerCategoryInfoModel
@@ -1139,10 +1128,7 @@
             };
 
             var repository = new DynamicRepository();
-            insertCTSResult.CustomerClassList = repository.Fetch<CustomerClassForMainDb>(criteria);
-            insertCTSResult.OpErrorMessage = criteria.ErrorMessage;
-
-            return insertCTSResult;
+            return repository.Fetch<CustomerClassForMainDb>(criteria) ?? Enumerable.Empty<CustomerClassForMainDb>();
         }
 
         public DBResult PinCategoryCustomerClassification(long ctsCustId, int subscriberId, bool isPinCategory, int createdBy)

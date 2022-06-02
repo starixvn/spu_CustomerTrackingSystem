@@ -11,6 +11,7 @@
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.Home;
     using Fanex.NAP.CTS.Model.ImportEvidences;
+    using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.ViewModel.Account.Associated;
     using System;
     using System.Collections.Generic;
@@ -102,11 +103,11 @@
 
         IEnumerable<CustomerClassificationHistoryModel> GetCustomerClassificationHistory(long ctsCustId);
 
-        DBResult MarkVVIPCategory(CustomerCategoryModel categoryModel, out IEnumerable<LatestClassificationModel> latestClassifications);
+        IEnumerable<LatestClassificationModel> MarkVVIPCategory(CustomerCategoryModel categoryModel);
 
         DBResult AddQueueAffectDownlinesCustomerCategory(CustomerCategoryModel categoryModel);
 
-        ResultInsertRemoveCustomerClassificationModel RemoveVVIPCategory(CustomerCategoryModel removeCategoryModel);        
+        IEnumerable<CustomerClassForMainDb> RemoveVVIPCategory(CustomerCategoryModel removeCategoryModel);        
 
         DBResult PinCategoryCustomerClassification(long ctsCustId, int subscriberId, bool isPinCategory, int createdBy);
 

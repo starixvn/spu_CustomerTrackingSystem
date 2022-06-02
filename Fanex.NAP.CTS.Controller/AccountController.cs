@@ -1639,6 +1639,8 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationRemoveCategory)]
         public ActionResult SaveMarkVVIP(SaveMarkCustomerCategoryViewModel model)
         {
+            var result = new DBResult();
+
             var categoryModel = new CustomerCategoryModel
             {
                 CustId = model.CustID,
@@ -1653,27 +1655,26 @@
                 ActionType = ActionTypeQueueCustCategory.Insert
             };
 
-            var resultAddDirectCC = MarkDirectVVIP(categoryModel);
+            var isMarkDirect = MarkDirectVVIP(categoryModel);
 
-            if (resultAddDirectCC.ErrorCode == 0 && categoryModel.RoleId != 1 && categoryModel.IsAffectToAllDownlines)
+            if (isMarkDirect && categoryModel.RoleId != 1 && categoryModel.IsAffectToAllDownlines)
             {
-                _accountService.AddQueueAffectDownlinesCustomerCategory(categoryModel);
+                result = _accountService.AddQueueAffectDownlinesCustomerCategory(categoryModel);
             }
 
             return Json(new
             {
-                errorCode = resultAddDirectCC.ErrorCode,
-                errorMessage = resultAddDirectCC.ErrorMsg
+                errorCode = result.ErrorCode,
+                errorMessage = result.ErrorMsg
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private DBResult MarkDirectVVIP(CustomerCategoryModel categoryModel)
+        private bool MarkDirectVVIP(CustomerCategoryModel categoryModel)
         {
-            var latestClassifications = Enumerable.Empty<LatestClassificationModel>();
-            var result = _accountService.MarkVVIPCategory(categoryModel, out latestClassifications);
-
-            if (result.ErrorCode == 0 && latestClassifications != null)
+            try
             {
+                var latestClassifications = _accountService.MarkVVIPCategory(categoryModel);
+
                 if (categoryModel.IsVVip)
                 {
                     latestClassifications = latestClassifications?.Where(c => c.CustId != 0);
@@ -1690,8 +1691,18 @@
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                var logMessage = new LogMessage(ex.Message)
+                            .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                            .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
 
-            return result;
+                LogService.Error(logMessage);
+
+                return false;
+            }
+
+            return true;
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
@@ -1745,25 +1756,24 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationRemoveCategory)]
         public ActionResult SaveUnmarkVVIP(CustomerCategoryModel model)
         {
-            var errorCode = 0;
-            var errorMessage = string.Empty;
+            var result = new DBResult();
             model.CreatedBy = CurrentSession.UserId;
             model.ActionType = ActionTypeQueueCustCategory.Remove;
 
-            var result = _accountService.RemoveVVIPCategory(model);
+            var custInfos = _accountService.RemoveVVIPCategory(model);
 
-            if (string.IsNullOrEmpty(result.OpErrorMessage))
+            if (custInfos != null && custInfos.Any())
             {
                 if (model.RoleId != 1 && model.IsAffectToAllDownlines)
                 {
-                    _accountService.AddQueueAffectDownlinesCustomerCategory(model);
+                    result = _accountService.AddQueueAffectDownlinesCustomerCategory(model);
                 }
 
                 if (model.CustId != 0)
                 {
                     _rescanClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
                     {
-                        CustIds = new List<long> { model.CustId },
+                        CustIds = custInfos.Select(x=>x.CustID).Distinct(),
                         IsRescanPA = true,
                         IsPushCCToSoon88 = true,
                         FunctionId = FunctionId.UnmarkCustomerCategory,
@@ -1772,16 +1782,11 @@
                     });
                 }
             }
-            else
-            {
-                errorCode = -1;
-                errorMessage = result.OpErrorMessage;
-            }
 
             return Json(new
             {
-                errorCode,
-                errorMessage
+                errorCode = result.ErrorCode,
+                errorMessage = result.ErrorMsg
             }, JsonRequestBehavior.AllowGet);
         }
 

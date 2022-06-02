@@ -18,10 +18,7 @@
         public bool AffectDownline { get; set; }
 
         [SpParam(SqlParamName = "ip_CustJson")]
-        public string CustJson { get; set; }
-
-        [SpParam(SqlParamName = "op_ErrorMessage")]
-        public string ErrorMessage { get; set; }
+        public string CustJson { get; set; }    
 
         public override string GetSettingKey()
         {
