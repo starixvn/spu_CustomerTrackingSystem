@@ -1798,7 +1798,7 @@
                         RoleID = model.RoleID,
                         SubscriberID = model.SubscriberID,
                         CreatedBy = CurrentSession.UserId,
-                        Remark = string.Empty,
+                        Remark = model.Remark,
                         IsExceptDirectDownline = model.IsExceptDirectDownline,
                         IsDirectPA = true
                     }

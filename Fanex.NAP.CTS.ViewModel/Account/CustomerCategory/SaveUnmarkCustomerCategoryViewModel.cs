@@ -11,5 +11,7 @@
         public int SubscriberID { get; set; }
 
         public bool IsExceptDirectDownline { get; set; }
+
+        public string Remark { get; set; }
     }
 }
