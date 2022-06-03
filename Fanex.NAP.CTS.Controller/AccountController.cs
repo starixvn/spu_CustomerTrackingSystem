@@ -1566,19 +1566,19 @@
             return divReason;
         }
 
-        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationPinCategory)]
-        [HttpPost]
-        public ActionResult PinCategoryCustomerClassification(long ctsCustId, int subscriberId, bool isPinCategory)
-        {
-            var result = _accountService.PinCategoryCustomerClassification(ctsCustId, subscriberId, isPinCategory, CurrentSession.UserId);
+        //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        //[TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationPinCategory)]
+        //[HttpPost]
+        //public ActionResult PinCategoryCustomerClassification(long ctsCustId, int subscriberId, bool isPinCategory)
+        //{
+        //    var result = _accountService.PinCategoryCustomerClassification(ctsCustId, subscriberId, isPinCategory, CurrentSession.UserId);
 
-            return Json(new
-            {
-                errorCode = result.ErrorCode,
-                errorMessage = result.ErrorMsg
-            }, JsonRequestBehavior.AllowGet);
-        }
+        //    return Json(new
+        //    {
+        //        errorCode = result.ErrorCode,
+        //        errorMessage = result.ErrorMsg
+        //    }, JsonRequestBehavior.AllowGet);
+        //}
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationNormalCategory)]

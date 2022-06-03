@@ -528,71 +528,71 @@
         return html;
     }
 
-    function PinCategory(isChecked, ctsCustId, subscriberId) {
-        let html = "<div style='text-align:center'>Are you sure about this action? </div>";
+    //function PinCategory(isChecked, ctsCustId, subscriberId) {
+    //    let html = "<div style='text-align:center'>Are you sure about this action? </div>";
 
-        if (isChecked) {
-            html += "By enabling pin option, this account will not be classified automatically by our service in future";
-        } else {
-            html += "By unpin option, this account will be classified automatically by our service in future";
-        }
+    //    if (isChecked) {
+    //        html += "By enabling pin option, this account will not be classified automatically by our service in future";
+    //    } else {
+    //        html += "By unpin option, this account will be classified automatically by our service in future";
+    //    }
 
-        common.showFormConfirmation(html, 'Confirmation',
-            function () {
-                var url = common.modifyRelativeUrl('/Account/PinCategoryCustomerClassification');
-                var params = {};
-                params.ctsCustId = ctsCustId;
-                params.subscriberId = subscriberId;
-                params.isPinCategory = isChecked;
+    //    common.showFormConfirmation(html, 'Confirmation',
+    //        function () {
+    //            var url = common.modifyRelativeUrl('/Account/PinCategoryCustomerClassification');
+    //            var params = {};
+    //            params.ctsCustId = ctsCustId;
+    //            params.subscriberId = subscriberId;
+    //            params.isPinCategory = isChecked;
 
-                $.ajax(url, {
-                    type: 'POST',
-                    data: params,
-                    success: function (response) {
-                        if (response.errorCode === 0) {
-                            let message = isChecked
-                                ? "Pinned category successfully!"
-                                : "Unpinned category successfully!";
+    //            $.ajax(url, {
+    //                type: 'POST',
+    //                data: params,
+    //                success: function (response) {
+    //                    if (response.errorCode === 0) {
+    //                        let message = isChecked
+    //                            ? "Pinned category successfully!"
+    //                            : "Unpinned category successfully!";
 
-                            common.showSuccess(message);
+    //                        common.showSuccess(message);
 
-                            LoadGrid(ctsCustId, true);
-                        }
-                        else {
-                            common.showError('Failed! ' + response.errorMessage);
-                            ResetCategorySetting();
-                        }
-                    },
-                    beforeSend: function () {
-                        common.showLoading();
-                    },
-                    complete: function () {
-                        common.closeLoading();
-                    },
-                    error: function (error) {
-                        common.closeLoading();
-                        console.log(error);
-                        ResetCategorySetting();
-                    }
-                });
-            },
-            function () {
-                ResetCategorySetting();
-            }
-        );
-    }
+    //                        LoadGrid(ctsCustId, true);
+    //                    }
+    //                    else {
+    //                        common.showError('Failed! ' + response.errorMessage);
+    //                        ResetCategorySetting();
+    //                    }
+    //                },
+    //                beforeSend: function () {
+    //                    common.showLoading();
+    //                },
+    //                complete: function () {
+    //                    common.closeLoading();
+    //                },
+    //                error: function (error) {
+    //                    common.closeLoading();
+    //                    console.log(error);
+    //                    ResetCategorySetting();
+    //                }
+    //            });
+    //        },
+    //        function () {
+    //            ResetCategorySetting();
+    //        }
+    //    );
+    //}
 
     function ExcludedTagAssPA(isChecked, custId, ctsCustId, subscriberId, custSubId) {
         let html = "";
-        let isPinCategory = false;
+        //let isPinCategory = false;
 
-        $("option", cbbCategorySetting).each(function () {
-            if ($(this).val() === "PinCategory") {
-                isPinCategory = $(this).is(":checked");
-            }
-        });
+        //$("option", cbbCategorySetting).each(function () {
+        //    if ($(this).val() === "PinCategory") {
+        //        isPinCategory = $(this).is(":checked");
+        //    }
+        //});
 
-        if (isChecked && isPinCategory) {
+        if (isChecked && cacheData.isPinCategory) {
             html = "<div style='text-align:center'>You are not allow to turn on this setting because Pin Category setting is on.</div>";
             html += "<div>Please Turn Off Pin Category Setting before this action</div>";
 
@@ -661,7 +661,7 @@
     function ResetCategorySetting() {
         let cbbCategorySettingSelector = cbbCategorySetting.empty();
 
-        cbbCategorySettingSelector.append("<option " + (cacheData.isPinCategory ? "selected" : "") + (cacheData.isVVip ? " disabled" : "") + " value='PinCategory'>Pin Category</option>");
+        //cbbCategorySettingSelector.append("<option " + (cacheData.isPinCategory ? "selected" : "") + (cacheData.isVVip ? " disabled" : "") + " value='PinCategory'>Pin Category</option>");
 
         cbbCategorySettingSelector.append("<option " + (cacheData.isExcludedTagAssPA ? "selected" : "") + " value='ExcludedTagAssPA'>Normal Category</option>");
 
@@ -687,10 +687,9 @@
             menuHeight: 60,
             header: false,
             click: function (_, ui) {
-                if (ui.value == "PinCategory")
-                    PinCategory(ui.checked, ctsCustId, subscriberId);
-                else
-                    ExcludedTagAssPA(ui.checked, custId, ctsCustId, subscriberId, custSubId);
+                if (ui.value == "ExcludedTagAssPA")
+                    //PinCategory(ui.checked, ctsCustId, subscriberId);
+                    ExcludedTagAssPA(ui.checked, custId, ctsCustId, subscriberId, custSubId);                 
             },
             selectedText: "Category Setting",
             noneSelectedText: "Category Setting"
