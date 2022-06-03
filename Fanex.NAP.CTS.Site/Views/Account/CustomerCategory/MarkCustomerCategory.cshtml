@@ -36,6 +36,14 @@
                                     @paCategory.CategoryName
                                 </label>
                             }
+                            else if (paCategory.CategoryGroup == 61 && Model.IsRobotUser)
+                            {
+                                <label class="checkbox-container disabled" id="CategoryRobot">
+                                    <input id="CategoryRobot" type="checkbox" checked="checked" disabled>
+                                    <span class="checkmark"></span>
+                                    @paCategory.CategoryName
+                                </label>
+                            }
                             else
                             {
                                 if (Model.IsPinCategory)
@@ -58,7 +66,7 @@
                         </div>
                         }
 
-                        @if (Model.IsRobotUser)
+                        @*@if (Model.IsRobotUser)
                         {
                             <div class="form-control radio-button">
                                 <label class="checkbox-container disabled" id="robotUser">
@@ -67,7 +75,7 @@
                                     Robot User
                                 </label>
                             </div>
-                        }
+                        }*@
 
                     </div>
                 </div>
