@@ -207,7 +207,10 @@
     function ReloadGrid(ctsCustId) {
         $.ajax(common.modifyRelativeUrl('/Account/GetCustomerClassification'), {
             type: 'POST',
-            data: { ctsCustId: ctsCustId },
+            data: {
+                ctsCustID: ctsCustId,
+                roleID: $("#hdRoleID").val(),
+            },
             dataFilter: function (response) {
                 if (response !== undefined) {
                     let json = jQuery.parseJSON(response);                   

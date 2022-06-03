@@ -1375,7 +1375,7 @@
             return null;
         }
 
-        public ActionResult GetCustomerClassification(long ctsCustId)
+        public ActionResult GetCustomerClassification(long ctsCustID, int roleID)
         {
             var isPinCategory = false;
             var isExcludedTagAssPA = false;
@@ -1385,7 +1385,7 @@
             var categoryList = new List<CustomerCategoryViewModel>();
             var classificationHistoryList = new List<CustomerClassificationHistoryViewModel>();
 
-            var classification = _accountService.GetCustomerClassification(ctsCustId, out isPinCategory, out isExcludedTagAssPA);
+            var classification = _accountService.GetCustomerClassification(ctsCustID, out isPinCategory, out isExcludedTagAssPA);
 
             if (classification != null && classification.Any())
             {
@@ -1404,7 +1404,7 @@
                 isPAProbation = isProblemAccount && classification.Any(x => x.IsProbation);
             }
 
-            var classificationHistory = _accountService.GetCustomerClassificationHistory(ctsCustId);
+            var classificationHistory = _accountService.GetCustomerClassificationHistory(ctsCustID);
 
             if (classificationHistory != null && classificationHistory.Any())
             {
@@ -1414,7 +1414,7 @@
                     SourceTypeName = x.SourceTypeName,
                     CategoryName = x.CategoryName != null ? x.CategoryName : string.Empty,
                     CustomerClass = x.CustomerClass,
-                    Reason = GetReason(x),
+                    Reason = GetReason(x, roleID),
                     TurnOver = x.TurnOver,
                     Winloss = x.Winloss,
                     Margin = x.Margin,
@@ -1439,7 +1439,7 @@
             }, JsonRequestBehavior.AllowGet);
         }       
 
-        private string GetReason(CustomerClassificationHistoryModel cc)
+        private string GetReason(CustomerClassificationHistoryModel cc, int roleID)
         {
             var divReason = $"<div>";
             var spanReason = string.Empty;            
@@ -1532,7 +1532,10 @@
                 case (int)SourceTypeID.Classification_PAMarkDirectly:
                 case (int)SourceTypeID.Classification_PAAffectedByUplines:
                     spanReason += $"<span> { cc.SourceTypeName } </span>";
-                    spanReason += $"Win lost: {winlost} ";
+                    if (roleID == 1)
+                    {
+                        spanReason += $"Win lost: {winlost} ";
+                    }                    
 
                     if (!string.IsNullOrEmpty(cc.Remark))
                     {
