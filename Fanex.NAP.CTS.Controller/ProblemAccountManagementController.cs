@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
-    using Fanex.NAP.Core.Web.Attribute;   
+    using Fanex.NAP.Core.Web.Attribute;
+    using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.CustomerClassification.ProblemAccount;
@@ -129,6 +130,7 @@
         public ActionResult SaveMarkProblemAccount(ValidateProblemAccountInputViewModel model)
         {
             var result = new ResultSaveProblemAccountViewModel();
+            var dbResult = new DBResult();
 
             var validatedModels = _pamService.ValidateProblemAccounts(model);
 
@@ -138,35 +140,64 @@
 
                 if (!resultValidate.ProblemAccountInvalidList.Any())
                 {
-                    var custIdList = validatedModels.Select(c => c.CustID)?.Distinct();
-                    var custIds = string.Join(",", custIdList);
-
-                    var pas = validatedModels.Select(x => new InsertProblemAccountModel
+                    if (model.CategoryGroup == 61)
                     {
-                        CustID = x.CustID,
-                        CTSCustID = x.CTSCustID,
-                        RoleID = x.RoleID,
-                        SubscriberID = x.SubscriberID,
-                        IsLicensee = x.IsLicensee,
-                        CategoryID = model.CategoryID,
-                        CategoryGroup = model.CategoryGroup,
-                        Remark = model.Comment,
-                        IsDirectPA = true,
-                        IsFromCTS = true,
-                        CreatedBy = CurrentSession.UserId
-                    });
+                        dbResult = SaveMarkRobotAccount(model, validatedModels);
+                    }
+                    else
+                    {
+                        dbResult = SaveMarkPA(model, validatedModels);                        
+                    }
 
-                    var insertResult = _paClassificationService.InsertProblemAccountPackage(pas, InsertPA_ByType.Category, "ProblemAccountManagement", FromFlow.CTSWEB);
-
-                    result.ErrorCode = insertResult.ErrorCode;
-                    result.ErrorMessage = insertResult.ErrorMsg;
+                    result.ErrorCode = dbResult.ErrorCode;
+                    result.ErrorMessage = dbResult.ErrorMsg;
                     result.ResultValidated = resultValidate;
                 }
             }           
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
-       
+
+        private DBResult SaveMarkPA(ValidateProblemAccountInputViewModel model, IEnumerable<ProblemAccountValidatedModel> validatedModels)
+        {
+            var pas = validatedModels.Select(x => new InsertProblemAccountModel
+            {
+                CustID = x.CustID,
+                CTSCustID = x.CTSCustID,
+                RoleID = x.RoleID,
+                SubscriberID = x.SubscriberID,
+                IsLicensee = x.IsLicensee,
+                CategoryID = model.CategoryID,
+                CategoryGroup = model.CategoryGroup,
+                Remark = model.Comment,
+                IsDirectPA = true,
+                IsFromCTS = true,
+                CreatedBy = CurrentSession.UserId
+            });
+
+            return _paClassificationService.InsertProblemAccountPackage(pas, InsertPA_ByType.Category, "ProblemAccountManagement", FromFlow.CTSWEB);            
+        }
+
+        private DBResult SaveMarkRobotAccount(ValidateProblemAccountInputViewModel model, IEnumerable<ProblemAccountValidatedModel> validatedModels)
+        {
+            var robotAccounts = validatedModels.Select(x => new InsertRobotModel {
+                CustID = x.CustID,
+                CategoryID = model.CategoryID,
+                Remark = model.Comment,
+                IsDirect = true,
+                IsFromCTS = true,
+                IsFromTW = false,
+                CreatedBy = CurrentSession.UserId
+            });
+
+            var custInfos = _paClassificationService.InsertRobotAccount(robotAccounts);
+
+            if (custInfos.Any())            
+                return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };            
+            else            
+                return new DBResult { ErrorCode = -1, ErrorMsg = "Mark PA Robot failed" };            
+        }
+
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.ProblemAccountManagementMarkNew)]
         public ActionResult SaveUnmarkProblemAccount(ValidateProblemAccountInputViewModel model)

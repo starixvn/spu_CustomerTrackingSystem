@@ -488,7 +488,11 @@
         });
 
         if (params.CategoryID != 0) {
-            $.ajax(common.modifyRelativeUrl('Account/SaveMarkCustomerCategory'), {
+            let url = params.CategoryGroup == 61
+                ? common.modifyRelativeUrl('Account/SaveMarkRobotAccount')
+                : common.modifyRelativeUrl('Account/SaveMarkCustomerCategory');
+
+            $.ajax(url, {
                 type: 'POST',
                 data: params,
                 success: function (response) {

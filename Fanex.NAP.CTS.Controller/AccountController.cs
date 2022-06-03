@@ -1639,7 +1639,7 @@
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationRemoveCategory)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationMarkCategory)]
         public ActionResult SaveMarkVVIP(SaveMarkCustomerCategoryViewModel model)
         {
             var result = new DBResult();
@@ -1709,34 +1709,68 @@
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationRemoveCategory)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationMarkCategory)]
         public ActionResult SaveMarkCustomerCategory(SaveMarkCustomerCategoryViewModel model)
-        {
-            var pas = new List<InsertProblemAccountModel>();
-
-            var problemAccount = new InsertProblemAccountModel
+        {            
+            var pas = new List<InsertProblemAccountModel>()
             {
-                CustID = model.CustID,
-                CTSCustID = model.CTSCustID,
-                RoleID = model.RoleID,
-                SubscriberID = model.SubscriberID,
-                IsLicensee = model.IsLicensee,
-                CategoryID = model.CategoryID,
-                CategoryGroup = model.CategoryGroup,
-                Remark = model.Remark,
-                IsDirectPA = true,
-                IsFromCTS = true,
-                CreatedBy = CurrentSession.UserId
+                new InsertProblemAccountModel
+                {
+                    CustID = model.CustID,
+                    CTSCustID = model.CTSCustID,
+                    RoleID = model.RoleID,
+                    SubscriberID = model.SubscriberID,
+                    IsLicensee = model.IsLicensee,
+                    CategoryID = model.CategoryID,
+                    CategoryGroup = model.CategoryGroup,
+                    Remark = model.Remark,    
+                    IsDirectPA = true,
+                    IsFromCTS = true,
+                    IsFromTW = false,
+                    CreatedBy = CurrentSession.UserId
+                }
             };
 
-            pas.Add(problemAccount);
-
-            var result = _problemAccountClassificationService.InsertProblemAccountPackage(pas, InsertPA_ByType.Category, "ProfileAddProblemAccount", FromFlow.CTSWEB);
+            var result = _problemAccountClassificationService.InsertProblemAccountPackage(pas, InsertPA_ByType.Category, "ProfileAddProblemAccount", FromFlow.CTSWEB);            
 
             return Json(new
             {
                 errorCode = result.ErrorCode,
                 errorMessage = result.ErrorMsg
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationMarkCategory)]
+        public ActionResult SaveMarkRobotAccount(SaveMarkCustomerCategoryViewModel model)
+        {
+            var dbResult = new DBResult();
+
+            var robotAccounts = new List<InsertRobotModel>()
+            {
+                new InsertRobotModel
+                {
+                    CustID = model.CustID,                    
+                    CategoryID = model.CategoryID,                    
+                    Remark = model.Remark,
+                    IsDirect = true,
+                    IsFromCTS = true,
+                    IsFromTW = false,
+                    CreatedBy = CurrentSession.UserId
+                }
+            };
+          
+           var custInfos = _problemAccountClassificationService.InsertRobotAccount(robotAccounts);
+
+            if (custInfos.Any())           
+                dbResult = new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
+            else
+                dbResult = new DBResult { ErrorCode = -1, ErrorMsg = "Mark PA Robot failed" };
+
+            return Json(new
+            {
+                errorCode = dbResult.ErrorCode,
+                errorMessage = dbResult.ErrorMsg
             }, JsonRequestBehavior.AllowGet);
         }
 
