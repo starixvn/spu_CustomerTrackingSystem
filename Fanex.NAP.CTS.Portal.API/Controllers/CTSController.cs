@@ -415,7 +415,10 @@
 
                     if (markPAList.Any())
                     {
-                        result += "," + string.Join(",", markPAList.Select(x => x.Username));
+                        if (result != string.Empty)                        
+                            result += ",";
+
+                        result += string.Join(",", markPAList.Select(x => x.Username));
                     }
                 }
                 catch (Exception ex)

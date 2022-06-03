@@ -28,7 +28,7 @@
                         @foreach (var paCategory in Model.ProblemAccountList)
                         {
                         <div class="form-control radio-button">
-                            @if (Model.CategoryList.Any(x => x.CategoryId == paCategory.CategoryID))
+                            @if (Model.CategoryList.Any(x => x.CategoryGroup.Equals(paCategory.CategoryGroup) || x.CategoryGroup.Equals(paCategory.CategoryGroup)))
                             {
                                 <label class="checkbox-container disabled" id="Category">
                                     <input id="Category" type="checkbox" checked="checked" disabled>
