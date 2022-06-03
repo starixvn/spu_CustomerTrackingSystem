@@ -193,6 +193,9 @@
                         BetCount = c.BetCount,
                         ActiveDays = c.ActiveDays,
                         IsFromTW = false,
+                        IsFromCTS = c.IsFromCTS,
+                        IsDirect = c.IsDirect,
+                        Remark = c.Remark,
                         CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"])
                     });
                 }
