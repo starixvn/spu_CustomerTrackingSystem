@@ -1508,22 +1508,16 @@
                     }
                     else
                     {
-                        spanReason += $"Counter: {cc.RobotCounter}";
+                        spanReason += $"Robot Detection ";
+
+                        if (cc.RobotCounter > 0)
+                            spanReason += $"| Counter: {cc.RobotCounter}";
+
+                        if (!string.IsNullOrEmpty(cc.Remark))
+                            spanReason += $"| {cc.Remark}";
                     }
                     break;
-                case (int)ClassificationSourceType.AIRobotBetting63:
-                case (int)ClassificationSourceType.AIRobotBetting165:
-                case (int)ClassificationSourceType.AIRobotBetting166:
-                    if (cc.BetCount > 0)
-                    {
-                        spanReason += $"Turnover: {turnOver} | Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount} | Active Day: {activeDays}";
-                    }
-                    else
-                    {
-                        spanReason += $"Robot Betting Detection";
-                    }
-                    break;
-                default:                    
+                default:
                     break;
             }
 
