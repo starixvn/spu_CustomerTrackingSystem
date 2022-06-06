@@ -14,11 +14,9 @@
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.SPU.CTS.CC.Features.CustomerClassification.ProblemAccountInsert.Entities;
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Configuration;
     using System.Linq;
-    using System.Threading.Tasks;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public class RescanCustomerClassificationService : IRescanCustomerClassificationService
@@ -26,7 +24,6 @@
         private readonly ICustomerClassificationService custClassificationService;
         private readonly IProblemAccountClassificationService problemAccountService;
         private readonly ILogInputDataService logInputDataService;
-        private readonly IAntiFraudCenterService antiFraudCenterService;
         private readonly bool _isWriteLogInfo;
         private readonly IDynamicRepository repository;
 
@@ -37,7 +34,6 @@
             _isWriteLogInfo = ConfigSettings.IsWriteLogInfo;
             logInputDataService = new LogInputDataService();
             repository = new DynamicRepository();
-            antiFraudCenterService = new AntiFraudCenterService();
         }
 
         public bool RescanCustomerClassification(RescanCustClassificationModel parameters)
@@ -70,7 +66,7 @@
 
                 var paLosing = problemAccountService.GetProblemAccountLosingClassification(parameters.CustIds, parameters.FunctionId);
 
-                var custTORemovedOldPA = InsertProblemAccountLogics(existedProbAccounts.ProblemAccounts, paLosing, parameters.ServiceName, ref rescanResult);
+                var custTORemovedOldPA = InsertProblemAccountLogics(existedProbAccounts.ProblemAccounts, paLosing, ref rescanResult);
 
                 if (rescanResult.IsSuccess)
                 {
@@ -179,6 +175,7 @@
                         IsDirectPA = c.IsDirect,
                         IsFromCTS = c.IsFromCTS,
                         IsFromTVS = c.IsFromTVS,
+                        TVSRequestID = c.TVSRequestID,
                         IsFromTW = c.IsFromTW,
                         IsDataChanged = isDataChanged,
                         CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"])
@@ -204,17 +201,15 @@
             return existedPA;
         }
 
-        private IEnumerable<long> InsertProblemAccountLogics(IEnumerable<InsertProblemAccountModel> problemAccounts, IEnumerable<ProblemAccountLosingClassificationModel> paLosing, string serviceName, ref RescanResultModel rescanResultModel)
+        private IEnumerable<long> InsertProblemAccountLogics(IEnumerable<InsertProblemAccountModel> problemAccounts, IEnumerable<ProblemAccountLosingClassificationModel> paLosing, ref RescanResultModel rescanResultModel)
         {
             if (problemAccounts != null && problemAccounts.Any())
             {
-                var result = problemAccountService.InsertProblemAccountLogics(problemAccounts, paLosing, InsertPA_ByType.Category, serviceName, false);
+                var result = problemAccountService.InsertProblemAccountLogics(problemAccounts, paLosing, InsertPA_ByType.Category, false);
 
-                rescanResultModel.IsSuccess = (result.ErrorCode == 0);
-
-                if (result.ErrorCode == 0 && result.CustomerInfo.Any())
+                if (result != null && result.Any())
                 {
-                    var custIds = result.CustomerInfo.Select(c => c.CustID).Distinct();
+                    var custIds = result.Select(c => c.CustID).Distinct();
 
                     rescanResultModel.CustIds.AddRange(custIds);
 

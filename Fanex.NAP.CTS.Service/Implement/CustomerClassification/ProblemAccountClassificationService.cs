@@ -44,13 +44,13 @@
 
                     var probAccountLosing = GetProblemAccountLosingClassification(custIds, FunctionId.InsertPAM);
 
-                    var result = InsertProblemAccount(problemAccounts, probAccountLosing, mappingCategoryByType, serviceName, false);
+                    var custInfo = InsertProblemAccount(problemAccounts, probAccountLosing, mappingCategoryByType, false);
 
-                    if (result.ErrorCode == 0 && result.CustomerInfo != null && result.CustomerInfo.Any())
+                    if (custInfo != null && custInfo.Any())
                     {
-                        InsertPALogics(result.CustomerInfo);
+                        InsertPALogics(custInfo);
 
-                        _ccService.PushDataToExternalPackge(result.CustomerInfo.Select(c => c.CustID).Distinct(), new PushDataToExternalModel
+                        _ccService.PushDataToExternalPackge(custInfo.Select(c => c.CustID).Distinct(), new PushDataToExternalModel
                         {
                             ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
                             IsPushCCToSoon88 = true,
@@ -73,25 +73,24 @@
             return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
         }
 
-        public InsertPAResultModel InsertProblemAccountLogics(IEnumerable<InsertProblemAccountModel> problemAccounts
+        public IEnumerable<CustInfoModel> InsertProblemAccountLogics(IEnumerable<InsertProblemAccountModel> problemAccounts
             , IEnumerable<ProblemAccountLosingClassificationModel> paLosing
             , InsertPA_ByType mappingCategoryByType
-            , string serviceName
             , bool isFromQueue)
         {
-            var result = new InsertPAResultModel();
-
             if (problemAccounts.Any())
             {
-                result = InsertProblemAccount(problemAccounts, paLosing, mappingCategoryByType, serviceName, isFromQueue);
+                var custIds = InsertProblemAccount(problemAccounts, paLosing, mappingCategoryByType, isFromQueue);
 
-                if (result.ErrorCode == 0)
+                if (custIds != null && custIds.Any())
                 {
-                    InsertPALogics(result.CustomerInfo);
+                    InsertPALogics(custIds);
+
+                    return custIds;
                 }
             }
 
-            return result;
+            return Enumerable.Empty<CustInfoModel>();
         }
 
         public IEnumerable<ExistedProblemAccountModel> GetExistedProblemAccounts(IEnumerable<long> custIds)
@@ -186,28 +185,19 @@
 
         #region Private Methods
 
-        private InsertPAResultModel InsertProblemAccount(IEnumerable<InsertProblemAccountModel> problemAccounts
+        private IEnumerable<CustInfoModel> InsertProblemAccount(IEnumerable<InsertProblemAccountModel> problemAccounts
             , IEnumerable<ProblemAccountLosingClassificationModel> paLosing
             , InsertPA_ByType insertByType
-            , string serviceName
             , bool isFromQueue)
         {
-            var result = new InsertPAResultModel();
-
             if (problemAccounts != null && problemAccounts.Any())
             {
                 var paClassification = MergeProblemAccountClassification(problemAccounts, paLosing);
 
-                result = InsertProblemAccount(JsonConvert.SerializeObject(paClassification), insertByType, isFromQueue);
-
-                if (result.ErrorCode != 0)
-                {
-                    var logMessage = new LogMessage(result.ErrorMessage).AddMessage(serviceName + "InsertProblemAccount").AddMessage("Data: " + JsonConvert.SerializeObject(paClassification)).ToString();
-                    LogService.Error(logMessage);
-                }
+                return InsertProblemAccount(JsonConvert.SerializeObject(paClassification), insertByType, isFromQueue);
             }
 
-            return result;
+            return Enumerable.Empty<CustInfoModel>();
         }
 
         private void InsertPALogics(IEnumerable<CustInfoModel> customerInfo)
@@ -248,6 +238,7 @@
                                                      IsDirectPA = group.pa.IsDirectPA,
                                                      IsFromCTS = group.pa.IsFromCTS,
                                                      IsFromTVS = group.pa.IsFromTVS,
+                                                     TVSRequestID = group.pa.TVSRequestID,
                                                      IsFromTW = group.pa.IsFromTW,
                                                      IsDataChanged = group.pa.IsDataChanged,
                                                      ReasonID = group.pa.ReasonID,
@@ -263,7 +254,7 @@
             return Enumerable.Empty<InsertProblemAccountModel>();
         }
 
-        private InsertPAResultModel InsertProblemAccount(string problemAccountJson, InsertPA_ByType inputType, bool isFromQueue)
+        private IEnumerable<CustInfoModel> InsertProblemAccount(string problemAccountJson, InsertPA_ByType inputType, bool isFromQueue)
         {
             var criteria = new ProblemAccountMarkCriteria
             {
@@ -272,14 +263,7 @@
                 InputType = Enum.GetName(typeof(InsertPA_ByType), inputType)
             };
 
-            var result = _repository.Fetch<CustInfoModel>(criteria);
-
-            return new InsertPAResultModel
-            {
-                ErrorMessage = criteria.ErrorMessage,
-                ErrorCode = string.IsNullOrEmpty(criteria.ErrorMessage) ? 0 : -1,
-                CustomerInfo = result ?? Enumerable.Empty<CustInfoModel>()
-            };
+           return _repository.Fetch<CustInfoModel>(criteria) ?? Enumerable.Empty<CustInfoModel>();
         }
 
         public void RemoveOldProblemAccount(IEnumerable<long> custIds)

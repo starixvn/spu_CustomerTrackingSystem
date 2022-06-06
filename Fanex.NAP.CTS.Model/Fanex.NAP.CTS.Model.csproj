@@ -224,7 +224,6 @@
     <Compile Include="CustomerClassification\ProblemAccount\ExistedPAResultModel.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\CustInfoModel.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\ExistedProblemAccountModel.cs" />
-    <Compile Include="CustomerClassification\ProblemAccount\InsertPAResultModel.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\ProblemAccountCategoryModel.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\ProblemAccountLosingClassificationModel.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\UnmarkPAResultModel.cs" />
