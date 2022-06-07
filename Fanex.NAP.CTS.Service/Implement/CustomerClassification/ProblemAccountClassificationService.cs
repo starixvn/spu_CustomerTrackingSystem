@@ -256,8 +256,6 @@
 
         private IEnumerable<CustInfoModel> InsertProblemAccount(string problemAccountJson, InsertPA_ByType inputType, bool isFromQueue)
         {
-            LogService.Info($"AddSystemFormulaBetAccount InsertProblemAccount PA json: { problemAccountJson}"); // for testing
-
             var criteria = new ProblemAccountMarkCriteria
             {
                 ProblemAccountJson = problemAccountJson,
