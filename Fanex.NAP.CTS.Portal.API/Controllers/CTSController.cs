@@ -358,7 +358,7 @@
                                         IsMonitorCategoryGroup = cust.IsMonitorCategoryGroup,
                                         IsMonitorSite = cust.IsMonitorSite,
                                         Winloss = pCust == null ? 0 : pCust.Winloss
-                                    }).Where(x => x.CustID > 0).ToList();
+                                    }).ToList();
 
                     var monitorList = fullData.Where(c => (c.Winloss < 0 && c.IsMonitorSite) || (c.Winloss >= 0 && c.IsMonitorSite && c.IsMonitorCategoryGroup));
 
