@@ -143,6 +143,7 @@
                         RobotCounter = c.Counter,
                         CategoryID = (int)CATEGORY.ROBOT,
                         IsFromTW = true,
+                        IsDirect = true,
                         CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"])
                     });
                 }

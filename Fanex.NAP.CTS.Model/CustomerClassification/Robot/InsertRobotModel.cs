@@ -28,6 +28,8 @@
 
         public bool IsFromCTS { get; set; }
 
+        public bool IsFromAI { get; set; }
+
         public bool IsDirect { get; set; }
 
         public string Remark { get; set; }

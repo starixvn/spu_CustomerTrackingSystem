@@ -191,6 +191,7 @@
                         ActiveDays = c.ActiveDays,
                         IsFromTW = false,
                         IsFromCTS = c.IsFromCTS,
+                        IsFromAI = c.IsFromAI,
                         IsDirect = c.IsDirect,
                         Remark = c.Remark,
                         CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"])
