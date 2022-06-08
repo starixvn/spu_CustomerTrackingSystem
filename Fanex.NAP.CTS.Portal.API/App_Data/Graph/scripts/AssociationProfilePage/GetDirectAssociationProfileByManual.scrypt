@@ -21,8 +21,8 @@ WITH
     , c1.CustSubID          AS CustSubId
     , s.SubscriberID        AS SubscriberID
     , s.SubscriberName      AS SubscriberName
-    , c1.Username           AS UserName
-    , c1.Username2          AS UserName2  
+    , c1.UserName           AS UserName
+    , c1.UserName2          AS UserName2  
     , st.PriorityOrder      AS StatusGroup    
     , st.ItemID             AS StatusID
     , st.ItemNameDisplay    AS StatusName
