@@ -1500,54 +1500,52 @@
                     spanReason += $"<span> { cc.SourceTypeName } </span>";
                     break;
                 case (int)ClassificationSourceType.RobotUser61:
+                    spanReason += $"Robot Detection ";
+
+                    if (cc.RobotCounter > 0)
+                        spanReason += $"| Counter: {cc.RobotCounter}";
+
+                    if (!string.IsNullOrEmpty(cc.Remark))
+                        spanReason += $"| {cc.Remark}";
+                    break;
                 case (int)ClassificationSourceType.RobotUser163:
                 case (int)ClassificationSourceType.RobotUser164:
-                     if (cc.BetCount > 0)
-                    {
-                        spanReason += $"Turnover: {turnOver} | Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount} | Active Day: {activeDays}";
-                    }
-                    else
-                    {
-                        spanReason += $"Robot Detection ";
+                    spanReason += $"Turnover: {turnOver} | Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount} | Active Day: {activeDays}";
+                    break;
+                default:
+                    break;
+            }
 
-                        if (cc.RobotCounter > 0)
-                            spanReason += $"| Counter: {cc.RobotCounter}";
+            if (string.IsNullOrEmpty(spanReason))
+            {
+                switch (cc.SourceTypeID)
+                {
+                    case (int)SourceTypeID.Classification_PAMarkDirectly:
+                    case (int)SourceTypeID.Classification_PAAffectedByUplines:
+                        spanReason += $"<span> { cc.SourceTypeName } </span>";
+                        if (roleID == 1)
+                        {
+                            spanReason += $"Win lost: {winlost} ";
+                        }
 
                         if (!string.IsNullOrEmpty(cc.Remark))
+                        {
                             spanReason += $"| {cc.Remark}";
-                    }
-                    break;
-                default:
-                    break;
+                        }
+                        break;
+                    case (int)SourceTypeID.Classification_PAUnmarkDirectly:
+                    case (int)SourceTypeID.Classification_UnmarkingPAAffectedDirectly:
+                        spanReason += $"<span> { cc.SourceTypeName } </span>";
+                        if (!string.IsNullOrEmpty(cc.Remark))
+                        {
+                            spanReason += $"| {cc.Remark}";
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
-
-            switch (cc.SourceTypeID)
-            {
-                case (int)SourceTypeID.Classification_PAMarkDirectly:
-                case (int)SourceTypeID.Classification_PAAffectedByUplines:
-                    spanReason += $"<span> { cc.SourceTypeName } </span>";
-                    if (roleID == 1)
-                    {
-                        spanReason += $"Win lost: {winlost} ";
-                    }                    
-
-                    if (!string.IsNullOrEmpty(cc.Remark))
-                    {
-                        spanReason += $"| {cc.Remark}";
-                    }
-                    break;
-                case (int)SourceTypeID.Classification_PAUnmarkDirectly:
-                case (int)SourceTypeID.Classification_UnmarkingPAAffectedDirectly:
-                    spanReason += $"<span> { cc.SourceTypeName } </span>";
-                    if (!string.IsNullOrEmpty(cc.Remark))
-                    {
-                        spanReason += $"| {cc.Remark}";
-                    }
-                    break;
-                default:
-                    break;
-            }
-
+            
             if (!string.IsNullOrEmpty(spanReason))
             {
                 divReason += $"<div>{spanReason}</div>";
