@@ -386,6 +386,8 @@
 
                     _problemAccountMonitorService.InsertSystemFormulaCust(monitorListMoreDataJson);
 
+                    result = string.Join(",", monitorListMoreData.Select(x => x.UserName));
+
                     if (markPAList.Any())
                     {
                         var pas = markPAList.Select(x => new InsertProblemAccountModel
@@ -402,23 +404,18 @@
 
                         if (insertResult.ErrorCode == 0)
                         {
-                            _problemAccountMonitorService.RemoveSystemFormulaBetCustomer(string.Join(",", markPAList.Select(c => c.CustID)));
+                            _problemAccountMonitorService.RemoveSystemFormulaBetCustomer(string.Join(",", pas.Select(c => c.CustID)));
+
+                            if (result != string.Empty)
+                                result += ",";
+
+                            result += string.Join(",", markPAList.Select(x => x.Username));
                         }
 
                         if (isWriteLogInfo)
                         {
                             LogService.Info(string.Join(",", markPAList.Select(c => c.CustID)));
                         }
-                    }
-
-                    result = string.Join(",", monitorListMoreData.Select(x => x.UserName));
-
-                    if (markPAList.Any())
-                    {
-                        if (result != string.Empty)                        
-                            result += ",";
-
-                        result += string.Join(",", markPAList.Select(x => x.Username));
                     }
                 }
                 catch (Exception ex)

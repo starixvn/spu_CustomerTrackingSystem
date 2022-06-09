@@ -8,6 +8,8 @@
 
         public int CustomerClass { get; set; }
 
+        public string CustomerClassName { get; set; }
+
         public int DangerLevel { get; set; }
         
         public int DangerLevelType { get; set; }

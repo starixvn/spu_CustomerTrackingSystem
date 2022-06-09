@@ -16,5 +16,7 @@
         bool PushDataToExternal(IEnumerable<long> custIdsToSyncCC, PushDataToExternalModel paras);
 
         IEnumerable<LatestClassificationModel> GetLatestClassification(string custIds);
+
+        IEnumerable<LatestCCDangerLevelModel> GetLatestCCAndDangerLevel(IEnumerable<long> custIds);
     }
 }
