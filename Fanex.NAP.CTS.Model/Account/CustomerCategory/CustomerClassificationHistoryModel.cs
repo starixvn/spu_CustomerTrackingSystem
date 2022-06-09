@@ -47,5 +47,14 @@
         public int LastModifiedBy { get; set; }
 
         public string Remark { get; set; }
+
+        public int TVSRequestID { get; set; }
+
+        public bool IsFromTVS { get; set; }
+
+        public bool IsFromTW { get; set; }
+
+        public bool IsFromCTS { get; set; }
+
     }
 }
