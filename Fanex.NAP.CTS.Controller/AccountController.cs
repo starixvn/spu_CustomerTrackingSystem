@@ -208,14 +208,18 @@
         [HttpPost]
         public ActionResult GetLastestCustomerClassification(long custId)
         {
-            var result = _accountService.GetCustomerClassFromCTSByCustId(custId.ToString());
             var customerClassification = string.Empty;
+              
+            var result = _customerClassificationService.GetLatestCCAndDangerLevel(new List<long>() { custId });
 
             if (result != null && result.Any())
             {
-                var cc = result.First();
-                customerClassification = cc.CustomerClassName + " (" + cc.CustomerClass.ToString() + ")";
+                var cc = result.Where(x => x.CustomerClass != -1).FirstOrDefault();
 
+                if (cc != null)
+                {
+                    customerClassification = cc.CustomerClassName + " (" + cc.CustomerClass.ToString() + ")";
+                }
             }
 
             return Json(new { customerClassification = customerClassification }, JsonRequestBehavior.AllowGet);
