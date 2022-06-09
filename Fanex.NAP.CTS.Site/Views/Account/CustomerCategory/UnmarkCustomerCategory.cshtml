@@ -23,7 +23,7 @@ else
 {
 <div>
     <div class="form-control">
-        <div class="label">Are you sure you want to unmark Problem - @Model.RoleName <span style="color: #FF0000">@Model.UserName</span></div>
+        <div><label>Are you sure you want to unmark Problem - @Model.RoleName </label><span style="color: #FF0000">@Model.UserName</span></div>
     </div>
 
     @if (Model.RoleID != 1 && !Model.IsLicensee)
@@ -38,7 +38,7 @@ else
     }
 
     <div class="form-control">
-        <div class="label">Comment</div>
+        <div class="label"><label>Comment</label></div>
         <textarea id="txtCCPAUnmarkComment" rows="4" class="comment-field full-width" maxlength="200"></textarea>
     </div>
 </div>

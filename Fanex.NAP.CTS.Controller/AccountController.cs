@@ -1446,17 +1446,45 @@
         private string GetReason(CustomerClassificationHistoryModel cc, int roleID)
         {
             var divReason = $"<div>";
-            var spanReason = string.Empty;            
+            var spanReason = string.Empty;
 
+            var winlost = Math.Round(cc.Winloss, 3);
+
+            if (cc.IsFromTW)
+            {
+                if (cc.TVSRequestID > 0)
+                    spanReason += $"Void by RequestID: { cc.TVSRequestID }";
+                else
+                    spanReason += $"Void by BetID";
+
+                if (roleID == 1)
+                    spanReason += $"| Win lost: {winlost} ";
+            }
+
+            if (spanReason == string.Empty)
+                spanReason = MappingReasonByCategoryID(spanReason, cc);
+
+            if (spanReason == string.Empty)
+                spanReason = MappingReasonBySourceTypeID(spanReason, cc, roleID);
+
+            if (spanReason == string.Empty)
+                divReason += $"<div>{cc.SourceTypeName}</div>";
+            else
+                divReason += $"<div>{spanReason}</div>";
+
+            return divReason;
+        }
+
+        private string MappingReasonByCategoryID(string spanReason, CustomerClassificationHistoryModel cc)
+        {
             var margin = Math.Round(cc.Margin, 3);
             var winlost = Math.Round(cc.Winloss, 3);
             var turnOver = Math.Round(cc.TurnOver, 3);
             var betCount = cc.BetCount;
             var activeDays = cc.ActiveDays;
-            //var twBetCount = cc.TWBetCount;
             var twGroupBettingRate = cc.TWGroupBettingRate;
             var twTicketRejectRate = cc.TWTicketRejectRate;
-            var twDesktopTicket = cc.TWDesktopUsageRate;            
+            var twDesktopTicket = cc.TWDesktopUsageRate;
 
             switch (cc.CategoryID)
             {
@@ -1487,7 +1515,7 @@
                 case (int)ClassificationSourceType.GoodMember112:
                 case (int)ClassificationSourceType.GoodMember113:
                     spanReason += $"Turnover: {turnOver} | Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount} | Active Day: {activeDays}";
-                    break;               
+                    break;
                 case (int)ClassificationSourceType.Probation57:
                 case (int)ClassificationSourceType.SmartPunter67:
                 case (int)ClassificationSourceType.HighRiskPunter77:
@@ -1520,46 +1548,41 @@
                     break;
             }
 
-            if (string.IsNullOrEmpty(spanReason))
-            {
-                switch (cc.SourceTypeID)
-                {
-                    case (int)SourceTypeID.Classification_PAMarkDirectly:
-                    case (int)SourceTypeID.Classification_PAAffectedByUplines:
-                        spanReason += $"<span> { cc.SourceTypeName } </span>";
-                        if (roleID == 1)
-                        {
-                            spanReason += $"Win lost: {winlost} ";
-                        }
+            return spanReason;
+        }
 
-                        if (!string.IsNullOrEmpty(cc.Remark))
-                        {
-                            spanReason += $"| {cc.Remark}";
-                        }
-                        break;
-                    case (int)SourceTypeID.Classification_PAUnmarkDirectly:
-                    case (int)SourceTypeID.Classification_UnmarkingPAAffectedDirectly:
-                        spanReason += $"<span> { cc.SourceTypeName } </span>";
-                        if (!string.IsNullOrEmpty(cc.Remark))
-                        {
-                            spanReason += $"| {cc.Remark}";
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-            
-            if (!string.IsNullOrEmpty(spanReason))
+        private string MappingReasonBySourceTypeID(string spanReason, CustomerClassificationHistoryModel cc, int roleID)
+        {
+            var winlost = Math.Round(cc.Winloss, 3);
+
+            switch (cc.SourceTypeID)
             {
-                divReason += $"<div>{spanReason}</div>";
-            }
-            else
-            {
-                divReason += $"<div>{cc.SourceTypeName}</div>";
+                case (int)SourceTypeID.Classification_PAMarkDirectly:
+                case (int)SourceTypeID.Classification_PAAffectedByUplines:
+                    spanReason += $"<span> { cc.SourceTypeName } </span>";
+                    if (roleID == 1)
+                    {
+                        spanReason += $"| Win lost: {winlost} ";
+                    }
+
+                    if (!string.IsNullOrEmpty(cc.Remark))
+                    {
+                        spanReason += $"| {cc.Remark}";
+                    }
+                    break;
+                case (int)SourceTypeID.Classification_PAUnmarkDirectly:
+                case (int)SourceTypeID.Classification_UnmarkingPAAffectedDirectly:
+                    spanReason += $"<span> { cc.SourceTypeName } </span>";
+                    if (!string.IsNullOrEmpty(cc.Remark))
+                    {
+                        spanReason += $"| {cc.Remark}";
+                    }
+                    break;
+                default:
+                    break;
             }
 
-            return divReason;
+            return spanReason;
         }
 
         //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
@@ -1758,11 +1781,24 @@
           
            var custInfos = _problemAccountClassificationService.InsertRobotAccount(robotAccounts);
 
-            if (custInfos.Any())           
-                dbResult = new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
-            else
-                dbResult = new DBResult { ErrorCode = -1, ErrorMsg = "Mark PA Robot failed" };
+            if (custInfos.Any())
+            {
+                var custIds = custInfos.Select(x => x.CustID).Distinct();
 
+                _customerClassificationService.PushDataToExternalPackge(custIds, new PushDataToExternalModel
+                {
+                    ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
+                    IsPushCCToSoon88 = true,
+                    IsUpdateDangerToMainDB = true
+                }, FromFlow.CTSWEB);
+
+                dbResult = new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
+            }                
+            else
+            {
+                dbResult = new DBResult { ErrorCode = -1, ErrorMsg = "Mark PA Robot failed" };
+            }
+               
             return Json(new
             {
                 errorCode = dbResult.ErrorCode,

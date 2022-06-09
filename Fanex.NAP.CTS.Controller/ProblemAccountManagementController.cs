@@ -2,11 +2,13 @@
 {
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Core;
+    using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.CustomerClassification.ProblemAccount;
     using Fanex.NAP.CTS.Model.ProblemAccountManagement;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
+    using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.Service.Implement;
@@ -27,6 +29,7 @@
         private readonly IProblemAccountManagementService _pamService;
         private readonly IProblemAccountClassificationService _paClassificationService;
         private readonly IRescanCustomerClassificationService _rescanClassificationService;
+        private readonly ICustomerClassificationService _customerClassificationService;
         public override string BaseControllerName { get => Consts.MenuItemController; }
 
         public ProblemAccountManagementController()
@@ -34,6 +37,7 @@
             _pamService = new ProblemAccountManagementService();
             _paClassificationService = new ProblemAccountClassificationService();
             _rescanClassificationService = new RescanCustomerClassificationService();
+            _customerClassificationService = new CustomerClassificationService();
         }
 
         public ActionResult Index()
@@ -192,10 +196,23 @@
 
             var custInfos = _paClassificationService.InsertRobotAccount(robotAccounts);
 
-            if (custInfos.Any())            
-                return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };            
-            else            
-                return new DBResult { ErrorCode = -1, ErrorMsg = "Mark PA Robot failed" };            
+            if (custInfos.Any())
+            {
+                var custIds = custInfos.Select(x=>x.CustID).Distinct();
+
+                _customerClassificationService.PushDataToExternalPackge(custIds, new PushDataToExternalModel
+                {
+                    ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,                 
+                    IsPushCCToSoon88 = true,
+                    IsUpdateDangerToMainDB = true
+                }, FromFlow.CTSWEB);
+
+                return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
+            }
+            else
+            {
+                return new DBResult { ErrorCode = -1, ErrorMsg = "Mark PA Robot failed" };
+            }                           
         }
 
         [HttpPost]
