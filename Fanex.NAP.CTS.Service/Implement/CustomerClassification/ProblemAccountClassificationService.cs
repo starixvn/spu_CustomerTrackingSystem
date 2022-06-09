@@ -26,12 +26,14 @@
     {
         private readonly IDynamicRepository _repository;
         private readonly ICustomerClassificationService _ccService;
+        private readonly IDataLogTrackingServices dataLogTrackingServices;
  
 
         public ProblemAccountClassificationService()
         {
             _repository = new DynamicRepository();
             _ccService = new CustomerClassificationService();
+            dataLogTrackingServices = new DataLogTrackingServices();
         }
 
         public DBResult InsertProblemAccountPackage(IEnumerable<InsertProblemAccountModel> problemAccounts, InsertPA_ByType mappingCategoryByType, string serviceName, FromFlow fromFlow)
@@ -66,6 +68,8 @@
                                   .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
 
                 LogService.Error(logMessage);
+
+                dataLogTrackingServices.LogErrorData(ex, serviceName);
 
                 return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
             }

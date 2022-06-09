@@ -52,6 +52,7 @@
     <Compile Include="Implement\AssociationReportService.cs" />
     <Compile Include="Implement\CategoryService.cs" />
     <Compile Include="Implement\CustomerClassification\ProblemAccountClassificationService.cs" />
+    <Compile Include="Implement\CustomerClassification\DataLogTrackingServices.cs" />
     <Compile Include="Implement\CustomerClassification\RescanCustomerClassificationService.cs" />
     <Compile Include="Implement\CustomerEvidenceService.cs" />
     <Compile Include="Implement\MonitorCtsFunctionService.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="Implement\TransactionService.cs" />
     <Compile Include="Implement\CTSUserService.cs" />
     <Compile Include="Interface\Api\IProblemCaseMonitorService.cs" />
+    <Compile Include="Interface\CustomerClassification\IDataLogTrackingServices.cs" />
     <Compile Include="Interface\CustomerClassification\IProblemAccountClassificationService.cs" />
     <Compile Include="Interface\IAccountService.cs" />
     <Compile Include="Interface\IAssociatedAccountService.cs" />
@@ -100,8 +102,8 @@
     <Compile Include="Interface\IProblemAccountManagementService.cs" />
     <Compile Include="Interface\IProblemAccountMonitorService.cs" />
     <Compile Include="Interface\IProblemCaseMonitorService.cs" />
-    <Compile Include="Interface\ICustomerClassificationService.cs" />
-    <Compile Include="Interface\IRescanCustomerClassificationService.cs" />
+    <Compile Include="Interface\CustomerClassification\ICustomerClassificationService.cs" />
+    <Compile Include="Interface\CustomerClassification\IRescanCustomerClassificationService.cs" />
     <Compile Include="Interface\IRobotBettingService.cs" />
     <Compile Include="Interface\IRobotClassificationService.cs" />
     <Compile Include="Interface\ISpecialCustomerClassService.cs" />
