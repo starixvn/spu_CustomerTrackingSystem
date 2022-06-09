@@ -1758,11 +1758,24 @@
           
            var custInfos = _problemAccountClassificationService.InsertRobotAccount(robotAccounts);
 
-            if (custInfos.Any())           
-                dbResult = new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
-            else
-                dbResult = new DBResult { ErrorCode = -1, ErrorMsg = "Mark PA Robot failed" };
+            if (custInfos.Any())
+            {
+                var custIds = custInfos.Select(x => x.CustID).Distinct();
 
+                _customerClassificationService.PushDataToExternalPackge(custIds, new PushDataToExternalModel
+                {
+                    ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
+                    IsPushCCToSoon88 = true,
+                    IsUpdateDangerToMainDB = true
+                }, FromFlow.CTSWEB);
+
+                dbResult = new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
+            }                
+            else
+            {
+                dbResult = new DBResult { ErrorCode = -1, ErrorMsg = "Mark PA Robot failed" };
+            }
+               
             return Json(new
             {
                 errorCode = dbResult.ErrorCode,
