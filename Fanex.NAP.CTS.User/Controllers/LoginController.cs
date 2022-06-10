@@ -272,15 +272,15 @@
         {
             try
             {
-                if (UMHelper.IsUnderMaintainaceHappen(_maintenanceService))
-                {
-                    Logger.Log.Info("UM");
+                //if (UMHelper.IsUnderMaintainaceHappen(_maintenanceService))
+                //{
+                //    Logger.Log.Info("UM");
 
-                    return Json(new
-                    {
-                        IsKickedOut = "3"
-                    });
-                }
+                //    return Json(new
+                //    {
+                //        IsKickedOut = "3"
+                //    });
+                //}
 
                 if (_currentSession == null || _currentSession.OnUserId == 0)
                 {
@@ -294,7 +294,7 @@
 
                 return Json(new
                 {
-                    OnUserId = Convert.ToInt32(_currentSession.OnUserId),
+                    //OnUserId = Convert.ToInt32(_currentSession.OnUserId),
                     IsKickedOut = isKickedOut
                 });
             }
