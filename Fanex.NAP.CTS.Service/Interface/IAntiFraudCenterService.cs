@@ -6,7 +6,7 @@
 
     public interface IAntiFraudCenterService
     {
-        Task InsertAFCAccounts(IEnumerable<long> custIds, FromFlow fromFlow);
+        Task InsertAFCAccounts(IEnumerable<long> custIds, FromFlow fromFlow, bool isSyncAFC);
 
         Task DeleteAFCAccounts(IEnumerable<long> custIds, FromFlow fromFlow);
     }

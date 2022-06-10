@@ -144,7 +144,8 @@
                 {
                     ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
                     IsPushCCToSoon88 = parameters.IsPushCCToSoon88,
-                    IsUpdateDangerToMainDB = parameters.IsUpdateDangerToMainDB
+                    IsUpdateDangerToMainDB = parameters.IsUpdateDangerToMainDB,
+                    IsSyncAFC = ConfigSettings.IsSyncAFCData
                 }, FromFlow.CTSWEB);
             }
 
@@ -189,9 +190,11 @@
                         WinlossRM = c.Winloss,
                         BetCount = c.BetCount,
                         ActiveDays = c.ActiveDays,
-                        IsFromTW = false,
+                        IsFromTW = c.IsFromTW,
                         IsFromCTS = c.IsFromCTS,
                         IsFromAI = c.IsFromAI,
+                        IsFromTVS = c.IsFromTVS,
+                        TVSRequestID = c.TVSRequestID,
                         IsDirect = c.IsDirect,
                         Remark = c.Remark,
                         CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"])

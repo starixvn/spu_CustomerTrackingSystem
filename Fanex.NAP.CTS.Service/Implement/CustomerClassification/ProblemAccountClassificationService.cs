@@ -56,7 +56,8 @@
                         {
                             ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
                             IsPushCCToSoon88 = true,
-                            IsUpdateDangerToMainDB = true
+                            IsUpdateDangerToMainDB = true,
+                            IsSyncAFC = ConfigSettings.IsSyncAFCData
                         }, fromFlow);
                     }
                 }

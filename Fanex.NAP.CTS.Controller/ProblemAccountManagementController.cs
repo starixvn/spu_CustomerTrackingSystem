@@ -190,7 +190,6 @@
                 Remark = model.Comment,
                 IsDirect = true,
                 IsFromCTS = true,
-                IsFromTW = false,
                 CreatedBy = CurrentSession.UserId
             });
 
@@ -204,7 +203,8 @@
                 {
                     ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,                 
                     IsPushCCToSoon88 = true,
-                    IsUpdateDangerToMainDB = true
+                    IsUpdateDangerToMainDB = true,
+                    IsSyncAFC = false
                 }, FromFlow.CTSWEB);
 
                 return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };

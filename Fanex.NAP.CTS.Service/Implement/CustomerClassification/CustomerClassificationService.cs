@@ -41,7 +41,7 @@
 
                 isSuccess= PushDataToExternal(custIds, paras);
 
-                _antiFraudCenterService.InsertAFCAccounts(custIds, fromFlow);
+                _antiFraudCenterService.InsertAFCAccounts(custIds, fromFlow, paras.IsSyncAFC);
             }
 
             return isSuccess;

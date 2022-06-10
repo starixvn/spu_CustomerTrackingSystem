@@ -7,6 +7,9 @@
         public InsertRobotModel()
         {
             IsFromTW = false;
+            IsFromCTS = false;
+            IsFromAI = false;
+            IsFromTVS = false;
         }
 
         public Int64 CustID { get; set; }
@@ -29,6 +32,10 @@
         public bool IsFromCTS { get; set; }
 
         public bool IsFromAI { get; set; }
+
+        public bool IsFromTVS { get; set; }
+
+        public int? TVSRequestID { get; set; }
 
         public bool IsDirect { get; set; }
 
