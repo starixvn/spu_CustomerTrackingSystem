@@ -1428,8 +1428,7 @@
                     ActiveDays = x.ActiveDays,
                     LastXDaysMargin = x.LastXDaysMargin,
                     ProbationPeriodWinloss = x.ProbationPeriodWinloss,
-                    CreatedBy = x.CreatedBy,
-                    TaggingType = x.TaggingType                    
+                    CreatedBy = x.CreatedBy                                  
                 }).ToList();
             }
 
@@ -1452,12 +1451,12 @@
 
             var winlost = Math.Round(cc.Winloss, 3);
 
-            if (cc.IsFromTW)
+            if (cc.IsFromTVS)
             {
                 if (cc.TVSRequestID > 0)
-                    spanReason += $"Void by RequestID: { cc.TVSRequestID }";
+                    spanReason += $"Void by RequestID: { cc.TVSRequestID } ";
                 else
-                    spanReason += $"Void by BetID";
+                    spanReason += $"Void by BetID ";
 
                 if (roleID == 1)
                     spanReason += $"| Win lost: {winlost} ";
