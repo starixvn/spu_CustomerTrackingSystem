@@ -32,8 +32,6 @@
 
         public string CreatedBy { get; set; }
 
-        public string TaggingType { get; set; }
-
         public long TWBetCount { get; set; }
 
         public decimal TWGroupBettingRate { get; set; }
