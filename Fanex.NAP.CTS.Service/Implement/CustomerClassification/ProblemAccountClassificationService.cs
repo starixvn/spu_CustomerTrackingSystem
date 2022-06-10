@@ -36,7 +36,7 @@
             dataLogTrackingServices = new DataLogTrackingServices();
         }
 
-        public DBResult InsertProblemAccountPackage(IEnumerable<InsertProblemAccountModel> problemAccounts, InsertPA_ByType mappingCategoryByType, string serviceName, FromFlow fromFlow)
+        public DBResult InsertProblemAccountPackage(IEnumerable<InsertProblemAccountModel> problemAccounts, InsertPA_ByType mappingCategoryByType, string serviceName, FromFlow fromFlow, bool isToQueue)
         {
             try
             {
@@ -46,7 +46,7 @@
 
                     var probAccountLosing = GetProblemAccountLosingClassification(custIds, FunctionId.InsertPAM);
 
-                    var custInfo = InsertProblemAccount(problemAccounts, probAccountLosing, mappingCategoryByType, false);
+                    var custInfo = InsertProblemAccount(problemAccounts, probAccountLosing, mappingCategoryByType, isToQueue);
 
                     if (custInfo != null && custInfo.Any())
                     {
@@ -81,11 +81,11 @@
         public IEnumerable<CustInfoModel> InsertProblemAccountLogics(IEnumerable<InsertProblemAccountModel> problemAccounts
             , IEnumerable<ProblemAccountLosingClassificationModel> paLosing
             , InsertPA_ByType mappingCategoryByType
-            , bool isFromQueue)
+            , bool isToQueue)
         {
             if (problemAccounts.Any())
             {
-                var custIds = InsertProblemAccount(problemAccounts, paLosing, mappingCategoryByType, isFromQueue);
+                var custIds = InsertProblemAccount(problemAccounts, paLosing, mappingCategoryByType, isToQueue);
 
                 if (custIds != null && custIds.Any())
                 {
@@ -194,13 +194,13 @@
         private IEnumerable<CustInfoModel> InsertProblemAccount(IEnumerable<InsertProblemAccountModel> problemAccounts
             , IEnumerable<ProblemAccountLosingClassificationModel> paLosing
             , InsertPA_ByType insertByType
-            , bool isFromQueue)
+            , bool isToQueue)
         {
             if (problemAccounts != null && problemAccounts.Any())
             {
                 var paClassification = MergeProblemAccountClassification(problemAccounts, paLosing);
 
-                return InsertProblemAccount(JsonConvert.SerializeObject(paClassification), insertByType, isFromQueue);
+                return InsertProblemAccount(JsonConvert.SerializeObject(paClassification), insertByType, isToQueue);
             }
 
             return Enumerable.Empty<CustInfoModel>();
@@ -260,12 +260,12 @@
             return Enumerable.Empty<InsertProblemAccountModel>();
         }
 
-        private IEnumerable<CustInfoModel> InsertProblemAccount(string problemAccountJson, InsertPA_ByType inputType, bool isFromQueue)
+        private IEnumerable<CustInfoModel> InsertProblemAccount(string problemAccountJson, InsertPA_ByType inputType, bool isToQueue)
         {
             var criteria = new ProblemAccountMarkCriteria
             {
                 ProblemAccountJson = problemAccountJson,
-                IsFromQueue = isFromQueue,
+                IsToQueue = isToQueue,
                 InputType = Enum.GetName(typeof(InsertPA_ByType), inputType)
             };
 

@@ -5,15 +5,24 @@
 
     public class RescanCustClassificationModel
     {
+        public RescanCustClassificationModel()
+        {
+            IsUpdateDangerToMainDB = true;
+            IsPushCCToSoon88 = true;
+            IsToQueue = false;
+        }
+
         public IEnumerable<long> CustIds { get; set; }
 
         public bool IsRescanPA { get; set; }
 
+        public bool IsUpdateDangerToMainDB { get; set; }
+
         public bool IsPushCCToSoon88 { get; set; }
 
-        public FunctionId FunctionId { get; set; }
+        public bool IsToQueue { get; set; }
 
-        public bool IsUpdateDangerToMainDB { get; set; }
+        public FunctionId FunctionId { get; set; }
 
         public string ServiceName { get; set; }
 

@@ -1617,9 +1617,7 @@
                     {
                         CustIds = new List<long> { custId },
                         IsRescanPA = false,
-                        IsPushCCToSoon88 = true,
                         FunctionId = FunctionId.ExcludeTaggingAssPAWeb,
-                        IsUpdateDangerToMainDB = true,
                         ServiceName = "ExcludeTaggingAssociationWithPA"
                     });
                 }
@@ -1756,12 +1754,11 @@
                     Remark = model.Remark,    
                     IsDirectPA = true,
                     IsFromCTS = true,
-                    IsFromTW = false,
                     CreatedBy = CurrentSession.UserId
                 }
             };
 
-            var result = _problemAccountClassificationService.InsertProblemAccountPackage(pas, InsertPA_ByType.Category, "ProfileAddProblemAccount", FromFlow.CTSWEB);            
+            var result = _problemAccountClassificationService.InsertProblemAccountPackage(pas, InsertPA_ByType.Category, "ProfileAddProblemAccount", FromFlow.CTSWEB, true);            
 
             return Json(new
             {
@@ -1857,9 +1854,10 @@
                         {
                             CustIds = custInfos.Select(x => x.CustID).Distinct(),
                             IsRescanPA = true,
+                            IsToQueue = false,
                             IsPushCCToSoon88 = true,
-                            FunctionId = FunctionId.UnmarkCustomerCategory,
                             IsUpdateDangerToMainDB = true,
+                            FunctionId = FunctionId.UnmarkCustomerCategory,
                             ServiceName = "RemoveCustomerCategory"
                         });
                     }

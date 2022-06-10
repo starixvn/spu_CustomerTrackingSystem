@@ -128,8 +128,9 @@
                         CustIds = new List<long> { custID },
                         IsRescanPA = true,
                         IsPushCCToSoon88 = true,
-                        FunctionId = FunctionId.RemoveSpecialCCWeb,
                         IsUpdateDangerToMainDB = true,
+                        IsToQueue = false,
+                        FunctionId = FunctionId.RemoveSpecialCCWeb,
                         ServiceName = "RemoveSpecialCustomer"
                     });
                 }

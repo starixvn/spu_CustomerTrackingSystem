@@ -400,7 +400,7 @@
                             CreatedBy = dataParam.UserId
                         });
                         
-                        var insertResult = _paClassificationService.InsertProblemAccountPackage(pas, InsertPA_ByType.Reason, "InsertPA From TW-API", FromFlow.CTSAPI);
+                        var insertResult = _paClassificationService.InsertProblemAccountPackage(pas, InsertPA_ByType.Reason, "InsertPA From TW-API", FromFlow.CTSAPI, true);
 
                         if (insertResult.ErrorCode == 0)
                         {

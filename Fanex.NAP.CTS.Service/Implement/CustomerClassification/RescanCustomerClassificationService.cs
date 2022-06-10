@@ -66,7 +66,7 @@
 
                 var paLosing = problemAccountService.GetProblemAccountLosingClassification(parameters.CustIds, parameters.FunctionId);
 
-                var custTORemovedOldPA = InsertProblemAccountLogics(existedProbAccounts.ProblemAccounts, paLosing, ref rescanResult);
+                var custTORemovedOldPA = InsertProblemAccountLogics(existedProbAccounts.ProblemAccounts, paLosing, ref rescanResult, parameters.IsToQueue);
 
                 if (rescanResult.IsSuccess)
                 {
@@ -205,11 +205,11 @@
             return existedPA;
         }
 
-        private IEnumerable<long> InsertProblemAccountLogics(IEnumerable<InsertProblemAccountModel> problemAccounts, IEnumerable<ProblemAccountLosingClassificationModel> paLosing, ref RescanResultModel rescanResultModel)
+        private IEnumerable<long> InsertProblemAccountLogics(IEnumerable<InsertProblemAccountModel> problemAccounts, IEnumerable<ProblemAccountLosingClassificationModel> paLosing, ref RescanResultModel rescanResultModel, bool isToQueue)
         {
             if (problemAccounts != null && problemAccounts.Any())
             {
-                var result = problemAccountService.InsertProblemAccountLogics(problemAccounts, paLosing, InsertPA_ByType.Category, false);
+                var result = problemAccountService.InsertProblemAccountLogics(problemAccounts, paLosing, InsertPA_ByType.Category, isToQueue);
 
                 if (result != null && result.Any())
                 {
