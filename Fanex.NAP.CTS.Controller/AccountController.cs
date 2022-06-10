@@ -59,6 +59,7 @@
         private readonly IAntiFraudCenterService _antiFraudCenterService;
         private readonly IProblemAccountManagementService _pamService;
 	    private readonly IProblemAccountClassificationService _problemAccountClassificationService;
+	    private readonly IDataLogTrackingServices dataLogTrackingServices;
 
         public override string BaseControllerName { get => string.Empty; }
 
@@ -76,6 +77,7 @@
             _antiFraudCenterService = new AntiFraudCenterService();
             _pamService = new ProblemAccountManagementService();
             _problemAccountClassificationService = new ProblemAccountClassificationService();
+            this.dataLogTrackingServices = new DataLogTrackingServices();
         }
 
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileRpt)]
@@ -1604,28 +1606,38 @@
         [HttpPost]
         public ActionResult ChangeExcludedTagAssPA(int custId, long ctsCustId, int subscriberId, bool isExcludedTagAssPA, bool isProblemAccount, int custSubId)
         {
-            var result = _accountService.ChangeExcludedTagAssPA(ctsCustId, subscriberId, isExcludedTagAssPA, CurrentSession.UserId);
-
-            if (result.ErrorCode == 0
-                && !isProblemAccount
-                && custSubId == 0)
+            try
             {
-                _rescanClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
+                var result = _accountService.ChangeExcludedTagAssPA(ctsCustId, subscriberId, isExcludedTagAssPA, CurrentSession.UserId);
+
+                if (result.ErrorCode == 0
+                    && !isProblemAccount
+                    && custSubId == 0)
                 {
-                    CustIds = new List<long> { custId },
-                    IsRescanPA = false,
-                    IsPushCCToSoon88 = true,
-                    FunctionId = FunctionId.ExcludeTaggingAssPAWeb,
-                    IsUpdateDangerToMainDB = true,
-                    ServiceName = "ExcludeTaggingAssociationWithPA"
-                });
-            }
+                    _rescanClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
+                    {
+                        CustIds = new List<long> { custId },
+                        IsRescanPA = false,
+                        IsPushCCToSoon88 = true,
+                        FunctionId = FunctionId.ExcludeTaggingAssPAWeb,
+                        IsUpdateDangerToMainDB = true,
+                        ServiceName = "ExcludeTaggingAssociationWithPA"
+                    });
+                }
 
-            return Json(new
+                return Json(new
+                {
+                    errorCode = result.ErrorCode,
+                    errorMessage = result.ErrorMsg
+                }, JsonRequestBehavior.AllowGet);
+
+            }
+            catch (Exception ex)
             {
-                errorCode = result.ErrorCode,
-                errorMessage = result.ErrorMsg
-            }, JsonRequestBehavior.AllowGet);
+                LogService.Error($"CTS - ExcludeTaggingAssociationWithPA exception: { ex.Message }", ex);
+
+                return Json(new { errorCode = -1, errorMessage = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
         }
         
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
@@ -1766,20 +1778,20 @@
             var dbResult = new DBResult();
 
             var robotAccounts = new List<InsertRobotModel>()
-            {
-                new InsertRobotModel
                 {
-                    CustID = model.CustID,                    
-                    CategoryID = model.CategoryID,                    
-                    Remark = model.Remark,
-                    IsDirect = true,
-                    IsFromCTS = true,
-                    IsFromTW = false,
-                    CreatedBy = CurrentSession.UserId
-                }
-            };
-          
-           var custInfos = _problemAccountClassificationService.InsertRobotAccount(robotAccounts);
+                    new InsertRobotModel
+                    {
+                        CustID = model.CustID,
+                        CategoryID = model.CategoryID,
+                        Remark = model.Remark,
+                        IsDirect = true,
+                        IsFromCTS = true,
+                        IsFromTW = false,
+                        CreatedBy = CurrentSession.UserId
+                    }
+                };
+
+            var custInfos = _problemAccountClassificationService.InsertRobotAccount(robotAccounts);
 
             if (custInfos.Any())
             {
@@ -1793,12 +1805,12 @@
                 }, FromFlow.CTSWEB);
 
                 dbResult = new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
-            }                
+            }
             else
             {
                 dbResult = new DBResult { ErrorCode = -1, ErrorMsg = "Mark PA Robot failed" };
             }
-               
+
             return Json(new
             {
                 errorCode = dbResult.ErrorCode,
@@ -1825,38 +1837,49 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileCustomerClassificationRemoveCategory)]
         public ActionResult SaveUnmarkVVIP(CustomerCategoryModel model)
         {
-            var result = new DBResult();
-            model.CreatedBy = CurrentSession.UserId;
-            model.ActionType = ActionTypeQueueCustCategory.Remove;
-
-            var custInfos = _accountService.RemoveVVIPCategory(model);
-
-            if (custInfos != null && custInfos.Any())
+            try
             {
-                if (model.RoleId != 1 && model.IsAffectToAllDownlines)
-                {
-                    result = _accountService.AddQueueAffectDownlinesCustomerCategory(model);
-                }
+                var result = new DBResult();
+                model.CreatedBy = CurrentSession.UserId;
+                model.ActionType = ActionTypeQueueCustCategory.Remove;
 
-                if (model.CustId != 0)
+                var custInfos = _accountService.RemoveVVIPCategory(model);
+
+                if (custInfos != null && custInfos.Any())
                 {
-                    _rescanClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
+                    if (model.RoleId != 1 && model.IsAffectToAllDownlines)
                     {
-                        CustIds = custInfos.Select(x=>x.CustID).Distinct(),
-                        IsRescanPA = true,
-                        IsPushCCToSoon88 = true,
-                        FunctionId = FunctionId.UnmarkCustomerCategory,
-                        IsUpdateDangerToMainDB = true,
-                        ServiceName = "RemoveCustomerCategory"
-                    });
-                }
-            }
+                        result = _accountService.AddQueueAffectDownlinesCustomerCategory(model);
+                    }
 
-            return Json(new
+                    if (model.CustId != 0)
+                    {
+                        _rescanClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
+                        {
+                            CustIds = custInfos.Select(x => x.CustID).Distinct(),
+                            IsRescanPA = true,
+                            IsPushCCToSoon88 = true,
+                            FunctionId = FunctionId.UnmarkCustomerCategory,
+                            IsUpdateDangerToMainDB = true,
+                            ServiceName = "RemoveCustomerCategory"
+                        });
+                    }
+                }
+
+                return Json(new
+                {
+                    errorCode = result.ErrorCode,
+                    errorMessage = result.ErrorMsg
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
             {
-                errorCode = result.ErrorCode,
-                errorMessage = result.ErrorMsg
-            }, JsonRequestBehavior.AllowGet);
+                LogService.Error($"CTS - Unmark VVIP exception: { ex.Message }", ex);
+
+                dataLogTrackingServices.LogErrorData(ex, "WEB-UnmarkVVIP");
+
+                return Json(new { errorCode = -1, errorMessage = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         [NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]

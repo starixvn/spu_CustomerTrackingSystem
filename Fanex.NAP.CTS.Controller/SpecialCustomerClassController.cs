@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Controller
 {
+    using Fanex.Logging;
     using Fanex.NAP.Core.Configuration;
     using Fanex.NAP.Core.Service.Impl;
     using Fanex.NAP.Core.Service.Interface;
@@ -24,7 +25,8 @@
     {
         private readonly ISpecialCustomerClassService _customerClassService;
         private readonly IRescanCustomerClassificationService _customerClassifyService;
-        private readonly ICustomerClassificationService _custClassificationService;        
+        private readonly ICustomerClassificationService _custClassificationService; 
+        private readonly IDataLogTrackingServices dataLogTrackingServices;
 
         public override string BaseControllerName { get => Consts.MenuItemController; }
 
@@ -33,6 +35,7 @@
             _customerClassService = new SpecialCustomerClassService();
             _custClassificationService = new CustomerClassificationService();
             _customerClassifyService = new RescanCustomerClassificationService();
+            this.dataLogTrackingServices = new DataLogTrackingServices();
         }
 
         public ActionResult Index()
@@ -114,23 +117,33 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.SpecialCustomerClassRemove)]
         public ActionResult RemoveCustomerClass(int custID, long ctsCustID)
         {
-            var resultRemoveToCTS = _customerClassService.RemoveCustomerClass(ctsCustID, CurrentSession.UserId);
-
-            if (resultRemoveToCTS.ErrorCode == 0)
+            try
             {
-                _customerClassifyService.RescanCustomerClassification(new RescanCustClassificationModel
+                var resultRemoveToCTS = _customerClassService.RemoveCustomerClass(ctsCustID, CurrentSession.UserId);
+
+                if (resultRemoveToCTS.ErrorCode == 0)
                 {
-                    CustIds = new List<long> { custID },
-                    IsRescanPA = true,
-                    IsPushCCToSoon88 = true,
-                    FunctionId = FunctionId.RemoveSpecialCCWeb,
-                    IsUpdateDangerToMainDB = true,
-                    ServiceName = "RemoveSpecialCustomer"
-                });
+                    _customerClassifyService.RescanCustomerClassification(new RescanCustClassificationModel
+                    {
+                        CustIds = new List<long> { custID },
+                        IsRescanPA = true,
+                        IsPushCCToSoon88 = true,
+                        FunctionId = FunctionId.RemoveSpecialCCWeb,
+                        IsUpdateDangerToMainDB = true,
+                        ServiceName = "RemoveSpecialCustomer"
+                    });
+                }
+
+                return Json(resultRemoveToCTS, JsonRequestBehavior.AllowGet);
             }
+            catch (Exception ex)
+            {
+                LogService.Error($"CTS - RemoveSpecialCustomer exception: { ex.Message }", ex);
 
-            return Json(resultRemoveToCTS, JsonRequestBehavior.AllowGet);
+                dataLogTrackingServices.LogErrorData(ex, "WEB-RemoveSpecialCustomer");
+
+                return Json(new { errorCode = -1, errorMessage = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
         }
-
     }
 }
