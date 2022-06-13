@@ -107,6 +107,12 @@
                         ClassifyCustomerGeneralCategoryDaily(custToString, parameters.FunctionId, false);
                     }
                 }
+                
+                if (smaCustIds.Any())
+                {
+                    var custToRemovePA = smaCustIds.Except(custIdsToRescanPA);
+                    PushDataToExternalPackge(custToRemovePA?.Distinct(), parameters);
+                }
             }
 
             return true;

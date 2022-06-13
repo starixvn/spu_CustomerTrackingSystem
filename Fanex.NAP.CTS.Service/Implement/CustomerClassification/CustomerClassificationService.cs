@@ -85,7 +85,7 @@
         {
             if (lastestClassifications != null && lastestClassifications.Any())
             {
-                var groupDangerType = lastestClassifications.GroupBy(c => c.DangerLevelType);
+                var groupDangerType = lastestClassifications.Where(c=>c.DangerLevel != null).GroupBy(c => c.DangerLevelType);
 
                 if (groupDangerType != null && groupDangerType.Any())
                 {
@@ -94,10 +94,10 @@
                         var updateDangerLevel = dangerBatch.Select(c => new DangerLevelModel()
                         {
                             CustId = c.CustID,
-                            DangerLevel = c.DangerLevel
+                            DangerLevel = c.DangerLevel.Value
                         });
 
-                        var isUpdateSuccessful = RetryUpdateDangerLevelToMainDB(updateDangerLevel, dangerBatch.Key, Consts.Retry);
+                        var isUpdateSuccessful = RetryUpdateDangerLevelToMainDB(updateDangerLevel, dangerBatch.Key.Value, Consts.Retry);
 
                         if (!isUpdateSuccessful)
                         {
