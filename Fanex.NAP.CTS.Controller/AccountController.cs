@@ -1857,8 +1857,8 @@
                         _rescanClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
                         {
                             CustIds = custInfos.Select(x => x.CustID).Distinct(),
-                            IsRescanPA = true,
-                            IsToQueue = false,
+                            IsRescanPA = true ,
+                            IsToQueue = (model.RoleId != 1 && !model.IsAffectToAllDownlines),  // add to queue for case SMA and not checking affect to downline to affect PA for downline
                             IsPushCCToSoon88 = true,
                             IsUpdateDangerToMainDB = true,
                             FunctionId = FunctionId.UnmarkCustomerCategory,
