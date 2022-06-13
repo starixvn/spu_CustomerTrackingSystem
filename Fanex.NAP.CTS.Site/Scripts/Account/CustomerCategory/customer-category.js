@@ -597,8 +597,8 @@
         //});
 
         if (isChecked && cacheData.isPinCategory) {
-            html = "<div style='text-align:center'>You are not allow to turn on this setting because Pin Category setting is on.</div>";
-            html += "<div>Please Turn Off Pin Category Setting before this action</div>";
+            html = "<div style='text-align:center'>You are not allow to turn on this setting because of Pin Category.</div>";
+            html += "<div>Please contact your system administrator for further assistance.</div>";
 
             common.showError(html, 2000);
             ResetCategorySetting();
