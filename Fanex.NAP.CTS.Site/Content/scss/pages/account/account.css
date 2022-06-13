@@ -1558,6 +1558,8 @@
       width: 200px !important; }
     .dataTable thead th.col-nextscan-datetime {
       width: 330px !important; }
+    .dataTable thead th.col-datetime2 {
+      width: 20% !important; }
   .dataTable .dtrg-group td {
     background: #A1AFCD;
     color: #070F1F;

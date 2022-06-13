@@ -1265,6 +1265,10 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
         &.col-nextscan-datetime {
             width: 330px !important;
         }
+
+        &.col-datetime2 {
+            width: 20% !important;
+        }
     }
 
     .dtrg-group td {
@@ -1292,7 +1296,6 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
             cursor: not-allowed;
         }
     }
-
 }
 
 .table tbody .group-start td {

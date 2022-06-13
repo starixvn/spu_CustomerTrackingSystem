@@ -32,10 +32,10 @@
             scrollCollapse: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0], width: "30%", className: "text-left" },
-                { targets: [1], width: "10%", className: "text-center" },
+                { targets: [0], width: "30%", className: "text-left " },
+                { targets: [1], width: "10%", className: "text-center col-datetime2" },
                 { targets: [2], width: "40%", className: "text-left" },
-                { targets: [3], width: "20%", className: "text-center" },
+                { targets: [3], width: "20%", className: "text-center " },
                 //{ targets: [4], width: "20%", className: "text-center remove-action" }
             ],
             columns: [
