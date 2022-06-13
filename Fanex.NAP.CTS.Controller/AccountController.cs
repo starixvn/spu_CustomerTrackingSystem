@@ -292,12 +292,16 @@
             {
                 try
                 {
-                    var customerClass = _accountService.GetCustomerInfoClass(custId.ToString());
+                    var customerClass = _customerClassificationService.GetLatestCCAndDangerLevel(new List<long>() { custId });
 
-                    if (customerClass != null)
-                        custProfileEvidence.Class = customerClass.CustomerClass != -1 
-                            ? customerClass.CustomerClassName + " (" + customerClass.CustomerClass.ToString() + ")"
-                            : "";
+                    if (customerClass != null && customerClass.Any())
+                    {
+                        var cc = customerClass.Where(x => x.CustomerClass != -1).FirstOrDefault();
+
+                        custProfileEvidence.Class = cc != null
+                            ? cc.CustomerClassName + " (" + cc.CustomerClass.ToString() + ")"
+                            : string.Empty;
+                    }                      
                 }
                 catch (Exception ex)
                 {
