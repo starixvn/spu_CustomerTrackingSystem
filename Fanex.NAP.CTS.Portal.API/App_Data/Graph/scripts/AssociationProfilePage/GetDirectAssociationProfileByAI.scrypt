@@ -1,4 +1,4 @@
-﻿USE ctsgraphdb
+﻿USE ctsgraphdb2022
 MATCH (c:CTSCustomer)
 WHERE c.CTSCustID = $ip_CTSCustID
 OPTIONAL MATCH (c:CTSCustomer)-[r:ASS_BY_AI]-(c0:CTSCustomer)

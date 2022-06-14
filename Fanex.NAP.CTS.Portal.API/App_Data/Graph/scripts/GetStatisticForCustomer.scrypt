@@ -1,14 +1,19 @@
-﻿USE ctsgraphdb
+﻿USE ctsgraphdb2022
 MATCH (c:CTSCustomer)
 WHERE c.CTSCustID = $CTSCustID
-WITH c
+CALL {
+    WITH c
+    OPTIONAL MATCH (c)-[:ASS_BY_AI]-(c1:CTSCustomer)
+    RETURN c1 AS subAI
+    UNION
+    WITH c
+    OPTIONAL MATCH (c)-[:GROUP_BY_AI*2]-(c2:CTSCustomer)
+    RETURN c2 AS subAI
+}
+WITH c, COUNT(DISTINCT subAI.CTSCustID) AS AI
 OPTIONAL MATCH (c)-[:USED_DEVICE*2]-(c1:CTSCustomer)
-WITH c, COUNT(DISTINCT c1) AS Device
+WITH c, AI, COUNT(DISTINCT c1) AS Device
 OPTIONAL MATCH (c)-[:ADD_MANUALLY]-(c1:CTSCustomer)
-WITH c, Device, COUNT(DISTINCT c1) AS Manual
+WITH c, AI, Device, COUNT(DISTINCT c1) AS Manual
 OPTIONAL MATCH (c)-[:ASS_BY_IP]-(c1:CTSCustomer)
-WITH c, Device, Manual, COUNT(DISTINCT c1) AS IP
-OPTIONAL MATCH (c)-[:ASS_BY_AI]-(c1:CTSCustomer)
-WITH c, Device, Manual, IP, COUNT(DISTINCT c1) AS ai_Old
-OPTIONAL MATCH (c)-[:GROUP_BY_AI*2]-(c2:CTSCustomer)
-RETURN Device, Manual, IP, ai_Old + COUNT(DISTINCT c2) AS AI
+RETURN AI, Device, Manual, COUNT(DISTINCT c1) AS IP

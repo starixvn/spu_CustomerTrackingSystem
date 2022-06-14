@@ -1,4 +1,4 @@
-﻿USE ctsgraphdb
+﻿USE ctsgraphdb2022
 //USE ctslocal
 CALL apoc.cypher.run('
 MATCH (c:CTSCustomer)-[r:USED_DEVICE]->(d:Device)<-[r1:USED_DEVICE]-(c1:CTSCustomer)

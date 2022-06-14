@@ -1,4 +1,4 @@
-﻿USE ctsgraphdb
+﻿USE ctsgraphdb2022
 MATCH (n:ScanCTSCustomer)
 WITH "jdbc:mysql://10.40.40.185:3307/CTS_DataCenter?user=harvey.vn&password=harvey@1234" as url, n.CurrentCTSCustID as currentCTSCustID
 CALL apoc.load.jdbcParams(url,"select CTSCustID from CTS_DataCenter.CTSCustomer where CTSCustID > ?

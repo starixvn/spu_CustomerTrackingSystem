@@ -1,4 +1,4 @@
-﻿USE ctsgraphdb
+﻿USE ctsgraphdb2022
 //USE ctslocal
 CALL apoc.cypher.run('
     MATCH p=((c:CTSCustomer)-[:USED_DEVICE*2]-(c1:CTSCustomer))
@@ -13,7 +13,7 @@ CALL apoc.cypher.run('
                 OR ($ip_AssociationStatus = 2 AND exists((c)-[:HAS_EXCEPTION]-(c1))))
     WITH c, c1, r, st.PriorityOrder as StatusGroup, st.ItemID as ItemID, st.ItemNameDisplay as StatusName, s.SubscriberID as SubscriberID, s.SubscriberName as SubscriberName
     UNWIND r as val
-    UNWIND (CASE WHEN val[0].CreatedDate > val[1].CreatedDate THEN val[0].CreatedDate ELSE val[1].CreatedDate END) AS association
+    UNWIND (CASE WHEN CASE val[0].CreatedDate WHEN null THEN val[0].CreatedTime ELSE val[0].CreatedDate END > CASE val[1].CreatedDate WHEN null THEN val[1].CreatedTime ELSE val[1].CreatedDate END THEN CASE val[0].CreatedDate WHEN null THEN val[0].CreatedTime ELSE val[0].CreatedDate END ELSE CASE val[1].CreatedDate WHEN null THEN val[1].CreatedTime ELSE val[1].CreatedDate END END) AS association
     WITH c, c1, SubscriberID, SubscriberName, StatusGroup, ItemID, StatusName, Min(association) as firstAss
     OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c1)
     RETURN 
@@ -22,8 +22,8 @@ CALL apoc.cypher.run('
         , c1.CustSubID          AS CustSubId
         , SubscriberID          AS SubscriberID
         , SubscriberName        AS SubscriberName
-        , c1.Username           AS UserName
-        , c1.Username2          AS UserName2  
+        , c1.UserName           AS UserName
+        , c1.UserName2          AS UserName2  
         , StatusGroup           AS StatusGroup    
         , ItemID                AS StatusID
         , StatusName            AS StatusName
@@ -53,8 +53,8 @@ CALL apoc.cypher.run('
         , c1.CustSubID          AS CustSubId
         , s.SubscriberID        AS SubscriberID
         , s.SubscriberName      AS SubscriberName
-        , c1.Username           AS UserName
-        , c1.Username2          AS UserName2  
+        , c1.UserName           AS UserName
+        , c1.UserName2          AS UserName2  
         , st.PriorityOrder      AS StatusGroup    
         , st.ItemID             AS StatusID
         , st.ItemNameDisplay    AS StatusName
@@ -84,8 +84,8 @@ CALL apoc.cypher.run('
         , c1.CustSubID          AS CustSubId
         , s.SubscriberID        AS SubscriberID
         , s.SubscriberName      AS SubscriberName
-        , c1.Username           AS UserName
-        , c1.Username2          AS UserName2  
+        , c1.UserName           AS UserName
+        , c1.UserName2          AS UserName2  
         , st.PriorityOrder      AS StatusGroup    
         , st.ItemID             AS StatusID
         , st.ItemNameDisplay    AS StatusName
@@ -127,8 +127,8 @@ CALL apoc.cypher.run('
         , c1.CustSubID          AS CustSubId
         , s.SubscriberID        AS SubscriberID
         , s.SubscriberName      AS SubscriberName
-        , c1.Username           AS UserName
-        , c1.Username2          AS UserName2  
+        , c1.UserName           AS UserName
+        , c1.UserName2          AS UserName2  
         , st.PriorityOrder      AS StatusGroup    
         , st.ItemID             AS StatusID
         , st.ItemNameDisplay    AS StatusName

@@ -1,4 +1,4 @@
-﻿USE ctsgraphdb
+﻿USE ctsgraphdb2022
 //USE ctslocal
 MATCH (c:CTSCustomer)-[:USED_DEVICE*2]-(c1:FlaggedCustomer)
 WHERE c.CustID IN $CustID AND c.CustSubID = 0 AND c <> c1
