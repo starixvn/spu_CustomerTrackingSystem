@@ -7,9 +7,10 @@
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Helpers.Xml;
-    using Fanex.NAP.CTS.Criteria.CustomerClassify;
+    using Fanex.NAP.CTS.Core.Utilities;
+    using Fanex.NAP.CTS.Criteria.CustomerClassification;
     using Fanex.NAP.CTS.Criteria.SyncCustomerToMainDb;
-    using Fanex.NAP.CTS.Model.CustomerClassify;
+    using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service.Implement;
@@ -22,10 +23,28 @@
     public class CustomerClassificationService : ICustomerClassificationService
     {
         private readonly IDynamicRepository repository;
+        private readonly IAntiFraudCenterService _antiFraudCenterService;
 
         public CustomerClassificationService()
         {
             repository = new DynamicRepository();
+            _antiFraudCenterService = new AntiFraudCenterService();
+        }
+
+        public bool PushDataToExternalPackge(IEnumerable<long> custIds, PushDataToExternalModel paras, FromFlow fromFlow)
+        {
+            bool isSuccess = true;
+
+            if (custIds != null && custIds.Any())
+            {
+                custIds = custIds.Distinct();
+
+                isSuccess= PushDataToExternal(custIds, paras);
+
+                _antiFraudCenterService.InsertAFCAccounts(custIds, fromFlow, paras.IsSyncAFC);
+            }
+
+            return isSuccess;
         }
 
         public bool PushDataToExternal(IEnumerable<long> custIdsToSyncCC, PushDataToExternalModel paras)
@@ -39,22 +58,22 @@
 
             var custIdsChunk = custIdsToSyncCC.Distinct().Chunk(paras.ExternalBatchSize);
 
-            foreach (var custIds in custIdsChunk)
+            foreach (var batchCustIds in custIdsChunk)
             {
-                var lastestClassifications = GetLatestClassification(string.Join(",", custIds));
+                var latestcustClassification = GetLatestCCAndDangerLevel(batchCustIds);
 
-                if (lastestClassifications != null && lastestClassifications.Any())
+                if (latestcustClassification != null && latestcustClassification.Any())
                 {
-                    isSuccess = PushCCToMainDB(lastestClassifications, Consts.Retry);
+                    isSuccess = PushCCToMainDB(latestcustClassification, Consts.Retry);
 
                     if (paras.IsPushCCToSoon88)
                     {
-                        PushCustomerClassificationToSoon88(lastestClassifications);
+                        PushCustomerClassificationToSoon88(latestcustClassification);
                     }
 
                     if (paras.IsUpdateDangerToMainDB && isSuccess)
                     {
-                        isSuccess = UpdateDangerLevelToMainDB(lastestClassifications, paras.DangerLevelType);
+                        isSuccess = UpdateDangerLevelToMainDB(latestcustClassification);
                     }
                 }
             }
@@ -62,44 +81,49 @@
             return isSuccess;
         }
 
-        public bool UpdateDangerLevelToMainDB(IEnumerable<LatestClassificationModel> lastestClassifications, DangerLevel dangerLevelType)
+        public bool UpdateDangerLevelToMainDB(IEnumerable<LatestCCDangerLevelModel> lastestClassifications)
         {
-            if (lastestClassifications == null || !lastestClassifications.Any())
+            if (lastestClassifications != null && lastestClassifications.Any())
             {
-                return true;
-            }
+                var groupDangerType = lastestClassifications.Where(c=>c.DangerLevel != null).GroupBy(c => c.DangerLevelType);
 
-            var dangerLevels = GetDangerLevel(string.Join(",", lastestClassifications.Select(c => c.CustId)), dangerLevelType);
-
-            if (dangerLevels != null && dangerLevels.Any())
-            {
-                var isUpdateSuccessful = RetryUpdateDangerLevelToMainDB(dangerLevels, dangerLevelType, Consts.Retry);
-
-                if (isUpdateSuccessful)
+                if (groupDangerType != null && groupDangerType.Any())
                 {
-                    var jsonUpdateApplyCCs = JsonConvert.SerializeObject(dangerLevels);
+                    foreach (var dangerBatch in groupDangerType)
+                    {
+                        var updateDangerLevel = dangerBatch.Select(c => new DangerLevelModel()
+                        {
+                            CustId = c.CustID,
+                            DangerLevel = c.DangerLevel.Value
+                        });
 
-                    UpdateAppliedDangerLevel(jsonUpdateApplyCCs, dangerLevelType);
+                        var isUpdateSuccessful = RetryUpdateDangerLevelToMainDB(updateDangerLevel, dangerBatch.Key.Value, Consts.Retry);
+
+                        if (!isUpdateSuccessful)
+                        {
+                            return isUpdateSuccessful;
+                        }
+                    }
                 }
-
-                return isUpdateSuccessful;
             }
 
             return true;
         }
 
-        public bool PushCCToMainDB(IEnumerable<LatestClassificationModel> lastestClassifications, int retryTime)
+        public bool PushCCToMainDB(IEnumerable<LatestCCDangerLevelModel> lastestClassifications, int retryTime)
         {
             bool isSuccess = true;
 
             if (lastestClassifications != null && lastestClassifications.Any())
             {
-                isSuccess = RetryPushCCToMainDB(lastestClassifications, retryTime);
-
-                if (isSuccess)
+                var custClassification = lastestClassifications.Select(c => new LatestClassificationModel()
                 {
-                    UpdateAppliedCustomerClassification(JsonConvert.SerializeObject(lastestClassifications));
-                }
+                    CustId = c.CustID,
+                    Category = c.CategoryID,
+                    CustomerClass = c.CustomerClass
+                });
+
+                isSuccess = RetryPushCCToMainDB(custClassification, retryTime);
             }
 
             return isSuccess;
@@ -131,7 +155,7 @@
                     else
                     {
                         retryTime = -1;
-                    }                    
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -151,7 +175,7 @@
             return true;
         }
 
-        public void PushCustomerClassificationToSoon88(IEnumerable<LatestClassificationModel> customerClassifications)
+        public void PushCustomerClassificationToSoon88(IEnumerable<LatestCCDangerLevelModel> customerClassifications)
         {
             var feedDataToSoon88Service = new FeedDataToSoon88Service();
 
@@ -164,7 +188,7 @@
             {
                 var custClassList = customerClassifications.Select(c => new CustomerClassForMainDb()
                 {
-                    CustID = c.CustId,
+                    CustID = c.CustID,
                     CustomerClass = c.CustomerClass
                 });
 
@@ -182,7 +206,7 @@
             }
         }
 
-        public bool RetryUpdateDangerLevelToMainDB(IEnumerable<DangerLevelModel> dangerLevels, DangerLevel typeId, int retryTime)
+        public bool RetryUpdateDangerLevelToMainDB(IEnumerable<DangerLevelModel> dangerLevels, int dangerType, int retryTime)
         {
             if (dangerLevels == null || !dangerLevels.Any())
             {
@@ -193,7 +217,7 @@
             {
                 try
                 {
-                    var result = UpdateDangerLevelToMainDB(dangerLevels, typeId);
+                    var result = UpdateDangerLevelToMainDB(dangerLevels, dangerType);
 
                     if (result.ErrorCode != 0 && retryTime == 0)
                     {
@@ -257,29 +281,29 @@
             return new List<LatestClassificationModel>();
         }
 
-        public void UpdateAppliedCustomerClassification(string jsonData)
+        public IEnumerable<LatestCCDangerLevelModel> GetLatestCCAndDangerLevel(IEnumerable<long> custIds)
         {
-            var criteria = new UpdateAppliedCustomerClassificationCriteria
+            if (custIds != null && custIds.Any())
             {
-                ProblemCustomerJson = jsonData
-            };
+                var criteria = new GetLastestCCDangerLevelCriteria
+                {
+                    CustIds = string.Join(",", custIds)
+                };
 
-            repository.Execute(criteria);
-
-            if (!string.IsNullOrEmpty(criteria.ErrorMessage))
-            {
-                LogService.Error($"Web - UpdateAppliedCustomerClassification failed {criteria.ErrorMessage} with data: {jsonData}");
+                return repository.Fetch<LatestCCDangerLevelModel>(criteria) ?? Enumerable.Empty<LatestCCDangerLevelModel>();
             }
+
+            return new List<LatestCCDangerLevelModel>();
         }
 
-        public DBResult UpdateDangerLevelToMainDB(IEnumerable<DangerLevelModel> dangerLevel, DangerLevel typeId)
+        public DBResult UpdateDangerLevelToMainDB(IEnumerable<DangerLevelModel> dangerLevel, int dangerType)
         {
             if (dangerLevel != null && dangerLevel.Any())
             {
                 var criteria = new DangerLevelUpdateCriteria
                 {
                     CustList = dangerLevel.ToXmlString(),
-                    DangerType = (int)typeId
+                    DangerType = dangerType
                 };
 
                 repository.Execute(criteria);
@@ -288,36 +312,6 @@
             }
 
             return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
-        }
-
-        public IEnumerable<DangerLevelModel> GetDangerLevel(string custIds, DangerLevel typeId)
-        {
-            if (!string.IsNullOrEmpty(custIds))
-            {
-                var criteria = new DangerLevelGetCriteria
-                {
-                    CustIds = custIds,
-                    TypeID = (int)typeId
-                };
-
-                return repository.Fetch<DangerLevelModel>(criteria);
-            }
-
-            return new List<DangerLevelModel>();
-        }
-
-        public void UpdateAppliedDangerLevel(string custsJson, DangerLevel typeId)
-        {
-            if (!string.IsNullOrEmpty(custsJson))
-            {
-                var criteria = new AppliedDangerLevelUpdateCriteria
-                {
-                    CustJson = custsJson,
-                    TypeID = (int)typeId
-                };
-
-                repository.Execute(criteria);
-            }
         }
 
         #endregion DataAccess Layer

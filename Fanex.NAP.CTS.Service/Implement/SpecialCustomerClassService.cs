@@ -7,7 +7,7 @@
     using Fanex.NAP.CTS.Core.BaseClasses;
     using Fanex.NAP.CTS.Core.Helpers.Xml;
     using Fanex.NAP.CTS.Criteria.SpecialCustomerClass;
-    using Fanex.NAP.CTS.Model.CustomerClassify;
+    using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.SpecialCustomerClass;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using System;

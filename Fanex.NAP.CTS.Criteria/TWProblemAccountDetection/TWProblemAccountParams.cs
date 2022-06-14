@@ -1,11 +1,5 @@
 ﻿namespace Fanex.NAP.CTS.Criteria.TWProblemAccountDetection
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-
     public class TWProblemAccountParams
     {
         public string CustomerList { get; set; }
@@ -25,5 +19,6 @@
         public int UserId { get; set; }
 
         public string IP { get; set; }
+
     }
 }

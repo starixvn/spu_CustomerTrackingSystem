@@ -42,7 +42,6 @@
 	<Function Name="Evidence">
 		<Setting Key="CTS_DC_Evidences_GetAll" SpName="CTS_DC_Evidences_GetAll" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustEvidence_GetFlaggedEvidences" SpName="CTS_DC_CustEvidence_GetFlaggedEvidences" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustEvidence_InsertSingle" SpName="CTS_DC_CustEvidence_InsertSingle" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustEvidence_RemoveFlagged" SpName="CTS_DC_CustEvidence_RemoveFlagged" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustEvidence_GetAffectedEvidences" SpName="CTS_DC_CustEvidence_GetAffectedEvidences" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustEvidence_RemoveAffected" SpName="CTS_DC_CustEvidence_RemoveAffected" DbName="MySQL.CTS_DataCenter.Admin" />
@@ -54,10 +53,9 @@
 		<Setting Key="CTS_DC_CustEvidence_Get" SpName="CTS_DC_CustEvidence_Get" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustEvidence_GetFlaggedStatus" SpName="CTS_DC_CustEvidence_GetFlaggedStatus" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustEvidenceFromFile_Insert" SpName="CTS_DC_CustEvidenceFromFile_Insert" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_CustEvidence_SyncToCategory" SpName="CTS_DC_CustEvidence_SyncToCategory" DbName="MySQL.CTS_DataCenter.Admin" />
+		
 		<Setting Key="CTS_DC_CustEvidenceQueue_Insert" SpName="CTS_DC_CustEvidenceQueue_Insert" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustEvidence_CheckCleanCust" SpName="CTS_DC_CustEvidence_CheckCleanCust" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_Arc_CustomerAssociation_RollBack_CheckByNewPA" SpName="CTS_Arc_CustomerAssociation_RollBack_CheckByNewPA" DbName="MySQL.CTS_Archive.Admin" />
 	</Function>
 
 	<Function Name="Association">
@@ -85,21 +83,19 @@
 	
 	<Function Name="CustomerClassification">
 		<Setting Key="CTS_DC_CustClassification_GetCategory" SpName="CTS_DC_CustClassification_GetCategory" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustClassification_InsertVVIP" SpName="CTS_DC_CustClassification_InsertVVIP" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_CustClassification_VVIP_Insert" SpName="CTS_DC_CustClassification_VVIP_Insert" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustClassification_Update" SpName="CTS_DC_CustClassification_Update" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_CustClassification_RemoveVVIP" SpName="CTS_DC_CustClassification_RemoveVVIP" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_CustClassification_VVIP_Remove" SpName="CTS_DC_CustClassification_VVIP_Remove" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustClassification_Get" SpName="CTS_DC_CustClassification_Get" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustClassification_ViewHistory" SpName="CTS_DC_CustClassification_ViewHistory" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" Timeout="600" />
-		<Setting Key="CTS_DC_CustClassification_InsertProblemAccount" SpName="CTS_DC_CustClassification_InsertProblemAccount" DbName="MySQL.CTS_DataCenter.Admin" Timeout="600" />
+		
 		<Setting Key="CTS_DC_CustClassification_GetLatestClassification" SpName="CTS_DC_CustClassification_GetLatestClassification" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustClassification_UpdateIsAppliedCC" SpName="CTS_DC_CustClassification_UpdateIsAppliedCC" DbName="MySQL.CTS_DataCenter.Admin" Timeout="600" />
 		<Setting Key="CTS_DC_CustClassification_GetForSoon88" SpName="CTS_DC_CustClassification_GetForSoon88" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustEvidence_GetByCustIDs" SpName="CTS_DC_CustEvidence_GetByCustIDs" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustEvidence_SyncToCategory" SpName="CTS_DC_CustEvidence_SyncToCategory" DbName="MySQL.CTS_DataCenter.Admin" />
+		
 		<Setting Key="CTS_DC_CustClassification_LogInputData" SpName="CTS_DC_CustClassification_LogInputData" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_CustClassification_GetDangerLevel" SpName="CTS_DC_CustClassification_GetDangerLevel" DbName="MySQL.CTS_DataCenter.Reporter" TimeOut="300" />
-		<Setting Key="CTS_DC_CustClassification_UpdateDangerLevel" SpName="CTS_DC_CustClassification_UpdateDangerLevel" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_CustClassification_VVIPQueue_Insert" SpName="CTS_DC_CustClassification_VVIPQueue_Insert" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_CustClassification_Queue_Insert" SpName="CTS_DC_CustClassification_Queue_Insert" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_CustClassification_ProblemAccount_InsertByCategory" SpName="CTS_DC_CustClassification_ProblemAccount_InsertByCategory" DbName="MySQL.CTS_DataCenter.Admin" />
 	</Function>
 
 	<Function name="AssociatedAccountMonitor">
@@ -179,8 +175,21 @@
 	<Function name="ProblemAccountManagement">
 		<Setting Key="CTS_DC_ProblemAccountManagement_Get" SpName="CTS_DC_ProblemAccountManagement_Get" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" TimeOut="600" />
 		<Setting Key="CTS_DC_ProblemAccountManagement_GetCategories" SpName="CTS_DC_ProblemAccountManagement_GetCategories" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_ProblemAccountManagement_ValidateMultipleInput" SpName="CTS_DC_ProblemAccountManagement_ValidateMultipleInput" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_ProblemAccountManagement_ValidateUserName" SpName="CTS_DC_ProblemAccountManagement_ValidateUserName" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustEvidence_GetByReasonId" SpName="CTS_DC_CustEvidence_GetByReasonId" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_CustClassification_PA_Insert" SpName="CTS_DC_CustClassification_PA_Insert" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_CustClassification_PA_Remove" SpName="CTS_DC_CustClassification_PA_Remove" DbName="MySQL.CTS_DataCenter.Admin" />
+	</Function>
+	<Function name="RescanCustomerClassification">
+		<Setting Key="CTS_Arc_CustomerAssociation_RollBack_CheckByNewPA" SpName="CTS_Arc_CustomerAssociation_RollBack_CheckByNewPA" DbName="MySQL.CTS_Archive.Admin" />
+		<Setting Key="CTS_DC_CustClassification_PA_ReScan" SpName="CTS_DC_CustClassification_PA_ReScan" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_CustClassification_PA_InsertRobot" SpName="CTS_DC_CustClassification_PA_InsertRobot" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_CustClassification_PA_ClearOld" SpName="CTS_DC_CustClassification_PA_ClearOld" DbName="MySQL.CTS_DataCenter.Admin" />
+
+		<Setting Key="CTS_DC_CustClassification_GetCCAndDangerLevel" SpName="CTS_DC_CustClassification_GetCCAndDangerLevel" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
 
+	<Function name="LogData">
+		<Setting Key="CTS_Archive_Log_Insert" SpName="CTS_Archive_Log_Insert" DbName="MySQL.CTS_Archive.ctsServiceAdmin" />
+	</Function>
 </Functions>

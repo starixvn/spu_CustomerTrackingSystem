@@ -3,8 +3,6 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.Logging;
-    using Fanex.Logging.Extensions;
-    using Fanex.Logging.Extensions.Database;
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Core.BaseClasses;
     using Fanex.NAP.CTS.Core.Extentions;
@@ -17,21 +15,19 @@
     using Fanex.NAP.CTS.Criteria.Account.ChainToEvidence;
     using Fanex.NAP.CTS.Criteria.Account.CustomerCategory;
     using Fanex.NAP.CTS.Criteria.Account.CustomerInfo;
-    using Fanex.NAP.CTS.Criteria.CustomerClassify;
+    using Fanex.NAP.CTS.Criteria.CustomerClassification;
     using Fanex.NAP.CTS.Criteria.Home;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.Account.CustomerCategory;
     using Fanex.NAP.CTS.Model.Account.CustomerInfo;
     using Fanex.NAP.CTS.Model.Association;
-    using Fanex.NAP.CTS.Model.CustomerClassify;
+    using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
-    using Fanex.NAP.CTS.Model.Home;
-    using Fanex.NAP.CTS.Model.ImportEvidences;
+    using Fanex.NAP.CTS.Model.Home;    
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
-    using Fanex.NAP.CTS.Resource.Consts;
-    using Fanex.NAP.CTS.Service.Implement;
+    using Fanex.NAP.CTS.Resource.Consts;    
     using Fanex.NAP.CTS.ViewModel.Account.Associated;
     using Newtonsoft.Json;
     using System;
@@ -43,12 +39,10 @@
 
     public class AccountService : IAccountService
     {
-        private readonly ICustomerEvidenceService customerEvidenceService;
         private readonly IDynamicRepository repository;
 
         public AccountService()
         {
-            customerEvidenceService = new CustomerEvidenceService();
             repository = new DynamicRepository();
         }
 
@@ -759,78 +753,6 @@
             }
         }
 
-        public DBResult PlaceEvidence(UpdatePlaceEvidenceModel model)
-        {
-            var criteria = new PlaceEvidenceCriteria
-            {
-                CTSCustId = model.CTSCustId,
-                EvidenceId = model.EvidenceId,
-                Remark = model.Comment,
-                UserId = model.UserId
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                try
-                {
-                    db.ExecuteNonQuery(criteria);
-
-                    if (!string.IsNullOrEmpty(criteria.ErrorMessage))
-                    {
-                        return new DBResult { ErrorCode = -1, ErrorMsg = criteria.ErrorMessage };
-                    }
-                    else
-                    {
-                        return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
-                    }
-                }
-                catch (Exception ex)
-                {
-                    LogService.Error("CTS - Place Evidence Manual throws exception: " + ex.Message, ex);
-
-                    return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
-                }
-            }
-        }
-
-        public DBResult ProcessPlaceEvidence(UpdatePlaceEvidenceModel model)
-        {
-            var result = PlaceEvidence(model);
-
-            if (result.ErrorCode == 0)
-            {
-                customerEvidenceService.UpdateBetLimitOfFlaggedCustomer(model.CustId.ToString());
-
-                Task.Run(() =>
-                {
-
-                    try
-                    {
-                        FPSAddNewEvidence(ConfigSettings.AddNewEvidence, model);
-                    }
-                    catch (Exception ex)
-                    {
-                        LogService.Error(ex.Message);
-                    }
-                });
-            }
-
-            return result;
-        }
-
-        public void FPSAddNewEvidence(string apiURL, UpdatePlaceEvidenceModel model)
-        {
-            var data = ApiHelper.Post<AddNewEvidenceForFPSModel>(apiURL, new AddNewEvidenceForFPSModel
-            {
-                CustIds = model.CustId.ToString(),
-                EviCodes = model.EvidenceCode,
-                CreatedBy = model.UserId.ToString(),
-                Comment = model.Comment
-            });
-
-            Task.WhenAll(data);
-        }
-
         public DBResult RemoveFlaggedEvidence(RemoveEvidenceModel model)
         {
             var criteria = new RemoveFlaggedEvidenceCriteria
@@ -861,42 +783,6 @@
 
                     return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
                 }
-            }
-        }
-
-        public SynctEvidenceCategoryResultModel SyncCustEvidenceToCategory(string custEvidencesJson, bool isRescan, out IEnumerable<long> custIds)
-        {
-            custIds = Enumerable.Empty<long>();
-
-            try
-            {
-                var criteria = new CustEvidenceSyncToCategoryCriteria
-                {
-                    CustEvidencesJson = custEvidencesJson,
-                    IsRescan = isRescan
-                };
-
-                var custInfos = repository.Fetch<CheckPACustomerAssociationForRollbackModel>(criteria);
-
-                if (!string.IsNullOrEmpty(criteria.ErrorMessage))
-                {
-                    LogService.Error("CTS - AccountService SyncCustEvidenceToCategory failed: " + criteria.ErrorMessage);
-                }
-
-                custIds = custInfos?.Select(x => x.CustID) ?? Enumerable.Empty<long>();
-
-                return new SynctEvidenceCategoryResultModel
-                {
-                    ErrorCode = string.IsNullOrEmpty(criteria.ErrorMessage) ? 0 : -1,
-                    ErrorMsg = criteria.ErrorMessage,
-                    CustInfo = custInfos
-                };
-            }
-            catch (Exception ex)
-            {
-                LogService.Error("CTS - AccountService SyncCustEvidenceToCategory exception: " + ex.Message, ex);
-
-                return new SynctEvidenceCategoryResultModel { ErrorCode = -1, ErrorMsg = ex.Message, CustInfo = Enumerable.Empty<CheckPACustomerAssociationForRollbackModel>() };
             }
         }
 
@@ -1024,39 +910,7 @@
             }
         }
 
-        public int CheckNewPAAssociationCustomerForRollback(IEnumerable<CheckPACustomerAssociationForRollbackModel> assCustForRollbacks)
-        {
-            var result = 0;
-
-            try
-            {
-                if (assCustForRollbacks != null && assCustForRollbacks.Any())
-                {
-                    var custInfoJson = JsonConvert.SerializeObject(assCustForRollbacks);
-
-                    var criteria = new CheckNewPAAssociationCustomerForRollbackCriteria
-                    {
-                        CustInfoJson = custInfoJson
-                    };
-
-                    result = repository.Execute(criteria);
-                }                
-            }
-            catch (Exception ex)
-            {
-                var logMessage = new LogMessage(ex.Message)
-                   .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                   .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error(logMessage);
-
-                result = - 1;
-            }
-
-            return result;
-        }
-
-        #endregion
+         #endregion
 
         #region Customer Category
         public IEnumerable<SportGroup> GetAllSportGroup()
@@ -1111,6 +965,25 @@
                     }
 
                     return categories;
+                }
+            }
+        }
+
+        public IEnumerable<CustomerClassificationModel> GetCustomerClassification(long ctsCustId)
+        {
+            var criteria = new GetCTSCustomerClassificationCriteria
+            {
+                CTSCustID = ctsCustId
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                using (var result = db.QueryMultiple(criteria))
+                {
+                    result.Read<bool>(); // Pin Categories
+                    result.Read<bool>(); // Excluded Tag Ass PA
+
+                    return result.Read<CustomerClassificationModel>();                                       
                 }
             }
         }
@@ -1177,7 +1050,7 @@
             }
         }
 
-        public DBResult AddCustomerCategory(CustomerCategoryModel categoryModel, out IEnumerable<LatestClassificationModel> latestClassifications)
+        public IEnumerable<LatestClassificationModel> MarkVVIPCategory(CustomerCategoryModel categoryModel)
         {
             var custList = new List<AddCustomerCategoryInfoModel>()
             {
@@ -1192,7 +1065,7 @@
                 }
             };
 
-            var criteria = new AddCustomerCategoryCriteria
+            var criteria = new MarkVVIPCategoryCriteria
             {              
                 FromAction = (int)FromAction.WebSite,
                 AffectDownline = categoryModel.IsAffectToAllDownlines,
@@ -1201,16 +1074,7 @@
 
             var repository = new DynamicRepository();
 
-            latestClassifications = repository.Fetch<LatestClassificationModel>(criteria);
-
-            if (!string.IsNullOrEmpty(criteria.ErrorMessage))
-            {
-                LogService.Error("CTS - AddCustomerCategory failed: " + criteria.ErrorMessage);
-
-                return new DBResult { ErrorCode = -1, ErrorMsg = criteria.ErrorMessage };
-            }
-
-            return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
+            return repository.Fetch<LatestClassificationModel>(criteria) ?? Enumerable.Empty<LatestClassificationModel>();            
         }
 
         public DBResult AddQueueAffectDownlinesCustomerCategory(CustomerCategoryModel categoryModel)
@@ -1243,10 +1107,8 @@
             return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
         }
 
-        public ResultInsertRemoveCustomerClassificationModel RemoveCustomerCategory(CustomerCategoryModel categoryModel)
+        public IEnumerable<CustomerClassForMainDb> RemoveVVIPCategory(CustomerCategoryModel categoryModel)
         {
-            var insertCTSResult = new ResultInsertRemoveCustomerClassificationModel();
-
             var custList = new List<RemoveCustomerCategoryInfoModel>() 
             {
                 new RemoveCustomerCategoryInfoModel
@@ -1266,10 +1128,7 @@
             };
 
             var repository = new DynamicRepository();
-            insertCTSResult.CustomerClassList = repository.Fetch<CustomerClassForMainDb>(criteria);
-            insertCTSResult.OpErrorMessage = criteria.ErrorMessage;
-
-            return insertCTSResult;
+            return repository.Fetch<CustomerClassForMainDb>(criteria) ?? Enumerable.Empty<CustomerClassForMainDb>();
         }
 
         public DBResult PinCategoryCustomerClassification(long ctsCustId, int subscriberId, bool isPinCategory, int createdBy)

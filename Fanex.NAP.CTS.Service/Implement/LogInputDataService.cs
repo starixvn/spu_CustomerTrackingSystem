@@ -4,7 +4,7 @@
     using Fanex.Logging;
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Criteria.LogInputData;
-    using Fanex.NAP.CTS.Model.CustomerClassify;
+    using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.LogInputData;
     using Newtonsoft.Json;
     using System;
@@ -47,65 +47,14 @@
         {
             var logInputData = new List<LogInputDataModel>();
 
-            logInputData.AddRange(PrepareEvidenceInputData(content));
-            logInputData.AddRange(PreparePAInputData(content));
-
-            return logInputData;
-        }
-
-        private IEnumerable<LogInputDataModel> PrepareEvidenceInputData(LogInputViewModel content)
-        {
-            var logInputData = new List<LogInputDataModel>();
-
-            if (content.PlaceEvidences != null && !string.IsNullOrEmpty(content.PlaceEvidences.CustIds))
+            if (content != null && content.RobotUser != null && content.RobotUser.Any())
             {
-                var custIds = content.PlaceEvidences.CustIds.Split(',').Select(long.Parse);
-
-                custIds?.ToList().ForEach(c =>
+                content.RobotUser.ToList().ForEach(c =>
                 {
                     logInputData.Add(new LogInputDataModel
                     {
-                        CustId = c,
-                        InputValue = content.PlaceEvidences.EvidenceId
-                    });
-                });
-            }
-
-            if (content.PlaceMultiEvidences != null &&
-                !string.IsNullOrEmpty(content.PlaceMultiEvidences.CustIdList) &&
-                !string.IsNullOrEmpty(content.PlaceMultiEvidences.EvidenceCodeList))
-            {
-                var custIds = content.PlaceMultiEvidences.CustIdList.Split(',').Select(long.Parse);
-                var evidences = content.PlaceMultiEvidences.EvidenceCodeList.Split(',');
-
-                custIds?.ToList().ForEach(c =>
-                {
-                    evidences?.ToList().ForEach(e =>
-                    {
-                        logInputData.Add(new LogInputDataModel
-                        {
-                            CustId = c,
-                            InputValue = e
-                        });
-                    });
-                });
-            }
-
-            return logInputData;
-        }
-
-        private IEnumerable<LogInputDataModel> PreparePAInputData(LogInputViewModel content)
-        {
-            var logInputData = new List<LogInputDataModel>();
-
-            if (content.ProblemAccounts != null && content.ProblemAccounts.Any())
-            {
-                content.ProblemAccounts.ToList().ForEach(e =>
-                {
-                    logInputData.Add(new LogInputDataModel
-                    {
-                        CustId = e.CustID,
-                        InputValue = new { e.ReasonID, CreatedBy = e.Creator }.ToString()
+                        CustId = c.CustID,
+                        InputValue = new { c.RobotCounter, c.CategoryID, c.CreatedBy }.ToString()
                     });
                 });
             }

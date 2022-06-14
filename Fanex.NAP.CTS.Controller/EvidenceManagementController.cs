@@ -45,29 +45,31 @@
 
         public ActionResult Index()
         {
-            IUserService userService = new UserService();
+            //IUserService userService = new UserService();
 
-            var isHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
-                            NapSettings.Settings.SiteId,
-                            FSFunctionKeys.EvidenceManagement,
-                            NAP.Core.Business.Constant.Policy.Host);
+            //var isHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
+            //                NapSettings.Settings.SiteId,
+            //                FSFunctionKeys.EvidenceManagement,
+            //                NAP.Core.Business.Constant.Policy.Host);
 
-            var isOverwritePermission = userService.IsHavingPermission(CurrentSession.UserId,
-                          NapSettings.Settings.SiteId,
-                          FSFunctionKeys.OverwriteEvidences,
-                          NAP.Core.Business.Constant.Policy.Read);
+            //var isOverwritePermission = userService.IsHavingPermission(CurrentSession.UserId,
+            //              NapSettings.Settings.SiteId,
+            //              FSFunctionKeys.OverwriteEvidences,
+            //              NAP.Core.Business.Constant.Policy.Read);
 
-            if(!isHostPermission)
-            {
-                return Redirect("Errors/403");
-            }
+            //if(!isHostPermission)
+            //{
+            //    return Redirect("Errors/403");
+            //}
 
 
-            return View(new EvidencePermissionViewModel
-            {
-                IsHostPermission = isHostPermission,
-                IsOverwritePermission = isOverwritePermission
-            });
+            //return View(new EvidencePermissionViewModel
+            //{
+            //    IsHostPermission = isHostPermission,
+            //    IsOverwritePermission = isOverwritePermission
+            //});
+
+            return Redirect("Home/Index");
         }
 
         public ActionResult DownloadTemplateExcel()

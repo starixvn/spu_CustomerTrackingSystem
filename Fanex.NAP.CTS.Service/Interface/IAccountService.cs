@@ -6,11 +6,12 @@
     using Fanex.NAP.CTS.Model.Account.CustomerInfo;
     using Fanex.NAP.CTS.Model.API;
     using Fanex.NAP.CTS.Model.Association;
-    using Fanex.NAP.CTS.Model.CustomerClassify;
+    using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.Home;
     using Fanex.NAP.CTS.Model.ImportEvidences;
+    using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.ViewModel.Account.Associated;
     using System;
     using System.Collections.Generic;
@@ -70,13 +71,7 @@
 
         AffectedRetractEvidenceModel GetAffectedRetractEvidences(long ctsCustId, string evidenceCodes);
 
-        DBResult PlaceEvidence(UpdatePlaceEvidenceModel model);
-
-        void FPSAddNewEvidence(string apiURL, UpdatePlaceEvidenceModel model);
-
         DBResult RemoveFlaggedEvidence(RemoveEvidenceModel model);
-
-        SynctEvidenceCategoryResultModel SyncCustEvidenceToCategory(string custEvidencesJson, bool isRescan, out IEnumerable<long> custIds);
 
         List<AccountExceptionsModel> GetAccountExceptions(long ctsCustId);
 
@@ -89,8 +84,6 @@
         int RestoreAffectedEvidence(RemoveEvidenceModel model);
 
         IEnumerable<AffectedEvidenceListBetweenCustsModel> GetAffectedEvidenceListBetweenCusts(Int64 fromCTSCustID, Int64 toCTSCustID);
-
-        int CheckNewPAAssociationCustomerForRollback(IEnumerable<CheckPACustomerAssociationForRollbackModel> assCustForRollbacks);
 
         IEnumerable<SportGroup> GetAllSportGroup();
 
@@ -106,13 +99,15 @@
 
         IEnumerable<CustomerClassificationModel> GetCustomerClassification(long ctsCustId, out bool isPinCategory, out bool isExcludedTagAssPA);
 
+        IEnumerable<CustomerClassificationModel> GetCustomerClassification(long ctsCustId);
+
         IEnumerable<CustomerClassificationHistoryModel> GetCustomerClassificationHistory(long ctsCustId);
 
-        DBResult AddCustomerCategory(CustomerCategoryModel categoryModel, out IEnumerable<LatestClassificationModel> latestClassifications);
+        IEnumerable<LatestClassificationModel> MarkVVIPCategory(CustomerCategoryModel categoryModel);
 
         DBResult AddQueueAffectDownlinesCustomerCategory(CustomerCategoryModel categoryModel);
 
-        ResultInsertRemoveCustomerClassificationModel RemoveCustomerCategory(CustomerCategoryModel removeCategoryModel);        
+        IEnumerable<CustomerClassForMainDb> RemoveVVIPCategory(CustomerCategoryModel removeCategoryModel);        
 
         DBResult PinCategoryCustomerClassification(long ctsCustId, int subscriberId, bool isPinCategory, int createdBy);
 
@@ -131,8 +126,6 @@
         IEnumerable<CustomerClassificationModel> GetCustomerClassificationForAPI(string custIdList, string parentCateIdList);
 
         IEnumerable<CustomerClassificationGeneralInfoModel> GetCustomerClassificationByCategory(string categoryIdList);
-
-        DBResult ProcessPlaceEvidence(UpdatePlaceEvidenceModel model);
 
         IEnumerable<CTSCustomer> CheckCustomerNotExisted(string custIds, DateTime fromDate, DateTime toDate);
 

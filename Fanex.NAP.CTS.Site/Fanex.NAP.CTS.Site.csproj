@@ -1047,7 +1047,6 @@
     <Content Include="Views\NotificationSetting\Index.cshtml" />
     <Content Include="Views\AssociationReport\Index.cshtml" />
     <Content Include="Views\AssociationReport\Detail.cshtml" />
-    <Content Include="Views\Account\CustomerCategory\RemoveCategory.cshtml" />
     <Content Include="Views\Account\Associated\MatchBettingPattern.cshtml" />
     <Content Include="Views\Account\Associated\IPAssociation.cshtml" />
     <Content Include="Views\LatestTransaction\Index.cshtml" />
@@ -1072,6 +1071,8 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Views\Account\CustomerCategory\MarkCustomerCategory.cshtml" />
+    <Content Include="Views\Account\CustomerCategory\UnmarkCustomerCategory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CoreBetList.css" />
@@ -1786,7 +1787,6 @@
     <Content Include="Views\Home\Search.cshtml" />
     <Content Include="Views\Shared\_HomeLayout.cshtml" />
     <Content Include="Views\Shared\_HomeLoginPartial.cshtml" />
-    <Content Include="Views\Account\CustomerCategory\MarkCatergory.cshtml" />
     <Content Include="Views\Account\Associated\AddAssociation.cshtml" />
     <Content Include="Views\Account\CustomerCategory\CustomerCategory.cshtml" />
     <Content Include="Views\Account\CustomerCategory\EditMarkCatergory.cshtml" />

@@ -1,0 +1,97 @@
+﻿@using Fanex.NAP.CTS.ViewModel;
+@model Fanex.NAP.CTS.ViewModel.Account.CustomerCategory.MarkCustomerCategoryViewModel
+
+<div class="float-container" id="divProfileMarkCustomerCategory">
+    <div class="group-column">
+        <div class="column left-column">
+            <div class="heading-column"><p id="lblCCRoleName">@Model.RoleName <span class="red-fieldset">@Model.UserName</span></p></div>
+            <div class="body-column">
+                <div class="items">
+                    <div class="info-block">VVIP Category</div>
+                    <div class="info-item flex-item">
+                        <div class="form-control radio-button">
+                            <input type="radio" value="VVIP" id="inputCCVVIP" name="group2" />
+                            <label for="inputCCVVIP">
+                                VVIP
+                            </label>
+                        </div>                        
+                        <label class="checkbox-container" id="lblCCAffectToAllDownlines">
+                            <input id="inputCCAffectToAllDownlines" type="checkbox">
+                            <span class="checkmark"></span>
+                            Affect all Downlines
+                        </label>
+                    </div>
+                </div>
+                <div class="items">
+                    <div class="info-block">Problem Account Category</div>
+                    <div class="info-item">
+                        @foreach (var paCategory in Model.ProblemAccountList)
+                        {
+                        <div class="form-control radio-button">
+                            @if (Model.CategoryList.Any(x => x.CategoryGroup.Equals(paCategory.CategoryGroup) || x.CategoryGroup.Equals(paCategory.RelevantCategoryGroup)))
+                            {
+                                <label class="checkbox-container disabled" id="Category">
+                                    <input id="Category" type="checkbox" checked="checked" disabled>
+                                    <span class="checkmark"></span>
+                                    @paCategory.CategoryName
+                                </label>
+                            }
+                            else if (paCategory.CategoryGroup == 61 && Model.IsRobotUser)
+                            {
+                                <label class="checkbox-container disabled" id="CategoryRobot">
+                                    <input id="CategoryRobot" type="checkbox" checked="checked" disabled>
+                                    <span class="checkmark"></span>
+                                    @paCategory.CategoryName
+                                </label>
+                            }
+                            else
+                            {
+                                if (Model.IsPinCategory)
+                                {
+                                    <label class="checkbox-container disabled">
+                                        <input type="checkbox" disabled>
+                                        <span class="checkmark"></span>
+                                        @paCategory.CategoryName
+                                    </label>
+                                }
+                                else
+                                {
+                                    <input type="radio" value="@paCategory.CategoryID" id="@paCategory.CategoryID" data-categorygroup="@paCategory.CategoryGroup" name="group2" />
+                                    <label for="@paCategory.CategoryID">
+                                        @paCategory.CategoryName
+                                    </label>
+                                }
+                            }
+
+                        </div>
+                        }
+
+                        @*@if (Model.IsRobotUser)
+                        {
+                            <div class="form-control radio-button">
+                                <label class="checkbox-container disabled" id="robotUser">
+                                    <input id="-1" type="checkbox" checked="checked" disabled>
+                                    <span class="checkmark"></span>
+                                    Robot User
+                                </label>
+                            </div>
+                        }*@
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="column right-column">
+            <div class="heading-column">Comment</div>
+            <div class="body-column">
+                <textarea id="txtCCComment" class="comment-field full-width" maxlength="300"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button id="btnCCMarkCancel" class="button btn-cancel-outline" title="Cancel">Cancel</button>
+        <button id="btnCCMarkSave" class="button -add" title="Mark Customer Category">Submit</button>
+    </div>
+</div>
+
+

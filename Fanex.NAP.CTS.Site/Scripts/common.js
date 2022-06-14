@@ -98,12 +98,15 @@
 
         list.push({ 'id': '251', 'indexColor': 4, 'cssClass': 'circle yellow-line', 'name': 'Probation (51)' });
         list.push({ 'id': '252', 'indexColor': 4, 'cssClass': 'circle yellow-line', 'name': 'Probation (52)' });
-        list.push({ 'id': '253', 'indexColor': 4, 'cssClass': 'circle yellow-line', 'name': 'Probation (53)' });
+        list.push({ 'id': '253', 'indexColor': 4, 'cssClass': 'circle yellow-line', 'name': 'Probation (53)' });        
 
         list.push({ 'id': '261', 'indexColor': 4, 'cssClass': 'circle yellow-line', 'name': 'Smart Punter (61)' });
         list.push({ 'id': '262', 'indexColor': 4, 'cssClass': 'circle yellow-line', 'name': 'Smart Punter (62)' });
         list.push({ 'id': '263', 'indexColor': 4, 'cssClass': 'circle yellow-line', 'name': 'Smart Punter (63)' });
-
+        
+        list.push({ 'id': '271', 'indexColor': 4, 'cssClass': 'circle yellow-line', 'name': 'High Risk Punter (71)' });
+        list.push({ 'id': '272', 'indexColor': 4, 'cssClass': 'circle yellow-line', 'name': 'High Risk Punter (72)' });
+        list.push({ 'id': '273', 'indexColor': 4, 'cssClass': 'circle yellow-line', 'name': 'High Risk Punter (73)' });
         
         return list;
     };

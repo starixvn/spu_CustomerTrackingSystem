@@ -8,6 +8,8 @@
 
         public string CategoryName { get; set; }
 
+        public int CategoryGroup { get; set; }
+
         public int ParentID { get; set; }
 
         public int CustID { get; set; }       

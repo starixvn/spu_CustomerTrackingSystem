@@ -32,8 +32,6 @@
 
         public string CreatedBy { get; set; }
 
-        public string TaggingType { get; set; }
-
         public long TWBetCount { get; set; }
 
         public decimal TWGroupBettingRate { get; set; }
@@ -45,5 +43,16 @@
         public int RobotCounter { get; set; }
 
         public int LastModifiedBy { get; set; }
+
+        public string Remark { get; set; }
+
+        public int TVSRequestID { get; set; }
+
+        public bool IsFromTVS { get; set; }
+
+        public bool IsFromTW { get; set; }
+
+        public bool IsFromCTS { get; set; }
+
     }
 }

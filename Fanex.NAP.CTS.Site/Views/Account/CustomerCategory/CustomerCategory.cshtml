@@ -13,7 +13,7 @@
                     <div class="graph-info">                        
                         <div style="width:170px">
                             <select id="cbbCategorySetting" multiple="multiple">
-                                <option value="PinCategory">Pin Category</option>
+                                <option hidden="hidden" value="PinCategory" >Pin Category</option>
                                 <option value="ExcludedTagAssPA">Normal Category</option>
                             </select>
                         </div>                       
@@ -21,7 +21,7 @@
                             <button id="btnmarkcategory" class="button button-primary-outline" title="Mark Category">Mark Category</button>
                         </div>
                         <div>
-                            <button id="btnremovecategory" class="button button-primary-outline" title="Remove Category">Remove Category</button>
+                            <button id="btnunmarkcategory" class="button button-primary-outline" title="Unmark Category">Unmark Category</button>
                         </div>
                     </div>
                 </div>
@@ -40,10 +40,9 @@
                 <tbody></tbody>
             </table>
         </div>
-    </div>
+    </div>    
 
-    <div id="divMarkCategory" style="display:none;">
-    </div>
+    <div id="divMarkCustomerCategory" style="display:none"></div>
 
-    <div id="divRemoveCategory" style="display:none;">
-    </div>
+    <div id="divUnmarkCustomerCategory" style="display:none;"></div>
+

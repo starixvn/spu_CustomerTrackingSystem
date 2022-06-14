@@ -42,7 +42,7 @@
 	<Function name="CustomerClassification">
 		<Setting Key="Acc_CustomerUpdateCustomerClass" SpName="Acc_CustomerUpdateCustomerClass_xtest" DbName="DBCust.CustDB.bodbAdminNet" TimeOut="300" />
 		<!--<Setting Key="CTS_NormalAccountsClassification_GeneralCategorize_Daily" SpName="CTS_NormalAccountsClassification_GeneralCategorize_Daily" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
-		<Setting Key="TicketVoiding_CTS_ProblemAccountSelect" SpName="TicketVoiding_CTS_ProblemAccountSelect" DbName="DBCTS.bodb02.bodbSPUNet" />
+		
 		<Setting Key="CTS_CustomerUpdDanger" SpName="CTS_CustomerUpdDanger" DbName="DBCust.CustDB.bodbAdminNet" TimeOut="300" />-->
 	</Function>
 
@@ -62,16 +62,7 @@
 	<Function name="CustomerProfile">
 		<Setting Key="CTS_Customer_GetInfoByCustIdList" SpName="CTS_Customer_GetInfoByCustIdList_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
 	</Function>
-
-	<Function name="ProblemAccountManagement">
-		<Setting Key="NAP_ProblemAccount_CustomerCommentSel" SpName="NAP_ProblemAccount_CustomerCommentSel" DbName="DBACC.bodb02.bodbAdminNet" />
-		<Setting Key="Nap_ProblemAccount_AddCustomer" SpName="Nap_ProblemAccount_AddCustomer" DbName="DBCust.CustDB.bodbAdminNet" />
-		<Setting Key="NAP_ProblemAccount_LicenseeAddCustomer" SpName="NAP_ProblemAccount_LicenseeAddCustomer" DbName="DBCust.CustDB.bodbAdminNet" />
-		<Setting Key="NAP_ProblemAccount_LicenseeAccountReasonUpd" SpName="NAP_ProblemAccount_LicenseeAccountReasonUpd" DbName="DBCust.CustDB.bodbAdminNet" />
-		<Setting Key="NAP_ProblemAccount_LicenseeRemoveCustomer" SpName="NAP_ProblemAccount_LicenseeRemoveCustomer" DbName="DBCust.CustDB.bodbAdminNet" />
-		<Setting Key="NAP_ProblemAccount_RemoveCustomer" SpName="NAP_ProblemAccount_RemoveCustomer" DbName="DBCust.CustDB.bodbAdminNet" />
-		<Setting Key="NAP_ProblemAccount_UpdateCustomer" SpName="NAP_ProblemAccount_UpdateCustomer" DbName="DBCust.CustDB.bodbAdminNet" />
-	</Function>
+	
 	<Function Name="DailyProblemClassification">
 		<Setting Key="CTS_ProblemAccountsClassification_Daily" SpName="CTS_ProblemAccountsClassification_Daily" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" TimeOut="300" />
 	</Function>

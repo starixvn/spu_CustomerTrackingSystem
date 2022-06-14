@@ -1,30 +1,19 @@
 ﻿function customer_category() {
     let cbbCategorySetting = $('#cbbCategorySetting');
     let btnMarkCategory = $('#btnmarkcategory');
-    let btnRemoveCategory = $('#btnremovecategory');
-    let divMarkCategory = $('#divMarkCategory');
-    let divRemoveCategory = $('#divRemoveCategory');
-    let tblcustomercategory = $('#customer-category-table');
+    let btnUnmarkCategory = $('#btnunmarkcategory');    
+    let divMarkCustomerCategory = $('#divMarkCustomerCategory');    
+    let divUnmarkCustomerCategory = $('#divUnmarkCustomerCategory');
+    let tblcustomercategory = $('#customer-category-table');    
     let isHostPermission;
-    let cacheCategoryColors = [];    let cacheData = {
+    let cacheData = {
         isVVip: false,
         isPinCategory: false,
         isExcludedTagAssPA: false,
-        isProblemAccount: false
+        isProblemAccount: false,
+        isPAProbation: false
     };
-    let dataTable;   
-
-    function BindingMarkCategoryForAddNew(custId, ctsCustId, subscriberId) {
-        $('#btncancelcategory').on('click', function () {
-            divMarkCategory.dialog('close');
-        });
-
-        $('#btnsavecategory').on('click', function (e) {
-            AddCustomerCategory(custId, ctsCustId, subscriberId);
-        });
-
-        $("#ddlcategory").select2();
-    }
+    let dataTable;  
 
     function GetCustomerCategory(custId) {
         setTimeout(function () {
@@ -34,7 +23,7 @@
                     custId: custId
                 },
                 success: function (response) {
-                    spanClass.html(response.customerClassification + "  ");
+                    $('#spanClass').html(response.customerClassification + "  ");
                 },
                 complete: function () {
                 },
@@ -45,24 +34,40 @@
         }, 10000);
     }
 
-    function DisplayMarkCategory(custId, ctsCustId, subscriberId) {
-        $.ajax(common.modifyRelativeUrl('Account/MarkCatergory'), {
+    function DisplayUnmarkCustomerCategory() {        
+        $.ajax(common.modifyRelativeUrl('Account/UnmarkCustomerCategory'), {
             type: 'POST',
             data: {
-                ctsCustId: ctsCustId
+                roleID: $("#hdRoleID").val(),
+                userName: $("#hdUsername").val(),
+                isVVIP: cacheData.isVVip,
+                isLicensee: $("#hdIsLicensee").val()
             },
             beforeSend: function () {
                 common.showLoading();
             },
             success: function (response) {
-                divMarkCategory.html(response);
-                BindingMarkCategoryForAddNew(custId, ctsCustId, subscriberId);
+                divUnmarkCustomerCategory.html(response);
+
+                $('#btnCCCancelUnmark').on('click', function () {
+                    divUnmarkCustomerCategory.dialog('close');
+                });
+
+                $('#btnCCSaveUnmark').on('click', function (e) {
+                    if (cacheData.isVVip) {
+                        SaveUnmarkVVIP();
+                    } else {
+                        SaveUnmarkCustomerCategory();
+                    }                    
+                });               
             },
             complete: function () {
-                divMarkCategory.dialog({
+                let title = cacheData.isVVip ? 'UNMARK VVIP CONFIRMATION' : 'UNMARK PROBLEM CATEGORIES CONFIRMATION';
+
+                divUnmarkCustomerCategory.dialog({
                     modal: true,
                     width: '600px',
-                    title: 'MARK CUSTOMER CATEGORY',
+                    title: title,
                     resizable: true,
                     draggable: true,
                     close: function () { $(this).dialog('close'); }
@@ -76,32 +81,29 @@
         });
     }
 
-    function AddCustomerCategory(custId, ctsCustId, subscriberId) {
-        var url = common.modifyRelativeUrl('Account/AddCustomerCategory');
-        var params = {};
-        params.CustId = custId;
-        params.CTSCustId = ctsCustId;
-        params.SubscriberId = subscriberId;
-        params.CategoryId = $('#ddlcategory').val();
-        params.RoleId = $('#hdRoleID').val();
-        params.IsAffectToAllDownlines = $('#inputAffectToAllDownlines').is(":checked");
-        params.Remark = $('#txtcategorycomment').val();
-        params.isVVip = true;
+    function SaveUnmarkCustomerCategory() {
+        let params = {};
+        params.CustID = $("#hdCustId").val();
+        params.CTSCustID = $("#hdCTSCustId").val();
+        params.RoleID = $('#hdRoleID').val();
+        params.SubscriberID = $('#hdSubscriberId').val();
+        params.IsExceptDirectDownline = $('#inputPAUnmarkAffectToAllDownlines').is(":checked");
+        params.Remark = $('#txtCCPAUnmarkComment').val().trim();
 
-        $.ajax(url, {
+        $.ajax(common.modifyRelativeUrl('Account/SaveUnmarkCustomerCategory'), {
             type: 'POST',
             data: params,
             success: function (response) {
                 if (response.errorCode === 0) {
-                    common.showSuccess('Add the category successful!', 2000);
-                    divMarkCategory.dialog('close');
-
-                    LoadGrid(ctsCustId, true);
-                    GetCustomerCategory(custId);
+                    common.showSuccess('Unmark Category successful!', 2000);
+                    divUnmarkCustomerCategory.dialog('close');
                 }
                 else {
                     common.showError(response.errorMessage);
                 }
+
+                LoadGrid(params.CTSCustID, true);
+                GetCustomerCategory(params.CustID);
             },
             beforeSend: function () {
                 common.showLoading();
@@ -112,74 +114,34 @@
             error: function (error) {
                 console.log(error);
                 common.closeLoading();
+                divUnmarkCustomerCategory.dialog('close');
             }
         });
     }
 
-    function DisplayRemoveCategory(custId, ctsCustId, subscriberId) {
-        $.ajax(common.modifyRelativeUrl('Account/RemoveCatergory'), {
-            type: 'POST',
-            data: {
-                ctsCustId: ctsCustId
-            },
-            beforeSend: function () {
-                common.showLoading();
-            },
-            success: function (response) {
-                divRemoveCategory.html(response);
-
-                $('#btnCancelRemoveCategory').on('click', function () {
-                    divRemoveCategory.dialog('close');
-                });
-
-                $('#btnSaveRemoveCategory').on('click', function (e) {
-                    RemoveCategory(custId, ctsCustId);
-                });
-
-                $("#ddlRemoveCategory").select2();
-            },
-            complete: function () {
-                divRemoveCategory.dialog({
-                    modal: true,
-                    width: '600px',
-                    title: 'REMOVE CUSTOMER CATEGORY',
-                    resizable: true,
-                    draggable: true,
-                    close: function () { $(this).dialog('close'); }
-                });
-
-                common.closeLoading();
-            },
-            error: function (errMsg) {
-                common.showError(errMsg);
-            }
-        });
-    }
-
-    function RemoveCategory(custId, ctsCustId) {
-        var url = common.modifyRelativeUrl('Account/RemoveCustomerCategory');
-        var params = {};
-        params.CustId = custId;
-        params.CTSCustId = ctsCustId;
-        params.CategoryId = $('#ddlRemoveCategory').val();
+    function SaveUnmarkVVIP() {        
+        let params = {};
+        params.CustId = $('#hdCustId').val();
+        params.CTSCustId = $('#hdCTSCustId').val();
+        params.SubscriberId = $('#hdSubscriberId').val();
+        params.CategoryId = 210; // VVIP
         params.RoleId = $('#hdRoleID').val();
-        params.IsAffectToAllDownlines = $('#inputRemoveAffectToAllDownlines').is(":checked");
-        params.IsVVip = true;
+        params.IsAffectToAllDownlines = $('#inputVVIPUnmarkAffectToAllDownlines').is(":checked");
 
-        $.ajax(url, {
+        $.ajax(common.modifyRelativeUrl('Account/SaveUnmarkVVIP'), {
             type: 'POST',
             data: params,
             success: function (response) {
                 if (response.errorCode === 0) {
-                    common.showSuccess('Remove the category successful!', 2000);
-                    divRemoveCategory.dialog('close');
-
-                    LoadGrid(ctsCustId, true);
-                    GetCustomerCategory(custId);
+                    common.showSuccess('Unmark VVIP successful!', 2000);
+                    divUnmarkCustomerCategory.dialog('close');                    
                 }
                 else {
                     common.showError(response.errorMessage);
                 }
+
+                LoadGrid(params.CTSCustId, true);
+                GetCustomerCategory(params.CustId);
             },
             beforeSend: function () {
                 common.showLoading();
@@ -190,9 +152,10 @@
             error: function (error) {
                 console.log(error);
                 common.closeLoading();
+                divUnmarkCustomerCategory.dialog('close');
             }
         });
-    }
+    }   
 
     function LoadGrid(ctsCustId) {
         $(this).prop('disabled', true);
@@ -244,18 +207,19 @@
     function ReloadGrid(ctsCustId) {
         $.ajax(common.modifyRelativeUrl('/Account/GetCustomerClassification'), {
             type: 'POST',
-            data: { ctsCustId: ctsCustId },
+            data: {
+                ctsCustID: ctsCustId,
+                roleID: $("#hdRoleID").val(),
+            },
             dataFilter: function (response) {
                 if (response !== undefined) {
-                    let json = jQuery.parseJSON(response);
-
-                    btnMarkCategory.prop('disabled', json.isVVip);
-                    btnRemoveCategory.prop('disabled', !json.isVVip);
+                    let json = jQuery.parseJSON(response);                   
 
                     cacheData.isProblemAccount = json.isProblemAccount;
                     cacheData.isPinCategory = json.isPinCategory;
                     cacheData.isExcludedTagAssPA = json.isExcludedTagAssPA;
                     cacheData.isVVip = json.isVVip;
+                    cacheData.isPAProbation = json.isPAProbation;
 
                     ResetCategorySetting();
 
@@ -263,7 +227,7 @@
 
                     if (!isProblemAccount) {
                         RenderNormalCategoryProfilePage(json.categoryList);
-                    }
+                    }                    
                 }
                 return response;
             },
@@ -275,6 +239,23 @@
             },
             complete: function () {
                 tblcustomercategory.find('tbody').removeClass('loading');
+                
+                let disabledUnmarkCategory = (!cacheData.isVVip && !cacheData.isProblemAccount && !cacheData.isPAProbation)
+                    || (!cacheData.isVVip && cacheData.isPinCategory);                
+
+                let disabledMarkCategory = cacheData.isVVip
+                    || ($("#hdIsLicensee").val() == 'TRUE' && $("#hdRoleID").val() > 1)
+                    || $("#hdIsInternal").val() == 'TRUE';
+                
+                btnUnmarkCategory.prop('disabled', disabledUnmarkCategory);
+                btnMarkCategory.prop('disabled', disabledMarkCategory);                
+
+                if (!disabledMarkCategory) {                    
+                    $("#btnProfileInsertPA").off('click').click(function () { DisplayMarkCustomerCategory() });
+                    $("#btnProfileInsertPA").removeClass('disabled');
+                } else {
+                    $("#btnProfileInsertPA").addClass('disabled');
+                }  
             }
         });
     }
@@ -282,6 +263,8 @@
     function RenderProblemCategoryProfilePage(data, isPAProbation) {
         var isExistProblemAccount = false;
         let html = "";
+        
+        html = BuildButtonProfileInsertPA(html, data);
 
         data.map(function (x) {
             if (x.IsProblemAccount) {
@@ -316,14 +299,17 @@
             $('#divCustomerCategorySummary').html(html);
             $('#spanContentInfoLoading').css('visibility', 'hidden');
             $('#divHeaderInfo').css('visibility', 'visible');
-        }
+        }        
 
         return isExistProblemAccount;
     }
 
     function RenderNormalCategoryProfilePage(data) {
-        let html = "";
         let indexColorProfile = 1;
+        let html = "";
+
+        html = BuildButtonProfileInsertPA(html);
+
         let cacheCategoryColors = common.categoryColor();
 
         for (let i = 0; i < cacheCategoryColors.length; i++) {
@@ -387,6 +373,155 @@
         $('#divHeaderInfo').css('visibility', 'visible');
     }
 
+    function BuildButtonProfileInsertPA(html) {
+        if (isHostPermission) {
+            html += "<div class='btn-add-pa' id='btnProfileInsertPA' title='Mark Category'></div>";
+        }
+                
+        return html;
+    }
+
+    function DisplayMarkCustomerCategory() {
+        $.ajax(common.modifyRelativeUrl('Account/MarkCustomerCategory'), {
+            type: 'POST',
+            data: {
+                ctsCustID: $("#hdCTSCustId").val(),
+                roleID: $("#hdRoleID").val(),
+                userName: $("#hdUsername").val(),
+                isRobotUser: $("#hdIsRobotUser").val(),
+                isPinCategory: cacheData.isPinCategory
+            },
+            beforeSend: function () {
+                common.showLoading();
+            },
+            success: function (response) {
+                divMarkCustomerCategory.html(response);
+            },
+            complete: function () {
+                divMarkCustomerCategory.dialog({
+                    modal: true,
+                    width: '800px',
+                    title: 'MARK CUSTOMER CATEGORY',
+                    resizable: true,
+                    draggable: true,
+                    close: function () { $(this).dialog('close'); }
+                });
+
+                common.closeLoading();
+
+                $('#btnCCMarkCancel').on('click', function () {
+                    divMarkCustomerCategory.dialog('close');
+                });
+
+                $('#btnCCMarkSave').on('click', function (e) {
+                    if ($('#inputCCVVIP').is(":checked")) {
+                        SaveMarkVVIP();
+                    } else {
+                        SaveMarkCustomerCategory();
+                    }                          
+                });
+
+                if ($("#hdIsLicensee").val() == "TRUE" || $("#hdRoleID").val() == 1) {
+                    $('#lblCCAffectToAllDownlines').addClass('hide');
+                } else {
+                    $('#lblCCAffectToAllDownlines').removeClass('hide');
+                }
+            },
+            error: function (errMsg) {
+                common.showError(errMsg);
+            }
+        });
+    }  
+
+    function SaveMarkVVIP() {
+        let params = {};
+        params.CustID = $("#hdCustId").val();
+        params.CTSCustID = $("#hdCTSCustId").val();
+        params.SubscriberID = $("#hdSubscriberId").val();
+        params.RoleID = $('#hdRoleID').val();
+        params.IsVVip = true;
+        params.IsAffectAllDownlines = $('#inputCCAffectToAllDownlines').is(":checked");
+        params.Remark = $('#txtCCComment').val();
+      
+        $.ajax(common.modifyRelativeUrl('Account/SaveMarkVVIP') , {
+            type: 'POST',
+            data: params,
+            success: function (response) {
+                if (response.errorCode === 0) {
+                    common.showSuccess('Mark Customer Category successful!', 2000);
+                    divMarkCustomerCategory.dialog('close');
+                }
+                else {
+                    common.showError(response.errorMessage);
+                }
+
+                LoadGrid(params.CTSCustID, true);
+                GetCustomerCategory(params.CustID);
+            },
+            beforeSend: function () {
+                common.showLoading();
+            },
+            complete: function () {
+                common.closeLoading();
+            },
+            error: function (error) {
+                console.log(error);
+                common.closeLoading();
+            }
+        });
+    }
+
+    function SaveMarkCustomerCategory() {
+        let params = {};
+        params.CategoryID = 0;
+        params.CustID = $("#hdCustId").val();
+        params.CTSCustID = $("#hdCTSCustId").val();
+        params.SubscriberID = $("#hdSubscriberId").val();
+        params.RoleID = $('#hdRoleID').val();
+        params.IsVVip = false;        
+        params.Remark = $('#txtCCComment').val();
+
+        $('input[type=radio]:checked', '.radio-button').each(function () {
+            if (!$(this).attr('disabled')) {
+                params.CategoryID = $(this).val();
+                params.CategoryGroup = $(this).attr('data-categorygroup');
+            }
+        });
+
+        if (params.CategoryID != 0) {
+            let url = params.CategoryGroup == 61
+                ? common.modifyRelativeUrl('Account/SaveMarkRobotAccount')
+                : common.modifyRelativeUrl('Account/SaveMarkCustomerCategory');
+
+            $.ajax(url, {
+                type: 'POST',
+                data: params,
+                success: function (response) {
+                    if (response.errorCode === 0) {
+                        common.showSuccess('Mark Customer Category successful!', 2000);
+                        divMarkCustomerCategory.dialog('close');
+                    }
+                    else {
+                        common.showError(response.errorMessage);
+                    }
+
+                    LoadGrid(params.CTSCustID, true);
+                    GetCustomerCategory(params.CustID);
+                },
+                beforeSend: function () {
+                    common.showLoading();
+                },
+                complete: function () {
+                    common.closeLoading();
+                },
+                error: function (error) {
+                    console.log(error);
+                    common.closeLoading();
+                }
+            });
+        }
+    }
+   
     function BuildCategoryToHtmlDiv(html, classIconColor, categoryName) {
         html += "<div class='info-status'>";
         html += "<div class='status-left'>";
@@ -398,73 +533,73 @@
         return html;
     }
 
-    function PinCategory(isChecked, ctsCustId, subscriberId) {
-        let html = "<div style='text-align:center'>Are you sure about this action? </div>";
+    //function PinCategory(isChecked, ctsCustId, subscriberId) {
+    //    let html = "<div style='text-align:center'>Are you sure about this action? </div>";
 
-        if (isChecked) {
-            html += "By enabling pin option, this account will not be classified automatically by our service in future";
-        } else {
-            html += "By unpin option, this account will be classified automatically by our service in future";
-        }
+    //    if (isChecked) {
+    //        html += "By enabling pin option, this account will not be classified automatically by our service in future";
+    //    } else {
+    //        html += "By unpin option, this account will be classified automatically by our service in future";
+    //    }
 
-        common.showFormConfirmation(html, 'Confirmation',
-            function () {
-                var url = common.modifyRelativeUrl('/Account/PinCategoryCustomerClassification');
-                var params = {};
-                params.ctsCustId = ctsCustId;
-                params.subscriberId = subscriberId;
-                params.isPinCategory = isChecked;
+    //    common.showFormConfirmation(html, 'Confirmation',
+    //        function () {
+    //            var url = common.modifyRelativeUrl('/Account/PinCategoryCustomerClassification');
+    //            var params = {};
+    //            params.ctsCustId = ctsCustId;
+    //            params.subscriberId = subscriberId;
+    //            params.isPinCategory = isChecked;
 
-                $.ajax(url, {
-                    type: 'POST',
-                    data: params,
-                    success: function (response) {
-                        if (response.errorCode === 0) {
-                            let message = isChecked
-                                ? "Pinned category successfully!"
-                                : "Unpinned category successfully!";
+    //            $.ajax(url, {
+    //                type: 'POST',
+    //                data: params,
+    //                success: function (response) {
+    //                    if (response.errorCode === 0) {
+    //                        let message = isChecked
+    //                            ? "Pinned category successfully!"
+    //                            : "Unpinned category successfully!";
 
-                            common.showSuccess(message);
+    //                        common.showSuccess(message);
 
-                            LoadGrid(ctsCustId, true);
-                        }
-                        else {
-                            common.showError('Failed! ' + response.errorMessage);
-                            ResetCategorySetting();
-                        }
-                    },
-                    beforeSend: function () {
-                        common.showLoading();
-                    },
-                    complete: function () {
-                        common.closeLoading();
-                    },
-                    error: function (error) {
-                        common.closeLoading();
-                        console.log(error);
-                        ResetCategorySetting();
-                    }
-                });
-            },
-            function () {
-                ResetCategorySetting();
-            }
-        );
-    }
+    //                        LoadGrid(ctsCustId, true);
+    //                    }
+    //                    else {
+    //                        common.showError('Failed! ' + response.errorMessage);
+    //                        ResetCategorySetting();
+    //                    }
+    //                },
+    //                beforeSend: function () {
+    //                    common.showLoading();
+    //                },
+    //                complete: function () {
+    //                    common.closeLoading();
+    //                },
+    //                error: function (error) {
+    //                    common.closeLoading();
+    //                    console.log(error);
+    //                    ResetCategorySetting();
+    //                }
+    //            });
+    //        },
+    //        function () {
+    //            ResetCategorySetting();
+    //        }
+    //    );
+    //}
 
     function ExcludedTagAssPA(isChecked, custId, ctsCustId, subscriberId, custSubId) {
         let html = "";
-        let isPinCategory = false;
+        //let isPinCategory = false;
 
-        $("option", cbbCategorySetting).each(function () {
-            if ($(this).val() === "PinCategory") {
-                isPinCategory = $(this).is(":checked");
-            }
-        });
+        //$("option", cbbCategorySetting).each(function () {
+        //    if ($(this).val() === "PinCategory") {
+        //        isPinCategory = $(this).is(":checked");
+        //    }
+        //});
 
-        if (isChecked && isPinCategory) {
-            html = "<div style='text-align:center'>You are not allow to turn on this setting because Pin Category setting is on.</div>";
-            html += "<div>Please Turn Off Pin Category Setting before this action</div>";
+        if (isChecked && cacheData.isPinCategory) {
+            html = "<div style='text-align:center'>You are not allow to turn on this setting because of Pin Category.</div>";
+            html += "<div style='text-align:center'>Please contact your system administrator for further assistance.</div>";
 
             common.showError(html, 2000);
             ResetCategorySetting();
@@ -531,7 +666,7 @@
     function ResetCategorySetting() {
         let cbbCategorySettingSelector = cbbCategorySetting.empty();
 
-        cbbCategorySettingSelector.append("<option " + (cacheData.isPinCategory ? "selected" : "") + (cacheData.isVVip ? " disabled" : "") + " value='PinCategory'>Pin Category</option>");
+        //cbbCategorySettingSelector.append("<option " + (cacheData.isPinCategory ? "selected" : "") + (cacheData.isVVip ? " disabled" : "") + " value='PinCategory'>Pin Category</option>");
 
         cbbCategorySettingSelector.append("<option " + (cacheData.isExcludedTagAssPA ? "selected" : "") + " value='ExcludedTagAssPA'>Normal Category</option>");
 
@@ -542,10 +677,11 @@
         isHostPermission = hostPermission === "True";
 
         if (!isHostPermission) {
-            cbbCategorySetting.prop('disabled', true);
-            btnMarkCategory.prop('disabled', true);
-            btnRemoveCategory.prop('disabled', true);
+            cbbCategorySetting.prop('disabled', true);                 
         }
+        btnMarkCategory.prop('disabled', true);
+        btnUnmarkCategory.prop('disabled', true);
+        $("#btnProfileInsertPA").prop('disabled', true);        
     }
 
     this.Initial = function (custId, ctsCustId, subscriberId, username, hostPermission, custSubId) {
@@ -556,19 +692,18 @@
             menuHeight: 60,
             header: false,
             click: function (_, ui) {
-                if (ui.value == "PinCategory")
-                    PinCategory(ui.checked, ctsCustId, subscriberId);
-                else
-                    ExcludedTagAssPA(ui.checked, custId, ctsCustId, subscriberId, custSubId);
+                if (ui.value == "ExcludedTagAssPA")
+                    //PinCategory(ui.checked, ctsCustId, subscriberId);
+                    ExcludedTagAssPA(ui.checked, custId, ctsCustId, subscriberId, custSubId);                 
             },
             selectedText: "Category Setting",
             noneSelectedText: "Category Setting"
         });
 
         if (isHostPermission) {
-            btnMarkCategory.click(function () { DisplayMarkCategory(custId, ctsCustId, subscriberId); });
+            btnMarkCategory.click(function () { DisplayMarkCustomerCategory(); });
 
-            btnRemoveCategory.click(function () { DisplayRemoveCategory(custId, ctsCustId, subscriberId); });
+            btnUnmarkCategory.click(function () { DisplayUnmarkCustomerCategory(); });
         }       
 
         dataTable = RenderGrid();
@@ -579,4 +714,5 @@
     this.ReloadTab = function (ctsCustId) {
         ReloadGrid(ctsCustId);
     };
+
 }

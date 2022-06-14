@@ -20,11 +20,11 @@
             repository = new DynamicRepository();
         }
 
-        public async Task InsertAFCAccounts(IEnumerable<long> custIds, FromFlow fromFlow)
+        public async Task InsertAFCAccounts(IEnumerable<long> custIds, FromFlow fromFlow, bool isSyncAFC)
         {
             try
             { 
-                if (custIds != null && custIds.Any() && ConfigSettings.IsSyncAFCData)
+                if (custIds != null && custIds.Any() && isSyncAFC)
                 {
                     await CallAPI(custIds, fromFlow, ConfigSettings.InsertAFCAccountsURL);
                 }

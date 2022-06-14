@@ -5,5 +5,10 @@
         public int CategoryID { get; set; }
 
         public string CategoryName { get; set; }
+
+        public int CategoryGroup { get; set; }
+
+        public int RelevantCategoryGroup { get; set; }
+
     }
 }

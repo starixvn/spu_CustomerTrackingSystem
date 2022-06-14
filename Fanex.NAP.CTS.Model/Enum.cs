@@ -60,10 +60,14 @@
     public enum ClassificationSourceType
     {
         NewMember = 201,
+        NewMember31 = 231,
+        NewMember32 = 232,
+        NewMember33 = 233,
         NormalAccount = 202, 
         NormalAccount121 = 221,
         NormalAccount122 = 222,
         NormalAccount123 = 223,
+        NormalAccountInactive = 1001,        
         SmartPunter = 203,
         SmartPunter61 = 261,
         SmartPunter62 = 262,
@@ -86,9 +90,20 @@
         Probation53 = 253,
         Probation57 = 257,
         Probation58 = 258,
-        Robot61 = 61,
+        RobotUser61 = 61,
+        RobotUser163 = 163,
+        RobotUser164 = 164,
         Robot81 = 81,
-        Robot161 = 161
+        Robot161 = 161,
+        ProPunterInactive = 1002,
+    }
+
+    public enum SourceTypeID
+    {
+        Classification_PAMarkDirectly = 31,
+        Classification_PAAffectedByUplines = 32,
+        Classification_PAUnmarkDirectly = 33,
+        Classification_UnmarkingPAAffectedDirectly = 34
     }
 
     public enum EvidenceQueueActionID
@@ -100,9 +115,8 @@
 
     public enum ProblemAccountAction
     {
-        Mark = 1,
-        Update = 2,
-        Unmark = 3
+        Mark = 1,      
+        Unmark = 2
     }
    
     public enum ActionTypeQueueCustCategory
@@ -115,5 +129,11 @@
     {
         WebSite = 1,
         Service = 2
+    }
+
+    public enum InsertPA_ByType
+    {
+        Category,
+        Reason
     }
 }

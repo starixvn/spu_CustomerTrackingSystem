@@ -283,10 +283,6 @@
              SpName="CTS_DC_CustEvidence_GetFlaggedEvidences"
              DbName="MySQL.CTS_DataCenter" />    
 
-    <Setting Key="CTS_DC_CustEvidence_InsertSingle"
-            SpName="CTS_DC_CustEvidence_InsertSingle"
-            DbName="MySQL.CTS_DataCenter" />    
-
     <Setting Key="CTS_DC_CustEvidence_RemoveFlagged"
          SpName="CTS_DC_CustEvidence_RemoveFlagged"
          DbName="MySQL.CTS_DataCenter" />    
