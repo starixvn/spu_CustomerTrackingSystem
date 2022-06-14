@@ -477,8 +477,9 @@
         params.CustID = $("#hdCustId").val();
         params.CTSCustID = $("#hdCTSCustId").val();
         params.SubscriberID = $("#hdSubscriberId").val();
+        params.IsLicensee = $("#hdIsLicensee").val() == "TRUE";
         params.RoleID = $('#hdRoleID').val();
-        params.IsVVip = false;        
+        params.IsVVip = false;          
         params.Remark = $('#txtCCComment').val();
 
         $('input[type=radio]:checked', '.radio-button').each(function () {
