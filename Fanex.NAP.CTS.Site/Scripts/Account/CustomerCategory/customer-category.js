@@ -373,10 +373,11 @@
         $('#divHeaderInfo').css('visibility', 'visible');
     }
 
-    function BuildButtonProfileInsertPA(html) {       
-
-        html += "<div class='btn-add-pa' id='btnProfileInsertPA' title='Mark Category'></div>";
-        
+    function BuildButtonProfileInsertPA(html) {
+        if (isHostPermission) {
+            html += "<div class='btn-add-pa' id='btnProfileInsertPA' title='Mark Category'></div>";
+        }
+                
         return html;
     }
 
