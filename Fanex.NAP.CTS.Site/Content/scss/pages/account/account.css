@@ -1794,26 +1794,24 @@
           .float-container .column .body-column .items .flex-item .checkbox-container span:after {
             top: 5px;
             left: 3px; }
-      .float-container .column .body-column .items:first-child {
-        padding-bottom: 0; }
-      .float-container .column .body-column .items:last-child .info-item {
+      .float-container .column .body-column .items:first-child .info-item .disabled {
+        padding-left: 0;
+        cursor: no-drop; }
+        .float-container .column .body-column .items:first-child .info-item .disabled:before, .float-container .column .body-column .items:first-child .info-item .disabled:after {
+          display: none; }
+        .float-container .column .body-column .items:first-child .info-item .disabled span:before {
+          top: 1px;
+          height: 16px;
+          width: 16px;
+          background-color: #CBCBCB;
+          border-color: #CBCBCB;
+          border-radius: 50px; }
+        .float-container .column .body-column .items:first-child .info-item .disabled span:after {
+          top: 5px;
+          left: 3px; }
+      .float-container .column .body-column .items:last-child {
         padding-bottom: 0;
         border-bottom: none; }
-        .float-container .column .body-column .items:last-child .info-item .disabled {
-          padding-left: 0;
-          cursor: no-drop; }
-          .float-container .column .body-column .items:last-child .info-item .disabled:before, .float-container .column .body-column .items:last-child .info-item .disabled:after {
-            display: none; }
-          .float-container .column .body-column .items:last-child .info-item .disabled span:before {
-            top: 1px;
-            height: 16px;
-            width: 16px;
-            background-color: #CBCBCB;
-            border-color: #CBCBCB;
-            border-radius: 50px; }
-          .float-container .column .body-column .items:last-child .info-item .disabled span:after {
-            top: 5px;
-            left: 3px; }
       .float-container .column .body-column .items .info-block {
         color: #545454;
         font-weight: 700;

@@ -1617,14 +1617,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
                 }
 
                 &:first-child {
-                    padding-bottom: 0;
-                }
-
-                &:last-child {
                     .info-item {
-                        padding-bottom: 0;
-                        border-bottom: none;
-
                         .disabled {
                             padding-left: 0;
                             cursor: no-drop;
@@ -1650,6 +1643,11 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
                             }
                         }
                     }
+                }
+
+                &:last-child {
+                    padding-bottom: 0;
+                    border-bottom: none;
                 }
 
                 .info-block {
