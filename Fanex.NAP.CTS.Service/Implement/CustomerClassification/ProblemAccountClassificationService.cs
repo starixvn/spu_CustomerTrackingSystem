@@ -161,7 +161,13 @@
         {
             if (robotAccounts != null && robotAccounts.Any())
             {
-                var customerInfo = InsertRobotAccount(JsonConvert.SerializeObject(robotAccounts));
+                var custIds = robotAccounts.Select(x => x.CustID).Distinct();
+
+                var paLosing = GetProblemAccountLosingClassification(custIds, FunctionId.InsertPAM);
+
+                var robotClassification = MergeRobotAccountClassification(robotAccounts, paLosing);
+            
+                var customerInfo = InsertRobotAccount(JsonConvert.SerializeObject(robotClassification));
 
                 CheckNewPAAssociationCustomerForRollback(customerInfo);
 
@@ -216,6 +222,40 @@
 
                 UpdateBetLimitOfFlaggedCustomer(custIds);
             }
+        }
+
+        private IEnumerable<InsertRobotModel> MergeRobotAccountClassification(IEnumerable<InsertRobotModel> robotAccounts, IEnumerable<ProblemAccountLosingClassificationModel> paLosing)
+        {
+            if (paLosing != null && paLosing.Any())
+            {
+                return robotAccounts.GroupJoin(paLosing,
+                    pa => pa.CustID,
+                    ro => ro.CustId,
+                    (pa, ro) => new { pa, ro })
+                    .SelectMany(grp => grp.ro.DefaultIfEmpty(),
+                    (grp, itemLosing) => new InsertRobotModel
+                    {
+                        CustID = grp.pa.CustID,                        
+                        RobotCounter = grp.pa.RobotCounter,
+                        Remark = grp.pa.Remark,
+                        CreatedBy = grp.pa.CreatedBy,
+
+                        IsFromTW = grp.pa.IsFromTW,
+                        IsFromCTS = grp.pa.IsFromCTS,
+                        IsFromAI = grp.pa.IsFromAI,
+                        IsFromTVS = grp.pa.IsFromTVS,
+                        TVSRequestID = grp.pa.TVSRequestID,
+                        IsDirect = grp.pa.IsDirect,                        
+
+                        TurnoverRM = itemLosing?.TurnoverRM,
+                        WinlossRM = itemLosing?.WinlossRM,
+                        WinlossStatus = itemLosing?.WinlossStatus,
+                        BetCount = itemLosing?.BetCount,
+                        ActiveDays = itemLosing?.ActiveDays
+                    });
+            }
+
+            return robotAccounts;
         }
 
         private IEnumerable<InsertProblemAccountModel> MergeProblemAccountClassification(IEnumerable<InsertProblemAccountModel> problemAccounts, IEnumerable<ProblemAccountLosingClassificationModel> probAccountLosing)

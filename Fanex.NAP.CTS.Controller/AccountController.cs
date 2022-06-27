@@ -1467,7 +1467,7 @@
             }
 
             if (spanReason == string.Empty)
-                spanReason = MappingReasonByCategoryID(spanReason, cc);
+                spanReason = MappingReasonByCategoryID(spanReason, cc, roleID);
 
             if (spanReason == string.Empty)
                 spanReason = MappingReasonBySourceTypeID(spanReason, cc, roleID);
@@ -1480,7 +1480,7 @@
             return divReason;
         }
 
-        private string MappingReasonByCategoryID(string spanReason, CustomerClassificationHistoryModel cc)
+        private string MappingReasonByCategoryID(string spanReason, CustomerClassificationHistoryModel cc, int roleID)
         {
             var margin = Math.Round(cc.Margin, 3);
             var winlost = Math.Round(cc.Winloss, 3);
@@ -1526,7 +1526,6 @@
                 case (int)ClassificationSourceType.HighRiskPunter77:
                     spanReason += $"Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount} | Group Betting Percent: {twGroupBettingRate}";
                     break;
-
                 case (int)ClassificationSourceType.Probation58:
                 case (int)ClassificationSourceType.SmartPunter68:
                 case (int)ClassificationSourceType.HighRiskPunter78:
@@ -1536,19 +1535,28 @@
                 case (int)ClassificationSourceType.ProPunterInactive:
                     spanReason += $"<span> { cc.SourceTypeName } </span>";
                     break;
+                                   
                 case (int)ClassificationSourceType.RobotUser61:
-                    spanReason += $"Robot Detection ";
-
-                    if (cc.RobotCounter > 0)
-                        spanReason += $"| Counter: {cc.RobotCounter}";
-
-                    if (!string.IsNullOrEmpty(cc.Remark))
-                        spanReason += $"| {cc.Remark}";
-                    break;
                 case (int)ClassificationSourceType.RobotUser163:
                 case (int)ClassificationSourceType.RobotUser164:
-                    spanReason += $"Turnover: {turnOver} | Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount} | Active Day: {activeDays}";
+                    if (cc.IsFromTW)
+                    {
+                        spanReason += $"Counter: {cc.RobotCounter} | Win lost: {winlost}";
+                    }
+                    else if (cc.IsFromAI)
+                    {
+                        spanReason += $"Win lost: {winlost}";
+                    }
+                    else if(cc.IsFromCTS)
+                    {
+                        spanReason += $"PA is marked directly";
+                        if (!string.IsNullOrEmpty(cc.Remark))
+                            spanReason += $" | Comment {cc.Remark}";
+                        spanReason += $" | Win lost: {winlost}";
+                    } 
+                    
                     break;
+                
                 default:
                     break;
             }
@@ -1782,7 +1790,6 @@
                     new InsertRobotModel
                     {
                         CustID = model.CustID,
-                        CategoryID = model.CategoryID,
                         Remark = model.Remark,
                         IsDirect = true,
                         IsFromCTS = true,
