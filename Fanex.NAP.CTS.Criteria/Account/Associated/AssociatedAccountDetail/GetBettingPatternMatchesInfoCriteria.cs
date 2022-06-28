@@ -3,7 +3,7 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
 
-    public class GetMatchesInfoCriteria : CriteriaBase
+    public class GetBettingPatternMatchesInfoCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "MatchIds")]
         public string MatchIds { get; set; }

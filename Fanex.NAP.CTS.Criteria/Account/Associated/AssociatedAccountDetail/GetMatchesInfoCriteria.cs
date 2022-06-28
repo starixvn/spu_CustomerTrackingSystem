@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.CTS.Criteria.Account.Associated.AssociatedAccountDetail
+﻿namespace Fanex.NAP.CTS.Criteria.Account.Associated
 {
     using Fanex.Data;
     using Fanex.Data.Repository;

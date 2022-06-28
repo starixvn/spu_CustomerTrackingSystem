@@ -741,7 +741,7 @@
                 {
                     var matchIDs = groupBettingAssociation.MatchesInfo.Select(c => c.MatchID).Distinct();
 
-                    var matchesInfo = _accountService.GetMatchesInfo(string.Join(",", matchIDs), custID1 + "," + custID2);
+                    var matchesInfo = _accountService.GetBettingPatternMatchesInfo(string.Join(",", matchIDs), custID1 + "," + custID2);
 
                     if (matchesInfo != null && matchesInfo.Any())
                     {

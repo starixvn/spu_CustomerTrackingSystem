@@ -592,9 +592,9 @@
             }
         }
 
-        public IEnumerable<MatchesInfoModel> GetMatchesInfo(string matchIDs, string custIds)
+        public IEnumerable<MatchesInfoModel> GetBettingPatternMatchesInfo(string matchIDs, string custIds)
         {
-            var criteria = new GetMatchesInfoCriteria
+            var criteria = new GetBettingPatternMatchesInfoCriteria
             {
                 MatchIds = matchIDs,
                 CustIds = custIds
