@@ -141,6 +141,7 @@
     <Compile Include="Account\AssociatedAccount\AssociatedAccountDetail\MatchCustomerGGBViewModel.cs" />
     <Compile Include="Account\AssociatedAccount\AssociatedAccountDetail\CustomerGroupModel.cs" />
     <Compile Include="Account\AssociatedAccount\AssociatedAccountDetail\GetTicketDetailParaModel.cs" />
+    <Compile Include="Account\AssociatedAccount\AssociatedAccountDetail\MatchesModel.cs" />
     <Compile Include="Account\AssociatedAccount\CategoryInfoModel.cs" />
     <Compile Include="Account\AssociatedAccount\AssociationByIPInfoModel.cs" />
     <Compile Include="Account\AssociatedAccount\AssociationByIPItemModel.cs" />

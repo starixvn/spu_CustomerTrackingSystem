@@ -19,6 +19,7 @@
     using Fanex.NAP.CTS.Criteria.Home;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
+    using Fanex.NAP.CTS.Model.Account.AssociatedAccount;
     using Fanex.NAP.CTS.Model.Account.CustomerCategory;
     using Fanex.NAP.CTS.Model.Account.CustomerInfo;
     using Fanex.NAP.CTS.Model.Association;
@@ -578,6 +579,19 @@
             return result;
         }
 
+        public IEnumerable<MatchesModel> GetMatchInfosByIDs(string matchIDs)
+        {
+            var criteria = new GetMatchesInfoCriteria
+            {
+                MatchIds = matchIDs
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<MatchesModel>(criteria);
+            }
+        }
+
         public IEnumerable<MatchesInfoModel> GetMatchesInfo(string matchIDs, string custIds)
         {
             var criteria = new GetMatchesInfoCriteria
@@ -591,7 +605,6 @@
                 return db.Query<MatchesInfoModel>(criteria);
             }
         }
-
 
         public IEnumerable<CustomerGroupModel> GetCustGroupAssociation(string originalGroupIDs)
         {
@@ -607,7 +620,6 @@
 
             return Enumerable.Empty<CustomerGroupModel>();
         }
-
 
         public IEnumerable<MatchesDetailInfoModel> GetTicketDetails(MatchesAssociationDetailViewModel macthInfo, string custIds, string betTypes)
         {
