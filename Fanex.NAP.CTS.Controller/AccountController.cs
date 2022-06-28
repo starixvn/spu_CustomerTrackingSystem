@@ -120,26 +120,7 @@
 
                             throw;
                         }
-                    },
-                    () =>
-                    {
-                        try
-                        {
-                            var robotUser = _robotClassificationService.GetStatusRobotClassification(customerInfoFromCTS.CustID);
-
-                            customerGeneralStatusViewModel.BindingRobotUser(robotUser);
-                        }
-                        catch (Exception ex)
-                        {
-                            var logMessage = new LogMessage(ex.Message)
-                                  .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                                  .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                            LogService.Error(logMessage);
-
-                            throw;
-                        }
-                    },
+                    },                   
                     () =>
                     {
                         try
@@ -165,6 +146,14 @@
             }
 
             return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        public ActionResult GetStatusRobotClassification(int custID)
+        {
+            var result = _robotClassificationService.GetStatusRobotClassification(custID);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -1467,7 +1456,7 @@
             }
 
             if (spanReason == string.Empty)
-                spanReason = MappingReasonByCategoryID(spanReason, cc, roleID);
+                spanReason = MappingReasonByCategoryID(spanReason, cc);
 
             if (spanReason == string.Empty)
                 spanReason = MappingReasonBySourceTypeID(spanReason, cc, roleID);
@@ -1480,7 +1469,7 @@
             return divReason;
         }
 
-        private string MappingReasonByCategoryID(string spanReason, CustomerClassificationHistoryModel cc, int roleID)
+        private string MappingReasonByCategoryID(string spanReason, CustomerClassificationHistoryModel cc)
         {
             var margin = Math.Round(cc.Margin, 3);
             var winlost = Math.Round(cc.Winloss, 3);
@@ -1549,7 +1538,7 @@
                     }
                     else if(cc.IsFromCTS)
                     {
-                        spanReason += $"PA is marked directly";
+                        spanReason += $"Problem Account is marked directly ";
                         if (!string.IsNullOrEmpty(cc.Remark))
                             spanReason += $" | Comment {cc.Remark}";
                         spanReason += $" | Win lost: {winlost}";
