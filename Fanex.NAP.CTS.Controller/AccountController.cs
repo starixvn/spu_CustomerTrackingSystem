@@ -1797,7 +1797,7 @@
                     }
                 };
 
-            var custInfos = _problemAccountClassificationService.InsertRobotAccount(robotAccounts);
+            var custInfos = _problemAccountClassificationService.InsertRobotAccountPackge(robotAccounts);
 
             if (custInfos.Any())
             {

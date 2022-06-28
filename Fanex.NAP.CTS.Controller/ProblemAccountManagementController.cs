@@ -192,7 +192,7 @@
                 CreatedBy = CurrentSession.UserId
             });
 
-            var custInfos = _paClassificationService.InsertRobotAccount(robotAccounts);
+            var custInfos = _paClassificationService.InsertRobotAccountPackge(robotAccounts);
 
             if (custInfos.Any())
             {
