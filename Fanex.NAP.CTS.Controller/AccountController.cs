@@ -1538,10 +1538,11 @@
                     }
                     else if(cc.IsFromCTS)
                     {
-                        spanReason += $"Problem Account is marked directly ";
-                        if (!string.IsNullOrEmpty(cc.Remark))
-                            spanReason += $" | Comment {cc.Remark}";
+                        spanReason += $"Robot is marked directly ";
+
                         spanReason += $" | Win lost: {winlost}";
+                        if (!string.IsNullOrEmpty(cc.Remark))
+                            spanReason += $" | {cc.Remark}";                        
                     } 
                     
                     break;
