@@ -102,8 +102,9 @@
     {
         Classification_PAMarkDirectly = 31,
         Classification_PAAffectedByUplines = 32,
-        Classification_PAUnmarkDirectly = 33,
-        Classification_UnmarkingPAAffectedDirectly = 34,        
+        Classification_PAUnmarkDirectly = 33,       
+        Classification_UnmarkingPAAffectedDirectly = 34, 
+        Classification_ClassifyGBMatchMonitor = 35,
         Classification_RescanRobot = 36,
         Classification_InsertRobot = 37
     }
