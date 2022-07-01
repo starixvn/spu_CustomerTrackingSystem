@@ -22,7 +22,7 @@
 
         IEnumerable<InsertRobotModel> GetExistedTWRobotUser(IEnumerable<long> custIds);
 
-        IEnumerable<CustInfoModel> InsertRobotAccountPackge(IEnumerable<InsertRobotModel> robotAccounts);
+        IEnumerable<CustInfoModel> InsertRobotAccountPackge(IEnumerable<InsertRobotModel> robotAccounts, bool isRescan);
 
         void UpdateBetLimitOfFlaggedCustomer(IEnumerable<long> custId);
 

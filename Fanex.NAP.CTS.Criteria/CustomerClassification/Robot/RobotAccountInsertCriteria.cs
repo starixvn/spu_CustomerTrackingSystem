@@ -8,6 +8,9 @@
         [SpParam(SqlParamName = "ip_CustInfo")]
         public string CustInfo { get; set; }
 
+        [SpParam(SqlParamName = "ip_IsRescan")]
+        public bool IsRescan { get; set; }
+
         public override string GetSettingKey()
         {
             return "CTS_DC_CustClassification_PA_InsertRobot";

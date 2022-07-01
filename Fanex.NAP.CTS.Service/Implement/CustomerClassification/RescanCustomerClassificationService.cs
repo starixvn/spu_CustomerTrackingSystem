@@ -266,7 +266,7 @@
                 robotToInsert.AddRange(robotClassification);
             }
 
-            var customerInfo = problemAccountService.InsertRobotAccountPackge(robotToInsert);
+            var customerInfo = problemAccountService.InsertRobotAccountPackge(robotToInsert, true);
 
             if (customerInfo.Any())
             {

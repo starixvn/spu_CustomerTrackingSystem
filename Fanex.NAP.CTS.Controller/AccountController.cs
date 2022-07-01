@@ -1444,7 +1444,7 @@
 
             var winlost = Math.Round(cc.Winloss, 3);
 
-            if (cc.IsFromTVS)
+            if (cc.IsFromTVS && cc.SourceTypeID != (int)SourceTypeID.Classification_RescanRobot)
             {
                 if (cc.TVSRequestID > 0)
                     spanReason += $"Void by RequestID: { cc.TVSRequestID } ";
@@ -1528,22 +1528,38 @@
                 case (int)ClassificationSourceType.RobotUser61:
                 case (int)ClassificationSourceType.RobotUser163:
                 case (int)ClassificationSourceType.RobotUser164:
-                    if (cc.IsFromTW)
+                    if (cc.SourceTypeID != (int)SourceTypeID.Classification_RescanRobot)
                     {
-                        spanReason += $"Counter: {cc.RobotCounter} | Win lost: {winlost}";
+                        if (cc.IsFromTVS)
+                        {
+                            if (cc.TVSRequestID > 0)
+                                spanReason += $"Void by RequestID: { cc.TVSRequestID } | Win lost: {winlost}";
+                            else
+                                spanReason += $"Void by BetID |  Win lost: {winlost}";
+                        }
+                        else if (cc.IsFromTW)
+                        {
+                            spanReason += $"Counter: {cc.RobotCounter} | Win lost: {winlost}";
+                        }
+                        else if (cc.IsFromAI)
+                        {
+                            spanReason += $"Win lost: {winlost}";
+                        }
+                        else if (cc.IsFromCTS)
+                        {
+                            spanReason += $"Robot is marked directly ";
+
+                            spanReason += $" | Win lost: {winlost}";
+                            if (!string.IsNullOrEmpty(cc.Remark))
+                                spanReason += $" | {cc.Remark}";
+                        }
                     }
-                    else if (cc.IsFromAI)
+                    else
                     {
                         spanReason += $"Win lost: {winlost}";
-                    }
-                    else if(cc.IsFromCTS)
-                    {
-                        spanReason += $"Robot is marked directly ";
-
-                        spanReason += $" | Win lost: {winlost}";
                         if (!string.IsNullOrEmpty(cc.Remark))
-                            spanReason += $" | {cc.Remark}";                        
-                    } 
+                            spanReason += $" | {cc.Remark}";
+                    }
                     
                     break;
                 
@@ -1783,11 +1799,11 @@
                         Remark = model.Remark,
                         IsDirect = true,
                         IsFromCTS = true,
-                        CreatedBy = CurrentSession.UserId
+                        CreatedBy = CurrentSession.UserId                       
                     }
                 };
 
-            var custInfos = _problemAccountClassificationService.InsertRobotAccountPackge(robotAccounts);
+            var custInfos = _problemAccountClassificationService.InsertRobotAccountPackge(robotAccounts, false);
 
             if (custInfos.Any())
             {

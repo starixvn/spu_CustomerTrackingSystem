@@ -189,10 +189,10 @@
                 Remark = model.Comment,
                 IsDirect = true,
                 IsFromCTS = true,
-                CreatedBy = CurrentSession.UserId
+                CreatedBy = CurrentSession.UserId                
             });
 
-            var custInfos = _paClassificationService.InsertRobotAccountPackge(robotAccounts);
+            var custInfos = _paClassificationService.InsertRobotAccountPackge(robotAccounts, false);
 
             if (custInfos.Any())
             {

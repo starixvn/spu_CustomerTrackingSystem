@@ -156,7 +156,7 @@
             return Enumerable.Empty<InsertRobotModel>();
         }
 
-        public IEnumerable<CustInfoModel> InsertRobotAccountPackge(IEnumerable<InsertRobotModel> robotAccounts)
+        public IEnumerable<CustInfoModel> InsertRobotAccountPackge(IEnumerable<InsertRobotModel> robotAccounts, bool isRescan)
         {
             if (robotAccounts != null && robotAccounts.Any())
             {
@@ -166,7 +166,7 @@
 
                 var robotClassification = MergeRobotAccountClassification(robotAccounts, paLosing);
 
-                var customerInfo = InsertRobotAccount(JsonConvert.SerializeObject(robotClassification));
+                var customerInfo = InsertRobotAccount(JsonConvert.SerializeObject(robotClassification), isRescan);
 
                 CheckNewPAAssociationCustomerForRollback(customerInfo);
 
@@ -365,11 +365,12 @@
             }
         }
 
-        private IEnumerable<CustInfoModel> InsertRobotAccount(string robotAccountJson)
+        private IEnumerable<CustInfoModel> InsertRobotAccount(string robotAccountJson, bool isRescan)
         {
             var criteria = new RobotAccountInsertCriteria
             {
-                CustInfo = robotAccountJson
+                CustInfo = robotAccountJson,
+                IsRescan = isRescan
             };
 
             return _repository.Fetch<CustInfoModel>(criteria) ?? Enumerable.Empty<CustInfoModel>();
