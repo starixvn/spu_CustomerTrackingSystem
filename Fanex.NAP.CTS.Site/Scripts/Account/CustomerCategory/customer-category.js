@@ -491,7 +491,7 @@
         });
 
         if (params.CategoryID != 0) {
-            let url = params.CategoryGroup == 61
+            let url = params.CategoryGroup == 163
                 ? common.modifyRelativeUrl('Account/SaveMarkRobotAccount')
                 : common.modifyRelativeUrl('Account/SaveMarkCustomerCategory');
 
