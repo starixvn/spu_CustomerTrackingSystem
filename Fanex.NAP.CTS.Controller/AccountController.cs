@@ -1595,6 +1595,9 @@
                         spanReason += $"| {cc.Remark}";
                     }
                     break;
+                case (int)SourceTypeID.Classification_RescanRobot:
+                    spanReason += $"Win lost: {winlost}";
+                    break;
                 default:
                     break;
             }
