@@ -1556,9 +1556,7 @@
                     }
                     else
                     {
-                        spanReason += $"Win lost: {winlost}";
-                        if (!string.IsNullOrEmpty(cc.Remark))
-                            spanReason += $" | {cc.Remark}";
+                        spanReason += $"Win lost: {winlost}";                      
                     }
                     
                     break;
