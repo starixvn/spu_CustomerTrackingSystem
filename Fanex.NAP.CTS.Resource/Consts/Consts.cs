@@ -331,7 +331,8 @@
             GroupingCustomerAPI = 234,
             GetDetailAssociationReportAPI = 235,
             GetProbationReportAPI = 236,
-            ScanCTSCustomerAPI = 237
+            ScanCTSCustomerAPI = 237,
+            AssociatedGroupMonitorRpt
         };
 
         public enum SystemId

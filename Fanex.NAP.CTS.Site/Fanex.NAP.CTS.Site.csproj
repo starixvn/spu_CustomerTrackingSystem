@@ -1073,6 +1073,9 @@
     </Content>
     <Content Include="Views\Account\CustomerCategory\MarkCustomerCategory.cshtml" />
     <Content Include="Views\Account\CustomerCategory\UnmarkCustomerCategory.cshtml" />
+    <Content Include="Views\AssociatedGroupMonitor\Index.cshtml" />
+    <Content Include="Views\AssociatedGroupMonitor\AddGroup.cshtml" />
+    <Content Include="Views\AssociatedGroupMonitor\AddAccount.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CoreBetList.css" />

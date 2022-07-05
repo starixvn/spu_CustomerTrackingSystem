@@ -64,6 +64,7 @@
     <Compile Include="Account\BettingStatistic\BettingStaisticByBetTypeGetCriteria.cs" />
     <Compile Include="Account\BettingStatistic\BettingStatictisDaily.cs" />
     <Compile Include="Account\ChainToEvidence\AddAccountExceptionCriteria.cs" />
+    <Compile Include="AssociatedGroupMonitor\GetAssociatedGroupMonitorCriteria.cs" />
     <Compile Include="CustomerClassification\GetLastestCCDangerLevelCriteria.cs" />
     <Compile Include="CustomerClassification\InputErrorLogInsertCriteria.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\CheckNewPAAssociationCustomerForRollbackCriteria.cs" />

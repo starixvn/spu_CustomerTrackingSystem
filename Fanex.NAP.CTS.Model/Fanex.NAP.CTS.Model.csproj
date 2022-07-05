@@ -184,6 +184,7 @@
     <Compile Include="API\UpdateCategoryWhenPAUpdated\UpdatePALosingInfoModel.cs" />
     <Compile Include="API\UpdateCategoryWhenPAUpdated\UpdateCategoryModel.cs" />
     <Compile Include="API\UpdateCategoryWhenPAUpdated\UpdateCategoryResultModel.cs" />
+    <Compile Include="AssociatedGroupMonitor\AssociatedGroupMonitorModel.cs" />
     <Compile Include="AssociationDetection\GetAssociationDetectionModel.cs" />
     <Compile Include="API\ProblemCaseMonitor\ProblemCaseModel.cs" />
     <Compile Include="API\ProblemCaseMonitor\ProblemCaseMonitorParamsModel.cs" />

@@ -100,6 +100,7 @@
     <Compile Include="API\ProblemCaseMonitor\ProblemCaseMonitorViewModel.cs" />
     <Compile Include="AssociatedAccountMonitor\AssociatedAccountMonitorDetailViewModel.cs" />
     <Compile Include="AssociatedAccountMonitor\InsertManualAssociatedAccountViewModel.cs" />
+    <Compile Include="AssociatedGroupMonitor\AssociatedGroupMonitorViewModel.cs" />
     <Compile Include="AssociationDetection\GroupClassificationGraphDbViewModel.cs" />
     <Compile Include="AssociationDetection\AssociationLevelGraphDbViewModel.cs" />
     <Compile Include="AssociationDetection\AssociationDetectionItemViewModel.cs" />
