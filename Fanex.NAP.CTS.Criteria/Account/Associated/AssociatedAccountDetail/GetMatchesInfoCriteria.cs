@@ -7,13 +7,10 @@
     {
         [SpParam(SqlParamName = "MatchIds")]
         public string MatchIds { get; set; }
-
-        [SpParam(SqlParamName = "CustIds")]
-        public string CustIds { get; set; }
-
+        
         public override string GetSettingKey()
         {
-            return "CTS_Rpt_BettingPattern_MatchInfo";
+            return "CTS_MatchInfo_Get";
         }
 
         public override bool IsValid()

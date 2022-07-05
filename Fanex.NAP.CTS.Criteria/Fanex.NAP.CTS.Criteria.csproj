@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Account\Associated\ActiveRemoveAssociationCriteria.cs" />
     <Compile Include="Account\Associated\AssociatedAccountDetail\GetCustomerGroupCriteria.cs" />
+    <Compile Include="Account\Associated\AssociatedAccountDetail\GetMatchesInfoCriteria.cs" />
     <Compile Include="Account\Associated\ChangeUpdateTaggingAssWithPACriteria.cs" />
     <Compile Include="Account\Associated\GetAssociationByIPByCustIdCriteria.cs" />
     <Compile Include="Account\Associated\GetAssociationByIPInfoCriteria.cs" />
@@ -52,7 +53,7 @@
     <Compile Include="Account\Associated\GetAssociationProfileStatictisCriteria.cs" />
     <Compile Include="Account\Associated\GetCategoryInfoCriteria.cs" />
     <Compile Include="Account\Associated\AssociatedAccountDetail\GetMatchesDetailInfoCriteria.cs" />
-    <Compile Include="Account\Associated\AssociatedAccountDetail\GetMatchesInfoCriteria.cs" />
+    <Compile Include="Account\Associated\AssociatedAccountDetail\GetBettingPatternMatchesInfoCriteria.cs" />
     <Compile Include="Account\Associated\AssociatedAccountDetail\GetMatchesAssociationByAICriteria.cs" />
     <Compile Include="Account\Associated\InsertManualAssociationMultipleCriteria.cs" />
     <Compile Include="Account\Associated\ValidateManualAssociationMultipleCriteria.cs" />

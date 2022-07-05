@@ -3,6 +3,7 @@
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
+    using Fanex.NAP.CTS.Model.Account.AssociatedAccount;
     using Fanex.NAP.CTS.Model.Account.CustomerInfo;
     using Fanex.NAP.CTS.Model.API;
     using Fanex.NAP.CTS.Model.Association;
@@ -131,7 +132,9 @@
 
         MatchesAssociationByAIModel GetGBAssociationFromAI(long custID1, long custID2, string groupList);
 
-        IEnumerable<MatchesInfoModel> GetMatchesInfo(string matchIDs, string custIds);
+        IEnumerable<MatchesInfoModel> GetBettingPatternMatchesInfo(string matchIDs, string custIds);
+
+        IEnumerable<MatchesModel> GetMatchInfosByIDs(string matchIDs);
 
         IEnumerable<CustomerGroupModel> GetCustGroupAssociation(string originalGroupIDs);
 

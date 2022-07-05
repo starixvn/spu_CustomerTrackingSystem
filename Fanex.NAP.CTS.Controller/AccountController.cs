@@ -741,7 +741,7 @@
                 {
                     var matchIDs = groupBettingAssociation.MatchesInfo.Select(c => c.MatchID).Distinct();
 
-                    var matchesInfo = _accountService.GetMatchesInfo(string.Join(",", matchIDs), custID1 + "," + custID2);
+                    var matchesInfo = _accountService.GetBettingPatternMatchesInfo(string.Join(",", matchIDs), custID1 + "," + custID2);
 
                     if (matchesInfo != null && matchesInfo.Any())
                     {
@@ -876,11 +876,16 @@
 
             if (info.ItemList != null && info.ItemList.Any())
             {
+                var matchIds = string.Join(",", info.ItemList.Select(x => x.MatchID).Distinct());
+
+                var matchInfos = _accountService.GetMatchInfosByIDs(matchIds);
+
                 data = new AssociationByIPInfoViewModel
                 {
                     TotalMatchCount = info.TotalMatchCount,
                     TotalIPSharingCount = info.TotalIPCount,
                     ErrorMessage = info.ErrorMessage,
+                   
                     ItemList = info.ItemList.Select(x =>
                     {
                         var homeName = CachedRef.GetTeamName(x.HomeID);
@@ -888,6 +893,7 @@
                         var leagueName = CachedRef.GetLeagueName(x.LeagueID);
                         var betTypeList = new List<string>();
                         var ip = x.IP;
+                        var eventDateStr = "-";
 
                         if (x.BettypeList != null)
                         {
@@ -908,14 +914,17 @@
                             ip = ip.Replace(",", ", ");
                         }
 
+                        var match = matchInfos.Where(y => y.MatchID == x.MatchID).FirstOrDefault();
+
+                        if (match != null && match.EventDate != DateTime.MinValue)                        
+                            eventDateStr = match.EventDate.ToString(Consts.FormatDateToString_MMMddyyyy);                        
+
                         return new AssociationByIPItemViewModel
                         {
                             MatchID = x.MatchID,
                             EventName = homeName != string.Empty ? (homeName + " - vs - " + awayName) : "-",
                             LeagueName = leagueName != string.Empty ? leagueName : "-",
-                            EventDateString = x.EventDate != DateTime.MinValue
-                                ? x.EventDate.ToString(Consts.FormatDateToString_MMMddyyyy)
-                                : "-",
+                            EventDateString = eventDateStr,
                             BetTypes = string.Join(", ", betTypeList),
                             IP = ip
                         };
