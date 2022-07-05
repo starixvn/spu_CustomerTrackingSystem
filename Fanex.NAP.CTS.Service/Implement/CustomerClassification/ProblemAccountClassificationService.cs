@@ -27,7 +27,6 @@
         private readonly IDynamicRepository _repository;
         private readonly ICustomerClassificationService _ccService;
         private readonly IDataLogTrackingServices dataLogTrackingServices;
- 
 
         public ProblemAccountClassificationService()
         {
@@ -78,20 +77,21 @@
             return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
         }
 
-        public IEnumerable<CustInfoModel> InsertProblemAccountLogics(IEnumerable<InsertProblemAccountModel> problemAccounts
-            , IEnumerable<ProblemAccountLosingClassificationModel> paLosing
-            , InsertPA_ByType mappingCategoryByType
-            , bool isToQueue)
+        public IEnumerable<CustInfoModel> InsertProblemAccountLogics(IEnumerable<InsertProblemAccountModel> problemAccounts, FunctionId funcId, InsertPA_ByType mappingCategoryByType, bool isToQueue)
         {
             if (problemAccounts.Any())
             {
-                var custIds = InsertProblemAccount(problemAccounts, paLosing, mappingCategoryByType, isToQueue);
+                var custIds = problemAccounts.Select(c => c.CustID)?.Distinct();
 
-                if (custIds != null && custIds.Any())
+                var probAccountLosing = GetProblemAccountLosingClassification(custIds, funcId);
+
+                var custInfo = InsertProblemAccount(problemAccounts, probAccountLosing, mappingCategoryByType, isToQueue);
+
+                if (custInfo != null && custInfo.Any())
                 {
-                    InsertPALogics(custIds);
+                    InsertPALogics(custInfo);
 
-                    return custIds;
+                    return custInfo;
                 }
             }
 
@@ -146,7 +146,6 @@
                     {
                         CustID = c.CustId,
                         RobotCounter = c.Counter,
-                        CategoryID = (int)CATEGORY.ROBOT,
                         IsFromTW = true,
                         IsDirect = true,
                         CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"])
@@ -157,11 +156,17 @@
             return Enumerable.Empty<InsertRobotModel>();
         }
 
-        public IEnumerable<CustInfoModel> InsertRobotAccount(IEnumerable<InsertRobotModel> robotAccounts)
+        public IEnumerable<CustInfoModel> InsertRobotAccountPackge(IEnumerable<InsertRobotModel> robotAccounts, bool isRescan)
         {
             if (robotAccounts != null && robotAccounts.Any())
             {
-                var customerInfo = InsertRobotAccount(JsonConvert.SerializeObject(robotAccounts));
+                var custIds = robotAccounts.Select(x => x.CustID).Distinct();
+
+                var paLosing = GetProblemAccountLosingClassification(custIds, FunctionId.InsertPAM);
+
+                var robotClassification = MergeRobotAccountClassification(robotAccounts, paLosing);
+
+                var customerInfo = InsertRobotAccount(JsonConvert.SerializeObject(robotClassification), isRescan);
 
                 CheckNewPAAssociationCustomerForRollback(customerInfo);
 
@@ -218,6 +223,40 @@
             }
         }
 
+        private IEnumerable<InsertRobotModel> MergeRobotAccountClassification(IEnumerable<InsertRobotModel> robotAccounts, IEnumerable<ProblemAccountLosingClassificationModel> paLosing)
+        {
+            if (paLosing != null && paLosing.Any())
+            {
+                return robotAccounts.GroupJoin(paLosing,
+                                                ro => ro.CustID,
+                                                pl => pl.CustId,
+                                                (ro, pl) => new { ro, pl })
+                                                .SelectMany(group => group.pl.DefaultIfEmpty(),
+                                                            (group, itemLosing) => new InsertRobotModel
+                                                            {
+                                                                CustID = group.ro.CustID,
+                                                                RobotCounter = group.ro.RobotCounter,
+                                                                Remark = group.ro.Remark,
+                                                                CreatedBy = group.ro.CreatedBy,
+
+                                                                IsFromTW = group.ro.IsFromTW,
+                                                                IsFromCTS = group.ro.IsFromCTS,
+                                                                IsFromAI = group.ro.IsFromAI,
+                                                                IsFromTVS = group.ro.IsFromTVS,
+                                                                TVSRequestID = group.ro.TVSRequestID,
+                                                                IsDirect = group.ro.IsDirect,
+
+                                                                TurnoverRM = itemLosing?.TurnoverRM,
+                                                                WinlossRM = itemLosing?.WinlossRM,
+                                                                WinlossStatus = itemLosing?.WinlossStatus,
+                                                                BetCount = itemLosing?.BetCount,
+                                                                ActiveDays = itemLosing?.ActiveDays
+                                                            });
+            }
+
+            return robotAccounts;
+        }
+
         private IEnumerable<InsertProblemAccountModel> MergeProblemAccountClassification(IEnumerable<InsertProblemAccountModel> problemAccounts, IEnumerable<ProblemAccountLosingClassificationModel> probAccountLosing)
         {
             if (problemAccounts != null && problemAccounts.Any())
@@ -269,7 +308,7 @@
                 InputType = Enum.GetName(typeof(InsertPA_ByType), inputType)
             };
 
-           return _repository.Fetch<CustInfoModel>(criteria) ?? Enumerable.Empty<CustInfoModel>();
+            return _repository.Fetch<CustInfoModel>(criteria) ?? Enumerable.Empty<CustInfoModel>();
         }
 
         public void RemoveOldProblemAccount(IEnumerable<long> custIds)
@@ -326,11 +365,12 @@
             }
         }
 
-        private IEnumerable<CustInfoModel> InsertRobotAccount(string robotAccountJson)
+        private IEnumerable<CustInfoModel> InsertRobotAccount(string robotAccountJson, bool isRescan)
         {
             var criteria = new RobotAccountInsertCriteria
             {
-                CustInfo = robotAccountJson
+                CustInfo = robotAccountJson,
+                IsRescan = isRescan
             };
 
             return _repository.Fetch<CustInfoModel>(criteria) ?? Enumerable.Empty<CustInfoModel>();

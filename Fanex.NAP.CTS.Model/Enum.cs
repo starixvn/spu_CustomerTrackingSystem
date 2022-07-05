@@ -103,7 +103,9 @@
         Classification_PAMarkDirectly = 31,
         Classification_PAAffectedByUplines = 32,
         Classification_PAUnmarkDirectly = 33,
-        Classification_UnmarkingPAAffectedDirectly = 34
+        Classification_UnmarkingPAAffectedDirectly = 34,        
+        Classification_RescanRobot = 36,
+        Classification_InsertRobot = 37
     }
 
     public enum EvidenceQueueActionID

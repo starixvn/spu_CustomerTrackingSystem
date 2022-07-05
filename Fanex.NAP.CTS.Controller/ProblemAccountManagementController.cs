@@ -70,7 +70,7 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.ProblemAccountManagementRpt)]
         public ActionResult GetProblemAccount(ProblemAccountFilterViewModel filter)
         {
-            var problemAccounts = GetProblemAccounts(filter, false);
+            var problemAccounts = GetProblemAccounts(filter);
 
             return Json(new
             {
@@ -78,7 +78,7 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private IEnumerable<ProblemAccountViewModel> GetProblemAccounts(ProblemAccountFilterViewModel filter, bool isExportExcel)
+        private IEnumerable<ProblemAccountViewModel> GetProblemAccounts(ProblemAccountFilterViewModel filter)
         {
             var problemAccounts = Enumerable.Empty<ProblemAccountViewModel>();
 
@@ -144,7 +144,7 @@
 
                 if (!resultValidate.ProblemAccountInvalidList.Any())
                 {
-                    if (model.CategoryGroup == 61)
+                    if (model.CategoryGroup == 163)
                     {
                         dbResult = SaveMarkRobotAccount(model, validatedModels);
                     }
@@ -185,15 +185,14 @@
         private DBResult SaveMarkRobotAccount(ValidateProblemAccountInputViewModel model, IEnumerable<ProblemAccountValidatedModel> validatedModels)
         {
             var robotAccounts = validatedModels.Select(x => new InsertRobotModel {
-                CustID = x.CustID,
-                CategoryID = model.CategoryID,
+                CustID = x.CustID,               
                 Remark = model.Comment,
                 IsDirect = true,
                 IsFromCTS = true,
-                CreatedBy = CurrentSession.UserId
+                CreatedBy = CurrentSession.UserId                
             });
 
-            var custInfos = _paClassificationService.InsertRobotAccount(robotAccounts);
+            var custInfos = _paClassificationService.InsertRobotAccountPackge(robotAccounts, false);
 
             if (custInfos.Any())
             {
@@ -279,7 +278,7 @@
                 , filter.DateTime.ToString(FormatDateTimeToString_YYYYmmdd)
                 , filter.DateTime.ToString(Consts.FormatTimeToString_hhmmss));
           
-            var problemAccounts = GetProblemAccounts(filter, true);            
+            var problemAccounts = GetProblemAccounts(filter);            
             var excelFile = _pamService.ExportProblemAccount(problemAccounts, fileName, templatePath, filter);
 
             return File(excelFile, "application/vnd.ms-excel", fileName);

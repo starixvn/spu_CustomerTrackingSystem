@@ -109,6 +109,8 @@
                 var customerCategory = new customer_category();
                 customerCategory.Initial(custId, ctsCustId, subscriberId, username, isHostPermission, custSubId);
 
+                customerCategory.ReloadStatusRobotUser(custId);
+
                 GetCustProfileDates();
 
                 GetCustProfileLoginInfo();
@@ -171,7 +173,7 @@
                 console.log(errMsg);
             }
         });
-    }  
+    }      
 
     function GetCustProfileAssociationAccount() {
         $.ajax(common.modifyRelativeUrl('Account/GetCustProfileAssociationAccount'), {
@@ -319,8 +321,7 @@
         }
     };    
 
-    function Initial() {
-
+    function Initial() {        
         LoadCustomerCategory();                 
                                   
         $("#tabs-account-detail").tabs();       

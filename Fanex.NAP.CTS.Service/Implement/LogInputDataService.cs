@@ -54,7 +54,7 @@
                     logInputData.Add(new LogInputDataModel
                     {
                         CustId = c.CustID,
-                        InputValue = new { c.RobotCounter, c.CategoryID, c.CreatedBy }.ToString()
+                        InputValue = new { c.RobotCounter }.ToString()
                     });
                 });
             }

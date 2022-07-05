@@ -64,15 +64,13 @@
             {
                 var existedProbAccounts = GetExistedProblemAccounts(parameters.CustIds, parameters.IsDataChanged);
 
-                var paLosing = problemAccountService.GetProblemAccountLosingClassification(parameters.CustIds, parameters.FunctionId);
-
-                var custTORemovedOldPA = InsertProblemAccountLogics(existedProbAccounts.ProblemAccounts, paLosing, ref rescanResult, parameters.IsToQueue);
+                var custTORemovedOldPA = InsertProblemAccountLogics(existedProbAccounts.ProblemAccounts, parameters.FunctionId, ref rescanResult, parameters.IsToQueue);
 
                 if (rescanResult.IsSuccess)
                 {
                     var robotUsers = GetTWRobotUsers(parameters);
 
-                    InsertRobot(robotUsers, existedProbAccounts.RobotClassificationPerformance, ref rescanResult);
+                    InsertRobot(robotUsers, existedProbAccounts.RobotClassification, ref rescanResult);
                 }
 
                 if (rescanResult.IsSuccess && rescanResult.CustIds.Any())
@@ -107,7 +105,7 @@
                         ClassifyCustomerGeneralCategoryDaily(custToString, parameters.FunctionId, false);
                     }
                 }
-                
+
                 if (smaCustIds.Any())
                 {
                     var custToRemovePA = smaCustIds.Except(custIdsToRescanPA);
@@ -188,14 +186,9 @@
                         CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"])
                     });
 
-                    existedPA.RobotClassificationPerformance = result.Where(c => c.IsRobot).Select(c => new InsertRobotModel
+                    existedPA.RobotClassification = result.Where(c => c.IsRobot).Select(c => new InsertRobotModel
                     {
                         CustID = c.CustID,
-                        CategoryID = c.CategoryID,
-                        TurnoverRM = c.Turnover,
-                        WinlossRM = c.Winloss,
-                        BetCount = c.BetCount,
-                        ActiveDays = c.ActiveDays,
                         IsFromTW = c.IsFromTW,
                         IsFromCTS = c.IsFromCTS,
                         IsFromAI = c.IsFromAI,
@@ -211,11 +204,11 @@
             return existedPA;
         }
 
-        private IEnumerable<long> InsertProblemAccountLogics(IEnumerable<InsertProblemAccountModel> problemAccounts, IEnumerable<ProblemAccountLosingClassificationModel> paLosing, ref RescanResultModel rescanResultModel, bool isToQueue)
+        private IEnumerable<long> InsertProblemAccountLogics(IEnumerable<InsertProblemAccountModel> problemAccounts, FunctionId funcId, ref RescanResultModel rescanResultModel, bool isToQueue)
         {
             if (problemAccounts != null && problemAccounts.Any())
             {
-                var result = problemAccountService.InsertProblemAccountLogics(problemAccounts, paLosing, InsertPA_ByType.Category, isToQueue);
+                var result = problemAccountService.InsertProblemAccountLogics(problemAccounts, funcId, InsertPA_ByType.Category, isToQueue);
 
                 if (result != null && result.Any())
                 {
@@ -273,7 +266,7 @@
                 robotToInsert.AddRange(robotClassification);
             }
 
-            var customerInfo = problemAccountService.InsertRobotAccount(robotToInsert);
+            var customerInfo = problemAccountService.InsertRobotAccountPackge(robotToInsert, true);
 
             if (customerInfo.Any())
             {

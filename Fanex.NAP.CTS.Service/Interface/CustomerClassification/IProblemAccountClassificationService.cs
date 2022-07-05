@@ -12,7 +12,7 @@
     {
         DBResult InsertProblemAccountPackage(IEnumerable<InsertProblemAccountModel> problemAccounts, InsertPA_ByType mappingCategoryByType, string serviceName, FromFlow fromFlow, bool isToQueue);
 
-        IEnumerable<CustInfoModel> InsertProblemAccountLogics(IEnumerable<InsertProblemAccountModel> problemAccounts, IEnumerable<ProblemAccountLosingClassificationModel> paLosing, InsertPA_ByType mappingCategoryByType, bool isToQueue);
+        IEnumerable<CustInfoModel> InsertProblemAccountLogics(IEnumerable<InsertProblemAccountModel> problemAccounts, FunctionId funcId, InsertPA_ByType mappingCategoryByType, bool isToQueue);
 
         void RemoveOldProblemAccount(IEnumerable<long> custIds);
 
@@ -22,7 +22,7 @@
 
         IEnumerable<InsertRobotModel> GetExistedTWRobotUser(IEnumerable<long> custIds);
 
-        IEnumerable<CustInfoModel> InsertRobotAccount(IEnumerable<InsertRobotModel> robotAccounts);
+        IEnumerable<CustInfoModel> InsertRobotAccountPackge(IEnumerable<InsertRobotModel> robotAccounts, bool isRescan);
 
         void UpdateBetLimitOfFlaggedCustomer(IEnumerable<long> custId);
 

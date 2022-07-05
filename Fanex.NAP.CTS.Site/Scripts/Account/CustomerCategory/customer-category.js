@@ -104,6 +104,7 @@
 
                 LoadGrid(params.CTSCustID, true);
                 GetCustomerCategory(params.CustID);
+                LoadStatusRobotUser(params.CustID);
             },
             beforeSend: function () {
                 common.showLoading();
@@ -490,7 +491,7 @@
         });
 
         if (params.CategoryID != 0) {
-            let url = params.CategoryGroup == 61
+            let url = params.CategoryGroup == 163
                 ? common.modifyRelativeUrl('Account/SaveMarkRobotAccount')
                 : common.modifyRelativeUrl('Account/SaveMarkCustomerCategory');
 
@@ -508,6 +509,7 @@
 
                     LoadGrid(params.CTSCustID, true);
                     GetCustomerCategory(params.CustID);
+                    LoadStatusRobotUser(params.CustID);
                 },
                 beforeSend: function () {
                     common.showLoading();
@@ -522,7 +524,59 @@
             });
         }
     }
-   
+
+    function LoadStatusRobotUser(custID)
+    {
+        $.ajax(common.modifyRelativeUrl('Account/GetStatusRobotClassification'), {
+            type: 'POST',
+            data: {
+                CustID: custID
+            },
+            success: function (response) {
+                switch (response.RobotType) {
+                    case -2:
+                        $('span.icon-base-robot').addClass('hide');
+                        $('span.icon-ob-robot').addClass('hide');
+                        $('span.icon-good-robot').addClass('hide');
+                        $('span.icon-bad-robot').addClass('hide');
+                        break;
+                        break;
+                    case -1:
+                        $('span.icon-base-robot').removeClass('hide');
+                        $('span.icon-ob-robot').addClass('hide');
+                        $('span.icon-good-robot').addClass('hide');
+                        $('span.icon-bad-robot').addClass('hide');
+                        break;
+                    case 0:
+                        $('span.icon-base-robot').addClass('hide');
+                        $('span.icon-ob-robot').removeClass('hide');
+                        $('span.icon-good-robot').addClass('hide');
+                        $('span.icon-bad-robot').addClass('hide');
+                        break;
+                    case 1:
+                        $('span.icon-base-robot').addClass('hide');
+                        $('span.icon-ob-robot').addClass('hide');
+                        $('span.icon-good-robot').removeClass('hide');
+                        $('span.icon-bad-robot').addClass('hide');
+                        break;
+                    case 2:
+                        $('span.icon-base-robot').addClass('hide');
+                        $('span.icon-ob-robot').addClass('hide');
+                        $('span.icon-good-robot').addClass('hide');
+                        $('span.icon-bad-robot').removeClass('hide');
+                        break;
+                }              
+            },
+            beforeSend: function () {                
+            },
+            complete: function () {                
+            },
+            error: function (error) {
+                console.log(error);                
+            }
+        });
+    }
+
     function BuildCategoryToHtmlDiv(html, classIconColor, categoryName) {
         html += "<div class='info-status'>";
         html += "<div class='status-left'>";
@@ -711,6 +765,10 @@
 
         LoadGrid(ctsCustId);
     };
+
+    this.ReloadStatusRobotUser = function (custId) {
+        LoadStatusRobotUser(custId);
+    }
 
     this.ReloadTab = function (ctsCustId) {
         ReloadGrid(ctsCustId);

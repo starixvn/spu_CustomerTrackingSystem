@@ -9,10 +9,11 @@
         public ExistedPAResultModel()
         {
             ProblemAccounts = Enumerable.Empty<InsertProblemAccountModel>();
-            RobotClassificationPerformance = Enumerable.Empty<InsertRobotModel>();
+            RobotClassification = Enumerable.Empty<InsertRobotModel>();
         }
+
         public IEnumerable<InsertProblemAccountModel> ProblemAccounts { get; set; }
 
-        public IEnumerable<InsertRobotModel> RobotClassificationPerformance { get; set; }
+        public IEnumerable<InsertRobotModel> RobotClassification { get; set; }
     }
 }

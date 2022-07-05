@@ -120,26 +120,7 @@
 
                             throw;
                         }
-                    },
-                    () =>
-                    {
-                        try
-                        {
-                            var robotUser = _robotClassificationService.GetStatusRobotClassification(customerInfoFromCTS.CustID);
-
-                            customerGeneralStatusViewModel.BindingRobotUser(robotUser);
-                        }
-                        catch (Exception ex)
-                        {
-                            var logMessage = new LogMessage(ex.Message)
-                                  .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                                  .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                            LogService.Error(logMessage);
-
-                            throw;
-                        }
-                    },
+                    },                   
                     () =>
                     {
                         try
@@ -165,6 +146,14 @@
             }
 
             return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        public ActionResult GetStatusRobotClassification(int custID)
+        {
+            var result = _robotClassificationService.GetStatusRobotClassification(custID);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -1455,7 +1444,7 @@
 
             var winlost = Math.Round(cc.Winloss, 3);
 
-            if (cc.IsFromTVS)
+            if (cc.IsFromTVS && cc.SourceTypeID != (int)SourceTypeID.Classification_RescanRobot)
             {
                 if (cc.TVSRequestID > 0)
                     spanReason += $"Void by RequestID: { cc.TVSRequestID } ";
@@ -1526,7 +1515,6 @@
                 case (int)ClassificationSourceType.HighRiskPunter77:
                     spanReason += $"Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount} | Group Betting Percent: {twGroupBettingRate}";
                     break;
-
                 case (int)ClassificationSourceType.Probation58:
                 case (int)ClassificationSourceType.SmartPunter68:
                 case (int)ClassificationSourceType.HighRiskPunter78:
@@ -1536,19 +1524,43 @@
                 case (int)ClassificationSourceType.ProPunterInactive:
                     spanReason += $"<span> { cc.SourceTypeName } </span>";
                     break;
+                                   
                 case (int)ClassificationSourceType.RobotUser61:
-                    spanReason += $"Robot Detection ";
-
-                    if (cc.RobotCounter > 0)
-                        spanReason += $"| Counter: {cc.RobotCounter}";
-
-                    if (!string.IsNullOrEmpty(cc.Remark))
-                        spanReason += $"| {cc.Remark}";
-                    break;
                 case (int)ClassificationSourceType.RobotUser163:
                 case (int)ClassificationSourceType.RobotUser164:
-                    spanReason += $"Turnover: {turnOver} | Win lost: {winlost} | Margin: {margin} | Bet Count: {betCount} | Active Day: {activeDays}";
+                    if (cc.SourceTypeID != (int)SourceTypeID.Classification_RescanRobot)
+                    {
+                        if (cc.IsFromTVS)
+                        {
+                            if (cc.TVSRequestID > 0)
+                                spanReason += $"Void by RequestID: { cc.TVSRequestID } | Win lost: {winlost}";
+                            else
+                                spanReason += $"Void by BetID |  Win lost: {winlost}";
+                        }
+                        else if (cc.IsFromTW)
+                        {
+                            spanReason += $"Counter: {cc.RobotCounter} | Win lost: {winlost}";
+                        }
+                        else if (cc.IsFromAI)
+                        {
+                            spanReason += $"Win lost: {winlost}";
+                        }
+                        else if (cc.IsFromCTS)
+                        {
+                            spanReason += $"Robot is marked directly ";
+
+                            spanReason += $" | Win lost: {winlost}";
+                            if (!string.IsNullOrEmpty(cc.Remark))
+                                spanReason += $" | {cc.Remark}";
+                        }
+                    }
+                    else
+                    {
+                        spanReason += $"Win lost: {winlost}";                      
+                    }
+                    
                     break;
+                
                 default:
                     break;
             }
@@ -1582,6 +1594,9 @@
                     {
                         spanReason += $"| {cc.Remark}";
                     }
+                    break;
+                case (int)SourceTypeID.Classification_RescanRobot:
+                    spanReason += $"Win lost: {winlost}";
                     break;
                 default:
                     break;
@@ -1782,15 +1797,14 @@
                     new InsertRobotModel
                     {
                         CustID = model.CustID,
-                        CategoryID = model.CategoryID,
                         Remark = model.Remark,
                         IsDirect = true,
                         IsFromCTS = true,
-                        CreatedBy = CurrentSession.UserId
+                        CreatedBy = CurrentSession.UserId                       
                     }
                 };
 
-            var custInfos = _problemAccountClassificationService.InsertRobotAccount(robotAccounts);
+            var custInfos = _problemAccountClassificationService.InsertRobotAccountPackge(robotAccounts, false);
 
             if (custInfos.Any())
             {

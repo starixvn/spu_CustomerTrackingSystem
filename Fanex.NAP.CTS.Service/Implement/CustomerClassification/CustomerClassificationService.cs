@@ -192,6 +192,9 @@
                     CustomerClass = c.CustomerClass
                 });
 
+                // write log for test
+                LogService.Info($"Feed Data to Soon88 - listCust: {JsonConvert.SerializeObject(customerClassifications)}");
+
                 feedDataToSoon88Service.FeedDataToSoon88(custClassList);
             }
             catch (Exception ex)
