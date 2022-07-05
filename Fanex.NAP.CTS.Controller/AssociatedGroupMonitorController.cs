@@ -41,10 +41,11 @@
         }
 
         [HttpPost]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.ProblemAccountManagementRpt)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedGroupMonitorRpt)]
         public ActionResult GetAssociatedGroupMonitor()
         {
             var associatedGroups = Enumerable.Empty<AssociatedGroupMonitorViewModel>();
+
             var data = _associatedGroupService.GetAssociatedGroupMonitor();
 
             if (data != null && data.Any())

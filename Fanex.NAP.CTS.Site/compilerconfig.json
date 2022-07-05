@@ -130,5 +130,9 @@
   {
     "outputFile": "Content/scss/abstracts/_variables.css",
     "inputFile": "Content/scss/abstracts/_variables.scss"
+  },
+  {
+    "outputFile": "Content/scss/pages/associated-group-monitor/associated-group-monitor.css",
+    "inputFile": "Content/scss/pages/associated-group-monitor/associated-group-monitor.scss"
   }
 ]

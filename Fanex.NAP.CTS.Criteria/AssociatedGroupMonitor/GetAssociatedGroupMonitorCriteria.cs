@@ -1,14 +1,12 @@
 ﻿namespace Fanex.NAP.CTS.Criteria.AssociatedGroupMonitor
 {
-    using Fanex.Data;
     using Fanex.Data.Repository;
-    using System;
 
     public class GetAssociatedGroupMonitorCriteria : CriteriaBase
     {
         public override string GetSettingKey()
         {
-            return "";
+            return "CTS_DC_AssociatedGroup_Get";
         }
 
         public override bool IsValid()

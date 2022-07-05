@@ -294,6 +294,7 @@
             NotificationSettingProbation = 47,
             ProblemAccountManagementRpt = 48,
             ProblemAccountManagementMarkNew = 49,
+            AssociatedGroupMonitorRpt = 50,
             PlaceEvidenceForMultipleCustAPI = 200,
             GetFlaggedCustomersByLevelAPI = 201,
             GetFlaggedCustByLvAndEvidenceAPI = 202,
@@ -331,8 +332,7 @@
             GroupingCustomerAPI = 234,
             GetDetailAssociationReportAPI = 235,
             GetProbationReportAPI = 236,
-            ScanCTSCustomerAPI = 237,
-            AssociatedGroupMonitorRpt
+            ScanCTSCustomerAPI = 237            
         };
 
         public enum SystemId
