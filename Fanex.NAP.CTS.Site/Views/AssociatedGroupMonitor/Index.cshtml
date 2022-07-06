@@ -12,14 +12,14 @@
     <div class="content">
         <h2 class="page-title">Associated Group Monitor</h2>
     </div>
-    
+
     <div class="associated-group-content">
         <div class="associated-group">
             <div class="fixed-header">
                 <div class="top-header">
                     <div class="button-add">
-                        <button class="button button-primary-outline" id="btnAddGroup">Create New Group</button>
-                    </div>                  
+                        <button class="button button-primary-outline button-add-group" id="btnAddGroup">Create New Group</button>
+                    </div>
                 </div>
             </div>
 
@@ -35,7 +35,7 @@
                         <th>Created By</th>
                         <th>Export Excel</th>
                         <th>Remove Group</th>
-                        <th>Add Account</th>                                      
+                        <th>Add Accounts</th>
                     </tr>
                 </thead>
             </table>
@@ -44,10 +44,24 @@
 </div>
 
 <div id="divAddAssociatedGroup" class="popup-add" style="display: none">
-    <div class="group-title">
+    <div class="form-control">
         <div class="label">Group Name<label style="color:red">*</label></div>
-        <div class="wrapper-title">
-        </div>
+        <input id="txtGroupNameAssociatedGroup" type="text" class="input-field full-width" maxlength="50" />
+    </div>
+
+    <div class="form-control">
+        <div class="label">ABI<label style="color:red">*</label></div>
+        <select class="control" id="cbbABIAssociatedGroup" name="state">
+            @for (int idx = 1; idx < 51; idx++)
+            {
+                <option value=@idx>@idx</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-control wrapper-comment">
+        <div class="label">Comment</div>
+        <textarea id="txtCommentAssociatedGroup" rows="3" class="comment-field full-width" maxlength="300"></textarea>
     </div>
 
     <div class="modal-footer margin-top-10">
@@ -88,6 +102,10 @@
         <button id="btnCancelAssociatedAccount" class="button btn-cancel-outline" title="Cancel">Cancel</button>
         <button id="btnSaveAssociatedAccount" class="button -add" title="Save">Save</button>
     </div>
+</div>
+
+<div class="hide">
+    <input id="hdIsHostPermission" type="hidden" IsHostPermission="@Model.ToString()" />
 </div>
 
 @section scripts {

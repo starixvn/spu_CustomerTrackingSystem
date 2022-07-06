@@ -5,16 +5,17 @@ body {
 }
 
 .associated-group-content {
+    margin: 1rem 1.6rem 1rem 1.6rem;
+
     .associated-group {
-        .fixed-header {
-           /* padding-top: 1.6rem;*/
+        .fixed-header {          
             position: sticky;
             position: -webkit-sticky;
-           /* top: 11.5rem;*/
+            top: 6rem;
             background: #fff;
             z-index: 9;
 
-            .button-mark {
+            .button-add-group {
                 margin-left: 6px;
             }
         }
@@ -23,7 +24,7 @@ body {
             position: sticky;
             position: -webkit-sticky;
             z-index: 99;
-            top: 16.5rem;
+            top: 10rem;
             transition: top 0.01s linear;
         }
 
@@ -59,7 +60,7 @@ body {
                         position: -webkit-sticky;
                         z-index: 9;
                         transition: top 0.01s linear;
-                        top: 16.5rem;
+                        top: 9.6rem;
                     }
                 }
             }

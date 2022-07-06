@@ -57,13 +57,79 @@
                     ABI = x.ABI,
                     TotalAccount = x.TotalAccount,
                     Remark = x.Remark,
-                    CreatedDate = x.CreatedDate,
+                    CreatedDate = x.CreatedDate.ToString(Consts.FormatDateToString_MMMddyyyy),
                     CreatedBy = x.CreatedBy
                 });
+            }
+            else
+            {
+                associatedGroups = GenegateDataTest();
             }
 
             return Json(new { data = associatedGroups }, JsonRequestBehavior.AllowGet);
         }
 
+        private IEnumerable<AssociatedGroupMonitorViewModel> GenegateDataTest()
+        {
+            var list = new List<AssociatedGroupMonitorViewModel>();
+
+            for (int i = 1; i < 1000; i++)
+            {
+                list.Add(new AssociatedGroupMonitorViewModel
+                {
+                    GroupID = i,
+                    GroupName = "Name" + i,
+                    CreatedBy = "sa",
+                    ABI = 47,
+                    Remark = "Remark",
+                    CreatedDate = DateTime.Now.ToString(Consts.FormatDateToString_MMMddyyyy),
+                    TotalAccount = i + 20
+                });
+            }
+
+            return list;
+        }
+
+        [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.AssociatedGroupMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedGroupMonitorRpt)]
+        public ActionResult AddAssociatedGroupMonitor(AddAssociatedGroupViewModel model)
+        {
+            var result = _associatedGroupService.AddAssociatedGroupMonitor(model);
+
+            return Json(new
+            {
+                errorCode = result.ErrorCode,
+                errorMessage = result.ErrorMsg
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.AssociatedGroupMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedGroupMonitorRpt)]
+        public ActionResult RemoveAssociatedGroupMonitor(RemoveAssociatedGroupViewModel model)
+        {
+            var result = _associatedGroupService.RemoveAssociatedGroupMonitor(model);
+
+            return Json(new
+            {
+                errorCode = result.ErrorCode,
+                errorMessage = result.ErrorMsg
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.AssociatedGroupMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedGroupMonitorRpt)]
+        public ActionResult AddAssociatedAccount(AddAssociatedAccountViewModel model)
+        {
+            var result = _associatedGroupService.AddAssociatedAccount(model);
+
+            return Json(new
+            {
+                errorCode = result.ErrorCode,
+                errorMessage = result.ErrorMsg
+            }, JsonRequestBehavior.AllowGet);
+        }
     }
 }
