@@ -61,7 +61,7 @@
                 if (!string.IsNullOrEmpty(paras.SubscriberIDs) && !string.IsNullOrEmpty(paras.CategoryIDs))
                 {
                     string queryScript = GetQueryScriptForAssProfile(paras.AssociationType);
-
+                    LogService.Info("GetDirectAssociationProfile - Type: " + paras.AssociationType + "Script: " + queryScript);
                     var result = DbSessionFactory.Execute<AssociatedAccountPagingModel>(queryScript, new
                     {
                         ip_CTSCustID = paras.CTSCustId,
