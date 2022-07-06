@@ -7,7 +7,7 @@ CALL {
     UNION
     WITH c
     OPTIONAL MATCH (c)-[r:GROUP_BY_AI*2]-(c1:CTSCustomer)
-    RETURN DISTINCT c1, r[0] AS PreAssDate
+    RETURN DISTINCT c1, r[0].CreatedDate AS PreAssDate
 }
 WITH c, c1, MIN(PreAssDate) AS AssDate
 MATCH (c1)-[:BELONG_TO_SUB]->(s:Subscriber)
