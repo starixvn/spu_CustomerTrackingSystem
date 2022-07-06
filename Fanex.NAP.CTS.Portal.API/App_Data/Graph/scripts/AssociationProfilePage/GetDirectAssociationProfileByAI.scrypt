@@ -1,4 +1,5 @@
-﻿MATCH (c:CTSCustomer)
+﻿USE ctsgraphdb2022
+MATCH (c:CTSCustomer)
 WHERE c.CTSCustID = $ip_CTSCustID
 CALL {
     WITH c
