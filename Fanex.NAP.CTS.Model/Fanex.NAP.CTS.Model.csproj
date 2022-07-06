@@ -315,7 +315,6 @@
     <Compile Include="Action.cs" />
     <Compile Include="Association\AssociatedByAccountModel.cs" />
     <Compile Include="DTO\Currency.cs" />
-    <Compile Include="DTO\PlaceMultiCustomerEvidence.cs" />
     <Compile Include="DTO\CustomerList.cs" />
     <Compile Include="DTO\CustomerSubcriber.cs" />
     <Compile Include="DTO\CustomerTotalAssociation.cs" />

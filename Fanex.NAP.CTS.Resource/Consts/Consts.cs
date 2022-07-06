@@ -295,7 +295,7 @@
             ProblemAccountManagementRpt = 48,
             ProblemAccountManagementMarkNew = 49,
             AssociatedGroupMonitorRpt = 50,
-            PlaceEvidenceForMultipleCustAPI = 200,
+            //PlaceEvidenceForMultipleCustAPI = 200,
             GetFlaggedCustomersByLevelAPI = 201,
             GetFlaggedCustByLvAndEvidenceAPI = 202,
             //AddCustomersEvidencesAPI = 203,
