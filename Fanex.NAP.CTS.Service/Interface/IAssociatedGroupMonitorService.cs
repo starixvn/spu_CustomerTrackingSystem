@@ -15,7 +15,11 @@
 
         DBResult RemoveAssociatedGroupMonitor(RemoveAssociatedGroupViewModel model);
 
+        IEnumerable<ValidateUserAssociatedAccountModel> ValidateUserNameInput(string userNames);
+
         DBResult AddAssociatedAccount(AddAssociatedAccountViewModel model);
+
+        DBResult UpdateABIToMainDB(string custIDs, int valueABI);
 
         byte[] ExportExcelAssociatedAccount(IEnumerable<AssociatedAccountMonitorModel> associatedAccounts
             , string fileName

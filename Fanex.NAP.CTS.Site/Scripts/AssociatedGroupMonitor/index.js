@@ -14,9 +14,12 @@
         btnCancelAssociatedGroup: $('#btnCancelAssociatedGroup'),
         btnSaveAssociatedAccount: $('#btnSaveAssociatedAccount'),
         btnCancelAssociatedAccount: $('#btnCancelAssociatedAccount'),
-        spanAddAssociatedGroupUserName: $('#spanAddAssociatedGroupUserName'),
-        spanAddAssociatedGroupUserNameMaxTag: $('#spanAddAssociatedGroupUserNameMaxTag'),
-        spanAddAssociatedGroupChangeHidden: $('#spanAddAssociatedGroupChangeHidden'),
+        spanAddAssociatedAccountUserName: $('#spanAddAssociatedAccountUserName'),
+        spanAddAssociatedAccountUserNameMaxTag: $('#spanAddAssociatedAccountUserNameMaxTag'),
+        spanAddAssociatedAccountChangeHidden: $('#spanAddAssociatedAccountChangeHidden'),
+        spanAddAssociatedAccountGroupIDHidden: $('#spanAddAssociatedAccountGroupIDHidden'),
+        spanAddAssociatedAccountGroupNameHidden: $('#spanAddAssociatedAccountGroupNameHidden'),
+        spanAddAssociatedAccountGroupABIHidden: $('#spanAddAssociatedAccountGroupABIHidden'),
         hdIsHostPermission: $('#hdIsHostPermission'),
         maxTags: 1001
     };
@@ -82,9 +85,9 @@
                 { data: obj => obj.CreatedBy },
                 {
                     data: obj => {
-                        return html = '<span class="sub-icon - delete" id="sub-icon " title="Export To Excel"><i class="icon-delete ' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
+                        return '<span class="sub-icon - excel" id="sub-icon " title="Export To Excel"><i class="icon-excel ' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
                     }, createdCell: (cell, _, row) => {
-                        $('.icon-delete', cell).click(() => {
+                        $('.icon-excel', cell).click(() => {
                             $('td #sub-icon').addClass('none-pointer');
 
                             ExportToExcelAssociatedAccount(row.GroupID, row.GroupName);
@@ -93,15 +96,15 @@
                 },
                 {
                     data: obj => {
-                        return html = '<span class="sub-icon - delete" id="sub-icon " title="Remove Group"><i class="icon-delete ' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
+                        return '<span class="sub-icon - delete" id="sub-icon " title="Remove Group"><i class="icon-delete ' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
                     }, createdCell: (cell, _, row) => {
                         if (isHostPermission) {
                             $('.icon-delete', cell).click(() => {
                                 $('td #sub-icon').addClass('none-pointer');
-                                let html = "<div class='popup - content'>Do you want remove <strong>" + row.GroupName + "</strong> from Associated Group Monitor list? </div>";
+                                let html = "<div class='popup - content'>Are you sure you want to remove this group <strong>" + row.GroupName + "</strong>? </div>";
 
                                 common.showConfirmation(html, function () {
-                                    RemoveAssociatedGroupMonitor(row.GroupID);
+                                    RemoveAssociatedGroupMonitor(row.GroupID, row.GroupName);
                                 }, () => {
                                     $('td #sub-icon').removeClass('none-pointer');
                                 });
@@ -111,23 +114,28 @@
                 },                
                 {
                     data: obj => {
-                        return html = '<span class="sub-icon - delete" id="sub-icon " title="Add Accounts"><i class="icon-delete ' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
+                        return '<span class="sub-icon - edit" id="sub-icon " title="Add Accounts"><i class="icon-edit ' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
                     }, createdCell: (cell, _, row) => {
-                        $('.icon-delete', cell).click(() => {
+                        $('.icon-edit', cell).click(() => {
                             $('td #sub-icon').addClass('none-pointer');
-                          
+                            
+                            domElements.spanAddAssociatedAccountGroupIDHidden.val(row.GroupID);
+                            domElements.spanAddAssociatedAccountGroupNameHidden.val(row.GroupName);
+                            domElements.spanAddAssociatedAccountGroupABIHidden.val(row.ABI);                            
                             domElements.txtCommentAssociatedAccount.val('');
+                            InitInputTagUsername();
+
                             domElements.divAddAssociatedAccount.dialog({
                                 modal: true,
-                                width: '600px',
-                                title: 'CREATE NEW MEMBERS',
+                                width: '700px',
+                                title: 'ADD NEW MEMBERS - ' + row.GroupName,
                                 resizable: true,
                                 draggable: true,
                                 close: function () {
                                     $(this).dialog('close');
                                 }
                             });
-                        });                        
+                        });
                     }
                 }
             ]
@@ -211,7 +219,7 @@
         return stringDateFormat;
     }
 
-    function RemoveAssociatedGroupMonitor(groupID) {
+    function RemoveAssociatedGroupMonitor(groupID, groupName) {
         let params = {};
         params.GroupID = groupID;       
 
@@ -223,11 +231,11 @@
             },
             success: function (response) {
                 if (response.errorCode != -1) {
-                    common.showSuccess("Remove Associated Group successful!");                  
+                    common.showSuccess("Group " + groupName + " is removed successfully.");                  
 
                     GetAssociatedGroup();
                 } else {
-                    common.showSuccess("Remove Associated Group failed!");
+                    common.showSuccess("An unexpected Error occurred. Please try again.");
                 }
             },
             complete: function () {
@@ -241,7 +249,7 @@
     }
 
     function AddAssociatedGroupMonitor() {
-        common.showConfirmation("<div class='popup-content'><div class='popup-title'>Do you want to add Associated Group?</div></div>",
+        common.showConfirmation("<div class='popup-content'><div class='popup-title'>Are you sure you want to add new group '" + domElements.txtGroupNameAssociatedGroup.val().trim() +"'</div></div>",
             function () {
                 if (ValidateInputAddAssociatedGroupMonitor()) {
                     let params = {};
@@ -257,12 +265,12 @@
                         },
                         success: function (response) {
                             if (response.errorCode != -1) {
-                                common.showSuccess("Add Associated Group successful!");
+                                common.showSuccess("New group " + params.GroupName + " is added successfully.");
                                 domElements.divAddAssociatedGroup.dialog('close');
 
                                 GetAssociatedGroup();
                             } else {
-                                common.showSuccess("Add Associated Group failed!");
+                                common.showSuccess("An unexpected Error occurred. Please try again.");
                             }
                         },
                         complete: function () {
@@ -284,64 +292,84 @@
             return false;
         }
 
+        let pattern = /^[a-zA-Z0-9_.-\s]*$/;        
+        let groupName = domElements.txtGroupNameAssociatedGroup.val();
+      
+        if (!pattern.test(groupName)) {
+            common.showError('Group Name "' + groupName + '" is invalid.');
+            return false;
+        }
+
         if (domElements.cbbABIAssociatedGroup.val() === "") {
             common.showError('ABI "' + domElements.cbbABIAssociatedGroup.val() + '" is invalid.');
             return false;
-        }       
+        }
 
         return true;
     }
 
-    function AddAssociatedAccount(groupID) {
+    function AddAssociatedAccount() {
         let params = {};
-        params.GroupID = groupID;
-        //params.UserNames = domElements.cbbABIAssociatedGroup.val();
-        params.Comment = domElements.txtCommentAssociatedGroup.val().trim();       
+        params.GroupID = domElements.spanAddAssociatedAccountGroupIDHidden.val();
+        params.GroupName = domElements.spanAddAssociatedAccountGroupNameHidden.val();
+        params.ABI = domElements.spanAddAssociatedAccountGroupABIHidden.val();
+        params.UserNames = GetInputUserName();
+        params.Comment = domElements.txtCommentAssociatedAccount.val().trim();
 
-        $.ajax(common.modifyRelativeUrl('AssociatedGroupMonitor/AddAssociatedGroupMonitor'), {
-            type: 'POST',
-            data: params,
-            beforeSend: function () {
-                domElements.tblAssociatedGroup.find('tbody').addClass('loading');
-            },
-            success: function (response) {
-                if (response.errorCode != -1) {
-                    common.showSuccess("Add Associated Account successful!");
-                    domElements.divAddAssociatedAccount.dialog('close');
-                }
-            },
-            complete: function () {
-                domElements.tblAssociatedGroup.find('tbody').removeClass('loading');
-            },
-            error: function (errMsg) {
-                domElements.tblAssociatedGroup.find('tbody').removeClass('loading');
-                console.log(errMsg);
+        common.showConfirmation("<div class='popup-content'><div class='popup-title'>Are you sure you want to add new account(s) into group '" + params.GroupName  + "'?</div></div>",
+            function () {               
+                $.ajax(common.modifyRelativeUrl('AssociatedGroupMonitor/AddAssociatedAccount'), {
+                    type: 'POST',
+                    data: params,
+                    beforeSend: function () {
+                        domElements.tblAssociatedGroup.find('tbody').addClass('loading');
+                    },
+                    success: function (response) {
+                        if (response.errorCode != -1) {
+                            common.showSuccess("New account(s) added into group " + params.GroupName + " successfully.");
+                            domElements.divAddAssociatedAccount.dialog('close');
+
+                            GetAssociatedGroup();
+                        }
+                        else {
+                            common.showError("An unexpected Error occurred. Please try again.");
+                        }
+                    },
+                    complete: function () {
+                        domElements.tblAssociatedGroup.find('tbody').removeClass('loading');
+                    },
+                    error: function (errMsg) {
+                        domElements.tblAssociatedGroup.find('tbody').removeClass('loading');
+                        console.log(errMsg);
+                    }
+                });
+
             }
-        });
+        )        
     }
 
     function InitInputTagUsername() {
-        domElements.spanAddAssociatedGroupUserNameMaxTag.text(domElements.maxTags);
-        domElements.spanAddAssociatedGroupChangeHidden.text("0");
+        domElements.spanAddAssociatedAccountUserNameMaxTag.text(domElements.maxTags);
+        domElements.spanAddAssociatedAccountChangeHidden.text("0");
 
         function AddBorderTags() {
-            domElements.spanAddAssociatedGroupUserName.find('tags').addClass('ctrlA');
-            let allTags = domElements.spanAddAssociatedGroupUserName.find('tags tag.tagify__tag');
+            domElements.spanAddAssociatedAccountUserName.find('tags').addClass('ctrlA');
+            let allTags = domElements.spanAddAssociatedAccountUserName.find('tags tag.tagify__tag');
             allTags.each(function (_, tag) {
                 $(tag).css('border', '1px solid #6187E7');
             });
         }
 
         function ResetMaxTag() {
-            let currentTagsLength = domElements.spanAddAssociatedGroupUserName.find('tags tag').length;
+            let currentTagsLength = domElements.spanAddAssociatedAccountUserName.find('tags tag').length;
             if (currentTagsLength < domElements.maxTags)
-                domElements.spanAddAssociatedGroupUserNameMaxTag.text(domElements.maxTags - currentTagsLength + 1);
+                domElements.spanAddAssociatedAccountUserNameMaxTag.text(domElements.maxTags - currentTagsLength + 1);
         }
 
         function EnableButtonAdd() {
-            let validTags = domElements.spanAddAssociatedGroupUserName.find('tags tag.valid');
-            let invalidDuplicatedTags = domElements.spanAddAssociatedGroupUserName.find('tags tag.invalid-duplicated');
-            let invalidUsernameTags = domElements.spanAddAssociatedGroupUserName.find('tags tag.invalid-username');
+            let validTags = domElements.spanAddAssociatedAccountUserName.find('tags tag.valid');
+            let invalidDuplicatedTags = domElements.spanAddAssociatedAccountUserName.find('tags tag.invalid-duplicated');
+            let invalidUsernameTags = domElements.spanAddAssociatedAccountUserName.find('tags tag.invalid-username');
             let notInvalid = invalidDuplicatedTags.length + invalidUsernameTags.length;
             if (notInvalid <= 1 && validTags.length > 1)
                 domElements.btnSaveAssociatedAccount.prop('disabled', false);
@@ -355,7 +383,7 @@
         }
 
         function OnChangeTags(tagName, cssClass) {
-            let maxCountTags = parseInt(domElements.spanAddAssociatedGroupUserNameMaxTag.text());
+            let maxCountTags = parseInt(domElements.spanAddAssociatedAccountUserNameMaxTag.text());
             let isTextUnicode = IsTextUnicode($(tagName.tag).text());
 
             if (!isTextUnicode) {
@@ -372,19 +400,27 @@
                 $tag.prop('title', textReplaced);
                 $tag.find('span.tagify__tag-text').text(textReplaced);
                 $tag.addClass(cssClass);
-                let btnRemove = $tag.find('x');
 
+                let btnRemove = $tag.find('x');
                 btnRemove.on('click', function (e) {
                     let currentTag = $(e.target).parent();
 
                     ResetMaxTag();
-                    //ValidateManualAssociationMultiple(currentTag.text().trim());
+                    ValidateAddAssociatedAccountInput(currentTag.text().trim());
                     EnableButtonAdd();
                 });
 
-                domElements.spanAddAssociatedGroupUserNameMaxTag.text(maxCountTags - 1);
-            } else {
-                inputTagUsername.tagify().data('tagify').removeTags(tagName.tag);
+                domElements.spanAddAssociatedAccountUserNameMaxTag.text(maxCountTags - 1);
+            } else {              
+                let $tag = $(tagName.tag);
+                let btnRemove = $tag.find('x');
+                btnRemove.on('click', function (e) {
+                    let currentTag = $(e.target).parent();
+
+                    ResetMaxTag();
+                    ValidateAddAssociatedAccountInput(currentTag.text().trim());
+                    EnableButtonAdd();
+                });
             }
             domElements.btnSaveAssociatedAccount.prop('disabled', true);
         }
@@ -408,21 +444,21 @@
             }
         }).off('add').on('add', function (_, tagName) {
             OnChangeTags(tagName, 'valid');
-            domElements.spanAddAssociatedGroupChangeHidden.text("1");
+            domElements.spanAddAssociatedAccountChangeHidden.text("1");
         })
         .off('invalid').on('invalid', function (_, tagName) {
             OnChangeTags(tagName, 'invalid-duplicated');
-            domElements.spanAddAssociatedGroupChangeHidden.text("1");
+            domElements.spanAddAssociatedAccountChangeHidden.text("1");
         });
 
         domElements.inputTagUsername.off('keydown').on('keydown', function () {
             let keyCode = event.keyCode;
 
             if (keyCode === 46) {
-                if (domElements.spanAddAssociatedGroupUserName.find('tags').hasClass('ctrlA')) {
+                if (domElements.spanAddAssociatedAccountUserName.find('tags').hasClass('ctrlA')) {
                     domElements.inputTagUsername.tagify().data('tagify').removeAllTags();
-                    domElements.spanAddAssociatedGroupUserNameMaxTag.text(domElements.maxTags);
-                    domElements.spanAddAssociatedGroupUserName.find('tags').removeClass('ctrlA');
+                    domElements.spanAddAssociatedAccountUserNameMaxTag.text(domElements.maxTags);
+                    domElements.spanAddAssociatedAccountUserName.find('tags').removeClass('ctrlA');
                 }
             }
 
@@ -434,40 +470,104 @@
         });
 
         $(document).on('mouseup', function (e) {
-            let isOutSiteInput = !domElements.spanAddAssociatedGroupUserName.is(e.target) && domElements.spanAddAssociatedGroupUserName.has(e.target).length === 0;
-            let isTagsFocus = domElements.spanAddAssociatedGroupUserName.find('tags.tagify--focus').length > 0;
-            let isChange = domElements.spanAddAssociatedGroupChangeHidden.text();
+            let isOutSiteInput = !domElements.spanAddAssociatedAccountUserName.is(e.target) && domElements.spanAddAssociatedAccountUserName.has(e.target).length === 0;
+            let isTagsFocus = domElements.spanAddAssociatedAccountUserName.find('tags.tagify--focus').length > 0;
+            let isChange = domElements.spanAddAssociatedAccountChangeHidden.text();
             if (isOutSiteInput && isTagsFocus || isChange === "1") {
                 domElements.txtCommentAssociatedAccount.focus();
-                domElements.spanAddAssociatedGroupUserName.addClass("loading-value");
+                domElements.spanAddAssociatedAccountUserName.addClass("loading-value");
                 setTimeout(() => {
-                    //ValidateManualAssociationMultiple("");
-                    domElements.spanAddAssociatedGroupUserName.removeClass("loading-value");
-                    domElements.spanAddAssociatedGroupChangeHidden.text("0");
+                    ValidateAddAssociatedAccountInput("");
+                    domElements.spanAddAssociatedAccountUserName.removeClass("loading-value");
+                    domElements.spanAddAssociatedAccountChangeHidden.text("0");
                 }, 500);
             }
         });
 
         domElements.inputTagUsername.tagify().data('tagify').removeAllTags();
-        domElements.spanAddAssociatedGroupUserName.find('tags').attr('tabindex', "1");
+        domElements.spanAddAssociatedAccountUserName.find('tags').attr('tabindex', "1");
         domElements.btnSaveAssociatedAccount.prop('disabled', true);
     }
 
-    function IsDisableButton() {
-        IsHostPermission = domElements.hdIsHostPermission.attr('IsHostPermission') === "True";
+    function ValidateAddAssociatedAccountInput(textTagRemove) {
+        let numOfTagExceeded = domElements.spanAddAssociatedAccountUserName.find('tags tag.tagify--notAllowed');
 
-        if (!IsHostPermission) {
-            domElements.btnAddGroup.prop('disabled', true);
+        if (numOfTagExceeded.length > 0) {
+            return;
+        }
+
+        domElements.btnSaveAssociatedAccount.prop('disabled', false);
+        let userNames = GetInputUserName(textTagRemove);
+
+        if (userNames !== '') {            
+            $.ajax(common.modifyRelativeUrl('AssociatedGroupMonitor/ValidateUserNameInput'), {
+                type: 'POST',
+                data: {
+                    userNames: userNames
+                },
+                beforeSend: function () {
+                    domElements.spanAddAssociatedAccountUserName.addClass("loading-value");
+                },
+                success: function (response) {
+                    BindResultValidatedInputUserName(response);
+                },
+                complete: function () {
+                    domElements.spanAddAssociatedAccountUserName.removeClass("loading-value");
+                },
+                error: function (errMsg) {
+                    domElements.spanAddAssociatedAccountUserName.removeClass("loading-value");
+                    console.log(errMsg);
+                }
+            });
         }
     }
 
+    function GetInputUserName(textTagRemove) {
+        let userNameList = [];
+        let tags = domElements.spanAddAssociatedAccountUserName.find('tags tag');
+
+        tags.map(function (_, ele) {
+            let text = $(ele).text().trim();
+            if (textTagRemove !== "" && text === textTagRemove) {
+                textTagRemove = "";
+                return;
+            }
+            userNameList.push(text);
+        });
+
+        return userNameList.join();
+    }
+
+    function BindResultValidatedInputUserName(data) {
+        domElements.spanAddAssociatedAccountUserName.find('tags tag').each(function (_, tag) {
+            $(tag).removeClass('invalid-username').removeClass('invalid-duplicated').addClass('valid');
+        });
+
+        data.AccountInvalidList.map(function (x) {
+            let usernameEqual = $("tag[data-user-name='" + x.UserName + "']");
+            if (usernameEqual !== undefined) {
+                usernameEqual.removeClass('valid').addClass('invalid-username');
+                usernameEqual.prop('title', x.ErrMsg);
+            }
+        });
+
+        if (data.AccountInvalidList.length === 0) {
+            domElements.btnSaveAssociatedAccount.prop('disabled', false);
+        }
+        else
+            domElements.btnSaveAssociatedAccount.prop('disabled', true);
+    }   
+
     function Initial() {
-        IsDisableButton();
+        if (!isHostPermission) {
+            domElements.btnAddGroup.prop('disabled', true);
+        }
 
         GetAssociatedGroup();
 
-        domElements.btnAddGroup.on('click', function () {
-            domElements.txtGroupNameAssociatedGroup.val('');
+        domElements.btnAddGroup.on('click', function () {   
+            $('#cbbABIAssociatedGroup').val(1).trigger('change.select2');
+            domElements.txtGroupNameAssociatedGroup.val('');                       
             domElements.txtCommentAssociatedGroup.val('');
                       
             domElements.divAddAssociatedGroup.dialog({

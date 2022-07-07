@@ -11,6 +11,9 @@
         [SpParam(SqlParamName = "ip_CTSCustIDs")]
         public string CTSCustIDs { get; set; }
 
+        [SpParam(SqlParamName = "ip_IsAuto")]
+        public bool IsAuto { get; set; }
+
         [SpParam(SqlParamName = "ip_Remark")]
         public string Remark { get; set; }
 

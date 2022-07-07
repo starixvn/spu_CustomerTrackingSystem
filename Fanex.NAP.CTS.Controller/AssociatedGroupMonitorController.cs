@@ -5,6 +5,7 @@
     using Fanex.NAP.Core.Service.Interface;
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Model;
+    using Fanex.NAP.CTS.Model.AssociatedGroupMonitor;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
@@ -65,28 +66,7 @@
            
             return Json(new { data = associatedGroups }, JsonRequestBehavior.AllowGet);
         }
-
-        private IEnumerable<AssociatedGroupMonitorViewModel> GenegateDataTest()
-        {
-            var list = new List<AssociatedGroupMonitorViewModel>();
-
-            for (int i = 1; i < 1000; i++)
-            {
-                list.Add(new AssociatedGroupMonitorViewModel
-                {
-                    GroupID = i,
-                    GroupName = "Name" + i,
-                    CreatedBy = "sa",
-                    ABI = 47,
-                    Remark = "Remark",
-                    CreatedDate = DateTime.Now.ToString(Consts.FormatDateToString_MMMddyyyy),
-                    TotalAccount = i + 20
-                });
-            }
-
-            return list;
-        }
-
+      
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AssociatedGroupMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedGroupMonitorRpt)]
@@ -118,17 +98,61 @@
         }
 
         [HttpPost]
+        public ActionResult ValidateUserNameInput(string userNames)
+        {           
+            var validatedModels = _associatedGroupService.ValidateUserNameInput(userNames);
+            
+            return Json(this.GetResultValidated(validatedModels), JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AssociatedGroupMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedGroupMonitorRpt)]
         public ActionResult AddAssociatedAccount(AddAssociatedAccountViewModel model)
         {
-            var result = _associatedGroupService.AddAssociatedAccount(model);
+            var result = new ResultSaveAssociatedAccountViewModel();
+            var validatedModels = _associatedGroupService.ValidateUserNameInput(model.UserNames);
 
-            return Json(new
+            var resultValidate = GetResultValidated(validatedModels);
+
+            if (!resultValidate.AccountInvalidList.Any())
+            {               
+                model.CustIDs = string.Join(",", validatedModels.Select(x => x.CustID));
+                model.CTSCustIDs = string.Join(",", validatedModels.Select(x => x.CTSCustID));
+                model.CreatedBy = CurrentSession.UserId;
+
+                var dbResult = _associatedGroupService.AddAssociatedAccount(model);
+                
+                if (dbResult.ErrorCode == 0)
+                {                    
+                    _associatedGroupService.UpdateABIToMainDB(model.CustIDs, model.ABI);
+                }
+
+                result.ErrorCode = dbResult.ErrorCode;
+                result.ErrorMessage = dbResult.ErrorMsg;
+                result.ResultValidated = resultValidate;
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        private ResultValidatedViewModel GetResultValidated(IEnumerable<ValidateUserAssociatedAccountModel> validatedModels)
+        {
+            var result = new ResultValidatedViewModel();
+
+            if (validatedModels != null && validatedModels.Any())
             {
-                errorCode = result.ErrorCode,
-                errorMessage = result.ErrorMsg
-            }, JsonRequestBehavior.AllowGet);
+                result.AccountInvalidList = validatedModels
+                    .Where(x => !string.IsNullOrEmpty(x.ErrorMsg))
+                    .Select(x => new ValidateUserAssociatedAccountViewModel
+                    {
+                        CTSCustID = x.CTSCustID,
+                        UserName = x.Username,                       
+                        ErrMsg = x.ErrorMsg
+                    });
+            }
+
+            return result;
         }
 
         [HttpPost]        

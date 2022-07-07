@@ -41,3 +41,21 @@
       z-index: 9;
       transition: top 0.01s linear;
       top: 9.6rem; }
+    .associated-group-content .associated-group .table-associated-group .sub-icon {
+      width: 24px;
+      height: 24px;
+      display: inline-block;
+      position: relative;
+      cursor: pointer; }
+      .associated-group-content .associated-group .table-associated-group .sub-icon:hover {
+        border-radius: 50%;
+        background: #E7EDFF; }
+      .associated-group-content .associated-group .table-associated-group .sub-icon .disabled {
+        cursor: not-allowed; }
+    .associated-group-content .associated-group .table-associated-group .icon-delete {
+      font-size: 1.4rem;
+      position: absolute;
+      top: .5rem;
+      left: .6rem; }
+    .associated-group-content .associated-group .table-associated-group .icon-delete:before {
+      color: #FF0000; }
