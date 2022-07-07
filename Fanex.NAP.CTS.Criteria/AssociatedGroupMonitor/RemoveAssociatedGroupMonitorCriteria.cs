@@ -5,8 +5,11 @@
 
     public class RemoveAssociatedGroupMonitorCriteria : NonQueryCommand
     {
-        //[SpParam(SqlParamName = "CustIDList")]
-        //public string CustIDList { get; set; }
+        [SpParam(SqlParamName = "ip_GroupID")]
+        public long GroupID { get; set; }
+
+        [SpParam(SqlParamName = "ip_CreatedBy")]
+        public int CreatedBy { get; set; }
 
         public override string GetSettingKey()
         {

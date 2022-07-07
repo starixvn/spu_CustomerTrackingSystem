@@ -19,6 +19,7 @@
     [NapAuth(FunctionKey = FSFunctionKeys.AssociatedGroupMonitor, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class AssociatedGroupMonitorController : BaseController
     {
+        private const string AssociatedAccountMonitorTemplate = "~/App_Data/Excel Template/AssociatedGroupMonitor/Template.xlsx";
         private readonly IAssociatedGroupMonitorService _associatedGroupService;
 
         public override string BaseControllerName { get => Consts.MenuItemController; }
@@ -57,15 +58,11 @@
                     ABI = x.ABI,
                     TotalAccount = x.TotalAccount,
                     Remark = x.Remark,
-                    CreatedDate = x.CreatedDate.ToString(Consts.FormatDateToString_MMMddyyyy),
+                    CreatedDate = x.Created.ToString(Consts.FormatDateToString_MMMddyyyy),
                     CreatedBy = x.CreatedBy
                 });
             }
-            else
-            {
-                associatedGroups = GenegateDataTest();
-            }
-
+           
             return Json(new { data = associatedGroups }, JsonRequestBehavior.AllowGet);
         }
 
@@ -95,6 +92,8 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedGroupMonitorRpt)]
         public ActionResult AddAssociatedGroupMonitor(AddAssociatedGroupViewModel model)
         {
+            model.CreatedBy = CurrentSession.UserId;
+
             var result = _associatedGroupService.AddAssociatedGroupMonitor(model);
 
             return Json(new
@@ -131,5 +130,25 @@
                 errorMessage = result.ErrorMsg
             }, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpPost]        
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedGroupMonitorRpt)]
+        public ActionResult ExportToExcelAssociatedAccount(ExportToExcelAssociatedAccountViewModel model)
+        {
+            var templatePath = Server.MapPath(AssociatedAccountMonitorTemplate);
+            var dateTime = DateTime.UtcNow.AddHours(-4);
+            
+            var fileName = string.Format("{0}_Group_{1}_{2}.xlsx"
+                , model.GroupName
+                , dateTime.ToString(FormatDateTimeToString_YYYYmmdd)
+                , dateTime.ToString(Consts.FormatTimeToString_hhmmss));
+
+            var associatedAccounts = _associatedGroupService.GetAssociatedAccountMonitor(model.GroupID);
+
+            var excelFile = _associatedGroupService.ExportExcelAssociatedAccount(associatedAccounts, fileName, templatePath, model);
+
+            return File(excelFile, "application/vnd.ms-excel", fileName);
+        }
+
     }
 }

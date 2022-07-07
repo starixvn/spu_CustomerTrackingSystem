@@ -5,8 +5,17 @@
 
     public class AddAssociatedGroupMonitorCriteria : NonQueryCommand
     {
-        //[SpParam(SqlParamName = "CustIDList")]
-        //public string CustIDList { get; set; }
+        [SpParam(SqlParamName = "ip_GroupName")]
+        public string GroupName { get; set; }
+
+        [SpParam(SqlParamName = "ip_ABI")]
+        public int ABI { get; set; }
+
+        [SpParam(SqlParamName = "ip_Remark")]
+        public string Remark { get; set; }
+
+        [SpParam(SqlParamName = "ip_CreatedBy")]
+        public int CreatedBy { get; set; }
 
         public override string GetSettingKey()
         {

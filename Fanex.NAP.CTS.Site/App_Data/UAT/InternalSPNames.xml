@@ -191,6 +191,7 @@
 		<Setting Key="CTS_DC_AssociatedGroup_Remove" SpName="CTS_DC_AssociatedGroup_Remove_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_AssociatedGroup_Account_Add" SpName="CTS_DC_AssociatedGroup_Account_Add_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_AssociatedGroup_Account_Get" SpName="CTS_DC_AssociatedGroup_Account_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_AssociatedGroup_ValidateUsername" SpName="CTS_DC_AssociatedGroup_ValidateUsername_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
 
 	<Function name="LogData">

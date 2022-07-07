@@ -14,7 +14,7 @@
 
         public string Remark { get; set; }
 
-        public DateTime CreatedDate { get; set; }
+        public DateTime Created { get; set; }
 
         public string CreatedBy { get; set; }
 

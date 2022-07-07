@@ -66,8 +66,10 @@
     <Compile Include="Account\ChainToEvidence\AddAccountExceptionCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\AddAssociatedAccountCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\AddAssociatedGroupMonitorCriteria.cs" />
+    <Compile Include="AssociatedGroupMonitor\GetAssociatedAccountCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\GetAssociatedGroupMonitorCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\RemoveAssociatedGroupMonitorCriteria.cs" />
+    <Compile Include="AssociatedGroupMonitor\ValidateAssociatedAccountCriteria.cs" />
     <Compile Include="CustomerClassification\GetLastestCCDangerLevelCriteria.cs" />
     <Compile Include="CustomerClassification\InputErrorLogInsertCriteria.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\CheckNewPAAssociationCustomerForRollbackCriteria.cs" />

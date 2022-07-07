@@ -82,7 +82,13 @@
                 { data: obj => obj.CreatedBy },
                 {
                     data: obj => {
-                        return html = '<span class="sub-icon - delete" id="sub-icon " title="Remove Group"><i class="icon-delete ' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
+                        return html = '<span class="sub-icon - delete" id="sub-icon " title="Export To Excel"><i class="icon-delete ' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
+                    }, createdCell: (cell, _, row) => {
+                        $('.icon-delete', cell).click(() => {
+                            $('td #sub-icon').addClass('none-pointer');
+
+                            ExportToExcelAssociatedAccount(row.GroupID, row.GroupName);
+                        })
                     }
                 },
                 {
@@ -134,6 +140,77 @@
             : dataTable = RenderGrid();
     }
 
+    function ExportToExcelAssociatedAccount(groupID, groupName) {
+        let params = {};
+        params.GroupID = groupID;
+        params.GroupName = groupName;
+
+        common.showSuccess('Your filter export is being processed. Please wait, this may take some minutes.', 5000);
+
+        common.showLoading();
+
+        let request = new XMLHttpRequest();
+        request.open('POST', common.modifyRelativeUrl('AssociatedGroupMonitor/ExportToExcelAssociatedAccount'), true);
+        request.setRequestHeader('Content-type', 'application/json');
+        request.responseType = 'blob';
+        request.timeout = 600000;
+        request.addEventListener("timeout", function (e) {
+            common.closeLoading();
+            common.showError("Export failed (timeout)");
+        });
+        request.onload = function (e) {
+            if (this.status === 200) {
+                let extension = ".xlsx";
+                let date = GetFormattedDate();
+                let filenameFormat = "Group_{0}{1}";
+                let filename = filenameFormat.format(date, extension);
+                let blob = this.response;
+
+                if (window.navigator.msSaveOrOpenBlob) {
+                    window.navigator.msSaveBlob(blob, filename);
+                } else {
+                    let downloadLink = window.document.createElement('a');
+                    let contentTypeHeader = request.getResponseHeader("Content-Type");
+                    downloadLink.href = window.URL.createObjectURL(new Blob([blob], { type: contentTypeHeader }));
+
+                    var disposition = request.getResponseHeader('Content-Disposition');
+                    if (disposition && disposition.indexOf('filename') !== -1) {
+                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        var matches = filenameRegex.exec(disposition);
+                        if (matches != null && matches[1]) {
+                            filename = matches[1].replace(/['"]/g, '');
+                        }
+                    }
+
+                    downloadLink.download = filename;
+                    document.body.appendChild(downloadLink);
+                    downloadLink.click();
+                    document.body.removeChild(downloadLink);
+                }
+            } else {
+                console.log(this);
+                common.showError("Export failed");
+            }
+
+            common.closeLoading();
+        };       
+        request.send(JSON.stringify(params));      
+    }
+
+    function GetFormattedDate() {
+        let date = new Date();
+
+        let stringDateFormat = date.getUTCFullYear().toString()
+            + ('0' + (date.getUTCMonth() + 1)).slice(-2).toString()
+            + ('0' + date.getUTCDate()).slice(-2).toString()
+            + '_'
+            + ('0' + date.getUTCHours()).slice(-2).toString()
+            + ('0' + date.getUTCMinutes()).slice(-2).toString()
+            + ('0' + date.getUTCSeconds()).slice(-2).toString();
+
+        return stringDateFormat;
+    }
+
     function RemoveAssociatedGroupMonitor(groupID) {
         let params = {};
         params.GroupID = groupID;       
@@ -145,7 +222,13 @@
                 domElements.tblAssociatedGroup.find('tbody').addClass('loading');
             },
             success: function (response) {
-                console.log('successful');
+                if (response.errorCode != -1) {
+                    common.showSuccess("Remove Associated Group successful!");                  
+
+                    GetAssociatedGroup();
+                } else {
+                    common.showSuccess("Remove Associated Group failed!");
+                }
             },
             complete: function () {
                 domElements.tblAssociatedGroup.find('tbody').removeClass('loading');
@@ -176,6 +259,10 @@
                             if (response.errorCode != -1) {
                                 common.showSuccess("Add Associated Group successful!");
                                 domElements.divAddAssociatedGroup.dialog('close');
+
+                                GetAssociatedGroup();
+                            } else {
+                                common.showSuccess("Add Associated Group failed!");
                             }
                         },
                         complete: function () {

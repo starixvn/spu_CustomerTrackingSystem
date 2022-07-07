@@ -2,6 +2,8 @@
 {
     public class RemoveAssociatedGroupViewModel
     {
-        public int GroupID { get; set; }
+        public long GroupID { get; set; }
+
+        public int CreatedBy { get; set; }
     }
 }

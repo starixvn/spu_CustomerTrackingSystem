@@ -8,5 +8,6 @@
 
         public string Comment { get; set; }
 
+        public int CreatedBy { get; set; }
     }
 }
