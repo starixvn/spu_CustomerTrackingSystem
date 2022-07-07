@@ -115,6 +115,7 @@
       <HintPath>..\packages\SPSRemoting.1.0.0\lib\net40\SPSRemoting.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
@@ -179,6 +180,10 @@
     <Compile Include="API\CustomerClassModel.cs" />
     <Compile Include="API\CustomerClassification.cs" />
     <Compile Include="API\ForceSpecialCustomerClassModel.cs" />
+    <Compile Include="API\LicenseeVIP,BA\RemoveLicenseeBABySiteLogDataModel.cs" />
+    <Compile Include="API\LicenseeVIP,BA\RemoveLicenseeBABySiteInputModel.cs" />
+    <Compile Include="API\LicenseeVIP,BA\LicenseeVIPBAInputModel.cs" />
+    <Compile Include="API\LicenseeVIP,BA\LicenseeVIPBALogDataModel.cs" />
     <Compile Include="API\ProblemCaseMonitor\ProblemCaseMonitorModel.cs" />
     <Compile Include="API\UpdateCategoryWhenPAUpdated\CustInfoModel.cs" />
     <Compile Include="API\UpdateCategoryWhenPAUpdated\UpdatePALosingInfoModel.cs" />

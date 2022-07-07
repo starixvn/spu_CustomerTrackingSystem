@@ -219,7 +219,12 @@
             //UpdateCategory = 42,?
             InsertPAM = 43,
             TWProblemAccountInsert = 44,
-            UnmarkCustomerCategory = 45
+            UnmarkCustomerCategory = 45,
+            AddLicVIP_API = 46,
+            RemoveLicVIP_API = 47,
+            AddLicBA_API = 48,
+            RemoveLicBA_API = 49,
+            RemoveLicBABySite_API = 50,
         };
 
         public enum HttpStatus
@@ -332,7 +337,12 @@
             GroupingCustomerAPI = 234,
             GetDetailAssociationReportAPI = 235,
             GetProbationReportAPI = 236,
-            ScanCTSCustomerAPI = 237            
+            ScanCTSCustomerAPI = 237,
+            AddLicVIP_API = 238,
+            RemoveLicVIP_API = 239,
+            AddLicBA_API = 240,
+            RemoveLicBAP_API = 241,
+            RemoveLicBABySite_API = 242
         };
 
         public enum SystemId
@@ -341,6 +351,12 @@
             CTSAPI = 2,
             FS = 3,
             TGRS = 4
+        };
+
+        public enum FromSystem
+        {
+            Internal = 1,
+            External = 2
         };
     }
 }

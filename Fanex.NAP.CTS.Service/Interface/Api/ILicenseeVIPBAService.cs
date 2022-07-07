@@ -1,0 +1,11 @@
+﻿namespace Fanex.NAP.CTS.Service.Interface.Api
+{
+    using Fanex.NAP.CTS.Model.API;
+
+    public interface ILicenseeVIPBAService
+    {
+        bool CheckValid(LicenseeVIPBAInputModel parameter);
+
+        bool CheckValid(RemoveLicenseeBABySiteInputModel parameter);
+    }
+}
