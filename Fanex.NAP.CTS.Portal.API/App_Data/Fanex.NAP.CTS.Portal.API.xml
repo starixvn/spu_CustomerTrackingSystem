@@ -486,11 +486,6 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
-        <member name="T:Fanex.NAP.CTS.Portal.API.Controllers.LicenseeVIPBAController">
-            <summary>
-            CtsController
-            </summary>
-        </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.LicenseeVIPBAController.AddLicVIP(Fanex.NAP.CTS.Model.API.LicenseeVIPBAInputModel)">
             <summary>
             Add Licencee VIP

@@ -11,6 +11,7 @@
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
+    using System.Configuration;
     using System.Linq;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
@@ -58,20 +59,17 @@
 
             foreach (var batchCustIds in custInfo)
             {
-                if (batchCustIds != null && batchCustIds.Any())
-                {
-                    var result = InsertLicVIP(batchCustIds);
+                var custIDs = InsertLicVIP(batchCustIds);
 
-                    if (result != null && result.Any())
+                if (custIDs != null && custIDs.Any())
+                {
+                    custClassificationService.PushDataToExternal(custIDs, new PushDataToExternalModel
                     {
-                        custClassificationService.PushDataToExternal(result, new PushDataToExternalModel
-                        {
-                            IsUpdateDangerToMainDB = false,
-                            IsSyncAFC = false,
-                            IsPushCCToSoon88 = false,
-                            ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize
-                        });
-                    }
+                        IsUpdateDangerToMainDB = false,
+                        IsSyncAFC = false,
+                        IsPushCCToSoon88 = false,
+                        ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize
+                    });
                 }
             }
         }
@@ -87,20 +85,102 @@
 
             foreach (var batchCustIds in custInfo)
             {
-                if (batchCustIds != null && batchCustIds.Any())
+                var custIDs = RemoveLicVIP(batchCustIds);
+
+                if (custIDs != null && custIDs.Any())
                 {
-                    var result = RemoveLicVIP(batchCustIds);
+                    rescanCustomerClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
+                    {
+                        CustIds = custIDs,
+                        IsRescanPA = true,
+                        IsPushCCToSoon88 = true,
+                        IsUpdateDangerToMainDB = true,
+                        FunctionId = FunctionId.RemoveLicVIP_API,
+                        ServiceName = "RemoveLicVIP"
+                    });
+                }
+            }
+        }
+
+        public void InsertLicBA(LicenseeVIPBAInputModel parameter)
+        {
+            if (parameter == null)
+            {
+                return;
+            }
+
+            var custInfo = MappingLicVIPBAModel(parameter);
+
+            foreach (var batchCustIds in custInfo)
+            {
+                var custIDs = InsertLicBA(batchCustIds);
+
+                if (custIDs != null && custIDs.Any())
+                {
+                    custClassificationService.PushDataToExternal(custIDs, new PushDataToExternalModel
+                    {
+                        IsUpdateDangerToMainDB = false,
+                        IsSyncAFC = false,
+                        IsPushCCToSoon88 = false,
+                        ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize
+                    });
+                }
+            }
+        }
+
+        public void RemoveLicBA(LicenseeVIPBAInputModel parameter)
+        {
+            if (parameter == null)
+            {
+                return;
+            }
+
+            var custInfo = MappingLicVIPBAModel(parameter);
+
+            foreach (var batchCustIds in custInfo)
+            {
+                var custIDs = RemoveLicBA(batchCustIds);
+
+                if (custIDs != null && custIDs.Any())
+                {
+                    custClassificationService.PushDataToExternal(custIDs, new PushDataToExternalModel
+                    {
+                        IsUpdateDangerToMainDB = false,
+                        IsSyncAFC = false,
+                        IsPushCCToSoon88 = false,
+                        ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize
+                    });
+                }
+            }
+        }
+
+        public void RemoveLicBABySite(RemoveLicenseeBABySiteInputModel parameter)
+        {
+            if (parameter == null)
+            {
+                return;
+            }
+
+            var custList = GetCustomerInfoBySiteName(parameter.SiteName);
+
+            if (custList != null && custList.Any())
+            {
+                var custIDs = string.Join(",", custList.Select(c => c.CustID).Distinct());
+
+                var custInfo = MappingLicVIPBAModel(new LicenseeVIPBAInputModel { CustIDs = custIDs, CreatedBy = parameter.CreatedBy});
+                
+                foreach (var batchCustIds in custInfo)
+                {
+                    var result = RemoveLicBA(batchCustIds);
 
                     if (result != null && result.Any())
                     {
-                        rescanCustomerClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
+                        custClassificationService.PushDataToExternal(result, new PushDataToExternalModel
                         {
-                            CustIds = result,
-                            IsRescanPA = true,
-                            IsPushCCToSoon88 = true,
-                            IsUpdateDangerToMainDB = true,
-                            FunctionId = FunctionId.RemoveLicVIP_API,
-                            ServiceName = "RemoveLicVIP"
+                            IsUpdateDangerToMainDB = false,
+                            IsSyncAFC = false,
+                            IsPushCCToSoon88 = false,
+                            ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize
                         });
                     }
                 }
@@ -117,10 +197,10 @@
 
                 if (custIds != null && custIds.Any())
                 {
-                    var listCust =  custIds.Select(c => new LicenseeVIPBAModel
+                    var listCust = custIds.Select(c => new LicenseeVIPBAModel
                     {
                         CustID = c,
-                        CreatedBy = parameter.CreatedBy
+                        CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]) //Lic UserID is not in CTS system, so default StarixIT
                     });
 
                     return listCust.Distinct().Chunk(ConfigSettings.InternalChunkSize);
@@ -140,15 +220,44 @@
             return repository.Fetch<long>(criteria);
         }
 
-
         private IEnumerable<long> RemoveLicVIP(IEnumerable<LicenseeVIPBAModel> parameter)
         {
-            var criteria = new LicenseeVIPInsertCriteria
+            var criteria = new LicenseeVIPRemoveCriteria
             {
                 CustJson = JsonConvert.SerializeObject(parameter)
             };
 
             return repository.Fetch<long>(criteria);
+        }
+
+        private IEnumerable<long> InsertLicBA(IEnumerable<LicenseeVIPBAModel> parameter)
+        {
+            var criteria = new LicenseeBAInsertCriteria
+            {
+                CustJson = JsonConvert.SerializeObject(parameter)
+            };
+
+            return repository.Fetch<long>(criteria);
+        }
+
+        private IEnumerable<long> RemoveLicBA(IEnumerable<LicenseeVIPBAModel> parameter)
+        {
+            var criteria = new LicenseeBARemoveCriteria
+            {
+                CustJson = JsonConvert.SerializeObject(parameter)
+            };
+
+            return repository.Fetch<long>(criteria);
+        }
+
+        private IEnumerable<CustInfoBySiteNameModel> GetCustomerInfoBySiteName(string siteName)
+        {
+            var criteria = new CustomerInfoBySiteNameGetCriteria
+            {
+                SiteName = siteName
+            };
+
+            return repository.Fetch<CustInfoBySiteNameModel>(criteria);
         }
 
         #endregion Private Methods

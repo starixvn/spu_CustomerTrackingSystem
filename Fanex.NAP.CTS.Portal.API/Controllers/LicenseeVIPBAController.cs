@@ -13,9 +13,6 @@
     using System.Web.Http;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
-    /// <summary>
-    /// CtsController
-    /// </summary>
     public class LicenseeVIPBAController : ApiController
     {
         private readonly ILicenseeVIPBAService licenseeLAPCustomerClassificationService;
@@ -120,6 +117,8 @@
 
                     return BadRequest($"Invalid input parameter. Data: {JsonConvert.SerializeObject(parameters)}");
                 }
+
+                licenseeLAPCustomerClassificationService.InsertLicBA(parameters);
             }
             catch (Exception ex)
             {
@@ -155,6 +154,8 @@
 
                     return BadRequest($"Invalid input parameter. Data: {JsonConvert.SerializeObject(parameters)}");
                 }
+
+                licenseeLAPCustomerClassificationService.RemoveLicBA(parameters);
             }
             catch (Exception ex)
             {
@@ -190,6 +191,8 @@
 
                     return BadRequest($"Invalid input parameter. Data: {JsonConvert.SerializeObject(parameters)}");
                 }
+
+                licenseeLAPCustomerClassificationService.RemoveLicBABySite(parameters);
             }
             catch (Exception ex)
             {
