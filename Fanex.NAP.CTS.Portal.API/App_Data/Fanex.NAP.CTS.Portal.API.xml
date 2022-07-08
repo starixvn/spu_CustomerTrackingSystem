@@ -490,31 +490,26 @@
             <summary>
             Add Licencee VIP
             </summary>
-            <param name="parameters"></param>
         </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.LicenseeVIPBAController.RemoveLicVIP(Fanex.NAP.CTS.Model.API.LicenseeVIPBAInputModel)">
             <summary>
             Remove Licencee VIP
             </summary>
-            <param name="parameters"></param>
         </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.LicenseeVIPBAController.AddLicBA(Fanex.NAP.CTS.Model.API.LicenseeVIPBAInputModel)">
             <summary>
             Add Licencee BA
             </summary>
-            <param name="parameters"></param>
         </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.LicenseeVIPBAController.RemoveLicBA(Fanex.NAP.CTS.Model.API.LicenseeVIPBAInputModel)">
             <summary>
             Remove Licencee BA
             </summary>
-            <param name="parameters"></param>
         </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.LicenseeVIPBAController.RemoveLicBABySite(Fanex.NAP.CTS.Model.API.RemoveLicenseeBABySiteInputModel)">
             <summary>
             Remove Licencee BA by Site
             </summary>
-            <param name="parameters"></param>
         </member>
         <member name="T:Fanex.NAP.CTS.Portal.API.Controllers.CtsController">
             <summary>
