@@ -48,6 +48,7 @@
 
                     return BadRequest($"Invalid input parameter. Data: {JsonConvert.SerializeObject(parameters)}");
                 }
+
             }
             catch (Exception ex)
             {
