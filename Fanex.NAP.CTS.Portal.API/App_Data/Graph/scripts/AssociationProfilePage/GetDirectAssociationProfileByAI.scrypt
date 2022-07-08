@@ -21,9 +21,10 @@ WHERE (($ip_AssociationStatus = 0)
 WITH c, c1, s, st, AssDate
 OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c1)
 OPTIONAL MATCH (c1)-[:HAS_CATEGORY]->(ct:CustomerCategory)
-WHERE ct.CategoryID IN $ip_CategoryIDs
 WITH c, c1, s, st, ct, e, AssDate AS firstAssDate
-WHERE ( 0 IN $ip_CategoryIDs) OR (NOT 0 IN $ip_CategoryIDs AND ct.CategoryID IS NOT NULL)
+WHERE ($ip_CategoryIDs[0]=0 AND ct.CategoryID IS NULL)
+  OR (0 IN $ip_CategoryIDs AND (ct.CategoryID in $ip_CategoryIDs OR ct.CategoryID IS NULL)) 
+  OR (NOT 0 IN $ip_CategoryIDs AND ct.CategoryID IS NOT NULL)
 OPTIONAL MATCH (c)-[r:GROUP_BY_AI]->(g:AIGroup)<-[r1:GROUP_BY_AI]-(c1)
 WITH 
       c1.CTSCustID          AS CTSCustID

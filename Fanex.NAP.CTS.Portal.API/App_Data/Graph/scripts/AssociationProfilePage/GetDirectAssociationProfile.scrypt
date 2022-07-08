@@ -155,9 +155,11 @@ WITH     value.CTSCustID        AS CTSCustID
 UNWIND(AssociationDate) AS associationDate       
 WITH CTSCustID, CustId, CustSubId, SubscriberID, SubscriberName, UserName, UserName2, StatusGroup, StatusID, StatusName, AssociationStatus, AssociationTypeName, Min(associationDate) as AssociationDate, GroupIDs, OriginGroupIDs
 OPTIONAL MATCH (c1:CTSCustomer)-[:HAS_CATEGORY]->(ct:CustomerCategory)
-WHERE ct.CategoryID in $ip_CategoryIDs AND c1.CTSCustID = CTSCustID 
+WHERE c1.CTSCustID = CTSCustID 
 WITH ct, CTSCustID, CustId, CustSubId, SubscriberID, SubscriberName, UserName, UserName2, StatusGroup, StatusID, StatusName, AssociationStatus, AssociationTypeName, AssociationDate, GroupIDs, OriginGroupIDs
-WHERE ( 0 IN $ip_CategoryIDs) OR (NOT 0 IN $ip_CategoryIDs AND ct.CategoryID IS NOT NULL)
+WHERE ($ip_CategoryIDs[0]=0 AND ct.CategoryID IS NULL)
+  OR (0 IN $ip_CategoryIDs AND (ct.CategoryID in $ip_CategoryIDs OR ct.CategoryID IS NULL)) 
+  OR (NOT 0 IN $ip_CategoryIDs AND ct.CategoryID IS NOT NULL)
 WITH  CTSCustID          AS CTSCustID
     , CustId             AS CustId
     , CustSubId          AS CustSubId

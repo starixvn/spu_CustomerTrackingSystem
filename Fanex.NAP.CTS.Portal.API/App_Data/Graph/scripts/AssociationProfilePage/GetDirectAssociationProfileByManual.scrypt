@@ -12,9 +12,10 @@ WHERE c.CTSCustID = $ip_CTSCustID AND c1.CTSCustID IS NOT NULL
 WITH distinct c,c1,s,st,r.CreatedDate as AssDate
 OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c1)
 OPTIONAL MATCH (c1)-[:HAS_CATEGORY]->(ct:CustomerCategory)
-WHERE ct.CategoryID in $ip_CategoryIDs
 WITH c,c1,s,st,ct,e, Min(AssDate) as firstAssDate
-WHERE ( 0 IN $ip_CategoryIDs) OR (NOT 0 IN $ip_CategoryIDs AND ct.CategoryID IS NOT NULL)
+WHERE ($ip_CategoryIDs[0]=0 AND ct.CategoryID IS NULL)
+  OR (0 IN $ip_CategoryIDs AND (ct.CategoryID in $ip_CategoryIDs OR ct.CategoryID IS NULL)) 
+  OR (NOT 0 IN $ip_CategoryIDs AND ct.CategoryID IS NOT NULL)
 WITH 
       c1.CTSCustID           AS CTSCustID
     , c1.CustID             AS CustId
