@@ -194,7 +194,7 @@
             }
         }
 
-        public static int UpdateInternalChunkSize
+        public static int InternalChunkSize
         {
             get
             {

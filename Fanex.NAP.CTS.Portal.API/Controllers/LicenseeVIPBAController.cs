@@ -19,13 +19,11 @@
     public class LicenseeVIPBAController : ApiController
     {
         private readonly ILicenseeVIPBAService licenseeLAPCustomerClassificationService;
-        private readonly ICustomerClassificationService custClassificationService;
         private readonly ILogInputDataService logInputDataService;
 
         public LicenseeVIPBAController()
         {
             licenseeLAPCustomerClassificationService = new LicenseeVIPBAService();
-            custClassificationService = new CustomerClassificationService();
             logInputDataService = new LogInputDataService();
         }
 
@@ -49,6 +47,7 @@
                     return BadRequest($"Invalid input parameter. Data: {JsonConvert.SerializeObject(parameters)}");
                 }
 
+                licenseeLAPCustomerClassificationService.InsertLicVIP(parameters);
             }
             catch (Exception ex)
             {
@@ -81,9 +80,11 @@
                 if (!licenseeLAPCustomerClassificationService.CheckValid(parameters))
                 {
                     LogService.Error($"CTS API - RemoveLicVIP - Invalid input parameter from LAP: {JsonConvert.SerializeObject(parameters)} - DateTime {DateTime.UtcNow} UTC");
-                    
+
                     return BadRequest($"Invalid input parameter. Data: {JsonConvert.SerializeObject(parameters)}");
                 }
+
+                licenseeLAPCustomerClassificationService.RemoveLicVIP(parameters);
             }
             catch (Exception ex)
             {

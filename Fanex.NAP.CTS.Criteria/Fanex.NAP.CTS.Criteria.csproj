@@ -70,6 +70,8 @@
     <Compile Include="AssociatedGroupMonitor\GetAssociatedGroupMonitorCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\RemoveAssociatedGroupMonitorCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\ValidateAssociatedAccountCriteria.cs" />
+    <Compile Include="Api\LicenseeVIPBA\LicenseeVIPRemoveCriteria.cs" />
+    <Compile Include="Api\LicenseeVIPBA\LicenseeVIPInsertCriteria.cs" />
     <Compile Include="CustomerClassification\GetLastestCCDangerLevelCriteria.cs" />
     <Compile Include="CustomerClassification\InputErrorLogInsertCriteria.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\CheckNewPAAssociationCustomerForRollbackCriteria.cs" />

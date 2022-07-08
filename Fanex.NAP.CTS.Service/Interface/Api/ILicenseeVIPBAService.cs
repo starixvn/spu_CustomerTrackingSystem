@@ -7,5 +7,9 @@
         bool CheckValid(LicenseeVIPBAInputModel parameter);
 
         bool CheckValid(RemoveLicenseeBABySiteInputModel parameter);
+
+        void InsertLicVIP(LicenseeVIPBAInputModel parameter);
+
+        void RemoveLicVIP(LicenseeVIPBAInputModel parameter);
     }
 }
