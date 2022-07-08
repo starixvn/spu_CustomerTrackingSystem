@@ -30,7 +30,7 @@
 
         public bool CheckValid(LicenseeVIPBAInputModel parameter)
         {
-            if (parameter == null || parameter.CreatedBy == 0 || string.IsNullOrWhiteSpace(parameter.CustIDs))
+            if (parameter == null || string.IsNullOrWhiteSpace(parameter.CustIDs))
             {
                 return false;
             }
@@ -40,7 +40,7 @@
 
         public bool CheckValid(RemoveLicenseeBABySiteInputModel parameter)
         {
-            if (parameter == null || parameter.CreatedBy == 0 || string.IsNullOrWhiteSpace(parameter.SiteName))
+            if (parameter == null || string.IsNullOrWhiteSpace(parameter.SiteName))
             {
                 return false;
             }
@@ -167,8 +167,8 @@
             {
                 var custIDs = string.Join(",", custList.Select(c => c.CustID).Distinct());
 
-                var custInfo = MappingLicVIPBAModel(new LicenseeVIPBAInputModel { CustIDs = custIDs, CreatedBy = parameter.CreatedBy});
-                
+                var custInfo = MappingLicVIPBAModel(new LicenseeVIPBAInputModel { CustIDs = custIDs, CreatedBy = parameter.CreatedBy });
+
                 foreach (var batchCustIds in custInfo)
                 {
                     var result = RemoveLicBA(batchCustIds);
@@ -200,7 +200,7 @@
                     var listCust = custIds.Select(c => new LicenseeVIPBAModel
                     {
                         CustID = c,
-                        CreatedBy = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]) //Lic UserID is not in CTS system, so default StarixIT
+                        CreatedBy = parameter.CreatedBy ?? Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]) //Lic UserID is not in CTS system, so default StarixIT
                     });
 
                     return listCust.Distinct().Chunk(ConfigSettings.InternalChunkSize);

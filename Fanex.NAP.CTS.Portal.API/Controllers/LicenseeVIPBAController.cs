@@ -27,7 +27,6 @@
         /// <summary>
         /// Add Licencee VIP
         /// </summary>
-        /// <param name="parameters"></param>
         [HttpPost]
         [Route("api/cts/AddLicVIP")]
         [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.AddLicVIP_API)]
@@ -64,7 +63,6 @@
         /// <summary>
         /// Remove Licencee VIP
         /// </summary>
-        /// <param name="parameters"></param>
         [HttpPost]
         [Route("api/cts/RemoveLicVIP")]
         [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.RemoveLicVIP_API)]
@@ -101,7 +99,6 @@
         /// <summary>
         /// Add Licencee BA
         /// </summary>
-        /// <param name="parameters"></param>
         [HttpPost]
         [Route("api/cts/AddLicBA")]
         [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.AddLicVIP_API)]
@@ -138,7 +135,6 @@
         /// <summary>
         /// Remove Licencee BA
         /// </summary>
-        /// <param name="parameters"></param>
         [HttpPost]
         [Route("api/cts/RemoveLicBA")]
         [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.RemoveLicBAP_API)]
@@ -175,7 +171,6 @@
         /// <summary>
         /// Remove Licencee BA by Site
         /// </summary>
-        /// <param name="parameters"></param>
         [HttpPost]
         [Route("api/cts/RemoveLicBABySite")]
         [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.RemoveLicBABySite_API)]

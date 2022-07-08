@@ -8,6 +8,6 @@
         public string SiteName { get; set; }
 
         [JsonProperty(PropertyName = "CreatedBy")]
-        public long CreatedBy { get; set; }
+        public long? CreatedBy { get; set; }
     }
 }
