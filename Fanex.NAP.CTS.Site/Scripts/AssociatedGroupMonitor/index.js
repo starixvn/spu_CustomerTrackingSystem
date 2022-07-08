@@ -128,7 +128,7 @@
                             domElements.divAddAssociatedAccount.dialog({
                                 modal: true,
                                 width: '700px',
-                                title: 'ADD NEW MEMBERS - ' + row.GroupName,
+                                title: 'ADD NEW ACCOUNTS - ' + row.GroupName,
                                 resizable: true,
                                 draggable: true,
                                 close: function () {
@@ -569,25 +569,36 @@
             $('#cbbABIAssociatedGroup').val(1).trigger('change.select2');
             domElements.txtGroupNameAssociatedGroup.val('');                       
             domElements.txtCommentAssociatedGroup.val('');
-                      
+
+            if ($.ui && $.ui.dialog && $.ui.dialog.prototype._allowInteraction) {
+                var ui_dialog_interaction = $.ui.dialog.prototype._allowInteraction;
+                $.ui.dialog.prototype._allowInteraction = function (e) {
+                    if ($(e.target).closest('.select2-dropdown').length) return true;
+                    return ui_dialog_interaction.apply(this, arguments);
+                };
+            }
+
             domElements.divAddAssociatedGroup.dialog({
                 modal: true,
                 width: '600px',
                 title: 'CREATE NEW GROUP',
+                _allowInteraction: function (event) {
+                    return !!$(event.target).is(".select2-input") || this._super(event);
+                },
                 resizable: true,
                 draggable: true,
                 close: function () {
                     $(this).dialog('close');
                 }
-            });
+            });           
         });
 
         domElements.btnSaveAssociatedGroup.on('click', () => AddAssociatedGroupMonitor());
 
         domElements.btnCancelAssociatedGroup.on('click', () => { domElements.divAddAssociatedGroup.dialog('close') });
 
-        domElements.cbbABIAssociatedGroup.select2();
-
+        domElements.cbbABIAssociatedGroup.select2();        
+       
         domElements.btnSaveAssociatedAccount.on('click', () => AddAssociatedAccount());
 
         domElements.btnCancelAssociatedAccount.on('click', () => { domElements.divAddAssociatedAccount.dialog('close') });

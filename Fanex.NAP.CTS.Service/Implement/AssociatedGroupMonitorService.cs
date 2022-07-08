@@ -92,7 +92,7 @@
 
         public DBResult UpdateABIToMainDB(string custIDs, int valueABI)
         {
-            var custInfos = GetCustomerInfos(custIDs, 2);
+            var custInfos = GetCustomerInfoMainDB(custIDs, 2);
 
             try
             {
@@ -123,7 +123,7 @@
             return new DBResult { ErrorCode = 0 };
         }
 
-        public IEnumerable<CustomerInfoByCustIdsModel> GetCustomerInfos(string custIdList, int sourceType)
+        public IEnumerable<CustomerInfoByCustIdsModel> GetCustomerInfoMainDB(string custIdList, int sourceType)
         {
             try
             {
@@ -211,7 +211,7 @@
             var headerRow = writer.CopyRows(0, 1);
             var headerCell = headerRow.GetCell(0);
 
-            headerCell.SetCellValue(model.GroupName + " GROUP MANAGEMENT REPORT");
+            headerCell.SetCellValue(model.GroupName.ToUpper() + " GROUP MANAGEMENT REPORT");
 
             writer.CopyRows(1, 1);
             writer.CopyRows(2, 1);

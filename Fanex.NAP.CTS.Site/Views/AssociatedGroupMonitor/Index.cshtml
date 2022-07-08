@@ -8,7 +8,7 @@
 
 }
 
-<div class="associated-group-container">
+<div class="associated-group-container" id="divAssociatedGroupContainer">
     <div class="content">
         <h2 class="page-title">Associated Group Monitor</h2>
     </div>
@@ -29,7 +29,7 @@
                         <th>Group ID</th>
                         <th>Group Name</th>
                         <th>ABI</th>
-                        <th>Total Associated Accounts</th>
+                        <th>Total Accounts</th>
                         <th>Comment</th>
                         <th>Created Date</th>
                         <th>Created By</th>
@@ -50,9 +50,9 @@
         <input id="txtGroupNameAssociatedGroup" type="text" class="input-field full-width" maxlength="50" />
     </div>
 
-    <div class="form-control">
+    <div class="form-control" id="divABIAssociatedGroup">
         <div class="label">ABI<label style="color:red">*</label></div>
-        <select class="control" id="cbbABIAssociatedGroup" name="state">
+        <select class="control" id="cbbABIAssociatedGroup" name="state" style="height: 100px">
             @for (int idx = 1; idx < 51; idx++)
             {
                 <option value=@idx>@idx</option>
