@@ -58,7 +58,8 @@
         public AssociatedAccountPagingModel GetDirectAssociationProfile([FromBody] AssociationProfileParameterModel paras)
         {
             var batchID = (DateTime.Now.DayOfYear + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second + DateTime.Now.Millisecond);
-            LogService.Info("GetDirectAssociationProfile start - Type: " + paras.AssociationType + " - BatchId: " + batchID.ToString());
+            var mess = "GetDirectAssociation Portal API start \n\r";
+            mess += "GetDirectAssociationProfile start - Type: " + paras.AssociationType + " - BatchId: " + batchID.ToString() + "\r\n";
             var timer = new Stopwatch();
             TimeSpan runningTime;
             timer.Start();
@@ -68,8 +69,6 @@
                 {
                     string queryScript = GetQueryScriptForAssProfile(paras.AssociationType);
                     runningTime = timer.Elapsed;
-                    LogService.Info("GetQueryScriptForAssProfile done: " + runningTime.ToString(@"m\:ss\.fff"));
-                    LogService.Info("GetDirectAssociationProfile - Type: " + paras.AssociationType + " - Script: " + queryScript);
                     
                     var result = DbSessionFactory.Execute<AssociatedAccountPagingModel>(queryScript, new
                     {
@@ -85,7 +84,8 @@
 
                     timer.Stop();
                     runningTime = timer.Elapsed;
-                    LogService.Info("Get data from Neo4j done: " + runningTime.ToString(@"m\:ss\.fff") + "Current time: " + DateTime.Now.ToString());
+                    mess += "Get data from Neo4j done: " + runningTime.ToString(@"m\:ss\.fff") + " - Current time: " + DateTime.Now.ToString() + " - BatchId: " + batchID.ToString();
+                    LogService.Info(mess);
 
                     return result ?? new AssociatedAccountPagingModel() { AssociationList = new List<AssociatedAccountModel>(), TotalItems = 0 };
                 }
