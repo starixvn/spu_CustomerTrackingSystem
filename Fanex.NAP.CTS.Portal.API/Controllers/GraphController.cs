@@ -19,6 +19,7 @@
     using Fanex.NAP.SPU.Graph.Core;
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
     using System.Web.Http;
@@ -56,12 +57,20 @@
         [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetDirectAssociationProfileAPI)]
         public AssociatedAccountPagingModel GetDirectAssociationProfile([FromBody] AssociationProfileParameterModel paras)
         {
+            var batchID = (DateTime.Now.DayOfYear + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second + DateTime.Now.Millisecond);
+            LogService.Info("GetDirectAssociationProfile start - Type: " + paras.AssociationType + " - BatchId: " + batchID.ToString());
+            var timer = new Stopwatch();
+            TimeSpan runningTime;
+            timer.Start();
             try
             {
                 if (!string.IsNullOrEmpty(paras.SubscriberIDs) && !string.IsNullOrEmpty(paras.CategoryIDs))
                 {
                     string queryScript = GetQueryScriptForAssProfile(paras.AssociationType);
-                    LogService.Info("GetDirectAssociationProfile - Type: " + paras.AssociationType + "Script: " + queryScript);
+                    runningTime = timer.Elapsed;
+                    LogService.Info("GetQueryScriptForAssProfile done: " + runningTime.ToString(@"m\:ss\.fff"));
+                    LogService.Info("GetDirectAssociationProfile - Type: " + paras.AssociationType + " - Script: " + queryScript);
+                    
                     var result = DbSessionFactory.Execute<AssociatedAccountPagingModel>(queryScript, new
                     {
                         ip_CTSCustID = paras.CTSCustId,
@@ -73,6 +82,10 @@
                         ip_Skip = paras.Skip,
                         ip_PageSize = paras.Take
                     })?.Data.FirstOrDefault();
+
+                    timer.Stop();
+                    runningTime = timer.Elapsed;
+                    LogService.Info("Get data from Neo4j done: " + runningTime.ToString(@"m\:ss\.fff") + "Current time: " + DateTime.Now.ToString());
 
                     return result ?? new AssociatedAccountPagingModel() { AssociationList = new List<AssociatedAccountModel>(), TotalItems = 0 };
                 }
