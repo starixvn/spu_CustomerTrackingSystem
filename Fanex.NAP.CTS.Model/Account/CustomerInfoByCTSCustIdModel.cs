@@ -29,5 +29,9 @@
         public bool IsLicensee { get; set; }
 
         public bool IsInternal { get; set; }
+
+        public bool IsLicenseeVIP { get; set; }
+
+        public bool IsLicenseeBA { get; set; }
     }
 }

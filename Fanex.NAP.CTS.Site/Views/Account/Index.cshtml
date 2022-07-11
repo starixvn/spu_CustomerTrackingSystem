@@ -11,7 +11,7 @@
     <span class="tag-text-right spanContentInfoLoading" id="spanContentInfoLoading"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
     <div class="header-info border-green" id="divHeaderInfo" style="visibility:hidden">
         <div class="header-username bg-green" id="divHeaderUsername">
-            <div class="block-icon">               
+            <div class="block-icon">
                 <span class="icon-Robot icon-base-robot hide">
                     <span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span>
                 </span>
@@ -55,7 +55,7 @@
                     <span class="icon-flag hide"><span class="path1"></span><span class="path2"></span></span>
                 }
 
-                <span class="username">@(Model.UserName != null ? Model.UserName : Model.UserName2)</span>
+                <span class="username">@(Model.UserName != null ? Model.UserName : Model.UserName2) @Model.UserNameSuffix</span>
             </div>
         </div>
         <div class="container-status">

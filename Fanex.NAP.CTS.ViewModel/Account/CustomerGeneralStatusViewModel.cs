@@ -18,6 +18,8 @@
 
         public string UserName2 { get; set; }
 
+        public string UserNameSuffix { get; set; }
+
         public int? CustStatusID { get; set; }
 
         public string StatusName { get; set; }
@@ -91,6 +93,7 @@
                 this.StatusName = string.IsNullOrEmpty(customerInfoByCTSCustIdModel.CustStatusName) ? "N/A" : customerInfoByCTSCustIdModel.CustStatusName;
                 this.IsLicensee = customerInfoByCTSCustIdModel.IsLicensee;
                 this.IsInternal = customerInfoByCTSCustIdModel.IsInternal;
+                this.UserNameSuffix = customerInfoByCTSCustIdModel.IsLicenseeVIP ? " (Lic VIP)" : (customerInfoByCTSCustIdModel.IsLicenseeBA ? " (Lic BA)" : string.Empty);
             }
 
             return this;
