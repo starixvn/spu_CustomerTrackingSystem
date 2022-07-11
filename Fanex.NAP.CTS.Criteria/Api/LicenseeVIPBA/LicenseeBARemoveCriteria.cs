@@ -10,7 +10,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_CustClassification_BA_Remove";
+            return "CTS_DC_CustClassification_LicBA_Remove";
         }
 
         public override bool IsValid()

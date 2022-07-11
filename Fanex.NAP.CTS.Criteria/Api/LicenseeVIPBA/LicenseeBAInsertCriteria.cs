@@ -10,7 +10,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_CustClassification_BA_Insert";
+            return "CTS_DC_CustClassification_LicBA_Insert";
         }
 
         public override bool IsValid()

@@ -92,7 +92,7 @@
 		<Setting Key="CTS_DC_CTSCustomer_GetBySiteName" SpName="CTS_DC_CTSCustomer_GetBySiteName_xpre" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustClassification_LicVIP_Insert" SpName="CTS_DC_CustClassification_LicVIP_Insert_xpre" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustClassification_LicVIP_Remove" SpName="CTS_DC_CustClassification_LicVIP_Remove_xpre" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_CustClassification_BA_Insert" SpName="CTS_DC_CustClassification_BA_Insert_xpre" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_CustClassification_BA_Remove" SpName="CTS_DC_CustClassification_BA_Remove_xpre" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_CustClassification_LicBA_Insert" SpName="CTS_DC_CustClassification_LicBA_Insert_xpre" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_CustClassification_LicBA_Remove" SpName="CTS_DC_CustClassification_LicBA_Remove_xpre" DbName="MySQL.CTS_DataCenter.Admin" />
 	</Function>
 </Functions>
