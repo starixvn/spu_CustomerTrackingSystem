@@ -8,8 +8,8 @@
         [SpParam(SqlParamName = "ip_GroupID")]
         public long GroupID { get; set; }
 
-        [SpParam(SqlParamName = "ip_CreatedBy")]
-        public int CreatedBy { get; set; }
+        [SpParam(SqlParamName = "ip_UserID")]
+        public int UserID { get; set; }
 
         public override string GetSettingKey()
         {

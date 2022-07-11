@@ -123,12 +123,23 @@
                             domElements.spanAddAssociatedAccountGroupNameHidden.val(row.GroupName);
                             domElements.spanAddAssociatedAccountGroupABIHidden.val(row.ABI);                            
                             domElements.txtCommentAssociatedAccount.val('');
+
                             InitInputTagUsername();
+
+                            $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+                                _title: function (title) {
+                                    let $title = this.options.title || '&nbsp;'
+                                    if (("titleIsHtml" in this.options) && this.options.titleIsHtml == true)
+                                        title.html($title);
+                                    else title.text($title);
+                                }
+                            }));
 
                             domElements.divAddAssociatedAccount.dialog({
                                 modal: true,
                                 width: '700px',
-                                title: 'ADD NEW ACCOUNTS - ' + row.GroupName,
+                                title: '<div>ADD NEW ACCOUNTS - <label style="color:#FF0000">' + row.GroupName + '</label></div>',
+                                titleIsHtml: true,
                                 resizable: true,
                                 draggable: true,
                                 close: function () {
@@ -235,7 +246,7 @@
 
                     GetAssociatedGroup();
                 } else {
-                    common.showSuccess("An unexpected Error occurred. Please try again.");
+                    common.showError("An unexpected Error occurred. Please try again.");
                 }
             },
             complete: function () {
@@ -243,20 +254,21 @@
             },
             error: function (errMsg) {
                 domElements.tblAssociatedGroup.find('tbody').removeClass('loading');
+                common.showError("An unexpected Error occurred. Please try again.");
                 console.log(errMsg);
             }
         });
     }
 
     function AddAssociatedGroupMonitor() {
-        common.showConfirmation("<div class='popup-content'><div class='popup-title'>Are you sure you want to add new group '" + domElements.txtGroupNameAssociatedGroup.val().trim() +"'</div></div>",
-            function () {
-                if (ValidateInputAddAssociatedGroupMonitor()) {
+        if (ValidateInputAddAssociatedGroupMonitor()) {
+            common.showConfirmation("<div class='popup-content'><div class='popup-title'>Are you sure you want to add new group '" + domElements.txtGroupNameAssociatedGroup.val().trim() +"'</div></div>",
+                function () {
                     let params = {};
                     params.GroupName = domElements.txtGroupNameAssociatedGroup.val().trim();
                     params.ABI = domElements.cbbABIAssociatedGroup.val();
-                    params.Comment = domElements.txtCommentAssociatedGroup.val().trim();                                    
-                    
+                    params.Comment = domElements.txtCommentAssociatedGroup.val().trim();
+
                     $.ajax(common.modifyRelativeUrl('AssociatedGroupMonitor/AddAssociatedGroupMonitor'), {
                         type: 'POST',
                         data: params,
@@ -270,7 +282,7 @@
 
                                 GetAssociatedGroup();
                             } else {
-                                common.showSuccess("An unexpected Error occurred. Please try again.");
+                                common.showError("An unexpected Error occurred. Please try again.");
                             }
                         },
                         complete: function () {
@@ -278,34 +290,50 @@
                         },
                         error: function (errMsg) {
                             domElements.tblAssociatedGroup.find('tbody').removeClass('loading');
+                            common.showError("An unexpected Error occurred. Please try again.");
                             console.log(errMsg);
                         }
                     });
-                }                
-            }
-        );        
+                }
+            )
+        }       
     }
 
     function ValidateInputAddAssociatedGroupMonitor() {
-        if (domElements.txtGroupNameAssociatedGroup.val() === "") {
-            common.showError('Group Name "' + domElements.txtGroupNameAssociatedGroup.val() + '" is invalid.');
+        if (domElements.txtGroupNameAssociatedGroup.val() == "") {
+            common.showError('Group Name may not be empty.');
             return false;
         }
 
-        let pattern = /^[a-zA-Z0-9_.-\s]*$/;        
+        let pattern = /^[a-zA-Z0-9_.-\s]*$/;
         let groupName = domElements.txtGroupNameAssociatedGroup.val();
       
-        if (!pattern.test(groupName)) {
+        if (!pattern.test(RemoveAscent(groupName))) {
             common.showError('Group Name "' + groupName + '" is invalid.');
             return false;
         }
-
-        if (domElements.cbbABIAssociatedGroup.val() === "") {
-            common.showError('ABI "' + domElements.cbbABIAssociatedGroup.val() + '" is invalid.');
+        
+        if (domElements.cbbABIAssociatedGroup.val() == "" || domElements.cbbABIAssociatedGroup.val() == null) {
+            common.showError('ABI may not be empty.');
             return false;
         }
 
         return true;
+    }
+
+    function RemoveAscent(text) {
+        if (text === null || text === undefined)
+            return text;
+        text = text.toLowerCase();
+        text = text.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+        text = text.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+        text = text.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+        text = text.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+        text = text.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+        text = text.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+        text = text.replace(/đ/g, "d");
+
+        return text;
     }
 
     function AddAssociatedAccount() {
@@ -340,6 +368,7 @@
                     },
                     error: function (errMsg) {
                         domElements.tblAssociatedGroup.find('tbody').removeClass('loading');
+                        common.showError("An unexpected Error occurred. Please try again.");
                         console.log(errMsg);
                     }
                 });
@@ -516,6 +545,7 @@
                 },
                 error: function (errMsg) {
                     domElements.spanAddAssociatedAccountUserName.removeClass("loading-value");
+                    common.showError("An unexpected Error occurred. Please try again.");
                     console.log(errMsg);
                 }
             });
@@ -566,7 +596,7 @@
         GetAssociatedGroup();
 
         domElements.btnAddGroup.on('click', function () {   
-            $('#cbbABIAssociatedGroup').val(1).trigger('change.select2');
+            $('#cbbABIAssociatedGroup').val(0).trigger('change.select2');
             domElements.txtGroupNameAssociatedGroup.val('');                       
             domElements.txtCommentAssociatedGroup.val('');
 

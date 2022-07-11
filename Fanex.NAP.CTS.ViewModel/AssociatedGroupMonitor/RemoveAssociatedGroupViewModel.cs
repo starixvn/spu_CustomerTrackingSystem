@@ -4,6 +4,6 @@
     {
         public long GroupID { get; set; }
 
-        public int CreatedBy { get; set; }
+        public int UserID { get; set; }
     }
 }

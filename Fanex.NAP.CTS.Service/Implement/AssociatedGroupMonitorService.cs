@@ -180,7 +180,7 @@
             var criteria = new RemoveAssociatedGroupMonitorCriteria
             {
                 GroupID = model.GroupID,
-                CreatedBy = model.CreatedBy
+                UserID = model.UserID
             };
 
             try

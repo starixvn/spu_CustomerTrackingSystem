@@ -47,12 +47,13 @@
 <div id="divAddAssociatedGroup" class="popup-add" style="display: none">
     <div class="form-control">
         <div class="label">Group Name<label style="color:red">*</label></div>
-        <input id="txtGroupNameAssociatedGroup" type="text" class="input-field full-width" maxlength="50" />
+        <input id="txtGroupNameAssociatedGroup" type="text" class="input-field full-width" maxlength="100" />
     </div>
 
     <div class="form-control" id="divABIAssociatedGroup">
         <div class="label">ABI<label style="color:red">*</label></div>
         <select class="control" id="cbbABIAssociatedGroup" name="state" style="height: 100px">
+            <option disabled selected value="">Select an ABI</option>
             @for (int idx = 1; idx < 51; idx++)
             {
                 <option value=@idx>@idx</option>

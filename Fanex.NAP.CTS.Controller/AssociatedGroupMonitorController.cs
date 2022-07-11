@@ -88,6 +88,8 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedGroupMonitorRpt)]
         public ActionResult RemoveAssociatedGroupMonitor(RemoveAssociatedGroupViewModel model)
         {
+            model.UserID = CurrentSession.UserId;
+
             var result = _associatedGroupService.RemoveAssociatedGroupMonitor(model);
 
             return Json(new
@@ -117,8 +119,8 @@
 
             if (!resultValidate.AccountInvalidList.Any())
             {               
-                model.CustIDs = string.Join(",", validatedModels.Select(x => x.CustID));
-                model.CTSCustIDs = string.Join(",", validatedModels.Select(x => x.CTSCustID));
+                model.CustIDs = string.Join(",", validatedModels.Select(x => x.CustID).Distinct());
+                model.CTSCustIDs = string.Join(",", validatedModels.Select(x => x.CTSCustID).Distinct());
                 model.CreatedBy = CurrentSession.UserId;
 
                 var dbResult = _associatedGroupService.AddAssociatedAccount(model);
