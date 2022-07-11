@@ -113,12 +113,14 @@
                     <div class="info-text left">
                         <span>Class:</span>
                         <span>Lic VIP:</span>
+                        <span>Lic BA:</span>
                         <span id="spanLblFlagEvidence">Flag Evidence:</span>
                         <span id="spanLblAffectedEvidence">Affected Evidence:</span>
                     </div>
                     <div class="info-text right">
                         <span id="spanClass"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
-                        <span id="spanLicVIP"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
+                        <span>@Model.IsLicenseeVIP</span>
+                        <span>@Model.IsLicenseeBA</span>
                         <span id="spanFlagEvidence"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
                         <span id="spanAffectedEvidence"><img class="icon-loading" src="~/Content/scss/images/loading.svg" /></span>
                     </div>
