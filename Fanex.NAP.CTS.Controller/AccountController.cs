@@ -1400,7 +1400,7 @@
                 {
                     CreatedTimeString = x.CreatedTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                     SourceTypeName = x.SourceTypeName,
-                    CategoryName = x.CategoryName != null ? x.CategoryName : string.Empty,
+                    CategoryName = (x.SourceTypeID == (int)SourceTypeID.NoShow_Detail) ? "-" : ( x.CategoryName != null ? x.CategoryName : string.Empty),
                     CustomerClass = x.CustomerClass,
                     Reason = GetReason(x, roleID),
                     TurnOver = x.TurnOver,
@@ -1430,7 +1430,6 @@
         {
             var divReason = $"<div>";
             var spanReason = string.Empty;
-
             var winlost = Math.Round(cc.Winloss, 3);
 
             if (cc.IsFromTVS && cc.SourceTypeID != (int)SourceTypeID.Classification_RescanRobot)
@@ -1451,9 +1450,9 @@
                 spanReason = MappingReasonBySourceTypeID(spanReason, cc, roleID);
 
             if (spanReason == string.Empty)
-                divReason += $"<div>{cc.SourceTypeName}</div>";
+                divReason += $"<div>{MappingAdditionalReason(cc)}</div>" + $"<div>{cc.SourceTypeName}</div>";
             else
-                divReason += $"<div>{spanReason}</div>";
+                divReason += $"<div>{MappingAdditionalReason(cc) + spanReason }</div>";
 
             return divReason;
         }
@@ -1595,11 +1594,29 @@
                     }                    
 
                     break;
+                case (int)SourceTypeID.NoShow_Detail:
+                    spanReason += $"{cc.CategoryName}";
+                    break;
                 default:
                     break;
             }
 
             return spanReason;
+        }
+
+        private string MappingAdditionalReason(CustomerClassificationHistoryModel cc)
+        {
+            if(cc.SourceTypeID != (int)SourceTypeID.NoShow_Detail && !string.IsNullOrEmpty(cc.LicVIP))
+            {
+                return $"<div>{cc.LicVIP}</div>";
+            }
+
+            if (cc.SourceTypeID != (int)SourceTypeID.NoShow_Detail && !string.IsNullOrEmpty(cc.LicBA))
+            {
+                return $"<div>{cc.LicBA}</div>";
+            }
+
+            return string.Empty;
         }
 
         //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]
