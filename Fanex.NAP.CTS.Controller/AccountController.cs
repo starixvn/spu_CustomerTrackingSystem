@@ -432,7 +432,7 @@
             var graphAssociationPage = _accountService.GetAssociatedAccount(model, getAssociationFromMySql);
             timer.Stop();
             runningTime = timer.Elapsed;
-            messLog += "GetAssociatedAccount - getAssociationFromMySql: " + getAssociationFromMySql.ToString() + "ElapsedTime: " + runningTime.ToString(@"m\:ss\.fff");
+            messLog += "GetAssociatedAccount - getAssociationFromMySql: " + getAssociationFromMySql.ToString() + "- ElapsedTime: " + runningTime.ToString(@"m\:ss\.fff") + "\r\n";
             timer.Reset();
             timer.Start();
             if (graphAssociationPage != null && graphAssociationPage.AssociationList != null && graphAssociationPage.AssociationList.Any())
