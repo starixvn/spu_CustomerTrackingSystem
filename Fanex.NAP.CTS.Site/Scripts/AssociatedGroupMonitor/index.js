@@ -123,8 +123,11 @@
                             domElements.spanAddAssociatedAccountGroupNameHidden.val(row.GroupName);
                             domElements.spanAddAssociatedAccountGroupABIHidden.val(row.ABI);                            
                             domElements.txtCommentAssociatedAccount.val('');
-
-                            InitInputTagUsername();
+                            domElements.spanAddAssociatedAccountUserNameMaxTag.text(domElements.maxTags);
+                            domElements.spanAddAssociatedAccountChangeHidden.text("0");
+                            domElements.inputTagUsername.tagify().data('tagify').removeAllTags();
+                            domElements.spanAddAssociatedAccountUserName.find('tags').attr('tabindex', "1");
+                            domElements.btnSaveAssociatedAccount.prop('disabled', true);                           
 
                             $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
                                 _title: function (title) {

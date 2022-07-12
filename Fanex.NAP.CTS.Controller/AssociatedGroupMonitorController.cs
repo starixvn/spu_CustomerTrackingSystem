@@ -100,11 +100,11 @@
         }
 
         [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.AssociatedGroupMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedGroupMonitorRpt)]
         public ActionResult ValidateUserNameInput(string userNames)
-        {           
-            var validatedModels = _associatedGroupService.ValidateUserNameInput(userNames);
-            
-            return Json(this.GetResultValidated(validatedModels), JsonRequestBehavior.AllowGet);
+        {
+            return Json(GetResultValidated(userNames), JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -113,14 +113,13 @@
         public ActionResult AddAssociatedAccount(AddAssociatedAccountViewModel model)
         {
             var result = new ResultSaveAssociatedAccountViewModel();
-            var validatedModels = _associatedGroupService.ValidateUserNameInput(model.UserNames);
-
-            var resultValidate = GetResultValidated(validatedModels);
+            
+            var resultValidate = GetResultValidated(model.UserNames);
 
             if (!resultValidate.AccountInvalidList.Any())
             {               
-                model.CustIDs = string.Join(",", validatedModels.Select(x => x.CustID).Distinct());
-                model.CTSCustIDs = string.Join(",", validatedModels.Select(x => x.CTSCustID).Distinct());
+                model.CustIDs = resultValidate.CustIDs;
+                model.CTSCustIDs = resultValidate.CTSCustIDs;
                 model.CreatedBy = CurrentSession.UserId;
 
                 var dbResult = _associatedGroupService.AddAssociatedAccount(model);
@@ -138,22 +137,36 @@
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        private ResultValidatedViewModel GetResultValidated(IEnumerable<ValidateUserAssociatedAccountModel> validatedModels)
+        private ResultValidatedViewModel GetResultValidated(string userNames)
         {
             var result = new ResultValidatedViewModel();
 
-            if (validatedModels != null && validatedModels.Any())
+            if (!string.IsNullOrEmpty(userNames))
             {
-                result.AccountInvalidList = validatedModels
-                    .Where(x => !string.IsNullOrEmpty(x.ErrorMsg))
-                    .Select(x => new ValidateUserAssociatedAccountViewModel
-                    {
-                        CTSCustID = x.CTSCustID,
-                        UserName = x.Username,                       
-                        ErrMsg = x.ErrorMsg
-                    });
-            }
+                var userNameList = userNames.Split(',');
 
+                var userNamesDupIgnores = string.Join(",", userNameList.Distinct());
+
+                var validatedModels = _associatedGroupService.ValidateUserNameInput(userNamesDupIgnores);
+
+                if (validatedModels != null && validatedModels.Any())
+                {
+                    result = new ResultValidatedViewModel
+                    {
+                        AccountInvalidList = validatedModels
+                        .Where(x => !string.IsNullOrEmpty(x.ErrorMsg))
+                        .Select(x => new ValidateUserAssociatedAccountViewModel
+                        {
+                            CTSCustID = x.CTSCustID,
+                            UserName = x.Username,
+                            ErrMsg = x.ErrorMsg                            
+                        }),
+                        CustIDs = string.Join(",", validatedModels.Select(x => x.CustID).Distinct()),
+                        CTSCustIDs = string.Join(",", validatedModels.Select(x => x.CTSCustID).Distinct())
+                    };                  
+                }
+            }
+          
             return result;
         }
 

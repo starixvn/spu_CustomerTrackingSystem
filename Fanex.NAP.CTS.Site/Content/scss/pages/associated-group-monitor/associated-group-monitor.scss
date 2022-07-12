@@ -95,3 +95,15 @@ body {
         }
     }
 }
+
+.tagify__tag {
+    &.tagify--notAllowed {
+        background-color: #FFE0E0 !important;
+
+        &:hover {
+            > div::before {
+                border: 1px solid #FF3131 !important;
+            }
+        }
+    }
+}

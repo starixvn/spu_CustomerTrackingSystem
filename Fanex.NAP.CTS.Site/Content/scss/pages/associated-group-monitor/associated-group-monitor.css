@@ -59,3 +59,8 @@
       left: .6rem; }
     .associated-group-content .associated-group .table-associated-group .icon-delete:before {
       color: #FF0000; }
+
+.tagify__tag.tagify--notAllowed {
+  background-color: #FFE0E0 !important; }
+  .tagify__tag.tagify--notAllowed:hover > div::before {
+    border: 1px solid #FF3131 !important; }
