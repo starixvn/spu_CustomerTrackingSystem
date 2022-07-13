@@ -179,7 +179,7 @@ WITH  CTSCustID          AS CTSCustID
     , apoc.text.join(GroupIDs,",")                                  AS GroupIDs
     , apoc.text.join(OriginGroupIDs,",")                            AS OriginGroupIDs
 
-ORDER BY SubscriberName ASC, AssociationStatus ASC, StatusGroup ASC, StatusID ASC, AssociationDate DESC, CTSCustID ASC
+ORDER BY toLower(SubscriberName) ASC, AssociationStatus ASC, StatusGroup ASC, StatusID ASC, AssociationDate DESC, CTSCustID ASC
 WITH COLLECT({CTSCustID:CTSCustID, CustId:CustId, CustSubId:CustSubId, SubscriberID:SubscriberID, SubscriberName:SubscriberName, UserName:UserName, UserName2:UserName2, StatusGroup:StatusGroup, StatusID:StatusID, StatusName:StatusName, AssociationTypeName:AssociationTypeName, AssociationStatus:AssociationStatus, AssociationDate:AssociationDate, ParentIDs:ParentIDs, CategoryIDs:CategoryIDs, CategoryNames:CategoryNames, GroupIDs:GroupIDs, OriginGroupIDs:OriginGroupIDs} ) as AssociationList, count(CTSCustID) as TotalItems
 UNWIND AssociationList as associationList
 WITH associationList, TotalItems

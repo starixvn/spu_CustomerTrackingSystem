@@ -416,9 +416,6 @@
         public ActionResult GetAssociatedByAccount(AssociatedFilterModel model, bool? isSkipTracking)
         {
             var totalItem = 0;
-            string messLog = "CTS - Site - GetAssociatedByAccount \r\n";
-            var timer = new Stopwatch();
-            TimeSpan runningTime;
 
             var result = new List<CustomerAssociationByAccountDetailViewModel>();
 
@@ -428,13 +425,8 @@
             }
 
             var getAssociationFromMySql = AppSettings.Get("GetAssociationProfileFromMySQL") == "1";
-            timer.Start();
             var graphAssociationPage = _accountService.GetAssociatedAccount(model, getAssociationFromMySql);
-            timer.Stop();
-            runningTime = timer.Elapsed;
-            messLog += "GetAssociatedAccount - getAssociationFromMySql: " + getAssociationFromMySql.ToString() + "- ElapsedTime: " + runningTime.ToString(@"m\:ss\.fff") + "\r\n";
-            timer.Reset();
-            timer.Start();
+
             if (graphAssociationPage != null && graphAssociationPage.AssociationList != null && graphAssociationPage.AssociationList.Any())
             {
                 totalItem = graphAssociationPage.TotalItems;
@@ -482,11 +474,6 @@
                     return newX;
                 }).ToList();
             }
-
-            timer.Stop();
-            runningTime = timer.Elapsed;
-            messLog += "Handle some logics - ElapsedTime: " + runningTime.ToString(@"m\:ss\.fff");
-            LogService.Info(messLog);
 
             return Json(new
             {

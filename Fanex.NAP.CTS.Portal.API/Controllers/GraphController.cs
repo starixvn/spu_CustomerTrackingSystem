@@ -57,18 +57,11 @@
         [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetDirectAssociationProfileAPI)]
         public AssociatedAccountPagingModel GetDirectAssociationProfile([FromBody] AssociationProfileParameterModel paras)
         {
-            var batchID = (DateTime.Now.DayOfYear + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second + DateTime.Now.Millisecond);
-            var mess = "GetDirectAssociation Portal API start \n\r";
-            mess += "GetDirectAssociationProfile start - Type: " + paras.AssociationType + " - BatchId: " + batchID.ToString() + "\r\n";
-            var timer = new Stopwatch();
-            TimeSpan runningTime;
-            timer.Start();
             try
             {
                 if (!string.IsNullOrEmpty(paras.SubscriberIDs) && !string.IsNullOrEmpty(paras.CategoryIDs))
                 {
                     string queryScript = GetQueryScriptForAssProfile(paras.AssociationType);
-                    runningTime = timer.Elapsed;
                     
                     var result = DbSessionFactory.Execute<AssociatedAccountPagingModel>(queryScript, new
                     {
@@ -81,11 +74,6 @@
                         ip_Skip = paras.Skip,
                         ip_PageSize = paras.Take
                     })?.Data.FirstOrDefault();
-
-                    timer.Stop();
-                    runningTime = timer.Elapsed;
-                    mess += "Get data from Neo4j done: " + runningTime.ToString(@"m\:ss\.fff") + " - Current time: " + DateTime.Now.ToString() + " - BatchId: " + batchID.ToString();
-                    LogService.Info(mess);
 
                     return result ?? new AssociatedAccountPagingModel() { AssociationList = new List<AssociatedAccountModel>(), TotalItems = 0 };
                 }
