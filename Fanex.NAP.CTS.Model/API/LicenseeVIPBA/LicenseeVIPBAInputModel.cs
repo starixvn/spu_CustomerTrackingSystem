@@ -9,5 +9,11 @@
 
         [JsonProperty(PropertyName = "CreatedBy")]
         public long? CreatedBy { get; set; }
+
+        /// <summary>
+        /// Use this parameter only for internal service
+        /// </summary>
+        [JsonProperty(PropertyName = "IsFromExternal")]
+        public bool IsFromExternal { get; set; } = true;
     }
 }

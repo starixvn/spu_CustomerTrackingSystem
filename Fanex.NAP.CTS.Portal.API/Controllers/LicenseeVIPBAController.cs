@@ -34,13 +34,13 @@
         {
             try
             {
-                logInputDataService.LogInputData(new LogInputViewModel { LicenseeVIPBAModel = new LicenseeVIPBALogDataModel { Data = parameters, FromSystem = FromSystem.External } }, FunctionId.AddLicVIP_API);
+                logInputDataService.LogInputData(new LogInputViewModel { LicenseeVIPBAModel = new LicenseeVIPBALogDataModel { Data = parameters, FromSystem = parameters.IsFromExternal ? FromSystem.External : FromSystem.Internal } }, FunctionId.AddLicVIP_API);
 
                 if (!licenseeLAPCustomerClassificationService.CheckValid(parameters))
                 {
                     LogService.Error($"CTS API - AddLicVIP - Invalid input parameter from LAP: {JsonConvert.SerializeObject(parameters)} - DateTime {DateTime.UtcNow} UTC");
 
-                    return BadRequest($"Invalid input parameter. Data: {JsonConvert.SerializeObject(parameters)}");
+                    return BadRequest($"Invalid input parameter. Data: {JsonConvert.SerializeObject(new { parameters.CustIDs, parameters.CreatedBy })}");
                 }
 
                 licenseeLAPCustomerClassificationService.InsertLicVIP(parameters);
@@ -76,7 +76,7 @@
                 {
                     LogService.Error($"CTS API - RemoveLicVIP - Invalid input parameter from LAP: {JsonConvert.SerializeObject(parameters)} - DateTime {DateTime.UtcNow} UTC");
 
-                    return BadRequest($"Invalid input parameter. Data: {JsonConvert.SerializeObject(parameters)}");
+                    return BadRequest($"Invalid input parameter. Data: {JsonConvert.SerializeObject(new { parameters.CustIDs, parameters.CreatedBy })}");
                 }
 
                 licenseeLAPCustomerClassificationService.RemoveLicVIP(parameters);
@@ -106,13 +106,13 @@
         {
             try
             {
-                logInputDataService.LogInputData(new LogInputViewModel { LicenseeVIPBAModel = new LicenseeVIPBALogDataModel { Data = parameters, FromSystem = FromSystem.External } }, FunctionId.AddLicBA_API);
+                logInputDataService.LogInputData(new LogInputViewModel { LicenseeVIPBAModel = new LicenseeVIPBALogDataModel { Data = parameters, FromSystem = parameters.IsFromExternal ? FromSystem.External : FromSystem.Internal } }, FunctionId.AddLicBA_API);
 
                 if (!licenseeLAPCustomerClassificationService.CheckValid(parameters))
                 {
                     LogService.Error($"CTS API - AddLicBA - Invalid input parameter from LAP: {JsonConvert.SerializeObject(parameters)} - DateTime {DateTime.UtcNow} UTC");
 
-                    return BadRequest($"Invalid input parameter. Data: {JsonConvert.SerializeObject(parameters)}");
+                    return BadRequest($"Invalid input parameter. Data: {JsonConvert.SerializeObject(new { parameters.CustIDs, parameters.CreatedBy })}");
                 }
 
                 licenseeLAPCustomerClassificationService.InsertLicBA(parameters);
@@ -148,7 +148,7 @@
                 {
                     LogService.Error($"CTS API - RemoveLicBA - Invalid input parameter from LAP: {JsonConvert.SerializeObject(parameters)} - DateTime {DateTime.UtcNow} UTC");
 
-                    return BadRequest($"Invalid input parameter. Data: {JsonConvert.SerializeObject(parameters)}");
+                    return BadRequest($"Invalid input parameter. Data: {JsonConvert.SerializeObject(new { parameters.CustIDs, parameters.CreatedBy })}");
                 }
 
                 licenseeLAPCustomerClassificationService.RemoveLicBA(parameters);
