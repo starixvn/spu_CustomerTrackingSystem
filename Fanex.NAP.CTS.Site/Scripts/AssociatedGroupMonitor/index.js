@@ -114,9 +114,9 @@
                 },                
                 {
                     data: obj => {
-                        return '<span class="sub-icon - edit" id="sub-icon " title="Add Accounts"><i class="icon-edit ' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
+                        return '<span class="sub-icon - edit" id="sub-icon " title="Add Accounts"><i class="icon-add-account' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
                     }, createdCell: (cell, _, row) => {
-                        $('.icon-edit', cell).click(() => {
+                        $('.icon-add-account', cell).click(() => {
                             $('td #sub-icon').addClass('none-pointer');
                             
                             domElements.spanAddAssociatedAccountGroupIDHidden.val(row.GroupID);

@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'Fraud-Sensor';
-  src:  url('fonts/Fraud-Sensor.eot?s3fuxr');
-  src:  url('fonts/Fraud-Sensor.eot?s3fuxr#iefix') format('embedded-opentype'),
-    url('fonts/Fraud-Sensor.ttf?s3fuxr') format('truetype'),
-    url('fonts/Fraud-Sensor.woff?s3fuxr') format('woff'),
-    url('fonts/Fraud-Sensor.svg?s3fuxr#Fraud-Sensor') format('svg');
+  src:  url('fonts/Fraud-Sensor.eot?27r4n8');
+  src:  url('fonts/Fraud-Sensor.eot?27r4n8#iefix') format('embedded-opentype'),
+    url('fonts/Fraud-Sensor.ttf?27r4n8') format('truetype'),
+    url('fonts/Fraud-Sensor.woff?27r4n8') format('woff'),
+    url('fonts/Fraud-Sensor.svg?27r4n8#Fraud-Sensor') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,14 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-remove-account:before {
+  content: "\e937";
+  color: #666;
+}
+.icon-add-account:before {
+  content: "\e938";
+  color: #666;
+}
 .icon-big-good-robot .path1:before {
   content: "\e922";
   color: rgb(255, 255, 255);
