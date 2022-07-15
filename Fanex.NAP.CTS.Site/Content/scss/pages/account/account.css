@@ -968,7 +968,7 @@
       .content-info .header-info .header-username:after {
         content: " ";
         position: absolute;
-        height: 103%;
+        height: 100%;
         width: 50%;
         top: 0;
         right: -2.3rem;
