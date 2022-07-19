@@ -1,0 +1,118 @@
+﻿@{
+    ViewBag.Title = "ASSOCIATED ACCOUNT GROUP";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles {
+    @Styles.Render("~/associated-group-monitor-styles")
+
+}
+
+<div class="associated-group-container" id="divAssociatedGroupContainer">
+    <div class="content">
+        <h2 class="page-title">Associated Group Monitor</h2>
+    </div>
+
+    <div class="associated-group-content">
+        <div class="associated-group">
+            <div class="fixed-header">
+                <div class="top-header">
+                    <div class="button-add">
+                        <button class="button button-primary-outline button-add-group" id="btnAddGroup">Create New Group</button>
+                    </div>
+                </div>
+            </div>
+
+            <table id="tblAssociatedGroup" class="table table-striped width-100per table-associated-group" style="width: 100%">
+                <thead>
+                    <tr>
+                        <th>Group ID</th>
+                        <th>Group Name</th>
+                        <th>ABI</th>
+                        <th>Total Accounts</th>
+                        <th>Comment</th>
+                        <th>Created Date</th>
+                        <th>Created By</th>
+                        <th>Export Excel</th>
+                        <th>Remove Group</th>
+                        <th>Add Accounts</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<div id="divAddAssociatedGroup" class="popup-add" style="display: none">
+    <div class="form-control">
+        <div class="label">Group Name<label style="color:red">*</label></div>
+        <input id="txtGroupNameAssociatedGroup" type="text" class="input-field full-width" maxlength="100" />
+    </div>
+
+    <div class="form-control" id="divABIAssociatedGroup">
+        <div class="label">ABI<label style="color:red">*</label></div>
+        <select class="control" id="cbbABIAssociatedGroup" name="state" style="height: 100px">
+            <option disabled selected value="">Select an ABI</option>
+            @for (int idx = 1; idx < 51; idx++)
+            {
+                <option value=@idx>@idx</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-control wrapper-comment">
+        <div class="label">Comment</div>
+        <textarea id="txtCommentAssociatedGroup" rows="3" class="comment-field full-width" maxlength="300"></textarea>
+    </div>
+
+    <div class="modal-footer margin-top-10">
+        <button id="btnCancelAssociatedGroup" class="button btn-cancel-outline" title="Cancel">Cancel</button>
+        <button id="btnSaveAssociatedGroup" class="button -add" title="Save">Save</button>
+    </div>
+</div>
+
+<div id="divAddAssociatedAccount" class="popup-add" style="display: none">
+    <div class="group-title">
+        <div class="label">Username<label style="color:red">*</label></div>
+        <div class="wrapper-title">
+            <div class="wrapper-rule wrapper-rule-left">
+                <span class="text bg-red">Red</span>
+                <span class="text">Invalid username</span>
+            </div>
+            <div class="wrapper-rule wrapper-rule-right" hidden>
+                <span class="text bg-yellow">Yellow</span>
+                <span class="text">Duplicated username</span>
+            </div>
+        </div>
+    </div>
+
+    <span class="wrapper-value" id="spanAddAssociatedAccountUserName">
+        <input id="inputTagUsername" type="text" name='tags-outside' class="input-field full-width tagify--outside" placeholder="Type username (Separate by comma, tab and enter)" />
+        <span class="limit-username">
+            Max: <span id="spanAddAssociatedAccountUserNameMaxTag">1001</span> usernames
+        </span>
+        <span id="spanAddAssociatedAccountChangeHidden" hidden></span>
+        <span id="spanAddAssociatedAccountGroupIDHidden" hidden></span>
+        <span id="spanAddAssociatedAccountGroupNameHidden" hidden></span>
+        <span id="spanAddAssociatedAccountGroupABIHidden" hidden></span>
+    </span>
+
+    <div class="form-control wrapper-comment">
+        <div class="label">Comment</div>
+        <textarea id="txtCommentAssociatedAccount" rows="3" class="comment-field full-width" maxlength="500"></textarea>
+    </div>
+
+    <div class="modal-footer margin-top-10">
+        <button id="btnCancelAssociatedAccount" class="button btn-cancel-outline" title="Cancel">Cancel</button>
+        <button id="btnSaveAssociatedAccount" class="button -add" title="Save">Save</button>
+    </div>
+</div>
+
+<div class="hide">
+    <input id="hdIsHostPermission" type="hidden" IsHostPermission="@Model.ToString()" />
+</div>
+
+@section scripts {
+    @Scripts.Render("~/associated-group-monitor-scripts")
+}

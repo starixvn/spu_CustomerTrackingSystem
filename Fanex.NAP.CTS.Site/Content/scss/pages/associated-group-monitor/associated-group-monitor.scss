@@ -1,0 +1,109 @@
+﻿@import "../../abstracts/variables";
+
+body {
+    font-family: $font-family;    
+}
+
+.associated-group-content {
+    margin: 1rem 1.6rem 1rem 1.6rem;
+
+    .associated-group {
+        .fixed-header {
+            position: sticky;
+            position: -webkit-sticky;
+            top: 6rem;
+            background: #fff;
+            z-index: 9;
+
+            .button-add-group {
+                margin-left: 6px;
+            }
+        }
+
+        .wrapper-info-table {
+            position: sticky;
+            position: -webkit-sticky;
+            z-index: 99;
+            top: 10rem;
+            transition: top 0.01s linear;
+        }
+
+        .table-associated-group {
+            width: 100% !important;
+
+            .loading {
+                position: relative;
+
+                &:after {
+                    content: '';
+                    position: absolute;
+                    left: 50%;
+                    top: 75%;
+                    border-radius: 50%;
+                    width: 2.4rem;
+                    height: 2.4rem;
+                    border: 0.25rem solid rgba(57, 110, 248, 0.2);
+                    border-top-color: rgba(57, 110, 248, 1);
+                    -webkit-animation: spin 1s infinite linear;
+                    animation: spin 1s infinite linear;
+                }
+
+                tr {
+                    opacity: .3;
+                }
+            }
+
+            thead {
+                tr:first-child {
+                    th {
+                        position: sticky;
+                        position: -webkit-sticky;
+                        z-index: 9;
+                        transition: top 0.01s linear;
+                        top: 9.6rem;
+                    }
+                }
+            }
+
+            .sub-icon {
+                width: 24px;
+                height: 24px;
+                display: inline-block;
+                position: relative;
+                cursor: pointer;
+
+                &:hover {
+                    border-radius: 50%;
+                    background: #E7EDFF;
+                }
+
+                .disabled {
+                    cursor: not-allowed;
+                }
+            }
+
+            .icon-delete {
+                font-size: 1.4rem;
+                position: absolute;
+                top: .5rem;
+                left: .6rem;
+            }
+
+            .icon-delete:before {
+                color: #FF0000;
+            }
+        }
+    }
+}
+
+.tagify__tag {
+    &.tagify--notAllowed {
+        background-color: #FFE0E0 !important;
+
+        &:hover {
+            > div::before {
+                border: 1px solid #FF3131 !important;
+            }
+        }
+    }
+}

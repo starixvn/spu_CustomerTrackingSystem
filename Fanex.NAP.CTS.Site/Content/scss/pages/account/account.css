@@ -920,7 +920,7 @@
     top: 0; }
   .content-info .header-info {
     margin-right: 0;
-    min-height: 38px;
+    height: 41px;
     align-items: inherit; }
     .content-info .header-info .bg-yellow {
       background-color: #FDB703; }
@@ -943,7 +943,7 @@
       position: relative;
       border-top-left-radius: 3px;
       padding: .7rem 1.2rem;
-      min-height: 36px;
+      height: 40px;
       margin-right: 2.8rem;
       align-items: center; }
       .content-info .header-info .header-username.bg-red {
@@ -968,7 +968,7 @@
       .content-info .header-info .header-username:after {
         content: " ";
         position: absolute;
-        height: 103%;
+        height: 100%;
         width: 50%;
         top: 0;
         right: -2.3rem;

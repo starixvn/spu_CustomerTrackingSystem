@@ -83,6 +83,8 @@
             RegisterTransactionReport(bundles);
 
             RegisterProblemAccountManagementBundles(bundles);
+
+            RegisterAssociatedGroupMonitor(bundles);
         }
 
         private static void RegisterCTSCoreBundles(BundleCollection bundles)
@@ -380,6 +382,20 @@
                 "~/Content/scss/MultipleSelect/jquery.multiselect.css",
                   "~/Content/scss/vendors/jquery-ui/base/tagify.css",
                 "~/Content/scss/pages/problem-account-management/problem-account-management.css"));
+        }
+
+        private static void RegisterAssociatedGroupMonitor(BundleCollection bundles)
+        {
+            bundles.Add(new ScriptBundle("~/associated-group-monitor-scripts").Include(              
+                 "~/Scripts/tagify/jquery.tagify.min.js",
+                "~/Scripts/tagify/tagify.min.js",
+                "~/Scripts/select2.min.js",
+                "~/Scripts/AssociatedGroupMonitor/index.js"));
+
+            bundles.Add(new StyleBundle("~/associated-group-monitor-styles").Include(               
+                "~/Content/scss/vendors/jquery-ui/base/tagify.css",
+                "~/Content/scss/vendors/select2.min.css",
+                "~/Content/scss/pages/associated-group-monitor/associated-group-monitor.css"));           
         }
     }
 }

@@ -104,5 +104,7 @@ public static class FSFunctionKeys
     public const string TransactionReport = "TransactionReport";
 
     public const string ProblemAccountManagement = "ProblemAccountManagement";
-         
+
+    public const string AssociatedGroupMonitor = "AssociatedGroupMonitor";
+
 }

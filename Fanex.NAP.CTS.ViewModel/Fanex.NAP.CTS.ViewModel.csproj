@@ -100,6 +100,15 @@
     <Compile Include="API\ProblemCaseMonitor\ProblemCaseMonitorViewModel.cs" />
     <Compile Include="AssociatedAccountMonitor\AssociatedAccountMonitorDetailViewModel.cs" />
     <Compile Include="AssociatedAccountMonitor\InsertManualAssociatedAccountViewModel.cs" />
+    <Compile Include="AssociatedGroupMonitor\AddAssociatedAccountViewModel.cs" />
+    <Compile Include="AssociatedGroupMonitor\AddAssociatedGroupViewModel.cs" />
+    <Compile Include="AssociatedGroupMonitor\AssociatedAccountMonitorViewModel.cs" />
+    <Compile Include="AssociatedGroupMonitor\AssociatedGroupMonitorViewModel.cs" />
+    <Compile Include="AssociatedGroupMonitor\ExportToExcelAssociatedAccountViewModel.cs" />
+    <Compile Include="AssociatedGroupMonitor\RemoveAssociatedGroupViewModel.cs" />
+    <Compile Include="AssociatedGroupMonitor\ResultSaveAssociatedAccountViewModel.cs" />
+    <Compile Include="AssociatedGroupMonitor\ResultValidatedViewModel.cs" />
+    <Compile Include="AssociatedGroupMonitor\ValidateUserAssociatedAccountViewModel.cs" />
     <Compile Include="AssociationDetection\GroupClassificationGraphDbViewModel.cs" />
     <Compile Include="AssociationDetection\AssociationLevelGraphDbViewModel.cs" />
     <Compile Include="AssociationDetection\AssociationDetectionItemViewModel.cs" />
