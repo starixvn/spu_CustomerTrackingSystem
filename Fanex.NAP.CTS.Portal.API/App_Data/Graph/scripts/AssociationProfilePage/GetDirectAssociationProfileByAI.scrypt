@@ -24,7 +24,7 @@ OPTIONAL MATCH (c1)-[:HAS_CATEGORY]->(ct:CustomerCategory)
 WITH c, c1, s, st, ct, e, AssDate AS firstAssDate
 WHERE ($ip_CategoryIDs[0]=0 AND ct.CategoryID IS NULL)
   OR (0 IN $ip_CategoryIDs AND (ct.CategoryID in $ip_CategoryIDs OR ct.CategoryID IS NULL)) 
-  OR (NOT 0 IN $ip_CategoryIDs AND ct.CategoryID IS NOT NULL)
+  OR (NOT 0 IN $ip_CategoryIDs AND ct.CategoryID in $ip_CategoryIDs)
 OPTIONAL MATCH (c)-[r:GROUP_BY_AI]->(g:AIGroup)<-[r1:GROUP_BY_AI]-(c1)
 WITH 
       c1.CTSCustID          AS CTSCustID

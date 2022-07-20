@@ -159,7 +159,7 @@ WHERE c1.CTSCustID = CTSCustID
 WITH ct, CTSCustID, CustId, CustSubId, SubscriberID, SubscriberName, UserName, UserName2, StatusGroup, StatusID, StatusName, AssociationStatus, AssociationTypeName, AssociationDate, GroupIDs, OriginGroupIDs
 WHERE ($ip_CategoryIDs[0]=0 AND ct.CategoryID IS NULL)
   OR (0 IN $ip_CategoryIDs AND (ct.CategoryID in $ip_CategoryIDs OR ct.CategoryID IS NULL)) 
-  OR (NOT 0 IN $ip_CategoryIDs AND ct.CategoryID IS NOT NULL)
+  OR (NOT 0 IN $ip_CategoryIDs AND ct.CategoryID in $ip_CategoryIDs)
 WITH  CTSCustID          AS CTSCustID
     , CustId             AS CustId
     , CustSubId          AS CustSubId
