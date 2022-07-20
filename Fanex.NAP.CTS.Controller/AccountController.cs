@@ -1604,8 +1604,16 @@
                         spanReason += $"| {cc.Remark}";
                     }
                     break;
-                case (int)SourceTypeID.Classification_RescanRobot:
-                    spanReason += $"Win lost: {winlost}";
+                case (int)SourceTypeID.Classification_ClassifyGBMatchMonitor:
+                    if (!string.IsNullOrEmpty(cc.Remark))
+                    {
+                        spanReason += $"Match ID {cc.Remark} | Win lost: {winlost}";
+                    }
+                    else
+                    {
+                        spanReason += $"Win lost: {winlost}";
+                    }                    
+
                     break;
                 default:
                     break;
