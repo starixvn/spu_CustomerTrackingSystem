@@ -14,19 +14,20 @@ WITH c, c1, r, st.PriorityOrder as StatusGroup, st.ItemID as ItemID, st.ItemName
 UNWIND r as val
 UNWIND (CASE WHEN val[0].CreatedDate > val[1].CreatedDate THEN val[0].CreatedDate ELSE val[1].CreatedDate END) AS association
 WITH c, c1, SubscriberID, SubscriberName, StatusGroup, ItemID, StatusName, Min(association) as firstAss
-OPTIONAL MATCH (c )-[e:HAS_EXCEPTION]-(c1)
+OPTIONAL MATCH (c)-[e:HAS_EXCEPTION]-(c1)
 OPTIONAL MATCH (c1)-[:HAS_CATEGORY]->(ct:CustomerCategory)
-WHERE ct.CategoryID in $ip_CategoryIDs
 WITH c, c1, SubscriberID, SubscriberName, StatusGroup, ItemID, StatusName, firstAss, e, ct
-WHERE ( 0 IN $ip_CategoryIDs) OR (NOT 0 IN $ip_CategoryIDs AND ct.CategoryID IS NOT NULL)
+WHERE ($ip_CategoryIDs[0]=0 AND ct.CategoryID IS NULL)
+  OR (0 IN $ip_CategoryIDs AND (ct.CategoryID in $ip_CategoryIDs OR ct.CategoryID IS NULL)) 
+  OR (NOT 0 IN $ip_CategoryIDs AND ct.CategoryID in $ip_CategoryIDs)
 WITH
       c1.CTSCustID          AS CTSCustID
     , c1.CustID             AS CustId
     , c1.CustSubID          AS CustSubId
     , SubscriberID          AS SubscriberID
     , SubscriberName        AS SubscriberName
-    , c1.Username           AS UserName
-    , c1.Username2          AS UserName2  
+    , c1.UserName           AS UserName
+    , c1.UserName2          AS UserName2  
     , StatusGroup           AS StatusGroup    
     , ItemID                AS StatusID
     , StatusName            AS StatusName
@@ -37,7 +38,7 @@ WITH
     , apoc.text.join(COLLECT(DISTINCT toString(ct.CategoryID)),",") AS CategoryIDs
     , apoc.text.join(COLLECT(DISTINCT ct.CategoryName),",")         AS CategoryNames
 
-ORDER BY SubscriberName ASC, AssociationStatus ASC, StatusGroup ASC, StatusID ASC, AssociationDate DESC, CTSCustID ASC
+ORDER BY toLower(SubscriberName) ASC, AssociationStatus ASC, StatusGroup ASC, StatusID ASC, AssociationDate DESC, CTSCustID ASC
 WITH COLLECT({CTSCustID:CTSCustID, CustId:CustId, CustSubId:CustSubId, SubscriberID:SubscriberID, SubscriberName:SubscriberName, UserName:UserName, UserName2:UserName2, StatusGroup:StatusGroup, StatusID:StatusID, StatusName:StatusName, AssociationTypeName:AssociationTypeName, AssociationStatus:AssociationStatus, AssociationDate:AssociationDate, ParentIDs:ParentIDs, CategoryIDs:CategoryIDs, CategoryNames:CategoryNames} ) as AssociationList, count(CTSCustID) as TotalItems
 UNWIND AssociationList as associationList
 WITH associationList, TotalItems

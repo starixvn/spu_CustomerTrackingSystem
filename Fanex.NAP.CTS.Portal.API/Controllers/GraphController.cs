@@ -19,6 +19,7 @@
     using Fanex.NAP.SPU.Graph.Core;
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
     using System.Web.Http;
@@ -61,7 +62,7 @@
                 if (!string.IsNullOrEmpty(paras.SubscriberIDs) && !string.IsNullOrEmpty(paras.CategoryIDs))
                 {
                     string queryScript = GetQueryScriptForAssProfile(paras.AssociationType);
-
+                    
                     var result = DbSessionFactory.Execute<AssociatedAccountPagingModel>(queryScript, new
                     {
                         ip_CTSCustID = paras.CTSCustId,
