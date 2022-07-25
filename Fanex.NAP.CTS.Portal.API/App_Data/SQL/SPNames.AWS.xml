@@ -74,7 +74,7 @@
 		<Setting Key="CTS_Archive_Log_Insert" SpName="CTS_Archive_Log_Insert" DbName="MySQL.CTS_Archive.ctsServiceAdmin" />
 	</Function>
 	<Function name="Licensee VIP/BA">
-		<Setting Key="CTS_DC_CTSCustomer_GetBySiteName" SpName="CTS_DC_CTSCustomer_GetBySiteName" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_CTSCustomer_GetBABySiteName" SpName="CTS_DC_CTSCustomer_GetBABySiteName" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustClassification_LicVIP_Insert" SpName="CTS_DC_CustClassification_LicVIP_Insert" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustClassification_LicVIP_Remove" SpName="CTS_DC_CustClassification_LicVIP_Remove" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustClassification_LicBA_Insert" SpName="CTS_DC_CustClassification_LicBA_Insert" DbName="MySQL.CTS_DataCenter.Admin" />

@@ -10,7 +10,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_CTSCustomer_GetBySiteName";
+            return "CTS_DC_CTSCustomer_GetBABySiteName";
         }
 
         public override bool IsValid()
