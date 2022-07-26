@@ -143,12 +143,14 @@
 
                 if (custIDs != null && custIDs.Any())
                 {
-                    custClassificationService.PushDataToExternal(custIDs, new PushDataToExternalModel
+                    rescanCustomerClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
                     {
-                        IsUpdateDangerToMainDB = false,
-                        IsSyncAFC = false,
+                        CustIds = custIDs,
+                        IsRescanPA = false,
                         IsPushCCToSoon88 = false,
-                        ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize
+                        IsUpdateDangerToMainDB = false,
+                        FunctionId = FunctionId.RemoveLicBA_API,
+                        ServiceName = "RemoveLicBA"
                     });
                 }
             }
@@ -175,12 +177,14 @@
 
                     if (result != null && result.Any())
                     {
-                        custClassificationService.PushDataToExternal(result, new PushDataToExternalModel
+                        rescanCustomerClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
                         {
-                            IsUpdateDangerToMainDB = false,
-                            IsSyncAFC = false,
+                            CustIds = result,
+                            IsRescanPA = false,
                             IsPushCCToSoon88 = false,
-                            ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize
+                            IsUpdateDangerToMainDB = false,
+                            FunctionId = FunctionId.RemoveLicBABySite_API,
+                            ServiceName = "RemoveLicBA"
                         });
                     }
                 }
