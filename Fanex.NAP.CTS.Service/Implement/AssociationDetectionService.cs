@@ -1,16 +1,16 @@
-﻿using Fanex.Data;
-using Fanex.NAP.CTS.Core.Helpers.Api;
-using Fanex.NAP.CTS.Core.Utilities;
-using Fanex.NAP.CTS.Criteria.AssociationDetection;
-using Fanex.NAP.CTS.Model.AssociationDetection;
-using Fanex.NAP.CTS.ViewModel.AssociationDetection;
-using Fanex.NAP.SPU.Graph.Core;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Fanex.NAP.CTS.Service.Implement
+﻿namespace Fanex.NAP.CTS.Service.Implement
 {
+    using Fanex.Data;
+    using Fanex.NAP.CTS.Core.Helpers.Api;
+    using Fanex.NAP.CTS.Core.Utilities;
+    using Fanex.NAP.CTS.Criteria.AssociationDetection;
+    using Fanex.NAP.CTS.Model.AssociationDetection;
+    using Fanex.NAP.CTS.ViewModel.AssociationDetection;
+    using Fanex.NAP.SPU.Graph.Core;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+
     public interface IAssociationDetectionService
     {
         IEnumerable<GetAssociationDetectionModel> GetAssociationDetection(string ctsCustIds, bool fromMySQL = true);
@@ -18,6 +18,10 @@ namespace Fanex.NAP.CTS.Service.Implement
         List<GetAssociationDetectionModel> ClassifyGroupAssociation(IEnumerable<AssociationLevelGraphDbViewModel> association, IEnumerable<long> ip_CTSCustIDs);
 
         IEnumerable<GetAssociationDetectionModel> GetCustInfoAssDetectionReport(List<GetAssociationDetectionModel> assDetection);
+
+        IEnumerable<DetectAssociationByIPModel> DetectAssociationByIP(string custIDList);
+
+        IEnumerable<string> GetCoupleSharedIP(long custID1, long custID2);
     }
 
     public class AssociationDetectionService : IAssociationDetectionService
@@ -41,6 +45,33 @@ namespace Fanex.NAP.CTS.Service.Implement
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 return db.Query<GetAssociationDetectionModel>(criteria);
+            }
+        }
+
+        public IEnumerable<DetectAssociationByIPModel> DetectAssociationByIP(string custIDList)
+        {
+            var criteria = new DetectAssociationByIPCriteria
+            {
+                CustIDs = custIDList
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<DetectAssociationByIPModel>(criteria);
+            }
+        }
+
+        public IEnumerable<string> GetCoupleSharedIP(long custID1, long custID2)
+        {
+            var criteria = new GetCoupleSharedIPCriteria
+            {
+                CustID1 = custID1,
+                CustID2 = custID2
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<string>(criteria);
             }
         }
 
@@ -175,5 +206,6 @@ namespace Fanex.NAP.CTS.Service.Implement
         }
 
         #endregion
+
     }
 }

@@ -1,25 +1,25 @@
-﻿using Fanex.Logging;
-using Fanex.Logging.Extensions;
-using Fanex.Logging.Extensions.Database;
-using Fanex.NAP.Core.Web.Attribute;
-using Fanex.NAP.CTS.Core.Helpers;
-using Fanex.NAP.CTS.Model;
-using Fanex.NAP.CTS.Model.AssociationDetection;
-using Fanex.NAP.CTS.Model.Common;
-using Fanex.NAP.CTS.Model.CustomerClassification;
-using Fanex.NAP.CTS.Service;
-using Fanex.NAP.CTS.Service.Implement;
-using Fanex.NAP.CTS.Service.Interface;
-using Fanex.NAP.CTS.ViewModel.AssociationDetection;
-using Fanex.NAP.CTS.ViewModel.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using static Fanex.NAP.CTS.Resource.Consts.Consts;
-
-namespace Fanex.NAP.CTS.Controller
+﻿namespace Fanex.NAP.CTS.Controller
 {
+    using Fanex.Logging;
+    using Fanex.Logging.Extensions;
+    using Fanex.Logging.Extensions.Database;
+    using Fanex.NAP.Core.Web.Attribute;
+    using Fanex.NAP.CTS.Core.Helpers;
+    using Fanex.NAP.CTS.Model;
+    using Fanex.NAP.CTS.Model.AssociationDetection;
+    using Fanex.NAP.CTS.Model.Common;
+    using Fanex.NAP.CTS.Model.CustomerClassification;
+    using Fanex.NAP.CTS.Service;
+    using Fanex.NAP.CTS.Service.Implement;
+    using Fanex.NAP.CTS.Service.Interface;
+    using Fanex.NAP.CTS.ViewModel.AssociationDetection;
+    using Fanex.NAP.CTS.ViewModel.Common;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
+
     [NapSuperAuth]
     [NapAuth(FunctionKey = FSFunctionKeys.AssociationDetection, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class AssociationDetectionController : BaseController
@@ -50,7 +50,7 @@ namespace Fanex.NAP.CTS.Controller
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetection)]
-        public ActionResult GetAssociationDetection(string userNames)
+        public ActionResult GetAssociationDetection_old(string userNames)
         {
             var result = new GetAssociationDetectionViewModel();
             var groupLevel2ByUsername = Enumerable.Empty<GetAssociationDetectionModel>();
@@ -97,7 +97,17 @@ namespace Fanex.NAP.CTS.Controller
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        private IEnumerable<AssociationDetectionItemViewModel> TransformLatestCustomerClassification(IEnumerable<GetAssociationDetectionModel> groupLevel2ByUsername, IEnumerable<LatestClassificationModel> latestCustomerClassification)
+        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetection)]
+        public ActionResult DetectAssociationByUserNames(DetectAssociationByUserNamesViewModel detectModel)
+        {
+            var result = string.Empty;
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        private IEnumerable<AssociationDetectionItemViewModel> TransformLatestCustomerClassification(IEnumerable<GetAssociationDetectionModel> groupLevel2ByUsername
+            , IEnumerable<LatestClassificationModel> latestCustomerClassification)
         {
             if (groupLevel2ByUsername != null && groupLevel2ByUsername.Any())
             {
@@ -179,5 +189,6 @@ namespace Fanex.NAP.CTS.Controller
                 UserNameInvalidList = invalidList
             };
         }
+
     }
 }

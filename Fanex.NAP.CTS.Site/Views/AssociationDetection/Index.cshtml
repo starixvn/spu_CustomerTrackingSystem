@@ -35,6 +35,30 @@
                             <span id="spanAddChangeHidden" hidden></span>
                         </span>
                         <div class="modal-footer margin-top-10">
+                            <label class="checkbox-container" id="ckbOptBPManuallyDeviceIPContainer">
+                                <input id="inputOptBPManuallyDeviceIP" type="checkbox">
+                                <span class="checkmark"></span>
+                                Betting Pattern/Manually/Device/IP
+                            </label>
+
+                            <label class="checkbox-container" id="ckbOptAgentContainer">
+                                <input id="inputOptAgent" type="checkbox">
+                                <span class="checkmark"></span>
+                                Agent
+                            </label>
+
+                            <label class="checkbox-container" id="ckbOptIPLast3DaysContainer">
+                                <input id="inputOptIPLast3Days" type="checkbox">
+                                <span class="checkmark"></span>
+                                IP(last 3 days)
+                            </label>
+
+                            <label class="checkbox-container" id="ckbOpt3MatchesLast7DaysContainer">
+                                <input id="inputOpt3MatchesLast7Days" type="checkbox">
+                                <span class="checkmark"></span>
+                                3 Matches(last 7 days)
+                            </label>
+
                             <button id="btnAssociationDetection" class="button btn btn-detect" title="Association Detection">Detect</button>
                         </div>
                     </div>
@@ -49,6 +73,7 @@
                                 <th>Username</th>
                                 <th>Status</th>
                                 <th>Evidence</th>
+                                <th>Associated Type</th>
                                 <th>Customer Category</th>
                                 <th>Customer Class</th>
                             </tr>

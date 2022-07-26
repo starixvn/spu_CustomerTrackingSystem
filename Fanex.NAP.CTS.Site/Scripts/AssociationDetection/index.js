@@ -1,22 +1,26 @@
-﻿function AssociationDetection() {
+﻿import { param } from "jquery";
+
+function AssociationDetection() {
     let dataTable;    
     let maxTags = 1001;
     let domElements = {
-        hdIsHostPermission: $('#hdIsHostPermission'),
-        hdIsOverwritePermission: $('#hdIsOverwritePermission'),       
-        divValidation: $('#divValidation'),                
+        hdIsHostPermission: $('#hdIsHostPermission'),                   
         btnResultValidationClose: $('#btnResultValidationClose'),        
         divAddUserName: $('#divAddUserName'),
         spanAddUserName : $('#spanAddUserName'),
         spanAddUserNameMaxTag: $('#spanAddUserNameMaxTag'),        
         spanAddChangeHidden: $('#spanAddChangeHidden'),
         inputTagUsername: $('#inputTagUsername'),
+        inputOptBPManuallyDeviceIP: $('#inputOptBPManuallyDeviceIP'),
+        inputOptAgent: $('#inputOptAgent'),
+        inputOptIPLast3Days: $('#inputOptIPLast3Days'),
+        inputOpt3MatchesLast7Days: $('#inputOpt3MatchesLast7Days'),
         btnDetect: $('#btnAssociationDetection'),
-        tableResult: $('#tblAssociationDetection')
+        tblAssociationDetection: $('#tblAssociationDetection')
     };
 
     function GenerateGrid(data) {
-        return domElements.tableResult.DataTable({
+        return domElements.tblAssociationDetection.DataTable({
             language: {
                 lengthMenu: "",
                 info: "",
@@ -38,15 +42,17 @@
                 { targets: [0], width: "5%" },
                 { targets: [1], width: "20%" },
                 { targets: [2], width: "10%" },
-                { targets: [3], width: "25%" },
-                { targets: [4], width: "25%" },
-                { targets: [5], width: "15%" },
+                { targets: [3], width: "15%" },
+                { targets: [4], width: "20%" },
+                { targets: [5], width: "20%" },
+                { targets: [6], width: "15%" },
             ],
             columns: [
                 { data: obj => obj.GroupId },
                 { data: obj => obj.UserName },
                 { data: obj => obj.Status },
                 { data: obj => obj.Evidence },
+                { data: obj => obj.AssociatedType },
                 {
                     data: obj => common.renderCategoryName(obj.CustomerCategory), createdCell: (cell, _, row) => {
                         common.renderCategoryColor(cell, row);
@@ -152,9 +158,13 @@
 
         if (userNames !== '') {
             let params = {};
-            params.userNames = userNames;
+            params.UserNames = userNames;
+            params.IsBPManuallyDeviceIP = domElements.inputOptBPManuallyDeviceIP.is(":checked");
+            params.IsAgent = domElements.inputOptAgent.is(":checked");
+            params.IsIPLast3Days = domElements.inputOptIPLast3Days.is(":checked");
+            params.Is3MatchesLast7Days = domElements.inputOpt3MatchesLast7Days.is(":checked");
 
-            $.ajax(common.modifyRelativeUrl('AssociationDetection/GetAssociationDetection'), {
+            $.ajax(common.modifyRelativeUrl('AssociationDetection/DetectAssociationByUserNames'), {
                 type: 'POST',
                 data: params,
                 beforeSend: function () {
@@ -163,7 +173,7 @@
                 success: function (response) {
                     if (response.ErrorCode == 0) {
                         dataTable
-                            ? domElements.tableResult.DataTable().clear().rows.add(response.ItemList).draw()
+                            ? domElements.tblAssociationDetection.DataTable().clear().rows.add(response.ItemList).draw()
                             : dataTable = GenerateGrid(response.ItemList);
 
                         domElements.inputTagUsername.tagify().data('tagify').removeAllTags();
@@ -173,7 +183,7 @@
                         common.showError(response.ErrorMessage);
 
                         dataTable
-                            ? domElements.tableResult.DataTable().clear().draw()
+                            ? domElements.tblAssociationDetection.DataTable().clear().draw()
                             : dataTable = GenerateGrid([]);
                     }
                 },
@@ -310,9 +320,7 @@
         domElements.btnDetect.prop('disabled', true);
     }
 
-    function Initial() {        
-        domElements.divValidation.prop('hidden', true);        
-        
+    function Initial() {               
         InitInputTagUsername();
 
         domElements.btnDetect.on('click', () => DetectUserName());

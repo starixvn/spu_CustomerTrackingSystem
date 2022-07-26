@@ -479,6 +479,15 @@ body {
         color: #fff; }
         .association-detection-report .association-detection-content .control-table .form-filter .box-username .btn-detect:not(:disabled):hover {
           background-color: #5081ff; }
+    .association-detection-report .association-detection-content .control-table .form-filter .checkbox-container {
+      margin-top: 11px; }
+      .association-detection-report .association-detection-content .control-table .form-filter .checkbox-container span:before {
+        top: 1px;
+        height: 16px;
+        width: 16px; }
+      .association-detection-report .association-detection-content .control-table .form-filter .checkbox-container span:after {
+        top: 5px;
+        left: 3px; }
   .association-detection-report .association-detection-content .table-report {
     font-family: "Lato", Arial, Tahoma, sans-serif; }
     .association-detection-report .association-detection-content .table-report .table-association-detection {

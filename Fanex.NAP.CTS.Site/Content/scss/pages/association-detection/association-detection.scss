@@ -46,6 +46,23 @@ body {
                         }
                     }
                 }
+
+                .checkbox-container {
+                    margin-top: 11px;
+
+                    span {
+                        &:before {
+                            top: 1px;
+                            height: 16px;
+                            width: 16px;
+                        }
+
+                        &:after {
+                            top: 5px;
+                            left: 3px;
+                        }
+                    }
+                }
             }
         }
 
