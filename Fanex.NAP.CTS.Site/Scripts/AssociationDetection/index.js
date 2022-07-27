@@ -1,6 +1,4 @@
-﻿import { param } from "jquery";
-
-function AssociationDetection() {
+﻿function AssociationDetection() {
     let dataTable;    
     let maxTags = 1001;
     let domElements = {
