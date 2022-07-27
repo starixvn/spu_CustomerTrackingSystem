@@ -22,7 +22,7 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, null)</li>
                     <li>@Html.ActionLink("API", "Index", "Help", new { area = "" }, null)</li>
-                    <li>@Html.ActionLink("Swagger", "Index", "Swagger", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("Swagger", "Index", "Swagger", new { area = "" }, Request.Url.Host)</li>
                 </ul>
             </div>
         </div>
