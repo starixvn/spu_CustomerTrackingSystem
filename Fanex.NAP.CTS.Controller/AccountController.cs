@@ -1432,8 +1432,10 @@
             var spanReason = string.Empty;
             var winlost = Math.Round(cc.Winloss, 3);
 
-            if (cc.IsFromTVS && cc.SourceTypeID != (int)SourceTypeID.Classification_RescanRobot)
+            if (cc.SourceTypeID == (int)SourceTypeID.Classification_Rescan)
             {
+                spanReason += $"Win lost: {winlost}";
+            } else if (cc.IsFromTVS) {
                 if (cc.TVSRequestID > 0)
                     spanReason += $"Void by RequestID: { cc.TVSRequestID } ";
                 else
@@ -1516,37 +1518,30 @@
                 case (int)ClassificationSourceType.RobotUser61:
                 case (int)ClassificationSourceType.RobotUser163:
                 case (int)ClassificationSourceType.RobotUser164:
-                    if (cc.SourceTypeID != (int)SourceTypeID.Classification_RescanRobot)
+                    if (cc.IsFromTVS)
                     {
-                        if (cc.IsFromTVS)
-                        {
-                            if (cc.TVSRequestID > 0)
-                                spanReason += $"Void by RequestID: { cc.TVSRequestID } | Win lost: {winlost}";
-                            else
-                                spanReason += $"Void by BetID |  Win lost: {winlost}";
-                        }
-                        else if (cc.IsFromTW)
-                        {
-                            spanReason += $"Counter: {cc.RobotCounter} | Win lost: {winlost}";
-                        }
-                        else if (cc.IsFromAI)
-                        {
-                            spanReason += $"Win lost: {winlost}";
-                        }
-                        else if (cc.IsFromCTS)
-                        {
-                            spanReason += $"Robot is marked directly ";
+                        if (cc.TVSRequestID > 0)
+                            spanReason += $"Void by RequestID: { cc.TVSRequestID } | Win lost: {winlost}";
+                        else
+                            spanReason += $"Void by BetID |  Win lost: {winlost}";
+                    }
+                    else if (cc.IsFromTW)
+                    {
+                        spanReason += $"Counter: {cc.RobotCounter} | Win lost: {winlost}";
+                    }
+                    else if (cc.IsFromAI)
+                    {
+                        spanReason += $"Win lost: {winlost}";
+                    }
+                    else if (cc.IsFromCTS)
+                    {
+                        spanReason += $"Robot is marked directly ";
 
-                            spanReason += $" | Win lost: {winlost}";
-                            if (!string.IsNullOrEmpty(cc.Remark))
-                                spanReason += $" | {cc.Remark}";
-                        }
+                        spanReason += $" | Win lost: {winlost}";
+                        if (!string.IsNullOrEmpty(cc.Remark))
+                            spanReason += $" | {cc.Remark}";
                     }
-                    else
-                    {
-                        spanReason += $"Win lost: {winlost}";                      
-                    }
-                    
+
                     break;
                 
                 default:

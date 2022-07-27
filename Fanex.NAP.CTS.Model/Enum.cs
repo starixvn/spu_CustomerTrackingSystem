@@ -105,7 +105,7 @@
         Classification_PAUnmarkDirectly = 33,       
         Classification_UnmarkingPAAffectedDirectly = 34, 
         Classification_ClassifyGBMatchMonitor = 35,
-        Classification_RescanRobot = 36,
+        Classification_Rescan = 36,
         Classification_InsertRobot = 37,
         NoShow_Detail = 38
     }
