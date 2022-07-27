@@ -1,6 +1,6 @@
 ﻿function AssociationDetection() {
     let dataTable;    
-    let maxTags = 200;
+    let maxTags = 1001;
     let domElements = {
         hdIsHostPermission: $('#hdIsHostPermission'),
         hdIsOverwritePermission: $('#hdIsOverwritePermission'),       
