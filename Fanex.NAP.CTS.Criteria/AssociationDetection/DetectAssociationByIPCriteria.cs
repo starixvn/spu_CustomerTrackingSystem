@@ -5,7 +5,7 @@
 
     public class DetectAssociationByIPCriteria : NonQueryCommand
     {
-        [SpParam(SqlParamName = "ip_CustIDList")]
+        [SpParam(SqlParamName = "ListCustId")]
         public string CustIDs { get; set; }
 
         public override string GetSettingKey()

@@ -48,9 +48,9 @@
             columns: [
                 { data: obj => obj.GroupId },
                 { data: obj => obj.UserName },
-                { data: obj => obj.Status },
-                { data: obj => obj.Evidence },
-                { data: obj => obj.AssociatedType },
+                { data: obj => obj.CustStatus },
+                { data: obj => obj.Evidences },
+                { data: obj => obj.AssociationTypes },
                 {
                     data: obj => common.renderCategoryName(obj.CustomerCategory), createdCell: (cell, _, row) => {
                         common.renderCategoryColor(cell, row);
@@ -129,7 +129,7 @@
 
     function BindResultValidatedAccounts(data) {
         domElements.spanAddUserName.find('tags tag').each(function (_, tag) {
-            $(tag).removeClass('invalid-username').removeClass('invalid-duplicated').addClass('valid');
+            $(tag).removeClass('invalid-username').addClass('valid');
         });
 
         data.UserNameInvalidList.map(function (x) {
@@ -137,16 +137,9 @@
             if (usernameEqual !== undefined) {
                 usernameEqual.removeClass('valid').addClass('invalid-username');
             }
-        });
+        });     
 
-        data.UserNameDuplicatedList.map(function (x) {
-            let usernameEqual = $("tag[data-user-name='" + x + "']");
-            if (usernameEqual !== undefined) {
-                usernameEqual.removeClass('valid').addClass('invalid-duplicated');
-            }
-        });
-
-        let isEnableDetect = data.UserNameInvalidList.length === 0 && data.UserNameDuplicatedList.length === 0 && data.UserNameValidList.length >= 2;
+        let isEnableDetect = data.UserNameInvalidList.length === 0 && data.UserNameValidList.length >= 2;
 
         domElements.btnDetect.prop('disabled', !isEnableDetect);
     }    

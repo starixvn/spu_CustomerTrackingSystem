@@ -193,7 +193,10 @@
     <Compile Include="AssociatedGroupMonitor\AssociatedAccountMonitorModel.cs" />
     <Compile Include="AssociatedGroupMonitor\AssociatedGroupMonitorModel.cs" />
     <Compile Include="AssociatedGroupMonitor\ValidateUserAssociatedAccountModel.cs" />
+    <Compile Include="AssociationDetection\DetectAssociationByBPDeviceIPAgentModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationByIPModel.cs" />
+    <Compile Include="AssociationDetection\DetectAssociationBySharedMatchesModel.cs" />
+    <Compile Include="AssociationDetection\GetAssociationDetectionDetailModel.cs" />
     <Compile Include="AssociationDetection\GetAssociationDetectionModel.cs" />
     <Compile Include="API\ProblemCaseMonitor\ProblemCaseModel.cs" />
     <Compile Include="API\ProblemCaseMonitor\ProblemCaseMonitorParamsModel.cs" />

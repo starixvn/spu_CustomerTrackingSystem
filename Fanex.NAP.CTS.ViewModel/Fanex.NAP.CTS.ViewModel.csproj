@@ -109,7 +109,9 @@
     <Compile Include="AssociatedGroupMonitor\ResultSaveAssociatedAccountViewModel.cs" />
     <Compile Include="AssociatedGroupMonitor\ResultValidatedViewModel.cs" />
     <Compile Include="AssociatedGroupMonitor\ValidateUserAssociatedAccountViewModel.cs" />
+    <Compile Include="AssociationDetection\AssociationDetectionViewModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationByUserNamesViewModel.cs" />
+    <Compile Include="AssociationDetection\GetAssociationDetectionDetailViewModel.cs" />
     <Compile Include="AssociationDetection\GroupClassificationGraphDbViewModel.cs" />
     <Compile Include="AssociationDetection\AssociationLevelGraphDbViewModel.cs" />
     <Compile Include="AssociationDetection\AssociationDetectionItemViewModel.cs" />
