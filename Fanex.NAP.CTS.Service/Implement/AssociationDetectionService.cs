@@ -23,9 +23,9 @@
 
         IEnumerable<GetAssociationDetectionDetailModel> GetAssociationDetectionDetail(GetAssociationDetectionDetailViewModel assDetectionDetailModel);
 
-        IEnumerable<DetectAssociationByIPModel> DetectAssociationByIP(string custIDList);
+        IEnumerable<DetectAssociationBySharedIPMatchesModel> DetectAssociationByIP(string custIDList);
 
-        IEnumerable<DetectAssociationBySharedMatchesModel> DetectAssociationBySharedMatches(string custIDList);
+        IEnumerable<DetectAssociationBySharedIPMatchesModel> DetectAssociationBySharedMatches(string custIDList);
 
         IEnumerable<string> GetCoupleSharedIP(long custID1, long custID2);
     }
@@ -63,7 +63,9 @@
                 HasManually = model.IsBPManuallyDeviceIP,
                 HasDevice = model.IsBPManuallyDeviceIP,
                 HasIP = model.IsBPManuallyDeviceIP,
-                HasAgent = model.IsAgent
+                HasAgent = model.IsAgent,
+                SharedIPJson = model.SharedIPJson,
+                SharedMatchesJson = model.SharedMatchesJson
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -72,7 +74,7 @@
             }
         }
       
-        public IEnumerable<DetectAssociationBySharedMatchesModel> DetectAssociationBySharedMatches(string custIDList)
+        public IEnumerable<DetectAssociationBySharedIPMatchesModel> DetectAssociationBySharedMatches(string custIDList)
         {
             var criteria = new DetectAssociationBySharedMatchesCriteria
             {
@@ -81,11 +83,11 @@
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<DetectAssociationBySharedMatchesModel>(criteria);
+                return db.Query<DetectAssociationBySharedIPMatchesModel>(criteria);
             }
         }
 
-        public IEnumerable<DetectAssociationByIPModel> DetectAssociationByIP(string custIDList)
+        public IEnumerable<DetectAssociationBySharedIPMatchesModel> DetectAssociationByIP(string custIDList)
         {
             var criteria = new DetectAssociationByIPCriteria
             {
@@ -94,7 +96,7 @@
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<DetectAssociationByIPModel>(criteria);
+                return db.Query<DetectAssociationBySharedIPMatchesModel>(criteria);
             }
         }
 

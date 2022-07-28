@@ -14,9 +14,7 @@
 
         public string CustStatus { get; set; }
 
-        public string Evidences { get; set; }
-
-        public string Categories { get; set; }
+        public string Evidences { get; set; }       
 
         public string AssociationTypes { get; set; }
 

@@ -36,7 +36,7 @@
             columnDefs: [
                 { "visible": false, "targets": 0 },
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 3, 4 , 5], className: "text-center" },
+                { targets: [0, 1, 2, 3, 4 , 5, 6], className: "text-center" },
                 { targets: [0], width: "5%" },
                 { targets: [1], width: "20%" },
                 { targets: [2], width: "10%" },

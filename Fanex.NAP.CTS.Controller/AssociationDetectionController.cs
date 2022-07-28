@@ -235,41 +235,27 @@
 
                 try
                 {
-                    if (model.IsIPLast3Days)
-                    {
-                        var detectAssByIP = _associationDetectionService.DetectAssociationByIP(custIds);
+                    model.SharedIPJson = DetectAssociationByIP(validatedList, model.IsIPLast3Days, custIds);                   
 
-                        model.SharedIPJson = JsonConvert.SerializeObject(detectAssByIP);
-                    }
+                    model.SharedMatchesJson = DetectAssociationBySharedMatches(validatedList, model.Is3MatchesLast7Days, custIds);
 
-                    if (model.Is3MatchesLast7Days)
-                    {
-                        var detectAssByAssMatches = _associationDetectionService.DetectAssociationBySharedMatches(custIds);
-
-                        model.SharedMatchesJson = JsonConvert.SerializeObject(detectAssByAssMatches);
-                    }
-                 
                     var detectAssByBPDeviceIPAgent = _associationDetectionService.DetectAssociationByBPDeviceIPAgent(model);
-                   
-                    // Merge Result
 
-                    result.ItemList = new List<DetectAssociationItemViewModel>
+                    result.ItemList = detectAssByBPDeviceIPAgent.Select(x => new DetectAssociationItemViewModel
                     {
-                        new DetectAssociationItemViewModel
-                        {
-                            UserName = "Test",
-                            CTSCustID = 1,
-                            CustID = 1,
-                            CategoryIDs = "53,45",
-                            CustStatus = "Open",
-                            Evidences = "6.2",
-                            AssociationTypes = "IP, IP(last3days)",
-                            CustomerCategory = "Hedging(Losing)",
-                            CustomerClass = 106
-                        }
-                    };
-
-                    /* ... */
+                        GroupID = x.GroupID,
+                        UserName = x.UserName,
+                        CTSCustID = x.CTSCustID,
+                        CustID = x.CustID,
+                        CategoryIDs = x.CategoryIDs,
+                        CustStatus = x.CustStatus,
+                        Evidences = x.Evidences,
+                        AssociationTypes = x.AssociationType,
+                        CustomerCategory = x.Categories,
+                        CustomerClass = x.CustomerClass,
+                        IsProblemAccount = x.ParentIDs != null && x.ParentIDs.Split(',').Any(y => y == "50"),
+                        IsPAProbation = x.IsPAProbation
+                    });
                 }
                 catch (Exception ex)
                 {
@@ -282,19 +268,54 @@
 
                     LogService.Error(logMessage);
                 }
-            }            
+            }
             
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        private string DetectAssociationByIP(string custIDList)
-        {
-            return "";
+        private string DetectAssociationByIP(IEnumerable<ValidateUserNameModel> validateUserNames, bool isIPLast3Days, string custIds)
+        {            
+            if (isIPLast3Days)
+            {
+                var detectAssByIP = _associationDetectionService.DetectAssociationByIP(custIds);
+
+                return DetectAssociationBySharedIPMatches(detectAssByIP, validateUserNames);
+            }
+
+            return JsonConvert.SerializeObject(Enumerable.Empty<SharedIPMatchesModel>());
         }
 
-        private string DetectAssociationBySharedMatches(string custIDList)
-        {
-            return "";
+        private string DetectAssociationBySharedMatches(IEnumerable<ValidateUserNameModel> validateUserNames, bool is3MatchesLast7Days, string custIds)
+        {           
+            if (is3MatchesLast7Days)
+            {
+                var detectAssByAssMatches = _associationDetectionService.DetectAssociationBySharedMatches(custIds);
+
+                return DetectAssociationBySharedIPMatches(detectAssByAssMatches, validateUserNames);
+            }
+
+            return JsonConvert.SerializeObject(Enumerable.Empty<SharedIPMatchesModel>());
         }
+
+        private string DetectAssociationBySharedIPMatches(IEnumerable<DetectAssociationBySharedIPMatchesModel> detectAss
+            , IEnumerable<ValidateUserNameModel> validateUserNames)
+        {            
+            var detectModel = detectAss.Select(x =>
+            {
+                var fromCTSCust = validateUserNames.FirstOrDefault(y => y.CustID.Equals(x.CustID1));
+                var toCTSCust = validateUserNames.FirstOrDefault(y => y.CustID.Equals(x.CustID2));
+
+                return new SharedIPMatchesModel
+                {
+
+                    FromCustID = x.CustID1,
+                    FromCTSCustID = fromCTSCust != null ? fromCTSCust.CTSCustID : 0,
+                    ToCustID = x.CustID2 = toCTSCust != null ? toCTSCust.CTSCustID : 0
+                };
+            }).Where(x => x.FromCTSCustID != 0 && x.ToCTSCustID != 0);
+
+            return JsonConvert.SerializeObject(detectModel);
+        }
+        
     }
 }
