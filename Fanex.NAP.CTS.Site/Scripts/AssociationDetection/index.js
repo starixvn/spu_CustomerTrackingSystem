@@ -1,5 +1,7 @@
 ﻿function AssociationDetection() {
-    let dataTable;    
+    let dataTable;
+    let tableAssociationDetectDetail = null;
+    let tableAssociationDetectDetailIP = null;
     let maxTags = 1001;
     let domElements = {
         hdIsHostPermission: $('#hdIsHostPermission'),                   
@@ -14,7 +16,15 @@
         inputOptIPLast3Days: $('#inputOptIPLast3Days'),
         inputOpt3MatchesLast7Days: $('#inputOpt3MatchesLast7Days'),
         btnDetect: $('#btnAssociationDetection'),
-        tblAssociationDetection: $('#tblAssociationDetection')
+        tblAssociationDetection: $('#tblAssociationDetection'),
+        divAssociationDetectDetail: $('#divAssociationDetectDetail'),
+        tblAssociationDetectDetail: $("#tblAssociationDetectDetail"),
+        divAssociationDetectDetailIP: $('#divAssociationDetectDetailIP'),
+        tblAssociationDetectDetailIP: $('#tblAssociationDetectDetailIP'),
+        divAssociationDetectDetailMatch: $('#divAssociationDetectDetailMatch'),
+        tblAssociationDetectDetailMatch: $('#tblAssociationDetectDetailMatch'),
+        divAssociationDetectDetailAgent: $('#divAssociationDetectDetailAgent'),
+        tblAssociationDetectDetailAgent: $('#tblAssociationDetectDetailAgent')
     };
 
     function GenerateGrid(data) {
@@ -46,8 +56,15 @@
                 { targets: [6], width: "15%" },
             ],
             columns: [
-                { data: obj => obj.GroupId },
-                { data: obj => obj.UserName },
+                { data: obj => obj.GroupID },
+                {
+                    data: obj => RenderUserName(obj),
+                    createdCell: (cell, _, row) => {
+                        $('.association-detect-detail', cell).click(() => {
+                            ShowAssociationDetectDetail(row)
+                        })
+                    }
+                },
                 { data: obj => obj.CustStatus },
                 { data: obj => obj.Evidences },
                 { data: obj => obj.AssociationTypes },
@@ -74,6 +91,86 @@
                 });
             }
         }).rows.add(data).draw();
+    }
+
+    function RenderUserName(obj) {
+        if (obj.UserName !== null) {
+            return '<span class="association-detect-detail">' + obj.UserName + '</span>';
+        }
+
+        return "";
+    }
+
+    function ShowAssociationDetectDetail(obj) {
+        domElements.divAssociationDetectDetail.dialog({
+            modal: true,
+            width: '500px',
+            title: 'ASSOCIATION DETAIL: ' + obj.UserName,
+            resizable: false,
+            draggable: true,
+            close: function () {
+                $(this).dialog('close');
+                $('.ui-dialog .ui-dialog-content').css('padding-bottom', '16px');
+                $('.ui-dialog .ui-dialog-content').css('padding-top', '27px');
+                $('.ui-dialog .ui-dialog-content').css('padding-left', '12px');
+            }
+        });
+
+        if (tableAssociationDetectDetail === null) {
+            tableAssociationDetectDetail = domElements.tblAssociationDetectDetail.DataTable({
+                language: {
+                    lengthMenu: "",
+                    info: "",
+                    infoEmpty: "",
+                    zeroRecords: "",
+                    emptyTable: ""
+                },
+                info: false,
+                ordering: false,
+                searching: false,
+                scrollX: false,
+                scrollCollapse: false,
+                paging: false,
+                searching: false,
+                columnDefs: [
+                    { targets: "_all", defaultContent: "-" },
+                    { targets: [-1, 0, 1], className: "text-center" },
+                    { targets: [0], width: "50%" },
+                    { targets: [1], width: "50%" },
+                ],
+                columns: [
+                    { data: obj => obj.UserName },
+                    { data: obj => obj.AssociationTypes }
+                ]
+            });
+        }
+
+        GetAssociationDetectDetail();
+    }
+
+    function GetAssociationDetectDetail() {
+        $.ajax(common.modifyRelativeUrl('AssociationDetection/GetDetectAssociationDetail'), {
+            type: 'POST',
+            beforeSend: function () {
+                domElements.tblAssociationDetectDetail.find('tbody').addClass('loading');
+            },
+            data: {                
+            },
+            success: function (response) {
+                if (response !== undefined) {
+                    console.log(response.data);
+                    domElements.tblAssociationDetectDetail.DataTable().clear().rows.add(response.data).draw();
+                    //domElements.tblAssociationDetectDetail.DataTable().columns.adjust();
+                }
+            },
+            complete: function () {
+                domElements.tblAssociationDetectDetail.find('tbody').removeClass('loading');
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+                common.showError(errMsg);                
+            }
+        })
     }
 
     function ValidateUsernames(textTagRemove) {

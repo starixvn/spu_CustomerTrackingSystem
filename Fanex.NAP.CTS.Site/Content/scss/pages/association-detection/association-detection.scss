@@ -140,10 +140,17 @@ body {
                         font-weight: bold;
                     }
                 }
+
+                .association-detect-detail {
+                    cursor: pointer;
+                    color: blue;
+                    text-decoration: underline;
+                }
             }
         }
     }
 }
+
 .yellow-line {
     background-color: $account-high;
     background-size: 5px 5px;
@@ -187,3 +194,4 @@ body {
     background-color: $account-rosebud;
     font-weight: bold;
 }
+

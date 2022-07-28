@@ -112,6 +112,7 @@
     <Compile Include="AssociationDetection\DetectAssociationItemViewModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationByUserNamesViewModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationViewModel.cs" />
+    <Compile Include="AssociationDetection\GetAssociationDetectDetailViewModel.cs" />
     <Compile Include="AssociationDetection\GetAssociationDetectionDetailViewModel.cs" />
     <Compile Include="AssociationDetection\GroupClassificationGraphDbViewModel.cs" />
     <Compile Include="AssociationDetection\AssociationLevelGraphDbViewModel.cs" />

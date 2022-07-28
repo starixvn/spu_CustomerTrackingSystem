@@ -273,6 +273,29 @@
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetection)]
+        public ActionResult GetDetectAssociationDetail()
+        {
+            var result = new List<GetAssociationDetectDetailViewModel>()
+            {
+                new GetAssociationDetectDetailViewModel
+                {
+                     UserName = "Member 02",
+                     AssociationTypes = "IP(last3days)"
+                },
+                new GetAssociationDetectDetailViewModel
+                {
+                     UserName = "Member 03",
+                     AssociationTypes = "Betting Pattern"
+                }
+            };
+
+            return Json(new { 
+                data = result
+            }, JsonRequestBehavior.AllowGet);
+        }
+
         private string DetectAssociationByIP(IEnumerable<ValidateUserNameModel> validateUserNames, bool isIPLast3Days, string custIds)
         {            
             if (isIPLast3Days)
