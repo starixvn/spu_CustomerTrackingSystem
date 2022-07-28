@@ -47,7 +47,7 @@
                                 }
                             </select>
                         </div>
-                        <div class="group width-180">
+                        <div class="group width-180" @(ViewBag.IsDisableGroup ? "hidden" : "")>
                             <label class="text">Group</label>
                             <select class="control width-select" id="cbbGroup" multiple="multiple">
                                 @if (ViewBag.Group != null)
@@ -113,6 +113,7 @@
             <input id="hdBetID" type="hidden" value="@ViewBag.BetID" />
             <input id="hdLiveIndicator" type="hidden" value="@ViewBag.LiveIndicator.ToString()" />
             <input id="hdreason" type="hidden" value="@ViewBag.Reason" />
+            <input id="hdIsDisableGroup" type="hidden" value="@ViewBag.IsDisableGroup.ToString()" />
             <input id="hdIsHostPermission" type="hidden" IsHostPermission="@ViewBag.IsHostPermission.ToString()" />
         </div>
 </section>

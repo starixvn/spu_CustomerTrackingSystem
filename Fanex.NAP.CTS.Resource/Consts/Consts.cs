@@ -170,6 +170,14 @@
             ESport = 43,
         }
 
+        public enum MatchMonitorReason
+        {
+            GroupBetting = 0,
+            Hedging = 1,
+            Arbitrage = 2,
+            FixedGame = 3,
+        }
+
         public enum STATIC_LIST
         {
             PROBLEMCASE = 12

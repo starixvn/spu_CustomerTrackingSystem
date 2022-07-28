@@ -3,6 +3,7 @@
         detailpage: $('#detailpage'),
         groupTable: $('#groupTable'),
         isHostPermission: $("#hdIsHostPermission").attr("IsHostPermission"),
+        isDisableGroup: $("#hdIsDisableGroup").attr("value"),
         eventDataToString: $("#hdEventDataToString").val(),
         matchID: $("#hdMatchID").val(),
         betTypeID: $("#hdBetTypeID").val(),
@@ -89,8 +90,8 @@
                 { targets: [8] },
                 { targets: [9] },
                 { targets: [10] },
-                { targets: [11] },
-                { targets: [12] },
+                { targets: [11] }, 
+                { targets: [12] , visible: domElements.isDisableGroup == "True" ? false : true },
                 { targets: [13] },
                 { targets: [14], visible: false }
             ],
