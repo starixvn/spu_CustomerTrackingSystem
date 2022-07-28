@@ -4,7 +4,7 @@
     {
         public long CTSCustID { get; set; }
 
-        public string ListCTSCustID { get; set; }
+        public string CTSCustIDList { get; set; }
 
         public bool IsBPManuallyDeviceIP { get; set; }
 

@@ -250,7 +250,7 @@
                         CategoryIDs = x.CategoryIDs,
                         CustStatus = x.CustStatus,
                         Evidences = x.Evidences,
-                        AssociationTypes = x.AssociationType,
+                        AssociatedTypes = x.AssociationType,
                         CustomerCategory = x.Categories,
                         CustomerClass = x.CustomerClass,
                         IsProblemAccount = x.ParentIDs != null && x.ParentIDs.Split(',').Any(y => y == "50"),
@@ -275,23 +275,75 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetection)]
-        public ActionResult GetDetectAssociationDetail()
+        public ActionResult GetDetectAssociationDetail(GetAssociationDetectionDetailViewModel model)
         {
-            var result = new List<GetAssociationDetectDetailViewModel>()
+            var result = Enumerable.Empty<GetAssociationDetectDetailViewModel>();
+
+            var data = _associationDetectionService.GetAssociationDetectionDetail(model);
+
+            if (data != null && data.Any())
             {
-                new GetAssociationDetectDetailViewModel
+                //result = data.Select(x => new GetAssociationDetectDetailViewModel
+                //{
+                     
+                //});
+            }
+            else
+            {
+                result = new List<GetAssociationDetectDetailViewModel>()
                 {
-                     UserName = "Member 02",
-                     AssociationTypes = "IP(last3days)"
-                },
-                new GetAssociationDetectDetailViewModel
-                {
-                     UserName = "Member 03",
-                     AssociationTypes = "Betting Pattern"
-                }
-            };
+                    new GetAssociationDetectDetailViewModel
+                    {
+                         UserName = "Member 02",
+                         CustID = 2,
+                         CTSCustID = 2,
+                         AssociatedTypes = "<span class='association-detect-detail-ip'>IP(last3days)</span>"
+                    },
+                    new GetAssociationDetectDetailViewModel
+                    {
+                         UserName = "Member 03",
+                         CustID = 3,
+                         CTSCustID = 3,
+                         AssociatedTypes = "Betting Pattern"
+                    }
+                };
+            }
 
             return Json(new { 
+                data = result
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetection)]
+        public ActionResult GetDetectAssociationDetailIP(int custID1, int custID2)
+        {
+            var result = Enumerable.Empty<GetAssociationDetectDetailIPViewModel>();
+
+            var coupleSharedIP =_associationDetectionService.GetCoupleSharedIP(custID1, custID2);
+
+            if (coupleSharedIP != null && coupleSharedIP.Any())
+            {
+                result = coupleSharedIP.Select(x => new GetAssociationDetectDetailIPViewModel
+                {
+                    IP = x.IP
+                });
+            }           
+
+            return Json(new
+            {
+                data = result
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetection)]
+        public ActionResult GetDetectAssociationDetailAgent()
+        {
+            var result = "";
+
+            return Json(new
+            {
                 data = result
             }, JsonRequestBehavior.AllowGet);
         }

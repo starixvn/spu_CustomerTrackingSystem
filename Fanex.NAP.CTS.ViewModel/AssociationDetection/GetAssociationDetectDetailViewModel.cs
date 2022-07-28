@@ -4,6 +4,10 @@
     {
         public string UserName { get; set; }
 
-        public string AssociationTypes { get; set; }
+        public int CustID { get; set; }
+
+        public long CTSCustID { get; set; }
+
+        public string AssociatedTypes { get; set; }
     }
 }

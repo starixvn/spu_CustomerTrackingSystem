@@ -2,6 +2,8 @@
     let dataTable;
     let tableAssociationDetectDetail = null;
     let tableAssociationDetectDetailIP = null;
+    let tableAssociationDetectDetailMatch = null;
+    let tableAssociationDetectDetailAgent = null;
     let maxTags = 1001;
     let domElements = {
         hdIsHostPermission: $('#hdIsHostPermission'),                   
@@ -67,7 +69,7 @@
                 },
                 { data: obj => obj.CustStatus },
                 { data: obj => obj.Evidences },
-                { data: obj => obj.AssociationTypes },
+                { data: obj => obj.AssociatedTypes },
                 {
                     data: obj => common.renderCategoryName(obj.CustomerCategory), createdCell: (cell, _, row) => {
                         common.renderCategoryColor(cell, row);
@@ -95,7 +97,7 @@
 
     function RenderUserName(obj) {
         if (obj.UserName !== null) {
-            return '<span class="association-detect-detail">' + obj.UserName + '</span>';
+            return `<span class="association-detect-detail" data-custid=${ obj.CustID } data-ctscustid=${ obj.CTSCustID }> ${ obj.UserName } </span>`;
         }
 
         return "";
@@ -140,27 +142,43 @@
                 ],
                 columns: [
                     { data: obj => obj.UserName },
-                    { data: obj => obj.AssociationTypes }
+                    {
+                        data: obj => obj.AssociatedTypes,
+                        createdCell: (cell, _, row) => {
+                            $('.association-detect-detail-ip', cell).click(() => {
+                                ShowAssociationDetectDetailIP(obj.UserName, row.UserName, obj.CustID, row.CustID)
+                            });
+
+                            $('.association-detect-detail-agent', cell).click(() => {
+                                ShowAssociationDetectDetailAgent(row)
+                            });
+                        }
+                    }
                 ]
             });
         }
 
-        GetAssociationDetectDetail();
+        GetAssociationDetectDetail(obj.CustID);
     }
 
-    function GetAssociationDetectDetail() {
+    function GetAssociationDetectDetail(ctsCustID) {
         $.ajax(common.modifyRelativeUrl('AssociationDetection/GetDetectAssociationDetail'), {
             type: 'POST',
             beforeSend: function () {
                 domElements.tblAssociationDetectDetail.find('tbody').addClass('loading');
             },
-            data: {                
+            data: {      
+                CTSCustID: ctsCustID,
+                CTSCustIDList: "1,2,3",
+                IsBPManuallyDeviceIP: true,
+                IsAgent: true,
+                IsIPLast3Days: true,
+                Is3MatchesLast7Days: true
             },
             success: function (response) {
-                if (response !== undefined) {
-                    console.log(response.data);
+                if (response !== undefined) {                   
                     domElements.tblAssociationDetectDetail.DataTable().clear().rows.add(response.data).draw();
-                    //domElements.tblAssociationDetectDetail.DataTable().columns.adjust();
+                    domElements.tblAssociationDetectDetail.DataTable().columns.adjust();
                 }
             },
             complete: function () {
@@ -169,6 +187,149 @@
             error: function (errMsg) {
                 console.log(errMsg);
                 common.showError(errMsg);                
+            }
+        })
+    }
+
+    function ShowAssociationDetectDetailIP(userName1, userName2, custID1, custID2) {        
+        domElements.divAssociationDetectDetailIP.dialog({
+            modal: true,
+            width: '600px',
+            title: `ASSOCIATION DETAIL - IP LIST (in the last 3 days): ${userName1} - ${userName2}`,
+            resizable: false,
+            draggable: true,
+            close: function () {
+                $(this).dialog('close');
+                $('.ui-dialog .ui-dialog-content').css('padding-bottom', '16px');
+                $('.ui-dialog .ui-dialog-content').css('padding-top', '27px');
+                $('.ui-dialog .ui-dialog-content').css('padding-left', '12px');
+            }
+        });
+
+        if (tableAssociationDetectDetailIP === null) {
+            tableAssociationDetectDetailIP = domElements.tblAssociationDetectDetailIP.DataTable({
+                language: {
+                    lengthMenu: "",
+                    info: "",
+                    infoEmpty: "",
+                    zeroRecords: "",
+                    emptyTable: ""
+                },
+                info: false,
+                ordering: false,
+                searching: false,
+                scrollX: false,
+                scrollCollapse: false,
+                paging: false,
+                searching: false,
+                columnDefs: [
+                    { targets: "_all", defaultContent: "-" },
+                    { targets: [-1, 0 ], className: "text-center" },
+                    { targets: [0], width: "100%" }                  
+                ],
+                columns: [
+                    { data: obj => obj.IP }
+                ]
+            });
+        }
+
+        GetAssociationDetectDetailIP(custID1, custID2);
+    }
+
+    function GetAssociationDetectDetailIP(custID1, custID2) {
+        $.ajax(common.modifyRelativeUrl('AssociationDetection/GetDetectAssociationDetailIP'), {
+            type: 'POST',
+            beforeSend: function () {
+                domElements.tblAssociationDetectDetailIP.find('tbody').addClass('loading');
+            },
+            data: {
+                custID1: custID1,
+                custID2: custID2
+            },
+            success: function (response) {
+                if (response !== undefined) {
+                    domElements.tblAssociationDetectDetailIP.DataTable().clear().rows.add(response.data).draw();
+                    domElements.tblAssociationDetectDetailIP.DataTable().columns.adjust();
+                }
+            },
+            complete: function () {
+                domElements.tblAssociationDetectDetailIP.find('tbody').removeClass('loading');
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+                common.showError(errMsg);
+            }
+        })
+    }
+
+    function ShowAssociationDetectDetailAgent() {
+        domElements.divAssociationDetectDetailAgent.dialog({
+            modal: true,
+            width: '500px',
+            title: 'ASSOCIATION DETAIL: ' + row.UserName,
+            resizable: false,
+            draggable: true,
+            close: function () {
+                $(this).dialog('close');
+                $('.ui-dialog .ui-dialog-content').css('padding-bottom', '16px');
+                $('.ui-dialog .ui-dialog-content').css('padding-top', '27px');
+                $('.ui-dialog .ui-dialog-content').css('padding-left', '12px');
+            }
+        });
+
+        if (tableAssociationDetectDetailAgent === null) {
+            tableAssociationDetectDetailAgent = domElements.tblAssociationDetectDetailAgent.DataTable({
+                language: {
+                    lengthMenu: "",
+                    info: "",
+                    infoEmpty: "",
+                    zeroRecords: "",
+                    emptyTable: ""
+                },
+                info: false,
+                ordering: false,
+                searching: false,
+                scrollX: false,
+                scrollCollapse: false,
+                paging: false,
+                searching: false,
+                columnDefs: [
+                    { targets: "_all", defaultContent: "-" },
+                    { targets: [-1, 0, 1], className: "text-center" },
+                    { targets: [0], width: "50%" },
+                    { targets: [1], width: "50%" },
+                ],
+                columns: [
+                    { data: obj => obj.UserName },
+                    { data: obj => obj.Agent },
+                    { data: obj => obj.AssociatedTypes }
+                ]
+            });
+        }
+
+        GetAssociationDetectDetailAgent();
+    }
+
+    function GetAssociationDetectDetailAgent() {
+        $.ajax(common.modifyRelativeUrl('AssociationDetection/GetDetectAssociationDetailAgent'), {
+            type: 'POST',
+            beforeSend: function () {
+                domElements.tblAssociationDetectDetailAgent.find('tbody').addClass('loading');
+            },
+            data: {
+            },
+            success: function (response) {
+                if (response !== undefined) {
+                    domElements.tblAssociationDetectDetailAgent.DataTable().clear().rows.add(response.data).draw();
+                    domElements.tblAssociationDetectDetailAgent.DataTable().columns.adjust();
+                }
+            },
+            complete: function () {
+                domElements.tblAssociationDetectDetailAgent.find('tbody').removeClass('loading');
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+                common.showError(errMsg);
             }
         })
     }

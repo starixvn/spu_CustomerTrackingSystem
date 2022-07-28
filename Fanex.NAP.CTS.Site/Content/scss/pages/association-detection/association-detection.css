@@ -533,10 +533,12 @@ body {
       .association-detection-report .association-detection-content .table-report .table-association-detection tr .td-bg-lightred {
         background-color: #F5A89A;
         font-weight: bold; }
-      .association-detection-report .association-detection-content .table-report .table-association-detection .association-detect-detail {
-        cursor: pointer;
-        color: blue;
-        text-decoration: underline; }
+
+.association-detect-detail,
+.association-detect-detail-ip {
+  cursor: pointer;
+  color: blue;
+  text-decoration: underline; }
 
 .yellow-line {
   background-color: #FDB703;

@@ -16,7 +16,7 @@
 
         public string Evidences { get; set; }       
 
-        public string AssociationTypes { get; set; }
+        public string AssociatedTypes { get; set; }
 
         public string CategoryIDs { get; set; }
 

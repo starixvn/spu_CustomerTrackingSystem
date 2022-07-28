@@ -6,10 +6,10 @@
     public class GetCoupleSharedIPCriteria : NonQueryCommand
     {
         [SpParam(SqlParamName = "ip_CustID1")]
-        public long CustID1 { get; set; }
+        public int CustID1 { get; set; }
 
         [SpParam(SqlParamName = "ip_CustID2")]
-        public long CustID2 { get; set; }
+        public int CustID2 { get; set; }
 
         public override string GetSettingKey()
         {

@@ -27,7 +27,7 @@
 
         IEnumerable<DetectAssociationBySharedIPMatchesModel> DetectAssociationBySharedMatches(string custIDList);
 
-        IEnumerable<string> GetCoupleSharedIP(long custID1, long custID2);
+        IEnumerable<GetAssociationDetectDetailIPModel> GetCoupleSharedIP(int custID1, int custID2);
     }
 
     public class AssociationDetectionService : IAssociationDetectionService
@@ -105,7 +105,7 @@
             var criteria = new GetAssociationDetectionDetailCriteria
             {
                 CTSCustID = assDetectionDetailModel.CTSCustID,
-                ListCTSCustID = assDetectionDetailModel.ListCTSCustID,
+                ListCTSCustID = assDetectionDetailModel.CTSCustIDList,
                 HasManually = assDetectionDetailModel.IsBPManuallyDeviceIP,
                 HasBettingPattern = assDetectionDetailModel.IsBPManuallyDeviceIP,
                 HasDevice = assDetectionDetailModel.IsBPManuallyDeviceIP,
@@ -119,7 +119,7 @@
             }
         }
 
-        public IEnumerable<string> GetCoupleSharedIP(long custID1, long custID2)
+        public IEnumerable<GetAssociationDetectDetailIPModel> GetCoupleSharedIP(int custID1, int custID2)
         {
             var criteria = new GetCoupleSharedIPCriteria
             {
@@ -129,7 +129,7 @@
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<string>(criteria);
+                return db.Query<GetAssociationDetectDetailIPModel>(criteria);
             }
         }
 

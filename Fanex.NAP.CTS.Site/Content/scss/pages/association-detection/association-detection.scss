@@ -140,15 +140,16 @@ body {
                         font-weight: bold;
                     }
                 }
-
-                .association-detect-detail {
-                    cursor: pointer;
-                    color: blue;
-                    text-decoration: underline;
-                }
             }
-        }
+        }       
     }
+}
+
+.association-detect-detail,
+.association-detect-detail-ip {
+    cursor: pointer;
+    color: blue;
+    text-decoration: underline;
 }
 
 .yellow-line {
