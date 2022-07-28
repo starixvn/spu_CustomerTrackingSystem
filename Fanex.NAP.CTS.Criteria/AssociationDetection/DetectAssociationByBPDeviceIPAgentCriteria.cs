@@ -23,6 +23,12 @@
         [SpParam(SqlParamName = "ip_HasAgent")]
         public bool HasAgent { get; set; }
 
+        [SpParam(SqlParamName = "ip_SharedIP")]
+        public string SharedIPJson { get; set; }
+
+        [SpParam(SqlParamName = "ip_SharedMatches")]
+        public string SharedMatchesJson { get; set; }
+
         public override string GetSettingKey()
         {
             return "CTS_DC_AssociationDetection_GetByListCust";

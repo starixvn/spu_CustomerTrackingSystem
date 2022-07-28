@@ -1,6 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.AssociationDetection
 {
-    public class AssociationDetectionViewModel
+    public class DetectAssociationItemViewModel
     {              
         public int RowNumber { get; set; }
 

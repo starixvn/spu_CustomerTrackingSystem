@@ -14,6 +14,7 @@
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.AssociationDetection;
     using Fanex.NAP.CTS.ViewModel.Common;
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -221,50 +222,79 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetection)]
         public ActionResult DetectAssociationByUserNames(DetectAssociationByUserNamesViewModel model)
         {
-            var result = Enumerable.Empty<AssociationDetectionViewModel>();
+            var result = new DetectAssociationViewModel();
             var isException = false;
 
             if (!string.IsNullOrWhiteSpace(model.UserNames))
             {
                 var userNameList = model.UserNames.Split(',');
 
-                var newUserNames = string.Join(",", userNameList.Distinct());
+                var validatedList = _commonService.ValidateUsernames(string.Join(",", userNameList.Distinct()), out isException);
 
-                var validatedList = _commonService.ValidateUsernames(newUserNames, out isException);
+                var custIds = string.Join(",", validatedList.Select(x => x.CustID));    
 
-                var custIds = string.Join(",", validatedList.Select(x => x.CustID));
-
-                var ctsCustIds = string.Join(",", validatedList.Select(x => x.CTSCustID));                
-
-                var detectAssByBPDeviceIPAgent = _associationDetectionService.DetectAssociationByBPDeviceIPAgent(model);
-
-                var detectAssByIP = _associationDetectionService.DetectAssociationByIP(custIds);
-
-                var detectAssByAssMatches = _associationDetectionService.DetectAssociationBySharedMatches(custIds);
-
-                // Merge Result
-
-                result = new List<AssociationDetectionViewModel>
+                try
                 {
-                    new AssociationDetectionViewModel
+                    if (model.IsIPLast3Days)
                     {
-                        UserName = "Test",
-                        CTSCustID = 1,
-                        CustID = 1,
-                        CategoryIDs = "53,45",
-                        CustStatus = "Open",
-                        Evidences = "6.2",
-                        AssociationTypes = "IP, IP(last3days)",
-                        CustomerCategory = "Hedging(Losing)",
-                        CustomerClass = 106
+                        var detectAssByIP = _associationDetectionService.DetectAssociationByIP(custIds);
+
+                        model.SharedIPJson = JsonConvert.SerializeObject(detectAssByIP);
                     }
-                };
 
-                /* ... */
+                    if (model.Is3MatchesLast7Days)
+                    {
+                        var detectAssByAssMatches = _associationDetectionService.DetectAssociationBySharedMatches(custIds);
 
-            }
+                        model.SharedMatchesJson = JsonConvert.SerializeObject(detectAssByAssMatches);
+                    }
+                 
+                    var detectAssByBPDeviceIPAgent = _associationDetectionService.DetectAssociationByBPDeviceIPAgent(model);
+                   
+                    // Merge Result
 
+                    result.ItemList = new List<DetectAssociationItemViewModel>
+                    {
+                        new DetectAssociationItemViewModel
+                        {
+                            UserName = "Test",
+                            CTSCustID = 1,
+                            CustID = 1,
+                            CategoryIDs = "53,45",
+                            CustStatus = "Open",
+                            Evidences = "6.2",
+                            AssociationTypes = "IP, IP(last3days)",
+                            CustomerCategory = "Hedging(Losing)",
+                            CustomerClass = 106
+                        }
+                    };
+
+                    /* ... */
+                }
+                catch (Exception ex)
+                {
+                    result.ErrorCode = 1;
+                    result.ErrorMessage = "Timeout Issue.Please try again";
+
+                    var logMessage = new LogMessage(ex.Message)
+                       .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                       .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                    LogService.Error(logMessage);
+                }
+            }            
+            
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        private string DetectAssociationByIP(string custIDList)
+        {
+            return "";
+        }
+
+        private string DetectAssociationBySharedMatches(string custIDList)
+        {
+            return "";
         }
     }
 }

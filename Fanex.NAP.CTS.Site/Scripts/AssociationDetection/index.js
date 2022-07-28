@@ -66,7 +66,7 @@
                 api.column(0, { page: 'current' }).data().each(function (group, i) {
                     if (last !== group) {
                         $(rows).eq(i).before(
-                            '<tr class="group"><td colspan="5"> <i class="icon-chevron-down"></i>' + 'Group ' + group + '</td></tr>'
+                            '<tr class="group"><td colspan="6"> <i class="icon-chevron-down"></i>' + 'Group ' + group + '</td></tr>'
                         );
 
                         last = group;
@@ -136,6 +136,7 @@
             let usernameEqual = $("tag[data-user-name='" + x + "']");
             if (usernameEqual !== undefined) {
                 usernameEqual.removeClass('valid').addClass('invalid-username');
+                usernameEqual.prop('title', 'Invalid username');
             }
         });     
 
