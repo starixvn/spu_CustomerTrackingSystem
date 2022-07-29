@@ -87,7 +87,7 @@
                 },
                 { data: obj => obj.CustomerClass }
             ],
-            "drawCallback": function (settings) {
+            drawCallback: function (settings) {
                 var api = this.api();
                 var rows = api.rows({ page: 'current' }).nodes();
                 var last = null;
@@ -128,7 +128,7 @@
             }
         });
 
-        if (tableAssociationDetectDetail === null) {
+        if (tableAssociationDetectDetail == null) {
             tableAssociationDetectDetail = domElements.tblAssociationDetectDetail.DataTable({
                 language: {
                     lengthMenu: "",
@@ -157,6 +157,10 @@
                         createdCell: (cell, _, row) => {
                             $('.association-detect-detail-ip', cell).click(() => {
                                 ShowAssociationDetectDetailIP(obj.UserName, row.UserName, obj.CustID, row.CustID)
+                            });
+
+                            $('.association-detect-detail-match', cell).click(() => {
+                                ShowAssociationDetectDetailMatch(obj.UserName, row.UserName, obj.CustID, row.CustID);
                             });
 
                             $('.association-detect-detail-agent', cell).click(() => {
@@ -219,7 +223,7 @@
             }
         });
 
-        if (tableAssociationDetectDetailIP === null) {
+        if (tableAssociationDetectDetailIP == null) {
             tableAssociationDetectDetailIP = domElements.tblAssociationDetectDetailIP.DataTable({
                 language: {
                     lengthMenu: "",
@@ -267,6 +271,112 @@
             },
             complete: function () {
                 domElements.tblAssociationDetectDetailIP.find('tbody').removeClass('loading');
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+                common.showError(errMsg);
+            }
+        })
+    }
+
+    function ShowAssociationDetectDetailMatch(userName1, userName2, custID1, custID2) {
+        domElements.divAssociationDetectDetailMatch.dialog({
+            modal: true,
+            width: '900px',
+            title: `ASSOCIATION DETAIL - MATCH (in the last 7 days): ${userName1} - ${userName2}`,
+            resizable: false,
+            draggable: true,
+            close: function () {
+                $(this).dialog('close');
+                $('.ui-dialog .ui-dialog-content').css('padding-bottom', '16px');
+                $('.ui-dialog .ui-dialog-content').css('padding-top', '27px');
+                $('.ui-dialog .ui-dialog-content').css('padding-left', '12px');
+            }
+        });
+
+        if (tableAssociationDetectDetailMatch == null) {
+            tableAssociationDetectDetailMatch = domElements.tblAssociationDetectDetailMatch.DataTable({
+                language: {
+                    lengthMenu: "",
+                    info: "",
+                    infoEmpty: "",
+                    zeroRecords: "",
+                    emptyTable: ""
+                },
+                info: false,
+                ordering: false,
+                searching: false,
+                scrollX: false,
+                scrollCollapse: false,
+                paging: false,
+                searching: false,
+                columnDefs: [
+                    { "visible": false, "targets": 0 },
+                    { targets: "_all", defaultContent: "-" },
+                    { targets: [-1, 0], className: "text-center" },
+                    { targets: [0], width: "5%" },
+                    { targets: [1], width: "15%" },
+                    { targets: [2], width: "20%" },
+                    { targets: [3], width: "10%" },
+                    { targets: [4], width: "10%" },
+                    { targets: [5], width: "10%" },
+                    { targets: [6], width: "10%" },
+                    { targets: [7], width: "10%" },
+                    { targets: [8], width: "10%" },
+                    { targets: [9], width: "10%" }
+                ],
+                columns: [
+                    { data: obj => obj.MatchID },
+                    { data: obj => obj.UserName },
+                    { data: obj => obj.TransDate },
+                    { data: obj => obj.TransID },
+                    { data: obj => obj.BetTypeName },
+                    { data: obj => obj.BetTeam },
+                    { data: obj => obj.Stake },
+                    { data: obj => obj.Odd },
+                    { data: obj => obj.LiveScore },
+                    { data: obj => obj.Result }
+                ],
+                drawCallback: function (settings) {
+                    var api = this.api();
+                    var rows = api.rows({ page: 'current' }).nodes();
+                    var data = api.rows({ page: 'current' }).data();
+                    var last = null;
+
+                    api.column(0, { page: 'current' }).data().each(function (group, i) {
+                        if (last !== group) {
+                            $(rows).eq(i).before(
+                                `<tr class="match"><td colspan="9">${data[i].MatchName} - ${data[i].TransDate} - ${data[i].LeagueName}</td></tr>`
+                            );
+
+                            last = group;
+                        }
+                    });
+                }
+            });
+        }
+
+        GetAssociationDetectDetailMatch(custID1, custID2);
+    }
+
+    function GetAssociationDetectDetailMatch(custID1, custID2) {
+        $.ajax(common.modifyRelativeUrl('AssociationDetection/GetDetectAssociationDetailMatch'), {
+            type: 'POST',
+            beforeSend: function () {
+                domElements.tblAssociationDetectDetailMatch.find('tbody').addClass('loading');
+            },
+            data: {
+                custID1: custID1,
+                custID2: custID2
+            },
+            success: function (response) {
+                if (response !== undefined) {
+                    domElements.tblAssociationDetectDetailMatch.DataTable().clear().rows.add(response.data).draw();
+                    domElements.tblAssociationDetectDetailMatch.DataTable().columns.adjust();
+                }
+            },
+            complete: function () {
+                domElements.tblAssociationDetectDetailMatch.find('tbody').removeClass('loading');
             },
             error: function (errMsg) {
                 console.log(errMsg);

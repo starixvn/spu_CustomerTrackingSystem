@@ -117,7 +117,7 @@ body {
                     td {
                         color: #fff !important
                     }
-                }
+                }                
 
                 tr {
                     .td-bg-yellow {
@@ -141,15 +141,32 @@ body {
                     }
                 }
             }
-        }       
+        }
     }
 }
 
 .association-detect-detail,
-.association-detect-detail-ip {
+.association-detect-detail-ip,
+.association-detect-detail-match,
+.association-detect-detail-agent {
     cursor: pointer;
     color: blue;
     text-decoration: underline;
+}
+
+.table-association-detection-detail-Match {
+    .match {
+        background: #70809E !important;
+        cursor: pointer;
+
+        &:hover {
+            background: #70809E !important;
+        }
+
+        td {
+            color: #fff !important
+        }
+    }
 }
 
 .yellow-line {
@@ -157,6 +174,7 @@ body {
     background-size: 5px 5px;
     background-image: linear-gradient( -45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent);
     font-weight: bold;
+
     &:after {
         background-color: $account-high;
         background-size: 5px 5px;
@@ -195,4 +213,3 @@ body {
     background-color: $account-rosebud;
     font-weight: bold;
 }
-

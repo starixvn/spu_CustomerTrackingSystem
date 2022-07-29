@@ -314,9 +314,11 @@
 
             result.AddRange(GetAssociationDetectSharedIP(model.CustID, model.SharedIPJson));
 
+            result.AddRange(GetAssociationDetectSharedMatches(model.CustID, model.SharedMatchesJson));
+
             if (data != null && data.Any())
             {
-                /* ... */   
+                /* ... */
             }
             else
             {
@@ -368,7 +370,7 @@
                         CTSCustID = x.ToCTSCustID,
                         AssociatedTypes = "<span class='association-detect-detail-ip'>IP(last3days)</span>"
                     });
-                }
+                }              
             }
 
             return new List<GetAssociationDetectDetailViewModel>()
@@ -379,6 +381,19 @@
                     CustID = 2,
                     CTSCustID = 2,
                     AssociatedTypes = "<span class='association-detect-detail-ip'>IP(last3days)</span>"
+                }
+            };
+        }
+
+        private IEnumerable<GetAssociationDetectDetailViewModel> GetAssociationDetectSharedMatches(int custID, string sharedMatchesJson)
+        {
+            return new List<GetAssociationDetectDetailViewModel>() {
+                new GetAssociationDetectDetailViewModel
+                {
+                    UserName = "Member 04",
+                    CustID = 2,
+                    CTSCustID = 2,
+                    AssociatedTypes = "<span class='association-detect-detail-match'>Match</span>"
                 }
             };
         }
@@ -398,6 +413,47 @@
                     IP = x.IP
                 });
             }           
+
+            return Json(new
+            {
+                data = result
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetection)]
+        public ActionResult GetDetectAssociationDetailMatch(int custID1, int custID2)
+        {
+            var result = Enumerable.Empty<GetAssociationDetectDetailMatchViewModel>();
+            var custIDList = $"{custID1},{custID2}";
+
+            var data = _associationDetectionService.GetDetectAssociationDetailMatch(custIDList);
+
+            if (data != null && data.Any())
+            {
+                result = data.Select(x => new GetAssociationDetectDetailMatchViewModel(x));
+            }
+            else
+            {
+                result = new List<GetAssociationDetectDetailMatchViewModel>
+                {
+                    new GetAssociationDetectDetailMatchViewModel
+                    {
+                         MatchName = "Sutherland Sharks vs Blacktown City Demons",
+                         EventDate = " Jul 16, 2022",
+                         LeagueName = "AUSTRALIA NEW SOUTH WALES PREMIER LEAGUE",
+                         UserName = "Username01",
+                         TransDate = "7/16/2022  1:39:03",
+                         TransID = 115719773059,
+                         BetTypeName = "Handicap",
+                         BetTeam = "h",
+                         Stake = 500,
+                         Odd = new decimal(0.95),
+                         LiveScore = "0-1",
+                         Result = "Won"
+                    }
+                };
+            }
 
             return Json(new
             {

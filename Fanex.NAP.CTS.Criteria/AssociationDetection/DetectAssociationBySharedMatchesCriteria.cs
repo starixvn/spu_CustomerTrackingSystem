@@ -5,8 +5,11 @@
 
     public class DetectAssociationBySharedMatchesCriteria : NonQueryCommand
     {
-        [SpParam(SqlParamName = "ip_CustIDList")]
-        public string CustIDs { get; set; }
+        [SpParam(SqlParamName = "ListCustId")]
+        public string CustIDList { get; set; }
+
+        //[SpParam(SqlParamName = "IsFlagxxx")]
+        //public bool IsFlagxxx { get; set; }
 
         public override string GetSettingKey()
         {

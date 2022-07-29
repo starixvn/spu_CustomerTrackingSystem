@@ -535,10 +535,20 @@ body {
         font-weight: bold; }
 
 .association-detect-detail,
-.association-detect-detail-ip {
+.association-detect-detail-ip,
+.association-detect-detail-match,
+.association-detect-detail-agent {
   cursor: pointer;
   color: blue;
   text-decoration: underline; }
+
+.table-association-detection-detail-Match .match {
+  background: #70809E !important;
+  cursor: pointer; }
+  .table-association-detection-detail-Match .match:hover {
+    background: #70809E !important; }
+  .table-association-detection-detail-Match .match td {
+    color: #fff !important; }
 
 .yellow-line {
   background-color: #FDB703;

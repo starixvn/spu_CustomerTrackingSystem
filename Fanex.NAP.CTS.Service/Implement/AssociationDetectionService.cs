@@ -21,13 +21,15 @@
 
         IEnumerable<DetectAssociationByBPDeviceIPAgentModel> DetectAssociationByBPDeviceIPAgent(DetectAssociationByUserNamesViewModel model);
 
-        IEnumerable<GetAssociationDetectionDetailModel> GetAssociationDetectionDetail(GetAssociationDetectionDetailViewModel assDetectionDetailModel);
+        IEnumerable<GetAssociationDetectDetailModel> GetAssociationDetectionDetail(GetAssociationDetectionDetailViewModel assDetectionDetailModel);
 
         IEnumerable<DetectAssociationBySharedIPMatchesModel> DetectAssociationByIP(string custIDList);
 
         IEnumerable<DetectAssociationBySharedIPMatchesModel> DetectAssociationBySharedMatches(string custIDList);
 
         IEnumerable<GetAssociationDetectDetailIPModel> GetCoupleSharedIP(int custID1, int custID2);
+
+        IEnumerable<GetAssociationDetectDetailMatchModel> GetDetectAssociationDetailMatch(string custIDList);
     }
 
     public class AssociationDetectionService : IAssociationDetectionService
@@ -78,7 +80,7 @@
         {
             var criteria = new DetectAssociationBySharedMatchesCriteria
             {
-                CustIDs = custIDList
+                CustIDList = custIDList
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -100,7 +102,7 @@
             }
         }
 
-        public IEnumerable<GetAssociationDetectionDetailModel> GetAssociationDetectionDetail(GetAssociationDetectionDetailViewModel assDetectionDetailModel)
+        public IEnumerable<GetAssociationDetectDetailModel> GetAssociationDetectionDetail(GetAssociationDetectionDetailViewModel assDetectionDetailModel)
         {
             var criteria = new GetAssociationDetectionDetailCriteria
             {
@@ -115,7 +117,7 @@
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<GetAssociationDetectionDetailModel>(criteria);
+                return db.Query<GetAssociationDetectDetailModel>(criteria);
             }
         }
 
@@ -130,6 +132,19 @@
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 return db.Query<GetAssociationDetectDetailIPModel>(criteria);
+            }
+        }
+
+        public IEnumerable<GetAssociationDetectDetailMatchModel> GetDetectAssociationDetailMatch(string custIDList)
+        {
+            var criteria = new DetectAssociationBySharedMatchesCriteria
+            {
+                CustIDList = custIDList
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<GetAssociationDetectDetailMatchModel>(criteria);
             }
         }
 

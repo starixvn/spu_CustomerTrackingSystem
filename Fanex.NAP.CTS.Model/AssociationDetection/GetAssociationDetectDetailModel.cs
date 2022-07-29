@@ -1,6 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Model.AssociationDetection
 {
-    public class GetAssociationDetectionDetailModel
+    public class GetAssociationDetectDetailModel
     {
         public long FromCTSCustID { get; set; }
 
