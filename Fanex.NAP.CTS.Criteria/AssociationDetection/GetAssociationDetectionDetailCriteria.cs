@@ -28,7 +28,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_AssociationDetection_GetByCust";
+            return "CTS_DC_AssociationDetection_GetCust";
         }
 
         public override bool IsValid()

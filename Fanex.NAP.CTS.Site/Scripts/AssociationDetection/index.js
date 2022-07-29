@@ -26,8 +26,18 @@
         divAssociationDetectDetailMatch: $('#divAssociationDetectDetailMatch'),
         tblAssociationDetectDetailMatch: $('#tblAssociationDetectDetailMatch'),
         divAssociationDetectDetailAgent: $('#divAssociationDetectDetailAgent'),
-        tblAssociationDetectDetailAgent: $('#tblAssociationDetectDetailAgent')
+        tblAssociationDetectDetailAgent: $('#tblAssociationDetectDetailAgent'),
+        hdAssociationDetectSharedIP: $('#hdAssociationDetectSharedIP'),
+        hdAssociationDetectSharedMatches: $('#hdAssociationDetectSharedMatches')
     };
+
+    let parameters = {
+        UserNames: "",
+        IsBPManuallyDeviceIP: false,
+        IsAgent: false,
+        IsIPLast3Days: false,
+        Is3MatchesLast7Days: false
+    }
 
     function GenerateGrid(data) {
         return domElements.tblAssociationDetection.DataTable({
@@ -158,22 +168,25 @@
             });
         }
 
-        GetAssociationDetectDetail(obj.CustID);
+        GetAssociationDetectDetail(obj.CustID, obj.CTSCustID);
     }
 
-    function GetAssociationDetectDetail(ctsCustID) {
+    function GetAssociationDetectDetail(custID, ctsCustID) {
         $.ajax(common.modifyRelativeUrl('AssociationDetection/GetDetectAssociationDetail'), {
             type: 'POST',
             beforeSend: function () {
                 domElements.tblAssociationDetectDetail.find('tbody').addClass('loading');
             },
-            data: {      
+            data: {    
+                CustID: custID,
                 CTSCustID: ctsCustID,
-                CTSCustIDList: "1,2,3",
-                IsBPManuallyDeviceIP: true,
-                IsAgent: true,
-                IsIPLast3Days: true,
-                Is3MatchesLast7Days: true
+                CTSCustIDList: "1,2,3,4,5",
+                IsBPManuallyDeviceIP: parameters.IsBPManuallyDeviceIP,
+                IsAgent: parameters.IsAgent,
+                IsIPLast3Days: parameters.IsIPLast3Days,
+                Is3MatchesLast7Days: parameters.Is3MatchesLast7Days,
+                SharedIPJson: domElements.hdAssociationDetectSharedIP.val(),
+                SharedMatchesJson: domElements.hdAssociationDetectSharedMatches.val()
             },
             success: function (response) {
                 if (response !== undefined) {                   
@@ -406,36 +419,38 @@
     function DetectUserName() {
         let userNames = GetInputUserName();
 
-        if (userNames !== '') {
-            let params = {};
-            params.UserNames = userNames;
-            params.IsBPManuallyDeviceIP = domElements.inputOptBPManuallyDeviceIP.is(":checked");
-            params.IsAgent = domElements.inputOptAgent.is(":checked");
-            params.IsIPLast3Days = domElements.inputOptIPLast3Days.is(":checked");
-            params.Is3MatchesLast7Days = domElements.inputOpt3MatchesLast7Days.is(":checked");
+        if (userNames !== '') {            
+            parameters.UserNames = userNames;
+            parameters.IsBPManuallyDeviceIP = domElements.inputOptBPManuallyDeviceIP.is(":checked");
+            parameters.IsAgent = domElements.inputOptAgent.is(":checked");
+            parameters.IsIPLast3Days = domElements.inputOptIPLast3Days.is(":checked");
+            parameters.Is3MatchesLast7Days = domElements.inputOpt3MatchesLast7Days.is(":checked");
 
             $.ajax(common.modifyRelativeUrl('AssociationDetection/DetectAssociationByUserNames'), {
                 type: 'POST',
-                data: params,
+                data: parameters,
                 beforeSend: function () {
                     domElements.divAddUserName.addClass("loading-block");
                 },
                 success: function (response) {
-                    if (response.ErrorCode == 0) {
+                    if (response.data.ErrorCode == 0) {
                         dataTable
-                            ? domElements.tblAssociationDetection.DataTable().clear().rows.add(response.ItemList).draw()
-                            : dataTable = GenerateGrid(response.ItemList);
+                            ? domElements.tblAssociationDetection.DataTable().clear().rows.add(response.data.ItemList).draw()
+                            : dataTable = GenerateGrid(response.data.ItemList);
 
                         domElements.inputTagUsername.tagify().data('tagify').removeAllTags();
                         domElements.spanAddUserNameMaxTag.text(maxTags);
                         domElements.spanAddChangeHidden.text("0");
                     } else {
-                        common.showError(response.ErrorMessage);
+                        common.showError(response.data.ErrorMessage);
 
                         dataTable
                             ? domElements.tblAssociationDetection.DataTable().clear().draw()
                             : dataTable = GenerateGrid([]);
                     }
+
+                    domElements.hdAssociationDetectSharedIP.val(response.sharedIPJson);
+                    domElements.hdAssociationDetectSharedMatches.val(response.sharedMatchesJson);                    
                 },
                 complete: function () {
                     domElements.divAddUserName.removeClass("loading-block");                    

@@ -269,24 +269,54 @@
                     LogService.Error(logMessage);
                 }
             }
-            
-            return Json(result, JsonRequestBehavior.AllowGet);
+                       
+            return Json(new
+            {
+                data = result,
+                //sharedIPJson = model.SharedIPJson,
+                sharedIPJson = GenerateSharedIPJson(),
+                sharedMatchesJson = model.SharedMatchesJson
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        private string GenerateSharedIPJson()
+        {
+            var sharedIPs = new List<SharedIPMatchesModel>()
+            {
+                new SharedIPMatchesModel {
+                    FromCustID = 1,
+                    FromCTSCustID = 2,
+                    FromUserName = "UserName 1",
+                    ToCustID = 10,
+                    ToCTSCustID = 20,
+                    ToUserName = "UserName 2"
+                },
+                new SharedIPMatchesModel {
+                    FromCustID = 1,
+                    FromCTSCustID = 2,
+                    FromUserName = "UserName 1",
+                    ToCustID = 101,
+                    ToCTSCustID = 202,
+                    ToUserName = "UserName 3"
+                }
+            };
+
+            return JsonConvert.SerializeObject(sharedIPs);
         }
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetection)]
         public ActionResult GetDetectAssociationDetail(GetAssociationDetectionDetailViewModel model)
         {
-            var result = Enumerable.Empty<GetAssociationDetectDetailViewModel>();
+            var result = new List<GetAssociationDetectDetailViewModel>();
 
             var data = _associationDetectionService.GetAssociationDetectionDetail(model);
 
+            result.AddRange(GetAssociationDetectSharedIP(model.CustID, model.SharedIPJson));
+
             if (data != null && data.Any())
             {
-                //result = data.Select(x => new GetAssociationDetectDetailViewModel
-                //{
-                     
-                //});
+                /* ... */   
             }
             else
             {
@@ -294,14 +324,21 @@
                 {
                     new GetAssociationDetectDetailViewModel
                     {
-                         UserName = "Member 02",
+                         UserName = "Member 03",
                          CustID = 2,
                          CTSCustID = 2,
-                         AssociatedTypes = "<span class='association-detect-detail-ip'>IP(last3days)</span>"
+                         AssociatedTypes = "<span class='association-detect-detail-agent'>Agent</span>"
                     },
                     new GetAssociationDetectDetailViewModel
                     {
-                         UserName = "Member 03",
+                         UserName = "Member 04",
+                         CustID = 2,
+                         CTSCustID = 2,
+                         AssociatedTypes = "<span class='association-detect-detail-match'>Match</span>"
+                    },
+                    new GetAssociationDetectDetailViewModel
+                    {
+                         UserName = "Member 05",
                          CustID = 3,
                          CTSCustID = 3,
                          AssociatedTypes = "Betting Pattern"
@@ -312,6 +349,38 @@
             return Json(new { 
                 data = result
             }, JsonRequestBehavior.AllowGet);
+        }
+
+        private IEnumerable<GetAssociationDetectDetailViewModel> GetAssociationDetectSharedIP(int custID, string sharedIPJson)
+        {
+            if (!string.IsNullOrEmpty(sharedIPJson))
+            {
+                var sharedIPList = JsonConvert.DeserializeObject<IEnumerable<SharedIPMatchesModel>>(sharedIPJson);
+
+                var sharedIPByCust = sharedIPList.Where(x => x.FromCustID == custID || x.ToCustID == custID);
+
+                if (sharedIPByCust.Any())
+                {
+                    return sharedIPByCust.Select(x => new GetAssociationDetectDetailViewModel
+                    {
+                        UserName = x.ToUserName,
+                        CustID = x.ToCustID,
+                        CTSCustID = x.ToCTSCustID,
+                        AssociatedTypes = "<span class='association-detect-detail-ip'>IP(last3days)</span>"
+                    });
+                }
+            }
+
+            return new List<GetAssociationDetectDetailViewModel>()
+            {
+                new GetAssociationDetectDetailViewModel
+                {
+                    UserName = "Member 02",
+                    CustID = 2,
+                    CTSCustID = 2,
+                    AssociatedTypes = "<span class='association-detect-detail-ip'>IP(last3days)</span>"
+                }
+            };
         }
 
         [HttpPost]
@@ -377,15 +446,18 @@
         {            
             var detectModel = detectAss.Select(x =>
             {
-                var fromCTSCust = validateUserNames.FirstOrDefault(y => y.CustID.Equals(x.CustID1));
-                var toCTSCust = validateUserNames.FirstOrDefault(y => y.CustID.Equals(x.CustID2));
+                var fromCTSCust = validateUserNames.FirstOrDefault(y => y.CustID.Equals(x.CustID1)) ?? new ValidateUserNameModel();
+                var toCTSCust = validateUserNames.FirstOrDefault(y => y.CustID.Equals(x.CustID2)) ?? new ValidateUserNameModel();
 
                 return new SharedIPMatchesModel
                 {
 
                     FromCustID = x.CustID1,
-                    FromCTSCustID = fromCTSCust != null ? fromCTSCust.CTSCustID : 0,
-                    ToCustID = x.CustID2 = toCTSCust != null ? toCTSCust.CTSCustID : 0
+                    FromCTSCustID = fromCTSCust.CTSCustID,
+                    FromUserName = fromCTSCust.UserName,
+                    ToCustID = x.CustID2,
+                    ToCTSCustID = toCTSCust.CTSCustID,
+                    ToUserName = toCTSCust.UserName
                 };
             }).Where(x => x.FromCTSCustID != 0 && x.ToCTSCustID != 0);
 

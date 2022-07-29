@@ -2,6 +2,8 @@
 {
     public class GetAssociationDetectionDetailViewModel
     {
+        public int CustID { get; set; }
+
         public long CTSCustID { get; set; }
 
         public string CTSCustIDList { get; set; }
@@ -14,5 +16,8 @@
 
         public bool Is3MatchesLast7Days { get; set; }
 
+        public string SharedIPJson { get; set; }
+
+        public string SharedMatchesJson { get; set; }
     }
 }
