@@ -348,7 +348,7 @@
                     api.column(0, { page: 'current' }).data().each(function (group, i) {
                         if (last !== group) {
                             $(rows).eq(i).before(
-                                `<tr class="match"><td colspan="9">${data[i].MatchName} - ${data[i].TransDate} - ${data[i].LeagueName}</td></tr>`
+                                `<tr class="match"><td colspan="9">${data[i].MatchName} - ${data[i].EventDate} - ${data[i].LeagueName}</td></tr>`
                             );
 
                             last = group;

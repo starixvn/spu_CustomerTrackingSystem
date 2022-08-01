@@ -460,7 +460,7 @@
                          EventDate = " Jul 16, 2022",
                          LeagueName = "AUSTRALIA NEW SOUTH WALES PREMIER LEAGUE",
                          UserName = "Username01",
-                         TransDate = "7/16/2022  1:39:03",
+                         TransDate = DateTime.Now.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                          TransID = 115719773059,
                          BetTypeName = "Handicap",
                          BetTeam = "h",
