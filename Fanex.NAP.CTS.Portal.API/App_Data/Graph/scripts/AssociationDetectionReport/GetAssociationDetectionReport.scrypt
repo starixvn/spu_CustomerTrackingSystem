@@ -7,7 +7,7 @@ WITH DISTINCT c
 CALL 
 {
     WITH c
-    MATCH (c)-[:USED_DEVICE*2]-(c1:CTSCustomer)
+    MATCH (c)-[:USED_DEVICE*4]-(c1:CTSCustomer)
     WHERE c <> c1
     WITH DISTINCT c, c1
     WHERE NOT EXISTS((c)-[:HAS_EXCEPTION]-(c1))
@@ -18,7 +18,7 @@ CALL
 
     UNION
     WITH c
-    MATCH (c)-[r:ASS_BY_AI]-(c1:CTSCustomer)
+    MATCH (c)-[r:ASS_BY_AI*2]-(c1:CTSCustomer)
     WHERE c <> c1
     WITH DISTINCT c, c1
     WHERE NOT EXISTS((c)-[:HAS_EXCEPTION]-(c1))
@@ -29,7 +29,7 @@ CALL
 
     UNION
     WITH c
-    MATCH (c)-[r:ASS_BY_IP]-(c1:CTSCustomer)
+    MATCH (c)-[r:ASS_BY_IP*2]-(c1:CTSCustomer)
     WHERE c <> c1
     WITH DISTINCT c, c1
     WHERE NOT EXISTS((c)-[:HAS_EXCEPTION]-(c1))
@@ -40,7 +40,7 @@ CALL
 
     UNION
     WITH c
-    MATCH (c)-[r:ADD_MANUALLY]-(c1:CTSCustomer)
+    MATCH (c)-[r:ADD_MANUALLY*2]-(c1:CTSCustomer)
     WHERE c <> c1
     WITH DISTINCT c, c1
     WHERE NOT EXISTS((c)-[:HAS_EXCEPTION]-(c1))
