@@ -7,7 +7,8 @@
     let maxTags = 1001;
     let domElements = {
         hdIsHostPermission: $('#hdIsHostPermission'),                   
-        btnResultValidationClose: $('#btnResultValidationClose'),        
+        btnResultValidationClose: $('#btnResultValidationClose'),  
+        divReportContainer: $('#divReportContainer'),
         divAddUserName: $('#divAddUserName'),
         spanAddUserName : $('#spanAddUserName'),
         spanAddUserNameMaxTag: $('#spanAddUserNameMaxTag'),        
@@ -18,6 +19,7 @@
         inputOptIPLast3Days: $('#inputOptIPLast3Days'),
         inputOpt3MatchesLast7Days: $('#inputOpt3MatchesLast7Days'),
         btnDetect: $('#btnAssociationDetection'),
+        btnExportToExcel: $('#btnExportToExcel'),
         tblAssociationDetection: $('#tblAssociationDetection'),
         divAssociationDetectDetail: $('#divAssociationDetectDetail'),
         tblAssociationDetectDetail: $("#tblAssociationDetectDetail"),
@@ -385,7 +387,7 @@
         })
     }
 
-    function ShowAssociationDetectDetailAgent() {
+    function ShowAssociationDetectDetailAgent(obj) {
         domElements.divAssociationDetectDetailAgent.dialog({
             modal: true,
             width: '500px',
@@ -419,13 +421,14 @@
                 columnDefs: [
                     { targets: "_all", defaultContent: "-" },
                     { targets: [-1, 0, 1], className: "text-center" },
-                    { targets: [0], width: "50%" },
-                    { targets: [1], width: "50%" },
+                    { targets: [0], width: "35%" },
+                    { targets: [1], width: "35%" },
+                    { targets: [1], width: "30%" }
                 ],
                 columns: [
                     { data: obj => obj.UserName },
                     { data: obj => obj.Agent },
-                    { data: obj => obj.AssociatedTypes }
+                    { data: obj => obj.AssociatedType }
                 ]
             });
         }
@@ -457,6 +460,34 @@
         })
     }
 
+    function CheckSelectFilter() {
+        if (domElements.inputOptBPManuallyDeviceIP.is(":checked"))
+            return true;
+
+        if (domElements.inputOptAgent.is(":checked"))
+            return true;
+
+        if (domElements.inputOptIPLast3Days.is(":checked"))
+            return true;
+
+        if (domElements.inputOpt3MatchesLast7Days.is(":checked"))
+            return true;
+
+        return false;
+    }
+
+    function ChangeStateBtnDetect() {
+        if (!CheckSelectFilter()) {
+            if (!domElements.btnDetect.is(':disabled')) {
+                domElements.btnDetect.prop('disabled', true);
+                domElements.btnDetect.addClass('disabled-by-select');
+            }           
+        } else if (domElements.btnDetect.hasClass('disabled-by-select')) {
+            domElements.btnDetect.removeClass('disabled-by-select');
+            domElements.btnDetect.prop('disabled', false);
+        }
+    }
+
     function ValidateUsernames(textTagRemove) {
         let userNames = GetInputUserName(textTagRemove);
 
@@ -484,7 +515,7 @@
                 }
             });
         }
-    }
+    }    
 
     function GetInputUserName(textTagRemove) {
         let userNameList = [];
@@ -521,15 +552,16 @@
             }
         });     
 
-        let isEnableDetect = data.UserNameInvalidList.length === 0 && data.UserNameValidList.length >= 2;
+        let isEnableDetect = data.UserNameInvalidList.length === 0
+            && data.UserNameValidList.length >= 2;           
 
-        domElements.btnDetect.prop('disabled', !isEnableDetect);
-    }    
+        domElements.btnDetect.prop('disabled', !isEnableDetect);      
+    }
 
     function DetectUserName() {
         let userNames = GetInputUserName();
 
-        if (userNames !== '') {            
+        if (userNames !== '') {
             parameters.UserNames = userNames;
             parameters.IsBPManuallyDeviceIP = domElements.inputOptBPManuallyDeviceIP.is(":checked");
             parameters.IsAgent = domElements.inputOptAgent.is(":checked");
@@ -560,7 +592,9 @@
                     }
 
                     domElements.hdAssociationDetectSharedIP.val(response.sharedIPJson);
-                    domElements.hdAssociationDetectSharedMatches.val(response.sharedMatchesJson);                    
+                    domElements.hdAssociationDetectSharedMatches.val(response.sharedMatchesJson);
+
+                    domElements.divReportContainer.removeClass('hide');
                 },
                 complete: function () {
                     domElements.divAddUserName.removeClass("loading-block");                    
@@ -619,13 +653,20 @@
                     let currentTag = $(e.target).parent();
 
                     ResetMaxTag();
-
                     ValidateUsernames(currentTag.text().trim());                    
                 });
 
                 domElements.spanAddUserNameMaxTag.text(maxCountTags - 1);
             } else {
-                domElements.inputTagUsername.tagify().data('tagify').removeTags(tagName.tag);
+                //domElements.inputTagUsername.tagify().data('tagify').removeTags(tagName.tag);
+                let $tag = $(tagName.tag);
+                let btnRemove = $tag.find('x');
+                btnRemove.on('click', function (e) {
+                    let currentTag = $(e.target).parent();
+
+                    ResetMaxTag();
+                    ValidateUsernames(currentTag.text().trim());
+                });
             }
 
             domElements.btnDetect.prop('disabled', true);
@@ -695,10 +736,24 @@
         domElements.btnDetect.prop('disabled', true);
     }
 
-    function Initial() {               
+    function ExportToExcel() {      
+        common.downloadFileExcel(common.modifyRelativeUrl('AssociationDetection/ExportToExcelAssociationDetect'), parameters);
+    }
+
+    function Initial() { 
         InitInputTagUsername();
 
         domElements.btnDetect.on('click', () => DetectUserName());
+
+        domElements.btnExportToExcel.on('click', () => ExportToExcel());       
+
+        domElements.inputOptBPManuallyDeviceIP.on('change', () => ChangeStateBtnDetect());
+
+        domElements.inputOptAgent.on('change', () => ChangeStateBtnDetect());
+
+        domElements.inputOptIPLast3Days.on('change', () => ChangeStateBtnDetect());
+
+        domElements.inputOpt3MatchesLast7Days.on('change', () => ChangeStateBtnDetect());
     }
 
     $(document).ready(function () {

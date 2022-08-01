@@ -8,12 +8,12 @@
         [SpParam(SqlParamName = "ListCustId")]
         public string CustIDList { get; set; }
 
-        //[SpParam(SqlParamName = "IsFlagxxx")]
-        //public bool IsFlagxxx { get; set; }
+        [SpParam(SqlParamName = "IsDetecting")]
+        public bool IsDetecting { get; set; }
 
         public override string GetSettingKey()
         {
-            return "CTS_Association_BySharedMatches";
+            return "CTS_Association_GetBySharedMatches";
         }
 
         public override bool IsValid()

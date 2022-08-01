@@ -9,6 +9,7 @@
     using Fanex.NAP.CTS.Model.AssociationDetection;
     using Fanex.NAP.CTS.Model.Common;
     using Fanex.NAP.CTS.Model.CustomerClassification;
+    using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
@@ -25,6 +26,7 @@
     [NapAuth(FunctionKey = FSFunctionKeys.AssociationDetection, Policy = NAP.Core.Business.Constant.Policy.Read)]
     public class AssociationDetectionController : BaseController
     {
+        private const string AssociationDetectionTemplate = "~/App_Data/Excel Template/AssociationDetection/Template.xlsx";
         private readonly ICommonService _commonService;
         private readonly IAssociationDetectionService _associationDetectionService;
         private readonly ICustomerClassificationService _custClassificationService;
@@ -32,7 +34,6 @@
         public AssociationDetectionController()
         {
             _commonService = new CommonService();
-
             _associationDetectionService = new AssociationDetectionService();
             _custClassificationService = new CustomerClassificationService();
         }
@@ -222,57 +223,9 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetection)]
         public ActionResult DetectAssociationByUserNames(DetectAssociationByUserNamesViewModel model)
         {
-            var result = new DetectAssociationViewModel();
-            var isException = false;
-
-            if (!string.IsNullOrWhiteSpace(model.UserNames))
-            {
-                var userNameList = model.UserNames.Split(',');
-
-                var validatedList = _commonService.ValidateUsernames(string.Join(",", userNameList.Distinct()), out isException);
-
-                var custIds = string.Join(",", validatedList.Select(x => x.CustID));    
-
-                try
-                {
-                    model.SharedIPJson = DetectAssociationByIP(validatedList, model.IsIPLast3Days, custIds);                   
-
-                    model.SharedMatchesJson = DetectAssociationBySharedMatches(validatedList, model.Is3MatchesLast7Days, custIds);
-
-                    var detectAssByBPDeviceIPAgent = _associationDetectionService.DetectAssociationByBPDeviceIPAgent(model);
-
-                    result.ItemList = detectAssByBPDeviceIPAgent.Select(x => new DetectAssociationItemViewModel
-                    {
-                        GroupID = x.GroupID,
-                        UserName = x.UserName,
-                        CTSCustID = x.CTSCustID,
-                        CustID = x.CustID,
-                        CategoryIDs = x.CategoryIDs,
-                        CustStatus = x.CustStatus,
-                        Evidences = x.Evidences,
-                        AssociatedTypes = x.AssociationType,
-                        CustomerCategory = x.Categories,
-                        CustomerClass = x.CustomerClass,
-                        IsProblemAccount = x.ParentIDs != null && x.ParentIDs.Split(',').Any(y => y == "50"),
-                        IsPAProbation = x.IsPAProbation
-                    });
-                }
-                catch (Exception ex)
-                {
-                    result.ErrorCode = 1;
-                    result.ErrorMessage = "Timeout Issue.Please try again";
-
-                    var logMessage = new LogMessage(ex.Message)
-                       .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                       .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                    LogService.Error(logMessage);
-                }
-            }
-                       
             return Json(new
             {
-                data = result,
+                data = DetectAssociation(model),
                 //sharedIPJson = model.SharedIPJson,
                 sharedIPJson = GenerateSharedIPJson(),
                 sharedMatchesJson = model.SharedMatchesJson
@@ -333,13 +286,6 @@
                     },
                     new GetAssociationDetectDetailViewModel
                     {
-                         UserName = "Member 04",
-                         CustID = 2,
-                         CTSCustID = 2,
-                         AssociatedTypes = "<span class='association-detect-detail-match'>Match</span>"
-                    },
-                    new GetAssociationDetectDetailViewModel
-                    {
                          UserName = "Member 05",
                          CustID = 3,
                          CTSCustID = 3,
@@ -351,6 +297,59 @@
             return Json(new { 
                 data = result
             }, JsonRequestBehavior.AllowGet);
+        }
+
+        private DetectAssociationViewModel DetectAssociation(DetectAssociationByUserNamesViewModel model)
+        {
+            var result = new DetectAssociationViewModel();
+            var isException = false;
+
+            if (!string.IsNullOrWhiteSpace(model.UserNames))
+            {
+                var userNameList = model.UserNames.Split(',');
+
+                var validatedList = _commonService.ValidateUsernames(string.Join(",", userNameList.Distinct()), out isException);
+
+                var custIds = string.Join(",", validatedList.Select(x => x.CustID));
+
+                try
+                {
+                    model.SharedIPJson = DetectAssociationByIP(validatedList, model.IsIPLast3Days, custIds);
+
+                    model.SharedMatchesJson = DetectAssociationBySharedMatches(validatedList, model.Is3MatchesLast7Days, custIds);
+
+                    var detectAssByBPDeviceIPAgent = _associationDetectionService.DetectAssociationByBPDeviceIPAgent(model);
+
+                    result.ItemList = detectAssByBPDeviceIPAgent.Select(x => new DetectAssociationItemViewModel
+                    {
+                        GroupID = x.GroupID,
+                        UserName = x.UserName,
+                        CTSCustID = x.CTSCustID,
+                        CustID = x.CustID,
+                        CategoryIDs = x.CategoryIDs,
+                        CustStatus = x.CustStatus,
+                        Evidences = x.Evidences,
+                        AssociatedTypes = x.AssociationType,
+                        CustomerCategory = x.Categories,
+                        CustomerClass = x.CustomerClass,
+                        IsProblemAccount = x.ParentIDs != null && x.ParentIDs.Split(',').Any(y => y == "50"),
+                        IsPAProbation = x.IsPAProbation
+                    });
+                }
+                catch (Exception ex)
+                {
+                    result.ErrorCode = 1;
+                    result.ErrorMessage = "Timeout Issue.Please try again";
+
+                    var logMessage = new LogMessage(ex.Message)
+                       .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                       .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                    LogService.Error(logMessage);
+                }
+            }
+
+            return result;
         }
 
         private IEnumerable<GetAssociationDetectDetailViewModel> GetAssociationDetectSharedIP(int custID, string sharedIPJson)
@@ -387,6 +386,24 @@
 
         private IEnumerable<GetAssociationDetectDetailViewModel> GetAssociationDetectSharedMatches(int custID, string sharedMatchesJson)
         {
+            if (!string.IsNullOrEmpty(sharedMatchesJson))
+            {
+                var sharedMatchesList = JsonConvert.DeserializeObject<IEnumerable<SharedIPMatchesModel>>(sharedMatchesJson);
+
+                var sharedMatchesByCust = sharedMatchesList.Where(x => x.FromCustID == custID || x.ToCustID == custID);
+
+                if (sharedMatchesByCust.Any())
+                {
+                    return sharedMatchesByCust.Select(x => new GetAssociationDetectDetailViewModel
+                    {
+                        UserName = x.ToUserName,
+                        CustID = x.ToCustID,
+                        CTSCustID = x.ToCTSCustID,
+                        AssociatedTypes = "<span class='association-detect-detail-match'>Match</span>"
+                    });
+                }
+            }
+
             return new List<GetAssociationDetectDetailViewModel>() {
                 new GetAssociationDetectDetailViewModel
                 {
@@ -464,13 +481,45 @@
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetection)]
         public ActionResult GetDetectAssociationDetailAgent()
-        {
-            var result = "";
+        {            
+            var result = new List<GetAssociationDetectDetailAgentViewModel>
+            {
+                new GetAssociationDetectDetailAgentViewModel 
+                { 
+                     UserName = "Member 01",
+                     Agent = "Agent 01",
+                     AssociatedType = "Device"
+                },
+                new GetAssociationDetectDetailAgentViewModel
+                {
+                    UserName = "Member 01",
+                    Agent = "Agent 01",
+                    AssociatedType = "Device"
+                }
+            };
 
             return Json(new
             {
                 data = result
             }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetection)]
+        public ActionResult ExportToExcelAssociationDetect(DetectAssociationByUserNamesViewModel model)
+        {
+            var templatePath = Server.MapPath(AssociationDetectionTemplate);
+            var dateTime = DateTime.UtcNow.AddHours(-4);
+
+            var fileName = string.Format("AssociationDetect_{0}_{1}.xlsx"            
+                , dateTime.ToString(FormatDateTimeToString_YYYYmmdd)
+                , dateTime.ToString(Consts.FormatTimeToString_hhmmss));
+
+            var data = DetectAssociation(model);
+          
+            var excelFile = _associationDetectionService.ExportToExcelAssociationDetect(data.ItemList, fileName, templatePath);
+
+            return File(excelFile, "application/vnd.ms-excel", fileName);
         }
 
         private string DetectAssociationByIP(IEnumerable<ValidateUserNameModel> validateUserNames, bool isIPLast3Days, string custIds)

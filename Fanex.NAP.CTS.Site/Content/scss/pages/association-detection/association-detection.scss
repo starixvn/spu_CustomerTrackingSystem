@@ -47,6 +47,10 @@ body {
                     }
                 }
 
+                .checkbox-filter {
+                    margin-right: 20px;
+                }
+
                 .checkbox-container {
                     margin-top: 11px;
 
@@ -69,9 +73,50 @@ body {
         .table-report {
             font-family: $font-family;
 
+            .fixed-header {               
+                padding-top: 1.6rem;
+                position: sticky;
+                position: -webkit-sticky;
+                top: 7.5rem;
+                background: #fff;
+                z-index: 9;
+
+                .button-primary {
+                    margin-left: 10px;
+
+                    .sub-icon {
+                        width: 32px;
+                        height: 32px;
+                        display: inline-block;
+                        position: relative;
+                        cursor: pointer;
+
+                        &:hover {
+                            border-radius: 50%;
+                            background: #E7EDFF;
+                        }
+
+                        .disabled {
+                            cursor: not-allowed;
+                        }
+
+                        .icon-excel {
+                            font-size: 3rem;
+                        }
+                    }
+                }
+            }
+
+            .wrapper-info-table {
+                position: sticky;
+                position: -webkit-sticky;
+                z-index: 99;
+                top: 12.5rem;
+                transition: top 0.01s linear;
+            }
+
             .table-association-detection {
                 width: 100% !important;
-                margin-top: 20px;
 
                 .loading {
                     position: relative;
@@ -117,7 +162,7 @@ body {
                     td {
                         color: #fff !important
                     }
-                }                
+                }
 
                 tr {
                     .td-bg-yellow {

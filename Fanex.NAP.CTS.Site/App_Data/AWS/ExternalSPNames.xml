@@ -74,6 +74,6 @@
 	</Function>
 
 	<Function Name="AssociationDetection">
-		<Setting Key="CTS_Association_BySharedMatches" SpName="CTS_Association_BySharedMatches" DbName="DBCTS.bodb02.bodbSPUNet" />
+		<Setting Key="CTS_Association_GetBySharedMatches" SpName="CTS_Association_GetBySharedMatches" DbName="DBCTS.bodb02.bodbSPUNet" />
 	</Function>
 </Functions>

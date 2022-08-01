@@ -7,6 +7,7 @@
     using Fanex.NAP.CTS.Model.AssociationDetection;
     using Fanex.NAP.CTS.ViewModel.AssociationDetection;
     using Fanex.NAP.SPU.Graph.Core;
+    using Fanex.NAP.TGRS.Core.ExcelUtility;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -30,6 +31,8 @@
         IEnumerable<GetAssociationDetectDetailIPModel> GetCoupleSharedIP(int custID1, int custID2);
 
         IEnumerable<GetAssociationDetectDetailMatchModel> GetDetectAssociationDetailMatch(string custIDList);
+
+        byte[] ExportToExcelAssociationDetect(IEnumerable<DetectAssociationItemViewModel> AssociationDetect, string fileName, string templatePath);
     }
 
     public class AssociationDetectionService : IAssociationDetectionService
@@ -80,7 +83,8 @@
         {
             var criteria = new DetectAssociationBySharedMatchesCriteria
             {
-                CustIDList = custIDList
+                CustIDList = custIDList,
+                IsDetecting = true
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -139,12 +143,42 @@
         {
             var criteria = new DetectAssociationBySharedMatchesCriteria
             {
-                CustIDList = custIDList
+                CustIDList = custIDList,
+                IsDetecting = false
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 return db.Query<GetAssociationDetectDetailMatchModel>(criteria);
+            }
+        }
+
+        public byte[] ExportToExcelAssociationDetect(IEnumerable<DetectAssociationItemViewModel> AssociationDetect, string fileName, string templatePath)
+        {
+            var writer = new ExcelTemplateWriter(templatePath, fileName, "AD");
+            writer.CopyRows(0, 1);
+           
+            FillRowData(AssociationDetect, ref writer);
+
+            writer.SyncColumnsWidth(3);
+
+            return writer.ToBytes();
+        }
+
+        private void FillRowData(IEnumerable<DetectAssociationItemViewModel> AssociationDetect, ref ExcelTemplateWriter writer)
+        {
+            var idx = 1;
+
+            foreach (var item in AssociationDetect)
+            {
+                var record = new object[]
+                    {
+                        idx++,
+                        item.UserName,
+                        item.GroupID
+                    };
+
+                writer.WriteRow(1, record);
             }
         }
 
