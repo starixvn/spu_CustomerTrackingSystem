@@ -228,7 +228,8 @@
                 data = DetectAssociation(model),
                 //sharedIPJson = model.SharedIPJson,
                 sharedIPJson = GenerateSharedIPJson(),
-                sharedMatchesJson = model.SharedMatchesJson
+                //sharedMatchesJson = model.SharedMatchesJson,
+                sharedMatchesJson = GenerateSharedMatches()
             }, JsonRequestBehavior.AllowGet);
         }
 
@@ -255,6 +256,86 @@
             };
 
             return JsonConvert.SerializeObject(sharedIPs);
+        }
+
+        private string GenerateSharedMatches()
+        {
+            var sharedMatches = new List<SharedIPMatchesModel>()
+            {
+                new SharedIPMatchesModel {
+                    FromCustID = 21061114,
+                    FromCTSCustID = 119870,
+                    FromUserName = "NextBetRMB01001",
+                    ToCustID = 21061121,
+                    ToCTSCustID = 119872,
+                    ToUserName = "NextBetWon01001"
+                },
+                new SharedIPMatchesModel {
+                    FromCustID = 12035060,
+                    FromCTSCustID = 74125,
+                    FromUserName = "12BETRM04094",
+                    ToCustID = 21061114,
+                    ToCTSCustID = 119870,
+                    ToUserName = "NextBetRMB01001"
+                }
+            };
+
+            return JsonConvert.SerializeObject(sharedMatches);
+        }
+      
+        private DetectAssociationViewModel DetectAssociation(DetectAssociationByUserNamesViewModel model)
+        {
+            var result = new DetectAssociationViewModel();
+            var isException = false;
+
+            if (!string.IsNullOrWhiteSpace(model.UserNames))
+            {
+                var userNameList = model.UserNames.Split(',');
+
+                var validatedList = _commonService.ValidateUsernames(string.Join(",", userNameList.Distinct()), out isException);
+
+                var custIds = string.Join(",", validatedList.Select(x => x.CustID));
+
+                try
+                {
+                    model.SharedIPJson = DetectAssociationByIP(validatedList, model.IsIPLast3Days, custIds);
+
+                    model.SharedMatchesJson = DetectAssociationBySharedMatches(validatedList, model.Is3MatchesLast7Days, custIds);
+
+                    var detectAss = _associationDetectionService.DetectAssociationByBPDeviceIPAgent(model);
+
+                    var groups = detectAss.GroupBy(p => p.GroupID,(key, g) => new { GroupID = key, CTSCustIDs = g.Select(x => x.CTSCustID) });
+
+                    result.ItemList = detectAss.Select(x =>
+                    {                        
+                        var item = new DetectAssociationItemViewModel(x);
+                        var ctsCustIDs = groups.FirstOrDefault(y => y.GroupID == x.GroupID);
+                        item.CTSCustIDList = ctsCustIDs != null ? string.Join(",", ctsCustIDs.CTSCustIDs) : string.Empty;
+
+                        return item;
+                    });
+                }
+                catch (Exception ex)
+                {
+                    result.ErrorCode = 1;
+                    result.ErrorMessage = "Timeout Issue.Please try again";
+
+                    var logMessage = new LogMessage(ex.Message)
+                       .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                       .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                    LogService.Error(logMessage);
+                }
+            }
+
+            return result;
+        }
+
+        private void GroupCTSCustID(IEnumerable<DetectAssociationByBPDeviceIPAgentModel> data)
+        {          
+            var results = data.GroupBy(
+                p => p.GroupID,
+                (key, g) => new { GroupID = key, CTSCustIDs = g.Select(x => x.CTSCustID) });
         }
 
         [HttpPost]
@@ -294,62 +375,10 @@
                 };
             }
 
-            return Json(new { 
+            return Json(new
+            {
                 data = result
             }, JsonRequestBehavior.AllowGet);
-        }
-
-        private DetectAssociationViewModel DetectAssociation(DetectAssociationByUserNamesViewModel model)
-        {
-            var result = new DetectAssociationViewModel();
-            var isException = false;
-
-            if (!string.IsNullOrWhiteSpace(model.UserNames))
-            {
-                var userNameList = model.UserNames.Split(',');
-
-                var validatedList = _commonService.ValidateUsernames(string.Join(",", userNameList.Distinct()), out isException);
-
-                var custIds = string.Join(",", validatedList.Select(x => x.CustID));
-
-                try
-                {
-                    model.SharedIPJson = DetectAssociationByIP(validatedList, model.IsIPLast3Days, custIds);
-
-                    model.SharedMatchesJson = DetectAssociationBySharedMatches(validatedList, model.Is3MatchesLast7Days, custIds);
-
-                    var detectAssByBPDeviceIPAgent = _associationDetectionService.DetectAssociationByBPDeviceIPAgent(model);
-
-                    result.ItemList = detectAssByBPDeviceIPAgent.Select(x => new DetectAssociationItemViewModel
-                    {
-                        GroupID = x.GroupID,
-                        UserName = x.UserName,
-                        CTSCustID = x.CTSCustID,
-                        CustID = x.CustID,
-                        CategoryIDs = x.CategoryIDs,
-                        CustStatus = x.CustStatus,
-                        Evidences = x.Evidences,
-                        AssociatedTypes = x.AssociationType,
-                        CustomerCategory = x.Categories,
-                        CustomerClass = x.CustomerClass,
-                        IsProblemAccount = x.ParentIDs != null && x.ParentIDs.Split(',').Any(y => y == "50"),
-                        IsPAProbation = x.IsPAProbation
-                    });
-                }
-                catch (Exception ex)
-                {
-                    result.ErrorCode = 1;
-                    result.ErrorMessage = "Timeout Issue.Please try again";
-
-                    var logMessage = new LogMessage(ex.Message)
-                       .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                       .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                    LogService.Error(logMessage);
-                }
-            }
-
-            return result;
         }
 
         private IEnumerable<GetAssociationDetectDetailViewModel> GetAssociationDetectSharedIP(int custID, string sharedIPJson)

@@ -42,7 +42,7 @@
     }
 
     function GenerateGrid(data) {
-        return domElements.tblAssociationDetection.DataTable({
+        let table = domElements.tblAssociationDetection.DataTable({
             language: {
                 lengthMenu: "",
                 info: "",
@@ -97,7 +97,7 @@
                 api.column(0, { page: 'current' }).data().each(function (group, i) {
                     if (last !== group) {
                         $(rows).eq(i).before(
-                            '<tr class="group"><td colspan="6"> <i class="icon-chevron-down"></i>' + 'Group ' + group + '</td></tr>'
+                            '<tr class="group"><td colspan="6"><span><i class="icon-chevron-down"></i>' + 'Group ' + group + '</span></td></tr>'
                         );
 
                         last = group;
@@ -105,7 +105,28 @@
                 });
             }
         }).rows.add(data).draw();
-    }
+
+        $('tbody', domElements.tblAssociationDetection).on('click', 'tr', function () {
+            if ($(this).hasClass('group')) {
+                let $next = $(this).next();
+                while ($next.length && $next.is('[role=row]')) {
+                    $next.slideToggle();
+                    $next = $next.next();
+                }
+
+                let $i = $('i', $(this));
+                if ($i.hasClass('icon-chevron-down')) {
+                    $i.removeClass('icon-chevron-down')
+                        .addClass('icon-chevron-right');
+                } else {
+                    $i.removeClass('icon-chevron-right')
+                        .addClass('icon-chevron-down');
+                }                
+            }
+        });
+
+        return table;
+    }    
 
     function RenderUserName(obj) {
         if (obj.UserName !== null) {
@@ -113,7 +134,7 @@
         }
 
         return "";
-    }
+    }   
 
     function ShowAssociationDetectDetail(obj) {
         domElements.divAssociationDetectDetail.dialog({
@@ -174,19 +195,19 @@
             });
         }
 
-        GetAssociationDetectDetail(obj.CustID, obj.CTSCustID);
+        GetAssociationDetectDetail(obj.CustID, obj.CTSCustID, obj.CTSCustIDList);
     }
 
-    function GetAssociationDetectDetail(custID, ctsCustID) {
+    function GetAssociationDetectDetail(custID, ctsCustID, ctsCustIDList) {
         $.ajax(common.modifyRelativeUrl('AssociationDetection/GetDetectAssociationDetail'), {
             type: 'POST',
             beforeSend: function () {
                 domElements.tblAssociationDetectDetail.find('tbody').addClass('loading');
             },
-            data: {    
+            data: {
                 CustID: custID,
                 CTSCustID: ctsCustID,
-                CTSCustIDList: "1,2,3,4,5",
+                CTSCustIDList: ctsCustIDList,
                 IsBPManuallyDeviceIP: parameters.IsBPManuallyDeviceIP,
                 IsAgent: parameters.IsAgent,
                 IsIPLast3Days: parameters.IsIPLast3Days,

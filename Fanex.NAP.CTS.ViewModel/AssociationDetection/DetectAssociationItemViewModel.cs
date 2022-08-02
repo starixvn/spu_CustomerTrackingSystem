@@ -1,14 +1,38 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.AssociationDetection
 {
+    using Fanex.NAP.CTS.Model.AssociationDetection;
+    using System.Linq;
+
     public class DetectAssociationItemViewModel
     {              
+        public DetectAssociationItemViewModel() { }
+
+        public DetectAssociationItemViewModel(DetectAssociationByBPDeviceIPAgentModel data)
+        {
+            this.RowNumber = data.RowNumber;
+            this.GroupID = data.GroupID;
+            this.UserName = data.UserName;
+            this.CTSCustID = data.CTSCustID;
+            this.CustID = data.CustID;
+            this.CategoryIDs = data.CategoryIDs;
+            this.CustStatus = data.CustStatus;
+            this.Evidences = data.Evidences;
+            this.AssociatedTypes = data.AssociationType;
+            this.CustomerCategory = data.Categories;
+            this.CustomerClass = data.CustomerClass;
+            this.IsProblemAccount = data.ParentIDs != null && data.ParentIDs.Split(',').Any(y => y == "50");
+            this.IsPAProbation = data.IsPAProbation;
+        }
+
         public int RowNumber { get; set; }
 
         public int GroupID { get; set; }
 
         public string UserName { get; set; }
 
-        public long CTSCustID { get; set; }
+        public string CTSCustIDList { get; set; }
+
+        public long CTSCustID { get; set; }        
 
         public int CustID { get; set; }        
 
