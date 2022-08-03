@@ -111,6 +111,7 @@
     <Compile Include="AssociatedGroupMonitor\ValidateUserAssociatedAccountViewModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationItemViewModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationByUserNamesViewModel.cs" />
+    <Compile Include="AssociationDetection\DetectAssociationMergeGroupViewModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationViewModel.cs" />
     <Compile Include="AssociationDetection\GetAssociationDetectDetailAgentViewModel.cs" />
     <Compile Include="AssociationDetection\GetAssociationDetectDetailIPViewModel.cs" />

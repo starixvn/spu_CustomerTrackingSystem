@@ -1,6 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Model.AssociationDetection
 {   
-    public class SharedIPMatchesModel
+    public class SharedIPMatchesInfoModel
     {
         public int FromCustID { get; set; }
 

@@ -7,7 +7,7 @@
     {              
         public DetectAssociationItemViewModel() { }
 
-        public DetectAssociationItemViewModel(DetectAssociationByBPDeviceIPAgentModel data)
+        public DetectAssociationItemViewModel(DetectAssociationMergeGroupModel data)
         {
             this.RowNumber = data.RowNumber;
             this.GroupID = data.GroupID;

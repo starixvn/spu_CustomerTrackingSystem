@@ -20,13 +20,17 @@
 
         IEnumerable<GetAssociationDetectionModel> GetCustInfoAssDetectionReport(List<GetAssociationDetectionModel> assDetection);
 
-        IEnumerable<DetectAssociationByBPDeviceIPAgentModel> DetectAssociationByBPDeviceIPAgent(DetectAssociationByUserNamesViewModel model);
+        IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByPrimary(string ctsCustIDs);
+
+        IEnumerable<DetectAssociationByAgentModel> DetectAssociationByAgent(string ctsCustIDs);
 
         IEnumerable<GetAssociationDetectDetailModel> GetAssociationDetectionDetail(GetAssociationDetectionDetailViewModel assDetectionDetailModel);
 
         IEnumerable<DetectAssociationBySharedIPMatchesModel> DetectAssociationByIP(string custIDList);
 
         IEnumerable<DetectAssociationBySharedIPMatchesModel> DetectAssociationBySharedMatches(string custIDList);
+
+        IEnumerable<DetectAssociationMergeGroupModel> DetectAssociationMergeGroup(MergeGroupInfoModel model);
 
         IEnumerable<GetAssociationDetectDetailIPModel> GetCoupleSharedIP(int custID1, int custID2);
 
@@ -59,26 +63,49 @@
             }
         }
 
-        public IEnumerable<DetectAssociationByBPDeviceIPAgentModel> DetectAssociationByBPDeviceIPAgent(DetectAssociationByUserNamesViewModel model)
+        public IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByPrimary(string ctsCustIDs)
         {
-            var criteria = new DetectAssociationByBPDeviceIPAgentCriteria
+            var criteria = new DetectAssociationByPrimaryCriteria
             {
-                Usernames = model.UserNames,
-                HasBettingPattern = model.IsBPManuallyDeviceIP,
-                HasManually = model.IsBPManuallyDeviceIP,
-                HasDevice = model.IsBPManuallyDeviceIP,
-                HasIP = model.IsBPManuallyDeviceIP,
-                HasAgent = model.IsAgent,
-                SharedIPJson = model.SharedIPJson,
-                SharedMatchesJson = model.SharedMatchesJson
+                CTSCustIDs = ctsCustIDs
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<DetectAssociationByBPDeviceIPAgentModel>(criteria);
+                return db.Query<DetectAssociationByPrimaryModel>(criteria);
             }
         }
-      
+
+        public IEnumerable<DetectAssociationByAgentModel> DetectAssociationByAgent(string ctsCustIDs)
+        {
+            var criteria = new DetectAssociationByAgentCriteria
+            {
+                CTSCustIDs = ctsCustIDs
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<DetectAssociationByAgentModel>(criteria);
+            }
+        }
+
+        public IEnumerable<DetectAssociationMergeGroupModel> DetectAssociationMergeGroup(MergeGroupInfoModel model)
+        {
+            var criteria = new DetectAssociationMergeGroupCriteria
+            {
+                CTSCustIDs = model.CTSCustIDs,
+                PrimaryJson = model.AssociationByPrimaryJson,
+                AgentJson = model.AssociationByAgentJson,
+                SharedIPJson = model.AssociationByIPJson,
+                SharedMatches = model.AssociationByMatchesJson
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<DetectAssociationMergeGroupModel>(criteria);
+            }
+        }
+
         public IEnumerable<DetectAssociationBySharedIPMatchesModel> DetectAssociationBySharedMatches(string custIDList)
         {
             var criteria = new DetectAssociationBySharedMatchesCriteria
@@ -310,7 +337,7 @@
             }
 
             return new List<GetAssociationDetectionModel>();
-        }
+        }      
 
         #endregion
 

@@ -235,9 +235,9 @@
 
         private string GenerateSharedIPJson()
         {
-            var sharedIPs = new List<SharedIPMatchesModel>()
+            var sharedIPs = new List<SharedIPMatchesInfoModel>()
             {
-                new SharedIPMatchesModel {
+                new SharedIPMatchesInfoModel {
                     FromCustID = 1,
                     FromCTSCustID = 2,
                     FromUserName = "UserName 1",
@@ -245,7 +245,7 @@
                     ToCTSCustID = 20,
                     ToUserName = "UserName 2"
                 },
-                new SharedIPMatchesModel {
+                new SharedIPMatchesInfoModel {
                     FromCustID = 1,
                     FromCTSCustID = 2,
                     FromUserName = "UserName 1",
@@ -260,9 +260,9 @@
 
         private string GenerateSharedMatches()
         {
-            var sharedMatches = new List<SharedIPMatchesModel>()
+            var sharedMatches = new List<SharedIPMatchesInfoModel>()
             {
-                new SharedIPMatchesModel {
+                new SharedIPMatchesInfoModel {
                     FromCustID = 21061114,
                     FromCTSCustID = 119870,
                     FromUserName = "NextBetRMB01001",
@@ -270,7 +270,7 @@
                     ToCTSCustID = 119872,
                     ToUserName = "NextBetWon01001"
                 },
-                new SharedIPMatchesModel {
+                new SharedIPMatchesInfoModel {
                     FromCustID = 12035060,
                     FromCTSCustID = 74125,
                     FromUserName = "12BETRM04094",
@@ -290,30 +290,48 @@
 
             if (!string.IsNullOrWhiteSpace(model.UserNames))
             {
-                var userNameList = model.UserNames.Split(',');
+                var userNameList = string.Join(",", model.UserNames.Split(',').Distinct());
 
-                var validatedList = _commonService.ValidateUsernames(string.Join(",", userNameList.Distinct()), out isException);
+                var validatedList = _commonService.ValidateUsernames(userNameList, out isException);
 
-                var custIds = string.Join(",", validatedList.Select(x => x.CustID));
+                var custIDs = string.Join(",", validatedList.Select(x => x.CustID));
+                var ctsCustIDs = string.Join(",", validatedList.Select(x => x.CTSCustID));
 
                 try
                 {
-                    model.SharedIPJson = DetectAssociationByIP(validatedList, model.IsIPLast3Days, custIds);
+                    var assBySharedIP = DetectAssociationByIP(validatedList, model.IsIPLast3Days, custIDs);
+                    
+                    var assBySharedMatches = DetectAssociationBySharedMatches(validatedList, model.Is3MatchesLast7Days, custIDs);
 
-                    model.SharedMatchesJson = DetectAssociationBySharedMatches(validatedList, model.Is3MatchesLast7Days, custIds);
+                    var assByPrimary = _associationDetectionService.DetectAssociationByPrimary(ctsCustIDs);
 
-                    var detectAss = _associationDetectionService.DetectAssociationByBPDeviceIPAgent(model);
+                    var assByAgent = _associationDetectionService.DetectAssociationByAgent(ctsCustIDs);
 
-                    var groups = detectAss.GroupBy(p => p.GroupID,(key, g) => new { GroupID = key, CTSCustIDs = g.Select(x => x.CTSCustID) });
+                    var mergeGroupInfo = new MergeGroupInfoModel
+                    {
+                        CTSCustIDs = ctsCustIDs,
+                        AssociationByPrimaryJson = JsonConvert.SerializeObject(assByPrimary),
+                        AssociationByAgentJson = JsonConvert.SerializeObject(assByAgent),
+                        AssociationByIPJson = GetAssociationCust(assBySharedIP),
+                        AssociationByMatchesJson = GetAssociationCust(assBySharedMatches)
+                    };
 
-                    result.ItemList = detectAss.Select(x =>
-                    {                        
+                    var assMergeGroup = _associationDetectionService.DetectAssociationMergeGroup(mergeGroupInfo);
+
+                    var groups = assMergeGroup.GroupBy(p => p.GroupID,(key, g) => new { GroupID = key, CTSCustIDs = g.Select(x => x.CTSCustID) });
+
+                    result.ItemList = assMergeGroup.Select(x =>
+                    {
                         var item = new DetectAssociationItemViewModel(x);
-                        var ctsCustIDs = groups.FirstOrDefault(y => y.GroupID == x.GroupID);
-                        item.CTSCustIDList = ctsCustIDs != null ? string.Join(",", ctsCustIDs.CTSCustIDs) : string.Empty;
+                        var custInfo = groups.FirstOrDefault(y => y.GroupID == x.GroupID);
+
+                        item.CTSCustIDList = ctsCustIDs != null ? string.Join(",", custInfo.CTSCustIDs) : string.Empty;
 
                         return item;
                     });
+
+                    model.SharedIPJson = JsonConvert.SerializeObject(assBySharedIP);
+                    model.SharedMatchesJson = JsonConvert.SerializeObject(assBySharedMatches);
                 }
                 catch (Exception ex)
                 {
@@ -331,11 +349,59 @@
             return result;
         }
 
-        private void GroupCTSCustID(IEnumerable<DetectAssociationByBPDeviceIPAgentModel> data)
-        {          
-            var results = data.GroupBy(
-                p => p.GroupID,
-                (key, g) => new { GroupID = key, CTSCustIDs = g.Select(x => x.CTSCustID) });
+        private IEnumerable<SharedIPMatchesInfoModel> DetectAssociationByIP(IEnumerable<ValidateUserNameModel> validateUserNames, bool isIPLast3Days, string custIds)
+        {
+            if (isIPLast3Days)
+            {
+                var detectAssByIP = _associationDetectionService.DetectAssociationByIP(custIds);
+
+                return DetectAssociationBySharedIPMatches(detectAssByIP, validateUserNames);
+            }
+
+            return Enumerable.Empty<SharedIPMatchesInfoModel>();
+        }
+
+        private IEnumerable<SharedIPMatchesInfoModel> DetectAssociationBySharedMatches(IEnumerable<ValidateUserNameModel> validateUserNames, bool is3MatchesLast7Days, string custIds)
+        {
+            if (is3MatchesLast7Days)
+            {
+                var detectAssByAssMatches = _associationDetectionService.DetectAssociationBySharedMatches(custIds);
+
+                return DetectAssociationBySharedIPMatches(detectAssByAssMatches, validateUserNames);
+            }
+
+            return Enumerable.Empty<SharedIPMatchesInfoModel>();
+        }
+
+        private IEnumerable<SharedIPMatchesInfoModel> DetectAssociationBySharedIPMatches(IEnumerable<DetectAssociationBySharedIPMatchesModel> detectAss
+           , IEnumerable<ValidateUserNameModel> validateUserNames)
+        {
+            return detectAss.Select(x =>
+            {
+                var fromCTSCust = validateUserNames.FirstOrDefault(y => y.CustID.Equals(x.CustID1)) ?? new ValidateUserNameModel();
+                var toCTSCust = validateUserNames.FirstOrDefault(y => y.CustID.Equals(x.CustID2)) ?? new ValidateUserNameModel();
+
+                return new SharedIPMatchesInfoModel
+                {
+                    FromCustID = x.CustID1,
+                    FromCTSCustID = fromCTSCust.CTSCustID,
+                    FromUserName = fromCTSCust.UserName,
+                    ToCustID = x.CustID2,
+                    ToCTSCustID = toCTSCust.CTSCustID,
+                    ToUserName = toCTSCust.UserName
+                };
+            }).Where(x => x.FromCTSCustID != 0 && x.ToCTSCustID != 0);
+        }
+
+        private string GetAssociationCust(IEnumerable<SharedIPMatchesInfoModel> ass)
+        {
+            var assCustBySharedIP = ass.Select(x => new AssociationCustModel
+            {
+                FromtCustID = x.FromCustID,
+                ToCustID = x.ToCustID
+            });
+
+            return JsonConvert.SerializeObject(assCustBySharedIP);
         }
 
         [HttpPost]
@@ -385,7 +451,7 @@
         {
             if (!string.IsNullOrEmpty(sharedIPJson))
             {
-                var sharedIPList = JsonConvert.DeserializeObject<IEnumerable<SharedIPMatchesModel>>(sharedIPJson);
+                var sharedIPList = JsonConvert.DeserializeObject<IEnumerable<SharedIPMatchesInfoModel>>(sharedIPJson);
 
                 var sharedIPByCust = sharedIPList.Where(x => x.FromCustID == custID || x.ToCustID == custID);
 
@@ -417,7 +483,7 @@
         {
             if (!string.IsNullOrEmpty(sharedMatchesJson))
             {
-                var sharedMatchesList = JsonConvert.DeserializeObject<IEnumerable<SharedIPMatchesModel>>(sharedMatchesJson);
+                var sharedMatchesList = JsonConvert.DeserializeObject<IEnumerable<SharedIPMatchesInfoModel>>(sharedMatchesJson);
 
                 var sharedMatchesByCust = sharedMatchesList.Where(x => x.FromCustID == custID || x.ToCustID == custID);
 
@@ -549,54 +615,7 @@
             var excelFile = _associationDetectionService.ExportToExcelAssociationDetect(data.ItemList, fileName, templatePath);
 
             return File(excelFile, "application/vnd.ms-excel", fileName);
-        }
-
-        private string DetectAssociationByIP(IEnumerable<ValidateUserNameModel> validateUserNames, bool isIPLast3Days, string custIds)
-        {            
-            if (isIPLast3Days)
-            {
-                var detectAssByIP = _associationDetectionService.DetectAssociationByIP(custIds);
-
-                return DetectAssociationBySharedIPMatches(detectAssByIP, validateUserNames);
-            }
-
-            return JsonConvert.SerializeObject(Enumerable.Empty<SharedIPMatchesModel>());
-        }
-
-        private string DetectAssociationBySharedMatches(IEnumerable<ValidateUserNameModel> validateUserNames, bool is3MatchesLast7Days, string custIds)
-        {           
-            if (is3MatchesLast7Days)
-            {
-                var detectAssByAssMatches = _associationDetectionService.DetectAssociationBySharedMatches(custIds);
-
-                return DetectAssociationBySharedIPMatches(detectAssByAssMatches, validateUserNames);
-            }
-
-            return JsonConvert.SerializeObject(Enumerable.Empty<SharedIPMatchesModel>());
-        }
-
-        private string DetectAssociationBySharedIPMatches(IEnumerable<DetectAssociationBySharedIPMatchesModel> detectAss
-            , IEnumerable<ValidateUserNameModel> validateUserNames)
-        {            
-            var detectModel = detectAss.Select(x =>
-            {
-                var fromCTSCust = validateUserNames.FirstOrDefault(y => y.CustID.Equals(x.CustID1)) ?? new ValidateUserNameModel();
-                var toCTSCust = validateUserNames.FirstOrDefault(y => y.CustID.Equals(x.CustID2)) ?? new ValidateUserNameModel();
-
-                return new SharedIPMatchesModel
-                {
-
-                    FromCustID = x.CustID1,
-                    FromCTSCustID = fromCTSCust.CTSCustID,
-                    FromUserName = fromCTSCust.UserName,
-                    ToCustID = x.CustID2,
-                    ToCTSCustID = toCTSCust.CTSCustID,
-                    ToUserName = toCTSCust.UserName
-                };
-            }).Where(x => x.FromCTSCustID != 0 && x.ToCTSCustID != 0);
-
-            return JsonConvert.SerializeObject(detectModel);
-        }
-        
+        }       
+       
     }
 }
