@@ -136,21 +136,7 @@
         return "";
     }   
 
-    function ShowAssociationDetectDetail(obj) {
-        domElements.divAssociationDetectDetail.dialog({
-            modal: true,
-            width: '500px',
-            title: 'ASSOCIATION DETAIL: ' + obj.UserName,
-            resizable: false,
-            draggable: true,
-            close: function () {
-                $(this).dialog('close');
-                $('.ui-dialog .ui-dialog-content').css('padding-bottom', '16px');
-                $('.ui-dialog .ui-dialog-content').css('padding-top', '27px');
-                $('.ui-dialog .ui-dialog-content').css('padding-left', '12px');
-            }
-        });
-
+    function ShowAssociationDetectDetail(fromObj) {       
         if (tableAssociationDetectDetail == null) {
             tableAssociationDetectDetail = domElements.tblAssociationDetectDetail.DataTable({
                 language: {
@@ -163,8 +149,9 @@
                 info: false,
                 ordering: false,
                 searching: false,
-                scrollX: false,
-                scrollCollapse: false,
+                scrollX: false,              
+                scrollY: '400px',
+                scrollCollapse: true,
                 paging: false,
                 searching: false,
                 columnDefs: [
@@ -179,15 +166,18 @@
                         data: obj => obj.AssociatedTypes,
                         createdCell: (cell, _, row) => {
                             $('.association-detect-detail-ip', cell).click(() => {
-                                ShowAssociationDetectDetailIP(obj.UserName, row.UserName, obj.CustID, row.CustID)
+                                let span = $(cell).find('.association-detect-detail-ip');
+                                ShowAssociationDetectDetailIP(span.attr('data-fromusername'), row.UserName, span.attr('data-fromcustid'), row.CustID)
                             });
 
                             $('.association-detect-detail-match', cell).click(() => {
-                                ShowAssociationDetectDetailMatch(obj.UserName, row.UserName, obj.CustID, row.CustID);
+                                let span = $(cell).find('.association-detect-detail-match');
+                                ShowAssociationDetectDetailMatch(span.attr('data-fromusername'), row.UserName, span.attr('data-fromcustid'), row.CustID);
                             });
 
                             $('.association-detect-detail-agent', cell).click(() => {
-                                ShowAssociationDetectDetailAgent(row)
+                                let span = $(cell).find('.association-detect-detail-agent');
+                                ShowAssociationDetectDetailAgent(span.attr('data-fromusername'), row.UserName, row.AgentInfoJson);
                             });
                         }
                     }
@@ -195,16 +185,31 @@
             });
         }
 
-        GetAssociationDetectDetail(obj.CustID, obj.CTSCustID, obj.CTSCustIDList);
+        GetAssociationDetectDetail(fromObj.UserName, fromObj.CustID, fromObj.CTSCustID, fromObj.CTSCustIDList);
+
+        domElements.divAssociationDetectDetail.dialog({
+            modal: true,
+            width: '500px',
+            title: "ASSOCIATION DETAIL: " + fromObj.UserName,
+            resizable: false,
+            draggable: true,
+            close: function () {
+                $(this).dialog('close');
+                $('.ui-dialog .ui-dialog-content').css('padding-bottom', '16px');
+                $('.ui-dialog .ui-dialog-content').css('padding-top', '27px');
+                $('.ui-dialog .ui-dialog-content').css('padding-left', '12px');
+            }
+        });       
     }
 
-    function GetAssociationDetectDetail(custID, ctsCustID, ctsCustIDList) {
+    function GetAssociationDetectDetail(userName, custID, ctsCustID, ctsCustIDList) {
         $.ajax(common.modifyRelativeUrl('AssociationDetection/GetDetectAssociationDetail'), {
             type: 'POST',
             beforeSend: function () {
                 domElements.tblAssociationDetectDetail.find('tbody').addClass('loading');
             },
             data: {
+                UserName: userName,
                 CustID: custID,
                 CTSCustID: ctsCustID,
                 CTSCustIDList: ctsCustIDList,
@@ -231,21 +236,7 @@
         })
     }
 
-    function ShowAssociationDetectDetailIP(userName1, userName2, custID1, custID2) {        
-        domElements.divAssociationDetectDetailIP.dialog({
-            modal: true,
-            width: '600px',
-            title: `ASSOCIATION DETAIL - IP LIST (in the last 3 days): ${userName1} - ${userName2}`,
-            resizable: false,
-            draggable: true,
-            close: function () {
-                $(this).dialog('close');
-                $('.ui-dialog .ui-dialog-content').css('padding-bottom', '16px');
-                $('.ui-dialog .ui-dialog-content').css('padding-top', '27px');
-                $('.ui-dialog .ui-dialog-content').css('padding-left', '12px');
-            }
-        });
-
+    function ShowAssociationDetectDetailIP(userName1, userName2, custID1, custID2) {                 
         if (tableAssociationDetectDetailIP == null) {
             tableAssociationDetectDetailIP = domElements.tblAssociationDetectDetailIP.DataTable({
                 language: {
@@ -258,8 +249,9 @@
                 info: false,
                 ordering: false,
                 searching: false,
-                scrollX: false,
-                scrollCollapse: false,
+                scrollX: false,              
+                scrollY: '400px',
+                scrollCollapse: true,
                 paging: false,
                 searching: false,
                 columnDefs: [
@@ -274,6 +266,20 @@
         }
 
         GetAssociationDetectDetailIP(custID1, custID2);
+
+        domElements.divAssociationDetectDetailIP.dialog({
+            modal: true,
+            width: '500px',
+            title: "ASSOCIATION DETAIL - IP LIST (in the last 3 days): <br/> " + userName1 + " - " + userName2,
+            resizable: false,
+            draggable: true,
+            close: function () {
+                $(this).dialog('close');
+                $('.ui-dialog .ui-dialog-content').css('padding-bottom', '16px');
+                $('.ui-dialog .ui-dialog-content').css('padding-top', '27px');
+                $('.ui-dialog .ui-dialog-content').css('padding-left', '12px');
+            }
+        });       
     }
 
     function GetAssociationDetectDetailIP(custID1, custID2) {
@@ -302,21 +308,7 @@
         })
     }
 
-    function ShowAssociationDetectDetailMatch(userName1, userName2, custID1, custID2) {
-        domElements.divAssociationDetectDetailMatch.dialog({
-            modal: true,
-            width: '900px',
-            title: `ASSOCIATION DETAIL - MATCH (in the last 7 days): ${userName1} - ${userName2}`,
-            resizable: false,
-            draggable: true,
-            close: function () {
-                $(this).dialog('close');
-                $('.ui-dialog .ui-dialog-content').css('padding-bottom', '16px');
-                $('.ui-dialog .ui-dialog-content').css('padding-top', '27px');
-                $('.ui-dialog .ui-dialog-content').css('padding-left', '12px');
-            }
-        });
-
+    function ShowAssociationDetectDetailMatch(userName1, userName2, custID1, custID2) {               
         if (tableAssociationDetectDetailMatch == null) {
             tableAssociationDetectDetailMatch = domElements.tblAssociationDetectDetailMatch.DataTable({
                 language: {
@@ -330,7 +322,8 @@
                 ordering: false,
                 searching: false,
                 scrollX: false,
-                scrollCollapse: false,
+                scrollY: '400px',
+                scrollCollapse: true,
                 paging: false,
                 searching: false,
                 columnDefs: [
@@ -378,8 +371,23 @@
                 }
             });
         }
-
+      
         GetAssociationDetectDetailMatch(custID1, custID2);
+
+        domElements.divAssociationDetectDetailMatch.dialog({
+            modal: true,
+            width: '900px',
+            title: "ASSOCIATION DETAIL - MATCH (in the last 7 days): " + userName1 + " - " + userName2,
+            resizable: false,
+            draggable: true,
+            close: function () {
+                $(this).dialog('close');
+                $('.ui-dialog .ui-dialog-content').css('padding-bottom', '16px');
+                $('.ui-dialog .ui-dialog-content').css('padding-top', '27px');
+                $('.ui-dialog .ui-dialog-content').css('padding-left', '12px');
+            }
+        });
+        
     }
 
     function GetAssociationDetectDetailMatch(custID1, custID2) {
@@ -408,21 +416,7 @@
         })
     }
 
-    function ShowAssociationDetectDetailAgent(obj) {
-        domElements.divAssociationDetectDetailAgent.dialog({
-            modal: true,
-            width: '500px',
-            title: 'ASSOCIATION DETAIL: ' + row.UserName,
-            resizable: false,
-            draggable: true,
-            close: function () {
-                $(this).dialog('close');
-                $('.ui-dialog .ui-dialog-content').css('padding-bottom', '16px');
-                $('.ui-dialog .ui-dialog-content').css('padding-top', '27px');
-                $('.ui-dialog .ui-dialog-content').css('padding-left', '12px');
-            }
-        });
-
+    function ShowAssociationDetectDetailAgent(userName1, userName2, agentInfoJson) {                
         if (tableAssociationDetectDetailAgent === null) {
             tableAssociationDetectDetailAgent = domElements.tblAssociationDetectDetailAgent.DataTable({
                 language: {
@@ -438,13 +432,13 @@
                 scrollX: false,
                 scrollCollapse: false,
                 paging: false,
-                searching: false,
+                searching: false,                
                 columnDefs: [
                     { targets: "_all", defaultContent: "-" },
                     { targets: [-1, 0, 1], className: "text-center" },
                     { targets: [0], width: "35%" },
                     { targets: [1], width: "35%" },
-                    { targets: [1], width: "30%" }
+                    { targets: [2], width: "30%" }
                 ],
                 columns: [
                     { data: obj => obj.UserName },
@@ -454,20 +448,56 @@
             });
         }
 
-        GetAssociationDetectDetailAgent();
+        GetAssociationDetectDetailAgent(agentInfoJson);
+
+        domElements.divAssociationDetectDetailAgent.dialog({
+            modal: true,
+            width: '500px',
+            title: "ASSOCIATION DETAIL - AGENT: " + userName1 + " - " + userName2,
+            resizable: false,
+            draggable: true,
+            close: function () {
+                $(this).dialog('close');
+                $('.ui-dialog .ui-dialog-content').css('padding-bottom', '16px');
+                $('.ui-dialog .ui-dialog-content').css('padding-top', '27px');
+                $('.ui-dialog .ui-dialog-content').css('padding-left', '12px');
+            }
+        });      
     }
 
-    function GetAssociationDetectDetailAgent() {
+    function GetAssociationDetectDetailAgent(agentInfoJson) {
         $.ajax(common.modifyRelativeUrl('AssociationDetection/GetDetectAssociationDetailAgent'), {
             type: 'POST',
             beforeSend: function () {
                 domElements.tblAssociationDetectDetailAgent.find('tbody').addClass('loading');
+                domElements.tblAssociationDetectDetailAgent.DataTable().clear();
             },
             data: {
+                agentInfoJson: agentInfoJson
             },
             success: function (response) {
-                if (response !== undefined) {
-                    domElements.tblAssociationDetectDetailAgent.DataTable().clear().rows.add(response.data).draw();
+                if (response !== undefined) {                                       
+                    let tbody = domElements.tblAssociationDetectDetailAgent.find('tbody');
+
+                    $(tbody).empty();
+
+                    let items = response.data;
+                                   
+                    for (var i = 0; i < items.length; i++) {
+                        if (i == 0) {
+                            $(tbody).append($('<tr role="row" class="odd">')
+                                .append('<td class="text-center">' + items[i]['UserName'] + '</td>')
+                                .append('<td class="text-center">' + items[i]['Agent'] + '</td>')
+                                .append('<td rowspan="2" class="text-center">' + items[i]['AssociatedType'] + '</td>')
+                                .append('</tr>'));
+                        } else {
+                            $(tbody).append($('<tr role="row" class="odd">')
+                                .append('<td class="text-center">' + items[i]['UserName'] + '</td>')
+                                .append('<td class="text-center">' + items[i]['Agent'] + '</td>')                               
+                                .append('</tr>'));
+                        }                      
+                    }
+
                     domElements.tblAssociationDetectDetailAgent.DataTable().columns.adjust();
                 }
             },
@@ -482,37 +512,49 @@
     }
 
     function CheckSelectFilter() {
-        if (domElements.inputOptBPManuallyDeviceIP.is(":checked"))
-            return true;
+        if (domElements.inputOptBPManuallyDeviceIP.is(":checked")) {
+            domElements.btnDetect.removeClass('checkselectfilter-notpass'); return true;
+        }            
 
-        if (domElements.inputOptAgent.is(":checked"))
-            return true;
+        if (domElements.inputOptAgent.is(":checked")) {
+            domElements.btnDetect.removeClass('checkselectfilter-notpass'); return true;
+        }           
 
-        if (domElements.inputOptIPLast3Days.is(":checked"))
-            return true;
+        if (domElements.inputOptIPLast3Days.is(":checked")) {
+            domElements.btnDetect.removeClass('checkselectfilter-notpass'); return true;
+        }
+            
+        if (domElements.inputOpt3MatchesLast7Days.is(":checked")) {
+            domElements.btnDetect.removeClass('checkselectfilter-notpass'); return true;
+        }            
 
-        if (domElements.inputOpt3MatchesLast7Days.is(":checked"))
-            return true;
-
-        return false;
+        domElements.btnDetect.addClass('checkselectfilter-notpass'); return false;
     }
 
     function ChangeStateBtnDetect() {
-        if (!CheckSelectFilter()) {
+        if (domElements.btnDetect.hasClass('checkselectfilter-notpass')) {
+            ValidateUsernames();
+        } else if (!CheckSelectFilter()) {
             if (!domElements.btnDetect.is(':disabled')) {
                 domElements.btnDetect.prop('disabled', true);
-                domElements.btnDetect.addClass('disabled-by-select');
-            }           
-        } else if (domElements.btnDetect.hasClass('disabled-by-select')) {
-            domElements.btnDetect.removeClass('disabled-by-select');
+                domElements.btnDetect.addClass('disabled-by-selectoption');
+            }
+        } else if (domElements.btnDetect.hasClass('disabled-by-selectoption')) {
+            domElements.btnDetect.removeClass('disabled-by-selectoption');
             domElements.btnDetect.prop('disabled', false);
         }
     }
 
     function ValidateUsernames(textTagRemove) {
+        let numOfTagExceeded = domElements.spanAddUserName.find('tags tag.tagify--notAllowed');
+
+        if (numOfTagExceeded.length > 0) {
+            return;
+        }
+      
         let userNames = GetInputUserName(textTagRemove);
 
-        if (userNames !== '') {
+        if (userNames !== '' && CheckSelectFilter()) {
             let params = {};
             params.userNames = userNames;
 
@@ -604,6 +646,7 @@
                         domElements.inputTagUsername.tagify().data('tagify').removeAllTags();
                         domElements.spanAddUserNameMaxTag.text(maxTags);
                         domElements.spanAddChangeHidden.text("0");
+                        domElements.btnDetect.prop('disabled', true);
                     } else {
                         common.showError(response.data.ErrorMessage);
 
@@ -728,6 +771,7 @@
                     domElements.inputTagUsername.tagify().data('tagify').removeAllTags();
                     domElements.spanAddUserNameMaxTag.text(maxTags);
                     domElements.spanAddUserName.find('tags').removeClass('ctrlA');
+                    domElements.btnDetect.prop('disabled', true);
                 }
             }
 

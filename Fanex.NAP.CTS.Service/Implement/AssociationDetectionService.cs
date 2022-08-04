@@ -30,13 +30,13 @@
 
         IEnumerable<DetectAssociationBySharedIPMatchesModel> DetectAssociationBySharedMatches(string custIDList);
 
-        IEnumerable<DetectAssociationMergeGroupModel> DetectAssociationMergeGroup(MergeGroupInfoModel model);
+        IEnumerable<DetectAssociationMergeGroupModel> MergeGroupDetectAssociation(MergeGroupInfoModel model);
 
         IEnumerable<GetAssociationDetectDetailIPModel> GetCoupleSharedIP(int custID1, int custID2);
 
         IEnumerable<GetAssociationDetectDetailMatchModel> GetDetectAssociationDetailMatch(string custIDList);
 
-        byte[] ExportToExcelAssociationDetect(IEnumerable<DetectAssociationItemViewModel> AssociationDetect, string fileName, string templatePath);
+        byte[] ExportToExcelAssociationDetect(IEnumerable<DetectAssociationMergeGroupModel> AssociationDetect, string fileName, string templatePath);
     }
 
     public class AssociationDetectionService : IAssociationDetectionService
@@ -89,7 +89,7 @@
             }
         }
 
-        public IEnumerable<DetectAssociationMergeGroupModel> DetectAssociationMergeGroup(MergeGroupInfoModel model)
+        public IEnumerable<DetectAssociationMergeGroupModel> MergeGroupDetectAssociation(MergeGroupInfoModel model)
         {
             var criteria = new DetectAssociationMergeGroupCriteria
             {
@@ -139,10 +139,7 @@
             {
                 CTSCustID = assDetectionDetailModel.CTSCustID,
                 ListCTSCustID = assDetectionDetailModel.CTSCustIDList,
-                HasManually = assDetectionDetailModel.IsBPManuallyDeviceIP,
-                HasBettingPattern = assDetectionDetailModel.IsBPManuallyDeviceIP,
-                HasDevice = assDetectionDetailModel.IsBPManuallyDeviceIP,
-                HasIP = assDetectionDetailModel.IsBPManuallyDeviceIP,
+                HasPrimary = assDetectionDetailModel.IsBPManuallyDeviceIP,
                 HasAgent = assDetectionDetailModel.IsAgent
             };
 
@@ -180,7 +177,7 @@
             }
         }
 
-        public byte[] ExportToExcelAssociationDetect(IEnumerable<DetectAssociationItemViewModel> AssociationDetect, string fileName, string templatePath)
+        public byte[] ExportToExcelAssociationDetect(IEnumerable<DetectAssociationMergeGroupModel> AssociationDetect, string fileName, string templatePath)
         {
             var writer = new ExcelTemplateWriter(templatePath, fileName, "AD");
             writer.CopyRows(0, 1);
@@ -192,17 +189,17 @@
             return writer.ToBytes();
         }
 
-        private void FillRowData(IEnumerable<DetectAssociationItemViewModel> AssociationDetect, ref ExcelTemplateWriter writer)
+        private void FillRowData(IEnumerable<DetectAssociationMergeGroupModel> AssociationDetect, ref ExcelTemplateWriter writer)
         {
             var idx = 1;
 
             foreach (var item in AssociationDetect)
-            {
+            {                
                 var record = new object[]
                     {
                         idx++,
                         item.UserName,
-                        item.GroupID
+                        (item.GroupID.HasValue ? item.GroupID.ToString() : string.Empty)
                     };
 
                 writer.WriteRow(1, record);

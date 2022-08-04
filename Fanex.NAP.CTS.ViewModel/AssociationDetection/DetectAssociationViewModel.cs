@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.AssociationDetection
-{  
+{
+    using Fanex.NAP.CTS.Model.AssociationDetection;
     using System.Collections.Generic;
 
     public class DetectAssociationViewModel
@@ -12,6 +13,8 @@
         }
 
         public IEnumerable<DetectAssociationItemViewModel> ItemList { get; set; }
+
+        public IEnumerable<DetectAssociationMergeGroupModel> OrgItemList { get; set; }
 
         public int ErrorCode { get; set; }
 

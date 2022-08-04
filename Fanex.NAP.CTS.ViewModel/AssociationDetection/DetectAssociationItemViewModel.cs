@@ -16,9 +16,9 @@
             this.CustID = data.CustID;
             this.CategoryIDs = data.CategoryIDs;
             this.CustStatus = data.CustStatus;
-            this.Evidences = data.Evidences;
+            this.Evidences = data.Evidence;
             this.AssociatedTypes = data.AssociationType;
-            this.CustomerCategory = data.Categories;
+            this.CustomerCategory = data.CustomerCategory;
             this.CustomerClass = data.CustomerClass;
             this.IsProblemAccount = data.ParentIDs != null && data.ParentIDs.Split(',').Any(y => y == "50");
             this.IsPAProbation = data.IsPAProbation;
@@ -26,7 +26,7 @@
 
         public int RowNumber { get; set; }
 
-        public int GroupID { get; set; }
+        public int? GroupID { get; set; }
 
         public string UserName { get; set; }
 

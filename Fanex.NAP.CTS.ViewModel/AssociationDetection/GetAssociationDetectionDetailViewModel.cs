@@ -2,6 +2,8 @@
 {
     public class GetAssociationDetectionDetailViewModel
     {
+        public string UserName { get; set; }
+
         public int CustID { get; set; }
 
         public long CTSCustID { get; set; }

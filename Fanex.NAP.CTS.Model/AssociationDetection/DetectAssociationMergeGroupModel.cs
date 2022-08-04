@@ -4,7 +4,7 @@
     {
         public int RowNumber { get; set; }
 
-        public int GroupID { get; set; }
+        public int ? GroupID { get; set; }
 
         public long CTSCustID { get; set; }
 
@@ -14,9 +14,9 @@
 
         public string CustStatus { get; set; }
 
-        public string Evidences { get; set; }
+        public string Evidence { get; set; }
 
-        public string Categories { get; set; }
+        public string CustomerCategory { get; set; }
 
         public string AssociationType { get; set; }
 

@@ -493,10 +493,10 @@ body {
   .association-detection-report .association-detection-content .table-report {
     font-family: "Lato", Arial, Tahoma, sans-serif; }
     .association-detection-report .association-detection-content .table-report .fixed-header {
-      padding-top: 1.6rem;
+      /*  padding-top: 1.6rem;*/
       position: sticky;
       position: -webkit-sticky;
-      top: 7.5rem;
+      top: 8rem;
       background: #fff;
       z-index: 9; }
       .association-detection-report .association-detection-content .table-report .fixed-header .button-primary {

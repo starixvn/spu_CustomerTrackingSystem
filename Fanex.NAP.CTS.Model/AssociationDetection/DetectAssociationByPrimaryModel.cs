@@ -5,12 +5,12 @@
     public class DetectAssociationByPrimaryModel
     {
         [JsonProperty(PropertyName = "F")]
-        public long FromCTSCustID { get; set; }
+        public long FromID { get; set; }
 
         [JsonProperty(PropertyName = "T")]
-        public long ToCTSCustID { get; set; }
+        public long ToID { get; set; }
 
-        [JsonProperty(PropertyName = "AT")]
+        [JsonProperty(PropertyName = "A")]
         public int AssociationType { get; set; }
     }
 }

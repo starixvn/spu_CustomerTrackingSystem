@@ -5,9 +5,9 @@
     public class AssociationCustModel
     {
         [JsonProperty(PropertyName = "F")]
-        public int FromtCustID { get; set; }
+        public long FromCTSCustID { get; set; }
 
         [JsonProperty(PropertyName = "T")]
-        public int ToCustID { get; set; }
+        public long ToCTSCustID { get; set; }
     }
 }

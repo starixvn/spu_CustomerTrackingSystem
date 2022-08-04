@@ -19,5 +19,8 @@
         public string ToAgentUsername { get; set; }
 
         public string AssociationType { get; set; }
+
+        public string AgentAssociationType { get; set; }
+
     }
 }

@@ -5,9 +5,9 @@
     public class DetectAssociationByAgentModel
     {
         [JsonProperty(PropertyName = "F")]
-        public long FromCTSCustID { get; set; }
+        public long FromID { get; set; }
 
         [JsonProperty(PropertyName = "T")]
-        public long ToCTSCustID { get; set; }
+        public long ToID { get; set; }
     }
 }

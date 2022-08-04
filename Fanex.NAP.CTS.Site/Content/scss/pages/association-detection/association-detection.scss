@@ -74,10 +74,10 @@ body {
             font-family: $font-family;
 
             .fixed-header {               
-                padding-top: 1.6rem;
+              /*  padding-top: 1.6rem;*/
                 position: sticky;
                 position: -webkit-sticky;
-                top: 7.5rem;
+                top: 8rem;
                 background: #fff;
                 z-index: 9;
 

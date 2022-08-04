@@ -11,24 +11,15 @@
         [SpParam(SqlParamName = "ip_ListCTSCustID")]
         public string ListCTSCustID { get; set; }
 
-        [SpParam(SqlParamName = "ip_HasDevice")]
-        public bool HasDevice { get; set; }
-
-        [SpParam(SqlParamName = "ip_HasManually")]
-        public bool HasManually { get; set; }
-
-        [SpParam(SqlParamName = "ip_HasIP")]
-        public bool HasIP { get; set; }
-
-        [SpParam(SqlParamName = "ip_HasBettingPattern")]
-        public bool HasBettingPattern { get; set; }
+        [SpParam(SqlParamName = "ip_HasPrimary")]
+        public bool HasPrimary { get; set; }
 
         [SpParam(SqlParamName = "ip_HasAgent")]
-        public bool HasAgent { get; set; }
+        public bool HasAgent { get; set; }     
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_AssociationDetection_GetCust";
+            return "CTS_DC_AssociationDetection_GetDetail";
         }
 
         public override bool IsValid()

@@ -73,14 +73,13 @@
 	</Function>
 
 	<Function Name="AssociationDetection">
-		<Setting Key="CTS_DC_RPT_AssociationDetection" SpName="CTS_DC_RPT_AssociationDetection" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" Timeout="600" />
-		<!--<Setting Key="CTS_DC_AssociationDetection_GetByListCust" SpName="CTS_DC_AssociationDetection_GetByListCust" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_AssociationDetection_GetCust" SpName="CTS_DC_AssociationDetection_GetCust" DbName="MySQL.CTS_DataCenter.Reporter" />-->
+		<Setting Key="CTS_DC_RPT_AssociationDetection" SpName="CTS_DC_RPT_AssociationDetection" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" Timeout="600" />		
 		<Setting Key="SPU_AIML_GB_DetectAssociationByIP" SpName="SPU_AIML_GB_DetectAssociationByIP" DbName="MySQL.SPU_AIML.Reporter" />
 		<Setting Key="SPU_AIML_GB_GetCoupleSharedIP" SpName="SPU_AIML_GB_GetCoupleSharedIP" DbName="MySQL.SPU_AIML.Reporter" />
 		<Setting Key="CTS_DC_AssociationDetection_Primary_Detect" SpName="CTS_DC_AssociationDetection_Primary_Detect" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_AssociationDetection_Agent_Detect" SpName="CTS_DC_AssociationDetection_Agent_Detect" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_AssociationDetection_MergeGroup" SpName="CTS_DC_AssociationDetection_MergeGroup" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_AssociationDetection_GetDetail" SpName="CTS_DC_AssociationDetection_GetDetail" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
 
 	<Function Name="AssociationDetail">
