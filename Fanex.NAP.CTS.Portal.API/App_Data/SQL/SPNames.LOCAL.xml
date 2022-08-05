@@ -65,7 +65,7 @@
   </Function>
 
   <Function name="SpecialCustomerClass">
-    <Setting Key="CTS_DC_SpecialCustClass_Insert" SpName="CTS_DC_SpecialCustClass_Insert" DbName="MySQL.CTS_DataCenter.Admin" />
+    <Setting Key="CTS_DC_SpecialCustClass_Insert" SpName="CTS_DC_SpecialCustClass_Insert_xpre" DbName="MySQL.CTS_DataCenter.Admin" />
   </Function>
 
 	<Function name="MonitorCTSFunction">

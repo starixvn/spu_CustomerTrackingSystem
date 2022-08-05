@@ -17,6 +17,7 @@
     using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
     using Fanex.NAP.CTS.Model.ProblemAccountMonitor.TWProblemAccount;
     using Fanex.NAP.CTS.Model.Subscriber;
+    using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Portal.API.ActionFilter;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
@@ -650,8 +651,13 @@
 
                         foreach (var custs in custIdsChunk)
                         {
-                            // Update CC in table custinfo to MainDB
-                            _custClassificationService.RetryPushCCToMainDB(custs, 2);
+                            _custClassificationService.PushDataToExternal(custs.Select(c => c.CustId).Distinct(), new PushDataToExternalModel
+                            {
+                                IsUpdateDangerToMainDB = false,
+                                IsSyncAFC = false,
+                                IsPushCCToSoon88 = false,
+                                ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize
+                            });
                         }
                     }
                 }

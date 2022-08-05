@@ -9,6 +9,7 @@
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
+    using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Resource.Consts;    
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.ViewModel.SpecialCustomerClass;
@@ -97,9 +98,14 @@
                     var custIdsChunk = resultInsertToCTS.CustomerClassList.Chunk(ConfigSettings.PushCCToExternalChunkSize);
 
                     foreach (var custs in custIdsChunk)
-                    {
-                        // Update CC in table custinfo to MainDB
-                        _custClassificationService.RetryPushCCToMainDB(custs, 2);
+                    { 
+                        _custClassificationService.PushDataToExternal(custs.Select(c=>c.CustId).Distinct(), new PushDataToExternalModel
+                        {
+                            IsUpdateDangerToMainDB = false,
+                            IsSyncAFC = false,
+                            IsPushCCToSoon88 = false,
+                            ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize
+                        });
                     }
                 }
             }
