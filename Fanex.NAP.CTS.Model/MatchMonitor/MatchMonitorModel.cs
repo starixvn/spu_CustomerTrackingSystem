@@ -46,6 +46,8 @@
                         return "Hedging";
                     case 2:
                         return "Arbitrage";
+                    case 3:
+                        return "Fixed Game";
                 }
 
                 return string.Empty;
