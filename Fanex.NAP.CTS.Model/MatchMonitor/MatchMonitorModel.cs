@@ -163,24 +163,6 @@
             }
         }
 
-        public string BettypeName
-        {
-            get
-            {
-                switch (Reason)
-                {
-                    case 0:
-                        return "Group Betting";
-                    case 1:
-                        return "Hedging";
-                    case 2:
-                        return "Arbitrage";
-                }
-
-                return string.Empty;
-            }
-        }
-
         public string MatchSectionName
         {
             get
