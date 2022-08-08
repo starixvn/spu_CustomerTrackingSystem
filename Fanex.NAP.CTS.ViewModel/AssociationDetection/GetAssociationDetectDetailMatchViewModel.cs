@@ -21,13 +21,13 @@
             this.CustID = match.CustID;
             this.TransDate = match.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss);
             this.TransID = match.TransID;
-            this.BetTypeID = match.BetTypeID;
-            this.BetTypeName = CachedRef.GetBettypeName(match.BetTypeID);
+            this.BetTypeID = match.BetType;
+            this.BetTypeName = CachedRef.GetBettypeName(match.BetType);
             this.BetTeam = match.BetTeam;
             this.Stake = match.Stake;
-            this.Odd = match.Odd;
-            this.LiveScore = match.LiveScore;
-            this.Result = match.Result;
+            this.Odd = match.Odds;
+            this.LiveScore = match.LiveHomeScore + " - " + match.LiveAwayScore;
+            this.Result = match.TicketStatus.ToString();
         }
 
         public int LeagueID { get; set; }

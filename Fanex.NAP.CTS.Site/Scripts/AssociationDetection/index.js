@@ -376,7 +376,7 @@
 
         domElements.divAssociationDetectDetailMatch.dialog({
             modal: true,
-            width: '900px',
+            width: '950px',
             title: "ASSOCIATION DETAIL - MATCH (in the last 7 days): " + userName1 + " - " + userName2,
             resizable: false,
             draggable: true,

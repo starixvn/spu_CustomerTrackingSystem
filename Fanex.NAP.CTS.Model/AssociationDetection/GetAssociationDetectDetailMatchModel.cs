@@ -22,16 +22,18 @@
 
         public long TransID { get; set; }
 
-        public int BetTypeID { get; set; }
+        public int BetType { get; set; }
 
         public string BetTeam { get; set; }
 
         public decimal Stake { get; set; }
 
-        public decimal Odd { get; set; }
+        public decimal Odds { get; set; }
 
-        public string LiveScore { get; set; }
+        public int LiveHomeScore { get; set; }
 
-        public string Result { get; set; }
+        public int LiveAwayScore { get; set; }
+
+        public int TicketStatus { get; set; }
     }
 }
