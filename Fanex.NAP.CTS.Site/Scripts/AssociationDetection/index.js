@@ -270,7 +270,7 @@
         domElements.divAssociationDetectDetailIP.dialog({
             modal: true,
             width: '500px',
-            title: "ASSOCIATION DETAIL - IP LIST (in the last 3 days): <br/> " + userName1 + " - " + userName2,
+            title: "",
             resizable: false,
             draggable: true,
             close: function () {
@@ -279,7 +279,9 @@
                 $('.ui-dialog .ui-dialog-content').css('padding-top', '27px');
                 $('.ui-dialog .ui-dialog-content').css('padding-left', '12px');
             }
-        });       
+        });
+
+        domElements.divAssociationDetectDetailIP.parent().find('.ui-dialog-title').html("<div>ASSOCIATION DETAIL - IP LIST (in the last 3 days): <br/>" + userName1 + " - " + userName2 + "</div>");      
     }
 
     function GetAssociationDetectDetailIP(custID1, custID2) {

@@ -27,7 +27,7 @@
             this.Stake = match.Stake;
             this.Odd = match.Odds;
             this.LiveScore = match.LiveHomeScore + " - " + match.LiveAwayScore;
-            this.Result = match.TicketStatus.ToString();
+            this.Result = match.status;
         }
 
         public int LeagueID { get; set; }

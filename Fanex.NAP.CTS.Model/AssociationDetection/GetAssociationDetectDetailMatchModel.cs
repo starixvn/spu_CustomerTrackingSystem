@@ -35,5 +35,7 @@
         public int LiveAwayScore { get; set; }
 
         public int TicketStatus { get; set; }
+
+        public string status { get; set; }
     }
 }

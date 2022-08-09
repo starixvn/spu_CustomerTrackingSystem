@@ -133,14 +133,16 @@
             }
         }
 
-        public IEnumerable<GetAssociationDetectDetailModel> GetAssociationDetectionDetail(GetAssociationDetectionDetailViewModel assDetectionDetailModel)
+        public IEnumerable<GetAssociationDetectDetailModel> GetAssociationDetectionDetail(GetAssociationDetectionDetailViewModel model)
         {
+            var ctsCustIDList = model.CTSCustIDList.Split(',').Select(long.Parse);
+
             var criteria = new GetAssociationDetectionDetailCriteria
             {
-                CTSCustID = assDetectionDetailModel.CTSCustID,
-                ListCTSCustID = assDetectionDetailModel.CTSCustIDList,
-                HasPrimary = assDetectionDetailModel.IsBPManuallyDeviceIP,
-                HasAgent = assDetectionDetailModel.IsAgent
+                CTSCustID = model.CTSCustID,
+                ListCTSCustID = string.Join(",", ctsCustIDList.Where(x => x != model.CTSCustID)),
+                HasPrimary = model.IsBPManuallyDeviceIP,
+                HasAgent = model.IsAgent
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))

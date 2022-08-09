@@ -388,12 +388,28 @@
 
                 if (sharedIPByCust.Any())
                 {
-                    return sharedIPByCust.Select(x => new GetAssociationDetectDetailViewModel
+                    return sharedIPByCust.Select(x =>
                     {
-                        UserName = x.ToUserName,
-                        CustID = x.ToCustID,
-                        CTSCustID = x.ToCTSCustID,
-                        AssociatedTypes = $"<span class='association-detect-detail-ip' data-fromusername={userName} data-fromcustid={custID}>IP(last3days)</span>"
+                        if (x.FromCustID == custID)
+                        {
+                            return new GetAssociationDetectDetailViewModel
+                            {
+                                UserName = x.ToUserName,
+                                CustID = x.ToCustID,
+                                CTSCustID = x.ToCTSCustID,
+                                AssociatedTypes = $"<span class='association-detect-detail-ip' data-fromusername={userName} data-fromcustid={custID}>IP(last3days)</span>"
+                            };
+                        }
+                        else
+                        {
+                            return new GetAssociationDetectDetailViewModel
+                            {
+                                UserName = x.FromUserName,
+                                CustID = x.FromCustID,
+                                CTSCustID = x.FromCTSCustID,
+                                AssociatedTypes = $"<span class='association-detect-detail-ip' data-fromusername={userName} data-fromcustid={custID}>IP(last3days)</span>"
+                            };
+                        }                        
                     });
                 }              
             }
@@ -433,7 +449,7 @@
                                 AssociatedTypes = $"<span class='association-detect-detail-match' data-fromusername={userName} data-fromcustid={custID}>Match</span>"
                             };
                         }                        
-                    } );
+                    });
                 }
             }
 
@@ -444,17 +460,21 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetection)]
         public ActionResult GetDetectAssociationDetailIP(int custID1, int custID2)
         {
-            var result = Enumerable.Empty<GetAssociationDetectDetailIPViewModel>();
+            var result = new List<GetAssociationDetectDetailIPViewModel>();
 
-            var coupleSharedIP =_associationDetectionService.GetCoupleSharedIP(custID1, custID2);
+            var coupleSharedIPs =_associationDetectionService.GetCoupleSharedIP(custID1, custID2);
 
-            if (coupleSharedIP != null && coupleSharedIP.Any())
-            {
-                result = coupleSharedIP.Select(x => new GetAssociationDetectDetailIPViewModel
+            if (coupleSharedIPs != null && coupleSharedIPs.Any())
+            {               
+                foreach (var item in coupleSharedIPs)
                 {
-                    IP = x.IP
-                });
-            }           
+                    if (!string.IsNullOrEmpty(item.IP))
+                    {
+                        var arrIPs = item.IP.Split(',').AsEnumerable().Select(x => new GetAssociationDetectDetailIPViewModel { IP = x });
+                        result.AddRange(arrIPs);
+                    }
+                }
+            }
 
             return Json(new
             {
@@ -469,7 +489,7 @@
             var result = Enumerable.Empty<GetAssociationDetectDetailMatchViewModel>();
             var custIDList = $"{custID1},{custID2}";
 
-            var data = _associationDetectionService.GetDetectAssociationDetailMatch(custIDList);
+            var data = _associationDetectionService.GetDetectAssociationDetailMatch(custIDList).OrderByDescending(x=>x.TransDate);
 
             if (data != null && data.Any())
             {
