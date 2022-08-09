@@ -403,26 +403,18 @@
         /// <returns>A list of customer class's categories in JSON format</returns>
         [HttpGet]
         [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetCustomerClassCategoryAPI)]
-        public JsonResult<List<CategoryCustomerClassModel>> GetCustomerClassCategory()
+        public JsonResult<IEnumerable<CategoryCustomerClassModel>> GetCustomerClassCategory()
         {
             try
             {
-                var customerClassCategories = _categoryService.GetCustomerClassCategory().ToList();
-                customerClassCategories.Add(
-                    new CategoryCustomerClassModel
-                    {
-                        CategoryName = "VIP designated by licensee",
-                        CategoryNameCN = "承租公司指定为VIP玩家",
-                        CustomerClass = 99
-                    }
-                );
+                var customerClassCategories = _categoryService.GetCustomerClassCategory();
 
                 return Json(customerClassCategories);
             }
             catch (Exception ex)
             {
                 LogService.Error("Get Customer Class's Categories exception: " + ex.Message);
-                return Json(new List<CategoryCustomerClassModel>());
+                return Json(Enumerable.Empty<CategoryCustomerClassModel>());
             }
         }
 
