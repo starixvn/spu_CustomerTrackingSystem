@@ -303,26 +303,6 @@
 
                     throw;
                 }
-            },
-            () =>
-            {
-                try
-                {
-                    var custPolicies = _accountService.GetCustomerInfoPolicies(custId);
-
-                    if (custPolicies != null)
-                        custProfileEvidence.LicVIP = custPolicies.IsVIP ? "Yes" : "No";
-                }
-                catch (Exception ex)
-                {
-                    var logMessage = new LogMessage(ex.Message)
-                          .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                          .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                    LogService.Error(logMessage);
-
-                    throw;
-                }
             });
 
             return Json(custProfileEvidence, JsonRequestBehavior.AllowGet);
@@ -1420,7 +1400,7 @@
                 {
                     CreatedTimeString = x.CreatedTime.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                     SourceTypeName = x.SourceTypeName,
-                    CategoryName = x.CategoryName != null ? x.CategoryName : string.Empty,
+                    CategoryName = (x.SourceTypeID == (int)SourceTypeID.NoShow_Detail) ? "-" : ( x.CategoryName != null ? x.CategoryName : string.Empty),
                     CustomerClass = x.CustomerClass,
                     Reason = GetReason(x, roleID),
                     TurnOver = x.TurnOver,
@@ -1450,11 +1430,12 @@
         {
             var divReason = $"<div>";
             var spanReason = string.Empty;
-
             var winlost = Math.Round(cc.Winloss, 3);
 
-            if (cc.IsFromTVS && cc.SourceTypeID != (int)SourceTypeID.Classification_RescanRobot)
+            if (cc.SourceTypeID == (int)SourceTypeID.Classification_Rescan)
             {
+                spanReason += $"Win lost: {winlost}";
+            } else if (cc.IsFromTVS) {
                 if (cc.TVSRequestID > 0)
                     spanReason += $"Void by RequestID: { cc.TVSRequestID } ";
                 else
@@ -1471,9 +1452,9 @@
                 spanReason = MappingReasonBySourceTypeID(spanReason, cc, roleID);
 
             if (spanReason == string.Empty)
-                divReason += $"<div>{cc.SourceTypeName}</div>";
+                divReason += $"<div>{MappingAdditionalReason(cc)}</div>" + $"<div>{cc.SourceTypeName}</div>";
             else
-                divReason += $"<div>{spanReason}</div>";
+                divReason += $"<div>{MappingAdditionalReason(cc) + spanReason }</div>";
 
             return divReason;
         }
@@ -1537,37 +1518,30 @@
                 case (int)ClassificationSourceType.RobotUser61:
                 case (int)ClassificationSourceType.RobotUser163:
                 case (int)ClassificationSourceType.RobotUser164:
-                    if (cc.SourceTypeID != (int)SourceTypeID.Classification_RescanRobot)
+                    if (cc.IsFromTVS)
                     {
-                        if (cc.IsFromTVS)
-                        {
-                            if (cc.TVSRequestID > 0)
-                                spanReason += $"Void by RequestID: { cc.TVSRequestID } | Win lost: {winlost}";
-                            else
-                                spanReason += $"Void by BetID |  Win lost: {winlost}";
-                        }
-                        else if (cc.IsFromTW)
-                        {
-                            spanReason += $"Counter: {cc.RobotCounter} | Win lost: {winlost}";
-                        }
-                        else if (cc.IsFromAI)
-                        {
-                            spanReason += $"Win lost: {winlost}";
-                        }
-                        else if (cc.IsFromCTS)
-                        {
-                            spanReason += $"Robot is marked directly ";
+                        if (cc.TVSRequestID > 0)
+                            spanReason += $"Void by RequestID: { cc.TVSRequestID } | Win lost: {winlost}";
+                        else
+                            spanReason += $"Void by BetID |  Win lost: {winlost}";
+                    }
+                    else if (cc.IsFromTW)
+                    {
+                        spanReason += $"Counter: {cc.RobotCounter} | Win lost: {winlost}";
+                    }
+                    else if (cc.IsFromAI)
+                    {
+                        spanReason += $"Win lost: {winlost}";
+                    }
+                    else if (cc.IsFromCTS)
+                    {
+                        spanReason += $"Robot is marked directly ";
 
-                            spanReason += $" | Win lost: {winlost}";
-                            if (!string.IsNullOrEmpty(cc.Remark))
-                                spanReason += $" | {cc.Remark}";
-                        }
+                        spanReason += $" | Win lost: {winlost}";
+                        if (!string.IsNullOrEmpty(cc.Remark))
+                            spanReason += $" | {cc.Remark}";
                     }
-                    else
-                    {
-                        spanReason += $"Win lost: {winlost}";                      
-                    }
-                    
+
                     break;
                 
                 default:
@@ -1615,11 +1589,29 @@
                     }                    
 
                     break;
+                case (int)SourceTypeID.NoShow_Detail:
+                    spanReason += $"{cc.CategoryName}";
+                    break;
                 default:
                     break;
             }
 
             return spanReason;
+        }
+
+        private string MappingAdditionalReason(CustomerClassificationHistoryModel cc)
+        {
+            if(cc.SourceTypeID != (int)SourceTypeID.NoShow_Detail && !string.IsNullOrEmpty(cc.LicVIP))
+            {
+                return $"<div>{cc.LicVIP}</div>";
+            }
+
+            if (cc.SourceTypeID != (int)SourceTypeID.NoShow_Detail && !string.IsNullOrEmpty(cc.LicBA))
+            {
+                return $"<div>{cc.LicBA}</div>";
+            }
+
+            return string.Empty;
         }
 
         //[NapAuth(FunctionKey = FSFunctionKeys.AccountDetail, Policy = NAP.Core.Business.Constant.Policy.Host)]

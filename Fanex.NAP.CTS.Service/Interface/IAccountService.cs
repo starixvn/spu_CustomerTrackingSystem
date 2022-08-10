@@ -32,8 +32,6 @@
 
         CustomerInfoClassModel GetCustomerInfoClass(string custIdList);
 
-        CustomerInfoPoliciesModel GetCustomerInfoPolicies(long custId);
-
         CustomerInfoLoginStatsModel GetCustomerInfoLoginStats(long ctsCustId, DateTime fromDate, DateTime toDate);
 
         CustomerInfoDateModel GetCustProfileDates(long ctsCustId);

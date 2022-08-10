@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="ExcelConfig\Utilities.cs" />
     <Compile Include="Implement\AccountService.cs" />
+    <Compile Include="Implement\Api\LicenseeVIPBAService.cs" />
     <Compile Include="Implement\Api\ProblemCaseMonitorService.cs" />
     <Compile Include="Implement\AssociatedAccountService.cs" />
     <Compile Include="Implement\AssociatedGroupMonitorService.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="Implement\TransactionReportService.cs" />
     <Compile Include="Implement\TransactionService.cs" />
     <Compile Include="Implement\CTSUserService.cs" />
+    <Compile Include="Interface\Api\ILicenseeVIPBAService.cs" />
     <Compile Include="Interface\Api\IProblemCaseMonitorService.cs" />
     <Compile Include="Interface\CustomerClassification\IDataLogTrackingServices.cs" />
     <Compile Include="Interface\CustomerClassification\IProblemAccountClassificationService.cs" />

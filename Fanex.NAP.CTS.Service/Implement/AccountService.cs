@@ -131,19 +131,6 @@
             }
         }
 
-        public CustomerInfoPoliciesModel GetCustomerInfoPolicies(long custId)
-        {
-            var criteria = new CustomerProfilePoliciesInfoCriteria
-            {
-                CustID = custId
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.QueryEntity<CustomerInfoPoliciesModel>(criteria);
-            }
-        }
-
         public CustomerInfoLoginStatsModel GetCustomerInfoLoginStats(long ctsCustId, DateTime fromDate, DateTime toDate)
         {
             var criteria = new GetCustomerInfoLoginStatsCriteria

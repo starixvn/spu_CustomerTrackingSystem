@@ -59,6 +59,24 @@
                 });
             }
 
+            if (content != null && content.LicenseeVIPBAModel != null && content.LicenseeVIPBAModel.Data != null)
+            {
+                logInputData.Add(new LogInputDataModel
+                {
+                    CustId = 0,
+                    InputValue = new { content.LicenseeVIPBAModel.Data.CreatedBy, FromSystem = Enum.GetName(typeof(FromSystem), content.LicenseeVIPBAModel.FromSystem), content.LicenseeVIPBAModel.Data.CustIDs }.ToString()
+                });
+            }
+
+            if (content != null && content.RemoveLicenseeBABySiteModel != null && content.RemoveLicenseeBABySiteModel.Data != null)
+            {
+                logInputData.Add(new LogInputDataModel
+                {
+                    CustId = 0,
+                    InputValue = new { content.RemoveLicenseeBABySiteModel.Data.CreatedBy, FromSystem = Enum.GetName(typeof(FromSystem), content.RemoveLicenseeBABySiteModel.FromSystem), content.RemoveLicenseeBABySiteModel.Data.SiteName }.ToString()
+                });
+            }
+
             return logInputData;
         }
 

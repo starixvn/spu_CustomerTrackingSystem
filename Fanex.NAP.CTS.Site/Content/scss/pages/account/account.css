@@ -964,7 +964,8 @@
         line-height: 1;
         cursor: inherit;
         top: .3rem;
-        margin-left: 0; }
+        margin-left: 0;
+        white-space: nowrap; }
       .content-info .header-info .header-username:after {
         content: " ";
         position: absolute;

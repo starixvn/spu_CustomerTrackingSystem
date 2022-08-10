@@ -70,6 +70,11 @@
     <Compile Include="AssociatedGroupMonitor\GetAssociatedGroupMonitorCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\RemoveAssociatedGroupMonitorCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\ValidateAssociatedAccountCriteria.cs" />
+    <Compile Include="Api\LicenseeVIPBA\CustomerInfoBySiteNameGetCriteria.cs" />
+    <Compile Include="Api\LicenseeVIPBA\LicenseeBAInsertCriteria.cs" />
+    <Compile Include="Api\LicenseeVIPBA\LicenseeBARemoveCriteria.cs" />
+    <Compile Include="Api\LicenseeVIPBA\LicenseeVIPRemoveCriteria.cs" />
+    <Compile Include="Api\LicenseeVIPBA\LicenseeVIPInsertCriteria.cs" />
     <Compile Include="CustomerClassification\GetLastestCCDangerLevelCriteria.cs" />
     <Compile Include="CustomerClassification\InputErrorLogInsertCriteria.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\CheckNewPAAssociationCustomerForRollbackCriteria.cs" />
@@ -165,7 +170,6 @@
     <Compile Include="Account\CustomerFlagInfoByCTSCustIdCriteria.cs" />
     <Compile Include="Account\CustomerLastTicketDateCriteria.cs" />
     <Compile Include="Account\CustomerProfileFraudInfoCriteria.cs" />
-    <Compile Include="Account\CustomerProfilePoliciesInfoCriteria.cs" />
     <Compile Include="Account\CustomerRobotUserStatusCriteria.cs" />
     <Compile Include="Account\CustomerInfoByCTSCustIdCriteria.cs" />
     <Compile Include="Account\ChainToEvidence\GetFlaggedEvidenceCriteria.cs" />

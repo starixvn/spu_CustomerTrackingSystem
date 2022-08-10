@@ -28,7 +28,6 @@
         spanFlagEvidence: $('#spanFlagEvidence'),
         spanLblAffectedEvidence: $('#spanLblAffectedEvidence'),
         spanAffectedEvidence: $('#spanAffectedEvidence'),        
-        spanLicVIP: $('#spanLicVIP'),       
         spanDesktopUsage: $('#spanDesktopUsage'),
         spanMobileUsage: $('#spanMobileUsage'),
         spanOthersUsage: $('#spanOthersUsage'),
@@ -209,7 +208,6 @@
             success: function (response) {
                 if (response !== null) {
                     domElements.spanClass.html(response.Class);
-                    domElements.spanLicVIP.html(response.LicVIP);
                     domElements.spanFlagEvidence.html(response.FlagEvidenceCodes);
                     domElements.spanAffectedEvidence.html(response.AffectedEvidenceCodes); 
 

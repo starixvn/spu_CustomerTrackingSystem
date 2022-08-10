@@ -18,6 +18,8 @@
 
         public string UserName2 { get; set; }
 
+        public string UserNameSuffix { get; set; }
+
         public int? CustStatusID { get; set; }
 
         public string StatusName { get; set; }
@@ -60,6 +62,10 @@
 
         public bool IsInternal { get; set; }
 
+        public string IsLicenseeVIP { get; set; }
+        
+        public string IsLicenseeBA { get; set; }
+
         public CustomerGeneralStatusViewModel BindingDangerous(CustomerInfoByCustIdsModel custDangerousModel)
         {
             if (custDangerousModel != null)
@@ -91,6 +97,9 @@
                 this.StatusName = string.IsNullOrEmpty(customerInfoByCTSCustIdModel.CustStatusName) ? "N/A" : customerInfoByCTSCustIdModel.CustStatusName;
                 this.IsLicensee = customerInfoByCTSCustIdModel.IsLicensee;
                 this.IsInternal = customerInfoByCTSCustIdModel.IsInternal;
+                this.UserNameSuffix = customerInfoByCTSCustIdModel.IsLicensee ? (customerInfoByCTSCustIdModel.IsLicenseeVIP ? " (Lic VIP)" : (customerInfoByCTSCustIdModel.IsLicenseeBA ? " (Lic BA)" : string.Empty)) : string.Empty;
+                this.IsLicenseeVIP = customerInfoByCTSCustIdModel.IsLicensee ? (customerInfoByCTSCustIdModel.IsLicenseeVIP ? "Yes" : "No") : "-";
+                this.IsLicenseeBA = customerInfoByCTSCustIdModel.IsLicensee ? (customerInfoByCTSCustIdModel.IsLicenseeBA ? "Yes" : "No") : "-";
             }
 
             return this;

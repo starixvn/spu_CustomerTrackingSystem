@@ -11,24 +11,18 @@
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.API;
     using Fanex.NAP.CTS.Model.API.ProblemCaseMonitor;
-    using Fanex.NAP.CTS.Model.API.UpdateCategoryWhenPAUpdated;
     using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
-    using Fanex.NAP.CTS.Model.ImportEvidences;
-    using Fanex.NAP.CTS.Model.LogInputData;
     using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
     using Fanex.NAP.CTS.Model.ProblemAccountMonitor.TWProblemAccount;
-    using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Model.Subscriber;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Portal.API.ActionFilter;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.Service.Implement;
-    using Fanex.NAP.CTS.Service.Implement.Api;
     using Fanex.NAP.CTS.Service.Interface;
-    using Fanex.NAP.CTS.Service.Interface.Api;
     using Fanex.NAP.CTS.ViewModel.API.ProblemCaseMonitor;
     using Fanex.NAP.CTS.ViewModel.SpecialCustomerClass;
     using Fanex.NAP.SPU.Graph.Core;
@@ -37,7 +31,6 @@
     using System.Collections.Generic;
     using System.Configuration;
     using System.Linq;
-    using System.Threading.Tasks;
     using System.Web.Http;
     using System.Web.Http.Results;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
@@ -57,7 +50,7 @@
         private readonly ICustomerClassificationService _custClassificationService;
         private readonly ISubscriberService _subscriberService;
         private readonly IProblemCaseMonitorService _problemCaseMonitorService;
-        private readonly IProblemAccountManagementService _problemAccountManagementService;        
+        private readonly IProblemAccountManagementService _problemAccountManagementService;
         private readonly ILogInputDataService logInputDataService;
         private readonly IAntiFraudCenterService _antiFraudCenterService;
         private readonly ISpecialCustomerClassService _customerClassService;
@@ -83,92 +76,6 @@
             _problemAccountManagementService = new ProblemAccountManagementService();
             _paClassificationService = new ProblemAccountClassificationService();
         }
-
-        /// <summary>
-        /// Place evidence for multiple customer
-        /// </summary>
-        /// <param name="custIds">List custId in string format, separated by comma</param>
-        /// <param name="evidenceId">Evidence Id in CTS system</param>
-        /// <returns>true: success; false: failed</returns>
-        //[HttpPost]
-        //[TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.PlaceEvidenceForMultipleCustAPI)]
-        //public bool PlaceEvidenceMultipleByCustId(string custIds, int evidenceId)
-        //{
-        //    bool returnedResult = false;
-        //    if (!string.IsNullOrEmpty(custIds))
-        //    {
-        //        try
-        //        {
-        //            logInputDataService.LogInputData(new LogInputViewModel
-        //            {
-        //                PlaceEvidences = new PlaceEvidencesViewModel()
-        //                {
-        //                    CustIds = custIds,
-        //                    EvidenceId = evidenceId
-        //                }
-        //            }, FunctionId.PlaceEvidenceForMultiCustAPI);
-
-        //            int userId = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);
-
-        //            var result = _custEvidenceService.AddCustEvidenceMultipleByCustId(custIds, evidenceId, userId);
-
-        //            if (string.IsNullOrEmpty(result.ErrorMessage) && result.Eivdences != null && result.Eivdences.Any())
-        //            {
-        //                var syncCustIds = Enumerable.Empty<long>();
-
-        //                var paLosingClassification = _rescanClassificationService.GetProblemAccountLosing(result.Eivdences, FunctionId.PlaceSingleEvidence);
-
-        //                var custEvidenceJson = JsonConvert.SerializeObject(paLosingClassification);
-
-        //                var syncResult = _accountService.SyncCustEvidenceToCategory(custEvidenceJson, false, out syncCustIds);
-
-        //                Parallel.Invoke(() =>
-        //                {
-        //                    _custEvidenceService.UpdateBetLimitOfFlaggedCustomer(custIds);
-        //                },
-        //                () =>
-        //                {
-        //                    if (syncResult.ErrorCode == 0 && syncCustIds != null && syncCustIds.Any())
-        //                    {
-        //                        _custClassificationService.PushDataToExternal(syncCustIds, new PushDataToExternalModel
-        //                        {
-        //                            ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
-        //                            IsPushCCToSoon88 = true,
-        //                            IsUpdateDangerToMainDB = true,
-        //                            DangerLevelType = DangerLevel.ABI
-        //                        });
-
-        //                       _accountService.CheckNewPAAssociationCustomerForRollback(syncResult.CustInfo);
-        //                    }
-        //                },
-        //                () =>
-        //                {
-        //                    if (syncResult.ErrorCode == 0 && syncCustIds != null && syncCustIds.Any())
-        //                    {
-        //                        _antiFraudCenterService.InsertAFCAccounts(syncCustIds, FromFlow.CTSAPI);
-        //                    }
-        //                });
-        //            }
-
-        //            if (!string.IsNullOrEmpty(result.ErrorMessage))
-        //            {
-        //                LogService.Error($"CTS Portal API - Add Customers Evidences exception: {result.ErrorMessage} - List custIds: {custIds} - EvidenceId: {evidenceId}");
-        //            }
-
-        //            returnedResult = true;
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            var logMessage = new LogMessage(ex.Message)
-        //                    .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-        //                    .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-        //            LogService.Error($"CTS Portal API - PlaceEvidence exception: {logMessage} - CustIds: {custIds} - EvidenceId: {evidenceId}");
-        //        }
-        //    }
-
-        //    return returnedResult;
-        //}
 
         /// <summary>
         /// Get flagged customers by level
@@ -224,80 +131,6 @@
         }
 
         /// <summary>
-        /// Add evidences to customers
-        /// </summary>
-        /// <param name="customerEvidenceList"></param>
-        /// <returns></returns>
-        //[HttpPost]
-        //[TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.AddCustomersEvidencesAPI)]
-        //public bool AddCustomersEvidences(PlaceMultiCustomerEvidence customerEvidenceList)
-        //{
-        //    try
-        //    {
-        //        logInputDataService.LogInputData(new LogInputViewModel { PlaceMultiEvidences = customerEvidenceList }, FunctionId.PlaceMultiEvidencesForMultiCustAPI);
-
-        //        int userId = Convert.ToInt32(ConfigurationManager.AppSettings["StarixITUserId"]);
-
-        //        var result = _evidenceService.AddCustomersEvidences(customerEvidenceList, userId);
-
-        //        if (string.IsNullOrEmpty(result.ErrorMessage) && result.Eivdences != null && result.Eivdences.Any())
-        //        {
-        //            var syncCustIds = Enumerable.Empty<long>();
-
-        //            var paLosingClassification = _rescanClassificationService.GetProblemAccountLosing(result.Eivdences, FunctionId.PlaceSingleEvidence);
-
-        //            var custEvidenceJson = JsonConvert.SerializeObject(paLosingClassification);
-
-        //            var syncResult = _accountService.SyncCustEvidenceToCategory(custEvidenceJson, false, out syncCustIds);
-
-        //            Parallel.Invoke(() =>
-        //            {
-        //                _custEvidenceService.UpdateBetLimitOfFlaggedCustomer(customerEvidenceList.CustIdList);
-        //            },
-        //            () =>
-        //            {
-        //                if (syncResult.ErrorCode == 0 && syncCustIds != null && syncCustIds.Any())
-        //                {
-        //                    _custClassificationService.PushDataToExternal(syncCustIds, new PushDataToExternalModel
-        //                    {
-        //                        ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize,
-        //                        IsPushCCToSoon88 = true,
-        //                        IsUpdateDangerToMainDB = true,
-        //                        DangerLevelType = DangerLevel.ABI
-        //                    });
-
-        //                    _accountService.CheckNewPAAssociationCustomerForRollback(syncResult.CustInfo);
-        //                }
-        //            },
-        //            () =>
-        //            {
-        //                if (syncResult.ErrorCode == 0 && syncCustIds != null && syncCustIds.Any())
-        //                {
-        //                    _antiFraudCenterService.InsertAFCAccounts(syncCustIds, FromFlow.CTSAPI);
-        //                }
-        //            });
-        //        }
-
-        //        if (!string.IsNullOrEmpty(result.ErrorMessage))
-        //        {
-        //            LogService.Error($"CTS Portal API - Add Customers Evidences exception: {result.ErrorMessage} - List custIds: {customerEvidenceList.CustIdList} - List EvidenceCode: {customerEvidenceList.EvidenceCodeList}");
-        //            return false;
-        //        }
-
-        //        return true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        var logMessage = new LogMessage(ex.Message)
-        //            .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-        //            .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-        //        LogService.Error($"CTS Portal API - Add Customers Evidences exception: {logMessage} - Data: {JsonConvert.SerializeObject(customerEvidenceList)}");
-        //        return false;
-        //    }
-        //}
-
-        /// <summary>
         /// Get Association data from MySQL
         /// </summary>
         /// <param name="custId"></param>
@@ -337,7 +170,7 @@
         [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.AddSystemFormulaBetAccountAPI)]
         public JsonResult<InsertNAPProblemAccountResult> AddSystemFormulaBetAccount(TWProblemAccountParams dataParam)
         {
-            var isWriteLogInfo = ConfigSettings.IsWriteLogInfo;            
+            var isWriteLogInfo = ConfigSettings.IsWriteLogInfo;
             var result = string.Empty;
             var orgCustomerList = dataParam.CustomerList.Split(',').Select(u => new TWProblemAccountModel { Username = u });
             if (orgCustomerList.Count() <= 100)
@@ -392,14 +225,14 @@
                     {
                         var pas = markPAList.Select(x => new InsertProblemAccountModel
                         {
-                            CustID = x.CustID,                          
-                            ReasonID = dataParam.ReasonId,                            
+                            CustID = x.CustID,
+                            ReasonID = dataParam.ReasonId,
                             Remark = dataParam.Comment,
                             IsDirectPA = true,
                             IsFromTW = true,
                             CreatedBy = dataParam.UserId
                         });
-                        
+
                         var insertResult = _paClassificationService.InsertProblemAccountPackage(pas, InsertPA_ByType.Reason, "InsertPA From TW-API", FromFlow.CTSAPI, true);
 
                         if (insertResult.ErrorCode == 0)
@@ -564,184 +397,24 @@
             return null;
         }
 
-        #region Problem Account
-
-        ///// <summary>
-        /////  Update Removed Problem Account into CTS
-        ///// </summary>
-        ///// <param name="paras">List custId in string format, separated by comma</param>
-        ///// <returns>true: success; false: failed</returns>
-        //[HttpPost]
-        //[TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.RemoveProblemAccountsAPI)]
-        //public ApiResultModel RemoveProblemAccounts([FromBody] RemovePANapParamsModel paras)
-        //{
-        //    try
-        //    {
-        //        var isWriteLogInfo = ConfigSettings.IsWriteLogInfo;
-
-        //        if (isWriteLogInfo)
-        //            LogService.Info($"CTS Portal API - RemoveProblemAccounts endpoint - start {paras.CustIds}");
-
-        //        var output = _problemAccountMonitorService.UpdateRemovedProblemAccountToCTS(paras.CustIds, paras.UserId);
-
-        //        if (string.IsNullOrEmpty(output.ErrorMessage) && output.CustIds != null && output.CustIds.Any())
-        //        {
-        //            if (isWriteLogInfo)
-        //                LogService.Info($"CTS Portal API - UpdateRemovedProblemAccountToCTS successful custIds:  {JsonConvert.SerializeObject(output.CustIds)}");
-
-        //            var custEviRemoved = _problemAccountManagementService.RemoveProblemAccountEvidence(paras.CustIds);
-
-        //            if (custEviRemoved != null && custEviRemoved.Any())
-        //            {
-        //                var custEviRemovedIds = string.Join(",", custEviRemoved);
-        //                _custEvidenceService.UpdateBetLimitOfUnflaggedCustomer(custEviRemovedIds);
-        //            }
-
-        //            _rescanClassificationService.RescanCustomerClassify(new RescanCustClassificationModel
-        //            {
-        //                CustIds = output.CustIds,
-        //                IsCheckPAFromNAP = false,
-        //                IsPushCCToSoon88 = true,
-        //                FunctionId = FunctionId.RemovePAAPI,
-        //                IsUpdateDangerToMainDB = true,
-        //                DangerLevelType = DangerLevel.ABI
-        //            });
-        //        }
-        //        else if (!string.IsNullOrEmpty(output.ErrorMessage))
-        //        {
-        //            LogService.Error($"CTS Portal API - Remove Problem Account API - Rescan Problem Account failed: {output.ErrorMessage} - List custIds: {paras.CustIds}.");
-        //            return new ApiResultModel { ErrorMessage = string.Empty, StatusMessage = "fail" };
-        //        }
-
-        //        if (isWriteLogInfo)
-        //            LogService.Info($"CTS Portal API - RemoveProblemAccounts endpoint - end");
-
-        //        return new ApiResultModel
-        //        {
-        //            ErrorMessage = string.Empty,
-        //            StatusMessage = "success"
-        //        };
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        LogService.Error($"CTS Portal API - RemoveProblemAccounts endpoint - Exception: {ex.Message} - List custIds: {paras.CustIds}.", ex);
-
-        //        return new ApiResultModel
-        //        {
-        //            ErrorMessage = ex.Message,
-        //            StatusMessage = "fail"
-        //        };
-        //    }
-        //}
-
-        ///// <summary>
-        ///// Update Category To CTS When PA Updated
-        ///// </summary>
-        ///// <param name="paras"></param>
-        ///// <returns></returns>
-        //[HttpPost]
-        //[TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.UpdateCategoryToCTSWhenPAUpdatedAPI)]
-        //public ApiResultModel UpdateCategoryToCTSWhenPAUpdated([FromBody] UpdateCategoryParamsModel paras)
-        //{
-        //    var result = new ApiResultModel
-        //    {
-        //        ErrorMessage = string.Empty,
-        //        StatusMessage = "success"
-        //    };
-
-        //    try
-        //    {
-        //        if (paras != null && paras.CustInfos != null && paras.CustInfos.Any())
-        //        {
-        //            var custIds = paras.CustInfos.Select(c => c.CustID)?.Distinct();
-
-        //            var probAccountLosing = _rescanClassificationService.GetProblemAccountLosing(custIds, FunctionId.UpdateCategory);
-
-        //            var updateCategoryResult = _updateCategoryService.UpdateCategoryToCTSWhenPAUpdated(paras, probAccountLosing);
-
-        //            if (updateCategoryResult != null && updateCategoryResult.Any())
-        //            {
-        //                var assCustForRollbacks = updateCategoryResult.Select(x => new CheckPACustomerAssociationForRollbackModel
-        //                {
-        //                    CTSCustID = x.CTSCustID,
-        //                    CustID = x.CustID
-        //                });
-
-        //                var listCustIdToSyncCC = assCustForRollbacks.Select(x => (long)x.CustID);
-
-        //                var options = new PushDataToExternalModel 
-        //                { 
-        //                    ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize, 
-        //                    IsPushCCToSoon88 = true,
-        //                    IsUpdateDangerToMainDB = true,
-        //                    DangerLevelType = DangerLevel.ABI
-        //                };
-
-        //                var custEviUpdated = _problemAccountManagementService.UpdateProblemAccountEvidence(paras);
-
-        //                if (custEviUpdated != null && custEviUpdated.Any())
-        //                {
-        //                    var custEviUpdatedIds = string.Join(",", custEviUpdated);
-        //                    _custEvidenceService.UpdateBetLimitOfFlaggedCustomer(custEviUpdatedIds);
-        //                }
-
-        //                Parallel.Invoke(() =>
-        //                {
-        //                    _rescanClassificationService.CheckNewPAAssociationCustomerForRollback(assCustForRollbacks);
-        //                },
-        //                () =>
-        //                {
-        //                    _custClassificationService.PushDataToExternal(listCustIdToSyncCC, options);
-        //                },
-        //                () =>
-        //                {
-        //                    _antiFraudCenterService.InsertAFCAccounts(listCustIdToSyncCC, FromFlow.CTSAPI);
-        //                });
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        LogService.Error($"CTS Portal API - UpdateCategoryToCTSWhenPAUpdated endpoint - Exception: {ex.Message} with params {JsonConvert.SerializeObject(paras)}", ex);
-
-        //        result = new ApiResultModel
-        //        {
-        //            ErrorMessage = ex.Message,
-        //            StatusMessage = "fail"
-        //        };
-        //    }
-
-        //    return result;
-        //}
-
-        #endregion
-
         /// <summary>
         /// Get customer class's categories
         /// </summary>
         /// <returns>A list of customer class's categories in JSON format</returns>
         [HttpGet]
         [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetCustomerClassCategoryAPI)]
-        public JsonResult<List<CategoryCustomerClassModel>> GetCustomerClassCategory()
+        public JsonResult<IEnumerable<CategoryCustomerClassModel>> GetCustomerClassCategory()
         {
             try
             {
-                var customerClassCategories = _categoryService.GetCustomerClassCategory().ToList();
-                customerClassCategories.Add(
-                    new CategoryCustomerClassModel
-                    {
-                        CategoryName = "VIP designated by licensee",
-                        CategoryNameCN = "承租公司指定为VIP玩家",
-                        CustomerClass = 99
-                    }
-                );
+                var customerClassCategories = _categoryService.GetCustomerClassCategory();
 
                 return Json(customerClassCategories);
             }
             catch (Exception ex)
             {
                 LogService.Error("Get Customer Class's Categories exception: " + ex.Message);
-                return Json(new List<CategoryCustomerClassModel>());
+                return Json(Enumerable.Empty<CategoryCustomerClassModel>());
             }
         }
 
@@ -970,8 +643,13 @@
 
                         foreach (var custs in custIdsChunk)
                         {
-                            // Update CC in table custinfo to MainDB
-                            _custClassificationService.RetryPushCCToMainDB(custs, 2);
+                            _custClassificationService.PushDataToExternal(custs.Select(c => c.CustId).Distinct(), new PushDataToExternalModel
+                            {
+                                IsUpdateDangerToMainDB = false,
+                                IsSyncAFC = false,
+                                IsPushCCToSoon88 = false,
+                                ExternalBatchSize = ConfigSettings.PushCCToExternalChunkSize
+                            });
                         }
                     }
                 }

@@ -354,6 +354,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
                 cursor: inherit;
                 top: .3rem;
                 margin-left: 0;
+                white-space: nowrap;
             }
 
             &:after {
@@ -458,7 +459,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
                         cursor: not-allowed;
                     }
                 }
-               
+
                 .btn-add-pa:hover:before,
                 .btn-add-pa:hover:after {
                     background: #fff;

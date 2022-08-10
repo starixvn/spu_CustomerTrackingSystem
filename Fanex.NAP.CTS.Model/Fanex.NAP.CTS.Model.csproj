@@ -115,6 +115,7 @@
       <HintPath>..\packages\SPSRemoting.1.0.0\lib\net40\SPSRemoting.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
@@ -168,7 +169,6 @@
     <Compile Include="Account\CustomerInfo\CustomerInfoDateModel.cs" />
     <Compile Include="Account\CustomerInfo\CustomerInfoEvidenceModel.cs" />
     <Compile Include="Account\CustomerInfo\CustomerInfoLoginStatsModel.cs" />
-    <Compile Include="Account\CustomerInfo\CustomerInfoPoliciesModel.cs" />
     <Compile Include="Account\RobotBetting\RobotBettingTicketDetailModel.cs" />
     <Compile Include="Account\RobotBetting\RobotDateModel.cs" />
     <Compile Include="Account\RobotBetting\RobotUserDetailModel.cs" />
@@ -179,6 +179,12 @@
     <Compile Include="API\CustomerClassModel.cs" />
     <Compile Include="API\CustomerClassification.cs" />
     <Compile Include="API\ForceSpecialCustomerClassModel.cs" />
+    <Compile Include="API\LicenseeVIPBA\CustInfoBySiteNameModel.cs" />
+    <Compile Include="API\LicenseeVIPBA\LicenseeVIPBAModel.cs" />
+    <Compile Include="API\LicenseeVIPBA\RemoveLicenseeBABySiteLogDataModel.cs" />
+    <Compile Include="API\LicenseeVIPBA\RemoveLicenseeBABySiteInputModel.cs" />
+    <Compile Include="API\LicenseeVIPBA\LicenseeVIPBAInputModel.cs" />
+    <Compile Include="API\LicenseeVIPBA\LicenseeVIPBALogDataModel.cs" />
     <Compile Include="API\ProblemCaseMonitor\ProblemCaseMonitorModel.cs" />
     <Compile Include="API\UpdateCategoryWhenPAUpdated\CustInfoModel.cs" />
     <Compile Include="API\UpdateCategoryWhenPAUpdated\UpdatePALosingInfoModel.cs" />
@@ -315,7 +321,6 @@
     <Compile Include="Action.cs" />
     <Compile Include="Association\AssociatedByAccountModel.cs" />
     <Compile Include="DTO\Currency.cs" />
-    <Compile Include="DTO\PlaceMultiCustomerEvidence.cs" />
     <Compile Include="DTO\CustomerList.cs" />
     <Compile Include="DTO\CustomerSubcriber.cs" />
     <Compile Include="DTO\CustomerTotalAssociation.cs" />
