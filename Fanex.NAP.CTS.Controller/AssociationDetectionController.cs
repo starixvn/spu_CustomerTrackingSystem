@@ -240,16 +240,32 @@
             {
                 try
                 {
-                    var userNameList = string.Join(",", model.UserNames.Split(',').Distinct());
+                    var userNames = model.UserNames.Split(',').Distinct();
+                    var userNameList = string.Join(",", userNames);
+
+                    var orgUserList = userNames.Select(x => new ValidateUserNameModel
+                    {
+                        UserName = x
+                    });
 
                     var validatedList = _commonService.ValidateUsernames(userNameList, out isException);
 
-                    var custIDs = string.Join(",", validatedList.Select(x => x.CustID));
-                    var ctsCustIDs = string.Join(",", validatedList.Select(x => x.CTSCustID));
+                    orgUserList = orgUserList.Join(validatedList, c1 => c1.UserName, c2 => c2.UserName,
+                        (c1, c2) => new ValidateUserNameModel
+                        {
+                            UserName = c1.UserName,
+                            CustID = c2.CustID,
+                            CTSCustID = c2.CTSCustID,
+                            IsInternal = c2.IsInternal
+                        });
 
-                    var assBySharedIP = model.IsIPLast3Days ? DetectAssociationByIP(validatedList.Where(x => !x.IsInternal), custIDs) : Enumerable.Empty<SharedIPMatchesInfoModel>();
+                    var custIDs = string.Join(",", orgUserList.Select(x => x.CustID));
+
+                    var ctsCustIDs = string.Join(",", orgUserList.Select(x => x.CTSCustID));
+
+                    var assBySharedIP = model.IsIPLast3Days ? DetectAssociationByIP(orgUserList.Where(x => !x.IsInternal), custIDs) : Enumerable.Empty<SharedIPMatchesInfoModel>();
                     
-                    var assBySharedMatches = model.Is3MatchesLast7Days ? DetectAssociationBySharedMatches(validatedList.Where(x => !x.IsInternal), custIDs) : Enumerable.Empty<SharedIPMatchesInfoModel>();
+                    var assBySharedMatches = model.Is3MatchesLast7Days ? DetectAssociationBySharedMatches(orgUserList.Where(x => !x.IsInternal), custIDs) : Enumerable.Empty<SharedIPMatchesInfoModel>();
 
                     var assByPrimary = model.IsBPManuallyDeviceIP ? _associationDetectionService.DetectAssociationByPrimary(ctsCustIDs) : Enumerable.Empty<DetectAssociationByPrimaryModel>();
 
@@ -363,13 +379,11 @@
             var data = _associationDetectionService.GetAssociationDetectionDetail(model);
             
             if (data != null && data.Any())
-            {
-                var groups = data.GroupBy(p => p.ToCustID, (key, g) => new { CustID = key, Items = g.Select(x => x) });
-
-                foreach (var group in groups)
+            {                
+                foreach (var item in data)
                 {
-                    result.Add(new GetAssociationDetectDetailViewModel(group.Items));
-                }                
+                    result.Add(new GetAssociationDetectDetailViewModel(item));
+                }                          
             }
             
             return Json(new
@@ -489,11 +503,11 @@
             var result = Enumerable.Empty<GetAssociationDetectDetailMatchViewModel>();
             var custIDList = $"{custID1},{custID2}";
 
-            var data = _associationDetectionService.GetDetectAssociationDetailMatch(custIDList).OrderByDescending(x=>x.TransDate);
+            var tickets = _associationDetectionService.GetDetectAssociationDetailMatch(custIDList).OrderByDescending(x=>x.TransDate);
 
-            if (data != null && data.Any())
+            if (tickets != null && tickets.Any())
             {
-                result = data.Select(x => new GetAssociationDetectDetailMatchViewModel(x));
+                result = tickets.Select(x => { return new GetAssociationDetectDetailMatchViewModel(x); });
             }
             
             return Json(new

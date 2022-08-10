@@ -3,31 +3,33 @@
     using Fanex.NAP.CTS.Core.BaseClasses;
     using Fanex.NAP.CTS.Model.AssociationDetection;
     using Fanex.NAP.CTS.Resource.Consts;
+    using System;
 
+    [Serializable]
     public class GetAssociationDetectDetailMatchViewModel
     {
         public GetAssociationDetectDetailMatchViewModel() { }
 
-        public GetAssociationDetectDetailMatchViewModel(GetAssociationDetectDetailMatchModel match)
+        public GetAssociationDetectDetailMatchViewModel(GetAssociationDetectDetailMatchModel ticket)
         {       
-            this.LeagueID = match.LeagueID;
-            this.LeagueName = CachedRef.GetLeagueName(match.LeagueID);
-            this.MatchID = match.MatchID;
-            this.MatchName = CachedRef.GetTeamName(match.HomeID) + " vs " + CachedRef.GetTeamName(match.AwayID);            
-            this.HomeID = match.HomeID;
-            this.AwayID = match.AwayID;
-            this.EventDate = match.EventDate.ToString(Consts.FormatDateToString_MMMddyyyy);
-            this.UserName = match.UserName;
-            this.CustID = match.CustID;
-            this.TransDate = match.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss);
-            this.TransID = match.TransID;
-            this.BetTypeID = match.BetType;
-            this.BetTypeName = CachedRef.GetBettypeName(match.BetType);
-            this.BetTeam = match.BetTeam;
-            this.Stake = match.Stake;
-            this.Odd = match.Odds;
-            this.LiveScore = match.LiveHomeScore + " - " + match.LiveAwayScore;
-            this.Result = match.status;
+            this.LeagueID = ticket.LeagueID;
+            this.LeagueName = CachedRef.GetLeagueName(ticket.LeagueID);
+            this.MatchID = ticket.MatchID;
+            this.MatchName = CachedRef.GetTeamName(ticket.HomeID) + " vs " + CachedRef.GetTeamName(ticket.AwayID);            
+            this.HomeID = ticket.HomeID;
+            this.AwayID = ticket.AwayID;
+            this.EventDate = ticket.EventDate.ToString(Consts.FormatDateToString_MMMddyyyy);
+            this.UserName = ticket.UserName;
+            this.CustID = ticket.CustID;
+            this.TransDate = ticket.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss);
+            this.TransID = ticket.TransID.ToString();
+            this.BetTypeID = ticket.BetType;
+            this.BetTypeName = CachedRef.GetBettypeName(ticket.BetType);
+            this.BetTeam = ticket.BetTeam;
+            this.Stake = ticket.Stake;
+            this.Odd = ticket.Odds;
+            this.LiveScore = ticket.LiveHomeScore + " - " + ticket.LiveAwayScore;
+            this.Result = ticket.TicketStatus;
         }
 
         public int LeagueID { get; set; }
@@ -50,7 +52,7 @@
 
         public string TransDate { get; set; }
 
-        public long TransID { get; set; }
+        public string TransID { get; set; }
 
         public int BetTypeID { get; set; }
 

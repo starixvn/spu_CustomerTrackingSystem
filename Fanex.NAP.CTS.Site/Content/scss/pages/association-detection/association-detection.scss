@@ -199,7 +199,32 @@ body {
     text-decoration: underline;
 }
 
+.table-association-detection-detail,
+.table-association-detection-detail-ip,
+.table-association-detection-detail-agent,
 .table-association-detection-detail-Match {
+    .loading {
+        position: relative;
+
+        &:after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 75%;
+            border-radius: 50%;
+            width: 2.4rem;
+            height: 2.4rem;
+            border: 0.25rem solid rgba(57, 110, 248, 0.2);
+            border-top-color: rgba(57, 110, 248, 1);
+            -webkit-animation: spin 1s infinite linear;
+            animation: spin 1s infinite linear;
+        }
+
+        tr {
+            opacity: .3;
+        }
+    }
+
     .match {
         background: #70809E !important;
         cursor: pointer;

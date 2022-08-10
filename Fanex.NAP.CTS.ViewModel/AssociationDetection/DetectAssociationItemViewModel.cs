@@ -19,7 +19,7 @@
             this.Evidences = data.Evidence;
             this.AssociatedTypes = data.AssociationType;
             this.CustomerCategory = data.CustomerCategory;
-            this.CustomerClass = data.CustomerClass;
+            this.CustomerClass = data.CustomerClass > 0 ? data.CustomerClass.ToString() : null;
             this.IsProblemAccount = data.ParentIDs != null && data.ParentIDs.Split(',').Any(y => y == "50");
             this.IsPAProbation = data.IsPAProbation;
         }
@@ -46,7 +46,7 @@
 
         public string CustomerCategory { get; set; }
 
-        public int CustomerClass { get; set; }
+        public string CustomerClass { get; set; }
 
         public bool IsProblemAccount { get; set; }
 

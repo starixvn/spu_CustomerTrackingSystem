@@ -4,7 +4,7 @@
     let tableAssociationDetectDetailIP = null;
     let tableAssociationDetectDetailMatch = null;
     let tableAssociationDetectDetailAgent = null;
-    let maxTags = 1001;
+    let maxTags = 5001;    
     let domElements = {
         hdIsHostPermission: $('#hdIsHostPermission'),                   
         btnResultValidationClose: $('#btnResultValidationClose'),  
@@ -185,12 +185,14 @@
             });
         }
 
+        domElements.tblAssociationDetectDetail.DataTable().clear();
+
         GetAssociationDetectDetail(fromObj.UserName, fromObj.CustID, fromObj.CTSCustID, fromObj.CTSCustIDList);
 
         domElements.divAssociationDetectDetail.dialog({
             modal: true,
             width: '500px',
-            title: "ASSOCIATION DETAIL: " + fromObj.UserName,
+            title: "ASSOCIATION DETAILS: " + fromObj.UserName,
             resizable: false,
             draggable: true,
             close: function () {
@@ -199,14 +201,14 @@
                 $('.ui-dialog .ui-dialog-content').css('padding-top', '27px');
                 $('.ui-dialog .ui-dialog-content').css('padding-left', '12px');
             }
-        });       
+        });             
     }
 
     function GetAssociationDetectDetail(userName, custID, ctsCustID, ctsCustIDList) {
         $.ajax(common.modifyRelativeUrl('AssociationDetection/GetDetectAssociationDetail'), {
             type: 'POST',
             beforeSend: function () {
-                domElements.tblAssociationDetectDetail.find('tbody').addClass('loading');
+                domElements.tblAssociationDetectDetail.find('tbody').addClass('loading');                
             },
             data: {
                 UserName: userName,
@@ -222,12 +224,13 @@
             },
             success: function (response) {
                 if (response !== undefined) {                   
-                    domElements.tblAssociationDetectDetail.DataTable().clear().rows.add(response.data).draw();
+                    domElements.tblAssociationDetectDetail.DataTable().rows.add(response.data).draw();
                     domElements.tblAssociationDetectDetail.DataTable().columns.adjust();
                 }
             },
             complete: function () {
                 domElements.tblAssociationDetectDetail.find('tbody').removeClass('loading');
+
             },
             error: function (errMsg) {
                 console.log(errMsg);
@@ -265,6 +268,8 @@
             });
         }
 
+        domElements.tblAssociationDetectDetailIP.DataTable().clear();
+
         GetAssociationDetectDetailIP(custID1, custID2);
 
         domElements.divAssociationDetectDetailIP.dialog({
@@ -288,7 +293,7 @@
         $.ajax(common.modifyRelativeUrl('AssociationDetection/GetDetectAssociationDetailIP'), {
             type: 'POST',
             beforeSend: function () {
-                domElements.tblAssociationDetectDetailIP.find('tbody').addClass('loading');
+                domElements.tblAssociationDetectDetailIP.find('tbody').addClass('loading');                
             },
             data: {
                 custID1: custID1,
@@ -296,7 +301,7 @@
             },
             success: function (response) {
                 if (response !== undefined) {
-                    domElements.tblAssociationDetectDetailIP.DataTable().clear().rows.add(response.data).draw();
+                    domElements.tblAssociationDetectDetailIP.DataTable().rows.add(response.data).draw();
                     domElements.tblAssociationDetectDetailIP.DataTable().columns.adjust();
                 }
             },
@@ -373,13 +378,15 @@
                 }
             });
         }
+
+        domElements.tblAssociationDetectDetailMatch.DataTable().clear();
       
         GetAssociationDetectDetailMatch(custID1, custID2);
 
         domElements.divAssociationDetectDetailMatch.dialog({
             modal: true,
             width: '950px',
-            title: "ASSOCIATION DETAIL - MATCH (in the last 7 days): " + userName1 + " - " + userName2,
+            title: "ASSOCIATION DETAILS - MATCH (in the last 7 days): " + userName1 + " - " + userName2,
             resizable: false,
             draggable: true,
             close: function () {
@@ -396,15 +403,15 @@
         $.ajax(common.modifyRelativeUrl('AssociationDetection/GetDetectAssociationDetailMatch'), {
             type: 'POST',
             beforeSend: function () {
-                domElements.tblAssociationDetectDetailMatch.find('tbody').addClass('loading');
+                domElements.tblAssociationDetectDetailMatch.find('tbody').addClass('loading');                
             },
             data: {
                 custID1: custID1,
                 custID2: custID2
             },
             success: function (response) {
-                if (response !== undefined) {
-                    domElements.tblAssociationDetectDetailMatch.DataTable().clear().rows.add(response.data).draw();
+                if (response !== undefined) {                   
+                    domElements.tblAssociationDetectDetailMatch.DataTable().rows.add(response.data).draw();
                     domElements.tblAssociationDetectDetailMatch.DataTable().columns.adjust();
                 }
             },
@@ -450,12 +457,14 @@
             });
         }
 
+        domElements.tblAssociationDetectDetailAgent.DataTable().clear();
+
         GetAssociationDetectDetailAgent(agentInfoJson);
 
         domElements.divAssociationDetectDetailAgent.dialog({
             modal: true,
             width: '500px',
-            title: "ASSOCIATION DETAIL - AGENT: " + userName1 + " - " + userName2,
+            title: "ASSOCIATION DETAILS - AGENT: " + userName1 + " - " + userName2,
             resizable: false,
             draggable: true,
             close: function () {
@@ -471,8 +480,7 @@
         $.ajax(common.modifyRelativeUrl('AssociationDetection/GetDetectAssociationDetailAgent'), {
             type: 'POST',
             beforeSend: function () {
-                domElements.tblAssociationDetectDetailAgent.find('tbody').addClass('loading');
-                domElements.tblAssociationDetectDetailAgent.DataTable().clear();
+                domElements.tblAssociationDetectDetailAgent.find('tbody').addClass('loading');                
             },
             data: {
                 agentInfoJson: agentInfoJson
