@@ -28,9 +28,7 @@
 
         public int? GroupID { get; set; }
 
-        public string UserName { get; set; }
-
-        public string CTSCustIDList { get; set; }
+        public string UserName { get; set; }       
 
         public long CTSCustID { get; set; }        
 

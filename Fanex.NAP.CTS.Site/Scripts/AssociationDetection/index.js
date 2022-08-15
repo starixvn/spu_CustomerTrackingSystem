@@ -75,7 +75,7 @@
                     data: obj => RenderUserName(obj),
                     createdCell: (cell, _, row) => {
                         $('.association-detect-detail', cell).click(() => {
-                            ShowAssociationDetectDetail(row)
+                            ShowAssociationDetectDetail(cell, row);
                         })
                     }
                 },
@@ -101,7 +101,7 @@
                         );
 
                         last = group;
-                    }
+                    }                   
                 });
             }
         }).rows.add(data).draw();
@@ -121,22 +121,22 @@
                 } else {
                     $i.removeClass('icon-chevron-right')
                         .addClass('icon-chevron-down');
-                }                
+                }
             }
-        });
+        });        
 
         return table;
-    }    
+    } 
 
     function RenderUserName(obj) {
         if (obj.UserName !== null) {
-            return `<span class="association-detect-detail" data-custid=${ obj.CustID } data-ctscustid=${ obj.CTSCustID }> ${ obj.UserName } </span>`;
+            return `<span class="association-detect-detail" data-groupid=${ obj.GroupID } data-custid=${ obj.CustID } data-ctscustid=${ obj.CTSCustID }> ${ obj.UserName } </span>`;
         }
 
         return "";
     }   
 
-    function ShowAssociationDetectDetail(fromObj) {       
+    function ShowAssociationDetectDetail(cell, fromObj) {       
         if (tableAssociationDetectDetail == null) {
             tableAssociationDetectDetail = domElements.tblAssociationDetectDetail.DataTable({
                 language: {
@@ -186,8 +186,16 @@
         }
 
         domElements.tblAssociationDetectDetail.DataTable().clear();
+        
+        let ctsCustIDs = [];
 
-        GetAssociationDetectDetail(fromObj.UserName, fromObj.CustID, fromObj.CTSCustID, fromObj.CTSCustIDList);
+        domElements.tblAssociationDetection.find('.association-detect-detail').each(function () {
+            if ($(this).attr("data-groupid") == fromObj.GroupID) {
+                ctsCustIDs.push($(this).attr('data-ctscustid'));
+            }
+        });
+               
+        GetAssociationDetectDetail(fromObj.UserName, fromObj.CustID, fromObj.CTSCustID, ctsCustIDs.join());
 
         domElements.divAssociationDetectDetail.dialog({
             modal: true,
@@ -457,7 +465,7 @@
             });
         }
 
-        domElements.tblAssociationDetectDetailAgent.DataTable().clear();
+        domElements.tblAssociationDetectDetailAgent.DataTable().clear().rows.add([]);
 
         GetAssociationDetectDetailAgent(agentInfoJson);
 

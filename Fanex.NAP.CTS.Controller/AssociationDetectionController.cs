@@ -239,7 +239,7 @@
             if (!string.IsNullOrWhiteSpace(model.UserNames))
             {
                 try
-                {
+                {                    
                     var userNames = model.UserNames.Split(',').Distinct();
                     var userNameList = string.Join(",", userNames);
 
@@ -258,7 +258,7 @@
                             CTSCustID = c2.CTSCustID,
                             IsInternal = c2.IsInternal
                         });
-
+                 
                     var custIDs = string.Join(",", orgUserList.Select(x => x.CustID));
 
                     var ctsCustIDs = string.Join(",", orgUserList.Select(x => x.CTSCustID));
@@ -267,10 +267,10 @@
                     
                     var assBySharedMatches = model.Is3MatchesLast7Days ? DetectAssociationBySharedMatches(orgUserList.Where(x => !x.IsInternal), custIDs) : Enumerable.Empty<SharedIPMatchesInfoModel>();
 
-                    var assByPrimary = model.IsBPManuallyDeviceIP ? _associationDetectionService.DetectAssociationByPrimary(ctsCustIDs) : Enumerable.Empty<DetectAssociationByPrimaryModel>();
+                    var assByPrimary = model.IsBPManuallyDeviceIP ? _associationDetectionService.DetectAssociationByPrimary(ctsCustIDs) : Enumerable.Empty<DetectAssociationByPrimaryModel>();                  
 
                     var assByAgent = model.IsAgent ? _associationDetectionService.DetectAssociationByAgent(ctsCustIDs) : Enumerable.Empty<DetectAssociationByAgentModel>();
-
+                   
                     var mergeGroupInfo = new MergeGroupInfoModel
                     {
                         CTSCustIDs = ctsCustIDs,
@@ -281,7 +281,7 @@
                     };
 
                     var assMergeGroup = _associationDetectionService.MergeGroupDetectAssociation(mergeGroupInfo);
-                   
+                 
                     if (!isExportExcel)
                     {
                         var groups = assMergeGroup.Where(x => x.GroupID.HasValue)
@@ -289,16 +289,11 @@
 
                         result.ItemList = assMergeGroup.Where(x => x.GroupID.HasValue).OrderBy(x => x.GroupID).Select(x =>
                         {
-                            var item = new DetectAssociationItemViewModel(x);
-                            var custInfo = groups.FirstOrDefault(y => y.GroupID == x.GroupID);
-
-                            item.CTSCustIDList = ctsCustIDs != null ? string.Join(",", custInfo.CTSCustIDs) : string.Empty;
-
-                            return item;
+                            return new DetectAssociationItemViewModel(x);                          
                         });
 
                         model.SharedIPJson = JsonConvert.SerializeObject(assBySharedIP);
-                        model.SharedMatchesJson = JsonConvert.SerializeObject(assBySharedMatches);
+                        model.SharedMatchesJson = JsonConvert.SerializeObject(assBySharedMatches);                      
                     }
                     else
                     {
