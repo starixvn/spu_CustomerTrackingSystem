@@ -167,12 +167,12 @@
                         createdCell: (cell, _, row) => {
                             $('.association-detect-detail-ip', cell).click(() => {
                                 let span = $(cell).find('.association-detect-detail-ip');
-                                ShowAssociationDetectDetailIP(span.attr('data-fromusername'), row.UserName, span.attr('data-fromcustid'), row.CustID)
+                                ShowAssociationDetectDetailIP(span.attr('data-fromusername'), row.UserName, parseInt(span.attr('data-fromcustid')), row.CustID)
                             });
 
                             $('.association-detect-detail-match', cell).click(() => {
                                 let span = $(cell).find('.association-detect-detail-match');
-                                ShowAssociationDetectDetailMatch(span.attr('data-fromusername'), row.UserName, span.attr('data-fromcustid'), row.CustID);
+                                ShowAssociationDetectDetailMatch(span.attr('data-fromusername'), row.UserName, parseInt(span.attr('data-fromcustid')), row.CustID);
                             });
 
                             $('.association-detect-detail-agent', cell).click(() => {
