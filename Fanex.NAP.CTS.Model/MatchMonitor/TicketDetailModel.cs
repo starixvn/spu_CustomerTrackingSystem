@@ -4,6 +4,8 @@
 
     public class TicketDetailModel
     {
+        public long SequenceId { get; set; }
+
         public Int64 TransId { get; set; }
 
         public DateTime TransDate { get; set; }
