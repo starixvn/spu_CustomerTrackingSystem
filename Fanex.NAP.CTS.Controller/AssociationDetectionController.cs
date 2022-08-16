@@ -267,27 +267,38 @@
                     var mergeGroupInfo = new MergeGroupInfoModel { CTSCustIDs = ctsCustIDs };
 
                     Parallel.Invoke(() => {
+                        LogService.Info($"Detect Associatied by IP start time {DateTime.Now}");
                         var assBySharedIP = model.IsIPLast3Days ? DetectAssociationByIP(orgUserList.Where(x => !x.IsInternal), custIDs) : Enumerable.Empty<SharedIPMatchesInfoModel>();
 
                         mergeGroupInfo.AssociationByIPJson = GetAssociationCust(assBySharedIP);
                         model.SharedIPJson = JsonConvert.SerializeObject(assBySharedIP);
+
+                        LogService.Info($"Detect Associatied by IP end time {DateTime.Now}");
                     },() => {
+                        LogService.Info($"Detect Associatied by Matches start time {DateTime.Now}");
                         var assBySharedMatches = model.Is3MatchesLast7Days ? DetectAssociationBySharedMatches(orgUserList.Where(x => !x.IsInternal), custIDs) : Enumerable.Empty<SharedIPMatchesInfoModel>();
 
                         mergeGroupInfo.AssociationByMatchesJson = GetAssociationCust(assBySharedMatches);
                         model.SharedMatchesJson = JsonConvert.SerializeObject(assBySharedMatches);
+                        LogService.Info($"Detect Associatied by Matches end time {DateTime.Now}");
                     }, () => {
+                        LogService.Info($"Detect Associatied by Primary start time {DateTime.Now}");
                         var assByPrimary = model.IsBPManuallyDeviceIP ? _associationDetectionService.DetectAssociationByPrimary(ctsCustIDs) : Enumerable.Empty<DetectAssociationByPrimaryModel>();
 
                         mergeGroupInfo.AssociationByPrimaryJson = JsonConvert.SerializeObject(assByPrimary);
+                        LogService.Info($"Detect Associatied by Primary end time {DateTime.Now}");
                     }, () => {
+                        LogService.Info($"Detect Associatied by Agent start time {DateTime.Now}");
                         var assByAgent = model.IsAgent ? _associationDetectionService.DetectAssociationByAgent(ctsCustIDs) : Enumerable.Empty<DetectAssociationByAgentModel>();
 
                         mergeGroupInfo.AssociationByAgentJson = JsonConvert.SerializeObject(assByAgent);
+                        LogService.Info($"Detect Associatied by Agent end time {DateTime.Now}");
                     });
-                                    
+
+                    LogService.Info($"Detect Associatied Merge Group start time {DateTime.Now}");
                     var assMergeGroup = _associationDetectionService.MergeGroupDetectAssociation(mergeGroupInfo);
-                 
+                    LogService.Info($"Detect Associatied Merge Group end time {DateTime.Now}");
+
                     if (!isExportExcel)
                     {
                         var groups = assMergeGroup.Where(x => x.GroupID.HasValue)
@@ -501,7 +512,9 @@
             var result = Enumerable.Empty<GetAssociationDetectDetailMatchViewModel>();
             var custIDList = $"{custID1},{custID2}";
 
-            var tickets = _associationDetectionService.GetDetectAssociationDetailMatch(custIDList).OrderByDescending(x=>x.TransDate);
+            var tickets = _associationDetectionService.GetDetectAssociationDetailMatch(custIDList)
+                .OrderByDescending(x=>x.MatchID)
+                .ThenByDescending(x=>x.TransDate);
 
             if (tickets != null && tickets.Any())
             {
