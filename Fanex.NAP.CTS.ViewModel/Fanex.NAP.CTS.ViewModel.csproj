@@ -122,6 +122,7 @@
     <Compile Include="AssociationDetection\AssociationLevelGraphDbViewModel.cs" />
     <Compile Include="AssociationDetection\AssociationDetectionItemViewModel.cs" />
     <Compile Include="AssociationDetection\GetAssociationDetectionViewModel.cs" />
+    <Compile Include="AssociationDetection\SharedByMatchesInfoViewModel.cs" />
     <Compile Include="AssociationReport\AssociationDetailFilterViewModel.cs" />
     <Compile Include="AssociationReport\AssociationDetailViewModel.cs" />
     <Compile Include="AssociationReport\AssociationFilterViewModel.cs" />

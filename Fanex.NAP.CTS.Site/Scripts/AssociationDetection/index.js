@@ -75,7 +75,8 @@
                     data: obj => RenderUserName(obj),
                     createdCell: (cell, _, row) => {
                         $('.association-detect-detail', cell).click(() => {
-                            ShowAssociationDetectDetail(cell, row);
+                            let span = $(cell).find('.association-detect-detail');
+                            ShowAssociationDetectDetail(cell, row, span.attr('data-cust-bysharedmatches'));
                         })
                     }
                 },
@@ -130,13 +131,13 @@
 
     function RenderUserName(obj) {
         if (obj.UserName !== null) {
-            return `<span class="association-detect-detail" data-groupid=${ obj.GroupID } data-custid=${ obj.CustID } data-ctscustid=${ obj.CTSCustID }> ${ obj.UserName } </span>`;
+            return `<span class="association-detect-detail" data-groupid=${obj.GroupID} data-custid=${obj.CustID} data-ctscustid=${obj.CTSCustID} data-cust-bysharedmatches=${obj.CustByMatches}> ${ obj.UserName } </span>`;
         }
 
         return "";
     }   
 
-    function ShowAssociationDetectDetail(cell, fromObj) {       
+    function ShowAssociationDetectDetail(cell, fromObj, custBySharedMatches) {       
         if (tableAssociationDetectDetail == null) {
             tableAssociationDetectDetail = domElements.tblAssociationDetectDetail.DataTable({
                 language: {
@@ -196,7 +197,7 @@
             }
         });
                
-        GetAssociationDetectDetail(fromObj.UserName, fromObj.CustID, fromObj.CTSCustID, ctsCustIDs.join());
+        GetAssociationDetectDetail(fromObj.UserName, fromObj.CustID, fromObj.CTSCustID, ctsCustIDs.join(), custBySharedMatches);
 
         domElements.divAssociationDetectDetail.dialog({
             modal: true,
@@ -213,7 +214,7 @@
         });             
     }
 
-    function GetAssociationDetectDetail(userName, custID, ctsCustID, ctsCustIDList) {
+    function GetAssociationDetectDetail(userName, custID, ctsCustID, ctsCustIDList, custBySharedMatches) {
         $.ajax(common.modifyRelativeUrl('AssociationDetection/GetDetectAssociationDetail'), {
             type: 'POST',
             beforeSend: function () {
@@ -228,8 +229,8 @@
                 IsAgent: parameters.IsAgent,
                 IsIPLast3Days: parameters.IsIPLast3Days,
                 Is3MatchesLast7Days: parameters.Is3MatchesLast7Days,
-                SharedIPJson: domElements.hdAssociationDetectSharedIP.val(),
-                SharedMatchesJson: domElements.hdAssociationDetectSharedMatches.val()
+                SharedIPJson: domElements.hdAssociationDetectSharedIP.val(),               
+                SharedMatchesJson: custBySharedMatches
             },
             success: function (response) {
                 if (response !== undefined) {                   
@@ -339,9 +340,8 @@
                 ordering: false,
                 searching: false,
                 scrollX: false,
-                //scrollY: '400px',
-                //scrollCollapse: true,
-                scrollCollapse: false,
+                scrollY: '400px',
+                scrollCollapse: true,
                 paging: false,
                 searching: false,
                 columnDefs: [

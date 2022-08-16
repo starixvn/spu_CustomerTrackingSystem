@@ -7,7 +7,7 @@
     {              
         public DetectAssociationItemViewModel() { }
 
-        public DetectAssociationItemViewModel(DetectAssociationMergeGroupModel data)
+        public DetectAssociationItemViewModel(DetectAssociationMergeGroupModel data, string custByMatches)
         {
             this.RowNumber = data.RowNumber;
             this.GroupID = data.GroupID;
@@ -22,6 +22,7 @@
             this.CustomerClass = data.CustomerClass > 0 ? data.CustomerClass.ToString() : null;
             this.IsProblemAccount = data.ParentIDs != null && data.ParentIDs.Split(',').Any(y => y == "50");
             this.IsPAProbation = data.IsPAProbation;
+            this.CustByMatches = custByMatches;
         }
 
         public int RowNumber { get; set; }
@@ -49,6 +50,8 @@
         public bool IsProblemAccount { get; set; }
 
         public bool IsPAProbation { get; set; }
+
+        public string CustByMatches { get; set; }
 
     }
 }

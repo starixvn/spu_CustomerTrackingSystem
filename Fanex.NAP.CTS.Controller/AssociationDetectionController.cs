@@ -266,53 +266,71 @@
 
                     var mergeGroupInfo = new MergeGroupInfoModel { CTSCustIDs = ctsCustIDs };
 
+                    var assBySharedMatches = Enumerable.Empty<SharedIPMatchesInfoModel>();
+
                     Parallel.Invoke(() => {
-                        LogService.Info($"Detect Associatied by IP start time {DateTime.Now}");
+                        //LogService.Info($"Detect Associatied by IP start time {DateTime.Now}");
                         var assBySharedIP = model.IsIPLast3Days ? DetectAssociationByIP(orgUserList.Where(x => !x.IsInternal), custIDs) : Enumerable.Empty<SharedIPMatchesInfoModel>();
 
                         mergeGroupInfo.AssociationByIPJson = GetAssociationCust(assBySharedIP);
                         model.SharedIPJson = JsonConvert.SerializeObject(assBySharedIP);
 
-                        LogService.Info($"Detect Associatied by IP end time {DateTime.Now}");
-                    },() => {
+                        //LogService.Info($"Detect Associatied by IP end time {DateTime.Now}");
+                    }, () => {
                         LogService.Info($"Detect Associatied by Matches start time {DateTime.Now}");
-                        var assBySharedMatches = model.Is3MatchesLast7Days ? DetectAssociationBySharedMatches(orgUserList.Where(x => !x.IsInternal), custIDs) : Enumerable.Empty<SharedIPMatchesInfoModel>();
+
+                        assBySharedMatches = model.Is3MatchesLast7Days ? DetectAssociationBySharedMatches(orgUserList.Where(x => !x.IsInternal), custIDs) : Enumerable.Empty<SharedIPMatchesInfoModel>();
 
                         mergeGroupInfo.AssociationByMatchesJson = GetAssociationCust(assBySharedMatches);
-                        model.SharedMatchesJson = JsonConvert.SerializeObject(assBySharedMatches);
+                        //model.SharedMatchesJson = JsonConvert.SerializeObject(assBySharedMatches);
+                        model.SharedMatchesJson = "[]";
+
                         LogService.Info($"Detect Associatied by Matches end time {DateTime.Now}");
                     }, () => {
-                        LogService.Info($"Detect Associatied by Primary start time {DateTime.Now}");
+                        //LogService.Info($"Detect Associatied by Primary start time {DateTime.Now}");
                         var assByPrimary = model.IsBPManuallyDeviceIP ? _associationDetectionService.DetectAssociationByPrimary(ctsCustIDs) : Enumerable.Empty<DetectAssociationByPrimaryModel>();
 
                         mergeGroupInfo.AssociationByPrimaryJson = JsonConvert.SerializeObject(assByPrimary);
-                        LogService.Info($"Detect Associatied by Primary end time {DateTime.Now}");
+                        //LogService.Info($"Detect Associatied by Primary end time {DateTime.Now}");
                     }, () => {
-                        LogService.Info($"Detect Associatied by Agent start time {DateTime.Now}");
+                        //LogService.Info($"Detect Associatied by Agent start time {DateTime.Now}");
                         var assByAgent = model.IsAgent ? _associationDetectionService.DetectAssociationByAgent(ctsCustIDs) : Enumerable.Empty<DetectAssociationByAgentModel>();
 
                         mergeGroupInfo.AssociationByAgentJson = JsonConvert.SerializeObject(assByAgent);
-                        LogService.Info($"Detect Associatied by Agent end time {DateTime.Now}");
+                        //LogService.Info($"Detect Associatied by Agent end time {DateTime.Now}");
                     });
 
                     LogService.Info($"Detect Associatied Merge Group start time {DateTime.Now}");
                     var assMergeGroup = _associationDetectionService.MergeGroupDetectAssociation(mergeGroupInfo);
                     LogService.Info($"Detect Associatied Merge Group end time {DateTime.Now}");
 
-                    if (!isExportExcel)
+                    if (isExportExcel)
                     {
-                        var groups = assMergeGroup.Where(x => x.GroupID.HasValue)
-                            .GroupBy(p => p.GroupID, (key, g) => new { GroupID = key, CTSCustIDs = g.Select(x => x.CTSCustID) });
-
-                        result.ItemList = assMergeGroup.Where(x => x.GroupID.HasValue).OrderBy(x => x.GroupID).Select(x =>
-                        {
-                            return new DetectAssociationItemViewModel(x);                          
-                        });                                   
+                        result.OrgItemList = assMergeGroup;                                
                     }
                     else
                     {
-                        result.OrgItemList = assMergeGroup;
+                        result.ItemList = assMergeGroup.Where(x => x.GroupID.HasValue).OrderBy(x => x.GroupID).Select(x =>
+                        {
+                            var custIDByMatches = new List<SharedByMatchesInfoViewModel>();
+                           
+                            custIDByMatches.AddRange(assBySharedMatches.Where(y => y.FromCustID == x.CustID).Select(y => new SharedByMatchesInfoViewModel
+                            {
+                                CustID = y.ToCustID,
+                                UserName = y.ToUserName
+                            }));
+
+                            custIDByMatches.AddRange(assBySharedMatches.Where(y => y.ToCustID == x.CustID).Select(y => new SharedByMatchesInfoViewModel
+                            {
+                                CustID = y.FromCustID,
+                                UserName = y.FromUserName
+                            }));
+
+                            return new DetectAssociationItemViewModel(x, JsonConvert.SerializeObject(custIDByMatches.Distinct()));
+                        });
                     }
+
+                    LogService.Info($"Detect Associatied end time {DateTime.Now}");
                 }
                 catch (Exception ex)
                 {
@@ -444,34 +462,19 @@
         {
             if (!string.IsNullOrEmpty(sharedMatchesJson))
             {
-                var sharedMatchesList = JsonConvert.DeserializeObject<IEnumerable<SharedIPMatchesInfoModel>>(sharedMatchesJson);
-
-                var sharedMatchesByCust = sharedMatchesList.Where(x => x.FromCustID == custID || x.ToCustID == custID);
-
-                if (sharedMatchesByCust.Any())
+                var sharedMatchesList = JsonConvert.DeserializeObject<IEnumerable<SharedByMatchesInfoViewModel>>(sharedMatchesJson);
+               
+                if (sharedMatchesList.Any())
                 {
-                    return sharedMatchesByCust.Select(x => 
+                    return sharedMatchesList.Select(x => 
                     {
-                        if (x.FromCustID == custID)
+                        return new GetAssociationDetectDetailViewModel
                         {
-                            return new GetAssociationDetectDetailViewModel
-                            {
-                                UserName = x.ToUserName,
-                                CustID = x.ToCustID,
-                                CTSCustID = x.ToCTSCustID,
-                                AssociatedTypes = $"<span class='association-detect-detail-match' data-fromusername={userName} data-fromcustid={custID}>Match</span>"
-                            };
-                        }
-                        else
-                        {
-                            return new GetAssociationDetectDetailViewModel
-                            {
-                                UserName = x.FromUserName,
-                                CustID = x.FromCustID,
-                                CTSCustID = x.FromCTSCustID,
-                                AssociatedTypes = $"<span class='association-detect-detail-match' data-fromusername={userName} data-fromcustid={custID}>Match</span>"
-                            };
-                        }                        
+                            UserName = x.UserName,
+                            CustID = x.CustID,
+                            /*CTSCustID = x.ToCTSCustID,*/
+                            AssociatedTypes = $"<span class='association-detect-detail-match' data-fromusername={userName} data-fromcustid={custID}>Match</span>"
+                        };
                     });
                 }
             }
