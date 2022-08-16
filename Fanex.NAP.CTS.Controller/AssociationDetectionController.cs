@@ -362,7 +362,7 @@
         }
 
         [HttpPost]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetection)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetectionDetails)]
         public ActionResult GetDetectAssociationDetail(GetAssociationDetectionDetailViewModel model)
         {
             var result = new List<GetAssociationDetectDetailViewModel>();
@@ -466,7 +466,7 @@
         }
 
         [HttpPost]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetection)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetectionDetails)]
         public ActionResult GetDetectAssociationDetailIP(int custID1, int custID2)
         {
             var result = new List<GetAssociationDetectDetailIPViewModel>();
@@ -492,7 +492,7 @@
         }
 
         [HttpPost]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetection)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetectionDetails)]
         public ActionResult GetDetectAssociationDetailMatch(int custID1, int custID2)
         {
             var result = Enumerable.Empty<GetAssociationDetectDetailMatchViewModel>();
@@ -512,7 +512,7 @@
         }
 
         [HttpPost]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetection)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetectionDetails)]
         public ActionResult GetDetectAssociationDetailAgent(string agentInfoJson)
         {
             var result = Enumerable.Empty<GetAssociationDetectDetailAgentViewModel>();
