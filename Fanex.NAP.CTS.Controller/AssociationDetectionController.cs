@@ -19,6 +19,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using System.Web.Mvc;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
@@ -263,23 +264,28 @@
 
                     var ctsCustIDs = string.Join(",", orgUserList.Select(x => x.CTSCustID));
 
-                    var assBySharedIP = model.IsIPLast3Days ? DetectAssociationByIP(orgUserList.Where(x => !x.IsInternal), custIDs) : Enumerable.Empty<SharedIPMatchesInfoModel>();
-                    
-                    var assBySharedMatches = model.Is3MatchesLast7Days ? DetectAssociationBySharedMatches(orgUserList.Where(x => !x.IsInternal), custIDs) : Enumerable.Empty<SharedIPMatchesInfoModel>();
+                    var mergeGroupInfo = new MergeGroupInfoModel { CTSCustIDs = ctsCustIDs };
 
-                    var assByPrimary = model.IsBPManuallyDeviceIP ? _associationDetectionService.DetectAssociationByPrimary(ctsCustIDs) : Enumerable.Empty<DetectAssociationByPrimaryModel>();                  
+                    Parallel.Invoke(() => {
+                        var assBySharedIP = model.IsIPLast3Days ? DetectAssociationByIP(orgUserList.Where(x => !x.IsInternal), custIDs) : Enumerable.Empty<SharedIPMatchesInfoModel>();
 
-                    var assByAgent = model.IsAgent ? _associationDetectionService.DetectAssociationByAgent(ctsCustIDs) : Enumerable.Empty<DetectAssociationByAgentModel>();
-                   
-                    var mergeGroupInfo = new MergeGroupInfoModel
-                    {
-                        CTSCustIDs = ctsCustIDs,
-                        AssociationByPrimaryJson = JsonConvert.SerializeObject(assByPrimary),
-                        AssociationByAgentJson = JsonConvert.SerializeObject(assByAgent),
-                        AssociationByIPJson = GetAssociationCust(assBySharedIP),
-                        AssociationByMatchesJson = GetAssociationCust(assBySharedMatches)
-                    };
+                        mergeGroupInfo.AssociationByIPJson = GetAssociationCust(assBySharedIP);
+                        model.SharedIPJson = JsonConvert.SerializeObject(assBySharedIP);
+                    },() => {
+                        var assBySharedMatches = model.Is3MatchesLast7Days ? DetectAssociationBySharedMatches(orgUserList.Where(x => !x.IsInternal), custIDs) : Enumerable.Empty<SharedIPMatchesInfoModel>();
 
+                        mergeGroupInfo.AssociationByMatchesJson = GetAssociationCust(assBySharedMatches);
+                        model.SharedMatchesJson = JsonConvert.SerializeObject(assBySharedMatches);
+                    }, () => {
+                        var assByPrimary = model.IsBPManuallyDeviceIP ? _associationDetectionService.DetectAssociationByPrimary(ctsCustIDs) : Enumerable.Empty<DetectAssociationByPrimaryModel>();
+
+                        mergeGroupInfo.AssociationByPrimaryJson = JsonConvert.SerializeObject(assByPrimary);
+                    }, () => {
+                        var assByAgent = model.IsAgent ? _associationDetectionService.DetectAssociationByAgent(ctsCustIDs) : Enumerable.Empty<DetectAssociationByAgentModel>();
+
+                        mergeGroupInfo.AssociationByAgentJson = JsonConvert.SerializeObject(assByAgent);
+                    });
+                                    
                     var assMergeGroup = _associationDetectionService.MergeGroupDetectAssociation(mergeGroupInfo);
                  
                     if (!isExportExcel)
@@ -290,10 +296,7 @@
                         result.ItemList = assMergeGroup.Where(x => x.GroupID.HasValue).OrderBy(x => x.GroupID).Select(x =>
                         {
                             return new DetectAssociationItemViewModel(x);                          
-                        });
-
-                        model.SharedIPJson = JsonConvert.SerializeObject(assBySharedIP);
-                        model.SharedMatchesJson = JsonConvert.SerializeObject(assBySharedMatches);                      
+                        });                                   
                     }
                     else
                     {
