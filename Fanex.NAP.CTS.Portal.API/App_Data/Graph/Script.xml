@@ -56,11 +56,11 @@
 		<GraphSetting Key="GetAssociationDetectionReport" SpName="GetAssociationDetectionReport" DbName="GraphDB" TimeOut="600"/>
 		<GraphSetting Key="GetCustInformation" SpName="GetCustInformation" DbName="GraphDB" TimeOut="600"/>
 
-    <GraphSetting Key="AssDetection_DropInMemoryGraph" SpName="AssDetection_DropInMemoryGraph" DbName="GraphDB" TimeOut="600"/>
+    <GraphSetting Key="AssDetection_DropInMemoryGraph" SpName="AssDetection_DropInMemoryGraph" DbName="GraphDB"/>
     <GraphSetting Key="AssDetection_CreateInMemoryGraph" SpName="AssDetection_CreateInMemoryGraph" DbName="GraphDB" TimeOut="600"/>
-    <GraphSetting Key="AssDetection_RunWCCAlgo" SpName="AssDetection_RunWCCAlgo" DbName="GraphDB" TimeOut="600"/>
-    <GraphSetting Key="AssDetection_GetResult" SpName="AssDetection_GetResult" DbName="GraphDB" TimeOut="600"/>
-    <GraphSetting Key="AssDetection_CheckIfGraphExists" SpName="AssDetection_CheckIfGraphExists" DbName="GraphDB" TimeOut="600"/>
+    <GraphSetting Key="AssDetection_RunWCCAlgo" SpName="AssDetection_RunWCCAlgo" DbName="GraphDB"/>
+    <GraphSetting Key="AssDetection_GetResult" SpName="AssDetection_GetResult" DbName="GraphDB"/>
+    <GraphSetting Key="AssDetection_CheckIfGraphExists" SpName="AssDetection_CheckIfGraphExists" DbName="GraphDB"/>
 	</Function>
 
   <Function Name="Adhoc">

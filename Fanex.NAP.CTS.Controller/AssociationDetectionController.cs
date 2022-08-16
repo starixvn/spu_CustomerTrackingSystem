@@ -277,7 +277,7 @@
 
                         //LogService.Info($"Detect Associatied by IP end time {DateTime.Now}");
                     }, () => {
-                        LogService.Info($"Detect Associatied by Matches start time {DateTime.Now}");
+                        //LogService.Info($"Detect Associatied by Matches start time {DateTime.Now}");
 
                         assBySharedMatches = model.Is3MatchesLast7Days ? DetectAssociationBySharedMatches(orgUserList.Where(x => !x.IsInternal), custIDs) : Enumerable.Empty<SharedIPMatchesInfoModel>();
 
@@ -285,7 +285,7 @@
                         //model.SharedMatchesJson = JsonConvert.SerializeObject(assBySharedMatches);
                         model.SharedMatchesJson = "[]";
 
-                        LogService.Info($"Detect Associatied by Matches end time {DateTime.Now}");
+                        //LogService.Info($"Detect Associatied by Matches end time {DateTime.Now}");
                     }, () => {
                         //LogService.Info($"Detect Associatied by Primary start time {DateTime.Now}");
                         var assByPrimary = model.IsBPManuallyDeviceIP ? _associationDetectionService.DetectAssociationByPrimary(ctsCustIDs) : Enumerable.Empty<DetectAssociationByPrimaryModel>();
@@ -312,21 +312,13 @@
                     {
                         result.ItemList = assMergeGroup.Where(x => x.GroupID.HasValue).OrderBy(x => x.GroupID).Select(x =>
                         {
-                            var custIDByMatches = new List<SharedByMatchesInfoViewModel>();
-                           
-                            custIDByMatches.AddRange(assBySharedMatches.Where(y => y.FromCustID == x.CustID).Select(y => new SharedByMatchesInfoViewModel
-                            {
-                                CustID = y.ToCustID,
-                                UserName = y.ToUserName
-                            }));
+                            var userNameByMatches = new List<string>();
 
-                            custIDByMatches.AddRange(assBySharedMatches.Where(y => y.ToCustID == x.CustID).Select(y => new SharedByMatchesInfoViewModel
-                            {
-                                CustID = y.FromCustID,
-                                UserName = y.FromUserName
-                            }));
+                            userNameByMatches.AddRange(assBySharedMatches.Where(y => y.FromCustID == x.CustID).Select(y => y.ToUserName));
 
-                            return new DetectAssociationItemViewModel(x, JsonConvert.SerializeObject(custIDByMatches.Distinct()));
+                            userNameByMatches.AddRange(assBySharedMatches.Where(y => y.ToCustID == x.CustID).Select(y => y.FromUserName));
+
+                            return new DetectAssociationItemViewModel(x, string.Join(",", userNameByMatches.Distinct()));
                         });
                     }
 
@@ -462,16 +454,18 @@
         {
             if (!string.IsNullOrEmpty(sharedMatchesJson))
             {
-                var sharedMatchesList = JsonConvert.DeserializeObject<IEnumerable<SharedByMatchesInfoViewModel>>(sharedMatchesJson);
-               
-                if (sharedMatchesList.Any())
+                //var sharedMatchesList = JsonConvert.DeserializeObject<IEnumerable<SharedByMatchesInfoViewModel>>(sharedMatchesJson);
+                var arrUserNames = sharedMatchesJson.Split(',').AsEnumerable();
+
+                if (arrUserNames.Any())
                 {
-                    return sharedMatchesList.Select(x => 
+                    return arrUserNames.Select(x => 
                     {
                         return new GetAssociationDetectDetailViewModel
                         {
-                            UserName = x.UserName,
-                            CustID = x.CustID,
+                            UserName = x,
+                            CustID = 0,
+                            //CustID = x.CustID,
                             /*CTSCustID = x.ToCTSCustID,*/
                             AssociatedTypes = $"<span class='association-detect-detail-match' data-fromusername={userName} data-fromcustid={custID}>Match</span>"
                         };

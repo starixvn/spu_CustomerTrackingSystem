@@ -74,9 +74,8 @@
                 {
                     data: obj => RenderUserName(obj),
                     createdCell: (cell, _, row) => {
-                        $('.association-detect-detail', cell).click(() => {
-                            let span = $(cell).find('.association-detect-detail');
-                            ShowAssociationDetectDetail(cell, row, span.attr('data-cust-bysharedmatches'));
+                        $('.association-detect-detail', cell).click(() => {                           
+                            ShowAssociationDetectDetail(cell, row);
                         })
                     }
                 },
@@ -137,7 +136,7 @@
         return "";
     }   
 
-    function ShowAssociationDetectDetail(cell, fromObj, custBySharedMatches) {       
+    function ShowAssociationDetectDetail(cell, fromObj) {       
         if (tableAssociationDetectDetail == null) {
             tableAssociationDetectDetail = domElements.tblAssociationDetectDetail.DataTable({
                 language: {
@@ -151,9 +150,8 @@
                 ordering: false,
                 searching: false,
                 scrollX: false,              
-                //scrollY: '400px',
-                //scrollCollapse: true,
-                scrollCollapse: false,
+                scrollY: '400px',
+                scrollCollapse: true,              
                 paging: false,
                 searching: false,
                 columnDefs: [
@@ -196,6 +194,9 @@
                 ctsCustIDs.push($(this).attr('data-ctscustid'));
             }
         });
+
+        let span = $(cell).find('.association-detect-detail');
+        let custBySharedMatches = span.attr('data-cust-bysharedmatches');
                
         GetAssociationDetectDetail(fromObj.UserName, fromObj.CustID, fromObj.CTSCustID, ctsCustIDs.join(), custBySharedMatches);
 

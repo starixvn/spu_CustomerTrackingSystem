@@ -3,9 +3,9 @@ MATCH (c:CTSCustomer)
 WHERE c.CTSCustID IN $CTSCustIDs
 WITH c
 OPTIONAL MATCH (c)-[:USED_DEVICE]->(d:Device)<-[:USED_DEVICE]-(c1:CTSCustomer)
-WITH apoc.coll.union(apoc.coll.union(collect(DISTINCT c), collect(DISTINCT d)), collect(DISTINCT c1)) AS nodes, collect(DISTINCT c) as rootCust
+WITH apoc.coll.union(apoc.coll.union(collect(DISTINCT c), collect(DISTINCT d)), collect(DISTINCT c1)) AS nodes, collect(c) as rootCust
 UNWIND rootCust AS c
-MATCH (c)-[:GROUP_BY_AI]->(g:AIGroup)<-[:GROUP_BY_AI]-(c1:CTSCustomer)
+OPTIONAL MATCH (c)-[:GROUP_BY_AI]->(g:AIGroup)<-[:GROUP_BY_AI]-(c1:CTSCustomer)
 WITH apoc.coll.union(nodes, apoc.coll.union(collect(DISTINCT g),collect(DISTINCT c1))) AS nodeList
 CALL gds.graph.create.cypher(
   'AssLevel2',
