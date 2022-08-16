@@ -316,6 +316,82 @@
             return new List<GetAssociationDetectionModel>();
         }
 
+        /// <summary>
+        /// Get association report
+        /// </summary>
+        /// <param name="ctsCustIDs"></param>
+        /// <returns></returns>
+        [System.Web.Http.AcceptVerbs("DetectAssociationByPrimaryType")]
+        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetAssociationDetectionReportAPI)]
+        public IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByPrimaryType([FromBody] string ctsCustIDs)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(ctsCustIDs))
+                {
+                    var ip_CTSCustIDs = ctsCustIDs.Split(',').Select(long.Parse);
+                    
+                    DbSessionFactory.Execute<object>("AssDetection_DropInMemoryGraph");
+                    DbSessionFactory.Execute<object>("AssDetection_CreateInMemoryGraph", new { CTSCustIDs = ip_CTSCustIDs });
+                    var isGraphExisting = DbSessionFactory.Execute<bool>("AssDetection_CheckIfGraphExists").Data.FirstOrDefault();
+                    if (isGraphExisting)
+                    {
+                        DbSessionFactory.Execute<object>("AssDetection_RunWCCAlgo");
+                    
+                        var custAssociations = DbSessionFactory.Execute<DetectAssociationByPrimaryModel>("AssDetection_GetResult", new
+                        {
+                            CTSCustIDs = ip_CTSCustIDs
+                        }).Data;
+
+                        return custAssociations;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Error($"WEB - {ConfigSettings.EnvironmentName} - DetectAssociationByPrimaryType failed: " + ex.Message + ex.StackTrace + "\n"
+                        + ex.InnerException.Message + ex.InnerException.Source + ((Neo4j.Driver.Neo4jException)ex.InnerException).Code
+                        + ex.InnerException.StackTrace);
+            }
+
+            return new List<DetectAssociationByPrimaryModel>();
+        }
+
+        /// <summary>
+        /// Get association report
+        /// </summary>
+        /// <param name="ctsCustIDs"></param>
+        /// <returns></returns>
+        [System.Web.Http.AcceptVerbs("DetectAssociationByAgent")]
+        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetAssociationDetectionReportAPI)]
+        public IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByAgent([FromBody] string ctsCustIDs)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(ctsCustIDs))
+                {
+                    var ip_CTSCustIDs = ctsCustIDs.Split(',').Select(long.Parse);
+
+                    var custAssociations = DbSessionFactory.Execute<DetectAssociationByPrimaryModel>("GetAssociationDetectionReport_New", new
+                    {
+                        ip_CTSCustIDs = ip_CTSCustIDs,
+                    }).Data;
+
+                    return custAssociations;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogService.Error($"WEB - {ConfigSettings.EnvironmentName} - DetectAssociationByAgent failed: " + ex.Message + ex.StackTrace + "\n"
+                        + ex.InnerException.Message + ex.InnerException.Source + ((Neo4j.Driver.Neo4jException)ex.InnerException).Code
+                        + ex.InnerException.StackTrace);
+            }
+
+            return new List<DetectAssociationByPrimaryModel>();
+        }
+
         #endregion WEB - Association Detection Report
 
         #region API (Need to remove without in use)

@@ -1,0 +1,6 @@
+﻿USE ctsgraphdb2022
+CALL gds.graph.streamNodeProperty('AssLevel2', 'groupId',['CTSCustomer'])
+YIELD nodeId, propertyValue
+WITH gds.util.asNode(nodeId).CTSCustID AS CTSCustID, propertyValue AS GroupId
+WHERE CTSCustID IN $CTSCustIDs
+RETURN CTSCustID AS F, GroupId AS T

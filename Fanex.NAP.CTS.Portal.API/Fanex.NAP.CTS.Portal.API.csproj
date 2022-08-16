@@ -485,6 +485,13 @@
     <Content Include="App_Data\Graph\scripts\AssociationDetectionReport\GetAssociationDetectionReport.scrypt" />
     <Content Include="App_Data\Graph\scripts\AssociationDetectionReport\GetCustInformation.scrypt" />
     <Content Include="App_Data\Graph\scripts\adhoc\ScanCTSCustomer.scrypt" />
+    <Content Include="App_Data\Graph\scripts\AssociationDetectionReport\GetAssociationDetectionReport_New.scrypt" />
+    <Content Include="App_Data\Graph\scripts\AssociationDetectionReport\GetAgentByCTSCustIDs.scrypt" />
+    <Content Include="App_Data\Graph\scripts\AssociationDetectionReport\AssDetection_CreateInMemoryGraph.scrypt" />
+    <Content Include="App_Data\Graph\scripts\AssociationDetectionReport\AssDetection_RunWCCAlgo.scrypt" />
+    <Content Include="App_Data\Graph\scripts\AssociationDetectionReport\AssDetection_GetResult.scrypt" />
+    <Content Include="App_Data\Graph\scripts\AssociationDetectionReport\AssDetection_DropInMemoryGraph.scrypt" />
+    <Content Include="App_Data\Graph\scripts\AssociationDetectionReport\AssDetection_CheckIfGraphExists.scrypt" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />

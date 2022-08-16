@@ -663,6 +663,20 @@
             <param name="ctsCustIDs"></param>
             <returns></returns>
         </member>
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.DetectAssociationByPrimaryType(System.String)">
+            <summary>
+            Get association report
+            </summary>
+            <param name="ctsCustIDs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.DetectAssociationByAgent(System.String)">
+            <summary>
+            Get association report
+            </summary>
+            <param name="ctsCustIDs"></param>
+            <returns></returns>
+        </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetStatisticAssociation(System.Int64)">
             <summary>
             Get association statistic

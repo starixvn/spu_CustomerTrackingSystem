@@ -1,84 +1,24 @@
-﻿MATCH (c:CTSCustomer)
-WHERE c.CTSCustID IN [13,22,30,31,32,33,34,35,36,37]
-CALL{
-	WITH c
-	RETURN  id(c) AS data
-	
-	UNION
-    // AssDevice
+﻿USE ctsgraphdb2022
+MATCH (c:CTSCustomer)
+WHERE c.CTSCustID IN $CTSCustIDs
+CALL {   
     WITH c
-    MATCH (c)-[:USED_DEVICE*2]-(c1:CTSCustomer)
-    RETURN  id(c1) AS data
-    UNION
-    WITH c
-    MATCH (c)-[:USED_DEVICE*4]-(c1:CTSCustomer)
-    RETURN id(c1) AS data
-    UNION
-    WITH c
-    MATCH (c)-[:USED_DEVICE]->(d:Device)
-    RETURN id(d) AS data
-	UNION
-    WITH c
-    MATCH (c)-[:USED_DEVICE*4]-(c1:CTSCustomer)-[:USED_DEVICE]->(d:Device)
-    RETURN id(d) AS data
+    MATCH (c)-[r:GROUP_BY_AI]->(g:AIGroup)
+    RETURN g.GroupID + 10000000000 AS ToID, 4 AS AssociationType
 
     UNION
-    // AssGroupByAI
     WITH c
-    MATCH (c)-[:GROUP_BY_AI]->(g:AIGroup)
-    RETURN  id(g) AS data
-    UNION
-    WITH c
-	MATCH (c)-[:GROUP_BY_AI*4]-(c1:CTSCustomer)-[:GROUP_BY_AI]->(g:AIGroup)
-    RETURN  id(g) AS data
-    UNION
-    WITH c
-    MATCH (c)-[:GROUP_BY_AI*2]-(c1:CTSCustomer)
-    RETURN  id(c1) AS data
-    UNION
-    WITH c
-    MATCH (c)-[:GROUP_BY_AI*4]-(c1:CTSCustomer)
-    RETURN  id(c1) AS data
-    
-    UNION
-    // AssAI
-    WITH c
-    MATCH (c)-[:ASS_BY_AI]-(c1:CTSCustomer)
-    RETURN  id(c1) AS data
-    UNION
-    WITH c
-    MATCH (c)-[:ASS_BY_AI*2]-(c1:CTSCustomer)
-    RETURN  id(c1) AS data
-
-    UNION
-    // AssIP
-    WITH c
-    MATCH (c)-[:ASS_BY_IP]-(c1:CTSCustomer)
-    RETURN  id(c1) AS data
-    UNION
-    WITH c
-    MATCH (c)-[:ASS_BY_IP*2]-(c1:CTSCustomer)
-    RETURN  id(c1) AS data
-
-    UNION
-    // Manual
-    WITH c
-    MATCH (c)-[:ADD_MANUALLY]-(c1:CTSCustomer)
-    RETURN  id(c1) AS data
-    UNION
-    WITH c
-    MATCH (c)-[:ADD_MANUALLY*2]-(c1:CTSCustomer)
-    RETURN  id(c1) AS data
+    MATCH (c)-[r:ADD_MANUALLY|ASS_BY_IP|ASS_BY_AI]-(c2:CTSCustomer)
+    RETURN c2.CTSCustID AS ToID, 
+        CASE type(r) 
+            WHEN 'ADD_MANUALLY' THEN 2
+            WHEN 'ASS_BY_AI' THEN 3
+            ELSE 5
+        END AS AssociationType
 }
-WITH collect(distinct data) AS nodeIds
-CALL gds.graph.create.cypher(
-  'AssLevel2',
-  'UNWIND $nodes AS id RETURN id',
-  'MATCH (n)-[r:USED_DEVICE|GROUP_BY_AI|ASS_BY_AI|ASS_BY_IP|ADD_MANUALLY]-(m)
-    WHERE (id(n) IN $nodes) AND (id(m) IN $nodes)
-    RETURN id(n) AS source, id(m) AS target, type(r) AS type',
-  { parameters: { nodes: nodeIds} }
-)
- YIELD
-  graphName, nodeCount AS nodes, relationshipCount AS rels
-   RETURN graphName, nodes, rels
+RETURN c.CTSCustID AS FromID, ToID, AssociationType
+
+UNION
+MATCH (c:CTSCustomer)-[:USED_DEVICE]->(d:Device)<-[:USED_DEVICE]-(c1:CTSCustomer)
+WHERE c.CTSCustID IN $CTSCustIDs
+RETURN c1.CTSCustID AS FromID, d.DeviceID * -1 AS ToID, 1 AS AssociationType
