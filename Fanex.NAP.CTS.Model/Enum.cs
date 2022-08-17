@@ -140,4 +140,12 @@
         Category,
         Reason
     }
+
+    public enum DetectAssociation_QueryType
+    {
+        DetectAss = 1,
+        GetTicketDetail = 2,
+        GetAssByGroup = 3
+    }
+
 }

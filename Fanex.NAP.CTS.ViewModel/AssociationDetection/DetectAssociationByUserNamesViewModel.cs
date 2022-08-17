@@ -11,9 +11,6 @@
         public bool IsIPLast3Days { get; set; }
 
         public bool Is3MatchesLast7Days { get; set; }
-
-        public string SharedIPJson { get; set; }
-
-        public string SharedMatchesJson { get; set; }
+       
     }
 }

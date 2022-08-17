@@ -28,9 +28,7 @@
         divAssociationDetectDetailMatch: $('#divAssociationDetectDetailMatch'),
         tblAssociationDetectDetailMatch: $('#tblAssociationDetectDetailMatch'),
         divAssociationDetectDetailAgent: $('#divAssociationDetectDetailAgent'),
-        tblAssociationDetectDetailAgent: $('#tblAssociationDetectDetailAgent'),
-        hdAssociationDetectSharedIP: $('#hdAssociationDetectSharedIP'),
-        hdAssociationDetectSharedMatches: $('#hdAssociationDetectSharedMatches')
+        tblAssociationDetectDetailAgent: $('#tblAssociationDetectDetailAgent')    
     };
 
     let parameters = {
@@ -130,9 +128,7 @@
 
     function RenderUserName(obj) {
         if (obj.UserName !== null) {
-            return `<span class="association-detect-detail" data-groupid=${obj.GroupID} data-custid=${obj.CustID} data-ctscustid=${obj.CTSCustID}> ${obj.UserName} 
-                    <i class="hide cust-by-matches">${obj.CustByMatches}</i>
-                    </span>`;
+            return `<span class="association-detect-detail" data-groupid=${obj.GroupID} data-custid=${obj.CustID} data-ctscustid=${obj.CTSCustID} data-cust-sharedbyip=${obj.CustCoupleSharedIP}> ${obj.UserName}</span>`;
         }
 
         return "";
@@ -151,9 +147,9 @@
                 info: false,
                 ordering: false,
                 searching: false,
-                scrollX: false,              
+                scrollX: false,
                 scrollY: '400px',
-                scrollCollapse: true,              
+                scrollCollapse: true,
                 paging: false,
                 searching: false,
                 columnDefs: [
@@ -169,7 +165,7 @@
                         createdCell: (cell, _, row) => {
                             $('.association-detect-detail-ip', cell).click(() => {
                                 let span = $(cell).find('.association-detect-detail-ip');
-                                ShowAssociationDetectDetailIP(span.attr('data-fromusername'), row.UserName, parseInt(span.attr('data-fromcustid')), row.CustID)
+                                ShowAssociationDetectDetailIP(span.attr('data-fromusername'), row.UserName);
                             });
 
                             $('.association-detect-detail-match', cell).click(() => {
@@ -190,19 +186,18 @@
         domElements.tblAssociationDetectDetail.DataTable().clear();
         
         let ctsCustIDs = [];
+        let userNames = [];
 
         domElements.tblAssociationDetection.find('.association-detect-detail').each(function () {
             if ($(this).attr("data-groupid") == fromObj.GroupID) {
                 ctsCustIDs.push($(this).attr('data-ctscustid'));
+                userNames.push($(this).text().trim());
             }
         });
 
-        let custBySharedMatches = '';
-        $(cell).find('.cust-by-matches').each(function () {         
-            custBySharedMatches = $(this).text();            
-        });
-               
-        GetAssociationDetectDetail(fromObj.UserName, fromObj.CustID, fromObj.CTSCustID, ctsCustIDs.join(), custBySharedMatches);
+        let custSharedByIPs = $(cell).find('.association-detect-detail').attr('data-cust-sharedbyip');
+        
+        GetAssociationDetectDetail(fromObj.UserName, fromObj.CustID, fromObj.CTSCustID, ctsCustIDs.join(), userNames.join(), custSharedByIPs);
 
         domElements.divAssociationDetectDetail.dialog({
             modal: true,
@@ -219,7 +214,7 @@
         });             
     }
 
-    function GetAssociationDetectDetail(userName, custID, ctsCustID, ctsCustIDList, custBySharedMatches) {
+    function GetAssociationDetectDetail(userName, custID, ctsCustID, ctsCustIDList, userNames, custSharedByIPs) {
         $.ajax(common.modifyRelativeUrl('AssociationDetection/GetDetectAssociationDetail'), {
             type: 'POST',
             beforeSend: function () {
@@ -227,15 +222,15 @@
             },
             data: {
                 UserName: userName,
+                UserNameList: userNames,
                 CustID: custID,
                 CTSCustID: ctsCustID,
-                CTSCustIDList: ctsCustIDList,
+                CTSCustIDList: ctsCustIDList,                
                 IsBPManuallyDeviceIP: parameters.IsBPManuallyDeviceIP,
                 IsAgent: parameters.IsAgent,
                 IsIPLast3Days: parameters.IsIPLast3Days,
                 Is3MatchesLast7Days: parameters.Is3MatchesLast7Days,
-                SharedIPJson: domElements.hdAssociationDetectSharedIP.val(),               
-                SharedMatchesJson: custBySharedMatches
+                CustSharedByIPs: custSharedByIPs     
             },
             success: function (response) {
                 if (response !== undefined) {                   
@@ -254,7 +249,7 @@
         })
     }
 
-    function ShowAssociationDetectDetailIP(userName1, userName2, custID1, custID2) {                 
+    function ShowAssociationDetectDetailIP(userName1, userName2) {                 
         if (tableAssociationDetectDetailIP == null) {
             tableAssociationDetectDetailIP = domElements.tblAssociationDetectDetailIP.DataTable({
                 language: {
@@ -286,7 +281,7 @@
 
         domElements.tblAssociationDetectDetailIP.DataTable().clear();
 
-        GetAssociationDetectDetailIP(custID1, custID2);
+        GetAssociationDetectDetailIP(userName1, userName2);
 
         domElements.divAssociationDetectDetailIP.dialog({
             modal: true,
@@ -305,15 +300,14 @@
         domElements.divAssociationDetectDetailIP.parent().find('.ui-dialog-title').html("<div>ASSOCIATION DETAIL - IP LIST (in the last 3 days): <br/>" + userName1 + " - " + userName2 + "</div>");      
     }
 
-    function GetAssociationDetectDetailIP(custID1, custID2) {
+    function GetAssociationDetectDetailIP(userName1, userName2) {
         $.ajax(common.modifyRelativeUrl('AssociationDetection/GetDetectAssociationDetailIP'), {
             type: 'POST',
             beforeSend: function () {
                 domElements.tblAssociationDetectDetailIP.find('tbody').addClass('loading');                
             },
             data: {
-                custID1: custID1,
-                custID2: custID2
+                userNameList: userName1 + ',' + userName2,              
             },
             success: function (response) {
                 if (response !== undefined) {
@@ -680,10 +674,7 @@
                             ? domElements.tblAssociationDetection.DataTable().clear().draw()
                             : dataTable = GenerateGrid([]);
                     }
-
-                    domElements.hdAssociationDetectSharedIP.val(response.sharedIPJson);
-                    domElements.hdAssociationDetectSharedMatches.val(response.sharedMatchesJson);
-
+              
                     domElements.divReportContainer.removeClass('hide');
                 },
                 complete: function () {

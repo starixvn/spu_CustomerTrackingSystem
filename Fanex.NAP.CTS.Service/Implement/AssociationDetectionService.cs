@@ -4,6 +4,7 @@
     using Fanex.NAP.CTS.Core.Helpers.Api;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria.AssociationDetection;
+    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.AssociationDetection;
     using Fanex.NAP.CTS.ViewModel.AssociationDetection;
     using Fanex.NAP.SPU.Graph.Core;
@@ -23,6 +24,8 @@
         IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByPrimary(string ctsCustIDs);
 
         IEnumerable<DetectAssociationByAgentModel> DetectAssociationByAgent(string ctsCustIDs);
+
+        IEnumerable<long> GetAssociationDetectSharedMatches(int rootCustID, string custIDList);
 
         IEnumerable<GetAssociationDetectDetailModel> GetAssociationDetectionDetail(GetAssociationDetectionDetailViewModel assDetectionDetailModel);
 
@@ -111,7 +114,7 @@
             var criteria = new DetectAssociationBySharedMatchesCriteria
             {
                 CustIDList = custIDList,
-                IsDetecting = true
+                QueryType = (int)DetectAssociation_QueryType.DetectAss
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -130,6 +133,21 @@
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 return db.Query<DetectAssociationBySharedIPMatchesModel>(criteria);
+            }
+        }
+
+        public IEnumerable<long> GetAssociationDetectSharedMatches(int rootCustID, string custIDList)
+        {
+            var criteria = new DetectAssociationBySharedMatchesCriteria
+            {
+                RootCustID = rootCustID,
+                CustIDList = custIDList,
+                QueryType = (int)DetectAssociation_QueryType.GetAssByGroup
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<long>(criteria);
             }
         }
 
@@ -170,7 +188,7 @@
             var criteria = new DetectAssociationBySharedMatchesCriteria
             {
                 CustIDList = custIDList,
-                IsDetecting = false
+                QueryType = (int)DetectAssociation_QueryType.GetTicketDetail
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))

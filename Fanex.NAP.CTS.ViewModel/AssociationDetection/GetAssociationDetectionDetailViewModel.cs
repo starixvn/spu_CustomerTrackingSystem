@@ -4,7 +4,9 @@
     {
         public string UserName { get; set; }
 
-        public int CustID { get; set; }
+        public string UserNameList { get; set; }
+
+        public int CustID { get; set; }        
 
         public long CTSCustID { get; set; }
 
@@ -18,8 +20,7 @@
 
         public bool Is3MatchesLast7Days { get; set; }
 
-        public string SharedIPJson { get; set; }
-
-        public string SharedMatchesJson { get; set; }
+        public string CustSharedByIPs { get; set; }
+       
     }
 }
