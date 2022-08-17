@@ -130,7 +130,9 @@
 
     function RenderUserName(obj) {
         if (obj.UserName !== null) {
-            return `<span class="association-detect-detail" data-groupid=${obj.GroupID} data-custid=${obj.CustID} data-ctscustid=${obj.CTSCustID} data-cust-bysharedmatches=${obj.CustByMatches}> ${ obj.UserName } </span>`;
+            return `<span class="association-detect-detail" data-groupid=${obj.GroupID} data-custid=${obj.CustID} data-ctscustid=${obj.CTSCustID}> ${obj.UserName} 
+                    <i class="hide cust-by-matches">${obj.CustByMatches}</i>
+                    </span>`;
         }
 
         return "";
@@ -195,8 +197,10 @@
             }
         });
 
-        let span = $(cell).find('.association-detect-detail');
-        let custBySharedMatches = span.attr('data-cust-bysharedmatches');
+        let custBySharedMatches = '';
+        $(cell).find('.cust-by-matches').each(function () {         
+            custBySharedMatches = $(this).text();            
+        });
                
         GetAssociationDetectDetail(fromObj.UserName, fromObj.CustID, fromObj.CTSCustID, ctsCustIDs.join(), custBySharedMatches);
 
