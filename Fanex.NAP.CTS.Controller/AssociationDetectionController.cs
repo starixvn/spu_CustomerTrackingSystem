@@ -239,8 +239,8 @@
             {
                 try
                 {                    
-                    var userNames = model.UserNames.Split(',').Distinct();
-                    var userNameList = string.Join(",", userNames);
+                    var userNames = model.UserNames.Split(',');
+                    var userNameList = string.Join(",", userNames.Distinct());
 
                     var orgUserList = userNames.Select(x => new ValidateUserNameModel
                     {
