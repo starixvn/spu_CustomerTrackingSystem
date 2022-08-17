@@ -14,7 +14,7 @@
 
         public IEnumerable<DetectAssociationItemViewModel> ItemList { get; set; }
 
-        public IEnumerable<DetectAssociationMergeGroupModel> OrgItemList { get; set; }
+        public IEnumerable<ExportAssociationDetectModel> ExportItemList { get; set; }
 
         public int ErrorCode { get; set; }
 

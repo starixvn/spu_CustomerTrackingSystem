@@ -258,7 +258,7 @@
                             IsInternal = c2.IsInternal
                         });
                  
-                    var custIDs = string.Join(",", orgUserList.Select(x => x.CustID));
+                    var custIDs = string.Join(",", orgUserList.Select(x => x.CustID).Distinct());
 
                     var ctsCustIDs = string.Join(",", orgUserList.Select(x => x.CTSCustID));
 
@@ -274,13 +274,13 @@
 
                         //LogService.Info($"Detect Associatied by IP end time {DateTime.Now}");
                     }, () => {
-                        LogService.Info($"Detect Associatied by Matches start time {DateTime.Now}");
+                        //LogService.Info($"Detect Associatied by Matches start time {DateTime.Now}");
 
                         var assBySharedMatches = model.Is3MatchesLast7Days ? DetectAssociationBySharedMatches(orgUserList.Where(x => !x.IsInternal), custIDs) : Enumerable.Empty<SharedIPMatchesInfoModel>();
 
                         mergeGroupInfo.AssociationByMatchesJson = GetAssociationCust(assBySharedMatches);                        
 
-                        LogService.Info($"Detect Associatied by Matches end time {DateTime.Now}");
+                        //LogService.Info($"Detect Associatied by Matches end time {DateTime.Now}");
                     }, () => {                        
                         var assByPrimary = model.IsBPManuallyDeviceIP ? _associationDetectionService.DetectAssociationByPrimary(ctsCustIDs) : Enumerable.Empty<DetectAssociationByPrimaryModel>();
 
@@ -291,13 +291,20 @@
                         mergeGroupInfo.AssociationByAgentJson = JsonConvert.SerializeObject(assByAgent);                        
                     });
 
-                    LogService.Info($"Detect Associatied Merge Group start time {DateTime.Now}");
+                    //LogService.Info($"Detect Associatied Merge Group start time {DateTime.Now}");
                     var assMergeGroup = _associationDetectionService.MergeGroupDetectAssociation(mergeGroupInfo);
-                    LogService.Info($"Detect Associatied Merge Group end time {DateTime.Now}");
+                    //LogService.Info($"Detect Associatied Merge Group end time {DateTime.Now}");
 
                     if (isExportExcel)
-                    {
-                        result.OrgItemList = assMergeGroup;                                
+                    {     
+                        result.ExportItemList = orgUserList.Select(x => 
+                        {                           
+                            return new ExportAssociationDetectModel
+                            {
+                                UserName = x.UserName,
+                                GroupID = assMergeGroup.FirstOrDefault(y => y.CustID == x.CustID).GroupID ?? null
+                            };
+                        });
                     }
                     else
                     {
@@ -313,7 +320,7 @@
                         });
                     }
 
-                    LogService.Info($"Detect Associatied end time {DateTime.Now}");
+                    //LogService.Info($"Detect Associatied end time {DateTime.Now}");
                 }
                 catch (Exception ex)
                 {
@@ -533,7 +540,7 @@
 
             var data = DetectAssociation(model, true);
           
-            var excelFile = _associationDetectionService.ExportToExcelAssociationDetect(data.OrgItemList, fileName, templatePath);
+            var excelFile = _associationDetectionService.ExportToExcelAssociationDetect(data.ExportItemList, fileName, templatePath);
 
             return File(excelFile, "application/vnd.ms-excel", fileName);
         }       

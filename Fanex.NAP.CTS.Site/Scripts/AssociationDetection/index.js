@@ -339,8 +339,9 @@
                 ordering: false,
                 searching: false,
                 scrollX: false,
-                scrollY: '400px',
-                scrollCollapse: true,
+                //scrollY: '400px',
+                //scrollCollapse: true,
+                scrollCollapse: false,
                 paging: false,
                 searching: false,
                 columnDefs: [
