@@ -266,21 +266,18 @@
                    
                     var assBySharedIP = Enumerable.Empty<SharedIPMatchesInfoModel>();
 
-                    Parallel.Invoke(() => {
-                        //LogService.Info($"Detect Associatied by IP start time {DateTime.Now}");
+                    Parallel.Invoke(() => {                      
                         assBySharedIP = model.IsIPLast3Days ? DetectAssociationByIP(orgUserList.Where(x => !x.IsInternal), custIDs) : Enumerable.Empty<SharedIPMatchesInfoModel>();
 
-                        mergeGroupInfo.AssociationByIPJson = GetAssociationCust(assBySharedIP);                       
-
-                        //LogService.Info($"Detect Associatied by IP end time {DateTime.Now}");
+                        mergeGroupInfo.AssociationByIPJson = GetAssociationCust(assBySharedIP);            
                     }, () => {
-                        //LogService.Info($"Detect Associatied by Matches start time {DateTime.Now}");
+                        LogService.Info($"Detect Associatied by Matches start time {DateTime.Now}");
 
                         var assBySharedMatches = model.Is3MatchesLast7Days ? DetectAssociationBySharedMatches(orgUserList.Where(x => !x.IsInternal), custIDs) : Enumerable.Empty<SharedIPMatchesInfoModel>();
 
                         mergeGroupInfo.AssociationByMatchesJson = GetAssociationCust(assBySharedMatches);                        
 
-                        //LogService.Info($"Detect Associatied by Matches end time {DateTime.Now}");
+                        LogService.Info($"Detect Associatied by Matches end time {DateTime.Now}");
                     }, () => {                        
                         var assByPrimary = model.IsBPManuallyDeviceIP ? _associationDetectionService.DetectAssociationByPrimary(ctsCustIDs) : Enumerable.Empty<DetectAssociationByPrimaryModel>();
 
@@ -320,7 +317,7 @@
                         });
                     }
 
-                    //LogService.Info($"Detect Associatied end time {DateTime.Now}");
+                    LogService.Info($"Detect Associatied end time {DateTime.Now}");
                 }
                 catch (Exception ex)
                 {
