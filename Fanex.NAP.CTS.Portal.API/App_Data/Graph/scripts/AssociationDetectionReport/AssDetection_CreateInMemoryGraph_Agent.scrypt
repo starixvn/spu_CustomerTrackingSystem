@@ -1,4 +1,4 @@
-﻿USE ctsgraphdb2022
+﻿USE ctsgraphdb
 OPTIONAL MATCH (c:CTSCustomer)-[:HAS_DOWNLINE]->(member:CTSCustomer)
 WHERE member.CTSCustID IN $CTSCustIDs AND NOT c:IsLicensee
 WITH collect(DISTINCT c) as agents, collect(DISTINCT member) as rootCust

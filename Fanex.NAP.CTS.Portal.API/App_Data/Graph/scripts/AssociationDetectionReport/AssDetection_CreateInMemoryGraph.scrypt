@@ -1,4 +1,4 @@
-﻿USE ctsgraphdb2022
+﻿USE ctsgraphdb
 MATCH (c:CTSCustomer)
 WHERE c.CTSCustID IN $CTSCustIDs
 WITH c

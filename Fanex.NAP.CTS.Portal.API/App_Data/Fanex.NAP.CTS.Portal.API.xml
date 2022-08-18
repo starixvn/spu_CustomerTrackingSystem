@@ -670,11 +670,14 @@
             <param name="assType">1 - Primary type, 2 - Agent type</param>
             <returns></returns>
         </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.DetectAssociationGetDetail(System.Int64,System.String)">
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.DetectAssociationGetDetail(System.Int64,System.String,System.Boolean,System.Boolean)">
             <summary>
-            Get association report
+            
             </summary>
-            <param name="ctsCustIDs"></param>
+            <param name="rootCTSCustID"></param>
+            <param name="assCTSCustIDs"></param>
+            <param name="getPrimary"></param>
+            <param name="getAgent"></param>
             <returns></returns>
         </member>
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.GetStatisticAssociation(System.Int64)">

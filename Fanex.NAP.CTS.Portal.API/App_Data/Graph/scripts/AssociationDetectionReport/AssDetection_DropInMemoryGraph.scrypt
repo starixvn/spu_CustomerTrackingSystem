@@ -1,2 +1,2 @@
-﻿USE ctsgraphdb2022
+﻿USE ctsgraphdb
 CALL gds.graph.drop('AssLevel2', false);

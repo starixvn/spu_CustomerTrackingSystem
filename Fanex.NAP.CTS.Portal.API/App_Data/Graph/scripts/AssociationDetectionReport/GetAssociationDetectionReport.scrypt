@@ -1,4 +1,4 @@
-﻿USE ctsgraphdb2022
+﻿USE ctsgraphdb
 //USE ctslocal
 MATCH (c:CTSCustomer)-[:BELONG_TO_SUB]->(s:Subscriber)
 WHERE c.CTSCustID in $ip_CTSCustIDs AND NOT (s.SubscriberID IN $ip_ExcludeSubscriberIDs)
