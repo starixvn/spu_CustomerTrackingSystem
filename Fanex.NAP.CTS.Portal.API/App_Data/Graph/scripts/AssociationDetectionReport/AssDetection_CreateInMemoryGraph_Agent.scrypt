@@ -1,0 +1,20 @@
+﻿USE ctsgraphdb2022
+OPTIONAL MATCH (c:CTSCustomer)-[:HAS_DOWNLINE]->(member:CTSCustomer)
+WHERE member.CTSCustID IN $CTSCustIDs AND NOT c:IsLicensee
+WITH collect(DISTINCT c) as agents, collect(DISTINCT member) as rootCust
+UNWIND agents AS c
+OPTIONAL MATCH (c)-[:USED_DEVICE]->(d:Device)<-[:USED_DEVICE]-(c1:CTSCustomer)
+WITH apoc.coll.union(agents, apoc.coll.union(apoc.coll.union(collect(DISTINCT c), collect(DISTINCT d)), collect(DISTINCT c1))) AS nodes, collect(DISTINCT c) as rootCust
+UNWIND rootCust AS c
+MATCH (c)-[:GROUP_BY_AI]->(g:AIGroup)<-[:GROUP_BY_AI]-(c1:CTSCustomer)
+WITH apoc.coll.union(nodes, apoc.coll.union(collect(DISTINCT g),collect(DISTINCT c1))) AS nodeList
+CALL gds.graph.create.cypher(
+  'AssLevel2',
+  'UNWIND $nodes AS n RETURN id(n) AS id, labels(n) AS labels',
+  'MATCH (n)-[r:USED_DEVICE|ASS_BY_AI|ADD_MANUALLY|ASS_BY_IP|GROUP_BY_AI]->(m)
+    WHERE (n IN $nodes) AND (m IN $nodes)
+    RETURN id(n) AS source, id(m) AS target, type(r) AS type',
+  { parameters: { nodes: nodeList} }
+)
+YIELD graphName, nodeCount AS nodes, relationshipCount AS rels
+RETURN graphName, nodes, rels

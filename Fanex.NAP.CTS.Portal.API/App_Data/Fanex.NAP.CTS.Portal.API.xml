@@ -603,7 +603,6 @@
             <param name="associationType">1-Device, 2-Manual</param>
             <returns></returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetProblemCase" -->
         <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.CtsController.GetProblemCaseMonitor(Fanex.NAP.CTS.Model.API.ProblemCaseMonitor.ProblemCaseMonitorParamsModel)">
             <summary>
             Get list Problem Case Monitor
@@ -663,14 +662,15 @@
             <param name="ctsCustIDs"></param>
             <returns></returns>
         </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.DetectAssociationByPrimaryType(System.String)">
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.DetectAssociationByPrimaryOrAgentType(System.String,System.Int32)">
             <summary>
-            Get association report
+            DetectAssociationByPrimaryOrAgentType
             </summary>
             <param name="ctsCustIDs"></param>
+            <param name="assType">1 - Primary type, 2 - Agent type</param>
             <returns></returns>
         </member>
-        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.DetectAssociationByAgent(System.String)">
+        <member name="M:Fanex.NAP.CTS.Portal.API.Controllers.GraphController.DetectAssociationGetDetail(System.Int64,System.String)">
             <summary>
             Get association report
             </summary>

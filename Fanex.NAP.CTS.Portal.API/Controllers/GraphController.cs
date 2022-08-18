@@ -317,14 +317,15 @@
         }
 
         /// <summary>
-        /// Get association report
+        /// DetectAssociationByPrimaryOrAgentType
         /// </summary>
         /// <param name="ctsCustIDs"></param>
+        /// <param name="assType">1 - Primary type, 2 - Agent type</param>
         /// <returns></returns>
-        [System.Web.Http.AcceptVerbs("DetectAssociationByPrimaryType")]
+        [System.Web.Http.AcceptVerbs("DetectAssociationByPrimaryOrAgentType")]
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetAssociationDetectionReportAPI)]
-        public IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByPrimaryType([FromBody] string ctsCustIDs)
+        public IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByPrimaryOrAgentType([FromBody] string ctsCustIDs, [FromBody] int assType)
         {
             try
             {
@@ -333,7 +334,8 @@
                     var ip_CTSCustIDs = ctsCustIDs.Split(',').Select(long.Parse);
                     
                     DbSessionFactory.Execute<object>("AssDetection_DropInMemoryGraph");
-                    DbSessionFactory.Execute<object>("AssDetection_CreateInMemoryGraph", new { CTSCustIDs = ip_CTSCustIDs });
+                    var scriptName = assType == 1 ? "AssDetection_CreateInMemoryGraph" : "AssDetection_CreateInMemoryGraph_Agent";
+                    DbSessionFactory.Execute<object>(scriptName, new { CTSCustIDs = ip_CTSCustIDs });
                     var isGraphExisting = DbSessionFactory.Execute<bool>("AssDetection_CheckIfGraphExists").Data.FirstOrDefault();
                     if (isGraphExisting)
                     {
@@ -363,20 +365,21 @@
         /// </summary>
         /// <param name="ctsCustIDs"></param>
         /// <returns></returns>
-        [System.Web.Http.AcceptVerbs("DetectAssociationByAgent")]
+        [System.Web.Http.AcceptVerbs("DetectAssociationGetDetail")]
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetAssociationDetectionReportAPI)]
-        public IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByAgent([FromBody] string ctsCustIDs)
+        public IEnumerable<GetAssociationDetectDetailModel> DetectAssociationGetDetail([FromBody] long rootCTSCustID, [FromBody] string assCTSCustIDs)
         {
             try
             {
-                if (!string.IsNullOrEmpty(ctsCustIDs))
+                if (rootCTSCustID > 0)
                 {
-                    var ip_CTSCustIDs = ctsCustIDs.Split(',').Select(long.Parse);
+                    var ip_assCTSCustIDs = assCTSCustIDs.Split(',').Select(long.Parse);
 
-                    var custAssociations = DbSessionFactory.Execute<DetectAssociationByPrimaryModel>("GetAssociationDetectionReport_New", new
+                    var custAssociations = DbSessionFactory.Execute<GetAssociationDetectDetailModel>("AssDetection_GetDetail", new
                     {
-                        ip_CTSCustIDs = ip_CTSCustIDs,
+                        RootCTSCustID = rootCTSCustID,
+                        AssCTSCustIDs = ip_assCTSCustIDs
                     }).Data;
 
                     return custAssociations;
@@ -384,12 +387,12 @@
             }
             catch (Exception ex)
             {
-                LogService.Error($"WEB - {ConfigSettings.EnvironmentName} - DetectAssociationByAgent failed: " + ex.Message + ex.StackTrace + "\n"
+                LogService.Error($"WEB - {ConfigSettings.EnvironmentName} - DetectAssociationGetDetail failed: " + ex.Message + ex.StackTrace + "\n"
                         + ex.InnerException.Message + ex.InnerException.Source + ((Neo4j.Driver.Neo4jException)ex.InnerException).Code
                         + ex.InnerException.StackTrace);
             }
 
-            return new List<DetectAssociationByPrimaryModel>();
+            return new List<GetAssociationDetectDetailModel>();
         }
 
         #endregion WEB - Association Detection Report
