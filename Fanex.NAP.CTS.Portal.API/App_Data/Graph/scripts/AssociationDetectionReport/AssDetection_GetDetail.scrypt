@@ -1,4 +1,4 @@
-﻿USE ctsgraphdb
+﻿USE ctsgraphdb2022
 MATCH (c:CTSCustomer)
 WHERE c.CTSCustID = $RootCTSCustID
 CALL{
@@ -24,12 +24,4 @@ CALL{
             ELSE 'IP' 
         END AS AssType
 }
-RETURN c.CTSCustID      AS FromCTSCustID
-    , c.CustID          AS FromCustID
-    , c.UserName        AS FromUsername
-    , ''                AS FromAgentUsername
-    , ass.CTSCustID     AS ToCTSCustID
-    , ass.CustID        AS ToCustID
-    , ass.UserName      AS ToUsername
-    , ''                AS ToAgentUsername
-    ,                      AssType
+RETURN ass.CTSCustID AS ToCTSCustID, ass.UserName AS ToUsername, ass.CustID AS ToCustID, AssType, ass.Username

@@ -361,46 +361,28 @@
         }
 
         /// <summary>
-        /// 
+        /// Get association report
         /// </summary>
-        /// <param name="rootCTSCustID"></param>
-        /// <param name="assCTSCustIDs"></param>
-        /// <param name="getPrimary"></param>
-        /// <param name="getAgent"></param>
+        /// <param name="ctsCustIDs"></param>
         /// <returns></returns>
         [System.Web.Http.AcceptVerbs("DetectAssociationGetDetail")]
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetAssociationDetectionReportAPI)]
-        public IEnumerable<GetAssociationDetectDetailModel> DetectAssociationGetDetail([FromBody] long rootCTSCustID, [FromBody] string assCTSCustIDs, [FromBody] bool getPrimary, [FromBody] bool getAgent)
+        public IEnumerable<GetAssociationDetectDetailModel> DetectAssociationGetDetail([FromBody] long rootCTSCustID, [FromBody] string assCTSCustIDs)
         {
-            var custAssociations = new List<GetAssociationDetectDetailModel>();
             try
             {
                 if (rootCTSCustID > 0)
                 {
                     var ip_assCTSCustIDs = assCTSCustIDs.Split(',').Select(long.Parse);
 
-                    if (getPrimary)
+                    var custAssociations = DbSessionFactory.Execute<GetAssociationDetectDetailModel>("AssDetection_GetDetail", new
                     {
-                        var custAssociations_Primary = DbSessionFactory.Execute<GetAssociationDetectDetailModel>("AssDetection_GetDetail_PrimaryType", new
-                        {
-                            RootCTSCustID = rootCTSCustID,
-                            AssCTSCustIDs = ip_assCTSCustIDs
-                        }).Data;
+                        RootCTSCustID = rootCTSCustID,
+                        AssCTSCustIDs = ip_assCTSCustIDs
+                    }).Data;
 
-                        custAssociations.AddRange(custAssociations_Primary);
-                    }
-
-                    if (getAgent)
-                    {
-                        var custAssociations_Agent = DbSessionFactory.Execute<GetAssociationDetectDetailModel>("AssDetection_GetDetail_AgentType", new
-                        {
-                            RootCTSCustID = rootCTSCustID,
-                            AssCTSCustIDs = ip_assCTSCustIDs
-                        }).Data;
-
-                        custAssociations.AddRange(custAssociations_Agent);
-                    }
+                    return custAssociations;
                 }
             }
             catch (Exception ex)
@@ -410,7 +392,7 @@
                         + ex.InnerException.StackTrace);
             }
 
-            return custAssociations;
+            return new List<GetAssociationDetectDetailModel>();
         }
 
         #endregion WEB - Association Detection Report
