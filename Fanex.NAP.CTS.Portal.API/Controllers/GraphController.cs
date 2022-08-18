@@ -370,19 +370,34 @@
         [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetAssociationDetectionReportAPI)]
         public IEnumerable<GetAssociationDetectDetailModel> DetectAssociationGetDetail([FromBody] DetectAssGetDetailParams paras)
         {
+            var custAssociations = new List<GetAssociationDetectDetailModel>();
             try
             {
                 if (paras.RootCTSCustID > 0)
                 {
                     var ip_assCTSCustIDs = paras.AssCTSCustIDs.Split(',').Select(long.Parse);
 
-                    var custAssociations = DbSessionFactory.Execute<GetAssociationDetectDetailModel>("AssDetection_GetDetail", new
+                    if (paras.GetPrimaryType)
                     {
-                        RootCTSCustID = paras.RootCTSCustID,
-                        AssCTSCustIDs = ip_assCTSCustIDs
-                    }).Data;
+                        var custAssociations_Primary = DbSessionFactory.Execute<GetAssociationDetectDetailModel>("AssDetection_GetDetail_PrimaryType", new
+                        {
+                            RootCTSCustID = paras.RootCTSCustID,
+                            AssCTSCustIDs = ip_assCTSCustIDs
+                        }).Data;
 
-                    return custAssociations;
+                        custAssociations.AddRange(custAssociations_Primary);
+                    }
+
+                    if (paras.GetAgentType)
+                    {
+                        var custAssociations_Agent = DbSessionFactory.Execute<GetAssociationDetectDetailModel>("AssDetection_GetDetail_AgentType", new
+                        {
+                            RootCTSCustID = paras.RootCTSCustID,
+                            AssCTSCustIDs = ip_assCTSCustIDs
+                        }).Data;
+
+                        custAssociations.AddRange(custAssociations_Agent);
+                    }
                 }
             }
             catch (Exception ex)
@@ -392,7 +407,7 @@
                         + ex.InnerException.StackTrace);
             }
 
-            return new List<GetAssociationDetectDetailModel>();
+            return custAssociations;
         }
 
         #endregion WEB - Association Detection Report
