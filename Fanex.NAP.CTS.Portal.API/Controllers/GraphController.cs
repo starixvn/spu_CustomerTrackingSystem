@@ -8,6 +8,7 @@
     using Fanex.NAP.CTS.Model.AssociationDetection;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
+    using Fanex.NAP.CTS.Model.GraphDB.AssDetection;
     using Fanex.NAP.CTS.Model.ProbationManagement;
     using Fanex.NAP.CTS.Portal.API.ActionFilter;
     using Fanex.NAP.CTS.Service;
@@ -319,22 +320,21 @@
         /// <summary>
         /// DetectAssociationByPrimaryOrAgentType
         /// </summary>
-        /// <param name="ctsCustIDs"></param>
-        /// <param name="assType">1 - Primary type, 2 - Agent type</param>
+        /// <param name="paras"></param>
         /// <returns></returns>
         [System.Web.Http.AcceptVerbs("DetectAssociationByPrimaryOrAgentType")]
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetAssociationDetectionReportAPI)]
-        public IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByPrimaryOrAgentType([FromBody] string ctsCustIDs, [FromBody] int assType)
+        public IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByPrimaryOrAgentType([FromBody] DetectAssByPrimaryOrAgentParams paras)
         {
             try
             {
-                if (!string.IsNullOrEmpty(ctsCustIDs))
+                if (!string.IsNullOrEmpty(paras.CTSCustIDs))
                 {
-                    var ip_CTSCustIDs = ctsCustIDs.Split(',').Select(long.Parse);
+                    var ip_CTSCustIDs = paras.CTSCustIDs.Split(',').Select(long.Parse);
                     
                     DbSessionFactory.Execute<object>("AssDetection_DropInMemoryGraph");
-                    var scriptName = assType == 1 ? "AssDetection_CreateInMemoryGraph" : "AssDetection_CreateInMemoryGraph_Agent";
+                    var scriptName = paras.AssType == 1 ? "AssDetection_CreateInMemoryGraph" : "AssDetection_CreateInMemoryGraph_Agent";
                     DbSessionFactory.Execute<object>(scriptName, new { CTSCustIDs = ip_CTSCustIDs });
                     var isGraphExisting = DbSessionFactory.Execute<bool>("AssDetection_CheckIfGraphExists").Data.FirstOrDefault();
                     if (isGraphExisting)
@@ -361,24 +361,24 @@
         }
 
         /// <summary>
-        /// Get association report
+        /// DetectAssociationGetDetail
         /// </summary>
-        /// <param name="ctsCustIDs"></param>
+        /// <param name="paras"></param>
         /// <returns></returns>
         [System.Web.Http.AcceptVerbs("DetectAssociationGetDetail")]
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetAssociationDetectionReportAPI)]
-        public IEnumerable<GetAssociationDetectDetailModel> DetectAssociationGetDetail([FromBody] long rootCTSCustID, [FromBody] string assCTSCustIDs)
+        public IEnumerable<GetAssociationDetectDetailModel> DetectAssociationGetDetail([FromBody] DetectAssGetDetailParams paras)
         {
             try
             {
-                if (rootCTSCustID > 0)
+                if (paras.RootCTSCustID > 0)
                 {
-                    var ip_assCTSCustIDs = assCTSCustIDs.Split(',').Select(long.Parse);
+                    var ip_assCTSCustIDs = paras.AssCTSCustIDs.Split(',').Select(long.Parse);
 
                     var custAssociations = DbSessionFactory.Execute<GetAssociationDetectDetailModel>("AssDetection_GetDetail", new
                     {
-                        RootCTSCustID = rootCTSCustID,
+                        RootCTSCustID = paras.RootCTSCustID,
                         AssCTSCustIDs = ip_assCTSCustIDs
                     }).Data;
 
