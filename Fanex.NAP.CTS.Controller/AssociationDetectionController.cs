@@ -279,11 +279,15 @@
 
                         LogService.Info($"Detect Associatied by Matches end time {DateTime.Now}");
                     }, () => {                        
-                        var assByPrimary = model.IsBPManuallyDeviceIP ? _associationDetectionService.DetectAssociationByPrimary(ctsCustIDs) : Enumerable.Empty<DetectAssociationByPrimaryModel>();
+                        var assByPrimary = model.IsBPManuallyDeviceIP 
+                            ? _associationDetectionService.DetectAssociationByPrimary(ctsCustIDs, AppSettings.Get("GetAssDetectionFromMySQL") == "1") 
+                            : Enumerable.Empty<DetectAssociationByPrimaryModel>();
 
                         mergeGroupInfo.AssociationByPrimaryJson = JsonConvert.SerializeObject(assByPrimary);                       
                     }, () => {                      
-                        var assByAgent = model.IsAgent ? _associationDetectionService.DetectAssociationByAgent(ctsCustIDs) : Enumerable.Empty<DetectAssociationByAgentModel>();
+                        var assByAgent = model.IsAgent 
+                            ? _associationDetectionService.DetectAssociationByAgent(ctsCustIDs, AppSettings.Get("GetAssDetectionFromMySQL") == "1") 
+                            : Enumerable.Empty<DetectAssociationByAgentModel>();
 
                         mergeGroupInfo.AssociationByAgentJson = JsonConvert.SerializeObject(assByAgent);                        
                     });
@@ -386,10 +390,12 @@
         {
             var result = new List<GetAssociationDetectDetailViewModel>();
 
-            result.AddRange(GetAssociationDetectSharedIP(model.UserName, model.CustID, model.CustSharedByIPs));
+            if (model.IsIPLast3Days)            
+                result.AddRange(GetAssociationDetectSharedIP(model.UserName, model.CustID, model.CustSharedByIPs));            
 
-            result.AddRange(GetAssociationDetectSharedMatches(model));
-
+            if (model.Is3MatchesLast7Days)            
+                result.AddRange(GetAssociationDetectSharedMatches(model));
+                        
             var data = _associationDetectionService.GetAssociationDetectionDetail(model);
             
             if (data != null && data.Any())

@@ -21,9 +21,9 @@
 
         IEnumerable<GetAssociationDetectionModel> GetCustInfoAssDetectionReport(List<GetAssociationDetectionModel> assDetection);
 
-        IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByPrimary(string ctsCustIDs);
+        IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByPrimary(string ctsCustIDs, bool fromMySQL = true);
 
-        IEnumerable<DetectAssociationByAgentModel> DetectAssociationByAgent(string ctsCustIDs);
+        IEnumerable<DetectAssociationByAgentModel> DetectAssociationByAgent(string ctsCustIDs, bool fromMySQL = true);
 
         IEnumerable<long> GetAssociationDetectSharedMatches(int rootCustID, string custIDList);
 
@@ -66,30 +66,40 @@
             }
         }
 
-        public IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByPrimary(string ctsCustIDs)
+        public IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByPrimary(string ctsCustIDs, bool fromMySQL = true)
         {
-            var criteria = new DetectAssociationByPrimaryCriteria
+            if (fromMySQL)
             {
-                CTSCustIDs = ctsCustIDs
-            };
+                var criteria = new DetectAssociationByPrimaryCriteria
+                {
+                    CTSCustIDs = ctsCustIDs
+                };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<DetectAssociationByPrimaryModel>(criteria);
+                using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+                {
+                    return db.Query<DetectAssociationByPrimaryModel>(criteria);
+                }
             }
+
+            return DetectAssociationByPrimaryFromGraphDB(ctsCustIDs);
         }
 
-        public IEnumerable<DetectAssociationByAgentModel> DetectAssociationByAgent(string ctsCustIDs)
+        public IEnumerable<DetectAssociationByAgentModel> DetectAssociationByAgent(string ctsCustIDs, bool fromMySQL = true)
         {
-            var criteria = new DetectAssociationByAgentCriteria
+            if (fromMySQL)
             {
-                CTSCustIDs = ctsCustIDs
-            };
+                var criteria = new DetectAssociationByAgentCriteria
+                {
+                    CTSCustIDs = ctsCustIDs
+                };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<DetectAssociationByAgentModel>(criteria);
+                using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+                {
+                    return db.Query<DetectAssociationByAgentModel>(criteria);
+                }
             }
+
+            return DetectAssociationByAgentFromGraphDB(ctsCustIDs);
         }
 
         public IEnumerable<DetectAssociationMergeGroupModel> MergeGroupDetectAssociation(MergeGroupInfoModel model)
@@ -354,7 +364,25 @@
             }
 
             return new List<GetAssociationDetectionModel>();
-        }      
+        }
+
+        public IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByPrimaryFromGraphDB(string ctsCustIDs)
+        {
+            var data = ApiHelper.Post<List<DetectAssociationByPrimaryModel>>(ConfigSettings.DetectAssociationByPrimaryOrAgentType, ctsCustIDs, 1);
+
+            Task.WhenAll(data);
+
+            return data.Result ?? new List<DetectAssociationByPrimaryModel>();
+        }
+
+        public IEnumerable<DetectAssociationByAgentModel> DetectAssociationByAgentFromGraphDB(string ctsCustIDs)
+        {
+            var data = ApiHelper.Post<List<DetectAssociationByAgentModel>>(ConfigSettings.DetectAssociationByPrimaryOrAgentType, ctsCustIDs, 2);
+
+            Task.WhenAll(data);
+
+            return data.Result ?? new List<DetectAssociationByAgentModel>();
+        }
 
         #endregion
 
