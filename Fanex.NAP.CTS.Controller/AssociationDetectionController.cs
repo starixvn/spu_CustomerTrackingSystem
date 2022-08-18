@@ -238,7 +238,7 @@
             if (!string.IsNullOrWhiteSpace(model.UserNames))
             {
                 try
-                {                    
+                {
                     var userNames = model.UserNames.Split(',');
                     var userNameList = string.Join(",", userNames.Distinct());
 
@@ -271,33 +271,31 @@
 
                         mergeGroupInfo.AssociationByIPJson = GetAssociationCust(assBySharedIP);            
                     }, () => {
-                        LogService.Info($"Detect Associatied by Matches start time {DateTime.Now}");
+                        //LogService.Info($"Detect Associatied by Matches start time {DateTime.Now}");
 
                         var assBySharedMatches = model.Is3MatchesLast7Days ? DetectAssociationBySharedMatches(orgUserList.Where(x => !x.IsInternal), custIDs) : Enumerable.Empty<SharedIPMatchesInfoModel>();
 
-                        mergeGroupInfo.AssociationByMatchesJson = GetAssociationCust(assBySharedMatches);                        
+                        mergeGroupInfo.AssociationByMatchesJson = GetAssociationCust(assBySharedMatches);   
 
-                        LogService.Info($"Detect Associatied by Matches end time {DateTime.Now}");
-                    }, () => {                        
+                        //LogService.Info($"Detect Associatied by Matches end time {DateTime.Now}");
+                    }, () => {
                         var assByPrimary = model.IsBPManuallyDeviceIP 
                             ? _associationDetectionService.DetectAssociationByPrimary(ctsCustIDs, AppSettings.Get("GetAssDetectionFromMySQL") == "1") 
                             : Enumerable.Empty<DetectAssociationByPrimaryModel>();
 
-                        mergeGroupInfo.AssociationByPrimaryJson = JsonConvert.SerializeObject(assByPrimary);                       
+                        mergeGroupInfo.AssociationByPrimaryJson = JsonConvert.SerializeObject(assByPrimary);    
                     }, () => {                      
                         var assByAgent = model.IsAgent 
                             ? _associationDetectionService.DetectAssociationByAgent(ctsCustIDs, AppSettings.Get("GetAssDetectionFromMySQL") == "1") 
-                            : Enumerable.Empty<DetectAssociationByAgentModel>();
+                            : Enumerable.Empty<DetectAssociationByPrimaryModel>();
 
-                        mergeGroupInfo.AssociationByAgentJson = JsonConvert.SerializeObject(assByAgent);                        
+                        mergeGroupInfo.AssociationByAgentJson = JsonConvert.SerializeObject(assByAgent);   
                     });
-
-                    //LogService.Info($"Detect Associatied Merge Group start time {DateTime.Now}");
-                    var assMergeGroup = _associationDetectionService.MergeGroupDetectAssociation(mergeGroupInfo);
-                    //LogService.Info($"Detect Associatied Merge Group end time {DateTime.Now}");
+                   
+                    var assMergeGroup = _associationDetectionService.MergeGroupDetectAssociation(mergeGroupInfo);                   
 
                     if (isExportExcel)
-                    {     
+                    {
                         result.ExportItemList = orgUserList.Select(x => 
                         {                           
                             return new ExportAssociationDetectModel
@@ -321,7 +319,7 @@
                         });
                     }
 
-                    LogService.Info($"Detect Associatied end time {DateTime.Now}");
+                    //LogService.Info($"Detect Associatied end time {DateTime.Now}");
                 }
                 catch (Exception ex)
                 {
@@ -396,7 +394,7 @@
             if (model.Is3MatchesLast7Days)            
                 result.AddRange(GetAssociationDetectSharedMatches(model));
                         
-            var data = _associationDetectionService.GetAssociationDetectionDetail(model);
+            var data = _associationDetectionService.GetAssociationDetectionDetail(model, AppSettings.Get("GetAssDetectionFromMySQL") == "1");
             
             if (data != null && data.Any())
             {

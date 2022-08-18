@@ -6,6 +6,7 @@
     using Fanex.NAP.CTS.Criteria.AssociationDetection;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.AssociationDetection;
+    using Fanex.NAP.CTS.Model.GraphDB.AssDetection;
     using Fanex.NAP.CTS.ViewModel.AssociationDetection;
     using Fanex.NAP.SPU.Graph.Core;
     using Fanex.NAP.TGRS.Core.ExcelUtility;
@@ -23,11 +24,11 @@
 
         IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByPrimary(string ctsCustIDs, bool fromMySQL = true);
 
-        IEnumerable<DetectAssociationByAgentModel> DetectAssociationByAgent(string ctsCustIDs, bool fromMySQL = true);
+        IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByAgent(string ctsCustIDs, bool fromMySQL = true);
 
         IEnumerable<long> GetAssociationDetectSharedMatches(int rootCustID, string custIDList);
 
-        IEnumerable<GetAssociationDetectDetailModel> GetAssociationDetectionDetail(GetAssociationDetectionDetailViewModel assDetectionDetailModel);
+        IEnumerable<GetAssociationDetectDetailModel> GetAssociationDetectionDetail(GetAssociationDetectionDetailViewModel assDetectionDetailModel, bool fromMySQL = true);
 
         IEnumerable<DetectAssociationBySharedIPMatchesModel> DetectAssociationByIP(string custIDList);
 
@@ -81,10 +82,10 @@
                 }
             }
 
-            return DetectAssociationByPrimaryFromGraphDB(ctsCustIDs);
+            return DetectAssociationByPrimaryFromGraphDB(ctsCustIDs, 1);
         }
 
-        public IEnumerable<DetectAssociationByAgentModel> DetectAssociationByAgent(string ctsCustIDs, bool fromMySQL = true)
+        public IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByAgent(string ctsCustIDs, bool fromMySQL = true)
         {
             if (fromMySQL)
             {
@@ -95,11 +96,11 @@
 
                 using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
                 {
-                    return db.Query<DetectAssociationByAgentModel>(criteria);
+                    return db.Query<DetectAssociationByPrimaryModel>(criteria);
                 }
             }
 
-            return DetectAssociationByAgentFromGraphDB(ctsCustIDs);
+            return DetectAssociationByPrimaryFromGraphDB(ctsCustIDs, 2);
         }
 
         public IEnumerable<DetectAssociationMergeGroupModel> MergeGroupDetectAssociation(MergeGroupInfoModel model)
@@ -161,22 +162,28 @@
             }
         }
 
-        public IEnumerable<GetAssociationDetectDetailModel> GetAssociationDetectionDetail(GetAssociationDetectionDetailViewModel model)
+        public IEnumerable<GetAssociationDetectDetailModel> GetAssociationDetectionDetail(GetAssociationDetectionDetailViewModel model, bool fromMySQL = true)
         {
-            var ctsCustIDList = model.CTSCustIDList.Split(',').Select(long.Parse);
+            var ctsCustIDs = model.CTSCustIDList.Split(',').Select(long.Parse);
+            var ctsCustIDList = string.Join(",", ctsCustIDs.Where(x => x != model.CTSCustID));
 
-            var criteria = new GetAssociationDetectionDetailCriteria
+            if (fromMySQL)
             {
-                CTSCustID = model.CTSCustID,
-                ListCTSCustID = string.Join(",", ctsCustIDList.Where(x => x != model.CTSCustID)),
-                HasPrimary = model.IsBPManuallyDeviceIP,
-                HasAgent = model.IsAgent
-            };
+                var criteria = new GetAssociationDetectionDetailCriteria
+                {
+                    CTSCustID = model.CTSCustID,
+                    ListCTSCustID = ctsCustIDList,
+                    HasPrimary = model.IsBPManuallyDeviceIP,
+                    HasAgent = model.IsAgent
+                };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<GetAssociationDetectDetailModel>(criteria);
+                using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+                {
+                    return db.Query<GetAssociationDetectDetailModel>(criteria);
+                }
             }
+
+            return GetAssociationDetectionDetailFromGraphDB(model.CTSCustID, ctsCustIDList, model.IsBPManuallyDeviceIP, model.IsAgent);
         }
 
         public IEnumerable<GetAssociationDetectDetailIPModel> GetCoupleSharedIP(int custID1, int custID2)
@@ -366,22 +373,30 @@
             return new List<GetAssociationDetectionModel>();
         }
 
-        public IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByPrimaryFromGraphDB(string ctsCustIDs)
+        public IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByPrimaryFromGraphDB(string ctsCustIDs, int assType)
         {
-            var data = ApiHelper.Post<List<DetectAssociationByPrimaryModel>>(ConfigSettings.DetectAssociationByPrimaryOrAgentType, ctsCustIDs, 1);
+            var data = ApiHelper.Post<List<DetectAssociationByPrimaryModel>>(ConfigSettings.DetectAssociationByPrimaryOrAgentType, ctsCustIDs, assType);
 
             Task.WhenAll(data);
 
             return data.Result ?? new List<DetectAssociationByPrimaryModel>();
         }
 
-        public IEnumerable<DetectAssociationByAgentModel> DetectAssociationByAgentFromGraphDB(string ctsCustIDs)
+        public IEnumerable<GetAssociationDetectDetailModel> GetAssociationDetectionDetailFromGraphDB(long rootCTSCustID, string assCTSCustIDs, bool getPrimaryType, bool getAgentType)
         {
-            var data = ApiHelper.Post<List<DetectAssociationByAgentModel>>(ConfigSettings.DetectAssociationByPrimaryOrAgentType, ctsCustIDs, 2);
+            var paras = new DetectAssGetDetailParams
+            {
+                RootCTSCustID = rootCTSCustID,
+                AssCTSCustIDs = assCTSCustIDs,
+                GetPrimaryType = getPrimaryType,
+                GetAgentType = getAgentType
+            };
+
+            var data = ApiHelper.Post<List<GetAssociationDetectDetailModel>>(ConfigSettings.DetectAssociationGetDetail, paras);
 
             Task.WhenAll(data);
 
-            return data.Result ?? new List<DetectAssociationByAgentModel>();
+            return data.Result ?? new List<GetAssociationDetectDetailModel>();           
         }
 
         #endregion
