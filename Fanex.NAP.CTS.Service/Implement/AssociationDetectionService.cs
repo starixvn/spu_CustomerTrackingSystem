@@ -375,7 +375,13 @@
 
         public IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByPrimaryFromGraphDB(string ctsCustIDs, int assType)
         {
-            var data = ApiHelper.Post<List<DetectAssociationByPrimaryModel>>(ConfigSettings.DetectAssociationByPrimaryOrAgentType, ctsCustIDs, assType);
+            var paras = new DetectAssByPrimaryOrAgentParams
+            {
+                CTSCustIDs = ctsCustIDs,
+                AssType = assType
+            };
+
+            var data = ApiHelper.Post<List<DetectAssociationByPrimaryModel>>(ConfigSettings.DetectAssociationByPrimaryOrAgentType, paras);
 
             Task.WhenAll(data);
 
