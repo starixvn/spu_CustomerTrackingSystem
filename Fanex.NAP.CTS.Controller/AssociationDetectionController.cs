@@ -266,9 +266,9 @@
                    
                     var assBySharedIP = Enumerable.Empty<SharedIPMatchesInfoModel>();
 
-                    Parallel.Invoke(() => {                      
+                    Parallel.Invoke(() => {                        
                         assBySharedIP = model.IsIPLast3Days ? DetectAssociationByIP(orgUserList.Where(x => !x.IsInternal), custIDs) : Enumerable.Empty<SharedIPMatchesInfoModel>();
-
+                        
                         mergeGroupInfo.AssociationByIPJson = GetAssociationCust(assBySharedIP);            
                     }, () => {
                         //LogService.Info($"Detect Associatied by Matches start time {DateTime.Now}");
@@ -291,9 +291,10 @@
 
                         mergeGroupInfo.AssociationByAgentJson = JsonConvert.SerializeObject(assByAgent);   
                     });
-                   
-                    var assMergeGroup = _associationDetectionService.MergeGroupDetectAssociation(mergeGroupInfo);                   
 
+                    LogService.Info($"Detect Associatied Merge group info {JsonConvert.SerializeObject(mergeGroupInfo)}");
+                    var assMergeGroup = _associationDetectionService.MergeGroupDetectAssociation(mergeGroupInfo);
+                    LogService.Info($"Detect Associatied assMergeGroup info {JsonConvert.SerializeObject(assMergeGroup)}");
                     if (isExportExcel)
                     {
                         result.ExportItemList = orgUserList.Select(x => 
@@ -339,7 +340,9 @@
 
         private IEnumerable<SharedIPMatchesInfoModel> DetectAssociationByIP(IEnumerable<ValidateUserNameModel> validateUserNames, string custIds)
         {
+            LogService.Info($"Detect Associatied custIds {custIds}");
             var detectAssByIP = _associationDetectionService.DetectAssociationByIP(custIds);
+            LogService.Info($"Detect Associatied detectAssByIP  {JsonConvert.SerializeObject(detectAssByIP)}");
 
             return DetectAssociationBySharedIPMatches(detectAssByIP, validateUserNames);
         }
