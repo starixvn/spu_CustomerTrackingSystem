@@ -337,9 +337,7 @@
                 info: false,
                 ordering: false,
                 searching: false,
-                scrollX: false,
-                //scrollY: '400px',
-                //scrollCollapse: true,
+                scrollX: false,             
                 scrollCollapse: false,
                 paging: false,
                 searching: false,
@@ -568,9 +566,8 @@
     function ValidateUsernames(textTagRemove) {
         let numOfTagExceeded = domElements.spanAddUserName.find('tags tag.tagify--notAllowed');
 
-        if (numOfTagExceeded.length > 0) {
-            return;
-        }
+        if (textTagRemove != '' && numOfTagExceeded.length > 1) return;
+        else if (textTagRemove == '' && numOfTagExceeded.length > 0) return;
       
         let userNames = GetInputUserName(textTagRemove);
 
