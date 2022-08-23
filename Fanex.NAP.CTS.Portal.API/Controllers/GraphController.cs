@@ -332,7 +332,7 @@
                 if (!string.IsNullOrEmpty(paras.CTSCustIDs))
                 {
                     var ip_CTSCustIDs = paras.CTSCustIDs.Split(',').Select(long.Parse);
-                    
+
                     DbSessionFactory.Execute<object>("AssDetection_DropInMemoryGraph");
                     var scriptName = paras.AssType == 1 ? "AssDetection_CreateInMemoryGraph" : "AssDetection_CreateInMemoryGraph_Agent";
                     DbSessionFactory.Execute<object>(scriptName, new { CTSCustIDs = ip_CTSCustIDs });
@@ -352,9 +352,14 @@
             }
             catch (Exception ex)
             {
-                LogService.Error($"WEB - {ConfigSettings.EnvironmentName} - DetectAssociationByPrimaryType failed: " + ex.Message + ex.StackTrace + "\n"
-                        + ex.InnerException.Message + ex.InnerException.Source + ((Neo4j.Driver.Neo4jException)ex.InnerException).Code
-                        + ex.InnerException.StackTrace);
+                string mess = $"WEB - {ConfigSettings.EnvironmentName} - DetectAssociationByPrimaryType failed: " + ex.Message + ex.StackTrace + "\n";
+                if (ex.InnerException != null)
+                {
+                    mess += ex.InnerException.Message + ex.InnerException.Source + ((Neo4j.Driver.Neo4jException)ex.InnerException).Code
+                        + ex.InnerException.StackTrace;
+                }
+                
+                LogService.Error(mess);
             }
 
             return new List<DetectAssociationByPrimaryModel>();
