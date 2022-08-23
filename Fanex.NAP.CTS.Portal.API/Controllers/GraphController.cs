@@ -343,7 +343,8 @@
                     
                         var custAssociations = DbSessionFactory.Execute<DetectAssociationByPrimaryModel>("AssDetection_GetResult", new
                         {
-                            CTSCustIDs = ip_CTSCustIDs
+                            CTSCustIDs = ip_CTSCustIDs,
+                            AssType = paras.AssType
                         }).Data;
 
                         return custAssociations;
@@ -407,9 +408,14 @@
             }
             catch (Exception ex)
             {
-                LogService.Error($"WEB - {ConfigSettings.EnvironmentName} - DetectAssociationGetDetail failed: " + ex.Message + ex.StackTrace + "\n"
-                        + ex.InnerException.Message + ex.InnerException.Source + ((Neo4j.Driver.Neo4jException)ex.InnerException).Code
-                        + ex.InnerException.StackTrace);
+                string mess = $"WEB - {ConfigSettings.EnvironmentName} - DetectAssociationGetDetail failed: " + ex.Message + ex.StackTrace + "\n";
+                if (ex.InnerException != null)
+                {
+                    mess += ex.InnerException.Message + ex.InnerException.Source + ((Neo4j.Driver.Neo4jException)ex.InnerException).Code
+                        + ex.InnerException.StackTrace;
+                }
+
+                LogService.Error(mess);
             }
 
             return custAssociations;

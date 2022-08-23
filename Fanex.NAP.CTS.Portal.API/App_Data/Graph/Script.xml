@@ -62,6 +62,8 @@
     <GraphSetting Key="AssDetection_RunWCCAlgo" SpName="AssDetection_RunWCCAlgo" DbName="GraphDB"/>
     <GraphSetting Key="AssDetection_GetResult" SpName="AssDetection_GetResult" DbName="GraphDB"/>
     <GraphSetting Key="AssDetection_CheckIfGraphExists" SpName="AssDetection_CheckIfGraphExists" DbName="GraphDB"/>
+    <GraphSetting Key="AssDetection_GetDetail_AgentType" SpName="AssDetection_GetDetail_AgentType" DbName="GraphDB"/>
+    <GraphSetting Key="AssDetection_GetDetail_PrimaryType" SpName="AssDetection_GetDetail_PrimaryType" DbName="GraphDB"/>
 	</Function>
 
   <Function Name="Adhoc">

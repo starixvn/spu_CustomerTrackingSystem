@@ -3,4 +3,4 @@ CALL gds.graph.streamNodeProperty('AssLevel2', 'groupId',['CTSCustomer'])
 YIELD nodeId, propertyValue
 WITH gds.util.asNode(nodeId).CTSCustID AS CTSCustID, propertyValue AS GroupId
 WHERE CTSCustID IN $CTSCustIDs
-RETURN CTSCustID AS F, GroupId AS T
+RETURN CTSCustID AS F, CASE WHEN $AssType = 1 THEN -1 * (GroupId + 1) ELSE GroupId + 10000000000 END AS T
