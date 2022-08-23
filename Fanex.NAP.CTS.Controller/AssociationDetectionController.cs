@@ -273,9 +273,10 @@
 
                         var assBySharedMatches = model.Is3MatchesLast7Days ? DetectAssociationBySharedMatches(orgUserList.Where(x => !x.IsInternal), custIDs) : Enumerable.Empty<SharedIPMatchesInfoModel>();
 
-                        mergeGroupInfo.AssociationByMatchesJson = GetAssociationCust(assBySharedMatches);   
+                        mergeGroupInfo.AssociationByMatchesJson = GetAssociationCust(assBySharedMatches);
 
-                        //LogService.Info($"Detect Associatied by Matches end time {DateTime.Now}");
+                        LogService.Info($"Detect Associatied by Matches assBySharedMatchesJson { JsonConvert.SerializeObject(assBySharedMatches) }");
+                        LogService.Info($"Detect Associatied by Matches AssociationByMatchesJson { JsonConvert.SerializeObject(mergeGroupInfo.AssociationByMatchesJson) }");
                     }, () => {
                         var assByPrimary = model.IsBPManuallyDeviceIP 
                             ? _associationDetectionService.DetectAssociationByPrimary(ctsCustIDs, AppSettings.Get("GetAssDetectionFromMySQL") == "1") 
