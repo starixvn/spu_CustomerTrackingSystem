@@ -11,6 +11,7 @@
         public bool IsIPLast3Days { get; set; }
 
         public bool Is3MatchesLast7Days { get; set; }
-       
+
+        public string AssociationByIPJson { get; set; }
     }
 }

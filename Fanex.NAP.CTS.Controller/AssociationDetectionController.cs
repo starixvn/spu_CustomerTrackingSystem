@@ -224,11 +224,13 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetection)]
         public ActionResult DetectAssociationByUserNames(DetectAssociationByUserNamesViewModel model)
         {
+            var result = DetectAssociation(model, false);
             return Json(new
             {
-                data = DetectAssociation(model, false)                
+                data = result,
+                associationByIPJson = model.AssociationByIPJson
             }, JsonRequestBehavior.AllowGet);
-        }      
+        }
       
         private DetectAssociationViewModel DetectAssociation(DetectAssociationByUserNamesViewModel model, bool isExportExcel)
         {
@@ -268,6 +270,7 @@
                         assBySharedIP = model.IsIPLast3Days ? DetectAssociationByIP(orgUserList.Where(x => !x.IsInternal), custIDs) : Enumerable.Empty<SharedIPMatchesInfoModel>();
                         
                         mergeGroupInfo.AssociationByIPJson = GetAssociationCust(assBySharedIP);
+                        model.AssociationByIPJson = mergeGroupInfo.AssociationByIPJson;
 
                         LogService.Info($"Detect Associatied by IP end time {DateTime.Now}");
 
@@ -316,9 +319,9 @@
                         {
                             var userNameBySharedIPs = new List<string>();
 
-                            userNameBySharedIPs.AddRange(assBySharedIP.Where(y => y.FromCustID == x.CustID).Select(y => y.ToUserName));
+                            //userNameBySharedIPs.AddRange(assBySharedIP.Where(y => y.FromCustID == x.CustID).Select(y => y.ToUserName));
 
-                            userNameBySharedIPs.AddRange(assBySharedIP.Where(y => y.ToCustID == x.CustID).Select(y => y.FromUserName));
+                            //userNameBySharedIPs.AddRange(assBySharedIP.Where(y => y.ToCustID == x.CustID).Select(y => y.FromUserName));
 
                             LogService.Info($"Detect Associatied userNameBySharedIPs end time {DateTime.Now}");
 

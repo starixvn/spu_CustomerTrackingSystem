@@ -36,7 +36,8 @@
         IsBPManuallyDeviceIP: false,
         IsAgent: false,
         IsIPLast3Days: false,
-        Is3MatchesLast7Days: false
+        Is3MatchesLast7Days: false,
+        AssociationByIPJson: ""
     }
 
     function GenerateGrid(data) {
@@ -664,6 +665,8 @@
                         domElements.spanAddUserNameMaxTag.text(maxTags);
                         domElements.spanAddChangeHidden.text("0");
                         domElements.btnDetect.prop('disabled', true);
+
+                        parameters.AssociationByIPJson = response.AssociationByIPJson;
                     } else {
                         common.showError(response.data.ErrorMessage);
 
