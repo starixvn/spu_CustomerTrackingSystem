@@ -7,7 +7,7 @@
     {              
         public DetectAssociationItemViewModel() { }
 
-        public DetectAssociationItemViewModel(DetectAssociationMergeGroupModel data, string custCoupleSharedIP)
+        public DetectAssociationItemViewModel(DetectAssociationMergeGroupModel data)
         {
             this.RowNumber = data.RowNumber;
             this.GroupID = data.GroupID;
@@ -21,8 +21,7 @@
             this.CustomerCategory = data.CustomerCategory;
             this.CustomerClass = data.CustomerClass > 0 ? data.CustomerClass.ToString() : null;
             this.IsProblemAccount = data.ParentIDs != null && data.ParentIDs.Split(',').Any(y => y == "50");
-            this.IsPAProbation = data.IsPAProbation;           
-            this.CustCoupleSharedIP = custCoupleSharedIP;
+            this.IsPAProbation = data.IsPAProbation;                      
         }
 
         public int RowNumber { get; set; }
@@ -49,9 +48,7 @@
 
         public bool IsProblemAccount { get; set; }
 
-        public bool IsPAProbation { get; set; }      
-
-        public string CustCoupleSharedIP { get; set; }
+        public bool IsPAProbation { get; set; }              
 
     }
 }

@@ -316,16 +316,8 @@
                     else
                     {
                         result.ItemList = assMergeGroup.Where(x => x.GroupID.HasValue).OrderBy(x => x.GroupID).Select(x =>
-                        {
-                            var userNameBySharedIPs = new List<string>();
-
-                            //userNameBySharedIPs.AddRange(assBySharedIP.Where(y => y.FromCustID == x.CustID).Select(y => y.ToUserName));
-
-                            //userNameBySharedIPs.AddRange(assBySharedIP.Where(y => y.ToCustID == x.CustID).Select(y => y.FromUserName));
-
-                            LogService.Info($"Detect Associatied userNameBySharedIPs end time {DateTime.Now}");
-
-                            return new DetectAssociationItemViewModel(x, string.Join(",", userNameBySharedIPs.Distinct()));
+                        {           
+                            return new DetectAssociationItemViewModel(x);
                         });
                     }
 
@@ -386,7 +378,9 @@
             var assCustBySharedIP = ass.Select(x => new AssociationCustModel
             {
                 FromCTSCustID = x.FromCTSCustID,
-                ToCTSCustID = x.ToCTSCustID
+                FromUserName = x.FromUserName,
+                ToCTSCustID = x.ToCTSCustID,      
+                ToUserName = x.ToUserName
             });
 
             return JsonConvert.SerializeObject(assCustBySharedIP);
@@ -399,7 +393,7 @@
             var result = new List<GetAssociationDetectDetailViewModel>();
 
             if (model.IsIPLast3Days)            
-                result.AddRange(GetAssociationDetectSharedIP(model.UserName, model.CustID, model.CustSharedByIPs));            
+                result.AddRange(GetAssociationDetectSharedIP(model.UserName, model.CustID, model.CTSCustID, model.AssociationByIPJson));            
 
             if (model.Is3MatchesLast7Days)            
                 result.AddRange(GetAssociationDetectSharedMatches(model));
@@ -420,20 +414,26 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private IEnumerable<GetAssociationDetectDetailViewModel> GetAssociationDetectSharedIP(string userName, int custID, string custSharedByIPs)
+        private IEnumerable<GetAssociationDetectDetailViewModel> GetAssociationDetectSharedIP(string userName, int custID, long ctsCustID, string associationByIPJson)
         {
-            if (!string.IsNullOrEmpty(custSharedByIPs))
+            if (!string.IsNullOrEmpty(associationByIPJson))
             {
-                var sharedIPList = custSharedByIPs.Split(',').AsEnumerable();
+                var sharedIPList = JsonConvert.DeserializeObject<IEnumerable<AssociationCustModel>>(associationByIPJson);
 
-                return sharedIPList.Select(x =>
-                {
-                    return new GetAssociationDetectDetailViewModel
-                    {
-                        UserName = x.ToString(),                       
-                        AssociatedTypes = $"<span class='association-detect-detail-ip' data-fromusername={userName} data-fromcustid={custID}>IP(last3days)</span>"
-                    };
-                });               
+                if (sharedIPList.Any())
+                {                   
+                    var result = sharedIPList.Where(x => x.FromCTSCustID == ctsCustID || x.ToCTSCustID == ctsCustID)
+                        .Select(x =>
+                        {
+                             return new GetAssociationDetectDetailViewModel
+                             {
+                                 UserName = x.FromCTSCustID == ctsCustID ? x.ToUserName : x.FromUserName,
+                                 AssociatedTypes = $"<span class='association-detect-detail-ip' data-fromusername={userName} data-fromcustid={custID}>IP(last3days)</span>"
+                             };
+                        });
+                   
+                    return result;
+                } 
             }
 
             return Enumerable.Empty<GetAssociationDetectDetailViewModel>();
@@ -460,7 +460,7 @@
                             CustID = (int)x,
                             AssociatedTypes = $"<span class='association-detect-detail-match' data-fromusername={model.UserName} data-fromcustid={model.CustID}>Match</span>"
                         };
-                    });
+                    });                                        
                 }
             }
             

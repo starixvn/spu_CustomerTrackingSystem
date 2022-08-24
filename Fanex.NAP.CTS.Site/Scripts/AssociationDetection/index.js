@@ -129,7 +129,7 @@
 
     function RenderUserName(obj) {
         if (obj.UserName !== null) {
-            return `<span class="association-detect-detail" data-groupid=${obj.GroupID} data-custid=${obj.CustID} data-ctscustid=${obj.CTSCustID} data-cust-sharedbyip=${obj.CustCoupleSharedIP}> ${obj.UserName}</span>`;
+            return `<span class="association-detect-detail" data-groupid=${obj.GroupID} data-custid=${obj.CustID} data-ctscustid=${obj.CTSCustID}> ${obj.UserName}</span>`;
         }
 
         return "";
@@ -194,10 +194,8 @@
                 userNames.push($(this).text().trim());
             }
         });
-
-        let custSharedByIPs = $(cell).find('.association-detect-detail').attr('data-cust-sharedbyip');
-        
-        GetAssociationDetectDetail(fromObj.UserName, fromObj.CustID, fromObj.CTSCustID, ctsCustIDs.join(), userNames.join(), custSharedByIPs);
+       
+        GetAssociationDetectDetail(fromObj.UserName, fromObj.CustID, fromObj.CTSCustID, ctsCustIDs.join(), userNames.join());
 
         domElements.divAssociationDetectDetail.dialog({
             modal: true,
@@ -214,7 +212,7 @@
         });             
     }
 
-    function GetAssociationDetectDetail(userName, custID, ctsCustID, ctsCustIDList, userNames, custSharedByIPs) {
+    function GetAssociationDetectDetail(userName, custID, ctsCustID, ctsCustIDList, userNames) {
         $.ajax(common.modifyRelativeUrl('AssociationDetection/GetDetectAssociationDetail'), {
             type: 'POST',
             beforeSend: function () {
@@ -230,7 +228,7 @@
                 IsAgent: parameters.IsAgent,
                 IsIPLast3Days: parameters.IsIPLast3Days,
                 Is3MatchesLast7Days: parameters.Is3MatchesLast7Days,
-                CustSharedByIPs: custSharedByIPs     
+                AssociationByIPJson: parameters.AssociationByIPJson     
             },
             success: function (response) {
                 if (response !== undefined) {                   
@@ -262,9 +260,7 @@
                 info: false,
                 ordering: false,
                 searching: false,
-                scrollX: false,              
-                //scrollY: '400px',
-                //scrollCollapse: true,
+                scrollX: false,                            
                 scrollCollapse: false,
                 paging: false,
                 searching: false,
@@ -666,7 +662,7 @@
                         domElements.spanAddChangeHidden.text("0");
                         domElements.btnDetect.prop('disabled', true);
 
-                        parameters.AssociationByIPJson = response.AssociationByIPJson;
+                        parameters.AssociationByIPJson = response.associationByIPJson;
                     } else {
                         common.showError(response.data.ErrorMessage);
 
@@ -738,8 +734,7 @@
                 });
 
                 domElements.spanAddUserNameMaxTag.text(maxCountTags - 1);
-            } else {
-                //domElements.inputTagUsername.tagify().data('tagify').removeTags(tagName.tag);
+            } else {               
                 let $tag = $(tagName.tag);
                 let btnRemove = $tag.find('x');
                 btnRemove.on('click', function (e) {

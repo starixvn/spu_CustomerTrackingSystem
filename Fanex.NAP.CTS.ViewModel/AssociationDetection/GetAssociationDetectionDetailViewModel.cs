@@ -20,7 +20,7 @@
 
         public bool Is3MatchesLast7Days { get; set; }
 
-        public string CustSharedByIPs { get; set; }
+        public string AssociationByIPJson { get; set; }
        
     }
 }
