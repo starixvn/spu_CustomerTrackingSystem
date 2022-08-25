@@ -299,7 +299,7 @@
             menuWidth: 260,
             menuHeight: 260,
             selectedText: "# of # selected",
-            noneSelectedText: "Select Match Section"
+            noneSelectedText: "Select Section"
         });
 
         domElements.cbbReason.multiselect({

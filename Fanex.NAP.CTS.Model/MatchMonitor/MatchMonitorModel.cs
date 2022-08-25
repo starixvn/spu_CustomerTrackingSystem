@@ -46,6 +46,8 @@
                         return "Hedging";
                     case 2:
                         return "Arbitrage";
+                    case 3:
+                        return "Fixed Game";
                 }
 
                 return string.Empty;
@@ -155,24 +157,6 @@
 
                             return ReasonName + " - " + MatchMonitorBetType_QuarterXMoneyline;
                         }
-                }
-
-                return string.Empty;
-            }
-        }
-
-        public string BettypeName
-        {
-            get
-            {
-                switch (Reason)
-                {
-                    case 0:
-                        return "Group Betting";
-                    case 1:
-                        return "Hedging";
-                    case 2:
-                        return "Arbitrage";
                 }
 
                 return string.Empty;

@@ -60,7 +60,7 @@
 	</Function>
 
 	<Function name="MatchMonitor">
-		<Setting Key="CTS_Rpt_MatchMonitor_TicketDetails" SpName="CTS_Rpt_MatchMonitor_TicketDetails" DbName="DBCTS.bodb02.bodbSPUNet" />
+		<Setting Key="CTS_Rpt_MatchMonitor_TicketDetails" SpName="CTS_Rpt_MatchMonitor_TicketDetails_xtest" DbName="DBCTS.bodb02.bodbSPUNet" />
 	</Function>
 
 	<Function name="RobotBetting">

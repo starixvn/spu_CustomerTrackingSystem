@@ -95,7 +95,10 @@
                         matchScore = _matchMonitorService.GetMatchScore(para.MatchID, para.BetTypeID, para.LiveIndicator, para.BetID, para.Reason) ?? new List<MatchScoreModel>();
                     }
 
-                    MappingReasonGroupName(ref matchGroup);
+                    if (para.Reason != (int)MatchMonitorReason.FixedGame)
+                    {
+                        MappingReasonGroupName(ref matchGroup);
+                    }
                 }
             }
             catch (Exception e)
@@ -117,6 +120,7 @@
             ViewBag.MarketName = para?.MarketName ?? string.Empty;
             ViewBag.BetChoice = para?.BetChoice;
             ViewBag.IsDisableScoreFilter = para?.SportType != null && para.SportType == (int)MatchMonitorSportType.Basketball;
+            ViewBag.IsDisableGroup = para?.Reason != null && para.Reason == (int)MatchMonitorReason.FixedGame;
             ViewBag.SportName = para?.SportName ?? string.Empty;
             ViewBag.IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
                                                                         NapSettings.Settings.SiteId,
