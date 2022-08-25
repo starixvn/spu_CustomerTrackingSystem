@@ -4,7 +4,8 @@
     using Fanex.Logging.Extensions;
     using Fanex.Logging.Extensions.Database;
     using Fanex.NAP.Core.Web.Attribute;
-    using Fanex.NAP.CTS.Core.Helpers;
+    using Fanex.NAP.CTS.Core.Extentions;
+    using Fanex.NAP.CTS.Core.Helpers;    
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.AssociationDetection;
     using Fanex.NAP.CTS.Model.Common;
@@ -507,6 +508,7 @@
             var custIDList = $"{custID1},{custID2}";
 
             var tickets = _associationDetectionService.GetDetectAssociationDetailMatch(custIDList)
+                .Distinct(x => x.TransID)
                 .OrderByDescending(x=>x.MatchID)
                 .ThenByDescending(x=>x.TransDate);
 
