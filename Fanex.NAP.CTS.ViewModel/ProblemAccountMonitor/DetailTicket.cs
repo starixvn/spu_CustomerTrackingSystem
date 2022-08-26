@@ -15,7 +15,7 @@ namespace Fanex.NAP.CTS.ViewModel.ProblemAccountMonitor
 
         public string BettypeName { get; set; }
 
-        public long BetId { get; set; }
+        public string BetId { get; set; }
 
         public string BetDate { get; set; }
 

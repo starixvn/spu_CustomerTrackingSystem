@@ -8,7 +8,7 @@ namespace Fanex.NAP.CTS.ViewModel.Account.TransactionHistory
 {
    public class TransactionHistoryViewModel
     {
-        public long TransId { get; set; }
+        public string TransId { get; set; }
 
         public string TransTime { get; set; }
 
