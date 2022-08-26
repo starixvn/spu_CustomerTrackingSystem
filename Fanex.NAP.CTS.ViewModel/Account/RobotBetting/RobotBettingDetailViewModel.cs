@@ -4,7 +4,7 @@
     {
         public string TransDate { get; set; }        
 
-        public long TransID { get; set; }
+        public string TransID { get; set; }
 
         public int BetType { get; set; }
 

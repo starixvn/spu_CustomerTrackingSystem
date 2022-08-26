@@ -318,7 +318,7 @@
 
             return new DetailTicket
             {
-                BetId = ticketModel.TransID,
+                BetId = ticketModel.TransID.ToString(),
                 BetDate = ticketModel.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
                 BettypeId = ticketModel.BettypeId,
                 BettypeName = ticketModel.BettypeName,

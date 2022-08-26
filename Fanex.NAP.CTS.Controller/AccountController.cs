@@ -1326,7 +1326,7 @@
 
             var result = data.Select(x => new TransactionHistoryViewModel
             {
-                TransId = x.TransId,
+                TransId = x.TransId.ToString(),
                 Action = x.Action,
                 ActionResult = x.ActionResult,
                 BrowserName = x.Browser,
@@ -2073,7 +2073,7 @@
                         TransDate = x.TransDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff),
                         HomeID = x.HomeId,
                         AwayID = x.AwayId,
-                        TransID = x.TransId,
+                        TransID = x.TransId.ToString(),
                         BetType = x.BetType,
                         BetTypeName = CachedRef.GetBettypeName(x.BetType),
                         BetTeam = x.BetTeam,
