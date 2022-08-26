@@ -164,7 +164,7 @@
                 MatchId: domElements.matchID,
                 LiveIndicator: domElements.liveIndicator == "True",
                 BettypeID: domElements.betTypeID,
-                BetID: domElements.betID,
+                BetID: domElements.betIDToString,
                 TranIds: GetTranIds().join()
             },
             beforeSend: function () {
