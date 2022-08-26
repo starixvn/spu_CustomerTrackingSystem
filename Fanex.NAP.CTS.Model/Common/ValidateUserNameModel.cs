@@ -7,5 +7,7 @@
         public int CTSCustID { get; set; }
 
         public int CustID { get; set; }
+
+        public bool IsInternal { get; set; }
     }
 }

@@ -479,11 +479,49 @@ body {
         color: #fff; }
         .association-detection-report .association-detection-content .control-table .form-filter .box-username .btn-detect:not(:disabled):hover {
           background-color: #5081ff; }
+    .association-detection-report .association-detection-content .control-table .form-filter .checkbox-filter {
+      margin-right: 20px; }
+    .association-detection-report .association-detection-content .control-table .form-filter .checkbox-container {
+      margin-top: 11px; }
+      .association-detection-report .association-detection-content .control-table .form-filter .checkbox-container span:before {
+        top: 1px;
+        height: 16px;
+        width: 16px; }
+      .association-detection-report .association-detection-content .control-table .form-filter .checkbox-container span:after {
+        top: 5px;
+        left: 3px; }
   .association-detection-report .association-detection-content .table-report {
     font-family: "Lato", Arial, Tahoma, sans-serif; }
+    .association-detection-report .association-detection-content .table-report .fixed-header {
+      /*  padding-top: 1.6rem;*/
+      position: sticky;
+      position: -webkit-sticky;
+      top: 8rem;
+      background: #fff;
+      z-index: 9; }
+      .association-detection-report .association-detection-content .table-report .fixed-header .button-primary {
+        margin-left: 10px; }
+        .association-detection-report .association-detection-content .table-report .fixed-header .button-primary .sub-icon {
+          width: 32px;
+          height: 32px;
+          display: inline-block;
+          position: relative;
+          cursor: pointer; }
+          .association-detection-report .association-detection-content .table-report .fixed-header .button-primary .sub-icon:hover {
+            border-radius: 50%;
+            background: #E7EDFF; }
+          .association-detection-report .association-detection-content .table-report .fixed-header .button-primary .sub-icon .disabled {
+            cursor: not-allowed; }
+          .association-detection-report .association-detection-content .table-report .fixed-header .button-primary .sub-icon .icon-excel {
+            font-size: 3rem; }
+    .association-detection-report .association-detection-content .table-report .wrapper-info-table {
+      position: sticky;
+      position: -webkit-sticky;
+      z-index: 99;
+      top: 12.5rem;
+      transition: top 0.01s linear; }
     .association-detection-report .association-detection-content .table-report .table-association-detection {
-      width: 100% !important;
-      margin-top: 20px; }
+      width: 100% !important; }
       .association-detection-report .association-detection-content .table-report .table-association-detection .loading {
         position: relative; }
         .association-detection-report .association-detection-content .table-report .table-association-detection .loading:after {
@@ -524,6 +562,57 @@ body {
       .association-detection-report .association-detection-content .table-report .table-association-detection tr .td-bg-lightred {
         background-color: #F5A89A;
         font-weight: bold; }
+
+.association-detect-detail,
+.association-detect-detail-ip,
+.association-detect-detail-match,
+.association-detect-detail-agent {
+  cursor: pointer;
+  color: blue;
+  text-decoration: underline; }
+
+.table-association-detection-detail .loading,
+.table-association-detection-detail-ip .loading,
+.table-association-detection-detail-agent .loading,
+.table-association-detection-detail-Match .loading {
+  position: relative; }
+  .table-association-detection-detail .loading:after,
+  .table-association-detection-detail-ip .loading:after,
+  .table-association-detection-detail-agent .loading:after,
+  .table-association-detection-detail-Match .loading:after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 75%;
+    border-radius: 50%;
+    width: 2.4rem;
+    height: 2.4rem;
+    border: 0.25rem solid rgba(57, 110, 248, 0.2);
+    border-top-color: #396ef8;
+    -webkit-animation: spin 1s infinite linear;
+    animation: spin 1s infinite linear; }
+  .table-association-detection-detail .loading tr,
+  .table-association-detection-detail-ip .loading tr,
+  .table-association-detection-detail-agent .loading tr,
+  .table-association-detection-detail-Match .loading tr {
+    opacity: .3; }
+
+.table-association-detection-detail .match,
+.table-association-detection-detail-ip .match,
+.table-association-detection-detail-agent .match,
+.table-association-detection-detail-Match .match {
+  background: #70809E !important;
+  cursor: pointer; }
+  .table-association-detection-detail .match:hover,
+  .table-association-detection-detail-ip .match:hover,
+  .table-association-detection-detail-agent .match:hover,
+  .table-association-detection-detail-Match .match:hover {
+    background: #70809E !important; }
+  .table-association-detection-detail .match td,
+  .table-association-detection-detail-ip .match td,
+  .table-association-detection-detail-agent .match td,
+  .table-association-detection-detail-Match .match td {
+    color: #fff !important; }
 
 .yellow-line {
   background-color: #FDB703;

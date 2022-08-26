@@ -539,9 +539,6 @@
             return result;
         }
 
-        /// Get list Problem Case
-        /// </summary>
-        /// <returns></returns>
         [HttpGet]
         [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetProblemCaseAPI)]
         public JsonResult<List<ProblemCaseModel>> GetProblemCase()

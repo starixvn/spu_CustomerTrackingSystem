@@ -1,0 +1,2 @@
+﻿USE ctsgraphdb
+RETURN gds.graph.exists('AssLevel2') AS isExisting

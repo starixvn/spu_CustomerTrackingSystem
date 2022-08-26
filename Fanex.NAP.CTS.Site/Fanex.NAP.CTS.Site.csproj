@@ -464,6 +464,9 @@
     <Content Include="App_Data\Excel Template\AssociatedGroupMonitor\Template.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="App_Data\Excel Template\AssociationDetection\Template.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Content\scss\components\_notification.scss" />
     <Content Include="Content\scss\fonts\Fraud-Sensor\fonts\CTS.svg" />
     <Content Include="Content\scss\images\chevron-down.png" />
@@ -658,6 +661,7 @@
     <Content Include="Scripts\Account\RobotClassification\robot-classification.js" />
     <Content Include="Scripts\AssociatedAccountMonitor\index.js" />
     <Content Include="Scripts\AssociatedGroupMonitor\index.js" />
+    <Content Include="Scripts\AssociationDetection\index_old.js" />
     <Content Include="Scripts\AssociationDetection\index.js" />
     <Content Include="Scripts\AssociationReport\detail.js" />
     <Content Include="Scripts\AssociationReport\index.js" />
@@ -1085,6 +1089,7 @@
     <Content Include="Views\Account\CustomerCategory\MarkCustomerCategory.cshtml" />
     <Content Include="Views\Account\CustomerCategory\UnmarkCustomerCategory.cshtml" />
     <Content Include="Views\AssociatedGroupMonitor\Index.cshtml" />
+    <Content Include="Views\AssociationDetection\Index_old.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\CoreBetList.css" />

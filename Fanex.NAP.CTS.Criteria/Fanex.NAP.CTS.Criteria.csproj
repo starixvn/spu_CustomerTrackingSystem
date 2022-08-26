@@ -70,7 +70,14 @@
     <Compile Include="AssociatedGroupMonitor\GetAssociatedGroupMonitorCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\RemoveAssociatedGroupMonitorCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\ValidateAssociatedAccountCriteria.cs" />
-    <Compile Include="Api\LicenseeVIPBA\CustomerInfoBySiteNameGetCriteria.cs" />
+    <Compile Include="AssociationDetection\DetectAssociationByAgentCriteria.cs" />
+    <Compile Include="AssociationDetection\DetectAssociationByIPCriteria.cs" />
+    <Compile Include="AssociationDetection\DetectAssociationByPrimaryCriteria.cs" />
+    <Compile Include="AssociationDetection\DetectAssociationBySharedMatchesCriteria.cs" />
+    <Compile Include="AssociationDetection\DetectAssociationMergeGroupCriteria.cs" />
+    <Compile Include="AssociationDetection\GetAssociationDetectionDetailCriteria.cs" />
+    <Compile Include="AssociationDetection\GetCoupleSharedIPCriteria.cs" />
+	<Compile Include="Api\LicenseeVIPBA\CustomerInfoBySiteNameGetCriteria.cs" />
     <Compile Include="Api\LicenseeVIPBA\LicenseeBAInsertCriteria.cs" />
     <Compile Include="Api\LicenseeVIPBA\LicenseeBARemoveCriteria.cs" />
     <Compile Include="Api\LicenseeVIPBA\LicenseeVIPRemoveCriteria.cs" />

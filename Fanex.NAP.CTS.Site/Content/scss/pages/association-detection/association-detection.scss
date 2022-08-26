@@ -46,15 +46,77 @@ body {
                         }
                     }
                 }
+
+                .checkbox-filter {
+                    margin-right: 20px;
+                }
+
+                .checkbox-container {
+                    margin-top: 11px;
+
+                    span {
+                        &:before {
+                            top: 1px;
+                            height: 16px;
+                            width: 16px;
+                        }
+
+                        &:after {
+                            top: 5px;
+                            left: 3px;
+                        }
+                    }
+                }
             }
         }
 
         .table-report {
             font-family: $font-family;
 
+            .fixed-header {               
+              /*  padding-top: 1.6rem;*/
+                position: sticky;
+                position: -webkit-sticky;
+                top: 8rem;
+                background: #fff;
+                z-index: 9;
+
+                .button-primary {
+                    margin-left: 10px;
+
+                    .sub-icon {
+                        width: 32px;
+                        height: 32px;
+                        display: inline-block;
+                        position: relative;
+                        cursor: pointer;
+
+                        &:hover {
+                            border-radius: 50%;
+                            background: #E7EDFF;
+                        }
+
+                        .disabled {
+                            cursor: not-allowed;
+                        }
+
+                        .icon-excel {
+                            font-size: 3rem;
+                        }
+                    }
+                }
+            }
+
+            .wrapper-info-table {
+                position: sticky;
+                position: -webkit-sticky;
+                z-index: 99;
+                top: 12.5rem;
+                transition: top 0.01s linear;
+            }
+
             .table-association-detection {
                 width: 100% !important;
-                margin-top: 20px;
 
                 .loading {
                     position: relative;
@@ -127,11 +189,62 @@ body {
         }
     }
 }
+
+.association-detect-detail,
+.association-detect-detail-ip,
+.association-detect-detail-match,
+.association-detect-detail-agent {
+    cursor: pointer;
+    color: blue;
+    text-decoration: underline;
+}
+
+.table-association-detection-detail,
+.table-association-detection-detail-ip,
+.table-association-detection-detail-agent,
+.table-association-detection-detail-Match {
+    .loading {
+        position: relative;
+
+        &:after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 75%;
+            border-radius: 50%;
+            width: 2.4rem;
+            height: 2.4rem;
+            border: 0.25rem solid rgba(57, 110, 248, 0.2);
+            border-top-color: rgba(57, 110, 248, 1);
+            -webkit-animation: spin 1s infinite linear;
+            animation: spin 1s infinite linear;
+        }
+
+        tr {
+            opacity: .3;
+        }
+    }
+
+    .match {
+        background: #70809E !important;
+        cursor: pointer;
+
+        &:hover {
+            background: #70809E !important;
+        }
+
+        td {
+            color: #fff !important
+        }
+    }
+}
+
 .yellow-line {
     background-color: $account-high;
     background-size: 5px 5px;
     background-image: linear-gradient( -45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent);
     font-weight: bold;
+
     &:after {
         background-color: $account-high;
         background-size: 5px 5px;

@@ -147,6 +147,71 @@
         }
     };
 
+    this.downloadFileExcel = function (url, parameters) {
+        $this.showLoading();
+        let request = new XMLHttpRequest();
+        request.open('POST', url, true);
+        request.setRequestHeader('Content-type', 'application/json');
+        request.responseType = 'blob';
+        request.timeout = 600000;
+        request.addEventListener("timeout", function (e) {
+            $this.closeLoading();
+            $this.showError("Export failed (timeout)");
+        });
+        request.onload = function (e) {
+            if (this.status === 200) {
+                let extension = ".xlsx";
+                let date = $this.getFormattedDate();
+                let filenameFormat = "Export_{0}{1}";
+                let filename = filenameFormat.format(date, extension);
+                let blob = this.response;
+
+                if (window.navigator.msSaveOrOpenBlob) {
+                    window.navigator.msSaveBlob(blob, filename);
+                } else {
+                    let downloadLink = window.document.createElement('a');
+                    let contentTypeHeader = request.getResponseHeader("Content-Type");
+                    downloadLink.href = window.URL.createObjectURL(new Blob([blob], { type: contentTypeHeader }));
+
+                    var disposition = request.getResponseHeader('Content-Disposition');
+                    if (disposition && disposition.indexOf('filename') !== -1) {
+                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        var matches = filenameRegex.exec(disposition);
+                        if (matches != null && matches[1]) {
+                            filename = matches[1].replace(/['"]/g, '');
+                        }
+                    }
+
+                    downloadLink.download = filename;
+                    document.body.appendChild(downloadLink);
+                    downloadLink.click();
+                    document.body.removeChild(downloadLink);
+                }
+            } else {
+                console.log(this);
+                $this.showError("Export failed");
+            }
+
+            $this.closeLoading();
+        }
+
+        request.send(JSON.stringify(parameters)); 
+    }
+
+    this.getFormattedDate = function () {
+        let date = new Date();
+
+        let stringDateFormat = date.getUTCFullYear().toString()
+            + ('0' + (date.getUTCMonth() + 1)).slice(-2).toString()
+            + ('0' + date.getUTCDate()).slice(-2).toString()
+            + '_'
+            + ('0' + date.getUTCHours()).slice(-2).toString()
+            + ('0' + date.getUTCMinutes()).slice(-2).toString()
+            + ('0' + date.getUTCSeconds()).slice(-2).toString();
+
+        return stringDateFormat;
+    }
+
     this.hasSpecialCharacter = function (str = "") {
         if (str == null) {
             return false;

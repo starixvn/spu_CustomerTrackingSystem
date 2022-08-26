@@ -8,6 +8,7 @@
     using Fanex.NAP.CTS.Model.AssociationDetection;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
+    using Fanex.NAP.CTS.Model.GraphDB.AssDetection;
     using Fanex.NAP.CTS.Model.ProbationManagement;
     using Fanex.NAP.CTS.Portal.API.ActionFilter;
     using Fanex.NAP.CTS.Service;
@@ -314,6 +315,110 @@
             }
 
             return new List<GetAssociationDetectionModel>();
+        }
+
+        /// <summary>
+        /// DetectAssociationByPrimaryOrAgentType
+        /// </summary>
+        /// <param name="paras"></param>
+        /// <returns></returns>
+        [System.Web.Http.AcceptVerbs("DetectAssociationByPrimaryOrAgentType")]
+        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetAssociationDetectionReportAPI)]
+        public IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByPrimaryOrAgentType([FromBody] DetectAssByPrimaryOrAgentParams paras)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(paras.CTSCustIDs))
+                {
+                    var ip_CTSCustIDs = paras.CTSCustIDs.Split(',').Select(long.Parse);
+
+                    DbSessionFactory.Execute<object>("AssDetection_DropInMemoryGraph");
+                    var scriptName = paras.AssType == 1 ? "AssDetection_CreateInMemoryGraph" : "AssDetection_CreateInMemoryGraph_Agent";
+                    DbSessionFactory.Execute<object>(scriptName, new { CTSCustIDs = ip_CTSCustIDs });
+                    var isGraphExisting = DbSessionFactory.Execute<bool>("AssDetection_CheckIfGraphExists").Data.FirstOrDefault();
+                    if (isGraphExisting)
+                    {
+                        DbSessionFactory.Execute<object>("AssDetection_RunWCCAlgo");
+                    
+                        var custAssociations = DbSessionFactory.Execute<DetectAssociationByPrimaryModel>("AssDetection_GetResult", new
+                        {
+                            CTSCustIDs = ip_CTSCustIDs,
+                            AssType = paras.AssType
+                        }).Data;
+
+                        return custAssociations;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string mess = $"WEB - {ConfigSettings.EnvironmentName} - DetectAssociationByPrimaryType failed: " + ex.Message + ex.StackTrace + "\n";
+                if (ex.InnerException != null)
+                {
+                    mess += ex.InnerException.Message + ex.InnerException.Source + ((Neo4j.Driver.Neo4jException)ex.InnerException).Code
+                        + ex.InnerException.StackTrace;
+                }
+                
+                LogService.Error(mess);
+            }
+
+            return new List<DetectAssociationByPrimaryModel>();
+        }
+
+        /// <summary>
+        /// DetectAssociationGetDetail
+        /// </summary>
+        /// <param name="paras"></param>
+        /// <returns></returns>
+        [System.Web.Http.AcceptVerbs("DetectAssociationGetDetail")]
+        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSAPI, TrackingCtsFunctionId.GetAssociationDetectionReportAPI)]
+        public IEnumerable<GetAssociationDetectDetailModel> DetectAssociationGetDetail([FromBody] DetectAssGetDetailParams paras)
+        {
+            var custAssociations = new List<GetAssociationDetectDetailModel>();
+            try
+            {
+                if (paras.RootCTSCustID > 0)
+                {
+                    var ip_assCTSCustIDs = paras.AssCTSCustIDs.Split(',').Select(long.Parse);
+
+                    if (paras.GetPrimaryType)
+                    {
+                        var custAssociations_Primary = DbSessionFactory.Execute<GetAssociationDetectDetailModel>("AssDetection_GetDetail_PrimaryType", new
+                        {
+                            RootCTSCustID = paras.RootCTSCustID,
+                            AssCTSCustIDs = ip_assCTSCustIDs
+                        }).Data;
+
+                        custAssociations.AddRange(custAssociations_Primary);
+                    }
+
+                    if (paras.GetAgentType)
+                    {
+                        var custAssociations_Agent = DbSessionFactory.Execute<GetAssociationDetectDetailModel>("AssDetection_GetDetail_AgentType", new
+                        {
+                            RootCTSCustID = paras.RootCTSCustID,
+                            AssCTSCustIDs = ip_assCTSCustIDs
+                        }).Data;
+
+                        custAssociations.AddRange(custAssociations_Agent);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string mess = $"WEB - {ConfigSettings.EnvironmentName} - DetectAssociationGetDetail failed: " + ex.Message + ex.StackTrace + "\n";
+                if (ex.InnerException != null)
+                {
+                    mess += ex.InnerException.Message + ex.InnerException.Source + ((Neo4j.Driver.Neo4jException)ex.InnerException).Code
+                        + ex.InnerException.StackTrace;
+                }
+
+                LogService.Error(mess);
+            }
+
+            return custAssociations;
         }
 
         #endregion WEB - Association Detection Report

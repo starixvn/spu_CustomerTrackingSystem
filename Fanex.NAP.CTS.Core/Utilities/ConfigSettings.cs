@@ -64,6 +64,10 @@
 
         public static string GetAssociationDetection => GetConfigStringByName("Graph_GetAssociationDetectionReport");
 
+        public static string DetectAssociationByPrimaryOrAgentType => GetConfigStringByName("Graph_DetectAssociationByPrimaryOrAgentType");
+
+        public static string DetectAssociationGetDetail => GetConfigStringByName("Graph_DetectAssociationGetDetail");
+
         public static string GetAssociationException => GetConfigStringByName("Graph_GetAssociationException");
 
         public static string GetInDirectAssociation => GetConfigStringByName("Graph_GetInDirectAssociation");

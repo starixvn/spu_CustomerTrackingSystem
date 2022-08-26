@@ -1,0 +1,3 @@
+﻿USE ctsgraphdb
+CALL gds.wcc.mutate('AssLevel2', { mutateProperty: 'groupId' })
+YIELD nodePropertiesWritten, componentCount;
