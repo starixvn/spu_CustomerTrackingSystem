@@ -57,6 +57,14 @@
 
         public int BetTypeID { get; set; }
 
+        public string TransIdToString
+        {
+            get
+            {
+                return TransId.ToString();
+            }
+        }
+
         public string BetChoice
         {
             get

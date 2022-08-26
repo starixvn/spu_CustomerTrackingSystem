@@ -7,7 +7,7 @@
         eventDataToString: $("#hdEventDataToString").val(),
         matchID: $("#hdMatchID").val(),
         betTypeID: $("#hdBetTypeID").val(),
-        betID: $("#hdBetID").val(),
+        betIDToString: $("#hdbetIDToString").val(),
         reason: $("#hdreason").val(),
         liveIndicator: $("#hdLiveIndicator").val(),
         cbbMatchScore: $('#cbbMatchScore'),
@@ -27,7 +27,7 @@
                 EventDateToString: function () { return domElements.eventDataToString; },
                 MatchID: function () { return domElements.matchID; },
                 BetTypeID: function () { return domElements.betTypeID; },
-                BetID: function () { return domElements.betID; },
+                BetID: function () { return domElements.betIDToString; },
                 Sites: function () { return domElements.cbbSites.val(); },
                 BetChoice: function () { return domElements.cbbBetChoice.val(); },
                 Reason: function () { return domElements.reason; },
@@ -106,7 +106,7 @@
                 { data: obj => RenderBotIcon(obj.RobotType, obj.IsRobot) },
                 { data: obj => obj.DangerToString },
                 { data: obj => obj.Odds },
-                { data: obj => obj.BetID },
+                { data: obj => obj.TransIdToString },
                 { data: obj => obj.Currency },
                 { data: obj => obj.Amount },
                 { data: obj => obj.HDP },
@@ -115,7 +115,7 @@
                 { data: obj => obj.TransTimeToString },
                 { data: obj => obj.Group },
                 { data: obj => obj.PICVerified },
-                { data: obj => obj.TransId }
+                { data: obj => obj.TransIdToString }
             ],
             createdRow: function (row, data, index) {
                 if (data.TicketStatus == 102)
@@ -191,7 +191,7 @@
         {
             if (element.PICVerified == "-")
             {
-                tranIds.push(element.TransId);
+                tranIds.push(element.TransIdToString);
             }
         });
 

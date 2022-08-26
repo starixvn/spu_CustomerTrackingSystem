@@ -109,7 +109,7 @@
             ViewBag.EventDateToString = para?.EventDateToString;
             ViewBag.MatchID = para?.MatchID;
             ViewBag.BetTypeID = para?.BetTypeID;
-            ViewBag.BetID = para?.BetID;
+            ViewBag.BetIDToString = para?.BetID.ToString();
             ViewBag.MatchName = para?.MatchName ?? string.Empty;
             ViewBag.LiveIndicator = para?.LiveIndicator ?? true;
             ViewBag.Reason = para?.Reason;
