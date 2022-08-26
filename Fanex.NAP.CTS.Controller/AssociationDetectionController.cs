@@ -266,43 +266,31 @@
                    
                     var assBySharedIP = Enumerable.Empty<SharedIPMatchesInfoModel>();
 
-                    Parallel.Invoke(() => {
-                        LogService.Info($"Detect Associatied by IP start time {DateTime.Now}");
+                    Parallel.Invoke(() => {                        
                         assBySharedIP = model.IsIPLast3Days ? DetectAssociationByIP(orgUserList.Where(x => !x.IsInternal), custIDs) : Enumerable.Empty<SharedIPMatchesInfoModel>();
                         
                         mergeGroupInfo.AssociationByIPJson = GetAssociationCust(assBySharedIP);
                         model.AssociationByIPJson = mergeGroupInfo.AssociationByIPJson;
-
-                        LogService.Info($"Detect Associatied by IP end time {DateTime.Now}");
-
-                    }, () => {
-                        LogService.Info($"Detect Associatied by Matches start time {DateTime.Now}");
+                    }, () => {                        
                         var assBySharedMatches = model.Is3MatchesLast7Days ? DetectAssociationBySharedMatches(orgUserList.Where(x => !x.IsInternal), custIDs) : Enumerable.Empty<SharedIPMatchesInfoModel>();
 
-                        mergeGroupInfo.AssociationByMatchesJson = GetAssociationCust(assBySharedMatches);
-                        LogService.Info($"Detect Associatied by Matches end time {DateTime.Now}");
-
-                    }, () => {
-                        LogService.Info($"Detect Associatied by Primary start time {DateTime.Now}");
+                        mergeGroupInfo.AssociationByMatchesJson = GetAssociationCust(assBySharedMatches);                       
+                    }, () => {                     
                         var assByPrimary = model.IsBPManuallyDeviceIP 
                             ? _associationDetectionService.DetectAssociationByPrimary(ctsCustIDs, AppSettings.Get("GetAssDetectionFromMySQL") == "1") 
                             : Enumerable.Empty<DetectAssociationByPrimaryModel>();
 
-                        mergeGroupInfo.AssociationByPrimaryJson = JsonConvert.SerializeObject(assByPrimary);
-                        LogService.Info($"Detect Associatied by Primary end time {DateTime.Now}");
-                    }, () => {
-                        LogService.Info($"Detect Associatied by Agent start time {DateTime.Now}");
+                        mergeGroupInfo.AssociationByPrimaryJson = JsonConvert.SerializeObject(assByPrimary);                       
+                    }, () => {                     
                         var assByAgent = model.IsAgent 
                             ? _associationDetectionService.DetectAssociationByAgent(ctsCustIDs, AppSettings.Get("GetAssDetectionFromMySQL") == "1") 
                             : Enumerable.Empty<DetectAssociationByPrimaryModel>();
 
-                        mergeGroupInfo.AssociationByAgentJson = JsonConvert.SerializeObject(assByAgent);
-                        LogService.Info($"Detect Associatied by Agent end time {DateTime.Now}");
+                        mergeGroupInfo.AssociationByAgentJson = JsonConvert.SerializeObject(assByAgent);                       
                     });
-
-                    LogService.Info($"Detect Associatied MergeGroup start time {DateTime.Now}");
+                   
                     var assMergeGroup = _associationDetectionService.MergeGroupDetectAssociation(mergeGroupInfo);
-                    LogService.Info($"Detect Associatied MergeGroup end time {DateTime.Now}");
+                  
                     if (isExportExcel)
                     {
                         result.ExportItemList = orgUserList.Select(x => 
@@ -320,9 +308,7 @@
                         {           
                             return new DetectAssociationItemViewModel(x);
                         });
-                    }
-
-                    LogService.Info($"Detect Associatied end time {DateTime.Now}");
+                    }                   
                 }
                 catch (Exception ex)
                 {

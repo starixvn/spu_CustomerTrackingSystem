@@ -14,7 +14,7 @@
             this.UserName = data.UserName;
             this.CTSCustID = data.CTSCustID;
             this.CustID = data.CustID;
-            this.CategoryIDs = data.CategoryIDs;
+            this.CategoryIds = data.CategoryIDs;
             this.CustStatus = data.CustStatus;
             this.Evidences = data.Evidence;
             this.AssociatedTypes = data.AssociationType;
@@ -40,7 +40,7 @@
 
         public string AssociatedTypes { get; set; }
 
-        public string CategoryIDs { get; set; }
+        public string CategoryIds { get; set; }
 
         public string CustomerCategory { get; set; }
 
