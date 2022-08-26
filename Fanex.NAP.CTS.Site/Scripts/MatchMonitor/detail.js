@@ -7,7 +7,7 @@
         eventDataToString: $("#hdEventDataToString").val(),
         matchID: $("#hdMatchID").val(),
         betTypeID: $("#hdBetTypeID").val(),
-        betIDToString: $("#hdbetIDToString").val(),
+        betIDToString: $("#hdBetIDToString").val(),
         reason: $("#hdreason").val(),
         liveIndicator: $("#hdLiveIndicator").val(),
         cbbMatchScore: $('#cbbMatchScore'),
