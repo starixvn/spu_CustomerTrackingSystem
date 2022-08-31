@@ -1,4 +1,5 @@
-﻿@{
+﻿@using Fanex.NAP.CTS.Model
+@{
     ViewBag.Title = "ASSOCIATED ACCOUNT GROUP";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -28,6 +29,8 @@
                     <tr>
                         <th>Group ID</th>
                         <th>Group Name</th>
+                        <th>Site</th>
+                        <th>Associated Type</th>
                         <th>ABI</th>
                         <th>Total Accounts</th>
                         <th>Comment</th>
@@ -56,16 +59,16 @@
             <div class="label">Site<label style="color:red">*</label></div>
             <div style="width:270px">
                 <select class="control width-select" id="cbbSites" multiple="multiple">
-                    @foreach (var group in ViewBag.SiteGroups)
+                    @*@foreach (var group in ViewBag.SiteGroups)
                     {
-                    <optgroup label="@group.SiteGroupName">
+                        <optgroup label="@group.SiteGroupName">
 
-                        @foreach (var site in group.SiteList)
-                        {
-                            <option selected value=@site.SiteID>@site.SiteName</option>
-                        }
-                    </optgroup>
-                    }
+                            @foreach (var site in group.SiteList)
+                            {
+                                <option selected value=@site.SiteID>@site.SiteName</option>
+                            }
+                        </optgroup>
+                    }*@
                 </select>
             </div>
         </div>
@@ -73,10 +76,10 @@
             <div class="label">Associated Type<label style="color:red">*</label></div>
             <div style="width:205px">
                 <select class="control width-select" id="cbbAssociatedTypes" multiple="multiple">
-                    <option selected>Betting Pattern</option>
-                    <option selected>Device</option>
-                    <option selected>IP</option>
-                    <option selected>Manually</option>
+                    <option selected value=@AssociationType.BettingPattern>Betting Pattern</option>
+                    <option selected value=@AssociationType.Device>Device</option>
+                    <option selected value=@AssociationType.IP>IP</option>
+                    <option selected value=@AssociationType.Manual>Manually</option>
                 </select>
             </div>
         </div>
@@ -90,7 +93,7 @@
                         <option value=@idx>@idx</option>
                     }
                 </select>
-            </div>            
+            </div>
         </div>
     </div>
 

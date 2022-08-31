@@ -41,29 +41,33 @@
                             NapSettings.Settings.SiteId,
                             FSFunctionKeys.AssociatedGroupMonitor,
                             NAP.Core.Business.Constant.Policy.Host);
+                      
+            return View(isHostPermission);
+        }
 
+        [HttpPost]
+        public ActionResult GetSitesByGroupID(long groupID)
+        {
             var siteGroups = Enumerable.Empty<SiteGroupViewModel>();
-
             var sites = _commonService.GetSites();
 
             if (sites != null && sites.Any())
             {
                 siteGroups = sites.GroupBy(g => g.IsLicensee)
-                         .Select(x => new { SiteGroupName = x.Key ? "Licensees" : "Credit" , SiteList = x.ToList() })
+                         .Select(x => new { SiteGroupName = x.Key ? "Licensee" : "Credit", SiteList = x.ToList() })
                          .Select(x => new SiteGroupViewModel
                          {
                              SiteGroupName = x.SiteGroupName,
                              SiteList = x.SiteList.Select(y => new SiteViewModel
                              {
                                  SiteID = y.SiteID,
-                                 SiteName = y.SiteName
+                                 SiteName = y.SiteName,
+                                 IsSelected = true
                              })
                          });
             }
-
-            ViewBag.SiteGroups = siteGroups;
-
-            return View(isHostPermission);
+         
+            return Json(siteGroups, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -80,6 +84,8 @@
                 {
                     GroupID = x.GroupID,
                     GroupName = x.GroupName,
+                    Sites = "Credit",
+                    AssociatedType = "Device,IP",
                     ABI = x.ABI,
                     TotalAccount = x.TotalAccount,
                     Remark = x.Remark,
@@ -87,24 +93,64 @@
                     CreatedBy = x.CreatedBy
                 });
             }
-           
+            else /* Test */
+            {
+                associatedGroups = new List<AssociatedGroupMonitorViewModel>()
+                {
+                    new AssociatedGroupMonitorViewModel
+                    {
+                        GroupID = 1,
+                        GroupName = "Group 1",
+                        Sites = "Credit",
+                        AssociatedType = "Device,IP",
+                        ABI = 1,
+                        TotalAccount = 150,
+                        Remark = "Test",
+                        CreatedDate = DateTime.Now.ToString(Consts.FormatDateToString_MMMddyyyy),
+                        CreatedBy = "sa"
+                    }
+                };
+
+                /* End Test */
+            }
+
             return Json(new { data = associatedGroups }, JsonRequestBehavior.AllowGet);
         }
       
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AssociatedGroupMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedGroupMonitorRpt)]
-        public ActionResult AddAssociatedGroupMonitor(AddAssociatedGroupViewModel model)
+        public ActionResult SaveAddAssociatedGroupMonitor(AddAssociatedGroupViewModel model)
         {
             model.CreatedBy = CurrentSession.UserId;
 
-            var result = _associatedGroupService.AddAssociatedGroupMonitor(model);
-
+            //var result = _associatedGroupService.AddAssociatedGroupMonitor(model);
+            var result = new Core.DBResult();
             return Json(new
             {
                 errorCode = result.ErrorCode,
                 errorMessage = result.ErrorMsg
             }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.AssociatedGroupMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedGroupMonitorRpt)]
+        public ActionResult EditAssociatedGroupMonitor(int groupID)
+        {
+            var result = "";
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.AssociatedGroupMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedGroupMonitorRpt)]
+        public ActionResult SaveEditAssociatedGroupMonitor(int groupID)
+        {
+            var result = "";
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

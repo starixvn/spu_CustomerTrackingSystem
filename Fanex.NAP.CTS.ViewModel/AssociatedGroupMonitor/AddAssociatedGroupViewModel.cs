@@ -6,7 +6,15 @@
 
         public int ABI { get; set; }
 
-        public string Comment { get; set; }
+        public bool IsAllCredit { get; set; }
+
+        public bool IsAllLicensee { get; set; }
+
+        public string Sites { get; set; }
+
+        public string AssociationTypes { get; set; }     
+
+        public string Remark { get; set; }
 
         public int CreatedBy { get; set; }
     }

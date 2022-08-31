@@ -1,4 +1,6 @@
-﻿function AssociatedGroupMonitor() {
+﻿import { NU } from "../DataTables_New/pdfmake-0.1.36/pdfmake";
+
+function AssociatedGroupMonitor() {
     let dataTable;    
     let domElements = {
         btnAddGroup: $('#btnAddGroup'),
@@ -69,17 +71,21 @@
                 { targets: [0], width: "10%" },
                 { targets: [1], width: "20%" },
                 { targets: [2], width: "5%" },
-                { targets: [3], width: "10%" },
-                { targets: [4], width: "20%" },
+                { targets: [3], width: "5%" },
+                { targets: [4], width: "5%" },
                 { targets: [5], width: "10%" },
-                { targets: [6], width: "10%" },
-                { targets: [7], width: "5%" },
-                { targets: [8], width: "5%" },
-                { targets: [9], width: "5%" }
+                { targets: [6], width: "20%" },
+                { targets: [7], width: "10%" },
+                { targets: [8], width: "10%" },
+                { targets: [9], width: "5%" },
+                { targets: [10], width: "5%" },
+                { targets: [11], width: "5%" }
             ],
             columns: [
                 { data: obj => obj.GroupID },
                 { data: obj => obj.GroupName },
+                { data: obj => obj.Sites },
+                { data: obj => obj.AssociatedType },
                 { data: obj => obj.ABI },
                 { data: obj => obj.TotalAccount },
                 { data: obj => obj.Remark },
@@ -91,7 +97,7 @@
                     }, createdCell: (cell, _, row) => {
                         if (isHostPermission) {
                             $('.icon-edit', cell).click(() => {
-
+                                EditAssociatedGroupMonitor(row.GroupID);
                             });
                         }
                     }
@@ -276,16 +282,28 @@
         });
     }
 
-    function AddAssociatedGroupMonitor() {
+    function SaveAddAssociatedGroupMonitor() {
         if (ValidateInputAddAssociatedGroupMonitor()) {
             common.showConfirmation("<div class='popup-content'><div class='popup-title'>Are you sure you want to add new group '" + domElements.txtGroupNameAssociatedGroup.val().trim() +"'</div></div>",
                 function () {
                     let params = {};
                     params.GroupName = domElements.txtGroupNameAssociatedGroup.val().trim();
-                    params.ABI = domElements.cbbABIAssociatedGroup.val();
-                    params.Comment = domElements.txtCommentAssociatedGroup.val().trim();
+                    params.ABI = domElements.cbbABIAssociatedGroup.val();   
+                    params.Sites = domElements.cbbSites.val().join();
+                    params.AssociationTypes = domElements.cbbAssociatedTypes.val().join();
+                    params.Remark = domElements.txtCommentAssociatedGroup.val().trim();
 
-                    $.ajax(common.modifyRelativeUrl('AssociatedGroupMonitor/AddAssociatedGroupMonitor'), {
+                    domElements.cbbSites.find('optgroup').each(function () {                                       
+                        if ($(this).find('option:not(:selected)').length == 0) {
+                            if ($(this).attr('label') == 'Credit') {
+                                params.IsAllCredit = true;
+                            } else {
+                                params.IsAllLicensee = true;
+                            }
+                        }
+                    });
+
+                    $.ajax(common.modifyRelativeUrl('AssociatedGroupMonitor/SaveAddAssociatedGroupMonitor'), {
                         type: 'POST',
                         data: params,
                         beforeSend: function () {
@@ -316,6 +334,16 @@
     }
 
     function ValidateInputAddAssociatedGroupMonitor() {
+        if (domElements.cbbSites.find('option:selected').length == 0) {
+            common.showError('Sites may not be empty.');
+            return false;
+        }
+
+        if (domElements.cbbAssociatedTypes.find('option:selected').length == 0) {
+            common.showError('Associated Type may not be empty.');
+            return false;
+        }
+
         if (domElements.txtGroupNameAssociatedGroup.val() == "") {
             common.showError('Group Name may not be empty.');
             return false;
@@ -335,6 +363,51 @@
         }
 
         return true;
+    }
+
+    function EditAssociatedGroupMonitor(groupID) {
+        $.ajax(common.modifyRelativeUrl('AssociatedGroupMonitor/EditAssociatedGroupMonitor'), {
+            type: 'POST',
+            data: {
+                groupID: groupID
+            },
+            beforeSend: function () {                
+            },
+            success: function (response) {
+                if (response.errorCode != -1) {
+                    if ($.ui && $.ui.dialog && $.ui.dialog.prototype._allowInteraction) {
+                        var ui_dialog_interaction = $.ui.dialog.prototype._allowInteraction;
+                        $.ui.dialog.prototype._allowInteraction = function (e) {
+                            if ($(e.target).closest('.select2-dropdown').length) return true;
+                            return ui_dialog_interaction.apply(this, arguments);
+                        };
+                    }
+
+                    domElements.divAddAssociatedGroup.dialog({
+                        modal: true,
+                        width: '690px',
+                        title: 'EDIT GROUP',
+                        _allowInteraction: function (event) {
+                            return !!$(event.target).is(".select2-input") || this._super(event);
+                        },
+                        resizable: true,
+                        draggable: true,
+                        close: function () {
+                            $(this).dialog('close');
+                        }
+                    });        
+                } else {
+                    common.showError("An unexpected Error occurred. Please try again.");
+                }
+            },
+            complete: function () {
+                
+            },
+            error: function (errMsg) {              
+                common.showError("An unexpected Error occurred. Please try again.");
+                console.log(errMsg);
+            }
+        });
     }
 
     function RemoveAscent(text) {
@@ -604,6 +677,36 @@
             domElements.btnSaveAssociatedAccount.prop('disabled', true);
     }   
 
+    function RefreshSites(groupID) {
+        $.ajax(common.modifyRelativeUrl('AssociatedGroupMonitor/GetSitesByGroupID'), {
+            type: 'POST',
+            data: {
+                groupID: groupID
+            },
+            success: function (response) {
+                domElements.cbbSites.multiselect().empty();
+
+                if (response != null) {
+                    for (var i = 0; i < response.length; i++) {
+                        let siteGroup = response[i];
+                        domElements.cbbSites.append(`<optgroup label=${siteGroup.SiteGroupName}></optgroup>`);
+
+                        for (var j = 0; j < siteGroup.SiteList.length; j++) {
+                            let site = siteGroup.SiteList[j];
+                            let selected = site.IsSelected ? 'selected' : '';
+                            domElements.cbbSites.append(`<option ${selected} label=${site.SiteName}></optgroup>`);
+                        }
+                    }
+                }
+                
+                domElements.cbbSites.multiselect('refresh');
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+            }
+        });
+    }
+
     function Initial() {
         if (!isHostPermission) {
             domElements.btnAddGroup.prop('disabled', true);
@@ -611,7 +714,7 @@
 
         domElements.cbbSites.multiselect({
             menuWidth: 270,
-            menuHeight: 320,
+            menuHeight: 270,
             selectedText: "# of # selected",
             noneSelectedText: "Select Sites",
             enableClickableOptGroups: true,
@@ -633,7 +736,9 @@
 
         GetAssociatedGroup();
 
-        domElements.btnAddGroup.on('click', function () {   
+        domElements.btnAddGroup.on('click', function () {  
+            RefreshSites(-1);
+
             $('#cbbABIAssociatedGroup').val(0).trigger('change.select2');
             domElements.txtGroupNameAssociatedGroup.val('');                       
             domElements.txtCommentAssociatedGroup.val('');
@@ -661,7 +766,7 @@
             });           
         });
 
-        domElements.btnSaveAssociatedGroup.on('click', () => AddAssociatedGroupMonitor());
+        domElements.btnSaveAssociatedGroup.on('click', () => SaveAddAssociatedGroupMonitor());
 
         domElements.btnCancelAssociatedGroup.on('click', () => { domElements.divAddAssociatedGroup.dialog('close') });
 

@@ -8,6 +8,7 @@
     using Fanex.NAP.CTS.Criteria.Account.CustomerInfo;
     using Fanex.NAP.CTS.Criteria.AssociatedGroupMonitor;
     using Fanex.NAP.CTS.Criteria.Common;
+    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account.CustomerInfo;
     using Fanex.NAP.CTS.Model.AssociatedGroupMonitor;
     using Fanex.NAP.CTS.Model.Common;
@@ -177,11 +178,20 @@
 
         public DBResult AddAssociatedGroupMonitor(AddAssociatedGroupViewModel model)
         {
+            var assTypes = model.AssociationTypes.Split(',').Select(int.Parse);
+
             var criteria = new AddAssociatedGroupMonitorCriteria
             {
                 GroupName = model.GroupName,
                 ABI = model.ABI,
-                Remark = model.Comment,
+                AllCredit = model.IsAllCredit,
+                AllLicensee = model.IsAllLicensee,
+                Sites = model.Sites,
+                HasDevice = assTypes.Any(x=> x == (int)AssociationType.Device),
+                HasManual = assTypes.Any(x => x == (int)AssociationType.Manual),
+                HasIP = assTypes.Any(x => x == (int)AssociationType.IP),
+                HasAI = assTypes.Any(x => x == (int)AssociationType.BettingPattern),
+                Remark = model.Remark,
                 CreatedBy = model.CreatedBy
             };
 
