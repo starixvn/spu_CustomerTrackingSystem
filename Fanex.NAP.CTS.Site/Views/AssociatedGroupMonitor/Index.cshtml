@@ -33,9 +33,10 @@
                         <th>Comment</th>
                         <th>Created Date</th>
                         <th>Created By</th>
-                        <th>Export Excel</th>
+                        <th>Edit Group</th>
                         <th>Remove Group</th>
                         <th>Add Accounts</th>
+                        <th>Export Excel</th>
                     </tr>
                 </thead>
             </table>
@@ -50,15 +51,55 @@
         <input id="txtGroupNameAssociatedGroup" type="text" class="input-field full-width" maxlength="100" />
     </div>
 
-    <div class="form-control" id="divABIAssociatedGroup">
-        <div class="label">ABI<label style="color:red">*</label></div>
-        <select class="control" id="cbbABIAssociatedGroup" name="state" style="height: 100px">
-            <option disabled selected value="">Select an ABI</option>
-            @for (int idx = 1; idx < 51; idx++)
-            {
-                <option value=@idx>@idx</option>
-            }
-        </select>
+    <div style="display: flex">
+        <div class="form-control margin-right-20">
+            <div class="label">Site<label style="color:red">*</label></div>
+            <div style="width:270px">
+                <select class="control width-select" id="cbbSites" multiple="multiple">
+                    @foreach (var group in ViewBag.Sites)
+                    {
+                        <optgroup label="@group.SiteGroupName">
+                            @foreach (var item in ViewBag.Sites)
+                            {
+
+                            }
+                        </optgroup>
+                    }
+
+                    @*<optgroup label="Credit">
+            <option selected value=1>ACB</option>
+            <option selected value=1>DEF</option>
+        </optgroup>
+        <optgroup label="Licensees">
+            <option selected value=1>ACB</option>
+            <option selected value=1>DEF</option>
+        </optgroup>*@
+                </select>
+            </div>
+        </div>
+        <div class="form-control margin-right-20">
+            <div class="label">Associated Type<label style="color:red">*</label></div>
+            <div style="width:190px">
+                <select class="control width-select" id="cbbAssociatedTypes" multiple="multiple">
+                    <option selected>Betting Pattern</option>
+                    <option selected>Device</option>
+                    <option selected>IP</option>
+                    <option selected>Manually</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-control">
+            <div class="label">ABI<label style="color:red">*</label></div>
+            <div style="width:140px">
+                <select class="control" id="cbbABIAssociatedGroup" name="state" style="height: 100px">
+                    <option disabled selected value="">Select an ABI</option>
+                    @for (int idx = 1; idx < 51; idx++)
+                    {
+                        <option value=@idx>@idx</option>
+                    }
+                </select>
+            </div>            
+        </div>
     </div>
 
     <div class="form-control wrapper-comment">

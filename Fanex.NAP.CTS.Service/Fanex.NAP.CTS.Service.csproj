@@ -87,7 +87,6 @@
     <Compile Include="Interface\CustomerClassification\IProblemAccountClassificationService.cs" />
     <Compile Include="Interface\IAccountService.cs" />
     <Compile Include="Interface\IAssociatedAccountService.cs" />
-    <Compile Include="Interface\IAssociatedGroupMonitorService.cs" />
     <Compile Include="Interface\IAssociationReportService.cs" />
     <Compile Include="Interface\ICategoryService.cs" />
     <Compile Include="Interface\ICustomerEvidenceService.cs" />

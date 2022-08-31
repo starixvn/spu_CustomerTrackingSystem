@@ -6,6 +6,8 @@
         divAddAssociatedGroup: $('#divAddAssociatedGroup'),
         txtGroupNameAssociatedGroup: $('#txtGroupNameAssociatedGroup'),
         txtCommentAssociatedGroup: $('#txtCommentAssociatedGroup'),
+        cbbSites: $('#cbbSites'),
+        cbbAssociatedTypes: $('#cbbAssociatedTypes'),
         cbbABIAssociatedGroup: $('#cbbABIAssociatedGroup'),
         txtCommentAssociatedAccount: $('#txtCommentAssociatedAccount'),
         divAddAssociatedAccount: $('#divAddAssociatedAccount'),
@@ -65,15 +67,15 @@
                 { targets: "_all", defaultContent: "-" },
                 { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8 , 9], className: "text-center" },
                 { targets: [0], width: "10%" },
-                { targets: [1], width: "10%" },
-                { targets: [2], width: "10%" },
+                { targets: [1], width: "20%" },
+                { targets: [2], width: "5%" },
                 { targets: [3], width: "10%" },
-                { targets: [4], width: "10%" },
+                { targets: [4], width: "20%" },
                 { targets: [5], width: "10%" },
                 { targets: [6], width: "10%" },
-                { targets: [7], width: "10%" },
-                { targets: [8], width: "10%" },
-                { targets: [9], width: "10%" }                
+                { targets: [7], width: "5%" },
+                { targets: [8], width: "5%" },
+                { targets: [9], width: "5%" }
             ],
             columns: [
                 { data: obj => obj.GroupID },
@@ -82,16 +84,16 @@
                 { data: obj => obj.TotalAccount },
                 { data: obj => obj.Remark },
                 { data: obj => obj.CreatedDate },
-                { data: obj => obj.CreatedBy },
+                { data: obj => obj.CreatedBy },   
                 {
                     data: obj => {
-                        return '<span class="sub-icon - excel" id="sub-icon " title="Export To Excel"><i class="icon-excel ' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
+                        return '<span class="sub-icon - edit" id="sub-icon " title="Edit Group"><i class="icon-edit ' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
                     }, createdCell: (cell, _, row) => {
-                        $('.icon-excel', cell).click(() => {
-                            $('td #sub-icon').addClass('none-pointer');
+                        if (isHostPermission) {
+                            $('.icon-edit', cell).click(() => {
 
-                            ExportToExcelAssociatedAccount(row.GroupID, row.GroupName);
-                        })
+                            });
+                        }
                     }
                 },
                 {
@@ -150,6 +152,17 @@
                                 }
                             });
                         });
+                    }
+                },
+                {
+                    data: obj => {
+                        return '<span class="sub-icon - excel" id="sub-icon " title="Export To Excel"><i class="icon-excel ' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
+                    }, createdCell: (cell, _, row) => {
+                        $('.icon-excel', cell).click(() => {
+                            $('td #sub-icon').addClass('none-pointer');
+
+                            ExportToExcelAssociatedAccount(row.GroupID, row.GroupName);
+                        })
                     }
                 }
             ]
@@ -596,6 +609,28 @@
             domElements.btnAddGroup.prop('disabled', true);
         }
 
+        domElements.cbbSites.multiselect({
+            menuWidth: 270,
+            menuHeight: 320,
+            selectedText: "# of # selected",
+            noneSelectedText: "Select Sites",
+            enableClickableOptGroups: true,
+            includeSelectAllOption: true,
+            groupsCollapsable: true,
+            optGroupChecked: true
+        }).multiselectfilter({
+            width: 210,
+            placeholder: '',
+            label: ''
+        });
+
+        domElements.cbbAssociatedTypes.multiselect({
+            menuWidth: 190,
+            menuHeight: 190,
+            selectedText: "# of # selected",
+            noneSelectedText: "Select Associated Types"
+        });
+
         GetAssociatedGroup();
 
         domElements.btnAddGroup.on('click', function () {   
@@ -613,7 +648,7 @@
 
             domElements.divAddAssociatedGroup.dialog({
                 modal: true,
-                width: '600px',
+                width: '700px',
                 title: 'CREATE NEW GROUP',
                 _allowInteraction: function (event) {
                     return !!$(event.target).is(".select2-input") || this._super(event);

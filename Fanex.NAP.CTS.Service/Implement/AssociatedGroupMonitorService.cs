@@ -7,21 +7,42 @@
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Criteria.Account.CustomerInfo;
     using Fanex.NAP.CTS.Criteria.AssociatedGroupMonitor;
+    using Fanex.NAP.CTS.Criteria.Common;
     using Fanex.NAP.CTS.Model.Account.CustomerInfo;
     using Fanex.NAP.CTS.Model.AssociatedGroupMonitor;
+    using Fanex.NAP.CTS.Model.Common;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
-    using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.AssociatedGroupMonitor;
     using Fanex.NAP.TGRS.Core.ExcelUtility;
-    using Fanex.NAP.TGRS.Core.ExcelUtility.RichTextExtensions;
     using Newtonsoft.Json;
     using NPOI.SS.UserModel;
     using NPOI.XSSF.UserModel;
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
+
+    public interface IAssociatedGroupMonitorService
+    {        
+        IEnumerable<AssociatedGroupMonitorModel> GetAssociatedGroupMonitor();
+
+        IEnumerable<AssociatedAccountMonitorModel> GetAssociatedAccountMonitor(long groupID);
+
+        DBResult AddAssociatedGroupMonitor(AddAssociatedGroupViewModel model);
+
+        DBResult RemoveAssociatedGroupMonitor(RemoveAssociatedGroupViewModel model);
+
+        IEnumerable<ValidateUserAssociatedAccountModel> ValidateUserNameInput(string userNames);
+
+        DBResult AddAssociatedAccount(AddAssociatedAccountViewModel model);
+
+        DBResult UpdateABIToMainDB(string custIDs, int valueABI);
+
+        byte[] ExportExcelAssociatedAccount(IEnumerable<AssociatedAccountMonitorModel> associatedAccounts
+            , string fileName
+            , string templatePath
+            , ExportToExcelAssociatedAccountViewModel model);
+
+    }
 
     public class AssociatedGroupMonitorService : IAssociatedGroupMonitorService
     {
@@ -32,6 +53,13 @@
         {
             repository = new DynamicRepository();
             customerClassificationService = new CustomerClassificationService();
+        }
+
+        public IEnumerable<SiteModel> GetSites()
+        {
+            var criteria = new GetSitesCriteria();
+
+            return repository.Fetch<SiteModel>(criteria);
         }
 
         public IEnumerable<AssociatedGroupMonitorModel> GetAssociatedGroupMonitor()

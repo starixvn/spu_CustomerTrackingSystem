@@ -22,12 +22,14 @@
     {
         private const string AssociatedAccountMonitorTemplate = "~/App_Data/Excel Template/AssociatedGroupMonitor/Template.xlsx";
         private readonly IAssociatedGroupMonitorService _associatedGroupService;
+        private readonly ICommonService _commonService;
 
         public override string BaseControllerName { get => Consts.MenuItemController; }
 
         public AssociatedGroupMonitorController()
         {
             _associatedGroupService = new AssociatedGroupMonitorService();
+            _commonService = new CommonService();
         }
 
         public ActionResult Index()
@@ -38,6 +40,8 @@
                             NapSettings.Settings.SiteId,
                             FSFunctionKeys.AssociatedGroupMonitor,
                             NAP.Core.Business.Constant.Policy.Host);
+
+            ViewBag.Sites = _commonService.GetSites();
 
             return View(isHostPermission);
         }
