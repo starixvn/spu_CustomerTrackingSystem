@@ -56,30 +56,22 @@
             <div class="label">Site<label style="color:red">*</label></div>
             <div style="width:270px">
                 <select class="control width-select" id="cbbSites" multiple="multiple">
-                    @foreach (var group in ViewBag.Sites)
+                    @foreach (var group in ViewBag.SiteGroups)
                     {
-                        <optgroup label="@group.SiteGroupName">
-                            @foreach (var item in ViewBag.Sites)
-                            {
+                    <optgroup label="@group.SiteGroupName">
 
-                            }
-                        </optgroup>
+                        @foreach (var site in group.SiteList)
+                        {
+                            <option selected value=@site.SiteID>@site.SiteName</option>
+                        }
+                    </optgroup>
                     }
-
-                    @*<optgroup label="Credit">
-            <option selected value=1>ACB</option>
-            <option selected value=1>DEF</option>
-        </optgroup>
-        <optgroup label="Licensees">
-            <option selected value=1>ACB</option>
-            <option selected value=1>DEF</option>
-        </optgroup>*@
                 </select>
             </div>
         </div>
         <div class="form-control margin-right-20">
             <div class="label">Associated Type<label style="color:red">*</label></div>
-            <div style="width:190px">
+            <div style="width:205px">
                 <select class="control width-select" id="cbbAssociatedTypes" multiple="multiple">
                     <option selected>Betting Pattern</option>
                     <option selected>Device</option>
@@ -90,7 +82,7 @@
         </div>
         <div class="form-control">
             <div class="label">ABI<label style="color:red">*</label></div>
-            <div style="width:140px">
+            <div style="width:150px">
                 <select class="control" id="cbbABIAssociatedGroup" name="state" style="height: 100px">
                     <option disabled selected value="">Select an ABI</option>
                     @for (int idx = 1; idx < 51; idx++)

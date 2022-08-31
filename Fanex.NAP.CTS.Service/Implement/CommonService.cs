@@ -71,7 +71,7 @@
                 return Enumerable.Empty<ValidateUserNameModel>();
             }
         }
-
+       
         public IEnumerable<SiteModel> GetSites(bool isNestedCalled)
         {
             var criteria = new GetSitesCriteria { IsNestedCalled = isNestedCalled };
@@ -80,6 +80,8 @@
             {
                 return db.Query<SiteModel>(criteria);
             }
+
+ ```````````return siteGroups;
         }
     }
 }

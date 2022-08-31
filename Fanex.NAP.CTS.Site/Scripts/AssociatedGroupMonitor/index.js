@@ -625,8 +625,8 @@
         });
 
         domElements.cbbAssociatedTypes.multiselect({
-            menuWidth: 190,
-            menuHeight: 190,
+            menuWidth: 200,
+            menuHeight: 200,
             selectedText: "# of # selected",
             noneSelectedText: "Select Associated Types"
         });
@@ -648,7 +648,7 @@
 
             domElements.divAddAssociatedGroup.dialog({
                 modal: true,
-                width: '700px',
+                width: '690px',
                 title: 'CREATE NEW GROUP',
                 _allowInteraction: function (event) {
                     return !!$(event.target).is(".select2-input") || this._super(event);

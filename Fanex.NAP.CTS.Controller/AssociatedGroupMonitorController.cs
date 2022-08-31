@@ -10,6 +10,7 @@
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.AssociatedGroupMonitor;
+    using Fanex.NAP.CTS.ViewModel.Common;
     using System;
     using System.Collections.Generic;
     using System.Linq;   
@@ -41,7 +42,26 @@
                             FSFunctionKeys.AssociatedGroupMonitor,
                             NAP.Core.Business.Constant.Policy.Host);
 
-            ViewBag.Sites = _commonService.GetSites();
+            var siteGroups = Enumerable.Empty<SiteGroupViewModel>();
+
+            var sites = _commonService.GetSites();
+
+            if (sites != null && sites.Any())
+            {
+                siteGroups = sites.GroupBy(g => g.IsLicensee)
+                         .Select(x => new { SiteGroupName = x.Key ? "Licensees" : "Credit" , SiteList = x.ToList() })
+                         .Select(x => new SiteGroupViewModel
+                         {
+                             SiteGroupName = x.SiteGroupName,
+                             SiteList = x.SiteList.Select(y => new SiteViewModel
+                             {
+                                 SiteID = y.SiteID,
+                                 SiteName = y.SiteName
+                             })
+                         });
+            }
+
+            ViewBag.SiteGroups = siteGroups;
 
             return View(isHostPermission);
         }
