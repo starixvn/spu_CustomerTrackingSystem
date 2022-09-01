@@ -1,3 +1,45 @@
-﻿.nav-controls{
-    display : flex;
+﻿.vertical-tabs {
+    display: grid;
+    grid-template-columns: 15% 85%;
+    grid-gap: 10px;
+
+    .nav-controls {
+        display: flex;
+        flex-direction: column;
+
+        li {
+            border: 1px solid #DDE2E5;
+
+            a {
+                color: #475A7C;
+                display: block;
+                padding: 10px 20px;
+
+                &.active {
+                    color: #E15F00;
+                }
+            }
+        }
+    }
+
+    .main-pannel {
+        .nav-pannel {
+            overflow: auto;
+            max-height: 300px;
+            display: none;
+
+            &.active {
+                display: block;
+            }
+        }
+    }
+
+
+    .fixed-header {
+        top: 0 !important;
+        padding-top: 0 !important;
+    }
+}
+.customer-class-tabs {
+    padding-top: 10px;
 }

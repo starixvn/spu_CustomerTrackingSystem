@@ -4,7 +4,8 @@
     let btnUnmarkCategory = $('#btnunmarkcategory');    
     let divMarkCustomerCategory = $('#divMarkCustomerCategory');    
     let divUnmarkCustomerCategory = $('#divUnmarkCustomerCategory');
-    let tblcustomercategory = $('#customer-category-table');    
+    let tblcustomercategory = $('#customer-category-table');
+    let navsTabs = $('.nav-controls li a');
     let isHostPermission;
     let cacheData = {
         isVVip: false,
@@ -13,7 +14,20 @@
         isProblemAccount: false,
         isPAProbation: false
     };
-    let dataTable;  
+    let dataTable;
+
+
+    function CustomerSettingVerticalTabs() {
+        navsTabs.click(function (e) {
+            var $this = $(this);
+            e.preventDefault();
+            $('.nav-controls a.active , .nav-pannel.active').removeClass('active');
+            $this.addClass('active');
+            $($this.attr('href')).addClass('active');
+        })
+    }
+
+
 
     function GetCustomerCategory(custId) {
         setTimeout(function () {
@@ -764,6 +778,7 @@
         dataTable = RenderGrid();
 
         LoadGrid(ctsCustId);
+        CustomerSettingVerticalTabs();
     };
 
     this.ReloadStatusRobotUser = function (custId) {

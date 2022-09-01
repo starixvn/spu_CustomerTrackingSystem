@@ -1193,25 +1193,22 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 }
 // customer-category-content
 #customer-category {
-    padding-top: 1.2rem;
-
     .fixed-header {
         position: sticky;
         position: -webkit-sticky;
         top: 9.7rem;
         z-index: 9;
-        padding-top: 1.2rem;
     }
 
     .wrapper-info-table {
-        top: 14.9rem;
+        top: 4rem;
     }
 
     #customer-category-table {
         thead th {
             position: sticky;
             position: -webkit-sticky;
-            top: 14.8rem;
+            top: 4rem;
             z-index: 10;
         }
     }
