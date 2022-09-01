@@ -10,7 +10,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_AssociatedGroup_Get";
+            return "CTS_DC_AssociatedGroup_GetByID";
         }
 
         public override bool IsValid()

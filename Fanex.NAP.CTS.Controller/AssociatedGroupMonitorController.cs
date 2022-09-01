@@ -80,39 +80,8 @@
 
             if (data != null && data.Any())
             {
-                associatedGroups = data.Select(x => new AssociatedGroupMonitorViewModel
-                {
-                    GroupID = x.GroupID,
-                    GroupName = x.GroupName,
-                    Sites = "Credit",
-                    AssociatedType = "Device,IP",
-                    ABI = x.ABI,
-                    TotalAccount = x.TotalAccount,
-                    Remark = x.Remark,
-                    CreatedDate = x.Created.ToString(Consts.FormatDateToString_MMMddyyyy),
-                    CreatedBy = x.CreatedBy
-                });
-            }
-            else /* Test */
-            {
-                associatedGroups = new List<AssociatedGroupMonitorViewModel>()
-                {
-                    new AssociatedGroupMonitorViewModel
-                    {
-                        GroupID = 1,
-                        GroupName = "Group 1",
-                        Sites = "Credit",
-                        AssociatedType = "Device,IP",
-                        ABI = 1,
-                        TotalAccount = 150,
-                        Remark = "Test",
-                        CreatedDate = DateTime.Now.ToString(Consts.FormatDateToString_MMMddyyyy),
-                        CreatedBy = "sa"
-                    }
-                };
-
-                /* End Test */
-            }
+                associatedGroups = data.Select(x => new AssociatedGroupMonitorViewModel(x));
+            }           
 
             return Json(new { data = associatedGroups }, JsonRequestBehavior.AllowGet);
         }
@@ -120,12 +89,12 @@
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AssociatedGroupMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedGroupMonitorRpt)]
-        public ActionResult SaveAddAssociatedGroupMonitor(AddAssociatedGroupViewModel model)
+        public ActionResult SaveAddAssociatedGroupMonitor(AddAssociatedGroupModel model)
         {
             model.CreatedBy = CurrentSession.UserId;
 
-            //var result = _associatedGroupService.AddAssociatedGroupMonitor(model);
-            var result = new Core.DBResult();
+            var result = _associatedGroupService.AddAssociatedGroupMonitor(model);
+         
             return Json(new
             {
                 errorCode = result.ErrorCode,
@@ -136,9 +105,16 @@
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AssociatedGroupMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedGroupMonitorRpt)]
-        public ActionResult EditAssociatedGroupMonitor(int groupID)
+        public ActionResult UpdateAssociatedGroupMonitor(int groupID)
         {
-            var result = "";
+            var result = new GetUpdateAssociatedGroupMonitorByIDViewModel();
+
+            var data = _associatedGroupService.GetUpdateAssociatedGroupMonitorByID(groupID);
+
+            if (data != null)
+            {
+                result = new GetUpdateAssociatedGroupMonitorByIDViewModel(data);
+            }
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -146,17 +122,23 @@
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AssociatedGroupMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedGroupMonitorRpt)]
-        public ActionResult SaveEditAssociatedGroupMonitor(int groupID)
+        public ActionResult SaveUpdateAssociatedGroupMonitor(UpdateAssociatedGroupMonitorModel model)
         {
-            var result = "";
+            model.ModifiedBy = CurrentSession.UserId;
 
-            return Json(result, JsonRequestBehavior.AllowGet);
+            var result = _associatedGroupService.UpdateAssociatedGroupMonitor(model);
+
+            return Json(new
+            {
+                errorCode = result.ErrorCode,
+                errorMessage = result.ErrorMsg
+            }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AssociatedGroupMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedGroupMonitorRpt)]
-        public ActionResult RemoveAssociatedGroupMonitor(RemoveAssociatedGroupViewModel model)
+        public ActionResult RemoveAssociatedGroupMonitor(RemoveAssociatedGroupModel model)
         {
             model.UserID = CurrentSession.UserId;
 
@@ -180,7 +162,7 @@
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AssociatedGroupMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedGroupMonitorRpt)]
-        public ActionResult AddAssociatedAccount(AddAssociatedAccountViewModel model)
+        public ActionResult AddAssociatedAccount(AddAssociatedAccountModel model)
         {
             var result = new ResultSaveAssociatedAccountViewModel();
             

@@ -28,13 +28,17 @@
 
         IEnumerable<AssociatedAccountMonitorModel> GetAssociatedAccountMonitor(long groupID);
 
-        DBResult AddAssociatedGroupMonitor(AddAssociatedGroupViewModel model);
+        DBResult AddAssociatedGroupMonitor(AddAssociatedGroupModel model);
 
-        DBResult RemoveAssociatedGroupMonitor(RemoveAssociatedGroupViewModel model);
+        GetUpdateAssociatedGroupMonitorByIDModel GetUpdateAssociatedGroupMonitorByID(long groupID);
+
+        DBResult UpdateAssociatedGroupMonitor(UpdateAssociatedGroupMonitorModel model);
+
+        DBResult RemoveAssociatedGroupMonitor(RemoveAssociatedGroupModel model);
 
         IEnumerable<ValidateUserAssociatedAccountModel> ValidateUserNameInput(string userNames);
 
-        DBResult AddAssociatedAccount(AddAssociatedAccountViewModel model);
+        DBResult AddAssociatedAccount(AddAssociatedAccountModel model);
 
         DBResult UpdateABIToMainDB(string custIDs, int valueABI);
 
@@ -90,7 +94,7 @@
             return repository.Fetch<ValidateUserAssociatedAccountModel>(criteria);
         }
 
-        public DBResult AddAssociatedAccount(AddAssociatedAccountViewModel model)
+        public DBResult AddAssociatedAccount(AddAssociatedAccountModel model)
         {
             var criteria = new AddAssociatedAccountCriteria
             {
@@ -176,7 +180,7 @@
             return Enumerable.Empty<CustomerInfoByCustIdsModel>();
         }       
 
-        public DBResult AddAssociatedGroupMonitor(AddAssociatedGroupViewModel model)
+        public DBResult AddAssociatedGroupMonitor(AddAssociatedGroupModel model)
         {
             var assTypes = model.AssociationTypes.Split(',').Select(int.Parse);
 
@@ -211,9 +215,57 @@
 
                 return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
             }
-        }      
+        }
 
-        public DBResult RemoveAssociatedGroupMonitor(RemoveAssociatedGroupViewModel model)
+        public GetUpdateAssociatedGroupMonitorByIDModel GetUpdateAssociatedGroupMonitorByID(long groupID)
+        {
+            var criteria = new GetAssociatedGroupMonitorByIDCriteria
+            {
+                GroupID = groupID
+            };
+
+            return repository.Fetch<GetUpdateAssociatedGroupMonitorByIDModel>(criteria).First() ?? new GetUpdateAssociatedGroupMonitorByIDModel();
+        }
+
+        public DBResult UpdateAssociatedGroupMonitor(UpdateAssociatedGroupMonitorModel model)
+        {
+            var assTypes = model.AssociationTypes.Split(',').Select(int.Parse);
+
+            var criteria = new UpdateAssociatedGroupMonitorCriteria
+            {
+                GroupID = model.GroupID,
+                GroupName = model.GroupName,
+                ABI = model.ABI,
+                AllCredit = model.IsAllCredit,
+                AllLicensee = model.IsAllLicensee,
+                Sites = model.Sites,
+                HasDevice = assTypes.Any(x => x == (int)AssociationType.Device),
+                HasManual = assTypes.Any(x => x == (int)AssociationType.Manual),
+                HasIP = assTypes.Any(x => x == (int)AssociationType.IP),
+                HasAI = assTypes.Any(x => x == (int)AssociationType.BettingPattern),
+                Remark = model.Remark,
+                ModifiedBy = model.ModifiedBy
+            };
+
+            try
+            {
+                repository.Execute(criteria);
+
+                return new DBResult { ErrorCode = 0 };
+            }
+            catch (Exception ex)
+            {
+                var logMessage = new LogMessage(ex.Message)
+                 .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                 .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error($"Update associated group monitor Exception { logMessage }", ex);
+
+                return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
+            }
+        }
+
+        public DBResult RemoveAssociatedGroupMonitor(RemoveAssociatedGroupModel model)
         {
             var criteria = new RemoveAssociatedGroupMonitorCriteria
             {

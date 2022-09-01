@@ -1,6 +1,4 @@
-﻿import { NU } from "../DataTables_New/pdfmake-0.1.36/pdfmake";
-
-function AssociatedGroupMonitor() {
+﻿function AssociatedGroupMonitor() {
     let dataTable;    
     let domElements = {
         btnAddGroup: $('#btnAddGroup'),
@@ -67,46 +65,42 @@ function AssociatedGroupMonitor() {
             scrollCollapse: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8 , 9], className: "text-center" },
+                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], className: "text-center" },
                 { targets: [0], width: "10%" },
-                { targets: [1], width: "20%" },
+                { targets: [1], width: "15%" },
                 { targets: [2], width: "5%" },
                 { targets: [3], width: "5%" },
                 { targets: [4], width: "5%" },
                 { targets: [5], width: "10%" },
-                { targets: [6], width: "20%" },
-                { targets: [7], width: "10%" },
+                { targets: [6], width: "15%" },
+                { targets: [7], width: "10%" },              
                 { targets: [8], width: "10%" },
-                { targets: [9], width: "5%" },
-                { targets: [10], width: "5%" },
-                { targets: [11], width: "5%" }
+                { targets: [9], width: "15%" },
             ],
             columns: [
                 { data: obj => obj.GroupID },
                 { data: obj => obj.GroupName },
-                { data: obj => obj.Sites },
-                { data: obj => obj.AssociatedType },
+                { data: obj => obj.SiteGroups },
+                { data: obj => obj.AssociatedTypes },
                 { data: obj => obj.ABI },
                 { data: obj => obj.TotalAccount },
                 { data: obj => obj.Remark },
                 { data: obj => obj.CreatedDate },
-                { data: obj => obj.CreatedBy },   
+                { data: obj => obj.CreatedBy },                        
                 {
                     data: obj => {
-                        return '<span class="sub-icon - edit" id="sub-icon " title="Edit Group"><i class="icon-edit ' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
-                    }, createdCell: (cell, _, row) => {
+                        let htmlSPANEditGroup = '<span class="sub-icon - edit" id="sub-icon " title="Edit Group"><i class="icon-edit ' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
+                        let htmlSPANRemoveGroup = '<span class="sub-icon - delete" id="sub-icon " title="Remove Group"><i class="icon-delete ' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
+                        let htmlSPANAddAccount = '<span class="sub-icon - edit" id="sub-icon " title="Add Accounts"><i class="icon-add-account' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
+                        let htmlExportExcel = '<span class="sub-icon - excel" id="sub-icon " title="Export To Excel"><i class="icon-excel ' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
+
+                        return htmlSPANEditGroup + htmlSPANRemoveGroup + htmlSPANAddAccount + htmlExportExcel;
+                    }, createdCell: (cell, _, row) => {                      
                         if (isHostPermission) {
                             $('.icon-edit', cell).click(() => {
-                                EditAssociatedGroupMonitor(row.GroupID);
+                                UpdateAssociatedGroupMonitor(row.GroupID);
                             });
-                        }
-                    }
-                },
-                {
-                    data: obj => {
-                        return '<span class="sub-icon - delete" id="sub-icon " title="Remove Group"><i class="icon-delete ' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
-                    }, createdCell: (cell, _, row) => {
-                        if (isHostPermission) {
+
                             $('.icon-delete', cell).click(() => {
                                 $('td #sub-icon').addClass('none-pointer');
                                 let html = "<div class='popup - content'>Are you sure you want to remove this group <strong>" + row.GroupName + "</strong>? </div>";
@@ -117,60 +111,50 @@ function AssociatedGroupMonitor() {
                                     $('td #sub-icon').removeClass('none-pointer');
                                 });
                             });
-                        }
-                    }
-                },                
-                {
-                    data: obj => {
-                        return '<span class="sub-icon - edit" id="sub-icon " title="Add Accounts"><i class="icon-add-account' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
-                    }, createdCell: (cell, _, row) => {
-                        $('.icon-add-account', cell).click(() => {
-                            $('td #sub-icon').addClass('none-pointer');
-                            
-                            domElements.spanAddAssociatedAccountGroupIDHidden.val(row.GroupID);
-                            domElements.spanAddAssociatedAccountGroupNameHidden.val(row.GroupName);
-                            domElements.spanAddAssociatedAccountGroupABIHidden.val(row.ABI);                            
-                            domElements.txtCommentAssociatedAccount.val('');
-                            domElements.spanAddAssociatedAccountUserNameMaxTag.text(domElements.maxTags);
-                            domElements.spanAddAssociatedAccountChangeHidden.text("0");
-                            domElements.inputTagUsername.tagify().data('tagify').removeAllTags();
-                            domElements.spanAddAssociatedAccountUserName.find('tags').attr('tabindex', "1");
-                            domElements.btnSaveAssociatedAccount.prop('disabled', true);                           
 
-                            $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
-                                _title: function (title) {
-                                    let $title = this.options.title || '&nbsp;'
-                                    if (("titleIsHtml" in this.options) && this.options.titleIsHtml == true)
-                                        title.html($title);
-                                    else title.text($title);
-                                }
-                            }));
+                            $('.icon-add-account', cell).click(() => {
+                                $('td #sub-icon').addClass('none-pointer');
 
-                            domElements.divAddAssociatedAccount.dialog({
-                                modal: true,
-                                width: '700px',
-                                title: '<div>ADD NEW ACCOUNTS - <label style="color:#FF0000">' + row.GroupName + '</label></div>',
-                                titleIsHtml: true,
-                                resizable: true,
-                                draggable: true,
-                                close: function () {
-                                    $(this).dialog('close');
-                                }
+                                domElements.spanAddAssociatedAccountGroupIDHidden.val(row.GroupID);
+                                domElements.spanAddAssociatedAccountGroupNameHidden.val(row.GroupName);
+                                domElements.spanAddAssociatedAccountGroupABIHidden.val(row.ABI);
+                                domElements.txtCommentAssociatedAccount.val('');
+                                domElements.spanAddAssociatedAccountUserNameMaxTag.text(domElements.maxTags);
+                                domElements.spanAddAssociatedAccountChangeHidden.text("0");
+                                domElements.inputTagUsername.tagify().data('tagify').removeAllTags();
+                                domElements.spanAddAssociatedAccountUserName.find('tags').attr('tabindex', "1");
+                                domElements.btnSaveAssociatedAccount.prop('disabled', true);
+
+                                $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+                                    _title: function (title) {
+                                        let $title = this.options.title || '&nbsp;'
+                                        if (("titleIsHtml" in this.options) && this.options.titleIsHtml == true)
+                                            title.html($title);
+                                        else title.text($title);
+                                    }
+                                }));
+
+                                domElements.divAddAssociatedAccount.dialog({
+                                    modal: true,
+                                    width: '700px',
+                                    title: '<div>ADD NEW ACCOUNTS - <label style="color:#FF0000">' + row.GroupName + '</label></div>',
+                                    titleIsHtml: true,
+                                    resizable: true,
+                                    draggable: true,
+                                    close: function () {
+                                        $(this).dialog('close');
+                                    }
+                                });
                             });
-                        });
-                    }
-                },
-                {
-                    data: obj => {
-                        return '<span class="sub-icon - excel" id="sub-icon " title="Export To Excel"><i class="icon-excel ' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
-                    }, createdCell: (cell, _, row) => {
+                        }                        
+
                         $('.icon-excel', cell).click(() => {
                             $('td #sub-icon').addClass('none-pointer');
 
                             ExportToExcelAssociatedAccount(row.GroupID, row.GroupName);
                         })
                     }
-                }
+                }               
             ]
         });
     }
@@ -365,8 +349,10 @@ function AssociatedGroupMonitor() {
         return true;
     }
 
-    function EditAssociatedGroupMonitor(groupID) {
-        $.ajax(common.modifyRelativeUrl('AssociatedGroupMonitor/EditAssociatedGroupMonitor'), {
+    function UpdateAssociatedGroupMonitor(groupID) {
+        RefreshSites(groupID);
+
+        $.ajax(common.modifyRelativeUrl('AssociatedGroupMonitor/UpdateAssociatedGroupMonitor'), {
             type: 'POST',
             data: {
                 groupID: groupID
@@ -383,6 +369,12 @@ function AssociatedGroupMonitor() {
                         };
                     }
 
+                    domElements.txtGroupNameAssociatedGroup.val(response.GroupName);
+                    domElements.txtCommentAssociatedGroup.val(response.Remark);
+                    domElements.cbbABIAssociatedGroup.val(response.ABI).change();
+
+                    RefreshAssociatedTypes(response.AssociatedTypeList);
+                    
                     domElements.divAddAssociatedGroup.dialog({
                         modal: true,
                         width: '690px',
@@ -694,7 +686,7 @@ function AssociatedGroupMonitor() {
                         for (var j = 0; j < siteGroup.SiteList.length; j++) {
                             let site = siteGroup.SiteList[j];
                             let selected = site.IsSelected ? 'selected' : '';
-                            domElements.cbbSites.append(`<option ${selected} label=${site.SiteName}></optgroup>`);
+                            domElements.cbbSites.append(`<option ${selected} value=${site.SiteID}>${site.SiteName}</option>`);
                         }
                     }
                 }
@@ -705,6 +697,18 @@ function AssociatedGroupMonitor() {
                 console.log(errMsg);
             }
         });
+    }
+
+    function RefreshAssociatedTypes(associatedTypeList) {
+        domElements.cbbAssociatedTypes.multiselect().empty();
+
+        for (var i = 0; i < associatedTypeList.length; i++) {
+            let assType = associatedTypeList[i];
+            let selected = assType.IsSelected ? 'selected' : '';
+            domElements.cbbAssociatedTypes.append(`<option ${selected} value=${assType.TypeID}>${assType.TypeName}</option>`);
+        }
+
+        domElements.cbbAssociatedTypes.multiselect('refresh');
     }
 
     function Initial() {

@@ -190,8 +190,13 @@
     <Compile Include="API\UpdateCategoryWhenPAUpdated\UpdatePALosingInfoModel.cs" />
     <Compile Include="API\UpdateCategoryWhenPAUpdated\UpdateCategoryModel.cs" />
     <Compile Include="API\UpdateCategoryWhenPAUpdated\UpdateCategoryResultModel.cs" />
+    <Compile Include="AssociatedGroupMonitor\AddAssociatedAccountModel.cs" />
+    <Compile Include="AssociatedGroupMonitor\AddAssociatedGroupModel.cs" />
     <Compile Include="AssociatedGroupMonitor\AssociatedAccountMonitorModel.cs" />
     <Compile Include="AssociatedGroupMonitor\AssociatedGroupMonitorModel.cs" />
+    <Compile Include="AssociatedGroupMonitor\GetUpdateAssociatedGroupMonitorByIDModel.cs" />
+    <Compile Include="AssociatedGroupMonitor\RemoveAssociatedGroupModel.cs" />
+    <Compile Include="AssociatedGroupMonitor\UpdateAssociatedGroupMonitorModel.cs" />
     <Compile Include="AssociatedGroupMonitor\ValidateUserAssociatedAccountModel.cs" />
     <Compile Include="AssociationDetection\AssociationCustModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationByAgentModel.cs" />

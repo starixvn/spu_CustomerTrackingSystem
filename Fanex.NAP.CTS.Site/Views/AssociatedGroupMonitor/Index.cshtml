@@ -35,11 +35,8 @@
                         <th>Total Accounts</th>
                         <th>Comment</th>
                         <th>Created Date</th>
-                        <th>Created By</th>
-                        <th>Edit Group</th>
-                        <th>Remove Group</th>
-                        <th>Add Accounts</th>
-                        <th>Export Excel</th>
+                        <th>Created By</th>                      
+                        <th>Action</th>
                     </tr>
                 </thead>
             </table>
@@ -58,17 +55,7 @@
         <div class="form-control margin-right-20">
             <div class="label">Site<label style="color:red">*</label></div>
             <div style="width:270px">
-                <select class="control width-select" id="cbbSites" multiple="multiple">
-                    @*@foreach (var group in ViewBag.SiteGroups)
-                    {
-                        <optgroup label="@group.SiteGroupName">
-
-                            @foreach (var site in group.SiteList)
-                            {
-                                <option selected value=@site.SiteID>@site.SiteName</option>
-                            }
-                        </optgroup>
-                    }*@
+                <select class="control width-select" id="cbbSites" multiple="multiple">                  
                 </select>
             </div>
         </div>

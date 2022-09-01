@@ -3,7 +3,7 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
 
-    public class UpdateAssociatedGroupMonitorByIDCriteria : NonQueryCommand
+    public class UpdateAssociatedGroupMonitorCriteria : NonQueryCommand
     {
         [SpParam(SqlParamName = "ip_GroupID")]
         public long GroupID { get; set; }
@@ -38,8 +38,8 @@
         [SpParam(SqlParamName = "ip_Remark")]
         public string Remark { get; set; }
 
-        [SpParam(SqlParamName = "ip_CreatedBy")]
-        public int CreatedBy { get; set; }
+        [SpParam(SqlParamName = "ip_ModifiedBy")]
+        public int ModifiedBy { get; set; }
 
         public override string GetSettingKey()
         {

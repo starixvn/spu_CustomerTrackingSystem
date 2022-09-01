@@ -1,6 +1,6 @@
-﻿namespace Fanex.NAP.CTS.ViewModel.AssociatedGroupMonitor
+﻿namespace Fanex.NAP.CTS.Model.AssociatedGroupMonitor
 {
-    public class AddAssociatedGroupViewModel
+    public class AddAssociatedGroupModel
     {
         public string GroupName { get; set; }
 
@@ -12,7 +12,7 @@
 
         public string Sites { get; set; }
 
-        public string AssociationTypes { get; set; }     
+        public string AssociationTypes { get; set; }
 
         public string Remark { get; set; }
 
