@@ -4,7 +4,7 @@
 
     public class TicketDetailModel
     {
-        public long SequenceId { get; set; }
+        public long SequenceID { get; set; }
 
         public Int64 TransId { get; set; }
 
