@@ -10,8 +10,18 @@
         {
             this.GroupID = data.GroupID;
             this.GroupName = data.GroupName;
-            this.Sites = data.Sites;
-            this.SiteGroups = "Credit";
+            this.Sites = data.Sites;           
+            var siteGroups = new List<string>();
+
+            if (data.AllCredit == 1 || data.AllCredit == 2)            
+                siteGroups.Add("<span class='view-site-credit'>Credit</span>");
+            
+
+            if (data.AllLicensee == 1 || data.AllLicensee == 2)            
+                siteGroups.Add("<span class='view-site-licensee'>Licensee</span>");            
+
+            this.SiteGroups = string.Join(",", siteGroups);
+
             var associatedTypes = new List<string>();
             if (data.HasAI)
                 associatedTypes.Add("Betting Pattern");

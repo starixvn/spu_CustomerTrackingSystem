@@ -15,10 +15,10 @@
         public int ABI { get; set; }
 
         [SpParam(SqlParamName = "ip_AllCredit")]
-        public bool AllCredit { get; set; }
+        public int AllCredit { get; set; }
 
         [SpParam(SqlParamName = "ip_AllLicensee")]
-        public bool AllLicensee { get; set; }
+        public int AllLicensee { get; set; }
 
         [SpParam(SqlParamName = "ip_Sites")]
         public string Sites { get; set; }

@@ -4,6 +4,9 @@
         btnAddGroup: $('#btnAddGroup'),
         tblAssociatedGroup: $('#tblAssociatedGroup'),        
         divAddAssociatedGroup: $('#divAddAssociatedGroup'),
+        hdGroupID: $('#hdGroupID'),
+        divSitesByGroup: $('#divSitesByGroup'),
+        lblSiteList: $('#lblSiteList'),
         txtGroupNameAssociatedGroup: $('#txtGroupNameAssociatedGroup'),
         txtCommentAssociatedGroup: $('#txtCommentAssociatedGroup'),
         cbbSites: $('#cbbSites'),
@@ -36,7 +39,7 @@
             dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
             pagingType: "full_numbers",
             ajax: {
-                url: url,               
+                url: url,
                 type: "POST",
                 beforeSend: function () {
                     domElements.tblAssociatedGroup.find('tbody').addClass('loading');
@@ -73,14 +76,26 @@
                 { targets: [4], width: "5%" },
                 { targets: [5], width: "10%" },
                 { targets: [6], width: "15%" },
-                { targets: [7], width: "10%" },              
+                { targets: [7], width: "10%" },
                 { targets: [8], width: "10%" },
                 { targets: [9], width: "15%" },
             ],
             columns: [
                 { data: obj => obj.GroupID },
                 { data: obj => obj.GroupName },
-                { data: obj => obj.SiteGroups },
+                {
+                    data: obj => {
+                        return obj.SiteGroups;
+                    }, createdCell: (cell, _, row) => {
+                        $('.view-site-credit', cell).click(() => {
+                            GetSitesByGroup(row.GroupID, false, "CREDIT");
+                        });
+
+                        $('.view-site-licensee', cell).click(() => {
+                            GetSitesByGroup(row.GroupID, true, "LICENSEE");
+                        });        
+                    }
+                },
                 { data: obj => obj.AssociatedTypes },
                 { data: obj => obj.ABI },
                 { data: obj => obj.TotalAccount },
@@ -151,7 +166,7 @@
                         $('.icon-excel', cell).click(() => {
                             $('td #sub-icon').addClass('none-pointer');
 
-                            ExportToExcelAssociatedAccount(row.GroupID, row.GroupName);
+                            ExportToExcelAssociatedAccount(row.GroupID, row.GroupName, row.AssociatedTypes);
                         })
                     }
                 }               
@@ -165,10 +180,49 @@
             : dataTable = RenderGrid();
     }
 
-    function ExportToExcelAssociatedAccount(groupID, groupName) {
+    function GetSitesByGroup(groupID, isLicensee, siteGroupName) {       
+        $.ajax(common.modifyRelativeUrl('AssociatedGroupMonitor/GetSitesByGroup'), {
+            type: 'POST',
+            data: {
+                groupID: groupID,
+                isLicensee: isLicensee
+            },
+            beforeSend: function () {
+                domElements.tblAssociatedGroup.find('tbody').addClass('loading');
+            },
+            success: function (response) {
+                domElements.divSitesByGroup.dialog({
+                    modal: true,
+                    width: '600px',
+                    title: siteGroupName,
+                    _allowInteraction: function (event) {
+                        return !!$(event.target).is(".select2-input") || this._super(event);
+                    },
+                    resizable: true,
+                    draggable: true,
+                    close: function () {
+                        $(this).dialog('close');
+                    }
+                });
+
+                domElements.lblSiteList.text(response);
+            },
+            complete: function () {
+                domElements.tblAssociatedGroup.find('tbody').removeClass('loading');
+            },
+            error: function (errMsg) {
+                domElements.tblAssociatedGroup.find('tbody').removeClass('loading');
+                common.showError("An unexpected Error occurred. Please try again.");
+                console.log(errMsg);
+            }
+        });
+    }
+
+    function ExportToExcelAssociatedAccount(groupID, groupName, associatedType) {
         let params = {};
         params.GroupID = groupID;
         params.GroupName = groupName;
+        params.AssociatedType = associatedType;
 
         common.showSuccess('Your filter export is being processed. Please wait, this may take some minutes.', 5000);
 
@@ -266,55 +320,135 @@
         });
     }
 
-    function SaveAddAssociatedGroupMonitor() {
+    function SaveAssociatedGroupMonitor() {
         if (ValidateInputAddAssociatedGroupMonitor()) {
-            common.showConfirmation("<div class='popup-content'><div class='popup-title'>Are you sure you want to add new group '" + domElements.txtGroupNameAssociatedGroup.val().trim() +"'</div></div>",
-                function () {
-                    let params = {};
-                    params.GroupName = domElements.txtGroupNameAssociatedGroup.val().trim();
-                    params.ABI = domElements.cbbABIAssociatedGroup.val();   
-                    params.Sites = domElements.cbbSites.val().join();
-                    params.AssociationTypes = domElements.cbbAssociatedTypes.val().join();
-                    params.Remark = domElements.txtCommentAssociatedGroup.val().trim();
-
-                    domElements.cbbSites.find('optgroup').each(function () {                                       
-                        if ($(this).find('option:not(:selected)').length == 0) {
-                            if ($(this).attr('label') == 'Credit') {
-                                params.IsAllCredit = true;
-                            } else {
-                                params.IsAllLicensee = true;
-                            }
-                        }
-                    });
-
-                    $.ajax(common.modifyRelativeUrl('AssociatedGroupMonitor/SaveAddAssociatedGroupMonitor'), {
-                        type: 'POST',
-                        data: params,
-                        beforeSend: function () {
-                            domElements.tblAssociatedGroup.find('tbody').addClass('loading');
-                        },
-                        success: function (response) {
-                            if (response.errorCode != -1) {
-                                common.showSuccess("New group " + params.GroupName + " is added successfully.");
-                                domElements.divAddAssociatedGroup.dialog('close');
-
-                                GetAssociatedGroup();
-                            } else {
-                                common.showError("An unexpected Error occurred. Please try again.");
-                            }
-                        },
-                        complete: function () {
-                            domElements.tblAssociatedGroup.find('tbody').removeClass('loading');
-                        },
-                        error: function (errMsg) {
-                            domElements.tblAssociatedGroup.find('tbody').removeClass('loading');
-                            common.showError("An unexpected Error occurred. Please try again.");
-                            console.log(errMsg);
-                        }
-                    });
-                }
-            )
+            let groupID = domElements.hdGroupID.val();
+            if (groupID == 0) {
+                SaveAddAssociatedGroupMonitor();
+            } else {
+                SaveUpdateAssociatedGroupMonitor(groupID);
+            }
+           
         }       
+    }
+
+    function SaveAddAssociatedGroupMonitor() {
+        common.showConfirmation("<div class='popup-content'><div class='popup-title'>Are you sure you want to add new group '" + domElements.txtGroupNameAssociatedGroup.val().trim() + "'</div></div>",
+            function () {
+                let params = {};
+                params.GroupName = domElements.txtGroupNameAssociatedGroup.val().trim();
+                params.ABI = domElements.cbbABIAssociatedGroup.val();
+                params.Sites = domElements.cbbSites.val().join();
+                params.AssociationTypes = domElements.cbbAssociatedTypes.val().join();
+                params.Remark = domElements.txtCommentAssociatedGroup.val().trim();
+
+                domElements.cbbSites.find('optgroup').each(function () {
+                    let notSelected = $(this).find('option:not(:selected)').length;
+                    let selected = $(this).find('option:selected').length;
+                    if ($(this).attr('label') == 'Credit') {
+                        if (selected > 0 && notSelected > 0)
+                            params.AllCredit = 2;                        
+                        else if (selected > 0 && notSelected == 0)
+                            params.AllCredit = 1;
+                        else      
+                            params.AllCredit = 0;
+                    } else {                       
+                        if (selected > 0 && notSelected > 0)
+                            params.AllLicensee = 2;
+                        else if (selected > 0 && notSelected == 0)
+                            params.AllLicensee = 1;
+                        else
+                            params.AllLicensee = 0;
+                    }                  
+                });
+
+                $.ajax(common.modifyRelativeUrl('AssociatedGroupMonitor/SaveAddAssociatedGroupMonitor'), {
+                    type: 'POST',
+                    data: params,
+                    beforeSend: function () {
+                        domElements.tblAssociatedGroup.find('tbody').addClass('loading');
+                    },
+                    success: function (response) {
+                        if (response.errorCode != -1) {
+                            common.showSuccess("New group " + params.GroupName + " is added successfully.");
+                            domElements.divAddAssociatedGroup.dialog('close');
+
+                            GetAssociatedGroup();
+                        } else {
+                            common.showError("An unexpected Error occurred. Please try again.");
+                        }
+                    },
+                    complete: function () {
+                        domElements.tblAssociatedGroup.find('tbody').removeClass('loading');
+                    },
+                    error: function (errMsg) {
+                        domElements.tblAssociatedGroup.find('tbody').removeClass('loading');
+                        common.showError("An unexpected Error occurred. Please try again.");
+                        console.log(errMsg);
+                    }
+                });
+            }
+        )
+    }
+
+    function SaveUpdateAssociatedGroupMonitor(groupID) {
+        common.showConfirmation("<div class='popup-content'><div class='popup-title'>Are you sure you want to edit the group '" + domElements.txtGroupNameAssociatedGroup.val().trim() + "'</div></div>",
+            function () {
+                let params = {};
+                params.GroupID = groupID;
+                params.GroupName = domElements.txtGroupNameAssociatedGroup.val().trim();
+                params.ABI = domElements.cbbABIAssociatedGroup.val();
+                params.Sites = domElements.cbbSites.val().join();
+                params.AssociationTypes = domElements.cbbAssociatedTypes.val().join();
+                params.Remark = domElements.txtCommentAssociatedGroup.val().trim();
+
+                domElements.cbbSites.find('optgroup').each(function () {
+                    let notSelected = $(this).find('option:not(:selected)').length;
+                    let selected = $(this).find('option:selected').length;
+                    if ($(this).attr('label') == 'Credit') {
+                        if (selected > 0 && notSelected > 0)
+                            params.AllCredit = 2;
+                        else if (selected > 0 && notSelected == 0)
+                            params.AllCredit = 1;
+                        else
+                            params.AllCredit = 0;
+                    } else {
+                        if (selected > 0 && notSelected > 0)
+                            params.AllLicensee = 2;
+                        else if (selected > 0 && notSelected == 0)
+                            params.AllLicensee = 1;
+                        else
+                            params.AllLicensee = 0;
+                    }
+                });
+
+                $.ajax(common.modifyRelativeUrl('AssociatedGroupMonitor/SaveUpdateAssociatedGroupMonitor'), {
+                    type: 'POST',
+                    data: params,
+                    beforeSend: function () {
+                        domElements.tblAssociatedGroup.find('tbody').addClass('loading');
+                    },
+                    success: function (response) {
+                        if (response.errorCode != -1) {
+                            common.showSuccess("The group " + params.GroupName + " edit group is successful.");
+                            domElements.divAddAssociatedGroup.dialog('close');
+
+                            GetAssociatedGroup();
+                        } else {
+                            common.showError("An unexpected Error occurred. Please try again.");
+                        }
+                    },
+                    complete: function () {
+                        domElements.tblAssociatedGroup.find('tbody').removeClass('loading');
+                    },
+                    error: function (errMsg) {
+                        domElements.tblAssociatedGroup.find('tbody').removeClass('loading');
+                        common.showError("An unexpected Error occurred. Please try again.");
+                        console.log(errMsg);
+                    }
+                });
+            }
+        )
     }
 
     function ValidateInputAddAssociatedGroupMonitor() {
@@ -350,7 +484,7 @@
     }
 
     function UpdateAssociatedGroupMonitor(groupID) {
-        RefreshSites(groupID);
+        domElements.hdGroupID.val(groupID);
 
         $.ajax(common.modifyRelativeUrl('AssociatedGroupMonitor/UpdateAssociatedGroupMonitor'), {
             type: 'POST',
@@ -373,6 +507,7 @@
                     domElements.txtCommentAssociatedGroup.val(response.Remark);
                     domElements.cbbABIAssociatedGroup.val(response.ABI).change();
 
+                    RefreshSiteGroups(response.SiteGroups);
                     RefreshAssociatedTypes(response.AssociatedTypeList);
                     
                     domElements.divAddAssociatedGroup.dialog({
@@ -392,8 +527,7 @@
                     common.showError("An unexpected Error occurred. Please try again.");
                 }
             },
-            complete: function () {
-                
+            complete: function () {                
             },
             error: function (errMsg) {              
                 common.showError("An unexpected Error occurred. Please try again.");
@@ -669,38 +803,45 @@
             domElements.btnSaveAssociatedAccount.prop('disabled', true);
     }   
 
-    function RefreshSites(groupID) {
-        $.ajax(common.modifyRelativeUrl('AssociatedGroupMonitor/GetSitesByGroupID'), {
-            type: 'POST',
-            data: {
-                groupID: groupID
-            },
-            success: function (response) {
-                domElements.cbbSites.multiselect().empty();
-
-                if (response != null) {
-                    for (var i = 0; i < response.length; i++) {
-                        let siteGroup = response[i];
-                        domElements.cbbSites.append(`<optgroup label=${siteGroup.SiteGroupName}></optgroup>`);
-
-                        for (var j = 0; j < siteGroup.SiteList.length; j++) {
-                            let site = siteGroup.SiteList[j];
-                            let selected = site.IsSelected ? 'selected' : '';
-                            domElements.cbbSites.append(`<option ${selected} value=${site.SiteID}>${site.SiteName}</option>`);
-                        }
-                    }
+    function InitSiteGroups(sitesGroups) {
+        if (sitesGroups.length == 0) {
+            $.ajax(common.modifyRelativeUrl('AssociatedGroupMonitor/GetAllSites'), {
+                type: 'POST',
+                data: {},
+                success: function (response) {
+                    RefreshSiteGroups(response);
+                },
+                error: function (errMsg) {
+                    console.log(errMsg);
                 }
-                
-                domElements.cbbSites.multiselect('refresh');
-            },
-            error: function (errMsg) {
-                console.log(errMsg);
+            });
+        } else {
+            RefreshSiteGroups(siteGroups);
+        }       
+    }
+
+    function RefreshSiteGroups(siteGroups) {
+        let siteSelector = domElements.cbbSites.empty();
+
+        siteGroups.map(function (x) {
+            let optgroup = `<optgroup label='${x.SiteGroupName}'>`;
+
+            if (x.SiteList.length > 0) {
+                x.SiteList.map(function (y) {
+                    let selected = y.IsSelected ? 'selected' : '';
+                    optgroup += `<option ${selected} value=${y.SiteID}>${y.SiteName}</option>`;
+                })
             }
+            optgroup += "</optgroup>";
+
+            siteSelector.append(optgroup);
         });
+
+        domElements.cbbSites.multiselect('refresh');
     }
 
     function RefreshAssociatedTypes(associatedTypeList) {
-        domElements.cbbAssociatedTypes.multiselect().empty();
+        domElements.cbbAssociatedTypes.empty();
 
         for (var i = 0; i < associatedTypeList.length; i++) {
             let assType = associatedTypeList[i];
@@ -741,7 +882,8 @@
         GetAssociatedGroup();
 
         domElements.btnAddGroup.on('click', function () {  
-            RefreshSites(-1);
+            domElements.hdGroupID.val(0);
+            InitSiteGroups([]);
 
             $('#cbbABIAssociatedGroup').val(0).trigger('change.select2');
             domElements.txtGroupNameAssociatedGroup.val('');                       
@@ -770,7 +912,7 @@
             });           
         });
 
-        domElements.btnSaveAssociatedGroup.on('click', () => SaveAddAssociatedGroupMonitor());
+        domElements.btnSaveAssociatedGroup.on('click', () => SaveAssociatedGroupMonitor());
 
         domElements.btnCancelAssociatedGroup.on('click', () => { domElements.divAddAssociatedGroup.dialog('close') });
 

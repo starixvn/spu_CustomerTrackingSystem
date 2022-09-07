@@ -15,6 +15,7 @@
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.ViewModel.AssociatedGroupMonitor;
     using Fanex.NAP.TGRS.Core.ExcelUtility;
+    using Fanex.NAP.TGRS.Core.ExcelUtility.RichTextExtensions;
     using Newtonsoft.Json;
     using NPOI.SS.UserModel;
     using NPOI.XSSF.UserModel;
@@ -25,6 +26,8 @@
     public interface IAssociatedGroupMonitorService
     {        
         IEnumerable<AssociatedGroupMonitorModel> GetAssociatedGroupMonitor();
+
+        IEnumerable<AssociatedGroupSiteModel> GetAssociatedGroupSites(long groupID);
 
         IEnumerable<AssociatedAccountMonitorModel> GetAssociatedAccountMonitor(long groupID);
 
@@ -82,6 +85,13 @@
             };
 
             return repository.Fetch<AssociatedAccountMonitorModel>(criteria);
+        }
+
+        public IEnumerable<AssociatedGroupSiteModel> GetAssociatedGroupSites(long groupID)
+        {
+            var criteria = new GetAssociatedGroupSiteCriteria { GroupID = groupID };
+
+            return repository.Fetch<AssociatedGroupSiteModel>(criteria);
         }
 
         public IEnumerable<ValidateUserAssociatedAccountModel> ValidateUserNameInput(string userNames)
@@ -188,10 +198,10 @@
             {
                 GroupName = model.GroupName,
                 ABI = model.ABI,
-                AllCredit = model.IsAllCredit,
-                AllLicensee = model.IsAllLicensee,
+                AllCredit = model.AllCredit,
+                AllLicensee = model.AllLicensee,
                 Sites = model.Sites,
-                HasDevice = assTypes.Any(x=> x == (int)AssociationType.Device),
+                HasDevice = assTypes.Any(x => x == (int)AssociationType.Device),
                 HasManual = assTypes.Any(x => x == (int)AssociationType.Manual),
                 HasIP = assTypes.Any(x => x == (int)AssociationType.IP),
                 HasAI = assTypes.Any(x => x == (int)AssociationType.BettingPattern),
@@ -236,8 +246,8 @@
                 GroupID = model.GroupID,
                 GroupName = model.GroupName,
                 ABI = model.ABI,
-                AllCredit = model.IsAllCredit,
-                AllLicensee = model.IsAllLicensee,
+                AllCredit = model.AllCredit,
+                AllLicensee = model.AllLicensee,
                 Sites = model.Sites,
                 HasDevice = assTypes.Any(x => x == (int)AssociationType.Device),
                 HasManual = assTypes.Any(x => x == (int)AssociationType.Manual),
@@ -297,13 +307,10 @@
             , ExportToExcelAssociatedAccountViewModel model)
         {
             var writer = new ExcelTemplateWriter(templatePath, fileName, "GMR");
+            writer.CopyRows(0, 1);
+            
+            FilterBlock(model, ref writer);
 
-            var headerRow = writer.CopyRows(0, 1);
-            var headerCell = headerRow.GetCell(0);
-
-            headerCell.SetCellValue(model.GroupName.ToUpper() + " GROUP MANAGEMENT REPORT");
-
-            writer.CopyRows(1, 1);
             writer.CopyRows(2, 1);
 
             FillRowData(associatedAccounts, ref writer);
@@ -312,7 +319,56 @@
 
             return writer.ToBytes();
         }
-      
+
+        private void FilterBlock(ExportToExcelAssociatedAccountViewModel model, ref ExcelTemplateWriter writer)
+        {
+            var boldFont = writer.GetFont(10, 0);
+            var normalFont = writer.GetFont(11, 0);
+
+            var contentRender = new RichTextRender().Clear();
+            if (!string.IsNullOrEmpty(model.GroupName))
+            {                
+                AppendBlockContent(ref contentRender, "Group Name", boldFont, model.GroupName, normalFont, "\n");
+                WriteRickText(contentRender, ref writer, 4);
+            }                      
+            
+            if (!string.IsNullOrEmpty(model.Sites))
+            {
+                contentRender = new RichTextRender().Clear();
+                AppendBlockContent(ref contentRender, "Sites", boldFont, model.Sites, normalFont, "\n");
+                WriteRickText(contentRender, ref writer, 4);
+            }
+
+            if (!string.IsNullOrEmpty(model.AssociatedType))
+            {
+                contentRender = new RichTextRender().Clear();             
+                AppendBlockContent(ref contentRender, "Associated Type", boldFont, model.AssociatedType, normalFont, "\n");
+                WriteRickText(contentRender, ref writer, 4);
+            }            
+        }
+
+        private void WriteRickText(RichTextRender contentRender, ref ExcelTemplateWriter writer, int idx)
+        {
+            var contentRichTextString = contentRender.XSSFRickRender();
+            XSSFRichTextString[] contentRichTextArray = new XSSFRichTextString[1];
+            contentRichTextArray[0] = contentRichTextString;
+            writer.WriteRow(idx, contentRichTextArray);
+        }
+
+        private void AppendBlockContent(ref RichTextRender content, string name, IFont nameFont, string value, IFont valueFont, string endString)
+        {
+            TextBlock nameBlock = new TextBlock(name + ": ", nameFont);
+            content = content.AddText(nameBlock);
+
+            TextBlock valueBlock = new TextBlock(value, valueFont);
+            content = content.AddText(valueBlock);
+
+            if (!string.IsNullOrEmpty(endString))
+            {
+                content = content.AddText(endString);
+            }
+        }
+
         private void FillRowData(IEnumerable<AssociatedAccountMonitorModel> associatedAccounts, ref ExcelTemplateWriter writer)
         {
             foreach (var item in associatedAccounts)

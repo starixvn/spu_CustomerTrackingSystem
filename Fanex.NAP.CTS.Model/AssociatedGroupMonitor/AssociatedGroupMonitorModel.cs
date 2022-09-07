@@ -10,9 +10,9 @@
 
         public int ABI { get; set; }        
 
-        public bool AllCredit { get; set; }
+        public int AllCredit { get; set; } // 0-Not Existed; 1-All; 2-Existed
 
-        public bool AllLicensee { get; set; }
+        public int AllLicensee { get; set; }  // 0-Not Existed; 1-All; 2-Existed
 
         public bool HasDevice { get; set; }
 

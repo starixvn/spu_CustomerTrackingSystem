@@ -46,7 +46,7 @@
         }
 
         [HttpPost]
-        public ActionResult GetSitesByGroupID(long groupID)
+        public ActionResult GetAllSites()
         {
             var siteGroups = Enumerable.Empty<SiteGroupViewModel>();
             var sites = _commonService.GetSites();
@@ -66,7 +66,7 @@
                              })
                          });
             }
-         
+
             return Json(siteGroups, JsonRequestBehavior.AllowGet);
         }
 
@@ -85,7 +85,20 @@
 
             return Json(new { data = associatedGroups }, JsonRequestBehavior.AllowGet);
         }
-      
+
+        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedGroupMonitorRpt)]
+        public ActionResult GetSitesByGroup(long groupID, bool isLicensee)
+        {
+            var sites = _associatedGroupService.GetAssociatedGroupSites(groupID)
+                .Where(x => x.IsLicensee == isLicensee && x.IsChosen)
+                .Select(x=>x.SiteName);
+
+            var result = string.Join(", ", sites);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AssociatedGroupMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedGroupMonitorRpt)]
@@ -105,7 +118,7 @@
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AssociatedGroupMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedGroupMonitorRpt)]
-        public ActionResult UpdateAssociatedGroupMonitor(int groupID)
+        public ActionResult UpdateAssociatedGroupMonitor(long groupID)
         {
             var result = new GetUpdateAssociatedGroupMonitorByIDViewModel();
 
@@ -114,10 +127,30 @@
             if (data != null)
             {
                 result = new GetUpdateAssociatedGroupMonitorByIDViewModel(data);
+
+                var sites = _associatedGroupService.GetAssociatedGroupSites(groupID);
+
+                if (sites != null && sites.Any())
+                {
+                    var siteGroups = sites.GroupBy(g => g.IsLicensee)
+                             .Select(x => new { SiteGroupName = x.Key ? "Licensee" : "Credit", SiteList = x.ToList() })
+                             .Select(x => new SiteGroupViewModel
+                             {
+                                 SiteGroupName = x.SiteGroupName,
+                                 SiteList = x.SiteList.Select(y => new SiteViewModel
+                                 {
+                                     SiteID = y.SiteID,
+                                     SiteName = y.SiteName,
+                                     IsSelected = y.IsChosen
+                                 })
+                             });
+
+                    result.AddSiteGroups(siteGroups);
+                }                
             }
 
             return Json(result, JsonRequestBehavior.AllowGet);
-        }
+        }      
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AssociatedGroupMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
@@ -235,6 +268,8 @@
                 , dateTime.ToString(Consts.FormatTimeToString_hhmmss));
 
             var associatedAccounts = _associatedGroupService.GetAssociatedAccountMonitor(model.GroupID);
+            var sites = _associatedGroupService.GetAssociatedGroupSites(model.GroupID).Where(x => x.IsChosen).Select(x => x.SiteName);
+            model.Sites = string.Join(",", sites);
 
             var excelFile = _associatedGroupService.ExportExcelAssociatedAccount(associatedAccounts, fileName, templatePath, model);
 

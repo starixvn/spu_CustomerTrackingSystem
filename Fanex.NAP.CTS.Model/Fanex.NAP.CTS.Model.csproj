@@ -194,6 +194,7 @@
     <Compile Include="AssociatedGroupMonitor\AddAssociatedGroupModel.cs" />
     <Compile Include="AssociatedGroupMonitor\AssociatedAccountMonitorModel.cs" />
     <Compile Include="AssociatedGroupMonitor\AssociatedGroupMonitorModel.cs" />
+    <Compile Include="AssociatedGroupMonitor\AssociatedGroupSiteModel.cs" />
     <Compile Include="AssociatedGroupMonitor\GetUpdateAssociatedGroupMonitorByIDModel.cs" />
     <Compile Include="AssociatedGroupMonitor\RemoveAssociatedGroupModel.cs" />
     <Compile Include="AssociatedGroupMonitor\UpdateAssociatedGroupMonitorModel.cs" />

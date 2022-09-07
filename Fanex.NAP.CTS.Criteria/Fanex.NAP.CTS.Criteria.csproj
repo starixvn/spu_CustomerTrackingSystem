@@ -69,6 +69,7 @@
     <Compile Include="AssociatedGroupMonitor\GetAssociatedAccountCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\GetAssociatedGroupMonitorByIDCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\GetAssociatedGroupMonitorCriteria.cs" />
+    <Compile Include="AssociatedGroupMonitor\GetAssociatedGroupSiteCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\RemoveAssociatedGroupMonitorCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\UpdateAssociatedGroupMonitorCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\ValidateAssociatedAccountCriteria.cs" />

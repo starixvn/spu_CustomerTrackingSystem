@@ -6,9 +6,9 @@
 
         public int ABI { get; set; }
 
-        public bool IsAllCredit { get; set; }
+        public int AllCredit { get; set; }
 
-        public bool IsAllLicensee { get; set; }
+        public int AllLicensee { get; set; }
 
         public string Sites { get; set; }
 

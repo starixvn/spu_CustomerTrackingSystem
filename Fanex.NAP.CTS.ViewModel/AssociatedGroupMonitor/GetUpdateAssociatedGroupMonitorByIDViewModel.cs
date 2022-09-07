@@ -2,6 +2,7 @@
 {
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.AssociatedGroupMonitor;
+    using Fanex.NAP.CTS.ViewModel.Common;
     using System;
     using System.Collections.Generic;
 
@@ -58,7 +59,9 @@
 
         public bool IsAllLicensee { get; set; }
 
-        public string Sites { get; set; }       
+        public string Sites { get; set; }
+
+        public IEnumerable<SiteGroupViewModel> SiteGroups { get; set; }       
 
         public List<AssociatedTypeViewModel> AssociatedTypeList { get; set; }
 
@@ -71,5 +74,10 @@
         public DateTime Modified { get; set; }
 
         public string ModifiedBy { get; set; }
+
+        public void AddSiteGroups(IEnumerable<SiteGroupViewModel> siteGroups)
+        {
+            this.SiteGroups = siteGroups;
+        }
     }
 }
