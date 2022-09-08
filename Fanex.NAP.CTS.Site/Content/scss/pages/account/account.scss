@@ -416,16 +416,17 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
                 flex-wrap: wrap;
                 padding-top: .9rem;
                 padding-left: 1.7rem;
+                align-items: center;
 
                 .btn-add-pa {
                     margin-bottom: .6rem;
                     margin-right: .6rem;
                     position: inherit;
-                    width: 22px;
-                    height: 22px;
-                    background: #FFFFFF;
+                    width: 18px;
+                    height: 18px;
+                    background: #396EF8;
                     cursor: pointer;
-                    border: 1px solid #C2CFEE;
+                    border-radius: 5px 5px 5px 0;
 
                     &:after {
                         content: '';
@@ -433,7 +434,7 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
                         transform: translate(-50%, -50%);
                         height: 2px;
                         width: 50%;
-                        background: #000000;
+                        background: #fff;
                         top: 50%;
                         left: 50%;
                     }
@@ -444,13 +445,13 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
                         top: 50%;
                         left: 50%;
                         transform: translate(-50%, -50%);
-                        background: #000000;
+                        background: #fff;
                         height: 50%;
                         width: 2px;
                     }
 
                     &:hover {
-                        background-color: #095776;
+                        background-color: darken(#396EF8, 10%);
                         transition: 0.2s;
                     }
 
@@ -2402,5 +2403,35 @@ $dangerousBackgroundColor_41_50: ( level-41: #ffdb2f, level-42: #8db4e2, level-4
 
     .graph-heading {
         justify-content: flex-start;
+    }
+}
+
+
+.dropdown-button-account {
+    display: block;
+    width: 22px;
+    height: 22px;
+    background: #E6ECF9;
+    border-radius: 3px;
+    position: absolute;
+    right: 0;
+    top: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    span {
+        width: 3px;
+        height: 3px;
+        border-radius: 20px;
+        background: #4B4B4B;
+        margin-bottom: 2px;
+        display: block;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
     }
 }
