@@ -85,12 +85,17 @@ body {
             .icon-delete {
                 font-size: 1.4rem;
                 position: absolute;
-                top: .5rem;
+                top: .8rem;
                 left: .6rem;
             }
 
             .icon-delete:before {
                 color: #FF0000;
+            }
+
+            .view-site {
+                cursor: pointer;
+                color: blue;
             }
         }
     }
