@@ -77,7 +77,7 @@
     <Compile Include="AssociationDetection\DetectAssociationMergeGroupCriteria.cs" />
     <Compile Include="AssociationDetection\GetAssociationDetectionDetailCriteria.cs" />
     <Compile Include="AssociationDetection\GetCoupleSharedIPCriteria.cs" />
-	<Compile Include="Api\LicenseeVIPBA\CustomerInfoBySiteNameGetCriteria.cs" />
+    <Compile Include="Api\LicenseeVIPBA\CustomerInfoBySiteNameGetCriteria.cs" />
     <Compile Include="Api\LicenseeVIPBA\LicenseeBAInsertCriteria.cs" />
     <Compile Include="Api\LicenseeVIPBA\LicenseeBARemoveCriteria.cs" />
     <Compile Include="Api\LicenseeVIPBA\LicenseeVIPRemoveCriteria.cs" />
@@ -130,7 +130,6 @@
     <Compile Include="LogInputData\LogInputDataCriteria.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\GetExistedTWRobotUserCriteria.cs" />
     <Compile Include="CustomerClassification\GetRoleCustomerCriteria.cs" />
-    <Compile Include="CustomerClassification\GetLastestClassificationCriteria.cs" />
     <Compile Include="CustomerClassification\NormalAccountsClassificationGeneralCategorizeDailyCriteria.cs" />
     <Compile Include="ImportEvidences\InsertCustEvidenceFromFileCriteria.cs" />
     <Compile Include="AssociationReport\AssociationReportGetCategoriesCriteria.cs" />

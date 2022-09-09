@@ -7,7 +7,7 @@
     {        
         public long CTSCustID { get; set; }
 
-        public int? CustId { get; set; }
+        public long? CustId { get; set; }
 
         public int CustSubId { get; set; }
 

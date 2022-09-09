@@ -264,23 +264,6 @@
             return new DBResult { ErrorCode = criteria.ErrorCode, ErrorMsg = criteria.ErrorMessage };
         }
 
-        public IEnumerable<LatestClassificationModel> GetLatestClassification(string custIds)
-        {
-            if (!string.IsNullOrEmpty(custIds))
-            {
-                var criteria = new GetLastestClassificationCriteria
-                {
-                    CustIds = custIds
-                };
-
-                var result = repository.Fetch<LatestClassificationModel>(criteria);
-
-                return result ?? new List<LatestClassificationModel>();
-            }
-
-            return new List<LatestClassificationModel>();
-        }
-
         public IEnumerable<LatestCCDangerLevelModel> GetLatestCCAndDangerLevel(IEnumerable<long> custIds)
         {
             if (custIds != null && custIds.Any())
@@ -288,6 +271,22 @@
                 var criteria = new GetLastestCCDangerLevelCriteria
                 {
                     CustIds = string.Join(",", custIds)
+                };
+
+                return repository.Fetch<LatestCCDangerLevelModel>(criteria) ?? Enumerable.Empty<LatestCCDangerLevelModel>();
+            }
+
+            return new List<LatestCCDangerLevelModel>();
+        }
+
+
+        public IEnumerable<LatestCCDangerLevelModel> GetLatestCCAndDangerLevel(string custIds)
+        {
+            if (!string.IsNullOrEmpty(custIds))
+            {
+                var criteria = new GetLastestCCDangerLevelCriteria
+                {
+                    CustIds = custIds
                 };
 
                 return repository.Fetch<LatestCCDangerLevelModel>(criteria) ?? Enumerable.Empty<LatestCCDangerLevelModel>();

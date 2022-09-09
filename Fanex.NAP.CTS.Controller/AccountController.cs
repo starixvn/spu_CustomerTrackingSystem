@@ -505,16 +505,16 @@
 
         private List<AssociatedAccountModel> GetCustClassification(string custIds, List<AssociatedAccountModel> assModel)
         {
-            var custClassification = new List<LatestClassification4ReportModel>();
+            var custClassification = new List<LatestCCDangerLevelModel>();
 
             if (!string.IsNullOrEmpty(custIds))
             {
-                custClassification = _accountService.GetCustomerClassFromCTSByCustId(custIds)?.ToList();
+                custClassification = _customerClassificationService.GetLatestCCAndDangerLevel(custIds)?.ToList();
             }
 
             var result = assModel.GroupJoin(custClassification,
                                  a => a.CustId,
-                                 b => b.CustId,
+                                 b => b.CustID,
                                  (a, b) => new { a, b })
                                  .SelectMany(
                                       group => group.b.DefaultIfEmpty(),
@@ -539,7 +539,7 @@
                                           IsProbation = group.a.IsProbation,
                                           CategoryIDs = group.a.CategoryIDs,
                                           CategoryNames = group.a.CategoryNames,
-                                          CustomerClasses = (temp != null && temp.CustClass != null && group.a.CustSubId == 0) ? temp.CustClass.ToString() : "-",
+                                          CustomerClasses = (temp != null && group.a.CustSubId == 0) ? temp.CustomerClass.ToString() : "-",
                                           GroupIDs = group.a.GroupIDs,
                                           OriginGroupIDs = group.a.OriginGroupIDs
                                       }).ToList();

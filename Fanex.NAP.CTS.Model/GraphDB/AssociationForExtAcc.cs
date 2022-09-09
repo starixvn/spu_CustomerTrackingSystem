@@ -10,7 +10,7 @@ namespace Fanex.NAP.CTS.Model.GraphDB
     [XName("Association")]
     public class AssociationForExtAcc
     {
-        public int CustId { get; set; }
+        public long CustId { get; set; }
 
         public int CustSubId { get; set; }
 
