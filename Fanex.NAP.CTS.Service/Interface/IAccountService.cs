@@ -30,8 +30,6 @@
 
         IEnumerable<CustomerInfoEvidenceModel> GetCustomerInfoEvidence(long ctsCustId);
 
-        CustomerInfoClassModel GetCustomerInfoClass(string custIdList);
-
         CustomerInfoLoginStatsModel GetCustomerInfoLoginStats(long ctsCustId, DateTime fromDate, DateTime toDate);
 
         CustomerInfoDateModel GetCustProfileDates(long ctsCustId);
@@ -119,8 +117,6 @@
         IEnumerable<PerformanceDailyModel> GetPerformanceDaily(long custId);
 
         IEnumerable<CustomerClassModel> GetCustomerClassByCustId(string custIdList);
-
-        IEnumerable<LatestClassification4ReportModel> GetCustomerClassFromCTSByCustId(string custIdList);
 
         IEnumerable<CustomerClassificationModel> GetCustomerClassificationForAPI(string custIdList, string parentCateIdList);
 

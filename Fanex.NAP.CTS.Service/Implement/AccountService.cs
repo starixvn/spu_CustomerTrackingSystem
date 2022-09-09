@@ -118,19 +118,6 @@
             }
         }
 
-        public CustomerInfoClassModel GetCustomerInfoClass(string custIdList)
-        {
-            var criteria = new GetLastestClassificationCriteria
-            {
-                CustIds = custIdList
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.QueryEntity<CustomerInfoClassModel>(criteria);
-            }
-        }
-
         public CustomerInfoLoginStatsModel GetCustomerInfoLoginStats(long ctsCustId, DateTime fromDate, DateTime toDate)
         {
             var criteria = new GetCustomerInfoLoginStatsCriteria
@@ -1033,19 +1020,6 @@
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 return db.Query<Model.API.CustomerClassModel>(criteria);
-            }
-        }
-
-        public IEnumerable<LatestClassification4ReportModel> GetCustomerClassFromCTSByCustId(string custIdList)
-        {
-            var criteria = new GetLastestClassificationCriteria
-            {
-                CustIds = custIdList
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<LatestClassification4ReportModel>(criteria);
             }
         }
 
