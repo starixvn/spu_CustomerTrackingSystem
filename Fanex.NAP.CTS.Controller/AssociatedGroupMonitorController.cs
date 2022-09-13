@@ -53,7 +53,8 @@
 
             if (sites != null && sites.Any())
             {
-                siteGroups = sites.GroupBy(g => g.IsLicensee)
+                siteGroups = sites.OrderBy(x=>x.IsLicensee)
+                         .GroupBy(g => g.IsLicensee)
                          .Select(x => new { SiteGroupName = x.Key ? "Licensee" : "Credit", SiteList = x.ToList() })
                          .Select(x => new SiteGroupViewModel
                          {
@@ -132,7 +133,8 @@
 
                 if (sites != null && sites.Any())
                 {
-                    var siteGroups = sites.GroupBy(g => g.IsLicensee)
+                    var siteGroups = sites.OrderBy(x=>x.IsLicensee)
+                             .GroupBy(g => g.IsLicensee)
                              .Select(x => new { SiteGroupName = x.Key ? "Licensee" : "Credit", SiteList = x.ToList() })
                              .Select(x => new SiteGroupViewModel
                              {
