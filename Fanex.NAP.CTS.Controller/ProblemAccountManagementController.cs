@@ -13,6 +13,7 @@
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
+    using Fanex.NAP.CTS.ViewModel.Account.Associated;
     using Fanex.NAP.CTS.ViewModel.ProblemAccountManagement;
     using Fanex.NAP.CTS.ViewModel.ProblemAccountMonitor;
     using System;
@@ -42,12 +43,12 @@
 
         public ActionResult Index()
         {
-            var viewModel = Enumerable.Empty<SubscriberGroupViewModel>();
-            var model = _pamService.GetAllSites();
+            var result = new ProblemAccountViewModel();
+            var sites = _pamService.GetAllSites();
 
-            if (model != null)
+            if (sites != null && sites.Any())
             {
-                viewModel = model.Where(x => x.IsActive)
+                result.SiteGroupList = sites.Where(x => x.IsActive)
                     .GroupBy(g => new { g.SubscriberGroupID, g.SubscriberGroupName })
                     .Select(x => new { Group = x.Key, SiteList = x.ToList() })
                     .Select(x => new SubscriberGroupViewModel
@@ -60,10 +61,29 @@
                             SiteName = y.SiteName,
                             DisplayOrder = y.DisplayOrder
                         })
-                    });
+                    }).ToList();
             }
 
-            return View(viewModel);
+            var categories = _pamService.GetAllCategory();
+
+            if (categories != null && categories.Any())
+            {
+                result.CategoryList = categories
+                       .Where(x=>x.CategoryGroup == Consts.ProblemAccountManagement_CategoryPA)
+                       .GroupBy(g => new { g.CategoryGroup })
+                       .Select(x => new { Group = x.Key, CategoryList = x.ToList() })
+                       .Select(x => new CategoryGroupViewModel
+                       {
+                           CategoryGroupName = x.Group.CategoryGroup,
+                           CategoryList = x.CategoryList.Select(y => new CategoryViewModel
+                           {
+                               CategoryIDs = y.CategoryIDs,
+                               CategoryName = y.CategoryName
+                           }).OrderBy(y => y.CategoryName)
+                       }).ToList();
+            }    
+
+            return View(result);
         }
 
         [HttpPost]
@@ -78,9 +98,9 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private IEnumerable<ProblemAccountViewModel> GetProblemAccounts(ProblemAccountFilterViewModel filter)
+        private IEnumerable<GetProblemAccountViewModel> GetProblemAccounts(ProblemAccountFilterViewModel filter)
         {
-            var problemAccounts = Enumerable.Empty<ProblemAccountViewModel>();
+            var problemAccounts = Enumerable.Empty<GetProblemAccountViewModel>();
 
             if (filter.ToDate != DateTime.MinValue)
             {
@@ -91,7 +111,7 @@
 
             if (paModel != null && paModel.Any())
             {
-                problemAccounts = paModel.OrderByDescending(x => x.CreatedDate).Select(x => new ProblemAccountViewModel
+                problemAccounts = paModel.OrderByDescending(x => x.CreatedDate).Select(x => new GetProblemAccountViewModel
                 {
                     UserName = x.UserName,
                     Site = x.Site,

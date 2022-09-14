@@ -12,6 +12,8 @@
 
         public bool IsAllSites { get; set; }
 
+        public string CategoryIDs { get; set; }
+
         public string UserName { get; set; }
 
         public bool HasDownline { get; set; }

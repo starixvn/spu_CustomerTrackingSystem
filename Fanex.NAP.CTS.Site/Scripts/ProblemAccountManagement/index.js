@@ -6,6 +6,7 @@
         dpkFromDate: $('#dpkFromDate'),
         dpkToDate: $('#dpkToDate'),
         cbbSite: $('#cbbSite'),
+        cbbCategory: $('#cbbCategory'),
         cbbProblemAccountCategories: $('#cbbProblemAccountCategories'),
         inputUserName: $('#inputUserName'),
         inputSearchDownlines: $('#inputSearchDownlines'),
@@ -95,9 +96,10 @@
         let params = {};
 
         params.FromDate = domElements.dpkFromDate.val();
-        params.ToDate = domElements.dpkToDate.val();
+        params.ToDate = domElements.dpkToDate.val();       
         params.Sites = domElements.cbbSite.val().join();
         params.IsAllSites = domElements.cbbSite.find('option').not(':selected').length == 0;
+        params.CategoryIDs = domElements.cbbCategory.val().join();
         params.UserName = domElements.inputUserName.val().trim();
         params.HasDownline = domElements.inputSearchDownlines.is(":checked");
 
@@ -599,6 +601,17 @@
             optGroupChecked: true
         }).multiselectfilter({
             width: 217,
+            placeholder: '',
+            label: ''
+        });
+
+        domElements.cbbCategory.multiselect({
+            menuWidth: 300,
+            menuHeight: 280,
+            selectedText: "# of # selected",
+            noneSelectedText: "Select Category"            
+        }).multiselectfilter({
+            width: 240,
             placeholder: '',
             label: ''
         });

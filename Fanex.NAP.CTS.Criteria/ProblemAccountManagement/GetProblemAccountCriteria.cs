@@ -15,6 +15,9 @@
         [SpParam(SqlParamName = "ip_Sites")]
         public string Sites { get; set; }
 
+        [SpParam(SqlParamName = "ip_CategoryIDs")]
+        public string CategoryIDs { get; set; }
+
         [SpParam(SqlParamName = "ip_UserName")]
         public string UserName { get; set; }
 

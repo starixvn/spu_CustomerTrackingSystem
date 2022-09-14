@@ -2,8 +2,10 @@
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
+    using Fanex.NAP.CTS.Criteria.Account;
     using Fanex.NAP.CTS.Criteria.ProblemAccountManagement;
     using Fanex.NAP.CTS.Criteria.ProblemAccountMonitor;
+    using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.ProblemAccountManagement;
     using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
     using Fanex.NAP.CTS.Resource.Consts;
@@ -27,6 +29,16 @@
             }
         }
 
+        public IEnumerable<CategoryInfoModel> GetAllCategory()
+        {
+            var criteria = new GetCategoryInfoCriteria();
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<CategoryInfoModel>(criteria);
+            }
+        }
+
         public IEnumerable<ProblemAccountModel> GetProblemAccounts(ProblemAccountFilterViewModel filter)
         {
             var criteria = new GetProblemAccountCriteria
@@ -34,6 +46,7 @@
                 FromDate = filter.FromDate,
                 ToDate = filter.ToDate,
                 Sites = filter.Sites,
+                CategoryIDs = filter.CategoryIDs,
                 UserName = filter.UserName,
                 HasDownline = filter.HasDownline
             };
@@ -95,7 +108,7 @@
             }
         }
      
-        public byte[] ExportProblemAccount(IEnumerable<ProblemAccountViewModel> data, string fileName, string templatePath, ProblemAccountFilterViewModel filter)
+        public byte[] ExportProblemAccount(IEnumerable<GetProblemAccountViewModel> data, string fileName, string templatePath, ProblemAccountFilterViewModel filter)
         {
             var writer = new ExcelTemplateWriter(templatePath, fileName, "PAM");
             writer.CopyRows(0, 1);
@@ -152,7 +165,7 @@
             writer.WriteRow(idx, contentRichTextArray);
         }
 
-        private void FillRowData(IEnumerable<ProblemAccountViewModel> problemAccounts, ref ExcelTemplateWriter writer)
+        private void FillRowData(IEnumerable<GetProblemAccountViewModel> problemAccounts, ref ExcelTemplateWriter writer)
         {
             foreach (var item in problemAccounts)
             {
