@@ -324,27 +324,33 @@
         {
             var boldFont = writer.GetFont(10, 0);
             var normalFont = writer.GetFont(11, 0);
+            var lineCount = 1;
 
             var contentRender = new RichTextRender().Clear();
             if (!string.IsNullOrEmpty(model.GroupName))
-            {                
-                AppendBlockContent(ref contentRender, "Group Name", boldFont, model.GroupName, normalFont, "\n");
-                WriteRickText(contentRender, ref writer, 4);
-            }                      
-            
-            if (!string.IsNullOrEmpty(model.Sites))
+                AppendBlockContent(ref contentRender, ref lineCount, "Group Name", boldFont, model.GroupName, normalFont, "\n");
+
+            if (model.IsAllSite)
             {
-                contentRender = new RichTextRender().Clear();
-                AppendBlockContent(ref contentRender, "Sites", boldFont, model.Sites, normalFont, "\n");
-                WriteRickText(contentRender, ref writer, 4);
+                AppendBlockContent(ref contentRender, ref lineCount, "Site", boldFont, "All", normalFont, "\n");
             }
+            else
+            {
+                AppendBlockContent(ref contentRender, ref lineCount, "Site", boldFont, " ", normalFont, "\n");
+
+                if (!string.IsNullOrEmpty(model.CreditSites))
+                    AppendBlockContent(ref contentRender, ref lineCount, "- Credit", boldFont, model.CreditSites, normalFont, "\n");
+
+                if (!string.IsNullOrEmpty(model.LicenseeSites))
+                    AppendBlockContent(ref contentRender, ref lineCount, "- Licensee", boldFont, model.LicenseeSites, normalFont, "\n");
+            }           
 
             if (!string.IsNullOrEmpty(model.AssociatedType))
-            {
-                contentRender = new RichTextRender().Clear();             
-                AppendBlockContent(ref contentRender, "Associated Type", boldFont, model.AssociatedType, normalFont, "\n");
-                WriteRickText(contentRender, ref writer, 4);
-            }            
+                AppendBlockContent(ref contentRender, ref lineCount, "Associated Type", boldFont, model.AssociatedType, normalFont, "\n");
+
+            WriteRickText(contentRender, ref writer, 4);
+
+            writer.SetRowHeight(1, 225 * lineCount);
         }
 
         private void WriteRickText(RichTextRender contentRender, ref ExcelTemplateWriter writer, int idx)
@@ -355,7 +361,7 @@
             writer.WriteRow(idx, contentRichTextArray);
         }
 
-        private void AppendBlockContent(ref RichTextRender content, string name, IFont nameFont, string value, IFont valueFont, string endString)
+        private void AppendBlockContent(ref RichTextRender content, ref int lineCount, string name, IFont nameFont, string value, IFont valueFont, string endString)
         {
             TextBlock nameBlock = new TextBlock(name + ": ", nameFont);
             content = content.AddText(nameBlock);
@@ -367,6 +373,8 @@
             {
                 content = content.AddText(endString);
             }
+
+            lineCount += 1;
         }
 
         private void FillRowData(IEnumerable<AssociatedAccountMonitorModel> associatedAccounts, ref ExcelTemplateWriter writer)

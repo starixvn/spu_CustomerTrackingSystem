@@ -270,9 +270,20 @@
                 , dateTime.ToString(Consts.FormatTimeToString_hhmmss));
 
             var associatedAccounts = _associatedGroupService.GetAssociatedAccountMonitor(model.GroupID);
-            var sites = _associatedGroupService.GetAssociatedGroupSites(model.GroupID).Where(x => x.IsChosen).Select(x => x.SiteName);
-            model.Sites = string.Join(",", sites);
+           
+            var sites = _associatedGroupService.GetAssociatedGroupSites(model.GroupID);
 
+            model.IsAllSite = !sites.Where(x => !x.IsChosen).Any();
+
+            if (!model.IsAllSite)
+            {
+                var creditSites = sites.Where(x => x.IsChosen).Where(x => !x.IsLicensee).Select(x => x.SiteName);
+                var licenseeSites = sites.Where(x => x.IsChosen).Where(x => x.IsLicensee).Select(x => x.SiteName);
+
+                model.CreditSites = string.Join(", ", creditSites);
+                model.LicenseeSites = string.Join(", ", licenseeSites);
+            }
+                       
             var excelFile = _associatedGroupService.ExportExcelAssociatedAccount(associatedAccounts, fileName, templatePath, model);
 
             return File(excelFile, "application/vnd.ms-excel", fileName);

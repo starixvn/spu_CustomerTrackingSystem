@@ -20,7 +20,7 @@
             if (data.AllLicensee == 1 || data.AllLicensee == 2)            
                 siteGroups.Add("<span class='view-site view-site-licensee'>Licensee</span>");            
 
-            this.SiteGroups = string.Join(",", siteGroups);
+            this.SiteGroups = string.Join(", ", siteGroups);
 
             var associatedTypes = new List<string>();
             if (data.HasAI)
@@ -31,7 +31,7 @@
                 associatedTypes.Add("IP");
             if (data.HasManual)
                 associatedTypes.Add("Manual");
-            this.AssociatedTypes = string.Join(",", associatedTypes);
+            this.AssociatedTypes = string.Join(", ", associatedTypes);
 
             this.ABI = data.ABI;
             this.TotalAccount = data.TotalAccount;
