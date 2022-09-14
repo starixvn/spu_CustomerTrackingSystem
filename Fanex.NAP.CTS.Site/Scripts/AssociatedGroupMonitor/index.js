@@ -430,7 +430,7 @@
                     },
                     success: function (response) {
                         if (response.errorCode != -1) {
-                            common.showSuccess("The group " + params.GroupName + " edit group is successful.");
+                            common.showSuccess("The group " + params.GroupName + " is edited successfully.");
                             domElements.divAddAssociatedGroup.dialog('close');
 
                             GetAssociatedGroup();
