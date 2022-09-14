@@ -9,8 +9,8 @@
         [SpParam(SqlParamName = "QueryType")]
         public int QueryType { get; set; }
 
-        [SpParam(SqlParamName = "LastScannedTransID")]
-        public Int64 LastScannedTransID { get; set; }
+        [SpParam(SqlParamName = "LastScannedSequenceID")]
+        public Int64 LastScannedSequenceID { get; set; }
 
         [SpParam(SqlParamName = "BatchSize")]
         public int BatchSize { get; set; }
