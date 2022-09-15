@@ -61,6 +61,7 @@
         private readonly IProblemAccountManagementService _pamService;
 	    private readonly IProblemAccountClassificationService _problemAccountClassificationService;
 	    private readonly IDataLogTrackingServices dataLogTrackingServices;
+        private readonly ICustomerClassificationBySportService _custClassificationBySportService;
 
         public override string BaseControllerName { get => string.Empty; }
 
@@ -79,6 +80,7 @@
             _pamService = new ProblemAccountManagementService();
             _problemAccountClassificationService = new ProblemAccountClassificationService();
             this.dataLogTrackingServices = new DataLogTrackingServices();
+            _custClassificationBySportService = new CustomerClassificationBySportService();
         }
 
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileRpt)]
@@ -2324,5 +2326,10 @@
         }
 
         #endregion Betting Statistic
+
+        #region Customer Classification By Sport
+
+        #endregion
+
     }
 }
