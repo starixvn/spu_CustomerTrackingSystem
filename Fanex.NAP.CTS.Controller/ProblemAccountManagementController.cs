@@ -298,7 +298,8 @@
                 , filter.DateTime.ToString(FormatDateTimeToString_YYYYmmdd)
                 , filter.DateTime.ToString(Consts.FormatTimeToString_hhmmss));
           
-            var problemAccounts = GetProblemAccounts(filter);            
+            var problemAccounts = GetProblemAccounts(filter);
+            
             var excelFile = _pamService.ExportProblemAccount(problemAccounts, fileName, templatePath, filter);
 
             return File(excelFile, "application/vnd.ms-excel", fileName);

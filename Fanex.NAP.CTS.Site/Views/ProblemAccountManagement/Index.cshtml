@@ -27,7 +27,7 @@
                         <span class="icon-calendar-text"></span>
                     </div>
 
-                    <div class="group width-200">
+                    <div class="group" style="width:290px">
                         <label class="text">Site</label>
                         <select class="control" id="cbbSite" multiple="multiple">
                             @if (Model.SiteGroupList != null)
@@ -47,7 +47,7 @@
                     </div>
 
                     <div class="group" style="width:310px">
-                        <label class="text">Category</label>
+                        <label class="text">Problem Category</label>
                         <select class="control" id="cbbCategory" multiple="multiple">
                             @foreach (var group in Model.CategoryList)
                             {

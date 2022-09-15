@@ -9,10 +9,20 @@
         public DateTime ToDate { get; set; }
 
         public string Sites { get; set; }
-
+        
         public bool IsAllSites { get; set; }
 
+        public string CreditSiteNames { get; set; }
+
+        public string LicenseeSiteNames { get; set; }
+
+        public string CN88SiteNames { get; set; }
+
         public string CategoryIDs { get; set; }
+
+        public bool IsAllCategories { get; set; }
+
+        public string CategoryNames { get; set; }
 
         public string UserName { get; set; }
 

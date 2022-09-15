@@ -41,7 +41,7 @@
             ajax: {
                 url: url,
                 data: function () {
-                    return GetParams();
+                    return GetParams(false);
                 },
                 type: "POST",
                 beforeSend: function () {
@@ -92,16 +92,32 @@
         });
     }
 
-    function GetParams() {
+    function GetParams(isExportExcel) {
         let params = {};
 
         params.FromDate = domElements.dpkFromDate.val();
         params.ToDate = domElements.dpkToDate.val();       
-        params.Sites = domElements.cbbSite.val().join();
+        params.Sites = domElements.cbbSite.val().join();        
         params.IsAllSites = domElements.cbbSite.find('option').not(':selected').length == 0;
-        params.CategoryIDs = domElements.cbbCategory.val().join();
+        params.CategoryIDs = domElements.cbbCategory.val().join();        
         params.UserName = domElements.inputUserName.val().trim();
         params.HasDownline = domElements.inputSearchDownlines.is(":checked");
+
+        if (isExportExcel) {
+            params.IsAllCategories = domElements.cbbCategory.find('option').not(':selected').length == 0;
+            params.CategoryNames = $('#cbbCategory option:selected').toArray().map(item => item.text).join();
+            
+            domElements.cbbSite.find('optgroup').each(function () {
+                let txtSelected = $(this).find('option:selected').toArray().map(item => item.text).join();
+                if ($(this).attr('label') == 'Credit') {
+                    params.CreditSiteNames = txtSelected;
+                } else if ($(this).attr('label') == 'Licensees') {
+                    params.LicenseeSiteNames = txtSelected;
+                } else {
+                    params.CN88SiteNames = txtSelected;
+                }
+            });
+        }
 
         return params;
     }
@@ -552,7 +568,7 @@
                 common.closeLoading();
             };
 
-            let params = GetParams();
+            let params = GetParams(true);
             request.send(JSON.stringify(params));
         }        
     }
@@ -591,7 +607,7 @@
             .change(SetRestrictFromDate);        
 
         domElements.cbbSite.multiselect({
-            menuWidth: 180,
+            menuWidth: 280,
             menuHeight: 280,
             selectedText: "# of # selected",
             noneSelectedText: "Select Site",
