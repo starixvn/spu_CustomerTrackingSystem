@@ -14,8 +14,8 @@
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.Account.Associated;
-    using Fanex.NAP.CTS.ViewModel.ProblemAccountManagement;
-    using Fanex.NAP.CTS.ViewModel.ProblemAccountMonitor;
+    using Fanex.NAP.CTS.ViewModel.Common;
+    using Fanex.NAP.CTS.ViewModel.ProblemAccountManagement; 
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -31,6 +31,7 @@
         private readonly IProblemAccountClassificationService _paClassificationService;
         private readonly IRescanCustomerClassificationService _rescanClassificationService;
         private readonly ICustomerClassificationService _customerClassificationService;
+        private readonly ICommonService _commonService;
         public override string BaseControllerName { get => Consts.MenuItemController; }
 
         public ProblemAccountManagementController()
@@ -39,29 +40,29 @@
             _paClassificationService = new ProblemAccountClassificationService();
             _rescanClassificationService = new RescanCustomerClassificationService();
             _customerClassificationService = new CustomerClassificationService();
+            _commonService = new CommonService();
         }
 
         public ActionResult Index()
         {
             var result = new ProblemAccountViewModel();
-            var sites = _pamService.GetAllSites();
+           
+            var sites = _commonService.GetSites(false);
 
             if (sites != null && sites.Any())
             {
-                result.SiteGroupList = sites.Where(x => x.IsActive)
-                    .GroupBy(g => new { g.SubscriberGroupID, g.SubscriberGroupName })
-                    .Select(x => new { Group = x.Key, SiteList = x.ToList() })
-                    .Select(x => new SubscriberGroupViewModel
-                    {
-                        SubscriberGroupID = x.Group.SubscriberGroupID,
-                        SubscriberGroupName = x.Group.SubscriberGroupName,
-                        SiteList = x.SiteList.Select(y => new SiteViewModel
-                        {
-                            SiteID = y.SiteID,
-                            SiteName = y.SiteName,
-                            DisplayOrder = y.DisplayOrder
-                        })
-                    }).ToList();
+                result.SiteGroupList = sites.GroupBy(g => g.SubscriberGroupName)
+                             .Select(x => new { SubscriberGroupName = x.Key, SiteList = x.ToList() })
+                             .Select(x => new SiteGroupViewModel
+                             {
+                                 SubscriberGroupName = x.SubscriberGroupName,
+                                 SiteList = x.SiteList.Select(y => new SiteViewModel
+                                 {
+                                     SiteID = y.SiteID,
+                                     SiteName = y.SiteName,
+                                     IsSelected = true
+                                 })
+                             }).ToList();
             }
 
             var categories = _pamService.GetAllCategory();

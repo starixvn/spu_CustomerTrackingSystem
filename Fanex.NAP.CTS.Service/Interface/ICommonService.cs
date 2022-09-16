@@ -11,5 +11,7 @@
         IEnumerable<SubscriberGroupModel> GetSubscribers();
 
         IEnumerable<ValidateUserNameModel> ValidateUsernames(string userNames, out bool isException);
+
+        IEnumerable<SiteModel> GetSites(bool isNestedCalled);
     }
 }

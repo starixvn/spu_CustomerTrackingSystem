@@ -71,5 +71,15 @@
                 return Enumerable.Empty<ValidateUserNameModel>();
             }
         }
+
+        public IEnumerable<SiteModel> GetSites(bool isNestedCalled)
+        {
+            var criteria = new GetSitesCriteria { IsNestedCalled = isNestedCalled };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<SiteModel>(criteria);
+            }
+        }
     }
 }
