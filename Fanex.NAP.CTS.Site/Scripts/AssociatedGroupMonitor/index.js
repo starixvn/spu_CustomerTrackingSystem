@@ -824,7 +824,7 @@
         let siteSelector = domElements.cbbSites.empty();
 
         siteGroups.map(function (x) {
-            let optgroup = `<optgroup label='${x.SiteGroupName}'>`;
+            let optgroup = `<optgroup label='${x.SubscriberGroupName}'>`;
 
             if (x.SiteList.length > 0) {
                 x.SiteList.map(function (y) {

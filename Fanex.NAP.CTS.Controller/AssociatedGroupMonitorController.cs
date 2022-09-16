@@ -49,23 +49,22 @@
         public ActionResult GetAllSites()
         {
             var siteGroups = Enumerable.Empty<SiteGroupViewModel>();
-            var sites = _commonService.GetSites();
+            var sites = _commonService.GetSites(false);
 
             if (sites != null && sites.Any())
             {
-                siteGroups = sites.OrderBy(x=>x.IsLicensee)
-                         .GroupBy(g => g.IsLicensee)
-                         .Select(x => new { SiteGroupName = x.Key ? "Licensee" : "Credit", SiteList = x.ToList() })
+                siteGroups = sites.GroupBy(g => g.SubscriberGroupName)
+                         .Select(x => new { SubscriberGroupName = x.Key, SiteList = x.ToList() })
                          .Select(x => new SiteGroupViewModel
                          {
-                             SiteGroupName = x.SiteGroupName,
+                             SubscriberGroupName = x.SubscriberGroupName,
                              SiteList = x.SiteList.Select(y => new SiteViewModel
                              {
                                  SiteID = y.SiteID,
                                  SiteName = y.SiteName,
                                  IsSelected = true
                              })
-                         });
+                         });               
             }
 
             return Json(siteGroups, JsonRequestBehavior.AllowGet);
@@ -135,10 +134,10 @@
                 {
                     var siteGroups = sites.OrderBy(x=>x.IsLicensee)
                              .GroupBy(g => g.IsLicensee)
-                             .Select(x => new { SiteGroupName = x.Key ? "Licensee" : "Credit", SiteList = x.ToList() })
+                             .Select(x => new { SubscriberGroupName = x.Key ? "Licensees" : "Credit", SiteList = x.ToList() })
                              .Select(x => new SiteGroupViewModel
                              {
-                                 SiteGroupName = x.SiteGroupName,
+                                 SubscriberGroupName = x.SubscriberGroupName,
                                  SiteList = x.SiteList.Select(y => new SiteViewModel
                                  {
                                      SiteID = y.SiteID,
