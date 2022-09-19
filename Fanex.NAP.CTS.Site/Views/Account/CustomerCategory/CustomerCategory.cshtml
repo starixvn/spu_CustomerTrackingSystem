@@ -5,11 +5,29 @@
 }
 @model Fanex.NAP.CTS.ViewModel.Account.CustomerCategory.MarkCategoryViewModel
     
+<div id="divCustomerCategoryBySport" class="popup-add" style="display:none">
+    <div class="report-cont" style="max-height:500px">
+        <div class="table-report" style="width:100%;background:#fff">           
+            <table id="tblCustomerCategoryBySport" class="table table-striped width-100per" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Sport Type</th>
+                        <th>Category</th>
+                        <th>CC</th>                        
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
 <div class="customer-class-tabs vertical-tabs">
     <ul class="nav-controls">
         <li><a href="#all-sportsbook" class="active">All Sportsbook</a></li>
         <li><a href="#soccer">Soccer</a></li>
         <li><a href="#basketball">Basketball</a></li>
+        <li><a href="#esport">E-Sports</a></li>
         <li><a href="#other">Other Sports</a></li>
     </ul>
     <div class="main-pannel">

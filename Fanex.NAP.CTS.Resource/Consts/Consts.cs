@@ -310,6 +310,8 @@
             ProblemAccountManagementMarkNew = 49,
             AssociatedGroupMonitorRpt = 50,
             AssociationDetectionDetails = 51,
+            AccountProfileGetCustomerCategoryBySportRpt = 52,
+            AccountProfileGetCustomerCategoryHistoryBySportRpt = 53,
             //PlaceEvidenceForMultipleCustAPI = 200,
             GetFlaggedCustomersByLevelAPI = 201,
             GetFlaggedCustByLvAndEvidenceAPI = 202,

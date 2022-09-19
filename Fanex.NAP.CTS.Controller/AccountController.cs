@@ -31,6 +31,7 @@
     using Fanex.NAP.CTS.ViewModel.Account.BettingStatistic;
     using Fanex.NAP.CTS.ViewModel.Account.ChainToEvidence;
     using Fanex.NAP.CTS.ViewModel.Account.CustomerCategory;
+    using Fanex.NAP.CTS.ViewModel.Account.CustomerCategoryBySport;
     using Fanex.NAP.CTS.ViewModel.Account.CustomerInfo;
     using Fanex.NAP.CTS.ViewModel.Account.Evidence;
     using Fanex.NAP.CTS.ViewModel.Account.RobotBetting;
@@ -1953,9 +1954,27 @@
                 errorCode = unmarkPAResult.ErrorCode,
                 errorMessage = unmarkPAResult.ErrorMessage
             }, JsonRequestBehavior.AllowGet);
-        }        
+        }
 
         #endregion Customer Category
+        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileGetCustomerCategoryBySportRpt)]
+        public ActionResult GetCustomerCategoryBySport(long custID)
+        {
+            var custs = Enumerable.Empty<GetCustomerCategoryBySportViewModel>();
+
+            var data = _accountService.GetCustomerCategoryBySport(custID);
+
+            if (data != null && data.Any())
+            {
+                custs = data.Select(x => new GetCustomerCategoryBySportViewModel(x));              
+            }
+
+            return Json(new { data = custs }, JsonRequestBehavior.AllowGet);
+        }
+        #region Customer Category By Sport
+
+        #endregion
 
         #region Robot Classification
 
@@ -2326,10 +2345,6 @@
         }
 
         #endregion Betting Statistic
-
-        #region Customer Classification By Sport
-
-        #endregion
-
+        
     }
 }

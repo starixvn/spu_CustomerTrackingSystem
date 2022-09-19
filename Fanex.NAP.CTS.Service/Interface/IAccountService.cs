@@ -4,6 +4,7 @@
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.Account.AssociatedAccount;
+    using Fanex.NAP.CTS.Model.Account.CustomerCategoryBySport;
     using Fanex.NAP.CTS.Model.Account.CustomerInfo;
     using Fanex.NAP.CTS.Model.API;
     using Fanex.NAP.CTS.Model.Association;
@@ -121,6 +122,12 @@
         IEnumerable<CustomerClassificationModel> GetCustomerClassificationForAPI(string custIdList, string parentCateIdList);
 
         IEnumerable<CustomerClassificationGeneralInfoModel> GetCustomerClassificationByCategory(string categoryIdList);
+
+        #region Customer Category By Sport
+        IEnumerable<GetCustomerCategoryBySportModel> GetCustomerCategoryBySport(long custID);
+
+        IEnumerable<GetCustomerCategoryHistoryBySportModel> GetCustomerCategoryHistoryBySport(long custID, int sportID);
+        #endregion
 
         IEnumerable<CTSCustomer> CheckCustomerNotExisted(string custIds, DateTime fromDate, DateTime toDate);
 
