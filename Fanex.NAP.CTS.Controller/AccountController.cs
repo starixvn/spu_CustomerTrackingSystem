@@ -1957,6 +1957,8 @@
         }
 
         #endregion Customer Category
+
+        #region Customer Category By Sport
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileGetCustomerCategoryBySportRpt)]
         public ActionResult GetCustomerCategoryBySport(long custID)
@@ -1967,13 +1969,27 @@
 
             if (data != null && data.Any())
             {
-                custs = data.Select(x => new GetCustomerCategoryBySportViewModel(x));              
+                custs = data.Select(x => new GetCustomerCategoryBySportViewModel(x));
             }
 
             return Json(new { data = custs }, JsonRequestBehavior.AllowGet);
         }
-        #region Customer Category By Sport
 
+        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileGetCustomerCategoryHistoryBySportRpt)]
+        public ActionResult GetCustomerCategoryHistoryBySport(long custID, int sportID)
+        {
+            var custs = Enumerable.Empty<GetCustomerCategoryHistoryBySportViewModel>();
+
+            var data = _accountService.GetCustomerCategoryHistoryBySport(custID, sportID);
+
+            if (data != null && data.Any())
+            {
+                custs = data.Select(x => new GetCustomerCategoryHistoryBySportViewModel(x));
+            }
+
+            return Json(new { data = custs }, JsonRequestBehavior.AllowGet);
+        }
         #endregion
 
         #region Robot Classification

@@ -20,14 +20,30 @@
     let dataTable;
     let dataTableCustomerCategoryBySport;
 
-    function CustomerSettingVerticalTabs() {
+    function CustomerSettingVerticalTabs(custID, ctsCustId) {
         navsTabs.click(function (e) {
-            var $this = $(this);
+            let $this = $(this);
+            let sportID = $this.attr('data-sport-id');
+
             e.preventDefault();
-            $('.nav-controls a.active , .nav-pannel.active').removeClass('active');
+            $('.nav-controls a.active').removeClass('active');            
             $this.addClass('active');
             $($this.attr('href')).addClass('active');
-        })
+
+            if (sportID == -1) {                
+                $('#divCategorySetting').removeClass('hide');
+                $('#divMarkCategory').removeClass('hide');
+                $('#divUnmarkCategory').removeClass('hide');
+
+                LoadGrid(ctsCustId);
+            } else {
+                $('#divCategorySetting').addClass('hide');
+                $('#divMarkCategory').addClass('hide');
+                $('#divUnmarkCategory').addClass('hide');
+
+                GetCustomerCategoryHistoryBySport(custID, sportID);
+            }                        
+        });
     }
 
     function GetCustomerCategory(custId) {
@@ -787,16 +803,43 @@
             type: 'POST',
             data: {
                 custId: custId
-            },
+            },            
             success: function (response) {
                 if (response.data != undefined) {
                     tblCustomerCategoryBySport.DataTable().clear().rows.add(response.data);
                     tblCustomerCategoryBySport.DataTable().columns.adjust().draw();                    
                 }
             },
-            complete: function () {
+            complete: function () {                
             },
             error: function (errMsg) {
+                tblcustomercategory.find('tbody').removeClass('loading');
+                console.log(errMsg);
+            }
+        });
+    }
+
+    function GetCustomerCategoryHistoryBySport(custId, sportId) {
+        $.ajax(common.modifyRelativeUrl('Account/GetCustomerCategoryHistoryBySport'), {
+            type: 'POST',
+            data: {
+                custID: custId,
+                sportID: sportId
+            },
+            beforeSend: function () {
+                tblcustomercategory.find('tbody').addClass('loading');
+            },
+            success: function (response) {
+                if (response.data != undefined) {
+                    tblcustomercategory.DataTable().clear().rows.add(response.data);
+                    tblcustomercategory.DataTable().columns.adjust().draw();
+                }
+            },
+            complete: function () {
+                tblcustomercategory.find('tbody').removeClass('loading');
+            },
+            error: function (errMsg) {
+                tblcustomercategory.find('tbody').removeClass('loading');
                 console.log(errMsg);
             }
         });
@@ -838,7 +881,7 @@
         dataTable = RenderGrid();
 
         LoadGrid(ctsCustId);
-        CustomerSettingVerticalTabs();
+        CustomerSettingVerticalTabs(custId, ctsCustId);
 
         btnDisplayCustomerCategoryBySport.click(function () { DisplayCustomerCategoryBySport(custId); });
     };
