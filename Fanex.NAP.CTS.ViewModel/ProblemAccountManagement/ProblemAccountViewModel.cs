@@ -1,21 +1,19 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.ProblemAccountManagement
 {
-    using System;
+    using Fanex.NAP.CTS.ViewModel.Account.Associated;
+    using Fanex.NAP.CTS.ViewModel.Common;  
+    using System.Collections.Generic;
 
     public class ProblemAccountViewModel
     {
-        public string UserName { get; set; }
+        public ProblemAccountViewModel()
+        {
+            SiteGroupList = new List<SiteGroupViewModel>();
+            CategoryList = new List<CategoryGroupViewModel>();
+        }
 
-        public string Site { get; set; }
+        public List<SiteGroupViewModel> SiteGroupList { get; set; }
 
-        public string Currency { get; set; }
-
-        public string Category { get; set; }
-
-        public string Comment { get; set; }
-
-        public string CreatedBy { get; set; }
-
-        public string CreatedDateStr { get; set; }
+        public List<CategoryGroupViewModel> CategoryList { get; set; }
     }
 }

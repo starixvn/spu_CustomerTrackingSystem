@@ -148,4 +148,8 @@
         GetAssByGroup = 3
     }
 
+    public enum CustomerCategoryID
+    {
+        SystemDetectGroupBetting = 63
+    }
 }

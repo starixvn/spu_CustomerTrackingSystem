@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
+    using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.ProblemAccountManagement;
     using Fanex.NAP.CTS.Model.ProblemAccountMonitor;
     using Fanex.NAP.CTS.ViewModel.ProblemAccountManagement;    
@@ -9,6 +10,8 @@
     {
         IEnumerable<SubscriberGroupModel> GetAllSites();
 
+        IEnumerable<CategoryInfoModel> GetAllCategory();
+
         IEnumerable<ProblemAccountModel> GetProblemAccounts(ProblemAccountFilterViewModel filter);
         
         IEnumerable<ProblemAccountCategoryModel> GetProblemAccountCategories();
@@ -17,7 +20,7 @@
 
         IEnumerable<GetCustEvidenceByReasonIdModel> GetCustEvidenceByReasonIds();             
 
-		byte[] ExportProblemAccount(IEnumerable<ProblemAccountViewModel> problemAccounts, string fileName, string templatePath, ProblemAccountFilterViewModel filter);        
+		byte[] ExportProblemAccount(IEnumerable<GetProblemAccountViewModel> problemAccounts, string fileName, string templatePath, ProblemAccountFilterViewModel filter);        
 
         IEnumerable<long> RemoveProblemAccountEvidence(string custIds);
 

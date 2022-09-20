@@ -82,6 +82,7 @@
     <Compile Include="Api\LicenseeVIPBA\LicenseeBARemoveCriteria.cs" />
     <Compile Include="Api\LicenseeVIPBA\LicenseeVIPRemoveCriteria.cs" />
     <Compile Include="Api\LicenseeVIPBA\LicenseeVIPInsertCriteria.cs" />
+    <Compile Include="Common\GetSitesCriteria.cs" />
     <Compile Include="CustomerClassification\GetLastestCCDangerLevelCriteria.cs" />
     <Compile Include="CustomerClassification\InputErrorLogInsertCriteria.cs" />
     <Compile Include="CustomerClassification\ProblemAccount\CheckNewPAAssociationCustomerForRollbackCriteria.cs" />

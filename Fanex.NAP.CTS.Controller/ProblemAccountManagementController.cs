@@ -13,8 +13,9 @@
     using Fanex.NAP.CTS.Service;
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
-    using Fanex.NAP.CTS.ViewModel.ProblemAccountManagement;
-    using Fanex.NAP.CTS.ViewModel.ProblemAccountMonitor;
+    using Fanex.NAP.CTS.ViewModel.Account.Associated;
+    using Fanex.NAP.CTS.ViewModel.Common;
+    using Fanex.NAP.CTS.ViewModel.ProblemAccountManagement; 
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -30,6 +31,7 @@
         private readonly IProblemAccountClassificationService _paClassificationService;
         private readonly IRescanCustomerClassificationService _rescanClassificationService;
         private readonly ICustomerClassificationService _customerClassificationService;
+        private readonly ICommonService _commonService;
         public override string BaseControllerName { get => Consts.MenuItemController; }
 
         public ProblemAccountManagementController()
@@ -38,32 +40,51 @@
             _paClassificationService = new ProblemAccountClassificationService();
             _rescanClassificationService = new RescanCustomerClassificationService();
             _customerClassificationService = new CustomerClassificationService();
+            _commonService = new CommonService();
         }
 
         public ActionResult Index()
         {
-            var viewModel = Enumerable.Empty<SubscriberGroupViewModel>();
-            var model = _pamService.GetAllSites();
+            var result = new ProblemAccountViewModel();
+           
+            var sites = _commonService.GetSites(false);
 
-            if (model != null)
+            if (sites != null && sites.Any())
             {
-                viewModel = model.Where(x => x.IsActive)
-                    .GroupBy(g => new { g.SubscriberGroupID, g.SubscriberGroupName })
-                    .Select(x => new { Group = x.Key, SiteList = x.ToList() })
-                    .Select(x => new SubscriberGroupViewModel
-                    {
-                        SubscriberGroupID = x.Group.SubscriberGroupID,
-                        SubscriberGroupName = x.Group.SubscriberGroupName,
-                        SiteList = x.SiteList.Select(y => new SiteViewModel
-                        {
-                            SiteID = y.SiteID,
-                            SiteName = y.SiteName,
-                            DisplayOrder = y.DisplayOrder
-                        })
-                    });
+                result.SiteGroupList = sites.GroupBy(g => g.SubscriberGroupName)
+                             .Select(x => new { SubscriberGroupName = x.Key, SiteList = x.ToList() })
+                             .Select(x => new SiteGroupViewModel
+                             {
+                                 SubscriberGroupName = x.SubscriberGroupName,
+                                 SiteList = x.SiteList.Select(y => new SiteViewModel
+                                 {
+                                     SiteID = y.SiteID,
+                                     SiteName = y.SiteName,
+                                     IsSelected = true
+                                 })
+                             }).ToList();
             }
 
-            return View(viewModel);
+            var categories = _pamService.GetAllCategory();
+
+            if (categories != null && categories.Any())
+            {
+                result.CategoryList = categories
+                       .Where(x=>x.CategoryGroup == Consts.ProblemAccountManagement_CategoryPA)
+                       .GroupBy(g => new { g.CategoryGroup })
+                       .Select(x => new { Group = x.Key, CategoryList = x.ToList() })
+                       .Select(x => new CategoryGroupViewModel
+                       {
+                           CategoryGroupName = x.Group.CategoryGroup,
+                           CategoryList = x.CategoryList.Select(y => new CategoryViewModel
+                           {
+                               CategoryIDs = y.CategoryIDs,
+                               CategoryName = y.CategoryName
+                           }).OrderBy(y => y.CategoryName)
+                       }).ToList();
+            }    
+
+            return View(result);
         }
 
         [HttpPost]
@@ -78,9 +99,9 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private IEnumerable<ProblemAccountViewModel> GetProblemAccounts(ProblemAccountFilterViewModel filter)
+        private IEnumerable<GetProblemAccountViewModel> GetProblemAccounts(ProblemAccountFilterViewModel filter)
         {
-            var problemAccounts = Enumerable.Empty<ProblemAccountViewModel>();
+            var problemAccounts = Enumerable.Empty<GetProblemAccountViewModel>();
 
             if (filter.ToDate != DateTime.MinValue)
             {
@@ -91,7 +112,7 @@
 
             if (paModel != null && paModel.Any())
             {
-                problemAccounts = paModel.OrderByDescending(x => x.CreatedDate).Select(x => new ProblemAccountViewModel
+                problemAccounts = paModel.OrderByDescending(x => x.CreatedDate).Select(x => new GetProblemAccountViewModel
                 {
                     UserName = x.UserName,
                     Site = x.Site,
@@ -109,7 +130,7 @@
         [HttpGet]
         public ActionResult GetProblemAccountAllCategories()
         {
-            var data = _pamService.GetProblemAccountCategories();
+            var data = _pamService.GetProblemAccountCategories().Where(x=>x.CategoryID != (int)CustomerCategoryID.SystemDetectGroupBetting);
 
             return Json(data, JsonRequestBehavior.AllowGet);
         }
@@ -278,7 +299,8 @@
                 , filter.DateTime.ToString(FormatDateTimeToString_YYYYmmdd)
                 , filter.DateTime.ToString(Consts.FormatTimeToString_hhmmss));
           
-            var problemAccounts = GetProblemAccounts(filter);            
+            var problemAccounts = GetProblemAccounts(filter);
+            
             var excelFile = _pamService.ExportProblemAccount(problemAccounts, fileName, templatePath, filter);
 
             return File(excelFile, "application/vnd.ms-excel", fileName);

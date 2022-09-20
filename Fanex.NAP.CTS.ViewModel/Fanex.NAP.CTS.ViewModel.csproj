@@ -127,6 +127,8 @@
     <Compile Include="AssociationReport\AssociationFilterViewModel.cs" />
     <Compile Include="AssociationReport\AssociationReportViewModel.cs" />
     <Compile Include="AssociationReport\AssociationViewModel.cs" />
+    <Compile Include="Common\SiteGroupViewModel.cs" />
+    <Compile Include="Common\SiteViewModel.cs" />
     <Compile Include="Common\SubscriberGroupViewModel.cs" />
     <Compile Include="Common\SubscriberViewModel.cs" />
     <Compile Include="Evidence\Evidence.cs" />
@@ -166,6 +168,7 @@
     <Compile Include="ProbationManagement\RenderProbationViewModel.cs" />
     <Compile Include="ProblemAccountManagement\ProblemAccountFilterViewModel.cs" />
     <Compile Include="ProblemAccountManagement\ProblemAccountValidatedViewModel.cs" />
+    <Compile Include="ProblemAccountManagement\GetProblemAccountViewModel.cs" />
     <Compile Include="ProblemAccountManagement\ProblemAccountViewModel.cs" />
     <Compile Include="ProblemAccountManagement\ResultSaveProblemAccountViewModel.cs" />
     <Compile Include="ProblemAccountManagement\ResultValidatedViewModel.cs" />

@@ -97,6 +97,7 @@
         public const string ProblemAccountManagement_DuplicatedUserName = "Duplicated Username";
         public const string ProblemAccountManagement_SiteLicensee = "Licensee";
         public const string ProblemAccountManagement_SiteCredit = "Credit";
+        public const string ProblemAccountManagement_CategoryPA = "Problem Account Category";
 
         public enum ROLE_CUSTOMER
         {
