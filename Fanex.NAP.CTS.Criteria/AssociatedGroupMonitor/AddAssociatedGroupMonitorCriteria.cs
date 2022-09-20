@@ -11,6 +11,27 @@
         [SpParam(SqlParamName = "ip_ABI")]
         public int ABI { get; set; }
 
+        [SpParam(SqlParamName = "ip_AllCredit")]
+        public int AllCredit { get; set; }
+
+        [SpParam(SqlParamName = "ip_AllLicensee")]
+        public int AllLicensee { get; set; }
+
+        [SpParam(SqlParamName = "ip_Sites")]
+        public string Sites { get; set; }
+
+        [SpParam(SqlParamName = "ip_HasDevice")]
+        public bool HasDevice { get; set; }
+
+        [SpParam(SqlParamName = "ip_HasManual")]
+        public bool HasManual { get; set; }
+
+        [SpParam(SqlParamName = "ip_HasIP")]
+        public bool HasIP { get; set; }
+
+        [SpParam(SqlParamName = "ip_HasAI")]
+        public bool HasAI { get; set; }
+
         [SpParam(SqlParamName = "ip_Remark")]
         public string Remark { get; set; }
 

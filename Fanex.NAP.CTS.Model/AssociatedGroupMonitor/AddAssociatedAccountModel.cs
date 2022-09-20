@@ -1,6 +1,6 @@
-﻿namespace Fanex.NAP.CTS.ViewModel.AssociatedGroupMonitor
-{   
-    public class AddAssociatedAccountViewModel
+﻿namespace Fanex.NAP.CTS.Model.AssociatedGroupMonitor
+{    
+    public class AddAssociatedAccountModel
     {
         public long GroupID { get; set; }
 

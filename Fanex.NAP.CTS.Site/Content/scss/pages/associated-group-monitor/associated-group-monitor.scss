@@ -68,6 +68,7 @@ body {
             .sub-icon {
                 width: 24px;
                 height: 24px;
+                margin-right: 6px;
                 display: inline-block;
                 position: relative;
                 cursor: pointer;
@@ -85,15 +86,24 @@ body {
             .icon-delete {
                 font-size: 1.4rem;
                 position: absolute;
-                top: .5rem;
+                top: .8rem;
                 left: .6rem;
             }
 
             .icon-delete:before {
                 color: #FF0000;
             }
+
+            .view-site {
+                cursor: pointer;
+                color: blue;
+            }
         }
     }
+}
+
+.margin-right-20 {
+    margin-right: 20px;
 }
 
 .tagify__tag {

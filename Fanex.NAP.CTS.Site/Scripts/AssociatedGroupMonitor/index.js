@@ -4,8 +4,13 @@
         btnAddGroup: $('#btnAddGroup'),
         tblAssociatedGroup: $('#tblAssociatedGroup'),        
         divAddAssociatedGroup: $('#divAddAssociatedGroup'),
+        hdGroupID: $('#hdGroupID'),
+        divSitesByGroup: $('#divSitesByGroup'),
+        lblSiteList: $('#lblSiteList'),
         txtGroupNameAssociatedGroup: $('#txtGroupNameAssociatedGroup'),
         txtCommentAssociatedGroup: $('#txtCommentAssociatedGroup'),
+        cbbSites: $('#cbbSites'),
+        cbbAssociatedTypes: $('#cbbAssociatedTypes'),
         cbbABIAssociatedGroup: $('#cbbABIAssociatedGroup'),
         txtCommentAssociatedAccount: $('#txtCommentAssociatedAccount'),
         divAddAssociatedAccount: $('#divAddAssociatedAccount'),
@@ -34,7 +39,7 @@
             dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
             pagingType: "full_numbers",
             ajax: {
-                url: url,               
+                url: url,
                 type: "POST",
                 beforeSend: function () {
                     domElements.tblAssociatedGroup.find('tbody').addClass('loading');
@@ -63,42 +68,54 @@
             scrollCollapse: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8 , 9], className: "text-center" },
-                { targets: [0], width: "10%" },
-                { targets: [1], width: "10%" },
+                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], className: "text-center" },
+                { targets: [0], width: "5%" },
+                { targets: [1], width: "12%" },
                 { targets: [2], width: "10%" },
                 { targets: [3], width: "10%" },
-                { targets: [4], width: "10%" },
-                { targets: [5], width: "10%" },
-                { targets: [6], width: "10%" },
+                { targets: [4], width: "5%" },
+                { targets: [5], width: "8%" },
+                { targets: [6], width: "15%" },
                 { targets: [7], width: "10%" },
                 { targets: [8], width: "10%" },
-                { targets: [9], width: "10%" }                
+                { targets: [9], width: "15%" },
             ],
             columns: [
                 { data: obj => obj.GroupID },
                 { data: obj => obj.GroupName },
+                {
+                    data: obj => {
+                        return obj.SiteGroups;
+                    }, createdCell: (cell, _, row) => {
+                        $('.view-site-credit', cell).click(() => {
+                            GetSitesByGroup(row.GroupID, false, "CREDIT");
+                        });
+
+                        $('.view-site-licensee', cell).click(() => {
+                            GetSitesByGroup(row.GroupID, true, "LICENSEE");
+                        });        
+                    }
+                },
+                { data: obj => obj.AssociatedTypes },
                 { data: obj => obj.ABI },
                 { data: obj => obj.TotalAccount },
                 { data: obj => obj.Remark },
                 { data: obj => obj.CreatedDate },
-                { data: obj => obj.CreatedBy },
+                { data: obj => obj.CreatedBy },                        
                 {
                     data: obj => {
-                        return '<span class="sub-icon - excel" id="sub-icon " title="Export To Excel"><i class="icon-excel ' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
-                    }, createdCell: (cell, _, row) => {
-                        $('.icon-excel', cell).click(() => {
-                            $('td #sub-icon').addClass('none-pointer');
+                        let htmlSPANEditGroup = '<span class="sub-icon - edit" id="sub-icon " title="Edit Group"><i class="icon-edit ' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
+                        let htmlSPANRemoveGroup = '<span class="sub-icon - delete" id="sub-icon " title="Remove Group"><i class="icon-delete ' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
+                        let htmlSPANAddAccount = '<span class="sub-icon - edit" id="sub-icon " title="Add Accounts"><i class="icon-add-account' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
+                        let htmlExportExcel = '<span class="sub-icon - excel" id="sub-icon " title="Export To Excel"><i class="icon-excel ' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
 
-                            ExportToExcelAssociatedAccount(row.GroupID, row.GroupName);
-                        })
-                    }
-                },
-                {
-                    data: obj => {
-                        return '<span class="sub-icon - delete" id="sub-icon " title="Remove Group"><i class="icon-delete ' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
-                    }, createdCell: (cell, _, row) => {
+                        return htmlSPANEditGroup + htmlSPANRemoveGroup + htmlSPANAddAccount + htmlExportExcel;
+                    }, createdCell: (cell, _, row) => {                      
                         if (isHostPermission) {
+                            $('.icon-edit', cell).click(() => {
+                                UpdateAssociatedGroupMonitor(row.GroupID);
+                            });
+
                             $('.icon-delete', cell).click(() => {
                                 $('td #sub-icon').addClass('none-pointer');
                                 let html = "<div class='popup - content'>Are you sure you want to remove this group <strong>" + row.GroupName + "</strong>? </div>";
@@ -109,49 +126,50 @@
                                     $('td #sub-icon').removeClass('none-pointer');
                                 });
                             });
-                        }
-                    }
-                },                
-                {
-                    data: obj => {
-                        return '<span class="sub-icon - edit" id="sub-icon " title="Add Accounts"><i class="icon-add-account' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
-                    }, createdCell: (cell, _, row) => {
-                        $('.icon-add-account', cell).click(() => {
-                            $('td #sub-icon').addClass('none-pointer');
-                            
-                            domElements.spanAddAssociatedAccountGroupIDHidden.val(row.GroupID);
-                            domElements.spanAddAssociatedAccountGroupNameHidden.val(row.GroupName);
-                            domElements.spanAddAssociatedAccountGroupABIHidden.val(row.ABI);                            
-                            domElements.txtCommentAssociatedAccount.val('');
-                            domElements.spanAddAssociatedAccountUserNameMaxTag.text(domElements.maxTags);
-                            domElements.spanAddAssociatedAccountChangeHidden.text("0");
-                            domElements.inputTagUsername.tagify().data('tagify').removeAllTags();
-                            domElements.spanAddAssociatedAccountUserName.find('tags').attr('tabindex', "1");
-                            domElements.btnSaveAssociatedAccount.prop('disabled', true);                           
 
-                            $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
-                                _title: function (title) {
-                                    let $title = this.options.title || '&nbsp;'
-                                    if (("titleIsHtml" in this.options) && this.options.titleIsHtml == true)
-                                        title.html($title);
-                                    else title.text($title);
-                                }
-                            }));
+                            $('.icon-add-account', cell).click(() => {
+                                $('td #sub-icon').addClass('none-pointer');
 
-                            domElements.divAddAssociatedAccount.dialog({
-                                modal: true,
-                                width: '700px',
-                                title: '<div>ADD NEW ACCOUNTS - <label style="color:#FF0000">' + row.GroupName + '</label></div>',
-                                titleIsHtml: true,
-                                resizable: true,
-                                draggable: true,
-                                close: function () {
-                                    $(this).dialog('close');
-                                }
+                                domElements.spanAddAssociatedAccountGroupIDHidden.val(row.GroupID);
+                                domElements.spanAddAssociatedAccountGroupNameHidden.val(row.GroupName);
+                                domElements.spanAddAssociatedAccountGroupABIHidden.val(row.ABI);
+                                domElements.txtCommentAssociatedAccount.val('');
+                                domElements.spanAddAssociatedAccountUserNameMaxTag.text(domElements.maxTags);
+                                domElements.spanAddAssociatedAccountChangeHidden.text("0");
+                                domElements.inputTagUsername.tagify().data('tagify').removeAllTags();
+                                domElements.spanAddAssociatedAccountUserName.find('tags').attr('tabindex', "1");
+                                domElements.btnSaveAssociatedAccount.prop('disabled', true);
+
+                                $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+                                    _title: function (title) {
+                                        let $title = this.options.title || '&nbsp;'
+                                        if (("titleIsHtml" in this.options) && this.options.titleIsHtml == true)
+                                            title.html($title);
+                                        else title.text($title);
+                                    }
+                                }));
+
+                                domElements.divAddAssociatedAccount.dialog({
+                                    modal: true,
+                                    width: '700px',
+                                    title: '<div>ADD NEW ACCOUNTS - <label style="color:#FF0000">' + row.GroupName + '</label></div>',
+                                    titleIsHtml: true,
+                                    resizable: true,
+                                    draggable: true,
+                                    close: function () {
+                                        $(this).dialog('close');
+                                    }
+                                });
                             });
-                        });
+                        }                        
+
+                        $('.icon-excel', cell).click(() => {
+                            $('td #sub-icon').addClass('none-pointer');
+
+                            ExportToExcelAssociatedAccount(row.GroupID, row.GroupName, row.AssociatedTypes);
+                        })
                     }
-                }
+                }               
             ]
         });
     }
@@ -162,10 +180,49 @@
             : dataTable = RenderGrid();
     }
 
-    function ExportToExcelAssociatedAccount(groupID, groupName) {
+    function GetSitesByGroup(groupID, isLicensee, siteGroupName) {       
+        $.ajax(common.modifyRelativeUrl('AssociatedGroupMonitor/GetSitesByGroup'), {
+            type: 'POST',
+            data: {
+                groupID: groupID,
+                isLicensee: isLicensee
+            },
+            beforeSend: function () {
+                domElements.tblAssociatedGroup.find('tbody').addClass('loading');
+            },
+            success: function (response) {
+                domElements.divSitesByGroup.dialog({
+                    modal: true,
+                    width: '600px',
+                    title: siteGroupName,
+                    _allowInteraction: function (event) {
+                        return !!$(event.target).is(".select2-input") || this._super(event);
+                    },
+                    resizable: true,
+                    draggable: true,
+                    close: function () {
+                        $(this).dialog('close');
+                    }
+                });
+
+                domElements.lblSiteList.text(response);
+            },
+            complete: function () {
+                domElements.tblAssociatedGroup.find('tbody').removeClass('loading');
+            },
+            error: function (errMsg) {
+                domElements.tblAssociatedGroup.find('tbody').removeClass('loading');
+                common.showError("An unexpected Error occurred. Please try again.");
+                console.log(errMsg);
+            }
+        });
+    }
+
+    function ExportToExcelAssociatedAccount(groupID, groupName, associatedType) {
         let params = {};
         params.GroupID = groupID;
         params.GroupName = groupName;
+        params.AssociatedType = associatedType;
 
         common.showSuccess('Your filter export is being processed. Please wait, this may take some minutes.', 5000);
 
@@ -263,46 +320,148 @@
         });
     }
 
-    function AddAssociatedGroupMonitor() {
+    function SaveAssociatedGroupMonitor() {
         if (ValidateInputAddAssociatedGroupMonitor()) {
-            common.showConfirmation("<div class='popup-content'><div class='popup-title'>Are you sure you want to add new group '" + domElements.txtGroupNameAssociatedGroup.val().trim() +"'</div></div>",
-                function () {
-                    let params = {};
-                    params.GroupName = domElements.txtGroupNameAssociatedGroup.val().trim();
-                    params.ABI = domElements.cbbABIAssociatedGroup.val();
-                    params.Comment = domElements.txtCommentAssociatedGroup.val().trim();
-
-                    $.ajax(common.modifyRelativeUrl('AssociatedGroupMonitor/AddAssociatedGroupMonitor'), {
-                        type: 'POST',
-                        data: params,
-                        beforeSend: function () {
-                            domElements.tblAssociatedGroup.find('tbody').addClass('loading');
-                        },
-                        success: function (response) {
-                            if (response.errorCode != -1) {
-                                common.showSuccess("New group " + params.GroupName + " is added successfully.");
-                                domElements.divAddAssociatedGroup.dialog('close');
-
-                                GetAssociatedGroup();
-                            } else {
-                                common.showError("An unexpected Error occurred. Please try again.");
-                            }
-                        },
-                        complete: function () {
-                            domElements.tblAssociatedGroup.find('tbody').removeClass('loading');
-                        },
-                        error: function (errMsg) {
-                            domElements.tblAssociatedGroup.find('tbody').removeClass('loading');
-                            common.showError("An unexpected Error occurred. Please try again.");
-                            console.log(errMsg);
-                        }
-                    });
-                }
-            )
+            let groupID = domElements.hdGroupID.val();
+            if (groupID == 0) {
+                SaveAddAssociatedGroupMonitor();
+            } else {
+                SaveUpdateAssociatedGroupMonitor(groupID);
+            }
+           
         }       
     }
 
+    function SaveAddAssociatedGroupMonitor() {
+        common.showConfirmation("<div class='popup-content'><div class='popup-title'>Are you sure you want to add new group '" + domElements.txtGroupNameAssociatedGroup.val().trim() + "'</div></div>",
+            function () {
+                let params = {};
+                params.GroupName = domElements.txtGroupNameAssociatedGroup.val().trim();
+                params.ABI = domElements.cbbABIAssociatedGroup.val();
+                params.Sites = domElements.cbbSites.val().join();
+                params.AssociationTypes = domElements.cbbAssociatedTypes.val().join();
+                params.Remark = domElements.txtCommentAssociatedGroup.val().trim();
+
+                domElements.cbbSites.find('optgroup').each(function () {
+                    let notSelected = $(this).find('option:not(:selected)').length;
+                    let selected = $(this).find('option:selected').length;
+                    if ($(this).attr('label') == 'Credit') {
+                        if (selected > 0 && notSelected > 0)
+                            params.AllCredit = 2;                        
+                        else if (selected > 0 && notSelected == 0)
+                            params.AllCredit = 1;
+                        else      
+                            params.AllCredit = 0;
+                    } else {                       
+                        if (selected > 0 && notSelected > 0)
+                            params.AllLicensee = 2;
+                        else if (selected > 0 && notSelected == 0)
+                            params.AllLicensee = 1;
+                        else
+                            params.AllLicensee = 0;
+                    }                  
+                });
+
+                $.ajax(common.modifyRelativeUrl('AssociatedGroupMonitor/SaveAddAssociatedGroupMonitor'), {
+                    type: 'POST',
+                    data: params,
+                    beforeSend: function () {
+                        domElements.tblAssociatedGroup.find('tbody').addClass('loading');
+                    },
+                    success: function (response) {
+                        if (response.errorCode != -1) {
+                            common.showSuccess("New group " + params.GroupName + " is added successfully.");
+                            domElements.divAddAssociatedGroup.dialog('close');
+
+                            GetAssociatedGroup();
+                        } else {
+                            common.showError("An unexpected Error occurred. Please try again.");
+                        }
+                    },
+                    complete: function () {
+                        domElements.tblAssociatedGroup.find('tbody').removeClass('loading');
+                    },
+                    error: function (errMsg) {
+                        domElements.tblAssociatedGroup.find('tbody').removeClass('loading');
+                        common.showError("An unexpected Error occurred. Please try again.");
+                        console.log(errMsg);
+                    }
+                });
+            }
+        )
+    }
+
+    function SaveUpdateAssociatedGroupMonitor(groupID) {
+        common.showConfirmation("<div class='popup-content'><div class='popup-title'>Are you sure you want to edit the group '" + domElements.txtGroupNameAssociatedGroup.val().trim() + "'</div></div>",
+            function () {
+                let params = {};
+                params.GroupID = groupID;
+                params.GroupName = domElements.txtGroupNameAssociatedGroup.val().trim();
+                params.ABI = domElements.cbbABIAssociatedGroup.val();
+                params.Sites = domElements.cbbSites.val().join();
+                params.AssociationTypes = domElements.cbbAssociatedTypes.val().join();
+                params.Remark = domElements.txtCommentAssociatedGroup.val().trim();
+
+                domElements.cbbSites.find('optgroup').each(function () {
+                    let notSelected = $(this).find('option:not(:selected)').length;
+                    let selected = $(this).find('option:selected').length;
+                    if ($(this).attr('label') == 'Credit') {
+                        if (selected > 0 && notSelected > 0)
+                            params.AllCredit = 2;
+                        else if (selected > 0 && notSelected == 0)
+                            params.AllCredit = 1;
+                        else
+                            params.AllCredit = 0;
+                    } else {
+                        if (selected > 0 && notSelected > 0)
+                            params.AllLicensee = 2;
+                        else if (selected > 0 && notSelected == 0)
+                            params.AllLicensee = 1;
+                        else
+                            params.AllLicensee = 0;
+                    }
+                });
+
+                $.ajax(common.modifyRelativeUrl('AssociatedGroupMonitor/SaveUpdateAssociatedGroupMonitor'), {
+                    type: 'POST',
+                    data: params,
+                    beforeSend: function () {
+                        domElements.tblAssociatedGroup.find('tbody').addClass('loading');
+                    },
+                    success: function (response) {
+                        if (response.errorCode != -1) {
+                            common.showSuccess("The group " + params.GroupName + " is edited successfully.");
+                            domElements.divAddAssociatedGroup.dialog('close');
+
+                            GetAssociatedGroup();
+                        } else {
+                            common.showError("An unexpected Error occurred. Please try again.");
+                        }
+                    },
+                    complete: function () {
+                        domElements.tblAssociatedGroup.find('tbody').removeClass('loading');
+                    },
+                    error: function (errMsg) {
+                        domElements.tblAssociatedGroup.find('tbody').removeClass('loading');
+                        common.showError("An unexpected Error occurred. Please try again.");
+                        console.log(errMsg);
+                    }
+                });
+            }
+        )
+    }
+
     function ValidateInputAddAssociatedGroupMonitor() {
+        if (domElements.cbbSites.find('option:selected').length == 0) {
+            common.showError('Sites may not be empty.');
+            return false;
+        }
+
+        if (domElements.cbbAssociatedTypes.find('option:selected').length == 0) {
+            common.showError('Associated Type may not be empty.');
+            return false;
+        }
+
         if (domElements.txtGroupNameAssociatedGroup.val() == "") {
             common.showError('Group Name may not be empty.');
             return false;
@@ -322,6 +481,59 @@
         }
 
         return true;
+    }
+
+    function UpdateAssociatedGroupMonitor(groupID) {
+        domElements.hdGroupID.val(groupID);
+
+        $.ajax(common.modifyRelativeUrl('AssociatedGroupMonitor/UpdateAssociatedGroupMonitor'), {
+            type: 'POST',
+            data: {
+                groupID: groupID
+            },
+            beforeSend: function () {                
+            },
+            success: function (response) {
+                if (response.errorCode != -1) {
+                    if ($.ui && $.ui.dialog && $.ui.dialog.prototype._allowInteraction) {
+                        var ui_dialog_interaction = $.ui.dialog.prototype._allowInteraction;
+                        $.ui.dialog.prototype._allowInteraction = function (e) {
+                            if ($(e.target).closest('.select2-dropdown').length) return true;
+                            return ui_dialog_interaction.apply(this, arguments);
+                        };
+                    }
+
+                    domElements.txtGroupNameAssociatedGroup.val(response.GroupName);
+                    domElements.txtCommentAssociatedGroup.val(response.Remark);
+                    domElements.cbbABIAssociatedGroup.val(response.ABI).change();
+
+                    RefreshSiteGroups(response.SiteGroups);
+                    RefreshAssociatedTypes(response.AssociatedTypeList);
+                    
+                    domElements.divAddAssociatedGroup.dialog({
+                        modal: true,
+                        width: '690px',
+                        title: 'EDIT GROUP',
+                        _allowInteraction: function (event) {
+                            return !!$(event.target).is(".select2-input") || this._super(event);
+                        },
+                        resizable: true,
+                        draggable: true,
+                        close: function () {
+                            $(this).dialog('close');
+                        }
+                    });        
+                } else {
+                    common.showError("An unexpected Error occurred. Please try again.");
+                }
+            },
+            complete: function () {                
+            },
+            error: function (errMsg) {              
+                common.showError("An unexpected Error occurred. Please try again.");
+                console.log(errMsg);
+            }
+        });
     }
 
     function RemoveAscent(text) {
@@ -591,14 +803,88 @@
             domElements.btnSaveAssociatedAccount.prop('disabled', true);
     }   
 
+    function InitSiteGroups(sitesGroups) {
+        if (sitesGroups.length == 0) {
+            $.ajax(common.modifyRelativeUrl('AssociatedGroupMonitor/GetAllSites'), {
+                type: 'POST',
+                data: {},
+                success: function (response) {
+                    RefreshSiteGroups(response);
+                },
+                error: function (errMsg) {
+                    console.log(errMsg);
+                }
+            });
+        } else {
+            RefreshSiteGroups(siteGroups);
+        }       
+    }
+
+    function RefreshSiteGroups(siteGroups) {
+        let siteSelector = domElements.cbbSites.empty();
+
+        siteGroups.map(function (x) {
+            let optgroup = `<optgroup label='${x.SubscriberGroupName}'>`;
+
+            if (x.SiteList.length > 0) {
+                x.SiteList.map(function (y) {
+                    let selected = y.IsSelected ? 'selected' : '';
+                    optgroup += `<option ${selected} value=${y.SiteID}>${y.SiteName}</option>`;
+                })
+            }
+            optgroup += "</optgroup>";
+
+            siteSelector.append(optgroup);
+        });
+
+        domElements.cbbSites.multiselect('refresh');
+    }
+
+    function RefreshAssociatedTypes(associatedTypeList) {
+        domElements.cbbAssociatedTypes.empty();
+
+        for (var i = 0; i < associatedTypeList.length; i++) {
+            let assType = associatedTypeList[i];
+            let selected = assType.IsSelected ? 'selected' : '';
+            domElements.cbbAssociatedTypes.append(`<option ${selected} value=${assType.TypeID}>${assType.TypeName}</option>`);
+        }
+
+        domElements.cbbAssociatedTypes.multiselect('refresh');
+    }
+
     function Initial() {
         if (!isHostPermission) {
             domElements.btnAddGroup.prop('disabled', true);
         }
 
+        domElements.cbbSites.multiselect({
+            menuWidth: 270,
+            menuHeight: 270,
+            selectedText: "# of # selected",
+            noneSelectedText: "Select Sites",
+            enableClickableOptGroups: true,
+            includeSelectAllOption: true,
+            groupsCollapsable: true,
+            optGroupChecked: true
+        }).multiselectfilter({
+            width: 210,
+            placeholder: '',
+            label: ''
+        });
+
+        domElements.cbbAssociatedTypes.multiselect({
+            menuWidth: 200,
+            menuHeight: 200,
+            selectedText: "# of # selected",
+            noneSelectedText: "Select Associated Types"
+        });
+
         GetAssociatedGroup();
 
-        domElements.btnAddGroup.on('click', function () {   
+        domElements.btnAddGroup.on('click', function () {  
+            domElements.hdGroupID.val(0);
+            InitSiteGroups([]);
+
             $('#cbbABIAssociatedGroup').val(0).trigger('change.select2');
             domElements.txtGroupNameAssociatedGroup.val('');                       
             domElements.txtCommentAssociatedGroup.val('');
@@ -613,7 +899,7 @@
 
             domElements.divAddAssociatedGroup.dialog({
                 modal: true,
-                width: '600px',
+                width: '690px',
                 title: 'CREATE NEW GROUP',
                 _allowInteraction: function (event) {
                     return !!$(event.target).is(".select2-input") || this._super(event);
@@ -626,7 +912,7 @@
             });           
         });
 
-        domElements.btnSaveAssociatedGroup.on('click', () => AddAssociatedGroupMonitor());
+        domElements.btnSaveAssociatedGroup.on('click', () => SaveAssociatedGroupMonitor());
 
         domElements.btnCancelAssociatedGroup.on('click', () => { domElements.divAddAssociatedGroup.dialog('close') });
 

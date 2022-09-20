@@ -1,4 +1,5 @@
-﻿@{
+﻿@using Fanex.NAP.CTS.Model
+@{
     ViewBag.Title = "ASSOCIATED ACCOUNT GROUP";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -28,14 +29,14 @@
                     <tr>
                         <th>Group ID</th>
                         <th>Group Name</th>
+                        <th>Site</th>
+                        <th>Associated Type</th>
                         <th>ABI</th>
                         <th>Total Accounts</th>
                         <th>Comment</th>
                         <th>Created Date</th>
-                        <th>Created By</th>
-                        <th>Export Excel</th>
-                        <th>Remove Group</th>
-                        <th>Add Accounts</th>
+                        <th>Created By</th>                      
+                        <th>Action</th>
                     </tr>
                 </thead>
             </table>
@@ -50,15 +51,37 @@
         <input id="txtGroupNameAssociatedGroup" type="text" class="input-field full-width" maxlength="100" />
     </div>
 
-    <div class="form-control" id="divABIAssociatedGroup">
-        <div class="label">ABI<label style="color:red">*</label></div>
-        <select class="control" id="cbbABIAssociatedGroup" name="state" style="height: 100px">
-            <option disabled selected value="">Select an ABI</option>
-            @for (int idx = 1; idx < 51; idx++)
-            {
-                <option value=@idx>@idx</option>
-            }
-        </select>
+    <div style="display: flex">
+        <div class="form-control margin-right-20">
+            <div class="label">Site<label style="color:red">*</label></div>
+            <div style="width:270px">
+                <select class="control width-select" id="cbbSites" multiple="multiple">                  
+                </select>
+            </div>
+        </div>
+        <div class="form-control margin-right-20">
+            <div class="label">Associated Type<label style="color:red">*</label></div>
+            <div style="width:205px">
+                <select class="control width-select" id="cbbAssociatedTypes" multiple="multiple">
+                    <option selected value=@((int)AssociationType.BettingPattern)>Betting Pattern</option>
+                    <option selected value=@((int)AssociationType.Device)>Device</option>
+                    <option selected value=@((int)AssociationType.IP)>IP</option>
+                    <option selected value=@((int)AssociationType.Manual)>Manually</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-control">
+            <div class="label">ABI<label style="color:red">*</label></div>
+            <div style="width:150px">
+                <select class="control" id="cbbABIAssociatedGroup" name="state" style="height: 100px">
+                    <option disabled selected value="">Select an ABI</option>
+                    @for (int idx = 1; idx < 51; idx++)
+                    {
+                        <option value=@idx>@idx</option>
+                    }
+                </select>
+            </div>
+        </div>
     </div>
 
     <div class="form-control wrapper-comment">
@@ -73,6 +96,9 @@
 </div>
 
 <div id="divAddAssociatedAccount" class="popup-add" style="display: none">
+    <div class="hide">
+        <input id="hdGroupID" type="hidden" />
+    </div>
     <div class="group-title">
         <div class="label">Username<label style="color:red">*</label></div>
         <div class="wrapper-title">
@@ -106,6 +132,12 @@
     <div class="modal-footer margin-top-10">
         <button id="btnCancelAssociatedAccount" class="button btn-cancel-outline" title="Cancel">Cancel</button>
         <button id="btnSaveAssociatedAccount" class="button -add" title="Save">Save</button>
+    </div>
+</div>
+
+<div id="divSitesByGroup" class="popup-add" style="display: none">
+    <div class="form-control" style="max-height: 400px;text-align: justify;">
+        <div class="label" id="lblSiteList"></div>        
     </div>
 </div>
 

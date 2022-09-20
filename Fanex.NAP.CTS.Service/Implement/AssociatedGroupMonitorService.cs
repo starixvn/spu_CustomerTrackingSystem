@@ -7,10 +7,12 @@
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Criteria.Account.CustomerInfo;
     using Fanex.NAP.CTS.Criteria.AssociatedGroupMonitor;
+    using Fanex.NAP.CTS.Criteria.Common;
+    using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account.CustomerInfo;
     using Fanex.NAP.CTS.Model.AssociatedGroupMonitor;
+    using Fanex.NAP.CTS.Model.Common;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
-    using Fanex.NAP.CTS.Service.Interface;
     using Fanex.NAP.CTS.ViewModel.AssociatedGroupMonitor;
     using Fanex.NAP.TGRS.Core.ExcelUtility;
     using Fanex.NAP.TGRS.Core.ExcelUtility.RichTextExtensions;
@@ -20,8 +22,35 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
+
+    public interface IAssociatedGroupMonitorService
+    {        
+        IEnumerable<AssociatedGroupMonitorModel> GetAssociatedGroupMonitor();
+
+        IEnumerable<AssociatedGroupSiteModel> GetAssociatedGroupSites(long groupID);
+
+        IEnumerable<AssociatedAccountMonitorModel> GetAssociatedAccountMonitor(long groupID);
+
+        DBResult AddAssociatedGroupMonitor(AddAssociatedGroupModel model);
+
+        GetUpdateAssociatedGroupMonitorByIDModel GetUpdateAssociatedGroupMonitorByID(long groupID);
+
+        DBResult UpdateAssociatedGroupMonitor(UpdateAssociatedGroupMonitorModel model);
+
+        DBResult RemoveAssociatedGroupMonitor(RemoveAssociatedGroupModel model);
+
+        IEnumerable<ValidateUserAssociatedAccountModel> ValidateUserNameInput(string userNames);
+
+        DBResult AddAssociatedAccount(AddAssociatedAccountModel model);
+
+        DBResult UpdateABIToMainDB(string custIDs, int valueABI);
+
+        byte[] ExportExcelAssociatedAccount(IEnumerable<AssociatedAccountMonitorModel> associatedAccounts
+            , string fileName
+            , string templatePath
+            , ExportToExcelAssociatedAccountViewModel model);
+
+    }
 
     public class AssociatedGroupMonitorService : IAssociatedGroupMonitorService
     {
@@ -32,6 +61,13 @@
         {
             repository = new DynamicRepository();
             customerClassificationService = new CustomerClassificationService();
+        }
+
+        public IEnumerable<SiteModel> GetSites()
+        {
+            var criteria = new GetSitesCriteria();
+
+            return repository.Fetch<SiteModel>(criteria);
         }
 
         public IEnumerable<AssociatedGroupMonitorModel> GetAssociatedGroupMonitor()
@@ -51,6 +87,13 @@
             return repository.Fetch<AssociatedAccountMonitorModel>(criteria);
         }
 
+        public IEnumerable<AssociatedGroupSiteModel> GetAssociatedGroupSites(long groupID)
+        {
+            var criteria = new GetAssociatedGroupSiteCriteria { GroupID = groupID };
+
+            return repository.Fetch<AssociatedGroupSiteModel>(criteria);
+        }
+
         public IEnumerable<ValidateUserAssociatedAccountModel> ValidateUserNameInput(string userNames)
         {
             var criteria = new ValidateAssociatedAccountCriteria
@@ -61,7 +104,7 @@
             return repository.Fetch<ValidateUserAssociatedAccountModel>(criteria);
         }
 
-        public DBResult AddAssociatedAccount(AddAssociatedAccountViewModel model)
+        public DBResult AddAssociatedAccount(AddAssociatedAccountModel model)
         {
             var criteria = new AddAssociatedAccountCriteria
             {
@@ -147,13 +190,22 @@
             return Enumerable.Empty<CustomerInfoByCustIdsModel>();
         }       
 
-        public DBResult AddAssociatedGroupMonitor(AddAssociatedGroupViewModel model)
+        public DBResult AddAssociatedGroupMonitor(AddAssociatedGroupModel model)
         {
+            var assTypes = model.AssociationTypes.Split(',').Select(int.Parse);
+
             var criteria = new AddAssociatedGroupMonitorCriteria
             {
                 GroupName = model.GroupName,
                 ABI = model.ABI,
-                Remark = model.Comment,
+                AllCredit = model.AllCredit,
+                AllLicensee = model.AllLicensee,
+                Sites = model.Sites,
+                HasDevice = assTypes.Any(x => x == (int)AssociationType.Device),
+                HasManual = assTypes.Any(x => x == (int)AssociationType.Manual),
+                HasIP = assTypes.Any(x => x == (int)AssociationType.IP),
+                HasAI = assTypes.Any(x => x == (int)AssociationType.BettingPattern),
+                Remark = model.Remark,
                 CreatedBy = model.CreatedBy
             };
 
@@ -173,9 +225,57 @@
 
                 return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
             }
-        }      
+        }
 
-        public DBResult RemoveAssociatedGroupMonitor(RemoveAssociatedGroupViewModel model)
+        public GetUpdateAssociatedGroupMonitorByIDModel GetUpdateAssociatedGroupMonitorByID(long groupID)
+        {
+            var criteria = new GetAssociatedGroupMonitorByIDCriteria
+            {
+                GroupID = groupID
+            };
+
+            return repository.Fetch<GetUpdateAssociatedGroupMonitorByIDModel>(criteria).First() ?? new GetUpdateAssociatedGroupMonitorByIDModel();
+        }
+
+        public DBResult UpdateAssociatedGroupMonitor(UpdateAssociatedGroupMonitorModel model)
+        {
+            var assTypes = model.AssociationTypes.Split(',').Select(int.Parse);
+
+            var criteria = new UpdateAssociatedGroupMonitorCriteria
+            {
+                GroupID = model.GroupID,
+                GroupName = model.GroupName,
+                ABI = model.ABI,
+                AllCredit = model.AllCredit,
+                AllLicensee = model.AllLicensee,
+                Sites = model.Sites,
+                HasDevice = assTypes.Any(x => x == (int)AssociationType.Device),
+                HasManual = assTypes.Any(x => x == (int)AssociationType.Manual),
+                HasIP = assTypes.Any(x => x == (int)AssociationType.IP),
+                HasAI = assTypes.Any(x => x == (int)AssociationType.BettingPattern),
+                Remark = model.Remark,
+                ModifiedBy = model.ModifiedBy
+            };
+
+            try
+            {
+                repository.Execute(criteria);
+
+                return new DBResult { ErrorCode = 0 };
+            }
+            catch (Exception ex)
+            {
+                var logMessage = new LogMessage(ex.Message)
+                 .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                 .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error($"Update associated group monitor Exception { logMessage }", ex);
+
+                return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
+            }
+        }
+
+        public DBResult RemoveAssociatedGroupMonitor(RemoveAssociatedGroupModel model)
         {
             var criteria = new RemoveAssociatedGroupMonitorCriteria
             {
@@ -207,13 +307,10 @@
             , ExportToExcelAssociatedAccountViewModel model)
         {
             var writer = new ExcelTemplateWriter(templatePath, fileName, "GMR");
+            writer.CopyRows(0, 1);
+            
+            FilterBlock(model, ref writer);
 
-            var headerRow = writer.CopyRows(0, 1);
-            var headerCell = headerRow.GetCell(0);
-
-            headerCell.SetCellValue(model.GroupName.ToUpper() + " GROUP MANAGEMENT REPORT");
-
-            writer.CopyRows(1, 1);
             writer.CopyRows(2, 1);
 
             FillRowData(associatedAccounts, ref writer);
@@ -222,7 +319,64 @@
 
             return writer.ToBytes();
         }
-      
+
+        private void FilterBlock(ExportToExcelAssociatedAccountViewModel model, ref ExcelTemplateWriter writer)
+        {
+            var boldFont = writer.GetFont(10, 0);
+            var normalFont = writer.GetFont(11, 0);
+            var lineCount = 1;
+
+            var contentRender = new RichTextRender().Clear();
+            if (!string.IsNullOrEmpty(model.GroupName))
+                AppendBlockContent(ref contentRender, ref lineCount, "Group Name", boldFont, model.GroupName, normalFont, "\n");
+
+            if (model.IsAllSite)
+            {
+                AppendBlockContent(ref contentRender, ref lineCount, "Site", boldFont, "All", normalFont, "\n");
+            }
+            else
+            {
+                AppendBlockContent(ref contentRender, ref lineCount, "Site", boldFont, " ", normalFont, "\n");
+
+                if (!string.IsNullOrEmpty(model.CreditSites))
+                    AppendBlockContent(ref contentRender, ref lineCount, "- Credit", boldFont, model.CreditSites, normalFont, "\n");
+
+                if (!string.IsNullOrEmpty(model.LicenseeSites))
+                    AppendBlockContent(ref contentRender, ref lineCount, "- Licensee", boldFont, model.LicenseeSites, normalFont, "\n");
+            }           
+
+            if (!string.IsNullOrEmpty(model.AssociatedType))
+                AppendBlockContent(ref contentRender, ref lineCount, "Associated Type", boldFont, model.AssociatedType, normalFont, "\n");
+
+            WriteRickText(contentRender, ref writer, 4);
+
+            writer.SetRowHeight(1, 225 * lineCount);
+        }
+
+        private void WriteRickText(RichTextRender contentRender, ref ExcelTemplateWriter writer, int idx)
+        {
+            var contentRichTextString = contentRender.XSSFRickRender();
+            XSSFRichTextString[] contentRichTextArray = new XSSFRichTextString[1];
+            contentRichTextArray[0] = contentRichTextString;
+            writer.WriteRow(idx, contentRichTextArray);
+        }
+
+        private void AppendBlockContent(ref RichTextRender content, ref int lineCount, string name, IFont nameFont, string value, IFont valueFont, string endString)
+        {
+            TextBlock nameBlock = new TextBlock(name + ": ", nameFont);
+            content = content.AddText(nameBlock);
+
+            TextBlock valueBlock = new TextBlock(value, valueFont);
+            content = content.AddText(valueBlock);
+
+            if (!string.IsNullOrEmpty(endString))
+            {
+                content = content.AddText(endString);
+            }
+
+            lineCount += 1;
+        }
+
         private void FillRowData(IEnumerable<AssociatedAccountMonitorModel> associatedAccounts, ref ExcelTemplateWriter writer)
         {
             foreach (var item in associatedAccounts)
