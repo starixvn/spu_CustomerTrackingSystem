@@ -78,6 +78,7 @@
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
+                return db.Query<SiteModel>(criteria);
             }
         }
     }
