@@ -20,7 +20,7 @@
     let dataTable;
     let dataTableCustomerCategoryBySport;
 
-    function CustomerSettingVerticalTabs(custID, ctsCustId) {
+    function CustomerSettingVerticalTabs(ctsCustId) {
         navsTabs.click(function (e) {
             let $this = $(this);
             let sportID = $this.attr('data-sport-id');
@@ -41,7 +41,7 @@
                 $('#divMarkCategory').addClass('hide');
                 $('#divUnmarkCategory').addClass('hide');
 
-                GetCustomerCategoryHistoryBySport(custID, sportID);
+                GetCustomerCategoryHistoryBySport(ctsCustId, sportID);
             }                        
         });
     }
@@ -759,7 +759,7 @@
         cbbCategorySetting.multiselect("refresh");
     }
 
-    function DisplayCustomerCategoryBySport(custId) {
+    function DisplayCustomerCategoryBySport(ctsCustId) {
         divCustomerCategoryBySport.dialog({
             modal: true,
             width: '550px',
@@ -795,14 +795,14 @@
             });
         }
 
-        GetCustomerCategoryBySport(custId);
+        GetCustomerCategoryBySport(ctsCustId);
     }
 
-    function GetCustomerCategoryBySport(custId) {
+    function GetCustomerCategoryBySport(ctsCustId) {
         $.ajax(common.modifyRelativeUrl('Account/GetCustomerCategoryBySport'), {
             type: 'POST',
             data: {
-                custId: custId
+                ctsCustID: ctsCustId
             },            
             success: function (response) {
                 if (response.data != undefined) {
@@ -819,11 +819,11 @@
         });
     }
 
-    function GetCustomerCategoryHistoryBySport(custId, sportId) {
+    function GetCustomerCategoryHistoryBySport(ctsCustId, sportId) {
         $.ajax(common.modifyRelativeUrl('Account/GetCustomerCategoryHistoryBySport'), {
             type: 'POST',
             data: {
-                custID: custId,
+                ctsCustID: ctsCustId,
                 sportID: sportId
             },
             beforeSend: function () {
@@ -881,9 +881,9 @@
         dataTable = RenderGrid();
 
         LoadGrid(ctsCustId);
-        CustomerSettingVerticalTabs(custId, ctsCustId);
+        CustomerSettingVerticalTabs(ctsCustId);
 
-        btnDisplayCustomerCategoryBySport.click(function () { DisplayCustomerCategoryBySport(custId); });
+        btnDisplayCustomerCategoryBySport.click(function () { DisplayCustomerCategoryBySport(ctsCustId); });
     };
 
     this.ReloadStatusRobotUser = function (custId) {

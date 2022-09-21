@@ -5,8 +5,8 @@
 
     public class GetCustomerClassificationHistoryBySportCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_CustID")]
-        public long CustID { get; set; }
+        [SpParam(SqlParamName = "ip_CTSCustID")]
+        public long CTSCustID { get; set; }
 
         [SpParam(SqlParamName = "ip_SportID")]
         public int SportID { get; set; }

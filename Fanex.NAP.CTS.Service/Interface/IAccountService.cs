@@ -124,9 +124,9 @@
         IEnumerable<CustomerClassificationGeneralInfoModel> GetCustomerClassificationByCategory(string categoryIdList);
 
         #region Customer Category By Sport
-        IEnumerable<GetCustomerCategoryBySportModel> GetCustomerCategoryBySport(long custID);
+        IEnumerable<GetCustomerCategoryBySportModel> GetCustomerCategoryBySport(long ctsCustID);
 
-        IEnumerable<GetCustomerCategoryHistoryBySportModel> GetCustomerCategoryHistoryBySport(long custID, int sportID);
+        IEnumerable<GetCustomerCategoryHistoryBySportModel> GetCustomerCategoryHistoryBySport(long ctsCustID, int sportID);
         #endregion
 
         IEnumerable<CTSCustomer> CheckCustomerNotExisted(string custIds, DateTime fromDate, DateTime toDate);

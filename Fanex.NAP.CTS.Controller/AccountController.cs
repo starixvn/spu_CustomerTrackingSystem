@@ -1961,11 +1961,11 @@
         #region Customer Category By Sport
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileGetCustomerCategoryBySportRpt)]
-        public ActionResult GetCustomerCategoryBySport(long custID)
+        public ActionResult GetCustomerCategoryBySport(long ctsCustID)
         {
             var custs = Enumerable.Empty<GetCustomerCategoryBySportViewModel>();
 
-            var data = _accountService.GetCustomerCategoryBySport(custID);
+            var data = _accountService.GetCustomerCategoryBySport(ctsCustID);
 
             if (data != null && data.Any())
             {
@@ -1977,11 +1977,11 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileGetCustomerCategoryHistoryBySportRpt)]
-        public ActionResult GetCustomerCategoryHistoryBySport(long custID, int sportID)
+        public ActionResult GetCustomerCategoryHistoryBySport(long ctsCustID, int sportID)
         {
             var custs = Enumerable.Empty<GetCustomerCategoryHistoryBySportViewModel>();
 
-            var data = _accountService.GetCustomerCategoryHistoryBySport(custID, sportID);
+            var data = _accountService.GetCustomerCategoryHistoryBySport(ctsCustID, sportID);
 
             if (data != null && data.Any())
             {

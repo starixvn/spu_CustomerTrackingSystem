@@ -1187,9 +1187,9 @@
         #endregion
 
         #region Customer Category By Sport
-        public IEnumerable<GetCustomerCategoryBySportModel> GetCustomerCategoryBySport(long custID)
+        public IEnumerable<GetCustomerCategoryBySportModel> GetCustomerCategoryBySport(long ctsCustID)
         {
-            var criteria = new GetCustomerClassificationBySportCriteria { CustID = custID };
+            var criteria = new GetCustomerClassificationBySportCriteria { CTSCustID = ctsCustID };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
@@ -1197,11 +1197,11 @@
             }
         }
 
-        public IEnumerable<GetCustomerCategoryHistoryBySportModel> GetCustomerCategoryHistoryBySport(long custID, int sportID)
+        public IEnumerable<GetCustomerCategoryHistoryBySportModel> GetCustomerCategoryHistoryBySport(long ctsCustID, int sportID)
         {
             var criteria = new GetCustomerClassificationHistoryBySportCriteria
             {
-                CustID = custID,
+                CTSCustID = ctsCustID,
                 SportID = sportID
             };
 
