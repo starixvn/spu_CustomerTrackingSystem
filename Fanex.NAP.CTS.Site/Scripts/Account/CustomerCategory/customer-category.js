@@ -763,7 +763,7 @@
         divCustomerCategoryBySport.dialog({
             modal: true,
             width: '550px',
-            title: 'CATEGORY BY SPORT DETAILS',
+            title: 'SPORT DETAILS CATEGORY',
             resizable: false,
             draggable: true,
             close: function () {
