@@ -97,7 +97,7 @@
 		<Setting Key="CTS_DC_CustClassification_Update" SpName="CTS_DC_CustClassification_Update" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustClassification_VVIP_Remove" SpName="CTS_DC_CustClassification_VVIP_Remove" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustClassification_Get" SpName="CTS_DC_CustClassification_Get" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustClassification_ViewHistory" SpName="CTS_DC_CustClassification_ViewHistory_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_CustClassification_ViewHistory" SpName="CTS_DC_CustClassification_ViewHistory" DbName="MySQL.CTS_DataCenter.Reporter" />
 		
 		<Setting Key="CTS_DC_CustClassification_GetLatestClassification" SpName="CTS_DC_CustClassification_GetLatestClassification" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustClassification_GetForSoon88" SpName="CTS_DC_CustClassification_GetForSoon88" DbName="MySQL.CTS_DataCenter.Reporter" />
@@ -183,11 +183,11 @@
 	</Function>
 
     <Function name="ProblemAccountManagement">
-		<Setting Key="CTS_DC_ProblemAccountManagement_Get" SpName="CTS_DC_ProblemAccountManagement_Get_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_ProblemAccountManagement_GetCategories" SpName="CTS_DC_ProblemAccountManagement_GetCategories_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_ProblemAccountManagement_Get" SpName="CTS_DC_ProblemAccountManagement_Get" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_ProblemAccountManagement_GetCategories" SpName="CTS_DC_ProblemAccountManagement_GetCategories" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_ProblemAccountManagement_ValidateUserName" SpName="CTS_DC_ProblemAccountManagement_ValidateUserName" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustEvidence_GetByReasonId" SpName="CTS_DC_CustEvidence_GetByReasonId" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustClassification_PA_Insert" SpName="CTS_DC_CustClassification_PA_Insert_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_CustClassification_PA_Insert" SpName="CTS_DC_CustClassification_PA_Insert" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustClassification_PA_Remove" SpName="CTS_DC_CustClassification_PA_Remove" DbName="MySQL.CTS_DataCenter.Admin" />
 	</Function>
 
