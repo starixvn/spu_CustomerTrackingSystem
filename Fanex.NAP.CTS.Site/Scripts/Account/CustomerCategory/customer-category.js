@@ -803,17 +803,21 @@
             type: 'POST',
             data: {
                 ctsCustID: ctsCustId
-            },            
+            },   
+            beforeSend: function () {
+                tblCustomerCategoryBySport.find('tbody').addClass('loading');
+            },
             success: function (response) {
                 if (response.data != undefined) {
                     tblCustomerCategoryBySport.DataTable().clear().rows.add(response.data);
                     tblCustomerCategoryBySport.DataTable().columns.adjust().draw();                    
                 }
             },
-            complete: function () {                
+            complete: function () {  
+                tblCustomerCategoryBySport.find('tbody').removeClass('loading');
             },
             error: function (errMsg) {
-                tblcustomercategory.find('tbody').removeClass('loading');
+                tblCustomerCategoryBySport.find('tbody').removeClass('loading');
                 console.log(errMsg);
             }
         });
