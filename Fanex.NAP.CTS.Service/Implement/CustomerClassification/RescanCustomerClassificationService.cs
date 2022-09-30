@@ -2,6 +2,7 @@
 {
     using Fanex.Data.Repository;
     using Fanex.NAP.CTS.Core.Extentions;
+    using Fanex.NAP.CTS.Core.Helpers.Xml;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria;
     using Fanex.NAP.CTS.Criteria.CustomerClassification;
@@ -47,7 +48,7 @@
 
             if (result.IsSuccess)
             {
-                var smCustIds = GetAgentCusts(parameters.CustIds);
+                var smCustIds = GetAgentCusts(parameters.CustInfos.Select(x=>x.CustID));
                 result.IsSuccess = RescanNormalAccount(parameters, result.CustIds, smCustIds);
             }
 
@@ -60,9 +61,9 @@
         {
             var rescanResult = new RescanResultModel();
 
-            if (parameters != null && parameters.CustIds != null && parameters.CustIds.Any())
+            if (parameters != null && parameters.CustInfos != null && parameters.CustInfos.Any())
             {
-                var existedProbAccounts = GetExistedProblemAccounts(parameters.CustIds, parameters.IsDataChanged);
+                var existedProbAccounts = GetExistedProblemAccounts(parameters.CustInfos.Select(x=>x.CustID), parameters.IsDataChanged);
 
                 var custTORemovedOldPA = InsertProblemAccountLogics(existedProbAccounts.ProblemAccounts, parameters.FunctionId, ref rescanResult, parameters.IsToQueue);
 
@@ -89,20 +90,20 @@
 
         public bool RescanNormalAccount(RescanCustClassificationModel parameters, IEnumerable<long> custIdsToRescanPA, IEnumerable<long> smaCustIds)
         {
-            if (parameters != null && parameters.CustIds != null && parameters.CustIds.Any())
+            if (parameters != null && parameters.CustInfos != null && parameters.CustInfos.Any())
             {
-                var custToRescanNormal = parameters.CustIds.Distinct().ToList();
+                var custInfoToRescanNormal = parameters.CustInfos;
+                var custToRescanNormal = custInfoToRescanNormal.Select(x => x.CustID).Distinct().ToList();
                 custToRescanNormal.RemoveAll(x => custIdsToRescanPA.Distinct().Contains(x));
                 custToRescanNormal.RemoveAll(x => smaCustIds.Distinct().Contains(x));
 
-                if (custToRescanNormal.Any())
+                if (custInfoToRescanNormal.Any())
                 {
-                    var custIdsChunk = custToRescanNormal.Chunk(ConfigSettings.PushCCToExternalChunkSize);
+                    var custInfosChunk = custInfoToRescanNormal.Chunk(ConfigSettings.PushCCToExternalChunkSize);
 
-                    foreach (var custIds in custIdsChunk)
+                    foreach (var custInfos in custInfosChunk)
                     {
-                        var custToString = string.Join(",", custIds);
-                        ClassifyCustomerGeneralCategoryDaily(custToString, parameters.FunctionId, false);
+                        ClassifyCustomerGeneralCategoryDaily(custInfos.ToXmlString(), parameters.FunctionId, false);
                     }
                 }
 
@@ -223,11 +224,11 @@
             return Enumerable.Empty<long>();
         }
 
-        private void ClassifyCustomerGeneralCategoryDaily(string customers, FunctionId funcId, bool isCheckLast14Days)
+        private void ClassifyCustomerGeneralCategoryDaily(string customersXML, FunctionId funcId, bool isCheckLast14Days)
         {
             var criteria = new NormalAccountsClassificationGeneralCategorizeDailyCriteria
             {
-                ListCustIds = customers,
+                CustomersXML = customersXML,
                 IsCheckLast14Days = isCheckLast14Days,
                 FunctionId = (int)funcId
             };
@@ -237,9 +238,9 @@
 
         private IEnumerable<InsertRobotModel> GetTWRobotUsers(RescanCustClassificationModel para)
         {
-            if (para.CustIds != null && para.CustIds.Any())
+            if (para.CustInfos != null && para.CustInfos.Any())
             {
-                var robotUsers = problemAccountService.GetExistedTWRobotUser(para.CustIds);
+                var robotUsers = problemAccountService.GetExistedTWRobotUser(para.CustInfos.Select(x=>x.CustID));
 
                 if (robotUsers != null && robotUsers.Any())
                 {

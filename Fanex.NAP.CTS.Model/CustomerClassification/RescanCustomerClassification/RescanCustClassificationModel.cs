@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Model.RescanCustClassificationModel
 {
+    using Fanex.NAP.CTS.Model.CustomerClassification.RescanCustomerClassification;
     using System.Collections.Generic;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
@@ -12,7 +13,9 @@
             IsToQueue = false;
         }
 
-        public IEnumerable<long> CustIds { get; set; }
+        public IEnumerable<RescanCategoryDailyModel> CustInfos { get; set; }
+
+        //public IEnumerable<long> CustIds { get; set; }
 
         public bool IsRescanPA { get; set; }
 

@@ -6,6 +6,7 @@
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.CustomerClassification.ProblemAccount;
+    using Fanex.NAP.CTS.Model.CustomerClassification.RescanCustomerClassification;
     using Fanex.NAP.CTS.Model.ProblemAccountManagement;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
@@ -267,12 +268,13 @@
                     {
                         var custIdList = unmarkPAResult.CustomerInfo.Select(c => c.CustID)?.Distinct();
                         var custIds = string.Join(",", custIdList);
+                        var custInfos = unmarkPAResult.CustomerInfo.Select(x => new RescanCategoryDailyModel { CustID = x.CustID, CurrentCategoryID = x.CurrentCategoryID });
 
                         _paClassificationService.UpdateBetLimitOfUnflaggedCustomer(custIdList);
 
                         var paramRescan = new RescanCustClassificationModel
                         {
-                            CustIds = custIdList,
+                            CustInfos = custInfos,
                             IsPushCCToSoon88 = true,
                             FunctionId = FunctionId.UnmarkCustomerCategory,
                             IsUpdateDangerToMainDB = true

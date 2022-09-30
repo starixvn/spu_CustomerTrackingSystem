@@ -18,6 +18,7 @@
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.CustomerClassification.ProblemAccount;
+    using Fanex.NAP.CTS.Model.CustomerClassification.RescanCustomerClassification;
     using Fanex.NAP.CTS.Model.ImportEvidences;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
@@ -1906,7 +1907,7 @@
                     {
                         _rescanClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
                         {
-                            CustIds = custInfos.Select(x => x.CustID).Distinct(),
+                            CustInfos = custInfos,                         
                             IsRescanPA = true ,
                             IsToQueue = (model.RoleId != 1 && !model.IsAffectToAllDownlines), // add to queue for case SMA and not checking affect to downline to affect PA for downline
                             IsPushCCToSoon88 = true,
@@ -1956,19 +1957,20 @@
 
             if (unmarkPAResult.ErrorCode == 0 && unmarkPAResult.CustomerInfo.Any())
             {
-                var custIdList = unmarkPAResult.CustomerInfo.Select(x => x.CustID);
+                var custIds = unmarkPAResult.CustomerInfo.Select(x => x.CustID);
+                var custInfos = unmarkPAResult.CustomerInfo.Select(x => new RescanCategoryDailyModel { CustID = x.CustID, CurrentCategoryID = x.CurrentCategoryID });
 
-                _problemAccountClassificationService.UpdateBetLimitOfUnflaggedCustomer(custIdList.Distinct());                
+                _problemAccountClassificationService.UpdateBetLimitOfUnflaggedCustomer(custIds.Distinct());                
 
                 var paramRescan = new RescanCustClassificationModel
                 {
-                    CustIds = custIdList,
+                    CustInfos = custInfos,
                     IsPushCCToSoon88 = true,
                     FunctionId = FunctionId.UnmarkCustomerCategory,
                     IsUpdateDangerToMainDB = true
                 };
 
-                var smCustIds = _rescanClassificationService.GetAgentCusts(custIdList);
+                var smCustIds = _rescanClassificationService.GetAgentCusts(custIds);
 
                 _rescanClassificationService.RescanNormalAccount(paramRescan, Enumerable.Empty<long>(), smCustIds);
             }
