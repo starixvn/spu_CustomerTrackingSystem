@@ -194,7 +194,7 @@
                     case (int)MatchMonitorSportType.Basketball:
                         return nameof(MatchMonitorSportType.Basketball); 
                     case (int)MatchMonitorSportType.ESport:
-                        return "E-Sport";
+                        return "E-Sports";
                 }
 
                 return string.Empty;

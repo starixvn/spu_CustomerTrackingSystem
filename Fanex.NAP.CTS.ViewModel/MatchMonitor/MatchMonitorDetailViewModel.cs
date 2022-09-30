@@ -255,7 +255,7 @@
                         return nameof(MatchMonitorSportType.Soccer);
 
                     case (int)MatchMonitorSportType.ESport:
-                        return "E-Sport";
+                        return "E-Sports";
                 }
 
                 return string.Empty;
