@@ -59,14 +59,16 @@
             columnDefs: [
                 { "visible": false, "targets": 0 },
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 3, 4 , 5, 6], className: "text-center" },
+                { targets: [0, 1, 2, 3, 4 , 5, 6, 7, 8], className: "text-center" },
                 { targets: [0], width: "5%" },
-                { targets: [1], width: "20%" },
+                { targets: [1], width: "15%" },
                 { targets: [2], width: "10%" },
                 { targets: [3], width: "15%" },
-                { targets: [4], width: "20%" },
-                { targets: [5], width: "20%" },
+                { targets: [4], width: "15%" },
+                { targets: [5], width: "15%" },
                 { targets: [6], width: "15%" },
+                { targets: [7], width: "5%" },
+                { targets: [8], width: "5%" }
             ],
             columns: [
                 { data: obj => obj.GroupID },
@@ -86,7 +88,9 @@
                         common.renderCategoryColor(cell, row);
                     }
                 },
-                { data: obj => obj.CustomerClass }
+                { data: obj => obj.CustomerClass },
+                { data: obj => obj.AgentUsername },
+                { data: obj => obj.AgentEvidence }
             ],
             drawCallback: function (settings) {
                 var api = this.api();
@@ -96,7 +100,7 @@
                 api.column(0, { page: 'current' }).data().each(function (group, i) {
                     if (last !== group) {
                         $(rows).eq(i).before(
-                            '<tr class="group"><td colspan="6"><span><i class="icon-chevron-down"></i>' + 'Group ' + group + '</span></td></tr>'
+                            '<tr class="group"><td colspan="8"><span><i class="icon-chevron-down"></i>' + 'Group ' + group + '</span></td></tr>'
                         );
 
                         last = group;
