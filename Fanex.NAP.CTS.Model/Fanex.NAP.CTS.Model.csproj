@@ -153,6 +153,8 @@
     <Compile Include="Account\AssociatedAccount\AssociatedAccountDetail\MatchesInfoModel.cs" />
     <Compile Include="Account\BettingStatistic\PerformanceBySportModel.cs" />
     <Compile Include="Account\CustomerByGraphDB.cs" />
+    <Compile Include="Account\CustomerCategoryBySport\GetCustomerCategoryBySportModel.cs" />
+    <Compile Include="Account\CustomerCategoryBySport\GetCustomerCategoryHistoryBySportModel.cs" />
     <Compile Include="Account\CustomerCategory\AddCustomerCategoryModel.cs" />
     <Compile Include="Account\CustomerCategory\AddCustomerCategoryInfoModel.cs" />
     <Compile Include="Account\CustomerCategory\CustomerClassificationGeneralInfoModel.cs" />

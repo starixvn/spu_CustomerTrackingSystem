@@ -14,13 +14,14 @@
     using Fanex.NAP.CTS.Criteria.Account.BettingStatistic;
     using Fanex.NAP.CTS.Criteria.Account.ChainToEvidence;
     using Fanex.NAP.CTS.Criteria.Account.CustomerCategory;
-    using Fanex.NAP.CTS.Criteria.Account.CustomerInfo;
-    using Fanex.NAP.CTS.Criteria.CustomerClassification;
+    using Fanex.NAP.CTS.Criteria.Account.CustomerCategoryBySport;
+    using Fanex.NAP.CTS.Criteria.Account.CustomerInfo; 
     using Fanex.NAP.CTS.Criteria.Home;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.Account.AssociatedAccount;
     using Fanex.NAP.CTS.Model.Account.CustomerCategory;
+    using Fanex.NAP.CTS.Model.Account.CustomerCategoryBySport;
     using Fanex.NAP.CTS.Model.Account.CustomerInfo;
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.CustomerClassification;
@@ -1181,6 +1182,32 @@
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 return db.Query<CustomerClassificationGeneralInfoModel>(criteria);
+            }
+        }
+        #endregion
+
+        #region Customer Category By Sport
+        public IEnumerable<GetCustomerCategoryBySportModel> GetCustomerCategoryBySport(long ctsCustID)
+        {
+            var criteria = new GetCustomerClassificationBySportCriteria { CTSCustID = ctsCustID };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<GetCustomerCategoryBySportModel>(criteria);
+            }
+        }
+
+        public IEnumerable<GetCustomerCategoryHistoryBySportModel> GetCustomerCategoryHistoryBySport(long ctsCustID, int sportID)
+        {
+            var criteria = new GetCustomerClassificationHistoryBySportCriteria
+            {
+                CTSCustID = ctsCustID,
+                SportID = sportID
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.Query<GetCustomerCategoryHistoryBySportModel>(criteria);
             }
         }
         #endregion

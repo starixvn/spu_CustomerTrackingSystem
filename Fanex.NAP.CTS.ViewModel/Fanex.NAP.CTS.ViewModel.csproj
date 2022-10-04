@@ -63,6 +63,8 @@
     <Compile Include="Account\ChainToEvidence\EvidenceViewModel.cs" />
     <Compile Include="Account\ChainToEvidence\FlaggedEvidenceViewModel.cs" />
     <Compile Include="Account\ChainToEvidence\AccountExceptionsViewModel.cs" />
+    <Compile Include="Account\CustomerCategoryBySport\GetCustomerCategoryBySportViewModel.cs" />
+    <Compile Include="Account\CustomerCategoryBySport\GetCustomerCategoryHistoryBySportViewModel.cs" />
     <Compile Include="Account\CustomerCategory\CustomerCategory.cs" />
     <Compile Include="Account\CustomerCategory\CustomerCategorySummaryViewModel.cs" />
     <Compile Include="Account\CustomerCategory\CustomerCategoryViewModel.cs" />

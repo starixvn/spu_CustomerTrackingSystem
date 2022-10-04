@@ -53,6 +53,7 @@
     <Compile Include="Implement\AssociationDetectionService.cs" />
     <Compile Include="Implement\AssociationReportService.cs" />
     <Compile Include="Implement\CategoryService.cs" />
+    <Compile Include="Implement\CustomerClassificationBySportService.cs" />
     <Compile Include="Implement\CustomerClassification\ProblemAccountClassificationService.cs" />
     <Compile Include="Implement\CustomerClassification\DataLogTrackingServices.cs" />
     <Compile Include="Implement\CustomerClassification\RescanCustomerClassificationService.cs" />

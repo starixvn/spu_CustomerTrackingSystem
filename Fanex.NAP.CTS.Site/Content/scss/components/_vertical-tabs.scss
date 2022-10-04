@@ -1,0 +1,60 @@
+﻿.vertical-tabs {
+    display: grid;
+    grid-template-columns: 150px auto;
+    grid-gap: 12px;
+
+    .nav-controls {
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid #DEE3EC;
+        li {
+            a {
+                display: block;
+                padding: 0 8px;
+                font-size: 14px;
+                line-height: 40px;
+                color: #475A7C;
+                font-weight: 400;
+
+                &.active {
+                    color: #396EF8;
+                    position: relative;
+                    font-weight: 700;
+                    background: #E6ECF9;
+
+                    &:after {
+                        content: "";
+                        display: block;
+                        width: 2px;
+                        height: 100%;
+                        background: #396EF8;
+                        position: absolute;
+                        right: -1px;
+                        top: 0;
+                    }
+                }
+            }
+        }
+    }
+
+    .main-pannel {
+        .nav-pannel {
+            overflow: auto;
+            max-height: 555px;
+            display: none;
+
+            &.active {
+                display: block;
+            }
+        }
+    }
+
+
+    .fixed-header {
+        top: 0 !important;
+        padding-top: 0 !important;
+    }
+}
+.report-cont{
+    padding : 12px !important;
+}

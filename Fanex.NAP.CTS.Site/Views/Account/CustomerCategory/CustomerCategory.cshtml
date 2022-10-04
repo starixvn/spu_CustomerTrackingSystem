@@ -4,45 +4,82 @@
     ViewBag.Title = "Customer Category";
 }
 @model Fanex.NAP.CTS.ViewModel.Account.CustomerCategory.MarkCategoryViewModel
-
-    <div id="customer-category">        
-        <div class="table-report" id="customer-category-content">
-            <div class="fixed-header">
-                <div class="graph-heading">
-                    <div class="free-size"></div>                  
-                    <div class="graph-info">                        
-                        <div style="width:170px">
-                            <select id="cbbCategorySetting" multiple="multiple">
-                                <option hidden="hidden" value="PinCategory" >Pin Category</option>
-                                <option value="ExcludedTagAssPA">Normal Category</option>
-                            </select>
-                        </div>                       
-                        <div>
-                            <button id="btnmarkcategory" class="button button-primary-outline" title="Mark Category">Mark Category</button>
-                        </div>
-                        <div>
-                            <button id="btnunmarkcategory" class="button button-primary-outline" title="Unmark Category">Unmark Category</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-          
-            <table id="customer-category-table" class="table table-striped" style="width: 100%">
+    
+<div id="divCustomerCategoryBySport" class="popup-add" style="display:none">
+    <div class="report-cont" style="max-height:500px">
+        <div class="table-report" style="width:100%;background:#fff">           
+            <table id="tblCustomerCategoryBySport" class="table table-striped width-100per" style="width:100%">
                 <thead>
                     <tr>
-                        <th>Date/Time</th>
+                        <th>Sport Type</th>
                         <th>Category</th>
-                        <th>Customer Class</th>
-                        <th>Reason</th>
-                        <th>Created By</th>
+                        <th>Customer Class</th>                        
                     </tr>
                 </thead>
                 <tbody></tbody>
             </table>
         </div>
-    </div>    
+    </div>
+</div>
 
-    <div id="divMarkCustomerCategory" style="display:none"></div>
+<div class="customer-class-tabs vertical-tabs">
+    <ul class="nav-controls">
+        <li><a href="#all-sportsbook" class="active" data-sport-id="-1">General</a></li>
+        <li><a href="#soccer" data-sport-id="1">Soccer</a></li>
+        <li><a href="#basketball" data-sport-id="2">Basketball</a></li>
+        <li><a href="#esport" data-sport-id="43">E-Sports</a></li>
+        <li><a href="#other" data-sport-id="99">Other Sports</a></li>
+    </ul>
+    <div class="main-pannel">
+        <div class="nav-pannel active" id="all-sportsbook">
+            <div id="customer-category">
+                <div class="table-report" id="customer-category-content">
+                    <div class="fixed-header">
+                        <div class="graph-heading">
+                            <div class="free-size"></div>
+                            <div class="graph-info">
+                                <div style="width:170px" id="divCategorySetting">
+                                    <select id="cbbCategorySetting" multiple="multiple">
+                                        <option hidden="hidden" value="PinCategory">Pin Category</option>
+                                        <option value="ExcludedTagAssPA">Normal Category</option>
+                                    </select>
+                                </div>
+                                <div id="divMarkCategory">
+                                    <button id="btnmarkcategory" class="button button-primary-outline" title="Mark Category">Mark Category</button>
+                                </div>
+                                <div id="divUnmarkCategory">
+                                    <button id="btnunmarkcategory" class="button button-primary-outline" title="Unmark Category">Unmark Category</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-    <div id="divUnmarkCustomerCategory" style="display:none;"></div>
+                    <table id="customer-category-table" class="table table-striped" style="width: 100%">
+                        <thead>
+                            <tr>
+                                <th>Date/Time</th>
+                                <th>Category</th>
+                                <th>Customer Class</th>
+                                <th>Reason</th>
+                                <th>Created By</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="divMarkCustomerCategory" style="display:none"></div>
+
+            <div id="divUnmarkCustomerCategory" style="display:none;"></div>
+        </div>
+        @*<div class="nav-pannel" id="soccer"></div>
+        <div class="nav-pannel" id="basketball"></div>
+        <div class="nav-pannel" id="esport"></div>
+        <div class="nav-pannel" id="other"></div>*@
+    </div>
+</div>
+
+
+    
 

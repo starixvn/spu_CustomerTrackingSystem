@@ -214,4 +214,9 @@
 	<Function name="LogData">
 		<Setting Key="CTS_Archive_Log_Insert" SpName="CTS_Archive_Log_Insert" DbName="MySQL.CTS_Archive.ctsServiceAdmin" />
 	</Function>
+
+	<Function name="CustomerClassificationBySport">
+		<Setting Key="CTS_DC_CustClassification_BySport_Get" SpName="CTS_DC_CustClassification_BySport_Get" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_CustClassification_BySport_History_Get" SpName="CTS_DC_CustClassification_BySport_History_Get" DbName="MySQL.CTS_DataCenter.Reporter" />
+	</Function>
 </Functions>

@@ -534,6 +534,7 @@
     <Content Include="Content\scss\fonts\Fraud-Sensor\fonts\CTS.woff" />
     <Content Include="Content\scss\fonts\Fraud-Sensor\fonts\CTS.ttf" />
     <Content Include="Content\scss\pages\associated-group-monitor\associated-group-monitor.scss" />
+    <Content Include="Content\scss\components\_vertical-tabs.scss" />
     <None Include="Content\scss\pages\latest-transaction\latest-transaction.scss" />
     <Content Include="Content\scss\pages\latest-transaction\latest-transaction.css">
       <DependentUpon>latest-transaction.scss</DependentUpon>

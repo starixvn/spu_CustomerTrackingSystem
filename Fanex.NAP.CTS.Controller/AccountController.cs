@@ -31,6 +31,7 @@
     using Fanex.NAP.CTS.ViewModel.Account.BettingStatistic;
     using Fanex.NAP.CTS.ViewModel.Account.ChainToEvidence;
     using Fanex.NAP.CTS.ViewModel.Account.CustomerCategory;
+    using Fanex.NAP.CTS.ViewModel.Account.CustomerCategoryBySport;
     using Fanex.NAP.CTS.ViewModel.Account.CustomerInfo;
     using Fanex.NAP.CTS.ViewModel.Account.Evidence;
     using Fanex.NAP.CTS.ViewModel.Account.RobotBetting;
@@ -61,6 +62,7 @@
         private readonly IProblemAccountManagementService _pamService;
 	    private readonly IProblemAccountClassificationService _problemAccountClassificationService;
 	    private readonly IDataLogTrackingServices dataLogTrackingServices;
+        private readonly ICustomerClassificationBySportService _custClassificationBySportService;
 
         public override string BaseControllerName { get => string.Empty; }
 
@@ -79,6 +81,7 @@
             _pamService = new ProblemAccountManagementService();
             _problemAccountClassificationService = new ProblemAccountClassificationService();
             this.dataLogTrackingServices = new DataLogTrackingServices();
+            _custClassificationBySportService = new CustomerClassificationBySportService();
         }
 
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileRpt)]
@@ -1951,9 +1954,43 @@
                 errorCode = unmarkPAResult.ErrorCode,
                 errorMessage = unmarkPAResult.ErrorMessage
             }, JsonRequestBehavior.AllowGet);
-        }        
+        }
 
         #endregion Customer Category
+
+        #region Customer Category By Sport
+        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileGetCustomerCategoryBySportRpt)]
+        public ActionResult GetCustomerCategoryBySport(long ctsCustID)
+        {
+            var custs = Enumerable.Empty<GetCustomerCategoryBySportViewModel>();
+
+            var data = _accountService.GetCustomerCategoryBySport(ctsCustID);
+
+            if (data != null && data.Any())
+            {
+                custs = data.Select(x => new GetCustomerCategoryBySportViewModel(x));
+            }
+
+            return Json(new { data = custs }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileGetCustomerCategoryHistoryBySportRpt)]
+        public ActionResult GetCustomerCategoryHistoryBySport(long ctsCustID, int sportID)
+        {
+            var custs = Enumerable.Empty<GetCustomerCategoryHistoryBySportViewModel>();
+
+            var data = _accountService.GetCustomerCategoryHistoryBySport(ctsCustID, sportID);
+
+            if (data != null && data.Any())
+            {
+                custs = data.Select(x => new GetCustomerCategoryHistoryBySportViewModel(x));
+            }
+
+            return Json(new { data = custs }, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
 
         #region Robot Classification
 
@@ -2324,5 +2361,6 @@
         }
 
         #endregion Betting Statistic
+        
     }
 }

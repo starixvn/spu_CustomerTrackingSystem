@@ -4,7 +4,11 @@
     let btnUnmarkCategory = $('#btnunmarkcategory');    
     let divMarkCustomerCategory = $('#divMarkCustomerCategory');    
     let divUnmarkCustomerCategory = $('#divUnmarkCustomerCategory');
-    let tblcustomercategory = $('#customer-category-table');    
+    let tblcustomercategory = $('#customer-category-table');
+    let btnDisplayCustomerCategoryBySport = $('#btnDisplayCustomerCategoryBySport');
+    let divCustomerCategoryBySport = $('#divCustomerCategoryBySport');
+    let tblCustomerCategoryBySport = $('#tblCustomerCategoryBySport');
+    let navsTabs = $('.nav-controls li a');
     let isHostPermission;
     let cacheData = {
         isVVip: false,
@@ -13,7 +17,34 @@
         isProblemAccount: false,
         isPAProbation: false
     };
-    let dataTable;  
+    let dataTable;
+    let dataTableCustomerCategoryBySport;
+
+    function CustomerSettingVerticalTabs(ctsCustId) {
+        navsTabs.click(function (e) {
+            let $this = $(this);
+            let sportID = $this.attr('data-sport-id');
+
+            e.preventDefault();
+            $('.nav-controls a.active').removeClass('active');            
+            $this.addClass('active');
+            $($this.attr('href')).addClass('active');
+
+            if (sportID == -1) {                
+                $('#divCategorySetting').removeClass('hide');
+                $('#divMarkCategory').removeClass('hide');
+                $('#divUnmarkCategory').removeClass('hide');
+
+                LoadGrid(ctsCustId);
+            } else {
+                $('#divCategorySetting').addClass('hide');
+                $('#divMarkCategory').addClass('hide');
+                $('#divUnmarkCategory').addClass('hide');
+
+                GetCustomerCategoryHistoryBySport(ctsCustId, sportID);
+            }                        
+        });
+    }
 
     function GetCustomerCategory(custId) {
         setTimeout(function () {
@@ -728,6 +759,96 @@
         cbbCategorySetting.multiselect("refresh");
     }
 
+    function DisplayCustomerCategoryBySport(ctsCustId) {
+        divCustomerCategoryBySport.dialog({
+            modal: true,
+            width: '550px',
+            title: 'SPORT DETAILS CATEGORY',
+            resizable: false,
+            draggable: true,
+            close: function () {
+                $(this).dialog('close');
+            }
+        });
+
+        if (dataTableCustomerCategoryBySport == null) {
+            dataTableCustomerCategoryBySport = tblCustomerCategoryBySport.DataTable({
+                language: {
+                    zeroRecords: "There's no data"
+                },
+                info: false,
+                ordering: false,
+                searching: false,
+                scrollX: false,
+                paging: false,
+                columnDefs: [
+                    { targets: "_all", defaultContent: "-" },
+                    { targets: [0], width: "35%", className: "text-center" },
+                    { targets: [1], width: "35%", className: "text-center" },                   
+                    { targets: [2], width: "30%", className: "text-center" }                  
+                ],
+                columns: [
+                    { data: obj => obj.SportType },
+                    { data: obj => obj.CategoryName },
+                    { data: obj => obj.CustomerClass }                   
+                ]
+            });
+        }
+
+        GetCustomerCategoryBySport(ctsCustId);
+    }
+
+    function GetCustomerCategoryBySport(ctsCustId) {
+        $.ajax(common.modifyRelativeUrl('Account/GetCustomerCategoryBySport'), {
+            type: 'POST',
+            data: {
+                ctsCustID: ctsCustId
+            },   
+            beforeSend: function () {
+                tblCustomerCategoryBySport.find('tbody').addClass('loading');
+            },
+            success: function (response) {
+                if (response.data != undefined) {
+                    tblCustomerCategoryBySport.DataTable().clear().rows.add(response.data);
+                    tblCustomerCategoryBySport.DataTable().columns.adjust().draw();                    
+                }
+            },
+            complete: function () {  
+                tblCustomerCategoryBySport.find('tbody').removeClass('loading');
+            },
+            error: function (errMsg) {
+                tblCustomerCategoryBySport.find('tbody').removeClass('loading');
+                console.log(errMsg);
+            }
+        });
+    }
+
+    function GetCustomerCategoryHistoryBySport(ctsCustId, sportId) {
+        $.ajax(common.modifyRelativeUrl('Account/GetCustomerCategoryHistoryBySport'), {
+            type: 'POST',
+            data: {
+                ctsCustID: ctsCustId,
+                sportID: sportId
+            },
+            beforeSend: function () {
+                tblcustomercategory.find('tbody').addClass('loading');
+            },
+            success: function (response) {
+                if (response.data != undefined) {
+                    tblcustomercategory.DataTable().clear().rows.add(response.data);
+                    tblcustomercategory.DataTable().columns.adjust().draw();
+                }
+            },
+            complete: function () {
+                tblcustomercategory.find('tbody').removeClass('loading');
+            },
+            error: function (errMsg) {
+                tblcustomercategory.find('tbody').removeClass('loading');
+                console.log(errMsg);
+            }
+        });
+    }
+
     function DisableButton(hostPermission) {
         isHostPermission = hostPermission === "True";
 
@@ -764,6 +885,9 @@
         dataTable = RenderGrid();
 
         LoadGrid(ctsCustId);
+        CustomerSettingVerticalTabs(ctsCustId);
+
+        btnDisplayCustomerCategoryBySport.click(function () { DisplayCustomerCategoryBySport(ctsCustId); });
     };
 
     this.ReloadStatusRobotUser = function (custId) {
