@@ -433,7 +433,7 @@
                 var isException = false;
                 var validatedList = _commonService.ValidateUsernames(model.UserNameList, out isException);
 
-                var custIDList = string.Join(",", validatedList.Select(x => x.CustID));
+                var custIDList = string.Join(",", validatedList.Select(x => x.CustID).Distinct());
 
                 var custSharedMatches = _associationDetectionService.GetAssociationDetectSharedMatches(model.CustID, custIDList);
 
