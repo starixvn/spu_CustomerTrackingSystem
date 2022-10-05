@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Fanex.NAP.CTS.Model.AssociationDetection
+﻿namespace Fanex.NAP.CTS.Model.AssociationDetection
 {
+    using System;
+
     public class DetectAssociationMergeGroupModel
     {
         public int RowNumber { get; set; }

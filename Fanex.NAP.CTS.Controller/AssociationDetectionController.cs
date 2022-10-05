@@ -293,13 +293,25 @@
                   
                     if (isExportExcel)
                     {
-                        result.ExportItemList = orgUserList.Select(x => 
-                        {                           
-                            return new ExportAssociationDetectModel
+                        var custStatisticsList = _associationDetectionService.GetCustStatisticsInfoRealtime(custIDs);
+                       
+                        result.ExportItemList = assMergeGroup.Select(x =>
+                        {
+                            var item = new ExportAssociationDetectModel(x);                           
+
+                            var statistics = custStatisticsList.FirstOrDefault(y => y.CustID == x.CustID);
+
+                            if (statistics != null)
                             {
-                                UserName = x.UserName,
-                                GroupID = assMergeGroup.FirstOrDefault(y => y.CustID == x.CustID).GroupID ?? null
-                            };
+                                item.TotalWinloss = statistics.TotalWinlossRM;
+                                item.WinlossLast3Days = statistics.WinlossRM_Last3Days;
+                                item.WinlossLast7Days = statistics.WinlossRM_Last7Days;
+                                item.TotalTurnover = statistics.TotalTurnoverRM;
+                                item.TurnoverLast3Days = statistics.TurnoverRM_Last3Days;
+                                
+                            }
+
+                            return item;
                         });
                     }
                     else
@@ -308,12 +320,12 @@
                         {           
                             return new DetectAssociationItemViewModel(x);
                         });
-                    }                   
+                    }
                 }
                 catch (Exception ex)
                 {
                     result.ErrorCode = 1;
-                    result.ErrorMessage = "Timeout Issue.Please try again";
+                    result.ErrorMessage = ex.Message;
 
                     var logMessage = new LogMessage(ex.Message)
                        .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))

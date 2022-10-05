@@ -1,9 +1,85 @@
 ﻿namespace Fanex.NAP.CTS.Model.AssociationDetection
 {
+    using System;
+
     public class ExportAssociationDetectModel
-    {     
+    {
+        public ExportAssociationDetectModel(DetectAssociationMergeGroupModel data)
+        {
+            UserName = data.UserName;
+            CreatedDate = data.CreatedDate;
+            CustomerClass = data.CustomerClass;
+            GroupID = data.GroupID;
+            Danger1 = data.Danger1;
+            Danger2 = data.Danger2;
+            Danger3 = data.Danger3;
+            Danger4 = data.Danger4;
+            Danger5 = data.Danger5;
+        }
+
         public string UserName { get; set; }
 
+        public DateTime CreatedDate { get; set; }
+
+        public int CustomerClass { get; set; }
+
         public int? GroupID { get; set; }
+
+        public int Danger1 { get; set; }
+
+        public int Danger2 { get; set; }
+
+        public int Danger3 { get; set; }
+
+        public int Danger4 { get; set; }
+
+        public int Danger5 { get; set; }        
+
+        public decimal TotalWinloss { get; set; }
+
+        public decimal WinlossLast3Days { get; set; }
+
+        public decimal WinlossLast7Days { get; set; }
+
+        public decimal TotalTurnover { get; set; }
+
+        public decimal TurnoverLast3Days { get; set; }
+
+        public decimal TurnoverLast7Days { get; set; }
+
+        public string DangerLevel 
+        {
+            get
+            {
+                string danger = string.Empty;
+
+                if (Danger1 != 0)
+                {
+                    danger += "Ori" + Danger1;
+                }
+
+                if (Danger2 != 0)
+                {
+                    danger += string.IsNullOrEmpty(danger) ? "ABI" + Danger2 : "-ABI" + Danger2;
+                }
+
+                if (Danger3 != 0)
+                {
+                    danger += string.IsNullOrEmpty(danger) ? "OS" + Danger3 : "-OS" + Danger3;
+                }
+
+                if (Danger4 != 0)
+                {
+                    danger += string.IsNullOrEmpty(danger) ? "BkB" + Danger4 : "-BkB" + Danger4;
+                }
+
+                if (Danger5 != 0)
+                {
+                    danger += string.IsNullOrEmpty(danger) ? "ES" + Danger5 : "-ES" + Danger5;
+                }
+
+                return danger;
+            }
+        }
     }
 }

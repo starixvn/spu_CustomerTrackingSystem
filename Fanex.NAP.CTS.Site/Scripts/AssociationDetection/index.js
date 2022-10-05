@@ -824,7 +824,9 @@
     function Initial() { 
         InitInputTagUsername();
 
-        domElements.btnDetect.on('click', () => DetectUserName());
+        //domElements.btnDetect.on('click', () => DetectUserName());
+
+        domElements.btnDetect.on('click', () => { DetectUserName(); ExportToExcel() });
 
         domElements.btnExportToExcel.on('click', () => ExportToExcel());       
 
