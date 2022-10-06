@@ -308,7 +308,6 @@
                                 item.WinlossLast7Days = statistics.WinlossRM_Last7Days;
                                 item.TotalTurnover = statistics.TotalTurnoverRM;
                                 item.TurnoverLast3Days = statistics.TurnoverRM_Last3Days;
-                                
                             }
 
                             return item;
@@ -347,9 +346,25 @@
 
         private IEnumerable<SharedIPMatchesInfoModel> DetectAssociationBySharedMatches(IEnumerable<ValidateUserNameModel> validateUserNames, string custIds)
         {
-            var detectAssByAssMatches = _associationDetectionService.DetectAssociationBySharedMatches(custIds);
+            //var detectAssByAssMatches = _associationDetectionService.DetectAssociationBySharedMatches(custIds);
+
+            var detectAssByAssMatches = DetectAssociationBySharedMatches_Test(custIds);
 
             return DetectAssociationBySharedIPMatches(detectAssByAssMatches, validateUserNames);
+        }
+
+        private IEnumerable<DetectAssociationBySharedIPMatchesModel> DetectAssociationBySharedMatches_Test(string custIds)
+        {
+            var arrCust = custIds.Split(',');
+
+            return new List<DetectAssociationBySharedIPMatchesModel>()
+            {
+                new DetectAssociationBySharedIPMatchesModel
+                {
+                     CustID1 = int.Parse(arrCust[0]),
+                     CustID2 = int.Parse(arrCust[1])
+                }
+            };
         }
 
         private IEnumerable<SharedIPMatchesInfoModel> DetectAssociationBySharedIPMatches(IEnumerable<DetectAssociationBySharedIPMatchesModel> detectAss
@@ -500,13 +515,26 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetectionDetails)]
-        public ActionResult GetDetectAssociationDetailMatch(int custID1, int custID2)
+        public ActionResult GetDetectAssociationDetailMatch(int custID1, int custID2, string custIDList)
         {
             var result = Enumerable.Empty<GetAssociationDetectDetailMatchViewModel>();
-            var custIDList = $"{custID1},{custID2}";
 
-            var tickets = _associationDetectionService.GetDetectAssociationDetailMatch(custIDList)
-                .Distinct(x => x.TransID)
+            if (string.IsNullOrEmpty(custIDList))
+                custIDList = $"{custID1},{custID2}";
+
+            var tickets = Enumerable.Empty<GetAssociationDetectDetailMatchModel>();
+            if (string.IsNullOrEmpty(custIDList))
+            {
+                custIDList = $"{custID1},{custID2}";
+
+                tickets = _associationDetectionService.GetDetectAssociationDetailMatch(-1, custIDList, (int)DetectAssociation_QueryType.GetTicketDetail);
+            }
+            else
+            {
+                tickets = _associationDetectionService.GetDetectAssociationDetailMatch(custID1, custIDList, (int)DetectAssociation_QueryType.GetTicketDetailByListCust);
+            }
+            
+            tickets = tickets.Distinct(x => x.TransID)
                 .OrderByDescending(x=>x.MatchID)
                 .ThenByDescending(x=>x.TransDate);
 

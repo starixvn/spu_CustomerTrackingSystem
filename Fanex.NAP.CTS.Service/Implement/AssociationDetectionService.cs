@@ -40,7 +40,7 @@
 
         IEnumerable<GetAssociationDetectDetailIPModel> GetCoupleSharedIP(int custID1, int custID2);
 
-        IEnumerable<GetAssociationDetectDetailMatchModel> GetDetectAssociationDetailMatch(string custIDList);
+        IEnumerable<GetAssociationDetectDetailMatchModel> GetDetectAssociationDetailMatch(long rootCustID, string custIDList, int queryType);
 
         byte[] ExportToExcelAssociationDetect(IEnumerable<ExportAssociationDetectModel> AssociationDetect, string fileName, string templatePath);
     }
@@ -215,13 +215,18 @@
             }
         }
 
-        public IEnumerable<GetAssociationDetectDetailMatchModel> GetDetectAssociationDetailMatch(string custIDList)
+        public IEnumerable<GetAssociationDetectDetailMatchModel> GetDetectAssociationDetailMatch(long rootCustID, string custIDList, int queryType)
         {
             var criteria = new DetectAssociationBySharedMatchesCriteria
             {
                 CustIDList = custIDList,
-                QueryType = (int)DetectAssociation_QueryType.GetTicketDetail
+                QueryType = queryType
             };
+
+            if (rootCustID != -1)
+            {
+                criteria.RootCustID = rootCustID;
+            }
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {

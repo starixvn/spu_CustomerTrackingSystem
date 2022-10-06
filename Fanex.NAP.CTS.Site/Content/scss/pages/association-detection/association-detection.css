@@ -543,6 +543,20 @@ body {
         position: -webkit-sticky;
         top: 9.4rem;
         font-weight: 300; }
+      .association-detection-report .association-detection-content .table-report .table-association-detection .sub-icon {
+        width: 24px;
+        height: 24px;
+        float: right;
+        margin-left: 6px;
+        margin-right: 6px;
+        display: inline-block;
+        position: relative;
+        cursor: pointer; }
+        .association-detection-report .association-detection-content .table-report .table-association-detection .sub-icon:hover {
+          border-radius: 50%;
+          background: #E7EDFF; }
+        .association-detection-report .association-detection-content .table-report .table-association-detection .sub-icon .disabled {
+          cursor: not-allowed; }
       .association-detection-report .association-detection-content .table-report .table-association-detection .group {
         background: #70809E !important;
         cursor: pointer; }
@@ -563,6 +577,8 @@ body {
         background-color: #F5A89A;
         font-weight: bold; }
 
+.view-profile-byusername,
+.association-detect-match,
 .association-detect-detail,
 .association-detect-detail-ip,
 .association-detect-detail-match,

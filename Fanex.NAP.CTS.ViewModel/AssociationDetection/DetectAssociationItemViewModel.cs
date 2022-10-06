@@ -18,7 +18,7 @@
             this.CategoryIds = data.CategoryIDs;
             this.CustStatus = data.CustStatus;
             this.Evidences = data.Evidence;
-            this.AssociatedTypes = data.AssociationType;
+            this.AssociatedTypes = GetAssociationType(data.AssociationType);
             this.CustomerCategory = data.CustomerCategory;
             this.CustomerClass = data.CustomerClass > 0 ? data.CustomerClass.ToString() : null;
             this.IsProblemAccount = data.ParentIDs != null && data.ParentIDs.Split(',').Any(y => y == "50");
@@ -66,6 +66,24 @@
         public int Danger4 { get; set; }
 
         public int Danger5 { get; set; }
+
+        private string GetAssociationType(string assType)
+        {
+            var newAssType = assType;
+
+            if (!string.IsNullOrEmpty(assType))
+            {
+                if (assType.Contains("Match"))
+                {
+                    newAssType = assType.Replace("Match", $"<span class='association-detect-match' data-groupid={this.GroupID} data-custid={this.CustID} data-ctscustid={this.CTSCustID}>Match</span>");
+                    
+                }
+            }
+
+            newAssType += "<span class='sub-icon - view-detail' id='sub-icon ' title='View Detail'><i class='icon-account_detail'></i ></span>";
+
+            return newAssType;
+        }
 
     }
 }

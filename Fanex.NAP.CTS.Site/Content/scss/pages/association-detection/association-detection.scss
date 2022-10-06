@@ -73,8 +73,8 @@ body {
         .table-report {
             font-family: $font-family;
 
-            .fixed-header {               
-              /*  padding-top: 1.6rem;*/
+            .fixed-header {
+                /*  padding-top: 1.6rem;*/
                 position: sticky;
                 position: -webkit-sticky;
                 top: 8rem;
@@ -151,6 +151,26 @@ body {
                     }
                 }
 
+                .sub-icon {
+                    width: 24px;
+                    height: 24px;
+                    float: right;
+                    margin-left: 6px;
+                    margin-right: 6px;
+                    display: inline-block;
+                    position: relative;
+                    cursor: pointer;
+
+                    &:hover {
+                        border-radius: 50%;
+                        background: #E7EDFF;
+                    }
+
+                    .disabled {
+                        cursor: not-allowed;
+                    }
+                }
+
                 .group {
                     background: #70809E !important;
                     cursor: pointer;
@@ -190,6 +210,8 @@ body {
     }
 }
 
+.view-profile-byusername,
+.association-detect-match,
 .association-detect-detail,
 .association-detect-detail-ip,
 .association-detect-detail-match,

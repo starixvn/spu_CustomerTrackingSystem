@@ -73,16 +73,29 @@
             columns: [
                 { data: obj => obj.GroupID },
                 {
-                    data: obj => RenderUserName(obj),
+                    data: obj => () => {
+                        let url = common.modifyRelativeUrl('Account/Index/' + obj.CTSCustID);
+                        return `<a class='.view-profile-byusername' href=${url}> ${obj.UserName} </a>`;
+                    },
                     createdCell: (cell, _, row) => {
-                        $('.association-detect-detail', cell).click(() => {                           
-                            ShowAssociationDetectDetail(cell, row);
+                        $('.association-detect-detail', cell).click(() => {
+                            ShowAssociationDetectDetail(row);
                         })
                     }
                 },
                 { data: obj => obj.CustStatus },
                 { data: obj => obj.Evidences },
-                { data: obj => obj.AssociatedTypes },
+                {
+                    data: obj => obj.AssociatedTypes, createdCell: (cell, _, row) => {
+                        $('.association-detect-match', cell).click(() => {
+                            ShowAssociationDetectMatch(row);
+                        });
+
+                        $('.icon-account_detail', cell).click(() => {
+                            ShowAssociationDetectDetail(row);
+                        });
+                    }
+                },
                 {
                     data: obj => common.renderCategoryName(obj.CustomerCategory), createdCell: (cell, _, row) => {
                         common.renderCategoryColor(cell, row);
@@ -129,17 +142,9 @@
         });        
 
         return table;
-    } 
+    }    
 
-    function RenderUserName(obj) {
-        if (obj.UserName !== null) {
-            return `<span class="association-detect-detail" data-groupid=${obj.GroupID} data-custid=${obj.CustID} data-ctscustid=${obj.CTSCustID}> ${obj.UserName}</span>`;
-        }
-
-        return "";
-    }   
-
-    function ShowAssociationDetectDetail(cell, fromObj) {       
+    function ShowAssociationDetectDetail(fromObj) {       
         if (tableAssociationDetectDetail == null) {
             tableAssociationDetectDetail = domElements.tblAssociationDetectDetail.DataTable({
                 language: {
@@ -192,7 +197,7 @@
         let ctsCustIDs = [];
         let userNames = [];
 
-        domElements.tblAssociationDetection.find('.association-detect-detail').each(function () {
+        domElements.tblAssociationDetection.find('.association-detect-match').each(function () {
             if ($(this).attr("data-groupid") == fromObj.GroupID) {
                 ctsCustIDs.push($(this).attr('data-ctscustid'));
                 userNames.push($(this).text().trim());
@@ -325,7 +330,30 @@
         })
     }
 
+    function ShowAssociationDetectMatch(fromObj) {
+        RenderGridMatch();
+
+        let custIDs = [];        
+        domElements.tblAssociationDetection.find('.association-detect-match').each(function () {
+            if ($(this).attr("data-groupid") == fromObj.GroupID) {
+                custIDs.push($(this).attr('data-custid'));
+            }
+        });
+
+        GetAssociationDetectDetailMatch(fromObj.CustID, -1, custIDs);
+
+        ShowDialogMatch(fromObj.UserName, "");
+    }
+
     function ShowAssociationDetectDetailMatch(userName1, userName2, custID1, custID2) {               
+        RenderGridMatch();
+      
+        GetAssociationDetectDetailMatch(custID1, custID2, "");
+        
+        ShowDialogMatch(userName1, userName2);
+    }
+
+    function RenderGridMatch() {
         if (tableAssociationDetectDetailMatch == null) {
             tableAssociationDetectDetailMatch = domElements.tblAssociationDetectDetailMatch.DataTable({
                 language: {
@@ -338,7 +366,7 @@
                 info: false,
                 ordering: false,
                 searching: false,
-                scrollX: false,             
+                scrollX: false,
                 scrollCollapse: false,
                 paging: false,
                 searching: false,
@@ -389,13 +417,19 @@
         }
 
         domElements.tblAssociationDetectDetailMatch.DataTable().clear();
-      
-        GetAssociationDetectDetailMatch(custID1, custID2);
+    }
+
+    function ShowDialogMatch(userName1, userName2) {
+        let title = "ASSOCIATION DETAILS - MATCH (in the last 7 days): " + userName1;
+
+        if (userName2 != "") {
+            title += " - " + userName2;
+        }
 
         domElements.divAssociationDetectDetailMatch.dialog({
             modal: true,
             width: '950px',
-            title: "ASSOCIATION DETAILS - MATCH (in the last 7 days): " + userName1 + " - " + userName2,
+            title: title,
             resizable: false,
             draggable: true,
             close: function () {
@@ -405,10 +439,9 @@
                 $('.ui-dialog .ui-dialog-content').css('padding-left', '12px');
             }
         });
-        
     }
 
-    function GetAssociationDetectDetailMatch(custID1, custID2) {
+    function GetAssociationDetectDetailMatch(custID1, custID2, custIDList) {
         $.ajax(common.modifyRelativeUrl('AssociationDetection/GetDetectAssociationDetailMatch'), {
             type: 'POST',
             beforeSend: function () {
@@ -416,7 +449,8 @@
             },
             data: {
                 custID1: custID1,
-                custID2: custID2
+                custID2: custID2,
+                custIDList: custIDList
             },
             success: function (response) {
                 if (response !== undefined) {                   
@@ -824,9 +858,9 @@
     function Initial() { 
         InitInputTagUsername();
 
-        //domElements.btnDetect.on('click', () => DetectUserName());
+        domElements.btnDetect.on('click', () => DetectUserName());
 
-        domElements.btnDetect.on('click', () => { DetectUserName(); ExportToExcel() });
+        //domElements.btnDetect.on('click', () => { DetectUserName(); ExportToExcel() });
 
         domElements.btnExportToExcel.on('click', () => ExportToExcel());       
 
