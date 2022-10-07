@@ -346,27 +346,11 @@
 
         private IEnumerable<SharedIPMatchesInfoModel> DetectAssociationBySharedMatches(IEnumerable<ValidateUserNameModel> validateUserNames, string custIds)
         {
-            //var detectAssByAssMatches = _associationDetectionService.DetectAssociationBySharedMatches(custIds);
-
-            var detectAssByAssMatches = DetectAssociationBySharedMatches_Test(custIds);
+            var detectAssByAssMatches = _associationDetectionService.DetectAssociationBySharedMatches(custIds);           
 
             return DetectAssociationBySharedIPMatches(detectAssByAssMatches, validateUserNames);
         }
-
-        private IEnumerable<DetectAssociationBySharedIPMatchesModel> DetectAssociationBySharedMatches_Test(string custIds)
-        {
-            var arrCust = custIds.Split(',');
-
-            return new List<DetectAssociationBySharedIPMatchesModel>()
-            {
-                new DetectAssociationBySharedIPMatchesModel
-                {
-                     CustID1 = int.Parse(arrCust[0]),
-                     CustID2 = int.Parse(arrCust[1])
-                }
-            };
-        }
-
+      
         private IEnumerable<SharedIPMatchesInfoModel> DetectAssociationBySharedIPMatches(IEnumerable<DetectAssociationBySharedIPMatchesModel> detectAss
            , IEnumerable<ValidateUserNameModel> validateUserNames)
         {
@@ -517,12 +501,9 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetectionDetails)]
         public ActionResult GetDetectAssociationDetailMatch(int custID1, int custID2, string custIDList)
         {
-            var result = Enumerable.Empty<GetAssociationDetectDetailMatchViewModel>();
-
-            if (string.IsNullOrEmpty(custIDList))
-                custIDList = $"{custID1},{custID2}";
-
+            var result = Enumerable.Empty<GetAssociationDetectDetailMatchViewModel>();          
             var tickets = Enumerable.Empty<GetAssociationDetectDetailMatchModel>();
+
             if (string.IsNullOrEmpty(custIDList))
             {
                 custIDList = $"{custID1},{custID2}";

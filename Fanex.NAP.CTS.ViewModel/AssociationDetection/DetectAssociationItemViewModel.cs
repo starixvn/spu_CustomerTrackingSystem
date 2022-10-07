@@ -22,7 +22,9 @@
             this.CustomerCategory = data.CustomerCategory;
             this.CustomerClass = data.CustomerClass > 0 ? data.CustomerClass.ToString() : null;
             this.IsProblemAccount = data.ParentIDs != null && data.ParentIDs.Split(',').Any(y => y == "50");
-            this.IsPAProbation = data.IsPAProbation;                      
+            this.IsPAProbation = data.IsPAProbation;
+            this.AgentUsername = data.AgentUsername;
+            this.AgentEvidence = data.AgentEvidence;
         }
 
         public int RowNumber { get; set; }
@@ -80,7 +82,7 @@
                 }
             }
 
-            newAssType += "<span class='sub-icon - view-detail' id='sub-icon ' title='View Detail'><i class='icon-account_detail'></i ></span>";
+            newAssType += $"<span class='sub-icon - view-detail' id='sub-icon ' title='View Detail' data-groupid={this.GroupID} data-ctscustid={this.CTSCustID}><i class='icon-account_detail'></i ></span>";
 
             return newAssType;
         }

@@ -76,12 +76,12 @@
                     data: obj => () => {
                         let url = common.modifyRelativeUrl('Account/Index/' + obj.CTSCustID);
                         return `<a class='.view-profile-byusername' href=${url}> ${obj.UserName} </a>`;
-                    },
-                    createdCell: (cell, _, row) => {
-                        $('.association-detect-detail', cell).click(() => {
-                            ShowAssociationDetectDetail(row);
-                        })
                     }
+                    //createdCell: (cell, _, row) => {
+                    //    $('.association-detect-detail', cell).click(() => {
+                    //        ShowAssociationDetectDetail(row);
+                    //    })
+                    //}
                 },
                 { data: obj => obj.CustStatus },
                 { data: obj => obj.Evidences },
@@ -197,7 +197,7 @@
         let ctsCustIDs = [];
         let userNames = [];
 
-        domElements.tblAssociationDetection.find('.association-detect-match').each(function () {
+        domElements.tblAssociationDetection.find('.view-detail').each(function () {
             if ($(this).attr("data-groupid") == fromObj.GroupID) {
                 ctsCustIDs.push($(this).attr('data-ctscustid'));
                 userNames.push($(this).text().trim());
@@ -340,7 +340,7 @@
             }
         });
 
-        GetAssociationDetectDetailMatch(fromObj.CustID, -1, custIDs);
+        GetAssociationDetectDetailMatch(fromObj.CustID, -1, custIDs.join());
 
         ShowDialogMatch(fromObj.UserName, "");
     }
