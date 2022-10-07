@@ -5,6 +5,7 @@
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria.Api;
     using Fanex.NAP.CTS.Model.API;
+    using Fanex.NAP.CTS.Model.CustomerClassification.RescanCustomerClassification;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Service.Interface.Api;
@@ -89,9 +90,13 @@
 
                 if (custIDs != null && custIDs.Any())
                 {
+                    var cusCategories = rescanCustomerClassificationService.GetCustomerClassification(string.Join(",", custIDs), false);
+
+                    var custInfos = cusCategories.Select(x => new RescanCategoryDailyModel { CustID = x.CustID, CurrentCategoryID = x.CategoryID });
+                   
                     rescanCustomerClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
                     {
-                        CustIds = custIDs,
+                        CustInfos = custInfos,
                         IsRescanPA = true,
                         IsPushCCToSoon88 = true,
                         IsUpdateDangerToMainDB = true,
@@ -141,11 +146,17 @@
             {
                 var custIDs = RemoveLicBA(batchCustIds);
 
+                custIDs = new List<long>() { 1330, 1423 };
+
                 if (custIDs != null && custIDs.Any())
                 {
+                    var cusCategories = rescanCustomerClassificationService.GetCustomerClassification(string.Join(",", custIDs), false);
+
+                    var custInfos = cusCategories.Select(x => new RescanCategoryDailyModel { CustID = x.CustID, CurrentCategoryID = x.CategoryID });
+
                     rescanCustomerClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
                     {
-                        CustIds = custIDs,
+                        CustInfos = custInfos,
                         IsRescanPA = false,
                         IsPushCCToSoon88 = false,
                         IsUpdateDangerToMainDB = false,
@@ -177,9 +188,13 @@
 
                     if (result != null && result.Any())
                     {
+                        var cusCategories = rescanCustomerClassificationService.GetCustomerClassification(custIDs, false);
+
+                        var custInfos = cusCategories.Select(x => new RescanCategoryDailyModel { CustID = x.CustID, CurrentCategoryID = x.CategoryID });
+
                         rescanCustomerClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
                         {
-                            CustIds = result,
+                            CustInfos = custInfos,
                             IsRescanPA = false,
                             IsPushCCToSoon88 = false,
                             IsUpdateDangerToMainDB = false,
@@ -262,8 +277,7 @@
             };
 
             return repository.Fetch<CustInfoBySiteNameModel>(criteria);
-        }
-
+        }       
         #endregion Private Methods
     }
 }

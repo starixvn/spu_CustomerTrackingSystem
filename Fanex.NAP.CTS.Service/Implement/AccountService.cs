@@ -941,7 +941,8 @@
 
             var criteria = new GetCTSCustomerClassificationCriteria
             {
-                CTSCustID = ctsCustId
+                 IDList = ctsCustId.ToString(),
+                 IsCTSCustID = true
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -971,7 +972,8 @@
         {
             var criteria = new GetCTSCustomerClassificationCriteria
             {
-                CTSCustID = ctsCustId
+                IDList = ctsCustId.ToString(),
+                IsCTSCustID = true
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -981,7 +983,7 @@
                     result.Read<bool>(); // Pin Categories
                     result.Read<bool>(); // Excluded Tag Ass PA
 
-                    return result.Read<CustomerClassificationModel>();                                       
+                    return result.Read<CustomerClassificationModel>();
                 }
             }
         }

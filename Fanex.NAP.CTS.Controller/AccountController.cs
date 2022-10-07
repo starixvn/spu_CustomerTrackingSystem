@@ -1669,9 +1669,11 @@
                     && !isProblemAccount
                     && custSubId == 0)
                 {
+                    var custInfos = new List<RescanCategoryDailyModel> { new RescanCategoryDailyModel { CustID = custId, CurrentCategoryID = 0 } };
+
                     _rescanClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
                     {
-                        CustIds = new List<long> { custId },
+                        CustInfos = custInfos,
                         IsRescanPA = false,
                         FunctionId = FunctionId.ExcludeTaggingAssPAWeb,
                         ServiceName = "ExcludeTaggingAssociationWithPA"

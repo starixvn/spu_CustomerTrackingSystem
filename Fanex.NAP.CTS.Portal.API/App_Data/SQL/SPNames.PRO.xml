@@ -16,6 +16,7 @@
 		<Setting Key="CTS_NormalAccountsClassification_GeneralCategorize_Daily" SpName="CTS_NormalAccountsClassification_GeneralCategorize_Daily" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" TimeOut="1200"/>
 		<Setting Key="CTS_DC_CustClassification_UpdateProblemAccount" SpName="CTS_DC_CustClassification_UpdateProblemAccount" DbName="MySQL.CTS_DataCenter.Admin"/>
 		<Setting Key="CTS_DC_CustClassification_PA_Insert" SpName="CTS_DC_CustClassification_PA_Insert" DbName="MySQL.CTS_DataCenter.Admin"/>
+		<Setting Key="CTS_DC_CustClassification_Get" SpName="CTS_DC_CustClassification_Get" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
 
 	<Function Name="CustomerClass">

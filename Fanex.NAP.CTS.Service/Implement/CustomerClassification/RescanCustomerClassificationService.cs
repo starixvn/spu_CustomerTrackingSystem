@@ -1,12 +1,15 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
+    using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Helpers.Xml;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria;
+    using Fanex.NAP.CTS.Criteria.Account.CustomerCategory;
     using Fanex.NAP.CTS.Criteria.CustomerClassification;
     using Fanex.NAP.CTS.Model;
+    using Fanex.NAP.CTS.Model.Account;
     using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.LogInputData;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
@@ -53,6 +56,26 @@
             }
 
             return result.IsSuccess;
+        }
+
+        public IEnumerable<CustomerClassificationModel> GetCustomerClassification(string IDList, bool isCTSCustID)
+        {
+            var criteria = new GetCTSCustomerClassificationCriteria
+            {
+                IDList = IDList,
+                IsCTSCustID = isCTSCustID
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                using (var result = db.QueryMultiple(criteria))
+                {
+                    result.Read<bool>(); // Pin Categories
+                    result.Read<bool>(); // Excluded Tag Ass PA
+
+                    return result.Read<CustomerClassificationModel>();
+                }
+            }
         }
 
         #region Private Methods

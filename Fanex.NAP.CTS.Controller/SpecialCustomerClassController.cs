@@ -8,6 +8,7 @@
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model;
+    using Fanex.NAP.CTS.Model.CustomerClassification.RescanCustomerClassification;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Resource.Consts;    
@@ -129,9 +130,12 @@
 
                 if (resultRemoveToCTS.ErrorCode == 0)
                 {
+                    // TODO
+                    var custInfos = new List<RescanCategoryDailyModel>();
+
                     _customerClassifyService.RescanCustomerClassification(new RescanCustClassificationModel
                     {
-                        CustIds = new List<long> { custID },
+                        CustInfos = custInfos,
                         IsRescanPA = true,
                         IsPushCCToSoon88 = true,
                         IsUpdateDangerToMainDB = true,
