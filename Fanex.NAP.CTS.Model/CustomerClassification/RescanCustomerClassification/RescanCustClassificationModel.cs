@@ -12,10 +12,8 @@
             IsPushCCToSoon88 = true;
             IsToQueue = false;
         }
-
-        public IEnumerable<RescanCategoryDailyModel> CustInfos { get; set; }
-
-        //public IEnumerable<long> CustIds { get; set; }
+      
+        public IEnumerable<long> CustIds { get; set; }
 
         public bool IsRescanPA { get; set; }
 

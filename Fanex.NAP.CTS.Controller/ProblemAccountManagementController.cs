@@ -273,8 +273,8 @@
                         _paClassificationService.UpdateBetLimitOfUnflaggedCustomer(custIdList);
 
                         var paramRescan = new RescanCustClassificationModel
-                        {
-                            CustInfos = custInfos,
+                        {                           
+                            CustIds = custIdList,
                             IsPushCCToSoon88 = true,
                             FunctionId = FunctionId.UnmarkCustomerCategory,
                             IsUpdateDangerToMainDB = true

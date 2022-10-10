@@ -129,13 +129,10 @@
                 var resultRemoveToCTS = _customerClassService.RemoveCustomerClass(ctsCustID, CurrentSession.UserId);
 
                 if (resultRemoveToCTS.ErrorCode == 0)
-                {
-                    // TODO
-                    var custInfos = new List<RescanCategoryDailyModel>();
-
+                {                   
                     _customerClassifyService.RescanCustomerClassification(new RescanCustClassificationModel
                     {
-                        CustInfos = custInfos,
+                        CustIds = new List<long> { custID},
                         IsRescanPA = true,
                         IsPushCCToSoon88 = true,
                         IsUpdateDangerToMainDB = true,

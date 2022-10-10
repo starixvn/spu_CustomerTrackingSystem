@@ -1668,12 +1668,10 @@
                 if (result.ErrorCode == 0
                     && !isProblemAccount
                     && custSubId == 0)
-                {
-                    var custInfos = new List<RescanCategoryDailyModel> { new RescanCategoryDailyModel { CustID = custId, CurrentCategoryID = 0 } };
-
+                {                    
                     _rescanClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
                     {
-                        CustInfos = custInfos,
+                        CustIds = new List<long> { custId },
                         IsRescanPA = false,
                         FunctionId = FunctionId.ExcludeTaggingAssPAWeb,
                         ServiceName = "ExcludeTaggingAssociationWithPA"
@@ -1909,7 +1907,7 @@
                     {
                         _rescanClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
                         {
-                            CustInfos = custInfos,                         
+                            CustIds = new List<long> { model.CustId },
                             IsRescanPA = true ,
                             IsToQueue = (model.RoleId != 1 && !model.IsAffectToAllDownlines), // add to queue for case SMA and not checking affect to downline to affect PA for downline
                             IsPushCCToSoon88 = true,
@@ -1960,13 +1958,12 @@
             if (unmarkPAResult.ErrorCode == 0 && unmarkPAResult.CustomerInfo.Any())
             {
                 var custIds = unmarkPAResult.CustomerInfo.Select(x => x.CustID);
-                var custInfos = unmarkPAResult.CustomerInfo.Select(x => new RescanCategoryDailyModel { CustID = x.CustID, CurrentCategoryID = x.CurrentCategoryID });
-
+               
                 _problemAccountClassificationService.UpdateBetLimitOfUnflaggedCustomer(custIds.Distinct());                
 
                 var paramRescan = new RescanCustClassificationModel
                 {
-                    CustInfos = custInfos,
+                    CustIds = custIds,
                     IsPushCCToSoon88 = true,
                     FunctionId = FunctionId.UnmarkCustomerCategory,
                     IsUpdateDangerToMainDB = true
