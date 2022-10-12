@@ -268,8 +268,7 @@
                     {
                         var custIdList = unmarkPAResult.CustomerInfo.Select(c => c.CustID)?.Distinct();
                         var custIds = string.Join(",", custIdList);
-                        var custInfos = unmarkPAResult.CustomerInfo.Select(x => new RescanCategoryDailyModel { CustID = x.CustID, CurrentCategoryID = x.CurrentCategoryID });
-
+                        
                         _paClassificationService.UpdateBetLimitOfUnflaggedCustomer(custIdList);
 
                         var paramRescan = new RescanCustClassificationModel

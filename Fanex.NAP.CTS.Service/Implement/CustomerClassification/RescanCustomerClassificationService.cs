@@ -128,9 +128,9 @@
                     {
                         var custToString = string.Join(",", custIds);
                       
-                        var custInfos = GetCustomerClassification(custToString, false).Select(x => new RescanCategoryDailyModel { CustID = x.CustID, CurrentCategoryID = x.CategoryID });
+                        var custInfos = GetCustomerClassification(custToString, false).Select(x => new RescanCategoryDailyModel { CustID = x.CustID, CurrentCategoryID = x.CategoryID }).Distinct();
                         
-                        ClassifyCustomerGeneralCategoryDaily(custInfos.ToXmlString(), parameters.FunctionId, false);
+                        ClassifyCustomerGeneralCategoryDaily(custInfos.ToXmlString(), parameters.FunctionId);
                     }
                 }
 
@@ -251,12 +251,11 @@
             return Enumerable.Empty<long>();
         }
 
-        private void ClassifyCustomerGeneralCategoryDaily(string customersXML, FunctionId funcId, bool isCheckLast14Days)
+        private void ClassifyCustomerGeneralCategoryDaily(string customersXML, FunctionId funcId)
         {
             var criteria = new NormalAccountsClassificationGeneralCategorizeDailyCriteria
             {
-                CustomersXML = customersXML,
-                IsCheckLast14Days = isCheckLast14Days,
+                CustomersXML = customersXML,              
                 FunctionId = (int)funcId
             };
 

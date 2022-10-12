@@ -5,9 +5,7 @@
     public class NormalAccountsClassificationGeneralCategorizeDailyCriteria : NonQueryCommand
     {
         public string CustomersXML { get; set; }
-
-        public bool IsCheckLast14Days { get; set; }
-
+       
         public int FunctionId { get; set; }
 
         public override string GetSettingKey()
