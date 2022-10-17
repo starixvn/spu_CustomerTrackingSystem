@@ -257,7 +257,7 @@
                         idx++,
                         item.UserName,
                         item.CreatedDate,
-                        item.CustomerClass,
+                        item.CustomerClass != -1 ? item.CustomerClass.ToString() : string.Empty,
                         (item.GroupID.HasValue ? item.GroupID.ToString() : string.Empty),
                         item.DangerLevel,
                         item.TotalWinloss,
