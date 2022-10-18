@@ -82,7 +82,7 @@
                 }
             }
 
-            newAssType += $"<span class='sub-icon - view-detail' id='sub-icon ' title='View Detail' data-groupid={this.GroupID} data-ctscustid={this.CTSCustID}><i class='icon-account_detail'></i ></span>";
+            newAssType += $"<span class='sub-icon - view-detail' id='sub-icon ' title='View Detail' data-groupid={this.GroupID} data-ctscustid={this.CTSCustID} data-username={this.UserName}><i class='icon-account_detail'></i ></span>";
 
             return newAssType;
         }

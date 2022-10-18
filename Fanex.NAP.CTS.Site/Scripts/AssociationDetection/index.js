@@ -200,7 +200,7 @@
         domElements.tblAssociationDetection.find('.view-detail').each(function () {
             if ($(this).attr("data-groupid") == fromObj.GroupID) {
                 ctsCustIDs.push($(this).attr('data-ctscustid'));
-                userNames.push($(this).text().trim());
+                userNames.push($(this).attr('data-username'));
             }
         });
        
