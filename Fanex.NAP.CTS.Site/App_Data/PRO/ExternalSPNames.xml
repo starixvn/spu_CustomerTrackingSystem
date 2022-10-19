@@ -70,6 +70,6 @@
 
 	<Function Name="AssociationDetection">
 		<Setting Key="CTS_Association_GetBySharedMatches" SpName="CTS_Association_GetBySharedMatches" DbName="DBCTS.bodb02.bodbSPUNet" TimeOut="300" />
-		<Setting Key="Acc_Rpt_GetCustStatisticsInfo_Realtime_ByListCustID" SpName="Acc_Rpt_GetCustStatisticsInfo_Realtime_ByListCustID" DbName="DBDW.bodb_dwrs.bodbAdminNet" />
+		<Setting Key="Acc_Rpt_GetCustStatisticsInfo_Realtime_ByListCustID" SpName="Acc_Rpt_GetCustStatisticsInfo_Realtime_ByListCustID" DbName="DBDW.bodb_dwrs.bodbSPUNet" />
 	</Function>
 </Functions>
