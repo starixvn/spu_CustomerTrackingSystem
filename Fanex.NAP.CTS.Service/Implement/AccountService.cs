@@ -49,6 +49,17 @@
         }
 
         #region Customer Profile
+
+        public IEnumerable<CustInfoModel> GetCustInfoByCustID(string custIDs)
+        {
+            var criteria = new CustInfoByCustIdGetCriteria()
+            {
+                CustIDs = custIDs
+            };
+
+            return repository.Fetch<CustInfoModel>(criteria);
+        }
+
         public CustomerInfoByCTSCustIdModel GetCustomerInfoByCTSCustId(Int64 ctsCustId)
         {
             var criteria = new CustomerInfoByCTSCustIdCriteria

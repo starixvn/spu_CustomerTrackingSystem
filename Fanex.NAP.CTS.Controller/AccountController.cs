@@ -152,7 +152,24 @@
             return RedirectToAction("Index", "Home");
         }
 
-        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileRpt)]
+        public ActionResult SSOSearch(long? custId)
+        {
+            if (custId != null)
+            {
+                var customerInfo = _accountService.GetCustInfoByCustID(custId.ToString());
+
+                if(customerInfo != null && customerInfo.Any())
+                {
+                    return RedirectToAction("Index", "Account", new { Id = customerInfo.FirstOrDefault().CTSCustID });
+                }    
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
+
+            [HttpPost]
         public ActionResult GetStatusRobotClassification(int custID)
         {
             var result = _robotClassificationService.GetStatusRobotClassification(custID);

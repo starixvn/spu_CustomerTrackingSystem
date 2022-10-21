@@ -68,7 +68,7 @@
         /// <param name="time">Time value.</param>
         /// <param name="redirectUrl">The url redirection.</param>
         /// <returns>Redirect page.</returns>
-        [AllowAnonymous]
+        [AllowAnonymous] 
         [HttpGet]
         public ActionResult Index(string userId, string onuserId, string time, Uri redirectUrl = null)
         {
@@ -150,6 +150,7 @@
                 throw;
             }
         }
+
 
         /// <summary>
         /// Accounting login.

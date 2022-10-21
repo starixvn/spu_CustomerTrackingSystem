@@ -23,6 +23,9 @@
         List<SearchResultModel> SearchAccounts(string username);
 
         #region Customer Profile
+
+        IEnumerable<CustInfoModel> GetCustInfoByCustID(string custIDs);
+
         CustomerInfoByCTSCustIdModel GetCustomerInfoByCTSCustId(long ctsCustId);
 
         CustomerInfoByCustIdsModel GetCustomerInfoByCustIds(long custId, int sourceType);
