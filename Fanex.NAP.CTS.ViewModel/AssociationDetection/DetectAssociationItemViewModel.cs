@@ -23,8 +23,9 @@
             this.CustomerClass = data.CustomerClass > 0 ? data.CustomerClass.ToString() : null;
             this.IsProblemAccount = data.ParentIDs != null && data.ParentIDs.Split(',').Any(y => y == "50");
             this.IsPAProbation = data.IsPAProbation;
-            this.AgentUsername = data.AgentUsername;
-            this.AgentEvidence = data.AgentEvidence;
+            this.AgentCTSCustID = data.AgentCTSCustID;
+            this.AgentUsername = data.AgentUsername != null ? data.AgentUsername : "-";
+            this.AgentEvidence = data.AgentEvidence != null ? data.AgentEvidence : "-";
         }
 
         public int RowNumber { get; set; }
@@ -52,6 +53,8 @@
         public bool IsProblemAccount { get; set; }
 
         public bool IsPAProbation { get; set; }
+
+        public long AgentCTSCustID { get; set; }
 
         public string AgentUsername { get; set; }
 

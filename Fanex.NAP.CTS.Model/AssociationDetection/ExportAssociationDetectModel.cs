@@ -4,18 +4,7 @@
 
     public class ExportAssociationDetectModel
     {
-        public ExportAssociationDetectModel(DetectAssociationMergeGroupModel data)
-        {
-            UserName = data.UserName;
-            CreatedDate = data.CreatedDate;
-            CustomerClass = data.CustomerClass;
-            GroupID = data.GroupID;
-            Danger1 = data.Danger1;
-            Danger2 = data.Danger2;
-            Danger3 = data.Danger3;
-            Danger4 = data.Danger4;
-            Danger5 = data.Danger5;
-        }
+        public ExportAssociationDetectModel() { }       
 
         public string UserName { get; set; }
 
@@ -35,17 +24,17 @@
 
         public int Danger5 { get; set; }        
 
-        public decimal TotalWinloss { get; set; }
+        public decimal? TotalWinloss { get; set; }
 
-        public decimal WinlossLast3Days { get; set; }
+        public decimal? WinlossLast3Days { get; set; }
 
-        public decimal WinlossLast7Days { get; set; }
+        public decimal? WinlossLast7Days { get; set; }
 
-        public decimal TotalTurnover { get; set; }
+        public decimal? TotalTurnover { get; set; }
 
-        public decimal TurnoverLast3Days { get; set; }
+        public decimal? TurnoverLast3Days { get; set; }
 
-        public decimal TurnoverLast7Days { get; set; }
+        public decimal? TurnoverLast7Days { get; set; }
 
         public string DangerLevel 
         {

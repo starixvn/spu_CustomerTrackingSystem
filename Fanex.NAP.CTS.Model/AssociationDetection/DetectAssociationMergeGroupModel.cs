@@ -30,6 +30,8 @@
 
         public bool IsPAProbation { get; set; }
 
+        public long AgentCTSCustID { get; set; }
+
         public string AgentUsername { get; set; }
 
         public string AgentEvidence { get; set; }

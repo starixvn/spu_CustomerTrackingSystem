@@ -61,14 +61,14 @@
                 { targets: "_all", defaultContent: "-" },
                 { targets: [0, 1, 2, 3, 4 , 5, 6, 7, 8], className: "text-center" },
                 { targets: [0], width: "5%" },
-                { targets: [1], width: "15%" },
+                { targets: [1], width: "12%" },
                 { targets: [2], width: "10%" },
-                { targets: [3], width: "15%" },
-                { targets: [4], width: "15%" },
+                { targets: [3], width: "10%" },
+                { targets: [4], width: "20%" },
                 { targets: [5], width: "15%" },
-                { targets: [6], width: "15%" },
-                { targets: [7], width: "5%" },
-                { targets: [8], width: "5%" }
+                { targets: [6], width: "10%" },
+                { targets: [7], width: "8%" },
+                { targets: [8], width: "10%" }
             ],
             columns: [
                 { data: obj => obj.GroupID },
@@ -76,12 +76,7 @@
                     data: obj => () => {
                         let url = common.modifyRelativeUrl('Account/Index/' + obj.CTSCustID);
                         return `<a class='.view-profile-byusername' href=${url}> ${obj.UserName} </a>`;
-                    }
-                    //createdCell: (cell, _, row) => {
-                    //    $('.association-detect-detail', cell).click(() => {
-                    //        ShowAssociationDetectDetail(row);
-                    //    })
-                    //}
+                    }               
                 },
                 { data: obj => obj.CustStatus },
                 { data: obj => obj.Evidences },
@@ -102,7 +97,16 @@
                     }
                 },
                 { data: obj => obj.CustomerClass },
-                { data: obj => obj.AgentUsername },
+                {
+                    data: obj => () => {
+                        if (obj.AgentCTSCustID != 0) {
+                            let url = common.modifyRelativeUrl('Account/Index/' + obj.AgentCTSCustID);
+                            return `<a class='.view-profile-byusername' href=${url}> ${obj.AgentUsername} </a>`;
+                        } else {
+                            return obj.AgentUsername;
+                        }                        
+                    } 
+                },
                 { data: obj => obj.AgentEvidence }
             ],
             drawCallback: function (settings) {
