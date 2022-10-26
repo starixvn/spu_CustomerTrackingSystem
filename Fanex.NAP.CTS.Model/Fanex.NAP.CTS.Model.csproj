@@ -215,6 +215,7 @@
     <Compile Include="AssociationDetection\GetAssociationDetectionModel.cs" />
     <Compile Include="API\ProblemCaseMonitor\ProblemCaseModel.cs" />
     <Compile Include="API\ProblemCaseMonitor\ProblemCaseMonitorParamsModel.cs" />
+    <Compile Include="AssociationDetection\GetCustStatisticsInfoRealtimeModel.cs" />
     <Compile Include="AssociationDetection\MergeGroupInfoModel.cs" />
     <Compile Include="AssociationDetection\SharedIPMatchesInfoModel.cs" />
     <Compile Include="AssociationReport\AssociationDetailFromMySqlModel.cs" />

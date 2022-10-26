@@ -291,15 +291,36 @@
                    
                     var assMergeGroup = _associationDetectionService.MergeGroupDetectAssociation(mergeGroupInfo);
                   
-                    if (isExportExcel)
+                    if (isExportExcel && assMergeGroup.Any())
                     {
-                        result.ExportItemList = orgUserList.Select(x => 
-                        {                           
-                            return new ExportAssociationDetectModel
+                        var custStatisticsList = _associationDetectionService.GetCustStatisticsInfoRealtime(custIDs);
+                                             
+                        result.ExportItemList = orgUserList.Select(x =>
+                        {
+                            var cust1 = assMergeGroup.FirstOrDefault(y => y.CustID == x.CustID);
+                            var cust2 = custStatisticsList.FirstOrDefault(y => y.CustID == x.CustID);
+                            var item = new ExportAssociationDetectModel { UserName = x.UserName };
+                            if (cust1 != null)
                             {
-                                UserName = x.UserName,
-                                GroupID = assMergeGroup.FirstOrDefault(y => y.CustID == x.CustID).GroupID ?? null
-                            };
+                                item.CreatedDate = cust1.CreatedDate;
+                                item.CustomerClass = cust1.CustomerClass;
+                                item.GroupID = cust1.GroupID;
+                                item.Danger1 = cust1.Danger1;
+                                item.Danger2 = cust1.Danger2;
+                                item.Danger3 = cust1.Danger3;
+                                item.Danger4 = cust1.Danger4;
+                                item.Danger5 = cust1.Danger5;
+                            }
+                            if (cust2 != null)
+                            {
+                                item.TotalWinloss = cust2.TotalWinlossRM;
+                                item.WinlossLast3Days = cust2.WinlossRM_Last3Days;
+                                item.WinlossLast7Days = cust2.WinlossRM_Last7Days;
+                                item.TotalTurnover = cust2.TotalTurnoverRM;
+                                item.TurnoverLast3Days = cust2.TurnoverRM_Last3Days;
+                                item.TurnoverLast7Days = cust2.TurnoverRM_Last7Days;
+                            }
+                            return item;
                         });
                     }
                     else
@@ -308,12 +329,12 @@
                         {           
                             return new DetectAssociationItemViewModel(x);
                         });
-                    }                   
+                    }
                 }
                 catch (Exception ex)
                 {
                     result.ErrorCode = 1;
-                    result.ErrorMessage = "Timeout Issue.Please try again";
+                    result.ErrorMessage = ex.Message;
 
                     var logMessage = new LogMessage(ex.Message)
                        .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
@@ -335,11 +356,11 @@
 
         private IEnumerable<SharedIPMatchesInfoModel> DetectAssociationBySharedMatches(IEnumerable<ValidateUserNameModel> validateUserNames, string custIds)
         {
-            var detectAssByAssMatches = _associationDetectionService.DetectAssociationBySharedMatches(custIds);
+            var detectAssByAssMatches = _associationDetectionService.DetectAssociationBySharedMatches(custIds);           
 
             return DetectAssociationBySharedIPMatches(detectAssByAssMatches, validateUserNames);
         }
-
+      
         private IEnumerable<SharedIPMatchesInfoModel> DetectAssociationBySharedIPMatches(IEnumerable<DetectAssociationBySharedIPMatchesModel> detectAss
            , IEnumerable<ValidateUserNameModel> validateUserNames)
         {
@@ -364,8 +385,10 @@
         {
             var assCustBySharedIP = ass.Select(x => new AssociationCustModel
             {
+                FromCustID = x.FromCustID,
                 FromCTSCustID = x.FromCTSCustID,
                 FromUserName = x.FromUserName,
+                ToCustID = x.ToCustID,
                 ToCTSCustID = x.ToCTSCustID,      
                 ToUserName = x.ToUserName
             });
@@ -377,22 +400,40 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetectionDetails)]
         public ActionResult GetDetectAssociationDetail(GetAssociationDetectionDetailViewModel model)
         {
-            var result = new List<GetAssociationDetectDetailViewModel>();
+            var result = Enumerable.Empty<GetAssociationDetectDetailViewModel>();
+            var viewModel = new List<GetAssociationDetectDetailViewModel>();
 
-            if (model.IsIPLast3Days)            
-                result.AddRange(GetAssociationDetectSharedIP(model.UserName, model.CustID, model.CTSCustID, model.AssociationByIPJson));            
+            if (model.IsIPLast3Days)
+                viewModel.AddRange(GetAssociationDetectSharedIP(model.UserName, model.CustID, model.CTSCustID, model.AssociationByIPJson));            
 
-            if (model.Is3MatchesLast7Days)            
-                result.AddRange(GetAssociationDetectSharedMatches(model));
+            if (model.Is3MatchesLast7Days)
+                viewModel.AddRange(GetAssociationDetectSharedMatches(model));
                         
-            var data = _associationDetectionService.GetAssociationDetectionDetail(model, AppSettings.Get("GetAssDetectionFromMySQL") == "1");
+            var dataCust = _associationDetectionService.GetAssociationDetectionDetail(model, AppSettings.Get("GetAssDetectionFromMySQL") == "1");
             
-            if (data != null && data.Any())
+            if (dataCust != null && dataCust.Any())
             {
-                foreach (var item in data)
+                foreach (var item in dataCust)
                 {
-                    result.Add(new GetAssociationDetectDetailViewModel(item));
-                }                          
+                    viewModel.Add(new GetAssociationDetectDetailViewModel(item));
+                }     
+            }
+
+            if (viewModel.Any())
+            {
+                result = viewModel.GroupBy(x => x.CTSCustID).Select(x =>
+                {
+                    var agentInfos = x.Where(y => !string.IsNullOrEmpty(y.AgentInfoJson)).Select(y => y.AgentInfoJson);
+
+                    return new GetAssociationDetectDetailViewModel
+                    {
+                        CTSCustID = x.Key,
+                        CustID = x.FirstOrDefault()?.CustID,
+                        UserName = x.FirstOrDefault()?.UserName,
+                        AgentInfoJson = string.Join(",", agentInfos),
+                        AssociatedTypes = string.Join(", ", x.Select(y => y.AssociatedTypes))
+                    };
+                });
             }
             
             return Json(new
@@ -413,7 +454,9 @@
                         .Select(x =>
                         {
                              return new GetAssociationDetectDetailViewModel
-                             {
+                             {          
+                                 CustID = x.FromCTSCustID == ctsCustID ? x.ToCustID : x.FromCustID,
+                                 CTSCustID = x.FromCTSCustID == ctsCustID ? x.ToCTSCustID : x.FromCTSCustID,
                                  UserName = x.FromCTSCustID == ctsCustID ? x.ToUserName : x.FromUserName,
                                  AssociatedTypes = $"<span class='association-detect-detail-ip' data-fromusername={userName} data-fromcustid={custID}>IP(last3days)</span>"
                              };
@@ -440,13 +483,21 @@
                 if (custSharedMatches != null)
                 {
                     return custSharedMatches.Distinct().Select(x =>
-                    {      
-                        return new GetAssociationDetectDetailViewModel
+                    {
+                        var custFirst = validatedList.FirstOrDefault(y => y.CustID == x);
+
+                        if (custFirst != null)
                         {
-                            UserName = validatedList.FirstOrDefault(y => y.CustID == x).UserName ?? string.Empty,
-                            CustID = (int)x,
-                            AssociatedTypes = $"<span class='association-detect-detail-match' data-fromusername={model.UserName} data-fromcustid={model.CustID}>Match</span>"
-                        };
+                            return new GetAssociationDetectDetailViewModel
+                            {
+                                UserName = custFirst.UserName,
+                                CustID = custFirst.CustID,
+                                CTSCustID = custFirst.CTSCustID,
+                                AssociatedTypes = $"<span class='association-detect-detail-match' data-fromusername={model.UserName} data-fromcustid={model.CustID}>Match</span>"
+                            };
+                        }
+
+                        return new GetAssociationDetectDetailViewModel();
                     });                                        
                 }
             }
@@ -488,13 +539,23 @@
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetectionDetails)]
-        public ActionResult GetDetectAssociationDetailMatch(int custID1, int custID2)
+        public ActionResult GetDetectAssociationDetailMatch(int custID1, int custID2, string custIDList)
         {
-            var result = Enumerable.Empty<GetAssociationDetectDetailMatchViewModel>();
-            var custIDList = $"{custID1},{custID2}";
+            var result = Enumerable.Empty<GetAssociationDetectDetailMatchViewModel>();          
+            var tickets = Enumerable.Empty<GetAssociationDetectDetailMatchModel>();
 
-            var tickets = _associationDetectionService.GetDetectAssociationDetailMatch(custIDList)
-                .Distinct(x => x.TransID)
+            if (string.IsNullOrEmpty(custIDList))
+            {
+                custIDList = $"{custID1},{custID2}";
+
+                tickets = _associationDetectionService.GetDetectAssociationDetailMatch(-1, custIDList, (int)DetectAssociation_QueryType.GetTicketDetail);
+            }
+            else
+            {
+                tickets = _associationDetectionService.GetDetectAssociationDetailMatch(custID1, custIDList, (int)DetectAssociation_QueryType.GetTicketDetailByListCust);
+            }
+            
+            tickets = tickets.Distinct(x => x.TransID)
                 .OrderByDescending(x=>x.MatchID)
                 .ThenByDescending(x=>x.TransDate);
 

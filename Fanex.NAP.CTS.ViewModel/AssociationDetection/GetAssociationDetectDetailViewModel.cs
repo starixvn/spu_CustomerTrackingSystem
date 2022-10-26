@@ -16,7 +16,7 @@
             this.CTSCustID = cust.ToCTSCustID;
             
             if (cust.AssociationType != null && cust.AssociationType.ToLower() == "agent")
-            {                
+            {
                 this.AssociatedTypes = $"<span class='association-detect-detail-agent' data-fromusername={cust.FromUsername}>Agent </span>";
 
                 var agentInfo = new List<GetAssociationDetectDetailAgentViewModel>
@@ -85,9 +85,9 @@
 
         public string UserName { get; set; }
 
-        public int CustID { get; set; }
+        public int? CustID { get; set; }
 
-        public long CTSCustID { get; set; }
+        public long? CTSCustID { get; set; }
 
         public string AssociatedTypes { get; set; }
 

@@ -1,5 +1,7 @@
 ﻿namespace Fanex.NAP.CTS.Model.AssociationDetection
 {
+    using System;
+
     public class DetectAssociationMergeGroupModel
     {
         public int RowNumber { get; set; }
@@ -27,5 +29,23 @@
         public string ParentIDs { get; set; }
 
         public bool IsPAProbation { get; set; }
+
+        public long AgentCTSCustID { get; set; }
+
+        public string AgentUsername { get; set; }
+
+        public string AgentEvidence { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+
+        public int Danger1 { get; set; }
+
+        public int Danger2 { get; set; }
+
+        public int Danger3 { get; set; }
+
+        public int Danger4 { get; set; }
+
+        public int Danger5 { get; set; }
     }
 }

@@ -59,34 +59,55 @@
             columnDefs: [
                 { "visible": false, "targets": 0 },
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 3, 4 , 5, 6], className: "text-center" },
+                { targets: [0, 1, 2, 3, 4 , 5, 6, 7, 8], className: "text-center" },
                 { targets: [0], width: "5%" },
-                { targets: [1], width: "20%" },
+                { targets: [1], width: "12%" },
                 { targets: [2], width: "10%" },
-                { targets: [3], width: "15%" },
+                { targets: [3], width: "10%" },
                 { targets: [4], width: "20%" },
-                { targets: [5], width: "20%" },
-                { targets: [6], width: "15%" },
+                { targets: [5], width: "15%" },
+                { targets: [6], width: "10%" },
+                { targets: [7], width: "8%" },
+                { targets: [8], width: "10%" }
             ],
             columns: [
                 { data: obj => obj.GroupID },
                 {
-                    data: obj => RenderUserName(obj),
-                    createdCell: (cell, _, row) => {
-                        $('.association-detect-detail', cell).click(() => {                           
-                            ShowAssociationDetectDetail(cell, row);
-                        })
-                    }
+                    data: obj => () => {
+                        let url = common.modifyRelativeUrl('Account/Index/' + obj.CTSCustID);
+                        return `<a class='.view-profile-byusername' href=${url}> ${obj.UserName} </a>`;
+                    }               
                 },
                 { data: obj => obj.CustStatus },
                 { data: obj => obj.Evidences },
-                { data: obj => obj.AssociatedTypes },
+                {
+                    data: obj => obj.AssociatedTypes, createdCell: (cell, _, row) => {
+                        $('.association-detect-match', cell).click(() => {
+                            ShowAssociationDetectMatch(row);
+                        });
+
+                        $('.icon-account_detail', cell).click(() => {
+                            ShowAssociationDetectDetail(row);
+                        });
+                    }
+                },
                 {
                     data: obj => common.renderCategoryName(obj.CustomerCategory), createdCell: (cell, _, row) => {
                         common.renderCategoryColor(cell, row);
                     }
                 },
-                { data: obj => obj.CustomerClass }
+                { data: obj => obj.CustomerClass },
+                {
+                    data: obj => () => {
+                        if (obj.AgentCTSCustID != 0) {
+                            let url = common.modifyRelativeUrl('Account/Index/' + obj.AgentCTSCustID);
+                            return `<a class='.view-profile-byusername' href=${url}> ${obj.AgentUsername} </a>`;
+                        } else {
+                            return obj.AgentUsername;
+                        }                        
+                    } 
+                },
+                { data: obj => obj.AgentEvidence }
             ],
             drawCallback: function (settings) {
                 var api = this.api();
@@ -96,7 +117,7 @@
                 api.column(0, { page: 'current' }).data().each(function (group, i) {
                     if (last !== group) {
                         $(rows).eq(i).before(
-                            '<tr class="group"><td colspan="6"><span><i class="icon-chevron-down"></i>' + 'Group ' + group + '</span></td></tr>'
+                            '<tr class="group"><td colspan="8"><span><i class="icon-chevron-down"></i>' + 'Group ' + group + '</span></td></tr>'
                         );
 
                         last = group;
@@ -125,17 +146,9 @@
         });        
 
         return table;
-    } 
+    }    
 
-    function RenderUserName(obj) {
-        if (obj.UserName !== null) {
-            return `<span class="association-detect-detail" data-groupid=${obj.GroupID} data-custid=${obj.CustID} data-ctscustid=${obj.CTSCustID}> ${obj.UserName}</span>`;
-        }
-
-        return "";
-    }   
-
-    function ShowAssociationDetectDetail(cell, fromObj) {       
+    function ShowAssociationDetectDetail(fromObj) {       
         if (tableAssociationDetectDetail == null) {
             tableAssociationDetectDetail = domElements.tblAssociationDetectDetail.DataTable({
                 language: {
@@ -188,10 +201,10 @@
         let ctsCustIDs = [];
         let userNames = [];
 
-        domElements.tblAssociationDetection.find('.association-detect-detail').each(function () {
+        domElements.tblAssociationDetection.find('.view-detail').each(function () {
             if ($(this).attr("data-groupid") == fromObj.GroupID) {
                 ctsCustIDs.push($(this).attr('data-ctscustid'));
-                userNames.push($(this).text().trim());
+                userNames.push($(this).attr('data-username'));
             }
         });
        
@@ -321,7 +334,30 @@
         })
     }
 
+    function ShowAssociationDetectMatch(fromObj) {
+        RenderGridMatch();
+
+        let custIDs = [];        
+        domElements.tblAssociationDetection.find('.association-detect-match').each(function () {
+            if ($(this).attr("data-groupid") == fromObj.GroupID) {
+                custIDs.push($(this).attr('data-custid'));
+            }
+        });
+
+        GetAssociationDetectDetailMatch(fromObj.CustID, -1, custIDs.join());
+
+        ShowDialogMatch(fromObj.UserName, "");
+    }
+
     function ShowAssociationDetectDetailMatch(userName1, userName2, custID1, custID2) {               
+        RenderGridMatch();
+      
+        GetAssociationDetectDetailMatch(custID1, custID2, "");
+        
+        ShowDialogMatch(userName1, userName2);
+    }
+
+    function RenderGridMatch() {
         if (tableAssociationDetectDetailMatch == null) {
             tableAssociationDetectDetailMatch = domElements.tblAssociationDetectDetailMatch.DataTable({
                 language: {
@@ -334,7 +370,7 @@
                 info: false,
                 ordering: false,
                 searching: false,
-                scrollX: false,             
+                scrollX: false,
                 scrollCollapse: false,
                 paging: false,
                 searching: false,
@@ -385,13 +421,19 @@
         }
 
         domElements.tblAssociationDetectDetailMatch.DataTable().clear();
-      
-        GetAssociationDetectDetailMatch(custID1, custID2);
+    }
+
+    function ShowDialogMatch(userName1, userName2) {
+        let title = "ASSOCIATION DETAILS - MATCH (in the last 7 days): " + userName1;
+
+        if (userName2 != "") {
+            title += " - " + userName2;
+        }
 
         domElements.divAssociationDetectDetailMatch.dialog({
             modal: true,
             width: '950px',
-            title: "ASSOCIATION DETAILS - MATCH (in the last 7 days): " + userName1 + " - " + userName2,
+            title: title,
             resizable: false,
             draggable: true,
             close: function () {
@@ -401,10 +443,9 @@
                 $('.ui-dialog .ui-dialog-content').css('padding-left', '12px');
             }
         });
-        
     }
 
-    function GetAssociationDetectDetailMatch(custID1, custID2) {
+    function GetAssociationDetectDetailMatch(custID1, custID2, custIDList) {
         $.ajax(common.modifyRelativeUrl('AssociationDetection/GetDetectAssociationDetailMatch'), {
             type: 'POST',
             beforeSend: function () {
@@ -412,7 +453,8 @@
             },
             data: {
                 custID1: custID1,
-                custID2: custID2
+                custID2: custID2,
+                custIDList: custIDList
             },
             success: function (response) {
                 if (response !== undefined) {                   
@@ -821,6 +863,8 @@
         InitInputTagUsername();
 
         domElements.btnDetect.on('click', () => DetectUserName());
+
+        //domElements.btnDetect.on('click', () => { DetectUserName(); ExportToExcel() });
 
         domElements.btnExportToExcel.on('click', () => ExportToExcel());       
 

@@ -145,7 +145,8 @@
     {
         DetectAss = 1,
         GetTicketDetail = 2,
-        GetAssByGroup = 3
+        GetAssByGroup = 3,
+        GetTicketDetailByListCust = 4
     }
 
     public enum CustomerCategoryID
