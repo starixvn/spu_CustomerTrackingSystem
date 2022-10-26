@@ -8,7 +8,11 @@
 
         public string GroupName { get; set; }
 
-        public int ABI { get; set; }        
+        public int ABI { get; set; }
+
+        public int Ori { get; set; }
+
+        public string ProblemCategory { get; set; }
 
         public int AllCredit { get; set; } // 0-Not Existed; 1-All; 2-Existed
 

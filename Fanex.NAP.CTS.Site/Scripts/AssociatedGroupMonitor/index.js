@@ -12,6 +12,7 @@
         cbbSites: $('#cbbSites'),
         cbbAssociatedTypes: $('#cbbAssociatedTypes'),
         cbbABIAssociatedGroup: $('#cbbABIAssociatedGroup'),
+        cbbOriAssociatedGroup: $('#cbbOriAssociatedGroup'),
         txtCommentAssociatedAccount: $('#txtCommentAssociatedAccount'),
         divAddAssociatedAccount: $('#divAddAssociatedAccount'),
         inputTagUsername: $('#inputTagUsername'),
@@ -68,24 +69,24 @@
             scrollCollapse: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], className: "text-center" },
+                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], className: "text-center" },
                 { targets: [0], width: "5%" },
                 { targets: [1], width: "12%" },
                 { targets: [2], width: "10%" },
-                { targets: [3], width: "10%" },
+                { targets: [3], width: "5%" },
                 { targets: [4], width: "5%" },
-                { targets: [5], width: "8%" },
-                { targets: [6], width: "15%" },
+                { targets: [5], width: "10%" },
+                { targets: [6], width: "8%" },
                 { targets: [7], width: "10%" },
                 { targets: [8], width: "10%" },
-                { targets: [9], width: "15%" },
+                { targets: [9], width: "10%" },
+                { targets: [10], width: "15%" }                
             ],
             columns: [
                 { data: obj => obj.GroupID },
-                { data: obj => obj.GroupName },
                 {
                     data: obj => {
-                        return obj.SiteGroups;
+                        return obj.GroupName + " " + obj.SiteGroups;
                     }, createdCell: (cell, _, row) => {
                         $('.view-site-credit', cell).click(() => {
                             GetSitesByGroup(row.GroupID, false, "CREDIT");
@@ -93,11 +94,13 @@
 
                         $('.view-site-licensee', cell).click(() => {
                             GetSitesByGroup(row.GroupID, true, "LICENSEE");
-                        });        
+                        });
                     }
-                },
+                },                
                 { data: obj => obj.AssociatedTypes },
                 { data: obj => obj.ABI },
+                { data: obj => obj.Ori },
+                { data: obj => obj.ProblemCategory },
                 { data: obj => obj.TotalAccount },
                 { data: obj => obj.Remark },
                 { data: obj => obj.CreatedDate },
@@ -512,7 +515,7 @@
                     
                     domElements.divAddAssociatedGroup.dialog({
                         modal: true,
-                        width: '690px',
+                        width: '790px',
                         title: 'EDIT GROUP',
                         _allowInteraction: function (event) {
                             return !!$(event.target).is(".select2-input") || this._super(event);
@@ -858,8 +861,8 @@
         }
 
         domElements.cbbSites.multiselect({
-            menuWidth: 270,
-            menuHeight: 270,
+            menuWidth: 240,
+            menuHeight: 260,
             selectedText: "# of # selected",
             noneSelectedText: "Select Sites",
             enableClickableOptGroups: true,
@@ -867,13 +870,13 @@
             groupsCollapsable: true,
             optGroupChecked: true
         }).multiselectfilter({
-            width: 210,
+            width: 190,
             placeholder: '',
             label: ''
         });
 
         domElements.cbbAssociatedTypes.multiselect({
-            menuWidth: 200,
+            menuWidth: 185,
             menuHeight: 200,
             selectedText: "# of # selected",
             noneSelectedText: "Select Associated Types"
@@ -899,7 +902,7 @@
 
             domElements.divAddAssociatedGroup.dialog({
                 modal: true,
-                width: '690px',
+                width: '790px',
                 title: 'CREATE NEW GROUP',
                 _allowInteraction: function (event) {
                     return !!$(event.target).is(".select2-input") || this._super(event);
@@ -916,7 +919,9 @@
 
         domElements.btnCancelAssociatedGroup.on('click', () => { domElements.divAddAssociatedGroup.dialog('close') });
 
-        domElements.cbbABIAssociatedGroup.select2();        
+        domElements.cbbABIAssociatedGroup.select2();     
+
+        domElements.cbbOriAssociatedGroup.select2();
        
         domElements.btnSaveAssociatedAccount.on('click', () => AddAssociatedAccount());
 

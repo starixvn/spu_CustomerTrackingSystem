@@ -34,6 +34,8 @@
             this.AssociatedTypes = string.Join(", ", associatedTypes);
 
             this.ABI = data.ABI;
+            this.Ori = data.Ori;
+            this.ProblemCategory = data.ProblemCategory;
             this.TotalAccount = data.TotalAccount;
             this.Remark = data.Remark;
             this.CreatedDate = data.Created.ToString(Consts.FormatDateToString_MMMddyyyy);
@@ -50,6 +52,10 @@
         public string AssociatedTypes { get; set; }
 
         public int ABI { get; set; }
+
+        public int Ori { get; set; }
+
+        public string ProblemCategory { get; set; }
 
         public int TotalAccount { get; set; }
 

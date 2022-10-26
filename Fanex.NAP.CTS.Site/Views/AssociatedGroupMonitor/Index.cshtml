@@ -28,14 +28,15 @@
                 <thead>
                     <tr>
                         <th>Group ID</th>
-                        <th>Group Name</th>
-                        <th>Site</th>
+                        <th>Group Name</th>                     
                         <th>Associated Type</th>
                         <th>ABI</th>
+                        <th>Ori</th>
+                        <th>Problem Category</th>
                         <th>Total Accounts</th>
                         <th>Comment</th>
                         <th>Created Date</th>
-                        <th>Created By</th>                      
+                        <th>Created By</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -54,14 +55,14 @@
     <div style="display: flex">
         <div class="form-control margin-right-20">
             <div class="label">Site<label style="color:red">*</label></div>
-            <div style="width:270px">
+            <div style="width:240px">
                 <select class="control width-select" id="cbbSites" multiple="multiple">                  
                 </select>
             </div>
         </div>
         <div class="form-control margin-right-20">
             <div class="label">Associated Type<label style="color:red">*</label></div>
-            <div style="width:205px">
+            <div style="width:185px">
                 <select class="control width-select" id="cbbAssociatedTypes" multiple="multiple">
                     <option selected value=@((int)AssociationType.BettingPattern)>Betting Pattern</option>
                     <option selected value=@((int)AssociationType.Device)>Device</option>
@@ -70,11 +71,24 @@
                 </select>
             </div>
         </div>
-        <div class="form-control">
+        <div class="form-control margin-right-20">
             <div class="label">ABI<label style="color:red">*</label></div>
-            <div style="width:150px">
+            <div style="width:140px">
                 <select class="control" id="cbbABIAssociatedGroup" name="state" style="height: 100px">
                     <option disabled selected value="">Select an ABI</option>
+                    @for (int idx = 1; idx < 51; idx++)
+                    {
+                        <option value=@idx>@idx</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="form-control">
+            <div class="label">Ori</div>
+            <div style="width:140px">
+                <select class="control" id="cbbOriAssociatedGroup" name="state" style="height: 100px">
+                    <option disabled selected value="">Select an Ori</option>
                     @for (int idx = 1; idx < 51; idx++)
                     {
                         <option value=@idx>@idx</option>
