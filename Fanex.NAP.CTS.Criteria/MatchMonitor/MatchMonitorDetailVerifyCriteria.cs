@@ -24,6 +24,9 @@
         [SpParam(SqlParamName = "ip_VerifiedBy")]
         public int VerifiedBy { get; set; }
 
+        [SpParam(SqlParamName = "ip_Reason")]
+        public int Reason { get; set; }
+
         public override string GetSettingKey()
             => "CTS_DC_MatchMonitor_Details_Verify";
 

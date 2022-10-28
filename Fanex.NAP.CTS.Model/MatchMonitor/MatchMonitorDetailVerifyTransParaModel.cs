@@ -14,6 +14,8 @@ namespace Fanex.NAP.CTS.Model.MatchMonitor
         
         public string TranIds { get; set; }      
         
-        public int VerifiedBy { get; set; }              
+        public int VerifiedBy { get; set; }
+
+        public int Reason { get; set; }
     }
 }

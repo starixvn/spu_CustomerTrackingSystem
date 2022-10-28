@@ -165,7 +165,8 @@
                 LiveIndicator: domElements.liveIndicator == "True",
                 BettypeID: domElements.betTypeID,
                 BetID: domElements.betIDToString,
-                TranIds: GetTranIds().join()
+                TranIds: GetTranIds().join(),
+                Reason: domElements.reason
             },
             beforeSend: function () {
                 domElements.firsttblMonitor.addClass('loading-value');
