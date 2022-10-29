@@ -10,13 +10,17 @@
 
         public int ABI { get; set; }
 
-        public int Ori { get; set; }
-
-        public string ProblemCategory { get; set; }
+        public int Ori { get; set; }       
 
         public int AllCredit { get; set; } // 0-Not Existed; 1-All; 2-Existed
 
         public int AllLicensee { get; set; }  // 0-Not Existed; 1-All; 2-Existed
+
+        public string CategoryName { get; set; }
+
+        public int PAAllCredit { get; set; }  // 0-Not Existed; 1-All; 2-Existed
+
+        public int PAAllLicensee { get; set; }  // 0-Not Existed; 1-All; 2-Existed
 
         public bool HasDevice { get; set; }
 

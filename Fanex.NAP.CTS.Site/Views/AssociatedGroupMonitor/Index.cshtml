@@ -136,6 +136,7 @@
         <span id="spanAddAssociatedAccountGroupIDHidden" hidden></span>
         <span id="spanAddAssociatedAccountGroupNameHidden" hidden></span>
         <span id="spanAddAssociatedAccountGroupABIHidden" hidden></span>
+        <span id="spanAddAssociatedAccountGroupOriHidden" hidden></span>
     </span>
 
     <div class="form-control wrapper-comment">
@@ -146,6 +147,40 @@
     <div class="modal-footer margin-top-10">
         <button id="btnCancelAssociatedAccount" class="button btn-cancel-outline" title="Cancel">Cancel</button>
         <button id="btnSaveAssociatedAccount" class="button -add" title="Save">Save</button>
+    </div>
+</div>
+
+<div id="divSetPC" class="popup-add" style="display: none">      
+    <div style="display: flex">
+        <div class="form-control margin-right-20">
+            <div class="label">Site<label style="color:red">*</label></div>
+            <div style="width:240px">
+                <select class="control width-select" id="cbbSitesSetPC" multiple="multiple">
+                </select>
+            </div>
+        </div>
+
+        <div class="form-control margin-right-20">
+            <div class="label">Problem Category<label style="color:red">*</label></div>
+            <div style="width:200px">
+                <select class="control" id="cbbProblemCategorySetPC" style="width:200px">
+                    <option value="-1">None</option>
+                    <option value="52" selected>Group Betting</option>
+                    <option value="53">Hedging</option>
+                    <option value="54">Arbitrage</option>
+                    <option value="55">Fixed Game</option>
+                    <option value="59">Formula Bet</option>
+                    <option value="62">Info Bet</option>
+                </select>
+            </div>
+        </div>
+    </div>    
+
+    <div class="modal-footer margin-top-20">
+        <button id="btnCancelSetPC" class="button btn-cancel-outline" title="Cancel">Cancel</button>
+        <button id="btnSaveSetPC" class="button -add" title="Save">Save</button>
+        <span id="spanGroupIDSetPCHidden" hidden></span>
+        <span id="spanGroupNameSetPCHidden" hidden></span>
     </div>
 </div>
 

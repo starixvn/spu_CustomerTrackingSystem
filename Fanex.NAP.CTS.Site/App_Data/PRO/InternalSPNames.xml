@@ -214,6 +214,9 @@
 		<Setting Key="CTS_DC_AssociatedGroup_ValidateUsername" SpName="CTS_DC_AssociatedGroup_ValidateUsername" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_AssociatedGroup_GetByID" SpName="CTS_DC_AssociatedGroup_GetByID" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_AssociatedGroup_Update" SpName="CTS_DC_AssociatedGroup_Update" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_AssociatedGroup_GetProblemCategoryByGroupID" SpName="CTS_DC_AssociatedGroup_GetProblemCategoryByGroupID" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_AssociatedGroup_SetProblemCategoryByGroupID" SpName="CTS_DC_AssociatedGroup_SetProblemCategoryByGroupID" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_AssociatedGroup_GetPASites" SpName="CTS_DC_AssociatedGroup_GetPASites" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
 
 	<Function name="LogData">

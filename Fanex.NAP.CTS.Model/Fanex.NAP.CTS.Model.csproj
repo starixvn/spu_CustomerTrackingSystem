@@ -199,8 +199,13 @@
     <Compile Include="AssociatedGroupMonitor\AssociatedAccountMonitorModel.cs" />
     <Compile Include="AssociatedGroupMonitor\AssociatedGroupMonitorModel.cs" />
     <Compile Include="AssociatedGroupMonitor\AssociatedGroupSiteModel.cs" />
+    <Compile Include="AssociatedGroupMonitor\CustInfoAssociatedAccountModel.cs" />
+    <Compile Include="AssociatedGroupMonitor\GetProblemCategoryByGroupIDModel.cs" />
     <Compile Include="AssociatedGroupMonitor\GetUpdateAssociatedGroupMonitorByIDModel.cs" />
+    <Compile Include="AssociatedGroupMonitor\ProblemCategorySiteModel.cs" />
     <Compile Include="AssociatedGroupMonitor\RemoveAssociatedGroupModel.cs" />
+    <Compile Include="AssociatedGroupMonitor\ResultAddAssociatedAccountModel.cs" />
+    <Compile Include="AssociatedGroupMonitor\SetProblemCategoryByGroupIDModel.cs" />
     <Compile Include="AssociatedGroupMonitor\UpdateAssociatedGroupMonitorModel.cs" />
     <Compile Include="AssociatedGroupMonitor\ValidateUserAssociatedAccountModel.cs" />
     <Compile Include="AssociationDetection\AssociationCustModel.cs" />

@@ -6,6 +6,7 @@
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.AssociatedGroupMonitor;
+    using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.Service.Interface;
@@ -23,6 +24,7 @@
     {
         private const string AssociatedAccountMonitorTemplate = "~/App_Data/Excel Template/AssociatedGroupMonitor/Template.xlsx";
         private readonly IAssociatedGroupMonitorService _associatedGroupService;
+        private readonly IProblemAccountClassificationService _paClassificationService;
         private readonly ICommonService _commonService;
 
         public override string BaseControllerName { get => Consts.MenuItemController; }
@@ -30,6 +32,7 @@
         public AssociatedGroupMonitorController()
         {
             _associatedGroupService = new AssociatedGroupMonitorService();
+            _paClassificationService = new ProblemAccountClassificationService();
             _commonService = new CommonService();
         }
 
@@ -95,6 +98,50 @@
                 .Select(x=>x.SiteName);
 
             var result = string.Join(", ", sites);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedGroupMonitorRpt)]
+        public ActionResult GetProblemCategorySiteByGroup(long groupID, bool isLicensee)
+        {
+            var sites = _associatedGroupService.GetProblemCategorySites(groupID)
+                .Where(x => x.IsLicensee == isLicensee && x.IsChosen)
+                .Select(x => x.SiteName);
+
+            var result = string.Join(", ", sites);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedGroupMonitorRpt)]
+        public ActionResult GetProblemCategoryByGroupID(long groupID)
+        {
+            var result = new GetProblemCategoryByGroupIDViewModel();
+
+            var data = _associatedGroupService.GetProblemCategoryByGroupID(groupID);
+
+            if (data != null)
+            {
+                result = new GetProblemCategoryByGroupIDViewModel(data);
+
+                var sites = _associatedGroupService.GetAssociatedGroupSites(groupID);
+
+                result.AddSiteGroups(sites);
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedGroupMonitorRpt)]
+        public ActionResult SaveProblemCategoryByGroupID(SetProblemCategoryByGroupIDModel model)
+        {
+            model.CreatedBy = CurrentSession.UserId;
+
+            var result = _associatedGroupService.SetProblemCategoryByGroupID(model);
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -208,15 +255,37 @@
                 model.CTSCustIDs = resultValidate.CTSCustIDs;
                 model.CreatedBy = CurrentSession.UserId;
 
-                var dbResult = _associatedGroupService.AddAssociatedAccount(model);
+                var addResult = _associatedGroupService.AddAssociatedAccount(model);
                 
-                if (dbResult.ErrorCode == 0)
-                {                    
-                    _associatedGroupService.UpdateABIToMainDB(model.CustIDs, model.ABI);
+                if (addResult.ErrorCode == 0)
+                {
+                    var custPas = addResult.CustInfos.Where(x => x.IsSyncPA).Select(x => new InsertProblemAccountModel {
+                        CustID = x.CustID,
+                        CTSCustID = x.CTSCustID,
+                        RoleID = x.RoleID,
+                        SubscriberID = x.SubscriberID,
+                        IsLicensee = x.IsLicensee,
+                        CategoryID = x.CategoryID,
+                        CategoryGroup = x.CategoryGroup,                      
+                        IsDirectPA = true,
+                        IsFromCTS = true,
+                        CreatedBy = CurrentSession.UserId
+                    });
+
+                    if (custPas.Any())
+                    {
+                        _paClassificationService.InsertProblemAccountPackage(custPas, InsertPA_ByType.Category, "AssociatedGroupMonitorAddPA", FromFlow.CTSWEB, true);
+                    }
+
+                    var custUpdateABI = addResult.CustInfos.Where(x => !x.IsSyncPA).Select(x => x.CustID);
+                    if (custUpdateABI.Any())
+                    {
+                        _associatedGroupService.UpdateDangerToMainDB(string.Join(",", custUpdateABI), model.ABI, model.Ori);
+                    }                    
                 }
 
-                result.ErrorCode = dbResult.ErrorCode;
-                result.ErrorMessage = dbResult.ErrorMsg;
+                result.ErrorCode = addResult.ErrorCode;
+                result.ErrorMessage = addResult.ErrorMsg;
                 result.ResultValidated = resultValidate;
             }
 

@@ -8,6 +8,8 @@
 
         public int ABI { get; set; }
 
+        public int Ori { get; set; }
+
         public int AllCredit { get; set; }
 
         public int AllLicensee { get; set; }

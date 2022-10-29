@@ -14,8 +14,7 @@
             var siteGroups = new List<string>();
 
             if (data.AllCredit == 1 || data.AllCredit == 2)            
-                siteGroups.Add("<span class='view-site view-site-credit'>Credit</span>");
-            
+                siteGroups.Add("<span class='view-site view-site-credit'>Credit</span>");            
 
             if (data.AllLicensee == 1 || data.AllLicensee == 2)            
                 siteGroups.Add("<span class='view-site view-site-licensee'>Licensee</span>");            
@@ -34,8 +33,19 @@
             this.AssociatedTypes = string.Join(", ", associatedTypes);
 
             this.ABI = data.ABI;
-            this.Ori = data.Ori;
-            this.ProblemCategory = data.ProblemCategory;
+            this.Ori = data.Ori;                       
+            
+            var categoryNameSite = new List<string>();
+            if (data.PAAllCredit == 1 || data.PAAllCredit == 2)
+                categoryNameSite.Add("<span class='view-site view-pcsite-credit'>Credit</span>");
+
+            if (data.PAAllLicensee == 1 || data.PAAllLicensee == 2)
+                categoryNameSite.Add("<span class='view-site view-pcsite-licensee'>Licensee</span>");
+
+            this.CategoryNameSite = string.Join(", ", categoryNameSite);
+
+            this.CategoryName = data.CategoryName;
+
             this.TotalAccount = data.TotalAccount;
             this.Remark = data.Remark;
             this.CreatedDate = data.Created.ToString(Consts.FormatDateToString_MMMddyyyy);
@@ -55,7 +65,9 @@
 
         public int Ori { get; set; }
 
-        public string ProblemCategory { get; set; }
+        public string CategoryName { get; set; }
+
+        public string CategoryNameSite { get; set; }
 
         public int TotalAccount { get; set; }
 
