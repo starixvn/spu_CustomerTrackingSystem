@@ -277,11 +277,17 @@
                         _paClassificationService.InsertProblemAccountPackage(custPas, InsertPA_ByType.Category, "AssociatedGroupMonitorAddPA", FromFlow.CTSWEB, true);
                     }
 
-                    var custUpdateABI = addResult.CustInfos.Where(x => !x.IsSyncPA).Select(x => x.CustID);
+                    var custUpdateABI = addResult.CustInfos.Where(x => !x.IsSyncPA).Select(x => x.CustID).Distinct();
                     if (custUpdateABI.Any())
                     {
-                        _associatedGroupService.UpdateDangerToMainDB(string.Join(",", custUpdateABI), model.ABI, model.Ori);
-                    }                    
+                        _associatedGroupService.UpdateABIToMainDB(string.Join(",", custUpdateABI), model.ABI);
+                    }
+
+                    var custUpdateOri = addResult.CustInfos.Select(x => x.CustID).Distinct();
+                    if (custUpdateOri.Any())
+                    {
+                        _associatedGroupService.UpdateOriToMainDB(string.Join(",", custUpdateOri), model.Ori);
+                    }
                 }
 
                 result.ErrorCode = addResult.ErrorCode;

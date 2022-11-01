@@ -49,7 +49,9 @@
 
         DBResult SetProblemCategoryByGroupID(SetProblemCategoryByGroupIDModel model);
 
-        DBResult UpdateDangerToMainDB(string custIDs, int valueABI, int valueOri);
+        DBResult UpdateABIToMainDB(string custIDs, int valueABI);
+
+        DBResult UpdateOriToMainDB(string custIDs, int valueOri);
 
         byte[] ExportExcelAssociatedAccount(IEnumerable<AssociatedAccountMonitorModel> associatedAccounts
             , string fileName
@@ -186,26 +188,13 @@
             }
         }
 
-        public DBResult UpdateDangerToMainDB(string custIDs, int valueABI, int valueOri)
+        public DBResult UpdateABIToMainDB(string custIDs, int valueABI)
         {
             var custInfos = GetCustomerInfoMainDB(custIDs, 2);
 
             try
             {
-                if (valueOri > 0)
-                {
-                    var custToUpdateOri = custInfos.Where(x => x.Danger1 == 0).Select(x => new DangerLevelModel
-                    {
-                        CustId = x.CustID,
-                        DangerLevel = valueOri
-                    });
-
-                    if (custToUpdateOri.Any())
-                    {
-                        customerClassificationService.UpdateDangerLevelToMainDB(custToUpdateOri, 1);
-                    }
-                }
-
+               
                 if (valueABI > 0)
                 {
                     var custToUpdateABI = custInfos.Where(x => x.Danger2 == 0).Select(x => new DangerLevelModel
@@ -232,6 +221,43 @@
 
                 return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
             }            
+
+            return new DBResult { ErrorCode = 0 };
+        }
+
+        public DBResult UpdateOriToMainDB(string custIDs, int valueOri)
+        {
+            var custInfos = GetCustomerInfoMainDB(custIDs, 2);
+
+            try
+            {
+                if (valueOri > 0)
+                {
+                    var custToUpdateOri = custInfos.Where(x => x.Danger1 == 0).Select(x => new DangerLevelModel
+                    {
+                        CustId = x.CustID,
+                        DangerLevel = valueOri
+                    });
+
+                    if (custToUpdateOri.Any())
+                    {
+                        customerClassificationService.UpdateDangerLevelToMainDB(custToUpdateOri, 1);
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                var logMessage = new LogMessage(ex.Message)
+                 .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                 .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                var jsonData = JsonConvert.SerializeObject(custInfos);
+
+                LogService.Error($"Update Ori To MainDB Exception { logMessage } with listCust: {jsonData}", ex);
+
+                return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };              
+            }
 
             return new DBResult { ErrorCode = 0 };
         }

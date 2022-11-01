@@ -44,7 +44,7 @@
 
             this.CategoryNameSite = string.Join(", ", categoryNameSite);
 
-            this.CategoryName = data.CategoryName;
+            this.CategoryName = data.CategoryName == null ? string.Empty : data.CategoryName;
 
             this.TotalAccount = data.TotalAccount;
             this.Remark = data.Remark;

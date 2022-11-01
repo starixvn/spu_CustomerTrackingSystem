@@ -13,7 +13,7 @@
         public GetProblemCategoryByGroupIDViewModel(GetProblemCategoryByGroupIDModel data)
         {
             this.GroupID = data.GroupID;
-            this.PACategoryID = data.PACategoryID;
+            this.PACategoryID = data.PACategoryID.HasValue ? data.PACategoryID.Value : -1;
             this.PAAllCredit = data.PAAllCredit;
             this.PAAllLicensee = data.PAAllLicensee;
             this.PASites = data.PASites;

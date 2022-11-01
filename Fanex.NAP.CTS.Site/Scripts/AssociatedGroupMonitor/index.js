@@ -109,13 +109,19 @@
                 { data: obj => obj.ABI },
                 { data: obj => obj.Ori },
                 {
-                    data: obj => {
-                        if (obj.CategoryNameSite != "") {
-                            return obj.CategoryName + " - " + obj.CategoryNameSite;
+                    data: obj => {          
+                        let categoryName = "";
+                        if (obj.CategoryName != "") {
+                            categoryName = obj.CategoryName;       
+
+                            if (obj.CategoryNameSite != "") {
+                                categoryName += " - " + obj.CategoryNameSite;
+                            }
+                            return categoryName;
+                        } else {
+                            return "-";
                         }
-                        else {
-                            return obj.CategoryName;
-                        }
+                        
                     }, createdCell: (cell, _, row) => {
                         $('.view-pcsite-credit', cell).click(() => {
                             GetPCSiteByGroup(row.GroupID, false, "CREDIT");

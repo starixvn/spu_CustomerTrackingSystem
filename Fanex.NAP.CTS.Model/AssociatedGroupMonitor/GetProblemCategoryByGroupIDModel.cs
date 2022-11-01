@@ -4,7 +4,7 @@
     {
         public long GroupID { get; set; }
 
-        public int PACategoryID { get; set; }
+        public int? PACategoryID { get; set; }
 
         public int PAAllCredit { get; set; }
 
