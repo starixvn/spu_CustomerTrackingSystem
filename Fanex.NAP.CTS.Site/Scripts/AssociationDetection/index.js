@@ -59,7 +59,7 @@
             columnDefs: [
                 { "visible": false, "targets": 0 },
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 3, 4 , 5, 6, 7, 8], className: "text-center" },
+                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8], className: "text-center" },     
                 { targets: [0], width: "5%" },
                 { targets: [1], width: "12%" },
                 { targets: [2], width: "10%" },
@@ -67,15 +67,14 @@
                 { targets: [4], width: "20%" },
                 { targets: [5], width: "15%" },
                 { targets: [6], width: "10%" },
-                { targets: [7], width: "8%" },
-                { targets: [8], width: "10%" }
+                { targets: [7], width: "8%" }               
             ],
             columns: [
                 { data: obj => obj.GroupID },
                 {
                     data: obj => () => {
                         let url = common.modifyRelativeUrl('Account/Index/' + obj.CTSCustID);
-                        return `<a class='.view-profile-byusername' href=${url}> ${obj.UserName} </a>`;
+                        return `<a class='.view-profile-byusername' href=${url}>${obj.UserName}</a>`;
                     }               
                 },
                 { data: obj => obj.CustStatus },
@@ -86,7 +85,7 @@
                             ShowAssociationDetectMatch(row);
                         });
 
-                        $('.icon-account_detail', cell).click(() => {
+                        $('.icon-Detail', cell).click(() => {
                             ShowAssociationDetectDetail(row);
                         });
                     }
@@ -101,7 +100,7 @@
                     data: obj => () => {
                         if (obj.AgentCTSCustID != 0) {
                             let url = common.modifyRelativeUrl('Account/Index/' + obj.AgentCTSCustID);
-                            return `<a class='.view-profile-byusername' href=${url}> ${obj.AgentUsername} </a>`;
+                            return `<a class='.view-profile-byusername' href=${url}>${obj.AgentUsername}</a>`;
                         } else {
                             return obj.AgentUsername;
                         }                        
@@ -144,7 +143,7 @@
                 }
             }
         });        
-
+      
         return table;
     }    
 
@@ -432,7 +431,7 @@
 
         domElements.divAssociationDetectDetailMatch.dialog({
             modal: true,
-            width: '950px',
+            width: '1050px',
             title: title,
             resizable: false,
             draggable: true,
@@ -699,6 +698,8 @@
                             ? domElements.tblAssociationDetection.DataTable().clear().rows.add(response.data.ItemList).draw()
                             : dataTable = GenerateGrid(response.data.ItemList);
 
+                        domElements.tblAssociationDetection.DataTable().columns.adjust();
+
                         domElements.inputTagUsername.tagify().data('tagify').removeAllTags();
                         domElements.spanAddUserNameMaxTag.text(maxTags);
                         domElements.spanAddChangeHidden.text("0");
@@ -862,9 +863,7 @@
     function Initial() { 
         InitInputTagUsername();
 
-        domElements.btnDetect.on('click', () => DetectUserName());
-
-        //domElements.btnDetect.on('click', () => { DetectUserName(); ExportToExcel() });
+        domElements.btnDetect.on('click', () => DetectUserName());       
 
         domElements.btnExportToExcel.on('click', () => ExportToExcel());       
 

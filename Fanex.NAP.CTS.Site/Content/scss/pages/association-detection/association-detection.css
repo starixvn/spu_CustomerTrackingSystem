@@ -576,6 +576,16 @@ body {
       .association-detection-report .association-detection-content .table-report .table-association-detection tr .td-bg-lightred {
         background-color: #F5A89A;
         font-weight: bold; }
+      .association-detection-report .association-detection-content .table-report .table-association-detection tr .association-type-outer {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        position: relative; }
+        .association-detection-report .association-detection-content .table-report .table-association-detection tr .association-type-outer .association-type-info {
+          -webkit-box-flex: 1;
+          flex: 3; }
+        .association-detection-report .association-detection-content .table-report .table-association-detection tr .association-type-outer .association-type-detail {
+          -webkit-box-flex: 1; }
 
 .view-profile-byusername,
 .association-detect-match,

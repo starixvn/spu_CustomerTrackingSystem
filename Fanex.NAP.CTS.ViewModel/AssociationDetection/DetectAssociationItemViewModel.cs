@@ -24,8 +24,15 @@
             this.IsProblemAccount = data.ParentIDs != null && data.ParentIDs.Split(',').Any(y => y == "50");
             this.IsPAProbation = data.IsPAProbation;
             this.AgentCTSCustID = data.AgentCTSCustID;
-            this.AgentUsername = data.AgentUsername != null ? data.AgentUsername : "-";
-            this.AgentEvidence = data.AgentEvidence != null ? data.AgentEvidence : "-";
+            if (!data.IsLicensee && data.AgentUsername != null)
+                this.AgentUsername = data.AgentUsername;
+            else
+                this.AgentUsername = "-";
+
+            if (!data.IsLicensee && data.AgentEvidence != null)
+                this.AgentEvidence = data.AgentEvidence;
+            else
+                this.AgentEvidence = "-";
         }
 
         public int RowNumber { get; set; }
@@ -74,21 +81,17 @@
 
         private string GetAssociationType(string assType)
         {
-            var newAssType = assType;
+            var newAssType = "<div class='association-type-outer'>";
+            newAssType += $"<div class='association-type-info'>{assType}</div>";
 
-            if (!string.IsNullOrEmpty(assType))
+            if (assType != null && assType.Contains("Match"))
             {
-                if (assType.Contains("Match"))
-                {
-                    newAssType = assType.Replace("Match", $"<span class='association-detect-match' data-groupid={this.GroupID} data-custid={this.CustID} data-ctscustid={this.CTSCustID}>Match</span>");
-                    
-                }
+                newAssType = assType.Replace("Match", $"<span class='association-detect-match' data-groupid={this.GroupID} data-custid={this.CustID} data-ctscustid={this.CTSCustID}>Match</span>");
             }
-
-            newAssType += $"<span class='sub-icon - view-detail' id='sub-icon ' title='View Detail' data-groupid={this.GroupID} data-ctscustid={this.CTSCustID} data-username={this.UserName}><i class='icon-account_detail'></i ></span>";
-
+           
+            newAssType += $"<div class='association-type-detail sub-icon - view-detail' id='sub-icon ' title='View Detail' data-groupid={this.GroupID} data-ctscustid={this.CTSCustID} data-username={this.UserName}><i class='icon-Detail'></i ></div>";
+            newAssType += "</div>";
             return newAssType;
         }
-
     }
 }

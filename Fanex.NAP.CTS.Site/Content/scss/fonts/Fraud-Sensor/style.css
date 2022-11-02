@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'Fraud-Sensor';
-  src:  url('fonts/Fraud-Sensor.eot?27r4n8');
-  src:  url('fonts/Fraud-Sensor.eot?27r4n8#iefix') format('embedded-opentype'),
-    url('fonts/Fraud-Sensor.ttf?27r4n8') format('truetype'),
-    url('fonts/Fraud-Sensor.woff?27r4n8') format('woff'),
-    url('fonts/Fraud-Sensor.svg?27r4n8#Fraud-Sensor') format('svg');
+  src:  url('fonts/Fraud-Sensor.eot?q70wa0');
+  src:  url('fonts/Fraud-Sensor.eot?q70wa0#iefix') format('embedded-opentype'),
+    url('fonts/Fraud-Sensor.ttf?q70wa0') format('truetype'),
+    url('fonts/Fraud-Sensor.woff?q70wa0') format('woff'),
+    url('fonts/Fraud-Sensor.svg?q70wa0#Fraud-Sensor') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,14 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-Add:before {
+  content: "\e939";
+  color: #666;
+}
+.icon-Detail:before {
+  content: "\e93a";
+  color: #666;
+}
 .icon-remove-account:before {
   content: "\e937";
   color: #666;
