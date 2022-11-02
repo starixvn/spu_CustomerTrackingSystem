@@ -60,25 +60,20 @@
             createdRow: function (row, obj) {
                 if (obj.Detail.length == 0) {
                     let td = `<td class="robot-betting" colspan="8" data-custid=${obj.CustID} data-periodrangetype=${obj.PeriodRangeType}><span class="icon-chevron-right"><i class="title-robot">${obj.PeriodRangeName}</span></td>`;
-
                     $(row).empty().html(td);
                 }
             }
         });
 
         $('tbody', robotBettingTable).on('click', 'tr', function () {
-            var tr = $(this);
+            var tr = $(this).closest('tr');
             var row = robotBettingTable.DataTable().row(tr);
 
             let tdTicket = $('.robot-betting', tr);
-            let tdReason = $('.robot-betting-reason', tr);
 
             if (tdTicket.length > 0) {
                 LoadRobotDetail(tr, row);
-            }
-            else if (tdReason.length > 0) {
-                LoadSCETicketDetail(tr, row);
-            }            
+            }          
         });
     }
 
@@ -131,15 +126,15 @@
                 let periodrangetype = $('.robot-betting', tr).attr('data-periodrangetype');
 
                 if (periodrangetype == 100 || periodrangetype == 101) {
-                    LoadSCEReasonDetail(tr, row);
+                    GenerateSCEReason(tr, row);
                 } else {
-                    LoadRobotTicketDetail(tr, row);
+                    GenerateTicketDetail(tr, row);
                 }
             }
         }
     }
 
-    function LoadRobotTicketDetail(tr, row) {
+    function GenerateTicketDetail(tr, row) {
         let td = $('.robot-betting', tr);
         let custID = td.attr('data-custid');
         let periodrangetype = td.attr('data-periodrangetype');
@@ -151,7 +146,7 @@
                 periodrangetype: periodrangetype
             },
             success: function (response) {
-                let childRow = $(NewDetailTicketRows(response));
+                let childRow = NewDetailTicketRows(response);
                 row.child(childRow).show();
                 tr.addClass('detail-loaded');
             },
@@ -171,7 +166,7 @@
         });
     }
 
-    function LoadSCEReasonDetail(tr, row) {
+    function GenerateSCEReason(tr, row) {
         if (row.child.isShown()) {
             row.child.hide();
             tr.removeClass('shown');
@@ -192,8 +187,10 @@
                         periodrangetype: periodrangetype
                     },
                     success: function (response) {
-                        let childRow = $(NewDetailReasonRows(response));
-                        row.child(childRow).show();
+                        let childTable = CreateNewChildTable();
+                        row.child(childTable).show();
+
+                        RenderSCEReasonTable(response);
 
                         tr.addClass('detail-loaded');
                     },
@@ -215,40 +212,107 @@
         }
     }
 
-    function LoadSCETicketDetail(tr, row) {
-        let td = $('.robot-betting-reason', tr);
-        let custID = td.attr('data-custid');
-        let periodrangetype = td.attr('data-periodrangetype');
-        let createdTime = td.attr('data-createdTime');
+    function CreateNewChildTable() {
+        var childTable = '<table id="cl" class="display compact nowrap w-100" width="100%">' +
+                         '<thead style="display:none"></thead >' +
+                         '</table>';
+        return $(childTable);
 
-        $.ajax(common.modifyRelativeUrl('Account/GetRobotBettingReasonDetail'), {
-            type: 'POST',
-            data: {
-                custID: custID,
-                periodrangetype: periodrangetype,
-                createdTime: createdTime
-            },
-            success: function (response) {
-                let childRow = $(NewDetailReasonRows2(response));
-                row.child(childRow).show();
-                row.child(format()).show();
+    }
 
-                tr.addClass('detail-loaded');
-            },
-            beforeSend: function () {
-                td.prop('disabled', true);
-                robotBettingTable.find('tbody').addClass('loading');
-            },
-            complete: function () {
-                td.prop('disabled', false);
-                robotBettingTable.find('tbody').removeClass('loading');
-            },
-            error: function (errMsg) {
-                console.log(errMsg);
-                td.prop('disabled', false);
-                robotBettingTable.find('tbody').removeClass('loading');
+    function RenderSCEReasonTable(data) {
+        $('#cl').DataTable({
+            data: data,
+            columnDefs: [
+                { targets: "_all", defaultContent: "-", className: "text-center" },
+            ],
+            columns: [],
+            info: false,
+            order: false,
+            paging: false,
+            searching: false,
+            scrollX: false,
+            scrollCollapse: false,
+            createdRow: function (row, obj) {
+                if (obj.length != 0) {
+                    let td = RenderSCEReasonData(obj);
+                    $(row).empty().html(td);
+                }
             }
         });
+
+        $('tbody', $('#cl')).on('click', 'tr', function () {
+            var tr = $(this).closest('tr');
+            var row = $('#cl').DataTable().row(tr);
+            let tdReason = $('.robot-betting-reason', tr);
+
+            if (tdReason.length > 0) {
+                GenerateSCETicketDetail(tr, row);
+            }
+        });
+    }
+
+    function RenderSCEReasonData(item) {
+        let html;
+
+        switch (item.PeriodRangeType) {
+            case 100:
+                html = `<td class="robot-betting-reason" colspan="8" data-custid=${item.CustID} data-periodrangetype=${item.PeriodRangeType} data-createdTime=${item.CreatedDateToString}>`;
+                html += `<span class="d"> ${item.FirstTransDateToString} - ${item.LastTransDateToString} (Total ${item.TotalHours} hours): <i class="title-reason-BetCount">${item.BetCount} </i> Tickets </span>`;
+                html += `</td >`;
+                break;
+            case 101:
+                html = `<td class="robot-betting-reason" colspan = "8" data-custid=${item.CustID} data-periodrangetype=${item.PeriodRangeType} data-createdTime=${item.CreatedDateToString}>`;
+                html += `<span class=""><i class="title-reason-BetCount">${item.BetCount}/${item.TotalBetCount}</i> High Ugly Stake Tickets From ${item.FirstTransDateToString} To ${item.LastTransDateToString} </span>`;
+                html += `</td >`;
+                break;
+        }
+
+        return html;
+    }
+
+    function GenerateSCETicketDetail(tr, row) {
+        if (row.child.isShown()) {
+            row.child.hide();
+            tr.removeClass('shown');
+        }
+        else {
+            if (tr.hasClass('detail-loaded')) {
+                row.child.show();
+            } else {
+                let td = $('.robot-betting-reason', tr);
+                let custID = td.attr('data-custid');
+                let periodrangetype = td.attr('data-periodrangetype');
+                let createdTime = td.attr('data-createdTime');
+
+                $.ajax(common.modifyRelativeUrl('Account/GetRobotBettingTicketDetail'), {
+                    type: 'POST',
+                    data: {
+                        custID: custID,
+                        periodrangetype: periodrangetype,
+                        createdTime: createdTime
+                    },
+                    success: function (response) {
+                        let childRow = NewDetailTicketRows(response);
+                        row.child(childRow).show();
+                        tr.addClass('detail-loaded');
+                    },
+                    beforeSend: function () {
+                        td.prop('disabled', true);
+                        robotBettingTable.find('tbody').addClass('loading');
+                    },
+                    complete: function () {
+                        td.prop('disabled', false);
+                        robotBettingTable.find('tbody').removeClass('loading');
+                    },
+                    error: function (errMsg) {
+                        console.log(errMsg);
+                        td.prop('disabled', false);
+                        robotBettingTable.find('tbody').removeClass('loading');
+                    }
+                });
+            }
+        }      
     }
 
     function NewDetailTicketRows(data) {
@@ -269,36 +333,7 @@
             html += `</tr>`;
         }
 
-       return html;
-    }
-
-    function NewDetailReasonRows(data) {
-        let html = '';
-
-        for (let i = 0; i < data.length; i++) {
-            let item = data[i];
-
-            switch (item.PeriodRangeType) {
-                case 100:
-                    html += `<tr>`;
-                    html += `<td class="robot-betting-reason" colspan="8" data-custid=${item.CustID} data-periodrangetype=${item.PeriodRangeType} data-createdTime=${item.CreatedDateToString}>`;
-                    html += `<span class="d"> ${item.FirstTransDateToString} - ${item.LastTransDateToString} (Total ${item.TotalHours} hours): <i class="title-reason-BetCount">${item.BetCount} </i> Tickets </span>`;
-                    html += `</td >`;
-                    html += `</tr>`;
-
-                    break;
-                case 101:
-                    html += `<tr>`;
-                    html += `<td class="robot-betting-reason" colspan = "8" data-custid=${item.CustID} data-periodrangetype=${item.PeriodRangeType} data-createdTime=${item.CreatedDateToString}>`;
-                    html += `<span class=""><i class="title-reason-BetCount">${item.BetCount}/${item.TotalBetCount}</i> High Ugly Stake Tickets From ${item.FirstTransDateToString} To ${item.LastTransDateToString} </span>`;
-                    html += `</td >`;
-                    html += `</tr>`;
-
-                    break;
-            }
-        }
-
-        return html;
+        return $(html);
     }
 
     this.Initial = function (custID) {
