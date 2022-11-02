@@ -29,6 +29,8 @@
         public const string FormatDateTimeToString_YYYYmmddThhddmm = "yyyy-MM-dd'T'HH:mm:ss.fffffff'Z'";
         public const string FormatDateTimeToString_YYYYmmdd = "yyyyMMdd";        
         public const string FormatDatetimeToString_ddMMMyyyyHHmmssfff = "dd MMM, yyyy HH:mm:ss.fff";
+        public const string FormatDatetimeToString_ddMMMHHmmssfff = "dd MMM HH:mm:ss.fff";
+        public const string FormatDatetimeToString_ddMMM = "dd MMM";
         public const string FormatTimeToString_hhmmss = "HHmmss";
         public const string FormatDecimalToString_2Places = "0.00";
         public const string FormatDecimalToString_Thousands2Places = "#,##0.00";
@@ -369,6 +371,18 @@
         {
             Internal = 1,
             External = 2
+        };
+
+        public enum RobotDetectionQueryType
+        {
+            RobotReasonDetail = 1,
+            RobotTicketDetail = 2
+        };
+
+        public enum RobotDetectionReasonQueryType
+        {
+            ConsecutiveTicket = 100,
+            UglyStakeTicket = 101
         };
     }
 }

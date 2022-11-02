@@ -2,6 +2,7 @@
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
+    using System;
 
     public class GetRobotUsersDetailsCriteria : CriteriaBase
     {
