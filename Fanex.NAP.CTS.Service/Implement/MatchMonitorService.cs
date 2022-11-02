@@ -46,7 +46,8 @@
                 BettypeID = para.BettypeID,
                 BetID = para.BetID,
                 TranIds = para.TranIds,
-                VerifiedBy = para.VerifiedBy
+                VerifiedBy = para.VerifiedBy,
+                Reason = para.Reason
             };
 
             repository.Fetch<DBResult>(criteria);
