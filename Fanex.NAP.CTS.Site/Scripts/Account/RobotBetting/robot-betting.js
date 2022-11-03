@@ -2,6 +2,7 @@
     let firstRobotDate = $('#spanFirstRobotDate');
     let lastRobotDate = $('#spanLastRobotDate');
     let robotBettingTable = $('#tableRobotBetting');
+    let childTableIndex = 1;
 
     function RenderGrid(custID) {
         robotBettingTable.DataTable({
@@ -187,7 +188,7 @@
                         periodrangetype: periodrangetype
                     },
                     success: function (response) {
-                        let childTable = CreateNewChildTable();
+                        let childTable = CreateNewChildTable(response);
 
                         row.child(childTable).show();
 
@@ -212,8 +213,8 @@
         }
     }
 
-    function CreateNewChildTable() {
-        var childTable = '<table id="childTable" class="display compact nowrap w-100" width="100%">' +
+    function CreateNewChildTable(response) {
+        var childTable = '<table id="childTable' + response.childTableId + '" class="display compact nowrap w-100" width="100%">' +
                          '<thead style="display:none"></thead >' +
                          '</table>';
 
@@ -222,8 +223,8 @@
     }
 
     function RenderSCEReasonTable(data) {
-        $('#childTable').DataTable({
-            data: data,
+        $('#childTable' + data.childTableId).DataTable({
+            data: data.reasonGroups,
             columnDefs: [
                 { targets: "_all", defaultContent: "-", className: "text-center" },
             ],
@@ -234,6 +235,10 @@
             searching: false,
             scrollX: false,
             scrollCollapse: false,
+            language: {
+                infoEmpty: "",
+                zeroRecords: "There's no data"
+            },
             createdRow: function (row, obj) {
                 if (obj.length != 0) {
                     let td = RenderSCEReasonData(obj);
@@ -249,11 +254,11 @@
             }
         });
 
-        $('#childTable').removeClass('no-footer');
+        $('#childTable' + data.childTableId).removeClass('no-footer');
 
-        $('tbody', $('#childTable')).on('click', 'tr', function () {
+        $('tbody', $('#childTable' + data.childTableId)).on('click', 'tr', function () {
             var tr = $(this).closest('tr');
-            var row = $('#childTable').DataTable().row(tr);
+            var row = $('#childTable' + data.childTableId).DataTable().row(tr);
             let tdReason = $('.robot-betting-reason', tr);
 
             if (tdReason.length > 0) {

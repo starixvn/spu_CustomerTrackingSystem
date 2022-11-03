@@ -2155,7 +2155,11 @@
         {
             var robotReasonDetail = _robotBettingService.GetRobotDetectionSCEDetails(custID, periodrangetype, RobotDetectionQueryType.RobotReasonDetail);
 
-            return Json(robotReasonDetail ?? Enumerable.Empty<RobotUserDetailSceModel>(), JsonRequestBehavior.AllowGet);
+            return Json(new
+            {
+                childTableId = new Random().Next(),
+                reasonGroups = robotReasonDetail ?? Enumerable.Empty<RobotUserDetailSceModel>()
+            }, JsonRequestBehavior.AllowGet); ;
         }
 
 
