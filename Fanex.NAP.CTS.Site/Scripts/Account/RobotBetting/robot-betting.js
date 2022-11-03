@@ -188,12 +188,14 @@
                         periodrangetype: periodrangetype
                     },
                     success: function (response) {
-                        let childTable = CreateNewChildTable(response);
+                        if (response.reasonGroups.length  > 0) {
+                            let childTable = CreateNewChildTable(response);
 
-                        row.child(childTable).show();
+                            row.child(childTable).show();
 
-                        RenderSCEReasonTable(response);                                              
-                        tr.addClass('detail-loaded');
+                            RenderSCEReasonTable(response);
+                            tr.addClass('detail-loaded');
+                        }
                     },
                     beforeSend: function () {
                         td.prop('disabled', true);
@@ -308,9 +310,11 @@
                         createdTime: createdTime
                     },
                     success: function (response) {
-                        let childRow = NewDetailTicketRows(response);
-                        row.child(childRow).show();
-                        tr.addClass('detail-loaded');
+                        if (response.length > 0) {
+                            let childRow = NewDetailTicketRows(response);
+                            row.child(childRow).show();
+                            tr.addClass('detail-loaded');
+                        }
                     },
                     beforeSend: function () {
                         td.prop('disabled', true);
@@ -332,21 +336,20 @@
 
     function NewDetailTicketRows(data) {
         let html = ''; 
-        if (data.length > 0) {
-            for (let i = 0; i < data.length; i++) {
-                let item = data[i];
 
-                html += `<tr class='robotBetting-childRow'>`;
-                html += `<td class="td1 text-center">${item.TransDate}</td>`;
-                html += `<td class="td2 text-center">${item.MatchName}</td>`;
-                html += `<td class="td3 text-center">${item.TransID}</td>`;
-                html += `<td class="td4 text-center">${item.BetTypeName}</td>`;
-                html += `<td class="td5 text-center">${item.BetTeam}</td>`;
-                html += `<td class="td6 text-center">${item.Stake.toLocaleString('en-US', { maximumFractionDigits: 2 })}</td>`;
-                html += `<td class="text-center">${item.Odds}</td>`;
-                html += `<td class="td7 text-center">${item.LiveScore}</td>`;
-                html += `</tr>`;
-            }
+        for (let i = 0; i < data.length; i++) {
+            let item = data[i];
+
+            html += `<tr class='robotBetting-childRow'>`;
+            html += `<td class="td1 text-center">${item.TransDate}</td>`;
+            html += `<td class="td2 text-center">${item.MatchName}</td>`;
+            html += `<td class="td3 text-center">${item.TransID}</td>`;
+            html += `<td class="td4 text-center">${item.BetTypeName}</td>`;
+            html += `<td class="td5 text-center">${item.BetTeam}</td>`;
+            html += `<td class="td6 text-center">${item.Stake.toLocaleString('en-US', { maximumFractionDigits: 2 })}</td>`;
+            html += `<td class="text-center">${item.Odds}</td>`;
+            html += `<td class="td7 text-center">${item.LiveScore}</td>`;
+            html += `</tr>`;
         }
 
         return $(html);
