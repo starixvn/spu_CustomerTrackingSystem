@@ -185,7 +185,7 @@
                     type: 'POST',
                     data: {
                         custID: custID,
-                        periodrangetype: periodrangetype
+                        periodRangeType: periodrangetype
                     },
                     success: function (response) {
                         if (response.reasonGroups.length  > 0) {
@@ -243,7 +243,7 @@
             },
             createdRow: function (row, obj) {
                 if (obj.length != 0) {
-                    let td = RenderSCEReasonData(obj);
+                    let td = RenderSCEReasonData(data.periodRangeType, obj);
 
                     let tdChildTable = $(this).closest('td');
 
@@ -269,12 +269,13 @@
         });
     }
 
-    function RenderSCEReasonData(item) {
+    function RenderSCEReasonData(periodRangeType, item) {
         let html;
+        let realPeriodRangeType = (periodRangeType == item.PeriodRangeType) ? item.PeriodRangeType : periodRangeType;
 
         switch (item.PeriodRangeType) {
             case 100:
-                html = `<td class="robot-betting-reason" colspan="8" data-custid=${item.CustID} data-periodrangetype=${item.PeriodRangeType} data-clusterId=${item.ClusterID} data-createdTime=${item.CreatedDateToString}>`;
+                html = `<td class="robot-betting-reason" colspan="8" data-custid=${item.CustID} data-periodrangetype=${realPeriodRangeType} data-clusterId=${item.ClusterID} data-createdTime=${item.CreatedDateToString}>`;
                 html += `<span> ${item.FirstTransDateToString} - ${item.LastTransDateToString} (Total ${item.TotalHours} hours): <i class="title-reason">${item.BetCount} </i> Tickets </span>`;
                 html += `</td >`;
                 break;

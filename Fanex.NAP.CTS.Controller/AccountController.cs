@@ -2122,7 +2122,7 @@
 
                     if (ticketDetail != null && ticketDetail.Any())
                     {
-                        result = ticketDetail.OrderByDescending(x => x.TransDate).Select(x => new RobotBettingDetailViewModel
+                        result = ticketDetail.OrderBy(x => x.TransDate).Select(x => new RobotBettingDetailViewModel
                         {
                             TransDate = x.TransDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff),
                             HomeID = x.HomeId,
@@ -2151,14 +2151,15 @@
 
 
         [HttpPost]
-        public ActionResult GetRobotBettingReasonDetail(long custID, int periodrangetype)
+        public ActionResult GetRobotBettingReasonDetail(long custID, int periodRangeType)
         {
-            var robotReasonDetail = _robotBettingService.GetRobotDetectionSCEDetails(custID, periodrangetype, RobotDetectionQueryType.RobotReasonDetail);
+            var robotReasonDetail = _robotBettingService.GetRobotDetectionSCEDetails(custID, periodRangeType, RobotDetectionQueryType.RobotReasonDetail);
 
             return Json(new
             {
                 childTableId = new Random().Next(),
-                reasonGroups = robotReasonDetail ?? Enumerable.Empty<RobotUserDetailSceModel>()
+                reasonGroups = robotReasonDetail?.ToList().OrderBy(c => c.FirstTransDate) ?? Enumerable.Empty<RobotUserDetailSceModel>(),
+                periodRangeType = periodRangeType
             }, JsonRequestBehavior.AllowGet); ;
         }
 

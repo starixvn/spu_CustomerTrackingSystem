@@ -29,13 +29,26 @@
         {
             get
             {
-                if (LastTransDate != null)
+                switch (PeriodRangeType)
                 {
-                    switch (PeriodRangeType)
-                    {
-                        case ((int)Consts.RobotDetectionReasonQueryType.ConsecutiveTicket): return LastTransDate?.ToString(Consts.FormatDatetimeToString_ddMMMHHmmssfff);
-                        case ((int)Consts.RobotDetectionReasonQueryType.UglyStakeTicket): return LastTransDate?.ToString(Consts.FormatDatetimeToString_ddMMM);
-                    }
+                    case ((int)Consts.RobotDetectionReasonQueryType.ConsecutiveTicket):
+                        {
+                            if (LastTransDate != null)
+                            {
+                                return LastTransDate?.ToString(Consts.FormatDatetimeToString_ddMMMHHmmssfff);
+                            }
+
+                            break;
+                        }
+                    case ((int)Consts.RobotDetectionReasonQueryType.UglyStakeTicket):
+                        {
+                            if (CreatedDate != null)
+                            {
+                                return CreatedDate?.ToString(Consts.FormatDatetimeToString_ddMMM);
+                            }
+
+                            break;
+                        }
                 }
 
                 return string.Empty;
@@ -46,13 +59,26 @@
         {
             get
             {
-                if (FirstTransDate != null)
+                switch (PeriodRangeType)
                 {
-                    switch (PeriodRangeType)
-                    {
-                        case ((int)Consts.RobotDetectionReasonQueryType.ConsecutiveTicket): return FirstTransDate?.ToString(Consts.FormatDatetimeToString_ddMMMHHmmssfff);
-                        case ((int)Consts.RobotDetectionReasonQueryType.UglyStakeTicket): return FirstTransDate?.ToString(Consts.FormatDatetimeToString_ddMMM);
-                    }
+                    case ((int)Consts.RobotDetectionReasonQueryType.ConsecutiveTicket):
+                        {
+                            if (FirstTransDate != null)
+                            {
+                                return FirstTransDate?.ToString(Consts.FormatDatetimeToString_ddMMMHHmmssfff);
+                            }
+
+                            break;
+                        }
+                    case ((int)Consts.RobotDetectionReasonQueryType.UglyStakeTicket):
+                        {
+                            if (CreatedDate != null)
+                            {
+                                return CreatedDate?.AddDays(-30).ToString(Consts.FormatDatetimeToString_ddMMM);
+                            }
+
+                            break;
+                        }
                 }
 
                 return string.Empty;
