@@ -11,11 +11,11 @@
 
         IEnumerable<RobotUserDetailModel> GetRobotDetectionDetails(long custID, int periodRangeType);
 
-        IEnumerable<RobotUserDetailSceModel> GetRobotDetectionSCEDetails(long custID, int periodRangeType, RobotDetectionQueryType queryType, DateTime? scannedTime = null);
+        IEnumerable<RobotUserDetailSceModel> GetRobotDetectionSCEDetails(long custID, int periodRangeType, RobotDetectionQueryType queryType, int? clusterId = null, DateTime? scannedTime = null);
 
         IEnumerable<RobotBettingTicketDetailModel> GetRobotBettingTicketDetails(string tranIdList);
 
-        IEnumerable<string> GetTranIds(long custID, int periodRangeType, string createdTime);
+        IEnumerable<string> GetTranIds(long custID, int periodRangeType, int clusterId, string createdTime);
 
         string GetTransFromList(IEnumerable<string> suspiciousTransList);
     }

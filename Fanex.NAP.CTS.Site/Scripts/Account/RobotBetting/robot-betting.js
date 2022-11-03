@@ -274,12 +274,12 @@
 
         switch (item.PeriodRangeType) {
             case 100:
-                html = `<td class="robot-betting-reason" colspan="8" data-custid=${item.CustID} data-periodrangetype=${item.PeriodRangeType} data-createdTime=${item.CreatedDateToString}>`;
+                html = `<td class="robot-betting-reason" colspan="8" data-custid=${item.CustID} data-periodrangetype=${item.PeriodRangeType} data-clusterId=${item.ClusterID} data-createdTime=${item.CreatedDateToString}>`;
                 html += `<span> ${item.FirstTransDateToString} - ${item.LastTransDateToString} (Total ${item.TotalHours} hours): <i class="title-reason">${item.BetCount} </i> Tickets </span>`;
                 html += `</td >`;
                 break;
             case 101:
-                html = `<td class="robot-betting-reason" colspan="8" data-custid=${item.CustID} data-periodrangetype=${item.PeriodRangeType} data-createdTime=${item.CreatedDateToString}>`;
+                html = `<td class="robot-betting-reason" colspan="8" data-custid=${item.CustID} data-periodrangetype=${item.PeriodRangeType} data-clusterId=${item.ClusterID} data-createdTime=${item.CreatedDateToString}>`;
                 html += `<span><i class="title-reason">${item.BetCount}/${item.TotalBetCount}</i> High Ugly Stake Tickets From ${item.FirstTransDateToString} To ${item.LastTransDateToString} </span>`;
                 html += `</td >`;
                 break;
@@ -301,12 +301,14 @@
                 let custID = td.attr('data-custid');
                 let periodrangetype = td.attr('data-periodrangetype');
                 let createdTime = td.attr('data-createdTime');
+                let clusterId = td.attr('data-clusterId');
 
                 $.ajax(common.modifyRelativeUrl('Account/GetRobotBettingTicketDetail'), {
                     type: 'POST',
                     data: {
                         custID: custID,
                         periodrangetype: periodrangetype,
+                        clusterId: clusterId,
                         createdTime: createdTime
                     },
                     success: function (response) {

@@ -2106,13 +2106,13 @@
         }
 
         [HttpPost]
-        public ActionResult GetRobotBettingTicketDetail(long custID, int periodRangeType, string createdTime)
+        public ActionResult GetRobotBettingTicketDetail(long custID, int periodRangeType, int clusterId, string createdTime)
         {
             var result = Enumerable.Empty<RobotBettingDetailViewModel>();
 
             try
             {
-                var listTrans = _robotBettingService.GetTranIds(custID, periodRangeType, createdTime);
+                var listTrans = _robotBettingService.GetTranIds(custID, periodRangeType, clusterId, createdTime);
 
                 if (listTrans != null && listTrans.Any())
                 {

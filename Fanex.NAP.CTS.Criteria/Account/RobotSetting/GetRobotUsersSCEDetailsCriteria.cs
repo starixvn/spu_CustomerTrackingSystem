@@ -18,6 +18,9 @@
         [SpParam(SqlParamName = "ip_QueryType")]
         public int QueryType { get; set; }
 
+        [SpParam(SqlParamName = "ip_ClusterID")]
+        public int? ClusterID { get; set; }
+
         public override string GetSettingKey()
         {
             return "SPU_AIML_RD_SCE_GetRobotUsersDetails";

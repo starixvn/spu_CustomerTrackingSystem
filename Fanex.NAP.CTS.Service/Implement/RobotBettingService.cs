@@ -49,14 +49,15 @@
             return repository.Fetch<RobotUserDetailModel>(criteria);
         }
 
-        public IEnumerable<RobotUserDetailSceModel> GetRobotDetectionSCEDetails(long custID, int periodRangeType, RobotDetectionQueryType queryType, DateTime? scannedTime = null)
+        public IEnumerable<RobotUserDetailSceModel> GetRobotDetectionSCEDetails(long custID, int periodRangeType, RobotDetectionQueryType queryType, int? clusterId = null, DateTime? scannedTime = null)
         {
             var criteria = new GetRobotUsersSCEDetailsCriteria
             {
                 CustID = custID,
                 RobotType = periodRangeType,
                 QueryType = (int)queryType,
-                ScannedDate = scannedTime
+                ScannedDate = scannedTime,
+                ClusterID = clusterId
             };
 
             return repository.Fetch<RobotUserDetailSceModel>(criteria);
@@ -79,14 +80,14 @@
             }
         }
 
-        public IEnumerable<string> GetTranIds(long custID, int periodRangeType, string createdTime)
+        public IEnumerable<string> GetTranIds(long custID, int periodRangeType, int clusterId, string createdTime)
         {
             bool isSCERobotDetection = (periodRangeType == (int)RobotDetectionReasonQueryType.ConsecutiveTicket || periodRangeType == (int)RobotDetectionReasonQueryType.UglyStakeTicket);
 
             if (isSCERobotDetection)
             {
                 var datetime = DateTime.ParseExact(createdTime, FormatDateTimeToString_YYYYmmdd, CultureInfo.InvariantCulture);
-                var robotUserDetailsSCE = GetRobotDetectionSCEDetails(custID, periodRangeType, RobotDetectionQueryType.RobotTicketDetail, datetime);
+                var robotUserDetailsSCE = GetRobotDetectionSCEDetails(custID, periodRangeType, RobotDetectionQueryType.RobotTicketDetail, clusterId, datetime);
 
                 if (robotUserDetailsSCE != null && robotUserDetailsSCE.Any())
                 {

@@ -23,6 +23,8 @@
 
         public DateTime? CreatedDate { get; set; }
 
+        public int? ClusterID { get; set; }
+
         public string LastTransDateToString
         {
             get
