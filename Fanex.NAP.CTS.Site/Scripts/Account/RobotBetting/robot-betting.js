@@ -188,10 +188,10 @@
                     },
                     success: function (response) {
                         let childTable = CreateNewChildTable();
+
                         row.child(childTable).show();
 
-                        RenderSCEReasonTable(response);
-
+                        RenderSCEReasonTable(response);                                              
                         tr.addClass('detail-loaded');
                     },
                     beforeSend: function () {
@@ -213,15 +213,16 @@
     }
 
     function CreateNewChildTable() {
-        var childTable = '<table id="cl" class="display compact nowrap w-100" width="100%">' +
+        var childTable = '<table id="childTable" class="display compact nowrap w-100" width="100%">' +
                          '<thead style="display:none"></thead >' +
                          '</table>';
+
         return $(childTable);
 
     }
 
     function RenderSCEReasonTable(data) {
-        $('#cl').DataTable({
+        $('#childTable').DataTable({
             data: data,
             columnDefs: [
                 { targets: "_all", defaultContent: "-", className: "text-center" },
@@ -236,14 +237,23 @@
             createdRow: function (row, obj) {
                 if (obj.length != 0) {
                     let td = RenderSCEReasonData(obj);
+
+                    let tdChildTable = $(this).closest('td');
+
+                    if (!tdChildTable.hasClass('nest-table')) {
+                        tdChildTable.addClass('nest-table');
+                    }
+
                     $(row).empty().html(td);
                 }
             }
         });
 
-        $('tbody', $('#cl')).on('click', 'tr', function () {
+        $('#childTable').removeClass('no-footer');
+
+        $('tbody', $('#childTable')).on('click', 'tr', function () {
             var tr = $(this).closest('tr');
-            var row = $('#cl').DataTable().row(tr);
+            var row = $('#childTable').DataTable().row(tr);
             let tdReason = $('.robot-betting-reason', tr);
 
             if (tdReason.length > 0) {
@@ -258,12 +268,12 @@
         switch (item.PeriodRangeType) {
             case 100:
                 html = `<td class="robot-betting-reason" colspan="8" data-custid=${item.CustID} data-periodrangetype=${item.PeriodRangeType} data-createdTime=${item.CreatedDateToString}>`;
-                html += `<span class="d"> ${item.FirstTransDateToString} - ${item.LastTransDateToString} (Total ${item.TotalHours} hours): <i class="title-reason-BetCount">${item.BetCount} </i> Tickets </span>`;
+                html += `<span> ${item.FirstTransDateToString} - ${item.LastTransDateToString} (Total ${item.TotalHours} hours): <i class="title-reason">${item.BetCount} </i> Tickets </span>`;
                 html += `</td >`;
                 break;
             case 101:
-                html = `<td class="robot-betting-reason" colspan = "8" data-custid=${item.CustID} data-periodrangetype=${item.PeriodRangeType} data-createdTime=${item.CreatedDateToString}>`;
-                html += `<span class=""><i class="title-reason-BetCount">${item.BetCount}/${item.TotalBetCount}</i> High Ugly Stake Tickets From ${item.FirstTransDateToString} To ${item.LastTransDateToString} </span>`;
+                html = `<td class="robot-betting-reason" colspan="8" data-custid=${item.CustID} data-periodrangetype=${item.PeriodRangeType} data-createdTime=${item.CreatedDateToString}>`;
+                html += `<span><i class="title-reason">${item.BetCount}/${item.TotalBetCount}</i> High Ugly Stake Tickets From ${item.FirstTransDateToString} To ${item.LastTransDateToString} </span>`;
                 html += `</td >`;
                 break;
         }
@@ -299,16 +309,16 @@
                     },
                     beforeSend: function () {
                         td.prop('disabled', true);
-                        robotBettingTable.find('tbody').addClass('loading');
+                        robotBettingTable.find('tbody').first().addClass('loading');
                     },
                     complete: function () {
                         td.prop('disabled', false);
-                        robotBettingTable.find('tbody').removeClass('loading');
+                        robotBettingTable.find('tbody').first().removeClass('loading');
                     },
                     error: function (errMsg) {
                         console.log(errMsg);
                         td.prop('disabled', false);
-                        robotBettingTable.find('tbody').removeClass('loading');
+                        robotBettingTable.find('tbody').first().removeClass('loading');
                     }
                 });
             }
@@ -316,21 +326,22 @@
     }
 
     function NewDetailTicketRows(data) {
-        let html = '';
+        let html = ''; 
+        if (data.length > 0) {
+            for (let i = 0; i < data.length; i++) {
+                let item = data[i];
 
-        for (let i = 0; i < data.length; i++) {
-            let item = data[i];
-
-            html += `<tr>`;
-            html += `<td class="text-center">${item.TransDate}</td>`;
-            html += `<td class="text-center">${item.MatchName}</td>`;
-            html += `<td class="text-center">${item.TransID}</td>`;
-            html += `<td class="text-center">${item.BetTypeName}</td>`;
-            html += `<td class="text-center">${item.BetTeam}</td>`;
-            html += `<td class="text-center">${item.Stake.toLocaleString('en-US', { maximumFractionDigits: 2 })}</td>`;
-            html += `<td class="text-center">${item.Odds}</td>`;
-            html += `<td class="text-center">${item.LiveScore}</td>`;
-            html += `</tr>`;
+                html += `<tr class='robotBetting-childRow'>`;
+                html += `<td class="td1 text-center">${item.TransDate}</td>`;
+                html += `<td class="td2 text-center">${item.MatchName}</td>`;
+                html += `<td class="td3 text-center">${item.TransID}</td>`;
+                html += `<td class="td4 text-center">${item.BetTypeName}</td>`;
+                html += `<td class="td5 text-center">${item.BetTeam}</td>`;
+                html += `<td class="td6 text-center">${item.Stake.toLocaleString('en-US', { maximumFractionDigits: 2 })}</td>`;
+                html += `<td class="text-center">${item.Odds}</td>`;
+                html += `<td class="td7 text-center">${item.LiveScore}</td>`;
+                html += `</tr>`;
+            }
         }
 
         return $(html);
