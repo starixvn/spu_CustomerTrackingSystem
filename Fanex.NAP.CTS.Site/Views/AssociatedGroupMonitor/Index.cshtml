@@ -72,10 +72,10 @@
             </div>
         </div>
         <div class="form-control margin-right-20">
-            <div class="label">ABI<label style="color:red">*</label></div>
+            <div class="label">ABI</div>
             <div style="width:140px">
                 <select class="control" id="cbbABIAssociatedGroup" name="state" style="height: 100px">
-                    <option disabled selected value="">Select an ABI</option>
+                    <option selected value=0>Select an ABI</option>
                     @for (int idx = 1; idx < 51; idx++)
                     {
                         <option value=@idx>@idx</option>
@@ -88,7 +88,7 @@
             <div class="label">Ori</div>
             <div style="width:140px">
                 <select class="control" id="cbbOriAssociatedGroup" name="state" style="height: 100px">
-                    <option disabled selected value="">Select an Ori</option>
+                    <option selected value=0>Select an Ori</option>
                     @for (int idx = 1; idx < 51; idx++)
                     {
                         <option value=@idx>@idx</option>

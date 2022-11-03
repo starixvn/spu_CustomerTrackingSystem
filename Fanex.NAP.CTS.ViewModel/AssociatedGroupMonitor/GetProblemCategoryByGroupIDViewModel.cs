@@ -45,11 +45,13 @@
                 {
                     paSiteList = this.PASites.Split(',').Select(x => Convert.ToInt32(x)).ToList();
                 }
-
                 var siteGroups = sites.Where(x => x.IsChosen).OrderBy(x => x.IsLicensee)
                              .GroupBy(g => g.IsLicensee)
-                             .Select(x => new { SubscriberGroupName = x.Key ? "Licensees" : "Credit", SiteList = x.ToList() })
-                             .Select(x => new SiteGroupViewModel
+                             .Select(x => new { SubscriberGroupName = x.Key ? "Licensees" : "Credit", SiteList = x.ToList() });
+
+                if (this.PACategoryID != -1)
+                {
+                    this.SiteGroups = siteGroups.Select(x => new SiteGroupViewModel
                              {
                                  SubscriberGroupName = x.SubscriberGroupName,
                                  SiteList = x.SiteList.Select(y =>
@@ -62,8 +64,18 @@
                                      };
                                  })
                              });
-
-                this.SiteGroups = siteGroups;
+                } else {
+                    this.SiteGroups = siteGroups.Select(x => new SiteGroupViewModel
+                             {
+                                 SubscriberGroupName = x.SubscriberGroupName,
+                                 SiteList = x.SiteList.Select(y => new SiteViewModel
+                                 {
+                                     SiteID = y.SiteID,
+                                     SiteName = y.SiteName,
+                                     IsSelected = true
+                                 })
+                             });
+                }
             }            
         }
     }

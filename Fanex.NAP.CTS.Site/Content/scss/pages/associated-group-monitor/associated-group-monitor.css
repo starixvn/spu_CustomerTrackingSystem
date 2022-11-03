@@ -60,6 +60,8 @@
       left: .6rem; }
     .associated-group-content .associated-group .table-associated-group .icon-delete:before {
       color: #FF0000; }
+    .associated-group-content .associated-group .table-associated-group .icon-Add:before {
+      color: #396EF8; }
     .associated-group-content .associated-group .table-associated-group .view-site {
       cursor: pointer;
       color: blue; }

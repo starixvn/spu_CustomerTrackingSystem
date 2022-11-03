@@ -33,7 +33,7 @@
             this.AssociatedTypes = string.Join(", ", associatedTypes);
 
             this.ABI = data.ABI;
-            this.Ori = data.Ori;                       
+            this.Ori = data.Ori;
             
             var categoryNameSite = new List<string>();
             if (data.PAAllCredit == 1 || data.PAAllCredit == 2)

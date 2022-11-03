@@ -4,6 +4,8 @@
     {
         public long GroupID { get; set; }
 
+        public string GroupName { get; set; }
+
         public string CustIDs { get; set; }
 
         public string CTSCustIDs { get; set; }

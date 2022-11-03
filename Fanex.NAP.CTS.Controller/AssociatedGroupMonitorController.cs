@@ -269,7 +269,8 @@
                         CategoryGroup = x.CategoryGroup,                      
                         IsDirectPA = true,
                         IsFromCTS = true,
-                        CreatedBy = CurrentSession.UserId
+                        CreatedBy = CurrentSession.UserId,
+                        Remark = $"Associated Group - {model.GroupName}"
                     });
 
                     if (custPas.Any())

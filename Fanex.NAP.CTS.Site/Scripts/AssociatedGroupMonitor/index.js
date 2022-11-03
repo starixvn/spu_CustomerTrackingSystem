@@ -106,8 +106,22 @@
                     }
                 },                
                 { data: obj => obj.AssociatedTypes },
-                { data: obj => obj.ABI },
-                { data: obj => obj.Ori },
+                {
+                    data: obj => {
+                        if (obj.ABI != 0)
+                            return obj.ABI;
+                        else
+                            return "-";
+                    }
+                },
+                {
+                    data: obj => {
+                        if (obj.Ori != 0)
+                            return obj.Ori;
+                        else
+                            return "-";
+                    }
+                },
                 {
                     data: obj => {          
                         let categoryName = "";
@@ -139,12 +153,12 @@
                 {
                     data: obj => {
                         let htmlSPANEditGroup = '<span class="sub-icon - edit" id="sub-icon " title="Edit Group"><i class="icon-edit ' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
-                        let htmlSPANSetPC = '<span class="sub-icon - setpc" id="sub-icon " title="Set Problem Category"><i class="icon-account_detail icon-set-pc' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
-                        let htmlSPANRemoveGroup = '<span class="sub-icon - delete" id="sub-icon " title="Remove Group"><i class="icon-delete ' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
+                        let htmlSPANSetPC = '<span class="sub-icon - setpc" id="sub-icon " title="Set Problem Category"><i class="icon-Add icon-set-pc' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';                        
                         let htmlSPANAddAccount = '<span class="sub-icon - edit" id="sub-icon " title="Add Accounts"><i class="icon-add-account' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
                         let htmlExportExcel = '<span class="sub-icon - excel" id="sub-icon " title="Export To Excel"><i class="icon-excel ' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
+                        let htmlSPANRemoveGroup = '<span class="sub-icon - delete" id="sub-icon " title="Remove Group"><i class="icon-delete ' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
 
-                        return htmlSPANEditGroup + htmlSPANSetPC + htmlSPANRemoveGroup + htmlSPANAddAccount + htmlExportExcel;
+                        return htmlSPANEditGroup + htmlSPANSetPC + htmlSPANAddAccount + htmlExportExcel + htmlSPANRemoveGroup;
                     }, createdCell: (cell, _, row) => {                      
                         if (isHostPermission) {
                             $('.icon-edit', cell).click(() => {
@@ -169,37 +183,7 @@
                             $('.icon-add-account', cell).click(() => {
                                 $('td #sub-icon').addClass('none-pointer');
 
-                                domElements.spanAddAssociatedAccountGroupIDHidden.val(row.GroupID);
-                                domElements.spanAddAssociatedAccountGroupNameHidden.val(row.GroupName);
-                                domElements.spanAddAssociatedAccountGroupABIHidden.val(row.ABI);
-                                domElements.spanAddAssociatedAccountGroupOriHidden.val(row.Ori)
-                                domElements.txtCommentAssociatedAccount.val('');
-                                domElements.spanAddAssociatedAccountUserNameMaxTag.text(domElements.maxTags);
-                                domElements.spanAddAssociatedAccountChangeHidden.text("0");
-                                domElements.inputTagUsername.tagify().data('tagify').removeAllTags();
-                                domElements.spanAddAssociatedAccountUserName.find('tags').attr('tabindex', "1");
-                                domElements.btnSaveAssociatedAccount.prop('disabled', true);
-
-                                $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
-                                    _title: function (title) {
-                                        let $title = this.options.title || '&nbsp;'
-                                        if (("titleIsHtml" in this.options) && this.options.titleIsHtml == true)
-                                            title.html($title);
-                                        else title.text($title);
-                                    }
-                                }));
-
-                                domElements.divAddAssociatedAccount.dialog({
-                                    modal: true,
-                                    width: '700px',
-                                    title: '<div>ADD NEW ACCOUNTS - <label style="color:#FF0000">' + row.GroupName + '</label></div>',
-                                    titleIsHtml: true,
-                                    resizable: true,
-                                    draggable: true,
-                                    close: function () {
-                                        $(this).dialog('close');
-                                    }
-                                });
+                                AddAccount(row);
                             });
                         }                        
 
@@ -292,6 +276,40 @@
                 domElements.tblAssociatedGroup.find('tbody').removeClass('loading');
                 common.showError("An unexpected Error occurred. Please try again.");
                 console.log(errMsg);
+            }
+        });
+    }
+
+    function AddAccount(row) {        
+        domElements.spanAddAssociatedAccountGroupIDHidden.val(row.GroupID);
+        domElements.spanAddAssociatedAccountGroupNameHidden.val(row.GroupName);
+        domElements.spanAddAssociatedAccountGroupABIHidden.val(row.ABI);
+        domElements.spanAddAssociatedAccountGroupOriHidden.val(row.Ori)
+        domElements.txtCommentAssociatedAccount.val('');
+        domElements.spanAddAssociatedAccountUserNameMaxTag.text(domElements.maxTags);
+        domElements.spanAddAssociatedAccountChangeHidden.text("0");
+        domElements.inputTagUsername.tagify().data('tagify').removeAllTags();
+        domElements.spanAddAssociatedAccountUserName.find('tags').attr('tabindex', "1");
+        domElements.btnSaveAssociatedAccount.prop('disabled', true);
+
+        $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+            _title: function (title) {
+                let $title = this.options.title || '&nbsp;'
+                if (("titleIsHtml" in this.options) && this.options.titleIsHtml == true)
+                    title.html($title);
+                else title.text($title);
+            }
+        }));
+
+        domElements.divAddAssociatedAccount.dialog({
+            modal: true,
+            width: '700px',
+            title: '<div>ADD NEW ACCOUNTS - <label style="color:#FF0000">' + row.GroupName + '</label></div>',
+            titleIsHtml: true,
+            resizable: true,
+            draggable: true,
+            close: function () {
+                $(this).dialog('close');
             }
         });
     }
@@ -555,8 +573,9 @@
             return false;
         }
         
-        if (domElements.cbbABIAssociatedGroup.val() == "" || domElements.cbbABIAssociatedGroup.val() == null) {
-            common.showError('ABI may not be empty.');
+        if ((domElements.cbbABIAssociatedGroup.val() == 0 || domElements.cbbABIAssociatedGroup.val() == null)
+            && (domElements.cbbOriAssociatedGroup.val() == 0 || domElements.cbbOriAssociatedGroup.val() == null)) {
+            common.showError('ABI or Ori may not be empty.');
             return false;
         }
 
@@ -1023,7 +1042,7 @@
     function RefreshProblemCategorySiteGroups(siteGroups) {
         let siteSelector = domElements.cbbSitesSetPC.empty();
 
-        siteGroups.map(function (x) {
+        siteGroups.map(function (x) {           
             let optgroup = `<optgroup label='${x.SubscriberGroupName}'>`;
 
             if (x.SiteList.length > 0) {
