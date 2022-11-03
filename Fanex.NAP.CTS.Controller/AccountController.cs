@@ -2011,51 +2011,51 @@
 
         #region Robot Classification
 
-        public ActionResult RobotClassification()
-        {
-            return PartialView("RobotClassfication/LastestRobotClassification");
-        }
+        //public ActionResult RobotClassification()
+        //{
+        //    return PartialView("RobotClassfication/LastestRobotClassification");
+        //}
 
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileRobotClassification)]
-        public ActionResult TrackingRobotClassification()
-        {
-            return null;
-        }
+        //[TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileRobotClassification)]
+        //public ActionResult TrackingRobotClassification()
+        //{
+        //    return null;
+        //}
 
-        [HttpPost]
-        public ActionResult GetHistoryRobotClassification(long custId)
-        {
-            var data = Enumerable.Empty<RobotClassificationViewModel>();
-            var bettingStatisticFormat = "Turnover: {0} | Win lost: {1} | Margin: {2}% | Bet count: {3} | Active days: {4}";
+        //[HttpPost]
+        //public ActionResult GetHistoryRobotClassification(long custId)
+        //{
+        //    var data = Enumerable.Empty<RobotClassificationViewModel>();
+        //    var bettingStatisticFormat = "Turnover: {0} | Win lost: {1} | Margin: {2}% | Bet count: {3} | Active days: {4}";
 
-            var robotData = _robotClassificationService.GetHistoryRobotClassification(custId);
+        //    var robotData = _robotClassificationService.GetHistoryRobotClassification(custId);
 
-            if (robotData != null && robotData.Any())
-            {
-                data = robotData.OrderByDescending(d => d.FromDate).Select(x =>
-                {
-                    decimal margin = 0;
+        //    if (robotData != null && robotData.Any())
+        //    {
+        //        data = robotData.OrderByDescending(d => d.FromDate).Select(x =>
+        //        {
+        //            decimal margin = 0;
 
-                    if (x.Turnover != 0)
-                    {
-                        margin = x.Winloss / x.Turnover * 100;
-                    }
+        //            if (x.Turnover != 0)
+        //            {
+        //                margin = x.Winloss / x.Turnover * 100;
+        //            }
 
-                    return new RobotClassificationViewModel
-                    {
-                        ScannedDate = x.FromDate.ToString(Consts.FormatDateToString_MMMddyyyy),
-                        BettingStatistic = string.Format(bettingStatisticFormat
-                                         , Math.Round(x.Turnover, 3).ToString("0.000").Replace(".000", string.Empty)
-                                         , Math.Round(x.Winloss, 3).ToString("0.000").Replace(".000", string.Empty)
-                                         , Math.Round(margin, 3).ToString("0.000").Replace(".000", string.Empty)
-                                         , x.BetCount, x.ActiveDays),
-                        RobotType = x.RobotType
-                    };
-                });
-            }
+        //            return new RobotClassificationViewModel
+        //            {
+        //                ScannedDate = x.FromDate.ToString(Consts.FormatDateToString_MMMddyyyy),
+        //                BettingStatistic = string.Format(bettingStatisticFormat
+        //                                 , Math.Round(x.Turnover, 3).ToString("0.000").Replace(".000", string.Empty)
+        //                                 , Math.Round(x.Winloss, 3).ToString("0.000").Replace(".000", string.Empty)
+        //                                 , Math.Round(margin, 3).ToString("0.000").Replace(".000", string.Empty)
+        //                                 , x.BetCount, x.ActiveDays),
+        //                RobotType = x.RobotType
+        //            };
+        //        });
+        //    }
 
-            return Json(new { data }, JsonRequestBehavior.AllowGet);
-        }
+        //    return Json(new { data }, JsonRequestBehavior.AllowGet);
+        //}
 
         #endregion Robot Classification
 
