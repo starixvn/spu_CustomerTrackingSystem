@@ -408,7 +408,7 @@
 
             if (model.Is3MatchesLast7Days)
                 viewModel.AddRange(GetAssociationDetectSharedMatches(model));
-                        
+          
             var dataCust = _associationDetectionService.GetAssociationDetectionDetail(model, AppSettings.Get("GetAssDetectionFromMySQL") == "1");
             
             if (dataCust != null && dataCust.Any())
@@ -417,7 +417,7 @@
                 {
                     viewModel.Add(new GetAssociationDetectDetailViewModel(item));
                 }     
-            }
+            }            
 
             if (viewModel.Any())
             {
@@ -431,7 +431,9 @@
                         CustID = x.FirstOrDefault()?.CustID,
                         UserName = x.FirstOrDefault()?.UserName,
                         AgentInfoJson = string.Join(",", agentInfos),
-                        AssociatedTypes = string.Join(", ", x.Select(y => y.AssociatedTypes))
+                        AssociatedTypes = string.Join(", ",
+                                    x.Where(y=>!string.IsNullOrEmpty(y.AssociatedTypes))
+                                    .Select(y => y.AssociatedTypes))
                     };
                 });
             }
@@ -504,7 +506,7 @@
             
             return Enumerable.Empty<GetAssociationDetectDetailViewModel>();
         }
-
+       
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetectionDetails)]
         public ActionResult GetDetectAssociationDetailIP(string userNameList)

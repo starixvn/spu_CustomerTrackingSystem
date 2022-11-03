@@ -204,6 +204,22 @@ body {
                         background-color: $account-rosebud;
                         font-weight: bold;
                     }
+
+                    .association-type-outer {                       
+                        display: -webkit-box;
+                        display: -ms-flexbox;
+                        display: flex;                                         
+                        position: relative;
+
+                        .association-type-info {
+                            -webkit-box-flex: 1;
+                            flex: 3;                 
+                        }
+
+                        .association-type-detail {
+                            -webkit-box-flex: 1;                                                     
+                        }
+                    }
                 }
             }
         }
