@@ -2106,13 +2106,13 @@
         }
 
         [HttpPost]
-        public ActionResult GetRobotBettingTicketDetail(long custID, int periodRangeType, int clusterId, string createdTime)
+        public ActionResult GetRobotBettingTicketDetail(long custID, int robotTypeOrigin, int robotTypeDisplay, int clusterId, string createdTime)
         {
             var result = Enumerable.Empty<RobotBettingDetailViewModel>();
 
             try
             {
-                var listTrans = _robotBettingService.GetTranIds(custID, periodRangeType, clusterId, createdTime);
+                var listTrans = _robotBettingService.GetTranIds(custID, robotTypeOrigin, robotTypeDisplay, clusterId, createdTime);
 
                 if (listTrans != null && listTrans.Any())
                 {
@@ -2151,15 +2151,15 @@
 
 
         [HttpPost]
-        public ActionResult GetRobotBettingReasonDetail(long custID, int periodRangeType)
+        public ActionResult GetRobotBettingReasonDetail(long custID, int robotTypeOrigin)
         {
-            var robotReasonDetail = _robotBettingService.GetRobotDetectionSCEDetails(custID, periodRangeType, RobotDetectionQueryType.RobotReasonDetail);
+            var inputParas = new RobotBettingSceDetailParaModel { CustId = custID, RobotTypeOrigin = robotTypeOrigin, QueryType = RobotDetectionQueryType.RobotReasonDetail };
+            var robotReasonDetail = _robotBettingService.GetRobotDetectionSCEDetails(inputParas);
 
             return Json(new
             {
                 childTableId = new Random().Next(),
-                reasonGroups = robotReasonDetail?.ToList().OrderBy(c => c.FirstTransDate) ?? Enumerable.Empty<RobotUserDetailSceModel>(),
-                periodRangeType = periodRangeType
+                reasonGroups = robotReasonDetail?.ToList().OrderBy(c => c.FirstTransDate) ?? Enumerable.Empty<RobotUserDetailSceModel>()
             }, JsonRequestBehavior.AllowGet); ;
         }
 

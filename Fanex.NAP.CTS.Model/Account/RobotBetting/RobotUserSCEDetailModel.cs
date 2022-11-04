@@ -7,7 +7,9 @@
     {
         public long CustID { get; set; }
 
-        public int PeriodRangeType { get; set; }
+        public int RobotTypeOrigin { get; set; }
+
+        public int RobotTypeDisplay { get; set; }
 
         public string TransList { get; set; }
 
@@ -29,7 +31,7 @@
         {
             get
             {
-                switch (PeriodRangeType)
+                switch (RobotTypeDisplay)
                 {
                     case ((int)Consts.RobotDetectionReasonQueryType.ConsecutiveTicket):
                         {
@@ -59,7 +61,7 @@
         {
             get
             {
-                switch (PeriodRangeType)
+                switch (RobotTypeDisplay)
                 {
                     case ((int)Consts.RobotDetectionReasonQueryType.ConsecutiveTicket):
                         {

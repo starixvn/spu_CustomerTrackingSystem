@@ -2,7 +2,6 @@
     let firstRobotDate = $('#spanFirstRobotDate');
     let lastRobotDate = $('#spanLastRobotDate');
     let robotBettingTable = $('#tableRobotBetting');
-    let childTableIndex = 1;
 
     function RenderGrid(custID) {
         robotBettingTable.DataTable({
@@ -60,7 +59,7 @@
             ],
             createdRow: function (row, obj) {
                 if (obj.Detail.length == 0) {
-                    let td = `<td class="robot-betting" colspan="8" data-custid=${obj.CustID} data-periodrangetype=${obj.PeriodRangeType}><span class="icon-chevron-right"><i class="title-robot">${obj.PeriodRangeName}</span></td>`;
+                    let td = `<td class="robot-betting" colspan="8" data-custid=${obj.CustID} data-robotTypeOrigin=${obj.PeriodRangeType}><span class="icon-chevron-right"><i class="title-robot">${obj.PeriodRangeName}</span></td>`;
                     $(row).empty().html(td);
                 }
             }
@@ -124,9 +123,9 @@
             if (tr.hasClass('detail-loaded')) {
                 row.child.show();
             } else {
-                let periodrangetype = $('.robot-betting', tr).attr('data-periodrangetype');
+                let robotTypeOrigin = $('.robot-betting', tr).attr('data-robotTypeOrigin');
 
-                if (periodrangetype == 100 || periodrangetype == 101) {
+                if (robotTypeOrigin == 100 || robotTypeOrigin == 101) {
                     GenerateSCEReason(tr, row);
                 } else {
                     GenerateTicketDetail(tr, row);
@@ -138,13 +137,13 @@
     function GenerateTicketDetail(tr, row) {
         let td = $('.robot-betting', tr);
         let custID = td.attr('data-custid');
-        let periodrangetype = td.attr('data-periodrangetype');
+        let robotTypeOrigin = td.attr('data-robotTypeOrigin');
 
         $.ajax(common.modifyRelativeUrl('Account/GetRobotBettingTicketDetail'), {
             type: 'POST',
             data: {
                 custID: custID,
-                periodrangetype: periodrangetype
+                robotTypeOrigin: robotTypeOrigin
             },
             success: function (response) {
                 let childRow = NewDetailTicketRows(response);
@@ -179,13 +178,13 @@
 
                 let td = $('.robot-betting', tr);
                 let custID = td.attr('data-custid');
-                let periodrangetype = td.attr('data-periodrangetype');
+                let robotTypeOrigin = td.attr('data-robotTypeOrigin');
 
                 $.ajax(common.modifyRelativeUrl('Account/GetRobotBettingReasonDetail'), {
                     type: 'POST',
                     data: {
                         custID: custID,
-                        periodRangeType: periodrangetype
+                        robotTypeOrigin: robotTypeOrigin
                     },
                     success: function (response) {
                         if (response.reasonGroups.length  > 0) {
@@ -243,7 +242,7 @@
             },
             createdRow: function (row, obj) {
                 if (obj.length != 0) {
-                    let td = RenderSCEReasonData(data.periodRangeType, obj);
+                    let td = RenderSCEReasonData(obj);
 
                     let tdChildTable = $(this).closest('td');
 
@@ -269,18 +268,17 @@
         });
     }
 
-    function RenderSCEReasonData(periodRangeType, item) {
+    function RenderSCEReasonData(item) {
         let html;
-        let realPeriodRangeType = (periodRangeType == item.PeriodRangeType) ? item.PeriodRangeType : periodRangeType;
 
-        switch (item.PeriodRangeType) {
+        switch (item.RobotTypeDisplay) {
             case 100:
-                html = `<td class="robot-betting-reason" colspan="8" data-custid=${item.CustID} data-periodrangetype=${realPeriodRangeType} data-clusterId=${item.ClusterID} data-createdTime=${item.CreatedDateToString}>`;
+                html = `<td class="robot-betting-reason" colspan="8" data-custid=${item.CustID} data-robotTypeOrigin=${item.RobotTypeOrigin} data-robotTypeDisplay=${item.RobotTypeDisplay} data-clusterId=${item.ClusterID} data-createdTime=${item.CreatedDateToString}>`;
                 html += `<span> ${item.FirstTransDateToString} - ${item.LastTransDateToString} (Total ${item.TotalHours} hours): <i class="title-reason">${item.BetCount} </i> Tickets </span>`;
                 html += `</td >`;
                 break;
             case 101:
-                html = `<td class="robot-betting-reason" colspan="8" data-custid=${item.CustID} data-periodrangetype=${item.PeriodRangeType} data-clusterId=${item.ClusterID} data-createdTime=${item.CreatedDateToString}>`;
+                html = `<td class="robot-betting-reason" colspan="8" data-custid=${item.CustID} data-robotTypeOrigin=${item.RobotTypeOrigin}  data-robotTypeDisplay=${item.RobotTypeDisplay} data-clusterId=${item.ClusterID} data-createdTime=${item.CreatedDateToString}>`;
                 html += `<span><i class="title-reason">${item.BetCount}/${item.TotalBetCount}</i> High Ugly Stake Tickets From ${item.FirstTransDateToString} To ${item.LastTransDateToString} </span>`;
                 html += `</td >`;
                 break;
@@ -300,7 +298,8 @@
             } else {
                 let td = $('.robot-betting-reason', tr);
                 let custID = td.attr('data-custid');
-                let periodrangetype = td.attr('data-periodrangetype');
+                let robotTypeOrigin = td.attr('data-robotTypeOrigin');
+                let robotTypeDisplay = td.attr('data-robotTypeDisplay');
                 let createdTime = td.attr('data-createdTime');
                 let clusterId = td.attr('data-clusterId');
 
@@ -308,7 +307,8 @@
                     type: 'POST',
                     data: {
                         custID: custID,
-                        periodrangetype: periodrangetype,
+                        robotTypeOrigin: robotTypeOrigin,
+                        robotTypeDisplay: robotTypeDisplay,
                         clusterId: clusterId,
                         createdTime: createdTime
                     },

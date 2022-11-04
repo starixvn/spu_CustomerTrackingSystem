@@ -9,8 +9,11 @@
         [SpParam(SqlParamName = "ip_CustID")]
         public long CustID { get; set; }
 
-        [SpParam(SqlParamName = "ip_RobotType")]
-        public int RobotType { get; set; }
+        [SpParam(SqlParamName = "ip_RobotTypeOrigin")]
+        public int RobotTypeOrigin { get; set; }
+
+        [SpParam(SqlParamName = "ip_RobotTypeDisplay")]
+        public int RobotTypeDisplay { get; set; }
 
         [SpParam(SqlParamName = "ip_ScannedDate")]
         public DateTime? ScannedDate { get; set; }

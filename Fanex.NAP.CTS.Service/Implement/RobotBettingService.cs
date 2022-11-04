@@ -49,15 +49,16 @@
             return repository.Fetch<RobotUserDetailModel>(criteria);
         }
 
-        public IEnumerable<RobotUserDetailSceModel> GetRobotDetectionSCEDetails(long custID, int periodRangeType, RobotDetectionQueryType queryType, int? clusterId = null, DateTime? scannedTime = null)
+        public IEnumerable<RobotUserDetailSceModel> GetRobotDetectionSCEDetails(RobotBettingSceDetailParaModel parameters)
         {
             var criteria = new GetRobotUsersSCEDetailsCriteria
             {
-                CustID = custID,
-                RobotType = periodRangeType,
-                QueryType = (int)queryType,
-                ScannedDate = scannedTime,
-                ClusterID = clusterId
+                CustID = parameters.CustId,
+                RobotTypeOrigin = parameters.RobotTypeOrigin,
+                RobotTypeDisplay = parameters.RobotTypeDisplay,
+                QueryType = (int)parameters.QueryType,
+                ScannedDate = parameters.ScannedTime,
+                ClusterID = parameters.ClusterId
             };
 
             return repository.Fetch<RobotUserDetailSceModel>(criteria);
@@ -80,14 +81,23 @@
             }
         }
 
-        public IEnumerable<string> GetTranIds(long custID, int periodRangeType, int clusterId, string createdTime)
+        public IEnumerable<string> GetTranIds(long custID, int robotTypeOrigin, int robotTypeDisplay, int clusterId, string createdTime)
         {
-            bool isSCERobotDetection = (periodRangeType == (int)RobotDetectionReasonQueryType.ConsecutiveTicket || periodRangeType == (int)RobotDetectionReasonQueryType.UglyStakeTicket);
+            bool isSCERobotDetection = (robotTypeOrigin == (int)RobotDetectionReasonQueryType.ConsecutiveTicket || robotTypeOrigin == (int)RobotDetectionReasonQueryType.UglyStakeTicket);
 
             if (isSCERobotDetection)
             {
-                var datetime = DateTime.ParseExact(createdTime, FormatDateTimeToString_YYYYmmdd, CultureInfo.InvariantCulture);
-                var robotUserDetailsSCE = GetRobotDetectionSCEDetails(custID, periodRangeType, RobotDetectionQueryType.RobotTicketDetail, clusterId, datetime);
+                var inputPara = new RobotBettingSceDetailParaModel
+                {
+                    CustId = custID,
+                    ClusterId = clusterId,
+                    QueryType = RobotDetectionQueryType.RobotTicketDetail,
+                    RobotTypeDisplay = robotTypeDisplay,
+                    RobotTypeOrigin = robotTypeOrigin,
+                    ScannedTime = DateTime.ParseExact(createdTime, FormatDateTimeToString_YYYYmmdd, CultureInfo.InvariantCulture)
+                };
+
+                var robotUserDetailsSCE = GetRobotDetectionSCEDetails(inputPara);
 
                 if (robotUserDetailsSCE != null && robotUserDetailsSCE.Any())
                 {
@@ -96,7 +106,7 @@
             }
             else
             {
-                var robotUserDetails = GetRobotDetectionDetails(custID, periodRangeType);
+                var robotUserDetails = GetRobotDetectionDetails(custID, robotTypeOrigin);
 
                 if (robotUserDetails != null && robotUserDetails.Any())
                 {
