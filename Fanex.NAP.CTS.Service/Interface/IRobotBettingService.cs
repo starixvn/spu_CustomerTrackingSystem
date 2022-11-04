@@ -15,7 +15,7 @@
 
         IEnumerable<RobotBettingTicketDetailModel> GetRobotBettingTicketDetails(string tranIdList);
 
-        IEnumerable<string> GetTranIds(long custID, int robotTypeOrigin, int robotTypeDisplay, int clusterId, string createdTime);
+        IEnumerable<string> GetTranIds(long custID, int robotTypeOrigin, int? robotTypeDisplay, int? clusterId, string createdTime);
 
         string GetTransFromList(IEnumerable<string> suspiciousTransList);
     }

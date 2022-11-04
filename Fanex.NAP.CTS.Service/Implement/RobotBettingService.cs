@@ -81,7 +81,7 @@
             }
         }
 
-        public IEnumerable<string> GetTranIds(long custID, int robotTypeOrigin, int robotTypeDisplay, int clusterId, string createdTime)
+        public IEnumerable<string> GetTranIds(long custID, int robotTypeOrigin, int? robotTypeDisplay, int? clusterId, string createdTime)
         {
             bool isSCERobotDetection = (robotTypeOrigin == (int)RobotDetectionReasonQueryType.ConsecutiveTicket || robotTypeOrigin == (int)RobotDetectionReasonQueryType.UglyStakeTicket);
 
@@ -92,7 +92,7 @@
                     CustId = custID,
                     ClusterId = clusterId,
                     QueryType = RobotDetectionQueryType.RobotTicketDetail,
-                    RobotTypeDisplay = robotTypeDisplay,
+                    RobotTypeDisplay = robotTypeDisplay.GetValueOrDefault(),
                     RobotTypeOrigin = robotTypeOrigin,
                     ScannedTime = DateTime.ParseExact(createdTime, FormatDateTimeToString_YYYYmmdd, CultureInfo.InvariantCulture)
                 };

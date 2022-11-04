@@ -2106,7 +2106,7 @@
         }
 
         [HttpPost]
-        public ActionResult GetRobotBettingTicketDetail(long custID, int robotTypeOrigin, int robotTypeDisplay, int clusterId, string createdTime)
+        public ActionResult GetRobotBettingTicketDetail(long custID, int robotTypeOrigin, int? robotTypeDisplay, int? clusterId, string createdTime)
         {
             var result = Enumerable.Empty<RobotBettingDetailViewModel>();
 
