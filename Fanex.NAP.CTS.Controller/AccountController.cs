@@ -2141,7 +2141,7 @@
             }
             catch (Exception ex)
             {
-                LogService.Info(ex.Message);
+                LogService.Error(ex.Message);
 
                 result = Enumerable.Empty<RobotBettingDetailViewModel>();
             }
@@ -2206,7 +2206,7 @@
                     }
                     catch (Exception ex)
                     {
-                        LogService.Info(ex.Message);
+                        LogService.Error(ex.Message);
 
                         throw;
                     }
@@ -2227,7 +2227,7 @@
                     }
                     catch (Exception ex)
                     {
-                        LogService.Info(ex.Message);
+                        LogService.Error(ex.Message);
 
                         throw;
                     }
@@ -2241,7 +2241,7 @@
                     }
                     catch (Exception ex)
                     {
-                        LogService.Info(ex.Message);
+                        LogService.Error(ex.Message);
 
                         throw;
                     }
