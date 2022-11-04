@@ -316,10 +316,14 @@
                                 item.TotalWinloss = cust2.TotalWinlossRM;
                                 item.WinlossLast3Days = cust2.WinlossRM_Last3Days;
                                 item.WinlossLast7Days = cust2.WinlossRM_Last7Days;
+                                item.TotalSabaTurnoverRM = cust2.TotalSabaTurnoverRM;
+                                item.SabaTurnoverRMLast3Days = cust2.SabaTurnoverRM_Last3Days;
+                                item.SabaTurnoverRMLast7Days = cust2.SabaTurnoverRM_Last7Days;
                                 item.TotalTurnover = cust2.TotalTurnoverRM;
                                 item.TurnoverLast3Days = cust2.TurnoverRM_Last3Days;
                                 item.TurnoverLast7Days = cust2.TurnoverRM_Last7Days;
-                            }
+                            }                           
+
                             return item;
                         });
                     }

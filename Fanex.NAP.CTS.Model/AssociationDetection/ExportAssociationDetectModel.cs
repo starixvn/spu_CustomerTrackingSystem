@@ -30,6 +30,12 @@
 
         public decimal? WinlossLast7Days { get; set; }
 
+        public decimal? TotalSabaTurnoverRM { get; set; }
+
+        public decimal? SabaTurnoverRMLast3Days { get; set; }
+
+        public decimal? SabaTurnoverRMLast7Days { get; set; }
+
         public decimal? TotalTurnover { get; set; }
 
         public decimal? TurnoverLast3Days { get; set; }

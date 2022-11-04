@@ -4,17 +4,23 @@
     {
         public int CustID { get; set; }
 
-        public decimal TotalWinlossRM { get; set; }
+        public decimal? TotalWinlossRM { get; set; }
 
-        public decimal WinlossRM_Last3Days { get; set; }
+        public decimal? WinlossRM_Last3Days { get; set; }
 
-        public decimal WinlossRM_Last7Days { get; set; }
+        public decimal? WinlossRM_Last7Days { get; set; }
 
-        public decimal TotalTurnoverRM { get; set; }
+        public decimal? TotalSabaTurnoverRM { get; set; }
 
-        public decimal TurnoverRM_Last3Days { get; set; }
+        public decimal? SabaTurnoverRM_Last3Days { get; set; }
 
-        public decimal TurnoverRM_Last7Days { get; set; }
+        public decimal? SabaTurnoverRM_Last7Days { get; set; }
+
+        public decimal? TotalTurnoverRM { get; set; }
+
+        public decimal? TurnoverRM_Last3Days { get; set; }
+
+        public decimal? TurnoverRM_Last7Days { get; set; }
 
     }
 }

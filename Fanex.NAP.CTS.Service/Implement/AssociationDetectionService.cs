@@ -7,6 +7,7 @@
     using Fanex.NAP.CTS.Model;
     using Fanex.NAP.CTS.Model.AssociationDetection;
     using Fanex.NAP.CTS.Model.GraphDB.AssDetection;
+    using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.ViewModel.AssociationDetection;
     using Fanex.NAP.SPU.Graph.Core;
     using Fanex.NAP.TGRS.Core.ExcelUtility;
@@ -241,7 +242,7 @@
            
             FillRowData(AssociationDetect, ref writer);
 
-            writer.SyncColumnsWidth(12);
+            writer.SyncColumnsWidth(15);
 
             return writer.ToBytes();
         }
@@ -256,13 +257,16 @@
                     {
                         idx++,
                         item.UserName,
-                        item.CreatedDate,
+                        item.CreatedDate.ToString(Consts.FormatDateToString_MMMddyyyy),
                         item.CustomerClass != -1 ? item.CustomerClass.ToString() : string.Empty,
                         (item.GroupID.HasValue ? item.GroupID.ToString() : string.Empty),
                         item.DangerLevel,
                         item.TotalWinloss,
                         item.WinlossLast3Days,
                         item.WinlossLast7Days,
+                        item.TotalSabaTurnoverRM,
+                        item.SabaTurnoverRMLast3Days,
+                        item.SabaTurnoverRMLast7Days,
                         item.TotalTurnover,
                         item.TurnoverLast3Days,
                         item.TurnoverLast7Days
