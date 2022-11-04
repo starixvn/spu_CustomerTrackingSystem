@@ -13,7 +13,7 @@
 
         IEnumerable<RobotUserDetailSceModel> GetRobotDetectionSCEDetails(RobotBettingSceDetailParaModel parameters);
 
-        IEnumerable<RobotBettingTicketDetailModel> GetRobotBettingTicketDetails(string tranIdList);
+        IEnumerable<RobotBettingTicketDetailModel> GetRobotBettingTicketDetails(string tranIdList, bool isSCETicketDetails);
 
         IEnumerable<string> GetTranIds(long custID, int robotTypeOrigin, int? robotTypeDisplay, int? clusterId, string createdTime);
 

@@ -7,6 +7,9 @@
     {
         [SpParam(SqlParamName = "ListTransId")]
         public string ListTransId { get; set; }
+
+        [SpParam(SqlParamName = "MatchBatchSize")]
+        public int MatchBatchSize { get; set; }
      
         public override string GetSettingKey()
         {

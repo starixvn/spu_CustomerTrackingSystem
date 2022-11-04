@@ -2118,7 +2118,10 @@
                 {
                     var transToString = _robotBettingService.GetTransFromList(listTrans);
 
-                    var ticketDetail = _robotBettingService.GetRobotBettingTicketDetails(transToString);
+                    var isSCETicketDetails = (robotTypeOrigin == (int)RobotDetectionReasonQueryType.ConsecutiveTicket
+                                            || robotTypeOrigin == (int)RobotDetectionReasonQueryType.UglyStakeTicket) ? true : false;
+
+                    var ticketDetail = _robotBettingService.GetRobotBettingTicketDetails(transToString, isSCETicketDetails);
 
                     if (ticketDetail != null && ticketDetail.Any())
                     {

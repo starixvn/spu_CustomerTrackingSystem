@@ -64,13 +64,14 @@
             return repository.Fetch<RobotUserDetailSceModel>(criteria);
         }
 
-        public IEnumerable<RobotBettingTicketDetailModel> GetRobotBettingTicketDetails(string tranIdList)
+        public IEnumerable<RobotBettingTicketDetailModel> GetRobotBettingTicketDetails(string tranIdList, bool isSCETicketDetails)
         {
             if (!string.IsNullOrEmpty(tranIdList))
             {
                 var criteria = new GetRobotDetectionTicketDetailsCriteria
                 {
-                    ListTransId = tranIdList
+                    ListTransId = tranIdList,
+                    MatchBatchSize = isSCETicketDetails ? 1000 : 50
                 };
 
                 return repository.Fetch<RobotBettingTicketDetailModel>(criteria);
