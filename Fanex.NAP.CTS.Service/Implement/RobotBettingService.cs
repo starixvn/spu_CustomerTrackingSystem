@@ -3,12 +3,12 @@
     using Fanex.Data.Repository;
     using Fanex.NAP.CTS.Criteria.Account.RobotSetting;
     using Fanex.NAP.CTS.Model.Account.RobotBetting;
-    using Fanex.NAP.CTS.Model.MatchMonitor;
+    using Fanex.NAP.CTS.Resource.Consts;
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
+    using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public class RobotBettingService : IRobotBettingService
     {
@@ -20,10 +20,10 @@
         }
 
         public IEnumerable<RobotBettingModel> GetRobotBetting(long custID, out RobotDateAndTypeModel robotDateAndType)
-        {          
+        {
             var criteria = new GetRobotDetectionCriteria()
             {
-                CustID = custID 
+                CustID = custID
             };
 
             var result = repository.Fetch<RobotBettingModel>(criteria);
@@ -38,7 +38,7 @@
             return result;
         }
 
-        public IEnumerable<RobotUserDetailModel> GetRobotUserDetails(long custID, int periodRangeType)
+        public IEnumerable<RobotUserDetailModel> GetRobotDetectionDetails(long custID, int periodRangeType)
         {
             var criteria = new GetRobotUsersDetailsCriteria
             {
@@ -49,13 +49,29 @@
             return repository.Fetch<RobotUserDetailModel>(criteria);
         }
 
-        public IEnumerable<RobotBettingTicketDetailModel> GetRobotBettingTicketDetails(string tranIdList)
+        public IEnumerable<RobotUserDetailSceModel> GetRobotDetectionSCEDetails(RobotBettingSceDetailParaModel parameters)
+        {
+            var criteria = new GetRobotUsersSCEDetailsCriteria
+            {
+                CustID = parameters.CustId,
+                RobotTypeOrigin = parameters.RobotTypeOrigin,
+                RobotTypeDisplay = parameters.RobotTypeDisplay,
+                QueryType = (int)parameters.QueryType,
+                ScannedDate = parameters.ScannedTime,
+                ClusterID = parameters.ClusterId
+            };
+
+            return repository.Fetch<RobotUserDetailSceModel>(criteria);
+        }
+
+        public IEnumerable<RobotBettingTicketDetailModel> GetRobotBettingTicketDetails(string tranIdList, bool isSCETicketDetails)
         {
             if (!string.IsNullOrEmpty(tranIdList))
             {
                 var criteria = new GetRobotDetectionTicketDetailsCriteria
                 {
-                    ListTransId = tranIdList
+                    ListTransId = tranIdList,
+                    MatchBatchSize = isSCETicketDetails ? 1000 : 50
                 };
 
                 return repository.Fetch<RobotBettingTicketDetailModel>(criteria);
@@ -66,5 +82,69 @@
             }
         }
 
+        public IEnumerable<string> GetTranIds(long custID, int robotTypeOrigin, int? robotTypeDisplay, int? clusterId, string createdTime)
+        {
+            bool isSCERobotDetection = (robotTypeOrigin == (int)RobotDetectionReasonQueryType.ConsecutiveTicket || robotTypeOrigin == (int)RobotDetectionReasonQueryType.UglyStakeTicket);
+
+            if (isSCERobotDetection)
+            {
+                var inputPara = new RobotBettingSceDetailParaModel
+                {
+                    CustId = custID,
+                    ClusterId = clusterId,
+                    QueryType = RobotDetectionQueryType.RobotTicketDetail,
+                    RobotTypeDisplay = robotTypeDisplay.GetValueOrDefault(),
+                    RobotTypeOrigin = robotTypeOrigin,
+                    ScannedTime = DateTime.ParseExact(createdTime, FormatDateTimeToString_YYYYmmdd, CultureInfo.InvariantCulture)
+                };
+
+                var robotUserDetailsSCE = GetRobotDetectionSCEDetails(inputPara);
+
+                if (robotUserDetailsSCE != null && robotUserDetailsSCE.Any())
+                {
+                    return robotUserDetailsSCE.Select(c => c.TransList);
+                }
+            }
+            else
+            {
+                var robotUserDetails = GetRobotDetectionDetails(custID, robotTypeOrigin);
+
+                if (robotUserDetails != null && robotUserDetails.Any())
+                {
+                    return robotUserDetails.Select(c => c.SuspiciousTransList);
+                }
+            }
+
+            return Enumerable.Empty<string>();
+        }
+
+
+        public string GetTransFromList(IEnumerable<string> suspiciousTransList)
+        {
+            var tranIdList = new List<string>();
+
+            foreach (var level1 in suspiciousTransList)
+            {
+                var susTranIdsLevel1 = level1.Split(',');
+
+                foreach (var level2 in susTranIdsLevel1)
+                {
+                    var susTranIdsLevel2 = level2.Split('#');
+
+                    if (susTranIdsLevel2.Length > 1)
+                    {
+                        tranIdList.AddRange(susTranIdsLevel2);
+                    }
+                    else
+                    {
+                        tranIdList.Add(level2);
+                    }
+                }
+            }
+
+            var tranIds = string.Join(",", tranIdList.Distinct());
+
+            return tranIds.Replace(@".0", "");
+        }
     }
 }

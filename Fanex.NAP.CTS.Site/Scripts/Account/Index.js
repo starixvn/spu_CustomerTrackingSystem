@@ -69,7 +69,7 @@
 
                 LoadChainToEvidence();                
                 LoadTransactionHistory();
-                LoadLastestRobotClassification();
+                //LoadLastestRobotClassification();
                 LoadRobotBetting();
             },
             error: function (errMsg) {
@@ -124,21 +124,21 @@
         });
     }
 
-    function LoadLastestRobotClassification() {
-        $.ajax(common.modifyRelativeUrl('Account/RobotClassification'), {
-            type: 'POST',
-            success: function (response) {
-                domElements.tabRobotClassification.html(response);
-            },
-            complete: function () {
-                var robotClassification = new robot_classification();
-                robotClassification.Initial(custId);
-            },
-            error: function (errMsg) {
-                console.log(errMsg);
-            }
-        });
-    }
+    //function LoadLastestRobotClassification() {
+    //    $.ajax(common.modifyRelativeUrl('Account/RobotClassification'), {
+    //        type: 'POST',
+    //        success: function (response) {
+    //            domElements.tabRobotClassification.html(response);
+    //        },
+    //        complete: function () {
+    //            var robotClassification = new robot_classification();
+    //            robotClassification.Initial(custId);
+    //        },
+    //        error: function (errMsg) {
+    //            console.log(errMsg);
+    //        }
+    //    });
+    //}
 
     function LoadTransactionHistory() {
         let isViewIP = (isViewIPTransactionPermission === "False" || isViewIPTransactionPermission === undefined) ? false : true;

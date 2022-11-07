@@ -2011,51 +2011,51 @@
 
         #region Robot Classification
 
-        public ActionResult RobotClassification()
-        {
-            return PartialView("RobotClassfication/LastestRobotClassification");
-        }
+        //public ActionResult RobotClassification()
+        //{
+        //    return PartialView("RobotClassfication/LastestRobotClassification");
+        //}
 
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileRobotClassification)]
-        public ActionResult TrackingRobotClassification()
-        {
-            return null;
-        }
+        //[TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileRobotClassification)]
+        //public ActionResult TrackingRobotClassification()
+        //{
+        //    return null;
+        //}
 
-        [HttpPost]
-        public ActionResult GetHistoryRobotClassification(long custId)
-        {
-            var data = Enumerable.Empty<RobotClassificationViewModel>();
-            var bettingStatisticFormat = "Turnover: {0} | Win lost: {1} | Margin: {2}% | Bet count: {3} | Active days: {4}";
+        //[HttpPost]
+        //public ActionResult GetHistoryRobotClassification(long custId)
+        //{
+        //    var data = Enumerable.Empty<RobotClassificationViewModel>();
+        //    var bettingStatisticFormat = "Turnover: {0} | Win lost: {1} | Margin: {2}% | Bet count: {3} | Active days: {4}";
 
-            var robotData = _robotClassificationService.GetHistoryRobotClassification(custId);
+        //    var robotData = _robotClassificationService.GetHistoryRobotClassification(custId);
 
-            if (robotData != null && robotData.Any())
-            {
-                data = robotData.OrderByDescending(d => d.FromDate).Select(x =>
-                {
-                    decimal margin = 0;
+        //    if (robotData != null && robotData.Any())
+        //    {
+        //        data = robotData.OrderByDescending(d => d.FromDate).Select(x =>
+        //        {
+        //            decimal margin = 0;
 
-                    if (x.Turnover != 0)
-                    {
-                        margin = x.Winloss / x.Turnover * 100;
-                    }
+        //            if (x.Turnover != 0)
+        //            {
+        //                margin = x.Winloss / x.Turnover * 100;
+        //            }
 
-                    return new RobotClassificationViewModel
-                    {
-                        ScannedDate = x.FromDate.ToString(Consts.FormatDateToString_MMMddyyyy),
-                        BettingStatistic = string.Format(bettingStatisticFormat
-                                         , Math.Round(x.Turnover, 3).ToString("0.000").Replace(".000", string.Empty)
-                                         , Math.Round(x.Winloss, 3).ToString("0.000").Replace(".000", string.Empty)
-                                         , Math.Round(margin, 3).ToString("0.000").Replace(".000", string.Empty)
-                                         , x.BetCount, x.ActiveDays),
-                        RobotType = x.RobotType
-                    };
-                });
-            }
+        //            return new RobotClassificationViewModel
+        //            {
+        //                ScannedDate = x.FromDate.ToString(Consts.FormatDateToString_MMMddyyyy),
+        //                BettingStatistic = string.Format(bettingStatisticFormat
+        //                                 , Math.Round(x.Turnover, 3).ToString("0.000").Replace(".000", string.Empty)
+        //                                 , Math.Round(x.Winloss, 3).ToString("0.000").Replace(".000", string.Empty)
+        //                                 , Math.Round(margin, 3).ToString("0.000").Replace(".000", string.Empty)
+        //                                 , x.BetCount, x.ActiveDays),
+        //                RobotType = x.RobotType
+        //            };
+        //        });
+        //    }
 
-            return Json(new { data }, JsonRequestBehavior.AllowGet);
-        }
+        //    return Json(new { data }, JsonRequestBehavior.AllowGet);
+        //}
 
         #endregion Robot Classification
 
@@ -2106,69 +2106,66 @@
         }
 
         [HttpPost]
-        public ActionResult GetRobotBettingDetail(long custID, int periodRangeType)
+        public ActionResult GetRobotBettingTicketDetail(long custID, int robotTypeOrigin, int? robotTypeDisplay, int? clusterId, string createdTime)
         {
             var result = Enumerable.Empty<RobotBettingDetailViewModel>();
 
-            var robotUserDetails = _robotBettingService.GetRobotUserDetails(custID, periodRangeType);
-
-            if (robotUserDetails != null && robotUserDetails.Any())
+            try
             {
-                var suspiciousTransList = robotUserDetails.Select(x => x.SuspiciousTransList);
+                var listTrans = _robotBettingService.GetTranIds(custID, robotTypeOrigin, robotTypeDisplay, clusterId, createdTime);
 
-                var tranIdList = GetTranIdList(suspiciousTransList);
-
-                var ticketDetail = _robotBettingService.GetRobotBettingTicketDetails(tranIdList);
-
-                if (ticketDetail != null && ticketDetail.Any())
+                if (listTrans != null && listTrans.Any())
                 {
-                    result = ticketDetail.OrderByDescending(x => x.TransDate).Select(x => new RobotBettingDetailViewModel
+                    var transToString = _robotBettingService.GetTransFromList(listTrans);
+
+                    var isSCETicketDetails = (robotTypeOrigin == (int)RobotDetectionReasonQueryType.ConsecutiveTicket
+                                            || robotTypeOrigin == (int)RobotDetectionReasonQueryType.UglyStakeTicket) ? true : false;
+
+                    var ticketDetail = _robotBettingService.GetRobotBettingTicketDetails(transToString, isSCETicketDetails);
+
+                    if (ticketDetail != null && ticketDetail.Any())
                     {
-                        TransDate = x.TransDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff),
-                        HomeID = x.HomeId,
-                        AwayID = x.AwayId,
-                        TransID = x.TransId.ToString(),
-                        BetType = x.BetType,
-                        BetTypeName = CachedRef.GetBettypeName(x.BetType),
-                        BetTeam = x.BetTeam,
-                        Stake = x.Stake,
-                        Odds = x.Odds,
-                        LiveScore = x.LiveIndicator ? (x.LiveHomeScore + " - " + x.LiveAwayScore) : "-",
-                        MatchName = GetMatchName(x)
-                    });
+                        result = ticketDetail.OrderBy(x => x.TransDate).Select(x => new RobotBettingDetailViewModel
+                        {
+                            TransDate = x.TransDate.ToString(Consts.FormatDatetimeToString_ddMMMyyyyHHmmssfff),
+                            HomeID = x.HomeId,
+                            AwayID = x.AwayId,
+                            TransID = x.TransId.ToString(),
+                            BetType = x.BetType,
+                            BetTypeName = CachedRef.GetBettypeName(x.BetType),
+                            BetTeam = x.BetTeam,
+                            Stake = x.Stake,
+                            Odds = x.Odds,
+                            LiveScore = x.LiveIndicator ? (x.LiveHomeScore + " - " + x.LiveAwayScore) : "-",
+                            MatchName = GetMatchName(x)
+                        });
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                LogService.Error(ex.Message);
+
+                result = Enumerable.Empty<RobotBettingDetailViewModel>();
             }
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        private string GetTranIdList(IEnumerable<string> suspiciousTransList)
+
+        [HttpPost]
+        public ActionResult GetRobotBettingReasonDetail(long custID, int robotTypeOrigin)
         {
-            var tranIdList = new List<string>();
+            var inputParas = new RobotBettingSceDetailParaModel { CustId = custID, RobotTypeOrigin = robotTypeOrigin, QueryType = RobotDetectionQueryType.RobotReasonDetail };
+            var robotReasonDetail = _robotBettingService.GetRobotDetectionSCEDetails(inputParas);
 
-            foreach (var level1 in suspiciousTransList)
+            return Json(new
             {
-                var susTranIdsLevel1 = level1.Split(',');
-
-                foreach (var level2 in susTranIdsLevel1)
-                {
-                    var susTranIdsLevel2 = level2.Split('#');
-
-                    if (susTranIdsLevel2.Length > 1)
-                    {
-                        tranIdList.AddRange(susTranIdsLevel2);
-                    }
-                    else
-                    {
-                        tranIdList.Add(level2);
-                    }
-                }
-            }
-
-            var tranIds = string.Join(",", tranIdList.Distinct());
-
-            return tranIds.Replace(@".0", "");
+                childTableId = new Random().Next(),
+                reasonGroups = robotReasonDetail?.ToList().OrderBy(c => c.FirstTransDate) ?? Enumerable.Empty<RobotUserDetailSceModel>()
+            }, JsonRequestBehavior.AllowGet); ;
         }
+
 
         public string GetMatchName(RobotBettingTicketDetailModel ticket)
         {
@@ -2212,7 +2209,7 @@
                     }
                     catch (Exception ex)
                     {
-                        LogService.Info(ex.Message);
+                        LogService.Error(ex.Message);
 
                         throw;
                     }
@@ -2233,7 +2230,7 @@
                     }
                     catch (Exception ex)
                     {
-                        LogService.Info(ex.Message);
+                        LogService.Error(ex.Message);
 
                         throw;
                     }
@@ -2247,7 +2244,7 @@
                     }
                     catch (Exception ex)
                     {
-                        LogService.Info(ex.Message);
+                        LogService.Error(ex.Message);
 
                         throw;
                     }

@@ -7,7 +7,5 @@
         public int PeriodRangeType { get; set; }
 
         public string SuspiciousTransList { get; set; }
-
     }
-
 }

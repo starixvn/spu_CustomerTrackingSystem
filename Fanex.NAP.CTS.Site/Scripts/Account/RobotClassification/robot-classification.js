@@ -21,7 +21,6 @@
                 }
             },
             language: {
-                infoEmpty: "",
                 zeroRecords: "There's no data"
             },
             info: false,

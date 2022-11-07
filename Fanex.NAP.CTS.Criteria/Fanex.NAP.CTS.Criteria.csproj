@@ -67,6 +67,7 @@
     <Compile Include="Account\CustInfoByCustIdGetCriteria.cs" />
     <Compile Include="Account\CustomerCategoryBySport\GetCustomerClassificationBySportCriteria.cs" />
     <Compile Include="Account\CustomerCategoryBySport\GetCustomerClassificationHistoryBySportCriteria.cs" />
+    <Compile Include="Account\RobotSetting\GetRobotUsersSCEDetailsCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\AddAssociatedAccountCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\AddAssociatedGroupMonitorCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\GetAssociatedAccountCriteria.cs" />
