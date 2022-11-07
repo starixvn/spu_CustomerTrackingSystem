@@ -593,7 +593,7 @@
             beforeSend: function () {
             },
             success: function (response) {
-                if (response.errorCode != -1) {
+                if (response != undefined) {
                     if ($.ui && $.ui.dialog && $.ui.dialog.prototype._allowInteraction) {
                         var ui_dialog_interaction = $.ui.dialog.prototype._allowInteraction;
                         $.ui.dialog.prototype._allowInteraction = function (e) {
@@ -605,6 +605,7 @@
                     domElements.txtGroupNameAssociatedGroup.val(response.GroupName);
                     domElements.txtCommentAssociatedGroup.val(response.Remark);
                     domElements.cbbABIAssociatedGroup.val(response.ABI).change();
+                    domElements.cbbOriAssociatedGroup.val(response.Ori).change();
 
                     RefreshSiteGroups(response.SiteGroups);
                     RefreshAssociatedTypes(response.AssociatedTypeList);
