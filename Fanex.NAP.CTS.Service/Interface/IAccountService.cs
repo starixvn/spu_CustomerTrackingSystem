@@ -109,7 +109,7 @@
 
         DBResult AddQueueAffectDownlinesCustomerCategory(CustomerCategoryModel categoryModel);
 
-        IEnumerable<RescanCategoryDailyModel> RemoveVVIPCategory(CustomerCategoryModel removeCategoryModel);        
+        IEnumerable<long> RemoveVVIPCategory(CustomerCategoryModel removeCategoryModel);        
 
         DBResult PinCategoryCustomerClassification(long ctsCustId, int subscriberId, bool isPinCategory, int createdBy);
 

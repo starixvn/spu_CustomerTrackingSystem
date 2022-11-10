@@ -1894,9 +1894,9 @@
                 model.CreatedBy = CurrentSession.UserId;
                 model.ActionType = ActionTypeQueueCustCategory.Remove;
 
-                var custInfos = _accountService.RemoveVVIPCategory(model);
+                var custIds = _accountService.RemoveVVIPCategory(model);
 
-                if (custInfos != null && custInfos.Any())
+                if (custIds != null && custIds.Any())
                 {
                     if (model.RoleId != 1 && model.IsAffectToAllDownlines)
                     {

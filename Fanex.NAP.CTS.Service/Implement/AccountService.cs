@@ -1094,7 +1094,7 @@
             return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
         }
 
-        public IEnumerable<RescanCategoryDailyModel> RemoveVVIPCategory(CustomerCategoryModel categoryModel)
+        public IEnumerable<long> RemoveVVIPCategory(CustomerCategoryModel categoryModel)
         {
             var custList = new List<RemoveCustomerCategoryInfoModel>() 
             {
@@ -1115,7 +1115,7 @@
             };
 
             var repository = new DynamicRepository();
-            return repository.Fetch<RescanCategoryDailyModel>(criteria) ?? Enumerable.Empty<RescanCategoryDailyModel>();
+            return repository.Fetch<long>(criteria) ?? Enumerable.Empty<long>();
         }
 
         public DBResult PinCategoryCustomerClassification(long ctsCustId, int subscriberId, bool isPinCategory, int createdBy)
