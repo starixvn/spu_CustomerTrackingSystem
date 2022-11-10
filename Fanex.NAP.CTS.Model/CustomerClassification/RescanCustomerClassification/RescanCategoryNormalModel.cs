@@ -3,12 +3,12 @@
     using Fanex.NAP.CTS.Core.Helpers.Xml;
 
     [XName("r")]
-    public class RescanCategoryDailyModel
+    public class RescanCategoryNormalModel
     {
         [XName("CustId")]
         public long CustID { get; set; }
        
         [XName("CategoryId")]
-        public int CurrentCategoryID { get; set; }
+        public int CategoryID { get; set; }
     }
 }

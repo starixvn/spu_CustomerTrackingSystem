@@ -941,8 +941,7 @@
 
             var criteria = new GetCTSCustomerClassificationCriteria
             {
-                 IDList = ctsCustId.ToString(),
-                 IsCTSCustID = true
+                 CTSCustID = ctsCustId
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -972,8 +971,7 @@
         {
             var criteria = new GetCTSCustomerClassificationCriteria
             {
-                IDList = ctsCustId.ToString(),
-                IsCTSCustID = true
+                CTSCustID = ctsCustId
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))

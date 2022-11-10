@@ -59,24 +59,14 @@
             return result.IsSuccess;
         }
 
-        public IEnumerable<CustomerClassificationModel> GetCustomerClassification(string IDList, bool isCTSCustID)
+        public IEnumerable<RescanCategoryNormalModel> GetExistingCustClassificationNormal(string custIDList)
         {
-            var criteria = new GetCTSCustomerClassificationCriteria
+            var criteria = new GetExistingCustClassificationNormalCriteria
             {
-                IDList = IDList,
-                IsCTSCustID = isCTSCustID
+                CustIDList = custIDList
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                using (var result = db.QueryMultiple(criteria))
-                {
-                    result.Read<bool>(); // Pin Categories
-                    result.Read<bool>(); // Excluded Tag Ass PA
-
-                    return result.Read<CustomerClassificationModel>();
-                }
-            }
+            return repository.Fetch<RescanCategoryNormalModel>(criteria);            
         }
 
         #region Private Methods
@@ -127,10 +117,13 @@
                     foreach (var custIds in custIdsChunk)
                     {
                         var custToString = string.Join(",", custIds);
-                      
-                        var custInfos = GetCustomerClassification(custToString, false).Select(x => new RescanCategoryDailyModel { CustID = x.CustID, CurrentCategoryID = x.CategoryID }).Distinct();
-                        
-                        ClassifyCustomerGeneralCategoryDaily(custInfos.ToXmlString(), parameters.FunctionId);
+
+                        var custNormalInfos = GetExistingCustClassificationNormal(custToString);
+
+                        if (custNormalInfos.Any())
+                        {
+                            ClassifyCustomerGeneralCategoryDaily(custNormalInfos.Distinct().ToXmlString(), parameters.FunctionId);
+                        }
                     }
                 }
 

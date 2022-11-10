@@ -5,12 +5,9 @@
 
     public class GetCTSCustomerClassificationCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_ListID")]
-        public string IDList { get; set; }      
-
-        [SpParam(SqlParamName = "ip_IsCTSCustID")]
-        public bool IsCTSCustID { get; set; }
-
+        [SpParam(SqlParamName = "ip_CTSCustID")]
+        public long CTSCustID { get; set; }      
+      
         public override string GetSettingKey()
         {
             return "CTS_DC_CustClassification_Get";

@@ -1,6 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Service
 {
-    using Fanex.NAP.CTS.Model.Account;
+    using Fanex.NAP.CTS.Model.CustomerClassification.RescanCustomerClassification;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using System.Collections.Generic;
 
@@ -12,6 +12,6 @@
 
         bool RescanNormalAccount(RescanCustClassificationModel parameters, IEnumerable<long> custIdsToRescanPA, IEnumerable<long> smaCustIds);
 
-        IEnumerable<CustomerClassificationModel> GetCustomerClassification(string IDList, bool isCTSCustID);
+        IEnumerable<RescanCategoryNormalModel> GetExistingCustClassificationNormal(string custIdList);
     }
 }
