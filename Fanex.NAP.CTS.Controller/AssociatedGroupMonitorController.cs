@@ -270,18 +270,21 @@
                         IsDirectPA = true,
                         IsFromCTS = true,
                         CreatedBy = CurrentSession.UserId,
-                        Remark = $"Associated Group - {model.GroupName}"
+                        Remark = Consts.MarkPA_AssociatedGroup + " - " + model.GroupName
                     });
 
                     if (custPas.Any())
                     {
+                        var custGroupABIPA = custPas.Select(x => x.CustID).Distinct();
+                        _associatedGroupService.UpdateABIToMainDB(string.Join(",", custGroupABIPA), model.ABI);
+
                         _paClassificationService.InsertProblemAccountPackage(custPas, InsertPA_ByType.Category, "AssociatedGroupMonitorAddPA", FromFlow.CTSWEB, true);
                     }
 
-                    var custUpdateABI = addResult.CustInfos.Where(x => !x.IsSyncPA).Select(x => x.CustID).Distinct();
-                    if (custUpdateABI.Any())
+                    var custGroupABI = addResult.CustInfos.Where(x => !x.IsSyncPA).Select(x => x.CustID).Distinct();
+                    if (custGroupABI.Any())
                     {
-                        _associatedGroupService.UpdateABIToMainDB(string.Join(",", custUpdateABI), model.ABI);
+                        _associatedGroupService.UpdateABIToMainDB(string.Join(",", custGroupABI), model.ABI);
                     }
 
                     var custUpdateOri = addResult.CustInfos.Select(x => x.CustID).Distinct();

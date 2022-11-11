@@ -100,6 +100,7 @@
         public const string ProblemAccountManagement_SiteLicensee = "Licensee";
         public const string ProblemAccountManagement_SiteCredit = "Credit";
         public const string ProblemAccountManagement_CategoryPA = "Problem Account Category";
+        public const string MarkPA_AssociatedGroup = "Associated Group";
 
         public enum ROLE_CUSTOMER
         {
