@@ -274,11 +274,11 @@
                     });
 
                     if (custPas.Any())
-                    {
+                    {                        
+                        _paClassificationService.InsertProblemAccountPackage(custPas, InsertPA_ByType.Category, "AssociatedGroupMonitorAddPA", FromFlow.CTSWEB, true);
+
                         var custGroupABIPA = custPas.Select(x => x.CustID).Distinct();
                         _associatedGroupService.UpdateABIToMainDB(string.Join(",", custGroupABIPA), model.ABI);
-
-                        _paClassificationService.InsertProblemAccountPackage(custPas, InsertPA_ByType.Category, "AssociatedGroupMonitorAddPA", FromFlow.CTSWEB, true);
                     }
 
                     var custGroupABI = addResult.CustInfos.Where(x => !x.IsSyncPA).Select(x => x.CustID).Distinct();
