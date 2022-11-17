@@ -161,6 +161,12 @@
                                 var custIdsOfEachMatch =  matchDetailInfo.MatchDetails.Select(c => c.ListCustID).Distinct();
                                 var custIdsOfTotalMatch = string.Join(",",custIdsOfEachMatch).Split(',').Distinct();
                                 custInfo = _matchMonitorService.GetCustInfoByCustID(string.Join(",", custIdsOfTotalMatch));
+
+                                // for test
+                                if (!custInfo.Any())
+                                {
+                                    custInfo = GenerateCustInfo_Test();
+                                }
                             }),
                             Task.Run(() =>
                             {
@@ -187,6 +193,14 @@
             }
 
             return Json(matchDetailResult ?? new List<MatchMonitorDetailResultViewModel>(), JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult GetIrrigationCounter()
+        {
+            var result = "";
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -218,6 +232,37 @@
 
         #region Private Methods
 
+        private IEnumerable<CustInfoModel> GenerateCustInfo_Test()
+        {
+            return new List<CustInfoModel>()
+            {
+                new CustInfoModel
+                {
+                     CustID = 21060602,
+                     CTSCustID = 2661215,
+                     UserName = "NextBetRM01001",
+                     SubscriberID = 4521,
+                     SubscriberName = "NextBet",
+                     Site = "NextBet",
+                     Currency = "RM",
+                     SubscriberType = "L",
+                     CustomerClass = 201
+                },
+                new CustInfoModel
+                {
+                     CustID = 21061174,
+                     CTSCustID = 2661231,
+                     UserName = "NextBetINH01001",
+                     SubscriberID = 4521,
+                     SubscriberName = "NextBet",
+                     Site = "NextBet",
+                     Currency = "INH",
+                     SubscriberType = "L",
+                     CustomerClass = 201
+                }
+            };
+        }
+
         private bool IsValidDateRange(DateTime? fromDate, DateTime? toDate)
         {
             if (toDate != null && fromDate != null)
@@ -247,6 +292,7 @@
                                                                 CustID = c.cust.CustID,
                                                                 SubscriberType = c.cust.SubscriberType,
                                                                 Username = c.cust.UserName,
+                                                                CustomerClass = c.cust.CustomerClass,
                                                                 PICVerified = GetVerifiedTrans(mappingTransInfo, c.ticket),
                                                                 Danger1 = c.ticket.Danger1,
                                                                 Danger2 = c.ticket.Danger2,

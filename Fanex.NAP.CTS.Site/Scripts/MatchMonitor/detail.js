@@ -78,9 +78,9 @@
             autoWidth: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], className: "text-center" },
+                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], className: "text-center" },
                 { targets: [0] },
-                { targets: [1] },
+                { targets: [1] },              
                 { targets: [2] },
                 { targets: [3] },
                 { targets: [4] },
@@ -91,9 +91,11 @@
                 { targets: [9] },
                 { targets: [10] },
                 { targets: [11] }, 
-                { targets: [12] , visible: domElements.isDisableGroup == "True" ? false : true },
+                { targets: [12] },
                 { targets: [13] },
-                { targets: [14], visible: false }
+                { targets: [14], visible: domElements.isDisableGroup == "True" ? false : true },
+                { targets: [15] },
+                { targets: [16], visible: false }
             ],
             columns: [
                 { data: obj => obj.SubscriberType },
@@ -103,9 +105,11 @@
                         return `<a class='click-view-name ' href=${url}> ${obj.Username} </a>`;
                     }
                 },
+                { data: obj => obj.CustomerClassToString},
                 { data: obj => RenderBotIcon(obj.RobotType, obj.IsRobot) },
                 { data: obj => obj.DangerToString },
-                { data: obj => obj.Odds },
+                { data: obj => obj.IrrigationCounter },
+                { data: obj => obj.Odds },                
                 { data: obj => obj.TransIdToString },
                 { data: obj => obj.Currency },
                 { data: obj => obj.Amount },
