@@ -11,17 +11,14 @@
         [SpParam(SqlParamName = "ip_PACategoryID")]
         public int PACategoryID { get; set; }
 
-        [SpParam(SqlParamName = "ip_PAAllCredit")]
-        public int PAAllCredit { get; set; }
+        [SpParam(SqlParamName = "ip_PACreditSites")]
+        public string PACreditSites { get; set; }
 
-        [SpParam(SqlParamName = "ip_PAAllLicensee")]
-        public int PAAllLicensee { get; set; }
-
-        [SpParam(SqlParamName = "ip_PASites")]
-        public string PASites { get; set; }
+        [SpParam(SqlParamName = "ip_PALicenseeSites")]
+        public string PALicenseeSites { get; set; }       
 
         [SpParam(SqlParamName = "ip_ModifiedBy")]
-        public int CreatedBy { get; set; }
+        public int ModifiedBy { get; set; }
 
         public override string GetSettingKey()
         {

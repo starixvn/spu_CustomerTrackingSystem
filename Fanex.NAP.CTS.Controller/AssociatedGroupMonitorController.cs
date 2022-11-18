@@ -139,7 +139,7 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedGroupMonitorRpt)]
         public ActionResult SaveProblemCategoryByGroupID(SetProblemCategoryByGroupIDModel model)
         {
-            model.CreatedBy = CurrentSession.UserId;
+            model.ModifiedBy = CurrentSession.UserId;
 
             var result = _associatedGroupService.SetProblemCategoryByGroupID(model);
 

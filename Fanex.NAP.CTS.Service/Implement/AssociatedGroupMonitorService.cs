@@ -164,10 +164,9 @@
             {
                 GroupID = model.GroupID,
                 PACategoryID = model.PACategoryID,
-                PAAllCredit = model.PAAllCredit,
-                PAAllLicensee = model.PAAllLicensee,
-                PASites = model.PASites,
-                CreatedBy = model.CreatedBy
+                PACreditSites = model.PACreditSites,
+                PALicenseeSites = model.PALicenseeSites,
+                ModifiedBy = model.ModifiedBy
             };
 
             try

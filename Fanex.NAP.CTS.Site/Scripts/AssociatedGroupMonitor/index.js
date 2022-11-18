@@ -693,27 +693,19 @@
             common.showConfirmation("<div class='popup-content'><div class='popup-title'>Are you sure you want to set '" + problemCategory + "' for the group '" + groupName + "'</div></div>",
                 function () {
                     let params = {};
-                    params.GroupID = domElements.spanGroupIDSetPCHidden.val();                   
-                    params.PASites = domElements.cbbSitesSetPC.val().join();
+                    params.GroupID = domElements.spanGroupIDSetPCHidden.val();                                   
                     params.PACategoryID = domElements.cbbProblemCategorySetPC.val();
 
-                    domElements.cbbSitesSetPC.find('optgroup').each(function () {
-                        let notSelected = $(this).find('option:not(:selected)').length;
-                        let selected = $(this).find('option:selected').length;
+                    domElements.cbbSitesSetPC.find('optgroup').each(function () {                       
+                        let values = [];
+                        $(this).find('option:selected').each(function () {
+                            values.push($(this).val());
+                        })
+                        
                         if ($(this).attr('label') == 'Credit') {
-                            if (selected > 0 && notSelected > 0)
-                                params.PAAllCredit = 2;
-                            else if (selected > 0 && notSelected == 0)
-                                params.PAAllCredit = 1;
-                            else
-                                params.PAAllCredit = 0;
+                            params.PACreditSites = values.join();
                         } else {
-                            if (selected > 0 && notSelected > 0)
-                                params.PAAllLicensee = 2;
-                            else if (selected > 0 && notSelected == 0)
-                                params.PAAllLicensee = 1;
-                            else
-                                params.PAAllLicensee = 0;
+                            params.PALicenseeSites = values.join();
                         }
                     });
 
