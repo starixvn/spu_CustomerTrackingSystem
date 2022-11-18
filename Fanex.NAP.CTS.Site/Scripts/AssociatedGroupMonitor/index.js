@@ -502,7 +502,15 @@
 
                 domElements.cbbSites.find('optgroup').each(function () {
                     let notSelected = $(this).find('option:not(:selected)').length;
-                    let selected = $(this).find('option:selected').length;
+
+                    let optSelected = $(this).find('option:selected');
+
+                    let values = [];
+                    optSelected.each(function () {
+                        values.push($(this).val());
+                    })
+
+                    let selected = optSelected.length;
                     if ($(this).attr('label') == 'Credit') {
                         if (selected > 0 && notSelected > 0)
                             params.AllCredit = 2;
@@ -510,6 +518,8 @@
                             params.AllCredit = 1;
                         else
                             params.AllCredit = 0;
+
+                        params.PACreditSites = values.join();
                     } else {
                         if (selected > 0 && notSelected > 0)
                             params.AllLicensee = 2;
@@ -517,6 +527,8 @@
                             params.AllLicensee = 1;
                         else
                             params.AllLicensee = 0;
+
+                        params.PALicenseeSites = values.join();
                     }
                 });
 

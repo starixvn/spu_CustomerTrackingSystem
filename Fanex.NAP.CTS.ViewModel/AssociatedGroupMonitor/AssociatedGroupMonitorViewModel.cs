@@ -36,10 +36,10 @@
             this.Ori = data.Ori;
             
             var categoryNameSite = new List<string>();
-            if (data.PAAllCredit == 1 || data.PAAllCredit == 2)
+            if (data.IsPACreditSite)
                 categoryNameSite.Add("<span class='view-site view-pcsite-credit'>Credit</span>");
 
-            if (data.PAAllLicensee == 1 || data.PAAllLicensee == 2)
+            if (data.IsPALicenseeSite)
                 categoryNameSite.Add("<span class='view-site view-pcsite-licensee'>Licensee</span>");
 
             this.CategoryNameSite = string.Join(", ", categoryNameSite);

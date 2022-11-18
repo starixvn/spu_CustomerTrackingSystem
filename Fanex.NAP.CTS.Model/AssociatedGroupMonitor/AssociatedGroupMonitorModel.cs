@@ -18,10 +18,10 @@
 
         public string CategoryName { get; set; }
 
-        public int PAAllCredit { get; set; }  // 0-Not Existed; 1-All; 2-Existed
+        public bool IsPACreditSite { get; set; }
 
-        public int PAAllLicensee { get; set; }  // 0-Not Existed; 1-All; 2-Existed
-
+        public bool IsPALicenseeSite { get; set; }
+       
         public bool HasDevice { get; set; }
 
         public bool HasManual { get; set; }

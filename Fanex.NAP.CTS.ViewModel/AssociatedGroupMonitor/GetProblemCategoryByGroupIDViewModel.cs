@@ -14,9 +14,8 @@
         {
             this.GroupID = data.GroupID;
             this.PACategoryID = data.PACategoryID.HasValue ? data.PACategoryID.Value : -1;
-            this.PAAllCredit = data.PAAllCredit;
-            this.PAAllLicensee = data.PAAllLicensee;
-            this.PASites = data.PASites;
+            this.PACreditSites = data.PACreditSites;
+            this.PALicenseeSites = data.PALicenseeSites;
             this.ModifiedBy = data.ModifiedBy;
             this.SiteGroups = Enumerable.Empty<SiteGroupViewModel>();
         }
@@ -25,11 +24,9 @@
 
         public int PACategoryID { get; set; }
 
-        public int PAAllCredit { get; set; }
+        public string PACreditSites { get; set; }
 
-        public int PAAllLicensee { get; set; }
-
-        public string PASites { get; set; }
+        public string PALicenseeSites { get; set; }       
 
         public string ModifiedBy { get; set; }
 
@@ -41,9 +38,13 @@
             {
                 var paSiteList = new List<int>();
 
-                if (!string.IsNullOrEmpty(this.PASites))
+                if (!string.IsNullOrEmpty(this.PACreditSites))
                 {
-                    paSiteList = this.PASites.Split(',').Select(x => Convert.ToInt32(x)).ToList();
+                    paSiteList.AddRange(this.PACreditSites.Split(',').Select(x => Convert.ToInt32(x)).ToList());
+                }
+                if (!string.IsNullOrEmpty(this.PALicenseeSites))
+                {
+                    paSiteList.AddRange(this.PALicenseeSites.Split(',').Select(x => Convert.ToInt32(x)).ToList());
                 }
                 var siteGroups = sites.Where(x => x.IsChosen).OrderBy(x => x.IsLicensee)
                              .GroupBy(g => g.IsLicensee)

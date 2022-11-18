@@ -12,7 +12,11 @@
 
         public int AllCredit { get; set; }
 
+        public string PACreditSites { get; set; }
+
         public int AllLicensee { get; set; }
+
+        public string PALicenseeSites { get; set; }
 
         public string Sites { get; set; }
 

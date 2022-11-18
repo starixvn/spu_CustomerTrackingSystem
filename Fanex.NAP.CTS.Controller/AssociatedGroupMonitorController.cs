@@ -209,6 +209,18 @@
 
             var result = _associatedGroupService.UpdateAssociatedGroupMonitor(model);
 
+            if (result.ErrorCode != -1)
+            {
+                result = _associatedGroupService.SetProblemCategoryByGroupID(new SetProblemCategoryByGroupIDModel
+                {
+                    GroupID = model.GroupID,                    
+                    PACreditSites = model.PACreditSites,
+                    PALicenseeSites = model.PALicenseeSites,
+                    PACategoryID = -2,
+                    ModifiedBy = model.ModifiedBy,
+                });
+            }
+
             return Json(new
             {
                 errorCode = result.ErrorCode,
