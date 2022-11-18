@@ -196,9 +196,14 @@
         }
 
         [HttpPost]
-        public ActionResult GetIrrigationCounter()
+        public ActionResult GetAssociationIrrigation(string custIDList, string categoryIDList)
         {
-            var result = "";
+            var result = _matchMonitorService.GetAssociationIrrigation(custIDList, categoryIDList);
+
+            result = new List<CountAssociationByCategoryModel> { new CountAssociationByCategoryModel {
+                 CustID = 1,
+                  Total = 1
+            } };
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }

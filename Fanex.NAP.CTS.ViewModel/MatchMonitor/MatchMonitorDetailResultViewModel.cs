@@ -27,7 +27,7 @@
 
         public decimal Odds { get; set; }
 
-        public int IrrigationCounter { get; set; }
+        public int AssociationIrrigation { get; set; }
 
         public Int64 BetID { get; set; }
 

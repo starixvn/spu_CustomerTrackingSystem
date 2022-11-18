@@ -40,6 +40,16 @@
             },
             success: function (response) {
                 domElements.firsttblMonitor.DataTable().clear().rows.add(response).draw();
+
+                if (response.length > 0) {
+                    let params = {};
+                    params.custIDList = "";
+                    params.categoryIDList = "";
+
+                    $.post(common.modifyRelativeUrl('MatchMonitor/GetAssociationIrrigation'), params, function (xResponse) {
+                        RenderAssociationIrrigation(xResponse);
+                    })
+                }
             },
             complete: function (response) {
                 domElements.firsttblMonitor.find('tbody').removeClass('loading');
@@ -50,6 +60,16 @@
                 console.log(error);
             }
         });
+    }
+
+    function RenderAssociationIrrigation(associations) {
+        domElements.firsttblMonitor.DataTable().rows().every(function () {
+            var rowData = this.data();
+            rowData.AssociationIrrigation = 100;
+            this.invalidate();
+        });
+
+        domElements.firsttblMonitor.DataTable().draw();
     }
 
     function InitialDetailGird() {
@@ -108,7 +128,7 @@
                 { data: obj => obj.CustomerClassToString},
                 { data: obj => RenderBotIcon(obj.RobotType, obj.IsRobot) },
                 { data: obj => obj.DangerToString },
-                { data: obj => obj.IrrigationCounter },
+                { data: obj => obj.AssociationIrrigation },
                 { data: obj => obj.Odds },                
                 { data: obj => obj.TransIdToString },
                 { data: obj => obj.Currency },
