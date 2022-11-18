@@ -139,5 +139,16 @@
 
             return repository.Fetch<RobotStatusModel>(criteria);
         }
+
+        public IEnumerable<CountAssociationByCategoryModel> GetCountAssociationByCategory(string custIDList, string categoryIDList)
+        {
+            var criteria = new GetCountAssociationByCategoryCriteria
+            {
+                CustIDList = custIDList,
+                CategoryIDList = categoryIDList
+            };
+
+            return repository.Fetch<CountAssociationByCategoryModel>(criteria);
+        }
     }
 }

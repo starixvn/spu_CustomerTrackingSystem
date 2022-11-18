@@ -294,6 +294,7 @@
     <Compile Include="ManageSubscriber\ReUpdateSubscribeBySiteIDModel.cs" />
     <Compile Include="ManageSubscriber\DetailedSiteModel.cs" />
     <Compile Include="ManageSubscriber\UpdateSubsciberResultModel.cs" />
+    <Compile Include="MatchMonitor\CountAssociationByCategoryModel.cs" />
     <Compile Include="MatchMonitor\MatchGroupKeyModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorDetailResultModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorDetailVerifyTransResultModel.cs" />
