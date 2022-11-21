@@ -10,6 +10,8 @@
 
         public string BetTypeName { get; set; }
 
+        public int SportID { get; set; }
+
         public bool IsSelected { get; set; }
     }
 }

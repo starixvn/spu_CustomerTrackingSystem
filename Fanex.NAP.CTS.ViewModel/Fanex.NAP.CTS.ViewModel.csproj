@@ -155,6 +155,7 @@
     <Compile Include="ManageSubscriber\ManageSubscriberGetViewModel.cs" />
     <Compile Include="ManageSubscriber\ManageSubscriberViewModel.cs" />
     <Compile Include="MatchMonitor\CountAssociationByCategoryViewModel.cs" />
+    <Compile Include="MatchMonitor\MatchMonitorBetTypeViewModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorDetailFilterViewModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorDetailResultViewModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorDetailViewModel.cs" />

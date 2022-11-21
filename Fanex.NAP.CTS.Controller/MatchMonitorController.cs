@@ -241,16 +241,30 @@
         [HttpPost]
         public ActionResult GetMMFilterBetTypeBySport(string sportIDs)
         {
-            var result = Enumerable.Empty<MatchMonitorBetTypeModel>();
+            var result = Enumerable.Empty<MatchMonitorBetTypeViewModel>();
+            var sportIds = sportIDs.Split(',').Select(x => Convert.ToInt32(x));
 
-            var data = _matchMonitorService.GetMMStaticList();
-
-            if (data.BetTypes != null && data.BetTypes.Any())
+            if (sportIds.Any())
             {
+                var data = _matchMonitorService.GetMMStaticList();
 
+                if (data.BetTypes != null && data.BetTypes.Any())
+                {
+                    result = data.BetTypes.Join(sportIds,
+                      x1 => x1.SportID,
+                      x2 => x2,
+                      (x1, x2) => new MatchMonitorBetTypeViewModel
+                      {
+                          BetTypeID = x1.BetTypeID,
+                          BetTypeName = x1.BetTypeName,
+                          BetID = x1.BetID,
+                          SportID = x1.SportID,                         
+                          IsSelected = true
+                      });
+                }
             }
 
-            return Json(data, JsonRequestBehavior.AllowGet);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         #region Private Methods
