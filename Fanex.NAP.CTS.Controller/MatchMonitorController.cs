@@ -201,7 +201,7 @@
             var result = _matchMonitorService.GetAssociationIrrigation(custIDList, categoryIDList);
 
             result = new List<CountAssociationByCategoryModel> { new CountAssociationByCategoryModel {
-                 CustID = 1,
+                  CustID = 1,
                   Total = 1
             } };
 

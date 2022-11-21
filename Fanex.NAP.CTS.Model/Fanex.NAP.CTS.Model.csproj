@@ -296,9 +296,13 @@
     <Compile Include="ManageSubscriber\UpdateSubsciberResultModel.cs" />
     <Compile Include="MatchMonitor\CountAssociationByCategoryModel.cs" />
     <Compile Include="MatchMonitor\MatchGroupKeyModel.cs" />
+    <Compile Include="MatchMonitor\MatchMonitorBetTypeModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorDetailResultModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorDetailVerifyTransResultModel.cs" />
     <Compile Include="MatchMonitor\MatchMonitorDetailVerifyTransParaModel.cs" />
+    <Compile Include="MatchMonitor\MatchMonitorReasonModel.cs" />
+    <Compile Include="MatchMonitor\MatchMonitorSportModel.cs" />
+    <Compile Include="MatchMonitor\MatchMonitorStaticListModel.cs" />
     <Compile Include="MatchMonitor\RobotStatusModel.cs" />
     <Compile Include="MatchMonitor\TransGroupModel.cs" />
     <Compile Include="MatchMonitor\CustInfoModel.cs" />

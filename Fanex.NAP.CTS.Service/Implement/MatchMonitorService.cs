@@ -150,5 +150,19 @@
 
             return repository.Fetch<CountAssociationByCategoryModel>(criteria);
         }
+
+        public MatchMonitorStaticListModel GetMMStaticList()
+        {
+            var criteria = new GetMatchMonitorStaticListCriteria();
+
+            var result = repository.FetchMultiple<MatchMonitorReasonModel, MatchMonitorSportModel, MatchMonitorBetTypeModel>(criteria);
+
+            return new MatchMonitorStaticListModel
+            {
+                Reasons = result.firstResultSet,
+                Sports = result.secondResultSet,
+                BetTypes = result.thirdResultSet
+            };
+        }
     }
 }

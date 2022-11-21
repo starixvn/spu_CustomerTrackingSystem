@@ -25,5 +25,7 @@
         IEnumerable<RobotStatusModel> GetRobotStatus(string transJson);
 
         IEnumerable<CountAssociationByCategoryModel> GetAssociationIrrigation(string custIDList, string categoryIDList);
+
+        MatchMonitorStaticListModel GetMMStaticList();
     }
 }
