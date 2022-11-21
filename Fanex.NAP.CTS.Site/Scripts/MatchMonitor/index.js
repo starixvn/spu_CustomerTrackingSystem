@@ -255,7 +255,22 @@
     function InitBetTypeFilter() {
         LoadBetTypes();
         domElements.cbbBetType.find('option').prop('selected', true);
-        domElements.cbbBetType.multiselect("refresh");
+        domElements.cbbBetType.multiselect("refresh");       
+
+        $.ajax(common.modifyRelativeUrl('MatchMonitor/GetMMFilterBetTypeBySport'), {
+            type: 'POST',
+            data: {
+                sportIDs: domElements.cbbSport.val().join()
+            },
+            success: function (response) {
+                
+            },
+            complete: function () {
+            },
+            error: function (errMsg) {               
+                console.log(errMsg);
+            }
+        });
     }
 
     function RenderBetTypeHTML(betTypeID, betId) {

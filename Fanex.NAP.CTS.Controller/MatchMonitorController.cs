@@ -41,10 +41,13 @@
 
             var userId = CurrentSession.UserId;
 
+            var mmStatic = _matchMonitorService.GetMMStaticList();
+
             return View(new MatchMonitorViewModel
             {
                 IsHostPermission = isHostPermission,
-                CustId = userId
+                CustId = userId,
+                MMStatic = mmStatic
             });
         }
 
@@ -233,6 +236,21 @@
             {
                 data = result
             }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult GetMMFilterBetTypeBySport(string sportIDs)
+        {
+            var result = Enumerable.Empty<MatchMonitorBetTypeModel>();
+
+            var data = _matchMonitorService.GetMMStaticList();
+
+            if (data.BetTypes != null && data.BetTypes.Any())
+            {
+
+            }
+
+            return Json(data, JsonRequestBehavior.AllowGet);
         }
 
         #region Private Methods

@@ -1,4 +1,4 @@
-﻿
+﻿@using Fanex.NAP.CTS.ViewModel.MatchMonitor
 @{
     ViewBag.Title = "MATCH MONITOR";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -60,19 +60,22 @@
                         </div>
                         <div class="group width-180">
                             <label class="text">Reason</label>
-                            <select class="control width-select" id="cbbReason" multiple="multiple">
-                                <option value="0" selected>Group Betting</option>
-                                <option value="1" selected>Hedging</option>
-                                <option value="2" selected>Arbitrage</option>
-                                <option value="3" selected>Fixed Game</option>
+                            <select class="control width-select" id="cbbReason" multiple="multiple">                           
+                                @foreach (var item in Model.MMStatic.Reasons)
+                                {
+                                    if (item.IsSelected) {<option value=@item.ReasonID selected>@item.ReasonName</option> }
+                                    else { <option value=@item.ReasonID>@item.ReasonName</option> }                                        
+                                }
                             </select>
                         </div>
                         <div class="group width-180">
                             <label class="text">Sport</label>
                             <select class="control width-select" id="cbbSport" multiple="multiple">
-                                <option value="1" selected>Soccer</option>
-                                <option value="2">Basketball</option>
-                                <option value="43">E-Sports</option>
+                                @foreach (var item in Model.MMStatic.Sports)
+                                {
+                                    if (item.IsSelected) { <option value=@item.SportID selected>@item.SportName</option> }
+                                    else { <option value=@item.SportID>@item.SportName</option> }
+                                }                               
                             </select>
                         </div>
                         <div class="group width-180">
@@ -121,8 +124,6 @@
     </section>
 </body>
 
-
-
 @section scripts{
-    @Scripts.Render("~/match-monitor-scripts")
+    @Scripts.Render("~/match-monitor-scripts")   
 }
