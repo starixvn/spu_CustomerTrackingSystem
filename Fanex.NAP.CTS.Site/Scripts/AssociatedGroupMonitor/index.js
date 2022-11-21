@@ -651,6 +651,7 @@
     function GetProblemCategoryByGroupID(groupID, groupName) {
         domElements.spanGroupIDSetPCHidden.val(groupID);
         domElements.spanGroupNameSetPCHidden.val(groupName);
+        domElements.cbbSitesSetPC.multiselect("enable");
 
         $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
             _title: function (title) {
@@ -671,6 +672,7 @@
             success: function (response) {
                 if (response.errorCode != -1) {                    
                     RefreshProblemCategorySiteGroups(response.SiteGroups);
+                    
                     domElements.cbbProblemCategorySetPC.val(response.PACategoryID);
                     
                     domElements.divSetPC.dialog({
@@ -752,10 +754,15 @@
     }
 
     function ValidateInputProblemCategory() {
-        if (domElements.cbbSitesSetPC.find('option:selected').length == 0) {
-            common.showError('Site may not be empty.');
-            return false;
-        }
+        var optPCSelected = $("option:selected", domElements.cbbProblemCategorySetPC);
+
+        if (optPCSelected.val() != -1) {
+            if (domElements.cbbSitesSetPC.find('option:selected').length == 0) {
+                common.showError('Site may not be empty.');
+                return false;
+            }
+        }   
+        
         return true;
     }
 
@@ -1048,7 +1055,7 @@
         let siteSelector = domElements.cbbSitesSetPC.empty();
 
         siteGroups.map(function (x) {           
-            let optgroup = `<optgroup label='${x.SubscriberGroupName}'>`;
+            let optgroup = `<optgroup label="${x.SubscriberGroupName}">`;
 
             if (x.SiteList.length > 0) {
                 x.SiteList.map(function (y) {
@@ -1060,7 +1067,7 @@
 
             siteSelector.append(optgroup);
         });
-
+       
         domElements.cbbSitesSetPC.multiselect('refresh');
     }
 
@@ -1094,6 +1101,16 @@
         }
 
         domElements.cbbAssociatedTypes.multiselect('refresh');
+    }
+
+    function ChangeProblemCategorySetPC() {
+        var optPCSelected = $("option:selected", domElements.cbbProblemCategorySetPC);
+
+        if (optPCSelected.val() == -1) {
+            domElements.cbbSitesSetPC.multiselect("disable");
+        } else {
+            domElements.cbbSitesSetPC.multiselect("enable");
+        }      
     }
 
     function Initial() {
@@ -1140,13 +1157,13 @@
 
         GetAssociatedGroup();
 
-        domElements.btnAddGroup.on('click', function () {  
+        domElements.btnAddGroup.on('click', function () {
             domElements.hdGroupID.val(0);
             InitSiteGroups([]);
 
             domElements.cbbABIAssociatedGroup.val(0).trigger('change.select2');
             domElements.cbbOriAssociatedGroup.val(0).trigger('change.select2');
-            domElements.txtGroupNameAssociatedGroup.val('');                       
+            domElements.txtGroupNameAssociatedGroup.val('');
             domElements.txtCommentAssociatedGroup.val('');
 
             if ($.ui && $.ui.dialog && $.ui.dialog.prototype._allowInteraction) {
@@ -1169,7 +1186,7 @@
                 close: function () {
                     $(this).dialog('close');
                 }
-            });           
+            });
         });
 
         domElements.btnSaveAssociatedGroup.on('click', () => SaveAssociatedGroupMonitor());
@@ -1183,10 +1200,12 @@
         domElements.cbbABIAssociatedGroup.select2();
 
         domElements.cbbOriAssociatedGroup.select2();
-       
+
         domElements.btnSaveAssociatedAccount.on('click', () => AddAssociatedAccount());
 
         domElements.btnCancelAssociatedAccount.on('click', () => { domElements.divAddAssociatedAccount.dialog('close') });
+
+        domElements.cbbProblemCategorySetPC.on('change', () => { ChangeProblemCategorySetPC() });
 
         InitInputTagUsername();
     }

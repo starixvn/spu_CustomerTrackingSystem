@@ -73,7 +73,7 @@
                                  {
                                      SiteID = y.SiteID,
                                      SiteName = y.SiteName,
-                                     IsSelected = true
+                                     IsSelected = false
                                  })
                              });
                 }
