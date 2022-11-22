@@ -710,18 +710,20 @@
                     params.GroupID = domElements.spanGroupIDSetPCHidden.val();                                   
                     params.PACategoryID = domElements.cbbProblemCategorySetPC.val();
 
-                    domElements.cbbSitesSetPC.find('optgroup').each(function () {                       
-                        let values = [];
-                        $(this).find('option:selected').each(function () {
-                            values.push($(this).val());
-                        })
-                        
-                        if ($(this).attr('label') == 'Credit') {
-                            params.PACreditSites = values.join();
-                        } else {
-                            params.PALicenseeSites = values.join();
-                        }
-                    });
+                    if (params.PACategoryID != -1) {
+                        domElements.cbbSitesSetPC.find('optgroup').each(function () {
+                            let values = [];
+                            $(this).find('option:selected').each(function () {
+                                values.push($(this).val());
+                            })
+
+                            if ($(this).attr('label') == 'Credit') {
+                                params.PACreditSites = values.join();
+                            } else {
+                                params.PALicenseeSites = values.join();
+                            }
+                        });
+                    }                   
 
                     $.ajax(common.modifyRelativeUrl('AssociatedGroupMonitor/SaveProblemCategoryByGroupID'), {
                         type: 'POST',
