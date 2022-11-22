@@ -138,6 +138,7 @@
         public ActionResult GetMatchMonitorDetail(MatchMonitorDetailFilterViewModel para)
         {
             var matchDetailResult = Enumerable.Empty<MatchMonitorDetailResultViewModel>();
+            var custIDList = string.Empty;
 
             try
             {
@@ -190,6 +191,8 @@
 
                         // for Test
                         matchDetailResult = GenerateMMDetail_Test(matchDetailResult);
+
+                        custIDList = string.Join(",", matchDetailResult.Select(x => x.CustID));
                     }
                 }
             }
@@ -198,18 +201,27 @@
                 LogService.Error("Get Match Monitor Error", e);
             }
 
-            return Json(matchDetailResult ?? new List<MatchMonitorDetailResultViewModel>(), JsonRequestBehavior.AllowGet);
+            return Json(new {
+                custIDList = custIDList,
+                data = matchDetailResult
+            }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         public ActionResult GetAssociationIrrigation(string custIDList, string categoryIDList)
         {
-            var result = _matchMonitorService.GetAssociationIrrigation(custIDList, categoryIDList);
+            var result = Enumerable.Empty<AssociationIrrigationViewModel>();
 
-            result = new List<CountAssociationByCategoryModel> { new CountAssociationByCategoryModel {
-                  CustID = 1,
-                  Total = 1
-            } };
+            var data = _matchMonitorService.GetAssociationIrrigation(custIDList, categoryIDList);
+
+            if (data != null && data.Any())
+            {
+                result = data.Select(x => new AssociationIrrigationViewModel
+                {
+                    CustID = x.CustID,
+                    TotalAssociation = x.Total
+                });
+            }
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -327,11 +339,27 @@
         {
             var dataList = new List<MatchMonitorDetailResultViewModel>();
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 60; i++)
             {
                 foreach (var item in details)
-                {
-                    dataList.Add(item);
+                {                   
+                    dataList.Add(new MatchMonitorDetailResultViewModel
+                    {
+                        BetID = item.BetID,
+                        Username = item.Username + i.ToString(),
+                        CustID = item.CustID + i,
+                        Amount = item.Amount,
+                        AssociationIrrigation = -1,
+                        BetTeam = item.BetTeam,
+                        BetTypeID = item.BetTypeID,
+                        CTSCustID = item.CTSCustID,
+                        Currency = item.Currency,
+                        CustomerClass = item.CustomerClass,
+                        Danger1 = item.Danger1,
+                        TransId = item.TransId,
+                        PICVerified = item.PICVerified,
+                        HDP1 = item.HDP1
+                    });
                 }
             }
 
@@ -389,7 +417,8 @@
                                                                 Group = GetGroup(mappingTransInfo, c.ticket),
                                                                 TransId = c.ticket.TransId,
                                                                 RobotType = null,
-                                                                IsRobot = false
+                                                                IsRobot = false,
+                                                                AssociationIrrigation = -1
                                                             })?.OrderByDescending(c => c.TransTime)?.ThenBy(c => c.Group)?.Distinct()?.ToList();
 
             return matchDetailResult;

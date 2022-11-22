@@ -1,6 +1,6 @@
 ﻿namespace Fanex.NAP.CTS.Model.MatchMonitor
 {
-    public class CountAssociationByCategoryModel
+    public class AssociationIrrigationModel
     {
         public long CustID { get; set; }
 

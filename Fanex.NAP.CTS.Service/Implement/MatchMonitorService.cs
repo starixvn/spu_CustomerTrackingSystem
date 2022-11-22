@@ -140,7 +140,7 @@
             return repository.Fetch<RobotStatusModel>(criteria);
         }
 
-        public IEnumerable<CountAssociationByCategoryModel> GetAssociationIrrigation(string custIDList, string categoryIDList)
+        public IEnumerable<AssociationIrrigationModel> GetAssociationIrrigation(string custIDList, string categoryIDList)
         {
             var criteria = new GetCountAssociationByCategoryCriteria
             {
@@ -148,7 +148,7 @@
                 CategoryIDList = categoryIDList
             };
 
-            return repository.Fetch<CountAssociationByCategoryModel>(criteria);
+            return repository.Fetch<AssociationIrrigationModel>(criteria);
         }
 
         public MatchMonitorStaticListModel GetMMStaticList()

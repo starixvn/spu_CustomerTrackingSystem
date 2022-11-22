@@ -39,12 +39,12 @@
                 domElements.firsttblMonitor.find('tbody').addClass('loading');
             },
             success: function (response) {
-                domElements.firsttblMonitor.DataTable().clear().rows.add(response).draw();
+                domElements.firsttblMonitor.DataTable().clear().rows.add(response.data).draw();
 
-                if (response.length > 0) {
+                if (response.data.length > 0) {
                     let params = {};
-                    params.custIDList = "";
-                    params.categoryIDList = "";
+                    params.custIDList = response.custIDList;
+                    params.categoryIDList = "58,78,98,118,138,158";
 
                     $.post(common.modifyRelativeUrl('MatchMonitor/GetAssociationIrrigation'), params, function (xResponse) {
                         RenderAssociationIrrigation(xResponse);
@@ -52,7 +52,8 @@
                 }
             },
             complete: function (response) {
-                domElements.firsttblMonitor.find('tbody').removeClass('loading');
+                domElements.firsttblMonitor.find('tbody').removeClass('loading');     
+                
                 resizeDataTable();
             },
             error: function (error) {
@@ -64,12 +65,25 @@
 
     function RenderAssociationIrrigation(associations) {
         domElements.firsttblMonitor.DataTable().rows().every(function () {
-            var rowData = this.data();
-            rowData.AssociationIrrigation = 100;
+            let rowData = this.data();
+            
+            rowData.AssociationIrrigation = GetTotalAssociationIrrigation(rowData.CustID, associations);
+           
             this.invalidate();
         });
 
         domElements.firsttblMonitor.DataTable().draw();
+       
+        //domElements.firsttblMonitor.find('span.has-icon').removeClass('icon-loading');
+    }
+
+    function GetTotalAssociationIrrigation(custID, associations) {
+        for (var i = 0; i < associations.length; i++) {
+            if (associations[i].CustID == custID) {
+                return associations[i].TotalAssociation;
+            }
+        }
+        return 0;
     }
 
     function InitialDetailGird() {
@@ -128,8 +142,15 @@
                 { data: obj => obj.CustomerClassToString},
                 { data: obj => RenderBotIcon(obj.RobotType, obj.IsRobot) },
                 { data: obj => obj.DangerToString },
-                { data: obj => obj.AssociationIrrigation },
-                { data: obj => obj.Odds },                
+                {
+                    data: obj => {
+                        if (obj.AssociationIrrigation == -1) {
+                            return `<span class="has-icon icon-loading">${obj.AssociationIrrigation}</span>`;
+                        } else {
+                            return '-';
+                        }
+                    } },
+                { data: obj => obj.Odds },
                 { data: obj => obj.TransIdToString },
                 { data: obj => obj.Currency },
                 { data: obj => obj.Amount },

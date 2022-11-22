@@ -1,9 +1,9 @@
 ﻿namespace Fanex.NAP.CTS.ViewModel.MatchMonitor
 {
-    public class CountAssociationByCategoryViewModel
+    public class AssociationIrrigationViewModel
     {
         public long CustID { get; set; }
 
-        public int Total { get; set; }
+        public int TotalAssociation { get; set; }
     }
 }
