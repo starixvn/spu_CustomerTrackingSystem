@@ -257,7 +257,7 @@
         
         let sportIDs = domElements.cbbSport.val().join()
         if (sportIDs != '') {
-            $.ajax(common.modifyRelativeUrl('MatchMonitor/GetMMFilterBetTypeBySport'), {
+            $.ajax(common.modifyRelativeUrl('MatchMonitor/GetMMFilterBetTypeBySportID'), {
                 type: 'POST',
                 data: {
                     sportIDs: domElements.cbbSport.val().join()

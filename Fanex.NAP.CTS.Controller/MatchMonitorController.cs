@@ -165,7 +165,7 @@
                                 var custIdsOfTotalMatch = string.Join(",",custIdsOfEachMatch).Split(',').Distinct();
                                 custInfo = _matchMonitorService.GetCustInfoByCustID(string.Join(",", custIdsOfTotalMatch));
 
-                                // for test
+                                // for Test
                                 if (!custInfo.Any())
                                 {
                                     custInfo = GenerateCustInfo_Test();
@@ -182,11 +182,14 @@
 
                         Task.WhenAll(tasks.ToArray()).Wait();
 
-                        var mergeInfo = MergeMatchMonitorDetail(mappingTransInfo, custInfo, ticketDetail);
+                        var mergeInfo = MergeMatchMonitorDetail(mappingTransInfo, custInfo, ticketDetail);                        
 
                         matchDetailResult = GetRobotStatus(mergeInfo, para.BetTypeID);
 
                         matchDetailResult = FilterSite(matchDetailResult, para.Sites);
+
+                        // for Test
+                        matchDetailResult = GenerateMMDetail_Test(matchDetailResult);
                     }
                 }
             }
@@ -239,7 +242,7 @@
         }
 
         [HttpPost]
-        public ActionResult GetMMFilterBetTypeBySport(string sportIDs)
+        public ActionResult GetMMFilterBetTypeBySportID(string sportIDs)
         {
             var result = Enumerable.Empty<MatchMonitorBetTypeViewModel>();
             var sportIds = sportIDs.Split(',').Select(x => Convert.ToInt32(x));
@@ -271,33 +274,68 @@
 
         private IEnumerable<CustInfoModel> GenerateCustInfo_Test()
         {
-            return new List<CustInfoModel>()
+            var dataList = new List<CustInfoModel>();
+
+            dataList.Add(new CustInfoModel
             {
-                new CustInfoModel
+                CustID = 21060602,
+                CTSCustID = 2661215,
+                UserName = "NextBetRM01001",
+                SubscriberID = 4521,
+                SubscriberName = "NextBet",
+                Site = "NextBet",
+                Currency = "RM",
+                SubscriberType = "L",
+                CustomerClass = 201
+            });
+
+            for (int i = 0; i < 2; i++)
+            {
+                dataList.AddRange(new List<CustInfoModel>()
                 {
-                     CustID = 21060602,
-                     CTSCustID = 2661215,
-                     UserName = "NextBetRM01001",
-                     SubscriberID = 4521,
-                     SubscriberName = "NextBet",
-                     Site = "NextBet",
-                     Currency = "RM",
-                     SubscriberType = "L",
-                     CustomerClass = 201
-                },
-                new CustInfoModel
+                    new CustInfoModel
+                    {
+                         CustID = 21060602+i,
+                         CTSCustID = 2661215+i,
+                         UserName = "NextBetRM01001",
+                         SubscriberID = 4521,
+                         SubscriberName = "NextBet",
+                         Site = "NextBet",
+                         Currency = "RM",
+                         SubscriberType = "L",
+                         CustomerClass = 201
+                    },
+                    new CustInfoModel
+                    {
+                         CustID = 21061174+i,
+                         CTSCustID = 2661231+i,
+                         UserName = "NextBetINH01001",
+                         SubscriberID = 4521,
+                         SubscriberName = "NextBet",
+                         Site = "NextBet",
+                         Currency = "INH",
+                         SubscriberType = "L",
+                         CustomerClass = 201
+                    }
+                });
+            }
+
+            return dataList;
+        }
+
+        private IEnumerable<MatchMonitorDetailResultViewModel> GenerateMMDetail_Test(IEnumerable<MatchMonitorDetailResultViewModel> details)
+        {
+            var dataList = new List<MatchMonitorDetailResultViewModel>();
+
+            for (int i = 0; i < 10; i++)
+            {
+                foreach (var item in details)
                 {
-                     CustID = 21061174,
-                     CTSCustID = 2661231,
-                     UserName = "NextBetINH01001",
-                     SubscriberID = 4521,
-                     SubscriberName = "NextBet",
-                     Site = "NextBet",
-                     Currency = "INH",
-                     SubscriberType = "L",
-                     CustomerClass = 201
+                    dataList.Add(item);
                 }
-            };
+            }
+
+            return dataList;
         }
 
         private bool IsValidDateRange(DateTime? fromDate, DateTime? toDate)
