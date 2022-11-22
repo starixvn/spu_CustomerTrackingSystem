@@ -4,6 +4,16 @@ body {
     font-family: $font-family;    
 }
 
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 .associated-group-content {
     margin: 1rem 1.6rem 1rem 1.6rem;
 
