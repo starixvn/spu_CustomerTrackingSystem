@@ -165,12 +165,7 @@
                                 var custIdsOfEachMatch =  matchDetailInfo.MatchDetails.Select(c => c.ListCustID).Distinct();
                                 var custIdsOfTotalMatch = string.Join(",",custIdsOfEachMatch).Split(',').Distinct();
                                 custInfo = _matchMonitorService.GetCustInfoByCustID(string.Join(",", custIdsOfTotalMatch));
-
-                                // for Test
-                                if (!custInfo.Any())
-                                {
-                                    custInfo = GenerateCustInfo_Test();
-                                }
+                               
                             }),
                             Task.Run(() =>
                             {
@@ -187,10 +182,7 @@
 
                         matchDetailResult = GetRobotStatus(mergeInfo, para.BetTypeID);
 
-                        matchDetailResult = FilterSite(matchDetailResult, para.Sites);
-
-                        // for Test
-                        matchDetailResult = GenerateMMDetail_Test(matchDetailResult);
+                        matchDetailResult = FilterSite(matchDetailResult, para.Sites);                    
 
                         custIDList = string.Join(",", matchDetailResult.Select(x => x.CustID));
                     }
@@ -283,89 +275,7 @@
         }
 
         #region Private Methods
-
-        private IEnumerable<CustInfoModel> GenerateCustInfo_Test()
-        {
-            var dataList = new List<CustInfoModel>();
-
-            dataList.Add(new CustInfoModel
-            {
-                CustID = 21060602,
-                CTSCustID = 2661215,
-                UserName = "NextBetRM01001",
-                SubscriberID = 4521,
-                SubscriberName = "NextBet",
-                Site = "NextBet",
-                Currency = "RM",
-                SubscriberType = "L",
-                CustomerClass = 201
-            });
-
-            for (int i = 0; i < 2; i++)
-            {
-                dataList.AddRange(new List<CustInfoModel>()
-                {
-                    new CustInfoModel
-                    {
-                         CustID = 21060602+i,
-                         CTSCustID = 2661215+i,
-                         UserName = "NextBetRM01001",
-                         SubscriberID = 4521,
-                         SubscriberName = "NextBet",
-                         Site = "NextBet",
-                         Currency = "RM",
-                         SubscriberType = "L",
-                         CustomerClass = 201
-                    },
-                    new CustInfoModel
-                    {
-                         CustID = 21061174+i,
-                         CTSCustID = 2661231+i,
-                         UserName = "NextBetINH01001",
-                         SubscriberID = 4521,
-                         SubscriberName = "NextBet",
-                         Site = "NextBet",
-                         Currency = "INH",
-                         SubscriberType = "L",
-                         CustomerClass = 201
-                    }
-                });
-            }
-
-            return dataList;
-        }
-
-        private IEnumerable<MatchMonitorDetailResultViewModel> GenerateMMDetail_Test(IEnumerable<MatchMonitorDetailResultViewModel> details)
-        {
-            var dataList = new List<MatchMonitorDetailResultViewModel>();
-
-            for (int i = 0; i < 60; i++)
-            {
-                foreach (var item in details)
-                {                   
-                    dataList.Add(new MatchMonitorDetailResultViewModel
-                    {
-                        BetID = item.BetID,
-                        Username = item.Username + i.ToString(),
-                        CustID = item.CustID + i,
-                        Amount = item.Amount,
-                        AssociationIrrigation = -1,
-                        BetTeam = item.BetTeam,
-                        BetTypeID = item.BetTypeID,
-                        CTSCustID = item.CTSCustID,
-                        Currency = item.Currency,
-                        CustomerClass = item.CustomerClass,
-                        Danger1 = item.Danger1,
-                        TransId = item.TransId,
-                        PICVerified = item.PICVerified,
-                        HDP1 = item.HDP1
-                    });
-                }
-            }
-
-            return dataList;
-        }
-
+       
         private bool IsValidDateRange(DateTime? fromDate, DateTime? toDate)
         {
             if (toDate != null && fromDate != null)
