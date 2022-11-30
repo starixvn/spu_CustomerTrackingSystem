@@ -455,9 +455,10 @@
                                     (group, temp) => new MatchMonitorDetailResultViewModel
                                     {
                                         CTSCustID = group.m.CTSCustID,
-                                        CustID = group.m.CustID,
+                                        CustID = group.m.CustID,                                        
                                         SubscriberType = group.m.SubscriberType,
                                         Username = group.m.Username,
+                                        CustomerClass = group.m.CustomerClass,
                                         PICVerified = group.m.PICVerified,
                                         Danger1 = group.m.Danger1,
                                         Danger2 = group.m.Danger2,

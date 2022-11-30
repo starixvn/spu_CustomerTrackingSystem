@@ -146,8 +146,10 @@
                     data: obj => {
                         if (obj.AssociationIrrigation == -1) {
                             return `<span class="has-icon icon-loading">${obj.AssociationIrrigation}</span>`;
-                        } else {
+                        } else if (obj.AssociationIrrigation == 0){
                             return '-';
+                        } else {
+                            return obj.AssociationIrrigation;
                         }
                     } },
                 { data: obj => obj.Odds },
