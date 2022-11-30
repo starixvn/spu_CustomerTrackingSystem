@@ -48,6 +48,8 @@
                         return "Arbitrage";
                     case 3:
                         return "Fixed Game";
+                    case 58:
+                        return "Irrigation";
                 }
 
                 return string.Empty;

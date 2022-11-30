@@ -61,7 +61,7 @@
                         <div class="group width-180">
                             <label class="text">Reason</label>
                             <select class="control width-select" id="cbbReason" multiple="multiple">                           
-                                @foreach (var item in Model.MMStatic.Reasons)
+                                @foreach (var item in Model.Reasons)
                                 {
                                     if (item.IsSelected) {<option value=@item.ReasonID selected>@item.ReasonName</option> }
                                     else { <option value=@item.ReasonID>@item.ReasonName</option> }                                        
@@ -71,7 +71,7 @@
                         <div class="group width-180">
                             <label class="text">Sport</label>
                             <select class="control width-select" id="cbbSport" multiple="multiple">
-                                @foreach (var item in Model.MMStatic.Sports)
+                                @foreach (var item in Model.Sports)
                                 {
                                     if (item.IsSelected) { <option value=@item.SportID selected>@item.SportName</option> }
                                     else { <option value=@item.SportID>@item.SportName</option> }

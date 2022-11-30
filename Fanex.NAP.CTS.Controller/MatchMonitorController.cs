@@ -42,12 +42,13 @@
             var userId = CurrentSession.UserId;
 
             var mmStatic = _matchMonitorService.GetMMStaticList();
-
+          
             return View(new MatchMonitorViewModel
             {
                 IsHostPermission = isHostPermission,
-                CustId = userId,
-                MMStatic = mmStatic
+                CustId = userId,               
+                Reasons = mmStatic.Reasons,
+                Sports = mmStatic.Sports               
             });
         }
 
@@ -267,7 +268,8 @@
                           BetID = x1.BetID,
                           SportID = x1.SportID,                         
                           IsSelected = true
-                      });
+                      }).GroupBy(g => new { g.BetTypeID, g.BetID })
+                      .Select(g => g.First());                   
                 }
             }
 
