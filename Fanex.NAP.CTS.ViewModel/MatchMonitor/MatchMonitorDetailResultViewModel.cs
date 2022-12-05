@@ -98,6 +98,11 @@
         {
             get
             {
+                if (BetTypeID == (int)MatchMonitorBetType.OU)
+                {
+                    return HDP1;
+                } 
+
                 if (!string.IsNullOrEmpty(BetTeam))
                 {
                     if (string.Equals(BetTeam, "h", StringComparison.OrdinalIgnoreCase))
@@ -107,10 +112,6 @@
                     else if (string.Equals(BetTeam, "a", StringComparison.OrdinalIgnoreCase))
                     {
                         return HDP1 - HDP2;
-                    }
-                    else
-                    {
-                        return HDP1;
                     }
                 }
 
