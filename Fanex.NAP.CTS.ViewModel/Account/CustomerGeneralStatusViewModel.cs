@@ -42,6 +42,10 @@
 
         public string DangerousOtherSports { get; set; }
 
+        public string DangerousSabaSc { get; set; }
+
+        public string DangerousSabaBkb { get; set; }
+
         public DateTime LastLoginDate { get; set; }
 
         public DateTime CreatedDate { get; set; }
@@ -75,6 +79,8 @@
                 this.DangerousBasketball = (custDangerousModel.Danger4 == 0) ? "None" : custDangerousModel.Danger4.ToString();
                 this.DangerousESports = (custDangerousModel.Danger5 == 0) ? "None" : custDangerousModel.Danger5.ToString();
                 this.DangerousOtherSports = (custDangerousModel.Danger3 == 0) ? "None" : custDangerousModel.Danger3.ToString();
+                this.DangerousSabaSc = (custDangerousModel.Danger6 == 0) ? "None" : custDangerousModel.Danger6.ToString();
+                this.DangerousSabaBkb = (custDangerousModel.Danger7 == 0) ? "None" : custDangerousModel.Danger7.ToString();
             }
 
             return this;
