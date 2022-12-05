@@ -41,7 +41,7 @@
             success: function (response) {
                 domElements.firsttblMonitor.DataTable().clear().rows.add(response.data).draw();
 
-                if (response.data.length > 0) {
+                if (domElements.reason == 58 && response.data.length > 0) {
                     let params = {};
                     params.custIDList = response.custIDList;
                     params.categoryIDList = "58,78,98,118,138,158";
@@ -114,11 +114,11 @@
                 { targets: "_all", defaultContent: "-" },
                 { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], className: "text-center" },
                 { targets: [0] },
-                { targets: [1] },              
-                { targets: [2] },
+                { targets: [1] },
+                { targets: [2], visible: domElements.reason == 58 ? true : false },
                 { targets: [3] },
                 { targets: [4] },
-                { targets: [5] },
+                { targets: [5], visible: domElements.reason == 58 ? true : false },
                 { targets: [6] },
                 { targets: [7] },
                 { targets: [8] },
@@ -145,9 +145,7 @@
                 {
                     data: obj => {
                         if (obj.AssociationIrrigation == -1) {
-                            return `<span class="has-icon icon-loading">${obj.AssociationIrrigation}</span>`;
-                        } else if (obj.AssociationIrrigation == 0){
-                            return '-';
+                            return `<span class="has-icon icon-loading">${obj.AssociationIrrigation}</span>`;                        
                         } else {
                             return obj.AssociationIrrigation;
                         }

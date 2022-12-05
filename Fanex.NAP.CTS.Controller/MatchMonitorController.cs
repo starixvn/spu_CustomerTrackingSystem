@@ -185,7 +185,7 @@
 
                         matchDetailResult = FilterSite(matchDetailResult, para.Sites);                    
 
-                        custIDList = string.Join(",", matchDetailResult.Select(x => x.CustID));
+                        custIDList = string.Join(",", matchDetailResult.Select(x => x.CustID).Distinct());
                     }
                 }
             }
