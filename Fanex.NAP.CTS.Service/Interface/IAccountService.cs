@@ -28,7 +28,7 @@
 
         CustomerInfoByCTSCustIdModel GetCustomerInfoByCTSCustId(long ctsCustId);
 
-        CustomerInfoByCustIdsModel GetCustomerInfoByCustIds(long custId, int sourceType);
+        CustomerInfoByCustIdsModel GetCustomerInfoDangerous(long custID);
 
         CustomerInfoAssociationAccountModel GetCustomerInfoAssociationAccount(long ctsCustId, bool getFromMySQL);
 

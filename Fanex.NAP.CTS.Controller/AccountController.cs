@@ -110,7 +110,7 @@
                     {
                         try
                         {
-                            var custDangerous = _accountService.GetCustomerInfoByCustIds(customerInfoFromCTS.CustID, 2);
+                            var custDangerous = _accountService.GetCustomerInfoDangerous(customerInfoFromCTS.CustID);
 
                             customerGeneralStatusViewModel.BindingDangerous(custDangerous);
                         }
