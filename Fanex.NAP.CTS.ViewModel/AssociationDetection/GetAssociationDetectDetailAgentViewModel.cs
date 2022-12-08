@@ -4,8 +4,10 @@
     {
         public string UserName { get; set; }
 
-        public string Agent { get; set; }
+        public string AgentName { get; set; }
 
-        public string AssociatedType { get; set; }
+        public string TransitiveUsername { get; set; }
+
+        public string AgentAssociationTypes { get; set; }       
     }
 }

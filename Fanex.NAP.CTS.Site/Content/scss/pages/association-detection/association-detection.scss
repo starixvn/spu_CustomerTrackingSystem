@@ -6,6 +6,17 @@
 body {
     font-family: $font-family;
 }
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 .page-title {
     position: sticky;
     top: 6rem;
@@ -48,11 +59,11 @@ body {
                 }
 
                 .checkbox-filter {
-                    margin-right: 20px;
+                    margin-right: 40px;
                 }
 
                 .checkbox-container {
-                    margin-top: 11px;
+                    margin-top: 12px;
 
                     span {
                         &:before {
@@ -70,6 +81,12 @@ body {
 
                 .flex-container {
                     display: flex;
+                    margin-bottom: 10px;
+
+                    .checkbox-all {
+                        cursor: pointer;
+                        color: blue;                      
+                    }
                 }
             }
         }
@@ -81,7 +98,7 @@ body {
                 /*  padding-top: 1.6rem;*/
                 position: sticky;
                 position: -webkit-sticky;
-                top: 8rem;
+                top: 10rem;
                 background: #fff;
                 z-index: 9;
 
@@ -115,7 +132,7 @@ body {
                 position: sticky;
                 position: -webkit-sticky;
                 z-index: 99;
-                top: 12.5rem;
+                top: 13.5rem;
                 transition: top 0.01s linear;
             }
 
@@ -149,7 +166,7 @@ body {
                         th {
                             position: sticky;
                             position: -webkit-sticky;
-                            top: 9.4rem;
+                            top: 10.4rem;
                             font-weight: 300;
                         }
                     }

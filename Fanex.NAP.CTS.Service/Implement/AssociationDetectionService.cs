@@ -23,7 +23,7 @@
 
         IEnumerable<GetAssociationDetectionModel> GetCustInfoAssDetectionReport(List<GetAssociationDetectionModel> assDetection);
 
-        IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByPrimary(string ctsCustIDs, bool fromMySQL = true);
+        IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByPrimary(DetectAssociationByPrimaryFilterModel filter, bool fromMySQL = true);
 
         IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByAgent(string ctsCustIDs, bool fromMySQL = true);
 
@@ -70,13 +70,16 @@
             }
         }
 
-        public IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByPrimary(string ctsCustIDs, bool fromMySQL = true)
+        public IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByPrimary(DetectAssociationByPrimaryFilterModel filter, bool fromMySQL = true)
         {
             if (fromMySQL)
             {
                 var criteria = new DetectAssociationByPrimaryCriteria
                 {
-                    CTSCustIDs = ctsCustIDs
+                    CTSCustIDs = filter.CTSCustIDs,
+                    IsBP = filter.IsBP,
+                    IsDevice = filter.IsDevice,
+                    IsIP = filter.IsIP
                 };
 
                 using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -85,7 +88,7 @@
                 }
             }
 
-            return DetectAssociationByPrimaryFromGraphDB(ctsCustIDs, 1);
+            return DetectAssociationByPrimaryFromGraphDB(filter.CTSCustIDs, 1);
         }
 
         public IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByAgent(string ctsCustIDs, bool fromMySQL = true)
@@ -114,7 +117,7 @@
                 PrimaryJson = model.AssociationByPrimaryJson,
                 AgentJson = model.AssociationByAgentJson,
                 SharedIPJson = model.AssociationByIPJson,
-                SharedMatches = model.AssociationByMatchesJson
+                SharedMatchesJson = model.AssociationByMatchesJson
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -189,8 +192,10 @@
                 {
                     CTSCustID = model.CTSCustID,
                     ListCTSCustID = ctsCustIDList,
-                    HasPrimary = model.IsBPManuallyDeviceIP,
-                    HasAgent = model.IsAgent
+                    IsBP = model.IsBP,
+                    IsDevice = model.IsDevice,
+                    IsIP = model.IsIP,
+                    IsAgent = model.IsAgent
                 };
 
                 using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -199,7 +204,7 @@
                 }
             }
 
-            return GetAssociationDetectionDetailFromGraphDB(model.CTSCustID, ctsCustIDList, model.IsBPManuallyDeviceIP, model.IsAgent);
+            return GetAssociationDetectionDetailFromGraphDB(model.CTSCustID, ctsCustIDList, model.IsDevice, model.IsAgent);
         }
 
         public IEnumerable<GetAssociationDetectDetailIPModel> GetCoupleSharedIP(int custID1, int custID2)

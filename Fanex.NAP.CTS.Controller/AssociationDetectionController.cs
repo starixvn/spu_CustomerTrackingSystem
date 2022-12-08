@@ -275,18 +275,32 @@
                         var assBySharedMatches = model.Is3MatchesLast7Days ? DetectAssociationBySharedMatches(orgUserList.Where(x => !x.IsInternal), custIDs) : Enumerable.Empty<SharedIPMatchesInfoModel>();
 
                         mergeGroupInfo.AssociationByMatchesJson = GetAssociationCust(assBySharedMatches);                       
-                    }, () => {                     
-                        var assByPrimary = (model.IsBP || model.IsDevice || model.IsIP)
-                            ? _associationDetectionService.DetectAssociationByPrimary(ctsCustIDs, AppSettings.Get("GetAssDetectionFromMySQL") == "1") 
-                            : Enumerable.Empty<DetectAssociationByPrimaryModel>();
+                    }, () => {
+                        var assByPrimary = Enumerable.Empty<DetectAssociationByPrimaryModel>();
 
+                    if (model.IsBP || model.IsDevice || model.IsIP)
+                    {
+                        var isGetAssDetectionFromMySQL = AppSettings.Get("GetAssDetectionFromMySQL") == "1";
+                            assByPrimary = _associationDetectionService.DetectAssociationByPrimary(new DetectAssociationByPrimaryFilterModel 
+                            {
+                                CTSCustIDs = ctsCustIDs,
+                                IsBP = model.IsBP,
+                                IsDevice = model.IsDevice,
+                                IsIP = model.IsIP
+                            }, isGetAssDetectionFromMySQL);
+                        }
+                      
                         mergeGroupInfo.AssociationByPrimaryJson = JsonConvert.SerializeObject(assByPrimary);                       
-                    }, () => {                     
-                        var assByAgent = model.IsAgent 
-                            ? _associationDetectionService.DetectAssociationByAgent(ctsCustIDs, AppSettings.Get("GetAssDetectionFromMySQL") == "1") 
-                            : Enumerable.Empty<DetectAssociationByPrimaryModel>();
+                    }, () => {
+                        var assByAgent = Enumerable.Empty<DetectAssociationByPrimaryModel>();
 
-                        mergeGroupInfo.AssociationByAgentJson = JsonConvert.SerializeObject(assByAgent);                       
+                        if (model.IsAgent)
+                        {
+                            var isGetAssDetectionFromMySQL = AppSettings.Get("GetAssDetectionFromMySQL") == "1";
+                            assByAgent = _associationDetectionService.DetectAssociationByAgent(ctsCustIDs, isGetAssDetectionFromMySQL);
+                        }
+
+                        mergeGroupInfo.AssociationByAgentJson = JsonConvert.SerializeObject(assByAgent);
                     });
                    
                     var assMergeGroup = _associationDetectionService.MergeGroupDetectAssociation(mergeGroupInfo);
@@ -434,6 +448,7 @@
                         CTSCustID = x.Key,
                         CustID = x.FirstOrDefault()?.CustID,
                         UserName = x.FirstOrDefault()?.UserName,
+                        TransitiveUsername = x.FirstOrDefault()?.TransitiveUsername,
                         AgentInfoJson = string.Join(",", agentInfos),
                         AssociatedTypes = string.Join(", ",
                                     x.Where(y=>!string.IsNullOrEmpty(y.AssociatedTypes))
@@ -594,7 +609,7 @@
         }
 
         [HttpPost]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetection)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetectionExportToExcel)]
         public ActionResult ExportToExcelAssociationDetect(DetectAssociationByUserNamesViewModel model)
         {
             var templatePath = Server.MapPath(AssociationDetectionTemplate);

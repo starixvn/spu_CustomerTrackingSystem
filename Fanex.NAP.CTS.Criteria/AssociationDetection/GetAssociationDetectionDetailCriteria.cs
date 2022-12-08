@@ -11,11 +11,17 @@
         [SpParam(SqlParamName = "ip_ListCTSCustID")]
         public string ListCTSCustID { get; set; }
 
-        [SpParam(SqlParamName = "ip_HasPrimary")]
-        public bool HasPrimary { get; set; }
+        [SpParam(SqlParamName = "ip_HasAI")]
+        public bool IsBP { get; set; }
+
+        [SpParam(SqlParamName = "ip_HasDevice")]
+        public bool IsDevice { get; set; }       
+
+        [SpParam(SqlParamName = "ip_HasIP")]
+        public bool IsIP { get; set; }
 
         [SpParam(SqlParamName = "ip_HasAgent")]
-        public bool HasAgent { get; set; }     
+        public bool IsAgent { get; set; }     
 
         public override string GetSettingKey()
         {

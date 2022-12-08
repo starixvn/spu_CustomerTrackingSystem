@@ -206,6 +206,7 @@
     <Compile Include="AssociationDetection\AssociationCustModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationByAgentModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationByBPDeviceIPAgentModel.cs" />
+    <Compile Include="AssociationDetection\DetectAssociationByPrimaryFilterModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationByPrimaryModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationBySharedIPMatchesModel.cs" />
     <Compile Include="AssociationDetection\DetectAssociationMergeGroupModel.cs" />
