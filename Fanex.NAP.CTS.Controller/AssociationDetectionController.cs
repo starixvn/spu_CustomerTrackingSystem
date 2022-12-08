@@ -276,7 +276,7 @@
 
                         mergeGroupInfo.AssociationByMatchesJson = GetAssociationCust(assBySharedMatches);                       
                     }, () => {                     
-                        var assByPrimary = model.IsBPManuallyDeviceIP 
+                        var assByPrimary = (model.IsBP || model.IsDevice || model.IsIP)
                             ? _associationDetectionService.DetectAssociationByPrimary(ctsCustIDs, AppSettings.Get("GetAssDetectionFromMySQL") == "1") 
                             : Enumerable.Empty<DetectAssociationByPrimaryModel>();
 

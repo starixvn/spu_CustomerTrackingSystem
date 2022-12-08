@@ -13,8 +13,10 @@
         spanAddUserName : $('#spanAddUserName'),
         spanAddUserNameMaxTag: $('#spanAddUserNameMaxTag'),        
         spanAddChangeHidden: $('#spanAddChangeHidden'),
-        inputTagUsername: $('#inputTagUsername'),
-        inputOptBPManuallyDeviceIP: $('#inputOptBPManuallyDeviceIP'),
+        inputTagUsername: $('#inputTagUsername'),       
+        inputOptBP: $('#inputOptBP'),
+        inputOptDevice: $('#inputOptDevice'),
+        inputOptIP: $('#inputOptIP'),
         inputOptAgent: $('#inputOptAgent'),
         inputOptIPLast3Days: $('#inputOptIPLast3Days'),
         inputOpt3MatchesLast7Days: $('#inputOpt3MatchesLast7Days'),
@@ -568,9 +570,17 @@
     }
 
     function CheckSelectFilter() {
-        if (domElements.inputOptBPManuallyDeviceIP.is(":checked")) {
+        if (domElements.inputOptBP.is(":checked")) {
             domElements.btnDetect.removeClass('checkselectfilter-notpass'); return true;
-        }            
+        }     
+
+        if (domElements.inputOptDevice.is(":checked")) {
+            domElements.btnDetect.removeClass('checkselectfilter-notpass'); return true;
+        }
+
+        if (domElements.inputOptIP.is(":checked")) {
+            domElements.btnDetect.removeClass('checkselectfilter-notpass'); return true;
+        }
 
         if (domElements.inputOptAgent.is(":checked")) {
             domElements.btnDetect.removeClass('checkselectfilter-notpass'); return true;
@@ -681,7 +691,9 @@
 
         if (userNames !== '') {
             parameters.UserNames = userNames;
-            parameters.IsBPManuallyDeviceIP = domElements.inputOptBPManuallyDeviceIP.is(":checked");
+            parameters.IsBP = domElements.inputOptBP.is(":checked");
+            parameters.IsDevice = domElements.inputOptDevice.is(":checked");
+            parameters.IsIP = domElements.inputOptIP.is(":checked");
             parameters.IsAgent = domElements.inputOptAgent.is(":checked");
             parameters.IsIPLast3Days = domElements.inputOptIPLast3Days.is(":checked");
             parameters.Is3MatchesLast7Days = domElements.inputOpt3MatchesLast7Days.is(":checked");
@@ -867,7 +879,11 @@
 
         domElements.btnExportToExcel.on('click', () => ExportToExcel());       
 
-        domElements.inputOptBPManuallyDeviceIP.on('change', () => ChangeStateBtnDetect());
+        domElements.inputOptBP.on('change', () => ChangeStateBtnDetect());
+
+        domElements.inputOptDevice.on('change', () => ChangeStateBtnDetect());
+
+        domElements.inputOptIP.on('change', () => ChangeStateBtnDetect());
 
         domElements.inputOptAgent.on('change', () => ChangeStateBtnDetect());
 

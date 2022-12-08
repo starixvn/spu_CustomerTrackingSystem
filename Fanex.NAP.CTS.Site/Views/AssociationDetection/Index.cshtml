@@ -30,41 +30,66 @@
                             </span>
                             <span id="spanAddChangeHidden" hidden></span>
                         </span>
-                        <div class="modal-footer margin-top-10">
-                            <span class="checkbox-filter">
-                                <label class="checkbox-container" id="ckbOptBPManuallyDeviceIPContainer">
-                                    <input id="inputOptBPManuallyDeviceIP" type="checkbox" checked>
-                                    <span class="checkmark"></span>
-                                    Betting Pattern/Manual/Device/IP
-                                </label>
-                            </span>
+                        <div class="flex-container modal-footer margin-top-10">                            
+                            <div>
+                                <div><span class="checkbox-filter">Check all</span></div>
+                                <div><span class="checkbox-filter">Uncheck all</span></div>
+                            </div>
+                            <div style="width: 42%">
+                                <button id="btnAssociationDetection" class="button btn btn-detect" title="Association Detection">Detect</button>
+                            </div>
+                        </div>
+                        <div class="flex-container modal-footer margin-top-10">                            
+                            <div>
+                                <span class="checkbox-filter">
+                                    <label class="checkbox-container" id="ckbOptBPContainer">
+                                        <input id="inputOptBP" type="checkbox" checked>
+                                        <span class="checkmark"></span>
+                                        Betting Pattern
+                                    </label>
+                                </span>
 
-                            <span class="checkbox-filter">
-                                <label class="checkbox-container" id="ckbOptAgentContainer">
-                                    <input id="inputOptAgent" type="checkbox">
-                                    <span class="checkmark"></span>
-                                    Agent
-                                </label>
-                            </span>
+                                <span class="checkbox-filter">
+                                    <label class="checkbox-container" id="ckbOptDeviceContainer">
+                                        <input id="inputOptDevice" type="checkbox" checked>
+                                        <span class="checkmark"></span>
+                                        Device
+                                    </label>
+                                </span>
 
-                            <span class="checkbox-filter">
-                                <label class="checkbox-container" id="ckbOptIPLast3DaysContainer">
-                                    <input id="inputOptIPLast3Days" type="checkbox">
-                                    <span class="checkmark"></span>
-                                    IP(last 3 days)
-                                </label>
+                                <span class="checkbox-filter">
+                                    <label class="checkbox-container" id="ckbOptIPContainer">
+                                        <input id="inputOptIP" type="checkbox" checked>
+                                        <span class="checkmark"></span>
+                                        IP
+                                    </label>
+                                </span>
 
-                            </span>
+                                <span class="checkbox-filter">
+                                    <label class="checkbox-container" id="ckbOptAgentContainer">
+                                        <input id="inputOptAgent" type="checkbox">
+                                        <span class="checkmark"></span>
+                                        Agent
+                                    </label>
+                                </span>
 
-                            <span class="checkbox-filter">
-                                <label class="checkbox-container" id="ckbOpt3MatchesLast7DaysContainer">
-                                    <input id="inputOpt3MatchesLast7Days" type="checkbox">
-                                    <span class="checkmark"></span>
-                                    3 Matches(last 7 days)
-                                </label>
-                            </span>
+                                <span class="checkbox-filter">
+                                    <label class="checkbox-container" id="ckbOpt3MatchesLast7DaysContainer">
+                                        <input id="inputOpt3MatchesLast7Days" type="checkbox">
+                                        <span class="checkmark"></span>
+                                        3 Matches(last 7 days)
+                                    </label>
+                                </span>
 
-                            <button id="btnAssociationDetection" class="button btn btn-detect" title="Association Detection">Detect</button>
+                                <span class="checkbox-filter">
+                                    <label class="checkbox-container" id="ckbOptIPLast3DaysContainer">
+                                        <input id="inputOptIPLast3Days" type="checkbox">
+                                        <span class="checkmark"></span>
+                                        IP(last 3 days)
+                                    </label>
+
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
