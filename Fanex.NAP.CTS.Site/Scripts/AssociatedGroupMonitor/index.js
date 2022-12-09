@@ -36,8 +36,14 @@
         btnCancelSetPC: $('#btnCancelSetPC'),
         btnSaveSetPC: $('#btnSaveSetPC'),
         divTransferAccount: $('#divTransferAccount'),
+        spanTransferAccountGroupIDHidden: $('#spanTransferAccountGroupIDHidden'),
+        spanTransferAccountUserNameMaxTag: $('#spanTransferAccountUserNameMaxTag'),
+        spanTransferAccountChangeHidden: $('#spanTransferAccountChangeHidden'),
+        inputTransferAccountTagUsername: $('#inputTransferAccountTagUsername'),
+        spanTransferAccountUserName: $('#spanTransferAccountUserName'),
+        btnSaveTransferAccount: $('#btnSaveTransferAccount'),
         maxTags: 1001
-    };
+    };   
 
     let isHostPermission = domElements.hdIsHostPermission.attr('IsHostPermission') === "True";
 
@@ -313,9 +319,15 @@
         });
     }
 
-
     function TranserAccount(row) {
-        RefreshTitleIsHtml();
+        domElements.spanTransferAccountGroupIDHidden.val(row.GroupID);
+        domElements.spanTransferAccountUserNameMaxTag.text(domElements.maxTags);
+        domElements.spanTransferAccountChangeHidden.text("0");
+        domElements.inputTransferAccountTagUsername.tagify().data('tagify').removeAllTags();
+        domElements.spanTransferAccountUserName.find('tags').attr('tabindex', "1");
+        domElements.btnSaveTransferAccount.prop('disabled', true);
+
+        RefreshTitleIsHtml();        
 
         domElements.divTransferAccount.dialog({
             modal: true,

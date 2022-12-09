@@ -2,6 +2,8 @@
 {
     public class SaveTransferAccountModel
     {
+        public string UserNames { get; set; }
+
         public string CTSCustIDs { get; set; }
 
         public long FromGroupID { get; set; }

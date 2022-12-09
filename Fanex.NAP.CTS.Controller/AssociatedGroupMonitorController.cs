@@ -249,7 +249,7 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedGroupMonitorRpt)]
         public ActionResult ValidateUserNameInput(string userNames)
         {
-            return Json(GetResultValidated(userNames), JsonRequestBehavior.AllowGet);
+            return Json(GetResultValidated(userNames, 0), JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -259,7 +259,7 @@
         {
             var result = new ResultSaveAssociatedAccountViewModel();
             
-            var resultValidate = GetResultValidated(model.UserNames);
+            var resultValidate = GetResultValidated(model.UserNames, 0);
 
             if (!resultValidate.AccountInvalidList.Any())
             {               
@@ -314,7 +314,7 @@
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        private ResultValidatedViewModel GetResultValidated(string userNames)
+        private ResultValidatedViewModel GetResultValidated(string userNames, long groupID)
         {
             var result = new ResultValidatedViewModel();
 
@@ -324,7 +324,12 @@
 
                 var userNamesDupIgnores = string.Join(",", userNameList.Distinct());
 
-                var validatedModels = _associatedGroupService.ValidateUserNameInput(userNamesDupIgnores);
+                var validatedModels = Enumerable.Empty<ValidateUserAssociatedAccountModel>();
+
+                if (groupID == 0)
+                    validatedModels = _associatedGroupService.ValidateUserNameInput(userNamesDupIgnores);
+                else
+                    validatedModels = _associatedGroupService.ValidateUsernameTransferAccount(userNamesDupIgnores, groupID);
 
                 if (validatedModels != null && validatedModels.Any())
                 {
@@ -362,15 +367,7 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedGroupMonitorRpt)]
         public ActionResult ValidateUsernameTransferAccount(string userNames, long groupID)
         {
-            var result = new ResultValidatedViewModel();
-
-            if (!string.IsNullOrEmpty(userNames))
-            {
-                var userNameList = userNames.Split(',');
-
-            }
-
-            return Json(result, JsonRequestBehavior.AllowGet);
+            return Json(GetResultValidated(userNames, groupID), JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -380,13 +377,23 @@
         {
             model.ModifiedBy = CurrentSession.UserId;
 
-            var result = _associatedGroupService.SaveTransferAccount(model);
-            
-            return Json(new
+            var result = new ResultSaveAssociatedAccountViewModel();
+
+            var resultValidate = GetResultValidated(model.UserNames, model.FromGroupID);
+
+            if (!resultValidate.AccountInvalidList.Any())
             {
-                errorCode = result.ErrorCode,
-                errorMessage = result.ErrorMsg
-            }, JsonRequestBehavior.AllowGet);
+                model.CTSCustIDs = resultValidate.CTSCustIDs;
+                model.ModifiedBy = CurrentSession.UserId;
+
+                var addResult = _associatedGroupService.SaveTransferAccount(model);
+
+                result.ErrorCode = addResult.ErrorCode;
+                result.ErrorMessage = addResult.ErrorMsg;
+                result.ResultValidated = resultValidate;
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]        
