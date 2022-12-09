@@ -214,6 +214,9 @@
 		<Setting Key="CTS_DC_AssociatedGroup_GetProblemCategoryByGroupID" SpName="CTS_DC_AssociatedGroup_GetProblemCategoryByGroupID_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_AssociatedGroup_SetProblemCategoryByGroupID" SpName="CTS_DC_AssociatedGroup_SetProblemCategoryByGroupID_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_AssociatedGroup_GetPASites" SpName="CTS_DC_AssociatedGroup_GetPASites_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_AssociatedGroup_TransferAccount_GetGroup" SpName="CTS_DC_AssociatedGroup_TransferAccount_GetGroup_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_AssociatedGroup_TransferAccount_ValidateUsername" SpName="CTS_DC_AssociatedGroup_TransferAccount_ValidateUsername_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_AssociatedGroup_TransferAccount_Update" SpName="CTS_DC_AssociatedGroup_TransferAccount_Update_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
 	</Function>
 
 	<Function name="LogData">

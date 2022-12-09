@@ -347,6 +347,48 @@
             return result;
         }
 
+        [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.AssociatedGroupMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedGroupMonitorRpt)]
+        public ActionResult GetGroupTransferAccount(long groupID)
+        {
+            var groups = _associatedGroupService.GetGroupTransferAccount(groupID);
+
+            return Json(groups, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.AssociatedGroupMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedGroupMonitorRpt)]
+        public ActionResult ValidateUsernameTransferAccount(string userNames, long groupID)
+        {
+            var result = new ResultValidatedViewModel();
+
+            if (!string.IsNullOrEmpty(userNames))
+            {
+                var userNameList = userNames.Split(',');
+
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [NapAuth(FunctionKey = FSFunctionKeys.AssociatedGroupMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedGroupMonitorRpt)]
+        public ActionResult SaveTransferAccount(SaveTransferAccountModel model)
+        {
+            model.ModifiedBy = CurrentSession.UserId;
+
+            var result = _associatedGroupService.SaveTransferAccount(model);
+            
+            return Json(new
+            {
+                errorCode = result.ErrorCode,
+                errorMessage = result.ErrorMsg
+            }, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpPost]        
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedGroupMonitorRpt)]
         public ActionResult ExportToExcelAssociatedAccount(ExportToExcelAssociatedAccountViewModel model)

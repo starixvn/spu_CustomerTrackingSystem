@@ -35,6 +35,7 @@
         spanGroupNameSetPCHidden: $('#spanGroupNameSetPCHidden'),
         btnCancelSetPC: $('#btnCancelSetPC'),
         btnSaveSetPC: $('#btnSaveSetPC'),
+        divTransferAccount: $('#divTransferAccount'),
         maxTags: 1001
     };
 
@@ -155,10 +156,11 @@
                         let htmlSPANEditGroup = '<span class="sub-icon - edit" id="sub-icon " title="Edit Group"><i class="icon-edit ' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
                         let htmlSPANSetPC = '<span class="sub-icon - setpc" id="sub-icon " title="Set Problem Category"><i class="icon-Add icon-set-pc' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';                        
                         let htmlSPANAddAccount = '<span class="sub-icon - edit" id="sub-icon " title="Add Accounts"><i class="icon-add-account' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
+                        let htmlSPANTransferAccount = '<span class="sub-icon - edit" id="sub-icon " title="Transfer Accounts"><i class="icon-remove-account' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
                         let htmlExportExcel = '<span class="sub-icon - excel" id="sub-icon " title="Export To Excel"><i class="icon-excel ' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
                         let htmlSPANRemoveGroup = '<span class="sub-icon - delete" id="sub-icon " title="Remove Group"><i class="icon-delete ' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
 
-                        return htmlSPANEditGroup + htmlSPANSetPC + htmlSPANAddAccount + htmlExportExcel + htmlSPANRemoveGroup;
+                        return htmlSPANEditGroup + htmlSPANSetPC + htmlSPANAddAccount + htmlSPANTransferAccount + htmlExportExcel + htmlSPANRemoveGroup;
                     }, createdCell: (cell, _, row) => {                      
                         if (isHostPermission) {
                             $('.icon-edit', cell).click(() => {
@@ -184,6 +186,10 @@
                                 $('td #sub-icon').addClass('none-pointer');
 
                                 AddAccount(row);
+                            });
+
+                            $('.icon-remove-account', cell).click(() => {
+                                TranserAccount(row);
                             });
                         }                        
 
@@ -292,14 +298,7 @@
         domElements.spanAddAssociatedAccountUserName.find('tags').attr('tabindex', "1");
         domElements.btnSaveAssociatedAccount.prop('disabled', true);
 
-        $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
-            _title: function (title) {
-                let $title = this.options.title || '&nbsp;'
-                if (("titleIsHtml" in this.options) && this.options.titleIsHtml == true)
-                    title.html($title);
-                else title.text($title);
-            }
-        }));
+        RefreshTitleIsHtml();
 
         domElements.divAddAssociatedAccount.dialog({
             modal: true,
@@ -312,6 +311,34 @@
                 $(this).dialog('close');
             }
         });
+    }
+
+
+    function TranserAccount(row) {
+        RefreshTitleIsHtml();
+
+        domElements.divTransferAccount.dialog({
+            modal: true,
+            width: '700px',
+            title: '<div>TRANSFER ACCOUNTS - <label style="color:#FF0000">' + row.GroupName + '</label></div>',
+            titleIsHtml: true,
+            resizable: true,
+            draggable: true,
+            close: function () {
+                $(this).dialog('close');
+            }
+        });
+    }
+
+    function RefreshTitleIsHtml() {
+        $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+            _title: function (title) {
+                let $title = this.options.title || '&nbsp;'
+                if (("titleIsHtml" in this.options) && this.options.titleIsHtml == true)
+                    title.html($title);
+                else title.text($title);
+            }
+        }));
     }
 
     function ExportToExcelAssociatedAccount(groupID, groupName, associatedType) {

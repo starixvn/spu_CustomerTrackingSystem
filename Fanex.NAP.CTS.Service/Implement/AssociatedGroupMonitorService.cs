@@ -53,6 +53,12 @@
 
         DBResult UpdateOriToMainDB(string custIDs, int valueOri);
 
+        IEnumerable<GetGroupTransferAccountGroupModel> GetGroupTransferAccount(long currentGroupID);
+
+        IEnumerable<ValidateUserAssociatedAccountModel> ValidateUsernameTransferAccount(string userNames, long groupID);
+
+        DBResult SaveTransferAccount(SaveTransferAccountModel model);
+
         byte[] ExportExcelAssociatedAccount(IEnumerable<AssociatedAccountMonitorModel> associatedAccounts
             , string fileName
             , string templatePath
@@ -393,6 +399,51 @@
                  .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
 
                 LogService.Error($"Remove associated group monitor Exception { logMessage }", ex);
+
+                return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
+            }
+        }
+
+        public IEnumerable<GetGroupTransferAccountGroupModel> GetGroupTransferAccount(long currentGroupID)
+        {
+            return repository.Fetch<GetGroupTransferAccountGroupModel>(new GetGroupTransferAccountCriteria
+            {
+                GroupID = currentGroupID
+            });
+        }
+
+        public IEnumerable<ValidateUserAssociatedAccountModel> ValidateUsernameTransferAccount(string userNames, long groupID)
+        {           
+            return repository.Fetch<ValidateUserAssociatedAccountModel>(new ValidateUsernameTransferAccountCriteria
+            {
+                UserNames = userNames,
+                GroupID = groupID
+            });
+        }
+
+        public DBResult SaveTransferAccount(SaveTransferAccountModel model)
+        {
+            var criteria = new SaveTransferAccountCriteria
+            {
+                CTSCustIDs = model.CTSCustIDs,
+                FromGroupID = model.FromGroupID,
+                ToGroupID = model.ToGroupID,
+                ModifiedBy = model.ModifiedBy
+            };
+
+            try
+            {
+                repository.Execute(criteria);
+
+                return new DBResult { ErrorCode = 0 };
+            }
+            catch (Exception ex)
+            {
+                var logMessage = new LogMessage(ex.Message)
+                 .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                 .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error($"Save Transfer Account Exception { logMessage }", ex);
 
                 return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
             }

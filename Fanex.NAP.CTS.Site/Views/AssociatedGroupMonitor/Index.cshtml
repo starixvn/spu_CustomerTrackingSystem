@@ -190,6 +190,51 @@
     </div>
 </div>
 
+<div id="divTransferAccount" class="popup-add" style="display: none">
+    <div class="hide">
+        <input id="hdTransferAccountGroupID" type="hidden" />
+    </div>
+    <div class="group-title">
+        <div class="label">Username<label style="color:red">*</label></div>
+        <div class="wrapper-title">
+            <div class="wrapper-rule wrapper-rule-left">
+                <span class="text bg-red">Red</span>
+                <span class="text">Invalid username</span>
+            </div>
+            <div class="wrapper-rule wrapper-rule-right" hidden>
+                <span class="text bg-yellow">Yellow</span>
+                <span class="text">Duplicated username</span>
+            </div>
+        </div>
+    </div>
+
+    <span class="wrapper-value" id="spanTransferAccountUserName">
+        <input id="inputTransferAccountTagUsername" type="text" name='tags-outside' class="input-field full-width tagify--outside" placeholder="Type username (Separate by comma, tab and enter)" />
+        <span class="limit-username">
+            Max: <span id="spanTransferAccountUserNameMaxTag">1001</span> usernames
+        </span>
+        <span id="spanTransferAccountChangeHidden" hidden></span>
+        <span id="spanTransferAccountGroupIDHidden" hidden></span>
+        <span id="spanTransferAccountGroupNameHidden" hidden></span>
+    </span>
+
+    <div class="form-control margin-right-20">
+        <div class="label">New Group<label style="color:red">*</label></div>
+        <div style="width:200px">
+            <select class="control" id="cbbTransferAccountNewGroup" style="width:200px">
+                <option value="-1">Group 1</option>
+                <option value="52" selected>Group 2</option>
+                <option value="53">Group 3</option>                
+            </select>
+        </div>
+    </div>
+
+    <div class="modal-footer margin-top-10">
+        <button id="btnCancelTransferAccount" class="button btn-cancel-outline" title="Cancel">Cancel</button>
+        <button id="btnSaveTransferAccount" class="button -add" title="Save">Save</button>
+    </div>
+</div>
+
 <div class="hide">
     <input id="hdIsHostPermission" type="hidden" IsHostPermission="@Model.ToString()" />
 </div>

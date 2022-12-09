@@ -662,6 +662,7 @@
     <Content Include="Scripts\Account\RobotClassification\robot-classification.js" />
     <Content Include="Scripts\AssociatedAccountMonitor\index.js" />
     <Content Include="Scripts\AssociatedGroupMonitor\index.js" />
+    <Content Include="Scripts\AssociatedGroupMonitor\transfer-account.js" />
     <Content Include="Scripts\AssociationDetection\index_old.js" />
     <Content Include="Scripts\AssociationDetection\index.js" />
     <Content Include="Scripts\AssociationReport\detail.js" />
