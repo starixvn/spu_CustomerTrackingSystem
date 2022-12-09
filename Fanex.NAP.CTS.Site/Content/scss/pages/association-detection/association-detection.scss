@@ -98,7 +98,7 @@ body {
                 /*  padding-top: 1.6rem;*/
                 position: sticky;
                 position: -webkit-sticky;
-                top: 10rem;
+                top: 9.3rem;
                 background: #fff;
                 z-index: 9;
 
@@ -166,8 +166,9 @@ body {
                         th {
                             position: sticky;
                             position: -webkit-sticky;
-                            top: 10.4rem;
+                            top: 13.7rem;
                             font-weight: 300;
+                            z-index: 99;
                         }
                     }
                 }

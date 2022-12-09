@@ -346,7 +346,7 @@
                         result.ItemList = assMergeGroup.Where(x => x.GroupID.HasValue).OrderBy(x => x.GroupID).Select(x =>
                         {           
                             return new DetectAssociationItemViewModel(x);
-                        });
+                        });                       
                     }
                 }
                 catch (Exception ex)
@@ -363,6 +363,18 @@
             }
 
             return result;
+        }
+
+        private IEnumerable<DetectAssociationItemViewModel> GenerateDataTest(IEnumerable<DetectAssociationItemViewModel> itemList)
+        {
+            var data = new List<DetectAssociationItemViewModel>();
+
+            for (int i = 0; i < 10; i++)
+            {
+                data.AddRange(itemList);
+            }
+
+            return data;
         }
 
         private IEnumerable<SharedIPMatchesInfoModel> DetectAssociationByIP(IEnumerable<ValidateUserNameModel> validateUserNames, string custIds)

@@ -907,6 +907,21 @@
         }        
     }
 
+    function SetDefaultCheckboxFilter() {        
+        if (domElements.inputOptBP.is(":checked")) return true;
+        if (domElements.inputOptDevice.is(":checked")) return true;
+        if (domElements.inputOptIP.is(":checked")) return true;
+        if (domElements.inputOptAgent.is(":checked")) return true;
+        if (domElements.inputOptIPLast3Days.is(":checked")) return true;
+        if (domElements.inputOpt3MatchesLast7Days.is(":checked")) return true;
+
+        domElements.inputOptBP.prop("checked", true);
+        domElements.inputOptDevice.prop("checked", true);
+        domElements.inputOptIP.prop("checked", true);
+
+        return true;
+    }
+
     function GetStorageFilter(key) {
         if (typeof (Storage) !== "undefined") {
             var value = localStorage.getItem(key);
@@ -941,9 +956,15 @@
 
         domElements.inputOpt3MatchesLast7Days.on('change', () => ChangeStateBtnDetect());
 
-        domElements.tickCheckAll.on('click', () => ToggleTickCheckAll(true));
+        domElements.tickCheckAll.on('click', function () {
+            ToggleTickCheckAll(true);
+            ChangeStateBtnDetect();
+        });
 
-        domElements.tickUncheckAll.on('click', () => ToggleTickCheckAll(false));
+        domElements.tickUncheckAll.on('click', function () {
+            ToggleTickCheckAll(false);
+            ChangeStateBtnDetect();
+        });
 
         SetCacheForFilter(domElements.inputOptBP, GetStorageFilter("AssDetectCheckboxBP"));
         SetCacheForFilter(domElements.inputOptDevice, GetStorageFilter("AssDetectCheckboxDevice"));
@@ -951,6 +972,8 @@
         SetCacheForFilter(domElements.inputOptAgent, GetStorageFilter("AssDetectCheckboxAgent"));
         SetCacheForFilter(domElements.inputOpt3MatchesLast7Days, GetStorageFilter("AssDetectCheckbox3Matches"));
         SetCacheForFilter(domElements.inputOptIPLast3Days, GetStorageFilter("AssDetectCheckboxIP3Days"));
+
+        SetDefaultCheckboxFilter();
     }
 
     $(document).ready(function () {
