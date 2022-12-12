@@ -337,11 +337,12 @@
         [NapAuth(FunctionKey = FSFunctionKeys.AssociatedGroupMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]        
         public ActionResult GetGroupTransferAccount(long groupID)
         {
-            var groups = _associatedGroupService.GetGroupTransferAccount(groupID);
+            var data = _associatedGroupService.GetGroupTransferAccount(groupID);           
 
-            return Json(groups, JsonRequestBehavior.AllowGet);
+            return Json(data, JsonRequestBehavior.AllowGet);
         }
 
+         
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AssociatedGroupMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedGroupMonitorTransferAccountRpt)]
@@ -368,14 +369,10 @@
 
                 var transferResult = _associatedGroupService.SaveTransferAccount(model);
 
-                if (transferResult.ErrorCode == 0)
+                if (transferResult.ErrorCode == 0 && !string.IsNullOrEmpty(transferResult.CustIDs))
                 {
-                    //var custGroupABIOri = transferResult.CustInfos.Select(x => x.CustID).Distinct();
-                    //if (custGroupABIOri.Any())
-                    //{
-                    //    _associatedGroupService.UpdateABIToMainDB(string.Join(",", custGroupABIOri), model.ABI);
-                    //    _associatedGroupService.UpdateOriToMainDB(string.Join(",", custGroupABIOri), model.Ori);
-                    //}
+                    _associatedGroupService.UpdateABIToMainDB(transferResult.CustIDs, transferResult.ABI);
+                    _associatedGroupService.UpdateOriToMainDB(transferResult.CustIDs, transferResult.Ori);
                 }
 
                 result.ErrorCode = transferResult.ErrorCode;

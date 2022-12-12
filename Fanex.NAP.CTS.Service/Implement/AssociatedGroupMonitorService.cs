@@ -57,7 +57,7 @@
 
         IEnumerable<ValidateUserAssociatedAccountModel> ValidateUsernameTransferAccount(string userNames, long groupID);
 
-        DBResult SaveTransferAccount(SaveTransferAccountModel model);
+        SaveTransferAccountResultModel SaveTransferAccount(SaveTransferAccountModel model);
 
         byte[] ExportExcelAssociatedAccount(IEnumerable<AssociatedAccountMonitorModel> associatedAccounts
             , string fileName
@@ -421,7 +421,7 @@
             });
         }
 
-        public DBResult SaveTransferAccount(SaveTransferAccountModel model)
+        public SaveTransferAccountResultModel SaveTransferAccount(SaveTransferAccountModel model)
         {
             var criteria = new SaveTransferAccountCriteria
             {
@@ -433,9 +433,11 @@
 
             try
             {
-                repository.Execute(criteria);
+                var result = repository.Fetch<SaveTransferAccountResultModel>(criteria).First() ?? new SaveTransferAccountResultModel();
 
-                return new DBResult { ErrorCode = 0 };
+                result.ErrorCode = 0;
+
+                return result;
             }
             catch (Exception ex)
             {
@@ -445,7 +447,7 @@
 
                 LogService.Error($"Save Transfer Account Exception { logMessage }", ex);
 
-                return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
+                return new SaveTransferAccountResultModel { ErrorCode = -1, ErrorMsg = ex.Message };
             }
         }
 

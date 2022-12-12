@@ -36,6 +36,7 @@
         btnCancelSetPC: $('#btnCancelSetPC'),
         btnSaveSetPC: $('#btnSaveSetPC'),    
         divTransferAccount: $('#divTransferAccount'),
+        btnSaveTransferAccount: $('#btnSaveTransferAccount'),
         maxTags: 1001
     };   
 
@@ -1144,7 +1145,7 @@
             domElements.cbbSitesSetPC.multiselect("enable");
         }      
     }
-
+   
     function Initial() {
         if (!isHostPermission) {
             domElements.btnAddGroup.prop('disabled', true);
@@ -1242,6 +1243,10 @@
         InitInputTagUsername();
 
         transferAccount.InitInputTransferAccountTagUsername();
+
+        domElements.btnSaveTransferAccount.on('click', function () {
+            transferAccount.SaveTransferAccount(GetAssociatedGroup);          
+        });
     }
 
     $(document).ready(function () {

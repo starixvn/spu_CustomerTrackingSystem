@@ -144,6 +144,8 @@
         let numOfTagExceeded = domElementsTransAcc.spanTransferAccountUserName.find('tags tag.tagify--notAllowed');
         if (numOfTagExceeded.length > 0) return;
 
+        if (domElementsTransAcc.cbbTransferAccountNewGroup.find('option').length == 0) return;
+
         domElementsTransAcc.btnSaveTransferAccount.prop('disabled', false);
         let userNames = GetTransferAccountInputUserName(textTagRemove);
 
@@ -204,47 +206,7 @@
         if (data.AccountInvalidList.length === 0) domElementsTransAcc.btnSaveTransferAccount.prop('disabled', false);
         else domElementsTransAcc.btnSaveTransferAccount.prop('disabled', true);
     }   
-
-    function SaveTransferAccount() {
-        let params = {};
-        params.UserNames = GetTransferAccountInputUserName();
-        params.FromGroupID = domElementsTransAcc.spanTransferAccountGroupIDHidden.val();
-        params.ToGroupID = domElementsTransAcc.cbbTransferAccountNewGroup.val();
-
-        let fromGroupName = domElementsTransAcc.spanTransferAccountGroupNameHidden.val();
-        let toGroupName = domElementsTransAcc.cbbTransferAccountNewGroup.find('option:selected').text();
-
-        common.showConfirmation("<div class='popup-content'><div class='popup-title'>Are you sure you want to TRANSFER the account(s) from '" + fromGroupName + "' to '" + toGroupName +"'?</div></div>",
-            function () {
-                $.ajax(common.modifyRelativeUrl('AssociatedGroupMonitor/SaveTransferAccount'), {
-                    type: 'POST',
-                    data: params,
-                    beforeSend: function () {
-                        domElementsTransAcc.tblAssociatedGroup.find('tbody').addClass('loading');
-                    },
-                    success: function (response) {
-                        if (response.errorCode != -1) {
-                            common.showSuccess('The account(s) transferred successfully.');
-                            domElementsTransAcc.divTransferAccount.dialog('close');
-                        }
-                        else {
-                            common.showError("An unexpected Error occurred. Please try again.");
-                        }
-                    },
-                    complete: function () {
-                        domElementsTransAcc.tblAssociatedGroup.find('tbody').removeClass('loading');
-                    },
-                    error: function (errMsg) {
-                        domElementsTransAcc.tblAssociatedGroup.find('tbody').removeClass('loading');
-                        common.showError("An unexpected Error occurred. Please try again.");
-                        console.log(errMsg);
-                    }
-                });
-
-            }
-        )
-    }
-
+   
     function GetGroupTransferAccount(groupID) {
         $.ajax(common.modifyRelativeUrl('AssociatedGroupMonitor/GetGroupTransferAccount'), {
             type: 'POST',
@@ -317,12 +279,51 @@
             }
     }
 
+    this.SaveTransferAccount = function (callback) {
+        let params = {};
+        params.UserNames = GetTransferAccountInputUserName();
+        params.FromGroupID = domElementsTransAcc.spanTransferAccountGroupIDHidden.val();
+        params.ToGroupID = domElementsTransAcc.cbbTransferAccountNewGroup.val();
+
+        let fromGroupName = domElementsTransAcc.spanTransferAccountGroupNameHidden.val();
+        let toGroupName = domElementsTransAcc.cbbTransferAccountNewGroup.find('option:selected').text();
+
+        common.showConfirmation("<div class='popup-content'><div class='popup-title'>Are you sure you want to TRANSFER the account(s) from '" + fromGroupName + "' to '" + toGroupName + "'?</div></div>",
+            function () {
+                $.ajax(common.modifyRelativeUrl('AssociatedGroupMonitor/SaveTransferAccount'), {
+                    type: 'POST',
+                    data: params,
+                    beforeSend: function () {
+                        domElementsTransAcc.tblAssociatedGroup.find('tbody').addClass('loading');
+                    },
+                    success: function (response) {
+                        if (response.errorCode != -1) {
+                            common.showSuccess('The account(s) transferred successfully.');
+                            domElementsTransAcc.divTransferAccount.dialog('close');
+
+                            callback();
+                        }
+                        else {
+                            common.showError("An unexpected Error occurred. Please try again.");
+                        }
+                    },
+                    complete: function () {
+                        domElementsTransAcc.tblAssociatedGroup.find('tbody').removeClass('loading');
+                    },
+                    error: function (errMsg) {
+                        domElementsTransAcc.tblAssociatedGroup.find('tbody').removeClass('loading');
+                        common.showError("An unexpected Error occurred. Please try again.");
+                        console.log(errMsg);
+                    }
+                });
+            }
+        )
+    }
+
     this.Initial = function (groupID, groupName) {
         InitTransferAccount(groupID, groupName);
 
-        domElementsTransAcc.btnCancelTransferAccount.on('click', () => domElementsTransAcc.divTransferAccount.dialog('close'));
-
-        domElementsTransAcc.btnSaveTransferAccount.on('click', () => SaveTransferAccount());      
+        domElementsTransAcc.btnCancelTransferAccount.on('click', () => domElementsTransAcc.divTransferAccount.dialog('close'));              
     }
 
     this.InitInputTransferAccountTagUsername = function() {

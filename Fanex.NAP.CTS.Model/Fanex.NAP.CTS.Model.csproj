@@ -206,6 +206,7 @@
     <Compile Include="AssociatedGroupMonitor\RemoveAssociatedGroupModel.cs" />
     <Compile Include="AssociatedGroupMonitor\ResultAddAssociatedAccountModel.cs" />
     <Compile Include="AssociatedGroupMonitor\SaveTransferAccountModel.cs" />
+    <Compile Include="AssociatedGroupMonitor\SaveTransferAccountResultModel.cs" />
     <Compile Include="AssociatedGroupMonitor\SetProblemCategoryByGroupIDModel.cs" />
     <Compile Include="AssociatedGroupMonitor\GetGroupTransferAccountGroupModel.cs" />
     <Compile Include="AssociatedGroupMonitor\UpdateAssociatedGroupMonitorModel.cs" />
