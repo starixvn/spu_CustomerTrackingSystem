@@ -87,21 +87,9 @@
             }           
 
             return Json(new { data = associatedGroups }, JsonRequestBehavior.AllowGet);
-        }
+        }      
 
-        [HttpPost]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedGroupMonitorRpt)]
-        public ActionResult GetSitesByGroup(long groupID, bool isLicensee)
-        {
-            var sites = _associatedGroupService.GetAssociatedGroupSites(groupID)
-                .Where(x => x.IsLicensee == isLicensee && x.IsChosen)
-                .Select(x=>x.SiteName);
-
-            var result = string.Join(", ", sites);
-
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
-
+        #region Set Problem Account
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedGroupMonitorRpt)]
         public ActionResult GetProblemCategorySiteByGroup(long groupID, bool isLicensee)
@@ -145,6 +133,9 @@
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+        #endregion
+
+        #region New, Update, Remove Group
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AssociatedGroupMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
@@ -243,6 +234,23 @@
                 errorMessage = result.ErrorMsg
             }, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpPost]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedGroupMonitorRpt)]
+        public ActionResult GetSitesByGroup(long groupID, bool isLicensee)
+        {
+            var sites = _associatedGroupService.GetAssociatedGroupSites(groupID)
+                .Where(x => x.IsLicensee == isLicensee && x.IsChosen)
+                .Select(x => x.SiteName);
+
+            var result = string.Join(", ", sites);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion
+
+        #region Add Account to Group
 
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AssociatedGroupMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
@@ -352,6 +360,9 @@
             return result;
         }
 
+        #endregion
+
+        #region Transfer Accounts
         [HttpPost]
         [NapAuth(FunctionKey = FSFunctionKeys.AssociatedGroupMonitor, Policy = NAP.Core.Business.Constant.Policy.Host)]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedGroupMonitorRpt)]
@@ -396,6 +407,9 @@
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        #endregion
+
+        #region Export to Excel
         [HttpPost]        
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociatedGroupMonitorRpt)]
         public ActionResult ExportToExcelAssociatedAccount(ExportToExcelAssociatedAccountViewModel model)
@@ -427,6 +441,8 @@
 
             return File(excelFile, "application/vnd.ms-excel", fileName);
         }
+
+        #endregion
 
     }
 }

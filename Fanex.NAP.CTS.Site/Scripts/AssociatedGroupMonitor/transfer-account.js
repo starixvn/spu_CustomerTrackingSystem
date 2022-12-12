@@ -1,5 +1,6 @@
-﻿function AssociatedGroupTransferAccount() {
-    let domElementsTransAcc = {
+﻿function transfer_account() {
+    var domElementsTransAcc = {
+        tblAssociatedGroup: $('#tblAssociatedGroup'),        
         divTransferAccount: $('#divTransferAccount'),
         spanTransferAccountUserName: $('#spanTransferAccountUserName'),
         cbbTransferAccountNewGroup: $('#cbbTransferAccountNewGroup'),
@@ -12,82 +13,82 @@
         maxTags: 1001
     };
 
-    function InitInputTransferAccountTagUsername() {
-        domElementsTransAcc.spanTransferAccountUserNameMaxTag.text(domElements.maxTags);
-        domElementsTransAcc.spanTransferAccountChangeHidden.text("0");
+    function AddBorderTags() {
+        domElementsTransAcc.spanTransferAccountUserName.find('tags').addClass('ctrlA');
+        let allTags = domElementsTransAcc.spanTransferAccountUserName.find('tags tag.tagify__tag');
+        allTags.each(function (_, tag) {
+            $(tag).css('border', '1px solid #6187E7');
+        });
+    }
 
-        function AddBorderTags() {
-            domElementsTransAcc.spanTransferAccountUserName.find('tags').addClass('ctrlA');
-            let allTags = domElementsTransAcc.spanTransferAccountUserName.find('tags tag.tagify__tag');
-            allTags.each(function (_, tag) {
-                $(tag).css('border', '1px solid #6187E7');
+    function ResetMaxTag() {
+        let currentTagsLength = domElementsTransAcc.spanTransferAccountUserName.find('tags tag').length;
+        if (currentTagsLength < domElementsTransAcc.maxTags)
+            domElementsTransAcc.spanTransferAccountUserNameMaxTag.text(domElementsTransAcc.maxTags - currentTagsLength + 1);
+    }
+
+    function EnableButtonAdd() {
+        let validTags = domElementsTransAcc.spanTransferAccountUserName.find('tags tag.valid');
+        let invalidDuplicatedTags = domElementsTransAcc.spanTransferAccountUserName.find('tags tag.invalid-duplicated');
+        let invalidUsernameTags = domElementsTransAcc.spanTransferAccountUserName.find('tags tag.invalid-username');
+        let notInvalid = invalidDuplicatedTags.length + invalidUsernameTags.length;
+        if (notInvalid <= 1 && validTags.length > 1)
+            domElementsTransAcc.btnSaveTransferAccount.prop('disabled', false);
+        else
+            domElementsTransAcc.btnSaveTransferAccount.prop('disabled', true);
+    }
+
+    function IsTextUnicode(text) {
+        var pattern = /^[\x20-\x7E]*$/;
+        return pattern.test(text);
+    }
+
+    function OnChangeTags(tagName, cssClass) {
+        let maxCountTags = parseInt(domElementsTransAcc.spanTransferAccountUserNameMaxTag.text());
+        let isTextUnicode = IsTextUnicode($(tagName.tag).text());
+
+        if (!isTextUnicode) {
+            domElementsTransAcc.inputTransferAccountTagUsername.tagify().data('tagify').removeTags(tagName.tag);
+        }
+        else if (maxCountTags > 0) {
+            let $tag = $(tagName.tag);
+            let textReplaced = $tag.text();
+            textReplaced = textReplaced.replace(new RegExp("'", 'g'), "").replace(new RegExp("\"", 'g'), "");
+            if (textReplaced.length > 50)
+                textReplaced = textReplaced.substr(0, 50);
+            $tag.val(textReplaced);
+            $tag.attr('data-user-name', textReplaced);
+            $tag.prop('title', textReplaced);
+            $tag.find('span.tagify__tag-text').text(textReplaced);
+            $tag.addClass(cssClass);
+
+            let btnRemove = $tag.find('x');
+            btnRemove.on('click', function (e) {
+                let currentTag = $(e.target).parent();
+
+                ResetMaxTag();
+                ValidateTransferAccountInput(currentTag.text().trim());
+                EnableButtonAdd();
+            });
+
+            domElementsTransAcc.spanTransferAccountUserNameMaxTag.text(maxCountTags - 1);
+        } else {
+            let $tag = $(tagName.tag);
+            let btnRemove = $tag.find('x');
+            btnRemove.on('click', function (e) {
+                let currentTag = $(e.target).parent();
+
+                ResetMaxTag();
+                ValidateTransferAccountInput(currentTag.text().trim());
+                EnableButtonAdd();
             });
         }
+        domElementsTransAcc.btnSaveTransferAccount.prop('disabled', true);
+    }
 
-        function ResetMaxTag() {
-            let currentTagsLength = domElementsTransAcc.spanTransferAccountUserName.find('tags tag').length;
-            if (currentTagsLength < domElementsTransAcc.maxTags)
-                domElementsTransAcc.spanTransferAccountUserNameMaxTag.text(domElements.maxTags - currentTagsLength + 1);
-        }
-
-        function EnableButtonAdd() {
-            let validTags = domElementsTransAcc.spanTransferAccountUserName.find('tags tag.valid');
-            let invalidDuplicatedTags = domElementsTransAcc.spanTransferAccountUserName.find('tags tag.invalid-duplicated');
-            let invalidUsernameTags = domElementsTransAcc.spanTransferAccountUserName.find('tags tag.invalid-username');
-            let notInvalid = invalidDuplicatedTags.length + invalidUsernameTags.length;
-            if (notInvalid <= 1 && validTags.length > 1)
-                domElementsTransAcc.btnSaveTransferAccount.prop('disabled', false);
-            else
-                domElementsTransAcc.btnSaveTransferAccount.prop('disabled', true);
-        }
-
-        function IsTextUnicode(text) {
-            var pattern = /^[\x20-\x7E]*$/;
-            return pattern.test(text);
-        }
-
-        function OnChangeTags(tagName, cssClass) {
-            let maxCountTags = parseInt(domElementsTransAcc.spanTransferAccountUserNameMaxTag.text());
-            let isTextUnicode = IsTextUnicode($(tagName.tag).text());
-
-            if (!isTextUnicode) {
-                domElementsTransAcc.inputTransferAccountTagUsername.tagify().data('tagify').removeTags(tagName.tag);
-            }
-            else if (maxCountTags > 0) {
-                let $tag = $(tagName.tag);
-                let textReplaced = $tag.text();
-                textReplaced = textReplaced.replace(new RegExp("'", 'g'), "").replace(new RegExp("\"", 'g'), "");
-                if (textReplaced.length > 50)
-                    textReplaced = textReplaced.substr(0, 50);
-                $tag.val(textReplaced);
-                $tag.attr('data-user-name', textReplaced);
-                $tag.prop('title', textReplaced);
-                $tag.find('span.tagify__tag-text').text(textReplaced);
-                $tag.addClass(cssClass);
-
-                let btnRemove = $tag.find('x');
-                btnRemove.on('click', function (e) {
-                    let currentTag = $(e.target).parent();
-
-                    ResetMaxTag();
-                    ValidateTransferAccountInput(currentTag.text().trim());
-                    EnableButtonAdd();
-                });
-
-                domElementsTransAcc.spanTransferAccountUserNameMaxTag.text(maxCountTags - 1);
-            } else {
-                let $tag = $(tagName.tag);
-                let btnRemove = $tag.find('x');
-                btnRemove.on('click', function (e) {
-                    let currentTag = $(e.target).parent();
-
-                    ResetMaxTag();
-                    ValidateTransferAccountInput(currentTag.text().trim());
-                    EnableButtonAdd();
-                });
-            }
-            domElementsTransAcc.btnSaveTransferAccount.prop('disabled', true);
-        }
+    function InitInputTransferAccountTagUsername() {
+        domElementsTransAcc.spanTransferAccountUserNameMaxTag.text(domElementsTransAcc.maxTags);
+        domElementsTransAcc.spanTransferAccountChangeHidden.text("0");        
 
         domElementsTransAcc.inputTransferAccountTagUsername.tagify({
             pattern: null,
@@ -112,7 +113,7 @@
         })
             .off('invalid').on('invalid', function (_, tagName) {
                 OnChangeTags(tagName, 'invalid-duplicated');
-                domElementsTransAcc.spanTransferAccountChangeHidden.text("1");
+                domElements.spanTransferAccountChangeHidden.text("1");
             });
 
         domElementsTransAcc.inputTransferAccountTagUsername.off('keydown').on('keydown', function () {
@@ -121,7 +122,7 @@
             if (keyCode === 46) {
                 if (domElementsTransAcc.spanTransferAccountUserName.find('tags').hasClass('ctrlA')) {
                     domElementsTransAcc.inputTransferAccountTagUsername.tagify().data('tagify').removeAllTags();
-                    domElementsTransAcc.spanTransferAccountUserNameMaxTag.text(domElements.maxTags);
+                    domElementsTransAcc.spanTransferAccountUserNameMaxTag.text(domElementsTransAcc.maxTags);
                     domElementsTransAcc.spanTransferAccountUserName.find('tags').removeClass('ctrlA');
                 }
             }
@@ -132,21 +133,7 @@
                 }
             }
         });
-
-        $(document).on('mouseup', function (e) {
-            let isOutSiteInput = !domElementsTransAcc.spanTransferAccountUserName.is(e.target) && domElements.spanTransferAccountUserName.has(e.target).length === 0;
-            let isTagsFocus = domElementsTransAcc.spanTransferAccountUserName.find('tags.tagify--focus').length > 0;
-            let isChange = domElementsTransAcc.spanTransferAccountChangeHidden.text();
-            if (isOutSiteInput && isTagsFocus || isChange === "1") {              
-                domElementsTransAcc.spanTransferAccountUserName.addClass("loading-value");
-                setTimeout(() => {
-                    ValidateTransferAccountInput("");
-                    domElementsTransAcc.spanTransferAccountUserName.removeClass("loading-value");
-                    domElementsTransAcc.spanTransferAccountChangeHidden.text("0");
-                }, 500);
-            }
-        });
-
+      
         domElementsTransAcc.inputTransferAccountTagUsername.tagify().data('tagify').removeAllTags();
         domElementsTransAcc.spanTransferAccountUserName.find('tags').attr('tabindex', "1");
         domElementsTransAcc.btnSaveTransferAccount.prop('disabled', true);
@@ -221,20 +208,126 @@
     }   
 
     function SaveTransferAccount() {
-        console.log("AssociatedGroupTransferAccount SaveTransferAccount");
+        let fromGroupName = "fromGroupName";
+        let toGroupName = "toGroupName";
+        let params = {};
+        params.UserNames = GetTransferAccountInputUserName();
+        params.FromGroupID = domElementsTransAcc.spanTransferAccountGroupIDHidden.val();
+        params.ToGroupID = 2;
+
+        common.showConfirmation("<div class='popup-content'><div class='popup-title'>Are you sure you want to TRANSFER the account(s) from '" + fromGroupName + "' to '" + toGroupName +"'?</div></div>",
+            function () {
+                $.ajax(common.modifyRelativeUrl('AssociatedGroupMonitor/SaveTransferAccount'), {
+                    type: 'POST',
+                    data: params,
+                    beforeSend: function () {
+                        domElementsTransAcc.tblAssociatedGroup.find('tbody').addClass('loading');
+                    },
+                    success: function (response) {
+                        if (response.errorCode != -1) {
+                            common.showSuccess("New account(s) added into group " + params.GroupName + " successfully.");
+                            domElementsTransAcc.divTransferAccount.dialog('close');
+
+                            GetAssociatedGroup();
+                        }
+                        else {
+                            common.showError("An unexpected Error occurred. Please try again.");
+                        }
+                    },
+                    complete: function () {
+                        domElementsTransAcc.tblAssociatedGroup.find('tbody').removeClass('loading');
+                    },
+                    error: function (errMsg) {
+                        domElementsTransAcc.tblAssociatedGroup.find('tbody').removeClass('loading');
+                        common.showError("An unexpected Error occurred. Please try again.");
+                        console.log(errMsg);
+                    }
+                });
+
+            }
+        )
     }
 
-    function Initial() {        
+    function GetGroupTransferAccount(groupID) {
+        $.ajax(common.modifyRelativeUrl('AssociatedGroupMonitor/GetGroupTransferAccount'), {
+            type: 'POST',
+            data: {
+                groupID: groupID
+            },
+            success: function (response) {
+                if (response != undefined) {
+                    domElementsTransAcc.cbbTransferAccountNewGroup.find('option').remove().end();
+
+                    response.map(function (x) {                       
+                        domElementsTransAcc.cbbTransferAccountNewGroup.append(`<option value=${x.GroupID}>${x.GroupName}</option>`);
+                    })
+                }
+            },
+            error: function (errMsg) {
+                console.log(errMsg);
+            }
+        });
+    }
+
+    function RefreshTitleIsHtml() {
+        $.widget("ui.dialog", $.extend({}, $.ui.dialog.prototype, {
+            _title: function (title) {
+                let $title = this.options.title || '&nbsp;'
+                if (("titleIsHtml" in this.options) && this.options.titleIsHtml == true)
+                    title.html($title);
+                else title.text($title);
+            }
+        }));
+    }
+
+    function InitTransferAccount(groupID, groupName) {
+        domElementsTransAcc.spanTransferAccountGroupIDHidden.val(groupID);
+        domElementsTransAcc.spanTransferAccountUserNameMaxTag.text(domElementsTransAcc.maxTags);
+        domElementsTransAcc.spanTransferAccountChangeHidden.text("0");
+        domElementsTransAcc.inputTransferAccountTagUsername.tagify().data('tagify').removeAllTags();
+        domElementsTransAcc.spanTransferAccountUserName.find('tags').attr('tabindex', "1");
+        domElementsTransAcc.btnSaveTransferAccount.prop('disabled', true);
+
+        RefreshTitleIsHtml();
+
+        GetGroupTransferAccount(groupID);
+
+        domElementsTransAcc.divTransferAccount.dialog({
+            modal: true,
+            width: '700px',
+            title: '<div>TRANSFER ACCOUNTS - <label style="color:#FF0000">' + groupName + '</label></div>',
+            titleIsHtml: true,
+            resizable: true,
+            draggable: true,
+            close: function () {
+                $(this).dialog('close');
+            }
+        });
+    }
+
+    this.Mouseup = function (e) {
+            let isOutSiteInput = !domElementsTransAcc.spanTransferAccountUserName.is(e.target) && domElementsTransAcc.spanTransferAccountUserName.has(e.target).length === 0;
+            let isTagsFocus = domElementsTransAcc.spanTransferAccountUserName.find('tags.tagify--focus').length > 0;
+            let isChange = domElementsTransAcc.spanTransferAccountChangeHidden.text();
+            if (isOutSiteInput && isTagsFocus || isChange === "1") {              
+                domElementsTransAcc.spanTransferAccountUserName.addClass("loading-value");
+                setTimeout(() => {
+                    ValidateTransferAccountInput("");
+                    domElementsTransAcc.spanTransferAccountUserName.removeClass("loading-value");
+                    domElementsTransAcc.spanTransferAccountChangeHidden.text("0");
+                }, 500);
+            }
+    }
+
+    this.Initial = function (groupID, groupName) {
+        InitTransferAccount(groupID, groupName);
+
         domElementsTransAcc.btnCancelTransferAccount.on('click', () => domElementsTransAcc.divTransferAccount.dialog('close'));
 
-        domElementsTransAcc.btnSaveTransferAccount.on('click', () => SaveTransferAccount());
-
-        InitInputTransferAccountTagUsername();
+        domElementsTransAcc.btnSaveTransferAccount.on('click', () => SaveTransferAccount());      
     }
 
-    $(document).ready(function () {
-        Initial();
-    })
+    this.InitInputTransferAccountTagUsername = function() {
+        InitInputTransferAccountTagUsername();
+    }
 }
-
-$(AssociatedGroupTransferAccount);

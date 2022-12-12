@@ -34,18 +34,14 @@
         spanGroupIDSetPCHidden: $('#spanGroupIDSetPCHidden'),
         spanGroupNameSetPCHidden: $('#spanGroupNameSetPCHidden'),
         btnCancelSetPC: $('#btnCancelSetPC'),
-        btnSaveSetPC: $('#btnSaveSetPC'),
+        btnSaveSetPC: $('#btnSaveSetPC'),    
         divTransferAccount: $('#divTransferAccount'),
-        spanTransferAccountGroupIDHidden: $('#spanTransferAccountGroupIDHidden'),
-        spanTransferAccountUserNameMaxTag: $('#spanTransferAccountUserNameMaxTag'),
-        spanTransferAccountChangeHidden: $('#spanTransferAccountChangeHidden'),
-        inputTransferAccountTagUsername: $('#inputTransferAccountTagUsername'),
-        spanTransferAccountUserName: $('#spanTransferAccountUserName'),
-        btnSaveTransferAccount: $('#btnSaveTransferAccount'),
         maxTags: 1001
     };   
 
     let isHostPermission = domElements.hdIsHostPermission.attr('IsHostPermission') === "True";
+
+    let transferAccount = new transfer_account();
 
     function RenderGrid() {
         let url = common.modifyRelativeUrl('AssociatedGroupMonitor/GetAssociatedGroupMonitor');
@@ -170,10 +166,14 @@
                     }, createdCell: (cell, _, row) => {                      
                         if (isHostPermission) {
                             $('.icon-edit', cell).click(() => {
+                                $('td #sub-icon').addClass('none-pointer');
+
                                 UpdateAssociatedGroupMonitor(row.GroupID);
                             });
 
                             $('.icon-set-pc', cell).click(() => {
+                                $('td #sub-icon').addClass('none-pointer');
+
                                 GetProblemCategoryByGroupID(row.GroupID, row.GroupName); 
                             });
 
@@ -195,6 +195,8 @@
                             });
 
                             $('.icon-remove-account', cell).click(() => {
+                                $('td #sub-icon').addClass('none-pointer');
+
                                 TranserAccount(row);
                             });
                         }                        
@@ -292,7 +294,7 @@
         });
     }
 
-    function AddAccount(row) {        
+    function AddAccount(row) {         
         domElements.spanAddAssociatedAccountGroupIDHidden.val(row.GroupID);
         domElements.spanAddAssociatedAccountGroupNameHidden.val(row.GroupName);
         domElements.spanAddAssociatedAccountGroupABIHidden.val(row.ABI);
@@ -319,27 +321,8 @@
         });
     }
 
-    function TranserAccount(row) {
-        domElements.spanTransferAccountGroupIDHidden.val(row.GroupID);
-        domElements.spanTransferAccountUserNameMaxTag.text(domElements.maxTags);
-        domElements.spanTransferAccountChangeHidden.text("0");
-        domElements.inputTransferAccountTagUsername.tagify().data('tagify').removeAllTags();
-        domElements.spanTransferAccountUserName.find('tags').attr('tabindex', "1");
-        domElements.btnSaveTransferAccount.prop('disabled', true);
-
-        RefreshTitleIsHtml();        
-
-        domElements.divTransferAccount.dialog({
-            modal: true,
-            width: '700px',
-            title: '<div>TRANSFER ACCOUNTS - <label style="color:#FF0000">' + row.GroupName + '</label></div>',
-            titleIsHtml: true,
-            resizable: true,
-            draggable: true,
-            close: function () {
-                $(this).dialog('close');
-            }
-        });
+    function TranserAccount(row) {              
+        transferAccount.Initial(row.GroupID, row.GroupName);
     }
 
     function RefreshTitleIsHtml() {
@@ -351,7 +334,7 @@
                 else title.text($title);
             }
         }));
-    }
+    }   
 
     function ExportToExcelAssociatedAccount(groupID, groupName, associatedType) {
         let params = {};
@@ -986,18 +969,22 @@
         });
 
         $(document).on('mouseup', function (e) {
-            let isOutSiteInput = !domElements.spanAddAssociatedAccountUserName.is(e.target) && domElements.spanAddAssociatedAccountUserName.has(e.target).length === 0;
-            let isTagsFocus = domElements.spanAddAssociatedAccountUserName.find('tags.tagify--focus').length > 0;
-            let isChange = domElements.spanAddAssociatedAccountChangeHidden.text();
-            if (isOutSiteInput && isTagsFocus || isChange === "1") {
-                domElements.txtCommentAssociatedAccount.focus();
-                domElements.spanAddAssociatedAccountUserName.addClass("loading-value");
-                setTimeout(() => {
-                    ValidateAddAssociatedAccountInput("");
-                    domElements.spanAddAssociatedAccountUserName.removeClass("loading-value");
-                    domElements.spanAddAssociatedAccountChangeHidden.text("0");
-                }, 500);
-            }
+            if (domElements.divTransferAccount.hasClass("ui-dialog-content")) {
+                transferAccount.Mouseup(e);
+            } else {
+                let isOutSiteInput = !domElements.spanAddAssociatedAccountUserName.is(e.target) && domElements.spanAddAssociatedAccountUserName.has(e.target).length === 0;
+                let isTagsFocus = domElements.spanAddAssociatedAccountUserName.find('tags.tagify--focus').length > 0;
+                let isChange = domElements.spanAddAssociatedAccountChangeHidden.text();
+                if (isOutSiteInput && isTagsFocus || isChange === "1") {
+                    domElements.txtCommentAssociatedAccount.focus();
+                    domElements.spanAddAssociatedAccountUserName.addClass("loading-value");
+                    setTimeout(() => {
+                        ValidateAddAssociatedAccountInput("");
+                        domElements.spanAddAssociatedAccountUserName.removeClass("loading-value");
+                        domElements.spanAddAssociatedAccountChangeHidden.text("0");
+                    }, 500);
+                }
+            }            
         });
 
         domElements.inputTagUsername.tagify().data('tagify').removeAllTags();
@@ -1249,6 +1236,8 @@
         domElements.cbbProblemCategorySetPC.on('change', () => { ChangeProblemCategorySetPC() });
 
         InitInputTagUsername();
+
+        transferAccount.InitInputTransferAccountTagUsername();
     }
 
     $(document).ready(function () {
