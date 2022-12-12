@@ -275,39 +275,12 @@
                 var addResult = _associatedGroupService.AddAssociatedAccount(model);
                 
                 if (addResult.ErrorCode == 0)
-                {
-                    var custPas = addResult.CustInfos.Where(x => x.IsSyncPA).Select(x => new InsertProblemAccountModel {
-                        CustID = x.CustID,
-                        CTSCustID = x.CTSCustID,
-                        RoleID = x.RoleID,
-                        SubscriberID = x.SubscriberID,
-                        IsLicensee = x.IsLicensee,
-                        CategoryID = x.CategoryID,
-                        CategoryGroup = x.CategoryGroup,                      
-                        IsDirectPA = true,
-                        IsFromCTS = true,
-                        CreatedBy = CurrentSession.UserId,
-                        Remark = Consts.MarkPA_AssociatedGroup + " - " + model.GroupName
-                    });
-
-                    if (custPas.Any())
-                    {                        
-                        _paClassificationService.InsertProblemAccountPackage(custPas, InsertPA_ByType.Category, "AssociatedGroupMonitorAddPA", FromFlow.CTSWEB, true);
-
-                        var custGroupABIPA = custPas.Select(x => x.CustID).Distinct();
-                        _associatedGroupService.UpdateABIToMainDB(string.Join(",", custGroupABIPA), model.ABI);
-                    }
-
-                    var custGroupABI = addResult.CustInfos.Where(x => !x.IsSyncPA).Select(x => x.CustID).Distinct();
-                    if (custGroupABI.Any())
+                {              
+                    var custGroupABIOri = addResult.CustInfos.Select(x => x.CustID).Distinct();
+                    if (custGroupABIOri.Any())
                     {
-                        _associatedGroupService.UpdateABIToMainDB(string.Join(",", custGroupABI), model.ABI);
-                    }
-
-                    var custUpdateOri = addResult.CustInfos.Select(x => x.CustID).Distinct();
-                    if (custUpdateOri.Any())
-                    {
-                        _associatedGroupService.UpdateOriToMainDB(string.Join(",", custUpdateOri), model.Ori);
+                        _associatedGroupService.UpdateABIToMainDB(string.Join(",", custGroupABIOri), model.ABI);
+                        _associatedGroupService.UpdateOriToMainDB(string.Join(",", custGroupABIOri), model.Ori);
                     }
                 }
 
@@ -393,10 +366,20 @@
                 model.CTSCustIDs = resultValidate.CTSCustIDs;
                 model.ModifiedBy = CurrentSession.UserId;
 
-                var addResult = _associatedGroupService.SaveTransferAccount(model);
+                var transferResult = _associatedGroupService.SaveTransferAccount(model);
 
-                result.ErrorCode = addResult.ErrorCode;
-                result.ErrorMessage = addResult.ErrorMsg;
+                if (transferResult.ErrorCode == 0)
+                {
+                    //var custGroupABIOri = transferResult.CustInfos.Select(x => x.CustID).Distinct();
+                    //if (custGroupABIOri.Any())
+                    //{
+                    //    _associatedGroupService.UpdateABIToMainDB(string.Join(",", custGroupABIOri), model.ABI);
+                    //    _associatedGroupService.UpdateOriToMainDB(string.Join(",", custGroupABIOri), model.Ori);
+                    //}
+                }
+
+                result.ErrorCode = transferResult.ErrorCode;
+                result.ErrorMessage = transferResult.ErrorMsg;
                 result.ResultValidated = resultValidate;
             }
 

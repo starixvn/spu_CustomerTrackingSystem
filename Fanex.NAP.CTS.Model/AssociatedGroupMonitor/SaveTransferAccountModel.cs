@@ -11,5 +11,9 @@
         public long ToGroupID { get; set; }
 
         public int ModifiedBy { get; set; }
+
+        public int ABI { get; set; }
+
+        public int Ori { get; set; }
     }
 }
