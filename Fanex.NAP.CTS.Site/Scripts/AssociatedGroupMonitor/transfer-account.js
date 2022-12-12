@@ -5,6 +5,7 @@
         spanTransferAccountUserName: $('#spanTransferAccountUserName'),
         cbbTransferAccountNewGroup: $('#cbbTransferAccountNewGroup'),
         spanTransferAccountGroupIDHidden: $('#spanTransferAccountGroupIDHidden'),
+        spanTransferAccountGroupNameHidden: $('#spanTransferAccountGroupNameHidden'),
         spanTransferAccountUserNameMaxTag: $('#spanTransferAccountUserNameMaxTag'),
         spanTransferAccountChangeHidden: $('#spanTransferAccountChangeHidden'),
         inputTransferAccountTagUsername: $('#inputTransferAccountTagUsername'),        
@@ -200,20 +201,18 @@
             }
         });
 
-        if (data.AccountInvalidList.length === 0) {
-            domElementsTransAcc.btnSaveTransferAccount.prop('disabled', false);
-        }
-        else
-            domElementsTransAcc.btnSaveTransferAccount.prop('disabled', true);
+        if (data.AccountInvalidList.length === 0) domElementsTransAcc.btnSaveTransferAccount.prop('disabled', false);
+        else domElementsTransAcc.btnSaveTransferAccount.prop('disabled', true);
     }   
 
     function SaveTransferAccount() {
-        let fromGroupName = "fromGroupName";
-        let toGroupName = "toGroupName";
         let params = {};
         params.UserNames = GetTransferAccountInputUserName();
         params.FromGroupID = domElementsTransAcc.spanTransferAccountGroupIDHidden.val();
-        params.ToGroupID = 2;
+        params.ToGroupID = domElementsTransAcc.cbbTransferAccountNewGroup.val();
+
+        let fromGroupName = domElementsTransAcc.spanTransferAccountGroupNameHidden.val();
+        let toGroupName = domElementsTransAcc.cbbTransferAccountNewGroup.find('option:selected').text();
 
         common.showConfirmation("<div class='popup-content'><div class='popup-title'>Are you sure you want to TRANSFER the account(s) from '" + fromGroupName + "' to '" + toGroupName +"'?</div></div>",
             function () {
@@ -225,10 +224,8 @@
                     },
                     success: function (response) {
                         if (response.errorCode != -1) {
-                            common.showSuccess("New account(s) added into group " + params.GroupName + " successfully.");
+                            common.showSuccess('The account(s) transferred successfully.');
                             domElementsTransAcc.divTransferAccount.dialog('close');
-
-                            GetAssociatedGroup();
                         }
                         else {
                             common.showError("An unexpected Error occurred. Please try again.");
@@ -282,6 +279,7 @@
 
     function InitTransferAccount(groupID, groupName) {
         domElementsTransAcc.spanTransferAccountGroupIDHidden.val(groupID);
+        domElementsTransAcc.spanTransferAccountGroupNameHidden.val(groupName);
         domElementsTransAcc.spanTransferAccountUserNameMaxTag.text(domElementsTransAcc.maxTags);
         domElementsTransAcc.spanTransferAccountChangeHidden.text("0");
         domElementsTransAcc.inputTransferAccountTagUsername.tagify().data('tagify').removeAllTags();

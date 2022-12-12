@@ -972,24 +972,28 @@
             if (domElements.divTransferAccount.hasClass("ui-dialog-content")) {
                 transferAccount.Mouseup(e);
             } else {
-                let isOutSiteInput = !domElements.spanAddAssociatedAccountUserName.is(e.target) && domElements.spanAddAssociatedAccountUserName.has(e.target).length === 0;
-                let isTagsFocus = domElements.spanAddAssociatedAccountUserName.find('tags.tagify--focus').length > 0;
-                let isChange = domElements.spanAddAssociatedAccountChangeHidden.text();
-                if (isOutSiteInput && isTagsFocus || isChange === "1") {
-                    domElements.txtCommentAssociatedAccount.focus();
-                    domElements.spanAddAssociatedAccountUserName.addClass("loading-value");
-                    setTimeout(() => {
-                        ValidateAddAssociatedAccountInput("");
-                        domElements.spanAddAssociatedAccountUserName.removeClass("loading-value");
-                        domElements.spanAddAssociatedAccountChangeHidden.text("0");
-                    }, 500);
-                }
-            }            
+                Mouseup(e);
+            }
         });
 
         domElements.inputTagUsername.tagify().data('tagify').removeAllTags();
         domElements.spanAddAssociatedAccountUserName.find('tags').attr('tabindex', "1");
         domElements.btnSaveAssociatedAccount.prop('disabled', true);
+    }
+
+    function Mouseup(e) {
+        let isOutSiteInput = !domElements.spanAddAssociatedAccountUserName.is(e.target) && domElements.spanAddAssociatedAccountUserName.has(e.target).length === 0;
+        let isTagsFocus = domElements.spanAddAssociatedAccountUserName.find('tags.tagify--focus').length > 0;
+        let isChange = domElements.spanAddAssociatedAccountChangeHidden.text();
+        if (isOutSiteInput && isTagsFocus || isChange === "1") {
+            domElements.txtCommentAssociatedAccount.focus();
+            domElements.spanAddAssociatedAccountUserName.addClass("loading-value");
+            setTimeout(() => {
+                ValidateAddAssociatedAccountInput("");
+                domElements.spanAddAssociatedAccountUserName.removeClass("loading-value");
+                domElements.spanAddAssociatedAccountChangeHidden.text("0");
+            }, 500);
+        }
     }
 
     function ValidateAddAssociatedAccountInput(textTagRemove) {
