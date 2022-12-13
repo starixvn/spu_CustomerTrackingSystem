@@ -61,7 +61,7 @@
                          .Select(x => new SiteGroupViewModel
                          {
                              SubscriberGroupName = x.SubscriberGroupName,
-                             SiteList = x.SiteList.Select(y => new SiteViewModel
+                             SiteList = x.SiteList.OrderBy(y=>y.SiteID).Select(y => new SiteViewModel
                              {
                                  SiteID = y.SiteID,
                                  SiteName = y.SiteName,
@@ -168,13 +168,13 @@
 
                 if (sites != null && sites.Any())
                 {
-                    var siteGroups = sites.OrderBy(x=>x.IsLicensee)
+                    var siteGroups = sites.OrderBy(x => x.IsLicensee)
                              .GroupBy(g => g.IsLicensee)
                              .Select(x => new { SubscriberGroupName = x.Key ? "Licensees" : "Credit", SiteList = x.ToList() })
                              .Select(x => new SiteGroupViewModel
                              {
                                  SubscriberGroupName = x.SubscriberGroupName,
-                                 SiteList = x.SiteList.Select(y => new SiteViewModel
+                                 SiteList = x.SiteList.OrderBy(y => y.SiteID).Select(y => new SiteViewModel
                                  {
                                      SiteID = y.SiteID,
                                      SiteName = y.SiteName,

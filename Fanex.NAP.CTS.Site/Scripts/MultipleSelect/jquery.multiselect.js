@@ -505,9 +505,12 @@
 
                 if (elem.tagName.toUpperCase() === 'OPTGROUP') {
                     var options = [];
+                    var isChildSelected = false;
 
                     $(elem).children().each(function () {
                         options.push(self._makeOption(this));
+                                               
+                        if (this.selected) isChildSelected = true;
                     });
 
                     // Build the list section for this optgroup, complete w/ option inputs...
@@ -525,10 +528,9 @@
                     var $optGroupInput = $(document.createElement('input'))
                         .addClass('optgroup-input');
 
-                    if (self.options.optGroupChecked)
-                        $optGroupInput = $optGroupInput.attr({ 'type': 'checkbox', 'name': 'multiselect_group', 'aria-checked': 'true', 'checked': 'checked' });
-                    else
-                        $optGroupInput = $optGroupInput.attr({ 'type': 'checkbox', 'name': 'multiselect_group' });
+                    if (isChildSelected)
+                        $optGroupInput = $optGroupInput.attr({ 'type': 'checkbox', 'name': 'multiselect_group', 'aria-checked': 'true', 'checked': 'checked' });                   
+                    else $optGroupInput = $optGroupInput.attr({ 'type': 'checkbox', 'name': 'multiselect_group' });                        
 
                     var $optGroupSpan = $(document.createElement('span'))
                         .html(elem.getAttribute('label'));
@@ -963,13 +965,13 @@
                     var isOptGroupChecked = $input.parents().eq(3).find('a').find("input.optgroup-input").is(':checked');
                     var optGroup = $input.parents().eq(3).find('a').find("input.optgroup-input");
 
-                    if ((typeof optGroup.val() !== 'undefined') && self.options.optGroupChecked) {
+                    if ((typeof optGroup.val() !== 'undefined')) {                                             
                         var isOptGroupShouldChecked = self._checkOptGroup(optGroup);
 
                         if (isOptGroupChecked != isOptGroupShouldChecked) {
                             optGroup.prop('checked', isOptGroupShouldChecked);
                             optGroup.prop('aria-selected', isOptGroupShouldChecked);
-                        }
+                        }                                            
                     }
 
                     // bail if this input is disabled or the event is cancelled
@@ -1622,7 +1624,7 @@
             if (typeof groupID === 'undefined') {  // groupID could be 0
                 this._toggleChecked(true);
 
-                if (this.options.optGroupChecked)
+                if (this.options.optGroupChecked || this.options.enableClickableOptGroups)
                     this.toggleOptGroup(true);
             }
             else {
@@ -1642,7 +1644,7 @@
             if (typeof groupID === 'undefined') {  // groupID could be 0
                 this._toggleChecked(false);
 
-                if (this.options.optGroupChecked)
+                if (this.options.optGroupChecked || this.options.enableClickableOptGroups)
                     this.toggleOptGroup(false);
             }
             else {

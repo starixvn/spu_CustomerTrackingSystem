@@ -297,7 +297,7 @@
                         domElementsTransAcc.tblAssociatedGroup.find('tbody').addClass('loading');
                     },
                     success: function (response) {
-                        if (response.errorCode != -1) {
+                        if (response.ErrorCode != -1) {
                             common.showSuccess('The account(s) transferred successfully.');
                             domElementsTransAcc.divTransferAccount.dialog('close');
 
@@ -305,6 +305,7 @@
                         }
                         else {
                             common.showError("An unexpected Error occurred. Please try again.");
+                            console.log(response.ErrorMessage);
                         }
                     },
                     complete: function () {

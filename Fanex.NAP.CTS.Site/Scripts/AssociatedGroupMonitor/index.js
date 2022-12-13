@@ -1174,7 +1174,7 @@
             enableClickableOptGroups: true,
             includeSelectAllOption: true,
             groupsCollapsable: true,
-            optGroupChecked: true
+            optGroupChecked: false
         }).multiselectfilter({
             width: 190,
             placeholder: '',
