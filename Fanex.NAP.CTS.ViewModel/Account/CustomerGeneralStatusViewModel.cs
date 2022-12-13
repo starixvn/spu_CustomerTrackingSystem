@@ -79,8 +79,8 @@
                 this.DangerousBasketball = (custDangerousModel.Danger4 == 0) ? "-" : custDangerousModel.Danger4.ToString();
                 this.DangerousESports = (custDangerousModel.Danger5 == 0) ? "-" : custDangerousModel.Danger5.ToString();
                 this.DangerousOtherSports = (custDangerousModel.Danger3 == 0) ? "-" : custDangerousModel.Danger3.ToString();
-                this.DangerousSabaSc = (custDangerousModel.Danger6 == 0) ? "-" : custDangerousModel.Danger6.ToString();
-                this.DangerousSabaBkb = (custDangerousModel.Danger7 == 0) ? "-" : custDangerousModel.Danger7.ToString();
+                this.DangerousSabaSc = (custDangerousModel.DangerSabaSc == 0) ? "-" : custDangerousModel.DangerSabaSc.ToString();
+                this.DangerousSabaBkb = (custDangerousModel.DangerSabaBkb == 0) ? "-" : custDangerousModel.DangerSabaBkb.ToString();
             }
 
             return this;
