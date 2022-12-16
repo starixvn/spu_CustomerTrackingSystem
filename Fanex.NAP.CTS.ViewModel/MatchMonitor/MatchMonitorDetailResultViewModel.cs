@@ -98,7 +98,9 @@
         {
             get
             {
-                if (BetTypeID == (int)MatchMonitorBetType.OU)
+                if (BetTypeID == (int)MatchMonitorBetType.OU 
+                    || BetTypeID == (int)MatchMonitorBetType.FirsttOU 
+                    || BetTypeID == (int)MatchMonitorBetType.QuarterXOU)
                 {
                     return HDP1;
                 } 

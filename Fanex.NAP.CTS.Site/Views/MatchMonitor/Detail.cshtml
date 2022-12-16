@@ -42,7 +42,7 @@
                                 {
                                     foreach (var item in ViewBag.MatchScore)
                                     {
-                                        <option value="@item.TotalScore" selected>@item.LiveHomeScore - @item.LiveAwayScore </option>
+                                        <option value="@item.ScoreDiff" selected>@item.LiveHomeScore - @item.LiveAwayScore </option>
                                     }
                                 }
                             </select>
