@@ -6,7 +6,7 @@
     {
         public Int64 CTSCustID { get; set; }
 
-        public Int64 CustID { get; set; }
+        public Int64 CustID { get; set; }       
 
         public string UserName { get; set; }
 
@@ -19,5 +19,7 @@
         public string Currency { get; set; }
 
         public string SubscriberType { get; set; }
+
+        public int CustomerClass { get; set; }
     }
 }

@@ -41,10 +41,14 @@
 
             var userId = CurrentSession.UserId;
 
+            var mmStatic = _matchMonitorService.GetMMStaticList();
+          
             return View(new MatchMonitorViewModel
             {
                 IsHostPermission = isHostPermission,
-                CustId = userId
+                CustId = userId,               
+                Reasons = mmStatic.Reasons,
+                Sports = mmStatic.Sports               
             });
         }
 
@@ -135,6 +139,7 @@
         public ActionResult GetMatchMonitorDetail(MatchMonitorDetailFilterViewModel para)
         {
             var matchDetailResult = Enumerable.Empty<MatchMonitorDetailResultViewModel>();
+            var custIDList = string.Empty;
 
             try
             {
@@ -161,6 +166,7 @@
                                 var custIdsOfEachMatch =  matchDetailInfo.MatchDetails.Select(c => c.ListCustID).Distinct();
                                 var custIdsOfTotalMatch = string.Join(",",custIdsOfEachMatch).Split(',').Distinct();
                                 custInfo = _matchMonitorService.GetCustInfoByCustID(string.Join(",", custIdsOfTotalMatch));
+                               
                             }),
                             Task.Run(() =>
                             {
@@ -173,11 +179,13 @@
 
                         Task.WhenAll(tasks.ToArray()).Wait();
 
-                        var mergeInfo = MergeMatchMonitorDetail(mappingTransInfo, custInfo, ticketDetail);
+                        var mergeInfo = MergeMatchMonitorDetail(mappingTransInfo, custInfo, ticketDetail);                        
 
                         matchDetailResult = GetRobotStatus(mergeInfo, para.BetTypeID);
 
-                        matchDetailResult = FilterSite(matchDetailResult, para.Sites);
+                        matchDetailResult = FilterSite(matchDetailResult, para.Sites);                    
+
+                        custIDList = string.Join(",", matchDetailResult.Select(x => x.CustID).Distinct());
                     }
                 }
             }
@@ -186,7 +194,29 @@
                 LogService.Error("Get Match Monitor Error", e);
             }
 
-            return Json(matchDetailResult ?? new List<MatchMonitorDetailResultViewModel>(), JsonRequestBehavior.AllowGet);
+            return Json(new {
+                custIDList = custIDList,
+                data = matchDetailResult
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult GetAssociationIrrigation(string custIDList, string categoryIDList)
+        {
+            var result = Enumerable.Empty<AssociationIrrigationViewModel>();
+
+            var data = _matchMonitorService.GetAssociationIrrigation(custIDList, categoryIDList);
+
+            if (data != null && data.Any())
+            {
+                result = data.Select(x => new AssociationIrrigationViewModel
+                {
+                    CustID = x.CustID,
+                    TotalAssociation = x.Total
+                });
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -216,8 +246,38 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
-        #region Private Methods
+        [HttpPost]
+        public ActionResult GetMMFilterBetTypeBySportID(string sportIDs)
+        {
+            var result = Enumerable.Empty<MatchMonitorBetTypeViewModel>();
+            var sportIds = sportIDs.Split(',').Select(x => Convert.ToInt32(x));
 
+            if (sportIds.Any())
+            {
+                var data = _matchMonitorService.GetMMStaticList();
+
+                if (data.BetTypes != null && data.BetTypes.Any())
+                {
+                    result = data.BetTypes.Join(sportIds,
+                      x1 => x1.SportID,
+                      x2 => x2,
+                      (x1, x2) => new MatchMonitorBetTypeViewModel
+                      {
+                          BetTypeID = x1.BetTypeID,
+                          BetTypeName = x1.BetTypeName,
+                          BetID = x1.BetID,
+                          SportID = x1.SportID,                         
+                          IsSelected = true
+                      }).GroupBy(g => new { g.BetTypeID, g.BetID })
+                      .Select(g => g.First());                   
+                }
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        #region Private Methods
+       
         private bool IsValidDateRange(DateTime? fromDate, DateTime? toDate)
         {
             if (toDate != null && fromDate != null)
@@ -247,6 +307,7 @@
                                                                 CustID = c.cust.CustID,
                                                                 SubscriberType = c.cust.SubscriberType,
                                                                 Username = c.cust.UserName,
+                                                                CustomerClass = c.cust.CustomerClass,
                                                                 PICVerified = GetVerifiedTrans(mappingTransInfo, c.ticket),
                                                                 Danger1 = c.ticket.Danger1,
                                                                 Danger2 = c.ticket.Danger2,
@@ -268,7 +329,8 @@
                                                                 Group = GetGroup(mappingTransInfo, c.ticket),
                                                                 TransId = c.ticket.TransId,
                                                                 RobotType = null,
-                                                                IsRobot = false
+                                                                IsRobot = false,
+                                                                AssociationIrrigation = -1
                                                             })?.OrderByDescending(c => c.TransTime)?.ThenBy(c => c.Group)?.Distinct()?.ToList();
 
             return matchDetailResult;
@@ -393,9 +455,10 @@
                                     (group, temp) => new MatchMonitorDetailResultViewModel
                                     {
                                         CTSCustID = group.m.CTSCustID,
-                                        CustID = group.m.CustID,
+                                        CustID = group.m.CustID,                                        
                                         SubscriberType = group.m.SubscriberType,
                                         Username = group.m.Username,
+                                        CustomerClass = group.m.CustomerClass,
                                         PICVerified = group.m.PICVerified,
                                         Danger1 = group.m.Danger1,
                                         Danger2 = group.m.Danger2,

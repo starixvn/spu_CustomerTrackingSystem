@@ -23,5 +23,9 @@
         IEnumerable<TicketDetailModel> GetTicketDetail(DateTime eventDate, string transIds);
 
         IEnumerable<RobotStatusModel> GetRobotStatus(string transJson);
+
+        IEnumerable<AssociationIrrigationModel> GetAssociationIrrigation(string custIDList, string categoryIDList);
+
+        MatchMonitorStaticListModel GetMMStaticList();
     }
 }

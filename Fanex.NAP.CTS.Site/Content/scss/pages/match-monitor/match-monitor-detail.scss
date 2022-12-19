@@ -2,6 +2,15 @@
 @import "../../abstracts/mixins";
 @import "../../components/popup";
 
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
 
 .detailpage {
     .content {
@@ -239,6 +248,25 @@
 
                             tr:last-child td {
                                 border-bottom: 1px solid #C4C4C4 !important;
+                            }
+
+                            .icon-loading {
+                                position: relative;
+
+                                &:after {
+                                    content: '';
+                                    position: absolute;
+                                    left: 0;
+                                    top: 0;
+                                    border-radius: 50%;
+                                    width: 2.4rem;
+                                    height: 2.4rem;
+                                    border: 0.25rem solid rgba(57, 110, 248, 0.2);
+                                    border-top-color: rgba(57, 110, 248, 1);
+                                    -webkit-animation: spin 1s infinite linear;
+                                    animation: spin 1s infinite linear;
+                                }
+                            
                             }
                         }
                     }

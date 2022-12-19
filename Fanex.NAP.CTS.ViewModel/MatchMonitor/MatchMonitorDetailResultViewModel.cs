@@ -13,6 +13,8 @@
 
         public string Username { get; set; }
 
+        public int CustomerClass { get; set; }
+
         public int Danger1 { get; set; }
 
         public int Danger2 { get; set; }
@@ -24,6 +26,8 @@
         public int Danger5 { get; set; }
 
         public decimal Odds { get; set; }
+
+        public int AssociationIrrigation { get; set; }
 
         public Int64 BetID { get; set; }
 
@@ -146,6 +150,17 @@
                 }
 
                 return (danger == string.Empty) ? "-" : danger;
+            }
+        }
+
+        public string CustomerClassToString 
+        { 
+            get 
+            {
+                if (this.CustomerClass != 0 && this.CustomerClass != -1)
+                    return this.CustomerClass.ToString();
+                else
+                    return "-";
             }
         }
     }

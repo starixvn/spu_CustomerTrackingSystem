@@ -184,78 +184,103 @@
         }
     }
 
-    function LoadBetTypes() {
-        domElements.cbbBetType.find('option').remove();
+    //function LoadBetTypes() {
+    //    domElements.cbbBetType.find('option').remove();
 
-        let sportTypes = domElements.cbbSport.val();
-        let existedBetType = [];
+    //    let sportTypes = domElements.cbbSport.val();
+    //    let existedBetType = [];
 
-        if (sportTypes != null) {
-            sportTypes.forEach(c => {
-                if (c == 1) {
-                    var options1 = [{ text: 'HDP', value: RenderBetTypeHTML(1, 0) },
-                    { text: 'O/U', value: RenderBetTypeHTML(3, 0) },
-                    { text: '1st HDP', value: RenderBetTypeHTML(7, 0) },
-                    { text: '1st O/U', value: RenderBetTypeHTML(8, 0) }
-                    ];
+    //    if (sportTypes != null) {
+    //        sportTypes.forEach(c => {
+    //            if (c == 1) {
+    //                var options1 = [{ text: 'HDP', value: RenderBetTypeHTML(1, 0) },
+    //                { text: 'O/U', value: RenderBetTypeHTML(3, 0) },
+    //                { text: '1st HDP', value: RenderBetTypeHTML(7, 0) },
+    //                { text: '1st O/U', value: RenderBetTypeHTML(8, 0) }
+    //                ];
 
-                    options1.forEach(i => {
-                        if (!existedBetType.includes(i.value)) {
-                            domElements.cbbBetType.append(`<option value="${i.value}">${i.text}</option>`);
-                            existedBetType.push(i.value);
-                        }
-                    })
+    //                options1.forEach(i => {
+    //                    if (!existedBetType.includes(i.value)) {
+    //                        domElements.cbbBetType.append(`<option value="${i.value}">${i.text}</option>`);
+    //                        existedBetType.push(i.value);
+    //                    }
+    //                })
+    //            }
+    //            else if (c == 2) {
+    //                var options2 = [{ text: 'HDP', value: RenderBetTypeHTML(1, 0) },
+    //                { text: 'O/U', value: RenderBetTypeHTML(3, 0) },
+    //                { text: '1st HDP', value: RenderBetTypeHTML(7, 0) },
+    //                { text: '1st O/U', value: RenderBetTypeHTML(8, 0) },
+    //                { text: 'Moneyline', value: RenderBetTypeHTML(20, 0) },
+    //                { text: 'Quarter 1 HDP', value: RenderBetTypeHTML(609, 801) },
+    //                { text: 'Quarter 2 HDP', value: RenderBetTypeHTML(609, 802) },
+    //                { text: 'Quarter 3 HDP', value: RenderBetTypeHTML(609, 803) },
+    //                { text: 'Quarter 4 HDP', value: RenderBetTypeHTML(609, 804) },
+    //                { text: 'Quarter 1 O/U', value: RenderBetTypeHTML(610, 801) },
+    //                { text: 'Quarter 2 O/U', value: RenderBetTypeHTML(610, 802) },
+    //                { text: 'Quarter 3 O/U', value: RenderBetTypeHTML(610, 803) },
+    //                { text: 'Quarter 4 O/U', value: RenderBetTypeHTML(610, 804) },
+    //                { text: 'Quarter 1 Moneyline', value: RenderBetTypeHTML(612, 801) },
+    //                { text: 'Quarter 2 Moneyline', value: RenderBetTypeHTML(612, 802) },
+    //                { text: 'Quarter 3 Moneyline', value: RenderBetTypeHTML(612, 803) },
+    //                { text: 'Quarter 4 Moneyline', value: RenderBetTypeHTML(612, 804) }
+    //                ];
+
+    //                options2.forEach(i => {
+    //                    if (!existedBetType.includes(i.value)) {
+    //                        domElements.cbbBetType.append(`<option value="${i.value}">${i.text}</option>`);
+    //                        existedBetType.push(i.value);
+    //                    }
+    //                })
+    //            }
+    //            else if (c == 43) {
+    //                var options3 = [{ text: 'HDP', value: RenderBetTypeHTML(1, 0) },
+    //                { text: 'O/U', value: RenderBetTypeHTML(3, 0) },
+    //                { text: 'Moneyline', value: RenderBetTypeHTML(20, 0) }
+    //                ];
+
+    //                options3.forEach(i => {
+    //                    if (!existedBetType.includes(i.value)) {
+    //                        domElements.cbbBetType.append(`<option value="${i.value}">${i.text}</option>`);
+    //                        existedBetType.push(i.value);
+    //                    }
+    //                })
+    //            }
+    //        })
+    //    }
+
+    //    domElements.cbbBetType.multiselect('refresh');
+    //}   
+
+    function RefreshBetTypeFilter() {  
+        domElements.cbbBetType.find('option').remove(); 
+        
+        let sportIDs = domElements.cbbSport.val().join()
+        if (sportIDs != '') {
+            $.ajax(common.modifyRelativeUrl('MatchMonitor/GetMMFilterBetTypeBySportID'), {
+                type: 'POST',
+                data: {
+                    sportIDs: domElements.cbbSport.val().join()
+                },
+                success: function (response) {
+                    if (response != undefined) {
+                        response.forEach(i => {
+                            let value = RenderBetTypeHTML(i.BetTypeID, i.BetID);
+                            domElements.cbbBetType.append(`<option value="${value}">${i.BetTypeName}</option>`);
+                        })
+                    }
+                },
+                complete: function () {
+                    domElements.cbbBetType.find('option').prop('selected', true);
+                    domElements.cbbBetType.multiselect("refresh");
+                },
+                error: function (errMsg) {
+                    console.log(errMsg);
                 }
-                else if (c == 2) {
-                    var options2 = [{ text: 'HDP', value: RenderBetTypeHTML(1, 0) },
-                    { text: 'O/U', value: RenderBetTypeHTML(3, 0) },
-                    { text: '1st HDP', value: RenderBetTypeHTML(7, 0) },
-                    { text: '1st O/U', value: RenderBetTypeHTML(8, 0) },
-                    { text: 'Moneyline', value: RenderBetTypeHTML(20, 0) },
-                    { text: 'Quarter 1 HDP', value: RenderBetTypeHTML(609, 801) },
-                    { text: 'Quarter 2 HDP', value: RenderBetTypeHTML(609, 802) },
-                    { text: 'Quarter 3 HDP', value: RenderBetTypeHTML(609, 803) },
-                    { text: 'Quarter 4 HDP', value: RenderBetTypeHTML(609, 804) },
-                    { text: 'Quarter 1 O/U', value: RenderBetTypeHTML(610, 801) },
-                    { text: 'Quarter 2 O/U', value: RenderBetTypeHTML(610, 802) },
-                    { text: 'Quarter 3 O/U', value: RenderBetTypeHTML(610, 803) },
-                    { text: 'Quarter 4 O/U', value: RenderBetTypeHTML(610, 804) },
-                    { text: 'Quarter 1 Moneyline', value: RenderBetTypeHTML(612, 801) },
-                    { text: 'Quarter 2 Moneyline', value: RenderBetTypeHTML(612, 802) },
-                    { text: 'Quarter 3 Moneyline', value: RenderBetTypeHTML(612, 803) },
-                    { text: 'Quarter 4 Moneyline', value: RenderBetTypeHTML(612, 804) }
-                    ];
-
-                    options2.forEach(i => {
-                        if (!existedBetType.includes(i.value)) {
-                            domElements.cbbBetType.append(`<option value="${i.value}">${i.text}</option>`);
-                            existedBetType.push(i.value);
-                        }
-                    })
-                }
-                else if (c == 43) {
-                    var options3 = [{ text: 'HDP', value: RenderBetTypeHTML(1, 0) },
-                    { text: 'O/U', value: RenderBetTypeHTML(3, 0) },
-                    { text: 'Moneyline', value: RenderBetTypeHTML(20, 0) }
-                    ];
-
-                    options3.forEach(i => {
-                        if (!existedBetType.includes(i.value)) {
-                            domElements.cbbBetType.append(`<option value="${i.value}">${i.text}</option>`);
-                            existedBetType.push(i.value);
-                        }
-                    })
-                }
-            })
-        }
-
-        domElements.cbbBetType.multiselect('refresh');
-    }
-
-    function InitBetTypeFilter() {
-        LoadBetTypes();
-        domElements.cbbBetType.find('option').prop('selected', true);
-        domElements.cbbBetType.multiselect("refresh");
+            });
+        } else {
+            domElements.cbbBetType.multiselect("refresh");
+        }                      
     }
 
     function RenderBetTypeHTML(betTypeID, betId) {
@@ -323,9 +348,9 @@
 
         RefreshChange(domElements.eventTarget);
 
-        domElements.cbbSport.on('change', function () { LoadBetTypes(); });
+        domElements.cbbSport.on('change', function () { RefreshBetTypeFilter(); });
 
-        InitBetTypeFilter();
+        RefreshBetTypeFilter();
     }
 
     $(document).ready(function () {

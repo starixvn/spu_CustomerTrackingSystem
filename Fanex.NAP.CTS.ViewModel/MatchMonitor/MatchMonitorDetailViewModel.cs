@@ -79,15 +79,14 @@
                 {
                     case 0:
                         return "Group Betting";
-
                     case 1:
                         return "Hedging";
-
                     case 2:
                         return "Arbitrage";
-                    
                     case 3:
                         return "Fixed Game";
+                    case 58:
+                        return "Irrigation";
                 }
 
                 return string.Empty;
