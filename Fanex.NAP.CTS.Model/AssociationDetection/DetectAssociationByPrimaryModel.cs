@@ -4,11 +4,11 @@
 
     public class DetectAssociationByPrimaryModel
     {
-        [JsonProperty(PropertyName = "F")]
-        public long FromID { get; set; }
+        [JsonProperty(PropertyName = "O")]
+        public long OrigID { get; set; }
 
-        [JsonProperty(PropertyName = "T")]
-        public long ToID { get; set; }
+        [JsonProperty(PropertyName = "D")]
+        public long DestID { get; set; }
 
         [JsonProperty(PropertyName = "A")]
         public int AssociationType { get; set; }

@@ -18,11 +18,11 @@
         public string SharedIPJson { get; set; }
 
         [SpParam(SqlParamName = "ip_SharedMatches")]
-        public string SharedMatches { get; set; }
+        public string SharedMatchesJson { get; set; }
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_AssociationDetection_MergeGroup";
+            return "CTS_DC_AssociationDetection_DetectGroup";
         }
 
         public override bool IsValid()

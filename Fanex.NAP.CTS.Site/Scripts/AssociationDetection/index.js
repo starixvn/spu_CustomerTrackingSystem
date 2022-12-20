@@ -13,8 +13,12 @@
         spanAddUserName : $('#spanAddUserName'),
         spanAddUserNameMaxTag: $('#spanAddUserNameMaxTag'),        
         spanAddChangeHidden: $('#spanAddChangeHidden'),
-        inputTagUsername: $('#inputTagUsername'),
-        inputOptBPManuallyDeviceIP: $('#inputOptBPManuallyDeviceIP'),
+        inputTagUsername: $('#inputTagUsername'),  
+        tickCheckAll: $('#tickCheckAll'),
+        tickUncheckAll: $('#tickUncheckAll'),
+        inputOptBP: $('#inputOptBP'),
+        inputOptDevice: $('#inputOptDevice'),
+        inputOptIP: $('#inputOptIP'),
         inputOptAgent: $('#inputOptAgent'),
         inputOptIPLast3Days: $('#inputOptIPLast3Days'),
         inputOpt3MatchesLast7Days: $('#inputOpt3MatchesLast7Days'),
@@ -33,7 +37,9 @@
 
     let parameters = {
         UserNames: "",
-        IsBPManuallyDeviceIP: false,
+        IsBP: false,
+        IsDevice: false,
+        IsIP: false,
         IsAgent: false,
         IsIPLast3Days: false,
         Is3MatchesLast7Days: false,
@@ -166,12 +172,14 @@
                 searching: false,
                 columnDefs: [
                     { targets: "_all", defaultContent: "-" },
-                    { targets: [-2, -1, 0, 1], className: "text-center" },
-                    { targets: [0], width: "50%" },
-                    { targets: [1], width: "50%" },
+                    { targets: [-2, -1, 0, 1, 2], className: "text-center" },
+                    { targets: [0], width: "30%" },
+                    { targets: [1], width: "30%" },
+                    { targets: [2], width: "40%" }
                 ],
                 columns: [
                     { data: obj => obj.UserName },
+                    { data: obj => obj.TransitiveUsername },
                     {
                         data: obj => obj.AssociatedTypes,
                         createdCell: (cell, _, row) => {
@@ -211,7 +219,7 @@
 
         domElements.divAssociationDetectDetail.dialog({
             modal: true,
-            width: '500px',
+            width: '600px',
             title: "ASSOCIATION DETAILS: " + fromObj.UserName,
             resizable: false,
             draggable: true,
@@ -235,8 +243,10 @@
                 UserNameList: userNames,
                 CustID: custID,
                 CTSCustID: ctsCustID,
-                CTSCustIDList: ctsCustIDList,                
-                IsBPManuallyDeviceIP: parameters.IsBPManuallyDeviceIP,
+                CTSCustIDList: ctsCustIDList,                               
+                IsBP: parameters.IsBP,
+                IsDevice: parameters.IsDevice,
+                IsIP: parameters.IsIP,
                 IsAgent: parameters.IsAgent,
                 IsIPLast3Days: parameters.IsIPLast3Days,
                 Is3MatchesLast7Days: parameters.Is3MatchesLast7Days,
@@ -490,15 +500,17 @@
                 searching: false,                
                 columnDefs: [
                     { targets: "_all", defaultContent: "-" },
-                    { targets: [-1, 0, 1], className: "text-center" },
-                    { targets: [0], width: "35%" },
-                    { targets: [1], width: "35%" },
-                    { targets: [2], width: "30%" }
+                    { targets: [-1, 0, 1, 2], className: "text-center" },
+                    { targets: [0], width: "25%" },
+                    { targets: [1], width: "25%" },
+                    { targets: [2], width: "25%" },
+                    { targets: [3], width: "25%" }
                 ],
                 columns: [
                     { data: obj => obj.UserName },
-                    { data: obj => obj.Agent },
-                    { data: obj => obj.AssociatedType }
+                    { data: obj => obj.AgentName },
+                    { data: obj => obj.TransitiveUsername },
+                    { data: obj => obj.AgentAssociationTypes }
                 ]
             });
         }
@@ -509,7 +521,7 @@
 
         domElements.divAssociationDetectDetailAgent.dialog({
             modal: true,
-            width: '500px',
+            width: '600px',
             title: "ASSOCIATION DETAILS - AGENT: " + userName1 + " - " + userName2,
             resizable: false,
             draggable: true,
@@ -543,13 +555,14 @@
                         if (i == 0) {
                             $(tbody).append($('<tr role="row" class="odd">')
                                 .append('<td class="text-center">' + items[i]['UserName'] + '</td>')
-                                .append('<td class="text-center">' + items[i]['Agent'] + '</td>')
-                                .append('<td rowspan="2" class="text-center">' + items[i]['AssociatedType'] + '</td>')
+                                .append('<td class="text-center">' + items[i]['AgentName'] + '</td>')
+                                .append('<td rowspan="2" class="text-center">' + items[i]['TransitiveUsername'] + '</td>')
+                                .append('<td rowspan="2" class="text-center">' + items[i]['AgentAssociationTypes'] + '</td>')
                                 .append('</tr>'));
                         } else {
                             $(tbody).append($('<tr role="row" class="odd">')
                                 .append('<td class="text-center">' + items[i]['UserName'] + '</td>')
-                                .append('<td class="text-center">' + items[i]['Agent'] + '</td>')                               
+                                .append('<td class="text-center">' + items[i]['AgentName'] + '</td>')                               
                                 .append('</tr>'));
                         }                      
                     }
@@ -568,9 +581,17 @@
     }
 
     function CheckSelectFilter() {
-        if (domElements.inputOptBPManuallyDeviceIP.is(":checked")) {
+        if (domElements.inputOptBP.is(":checked")) {
             domElements.btnDetect.removeClass('checkselectfilter-notpass'); return true;
-        }            
+        }     
+
+        if (domElements.inputOptDevice.is(":checked")) {
+            domElements.btnDetect.removeClass('checkselectfilter-notpass'); return true;
+        }
+
+        if (domElements.inputOptIP.is(":checked")) {
+            domElements.btnDetect.removeClass('checkselectfilter-notpass'); return true;
+        }
 
         if (domElements.inputOptAgent.is(":checked")) {
             domElements.btnDetect.removeClass('checkselectfilter-notpass'); return true;
@@ -681,10 +702,19 @@
 
         if (userNames !== '') {
             parameters.UserNames = userNames;
-            parameters.IsBPManuallyDeviceIP = domElements.inputOptBPManuallyDeviceIP.is(":checked");
+            parameters.IsBP = domElements.inputOptBP.is(":checked");
+            parameters.IsDevice = domElements.inputOptDevice.is(":checked");
+            parameters.IsIP = domElements.inputOptIP.is(":checked");
             parameters.IsAgent = domElements.inputOptAgent.is(":checked");
-            parameters.IsIPLast3Days = domElements.inputOptIPLast3Days.is(":checked");
             parameters.Is3MatchesLast7Days = domElements.inputOpt3MatchesLast7Days.is(":checked");
+            parameters.IsIPLast3Days = domElements.inputOptIPLast3Days.is(":checked");            
+
+            SetStorageFilter("AssDetectCheckboxBP", parameters.IsBP);
+            SetStorageFilter("AssDetectCheckboxDevice", parameters.IsDevice);
+            SetStorageFilter("AssDetectCheckboxIP", parameters.IsIP);
+            SetStorageFilter("AssDetectCheckboxAgent", parameters.IsAgent);            
+            SetStorageFilter("AssDetectCheckboxIP3Days", parameters.IsIPLast3Days);
+            SetStorageFilter("AssDetectCheckbox3Matches", parameters.Is3MatchesLast7Days);
 
             $.ajax(common.modifyRelativeUrl('AssociationDetection/DetectAssociationByUserNames'), {
                 type: 'POST',
@@ -860,6 +890,53 @@
         common.downloadFileExcel(common.modifyRelativeUrl('AssociationDetection/ExportToExcelAssociationDetect'), parameters);
     }
 
+    function ToggleTickCheckAll(isCheckAll) {
+        domElements.inputOptBP.prop("checked", isCheckAll);
+        domElements.inputOptDevice.prop("checked", isCheckAll);
+        domElements.inputOptIP.prop("checked", isCheckAll);
+        domElements.inputOptAgent.prop("checked", isCheckAll);
+        domElements.inputOpt3MatchesLast7Days.prop("checked", isCheckAll);
+        domElements.inputOptIPLast3Days.prop("checked", isCheckAll);
+    }
+
+    function SetCacheForFilter(chkboxElement, cacheItem) {        
+        if (cacheItem != null && cacheItem == "true") {            
+            chkboxElement.prop("checked", true);
+        } else {
+            chkboxElement.prop("checked", false);
+        }        
+    }
+
+    function SetDefaultCheckboxFilter() {        
+        if (domElements.inputOptBP.is(":checked")) return true;
+        if (domElements.inputOptDevice.is(":checked")) return true;
+        if (domElements.inputOptIP.is(":checked")) return true;
+        if (domElements.inputOptAgent.is(":checked")) return true;
+        if (domElements.inputOptIPLast3Days.is(":checked")) return true;
+        if (domElements.inputOpt3MatchesLast7Days.is(":checked")) return true;
+
+        domElements.inputOptBP.prop("checked", true);
+        domElements.inputOptDevice.prop("checked", true);
+        domElements.inputOptIP.prop("checked", true);
+
+        return true;
+    }
+
+    function GetStorageFilter(key) {
+        if (typeof (Storage) !== "undefined") {
+            var value = localStorage.getItem(key);
+            return value;
+        }
+
+        return null;
+    }
+
+    function SetStorageFilter(key, value) {
+        if (typeof (Storage) !== "undefined") {
+            localStorage.setItem(key, value);
+        }
+    }
+
     function Initial() { 
         InitInputTagUsername();
 
@@ -867,13 +944,36 @@
 
         domElements.btnExportToExcel.on('click', () => ExportToExcel());       
 
-        domElements.inputOptBPManuallyDeviceIP.on('change', () => ChangeStateBtnDetect());
+        domElements.inputOptBP.on('change', () => ChangeStateBtnDetect());
+
+        domElements.inputOptDevice.on('change', () => ChangeStateBtnDetect());
+
+        domElements.inputOptIP.on('change', () => ChangeStateBtnDetect());
 
         domElements.inputOptAgent.on('change', () => ChangeStateBtnDetect());
 
         domElements.inputOptIPLast3Days.on('change', () => ChangeStateBtnDetect());
 
         domElements.inputOpt3MatchesLast7Days.on('change', () => ChangeStateBtnDetect());
+
+        domElements.tickCheckAll.on('click', function () {
+            ToggleTickCheckAll(true);
+            ChangeStateBtnDetect();
+        });
+
+        domElements.tickUncheckAll.on('click', function () {
+            ToggleTickCheckAll(false);
+            ChangeStateBtnDetect();
+        });
+
+        SetCacheForFilter(domElements.inputOptBP, GetStorageFilter("AssDetectCheckboxBP"));
+        SetCacheForFilter(domElements.inputOptDevice, GetStorageFilter("AssDetectCheckboxDevice"));
+        SetCacheForFilter(domElements.inputOptIP, GetStorageFilter("AssDetectCheckboxIP"));
+        SetCacheForFilter(domElements.inputOptAgent, GetStorageFilter("AssDetectCheckboxAgent"));
+        SetCacheForFilter(domElements.inputOpt3MatchesLast7Days, GetStorageFilter("AssDetectCheckbox3Matches"));
+        SetCacheForFilter(domElements.inputOptIPLast3Days, GetStorageFilter("AssDetectCheckboxIP3Days"));
+
+        SetDefaultCheckboxFilter();
     }
 
     $(document).ready(function () {

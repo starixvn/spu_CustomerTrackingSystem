@@ -18,9 +18,17 @@
 
         public string ToAgentUsername { get; set; }
 
-        public string AssociationType { get; set; }
+        public string AssociationType1 { get; set; }
 
-        public string AgentAssociationType { get; set; }
+        public string AssociationType2 { get; set; }
+
+        public string AgentAssociationType1 { get; set; }
+
+        public string AgentAssociationType2 { get; set; }
+
+        public long TransitiveCTSCustID { get; set; }
+
+        public string TransitiveUsername { get; set; }
 
     }
 }

@@ -451,6 +451,12 @@
 body {
   font-family: "Lato", Arial, Tahoma, sans-serif; }
 
+@keyframes spin {
+  0% {
+    transform: rotate(0deg); }
+  100% {
+    transform: rotate(360deg); } }
+
 .page-title {
   position: sticky;
   top: 6rem;
@@ -480,9 +486,9 @@ body {
         .association-detection-report .association-detection-content .control-table .form-filter .box-username .btn-detect:not(:disabled):hover {
           background-color: #5081ff; }
     .association-detection-report .association-detection-content .control-table .form-filter .checkbox-filter {
-      margin-right: 20px; }
+      margin-right: 40px; }
     .association-detection-report .association-detection-content .control-table .form-filter .checkbox-container {
-      margin-top: 11px; }
+      margin-top: 12px; }
       .association-detection-report .association-detection-content .control-table .form-filter .checkbox-container span:before {
         top: 1px;
         height: 16px;
@@ -490,13 +496,19 @@ body {
       .association-detection-report .association-detection-content .control-table .form-filter .checkbox-container span:after {
         top: 5px;
         left: 3px; }
+    .association-detection-report .association-detection-content .control-table .form-filter .flex-container {
+      display: flex;
+      margin-bottom: 10px; }
+      .association-detection-report .association-detection-content .control-table .form-filter .flex-container .checkbox-all {
+        cursor: pointer;
+        color: blue; }
   .association-detection-report .association-detection-content .table-report {
     font-family: "Lato", Arial, Tahoma, sans-serif; }
     .association-detection-report .association-detection-content .table-report .fixed-header {
       /*  padding-top: 1.6rem;*/
       position: sticky;
       position: -webkit-sticky;
-      top: 8rem;
+      top: 9.3rem;
       background: #fff;
       z-index: 9; }
       .association-detection-report .association-detection-content .table-report .fixed-header .button-primary {
@@ -518,7 +530,7 @@ body {
       position: sticky;
       position: -webkit-sticky;
       z-index: 99;
-      top: 12.5rem;
+      top: 13.5rem;
       transition: top 0.01s linear; }
     .association-detection-report .association-detection-content .table-report .table-association-detection {
       width: 100% !important; }
@@ -541,8 +553,9 @@ body {
       .association-detection-report .association-detection-content .table-report .table-association-detection thead tr:first-child th {
         position: sticky;
         position: -webkit-sticky;
-        top: 9.4rem;
-        font-weight: 300; }
+        top: 13.7rem;
+        font-weight: 300;
+        z-index: 99; }
       .association-detection-report .association-detection-content .table-report .table-association-detection .sub-icon {
         width: 24px;
         height: 24px;

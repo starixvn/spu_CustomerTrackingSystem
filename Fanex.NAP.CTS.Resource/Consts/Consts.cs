@@ -314,6 +314,7 @@
             AssociationDetectionDetails = 51,
             AccountProfileGetCustomerCategoryBySportRpt = 52,
             AccountProfileGetCustomerCategoryHistoryBySportRpt = 53,
+            AssociationDetectionExportToExcel = 54,
             //PlaceEvidenceForMultipleCustAPI = 200,
             GetFlaggedCustomersByLevelAPI = 201,
             GetFlaggedCustByLvAndEvidenceAPI = 202,

@@ -189,6 +189,8 @@
 
         #endregion
 
+        #region Validate Usernames
+
         public ActionResult ValidateUsernames(string userNames)
         {
             var isException = false;
@@ -220,7 +222,10 @@
 
             return Json(viewModel, JsonRequestBehavior.AllowGet);
         }
-       
+        #endregion
+
+        #region Detect Association
+
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetection)]
         public ActionResult DetectAssociationByUserNames(DetectAssociationByUserNamesViewModel model)
@@ -275,62 +280,48 @@
                         var assBySharedMatches = model.Is3MatchesLast7Days ? DetectAssociationBySharedMatches(orgUserList.Where(x => !x.IsInternal), custIDs) : Enumerable.Empty<SharedIPMatchesInfoModel>();
 
                         mergeGroupInfo.AssociationByMatchesJson = GetAssociationCust(assBySharedMatches);                       
-                    }, () => {                     
-                        var assByPrimary = model.IsBPManuallyDeviceIP 
-                            ? _associationDetectionService.DetectAssociationByPrimary(ctsCustIDs, AppSettings.Get("GetAssDetectionFromMySQL") == "1") 
-                            : Enumerable.Empty<DetectAssociationByPrimaryModel>();
+                    }, () => {
+                        var assByPrimary = Enumerable.Empty<DetectAssociationByPrimaryModel>();
 
+                    if (model.IsBP || model.IsDevice || model.IsIP)
+                    {
+                        var isGetAssDetectionFromMySQL = AppSettings.Get("GetAssDetectionFromMySQL") == "1";
+                            assByPrimary = _associationDetectionService.DetectAssociationByPrimary(new DetectAssociationByPrimaryFilterModel 
+                            {
+                                CTSCustIDs = ctsCustIDs,
+                                IsBP = model.IsBP,
+                                IsDevice = model.IsDevice,
+                                IsIP = model.IsIP
+                            }, isGetAssDetectionFromMySQL);
+                        }
+                      
                         mergeGroupInfo.AssociationByPrimaryJson = JsonConvert.SerializeObject(assByPrimary);                       
-                    }, () => {                     
-                        var assByAgent = model.IsAgent 
-                            ? _associationDetectionService.DetectAssociationByAgent(ctsCustIDs, AppSettings.Get("GetAssDetectionFromMySQL") == "1") 
-                            : Enumerable.Empty<DetectAssociationByPrimaryModel>();
+                    }, () => {
+                        var assByAgent = Enumerable.Empty<DetectAssociationByPrimaryModel>();
 
-                        mergeGroupInfo.AssociationByAgentJson = JsonConvert.SerializeObject(assByAgent);                       
+                        if (model.IsAgent)
+                        {
+                            var isGetAssDetectionFromMySQL = AppSettings.Get("GetAssDetectionFromMySQL") == "1";
+                            assByAgent = _associationDetectionService.DetectAssociationByAgent(ctsCustIDs, isGetAssDetectionFromMySQL);
+                        }
+
+                        mergeGroupInfo.AssociationByAgentJson = JsonConvert.SerializeObject(assByAgent);
                     });
                    
                     var assMergeGroup = _associationDetectionService.MergeGroupDetectAssociation(mergeGroupInfo);
-                  
-                    if (isExportExcel && assMergeGroup.Any())
-                    {
-                        var custStatisticsList = _associationDetectionService.GetCustStatisticsInfoRealtime(custIDs);
-                                             
-                        result.ExportItemList = orgUserList.Select(x =>
-                        {
-                            var cust1 = assMergeGroup.FirstOrDefault(y => y.CustID == x.CustID);
-                            var cust2 = custStatisticsList.FirstOrDefault(y => y.CustID == x.CustID);
-                            var item = new ExportAssociationDetectModel { UserName = x.UserName };
-                            if (cust1 != null)
-                            {
-                                item.CreatedDate = cust1.CreatedDate;
-                                item.CustomerClass = cust1.CustomerClass;
-                                item.GroupID = cust1.GroupID;
-                                item.Danger1 = cust1.Danger1;
-                                item.Danger2 = cust1.Danger2;
-                                item.Danger3 = cust1.Danger3;
-                                item.Danger4 = cust1.Danger4;
-                                item.Danger5 = cust1.Danger5;
-                            }
-                            if (cust2 != null)
-                            {
-                                item.TotalWinloss = cust2.TotalWinlossRM;
-                                item.WinlossLast3Days = cust2.WinlossRM_Last3Days;
-                                item.WinlossLast7Days = cust2.WinlossRM_Last7Days;
-                                item.TotalSabaTurnoverRM = cust2.TotalSabaTurnoverRM;
-                                item.SabaTurnoverRMLast3Days = cust2.SabaTurnoverRM_Last3Days;
-                                item.SabaTurnoverRMLast7Days = cust2.SabaTurnoverRM_Last7Days;
-                                item.TotalTurnover = cust2.TotalTurnoverRM;
-                                item.TurnoverLast3Days = cust2.TurnoverRM_Last3Days;
-                                item.TurnoverLast7Days = cust2.TurnoverRM_Last7Days;
-                            }                           
 
-                            return item;
-                        });
+                    var assRearrangeGroup = RearrangeAssGroup(assMergeGroup, isExportExcel);
+
+                    if (isExportExcel)
+                    {                        
+                        var custStatisticsList = _associationDetectionService.GetCustStatisticsInfoRealtime(custIDs);
+
+                        result.ExportItemList = GetExportItem(orgUserList, assRearrangeGroup, custStatisticsList);
                     }
                     else
-                    {
-                        result.ItemList = assMergeGroup.Where(x => x.GroupID.HasValue).OrderBy(x => x.GroupID).Select(x =>
-                        {           
+                    {                        
+                        result.ItemList = assRearrangeGroup.Select(x =>
+                        {
                             return new DetectAssociationItemViewModel(x);
                         });
                     }
@@ -349,7 +340,7 @@
             }
 
             return result;
-        }
+        }      
 
         private IEnumerable<SharedIPMatchesInfoModel> DetectAssociationByIP(IEnumerable<ValidateUserNameModel> validateUserNames, string custIds)
         {           
@@ -400,6 +391,44 @@
             return JsonConvert.SerializeObject(assCustBySharedIP);
         }
 
+        private IEnumerable<DetectAssociationMergeGroupModel> RearrangeAssGroup(IEnumerable<DetectAssociationMergeGroupModel> assGroupList, bool isExportExcel)
+        {
+            var result = new List<DetectAssociationMergeGroupModel>();
+            if (!isExportExcel)
+                assGroupList = assGroupList.Where(x => x.GroupID.HasValue);
+
+            if (assGroupList.Any())
+            {                
+                var grouping = assGroupList
+                    .GroupBy(x => x.GroupID, (key, g) => new { GroupID = key, Items = g.ToList() })
+                    .OrderBy(x => x.GroupID);
+
+                var idx = 1;
+
+                foreach (var group in grouping)
+                {
+                    var groupID = group.GroupID;
+
+                    if (groupID.HasValue)
+                    {
+                        groupID = idx;
+                        idx += 1;
+                    }         
+
+                    result.AddRange(group.Items.Select(x => 
+                    {
+                        x.GroupID = groupID;
+
+                        return x;
+                    }));                    
+                }
+            }            
+            
+            return result;
+        }
+        #endregion
+
+        #region Detail
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetectionDetails)]
         public ActionResult GetDetectAssociationDetail(GetAssociationDetectionDetailViewModel model)
@@ -434,6 +463,7 @@
                         CTSCustID = x.Key,
                         CustID = x.FirstOrDefault()?.CustID,
                         UserName = x.FirstOrDefault()?.UserName,
+                        TransitiveUsername = x.FirstOrDefault()?.TransitiveUsername,
                         AgentInfoJson = string.Join(",", agentInfos),
                         AssociatedTypes = string.Join(", ",
                                     x.Where(y=>!string.IsNullOrEmpty(y.AssociatedTypes))
@@ -510,7 +540,9 @@
             
             return Enumerable.Empty<GetAssociationDetectDetailViewModel>();
         }
-       
+        #endregion
+
+        #region Detail IP
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetectionDetails)]
         public ActionResult GetDetectAssociationDetailIP(string userNameList)
@@ -543,6 +575,9 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
+        #endregion
+
+        #region Detail Match
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetectionDetails)]
         public ActionResult GetDetectAssociationDetailMatch(int custID1, int custID2, string custIDList)
@@ -576,6 +611,9 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
+        #endregion
+
+        #region Detail Agent
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetectionDetails)]
         public ActionResult GetDetectAssociationDetailAgent(string agentInfoJson)
@@ -593,8 +631,11 @@
             }, JsonRequestBehavior.AllowGet);
         }
 
+        #endregion
+
+        #region Export to Excel
         [HttpPost]
-        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetection)]
+        [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AssociationDetectionExportToExcel)]
         public ActionResult ExportToExcelAssociationDetect(DetectAssociationByUserNamesViewModel model)
         {
             var templatePath = Server.MapPath(AssociationDetectionTemplate);
@@ -610,6 +651,51 @@
 
             return File(excelFile, "application/vnd.ms-excel", fileName);
         }       
-       
+
+        private IEnumerable<ExportAssociationDetectModel> GetExportItem(IEnumerable<ValidateUserNameModel> orgUserList
+            , IEnumerable<DetectAssociationMergeGroupModel> assMergeGroup
+            , IEnumerable<GetCustStatisticsInfoRealtimeModel> custStatisticsList)
+        {            
+            if (assMergeGroup.Any())
+            {
+                return orgUserList.Select(x =>
+                {
+                    var cust1 = assMergeGroup.FirstOrDefault(y => y.CustID == x.CustID);
+                    var cust2 = custStatisticsList.FirstOrDefault(y => y.CustID == x.CustID);
+                    var item = new ExportAssociationDetectModel { UserName = x.UserName };
+                    if (cust1 != null)
+                    {
+                        item.CreatedDate = cust1.CreatedDate;
+                        item.CustomerClass = cust1.CustomerClass;
+                        item.GroupID = cust1.GroupID;
+                        item.Danger1 = cust1.Danger1;
+                        item.Danger2 = cust1.Danger2;
+                        item.Danger3 = cust1.Danger3;
+                        item.Danger4 = cust1.Danger4;
+                        item.Danger5 = cust1.Danger5;
+                    }
+                    if (cust2 != null)
+                    {
+                        item.TotalWinloss = cust2.TotalWinlossRM;
+                        item.WinlossLast3Days = cust2.WinlossRM_Last3Days;
+                        item.WinlossLast7Days = cust2.WinlossRM_Last7Days;
+                        item.TotalSabaTurnoverRM = cust2.TotalSabaTurnoverRM;
+                        item.SabaTurnoverRMLast3Days = cust2.SabaTurnoverRM_Last3Days;
+                        item.SabaTurnoverRMLast7Days = cust2.SabaTurnoverRM_Last7Days;
+                        item.TotalTurnover = cust2.TotalTurnoverRM;
+                        item.TurnoverLast3Days = cust2.TurnoverRM_Last3Days;
+                        item.TurnoverLast7Days = cust2.TurnoverRM_Last7Days;
+                    }
+
+                    return item;
+                });
+            }
+
+
+            return new List<ExportAssociationDetectModel>();
+        }
+
+        #endregion
+
     }
 }

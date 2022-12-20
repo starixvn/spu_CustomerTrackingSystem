@@ -4,7 +4,11 @@
     {
         public string UserNames { get; set; }
 
-        public bool IsBPManuallyDeviceIP { get; set; }
+        public bool IsBP { get; set; }
+
+        public bool IsDevice { get; set; }
+
+        public bool IsIP { get; set; }
 
         public bool IsAgent { get; set; }
 

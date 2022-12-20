@@ -4,7 +4,7 @@
 
     public class AssociationCustModel
     {
-        [JsonProperty(PropertyName = "F")]
+        [JsonProperty(PropertyName = "O")]
         public long FromCTSCustID { get; set; }
 
         [JsonProperty(PropertyName = "F1")]
@@ -13,7 +13,7 @@
         [JsonProperty(PropertyName = "X")]
         public string FromUserName { get; set; }
 
-        [JsonProperty(PropertyName = "T")]
+        [JsonProperty(PropertyName = "D")]
         public long ToCTSCustID { get; set; }
 
         [JsonProperty(PropertyName = "T1")]

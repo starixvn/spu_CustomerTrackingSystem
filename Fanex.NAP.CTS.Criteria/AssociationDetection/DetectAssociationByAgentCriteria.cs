@@ -10,7 +10,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_AssociationDetection_Agent_Detect";
+            return "CTS_DC_AssociationDetection_Agent_DetectGroup";
         }
 
         public override bool IsValid()
