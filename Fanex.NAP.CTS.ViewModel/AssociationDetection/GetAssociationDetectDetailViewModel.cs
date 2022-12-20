@@ -14,10 +14,10 @@
             this.UserName = cust.ToUsername;
             this.CustID = cust.ToCustID;
             this.CTSCustID = cust.ToCTSCustID;
-            this.TransitiveUsername = cust.TransitiveUsername;
-
+            
             if (!string.IsNullOrEmpty(cust.AgentAssociationType1) || !string.IsNullOrEmpty(cust.AgentAssociationType2))
             {
+                this.TransitiveUsername = "-";
                 this.AssociatedTypes = $"<span class='association-detect-detail-agent' data-fromusername={cust.FromUsername}>Agent </span>";               
 
                 var agentInfos = new List<GetAssociationDetectDetailAgentViewModel>();
@@ -50,6 +50,7 @@
             }
             else
             {
+                this.TransitiveUsername = cust.TransitiveUsername;
                 this.AssociatedTypes = cust.AssociationType1;
 
                 if (!string.IsNullOrEmpty(cust.AssociationType2))
