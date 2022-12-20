@@ -75,12 +75,11 @@
             }
         }
 
-        public CustomerInfoByCustIdsModel GetCustomerInfoByCustIds(long custId, int sourceType)
+        public CustomerInfoByCustIdsModel GetCustomerInfoDangerous(long custId)
         {
-            var criteria = new GetCustomerInfoByCustIdsCriteria
+            var criteria = new GetCustomerInfoDangerousCriteria
             {
-                CustIdList = custId.ToString(),
-                SourceType = sourceType
+                CustIdList = custId.ToString(),               
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))

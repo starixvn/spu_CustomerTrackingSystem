@@ -33,6 +33,7 @@
 		<Setting Key="CTS_DC_CustInfo_GetCustomerRoles" SpName="CTS_DC_CustInfo_GetCustomerRoles" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustInfo_GetCustIDsRole" SpName="CTS_DC_CustInfo_GetCustIDsRole" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustInfo_RobotUser_CheckSiteByCustIds" SpName="CTS_DC_CustInfo_RobotUser_CheckSiteByCustIds" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_CustInfo_GetCustInfoDangerous" SpName="CTS_DC_CustInfo_GetCustInfoDangerous_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
 
 	<Function Name="Notification">
