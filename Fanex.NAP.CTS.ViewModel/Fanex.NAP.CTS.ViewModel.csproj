@@ -106,6 +106,7 @@
     <Compile Include="AssociatedGroupMonitor\AssociatedGroupMonitorViewModel.cs" />
     <Compile Include="AssociatedGroupMonitor\AssociatedTypeViewModel.cs" />
     <Compile Include="AssociatedGroupMonitor\ExportToExcelAssociatedAccountViewModel.cs" />
+    <Compile Include="AssociatedGroupMonitor\GetProblemCategoryByGroupIDViewModel.cs" />
     <Compile Include="AssociatedGroupMonitor\GetUpdateAssociatedGroupMonitorByIDViewModel.cs" />
     <Compile Include="AssociatedGroupMonitor\ResultSaveAssociatedAccountViewModel.cs" />
     <Compile Include="AssociatedGroupMonitor\ResultValidatedViewModel.cs" />

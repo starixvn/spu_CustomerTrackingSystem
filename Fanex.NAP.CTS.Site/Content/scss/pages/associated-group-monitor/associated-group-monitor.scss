@@ -4,6 +4,16 @@ body {
     font-family: $font-family;    
 }
 
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 .associated-group-content {
     margin: 1rem 1.6rem 1rem 1.6rem;
 
@@ -92,6 +102,10 @@ body {
 
             .icon-delete:before {
                 color: #FF0000;
+            }
+
+            .icon-Add:before {
+                color: #396EF8;
             }
 
             .view-site {

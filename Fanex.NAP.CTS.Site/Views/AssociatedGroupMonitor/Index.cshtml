@@ -28,14 +28,15 @@
                 <thead>
                     <tr>
                         <th>Group ID</th>
-                        <th>Group Name</th>
-                        <th>Site</th>
+                        <th>Group Name</th>                     
                         <th>Associated Type</th>
                         <th>ABI</th>
+                        <th>Ori</th>
+                        <th>Problem Category</th>
                         <th>Total Accounts</th>
                         <th>Comment</th>
                         <th>Created Date</th>
-                        <th>Created By</th>                      
+                        <th>Created By</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -54,14 +55,14 @@
     <div style="display: flex">
         <div class="form-control margin-right-20">
             <div class="label">Site<label style="color:red">*</label></div>
-            <div style="width:270px">
+            <div style="width:240px">
                 <select class="control width-select" id="cbbSites" multiple="multiple">                  
                 </select>
             </div>
         </div>
         <div class="form-control margin-right-20">
             <div class="label">Associated Type<label style="color:red">*</label></div>
-            <div style="width:205px">
+            <div style="width:185px">
                 <select class="control width-select" id="cbbAssociatedTypes" multiple="multiple">
                     <option selected value=@((int)AssociationType.BettingPattern)>Betting Pattern</option>
                     <option selected value=@((int)AssociationType.Device)>Device</option>
@@ -70,11 +71,24 @@
                 </select>
             </div>
         </div>
-        <div class="form-control">
-            <div class="label">ABI<label style="color:red">*</label></div>
-            <div style="width:150px">
+        <div class="form-control margin-right-20">
+            <div class="label">ABI</div>
+            <div style="width:140px">
                 <select class="control" id="cbbABIAssociatedGroup" name="state" style="height: 100px">
-                    <option disabled selected value="">Select an ABI</option>
+                    <option selected value=0>Select an ABI</option>
+                    @for (int idx = 1; idx < 51; idx++)
+                    {
+                        <option value=@idx>@idx</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="form-control">
+            <div class="label">Ori</div>
+            <div style="width:140px">
+                <select class="control" id="cbbOriAssociatedGroup" name="state" style="height: 100px">
+                    <option selected value=0>Select an Ori</option>
                     @for (int idx = 1; idx < 51; idx++)
                     {
                         <option value=@idx>@idx</option>
@@ -122,6 +136,7 @@
         <span id="spanAddAssociatedAccountGroupIDHidden" hidden></span>
         <span id="spanAddAssociatedAccountGroupNameHidden" hidden></span>
         <span id="spanAddAssociatedAccountGroupABIHidden" hidden></span>
+        <span id="spanAddAssociatedAccountGroupOriHidden" hidden></span>
     </span>
 
     <div class="form-control wrapper-comment">
@@ -135,14 +150,87 @@
     </div>
 </div>
 
+<div id="divSetPC" class="popup-add" style="display: none">      
+    <div style="display: flex">
+        <div class="form-control margin-right-20">
+            <div class="label">Site<label style="color:red">*</label></div>
+            <div style="width:240px">
+                <select class="control width-select" id="cbbSitesSetPC" multiple="multiple">
+                </select>
+            </div>
+        </div>
+
+        <div class="form-control margin-right-20">
+            <div class="label">Problem Category<label style="color:red">*</label></div>
+            <div style="width:200px">
+                <select class="control" id="cbbProblemCategorySetPC" style="width:200px">
+                    <option value="-1">None</option>
+                    <option value="52" selected>Group Betting</option>
+                    <option value="53">Hedging</option>
+                    <option value="54">Arbitrage</option>
+                    <option value="55">Fixed Game</option>
+                    <option value="59">Formula Bet</option>
+                    <option value="62">Info Bet</option>
+                </select>
+            </div>
+        </div>
+    </div>    
+
+    <div class="modal-footer margin-top-20">
+        <button id="btnCancelSetPC" class="button btn-cancel-outline" title="Cancel">Cancel</button>
+        <button id="btnSaveSetPC" class="button -add" title="Save">Save</button>
+        <span id="spanGroupIDSetPCHidden" hidden></span>
+        <span id="spanGroupNameSetPCHidden" hidden></span>
+    </div>
+</div>
+
 <div id="divSitesByGroup" class="popup-add" style="display: none">
     <div class="form-control" style="max-height: 400px;text-align: justify;">
         <div class="label" id="lblSiteList"></div>        
     </div>
 </div>
 
+<div id="divTransferAccount" class="popup-add" style="display: none">
+    <div class="hide">
+        <input id="hdTransferAccountGroupID" type="hidden" />
+    </div>
+    <div class="group-title">
+        <div class="label">Username<label style="color:red">*</label></div>
+        <div class="wrapper-title">
+            <div class="wrapper-rule wrapper-rule-left">
+                <span class="text bg-red">Red</span>
+                <span class="text">Invalid username</span>
+            </div>           
+        </div>
+    </div>
+
+    <span class="wrapper-value" id="spanTransferAccountUserName">
+        <input id="inputTransferAccountTagUsername" type="text" name='tags-outside' class="input-field full-width tagify--outside" placeholder="Type username (Separate by comma, tab and enter)" />
+        <span class="limit-username">
+            Max: <span id="spanTransferAccountUserNameMaxTag">1001</span> usernames
+        </span>
+        <span id="spanTransferAccountChangeHidden" hidden></span>
+        <span id="spanTransferAccountGroupIDHidden" hidden></span>
+        <span id="spanTransferAccountGroupNameHidden" hidden></span>
+    </span>
+
+    <div class="form-control margin-right-20">
+        <div class="label">New Group<label style="color:red">*</label></div>
+        <div style="width:200px">
+            <select class="control" id="cbbTransferAccountNewGroup" style="width:200px">                       
+            </select>
+        </div>
+    </div>
+
+    <div class="modal-footer margin-top-10">
+        <button id="btnCancelTransferAccount" class="button btn-cancel-outline" title="Cancel">Cancel</button>
+        <button id="btnSaveTransferAccount" class="button -add" title="Save">Save</button>
+    </div>
+</div>
+
 <div class="hide">
-    <input id="hdIsHostPermission" type="hidden" IsHostPermission="@Model.ToString()" />
+    <input id="hdIsHostPermission" type="hidden" IsHostPermission="@Model.ToString()" />  
+    <span id="spanAddAssociatedAccountOpen" hidden></span>
 </div>
 
 @section scripts {

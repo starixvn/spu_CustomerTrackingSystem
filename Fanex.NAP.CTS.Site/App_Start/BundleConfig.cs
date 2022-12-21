@@ -387,11 +387,12 @@
         private static void RegisterAssociatedGroupMonitor(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/associated-group-monitor-scripts").Include(              
-                 "~/Scripts/tagify/jquery.tagify.min.js",
+                "~/Scripts/tagify/jquery.tagify.min.js",
                 "~/Scripts/tagify/tagify.min.js",
                 "~/Scripts/select2.min.js",
                 "~/Scripts/MultipleSelect/jquery.multiselect.filter.js",
-                "~/Scripts/AssociatedGroupMonitor/index.js"));
+                "~/Scripts/AssociatedGroupMonitor/index.js",
+                "~/Scripts/AssociatedGroupMonitor/transfer-account.js"));
 
             bundles.Add(new StyleBundle("~/associated-group-monitor-styles").Include(               
                 "~/Content/scss/vendors/jquery-ui/base/tagify.css",

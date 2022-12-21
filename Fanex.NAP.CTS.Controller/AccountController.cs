@@ -1579,16 +1579,23 @@
             {
                 case (int)SourceTypeID.Classification_PAMarkDirectly:
                 case (int)SourceTypeID.Classification_PAAffectedByUplines:
-                    spanReason += $"<span> { cc.SourceTypeName } </span>";
-                    if (roleID == 1)
+                    if (!string.IsNullOrEmpty(cc.Remark) && cc.Remark.Contains(Consts.MarkPA_AssociatedGroup))
                     {
-                        spanReason += $"| Win lost: {winlost} ";
+                        spanReason += $"<span> { cc.Remark } </span>";
+                        
+                        if (roleID == 1)             
+                            spanReason += $"| Win lost: {winlost} ";
                     }
+                    else
+                    {
+                        spanReason += $"<span> { cc.SourceTypeName } </span>";
+                        if (roleID == 1)                        
+                            spanReason += $"| Win lost: {winlost} ";
 
-                    if (!string.IsNullOrEmpty(cc.Remark))
-                    {
-                        spanReason += $"| {cc.Remark}";
+                        if (!string.IsNullOrEmpty(cc.Remark))
+                            spanReason += $"| {cc.Remark}";
                     }
+                   
                     break;
                 case (int)SourceTypeID.Classification_PAUnmarkDirectly:
                 case (int)SourceTypeID.Classification_UnmarkingPAAffectedDirectly:

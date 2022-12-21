@@ -14,6 +14,9 @@
         [SpParam(SqlParamName = "ip_ABI")]
         public int ABI { get; set; }
 
+        [SpParam(SqlParamName = "ip_Danger1")]
+        public int Ori { get; set; }
+
         [SpParam(SqlParamName = "ip_AllCredit")]
         public int AllCredit { get; set; }
 

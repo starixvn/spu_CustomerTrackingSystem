@@ -100,6 +100,7 @@
         public const string ProblemAccountManagement_SiteLicensee = "Licensee";
         public const string ProblemAccountManagement_SiteCredit = "Credit";
         public const string ProblemAccountManagement_CategoryPA = "Problem Account Category";
+        public const string MarkPA_AssociatedGroup = "Associated Group";
 
         public enum ROLE_CUSTOMER
         {
@@ -314,8 +315,14 @@
             AssociationDetectionDetails = 51,
             AccountProfileGetCustomerCategoryBySportRpt = 52,
             AccountProfileGetCustomerCategoryHistoryBySportRpt = 53,
-            AssociationDetectionExportToExcel = 54,
-            //PlaceEvidenceForMultipleCustAPI = 200,
+			AssociationDetectionExportToExcel = 54,
+  			AssociatedGroupMonitorAddNewGroupRpt = 55,
+            AssociatedGroupMonitorUpdateGroupRpt = 56,
+            AssociatedGroupMonitorRemoveGroupRpt = 57,
+            AssociatedGroupMonitorAddAccountRpt = 58, 
+            AssociatedGroupMonitorTransferAccountRpt = 59,
+            AssociatedGroupMonitorSetPARpt = 60,
+            AssociatedGroupMonitorExportToExcelRpt = 61,            //PlaceEvidenceForMultipleCustAPI = 200,
             GetFlaggedCustomersByLevelAPI = 201,
             GetFlaggedCustByLvAndEvidenceAPI = 202,
             //AddCustomersEvidencesAPI = 203,

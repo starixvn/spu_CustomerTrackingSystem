@@ -76,9 +76,15 @@
     <Compile Include="AssociatedGroupMonitor\GetAssociatedGroupMonitorByIDCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\GetAssociatedGroupMonitorCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\GetAssociatedGroupSiteCriteria.cs" />
+    <Compile Include="AssociatedGroupMonitor\GetGroupTransferAccountCriteria.cs" />
+    <Compile Include="AssociatedGroupMonitor\GetProblemCategoryByGroupIDCriteria.cs" />
+    <Compile Include="AssociatedGroupMonitor\GetProblemCategorySitesCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\RemoveAssociatedGroupMonitorCriteria.cs" />
+    <Compile Include="AssociatedGroupMonitor\SaveTransferAccountCriteria.cs" />
+    <Compile Include="AssociatedGroupMonitor\SetProblemCategoryByGroupIDCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\UpdateAssociatedGroupMonitorCriteria.cs" />
     <Compile Include="AssociatedGroupMonitor\ValidateAssociatedAccountCriteria.cs" />
+    <Compile Include="AssociatedGroupMonitor\ValidateUsernameTransferAccountCriteria.cs" />
     <Compile Include="AssociationDetection\DetectAssociationByAgentCriteria.cs" />
     <Compile Include="AssociationDetection\DetectAssociationByIPCriteria.cs" />
     <Compile Include="AssociationDetection\DetectAssociationByPrimaryCriteria.cs" />

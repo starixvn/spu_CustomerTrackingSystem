@@ -4,6 +4,8 @@
     {
         public long GroupID { get; set; }
 
+        public string GroupName { get; set; }
+
         public string CustIDs { get; set; }
 
         public string CTSCustIDs { get; set; }
@@ -17,5 +19,7 @@
         public int CreatedBy { get; set; }
 
         public int ABI { get; set; }
+
+        public int Ori { get; set; }
     }
 }

@@ -15,6 +15,7 @@
             this.GroupID = data.GroupID;
             this.GroupName = data.GroupName;
             this.ABI = data.ABI;
+            this.Ori = data.Ori;
             this.IsAllCredit = data.AllCredit;
             this.IsAllLicensee = data.AllLicensee;
             this.Sites = data.Sites;
@@ -54,6 +55,8 @@
         public string GroupName { get; set; }
 
         public int ABI { get; set; }
+
+        public int Ori { get; set; }
 
         public bool IsAllCredit { get; set; }
 

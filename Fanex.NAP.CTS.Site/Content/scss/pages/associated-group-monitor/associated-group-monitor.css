@@ -1,6 +1,12 @@
 ﻿body {
   font-family: "Lato", Arial, Tahoma, sans-serif; }
 
+@keyframes spin {
+  0% {
+    transform: rotate(0deg); }
+  100% {
+    transform: rotate(360deg); } }
+
 .associated-group-content {
   margin: 1rem 1.6rem 1rem 1.6rem; }
   .associated-group-content .associated-group .fixed-header {
@@ -60,6 +66,8 @@
       left: .6rem; }
     .associated-group-content .associated-group .table-associated-group .icon-delete:before {
       color: #FF0000; }
+    .associated-group-content .associated-group .table-associated-group .icon-Add:before {
+      color: #396EF8; }
     .associated-group-content .associated-group .table-associated-group .view-site {
       cursor: pointer;
       color: blue; }

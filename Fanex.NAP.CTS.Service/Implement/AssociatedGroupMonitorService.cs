@@ -29,6 +29,8 @@
 
         IEnumerable<AssociatedGroupSiteModel> GetAssociatedGroupSites(long groupID);
 
+        IEnumerable<ProblemCategorySiteModel> GetProblemCategorySites(long groupID);
+
         IEnumerable<AssociatedAccountMonitorModel> GetAssociatedAccountMonitor(long groupID);
 
         DBResult AddAssociatedGroupMonitor(AddAssociatedGroupModel model);
@@ -41,9 +43,21 @@
 
         IEnumerable<ValidateUserAssociatedAccountModel> ValidateUserNameInput(string userNames);
 
-        DBResult AddAssociatedAccount(AddAssociatedAccountModel model);
+        ResultAddAssociatedAccountModel AddAssociatedAccount(AddAssociatedAccountModel model);
+
+        GetProblemCategoryByGroupIDModel GetProblemCategoryByGroupID(long groupID);
+
+        DBResult SetProblemCategoryByGroupID(SetProblemCategoryByGroupIDModel model);
 
         DBResult UpdateABIToMainDB(string custIDs, int valueABI);
+
+        DBResult UpdateOriToMainDB(string custIDs, int valueOri);
+
+        IEnumerable<GetGroupTransferAccountGroupModel> GetGroupTransferAccount(long currentGroupID);
+
+        IEnumerable<ValidateUserAssociatedAccountModel> ValidateUsernameTransferAccount(string userNames, long groupID);
+
+        SaveTransferAccountResultModel SaveTransferAccount(SaveTransferAccountModel model);
 
         byte[] ExportExcelAssociatedAccount(IEnumerable<AssociatedAccountMonitorModel> associatedAccounts
             , string fileName
@@ -94,6 +108,13 @@
             return repository.Fetch<AssociatedGroupSiteModel>(criteria);
         }
 
+        public IEnumerable<ProblemCategorySiteModel> GetProblemCategorySites(long groupID)
+        {
+            var criteria = new GetProblemCategorySitesCriteria { GroupID = groupID };
+
+            return repository.Fetch<ProblemCategorySiteModel>(criteria);
+        }
+
         public IEnumerable<ValidateUserAssociatedAccountModel> ValidateUserNameInput(string userNames)
         {
             var criteria = new ValidateAssociatedAccountCriteria
@@ -104,7 +125,7 @@
             return repository.Fetch<ValidateUserAssociatedAccountModel>(criteria);
         }
 
-        public DBResult AddAssociatedAccount(AddAssociatedAccountModel model)
+        public ResultAddAssociatedAccountModel AddAssociatedAccount(AddAssociatedAccountModel model)
         {
             var criteria = new AddAssociatedAccountCriteria
             {
@@ -113,6 +134,45 @@
                 IsAuto = model.IsAuto,
                 Remark = model.Comment,
                 CreatedBy = model.CreatedBy
+            };
+
+            try
+            {              
+                var custInfos = repository.Fetch<CustInfoAssociatedAccountModel>(criteria);
+
+                return new ResultAddAssociatedAccountModel {  ErrorCode = 0, CustInfos = custInfos };
+            }
+            catch (Exception ex)
+            {
+                var logMessage = new LogMessage(ex.Message)
+                 .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                 .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error($"Add associated account Exception { logMessage }", ex);
+                
+                return new ResultAddAssociatedAccountModel { ErrorCode = -1, ErrorMsg = ex.Message };
+            }
+        }
+
+        public GetProblemCategoryByGroupIDModel GetProblemCategoryByGroupID(long groupID)
+        {
+            var criteria = new GetProblemCategoryByGroupIDCriteria
+            {
+                GroupID = groupID
+            };
+
+            return repository.Fetch<GetProblemCategoryByGroupIDModel>(criteria).FirstOrDefault();
+        }
+
+        public DBResult SetProblemCategoryByGroupID(SetProblemCategoryByGroupIDModel model)
+        {
+            var criteria = new SetProblemCategoryByGroupIDCriteria
+            {
+                GroupID = model.GroupID,
+                PACategoryID = model.PACategoryID,
+                PACreditSites = model.PACreditSites,
+                PALicenseeSites = model.PALicenseeSites,
+                ModifiedBy = model.ModifiedBy
             };
 
             try
@@ -127,7 +187,7 @@
                  .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
                  .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
 
-                LogService.Error($"Add associated account Exception { logMessage }", ex);
+                LogService.Error($"Set ProblemCategoryByGroupID Exception { logMessage }", ex);
 
                 return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
             }
@@ -139,16 +199,20 @@
 
             try
             {
-                var custToUpdateABI = custInfos.Where(x => x.Danger2 == 0).Select(x => new DangerLevelModel
+               
+                if (valueABI > 0)
                 {
-                    CustId = x.CustID,
-                    DangerLevel = valueABI
-                });
+                    var custToUpdateABI = custInfos.Where(x => x.Danger2 == 0).Select(x => new DangerLevelModel
+                    {
+                        CustId = x.CustID,
+                        DangerLevel = valueABI
+                    });
 
-                if (custToUpdateABI.Any())
-                {
-                    return customerClassificationService.UpdateDangerLevelToMainDB(custToUpdateABI, 2);
-                }
+                    if (custToUpdateABI.Any())
+                    {
+                        customerClassificationService.UpdateDangerLevelToMainDB(custToUpdateABI, 2);
+                    }
+                }                
             }
             catch (Exception ex)
             {
@@ -162,6 +226,43 @@
 
                 return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
             }            
+
+            return new DBResult { ErrorCode = 0 };
+        }
+
+        public DBResult UpdateOriToMainDB(string custIDs, int valueOri)
+        {
+            var custInfos = GetCustomerInfoMainDB(custIDs, 2);
+
+            try
+            {
+                if (valueOri > 0)
+                {
+                    var custToUpdateOri = custInfos.Where(x => x.Danger1 == 0).Select(x => new DangerLevelModel
+                    {
+                        CustId = x.CustID,
+                        DangerLevel = valueOri
+                    });
+
+                    if (custToUpdateOri.Any())
+                    {
+                        customerClassificationService.UpdateDangerLevelToMainDB(custToUpdateOri, 1);
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                var logMessage = new LogMessage(ex.Message)
+                 .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                 .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                var jsonData = JsonConvert.SerializeObject(custInfos);
+
+                LogService.Error($"Update Ori To MainDB Exception { logMessage } with listCust: {jsonData}", ex);
+
+                return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };              
+            }
 
             return new DBResult { ErrorCode = 0 };
         }
@@ -198,6 +299,7 @@
             {
                 GroupName = model.GroupName,
                 ABI = model.ABI,
+                Ori = model.Ori,
                 AllCredit = model.AllCredit,
                 AllLicensee = model.AllLicensee,
                 Sites = model.Sites,
@@ -246,6 +348,7 @@
                 GroupID = model.GroupID,
                 GroupName = model.GroupName,
                 ABI = model.ABI,
+                Ori = model.Ori,
                 AllCredit = model.AllCredit,
                 AllLicensee = model.AllLicensee,
                 Sites = model.Sites,
@@ -298,6 +401,53 @@
                 LogService.Error($"Remove associated group monitor Exception { logMessage }", ex);
 
                 return new DBResult { ErrorCode = -1, ErrorMsg = ex.Message };
+            }
+        }
+
+        public IEnumerable<GetGroupTransferAccountGroupModel> GetGroupTransferAccount(long currentGroupID)
+        {
+            return repository.Fetch<GetGroupTransferAccountGroupModel>(new GetGroupTransferAccountCriteria
+            {
+                GroupID = currentGroupID
+            });
+        }
+
+        public IEnumerable<ValidateUserAssociatedAccountModel> ValidateUsernameTransferAccount(string userNames, long groupID)
+        {           
+            return repository.Fetch<ValidateUserAssociatedAccountModel>(new ValidateUsernameTransferAccountCriteria
+            {
+                UserNames = userNames,
+                GroupID = groupID
+            });
+        }
+
+        public SaveTransferAccountResultModel SaveTransferAccount(SaveTransferAccountModel model)
+        {
+            var criteria = new SaveTransferAccountCriteria
+            {
+                CTSCustIDs = model.CTSCustIDs,
+                FromGroupID = model.FromGroupID,
+                ToGroupID = model.ToGroupID,
+                ModifiedBy = model.ModifiedBy
+            };
+
+            try
+            {
+                var result = repository.Fetch<SaveTransferAccountResultModel>(criteria).First() ?? new SaveTransferAccountResultModel();
+
+                result.ErrorCode = 0;
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var logMessage = new LogMessage(ex.Message)
+                 .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                 .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error($"Save Transfer Account Exception { logMessage }", ex);
+
+                return new SaveTransferAccountResultModel { ErrorCode = -1, ErrorMsg = ex.Message };
             }
         }
 

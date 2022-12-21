@@ -8,12 +8,20 @@
 
         public string GroupName { get; set; }
 
-        public int ABI { get; set; }        
+        public int ABI { get; set; }
+
+        public int Ori { get; set; }       
 
         public int AllCredit { get; set; } // 0-Not Existed; 1-All; 2-Existed
 
         public int AllLicensee { get; set; }  // 0-Not Existed; 1-All; 2-Existed
 
+        public string CategoryName { get; set; }
+
+        public bool IsPACreditSite { get; set; }
+
+        public bool IsPALicenseeSite { get; set; }
+       
         public bool HasDevice { get; set; }
 
         public bool HasManual { get; set; }

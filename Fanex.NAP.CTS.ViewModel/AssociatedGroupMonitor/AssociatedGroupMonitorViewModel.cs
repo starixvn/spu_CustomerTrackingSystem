@@ -14,8 +14,7 @@
             var siteGroups = new List<string>();
 
             if (data.AllCredit == 1 || data.AllCredit == 2)            
-                siteGroups.Add("<span class='view-site view-site-credit'>Credit</span>");
-            
+                siteGroups.Add("<span class='view-site view-site-credit'>Credit</span>");            
 
             if (data.AllLicensee == 1 || data.AllLicensee == 2)            
                 siteGroups.Add("<span class='view-site view-site-licensee'>Licensee</span>");            
@@ -34,6 +33,19 @@
             this.AssociatedTypes = string.Join(", ", associatedTypes);
 
             this.ABI = data.ABI;
+            this.Ori = data.Ori;
+            
+            var categoryNameSite = new List<string>();
+            if (data.IsPACreditSite)
+                categoryNameSite.Add("<span class='view-site view-pcsite-credit'>Credit</span>");
+
+            if (data.IsPALicenseeSite)
+                categoryNameSite.Add("<span class='view-site view-pcsite-licensee'>Licensee</span>");
+
+            this.CategoryNameSite = string.Join(", ", categoryNameSite);
+
+            this.CategoryName = data.CategoryName == null ? string.Empty : data.CategoryName;
+
             this.TotalAccount = data.TotalAccount;
             this.Remark = data.Remark;
             this.CreatedDate = data.Created.ToString(Consts.FormatDateToString_MMMddyyyy);
@@ -50,6 +62,12 @@
         public string AssociatedTypes { get; set; }
 
         public int ABI { get; set; }
+
+        public int Ori { get; set; }
+
+        public string CategoryName { get; set; }
+
+        public string CategoryNameSite { get; set; }
 
         public int TotalAccount { get; set; }
 
