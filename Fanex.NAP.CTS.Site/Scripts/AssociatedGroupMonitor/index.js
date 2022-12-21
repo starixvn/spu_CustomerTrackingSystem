@@ -160,7 +160,7 @@
                         let htmlSPANEditGroup = '<span class="sub-icon - edit" id="sub-icon " title="Edit Group"><i class="icon-edit ' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
                         let htmlSPANSetPC = '<span class="sub-icon - setpc" id="sub-icon " title="Set Problem Category"><i class="icon-Add icon-set-pc' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';                        
                         let htmlSPANAddAccount = '<span class="sub-icon - edit" id="sub-icon " title="Add Accounts"><i class="icon-add-account' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
-                        let htmlSPANTransferAccount = '<span class="sub-icon - edit" id="sub-icon " title="Transfer Accounts"><i class="icon-remove-account' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
+                        let htmlSPANTransferAccount = '<span class="sub-icon - edit" id="sub-icon " title="Transfer Accounts"><i class="icon-transfer-user' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
                         let htmlExportExcel = '<span class="sub-icon - excel" id="sub-icon " title="Export To Excel"><i class="icon-excel ' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
                         let htmlSPANRemoveGroup = '<span class="sub-icon - delete" id="sub-icon " title="Remove Group"><i class="icon-delete ' + (!isHostPermission ? ' disabled"' : '') + '"></i></span>';
 
@@ -196,7 +196,7 @@
                                 AddAccount(row);
                             });
 
-                            $('.icon-remove-account', cell).click(() => {
+                            $('.icon-transfer-user', cell).click(() => {
                                 $('td #sub-icon').addClass('none-pointer');
 
                                 TranserAccount(row);
