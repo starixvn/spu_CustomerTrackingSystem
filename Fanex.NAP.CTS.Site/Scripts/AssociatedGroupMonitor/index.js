@@ -37,6 +37,7 @@
         btnSaveSetPC: $('#btnSaveSetPC'),    
         divTransferAccount: $('#divTransferAccount'),
         btnSaveTransferAccount: $('#btnSaveTransferAccount'),
+        spanAddAssociatedAccountOpen: $('#spanAddAssociatedAccountOpen'),
         maxTags: 1001
     };   
 
@@ -309,6 +310,7 @@
 
         RefreshTitleIsHtml();
 
+        domElements.spanAddAssociatedAccountOpen.val(1);
         domElements.divAddAssociatedAccount.dialog({
             modal: true,
             width: '700px',
@@ -318,6 +320,7 @@
             draggable: true,
             close: function () {
                 $(this).dialog('close');
+                domElements.spanAddAssociatedAccountOpen.val(0);
             }
         });
     }
@@ -969,11 +972,11 @@
             }
         });
 
-        $(document).on('mouseup', function (e) {
-            if (domElements.divTransferAccount.hasClass("ui-dialog-content")) {
+        $(document).on('mouseup', function (e) {                                   
+            if (domElements.spanAddAssociatedAccountOpen.val() == 1) {
+                Mouseup(e);             
+            } else {               
                 transferAccount.Mouseup(e);
-            } else {
-                Mouseup(e);
             }
         });
 
