@@ -835,7 +835,7 @@
 
                                     if (ggbTicketDetails != null && ggbTicketDetails.Any())
                                     {
-                                        ggbData = _accountService.MergeCustGroupTicketInfo(matchGroupInfo, ggbTicketDetails, true);
+                                        ggbData = _accountService.MergeCustGroupTicketInfo(matchGroupInfo.Distinct(x => new { x.CustID, x.GroupID }), ggbTicketDetails, true);
                                     }
                                 }
                             }
