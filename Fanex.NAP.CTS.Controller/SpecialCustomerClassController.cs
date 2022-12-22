@@ -8,6 +8,7 @@
     using Fanex.NAP.CTS.Core.Extentions;
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Model;
+    using Fanex.NAP.CTS.Model.CustomerClassification.RescanCustomerClassification;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Resource.Consts;    
@@ -128,10 +129,10 @@
                 var resultRemoveToCTS = _customerClassService.RemoveCustomerClass(ctsCustID, CurrentSession.UserId);
 
                 if (resultRemoveToCTS.ErrorCode == 0)
-                {
+                {                   
                     _customerClassifyService.RescanCustomerClassification(new RescanCustClassificationModel
                     {
-                        CustIds = new List<long> { custID },
+                        CustIds = new List<long> { custID},
                         IsRescanPA = true,
                         IsPushCCToSoon88 = true,
                         IsUpdateDangerToMainDB = true,

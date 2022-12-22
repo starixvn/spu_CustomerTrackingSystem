@@ -25,6 +25,7 @@
     using Fanex.NAP.CTS.Model.Account.CustomerInfo;
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.CustomerClassification;
+    using Fanex.NAP.CTS.Model.CustomerClassification.RescanCustomerClassification;
     using Fanex.NAP.CTS.Model.DTO;
     using Fanex.NAP.CTS.Model.GraphDB;
     using Fanex.NAP.CTS.Model.Home;    
@@ -940,7 +941,7 @@
 
             var criteria = new GetCTSCustomerClassificationCriteria
             {
-                CTSCustID = ctsCustId
+                 CTSCustID = ctsCustId
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
@@ -980,7 +981,7 @@
                     result.Read<bool>(); // Pin Categories
                     result.Read<bool>(); // Excluded Tag Ass PA
 
-                    return result.Read<CustomerClassificationModel>();                                       
+                    return result.Read<CustomerClassificationModel>();
                 }
             }
         }
@@ -1091,7 +1092,7 @@
             return new DBResult { ErrorCode = 0, ErrorMsg = string.Empty };
         }
 
-        public IEnumerable<CustomerClassForMainDb> RemoveVVIPCategory(CustomerCategoryModel categoryModel)
+        public IEnumerable<long> RemoveVVIPCategory(CustomerCategoryModel categoryModel)
         {
             var custList = new List<RemoveCustomerCategoryInfoModel>() 
             {
@@ -1112,7 +1113,7 @@
             };
 
             var repository = new DynamicRepository();
-            return repository.Fetch<CustomerClassForMainDb>(criteria) ?? Enumerable.Empty<CustomerClassForMainDb>();
+            return repository.Fetch<long>(criteria) ?? Enumerable.Empty<long>();
         }
 
         public DBResult PinCategoryCustomerClassification(long ctsCustId, int subscriberId, bool isPinCategory, int createdBy)

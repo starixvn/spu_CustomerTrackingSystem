@@ -18,6 +18,7 @@
     using Fanex.NAP.CTS.Model.Association;
     using Fanex.NAP.CTS.Model.CustomerClassification;
     using Fanex.NAP.CTS.Model.CustomerClassification.ProblemAccount;
+    using Fanex.NAP.CTS.Model.CustomerClassification.RescanCustomerClassification;
     using Fanex.NAP.CTS.Model.ImportEvidences;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
@@ -1667,7 +1668,7 @@
                 if (result.ErrorCode == 0
                     && !isProblemAccount
                     && custSubId == 0)
-                {
+                {                    
                     _rescanClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
                     {
                         CustIds = new List<long> { custId },
@@ -1893,9 +1894,9 @@
                 model.CreatedBy = CurrentSession.UserId;
                 model.ActionType = ActionTypeQueueCustCategory.Remove;
 
-                var custInfos = _accountService.RemoveVVIPCategory(model);
+                var custIds = _accountService.RemoveVVIPCategory(model);
 
-                if (custInfos != null && custInfos.Any())
+                if (custIds != null && custIds.Any())
                 {
                     if (model.RoleId != 1 && model.IsAffectToAllDownlines)
                     {
@@ -1906,7 +1907,7 @@
                     {
                         _rescanClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
                         {
-                            CustIds = custInfos.Select(x => x.CustID).Distinct(),
+                            CustIds = new List<long> { model.CustId },
                             IsRescanPA = true ,
                             IsToQueue = (model.RoleId != 1 && !model.IsAffectToAllDownlines), // add to queue for case SMA and not checking affect to downline to affect PA for downline
                             IsPushCCToSoon88 = true,
@@ -1956,19 +1957,19 @@
 
             if (unmarkPAResult.ErrorCode == 0 && unmarkPAResult.CustomerInfo.Any())
             {
-                var custIdList = unmarkPAResult.CustomerInfo.Select(x => x.CustID);
-
-                _problemAccountClassificationService.UpdateBetLimitOfUnflaggedCustomer(custIdList.Distinct());                
+                var custIds = unmarkPAResult.CustomerInfo.Select(x => x.CustID);
+               
+                _problemAccountClassificationService.UpdateBetLimitOfUnflaggedCustomer(custIds.Distinct());                
 
                 var paramRescan = new RescanCustClassificationModel
                 {
-                    CustIds = custIdList,
+                    CustIds = custIds,
                     IsPushCCToSoon88 = true,
                     FunctionId = FunctionId.UnmarkCustomerCategory,
                     IsUpdateDangerToMainDB = true
                 };
 
-                var smCustIds = _rescanClassificationService.GetAgentCusts(custIdList);
+                var smCustIds = _rescanClassificationService.GetAgentCusts(custIds);
 
                 _rescanClassificationService.RescanNormalAccount(paramRescan, Enumerable.Empty<long>(), smCustIds);
             }

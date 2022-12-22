@@ -10,5 +10,7 @@
 
         [XName("c")]
         public int CustomerClass { get; set; }
+
+        public int CurrentCategoryID { get; set; }
     }
 }

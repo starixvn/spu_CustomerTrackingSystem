@@ -5,6 +5,7 @@
     using Fanex.NAP.CTS.Core.Utilities;
     using Fanex.NAP.CTS.Criteria.Api;
     using Fanex.NAP.CTS.Model.API;
+    using Fanex.NAP.CTS.Model.CustomerClassification.RescanCustomerClassification;
     using Fanex.NAP.CTS.Model.RescanCustClassificationModel;
     using Fanex.NAP.CTS.Model.SyncCustomerToMainDb;
     using Fanex.NAP.CTS.Service.Interface.Api;
@@ -140,9 +141,9 @@
             foreach (var batchCustIds in custInfo)
             {
                 var custIDs = RemoveLicBA(batchCustIds);
-
+               
                 if (custIDs != null && custIDs.Any())
-                {
+                {                    
                     rescanCustomerClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
                     {
                         CustIds = custIDs,
@@ -176,10 +177,10 @@
                     var result = RemoveLicBA(batchCustIds);
 
                     if (result != null && result.Any())
-                    {
+                    {                        
                         rescanCustomerClassificationService.RescanCustomerClassification(new RescanCustClassificationModel
                         {
-                            CustIds = result,
+                            CustIds = batchCustIds.Select(x=>x.CustID),
                             IsRescanPA = false,
                             IsPushCCToSoon88 = false,
                             IsUpdateDangerToMainDB = false,
@@ -262,8 +263,7 @@
             };
 
             return repository.Fetch<CustInfoBySiteNameModel>(criteria);
-        }
-
+        }       
         #endregion Private Methods
     }
 }
