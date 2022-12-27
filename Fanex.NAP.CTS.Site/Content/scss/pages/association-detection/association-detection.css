@@ -485,6 +485,13 @@ body {
         color: #fff; }
         .association-detection-report .association-detection-content .control-table .form-filter .box-username .btn-detect:not(:disabled):hover {
           background-color: #5081ff; }
+    .association-detection-report .association-detection-content .control-table .form-filter .icon-delete {
+      font-size: 1.4rem;
+      height: 18px;
+      margin-right: 4px;
+      cursor: pointer; }
+    .association-detection-report .association-detection-content .control-table .form-filter .icon-delete:before {
+      color: #808080; }
     .association-detection-report .association-detection-content .control-table .form-filter .checkbox-filter {
       margin-right: 40px; }
     .association-detection-report .association-detection-content .control-table .form-filter .checkbox-container {
@@ -502,6 +509,13 @@ body {
       .association-detection-report .association-detection-content .control-table .form-filter .flex-container .checkbox-all {
         cursor: pointer;
         color: blue; }
+      .association-detection-report .association-detection-content .control-table .form-filter .flex-container .box-left {
+        background: #E7EDFF;
+        width: 65%;
+        padding: 0 10px 0 10px; }
+      .association-detection-report .association-detection-content .control-table .form-filter .flex-container .box-right {
+        margin-top: 30px;
+        margin-left: 15px; }
   .association-detection-report .association-detection-content .table-report {
     font-family: "Lato", Arial, Tahoma, sans-serif; }
     .association-detection-report .association-detection-content .table-report .fixed-header {
