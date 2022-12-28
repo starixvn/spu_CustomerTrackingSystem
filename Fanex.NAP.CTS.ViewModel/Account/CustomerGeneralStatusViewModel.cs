@@ -54,6 +54,8 @@
 
         public int SubscriberId { get; set; }
 
+        public string SiteName { get; set; }
+
         public bool IsHostPermission { get; set; }
 
         public bool IsBettingStatisticPermission { get; set; }
@@ -98,6 +100,7 @@
                 this.CustSubId = customerInfoByCTSCustIdModel.CustSubID;
                 this.CustId = customerInfoByCTSCustIdModel.CustID;
                 this.Subscriber = string.IsNullOrEmpty(customerInfoByCTSCustIdModel.SubscriberName) ? "N/A" : customerInfoByCTSCustIdModel.SubscriberName;
+                this.SiteName = string.IsNullOrEmpty(customerInfoByCTSCustIdModel.SiteName) ? "N/A" : customerInfoByCTSCustIdModel.SiteName;
                 this.SubscriberId = customerInfoByCTSCustIdModel.SubscriberID;
                 this.CustStatusID = customerInfoByCTSCustIdModel.CustStatusID;
                 this.StatusName = string.IsNullOrEmpty(customerInfoByCTSCustIdModel.CustStatusName) ? "N/A" : customerInfoByCTSCustIdModel.CustStatusName;
