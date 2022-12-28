@@ -63,15 +63,24 @@ body {
                     height: 18px;
                     margin-right: 4px;
                     cursor: pointer;
-                }
+                    padding: 2px;
 
-                .icon-delete:before {
-                    //color: #FF0000;
-                    color: #808080;
+                    &::before {
+                        color: #C0C0C0;
+                    }
+
+                    &:hover {
+                        border-radius: 50%;
+                        background: #E7EDFF;
+                    }
+
+                    &.delete-invalid::before {
+                        color: #FF0000;
+                    }
                 }
 
                 .checkbox-filter {
-                    margin-right: 40px;
+                    margin-right: 35px;
                 }
 
                 .checkbox-container {
@@ -101,9 +110,8 @@ body {
                     }
 
                     .box-left {
-                        background: #E7EDFF;
-                        width: 65%;
-                        padding: 0 10px 0 10px;
+                        background: #E7EDFF;                      
+                        padding-left: 10px;
                     }
 
                     .box-right {

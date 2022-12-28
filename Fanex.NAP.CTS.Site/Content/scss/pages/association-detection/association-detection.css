@@ -489,11 +489,17 @@ body {
       font-size: 1.4rem;
       height: 18px;
       margin-right: 4px;
-      cursor: pointer; }
-    .association-detection-report .association-detection-content .control-table .form-filter .icon-delete:before {
-      color: #808080; }
+      cursor: pointer;
+      padding: 2px; }
+      .association-detection-report .association-detection-content .control-table .form-filter .icon-delete::before {
+        color: #C0C0C0; }
+      .association-detection-report .association-detection-content .control-table .form-filter .icon-delete:hover {
+        border-radius: 50%;
+        background: #E7EDFF; }
+      .association-detection-report .association-detection-content .control-table .form-filter .icon-delete.delete-invalid::before {
+        color: #FF0000; }
     .association-detection-report .association-detection-content .control-table .form-filter .checkbox-filter {
-      margin-right: 40px; }
+      margin-right: 35px; }
     .association-detection-report .association-detection-content .control-table .form-filter .checkbox-container {
       margin-top: 12px; }
       .association-detection-report .association-detection-content .control-table .form-filter .checkbox-container span:before {
@@ -511,8 +517,7 @@ body {
         color: blue; }
       .association-detection-report .association-detection-content .control-table .form-filter .flex-container .box-left {
         background: #E7EDFF;
-        width: 65%;
-        padding: 0 10px 0 10px; }
+        padding-left: 10px; }
       .association-detection-report .association-detection-content .control-table .form-filter .flex-container .box-right {
         margin-top: 30px;
         margin-left: 15px; }

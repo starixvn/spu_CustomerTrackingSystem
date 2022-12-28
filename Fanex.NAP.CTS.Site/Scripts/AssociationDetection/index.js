@@ -14,6 +14,7 @@
         spanAddUserNameMaxTag: $('#spanAddUserNameMaxTag'),        
         spanAddChangeHidden: $('#spanAddChangeHidden'),
         inputTagUsername: $('#inputTagUsername'),  
+        btnRemoveInvalidUserName: $('#btnRemoveInvalidUserName'),
         tickCheckAll: $('#tickCheckAll'),
         tickUncheckAll: $('#tickUncheckAll'),
         inputOptBP: $('#inputOptBP'),
@@ -653,6 +654,8 @@
                     console.log(errMsg);
                 }
             });
+        } else {
+            domElements.btnRemoveInvalidUserName.removeClass('delete-invalid');
         }
     }    
 
@@ -691,10 +694,34 @@
             }
         });     
 
-        let isEnableDetect = data.UserNameInvalidList.length === 0
-            && data.UserNameValidList.length >= 2;           
+        let isEnableDetect = data.UserNameInvalidList.length === 0 && data.UserNameValidList.length >= 2;
 
-        domElements.btnDetect.prop('disabled', !isEnableDetect);      
+        domElements.btnDetect.prop('disabled', !isEnableDetect);
+
+        if (!isEnableDetect) {
+            domElements.btnRemoveInvalidUserName.addClass('delete-invalid');
+        } else {
+            domElements.btnRemoveInvalidUserName.removeClass('delete-invalid');
+        }
+    }
+
+    function RemoveAllInvalidUsername() {
+        if (domElements.btnRemoveInvalidUserName.hasClass('delete-invalid')) {
+            common.showConfirmation("<div class='popup-content'><div class='popup-title'>Are you sure you want to remove all invalid Usernames?</div></div>",
+                function () {
+                    let invalidTags = domElements.spanAddUserName.find('.invalid-username', 'tags tag');
+                    invalidTags.each(function (_, tag) {
+                        domElements.inputTagUsername.tagify().data('tagify').removeTags(tag);
+                    });
+
+                    let maxCountTags = parseInt(domElements.spanAddUserNameMaxTag.text());
+                    domElements.spanAddUserNameMaxTag.text(maxCountTags + invalidTags.length);
+                    
+                    if (GetInputUserName() !== '' && CheckSelectFilter())
+                        domElements.btnDetect.prop('disabled', false);
+                }
+            )
+        }
     }
 
     function DetectUserName() {
@@ -754,7 +781,7 @@
                 }
             });
         }
-    }
+    }   
 
     function InitInputTagUsername() {
         domElements.spanAddUserNameMaxTag.text(maxTags);
@@ -772,8 +799,8 @@
             let currentTagsLength = domElements.spanAddUserName.find('tags tag').length;
             if (currentTagsLength < maxTags)
                 domElements.spanAddUserNameMaxTag.text(maxTags - currentTagsLength + 1);
-        }        
-
+        }
+       
         function IsTextUnicode(text) {
             var pattern = /^[\x20-\x7E]*$/;
             return pattern.test(text);
@@ -965,6 +992,8 @@
             ToggleTickCheckAll(false);
             ChangeStateBtnDetect();
         });
+
+        domElements.btnRemoveInvalidUserName.on('click', () => RemoveAllInvalidUsername());
 
         SetCacheForFilter(domElements.inputOptBP, GetStorageFilter("AssDetectCheckboxBP"));
         SetCacheForFilter(domElements.inputOptDevice, GetStorageFilter("AssDetectCheckboxDevice"));
