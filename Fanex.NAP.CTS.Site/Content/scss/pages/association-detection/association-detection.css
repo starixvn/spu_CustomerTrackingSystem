@@ -514,12 +514,13 @@ body {
       margin-bottom: 10px; }
       .association-detection-report .association-detection-content .control-table .form-filter .flex-container .checkbox-all {
         cursor: pointer;
-        color: blue; }
+        color: #2097fd;
+        font-size: 12px; }
       .association-detection-report .association-detection-content .control-table .form-filter .flex-container .box-left {
         background: #E7EDFF;
         padding-left: 10px; }
       .association-detection-report .association-detection-content .control-table .form-filter .flex-container .box-right {
-        margin-top: 30px;
+        margin-top: 17px;
         margin-left: 15px; }
   .association-detection-report .association-detection-content .table-report {
     font-family: "Lato", Arial, Tahoma, sans-serif; }
