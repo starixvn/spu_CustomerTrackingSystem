@@ -485,8 +485,21 @@ body {
         color: #fff; }
         .association-detection-report .association-detection-content .control-table .form-filter .box-username .btn-detect:not(:disabled):hover {
           background-color: #5081ff; }
+    .association-detection-report .association-detection-content .control-table .form-filter .icon-delete {
+      font-size: 1.4rem;
+      height: 18px;
+      margin-right: 4px;
+      cursor: pointer;
+      padding: 2px; }
+      .association-detection-report .association-detection-content .control-table .form-filter .icon-delete::before {
+        color: #C0C0C0; }
+      .association-detection-report .association-detection-content .control-table .form-filter .icon-delete:hover {
+        border-radius: 50%;
+        background: #E7EDFF; }
+      .association-detection-report .association-detection-content .control-table .form-filter .icon-delete.delete-invalid::before {
+        color: #FF0000; }
     .association-detection-report .association-detection-content .control-table .form-filter .checkbox-filter {
-      margin-right: 40px; }
+      margin-right: 35px; }
     .association-detection-report .association-detection-content .control-table .form-filter .checkbox-container {
       margin-top: 12px; }
       .association-detection-report .association-detection-content .control-table .form-filter .checkbox-container span:before {
@@ -501,7 +514,14 @@ body {
       margin-bottom: 10px; }
       .association-detection-report .association-detection-content .control-table .form-filter .flex-container .checkbox-all {
         cursor: pointer;
-        color: blue; }
+        color: #2097fd;
+        font-size: 12px; }
+      .association-detection-report .association-detection-content .control-table .form-filter .flex-container .box-left {
+        background: #E7EDFF;
+        padding-left: 10px; }
+      .association-detection-report .association-detection-content .control-table .form-filter .flex-container .box-right {
+        margin-top: 17px;
+        margin-left: 15px; }
   .association-detection-report .association-detection-content .table-report {
     font-family: "Lato", Arial, Tahoma, sans-serif; }
     .association-detection-report .association-detection-content .table-report .fixed-header {
