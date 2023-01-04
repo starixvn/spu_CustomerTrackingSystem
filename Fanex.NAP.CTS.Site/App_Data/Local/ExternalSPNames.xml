@@ -32,7 +32,7 @@
 		<Setting Key="TicketVoiding_TicketsInRequest_Select" SpName="TicketVoiding_TicketsInRequest_Select" DbName="DBCTS.bodb02.bodbSPUNet" />
 		<Setting Key="CTS_CustomerProfile_FraudInfo_Get" SpName="CTS_CustomerProfile_FraudInfo_Get" DbName="DBFS.bodb_FraudSensor.bodbSPUNet" />
 		<Setting Key="CTS_RobotUserStatus_Get" SpName="CTS_RobotUserStatus_Get" DbName="DBONUSER.ON_USER.bodbSPUNet" />
-		<Setting Key="CTS_Customer_RobotCheckExist" SpName="CTS_Customer_RobotCheckExist_xtest" DbName="DBONUSER.ON_USER.bodbSPUNet" />
+		<Setting Key="CTS_Customer_RobotCheckExist" SpName="CTS_Customer_RobotCheckExist" DbName="DBONUSER.ON_USER.bodbSPUNet" />
 		<Setting Key="CTS_MatchInfo_Get" SpName="CTS_MatchInfo_Get" DbName="DBCTS.bodb02.bodbSPUNet" />
 	</Function>
 
@@ -41,7 +41,7 @@
 	</Function>
 
 	<Function name="CustomerClassification">
-		<Setting Key="CTS_NormalAccountsClassification_GeneralCategorize_Daily" SpName="CTS_NormalAccountsClassification_GeneralCategorize_Daily_xtest" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
+		<Setting Key="CTS_NormalAccountsClassification_GeneralCategorize_Daily" SpName="CTS_NormalAccountsClassification_GeneralCategorize_Daily" DbName="DBVR2.bodb_VR2Model.bodbSPUNet" />
 		
 		<Setting Key="CTS_CustomerUpdDanger" SpName="CTS_CustomerUpdDanger" DbName="DBCust.CustDB.bodbAdminNet" TimeOut="300" />
 	</Function>
@@ -69,6 +69,6 @@
 
 	<Function Name="AssociationDetection">
 		<Setting Key="CTS_Association_GetBySharedMatches" SpName="CTS_Association_GetBySharedMatches" DbName="DBCTS.bodb02.bodbSPUNet" />
-		<Setting Key="Acc_Rpt_GetCustStatisticsInfo_Realtime_ByListCustID" SpName="Acc_Rpt_GetCustStatisticsInfo_Realtime_ByListCustID_xtest" DbName="DBDW.bodb_dwrs.bodbSPUNet" />
+		<Setting Key="Acc_Rpt_GetCustStatisticsInfo_Realtime_ByListCustID" SpName="Acc_Rpt_GetCustStatisticsInfo_Realtime_ByListCustID" DbName="DBDW.bodb_dwrs.bodbSPUNet" />
 	</Function>
 </Functions>
