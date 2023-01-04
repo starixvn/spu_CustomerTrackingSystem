@@ -20,6 +20,8 @@
                     this.SportType = "E-Sports"; break;
                 case 99:
                     this.SportType = "Other Sports"; break;
+                case 229:
+                    this.SportType = "Non-Sport"; break;
                 default: break;
             }
         }

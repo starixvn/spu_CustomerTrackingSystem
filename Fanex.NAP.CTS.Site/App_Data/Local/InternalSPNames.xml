@@ -31,7 +31,7 @@
 		<Setting Key="CTS_DC_CustInfo_GetByCTSCustID" SpName="CTS_DC_CustInfo_GetByCTSCustID" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustInfo_GetFlagged" SpName="CTS_DC_CustInfo_GetFlagged" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustInfo_GetCustIDsRole" SpName="CTS_DC_CustInfo_GetCustIDsRole" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustInfo_GetCustInfoDangerous" SpName="CTS_DC_CustInfo_GetCustInfoDangerous_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_CustInfo_GetCustInfoDangerous" SpName="CTS_DC_CustInfo_GetCustInfoDangerous" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
 
 	<Function Name="Notification">
@@ -79,10 +79,10 @@
 		<Setting Key="CTS_DC_RPT_AssociationDetection" SpName="CTS_DC_RPT_AssociationDetection" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />		
 		<Setting Key="SPU_AIML_GB_DetectAssociationByIP" SpName="SPU_AIML_GB_DetectAssociationByIP" DbName="MySQL.SPU_AIML.Reporter" />
 		<Setting Key="SPU_AIML_GB_GetCoupleSharedIP" SpName="SPU_AIML_GB_GetCoupleSharedIP" DbName="MySQL.SPU_AIML.Reporter" />
-		<Setting Key="CTS_DC_AssociationDetection_Primary_GetEdge" SpName="CTS_DC_AssociationDetection_Primary_GetEdge_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_AssociationDetection_Agent_DetectGroup" SpName="CTS_DC_AssociationDetection_Agent_DetectGroup_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_AssociationDetection_DetectGroup" SpName="CTS_DC_AssociationDetection_DetectGroup_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_AssociationDetection_GetDetail" SpName="CTS_DC_AssociationDetection_GetDetail_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_AssociationDetection_Primary_GetEdge" SpName="CTS_DC_AssociationDetection_Primary_GetEdge" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_AssociationDetection_Agent_DetectGroup" SpName="CTS_DC_AssociationDetection_Agent_DetectGroup" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_AssociationDetection_DetectGroup" SpName="CTS_DC_AssociationDetection_DetectGroup" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_AssociationDetection_GetDetail" SpName="CTS_DC_AssociationDetection_GetDetail" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
 	
 	<Function Name="AssociationDetail">
@@ -93,7 +93,7 @@
 	
 	<Function Name="CustomerClassification">
 		<Setting Key="CTS_DC_CustClassification_GetCategory" SpName="CTS_DC_CustClassification_GetCategory" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustClassification_VVIP_Insert" SpName="CTS_DC_CustClassification_VVIP_Insert_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_CustClassification_VVIP_Insert" SpName="CTS_DC_CustClassification_VVIP_Insert" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustClassification_Update" SpName="CTS_DC_CustClassification_Update" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustClassification_VVIP_Remove" SpName="CTS_DC_CustClassification_VVIP_Remove" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustClassification_Get" SpName="CTS_DC_CustClassification_Get" DbName="MySQL.CTS_DataCenter.Reporter" />
@@ -106,7 +106,7 @@
 		<Setting Key="CTS_DC_CustClassification_LogInputData" SpName="CTS_DC_CustClassification_LogInputData" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustClassification_Queue_Insert" SpName="CTS_DC_CustClassification_Queue_Insert" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustClassification_ProblemAccount_InsertByCategory" SpName="CTS_DC_CustClassification_ProblemAccount_InsertByCategory" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_CustClassification_Normal_GetExisting" SpName="CTS_DC_CustClassification_Normal_GetExisting_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_CustClassification_Normal_GetExisting" SpName="CTS_DC_CustClassification_Normal_GetExisting" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
 
 	<Function name="AssociatedAccountMonitor">
@@ -154,10 +154,10 @@
 		<Setting Key="CTS_DC_MatchMonitor_Details_GetReasonGroup" SpName="CTS_DC_MatchMonitor_Details_GetReasonGroup" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_MatchMonitor_Details_GetScore" SpName="CTS_DC_MatchMonitor_Details_GetScore" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_MatchMonitor_Details_Get" SpName="CTS_DC_MatchMonitor_Details_Get" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustInfo_GetByCustID" SpName="CTS_DC_CustInfo_GetByCustID_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_CustInfo_GetByCustID" SpName="CTS_DC_CustInfo_GetByCustID" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_RobotClassification_GetRobotStatusByTransList" SpName="CTS_DC_RobotClassification_GetRobotStatusByTransList" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_Association_CountByCategoryID" SpName="CTS_DC_Association_CountByCategoryID_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_MatchMonitor_GetStaticList " SpName="CTS_DC_MatchMonitor_GetStaticList_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_Association_CountByCategoryID" SpName="CTS_DC_Association_CountByCategoryID" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_MatchMonitor_GetStaticList " SpName="CTS_DC_MatchMonitor_GetStaticList" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
 
 	<Function name="RobotClassification">
@@ -191,35 +191,35 @@
 		<Setting Key="CTS_DC_ProblemAccountManagement_GetCategories" SpName="CTS_DC_ProblemAccountManagement_GetCategories" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_ProblemAccountManagement_ValidateUserName" SpName="CTS_DC_ProblemAccountManagement_ValidateUserName" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_CustEvidence_GetByReasonId" SpName="CTS_DC_CustEvidence_GetByReasonId" DbName="MySQL.SLAVE.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustClassification_PA_Insert" SpName="CTS_DC_CustClassification_PA_Insert_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_CustClassification_PA_Insert" SpName="CTS_DC_CustClassification_PA_Insert" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_CustClassification_PA_Remove" SpName="CTS_DC_CustClassification_PA_Remove" DbName="MySQL.CTS_DataCenter.Admin" />		
 	</Function>
 	<Function name="RescanCustomerClassification">
 		<Setting Key="CTS_Arc_CustomerAssociation_RollBack_CheckByNewPA" SpName="CTS_Arc_CustomerAssociation_RollBack_CheckByNewPA" DbName="MySQL.CTS_Archive.Admin" />
-		<Setting Key="CTS_DC_CustClassification_PA_ReScan" SpName="CTS_DC_CustClassification_PA_ReScan_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_CustClassification_PA_InsertRobot" SpName="CTS_DC_CustClassification_PA_InsertRobot_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_CustClassification_PA_ClearOld" SpName="CTS_DC_CustClassification_PA_ClearOld_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_CustClassification_PA_ReScan" SpName="CTS_DC_CustClassification_PA_ReScan" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_CustClassification_PA_InsertRobot" SpName="CTS_DC_CustClassification_PA_InsertRobot" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_CustClassification_PA_ClearOld" SpName="CTS_DC_CustClassification_PA_ClearOld" DbName="MySQL.CTS_DataCenter.Admin" />
 
 		<Setting Key="CTS_DC_CustClassification_GetCCAndDangerLevel" SpName="CTS_DC_CustClassification_GetCCAndDangerLevel" DbName="MySQL.CTS_DataCenter.Reporter" />
 	</Function>
 
 	<Function name="AssociatedGroupMonitor">
 		<Setting Key="CTS_DC_Common_GetSites" SpName="CTS_DC_Common_GetSites" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_AssociatedGroup_Get" SpName="CTS_DC_AssociatedGroup_Get_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_AssociatedGroup_Get" SpName="CTS_DC_AssociatedGroup_Get" DbName="MySQL.CTS_DataCenter.Reporter" />
 		<Setting Key="CTS_DC_AssociatedGroup_GetSites" SpName="CTS_DC_AssociatedGroup_GetSites" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_AssociatedGroup_Create" SpName="CTS_DC_AssociatedGroup_Create_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_AssociatedGroup_Remove" SpName="CTS_DC_AssociatedGroup_Remove_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_AssociatedGroup_Account_Add" SpName="CTS_DC_AssociatedGroup_Account_Add_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_AssociatedGroup_Account_Get" SpName="CTS_DC_AssociatedGroup_Account_Get_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_AssociatedGroup_Create" SpName="CTS_DC_AssociatedGroup_Create" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_AssociatedGroup_Remove" SpName="CTS_DC_AssociatedGroup_Remove" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_AssociatedGroup_Account_Add" SpName="CTS_DC_AssociatedGroup_Account_Add" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_AssociatedGroup_Account_Get" SpName="CTS_DC_AssociatedGroup_Account_Get" DbName="MySQL.CTS_DataCenter.Admin" />
 		<Setting Key="CTS_DC_AssociatedGroup_ValidateUsername" SpName="CTS_DC_AssociatedGroup_ValidateUsername" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_AssociatedGroup_GetByID" SpName="CTS_DC_AssociatedGroup_GetByID_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_AssociatedGroup_Update" SpName="CTS_DC_AssociatedGroup_Update_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_AssociatedGroup_GetProblemCategoryByGroupID" SpName="CTS_DC_AssociatedGroup_GetProblemCategoryByGroupID_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_AssociatedGroup_SetProblemCategoryByGroupID" SpName="CTS_DC_AssociatedGroup_SetProblemCategoryByGroupID_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
-		<Setting Key="CTS_DC_AssociatedGroup_GetPASites" SpName="CTS_DC_AssociatedGroup_GetPASites_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_AssociatedGroup_TransferAccount_GetGroup" SpName="CTS_DC_AssociatedGroup_TransferAccount_GetGroup_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_AssociatedGroup_TransferAccount_ValidateUsername" SpName="CTS_DC_AssociatedGroup_TransferAccount_ValidateUsername_xtest" DbName="MySQL.CTS_DataCenter.Reporter" />
-		<Setting Key="CTS_DC_AssociatedGroup_TransferAccount_Update" SpName="CTS_DC_AssociatedGroup_TransferAccount_Update_xtest" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_AssociatedGroup_GetByID" SpName="CTS_DC_AssociatedGroup_GetByID" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_AssociatedGroup_Update" SpName="CTS_DC_AssociatedGroup_Update" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_AssociatedGroup_GetProblemCategoryByGroupID" SpName="CTS_DC_AssociatedGroup_GetProblemCategoryByGroupID" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_AssociatedGroup_SetProblemCategoryByGroupID" SpName="CTS_DC_AssociatedGroup_SetProblemCategoryByGroupID" DbName="MySQL.CTS_DataCenter.Admin" />
+		<Setting Key="CTS_DC_AssociatedGroup_GetPASites" SpName="CTS_DC_AssociatedGroup_GetPASites" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_AssociatedGroup_TransferAccount_GetGroup" SpName="CTS_DC_AssociatedGroup_TransferAccount_GetGroup" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_AssociatedGroup_TransferAccount_ValidateUsername" SpName="CTS_DC_AssociatedGroup_TransferAccount_ValidateUsername" DbName="MySQL.CTS_DataCenter.Reporter" />
+		<Setting Key="CTS_DC_AssociatedGroup_TransferAccount_Update" SpName="CTS_DC_AssociatedGroup_TransferAccount_Update" DbName="MySQL.CTS_DataCenter.Admin" />
 	</Function>
 	
 	<Function name="LogData">
