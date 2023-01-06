@@ -24,6 +24,58 @@
 
                 .title-association {
                     margin-bottom: -1.3rem;
+
+                    .radio-button {
+                        input[type="radio"] {
+                            display: none;
+                        }
+
+                        label {
+                            position: relative;                            
+                            padding: 1rem 4rem 0 2.5rem;
+                            cursor: pointer;
+
+                            &:before, &:after {
+                                position: absolute;
+                                content: '';
+                                top: 50%;
+                                border-radius: 100%;
+                                -webkit-transition: all .2s;
+                                transition: all .2s;
+                            }
+
+                            &:before {
+                                left: 0;
+                                width: 16px;
+                                height: 16px;
+                                margin-top: -0.4rem;
+                                background: #f3f3f3;
+                                border: 1px solid #ccc;
+                            }
+
+                            &:after {
+                                opacity: 0;
+                                left: .4rem;
+                                width: 8px;
+                                height: 8px;
+                                margin-top: 0;
+                                background: #458A00;
+                                -webkit-transform: scale(2);
+                                transform: scale(2);
+                            }
+                        }
+
+                        input[type="radio"]:checked + label::before {
+                            background: #fff;
+                            border: 1px solid #458A00;
+                        }
+
+                        input[type="radio"]:checked + label::after {
+                            opacity: 1;
+                            -webkit-transform: scale(1);
+                            transform: scale(1);
+                        }
+                    }
                 }
 
                 .form-filter {
@@ -40,6 +92,28 @@
                         .text {
                             margin-right: .7rem;
                             margin-bottom: 0;
+                        }
+
+                        .input {
+                            margin: 0;
+
+                            &::-webkit-input-placeholder { /* Edge */
+                                color: #868686;
+                                font-style: italic;
+                                font-size: 1.4rem;
+                            }
+
+                            &::-moz-placeholder { /* Internet Explorer */
+                                color: #868686;
+                                font-style: italic;
+                                font-size: 1.4rem;
+                            }
+
+                            &:-ms-input-placeholder {
+                                color: #868686;
+                                font-style: italic;
+                                font-size: 1.4rem;
+                            }
                         }
                     }
 

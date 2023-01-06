@@ -8,7 +8,7 @@
 
     public interface IMatchMonitorService
     {
-        IEnumerable<MatchMonitorModel> GetMatchMonitor(MatchMonitorFilterViewModel filter);
+        IEnumerable<GetMatchMonitorModel> GetMatchMonitor(MatchMonitorFilterViewModel filter);
 
         IEnumerable<MatchGroupModel> GetMatchGroup(Int64 matchID, int betTypeID, bool liveIndicator, Int64 betId, int reason);
 

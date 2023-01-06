@@ -56,7 +56,7 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorRpt, "isSkipTracking")]
         public ActionResult GetMatchMonitor(MatchMonitorFilterViewModel para, bool? isSkipTracking)
         {
-            var matchMonitors = new List<MatchMonitorModel>();
+            var matchMonitors = new List<GetMatchMonitorModel>();
 
             try
             {
@@ -70,9 +70,11 @@
                     matchMonitors = _matchMonitorService.GetMatchMonitor(para)?.OrderBy(c => c.MatchSection).ToList();
                 }
             }
-            catch (Exception e)
-            {
-                LogService.Error("Get Match Monitor Error", e);
+            catch (Exception ex)
+            {                
+                LogService.Info("Get Match Monitor Error: " + ex.Message + ex.StackTrace + "\n"
+                    + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
+                    + ex.InnerException.StackTrace);
             }
 
             return Json(new
@@ -105,9 +107,11 @@
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                LogService.Error("Match Monitor Detail Error", e);
+                LogService.Info("Match Monitor Detail Error: " + ex.Message + ex.StackTrace + "\n"
+                     + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
+                     + ex.InnerException.StackTrace);
             }
 
             ViewBag.EventDateToString = para?.EventDateToString;
@@ -189,9 +193,11 @@
                     }
                 }
             }
-            catch (Exception e)
-            {
-                LogService.Error("Get Match Monitor Error", e);
+            catch (Exception ex)
+            {               
+                LogService.Info("Get Match Monitor Detail Error: " + ex.Message + ex.StackTrace + "\n"
+                      + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
+                      + ex.InnerException.StackTrace);
             }
 
             return Json(new {
@@ -233,11 +239,14 @@
                     _matchMonitorService.VerifyTransMatchMonitorDetail(para);
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                LogService.Error("Verify Trans MM Detail Error", e);
+                LogService.Info("Verify Trans MM Detail Error: " + ex.Message + ex.StackTrace + "\n"
+                      + ex.InnerException.Message + ex.InnerException.Source + ex.InnerException
+                      + ex.InnerException.StackTrace);
+                
                 result.ErrorCode = -1;
-                result.ErrorMsg = e.Message;
+                result.ErrorMsg = ex.Message;
             }
 
             return Json(new

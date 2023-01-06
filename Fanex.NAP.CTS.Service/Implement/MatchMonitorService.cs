@@ -19,9 +19,9 @@
             repository = new DynamicRepository();
         }
 
-        public IEnumerable<MatchMonitorModel> GetMatchMonitor(MatchMonitorFilterViewModel filter)
+        public IEnumerable<GetMatchMonitorModel> GetMatchMonitor(MatchMonitorFilterViewModel filter)
         {
-            var criteria = new MatchMonitorGetCriteria()
+            var criteria = new MatchMonitorGetCriteria
             {
                 FromDate = filter?.FromDate ?? DateTime.Now,
                 ToDate = filter?.ToDate ?? DateTime.Now,
@@ -34,7 +34,7 @@
                 Reasons = filter.Reasons
             };
 
-            return repository.Fetch<MatchMonitorModel>(criteria);
+            return repository.Fetch<GetMatchMonitorModel>(criteria);
         }
 
         public DBResult VerifyTransMatchMonitorDetail(MatchMonitorDetailVerifyTransParaModel para)

@@ -364,6 +364,42 @@
     padding: 1rem 0 0 0; }
     .match-monitor .monitor-container .monitor-table .group-control .title-association {
       margin-bottom: -1.3rem; }
+      .match-monitor .monitor-container .monitor-table .group-control .title-association .radio-button input[type="radio"] {
+        display: none; }
+      .match-monitor .monitor-container .monitor-table .group-control .title-association .radio-button label {
+        position: relative;
+        padding: 1rem 4rem 0 2.5rem;
+        cursor: pointer; }
+        .match-monitor .monitor-container .monitor-table .group-control .title-association .radio-button label:before, .match-monitor .monitor-container .monitor-table .group-control .title-association .radio-button label:after {
+          position: absolute;
+          content: '';
+          top: 50%;
+          border-radius: 100%;
+          -webkit-transition: all .2s;
+          transition: all .2s; }
+        .match-monitor .monitor-container .monitor-table .group-control .title-association .radio-button label:before {
+          left: 0;
+          width: 16px;
+          height: 16px;
+          margin-top: -0.4rem;
+          background: #f3f3f3;
+          border: 1px solid #ccc; }
+        .match-monitor .monitor-container .monitor-table .group-control .title-association .radio-button label:after {
+          opacity: 0;
+          left: .4rem;
+          width: 8px;
+          height: 8px;
+          margin-top: 0;
+          background: #458A00;
+          -webkit-transform: scale(2);
+          transform: scale(2); }
+      .match-monitor .monitor-container .monitor-table .group-control .title-association .radio-button input[type="radio"]:checked + label::before {
+        background: #fff;
+        border: 1px solid #458A00; }
+      .match-monitor .monitor-container .monitor-table .group-control .title-association .radio-button input[type="radio"]:checked + label::after {
+        opacity: 1;
+        -webkit-transform: scale(1);
+        transform: scale(1); }
     .match-monitor .monitor-container .monitor-table .group-control .form-filter .calendar {
       display: flex;
       align-items: center;
@@ -374,6 +410,22 @@
       .match-monitor .monitor-container .monitor-table .group-control .form-filter .calendar .text {
         margin-right: .7rem;
         margin-bottom: 0; }
+      .match-monitor .monitor-container .monitor-table .group-control .form-filter .calendar .input {
+        margin: 0; }
+        .match-monitor .monitor-container .monitor-table .group-control .form-filter .calendar .input::-webkit-input-placeholder {
+          /* Edge */
+          color: #868686;
+          font-style: italic;
+          font-size: 1.4rem; }
+        .match-monitor .monitor-container .monitor-table .group-control .form-filter .calendar .input::-moz-placeholder {
+          /* Internet Explorer */
+          color: #868686;
+          font-style: italic;
+          font-size: 1.4rem; }
+        .match-monitor .monitor-container .monitor-table .group-control .form-filter .calendar .input:-ms-input-placeholder {
+          color: #868686;
+          font-style: italic;
+          font-size: 1.4rem; }
     .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .width-select {
       width: 11rem; }
     .match-monitor .monitor-container .monitor-table .group-control .form-filter .group .text-box {

@@ -45,23 +45,23 @@
     }
 
     function GenerateGrid() {
+        let params = {};
+        params.FromDate = domElements.dpkFromDate.val();  
+        params.ToDate = domElements.dpkToDate.val();
+        params.Reasons = domElements.cbbReason.val().join();
+        params.Sports = domElements.cbbSport.val().join();
+        params.BetTypes = "[" + domElements.cbbBetType.val().join() + "]";
+        params.IsVerified = domElements.cbbIsVerified.val();
+        params.LeagueName = domElements.txtLeague.val();
+        params.Market = domElements.cbbMarket.val();
+        params.MatchSection = domElements.cbbMatchSection.val().join();
+        params.isSkipTracking = isSkipTracking;
+        
         return domElements.tblMonitor.DataTable({
             serverSide: false,
             ajax: {
                 url: common.modifyRelativeUrl('MatchMonitor/GetMatchMonitor'),
-                data:
-                {
-                    FromDate: function () { return domElements.dpkFromDate.val(); },
-                    ToDate: function () { return domElements.dpkToDate.val(); },
-                    Reasons: function () { return domElements.cbbReason.val().join(); },
-                    Sports: function () { return domElements.cbbSport.val().join(); },
-                    BetTypes: function () { return "[" + domElements.cbbBetType.val().join() + "]" },
-                    IsVerified: function () { return domElements.cbbIsVerified.val(); },
-                    LeagueName: function () { return domElements.txtLeague.val(); },
-                    Market: function () { return domElements.cbbMarket.val(); },
-                    MatchSection: function () { return domElements.cbbMatchSection.val().join(); },
-                    isSkipTracking: function () { return isSkipTracking; }
-                },
+                data: params,
                 type: "POST",
                 beforeSend: function () {
                     domElements.tblMonitor.find('tbody').addClass('loading');
@@ -96,17 +96,21 @@
             scrollCollapse: false,
             columnDefs: [
                 { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 3, 4, 5, 6], className: "text-center" },
-                { targets: [0], width: "30%" },
-                { targets: [1], width: "9%" },
-                { targets: [2], width: "7%" },
+                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8], className: "text-center" },
+                { targets: [0], width: "7%" },
+                { targets: [1], width: "22%" },
+                { targets: [2], width: "26%" },
                 { targets: [3], width: "7%" },
-                { targets: [4], width: "28%" },
-                { targets: [5], width: "15%" },                
+                { targets: [4], width: "9%" },
+                { targets: [5], width: "15%" },
                 { targets: [6], width: "4%" },
-                { targets: [7], visible: false },
+                { targets: [7], width: "8%" },
+                { targets: [8], width: "4%" },
+                { targets: [9], visible: false }
             ],
             columns: [
+                { data: obj => obj.SportName },
+                { data: obj => obj.LeagueName },
                 {
                     data: obj => () => {
                         let paramTemplate = "EventDateToString={0}&MatchID={1}&HomeID={2}&AwayID={3}&BetTypeID={4}&MatchSection={5}&Market={6}&Reason={7}&LeagueID={8}&BetID={9}&SportType={10}";
@@ -114,13 +118,13 @@
                         return '<a class="click-view-details" href="MatchMonitor/Detail?' + para + '" target="_blank">' + obj.MatchName + '</a>';
                     }
                 },
-                { data: obj => obj.EventDateToString },
-                { data: obj => obj.SportName },
                 { data: obj => obj.MarketName },
-                { data: obj => obj.LeagueName },
+                { data: obj => obj.EventDateToString },                
+                { data: obj => obj.BetTypeName },
                 { data: obj => obj.ReasonGroup },
                 { data: obj => RenderVerifiedUI(obj.IsVerified) },
-                { data: obj => obj.MatchSectionName },
+                { data: obj => obj.VerifiedBy },
+                { data: obj => obj.MatchSectionName }
             ],
             drawCallback: function () {
                 var api = this.api();
@@ -128,10 +132,10 @@
                 var data = api.rows({ page: 'current' }).data();
                 var last = null;
 
-                api.column(7, { page: 'current' }).data().each(function (group, i) {
+                api.column(9, { page: 'current' }).data().each(function (group, i) {
                     if (last !== group) {
                         $(rows).eq(i).before(
-                            '<tr class="group group group-site"><td colspan="8"> ' + data[i].MatchSectionName + '</td></tr>'
+                            '<tr class="group group group-site"><td colspan="9"> ' + data[i].MatchSectionName + '</td></tr>'
                         );
 
                         last = group;
@@ -183,74 +187,6 @@
             }
         }
     }
-
-    //function LoadBetTypes() {
-    //    domElements.cbbBetType.find('option').remove();
-
-    //    let sportTypes = domElements.cbbSport.val();
-    //    let existedBetType = [];
-
-    //    if (sportTypes != null) {
-    //        sportTypes.forEach(c => {
-    //            if (c == 1) {
-    //                var options1 = [{ text: 'HDP', value: RenderBetTypeHTML(1, 0) },
-    //                { text: 'O/U', value: RenderBetTypeHTML(3, 0) },
-    //                { text: '1st HDP', value: RenderBetTypeHTML(7, 0) },
-    //                { text: '1st O/U', value: RenderBetTypeHTML(8, 0) }
-    //                ];
-
-    //                options1.forEach(i => {
-    //                    if (!existedBetType.includes(i.value)) {
-    //                        domElements.cbbBetType.append(`<option value="${i.value}">${i.text}</option>`);
-    //                        existedBetType.push(i.value);
-    //                    }
-    //                })
-    //            }
-    //            else if (c == 2) {
-    //                var options2 = [{ text: 'HDP', value: RenderBetTypeHTML(1, 0) },
-    //                { text: 'O/U', value: RenderBetTypeHTML(3, 0) },
-    //                { text: '1st HDP', value: RenderBetTypeHTML(7, 0) },
-    //                { text: '1st O/U', value: RenderBetTypeHTML(8, 0) },
-    //                { text: 'Moneyline', value: RenderBetTypeHTML(20, 0) },
-    //                { text: 'Quarter 1 HDP', value: RenderBetTypeHTML(609, 801) },
-    //                { text: 'Quarter 2 HDP', value: RenderBetTypeHTML(609, 802) },
-    //                { text: 'Quarter 3 HDP', value: RenderBetTypeHTML(609, 803) },
-    //                { text: 'Quarter 4 HDP', value: RenderBetTypeHTML(609, 804) },
-    //                { text: 'Quarter 1 O/U', value: RenderBetTypeHTML(610, 801) },
-    //                { text: 'Quarter 2 O/U', value: RenderBetTypeHTML(610, 802) },
-    //                { text: 'Quarter 3 O/U', value: RenderBetTypeHTML(610, 803) },
-    //                { text: 'Quarter 4 O/U', value: RenderBetTypeHTML(610, 804) },
-    //                { text: 'Quarter 1 Moneyline', value: RenderBetTypeHTML(612, 801) },
-    //                { text: 'Quarter 2 Moneyline', value: RenderBetTypeHTML(612, 802) },
-    //                { text: 'Quarter 3 Moneyline', value: RenderBetTypeHTML(612, 803) },
-    //                { text: 'Quarter 4 Moneyline', value: RenderBetTypeHTML(612, 804) }
-    //                ];
-
-    //                options2.forEach(i => {
-    //                    if (!existedBetType.includes(i.value)) {
-    //                        domElements.cbbBetType.append(`<option value="${i.value}">${i.text}</option>`);
-    //                        existedBetType.push(i.value);
-    //                    }
-    //                })
-    //            }
-    //            else if (c == 43) {
-    //                var options3 = [{ text: 'HDP', value: RenderBetTypeHTML(1, 0) },
-    //                { text: 'O/U', value: RenderBetTypeHTML(3, 0) },
-    //                { text: 'Moneyline', value: RenderBetTypeHTML(20, 0) }
-    //                ];
-
-    //                options3.forEach(i => {
-    //                    if (!existedBetType.includes(i.value)) {
-    //                        domElements.cbbBetType.append(`<option value="${i.value}">${i.text}</option>`);
-    //                        existedBetType.push(i.value);
-    //                    }
-    //                })
-    //            }
-    //        })
-    //    }
-
-    //    domElements.cbbBetType.multiselect('refresh');
-    //}   
 
     function RefreshBetTypeFilter() {  
         domElements.cbbBetType.find('option').remove(); 
