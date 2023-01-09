@@ -19,11 +19,11 @@
                 <div class="group-control">
                     <div class="title-association">                      
                         <div class="form-control radio-button">
-                            <input type="radio" value="1" id="radiobtnScanDate" name="group1" checked />
-                            <label for="1">Scan Date</label>
+                            <input type="radio" value="1" id="rbtnScanDate" name="group1" checked />
+                            <label for="rbtnScanDate">Scan Date</label>
 
-                            <input type="radio" value="1" id="radiobtnEventDate" name="group1" />
-                            <label for="2">Event Date</label>
+                            <input type="radio" value="2" id="rbtnEventDate" name="group1" />
+                            <label for="rbtnEventDate">Event Date</label>
                         </div>
                     </div>
                     <div class="form-filter">
@@ -56,7 +56,7 @@
 
                         <div class="group width-380">
                             <label class="text">Event</label>
-                            <input class="control input" type="text" id="txtLeague" placeholder="League/Match" />
+                            <input class="control input" type="text" id="txtEvent" placeholder="League/Match" />
                         </div>
                         <div class="group width-180">
                             <label class="text">Market</label>
@@ -77,6 +77,12 @@
                         </div>
 
                         <div class="group width-180">
+                            <label class="text">Bet Type</label>
+                            <select class="control width-select" id="cbbBetType" multiple="multiple">
+                            </select>
+                        </div>
+
+                        <div class="group width-180">
                             <label class="text">Reason</label>
                             <select class="control width-select" id="cbbReason" multiple="multiple">
                                 @foreach (var item in Model.Reasons)
@@ -90,12 +96,6 @@
                                         <option value=@item.ReasonID>@item.ReasonName</option>
                                     }
                                 }
-                            </select>
-                        </div>
-
-                        <div class="group width-180">
-                            <label class="text">Bet Type</label>
-                            <select class="control width-select" id="cbbBetType" multiple="multiple">
                             </select>
                         </div>
 

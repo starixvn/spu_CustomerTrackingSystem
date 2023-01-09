@@ -17,10 +17,12 @@
         tblMonitor: $('#tblMonitor'),
         btnGenerate: $('#btnGenerate'),
         eventTarget: $('#selectedRefresh')[0],
-        txtLeague: $('#txtLeague'),
+        txtEvent: $('#txtEvent'),
         cbbMarket: $('#cbbMarket'),
         cbbMatchSection: $('#cbbMatchSection'),
-        cbbReason: $('#cbbReason')
+        cbbReason: $('#cbbReason'),
+        rbtnScanDate: $('#rbtnScanDate'),
+        rbtnEventDate: $('#rbtnEventDate')
     };
 
     function GetMatchMonitor(isSkip) {
@@ -46,15 +48,16 @@
 
     function GenerateGrid() {
         let params = {};
+        params.DateType = domElements.rbtnScanDate.is(":checked") ? 1 : 2;
         params.FromDate = domElements.dpkFromDate.val();  
         params.ToDate = domElements.dpkToDate.val();
-        params.Reasons = domElements.cbbReason.val().join();
         params.Sports = domElements.cbbSport.val().join();
-        params.BetTypes = "[" + domElements.cbbBetType.val().join() + "]";
-        params.IsVerified = domElements.cbbIsVerified.val();
-        params.LeagueName = domElements.txtLeague.val();
         params.Market = domElements.cbbMarket.val();
-        params.MatchSection = domElements.cbbMatchSection.val().join();
+        params.MatchSection = domElements.cbbMatchSection.val().join();    
+        params.IsVerified = domElements.cbbIsVerified.val();
+        params.BetTypes = "[" + domElements.cbbBetType.val().join() + "]";
+        params.Reasons = domElements.cbbReason.val().join();   
+        params.Event = domElements.txtEvent.val();
         params.isSkipTracking = isSkipTracking;
         
         return domElements.tblMonitor.DataTable({
@@ -98,14 +101,14 @@
                 { targets: "_all", defaultContent: "-" },
                 { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8], className: "text-center" },
                 { targets: [0], width: "7%" },
-                { targets: [1], width: "22%" },
-                { targets: [2], width: "26%" },
+                { targets: [1], width: "20%" },
+                { targets: [2], width: "24%" },
                 { targets: [3], width: "7%" },
                 { targets: [4], width: "9%" },
                 { targets: [5], width: "15%" },
-                { targets: [6], width: "4%" },
-                { targets: [7], width: "8%" },
-                { targets: [8], width: "4%" },
+                { targets: [6], width: "7%" },
+                { targets: [7], width: "4%" },
+                { targets: [8], width: "7%" },
                 { targets: [9], visible: false }
             ],
             columns: [

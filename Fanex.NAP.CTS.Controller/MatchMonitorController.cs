@@ -56,7 +56,7 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorRpt, "isSkipTracking")]
         public ActionResult GetMatchMonitor(MatchMonitorFilterViewModel para, bool? isSkipTracking)
         {
-            var matchMonitors = new List<GetMatchMonitorModel>();
+            var matchMonitors = Enumerable.Empty<GetMatchMonitorViewModel>();
 
             try
             {
@@ -67,7 +67,16 @@
                     && !string.IsNullOrEmpty(para.Reasons)
                     && IsValidDateRange(para.FromDate, para.ToDate))
                 {
-                    matchMonitors = _matchMonitorService.GetMatchMonitor(para)?.OrderBy(c => c.MatchSection).ToList();
+                    var data = _matchMonitorService.GetMatchMonitor(para);
+
+                    matchMonitors = data?.Select(x => new GetMatchMonitorViewModel(x)).OrderBy(c => c.MatchSection);
+
+                    if (!string.IsNullOrEmpty(para.Event))
+                    {
+                        matchMonitors = matchMonitors.Where(x => x.HomeName.Contains(para.Event)
+                        || x.AwayName.Contains(para.Event)
+                        || x.LeagueName.Contains(para.Event));
+                    }
                 }
             }
             catch (Exception ex)

@@ -4,22 +4,25 @@
 
     public class MatchMonitorFilterViewModel
     {
+        public int DateType { get; set; } /* #1: InsertDate, 2: EvenDate */
+
         public DateTime? FromDate { get; set; }
 
         public DateTime? ToDate { get; set; }
 
-        public string  Reasons { get; set; }
-
         public string Sports { get; set; }
-
-        public string BetTypes { get; set; }
-
-        public int? IsVerified { get; set; }
-
-        public string LeagueName { get; set; }
 
         public int? Market { get; set; }
 
         public string MatchSection { get; set; }
+
+        public int? IsVerified { get; set; }
+
+        public string BetTypes { get; set; }
+
+        public string  Reasons { get; set; }
+
+        public string Event { get; set; } /* League / Match */
+
     }
 }

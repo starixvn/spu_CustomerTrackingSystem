@@ -14,12 +14,15 @@
             this.EventDate = data.EventDate;
             this.Market = data.Market;
             this.HomeID = data.HomeID;
+            this.HomeName = CachedRef.GetTeamName(this.HomeID);
             this.AwayID = data.AwayID;
+            this.AwayName = CachedRef.GetTeamName(this.AwayID);
             this.LeagueID = data.LeagueID;
+            this.LeagueName = CachedRef.GetTeamName(this.LeagueID);
             this.BettypeID = data.BettypeID;
             this.BetID = data.BetID;
             this.Reason = data.Reason;
-            this.SportType = data.SportType;
+            this.SportType = data.Sporttype;
             this.MatchSection = data.MatchSection;
             this.IsVerified = data.IsVerified;
             this.VerifiedBy = data.VerifiedBy;
@@ -35,7 +38,11 @@
 
         public int HomeID { get; set; }
 
+        public string HomeName { get; set; }
+
         public int AwayID { get; set; }
+
+        public string AwayName { get; set; }
 
         public int LeagueID { get; set; }
 

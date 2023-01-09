@@ -23,13 +23,14 @@
         {
             var criteria = new MatchMonitorGetCriteria
             {
+                DateType = filter.DateType,
                 FromDate = filter?.FromDate ?? DateTime.Now,
                 ToDate = filter?.ToDate ?? DateTime.Now,
-                LeagueName = string.IsNullOrWhiteSpace(filter?.LeagueName) ? null : filter.LeagueName,                
+                //LeagueName = string.IsNullOrWhiteSpace(filter?.LeagueName) ? null : filter.LeagueName,                
                 SportType = filter.Sports,
                 Market = filter.Market,
                 MatchSection = filter.MatchSection,
-                BetType = filter.BetTypes,
+                BetTypes = filter.BetTypes,
                 IsVerified = filter.IsVerified,
                 Reasons = filter.Reasons
             };

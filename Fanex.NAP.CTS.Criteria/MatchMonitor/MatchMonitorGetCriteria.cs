@@ -6,14 +6,14 @@
 
     public class MatchMonitorGetCriteria : CriteriaBase
     {
+        [SpParam(SqlParamName = "ip_DateType")]
+        public int DateType { get; set; }
+
         [SpParam(SqlParamName = "ip_FromDate")]
         public DateTime FromDate { get; set; }
 
         [SpParam(SqlParamName = "ip_ToDate")]
-        public DateTime ToDate { get; set; }
-
-        [SpParam(SqlParamName = "ip_LeagueName")]
-        public string LeagueName { get; set; }       
+        public DateTime ToDate { get; set; }       
 
         [SpParam(SqlParamName = "ip_SportType")]
         public string SportType { get; set; }
@@ -28,7 +28,7 @@
         public int? IsVerified { get; set; }
 
         [SpParam(SqlParamName = "ip_Bettypes")]
-        public string BetType { get; set; }
+        public string BetTypes { get; set; }
 
         [SpParam(SqlParamName = "ip_Reason")]
         public string Reasons { get; set; }
