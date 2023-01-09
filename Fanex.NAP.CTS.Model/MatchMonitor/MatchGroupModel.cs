@@ -8,14 +8,14 @@ namespace Fanex.NAP.CTS.Model.MatchMonitor
 
         public int GroupName { get; set; }
 
-        public int TotalScore { get; set; }
+        public int ScoreDiff { get; set; }
 
         public string Key {
 
             get => JsonConvert.SerializeObject(new MatchGroupKeyModel  
             {
                 GroupID =  GroupID, 
-                TotalScore = TotalScore,
+                ScoreDiff = ScoreDiff,
                 GroupName = GroupName
             });
         }

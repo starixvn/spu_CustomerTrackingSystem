@@ -118,7 +118,7 @@
             ViewBag.LiveIndicator = para?.LiveIndicator ?? true;
             ViewBag.Reason = para?.Reason;
             ViewBag.Group = matchGroup;
-            ViewBag.MatchScore = matchScore?.OrderBy(c => c.TotalScore).ThenBy(c => c.LiveHomeScore).ThenBy(c => c.LiveAwayScore);
+            ViewBag.MatchScore = matchScore?.OrderBy(c => c.ScoreDiff).ThenBy(c => c.LiveHomeScore).ThenBy(c => c.LiveAwayScore);
             ViewBag.LeagueName = para?.LeagueName ?? string.Empty;
             ViewBag.ReasonGroup = para?.ReasonGroup ?? string.Empty;
             ViewBag.MarketName = para?.MarketName ?? string.Empty;
@@ -348,8 +348,8 @@
 
                 if (matchDetails != null && matchDetails.MatchDetails.Any())
                 {
-                    var matchs = matchDetails.MatchDetails.Join(groupKeys, m => (m.GroupID, m.TotalScore)
-                                                            , r => (r.GroupID, r.TotalScore)
+                    var matchs = matchDetails.MatchDetails.Join(groupKeys, m => (m.GroupID, m.ScoreDiff)
+                                                            , r => (r.GroupID, r.ScoreDiff)
                                                             , (m, r) => m);
 
                     return new MatchMonitorDetailResultModel
@@ -378,7 +378,7 @@
                         transGroupBetting.Add(new TransGroupModel
                         {
                             TransId = tranID,
-                            GroupName = groupKey.FirstOrDefault(x => x.GroupID == i.GroupID && x.TotalScore == i.TotalScore).GroupName,
+                            GroupName = groupKey.FirstOrDefault(x => x.GroupID == i.GroupID && x.ScoreDiff == i.ScoreDiff).GroupName,
                             VerifiedBy = verifyTranInfo?.VerifiedBy ?? string.Empty,
                             VerifiedDate = verifyTranInfo?.VerifiedDate.ToString(FormatDateToString_MMMddhhmmss) ?? string.Empty
                         });
