@@ -766,7 +766,7 @@
                                                          OrginGroupIDs = originGroupIDs
                                                      })
                         };
-                    }
+                    }                    
                 }
 
                 if (groupBettingAssociation.ErrorCode != 0)
@@ -785,7 +785,7 @@
 
             return Json(data, JsonRequestBehavior.AllowGet);
         }
-
+        
         [HttpPost]
         public ActionResult GetMatchesAssociationDetailByAI(MatchesAssociationDetailViewModel para)
         {
@@ -837,7 +837,7 @@
                                     if (ggbTicketDetails != null && ggbTicketDetails.Any())
                                     {
                                         ggbData = _accountService.MergeCustGroupTicketInfo(matchGroupInfo.Distinct(x => new { x.CustID, x.GroupID }), ggbTicketDetails, true);
-                                    }
+                                    }                                   
                                 }
                             }
                         });
@@ -857,7 +857,7 @@
             }
 
             return Json(data, JsonRequestBehavior.AllowGet);
-        }
+        }     
 
         [HttpPost]
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.AccountProfileAssAccountDetailRpt)]

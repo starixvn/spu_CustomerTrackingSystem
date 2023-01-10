@@ -57,6 +57,7 @@
                     .ThenByDescending(x=>x.TransID)
                     .Select(x => new LatestTransactionViewModel
                     {
+                        TransID = x.TransID.ToString(),
                         UserName = x.UserName,
                         LoginID = x.LoginID,
                         CTSCustID = x.CTSCustID,

@@ -2,7 +2,7 @@
 {
     public class LatestTransactionViewModel
     {
-        public long TransID { get; set; }
+        public string TransID { get; set; }
 
         public string UserName { get; set; }
 
