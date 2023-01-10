@@ -23,6 +23,11 @@
                                 <option value="L">Licensee</option>
                             </select>
                         </div>
+
+                        <div>
+                            <button class="button button-generate" id="btnGenerate-detail">Generate</button>
+                        </div>
+
                         <div class="group width-180">
                             <label class="text">Bet choice</label>
                             <select class="control width-select" id="cbbBetChoice">
@@ -59,7 +64,9 @@
                                 }
                             </select>
                         </div>
-                        <button class="button button-generate" id="btnGenerate-detail">Generate</button>
+                        <div>
+                            <button class="button button-generate" id="btnGenerate-detail">Generate</button>
+                        </div>                        
                     </div>
                     <div class="detail-area">
                         <span>@ViewBag.MatchName <br /></span>
@@ -118,6 +125,7 @@
             <input id="hdIsDisableGroup" type="hidden" value="@ViewBag.IsDisableGroup.ToString()" />
             <input id="hdIsHostPermission" type="hidden" IsHostPermission="@ViewBag.IsHostPermission.ToString()" />
         </div>
+    </div>
 </section>
 @section scripts{
     @Scripts.Render("~/match-monitor-detail-scripts")

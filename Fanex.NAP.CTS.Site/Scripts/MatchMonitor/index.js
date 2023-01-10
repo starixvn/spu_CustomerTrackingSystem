@@ -46,25 +46,24 @@
         return true;
     }
 
-    function GenerateGrid() {
-        let params = {};
-        params.DateType = domElements.rbtnScanDate.is(":checked") ? 1 : 2;
-        params.FromDate = domElements.dpkFromDate.val();  
-        params.ToDate = domElements.dpkToDate.val();
-        params.Sports = domElements.cbbSport.val().join();
-        params.Market = domElements.cbbMarket.val();
-        params.MatchSection = domElements.cbbMatchSection.val().join();    
-        params.IsVerified = domElements.cbbIsVerified.val();
-        params.BetTypes = "[" + domElements.cbbBetType.val().join() + "]";
-        params.Reasons = domElements.cbbReason.val().join();   
-        params.Event = domElements.txtEvent.val();
-        params.isSkipTracking = isSkipTracking;
-        
+    function GenerateGrid() {       
         return domElements.tblMonitor.DataTable({
             serverSide: false,
             ajax: {
                 url: common.modifyRelativeUrl('MatchMonitor/GetMatchMonitor'),
-                data: params,
+                data: {
+                    DateType: function () { return domElements.rbtnScanDate.is(":checked") ? 1 : 2; },
+                    FromDate: function () { return domElements.dpkFromDate.val(); },
+                    ToDate: function () { return domElements.dpkToDate.val(); },
+                    Sports: function () { return domElements.cbbSport.val().join(); },
+                    Market: function () { return domElements.cbbMarket.val(); },
+                    MatchSection: function () { return domElements.cbbMatchSection.val().join(); },
+                    IsVerified: function () { return domElements.cbbIsVerified.val(); },
+                    BetTypes: function () { return "[" + domElements.cbbBetType.val().join() + "]" },
+                    Reasons: function () { return domElements.cbbReason.val().join(); },
+                    Event: function () { return domElements.txtEvent.val(); },
+                    isSkipTracking: function () { return isSkipTracking; }
+                },
                 type: "POST",
                 beforeSend: function () {
                     domElements.tblMonitor.find('tbody').addClass('loading');
@@ -101,12 +100,12 @@
                 { targets: "_all", defaultContent: "-" },
                 { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8], className: "text-center" },
                 { targets: [0], width: "7%" },
-                { targets: [1], width: "20%" },
-                { targets: [2], width: "24%" },
-                { targets: [3], width: "7%" },
+                { targets: [1], width: "19%" },
+                { targets: [2], width: "26%" },
+                { targets: [3], width: "6%" },
                 { targets: [4], width: "9%" },
-                { targets: [5], width: "15%" },
-                { targets: [6], width: "7%" },
+                { targets: [5], width: "10%" },
+                { targets: [6], width: "12%" },
                 { targets: [7], width: "4%" },
                 { targets: [8], width: "7%" },
                 { targets: [9], visible: false }
