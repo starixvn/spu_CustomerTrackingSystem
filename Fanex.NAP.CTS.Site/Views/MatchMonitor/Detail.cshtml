@@ -17,18 +17,20 @@
                     <div class="form-filter">
                         <div class="group width-120">
                             <label class="text">Site</label>
-                            <select class="control width-select" id="cbbSites">
+                            <select class="control width-select-sites" id="cbbSites">
                                 <option value="A">All</option>
                                 <option value="C">Credit</option>
                                 <option value="L">Licensee</option>
                             </select>
                         </div>
 
-                        <div>
-                            <button class="button button-generate" id="btnGenerate-detail">Generate</button>
+                        <div class="group-button">
+                            <button class="button button-generate" id="btnRefresh">Refresh</button>
                         </div>
 
-                        <div class="group width-180">
+                        <div class="blank"></div>
+                       
+                        <div class="group width-180" style="display: none;">
                             <label class="text">Bet choice</label>
                             <select class="control width-select" id="cbbBetChoice">
                                 @if (ViewBag.BetChoice != null)
@@ -52,6 +54,15 @@
                                 }
                             </select>
                         </div>
+
+                        <div class="group">
+                            <label class="text">Reason</label>
+                            <select class="control width-select" id="cbbReason" multiple="multiple">
+                                <option value="1" selected>HEG</option>
+                                <option value="2" selected>FG</option>
+                            </select>
+                        </div>
+
                         <div class="group width-180" @(ViewBag.IsDisableGroup ? "hidden" : "")>
                             <label class="text">Group</label>
                             <select class="control width-select" id="cbbGroup" multiple="multiple">
@@ -64,14 +75,16 @@
                                 }
                             </select>
                         </div>
-                        <div>
+                        <div class="group-button">
                             <button class="button button-generate" id="btnGenerate-detail">Generate</button>
                         </div>                        
                     </div>
                     <div class="detail-area">
                         <span>@ViewBag.MatchName <br /></span>
                         <span class="league-highlight">@ViewBag.LeagueName<br /></span>
-                        <span>@ViewBag.SportName - @ViewBag.ReasonGroup - <span class="market-highlight">@ViewBag.MarketName</span><br /></span>
+                        <span>@ViewBag.SportName - @ViewBag.Reason - <span class="market-highlight">@ViewBag.MarketName</span><br /></span>
+                        <span id="spanKOTime">KO Time: @ViewBag.KOTime<br /></span>
+                        <span class="reason-highlight" id="spanReason">HEG, FG, GB</span>
                     </div>
                 </div>
                 <div class="group-table " id="groupTable">

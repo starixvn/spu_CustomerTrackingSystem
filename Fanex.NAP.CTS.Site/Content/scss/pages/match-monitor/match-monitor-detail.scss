@@ -56,6 +56,10 @@
                             width: 18.5rem;
                         }
 
+                        .width-select-sites {
+                            width: 11.5rem;
+                        }
+
                         .text-box {
                             height: 2.8rem;
                             display: flex;
@@ -66,12 +70,20 @@
                         }
                     }
 
-                    .button-generate {
-                        background-color: #396ef8;
-                        border-radius: 2px;
-                        color: $page-bg;
-                        height: auto !important;
-                        padding: .7rem 2rem;
+                    .group-button {
+                        margin-left: 10px;
+
+                        .button-generate {
+                            background-color: #396ef8;
+                            border-radius: 2px;
+                            color: $page-bg;
+                            height: auto !important;
+                            padding: .7rem 2rem;
+                        }
+                    }      
+                    
+                    .blank {
+                        width: 60px;
                     }
 
                     .btn-refresh {
@@ -266,7 +278,6 @@
                                     -webkit-animation: spin 1s infinite linear;
                                     animation: spin 1s infinite linear;
                                 }
-                            
                             }
                         }
                     }
@@ -351,6 +362,7 @@
     padding: 0.5rem;
     border: 1px solid #E5E5E5;
     border-radius: 5px;
+    text-align: right;
 
     span {
         width: 100%;
@@ -366,6 +378,10 @@
 
     .market-highlight {
         color: #ff2020;
+    }
+
+    .reason-highlight {
+        color: #ff0000;
     }
 }
 

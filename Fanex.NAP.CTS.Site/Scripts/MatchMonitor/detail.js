@@ -11,12 +11,15 @@
         reason: $("#hdreason").val(),
         liveIndicator: $("#hdLiveIndicator").val(),
         cbbMatchScore: $('#cbbMatchScore'),
+        cbbReason: $('#cbbReason'),
         cbbGroup: $('#cbbGroup'),
         cbbSites: $('#cbbSites'),
         cbbBetChoice: $('#cbbBetChoice'),
+        btnRefresh: $('#btnRefresh'),
         btnGenerateDetail: $('#btnGenerate-detail'),
         btnVerify: $('#btnVerify'),
         firsttblMonitor: $('#first-tblMonitor'),
+        spanReason: $('#spanReason')
     };
 
     function GetMatchMonitorDetail() {
@@ -269,6 +272,13 @@
             menuHeight: 260,
             selectedText: "# of # selected",
             noneSelectedText: "Select Group "
+        });
+
+        domElements.cbbReason.multiselect({
+            menuWidth: 180,
+            menuHeight: 180,
+            selectedText: "# of # selected",
+            noneSelectedText: "Select Reason "
         });
 
         InitialDetailGird();

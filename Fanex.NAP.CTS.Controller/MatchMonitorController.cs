@@ -139,6 +139,7 @@
             ViewBag.IsDisableScoreFilter = para?.SportType != null && para.SportType == (int)MatchMonitorSportType.Basketball;
             ViewBag.IsDisableGroup = para?.Reason != null && para.Reason == (int)MatchMonitorReason.FixedGame;
             ViewBag.SportName = para?.SportName ?? string.Empty;
+            ViewBag.KOTime = para?.KOTime;
             ViewBag.IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
                                                                         NapSettings.Settings.SiteId,
                                                                         FSFunctionKeys.MatchMonitor,

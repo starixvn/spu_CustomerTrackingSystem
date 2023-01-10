@@ -2226,6 +2226,18 @@ body {
   padding-top: 10px;
   color: #FE0000; }
 
+.form-filter .width-90 {
+  width: 90px; }
+
+.form-filter .width-100 {
+  width: 100px; }
+
+.form-filter .width-120 {
+  width: 120px; }
+
+.form-filter .width-140 {
+  width: 140px; }
+
 .form-filter .width-160 {
   width: 160px; }
 

@@ -30,6 +30,8 @@
         
         public int SportType { get; set; }
 
+        public string KOTime { get; set; }
+
         public bool LiveIndicator
         {
             get

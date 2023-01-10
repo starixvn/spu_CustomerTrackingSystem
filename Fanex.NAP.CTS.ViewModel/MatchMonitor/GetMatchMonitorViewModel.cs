@@ -2,6 +2,7 @@
 {
     using Fanex.NAP.CTS.Core.BaseClasses;
     using Fanex.NAP.CTS.Model.MatchMonitor;
+    using Fanex.NAP.CTS.Resource.Consts;
     using System;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
@@ -20,12 +21,14 @@
             this.LeagueID = data.LeagueID;
             this.LeagueName = CachedRef.GetTeamName(this.LeagueID);
             this.BettypeID = data.BettypeID;
+            this.BettypeName = CachedRef.GetBettypeName(this.BettypeID);
             this.BetID = data.BetID;
             this.Reason = data.Reason;
             this.SportType = data.Sporttype;
             this.MatchSection = data.MatchSection;
             this.IsVerified = data.IsVerified;
             this.VerifiedBy = data.VerifiedBy;
+            this.KOTime = data.KickOffTime.ToString(Consts.FormatTimeToString_hhmmss);
         }
 
         public Int64 ID { get; set; }
@@ -50,6 +53,8 @@
 
         public int BettypeID { get; set; }
 
+        public string BettypeName { get; set; }
+
         public int? BetID { get; set; }
 
         public int Reason { get; set; }
@@ -62,6 +67,8 @@
 
         public string VerifiedBy { get; set; }
 
+        public string KOTime { get; set; }
+
         public string ReasonName
         {
             get
@@ -69,15 +76,15 @@
                 switch (Reason)
                 {
                     case 0:
-                        return "Group Betting";
+                        return "GB";
                     case 1:
-                        return "Hedging";
+                        return "HED";
                     case 2:
-                        return "Arbitrage";
+                        return "ARB";
                     case 3:
-                        return "Fixed Game";
+                        return "FG";
                     case 58:
-                        return "Irrigation";
+                        return "IRR";
                 }
 
                 return string.Empty;
@@ -120,15 +127,7 @@
 
                 return rs;
             }
-        }
-
-        public string BetTypeName 
-        {             
-            get 
-            {
-                return CachedRef.GetTeamName(this.BettypeID);
-            } 
-        }
+        }       
 
         public string ReasonGroup
         {

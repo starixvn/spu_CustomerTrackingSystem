@@ -33,6 +33,8 @@
         public bool IsVerified { get; set; }
 
         public string VerifiedBy { get; set; }
-        
+
+        public DateTime KickOffTime { get; set; }
+
     }
 }
