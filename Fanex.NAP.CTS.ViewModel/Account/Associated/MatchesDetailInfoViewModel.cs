@@ -44,7 +44,7 @@
 
         public DateTime TransDate { get; set; }
 
-        public Int64 TransId { get; set; }
+        public string TransId { get; set; }
 
         public string BetType { get; set; }
 
