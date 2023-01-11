@@ -85,15 +85,12 @@
 
         public MatchMonitorDetailResultModel GetMatchMonitorDetail(MatchMonitorDetailFilterViewModel filter)
         {
-            var criteria = new MatchDetailMonitorGetCriteria()
+            var criteria = new MatchDetailMonitorGetCriteria
             {
-                BettypeID = filter.BetTypeID,
-                BetID = filter.BetID,
-                ListGroup = filter.ListGroup,
-                ListScore = filter.ListScore,
                 MatchID = filter.MatchID,
                 LiveIndicator = filter.LiveIndicator,
-                Reason = filter.Reason,
+                BettypeID = filter.BetTypeID,
+                BetID = filter.BetID
             };
 
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))

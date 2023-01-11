@@ -14,13 +14,17 @@
         cbbReason: $('#cbbReason'),
         cbbGroup: $('#cbbGroup'),
         cbbSites: $('#cbbSites'),
-        cbbBetChoice: $('#cbbBetChoice'),
+        cbbBetChoice: $('#cbbBetChoice'),        
+        firsttblMonitor: $('#first-tblMonitor'),
+        secondtblMonitor: $('#secondtblMonitor'),
+        spanReason: $('#spanReason'),
         btnRefresh: $('#btnRefresh'),
         btnGenerateDetail: $('#btnGenerate-detail'),
         btnVerify: $('#btnVerify'),
-        firsttblMonitor: $('#first-tblMonitor'),
-        secondtblMonitor: $('#secondtblMonitor'),
-        spanReason: $('#spanReason')
+        btnShowAll: $('#btnShowAll'),
+        btnAssDetection: $('#btnAssDetection'),
+        btnExportExcel: $('#btnExportExcel'),
+        btnVerifyAndClose: $('#btnVerifyAndClose')
     };
 
     function GetMatchMonitorDetail() {
@@ -76,9 +80,7 @@
             this.invalidate();
         });
 
-        domElements.firsttblMonitor.DataTable().draw();
-       
-        //domElements.firsttblMonitor.find('span.has-icon').removeClass('icon-loading');
+        domElements.firsttblMonitor.DataTable().draw();       
     }
 
     function GetTotalAssociationIrrigation(custID, associations) {
@@ -285,7 +287,7 @@
         InitialDetailGird();
 
         domElements.btnGenerateDetail.on('click', function () {
-            //GetMatchMonitorDetail();
+            GetMatchMonitorDetail();
         })
 
         domElements.btnVerify.on('click', function () {

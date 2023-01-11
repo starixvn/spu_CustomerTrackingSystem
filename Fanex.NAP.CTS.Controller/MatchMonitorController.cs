@@ -347,9 +347,9 @@
             {
                 matchDetail.MatchDetails.ToList().ForEach(i =>
                 {
-                    i.ListTransID.Split(',').Select(Int64.Parse)?.ToList()?.ForEach(tranID =>
+                    i.ListTransID.Split(',').Select(long.Parse)?.ToList()?.ForEach(tranID =>
                     {
-                        var verifyTranInfo = matchDetail.VerifiedTrans?.FirstOrDefault(c => c.TransID == tranID);
+                        var verifyTranInfo = matchDetail.VerifiedTrans?.FirstOrDefault(c => c.VerifiedTransID == tranID);
 
                         transGroupBetting.Add(new TransGroupModel
                         {
