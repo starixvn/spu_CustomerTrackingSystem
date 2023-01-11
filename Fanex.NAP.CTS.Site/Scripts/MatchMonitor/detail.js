@@ -19,6 +19,7 @@
         btnGenerateDetail: $('#btnGenerate-detail'),
         btnVerify: $('#btnVerify'),
         firsttblMonitor: $('#first-tblMonitor'),
+        secondtblMonitor: $('#secondtblMonitor'),
         spanReason: $('#spanReason')
     };
 
@@ -284,7 +285,7 @@
         InitialDetailGird();
 
         domElements.btnGenerateDetail.on('click', function () {
-            GetMatchMonitorDetail();
+            //GetMatchMonitorDetail();
         })
 
         domElements.btnVerify.on('click', function () {
@@ -297,7 +298,7 @@
     $(document).ready(function () {
         Initial();
 
-        GetMatchMonitorDetail();
+        //GetMatchMonitorDetail();
 
         $(window).resize(function () {
             resizeDataTable();

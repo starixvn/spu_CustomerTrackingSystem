@@ -5,6 +5,11 @@
 
     public class MatchMonitorDetailResultViewModel
     {
+        public MatchMonitorDetailResultViewModel()
+        {
+
+        }
+
         public Int64 CTSCustID { get; set; }
 
         public Int64 CustID { get; set; }

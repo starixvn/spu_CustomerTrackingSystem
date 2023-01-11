@@ -4,31 +4,34 @@
     using Fanex.NAP.CTS.Model.MatchMonitor;
     using Fanex.NAP.CTS.Resource.Consts;
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using static Fanex.NAP.CTS.Resource.Consts.Consts;
 
     public class GetMatchMonitorViewModel
     {
-        public GetMatchMonitorViewModel(GetMatchMonitorModel data)
+        public GetMatchMonitorViewModel(GetMatchMonitorModel data, MatchMonitorStaticListModel mmStatic)
         {
             this.ID = data.ID;
             this.MatchID = data.MatchID;
             this.EventDate = data.EventDate;
             this.Market = data.Market;
             this.HomeID = data.HomeID;
-            this.HomeName = CachedRef.GetTeamName(this.HomeID);
+            this.HomeName = CachedRef.GetTeamName(data.HomeID);
             this.AwayID = data.AwayID;
-            this.AwayName = CachedRef.GetTeamName(this.AwayID);
+            this.AwayName = CachedRef.GetTeamName(data.AwayID);
             this.LeagueID = data.LeagueID;
-            this.LeagueName = CachedRef.GetTeamName(this.LeagueID);
+            this.LeagueName = CachedRef.GetTeamName(data.LeagueID);
             this.BettypeID = data.BettypeID;
-            this.BettypeName = CachedRef.GetBettypeName(this.BettypeID);
+            this.BettypeName = this.GetBettypeName(mmStatic.BetTypes, data.BettypeID);
             this.BetID = data.BetID;
             this.Reason = data.Reason;
+            this.ReasonName = this.GetReasonName(mmStatic.Reasons, data.Reason);
             this.SportType = data.Sporttype;
             this.MatchSection = data.MatchSection;
             this.IsVerified = data.IsVerified;
             this.VerifiedBy = data.VerifiedBy;
-            this.KOTime = data.KickOffTime.ToString(Consts.FormatTimeToString_hhmmss);
+            this.KOTime = data.KickOffTime.ToString(Consts.FormatTimeToString_hhmmss_2);
         }
 
         public Int64 ID { get; set; }
@@ -57,7 +60,9 @@
 
         public int? BetID { get; set; }
 
-        public int Reason { get; set; }
+        public string Reason { get; set; }
+
+        public string ReasonName { get; set; }
 
         public int SportType { get; set; }
 
@@ -67,29 +72,7 @@
 
         public string VerifiedBy { get; set; }
 
-        public string KOTime { get; set; }
-
-        public string ReasonName
-        {
-            get
-            {
-                switch (Reason)
-                {
-                    case 0:
-                        return "GB";
-                    case 1:
-                        return "HED";
-                    case 2:
-                        return "ARB";
-                    case 3:
-                        return "FG";
-                    case 58:
-                        return "IRR";
-                }
-
-                return string.Empty;
-            }
-        }
+        public string KOTime { get; set; }        
 
         public string MarketName
         {
@@ -236,6 +219,27 @@
 
                 return string.Empty;
             }
+        }
+
+        private string GetBettypeName(IEnumerable<MatchMonitorBetTypeModel> betTypes, int betTypeID)
+        {
+            return betTypes.FirstOrDefault(x => x.BetTypeID == betTypeID)?.BetTypeName;
+        }
+
+        private string GetReasonName(IEnumerable<MatchMonitorReasonModel> Reasons, string reason)
+        {
+            if (!string.IsNullOrEmpty(reason))
+            {
+                var arrReasons = reason.Split(',').Select(x => Convert.ToInt32(x));
+                var reasonNames = Reasons.Join(arrReasons,
+                           r1 => r1.ReasonID,
+                           r2 => r2,
+                           (r1, r2) => r1.ReasonName);
+
+                return string.Join(", ", reasonNames);
+            }
+
+            return string.Empty;
         }
     }
 }

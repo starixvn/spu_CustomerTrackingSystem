@@ -26,7 +26,7 @@
 
         public int? BetID { get; set; }
 
-        public int Reason { get; set; }        
+        public string Reason { get; set; }        
 
         public int MatchSection { get; set; }
 

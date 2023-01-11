@@ -442,7 +442,7 @@
             cursor: pointer; }
       .detailpage .monitor-container .monitor-table .group-control .form-filter .group-drop-down .block-box {
         display: block; }
-  .detailpage .monitor-container .monitor-table .group-table {
+  .detailpage .monitor-container .monitor-table .group-info {
     display: flex;
     padding: 2rem 0;
     position: sticky;
@@ -450,34 +450,24 @@
     background: #fff;
     width: 100%; }
   .detailpage .monitor-container .monitor-table .filter-group {
-    z-index: 11; }
+    z-index: 11;
+    height: 125px; }
+  .detailpage .monitor-container .monitor-table .group-table {
+    display: flex;
+    padding: 2rem 0;
+    position: sticky;
+    top: 15rem !important;
+    background: #fff;
+    width: 100%; }
   .detailpage .monitor-container .monitor-table #monitor-datatable .table-report, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report {
     font-family: "Lato", Arial, Tahoma, sans-serif; }
     .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .wrapper-info-table, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .wrapper-info-table, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .wrapper-info-table {
       padding: 0 1rem;
       position: sticky;
       position: -webkit-sticky;
-      top: 22.7rem;
+      top: 22.4rem;
       z-index: 11;
-      transition: top 0.01s linear;
-      /*    .dataTables_length {
-                           position: absolute;
-                            top: .5rem;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
-                            left: 0;
-                        }
-
-                        .dataTables_paginate {
-                            position: absolute !important;
-                            padding-top: 0 !important;
-                            top: .6rem !important;
-                            right: 50%;
-                            transform: translate(50%,-50%);
-                            text-align: center;
-                        }
-
-                        .dataTables_info {
-                            top: 0
-                        }*/ }
+      transition: top 0.01s linear; }
     .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor, .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor-detail, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor-detail {
       width: 100% !important; }
       .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor .loading, .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail .loading, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor .loading, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor-detail .loading, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor .loading, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor-detail .loading {
@@ -557,7 +547,7 @@
       top: 19rem;
       z-index: 9; }
   .detailpage .monitor-container .monitor-table #first-monitor-datatable {
-    padding-right: 2rem; }
+    padding-right: 1.5rem; }
 
 .group.width-280 {
   width: 27.5rem; }

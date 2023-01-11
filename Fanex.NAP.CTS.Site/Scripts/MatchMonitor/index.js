@@ -115,15 +115,15 @@
                 { data: obj => obj.LeagueName },
                 {
                     data: obj => () => {
-                        let paramTemplate = "EventDateToString={0}&MatchID={1}&HomeID={2}&AwayID={3}&BetTypeID={4}&MatchSection={5}&Market={6}&Reason={7}&LeagueID={8}&BetID={9}&SportType={10}&KOTime={11}";
-                        let para = paramTemplate.format(obj.EventDateToString, obj.MatchID, obj.HomeID, obj.AwayID, obj.BettypeID, obj.MatchSection, obj.Market, obj.Reason, obj.LeagueID, obj.BetID, obj.SportType, obj.KOTime);
+                        let paramTemplate = "EventDateToString={0}&MatchID={1}&HomeID={2}&AwayID={3}&BetTypeID={4}&BettypeName={5}&MatchSection={6}&Market={7}&Reason={8}&ReasonName={9}&LeagueID={10}&BetID={11}&SportType={12}&KOTime={13}";
+                        let para = paramTemplate.format(obj.EventDateToString, obj.MatchID, obj.HomeID, obj.AwayID, obj.BettypeID, obj.BettypeName, obj.MatchSection, obj.Market, obj.Reason, obj.ReasonName, obj.LeagueID, obj.BetID, obj.SportType, obj.KOTime);
                         return '<a class="click-view-details" href="MatchMonitor/Detail?' + para + '" target="_blank">' + obj.MatchName + '</a>';
                     }
                 },
                 { data: obj => obj.MarketName },
                 { data: obj => obj.EventDateToString },                
                 { data: obj => obj.BettypeName },
-                { data: obj => obj.Reason },
+                { data: obj => obj.ReasonName },
                 { data: obj => RenderVerifiedUI(obj.IsVerified) },
                 { data: obj => obj.VerifiedBy },
                 { data: obj => obj.MatchSectionName }

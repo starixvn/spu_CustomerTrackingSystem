@@ -31,7 +31,7 @@
                         }
 
                         label {
-                            position: relative;                            
+                            position: relative;
                             padding: 1rem 4rem 0 2.5rem;
                             cursor: pointer;
 
@@ -187,10 +187,6 @@
                                     margin-bottom: 0;
                                     padding-bottom: 0;
                                 }
-                                /*     a {
-                                    color: #474747;
-                                    cursor: pointer;
-                                }*/
                             }
                         }
 
@@ -209,8 +205,7 @@
                 background: #fff;
                 width: 100%;
                 z-index: 99999;
-            }
-
+            }            
             #monitor-datatable, #first-monitor-datatable, #second-monitor-datatable {
                 .table-report {
                     font-family: $font-family;

@@ -80,8 +80,8 @@
                             height: auto !important;
                             padding: .7rem 2rem;
                         }
-                    }      
-                    
+                    }
+
                     .blank {
                         width: 60px;
                     }
@@ -146,7 +146,7 @@
                 }
             }
 
-            .group-table {
+            .group-info {
                 display: flex;
                 padding: 2rem 0;
                 position: sticky;
@@ -157,6 +157,16 @@
 
             .filter-group {
                 z-index: 11;
+                height: 125px;
+            }
+
+            .group-table {
+                display: flex;
+                padding: 2rem 0;
+                position: sticky;
+                top: 15rem !important;
+                background: #fff;
+                width: 100%;
             }
 
             #monitor-datatable, #first-monitor-datatable, #second-monitor-datatable {
@@ -167,27 +177,10 @@
                         padding: 0 1rem;
                         position: sticky;
                         position: -webkit-sticky;
-                        top: 22.7rem;
+                        top: 22.4rem;
                         z-index: 11;
                         transition: top 0.01s linear;
-                        /*    .dataTables_length {
-                           position: absolute;
-                            top: .5rem;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
-                            left: 0;
-                        }
-
-                        .dataTables_paginate {
-                            position: absolute !important;
-                            padding-top: 0 !important;
-                            top: .6rem !important;
-                            right: 50%;
-                            transform: translate(50%,-50%);
-                            text-align: center;
-                        }
-
-                        .dataTables_info {
-                            top: 0
-                        }*/
+                       
                     }
 
                     .table-monitor, .table-monitor-detail {
@@ -323,7 +316,7 @@
             }
 
             #first-monitor-datatable {
-                padding-right: 2rem;
+                padding-right: 1.5rem;
             }
         }
     }

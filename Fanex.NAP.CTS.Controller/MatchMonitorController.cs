@@ -67,9 +67,11 @@
                     && !string.IsNullOrEmpty(para.Reasons)
                     && IsValidDateRange(para.FromDate, para.ToDate))
                 {
-                    var data = _matchMonitorService.GetMatchMonitor(para);
+                    var mmData = _matchMonitorService.GetMatchMonitor(para);
+                    var mmStatic = _matchMonitorService.GetMMStaticList();
 
-                    matchMonitors = data?.Select(x => new GetMatchMonitorViewModel(x)).OrderBy(c => c.MatchSection);
+                    matchMonitors = mmData?.Select(x => new GetMatchMonitorViewModel(x, mmStatic))
+                                            .OrderBy(c => c.MatchSection);
 
                     if (!string.IsNullOrEmpty(para.Event))
                     {
@@ -126,10 +128,12 @@
             ViewBag.EventDateToString = para?.EventDateToString;
             ViewBag.MatchID = para?.MatchID;
             ViewBag.BetTypeID = para?.BetTypeID;
+            ViewBag.BettypeName = para?.BettypeName ?? string.Empty;
             ViewBag.BetIDToString = para?.BetID.ToString();
             ViewBag.MatchName = para?.MatchName ?? string.Empty;
             ViewBag.LiveIndicator = para?.LiveIndicator ?? true;
             ViewBag.Reason = para?.Reason;
+            ViewBag.ReasonName = para?.ReasonName ?? string.Empty;
             ViewBag.Group = matchGroup;
             ViewBag.MatchScore = matchScore?.OrderBy(c => c.ScoreDiff).ThenBy(c => c.LiveHomeScore).ThenBy(c => c.LiveAwayScore);
             ViewBag.LeagueName = para?.LeagueName ?? string.Empty;
@@ -307,54 +311,7 @@
 
             return false;
         }
-
-        private IEnumerable<MatchMonitorDetailResultViewModel> MergeMatchMonitorDetail(IEnumerable<TransGroupModel> mappingTransInfo, IEnumerable<CustInfoModel> custInfo, IEnumerable<TicketDetailModel> ticketDetail)
-        {
-            var matchDetailResult = new List<MatchMonitorDetailResultViewModel>();
-
-            if (custInfo == null || ticketDetail == null)
-            {
-                return matchDetailResult;
-            }
-
-            matchDetailResult = ticketDetail.Join(custInfo, ticket => ticket.CustId,
-                                                            cust => cust.CustID,
-                                                            (ticket, cust) => new { ticket, cust })
-                                                            .Select(c => new MatchMonitorDetailResultViewModel
-                                                            {
-                                                                CTSCustID = c.cust.CTSCustID,
-                                                                CustID = c.cust.CustID,
-                                                                SubscriberType = c.cust.SubscriberType,
-                                                                Username = c.cust.UserName,
-                                                                CustomerClass = c.cust.CustomerClass,
-                                                                PICVerified = GetVerifiedTrans(mappingTransInfo, c.ticket),
-                                                                Danger1 = c.ticket.Danger1,
-                                                                Danger2 = c.ticket.Danger2,
-                                                                Danger3 = c.ticket.Danger3,
-                                                                Danger4 = c.ticket.Danger4,
-                                                                Danger5 = c.ticket.Danger5,
-                                                                Odds = c.ticket.Odds,
-                                                                BetID = c.ticket.TransId,
-                                                                BetTeam = c.ticket.BetTeam,
-
-                                                                Currency = c.cust.Currency,
-                                                                Amount = c.ticket.Stake,
-                                                                HDP1 = c.ticket.Hdp1,
-                                                                HDP2 = c.ticket.Hdp2,
-                                                                Score = c.ticket.LiveIndicator ? (c.ticket.LiveHomeScore + " - " + c.ticket.LiveAwayScore) : "-",
-                                                                TicketStatus = c.ticket.TicketStatus,
-                                                                TransTime = c.ticket.TransDate,
-                                                                TransTimeToString = c.ticket.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                                                                Group = GetGroup(mappingTransInfo, c.ticket),
-                                                                TransId = c.ticket.TransId,
-                                                                RobotType = null,
-                                                                IsRobot = false,
-                                                                AssociationIrrigation = -1
-                                                            })?.OrderByDescending(c => c.TransTime)?.ThenBy(c => c.Group)?.Distinct()?.ToList();
-
-            return matchDetailResult;
-        }
-
+        
         private MatchMonitorDetailResultModel GetMatchMonitorDetail(MatchMonitorDetailFilterViewModel filter, List<MatchGroupKeyModel> groupKeys)
         {
             if (groupKeys != null && groupKeys.Any())
@@ -455,6 +412,77 @@
             }
         }
 
+        private IEnumerable<TicketDetailModel> FilterBetChoice(IEnumerable<TicketDetailModel> ticketDetails, string betChoice)
+        {
+            if (ticketDetails != null && ticketDetails.Any())
+            {
+                var result = Enumerable.Empty<TicketDetailModel>();
+
+                switch (betChoice)
+                {
+                    case nameof(MatchMonitorBetChoiceId.All):
+                        return ticketDetails;
+
+                    case nameof(MatchMonitorBetChoiceId.A):
+                    case nameof(MatchMonitorBetChoiceId.U):
+                        return ticketDetails.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.A), StringComparison.OrdinalIgnoreCase)) ?? result;
+
+                    case nameof(MatchMonitorBetChoiceId.H):
+                    case nameof(MatchMonitorBetChoiceId.O):
+                        return ticketDetails.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.H), StringComparison.OrdinalIgnoreCase)) ?? result;
+                }
+            }
+
+            return Enumerable.Empty<TicketDetailModel>();
+        }
+
+        private IEnumerable<MatchMonitorDetailResultViewModel> MergeMatchMonitorDetail(IEnumerable<TransGroupModel> mappingTransInfo, IEnumerable<CustInfoModel> custInfo, IEnumerable<TicketDetailModel> ticketDetail)
+        {
+            var matchDetailResult = new List<MatchMonitorDetailResultViewModel>();
+
+            if (custInfo == null || ticketDetail == null)
+            {
+                return matchDetailResult;
+            }
+
+            matchDetailResult = ticketDetail.Join(custInfo, ticket => ticket.CustId,
+                                                            cust => cust.CustID,
+                                                            (ticket, cust) => new { ticket, cust })
+                                                            .Select(c => new MatchMonitorDetailResultViewModel
+                                                            {
+                                                                CTSCustID = c.cust.CTSCustID,
+                                                                CustID = c.cust.CustID,
+                                                                SubscriberType = c.cust.SubscriberType,
+                                                                Username = c.cust.UserName,
+                                                                CustomerClass = c.cust.CustomerClass,
+                                                                PICVerified = GetVerifiedTrans(mappingTransInfo, c.ticket),
+                                                                Danger1 = c.ticket.Danger1,
+                                                                Danger2 = c.ticket.Danger2,
+                                                                Danger3 = c.ticket.Danger3,
+                                                                Danger4 = c.ticket.Danger4,
+                                                                Danger5 = c.ticket.Danger5,
+                                                                Odds = c.ticket.Odds,
+                                                                BetID = c.ticket.TransId,
+                                                                BetTeam = c.ticket.BetTeam,
+
+                                                                Currency = c.cust.Currency,
+                                                                Amount = c.ticket.Stake,
+                                                                HDP1 = c.ticket.Hdp1,
+                                                                HDP2 = c.ticket.Hdp2,
+                                                                Score = c.ticket.LiveIndicator ? (c.ticket.LiveHomeScore + " - " + c.ticket.LiveAwayScore) : "-",
+                                                                TicketStatus = c.ticket.TicketStatus,
+                                                                TransTime = c.ticket.TransDate,
+                                                                TransTimeToString = c.ticket.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
+                                                                Group = GetGroup(mappingTransInfo, c.ticket),
+                                                                TransId = c.ticket.TransId,
+                                                                RobotType = null,
+                                                                IsRobot = false,
+                                                                AssociationIrrigation = -1
+                                                            })?.OrderByDescending(c => c.TransTime)?.ThenBy(c => c.Group)?.Distinct()?.ToList();
+
+            return matchDetailResult;
+        }
+
         private IEnumerable<MatchMonitorDetailResultViewModel> GetRobotStatus(IEnumerable<MatchMonitorDetailResultViewModel> matchDetailInfo, int betTypeID)
         {
             if (matchDetailInfo != null && matchDetailInfo.Any())
@@ -508,31 +536,7 @@
 
             return matchDetailInfo;
         }
-
-        private IEnumerable<TicketDetailModel> FilterBetChoice(IEnumerable<TicketDetailModel> ticketDetails, string betChoice)
-        {
-            if (ticketDetails != null && ticketDetails.Any())
-            {
-                var result = Enumerable.Empty<TicketDetailModel>();
-
-                switch (betChoice)
-                {
-                    case nameof(MatchMonitorBetChoiceId.All):
-                        return ticketDetails;
-
-                    case nameof(MatchMonitorBetChoiceId.A):
-                    case nameof(MatchMonitorBetChoiceId.U):
-                        return ticketDetails.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.A), StringComparison.OrdinalIgnoreCase)) ?? result;
-
-                    case nameof(MatchMonitorBetChoiceId.H):
-                    case nameof(MatchMonitorBetChoiceId.O):
-                        return ticketDetails.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.H), StringComparison.OrdinalIgnoreCase)) ?? result;
-                }
-            }
-
-            return Enumerable.Empty<TicketDetailModel>();
-        }
-
+        
         private IEnumerable<MatchMonitorDetailResultViewModel> FilterSite(IEnumerable<MatchMonitorDetailResultViewModel> matchDetails, string site)
         {
             if (matchDetails != null && matchDetails.Any() && site != "A")
