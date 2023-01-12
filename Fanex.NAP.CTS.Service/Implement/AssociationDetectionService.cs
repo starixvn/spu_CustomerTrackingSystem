@@ -35,7 +35,7 @@
 
         IEnumerable<DetectAssociationBySharedIPMatchesModel> DetectAssociationBySharedMatches(string custIDList);
 
-        IEnumerable<DetectAssociationMergeGroupModel> MergeGroupDetectAssociation(MergeGroupInfoModel model);
+        IEnumerable<DetectAssociationMergeGroupModel> DetectGroupDetectAssociation(MergeGroupInfoModel model);
 
         IEnumerable<GetCustStatisticsInfoRealtimeModel> GetCustStatisticsInfoRealtime(string custIDList);
 
@@ -109,7 +109,7 @@
             return DetectAssociationByPrimaryFromGraphDB(ctsCustIDs, 2);
         }
 
-        public IEnumerable<DetectAssociationMergeGroupModel> MergeGroupDetectAssociation(MergeGroupInfoModel model)
+        public IEnumerable<DetectAssociationMergeGroupModel> DetectGroupDetectAssociation(MergeGroupInfoModel model)
         {
             var criteria = new DetectAssociationMergeGroupCriteria
             {

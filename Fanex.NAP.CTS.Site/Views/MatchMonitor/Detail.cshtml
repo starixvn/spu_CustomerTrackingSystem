@@ -57,22 +57,13 @@
 
                         <div class="group">
                             <label class="text">Reason</label>
-                            <select class="control width-select" id="cbbReason" multiple="multiple">
-                                <option value="1" selected>TODO</option>
-                                <option value="2" selected>TODO</option>
+                            <select class="control width-select" id="cbbReason" multiple="multiple">                              
                             </select>
                         </div>
 
-                        <div class="group width-180" @(ViewBag.IsDisableGroup ? "hidden" : "")>
+                        <div class="group width-180">
                             <label class="text">Group</label>
-                            <select class="control width-select" id="cbbGroup" multiple="multiple">
-                                @if (ViewBag.Group != null)
-                                {
-                                    foreach (var item in ViewBag.Group)
-                                    {
-                                        <option value="@item.Key" selected> TODO </option>
-                                    }
-                                }
+                            <select class="control width-select" id="cbbGroup" multiple="multiple">                               
                             </select>
                         </div>
                         <div class="group-button">
@@ -98,14 +89,8 @@
                 </div>
                 <div class="group-table" id="groupTable">                   
                     <div id="first-monitor-datatable">
-                        <div class="table-report">
-                            <div class="fixed-header">
-                                <div class="top-header">
-                                    <button class="button button-primary-outline" id="btnVerify">Verify & Close</button>
-                                </div>
-                            </div>
-
-                            <table id="first-tblMonitor" class="table table-striped table-monitor-detail">
+                        <div class="table-report"  style="width : 100%">                           
+                            <table id="tblMMHomeTeam" class="table table-striped table-monitor-detail">
                                 <thead>
                                     <tr>
                                         <th></th>
@@ -132,7 +117,7 @@
 
                     <div id="second-monitor-datatable">
                         <div class="table-report" style="width : 100%">
-                            <table id="secondtblMonitor" class="table table-striped table-monitor-detail">
+                            <table id="tblMMAwayTeam" class="table table-striped table-monitor-detail">
                                 <thead>
                                     <tr>
                                         <th></th>
@@ -165,8 +150,7 @@
             <input id="hdBetTypeID" type="hidden" value="@ViewBag.BetTypeID" />
             <input id="hdBetIDToString" type="hidden" value="@ViewBag.BetIDToString" />
             <input id="hdLiveIndicator" type="hidden" value="@ViewBag.LiveIndicator.ToString()" />
-            <input id="hdreason" type="hidden" value="@ViewBag.Reason" />
-            <input id="hdIsDisableGroup" type="hidden" value="@ViewBag.IsDisableGroup.ToString()" />
+            <input id="hdreason" type="hidden" value="@ViewBag.Reason" />           
             <input id="hdIsHostPermission" type="hidden" IsHostPermission="@ViewBag.IsHostPermission.ToString()" />
         </div>
     </div>

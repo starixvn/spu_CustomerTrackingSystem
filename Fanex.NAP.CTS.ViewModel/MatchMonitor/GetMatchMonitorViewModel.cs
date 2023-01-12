@@ -21,7 +21,7 @@
             this.AwayID = data.AwayID;
             this.AwayName = CachedRef.GetTeamName(data.AwayID);
             this.LeagueID = data.LeagueID;
-            this.LeagueName = CachedRef.GetTeamName(data.LeagueID);
+            this.LeagueName = CachedRef.GetLeagueName(data.LeagueID);
             this.BettypeID = data.BettypeID;
             this.BettypeName = this.GetBettypeName(mmStatic.BetTypes, data.BettypeID);
             this.BetID = data.BetID;

@@ -2,8 +2,7 @@
     let domElements = {
         detailpage: $('#detailpage'),
         groupTable: $('#groupTable'),
-        isHostPermission: $("#hdIsHostPermission").attr("IsHostPermission"),
-        isDisableGroup: $("#hdIsDisableGroup").attr("value"),
+        isHostPermission: $("#hdIsHostPermission").attr("IsHostPermission"),       
         eventDataToString: $("#hdEventDataToString").val(),
         matchID: $("#hdMatchID").val(),
         betTypeID: $("#hdBetTypeID").val(),
@@ -15,17 +14,100 @@
         cbbGroup: $('#cbbGroup'),
         cbbSites: $('#cbbSites'),
         cbbBetChoice: $('#cbbBetChoice'),        
-        firsttblMonitor: $('#first-tblMonitor'),
-        secondtblMonitor: $('#secondtblMonitor'),
+        tblMMHomeTeam: $('#tblMMHomeTeam'),
+        tblMMAwayTeam: $('#tblMMAwayTeam'),
         spanReason: $('#spanReason'),
         btnRefresh: $('#btnRefresh'),
-        btnGenerateDetail: $('#btnGenerate-detail'),
-        btnVerify: $('#btnVerify'),
+        btnGenerateDetail: $('#btnGenerate-detail'),       
         btnShowAll: $('#btnShowAll'),
         btnAssDetection: $('#btnAssDetection'),
         btnExportExcel: $('#btnExportExcel'),
         btnVerifyAndClose: $('#btnVerifyAndClose')
     };
+
+    function InitialDetailGird(element) {
+        element.DataTable({
+            serverSide: false,
+            dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
+            pagingType: "full_numbers",
+            language: {
+                lengthMenu: "Page size _MENU_",
+                paginate: {
+                    first: "<span class=\"icon-chevron-left\"></span><span class=\"icon-chevron-left\"></span>",
+                    last: "<span class=\"icon-chevron-right\"></span><span class=\"icon-chevron-right\"></span>",
+                    next: "",
+                    previous: ""
+                },
+                info: "Displaying _START_ to _END_ of _TOTAL_ item(s)",
+                infoEmpty: "",
+                zeroRecords: "There's no data"
+            },
+            ordering: false,
+            searching: false,
+            paging: false,
+            bInfo: false,
+            lengthMenu: [1000, 1500, 2000],
+            pageLength: 1000,
+            scrollX: false,
+            scrollCollapse: false,
+            autoWidth: false,
+            columnDefs: [
+                { targets: "_all", defaultContent: "-" },
+                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], className: "text-center" },
+                { targets: [0], width: "5%" },
+                { targets: [1], width: "25%" },
+                { targets: [2], width: "5%" },
+                { targets: [3], width: "5%" },
+                { targets: [4], width: "5%" },
+                { targets: [5], width: "5%" },
+                { targets: [6], width: "5%" },
+                { targets: [7], width: "5%" },
+                { targets: [8], width: "5%" },
+                { targets: [9], width: "5%" },
+                { targets: [10], width: "5%" },
+                { targets: [11], width: "5%" },
+                { targets: [12], width: "5%" },
+                { targets: [13], width: "5%" },
+                { targets: [14], width: "5%" },
+                { targets: [15], visible: false }
+            ],
+            columns: [
+                { data: obj => "x" },
+                {
+                    data: obj => () => {
+                        let url = common.modifyRelativeUrl('Account/Index/' + obj.CTSCustID);
+                        return `<a class='click-view-name ' href=${url}> ${obj.Username} </a>`;
+                    }
+                },
+                { data: obj => obj.CustomerClassToString },
+                { data: obj => RenderBotIcon(obj.RobotType, obj.IsRobot) },
+                { data: obj => obj.DangerToString },               
+                { data: obj => obj.Odds },
+                { data: obj => obj.TransIdToString },
+                { data: obj => obj.Currency },
+                { data: obj => obj.Amount },
+                { data: obj => obj.HDP },
+                { data: obj => obj.Score },
+                { data: obj => obj.TransTimeToString },
+                { data: obj => obj.GroupID },
+                { data: obj => obj.Reason },
+                { data: obj => "x" },
+                //{ data: obj => obj.PICVerified },
+                //{ data: obj => obj.TransIdToString }
+            ],
+            createdRow: function (row, data, index) {
+                if (data.TicketStatus == 102)
+                    $(row.cells).addClass('void-ticket');
+                else if (data.TicketStatus == 101)
+                    $(row.cells).addClass('rejected-ticket');
+                else if (data.SubscriberType === "L") {
+                    $(row.cells[1]).addClass('username-hightlight');
+                }
+            }
+        });    
+        
+        element.DataTable().columns.adjust();
+    }
 
     function GetMatchMonitorDetail() {
         $.ajax(common.modifyRelativeUrl('MatchMonitor/GetMatchMonitorDetail'), {
@@ -44,142 +126,71 @@
                 ListGroup: function () { return "[" + domElements.cbbGroup.val().join() + "]"; }
             },
             beforeSend: function () {
-                domElements.firsttblMonitor.find('tbody').addClass('loading');
+                domElements.tblMMHomeTeam.find('tbody').addClass('loading');
+                domElements.tblMMAwayTeam.find('tbody').addClass('loading');
             },
             success: function (response) {
-                domElements.firsttblMonitor.DataTable().clear().rows.add(response.data).draw();
+                domElements.tblMMHomeTeam.DataTable().clear().rows.add(response.data.HomeMatchItemList).draw();
+                domElements.tblMMAwayTeam.DataTable().clear().rows.add(response.data.AwayMatchItemList).draw();
 
-                if (domElements.reason == 58 && response.data.length > 0) {
-                    let params = {};
-                    params.custIDList = response.custIDList;
-                    params.categoryIDList = "58,78,98,118,138,158";
+                RefreshFilter(domElements.cbbMatchScore, response.data.ScoreList);
+                RefreshFilter(domElements.cbbReason, response.data.ReasonList);
 
-                    $.post(common.modifyRelativeUrl('MatchMonitor/GetAssociationIrrigation'), params, function (xResponse) {
-                        RenderAssociationIrrigation(xResponse);
-                    })
+                if (response.data.CTSCustIDList != '') {
+                    $.post(common.modifyRelativeUrl('MatchMonitor/DetectGroupAssociation'), { ctsCustIDList: response.data.CTSCustIDList },
+                        function (xResponse) {                            
+                            RenderAssociationGroup(domElements.tblMMHomeTeam, xResponse.ItemList);
+                            RenderAssociationGroup(domElements.tblMMAwayTeam, xResponse.ItemList);
+
+                            RefreshFilter(domElements.cbbGroup, xResponse.GroupList);
+                        });
                 }
             },
             complete: function (response) {
-                domElements.firsttblMonitor.find('tbody').removeClass('loading');     
+                domElements.tblMMHomeTeam.find('tbody').removeClass('loading');   
+                domElements.tblMMAwayTeam.find('tbody').removeClass('loading');
                 
                 resizeDataTable();
             },
             error: function (error) {
-                domElements.firsttblMonitor.find('tbody').removeClass('loading');
+                domElements.tblMMHomeTeam.find('tbody').removeClass('loading');
+                domElements.tblMMAwayTeam.find('tbody').removeClass('loading');
                 console.log(error);
             }
         });
     }
 
-    function RenderAssociationIrrigation(associations) {
-        domElements.firsttblMonitor.DataTable().rows().every(function () {
+    function RefreshFilter(element, data) {       
+        element.multiselect().empty();
+
+        for (var i = 0; i < data.length; i++) {
+            element.append(`<option selected value='${data[i]}'>${data[i]}</option>`);
+        }
+
+        element.multiselect("refresh");       
+    }
+
+    function RenderAssociationGroup(elements, associations) {
+        elements.DataTable().rows().every(function () {
             let rowData = this.data();
-            
-            rowData.AssociationIrrigation = GetTotalAssociationIrrigation(rowData.CustID, associations);
-           
+
+            rowData.GroupID = GetAssociationGroup(rowData.CustID, associations);
+
             this.invalidate();
         });
 
-        domElements.firsttblMonitor.DataTable().draw();       
+        elements.DataTable().draw();        
     }
 
-    function GetTotalAssociationIrrigation(custID, associations) {
+    function GetAssociationGroup(custID, associations) {
         for (var i = 0; i < associations.length; i++) {
             if (associations[i].CustID == custID) {
-                return associations[i].TotalAssociation;
+                return associations[i].GroupID;
             }
         }
-        return 0;
+        return '-';
     }
-
-    function InitialDetailGird() {
-        domElements.firsttblMonitor.DataTable({
-            serverSide: false,
-            dom: '<"wrapper-info-table"<"wrapper-info"lip>>t',
-            pagingType: "full_numbers",
-            language: {
-                lengthMenu: "Page size _MENU_",
-                paginate: {
-                    first: "<span class=\"icon-chevron-left\"></span><span class=\"icon-chevron-left\"></span>",
-                    last: "<span class=\"icon-chevron-right\"></span><span class=\"icon-chevron-right\"></span>",
-                    next: "",
-                    previous: ""
-                },
-                info: "Displaying _START_ to _END_ of _TOTAL_ item(s)",
-                infoEmpty: "",
-                zeroRecords: "There's no data"
-            },
-            ordering: false,
-            searching: false,
-            lengthMenu: [1000, 1500, 2000],
-            pageLength: 1000,
-            scrollX: false,
-            scrollCollapse: false,
-            autoWidth: false,
-            columnDefs: [
-                { targets: "_all", defaultContent: "-" },
-                { targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], className: "text-center" },
-                { targets: [0] },
-                { targets: [1] },
-                { targets: [2], visible: domElements.reason == 58 ? true : false },
-                { targets: [3] },
-                { targets: [4] },
-                { targets: [5], visible: domElements.reason == 58 ? true : false },
-                { targets: [6] },
-                { targets: [7] },
-                { targets: [8] },
-                { targets: [9] },
-                { targets: [10] },
-                { targets: [11] }, 
-                { targets: [12] },
-                { targets: [13] },
-                { targets: [14], visible: domElements.isDisableGroup == "True" ? false : true },
-                { targets: [15] },
-                { targets: [16], visible: false }
-            ],
-            columns: [
-                { data: obj => obj.SubscriberType },
-                {
-                    data: obj => () => {
-                        let url = common.modifyRelativeUrl('Account/Index/' + obj.CTSCustID);
-                        return `<a class='click-view-name ' href=${url}> ${obj.Username} </a>`;
-                    }
-                },
-                { data: obj => obj.CustomerClassToString},
-                { data: obj => RenderBotIcon(obj.RobotType, obj.IsRobot) },
-                { data: obj => obj.DangerToString },
-                {
-                    data: obj => {
-                        if (obj.AssociationIrrigation == -1) {
-                            return `<span class="has-icon icon-loading">${obj.AssociationIrrigation}</span>`;                        
-                        } else {
-                            return obj.AssociationIrrigation;
-                        }
-                    } },
-                { data: obj => obj.Odds },
-                { data: obj => obj.TransIdToString },
-                { data: obj => obj.Currency },
-                { data: obj => obj.Amount },
-                { data: obj => obj.HDP },
-                { data: obj => obj.BetChoice },
-                { data: obj => obj.Score },
-                { data: obj => obj.TransTimeToString },
-                { data: obj => obj.Group },
-                { data: obj => obj.PICVerified },
-                { data: obj => obj.TransIdToString }
-            ],
-            createdRow: function (row, data, index) {
-                if (data.TicketStatus == 102)
-                    $(row.cells).addClass('void-ticket');
-                else if (data.TicketStatus == 101)
-                    $(row.cells).addClass('rejected-ticket');
-                else if (data.SubscriberType === "L") {
-                    $(row.cells[1]).addClass('username-hightlight');
-                }
-            }
-        });
-    }
-
+    
     function RenderBotIcon(robotType, isRobot) {
         let html = "";
 
@@ -220,23 +231,26 @@
                 Reason: domElements.reason
             },
             beforeSend: function () {
-                domElements.firsttblMonitor.addClass('loading-value');
+                domElements.tblMMHomeTeam.addClass('loading-value');
+                domElements.tblMMAwayTeam.addClass('loading-value');
             },
             success: function () {
                 close();
             },
             complete: function () {
-                domElements.firsttblMonitor.removeClass("loading-value");
+                domElements.tblMMHomeTeam.removeClass("loading-value");
+                domElements.tblMMAwayTeam.removeClass("loading-value");
             },
             error: function (errMsg) {
                 console.log(errMsg);
-                domElements.firsttblMonitor.removeClass("loading-value");
+                domElements.tblMMHomeTeam.removeClass("loading-value");
+                domElements.tblMMAwayTeam.removeClass("loading-value");
             }
         });
     }
 
     function GetTranIds() {
-        var firstTableInfo = domElements.firsttblMonitor.DataTable().data().toArray();
+        var firstTableInfo = domElements.tblMMHomeTeam.DataTable().data().toArray();
         var tranIds = new Array();
 
         firstTableInfo.forEach(element =>
@@ -251,7 +265,7 @@
     }
 
     function resizeDataTable() {
-        var widthTables = domElements.firsttblMonitor[0].offsetWidth + 37;
+        var widthTables = domElements.tblMMHomeTeam[0].offsetWidth + 37;
 
         //if (domElements.groupTable[0].offsetWidth - widthTables > 0 && widthTables < $(window).width()) {
         if (widthTables < $(window).width()) {
@@ -284,13 +298,14 @@
             noneSelectedText: "Select Reason "
         });
 
-        InitialDetailGird();
+        InitialDetailGird(domElements.tblMMHomeTeam);
+        InitialDetailGird(domElements.tblMMAwayTeam);
 
         domElements.btnGenerateDetail.on('click', function () {
             GetMatchMonitorDetail();
         })
 
-        domElements.btnVerify.on('click', function () {
+        domElements.btnVerifyAndClose.on('click', function () {
             common.showConfirmation2('<div class="popup - content">Are you sure about this?<br>Once confirmed, all tickets\' review status will be updated to "Verified".</div>', function () {
                 VerifyTransMatchMonitorDetail();
             });

@@ -465,7 +465,7 @@
     display: flex;
     /*padding: 2rem 0;*/
     position: sticky;
-    top: 15rem !important;
+    /*top: 15rem !important;*/
     background: #FFFFFF;
     width: 100%; }
   .detailpage .monitor-container .monitor-table #monitor-datatable .table-report, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report {
@@ -500,14 +500,16 @@
         top: 22.4rem;
         font-weight: 300;
         z-index: 9;
-        padding-left: 1.5rem;
-        padding-right: 1.5rem;
-        border-right: none; }
-      .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor tbody tr td, .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail tbody tr td, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor tbody tr td, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr td, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor tbody tr td, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr td {
-        padding-left: 1.5rem;
-        padding-right: 1.5rem;
+        /*padding-left: 1.5rem;
+                                    padding-right: 1.5rem;*/
         border-right: none;
-        border-bottom: none; }
+        font-size: 13px; }
+      .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor tbody tr td, .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail tbody tr td, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor tbody tr td, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr td, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor tbody tr td, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr td {
+        padding-left: 0.1rem;
+        padding-right: 0.1rem;
+        border-right: none;
+        border-bottom: none;
+        /*font-size: 13px;*/ }
         .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor tbody tr td .click-view-details, .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor tbody tr td .click-view-name, .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail tbody tr td .click-view-details, .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail tbody tr td .click-view-name, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor tbody tr td .click-view-details, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor tbody tr td .click-view-name, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr td .click-view-details, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr td .click-view-name, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor tbody tr td .click-view-details, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor tbody tr td .click-view-name, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr td .click-view-details, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr td .click-view-name {
           cursor: pointer; }
         .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor tbody tr td .container-checkbox, .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail tbody tr td .container-checkbox, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor tbody tr td .container-checkbox, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor-detail tbody tr td .container-checkbox, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor tbody tr td .container-checkbox, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor-detail tbody tr td .container-checkbox {
@@ -535,6 +537,9 @@
           border-top-color: #396ef8;
           -webkit-animation: spin 1s infinite linear;
           animation: spin 1s infinite linear; }
+      .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor tbody .row-blank, .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail tbody .row-blank, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor tbody .row-blank, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor-detail tbody .row-blank, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor tbody .row-blank, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor-detail tbody .row-blank {
+        padding-left: 1.5rem !important;
+        padding-right: 1.5rem !important; }
     .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail .click-view-details, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor-detail .click-view-details, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor-detail .click-view-details {
       color: #474747; }
     .detailpage .monitor-container .monitor-table #monitor-datatable .table-report .table-monitor-detail .rejected-ticket, .detailpage .monitor-container .monitor-table #first-monitor-datatable .table-report .table-monitor-detail .rejected-ticket, .detailpage .monitor-container .monitor-table #second-monitor-datatable .table-report .table-monitor-detail .rejected-ticket {
@@ -556,7 +561,7 @@
       top: 19rem;
       z-index: 9; }
   .detailpage .monitor-container .monitor-table #first-monitor-datatable {
-    padding-right: 1.5rem; }
+    padding-right: 1rem; }
 
 .group.width-280 {
   width: 27.5rem; }

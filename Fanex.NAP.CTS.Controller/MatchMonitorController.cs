@@ -7,9 +7,11 @@
     using Fanex.NAP.Core.Web.Attribute;
     using Fanex.NAP.CTS.Core;
     using Fanex.NAP.CTS.Model;
+    using Fanex.NAP.CTS.Model.AssociationDetection;
     using Fanex.NAP.CTS.Model.MatchMonitor;
     using Fanex.NAP.CTS.Resource.Consts;
     using Fanex.NAP.CTS.Service;
+    using Fanex.NAP.CTS.Service.Implement;
     using Fanex.NAP.CTS.ViewModel.MatchMonitor;
     using Newtonsoft.Json;
     using System;
@@ -24,10 +26,12 @@
     public class MatchMonitorController : BaseController
     {
         private readonly IMatchMonitorService _matchMonitorService;
+        private readonly IAssociationDetectionService _associationDetectionService;
 
         public MatchMonitorController()
         {
             _matchMonitorService = new MatchMonitorService();
+            _associationDetectionService = new AssociationDetectionService();
         }
 
         public ActionResult Index()
@@ -140,8 +144,7 @@
             ViewBag.ReasonGroup = para?.ReasonGroup ?? string.Empty;
             ViewBag.MarketName = para?.MarketName ?? string.Empty;
             ViewBag.BetChoice = para?.BetChoice;
-            ViewBag.IsDisableScoreFilter = para?.SportType != null && para.SportType == (int)MatchMonitorSportType.Basketball;
-            ViewBag.IsDisableGroup = para?.Reason != null && para.Reason == (int)MatchMonitorReason.FixedGame;
+            ViewBag.IsDisableScoreFilter = para?.SportType != null && para.SportType == (int)MatchMonitorSportType.Basketball;            
             ViewBag.SportName = para?.SportName ?? string.Empty;
             ViewBag.KOTime = para?.KOTime;
             ViewBag.IsHostPermission = userService.IsHavingPermission(CurrentSession.UserId,
@@ -156,12 +159,12 @@
         [TrackingFunctionUsageFilter(SystemId.CTSWeb, TrackingCtsFunctionId.MatchMonitorDetailRpt)]
         public ActionResult GetMatchMonitorDetail(MatchMonitorDetailFilterViewModel para)
         {
-            var matchDetailResult = Enumerable.Empty<MatchMonitorDetailResultViewModel>();
-            var custIDList = string.Empty;
-
+            var mdResult = new MatchMonitorDetailListViewModel();
+            var mdItemList = Enumerable.Empty<MatchMonitorDetailItemViewModel>();           
+           
             try
             {
-                if (para != null && !string.IsNullOrEmpty(para.ListGroup))
+                if (para != null)
                 {
                     var groupKeysFilter = JsonConvert.DeserializeObject<List<MatchGroupKeyModel>>(para.ListGroup);
 
@@ -184,26 +187,32 @@
                                 var custIdsOfEachMatch =  matchDetailInfo.MatchDetails.Select(c => c.ListCustID).Distinct();
                                 var custIdsOfTotalMatch = string.Join(",",custIdsOfEachMatch).Split(',').Distinct();
                                 custInfo = _matchMonitorService.GetCustInfoByCustID(string.Join(",", custIdsOfTotalMatch));
-                               
                             }),
                             Task.Run(() =>
                             {
                                 var tranIdsOfEachMatch =  matchDetailInfo.MatchDetails.Select(c => c.ListTransID).Distinct();
                                 var tranIdsOfTotalMatch = string.Join(",",tranIdsOfEachMatch).Split(',').Distinct();
                                 ticketDetail = _matchMonitorService.GetTicketDetail(para.EventDate, string.Join(",",tranIdsOfTotalMatch));
-                                ticketDetail = FilterBetChoice(ticketDetail, para.BetChoice);
+                                //ticketDetail = FilterBetChoice(ticketDetail, para.BetChoice);
                             })
                         };
 
                         Task.WhenAll(tasks.ToArray()).Wait();
 
-                        var mergeInfo = MergeMatchMonitorDetail(mappingTransInfo, custInfo, ticketDetail);                        
+                        var mergeInfo = MergeMatchMonitorDetail(mappingTransInfo, custInfo, ticketDetail);
 
-                        matchDetailResult = GetRobotStatus(mergeInfo, para.BetTypeID);
+                        mdItemList = GetRobotStatus(mergeInfo, para.BetTypeID);
 
-                        matchDetailResult = FilterSite(matchDetailResult, para.Sites);                    
+                        mdItemList = FilterSite(mdItemList, para.Sites);
 
-                        custIDList = string.Join(",", matchDetailResult.Select(x => x.CustID).Distinct());
+                        mdResult = new MatchMonitorDetailListViewModel
+                        {
+                            CTSCustIDList = string.Join(",", mdItemList.Select(x => x.CTSCustID).Distinct()),
+                            HomeMatchItemList = mdItemList.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.H), StringComparison.OrdinalIgnoreCase)),
+                            AwayMatchItemList = mdItemList.Where(c => string.Equals(c.BetTeam, nameof(MatchMonitorBetChoiceId.A), StringComparison.OrdinalIgnoreCase)),
+                            ScoreList = mdItemList.Select(x => x.Score).Distinct().OrderBy(x => x),
+                            ReasonList = mdItemList.Select(x => x.Reason).Distinct()
+                        };
                     }
                 }
             }
@@ -214,27 +223,75 @@
                       + ex.InnerException.StackTrace);
             }
 
-            return Json(new {
-                custIDList = custIDList,
-                data = matchDetailResult
-            }, JsonRequestBehavior.AllowGet);
+            // for test
+            if (!mdItemList.Any())
+            {
+                mdResult.HomeMatchItemList = GenerateMMDetail_DataTest();
+                mdResult.AwayMatchItemList = GenerateMMDetail_DataTest();
+                mdResult.CTSCustIDList = string.Join(",", mdResult.HomeMatchItemList.Select(x => x.CTSCustID).Distinct());
+                mdResult.ScoreList = mdResult.HomeMatchItemList.Select(x => x.Score).Distinct().OrderBy(x => x);
+                mdResult.ReasonList = mdResult.HomeMatchItemList.Select(x => x.Reason).Distinct();
+            }
+            // end for test
+
+            return Json(new { data = mdResult }, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpPost]
-        public ActionResult GetAssociationIrrigation(string custIDList, string categoryIDList)
+        private IEnumerable<MatchMonitorDetailItemViewModel> GenerateMMDetail_DataTest()
         {
-            var result = Enumerable.Empty<AssociationIrrigationViewModel>();
+            var list = new List<MatchMonitorDetailItemViewModel>();
 
-            var data = _matchMonitorService.GetAssociationIrrigation(custIDList, categoryIDList);
-
-            if (data != null && data.Any())
+            for (int i = 0; i < 10; i++)
             {
-                result = data.Select(x => new AssociationIrrigationViewModel
+                list.Add(new MatchMonitorDetailItemViewModel
                 {
-                    CustID = x.CustID,
-                    TotalAssociation = x.Total
+                    CTSCustID = 1 + i,
+                    CustID = 1 + i,
+                    SubscriberType = "SubscriberType",
+                    Username = "Member10" + i,
+                    CustomerClass = 200 + i,
+                    Danger1 = 1,
+                    Danger2 = 2,
+                    Odds = new decimal(-0.81),
+                    BetID = 54026075788804200,
+                    TransId = 54026075788804200,
+                    Currency = "HKK",
+                    Amount = new decimal(1200),
+                    HDP1 = new decimal(0.75),
+                    HDP2 = new decimal(1.25),
+                    Score = i.ToString() + "-0",
+                    TransTimeToString = "14:56:12",
+                    Group = (i + 1).ToString(),
+                    Reason = "HEG,FG",
+                    BetTeam = "h"
                 });
             }
+           
+            return list;
+        }       
+
+        [HttpPost]
+        public ActionResult DetectGroupAssociation(string ctsCustIDList)
+        {
+            var mergeGroupInfo = new MergeGroupInfoModel { CTSCustIDs = ctsCustIDList };
+
+            var assByPrimary = _associationDetectionService.DetectAssociationByPrimary(new DetectAssociationByPrimaryFilterModel
+            {
+                CTSCustIDs = ctsCustIDList,
+                IsBP = true,
+                IsDevice = true,
+                IsIP = true
+            });
+
+            mergeGroupInfo.AssociationByPrimaryJson = JsonConvert.SerializeObject(assByPrimary);
+
+            var data = _associationDetectionService.DetectGroupDetectAssociation(mergeGroupInfo).Select(x=> new DetectGroupAssociationItemViewModel(x));
+
+            var result = new DetectGroupAssociationListViewModel
+            {
+                ItemList = data,
+                GroupList = data.Select(x => x.GroupID).Distinct().OrderBy(x => x)
+            };
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -315,17 +372,13 @@
         private MatchMonitorDetailResultModel GetMatchMonitorDetail(MatchMonitorDetailFilterViewModel filter, List<MatchGroupKeyModel> groupKeys)
         {
             if (groupKeys != null && groupKeys.Any())
-            {
-                var para = filter;
-
-                para.ListGroup = string.Join(",", groupKeys.Select(c => c.GroupID)?.Distinct());
-
-                var matchDetails = _matchMonitorService.GetMatchMonitorDetail(para);
+            {               
+                var matchDetails = _matchMonitorService.GetMatchMonitorDetail(filter);
 
                 if (matchDetails != null && matchDetails.MatchDetails.Any())
                 {
-                    var matchs = matchDetails.MatchDetails.Join(groupKeys, m => (m.GroupID, m.ScoreDiff)
-                                                            , r => (r.GroupID, r.ScoreDiff)
+                    var matchs = matchDetails.MatchDetails.Join(groupKeys, m => (m.ScoreDiff)
+                                                            , r => (r.ScoreDiff)
                                                             , (m, r) => m);
 
                     return new MatchMonitorDetailResultModel
@@ -436,9 +489,9 @@
             return Enumerable.Empty<TicketDetailModel>();
         }
 
-        private IEnumerable<MatchMonitorDetailResultViewModel> MergeMatchMonitorDetail(IEnumerable<TransGroupModel> mappingTransInfo, IEnumerable<CustInfoModel> custInfo, IEnumerable<TicketDetailModel> ticketDetail)
+        private IEnumerable<MatchMonitorDetailItemViewModel> MergeMatchMonitorDetail(IEnumerable<TransGroupModel> mappingTransInfo, IEnumerable<CustInfoModel> custInfo, IEnumerable<TicketDetailModel> ticketDetail)
         {
-            var matchDetailResult = new List<MatchMonitorDetailResultViewModel>();
+            var matchDetailResult = new List<MatchMonitorDetailItemViewModel>();
 
             if (custInfo == null || ticketDetail == null)
             {
@@ -448,7 +501,7 @@
             matchDetailResult = ticketDetail.Join(custInfo, ticket => ticket.CustId,
                                                             cust => cust.CustID,
                                                             (ticket, cust) => new { ticket, cust })
-                                                            .Select(c => new MatchMonitorDetailResultViewModel
+                                                            .Select(c => new MatchMonitorDetailItemViewModel
                                                             {
                                                                 CTSCustID = c.cust.CTSCustID,
                                                                 CustID = c.cust.CustID,
@@ -473,17 +526,16 @@
                                                                 TicketStatus = c.ticket.TicketStatus,
                                                                 TransTime = c.ticket.TransDate,
                                                                 TransTimeToString = c.ticket.TransDate.ToString(Consts.FormatDateToString_MMMddyyyyhhmmss),
-                                                                Group = GetGroup(mappingTransInfo, c.ticket),
+                                                                Group = GetGroup(mappingTransInfo, c.ticket),                                                               
                                                                 TransId = c.ticket.TransId,
                                                                 RobotType = null,
-                                                                IsRobot = false,
-                                                                AssociationIrrigation = -1
+                                                                IsRobot = false,                                                                
                                                             })?.OrderByDescending(c => c.TransTime)?.ThenBy(c => c.Group)?.Distinct()?.ToList();
 
             return matchDetailResult;
         }
 
-        private IEnumerable<MatchMonitorDetailResultViewModel> GetRobotStatus(IEnumerable<MatchMonitorDetailResultViewModel> matchDetailInfo, int betTypeID)
+        private IEnumerable<MatchMonitorDetailItemViewModel> GetRobotStatus(IEnumerable<MatchMonitorDetailItemViewModel> matchDetailInfo, int betTypeID)
         {
             if (matchDetailInfo != null && matchDetailInfo.Any())
             {
@@ -499,7 +551,7 @@
                                (m, r) => new { m, r })
                                .SelectMany(
                                     group => group.r.DefaultIfEmpty(),
-                                    (group, temp) => new MatchMonitorDetailResultViewModel
+                                    (group, temp) => new MatchMonitorDetailItemViewModel
                                     {
                                         CTSCustID = group.m.CTSCustID,
                                         CustID = group.m.CustID,                                        
@@ -524,7 +576,7 @@
                                         TicketStatus = group.m.TicketStatus,
                                         TransTime = group.m.TransTime,
                                         TransTimeToString = group.m.TransTimeToString,
-                                        Group = group.m.Group,
+                                        Group = group.m.Group,                                       
                                         TransId = group.m.TransId,
                                         RobotType = (temp != null) ? temp?.RobotType : null,
                                         IsRobot = (temp != null) && temp.IsRobot,
@@ -537,7 +589,7 @@
             return matchDetailInfo;
         }
         
-        private IEnumerable<MatchMonitorDetailResultViewModel> FilterSite(IEnumerable<MatchMonitorDetailResultViewModel> matchDetails, string site)
+        private IEnumerable<MatchMonitorDetailItemViewModel> FilterSite(IEnumerable<MatchMonitorDetailItemViewModel> matchDetails, string site)
         {
             if (matchDetails != null && matchDetails.Any() && site != "A")
             {

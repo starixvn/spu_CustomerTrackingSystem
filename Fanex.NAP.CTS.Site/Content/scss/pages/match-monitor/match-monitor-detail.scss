@@ -175,7 +175,7 @@
                 display: flex;
                 /*padding: 2rem 0;*/
                 position: sticky;
-                top: 15rem !important;
+                /*top: 15rem !important;*/
                 background: #FFFFFF;
                 width: 100%;
             }
@@ -225,9 +225,10 @@
                                     top: 22.4rem;
                                     font-weight: 300;
                                     z-index: 9;
-                                    padding-left: 1.5rem;
-                                    padding-right: 1.5rem;
+                                    /*padding-left: 1.5rem;
+                                    padding-right: 1.5rem;*/
                                     border-right: none;
+                                    font-size: 13px;
                                 }
                             }
                         }
@@ -235,11 +236,11 @@
                         tbody {
                             tr {
                                 td {
-                                    padding-left: 1.5rem;
-                                    padding-right: 1.5rem;
+                                    padding-left: 0.1rem;
+                                    padding-right: 0.1rem;
                                     border-right: none;
                                     border-bottom: none;
-
+                                    /*font-size: 13px;*/
                                     .click-view-details, .click-view-name {
                                         cursor: pointer;
                                     }
@@ -281,6 +282,11 @@
                                     -webkit-animation: spin 1s infinite linear;
                                     animation: spin 1s infinite linear;
                                 }
+                            }
+
+                            .row-blank {
+                                padding-left: 1.5rem !important;
+                                padding-right: 1.5rem !important;
                             }
                         }
                     }
@@ -326,7 +332,7 @@
             }
 
             #first-monitor-datatable {
-                padding-right: 1.5rem;
+                padding-right: 1rem;
             }
         }
     }

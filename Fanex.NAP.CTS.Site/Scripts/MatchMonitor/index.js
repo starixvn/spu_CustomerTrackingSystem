@@ -105,9 +105,9 @@
                 { targets: [3], width: "6%" },
                 { targets: [4], width: "9%" },
                 { targets: [5], width: "10%" },
-                { targets: [6], width: "12%" },
+                { targets: [6], width: "7%" },
                 { targets: [7], width: "4%" },
-                { targets: [8], width: "7%" },
+                { targets: [8], width: "12%" },
                 { targets: [9], visible: false }
             ],
             columns: [
@@ -144,7 +144,7 @@
                     }
                 });
             }
-        });
+        });        
     }
 
     function RenderVerifiedUI(isVerified) {
