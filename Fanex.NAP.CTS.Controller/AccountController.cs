@@ -2212,8 +2212,6 @@
                         totalSportBettingStatistic.TurnOver = result.Sum(c => c.TurnOver);
                         totalSportBettingStatistic.WinLoss = result.Sum(c => c.WinLoss);
                         totalSportBettingStatistic.BetCount = result.Sum(c => c.BetCount);
-                        totalSportBettingStatistic.BetCount14 = result.Sum(c => c.BetCount14);
-                        totalSportBettingStatistic.TurnOver14 = result.Sum(c => c.TurnOver14);
                     }
                     catch (Exception ex)
                     {
@@ -2233,8 +2231,6 @@
                         bestSportBettingStatistic.TurnOver = tempBestSport.TurnOver;
                         bestSportBettingStatistic.WinLoss = tempBestSport.WinLoss;
                         bestSportBettingStatistic.BetCount = tempBestSport.BetCount;
-                        bestSportBettingStatistic.TurnOver14 = tempBestSport.TurnOver14;
-                        bestSportBettingStatistic.BetCount14 = tempBestSport.BetCount14;
                     }
                     catch (Exception ex)
                     {

@@ -12,12 +12,6 @@
 
         public long BetCount { get; set; }
 
-        public decimal TurnOver14 { get; set; }
-
-        public decimal WinLoss14 { get; set; }
-
-        public long BetCount14 { get; set; }
-
         public int Ranking { get; set; }
     }
 }
